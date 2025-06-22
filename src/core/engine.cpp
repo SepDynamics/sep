@@ -1,0 +1,316 @@
+#include "core/engine.h"
+
+#include "audio/capture.h"
+#include "blender/bridge.h"
+#include "memory/manager.h"
+
+#include "compat/shim.h"
+#include "core/error_handler.h"
+#include <cstdint>
+#include <cstdio>
+#include <exception>
+
+#include "cuda/core.h"
+#include "cuda/cuda_common.h"
+
+#include "cuda/macros.h"
+#include "cuda/memory.h"
+#include "cuda/stream.h"
+#include "api/types.h"
+
+#ifndef SEP_HAS_EXCEPTIONS
+#if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
+#define SEP_HAS_EXCEPTIONS 1
+#else
+#define SEP_HAS_EXCEPTIONS 0
+#endif
+#endif
+
+namespace sep {
+namespace core {
+
+using namespace ::sep::cuda;
+
+struct Engine::Impl {
+    ::sep::cuda::StreamPtr stream_;
+    ::sep::cuda::DeviceMemory<std::uint32_t> d_bitfield_;
+    ::sep::cuda::DeviceMemory<std::uint32_t> d_probe_indices_;
+    ::sep::cuda::DeviceMemory<std::uint32_t> d_expectations_;
+    ::sep::cuda::DeviceMemory<std::uint32_t> d_corrections_;
+    ::sep::cuda::DeviceMemory<std::uint32_t> d_correction_count_;
+    ::sep::cuda::DeviceMemory<std::uint64_t> d_chunks_;
+    ::sep::cuda::DeviceMemory<std::uint32_t> d_collapse_indices_;
+    ::sep::cuda::DeviceMemory<std::uint32_t> d_collapse_counts_;
+    ::sep::shim::vector<StateNode> state_history_;
+    ::sep::config::APIConfig config;
+    bool initialized{false};
+};
+
+Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
+
+bool Engine::init(const sep::config::APIConfig& config) {
+    impl_->config = config;
+    auto& cuda_core = cuda::CudaCore::instance();
+    if (!cuda_core.initialize()) {
+        return false;
+    }
+
+    // Create default stream
+    impl_->stream_ = cuda_core.createStream(sep::StreamFlags::Default);
+    if (!impl_->stream_) {
+        return false;
+    }
+
+    impl_->d_bitfield_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+    impl_->d_probe_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+    impl_->d_expectations_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+    impl_->d_corrections_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+    impl_->d_correction_count_ = cuda::DeviceMemory<std::uint32_t>(1);
+    impl_->d_chunks_ = cuda::DeviceMemory<std::uint64_t>(DEFAULT_SIZE);
+    impl_->d_collapse_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE * PAIRS_PER_CHUNK);
+    impl_->d_collapse_counts_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+
+    audio_capture_ = audio::AudioCapture::create();
+    auto err = audio_capture_->init(audio::AudioConfig{});
+    if (err != audio::AudioError::NONE) {
+        audio_capture_.reset();
+    }
+
+    blender_bridge_ = std::make_shared<pattern::BlenderBridge>();
+
+    impl_->initialized = true;
+    return true;
+}
+
+void Engine::run() {
+    if (!impl_->initialized) {
+        if (!init(impl_->config))
+            return;
+    }
+
+    if (audio_capture_) {
+        audio_capture_->start();
+    }
+}
+
+void Engine::shutdown() {
+    if (audio_capture_) {
+        audio_capture_->stop();
+    }
+}
+
+namespace {
+#if SEP_HAS_EXCEPTIONS
+void log_cleanup_exception(const std::exception* ex) noexcept {
+    try {
+        if (ex) {
+            (void)fprintf(stderr, "Warning: Exception during Engine cleanup: %s\n", ex->what());
+        } else {
+            (void)fprintf(stderr, "%s\n", "Warning: Unknown exception during Engine cleanup");
+        }
+    } catch (...) {
+        std::terminate();
+    }
+}
+#endif
+}  // namespace
+
+Engine::~Engine() {
+#if SEP_HAS_EXCEPTIONS
+    try {
+#endif
+        if (impl_ && impl_->stream_) {
+            auto& cuda_core = cuda::CudaCore::instance();
+            if (cuda_core.is_initialized()) {
+                cuda_core.synchronizeStream(static_cast<cudaStream_t>(impl_->stream_->handle()));
+                impl_->stream_.reset();
+            }
+        }
+#if SEP_HAS_EXCEPTIONS
+    } catch (const std::exception& e) {
+        log_cleanup_exception(&e);
+    } catch (...) {
+        log_cleanup_exception(nullptr);
+    }
+#endif
+}
+
+void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
+                             ::sep::shim::vector<std::uint32_t>& indices,
+                             ::sep::shim::vector<std::uint32_t>& expectations, std::uint64_t tick ) {
+    if (inputs.empty()) {
+        ::sep::core::ErrorHandler::instance().reportError(
+            {sep::Status::Error, "No input states", "Engine::generate_probes", sep::api::ErrorCode::InvalidArgument});
+        return;
+    }
+
+    auto& cuda_core = cuda::CudaCore::instance();
+
+    // Copy input states to device
+    SEP_CUDA_CHECK(cudaMemcpyAsync(impl_->d_chunks_.get(), reinterpret_cast<const std::uint64_t*>(inputs.data()),
+                                   inputs.size() * sizeof(std::uint64_t), cudaMemcpyHostToDevice,
+                                   reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+
+    // Process batch to generate probes
+    indices.resize(inputs.size());
+    expectations.resize(inputs.size());
+
+    cuda_core.launchQBSA(impl_->d_probe_indices_, impl_->d_expectations_, static_cast<std::uint32_t>(inputs.size()),
+                         impl_->d_bitfield_, impl_->d_corrections_, impl_->d_correction_count_, *impl_->stream_);
+
+    // Copy results back to host
+    SEP_CUDA_CHECK(cudaMemcpyAsync(indices.data(), impl_->d_probe_indices_.get(), inputs.size() * sizeof(std::uint32_t),
+                                   cudaMemcpyDeviceToHost, reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+
+    SEP_CUDA_CHECK(cudaMemcpyAsync(expectations.data(), impl_->d_expectations_.get(),
+                                   inputs.size() * sizeof(std::uint32_t), cudaMemcpyDeviceToHost,
+                                   reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+
+    // Synchronize to ensure all operations are complete
+    cuda_core.synchronizeStream(static_cast<cudaStream_t>(impl_->stream_->handle()));
+}
+
+void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, std::uint64_t tick ,
+                           ::sep::quantum::QBSAResult& qbsa_result, ::sep::cuda::QSHResult& qsh_result) {
+    if (inputs.empty()) {
+        ::sep::core::ErrorHandler::instance().reportError(
+            {sep::Status::Error, "No input states", "Engine::process_batch", sep::api::ErrorCode::InvalidArgument});
+        return;
+    }
+
+    if (inputs.size() > DEFAULT_SIZE) {
+        ::sep::core::ErrorHandler::instance().reportError(
+            {sep::Status::Error, "Batch too large", "Engine::process_batch", sep::api::ErrorCode::InvalidArgument});
+        return;
+    }
+
+    auto& cuda_core = cuda::CudaCore::instance();
+
+    // Copy input states to device
+    SEP_CUDA_CHECK(cudaMemcpyAsync(impl_->d_chunks_.get(), reinterpret_cast<const std::uint64_t*>(inputs.data()),
+                                   inputs.size() * sizeof(std::uint64_t), cudaMemcpyHostToDevice,
+                                   reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+
+    // Process quantum bit states
+    cuda_core.launchQBSA(impl_->d_probe_indices_, impl_->d_expectations_, static_cast<std::uint32_t>(inputs.size()),
+                         impl_->d_bitfield_, impl_->d_corrections_, impl_->d_correction_count_, *impl_->stream_);
+
+    // Process quantum state history
+    cuda_core.launchQSH(impl_->d_chunks_, static_cast<std::uint32_t>(inputs.size()), impl_->d_collapse_indices_,
+                        impl_->d_collapse_counts_, *impl_->stream_);
+
+    // Copy QBSA results
+    std::uint32_t correction_count = 0;
+    SEP_CUDA_CHECK(cudaMemcpyAsync(&correction_count, impl_->d_correction_count_.get(), sizeof(std::uint32_t),
+                                   cudaMemcpyDeviceToHost, reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+
+    // Set corrections count and calculate correction ratio
+    qbsa_result.corrections.clear();
+    qbsa_result.corrections.resize(correction_count);  // Will be empty for now
+    qbsa_result.correction_ratio = static_cast<float>(correction_count) / inputs.size();
+    qbsa_result.collapse_detected = (qbsa_result.correction_ratio > 0.3f);  // 30% threshold for collapse
+
+    if (correction_count > 0) {
+        ::sep::shim::vector<uint32_t> temp_corr(correction_count);
+        SEP_CUDA_CHECK(cudaMemcpyAsync(temp_corr.data(), impl_->d_corrections_.get(),
+                                       correction_count * sizeof(uint32_t), cudaMemcpyDeviceToHost,
+                                       reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+        cuda_core.synchronizeStream(reinterpret_cast<cudaStream_t>(impl_->stream_->handle()));
+        // Note: correction data is available in temp_corr if needed for analysis
+    }
+
+    // Copy QSH results
+    qsh_result.collapse_indices.clear();
+    qsh_result.collapse_indices.resize(inputs.size());
+    qsh_result.collapse_counts.resize(inputs.size());
+    qsh_result.total_collapses = 0;
+    qsh_result.total_states = inputs.size();
+
+    // Temporary buffer for all possible indices
+    ::sep::shim::vector<uint32_t> temp_indices(inputs.size() * PAIRS_PER_CHUNK);
+
+    SEP_CUDA_CHECK(cudaMemcpyAsync(temp_indices.data(), impl_->d_collapse_indices_.get(),
+                                   temp_indices.size() * sizeof(std::uint32_t), cudaMemcpyDeviceToHost,
+                                   reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+
+    SEP_CUDA_CHECK(cudaMemcpyAsync(qsh_result.collapse_counts.data(), impl_->d_collapse_counts_.get(),
+
+                                   inputs.size() * sizeof(std::uint32_t), cudaMemcpyDeviceToHost,
+                                   reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+
+    // Wait for copies to complete before processing
+    cuda_core.synchronizeStream(reinterpret_cast<cudaStream_t>(impl_->stream_->handle()));
+
+    // Convert flat indices to vector of vectors
+    qsh_result.total_collapses = 0;
+
+    for (size_t i = 0; i < inputs.size(); ++i) {
+        const size_t base_idx = i * PAIRS_PER_CHUNK;
+        const size_t count = qsh_result.collapse_counts[i];
+
+        // Initialize vector for this input's collapse indices
+        // collapse_indices uses std::vector, so deduce the correct type
+        auto& indices = qsh_result.collapse_indices[i];
+        indices.clear();
+        indices.reserve(count);
+
+        bool rupture = false;
+        size_t actual_count = 0;
+        for (size_t j = 0; j < count && j < PAIRS_PER_CHUNK; ++j) {
+            uint32_t val = temp_indices[base_idx + j];
+            if (val == 0xFFFFFFFFU) {
+                rupture = true;
+            } else {
+                indices.push_back(val);
+                actual_count++;
+            }
+        }
+
+        // Note: rupture detection for analysis (not stored in result struct)
+        if (rupture) {
+            // Could log or handle rupture detection here if needed
+        }
+
+        qsh_result.total_collapses += actual_count;
+    }
+
+    // Synchronize to ensure all operations are complete
+    cuda_core.synchronizeStream(static_cast<cudaStream_t>(impl_->stream_->handle()));
+
+    qsh_result.total_collapses = 0;
+    for (const auto& count : qsh_result.collapse_counts) {
+        qsh_result.total_collapses += count;
+    }
+
+    // Update state DAG
+    StateNode node;
+    node.tick = tick;
+    // Calculate coherence from collapse ratio (fewer collapses = higher coherence)
+    node.coherence =
+        qsh_result.total_states > 0
+            ? 1.0f - (static_cast<float>(qsh_result.total_collapses) / static_cast<float>(qsh_result.total_states))
+            : 0.0f;
+    // Detect rupture based on collapse threshold (>30% collapse rate indicates rupture)
+    node.rupture = qsh_result.total_states > 0 && (static_cast<float>(qsh_result.total_collapses) /
+                                                   static_cast<float>(qsh_result.total_states)) > 0.3f;
+    if (!impl_->state_history_.empty()) {
+        node.parents.push_back(impl_->state_history_.size() - 1);
+    }
+    impl_->state_history_.push_back(node);
+}
+
+const ::sep::shim::vector<Engine::StateNode>& Engine::getStateHistory() const noexcept {
+    return impl_->state_history_;
+}
+
+::sep::shim::vector<float> Engine::getCoherenceHistory() const {
+    ::sep::shim::vector<float> history;
+    history.reserve(impl_->state_history_.size());
+    for (const auto& n : impl_->state_history_) {
+        history.push_back(n.coherence);
+    }
+    return history;
+}
+
+}  // namespace core
+}  // namespace sep

@@ -1,0 +1,19 @@
+{
+    "recommendations": [
+        "llvm-vs-code-extensions.vscode-clangd",
+        "sr-team.vscode-clangd-cmake",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "nvidia.nsight-vscode-edition",
+        "slevesque.shader",
+        "raczzalan.webgl-glsl-editor",
+        "twxs.cmake",
+        "ms-vscode.makefile-tools",
+        "ms-vscode.hexeditor",
+        "giga-ai.giga-ai",
+        "neuronlink.neuronlink-ca",
+        "sourcegraph.cody-ai",
+        "google.geminicodeassist"
+    ]
+}

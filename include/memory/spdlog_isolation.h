@@ -1,0 +1,372 @@
+#pragma once
+
+#ifdef __CUDACC__
+#    include <cuda_runtime.h>
+#endif
+
+#include <sstream>
+#include <string>
+
+namespace sep {
+namespace spdlog {
+
+// CUDA-compatible formatter base class
+class formatter
+{
+public:
+    virtual ~formatter() = default;
+
+    SEP_HOST SEP_DEVICE virtual void format(const sep::shim::string& msg, std::ostringstream& dest) = 0;
+
+    SEP_HOST SEP_DEVICE virtual sep::shim::string pattern() const = 0;
+};
+
+// Default pattern formatter implementation
+class pattern_formatter : public formatter
+{
+public:
+    SEP_HOST SEP_DEVICE void format(const sep::shim::string& msg, std::ostringstream& dest) override
+    {
+        dest << msg.c_str();
+    }
+
+    SEP_HOST SEP_DEVICE sep::shim::string pattern() const override
+    {
+        return "%v";
+    }
+};
+
+}  // namespace spdlog
+}  // namespace sep
+
+// This header file is used to isolate spdlog-related code from CUDA compilation
+// It provides stub implementations for spdlog functionality that can be
+// safely included in CUDA files without causing template instantiation errors
+
+// Check for CUDA compilation - either via __CUDACC__ or our custom SEP_CUDA_COMPILATION flag
+#if defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)
+// When compiling with CUDA, provide stub implementations
+
+// Include our isolation headers
+#    include "compat/shim.h"
+
+// Forward declarations for standard library components used by spdlog
+namespace sep::shim {
+// Ratio template for chrono
+template<intmax_t Num, intmax_t Denom = 1>
+struct ratio
+{
+    static constexpr intmax_t num = Num;
+    static constexpr intmax_t den = Denom;
+};
+
+template<typename T>
+class atomic;
+
+template<typename T>
+class unique_ptr;
+
+template<typename T>
+class shared_ptr;
+
+template<typename T>
+class weak_ptr;
+
+template<typename T, typename Deleter = void>
+class unique_ptr;
+
+template<typename T>
+class allocator;
+
+template<typename T>
+class vector;
+
+template<typename T>
+class function;
+
+template<typename T, typename U>
+class pair;
+
+class thread;
+class mutex;
+class recursive_mutex;
+class condition_variable;
+class once_flag;
+
+// Chrono namespace for time-related functionality
+namespace chrono {
+class duration_base
+{};
+
+template<typename Rep, typename Period = ratio<1>>
+class duration : public duration_base
+{
+public:
+    duration() {}
+    explicit duration(const Rep&) {}
+    
+    template<typename Rep2>
+    duration(const Rep2&)
+    {}
+
+    template<typename Rep2, typename Period2>
+    duration(const duration<Rep2, Period2>&)
+    {}
+};
+
+typedef duration<int64_t, ratio<1>>             seconds;
+typedef duration<int64_t, ratio<1, 1000>>       milliseconds;
+typedef duration<int64_t, ratio<1, 1000000>>    microseconds;
+typedef duration<int64_t, ratio<1, 1000000000>> nanoseconds;
+}  // namespace chrono
+
+template<typename T>
+class lock_guard;
+template<typename T>
+class unique_lock;
+
+enum class memory_order
+{
+    relaxed,
+    consume,
+    acquire,
+    release,
+    acq_rel,
+    seq_cst
+};
+
+constexpr memory_order memory_order_relaxed = memory_order::relaxed;
+constexpr memory_order memory_order_consume = memory_order::consume;
+constexpr memory_order memory_order_acquire = memory_order::acquire;
+constexpr memory_order memory_order_release = memory_order::release;
+constexpr memory_order memory_order_acq_rel = memory_order::acq_rel;
+constexpr memory_order memory_order_seq_cst = memory_order::seq_cst;
+
+template<typename T, typename... Args>
+shared_ptr<T> make_shared(Args&&...)
+{
+    return shared_ptr<T>();
+}
+
+template<typename T, typename... Args>
+unique_ptr<T> make_unique(Args&&...)
+{
+    return unique_ptr<T>();
+}
+}  // namespace sep::shim
+
+// Forward declarations for fmt library
+namespace fmt {
+template<typename... T>
+class format_string
+{
+public:
+    format_string() {}
+};
+
+template<typename T>
+class basic_string_view
+{
+public:
+    basic_string_view() {}
+    basic_string_view(const char*) {}
+};
+
+template<typename T>
+class basic_memory_buffer
+{
+public:
+    basic_memory_buffer() {}
+};
+
+template<typename T>
+class basic_runtime
+{
+public:
+    basic_runtime() {}
+};
+
+using string_view   = basic_string_view<char>;
+using memory_buffer = basic_memory_buffer<char>;
+using runtime       = basic_runtime<char>;
+}  // namespace fmt
+
+// Stub implementations for spdlog
+namespace spdlog {
+// Forward declarations
+class logger;
+
+// Enums
+enum class level
+{
+    trace,
+    debug,
+    info,
+    warn,
+    err,
+    critical,
+    off
+};
+
+// Stub for logger class
+class logger
+{
+public:
+    logger() {}
+    logger(const sep::shim::string&) {}
+
+    template<typename... Args>
+    void log(level, const fmt::format_string<Args...>&, Args&&...)
+    {}
+
+    template<typename... Args>
+    void trace(const fmt::format_string<Args...>&, Args&&...)
+    {}
+
+    template<typename... Args>
+    void debug(const fmt::format_string<Args...>&, Args&&...)
+    {}
+
+    template<typename... Args>
+    void info(const fmt::format_string<Args...>&, Args&&...)
+    {}
+
+    template<typename... Args>
+    void warn(const fmt::format_string<Args...>&, Args&&...)
+    {}
+
+    template<typename... Args>
+    void error(const fmt::format_string<Args...>&, Args&&...)
+    {}
+
+    template<typename... Args>
+    void critical(const fmt::format_string<Args...>&, Args&&...)
+    {}
+};
+
+// Stub for registry
+namespace details {
+class registry
+{
+public:
+    static registry& instance()
+    {
+        static registry instance;
+        static bool     initialized = false;
+        if (!initialized)
+        {
+            initialized = true;
+            instance.set_level(level::info);
+        }
+        return instance;
+    }
+
+    sep::shim::shared_ptr<logger> get(const sep::shim::string&)
+    {
+        try
+        {
+            return sep::shim::make_shared<logger>();
+        }
+        catch (const sep::shim::exception& e)
+        {
+            (void)fprintf(stderr, "Failed to create logger: %s\n", e.what());
+            return nullptr;
+        }
+    }
+
+    void register_logger(sep::shim::shared_ptr<logger>) {}
+
+    void set_default_logger(sep::shim::shared_ptr<logger>) {}
+
+    void drop(const sep::shim::string&) {}
+
+    void drop_all() {}
+
+    void shutdown() {}
+
+    void set_automatic_registration(bool) {}
+
+    void set_level(level) {}
+
+    void flush_on(level) {}
+
+    void flush_every(sep::shim::chrono::seconds) {}
+};
+} // namespace details
+} // namespace spdlog
+
+#else
+#    include <spdlog/spdlog.h>
+#    include <spdlog/details/registry.h>
+#    include <chrono>
+
+namespace sep {
+namespace spdlog {
+
+using logger = ::spdlog::logger;
+using level  = ::spdlog::level::level_enum;
+
+namespace details {
+class registry
+{
+public:
+    static registry& instance()
+    {
+        static registry inst;
+        return inst;
+    }
+
+    std::shared_ptr<logger> get(const std::string& name)
+    {
+        return ::spdlog::get(name);
+    }
+
+    void register_logger(std::shared_ptr<logger> lg)
+    {
+        ::spdlog::register_logger(std::move(lg));
+    }
+
+    void set_default_logger(std::shared_ptr<logger> lg)
+    {
+        ::spdlog::set_default_logger(std::move(lg));
+    }
+
+    void drop(const std::string& name)
+    {
+        ::spdlog::drop(name);
+    }
+
+    void drop_all()
+    {
+        ::spdlog::drop_all();
+    }
+
+    void shutdown()
+    {
+        ::spdlog::shutdown();
+    }
+
+    void set_automatic_registration(bool v)
+    {
+        ::spdlog::details::registry::instance().set_automatic_registration(v);
+    }
+
+    void set_level(level lvl)
+    {
+        ::spdlog::set_level(static_cast<::spdlog::level::level_enum>(lvl));
+    }
+
+    void flush_on(level lvl)
+    {
+        ::spdlog::flush_on(static_cast<::spdlog::level::level_enum>(lvl));
+    }
+
+    void flush_every(std::chrono::seconds interval)
+    {
+        ::spdlog::flush_every(interval);
+    }
+};
+} // namespace details
+} // namespace spdlog
+} // namespace sep
+#endif // defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)

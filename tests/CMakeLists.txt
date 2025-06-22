@@ -1,0 +1,2 @@
+add_executable(blender_api_test blender/api_test.cpp)
+target_link_libraries(blender_api_test sep_blender sep_core)

@@ -1,0 +1,54 @@
+#pragma once
+
+#include "cuda/macros.h"
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime.h>
+#else
+#include "cuda/cuda_impl.h"
+#endif
+
+#include <cstdio>
+
+#include "cuda/cuda_common.h"
+#include "cuda/macros.h"
+
+// Comprehensive CUDA helper utilities - consolidated from multiple files
+namespace sep {
+namespace cuda {
+
+SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+    if (error != cudaSuccess) {
+        (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
+    }
+}
+
+struct StreamDestroyer {
+    void operator()(cudaStream_t stream) const noexcept {
+        if (stream) {
+            cudaStreamDestroy(stream);
+        }
+    }
+};
+
+struct EventDestroyer {
+    void operator()(cudaEvent_t event) const noexcept {
+        if (event) {
+            cudaEventDestroy(event);
+        }
+    }
+};
+
+#ifndef CUDA_CHECK
+#define CUDA_CHECK(call)                             \
+    do {                                             \
+        cudaError_t error = call;                    \
+        if (error != cudaSuccess) {                  \
+            ::sep::cuda::logCudaError(#call, error); \
+        }                                            \
+    } while (0)
+#endif
+
+// Additional CUDA utility functions that may be moved from other files
+
+}  // namespace cuda
+}  // namespace sep

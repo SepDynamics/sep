@@ -1,0 +1,92 @@
+# Build artifacts (most frequent)
+build/
+_build/
+out/
+dist/
+bin/
+output/
+*CMakeFiles/*
+Makefile
+_work/
+_diag/
+_deps/
+output/
+.codechecker/
+opentelemetry-cpp/
+workspace/
+glm/doc/
+actions-runner/
+
+# Compiled files
+*.o
+*.a
+*.so
+*.dll
+*.exe
+*.obj
+*.lib
+*.dylib
+*.tar.gz
+
+# Dependencies (second most common)
+vendor/
+externals/
+boost/
+crow/
+!src/blender/
+!tests/blender/
+!include/blender/
+tbb/
+temp/
+ollama/
+
+#.vscode/
+.idea/
+.cache/
+*.swp
+*.swo
+*.cu.o
+*.device-link.o
+*.ptx
+*.cubin
+*.fatbin
+*.deb
+CMakeFiles/
+# Testing
+coverage/
+.nyc_output/
+test-results/
+.pytest_cache/
+asio/
+.pnpm-store/
+node_modules/
+extern/*
+!extern/patches/
+
+# Security
+.env*
+*.key
+*.pem
+secrets/
+
+# Modern build tools
+.next/
+.nuxt/
+.svelte-kit/
+
+# Environment
+.env*
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+.Trash-1000/
+
+CMakeCache.txt
+build.ninja
+compile_commands.json
+.ninja_deps
+.ninja_log
+!CMakeLists.txt

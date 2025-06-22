@@ -1,0 +1,22 @@
+{
+    "api": {
+        "host": "127.0.0.1",
+        "port": 8080,
+        "threads": 4,
+        "log_level": "info",
+        "max_batch_size": 1024,
+        "enable_metrics": true,
+        "keep_alive_timeout_ms": 15000,
+        "cors": {
+            "enabled": false,
+            "allowed_origins": "*"
+        }
+    },
+    "logging": {
+        "level": "info",
+        "log_dir": "logs",
+        "log_file": "sep.log",
+        "console_output": true,
+        "file_output": true
+    }
+}

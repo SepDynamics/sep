@@ -42,18 +42,18 @@ class BlenderBridge {
   BlenderBridge& operator=(BlenderBridge&&) noexcept = delete;
   virtual ~BlenderBridge();
 
-  virtual SEPResult init(::sep::GPUContext* ctx);  // Use global namespace for GPUContext
+  virtual sep::SEPResult init(::sep::GPUContext* ctx);  // Use global namespace for GPUContext
 
-  virtual SEPResult registerObject(  // Changed to global SEPResult
+  virtual sep::SEPResult registerObject(  // Changed to global SEPResult
       Object* obj, const sep::pattern::PatternConfig& config,
       sep::pattern::ObjectHandle* handle_out);
 
-  virtual SEPResult updateObject(  // Changed to global SEPResult
+  virtual sep::SEPResult updateObject(  // Changed to global SEPResult
       sep::pattern::ObjectHandle handle, const sep::pattern::PatternMetrics& metrics);
 
-  virtual SEPResult processPatterns();  // Changed to global SEPResult
+  virtual sep::SEPResult processPatterns();  // Changed to global SEPResult
 
-  virtual SEPResult syncMemory(  // Changed to global SEPResult
+  virtual sep::SEPResult syncMemory(  // Changed to global SEPResult
       MemoryTierEnum tier, bool force = false);
 
   void addObserver(std::shared_ptr<PatternObserver> observer);
@@ -94,20 +94,20 @@ class BlenderBridge {
   void notifyStateChange(sep::pattern::ObjectHandle handle,
                          PatternStateEnum old_state,
                          PatternStateEnum new_state);
-  void notifyError(SEPResult error, const char* message);  // Changed to global SEPResult
+  void notifyError(sep::SEPResult error, const char* message);  // Changed to global SEPResult
   void notifyResourceWarning(sep::pattern::ResourceType type, float utilization);
 
-  SEPResult processObjectPatterns(sep::pattern::ObjectHandle handle,
+  sep::SEPResult processObjectPatterns(sep::pattern::ObjectHandle handle,
                                     ObjectState& state);           // Changed to global SEPResult
-  SEPResult updatePatternMetrics(ObjectState& state);            // Changed to global SEPResult
-  SEPResult validatePatternCoherence(const ObjectState& state);  // Changed to global SEPResult
-  SEPResult checkResourceLimits();                               // Changed to global SEPResult
+  sep::SEPResult updatePatternMetrics(ObjectState& state);            // Changed to global SEPResult
+  sep::SEPResult validatePatternCoherence(const ObjectState& state);  // Changed to global SEPResult
+  sep::SEPResult checkResourceLimits();                               // Changed to global SEPResult
 
-  SEPResult allocatePatternMemory(ObjectState& state);  // Changed to global SEPResult
-  SEPResult freePatternMemory(ObjectState& state);      // Changed to global SEPResult
-  SEPResult promotePatterns(sep::pattern::ObjectHandle handle,
+  sep::SEPResult allocatePatternMemory(ObjectState& state);  // Changed to global SEPResult
+  sep::SEPResult freePatternMemory(ObjectState& state);      // Changed to global SEPResult
+  sep::SEPResult promotePatterns(sep::pattern::ObjectHandle handle,
                               MemoryTierEnum target_tier);  // Changed to global SEPResult
-  SEPResult syncPatternData(sep::pattern::ObjectHandle handle,
+  sep::SEPResult syncPatternData(sep::pattern::ObjectHandle handle,
                               bool force);  // Changed to global SEPResult
 
   bool isInitialized() const { return initialized_; }

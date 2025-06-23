@@ -3,6 +3,7 @@
 
 #include "quantum/processor.h"
 #include "quantum/types.h"
+#include "quantum/resource_predictor.h" // Provides context types
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>

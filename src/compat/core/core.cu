@@ -1,122 +1,199 @@
-#include "compat/cuda_unified_fix.h"
+#include "cuda/core.h"
+
+#include <stdexcept>
 
 #include "cuda/cuda_common.h"
+#include "cuda/kernels.h"
+#include "cuda/macros.h"  // for SEP_CUDA_CHECK_NOTHROW
+#include "cuda/stream.h"  // for Stream::create()
+#include "compat/cuda_helpers.h"
 
-
-#if !defined(__CUDACC__)
-#    include <string>
-#endif
-
-#if !defined(__CUDACC__)
 namespace sep::cuda {
 
-// Simple error handling
-enum class Status
-{
-    Success = 0,
-    Error   = 1
-};
+CudaCore::CudaCore() = default;
 
-class Error
-{
-public:
-    Error() : status(Status::Success), message("") {}
-    Error(Status s) : status(s), message("") {}
-    Error(Status s, const std::string& msg) : status(s), message(msg) {}
+Error CudaCore::initialize(int device_id) {
+  if (initialized_) {
+    return {Status::Success, "", "", SEPResult::SUCCESS};
+  }
 
-    Status      status;
-    std::string message;
-};
+  Error error = initializeDevice(device_id);
+  if (error.status != Status::Success) {
+    return error;
+  }
 
-KernelTrace::KernelTrace(const char* name, cudaStream_t stream) noexcept
-    : span_(name), stream_(stream), start_(nullptr), stop_(nullptr)
-{
-    if (cudaEventCreate(&start_) != cudaSuccess || cudaEventCreate(&stop_) != cudaSuccess
-        || cudaEventRecord(start_, stream_) != cudaSuccess)
-    {
-        // Handle initialization failure
-        if (start_)
-            cudaEventDestroy(start_);
-        if (stop_)
-            cudaEventDestroy(stop_);
-        start_ = stop_ = nullptr;
-    }
+  error = queryDeviceProperties();
+  if (error.status != Status::Success) {
+    return error;
+  }
+
+  error = updateMetrics();
+  if (error.status != Status::Success) {
+    return error;
+  }
+
+  initialized_ = true;
+  return {Status::Success, "", "", SEPResult::SUCCESS};
 }
 
-KernelTrace::~KernelTrace() noexcept
-{
-    if (!start_ || !stop_)
-        return;
+Error CudaCore::setDevice(int device) {
+  if (device < 0 || device >= getDeviceCount()) {
+    return {Status::Error, "Invalid device ID", "", SEPResult::INVALID_ARGUMENT};
+  }
 
-    try
-    {
-        float ms = 0.0f;
-        if (cudaEventRecord(stop_, stream_) == cudaSuccess && cudaEventSynchronize(stop_) == cudaSuccess
-            && cudaEventElapsedTime(&ms, start_, stop_) == cudaSuccess)
-        {
-            span_.setAttribute("kernel_time_ms", static_cast<std::int64_t>(ms));
-        }
-    }
-    catch (...)
-    {
-        // Suppress exceptions in destructor
-    }
+  CUDA_CHECK(cudaSetDevice(device));
 
-    // Cleanup events
-    if (start_)
-        cudaEventDestroy(start_);
-    if (stop_)
-        cudaEventDestroy(stop_);
+  current_device_ = device;
+  return {Status::Success, "", "", SEPResult::SUCCESS};
 }
 
-// CUDA kernel for calculating grid dimensions
-SEP_DEVICE dim3 calculateGrid(int n, int blockSize)
-{
-    int numBlocks = (n + blockSize - 1) / blockSize;
-    return dim3(numBlocks);
+int CudaCore::getDeviceCount() const {
+  int count = 0;
+  SEP_CUDA_CHECK_NOTHROW(cudaGetDeviceCount(&count));
+  return count;
 }
 
-// CUDA kernel for calculating block dimensions
-SEP_DEVICE dim3 calculateBlock(int blockSize)
-{
-    return dim3(blockSize);
+Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const {
+  if (device < 0 || device >= getDeviceCount()) {
+    return {Status::Error, "Invalid device ID", "", SEPResult::INVALID_ARGUMENT};
+  }
+
+  CUDA_CHECK(cudaGetDeviceProperties(&props, device));
+
+  return {Status::Success, "", "", SEPResult::SUCCESS};
 }
 
-// Helper function to check CUDA errors
-Error checkCudaError(cudaError_t cuda_error, const char* operation)
-{
-    try
-    {
-        if (cuda_error != cudaSuccess)
-        {
-            throw sep::CudaException(__FILE__, __LINE__, cuda_error);
-        }
-    }
-    catch (const sep::CudaException& e)
-    {
-        return Error(Status::Error, std::string(operation) + ": " + e.what());
-    }
-    return Error(Status::Success);
+StreamPtr CudaCore::createStream(sep::StreamFlags flags) {
+  return Stream::create(flags);
 }
 
-// Helper function to synchronize device
-Error synchronizeDevice() noexcept
-{
-    try
-    {
-        cudaError_t sync_error = cudaDeviceSynchronize();
-        if (sync_error != cudaSuccess)
-        {
-            return Error(Status::Error,
-                         std::string("Device synchronization failed: ") + cudaGetErrorString(sync_error));
-        }
-    }
-    catch (...)
-    {
-        return Error(Status::Error, "Unexpected error during device synchronization");
-    }
-    return Error(Status::Success);
+Error CudaCore::destroyStream(cudaStream_t stream) {
+  if (!stream) {
+    return {Status::Success, "", "", SEPResult::SUCCESS};
+  }
+
+  CUDA_CHECK(cudaStreamDestroy(stream));
+
+  return {Status::Success, "", "", SEPResult::SUCCESS};
+}
+
+Error CudaCore::synchronizeStream(cudaStream_t stream) {
+  if (!stream) {
+    return {Status::Success, "", "", SEPResult::SUCCESS};
+  }
+
+  CUDA_CHECK(cudaStreamSynchronize(stream));
+
+  return {Status::Success, "", "", SEPResult::SUCCESS};
+}
+
+Error CudaCore::getMemoryInfo(size_t& free, size_t& total) const {
+  CUDA_CHECK(cudaMemGetInfo(&free, &total));
+
+  return {Status::Success, "", "", SEPResult::SUCCESS};
+}
+
+Error CudaCore::getLastError() const {
+  cudaError_t error = cudaGetLastError();
+  return {error == cudaSuccess ? Status::Success : Status::Error,
+          error != cudaSuccess ? cudaGetErrorString(error) : "", "",
+          error == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+}
+
+std::string CudaCore::getErrorString(cudaError_t error) const { return cudaGetErrorString(error); }
+
+CudaMetrics CudaCore::getMetrics() const { return current_metrics_; }
+
+Error CudaCore::updateMetrics() {
+  size_t free_memory = 0;
+  size_t total_memory = 0;
+
+  Error error = getMemoryInfo(free_memory, total_memory);
+  if (error.status != Status::Success) {
+    return error;
+  }
+
+  current_metrics_.total_memory = total_memory;
+  current_metrics_.used_memory = total_memory - free_memory;
+  current_metrics_.memory_utilization =
+      static_cast<float>(current_metrics_.used_memory) / total_memory;
+
+  // Update other metrics if we have a valid device
+  if (current_device_ >= 0 && current_device_ < static_cast<int>(device_properties_.size())) {
+    // Note: Would need nvml for actual GPU utilization
+    current_metrics_.gpu_utilization = 0.0f;
+    current_metrics_.active_kernels = 0;
+  }
+
+  return {Status::Success, "", "", SEPResult::SUCCESS};
+}
+
+Error CudaCore::initializeDevice(int device) {
+  if (device < 0) {
+    return {Status::Error, "Invalid device ID", "", SEPResult::INVALID_ARGUMENT};
+  }
+
+  CUDA_CHECK(cudaSetDevice(device));
+
+  current_device_ = device;
+  return {Status::Success, "", "", SEPResult::SUCCESS};
+}
+
+Error CudaCore::queryDeviceProperties() {
+  int count = getDeviceCount();
+  if (count <= 0) {
+    return {Status::Error, "No CUDA devices found", "", SEPResult::INVALID_ARGUMENT};
+  }
+
+  device_properties_.resize(count);
+  for (int i = 0; i < count; ++i) {
+    CUDA_CHECK(cudaGetDeviceProperties(&device_properties_[i], i));
+  }
+
+  return {Status::Success, "", "", SEPResult::SUCCESS};
+}
+
+Error CudaCore::launchQBSA(const DeviceMemory<std::uint32_t>& probe_indices,
+                           const DeviceMemory<std::uint32_t>& expectations,
+                           std::uint32_t num_probes, DeviceMemory<std::uint32_t>& bitfield,
+                           DeviceMemory<std::uint32_t>& corrections,
+                           DeviceMemory<std::uint32_t>& correction_count, Stream& stream) {
+  cudaError_t result =
+      launchQBSAKernel(probe_indices.get(), expectations.get(), num_probes, bitfield.get(),
+                       corrections.get(), correction_count.get(), static_cast<cudaStream_t>(stream.handle()));
+  return {result == cudaSuccess ? Status::Success : Status::Error,
+          result != cudaSuccess ? cudaGetErrorString(result) : "", "",
+          result == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+}
+
+Error CudaCore::launchQSH(const DeviceMemory<std::uint64_t>& chunks, std::uint32_t num_chunks,
+                          DeviceMemory<std::uint32_t>& collapse_indices,
+                          DeviceMemory<std::uint32_t>& collapse_counts, Stream& stream) {
+  cudaError_t result = launchQSHKernel(chunks.get(), num_chunks, collapse_indices.get(),
+                                       collapse_counts.get(), static_cast<cudaStream_t>(stream.handle()));
+  return {result == cudaSuccess ? Status::Success : Status::Error,
+          result != cudaSuccess ? cudaGetErrorString(result) : "", "",
+          result == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+}
+
+Error CudaCore::launchSimilarity(const DeviceMemory<float>& similarity,
+                                 const DeviceMemory<float>& emb_a, const DeviceMemory<float>& emb_b,
+                                 std::uint32_t embedding_size, Stream& stream) {
+  cudaError_t result = launchSimilarityKernel(const_cast<float*>(similarity.get()), emb_a.get(),
+                                             emb_b.get(), embedding_size, static_cast<cudaStream_t>(stream.handle()));
+  return {result == cudaSuccess ? Status::Success : Status::Error,
+          result != cudaSuccess ? cudaGetErrorString(result) : "", "",
+          result == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+}
+
+Error CudaCore::launchBlend(DeviceMemory<float>& output, const DeviceMemory<float>& embeddings,
+                            const DeviceMemory<float>& weights, std::uint32_t num_contexts,
+                            std::uint32_t embedding_size, Stream& stream) {
+  cudaError_t result = launchBlendKernel(output.get(), embeddings.get(), weights.get(),
+                                        num_contexts, embedding_size, static_cast<cudaStream_t>(stream.handle()));
+  return {result == cudaSuccess ? Status::Success : Status::Error,
+          result != cudaSuccess ? cudaGetErrorString(result) : "", "",
+          result == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
 }
 
 }  // namespace sep::cuda
-#endif

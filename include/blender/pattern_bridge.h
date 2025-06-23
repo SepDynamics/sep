@@ -27,6 +27,12 @@
 namespace sep {
 namespace pattern {
 
+struct PatternLimits {
+    static constexpr std::size_t MAX_PATTERNS = 10000;
+    static constexpr float MIN_COHERENCE_VALUE = 0.0f;
+    static constexpr float MAX_COHERENCE = 1.0f;
+};
+
 // Forward declare if necessary, or include the full definition
 class PatternProcessor;
 
@@ -114,7 +120,7 @@ class BlenderBridge {
                        const sep::pattern::PatternMetrics& metrics);
   void notifyStateChange(sep::pattern::ObjectHandle handle, PatternStateEnum old_state,
                          PatternStateEnum new_state);
-  void notifyError(::SEPResult error, const char* message);
+  void notifyError(sep::SEPResult error, const char* message);
   void notifyResourceWarning(sep::pattern::ResourceType type, float utilization);
 
   // Member Variables

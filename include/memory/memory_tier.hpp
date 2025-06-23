@@ -45,7 +45,7 @@ struct MemoryBlock {
     float                      utilization{0.0f};
     std::size_t                access_count{0};
     TierType                   tier{TierType::HOST};
-    blender::CompressionMethod compression{blender::CompressionMethod::None};
+    ::blender::CompressionMethod compression{::blender::CompressionMethod::None};
     std::size_t                original_size{0};
     float                      stability{0.0f};
     float                      coherence{0.0f};

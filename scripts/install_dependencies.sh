@@ -44,3 +44,7 @@ fi
 cd /usr/src/googletest
 sudo cmake . -B build
 sudo cmake --build build --target install
+
+# Verify toolchain presence
+cmake --version
+g++ --version

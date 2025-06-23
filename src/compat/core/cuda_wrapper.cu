@@ -9,7 +9,7 @@
 
 // Include CUDA compatibility header first
 
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 #include "compat/cuda_unified_fix.h"
 
 // Include memory tiers first to prevent redefinitions
@@ -28,7 +28,7 @@
 // CUDA compatibility headers
 
 // SEP core headers
-#include "cuda/cuda_wrapper.h"
+#include "compat/cuda_wrapper.h"
 
 #include "memory/memory_tier_manager.hpp"
 #include "compat/cuda_helpers.h"

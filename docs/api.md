@@ -1,6 +1,16 @@
-# API Module Review
+# API Module Overview
 
-This document summarizes the state of the files under `src/api` and `include/api`.
+The API layer is split into a public header tree under `include/api` and
+matching implementations in `src/api`.  Each header exposes declarations only
+so other modules can depend on the API without pulling in implementation
+details.  Previous helper sources like `connection_manager.cpp` have been
+removed, leaving `connection_manager.h` as an interface used solely by tests.
+
+Generated build files (`cmake_install.cmake`, `CMakeFiles/` directories, etc.)
+were removed from version control to keep the repository clean.
+
+The following table lists the remaining headers and their corresponding
+implementations:
 
 ## Public interface headers
 

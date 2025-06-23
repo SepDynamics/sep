@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include "cuda/kernels.h"
-#include "cuda/kernels.cuh"
-#include "cuda/types.h"
-#include "cuda/constants.h"
-#include "cuda/raii.h"
+#include "compat/kernels.h"
+#include "compat/kernels.cuh"
+#include "compat/types.h"
+#include "compat/constants.h"
+#include "compat/raii.h"
 #include "test_utils.hpp"
 #include <vector>
 #include <memory>

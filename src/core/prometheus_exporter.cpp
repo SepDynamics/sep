@@ -1,4 +1,4 @@
-#include "metrics/prometheus_exporter.h"
+#include "core/prometheus_exporter.h"
 
 #include <sstream>
 

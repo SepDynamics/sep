@@ -1,5 +1,5 @@
 #include "audio/pipeline.h"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 #include <complex>
 #include <memory>
 #include <glm/glm.hpp>

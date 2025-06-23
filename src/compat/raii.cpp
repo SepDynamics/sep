@@ -3,8 +3,8 @@
 #ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
 #define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
 #endif
-#include "cuda/macros.h"
-#include "cuda/raii.h"
+#include "compat/macros.h"
+#include "compat/raii.h"
 #include "compat/cuda_unified_fix.h"
 #include "memory/memory_tier_manager.hpp"
 #include "compat/cuda_helpers.h"

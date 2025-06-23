@@ -3,12 +3,12 @@
 #ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
 #define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
 #endif
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 
 
-#include "cuda/macros.h"
+#include "compat/macros.h"
 
-#include "cuda/types.h"
+#include "compat/types.h"
 #include "compat/cuda_unified_fix.h"
 #include "compat/cuda_helpers.h"
 #include <cstddef>

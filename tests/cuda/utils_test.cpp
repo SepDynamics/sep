@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "cuda/constants.h"
-#include "cuda/memory.h"
+#include "compat/constants.h"
+#include "compat/memory.h"
 
 using namespace sep::cuda;
 

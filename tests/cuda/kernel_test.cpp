@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "cuda/raii.h"
-#include "cuda/kernels.h"
+#include "compat/raii.h"
+#include "compat/kernels.h"
 #include "sep/shim.h"
 
 

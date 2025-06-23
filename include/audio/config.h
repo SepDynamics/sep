@@ -5,7 +5,7 @@
  */
 
 #include "audio/types.h"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 
 
 namespace sep {

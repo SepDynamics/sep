@@ -7,7 +7,7 @@
 #include <cstring>
 
 // Include CUDA runtime only when CUDA is available
-#include "cuda/macros.h"
+#include "compat/macros.h"
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
 #else

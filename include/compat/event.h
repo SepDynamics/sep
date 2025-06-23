@@ -1,7 +1,7 @@
 #ifndef SEP_CUDA_EVENT_H
 #define SEP_CUDA_EVENT_H
 
-#include "cuda/macros.h"
+#include "compat/macros.h"
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
 #else

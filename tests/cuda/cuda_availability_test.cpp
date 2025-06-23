@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "cuda/macros.h"
+#include "compat/macros.h"
 #if !SEP_CUDA_AVAILABLE
 TEST(CudaAvailabilityTest, SkipWhenNoCudaRuntime) {
     GTEST_SKIP() << "CUDA runtime not available";

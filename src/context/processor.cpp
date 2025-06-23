@@ -1,12 +1,12 @@
-#include "cuda/stream.h"
-#include "cuda/memory.h"
+#include "compat/stream.h"
+#include "compat/memory.h"
 #include "quantum/priority.h"
 #include "quantum/relationship.h"
 #include "quantum/pattern_processor.h"
 #include "core/types.h"
 
 #include "memory/memory_tier_manager.hpp"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 
 
 #include "compat/shim.h"
@@ -45,7 +45,7 @@
 #include "quantum/pattern_evolution.h"
 #include "quantum/types.h"
 #include "memory/manager.h"
-#include "metrics/allocation_metrics.h"
+#include "core/allocation_metrics.h"
 
 namespace sep::context {
 

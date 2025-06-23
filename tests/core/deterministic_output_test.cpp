@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "core/engine.h"
-#include "cuda/types.h"
+#include "compat/types.h"
 #include "core/types.h"
 
 using namespace sep;

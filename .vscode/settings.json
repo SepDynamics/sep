@@ -1,13 +1,4 @@
 {
     "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 1000,
-    "tasks.runOn": "folderOpen",
-    "emeraldwalk.runonsave": {
-        "commands": [
-            {
-                "match": ".*",
-                "cmd": "ninja"
-            }
-        ]
-    }
+    "files.autoSaveDelay": 10,
 }

@@ -8,7 +8,7 @@
 #endif
 
 #include "api/rate_limiter.h"
-#include "config/types.h"  // Include for RateLimitConfig
+#include "api/types.h"  // Include for RateLimitConfig
 
 namespace sep::api {
 

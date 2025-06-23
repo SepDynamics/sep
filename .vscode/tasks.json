@@ -4,7 +4,7 @@
     {
       "label": "Auto Build",
       "type": "shell",
-      "command": "ninja",
+      "command": "make",
       "group": "build",
       "presentation": {
         "reveal": "silent",
@@ -13,14 +13,13 @@
       "runOptions": {
         "runOn": "folderOpen"
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": ["$nvcc"]
     },
     {
       "label": "Configure",
       "type": "shell",
       "command": "cmake",
       "args": [
-        "-G", "Ninja",
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
         "-DCMAKE_BUILD_TYPE=Release",
         "-DCMAKE_C_COMPILER=/usr/bin/gcc-14",
@@ -32,12 +31,12 @@
         "reveal": "always",
         "panel": "shared"
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": ["$nvcc"]
     },
     {
       "label": "Build",
       "type": "shell",
-      "command": "ninja",
+      "command": "make",
       "group": {
         "kind": "build",
         "isDefault": true
@@ -48,7 +47,7 @@
         "reveal": "always",
         "panel": "shared"
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": ["$nvcc"]
     },
     {
       "label": "Clean",

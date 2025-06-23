@@ -45,7 +45,7 @@ The memory system underpins pattern processing and should remain. Only minor
 subfolder cleanup is recommended—`manager.cpp` implements logging helpers and
 could live under `src/logging/`. The core tier source files are well isolated.
 
-Header organisation could be simplified by merging `memory_tier.h` with
+Header organisation was simplified by merging `memory_tier.h` into
 `memory_tier.hpp`. The same applies to small helpers in `unified_memory.h` and
 `memory.cu`.
 

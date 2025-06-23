@@ -12,7 +12,7 @@
 #include "core/types.h"
 #include "blender/pattern_observer.h"   // For PatternObserver
 #include "blender/types.h"              // For Object, SEPResult, etc.
-#include "memory/memory_tier.h"   // Provides MemoryTier
+#include "memory/memory_tier.hpp"   // Provides MemoryTier
 #include "memory/memory_tier_manager.hpp"  // For MemoryTierManager
 
 #include <atomic>

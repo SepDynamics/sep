@@ -10,7 +10,7 @@
 // Project includes
 #include "core/common.h"
 #include "quantum/dag_graph.h"
-#include "memory/memory_tier.h"
+#include "memory/memory_tier.hpp"
 #include "memory/types.h"
 #include "compat/shim.h"
 #include "quantum/relationship.h"

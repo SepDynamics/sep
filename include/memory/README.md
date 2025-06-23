@@ -8,8 +8,8 @@
 This directory exposes the public API for the engine's tiered memory system. The
 matching source files live under `src/memory`.
 
-- **`memory_tier.h` / `memory_tier.hpp`**
-  - Declare the `MemoryTier` class and helper structures.
+- **`memory_tier.hpp`**
+  - Declares the `MemoryTier` class, tier enums and `MemoryBlock`.
   - `src/memory/memory_tier.cpp` contains the full implementation including pool
     allocation, defragmentation and pattern storage logic.
 
@@ -35,14 +35,14 @@ Public headers for the memory subsystem live here. They expose the tier manager,
 allocation primitives and persistence helpers.
 
 - **`memory_tier_manager.hpp`** – singleton controlling STM, MTM and LTM tiers.
-- **`memory_tier.hpp`** and **`memory_tier.h`** – structures and inline methods for
+- **`memory_tier.hpp`** – structures and inline methods for
   memory blocks and tier pools.
 - **`unified_memory.h`** – lightweight RAII wrapper around CUDA's unified memory.
 - **`types.h`** – shared enums plus the `RedisManager` API.
 
-These headers are widely included so they remain worth keeping. Collapsing
-`memory_tier.h` with `memory_tier.hpp` would reduce duplication. Minor logging
-helpers in `manager.h` could merge with the source implementation.
+These headers are widely included so they remain worth keeping. `memory_tier.h`
+was merged into `memory_tier.hpp` to remove duplication. Minor logging helpers
+in `manager.h` could merge with the source implementation.
 
 ## From branch: codex/write-memory-tier-and-redis-manager-documentation-2025-06-22
 

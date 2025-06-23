@@ -229,6 +229,14 @@ inline void from_json(const nlohmann::json& j, APIConfig& c)
 
 }  // namespace config
 
+enum class PatternStateEnum {
+    UNINITIALIZED = 0,
+    INITIALIZING,
+    ACTIVE,
+    STOPPED,
+    ERROR
+};
+
 enum class StreamFlags { Default = 0, NonBlocking = 1 };
 }  // namespace sep
 

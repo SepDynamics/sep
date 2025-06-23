@@ -433,5 +433,12 @@ inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cud
 }
 }  // namespace cuda_stub_constants
 
+#if !SEP_CUDA_AVAILABLE
+using cuda_stub_constants::cudaEvent_t;
+using cuda_stub_constants::cudaStream_t;
+using cuda_stub_constants::cudaMemcpyKind;
+using cuda_stub_constants::cudaDeviceProp;
+#endif
+
 #endif  // !SEP_CUDA_AVAILABLE
 #endif  // SEP_CUDA_IMPL_H

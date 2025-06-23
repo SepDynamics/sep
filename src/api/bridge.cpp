@@ -1,6 +1,7 @@
 #define BUILDING_SEP_BRIDGE
 #include "api/bridge.h"
 #include "api/bridge.hpp"
+#include "api/types.h"
 
 
 #include <mutex>

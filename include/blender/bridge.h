@@ -13,6 +13,8 @@
 #include "blender/gpu_context.h"
 #include "blender/pattern_common.h"
 #include "pattern/data.hpp"
+#include "quantum/pattern_processor.h"
+#include "blender/config.h"
 
 #include "blender/types.h"
 #include "core/types.h"
@@ -21,7 +23,6 @@
 
 namespace sep {
 namespace pattern {
-using ::sep::SEPResult;
 
 struct PatternLimits {
     static constexpr size_t MAX_PATTERNS = 10000;

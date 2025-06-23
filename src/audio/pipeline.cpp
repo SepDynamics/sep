@@ -82,7 +82,7 @@ void AudioPipeline::applyHannWindow(std::vector<float>& samples) {
     for (size_t i = 0; i < samples.size(); ++i) {
         float angle = 2.0f * glm::pi<float>() * static_cast<float>(i) /
                       static_cast<float>(samples.size());
-        float window = 0.5f * (1.0f - std::cosf(angle));
+        float window = 0.5f * (1.0f - std::cos(angle));
         samples[i] *= window;
     }
 }

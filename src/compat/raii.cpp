@@ -15,6 +15,7 @@
 #include "compat/raii.h"
 #include "memory/memory_tier_manager.hpp"
 #include "compat/cuda_helpers.h"
+#include "compat/cuda_impl.h"
 
 // Simple debug flag check without external logger dependency
 namespace {
@@ -55,7 +56,7 @@ extern "C" cudaError_t cudaStreamDestroy(cudaStream_t /*stream*/) {
 extern "C" cudaError_t cudaStreamSynchronize(cudaStream_t /*stream*/) {
     return cudaSuccess;
 }
-extern "C" cudaError_t cudaEventCreate(cudaEvent_t* event) {
+extern "C" cudaError_t cudaEventCreate(void** event) {
     if (event) {
         *event = nullptr;
     }
@@ -127,7 +128,7 @@ EventRAII::EventRAII() {
     // the real CUDA runtime or the stub implementation. Casting through
     // the stub-specific type is unnecessary and breaks when the stub is
     // absent, so simply pass the address of the underlying handle.
-    cudaError_t err = cudaEventCreate(&event_);
+    cudaError_t err = cudaEventCreate(reinterpret_cast<void**>(&event_));
     if (err != cudaSuccess) {
         event_ = nullptr;
         if (debugAllocEnabled()) {

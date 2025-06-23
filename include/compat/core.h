@@ -2,7 +2,7 @@
 #define SEP_CUDA_CORE_H
 
 // Include the standard CUDA runtime first
-#include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"
 
 #include <vector>
 

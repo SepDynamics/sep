@@ -1,5 +1,5 @@
 
-#include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"
 #include <gtest/gtest.h>
 
 // Override the kernel launcher to simulate failure

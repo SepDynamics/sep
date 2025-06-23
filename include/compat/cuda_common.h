@@ -4,7 +4,7 @@
 // Include CUDA runtime when available, otherwise use stub definitions
 #include "compat/macros.h"
 #if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"
 #else
 #include "compat/cuda_impl.h"
 #endif

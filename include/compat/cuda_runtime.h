@@ -45,7 +45,7 @@
 #endif
 
 // Now include CUDA runtime with the protections in place
-#include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"
 
 // Allow the toolchain to define __noinline__ if needed
 

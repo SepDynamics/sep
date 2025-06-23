@@ -2,7 +2,7 @@
 
 #include "macros.h"
 #if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"
 #else
 
 #include "types.h"

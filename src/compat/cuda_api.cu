@@ -7,7 +7,7 @@
 #define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
 #endif
 #if defined(__CUDACC__) || defined(SEP_USE_CUDA)
-#include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"
 #else
 #include "compat/cuda_impl.h"
 #endif

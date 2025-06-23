@@ -15,7 +15,7 @@
 #include <iostream>
 #include <utility>
 
-#include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"
 
 // Simple debug flag check without external logger dependency
 namespace {

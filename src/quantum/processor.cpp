@@ -38,7 +38,6 @@ public:
     SEPResult addPattern(const Pattern& pattern) {
         std::lock_guard<std::mutex> lock(mutex_);
         if (patterns_.size() >= config_.max_patterns) {
-            return SEPResult::ERROR;
         }
         patterns_.push_back(pattern);
         pattern_map_[pattern.id] = patterns_.size() - 1;

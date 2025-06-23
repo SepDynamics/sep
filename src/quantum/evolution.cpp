@@ -295,7 +295,6 @@ private:
 };
 
 EvolutionEngine::EvolutionEngine(Processor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {}
-EvolutionEngine::~EvolutionEngine() = default;
 
 BatchProcessingResult EvolutionEngine::evolve(const EvolutionParams& params) { return impl_->evolve(params); }
 BatchProcessingResult EvolutionEngine::evolveGeneration() { return impl_->evolveGeneration(); }
@@ -309,7 +308,7 @@ std::vector<std::string> EvolutionEngine::rouletteWheelSelection(size_t count) {
 float EvolutionEngine::calculateFitness(const Pattern& pattern) const { return impl_->calculateFitness(pattern); }
 float EvolutionEngine::calculateDiversity(const std::vector<Pattern>& patterns) const { return impl_->calculateDiversity(patterns); }
 void EvolutionEngine::setParams(const EvolutionParams& params) { impl_->setParams(params); }
-EvolutionParams EvolutionEngine::getParams() const { return impl_->getParams(); }
+EvolutionEngine::EvolutionParams EvolutionEngine::getParams() const { return impl_->getParams(); }
 EvolutionEngine::EvolutionStats EvolutionEngine::getStats() const { return impl_->getStats(); }
 std::vector<EvolutionEngine::EvolutionStats> EvolutionEngine::getHistory() const { return impl_->getHistory(); }
 

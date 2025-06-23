@@ -52,8 +52,7 @@ class IConnectionManager {
   virtual void sendKeepAlive() = 0;
 };
 
-// Factory function to create connection manager
-std::unique_ptr<IConnectionManager> create_connection_manager(const ConnectionConfig &config);
+
 
 }  // namespace api
 }  // namespace sep

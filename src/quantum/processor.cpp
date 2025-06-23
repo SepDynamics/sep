@@ -1,7 +1,7 @@
 #include "quantum/processor.h"
 #include "quantum/types.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/random.hpp>
+#include "quantum/quantum_rng.h"
 #include <mutex>
 #include <unordered_map>
 #include <chrono>
@@ -13,7 +13,7 @@ namespace sep::quantum {
 class ProcessorImpl {
 public:
     explicit ProcessorImpl(const ProcessingConfig& config)
-        : config_(config), initialized_(false), gpu_context_(nullptr), hooks_(nullptr) {}
+        : config_(config), initialized_(false), gpu_context_(nullptr), hooks_(nullptr), rng_() {}
 
     SEPResult init(GPUContext* gpu_context) {
         std::lock_guard<std::mutex> lock(mutex_);
@@ -282,10 +282,10 @@ private:
     }
 
     void mutateQuantumState(QuantumState& state) {
-        state.coherence = glm::clamp(state.coherence + glm::gaussRand(0.0f, config_.mutation_rate), 0.0f, 1.0f);
-        state.stability = glm::clamp(state.stability + glm::gaussRand(0.0f, config_.mutation_rate * 0.5f), 0.0f, 1.0f);
-        state.entropy = glm::clamp(state.entropy + glm::gaussRand(0.0f, config_.mutation_rate * 2.0f), 0.0f, 1.0f);
-        state.mutation_rate *= (1.0f + glm::gaussRand(0.0f, 0.1f));
+        state.coherence = glm::clamp(state.coherence + rng_.gaussian(0.0f, config_.mutation_rate), 0.0f, 1.0f);
+        state.stability = glm::clamp(state.stability + rng_.gaussian(0.0f, config_.mutation_rate * 0.5f), 0.0f, 1.0f);
+        state.entropy = glm::clamp(state.entropy + rng_.gaussian(0.0f, config_.mutation_rate * 2.0f), 0.0f, 1.0f);
+        state.mutation_rate *= (1.0f + rng_.gaussian(0.0f, 0.1f));
         state.mutation_count++;
     }
 
@@ -335,6 +335,7 @@ private:
     bool initialized_;
     GPUContext* gpu_context_;
     core::SystemHooks* hooks_;
+    QuantumRNG rng_;
 };
 
 Processor::Processor(const ProcessingConfig& config) : impl_(std::make_unique<ProcessorImpl>(config)) {}

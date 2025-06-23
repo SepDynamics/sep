@@ -6,10 +6,9 @@
 #include <unordered_map>
 #include <chrono>
 #include <algorithm>
+#include <atomic>
 
 namespace sep::quantum {
-
-enum class SEPResult { SUCCESS, NOT_FOUND, ERROR };
 
 class ProcessorImpl {
 public:

@@ -11,6 +11,9 @@ sudo apt-get install -y \
     libspdlog-dev \
     libfmt-dev \
     libglm-dev \
+    libboost-all-dev \
+    libasio-dev \
+    libssl-dev \
     libcurl4-openssl-dev \
     liblz4-dev \
     libzstd-dev \
@@ -30,6 +33,11 @@ fi
 # Clone Crow (header-only web framework) if not present
 if [ ! -d "third_party/crow" ]; then
     git clone https://github.com/CrowCpp/crow.git third_party/crow
+fi
+
+# Clone GLM (header-only math library) if not present
+if [ ! -d "third_party/glm" ]; then
+    git clone https://github.com/g-truc/glm.git third_party/glm
 fi
 
 # Build GoogleTest libraries

@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 project(SEPEngine)
 
 include_directories(${CMAKE_SOURCE_DIR}/include
-                    ${CMAKE_SOURCE_DIR}/third_party)
+                    ${CMAKE_SOURCE_DIR}/third_party
+                    ${CMAKE_SOURCE_DIR}/third_party/crow/include
+                    ${CMAKE_SOURCE_DIR}/third_party/glm)
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 add_subdirectory(src/blender)

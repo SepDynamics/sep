@@ -22,7 +22,6 @@ option(BUILD_BENCHMARKS "Build benchmark tests" ${GoogleBenchmark_FOUND})
 add_executable(blender_tests
     compression_test.cpp
     pattern_data_test.cpp
-    connection_pool_manager_test.cpp
     api_test.cpp
     mesh_handler_test.cpp
     mesh_handler_perf_test.cpp

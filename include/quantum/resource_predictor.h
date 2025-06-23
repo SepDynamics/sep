@@ -67,6 +67,40 @@ struct ResourceMetrics {
 
 namespace sep::context {
 
+struct ResourcePrediction {
+  std::size_t estimated_memory{0};
+  float estimated_cpu_usage{0.0f};
+  float estimated_gpu_usage{0.0f};
+  std::size_t optimal_batch_size{0};
+  double expected_processing_time{0.0};
+  float confidence_score{0.0f};
+};
+
+struct UsagePattern {
+  std::size_t memory_used{0};
+  std::size_t batch_size{0};
+  double processing_time{0.0};
+  float cpu_utilization{0.0f};
+  float gpu_utilization{0.0f};
+};
+
+struct ResourceState {
+  std::size_t total_memory{0};
+  std::size_t free_memory{0};
+  std::size_t used_memory{0};
+  std::size_t active_batches{0};
+  float gpu_utilization{0.0f};
+  float cpu_utilization{0.0f};
+};
+
+struct ResourceMetrics {
+  std::size_t peak_memory_usage{0};
+  std::size_t average_memory_usage{0};
+  double average_processing_time{0.0};
+  std::size_t total_batches_processed{0};
+  float resource_efficiency{0.0f};
+};
+
 class ResourcePredictor {
 public:
   virtual ~ResourcePredictor() = default;

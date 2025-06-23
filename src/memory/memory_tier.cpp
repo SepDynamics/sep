@@ -124,7 +124,7 @@ MemoryBlock* MemoryTier::allocate(std::size_t size) {
     block->allocated = true;
     block->utilization = static_cast<float>(block->size) / config_.size;
     block->access_count = 0;
-    block->compression = blender::CompressionMethod::None;
+    block->compression = ::blender::CompressionMethod::None;
     block->original_size = size;
     block->coherence = 0.0f;
     block->last_coherence = 0.0f;

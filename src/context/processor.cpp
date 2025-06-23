@@ -1271,6 +1271,7 @@ struct Prediction
     float  confidence_score{0.0f};
 };
 
+
 #ifdef __linux__
 struct CpuTimes
 {

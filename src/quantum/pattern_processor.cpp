@@ -19,6 +19,7 @@ public:
         PatternProcessResult result;
         result.state = state;
         result.pattern_id = pattern_id;
+        result.memory_tier = MemoryTierEnum::STM; // Default to Short-Term Memory
         
         // Process using quantum processor
         quantum_processor_->evolveState(result.state, pattern_id);
@@ -27,7 +28,7 @@ public:
 
         // Determine memory tier
         if (result.coherence_score >= constants::LTM_COHERENCE_THRESHOLD &&
-            result.stability_score >= constants::STABILITY_THRESHOLD) {
+            result.stability_score >= pattern::STABILITY_THRESHOLD) {
             result.memory_tier = MemoryTierEnum::LTM;
         } else if (result.coherence_score >= constants::MTM_COHERENCE_THRESHOLD) {
             result.memory_tier = MemoryTierEnum::MTM;
@@ -39,8 +40,11 @@ public:
     std::vector<PatternProcessResult> processBatch(
         const std::vector<QuantumState>& states,
         const std::vector<std::string>& pattern_ids) override {
-        std::vector<PatternProcessResult> results;
-        results.reserve(states.size());
+        if (states.size() != pattern_ids.size()) {
+            return {};
+        }
+        
+        std::vector<PatternProcessResult> results(states.size());
         
         for (size_t i = 0; i < states.size(); ++i) {
             results.push_back(processPattern(states[i], pattern_ids[i]));
@@ -56,11 +60,11 @@ public:
     }
 
     bool isStable(const QuantumState& state) const override {
-        return state.stability >= constants::STABILITY_THRESHOLD;
+        return state.stability >= pattern::STABILITY_THRESHOLD;
     }
 
     bool isCollapsed(const QuantumState& state) const override {
-        return state.coherence < constants::MIN_COHERENCE;
+        return state.coherence < pattern::MIN_COHERENCE;
     }
 
     bool isQuantum(const QuantumState& state) const override {

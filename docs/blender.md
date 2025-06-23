@@ -37,3 +37,15 @@ Several `.cpp` files provide only skeletal implementations:
 - Verified that each `.cpp` implementation includes its matching header. Interfaces are declared once in `include/blender` and reused across the engine.
 
 After this cleanup the **BlenderBridge** in `src/blender/blender_integration.cpp` serves as the single entry point for pattern processing. The bridge owns a `PatternProcessor`, keeps object state in a map and relays updates through the `GPUContext` and `MeshHandler`. Applications interact with the engine by calling the C API in `api.cpp`, which forwards to `BlenderBridge` methods.
+
+## Bridge Architecture
+
+The **BlenderBridge** class in `src/blender/blender_integration.cpp` owns the pattern processor and coordinates GPU access. It exposes a lightweight C API via `src/blender/api.cpp` so Python scripts can drive the engine. Each registered object keeps its pattern state and observers are notified on every update.
+
+## Visualization Pipeline
+
+`pattern_visualization_pipeline.cpp` reloads compute shaders, projects n-dimensional pattern data down to a 3D mesh and passes the results to the `MeshHandler`. Shader sources live in `assets/shaders/` and are compiled at build time.
+
+## Remaining Cleanup
+
+Obsolete `cmake_install.cmake` files were removed and tests reside in `tests/blender/`. The last big cleanup tasks are consolidating `bridge.h` with `pattern_bridge.h` and fleshing out the GPU context helpers.

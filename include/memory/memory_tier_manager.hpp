@@ -91,21 +91,27 @@ public:
     void rebuildLookup();
 
     // Pattern management
-    SEPResult launch_pattern_processing(pattern::PatternData* patterns,
-                                      pattern::PatternData* results,
-                                      const pattern::PatternConfig& config,
+    // Forward declare pattern namespace types to avoid compilation errors
+    namespace sep { namespace pattern {
+        struct PatternData;
+        struct PatternConfig;
+    }}
+
+    SEPResult launch_pattern_processing(sep::pattern::PatternData* patterns,
+                                      sep::pattern::PatternData* results,
+                                      const sep::pattern::PatternConfig& config,
                                       size_t pattern_count,
-                                      const pattern::PatternData* previous_patterns,
+                                      const sep::pattern::PatternData* previous_patterns,
                                       void* stream);
                                       
-    void updateRelationship(std::size_t id_a, std::size_t id_b, pattern::RelationshipType type);
+    void updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type);
     void removePattern(std::size_t id);
     void pruneWeakRelationships();
     void calculateRelationshipCoherence();
     void loadLTMFromPersistence();
-    void storeLTMToPersistence(const Pattern& pattern);
-    Pattern* findPattern(std::size_t id);
-    const Pattern* findPattern(std::size_t id) const;
+    void storeLTMToPersistence(const quantum::Pattern& pattern);
+    quantum::Pattern* findPattern(std::size_t id);
+    const quantum::Pattern* findPattern(std::size_t id) const;
     void cleanupExpiredPatterns();
     void prunePatternsByPriority(sep::memory::TierType tier, size_t max_count);
 

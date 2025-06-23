@@ -183,7 +183,7 @@ MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, i
     return stm_.get();
 }
 
-void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b, sep::pattern::RelationshipType type) {
+void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type) {
     pattern_relationships_[id_a][id_b] = 1.0;
     pattern_relationships_[id_b][id_a] = 1.0;
     (void)type;  // Prevent unused parameter warning

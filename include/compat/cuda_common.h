@@ -12,7 +12,11 @@
 // Forward declaration for compat/cuda_helpers.h functionality
 // These are defined in compat/cuda_helpers.h
 namespace sep::cuda {
+#if SEP_CUDA_AVAILABLE
+void logCudaError(const char* operation, cudaError_t error);
+#else
 void logCudaError(const char* operation, cuda_stub_constants::cudaError_t error);
+#endif
 }  // namespace sep::cuda
 
 

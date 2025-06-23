@@ -4,13 +4,14 @@ set -uo pipefail
 # Configuration
 # export CC=/usr/bin/gcc-14
 # export CXX=/usr/bin/g++-14
-BUILD_DIR="/sep/build"
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BUILD_DIR="$ROOT_DIR/build"
 LOG_DIR="$BUILD_DIR/logs"
 BUILD_LOG="$LOG_DIR/build_log.txt"
 CMAKE_LOG="$LOG_DIR/cmake_log.txt"
 ERROR_LOG="$LOG_DIR/error_summary.txt"
 
-cd /sep 
+cd "$ROOT_DIR"
 
 clear 
 
@@ -33,7 +34,7 @@ cmake \
     --log-level=TRACE \
     --no-warn-unused-cli \
     --compile-no-warning-as-error \
-    -B /sep/build -S /sep . \
+    -B "$BUILD_DIR" -S "$ROOT_DIR" . \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     -Wno-dev -Wno-deprecated \
     -Wno-error=deprecated
@@ -155,12 +156,12 @@ build_project() {
     if [ -f "$BUILD_DIR/Makefile" ]; then
         CMakeFile="$BUILD_DIR/Makefile"
         cd "$BUILD_DIR"
-    elif [ -f "/sep/Makefile" ]; then
-        CMakeFile="/sep/Makefile"
-        cd "/sep"
+    elif [ -f "$ROOT_DIR/Makefile" ]; then
+        CMakeFile="$ROOT_DIR/Makefile"
+        cd "$ROOT_DIR"
         echo "[i] Using Makefile from workspace root"
     else
-        echo "[!!] No Makefile file found in $BUILD_DIR or /sep"
+        echo "[!!] No Makefile file found in $BUILD_DIR or $ROOT_DIR"
         return 1
     fi
     
@@ -169,7 +170,7 @@ build_project() {
     # export CXX="$CXX_COMPILER"
     export CUDACXX="nvcc"
     # Force the use of libc++ instead of libc++
-    echo "[i] Using compilers: CC=$CC, CXX=$CXX"
+    echo "[i] Using compilers: CC=${CC:-}, CXX=${CXX:-}"
     echo "[i] Forcing standard library: libc++"
     
     
@@ -324,16 +325,16 @@ run_tests() {
     echo "[*] Running tests..."
     
     # Check if the test script exists
-    if [ -f "/sep/scripts/run_tests.sh" ]; then
-        echo "[i] Using test script: /sep/scripts/run_tests.sh"
+    if [ -f "$ROOT_DIR/scripts/run_tests.sh" ]; then
+        echo "[i] Using test script: $ROOT_DIR/scripts/run_tests.sh"
         
         # Make sure it's executable
-        chmod +x /sep/scripts/run_tests.sh
+        chmod +x "$ROOT_DIR/scripts/run_tests.sh"
         
         # Run the test script
-        /sep/scripts/run_tests.sh
+        "$ROOT_DIR/scripts/run_tests.sh"
     else
-        echo "[!!] Test script not found: /sep/scripts/run_tests.sh"
+        echo "[!!] Test script not found: $ROOT_DIR/scripts/run_tests.sh"
         echo "[i] Running CTest directly..."
         
         # Fall back to running CTest directly
@@ -402,7 +403,7 @@ main() {
 }
 
 # Trap to ensure we return to workspace directory
-trap 'cd /sep' EXIT
+trap 'cd "$ROOT_DIR"' EXIT
 
 # Run main function
 main "$@"

@@ -8,7 +8,7 @@ interfaces, and note areas for consolidation.
 
 No CUDA kernels or obsolete helper functions were found in `src/quantum`.
 All implementations rely on host side algorithms. Generated build artifacts such
-as `cmake_install.cmake` were present and removed from the directory.
+as `cmake_install.cmake` were removed from every module directory.
 
 ## Header and Implementation Separation
 
@@ -29,4 +29,13 @@ experimental integrations of QFH analysis with the core processor. Once these
 interfaces stabilize they could be merged with `quantum_processor.cpp` to reduce
 duplication. The existing DAG utilities mentioned in the `README` may also be
 consolidated with context management to avoid multiple lineage trackers.
+
+## Integration with Pattern Processing
+
+After cleanup the quantum processors expose minimal headers and integrate
+through `QuantumPatternProcessor`. This class relies on `QuantumProcessor` and
+the optional QFH-enhanced helpers to evolve `PatternData` records. The pattern
+module converts its internal state to `QuantumState` structures and delegates
+coherence and stability calculations to the quantum layer. Results drive memory
+tiering and mutation logic in `PatternProcessor`.
 

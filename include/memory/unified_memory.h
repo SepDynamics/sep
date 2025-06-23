@@ -4,7 +4,7 @@
 #include "compat/cuda_defs.h"
 #include "memory/manager.h"
 #include "memory/types.h"
-#include "memory/memory_tier.h"
+#include "memory/memory_tier.hpp"
 #include <cstddef>
 
 namespace sep {

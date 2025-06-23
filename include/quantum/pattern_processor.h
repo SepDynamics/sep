@@ -3,7 +3,7 @@
 #include "quantum/processor.h"
 #include "quantum/types.h"
 #include "core/types.h"
-#include "memory/memory_tier.h"
+#include "memory/memory_tier.hpp"
 #include <vector>
 #include <memory>
 #include <string>

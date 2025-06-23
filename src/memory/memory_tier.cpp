@@ -8,7 +8,6 @@
 #include <memory>
 #include <stdexcept>
 
-#include "memory/memory_tier.h"
 #include "memory/memory_tier.hpp"
 
 #ifndef SEP_HAS_EXCEPTIONS

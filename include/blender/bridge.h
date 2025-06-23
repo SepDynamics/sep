@@ -16,7 +16,6 @@
 #include "blender/types.h"
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
-#include "memory/memory_tier.h"
 
 
 namespace sep {

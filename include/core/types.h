@@ -21,6 +21,9 @@
 #include <vector>
 
 namespace sep {
+
+enum class StreamFlags { Default = 0, NonBlocking = 1 };
+
 namespace config {
 
 // Default configuration values

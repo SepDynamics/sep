@@ -3,8 +3,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 #include <algorithm>
+#include <atomic>
+#include <chrono>
 #include <numeric>
 #include <random>
+#include <stdexcept>
+#include <string>
 
 namespace sep::quantum {
 

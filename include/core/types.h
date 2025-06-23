@@ -230,8 +230,16 @@ inline void from_json(const nlohmann::json& j, APIConfig& c)
 }  // namespace config
 
 enum class PatternStateEnum {
+<<<<<<< HEAD
     UNINITIALIZED,
     INITIALIZING
+=======
+    UNINITIALIZED = 0,
+    INITIALIZING,
+    ACTIVE,
+    STOPPED,
+    ERROR
+>>>>>>> 12751ce (Fix build dependencies and add stubs)
 };
 
 enum class StreamFlags { Default = 0, NonBlocking = 1 };

@@ -15,7 +15,11 @@ namespace sep::cuda {
 #if SEP_CUDA_AVAILABLE
 void logCudaError(const char* operation, cudaError_t error);
 #else
-void logCudaError(const char* operation, cuda_stub_constants::cudaError_t error);
+// The stub implementation shares the same cudaError_t type defined in
+// compat/cuda_impl.h, so keep the interface consistent regardless of build
+// mode. Using the fully qualified name from the stub namespace caused build
+// failures because the type alias lives outside that namespace.
+void logCudaError(const char* operation, cudaError_t error);
 #endif
 }  // namespace sep::cuda
 

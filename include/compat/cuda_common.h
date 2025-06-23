@@ -15,7 +15,7 @@ namespace sep::cuda {
 #if SEP_CUDA_AVAILABLE
 void logCudaError(const char* operation, cudaError_t error);
 #else
-void logCudaError(const char* operation, cuda_stub_constants::cudaError_t error);
+void logCudaError(const char* operation, sep::cuda::cudaError_t error);
 #endif
 }  // namespace sep::cuda
 

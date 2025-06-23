@@ -1,14 +1,14 @@
 #include "quantum/processor.h"
 #include "quantum/types.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 #include <mutex>
 #include <unordered_map>
 #include <chrono>
 #include <algorithm>
+#include <atomic>
 
 namespace sep::quantum {
-
-enum class SEPResult { SUCCESS, NOT_FOUND, ERROR };
 
 class ProcessorImpl {
 public:

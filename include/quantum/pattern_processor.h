@@ -1,6 +1,6 @@
 #pragma once
 
-#include "quantum/processor.h"
+#include "context/processor.h"
 #include "quantum/types.h"
 #include "core/types.h"
 #include "memory/memory_tier.h"

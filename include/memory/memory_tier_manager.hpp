@@ -13,7 +13,7 @@
 #include "memory/memory_tier.h"
 #include "memory/types.h"
 #include "compat/shim.h"
-#include "quantum/relationship.h"
+#include "context/relationship.h"
 #include "quantum/types.h"
 
 // Standard library includes

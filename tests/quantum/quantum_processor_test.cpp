@@ -1,5 +1,5 @@
 #include "core/quantum_processor.h"
-#include "quantum/processor.h"
+#include "context/processor.h"
 #include "quantum/types.h"
 
 #include <atomic>

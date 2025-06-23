@@ -1,7 +1,7 @@
 #pragma once
 
 // Compatibility header - redirects to new unified processor
-#include "quantum/processor.h"
+#include "context/processor.h"
 
 namespace sep::quantum {
 

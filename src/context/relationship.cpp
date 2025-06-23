@@ -1,4 +1,4 @@
-#include "quantum/relationship.h"
+#include "context/relationship.h"
 #include "cuda/math_common.h"
 
 #include <algorithm>

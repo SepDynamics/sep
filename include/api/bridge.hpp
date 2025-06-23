@@ -1,7 +1,7 @@
 #ifndef SEP_API_BRIDGE_HPP
 #define SEP_API_BRIDGE_HPP
 
-#include "quantum/processor.h"
+#include "context/processor.h"
 #include "quantum/types.h"
 #include <nlohmann/json.hpp>
 #include <string>

@@ -1,7 +1,7 @@
 #ifndef SEP_QUANTUM_PROCESSOR_H
 #define SEP_QUANTUM_PROCESSOR_H
 
-#include "types.h"
+#include "quantum/types.h"
 #include "core/common.h"
 #include <memory>
 #include <vector>

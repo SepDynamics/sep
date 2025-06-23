@@ -1,7 +1,7 @@
 #include "cuda/stream.h"
 #include "cuda/memory.h"
-#include "quantum/priority.h"
-#include "quantum/relationship.h"
+#include "context/priority.h"
+#include "context/relationship.h"
 #include "quantum/pattern_processor.h"
 #include "core/types.h"
 
@@ -40,7 +40,7 @@
 #endif
 
 
-#include "quantum/processor.h"
+#include "context/processor.h"
 #include "quantum/resource_predictor.h"
 #include "quantum/pattern_evolution.h"
 #include "quantum/types.h"

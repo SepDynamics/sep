@@ -15,7 +15,7 @@ bool simplePatternMatch(const std::string& pattern, const std::string& text);
 // Relationship strength and metadata
 struct RelationshipInfo {
   std::string target_id;
-  ::sep::pattern::RelationshipType type{::sep::pattern::RelationshipType::REFERENCE};
+  uint8_t type{0}; // 0 = REFERENCE
   float strength{0.0f};
   bool bidirectional{false};
 };
@@ -35,7 +35,7 @@ class RelationshipManager {
 
   // Add a relationship between contexts
   bool addRelationship(const std::string& source_id, const std::string& target_id,
-                       ::sep::pattern::RelationshipType type, float strength, bool bidirectional = false);
+                       uint8_t type, float strength, bool bidirectional = false);
 
   // Remove a relationship
   bool removeRelationship(const std::string& source_id, const std::string& target_id);

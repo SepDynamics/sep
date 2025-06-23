@@ -1,6 +1,6 @@
 #include "context/processor.h"
 #include "context/types.h"
-#include "metrics/allocation_metrics.h"
+#include "core/allocation_metrics.h"
 #include <gtest/gtest.h>
 #include <vector>
 

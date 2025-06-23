@@ -45,7 +45,7 @@
 #include "quantum/pattern_evolution.h"
 #include "quantum/types.h"
 #include "memory/manager.h"
-#include "metrics/allocation_metrics.h"
+#include "core/allocation_metrics.h"
 
 namespace sep::context {
 

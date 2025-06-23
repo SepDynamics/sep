@@ -1,5 +1,5 @@
-#include "cuda/compat.h"
-#include "cuda/constants.h"
+#include "compat/compat.h"
+#include "compat/constants.h"
 
 #include <gtest/gtest.h>
 #include <type_traits>

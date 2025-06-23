@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "cuda/raii.h"
+#include "compat/raii.h"
 
 extern "C" int mockCudaGetAllocationCount();
 extern "C" void mockCudaReset();

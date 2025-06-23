@@ -1,13 +1,13 @@
 #ifndef SEP_CUDA_STREAM_IMPL_H
 #define SEP_CUDA_STREAM_IMPL_H
 
-#include "cuda/stream.h"
+#include "compat/stream.h"
 #include "compat/cuda_helpers.h"
 
 #ifdef __CUDACC__
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 #else
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #endif
 
 namespace sep {

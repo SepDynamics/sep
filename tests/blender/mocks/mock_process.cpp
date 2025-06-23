@@ -3,7 +3,7 @@
  * @brief Mock implementation of pattern processing functions for testing
  */
 
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 
 
 #include <iostream>

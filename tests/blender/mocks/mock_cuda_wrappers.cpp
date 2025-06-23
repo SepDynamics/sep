@@ -7,9 +7,9 @@
  * actual CUDA hardware or drivers.
  */
 
-#include "cuda/cuda_wrapper.h"
-#include "cuda/macros.h"
-#include "cuda/raii.h"
+#include "compat/cuda_wrapper.h"
+#include "compat/macros.h"
+#include "compat/raii.h"
 #include <cstdint>
 #include <cstring>
 #include <iostream>

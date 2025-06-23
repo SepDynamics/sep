@@ -2,6 +2,7 @@
 #define SEP_QUANTUM_EVOLUTION_H
 
 #include "quantum/types.h"
+#include <memory>
 #include <vector>
 
 namespace sep::quantum {

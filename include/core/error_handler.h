@@ -13,9 +13,10 @@ class ErrorHandler {
  public:
   static ErrorHandler &instance();
 
-  void reportError(const ::sep::Error &error, std::function<bool()> retry = {});
+  void reportError(const ::sep::api::APIResponse::Error &error,
+                   std::function<bool()> retry = {});
 
-  ::sep::shim::vector<::sep::Error> getErrors() const;
+  ::sep::shim::vector<::sep::api::APIResponse::Error> getErrors() const;
 
   void clearErrors();
 
@@ -23,7 +24,7 @@ class ErrorHandler {
 
  private:
   struct Entry {
-    ::sep::Error error;
+    ::sep::api::APIResponse::Error error;
     std::function<bool()> retry;
     std::uint32_t attempts{0};
   };

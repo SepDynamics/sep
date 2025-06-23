@@ -1,7 +1,7 @@
 #define BUILDING_SEP_BRIDGE
 #include "api/bridge.h"
 #include "api/bridge.hpp"
-#include "bridge_internal.hpp"
+#include "api/bridge_internal.hpp"
 #include "config/manager.h"
 #include <nlohmann/json.hpp>
 #include <cstdio>

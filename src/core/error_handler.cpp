@@ -2,7 +2,8 @@
 #include "compat/shim.h"
 
 namespace sep::core {
-using ::sep::Error;
+using ::sep::api::APIResponse;
+using ::sep::api::APIResponse::Error;
 using ::sep::shim::vector;
 
 ErrorHandler &ErrorHandler::instance() {

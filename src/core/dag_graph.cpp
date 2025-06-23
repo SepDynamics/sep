@@ -70,7 +70,7 @@ void DagGraph::removeNode(uint64_t id)
 
 bool DagGraph::hasNode(uint64_t id) const
 {
-    return nodes_.contains(id);
+    return nodes_.find(id) != nodes_.end();
 }
 
 }  // namespace dag

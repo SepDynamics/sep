@@ -1,12 +1,20 @@
 #include "quantum/processor.h"
 #include "quantum/types.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/random.hpp>
 #include <mutex>
 #include <unordered_map>
 #include <chrono>
 #include <algorithm>
 #include <atomic>
+#include <cstdint>
+#include <cmath>
+
+namespace {
+inline float deterministicNoise(uint64_t& state) {
+    state = state * 1664525u + 1013904223u;
+    return static_cast<float>(state & 0xFFFFFFFFu) / static_cast<float>(0xFFFFFFFFu);
+}
+}
 
 namespace sep::quantum {
 
@@ -282,10 +290,12 @@ private:
     }
 
     void mutateQuantumState(QuantumState& state) {
-        state.coherence = glm::clamp(state.coherence + glm::gaussRand(0.0f, config_.mutation_rate), 0.0f, 1.0f);
-        state.stability = glm::clamp(state.stability + glm::gaussRand(0.0f, config_.mutation_rate * 0.5f), 0.0f, 1.0f);
-        state.entropy = glm::clamp(state.entropy + glm::gaussRand(0.0f, config_.mutation_rate * 2.0f), 0.0f, 1.0f);
-        state.mutation_rate *= (1.0f + glm::gaussRand(0.0f, 0.1f));
+        static uint64_t noise_state = 0;
+        auto rnd = [&]() { return deterministicNoise(noise_state); };
+        state.coherence = glm::clamp(state.coherence + (rnd() * 2.0f - 1.0f) * config_.mutation_rate, 0.0f, 1.0f);
+        state.stability = glm::clamp(state.stability + (rnd() * 2.0f - 1.0f) * config_.mutation_rate * 0.5f, 0.0f, 1.0f);
+        state.entropy = glm::clamp(state.entropy + (rnd() * 2.0f - 1.0f) * config_.mutation_rate * 2.0f, 0.0f, 1.0f);
+        state.mutation_rate *= (1.0f + (rnd() * 2.0f - 1.0f) * 0.1f);
         state.mutation_count++;
     }
 

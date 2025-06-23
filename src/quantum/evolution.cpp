@@ -1,20 +1,27 @@
 #include "quantum/evolution.h"
 #include "quantum/processor.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/random.hpp>
 #include <algorithm>
 #include <numeric>
-#include <random>
 #include <stdexcept>
 #include <chrono>
 #include <atomic>
+#include <cstdint>
+#include <cmath>
+
+namespace {
+inline float deterministicNoise(uint64_t& state) {
+    state = state * 1664525u + 1013904223u;
+    return static_cast<float>(state & 0xFFFFFFFFu) / static_cast<float>(0xFFFFFFFFu);
+}
+}
 
 namespace sep::quantum {
 
 class EvolutionEngine::EvolutionEngineImpl {
 public:
     explicit EvolutionEngineImpl(Processor* processor)
-        : processor_(processor), generation_number_(0), random_engine_(std::random_device{}()) {
+        : processor_(processor), generation_number_(0), noise_state_(0) {
         if (!processor) {
             throw std::invalid_argument("Processor cannot be null");
         }
@@ -50,7 +57,7 @@ public:
                 auto parent1 = processor_->getPattern(parent_ids[0]);
                 auto parent2 = processor_->getPattern(parent_ids[1]);
                 auto child = crossover(parent1, parent2);
-                if (uniform_real_distribution_(random_engine_) < processor_->getConfig().mutation_rate) {
+                if (nextFloat() < processor_->getConfig().mutation_rate) {
                     child = mutate(child);
                 }
                 processor_->addPattern(child);
@@ -87,7 +94,7 @@ public:
         child.last_accessed = child.timestamp;
         child.last_modified = child.timestamp;
 
-        float alpha = uniform_real_distribution_(random_engine_);
+        float alpha = nextFloat();
         auto& state1 = parent1.quantum_state;
         auto& state2 = parent2.quantum_state;
         auto& child_state = child.quantum_state;
@@ -115,12 +122,13 @@ public:
         auto& state = mutated.quantum_state;
         float sigma = processor_->getConfig().mutation_rate;
 
-        state.coherence = glm::clamp(state.coherence + glm::gaussRand(0.0f, sigma), 0.0f, 1.0f);
-        state.stability = glm::clamp(state.stability + glm::gaussRand(0.0f, sigma * 0.5f), 0.0f, 1.0f);
-        state.entropy = glm::clamp(state.entropy + glm::gaussRand(0.0f, sigma * 2.0f), 0.0f, 1.0f);
+        state.coherence = glm::clamp(state.coherence + (nextFloat() * 2.0f - 1.0f) * sigma, 0.0f, 1.0f);
+        state.stability = glm::clamp(state.stability + (nextFloat() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
+        state.entropy = glm::clamp(state.entropy + (nextFloat() * 2.0f - 1.0f) * sigma * 2.0f, 0.0f, 1.0f);
 
-        mutated.position += glm::vec4(glm::gaussRand(0.0f, sigma), glm::gaussRand(0.0f, sigma),
-                                      glm::gaussRand(0.0f, sigma), 0.0f);
+        mutated.position += glm::vec4((nextFloat() * 2.0f - 1.0f) * sigma,
+                                      (nextFloat() * 2.0f - 1.0f) * sigma,
+                                      (nextFloat() * 2.0f - 1.0f) * sigma, 0.0f);
 
         state.mutation_count++;
         return mutated;
@@ -148,12 +156,10 @@ public:
         if (patterns.empty()) return {};
 
         std::vector<std::string> winners;
-        std::uniform_int_distribution<size_t> dist(0, patterns.size() - 1);
-
         for (size_t w = 0; w < num_winners; ++w) {
             std::vector<std::pair<std::string, float>> tournament;
             for (size_t i = 0; i < tournament_size; ++i) {
-                size_t idx = dist(random_engine_);
+                size_t idx = nextIndex(patterns.size());
                 tournament.push_back({patterns[idx].id, calculateFitness(patterns[idx])});
             }
             auto winner = std::max_element(tournament.begin(), tournament.end(),
@@ -176,10 +182,9 @@ public:
         }
 
         std::vector<std::string> selected;
-        std::uniform_real_distribution<float> dist(0.0f, total_fitness);
 
         for (size_t i = 0; i < count; ++i) {
-            float value = dist(random_engine_);
+            float value = nextFloat() * total_fitness;
             float cumulative = 0.0f;
             for (size_t j = 0; j < patterns.size(); ++j) {
                 cumulative += fitness_values[j];
@@ -273,13 +278,20 @@ private:
         return std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
     }
 
+    float nextFloat() {
+        return deterministicNoise(noise_state_);
+    }
+
+    size_t nextIndex(size_t max) {
+        return static_cast<size_t>(nextFloat() * static_cast<float>(max));
+    }
+
     Processor* processor_;
     EvolutionParams params_;
     size_t generation_number_;
     EvolutionStats current_stats_;
     std::vector<EvolutionStats> stats_history_;
-    std::mt19937 random_engine_;
-    std::uniform_real_distribution<float> uniform_real_distribution_{0.0f, 1.0f};
+    uint64_t noise_state_;
 };
 
 EvolutionEngine::EvolutionEngine(Processor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {}
@@ -306,26 +318,28 @@ namespace evolution {
 Pattern gaussianMutation(const Pattern& pattern, float sigma) {
     Pattern mutated = pattern;
     auto& state = mutated.quantum_state;
-    state.coherence = glm::clamp(state.coherence + glm::gaussRand(0.0f, sigma), 0.0f, 1.0f);
-    state.stability = glm::clamp(state.stability + glm::gaussRand(0.0f, sigma * 0.5f), 0.0f, 1.0f);
-    state.entropy = glm::clamp(state.entropy + glm::gaussRand(0.0f, sigma * 2.0f), 0.0f, 1.0f);
-    mutated.position += glm::vec4(glm::gaussRand(0.0f, sigma), glm::gaussRand(0.0f, sigma),
-                                  glm::gaussRand(0.0f, sigma), 0.0f);
+    static uint64_t noise_state = 0;
+    auto rnd = [&]() { return deterministicNoise(noise_state); };
+    state.coherence = glm::clamp(state.coherence + (rnd() * 2.0f - 1.0f) * sigma, 0.0f, 1.0f);
+    state.stability = glm::clamp(state.stability + (rnd() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
+    state.entropy = glm::clamp(state.entropy + (rnd() * 2.0f - 1.0f) * sigma * 2.0f, 0.0f, 1.0f);
+    mutated.position += glm::vec4((rnd() * 2.0f - 1.0f) * sigma,
+                                  (rnd() * 2.0f - 1.0f) * sigma,
+                                  (rnd() * 2.0f - 1.0f) * sigma, 0.0f);
     state.mutation_count++;
     return mutated;
 }
 
 Pattern uniformMutation(const Pattern& pattern, float rate) {
     Pattern mutated = pattern;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+    static uint64_t noise_state = 0;
+    auto rnd = [&]() { return deterministicNoise(noise_state); };
     auto& state = mutated.quantum_state;
-    if (dist(gen) < rate) state.coherence = dist(gen);
-    if (dist(gen) < rate) state.stability = dist(gen);
-    if (dist(gen) < rate) state.entropy = dist(gen);
+    if (rnd() < rate) state.coherence = rnd();
+    if (rnd() < rate) state.stability = rnd();
+    if (rnd() < rate) state.entropy = rnd();
     for (int i = 0; i < 3; ++i) {
-        if (dist(gen) < rate) mutated.position[i] = dist(gen) * 2.0f - 1.0f;
+        if (rnd() < rate) mutated.position[i] = rnd() * 2.0f - 1.0f;
     }
     state.mutation_count++;
     return mutated;
@@ -353,18 +367,17 @@ float complexityFitness(const Pattern& pattern) {
 
 std::vector<Pattern> createRandomPopulation(size_t size) {
     std::vector<Pattern> population;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+    static uint64_t noise_state = 0;
+    auto rnd = [&]() { return deterministicNoise(noise_state); };
     for (size_t i = 0; i < size; ++i) {
         Pattern pattern;
         pattern.id = "rand_" + std::to_string(i);
         auto& state = pattern.quantum_state;
-        state.coherence = dist(gen);
-        state.stability = dist(gen);
-        state.entropy = dist(gen);
-        pattern.position = glm::vec4(dist(gen) * 2.0f - 1.0f, dist(gen) * 2.0f - 1.0f,
-                                     dist(gen) * 2.0f - 1.0f, 1.0f);
+        state.coherence = rnd();
+        state.stability = rnd();
+        state.entropy = rnd();
+        pattern.position = glm::vec4(rnd() * 2.0f - 1.0f, rnd() * 2.0f - 1.0f,
+                                     rnd() * 2.0f - 1.0f, 1.0f);
         population.push_back(pattern);
     }
     return population;

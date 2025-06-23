@@ -42,29 +42,5 @@ private:
     void updatePatternFromQuantumState(PatternData& pattern, const QuantumState& state);
 };
 
-inline QuantumState QuantumPatternProcessor::patternToQuantumState(const PatternData& pattern) const {
-    QuantumState state{};
-    state.coherence = pattern.coherence;
-    state.stability = pattern.stability;
-    state.entropy = pattern.entropy;
-    state.generation = pattern.generation;
-    state.access_frequency = static_cast<float>(pattern.mutations) / (pattern.generation > 0 ? pattern.generation : 1);
-    return state;
-}
-
-inline void QuantumPatternProcessor::updatePatternFromQuantumState(PatternData& pattern, const QuantumState& state) {
-    pattern.coherence = state.coherence;
-    pattern.stability = state.stability;
-    pattern.entropy = state.entropy;
-    pattern.generation = state.generation;
-    pattern.mutations = static_cast<uint32_t>(state.access_frequency * state.generation);
-}
-
-inline QuantumPatternProcessor::QuantumPatternProcessor(const PatternProcessorConfig& config) : config_(config) {}
-
-inline SEPResult QuantumPatternProcessor::init(GPUContext* ctx) {
-    return CPUPatternProcessor::init(ctx);
-}
-
 }  // namespace pattern
 }  // namespace sep

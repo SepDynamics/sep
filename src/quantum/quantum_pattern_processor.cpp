@@ -3,6 +3,33 @@
 namespace sep {
 namespace pattern {
 
+QuantumPatternProcessor::QuantumPatternProcessor(const PatternProcessorConfig& config)
+    : config_(config) {}
+
+SEPResult QuantumPatternProcessor::init(GPUContext* ctx) {
+    return CPUPatternProcessor::init(ctx);
+}
+
+QuantumState QuantumPatternProcessor::patternToQuantumState(const PatternData& pattern) const {
+    QuantumState state{};
+    state.coherence = pattern.coherence;
+    state.stability = pattern.stability;
+    state.entropy = pattern.entropy;
+    state.generation = pattern.generation;
+    state.access_frequency = static_cast<float>(pattern.mutations) /
+                            (pattern.generation > 0 ? pattern.generation : 1);
+    return state;
+}
+
+void QuantumPatternProcessor::updatePatternFromQuantumState(PatternData& pattern,
+                                                           const QuantumState& state) {
+    pattern.coherence = state.coherence;
+    pattern.stability = state.stability;
+    pattern.entropy = state.entropy;
+    pattern.generation = state.generation;
+    pattern.mutations = static_cast<uint32_t>(state.access_frequency * state.generation);
+}
+
 std::vector<PatternProcessResult> QuantumPatternProcessor::processBatch(const std::vector<QuantumState>& states,
                                                                         const std::vector<std::string>& pattern_ids) {
     std::vector<PatternProcessResult> results;
@@ -42,11 +69,6 @@ std::vector<PatternProcessResult> QuantumPatternProcessor::processBatch(const st
     return results;
 }
 
-QuantumPatternProcessor::QuantumPatternProcessor(const PatternProcessorConfig& config) : config_(config) {}
-
-SEPResult QuantumPatternProcessor::init(GPUContext* ctx) {
-    return CPUPatternProcessor::init(ctx);
-}
 
 void QuantumPatternProcessor::evolvePatterns() {
     for (auto& pattern : getModifiablePatterns()) {

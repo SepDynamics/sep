@@ -24,10 +24,7 @@ struct QFHEvent {
     uint8_t bit_prev;    // previous bit value
     uint8_t bit_curr;    // current bit value
 
-    bool operator==(const QFHEvent& other) const {
-        return index == other.index && state == other.state &&
-               bit_prev == other.bit_prev && bit_curr == other.bit_curr;
-    }
+    bool operator==(const QFHEvent& other) const;
 };
 
 // Aggregated event including run length.

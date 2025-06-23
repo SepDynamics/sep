@@ -1,6 +1,6 @@
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 #include "quantum/qbsa_qfh.h"
 #include <glm/glm.hpp>
 #include <vector>

@@ -1,4 +1,4 @@
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 
 
 #include "compat/cuda_unified_fix.h"
@@ -8,12 +8,12 @@
 #ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
 #define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
 #endif
-#include "cuda/constants.h"
+#include "compat/constants.h"
 
 #if defined(__CUDACC__) || defined(SEP_USE_CUDA)
 #include <cuda_runtime.h>
 #else
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #endif
 
 #if !defined(__CUDACC__)

@@ -2,7 +2,7 @@
 #define SEP_CONTEXT_PRIORITY_H
 
 #include "compat/shim.h"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 
 
 #include <ctime>

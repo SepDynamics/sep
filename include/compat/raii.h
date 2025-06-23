@@ -5,8 +5,8 @@
 #include <cstdint>
 #include <memory>
 
-#include "cuda/math_common.h"
-#include "cuda/cuda_defs.h"
+#include "compat/math_common.h"
+#include "compat/cuda_defs.h"
 #include "core/types.h"
 
 namespace sep {

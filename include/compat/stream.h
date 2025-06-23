@@ -2,7 +2,7 @@
 #define SEP_CUDA_STREAM_H
 
 // First include CUDA macros to set up SEP_CUDA_AVAILABLE
-#include "cuda/macros.h"
+#include "compat/macros.h"
 
 // Then include CUDA runtime compatibility header for GCC 14 fixes
 #if SEP_CUDA_AVAILABLE
@@ -16,7 +16,7 @@
 
 // CUDA implementation headers last
 #ifdef __CUDACC__
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 #endif
 
 namespace sep {

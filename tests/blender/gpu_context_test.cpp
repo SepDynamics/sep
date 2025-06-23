@@ -1,10 +1,10 @@
 #include "blender/gpu_context.h"
 
-#include "cuda/macros.h"
+#include "compat/macros.h"
 #include <gtest/gtest.h>
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #endif
 
 #include <cmath>

@@ -30,7 +30,7 @@
 #include "memory/logger.hpp"
 #include "memory/manager.h"
 #include "memory/memory_tier_manager.hpp"
-#include "metrics/allocation_metrics.h"
+#include "core/allocation_metrics.h"
 
 namespace sep::memory {
 

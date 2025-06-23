@@ -95,3 +95,10 @@ No legacy or duplicate implementations were found during the audit.
 - Update tests referencing `src/core/system_hooks.h` to include the installed header path.
 - Continue consolidating metrics utilities under the `sep::metrics` namespace to reduce boilerplate.
 
+## Unified Metrics Module
+
+Runtime counters, tracing helpers and the new `MetricsCollector` implementation now
+reside in the shared `sep::metrics` namespace.  Source files live under `src/core`
+with public headers in `include/core`.  Each component registers with the
+`PrometheusExporter` so tools can scrape a single consolidated endpoint.
+

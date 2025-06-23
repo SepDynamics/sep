@@ -23,8 +23,7 @@
 using namespace sep::shim::chrono_literals;
 using namespace sep::cuda;
 
-namespace sep {
-namespace core {
+namespace sep::metrics {
 
 class MetricsCollector::Impl {
  public:
@@ -342,5 +341,4 @@ void MetricsCollector::resetOperation(const std::string& operation_name) {
     performance_metrics_.erase(key);
 }
 
-}  // namespace core
-}  // namespace sep
+}  // namespace sep::metrics

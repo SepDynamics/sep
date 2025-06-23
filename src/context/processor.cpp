@@ -1,3 +1,4 @@
+#include "api/types.h"
 #include "compat/stream.h"
 #include "compat/memory.h"
 #include "quantum/priority.h"
@@ -68,9 +69,9 @@ sep::MemoryTierEnum determineTierFromScore(float score)
 }
 
 // Helper functions for result types
-EmbeddingResult makeEmbeddingError(const std::string& msg)
+ollama::EmbeddingRequest makeEmbeddingError(const std::string& msg)
 {
-    EmbeddingResult result;
+    ollama::EmbeddingRequest result;
     result.success = false;
     result.error = sep::shim::string(msg.c_str());
     return result;
@@ -170,7 +171,7 @@ std::vector<float> simpleJsonEmbedding(const nlohmann::json& j, std::size_t dim)
     return simpleTextEmbedding(text, dim);
 }
 
-class ProcessorImpl : public Processor
+class ProcessorImpl : public quantum::Processor
 {
 public:
     explicit ProcessorImpl(const ProcessOptions& options)
@@ -212,7 +213,7 @@ public:
 #endif
     }
 
-    ProcessResult processContext(const Context& context) override
+    quantum::ProcessingResult processContext(const fmt::context& context) 
     {
 #if defined(__cpp_exceptions)
         try
@@ -221,13 +222,13 @@ public:
             ValidationResult validation = validateContext(context);
             if (!validation.valid)
             {
-                return ProcessResult::fail(validation.error);
+                return quantum::ProcessingResult::fail(validation.error);
             }
 
             auto embeddings = extractEmbeddings(context);
             if (!embeddings.success)
             {
-                return ProcessResult::fail(embeddings.error);
+                return quantum::ProcessingResult::fail(embeddings.error);
             }
 
             float score = calculateStabilityScore(embeddings.value);
@@ -242,7 +243,7 @@ public:
                     metrics_.allocation_failures++;
                 }
                 metrics::allocationFailures().value++;
-                return ProcessResult::fail("Memory allocation failed");
+                return quantum::ProcessingResult::fail("Memory allocation failed");
             }
 
             std::memcpy(block->ptr, embeddings.value.data(), embeddings.value.size() * sizeof(float));
@@ -284,18 +285,18 @@ public:
             results.reserve(results_std.size());
             for (const auto& r : results_std)
                 results.push_back(r);
-            return ProcessResult::ok(std::move(results));
+            return quantum::ProcessingResult::ok(std::move(results));
 #if defined(__cpp_exceptions)
         }
         catch (const std::exception& e)
         {
             logger_->error("Error processing context: {}", e.what());
-            return ProcessResult::fail(e.what());
+            return quantum::ProcessingResult::fail(e.what());
         }
 #endif
     }
 
-    ProcessResult processBatch(const Batch& batch) override
+    quantum::ProcessingResult processBatch(const Batch& batch) override
     {
 #if defined(__cpp_exceptions)
         try
@@ -326,18 +327,18 @@ public:
             auto duration = std::chrono::duration<double>(end - start).count();
             updateMetrics(results.size(), duration);
 
-            return ProcessResult::ok(std::move(results));
+            return quantum::ProcessingResult::ok(std::move(results));
 #if defined(__cpp_exceptions)
         }
         catch (const std::exception& e)
         {
             logger_->error("Error processing batch: {}", e.what());
-            return ProcessResult::fail(e.what());
+            return quantum::ProcessingResult::fail(e.what());
         }
 #endif
     }
 
-    ValidationResult validateContext(const Context& context) override
+    ValidationResult validateContext(const fmt::context& context) override
     {
         std::string error;
         if (!validateSchema(context, error))
@@ -359,8 +360,7 @@ public:
         return ValidationResult{true, sep::shim::string(""), {}};
     }
 
-    EmbeddingResult extractEmbeddings(const Context& context) override
-    {
+    ollama::EmbeddingRequest extractEmbeddings(const fmt::context& context) {
 #if defined(__cpp_exceptions)
         try
         {
@@ -427,7 +427,7 @@ public:
             for (float v : embeddings)
                 shim_emb.push_back(v);
 
-            return EmbeddingResult{true, shim_emb, sep::shim::string("")};
+            return ollama::EmbeddingRequest{true, shim_emb, sep::shim::string("")};
 #if defined(__cpp_exceptions)
         }
         catch (const std::exception& e)
@@ -435,10 +435,6 @@ public:
             return makeEmbeddingError(e.what());
         }
 #endif
-    }
-
-    SimilarityResult calculateSimilarity(const Context& a, const Context& b) override
-    {
 #if defined(__cpp_exceptions)
         try
         {
@@ -492,12 +488,6 @@ public:
             return makeSimilarityError(e.what());
         }
 #endif
-    }
-
-    BlendResult blendContexts(const ::sep::shim::vector<Context>& contexts,
-                              const ::sep::shim::vector<float>& weights) override
-
-    {
 #if defined(__cpp_exceptions)
         try
         {
@@ -567,7 +557,7 @@ public:
     }
 
 private:
-    bool validateSchema(const Context& context, std::string& error)
+    bool validateSchema(const fmt::context& context, std::string& error)
     {
         if (!context.content.is_array() && !context.content.is_object())
         {
@@ -577,7 +567,7 @@ private:
         return true;
     }
 
-    bool validateMetadata(const Context& context, std::string& error)
+    bool validateMetadata(const fmt::context& context, std::string& error)
     {
         if (!context.metadata.contains("timestamp"))
         {
@@ -636,31 +626,22 @@ private:
             / metrics_.batches_processed;
     }
 
-    ProcessorMetrics getMetrics() const override
-    {
-        std::lock_guard<std::mutex> lock(metrics_mutex_);
-        return metrics_;
-    }
-
-    void setHooks(sep::core::SystemHooks* hooks) override
+    void setHooks(sep::core::SystemHooks* hooks)
     {
         hooks_ = hooks;
     }
 
-    ProcessOptions                             options_;
     std::shared_ptr<spdlog::logger>            logger_;
     std::shared_ptr<cuda::Stream>              stream_;
     std::shared_ptr<cuda::DeviceMemory<float>> device_buffer_;
     PriorityManager                            priority_manager_;
     RelationshipManager                        relationship_manager_;
-    std::unique_ptr<pattern::PatternProcessor> pattern_processor_;
     mutable std::mutex                         metrics_mutex_;
-    ProcessorMetrics                           metrics_{};
     sep::core::SystemHooks*                    hooks_{nullptr};
 
 private:
     // Helper functions moved inside the class
-    std::string getContextId(const Context& context)
+    std::string getContextId(const fmt::context& context)
     {
         // Generate a simple hash-based ID from context content
         std::hash<std::string> hasher;
@@ -668,7 +649,7 @@ private:
         return std::to_string(hasher(content_str));
     }
 
-    float calculateRelevanceScore(const Context& context)
+    float calculateRelevanceScore(const fmt::context& context)
     {
 #if defined(__cpp_exceptions)
         try
@@ -705,7 +686,7 @@ private:
 #endif
     }
 
-    void recordContextAccess(const std::string& context_id, const Context& /*context*/)
+    void recordContextAccess(const std::string& context_id, const fmt::context& /*context*/)
     {
 #if defined(__cpp_exceptions)
         try

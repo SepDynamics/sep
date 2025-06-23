@@ -4,16 +4,12 @@
 #include "pattern/data.hpp"
 #include <nlohmann/json.hpp>
 #include "compat/shim.h"
-#include "core/types.h"
 #include "api/sep_engine.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cmath>
-
-namespace shim = ::sep::shim;
-namespace api = ::sep::api;
 
 sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(const nlohmann::json& config, const std::string& patternId)
 {
@@ -61,14 +57,14 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
     {
         for (const auto& rel_json : config["relationships"])
         {
-            ::sep::pattern::PatternRelationship rel;
+            PatternRelationship rel;
             
             std::string target_id = rel_json.value("target", "");
             if (!target_id.empty())
             {
                 rel.targetId = shim::string(target_id.c_str());
                 rel.strength = rel_json.value("strength", 0.0f);
-                rel.type = static_cast<uint8_t>(rel_json.value("type", 0));
+                rel.type = static_cast<RelationshipType>(rel_json.value("type", 0));
                 pattern.relationships.push_back(rel);
             }
         }
@@ -76,21 +72,20 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
     
     return pattern;
 }
-
 std::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns( const nlohmann::json& args)
 {
     std::vector<sep::pattern::PatternData> patterns;
     return patterns;
 }
 
-::sep::SEPResult sep::quantum::mcp::PatternEvolution::processPatterns(const std::vector<sep::pattern::PatternData>& input,
+sep::pattern::SEPResult sep::quantum::mcp::PatternEvolution::processPatterns(const std::vector<sep::pattern::PatternData>& input,
                                                               const ::sep::pattern::PatternConfig& config,
                                                               std::vector<sep::pattern::PatternData>& output)
 {
     if (input.empty())
     {
         output.clear();
-        return SEPResult::SUCCESS;
+        return pattern::SEPResult::SUCCESS;
     }
     
     output.resize(input.size());
@@ -107,7 +102,7 @@ std::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getP
         output[i].id = shim::string(api::SepEngine::generateId("pat").c_str());
     }
     
-    return SEPResult::SUCCESS;
+    return pattern::SEPResult::SUCCESS;
 }
 
 float sep::quantum::mcp::PatternEvolution::calculateRelationshipStrength(const sep::pattern::PatternData& pattern1,
@@ -148,7 +143,6 @@ nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::pattern::P
     j["stability"] = pattern.stability;
     j["entropy"] = pattern.entropy;
     j["mutation_rate"] = pattern.mutation_rate;
-    j["mutations"] = pattern.mutations;
     
     // Export relationships
     if (!pattern.relationships.empty())
@@ -196,21 +190,20 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nl
     p.stability = j.value("stability", 0.0f);
     p.entropy = j.value("entropy", 0.0f);
     p.mutation_rate = j.value("mutation_rate", 0.0f);
-    p.mutations = j.value("mutations", 0);
     
     // Import relationships
     if (j.contains("relationships") && j["relationships"].is_array())
     {
         for (const auto& rel_json : j["relationships"])
         {
-            ::sep::pattern::PatternRelationship rel;
+            PatternRelationship rel;
             
             if (rel_json.contains("target") && rel_json["target"].is_string())
             {
                 std::string target_str = rel_json["target"].get<std::string>();
                 rel.targetId = shim::string(target_str.c_str());
                 rel.strength = rel_json.value("strength", 0.0f);
-                rel.type = static_cast<uint8_t>(rel_json.value("type", 0));
+                rel.type = static_cast<RelationshipType>(rel_json.value("type", 0));
                 p.relationships.push_back(rel);
             }
         }

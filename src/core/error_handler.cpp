@@ -2,8 +2,11 @@
 #include "compat/shim.h"
 
 namespace sep::core {
+// Using declarations to simplify code
 using ::sep::Error;
 using ::sep::shim::vector;
+using ::sep::shim::mutex;
+using ::sep::shim::lock_guard;
 
 ErrorHandler &ErrorHandler::instance() {
   static ErrorHandler handler;
@@ -11,13 +14,13 @@ ErrorHandler &ErrorHandler::instance() {
 }
 
 void ErrorHandler::reportError(const Error &error, std::function<bool()> retry) {
-  std::lock_guard<std::mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   errors_.push_back({error, retry, 0});
   processRetriesLocked();
 }
 
 vector<Error> ErrorHandler::getErrors() const {
-  std::lock_guard<std::mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   vector<Error> result;
   result.reserve(errors_.size());
   for (const auto &e : errors_) {
@@ -27,12 +30,12 @@ vector<Error> ErrorHandler::getErrors() const {
 }
 
 void ErrorHandler::clearErrors() {
-  std::lock_guard<std::mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   errors_.clear();
 }
 
 bool ErrorHandler::hasErrors() const {
-  std::lock_guard<std::mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   return !errors_.empty();
 }
 

@@ -1,11 +1,12 @@
 #pragma once
 
+#include "compat/shim.h"
+
 #include <atomic>
 #include <cstdint>
 #include <memory>
 #include <unordered_map>
 #include <mutex>
-#include "compat/shim.h"
 #include <string>
 
 namespace sep::metrics {

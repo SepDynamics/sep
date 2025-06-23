@@ -57,6 +57,14 @@ SEPApiServer::~SEPApiServer() {
   instance_ = nullptr;
 }
 
+std::mutex &SEPApiServer::getMetricsMutex() {
+  return metrics_mutex_;
+}
+
+ServerMetrics &SEPApiServer::getModifiableMetrics() {
+  return server_metrics_;
+}
+
 bool SEPApiServer::start() {
   if (running_) {
     logger_->warn("Server is already running");

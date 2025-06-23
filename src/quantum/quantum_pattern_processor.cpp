@@ -1,4 +1,5 @@
 #include "quantum/quantum_pattern_processor.h"
+#include "pattern/data.hpp"
 
 namespace sep {
 namespace pattern {

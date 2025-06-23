@@ -239,6 +239,18 @@ inline cudaError_t cudaStreamCreate(cudaStream_t* stream) {
 #endif
 }
 
+inline cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+#if SEP_CUDA_AVAILABLE
+    return ::cudaStreamCreateWithFlags(stream, flags);
+#else
+    if (stream) {
+        *stream = nullptr;
+    }
+    (void)flags; // Unused in stub implementation
+    return cudaSuccess;
+#endif
+}
+
 inline cudaError_t cudaStreamDestroy(cudaStream_t stream) {
 #if SEP_CUDA_AVAILABLE
     return ::cudaStreamDestroy(stream);
@@ -256,6 +268,8 @@ inline cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
     return cudaSuccess;
 #endif
 }
+
+// cudaStreamSynchronize_ptsz is already defined as a macro in cuda_runtime.h
 
 // Simplified memory info struct to avoid parameter similarity issues
 struct CudaMemoryInfo {
@@ -400,6 +414,42 @@ inline cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event) {
 #else
     (void)stream;
     (void)event;
+    return cudaSuccess;
+#endif
+}
+
+// Add cudaStreamAttachMemAsync function
+inline cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+#if SEP_CUDA_AVAILABLE
+    return ::cudaStreamAttachMemAsync(stream, devPtr, length, flags);
+#else
+    (void)stream;
+    (void)devPtr;
+    (void)length;
+    (void)flags;
+    return cudaSuccess;
+#endif
+}
+
+// Add cudaStreamAttachMemAsync_ptsz function
+inline cudaError_t cudaStreamAttachMemAsync_ptsz(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+#if SEP_CUDA_AVAILABLE
+    return ::cudaStreamAttachMemAsync_ptsz(stream, devPtr, length, flags);
+#else
+    (void)stream;
+    (void)devPtr;
+    (void)length;
+    (void)flags;
+    return cudaSuccess;
+#endif
+}
+
+// Add cudaStreamSynchronize_ptsz function
+inline cudaError_t cudaStreamSynchronize_ptsz(cudaStream_t stream) {
+#if SEP_CUDA_AVAILABLE
+    return ::cudaStreamSynchronize_ptsz(stream);
+#else
+    (void)stream;
     return cudaSuccess;
 #endif
 }

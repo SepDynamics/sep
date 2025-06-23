@@ -1,11 +1,11 @@
 #pragma once
 
-#include "macros.h"
+#include "compat/macros.h"
 #if SEP_CUDA_AVAILABLE
 #include "compat/cuda_runtime.h"
 #else
 
-#include "types.h"
+#include "compat/types.h"
 
 #include <cstddef>
 #include <memory>

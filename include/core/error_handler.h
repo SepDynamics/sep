@@ -1,13 +1,24 @@
 #ifndef SEP_CORE_ERROR_HANDLER_H
 #define SEP_CORE_ERROR_HANDLER_H
 
-#include <functional>
-#include <mutex>
 #include "compat/shim.h"
-
 #include "core/types.h"
+#include "core/common.h"
 
-namespace sep::core {
+namespace sep {
+
+// Error type for the SEP engine
+struct Error {
+    SEPResult code{SEPResult::SUCCESS};
+    ::sep::shim::string message;
+    ::sep::shim::string location;
+    
+    Error() = default;
+    Error(SEPResult code, const ::sep::shim::string& msg, const ::sep::shim::string& loc = "")
+        : code(code), message(msg), location(loc) {}
+};
+
+namespace core {
 
 class ErrorHandler {
  public:
@@ -31,10 +42,11 @@ class ErrorHandler {
   ErrorHandler() = default;
   void processRetriesLocked();
 
-  mutable std::mutex mutex_;
+  mutable ::sep::shim::mutex mutex_;
   ::sep::shim::vector<Entry> errors_;
 };
 
-}  // namespace sep::core
+}  // namespace core
+}  // namespace sep
 
 #endif  // SEP_CORE_ERROR_HANDLER_H

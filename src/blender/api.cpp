@@ -37,11 +37,11 @@ bool validateMesh(Object* obj, Mesh* mesh)
 }
 }  // namespace
 
-extern "C" SEPResult sep_blender_init(GPUContext* gpu_ctx, const SEPConfig* config, SEPBlenderBridge** bridge_out)
+extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPConfig* config, SEPBlenderBridge** bridge_out)
 {
     if (!gpu_ctx || !bridge_out)
     {
-        return SEPResult::INIT_FAILED;
+        return sep::SEPResult::INITIALIZATION_FAILED;
     }
 
     // Use config parameter to avoid unused warning
@@ -50,28 +50,28 @@ extern "C" SEPResult sep_blender_init(GPUContext* gpu_ctx, const SEPConfig* conf
     auto bridge_ptr = std::unique_ptr<SEPBlenderBridge>(new (std::nothrow) SEPBlenderBridge());
     if (!bridge_ptr)
     {
-        return SEPResult::ALLOCATION_FAILED;
+        return sep::SEPResult::ALLOCATION_FAILED;
     }
     bridge_ptr->impl            = sep::pattern::BlenderBridge::create();
     bridge_ptr->audio_metrics   = SEPAudioMetrics{};
     bridge_ptr->pattern_metrics = SEPPatternMetrics{};
 
-    SEPResult result = bridge_ptr->impl->init(reinterpret_cast<sep::GPUContext*>(gpu_ctx));
-    if (result != SEPResult::SUCCESS)
+    auto result = bridge_ptr->impl->init(gpu_ctx);
+    if (static_cast<int32_t>(result) != static_cast<int32_t>(sep::SEPResult::SUCCESS))
     {
         // bridge_ptr goes out of scope and cleans up
-        return result;
+        return static_cast<sep::SEPResult>(static_cast<int32_t>(result));
     }
     *bridge_out = bridge_ptr.release();  // Release ownership to the caller
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-extern "C" SEPResult
-sep_register_mesh(SEPBlenderBridge* bridge, Object* bl_object, Mesh* bl_mesh, SEPMeshHandle* handle_out)
+extern "C" sep::SEPResult
+sep_register_mesh(SEPBlenderBridge* bridge, Object* bl_object, Mesh* bl_mesh, sep::pattern::ObjectHandle* handle_out)
 {
     if (!validateBridge(bridge) || !validateMesh(bl_object, bl_mesh) || !handle_out)
     {
-        return SEPResult::INVALID_OBJECT;
+        return sep::SEPResult::NOT_FOUND;
     }
 
     sep::pattern::PatternConfig config{};
@@ -80,15 +80,16 @@ sep_register_mesh(SEPBlenderBridge* bridge, Object* bl_object, Mesh* bl_mesh, SE
     config.max_patterns     = 1000;
     config.batch_size       = 64;
 
-    return bridge->impl->registerObject(bl_object, config, handle_out);
+    auto result = bridge->impl->registerObject(bl_object, config, handle_out);
+    return static_cast<sep::SEPResult>(static_cast<int32_t>(result));
 }
 
-extern "C" SEPResult
-sep_update_mesh(SEPBlenderBridge* bridge, SEPMeshHandle handle, const SEPPatternMetrics* data, bool* updated_out)
+extern "C" sep::SEPResult
+sep_update_mesh(SEPBlenderBridge* bridge, sep::pattern::ObjectHandle handle, const SEPPatternMetrics* data, bool* updated_out)
 {
     if (!validateBridge(bridge) || !data || !updated_out)
     {
-        return SEPResult::INVALID_OBJECT;
+        return sep::SEPResult::NOT_FOUND;
     }
 
     {
@@ -108,18 +109,19 @@ sep_update_mesh(SEPBlenderBridge* bridge, SEPMeshHandle handle, const SEPPattern
         metrics.evolution.path_count                = 0;
         metrics.evolution.avg_path_length           = 0.0f;
 
-        SEPResult result = bridge->impl->updateObject(handle, metrics);
-        *updated_out     = (result == SEPResult::SUCCESS);
-        return result;
+        auto result = bridge->impl->updateObject(handle, metrics);
+        auto converted_result = static_cast<sep::SEPResult>(static_cast<int32_t>(result));
+        *updated_out = (converted_result == sep::SEPResult::SUCCESS);
+        return converted_result;
     }
 }
 
-extern "C" SEPResult
+extern "C" sep::SEPResult
 sep_process_audio(SEPBlenderBridge* bridge, const float* samples, size_t count, SEPAudioMetrics* metrics_out)
 {
     if (!validateBridge(bridge) || !samples || !metrics_out || count == 0)
     {
-        return SEPResult::INVALID_OBJECT;
+        return sep::SEPResult::NOT_FOUND;
     }
 
     float peak    = 0.0f;
@@ -141,51 +143,52 @@ sep_process_audio(SEPBlenderBridge* bridge, const float* samples, size_t count, 
     metrics_out->performance.xruns           = 0;
 
     bridge->audio_metrics = *metrics_out;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-extern "C" SEPResult sep_sync_memory(SEPBlenderBridge* bridge, sep::MemoryTierEnum tier, bool force)
+extern "C" sep::SEPResult sep_sync_memory(SEPBlenderBridge* bridge, sep::MemoryTierEnum tier, bool force)
 {
     if (!validateBridge(bridge))
     {
-        return SEPResult::INVALID_OBJECT;
+        return sep::SEPResult::NOT_FOUND;
     }
 
-    return bridge->impl->syncMemory(tier, force);
+    auto result = bridge->impl->syncMemory(tier, force);
+    return static_cast<sep::SEPResult>(static_cast<int32_t>(result));
 }
 
-extern "C" SEPResult sep_blender_cleanup(SEPBlenderBridge* bridge)
+extern "C" sep::SEPResult sep_blender_cleanup(SEPBlenderBridge* bridge)
 {
     if (!validateBridge(bridge))
     {
-        return SEPResult::INVALID_OBJECT;
+        return sep::SEPResult::NOT_FOUND;
     }
 
     delete bridge;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-extern "C" SEPResult sep_get_metrics(SEPBlenderBridge* bridge, SEPPatternMetrics* metrics_out)
+extern "C" sep::SEPResult sep_get_metrics(SEPBlenderBridge* bridge, SEPPatternMetrics* metrics_out)
 {
     if (!validateBridge(bridge) || !metrics_out)
     {
-        return SEPResult::INVALID_OBJECT;
+        return sep::SEPResult::NOT_FOUND;
     }
 
     *metrics_out = bridge->pattern_metrics;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-extern "C" SEPResult sep_reset_state(SEPBlenderBridge* bridge)
+extern "C" sep::SEPResult sep_reset_state(SEPBlenderBridge* bridge)
 {
     if (!validateBridge(bridge))
     {
-        return SEPResult::INVALID_OBJECT;
+        return sep::SEPResult::NOT_FOUND;
     }
 
     bridge->audio_metrics   = SEPAudioMetrics{};
     bridge->pattern_metrics = SEPPatternMetrics{};
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 extern "C" const char* sep_get_version(void)

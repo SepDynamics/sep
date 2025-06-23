@@ -13,8 +13,6 @@
 // These are defined in compat/cuda_helpers.h
 namespace sep::cuda {
 void logCudaError(const char* operation, cudaError_t error);
-struct StreamDestroyer;
-struct EventDestroyer;
 }  // namespace sep::cuda
 
 

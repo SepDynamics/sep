@@ -3,6 +3,67 @@
 
 #include "types.h"
 #include "compat/shim.h"
+#include <cstddef>
+#include <vector>
+#include <nlohmann/json.hpp>
+
+// Minimal context types for compilation
+namespace sep::context {
+struct Context {
+  ::sep::shim::string type;
+  nlohmann::json content;
+  std::vector<nlohmann::json> relationships;
+  ::sep::shim::vector<::sep::shim::string> tags;
+  nlohmann::json metadata;
+  nlohmann::json processorResult;
+};
+
+struct CheckResult {
+  enum class Status { VALID = 0, INVALID = 1, STABLE = 2 };
+  Status status{Status::VALID};
+  float score{0.0f};
+  ::sep::shim::string error;
+};
+
+struct Batch {
+  ::sep::shim::string layer;
+  ::sep::shim::vector<Context> contexts;
+};
+
+struct ResourcePrediction {
+  std::size_t estimated_memory{0};
+  std::size_t optimal_batch_size{0};
+  double expected_processing_time{0.0};
+  float confidence_score{0.0f};
+  float estimated_cpu_usage{0.0f};
+  float estimated_gpu_usage{0.0f};
+};
+
+struct UsagePattern {
+  std::size_t memory_used{0};
+  std::size_t batch_size{0};
+  double processing_time{0.0};
+  float cpu_utilization{0.0f};
+  float gpu_utilization{0.0f};
+};
+
+struct ResourceState {
+  std::size_t total_memory{0};
+  std::size_t free_memory{0};
+  std::size_t used_memory{0};
+  std::size_t active_batches{0};
+  float cpu_utilization{0.0f};
+  float gpu_utilization{0.0f};
+};
+
+struct ResourceMetrics {
+  std::size_t peak_memory_usage{0};
+  std::size_t average_memory_usage{0};
+  double average_processing_time{0.0};
+  std::size_t total_batches_processed{0};
+  float resource_efficiency{0.0f};
+};
+} // namespace sep::context
 
 namespace sep::context {
 
@@ -11,7 +72,7 @@ public:
   virtual ~ResourcePredictor() = default;
 
   // Predict resource needs for a batch
-  virtual ResourcePredictor predictResourceNeeds(const Batch &batch) = 0;
+  virtual ResourcePrediction predictResourceNeeds(const Batch &batch) = 0;
 
   // Record actual resource usage for a batch
   virtual void recordBatchProcessing(const Batch &batch,

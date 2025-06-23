@@ -63,14 +63,14 @@ class BlenderBridge {
   static std::shared_ptr<BlenderBridge> create();
 
   // Initialization
-  ::SEPResult init(sep::GPUContext* ctx);
+  sep::SEPResult init(sep::GPUContext* ctx);
 
   // Object Management
-  ::SEPResult registerObject(Object* obj, const sep::pattern::PatternConfig& config,
+  sep::SEPResult registerObject(Object* obj, const sep::pattern::PatternConfig& config,
                              sep::pattern::ObjectHandle* handle_out);
-  ::SEPResult updateObject(sep::pattern::ObjectHandle handle,
+  sep::SEPResult updateObject(sep::pattern::ObjectHandle handle,
                            const sep::pattern::PatternMetrics& metrics);
-  ::SEPResult cleanupObject(sep::pattern::ObjectHandle handle);  // Added from bridge.cpp context
+  sep::SEPResult cleanupObject(sep::pattern::ObjectHandle handle);  // Added from bridge.cpp context
   bool isValidHandle(sep::pattern::ObjectHandle handle) const;   // Added from bridge.cpp context
   PatternStateEnum getObjectState(
       sep::pattern::ObjectHandle handle) const;  // Added from bridge.cpp context
@@ -79,14 +79,14 @@ class BlenderBridge {
   ObjectState* getObjectStatePtr(sep::pattern::ObjectHandle handle);
 
   // Pattern Processing
-  ::SEPResult processPatterns();
-  ::SEPResult startProcessingThread();
-  ::SEPResult stopProcessingThread();
+  sep::SEPResult processPatterns();
+  sep::SEPResult startProcessingThread();
+  sep::SEPResult stopProcessingThread();
 
   // Memory Management
-  ::SEPResult syncMemory(MemoryTierEnum tier, bool force);
-  ::SEPResult promotePatterns(sep::pattern::ObjectHandle handle, MemoryTierEnum target_tier);
-  ::SEPResult syncPatternData(sep::pattern::ObjectHandle handle, bool force);
+  sep::SEPResult syncMemory(MemoryTierEnum tier, bool force);
+  sep::SEPResult promotePatterns(sep::pattern::ObjectHandle handle, MemoryTierEnum target_tier);
+  sep::SEPResult syncPatternData(sep::pattern::ObjectHandle handle, bool force);
 
   // Observer Management
   void addObserver(std::shared_ptr<sep::pattern::PatternObserver> observer);
@@ -95,19 +95,19 @@ class BlenderBridge {
  private:
   // Internal processing methods
   void processingThreadMain();
-  ::SEPResult processObjectPatterns(sep::pattern::ObjectHandle handle, ObjectState& state);
-  ::SEPResult updatePatternMetrics(ObjectState& state);
-  ::SEPResult validatePatternCoherence(const ObjectState& state);
+  sep::SEPResult processObjectPatterns(sep::pattern::ObjectHandle handle, ObjectState& state);
+  sep::SEPResult updatePatternMetrics(ObjectState& state);
+  sep::SEPResult validatePatternCoherence(const ObjectState& state);
 
   // Resource Management
-  ::SEPResult checkResourceLimits();
-  ::SEPResult updateResourceStats();
+  sep::SEPResult checkResourceLimits();
+  sep::SEPResult updateResourceStats();
   float calculateResourceUtilization(sep::pattern::ResourceType type);
-  ::SEPResult checkResourceThresholds();
+  sep::SEPResult checkResourceThresholds();
 
   // Internal Memory Management helpers
-  ::SEPResult allocatePatternMemory(ObjectState& state);
-  ::SEPResult freePatternMemory(ObjectState& state);
+  sep::SEPResult allocatePatternMemory(ObjectState& state);
+  sep::SEPResult freePatternMemory(ObjectState& state);
 
   // Notification helpers
   void notifyObservers(sep::pattern::ObjectHandle handle,

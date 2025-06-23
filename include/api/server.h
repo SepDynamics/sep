@@ -99,8 +99,8 @@ class SEPApiServer : public Server {
   void updateConfig(const ::sep::config::APIConfig &new_config);
 
   // Server interface implementation
-  std::mutex &getMetricsMutex() override { return metrics_mutex_; }
-  ServerMetrics &getModifiableMetrics() override { return server_metrics_; }
+  std::mutex &getMetricsMutex() override;
+  ServerMetrics &getModifiableMetrics() override;
   std::unique_ptr<HttpResponse> makeJsonResponse(int code,
                                                            const std::string &message) override;
   std::string handleError(const std::string &message, int code) override;

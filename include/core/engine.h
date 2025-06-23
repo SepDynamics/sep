@@ -9,8 +9,6 @@
 #include "compat/types.h"  // for QSHResult
 #include "quantum/qbsa.h"
 
-#include "config/types.h"
-
 namespace sep {
 namespace cuda {
 class Stream;

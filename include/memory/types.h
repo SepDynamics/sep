@@ -19,36 +19,6 @@
 namespace sep {
 namespace persistence {
 
-class RedisManager {
-public:
-    RedisManager(const std::string& host = "localhost", int port = 6379);
-    ~RedisManager();
-
-    // Store a pattern in Redis with its full metadata
-    void storePattern(std::size_t id, const sep::pattern::PatternData& data, const std::string& tier);
-    
-    // Load a pattern from Redis
-    std::optional<sep::pattern::PatternData> loadPattern(std::size_t id, const std::string& tier);
-    
-    // Get all pattern IDs for a given tier
-    std::vector<std::size_t> getPatternIds(const std::string& tier);
-    
-    // Remove a pattern from Redis
-    void removePattern(std::size_t id, const std::string& tier);
-    
-    // Batch operations for optimization
-    void bulkStore(const std::vector<std::pair<std::size_t, sep::pattern::PatternData>>& patterns, const std::string& tier);
-    std::vector<sep::pattern::PatternData> bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier);
-    
-    // Status check
-    bool isConnected() const;
-
-private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
-};
-
-
 // Structure to store relationship metadata for persistence
 struct RelationshipData {
     std::size_t id;       // Related pattern ID
@@ -67,6 +37,35 @@ struct PatternData {
     ::sep::shim::vector<std::size_t> relationships;          // Legacy relationships (just IDs)
     ::sep::shim::vector<RelationshipData> relationship_data; // Enhanced relationship data
     uint64_t dag_node_id = 0;              // DAG node ID for pattern
+};
+
+class RedisManager {
+public:
+    RedisManager(const std::string& host = "localhost", int port = 6379);
+    ~RedisManager();
+
+    // Store a pattern in Redis with its full metadata
+    void storePattern(std::size_t id, const sep::persistence::PatternData& data, const std::string& tier);
+    
+    // Load a pattern from Redis
+    std::optional<sep::persistence::PatternData> loadPattern(std::size_t id, const std::string& tier);
+    
+    // Get all pattern IDs for a given tier
+    std::vector<std::size_t> getPatternIds(const std::string& tier);
+    
+    // Remove a pattern from Redis
+    void removePattern(std::size_t id, const std::string& tier);
+    
+    // Batch operations for optimization
+    void bulkStore(const std::vector<std::pair<std::size_t, sep::persistence::PatternData>>& patterns, const std::string& tier);
+    std::vector<sep::persistence::PatternData> bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier);
+    
+    // Status check
+    bool isConnected() const;
+
+private:
+    class Impl;
+    std::unique_ptr<Impl> impl_;
 };
 
 }  // namespace persistence

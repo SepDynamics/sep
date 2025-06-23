@@ -1,5 +1,5 @@
-#include "evolution.h"
-#include "processor.h"
+#include "quantum/evolution.h"
+#include "quantum/processor.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 #include <algorithm>

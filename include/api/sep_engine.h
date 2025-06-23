@@ -9,7 +9,7 @@
 #pragma once
 
 #include "api/types.h"
-#include "config/types.h"
+#include "core/types.h"
 #include "quantum/types.h"
 
 

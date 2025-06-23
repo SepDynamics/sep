@@ -9,7 +9,7 @@
 
 #include "blender/compression.h"
 #include "core/common.h"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 #include "memory/types.h"
 #include "quantum/types.h"
 
@@ -113,12 +113,12 @@ public:
     }
 
     // Pattern management methods
-    bool canAcceptPattern(const sep::pattern::PatternData& pattern) const;
-    void addPattern(size_t id, sep::pattern::PatternData pattern);
+    bool canAcceptPattern(const persistence::PatternData& pattern) const;
+    void addPattern(size_t id, persistence::PatternData pattern);
     void removePattern(size_t id);
-    const sep::pattern::PatternData* getPattern(size_t id) const;
-    sep::pattern::PatternData* getPattern(size_t id);
-    const std::unordered_map<size_t, sep::pattern::PatternData>& getPatterns() const {
+    const persistence::PatternData* getPattern(size_t id) const;
+    persistence::PatternData* getPattern(size_t id);
+    const std::unordered_map<size_t, persistence::PatternData>& getPatterns() const {
         return m_patterns;
     }
 
@@ -136,7 +136,7 @@ private:
     size_t m_max_patterns{0};
     float m_coherence_threshold{0.0f};
     int m_min_generations{0};
-    std::unordered_map<size_t, sep::pattern::PatternData> m_patterns;
+    std::unordered_map<size_t, persistence::PatternData> m_patterns;
 };
 
 }  // namespace memory

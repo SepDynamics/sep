@@ -16,7 +16,7 @@
 
 // Project includes
 #include "api/types.h"
-#include "config/types.h"
+#include "compat/types.h"
 #include "quantum/quantum_processor.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/pattern_processor.h"

@@ -1,5 +1,5 @@
-#include "config/manager.h"
-#include "config/env_keys.h"
+#include "core/manager.h"
+#include "core/env_keys.h"
 #include <cstdlib>
 #include <fstream>
 #include <nlohmann/json.hpp>

@@ -1,4 +1,3 @@
-#include <crow/crow_isolation.h"
 #include "api/auth_middleware.h"
 
 namespace sep::api {

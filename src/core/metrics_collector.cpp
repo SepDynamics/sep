@@ -8,7 +8,6 @@
 
 #include <algorithm>
 #include <atomic>
-#include "compat/shim.h"
 #include <cstring>
 #include <deque>
 #include <iostream>
@@ -29,17 +28,26 @@ class MetricsCollector::Impl {
  public:
   Impl() : running_(false), latency_window_size_(1000) {
     // Create events for timing
+    #if SEP_CUDA_AVAILABLE
     CUDA_CHECK(cudaEventCreate(&start_event_));
     CUDA_CHECK(cudaEventCreate(&stop_event_));
+    #else
+    start_event_ = nullptr;
+    stop_event_ = nullptr;
+    #endif
   }
 
   ~Impl() {
     stopCollection();
     if (start_event_) {
+      #if SEP_CUDA_AVAILABLE
       CUDA_CHECK(cudaEventDestroy(start_event_));
+      #endif
     }
     if (stop_event_) {
+      #if SEP_CUDA_AVAILABLE
       CUDA_CHECK(cudaEventDestroy(stop_event_));
+      #endif
     }
   }
 
@@ -79,12 +87,15 @@ class MetricsCollector::Impl {
 
   void recordKernelStart() {
     if (start_event_) {
+      #if SEP_CUDA_AVAILABLE
       CUDA_CHECK(cudaEventRecord(start_event_, nullptr));
+      #endif
     }
   }
 
   void recordKernelStop() {
     if (stop_event_) {
+      #if SEP_CUDA_AVAILABLE
       CUDA_CHECK(cudaEventRecord(stop_event_, nullptr));
       CUDA_CHECK(cudaEventSynchronize(stop_event_));
 
@@ -92,6 +103,9 @@ class MetricsCollector::Impl {
       if (start_event_ && stop_event_) {
         CUDA_CHECK(cudaEventElapsedTime(&elapsed_time, start_event_, stop_event_));
       }
+      #else
+      float elapsed_time = 0.0f;
+      #endif
 
       std::lock_guard<std::mutex> lock(metrics_mutex_);
       current_metrics_.kernel_execution_time = elapsed_time;
@@ -158,8 +172,13 @@ class MetricsCollector::Impl {
     DetailedMetrics new_metrics;
 
     // Get CUDA memory info
-    size_t free_mem, total_mem;
+    size_t free_mem = 0, total_mem = 1;
+    #if SEP_CUDA_AVAILABLE
     CUDA_CHECK(cudaMemGetInfo(&free_mem, &total_mem));
+    #else
+    free_mem = 512 * 1024 * 1024;  // 512 MB
+    total_mem = 1024 * 1024 * 1024;  // 1 GB
+    #endif
     float gpu_memory_usage = static_cast<float>(total_mem - free_mem) / total_mem * 100.0f;
     new_metrics.gpu_memory_usage = gpu_memory_usage;
     // GPU utilization requires more complex querying, set to 0 for now

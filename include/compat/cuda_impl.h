@@ -488,6 +488,7 @@ using cuda_stub_constants::cudaEvent_t;
 using cuda_stub_constants::cudaStream_t;
 using cuda_stub_constants::cudaMemcpyKind;
 using cuda_stub_constants::cudaDeviceProp;
+
 #endif
 
 #endif  // !SEP_CUDA_AVAILABLE

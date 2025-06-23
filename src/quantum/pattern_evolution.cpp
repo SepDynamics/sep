@@ -64,7 +64,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
             {
                 rel.targetId = shim::string(target_id.c_str());
                 rel.strength = rel_json.value("strength", 0.0f);
-                rel.type = static_cast<RelationshipType>(rel_json.value("type", 0));
+                rel.type = static_cast<::sep::quantum::RelationshipType>(rel_json.value("type", 0));
                 pattern.relationships.push_back(rel);
             }
         }
@@ -203,7 +203,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nl
                 std::string target_str = rel_json["target"].get<std::string>();
                 rel.targetId = shim::string(target_str.c_str());
                 rel.strength = rel_json.value("strength", 0.0f);
-                rel.type = static_cast<RelationshipType>(rel_json.value("type", 0));
+                rel.type = static_cast<::sep::quantum::RelationshipType>(rel_json.value("type", 0));
                 p.relationships.push_back(rel);
             }
         }

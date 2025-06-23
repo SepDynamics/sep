@@ -6,7 +6,7 @@
 #include "compat/shim.h"
 
 #include "core/types.h"
-#include "cuda/types.h"  // for QSHResult
+#include "compat/types.h"  // for QSHResult
 #include "quantum/qbsa.h"
 
 #include "config/types.h"

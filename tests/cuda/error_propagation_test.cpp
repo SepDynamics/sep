@@ -1,4 +1,4 @@
-#include "cuda/core.h"
+#include "compat/core.h"
 #include <gtest/gtest.h>
 
 using namespace sep;

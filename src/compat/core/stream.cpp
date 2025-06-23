@@ -1,8 +1,8 @@
 #include <memory>
 
-#include "cuda/cuda_common.h"
-#include "cuda/stream.h"
-#include "cuda/stream_impl.h"
+#include "compat/cuda_common.h"
+#include "compat/stream.h"
+#include "compat/stream_impl.h"
 
 namespace sep::cuda {
 

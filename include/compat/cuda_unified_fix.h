@@ -112,8 +112,8 @@ CUDA_UNIFIED_FIX_END_SCOPE()
 
 // Include math compatibility headers
 #ifdef __has_include
-#if __has_include("cuda/math_common.h")
-#include "cuda/math_common.h"
+#if __has_include("compat/math_common.h")
+#include "compat/math_common.h"
 #define SEP_MATH_COMMON_AVAILABLE 1
 #else
 // Fallback for older compilers

@@ -1,7 +1,7 @@
 #include <mutex>
 
 #include "core/types.h"
-#include "cuda/kernels.cuh"
+#include "compat/kernels.cuh"
 #include "memory/logger.hpp"
 #include "memory/memory_tier.h"
 #include "memory/memory_tier.hpp"

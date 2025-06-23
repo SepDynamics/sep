@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "core/types.h"
-#include "cuda/types.h"
+#include "compat/types.h"
 
 #include "core/error_handler.h"
 

@@ -5,7 +5,7 @@
 
 // Include result definitions and math compatibility
 #include "core/common.h"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 #include "memory/memory_tier.h"
 
 #include <glm/glm.hpp>

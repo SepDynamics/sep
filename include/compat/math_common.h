@@ -4,7 +4,7 @@
 #define SEP_MATH_COMMON_H
 
 #include "compat/shim.h"
-#include "cuda/macros.h"
+#include "compat/macros.h"
 
 /* Standard includes */
 #ifdef __cplusplus

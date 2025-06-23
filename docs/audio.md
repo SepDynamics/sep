@@ -1,47 +1,17 @@
-# Audio Module Overview
+# Audio Pipeline and Cleanup Tasks
 
-This document describes the remaining files under `src/audio` and `include/audio` after removing generated artefacts. It also explains how the audio interfaces integrate with the rest of the engine.
+This document summarises the real-time audio path and the repository cleanup performed for the module.
 
-## Clean Up Results
+## Pipeline Overview
 
-All `cmake_install.cmake` files were deleted from the repository. The `src/audio` directory now contains only the source files needed to build the optional audio library:
+1. **Capture** – `PipeWireCapture` opens a `pw_thread_loop` and pulls samples from the default source.
+2. **Frame Queue** – `AudioPipeline` groups samples into fixed-size frames.
+3. **Window & FFT** – each frame receives a Hann window before a simplified FFT.
+4. **Feature Extraction** – fundamental frequency, spectral centroid and spectral flux are computed.
+5. **Pattern Output** – results are normalised into `glm::vec3` vectors and optionally queued for other modules.
 
-```
-src/audio/
-  CMakeLists.txt        - build rules for the `sep_audio` library
-  README.md             - documentation for the module
-  config.cpp            - global configuration and coherence helpers
-  pipeline.cpp          - implementation of `AudioPipeline`
-  pipewire_capture.cpp  - implementation of `PipeWireCapture`
-```
+Implementation files live under `src/audio/` and the public headers in `include/audio/` now contain only declarations.  Any stub logic originally inside headers was moved to `.cpp` sources.
 
-The public headers remain under `include/audio`:
+## Cleanup Tasks
 
-```
-include/audio/
-  capture.h             - `AudioCapture` interface and factory helper
-  config.h              - `AudioPipelineConfig` and coherence utilities
-  pipeline.h            - declarations for `AudioPipeline`
-  pipewire_capture.h    - `PipeWireCapture` class
-  pipewire_includes.h   - conditional PipeWire wrapper/stubs
-  types.h               - common structs and enums
-  README.md             - API overview
-```
-
-`pipewire_capture.cpp` and `pipeline.cpp` include their corresponding headers for all declarations. No extra inline implementations exist outside the headers except for the small stubs in `pipewire_includes.h` which allow compilation without the PipeWire library.
-
-## Integration Points
-
-`include/core/engine.h` forward declares `AudioCapture` and `Engine` owns a `std::unique_ptr` to an instance created via `AudioCapture::create()`. During `Engine::init()` the capture object is initialised and optionally started when the engine runs. Processed pattern vectors produced by `AudioPipeline` can then be consumed by other modules such as `src/pattern` or `src/memory`.
-
-
-## Capture Pipeline Design
-
-PipeWireCapture initializes a `pw_thread_loop` and forwards raw float samples to a callback. `AudioPipeline` collects those samples into fixed-size frames, applies a Hann window, runs a small FFT and extracts fundamental frequency, spectral centroid and spectral flux. The results are normalized into `glm::vec3` pattern vectors and optionally queued for other modules.
-
-Generated build files (for example `cmake_install.cmake`) should not be committed. A scan of this repository found none.
-
-## File Status
-
-No obsolete headers or stub sources were found. `capture.h` is still required as the abstract interface used by `PipeWireCapture` and referenced by the core engine. The only stub code resides in `pipewire_includes.h` to handle the absence of PipeWire headers.
-
+Generated build artefacts such as `cmake_install.cmake` were removed across the repository.  See `docs/build_cleanup.md` for the commands used to search for these files.  The previously referenced `src/audio/cmake_install.cmake` is no longer present.

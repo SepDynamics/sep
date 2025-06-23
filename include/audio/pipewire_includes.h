@@ -123,106 +123,36 @@ typedef enum pw_stream_flags {
 #define SPA_POD_BUILDER_INIT(buffer, size) \
     {}
 
-// Define stubs for the functions
+// Stub function declarations
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-inline void pw_init(void* argc, void* argv) {
-    (void)argc;
-    (void)argv;
-}
-inline void pw_deinit(void) {}
+void pw_init(void* argc, void* argv);
+void pw_deinit(void);
 
-inline const char* pw_stream_state_as_string(enum pw_stream_state state) {
-    (void)state;
-    return "pipewire-not-available";
-}
+const char* pw_stream_state_as_string(enum pw_stream_state state);
 
-inline pw_properties* pw_properties_new(const char* key, const char* value, ...) {
-    (void)key;
-    (void)value;
-    return NULL;
-}
-
-inline pw_thread_loop* pw_thread_loop_new(const char* name, const void* props) {
-    (void)name;
-    (void)props;
-    return NULL;
-}
-
-inline pw_loop* pw_thread_loop_get_loop(pw_thread_loop* loop) {
-    (void)loop;
-    return NULL;
-}
-
-inline pw_context* pw_context_new(pw_loop* main_loop, pw_properties* props, size_t user_data_size) {
-    (void)main_loop;
-    (void)props;
-    (void)user_data_size;
-    return NULL;
-}
-
-inline pw_core* pw_context_connect(pw_context* context, pw_properties* props, size_t user_data_size) {
-    (void)context;
-    (void)props;
-    (void)user_data_size;
-    return NULL;
-}
-
-inline pw_stream* pw_stream_new(pw_core* core, const char* name, pw_properties* props) {
-    (void)core;
-    (void)name;
-    (void)props;
-    return NULL;
-}
-
-inline int pw_stream_connect(pw_stream* stream, enum pw_direction direction, uint32_t target_id,
-                     enum pw_stream_flags flags, const struct spa_pod** params, uint32_t n_params) {
-    (void)stream;
-    (void)direction;
-    (void)target_id;
-    (void)flags;
-    (void)params;
-    (void)n_params;
-    return -1;
-}
-
-inline void pw_stream_destroy(pw_stream* stream) { (void)stream; }
-inline void pw_core_disconnect(pw_core* core) { (void)core; }
-inline void pw_context_destroy(pw_context* context) { (void)context; }
-inline void pw_thread_loop_destroy(pw_thread_loop* loop) { (void)loop; }
-inline int pw_thread_loop_start(pw_thread_loop* loop) { (void)loop; return -1; }
-inline void pw_thread_loop_stop(pw_thread_loop* loop) { (void)loop; }
-
-inline int pw_stream_add_listener(pw_stream* stream, spa_hook* listener,
-                         const void* events, void* data) {
-    (void)stream;
-    (void)listener;
-    (void)events;
-    (void)data;
-    return -1;
-}
-
-inline void spa_hook_remove(spa_hook* hook) { (void)hook; }
-
-inline pw_buffer* pw_stream_dequeue_buffer(pw_stream* stream) {
-    (void)stream;
-    return NULL;
-}
-
-inline int pw_stream_queue_buffer(pw_stream* stream, pw_buffer* buffer) {
-    (void)stream;
-    (void)buffer;
-    return -1;
-}
-
-inline spa_pod* spa_format_audio_raw_build(spa_pod_builder* builder, uint32_t id, const void* info) {
-    (void)builder;
-    (void)id;
-    (void)info;
-    return NULL;
-}
+pw_properties* pw_properties_new(const char* key, const char* value, ...);
+pw_thread_loop* pw_thread_loop_new(const char* name, const void* props);
+pw_loop* pw_thread_loop_get_loop(pw_thread_loop* loop);
+pw_context* pw_context_new(pw_loop* main_loop, pw_properties* props, size_t user_data_size);
+pw_core* pw_context_connect(pw_context* context, pw_properties* props, size_t user_data_size);
+pw_stream* pw_stream_new(pw_core* core, const char* name, pw_properties* props);
+int pw_stream_connect(pw_stream* stream, enum pw_direction direction, uint32_t target_id,
+                      enum pw_stream_flags flags, const struct spa_pod** params, uint32_t n_params);
+void pw_stream_destroy(pw_stream* stream);
+void pw_core_disconnect(pw_core* core);
+void pw_context_destroy(pw_context* context);
+void pw_thread_loop_destroy(pw_thread_loop* loop);
+int  pw_thread_loop_start(pw_thread_loop* loop);
+void pw_thread_loop_stop(pw_thread_loop* loop);
+int  pw_stream_add_listener(pw_stream* stream, spa_hook* listener,
+                            const void* events, void* data);
+void spa_hook_remove(spa_hook* hook);
+pw_buffer* pw_stream_dequeue_buffer(pw_stream* stream);
+int pw_stream_queue_buffer(pw_stream* stream, pw_buffer* buffer);
+spa_pod* spa_format_audio_raw_build(spa_pod_builder* builder, uint32_t id, const void* info);
 
 // Macros for PipeWire keys
 #define PW_KEY_CONFIG_NAME "pipewire.config.name"

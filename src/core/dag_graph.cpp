@@ -70,7 +70,9 @@ void DagGraph::removeNode(uint64_t id)
 
 bool DagGraph::hasNode(uint64_t id) const
 {
-    return nodes_.contains(id);
+    // `std::unordered_map::contains` is only available in C++20. Use a
+    // find-based check for broader compiler support.
+    return nodes_.find(id) != nodes_.end();
 }
 
 }  // namespace dag

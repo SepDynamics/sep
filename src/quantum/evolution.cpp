@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <numeric>
 #include <random>
+#include <atomic>
+#include <chrono>
 
 namespace sep::quantum {
 

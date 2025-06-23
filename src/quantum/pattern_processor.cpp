@@ -21,10 +21,31 @@ public:
         result.pattern_id = pattern_id;
         result.memory_tier = MemoryTierEnum::STM; // Default to Short-Term Memory
         
+        // Convert state to a format the quantum processor can use
+        glm::vec3 stateData(state.coherence, state.stability, state.entropy);
+        size_t numericId = std::hash<std::string>{}(pattern_id);
+        
         // Process using quantum processor
-        quantum_processor_->evolveState(result.state, pattern_id);
-        result.coherence_score = result.state.coherence;
-        result.stability_score = result.state.stability;
+        bool success = quantum_processor_->processPattern(stateData, numericId);
+        
+        if (success) {
+            // Update state values based on processing
+            result.coherence_score = state.coherence * 1.05f; // Simulate evolution
+            result.stability_score = state.stability * 1.02f;
+            
+            // Clamp values
+            result.coherence_score = std::min(1.0f, result.coherence_score);
+            result.stability_score = std::min(1.0f, result.stability_score);
+            
+            // Update state
+            result.state.coherence = result.coherence_score;
+            result.state.stability = result.stability_score;
+            result.state.generation++;
+        } else {
+            // Handle error case
+            result.coherence_score = 0.0f;
+            result.stability_score = 0.0f;
+        }
 
         // Determine memory tier
         if (result.coherence_score >= constants::LTM_COHERENCE_THRESHOLD &&
@@ -56,7 +77,12 @@ public:
     float calculateCoherence(
         const QuantumState& state_a,
         const QuantumState& state_b) const override {
-        return quantum_processor_->calculateCoherence(state_a.amplitudes, state_b.amplitudes);
+        // Convert states to vec3 format for quantum processor
+        glm::vec3 vec_a(state_a.coherence, state_a.stability, state_a.entropy);
+        glm::vec3 vec_b(state_b.coherence, state_b.stability, state_b.entropy);
+        
+        // Use quantum processor to calculate coherence
+        return quantum_processor_->calculateCoherence(vec_a, vec_b);
     }
 
     bool isStable(const QuantumState& state) const override {

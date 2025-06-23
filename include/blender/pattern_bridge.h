@@ -8,7 +8,7 @@
 #include "blender/compat/blender_types.h"  // If still needed
 #include "blender/gpu_context.h"           // For GPUContext
 #include "blender/pattern_common.h"  // For ObjectState (assuming)
-#include "pattern/data.hpp"
+#include "quantum/data.hpp"
 #include "core/types.h"
 #include "blender/pattern_observer.h"   // For PatternObserver
 #include "blender/types.h"              // For Object, SEPResult, etc.

@@ -12,7 +12,7 @@
 #include "blender/compat/blender_types.h"
 #include "blender/gpu_context.h"
 #include "blender/pattern_common.h"
-#include "pattern/data.hpp"
+#include "quantum/data.hpp"
 #include "quantum/pattern_processor.h"
 #include "blender/config.h"
 

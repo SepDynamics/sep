@@ -3,7 +3,7 @@
 #include "blender/mesh_handler.h"
 #include "blender/gpu_context.h"
 #include "blender/pattern_common.h"
-#include "pattern/data.hpp"
+#include "quantum/data.hpp"
 #include "compat/shim.h"
 #include <array>
 

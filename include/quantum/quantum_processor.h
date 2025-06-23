@@ -33,7 +33,7 @@ public:
         operator ProcessingConfig() const;
     };
 
-    QuantumProcessor() = default;
+    QuantumProcessor() = delete; // Base class Processor has no default constructor
     explicit QuantumProcessor(const Config& config);
     ~QuantumProcessor();
 

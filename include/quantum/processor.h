@@ -1,13 +1,70 @@
 #ifndef SEP_QUANTUM_PROCESSOR_H
 #define SEP_QUANTUM_PROCESSOR_H
+#pragma once
 
 #include "types.h"
 #include "core/common.h"
+#include "core/system_hooks.h"
+#include "core/types.h"
 #include "quantum/gpu_context.h"
+#include "quantum/data.hpp"
 #include <memory>
 #include <vector>
+#include <string>
 
-namespace sep::quantum {
+namespace sep {
+
+// Constants for pattern processing
+namespace quantum {
+constexpr float MIN_COHERENCE = 0.1f;
+constexpr float STABILITY_THRESHOLD = 0.85f;
+constexpr float COHERENCE_THRESHOLD = 0.7f;
+constexpr float DEMOTION_THRESHOLD = 0.3f;
+} // namespace quantum
+
+namespace pattern {
+
+// Base pattern processor class
+class PatternProcessor {
+public:
+    enum class Implementation {
+        CPU,
+        GPU,
+        QUANTUM
+    };
+
+    explicit PatternProcessor(Implementation impl = Implementation::CPU);
+    virtual ~PatternProcessor() = default;
+
+    virtual SEPResult init(quantum::GPUContext* ctx);
+    virtual void evolvePatterns();
+    virtual PatternData mutatePattern(const PatternData& parent);
+    
+    SEPResult addPattern(const PatternData& pattern);
+    const std::vector<PatternData>& getPatterns() const;
+    
+protected:
+    Implementation implementation_;
+    std::vector<PatternData> patterns_;
+};
+
+// CPU implementation of pattern processor
+class CPUPatternProcessor : public PatternProcessor {
+public:
+    explicit CPUPatternProcessor();
+    ~CPUPatternProcessor() override = default;
+
+    SEPResult init(quantum::GPUContext* ctx) override;
+    void evolvePatterns() override;
+    PatternData mutatePattern(const PatternData& parent) override;
+    
+protected:
+    std::vector<PatternData>& patterns_;
+};
+
+} // namespace pattern
+
+namespace quantum {
 namespace core { class SystemHooks; }
 
 class ProcessorImpl;
@@ -59,6 +116,7 @@ std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config);
 std::unique_ptr<Processor> createCPUProcessor(const ProcessingConfig& config);
 std::unique_ptr<Processor> createGPUProcessor(const ProcessingConfig& config);
 
-} // namespace sep::quantum
+} // namespace quantum
+} // namespace sep
 
 #endif // SEP_QUANTUM_PROCESSOR_H

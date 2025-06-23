@@ -3,6 +3,7 @@
 
 #include "quantum/types.h"
 #include <vector>
+#include <memory>
 
 namespace sep::quantum {
 

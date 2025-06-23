@@ -15,7 +15,10 @@ namespace sep::cuda {
 #if SEP_CUDA_AVAILABLE
 void logCudaError(const char* operation, cudaError_t error);
 #else
-void logCudaError(const char* operation, cuda_stub_constants::cudaError_t error);
+// The stub implementation reuses sep::cuda::cudaError_t directly rather than
+// relying on the internal cuda_stub_constants namespace.  This avoids build
+// failures when the stub constants header does not provide a matching type.
+void logCudaError(const char* operation, cudaError_t error);
 #endif
 }  // namespace sep::cuda
 

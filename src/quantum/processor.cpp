@@ -1,6 +1,7 @@
 #include "quantum/processor.h"
 #include "quantum/types.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 #include <mutex>
 #include <unordered_map>
 #include <chrono>

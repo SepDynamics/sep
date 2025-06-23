@@ -2,13 +2,11 @@
 
 namespace sep {
 
-// Implementation of the GPUBufferDeleter operator()
-void GPUBufferDeleter::operator()(GPUBuffer* buffer) const noexcept {
-    if (ctx && buffer) {
-        ctx->deleteBuffer(buffer);
-    }
-}
-
-// That's it! The GPUContext methods are already implemented inline in the header.
+// This translation unit intentionally remains empty. All methods of GPUContext
+// and its helper types are defined inline in the header to allow the minimal
+// stub implementation to be header-only. Keeping this file ensures that the
+// build system can still reference a source for the component without
+// generating duplicate symbol definitions when the header is included in
+// multiple translation units.
 
 }  // namespace sep

@@ -46,9 +46,7 @@ protected:
     std::unique_ptr<QBSAProcessor> qbsa_processor_;
     QFHResult m_last_qfh_result;
 
-    const QFHResult& lastQFHResult() const {
-        return m_last_qfh_result;
-    }
+    const QFHResult& lastQFHResult() const;
 
 private:
     void analyzePatternBits();

@@ -40,6 +40,10 @@ const QFHResult& QuantumProcessorQFHCommon::getLastQFHResult() const {
     return m_last_qfh_result;
 }
 
+const QFHResult& QuantumProcessorQFHCommon::lastQFHResult() const {
+    return m_last_qfh_result;
+}
+
 float QuantumProcessorQFHCommon::calculateMutationRate(float base_rate, int successful_mutations,
                                                        int stabilization_count) {
     float success_factor = 1.0f + static_cast<float>(successful_mutations) * 0.05f;

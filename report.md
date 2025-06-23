@@ -1,3 +1,103 @@
+----==== Severity Statistics ====----
+----------------------------
+Severity | Number of reports
+----------------------------
+LOW      |                46
+CRITICAL |               244
+MEDIUM   |                81
+----------------------------
+----=================----
+
+----==== Checker Statistics ====----
+-------------------------------------------------------------------------
+Checker name                               | Severity | Number of reports
+-------------------------------------------------------------------------
+misc-header-include-cycle                  | LOW      |                10
+clang-diagnostic-error                     | CRITICAL |               244
+bugprone-forward-declaration-namespace     | LOW      |                36
+clang-diagnostic-reserved-macro-identifier | MEDIUM   |                14
+clang-diagnostic-double-promotion          | MEDIUM   |                55
+clang-diagnostic-unused-parameter          | MEDIUM   |                 9
+clang-diagnostic-unused-private-field      | MEDIUM   |                 1
+clang-diagnostic-mismatched-tags           | MEDIUM   |                 2
+-------------------------------------------------------------------------
+----=================----
+
+----==== File Statistics ====----
+------------------------------------------------------
+File name                          | Number of reports
+------------------------------------------------------
+base_types.h                       |                 5
+cuda_common.h                      |                 1
+cuda_impl.h                        |                 2
+cuda_runtime.h                     |                24
+cuda_unified_fix.h                 |                56
+raii.h                             |                 4
+raii.cpp                           |                 9
+compression.h                      |                 2
+pattern_bridge.h                   |                17
+pattern_observer.h                 |                 2
+memory_tier_manager.cpp            |                 8
+stream.h                           |                 2
+resource_predictor.h               |                 5
+processor.cpp                      |                12
+memory_tier.hpp                    |                 3
+memory_tier.cpp                    |                11
+http_request.h                     |                 1
+dag_graph.cpp                      |                 1
+stream_impl.h                      |                 5
+stream.cpp                         |                 5
+metrics_collector.cpp              |                10
+gpu_context.cpp                    |                 1
+pattern_visualization_pipeline.cpp |                 2
+evolution.h                        |                 2
+evolution.cpp                      |                 7
+bridge.h                           |                 5
+api.cpp                            |                14
+shim.h                             |                 2
+error_handler.h                    |                 3
+error_handler.cpp                  |                 4
+processor.cpp                      |                10
+pattern_processor.cpp              |                 6
+bridge.hpp                         |                 6
+bridge.cpp                         |                13
+bridge_c.cpp                       |                 1
+quantum_pattern_processor.h        |                11
+quantum_pattern_processor.cpp      |                 8
+client.cpp                         |                 1
+engine.h                           |                 2
+redis_manager.cpp                  |                19
+server.h                           |                 2
+crow_isolation.h                   |                 1
+http_parser_merged.h               |                 1
+strand_executor_service.hpp        |                10
+type_traits.hpp                    |                 1
+executor.hpp                       |                 6
+invocable_archetype.hpp            |                 1
+is_applicable_property.hpp         |                 4
+prefer.hpp                         |                10
+require.hpp                        |                10
+equality_comparable.hpp            |                 2
+execute_member.hpp                 |                 2
+query_static_constexpr_member.hpp  |                 3
+main.cpp                           |                 1
+sep_engine.h                       |                 1
+sep_engine.cpp                     |                 2
+unique_ptr.h                       |                 3
+rate_limit_middleware.h            |                 2
+mesh_handler.cpp                   |                 2
+kernels.cuh                        |                 5
+------------------------------------------------------
+----=================----
+
+----======== Summary ========----
+-----------------------------------------------
+Number of processed analyzer result files | 98 
+Number of analyzer reports                | 371
+-----------------------------------------------
+
+----=================----
+
 [LOW] /sep/include/blender/base_types.h:9:10: circular header file dependency detected while including 'memory_tier.hpp', please check the include path [misc-header-include-cycle]
 #include "memory/memory_tier.hpp"
          ^
@@ -10,156 +110,105 @@
 
 Found 1 defect(s) in base_types.h
 
-[LOW] /sep/include/compat/cuda_impl.h:27:16: declaration 'CUstream_st' is never referenced, but a declaration with the same name found in another namespace '(global)' [bugprone-forward-declaration-namespace]
+[CRITICAL] /sep/include/compat/cuda_common.h:18:42: no type named 'cudaError_t' in namespace 'cuda_stub_constants'; did you mean simply 'cudaError_t'? [clang-diagnostic-error]
+void logCudaError(const char* operation, cuda_stub_constants::cudaError_t error);
+                                         ^
+  Report hash: 1048f77b38a196c61955645a1f2e3974
+  Notes:
+    1, cuda_common.h:18:42: cudaError_t (fixit)
+  Steps:
+    1, cuda.h:19:13: 'cudaError_t' declared here
+    2, cuda_common.h:18:42: no type named 'cudaError_t' in namespace 'cuda_stub_constants'; did you mean simply 'cudaError_t'?
+
+Found 1 defect(s) in cuda_common.h
+
+[LOW] /sep/include/compat/cuda_impl.h:42:16: declaration 'CUstream_st' is never referenced, but a declaration with the same name found in another namespace '(global)' [bugprone-forward-declaration-namespace]
 typedef struct CUstream_st* cudaStream_t;
                ^
   Report hash: e563db1f74d73b5ba7f84616a00506aa
   Steps:
     1, cuda_runtime.h:54:8: a declaration of 'CUstream_st' is found here
-    2, cuda_impl.h:27:16: declaration 'CUstream_st' is never referenced, but a declaration with the same name found in another namespace '(global)'
+    2, cuda_impl.h:42:16: declaration 'CUstream_st' is never referenced, but a declaration with the same name found in another namespace '(global)'
 
-[LOW] /sep/include/compat/cuda_impl.h:28:16: declaration 'CUevent_st' is never referenced, but a declaration with the same name found in another namespace '(global)' [bugprone-forward-declaration-namespace]
+[LOW] /sep/include/compat/cuda_impl.h:43:16: declaration 'CUevent_st' is never referenced, but a declaration with the same name found in another namespace '(global)' [bugprone-forward-declaration-namespace]
 typedef struct CUevent_st* cudaEvent_t;
                ^
   Report hash: 69ce2cb14e5b8887a28860514a45aebe
   Steps:
     1, cuda_runtime.h:55:8: a declaration of 'CUevent_st' is found here
-    2, cuda_impl.h:28:16: declaration 'CUevent_st' is never referenced, but a declaration with the same name found in another namespace '(global)'
+    2, cuda_impl.h:43:16: declaration 'CUevent_st' is never referenced, but a declaration with the same name found in another namespace '(global)'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:240:16: use of undeclared identifier 'cudaErrorInvalidValue' [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: cd08ba146bd420d9d7dcc48ba1f08ee2
+Found 2 defect(s) in cuda_impl.h
+
+[MEDIUM] /sep/include/compat/cuda_runtime.h:12:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define _GLIBCXX_MATH_H 1
+        ^
+  Report hash: 4ccf1f1bb2cc6373d7985afcca245c69
   Steps:
-    1, cuda_impl.h:240:16: use of undeclared identifier 'cudaErrorInvalidValue'
+    1, cuda_runtime.h:12:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:261:16: use of undeclared identifier 'cudaErrorInvalidValue' [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: cd08ba146bd420d9d7dcc48ba1f08ee2
+[MEDIUM] /sep/include/compat/cuda_runtime.h:15:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDACC_RTC__ 1
+        ^
+  Report hash: 30860bb5b6e354c70e7c2552c64c9a40
   Steps:
-    1, cuda_impl.h:261:16: use of undeclared identifier 'cudaErrorInvalidValue'
+    1, cuda_runtime.h:15:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:264:35: use of undeclared identifier 'cudaErrorMemoryAllocation' [clang-diagnostic-error]
-    return (*ptr) ? cudaSuccess : cudaErrorMemoryAllocation;
-                                  ^
-  Report hash: 6c74e8dc2917e746ed7cbfa2edc328ab
+[MEDIUM] /sep/include/compat/cuda_runtime.h:16:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __MATH_FUNCTIONS_DECL__ inline
+        ^
+  Report hash: f623cde0597b0ac7a640444958aeee8c
   Steps:
-    1, cuda_impl.h:264:35: use of undeclared identifier 'cudaErrorMemoryAllocation'
+    1, cuda_runtime.h:16:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:275:16: use of undeclared identifier 'cudaErrorInvalidValue' [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: cd08ba146bd420d9d7dcc48ba1f08ee2
+[MEDIUM] /sep/include/compat/cuda_runtime.h:17:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __MATH_FUNCTIONS_DEVICE_DECL__ inline
+        ^
+  Report hash: 153b6bc728348ab92d95e8ea6d09c375
   Steps:
-    1, cuda_impl.h:275:16: use of undeclared identifier 'cudaErrorInvalidValue'
+    1, cuda_runtime.h:17:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:279:16: use of undeclared identifier 'cudaErrorInvalidDevice' [clang-diagnostic-error]
-        return cudaErrorInvalidDevice;
-               ^
-  Report hash: e0ad84f0da4c20247d51bf3fb090d6c3
+[MEDIUM] /sep/include/compat/cuda_runtime.h:21:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDABE__
+        ^
+  Report hash: 2d57f8d3dc0408e51cf4f95a21c0cd7b
   Steps:
-    1, cuda_impl.h:279:16: use of undeclared identifier 'cudaErrorInvalidDevice'
+    1, cuda_runtime.h:21:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:282:22: no member named 'name' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        strcpy(prop->name, "Stub GPU Device");
-                     ^
-  Report hash: 9c3fced8815ba57207d155d313b68f77
+[MEDIUM] /sep/include/compat/cuda_runtime.h:26:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDA_ARCH__ 520  // Minimum supported architecture
+        ^
+  Report hash: 4a2b995644cf657e5ed2763652350c95
   Steps:
-    1, cuda_impl.h:282:22: no member named 'name' in 'cuda_stub_constants::cudaDeviceProp'
+    1, cuda_runtime.h:26:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:283:15: no member named 'totalGlobalMem' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->totalGlobalMem = 1024 * 1024 * 1024;  // 1GB
-              ^
-  Report hash: 645db400b2c39e95687a4ba0517115c7
+[MEDIUM] /sep/include/compat/cuda_runtime.h:31:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDA_ARCH_PTX__ 520
+        ^
+  Report hash: 69a0e458124254e1b6451c31e5197e01
   Steps:
-    1, cuda_impl.h:283:15: no member named 'totalGlobalMem' in 'cuda_stub_constants::cudaDeviceProp'
+    1, cuda_runtime.h:31:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:286:15: no member named 'multiProcessorCount' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->multiProcessorCount = 8;
-              ^
-  Report hash: d71f38e5eaca4a561dd0226081ab32c4
+[MEDIUM] /sep/include/compat/cuda_runtime.h:36:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDACC_VER_MAJOR__ 12
+        ^
+  Report hash: 056bd5f2b1a9d597c6cc7282445f396e
   Steps:
-    1, cuda_impl.h:286:15: no member named 'multiProcessorCount' in 'cuda_stub_constants::cudaDeviceProp'
+    1, cuda_runtime.h:36:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:287:15: no member named 'maxThreadsPerBlock' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->maxThreadsPerBlock = 1024;
-              ^
-  Report hash: a9875c22f9420d8c1cd070f46b5ad5c6
+[MEDIUM] /sep/include/compat/cuda_runtime.h:40:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDACC_VER_MINOR__ 9
+        ^
+  Report hash: 4372726d2af15c49ffd1f8ea842fc4b4
   Steps:
-    1, cuda_impl.h:287:15: no member named 'maxThreadsPerBlock' in 'cuda_stub_constants::cudaDeviceProp'
+    1, cuda_runtime.h:40:9: macro name is a reserved identifier
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:288:15: no member named 'warpSize' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->warpSize = 32;
-              ^
-  Report hash: 56aee228839a23e8451307f02229c1a7
+[MEDIUM] /sep/include/compat/cuda_runtime.h:44:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDACC_VER_BUILD__ 0
+        ^
+  Report hash: d3ff101d30a4df98a06a4d07a1836e14
   Steps:
-    1, cuda_impl.h:288:15: no member named 'warpSize' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:290:15: no member named 'sharedMemPerBlock' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->sharedMemPerBlock = 49152;
-              ^
-  Report hash: d98044173ed4e15347bf693ed2729702
-  Steps:
-    1, cuda_impl.h:290:15: no member named 'sharedMemPerBlock' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:291:15: no member named 'regsPerBlock' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->regsPerBlock = 65536;
-              ^
-  Report hash: 364368a875bdb4eb32abe2a187e1639d
-  Steps:
-    1, cuda_impl.h:291:15: no member named 'regsPerBlock' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:292:15: no member named 'memPitch' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->memPitch = 2147483647;
-              ^
-  Report hash: 4694af44a65b48f2144ae216011bb299
-  Steps:
-    1, cuda_impl.h:292:15: no member named 'memPitch' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:293:15: no member named 'maxThreadsDim' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->maxThreadsDim[0] = 1024;
-              ^
-  Report hash: be08a12e48338b876c9489497b779c9b
-  Steps:
-    1, cuda_impl.h:293:15: no member named 'maxThreadsDim' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:294:15: no member named 'maxThreadsDim' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->maxThreadsDim[1] = 1024;
-              ^
-  Report hash: ba350955d063a2cf06a865b497eacdac
-  Steps:
-    1, cuda_impl.h:294:15: no member named 'maxThreadsDim' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:295:15: no member named 'maxThreadsDim' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->maxThreadsDim[2] = 64;
-              ^
-  Report hash: db258745346fab56bc0c3b49013f7182
-  Steps:
-    1, cuda_impl.h:295:15: no member named 'maxThreadsDim' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:296:15: no member named 'maxGridSize' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->maxGridSize[0] = 65535;
-              ^
-  Report hash: 261e57aec9ac1c235ff056d34f6b2df8
-  Steps:
-    1, cuda_impl.h:296:15: no member named 'maxGridSize' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:297:15: no member named 'maxGridSize' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->maxGridSize[1] = 65535;
-              ^
-  Report hash: fd6f43cdc63888f671dcebe44099fc7f
-  Steps:
-    1, cuda_impl.h:297:15: no member named 'maxGridSize' in 'cuda_stub_constants::cudaDeviceProp'
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:298:15: no member named 'maxGridSize' in 'cuda_stub_constants::cudaDeviceProp' [clang-diagnostic-error]
-        prop->maxGridSize[2] = 65535;
-              ^
-  Report hash: 3d3ea352c80433cc707a24b20f71d60f
-  Steps:
-    1, cuda_impl.h:298:15: no member named 'maxGridSize' in 'cuda_stub_constants::cudaDeviceProp'
-
-Found 21 defect(s) in cuda_impl.h
+    1, cuda_runtime.h:44:9: macro name is a reserved identifier
 
 [LOW] /sep/include/compat/cuda_runtime.h:48:10: direct self-inclusion of header file 'cuda_runtime.h' [misc-header-include-cycle]
 #include "compat/cuda_runtime.h"
@@ -173,7 +222,7 @@ struct CUstream_st;
        ^
   Report hash: d55b7ae2c66d655a2cc9459b2f5ed583
   Steps:
-    1, cuda_impl.h:27:16: a declaration of 'CUstream_st' is found here
+    1, cuda_impl.h:42:16: a declaration of 'CUstream_st' is found here
     2, cuda_runtime.h:54:8: declaration 'CUstream_st' is never referenced, but a declaration with the same name found in another namespace 'cuda_stub_constants'
 
 [LOW] /sep/include/compat/cuda_runtime.h:55:8: declaration 'CUevent_st' is never referenced, but a declaration with the same name found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
@@ -181,10 +230,556 @@ struct CUevent_st;
        ^
   Report hash: 1ae5ff5ec9e0ef1e7a11e59892cedcf4
   Steps:
-    1, cuda_impl.h:28:16: a declaration of 'CUevent_st' is found here
+    1, cuda_impl.h:43:16: a declaration of 'CUevent_st' is found here
     2, cuda_runtime.h:55:8: declaration 'CUevent_st' is never referenced, but a declaration with the same name found in another namespace 'cuda_stub_constants'
 
-Found 3 defect(s) in cuda_runtime.h
+[CRITICAL] /sep/include/compat/cuda_runtime.h:60:3: typedef redefinition with different types ('enum cudaError' vs 'int') [clang-diagnostic-error]
+} cudaError_t;
+  ^
+  Report hash: af4f042f117ab57403c9723d5c7b62d2
+  Steps:
+    1, cuda.h:19:13: previous definition is here
+    2, cuda_runtime.h:60:3: typedef redefinition with different types ('enum cudaError' vs 'int')
+
+[CRITICAL] /sep/include/compat/cuda_runtime.h:78:13: conflicting types for 'cudaStreamDestroy' [clang-diagnostic-error]
+cudaError_t cudaStreamDestroy(cudaStream_t stream);
+            ^
+  Report hash: ab7a3dac97fdc3e107b6b2097674b6a1
+  Steps:
+    1, cuda.h:55:13: previous declaration is here
+    2, cuda_runtime.h:78:13: conflicting types for 'cudaStreamDestroy'
+
+[CRITICAL] /sep/include/compat/cuda_runtime.h:90:13: conflicting types for 'cudaMemcpyAsync' [clang-diagnostic-error]
+cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream);
+            ^
+  Report hash: b6073229254a78923c86a3a12ab7476e
+  Steps:
+    1, cuda.h:62:13: previous declaration is here
+    2, cuda_runtime.h:90:13: conflicting types for 'cudaMemcpyAsync'
+
+[CRITICAL] /sep/include/compat/cuda_runtime.h:96:13: conflicting types for 'cudaGetDeviceProperties' [clang-diagnostic-error]
+cudaError_t cudaGetDeviceProperties(struct cudaDeviceProp* prop, int device);
+            ^
+  Report hash: c570657abe6acafe512070a38e2cc61f
+  Steps:
+    1, cuda.h:51:13: previous declaration is here
+    2, cuda_runtime.h:96:13: conflicting types for 'cudaGetDeviceProperties'
+
+[CRITICAL] /sep/include/compat/cuda_runtime.h:109:13: conflicting types for 'cudaMallocManaged' [clang-diagnostic-error]
+cudaError_t cudaMallocManaged(void** ptr, size_t size, unsigned int flags);
+            ^
+  Report hash: 08dcf3315e018c902b6c04d23d6c3b8b
+  Steps:
+    1, cuda.h:60:13: previous declaration is here
+    2, cuda_runtime.h:109:13: conflicting types for 'cudaMallocManaged'
+
+Found 18 defect(s) in cuda_runtime.h
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:9:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDA_NO_FP8_CONVERSIONS__ 1
+        ^
+  Report hash: b47a20e2861af27d716799fa4ee0aa98
+  Steps:
+    1, cuda_unified_fix.h:9:9: macro name is a reserved identifier
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:13:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDA_NO_HALF_OPERATORS__ 1
+        ^
+  Report hash: b7964d24e2c29e671f700a3428169a46
+  Steps:
+    1, cuda_unified_fix.h:13:9: macro name is a reserved identifier
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:17:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDA_NO_HALF2_OPERATORS__ 1
+        ^
+  Report hash: 85a550749f0a0f6519fa61863d4a69a1
+  Steps:
+    1, cuda_unified_fix.h:17:9: macro name is a reserved identifier
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:21:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUDA_NO_BFLOAT16_CONVERSIONS__ 1 
+        ^
+  Report hash: e06de4dcdebe2b7fb009d22de2c5b116
+  Steps:
+    1, cuda_unified_fix.h:21:9: macro name is a reserved identifier
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:188:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return asin((double)x);
+           ^
+  Report hash: eefbc8b0681c7e90a94b15d9bc7326fa
+  Steps:
+    1, cuda_unified_fix.h:188:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:191:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return atan((double)x);
+           ^
+  Report hash: 2bce4ae48b292444e1581e0ea28e7874
+  Steps:
+    1, cuda_unified_fix.h:191:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:194:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return atan2((double)y, (double)x);
+           ^
+  Report hash: 2b48db1b95d334b3c98f75c362775b0d
+  Steps:
+    1, cuda_unified_fix.h:194:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:197:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return ceil((double)x);
+           ^
+  Report hash: c961f8a2aada070b7a41bbf0f6011f33
+  Steps:
+    1, cuda_unified_fix.h:197:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:200:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return cos((double)x);
+           ^
+  Report hash: 1f6a42f74fe0ff981b5a0bfdd1d63424
+  Steps:
+    1, cuda_unified_fix.h:200:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:203:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return cosh((double)x);
+           ^
+  Report hash: 70a58ddc3fbc85db9ce5b3027c5f0e24
+  Steps:
+    1, cuda_unified_fix.h:203:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:206:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return exp((double)x);
+           ^
+  Report hash: 8fa767bbc6cfa6482e9675694ec326bf
+  Steps:
+    1, cuda_unified_fix.h:206:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:209:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return fabs((double)x);
+           ^
+  Report hash: 357f6cd24e82bffd6a8940448c4bb57d
+  Steps:
+    1, cuda_unified_fix.h:209:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:212:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return floor((double)x);
+           ^
+  Report hash: 28a46c503cb225cf58116ef7775653f6
+  Steps:
+    1, cuda_unified_fix.h:212:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:215:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return fmod((double)x, (double)y);
+           ^
+  Report hash: cb4f992f0a444eb348f87b553fd9de2d
+  Steps:
+    1, cuda_unified_fix.h:215:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:218:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return frexp((double)x, exp);
+           ^
+  Report hash: ec0c137b321eceeb0d1e938df8f881ce
+  Steps:
+    1, cuda_unified_fix.h:218:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:221:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return ldexp((double)x, exp);
+           ^
+  Report hash: 5f7a1942fb1771eba3bc063f821fa752
+  Steps:
+    1, cuda_unified_fix.h:221:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:228:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return log((double)x);
+           ^
+  Report hash: 15aeacd06d3df228b7cb20928d4c740c
+  Steps:
+    1, cuda_unified_fix.h:228:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:231:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return log10((double)x);
+           ^
+  Report hash: 91a61fa3f104c4dd52447dbf73bb6d8a
+  Steps:
+    1, cuda_unified_fix.h:231:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:236:13: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    *iptr = int_part;
+            ^
+  Report hash: e8f415a9ecda8b51982f2f6b8c083079
+  Steps:
+    1, cuda_unified_fix.h:236:13: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:237:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return result;
+           ^
+  Report hash: 4097e62211fa869cbe091433f40f0ead
+  Steps:
+    1, cuda_unified_fix.h:237:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:240:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return pow((double)x, (double)y);
+           ^
+  Report hash: a9b8ced7129b7d2921537ddc617e4075
+  Steps:
+    1, cuda_unified_fix.h:240:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:243:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return sin((double)x);
+           ^
+  Report hash: b2748a533e464ce935bfa6db224fa73a
+  Steps:
+    1, cuda_unified_fix.h:243:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:246:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return sinh((double)x);
+           ^
+  Report hash: 1c78254eb1b1d1c4fb2c33306f8fda05
+  Steps:
+    1, cuda_unified_fix.h:246:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:249:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return sqrt((double)x);
+           ^
+  Report hash: 71eb7f609243ed93120fa72176b3e14c
+  Steps:
+    1, cuda_unified_fix.h:249:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:252:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return tan((double)x);
+           ^
+  Report hash: ad0a8d96494ca4d5972a2e82e1b3fb06
+  Steps:
+    1, cuda_unified_fix.h:252:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:255:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return tanh((double)x);
+           ^
+  Report hash: 7621d5dec9e640c0f63b27c1844d89d9
+  Steps:
+    1, cuda_unified_fix.h:255:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:260:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return acosh((double)x);
+           ^
+  Report hash: bb04fb713a01e3892468911b7bad2a2f
+  Steps:
+    1, cuda_unified_fix.h:260:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:263:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return asinh((double)x);
+           ^
+  Report hash: ad17b87232fd16208dba0446b2cbea5c
+  Steps:
+    1, cuda_unified_fix.h:263:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:266:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return atanh((double)x);
+           ^
+  Report hash: 5ab6705345292604001ae6681c3569d4
+  Steps:
+    1, cuda_unified_fix.h:266:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:269:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return cbrt((double)x);
+           ^
+  Report hash: c0cb217c511b2eb481b077a1550c0d2a
+  Steps:
+    1, cuda_unified_fix.h:269:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:272:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return copysign((double)x, (double)y);
+           ^
+  Report hash: f9683809cdbfd3b18f7b5ef370d59c32
+  Steps:
+    1, cuda_unified_fix.h:272:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:275:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return erf((double)x);
+           ^
+  Report hash: 597bbe9ebbf956430b4876e9657c61d4
+  Steps:
+    1, cuda_unified_fix.h:275:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:278:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return erfc((double)x);
+           ^
+  Report hash: bac3a37f1c8358ce3e976ba5c3135f08
+  Steps:
+    1, cuda_unified_fix.h:278:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:281:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return exp2((double)x);
+           ^
+  Report hash: e2316b7904f6c41b42d7e2bbe5eb9699
+  Steps:
+    1, cuda_unified_fix.h:281:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:284:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return expm1((double)x);
+           ^
+  Report hash: 7c59ba2da237407389066bbe5138ea20
+  Steps:
+    1, cuda_unified_fix.h:284:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:287:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return fdim((double)x, (double)y);
+           ^
+  Report hash: a5e69eca3be3bde6ad2aa1d353d804b1
+  Steps:
+    1, cuda_unified_fix.h:287:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:290:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return fma((double)x, (double)y, (double)z);
+           ^
+  Report hash: 49fde53fca68b1dbf21f1eb7da16f483
+  Steps:
+    1, cuda_unified_fix.h:290:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:293:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return fmax((double)x, (double)y);
+           ^
+  Report hash: 1715599e1bac1ecee844472db7691ab3
+  Steps:
+    1, cuda_unified_fix.h:293:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:296:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return fmin((double)x, (double)y);
+           ^
+  Report hash: ed6fc4bd672109dfc54e3a942330c262
+  Steps:
+    1, cuda_unified_fix.h:296:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:299:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return hypot((double)x, (double)y);
+           ^
+  Report hash: b99f0e0eb29e9ccc2dc39c6cf40cda0f
+  Steps:
+    1, cuda_unified_fix.h:299:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:305:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return lgamma((double)x);
+           ^
+  Report hash: 0b6a107223b62447d90c397c2005a21f
+  Steps:
+    1, cuda_unified_fix.h:305:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:314:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return log1p((double)x);
+           ^
+  Report hash: 102c3fe54fb9ba4d98ca3582bc90402f
+  Steps:
+    1, cuda_unified_fix.h:314:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:317:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return log2((double)x);
+           ^
+  Report hash: ee4977af931e4f1a1d578eeda8c02b60
+  Steps:
+    1, cuda_unified_fix.h:317:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:320:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return logb((double)x);
+           ^
+  Report hash: d0c044bb2ad434afdceabe6af3fe35d9
+  Steps:
+    1, cuda_unified_fix.h:320:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:329:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return nan(tagp);
+           ^
+  Report hash: fa5064685ec2cd71b2594ee4ab043c34
+  Steps:
+    1, cuda_unified_fix.h:329:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:332:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return nearbyint((double)x);
+           ^
+  Report hash: 964267d1ed3a8915ce12c75c8d2489ec
+  Steps:
+    1, cuda_unified_fix.h:332:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:335:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return nextafter((double)x, (double)y);
+           ^
+  Report hash: a8d66c6a0f82a0cf0546fffbc9a11c35
+  Steps:
+    1, cuda_unified_fix.h:335:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:344:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return nextafter((double)x, (double)y);
+           ^
+  Report hash: a8d66c6a0f82a0cf0546fffbc9a11c35
+  Steps:
+    1, cuda_unified_fix.h:344:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:347:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return remainder((double)x, (double)y);
+           ^
+  Report hash: 4724e77661a08231cc2a96fabfbbc1e6
+  Steps:
+    1, cuda_unified_fix.h:347:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:350:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return remquo((double)x, (double)y, quo);
+           ^
+  Report hash: 9376d0496bbd8b745a5af793b5e879a9
+  Steps:
+    1, cuda_unified_fix.h:350:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:359:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return nearbyint((double)x);
+           ^
+  Report hash: 964267d1ed3a8915ce12c75c8d2489ec
+  Steps:
+    1, cuda_unified_fix.h:359:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:362:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return round((double)x);
+           ^
+  Report hash: 800d94a104ff4f0b3a027c8b287a937f
+  Steps:
+    1, cuda_unified_fix.h:362:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:365:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return scalbln((double)x, n);
+           ^
+  Report hash: 1349c0a610bb360d8acebda58bcf52b7
+  Steps:
+    1, cuda_unified_fix.h:365:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:368:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return scalbn((double)x, n);
+           ^
+  Report hash: 1e90f39c653a2bea31f23a439218f168
+  Steps:
+    1, cuda_unified_fix.h:368:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:371:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return tgamma((double)x);
+           ^
+  Report hash: 866b1fe93df7712b96cc62b5875d3964
+  Steps:
+    1, cuda_unified_fix.h:371:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+[MEDIUM] /sep/include/compat/cuda_unified_fix.h:374:12: implicit conversion increases floating-point precision: 'double' to 'long double' [clang-diagnostic-double-promotion]
+    return trunc((double)x);
+           ^
+  Report hash: cdd9f9dd1dd8d526a6bc9fe275af7b25
+  Steps:
+    1, cuda_unified_fix.h:374:12: implicit conversion increases floating-point precision: 'double' to 'long double'
+
+Found 56 defect(s) in cuda_unified_fix.h
+
+[CRITICAL] /sep/include/compat/raii.h:17:30: no type named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
+  explicit StreamRAII(::sep::StreamFlags flags = ::sep::StreamFlags::Default);
+                             ^
+  Report hash: 529fe1416d274a6b8d733f163153fc87
+  Steps:
+    1, raii.h:17:30: no type named 'StreamFlags' in namespace 'sep'
+
+[CRITICAL] /sep/include/compat/raii.h:17:57: no member named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
+  explicit StreamRAII(::sep::StreamFlags flags = ::sep::StreamFlags::Default);
+                                                        ^
+  Report hash: 1674993516fb18ddd11cb3c8a3c839c4
+  Steps:
+    1, raii.h:17:57: no member named 'StreamFlags' in namespace 'sep'
+
+[CRITICAL] /sep/include/compat/raii.h:45:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
+  cudaEvent_t get() const { return event_; }
+  ^
+  Report hash: 7561bdf6b61e7ecafa4a3c9b9c486d09
+  Notes:
+    1, raii.h:45:3: cuda_stub_constants::cudaEvent_t (fixit)
+  Steps:
+    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
+    2, raii.h:45:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
+
+[CRITICAL] /sep/include/compat/raii.h:50:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
+  cudaEvent_t event_{nullptr};
+  ^
+  Report hash: 904a281ab2e4a7986bbb52bb1e526b9e
+  Notes:
+    1, raii.h:50:3: cuda_stub_constants::cudaEvent_t (fixit)
+  Steps:
+    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
+    2, raii.h:50:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
+
+Found 4 defect(s) in raii.h
+
+[CRITICAL] /sep/src/compat/raii.cpp:33:29: no type named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
+StreamRAII::StreamRAII(sep::StreamFlags flags) {
+                            ^
+  Report hash: 0c5a767822bc03e9a939ac88fd5828a1
+  Steps:
+    1, raii.cpp:33:29: no type named 'StreamFlags' in namespace 'sep'
+
+[CRITICAL] /sep/src/compat/raii.cpp:34:46: no member named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
+    unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+                                             ^
+  Report hash: 21380f1df7de8d941f5835e75637a60b
+  Steps:
+    1, raii.cpp:34:46: no member named 'StreamFlags' in namespace 'sep'
+
+[CRITICAL] /sep/src/compat/raii.cpp:34:74: use of undeclared identifier 'cudaStreamNonBlocking' [clang-diagnostic-error]
+    unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+                                                                         ^
+  Report hash: 503b2b903a5bf28997ffe43d7d79ca4d
+  Steps:
+    1, raii.cpp:34:74: use of undeclared identifier 'cudaStreamNonBlocking'
+
+[CRITICAL] /sep/src/compat/raii.cpp:34:98: use of undeclared identifier 'cudaStreamDefault'; did you mean 'cudaStreamDestroy'? [clang-diagnostic-error]
+    unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+                                                                                                 ^
+  Report hash: b9b50bfa10d158fa6af59585d16c7437
+  Notes:
+    1, raii.cpp:34:98: cudaStreamDestroy (fixit)
+  Steps:
+    1, cuda.h:55:13: 'cudaStreamDestroy' declared here
+    2, raii.cpp:34:98: use of undeclared identifier 'cudaStreamDefault'; did you mean 'cudaStreamDestroy'?
+
+[CRITICAL] /sep/src/compat/raii.cpp:35:23: no matching function for call to 'cudaStreamCreateWithFlags' [clang-diagnostic-error]
+    cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
+                      ^
+  Report hash: 05dd868e7fdba08246a20f014de2b345
+  Steps:
+    1, cuda_runtime.h:77:13: candidate function not viable: no known conversion from 'cudaStream_t *' (aka 'void **') to 'cudaStream_t *' (aka 'CUstream_st **') for 1st argument
+    2, raii.cpp:35:23: no matching function for call to 'cudaStreamCreateWithFlags'
+
+[CRITICAL] /sep/src/compat/raii.cpp:70:9: no matching function for call to 'cudaStreamSynchronize_ptsz' [clang-diagnostic-error]
+        cudaStreamSynchronize(stream_);
+        ^
+  Report hash: f28b70bf51d54c7aee80561788608788
+  Steps:
+    1, cuda_runtime.h:117:31: expanded from macro 'cudaStreamSynchronize'
+    2, cuda_runtime.h:75:13: candidate function not viable: cannot convert argument of incomplete type 'const cudaStream_t' (aka 'void *const') to 'cudaStream_t' (aka 'CUstream_st *') for 1st argument
+    3, raii.cpp:70:9: no matching function for call to 'cudaStreamSynchronize_ptsz'
+
+[CRITICAL] /sep/src/compat/raii.cpp:75:23: no matching function for call to 'cudaEventCreate' [clang-diagnostic-error]
+    cudaError_t err = cudaEventCreate(&event_);
+                      ^
+  Report hash: 9df802cdb7face7bda124418ad1bd039
+  Steps:
+    1, cuda_runtime.h:81:13: candidate function not viable: no known conversion from 'cuda_stub_constants::cudaEvent_t *' (aka 'cuda_stub_constants::CUevent_st **') to 'cudaEvent_t *' (aka 'CUevent_st **') for 1st argument
+    2, raii.cpp:75:23: no matching function for call to 'cudaEventCreate'
+
+[CRITICAL] /sep/src/compat/raii.cpp:91:20: no matching function for call to 'cudaEventDestroy' [clang-diagnostic-error]
+        CUDA_CHECK(cudaEventDestroy(event_));
+                   ^
+  Report hash: 9098cbd7b6992d372c5b1cdf7f450f99
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_runtime.h:82:13: candidate function not viable: cannot convert argument of incomplete type 'cuda_stub_constants::cudaEvent_t' (aka 'cuda_stub_constants::CUevent_st *') to 'cudaEvent_t' (aka 'CUevent_st *') for 1st argument
+    3, raii.cpp:91:20: no matching function for call to 'cudaEventDestroy'
+
+[CRITICAL] /sep/src/compat/raii.cpp:101:24: no matching function for call to 'cudaEventDestroy' [clang-diagnostic-error]
+            CUDA_CHECK(cudaEventDestroy(event_));
+                       ^
+  Report hash: a12e8e3fe08ef930a46b289c2d644a66
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_runtime.h:82:13: candidate function not viable: cannot convert argument of incomplete type 'cuda_stub_constants::cudaEvent_t' (aka 'cuda_stub_constants::CUevent_st *') to 'cudaEvent_t' (aka 'CUevent_st *') for 1st argument
+    3, raii.cpp:101:24: no matching function for call to 'cudaEventDestroy'
+
+Found 9 defect(s) in raii.cpp
 
 [LOW] /sep/include/blender/compression.h:7:10: circular header file dependency detected while including 'base_types.h', please check the include path [misc-header-include-cycle]
 #include "blender/base_types.h"
@@ -401,104 +996,63 @@ Found 2 defect(s) in pattern_observer.h
 
 Found 1 defect(s) in base_types.h
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:240:16: cannot initialize return object of type 'cudaError_t' with an lvalue of type 'const cudaError_t' (aka 'const int') [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: 121df4d528f97921944f185dc684974b
+[MEDIUM] /sep/src/memory/memory_tier_manager.cpp:178:69: unused parameter 'stability' [clang-diagnostic-unused-parameter]
+MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, int generation_count) {
+                                                                    ^
+  Report hash: cf61dae537bc9ff6905aab12dd292eb8
   Steps:
-    1, cuda_impl.h:240:16: cannot initialize return object of type 'cudaError_t' with an lvalue of type 'const cudaError_t' (aka 'const int')
+    1, memory_tier_manager.cpp:178:69: unused parameter 'stability'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:240:16: use of undeclared identifier 'cudaErrorInvalidValue'; did you mean 'sep::cuda::cudaErrorInvalidValue'? [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: b681d73c7396cd63f486ba7f97f7d72d
-  Notes:
-    1, cuda_impl.h:240:16: sep::cuda::cudaErrorInvalidValue (fixit)
+[MEDIUM] /sep/src/memory/memory_tier_manager.cpp:208:38: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+            if (it->second < config_.demote_threshold)
+                                     ^
+  Report hash: 474cc343d2d8bde6f322968e111612fc
   Steps:
-    1, cuda.h:73:26: 'sep::cuda::cudaErrorInvalidValue' declared here
-    2, cuda_impl.h:240:16: use of undeclared identifier 'cudaErrorInvalidValue'; did you mean 'sep::cuda::cudaErrorInvalidValue'?
+    1, memory_tier_manager.cpp:208:38: implicit conversion increases floating-point precision: 'float' to 'double'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:261:16: cannot initialize return object of type 'cudaError_t' with an lvalue of type 'const cudaError_t' (aka 'const int') [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: 121df4d528f97921944f185dc684974b
+[CRITICAL] /sep/src/memory/memory_tier_manager.cpp:228:14: no member named 'metadata' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+    pattern->metadata.coherence_score = data->coherence;
+             ^
+  Report hash: 22578aad3d8b17e3124a9ac3f3993c05
   Steps:
-    1, cuda_impl.h:261:16: cannot initialize return object of type 'cudaError_t' with an lvalue of type 'const cudaError_t' (aka 'const int')
+    1, memory_tier_manager.cpp:228:14: no member named 'metadata' in 'sep::quantum::Pattern'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:261:16: use of undeclared identifier 'cudaErrorInvalidValue'; did you mean 'sep::cuda::cudaErrorInvalidValue'? [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: b681d73c7396cd63f486ba7f97f7d72d
-  Notes:
-    1, cuda_impl.h:261:16: sep::cuda::cudaErrorInvalidValue (fixit)
+[CRITICAL] /sep/src/memory/memory_tier_manager.cpp:229:14: no member named 'metadata' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+    pattern->metadata.stability_score = data->stability;
+             ^
+  Report hash: 38f223a02190f76379588c8f82e127aa
   Steps:
-    1, cuda.h:73:26: 'sep::cuda::cudaErrorInvalidValue' declared here
-    2, cuda_impl.h:261:16: use of undeclared identifier 'cudaErrorInvalidValue'; did you mean 'sep::cuda::cudaErrorInvalidValue'?
+    1, memory_tier_manager.cpp:229:14: no member named 'metadata' in 'sep::quantum::Pattern'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:264:12: cannot initialize return object of type 'cudaError_t' with an rvalue of type 'int' [clang-diagnostic-error]
-    return (*ptr) ? cudaSuccess : cudaErrorMemoryAllocation;
-           ^
-  Report hash: f5b990f29085c739ebb7a16b81d39be5
+[CRITICAL] /sep/src/memory/memory_tier_manager.cpp:230:14: no member named 'metadata' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+    pattern->metadata.generation_count = data->generation;
+             ^
+  Report hash: 0a4b256439c8305744ebf9d9fb6229cb
   Steps:
-    1, cuda_impl.h:264:12: cannot initialize return object of type 'cudaError_t' with an rvalue of type 'int'
+    1, memory_tier_manager.cpp:230:14: no member named 'metadata' in 'sep::quantum::Pattern'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:264:35: use of undeclared identifier 'cudaErrorMemoryAllocation'; did you mean 'sep::cuda::cudaErrorMemoryAllocation'? [clang-diagnostic-error]
-    return (*ptr) ? cudaSuccess : cudaErrorMemoryAllocation;
-                                  ^
-  Report hash: 5b384f64bfc7bff7a934642a0928e7a1
-  Notes:
-    1, cuda_impl.h:264:35: sep::cuda::cudaErrorMemoryAllocation (fixit)
+[CRITICAL] /sep/src/memory/memory_tier_manager.cpp:245:14: no member named 'metadata' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+    pattern->metadata.coherence_score = data->coherence;
+             ^
+  Report hash: 22578aad3d8b17e3124a9ac3f3993c05
   Steps:
-    1, cuda.h:69:26: 'sep::cuda::cudaErrorMemoryAllocation' declared here
-    2, cuda_impl.h:264:35: use of undeclared identifier 'cudaErrorMemoryAllocation'; did you mean 'sep::cuda::cudaErrorMemoryAllocation'?
+    1, memory_tier_manager.cpp:245:14: no member named 'metadata' in 'sep::quantum::Pattern'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:275:16: cannot initialize return object of type 'cudaError_t' with an lvalue of type 'const cudaError_t' (aka 'const int') [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: 121df4d528f97921944f185dc684974b
+[CRITICAL] /sep/src/memory/memory_tier_manager.cpp:246:14: no member named 'metadata' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+    pattern->metadata.stability_score = data->stability;
+             ^
+  Report hash: 38f223a02190f76379588c8f82e127aa
   Steps:
-    1, cuda_impl.h:275:16: cannot initialize return object of type 'cudaError_t' with an lvalue of type 'const cudaError_t' (aka 'const int')
+    1, memory_tier_manager.cpp:246:14: no member named 'metadata' in 'sep::quantum::Pattern'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:275:16: use of undeclared identifier 'cudaErrorInvalidValue'; did you mean 'sep::cuda::cudaErrorInvalidValue'? [clang-diagnostic-error]
-        return cudaErrorInvalidValue;
-               ^
-  Report hash: b681d73c7396cd63f486ba7f97f7d72d
-  Notes:
-    1, cuda_impl.h:275:16: sep::cuda::cudaErrorInvalidValue (fixit)
+[CRITICAL] /sep/src/memory/memory_tier_manager.cpp:247:14: no member named 'metadata' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+    pattern->metadata.generation_count = data->generation;
+             ^
+  Report hash: 0a4b256439c8305744ebf9d9fb6229cb
   Steps:
-    1, cuda.h:73:26: 'sep::cuda::cudaErrorInvalidValue' declared here
-    2, cuda_impl.h:275:16: use of undeclared identifier 'cudaErrorInvalidValue'; did you mean 'sep::cuda::cudaErrorInvalidValue'?
+    1, memory_tier_manager.cpp:247:14: no member named 'metadata' in 'sep::quantum::Pattern'
 
-[CRITICAL] /sep/include/compat/cuda_impl.h:279:16: cannot initialize return object of type 'cudaError_t' with an lvalue of type 'const cudaError_t' (aka 'const int') [clang-diagnostic-error]
-        return cudaErrorInvalidDevice;
-               ^
-  Report hash: 97d4466a241740835640d26242bce954
-  Steps:
-    1, cuda_impl.h:279:16: cannot initialize return object of type 'cudaError_t' with an lvalue of type 'const cudaError_t' (aka 'const int')
-
-[CRITICAL] /sep/include/compat/cuda_impl.h:279:16: use of undeclared identifier 'cudaErrorInvalidDevice'; did you mean 'sep::cuda::cudaErrorInvalidDevice'? [clang-diagnostic-error]
-        return cudaErrorInvalidDevice;
-               ^
-  Report hash: aaefff12d8cd782c1a7b1f523ccc7bae
-  Notes:
-    1, cuda_impl.h:279:16: sep::cuda::cudaErrorInvalidDevice (fixit)
-  Steps:
-    1, cuda.h:71:26: 'sep::cuda::cudaErrorInvalidDevice' declared here
-    2, cuda_impl.h:279:16: use of undeclared identifier 'cudaErrorInvalidDevice'; did you mean 'sep::cuda::cudaErrorInvalidDevice'?
-
-Found 10 defect(s) in cuda_impl.h
-
-[LOW] /sep/include/memory/memory_tier_manager.hpp:69:5: class 'MemoryTierManager' can be made trivially destructible by defaulting the destructor on its first declaration [performance-trivially-destructible]
-    ~MemoryTierManager();
-    ^
-  Report hash: e6aa05158f1a009ee1d4df23d48cf44e
-  Notes:
-    1, memory_tier_manager.hpp:69:26: = default (fixit)
-  Steps:
-    1, memory_tier_manager.cpp:28:20: destructor definition is here
-    2, memory_tier_manager.hpp:69:5: class 'MemoryTierManager' can be made trivially destructible by defaulting the destructor on its first declaration
-
-Found 1 defect(s) in memory_tier_manager.hpp
+Found 8 defect(s) in memory_tier_manager.cpp
 
 [LOW] /sep/include/blender/base_types.h:9:10: circular header file dependency detected while including 'memory_tier.hpp', please check the include path [misc-header-include-cycle]
 #include "memory/memory_tier.hpp"
@@ -528,397 +1082,128 @@ Found 1 defect(s) in base_types.h
 
 Found 2 defect(s) in stream.h
 
-[LOW] /usr/include/boost/asio/associated_allocator.hpp:91:54: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_allocator.hpp:91:54)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    typename associator<associated_allocator, T, A>::type
-                                                     ^
-  Report hash: 70fef44d943cb18b0c56016a1a481040
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, associated_allocator.hpp:91:54: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_allocator.hpp:91:54)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 1 defect(s) in associated_allocator.hpp
-
-[LOW] /usr/include/boost/asio/associated_cancellation_slot.hpp:91:62: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_cancellation_slot.hpp:91:62)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    typename associator<associated_cancellation_slot, T, S>::type
-                                                             ^
-  Report hash: 6c84fd44b7ad7fbdeb4b0b2dd15b7040
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, associated_cancellation_slot.hpp:91:62: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_cancellation_slot.hpp:91:62)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 1 defect(s) in associated_cancellation_slot.hpp
-
-[LOW] /usr/include/boost/asio/associated_executor.hpp:93:53: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_executor.hpp:93:53)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    typename associator<associated_executor, T, E>::type
-                                                    ^
-  Report hash: e2271b31569a015899763cb0ff54e3c8
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, associated_executor.hpp:93:53: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_executor.hpp:93:53)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 1 defect(s) in associated_executor.hpp
-
-[LOW] /usr/include/boost/asio/associated_immediate_executor.hpp:67:21: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_immediate_executor.hpp:67:21)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    is_executor<E>::value
-                    ^
-  Report hash: a1600ab13c4bb287d462f7e14cf59fb8
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, associated_immediate_executor.hpp:67:21: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_immediate_executor.hpp:67:21)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/associated_immediate_executor.hpp:156:63: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_immediate_executor.hpp:156:63)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    typename associator<associated_immediate_executor, T, E>::type
-                                                              ^
-  Report hash: 541887fb470a17ec884c11045594239d
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, associated_immediate_executor.hpp:156:63: no definition found for '(unnamed struct at /usr/include/boost/asio/associated_immediate_executor.hpp:156:63)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 2 defect(s) in associated_immediate_executor.hpp
-
-[LOW] /usr/include/boost/asio/execution/bulk_execute.hpp:147:35: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/bulk_execute.hpp:147:35)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    bulk_execute_member<S, F, N>::is_valid
-                                  ^
-  Report hash: 4ec7f6121677d56fe04e330c234a4de6
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, bulk_execute.hpp:147:35: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/bulk_execute.hpp:147:35)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/execution/bulk_execute.hpp:165:36: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/bulk_execute.hpp:165:36)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    !bulk_execute_member<S, F, N>::is_valid
-                                   ^
-  Report hash: f674ac7f591f34b2f0db0ea3b2aa39d0
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, bulk_execute.hpp:165:36: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/bulk_execute.hpp:165:36)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/execution/bulk_execute.hpp:186:36: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/bulk_execute.hpp:186:36)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    !bulk_execute_member<S, F, N>::is_valid
-                                   ^
-  Report hash: e96cf796de2e1b27844b5d69db4ee404
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, bulk_execute.hpp:186:36: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/bulk_execute.hpp:186:36)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 3 defect(s) in bulk_execute.hpp
-
-[LOW] /usr/include/boost/asio/execution/connect.hpp:180:55: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/connect.hpp:180:55)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    is_operation_state<typename connect_member<S, R>::result_type>::value
-                                                      ^
-  Report hash: 423026ea700952e7cfa10b4dea0634fa
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, connect.hpp:180:55: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/connect.hpp:180:55)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/execution/connect.hpp:196:25: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/connect.hpp:196:25)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    connect_free<S, R>::is_valid
-                        ^
-  Report hash: 006ec4a7c8956163cdb1f214545b78a4
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, connect.hpp:196:25: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/connect.hpp:196:25)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/execution/connect.hpp:215:26: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/connect.hpp:215:26)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    !connect_free<S, R>::is_valid
-                         ^
-  Report hash: 0d464df3f8e39dd5b041bcbe3d2eab9b
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, connect.hpp:215:26: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/connect.hpp:215:26)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 3 defect(s) in connect.hpp
-
-[LOW] /usr/include/boost/asio/execution/execute.hpp:145:25: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/execute.hpp:145:25)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    execute_free<T, F>::is_valid
-                        ^
-  Report hash: 7d5c95c0f0d5390f77b4c128ab28774c
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, execute.hpp:145:25: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/execute.hpp:145:25)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/execution/execute.hpp:158:26: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/execute.hpp:158:26)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    !execute_free<T, F>::is_valid
-                         ^
-  Report hash: 56796fb8fa5ebe9f74739a3d97473d7d
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, execute.hpp:158:26: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/execute.hpp:158:26)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 2 defect(s) in execute.hpp
-
-[LOW] /usr/include/boost/asio/execution/executor.hpp:62:43: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/executor.hpp:62:43)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    typename result_of<typename decay<F>::type&()>::type
-                                          ^
-  Report hash: 2eeaab853776f0ba8cd75d1bdbc73e06
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, executor.hpp:62:43: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/executor.hpp:62:43)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 1 defect(s) in executor.hpp
-
-[LOW] /usr/include/boost/asio/execution/schedule.hpp:118:23: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/schedule.hpp:118:23)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    schedule_free<S>::is_valid
-                      ^
-  Report hash: 5bf94ce1b1dc29d0ea3c612ac409ff6c
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, schedule.hpp:118:23: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/schedule.hpp:118:23)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/execution/schedule.hpp:131:24: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/schedule.hpp:131:24)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    !schedule_free<S>::is_valid
-                       ^
-  Report hash: 72f5e86dea02dd9b01030339e2ab99bd
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, schedule.hpp:131:24: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/schedule.hpp:131:24)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 2 defect(s) in schedule.hpp
-
-[LOW] /usr/include/boost/asio/execution/sender.hpp:90:56: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/sender.hpp:90:56)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    typename has_error_types<S::template error_types>::type,
+[CRITICAL] /sep/include/quantum/resource_predictor.h:14:56: unknown type name 'Batch' [clang-diagnostic-error]
+  virtual ResourcePredictor predictResourceNeeds(const Batch &batch) = 0;
                                                        ^
-  Report hash: a46bdbaeb43903042be2c804a9f59b41
+  Report hash: 1d721bae7af1896800aca397b5433653
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, sender.hpp:90:56: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/sender.hpp:90:56)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, resource_predictor.h:14:56: unknown type name 'Batch'
 
-Found 1 defect(s) in sender.hpp
-
-[LOW] /usr/include/boost/asio/execution/set_done.hpp:115:23: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/set_done.hpp:115:23)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    set_done_free<R>::is_valid
-                      ^
-  Report hash: 704a00346b3fabbce808c34a20667085
+[CRITICAL] /sep/include/quantum/resource_predictor.h:17:44: unknown type name 'Batch' [clang-diagnostic-error]
+  virtual void recordBatchProcessing(const Batch &batch,
+                                           ^
+  Report hash: 172883d2fa3ee5da7c0401e71b130c69
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, set_done.hpp:115:23: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/set_done.hpp:115:23)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, resource_predictor.h:17:44: unknown type name 'Batch'
 
-Found 1 defect(s) in set_done.hpp
-
-[LOW] /usr/include/boost/asio/execution/set_error.hpp:115:27: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/set_error.hpp:115:27)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    set_error_free<R, E>::is_valid
-                          ^
-  Report hash: 309b7da127fc659ab4fe6d41658e4aef
+[CRITICAL] /sep/include/quantum/resource_predictor.h:22:11: unknown type name 'ResourceState' [clang-diagnostic-error]
+  virtual ResourceState getCurrentState() const = 0;
+          ^
+  Report hash: 4d1645ff7d866990c0b7b53c6a4422ca
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, set_error.hpp:115:27: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/set_error.hpp:115:27)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, resource_predictor.h:22:11: unknown type name 'ResourceState'
 
-Found 1 defect(s) in set_error.hpp
-
-[LOW] /usr/include/boost/asio/execution/set_value.hpp:118:28: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/set_value.hpp:118:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    set_value_free<R, Vs>::is_valid
-                           ^
-  Report hash: 4acb15d71c11afc2847029c9059f47ec
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, set_value.hpp:118:28: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/set_value.hpp:118:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 1 defect(s) in set_value.hpp
-
-[LOW] /usr/include/boost/asio/execution/start.hpp:112:20: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/start.hpp:112:20)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    start_free<R>::is_valid
-                   ^
-  Report hash: 90c32a5d05834d659f3190a942570700
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, start.hpp:112:20: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/start.hpp:112:20)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 1 defect(s) in start.hpp
-
-[LOW] /usr/include/boost/asio/execution/submit.hpp:148:25: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/submit.hpp:148:25)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    is_sender_to<S, R>::value
-                        ^
-  Report hash: 6a7174c92432db41adc0d9f36fc3d937
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, submit.hpp:148:25: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/submit.hpp:148:25)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/execution/submit.hpp:161:24: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/submit.hpp:161:24)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    submit_free<S, R>::is_valid
-                       ^
-  Report hash: 1db8948ae610b0f9cc2b92ca65da9cd5
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, submit.hpp:161:24: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/submit.hpp:161:24)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/execution/submit.hpp:177:25: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/submit.hpp:177:25)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    !submit_free<S, R>::is_valid
-                        ^
-  Report hash: ce178ee755a8021505e73e93992ecb96
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, submit.hpp:177:25: no definition found for '(unnamed struct at /usr/include/boost/asio/execution/submit.hpp:177:25)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 3 defect(s) in submit.hpp
-
-[LOW] /usr/include/boost/asio/executor_work_guard.hpp:162:41: no definition found for '(unnamed class at /usr/include/boost/asio/executor_work_guard.hpp:162:41)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-      execution::is_executor<Executor>::value
+[CRITICAL] /sep/include/quantum/resource_predictor.h:32:41: unknown type name 'UsagePattern' [clang-diagnostic-error]
+  virtual void recordUsagePattern(const UsagePattern &pattern) = 0;
                                         ^
-  Report hash: 07056f6befa6401089813143f2701c29
+  Report hash: a8cc273f3a3e21305ab2e555073a1663
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, executor_work_guard.hpp:162:41: no definition found for '(unnamed class at /usr/include/boost/asio/executor_work_guard.hpp:162:41)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, resource_predictor.h:32:41: unknown type name 'UsagePattern'
 
-Found 1 defect(s) in executor_work_guard.hpp
-
-[LOW] /usr/include/boost/asio/prefer.hpp:168:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:168:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_preferable
-                           ^
-  Report hash: 2238920b3c290a76c9b423a07a43a6d2
+[CRITICAL] /sep/include/quantum/resource_predictor.h:35:11: unknown type name 'ResourceMetrics' [clang-diagnostic-error]
+  virtual ResourceMetrics getResourceMetrics() const = 0;
+          ^
+  Report hash: 83627b8b1e2f98484963edb93b19a86f
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, prefer.hpp:168:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:168:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, resource_predictor.h:35:11: unknown type name 'ResourceMetrics'
 
-[LOW] /usr/include/boost/asio/prefer.hpp:193:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:193:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_preferable
-                           ^
-  Report hash: 1e6e8afac2bac81734c1c33af9f24479
+Found 5 defect(s) in resource_predictor.h
+
+[CRITICAL] /sep/src/context/processor.cpp:75:12: no member named 'success' in 'sep::ollama::EmbeddingRequest' [clang-diagnostic-error]
+    result.success = false;
+           ^
+  Report hash: e337d349aff4d67ae8b25c81da171cd0
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, prefer.hpp:193:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:193:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:75:12: no member named 'success' in 'sep::ollama::EmbeddingRequest'
 
-[LOW] /usr/include/boost/asio/prefer.hpp:215:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:215:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_preferable
-                           ^
-  Report hash: 6e0bbb106931fccd949fbd81d6371ab6
+[CRITICAL] /sep/src/context/processor.cpp:76:12: no member named 'error' in 'sep::ollama::EmbeddingRequest' [clang-diagnostic-error]
+    result.error = sep::shim::string(msg.c_str());
+           ^
+  Report hash: a10bc584450d14312d0d3bfecad12073
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, prefer.hpp:215:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:215:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:76:12: no member named 'error' in 'sep::ollama::EmbeddingRequest'
 
-[LOW] /usr/include/boost/asio/prefer.hpp:240:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:240:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_preferable
-                           ^
-  Report hash: cd5310347573725d62517f5cce2cc410
+[CRITICAL] /sep/src/context/processor.cpp:80:1: unknown type name 'SimilarityResult' [clang-diagnostic-error]
+SimilarityResult makeSimilarityError(const std::string& msg)
+^
+  Report hash: f08209d74d7d38ec9ba61bd7401ac1d6
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, prefer.hpp:240:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:240:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:80:1: unknown type name 'SimilarityResult'
 
-[LOW] /usr/include/boost/asio/prefer.hpp:268:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:268:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_preferable
-                           ^
-  Report hash: 0c6a666b99a4650e7dbee6903c1d2be1
+[CRITICAL] /sep/src/context/processor.cpp:82:5: unknown type name 'SimilarityResult' [clang-diagnostic-error]
+    SimilarityResult result;
+    ^
+  Report hash: ac3b86f7ebd1e6cea614ddaee88a2bd1
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, prefer.hpp:268:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:268:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:82:5: unknown type name 'SimilarityResult'
 
-[LOW] /usr/include/boost/asio/prefer.hpp:299:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:299:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_preferable
-                           ^
-  Report hash: a4694409cea859df04375695635e3a06
+[CRITICAL] /sep/src/context/processor.cpp:88:1: unknown type name 'BlendResult' [clang-diagnostic-error]
+BlendResult makeBlendError(const std::string& msg)
+^
+  Report hash: d84e0890d31a322d4e63ca6c560f18ad
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, prefer.hpp:299:28: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:299:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:88:1: unknown type name 'BlendResult'
 
-[LOW] /usr/include/boost/asio/prefer.hpp:335:48: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:335:48)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-      typename call_traits<Impl, T, void(P0)>::result_type,
-                                               ^
-  Report hash: 09a1f432e82f49101d8b075d91e59386
+[CRITICAL] /sep/src/context/processor.cpp:90:5: unknown type name 'BlendResult' [clang-diagnostic-error]
+    BlendResult result;
+    ^
+  Report hash: 34452909a7ad4281dcfcc81fefece865
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, prefer.hpp:335:48: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:335:48)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:90:5: unknown type name 'BlendResult'
 
-[LOW] /usr/include/boost/asio/prefer.hpp:371:48: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:371:48)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-      typename call_traits<Impl, T, void(P0)>::result_type,
-                                               ^
-  Report hash: 9ebf31eabe5216c4d127ab0a3f6e2a53
+[CRITICAL] /sep/src/context/processor.cpp:177:34: unknown type name 'ProcessOptions' [clang-diagnostic-error]
+    explicit ProcessorImpl(const ProcessOptions& options)
+                                 ^
+  Report hash: c2c21d6ec628aede79c0b930b6172431
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, prefer.hpp:371:48: no definition found for '(unnamed struct at /usr/include/boost/asio/prefer.hpp:371:48)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:177:34: unknown type name 'ProcessOptions'
 
-Found 8 defect(s) in prefer.hpp
-
-[LOW] /usr/include/boost/asio/query.hpp:142:32: no definition found for '(unnamed struct at /usr/include/boost/asio/query.hpp:142:32)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    static_query<T, Property>::is_valid
-                               ^
-  Report hash: d366360eda1cfbbd9b488be45557927d
+[CRITICAL] /sep/src/context/processor.cpp:178:11: member initializer 'options_' does not name a non-static data member or base class [clang-diagnostic-error]
+        : options_(options)
+          ^
+  Report hash: 1af144d9becab7a2432ae32d4eca0a4c
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, query.hpp:142:32: no definition found for '(unnamed struct at /usr/include/boost/asio/query.hpp:142:32)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:178:11: member initializer 'options_' does not name a non-static data member or base class
 
-[LOW] /usr/include/boost/asio/query.hpp:158:33: no definition found for '(unnamed struct at /usr/include/boost/asio/query.hpp:158:33)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    !static_query<T, Property>::is_valid
-                                ^
-  Report hash: fcd5cefdcec8710474a93ec3a72a1f8a
+[CRITICAL] /sep/src/context/processor.cpp:184:56: no member named 'PatternProcessor' in namespace 'sep::pattern' [clang-diagnostic-error]
+        , pattern_processor_(std::make_unique<pattern::PatternProcessor>())
+                                                       ^
+  Report hash: 350fef00dd5153e7a9553ce159731dad
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, query.hpp:158:33: no definition found for '(unnamed struct at /usr/include/boost/asio/query.hpp:158:33)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:184:56: no member named 'PatternProcessor' in namespace 'sep::pattern'
 
-[LOW] /usr/include/boost/asio/query.hpp:177:33: no definition found for '(unnamed struct at /usr/include/boost/asio/query.hpp:177:33)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    !static_query<T, Property>::is_valid
-                                ^
-  Report hash: 120f460ca0d0977150693fc7bb6f4609
+[CRITICAL] /sep/src/context/processor.cpp:222:13: unknown type name 'ValidationResult' [clang-diagnostic-error]
+            ValidationResult validation = validateContext(context);
+            ^
+  Report hash: 0949dbdfb21da609b3c72183c08d51fb
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, query.hpp:177:33: no definition found for '(unnamed struct at /usr/include/boost/asio/query.hpp:177:33)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:222:13: unknown type name 'ValidationResult'
 
-Found 3 defect(s) in query.hpp
-
-[LOW] /usr/include/boost/asio/require.hpp:151:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:151:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_requirable
-                           ^
-  Report hash: 85737c9140cdb8d6add1b9cfde149e21
+[CRITICAL] /sep/src/context/processor.cpp:299:50: unknown type name 'Batch' [clang-diagnostic-error]
+    quantum::ProcessingResult processBatch(const Batch& batch) override
+                                                 ^
+  Report hash: 7edb8fa254c6448d1a18e1dd078a68c4
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, require.hpp:151:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:151:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:299:50: unknown type name 'Batch'
 
-[LOW] /usr/include/boost/asio/require.hpp:176:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:176:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_requirable
-                           ^
-  Report hash: 0d4ffc2c4b1c37d53294ade401836d6a
+[CRITICAL] /sep/src/context/processor.cpp:341:5: unknown type name 'ValidationResult' [clang-diagnostic-error]
+    ValidationResult validateContext(const fmt::context& context) override
+    ^
+  Report hash: 062cf6ad4a8157d8f2ac4751ac5a6aba
   Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, require.hpp:176:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:176:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
+    1, processor.cpp:341:5: unknown type name 'ValidationResult'
 
-[LOW] /usr/include/boost/asio/require.hpp:198:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:198:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_requirable
-                           ^
-  Report hash: bc2fd662aec4f894c148763a5223b5ab
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, require.hpp:198:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:198:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/require.hpp:222:48: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:222:48)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-      typename call_traits<Impl, T, void(P0)>::result_type,
-                                               ^
-  Report hash: de3a4d17267602ff9fbf9b865639fc8b
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, require.hpp:222:48: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:222:48)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/require.hpp:258:48: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:258:48)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-      typename call_traits<Impl, T, void(P0)>::result_type,
-                                               ^
-  Report hash: 2f2feda367d72eb391a92b4ec2d263bd
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, require.hpp:258:48: no definition found for '(unnamed struct at /usr/include/boost/asio/require.hpp:258:48)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 5 defect(s) in require.hpp
-
-[LOW] /usr/include/boost/asio/require_concept.hpp:149:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require_concept.hpp:149:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_requirable_concept
-                           ^
-  Report hash: f5bdaa01caae4fc36e58e46857b32ef7
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, require_concept.hpp:149:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require_concept.hpp:149:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/require_concept.hpp:169:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require_concept.hpp:169:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_requirable_concept
-                           ^
-  Report hash: ff4b3bfb307d099918c340b9d0227ad5
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, require_concept.hpp:169:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require_concept.hpp:169:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-[LOW] /usr/include/boost/asio/require_concept.hpp:197:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require_concept.hpp:197:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants' [bugprone-forward-declaration-namespace]
-    decay<Property>::type::is_requirable_concept
-                           ^
-  Report hash: 8a1289ec2b687e0c263a335fe4cc73e9
-  Steps:
-    1, cuda_impl.h:30:9: a definition of 'cudaDeviceProp' is found here
-    2, require_concept.hpp:197:28: no definition found for '(unnamed struct at /usr/include/boost/asio/require_concept.hpp:197:28)', but a definition with the same name 'cudaDeviceProp' found in another namespace 'cuda_stub_constants'
-
-Found 3 defect(s) in require_concept.hpp
+Found 12 defect(s) in processor.cpp
 
 [LOW] /sep/include/memory/memory_tier.hpp:10:10: circular header file dependency detected while including 'compression.h', please check the include path [misc-header-include-cycle]
 #include "blender/compression.h"
@@ -951,6 +1236,108 @@ Found 2 defect(s) in memory_tier.hpp
 
 Found 1 defect(s) in base_types.h
 
+[CRITICAL] /sep/src/memory/memory_tier.cpp:165:83: use of undeclared identifier 'cudaMemcpyDefault'; did you mean 'cuda_stub_constants::cudaMemcpyDefault'? [clang-diagnostic-error]
+                cudaError_t err = cudaMemcpy(new_location, block.ptr, block.size, cudaMemcpyDefault);
+                                                                                  ^
+  Report hash: 9a6ee42988dc718411ce46c7c57d78ad
+  Notes:
+    1, memory_tier.cpp:165:83: cuda_stub_constants::cudaMemcpyDefault (fixit)
+  Steps:
+    1, cuda_impl.h:51:5: 'cuda_stub_constants::cudaMemcpyDefault' declared here
+    2, memory_tier.cpp:165:83: use of undeclared identifier 'cudaMemcpyDefault'; did you mean 'cuda_stub_constants::cudaMemcpyDefault'?
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:389:18: out-of-line definition of 'canAcceptPattern' does not match any declaration in 'sep::memory::MemoryTier' [clang-diagnostic-error]
+bool MemoryTier::canAcceptPattern(const sep::pattern::PatternData& pattern) const {
+                 ^
+  Report hash: c9b839062d252af44648d316cf8e3b7e
+  Steps:
+    1, memory_tier.hpp:68:7: MemoryTier defined here
+    2, memory_tier.hpp:109:33: type of 1st parameter of member declaration does not match definition ('const persistence::PatternData &' vs 'const sep::pattern::PatternData &')
+    3, memory_tier.cpp:389:18: out-of-line definition of 'canAcceptPattern' does not match any declaration in 'sep::memory::MemoryTier'
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:392:16: member access into incomplete type 'const sep::pattern::PatternData' [clang-diagnostic-error]
+    if (pattern.coherence < m_coherence_threshold)
+               ^
+  Report hash: ed4ee32248cffe079f734fc46e49459a
+  Steps:
+    1, memory_tier_manager.hpp:33:8: forward declaration of 'sep::pattern::PatternData'
+    2, memory_tier.cpp:392:16: member access into incomplete type 'const sep::pattern::PatternData'
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:396:16: member access into incomplete type 'const sep::pattern::PatternData' [clang-diagnostic-error]
+    if (pattern.memory_tier != MemoryTierEnum::STM && pattern.generation < m_min_generations)
+               ^
+  Report hash: a32ddc85e4af4692fdb00c56b3ce6b0b
+  Steps:
+    1, memory_tier_manager.hpp:33:8: forward declaration of 'sep::pattern::PatternData'
+    2, memory_tier.cpp:396:16: member access into incomplete type 'const sep::pattern::PatternData'
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:396:62: member access into incomplete type 'const sep::pattern::PatternData' [clang-diagnostic-error]
+    if (pattern.memory_tier != MemoryTierEnum::STM && pattern.generation < m_min_generations)
+                                                             ^
+  Report hash: 91d1ebe43ddf06536c6648e8e3333f3c
+  Steps:
+    1, memory_tier_manager.hpp:33:8: forward declaration of 'sep::pattern::PatternData'
+    2, memory_tier.cpp:396:62: member access into incomplete type 'const sep::pattern::PatternData'
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:401:18: out-of-line definition of 'addPattern' does not match any declaration in 'sep::memory::MemoryTier' [clang-diagnostic-error]
+void MemoryTier::addPattern(size_t id, sep::pattern::PatternData pattern) {
+                 ^
+  Report hash: ff0eb9c2d5c0f6b3bdee73021ead8b67
+  Steps:
+    1, memory_tier.hpp:68:7: MemoryTier defined here
+    2, memory_tier.hpp:110:32: type of 2nd parameter of member declaration does not match definition ('persistence::PatternData' vs 'sep::pattern::PatternData')
+    3, memory_tier.cpp:401:18: out-of-line definition of 'addPattern' does not match any declaration in 'sep::memory::MemoryTier'
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:401:66: variable has incomplete type 'sep::pattern::PatternData' [clang-diagnostic-error]
+void MemoryTier::addPattern(size_t id, sep::pattern::PatternData pattern) {
+                                                                 ^
+  Report hash: 5d44c9e036cedf27e3fe43d260981c32
+  Steps:
+    1, memory_tier_manager.hpp:33:8: forward declaration of 'sep::pattern::PatternData'
+    2, memory_tier.cpp:401:66: variable has incomplete type 'sep::pattern::PatternData'
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:413:46: return type of out-of-line definition of 'sep::memory::MemoryTier::getPattern' differs from that in the declaration [clang-diagnostic-error]
+const sep::pattern::PatternData* MemoryTier::getPattern(size_t id) const {
+                                             ^
+  Report hash: cfcd965b41e08401e76e6277634b786b
+  Steps:
+    1, memory_tier.hpp:112:37: previous declaration is here
+    2, memory_tier.cpp:413:46: return type of out-of-line definition of 'sep::memory::MemoryTier::getPattern' differs from that in the declaration
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:415:12: cannot initialize return object of type 'const sep::pattern::PatternData *' with an rvalue of type 'const sep::persistence::PatternData *' [clang-diagnostic-error]
+    return it == m_patterns.end() ? nullptr : &it->second;
+           ^
+  Report hash: 5b3c01df262b8aa2010ece26380cb883
+  Steps:
+    1, memory_tier.cpp:415:12: cannot initialize return object of type 'const sep::pattern::PatternData *' with an rvalue of type 'const sep::persistence::PatternData *'
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:418:40: return type of out-of-line definition of 'sep::memory::MemoryTier::getPattern' differs from that in the declaration [clang-diagnostic-error]
+sep::pattern::PatternData* MemoryTier::getPattern(size_t id) {
+                                       ^
+  Report hash: 483d43ee525c2987e1b52be30d69f091
+  Steps:
+    1, memory_tier.hpp:113:31: previous declaration is here
+    2, memory_tier.cpp:418:40: return type of out-of-line definition of 'sep::memory::MemoryTier::getPattern' differs from that in the declaration
+
+[CRITICAL] /sep/src/memory/memory_tier.cpp:420:12: cannot initialize return object of type 'sep::pattern::PatternData *' with an rvalue of type 'sep::persistence::PatternData *' [clang-diagnostic-error]
+    return it == m_patterns.end() ? nullptr : &it->second;
+           ^
+  Report hash: 9880abb8533a4dd2947af474ef1f3a88
+  Steps:
+    1, memory_tier.cpp:420:12: cannot initialize return object of type 'sep::pattern::PatternData *' with an rvalue of type 'sep::persistence::PatternData *'
+
+Found 11 defect(s) in memory_tier.cpp
+
+[CRITICAL] /sep/third_party/crow/http_request.h:25:15: no member named 'contains' in 'std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>' [clang-diagnostic-error]
+  if (headers.contains(key)) {
+              ^
+  Report hash: e35216a3c457ec75f05b98d2803e2800
+  Steps:
+    1, http_request.h:90:18: in instantiation of function template specialization 'crow::get_header_value<std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>>' requested here
+    2, http_request.h:25:15: no member named 'contains' in 'std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>'
+
+Found 1 defect(s) in http_request.h
+
 [CRITICAL] /sep/src/core/dag_graph.cpp:73:19: no member named 'contains' in 'std::unordered_map<unsigned long, sep::dag::DagNode>' [clang-diagnostic-error]
     return nodes_.contains(id);
                   ^
@@ -960,17 +1347,203 @@ Found 1 defect(s) in base_types.h
 
 Found 1 defect(s) in dag_graph.cpp
 
-[LOW] /sep/include/compat/stream.h:34:3: class 'Stream' can be made trivially destructible by defaulting the destructor on its first declaration [performance-trivially-destructible]
-  ~Stream();
-  ^
-  Report hash: 31acd9122b83ee6d4d9ac3e51481d6f8
-  Notes:
-    1, stream.h:34:13: = default (fixit)
+[CRITICAL] /sep/include/compat/stream_impl.h:65:11: no matching function for call to 'cudaStreamWaitEvent' [clang-diagnostic-error]
+          cudaStreamWaitEvent(stream_, static_cast<cudaEvent_t>(event), 0);
+          ^
+  Report hash: fd3d2f21fa79507d14cb474688cc11fa
   Steps:
-    1, stream.cpp:12:9: destructor definition is here
-    2, stream.h:34:3: class 'Stream' can be made trivially destructible by defaulting the destructor on its first declaration
+    1, cuda_impl.h:397:20: candidate function not viable: requires 2 arguments, but 3 were provided
+    2, stream_impl.h:65:11: no matching function for call to 'cudaStreamWaitEvent'
 
-Found 1 defect(s) in stream.h
+[CRITICAL] /sep/include/compat/stream_impl.h:65:52: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
+          cudaStreamWaitEvent(stream_, static_cast<cudaEvent_t>(event), 0);
+                                                   ^
+  Report hash: ed91806116175b4eb6b3531293a93bbb
+  Notes:
+    1, stream_impl.h:65:52: cuda_stub_constants::cudaEvent_t (fixit)
+  Steps:
+    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
+    2, stream_impl.h:65:52: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
+
+[CRITICAL] /sep/include/compat/stream_impl.h:75:11: use of undeclared identifier 'cudaEventRecord'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord'? [clang-diagnostic-error]
+          cudaEventRecord(static_cast<cudaEvent_t>(event), stream_);
+          ^
+  Report hash: eead8ce420214352e79a6c152d1d2b70
+  Notes:
+    1, stream_impl.h:75:11: cuda_stub_constants::cuda_stub_constants::cudaEventRecord (fixit)
+  Steps:
+    1, cuda_impl.h:199:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord' declared here
+    2, stream_impl.h:75:11: use of undeclared identifier 'cudaEventRecord'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord'?
+
+[CRITICAL] /sep/include/compat/stream_impl.h:75:39: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
+          cudaEventRecord(static_cast<cudaEvent_t>(event), stream_);
+                                      ^
+  Report hash: 617e8c5d81e5e7f07a40dd9174309770
+  Notes:
+    1, stream_impl.h:75:39: cuda_stub_constants::cudaEvent_t (fixit)
+  Steps:
+    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
+    2, stream_impl.h:75:39: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
+
+[CRITICAL] /sep/include/compat/stream_impl.h:75:60: cannot initialize a parameter of type 'cudaStream_t' (aka 'cuda_stub_constants::CUstream_st *') with an lvalue of type 'cudaStream_t' (aka 'void *') [clang-diagnostic-error]
+          cudaEventRecord(static_cast<cudaEvent_t>(event), stream_);
+                                                           ^
+  Report hash: cd2a80de7e2b87bcedc9a019c5e4685d
+  Steps:
+    1, cuda_impl.h:199:68: passing argument to parameter 'stream' here
+    2, stream_impl.h:75:60: cannot initialize a parameter of type 'cudaStream_t' (aka 'cuda_stub_constants::CUstream_st *') with an lvalue of type 'cudaStream_t' (aka 'void *')
+
+Found 5 defect(s) in stream_impl.h
+
+[CRITICAL] /sep/src/compat/core/stream.cpp:30:45: no type named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
+std::shared_ptr<Stream> Stream::create(sep::StreamFlags flags) {
+                                            ^
+  Report hash: 42d6ab88709d3956eafa28b2a5a689bc
+  Steps:
+    1, stream.cpp:30:45: no type named 'StreamFlags' in namespace 'sep'
+
+[CRITICAL] /sep/src/compat/core/stream.cpp:35:22: no member named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
+      (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+                     ^
+  Report hash: a31a0aa48da491c1b03941bff458c929
+  Steps:
+    1, stream.cpp:35:22: no member named 'StreamFlags' in namespace 'sep'
+
+[CRITICAL] /sep/src/compat/core/stream.cpp:35:50: use of undeclared identifier 'cudaStreamNonBlocking' [clang-diagnostic-error]
+      (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+                                                 ^
+  Report hash: 1af351aa9260072c0c2bc8d5144315b4
+  Steps:
+    1, stream.cpp:35:50: use of undeclared identifier 'cudaStreamNonBlocking'
+
+[CRITICAL] /sep/src/compat/core/stream.cpp:35:74: use of undeclared identifier 'cudaStreamDefault'; did you mean 'cudaStreamDestroy'? [clang-diagnostic-error]
+      (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+                                                                         ^
+  Report hash: 8d89a3d2c58a01653644a2ed200b5c2d
+  Notes:
+    1, stream.cpp:35:74: cudaStreamDestroy (fixit)
+  Steps:
+    1, cuda.h:55:13: 'cudaStreamDestroy' declared here
+    2, stream.cpp:35:74: use of undeclared identifier 'cudaStreamDefault'; did you mean 'cudaStreamDestroy'?
+
+[CRITICAL] /sep/src/compat/core/stream.cpp:37:21: use of undeclared identifier 'cudaStreamCreateWithFlags' [clang-diagnostic-error]
+  cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
+                    ^
+  Report hash: 3500fc9fd89ec193928b99c381e2e95a
+  Steps:
+    1, stream.cpp:37:21: use of undeclared identifier 'cudaStreamCreateWithFlags'
+
+Found 5 defect(s) in stream.cpp
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:32:16: use of undeclared identifier 'cudaEventCreate'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventCreate'? [clang-diagnostic-error]
+    CUDA_CHECK(cudaEventCreate(&start_event_));
+               ^
+  Report hash: b25508b5710f2f49244d0a33f85f65b6
+  Notes:
+    1, metrics_collector.cpp:32:16: cuda_stub_constants::cuda_stub_constants::cudaEventCreate (fixit)
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_impl.h:179:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventCreate' declared here
+    3, metrics_collector.cpp:32:16: use of undeclared identifier 'cudaEventCreate'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventCreate'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:33:16: use of undeclared identifier 'cudaEventCreate'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventCreate'? [clang-diagnostic-error]
+    CUDA_CHECK(cudaEventCreate(&stop_event_));
+               ^
+  Report hash: 91d29f50a1368ddcb1984747cb89f5d9
+  Notes:
+    1, metrics_collector.cpp:33:16: cuda_stub_constants::cuda_stub_constants::cudaEventCreate (fixit)
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_impl.h:179:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventCreate' declared here
+    3, metrics_collector.cpp:33:16: use of undeclared identifier 'cudaEventCreate'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventCreate'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:39:18: use of undeclared identifier 'cudaEventDestroy'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventDestroy'? [clang-diagnostic-error]
+      CUDA_CHECK(cudaEventDestroy(start_event_));
+                 ^
+  Report hash: c7291b4a8c9fcc75e53a9a149c286b7a
+  Notes:
+    1, metrics_collector.cpp:39:18: cuda_stub_constants::cuda_stub_constants::cudaEventDestroy (fixit)
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_impl.h:190:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventDestroy' declared here
+    3, metrics_collector.cpp:39:18: use of undeclared identifier 'cudaEventDestroy'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventDestroy'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:42:18: use of undeclared identifier 'cudaEventDestroy'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventDestroy'? [clang-diagnostic-error]
+      CUDA_CHECK(cudaEventDestroy(stop_event_));
+                 ^
+  Report hash: e5e7b804fe696dc785bde1e6e929c1d0
+  Notes:
+    1, metrics_collector.cpp:42:18: cuda_stub_constants::cuda_stub_constants::cudaEventDestroy (fixit)
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_impl.h:190:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventDestroy' declared here
+    3, metrics_collector.cpp:42:18: use of undeclared identifier 'cudaEventDestroy'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventDestroy'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:82:18: use of undeclared identifier 'cudaEventRecord'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord'? [clang-diagnostic-error]
+      CUDA_CHECK(cudaEventRecord(start_event_, nullptr));
+                 ^
+  Report hash: 021a79bc61b84d2510d0d8bc741021dd
+  Notes:
+    1, metrics_collector.cpp:82:18: cuda_stub_constants::cuda_stub_constants::cudaEventRecord (fixit)
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_impl.h:199:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord' declared here
+    3, metrics_collector.cpp:82:18: use of undeclared identifier 'cudaEventRecord'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:88:18: use of undeclared identifier 'cudaEventRecord'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord'? [clang-diagnostic-error]
+      CUDA_CHECK(cudaEventRecord(stop_event_, nullptr));
+                 ^
+  Report hash: 7e7d7c45a172efcb54ccdac7e25f4f5d
+  Notes:
+    1, metrics_collector.cpp:88:18: cuda_stub_constants::cuda_stub_constants::cudaEventRecord (fixit)
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_impl.h:199:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord' declared here
+    3, metrics_collector.cpp:88:18: use of undeclared identifier 'cudaEventRecord'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:89:18: use of undeclared identifier 'cudaEventSynchronize'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventSynchronize'? [clang-diagnostic-error]
+      CUDA_CHECK(cudaEventSynchronize(stop_event_));
+                 ^
+  Report hash: 0cb75e0551f2372d9e0f4580fb440065
+  Notes:
+    1, metrics_collector.cpp:89:18: cuda_stub_constants::cuda_stub_constants::cudaEventSynchronize (fixit)
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_impl.h:209:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventSynchronize' declared here
+    3, metrics_collector.cpp:89:18: use of undeclared identifier 'cudaEventSynchronize'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventSynchronize'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:93:20: use of undeclared identifier 'cudaEventElapsedTime'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventElapsedTime'? [clang-diagnostic-error]
+        CUDA_CHECK(cudaEventElapsedTime(&elapsed_time, start_event_, stop_event_));
+                   ^
+  Report hash: e914954a9d9a917a15150cbec0ec5d9d
+  Notes:
+    1, metrics_collector.cpp:93:20: cuda_stub_constants::cuda_stub_constants::cudaEventElapsedTime (fixit)
+  Steps:
+    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    2, cuda_impl.h:218:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventElapsedTime' declared here
+    3, metrics_collector.cpp:93:20: use of undeclared identifier 'cudaEventElapsedTime'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventElapsedTime'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:209:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
+  cudaEvent_t start_event_{nullptr};
+  ^
+  Report hash: 7830a555ff4f4c841dd5c13fa13e66c2
+  Notes:
+    1, metrics_collector.cpp:209:3: cuda_stub_constants::cudaEvent_t (fixit)
+  Steps:
+    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
+    2, metrics_collector.cpp:209:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
+
+[CRITICAL] /sep/src/core/metrics_collector.cpp:210:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
+  cudaEvent_t stop_event_{nullptr};
+  ^
+  Report hash: 0263a68ec6b0c2230629583cc80349d3
+  Notes:
+    1, metrics_collector.cpp:210:3: cuda_stub_constants::cudaEvent_t (fixit)
+  Steps:
+    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
+    2, metrics_collector.cpp:210:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
+
+Found 10 defect(s) in metrics_collector.cpp
 
 [CRITICAL] /sep/src/blender/gpu_context.cpp:6:24: redefinition of 'operator()' [clang-diagnostic-error]
 void GPUBufferDeleter::operator()(GPUBuffer* buffer) const noexcept {
@@ -1781,16 +2354,6 @@ std::vector<PatternProcessResult> QuantumPatternProcessor::processBatch(const st
 
 Found 8 defect(s) in quantum_pattern_processor.cpp
 
-[CRITICAL] /sep/third_party/crow/http_request.h:25:15: no member named 'contains' in 'std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>' [clang-diagnostic-error]
-  if (headers.contains(key)) {
-              ^
-  Report hash: e35216a3c457ec75f05b98d2803e2800
-  Steps:
-    1, http_request.h:90:18: in instantiation of function template specialization 'crow::get_header_value<std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>>' requested here
-    2, http_request.h:25:15: no member named 'contains' in 'std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>'
-
-Found 1 defect(s) in http_request.h
-
 [MEDIUM] /sep/src/api/client.cpp:142:47: unused parameter 'request' [clang-diagnostic-unused-parameter]
 void Client::updateMetrics( const APIRequest &request,
                                               ^
@@ -1799,84 +2362,6 @@ void Client::updateMetrics( const APIRequest &request,
     1, client.cpp:142:47: unused parameter 'request'
 
 Found 1 defect(s) in client.cpp
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:12:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define _GLIBCXX_MATH_H 1
-        ^
-  Report hash: 4ccf1f1bb2cc6373d7985afcca245c69
-  Steps:
-    1, cuda_runtime.h:12:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:15:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __CUDACC_RTC__ 1
-        ^
-  Report hash: 30860bb5b6e354c70e7c2552c64c9a40
-  Steps:
-    1, cuda_runtime.h:15:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:16:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __MATH_FUNCTIONS_DECL__ inline
-        ^
-  Report hash: f623cde0597b0ac7a640444958aeee8c
-  Steps:
-    1, cuda_runtime.h:16:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:17:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __MATH_FUNCTIONS_DEVICE_DECL__ inline
-        ^
-  Report hash: 153b6bc728348ab92d95e8ea6d09c375
-  Steps:
-    1, cuda_runtime.h:17:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:21:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __CUDABE__
-        ^
-  Report hash: 2d57f8d3dc0408e51cf4f95a21c0cd7b
-  Steps:
-    1, cuda_runtime.h:21:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:26:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __CUDA_ARCH__ 520  // Minimum supported architecture
-        ^
-  Report hash: 4a2b995644cf657e5ed2763652350c95
-  Steps:
-    1, cuda_runtime.h:26:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:31:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __CUDA_ARCH_PTX__ 520
-        ^
-  Report hash: 69a0e458124254e1b6451c31e5197e01
-  Steps:
-    1, cuda_runtime.h:31:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:36:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __CUDACC_VER_MAJOR__ 12
-        ^
-  Report hash: 056bd5f2b1a9d597c6cc7282445f396e
-  Steps:
-    1, cuda_runtime.h:36:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:40:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __CUDACC_VER_MINOR__ 9
-        ^
-  Report hash: 4372726d2af15c49ffd1f8ea842fc4b4
-  Steps:
-    1, cuda_runtime.h:40:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/include/compat/cuda_runtime.h:44:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __CUDACC_VER_BUILD__ 0
-        ^
-  Report hash: d3ff101d30a4df98a06a4d07a1836e14
-  Steps:
-    1, cuda_runtime.h:44:9: macro name is a reserved identifier
-
-[CRITICAL] /sep/include/compat/cuda_runtime.h:78:13: conflicting types for 'cudaStreamDestroy' [clang-diagnostic-error]
-cudaError_t cudaStreamDestroy(cudaStream_t stream);
-            ^
-  Report hash: ab7a3dac97fdc3e107b6b2097674b6a1
-  Steps:
-    1, cuda.h:55:13: previous declaration is here
-    2, cuda_runtime.h:78:13: conflicting types for 'cudaStreamDestroy'
 
 [CRITICAL] /sep/include/compat/cuda_runtime.h:88:13: conflicting types for 'cudaFree' [clang-diagnostic-error]
 cudaError_t cudaFree(void* ptr);
@@ -1894,14 +2379,6 @@ cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
     1, cuda.h:63:13: previous declaration is here
     2, cuda_runtime.h:89:13: conflicting types for 'cudaMemGetInfo'
 
-[CRITICAL] /sep/include/compat/cuda_runtime.h:90:13: conflicting types for 'cudaMemcpyAsync' [clang-diagnostic-error]
-cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream);
-            ^
-  Report hash: b6073229254a78923c86a3a12ab7476e
-  Steps:
-    1, cuda.h:62:13: previous declaration is here
-    2, cuda_runtime.h:90:13: conflicting types for 'cudaMemcpyAsync'
-
 [CRITICAL] /sep/include/compat/cuda_runtime.h:94:13: conflicting types for 'cudaSetDevice' [clang-diagnostic-error]
 cudaError_t cudaSetDevice(int device);
             ^
@@ -1917,14 +2394,6 @@ cudaError_t cudaGetDeviceCount(int* count);
   Steps:
     1, cuda.h:50:13: previous declaration is here
     2, cuda_runtime.h:95:13: conflicting types for 'cudaGetDeviceCount'
-
-[CRITICAL] /sep/include/compat/cuda_runtime.h:96:13: conflicting types for 'cudaGetDeviceProperties' [clang-diagnostic-error]
-cudaError_t cudaGetDeviceProperties(struct cudaDeviceProp* prop, int device);
-            ^
-  Report hash: c570657abe6acafe512070a38e2cc61f
-  Steps:
-    1, cuda.h:51:13: previous declaration is here
-    2, cuda_runtime.h:96:13: conflicting types for 'cudaGetDeviceProperties'
 
 [CRITICAL] /sep/include/compat/cuda_runtime.h:97:13: conflicting types for 'cudaGetLastError' [clang-diagnostic-error]
 cudaError_t cudaGetLastError(void);
@@ -1942,7 +2411,7 @@ const char* cudaGetErrorString(cudaError_t error);
     1, cuda.h:53:13: previous declaration is here
     2, cuda_runtime.h:98:13: conflicting types for 'cudaGetErrorString'
 
-Found 19 defect(s) in cuda_runtime.h
+Found 6 defect(s) in cuda_runtime.h
 
 [CRITICAL] /sep/include/core/engine.h:52:57: no member named 'PinState' in namespace 'sep' [clang-diagnostic-error]
   void generate_probes(const ::sep::shim::vector<::sep::PinState> &inputs,
@@ -2562,105 +3031,159 @@ namespace asio {
 
 Found 3 defect(s) in query_static_constexpr_member.hpp
 
+Found no defects in pipewire_stubs.cpp
+Found no defects in crow_error.cpp
+Found no defects in allocation_metrics.cpp
+Found no defects in pipeline.cpp
+Found no defects in tracing.cpp
+Found no defects in prometheus_exporter.cpp
+Found no defects in qbsa.cpp
+Found no defects in qfh.cpp
+Found no defects in qbsa_qfh.cpp
+Found no defects in js_integration.cpp
+Found no defects in relationship.cpp
+[CRITICAL] /sep/src/main.cpp:1:10: 'config/manager.h' file not found [clang-diagnostic-error]
+#include "config/manager.h"
+         ^
+  Report hash: bd758a45f2ff1b7826d8c6500f11dc6e
+  Steps:
+    1, main.cpp:1:10: 'config/manager.h' file not found
 
-----==== Severity Statistics ====----
-----------------------------
-Severity | Number of reports
-----------------------------
-LOW      |                91
-CRITICAL |               196
-MEDIUM   |                15
-----------------------------
-----=================----
+Found 1 defect(s) in main.cpp
 
-----==== Checker Statistics ====----
--------------------------------------------------------------------------
-Checker name                               | Severity | Number of reports
--------------------------------------------------------------------------
-misc-header-include-cycle                  | LOW      |                10
-bugprone-forward-declaration-namespace     | LOW      |                79
-clang-diagnostic-error                     | CRITICAL |               196
-performance-trivially-destructible         | LOW      |                 2
-clang-diagnostic-unused-private-field      | MEDIUM   |                 1
-clang-diagnostic-unused-parameter          | MEDIUM   |                 2
-clang-diagnostic-reserved-macro-identifier | MEDIUM   |                10
-clang-diagnostic-mismatched-tags           | MEDIUM   |                 2
--------------------------------------------------------------------------
-----=================----
+Found no defects in mesh_handler.cpp
+Found no defects in quantum_processor_qfh.cpp
+Found no defects in quantum_processor.cpp
+Found no defects in types_serialization.cpp
+Found no defects in quantum_processor_qfh_common.cpp
+Found no defects in ollama_client.cpp
+Found no defects in config.cpp
+Found no defects in manager.cpp
+[LOW] /sep/include/api/sep_engine.h:23:7: no definition found for 'Processor', but a definition with the same name 'Processor' found in another namespace 'sep::quantum' [bugprone-forward-declaration-namespace]
+class Processor;
+      ^
+  Report hash: 7ddbaf54ea1b7346b97eb4b637f989f0
+  Steps:
+    1, processor.h:15:7: a definition of 'Processor' is found here
+    2, sep_engine.h:23:7: no definition found for 'Processor', but a definition with the same name 'Processor' found in another namespace 'sep::quantum'
 
-----==== File Statistics ====----
-------------------------------------------------------
-File name                          | Number of reports
-------------------------------------------------------
-base_types.h                       |                 5
-cuda_impl.h                        |                31
-cuda_runtime.h                     |                22
-compression.h                      |                 2
-pattern_bridge.h                   |                17
-pattern_observer.h                 |                 2
-memory_tier_manager.hpp            |                 1
-stream.h                           |                 3
-associated_allocator.hpp           |                 1
-associated_cancellation_slot.hpp   |                 1
-associated_executor.hpp            |                 1
-associated_immediate_executor.hpp  |                 2
-bulk_execute.hpp                   |                 3
-connect.hpp                        |                 3
-execute.hpp                        |                 2
-executor.hpp                       |                 1
-schedule.hpp                       |                 2
-sender.hpp                         |                 1
-set_done.hpp                       |                 1
-set_error.hpp                      |                 1
-set_value.hpp                      |                 1
-start.hpp                          |                 1
-submit.hpp                         |                 3
-executor_work_guard.hpp            |                 1
-prefer.hpp                         |                 8
-query.hpp                          |                 3
-require.hpp                        |                 5
-require_concept.hpp                |                 3
-memory_tier.hpp                    |                 3
-dag_graph.cpp                      |                 1
-gpu_context.cpp                    |                 1
-pattern_visualization_pipeline.cpp |                 2
-evolution.h                        |                 2
-evolution.cpp                      |                 7
-bridge.h                           |                 5
-api.cpp                            |                14
-shim.h                             |                 2
-error_handler.h                    |                 3
-error_handler.cpp                  |                 4
-processor.cpp                      |                10
-pattern_processor.cpp              |                 6
-bridge.hpp                         |                 6
-bridge.cpp                         |                13
-bridge_c.cpp                       |                 1
-quantum_pattern_processor.h        |                11
-quantum_pattern_processor.cpp      |                 8
-http_request.h                     |                 1
-client.cpp                         |                 1
-engine.h                           |                 2
-redis_manager.cpp                  |                19
-server.h                           |                 2
-crow_isolation.h                   |                 1
-http_parser_merged.h               |                 1
-strand_executor_service.hpp        |                10
-type_traits.hpp                    |                 1
-executor.hpp                       |                 6
-invocable_archetype.hpp            |                 1
-is_applicable_property.hpp         |                 4
-prefer.hpp                         |                10
-require.hpp                        |                10
-equality_comparable.hpp            |                 2
-execute_member.hpp                 |                 2
-query_static_constexpr_member.hpp  |                 3
-------------------------------------------------------
-----=================----
+Found 1 defect(s) in sep_engine.h
 
-----======== Summary ========----
------------------------------------------------
-Number of processed analyzer result files | 26 
-Number of analyzer reports                | 302
------------------------------------------------
-----=================----
+[CRITICAL] /sep/src/api/sep_engine.cpp:308:56: member access into incomplete type 'sep::pattern::PatternProcessor' [clang-diagnostic-error]
+        const auto& patterns = impl_->pattern_processor->getPatterns();
+                                                       ^
+  Report hash: fb3ec886ae5509c0dfc05670f580a44e
+  Steps:
+    1, sep_engine.h:27:7: forward declaration of 'sep::pattern::PatternProcessor'
+    2, sep_engine.cpp:308:56: member access into incomplete type 'sep::pattern::PatternProcessor'
+
+[MEDIUM] /sep/src/api/sep_engine.cpp:323:67: unused parameter 'request_data' [clang-diagnostic-unused-parameter]
+nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
+                                                                  ^
+  Report hash: d06191f01aa657f541e0410cc16c881a
+  Steps:
+    1, sep_engine.cpp:323:67: unused parameter 'request_data'
+
+Found 2 defect(s) in sep_engine.cpp
+
+[CRITICAL] /usr/include/c++/15/bits/unique_ptr.h:91:16: invalid application of 'sizeof' to an incomplete type 'sep::pattern::PatternProcessor' [clang-diagnostic-error]
+  static_assert(sizeof(_Tp)>0,
+                ^
+  Report hash: 275649a1731b0dc3c756dbdb02c012dd
+  Steps:
+    1, unique_ptr.h:399:4: in instantiation of member function 'std::default_delete<sep::pattern::PatternProcessor>::operator()' requested here
+    2, sep_engine.cpp:44:29: in instantiation of member function 'std::unique_ptr<sep::pattern::PatternProcessor>::~unique_ptr' requested here
+    3, sep_engine.h:27:7: forward declaration of 'sep::pattern::PatternProcessor'
+    4, unique_ptr.h:91:16: invalid application of 'sizeof' to an incomplete type 'sep::pattern::PatternProcessor'
+
+[CRITICAL] /usr/include/c++/15/bits/unique_ptr.h:1085:34: allocation of incomplete type 'sep::pattern::PatternProcessor' [clang-diagnostic-error]
+    { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+                                 ^
+  Report hash: 1cb9eccadb0327b83d3d05b8b861e31f
+  Steps:
+    1, sep_engine.cpp:44:34: in instantiation of function template specialization 'std::make_unique<sep::pattern::PatternProcessor>' requested here
+    2, sep_engine.h:27:7: forward declaration of 'sep::pattern::PatternProcessor'
+    3, unique_ptr.h:1085:34: allocation of incomplete type 'sep::pattern::PatternProcessor'
+
+[CRITICAL] /usr/include/c++/15/bits/unique_ptr.h:1085:34: call to implicitly-deleted default constructor of 'sep::quantum::QuantumProcessor' [clang-diagnostic-error]
+    { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+                                 ^
+  Report hash: ef45dca4ce1fd2963df9cfada8936462
+  Steps:
+    1, sep_engine.cpp:42:34: in instantiation of function template specialization 'std::make_unique<sep::quantum::QuantumProcessor>' requested here
+    2, quantum_processor.h:36:5: explicitly defaulted function was implicitly deleted here
+    3, quantum_processor.h:21:26: default constructor of 'QuantumProcessor' is implicitly deleted because base class 'Processor' has no default constructor
+    4, unique_ptr.h:1085:34: call to implicitly-deleted default constructor of 'sep::quantum::QuantumProcessor'
+
+Found 3 defect(s) in unique_ptr.h
+
+[CRITICAL] /sep/include/api/rate_limit_middleware.h:24:32: no member named 'config' in namespace 'sep' [clang-diagnostic-error]
+    void set_config(const sep::config::RateLimitConfig& config);
+                               ^
+  Report hash: 02e9196a4653a2db44a5931da0474bbe
+  Steps:
+    1, rate_limit_middleware.h:24:32: no member named 'config' in namespace 'sep'
+
+[CRITICAL] /sep/include/api/rate_limit_middleware.h:31:10: no member named 'config' in namespace 'sep' [clang-diagnostic-error]
+    sep::config::RateLimitConfig  config_;  // Store the config here
+         ^
+  Report hash: 7ed29b9071b99d1066a607b1e8a9f8d9
+  Steps:
+    1, rate_limit_middleware.h:31:10: no member named 'config' in namespace 'sep'
+
+Found 2 defect(s) in rate_limit_middleware.h
+
+Found no defects in pipewire_capture.cpp
+[MEDIUM] /sep/src/blender/mesh_handler.cpp:306:21: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+      area += 0.5 * std::sqrt(cx * cx + cy * cy + cz * cz);
+                    ^
+  Report hash: 96149c0ed1849daeb9b92afc0dcb3cc9
+  Steps:
+    1, mesh_handler.cpp:306:21: implicit conversion increases floating-point precision: 'float' to 'double'
+
+[MEDIUM] /sep/src/blender/mesh_handler.cpp:325:14: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+    total += std::sqrt(dx * dx + dy * dy + dz * dz);
+             ^
+  Report hash: 31bfb7cbaa7554f38c92dbc1014c813e
+  Steps:
+    1, mesh_handler.cpp:325:14: implicit conversion increases floating-point precision: 'float' to 'double'
+
+Found 2 defect(s) in mesh_handler.cpp
+
+[MEDIUM] /sep/include/compat/kernels.cuh:47:27: unused parameter 'pattern' [clang-diagnostic-unused-parameter]
+    pattern::PatternData* pattern,
+                          ^
+  Report hash: 31d5f2cb4a0073e44a643481c4cc0d9c
+  Steps:
+    1, kernels.cuh:47:27: unused parameter 'pattern'
+
+[MEDIUM] /sep/include/compat/kernels.cuh:48:27: unused parameter 'result' [clang-diagnostic-unused-parameter]
+    pattern::PatternData* result,
+                          ^
+  Report hash: 5e3e639c90699be9f1e68511d19a7617
+  Steps:
+    1, kernels.cuh:48:27: unused parameter 'result'
+
+[MEDIUM] /sep/include/compat/kernels.cuh:49:35: unused parameter 'config' [clang-diagnostic-unused-parameter]
+    const pattern::PatternConfig* config,
+                                  ^
+  Report hash: eb015f5d301c785fe9ee54e041abb80c
+  Steps:
+    1, kernels.cuh:49:35: unused parameter 'config'
+
+[MEDIUM] /sep/include/compat/kernels.cuh:50:12: unused parameter 'pattern_count' [clang-diagnostic-unused-parameter]
+    size_t pattern_count,
+           ^
+  Report hash: bbdf69baf0632c6003f677ee2c7c0b3f
+  Steps:
+    1, kernels.cuh:50:12: unused parameter 'pattern_count'
+
+[MEDIUM] /sep/include/compat/kernels.cuh:51:33: unused parameter 'previous_patterns' [clang-diagnostic-unused-parameter]
+    const pattern::PatternData* previous_patterns
+                                ^
+  Report hash: e90d8ad10723fe736ad64b04db58160a
+  Steps:
+    1, kernels.cuh:51:33: unused parameter 'previous_patterns'
+
+Found 5 defect(s) in kernels.cuh
+

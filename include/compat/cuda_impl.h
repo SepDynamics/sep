@@ -12,6 +12,7 @@
 // several different macros.  We now use the unified `SEP_CUDA_AVAILABLE`
 // definition from `cuda/macros.h`.
 #include "compat/macros.h"
+#include "compat/cuda.h"  // For sep::cuda namespace
 
 #if SEP_CUDA_AVAILABLE
 #include "compat/cuda_runtime.h"
@@ -22,16 +23,75 @@
 
 #if !SEP_CUDA_AVAILABLE
 
+// Use CUDA types from sep::cuda namespace
+using sep::cuda::cudaError_t;
+using sep::cuda::cudaSuccess;
+using sep::cuda::cudaErrorMemoryAllocation;
+using sep::cuda::cudaErrorInitializationError;
+using sep::cuda::cudaErrorInvalidDevice;
+using sep::cuda::cudaErrorDeviceUninitialized;
+using sep::cuda::cudaErrorInvalidValue;
+using sep::cuda::cudaErrorNotReady;
+using sep::cuda::cudaErrorSetOnActiveProcess;
+using sep::cuda::cudaErrorStreamCaptureUnsupported;
+using sep::cuda::cudaErrorInvalidMemcpyDirection;
+using sep::cuda::cudaErrorInvalidResourceHandle;
+
 // Forward declare CUDA types needed for this stub implementation
 namespace cuda_stub_constants {
 typedef struct CUstream_st* cudaStream_t;
 typedef struct CUevent_st* cudaEvent_t;
-typedef enum { cudaSuccess = 0 } cudaError_t;
+
+// Define cudaMemcpyKind enum
+typedef enum {
+    cudaMemcpyHostToHost = 0,
+    cudaMemcpyHostToDevice = 1,
+    cudaMemcpyDeviceToHost = 2,
+    cudaMemcpyDeviceToDevice = 3,
+    cudaMemcpyDefault = 4
+} cudaMemcpyKind;
 typedef struct {
     int major;
     int minor;
     int pageableMemoryAccess;
     int concurrentKernels;
+    
+    // Add all fields used in cudaGetDeviceProperties
+    char name[256];
+    size_t totalGlobalMem;
+    int multiProcessorCount;
+    int maxThreadsPerBlock;
+    int warpSize;
+    int sharedMemPerBlock;
+    int regsPerBlock;
+    size_t memPitch;
+    int maxThreadsDim[3];
+    int maxGridSize[3];
+    size_t totalConstMem;
+    int clockRate;
+    size_t textureAlignment;
+    int deviceOverlap;
+    int kernelExecTimeoutEnabled;
+    int integrated;
+    int canMapHostMemory;
+    int computeMode;
+    int maxTexture1D;
+    int maxTexture2D[2];
+    int maxTexture3D[3];
+    int maxTexture1DLayered[2];
+    int maxTexture2DLayered[3];
+    size_t surfaceAlignment;
+    int ECCEnabled;
+    int pciBusID;
+    int pciDeviceID;
+    int pciDomainID;
+    int tccDriver;
+    int asyncEngineCount;
+    int unifiedAddressing;
+    int memoryClockRate;
+    int memoryBusWidth;
+    int l2CacheSize;
+    int maxThreadsPerMultiProcessor;
 } cudaDeviceProp;
 
 constexpr size_t STUB_GLOBAL_MEM = 1024 * 1024 * 1024;  // 1GB
@@ -240,7 +300,7 @@ inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
         return cudaErrorInvalidValue;
     }
     memset(devicePtr, value, numBytes);
-    return cudaSuccess;
+    return sep::cuda::cudaSuccess;
 }
 
 // Initialize a memory region with the given value - wrapper around memset
@@ -258,10 +318,10 @@ inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
     return ::cudaMallocManaged(ptr, size);
 #else
     if (!ptr) {
-        return cudaErrorInvalidValue;
+        return sep::cuda::cudaErrorInvalidValue;
     }
     *ptr = malloc(size);
-    return (*ptr) ? cudaSuccess : cudaErrorMemoryAllocation;
+    return (*ptr) ? sep::cuda::cudaSuccess : sep::cuda::cudaErrorMemoryAllocation;
 #endif
 }
 // Populate device properties with conservative values so callers relying on
@@ -272,7 +332,7 @@ inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
     return ::cudaGetDeviceProperties(prop, device);
 #else
     if (!prop) {
-        return cudaErrorInvalidValue;
+        return sep::cuda::cudaErrorInvalidValue;
     }
     // Only 1 stub device
     if (device < 0 || device >= 1) {

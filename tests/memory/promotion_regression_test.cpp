@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "memory/memory_tier_manager.hpp"
-#include "sep/memory/memory_tier.hpp"
+#include "memory/memory_tier.hpp"
 
 using namespace sep::memory;
 

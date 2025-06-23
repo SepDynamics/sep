@@ -1,6 +1,5 @@
 #include "core/types.h"
 #include "compat/types.h"
-#include "sep/result_defs.h"
 #include <gtest/gtest.h>
 
 // Test PinState equality operator

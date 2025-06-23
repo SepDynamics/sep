@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "compat/raii.h"
 #include "compat/kernels.h"
-#include "sep/shim.h"
+#include "compat/shim.h"
 
 
 using namespace sep;

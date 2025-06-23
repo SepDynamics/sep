@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #ifdef CROW_DISABLE_RTTI
-#include "sep/crow_isolation.h"
+#include "crow/crow_isolation.h"
 #endif
 #include "crow/json.h"
 

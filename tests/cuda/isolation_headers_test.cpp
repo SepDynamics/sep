@@ -1,5 +1,5 @@
-#include "sep/asio_isolation.h"
-#include "sep/crow_isolation.h"
+#include "crow/asio_isolation.h"
+#include "crow/crow_isolation.h"
 #include <gtest/gtest.h>
 
 TEST(IsolationHeadersCuda, BasicUsage)

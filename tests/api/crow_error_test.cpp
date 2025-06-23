@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "crow/common.h"
-#include "sep/crow_error.h"
+#include "crow/crow_error.h"
 
 TEST(CrowErrorTest, InvalidMethodReturnsError)
 {

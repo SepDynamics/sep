@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "audio/pipeline.h"
-#include "sep/shim.h"
+#include "compat/shim.h"
 #include <cmath>
 
 using namespace sep::audio;

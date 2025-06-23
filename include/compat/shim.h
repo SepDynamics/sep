@@ -508,6 +508,11 @@ namespace shim {
       size_ += count;
     }
   };
+
+  template<typename T>
+  inline std::vector<T> to_std_vector(const vector<T>& v) {
+    return std::vector<T>(v.begin(), v.end());
+  }
   
   template<typename K, typename V, typename... Args>
   class map {

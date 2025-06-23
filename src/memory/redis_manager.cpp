@@ -185,16 +185,16 @@ public:
         }
         freeReplyObject(reply);
 
-        sep::pattern::PatternData data;
+        sep::pattern::PatternData std::data;
 
         // Load position
         reply = static_cast<redisReply*>(
             redisCommand(context_, "HMGET %s position:x position:y position:z", key.str().c_str()));
         if (reply && reply->type == REDIS_REPLY_ARRAY && reply->elements == 3)
         {
-            data.position.x = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
-            data.position.y = reply->element[1]->str ? std::stof(reply->element[1]->str) : 0.0f;
-            data.position.z = reply->element[2]->str ? std::stof(reply->element[2]->str) : 0.0f;
+            std::data.position.x = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
+            std::data.position.y = reply->element[1]->str ? std::stof(reply->element[1]->str) : 0.0f;
+            std::data.position.z = reply->element[2]->str ? std::stof(reply->element[2]->str) : 0.0f;
         }
         if (reply)
             freeReplyObject(reply);
@@ -206,12 +206,12 @@ public:
                          key.str().c_str()));
         if (reply && reply->type == REDIS_REPLY_ARRAY && reply->elements == 6)
         {
-            data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
-            data.stability = reply->element[1]->str ? std::stof(reply->element[1]->str) : 0.0f;
-            data.generation = reply->element[2]->str ? std::stoi(reply->element[2]->str) : 0;
+            std::data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
+            std::data.stability = reply->element[1]->str ? std::stof(reply->element[1]->str) : 0.0f;
+            std::data.generation = reply->element[2]->str ? std::stoi(reply->element[2]->str) : 0;
             // We're ignoring access_frequency since it's not in the core PatternData structure
             // Just use coherence value for both fields
-            data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
+            std::data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
             
             // Parse timestamp but don't try to store it since it's not in the target structure
             // Just parse for logging purposes

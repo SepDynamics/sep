@@ -1,3 +1,6 @@
+#ifndef SEP_COMPAT_CUDA_RUNTIME_H
+#define SEP_COMPAT_CUDA_RUNTIME_H
+
 // Include standard headers needed for types
 #include <stddef.h>  // For size_t
 
@@ -7,11 +10,16 @@
 #endif
 
 // Include necessary headers
-#include <cstring> // For std::memcpy
+#include <string.h> // For memcpy
 
 // Forward declare types to avoid circular dependency with cuda_impl.h
 #if !SEP_CUDA_AVAILABLE
+
+#ifdef __cplusplus
+// C++ specific code
 namespace cuda_stub_constants {
+#endif
+
 typedef struct CUstream_st* cudaStream_t;
 typedef struct CUevent_st* cudaEvent_t;
 
@@ -23,14 +31,18 @@ typedef enum {
     cudaMemcpyDeviceToDevice = 3,
     cudaMemcpyDefault = 4
 } cudaMemcpyKind;
-}
+
+#ifdef __cplusplus
+} // namespace cuda_stub_constants
 #endif
+
+#endif // !SEP_CUDA_AVAILABLE
 
 // We don't need to define these types here since they're already defined in cuda_impl.h
 // This avoids the redefinition errors
 
 // When CUDA is not available, define global functions for CUDA operations
-#if !SEP_CUDA_AVAILABLE
+#if !SEP_CUDA_AVAILABLE && defined(__cplusplus)
 
 // Import the CUDA types from cuda_impl.h
 using cuda_stub_constants::cudaMemcpyKind;
@@ -57,7 +69,9 @@ typedef enum {
     cudaErrorInvalidResourceHandle = 10
 } cudaError_t;
 }  // namespace cuda
-}
+}  // namespace sep
+
+#endif // !SEP_CUDA_AVAILABLE && defined(__cplusplus)
 
 
 // Only declare the _ptsz variants of CUDA functions
@@ -68,6 +82,7 @@ typedef enum {
 extern "C" {
 #endif
 
+// Function declarations would go here if needed
 
 #ifdef __cplusplus
 }

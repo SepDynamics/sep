@@ -22,7 +22,7 @@
 
 namespace sep {
 namespace pattern {
-using sep::SEPResult;
+// Remove the conflicting using declaration
 
 // Constructor implementation
 BlenderBridge::BlenderBridge()
@@ -221,7 +221,7 @@ sep::SEPResult BlenderBridge::allocatePatternMemory(ObjectState& state)
 {
     std::size_t bytes  = state.config.max_patterns * sizeof(sep::pattern::PatternData);
     auto&       mgr    = sep::memory::MemoryTierManager::getInstance();
-    state.memory_block = mgr.allocate(bytes, sep::memory::TierType::MTM);
+    state.memory_block = mgr.allocate(bytes, sep::memory::TierType::DEVICE);
     if (!state.memory_block)
     {
         return sep::SEPResult::ALLOCATION_FAILED;
@@ -248,7 +248,7 @@ sep::SEPResult BlenderBridge::syncMemory(MemoryTierEnum tier, bool force)
 {
     if (!m_processing_thread_active.load())
     {
-        return sep::SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::INITIALIZATION_FAILED;
     }
 
     auto& manager = sep::memory::MemoryTierManager::getInstance();
@@ -256,17 +256,17 @@ sep::SEPResult BlenderBridge::syncMemory(MemoryTierEnum tier, bool force)
     switch (tier)
     {
         case MemoryTierEnum::STM:
-            manager.defragmentTier(sep::memory::TierType::STM);
+            manager.defragmentTier(sep::memory::TierType::HOST);
             break;
         case MemoryTierEnum::MTM:
-            manager.defragmentTier(sep::memory::TierType::MTM);
+            manager.defragmentTier(sep::memory::TierType::DEVICE);
             if (force)
             {
-                manager.defragmentTier(sep::memory::TierType::STM);
+                manager.defragmentTier(sep::memory::TierType::HOST);
             }
             break;
         case MemoryTierEnum::LTM:
-            manager.defragmentTier(sep::memory::TierType::LTM);
+            manager.defragmentTier(sep::memory::TierType::UNIFIED);
             break;
         default:
             return sep::SEPResult::INVALID_STATE;
@@ -284,7 +284,7 @@ sep::SEPResult BlenderBridge::startProcessingThread()
     }
     
     if (!m_gpu_context) {
-        return sep::SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::INITIALIZATION_FAILED;
     }
 
     // Launch background thread for pattern processing

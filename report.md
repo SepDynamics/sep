@@ -121,6 +121,22 @@ struct CUevent_st;
     1, cuda_impl.h:43:16: a declaration of 'CUevent_st' is found here
     2, cuda_runtime.h:55:8: declaration 'CUevent_st' is never referenced, but a declaration with the same name found in another namespace 'cuda_stub_constants'
 
+[CRITICAL] /sep/include/compat/cuda_runtime.h:56:29: typedef redefinition with different types ('struct CUstream_st *' (aka 'CUstream_st *') vs 'struct CUstream_st *' (aka 'cuda_stub_constants::CUstream_st *')) [clang-diagnostic-error]
+typedef struct CUstream_st* cudaStream_t;
+                            ^
+  Report hash: 8293bedeca2cc3609010b1e88cfbcead
+  Steps:
+    1, cuda_impl.h:42:29: previous definition is here
+    2, cuda_runtime.h:56:29: typedef redefinition with different types ('struct CUstream_st *' (aka 'CUstream_st *') vs 'struct CUstream_st *' (aka 'cuda_stub_constants::CUstream_st *'))
+
+[CRITICAL] /sep/include/compat/cuda_runtime.h:57:28: typedef redefinition with different types ('struct CUevent_st *' (aka 'CUevent_st *') vs 'struct CUevent_st *' (aka 'cuda_stub_constants::CUevent_st *')) [clang-diagnostic-error]
+typedef struct CUevent_st* cudaEvent_t;
+                           ^
+  Report hash: 6880a5576f420b682683b84ba9de5d81
+  Steps:
+    1, cuda_impl.h:43:28: previous definition is here
+    2, cuda_runtime.h:57:28: typedef redefinition with different types ('struct CUevent_st *' (aka 'CUevent_st *') vs 'struct CUevent_st *' (aka 'cuda_stub_constants::CUevent_st *'))
+
 [CRITICAL] /sep/include/compat/cuda_runtime.h:60:3: typedef redefinition with different types ('enum cudaError' vs 'int') [clang-diagnostic-error]
 } cudaError_t;
   ^
@@ -128,6 +144,23 @@ struct CUevent_st;
   Steps:
     1, cuda.h:19:13: previous definition is here
     2, cuda_runtime.h:60:3: typedef redefinition with different types ('enum cudaError' vs 'int')
+
+[CRITICAL] /sep/include/compat/cuda_runtime.h:61:9: declaration conflicts with target of using declaration already in scope [clang-diagnostic-error]
+typedef enum cudaMemcpyKind {
+        ^
+  Report hash: 2e418731bf19a5e041640437121e23b9
+  Steps:
+    1, cuda_impl.h:52:3: target of using declaration
+    2, cuda_impl.h:439:28: using declaration
+    3, cuda_runtime.h:61:9: declaration conflicts with target of using declaration already in scope
+
+[CRITICAL] /sep/include/compat/cuda_runtime.h:66:3: redefinition of 'cudaMemcpyKind' as different kind of symbol [clang-diagnostic-error]
+} cudaMemcpyKind;
+  ^
+  Report hash: 24d727c4a2d846f22166397821757754
+  Steps:
+    1, cuda_runtime.h:61:14: previous definition is here
+    2, cuda_runtime.h:66:3: redefinition of 'cudaMemcpyKind' as different kind of symbol
 
 [CRITICAL] /sep/include/compat/cuda_runtime.h:78:13: conflicting types for 'cudaStreamDestroy' [clang-diagnostic-error]
 cudaError_t cudaStreamDestroy(cudaStream_t stream);
@@ -137,21 +170,22 @@ cudaError_t cudaStreamDestroy(cudaStream_t stream);
     1, cuda.h:55:13: previous declaration is here
     2, cuda_runtime.h:78:13: conflicting types for 'cudaStreamDestroy'
 
-[CRITICAL] /sep/include/compat/cuda_runtime.h:90:13: conflicting types for 'cudaMemcpyAsync' [clang-diagnostic-error]
+[CRITICAL] /sep/include/compat/cuda_runtime.h:90:76: reference to 'cudaMemcpyKind' is ambiguous [clang-diagnostic-error]
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream);
-            ^
-  Report hash: b6073229254a78923c86a3a12ab7476e
+                                                                           ^
+  Report hash: bbde54187c786c66f88e0a68253d7a1a
   Steps:
-    1, cuda.h:62:13: previous declaration is here
-    2, cuda_runtime.h:90:13: conflicting types for 'cudaMemcpyAsync'
+    1, cuda_impl.h:439:28: candidate found by name lookup is 'cudaMemcpyKind'
+    2, cuda_runtime.h:61:14: candidate found by name lookup is 'cudaMemcpyKind'
+    3, cuda_runtime.h:90:76: reference to 'cudaMemcpyKind' is ambiguous
 
-[CRITICAL] /sep/include/compat/cuda_runtime.h:96:13: conflicting types for 'cudaGetDeviceProperties' [clang-diagnostic-error]
+[CRITICAL] /sep/include/compat/cuda_runtime.h:96:44: typedef 'cudaDeviceProp' cannot be referenced with the 'struct' specifier [clang-diagnostic-error]
 cudaError_t cudaGetDeviceProperties(struct cudaDeviceProp* prop, int device);
-            ^
-  Report hash: c570657abe6acafe512070a38e2cc61f
+                                           ^
+  Report hash: 16bc7de1a1c7d2be45e6b0b211e2c12f
   Steps:
-    1, cuda.h:51:13: previous declaration is here
-    2, cuda_runtime.h:96:13: conflicting types for 'cudaGetDeviceProperties'
+    1, cuda_impl.h:95:3: declared here
+    2, cuda_runtime.h:96:44: typedef 'cudaDeviceProp' cannot be referenced with the 'struct' specifier
 
 [CRITICAL] /sep/include/compat/cuda_runtime.h:109:13: conflicting types for 'cudaMallocManaged' [clang-diagnostic-error]
 cudaError_t cudaMallocManaged(void** ptr, size_t size, unsigned int flags);
@@ -161,7 +195,7 @@ cudaError_t cudaMallocManaged(void** ptr, size_t size, unsigned int flags);
     1, cuda.h:60:13: previous declaration is here
     2, cuda_runtime.h:109:13: conflicting types for 'cudaMallocManaged'
 
-Found 18 defect(s) in cuda_runtime.h
+Found 22 defect(s) in cuda_runtime.h
 
 [MEDIUM] /sep/include/compat/cuda_unified_fix.h:9:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
 #define __CUDA_NO_FP8_CONVERSIONS__ 1
@@ -557,56 +591,6 @@ Found 18 defect(s) in cuda_runtime.h
 
 Found 56 defect(s) in cuda_unified_fix.h
 
-[CRITICAL] /sep/include/compat/raii.h:17:30: no type named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
-  explicit StreamRAII(::sep::StreamFlags flags = ::sep::StreamFlags::Default);
-                             ^
-  Report hash: 529fe1416d274a6b8d733f163153fc87
-  Steps:
-    1, raii.h:17:30: no type named 'StreamFlags' in namespace 'sep'
-
-[CRITICAL] /sep/include/compat/raii.h:17:57: no member named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
-  explicit StreamRAII(::sep::StreamFlags flags = ::sep::StreamFlags::Default);
-                                                        ^
-  Report hash: 1674993516fb18ddd11cb3c8a3c839c4
-  Steps:
-    1, raii.h:17:57: no member named 'StreamFlags' in namespace 'sep'
-
-[CRITICAL] /sep/include/compat/raii.h:45:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
-  cudaEvent_t get() const { return event_; }
-  ^
-  Report hash: 7561bdf6b61e7ecafa4a3c9b9c486d09
-  Notes:
-    1, raii.h:45:3: cuda_stub_constants::cudaEvent_t (fixit)
-  Steps:
-    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
-    2, raii.h:45:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
-
-[CRITICAL] /sep/include/compat/raii.h:50:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
-  cudaEvent_t event_{nullptr};
-  ^
-  Report hash: 904a281ab2e4a7986bbb52bb1e526b9e
-  Notes:
-    1, raii.h:50:3: cuda_stub_constants::cudaEvent_t (fixit)
-  Steps:
-    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
-    2, raii.h:50:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
-
-Found 4 defect(s) in raii.h
-
-[CRITICAL] /sep/src/compat/raii.cpp:33:29: no type named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
-StreamRAII::StreamRAII(sep::StreamFlags flags) {
-                            ^
-  Report hash: 0c5a767822bc03e9a939ac88fd5828a1
-  Steps:
-    1, raii.cpp:33:29: no type named 'StreamFlags' in namespace 'sep'
-
-[CRITICAL] /sep/src/compat/raii.cpp:34:46: no member named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
-    unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
-                                             ^
-  Report hash: 21380f1df7de8d941f5835e75637a60b
-  Steps:
-    1, raii.cpp:34:46: no member named 'StreamFlags' in namespace 'sep'
-
 [CRITICAL] /sep/src/compat/raii.cpp:34:74: use of undeclared identifier 'cudaStreamNonBlocking' [clang-diagnostic-error]
     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
                                                                          ^
@@ -614,22 +598,19 @@ StreamRAII::StreamRAII(sep::StreamFlags flags) {
   Steps:
     1, raii.cpp:34:74: use of undeclared identifier 'cudaStreamNonBlocking'
 
-[CRITICAL] /sep/src/compat/raii.cpp:34:98: use of undeclared identifier 'cudaStreamDefault'; did you mean 'cudaStreamDestroy'? [clang-diagnostic-error]
+[CRITICAL] /sep/src/compat/raii.cpp:34:98: use of undeclared identifier 'cudaStreamDefault' [clang-diagnostic-error]
     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
                                                                                                  ^
-  Report hash: b9b50bfa10d158fa6af59585d16c7437
-  Notes:
-    1, raii.cpp:34:98: cudaStreamDestroy (fixit)
+  Report hash: 261aae3bdd46e39af7c4297a45c3ca2c
   Steps:
-    1, cuda.h:55:13: 'cudaStreamDestroy' declared here
-    2, raii.cpp:34:98: use of undeclared identifier 'cudaStreamDefault'; did you mean 'cudaStreamDestroy'?
+    1, raii.cpp:34:98: use of undeclared identifier 'cudaStreamDefault'
 
 [CRITICAL] /sep/src/compat/raii.cpp:35:23: no matching function for call to 'cudaStreamCreateWithFlags' [clang-diagnostic-error]
     cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
                       ^
   Report hash: 05dd868e7fdba08246a20f014de2b345
   Steps:
-    1, cuda_runtime.h:77:13: candidate function not viable: no known conversion from 'cudaStream_t *' (aka 'void **') to 'cudaStream_t *' (aka 'CUstream_st **') for 1st argument
+    1, cuda_runtime.h:77:13: candidate function not viable: no known conversion from 'cudaStream_t *' (aka 'void **') to 'cudaStream_t *' (aka 'cuda_stub_constants::CUstream_st **') for 1st argument
     2, raii.cpp:35:23: no matching function for call to 'cudaStreamCreateWithFlags'
 
 [CRITICAL] /sep/src/compat/raii.cpp:70:9: no matching function for call to 'cudaStreamSynchronize_ptsz' [clang-diagnostic-error]
@@ -638,44 +619,20 @@ StreamRAII::StreamRAII(sep::StreamFlags flags) {
   Report hash: f28b70bf51d54c7aee80561788608788
   Steps:
     1, cuda_runtime.h:117:31: expanded from macro 'cudaStreamSynchronize'
-    2, cuda_runtime.h:75:13: candidate function not viable: cannot convert argument of incomplete type 'const cudaStream_t' (aka 'void *const') to 'cudaStream_t' (aka 'CUstream_st *') for 1st argument
+    2, cuda_runtime.h:75:13: candidate function not viable: cannot convert argument of incomplete type 'const cudaStream_t' (aka 'void *const') to 'cudaStream_t' (aka 'cuda_stub_constants::CUstream_st *') for 1st argument
     3, raii.cpp:70:9: no matching function for call to 'cudaStreamSynchronize_ptsz'
 
-[CRITICAL] /sep/src/compat/raii.cpp:75:23: no matching function for call to 'cudaEventCreate' [clang-diagnostic-error]
-    cudaError_t err = cudaEventCreate(&event_);
-                      ^
-  Report hash: 9df802cdb7face7bda124418ad1bd039
-  Steps:
-    1, cuda_runtime.h:81:13: candidate function not viable: no known conversion from 'cuda_stub_constants::cudaEvent_t *' (aka 'cuda_stub_constants::CUevent_st **') to 'cudaEvent_t *' (aka 'CUevent_st **') for 1st argument
-    2, raii.cpp:75:23: no matching function for call to 'cudaEventCreate'
-
-[CRITICAL] /sep/src/compat/raii.cpp:91:20: no matching function for call to 'cudaEventDestroy' [clang-diagnostic-error]
-        CUDA_CHECK(cudaEventDestroy(event_));
+[CRITICAL] /sep/src/compat/raii.cpp:176:20: no matching function for call to 'cudaStreamAttachMemAsync_ptsz' [clang-diagnostic-error]
+        CUDA_CHECK(cudaStreamAttachMemAsync(stream, blk->ptr, 0, 0));
                    ^
-  Report hash: 9098cbd7b6992d372c5b1cdf7f450f99
+  Report hash: f672bced911f89848e0b5bb17839c7c9
   Steps:
-    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
-    2, cuda_runtime.h:82:13: candidate function not viable: cannot convert argument of incomplete type 'cuda_stub_constants::cudaEvent_t' (aka 'cuda_stub_constants::CUevent_st *') to 'cudaEvent_t' (aka 'CUevent_st *') for 1st argument
-    3, raii.cpp:91:20: no matching function for call to 'cudaEventDestroy'
+    1, cuda_runtime.h:129:34: expanded from macro 'cudaStreamAttachMemAsync'
+    2, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
+    3, cuda_runtime.h:91:13: candidate function not viable: cannot convert argument of incomplete type 'cudaStream_t' (aka 'void *') to 'cudaStream_t' (aka 'cuda_stub_constants::CUstream_st *') for 1st argument
+    4, raii.cpp:176:20: no matching function for call to 'cudaStreamAttachMemAsync_ptsz'
 
-[CRITICAL] /sep/src/compat/raii.cpp:101:24: no matching function for call to 'cudaEventDestroy' [clang-diagnostic-error]
-            CUDA_CHECK(cudaEventDestroy(event_));
-                       ^
-  Report hash: a12e8e3fe08ef930a46b289c2d644a66
-  Steps:
-    1, cuda_helpers.h:29:29: expanded from macro 'CUDA_CHECK'
-    2, cuda_runtime.h:82:13: candidate function not viable: cannot convert argument of incomplete type 'cuda_stub_constants::cudaEvent_t' (aka 'cuda_stub_constants::CUevent_st *') to 'cudaEvent_t' (aka 'CUevent_st *') for 1st argument
-    3, raii.cpp:101:24: no matching function for call to 'cudaEventDestroy'
-
-[CRITICAL] /sep/src/compat/raii.cpp:110:9: no matching function for call to 'cudaEventSynchronize' [clang-diagnostic-error]
-        cudaEventSynchronize(event_);
-        ^
-  Report hash: 727b55c7e9f06b3580fb399c9ffd6a44
-  Steps:
-    1, cuda_runtime.h:84:13: candidate function not viable: cannot convert argument of incomplete type 'const cuda_stub_constants::cudaEvent_t' (aka 'cuda_stub_constants::CUevent_st *const') to 'cudaEvent_t' (aka 'CUevent_st *') for 1st argument
-    2, raii.cpp:110:9: no matching function for call to 'cudaEventSynchronize'
-
-Found 10 defect(s) in raii.cpp
+Found 5 defect(s) in raii.cpp
 
 [LOW] /sep/include/blender/compression.h:7:10: circular header file dependency detected while including 'base_types.h', please check the include path [misc-header-include-cycle]
 #include "blender/base_types.h"
@@ -688,33 +645,6 @@ Found 10 defect(s) in raii.cpp
     4, compression.h:7:10: circular header file dependency detected while including 'base_types.h', please check the include path
 
 Found 1 defect(s) in compression.h
-
-[CRITICAL] /sep/include/blender/pattern_bridge.h:37:5: unknown type name 'PatternStateEnum'; did you mean 'PatternState'? [clang-diagnostic-error]
-    PatternStateEnum state = PatternStateEnum::UNINITIALIZED;
-    ^
-  Report hash: 9e4bf713f4d172fe27aa9503ded55534
-  Notes:
-    1, pattern_bridge.h:37:5: PatternState (fixit)
-  Steps:
-    1, base_types.h:49:8: 'PatternState' declared here
-    2, pattern_bridge.h:37:5: unknown type name 'PatternStateEnum'; did you mean 'PatternState'?
-
-[CRITICAL] /sep/include/blender/pattern_bridge.h:37:30: use of undeclared identifier 'PatternStateEnum'; did you mean 'PatternState'? [clang-diagnostic-error]
-    PatternStateEnum state = PatternStateEnum::UNINITIALIZED;
-                             ^
-  Report hash: def64e849402ad6b654008ccacc282ec
-  Notes:
-    1, pattern_bridge.h:37:30: PatternState (fixit)
-  Steps:
-    1, base_types.h:49:8: 'PatternState' declared here
-    2, pattern_bridge.h:37:30: use of undeclared identifier 'PatternStateEnum'; did you mean 'PatternState'?
-
-[CRITICAL] /sep/include/blender/pattern_bridge.h:37:48: no member named 'UNINITIALIZED' in 'sep::pattern::PatternState' [clang-diagnostic-error]
-    PatternStateEnum state = PatternStateEnum::UNINITIALIZED;
-                                               ^
-  Report hash: 64f35930aeec0a4aaea7b503a178d58b
-  Steps:
-    1, pattern_bridge.h:37:48: no member named 'UNINITIALIZED' in 'sep::pattern::PatternState'
 
 [CRITICAL] /sep/include/blender/pattern_bridge.h:66:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'? [clang-diagnostic-error]
   ::SEPResult init(sep::GPUContext* ctx);
@@ -755,16 +685,6 @@ Found 1 defect(s) in compression.h
   Steps:
     1, data.hpp:33:12: 'SEPResult' declared here
     2, pattern_bridge.h:73:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'?
-
-[CRITICAL] /sep/include/blender/pattern_bridge.h:75:3: unknown type name 'PatternStateEnum'; did you mean 'PatternState'? [clang-diagnostic-error]
-  PatternStateEnum getObjectState(
-  ^
-  Report hash: c62c4aefb5b85863234b50d203ba92eb
-  Notes:
-    1, pattern_bridge.h:75:3: PatternState (fixit)
-  Steps:
-    1, base_types.h:49:8: 'PatternState' declared here
-    2, pattern_bridge.h:75:3: unknown type name 'PatternStateEnum'; did you mean 'PatternState'?
 
 [CRITICAL] /sep/include/blender/pattern_bridge.h:82:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'? [clang-diagnostic-error]
   ::SEPResult processPatterns();
@@ -856,29 +776,81 @@ Found 1 defect(s) in compression.h
     1, data.hpp:33:12: 'SEPResult' declared here
     2, pattern_bridge.h:100:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'?
 
-Found 17 defect(s) in pattern_bridge.h
-
-[CRITICAL] /sep/include/blender/pattern_observer.h:17:53: unknown type name 'PatternStateEnum'; did you mean 'PatternState'? [clang-diagnostic-error]
-    virtual void onStateChange(ObjectHandle handle, PatternStateEnum old_state, PatternStateEnum new_state) = 0;
-                                                    ^
-  Report hash: eb71671d6a003376739797c10628c55b
+[CRITICAL] /sep/include/blender/pattern_bridge.h:103:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'? [clang-diagnostic-error]
+  ::SEPResult checkResourceLimits();
+  ^
+  Report hash: 5e9e6eb4c48405947742f08f6d517950
   Notes:
-    1, pattern_observer.h:17:53: PatternState (fixit)
+    1, pattern_bridge.h:103:3: SEPResult (fixit)
   Steps:
-    1, base_types.h:49:8: 'PatternState' declared here
-    2, pattern_observer.h:17:53: unknown type name 'PatternStateEnum'; did you mean 'PatternState'?
+    1, data.hpp:33:12: 'SEPResult' declared here
+    2, pattern_bridge.h:103:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'?
 
-[CRITICAL] /sep/include/blender/pattern_observer.h:17:81: unknown type name 'PatternStateEnum'; did you mean 'PatternState'? [clang-diagnostic-error]
-    virtual void onStateChange(ObjectHandle handle, PatternStateEnum old_state, PatternStateEnum new_state) = 0;
-                                                                                ^
-  Report hash: c0f10e8a5c298338d6b8f5f6276a02f7
+[CRITICAL] /sep/include/blender/pattern_bridge.h:104:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'? [clang-diagnostic-error]
+  ::SEPResult updateResourceStats();
+  ^
+  Report hash: faa6e5bfce29ca3ecf26e66e7589a6be
   Notes:
-    1, pattern_observer.h:17:81: PatternState (fixit)
+    1, pattern_bridge.h:104:3: SEPResult (fixit)
   Steps:
-    1, base_types.h:49:8: 'PatternState' declared here
-    2, pattern_observer.h:17:81: unknown type name 'PatternStateEnum'; did you mean 'PatternState'?
+    1, data.hpp:33:12: 'SEPResult' declared here
+    2, pattern_bridge.h:104:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'?
 
-Found 2 defect(s) in pattern_observer.h
+[CRITICAL] /sep/include/blender/pattern_bridge.h:106:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'? [clang-diagnostic-error]
+  ::SEPResult checkResourceThresholds();
+  ^
+  Report hash: 9e520a683ad5b2ec2e11b5e957c5898b
+  Notes:
+    1, pattern_bridge.h:106:3: SEPResult (fixit)
+  Steps:
+    1, data.hpp:33:12: 'SEPResult' declared here
+    2, pattern_bridge.h:106:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'?
+
+[CRITICAL] /sep/include/blender/pattern_bridge.h:109:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'? [clang-diagnostic-error]
+  ::SEPResult allocatePatternMemory(ObjectState& state);
+  ^
+  Report hash: 7ae535ce75db745c7d2b5d1202ec92db
+  Notes:
+    1, pattern_bridge.h:109:3: SEPResult (fixit)
+  Steps:
+    1, data.hpp:33:12: 'SEPResult' declared here
+    2, pattern_bridge.h:109:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'?
+
+[CRITICAL] /sep/include/blender/pattern_bridge.h:110:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'? [clang-diagnostic-error]
+  ::SEPResult freePatternMemory(ObjectState& state);
+  ^
+  Report hash: 51c2ea11044e7cbb71319d299a9f89e5
+  Notes:
+    1, pattern_bridge.h:110:3: SEPResult (fixit)
+  Steps:
+    1, data.hpp:33:12: 'SEPResult' declared here
+    2, pattern_bridge.h:110:3: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'?
+
+[CRITICAL] /sep/include/blender/pattern_bridge.h:117:20: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'? [clang-diagnostic-error]
+  void notifyError(::SEPResult error, const char* message);
+                   ^
+  Report hash: 99ffd5d5cf1a4fb0c30bd21fd8a4c980
+  Notes:
+    1, pattern_bridge.h:117:20: SEPResult (fixit)
+  Steps:
+    1, data.hpp:33:12: 'SEPResult' declared here
+    2, pattern_bridge.h:117:20: no type named 'SEPResult' in the global namespace; did you mean simply 'SEPResult'?
+
+Found 19 defect(s) in pattern_bridge.h
+
+[MEDIUM] /sep/src/blender/blender_integration.cpp:26:7: field 'm_processing_thread_active' will be initialized after field 'm_gpu_context' [clang-diagnostic-reorder-ctor]
+    : m_processing_thread_active(false)
+      ^
+  Report hash: 75f3b2edb4dd16cf5fe801d520f3978c
+  Notes:
+    1, blender_integration.cpp:26:7: m_gpu_context(nullptr) (fixit)
+    2, blender_integration.cpp:26:5: , m_gpu_context(nullptr) (fixit)
+    3, blender_integration.cpp:26:7: ~~~~~~~~~~~~~~~~~~~~~~ (fixit)
+    4, blender_integration.cpp:26:7: m_processing_thread_active(false) (fixit)
+  Steps:
+    1, blender_integration.cpp:26:7: field 'm_processing_thread_active' will be initialized after field 'm_gpu_context'
+
+Found 1 defect(s) in blender_integration.cpp
 
 [LOW] /sep/include/blender/base_types.h:9:10: circular header file dependency detected while including 'memory_tier.hpp', please check the include path [misc-header-include-cycle]
 #include "memory/memory_tier.hpp"
@@ -961,22 +933,6 @@ Found 8 defect(s) in memory_tier_manager.cpp
     4, base_types.h:9:10: circular header file dependency detected while including 'memory_tier.hpp', please check the include path
 
 Found 1 defect(s) in base_types.h
-
-[CRITICAL] /sep/include/compat/stream.h:47:48: no type named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
-  static std::shared_ptr<Stream> create(::sep::StreamFlags flags = ::sep::StreamFlags::Default);
-                                               ^
-  Report hash: d42cefdc304f03ce69f392323444b348
-  Steps:
-    1, stream.h:47:48: no type named 'StreamFlags' in namespace 'sep'
-
-[CRITICAL] /sep/include/compat/stream.h:47:75: no member named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
-  static std::shared_ptr<Stream> create(::sep::StreamFlags flags = ::sep::StreamFlags::Default);
-                                                                          ^
-  Report hash: 43b8d31bf1d7e75871228c8f92735978
-  Steps:
-    1, stream.h:47:75: no member named 'StreamFlags' in namespace 'sep'
-
-Found 2 defect(s) in stream.h
 
 [CRITICAL] /sep/include/quantum/resource_predictor.h:14:56: unknown type name 'Batch' [clang-diagnostic-error]
   virtual ResourcePredictor predictResourceNeeds(const Batch &batch) = 0;
@@ -1085,6 +1041,20 @@ BlendResult makeBlendError(const std::string& msg)
   Steps:
     1, processor.cpp:222:13: unknown type name 'ValidationResult'
 
+[CRITICAL] /sep/src/context/processor.cpp:225:51: no member named 'fail' in 'sep::quantum::ProcessingResult' [clang-diagnostic-error]
+                return quantum::ProcessingResult::fail(validation.error);
+                                                  ^
+  Report hash: 3fdbc32f4c44d2c88ed37887649a81e2
+  Steps:
+    1, processor.cpp:225:51: no member named 'fail' in 'sep::quantum::ProcessingResult'
+
+[CRITICAL] /sep/src/context/processor.cpp:229:29: no member named 'success' in 'sep::ollama::EmbeddingRequest' [clang-diagnostic-error]
+            if (!embeddings.success)
+                            ^
+  Report hash: cdd4205dcd88fc1ffae7d0db2a6b581e
+  Steps:
+    1, processor.cpp:229:29: no member named 'success' in 'sep::ollama::EmbeddingRequest'
+
 [CRITICAL] /sep/src/context/processor.cpp:299:50: unknown type name 'Batch' [clang-diagnostic-error]
     quantum::ProcessingResult processBatch(const Batch& batch) override
                                                  ^
@@ -1099,7 +1069,7 @@ BlendResult makeBlendError(const std::string& msg)
   Steps:
     1, processor.cpp:341:5: unknown type name 'ValidationResult'
 
-Found 12 defect(s) in processor.cpp
+Found 14 defect(s) in processor.cpp
 
 [LOW] /sep/include/memory/memory_tier.hpp:10:10: circular header file dependency detected while including 'compression.h', please check the include path [misc-header-include-cycle]
 #include "blender/compression.h"
@@ -1215,44 +1185,20 @@ sep::pattern::PatternData* MemoryTier::getPattern(size_t id) {
     1, memory_tier.hpp:113:31: previous declaration is here
     2, memory_tier.cpp:418:40: return type of out-of-line definition of 'sep::memory::MemoryTier::getPattern' differs from that in the declaration
 
-[CRITICAL] /sep/src/memory/memory_tier.cpp:420:12: cannot initialize return object of type 'sep::pattern::PatternData *' with an rvalue of type 'sep::persistence::PatternData *' [clang-diagnostic-error]
-    return it == m_patterns.end() ? nullptr : &it->second;
-           ^
-  Report hash: 9880abb8533a4dd2947af474ef1f3a88
-  Steps:
-    1, memory_tier.cpp:420:12: cannot initialize return object of type 'sep::pattern::PatternData *' with an rvalue of type 'sep::persistence::PatternData *'
-
-Found 11 defect(s) in memory_tier.cpp
-
-[CRITICAL] /sep/third_party/crow/http_request.h:25:15: no member named 'contains' in 'std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>' [clang-diagnostic-error]
-  if (headers.contains(key)) {
-              ^
-  Report hash: e35216a3c457ec75f05b98d2803e2800
-  Steps:
-    1, http_request.h:90:18: in instantiation of function template specialization 'crow::get_header_value<std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>>' requested here
-    2, http_request.h:25:15: no member named 'contains' in 'std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>'
-
-Found 1 defect(s) in http_request.h
+Found 10 defect(s) in memory_tier.cpp
 
 Found no defects in dag_graph.cpp
 [CRITICAL] /sep/include/compat/stream_impl.h:65:11: no matching function for call to 'cudaStreamWaitEvent' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: fd3d2f21fa79507d14cb474688cc11fa
+          cudaStreamWaitEvent(stream_, static_cast<cudaEvent_t>(event));
+          ^
+  Report hash: 709e049fab08c67924bdb6b5678f3fa2
   Steps:
-    1, cuda_impl.h:397:20: candidate function not viable: requires 2 arguments, but 3 were provided
+    1, cuda_impl.h:397:20: candidate function not viable: cannot convert argument of incomplete type 'cudaStream_t' (aka 'void *') to 'cudaStream_t' (aka 'cuda_stub_constants::CUstream_st *') for 1st argument
     2, stream_impl.h:65:11: no matching function for call to 'cudaStreamWaitEvent'
 
-[CRITICAL] /sep/include/compat/stream_impl.h:65:52: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: ed91806116175b4eb6b3531293a93bbb
-  Notes:
-    1, stream_impl.h:65:52: cuda_stub_constants::cudaEvent_t (fixit)
-  Steps:
-    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
-    2, stream_impl.h:65:52: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
-
 [CRITICAL] /sep/include/compat/stream_impl.h:75:11: use of undeclared identifier 'cudaEventRecord'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord'? [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+          cudaEventRecord(static_cast<cudaEvent_t>(event), stream_);
+          ^
   Report hash: eead8ce420214352e79a6c152d1d2b70
   Notes:
     1, stream_impl.h:75:11: cuda_stub_constants::cuda_stub_constants::cudaEventRecord (fixit)
@@ -1260,37 +1206,15 @@ WARNING: source file content is changed or missing. Please re-analyze your proje
     1, cuda_impl.h:199:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord' declared here
     2, stream_impl.h:75:11: use of undeclared identifier 'cudaEventRecord'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventRecord'?
 
-[CRITICAL] /sep/include/compat/stream_impl.h:75:39: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 617e8c5d81e5e7f07a40dd9174309770
-  Notes:
-    1, stream_impl.h:75:39: cuda_stub_constants::cudaEvent_t (fixit)
-  Steps:
-    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
-    2, stream_impl.h:75:39: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
-
 [CRITICAL] /sep/include/compat/stream_impl.h:75:60: cannot initialize a parameter of type 'cudaStream_t' (aka 'cuda_stub_constants::CUstream_st *') with an lvalue of type 'cudaStream_t' (aka 'void *') [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+          cudaEventRecord(static_cast<cudaEvent_t>(event), stream_);
+                                                           ^
   Report hash: cd2a80de7e2b87bcedc9a019c5e4685d
   Steps:
     1, cuda_impl.h:199:68: passing argument to parameter 'stream' here
     2, stream_impl.h:75:60: cannot initialize a parameter of type 'cudaStream_t' (aka 'cuda_stub_constants::CUstream_st *') with an lvalue of type 'cudaStream_t' (aka 'void *')
 
-Found 5 defect(s) in stream_impl.h
-
-[CRITICAL] /sep/src/compat/core/stream.cpp:30:45: no type named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
-std::shared_ptr<Stream> Stream::create(sep::StreamFlags flags) {
-                                            ^
-  Report hash: 42d6ab88709d3956eafa28b2a5a689bc
-  Steps:
-    1, stream.cpp:30:45: no type named 'StreamFlags' in namespace 'sep'
-
-[CRITICAL] /sep/src/compat/core/stream.cpp:35:22: no member named 'StreamFlags' in namespace 'sep' [clang-diagnostic-error]
-      (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
-                     ^
-  Report hash: a31a0aa48da491c1b03941bff458c929
-  Steps:
-    1, stream.cpp:35:22: no member named 'StreamFlags' in namespace 'sep'
+Found 3 defect(s) in stream_impl.h
 
 [CRITICAL] /sep/src/compat/core/stream.cpp:35:50: use of undeclared identifier 'cudaStreamNonBlocking' [clang-diagnostic-error]
       (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
@@ -1299,15 +1223,12 @@ std::shared_ptr<Stream> Stream::create(sep::StreamFlags flags) {
   Steps:
     1, stream.cpp:35:50: use of undeclared identifier 'cudaStreamNonBlocking'
 
-[CRITICAL] /sep/src/compat/core/stream.cpp:35:74: use of undeclared identifier 'cudaStreamDefault'; did you mean 'cudaStreamDestroy'? [clang-diagnostic-error]
+[CRITICAL] /sep/src/compat/core/stream.cpp:35:74: use of undeclared identifier 'cudaStreamDefault' [clang-diagnostic-error]
       (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
                                                                          ^
-  Report hash: 8d89a3d2c58a01653644a2ed200b5c2d
-  Notes:
-    1, stream.cpp:35:74: cudaStreamDestroy (fixit)
+  Report hash: f39bbbc2bbafd3f2fa4f66c1fdbc314e
   Steps:
-    1, cuda.h:55:13: 'cudaStreamDestroy' declared here
-    2, stream.cpp:35:74: use of undeclared identifier 'cudaStreamDefault'; did you mean 'cudaStreamDestroy'?
+    1, stream.cpp:35:74: use of undeclared identifier 'cudaStreamDefault'
 
 [CRITICAL] /sep/src/compat/core/stream.cpp:37:21: use of undeclared identifier 'cudaStreamCreateWithFlags' [clang-diagnostic-error]
   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
@@ -1316,18 +1237,7 @@ std::shared_ptr<Stream> Stream::create(sep::StreamFlags flags) {
   Steps:
     1, stream.cpp:37:21: use of undeclared identifier 'cudaStreamCreateWithFlags'
 
-Found 5 defect(s) in stream.cpp
-
-[CRITICAL] /sep/include/compat/cuda_common.h:18:42: no type named 'cudaError_t' in namespace 'cuda_stub_constants'; did you mean simply 'cudaError_t'? [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 1048f77b38a196c61955645a1f2e3974
-  Notes:
-    1, cuda_common.h:18:42: cudaError_t (fixit)
-  Steps:
-    1, cuda.h:19:13: 'cudaError_t' declared here
-    2, cuda_common.h:18:42: no type named 'cudaError_t' in namespace 'cuda_stub_constants'; did you mean simply 'cudaError_t'?
-
-Found 1 defect(s) in cuda_common.h
+Found 3 defect(s) in stream.cpp
 
 [CRITICAL] /sep/src/core/metrics_collector.cpp:32:16: use of undeclared identifier 'cudaEventCreate'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventCreate'? [clang-diagnostic-error]
     CUDA_CHECK(cudaEventCreate(&start_event_));
@@ -1417,27 +1327,7 @@ Found 1 defect(s) in cuda_common.h
     2, cuda_impl.h:218:20: 'cuda_stub_constants::cuda_stub_constants::cudaEventElapsedTime' declared here
     3, metrics_collector.cpp:93:20: use of undeclared identifier 'cudaEventElapsedTime'; did you mean 'cuda_stub_constants::cuda_stub_constants::cudaEventElapsedTime'?
 
-[CRITICAL] /sep/src/core/metrics_collector.cpp:209:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
-  cudaEvent_t start_event_{nullptr};
-  ^
-  Report hash: 7830a555ff4f4c841dd5c13fa13e66c2
-  Notes:
-    1, metrics_collector.cpp:209:3: cuda_stub_constants::cudaEvent_t (fixit)
-  Steps:
-    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
-    2, metrics_collector.cpp:209:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
-
-[CRITICAL] /sep/src/core/metrics_collector.cpp:210:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'? [clang-diagnostic-error]
-  cudaEvent_t stop_event_{nullptr};
-  ^
-  Report hash: 0263a68ec6b0c2230629583cc80349d3
-  Notes:
-    1, metrics_collector.cpp:210:3: cuda_stub_constants::cudaEvent_t (fixit)
-  Steps:
-    1, cuda_impl.h:43:28: 'cuda_stub_constants::cudaEvent_t' declared here
-    2, metrics_collector.cpp:210:3: unknown type name 'cudaEvent_t'; did you mean 'cuda_stub_constants::cudaEvent_t'?
-
-Found 10 defect(s) in metrics_collector.cpp
+Found 8 defect(s) in metrics_collector.cpp
 
 Found no defects in gpu_context.cpp
 [CRITICAL] /sep/src/blender/pattern_visualization_pipeline.cpp:35:29: no member named 'reloadComputeShaderIfNeeded' in 'sep::GPUContext' [clang-diagnostic-error]
@@ -1456,70 +1346,15 @@ Found no defects in gpu_context.cpp
 
 Found 2 defect(s) in pattern_visualization_pipeline.cpp
 
-[CRITICAL] /sep/src/quantum/evolution.cpp:286:18: definition of implicitly declared destructor [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 084e60d03a42db6c723b39be360dd2b4
-  Steps:
-    1, evolution.cpp:286:18: definition of implicitly declared destructor
-
-[CRITICAL] /sep/src/quantum/evolution.cpp:300:1: unknown type name 'EvolutionParams'; did you mean 'EvolutionEngine::EvolutionParams'? [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 628b583ff2006f25837512d38bb49fd3
-  Notes:
-    1, evolution.cpp:300:1: EvolutionEngine::EvolutionParams (fixit)
-  Steps:
-    1, evolution.h:24:12: 'EvolutionEngine::EvolutionParams' declared here
-    2, evolution.cpp:300:1: unknown type name 'EvolutionParams'; did you mean 'EvolutionEngine::EvolutionParams'?
-
-Found 2 defect(s) in evolution.cpp
-
-[CRITICAL] /sep/include/blender/bridge.h:24:14: target of using declaration conflicts with declaration already in scope [clang-diagnostic-error]
-using ::sep::SEPResult;
-             ^
-  Report hash: 308ab9a2077ed990307f54e39b1f1c66
-  Steps:
-    1, common.h:9:12: target of using declaration
-    2, data.hpp:33:12: conflicting declaration
-    3, bridge.h:24:14: target of using declaration conflicts with declaration already in scope
-
-[CRITICAL] /sep/include/blender/bridge.h:67:5: unknown type name 'PatternStateEnum'; did you mean 'PatternState'? [clang-diagnostic-error]
-    PatternStateEnum state;
-    ^
-  Report hash: ced06f5dbeb06e4cd750937e03c682be
-  Notes:
-    1, bridge.h:67:5: PatternState (fixit)
-  Steps:
-    1, base_types.h:49:8: 'PatternState' declared here
-    2, bridge.h:67:5: unknown type name 'PatternStateEnum'; did you mean 'PatternState'?
-
-[CRITICAL] /sep/include/blender/bridge.h:94:26: unknown type name 'PatternStateEnum'; did you mean 'PatternState'? [clang-diagnostic-error]
-                         PatternStateEnum old_state,
-                         ^
-  Report hash: 7f7ec7f9af3487344040a70aada3c337
-  Notes:
-    1, bridge.h:94:26: PatternState (fixit)
-  Steps:
-    1, base_types.h:49:8: 'PatternState' declared here
-    2, bridge.h:94:26: unknown type name 'PatternStateEnum'; did you mean 'PatternState'?
-
-[CRITICAL] /sep/include/blender/bridge.h:95:26: unknown type name 'PatternStateEnum'; did you mean 'PatternState'? [clang-diagnostic-error]
-                         PatternStateEnum new_state);
-                         ^
-  Report hash: ffdca8361da6cc6d137c374b13bec885
-  Notes:
-    1, bridge.h:95:26: PatternState (fixit)
-  Steps:
-    1, base_types.h:49:8: 'PatternState' declared here
-    2, bridge.h:95:26: unknown type name 'PatternStateEnum'; did you mean 'PatternState'?
-
-[CRITICAL] /sep/include/blender/bridge.h:122:33: no member named 'PatternProcessor' in namespace 'sep::pattern' [clang-diagnostic-error]
+Found no defects in evolution.cpp
+[CRITICAL] /sep/include/blender/bridge.h:123:33: no member named 'PatternProcessor' in namespace 'sep::pattern' [clang-diagnostic-error]
   std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor_;
                                 ^
   Report hash: e9d5d0d8582a2757e9b4e1532b4849fd
   Steps:
-    1, bridge.h:122:33: no member named 'PatternProcessor' in namespace 'sep::pattern'
+    1, bridge.h:123:33: no member named 'PatternProcessor' in namespace 'sep::pattern'
 
-Found 5 defect(s) in bridge.h
+Found 1 defect(s) in bridge.h
 
 [LOW] /sep/include/blender/compression.h:7:10: circular header file dependency detected while including 'base_types.h', please check the include path [misc-header-include-cycle]
 #include "blender/base_types.h"
@@ -1532,30 +1367,6 @@ Found 5 defect(s) in bridge.h
     4, compression.h:7:10: circular header file dependency detected while including 'base_types.h', please check the include path
 
 Found 1 defect(s) in compression.h
-
-[CRITICAL] /sep/src/blender/api.cpp:12:5: unknown type name 'SEPAudioMetrics' [clang-diagnostic-error]
-    SEPAudioMetrics                              audio_metrics{};    // last computed audio metrics
-    ^
-  Report hash: ae4a297b2fe18bddebb423be007cd8ba
-  Steps:
-    1, api.cpp:12:5: unknown type name 'SEPAudioMetrics'
-
-[CRITICAL] /sep/src/blender/api.cpp:13:5: unknown type name 'SEPPatternMetrics'; did you mean 'sep::pattern::PatternMetrics'? [clang-diagnostic-error]
-    SEPPatternMetrics                            pattern_metrics{};  // last collected pattern metrics
-    ^
-  Report hash: 29ba1b1e3e5ef95ae8ebcda40a303845
-  Notes:
-    1, api.cpp:13:5: sep::pattern::PatternMetrics (fixit)
-  Steps:
-    1, base_types.h:58:8: 'sep::pattern::PatternMetrics' declared here
-    2, api.cpp:13:5: unknown type name 'SEPPatternMetrics'; did you mean 'sep::pattern::PatternMetrics'?
-
-[CRITICAL] /sep/src/blender/api.cpp:34:46: use of undeclared identifier 'SEPConfig' [clang-diagnostic-error]
-    if (static_cast<size_t>(mesh->totvert) > SEPConfig::getDefault().pattern.max_vertices)
-                                             ^
-  Report hash: d93a706306990b30f7dda64efd22eb91
-  Steps:
-    1, api.cpp:34:46: use of undeclared identifier 'SEPConfig'
 
 [CRITICAL] /sep/src/blender/api.cpp:40:12: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
 extern "C" SEPResult sep_blender_init(GPUContext* gpu_ctx, const SEPConfig* config, SEPBlenderBridge** bridge_out)
@@ -1573,13 +1384,6 @@ extern "C" SEPResult sep_blender_init(GPUContext* gpu_ctx, const SEPConfig* conf
   Report hash: ce1115628829c62ea3ebf6379d03b56c
   Steps:
     1, api.cpp:40:39: unknown type name 'GPUContext'
-
-[CRITICAL] /sep/src/blender/api.cpp:40:66: unknown type name 'SEPConfig' [clang-diagnostic-error]
-extern "C" SEPResult sep_blender_init(GPUContext* gpu_ctx, const SEPConfig* config, SEPBlenderBridge** bridge_out)
-                                                                 ^
-  Report hash: e6f85f27a83a7632c059a7daf0aef9ad
-  Steps:
-    1, api.cpp:40:66: unknown type name 'SEPConfig'
 
 [CRITICAL] /sep/src/blender/api.cpp:44:16: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
         return SEPResult::INIT_FAILED;
@@ -1608,38 +1412,6 @@ extern "C" SEPResult sep_blender_init(GPUContext* gpu_ctx, const SEPConfig* conf
     1, common.h:9:12: 'sep::SEPResult' declared here
     2, api.cpp:53:16: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'?
 
-[CRITICAL] /sep/src/blender/api.cpp:56:35: use of undeclared identifier 'SEPAudioMetrics' [clang-diagnostic-error]
-    bridge_ptr->audio_metrics   = SEPAudioMetrics{};
-                                  ^
-  Report hash: 5a45e06e2fe907ea209e5c65414258c4
-  Steps:
-    1, api.cpp:56:35: use of undeclared identifier 'SEPAudioMetrics'
-
-[CRITICAL] /sep/src/blender/api.cpp:56:50: expected ';' after expression [clang-diagnostic-error]
-    bridge_ptr->audio_metrics   = SEPAudioMetrics{};
-                                                 ^
-  Report hash: 78eddf6c71e204beda94d41503bcc7eb
-  Notes:
-    1, api.cpp:56:50: ; (fixit)
-  Steps:
-    1, api.cpp:56:50: expected ';' after expression
-
-[CRITICAL] /sep/src/blender/api.cpp:57:35: use of undeclared identifier 'SEPPatternMetrics' [clang-diagnostic-error]
-    bridge_ptr->pattern_metrics = SEPPatternMetrics{};
-                                  ^
-  Report hash: 4d8580ff7beb25f85be455345647a498
-  Steps:
-    1, api.cpp:57:35: use of undeclared identifier 'SEPPatternMetrics'
-
-[CRITICAL] /sep/src/blender/api.cpp:57:52: expected ';' after expression [clang-diagnostic-error]
-    bridge_ptr->pattern_metrics = SEPPatternMetrics{};
-                                                   ^
-  Report hash: 22b2339193fa76476d5d7b707c44dc65
-  Notes:
-    1, api.cpp:57:52: ; (fixit)
-  Steps:
-    1, api.cpp:57:52: expected ';' after expression
-
 [CRITICAL] /sep/src/blender/api.cpp:59:5: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
     SEPResult result = bridge_ptr->impl->init(reinterpret_cast<sep::GPUContext*>(gpu_ctx));
     ^
@@ -1650,7 +1422,112 @@ extern "C" SEPResult sep_blender_init(GPUContext* gpu_ctx, const SEPConfig* conf
     1, common.h:9:12: 'sep::SEPResult' declared here
     2, api.cpp:59:5: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'?
 
-Found 14 defect(s) in api.cpp
+[CRITICAL] /sep/src/blender/api.cpp:59:15: cannot initialize a variable of type 'SEPResult' (aka 'sep::SEPResult') with an rvalue of type 'SEPResult' (aka 'sep::pattern::SEPResult') [clang-diagnostic-error]
+    SEPResult result = bridge_ptr->impl->init(reinterpret_cast<sep::GPUContext*>(gpu_ctx));
+              ^
+  Report hash: 6f2a7e389d8e00aab86275637c232c98
+  Steps:
+    1, api.cpp:59:15: cannot initialize a variable of type 'SEPResult' (aka 'sep::SEPResult') with an rvalue of type 'SEPResult' (aka 'sep::pattern::SEPResult')
+
+[CRITICAL] /sep/src/blender/api.cpp:60:19: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
+    if (result != SEPResult::SUCCESS)
+                  ^
+  Report hash: cb0a65c2d68d9b30f6581c1beffea7a3
+  Notes:
+    1, api.cpp:60:19: sep::SEPResult (fixit)
+  Steps:
+    1, common.h:9:12: 'sep::SEPResult' declared here
+    2, api.cpp:60:19: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'?
+
+[CRITICAL] /sep/src/blender/api.cpp:66:12: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
+    return SEPResult::SUCCESS;
+           ^
+  Report hash: 8b850ae16eb9c4080d4933344efcfd34
+  Notes:
+    1, api.cpp:66:12: sep::SEPResult (fixit)
+  Steps:
+    1, common.h:9:12: 'sep::SEPResult' declared here
+    2, api.cpp:66:12: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'?
+
+[CRITICAL] /sep/src/blender/api.cpp:69:12: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
+extern "C" SEPResult
+           ^
+  Report hash: 3bcc004ba94468d880743ca732e10e6e
+  Notes:
+    1, api.cpp:69:12: sep::SEPResult (fixit)
+  Steps:
+    1, common.h:9:12: 'sep::SEPResult' declared here
+    2, api.cpp:69:12: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'?
+
+[CRITICAL] /sep/src/blender/api.cpp:70:79: unknown type name 'SEPMeshHandle' [clang-diagnostic-error]
+sep_register_mesh(SEPBlenderBridge* bridge, Object* bl_object, Mesh* bl_mesh, SEPMeshHandle* handle_out)
+                                                                              ^
+  Report hash: a8b9ddf9e8bba33f94784d6a8592cf4a
+  Steps:
+    1, api.cpp:70:79: unknown type name 'SEPMeshHandle'
+
+[CRITICAL] /sep/src/blender/api.cpp:74:16: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
+        return SEPResult::INVALID_OBJECT;
+               ^
+  Report hash: 12a918d702fd7e44c70b0768636e6f9b
+  Notes:
+    1, api.cpp:74:16: sep::SEPResult (fixit)
+  Steps:
+    1, common.h:9:12: 'sep::SEPResult' declared here
+    2, api.cpp:74:16: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'?
+
+[CRITICAL] /sep/src/blender/api.cpp:74:27: no member named 'INVALID_OBJECT' in 'sep::SEPResult' [clang-diagnostic-error]
+        return SEPResult::INVALID_OBJECT;
+                          ^
+  Report hash: b41061b920b87d10abc97d4e6f4a5f13
+  Steps:
+    1, api.cpp:74:27: no member named 'INVALID_OBJECT' in 'sep::SEPResult'
+
+[CRITICAL] /sep/src/blender/api.cpp:86:12: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
+extern "C" SEPResult
+           ^
+  Report hash: 3bcc004ba94468d880743ca732e10e6e
+  Notes:
+    1, api.cpp:86:12: sep::SEPResult (fixit)
+  Steps:
+    1, common.h:9:12: 'sep::SEPResult' declared here
+    2, api.cpp:86:12: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'?
+
+[CRITICAL] /sep/src/blender/api.cpp:87:43: unknown type name 'SEPMeshHandle' [clang-diagnostic-error]
+sep_update_mesh(SEPBlenderBridge* bridge, SEPMeshHandle handle, const SEPPatternMetrics* data, bool* updated_out)
+                                          ^
+  Report hash: d13b4f75b2276913143d2a4588f4bd54
+  Steps:
+    1, api.cpp:87:43: unknown type name 'SEPMeshHandle'
+
+[CRITICAL] /sep/src/blender/api.cpp:91:16: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
+        return SEPResult::INVALID_OBJECT;
+               ^
+  Report hash: 12a918d702fd7e44c70b0768636e6f9b
+  Notes:
+    1, api.cpp:91:16: sep::SEPResult (fixit)
+  Steps:
+    1, common.h:9:12: 'sep::SEPResult' declared here
+    2, api.cpp:91:16: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'?
+
+[CRITICAL] /sep/src/blender/api.cpp:91:27: no member named 'INVALID_OBJECT' in 'sep::SEPResult' [clang-diagnostic-error]
+        return SEPResult::INVALID_OBJECT;
+                          ^
+  Report hash: b41061b920b87d10abc97d4e6f4a5f13
+  Steps:
+    1, api.cpp:91:27: no member named 'INVALID_OBJECT' in 'sep::SEPResult'
+
+[CRITICAL] /sep/src/blender/api.cpp:111:9: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'? [clang-diagnostic-error]
+        SEPResult result = bridge->impl->updateObject(handle, metrics);
+        ^
+  Report hash: 1f966d6acda7c952ec67323909f3e021
+  Notes:
+    1, api.cpp:111:9: sep::SEPResult (fixit)
+  Steps:
+    1, common.h:9:12: 'sep::SEPResult' declared here
+    2, api.cpp:111:9: unknown type name 'SEPResult'; did you mean 'sep::SEPResult'?
+
+Found 18 defect(s) in api.cpp
 
 [CRITICAL] /sep/include/compat/shim.h:406:25: no viable overloaded '=' [clang-diagnostic-error]
             new_data[i] = data_[i];
@@ -1674,19 +1551,22 @@ Found 14 defect(s) in api.cpp
 Found 2 defect(s) in shim.h
 
 [CRITICAL] /sep/include/core/error_handler.h:16:33: no type named 'Error' in namespace 'sep' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+  void reportError(const ::sep::Error &error, std::function<bool()> retry = {});
+                                ^
   Report hash: a58eabc0cc9b926aa2d68091f0f16d9c
   Steps:
     1, error_handler.h:16:33: no type named 'Error' in namespace 'sep'
 
 [CRITICAL] /sep/include/core/error_handler.h:18:30: no member named 'Error' in namespace 'sep' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+  ::sep::shim::vector<::sep::Error> getErrors() const;
+                             ^
   Report hash: 0e6c0a1772a78cab88673118a1c0ffee
   Steps:
     1, error_handler.h:18:30: no member named 'Error' in namespace 'sep'
 
 [CRITICAL] /sep/include/core/error_handler.h:26:12: no type named 'Error' in namespace 'sep' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+    ::sep::Error error;
+           ^
   Report hash: 4a759be76231f29039bb386baa4e21be
   Steps:
     1, error_handler.h:26:12: no type named 'Error' in namespace 'sep'
@@ -1694,99 +1574,36 @@ WARNING: source file content is changed or missing. Please re-analyze your proje
 Found 3 defect(s) in error_handler.h
 
 [CRITICAL] /sep/src/core/error_handler.cpp:5:14: no member named 'Error' in namespace 'sep' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+using ::sep::Error;
+             ^
   Report hash: 2a1fb1e3782bf296dbbdcd8c35be62a2
   Steps:
     1, error_handler.cpp:5:14: no member named 'Error' in namespace 'sep'
 
 [CRITICAL] /sep/src/core/error_handler.cpp:13:38: unknown type name 'Error' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+void ErrorHandler::reportError(const Error &error, std::function<bool()> retry) {
+                                     ^
   Report hash: 25c67e107ca76c8c73df94ea6ebde505
   Steps:
     1, error_handler.cpp:13:38: unknown type name 'Error'
 
 [CRITICAL] /sep/src/core/error_handler.cpp:19:8: use of undeclared identifier 'Error' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+vector<Error> ErrorHandler::getErrors() const {
+       ^
   Report hash: a1dfbf31cb5218bf9188224982c2c648
   Steps:
     1, error_handler.cpp:19:8: use of undeclared identifier 'Error'
 
 [CRITICAL] /sep/src/core/error_handler.cpp:21:10: use of undeclared identifier 'Error' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
+  vector<Error> result;
+         ^
   Report hash: 65ed092d7245ce2fa57074e32db69ec2
   Steps:
     1, error_handler.cpp:21:10: use of undeclared identifier 'Error'
 
 Found 4 defect(s) in error_handler.cpp
 
-[CRITICAL] /sep/src/quantum/processor.cpp:285:61: no member named 'gaussRand' in namespace 'glm' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 5c62784a77a3fc19bb2cf05194470ff6
-  Steps:
-    1, processor.cpp:285:61: no member named 'gaussRand' in namespace 'glm'
-
-[CRITICAL] /sep/src/quantum/processor.cpp:286:61: no member named 'gaussRand' in namespace 'glm' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 8c68d414f672bf0d65028a883359e2ff
-  Steps:
-    1, processor.cpp:286:61: no member named 'gaussRand' in namespace 'glm'
-
-[CRITICAL] /sep/src/quantum/processor.cpp:287:57: no member named 'gaussRand' in namespace 'glm' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 48386e8365724af4920c056ac8771a76
-  Steps:
-    1, processor.cpp:287:57: no member named 'gaussRand' in namespace 'glm'
-
-[CRITICAL] /sep/src/quantum/processor.cpp:288:45: no member named 'gaussRand' in namespace 'glm' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: a4655dd4bab7263ab40f05acc663d4ed
-  Steps:
-    1, processor.cpp:288:45: no member named 'gaussRand' in namespace 'glm'
-
-[CRITICAL] /sep/src/quantum/processor.cpp:322:38: implicit instantiation of undefined template 'std::atomic<unsigned long>' [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 835eca2a8acfb4f8ceb84dafd76c70ba
-  Steps:
-    1, atomic_base.h:173:12: template is declared here
-    2, processor.cpp:322:38: implicit instantiation of undefined template 'std::atomic<unsigned long>'
-
-[CRITICAL] /sep/src/quantum/processor.cpp:345:22: return type of out-of-line definition of 'sep::quantum::Processor::init' differs from that in the declaration [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 588b40c3d7103847b6ce764ecd9bf1fe
-  Steps:
-    1, processor.h:22:15: previous declaration is here
-    2, processor.cpp:345:22: return type of out-of-line definition of 'sep::quantum::Processor::init' differs from that in the declaration
-
-[CRITICAL] /sep/src/quantum/processor.cpp:347:22: return type of out-of-line definition of 'sep::quantum::Processor::addPattern' differs from that in the declaration [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: b9e36f2ffe3b61055c7620c3ed1cb45b
-  Steps:
-    1, processor.h:25:15: previous declaration is here
-    2, processor.cpp:347:22: return type of out-of-line definition of 'sep::quantum::Processor::addPattern' differs from that in the declaration
-
-[CRITICAL] /sep/src/quantum/processor.cpp:348:22: return type of out-of-line definition of 'sep::quantum::Processor::removePattern' differs from that in the declaration [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: f97b6e18809fcb23415fe89f6b79e1fc
-  Steps:
-    1, processor.h:26:15: previous declaration is here
-    2, processor.cpp:348:22: return type of out-of-line definition of 'sep::quantum::Processor::removePattern' differs from that in the declaration
-
-[CRITICAL] /sep/src/quantum/processor.cpp:349:22: return type of out-of-line definition of 'sep::quantum::Processor::updatePattern' differs from that in the declaration [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: b06b88e6a5e79feac81f0b0bbe229191
-  Steps:
-    1, processor.h:27:15: previous declaration is here
-    2, processor.cpp:349:22: return type of out-of-line definition of 'sep::quantum::Processor::updatePattern' differs from that in the declaration
-
-[CRITICAL] /sep/src/quantum/processor.cpp:364:22: return type of out-of-line definition of 'sep::quantum::Processor::addRelationship' differs from that in the declaration [clang-diagnostic-error]
-WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
-  Report hash: 0d1ccde5d06c8b64e2fe1cd8b50ae938
-  Steps:
-    1, processor.h:46:15: previous declaration is here
-    2, processor.cpp:364:22: return type of out-of-line definition of 'sep::quantum::Processor::addRelationship' differs from that in the declaration
-
-Found 10 defect(s) in processor.cpp
-
+Found no defects in processor.cpp
 [LOW] /sep/include/memory/memory_tier.hpp:10:10: circular header file dependency detected while including 'compression.h', please check the include path [misc-header-include-cycle]
 #include "blender/compression.h"
          ^
@@ -1799,59 +1616,7 @@ Found 10 defect(s) in processor.cpp
 
 Found 1 defect(s) in memory_tier.hpp
 
-[CRITICAL] /sep/src/quantum/pattern_processor.cpp:24:29: no member named 'evolveState' in 'sep::quantum::QuantumProcessor' [clang-diagnostic-error]
-        quantum_processor_->evolveState(result.state, pattern_id);
-                            ^
-  Report hash: dff875a30b3fb09de985acd8d80d69bf
-  Steps:
-    1, pattern_processor.cpp:24:29: no member named 'evolveState' in 'sep::quantum::QuantumProcessor'
-
-[CRITICAL] /sep/src/quantum/pattern_processor.cpp:30:39: no member named 'STABILITY_THRESHOLD' in namespace 'sep::quantum::constants'; did you mean 'pattern::STABILITY_THRESHOLD'? [clang-diagnostic-error]
-            result.stability_score >= constants::STABILITY_THRESHOLD) {
-                                      ^
-  Report hash: 961446c62167d7b6469edcbd93831af2
-  Notes:
-    1, pattern_processor.cpp:30:39: pattern::STABILITY_THRESHOLD (fixit)
-  Steps:
-    1, math_common.h:71:24: 'pattern::STABILITY_THRESHOLD' declared here
-    2, pattern_processor.cpp:30:39: no member named 'STABILITY_THRESHOLD' in namespace 'sep::quantum::constants'; did you mean 'pattern::STABILITY_THRESHOLD'?
-
-[CRITICAL] /sep/src/quantum/pattern_processor.cpp:55:63: no member named 'amplitudes' in 'sep::quantum::QuantumState' [clang-diagnostic-error]
-        return quantum_processor_->calculateCoherence(state_a.amplitudes, state_b.amplitudes);
-                                                              ^
-  Report hash: 86ec646f14b92dc419842ca41b7dd719
-  Steps:
-    1, pattern_processor.cpp:55:63: no member named 'amplitudes' in 'sep::quantum::QuantumState'
-
-[CRITICAL] /sep/src/quantum/pattern_processor.cpp:55:83: no member named 'amplitudes' in 'sep::quantum::QuantumState' [clang-diagnostic-error]
-        return quantum_processor_->calculateCoherence(state_a.amplitudes, state_b.amplitudes);
-                                                                                  ^
-  Report hash: c9b5206413db62d62b0fd6092846b6a1
-  Steps:
-    1, pattern_processor.cpp:55:83: no member named 'amplitudes' in 'sep::quantum::QuantumState'
-
-[CRITICAL] /sep/src/quantum/pattern_processor.cpp:59:35: no member named 'STABILITY_THRESHOLD' in namespace 'sep::quantum::constants'; did you mean 'pattern::STABILITY_THRESHOLD'? [clang-diagnostic-error]
-        return state.stability >= constants::STABILITY_THRESHOLD;
-                                  ^
-  Report hash: e917a3094b62646c7cd10cdc8a2ce103
-  Notes:
-    1, pattern_processor.cpp:59:35: pattern::STABILITY_THRESHOLD (fixit)
-  Steps:
-    1, math_common.h:71:24: 'pattern::STABILITY_THRESHOLD' declared here
-    2, pattern_processor.cpp:59:35: no member named 'STABILITY_THRESHOLD' in namespace 'sep::quantum::constants'; did you mean 'pattern::STABILITY_THRESHOLD'?
-
-[CRITICAL] /sep/src/quantum/pattern_processor.cpp:63:34: no member named 'MIN_COHERENCE' in namespace 'sep::quantum::constants'; did you mean 'pattern::MIN_COHERENCE'? [clang-diagnostic-error]
-        return state.coherence < constants::MIN_COHERENCE;
-                                 ^
-  Report hash: e413badcd3e9757394870b5062d0db40
-  Notes:
-    1, pattern_processor.cpp:63:34: pattern::MIN_COHERENCE (fixit)
-  Steps:
-    1, math_common.h:67:24: 'pattern::MIN_COHERENCE' declared here
-    2, pattern_processor.cpp:63:34: no member named 'MIN_COHERENCE' in namespace 'sep::quantum::constants'; did you mean 'pattern::MIN_COHERENCE'?
-
-Found 6 defect(s) in pattern_processor.cpp
-
+Found no defects in pattern_processor.cpp
 [CRITICAL] /sep/include/api/bridge.hpp:15:43: no member named 'context' in namespace 'sep' [clang-diagnostic-error]
 nlohmann::json contextToJson(const ::sep::context::Context &context);
                                           ^
@@ -1897,92 +1662,79 @@ nlohmann::json resultToJson(const ::sep::context::CheckResult &result);
 Found 6 defect(s) in bridge.hpp
 
 [CRITICAL] /sep/src/api/bridge.cpp:37:22: no member named 'context' in namespace 'sep' [clang-diagnostic-error]
-std::unique_ptr<sep::context::Processor> g_context_processor_bridge;
-                     ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: ec6fca3afca248d3668e54e56bfb6020
   Steps:
     1, bridge.cpp:37:22: no member named 'context' in namespace 'sep'
 
 [CRITICAL] /sep/src/api/bridge.cpp:56:11: no type named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-sep::api::ErrorCode mapSepError(sep::api::ErrorCode code) {
-          ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: a967de5a0a4186d92f4dbcdacb15e3b7
   Steps:
     1, bridge.cpp:56:11: no type named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:56:43: no type named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-sep::api::ErrorCode mapSepError(sep::api::ErrorCode code) {
-                                          ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: ef3d72eb8a880ea5ddde6cadb9be11b1
   Steps:
     1, bridge.cpp:56:43: no type named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:58:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::InvalidArgument:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: 0bd4fab6d51d514a87bc12a9a27c6fee
   Steps:
     1, bridge.cpp:58:20: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:59:24: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-      return sep::api::ErrorCode::InvalidParameter;
-                       ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: 004d89f5bb537fbeaaa2ff20f6ac355f
   Steps:
     1, bridge.cpp:59:24: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:60:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::CudaError:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: 29c0e9e2de59c2d4160026fceb61f027
   Steps:
     1, bridge.cpp:60:20: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:61:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::ApiError:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: 2f2f294af0b06ad7a7bee303b13ddc6b
   Steps:
     1, bridge.cpp:61:20: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:62:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::InvalidOperation:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: c1eb935e1476a41aad6a080be6ee6c8f
   Steps:
     1, bridge.cpp:62:20: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:63:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::ResourceNotFound:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: 5ac652f6e9e8770adfc064675d5346c8
   Steps:
     1, bridge.cpp:63:20: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:64:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::OutOfMemory:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: 6f062a4021778679091771f891183005
   Steps:
     1, bridge.cpp:64:20: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:65:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::InvalidState:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: e2e1e4550891b02a730bb9ba4892c906
   Steps:
     1, bridge.cpp:65:20: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:66:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::SystemError:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: d9830e6a081f524d5188e7ec6d1201a5
   Steps:
     1, bridge.cpp:66:20: no member named 'ErrorCode' in namespace 'sep::api'
 
 [CRITICAL] /sep/src/api/bridge.cpp:67:20: no member named 'ErrorCode' in namespace 'sep::api' [clang-diagnostic-error]
-    case sep::api::ErrorCode::Unknown:
-                   ^
+WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: a7fc2d4a0898a7817319cdf123664eaf
   Steps:
     1, bridge.cpp:67:20: no member named 'ErrorCode' in namespace 'sep::api'
@@ -2167,6 +1919,16 @@ std::vector<PatternProcessResult> QuantumPatternProcessor::processBatch(const st
 
 Found 8 defect(s) in quantum_pattern_processor.cpp
 
+[CRITICAL] /sep/third_party/crow/http_request.h:25:15: no member named 'contains' in 'std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>' [clang-diagnostic-error]
+  if (headers.contains(key)) {
+              ^
+  Report hash: e35216a3c457ec75f05b98d2803e2800
+  Steps:
+    1, http_request.h:90:18: in instantiation of function template specialization 'crow::get_header_value<std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>>' requested here
+    2, http_request.h:25:15: no member named 'contains' in 'std::unordered_multimap<std::basic_string<char>, std::basic_string<char>, crow::ci_hash, crow::ci_key_eq>'
+
+Found 1 defect(s) in http_request.h
+
 [MEDIUM] /sep/src/api/client.cpp:142:47: unused parameter 'request' [clang-diagnostic-unused-parameter]
 void Client::updateMetrics( const APIRequest &request,
                                               ^
@@ -2175,6 +1937,33 @@ void Client::updateMetrics( const APIRequest &request,
     1, client.cpp:142:47: unused parameter 'request'
 
 Found 1 defect(s) in client.cpp
+
+[CRITICAL] /sep/include/compat/cuda_impl.h:27:18: target of using declaration conflicts with declaration already in scope [clang-diagnostic-error]
+using sep::cuda::cudaError_t;
+                 ^
+  Report hash: 2a37151862e98320e57204de99d99087
+  Steps:
+    1, cuda.h:19:13: target of using declaration
+    2, cuda_runtime.h:60:3: conflicting declaration
+    3, cuda_impl.h:27:18: target of using declaration conflicts with declaration already in scope
+
+[CRITICAL] /sep/include/compat/cuda_impl.h:28:18: target of using declaration conflicts with declaration already in scope [clang-diagnostic-error]
+using sep::cuda::cudaSuccess;
+                 ^
+  Report hash: ec2491c407e92eb2d36d50a0d39861c9
+  Steps:
+    1, cuda.h:68:26: target of using declaration
+    2, cuda_runtime.h:59:5: conflicting declaration
+    3, cuda_impl.h:28:18: target of using declaration conflicts with declaration already in scope
+
+[CRITICAL] /sep/include/compat/cuda_impl.h:300:16: cannot initialize return object of type 'cudaError_t' (aka 'cudaError') with an lvalue of type 'const cudaError_t' (aka 'const int') [clang-diagnostic-error]
+        return cudaErrorInvalidValue;
+               ^
+  Report hash: 5a38753f980189d59d84e4e02037e672
+  Steps:
+    1, cuda_impl.h:300:16: cannot initialize return object of type 'cudaError_t' (aka 'cudaError') with an lvalue of type 'const cudaError_t' (aka 'const int')
+
+Found 3 defect(s) in cuda_impl.h
 
 [CRITICAL] /sep/include/compat/cuda_runtime.h:88:13: conflicting types for 'cudaFree' [clang-diagnostic-error]
 cudaError_t cudaFree(void* ptr);
@@ -2192,6 +1981,14 @@ cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
     1, cuda.h:63:13: previous declaration is here
     2, cuda_runtime.h:89:13: conflicting types for 'cudaMemGetInfo'
 
+[CRITICAL] /sep/include/compat/cuda_runtime.h:90:13: conflicting types for 'cudaMemcpyAsync' [clang-diagnostic-error]
+cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream);
+            ^
+  Report hash: b6073229254a78923c86a3a12ab7476e
+  Steps:
+    1, cuda.h:62:13: previous declaration is here
+    2, cuda_runtime.h:90:13: conflicting types for 'cudaMemcpyAsync'
+
 [CRITICAL] /sep/include/compat/cuda_runtime.h:94:13: conflicting types for 'cudaSetDevice' [clang-diagnostic-error]
 cudaError_t cudaSetDevice(int device);
             ^
@@ -2207,6 +2004,14 @@ cudaError_t cudaGetDeviceCount(int* count);
   Steps:
     1, cuda.h:50:13: previous declaration is here
     2, cuda_runtime.h:95:13: conflicting types for 'cudaGetDeviceCount'
+
+[CRITICAL] /sep/include/compat/cuda_runtime.h:96:13: conflicting types for 'cudaGetDeviceProperties' [clang-diagnostic-error]
+cudaError_t cudaGetDeviceProperties(struct cudaDeviceProp* prop, int device);
+            ^
+  Report hash: c570657abe6acafe512070a38e2cc61f
+  Steps:
+    1, cuda.h:51:13: previous declaration is here
+    2, cuda_runtime.h:96:13: conflicting types for 'cudaGetDeviceProperties'
 
 [CRITICAL] /sep/include/compat/cuda_runtime.h:97:13: conflicting types for 'cudaGetLastError' [clang-diagnostic-error]
 cudaError_t cudaGetLastError(void);
@@ -2224,7 +2029,7 @@ const char* cudaGetErrorString(cudaError_t error);
     1, cuda.h:53:13: previous declaration is here
     2, cuda_runtime.h:98:13: conflicting types for 'cudaGetErrorString'
 
-Found 6 defect(s) in cuda_runtime.h
+Found 8 defect(s) in cuda_runtime.h
 
 [CRITICAL] /sep/include/core/engine.h:52:57: no member named 'PinState' in namespace 'sep' [clang-diagnostic-error]
   void generate_probes(const ::sep::shim::vector<::sep::PinState> &inputs,
@@ -2850,8 +2655,8 @@ Found 3 defect(s) in query_static_constexpr_member.hpp
 Severity | Number of reports
 ----------------------------
 LOW      |                45
-MEDIUM   |                72
-CRITICAL |               230
+MEDIUM   |                73
+CRITICAL |               204
 ----------------------------
 ----=================----
 
@@ -2862,8 +2667,9 @@ Checker name                               | Severity | Number of reports
 misc-header-include-cycle                  | LOW      |                10
 bugprone-forward-declaration-namespace     | LOW      |                35
 clang-diagnostic-reserved-macro-identifier | MEDIUM   |                14
-clang-diagnostic-error                     | CRITICAL |               230
+clang-diagnostic-error                     | CRITICAL |               204
 clang-diagnostic-double-promotion          | MEDIUM   |                53
+clang-diagnostic-reorder-ctor              | MEDIUM   |                 1
 clang-diagnostic-unused-parameter          | MEDIUM   |                 3
 clang-diagnostic-mismatched-tags           | MEDIUM   |                 2
 -------------------------------------------------------------------------
@@ -2874,39 +2680,33 @@ clang-diagnostic-mismatched-tags           | MEDIUM   |                 2
 File name                          | Number of reports
 ------------------------------------------------------
 base_types.h                       |                 5
-cuda_impl.h                        |                 2
-cuda_runtime.h                     |                24
+cuda_impl.h                        |                 5
+cuda_runtime.h                     |                30
 cuda_unified_fix.h                 |                56
-raii.h                             |                 4
-raii.cpp                           |                10
+raii.cpp                           |                 5
 compression.h                      |                 2
-pattern_bridge.h                   |                17
-pattern_observer.h                 |                 2
+pattern_bridge.h                   |                19
+blender_integration.cpp            |                 1
 memory_tier_manager.cpp            |                 8
-stream.h                           |                 2
 resource_predictor.h               |                 5
-processor.cpp                      |                12
+processor.cpp                      |                14
 memory_tier.hpp                    |                 3
-memory_tier.cpp                    |                11
-http_request.h                     |                 1
-stream_impl.h                      |                 5
-stream.cpp                         |                 5
-cuda_common.h                      |                 1
-metrics_collector.cpp              |                10
+memory_tier.cpp                    |                10
+stream_impl.h                      |                 3
+stream.cpp                         |                 3
+metrics_collector.cpp              |                 8
 pattern_visualization_pipeline.cpp |                 2
-evolution.cpp                      |                 2
-bridge.h                           |                 5
-api.cpp                            |                14
+bridge.h                           |                 1
+api.cpp                            |                18
 shim.h                             |                 2
 error_handler.h                    |                 3
 error_handler.cpp                  |                 4
-processor.cpp                      |                10
-pattern_processor.cpp              |                 6
 bridge.hpp                         |                 6
 bridge.cpp                         |                13
 bridge_c.cpp                       |                 1
 quantum_pattern_processor.h        |                11
 quantum_pattern_processor.cpp      |                 8
+http_request.h                     |                 1
 client.cpp                         |                 1
 engine.h                           |                 2
 redis_manager.cpp                  |                19
@@ -2928,18 +2728,11 @@ query_static_constexpr_member.hpp  |                 3
 
 ----======== Summary ========----
 -----------------------------------------------
-Number of processed analyzer result files | 28 
-Number of analyzer reports                | 347
+Number of processed analyzer result files | 32 
+Number of analyzer reports                | 322
 -----------------------------------------------
 ----=================----
-[WARNING 2025-06-23 09:07] - The following source file contents changed or missing since the latest analysis:
- - /sep/include/compat/cuda_common.h
- - /sep/include/core/error_handler.h
+[WARNING 2025-06-23 10:09] - The following source file contents changed or missing since the latest analysis:
  - /sep/src/api/bridge_c.cpp
- - /sep/include/quantum/evolution.h
- - /sep/src/quantum/processor.cpp
- - /sep/src/quantum/evolution.cpp
- - /sep/include/compat/cuda_impl.h
- - /sep/src/core/error_handler.cpp
- - /sep/include/compat/stream_impl.h
+ - /sep/src/api/bridge.cpp
 Please re-analyze your project to update the reports!

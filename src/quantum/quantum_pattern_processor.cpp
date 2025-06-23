@@ -1,5 +1,5 @@
 #include "quantum/quantum_pattern_processor.h"
-#include "pattern/data.hpp"
+#include "quantum/data.hpp"
 
 namespace sep {
 namespace pattern {
@@ -7,12 +7,12 @@ namespace pattern {
 QuantumPatternProcessor::QuantumPatternProcessor(const PatternProcessorConfig& config)
     : config_(config) {}
 
-SEPResult QuantumPatternProcessor::init(GPUContext* ctx) {
+SEPResult QuantumPatternProcessor::init(quantum::GPUContext* ctx) {
     return CPUPatternProcessor::init(ctx);
 }
 
-QuantumState QuantumPatternProcessor::patternToQuantumState(const PatternData& pattern) const {
-    QuantumState state{};
+quantum::QuantumState QuantumPatternProcessor::patternToQuantumState(const PatternData& pattern) const {
+    quantum::QuantumState state{};
     state.coherence = pattern.coherence;
     state.stability = pattern.stability;
     state.entropy = pattern.entropy;
@@ -23,7 +23,7 @@ QuantumState QuantumPatternProcessor::patternToQuantumState(const PatternData& p
 }
 
 void QuantumPatternProcessor::updatePatternFromQuantumState(PatternData& pattern,
-                                                           const QuantumState& state) {
+                                                           const quantum::QuantumState& state) {
     pattern.coherence = state.coherence;
     pattern.stability = state.stability;
     pattern.entropy = state.entropy;
@@ -31,13 +31,13 @@ void QuantumPatternProcessor::updatePatternFromQuantumState(PatternData& pattern
     pattern.mutations = static_cast<uint32_t>(state.access_frequency * state.generation);
 }
 
-std::vector<PatternProcessResult> QuantumPatternProcessor::processBatch(const std::vector<QuantumState>& states,
+std::vector<PatternProcessor> QuantumPatternProcessor::processBatch(const std::vector<quantum::QuantumState>& states,
                                                                         const std::vector<std::string>& pattern_ids) {
-    std::vector<PatternProcessResult> results;
+    std::vector<PatternProcessor> results;
     results.reserve(states.size());
 
     for (size_t i = 0; i < states.size(); i++) {
-        PatternProcessResult result;
+        PatternProcessor result;
         result.state = states[i];
         result.pattern_id = i < pattern_ids.size() ? pattern_ids[i] : "";
 

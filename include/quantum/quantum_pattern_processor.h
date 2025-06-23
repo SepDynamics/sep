@@ -26,11 +26,11 @@ public:
     explicit QuantumPatternProcessor(const PatternProcessorConfig& config);
     ~QuantumPatternProcessor() override = default;
 
-    SEPResult init(GPUContext* ctx) override;
+    SEPResult init(quantum::GPUContext* ctx) override;
     void evolvePatterns() override;
     PatternData mutatePattern(const PatternData& parent) override;
-    std::vector<PatternProcessResult> processBatch(const std::vector<QuantumState>& states,
-                                                   const std::vector<std::string>& pattern_ids) override;
+    std::vector<PatternProcessor> processBatch(const std::vector<quantum::QuantumState>& states,
+                                                   const std::vector<std::string>& pattern_ids);
 
 private:
     PatternProcessorConfig config_;
@@ -39,8 +39,8 @@ private:
     }
 
     // Helper methods
-    QuantumState patternToQuantumState(const PatternData& pattern) const;
-    void updatePatternFromQuantumState(PatternData& pattern, const QuantumState& state);
+    quantum::QuantumState patternToQuantumState(const PatternData& pattern) const;
+    void updatePatternFromQuantumState(PatternData& pattern, const quantum::QuantumState& state);
 };
 
 }  // namespace pattern

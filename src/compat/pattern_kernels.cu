@@ -3,7 +3,7 @@
 
 #include "compat/cuda_unified_fix.h"
 #include "quantum/types.h"
-#include "pattern/data.hpp"
+#include "quantum/data.hpp"
 
 #include "compat/cuda_helpers.h"
 #ifdef __CUDACC__

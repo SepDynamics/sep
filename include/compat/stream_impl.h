@@ -62,7 +62,7 @@ class StreamImpl {
   void wait(void* event) {
     if (stream_ && event) {
       cudaError_t err =
-          cudaStreamWaitEvent(stream_, static_cast<cudaEvent_t>(event), 0);
+          cudaStreamWaitEvent(stream_, static_cast<cudaEvent_t>(event));
       if (err != cudaSuccess) {
         ::sep::cuda::logCudaError("cudaStreamWaitEvent", err);
       }

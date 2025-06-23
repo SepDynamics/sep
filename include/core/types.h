@@ -228,6 +228,8 @@ inline void from_json(const nlohmann::json& j, APIConfig& c)
 }
 
 }  // namespace config
+
+enum class StreamFlags { Default = 0, NonBlocking = 1 };
 }  // namespace sep
 
 #endif  // SEP_CONFIG_TYPES_H

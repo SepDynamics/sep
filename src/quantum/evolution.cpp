@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <numeric>
 #include <random>
+#include <memory>
+#include <stdexcept>
+#include <chrono>
+#include <atomic>
 
 namespace sep::quantum {
 

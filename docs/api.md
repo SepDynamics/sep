@@ -1,0 +1,43 @@
+# API Module Review
+
+This document summarizes the state of the files under `src/api` and `include/api`.
+
+## Public interface headers
+
+| Header | Purpose | Implementation |
+|-------|---------|---------------|
+| `api_exception.h` | Custom exception class. | Header only |
+| `auth_middleware.h` | Crow authentication middleware. | `src/api/auth_middleware.cpp` |
+| `background_cleanup.h` | Utility for periodic cleanup in a background thread. | Header only |
+| `bridge.h` | C API for processing contexts. | `src/api/bridge_c.cpp` |
+| `bridge.hpp` | C++ helpers and error utilities for the bridge. | `src/api/bridge.cpp`, `src/api/bridge_c.cpp` |
+| `bridge_internal.hpp` | Internal shared state for the bridge. | Header only |
+| `client.h` | High level HTTP client and Curl transport. | `src/api/client.cpp`, `src/api/curl_http_client.cpp`, `src/api/ollama_client.cpp` |
+| `connection_manager.h` | Connection pooling interface. | `src/api/connection_manager.cpp` |
+| `crow_adapter.h` | Crow route helpers and adapter classes. | `src/api/crow_adapter.cpp` |
+| `crow_request.h` | Implementation of `IRequest` for Crow. | Header only |
+| `js_integration.h` | JavaScript bridge wrappers. | `src/api/js_integration.cpp` |
+| `lock_free_rate_limiter.h` | Lock-free rate limiter implementation. | `src/api/lock_free_rate_limiter.cpp` |
+| `rate_limit_middleware.h` | Crow middleware that applies a rate limiter. | `src/api/rate_limit_middleware.cpp` |
+| `rate_limiter.h` | Abstract rate limiter interface. | Implemented inside `src/api/lock_free_rate_limiter.cpp` |
+| `request_interface.h` | Abstract HTTP request representation. | Header only |
+| `sep_engine.h` | Main engine façade. | `src/api/sep_engine.cpp` |
+| `server.h` | Crow server wrapper. | `src/api/server.cpp` |
+| `types.h` | Common API types and helpers. | Helper functions implemented in `src/api/sep_engine.cpp` |
+
+## Observations
+
+- `crow_adapter.h` declares `CrowRequestAdapter`, `CrowResponseAdapter`, `makeRequest` and `makeResponse` (see lines 38‑65) but these symbols have no implementation in the source tree.【F:include/api/crow_adapter.h†L38-L65】
+- `setupSepApiRoutes` is implemented in `src/api/crow_adapter.cpp` and provides example routes for a Crow application.【F:src/api/crow_adapter.cpp†L45-L80】
+- The server implementation in `server.cpp` duplicates much of the route logic from `crow_adapter.cpp`; consolidating these could reduce maintenance overhead.
+- `bridge.cpp` and `bridge_c.cpp` each contain similar exception handling macros and could potentially share a common header.
+- `makeRequest` is referenced from `src/memory/manager.cpp` but no definition exists in `src/api`; this suggests dead code or a missing implementation.【F:src/memory/manager.cpp†L152-L160】
+- Several helper headers (`api_exception.h`, `background_cleanup.h`, `crow_request.h`, `request_interface.h`) are header‑only and do not require separate `.cpp` files.
+
+## Potential cleanup
+
+- Remove or implement the unused adapter classes in `crow_adapter.h` along with the `makeRequest`/`makeResponse` helpers.
+- Investigate whether the example routes in `crow_adapter.cpp` are still needed now that `server.cpp` defines a full set of routes. If redundant, consider deleting `crow_adapter.cpp`.
+- Consider centralising bridge error macros shared between `bridge.cpp` and `bridge_c.cpp`.
+
+

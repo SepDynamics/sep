@@ -4,6 +4,7 @@
 #include "quantum/types.h"
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
+#include "quantum/gpu_context.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -11,7 +12,6 @@
 namespace sep::quantum {
 
 // Forward declarations
-class GPUContext;
 namespace core { class SystemHooks; }
 
 // Constants for pattern processing

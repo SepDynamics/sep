@@ -13,7 +13,7 @@
 #include "compat/cuda_unified_fix.h"
 
 // Include memory tiers first to prevent redefinitions
-#include "memory/memory_tier.h"
+#include "memory/memory_tier.hpp"
 
 // Host-specific standard headers
 #if !defined(__CUDACC__)

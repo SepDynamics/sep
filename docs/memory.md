@@ -19,17 +19,19 @@ change. The tiers interact with other modules in the following ways:
 - The **context** module uses MTM and LTM lookups when resolving relationships.
 - The **blender** and **audio** modules query LTM for visualization and sample
   playback.
+- `MemoryTierManager` promotes or demotes patterns as coherence metrics cross
+  configured thresholds. Generations are tracked so unstable patterns remain in
+  STM until maturity.
 ## Unused artifacts
 
 - `cmake_install.cmake` files checked in under `src/*` were build artifacts and
-  have been removed.
+  have been removed. One obsolete copy in `src/memory` was deleted.
 - Unused RAII helpers (`StreamDestroyer` and `EventDestroyer`) in
   `compat/cuda_helpers.h` were dropped.
 
 ## Header to implementation map
 
-- **`include/memory/memory_tier.hpp`** / **`include/memory/memory_tier.h`** →
-  `src/memory/memory_tier.cpp`
+- **`include/memory/memory_tier.hpp`** → `src/memory/memory_tier.cpp`
 - **`include/memory/memory_tier_manager.hpp`** →
   `src/memory/memory_tier_manager.cpp`
 - **`include/memory/manager.h`** → `src/memory/manager.cpp`
@@ -45,9 +47,8 @@ change. The tiers interact with other modules in the following ways:
 
 ## Redundant headers
 
-`memory_tier.h` and `memory_tier.hpp` both describe the `MemoryTier` structures.
-The code currently includes both in implementations. These headers could be
-merged to simplify the API surface.
+`memory_tier.hpp` now contains the tier enums and `MemoryBlock` structure.
+The previous `memory_tier.h` header was removed to simplify the API surface.
 
 `manager.h` mainly defines logging middleware. It could be relocated alongside
 other logging utilities or combined with its source file.

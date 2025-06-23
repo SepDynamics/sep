@@ -34,6 +34,13 @@ include/audio/
 
 `include/core/engine.h` forward declares `AudioCapture` and `Engine` owns a `std::unique_ptr` to an instance created via `AudioCapture::create()`. During `Engine::init()` the capture object is initialised and optionally started when the engine runs. Processed pattern vectors produced by `AudioPipeline` can then be consumed by other modules such as `src/pattern` or `src/memory`.
 
+
+## Capture Pipeline Design
+
+PipeWireCapture initializes a `pw_thread_loop` and forwards raw float samples to a callback. `AudioPipeline` collects those samples into fixed-size frames, applies a Hann window, runs a small FFT and extracts fundamental frequency, spectral centroid and spectral flux. The results are normalized into `glm::vec3` pattern vectors and optionally queued for other modules.
+
+Generated build files (for example `cmake_install.cmake`) should not be committed. A scan of this repository found none.
+
 ## File Status
 
 No obsolete headers or stub sources were found. `capture.h` is still required as the abstract interface used by `PipeWireCapture` and referenced by the core engine. The only stub code resides in `pipewire_includes.h` to handle the absence of PipeWire headers.

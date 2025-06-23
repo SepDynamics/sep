@@ -4,7 +4,7 @@
 #include <thread>
 
 namespace sep {
-namespace core {
+namespace metrics {
 namespace test {
 
 class MetricsCollectorTest : public ::testing::Test {
@@ -94,5 +94,5 @@ TEST_F(MetricsCollectorTest, StopCollectionTest) {
 }
 
 } // namespace test
-} // namespace core
+} // namespace metrics
 } // namespace sep

@@ -8,7 +8,7 @@
 #include <string>
 
 #include "memory/types.h"
-#include "metrics/tracing.h"
+#include "core/tracing.h"
 
 // Handle ASIO/Crow includes based on RTTI availability
 #ifndef CROW_DISABLE_RTTI

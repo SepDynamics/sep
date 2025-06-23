@@ -3,12 +3,11 @@
 
 #include "types.h"
 #include "core/common.h"
+#include "quantum/gpu_context.h"
 #include <memory>
 #include <vector>
 
 namespace sep::quantum {
-
-class GPUContext;
 namespace core { class SystemHooks; }
 
 class ProcessorImpl;

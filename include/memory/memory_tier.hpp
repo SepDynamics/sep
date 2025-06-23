@@ -15,13 +15,6 @@
 
 namespace sep {
 
-// Memory tier enum - for pattern storage
-enum class MemoryTierEnum {
-    STM = 0,  // Short-term memory
-    MTM = 1,  // Medium-term memory
-    LTM = 2   // Long-term memory
-};
-
 namespace memory {
 
 // Memory tier types

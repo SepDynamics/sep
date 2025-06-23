@@ -4,6 +4,7 @@
 #include "quantum/relationship.h"
 #include "quantum/pattern_processor.h"
 #include "core/types.h"
+#include "pattern/data.hpp"
 
 #include "memory/memory_tier_manager.hpp"
 #include "compat/math_common.h"

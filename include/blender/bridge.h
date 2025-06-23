@@ -12,6 +12,7 @@
 #include "blender/compat/blender_types.h"
 #include "blender/gpu_context.h"
 #include "blender/pattern_common.h"
+#include "pattern/data.hpp"
 
 #include "blender/types.h"
 #include "core/types.h"

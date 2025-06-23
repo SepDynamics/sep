@@ -56,31 +56,10 @@ private:
 
 QuantumProcessor::~QuantumProcessor() = default;
 
-// QuantumProcessor public interface implementation
-
-QuantumProcessor::QuantumProcessor(const Config& config) : config_(config) {
-    validateConfig(config);
-    initializeProcessor();
-    qbsa_processor_ = createQFHBasedQBSAProcessor();
-}
-
-void QuantumProcessor::validateConfig(const Config& config) {
-    if (config.coherence_threshold < 0.0f || config.coherence_threshold > 1.0f) {
-        return;
-    }
-    if (config.stability_threshold < 0.0f || config.stability_threshold > 1.0f) {
-        return;
-    }
-    if (config.minimum_coherence < 0.0f || config.minimum_coherence > 1.0f) {
-        return;
-    }
-    if (config.demotion_threshold < 0.0f || config.demotion_threshold > 1.0f) {
-        return;
-    }
-}
-
-void QuantumProcessor::initializeProcessor() {
+QuantumProcessor::QuantumProcessor(const Config& config)
+    : Processor(static_cast<ProcessingConfig>(config)), config_(config) {
     impl_ = std::make_unique<QuantumProcessorImpl>();
+    qbsa_processor_ = createQFHBasedQBSAProcessor({});
 }
 
 float QuantumProcessor::calculateCoherence(const glm::vec3& pattern_a, const glm::vec3& pattern_b) {
@@ -137,22 +116,21 @@ void QuantumProcessor::removePattern(size_t pattern_id) {
 }
 
 bool QuantumProcessor::isStable(float coherence) const {
-    return coherence >= config_.stability_threshold;
+    return coherence >= config_.measurement_threshold;
 }
 
 bool QuantumProcessor::isCollapsed(float coherence) const {
-    return coherence < config_.minimum_coherence;
+    return coherence < config_.decoherence_rate;
 }
 
 bool QuantumProcessor::isQuantum(float coherence) const {
-    return coherence >= config_.minimum_coherence &&
-           coherence < config_.coherence_threshold;
+    return coherence >= config_.decoherence_rate &&
+           coherence < config_.measurement_threshold;
 }
 
 void QuantumProcessor::updateConfig(const Config& new_config) {
-    validateConfig(new_config);
     config_ = new_config;
-    initializeProcessor();
+    impl_ = std::make_unique<QuantumProcessorImpl>();
 }
 
 // Factory functions
@@ -161,12 +139,12 @@ std::unique_ptr<QuantumProcessor> createQuantumProcessor(
     return std::make_unique<QuantumProcessor>(config);
 }
 
-ProcessingConfig QuantumProcessor::Config::operator ProcessingConfig() const {
+QuantumProcessor::Config::operator ProcessingConfig() const {
     ProcessingConfig pc;
-    pc.max_qubits = max_qubits;
-    pc.decoherence_rate = decoherence_rate;
-    pc.measurement_threshold = measurement_threshold;
-    pc.enable_gpu = enable_gpu;
+    pc.max_patterns = max_qubits;
+    pc.mutation_rate = decoherence_rate;
+    pc.ltm_coherence_threshold = measurement_threshold;
+    pc.enable_cuda = enable_gpu;
     return pc;
 }
 } // namespace sep::quantum

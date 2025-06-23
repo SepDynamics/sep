@@ -5,13 +5,17 @@
 #include <vector>
 #include <string>
 
-namespace sep::quantum {
+namespace sep {
 
 enum class MemoryTierEnum {
     STM,
     MTM,
     LTM
 };
+
+} // namespace sep
+
+namespace sep::quantum {
 
 enum class RelationshipType {
     ENTANGLEMENT,

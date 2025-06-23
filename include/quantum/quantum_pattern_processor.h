@@ -6,6 +6,7 @@
 #include "quantum/pattern_evolution.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
+#include "quantum/gpu_context.h"
 #include <string>
 #include <vector>
 

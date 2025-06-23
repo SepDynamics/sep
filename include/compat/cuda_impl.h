@@ -3,10 +3,10 @@
 #pragma once
 
 // Added to ensure consistent macro definitions
-#include <cstddef>  // For size_t
-#include <cstdio>   // For fprintf
-#include <cstdlib>  // For malloc/free
-#include <cstring>  // For strcpy, memcpy, memset
+#include <stddef.h>  // For size_t
+#include <stdio.h>   // For fprintf
+#include <stdlib.h>  // For malloc/free
+#include <string.h>  // For strcpy, memcpy, memset
 
 // Detect whether the real CUDA runtime is available.  This previously relied on
 // several different macros.  We now use the unified `SEP_CUDA_AVAILABLE`
@@ -15,7 +15,8 @@
 #include "compat/cuda.h"  // For sep::cuda namespace
 
 #if SEP_CUDA_AVAILABLE
-#include "compat/cuda_runtime.h"
+// When CUDA is available, include the real CUDA runtime
+#include <cuda_runtime.h>
 #define SEP_HD __host__ __device__
 #else
 #define SEP_HD

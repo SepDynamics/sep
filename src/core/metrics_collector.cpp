@@ -172,13 +172,8 @@ class MetricsCollector::Impl {
     DetailedMetrics new_metrics;
 
     // Get CUDA memory info
-    size_t free_mem = 0, total_mem = 1;
-    #if SEP_CUDA_AVAILABLE
+    size_t free_mem, total_mem;
     CUDA_CHECK(cudaMemGetInfo(&free_mem, &total_mem));
-    #else
-    free_mem = 512 * 1024 * 1024;  // 512 MB
-    total_mem = 1024 * 1024 * 1024;  // 1 GB
-    #endif
     float gpu_memory_usage = static_cast<float>(total_mem - free_mem) / total_mem * 100.0f;
     new_metrics.gpu_memory_usage = gpu_memory_usage;
     // GPU utilization requires more complex querying, set to 0 for now

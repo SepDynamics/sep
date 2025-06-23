@@ -21,7 +21,7 @@
 // CUDA headers after standard library
 #include "compat/cuda_common.h"
 #include "compat/macros.h"
-#include "compat/cuda_runtime.h"
+// Include only one of the CUDA headers to avoid redefinition errors
 #include "compat/cuda_impl.h"
 
 #include "blender/compression.h"
@@ -162,7 +162,7 @@ SEPResult MemoryTier::defragment() {
                 // Move memory to new position
                 void* new_location = static_cast<char*>(memory_pool_) + current_offset;
 #ifdef SEP_CUDA_AVAILABLE
-                cudaError_t err = cudaMemcpy(new_location, block.ptr, block.size, cudaMemcpyDefault);
+                cudaError_t err = cudaMemcpy(new_location, block.ptr, block.size, cuda_stub_constants::cudaMemcpyDefault);
                 if (err != cudaSuccess) {
                     if (logger)
                         LOG_ERROR(logger, "Defragment cudaMemcpy failed: {}", cudaGetErrorString(err));
@@ -386,23 +386,24 @@ bool MemoryTier::resize(std::size_t new_size) {
     return true;
 }
 
-bool MemoryTier::canAcceptPattern(const sep::pattern::PatternData& pattern) const {
+bool MemoryTier::canAcceptPattern(const sep::persistence::PatternData& pattern) const {
     if (m_patterns.size() >= m_max_patterns)
         return false;
     if (pattern.coherence < m_coherence_threshold)
         return false;
     // STM should accept new patterns (generation = 0)
     // Only MTM and LTM have minimum generation requirements
-    if (pattern.memory_tier != MemoryTierEnum::STM && pattern.generation < m_min_generations)
+    // Check generation count instead of memory_tier and generation
+    if (pattern.generation_count < m_min_generations)
         return false;
     return true;
 }
 
-void MemoryTier::addPattern(size_t id, sep::pattern::PatternData pattern) {
+void MemoryTier::addPattern(size_t id, sep::persistence::PatternData pattern) {
     if (!canAcceptPattern(pattern))
         return;
-    pattern.id = ::sep::shim::string(std::to_string(id));
-    pattern.memory_tier = static_cast<MemoryTierEnum>(config_.type);
+    // PatternData doesn't have id or memory_tier fields
+    // Just store the pattern as is
     m_patterns[id] = std::move(pattern);
 }
 
@@ -410,12 +411,12 @@ void MemoryTier::removePattern(size_t id) {
     m_patterns.erase(id);
 }
 
-const sep::pattern::PatternData* MemoryTier::getPattern(size_t id) const {
+const sep::persistence::PatternData* MemoryTier::getPattern(size_t id) const {
     auto it = m_patterns.find(id);
     return it == m_patterns.end() ? nullptr : &it->second;
 }
 
-sep::pattern::PatternData* MemoryTier::getPattern(size_t id) {
+sep::persistence::PatternData* MemoryTier::getPattern(size_t id) {
     auto it = m_patterns.find(id);
     return it == m_patterns.end() ? nullptr : &it->second;
 }

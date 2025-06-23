@@ -52,6 +52,7 @@ cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device);
 cudaError_t cudaGetLastError(void);
 const char* cudaGetErrorString(cudaError_t error);
 cudaError_t cudaStreamCreate(cudaStream_t* stream);
+cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags);
 cudaError_t cudaStreamDestroy(cudaStream_t stream);
 cudaError_t cudaStreamSynchronize(cudaStream_t stream);
 cudaError_t cudaMalloc(void** ptr, size_t size);
@@ -76,6 +77,10 @@ static const cudaError_t cudaErrorSetOnActiveProcess = 711;
 static const cudaError_t cudaErrorStreamCaptureUnsupported = 900;
 static const cudaError_t cudaErrorInvalidMemcpyDirection = 21;
 static const cudaError_t cudaErrorInvalidResourceHandle = 400;
+
+// Stream creation flags
+static const unsigned int cudaStreamDefault = 0x00;
+static const unsigned int cudaStreamNonBlocking = 0x01;
 #endif
 
 }  // namespace cuda

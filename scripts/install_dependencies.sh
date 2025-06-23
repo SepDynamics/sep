@@ -11,6 +11,7 @@ sudo apt-get install -y \
     libspdlog-dev \
     libfmt-dev \
     libglm-dev \
+    libasio-dev \
     libcurl4-openssl-dev \
     liblz4-dev \
     libzstd-dev \

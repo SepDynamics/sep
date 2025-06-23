@@ -14,9 +14,9 @@ against the library without depending on the source tree layout.
 - `server.h` and `sep_engine.h` define the Crow server and high level engine wrapper.
 - `auth_middleware.h` and `rate_limit_middleware.h` implement request filtering.
 - `bridge.h`, `bridge.hpp` and `bridge_c.cpp` headers describe the C and C++ bridge used by `js_integration.cpp`.
-- `connection_manager.h` declares a generic connection pool used by the HTTP clients.
+- `connection_manager.h` declares an interface for a generic connection pool.
 
-Keeping these headers in a single `api` module, paired with the source files, avoids confusion about where API boundaries begin and end. The current pool manager has both a full header and a large implementation (`connection_manager.cpp`), which might be simplified or removed if no longer used.
+Keeping these headers in a single `api` module, paired with the source files, avoids confusion about where API boundaries begin and end. The previous pool manager implementation (`connection_manager.cpp`) has been removed as it was unused.
 
 ## From branch: codex/create-api-readme-files-and-outline-integration-2025-06-22
 
@@ -47,7 +47,7 @@ This directory contains the public API headers for the SEP Engine. Each header e
 | `bridge.hpp` | C++ helpers used by the bridge layer such as JSON conversion utilities. | `src/api/bridge.cpp` and `src/api/bridge_c.cpp` |
 | `bridge_internal.hpp` | Internal bridge helpers (error handling and shared state). | Header only |
 | `client.h` | High level HTTP client, Curl transport and Ollama client definitions. | `src/api/client.cpp`, `src/api/curl_http_client.cpp`, `src/api/ollama_client.cpp` |
-| `connection_manager.h` | Interface and helpers for managing pooled socket connections. | `src/api/connection_manager.cpp` |
+| `connection_manager.h` | Interface for managing pooled socket connections. | (header only) |
 | `crow_adapter.h` | Adapters connecting SEP engine requests and responses to Crow. | `src/api/crow_adapter.cpp` |
 | `crow_request.h` | Implements `IRequest` for Crow requests. | Header only |
 | `js_integration.h` | Wrapper functions for calling the bridge from JavaScript. | `src/api/js_integration.cpp` |

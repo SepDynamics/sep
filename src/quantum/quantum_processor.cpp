@@ -160,4 +160,13 @@ std::unique_ptr<QuantumProcessor> createQuantumProcessor(
     const QuantumProcessor::Config& config) {
     return std::make_unique<QuantumProcessor>(config);
 }
+
+ProcessingConfig QuantumProcessor::Config::operator ProcessingConfig() const {
+    ProcessingConfig pc;
+    pc.max_qubits = max_qubits;
+    pc.decoherence_rate = decoherence_rate;
+    pc.measurement_threshold = measurement_threshold;
+    pc.enable_gpu = enable_gpu;
+    return pc;
+}
 } // namespace sep::quantum

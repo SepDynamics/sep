@@ -19,17 +19,17 @@
 #endif
 
 // CUDA headers after standard library
-#include "cuda/cuda_common.h"
-#include "cuda/macros.h"
+#include "compat/cuda_common.h"
+#include "compat/macros.h"
 #include <cuda_runtime.h>
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 
 #include "blender/compression.h"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 #include "memory/logger.hpp"
 #include "memory/manager.h"
 #include "memory/memory_tier_manager.hpp"
-#include "metrics/allocation_metrics.h"
+#include "core/allocation_metrics.h"
 
 namespace sep::memory {
 

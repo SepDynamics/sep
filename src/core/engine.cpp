@@ -10,12 +10,12 @@
 #include <cstdio>
 #include <exception>
 
-#include "cuda/core.h"
-#include "cuda/cuda_common.h"
+#include "compat/core.h"
+#include "compat/cuda_common.h"
 
-#include "cuda/macros.h"
-#include "cuda/memory.h"
-#include "cuda/stream.h"
+#include "compat/macros.h"
+#include "compat/memory.h"
+#include "compat/stream.h"
 #include "api/types.h"
 
 #ifndef SEP_HAS_EXCEPTIONS

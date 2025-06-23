@@ -1,6 +1,6 @@
 #pragma once
 
-#include "metrics/prometheus_exporter.h"
+#include "core/prometheus_exporter.h"
 
 namespace sep::metrics {
 

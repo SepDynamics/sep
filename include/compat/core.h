@@ -6,10 +6,10 @@
 
 #include <vector>
 
-#include "cuda/types.h"
+#include "compat/types.h"
 
-#include "cuda/memory.h"
-#include "cuda/stream.h"
+#include "compat/memory.h"
+#include "compat/stream.h"
 
 namespace sep::cuda {
 

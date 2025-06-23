@@ -8,8 +8,7 @@
 #include "compat/shim.h"
 #include <string>
 
-namespace sep {
-namespace core {
+namespace sep::metrics {
 
 // Forward declaration for PIMPL pattern
 struct DetailedMetrics {
@@ -104,5 +103,4 @@ private:
     SystemMetrics system_metrics_;
 };
 
-} // namespace core
-} // namespace sep
+} // namespace sep::metrics

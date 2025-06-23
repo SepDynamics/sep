@@ -3,7 +3,7 @@
  */
 
 #include "core/quantum_processor.h"
-#include "cuda/kernel_interface.h"
+#include "compat/kernel_interface.h"
 
 #include <gtest/gtest.h>
 #include <memory>

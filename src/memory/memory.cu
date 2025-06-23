@@ -5,13 +5,13 @@
 #if defined(__CUDACC__) || defined(SEP_USE_CUDA)
 #include <cuda_runtime.h>
 #else
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #endif
 
 
 // After CUDA headers, include the rest
 
-#include "cuda/raii.h"
+#include "compat/raii.h"
 #include "memory/types.h"
 
 

@@ -11,7 +11,7 @@
 // Detect whether the real CUDA runtime is available.  This previously relied on
 // several different macros.  We now use the unified `SEP_CUDA_AVAILABLE`
 // definition from `cuda/macros.h`.
-#include "cuda/macros.h"
+#include "compat/macros.h"
 
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>

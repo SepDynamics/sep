@@ -1,7 +1,7 @@
 #pragma once
 
 // CUDA macros and compatibility layer
-#include "cuda/macros.h"
+#include "compat/macros.h"
 
 #ifdef __CUDACC__
 #include <cmath>
@@ -13,15 +13,15 @@
 #include <cstddef>
 
 // Project headers - math first
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 
 
 // Other project headers
-#include "cuda/constants.h"
+#include "compat/constants.h"
 #include "quantum/types.h"
 
 #ifndef __CUDACC__
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #include <cmath>
 #include <algorithm>
 #endif

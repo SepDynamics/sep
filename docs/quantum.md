@@ -30,6 +30,12 @@ interfaces stabilize they could be merged with `quantum_processor.cpp` to reduce
 duplication. The existing DAG utilities mentioned in the `README` may also be
 consolidated with context management to avoid multiple lineage trackers.
 
+## DAG Utility Relocation
+
+`dag_graph.h` and its implementation were moved out of the `quantum` module. The
+header now lives in `include/core` and is built from `src/core/dag_graph.cpp`.
+This centralizes the DAG structures for use by memory and context code.
+
 ## Integration with Pattern Processing
 
 After cleanup the quantum processors expose minimal headers and integrate

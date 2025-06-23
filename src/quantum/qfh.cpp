@@ -4,6 +4,11 @@
 
 namespace sep::quantum {
 
+bool QFHEvent::operator==(const QFHEvent& other) const {
+    return index == other.index && state == other.state &&
+           bit_prev == other.bit_prev && bit_curr == other.bit_curr;
+}
+
 ::sep::shim::vector<QFHEvent> transform_rich(const ::sep::shim::vector<uint8_t>& bits) {
     ::sep::shim::vector<QFHEvent> result;
     if (bits.size() < 2) {

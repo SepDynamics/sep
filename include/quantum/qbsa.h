@@ -32,7 +32,7 @@ public:
                         std::size_t total_bits) const;
 
     // Get options
-    const QBSAOptions& getOptions() const { return options_; }
+    const QBSAOptions& getOptions() const;
 
 private:
     QBSAOptions options_;

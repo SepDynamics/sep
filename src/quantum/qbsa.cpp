@@ -46,4 +46,8 @@ bool QBSAProcessor::detectCollapse(const QBSAResult& result, std::size_t total_b
   return false;
 }
 
+const QBSAOptions& QBSAProcessor::getOptions() const {
+  return options_;
+}
+
 }  // namespace sep::quantum

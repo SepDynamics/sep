@@ -52,6 +52,6 @@ This directory hosts the experimental quantum-inspired components. Key implement
 
 Additional files such as `qbsa_qfh.cpp` and `quantum_processor_qfh_common.cpp` explore combining QBSA with QFH techniques. These experimental helpers may be merged into the core processor once stabilized.
 
-`dag_graph.h` currently lives in this module and implements a small DAG structure used by patterns. Consider folding this into `src/dag` or integrating directly with context/relationship code for a single source of truth.
+`dag_graph.h` has been moved to `include/core` with its implementation in `src/core/dag_graph.cpp`. The DAG utilities can now be shared across modules and may later integrate with the context relationship code for a single source of truth.
 
 

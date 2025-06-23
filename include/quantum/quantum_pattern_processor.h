@@ -13,6 +13,16 @@
 namespace sep {
 namespace pattern {
 
+// Pattern processing result
+struct PatternProcessResult {
+    quantum::QuantumState state;
+    std::string pattern_id;
+    MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+    bool tier_changed{false};
+    float coherence_score{0.0F};
+    float stability_score{0.0F};
+};
+
 struct PatternProcessorConfig {
     float minimum_coherence{0.1f};
     float stability_threshold{0.85f};
@@ -29,11 +39,12 @@ public:
     SEPResult init(quantum::GPUContext* ctx) override;
     void evolvePatterns() override;
     PatternData mutatePattern(const PatternData& parent) override;
-    std::vector<PatternProcessor> processBatch(const std::vector<quantum::QuantumState>& states,
-                                                   const std::vector<std::string>& pattern_ids);
+    std::vector<PatternProcessResult> processBatch(const std::vector<quantum::QuantumState>& states,
+                                                    const std::vector<std::string>& pattern_ids);
 
 private:
     PatternProcessorConfig config_;
+    std::unique_ptr<quantum::QuantumProcessor> quantum_processor_;
     std::vector<PatternData>& getModifiablePatterns() {
         return patterns_;
     }

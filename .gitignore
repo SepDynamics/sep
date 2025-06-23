@@ -58,6 +58,7 @@ coverage/
 test-results/
 .pytest_cache/
 asio/
+cmake_install.cmake
 .pnpm-store/
 node_modules/
 extern/*
@@ -90,4 +91,3 @@ compile_commands.json
 .ninja_deps
 .ninja_log
 !CMakeLists.txt
-cmake_install.cmake

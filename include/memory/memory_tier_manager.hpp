@@ -16,7 +16,6 @@
 #include "compat/shim.h"
 #include "quantum/relationship.h"
 #include "quantum/types.h"
-#include "pattern/data.hpp"
 
 // Standard library includes
 #include <cstddef>

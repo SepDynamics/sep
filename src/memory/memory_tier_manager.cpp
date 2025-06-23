@@ -213,15 +213,15 @@ void MemoryTierManager::pruneWeakRelationships() {
 
 void MemoryTierManager::calculateRelationshipCoherence() {}
 void MemoryTierManager::loadLTMFromPersistence() {}
-void MemoryTierManager::storeLTMToPersistence(const Pattern&) {}
+void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern&) {}
 
-Pattern* MemoryTierManager::findPattern(std::size_t id) {
+quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
     }
     const sep::pattern::PatternData* data = it->second.get();
-    Pattern* pattern = new Pattern();
+    quantum::Pattern* pattern = new quantum::Pattern();
     pattern->id = data->id;
     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
     pattern->data.assign(values, values + 4);
@@ -232,13 +232,13 @@ Pattern* MemoryTierManager::findPattern(std::size_t id) {
     return pattern;
 }
 
-const Pattern* MemoryTierManager::findPattern(std::size_t id) const {
+const quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
     }
     const sep::pattern::PatternData* data = it->second.get();
-    Pattern* pattern = new Pattern();
+    quantum::Pattern* pattern = new quantum::Pattern();
     pattern->id = data->id;
     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
     pattern->data.assign(values, values + 4);

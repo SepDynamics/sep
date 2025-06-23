@@ -12,9 +12,9 @@
 #include "core/dag_graph.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
+#include "quantum/types.h"
 #include "compat/shim.h"
 #include "quantum/relationship.h"
-#include "quantum/types.h"
 
 // Standard library includes
 #include <cstddef>
@@ -28,6 +28,11 @@
 #include <glm/vec3.hpp>
 
 namespace sep {
+namespace pattern {
+struct PatternData;
+struct PatternConfig;
+}
+
 namespace core {
 class SystemHooks;
 }
@@ -91,11 +96,6 @@ public:
     void rebuildLookup();
 
     // Pattern management
-    // Forward declare pattern namespace types to avoid compilation errors
-    namespace sep { namespace pattern {
-        struct PatternData;
-        struct PatternConfig;
-    }}
 
     SEPResult launch_pattern_processing(sep::pattern::PatternData* patterns,
                                       sep::pattern::PatternData* results,

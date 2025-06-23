@@ -8,6 +8,8 @@ removed, leaving `connection_manager.h` as an interface used solely by tests.
 
 Generated build files (`cmake_install.cmake`, `CMakeFiles/` directories, etc.)
 were removed from version control to keep the repository clean.
+The `src/api/cmake_install.cmake` stub generated during local builds will also
+be deleted in the next cleanup pass.
 
 The following table lists the remaining headers and their corresponding
 implementations:
@@ -37,17 +39,16 @@ implementations:
 
 ## Observations
 
-- `crow_adapter.h` declares `CrowRequestAdapter`, `CrowResponseAdapter`, `makeRequest` and `makeResponse` (see lines 38‑65) but these symbols have no implementation in the source tree.【F:include/api/crow_adapter.h†L38-L65】
+- `crow_adapter.h` declares `CrowRequestAdapter`, `CrowResponseAdapter`, `makeRequest` and `makeResponse` (see lines 38‑65); these helpers are now implemented in `src/api/crow_adapter.cpp`.
 - `setupSepApiRoutes` is implemented in `src/api/crow_adapter.cpp` and provides example routes for a Crow application.【F:src/api/crow_adapter.cpp†L45-L80】
 - The server implementation in `server.cpp` duplicates much of the route logic from `crow_adapter.cpp`; consolidating these could reduce maintenance overhead.
 - `bridge.cpp` and `bridge_c.cpp` each contain similar exception handling macros and could potentially share a common header.
-- `makeRequest` is referenced from `src/memory/manager.cpp` but no definition exists in `src/api`; this suggests dead code or a missing implementation.【F:src/memory/manager.cpp†L152-L160】
 - Several helper headers (`api_exception.h`, `background_cleanup.h`, `crow_request.h`, `request_interface.h`) are header‑only and do not require separate `.cpp` files.
 
 ## Potential cleanup
 
-- Remove or implement the unused adapter classes in `crow_adapter.h` along with the `makeRequest`/`makeResponse` helpers.
 - Investigate whether the example routes in `crow_adapter.cpp` are still needed now that `server.cpp` defines a full set of routes. If redundant, consider deleting `crow_adapter.cpp`.
+- Ensure generated file `src/api/cmake_install.cmake` is removed from the repository as part of ongoing cleanup.
 - Consider centralising bridge error macros shared between `bridge.cpp` and `bridge_c.cpp`.
 
 ## Server, middleware and client

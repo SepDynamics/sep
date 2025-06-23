@@ -29,50 +29,52 @@ bool debugAllocEnabled() {
 
 namespace sep::cuda {
 
-// Define dummy CUDA types and functions for compilation
-typedef void* cudaStream_t;
-typedef void* cudaEvent_t;
-typedef int cudaError_t;
+// The real CUDA headers (or their stub replacements) already provide the
+// necessary type aliases. Do not redefine them here to avoid conflicts with
+// the declarations pulled in by <compat/cuda_defs.h>.
 // Using constants from cuda.h instead of redefining them
 
-// Dummy CUDA function implementations
-cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+// The inline stub implementations provided by <compat/cuda_impl.h> are
+// sufficient for building without the real CUDA runtime, so no additional
+// shims are required here.  When CUDA is unavailable, bring those
+// stub functions into this namespace so the rest of the code can call
+// them transparently.
+#if !SEP_CUDA_AVAILABLE
+// Provide lightweight wrappers when the real CUDA runtime is absent.  These
+// definitions match the extern "C" declarations in <compat/cuda.h>.
+extern "C" cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream,
+                                                  unsigned int /*flags*/) {
     if (stream) {
         *stream = nullptr;
     }
     return cudaSuccess;
 }
-
-cudaError_t cudaStreamDestroy(cudaStream_t stream) {
+extern "C" cudaError_t cudaStreamDestroy(cudaStream_t /*stream*/) {
     return cudaSuccess;
 }
-
-cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
+extern "C" cudaError_t cudaStreamSynchronize(cudaStream_t /*stream*/) {
     return cudaSuccess;
 }
-
-cudaError_t cudaEventCreate(cudaEvent_t* event) {
+extern "C" cudaError_t cudaEventCreate(cudaEvent_t* event) {
     if (event) {
         *event = nullptr;
     }
     return cudaSuccess;
 }
-
-cudaError_t cudaEventDestroy(cudaEvent_t event) {
+extern "C" cudaError_t cudaEventDestroy(cudaEvent_t /*event*/) {
     return cudaSuccess;
 }
-
-cudaError_t cudaEventSynchronize(cudaEvent_t event) {
+extern "C" cudaError_t cudaEventSynchronize(cudaEvent_t /*event*/) {
     return cudaSuccess;
 }
-
-cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* ptr, size_t size, unsigned int flags) {
+extern "C" cudaError_t cudaStreamAttachMemAsync(cudaStream_t /*stream*/, void* /*ptr*/,
+                                                 size_t /*size*/, unsigned int /*flags*/) {
     return cudaSuccess;
 }
-
-const char* cudaGetErrorString(cudaError_t error) {
+extern "C" const char* cudaGetErrorString(cudaError_t /*error*/) {
     return "CUDA not available";
 }
+#endif
 
 StreamRAII::StreamRAII(sep::StreamFlags flags) {
     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
@@ -121,7 +123,11 @@ void StreamRAII::synchronize() const {
 }
 
 EventRAII::EventRAII() {
-    cudaError_t err = cudaEventCreate(reinterpret_cast<cuda_stub_constants::cudaEvent_t*>(&event_));
+    // Use the generic pointer version for maximum compatibility with either
+    // the real CUDA runtime or the stub implementation. Casting through
+    // the stub-specific type is unnecessary and breaks when the stub is
+    // absent, so simply pass the address of the underlying handle.
+    cudaError_t err = cudaEventCreate(&event_);
     if (err != cudaSuccess) {
         event_ = nullptr;
         if (debugAllocEnabled()) {

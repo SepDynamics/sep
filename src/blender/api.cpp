@@ -1,4 +1,4 @@
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 
 #include "blender/types.h"
 #include "blender/bridge.h"

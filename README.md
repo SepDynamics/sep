@@ -37,7 +37,9 @@ At the current stage the build does **not** succeed. Missing CUDA headers and in
 
 1. **Verify dependencies** – ensure the install script runs without errors. If CUDA support is required, set `INSTALL_CUDA=1` before running the script.
 2. **Correct include paths** – headers currently reference the absolute `/sep` prefix. The root `CMakeLists.txt` has been updated to use `${CMAKE_SOURCE_DIR}` so local builds resolve headers correctly.
-3. **CUDA shims** – many files include headers from `cuda/`. A temporary symlink (`include/cuda -> include/compat`) has been added to satisfy these includes. Longer term we should update the code to include the correct `compat` paths directly.
+3. **CUDA shims** – earlier revisions used a symlink at `include/cuda` to reach
+   the compatibility headers. This link has been removed. Update any legacy
+   includes to reference the `compat/` directory directly.
 4. **Resolve compile errors** – key modules like `quantum` and `memory` have missing declarations and inconsistent types. Incrementally stub or implement these functions, compiling after each change.
 5. **Continuous testing** – build the unit tests under `tests/` once the main libraries compile. Use the testbed to validate functionality before modifying the main modules.
 

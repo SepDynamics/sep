@@ -1,5 +1,5 @@
 #include "core/metrics_collector.h"
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 #include "compat/cuda_helpers.h"
 
 #include <sys/resource.h>

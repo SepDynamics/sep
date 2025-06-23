@@ -45,7 +45,7 @@ target_include_directories(blender_tests
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/include/blender
         ${CMAKE_CURRENT_SOURCE_DIR}/include/pattern
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/cuda
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/compat
         ${CMAKE_CURRENT_SOURCE_DIR}/include/quantum
         ${CMAKE_CURRENT_SOURCE_DIR}/include/memory
         ${CMAKE_CURRENT_SOURCE_DIR}/include/context
@@ -67,7 +67,7 @@ target_include_directories(blender_tests
         ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/dag
         ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/audio
         ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/blender
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/cuda
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/compat
         ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/errors
         ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/logging
         ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/persistence

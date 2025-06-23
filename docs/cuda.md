@@ -35,8 +35,12 @@ Only one copy of `pattern_kernels.cu` and `quantum_kernels.cu` exists. The file 
 The CUDA wrappers present under `include/compat` expose GPU services to the rest
 of the engine.  `CudaWrapper` provides a low level singleton around the CUDA
 runtime, while `CudaCore` builds higher level management and kernel launch
-helpers on top.  Other modules include only the headers from `include/cuda` (a
-symlink to `include/compat`) and link against `sep_compat` to access GPU
-functionality.  The C API in `cuda_api.cu` further allows non-C++ components to
-drive kernels without depending on C++ abstractions.
+helpers on top.  Other modules include headers from `compat/` directly and link
+against `sep_compat` to access GPU functionality.  The C API in `cuda_api.cu`
+further allows non-C++ components to drive kernels without depending on C++
+abstractions.
+
+Earlier revisions provided a `include/cuda` symlink for backward compatibility.
+That link has been removed; update any remaining includes to reference
+`compat/` instead.
 

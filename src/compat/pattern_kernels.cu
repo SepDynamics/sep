@@ -1,5 +1,5 @@
 #include "core/types.h"
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 
 #include "compat/cuda_unified_fix.h"
 #include "quantum/types.h"

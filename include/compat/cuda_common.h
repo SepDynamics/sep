@@ -2,11 +2,11 @@
 #define CUDA_COMMON_H
 
 // Include CUDA runtime when available, otherwise use stub definitions
-#include "cuda/macros.h"
+#include "compat/macros.h"
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
 #else
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #endif
 
 // Forward declaration for compat/cuda_helpers.h functionality

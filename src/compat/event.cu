@@ -1,4 +1,4 @@
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 
 #include "compat/cuda_unified_fix.h"
 #ifndef __CUDACC__
@@ -16,12 +16,12 @@
 #if defined(__CUDACC__) || defined(SEP_USE_CUDA)
 #include <cuda_runtime.h>
 #else
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #endif
 
-#include "cuda/core.h"
-#include "cuda/event.h"
-#include "cuda/macros.h"
+#include "compat/core.h"
+#include "compat/event.h"
+#include "compat/macros.h"
 
 // Ensure CUDA_CHECK is defined before use
 #include "compat/sep_glm_wrapper.h"

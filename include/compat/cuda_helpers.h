@@ -1,16 +1,16 @@
 #pragma once
 
-#include "cuda/macros.h"
+#include "compat/macros.h"
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
 #else
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #endif
 
 #include <cstdio>
 
-#include "cuda/cuda_common.h"
-#include "cuda/macros.h"
+#include "compat/cuda_common.h"
+#include "compat/macros.h"
 
 // Comprehensive CUDA helper utilities - consolidated from multiple files
 namespace sep {

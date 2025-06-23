@@ -9,7 +9,7 @@
 
 #include "blender/compression.h"
 #include "core/common.h"
-#include "cuda/math_common.h"
+#include "compat/math_common.h"
 #include "memory/memory_tier.h"
 #include "memory/types.h"
 #include "quantum/types.h"

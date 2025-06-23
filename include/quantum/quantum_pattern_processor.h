@@ -3,7 +3,7 @@
 #include "core/system_hooks.h"
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
-#include "pattern/pattern_evolution.h"
+#include "quantum/pattern_evolution.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
 #include <string>

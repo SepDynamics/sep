@@ -1,6 +1,6 @@
-#include "src/core/system_hooks.h"
+#include "core/system_hooks.h"
 
-#include "sep/pattern/types.h"
+#include "quantum/types.h"
 #include <gtest/gtest.h>
 
 using namespace sep;

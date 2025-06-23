@@ -1,7 +1,7 @@
 #include "api/client.h"
 #include "api/server.h"
 #include "api/types.h"
-#include "config/types.h"
+#include "compat/types.h"
 #ifdef BOOST_ASIO_DISABLE_RTTI
 #include "sep/asio_isolation.h"
 #else

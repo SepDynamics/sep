@@ -19,7 +19,7 @@
 #include "api/server.h"
 #include "api/sep_engine.h"
 #include "quantum/types.h"
-#include "config/types.h"
+#include "compat/types.h"
 
 namespace sep::api {
 

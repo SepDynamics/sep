@@ -1,7 +1,7 @@
 #ifndef SEP_QUANTUM_EVOLUTION_H
 #define SEP_QUANTUM_EVOLUTION_H
 
-#include "types.h"
+#include "quantum/types.h"
 #include <vector>
 
 namespace sep::quantum {
@@ -29,7 +29,6 @@ public:
     };
 
     explicit EvolutionEngine(Processor* processor);
-    ~EvolutionEngine();
 
     BatchProcessingResult evolve(const EvolutionParams& params);
     BatchProcessingResult evolveGeneration();

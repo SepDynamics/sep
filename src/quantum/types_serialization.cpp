@@ -1,4 +1,4 @@
-#include "types.h"
+#include "quantum/types.h"
 #include <nlohmann/json.hpp>
 
 namespace sep::quantum {

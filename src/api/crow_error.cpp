@@ -1,8 +1,7 @@
-#include <crow/crow_error.h"
-#include <crow/crow_isolation.h"
+#include "crow/crow_error.h"
 #include <cstdio>
 
-void sep::crow::error::log(Code code, const sep::shim::string& message)
+void sep::crow::error::log(sep::crow::error::Code code, const sep::shim::string& message)
 {
     (void)fprintf(stderr,
                   "Crow error %d: %s\n",

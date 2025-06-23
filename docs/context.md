@@ -1,46 +1,11 @@
-# Context Module Overview
+# Context Processing and Memory Tier Integration
 
-This report surveys the current implementation in `src/context` and how it maps to the public API.
+The context module links user-provided `Context` objects to the rest of the engine. `processor.cpp` implements a `Processor` that validates input, generates or extracts embeddings and determines which memory tier should store the result. A `RelationshipManager` tracks similarity scores while a `PriorityManager` keeps access priorities.
 
-## Missing Public Headers
+All public declarations currently live under `include/quantum` because no `include/context` directory exists yet. The headers `priority.h`, `relationship.h`, `processor.h` and `resource_predictor.h` describe the APIs used by `processor.cpp` and `relationship.cpp`.
 
-The context logic resides only in source files. The README notes:
+During processing the `Processor` calculates a stability score for each embedding. Scores below `0.7` are placed in the **STM** tier, values between `0.7` and `0.89` go to **MTM**, and scores above `0.9` are promoted to **LTM**. The chosen tier is allocated through `memory::MemoryTierManager` and the resulting embedding is forwarded to the pattern subsystem via `pattern::PatternProcessor`.
 
-```
-## From branch: codex/create-readme-for-context-processing-2025-06-22
+The absence of a dedicated `include/context` folder means downstream code must include these headers from the `quantum` path. Consolidating them under `include/context` would clarify ownership but has not been done yet.
 
-This directory contains the runtime logic for processing `Context` objects. It currently ships only as source, with no public headers under `include/`.
-```
-
-`processor.cpp` implements `ProcessorImpl`, `PriorityManager`, `RelationshipManager`, and `ResourcePredictorImpl`. The factory method `createResourcePredictor` has no declaration in `include/`.
-
-## Context Headers Under `include/quantum`
-
-Several headers in `include/quantum` belong to context processing. The table in the README lists them with implementations in `src/context`:
-
-```
-| `pattern_processor.h` | Abstract processor working on quantum pattern states. | `src/quantum/pattern_processor.cpp` |
-| `priority.h` | Priority tiers and manager for context relevance. | Implemented within `src/context/processor.cpp` |
-| `processor.h` | Main quantum `Processor` API manipulating `Pattern` objects. | `src/quantum/processor.cpp` |
-| `qbsa.h` | Quantum Bit-State Analysis algorithms. | `src/quantum/qbsa.cpp` |
-| `qbsa_qfh.h` | Factory for QFH-based `QBSAProcessor`. | `src/quantum/qbsa_qfh.cpp` |
-| `qfh.h` | Quantum Fluctuation Hashing algorithm and streaming processor. | `src/quantum/qfh.cpp` |
-| `quantum_pattern_processor.h` | Pattern processor built on top of a `QuantumProcessor`. | `src/quantum/quantum_pattern_processor.cpp` |
-| `quantum_processor.h` | Compatibility header mapping the old `QuantumProcessor` name to `Processor`. | `src/quantum/quantum_processor.cpp` |
-| `quantum_processor_qfh.h` | QFH-enhanced processor interface. | `src/quantum/quantum_processor_qfh.cpp`, `src/quantum/quantum_processor_qfh_common.cpp` |
-| `relationship.h` | Relationship manager for contexts. | Implemented within `src/context/processor.cpp` |
-| `resource_predictor.h` | Abstract interface for resource prediction. | Implemented within `src/context/processor.cpp` |
-| `types.h` | Fundamental data structures and config used across the module. | `src/quantum/types_serialization.cpp` |
-```
-
-These headers would be clearer under a dedicated `include/context` directory.
-
-## Candidate Files for Removal
-
-Several helper scripts and tests are not referenced by any build files and could be removed:
-
-- `tests/util/unused_include_scanner.py`
-- `tests/core/performance_test_suite.cpp`
-- `tests/brace_check.py`
-
-Removing them would reduce clutter.
+Redundant build artifacts such as `cmake_install.cmake` have been removed from the repository.

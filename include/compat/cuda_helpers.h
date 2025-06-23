@@ -22,21 +22,6 @@ SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
     }
 }
 
-struct StreamDestroyer {
-    void operator()(cudaStream_t stream) const noexcept {
-        if (stream) {
-            cudaStreamDestroy(stream);
-        }
-    }
-};
-
-struct EventDestroyer {
-    void operator()(cudaEvent_t event) const noexcept {
-        if (event) {
-            cudaEventDestroy(event);
-        }
-    }
-};
 
 #ifndef CUDA_CHECK
 #define CUDA_CHECK(call)                             \

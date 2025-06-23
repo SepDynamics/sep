@@ -21,7 +21,7 @@
 // CUDA headers after standard library
 #include "compat/cuda_common.h"
 #include "compat/macros.h"
-#include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"
 #include "compat/cuda_impl.h"
 
 #include "blender/compression.h"

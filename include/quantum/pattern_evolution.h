@@ -11,21 +11,21 @@ namespace mcp {
 
 class PatternEvolution {
 public:
-    static pattern::PatternData evolvePattern(const nlohmann::json& config,
+    static Pattern::PatternData evolvePattern(const nlohmann::json& config,
                                          const std::string& patternId = "");
 
-    static std::vector<pattern::PatternData> getPatterns(const nlohmann::json& args = {});
+    static std::vector<Pattern::PatternData> getPatterns(const nlohmann::json& args = {});
 
-    static SEPResult processPatterns(const std::vector<pattern::PatternData>& input,
-                                          const ::sep::pattern::PatternConfig& config,
-                                          std::vector<pattern::PatternData>& output);
+    static SEPResult processPatterns(const std::vector<Pattern::PatternData>& input,
+                                          const ::sep::Pattern::PatternConfig& config,
+                                          std::vector<Pattern::PatternData>& output);
 
-    static float calculateRelationshipStrength(const pattern::PatternData& pattern1,
-                                               const pattern::PatternData& pattern2);
+    static float calculateRelationshipStrength(const Pattern::PatternData& pattern1,
+                                               const Pattern::PatternData& pattern2);
 
-    static nlohmann::json toJson(const pattern::PatternData& pattern);
+    static nlohmann::json toJson(const Pattern::PatternData& pattern);
 
-    static pattern::PatternData fromJson(const nlohmann::json& j);
+    static Pattern::PatternData fromJson(const nlohmann::json& j);
 };
 
 } // namespace mcp

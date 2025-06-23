@@ -251,7 +251,7 @@ public:
                 
                 // Set the relationship type (convert from int to enum)
                 int type_int = reply->element[1]->str ? std::stoi(reply->element[1]->str) : 0;
-                patternRel.type = static_cast<sep::pattern::RelationshipType>(type_int);
+                patternRel.type = static_cast<uint8_t>(type_int);
                 
                 // Set the strength
                 patternRel.strength = reply->element[2]->str ? std::stof(reply->element[2]->str) : 0.0f;

@@ -480,7 +480,7 @@ public:
             // Create or update relationship if similarity is above threshold
             if (similarity >= 0.3f)
             {
-                relationship_manager_.addRelationship(id_a, id_b, ::sep::pattern::RelationshipType::REFERENCE, similarity, true);
+                relationship_manager_.addRelationship(id_a, id_b, static_cast<uint8_t>(0), similarity, true); // 0 = REFERENCE
             }
 
             return SimilarityResult{true, similarity, sep::shim::string("")};
@@ -898,7 +898,7 @@ RelationshipManager::RelationshipManager(const RelationshipConfig& config) : con
 
 bool RelationshipManager::addRelationship(const std::string& source_id,
                                           const std::string& target_id,
-                                          ::sep::pattern::RelationshipType   type,
+                                          uint8_t type,
                                           float              strength,
                                           bool               bidirectional)
 {
@@ -1072,7 +1072,7 @@ std::vector<std::string> RelationshipManager::getChildren(const std::string& par
         {
             for (const auto& rel : it->second)
             {
-                if (rel.type == ::sep::pattern::RelationshipType::CHILD)
+                if (rel.type == 1) // CHILD
                 {
                     children.push_back(rel.target_id);
                 }
@@ -1101,7 +1101,7 @@ std::string RelationshipManager::getParent(const std::string& child_id) const
         {
             for (const auto& rel : it->second)
             {
-                if (rel.type == ::sep::pattern::RelationshipType::PARENT)
+                if (rel.type == 2) // PARENT
                 {
                     return rel.target_id;
                 }

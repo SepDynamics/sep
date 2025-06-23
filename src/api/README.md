@@ -12,12 +12,12 @@ The `src/api` directory contains the runtime implementation of SEP's external in
 - **Crow server** – `server.cpp` instantiates `SEPApiServer`, configures routes through `crow_adapter.cpp` and runs the event loop.
 - **Middleware** – `auth_middleware.cpp` and `rate_limit_middleware.cpp` provide token authentication and lock‑free rate limiting.
 - **Bridge files** – `bridge.cpp`, `bridge_c.cpp` and `js_integration.cpp` expose a stable C API and optional JavaScript bindings.
-- **Helpers** – `client.cpp`, `curl_http_client.cpp` and `ollama_client.cpp` implement reusable HTTP clients, while `connection_manager.cpp` offers a generic connection pool.
+- **Helpers** – `client.cpp`, `curl_http_client.cpp` and `ollama_client.cpp` implement reusable HTTP clients. A previous `connection_manager.cpp` helper has been removed as redundant.
 - **Engine wrapper** – `sep_engine.cpp` contains the facade used by the server and bridge layers.
 
 All code in this directory is paired with headers under `include/api`. Keeping the module mirrored between `src` and `include` simplifies integration and makes the API easy to consume from other projects.
 
-The `connection_manager` helper mirrors much of its interface in the header and may be a candidate for consolidation or removal if unused.
+The former `connection_manager` helper has been removed from this directory; only the interface header remains for unit tests.
 
 ## From branch: codex/create-api-readme-files-and-outline-integration-2025-06-22
 
@@ -30,7 +30,6 @@ This directory holds the network and bridging layer for the SEP engine.
 - **bridge.cpp** and **bridge_c.cpp** – expose a stable C API so other languages can call into the engine.
 - **js_integration.cpp** – Node.js helper that wraps the C bridge for use with JavaScript FFI.
 - **auth_middleware.cpp**, **rate_limit_middleware.cpp**, **lock_free_rate_limiter.cpp** – middleware for authentication and throttling.
-- **connection_manager.cpp** – generic connection pool used by clients.
 
 `crow_error.cpp` currently lives under `src/crow/`. Once the Crow wrapper code is consolidated, this file will move here so all server utilities reside in one place. Its namespace and function signatures will remain the same during the move.
 

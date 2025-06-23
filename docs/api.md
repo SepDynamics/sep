@@ -13,7 +13,7 @@ This document summarizes the state of the files under `src/api` and `include/api
 | `bridge.hpp` | C++ helpers and error utilities for the bridge. | `src/api/bridge.cpp`, `src/api/bridge_c.cpp` |
 | `bridge_internal.hpp` | Internal shared state for the bridge. | Header only |
 | `client.h` | High level HTTP client and Curl transport. | `src/api/client.cpp`, `src/api/curl_http_client.cpp`, `src/api/ollama_client.cpp` |
-| `connection_manager.h` | Connection pooling interface. | `src/api/connection_manager.cpp` |
+| `connection_manager.h` | Connection pooling interface. | Removed implementation |
 | `crow_adapter.h` | Crow route helpers and adapter classes. | `src/api/crow_adapter.cpp` |
 | `crow_request.h` | Implementation of `IRequest` for Crow. | Header only |
 | `js_integration.h` | JavaScript bridge wrappers. | `src/api/js_integration.cpp` |
@@ -39,5 +39,22 @@ This document summarizes the state of the files under `src/api` and `include/api
 - Remove or implement the unused adapter classes in `crow_adapter.h` along with the `makeRequest`/`makeResponse` helpers.
 - Investigate whether the example routes in `crow_adapter.cpp` are still needed now that `server.cpp` defines a full set of routes. If redundant, consider deleting `crow_adapter.cpp`.
 - Consider centralising bridge error macros shared between `bridge.cpp` and `bridge_c.cpp`.
+
+## Server, middleware and client
+
+The API stack is built around `SEPApiServer` (declared in `server.h`).
+It configures Crow middleware for authentication and rate limiting,
+then delegates all heavy lifting to `SepEngine`.
+
+Middleware components (`auth_middleware.cpp`,
+`rate_limit_middleware.cpp` and `lock_free_rate_limiter.cpp`)
+only depend on the lightweight `crow_request.h` interface and the
+`rate_limiter.h` abstractions. The server uses `client.h` to talk to
+external services such as Ollama via `curl_http_client.cpp`.
+
+The removal of `connection_manager.cpp` leaves `connection_manager.h`
+as a pure interface used only in tests. No production code references
+it, so cross‑module coupling is minimal.
+
 
 

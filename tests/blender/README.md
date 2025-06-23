@@ -14,7 +14,7 @@ This folder hosts unit tests, benchmarks, and helper mocks for the Blender integ
 | `CMakeLists.txt` | Build rules for the suite. | Move once tests are relocated. |
 | `api_test.cpp` | Exercises the public C API used by Blender scripts. | Move |
 | `compression_test.cpp` | Validates pattern compression utilities. | Move |
-| `connection_pool_manager_test.cpp` | Tests the generic connection manager. | Move to `tests/api` |
+| `connection_pool_manager_test.cpp` | Removed (obsolete connection manager implementation). | |
 | `gpu_context_test.cpp` | Covers GPUContext initialization and memory operations. | Move |
 | `gpu_context_perf_test.cpp` | Measures GPUContext performance. | Move |
 | `mesh_handler_test.cpp` | Checks MeshHandler logic and metrics. | Move |

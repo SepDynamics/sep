@@ -11,6 +11,7 @@ sudo apt-get install -y \
     libspdlog-dev \
     libfmt-dev \
     libglm-dev \
+    libasio-dev \
     libcurl4-openssl-dev \
     liblz4-dev \
     libzstd-dev \
@@ -36,3 +37,7 @@ fi
 cd /usr/src/googletest
 sudo cmake . -B build
 sudo cmake --build build --target install
+
+# Verify toolchain presence
+cmake --version
+g++ --version

@@ -12,7 +12,7 @@
 #include <utility>
 
 // Include CUDA headers in the correct order
-#include "include/compat/raii.h"
+#include "compat/raii.h"
 #include "memory/memory_tier_manager.hpp"
 #include "compat/cuda_helpers.h"
 

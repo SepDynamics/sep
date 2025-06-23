@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "sep/crow_isolation.h"
-#include "sep/asio_isolation.h"
+#include "crow/crow_isolation.h"
+#include "crow/asio_isolation.h"
 
 TEST(CrowIsolationStub, ResponseFields)
 {

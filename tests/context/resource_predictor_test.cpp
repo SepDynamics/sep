@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "context/types.h"
-#include "sep/result_defs.h"
 #include "mock_resource_predictor.hpp"
 
 using namespace sep::context;

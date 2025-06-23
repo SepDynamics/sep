@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "blender/gpu_context.h"
-#include "sep/shim.h"
+#include "compat/shim.h"
 #include <fstream>
 #include <cstdio>
 

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "api/lock_free_rate_limiter.h"
 #include "api/request_interface.h"
-#include "sep/shim.h"
+#include "compat/shim.h"
 #include <unordered_map>
 
 using namespace sep::api;

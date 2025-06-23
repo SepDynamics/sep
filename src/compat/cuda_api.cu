@@ -1,4 +1,4 @@
-#include "cuda/cuda_common.h"
+#include "compat/cuda_common.h"
 
 #include "compat/cuda_unified_fix.h"
 
@@ -9,7 +9,7 @@
 #if defined(__CUDACC__) || defined(SEP_USE_CUDA)
 #include <cuda_runtime.h>
 #else
-#include "cuda/cuda_impl.h"
+#include "compat/cuda_impl.h"
 #endif
 #include "compat/cuda_helpers.h"
 
@@ -22,13 +22,13 @@
 #endif
 
 // Project includes
-#include "cuda/constants.h"
-#include "cuda/cuda_wrapper.h"
-#include "cuda/kernels.h"
-#include "cuda/macros.h"
+#include "compat/constants.h"
+#include "compat/cuda_wrapper.h"
+#include "compat/kernels.h"
+#include "compat/macros.h"
 
-#include "cuda/raii.h"
-#include "cuda/types.h"
+#include "compat/raii.h"
+#include "compat/types.h"
 
 
 extern "C" {

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "cuda/raii.h"
+#include "compat/raii.h"
 
 using namespace sep::cuda;
 

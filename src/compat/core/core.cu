@@ -1,11 +1,11 @@
-#include "cuda/core.h"
+#include "compat/core.h"
 
 #include <stdexcept>
 
-#include "cuda/cuda_common.h"
-#include "cuda/kernels.h"
-#include "cuda/macros.h"  // for SEP_CUDA_CHECK_NOTHROW
-#include "cuda/stream.h"  // for Stream::create()
+#include "compat/cuda_common.h"
+#include "compat/kernels.h"
+#include "compat/macros.h"  // for SEP_CUDA_CHECK_NOTHROW
+#include "compat/stream.h"  // for Stream::create()
 #include "compat/cuda_helpers.h"
 
 namespace sep::cuda {

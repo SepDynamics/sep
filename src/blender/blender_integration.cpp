@@ -10,6 +10,8 @@
 #include <utility>
 #include <vector>
 
+#include "quantum/processor.h"  // Ensure PatternProcessor is complete
+
 #include "blender/pattern_observer.h"
 #include "quantum/types.h"
 #include "memory/types.h"
@@ -42,16 +44,16 @@ std::shared_ptr<BlenderBridge> BlenderBridge::create()
     return std::shared_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge());
 }
 
-::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
+sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
 {
     if (!ctx)
     {
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     }
 
     if (m_processing_thread_active.load())
     {
-        return SEPResult::ALREADY_INITIALIZED;
+        return sep::SEPResult::ALREADY_EXISTS;
     }
 
     // Store GPU context
@@ -61,8 +63,8 @@ std::shared_ptr<BlenderBridge> BlenderBridge::create()
     m_pattern_processor.reset(new (std::nothrow) sep::pattern::PatternProcessor());
     if (!m_pattern_processor)
     {
-        notifyError(SEPResult::ALLOCATION_FAILED, "Failed to allocate pattern processor");
-        return SEPResult::ALLOCATION_FAILED;
+        notifyError(sep::SEPResult::ALLOCATION_FAILED, "Failed to allocate pattern processor");
+        return sep::SEPResult::ALLOCATION_FAILED;
     }
 
     // No initialization needed on PatternProcessor
@@ -70,25 +72,25 @@ std::shared_ptr<BlenderBridge> BlenderBridge::create()
     // Start processing thread
     startProcessingThread();
 
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 SEPResult BlenderBridge::registerObject(Object* obj, const PatternConfig& config, ObjectHandle* handle_out)
 {
     if (!m_processing_thread_active.load())
     {
-        return SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
 
     if (!obj || !handle_out)
     {
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     }
 
     // Validate configuration
     if (!sep::pattern::isValidConfig(config))
     {
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     }
 
     {
@@ -107,7 +109,7 @@ SEPResult BlenderBridge::registerObject(Object* obj, const PatternConfig& config
 
         // Allocate initial memory
         SEPResult result = allocatePatternMemory(state);
-        if (result != SEPResult::SUCCESS)
+        if (result != sep::SEPResult::SUCCESS)
         {
             notifyError(result, "Failed to allocate pattern memory");
             return result;
@@ -131,7 +133,7 @@ SEPResult BlenderBridge::registerObject(Object* obj, const PatternConfig& config
         // Update resource stats
         updateResourceStats();
 
-        return SEPResult::SUCCESS;
+        return sep::SEPResult::SUCCESS;
     }
 }
 
@@ -202,7 +204,7 @@ ObjectState* BlenderBridge::getObjectStatePtr(sep::pattern::ObjectHandle handle)
     return it != objects_.end() ? &it->second : nullptr;
 }
 
-::SEPResult BlenderBridge::cleanupObject(sep::pattern::ObjectHandle handle)
+sep::SEPResult BlenderBridge::cleanupObject(sep::pattern::ObjectHandle handle)
 {
     std::lock_guard<std::mutex> lock(objects_mutex_);
     auto                        it = objects_.find(handle);
@@ -211,7 +213,7 @@ ObjectState* BlenderBridge::getObjectStatePtr(sep::pattern::ObjectHandle handle)
         freePatternMemory(it->second);
         objects_.erase(it);
     }
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 SEPResult BlenderBridge::allocatePatternMemory(ObjectState& state)
@@ -221,11 +223,11 @@ SEPResult BlenderBridge::allocatePatternMemory(ObjectState& state)
     state.memory_block = mgr.allocate(bytes, sep::memory::TierType::MTM);
     if (!state.memory_block)
     {
-        return SEPResult::ALLOCATION_FAILED;
+        return sep::SEPResult::ALLOCATION_FAILED;
     }
     state.patterns.resize(state.config.max_patterns);
     state.memory_usage.host_memory = bytes;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 SEPResult BlenderBridge::freePatternMemory(ObjectState& state)
@@ -238,14 +240,14 @@ SEPResult BlenderBridge::freePatternMemory(ObjectState& state)
     }
     state.patterns.clear();
     state.memory_usage.host_memory = 0;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 SEPResult BlenderBridge::syncMemory(MemoryTierEnum tier, bool force)
 {
     if (!m_processing_thread_active.load())
     {
-        return SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
 
     auto& manager = sep::memory::MemoryTierManager::getInstance();
@@ -266,22 +268,22 @@ SEPResult BlenderBridge::syncMemory(MemoryTierEnum tier, bool force)
             manager.defragmentTier(sep::memory::TierType::LTM);
             break;
         default:
-            return SEPResult::INVALID_STATE;
+            return sep::SEPResult::INVALID_STATE;
     }
 
     // Note: synchronize method not available in current MemoryTierManager
     // interface manager.synchronize();
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-::SEPResult BlenderBridge::startProcessingThread()
+sep::SEPResult BlenderBridge::startProcessingThread()
 {
     if (m_processing_thread_active.load()) {
-        return SEPResult::ALREADY_INITIALIZED;
+        return sep::SEPResult::ALREADY_EXISTS;
     }
     
     if (!m_gpu_context) {
-        return SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
 
     // Launch background thread for pattern processing
@@ -289,26 +291,26 @@ SEPResult BlenderBridge::syncMemory(MemoryTierEnum tier, bool force)
     m_processing_thread.reset(
         new std::thread(&BlenderBridge::processingThreadMain, this));
 
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-::SEPResult BlenderBridge::stopProcessingThread()
+sep::SEPResult BlenderBridge::stopProcessingThread()
 {
     if (!m_processing_thread_active.load()) {
-        return SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
     
     m_processing_thread_active.store(false);
     if (m_processing_thread && m_processing_thread->joinable()) {
         m_processing_thread->join();
     }
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 SEPResult BlenderBridge::processPatterns()
 {
     if (!m_processing_thread_active.load()) {
-        return SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
 
     // Snapshot object list to avoid holding the lock while processing
@@ -325,22 +327,22 @@ SEPResult BlenderBridge::processPatterns()
     }
 
     updateResourceStats();
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics& metrics)
 {
     if (!m_processing_thread_active.load()) {
-        return SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
     
     if (!isValidHandle(handle)) {
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     }
     
     auto* state = getObjectStatePtr(handle);
     if (!state) {
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     }
     
     // Update object with new metrics
@@ -349,20 +351,23 @@ SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics&
     // Notify observers
     notifyObservers(handle, metrics);
     
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-::SEPResult BlenderBridge::updateResourceStats()
+sep::SEPResult BlenderBridge::updateResourceStats()
 {
     if (!m_processing_thread_active.load()) {
-        return SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
 
     auto& manager = sep::memory::MemoryTierManager::getInstance();
 
-    float stm_util = manager.getTierUtilization(sep::memory::TierType::STM);
-    float mtm_util = manager.getTierUtilization(sep::memory::TierType::MTM);
-    float ltm_util = manager.getTierUtilization(sep::memory::TierType::LTM);
+    float stm_util = manager.getTierUtilization(
+        static_cast<sep::memory::TierType>(sep::MemoryTierEnum::STM));
+    float mtm_util = manager.getTierUtilization(
+        static_cast<sep::memory::TierType>(sep::MemoryTierEnum::MTM));
+    float ltm_util = manager.getTierUtilization(
+        static_cast<sep::memory::TierType>(sep::MemoryTierEnum::LTM));
 
     if (stm_util > 0.9f)
         notifyResourceWarning(ResourceType::HOST_MEMORY, stm_util);
@@ -371,7 +376,7 @@ SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics&
     if (ltm_util > 0.9f)
         notifyResourceWarning(ResourceType::STORAGE_RESOURCES, ltm_util);
 
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 void BlenderBridge::processingThreadMain()
@@ -382,10 +387,10 @@ void BlenderBridge::processingThreadMain()
     }
 }
 
-::SEPResult BlenderBridge::processObjectPatterns(sep::pattern::ObjectHandle handle, ObjectState& state)
+sep::SEPResult BlenderBridge::processObjectPatterns(sep::pattern::ObjectHandle handle, ObjectState& state)
 {
     if (!state.object) {
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     }
 
     state.is_processing = true;
@@ -406,10 +411,10 @@ void BlenderBridge::processingThreadMain()
     notifyObservers(handle, state.metrics);
 
     state.is_processing = false;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-::SEPResult BlenderBridge::updatePatternMetrics(ObjectState& state)
+sep::SEPResult BlenderBridge::updatePatternMetrics(ObjectState& state)
 {
     const auto pattern_count = state.patterns.size();
     state.metrics.active_patterns = pattern_count;
@@ -434,18 +439,18 @@ void BlenderBridge::processingThreadMain()
     state.metrics.performance.process_time = state.stats.processing_time;
     state.metrics.performance.gpu_utilization = 0.0f;
 
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-::SEPResult BlenderBridge::validatePatternCoherence(const ObjectState& state)
+sep::SEPResult BlenderBridge::validatePatternCoherence(const ObjectState& state)
 {
     for (const auto& pat : state.patterns) {
         if (pat.coherence < PatternLimits::MIN_COHERENCE_VALUE ||
             pat.coherence > PatternLimits::MAX_COHERENCE) {
-            return SEPResult::INVALID_STATE;
+            return sep::SEPResult::INVALID_STATE;
         }
     }
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 }  // namespace pattern

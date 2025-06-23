@@ -42,6 +42,13 @@ public:
     
     SEPResult addPattern(const PatternData& pattern);
     const std::vector<PatternData>& getPatterns() const;
+
+    // Convenience method to evolve patterns and return the results
+    virtual const std::vector<PatternData>& process()
+    {
+        evolvePatterns();
+        return patterns_;
+    }
     
 protected:
     Implementation implementation_;

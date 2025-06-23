@@ -15,6 +15,7 @@
 #include "compat/shim.h"
 #include "quantum/relationship.h"
 #include "quantum/types.h"
+#include "pattern/data.hpp"
 
 // Standard library includes
 #include <cstddef>
@@ -91,11 +92,6 @@ public:
     void rebuildLookup();
 
     // Pattern management
-    // Forward declare pattern namespace types to avoid compilation errors
-    namespace sep { namespace pattern {
-        struct PatternData;
-        struct PatternConfig;
-    }}
 
     SEPResult launch_pattern_processing(sep::pattern::PatternData* patterns,
                                       sep::pattern::PatternData* results,

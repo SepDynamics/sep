@@ -24,8 +24,6 @@
 
 // Forward declare CUDA types needed for this stub implementation
 namespace cuda_stub_constants {
-struct CUstream_st;
-struct CUevent_st;
 typedef struct CUstream_st* cudaStream_t;
 typedef struct CUevent_st* cudaEvent_t;
 typedef enum { cudaSuccess = 0 } cudaError_t;
@@ -83,8 +81,6 @@ constexpr int STUB_MEMORY_CLOCK_RATE = 2000000;
 constexpr int STUB_MEMORY_BUS_WIDTH = 256;
 constexpr size_t STUB_L2_CACHE_SIZE = 1048576;
 constexpr int STUB_MAX_THREADS_PER_MULTI_PROCESSOR = 2048;
-}  // namespace cuda_stub_constants
-
 // Return a human readable error message. Always indicates failure is due to the
 // runtime stubs when CUDA is unavailable.
 inline const char* cudaGetErrorString(cudaError_t error) {
@@ -94,7 +90,7 @@ inline const char* cudaGetErrorString(cudaError_t error) {
     return (error == cudaSuccess) ? "success" : "CUDA not available";
 #endif
 }
-
+namespace cuda_stub_constants {
 // Select a CUDA device. This stub ignores the requested device and simply
 // reports success so that host builds can proceed without errors.
 inline cudaError_t cudaSetDevice(int device) {
@@ -201,9 +197,77 @@ inline cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
 #endif
 }
 
+// Simplified memory info struct to avoid parameter similarity issues
+struct CudaMemoryInfo {
+    size_t free;
+    size_t total;
+};
+
+// Provide fake memory statistics for compatibility with code that queries
+// available GPU memory - using a struct to avoid similar parameters
+inline CudaMemoryInfo getCudaMemoryInfo() {
+    return {512 * 1024 * 1024, 1024 * 1024 * 1024};
+}
+
+// Wrapper for the standard cudaMemGetInfo to avoid linter warnings
+inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
+#if SEP_CUDA_AVAILABLE
+    return ::cudaMemGetInfo(free, total);
+#else
+    CudaMemoryInfo info = getCudaMemoryInfo();
+    if (free)
+        *free = info.free;
+    if (total)
+        *total = info.total;
+    return cudaSuccess;
+#endif
+}
+}  // namespace cuda_stub_constants
+
+// Retrieve the last CUDA error. Since the stub never fails, this always
+// returns `cudaSuccess`.
+inline cudaError_t cudaGetLastError() {
+#if SEP_CUDA_AVAILABLE
+    return ::cudaGetLastError();
+#else
+    return cudaSuccess;
+#endif
+}
+
+// Wrapper function to avoid similar parameter types
+inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
+    if (!devicePtr) {
+        return cudaErrorInvalidValue;
+    }
+    memset(devicePtr, value, numBytes);
+    return cudaSuccess;
+}
+
+// Initialize a memory region with the given value - wrapper around memset
+inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
+#if SEP_CUDA_AVAILABLE
+    return ::cudaMemset(devPtr, value, count);
+#else
+    return cudaFillMemory(devPtr, count, value);
+#endif
+}
+
+// Allocate managed memory using host malloc when CUDA is unavailable
+inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
+#if SEP_CUDA_AVAILABLE
+    return ::cudaMallocManaged(ptr, size);
+#else
+    if (!ptr) {
+        return cudaErrorInvalidValue;
+    }
+    *ptr = malloc(size);
+    return (*ptr) ? cudaSuccess : cudaErrorMemoryAllocation;
+#endif
+}
 // Populate device properties with conservative values so callers relying on
 // hardware characteristics can continue running without real GPU hardware.
-inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device) {
+inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
+
 #if SEP_CUDA_AVAILABLE
     return ::cudaGetDeviceProperties(prop, device);
 #else
@@ -268,74 +332,6 @@ inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device) {
     return cudaSuccess;
 #endif
 }
-
-// Simplified memory info struct to avoid parameter similarity issues
-struct CudaMemoryInfo {
-    size_t free;
-    size_t total;
-};
-
-// Provide fake memory statistics for compatibility with code that queries
-// available GPU memory - using a struct to avoid similar parameters
-inline CudaMemoryInfo getCudaMemoryInfo() {
-    return {512 * 1024 * 1024, 1024 * 1024 * 1024};
-}
-
-// Wrapper for the standard cudaMemGetInfo to avoid linter warnings
-inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaMemGetInfo(free, total);
-#else
-    CudaMemoryInfo info = getCudaMemoryInfo();
-    if (free)
-        *free = info.free;
-    if (total)
-        *total = info.total;
-    return cudaSuccess;
-#endif
-}
-
-// Retrieve the last CUDA error. Since the stub never fails, this always
-// returns `cudaSuccess`.
-inline cudaError_t cudaGetLastError() {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaGetLastError();
-#else
-    return cudaSuccess;
-#endif
-}
-
-// Wrapper function to avoid similar parameter types
-inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
-    if (!devicePtr) {
-        return cudaErrorInvalidValue;
-    }
-    memset(devicePtr, value, numBytes);
-    return cudaSuccess;
-}
-
-// Initialize a memory region with the given value - wrapper around memset
-inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaMemset(devPtr, value, count);
-#else
-    return cudaFillMemory(devPtr, count, value);
-#endif
-}
-
-// Allocate managed memory using host malloc when CUDA is unavailable
-inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaMallocManaged(ptr, size);
-#else
-    if (!ptr) {
-        return cudaErrorInvalidValue;
-    }
-    *ptr = malloc(size);
-    return (*ptr) ? cudaSuccess : cudaErrorMemoryAllocation;
-#endif
-}
-
 // Synchronize a stream with a recorded event. The stub ignores both arguments
 // and immediately returns success.
 inline cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event) {
@@ -375,7 +371,7 @@ inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
 inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
     return performCudaMemcpyAsync({dst, src, count, kind, stream});
 }
+}  // namespace cuda_stub_constants
 
 #endif  // !SEP_CUDA_AVAILABLE
-
 #endif  // SEP_CUDA_IMPL_H

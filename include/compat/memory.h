@@ -89,7 +89,7 @@ inline void freeDeviceMemory(void* ptr) {
         std::free(ptr);
 }
 
-inline void* allocateUnifiedMemory(size_t size, cudaStream_t stream = nullptr) {
+inline void* allocateUnifiedMemory(size_t size, cuda_stub_constants::cudaStream_t stream = nullptr) {
     (void)stream;
     return std::malloc(size);
 }

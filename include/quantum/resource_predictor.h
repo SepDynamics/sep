@@ -11,7 +11,7 @@ public:
   virtual ~ResourcePredictor() = default;
 
   // Predict resource needs for a batch
-  virtual ResourcePrediction predictResourceNeeds(const Batch &batch) = 0;
+  virtual ResourcePredictor predictResourceNeeds(const Batch &batch) = 0;
 
   // Record actual resource usage for a batch
   virtual void recordBatchProcessing(const Batch &batch,

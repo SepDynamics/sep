@@ -1,20 +1,42 @@
-# SEP Engine Build Guide
+# SEP Engine
 
-This repository contains the experimental SEP Engine codebase. To ensure we can iterate on the refactor work, start by installing the development dependencies and attempting a build.
+The SEP Engine is a high-performance C++ framework for quantum-inspired pattern analysis and evolution. It provides a modular, tiered architecture for processing complex data streams, managing their lifecycle in memory, and exposing insights through a flexible API.
 
-## Dependency Installation
+## Key Features
 
-Run the provided script from the repository root:
+*   **Quantum-Inspired Algorithms**: Implements QBSA (Quantum Bit-State Analysis) and QFH (Quantum Fluctuation Hashing) for sophisticated pattern coherence and stability analysis.
+*   **Tiered Memory System**: Automatically manages pattern data across Short-Term (STM), Medium-Term (MTM), and Long-Term (LTM) memory tiers based on coherence and stability metrics.
+*   **High-Performance Core**: Built on C++ with a CUDA-accelerated backend for processing large data batches efficiently.
+*   **HTTP API & Bridging**: A modern HTTP API built with Crow, alongside a stable C-style bridge for integration with other languages like JavaScript/Node.js.
+*   **Specialized Integrations**: Optional modules provide direct integration with Blender (for 3D visualization) and PipeWire (for real-time audio analysis).
 
-```bash
-bash scripts/install_dependencies.sh
-```
+## Architecture Overview
 
-This installs system packages via `apt` (compilers, CMake, libraries) and pulls third‑party sources like the header-only Crow framework. GoogleTest is built and installed automatically.
+The engine is designed with clear, decoupled modules that follow unidirectional dependencies. A foundational `core` library provides common utilities, while specialized modules for `quantum` algorithms, `memory` management, and `context` processing build upon it. The `api` layer exposes the engine's functionality to the outside world.
 
-## Building
+For a complete breakdown of the architecture, components, and dependency graph, please see the [**ARCHITECTURE.md**](./docs/ARCHITECTURE.md) document.
 
-The project is built with CMake. A typical build can be invoked with:
+### Module Breakdown
+
+| Module      | Description                                                                                             |
+| :---------- | :------------------------------------------------------------------------------------------------------ |
+| **`core`**  | Foundational utilities: engine loop, configuration, error handling, metrics, and the DAG graph.         |
+| **`quantum`** | Implements the core quantum-inspired algorithms (QBSA, QFH) and pattern evolution logic.              |
+| **`memory`**| Manages the STM/MTM/LTM tiered memory system and optional Redis persistence layer.                      |
+| **`context`** | High-level logic for processing context objects, extracting embeddings, and managing relationships.      |
+| **`api`**     | Exposes the engine via an HTTP server (Crow), C-language bridge, and supporting clients.               |
+| **`blender`** | Optional module for integrating with Blender for 3D visualization of patterns.                        |
+| **`audio`**   | Optional module for real-time audio capture and processing via PipeWire.                              |
+| **`compat`**  | CUDA backend implementation, providing GPU acceleration and compatibility shims.                      |
+
+## Building the Engine
+
+The project uses CMake for building.
+
+**1. Install Dependencies:**
+Ensure you have a modern C++ compiler (GCC 12+), CMake (3.22+), and the required libraries (Boost, TBB, cURL). If GPU support is needed, the CUDA toolkit (12.x) is required.
+
+**2. Configure and Build:**
 
 ```bash
 mkdir build
@@ -23,23 +45,25 @@ cmake ..
 make -j$(nproc)
 ```
 
-At the current stage the build does **not** succeed. Missing CUDA headers and incomplete implementations in the quantum and memory modules trigger compilation failures. Fixing these issues is part of the refactoring effort.
+This will produce the main `sep_engine` executable and the associated static libraries for each module.
 
-## Directory Overview
+## Running the Engine
 
-- `src/` – C++ sources grouped by module
-- `include/` – matching headers
-- `third_party/` – external dependencies
-- `scripts/` – helper scripts, including `install_dependencies.sh`
-- `tests/` – testbed for individual modules
+The primary output is a server executable. Run it from the build directory:
 
-## Bring-Up Strategy
+```bash
+./sep_engine
+```
 
-1. **Verify dependencies** – ensure the install script runs without errors. If CUDA support is required, set `INSTALL_CUDA=1` before running the script.
-2. **Correct include paths** – headers currently reference the absolute `/sep` prefix. The root `CMakeLists.txt` has been updated to use `${CMAKE_SOURCE_DIR}` so local builds resolve headers correctly.
-3. **CUDA shims** – many files include headers from `cuda/`. A temporary symlink (`include/cuda -> include/compat`) has been added to satisfy these includes. Longer term we should update the code to include the correct `compat` paths directly.
-4. **Resolve compile errors** – key modules like `quantum` and `memory` have missing declarations and inconsistent types. Incrementally stub or implement these functions, compiling after each change.
-5. **Continuous testing** – build the unit tests under `tests/` once the main libraries compile. Use the testbed to validate functionality before modifying the main modules.
+Configuration can be provided via a JSON file, environment variables, or command-line arguments. See `src/core/manager.cpp` for details.
 
-Tracking progress with a small task list will keep the bring‑up manageable.
+## Testing
 
+The consolidated test suite is located in the `/tests` directory. To build and run the tests:
+
+```bash
+# From the build directory
+cmake .. -DSEP_BUILD_TESTS=ON
+make -j$(nproc)
+ctest
+```

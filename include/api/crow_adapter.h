@@ -11,7 +11,7 @@
 // Define CROW_DISABLE_RTTI first since we're using with CUDA
 #define CROW_DISABLE_RTTI 1
 
-// Forward declarations - don't include crow headers directly here
+// Forward declarations - use class instead of struct to match crow's definitions
 namespace crow {
     template <typename... Middlewares>
     class Crow;

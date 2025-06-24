@@ -1,4 +1,4 @@
-#include "api/client.h"
+#include "api/ollama_client.h"
 #include "api/types.h"
 
 #include <chrono>

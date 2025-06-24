@@ -9,24 +9,23 @@
 // Define CROW_DISABLE_RTTI first since we're using with CUDA
 #define CROW_DISABLE_RTTI 1
 
-// First include isolation headers to avoid ASIO conflicts
+// First include our fixed isolation headers to avoid conflicts
 #include "crow/asio_isolation.h"
 #include "crow/crow_isolation.h"
+#include "crow/common.h"
+#include "crow/http_request.h"
+#include "crow/http_response.h"
 
-// Then include standard C++ headers
+// Include standard C++ headers
 #include <memory>
 #include <string>
 #include <nlohmann/json.hpp>
 
 // Include our API headers
 #include "api/types.h"
+#include "api/crow_adapter.h"
 #include "api/sep_engine.h"
 #include "memory/manager.h"
-
-// Now include individual Crow headers
-#include "crow/app.h"
-#include "crow/http_request.h"
-#include "crow/http_response.h"
 
 namespace sep::api {
 
@@ -81,7 +80,7 @@ std::unique_ptr<HttpRequest> makeRequest(::crow::request &req) {
  *
  * @param app The Crow application instance
  */
-void setupSepApiRoutes(::crow::Crow<>* app)
+void setupSepApiRoutes(::crow::crow<>* app)
 {
     // Get singleton engine instance and initialize
     auto&                  engine = sep::api::SepEngine::getInstance();

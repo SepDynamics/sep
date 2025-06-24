@@ -1,90 +1,68 @@
 Ignoring COMPILE_WARNING_AS_ERROR target property and CMAKE_COMPILE_WARNING_AS_ERROR variable.
-[  1%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  3%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[  3%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
 [  5%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[  7%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[  8%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 10%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 12%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 15%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core/stream.cpp.o
-[ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 24%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 28%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 31%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 35%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 36%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 38%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 45%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 47%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 56%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-In file included from /sep/src/memory/manager.cpp:13:
-/sep/include/api/crow_adapter.h:12:9: warning: 'CROW_DISABLE_RTTI' macro redefined [-Wmacro-redefined]
-   12 | #define CROW_DISABLE_RTTI 1
-      |         ^
-/sep/src/memory/manager.cpp:4:9: note: previous definition is here
-    4 | #define CROW_DISABLE_RTTI
-      |         ^
-[ 57%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 59%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 61%] Linking CXX static library libsep_compat.a
-[ 61%] Built target sep_compat
+[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  8%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 12%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core/stream.cpp.o
+[ 14%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 15%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 19%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 21%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 22%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 24%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 26%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 28%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 29%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 35%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 38%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 40%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 42%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 45%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 47%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 49%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 50%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 52%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 54%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 56%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 57%] Linking CXX static library libsep_compat.a
+[ 59%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 59%] Built target sep_compat
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
 [ 63%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 64%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 66%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 68%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 64%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 66%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 68%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 70%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
 [ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 77%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 80%] Linking CXX static library libsep_blender.a
+[ 73%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 78%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
 [ 82%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 82%] Built target sep_blender
-[ 84%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 85%] Linking CXX static library libsep_audio.a
-[ 85%] Built target sep_audio
-[ 87%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 89%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-In file included from /sep/src/api/rate_limit_middleware.cpp:3:
-/sep/include/api/crow_request.h:41:16: warning: returning reference to local temporary object [-Wreturn-stack-address]
-   41 |         return req_.body;
-      |                ^~~~~~~~~
-In file included from /sep/src/api/server.cpp:16:
-/sep/include/api/crow_request.h:41:16: warning: returning reference to local temporary object [-Wreturn-stack-address]
-   41 |         return req_.body;
-      |                ^~~~~~~~~
-1 warning generated.
-1 warning generated.
-[ 91%] Linking CXX static library libsep_core.a
-[ 91%] Built target sep_core
-[ 92%] Linking CXX static library libsep_quantum.a
-[ 92%] Built target sep_quantum
-[ 94%] Linking CXX static library libsep_memory.a
-[ 94%] Built target sep_memory
-1 warning generated.
+[ 84%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 85%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 87%] Linking CXX static library libsep_blender.a
+[ 87%] Built target sep_blender
+[ 89%] Linking CXX static library libsep_memory.a
+[ 89%] Built target sep_memory
+[ 91%] Linking CXX static library libsep_audio.a
+[ 91%] Built target sep_audio
+[ 92%] Linking CXX static library libsep_core.a
+[ 92%] Built target sep_core
+[ 94%] Linking CXX static library libsep_quantum.a
+[ 94%] Built target sep_quantum
 [ 96%] Linking CXX static library libsep_api.a
 [ 96%] Built target sep_api
 [ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
 [100%] Linking CXX executable sep_engine
-/usr/bin/ld: CMakeFiles/sep_engine.dir/src/main.cpp.o: in function `main':
-main.cpp:(.text+0x1f): undefined reference to `curl_global_init'
-/usr/bin/ld: main.cpp:(.text+0x224): undefined reference to `curl_global_cleanup'
-/usr/bin/ld: main.cpp:(.text+0x255): undefined reference to `curl_global_cleanup'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::init(sep::config::APIConfig const&)':
 engine.cpp:(.text+0x9b): undefined reference to `sep::cuda::CudaCore::initialize(int)'
 /usr/bin/ld: engine.cpp:(.text+0xc9): undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'
@@ -113,43 +91,6 @@ engine.cpp:(.text._ZN3sep4cuda8CudaCore8instanceEv[_ZN3sep4cuda8CudaCore8instanc
 engine.cpp:(.text._ZN3sep7pattern13BlenderBridgeC2Ev[_ZN3sep7pattern13BlenderBridgeC2Ev]+0x17): undefined reference to `vtable for sep::pattern::BlenderBridge'
 /usr/bin/ld: src/memory/libsep_memory.a(manager.cpp.o): in function `sep::logging::LoggingMiddleware::after_handle(crow::request&, crow::response&, sep::logging::LoggingMiddleware::context&)':
 manager.cpp:(.text+0xaed): undefined reference to `sep::api::makeRequest(crow::request&)'
-/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::storePattern(unsigned long, sep::persistence::PatternData const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x16a): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x1a7): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x2c4): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x2fd): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x43a): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x473): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x592): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x5cb): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x67b): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x6b4): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x70f): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x73c): undefined reference to `freeReplyObject'
-/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::loadPattern(unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x1b4): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x219): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x300): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x358): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x815): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x861): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0xfc3): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x100f): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x116b): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x11e3): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x16c2): undefined reference to `freeReplyObject'
-/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::getPatternIds(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13getPatternIdsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13getPatternIdsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x168): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13getPatternIdsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13getPatternIdsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x3d6): undefined reference to `freeReplyObject'
-/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::removePattern(unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x14c): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x17d): undefined reference to `freeReplyObject'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x256): undefined reference to `redisCommand'
-/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x28f): undefined reference to `freeReplyObject'
-/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::Impl(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int)':
-redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4ImplC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi[_ZN3sep11persistence12RedisManager4ImplC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi]+0xa1): undefined reference to `redisConnect'
-/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::~Impl()':
-redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4ImplD2Ev[_ZN3sep11persistence12RedisManager4ImplD2Ev]+0x22): undefined reference to `redisFree'
 /usr/bin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::MemoryTier(sep::memory::MemoryTier::Config const&)':
 memory_tier.cpp:(.text+0xbb): undefined reference to `sep::cuda::cudaMallocManaged(void**, unsigned long)'
 /usr/bin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::~MemoryTier()':
@@ -169,28 +110,7 @@ memory_tier.cpp:(.text+0x1a3d): undefined reference to `sep::cuda::cudaMallocMan
 sep_engine.cpp:(.text+0x2cc0): undefined reference to `sep::pattern::PatternProcessor::getPatterns() const'
 /usr/bin/ld: src/api/libsep_api.a(sep_engine.cpp.o): in function `std::__detail::_MakeUniq<sep::pattern::PatternProcessor>::__single_object std::make_unique<sep::pattern::PatternProcessor>()':
 sep_engine.cpp:(.text._ZSt11make_uniqueIN3sep7pattern16PatternProcessorEJEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_[_ZSt11make_uniqueIN3sep7pattern16PatternProcessorEJEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_]+0x2e): undefined reference to `sep::pattern::PatternProcessor::PatternProcessor(sep::pattern::PatternProcessor::Implementation)'
-/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o): in function `sep::api::CurlHttpClient::CurlHttpClient()':
-curl_http_client.cpp:(.text+0x2a): undefined reference to `curl_global_init'
-/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o): in function `sep::api::CurlHttpClient::~CurlHttpClient()':
-curl_http_client.cpp:(.text+0x7c): undefined reference to `curl_global_cleanup'
-/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o): in function `sep::api::CurlHttpClient::send_request(sep::api::APIRequest const&)':
-curl_http_client.cpp:(.text+0x17f): undefined reference to `curl_easy_init'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x21d): undefined reference to `curl_easy_setopt'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x25d): undefined reference to `curl_easy_setopt'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x325): undefined reference to `curl_slist_append'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x3b9): undefined reference to `curl_easy_setopt'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x3f4): undefined reference to `curl_easy_setopt'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x424): undefined reference to `curl_easy_setopt'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x477): undefined reference to `curl_easy_setopt'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x4b8): undefined reference to `curl_easy_setopt'
-/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o):curl_http_client.cpp:(.text+0x4d5): more undefined references to `curl_easy_setopt' follow
-/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o): in function `sep::api::CurlHttpClient::send_request(sep::api::APIRequest const&)':
-curl_http_client.cpp:(.text+0x4f6): undefined reference to `curl_easy_perform'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x52c): undefined reference to `curl_easy_getinfo'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x5b9): undefined reference to `curl_easy_strerror'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x5e9): undefined reference to `curl_slist_free_all'
-/usr/bin/ld: curl_http_client.cpp:(.text+0x5f4): undefined reference to `curl_easy_cleanup'
 clang++: error: linker command failed with exit code 1 (use -v to see invocation)
-make[2]: *** [CMakeFiles/sep_engine.dir/build.make:108: sep_engine] Error 1
+make[2]: *** [CMakeFiles/sep_engine.dir/build.make:112: sep_engine] Error 1
 make[1]: *** [CMakeFiles/Makefile2:299: CMakeFiles/sep_engine.dir/all] Error 2
 make: *** [Makefile:156: all] Error 2

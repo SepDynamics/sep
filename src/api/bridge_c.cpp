@@ -77,10 +77,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
         }
       }
 
-      sep::context::Context context_obj = sep::api::bridge::jsonToContext(json_obj);
-      context_obj.metadata["layer"] = layer;
-
-      auto process_result = processor->processContext(context_obj);
+      auto process_result = processor->processAll();
       if (!process_result.success) {
         std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
         sep::api::bridge::detail::setLastError(

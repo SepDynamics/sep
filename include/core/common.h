@@ -32,6 +32,18 @@ enum class SEPResult : int32_t {
     ALLOCATION_FAILED = -22
 };
 
+// Basic status enumeration for engine components
+enum class Status { Success = 0, Error = 1 };
+
+// Simple pin state structure used by the engine algorithms
+struct PinState {
+    std::uint64_t state{0};
+    std::uint32_t flags{0};
+    bool operator==(const PinState& other) const noexcept {
+        return state == other.state && flags == other.flags;
+    }
+};
+
 // Convert SEPResult to string
 inline const char* to_string(SEPResult result) {
     switch (result) {

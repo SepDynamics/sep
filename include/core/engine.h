@@ -5,6 +5,8 @@
 #include <memory>
 #include "compat/shim.h"
 
+#include "core/common.h"
+
 #include "core/types.h"
 #include "compat/types.h"  // for QSHResult
 #include "quantum/qbsa.h"

@@ -49,7 +49,23 @@ Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const {
   return {Status::Success, "", "", SEPResult::SUCCESS};
 }
 
-StreamPtr CudaCore::createStream(sep::StreamFlags) { return nullptr; }
+// Dummy implementation of Stream for CPU-only mode
+class DummyStream : public Stream {
+public:
+    DummyStream() = default;
+    ~DummyStream() = default;
+    
+    void synchronize() {}
+    void wait(void* event) { (void)event; }
+    void record(void* event) { (void)event; }
+    void* handle() const { return nullptr; }
+    bool isValid() const { return true; }
+};
+
+StreamPtr CudaCore::createStream(sep::StreamFlags) {
+    // Create a dummy stream implementation that doesn't fail
+    return std::make_shared<DummyStream>();
+}
 
 Error CudaCore::destroyStream(cudaStream_t) { return {Status::Success, "", "", SEPResult::SUCCESS}; }
 

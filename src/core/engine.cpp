@@ -50,21 +50,78 @@ Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
 
 bool Engine::init(const sep::config::APIConfig& config) {
     impl_->config = config;
-    auto& cuda_core = cuda::CudaCore::instance();
+    printf("DEBUG: Engine::init - Before CudaCore instance\n");
+    fflush(stdout);
     
-    // Try each GPU device until one works
-    bool cuda_initialized = false;
-    for (int device_id = 0; device_id < 2; device_id++) {
-        auto init_err = cuda_core.initialize(device_id);
-        if (init_err.code == SEPResult::SUCCESS) {
-            cuda_initialized = true;
-            break;
+    auto& cuda_core = cuda::CudaCore::instance();
+    printf("DEBUG: Engine::init - Got CudaCore instance\n");
+    fflush(stdout);
+    
+    // Try GPU device 0 first with extensive error logging
+    printf("DEBUG: Engine::init - Trying GPU device 0\n");
+    fflush(stdout);
+    
+    auto init_err = cuda_core.initialize(0);
+    printf("DEBUG: Engine::init - initialize(0) returned code %d, message: %s\n",
+           static_cast<int>(init_err.code), init_err.message.c_str());
+    fflush(stdout);
+    
+    if (init_err.code != SEPResult::SUCCESS) {
+        printf("DEBUG: Engine::init - Trying GPU device 1\n");
+        fflush(stdout);
+        
+        // Try GPU device 1 as fallback
+        init_err = cuda_core.initialize(1);
+        printf("DEBUG: Engine::init - initialize(1) returned code %d, message: %s\n",
+               static_cast<int>(init_err.code), init_err.message.c_str());
+        fflush(stdout);
+        
+        if (init_err.code != SEPResult::SUCCESS) {
+            printf("DEBUG: Engine::init - All GPU devices failed, giving up\n");
+            fflush(stdout);
+            return false;
         }
-        fprintf(stderr, "Failed to initialize CUDA on device %d, trying next device...\n", device_id);
     }
     
-    if (!cuda_initialized) {
-        fprintf(stderr, "Failed to initialize CUDA on any available device\n");
+    printf("DEBUG: Engine::init - CUDA initialized successfully\n");
+    fflush(stdout);
+    
+    // Create default stream
+    printf("DEBUG: Engine::init - Creating CUDA stream\n");
+    fflush(stdout);
+    
+    impl_->stream_ = cuda_core.createStream(sep::StreamFlags::Default);
+    if (!impl_->stream_) {
+        printf("DEBUG: Engine::init - Failed to create CUDA stream\n");
+        fflush(stdout);
+        return false;
+    }
+    printf("DEBUG: Engine::init - CUDA stream created successfully\n");
+    fflush(stdout);
+
+    // Allocate device memory
+    printf("DEBUG: Engine::init - Allocating device memory\n");
+    fflush(stdout);
+    
+    try {
+        impl_->d_bitfield_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+        impl_->d_probe_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+        impl_->d_expectations_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+        impl_->d_corrections_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+        impl_->d_correction_count_ = cuda::DeviceMemory<std::uint32_t>(1);
+        impl_->d_chunks_ = cuda::DeviceMemory<std::uint64_t>(DEFAULT_SIZE);
+        impl_->d_collapse_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE * PAIRS_PER_CHUNK);
+        impl_->d_collapse_counts_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+        
+        printf("DEBUG: Engine::init - Device memory allocated successfully\n");
+        fflush(stdout);
+    } catch (const std::exception& e) {
+        printf("DEBUG: Engine::init - Exception during device memory allocation: %s\n", e.what());
+        fflush(stdout);
+        return false;
+    } catch (...) {
+        printf("DEBUG: Engine::init - Unknown exception during device memory allocation\n");
+        fflush(stdout);
         return false;
     }
 
@@ -83,15 +140,52 @@ bool Engine::init(const sep::config::APIConfig& config) {
     impl_->d_collapse_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE * PAIRS_PER_CHUNK);
     impl_->d_collapse_counts_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
 
-    audio_capture_ = audio::AudioCapture::create();
-    auto err = audio_capture_->init(audio::AudioConfig{});
-    if (err != audio::AudioError::NONE) {
-        audio_capture_.reset();
+    printf("DEBUG: Engine::init - Initializing audio capture\n");
+    fflush(stdout);
+    
+    try {
+        audio_capture_ = audio::AudioCapture::create();
+        if (!audio_capture_) {
+            printf("DEBUG: Engine::init - Failed to create audio capture\n");
+            fflush(stdout);
+        } else {
+            auto err = audio_capture_->init(audio::AudioConfig{});
+            if (err != audio::AudioError::NONE) {
+                printf("DEBUG: Engine::init - Audio capture init failed with error %d\n", static_cast<int>(err));
+                fflush(stdout);
+                audio_capture_.reset();
+            } else {
+                printf("DEBUG: Engine::init - Audio capture initialized successfully\n");
+                fflush(stdout);
+            }
+        }
+    } catch (const std::exception& e) {
+        printf("DEBUG: Engine::init - Exception during audio capture init: %s\n", e.what());
+        fflush(stdout);
+    } catch (...) {
+        printf("DEBUG: Engine::init - Unknown exception during audio capture init\n");
+        fflush(stdout);
     }
 
 #if SEP_HAS_BLENDER
-    blender_bridge_ = std::make_shared<pattern::BlenderBridge>();
+    printf("DEBUG: Engine::init - Initializing Blender bridge\n");
+    fflush(stdout);
+    
+    try {
+        blender_bridge_ = std::make_shared<pattern::BlenderBridge>();
+        printf("DEBUG: Engine::init - Blender bridge created successfully\n");
+        fflush(stdout);
+    } catch (const std::exception& e) {
+        printf("DEBUG: Engine::init - Exception during Blender bridge creation: %s\n", e.what());
+        fflush(stdout);
+    } catch (...) {
+        printf("DEBUG: Engine::init - Unknown exception during Blender bridge creation\n");
+        fflush(stdout);
+    }
 #endif
+
+    printf("DEBUG: Engine::init - Setting initialized flag\n");
+    fflush(stdout);
 
     impl_->initialized = true;
     return true;

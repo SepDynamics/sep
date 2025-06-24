@@ -6,7 +6,7 @@
 #include <cstdint>
 
 #ifdef __CUDACC__
-#include "compat/cuda_runtime.h"
+#include <compat/cuda_runtime.h>
 #endif
 
 namespace sep {

@@ -111,9 +111,27 @@ namespace shim {
         data_ = nullptr;
       }
     }
+    using value_type = char;
+    using size_type = size_t;
+    using const_iterator = const char*;
+    using iterator = char*;
+
+    const_iterator begin() const { return data_; }
+    const_iterator end() const { return data_ ? data_ + size_ : nullptr; }
+    iterator begin() { return data_; }
+    iterator end() { return data_ ? data_ + size_ : nullptr; }
+
     const char* c_str() const { return data_ ? data_ : ""; }
+    const char* data() const { return c_str(); }
     size_t size() const { return size_; }
+    size_t length() const { return size_; }
     bool empty() const { return size_ == 0; }
+
+    char operator[](size_t pos) const {
+      return (pos < size_) ? data_[pos] : '\0';
+    }
+
+    char& operator[](size_t pos) { return data_[pos]; }
     
     // Comparison operators
     bool operator==(const char* s) const {
@@ -126,19 +144,90 @@ namespace shim {
     }
     bool operator!=(const string& other) const { return !(*this == other); }
     
-    // Find method
+    // Find operations
     size_t find(const char* pattern) const {
-      if (!pattern || !data_) return static_cast<size_t>(-1);
+      if (!pattern || !data_) return npos;
       const char* pos = strstr(data_, pattern);
-      return pos ? static_cast<size_t>(pos - data_) : static_cast<size_t>(-1);
+      return pos ? static_cast<size_t>(pos - data_) : npos;
     }
-    
+
+    size_t find(char c, size_t pos = 0) const {
+      if (!data_ || pos >= size_) return npos;
+      for (size_t i = pos; i < size_; ++i) {
+        if (data_[i] == c) return i;
+      }
+      return npos;
+    }
+
     static const size_t npos = static_cast<size_t>(-1);
+
+    string substr(size_t pos = 0, size_t count = npos) const {
+      if (pos >= size_) return string();
+      size_t rcount = (count == npos || pos + count > size_) ? size_ - pos : count;
+      char* temp = static_cast<char*>(malloc(rcount + 1));
+      if (temp) {
+        memcpy(temp, data_ + pos, rcount);
+        temp[rcount] = '\0';
+        string result(temp);
+        free(temp);
+        return result;
+      }
+      return string();
+    }
+
+    string& append(const char* s) {
+      if (s) {
+        size_t slen = strlen(s);
+        if (size_ + slen + 1 > capacity_) {
+          size_t new_cap = (size_ + slen + 1) * 2;
+          char* new_data = static_cast<char*>(realloc(data_, new_cap));
+          if (new_data) {
+            data_ = new_data;
+            capacity_ = new_cap;
+          } else {
+            return *this;
+          }
+        }
+        memcpy(data_ + size_, s, slen + 1);
+        size_ += slen;
+      }
+      return *this;
+    }
+
+    string& operator+=(const char* s) { return append(s); }
+    string& operator+=(const string& other) { return append(other.c_str()); }
+
+    bool operator<(const string& other) const {
+      size_t min_size = (size_ < other.size_) ? size_ : other.size_;
+      if (data_ && other.data_) {
+        int cmp = memcmp(data_, other.data_, min_size);
+        if (cmp != 0) return cmp < 0;
+      }
+      return size_ < other.size_;
+    }
   };
 
   inline std::ostream& operator<<(std::ostream& os, const string& s) {
     os << s.c_str();
     return os;
+  }
+
+  inline string operator+(const string& lhs, const string& rhs) {
+    string result(lhs);
+    result += rhs;
+    return result;
+  }
+
+  inline string operator+(const string& lhs, const char* rhs) {
+    string result(lhs);
+    result += rhs;
+    return result;
+  }
+
+  inline string operator+(const char* lhs, const string& rhs) {
+    string result(lhs);
+    result += rhs;
+    return result;
   }
   
   // Exception classes
@@ -682,6 +771,15 @@ namespace shim {
   };
 }  // namespace shim
 }  // namespace sep
+
+namespace std {
+  template<>
+  struct hash<sep::shim::string> {
+    size_t operator()(const sep::shim::string& s) const {
+      return sep::shim::string_hash{}(s);
+    }
+  };
+}  // namespace std
 
 // Previously shim types were injected into the std namespace when SEP_NO_STDLIB
 // was defined. That mapping has been removed; use sep::shim directly instead.

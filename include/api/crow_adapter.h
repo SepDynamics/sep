@@ -15,8 +15,8 @@
 namespace crow {
     template <typename... Middlewares>
     class Crow;
-    struct request;
-    struct response;
+    class request;
+    class response;
 }
 
 #include <memory>
@@ -38,9 +38,9 @@ void setupSepApiRoutes(::crow::Crow<>* app);
 class CrowRequestAdapter : public HttpRequest {
 public:
   explicit CrowRequestAdapter(::crow::request &req);
-  const std::string &url() const override;
+  std::string url() const override;
   const std::string &method() const override;
-  const std::string &body() const override;
+  std::string body() const override;
 
  private:
   ::crow::request &req_;
@@ -55,7 +55,7 @@ public:
   int getCode() const override;
   void setBody(const std::string &body) override;
   void end() override;
-  const std::string &getBody() const override;
+  std::string getBody() const override;
 
  private:
   ::crow::response &res_;

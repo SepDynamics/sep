@@ -73,6 +73,16 @@ if(NOT EXISTS "${CMAKE_SOURCE_DIR}/third_party/crow/include")
 else()
     include_directories(${CMAKE_SOURCE_DIR}/third_party/crow/include)
 endif()
+
+set(CUDA_SOURCES
+    core/core.cu
+    cuda_api.cu
+    event.cu
+    pattern_kernels.cu
+    quantum_kernels.cu
+    utils.cu
+)
+
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 add_subdirectory(src/blender)

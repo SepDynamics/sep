@@ -52,6 +52,10 @@ include_directories(BEFORE
 )
 
 include_directories(
+  ${CMAKE_SOURCE_DIR}/include/compat
+)
+
+include_directories(
   ${CMAKE_SOURCE_DIR}/third_party
   ${CMAKE_SOURCE_DIR}/third_party/glm
   ${CMAKE_SOURCE_DIR}/third_party/tbb

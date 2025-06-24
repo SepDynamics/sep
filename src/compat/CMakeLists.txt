@@ -14,14 +14,16 @@ add_library(sep_compat STATIC
     utils.cu
 )
 
-# Comment out CUDA configuration
+# Ensure the CUDA source files are treated correctly
 set_source_files_properties(
-     core/core.cu
-     cuda_api.cu
-     event.cu
-     pattern_kernels.cu
-     quantum_kernels.cu
-     utils.cu
+    core/core.cu
+    cuda_api.cu
+    event.cu
+    pattern_kernels.cu
+    quantum_kernels.cu
+    utils.cu
+    PROPERTIES
+        LANGUAGE CUDA
 )
 
 # Add include directories needed by compat library sources

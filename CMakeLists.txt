@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 project(SEPEngine)
 
+# Ensure RTTI is disabled consistently across all targets when building with
+# the Crow isolation headers.
+add_compile_definitions(CROW_DISABLE_RTTI=1)
+
+# Locate external dependencies required by the engine
+find_package(CURL QUIET)
+find_package(Hiredis QUIET)
+find_package(CUDAToolkit QUIET)
+
 include(FetchContent)
 
 # Add our fixed Crow headers directory BEFORE other include directories
@@ -51,4 +60,7 @@ target_link_libraries(sep_engine
     sep_quantum
     sep_audio
     sep_blender
-    sep_compat)
+    sep_compat
+    ${CURL_LIBRARIES}
+    ${HIREDIS_LIBRARIES}
+    ${CUDAToolkit_LIBRARIES})

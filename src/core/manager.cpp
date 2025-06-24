@@ -96,7 +96,7 @@ public:
 
       // Support both --key=value and --key value
       sep::shim::string value;
-      auto pos = arg.find("=");
+      auto pos = arg.find('=');
       if (pos != sep::shim::string::npos) {
         // Extract substring after '='
         std::string arg_str = arg.c_str();

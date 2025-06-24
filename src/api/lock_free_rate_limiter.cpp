@@ -34,13 +34,22 @@ bool LockFreeRateLimiter::checkRateLimit(const IRequest &req) {
   const auto priority = getPriorityFromRequest(req);
 
   // Get or create client data
+#ifdef SEP_USE_TBB
   ClientMap::accessor accessor;
-  // clients_.insert(accessor, key) returns true if a new element was inserted.
-  // If true, accessor->second is a default-constructed unique_ptr (i.e., nullptr).
   if (clients_.insert(accessor, client_id)) {
     accessor->second = std::make_unique<ClientData>();
   }
   return tryInsertRequest(*(accessor->second), priority, now);
+#else
+  std::unique_lock<std::mutex> lock(clients_mutex_);
+  auto &ptr = clients_[client_id];
+  if (!ptr) {
+    ptr = std::make_unique<ClientData>();
+  }
+  ClientData &ref = *ptr;
+  lock.unlock();
+  return tryInsertRequest(ref, priority, now);
+#endif
 }
 
 bool LockFreeRateLimiter::tryInsertRequest(
@@ -118,9 +127,16 @@ void LockFreeRateLimiter::removeExpiredEntries(
 
 void LockFreeRateLimiter::cleanup(std::chrono::steady_clock::time_point now) {
   // Cleanup is now handled by background thread
+#ifdef SEP_USE_TBB
   for (auto it = clients_.begin(); it != clients_.end(); ++it) {
     removeExpiredEntries(*it->second, now);
   }
+#else
+  std::lock_guard<std::mutex> lock(clients_mutex_);
+  for (auto &pair : clients_) {
+    removeExpiredEntries(*pair.second, now);
+  }
+#endif
 }
 
 std::string LockFreeRateLimiter::getErrorResponse(const std::string &message,
@@ -145,15 +161,25 @@ void LockFreeRateLimiter::setPriorityQuota(Priority priority,
 
 unsigned int
 LockFreeRateLimiter::GetRequestCount(const std::string &client_id) const {
+#ifdef SEP_USE_TBB
   ClientMap::const_accessor acc;
   if (clients_.find(acc, client_id)) {
     return acc->second->request_count.load(std::memory_order_acquire);
   }
   return 0;
+#else
+  std::lock_guard<std::mutex> lock(clients_mutex_);
+  auto it = clients_.find(client_id);
+  if (it != clients_.end()) {
+    return it->second->request_count.load(std::memory_order_acquire);
+  }
+  return 0;
+#endif
 }
 
 unsigned int LockFreeRateLimiter::GetWindowSize(const std::string &client_id,
                                                 Priority priority) const {
+#ifdef SEP_USE_TBB
   ClientMap::const_accessor acc;
   if (clients_.find(acc, client_id)) {
     const auto &window = acc->second->window;
@@ -175,6 +201,27 @@ unsigned int LockFreeRateLimiter::GetWindowSize(const std::string &client_id,
     return count;
   }
   return 0;
+#else
+  std::lock_guard<std::mutex> lock(clients_mutex_);
+  auto it = clients_.find(client_id);
+  if (it != clients_.end()) {
+    const auto &window = it->second->window;
+    size_t count = 0;
+    const size_t head = window.head.load(std::memory_order_acquire);
+    const size_t tail = window.tail.load(std::memory_order_acquire);
+    size_t current = head;
+    while (current != tail) {
+      const auto &entry = window.entries[current];
+      if (entry.priority.load(std::memory_order_acquire) ==
+          static_cast<uint8_t>(priority)) {
+        count += entry.count.load(std::memory_order_acquire);
+      }
+      current = (current + 1) % WINDOW_SIZE;
+    }
+    return count;
+  }
+  return 0;
+#endif
 }
 
 unsigned int LockFreeRateLimiter::getAdjustedLimit(Priority priority) const {

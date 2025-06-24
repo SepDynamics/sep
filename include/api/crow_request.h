@@ -14,7 +14,7 @@ namespace sep::api {
 class CrowRequest : public IRequest
 {
 public:
-    CrowRequest(const ::crow::request& req) : req_(req)
+    CrowRequest(const ::crow::request& req) : req_(req), body_(req.body)
     {
         // In Crow, headers might not be directly accessible as a member
         // So we'll populate our headers from individual header values
@@ -38,7 +38,7 @@ public:
     
     const std::string& body() const override
     {
-        return req_.body;
+        return body_;
     }
 
     const std::unordered_map<std::string, std::string>& headers() const override
@@ -63,6 +63,7 @@ public:
 
 private:
     const ::crow::request& req_;
+    std::string body_;
     std::unordered_map<std::string, std::string> headers_;
 };
 

@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(SEPEngine)
 
+# Use compile definition globally for Crow without RTTI
+add_compile_definitions(CROW_DISABLE_RTTI=1)
+
 include(FetchContent)
 
 # Add our fixed Crow headers directory BEFORE other include directories
@@ -38,10 +41,17 @@ add_subdirectory(src/compat)
 add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
+
+# External dependencies
+find_package(CURL REQUIRED)
+find_library(HIREDIS_LIBRARIES hiredis)
+find_package(CUDAToolkit)
 add_executable(sep_engine src/main.cpp)
 target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CURL_INCLUDE_DIRS}
+        ${CUDAToolkit_INCLUDE_DIRS}
 )
 
 target_link_libraries(sep_engine
@@ -51,4 +61,7 @@ target_link_libraries(sep_engine
     sep_quantum
     sep_audio
     sep_blender
-    sep_compat)
+    sep_compat
+    ${CURL_LIBRARIES}
+    ${HIREDIS_LIBRARIES}
+    ${CUDAToolkit_LIBRARIES})

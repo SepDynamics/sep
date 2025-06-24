@@ -3,10 +3,10 @@
 include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)
 
 add_library(sep_compat STATIC
-    core/stream.cpp
+    stream.cpp
     raii.cpp
     # Add all .cu files here to be compiled by NVCC
-    core/core.cu
+    core.cu
     cuda_api.cu
     event.cu
     pattern_kernels.cu
@@ -15,13 +15,12 @@ add_library(sep_compat STATIC
 )
 
 if(NOT SEP_CUDA_AVAILABLE)
-  target_sources(sep_compat PRIVATE core/core_stub.cpp)
-  target_sources(sep_compat PRIVATE cuda_stubs.cpp)
+  target_sources(sep_compat PRIVATE core_stub.cpp)
 endif()
 
 # Comment out CUDA configuration
 set_source_files_properties(
-     core/core.cu
+     core.cu
      cuda_api.cu
      event.cu
      pattern_kernels.cu

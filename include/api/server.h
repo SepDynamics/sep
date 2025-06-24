@@ -27,9 +27,11 @@ template <typename... Middlewares>
 class Crow;
 }  // namespace crow
 
-namespace sep::api {
-
+namespace sep::ollama {
 class OllamaClient;
+}
+
+namespace sep::api {
 class CrowRequest;
 
 
@@ -213,7 +215,7 @@ class SEPApiServer : public Server {
   mutable std::mutex metrics_mutex_;
 
   // Clients
-  std::unique_ptr<OllamaClient> ollama_client_;
+  std::unique_ptr<sep::ollama::OllamaClient> ollama_client_;
 };
 
 }  // namespace sep::api

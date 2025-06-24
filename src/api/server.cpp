@@ -48,10 +48,8 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
     // Initialize logger
     setup_logging();
 
-    // Initialize clients if needed
-    if (config_.ollama.enabled) {
-        ollama_client_ = std::make_unique<OllamaClient>(config_.ollama);
-    }
+    // Initialize Ollama client
+    ollama_client_ = std::make_unique<sep::ollama::OllamaClient>(config_.ollama);
 }
 
 SEPApiServer::~SEPApiServer() {
@@ -128,7 +126,7 @@ std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const std
     void setBody(const std::string& body) override { body_ = body; }
     void end() override {}
     int getCode() const override { return code_; }
-    const std::string& getBody() const override { return body_; }
+    std::string getBody() const override { return body_; }
 
    private:
     int code_;
@@ -309,7 +307,7 @@ void SEPApiServer::setup_routes() {
 
   // Health check endpoint
   app_->route_dynamic("/api/v1/health")
-      .methods(::crow::HTTPMethod::Get)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::GET)([this, &engine](const ::crow::request& req) {
     auto start_time = std::chrono::steady_clock::now();
 
     #if SEP_HAS_EXCEPTIONS
@@ -339,7 +337,7 @@ void SEPApiServer::setup_routes() {
 
   // Process patterns endpoint
   app_->route_dynamic("/api/v1/pattern/evolve")
-      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -385,7 +383,7 @@ void SEPApiServer::setup_routes() {
 
   // Process batch endpoint
   app_->route_dynamic("/api/v1/memory/query")
-      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -428,7 +426,7 @@ void SEPApiServer::setup_routes() {
 
   // Pattern history endpoint
   app_->route_dynamic("/api/v1/patterns/history")
-      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -471,7 +469,7 @@ void SEPApiServer::setup_routes() {
 
   // Validate contexts endpoint
   app_->route_dynamic("/api/v1/context/process")
-      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -514,7 +512,7 @@ void SEPApiServer::setup_routes() {
 
   // Extract embeddings endpoint
   app_->route_dynamic("/api/v1/embeddings/extract")
-      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -557,7 +555,7 @@ void SEPApiServer::setup_routes() {
 
   // Analyze patterns endpoint
   app_->route_dynamic("/api/v1/pattern/analyze")
-      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -600,7 +598,7 @@ void SEPApiServer::setup_routes() {
 
   // Context relationships endpoint
   app_->route_dynamic("/api/v1/context/relationships")
-      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -643,7 +641,7 @@ void SEPApiServer::setup_routes() {
 
   // Memory metrics endpoint
   app_->route_dynamic("/api/v1/metrics/memory")
-      .methods(::crow::HTTPMethod::Get)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::GET)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -749,7 +747,7 @@ void SEPApiServer::initClients() {
   try {
 #endif
     // Initialize Ollama client if configured
-    ollama_client_ = std::make_unique<OllamaClient>(config_.ollama);
+    ollama_client_ = std::make_unique<sep::ollama::OllamaClient>(config_.ollama);
     logger_->info("Ollama client initialized");
 #if SEP_HAS_EXCEPTIONS
   } catch (const std::exception& e) {

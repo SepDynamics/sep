@@ -51,8 +51,20 @@ Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
 bool Engine::init(const sep::config::APIConfig& config) {
     impl_->config = config;
     auto& cuda_core = cuda::CudaCore::instance();
-    auto init_err = cuda_core.initialize();
-    if (init_err.code != SEPResult::SUCCESS) {
+    
+    // Try each GPU device until one works
+    bool cuda_initialized = false;
+    for (int device_id = 0; device_id < 2; device_id++) {
+        auto init_err = cuda_core.initialize(device_id);
+        if (init_err.code == SEPResult::SUCCESS) {
+            cuda_initialized = true;
+            break;
+        }
+        fprintf(stderr, "Failed to initialize CUDA on device %d, trying next device...\n", device_id);
+    }
+    
+    if (!cuda_initialized) {
+        fprintf(stderr, "Failed to initialize CUDA on any available device\n");
         return false;
     }
 

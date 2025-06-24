@@ -1,14 +1,15 @@
 #include "compat/math_common.h"
 
 #include "blender/types.h"
-#include "blender/bridge.h"
+#include "blender/config.h"
+#include "blender/pattern_bridge.h"
 #include <memory>
 #include <stdexcept>
 #include <string>
 // Bridge implementation structure
 struct SEPBlenderBridge
 {
-    std::unique_ptr<sep::pattern::BlenderBridge> impl;
+    std::shared_ptr<sep::pattern::BlenderBridge> impl;
     SEPAudioMetrics                              audio_metrics{};    // last computed audio metrics
     SEPPatternMetrics                            pattern_metrics{};  // last collected pattern metrics
 };

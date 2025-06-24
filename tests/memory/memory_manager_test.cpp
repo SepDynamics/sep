@@ -48,3 +48,16 @@ TEST(MemoryManager, MultipleAllocations) {
     EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::MTM), 0.0f);
     EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::LTM), 0.0f);
 }
+
+TEST(MemoryManager, TotalAllocatedMemory) {
+    MemoryTierManager mgr;
+    EXPECT_EQ(mgr.getTotalAllocated(), 0u);
+    MemoryBlock* a = mgr.allocate(64, sep::memory::TierType::STM);
+    MemoryBlock* b = mgr.allocate(128, sep::memory::TierType::MTM);
+    ASSERT_NE(a, nullptr);
+    ASSERT_NE(b, nullptr);
+    EXPECT_GT(mgr.getTotalAllocated(), 0u);
+    mgr.deallocate(a);
+    mgr.deallocate(b);
+    EXPECT_EQ(mgr.getTotalAllocated(), 0u);
+}

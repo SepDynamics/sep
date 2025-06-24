@@ -84,6 +84,9 @@ public:
     void optimizeBlocks();
     void optimizeTiers();
 
+    // Aggregate metrics
+    std::size_t getTotalAllocated() const;
+
     // Access tier objects
     MemoryTier& getSTM();
     MemoryTier& getMTM();

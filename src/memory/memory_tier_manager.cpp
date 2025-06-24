@@ -68,6 +68,13 @@ float MemoryTierManager::getTierFragmentation(sep::memory::TierType tier) const 
     return t ? t->calculateFragmentation() : 0.0f;
 }
 
+std::size_t MemoryTierManager::getTotalAllocated() const {
+    std::size_t used_stm = config_.stm_size - stm_->getFreeSpace();
+    std::size_t used_mtm = config_.mtm_size - mtm_->getFreeSpace();
+    std::size_t used_ltm = config_.ltm_size - ltm_->getFreeSpace();
+    return used_stm + used_mtm + used_ltm;
+}
+
 void MemoryTierManager::updateBlockMetrics(MemoryBlock* block, float coherence, float stability,
                                            std::uint32_t generation, float context_score) {
     if (!block)

@@ -14,7 +14,7 @@
 
 #if SEP_CUDA_AVAILABLE
 // When CUDA is available, include the real CUDA runtime with absolute path
-#include "/usr/local/cuda-12.9/include/cuda_runtime.h"
+#include <cuda_runtime>
 #else
 // When CUDA is not available, define stub types and functions
 

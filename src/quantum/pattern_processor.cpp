@@ -108,3 +108,48 @@ std::unique_ptr<PatternQuantumProcessor> createPatternQuantumProcessor(
 }
 
 } // namespace sep::quantum
+
+namespace sep::pattern {
+
+PatternProcessor::PatternProcessor(Implementation impl) : implementation_(impl) {}
+
+SEPResult PatternProcessor::init(quantum::GPUContext* ctx) {
+    (void)ctx;
+    return SEPResult::SUCCESS;
+}
+
+void PatternProcessor::evolvePatterns() {
+    for (auto& p : patterns_) {
+        ++p.generation;
+    }
+}
+
+PatternData PatternProcessor::mutatePattern(const PatternData& parent) {
+    PatternData child = parent;
+    child.generation = parent.generation + 1;
+    child.id = parent.id + "_child";
+    return child;
+}
+
+SEPResult PatternProcessor::addPattern(const PatternData& pattern) {
+    patterns_.push_back(pattern);
+    return SEPResult::SUCCESS;
+}
+
+const std::vector<PatternData>& PatternProcessor::getPatterns() const { return patterns_; }
+
+CPUPatternProcessor::CPUPatternProcessor() : PatternProcessor(Implementation::CPU), patterns_(patterns_) {}
+
+SEPResult CPUPatternProcessor::init(quantum::GPUContext* ctx) { return PatternProcessor::init(ctx); }
+
+void CPUPatternProcessor::evolvePatterns() {
+    for (auto& p : patterns_) {
+        p = mutatePattern(p);
+    }
+}
+
+PatternData CPUPatternProcessor::mutatePattern(const PatternData& parent) {
+    return PatternProcessor::mutatePattern(parent);
+}
+
+} // namespace sep::pattern

@@ -9,7 +9,7 @@
 // Project headers (must come before std headers for proper isolation)
 #include "compat/cuda.h"
 #include "api/types.h"
-#include "ollama/types.h"
+#include "api/ollama_types.h"
 
 // Standard C headers
 #include <cstddef>

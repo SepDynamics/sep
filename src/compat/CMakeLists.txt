@@ -15,10 +15,6 @@ add_library(sep_compat STATIC
     raii.cpp
 )
 
-if(NOT SEP_CUDA_AVAILABLE)
-  target_sources(sep_compat PRIVATE core/core_stub.cpp)
-endif()
-
 # Ensure the CUDA source files are treated correctly
 set_source_files_properties(
     core/core.cu
@@ -28,7 +24,6 @@ set_source_files_properties(
     quantum_kernels.cu
     utils.cu
     PROPERTIES
-        LANGUAGE CUDA
 )
 
 # Add include directories needed by compat library sources

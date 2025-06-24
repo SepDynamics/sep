@@ -8,8 +8,8 @@
 
 
 // Use specific using declarations for the renamed struct
-using sep::pattern::GPUPatternData;
-using sep::pattern::PatternFlags;
+using sep::quantum::Pattern::GPUPatternData;
+using sep::quantum::Pattern::PatternFlags;
 
 class PatternDataTest : public ::testing::Test
 {

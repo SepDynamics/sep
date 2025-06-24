@@ -4,18 +4,18 @@
 
 #include "compat/shim.h"
 
-// Unified PatternData definitions
+// Unified PatternState definitions
 #include "quantum/types.h"
 
 using blender::PatternCompression;
-using sep::pattern::PatternData;
+using sep::pattern::PatternState;
 
 class CompressionTest : public ::testing::Test
 {
 protected:
-    sep::shim::vector<PatternData> createRandomPatterns(size_t count)
+    sep::shim::vector<PatternState> createRandomPatterns(size_t count)
     {
-        sep::shim::vector<PatternData> patterns(count);
+        sep::shim::vector<PatternState> patterns(count);
         for (size_t i = 0; i < count; ++i)
         {
             float v = static_cast<float>(i) / static_cast<float>(count);
@@ -38,7 +38,7 @@ protected:
         return patterns;
     }
 
-    void verifyPatternData(const PatternData& expected, const PatternData& actual)
+    void verifyPatternData(const PatternState& expected, const PatternState& actual)
     {
         // Spatial data
         EXPECT_FLOAT_EQ(expected.position.x, actual.position.x);
@@ -72,7 +72,7 @@ protected:
 
 TEST_F(CompressionTest, CompressEmptyData)
 {
-    sep::shim::vector<PatternData> empty;
+    sep::shim::vector<PatternState> empty;
     sep::shim::vector<uint8_t>     compressed;
     size_t                         compressed_size = 0;
     auto                           result          = PatternCompression::compressPatterns(empty, compressed, compressed_size);
@@ -94,7 +94,7 @@ TEST_F(CompressionTest, CompressAndDecompressWithDifferentModes)
         EXPECT_GT(compressed_size, 0);
 
         // Decompress
-        sep::shim::vector<PatternData> decompressed_patterns;
+        sep::shim::vector<PatternState> decompressed_patterns;
         result = PatternCompression::decompressPatterns(compressed.data(), compressed_size, decompressed_patterns);
         EXPECT_TRUE(result);
         EXPECT_EQ(original_patterns.size(), decompressed_patterns.size());
@@ -155,7 +155,7 @@ TEST_F(CompressionTest, ValidationChecks)
 TEST_F(CompressionTest, CompressionRatios)
 {
     // Create test data with repeating patterns for better compression
-    sep::shim::vector<PatternData> patterns(1000);
+    sep::shim::vector<PatternState> patterns(1000);
     for (auto& pattern : patterns)
     {
         pattern.coherence     = 0.5f;
@@ -187,7 +187,7 @@ TEST_F(CompressionTest, CompressionRatios)
         auto result = PatternCompression::compressPatterns(patterns, compressed, compressed_size, mode);
         EXPECT_TRUE(result);
 
-        float ratio = static_cast<float>(compressed_size) / (patterns.size() * sizeof(PatternData));
+        float ratio = static_cast<float>(compressed_size) / (patterns.size() * sizeof(PatternState));
         EXPECT_LT(ratio, 0.5f);        // Should achieve at least 2:1 compression
         EXPECT_LE(ratio, last_ratio);  // Higher compression modes should achieve better ratios
         last_ratio = ratio;

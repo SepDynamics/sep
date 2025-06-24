@@ -17,14 +17,14 @@ struct SEPBlenderBridge;
 typedef uint64_t SEPMeshHandle;
 
 // Initialize bridge with Blender GPU context
-SEPResult sep_blender_init(
+sep::SEPResult sep_blender_init(
     GPUContext* gpu_ctx,           // [in] Blender GPU context
     const SEPConfig* config,       // [in] SEP configuration
     SEPBlenderBridge** bridge_out  // [out] Bridge instance
 );
 
 // Register mesh for pattern monitoring
-SEPResult sep_register_mesh(
+sep::SEPResult sep_register_mesh(
     SEPBlenderBridge* bridge,      // [in] Bridge instance
     Object* bl_object,             // [in] Blender object (lifetime: caller)
     Mesh* bl_mesh,                 // [in] Mesh data (lifetime: caller)
@@ -32,7 +32,7 @@ SEPResult sep_register_mesh(
 );
 
 // Update mesh based on pattern analysis
-SEPResult sep_update_mesh(
+sep::SEPResult sep_update_mesh(
     SEPBlenderBridge* bridge,      // [in] Bridge instance
     SEPMeshHandle handle,          // [in] Mesh handle
     const SEPPatternMetrics* data, // [in] Pattern data
@@ -40,7 +40,7 @@ SEPResult sep_update_mesh(
 );
 
 // Process audio input for voice-driven updates
-SEPResult sep_process_audio(
+sep::SEPResult sep_process_audio(
     SEPBlenderBridge* bridge,      // [in] Bridge instance
     const float* samples,          // [in] Audio samples
     size_t count,                  // [in] Sample count
@@ -48,25 +48,25 @@ SEPResult sep_process_audio(
 );
 
 // Synchronize SEP memory tiers with Blender
-SEPResult sep_sync_memory(
+sep::SEPResult sep_sync_memory(
     SEPBlenderBridge* bridge,      // [in] Bridge instance
     sep::MemoryTierEnum tier,      // [in] Target memory tier
     bool force                     // [in] Force immediate sync
 );
 
 // Clean up bridge instance
-SEPResult sep_blender_cleanup(
+sep::SEPResult sep_blender_cleanup(
     SEPBlenderBridge* bridge       // [in] Bridge instance to clean up
 );
 
 // Get current bridge metrics
-SEPResult sep_get_metrics(
+sep::SEPResult sep_get_metrics(
     SEPBlenderBridge* bridge,      // [in] Bridge instance
     SEPPatternMetrics* metrics_out // [out] Current metrics
 );
 
 // Reset bridge state
-SEPResult sep_reset_state(
+sep::SEPResult sep_reset_state(
     SEPBlenderBridge* bridge       // [in] Bridge instance to reset
 );
 

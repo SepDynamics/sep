@@ -79,7 +79,7 @@ TEST_F(GPUContextPerfTest, MemoryAllocationPerformance) {
 
   for (int i = 0; i < iterations; ++i) {
     double time = measureOperation(
-        [&]() { ASSERT_EQ(SEPResult::SUCCESS, context_->allocateMemory(&ptrs[i], alloc_size)); });
+        [&]() { ASSERT_EQ(sep::SEPResult::SUCCESS, context_->allocateMemory(&ptrs[i], alloc_size)); });
     times.push_back(time);
   }
 
@@ -90,7 +90,7 @@ TEST_F(GPUContextPerfTest, MemoryAllocationPerformance) {
 
   // Cleanup
   for (auto ptr : ptrs) {
-    ASSERT_EQ(SEPResult::SUCCESS, context_->freeMemory(ptr));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(ptr));
   }
 }
 
@@ -106,7 +106,7 @@ TEST_F(GPUContextPerfTest, DataTransferPerformance) {
     std::vector<float> result_data(size / sizeof(float));
     void* device_ptr = nullptr;
 
-    ASSERT_EQ(SEPResult::SUCCESS, context_->allocateMemory(&device_ptr, size));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->allocateMemory(&device_ptr, size));
 
     const int iterations = 100;
     std::vector<double> h2d_times;
@@ -117,13 +117,13 @@ TEST_F(GPUContextPerfTest, DataTransferPerformance) {
     for (int i = 0; i < iterations; ++i) {
       // Measure H2D transfer
       h2d_times.push_back(measureOperation([&]() {
-        ASSERT_EQ(SEPResult::SUCCESS,
+        ASSERT_EQ(sep::SEPResult::SUCCESS,
                   context_->copyHostToDevice(device_ptr, host_data.data(), size));
       }));
 
       // Measure D2H transfer
       d2h_times.push_back(measureOperation([&]() {
-        ASSERT_EQ(SEPResult::SUCCESS,
+        ASSERT_EQ(sep::SEPResult::SUCCESS,
                   context_->copyDeviceToHost(result_data.data(), device_ptr, size));
       }));
     }
@@ -145,7 +145,7 @@ TEST_F(GPUContextPerfTest, DataTransferPerformance) {
     EXPECT_GT(bandwidth_h2d, 10.0) << "H2D bandwidth below 10 GB/s";
     EXPECT_GT(bandwidth_d2h, 10.0) << "D2H bandwidth below 10 GB/s";
 
-    ASSERT_EQ(SEPResult::SUCCESS, context_->freeMemory(device_ptr));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(device_ptr));
   }
 }
 
@@ -159,8 +159,8 @@ TEST_F(GPUContextPerfTest, ConcurrentStreamPerformance) {
 
   // Initialize
   for (int i = 0; i < num_streams; ++i) {
-    ASSERT_EQ(SEPResult::SUCCESS, context_->createStream(streams[i]));
-    ASSERT_EQ(SEPResult::SUCCESS, context_->allocateMemory(&device_ptrs[i], size_per_stream));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->createStream(streams[i]));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->allocateMemory(&device_ptrs[i], size_per_stream));
     host_data[i] = createTestData(size_per_stream / sizeof(float));
     result_data[i].resize(size_per_stream / sizeof(float));
   }
@@ -175,11 +175,11 @@ TEST_F(GPUContextPerfTest, ConcurrentStreamPerformance) {
     // Measure concurrent transfers
     concurrent_times.push_back(measureOperation([&]() {
       for (int i = 0; i < num_streams; ++i) {
-        ASSERT_EQ(SEPResult::SUCCESS,
+        ASSERT_EQ(sep::SEPResult::SUCCESS,
                   context_->copyHostToDevice(device_ptrs[i], host_data[i].data(), size_per_stream));
       }
       for (int i = 0; i < num_streams; ++i) {
-        ASSERT_EQ(SEPResult::SUCCESS, context_->synchronizeStream(streams[i]));
+        ASSERT_EQ(sep::SEPResult::SUCCESS, context_->synchronizeStream(streams[i]));
       }
     }));
 
@@ -187,9 +187,9 @@ TEST_F(GPUContextPerfTest, ConcurrentStreamPerformance) {
     double sequential_time = 0.0;
     for (int i = 0; i < num_streams; ++i) {
       sequential_time += measureOperation([&]() {
-        ASSERT_EQ(SEPResult::SUCCESS,
+        ASSERT_EQ(sep::SEPResult::SUCCESS,
                   context_->copyHostToDevice(device_ptrs[i], host_data[i].data(), size_per_stream));
-        ASSERT_EQ(SEPResult::SUCCESS, context_->synchronizeStream(streams[i]));
+        ASSERT_EQ(sep::SEPResult::SUCCESS, context_->synchronizeStream(streams[i]));
       });
     }
     sequential_times.push_back(sequential_time);

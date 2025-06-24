@@ -37,6 +37,7 @@ find_library(HIREDIS_LIBRARIES NAMES hiredis)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
 
 if(CUDAToolkit_FOUND)
+    enable_language(CUDA)
     set(SEP_CUDA_AVAILABLE 1)
 else()
     set(SEP_CUDA_AVAILABLE 0)

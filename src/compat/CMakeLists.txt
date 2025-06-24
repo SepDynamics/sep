@@ -2,27 +2,24 @@
 # Include CUDA configuration for library paths
 include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)
 
-add_library(sep_compat STATIC
-    core/stream.cpp
-    raii.cpp
-    # Add all .cu files here to be compiled by NVCC
+set(CUDA_SOURCES
     core/core.cu
     cuda_api.cu
     event.cu
     pattern_kernels.cu
     quantum_kernels.cu
-    utils.cu
+    utils.cu)
+
+add_library(sep_compat STATIC
+    core/stream.cpp
+    raii.cpp
 )
 
-# Comment out CUDA configuration
-set_source_files_properties(
-     core/core.cu
-     cuda_api.cu
-     event.cu
-     pattern_kernels.cu
-     quantum_kernels.cu
-     utils.cu
-)
+if(SEP_CUDA_AVAILABLE)
+    target_sources(sep_compat PRIVATE ${CUDA_SOURCES})
+    set_source_files_properties(${CUDA_SOURCES} PROPERTIES LANGUAGE CUDA)
+    configure_cuda_target(sep_compat)
+endif()
 
 # Add include directories needed by compat library sources
 target_include_directories(sep_compat 

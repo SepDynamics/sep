@@ -13,7 +13,7 @@
 
 #if SEP_CUDA_AVAILABLE
 // When CUDA is available, include the real CUDA runtime
-#include <cuda_runtime>
+#include "cuda_runtime.h"
 #define SEP_HD __host__ __device__
 #else
 #define SEP_HD

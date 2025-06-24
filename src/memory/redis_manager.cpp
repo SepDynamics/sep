@@ -116,7 +116,7 @@ public:
             key.str().c_str(),
             static_cast<double>(data.coherence),
             static_cast<double>(data.stability),
-            data.generation,
+            data.generation_count,
             static_cast<double>(data.coherence), // Using coherence instead of access_frequency
             static_cast<long long>(
                 std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())));
@@ -124,21 +124,21 @@ public:
             freeReplyObject(reply);
 
         // Store enhanced relationship data
-        for (size_t i = 0; i < data.relationships.size(); ++i)
+        for (size_t i = 0; i < data.relationship_data.size(); ++i)
         {
-            const auto& rel = data.relationships[i];
-            // Convert targetId to size_t ID by using a hash
-            size_t rel_id = std::hash<std::string>{}(rel.targetId.c_str());
+            const auto& rel = data.relationship_data[i];
+            // Use the ID directly
+            size_t rel_id = rel.id;
             
             reply = static_cast<redisReply*>(redisCommand(context_,
-                                                          "HSET %s rel:%zu:id %zu rel:%zu:type %d rel:%zu:strength %f",
-                                                          key.str().c_str(),
-                                                          i,
-                                                          rel_id,
-                                                          i,
-                                                          static_cast<int>(rel.type),
-                                                          i,
-                                                          static_cast<double>(rel.strength)));
+                                                           "HSET %s rel:%zu:id %zu rel:%zu:type %d rel:%zu:strength %f",
+                                                           key.str().c_str(),
+                                                           i,
+                                                           rel_id,
+                                                           i,
+                                                           static_cast<int>(rel.type),
+                                                           i,
+                                                           static_cast<double>(rel.strength)));
             if (reply)
                 freeReplyObject(reply);
         }
@@ -211,7 +211,7 @@ public:
             pattern_data.generation_count = reply->element[2]->str ? std::stoi(reply->element[2]->str) : 0;
             // We're ignoring access_frequency since it's not in the core PatternData structure
             // Just use coherence value for both fields
-            std::data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
+            pattern_data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
             
             // Parse timestamp but don't try to store it since it's not in the target structure
             // Just parse for logging purposes
@@ -239,15 +239,14 @@ public:
 
             if (reply && reply->type == REDIS_REPLY_ARRAY && reply->elements == 3)
             {
-                // Create a PatternRelationship from the Redis data
-                sep::persistence::PatternRelationship patternRel;
+                // Create a RelationshipData from the Redis data
+                sep::persistence::RelationshipData patternRel;
                 
                 // Get the raw ID from Redis
                 size_t rel_id = reply->element[0]->str ? std::stoull(reply->element[0]->str) : 0;
                 
-                // Convert the numeric ID to a string identifier
-                std::string id_str = "pattern_" + std::to_string(rel_id);
-                patternRel.targetId = id_str.c_str();
+                // Set the ID directly
+                patternRel.id = rel_id;
                 
                 // Set the relationship type (convert from int to enum)
                 int type_int = reply->element[1]->str ? std::stoi(reply->element[1]->str) : 0;
@@ -256,8 +255,8 @@ public:
                 // Set the strength
                 patternRel.strength = reply->element[2]->str ? std::stof(reply->element[2]->str) : 0.0f;
                 
-                // Add to the relationships vector
-                data.relationships.push_back(patternRel);
+                // Add to the relationship_data vector
+                pattern_data.relationship_data.push_back(patternRel);
             }
             if (reply)
                 freeReplyObject(reply);
@@ -266,10 +265,10 @@ public:
         if (logger)
         {
             logger->debug(
-                "Loaded pattern {} from tier {} with {} relationships", id, tier, data.relationships.size());
+                "Loaded pattern {} from tier {} with {} relationships", id, tier, pattern_data.relationships.size());
         }
 
-        return data;
+        return pattern_data;
 #else
         return std::nullopt;
 #endif

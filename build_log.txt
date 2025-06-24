@@ -1,34 +1,186 @@
 Ignoring COMPILE_WARNING_AS_ERROR target property and CMAKE_COMPILE_WARNING_AS_ERROR variable.
-[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  3%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[  5%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[  7%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[  8%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 10%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 12%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 14%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 16%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 19%] Linking CXX static library libsep_compat.a
-[ 21%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 23%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 25%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 28%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 30%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 32%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 33%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 33%] Built target sep_compat
-[ 35%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 39%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 42%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 48%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[  1%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[  3%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[  5%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[  6%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[  8%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 12%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 13%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 15%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 12%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 18%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 24%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 25%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core/stream.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 29%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+In file included from /sep/src/compat/core/stream.cpp:4:
+/sep/include/compat/cuda_impl.h:17:9: warning: 'SEP_HD' macro redefined [-Wmacro-redefined]
+   17 | #define SEP_HD __host__ __device__
+      |         ^
+/sep/include/compat/macros.h:83:9: note: previous definition is here
+   83 | #define SEP_HD
+      |         ^
+[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 37%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 43%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 46%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+In file included from /sep/src/compat/core/stream.cpp:6:
+In file included from /sep/include/compat/stream_impl.h:5:
+In file included from /sep/include/compat/cuda_helpers.h:12:
+/sep/include/compat/cuda_common.h:16:42: error: unknown type name 'cudaError_t'
+   16 | void logCudaError(const char* operation, cudaError_t error);
+      |                                          ^
+In file included from /sep/src/compat/core/stream.cpp:6:
+In file included from /sep/include/compat/stream_impl.h:5:
+/sep/include/compat/cuda_helpers.h:19:58: error: unknown type name 'cudaError_t'
+   19 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+      |                                                          ^
+[ 48%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+/sep/include/compat/cuda_helpers.h:20:18: error: use of undeclared identifier 'cudaSuccess'
+   20 |     if (error != cudaSuccess) {
+      |                  ^
+In file included from /sep/src/compat/core/stream.cpp:6:
+/sep/include/compat/stream_impl.h:90:18: error: unknown type name 'cudaStream_t'
+   90 |   void setHandle(cudaStream_t stream) { stream_ = stream; }
+      |                  ^
+In file included from /sep/src/compat/raii.cpp:15:
+/sep/include/compat/raii.h:26:3: error: unknown type name 'cudaStream_t'
+   26 |   cudaStream_t get() const { return stream_; }
+      |   ^
+/sep/include/compat/stream_impl.h:93:3: error: unknown type name 'cudaStream_t'
+   93 |   cudaStream_t stream_;
+      |   ^
+/sep/include/compat/raii.h:31:3: error: unknown type name 'cudaStream_t'
+   31 |   cudaStream_t stream_{nullptr};
+      |   ^
+/sep/include/compat/raii.h:45:3: error: unknown type name 'cudaEvent_t'
+   45 |   cudaEvent_t get() const { return event_; }
+      |   ^
+/sep/include/compat/stream_impl.h:32:9: error: unknown type name 'cudaError_t'
+   32 |         cudaError_t err = cudaStreamDestroy(stream_);
+      |         ^
+/sep/include/compat/raii.h:50:3: error: unknown type name 'cudaEvent_t'
+   50 |   cudaEvent_t event_{nullptr};
+      |   ^
+/sep/include/compat/stream_impl.h:33:20: error: use of undeclared identifier 'cudaSuccess'
+   33 |         if (err != cudaSuccess) {
+      |                    ^
+/sep/include/compat/raii.h:80:47: error: unknown type name 'cudaStream_t'
+   80 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
+      |                                               ^
+/sep/include/compat/raii.h:80:60: error: cannot initialize a parameter of type 'int' with an rvalue of type 'std::nullptr_t'
+   80 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
+      |                                                            ^        ~~~~~~~
+/sep/include/compat/raii.h:80:60: note: passing argument to parameter 'stream' here
+/sep/include/compat/stream_impl.h:45:7: error: unknown type name 'cudaError_t'
+   45 |       cudaError_t err = cudaStreamDestroy(stream_);
+      |       ^
+/sep/include/compat/stream_impl.h:46:18: error: use of undeclared identifier 'cudaSuccess'
+   46 |       if (err != cudaSuccess) {
+      |                  ^
+/sep/include/compat/stream_impl.h:55:7: error: unknown type name 'cudaError_t'
+   55 |       cudaError_t err = cudaStreamSynchronize(stream_);
+      |       ^
+/sep/include/compat/stream_impl.h:56:18: error: use of undeclared identifier 'cudaSuccess'
+   56 |       if (err != cudaSuccess) {
+      |                  ^
+/sep/include/compat/stream_impl.h:66:11: error: unknown type name 'cudaError_t'
+   66 |           cudaError_t err = cudaSuccess;
+      |           ^
+/sep/include/compat/stream_impl.h:66:29: error: use of undeclared identifier 'cudaSuccess'
+   66 |           cudaError_t err = cudaSuccess;
+      |                             ^
+/sep/include/compat/stream_impl.h:69:22: error: use of undeclared identifier 'cudaSuccess'
+   69 |           if (err != cudaSuccess) {
+      |                      ^
+In file included from /sep/src/compat/raii.cpp:17:
+In file included from /sep/include/compat/cuda_helpers.h:12:
+/sep/include/compat/cuda_common.h:16:42: error: unknown type name 'cudaError_t'
+   16 | void logCudaError(const char* operation, cudaError_t error);
+      |                                          ^
+In file included from /sep/src/compat/raii.cpp:17:
+/sep/include/compat/cuda_helpers.h:19:58: error: unknown type name 'cudaError_t'
+   19 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+      |                                                          ^
+/sep/include/compat/stream_impl.h:79:11: error: unknown type name 'cudaError_t'
+   79 |           cudaError_t err = cudaSuccess;
+      |           ^
 [ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 51%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+/sep/include/compat/cuda_helpers.h:20:18: error: use of undeclared identifier 'cudaSuccess'
+   20 |     if (error != cudaSuccess) {
+      |                  ^
+In file included from /sep/src/compat/raii.cpp:18:
+/sep/include/compat/cuda_impl.h:17:9: warning: 'SEP_HD' macro redefined [-Wmacro-redefined]
+   17 | #define SEP_HD __host__ __device__
+      |         ^
+/sep/include/compat/macros.h:83:9: note: previous definition is here
+   83 | #define SEP_HD
+      |         ^
+/sep/include/compat/stream_impl.h:79:29: error: use of undeclared identifier 'cudaSuccess'
+   79 |           cudaError_t err = cudaSuccess;
+      |                             ^
+/sep/include/compat/stream_impl.h:82:22: error: use of undeclared identifier 'cudaSuccess'
+   82 |           if (err != cudaSuccess) {
+      |                      ^
+/sep/src/compat/core/stream.cpp:21:30: error: cannot initialize object parameter of type 'sep::cuda::impl::StreamImpl' with an expression of type 'sep::cuda::Stream::Impl'
+   21 | void Stream::synchronize() { impl_->synchronize(); }
+      |                              ^~~~~~~
+/sep/src/compat/core/stream.cpp:23:34: error: cannot initialize object parameter of type 'sep::cuda::impl::StreamImpl' with an expression of type 'sep::cuda::Stream::Impl'
+   23 | void Stream::wait(void* event) { impl_->wait(event); }
+      |                                  ^~~~~~~
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+1 warning and 20 errors generated.
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/core/stream.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/sep/src/compat/raii.cpp:86:74: error: use of undeclared identifier 'cudaStreamNonBlocking'
+   86 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+      |                                                                          ^
+/sep/src/compat/raii.cpp:86:98: error: use of undeclared identifier 'cudaStreamDefault'
+   86 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+      |                                                                                                  ^
+/sep/src/compat/raii.cpp:87:5: error: unknown type name 'cudaError_t'
+   87 |     cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
+      |     ^
+[ 51%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+/sep/src/compat/raii.cpp:88:16: error: use of undeclared identifier 'cudaSuccess'
+   88 |     if (err != cudaSuccess) {
+      |                ^
+/sep/src/compat/raii.cpp:103:9: error: unknown type name 'cudaError_t'
+  103 |         CUDA_CHECK(cudaStreamDestroy(stream_));
+      |         ^
+/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
+   29 |         cudaError_t error = call;                    \
+      |         ^
+/sep/src/compat/raii.cpp:103:9: error: use of undeclared identifier 'cudaSuccess'
+/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
+   30 |         if (error != cudaSuccess) {                  \
+      |                      ^
+/sep/src/compat/raii.cpp:113:13: error: unknown type name 'cudaError_t'
+  113 |             CUDA_CHECK(cudaStreamDestroy(stream_));
+      |             ^
+/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
+   29 |         cudaError_t error = call;                    \
+      |         ^
+/sep/src/compat/raii.cpp:113:13: error: use of undeclared identifier 'cudaSuccess'
+/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
+   30 |         if (error != cudaSuccess) {                  \
+      |                      ^
+/sep/src/compat/raii.cpp:122:9: error: unknown type name 'cudaError_t'
+  122 |         cudaError_t err = cudaStreamSynchronize(stream_);
+      |         ^
+/sep/src/compat/raii.cpp:123:20: error: use of undeclared identifier 'cudaSuccess'
+  123 |         if (err != cudaSuccess) {
+      |                    ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
 In file included from /sep/src/memory/memory_tier.cpp:22:
 /sep/include/compat/cuda_common.h:16:42: error: unknown type name 'cudaError_t'
    16 | void logCudaError(const char* operation, cudaError_t error);
@@ -40,36 +192,11 @@ In file included from /sep/src/memory/memory_tier.cpp:25:
 /sep/include/compat/macros.h:83:9: note: previous definition is here
    83 | #define SEP_HD
       |         ^
-In file included from /sep/src/memory/memory_tier_manager.cpp:4:
-In file included from /sep/include/compat/kernels.cuh:25:
-/sep/include/compat/cuda_impl.h:17:9: warning: 'SEP_HD' macro redefined [-Wmacro-redefined]
-   17 | #define SEP_HD __host__ __device__
-      |         ^
-/sep/include/compat/macros.h:83:9: note: previous definition is here
-   83 | #define SEP_HD
-      |         ^
-In file included from /sep/src/memory/memory_tier_manager.cpp:4:
-/sep/include/compat/kernels.cuh:59:10: error: unknown type name 'cudaError_t'
-   59 | SEP_HOST cudaError_t launch_pattern_processing(
-      |          ^
-/sep/include/compat/kernels.cuh:65:5: error: unknown type name 'cudaStream_t'
-   65 |     cudaStream_t stream = nullptr
-      |     ^
-/sep/include/compat/kernels.cuh:65:18: error: cannot initialize a parameter of type 'int' with an rvalue of type 'std::nullptr_t'
-   65 |     cudaStream_t stream = nullptr
-      |                  ^        ~~~~~~~
-/sep/include/compat/kernels.cuh:65:18: note: passing argument to parameter 'stream' here
-[ 53%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-/sep/src/memory/memory_tier_manager.cpp:199:48: error: expected ':'
-  199 |     return it != lookup_map_.end() ? it->second;
-      |                                                ^
-      |                                                : 
-/sep/src/memory/memory_tier_manager.cpp:199:36: note: to match this '?'
-  199 |     return it != lookup_map_.end() ? it->second;
-      |                                    ^
-/sep/src/memory/memory_tier_manager.cpp:199:48: error: expected expression
-  199 |     return it != lookup_map_.end() ? it->second;
-      |                                                ^
+1 warning and 20 errors generated.
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:491: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
 /sep/src/memory/memory_tier.cpp:44:9: error: unknown type name 'cudaError_t'
    44 |         cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
       |         ^
@@ -81,8 +208,7 @@ In file included from /sep/src/memory/memory_tier_manager.cpp:4:
       |                    ^~~~~~~~~~~
       |                    euidaccess
 /usr/include/unistd.h:292:12: note: 'euidaccess' declared here
-  292 | extern int euidaccess[ 55%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
- (const char *__name, int __type)
+  292 | extern int euidaccess (const char *__name, int __type)
       |            ^
 /sep/src/memory/memory_tier.cpp:85:13: error: use of undeclared identifier 'cudaFree'
    85 |             cudaFree(memory_pool_);
@@ -100,6 +226,7 @@ In file included from /sep/src/memory/memory_tier_manager.cpp:4:
 /usr/include/unistd.h:292:12: note: 'euidaccess' declared here
   292 | extern int euidaccess (const char *__name, int __type)
       |            ^
+[ 55%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
 /sep/src/memory/memory_tier.cpp:320:9: error: unknown type name 'cudaError_t'
   320 |         cudaError_t err = cudaMallocManaged(&new_pool, new_size);
       |         ^
@@ -119,8 +246,32 @@ In file included from /sep/src/memory/memory_tier_manager.cpp:4:
 /sep/src/memory/memory_tier.cpp:377:13: error: use of undeclared identifier 'cudaFree'
   377 |             cudaFree(memory_pool_);
       |             ^
+In file included from /sep/src/memory/memory_tier_manager.cpp:4:
+In file included from /sep/include/compat/kernels.cuh:25:
+/sep/include/compat/cuda_impl.h:17:9: warning: 'SEP_HD' macro redefined [-Wmacro-redefined]
+   17 | #define SEP_HD __host__ __device__
+      |         ^
+/sep/include/compat/macros.h:83:9: note: previous definition is here
+   83 | #define SEP_HD
+      |         ^
+In file included from /sep/src/memory/memory_tier_manager.cpp:4:
+/sep/include/compat/kernels.cuh:59:10: error: unknown type name 'cudaError_t'
+   59 | SEP_HOST cudaError_t launch_pattern_processing(
+      |          ^
+/sep/include/compat/kernels.cuh:65:5: error: unknown type name 'cudaStream_t'
+   65 |     cudaStream_t stream = nullptr
+      |     ^
+/sep/include/compat/kernels.cuh:65:18: error: cannot initialize a parameter of type 'int' with an rvalue of type 'std::nullptr_t'
+   65 |     cudaStream_t stream = nullptr
+      |                  ^        ~~~~~~~
+/sep/include/compat/kernels.cuh:65:18: note: passing argument to parameter 'stream' here
+[ 56%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 60%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 63%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 In file included from /sep/src/core/engine.cpp:13:
-In file included from /sep/include/compat/core.h:11:
+In file included from /sep/include/compat/core.h:9:
 /sep/include/compat/memory.h:105:42: error: unknown type name 'cudaStream_t'
   105 | void* allocateUnifiedMemory(size_t size, cudaStream_t stream = nullptr);
       |                                          ^
@@ -131,7 +282,6 @@ In file included from /sep/include/compat/core.h:11:
 /sep/include/compat/memory.h:113:5: error: unknown type name 'cudaError_t'
   113 |     cudaError_t error = cudaMemcpyAsync(dst, src, count * sizeof(T), cudaMemcpyHostToDevice, nullptr);
       |     ^
-[ 57%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
 /sep/include/compat/memory.h:113:70: error: use of undeclared identifier 'cudaMemcpyHostToDevice'
   113 |     cudaError_t error = cudaMemcpyAsync(dst, src, count * sizeof(T), cudaMemcpyHostToDevice, nullptr);
       |                                                                      ^
@@ -143,13 +293,14 @@ In file included from /sep/include/compat/core.h:11:
   292 | extern int euidaccess (const char *__name, int __type)
       |            ^
 In file included from /sep/src/core/engine.cpp:13:
-In file included from /sep/include/compat/core.h:11:
+In file included from /sep/include/compat/core.h:9:
 /sep/include/compat/memory.h:125:5: error: unknown type name 'cudaError_t'
   125 |     cudaError_t error = cudaMemcpyAsync(dst, src, count * sizeof(T), cudaMemcpyDeviceToHost, nullptr);
       |     ^
 /sep/include/compat/memory.h:125:70: error: use of undeclared identifier 'cudaMemcpyDeviceToHost'
   125 |     cudaError_t error = cudaMemcpyAsync(dst, src, count * sizeof(T), cudaMemcpyDeviceToHost, nullptr);
       |                                                                      ^
+[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 /sep/include/compat/memory.h:126:21: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
   126 |     return error == cudaSuccess;
       |                     ^~~~~~~~~~~
@@ -158,7 +309,7 @@ In file included from /sep/include/compat/core.h:11:
   292 | extern int euidaccess (const char *__name, int __type)
       |            ^
 In file included from /sep/src/core/engine.cpp:13:
-In file included from /sep/include/compat/core.h:11:
+In file included from /sep/include/compat/core.h:9:
 /sep/include/compat/memory.h:138:57: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
   138 |     return cudaMemset(ptr, value, count * sizeof(T)) == cudaSuccess;
       |                                                         ^~~~~~~~~~~
@@ -167,26 +318,26 @@ In file included from /sep/include/compat/core.h:11:
   292 | extern int euidaccess (const char *__name, int __type)
       |            ^
 In file included from /sep/src/core/engine.cpp:13:
-/sep/include/compat/core.h:42:29: error: unknown type name 'cudaDeviceProp'
-   42 |   Error getDeviceProperties(cudaDeviceProp& props, int device) const;
+/sep/include/compat/core.h:39:29: error: unknown type name 'cudaDeviceProp'
+   39 |   Error getDeviceProperties(cudaDeviceProp& props, int device) const;
       |                             ^
-/sep/include/compat/core.h:46:23: error: unknown type name 'cudaStream_t'
-   46 |   Error destroyStream(cudaStream_t stream);
+/sep/include/compat/core.h:43:23: error: unknown type name 'cudaStream_t'
+   43 |   Error destroyStream(cudaStream_t stream);
       |                       ^
-/sep/include/compat/core.h:47:27: error: unknown type name 'cudaStream_t'
-   47 |   Error synchronizeStream(cudaStream_t stream);
+/sep/include/compat/core.h:44:27: error: unknown type name 'cudaStream_t'
+   44 |   Error synchronizeStream(cudaStream_t stream);
       |                           ^
-/sep/include/compat/core.h:57:30: error: unknown type name 'cudaError_t'
-   57 |   std::string getErrorString(cudaError_t error) const;
+/sep/include/compat/core.h:54:30: error: unknown type name 'cudaError_t'
+   54 |   std::string getErrorString(cudaError_t error) const;
       |                              ^
-/sep/include/compat/core.h:90:15: error: use of undeclared identifier 'cudaDeviceProp'
-   90 |   std::vector<cudaDeviceProp> device_properties_;
+/sep/include/compat/core.h:87:15: error: use of undeclared identifier 'cudaDeviceProp'
+   87 |   std::vector<cudaDeviceProp> device_properties_;
       |               ^
-[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
 In file included from /sep/src/core/engine.cpp:14:
 /sep/include/compat/cuda_common.h:16:42: error: unknown type name 'cudaError_t'
    16 | void logCudaError(const char* operation, cudaError_t error);
       |                                          ^
+[ 67%] Linking CXX static library libsep_blender.a
 /sep/src/core/engine.cpp:126:57: error: unknown type name 'cudaStream_t'
   126 |                 cuda_core.synchronizeStream(static_cast<cudaStream_t>(impl_->stream_->handle()));
       |                                                         ^
@@ -196,6 +347,7 @@ In file included from /sep/src/core/engine.cpp:14:
 /sep/include/compat/macros.h:102:9: note: expanded from macro 'SEP_CUDA_CHECK'
   102 |         cudaError_t err = call;                                                                              \
       |         ^
+[ 68%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
 /sep/src/core/engine.cpp:153:53: error: unknown type name 'cudaStream_t'
   153 |                                    reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
       |                                                     ^
@@ -206,148 +358,25 @@ fatal error: too many errors emitted, stopping now [-ferror-limit=]
 20 errors generated.
 make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:107: src/core/CMakeFiles/sep_core.dir/engine.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 60%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-In file included from /sep/src/core/metrics_collector.cpp:2:
-/sep/include/compat/cuda_common.h:16:42: error: unknown type name 'cudaError_t'
-   16 | void logCudaError(const char* operation, cudaError_t error);
-      |                                          ^
-In file included from /sep/src/core/metrics_collector.cpp:3:
-/sep/include/compat/cuda_helpers.h:19:58: error: unknown type name 'cudaError_t'
-   19 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
-      |                                                          ^
-/sep/include/compat/cuda_helpers.h:20:18: error: use of undeclared identifier 'cudaSuccess'
-   20 |     if (error != cudaSuccess) {
-      |                  ^
-/sep/src/core/metrics_collector.cpp:223:3: error: unknown type name 'cudaEvent_t'
-  223 |   cudaEvent_t start_event_{nullptr};
-      |   ^
-/sep/src/core/metrics_collector.cpp:224:3: error: unknown type name 'cudaEvent_t'
-  224 |   cudaEvent_t stop_event_{nullptr};
-      |   ^
-/sep/src/core/metrics_collector.cpp:32:5: error: unknown type name 'cudaError_t'
-   32 |     CUDA_CHECK(cudaEventCreate(&start_event_));
-      |     ^
-/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
-   29 |         cudaError_t error = call;                    \
-      |         ^
-/sep/src/core/metrics_collector.cpp:32:5: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
-/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
-   30 |         if (error != cudaSuccess) {                  \
-      |                      ^
-/usr/include/unistd.h:292:12: note: 'euidaccess' declared here
-  292 | extern int euidaccess (const char *__name, int __type)
-      |            ^
-/sep/src/core/metrics_collector.cpp:33:5: error: unknown type name 'cudaError_t'
-   33 |     CUDA_CHECK(cudaEventCreate(&stop_event_));
-      |     ^
-/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
-   29 |         cudaError_t error = call;                    \
-      |         ^
-/sep/src/core/metrics_collector.cpp:33:5: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
-/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
-   30 |         if (error != cudaSuccess) {                  \
-      |                      ^
-/usr/include/unistd.h:292:12: note: 'euidaccess' declared here
-  292 | extern int euidaccess (const char *__name, int __type)
-      |            ^
-/sep/src/core/metrics_collector.cpp:44:7: error: unknown type name 'cudaError_t'
-   44 |       CUDA_CHECK(cudaEventDestroy(start_event_));
-      |       ^
-/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
-   29 |         cudaError_t error = call;                    \
-      |         ^
-/sep/src/core/metrics_collector.cpp:44:7: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
-/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
-   30 |         if (error != cudaSuccess) {                  \
-      |                      ^
-/usr/include/unistd.h:292:12: note: 'euidaccess' declared here
-  292 | extern int euidaccess (const char *__name, int __type)
-      |            ^
-/sep/src/core/metrics_collector.cpp:49:7: error: unknown type name 'cudaError_t'
-   49 |       CUDA_CHECK(cudaEventDestroy(stop_event_));
-      |       ^
-/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
-   29 |         cudaError_t error = call;                    \
-      |         ^
-/sep/src/core/metrics_collector.cpp:49:7: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
-/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
-   30 |         if (error != cudaSuccess) {                  \
-      |                      ^
-/usr/include/unistd.h:292:12: note: 'euidaccess' declared here
-  292 | extern int euidaccess (const char *__name, int __type)
-      |            ^
-[ 64%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-/sep/src/core/metrics_collector.cpp:91:7: error: unknown type name 'cudaError_t'
-   91 |       CUDA_CHECK(cudaEventRecord(start_event_, nullptr));
-      |       ^
-/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
-   29 |         cudaError_t error = call;                    \
-      |         ^
-/sep/src/core/metrics_collector.cpp:91:7: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
-/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
-   30 |         if (error != cudaSuccess) {                  \
-      |                      ^
-/usr/include/unistd.h:292:12: note: 'euidaccess' declared here
-  292 | extern int euidaccess (const char *__name, int __type)
-      |            ^
-/sep/src/core/metrics_collector.cpp:99:7: error: unknown type name 'cudaError_t'
-   99 |       CUDA_CHECK(cudaEventRecord(stop_event_, nullptr));
-      |       ^
-/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
-   29 |         cudaError_t error = call;                    \
-      |         ^
-/sep/src/core/metrics_collector.cpp:99:7: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
-/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
-   30 |         if (error != cudaSuccess) {                  \
-      |                      ^
-/usr/include/unistd.h:292:12: note: 'euidaccess' declared here
-  292 | extern int euidaccess (const char *__name, int __type)
-      |            ^
-1 warning and 5 errors generated.
-/sep/src/core/metrics_collector.cpp:100:7: error: unknown type name 'cudaError_t'
-  100 |       CUDA_CHECK(cudaEventSynchronize(stop_event_));
-      |       ^
-/sep/include/compat/cuda_helpers.h:29:9: note: expanded from macro 'CUDA_CHECK'
-   29 |         cudaError_t error = call;                    \
-      |         ^
-/sep/src/core/metrics_collector.cpp:100:7: error: use of undeclared identifier 'cudaSuccess'; did you mean 'euidaccess'?
-/sep/include/compat/cuda_helpers.h:30:22: note: expanded from macro 'CUDA_CHECK'
-   30 |         if (error != cudaSuccess) {                  \
-      |                      ^
-/usr/include/unistd.h:292:12: note: 'euidaccess' declared here
-  292 | extern int euidaccess (const char *__name, int __type)
-      |            ^
+[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 70%] Built target sep_blender
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+1 warning and 3 errors generated.
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
 make[2]: *** Waiting for unfinished jobs....
-20 errors generated.
-[ 66%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
-[ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 69%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 71%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 73%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 82%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 83%] Linking CXX static library libsep_audio.a
-[ 83%] Built target sep_audio
+[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 82%] Linking CXX static library libsep_audio.a
+[ 82%] Built target sep_audio
 1 warning and 13 errors generated.
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:79: src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o] Error 1
-/sep/src/quantum/pattern_processor.cpp:141:95: warning: reference 'patterns_' is not yet bound to a value when used here [-Wuninitialized]
-  141 | CPUPatternProcessor::CPUPatternProcessor() : PatternProcessor(Implementation::CPU), patterns_(patterns_) {}
-      |                                                                                               ^
-[ 85%] Linking CXX static library libsep_blender.a
-[ 85%] Built target sep_blender
+[ 84%] Linking CXX static library libsep_quantum.a
+[ 84%] Built target sep_quantum
 make[1]: *** [CMakeFiles/Makefile2:523: src/core/CMakeFiles/sep_core.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-1 warning generated.
-[ 87%] Linking CXX static library libsep_quantum.a
-[ 87%] Built target sep_quantum
 make[1]: *** [CMakeFiles/Makefile2:555: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
-[ 89%] Linking CXX static library libsep_api.a
-[ 89%] Built target sep_api
+[ 86%] Linking CXX static library libsep_api.a
+[ 86%] Built target sep_api
 make: *** [Makefile:156: all] Error 2

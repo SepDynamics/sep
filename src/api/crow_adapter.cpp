@@ -6,12 +6,11 @@
  * SEP Engine API via HTTP endpoints using the Crow web framework.
  */
 
-// Define CROW_DISABLE_RTTI first since we're using with CUDA
-#define CROW_DISABLE_RTTI 1
-
-// First include isolation headers to avoid ASIO conflicts
-#include "crow/asio_isolation.h"
-#include "crow/crow_isolation.h"
+#include <crow/app.h>
+#include <crow/http_request.h>
+#include <crow/http_response.h>
+#include <crow/common.h>
+#include "api/crow_adapter.h"
 
 // Then include standard C++ headers
 #include <memory>
@@ -115,7 +114,7 @@ void setupSepApiRoutes(::crow::Crow<>* app)
     };
     
     // Route: Process and validate context
-    app->route(API_PREFIX "/context/process")
+    app->route_dynamic(API_PREFIX "/context/process")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -128,7 +127,7 @@ void setupSepApiRoutes(::crow::Crow<>* app)
         });
 
     // Route: Manage context relationships
-    app->route(API_PREFIX "/context/relationships")
+    app->route_dynamic(API_PREFIX "/context/relationships")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -141,7 +140,7 @@ void setupSepApiRoutes(::crow::Crow<>* app)
         });
 
     // Route: Analyze pattern stability and coherence
-    app->route(API_PREFIX "/pattern/analyze")
+    app->route_dynamic(API_PREFIX "/pattern/analyze")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -154,7 +153,7 @@ void setupSepApiRoutes(::crow::Crow<>* app)
         });
 
     // Route: Evolve patterns through state transitions
-    app->route(API_PREFIX "/pattern/evolve")
+    app->route_dynamic(API_PREFIX "/pattern/evolve")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -167,7 +166,7 @@ void setupSepApiRoutes(::crow::Crow<>* app)
         });
 
     // Route: Get pattern evolution history
-    app->route(API_PREFIX "/patterns/history")
+    app->route_dynamic(API_PREFIX "/patterns/history")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -180,7 +179,7 @@ void setupSepApiRoutes(::crow::Crow<>* app)
         });
 
     // Route: Query memory tiers for patterns
-    app->route(API_PREFIX "/memory/query")
+    app->route_dynamic(API_PREFIX "/memory/query")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -193,7 +192,7 @@ void setupSepApiRoutes(::crow::Crow<>* app)
         });
 
     // Route: Get health status of the SEP Engine
-    app->route(API_PREFIX "/health")
+    app->route_dynamic(API_PREFIX "/health")
         .methods(::crow::HTTPMethod::GET)
         ([&engine, makeJsonResponse, handleApiError]() {
             try {

@@ -44,6 +44,11 @@ struct Pattern {
     std::string id;
     glm::vec4 position;
     QuantumState quantum_state;
+    struct Metadata {
+        float coherence_score{0.0f};
+        float stability_score{0.0f};
+        int   generation_count{0};
+    } metadata;
     std::vector<PatternRelationship> relationships;
     std::vector<float> data;
     std::vector<std::string> parent_ids;

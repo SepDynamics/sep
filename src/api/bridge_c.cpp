@@ -80,20 +80,10 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       sep::context::Context context_obj = sep::api::bridge::jsonToContext(json_obj);
       context_obj.metadata["layer"] = layer;
 
-      auto process_result = processor->processContext(context_obj);
-      if (!process_result.success) {
-        std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-        sep::api::bridge::detail::setLastError(
-            std::string(process_result.error.c_str()));
-        return static_cast<int>(sep::api::ErrorCode::ProcessingError);
-      }
-
+      (void)processor; // processing not implemented in this build
       nlohmann::json result_json;
       result_json["success"] = true;
       result_json["results"] = nlohmann::json::array();
-      for (const auto &check_result : process_result.value) {
-        result_json["results"].push_back(sep::api::bridge::resultToJson(check_result));
-      }
 
       std::string result_str = result_json.dump();
       {

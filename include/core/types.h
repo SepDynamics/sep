@@ -229,6 +229,15 @@ inline void from_json(const nlohmann::json& j, APIConfig& c)
 
 }  // namespace config
 
+struct PinState {
+    std::uint64_t state{0};
+    std::uint32_t flags{0};
+
+    bool operator==(const PinState& other) const {
+        return state == other.state && flags == other.flags;
+    }
+};
+
 enum class PatternStateEnum {
     UNINITIALIZED = 0,
     INITIALIZING,

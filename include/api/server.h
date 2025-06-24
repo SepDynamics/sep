@@ -1,9 +1,9 @@
 #pragma once
 
-// Math constants are already defined in crow.h
-#ifdef CROW_DISABLE_RTTI
-#include "crow/crow_isolation.h"
-#endif
+// Crow headers
+#include <crow/app.h>
+#include <crow/http_request.h>
+#include <crow/http_response.h>
 
 #include "api/rate_limit_middleware.h"
 #include "api/types.h"

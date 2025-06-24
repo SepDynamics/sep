@@ -1,14 +1,8 @@
 #pragma once
 
-// Handle ASIO/Crow includes based on RTTI availability
-#ifndef CROW_DISABLE_RTTI
-// Use real headers in non-CUDA mode
-#include "crow/http_request.h"
-#include "crow/http_response.h"
-#else
-// Use isolation headers in CUDA mode
-#include "crow/crow_isolation.h"
-#endif
+#include <crow/http_request.h>
+#include <crow/http_response.h>
+#include <crow/common.h>
 #include <vector>
 
 namespace sep::api {

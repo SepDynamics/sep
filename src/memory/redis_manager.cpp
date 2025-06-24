@@ -80,7 +80,7 @@ public:
     }
 
     void storePattern( std::size_t id,
-                       const sep::pattern::PatternData& data,
+                       const sep::persistence::PatternData& data,
                        const std::string& tier)
     {
 #if SEP_HAS_HIREDIS
@@ -162,8 +162,8 @@ public:
 #endif
     }
 
-    std::optional<sep::pattern::PatternData> loadPattern( std::size_t id,
-                                           const std::string& tier)
+    std::optional<sep::persistence::PatternData> loadPattern( std::size_t id,
+                       const std::string& tier)
     {
 #if SEP_HAS_HIREDIS
         if (!connected_ || !context_)
@@ -185,7 +185,7 @@ public:
         }
         freeReplyObject(reply);
 
-        sep::pattern::PatternData std::data;
+        sep::persistence::PatternData std::data;
 
         // Load position
         reply = static_cast<redisReply*>(
@@ -344,7 +344,7 @@ public:
 #endif
     }
 
-    void bulkStore(const std::vector<std::pair<std::size_t, sep::pattern::PatternData>>& patterns, const std::string& tier)
+    void bulkStore(const std::vector<std::pair<std::size_t, sep::persistence::PatternData>>& patterns, const std::string& tier)
     {
         for (const auto& pair : patterns)
         {
@@ -352,9 +352,9 @@ public:
         }
     }
 
-    std::vector<sep::pattern::PatternData> bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
+    std::vector<sep::persistence::PatternData> bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
     {
-        std::vector<sep::pattern::PatternData> results;
+        std::vector<sep::persistence::PatternData> results;
         results.reserve(ids.size());
 
         for (std::size_t id : ids)
@@ -379,12 +379,12 @@ private:
 RedisManager::RedisManager(const std::string& host, int port) : impl_(std::make_unique<Impl>(host, port)) {}
 RedisManager::~RedisManager() = default;
 
-void RedisManager::storePattern(std::size_t id, const sep::pattern::PatternData& data, const std::string& tier)
+void RedisManager::storePattern(std::size_t id, const sep::persistence::PatternData& data, const std::string& tier)
 {
     impl_->storePattern(id, data, tier);
 }
 
-std::optional<sep::pattern::PatternData> RedisManager::loadPattern(std::size_t id, const std::string& tier)
+std::optional<sep::persistence::PatternData> RedisManager::loadPattern(std::size_t id, const std::string& tier)
 {
     return impl_->loadPattern(id, tier);
 }
@@ -399,12 +399,12 @@ void RedisManager::removePattern(std::size_t id, const std::string& tier)
     impl_->removePattern(id, tier);
 }
 
-void RedisManager::bulkStore(const std::vector<std::pair<std::size_t, sep::pattern::PatternData>>& patterns, const std::string& tier)
+void RedisManager::bulkStore(const std::vector<std::pair<std::size_t, sep::persistence::PatternData>>& patterns, const std::string& tier)
 {
     impl_->bulkStore(patterns, tier);
 }
 
-std::vector<sep::pattern::PatternData> RedisManager::bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
+std::vector<sep::persistence::PatternData> RedisManager::bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
 {
     return impl_->bulkLoad(ids, tier);
 }

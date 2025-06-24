@@ -1,8 +1,8 @@
-// Always use the isolation header to avoid dependency on external crow.h
 #include "api/rate_limit_middleware.h"
 #include "api/crow_request.h"
 #include "api/rate_limiter.h"
-#include "crow/crow_isolation.h"
+#include <crow/http_request.h>
+#include <crow/http_response.h>
 #include <nlohmann/json.hpp>
 
 namespace sep::api {

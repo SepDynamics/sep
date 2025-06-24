@@ -4,8 +4,7 @@
 // C++ standard library.  The project now relies on the system C++ runtime so the
 // macro is expected to be undefined during normal builds.
 
-// Include directly from crow_isolation.h to avoid shim.h dependency
-#include "crow/crow_isolation.h"
+#include <crow/http_request.h>
 
 #include "api/request_interface.h"
 

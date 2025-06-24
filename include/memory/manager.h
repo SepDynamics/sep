@@ -10,16 +10,11 @@
 #include "memory/types.h"
 #include "core/tracing.h"
 
-// Handle ASIO/Crow includes based on RTTI availability
-#ifndef CROW_DISABLE_RTTI
-// Use real headers in non-CUDA mode
+#include <crow/http_request.h>
+#include <crow/http_response.h>
+#include <crow/common.h>
 #include "api/types.h"
 #include <spdlog/spdlog.h>
-#else
-// Use isolation headers in CUDA mode
-#include "crow/crow_isolation.h"
-#include <spdlog/spdlog.h>
-#endif
 
 #include "api/server.h"
 namespace sep {

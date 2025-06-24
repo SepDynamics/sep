@@ -3,6 +3,22 @@ project(SEPEngine)
 
 include(FetchContent)
 
+# Use C++17 across all targets
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Define Crow compile-time configuration globally to avoid
+# redundant macro definitions in individual compilation units
+add_compile_definitions(CROW_DISABLE_RTTI=1)
+
+# Locate external dependencies required for the final executable
+find_package(CURL REQUIRED)
+# Hiredis doesn't ship a CMake package file in many distributions,
+# so fall back to a simple find_library/find_path approach.
+find_library(HIREDIS_LIBRARIES NAMES hiredis)
+find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
+find_package(CUDA REQUIRED)
+
 # Add our fixed Crow headers directory BEFORE other include directories
 # This ensures our fixed headers are used instead of the problematic ones
 include_directories(BEFORE
@@ -44,6 +60,10 @@ target_include_directories(sep_engine
         ${CMAKE_SOURCE_DIR}/include
 )
 
+if(HIREDIS_INCLUDE_DIR)
+    target_include_directories(sep_engine PRIVATE ${HIREDIS_INCLUDE_DIR})
+endif()
+
 target_link_libraries(sep_engine
     sep_core
     sep_api
@@ -51,4 +71,10 @@ target_link_libraries(sep_engine
     sep_quantum
     sep_audio
     sep_blender
-    sep_compat)
+    sep_compat
+    ${CURL_LIBRARIES}
+    ${CUDA_LIBRARIES})
+
+if(HIREDIS_LIBRARIES)
+    target_link_libraries(sep_engine PRIVATE ${HIREDIS_LIBRARIES})
+endif()

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-project(SEPEngine LANGUAGES CXX) # Explicitly enable CUDA language
+project(SEPEngine LANGUAGES CXX CUDA)
 
 # Ensure RTTI is disabled consistently across all targets when building with
 # the Crow isolation headers.
@@ -12,7 +12,6 @@ include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)
 
 # Locate external dependencies required by the engine
 find_package(CURL QUIET)
-find_package(Hiredis QUIET)
 find_package(CUDAToolkit QUIET)
 
 include(FetchContent)
@@ -31,7 +30,15 @@ find_package(CURL REQUIRED)
 # so fall back to a simple find_library/find_path approach.
 find_library(HIREDIS_LIBRARIES NAMES hiredis)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
-find_package(CUDA REQUIRED)
+
+if(CUDAToolkit_FOUND)
+    set(SEP_CUDA_AVAILABLE 1)
+else()
+    set(SEP_CUDA_AVAILABLE 0)
+    message(WARNING "CUDA toolkit not found, building without CUDA support")
+endif()
+
+add_compile_definitions(SEP_CUDA_AVAILABLE=${SEP_CUDA_AVAILABLE})
 
 # Add our fixed Crow headers directory BEFORE other include directories
 # This ensures our fixed headers are used instead of the problematic ones

@@ -1,6 +1,7 @@
 #define BUILDING_SEP_BRIDGE
 #include "api/bridge.h"
 #include "api/bridge.hpp"
+#include "quantum/processor.h"
 #include "api/types.h"
 
 
@@ -35,7 +36,7 @@
 #endif
 
 namespace sep::api::bridge::detail {
-std::unique_ptr<sep::context::Processor> g_context_processor_bridge;
+std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
 std::string g_last_error;
 size_t g_required_buffer_size = 0;
 // Global mutex protects shared bridge state

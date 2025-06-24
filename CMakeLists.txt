@@ -119,6 +119,7 @@ target_link_libraries(sep_engine
     sep_compat
     ${CURL_LIBRARIES}
     ${CUDA_LIBRARIES}
+    $<$<BOOL:${SEP_HAS_HIREDIS}>:${HIREDIS_LIBRARIES}>
     fmt::fmt
     spdlog::spdlog
 )

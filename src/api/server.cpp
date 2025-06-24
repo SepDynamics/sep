@@ -14,6 +14,8 @@
 #include "memory/manager.h"
 
 #include "api/crow_request.h"
+#include "api/json_helpers.h"
+#include "api/ollama_client.h"
 #include "api/types.h"
 #include "api/client.h"
 #include "api/rate_limit_middleware.h"
@@ -423,13 +425,13 @@ void SEPApiServer::setup_routes() {
 
   // Pattern history endpoint
   app_->route_dynamic("/api/v1/patterns/history")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.getPatternHistory(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -466,13 +468,13 @@ void SEPApiServer::setup_routes() {
 
   // Validate contexts endpoint
   app_->route_dynamic("/api/v1/context/process")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.validateContexts(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -509,13 +511,13 @@ void SEPApiServer::setup_routes() {
 
   // Extract embeddings endpoint
   app_->route_dynamic("/api/v1/embeddings/extract")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.extractEmbeddings(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -552,13 +554,13 @@ void SEPApiServer::setup_routes() {
 
   // Analyze patterns endpoint
   app_->route_dynamic("/api/v1/pattern/analyze")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.calculateSimilarity(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -595,13 +597,13 @@ void SEPApiServer::setup_routes() {
 
   // Context relationships endpoint
   app_->route_dynamic("/api/v1/context/relationships")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.blendContexts(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -638,7 +640,7 @@ void SEPApiServer::setup_routes() {
 
   // Memory metrics endpoint
   app_->route_dynamic("/api/v1/metrics/memory")
-      .methods("GET"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Get)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS

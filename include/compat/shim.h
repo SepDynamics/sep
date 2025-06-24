@@ -128,6 +128,7 @@ namespace shim {
 
     // For JSON parsing - provide data() and size() consistently
     const char* c_str() const { return data_ ? data_ : ""; }
+    const char* data() const { return c_str(); }
     size_t size() const { return size_; }
 
     // Ensure empty() is defined
@@ -250,6 +251,24 @@ namespace shim {
   inline std::ostream& operator<<(std::ostream& os, const string& s) {
     os << s.c_str();
     return os;
+  }
+
+  inline string operator+(const string& lhs, const string& rhs) {
+    string result(lhs);
+    result += rhs;
+    return result;
+  }
+
+  inline string operator+(const string& lhs, const char* rhs) {
+    string result(lhs);
+    result += rhs;
+    return result;
+  }
+
+  inline string operator+(const char* lhs, const string& rhs) {
+    string result(lhs);
+    result += rhs;
+    return result;
   }
   
   // Exception classes

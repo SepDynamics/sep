@@ -160,3 +160,22 @@ TEST(MemoryTierManagerTest, AutoDefragmentationThreshold) {
     mgr.deallocate(b2);
 }
 
+TEST(MemoryTierManagerTest, TotalMetrics) {
+    MemoryTierManager mgr;
+    MemoryBlock* a = mgr.allocate(128, sep::memory::TierType::STM);
+    MemoryBlock* b = mgr.allocate(128, sep::memory::TierType::MTM);
+    MemoryBlock* c = mgr.allocate(128, sep::memory::TierType::LTM);
+
+    float util = mgr.getTotalUtilization();
+    EXPECT_GT(util, 0.0f);
+    EXPECT_LT(util, 1.0f);
+
+    mgr.deallocate(a);
+    mgr.deallocate(b);
+    mgr.deallocate(c);
+
+    float frag = mgr.getTotalFragmentation();
+    EXPECT_GE(frag, 0.0f);
+    EXPECT_LE(frag, 1.0f);
+}
+

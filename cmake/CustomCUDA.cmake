@@ -23,8 +23,9 @@ set(CUDA_LIBRARY_DIRS
     CACHE STRING "CUDA library directories"
 )
 
-# Add CUDA library directories (but not include directories globally to avoid conflicts)
+# Add CUDA library directories and include directories globally
 link_directories(${CUDA_LIBRARY_DIRS})
+include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
 
 #--- Host compiler flags ---
 # Enforce C++20 for GCC 14

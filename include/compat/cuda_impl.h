@@ -9,11 +9,11 @@
 #include <string.h>  // For strcpy, memcpy, memset
 
 // Include our CUDA runtime header which handles both real CUDA and stub implementations
-#include <compat/cuda_runtime.h>
+#include <cuda_runtime.h>
 
 #if SEP_CUDA_AVAILABLE
 // When CUDA is available, include the real CUDA runtime
-#include <compat/cuda_runtime.h>
+#include <cuda_runtime.h>
 #define SEP_HD __host__ __device__
 #else
 #define SEP_HD

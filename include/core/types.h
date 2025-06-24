@@ -3,7 +3,7 @@
 
 // Include order optimized for CUDA compatibility
 #ifdef __CUDACC__
-#include <compat/cuda_runtime.h>
+#include <cuda_runtime.h>
 #endif
 
 // Project headers (must come before std headers for proper isolation)

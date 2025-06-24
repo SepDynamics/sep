@@ -5,7 +5,7 @@
 
 #if SEP_CUDA_AVAILABLE
 // Use angle brackets to specifically target system CUDA headers
-#include <compat/cuda_runtime.h>
+#include <cuda_runtime.h>
 #else
 // Include the compatibility header that defines stub types
 

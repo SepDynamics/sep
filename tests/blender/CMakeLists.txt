@@ -1,4 +1,4 @@
-include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)
+include(/sep/cmake/CustomCUDA.cmake)
 
 if(NOT BUILD_TESTING)
     return()
@@ -41,37 +41,37 @@ endif()
 # Include directories
 target_include_directories(blender_tests
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/blender
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/pattern
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/cuda
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/quantum
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/memory
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/context
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/core
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/api
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/persistence
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/dag
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/errors
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/logging
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/metrics
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/audio
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/pattern
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/memory
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/context
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/core
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/api
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/quantum
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/dag
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/audio
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/blender
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/cuda
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/errors
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/logging
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/sep/persistence
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        /sep/src
+        /sep/include
+        /sep/include/blender
+        /sep/include/pattern
+        /sep/include/cuda
+        /sep/include/quantum
+        /sep/include/memory
+        /sep/include/context
+        /sep/include/core
+        /sep/include/api
+        /sep/include/persistence
+        /sep/include/dag
+        /sep/include/errors
+        /sep/include/logging
+        /sep/include/metrics
+        /sep/include/audio
+        /sep/include/sep
+        /sep/include/sep/pattern
+        /sep/include/sep/memory
+        /sep/include/sep/context
+        /sep/include/sep/core
+        /sep/include/sep/api
+        /sep/include/sep/quantum
+        /sep/include/sep/dag
+        /sep/include/sep/audio
+        /sep/include/sep/blender
+        /sep/include/sep/cuda
+        /sep/include/sep/errors
+        /sep/include/sep/logging
+        /sep/include/sep/persistence
+        /sep
         ${PIPEWIRE_INCLUDE_DIRS}
         ${LZ4_INCLUDE_DIRS}
         ${ZSTD_INCLUDE_DIRS}
@@ -84,8 +84,8 @@ endif()
 if(BUILD_BENCHMARKS)
     target_include_directories(blender_benchmarks
         PRIVATE
-            ${CMAKE_SOURCE_DIR}/src
-            ${CMAKE_SOURCE_DIR}/include
+            /sep/src
+            /sep/include
             ${PIPEWIRE_INCLUDE_DIRS}
             ${LZ4_INCLUDE_DIRS}
             ${ZSTD_INCLUDE_DIRS}
@@ -113,8 +113,8 @@ if(BUILD_BENCHMARKS)
 endif()
 
 # Check for optional libraries
-find_library(SEP_CORE_ENGINE_LIB sep_core_engine_lib PATHS ${CMAKE_SOURCE_DIR}/lib)
-find_library(PATTERN_CUDA_LIB pattern_cuda PATHS ${CMAKE_SOURCE_DIR}/lib)
+find_library(SEP_CORE_ENGINE_LIB sep_core_engine_lib PATHS /sep/lib)
+find_library(PATTERN_CUDA_LIB pattern_cuda PATHS /sep/lib)
 
 # Link dependencies
 target_link_libraries(blender_tests
@@ -137,22 +137,22 @@ endif()
 
 # Add optional libraries if found
 # Find additional required libraries
-find_library(MESH_HANDLER_LIB MeshHandler PATHS ${CMAKE_SOURCE_DIR}/lib)
-find_library(PATTERN_COMPRESSION_LIB PatternCompression PATHS ${CMAKE_SOURCE_DIR}/lib)
-find_library(CUDA_WRAPPER_LIB sep_cuda_wrapper PATHS ${CMAKE_SOURCE_DIR}/lib)
-find_library(METRICS_LIB sep_metrics PATHS ${CMAKE_SOURCE_DIR}/lib)
-find_library(WRAPPER_FUNCTIONS_LIB sep_cuda_wrappers PATHS ${CMAKE_SOURCE_DIR}/lib)
+find_library(MESH_HANDLER_LIB MeshHandler PATHS /sep/lib)
+find_library(PATTERN_COMPRESSION_LIB PatternCompression PATHS /sep/lib)
+find_library(CUDA_WRAPPER_LIB sep_cuda_wrapper PATHS /sep/lib)
+find_library(METRICS_LIB sep_metrics PATHS /sep/lib)
+find_library(WRAPPER_FUNCTIONS_LIB sep_cuda_wrappers PATHS /sep/lib)
 
 # Mock implementations used only for the unit tests
 set(TEST_MOCK_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/mocks/mock_cuda_wrappers.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/mocks/mock_trace_span.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/mocks/mock_pattern_compression.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/mocks/mock_mesh_handler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/mocks/mock_blender_bridge.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/mocks/mock_process.cpp
+    /sep/mocks/mock_cuda_wrappers.cpp
+    /sep/mocks/mock_trace_span.cpp
+    /sep/mocks/mock_pattern_compression.cpp
+    /sep/mocks/mock_mesh_handler.cpp
+    /sep/mocks/mock_blender_bridge.cpp
+    /sep/mocks/mock_process.cpp
 )
-target_sources(blender_tests PRIVATE ${TEST_MOCK_SOURCES})
+target_sources(blender_tests PRIVATE /sep/tests/blender/mocks)
 
 # Create a list of optional libraries
 set(OPTIONAL_LIBS "")
@@ -194,7 +194,7 @@ target_link_libraries(blender_tests
 )
 
 # Create a directory for mock implementations
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/mocks)
+file(MAKE_DIRECTORY /sep/mocks)
 
 # Add a special target that only runs tests that don't require missing libraries
 add_custom_target(run_available_tests
@@ -258,7 +258,7 @@ target_compile_definitions(blender_tests
         TESTING=1
         SEP_RANDOMIZE=1
         _USE_MATH_DEFINES  # For M_PI
-        SCENE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/scenes"
+        SCENE_SOURCE_DIR="/sep/scenes"
         GTEST_HAS_MAIN=1  # Ensure GTest knows we're using its main
 )
 
@@ -269,7 +269,7 @@ if(BUILD_BENCHMARKS)
             TESTING=1
             SEP_RANDOMIZE=1
             _USE_MATH_DEFINES  # For M_PI
-            SCENE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/scenes"
+            SCENE_SOURCE_DIR="/sep/scenes"
     )
 endif()
 
@@ -280,14 +280,6 @@ if(OpenMP_CXX_FOUND)
     if(BUILD_BENCHMARKS)
         target_link_libraries(blender_benchmarks PRIVATE OpenMP::OpenMP_CXX)
     endif()
-endif()
-
-# Enable c++20 features
-set_target_properties(blender_tests PROPERTIES
-)
-if(BUILD_BENCHMARKS)
-    set_target_properties(blender_benchmarks PROPERTIES
-    )
 endif()
 
 # Test Categories
@@ -407,7 +399,7 @@ endif()
 
 # Create test data directory
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test_data)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/scenes
+file(COPY /sep/scenes
      DESTINATION ${CMAKE_BINARY_DIR}/test_data)
 
 # Add sanitizers in debug mode (except for stress and gpu tests)

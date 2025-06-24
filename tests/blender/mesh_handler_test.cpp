@@ -1,6 +1,6 @@
 #include "blender/mesh_handler.h"
 
-#include <sep/pattern/types.h>
+#include "../../include/quantum/types.h"
 #include <gtest/gtest.h>
 
 #include <cmath>

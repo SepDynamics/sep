@@ -52,39 +52,39 @@ class APITest : public ::testing::Test {
 
 TEST_F(APITest, InitializationTest) {
   SEPBlenderBridge* bridge = nullptr;
-  EXPECT_EQ(SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge));
   EXPECT_NE(nullptr, bridge);
   sep_blender_cleanup(bridge);
 }
 
 TEST_F(APITest, NullContextInitTest) {
   SEPBlenderBridge* bridge = nullptr;
-  EXPECT_EQ(SEPResult::INIT_FAILED, sep_blender_init(nullptr, nullptr, &bridge));
+  EXPECT_EQ(sep::SEPResult::INIT_FAILED, sep_blender_init(nullptr, nullptr, &bridge));
   EXPECT_EQ(nullptr, bridge);
 }
 
 TEST_F(APITest, RegisterMeshTest) {
-  ASSERT_EQ(SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
+  ASSERT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
 
   SEPMeshHandle handle;
-  EXPECT_EQ(SEPResult::SUCCESS, sep_register_mesh(bridge_, object_.get(), mesh_.get(), &handle));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, sep_register_mesh(bridge_, object_.get(), mesh_.get(), &handle));
   EXPECT_NE(0u, handle);
 }
 
 TEST_F(APITest, InvalidMeshTest) {
-  ASSERT_EQ(SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
+  ASSERT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
 
   SEPMeshHandle handle;
   object_->type = 0;  // Not a mesh
-  EXPECT_EQ(SEPResult::INVALID_OBJECT,
+  EXPECT_EQ(sep::SEPResult::INVALID_OBJECT,
             sep_register_mesh(bridge_, object_.get(), mesh_.get(), &handle));
 }
 
 TEST_F(APITest, UpdateMeshTest) {
-  ASSERT_EQ(SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
+  ASSERT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
 
   SEPMeshHandle handle;
-  ASSERT_EQ(SEPResult::SUCCESS, sep_register_mesh(bridge_, object_.get(), mesh_.get(), &handle));
+  ASSERT_EQ(sep::SEPResult::SUCCESS, sep_register_mesh(bridge_, object_.get(), mesh_.get(), &handle));
 
   SEPPatternMetrics metrics{};
   metrics.active_patterns = 100;
@@ -92,16 +92,16 @@ TEST_F(APITest, UpdateMeshTest) {
   metrics.peak_entropy = 0.5f;
 
   bool updated = false;
-  EXPECT_EQ(SEPResult::SUCCESS, sep_update_mesh(bridge_, handle, &metrics, &updated));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, sep_update_mesh(bridge_, handle, &metrics, &updated));
   EXPECT_TRUE(updated);
 }
 
 TEST_F(APITest, ProcessAudioTest) {
-  ASSERT_EQ(SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
+  ASSERT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
 
   std::vector<float> samples(1024, 0.0f);
   SEPAudioMetrics metrics{};
-  EXPECT_EQ(SEPResult::SUCCESS,
+  EXPECT_EQ(sep::SEPResult::SUCCESS,
             sep_process_audio(bridge_, samples.data(), samples.size(), &metrics));
   EXPECT_EQ(metrics.frames_processed, samples.size());
   EXPECT_FLOAT_EQ(metrics.peak_level, 0.0f);
@@ -109,31 +109,31 @@ TEST_F(APITest, ProcessAudioTest) {
 }
 
 TEST_F(APITest, SyncMemoryTest) {
-  ASSERT_EQ(SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
-  EXPECT_EQ(SEPResult::SUCCESS,
+  ASSERT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
+  EXPECT_EQ(sep::SEPResult::SUCCESS,
             sep_sync_memory(bridge_, sep::MemoryTierEnum::STM, true));
 }
 
 TEST_F(APITest, GetMetricsTest) {
-  ASSERT_EQ(SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
+  ASSERT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
 
   SEPPatternMetrics metrics{};
-  EXPECT_EQ(SEPResult::SUCCESS, sep_get_metrics(bridge_, &metrics));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, sep_get_metrics(bridge_, &metrics));
 }
 
 TEST_F(APITest, ResetStateTest) {
-  ASSERT_EQ(SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
+  ASSERT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
 
   std::vector<float> samples(512, 0.5f);
   SEPAudioMetrics metrics{};
-  ASSERT_EQ(SEPResult::SUCCESS,
+  ASSERT_EQ(sep::SEPResult::SUCCESS,
             sep_process_audio(bridge_, samples.data(), samples.size(), &metrics));
   EXPECT_GT(metrics.peak_level, 0.0f);
 
-  EXPECT_EQ(SEPResult::SUCCESS, sep_reset_state(bridge_));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, sep_reset_state(bridge_));
 
   SEPAudioMetrics metrics_after{};
-  ASSERT_EQ(SEPResult::SUCCESS,
+  ASSERT_EQ(sep::SEPResult::SUCCESS,
             sep_process_audio(bridge_, samples.data(), samples.size(), &metrics_after));
   EXPECT_EQ(metrics_after.frames_processed, samples.size());
   EXPECT_NEAR(metrics_after.peak_level, metrics.peak_level, 1e-5);

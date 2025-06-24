@@ -130,13 +130,9 @@ configure_cmake() {
     local cmake_c_compiler="$C_COMPILER"
     local cmake_cxx_compiler="$CXX_COMPILER"
 
-    cmake -G cmake .. \
+    cmake -G "Unix Makefiles" .. \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-        # -DCMAKE_C_COMPILER="${cmake_c_compiler}" \
-        # -DCMAKE_CXX_COMPILER="${cmake_cxx_compiler}" \
         -DCMAKE_CUDA_COMPILER=nvcc \
-        # -DCMAKE_CUDA_STANDARD=20 \
-        # -DCMAKE_CUDA_ARCHITECTURES="native" \
         > "$CMAKE_LOG" 2>&1 || {
         echo "[!!] CMake configuration failed. See $CMAKE_LOG"
         echo "Last 10 lines of CMake log:"

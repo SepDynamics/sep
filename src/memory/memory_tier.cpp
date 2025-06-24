@@ -162,7 +162,7 @@ SEPResult MemoryTier::defragment() {
                 // Move memory to new position
                 void* new_location = static_cast<char*>(memory_pool_) + current_offset;
 #ifdef SEP_CUDA_AVAILABLE
-                cudaError_t err = cudaMemcpy(new_location, block.ptr, block.size, cuda_stub_constants::cudaMemcpyDefault);
+                cudaError_t err = cudaMemcpy(new_location, block.ptr, block.size, cudaMemcpyDefault);
                 if (err != cudaSuccess) {
                     if (logger)
                         LOG_ERROR(logger, "Defragment cudaMemcpy failed: {}", cudaGetErrorString(err));

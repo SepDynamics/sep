@@ -15,15 +15,14 @@
 #include "blender/pattern_observer.h"
 #include "quantum/types.h"
 #include "memory/types.h"
-
+#include "core/common.h"  // For sep::SEPResult
 
 #include "memory/memory_tier_manager.hpp"
 
 
 namespace sep {
 namespace pattern {
-// Remove the conflicting using declaration
-
+// Use the core SEPResult enum instead of the pattern-specific one
 // Constructor implementation
 BlenderBridge::BlenderBridge()
     : m_processing_thread_active(false)
@@ -184,7 +183,30 @@ void BlenderBridge::notifyError(sep::SEPResult error, const char* message)
     std::lock_guard<std::mutex> lock(m_observer_mutex);
     for (const auto& observer : m_observers)
     {
-        observer->onError(static_cast<sep::pattern::SEPResult>(error), message);
+        // Convert from sep::SEPResult to sep::pattern::SEPResult
+        sep::pattern::SEPResult pattern_error;
+        
+        // Map the most common error codes
+        switch (error) {
+            case sep::SEPResult::SUCCESS:
+                pattern_error = sep::pattern::SEPResult::SUCCESS;
+                break;
+            case sep::SEPResult::INVALID_ARGUMENT:
+                pattern_error = sep::pattern::SEPResult::INVALID_ARGUMENT;
+                break;
+            case sep::SEPResult::ALLOCATION_FAILED:
+                pattern_error = sep::pattern::SEPResult::ALLOCATION_FAILED;
+                break;
+            case sep::SEPResult::PROCESSING_ERROR:
+                pattern_error = sep::pattern::SEPResult::PROCESSING_ERROR;
+                break;
+            default:
+                // Default to PROCESSING_ERROR for any unmapped error
+                pattern_error = sep::pattern::SEPResult::PROCESSING_ERROR;
+                break;
+        }
+        
+        observer->onError(pattern_error, message);
     }
 }
 

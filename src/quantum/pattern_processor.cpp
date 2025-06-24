@@ -138,7 +138,7 @@ SEPResult PatternProcessor::addPattern(const PatternData& pattern) {
 
 const std::vector<PatternData>& PatternProcessor::getPatterns() const { return patterns_; }
 
-CPUPatternProcessor::CPUPatternProcessor() : PatternProcessor(Implementation::CPU), patterns_(patterns_) {}
+CPUPatternProcessor::CPUPatternProcessor() : PatternProcessor(Implementation::CPU), patterns_(PatternProcessor::patterns_) {}
 
 SEPResult CPUPatternProcessor::init(quantum::GPUContext* ctx) { return PatternProcessor::init(ctx); }
 

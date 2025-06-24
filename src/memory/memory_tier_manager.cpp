@@ -196,7 +196,7 @@ SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* pat
 
 MemoryBlock* MemoryTierManager::findBlockByPtr(void* ptr) {
     auto it = lookup_map_.find(ptr);
-    return it != lookup_map_.end() ? it->second;
+    return it != lookup_map_.end() ? it->second : nullptr;
 }
 
 MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, int generation_count) {

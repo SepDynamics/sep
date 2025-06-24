@@ -32,10 +32,10 @@ actions-runner/
 vendor/
 externals/
 boost/
-crow/
-!src/blender/
-!tests/blender/
-!include/blender/
+!third_party/
+!src/
+!tests/
+!include/
 tbb/
 temp/
 ollama/

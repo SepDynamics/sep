@@ -39,6 +39,7 @@ boost/
 tbb/
 temp/
 ollama/
+!include/ollama/
 
 #.vscode/
 .idea/

@@ -2,6 +2,7 @@
 #define SEP_API_CLIENT_H
 
 #include "api/types.h"
+#include "ollama/types.h"
 #include "curl/curl.h"
 #include "core/common.h"
 

@@ -39,7 +39,7 @@ struct SepEngine::Impl
     // PatternEvolution is a static class, no need to instantiate
 
     Impl()
-        : quantum_processor(std::make_unique<sep::quantum::QuantumProcessor>())
+        : quantum_processor(sep::quantum::createQuantumProcessor(sep::quantum::QuantumProcessor::Config{}))
         , memory_manager(sep::memory::MemoryTierManager::getInstance())
         , pattern_processor(std::make_unique<sep::pattern::PatternProcessor>())
     {
@@ -97,7 +97,7 @@ nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
         }
 
         // Initialize quantum processor using default options
-        impl_->quantum_processor = std::make_unique<sep::quantum::QuantumProcessor>();
+        impl_->quantum_processor = sep::quantum::createQuantumProcessor(sep::quantum::QuantumProcessor::Config{});
 
         // Initialize memory tier manager (singleton pattern)
         // The MemoryTierManager instance is stored as a reference in Impl

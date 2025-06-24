@@ -225,9 +225,9 @@ quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     pattern->id = data->id;
     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
     pattern->data.assign(values, values + 4);
-    pattern->metadata.coherence_score = data->coherence;
-    pattern->metadata.stability_score = data->stability;
-    pattern->metadata.generation_count = data->generation;
+    pattern->quantum_state.coherence = data->coherence;
+    pattern->quantum_state.stability = data->stability;
+    pattern->quantum_state.generation = data->generation;
     pattern->relationships = data->relationships;
     return pattern;
 }
@@ -242,9 +242,9 @@ const quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
     pattern->id = data->id;
     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
     pattern->data.assign(values, values + 4);
-    pattern->metadata.coherence_score = data->coherence;
-    pattern->metadata.stability_score = data->stability;
-    pattern->metadata.generation_count = data->generation;
+    pattern->quantum_state.coherence = data->coherence;
+    pattern->quantum_state.stability = data->stability;
+    pattern->quantum_state.generation = data->generation;
     pattern->relationships = data->relationships;
     return pattern;
 }

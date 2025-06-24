@@ -6,7 +6,6 @@ add_library(sep_compat STATIC core/stream.cpp core/core.cu raii.cpp)
 target_include_directories(sep_compat PUBLIC
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/third_party
-    ${CMAKE_SOURCE_DIR}/third_party/crow/include
     ${CMAKE_SOURCE_DIR}/third_party/glm
     ${CMAKE_SOURCE_DIR}/third_party/tbb
 )

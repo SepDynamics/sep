@@ -51,7 +51,8 @@ Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
 bool Engine::init(const sep::config::APIConfig& config) {
     impl_->config = config;
     auto& cuda_core = cuda::CudaCore::instance();
-    if (!cuda_core.initialize()) {
+    auto init_err = cuda_core.initialize();
+    if (init_err.status != cuda::Status::Success) {
         return false;
     }
 

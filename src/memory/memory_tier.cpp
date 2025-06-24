@@ -1,4 +1,6 @@
 // Standard library headers FIRST to ensure proper namespace resolution
+#include "memory/memory_tier.hpp"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
@@ -7,8 +9,6 @@
 #include <iterator>
 #include <memory>
 #include <stdexcept>
-
-#include "memory/memory_tier.hpp"
 
 #ifndef SEP_HAS_EXCEPTIONS
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)

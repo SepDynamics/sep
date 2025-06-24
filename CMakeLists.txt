@@ -37,36 +37,20 @@ find_package(CURL REQUIRED)
 find_library(HIREDIS_LIBRARIES NAMES hiredis)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
 
-if(HIREDIS_LIBRARIES AND HIREDIS_INCLUDE_DIR)
-    set(HIREDIS_FOUND TRUE)
-else()
-    set(HIREDIS_FOUND FALSE)
-    message(WARNING "Hiredis not found, Redis persistence disabled")
-endif()
 
-if(CUDAToolkit_FOUND)
-    set(SEP_CUDA_AVAILABLE 1)
-else()
-    set(SEP_CUDA_AVAILABLE 0)
-    message(WARNING "CUDA toolkit not found, building without CUDA support")
-endif()
-
-add_compile_definitions(SEP_CUDA_AVAILABLE=${SEP_CUDA_AVAILABLE})
-
-# Add our fixed Crow headers directory BEFORE other include directories
 # This ensures our fixed headers are used instead of the problematic ones
 include_directories(BEFORE
   ${CMAKE_SOURCE_DIR}/include
 )
+
+# Add our fixed Crow headers subdirectory
+add_subdirectory(include/crow)
 
 include_directories(
   ${CMAKE_SOURCE_DIR}/third_party
   ${CMAKE_SOURCE_DIR}/third_party/glm
   ${CMAKE_SOURCE_DIR}/third_party/tbb
 )
-
-# Add our fixed Crow headers subdirectory
-add_subdirectory(include/crow)
 
 # Fetch the Crow web framework if it is not present
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/third_party/crow/include")
@@ -83,13 +67,14 @@ else()
 endif()
 
 set(CUDA_SOURCES
-    core/core.cu
-    cuda_api.cu
-    event.cu
-    pattern_kernels.cu
-    quantum_kernels.cu
-    utils.cu
+    compat/core.cu
+    compat/cuda_api.cu
+    compat/event.cu
+    compat/pattern_kernels.cu
+    compat/quantum_kernels.cu
+    compat/utils.cu
 )
+add_executable(sep_engine src/main.cpp)
 
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
@@ -99,15 +84,12 @@ add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 
-add_executable(sep_engine src/main.cpp)
 
 target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
 )
-if(HIREDIS_FOUND)
-    target_include_directories(sep_engine PRIVATE ${HIREDIS_INCLUDE_DIR})
-endif()
+
 
 target_link_libraries(sep_engine
     sep_api
@@ -119,7 +101,7 @@ target_link_libraries(sep_engine
     sep_compat
     ${CURL_LIBRARIES}
     ${CUDA_LIBRARIES}
-    $<$<BOOL:${SEP_HAS_HIREDIS}>:${HIREDIS_LIBRARIES}>
+    ${HIREDIS_LIBRARIES}
     fmt::fmt
     spdlog::spdlog
 )

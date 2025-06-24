@@ -111,9 +111,34 @@ namespace shim {
         data_ = nullptr;
       }
     }
+    // Iterator support for compatibility with nlohmann::json
+    using value_type = char;
+    using size_type = size_t;
+    using const_iterator = const char*;
+    using iterator = char*;
+
+    const_iterator begin() const { return data_; }
+    const_iterator end() const { return data_ ? data_ + size_ : nullptr; }
+    iterator begin() { return data_; }
+    iterator end() { return data_ ? data_ + size_ : nullptr; }
+
+    // Data access helpers
+    const char* data() const { return c_str(); }
+    size_t length() const { return size_; }
+
+    // For JSON parsing - provide data() and size() consistently
     const char* c_str() const { return data_ ? data_ : ""; }
     size_t size() const { return size_; }
+
+    // Ensure empty() is defined
     bool empty() const { return size_ == 0; }
+
+    // Character access helpers
+    char operator[](size_t pos) const {
+        return (pos < size_) ? data_[pos] : '\0';
+    }
+
+    char& operator[](size_t pos) { return data_[pos]; }
     
     // Comparison operators
     bool operator==(const char* s) const {
@@ -126,15 +151,101 @@ namespace shim {
     }
     bool operator!=(const string& other) const { return !(*this == other); }
     
-    // Find method
-    size_t find(const char* pattern) const {
-      if (!pattern || !data_) return static_cast<size_t>(-1);
-      const char* pos = strstr(data_, pattern);
-      return pos ? static_cast<size_t>(pos - data_) : static_cast<size_t>(-1);
+    // Find operation (basic implementation)
+    size_t find(char c, size_t pos = 0) const {
+        if (!data_ || pos >= size_) return npos;
+        for (size_t i = pos; i < size_; ++i) {
+            if (data_[i] == c) return i;
+        }
+        return npos;
     }
-    
+
     static const size_t npos = static_cast<size_t>(-1);
+
+    // Substr operation
+    string substr(size_t pos = 0, size_t count = npos) const {
+        if (pos >= size_) return string();
+        size_t rcount = (count == npos || pos + count > size_) ?
+                        size_ - pos : count;
+        char* temp = static_cast<char*>(malloc(rcount + 1));
+        if (temp) {
+            memcpy(temp, data_ + pos, rcount);
+            temp[rcount] = '\0';
+            string result(temp);
+            free(temp);
+            return result;
+        }
+        return string();
+    }
+
+    // Append operations
+    string& append(const char* s) {
+        if (s) {
+            size_t slen = strlen(s);
+            if (size_ + slen + 1 > capacity_) {
+                size_t new_cap = (size_ + slen + 1) * 2;
+                char* new_data = static_cast<char*>(realloc(data_, new_cap));
+                if (new_data) {
+                    data_ = new_data;
+                    capacity_ = new_cap;
+                } else {
+                    return *this; // Failed to allocate
+                }
+            }
+            memcpy(data_ + size_, s, slen + 1);
+            size_ += slen;
+        }
+        return *this;
+    }
+
+    string& operator+=(const char* s) {
+        return append(s);
+    }
+
+    string& operator+=(const string& other) {
+        return append(other.c_str());
+    }
+
+    // Comparison operators
+    bool operator==(const string& other) const {
+        if (size_ != other.size_) return false;
+        if (!data_ && !other.data_) return true;
+        if (!data_ || !other.data_) return false;
+        return memcmp(data_, other.data_, size_) == 0;
+    }
+
+    bool operator!=(const string& other) const {
+        return !(*this == other);
+    }
+
+    bool operator<(const string& other) const {
+        size_t min_size = (size_ < other.size_) ? size_ : other.size_;
+        if (data_ && other.data_) {
+            int cmp = memcmp(data_, other.data_, min_size);
+            if (cmp != 0) return cmp < 0;
+        }
+        return size_ < other.size_;
+    }
   };
+
+  // String concatenation
+  inline string operator+(const string& lhs, const string& rhs) {
+      string result(lhs);
+      result += rhs;
+      return result;
+  }
+
+  inline string operator+(const string& lhs, const char* rhs) {
+      string result(lhs);
+      result += rhs;
+      return result;
+  }
+
+  inline string operator+(const char* lhs, const string& rhs) {
+      string result(lhs);
+      result += rhs;
+      return result;
+  }
 
   inline std::ostream& operator<<(std::ostream& os, const string& s) {
     os << s.c_str();
@@ -669,7 +780,7 @@ namespace shim {
 // Prefer a dedicated functor to avoid injecting into the std namespace.
 namespace sep {
 namespace shim {
-  struct string_hash {
+struct string_hash {
     size_t operator()(const string& s) const {
       size_t hash_val = 5381;
       const char* str = s.c_str();
@@ -682,6 +793,21 @@ namespace shim {
   };
 }  // namespace shim
 }  // namespace sep
+
+namespace std {
+    template<>
+    struct hash<sep::shim::string> {
+        size_t operator()(const sep::shim::string& s) const {
+            size_t h = 0;
+            const char* data = s.data();
+            size_t len = s.size();
+            for (size_t i = 0; i < len; ++i) {
+                h = h * 31 + static_cast<size_t>(data[i]);
+            }
+            return h;
+        }
+    };
+}
 
 // Previously shim types were injected into the std namespace when SEP_NO_STDLIB
 // was defined. That mapping has been removed; use sep::shim directly instead.

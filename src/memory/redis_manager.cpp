@@ -80,7 +80,7 @@ public:
     }
 
     void storePattern( std::size_t id,
-                       const sep::pattern::PatternData& data,
+                       const sep::persistence::PatternData& data,
                        const std::string& tier)
     {
 #if SEP_HAS_HIREDIS
@@ -162,7 +162,7 @@ public:
 #endif
     }
 
-    std::optional<sep::pattern::PatternData> loadPattern( std::size_t id,
+    std::optional<sep::persistence::PatternData> loadPattern( std::size_t id,
                                            const std::string& tier)
     {
 #if SEP_HAS_HIREDIS
@@ -185,16 +185,16 @@ public:
         }
         freeReplyObject(reply);
 
-        sep::pattern::PatternData std::data;
+        sep::persistence::PatternData pattern_data;
 
         // Load position
         reply = static_cast<redisReply*>(
             redisCommand(context_, "HMGET %s position:x position:y position:z", key.str().c_str()));
         if (reply && reply->type == REDIS_REPLY_ARRAY && reply->elements == 3)
         {
-            std::data.position.x = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
-            std::data.position.y = reply->element[1]->str ? std::stof(reply->element[1]->str) : 0.0f;
-            std::data.position.z = reply->element[2]->str ? std::stof(reply->element[2]->str) : 0.0f;
+            pattern_data.position.x = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
+            pattern_data.position.y = reply->element[1]->str ? std::stof(reply->element[1]->str) : 0.0f;
+            pattern_data.position.z = reply->element[2]->str ? std::stof(reply->element[2]->str) : 0.0f;
         }
         if (reply)
             freeReplyObject(reply);
@@ -206,9 +206,9 @@ public:
                          key.str().c_str()));
         if (reply && reply->type == REDIS_REPLY_ARRAY && reply->elements == 6)
         {
-            std::data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
-            std::data.stability = reply->element[1]->str ? std::stof(reply->element[1]->str) : 0.0f;
-            std::data.generation = reply->element[2]->str ? std::stoi(reply->element[2]->str) : 0;
+            pattern_data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
+            pattern_data.stability = reply->element[1]->str ? std::stof(reply->element[1]->str) : 0.0f;
+            pattern_data.generation_count = reply->element[2]->str ? std::stoi(reply->element[2]->str) : 0;
             // We're ignoring access_frequency since it's not in the core PatternData structure
             // Just use coherence value for both fields
             std::data.coherence = reply->element[0]->str ? std::stof(reply->element[0]->str) : 0.0f;
@@ -240,7 +240,7 @@ public:
             if (reply && reply->type == REDIS_REPLY_ARRAY && reply->elements == 3)
             {
                 // Create a PatternRelationship from the Redis data
-                sep::pattern::PatternRelationship patternRel;
+                sep::persistence::PatternRelationship patternRel;
                 
                 // Get the raw ID from Redis
                 size_t rel_id = reply->element[0]->str ? std::stoull(reply->element[0]->str) : 0;
@@ -344,7 +344,7 @@ public:
 #endif
     }
 
-    void bulkStore(const std::vector<std::pair<std::size_t, sep::pattern::PatternData>>& patterns, const std::string& tier)
+    void bulkStore(const std::vector<std::pair<std::size_t, sep::persistence::PatternData>>& patterns, const std::string& tier)
     {
         for (const auto& pair : patterns)
         {
@@ -352,9 +352,9 @@ public:
         }
     }
 
-    std::vector<sep::pattern::PatternData> bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
+    std::vector<sep::persistence::PatternData> bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
     {
-        std::vector<sep::pattern::PatternData> results;
+        std::vector<sep::persistence::PatternData> results;
         results.reserve(ids.size());
 
         for (std::size_t id : ids)
@@ -379,12 +379,12 @@ private:
 RedisManager::RedisManager(const std::string& host, int port) : impl_(std::make_unique<Impl>(host, port)) {}
 RedisManager::~RedisManager() = default;
 
-void RedisManager::storePattern(std::size_t id, const sep::pattern::PatternData& data, const std::string& tier)
+void RedisManager::storePattern(std::size_t id, const sep::persistence::PatternData& data, const std::string& tier)
 {
     impl_->storePattern(id, data, tier);
 }
 
-std::optional<sep::pattern::PatternData> RedisManager::loadPattern(std::size_t id, const std::string& tier)
+std::optional<sep::persistence::PatternData> RedisManager::loadPattern(std::size_t id, const std::string& tier)
 {
     return impl_->loadPattern(id, tier);
 }
@@ -399,12 +399,12 @@ void RedisManager::removePattern(std::size_t id, const std::string& tier)
     impl_->removePattern(id, tier);
 }
 
-void RedisManager::bulkStore(const std::vector<std::pair<std::size_t, sep::pattern::PatternData>>& patterns, const std::string& tier)
+void RedisManager::bulkStore(const std::vector<std::pair<std::size_t, sep::persistence::PatternData>>& patterns, const std::string& tier)
 {
     impl_->bulkStore(patterns, tier);
 }
 
-std::vector<sep::pattern::PatternData> RedisManager::bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
+std::vector<sep::persistence::PatternData> RedisManager::bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
 {
     return impl_->bulkLoad(ids, tier);
 }

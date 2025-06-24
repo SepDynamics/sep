@@ -36,6 +36,8 @@ enum class SEPResult : int32_t {
 enum class Status { Success = 0, Error = 1 };
 
 // Simple pin state structure used by the engine algorithms
+#ifndef SEP_PINSTATE_DEFINED
+#define SEP_PINSTATE_DEFINED
 struct PinState {
     std::uint64_t state{0};
     std::uint32_t flags{0};
@@ -43,6 +45,7 @@ struct PinState {
         return state == other.state && flags == other.flags;
     }
 };
+#endif // SEP_PINSTATE_DEFINED
 
 // Convert SEPResult to string
 inline const char* to_string(SEPResult result) {

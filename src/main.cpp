@@ -6,6 +6,8 @@
 #include <exception>
 #include <iostream>
 #include <spdlog/spdlog.h>
+#include <string>
+#include <csignal>
 
 #ifndef SEP_HAS_EXCEPTIONS
 #    if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
@@ -15,9 +17,30 @@
 #    endif
 #endif
 
+// Global flag for controlling server shutdown
+volatile sig_atomic_t g_keep_running = 1;
+
+// Signal handler for graceful shutdown
+void signal_handler(int signal) {
+    spdlog::info("Received signal {}, initiating shutdown...", signal);
+    g_keep_running = 0;
+}
+
 int main(int argc, char* argv[]) {
   curl_global_init(CURL_GLOBAL_ALL);
   sep::logging::initializeLogging();
+
+  // Setup signal handling for graceful shutdown
+  signal(SIGINT, signal_handler);
+  signal(SIGTERM, signal_handler);
+
+  bool server_mode = false;
+  for (int i = 1; i < argc; i++) {
+    if (std::string(argv[i]) == "--server") {
+      server_mode = true;
+      break;
+    }
+  }
 
 #if SEP_HAS_EXCEPTIONS
   try {
@@ -40,8 +63,21 @@ int main(int argc, char* argv[]) {
 
     sep::api::SEPApiServer server(config.getAPIConfig());
     server.run();
-    server.waitForShutdown();
+    
+    if (server_mode) {
+      spdlog::info("Running in server mode, waiting for shutdown signal...");
+      // Keep running until signal is received
+      while (g_keep_running) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+      }
+      spdlog::info("Shutting down server...");
+    } else {
+      // In non-server mode, wait for server to complete
+      server.waitForShutdown();
+    }
+
     engine.shutdown();
+
 #if SEP_HAS_EXCEPTIONS
   } catch (const std::exception& e) {
     spdlog::critical("Unhandled exception: {}", e.what());

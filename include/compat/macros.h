@@ -10,12 +10,6 @@
 #ifndef SEP_CUDA_AVAILABLE
 #if defined(__CUDACC__) || defined(SEP_USE_CUDA)
 #define SEP_CUDA_AVAILABLE 1
-#elif defined(__has_include)
-#if __has_include(<cuda_runtime.h>)
-#define SEP_CUDA_AVAILABLE 1
-#else
-#define SEP_CUDA_AVAILABLE 0
-#endif
 #else
 #define SEP_CUDA_AVAILABLE 0
 #endif

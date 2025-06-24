@@ -14,20 +14,20 @@ add_library(sep_compat STATIC
     utils.cu
 )
 
-# Ensure CUDA compilation for .cu files
+# Comment out CUDA configuration
 set_source_files_properties(
-    core/core.cu
-    cuda_api.cu
-    event.cu
-    pattern_kernels.cu
-    quantum_kernels.cu
-    utils.cu
-    PROPERTIES LANGUAGE CUDA
+     core/core.cu
+     cuda_api.cu
+     event.cu
+     pattern_kernels.cu
+     quantum_kernels.cu
+     utils.cu
 )
 
 # Add include directories needed by compat library sources
-target_include_directories(sep_compat PRIVATE
-    ${CMAKE_SOURCE_DIR}/include # For core/error_handler.h, core/types.h, etc.
-    ${CMAKE_SOURCE_DIR}/third_party/glm # For GLM headers
-    ${CMAKE_SOURCE_DIR}/src # For other source directories
+target_include_directories(sep_compat 
+  PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/third_party/glm
+    ${CMAKE_SOURCE_DIR}/src
 )

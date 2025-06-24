@@ -133,7 +133,7 @@ EventRAII::EventRAII() {
     // the real CUDA runtime or the stub implementation. Casting through
     // the stub-specific type is unnecessary and breaks when the stub is
     // absent, so simply pass the address of the underlying handle.
-    cudaError_t err = cudaEventCreate(reinterpret_cast<void**>(&event_));
+    cudaError_t err = cudaEventCreate(&event_);
     if (err != cudaSuccess) {
         event_ = nullptr;
         if (debugAllocEnabled()) {

@@ -23,9 +23,17 @@ set(CUDA_LIBRARY_DIRS
     CACHE STRING "CUDA library directories"
 )
 
-# Add CUDA library directories and include directories globally
-link_directories(${CUDA_LIBRARY_DIRS})
-include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
+# Check if the expected CUDA library path exists; if not, disable CUDA support.
+if(NOT EXISTS "${CUDA_PATH}/lib64")
+    message(WARNING "CUDA path ${CUDA_PATH} not found; disabling CUDA support")
+    set(CUDAToolkit_FOUND OFF CACHE BOOL "CUDA toolkit found" FORCE)
+    set(CUDA_LIBRARIES "" CACHE STRING "CUDA libraries" FORCE)
+    set(CUDA_LIBRARY_DIRS "" CACHE STRING "CUDA library directories" FORCE)
+else()
+    # Add CUDA library directories and include directories globally
+    link_directories(${CUDA_LIBRARY_DIRS})
+    include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
+endif()
 
 #--- Host compiler flags ---
 # Enforce C++20 for GCC 14

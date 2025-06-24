@@ -6,9 +6,6 @@
  * SEP Engine API via HTTP endpoints using the Crow web framework.
  */
 
-// Define CROW_DISABLE_RTTI first since we're using with CUDA
-#define CROW_DISABLE_RTTI 1
-
 // First include our fixed isolation headers to avoid conflicts
 #include "crow/crow_isolation.h"
 #include "crow/common.h"

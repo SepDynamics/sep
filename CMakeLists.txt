@@ -3,6 +3,18 @@ project(SEPEngine)
 
 include(FetchContent)
 
+# Disable RTTI in Crow globally
+add_compile_definitions(CROW_DISABLE_RTTI=1)
+
+# Locate external dependencies
+find_package(CURL REQUIRED)
+find_library(HIREDIS_LIBRARIES hiredis)
+find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
+find_package(CUDAToolkit QUIET)
+if(CUDAToolkit_FOUND)
+  set(SEP_CUDA_LIB CUDA::cudart)
+endif()
+
 # Add our fixed Crow headers directory BEFORE other include directories
 # This ensures our fixed headers are used instead of the problematic ones
 include_directories(BEFORE
@@ -43,6 +55,9 @@ target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
 )
+if(HIREDIS_INCLUDE_DIR)
+    target_include_directories(sep_engine PUBLIC ${HIREDIS_INCLUDE_DIR})
+endif()
 
 target_link_libraries(sep_engine
     sep_core
@@ -51,4 +66,10 @@ target_link_libraries(sep_engine
     sep_quantum
     sep_audio
     sep_blender
-    sep_compat)
+    sep_compat
+    CURL::libcurl
+    ${SEP_CUDA_LIB}
+)
+if(HIREDIS_LIBRARIES)
+    target_link_libraries(sep_engine PRIVATE ${HIREDIS_LIBRARIES})
+endif()

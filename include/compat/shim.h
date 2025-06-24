@@ -128,7 +128,6 @@ namespace shim {
 
     // For JSON parsing - provide data() and size() consistently
     const char* c_str() const { return data_ ? data_ : ""; }
-    const char* data() const { return c_str(); }
     size_t size() const { return size_; }
 
     // Ensure empty() is defined
@@ -147,10 +146,6 @@ namespace shim {
       return strcmp(c_str(), s) == 0;
     }
     bool operator!=(const char* s) const { return !(*this == s); }
-    bool operator==(const string& other) const {
-      return strcmp(c_str(), other.c_str()) == 0;
-    }
-    bool operator!=(const string& other) const { return !(*this == other); }
     
     // Find operation (basic implementation)
     size_t find(char c, size_t pos = 0) const {
@@ -253,24 +248,6 @@ namespace shim {
     return os;
   }
 
-  inline string operator+(const string& lhs, const string& rhs) {
-    string result(lhs);
-    result += rhs;
-    return result;
-  }
-
-  inline string operator+(const string& lhs, const char* rhs) {
-    string result(lhs);
-    result += rhs;
-    return result;
-  }
-
-  inline string operator+(const char* lhs, const string& rhs) {
-    string result(lhs);
-    result += rhs;
-    return result;
-  }
-  
   // Exception classes
   class exception {
   public:

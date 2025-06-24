@@ -39,7 +39,7 @@ CrowRequestAdapter::CrowRequestAdapter(::crow::request &req) : req_(req) {
 
 std::string CrowRequestAdapter::url() const { return std::string(req_.url); }
 
-const std::string& CrowRequestAdapter::method() const { return method_str_; }
+std::string CrowRequestAdapter::method() const { return method_str_; }
 
 std::string CrowRequestAdapter::body() const { return std::string(req_.body); }
 

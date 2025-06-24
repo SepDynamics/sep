@@ -8,6 +8,7 @@
 #include "api/rate_limit_middleware.h"
 #include "api/types.h"
 #include "api/auth_middleware.h"
+#include "api/ollama_client.h"
 #include <atomic>
 #include <memory>
 #include <mutex>

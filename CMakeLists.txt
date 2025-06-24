@@ -36,6 +36,18 @@ find_package(CURL REQUIRED)
 # so fall back to a simple find_library/find_path approach.
 find_library(HIREDIS_LIBRARIES NAMES hiredis)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
+if(HIREDIS_LIBRARIES AND HIREDIS_INCLUDE_DIR)
+    set(SEP_HAS_HIREDIS 1)
+else()
+    set(SEP_HAS_HIREDIS 0)
+    set(HIREDIS_LIBRARIES "")
+    set(HIREDIS_INCLUDE_DIR "")
+endif()
+add_compile_definitions(SEP_HAS_HIREDIS=${SEP_HAS_HIREDIS})
+
+# Blender support is disabled in this build
+set(SEP_HAS_BLENDER 0)
+add_compile_definitions(SEP_HAS_BLENDER=${SEP_HAS_BLENDER})
 
 if(CUDAToolkit_FOUND)
     set(SEP_CUDA_AVAILABLE 1)
@@ -97,9 +109,10 @@ add_executable(sep_engine src/main.cpp)
 target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
-    PRIVATE 
-        ${HIREDIS_INCLUDE_DIR}
 )
+if(HIREDIS_INCLUDE_DIR)
+    target_include_directories(sep_engine PRIVATE ${HIREDIS_INCLUDE_DIR})
+endif()
 
 target_link_libraries(sep_engine
     sep_api

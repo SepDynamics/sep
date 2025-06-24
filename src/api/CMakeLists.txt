@@ -6,4 +6,7 @@ target_include_directories(sep_api
 )
 
 # Link external dependencies when available
-target_link_libraries(sep_api PRIVATE ${CURL_LIBRARIES} ${HIREDIS_LIBRARIES})
+target_link_libraries(sep_api PRIVATE ${CURL_LIBRARIES})
+if(HIREDIS_LIBRARIES)
+    target_link_libraries(sep_api PRIVATE ${HIREDIS_LIBRARIES})
+endif()

@@ -8,11 +8,8 @@
 #include <stdlib.h>  // For malloc/free
 #include <string.h>  // For strcpy, memcpy, memset
 
-// Detect whether the real CUDA runtime is available.  This previously relied on
-// several different macros.  We now use the unified `SEP_CUDA_AVAILABLE`
-// definition from `cuda/macros.h`.
-#include "compat/macros.h"
-#include "compat/cuda.h"  // For sep::cuda namespace
+// Include our CUDA runtime header which handles both real CUDA and stub implementations
+#include "compat/cuda_runtime.h"
 
 #if SEP_CUDA_AVAILABLE
 // When CUDA is available, include the real CUDA runtime
@@ -23,77 +20,9 @@
 #endif
 
 #if !SEP_CUDA_AVAILABLE
-
-// Use CUDA types from sep::cuda namespace
-using sep::cuda::cudaError_t;
-using sep::cuda::cudaSuccess;
-using sep::cuda::cudaErrorMemoryAllocation;
-using sep::cuda::cudaErrorInitializationError;
-using sep::cuda::cudaErrorInvalidDevice;
-using sep::cuda::cudaErrorDeviceUninitialized;
-using sep::cuda::cudaErrorInvalidValue;
-using sep::cuda::cudaErrorNotReady;
-using sep::cuda::cudaErrorSetOnActiveProcess;
-using sep::cuda::cudaErrorStreamCaptureUnsupported;
-using sep::cuda::cudaErrorInvalidMemcpyDirection;
-using sep::cuda::cudaErrorInvalidResourceHandle;
-
-// Forward declare CUDA types needed for this stub implementation
-namespace cuda_stub_constants {
-typedef struct CUstream_st* cudaStream_t;
-typedef struct CUevent_st* cudaEvent_t;
-
-// Define cudaMemcpyKind enum
-typedef enum {
-    cudaMemcpyHostToHost = 0,
-    cudaMemcpyHostToDevice = 1,
-    cudaMemcpyDeviceToHost = 2,
-    cudaMemcpyDeviceToDevice = 3,
-    cudaMemcpyDefault = 4
-} cudaMemcpyKind;
-typedef struct {
-    int major;
-    int minor;
-    int pageableMemoryAccess;
-    int concurrentKernels;
-    
-    // Add all fields used in cudaGetDeviceProperties
-    char name[256];
-    size_t totalGlobalMem;
-    int multiProcessorCount;
-    int maxThreadsPerBlock;
-    int warpSize;
-    int sharedMemPerBlock;
-    int regsPerBlock;
-    size_t memPitch;
-    int maxThreadsDim[3];
-    int maxGridSize[3];
-    size_t totalConstMem;
-    int clockRate;
-    size_t textureAlignment;
-    int deviceOverlap;
-    int kernelExecTimeoutEnabled;
-    int integrated;
-    int canMapHostMemory;
-    int computeMode;
-    int maxTexture1D;
-    int maxTexture2D[2];
-    int maxTexture3D[3];
-    int maxTexture1DLayered[2];
-    int maxTexture2DLayered[3];
-    size_t surfaceAlignment;
-    int ECCEnabled;
-    int pciBusID;
-    int pciDeviceID;
-    int pciDomainID;
-    int tccDriver;
-    int asyncEngineCount;
-    int unifiedAddressing;
-    int memoryClockRate;
-    int memoryBusWidth;
-    int l2CacheSize;
-    int maxThreadsPerMultiProcessor;
-} cudaDeviceProp;
+// Additional implementation details for CUDA stubs
+// Use the cudaDeviceProp from cuda_runtime.h
+using cudaDeviceProp = sep::cuda::cudaDeviceProp;
 
 constexpr size_t STUB_GLOBAL_MEM = 1024 * 1024 * 1024;  // 1GB
 constexpr int STUB_MAJOR_VERSION = 3;
@@ -342,7 +271,6 @@ inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
 // Populate device properties with conservative values so callers relying on
 // hardware characteristics can continue running without real GPU hardware.
 inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
-
 #if SEP_CUDA_AVAILABLE
     return ::cudaGetDeviceProperties(prop, device);
 #else
@@ -353,6 +281,7 @@ inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
     if (device < 0 || device >= 1) {
         return cudaErrorInvalidDevice;
     }
+    
     if (prop) {
         strcpy(prop->name, "Stub GPU Device");
         prop->totalGlobalMem = 1024 * 1024 * 1024;  // 1GB
@@ -361,10 +290,7 @@ inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
         prop->multiProcessorCount = 8;
         prop->maxThreadsPerBlock = 1024;
         prop->warpSize = 32;
-        // Initialize other fields to reasonable defaults
         prop->sharedMemPerBlock = 49152;
-        prop->regsPerBlock = 65536;
-        prop->memPitch = 2147483647;
         prop->maxThreadsDim[0] = 1024;
         prop->maxThreadsDim[1] = 1024;
         prop->maxThreadsDim[2] = 64;
@@ -373,36 +299,15 @@ inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
         prop->maxGridSize[2] = 65535;
         prop->totalConstMem = 65536;
         prop->clockRate = 1000000;
-        prop->textureAlignment = 512;
         prop->deviceOverlap = 1;
         prop->kernelExecTimeoutEnabled = 0;
         prop->integrated = 0;
         prop->canMapHostMemory = 1;
-        prop->computeMode = 0;
-        prop->maxTexture1D = 65536;
-        prop->maxTexture2D[0] = 65536;
-        prop->maxTexture2D[1] = 65536;
-        prop->maxTexture3D[0] = 4096;
-        prop->maxTexture3D[1] = 4096;
-        prop->maxTexture3D[2] = 4096;
-        prop->maxTexture1DLayered[0] = 16384;
-        prop->maxTexture1DLayered[1] = 2048;
-        prop->maxTexture2DLayered[0] = 16384;
-        prop->maxTexture2DLayered[1] = 16384;
-        prop->maxTexture2DLayered[2] = 2048;
-        prop->surfaceAlignment = 512;
         prop->concurrentKernels = 1;
-        prop->ECCEnabled = 0;
-        prop->pciBusID = 0;
-        prop->pciDeviceID = 0;
-        prop->pciDomainID = 0;
-        prop->tccDriver = 0;
-        prop->asyncEngineCount = 2;
         prop->unifiedAddressing = 1;
-        prop->memoryClockRate = 2000000;
-        prop->memoryBusWidth = 256;
-        prop->l2CacheSize = 1048576;
         prop->maxThreadsPerMultiProcessor = 2048;
+        
+        // Note: We're not setting fields that don't exist in our simplified cudaDeviceProp
     }
     return cudaSuccess;
 #endif
@@ -482,15 +387,7 @@ inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
 inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
     return performCudaMemcpyAsync({dst, src, count, kind, stream});
 }
-}  // namespace cuda_stub_constants
-
-#if !SEP_CUDA_AVAILABLE
-using cuda_stub_constants::cudaEvent_t;
-using cuda_stub_constants::cudaStream_t;
-using cuda_stub_constants::cudaMemcpyKind;
-using cuda_stub_constants::cudaDeviceProp;
-
-#endif
-
+// End of the implementation section
 #endif  // !SEP_CUDA_AVAILABLE
+
 #endif  // SEP_CUDA_IMPL_H

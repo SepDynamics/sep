@@ -41,22 +41,25 @@ namespace sep::cuda {
 // stub functions into this namespace so the rest of the code can call
 // them transparently.
 #if !SEP_CUDA_AVAILABLE
-// Provide lightweight wrappers when the real CUDA runtime is absent.  These
-// definitions match the extern "C" declarations in <compat/cuda.h>.
-extern "C" cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream,
-                                                  unsigned int /*flags*/) {
+// Provide lightweight wrappers when the real CUDA runtime is absent.
+// These implementations match the declarations in cuda_runtime.h
+cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream,
+                                      unsigned int /*flags*/) {
     if (stream) {
         *stream = nullptr;
     }
     return cudaSuccess;
 }
-extern "C" cudaError_t cudaStreamDestroy(cudaStream_t /*stream*/) {
+
+cudaError_t cudaStreamDestroy(cudaStream_t /*stream*/) {
     return cudaSuccess;
 }
-extern "C" cudaError_t cudaStreamSynchronize(cudaStream_t /*stream*/) {
+
+cudaError_t cudaStreamSynchronize(cudaStream_t /*stream*/) {
     return cudaSuccess;
 }
-extern "C" cudaError_t cudaEventCreate(void** event) {
+
+cudaError_t cudaEventCreate(void** event) {
     if (event) {
         *event = nullptr;
     }
@@ -65,14 +68,16 @@ extern "C" cudaError_t cudaEventCreate(void** event) {
 extern "C" cudaError_t cudaEventDestroy(cudaEvent_t /*event*/) {
     return cudaSuccess;
 }
-extern "C" cudaError_t cudaEventSynchronize(cudaEvent_t /*event*/) {
+cudaError_t cudaEventSynchronize(cudaEvent_t /*event*/) {
     return cudaSuccess;
 }
-extern "C" cudaError_t cudaStreamAttachMemAsync(cudaStream_t /*stream*/, void* /*ptr*/,
-                                                 size_t /*size*/, unsigned int /*flags*/) {
+
+cudaError_t cudaStreamAttachMemAsync(cudaStream_t /*stream*/, void* /*ptr*/,
+                                   size_t /*size*/, unsigned int /*flags*/) {
     return cudaSuccess;
 }
-extern "C" const char* cudaGetErrorString(cudaError_t /*error*/) {
+
+const char* cudaGetErrorString(cudaError_t /*error*/) {
     return "CUDA not available";
 }
 #endif

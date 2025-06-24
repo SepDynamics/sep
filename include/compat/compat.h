@@ -8,7 +8,7 @@
 #include "compat/macros.h"
 #if SEP_CUDA_AVAILABLE
 #include "compat/math_common.h"
-#include "compat/cuda_runtime.h"
+#include <compat/cuda_runtime.h>
 
 // We don't need to define uint64_t as it's already provided by system headers
 // in <stdint.h> or <cstdint> which is included by other headers

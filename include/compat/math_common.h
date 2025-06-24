@@ -48,7 +48,7 @@
 #define GLM_FORCE_CUDA     // Force CUDA mode
 
 // Use the standard CUDA runtime instead of the custom wrapper
-#include "compat/cuda_runtime.h"
+#include <compat/cuda_runtime.h>
 #endif
 
 // Include GLM after defining compatibility macros

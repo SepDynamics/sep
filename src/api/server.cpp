@@ -2,7 +2,8 @@
 #include "api/ollama_client.h"
 #include "api/json_helpers.h"
 #include <spdlog/spdlog.h>
-#include "crow/crow.h"
+#include "crow/app.h"
+#include "crow/middlewares/cors.h"
 
 #include <chrono>
 #include <csignal>

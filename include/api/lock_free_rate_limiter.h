@@ -5,7 +5,13 @@
 #include <atomic>
 #include <chrono>
 #include <memory>
-#include <tbb/concurrent_hash_map.h>
+#if __has_include(<tbb/concurrent_hash_map.h>)
+#  include <tbb/concurrent_hash_map.h>
+#  define SEP_HAS_TBB 1
+#else
+#  include <unordered_map>
+#  define SEP_HAS_TBB 0
+#endif
 #include <thread>
 
 namespace sep::api {
@@ -122,9 +128,14 @@ private:
       PriorityConfig{5.0f}  // CRITICAL
   };
 
-  // Client management using TBB concurrent hash map
+  // Client management using concurrent hash map when TBB is available
+#if SEP_HAS_TBB
   using ClientMap =
       tbb::concurrent_hash_map<std::string, std::unique_ptr<ClientData>>;
+#else
+  using ClientMap =
+      std::unordered_map<std::string, std::unique_ptr<ClientData>>;
+#endif
   ClientMap clients_;
 
   // Background cleanup

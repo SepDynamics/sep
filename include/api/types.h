@@ -1,8 +1,11 @@
 #pragma once
 
-#include <string>
+#include <atomic>
+#include <chrono>
 #include <map>
+#include <string>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 namespace sep::api {
 
@@ -22,9 +25,7 @@ public:
     virtual std::string method() const = 0;
     virtual std::string body() const = 0;
 
-    virtual std::string getHeader(const std::string& name) const {
-        return "";
-    }
+    virtual std::string getHeader(const std::string& name) const { return ""; }
 };
 
 class HttpResponse {
@@ -38,15 +39,25 @@ public:
     virtual void end() = 0;
 
     virtual void setHeader(const std::string& name, const std::string& value) {
-        (void)name; (void)value;
+        (void)name;
+        (void)value;
     }
 };
 
+// Basic health metrics used by the HTTP client
 struct HealthMetrics {
-    bool healthy = true;
-    std::string status = "ok";
-    int64_t uptime_ms = 0;
-    std::map<std::string, double> metrics;
+    std::atomic<size_t> totalRequests{0};
+    std::atomic<size_t> successfulRequests{0};
+    std::atomic<size_t> failedRequests{0};
+    std::atomic<size_t> timeoutRequests{0};
+    std::atomic<size_t> rateLimitedCount{0};
+    std::atomic<double> averageResponseTime{0.0};
+    std::chrono::steady_clock::time_point lastRequestTime;
+    std::chrono::steady_clock::time_point startTime;
+    std::chrono::milliseconds lastResponseTime{0};
+    std::chrono::system_clock::time_point lastSuccessTime;
+    std::chrono::system_clock::time_point lastErrorTime;
+    int lastErrorCode{0};
 };
 
 struct RateLimitConfig {
@@ -58,5 +69,55 @@ struct AuthConfig {
     bool enabled = false;
     std::vector<std::string> tokens;
 };
+
+// Error codes returned by API operations
+enum class ErrorCode {
+    Success = 0,
+    InvalidArgument,
+    InvalidParameter,
+    InvalidOperation,
+    ResourceNotFound,
+    OutOfMemory,
+    InvalidState,
+    SystemError,
+    CudaError,
+    ProcessingError,
+    ApiError,
+    GeneralError,
+    BufferTooSmall,
+    Unknown
+};
+
+// Request priority for rate limiting
+enum class Priority { LOW = 0, NORMAL = 1, HIGH = 2, CRITICAL = 3 };
+
+struct APIRequest {
+    std::string method;
+    std::string url;
+    std::string body;
+    std::map<std::string, std::string> headers;
+    Priority priority = Priority::NORMAL;
+    std::chrono::milliseconds timeout{5000};
+    std::string requestId;
+};
+
+struct APIResponse {
+    int statusCode = 0;
+    std::string body;
+    std::map<std::string, std::string> headers;
+    std::chrono::milliseconds responseTime{0};
+    std::string requestId;
+    bool success = false;
+    struct Error {
+        ErrorCode code{ErrorCode::Success};
+        std::string message;
+    } error;
+};
+
+// Utility helpers for API responses
+nlohmann::json make_error_response(ErrorCode code, const std::string& message);
+bool validate_fields(const nlohmann::json& data,
+                     const std::vector<std::string>& fields,
+                     nlohmann::json& error);
 
 } // namespace sep::api

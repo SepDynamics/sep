@@ -21,17 +21,17 @@
 
 #if SEP_HAS_EXCEPTIONS
 #define SEP_TRY try
-#define SEP_CATCH_RETURN(code) \
+#define SEP_CATCH_RETURN(core) \
   catch (const std::exception &e) { \
     sep::api::bridge::detail::setLastError(e.what()); \
-    return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
+    return static_cast<int>(sep::api::bridge::detail::mapSepError(core)); \
   }
 #else
 #define SEP_TRY
-#define SEP_CATCH_RETURN(code) \
+#define SEP_CATCH_RETURN(core) \
   do { \
     sep::api::bridge::detail::setLastError("exceptions disabled"); \
-    return static_cast<int>(code); \
+    return static_cast<int>(core); \
   } while (0)
 #endif
 
@@ -55,8 +55,8 @@ void setRequiredBufferSize(size_t size) { g_required_buffer_size = size; }
 
 size_t getRequiredBufferSize() { return g_required_buffer_size; }
 
-sep::api::ErrorCode mapSepError(sep::api::ErrorCode code) {
-  switch (code) {
+sep::api::ErrorCode mapSepError(sep::api::ErrorCode core) {
+  switch (core) {
     case sep::api::ErrorCode::InvalidArgument:
       return sep::api::ErrorCode::InvalidParameter;
     case sep::api::ErrorCode::CudaError:

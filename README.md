@@ -1,69 +1,169 @@
-# SEP Engine
+# SEP Engine - Quantum Pattern Processing Framework
 
-The SEP Engine is a high-performance C++ framework for quantum-inspired pattern analysis and evolution. It provides a modular, tiered architecture for processing complex data streams, managing their lifecycle in memory, and exposing insights through a flexible API.
+*Personal project management README*
 
-## Key Features
+## Current Status: COMPILING BUILD
 
-*   **Quantum-Inspired Algorithms**: Implements QBSA (Quantum Bit-State Analysis) and QFH (Quantum Fluctuation Hashing) for sophisticated pattern coherence and stability analysis.
-*   **Tiered Memory System**: Automatically manages pattern data across Short-Term (STM), Medium-Term (MTM), and Long-Term (LTM) memory tiers based on coherence and stability metrics.
-*   **High-Performance Core**: Built on C++ with a CUDA-accelerated backend for processing large data batches efficiently.
-*   **HTTP API & Bridging**: A modern HTTP API built with Crow, alongside a stable C-style bridge for integration with other languages like JavaScript/Node.js.
-*   **Specialized Integrations**: Optional modules provide direct integration with Blender (for 3D visualization) and PipeWire (for real-time audio analysis).
+The quantum framework consolidation is complete. All previous modular components (context, pattern, etc.) have been unified into a cohesive system built around quantum-inspired algorithms.
 
 ## Architecture Overview
 
-The engine is designed with clear, decoupled modules that follow unidirectional dependencies. A foundational `core` library provides common utilities, while specialized modules for `quantum` algorithms, `memory` management, and `context` processing build upon it. The `api` layer exposes the engine's functionality to the outside world.
+### Core Modules (Static Libraries)
 
-For a complete breakdown of the architecture, components, and dependency graph, please see the [**ARCHITECTURE.md**](./docs/ARCHITECTURE.md) document.
+**`libsep_core.a`** - Foundation Layer
+- `engine.cpp` - Main Engine orchestrator
+- `manager.cpp` - ConfigManager singleton
+- `metrics_collector.cpp`, `prometheus_exporter.cpp`, `tracing.cpp` - Unified metrics
+- `error_handler.cpp` - Error reporting singleton
+- `dag_graph.cpp` - Pattern lineage tracking
+- `allocation_metrics.cpp` - Memory allocation tracking
 
-### Module Breakdown
+**`libsep_quantum.a`** - The Algorithm Core
+- `qbsa.cpp`, `qbsa_qfh.cpp` - Quantum Binary State Analysis
+- `qfh.cpp` - Quantum Fourier Hierarchy
+- `quantum_processor.cpp`, `quantum_processor_qfh.cpp` - Main processors
+- `evolution.cpp` - Pattern evolution algorithms
+- `processor.cpp` - Pattern processing logic
+- `pattern_processor.cpp`, `pattern_processor_interface.cpp` - Pattern interface
+- `types_serialization.cpp` - Type serialization
 
-| Module      | Description                                                                                             |
-| :---------- | :------------------------------------------------------------------------------------------------------ |
-| **`core`**  | Foundational utilities: engine loop, configuration, error handling, metrics, and the DAG graph.         |
-| **`quantum`** | Implements the core quantum-inspired algorithms (QBSA, QFH) and pattern evolution logic.              |
-| **`memory`**| Manages the STM/MTM/LTM tiered memory system and optional Redis persistence layer.                      |
-| **`context`** | High-level logic for processing context objects, extracting embeddings, and managing relationships.      |
-| **`api`**     | Exposes the engine via an HTTP server (Crow), C-language bridge, and supporting clients.               |
-| **`blender`** | Optional module for integrating with Blender for 3D visualization of patterns.                        |
-| **`audio`**   | Optional module for real-time audio capture and processing via PipeWire.                              |
-| **`compat`**  | CUDA backend implementation, providing GPU acceleration and compatibility shims.                      |
+**`libsep_memory.a`** - Tiered Storage System
+- `memory_tier_manager.cpp` - Manages STM/MTM/LTM hierarchy
+- `memory_tier.cpp` - Individual tier implementations
+- `redis_manager.cpp` - Redis persistence backend
+- `manager.cpp` - Memory management coordinator
 
-## Building the Engine
+**`libsep_context.a`** - Business Logic Layer
+- `processor.cpp` - Context processing
+- `relationship.cpp` - Pattern relationship management
 
-The project uses CMake for building.
+**`libsep_api.a`** - External Interface
+- `server.cpp` - HTTP server (Crow-based)
+- `sep_engine.cpp` - Main facade
+- `bridge_c.cpp` - C-style bridge
+- `crow_adapter.cpp`, `crow_error.cpp` - Crow integration
+- `auth_middleware.cpp`, `rate_limit_middleware.cpp` - HTTP middleware
+- `ollama_client.cpp` - Ollama integration
+- `js_integration.cpp` - JavaScript bridge
 
-**1. Install Dependencies:**
-Ensure you have a modern C++ compiler (GCC 12+), CMake (3.22+), and the required libraries (Boost, TBB, cURL). If GPU support is needed, the CUDA toolkit (12.x) is required.
+**`libsep_compat.a`** - CUDA Backend
+- `core/core.cu` - CudaCore singleton
+- `core/cuda_wrapper.cu` - CUDA Runtime wrappers
+- `quantum_kernels.cu`, `pattern_kernels.cu` - GPU kernels
+- `raii.cpp` - CUDA resource management
+- `core_stub.cpp` - CPU fallback stubs
 
-**2. Configure and Build:**
+**`libsep_blender.a`** - Blender Integration (Optional)
+- `api.cpp` - Blender API interface
+- `blender_integration.cpp` - Core integration
+- `mesh_handler.cpp` - Mesh processing
+- `gpu_context.cpp` - GPU context management
+- `compression.cpp`, `compression_utils.cpp` - Data compression
+- `pattern_visualization_pipeline.cpp` - Visualization pipeline
 
-```bash
-mkdir build
-cd build
-cmake ..
-make -j$(nproc)
+**`libsep_audio.a`** - Audio Processing (Optional)
+- `pipewire_capture.cpp` - PipeWire audio capture
+- `pipeline.cpp` - Audio processing pipeline
+- `config.cpp` - Audio configuration
+
+## Key Quantum Framework Components
+
+### Pattern Types
+- **Pattern**: Core pattern structure with quantum state
+- **QuantumState**: coherence, stability, entropy, generation, memory_tier
+- **PatternRelationship**: ENTANGLEMENT, CAUSAL, SIMILARITY types
+
+### Memory Tiers
+- **STM** (Short Term Memory): New/unstable patterns
+- **MTM** (Medium Term Memory): Intermediate patterns
+- **LTM** (Long Term Memory): Stable/coherent patterns
+
+### Quantum Processors
+- **QBSA** (Quantum Binary State Analysis): Core pattern analysis
+- **QFH** (Quantum Fourier Hierarchy): Frequency domain processing
+- **QuantumProcessorQFH**: Main processing interface
+
+## Build System
+
+### Static Library Dependencies
+```
+sep_engine (main executable)
+├── libsep_api.a
+│   ├── libsep_context.a
+│   │   ├── libsep_quantum.a
+│   │   │   └── libsep_core.a
+│   │   └── libsep_memory.a
+│   │       └── libsep_core.a
+│   └── libsep_core.a
+├── libsep_compat.a (CUDA support)
+├── libsep_blender.a (optional)
+└── libsep_audio.a (optional)
 ```
 
-This will produce the main `sep_engine` executable and the associated static libraries for each module.
+### Build Configuration
+- **Compiler**: Clang++ with C++17
+- **CUDA**: 12.9 (optional, controlled by SEP_CUDA_AVAILABLE)
+- **Dependencies**: Crow, GLM, TBB, Redis, spdlog, fmt
+- **Optional**: Blender (SEP_HAS_BLENDER), Redis (SEP_HAS_HIREDIS)
 
-## Running the Engine
+## Key Directories
 
-The primary output is a server executable. Run it from the build directory:
-
-```bash
-./sep_engine
+```
+sep-engine/
+├── src/                    # Source modules
+│   ├── core/              # Foundation
+│   ├── quantum/           # Algorithms
+│   ├── memory/            # Storage tiers
+│   ├── context/           # Business logic
+│   ├── api/               # HTTP interface
+│   ├── compat/            # CUDA backend
+│   ├── blender/           # Blender integration
+│   └── audio/             # Audio processing
+├── include/sep/           # Public headers
+├── tests/                 # Test suites
+├── docs/                  # Architecture docs
+└── third_party/          # External dependencies
 ```
 
-Configuration can be provided via a JSON file, environment variables, or command-line arguments. See `src/core/manager.cpp` for details.
+## Current State
 
-## Testing
+### Working Components
+- ✅ Quantum framework compiles and links
+- ✅ QBSA and QFH algorithms integrated
+- ✅ Three-tier memory system operational
+- ✅ HTTP API server functional
+- ✅ CUDA backend with CPU fallback
+- ✅ Pattern processing pipeline complete
 
-The consolidated test suite is located in the `/tests` directory. To build and run the tests:
+### Development Notes
+- All previous modular components successfully consolidated
+- Pattern/context modules merged into unified quantum framework
+- CUDA compilation working with proper fallback stubs
+- Redis integration for LTM persistence
+- Comprehensive test suite covering all modules
 
-```bash
-# From the build directory
-cmake .. -DSEP_BUILD_TESTS=ON
-make -j$(nproc)
-ctest
-```
+### Build Status
+- **Last successful build**: Links all libraries into `sep_engine` executable
+- **CUDA support**: Optional, falls back to CPU implementations
+- **Dependencies**: All external libraries properly linked
+
+## Usage Patterns
+
+### Engine Initialization
+The main `Engine` class orchestrates all subsystems and manages the quantum processor lifecycle.
+
+### Pattern Processing
+Patterns flow through the quantum algorithms (QBSA → QFH) and are automatically tiered into STM/MTM/LTM based on coherence and stability metrics.
+
+### API Access
+HTTP server exposes pattern processing endpoints with authentication and rate limiting middleware.
+
+## Memory Management
+- Automatic pattern promotion/demotion between memory tiers
+- Relationship tracking with coherence-based pruning
+- Optional Redis persistence for LTM patterns
+- CUDA memory management with RAII wrappers
+
+---
+
+*This is a private project management document. The system is designed around quantum-inspired pattern analysis with a focus on stability, coherence, and evolutionary relationships.*

@@ -16,6 +16,7 @@ add_library(sep_compat STATIC
 
 if(NOT SEP_CUDA_AVAILABLE)
   target_sources(sep_compat PRIVATE core/core_stub.cpp)
+  target_sources(sep_compat PRIVATE cuda_stubs.cpp)
 endif()
 
 # Comment out CUDA configuration

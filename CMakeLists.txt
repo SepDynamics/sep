@@ -18,6 +18,7 @@ find_package(CROW QUIET)
 find_package(TBB QUIET)
 find_package(glm QUIET)
 find_package(fmt QUIET)
+find_package(spdlog QUIET)
 
 include(FetchContent)
 
@@ -101,13 +102,15 @@ target_include_directories(sep_engine
 )
 
 target_link_libraries(sep_engine
-    sep_core
     sep_api
     sep_memory
     sep_quantum
+    sep_core
     sep_audio
     sep_blender
     sep_compat
     ${CURL_LIBRARIES}
     ${CUDA_LIBRARIES}
+    fmt::fmt
+    spdlog::spdlog
 )

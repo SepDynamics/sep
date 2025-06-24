@@ -94,6 +94,23 @@ void MemoryTierManager::updateBlockMetrics(MemoryBlock* block, float coherence, 
     }
 }
 
+void MemoryTierManager::rebuildLookup() {
+    lookup_map_.clear();
+
+    auto rebuild = [this](MemoryTier* tier) {
+        if (!tier) return;
+        for (auto& blk : tier->getBlocks()) {
+            if (blk.allocated) {
+                lookup_map_[blk.ptr] = const_cast<MemoryBlock*>(&blk);
+            }
+        }
+    };
+
+    rebuild(stm_.get());
+    rebuild(mtm_.get());
+    rebuild(ltm_.get());
+}
+
 void MemoryTierManager::defragmentTier(sep::memory::TierType tier) {
     if (MemoryTier* t = getTier(tier))
         t->defragment();

@@ -1,14 +1,13 @@
 #ifndef SEP_LOGGING_MANAGER_H
 #define SEP_LOGGING_MANAGER_H
 
-
-
-#include <chrono>
-#include <memory>
-#include <string>
-
 #include "memory/types.h"
 #include "core/tracing.h"
+
+#include <memory>
+#include <string>
+#include <chrono>
+
 
 // Handle ASIO/Crow includes based on RTTI availability
 #ifndef CROW_DISABLE_RTTI

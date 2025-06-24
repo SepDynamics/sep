@@ -1,28 +1,23 @@
-#include "api/server.h"
-#include "api/ollama_client.h"
-#include "api/json_helpers.h"
-#include <spdlog/spdlog.h>
-#include "crow/crow_isolation.h"
-
-#include <chrono>
-#include <csignal>
-#include <cstdio>
-#include <memory>
-#include <nlohmann/json.hpp>
-#include <thread>
-
 #include "memory/manager.h"
-
+#include "crow/crow_isolation.h"
 #include "api/crow_request.h"
 #include "api/json_helpers.h"
-#include "api/ollama_client.h"
 #include "api/types.h"
 #include "api/client.h"
 #include "api/rate_limit_middleware.h"
 #include "api/request_interface.h"
 #include "api/sep_engine.h"
 #include "quantum/types.h"
+#include "api/server.h"
 #include "compat/types.h"
+
+#include <chrono>
+#include <thread>
+#include <csignal>
+#include <cstdio>
+#include <memory>
+#include <nlohmann/json.hpp>
+#include <spdlog/spdlog.h>
 
 namespace sep::api {
 

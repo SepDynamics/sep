@@ -41,20 +41,20 @@ struct MemoryBlock {
     void*                      ptr{nullptr};
     std::size_t                size{0};
     std::size_t                offset{0};
-    bool                       allocated{false};
-    float                      utilization{0.0f};
+    std::size_t                original_size{0};
     std::size_t                access_count{0};
+    std::uint64_t              wait{0};
+    std::uint32_t              generation{0};
     TierType                   tier{TierType::HOST};
     ::blender::CompressionMethod compression{::blender::CompressionMethod::None};
-    std::size_t                original_size{0};
+    float                      utilization{0.0f};
     float                      stability{0.0f};
     float                      coherence{0.0f};
-    std::uint32_t              generation{0};
     float                      weight{0.0f};
-    std::uint64_t              wait{0};
     float                      coherence_trend{0.0f};
     float                      last_coherence{0.0f};
     float                      compression_ratio{1.0f};
+    bool                       allocated{false};
 
     MemoryBlock() = default;
     MemoryBlock(void* p, std::size_t s, std::size_t off, TierType t)

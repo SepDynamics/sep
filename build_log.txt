@@ -1,480 +1,33 @@
 Ignoring COMPILE_WARNING_AS_ERROR target property and CMAKE_COMPILE_WARNING_AS_ERROR variable.
-[  1%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  3%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[  5%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[  7%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[  8%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 10%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 12%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 14%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 15%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 19%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 21%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 22%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 24%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 26%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core/stream.cpp.o
+[  1%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[  7%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[  7%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[  8%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 10%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 12%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 14%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 15%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 17%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 24%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 [ 28%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 29%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 31%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 33%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-/sep/src/api/js_integration.cpp:23:42: error: use of undeclared identifier 'ErrorCode'
-   23 |         if (ret_code == static_cast<int>(ErrorCode::BufferTooSmall)) { // Buffer too small
-      |                                          ^
-/sep/src/api/js_integration.cpp:32:43: error: use of undeclared identifier 'ErrorCode'
-   32 |     } while (ret_code == static_cast<int>(ErrorCode::BufferTooSmall));
-      |                                           ^
-2 errors generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:177: src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 35%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-In file included from /sep/src/api/lock_free_rate_limiter.cpp:1:
-In file included from /sep/include/api/lock_free_rate_limiter.h:3:
-/sep/include/api/rate_limiter.h:21:35: error: unknown type name 'Priority'
-   21 |     virtual void setPriorityQuota(Priority priority, float multiplier) = 0;
-      |                                   ^
-/sep/include/api/rate_limiter.h:27:9: error: unknown type name 'Priority'
-   27 |         Priority priority
-      |         ^
-[ 36%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 40%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-In file included from /sep/src/api/lock_free_rate_limiter.cpp:1:
-/sep/include/api/lock_free_rate_limiter.h:49:25: error: unknown type name 'Priority'
-   49 |   void setPriorityQuota(Priority priority, float multiplier) override;
-      |                         ^
-/sep/include/api/lock_free_rate_limiter.h:54:30: error: unknown type name 'Priority'
-   54 |                              Priority priority) const override;
-      |                              ^
-/sep/include/api/lock_free_rate_limiter.h:89:33: error: unknown type name 'Priority'
-   89 |   unsigned int getAdjustedLimit(Priority priority) const;
-      |                                 ^
-/sep/include/api/lock_free_rate_limiter.h:90:3: error: unknown type name 'Priority'
-   90 |   Priority getPriorityFromRequest(const IRequest &req) const;
-      |   ^
-/sep/include/api/lock_free_rate_limiter.h:95:45: error: unknown type name 'Priority'
-   95 |   bool tryInsertRequest(ClientData &client, Priority priority,
-      |                                             ^
-In file included from /sep/src/api/curl_http_client.cpp:1:
-/sep/include/api/client.h:34:11: error: unknown type name 'APIResponse'
-   34 |   virtual APIResponse send_request(const APIRequest &request) = 0;
-      |           ^
-/sep/include/api/client.h:34:42: error: unknown type name 'APIRequest'
-   34 |   virtual APIResponse send_request(const APIRequest &request) = 0;
-      |                                          ^
-/sep/include/api/client.h:50:3: error: unknown type name 'APIResponse'
-   50 |   APIResponse send_request(const APIRequest& request) override;
-      |   ^
-In file included from /sep/src/api/crow_adapter.cpp:24:
-/sep/include/api/crow_adapter.h:42:22: error: virtual function 'method' has a different return type ('const std::string &' (aka 'const basic_string<char> &')) than the function it overrides (which has return type 'std::string' (aka 'basic_string<char>'))
-   42 |   const std::string &method() const override;
-      |         ~~~~~~~~~~~~~^
-/sep/include/api/types.h:22:25: note: overridden virtual function is here
-   22 |     virtual std::string method() const = 0;
-      |             ~~~~~~~~~~~ ^
-/sep/include/api/client.h:50:34: error: unknown type name 'APIRequest'
-   50 |   APIResponse send_request(const APIRequest& request) override;
-      |                                  ^
-/sep/include/api/client.h:67:3: error: unknown type name 'APIResponse'
-   67 |   APIResponse send(const APIRequest &request);
-      |   ^
-/sep/include/api/client.h:67:26: error: unknown type name 'APIRequest'
-   67 |   APIResponse send(const APIRequest &request);
-      |                          ^
-/sep/include/api/client.h:69:3: error: unknown type name 'APIResponse'
-   69 |   APIResponse get(const std::string &endpoint,
-      |   ^
-/sep/include/api/client.h:71:19: error: unknown type name 'Priority'
-   71 |                   Priority priority = Priority::NORMAL);
-      |                   ^
-/sep/include/api/client.h:73:3: error: unknown type name 'APIResponse'
-   73 |   APIResponse post(const std::string &endpoint, const std::string &body,
-      |   ^
-/sep/include/api/client.h:74:20: error: unknown type name 'Priority'
-   74 |                    Priority priority = Priority::NORMAL);
-      |                    ^
-/sep/include/api/client.h:76:3: error: unknown type name 'APIResponse'
-   76 |   APIResponse put(const std::string &endpoint, const std::string &body,
-      |   ^
-/sep/include/api/client.h:77:19: error: unknown type name 'Priority'
-   77 |                   Priority priority = Priority::NORMAL);
-      |                   ^
-In file included from /sep/src/api/crow_adapter.cpp:27:
-In file included from /sep/include/api/sep_engine.h:12:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-/sep/include/api/client.h:79:3: error: unknown type name 'APIResponse'
-   79 |   APIResponse delete_(const std::string &endpoint, Priority priority = Priority::NORMAL);
-      |   ^
-/sep/include/api/client.h:79:52: error: unknown type name 'Priority'
-   79 |   APIResponse delete_(const [ 43%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-std::string &endpoint, Priority priority = Priority::NORMAL);
-      |                                                    ^
-/sep/include/api/client.h:81:61: error: expected expression
-   81 |   void setRequestInterceptor(std::function<void(APIRequest &)> interceptor);
-      |                                                             ^
-/sep/include/api/client.h:81:49: error: use of undeclared identifier 'APIRequest'
-   81 |   void setRequestInterceptor(std::function<void(APIRequest &)> interceptor);
-      |                                                 ^
-/sep/include/api/client.h:82:63: error: expected expression
-   82 |   void setResponseInterceptor(std::function<void(APIResponse &)> interceptor);
-      |                                                               ^
-/sep/include/api/client.h:82:50: error: use of undeclared identifier 'APIResponse'
-   82 |   void setResponseInterceptor(std::function<void(APIResponse &)> interceptor);
-      |                                                  ^
-In file included from /sep/src/api/client.cpp:2:
-/sep/include/api/client.h:34:11: error: unknown type name 'APIResponse'
-   34 |   virtual APIResponse send_request(const APIRequest &request) = 0;
-      |           ^
-/sep/include/api/client.h:34:42: error: unknown type name 'APIRequest'
-   34 |   virtual APIResponse send_request(const APIRequest &request) = 0;
-      |                                          ^
-/sep/include/api/client.h:96:36: error: expected expression
-   96 |     std::function<void(APIRequest &)> requestInterceptor;
-      |                                    ^
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
-/sep/include/api/client.h:50:3: error: unknown type name 'APIResponse'
-   50 |   APIResponse send_request(const APIRequest& request) override;
-      |   ^
-/sep/include/api/client.h:50:34: error: unknown type name 'APIRequest'
-   50 |   APIResponse send_request(const APIRequest& request) override;
-      |                                  ^
-/sep/include/api/client.h:67:3: error: unknown type name 'APIResponse'
-   67 |   APIResponse send(const APIRequest &request);
-      |   ^
-/sep/include/api/client.h:67:26: error: unknown type name 'APIRequest'
-   67 |   APIResponse send(const APIRequest &request);
-      |                          ^
-/sep/include/api/client.h:69:3: error: unknown type name 'APIResponse'
-   69 |   APIResponse get(const std::string &endpoint,
-      |   ^
-/sep/include/api/client.h:71:19: error: unknown type name 'Priority'
-   71 |                   Priority priority = Priority::NORMAL);
-      |                   ^
-20 errors generated.
-/sep/include/api/client.h:73:3: error: unknown type name 'APIResponse'
-   73 |   APIResponmake[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:163: src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o] Error 1
-se post(const std::string &endpoint, const std::string &body,
-      |   ^
-/sep/include/api/client.h:74:20: error: unknown type name 'Priority'
-   74 |                    Priority priority = Priority::NORMAL);
-      |                    ^
-/sep/include/api/client.h:76:3: error: unknown type name 'APIResponse'
-   76 |   APIResponse put(const std::string &endpoint, const std::string &body,
-      |   ^
-[ 45%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-/sep/include/api/client.h:77:19: error: unknown type name 'Priority'
-   77 |                   Priority priority = Priority::NORMAL);
-      |                   ^
-/sep/include/api/client.h:79:3: error: unknown type name 'APIResponse'
-   79 |   APIResponse delete_(const std::string &endpoint, Priority priority = Priority::NORMAL);
-      |   ^
-/sep/include/api/client.h:79:52: error: unknown type name 'Priority'
-   79 |   APIResponse delete_(const std::string &endpoint, Priority priority = Priority::NORMAL);
-      |                                                    ^
-/sep/include/api/client.h:81:61: error: expected expression
-   81 |   void setRequestInterceptor(std::function<void(APIRequest &)> interceptor);
-      |                                                             ^
-/sep/include/api/client.h:81:49: error: use of undeclared identifier 'APIRequest'
-   81 |   void setRequestInterceptor(std::function<void(APIRequest &)> interceptor);
-      |                                                 ^
-/sep/include/api/client.h:82:63: error: expected expression
-   82 |   void setResponseInterceptor(std::function<void(APIResponse &)> interceptor);
-      |                                                               ^
-/sep/include/api/client.h:82:50: error: use of undeclared identifier 'APIResponse'
-   82 |   void setResponseInterceptor(std::function<void(APIResponse &)> interceptor);
-      |                                                  ^
-/sep/include/api/client.h:96:36: error: expected expression
-   96 |     std::function<void(APIRequest &)> requestInterceptor;
-      |                                    ^
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
-[ 47%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-20 errors generated.
-In file included from /sep/src/compat/core/stream.cpp:5:
-In file included from /sep/include/compat/stream.h:15:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:121: src/api/CMakeFiles/sep_api.dir/client.cpp.o] Error 1
-[ 49%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-In file included from /sep/src/api/bridge_c.cpp:3:
-/sep/include/api/bridge.hpp:28:15: error: no type named 'ErrorCode' in namespace 'sep::api'
-   28 |   ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
-      |   ~~~~~~~~~~~~^
-/sep/include/api/bridge.hpp:28:59: error: expected ')'
-   28 |   ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
-      |                                                           ^
-/sep/include/api/bridge.hpp:28:36: note: to match this '('
-   28 |   ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
-      |                                    ^
-/sep/include/api/bridge.hpp:28:49: error: no member named 'ErrorCode' in namespace 'sep::api'
-   28 |   ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
-      |                                     ~~~~~~~~~~~~^
-In file included from /sep/src/api/ollama_client.cpp:1:
-/sep/include/api/client.h:34:11: error: unknown type name 'APIResponse'
-   34 |   virtual APIResponse send_request(const APIRequest &request) = 0;
-      |           ^
-/sep/include/api/client.h:34:42: error: unknown type name 'APIRequest'
-   34 |   virtual APIResponse send_request(const APIRequest &request) = 0;
-      |                                          ^
-In file included from /sep/src/api/bridge_c.cpp:5:
-In file included from /sep/include/core/manager.h:4:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-/sep/include/api/client.h:50:3: error: unknown type name 'APIResponse'
-   50 |   APIResponse send_request(const APIRequest& request) override;
-      |   ^
-In file included from /sep/src/api/bridge.cpp:3:
-/sep/include/api/bridge.hpp:28:15: error: no type named 'ErrorCode' in namespace 'sep::api'
-   28 |   ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
-      |   ~~~~~~~~~~~~^
-/sep/include/api/client.h:50:34: error: unknown type name 'APIRequest'
-   50 |   APIResponse send_request(const APIRequest& request) override;
-      |                                  ^
-/sep/include/api/bridge.hpp/sep/include/api/client.h:67:3: error: unknown type name 'APIResponse'
-   67 |   APIResponse send(const APIRe:28:59: error: expected ')'
-   28 |   ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
-      |                                                           ^
-/sep/include/api/bridge.hpp:28:36: note: to match this '('
-   28 |   ::sep::api::ErrorCode mapSepError(::sep::api::Errorquest &request);
-      |   ^
-Code core);
-      |                                    ^
-/sep/include/api/bridge.hpp:28:49: error: no member named 'ErrorCode' in namespace 'sep::api'
-   28 |   ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
-      |                                     ~~~~~~~~~~~~^
-/sep/include/api/client.h:67:26: error: unknown type name 'APIRequest'
-   67 |   APIResponse send(const APIRequest &request);
-      |                          ^
-/sep/include/api/client.h:69:3: error: unknown type name 'APIResponse'
-   69 |   APIResponse get(const std::string &endpoint,
-      |   ^
-/sep/include/api/client.h:71:19: error: unknown type name 'Priority'
-   71 |                   Priority priority = Priority::NORMAL);
-      |                   ^
-/sep/include/api/client.h:73:3: error: unknown type name 'APIResponse'
-   73 |   APIResponse post(const std::string &endpoint, const std::string &body,
-      |   ^
-/sep/include/api/client.h:74:20: error: unknown type name 'Priority'
-   74 |                    Priority priority = Priority::NORMAL);
-      |                    ^
-/sep/src/api/bridge.cpp:58:11: error: no type named 'ErrorCode' in namespace 'sep::api'
-   58 | sep::api::ErrorCode mapSepError(sep::api::ErrorCode core) {
-      | ~~~~~~~~~~^
-In file included from /sep/src/memory/memory_tier.cpp:11:
-In file included from /sep/include/memory/memory_tier.hpp:13:
-In file included from /sep/include/memory/types.h:6:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-/sep/include/api/client.h:76:3: error: unknown type name 'APIResponse'
-   76 |   APIResponse put(const std::string &endpoint, const std::string &body,
-      |   ^
-/sep/src/api/bridge.cpp:58:53: error: expected ')'
-   58 | sep::api::ErrorCode mapSepError(sep::api::ErrorCode core) {
-      |                                                     ^
-/sep/src/api/bridge.cpp:58:32: note: to match this '('
-   58 | sep::api::ErrorCode mapSepError(sep::api::ErrorCode core) {
-      |                                ^
-/sep/src/api/bridge.cpp:58:43: error: no member named 'ErrorCode' in namespace 'sep::api'
-   58 | sep::api::ErrorCode mapSepError(sep::api::ErrorCode core) {
-      |                                 ~~~~~~~~~~^
-/sep/src/api/bridge.cpp:58:58: error: expected ';' after top level declarator
-   58 | sep::api::ErrorCode mapSepError(sep::api::ErrorCode core) {
-      |                                                          ^
-      |                                                          ;
-/sep/include/api/client.h:77:19: error: unknown type name 'Priority'
-   77 |                   Priority priority = Priority::NORMAL);
-      |                   ^
-In file included from /sep/src/memory/manager.cpp:1:
-In file included from /sep/include/memory/manager.h:10:
-In file included from /sep/include/memory/types.h:6:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-/sep/include/api/client.h:79:3: error: unknown type name 'APIResponse'
-   79 |   APIResponse delete_(const std::string &endpoint, Priority priority = Priority::NORMAL);
-      |   ^
-/sep/include/api/client.h:79:52: error: unknown type name 'Priority'
-   79 |   APIResponse delete_(const std::string &endpoint, Priority priority = Priority::NORMAL);
-      |                                                    ^
-/sep/include/api/client.h:81:61: error: expected expression
-   81 |   void setRequestInterceptor(std::function<void(APIRequest &)> interceptor);
-      |                                                             ^
-/sep/include/api/client.h:81:49: error: use of undeclared identifier 'APIRequest'
-   81 |   void setRequestInterceptor(std::function<void(APIRequest &)> interceptor);
-      |                                                 ^
-/sep/include/api/client.h:82:63: error: expected expression
-   82 |   void setResponseInterceptor(std::function<void(APIResponse &)> interceptor);
-      |                                                               ^
-/sep/include/api/client.h:82:50: error: use of undeclared identifier 'APIResponse'
-   82 |   void setResponseInterceptor(std::function<void(APIResponse &)> interceptor);
-      |                                                  ^
-/sep/include/api/client.h:96:36: error: expected expression
-   96 |     std::function<void(APIRequest &)> requestInterceptor;
-      |                                    ^
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
-In file included from /sep/src/blender/api.cpp:4:
-In file included from /sep/include/blender/bridge.h:16:
-In file included from /sep/include/quantum/pattern_processor.h:5:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-20 errors generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:205: src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o] Error 1
-[ 50%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-In file included from /sep/src/api/crow_adapter.cpp:27:
-/sep/include/api/sep_engine.h:133:45: error: unknown type name 'ErrorCode'
-  133 |     static nlohmann::json makeErrorResponse(ErrorCode code, const std::string& message);
-      |                                             ^
-[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-In file included from /sep/src/blender/blender_integration.cpp:1:
-In file included from /sep/include/blender/pattern_bridge.h:12:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-[ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-/sep/src/api/lock_free_rate_limiter.cpp:47:25: error: unknown type name 'Priority'
-   47 |     ClientData &client, Priority priority,
-      |                         ^
-/sep/src/api/bridge_c.cpp:28:32: error: no member named 'ErrorCode' in namespace 'sep::api'
-   28 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
-      |                      ~~~~~~~~~~^
-/sep/include/api/bridge_internal.hpp:25:67: note: expanded from macro 'SEP_CATCH_RETURN'
-   25 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
-      |                                                                   ^~~~
-/sep/src/api/bridge_c.cpp:47:41: error: no member named 'ErrorCode' in namespace 'sep::api'
-   47 |       return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
-      |                               ~~~~~~~~~~^
-/sep/src/api/bridge_c.cpp:55:43: error: no member named 'ErrorCode' in namespace 'sep::api'
-   55 |         return static_cast<int>(sep::api::ErrorCode::GeneralError);
-      |                                 ~~~~~~~~~~^
-In file included from /sep/src/memory/memory_tier_manager.cpp:3:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-/sep/src/api/bridge_c.cpp:64:43: error: no member named 'ErrorCode' in namespace 'sep::api'
-   64 |         return static_cast<int>(sep::api::ErrorCode::ProcessingError);
-      |                                 ~~~~~~~~~~^
-/sep/src/api/bridge_c.cpp:76:45: error: no member named 'ErrorCode' in namespace 'sep::api'
-   76 |           return static_cast<int>(sep::api::ErrorCode::BufferTooSmall);
-      |                                   ~~~~~~~~~~^
-/sep/src/api/lock_free_rate_limiter.cpp:138:44: error: unknown type name 'Priority'
-  138 | void LockFreeRateLimiter::setPriorityQuota(Priority priority,
-      |                                            ^
-/sep/src/api/bridge_c.cpp:85:43: error: no member named 'ErrorCode' in namespace 'sep::api'
-   85 |         return static_cast<int>(sep::api::ErrorCode::ProcessingError);
-      |                                 ~~~~~~~~~~^
-/sep/src/api/lock_free_rate_limiter.cpp:140:19: error: use of undeclared identifier 'Priority'
-  140 |   if (priority >= Priority::LOW && priority <= Priority::CRITICAL) {
-      |                   ^
-/sep/src/api/lock_free_rate_limiter.cpp:140:48: error: use of undeclared identifier 'Priority'
-  140 |   if (priority >= Priority::LOW && priority <= Priority::CRITICAL) {
-      |                                                ^
-/sep/src/api/lock_free_rate_limiter.cpp:156:49: error: unknown type name 'Priority'
-  156 |                                                 Priority priority) const {
-      |                                                 ^
-/sep/src/api/lock_free_rate_limiter.cpp:180:52: error: unknown type name 'Priority'
-  180 | unsigned int LockFreeRateLimiter::getAdjustedLimit(Priority priority) const {
-      |                                                    ^
-/sep/src/api/lock_free_rate_limiter.cpp:181:19: error: use of undeclared identifier 'Priority'
-  181 |   if (priority >= Priority::LOW && priority <= Priority::CRITICAL) {
-      |                   ^
-/sep/src/api/lock_free_rate_limiter.cpp:181:48: error: use of undeclared identifier 'Priority'
-  181 |   if (priority >= Priority::LOW && priority <= Priority::CRITICAL) {
-      |                                                ^
-/sep/src/api/lock_free_rate_limiter.cpp:243:1: error: unknown type name 'Priority'
-  243 | Priority
-      | ^
-/sep/src/api/lock_free_rate_limiter.cpp:247:12: error: use of undeclared identifier 'Priority'
-  247 |     return Priority::LOW;
-      |            ^
-/sep/src/api/bridge_c.cpp:107:45: error: no member named 'ErrorCode' in namespace 'sep::api'
-  107 |           return static_cast<int>(sep::api::ErrorCode::BufferTooSmall);
-      |                                   ~~~~~~~~~~^
-/sep/src/api/lock_free_rate_limiter.cpp:249:12: error: use of undeclared identifier 'Priority'
-  249 |     return Priority::HIGH;
-      |            ^
-/sep/src/api/bridge_c.cpp:117:77: error: no member named 'ErrorCode' in namespace 'sep::api'
-  117 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(sep::api::ErrorCode::ProcessingError));
-      |                                                                   ~~~~~~~~~~^
-/sep/src/api/lock_free_rate_limiter.cpp:251:12: error: use of undeclared identifier 'Priority'
-  251 |     return Priority::CRITICAL;
-      |            ^
-/sep/src/api/bridge_c.cpp:144:39: error: no member named 'ErrorCode' in namespace 'sep::api'
-  144 |     return static_cast<int>(sep::api::ErrorCode::GeneralError);
-      |                             ~~~~~~~~~~^
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
-20 errors generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:191: src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o] Error 1
-/sep/src/api/bridge_c.cpp:165:41: error: no member named 'ErrorCode' in namespace 'sep::api'
-  165 |       return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
-      |                               ~~~~~~~~~~^
-/sep/src/api/bridge_c.cpp:169:39: error: no member named 'ErrorCode' in namespace 'sep::api'
-  169 |     return static_cast<int>(sep::api::ErrorCode::InvalidArgument);
-      |                             ~~~~~~~~~~^
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-/sep/src/api/bridge_c.cpp:175:32: error: no member named 'ErrorCode' in namespace 'sep::api'
-  175 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-      |                      ~~~~~~~~~~^
-/sep/include/api/bridge_internal.hpp:25:67: note: expanded from macro 'SEP_CATCH_RETURN'
-   25 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
-      |                                                                   ^~~~
-/sep/src/api/bridge_c.cpp:186:39: error: no member named 'ErrorCode' in namespace 'sep::api'
-  186 |     return static_cast<int>(sep::api::ErrorCode::GeneralError);
-      |                             ~~~~~~~~~~^
-/sep/src/api/bridge_c.cpp:206:39: error: no member named 'ErrorCode' in namespace 'sep::api'
-  206 |     return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
-      |                             ~~~~~~~~~~^
-/sep/src/api/bridge_c.cpp:212:32: error: no member named 'ErrorCode' in namespace 'sep::api'
-  212 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-      |                      ~~~~~~~~~~^
-/sep/include/api/bridge_internal.hpp:25:67: note: expanded from macro 'SEP_CATCH_RETURN'
-   25 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
-      |                                                                   ^~~~
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
-20 errors generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
-[ 57%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-In file included from /sep/src/api/crow_adapter.cpp:28:
-In file included from /sep/include/memory/manager.h:24:
-In file included from /sep/include/api/server.h:8:
-In file included from /sep/include/api/rate_limit_middleware.h:10:
-/sep/include/api/rate_limiter.h:21:35: error: unknown type name 'Priority'
-   21 |     virtual void setPriorityQuota(Priority priority, float multiplier) = 0;
-      |                                   ^
-/sep/include/api/rate_limiter.h:27:9: error: unknown type name 'Priority'
-   27 |         Priority priority
-      |         ^
-In file included from /sep/src/compat/raii.cpp:15:
-In file included from /sep/include/compat/raii.h:10:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-In file included from /sep/src/memory/memory_tier.cpp:30:
-In file included from /sep/include/memory/manager.h:24:
-In file included from /sep/include/api/server.h:8:
-In file included from /sep/include/api/rate_limit_middleware.h:10:
-/sep/include/api/rate_limiter.h:21:35: error: unknown type name 'Priority'
-   21 |     virtual void setPriorityQuota(Priority priority, float multiplier) = 0;
-      |                                   ^
-/sep/include/api/rate_limiter.h:27:9: error: unknown type name 'Priority'
-   27 |         Priority priority
-      |         ^
-[ 59%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-In file included from /sep/src/memory/manager.cpp:1:
-In file included from /sep/include/memory/manager.h:24:
-In file included from /sep/include/api/server.h:8:
-In file included from /sep/include/api/rate_limit_middleware.h:10:
-/sep/include/api/rate_limiter.h:21:35: error: unknown type name 'Priority'
-   21 |     virtual void setPriorityQuota(Priority priority, float multiplier) = 0;
-      |                                   ^
-/sep/include/api/rate_limiter.h:27:9: error: unknown type name 'Priority'
-   27 |         Priority priority
-      |         ^
+[ 29%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core/stream.cpp.o
+[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 33%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 36%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 42%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 43%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 45%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 47%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 50%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
 In file included from /sep/src/memory/manager.cpp:13:
 /sep/include/api/crow_adapter.h:12:9: warning: 'CROW_DISABLE_RTTI' macro redefined [-Wmacro-redefined]
    12 | #define CROW_DISABLE_RTTI 1
@@ -482,146 +35,162 @@ In file included from /sep/src/memory/manager.cpp:13:
 /sep/src/memory/manager.cpp:4:9: note: previous definition is here
     4 | #define CROW_DISABLE_RTTI
       |         ^
-In file included from /sep/src/memory/manager.cpp:13:
-/sep/include/api/crow_adapter.h:42:22: error: virtual function 'method' has a different return type ('const std::string &' (aka 'const basic_string<char> &')) than the function it overrides (which has return type 'std::string' (aka 'basic_string<char>'))
-   42 |   const std::string &method() const override;
-      |         ~~~~~~~~~~~~~^
-/sep/include/api/types.h:22:25: note: overridden virtual function is here
-   22 |     virtual std::string method() const = 0;
-      |             ~~~~~~~~~~~ ^
-7 errors generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:93: src/api/CMakeFiles/sep_api.dir/bridge.cpp.o] Error 1
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-In file included from /sep/src/core/engine.cpp:1:
-In file included from /sep/include/core/engine.h:10:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-1 error generated.
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/core/stream.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 63%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-In file included from /sep/src/memory/redis_manager.cpp:1:
-In file included from /sep/include/memory/types.h:6:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-[ 64%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-In file included from /sep/src/quantum/quantum_processor_qfh.cpp:1:
-In file included from /sep/include/quantum/quantum_processor_qfh.h:4:
-In file included from /sep/include/memory/types.h:6:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-1 error generated.
-In file included from /sep/src/blender/compression.cpp:11:
-In file included from /sep/include/memory/memory_tier_manager.hpp:13:
-In file included from /sep/include/memory/memory_tier.hpp:13:
-In file included from /sep/include/memory/types.h:6:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:79: src/blender/CMakeFiles/sep_blender.dir/api.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 68%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-In file included from /sep/src/quantum/quantum_processor.cpp:2:
-In file included from /sep/include/quantum/quantum_processor_qfh.h:4:
-In file included from /sep/include/memory/types.h:6:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-1 error generated.
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:93: src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o] Error 1
-[ 70%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-In file included from /sep/src/memory/redis_manager.cpp:23:
-In file included from /sep/include/memory/manager.h:24:
-In file included from /sep/include/api/server.h:8:
-In file included from /sep/include/api/rate_limit_middleware.h:10:
-/sep/include/api/rate_limiter.h:21:35: error: unknown type name 'Priority'
-   21 |     virtual void setPriorityQuota(Priority priority, float multiplier) = 0;
-      |                                   ^
-/sep/include/api/rate_limiter.h:27:9: error: unknown type name 'Priority'
-   27 |         Priority priority
-      |         ^
-1 error generated.
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:491: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-In file included from /sep/src/core/manager.cpp:1:
-In file included from /sep/include/core/manager.h:4:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-In file included from /sep/src/core/engine.cpp:5:
-In file included from /sep/include/memory/manager.h:24:
-In file included from /sep/include/api/server.h:8:
-In file included from /sep/include/api/rate_limit_middleware.h:10:
-/sep/include/api/rate_limiter.h:21:35: error: unknown type name 'Priority'
-   21 |     virtual void setPriorityQuota(Priority priority, float multiplier) = 0;
-      |                                   ^
-/sep/include/api/rate_limiter.h:27:9: error: unknown type name 'Priority'
-   27 |         Priority priority
-      |         ^
-[ 71%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-1 error generated.
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 73%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-In file included from /sep/src/quantum/quantum_processor_qfh_common.cpp:4:
-In file included from /sep/include/quantum/quantum_processor_qfh.h:4:
-In file included from /sep/include/memory/types.h:6:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-In file included from /sep/src/blender/mesh_handler.cpp:7:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-/sep/src/core/manager.cpp:99:27: error: cannot initialize a parameter of type 'char' with an lvalue of type 'const char[2]'
-   99 |       auto pos = arg.find("=");
-      |                           ^~~
-/sep/include/compat/shim.h:151:22: note: passing argument to parameter 'c' here
-  151 |     size_t find(char c, size_t pos = 0) const {
-      |                      ^
-1 error generated.
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:121: src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o] Error 1
-[ 75%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 77%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-1 error generated.
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-1 error generated.
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
-1 warning and 4 errors generated.
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:107: src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o] Error 1
-5 errors generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:135: src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:395: src/api/CMakeFiles/sep_api.dir/all] Error 2
-2 errors generated.
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-3 errors generated.
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:79: src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o] Error 1
-1 error generated.
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:149: src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:459: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
-In file included from /sep/src/quantum/pattern_processor.cpp:1:
-In file included from /sep/include/quantum/pattern_processor.h:5:
-/sep/include/core/types.h:75:12: error: no member named 'ollama' in namespace 'sep'
-   75 |     ::sep::ollama::OllamaConfig          ollama;
-      |     ~~~~~~~^
-1 error generated.
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:149: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o] Error 1
-[ 78%] Linking CXX static library libsep_audio.a
-[ 78%] Built target sep_audio
-3 errors generated.
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:555: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
-1 error generated.
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:205: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:587: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
-3 errors generated.
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:107: src/core/CMakeFiles/sep_core.dir/engine.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:523: src/core/CMakeFiles/sep_core.dir/all] Error 2
+[ 52%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 54%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 56%] Linking CXX static library libsep_compat.a
+[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 57%] Built target sep_compat
+[ 59%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 61%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 64%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 66%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 68%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 71%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 73%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 75%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 77%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 78%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 82%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 85%] Linking CXX static library libsep_audio.a
+[ 85%] Built target sep_audio
+[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+In file included from /sep/src/api/rate_limit_middleware.cpp:3:
+/sep/include/api/crow_request.h:41:16: warning: returning reference to local temporary object [-Wreturn-stack-address]
+   41 |         return req_.body;
+      |                ^~~~~~~~~
+In file included from /sep/src/api/server.cpp:16:
+/sep/include/api/crow_request.h:41:16: warning: returning reference to local temporary object [-Wreturn-stack-address]
+   41 |         return req_.body;
+      |                ^~~~~~~~~
+[ 89%] Linking CXX static library libsep_blender.a
+1 warning generated.
+[ 89%] Built target sep_blender
+[ 91%] Linking CXX static library libsep_memory.a
+[ 91%] Built target sep_memory
+[ 92%] Linking CXX static library libsep_quantum.a
+[ 92%] Built target sep_quantum
+1 warning generated.
+[ 94%] Linking CXX static library libsep_core.a
+[ 94%] Built target sep_core
+1 warning generated.
+[ 96%] Linking CXX static library libsep_api.a
+[ 96%] Built target sep_api
+[ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
+[100%] Linking CXX executable sep_engine
+/usr/bin/ld: CMakeFiles/sep_engine.dir/src/main.cpp.o: in function `main':
+main.cpp:(.text+0x1f): undefined reference to `curl_global_init'
+/usr/bin/ld: main.cpp:(.text+0x224): undefined reference to `curl_global_cleanup'
+/usr/bin/ld: main.cpp:(.text+0x255): undefined reference to `curl_global_cleanup'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::init(sep::config::APIConfig const&)':
+engine.cpp:(.text+0x9b): undefined reference to `sep::cuda::CudaCore::initialize(int)'
+/usr/bin/ld: engine.cpp:(.text+0xc9): undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::~Engine()':
+engine.cpp:(.text+0x736): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::generate_probes(sep::shim::vector<sep::PinState> const&, sep::shim::vector<unsigned int>&, sep::shim::vector<unsigned int>&, unsigned long)':
+engine.cpp:(.text+0xa31): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0xb88): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0xc15): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0xc96): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0xcd6): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::process_batch(sep::shim::vector<sep::PinState> const&, unsigned long, sep::quantum::QBSAResult&, sep::cuda::QSHResult&)':
+engine.cpp:(.text+0x1022): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x111b): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x11db): undefined reference to `sep::cuda::CudaCore::launchQSH(sep::cuda::DeviceMemory<unsigned long> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x124c): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x13bb): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x140a): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1584): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x162a): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1679): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: engine.cpp:(.text+0x18b1): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::cuda::CudaCore::instance()':
+engine.cpp:(.text._ZN3sep4cuda8CudaCore8instanceEv[_ZN3sep4cuda8CudaCore8instanceEv]+0x2c): undefined reference to `sep::cuda::CudaCore::CudaCore()'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::pattern::BlenderBridge::BlenderBridge()':
+engine.cpp:(.text._ZN3sep7pattern13BlenderBridgeC2Ev[_ZN3sep7pattern13BlenderBridgeC2Ev]+0x17): undefined reference to `vtable for sep::pattern::BlenderBridge'
+/usr/bin/ld: src/memory/libsep_memory.a(manager.cpp.o): in function `sep::logging::LoggingMiddleware::after_handle(crow::request&, crow::response&, sep::logging::LoggingMiddleware::context&)':
+manager.cpp:(.text+0xaed): undefined reference to `sep::api::makeRequest(crow::request&)'
+/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::storePattern(unsigned long, sep::persistence::PatternData const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x16a): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x1a7): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x2c4): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x2fd): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x43a): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x473): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x592): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x5cb): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x67b): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x6b4): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x70f): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl12storePatternEmRKNS0_11PatternDataERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x73c): undefined reference to `freeReplyObject'
+/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::loadPattern(unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x1b4): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x219): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x300): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x358): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x815): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x861): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0xfc3): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x100f): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x116b): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x11e3): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl11loadPatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x16c2): undefined reference to `freeReplyObject'
+/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::getPatternIds(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13getPatternIdsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13getPatternIdsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x168): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13getPatternIdsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13getPatternIdsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x3d6): undefined reference to `freeReplyObject'
+/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::removePattern(unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x14c): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x17d): undefined reference to `freeReplyObject'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x256): undefined reference to `redisCommand'
+/usr/bin/ld: redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE[_ZN3sep11persistence12RedisManager4Impl13removePatternEmRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]+0x28f): undefined reference to `freeReplyObject'
+/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::Impl(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int)':
+redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4ImplC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi[_ZN3sep11persistence12RedisManager4ImplC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi]+0xa1): undefined reference to `redisConnect'
+/usr/bin/ld: src/memory/libsep_memory.a(redis_manager.cpp.o): in function `sep::persistence::RedisManager::Impl::~Impl()':
+redis_manager.cpp:(.text._ZN3sep11persistence12RedisManager4ImplD2Ev[_ZN3sep11persistence12RedisManager4ImplD2Ev]+0x22): undefined reference to `redisFree'
+/usr/bin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::MemoryTier(sep::memory::MemoryTier::Config const&)':
+memory_tier.cpp:(.text+0xbb): undefined reference to `sep::cuda::cudaMallocManaged(void**, unsigned long)'
+/usr/bin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::~MemoryTier()':
+memory_tier.cpp:(.text+0x2ec): undefined reference to `sep::cuda::cudaFree(void*)'
+/usr/bin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::allocate(unsigned long)':
+memory_tier.cpp:(.text+0x3b5): undefined reference to `sep::metrics::allocationFailures()'
+/usr/bin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::defragment()':
+memory_tier.cpp:(.text+0xb8b): undefined reference to `sep::cuda::cudaMemcpy(void*, void const*, unsigned long, int)'
+/usr/bin/ld: memory_tier.cpp:(.text+0xfa1): undefined reference to `sep::memory::MemoryTierManager::rebuildLookup()'
+/usr/bin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::resize(unsigned long)':
+memory_tier.cpp:(.text+0x1a3d): undefined reference to `sep::cuda::cudaMallocManaged(void**, unsigned long)'
+/usr/bin/ld: memory_tier.cpp:(.text+0x1a5c): undefined reference to `sep::metrics::allocationFailures()'
+/usr/bin/ld: memory_tier.cpp:(.text+0x1b32): undefined reference to `sep::cuda::cudaFree(void*)'
+/usr/bin/ld: memory_tier.cpp:(.text+0x1b5b): undefined reference to `sep::metrics::allocationFailures()'
+/usr/bin/ld: memory_tier.cpp:(.text+0x1dc2): undefined reference to `sep::cuda::cudaFree(void*)'
+/usr/bin/ld: src/api/libsep_api.a(sep_engine.cpp.o): in function `sep::api::SepEngine::getPatternHistory(nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> const&)':
+sep_engine.cpp:(.text+0x2cc0): undefined reference to `sep::pattern::PatternProcessor::getPatterns() const'
+/usr/bin/ld: src/api/libsep_api.a(sep_engine.cpp.o): in function `std::__detail::_MakeUniq<sep::pattern::PatternProcessor>::__single_object std::make_unique<sep::pattern::PatternProcessor>()':
+sep_engine.cpp:(.text._ZSt11make_uniqueIN3sep7pattern16PatternProcessorEJEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_[_ZSt11make_uniqueIN3sep7pattern16PatternProcessorEJEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_]+0x2e): undefined reference to `sep::pattern::PatternProcessor::PatternProcessor(sep::pattern::PatternProcessor::Implementation)'
+/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o): in function `sep::api::CurlHttpClient::CurlHttpClient()':
+curl_http_client.cpp:(.text+0x2a): undefined reference to `curl_global_init'
+/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o): in function `sep::api::CurlHttpClient::~CurlHttpClient()':
+curl_http_client.cpp:(.text+0x7c): undefined reference to `curl_global_cleanup'
+/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o): in function `sep::api::CurlHttpClient::send_request(sep::api::APIRequest const&)':
+curl_http_client.cpp:(.text+0x17f): undefined reference to `curl_easy_init'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x21d): undefined reference to `curl_easy_setopt'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x25d): undefined reference to `curl_easy_setopt'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x325): undefined reference to `curl_slist_append'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x3b9): undefined reference to `curl_easy_setopt'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x3f4): undefined reference to `curl_easy_setopt'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x424): undefined reference to `curl_easy_setopt'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x477): undefined reference to `curl_easy_setopt'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x4b8): undefined reference to `curl_easy_setopt'
+/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o):curl_http_client.cpp:(.text+0x4d5): more undefined references to `curl_easy_setopt' follow
+/usr/bin/ld: src/api/libsep_api.a(curl_http_client.cpp.o): in function `sep::api::CurlHttpClient::send_request(sep::api::APIRequest const&)':
+curl_http_client.cpp:(.text+0x4f6): undefined reference to `curl_easy_perform'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x52c): undefined reference to `curl_easy_getinfo'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x5b9): undefined reference to `curl_easy_strerror'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x5e9): undefined reference to `curl_slist_free_all'
+/usr/bin/ld: curl_http_client.cpp:(.text+0x5f4): undefined reference to `curl_easy_cleanup'
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [CMakeFiles/sep_engine.dir/build.make:108: sep_engine] Error 1
+make[1]: *** [CMakeFiles/Makefile2:299: CMakeFiles/sep_engine.dir/all] Error 2
 make: *** [Makefile:156: all] Error 2

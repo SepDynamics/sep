@@ -1,7 +1,7 @@
 #include "core/engine.h"
 
 #include "audio/capture.h"
-#include "blender/bridge.h"
+#include "blender/pattern_bridge.h"
 #include "memory/manager.h"
 
 #include "compat/shim.h"

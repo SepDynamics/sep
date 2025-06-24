@@ -12,7 +12,7 @@
 #include <condition_variable>
 #include <atomic>
 
-#include "blender/bridge.h"
+#include "blender/pattern_bridge.h"
 #include "blender/types.h"
 #include "core/common.h"
 

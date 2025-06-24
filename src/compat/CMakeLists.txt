@@ -1,4 +1,5 @@
 # src/compat/CMakeLists.txt
+find_package(CUDAToolkit QUIET)
 
 # Include CUDA configuration for library paths
 include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)

@@ -1,5 +1,6 @@
 #CustomCUDA.cmake
 #Custom CMake module for CUDA compilation that bypasses CMake's built-in CUDA language support
+find_package(CUDAToolkit QUIET)
 
 #--- CUDA paths and settings ---
 set(CUDA_PATH "/usr/local/cuda-12.9" CACHE PATH "Path to CUDA installation")

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-project(SEPEngine LANGUAGES CXX CUDA)
+project(SEPEngine LANGUAGES CXX)
 
 # Ensure RTTI is disabled consistently across all targets when building with
 # the Crow isolation headers.
@@ -11,8 +11,13 @@ add_compile_definitions(CROW_DISABLE_RTTI=1)
 include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)
 
 # Locate external dependencies required by the engine
-find_package(CURL QUIET)
 find_package(CUDAToolkit QUIET)
+find_package(HIREDIS QUIET)
+find_package(CURL QUIET)
+find_package(CROW QUIET)
+find_package(TBB QUIET)
+find_package(glm QUIET)
+find_package(fmt QUIET)
 
 include(FetchContent)
 

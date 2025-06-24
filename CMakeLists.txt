@@ -37,6 +37,13 @@ find_package(CURL REQUIRED)
 find_library(HIREDIS_LIBRARIES NAMES hiredis)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
 
+if(HIREDIS_LIBRARIES AND HIREDIS_INCLUDE_DIR)
+    set(HIREDIS_FOUND TRUE)
+else()
+    set(HIREDIS_FOUND FALSE)
+    message(WARNING "Hiredis not found, Redis persistence disabled")
+endif()
+
 if(CUDAToolkit_FOUND)
     set(SEP_CUDA_AVAILABLE 1)
 else()
@@ -97,9 +104,10 @@ add_executable(sep_engine src/main.cpp)
 target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
-    PRIVATE 
-        ${HIREDIS_INCLUDE_DIR}
 )
+if(HIREDIS_FOUND)
+    target_include_directories(sep_engine PRIVATE ${HIREDIS_INCLUDE_DIR})
+endif()
 
 target_link_libraries(sep_engine
     sep_api

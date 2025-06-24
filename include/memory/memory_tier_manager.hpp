@@ -80,6 +80,8 @@ public:
     MemoryTier* getTier(sep::memory::TierType tier);
     float getTierUtilization(sep::memory::TierType tier) const;
     float getTierFragmentation(sep::memory::TierType tier) const;
+    float getTotalUtilization() const;
+    float getTotalFragmentation() const;
     void defragmentTier(sep::memory::TierType tier);
     void optimizeBlocks();
     void optimizeTiers();

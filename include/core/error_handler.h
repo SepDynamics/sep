@@ -2,8 +2,8 @@
 #define SEP_CORE_ERROR_HANDLER_H
 
 #include "compat/shim.h"
-#include "core/types.h"
 #include "core/common.h"
+// Removed duplicate include of core/types.h
 
 namespace sep {
 

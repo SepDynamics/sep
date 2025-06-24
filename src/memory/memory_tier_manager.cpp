@@ -119,6 +119,22 @@ MemoryTier& MemoryTierManager::getLTM() {
     return *ltm_;
 }
 
+void MemoryTierManager::rebuildLookup()
+{
+    lookup_map_.clear();
+    auto rebuild = [this](MemoryTier* t) {
+        if (!t)
+            return;
+        for (const auto& blk : t->getBlocks()) {
+            if (blk.allocated)
+                lookup_map_[blk.ptr] = const_cast<MemoryBlock*>(&blk);
+        }
+    };
+    rebuild(stm_.get());
+    rebuild(mtm_.get());
+    rebuild(ltm_.get());
+}
+
 SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
         return SEPResult::INVALID_ARGUMENT;

@@ -10,6 +10,7 @@
 
 #include "compat/memory.h"
 #include "compat/stream.h"
+#include "compat/cuda_defs.h"
 
 namespace sep::cuda {
 

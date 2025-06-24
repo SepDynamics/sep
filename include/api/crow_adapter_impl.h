@@ -1,75 +1,75 @@
 /**
  * @file crow_adapter_impl.h
- * @brief Implementation of the Crow adapter classes for the SEP Engine API
- *
- * This file provides the implementation of the adapter classes needed to
- * integrate the SEP Engine API with the Crow web framework.
+ * @brief Implementation of adapters for integrating with the Crow web framework
+ * 
+ * This file provides the necessary adapter implementations to bridge the SEP Engine
+ * API with the Crow web framework.
  */
 
 #pragma once
 
-// Define CROW_DISABLE_RTTI first since we're using with CUDA
-#define CROW_DISABLE_RTTI 1
+// Include Crow headers with correct path
+#include "../../third_party/crow/crow_isolation.h"
 
-// Include our fixed headers first
-#include "crow/common.h"
-#include "crow/http_request.h"
-#include "crow/http_response.h"
-#include "crow/crow_isolation.h"
-
-#include "api/crow_adapter.h"
-#include <memory>
 #include <string>
+#include <memory>
 
-namespace sep::api {
+namespace sep {
+namespace api {
 
-// Implementation of CrowRequestAdapter
-CrowRequestAdapter::CrowRequestAdapter(::crow::request &req) : req_(req) {
-    method_str_ = ::crow::method_name(req.method);
-}
+/**
+ * Adapter for Crow requests
+ * Provides a consistent interface to access Crow request data
+ */
+class CrowRequestAdapter {
+public:
+    explicit CrowRequestAdapter(const ::crow::request& req) : req_(req) {
+        // Get method as string for consistent interface
+        method_str_ = ::crow::method_name(req.method);
+    }
 
-const std::string &CrowRequestAdapter::url() const { 
-    return req_.url; 
-}
+    std::string url() const { return req_.url; }
+    std::string method() const { return method_str_; }
+    std::string body() const { return req_.body; }
 
-const std::string &CrowRequestAdapter::method() const { 
-    return method_str_; 
-}
+    std::string get_header_value(const std::string& key) const {
+        return req_.get_header_value(key);
+    }
 
-const std::string &CrowRequestAdapter::body() const { 
-    return req_.body; 
-}
+    // Create a JSON object from the request body
+    std::string parse_json() const {
+        try {
+            // Just return the raw body as string for parsing by caller
+            return std::string(req_.body);
+        } catch (...) {
+            return std::string(); // Return empty string on error
+        }
+    }
 
-// Implementation of CrowResponseAdapter
-CrowResponseAdapter::CrowResponseAdapter(::crow::response &res) : res_(res) {}
+private:
+    const ::crow::request& req_;
+    std::string method_str_;
+};
 
-void CrowResponseAdapter::setCode(int code) { 
-    res_.code = code; 
-}
+/**
+ * Adapter for Crow responses
+ * Provides a consistent interface to set Crow response data
+ */
+class CrowResponseAdapter {
+public:
+    explicit CrowResponseAdapter(::crow::response& res) : res_(res) {}
 
-int CrowResponseAdapter::getCode() const { 
-    return res_.code; 
-}
+    void set_code(int code) { res_.code = code; }
+    int get_code() const { return res_.code; }
+    void set_body(const std::string& body) { res_.body = body; }
+    std::string get_body() const { return res_.body; }
+    void set_header(const std::string& key, const std::string& value) {
+        res_.set_header(key, value);
+    }
 
-void CrowResponseAdapter::setBody(const std::string &body) { 
-    res_.body = body; 
-}
+private:
+    ::crow::response& res_;
+};
 
-void CrowResponseAdapter::end() { 
-    res_.end(); 
-}
-
-const std::string &CrowResponseAdapter::getBody() const { 
-    return res_.body; 
-}
-
-// Factory functions
-std::unique_ptr<HttpResponse> makeResponse(::crow::response &res) {
-    return std::make_unique<CrowResponseAdapter>(res);
-}
-
-std::unique_ptr<HttpRequest> makeRequest(::crow::request &req) {
-    return std::make_unique<CrowRequestAdapter>(req);
-}
-
-} // namespace sep::api
+} // namespace api
+} // namespace sep

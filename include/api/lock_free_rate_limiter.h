@@ -1,17 +1,18 @@
 #pragma once
 
-#include "api/rate_limiter.h"
+#ifdef SEP_USE_TBB
+#  include <tbb/concurrent_hash_map.h>
+#else
+#  include "api/rate_limiter.h"
+#endif
+
+#include <mutex>
+#include <thread>
 #include <array>
 #include <atomic>
 #include <chrono>
 #include <memory>
-#ifdef SEP_USE_TBB
-#  include <tbb/concurrent_hash_map.h>
-#else
-#  include <unordered_map>
-#  include <mutex>
-#endif
-#include <thread>
+#include <unordered_map>
 
 namespace sep::api {
 

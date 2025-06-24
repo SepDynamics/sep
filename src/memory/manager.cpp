@@ -1,18 +1,18 @@
+#ifdef SEP_HAS_OPENTELEMETRY
+#include <opentelemetry/trace/provider.h>
+#endif
+
+#include "api/types.h"
+#include "api/server.h"
+#include "core/common.h"
 #include "memory/manager.h"
+#include "api/crow_adapter.h"
 
 // CROW_DISABLE_RTTI is defined globally via CMake
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 #include <atomic>
-#ifdef SEP_HAS_OPENTELEMETRY
-#include <opentelemetry/trace/provider.h>
-#endif
-
-#include "api/crow_adapter.h"
-#include "api/types.h"
-#include "api/server.h"
-#include "core/common.h"
 
 namespace sep::logging {
 

@@ -22,8 +22,9 @@
 #include <nlohmann/json.hpp>
 
 // Include our API headers
-#include "api/types.h"
 #include "api/crow_adapter.h"
+#include "api/json_helpers.h"
+#include "api/types.h"
 #include "api/sep_engine.h"
 #include "memory/manager.h"
 
@@ -37,11 +38,11 @@ CrowRequestAdapter::CrowRequestAdapter(::crow::request &req) : req_(req) {
     method_str_ = ::crow::method_name(req.method);
 }
 
-const std::string &CrowRequestAdapter::url() const { return req_.url; }
+std::string CrowRequestAdapter::url() const { return std::string(req_.url); }
 
-const std::string &CrowRequestAdapter::method() const { return method_str_; }
+const std::string& CrowRequestAdapter::method() const { return method_str_; }
 
-const std::string &CrowRequestAdapter::body() const { return req_.body; }
+std::string CrowRequestAdapter::body() const { return std::string(req_.body); }
 
 CrowResponseAdapter::CrowResponseAdapter(::crow::response &res) : res_(res) {}
 
@@ -53,7 +54,7 @@ void CrowResponseAdapter::setBody(const std::string &body) { res_.body = body; }
 
 void CrowResponseAdapter::end() { res_.end(); }
 
-const std::string &CrowResponseAdapter::getBody() const { return res_.body; }
+std::string CrowResponseAdapter::getBody() const { return std::string(res_.body); }
 
 std::unique_ptr<HttpResponse> makeResponse(::crow::response &res) {
     return std::make_unique<CrowResponseAdapter>(res);

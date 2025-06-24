@@ -1,6 +1,8 @@
+#include "api/server.h"
+#include "api/ollama_client.h"
+#include "api/json_helpers.h"
 #include <spdlog/spdlog.h>
-#include "crow/crow_isolation.h"
-
+#include "crow/crow.h"
 
 #include <chrono>
 #include <csignal>
@@ -16,7 +18,6 @@
 #include "api/client.h"
 #include "api/rate_limit_middleware.h"
 #include "api/request_interface.h"
-#include "api/server.h"
 #include "api/sep_engine.h"
 #include "quantum/types.h"
 #include "compat/types.h"
@@ -36,18 +37,18 @@ SEPApiServer* SEPApiServer::instance_ = nullptr;
 
 SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
     : config_(config), running_(false) {
-  instance_ = this;
+    instance_ = this;
 
-  // Initialize logger
-  setup_logging();
+    // Initialize the Crow app with middlewares
+    app_ = std::make_unique<::crow::Crow<RateLimitMiddleware, AuthMiddleware>>();
 
-  // Create Crow application with middleware
-  app_ = std::make_unique<::crow::Crow<RateLimitMiddleware, AuthMiddleware>>();
+    // Initialize logger
+    setup_logging();
 
-  // Setup components
-  setup_middleware();
-  setup_signal_handlers();
-  initClients();
+    // Initialize clients if needed
+    if (config_.ollama.enabled) {
+        ollama_client_ = std::make_unique<OllamaClient>(config_.ollama);
+    }
 }
 
 SEPApiServer::~SEPApiServer() {
@@ -66,44 +67,15 @@ ServerMetrics &SEPApiServer::getModifiableMetrics() {
 }
 
 bool SEPApiServer::start() {
-  if (running_) {
-    logger_->warn("Server is already running");
-    return false;
-  }
+    if (!app_) return false;
 
-#if SEP_HAS_EXCEPTIONS
-  try {
-#endif
-    logger_->info("Starting SEP API Server on {}:{}", config_.host, config_.port);
+    app_->port(config_.port);
+    app_->multithreaded();
 
-    // Configure Crow app
-    app_->port(config_.port)
-        .multithreaded()
-        .concurrency(config_.threads)
-        .timeout(static_cast<std::uint8_t>(config_.keep_alive_timeout_ms / 1000));
+    setup_middleware();
+    setup_routes();
 
-    // Start server in a separate thread
-    server_thread_ = std::make_unique<std::thread>([this]() {
-#if SEP_HAS_EXCEPTIONS
-      try {
-        app_->run();
-      } catch (const std::exception& e) {
-        logger_->error("Server thread error: {}", e.what());
-      }
-#else
-      app_->run();
-#endif
-    });
-
-    running_ = true;
-    logger_->info("SEP API Server started successfully");
     return true;
-#if SEP_HAS_EXCEPTIONS
-  } catch (const std::exception& e) {
-    logger_->error("Failed to start server: {}", e.what());
-    return false;
-  }
-#endif
 }
 
 bool SEPApiServer::run() {
@@ -208,8 +180,8 @@ void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::strin
 
   metrics_.lastResponseTime = std::chrono::milliseconds(duration);
 
-  logger_->info("Request: {} {} - Status: {} - Duration: {}ms", req.method(), req.url(), code,
-                duration);
+  logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
+                req.method(), req.url(), code, duration);
 }
 
 std::string SEPApiServer::getErrorResponse(const std::string& message, int status) {
@@ -267,8 +239,11 @@ void SEPApiServer::logRequest(const ::crow::request& req, int status_code,
 
   metrics_.lastResponseTime = std::chrono::milliseconds(duration_ms);
 
-  logger_->info("Request: {} {} - Status: {} - Duration: {}ms", ::crow::method_name(req.method),
-                req.url, status_code, duration_ms);
+  std::string method_name = std::string(::crow::method_name(req.method));
+  std::string url = std::string(req.url);
+
+  logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
+                method_name, url, status_code, duration_ms);
 }
 
 void SEPApiServer::setup_logging() {
@@ -328,7 +303,8 @@ void SEPApiServer::setup_routes() {
   auto& engine = SepEngine::getInstance();
 
   // Health check endpoint
-  app_->route_dynamic("/api/v1/health").methods(::crow::HTTPMethod::GET)([this, &engine](const ::crow::request& req) {
+  app_->route_dynamic("/api/v1/health")
+      .methods(::crow::HTTPMethod::Get)([this, &engine](const ::crow::request& req) {
     auto start_time = std::chrono::steady_clock::now();
 
     #if SEP_HAS_EXCEPTIONS
@@ -358,14 +334,14 @@ void SEPApiServer::setup_routes() {
 
   // Process patterns endpoint
   app_->route_dynamic("/api/v1/pattern/evolve")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
           // Parse request body
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
 
           // Process patterns through SEP engine
           auto result = engine.processPatterns(request_data);
@@ -404,13 +380,13 @@ void SEPApiServer::setup_routes() {
 
   // Process batch endpoint
   app_->route_dynamic("/api/v1/memory/query")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.processBatch(request_data);
           auto response_data = applyCoherenceModulation(result);
 

@@ -39,7 +39,7 @@ class CrowRequestAdapter : public HttpRequest {
 public:
   explicit CrowRequestAdapter(::crow::request &req);
   std::string url() const override;
-  const std::string &method() const override;
+  std::string method() const override;
   std::string body() const override;
 
  private:

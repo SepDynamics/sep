@@ -8,8 +8,6 @@
 
 #pragma once
 
-// CROW_DISABLE_RTTI is defined globally via CMake
-
 // Forward declarations - use class instead of struct to match crow's definitions
 namespace crow {
     template <typename... Middlewares>

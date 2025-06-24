@@ -63,7 +63,9 @@ add_subdirectory(src/compat)
 add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
+
 add_executable(sep_engine src/main.cpp)
+
 target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
@@ -80,4 +82,5 @@ target_link_libraries(sep_engine
     sep_blender
     sep_compat
     ${CURL_LIBRARIES}
-    ${CUDA_LIBRARIES})
+    ${CUDA_LIBRARIES}
+)

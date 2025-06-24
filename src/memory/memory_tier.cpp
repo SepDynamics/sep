@@ -196,6 +196,7 @@ SEPResult MemoryTier::defragment() {
             mgr.updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation, 1.0f);
         }
     }
+    mgr.rebuildLookup();
 
     if (logger) {
         LOG_INFO(logger, "Tier {} fragmentation now {:.2f}", static_cast<int>(config_.type), calculateFragmentation());

@@ -68,6 +68,38 @@ float MemoryTierManager::getTierFragmentation(sep::memory::TierType tier) const 
     return t ? t->calculateFragmentation() : 0.0f;
 }
 
+float MemoryTierManager::getTotalUtilization() const {
+    float total = 0.0f;
+    total += getTierUtilization(sep::memory::TierType::STM);
+    total += getTierUtilization(sep::memory::TierType::MTM);
+    total += getTierUtilization(sep::memory::TierType::LTM);
+    return total / 3.0f;
+}
+
+float MemoryTierManager::getTotalFragmentation() const {
+    float total = 0.0f;
+    total += getTierFragmentation(sep::memory::TierType::STM);
+    total += getTierFragmentation(sep::memory::TierType::MTM);
+    total += getTierFragmentation(sep::memory::TierType::LTM);
+    return total / 3.0f;
+}
+
+void MemoryTierManager::rebuildLookup() {
+    lookup_map_.clear();
+    auto add_blocks = [&](MemoryTier* tier) {
+        if (!tier) return;
+        const auto& blocks = tier->getBlocks();
+        for (const auto& blk : blocks) {
+            if (blk.allocated) {
+                lookup_map_[blk.ptr] = const_cast<MemoryBlock*>(&blk);
+            }
+        }
+    };
+    add_blocks(stm_.get());
+    add_blocks(mtm_.get());
+    add_blocks(ltm_.get());
+}
+
 void MemoryTierManager::updateBlockMetrics(MemoryBlock* block, float coherence, float stability,
                                            std::uint32_t generation, float context_score) {
     if (!block)

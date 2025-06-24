@@ -136,22 +136,6 @@ MemoryTier& MemoryTierManager::getLTM() {
     return *ltm_;
 }
 
-void MemoryTierManager::rebuildLookup()
-{
-    lookup_map_.clear();
-    auto rebuild = [this](MemoryTier* t) {
-        if (!t)
-            return;
-        for (const auto& blk : t->getBlocks()) {
-            if (blk.allocated)
-                lookup_map_[blk.ptr] = const_cast<MemoryBlock*>(&blk);
-        }
-    };
-    rebuild(stm_.get());
-    rebuild(mtm_.get());
-    rebuild(ltm_.get());
-}
-
 SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
         return SEPResult::INVALID_ARGUMENT;
@@ -212,7 +196,7 @@ SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* pat
 
 MemoryBlock* MemoryTierManager::findBlockByPtr(void* ptr) {
     auto it = lookup_map_.find(ptr);
-    return it != lookup_map_.end() ? it->second : nullptr;
+    return it != lookup_map_.end() ? it->second;
 }
 
 MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, int generation_count) {

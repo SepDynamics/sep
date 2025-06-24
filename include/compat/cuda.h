@@ -4,7 +4,8 @@
 
 // Forward declarations and includes
 #if SEP_CUDA_AVAILABLE
-#include "cuda_runtime.h"
+// Use absolute path to avoid recursive includes
+#include "/usr/local/cuda-12.9/include/cuda_runtime.h"
 #else
 // Include the compatibility header that defines stub types
 #include "compat/cuda_runtime.h"

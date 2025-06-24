@@ -2,7 +2,7 @@
 #include "api/bridge.h"
 #include "api/bridge.hpp"
 #include "api/bridge_internal.hpp"
-#include "config/manager.h"
+#include "core/manager.h"
 #include <nlohmann/json.hpp>
 #include <cstdio>
 #include <cstring>
@@ -19,8 +19,8 @@ SEP_API int sep_bridge_init(void) {
   try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-  sep::context::ProcessOptions options;
-  sep::api::bridge::detail::g_context_processor_bridge = sep::context::createProcessor(options);
+  sep::quantum::ProcessingConfig options{};
+  sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
   sep::api::bridge::detail::g_last_error.clear();
   sep::api::bridge::detail::g_required_buffer_size = 0;
   return 0;
@@ -47,7 +47,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
     }
 
-    sep::context::Processor *processor = nullptr;
+    sep::quantum::Processor *processor = nullptr;
     {
       std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
       if (!sep::api::bridge::detail::g_context_processor_bridge) {

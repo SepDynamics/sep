@@ -30,6 +30,10 @@ struct PatternConfig {
     std::size_t batch_size{64};
 };
 
+inline bool isValidConfig(const PatternConfig& cfg) {
+    return cfg.max_patterns > 0 && cfg.batch_size > 0;
+}
+
 enum class SEPResult {
     SUCCESS = 0,
     INVALID_ARGUMENT = -1,

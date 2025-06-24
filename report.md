@@ -2155,6 +2155,7 @@ Found 2 defect(s) in memory_tier_manager.cpp
 
 Found 12 defect(s) in memory_tier.cpp
 
+Found no defects in CMakeCXXCompilerId.cpp
 [MEDIUM] /sep/include/api/crow_request.h:41:16: returning reference to local temporary object [clang-diagnostic-return-stack-address]
 WARNING: source file content is changed or missing. Please re-analyze your project to update the reports.
   Report hash: bb0dbad5b1e8fee3c55448e19305e182
@@ -2588,39 +2589,39 @@ pattern_processor.cpp             |                 1
 
 ----======== Summary ========----
 -----------------------------------------------
-Number of processed analyzer result files | 657
+Number of processed analyzer result files | 755
 Number of analyzer reports                | 314
 -----------------------------------------------
 ----=================----
-[WARNING 2025-06-24 12:07] - The following source file contents changed or missing since the latest analysis:
- - /sep/src/api/bridge_c.cpp
- - /sep/include/quantum/processor.h
- - /sep/src/blender/blender_integration.cpp
- - /sep/include/compat/cuda_impl.h
- - /sep/src/memory/memory_tier.cpp
- - /sep/src/api/bridge.cpp
- - /sep/include/api/bridge.hpp
- - /sep/include/api/crow_request.h
- - /sep/third_party/crow/crow_isolation.h
- - /sep/include/api/rate_limit_middleware.h
- - /sep/src/api/server.cpp
- - /sep/include/api/server.h
- - /sep/src/api/crow_adapter.cpp
- - /sep/include/api/crow_adapter.h
- - /sep/src/memory/redis_manager.cpp
- - /sep/include/core/engine.h
- - /sep/include/crow/crow_isolation.h
+[WARNING 2025-06-24 12:46] - The following source file contents changed or missing since the latest analysis:
+ - /sep/third_party/crow/asio_isolation.h
  - /sep/include/compat/cuda_runtime.h
- - /sep/include/compat/cuda.h
- - /sep/third_party/crow/common.h
- - /sep/src/quantum/pattern_processor.cpp
+ - /sep/src/api/server.cpp
+ - /sep/src/blender/blender_integration.cpp
+ - /sep/src/main.cpp
+ - /sep/src/api/bridge_c.cpp
+ - /sep/third_party/crow/crow_isolation.h
+ - /sep/src/api/bridge.cpp
+ - /sep/include/crow/crow_isolation.h
+ - /sep/include/compat/core.h
+ - /sep/src/api/crow_adapter.cpp
  - /sep/src/context/processor.cpp
  - /sep/include/api/bridge_internal.hpp
- - /sep/include/compat/kernels.cuh
- - /sep/src/main.cpp
- - /sep/src/memory/memory_tier_manager.cpp
+ - /sep/include/api/server.h
+ - /sep/include/compat/cuda.h
+ - /sep/src/quantum/pattern_processor.cpp
+ - /sep/src/memory/memory_tier.cpp
+ - /sep/include/core/engine.h
  - /sep/third_party/crow/http_parser_merged.h
- - /sep/include/compat/core.h
- - /sep/third_party/crow/asio_isolation.h
+ - /sep/src/memory/memory_tier_manager.cpp
+ - /sep/src/memory/redis_manager.cpp
  - /sep/src/api/sep_engine.cpp
+ - /sep/include/quantum/processor.h
+ - /sep/third_party/crow/common.h
+ - /sep/include/compat/kernels.cuh
+ - /sep/include/compat/cuda_impl.h
+ - /sep/include/api/bridge.hpp
+ - /sep/include/api/crow_adapter.h
+ - /sep/include/api/crow_request.h
+ - /sep/include/api/rate_limit_middleware.h
 Please re-analyze your project to update the reports!

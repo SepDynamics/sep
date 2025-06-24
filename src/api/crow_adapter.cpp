@@ -10,7 +10,6 @@
 #define CROW_DISABLE_RTTI 1
 
 // First include our fixed isolation headers to avoid conflicts
-#include "crow/asio_isolation.h"
 #include "crow/crow_isolation.h"
 #include "crow/common.h"
 #include "crow/http_request.h"
@@ -22,8 +21,9 @@
 #include <nlohmann/json.hpp>
 
 // Include our API headers
-#include "api/types.h"
 #include "api/crow_adapter.h"
+#include "api/json_helpers.h"
+#include "api/types.h"
 #include "api/sep_engine.h"
 #include "memory/manager.h"
 
@@ -37,11 +37,11 @@ CrowRequestAdapter::CrowRequestAdapter(::crow::request &req) : req_(req) {
     method_str_ = ::crow::method_name(req.method);
 }
 
-const std::string &CrowRequestAdapter::url() const { return req_.url; }
+std::string CrowRequestAdapter::url() const { return std::string(req_.url); }
 
 const std::string &CrowRequestAdapter::method() const { return method_str_; }
 
-const std::string &CrowRequestAdapter::body() const { return req_.body; }
+std::string CrowRequestAdapter::body() const { return std::string(req_.body); }
 
 CrowResponseAdapter::CrowResponseAdapter(::crow::response &res) : res_(res) {}
 
@@ -53,7 +53,7 @@ void CrowResponseAdapter::setBody(const std::string &body) { res_.body = body; }
 
 void CrowResponseAdapter::end() { res_.end(); }
 
-const std::string &CrowResponseAdapter::getBody() const { return res_.body; }
+std::string CrowResponseAdapter::getBody() const { return std::string(res_.body); }
 
 std::unique_ptr<HttpResponse> makeResponse(::crow::response &res) {
     return std::make_unique<CrowResponseAdapter>(res);
@@ -118,7 +118,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.validateContexts(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -131,7 +131,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.blendContexts(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -144,7 +144,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.calculateSimilarity(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -157,7 +157,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.processPatterns(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -170,7 +170,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.getPatternHistory(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {

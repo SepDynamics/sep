@@ -59,9 +59,13 @@ enum HttpMethod {
 class HttpRequest {
 public:
     virtual ~HttpRequest() = default;
-    virtual const std::string& url() const = 0;
-    virtual const std::string& method() const = 0;
-    virtual const std::string& body() const = 0;
+    virtual std::string url() const = 0;
+    virtual std::string method() const = 0;
+    virtual std::string body() const = 0;
+
+    virtual std::string getHeader(const std::string& name) const {
+        return "";
+    }
 };
 
 // Abstract base class for HTTP responses
@@ -72,7 +76,11 @@ public:
     virtual void setBody(const std::string& body) = 0;
     virtual void end() = 0;
     virtual int getCode() const = 0;
-    virtual const std::string& getBody() const = 0;
+    virtual std::string getBody() const = 0;
+
+    virtual void setHeader(const std::string& name, const std::string& value) {
+        (void)name; (void)value;
+    }
 };
 
 enum class ErrorCode {
@@ -128,6 +136,16 @@ struct HealthMetrics {
   std::chrono::system_clock::time_point lastSuccessTime;
   std::chrono::system_clock::time_point lastErrorTime;
   int lastErrorCode{0};
+};
+
+struct RateLimitConfig {
+    int requests_per_minute = 60;
+    bool enabled = true;
+};
+
+struct AuthConfig {
+    bool enabled = false;
+    std::vector<std::string> tokens;
 };
 
 // Utility helpers for API responses

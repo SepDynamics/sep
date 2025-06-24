@@ -1,5 +1,6 @@
 #include <spdlog/spdlog.h>
 #include "crow/crow_isolation.h"
+#include "crow/crow.h"
 
 
 #include <chrono>
@@ -12,6 +13,8 @@
 #include "memory/manager.h"
 
 #include "api/crow_request.h"
+#include "api/json_helpers.h"
+#include "api/ollama_client.h"
 #include "api/types.h"
 #include "api/client.h"
 #include "api/rate_limit_middleware.h"
@@ -77,10 +80,10 @@ bool SEPApiServer::start() {
     logger_->info("Starting SEP API Server on {}:{}", config_.host, config_.port);
 
     // Configure Crow app
-    app_->port(config_.port)
-        .multithreaded()
-        .concurrency(config_.threads)
-        .timeout(static_cast<std::uint8_t>(config_.keep_alive_timeout_ms / 1000));
+    app_->port(config_.port);
+    app_->multithreaded();
+    app_->concurrency(config_.threads);
+    app_->timeout(static_cast<std::uint8_t>(config_.keep_alive_timeout_ms / 1000));
 
     // Start server in a separate thread
     server_thread_ = std::make_unique<std::thread>([this]() {
@@ -208,8 +211,8 @@ void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::strin
 
   metrics_.lastResponseTime = std::chrono::milliseconds(duration);
 
-  logger_->info("Request: {} {} - Status: {} - Duration: {}ms", req.method(), req.url(), code,
-                duration);
+  logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
+                req.method(), req.url(), code, duration);
 }
 
 std::string SEPApiServer::getErrorResponse(const std::string& message, int status) {
@@ -267,8 +270,9 @@ void SEPApiServer::logRequest(const ::crow::request& req, int status_code,
 
   metrics_.lastResponseTime = std::chrono::milliseconds(duration_ms);
 
-  logger_->info("Request: {} {} - Status: {} - Duration: {}ms", ::crow::method_name(req.method),
-                req.url, status_code, duration_ms);
+  logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
+                std::string(::crow::method_name(req.method)),
+                std::string(req.url), status_code, duration_ms);
 }
 
 void SEPApiServer::setup_logging() {
@@ -358,14 +362,14 @@ void SEPApiServer::setup_routes() {
 
   // Process patterns endpoint
   app_->route_dynamic("/api/v1/pattern/evolve")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
           // Parse request body
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
 
           // Process patterns through SEP engine
           auto result = engine.processPatterns(request_data);
@@ -404,13 +408,13 @@ void SEPApiServer::setup_routes() {
 
   // Process batch endpoint
   app_->route_dynamic("/api/v1/memory/query")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.processBatch(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -447,13 +451,13 @@ void SEPApiServer::setup_routes() {
 
   // Pattern history endpoint
   app_->route_dynamic("/api/v1/patterns/history")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.getPatternHistory(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -490,13 +494,13 @@ void SEPApiServer::setup_routes() {
 
   // Validate contexts endpoint
   app_->route_dynamic("/api/v1/context/process")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.validateContexts(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -533,13 +537,13 @@ void SEPApiServer::setup_routes() {
 
   // Extract embeddings endpoint
   app_->route_dynamic("/api/v1/embeddings/extract")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.extractEmbeddings(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -576,13 +580,13 @@ void SEPApiServer::setup_routes() {
 
   // Analyze patterns endpoint
   app_->route_dynamic("/api/v1/pattern/analyze")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.calculateSimilarity(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -619,13 +623,13 @@ void SEPApiServer::setup_routes() {
 
   // Context relationships endpoint
   app_->route_dynamic("/api/v1/context/relationships")
-      .methods("POST"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Post)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          nlohmann::json request_data = nlohmann::json::parse(req.body);
+          nlohmann::json request_data = parse_json(std::string(req.body));
           auto result = engine.blendContexts(request_data);
           auto response_data = applyCoherenceModulation(result);
 
@@ -662,7 +666,7 @@ void SEPApiServer::setup_routes() {
 
   // Memory metrics endpoint
   app_->route_dynamic("/api/v1/metrics/memory")
-      .methods("GET"_method)([this, &engine](const ::crow::request& req) {
+      .methods(::crow::HTTPMethod::Get)([this, &engine](const ::crow::request& req) {
         auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS

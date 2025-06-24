@@ -4,7 +4,12 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include "quantum/processor.h"
+// Forward declarations
+namespace sep {
+namespace context {
+class Processor;
+}
+}
 
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
 #define SEP_HAS_EXCEPTIONS 1
@@ -29,7 +34,7 @@
 #endif
 
 namespace sep::api::bridge::detail {
-extern std::unique_ptr<sep::context::Processor> g_context_processor_bridge;
+extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
 extern std::string g_last_error;
 extern size_t g_required_buffer_size;
 extern std::mutex g_bridge_mutex;

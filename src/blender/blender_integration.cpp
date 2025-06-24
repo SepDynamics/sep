@@ -109,7 +109,7 @@ sep::SEPResult BlenderBridge::registerObject(Object* obj, const PatternConfig& c
         state.stats        = {0.0f, 0, 0, 0.0f};
 
         // Allocate initial memory
-        SEPResult result = allocatePatternMemory(state);
+        sep::SEPResult result = allocatePatternMemory(state);
         if (result != sep::SEPResult::SUCCESS)
         {
             notifyError(result, "Failed to allocate pattern memory");
@@ -174,7 +174,7 @@ void BlenderBridge::notifyStateChange(ObjectHandle handle, PatternStateEnum old_
     }
 }
 
-void BlenderBridge::notifyError(SEPResult error, const char* message)
+void BlenderBridge::notifyError(sep::SEPResult error, const char* message)
 {
     std::lock_guard<std::mutex> lock(m_observer_mutex);
     for (const auto& observer : m_observers)
@@ -308,7 +308,7 @@ sep::SEPResult BlenderBridge::stopProcessingThread()
     return sep::SEPResult::SUCCESS;
 }
 
-SEPResult BlenderBridge::processPatterns()
+sep::SEPResult BlenderBridge::processPatterns()
 {
     if (!m_processing_thread_active.load()) {
         return sep::SEPResult::NOT_INITIALIZED;
@@ -331,7 +331,7 @@ SEPResult BlenderBridge::processPatterns()
     return sep::SEPResult::SUCCESS;
 }
 
-SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics& metrics)
+sep::SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics& metrics)
 {
     if (!m_processing_thread_active.load()) {
         return sep::SEPResult::NOT_INITIALIZED;

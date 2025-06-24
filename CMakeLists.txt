@@ -58,11 +58,9 @@ add_executable(sep_engine src/main.cpp)
 target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+    PRIVATE 
+        ${HIREDIS_INCLUDE_DIR}
 )
-
-if(HIREDIS_INCLUDE_DIR)
-    target_include_directories(sep_engine PRIVATE ${HIREDIS_INCLUDE_DIR})
-endif()
 
 target_link_libraries(sep_engine
     sep_core
@@ -74,7 +72,3 @@ target_link_libraries(sep_engine
     sep_compat
     ${CURL_LIBRARIES}
     ${CUDA_LIBRARIES})
-
-if(HIREDIS_LIBRARIES)
-    target_link_libraries(sep_engine PRIVATE ${HIREDIS_LIBRARIES})
-endif()

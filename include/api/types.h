@@ -59,20 +59,29 @@ enum HttpMethod {
 class HttpRequest {
 public:
     virtual ~HttpRequest() = default;
-    virtual const std::string& url() const = 0;
-    virtual const std::string& method() const = 0;
-    virtual const std::string& body() const = 0;
+
+    // Return by value for safety with different string types
+    virtual std::string url() const = 0;
+    virtual std::string method() const = 0;
+    virtual std::string body() const = 0;
+
+    // Optional: Add header access if needed
+    virtual std::string getHeader(const std::string& name) const { return ""; }
 };
 
 // Abstract base class for HTTP responses
 class HttpResponse {
 public:
     virtual ~HttpResponse() = default;
+
     virtual void setCode(int code) = 0;
-    virtual void setBody(const std::string& body) = 0;
-    virtual void end() = 0;
     virtual int getCode() const = 0;
-    virtual const std::string& getBody() const = 0;
+    virtual void setBody(const std::string& body) = 0;
+    virtual std::string getBody() const = 0;
+    virtual void end() = 0;
+
+    // Optional: Add header setting if needed
+    virtual void setHeader(const std::string& name, const std::string& value) {}
 };
 
 enum class ErrorCode {

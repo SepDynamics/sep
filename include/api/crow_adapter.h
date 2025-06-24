@@ -11,12 +11,12 @@
 // Define CROW_DISABLE_RTTI first since we're using with CUDA
 #define CROW_DISABLE_RTTI 1
 
-// Forward declarations - don't include crow headers directly here
+// Forward declarations - use class instead of struct to match crow's definitions
 namespace crow {
     template <typename... Middlewares>
     class Crow;
-    struct request;
-    struct response;
+    class request;
+    class response;
 }
 
 #include <memory>
@@ -38,9 +38,10 @@ void setupSepApiRoutes(::crow::Crow<>* app);
 class CrowRequestAdapter : public HttpRequest {
 public:
   explicit CrowRequestAdapter(::crow::request &req);
-  const std::string &url() const override;
-  const std::string &method() const override;
-  const std::string &body() const override;
+  // Changed to return by value to avoid reference to temporary
+  std::string url() const override;
+  const std::string &method() const override;  // method_str_ stored as member
+  std::string body() const override;
 
  private:
   ::crow::request &req_;
@@ -55,7 +56,8 @@ public:
   int getCode() const override;
   void setBody(const std::string &body) override;
   void end() override;
-  const std::string &getBody() const override;
+  // Changed to return by value to avoid reference to temporary
+  std::string getBody() const override;
 
  private:
   ::crow::response &res_;

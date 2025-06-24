@@ -9,23 +9,21 @@
 // Define CROW_DISABLE_RTTI first since we're using with CUDA
 #define CROW_DISABLE_RTTI 1
 
-// First include our fixed isolation headers to avoid conflicts
-#include "crow/asio_isolation.h"
+// Include API headers first
+#include "api/crow_adapter.h"
+#include "api/json_helpers.h"  // Our JSON compatibility helpers
+#include "api/types.h"
+#include "api/sep_engine.h"
+
+// Include crow headers
 #include "crow/crow_isolation.h"
 #include "crow/common.h"
 #include "crow/http_request.h"
 #include "crow/http_response.h"
 
-// Include standard C++ headers
+// Include standard headers
 #include <memory>
 #include <string>
-#include <nlohmann/json.hpp>
-
-// Include our API headers
-#include "api/types.h"
-#include "api/crow_adapter.h"
-#include "api/sep_engine.h"
-#include "memory/manager.h"
 
 namespace sep::api {
 
@@ -37,11 +35,15 @@ CrowRequestAdapter::CrowRequestAdapter(::crow::request &req) : req_(req) {
     method_str_ = ::crow::method_name(req.method);
 }
 
-const std::string &CrowRequestAdapter::url() const { return req_.url; }
+std::string CrowRequestAdapter::url() const {
+    return std::string(req_.url);
+}
 
 const std::string &CrowRequestAdapter::method() const { return method_str_; }
 
-const std::string &CrowRequestAdapter::body() const { return req_.body; }
+std::string CrowRequestAdapter::body() const {
+    return std::string(req_.body);
+}
 
 CrowResponseAdapter::CrowResponseAdapter(::crow::response &res) : res_(res) {}
 
@@ -53,7 +55,7 @@ void CrowResponseAdapter::setBody(const std::string &body) { res_.body = body; }
 
 void CrowResponseAdapter::end() { res_.end(); }
 
-const std::string &CrowResponseAdapter::getBody() const { return res_.body; }
+std::string CrowResponseAdapter::getBody() const { return std::string(res_.body); }
 
 std::unique_ptr<HttpResponse> makeResponse(::crow::response &res) {
     return std::make_unique<CrowResponseAdapter>(res);
@@ -114,11 +116,11 @@ void setupSepApiRoutes(::crow::crow<>* app)
     };
     
     // Route: Process and validate context
-    app->route(API_PREFIX "/context/process")
+    app->route_dynamic(API_PREFIX "/context/process")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.validateContexts(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -127,11 +129,11 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Manage context relationships
-    app->route(API_PREFIX "/context/relationships")
+    app->route_dynamic(API_PREFIX "/context/relationships")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.blendContexts(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -140,11 +142,11 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Analyze pattern stability and coherence
-    app->route(API_PREFIX "/pattern/analyze")
+    app->route_dynamic(API_PREFIX "/pattern/analyze")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.calculateSimilarity(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -153,11 +155,11 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Evolve patterns through state transitions
-    app->route(API_PREFIX "/pattern/evolve")
+    app->route_dynamic(API_PREFIX "/pattern/evolve")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.processPatterns(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -166,11 +168,11 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Get pattern evolution history
-    app->route(API_PREFIX "/patterns/history")
+    app->route_dynamic(API_PREFIX "/patterns/history")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.getPatternHistory(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -179,11 +181,11 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Query memory tiers for patterns
-    app->route(API_PREFIX "/memory/query")
+    app->route_dynamic(API_PREFIX "/memory/query")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.processBatch(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -192,7 +194,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Get health status of the SEP Engine
-    app->route(API_PREFIX "/health")
+    app->route_dynamic(API_PREFIX "/health")
         .methods(::crow::HTTPMethod::GET)
         ([&engine, makeJsonResponse, handleApiError]() {
             try {

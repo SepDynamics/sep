@@ -5,7 +5,6 @@
 #include "api/ollama_types.h"
 #include "curl/curl.h"
 #include "core/common.h"
-#include "ollama/types.h"
 
 #include <chrono>
 #include <nlohmann/json.hpp>

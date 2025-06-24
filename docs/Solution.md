@@ -1,4 +1,4 @@
-The `build_log.txt` clearly indicates several `undefined reference` errors, primarily related to CUDA functions (like `cudaMallocManaged`, `cudaFree`, `cudaMemcpyAsync`, `CudaCore::initialize`, `CudaCore::createStream`, `CudaCore::launchQBSA`, `CudaCore::launchQSH`, `CudaCore::synchronizeStream`) and some to `sep::pattern::PatternProcessor` constructor and `sep::api::makeRequest`.
+The `build_log.txt` clearly indicates several `undefined reference` errors, primarily related to CUDA functions (like [`cudaMallocManaged`](include/compat/cuda_runtime.h), [`cudaFree`](include/compat/cuda_runtime.h), [`cudaMemcpyAsync`](include/compat/cuda_runtime.h:95), [`CudaCore::initialize`](include/compat/core.h:35), [`CudaCore::createStream`](include/compat/core.h:44), [`CudaCore::launchQBSA`](include/compat/core.h:63), [`CudaCore::launchQSH`](include/compat/core.h:68), [`CudaCore::synchronizeStream`](include/compat/core.h:46)) and some to [`sep::pattern::PatternProcessor`](include/quantum/processor.h:28) constructor and [`sep::api::makeRequest`](include/api/crow_adapter.h).
 
 These errors usually mean that the linker cannot find the definitions for these symbols. This typically happens for one of two reasons:
 1. The header file is included, but the corresponding source file (where the function is actually defined) is not being compiled and linked into an archive or executable.
@@ -8,14 +8,14 @@ Let's analyze the specific errors:
 
 **CUDA Errors:**
 The most prominent errors are related to CUDA:
-- `undefined reference to `sep::cuda::CudaCore::initialize(int)'`
-- `undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'`
-- `undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'`
-- `undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'`
-- `undefined reference to `sep::cuda::CudaCore::launchQBSA(...)`
-- `undefined reference to `sep::cuda::CudaCore::launchQSH(...)`
-- `undefined reference to `sep::cuda::cudaMallocManaged(void**, unsigned long)'`
-- `undefined reference to `sep::cuda::cudaFree(void*)'`
+- `undefined reference to `[sep::cuda::CudaCore::initialize(int)](include/compat/core.h:35)'`
+- `undefined reference to `[sep::cuda::CudaCore::createStream(sep::StreamFlags)](include/compat/core.h:44)'`
+- `undefined reference to `[sep::cuda::CudaCore::synchronizeStream(void*)](include/compat/core.h:46)'`
+- `undefined reference to `[sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)](include/compat/cuda_runtime.h:95)'`
+- `undefined reference to `[sep::cuda::CudaCore::launchQBSA(...)](include/compat/core.h:63)'`
+- `undefined reference to `[sep::cuda::CudaCore::launchQSH(...)](include/compat/core.h:68)'`
+- `undefined reference to `[sep::cuda::cudaMallocManaged(void**, unsigned long)](include/compat/cuda_runtime.h)'`
+- `undefined reference to `[sep::cuda::cudaFree(void*)](include/compat/cuda_runtime.h)'`
 
 Looking at your `src/compat` directory, you have several `.cu` files (CUDA source files) that likely contain these definitions, such as `core/core.cu`, `cuda_api.cu`, `event.cu`, `pattern_kernels.cu`, `quantum_kernels.cu`, and `utils.cu`.
 

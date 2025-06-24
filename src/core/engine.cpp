@@ -77,7 +77,9 @@ bool Engine::init(const sep::config::APIConfig& config) {
         audio_capture_.reset();
     }
 
+#if SEP_HAS_BLENDER
     blender_bridge_ = std::make_shared<pattern::BlenderBridge>();
+#endif
 
     impl_->initialized = true;
     return true;

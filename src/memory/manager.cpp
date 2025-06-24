@@ -1,7 +1,9 @@
 #include "memory/manager.h"
 
-// Define CROW_DISABLE_RTTI to use isolation headers
+// Ensure CROW_DISABLE_RTTI is defined when building without RTTI support
+#ifndef CROW_DISABLE_RTTI
 #define CROW_DISABLE_RTTI
+#endif
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>

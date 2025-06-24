@@ -8,8 +8,10 @@
 
 #pragma once
 
-// Define CROW_DISABLE_RTTI first since we're using with CUDA
+// Define CROW_DISABLE_RTTI only if not provided by the build system
+#ifndef CROW_DISABLE_RTTI
 #define CROW_DISABLE_RTTI 1
+#endif
 
 // Forward declarations - use class instead of struct to match crow's definitions
 namespace crow {

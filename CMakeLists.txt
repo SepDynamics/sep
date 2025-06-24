@@ -3,12 +3,20 @@ project(SEPEngine)
 
 include(FetchContent)
 
-include_directories(
+# Add our fixed Crow headers directory BEFORE other include directories
+# This ensures our fixed headers are used instead of the problematic ones
+include_directories(BEFORE
   ${CMAKE_SOURCE_DIR}/include
+)
+
+include_directories(
   ${CMAKE_SOURCE_DIR}/third_party
   ${CMAKE_SOURCE_DIR}/third_party/glm
   ${CMAKE_SOURCE_DIR}/third_party/tbb
 )
+
+# Add our fixed Crow headers subdirectory
+add_subdirectory(include/crow)
 
 # Fetch the Crow web framework if it is not present
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/third_party/crow/include")

@@ -4,7 +4,7 @@
 
 // Forward declarations and includes
 #if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
+#include "cuda_runtime.h"
 #else
 // Include the compatibility header that defines stub types
 #include "compat/cuda_runtime.h"

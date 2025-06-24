@@ -15,7 +15,7 @@
 #include "crow/http_request.h"
 #include "crow/http_response.h"
 
-// Include standard C++ headers
+// Include standard headers
 #include <memory>
 #include <string>
 #include <nlohmann/json.hpp>
@@ -114,7 +114,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
     };
     
     // Route: Process and validate context
-    app->route(API_PREFIX "/context/process")
+    app->route_dynamic(API_PREFIX "/context/process")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -127,7 +127,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Manage context relationships
-    app->route(API_PREFIX "/context/relationships")
+    app->route_dynamic(API_PREFIX "/context/relationships")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -140,7 +140,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Analyze pattern stability and coherence
-    app->route(API_PREFIX "/pattern/analyze")
+    app->route_dynamic(API_PREFIX "/pattern/analyze")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -153,7 +153,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Evolve patterns through state transitions
-    app->route(API_PREFIX "/pattern/evolve")
+    app->route_dynamic(API_PREFIX "/pattern/evolve")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -166,7 +166,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Get pattern evolution history
-    app->route(API_PREFIX "/patterns/history")
+    app->route_dynamic(API_PREFIX "/patterns/history")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
@@ -179,11 +179,11 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Query memory tiers for patterns
-    app->route(API_PREFIX "/memory/query")
+    app->route_dynamic(API_PREFIX "/memory/query")
         .methods(::crow::HTTPMethod::POST)
         ([&engine, makeJsonResponse, handleApiError](const ::crow::request& req) {
             try {
-                auto body = json_t::parse(req.body);
+                auto body = parse_json(std::string(req.body));
                 auto result = engine.processBatch(body);
                 return makeJsonResponse(result);
             } catch (const std::exception& e) {
@@ -192,7 +192,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
         });
 
     // Route: Get health status of the SEP Engine
-    app->route(API_PREFIX "/health")
+    app->route_dynamic(API_PREFIX "/health")
         .methods(::crow::HTTPMethod::GET)
         ([&engine, makeJsonResponse, handleApiError]() {
             try {

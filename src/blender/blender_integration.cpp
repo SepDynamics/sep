@@ -31,13 +31,8 @@ BlenderBridge::BlenderBridge()
     // Initialize the bridge
 }
 
-BlenderBridge::~BlenderBridge()
-{
-    if (m_processing_thread_active.load())
-    {
-        stopProcessingThread();
-    }
-}
+BlenderBridge::~BlenderBridge() = default;
+
 
 std::shared_ptr<BlenderBridge> BlenderBridge::create()
 {
@@ -475,6 +470,36 @@ sep::SEPResult BlenderBridge::validatePatternCoherence(const ObjectState& state)
         }
     }
     return sep::SEPResult::SUCCESS;
+}
+
+sep::SEPResult BlenderBridge::promotePatterns(ObjectHandle handle, MemoryTierEnum target_tier)
+{
+    (void)handle;
+    (void)target_tier;
+    return sep::SEPResult::SUCCESS;
+}
+
+sep::SEPResult BlenderBridge::syncPatternData(ObjectHandle handle, bool force)
+{
+    (void)handle;
+    (void)force;
+    return sep::SEPResult::SUCCESS;
+}
+
+sep::SEPResult BlenderBridge::checkResourceLimits()
+{
+    return sep::SEPResult::SUCCESS;
+}
+
+sep::SEPResult BlenderBridge::checkResourceThresholds()
+{
+    return sep::SEPResult::SUCCESS;
+}
+
+float BlenderBridge::calculateResourceUtilization(ResourceType type)
+{
+    (void)type;
+    return 0.0f;
 }
 
 }  // namespace pattern

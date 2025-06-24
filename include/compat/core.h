@@ -1,19 +1,16 @@
 #ifndef SEP_CUDA_CORE_H
 #define SEP_CUDA_CORE_H
 
-// Include the standard CUDA runtime first
-#include "cuda_runtime.h"
-
 #include <vector>
+#include <cuda_runtime.h>
 
+// Include the standard CUDA runtime first
 #include "compat/types.h"
-
 #include "compat/memory.h"
 #include "compat/stream.h"
 #include "compat/cuda_defs.h"
 
 namespace sep::cuda {
-
 
 // Add metrics structure
 struct CudaMetrics {

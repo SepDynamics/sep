@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 project(SEPEngine)
 
+# Ensure RTTI is disabled consistently across all targets when building with
+# the Crow isolation headers.
+add_compile_definitions(CROW_DISABLE_RTTI=1)
+
+# Locate external dependencies required by the engine
+find_package(CURL QUIET)
+find_package(Hiredis QUIET)
+find_package(CUDAToolkit QUIET)
+
 include(FetchContent)
 
 # Use C++17 across all targets

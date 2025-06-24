@@ -78,21 +78,6 @@ CMake Warning at CMakeLists.txt:22 (add_executable):
 [ 50%] Building CXX object CMakeFiles/blender_tests.dir/mesh_handler_perf_test.o
 [ 60%] Building CXX object CMakeFiles/blender_tests.dir/mesh_handler_stress_test.o
 [ 70%] Building CXX object CMakeFiles/blender_tests.dir/gpu_context_perf_test.o
-/sep/tests/blender/pattern_data_test.cpp:11:30: error: using declaration cannot refer to class member
-   11 | using sep::quantum::Pattern::GPUPatternData;
-      |       ~~~~~~~~~~~~~~~~~~~~~~~^
-/sep/tests/blender/pattern_data_test.cpp:12:30: error: using declaration cannot refer to class member
-   12 | using sep::quantum::Pattern::PatternFlags;
-      |       ~~~~~~~~~~~~~~~~~~~~~~~^
-/sep/tests/blender/pattern_data_test.cpp:17:5: error: unknown type name 'GPUPatternData'
-   17 |     GPUPatternData createTestPattern()
-      |     ^
-/sep/tests/blender/pattern_data_test.cpp:19:9: error: unknown type name 'GPUPatternData'
-   19 |         GPUPatternData pattern;
-      |         ^
-/sep/tests/blender/pattern_data_test.cpp:40:26: error: use of undeclared identifier 'GPUPatternData'
-   40 |     EXPECT_EQ(96, sizeof(GPUPatternData));
-      |                          ^
 /sep/tests/blender/gpu_context_perf_test.cpp:18:15: error: use of undeclared identifier 'SEPResult'; did you mean 'sep::SEPResult'?
    18 |     ASSERT_EQ(SEPResult::SUCCESS, context_->init());
       |               ^~~~~~~~~
@@ -115,18 +100,6 @@ CMake Warning at CMakeLists.txt:22 (add_executable):
 /sep/include/core/common.h:9:12: note: 'sep::SEPResult' declared here
     9 | enum class SEPResult : int32_t {
       |            ^
-/sep/tests/blender/pattern_data_test.cpp:43:27: error: use of undeclared identifier 'GPUPatternData'
-   43 |     EXPECT_EQ(16, alignof(GPUPatternData));
-      |                           ^
-/sep/tests/blender/pattern_data_test.cpp:43:19: warning: 'alignof' applied to an expression is a GNU extension [-Wgnu-alignof-expression]
-   43 |     EXPECT_EQ(16, alignof(GPUPatternData));
-      |                   ^
-/sep/tests/blender/pattern_data_test.cpp:49:27: error: unknown type name 'GPUPatternData'
-   49 |     EXPECT_EQ(0, offsetof(GPUPatternData, position));
-      |                           ^
-/sep/tests/blender/pattern_data_test.cpp:50:28: error: unknown type name 'GPUPatternData'
-   50 |     EXPECT_EQ(16, offsetof(GPUPatternData, velocity));
-      |                            ^
 /sep/tests/blender/gpu_context_perf_test.cpp:82:62: error: no member named 'allocateMemory' in 'sep::GPUContext'
    82 |         [&]() { ASSERT_EQ(sep::SEPResult::SUCCESS, context_->allocateMemory(&ptrs[i], alloc_size)); });
       |                                                    ~~~~~~~~~~^
@@ -163,9 +136,6 @@ CMake Warning at CMakeLists.txt:22 (add_executable):
 /sep/tests/blender/gpu_context_perf_test.cpp:63:49: note: passing argument to parameter 'op' here
    63 |   double measureOperation(std::function<void()> op) {
       |                                                 ^
-/sep/tests/blender/pattern_data_test.cpp:51:28: error: unknown type name 'GPUPatternData'
-   51 |     EXPECT_EQ(32, offsetof(GPUPatternData, attributes));
-      |                            ^
 /sep/tests/blender/gpu_context_perf_test.cpp:93:50: error: no member named 'freeMemory' in 'sep::GPUContext'
    93 |     ASSERT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(ptr));
       |                                        ~~~~~~~~~~^
@@ -286,9 +256,6 @@ CMake Warning at CMakeLists.txt:22 (add_executable):
 /sep/tests/blender/gpu_context_perf_test.cpp:63:49: note: passing argument to parameter 'op' here
    63 |   double measureOperation(std::function<void()> op) {
       |                                                 ^
-/sep/tests/blender/pattern_data_test.cpp:52:28: error: unknown type name 'GPUPatternData'
-   52 |     EXPECT_EQ(48, offsetof(GPUPatternData, coherence));
-      |                            ^
 /sep/tests/blender/gpu_context_perf_test.cpp:148:50: error: no member named 'freeMemory' in 'sep::GPUContext'
   148 |     ASSERT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(device_ptr));
       |                                        ~~~~~~~~~~^
@@ -307,9 +274,6 @@ CMake Warning at CMakeLists.txt:22 (add_executable):
 /usr/include/gtest/gtest_pred_impl.h:79:52: note: expanded from macro 'GTEST_ASSERT_'
    79 |   if (const ::testing::AssertionResult gtest_ar = (expression)) \
       |                                                    ^~~~~~~~~~
-/sep/tests/blender/pattern_data_test.cpp:53:28: error: unknown type name 'GPUPatternData'
-   53 |     EXPECT_EQ(52, offsetof(GPUPatternData, entropy));
-      |                            ^
 /sep/tests/blender/gpu_context_perf_test.cpp:155:15: error: use of undeclared identifier 'cudaStream_t'
   155 |   std::vector<cudaStream_t> streams(num_streams);
       |               ^
@@ -455,9 +419,6 @@ CMake Warning at CMakeLists.txt:22 (add_executable):
 /usr/include/gtest/gtest_pred_impl.h:79:52: note: expanded from macro 'GTEST_ASSERT_'
    79 |   if (const ::testing::AssertionResult gtest_ar = (expression)) \
       |                                                    ^~~~~~~~~~
-/sep/tests/blender/pattern_data_test.cpp:54:28: error: unknown type name 'GPUPatternData'
-   54 |     EXPECT_EQ(56, offsetof(GPUPatternData, stability));
-      |                            ^
 /sep/tests/blender/gpu_context_perf_test.cpp:189:43: error: no viable conversion from '(lambda at /sep/tests/blender/gpu_context_perf_test.cpp:189:43)' to 'std::function<void ()>'
   189 |       sequential_time += measureOperation([&]() {
       |                                           ^~~~~~~
@@ -484,32 +445,64 @@ CMake Warning at CMakeLists.txt:22 (add_executable):
 /sep/tests/blender/gpu_context_perf_test.cpp:63:49: note: passing argument to parameter 'op' here
    63 |   double measureOperation(std::function<void()> op) {
       |                                                 ^
-/sep/tests/blender/pattern_data_test.cpp:55:28: error: unknown type name 'GPUPatternData'
-   55 |     EXPECT_EQ(60, offsetof(GPUPatternData, mutation_rate));
-      |                            ^
 fatal error: too many errors emitted, stopping now [-ferror-limit=]
 20 errors generated.
-/sep/tests/blender/pattern_data_test.cpp:56:28: error: unknown type name 'GPUPatternData'
-   56 |     EXPECT_EQ(64, offsetof(GPUPatternData, generation));
-      |                            ^
 gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:177: CMakeFiles/blender_tests.dir/gpu_context_perf_test.o] Error 1
 gmake[3]: *** Waiting for unfinished jobs....
-/sep/tests/blender/pattern_data_test.cpp:57:28: error: unknown type name 'GPUPatternData'
-   57 |     EXPECT_EQ(68, offsetof(GPUPatternData, mutations));
+/sep/tests/blender/pattern_data_test.cpp:11:30: error: using declaration cannot refer to class member
+   11 | using sep::quantum::Pattern::GPUPatternData;
+      |       ~~~~~~~~~~~~~~~~~~~~~~~^
+/sep/tests/blender/pattern_data_test.cpp:12:30: error: using declaration cannot refer to class member
+   12 | using sep::quantum::Pattern::PatternFlags;
+      |       ~~~~~~~~~~~~~~~~~~~~~~~^
+/sep/tests/blender/pattern_data_test.cpp:17:5: error: unknown type name 'GPUPatternData'
+   17 |     GPUPatternData createTestPattern()
+      |     ^
+/sep/tests/blender/pattern_data_test.cpp:19:9: error: unknown type name 'GPUPatternData'
+   19 |         GPUPatternData pattern;
+      |         ^
+/sep/tests/blender/pattern_data_test.cpp:40:26: error: use of undeclared identifier 'GPUPatternData'
+   40 |     EXPECT_EQ(96, sizeof(GPUPatternData));
+      |                          ^
+/sep/tests/blender/pattern_data_test.cpp:43:27: error: use of undeclared identifier 'GPUPatternData'
+   43 |     EXPECT_EQ(16, alignof(GPUPatternData));
+      |                           ^
+/sep/tests/blender/pattern_data_test.cpp:43:19: warning: 'alignof' applied to an expression is a GNU extension [-Wgnu-alignof-expression]
+   43 |     EXPECT_EQ(16, alignof(GPUPatternData));
+      |                   ^
+/sep/tests/blender/pattern_data_test.cpp:49:27: error: unknown type name 'GPUPatternData'
+   49 |     EXPECT_EQ(0, offsetof(GPUPatternData, position));
+      |                           ^
+/sep/tests/blender/pattern_data_test.cpp:50:28: error: unknown type name 'GPUPatternData'
+   50 |     EXPECT_EQ(16, offsetof(GPUPatternData, velocity));
       |                            ^
-/sep/tests/blender/pattern_data_test.cpp:58:28: error: unknown type name 'GPUPatternData'
-   58 |     EXPECT_EQ(72, offsetof(GPUPatternData, promotions));
+/sep/tests/blender/mesh_handler_perf_test.cpp:95:15: error: reference to 'SEPResult' is ambiguous
+   95 |     ASSERT_EQ(SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
+      |               ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/pattern_data_test.cpp:51:28: error: unknown type name 'GPUPatternData'
+   51 |     EXPECT_EQ(32, offsetof(GPUPatternData, attributes));
       |                            ^
-/sep/tests/blender/pattern_data_test.cpp:59:28: error: unknown type name 'GPUPatternData'
-   59 |     EXPECT_EQ(76, offsetof(GPUPatternData, flags));
+/sep/tests/blender/pattern_data_test.cpp:52:28: error: unknown type name 'GPUPatternData'
+   52 |     EXPECT_EQ(48, offsetof(GPUPatternData, coherence));
       |                            ^
-/sep/tests/blender/pattern_data_test.cpp:60:28: error: unknown type name 'GPUPatternData'
-   60 |     EXPECT_EQ(80, offsetof(GPUPatternData, offset_in_tier));
+/sep/tests/blender/pattern_data_test.cpp:53:28: error: unknown type name 'GPUPatternData'
+   53 |     EXPECT_EQ(52, offsetof(GPUPatternData, entropy));
       |                            ^
-/sep/tests/blender/pattern_data_test.cpp:61:28: error: unknown type name 'GPUPatternData'
-   61 |     EXPECT_EQ(88, offsetof(GPUPatternData, size_in_bytes));
-      |                            ^
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
+/sep/tests/blender/mesh_handler_perf_test.cpp:214:15: error: reference to 'SEPResult' is ambiguous
+  214 |     EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer(name, CD_PROP_FLOAT3));
+      |               ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
 /sep/tests/blender/mesh_handler_stress_test.cpp:69:15: error: reference to 'SEPResult' is ambiguous
    69 |     ASSERT_EQ(SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
       |               ^
@@ -519,7 +512,9 @@ fatal error: too many errors emitted, stopping now [-ferror-limit=]
 /sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
    37 | enum class SEPResult {
       |            ^
-1 warning and 20 errors generated.
+/sep/tests/blender/pattern_data_test.cpp:54:28: error: unknown type name 'GPUPatternData'
+   54 |     EXPECT_EQ(56, offsetof(GPUPatternData, stability));
+      |                            ^
 /sep/tests/blender/mesh_handler_stress_test.cpp:141:5: error: reference to 'SEPResult' is ambiguous
   141 |     SEPResult result = handler_->update(patterns_[i % patterns_.size()]);
       |     ^
@@ -529,7 +524,9 @@ fatal error: too many errors emitted, stopping now [-ferror-limit=]
 /sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
    37 | enum class SEPResult {
       |            ^
-gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:93: CMakeFiles/blender_tests.dir/pattern_data_test.o] Error 1
+/sep/tests/blender/pattern_data_test.cpp:55:28: error: unknown type name 'GPUPatternData'
+   55 |     EXPECT_EQ(60, offsetof(GPUPatternData, mutation_rate));
+      |                            ^
 /sep/tests/blender/mesh_handler_stress_test.cpp:142:9: error: use of undeclared identifier 'result'
   142 |     if (result == SEPResult::SUCCESS) {
       |         ^
@@ -542,54 +539,9 @@ gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:93: CMakeFiles/blender_te
 /sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
    37 | enum class SEPResult {
       |            ^
-/sep/tests/blender/mesh_handler_test.cpp:73:15: error: reference to 'SEPResult' is ambiguous
-   73 |     ASSERT_EQ(SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
-      |               ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:93:13: error: no member named 'size_in_bytes' in 'sep::pattern::PatternData'
-   93 |     pattern.size_in_bytes = 96;  // Using size_in_bytes instead of block_size
-      |     ~~~~~~~ ^
-/sep/tests/blender/mesh_handler_test.cpp:104:13: error: reference to 'SEPResult' is ambiguous
-  104 |   EXPECT_EQ(SEPResult::SUCCESS, handler.init(object_.get(), mesh_.get()));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:117:13: error: reference to 'SEPResult' is ambiguous
-  117 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer("test_float", CD_PROP_FLOAT));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:120:13: error: reference to 'SEPResult' is ambiguous
-  120 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer("test_float3", CD_PROP_FLOAT3));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:123:13: error: reference to 'SEPResult' is ambiguous
-  123 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->removeCustomDataLayer("test_float"));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
+/sep/tests/blender/pattern_data_test.cpp:56:28: error: unknown type name 'GPUPatternData'
+   56 |     EXPECT_EQ(64, offsetof(GPUPatternData, generation));
+      |                            ^
 /sep/tests/blender/mesh_handler_stress_test.cpp:178:59: error: reference to 'SEPResult' is ambiguous
   178 |           if (handler_->update(patterns_[pattern_idx]) != SEPResult::SUCCESS) {
       |                                                           ^
@@ -617,78 +569,9 @@ gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:93: CMakeFiles/blender_te
 /sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
    37 | enum class SEPResult {
       |            ^
-/sep/tests/blender/mesh_handler_test.cpp:130:13: error: reference to 'SEPResult' is ambiguous
-  130 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->update(pattern));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:140:13: error: reference to 'SEPResult' is ambiguous
-  140 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->update(pattern));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:148:13: error: reference to 'SEPResult' is ambiguous
-  148 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->applyDeformation(params));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:160:13: error: reference to 'SEPResult' is ambiguous
-  160 |   EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(nullptr, mesh_.get()));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:163:13: error: reference to 'SEPResult' is ambiguous
-  163 |   EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(object_.get(), nullptr));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:167:13: error: reference to 'SEPResult' is ambiguous
-  167 |   EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(object_.get(), mesh_.get()));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:173:13: error: reference to 'SEPResult' is ambiguous
-  173 |   EXPECT_EQ(SEPResult::INVALID_STATE, handler_->update(pattern));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:177:13: error: reference to 'SEPResult' is ambiguous
-  177 |   EXPECT_EQ(SEPResult::INVALID_STATE, handler_->update(pattern));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
+/sep/tests/blender/pattern_data_test.cpp:57:28: error: unknown type name 'GPUPatternData'
+   57 |     EXPECT_EQ(68, offsetof(GPUPatternData, mutations));
+      |                            ^
 /sep/tests/blender/mesh_handler_stress_test.cpp:249:63: error: reference to 'SEPResult' is ambiguous
   249 |     if (handler_->addCustomDataLayer(name, CD_PROP_FLOAT3) == SEPResult::SUCCESS) {
       |                                                               ^
@@ -707,24 +590,9 @@ gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:93: CMakeFiles/blender_te
 /sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
    37 | enum class SEPResult {
       |            ^
-/sep/tests/blender/mesh_handler_test.cpp:185:15: error: reference to 'SEPResult' is ambiguous
-  185 |     EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer(name, CD_PROP_FLOAT));
-      |               ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
-/sep/tests/blender/mesh_handler_test.cpp:193:13: error: reference to 'SEPResult' is ambiguous
-  193 |   EXPECT_EQ(SEPResult::INVALID_STATE, handler_->addCustomDataLayer("overflow", CD_PROP_FLOAT));
-      |             ^
-/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
-   15 | using sep::SEPResult;
-      |            ^
-/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
-   37 | enum class SEPResult {
-      |            ^
+/sep/tests/blender/pattern_data_test.cpp:58:28: error: unknown type name 'GPUPatternData'
+   58 |     EXPECT_EQ(72, offsetof(GPUPatternData, promotions));
+      |                            ^
 /sep/tests/blender/mesh_handler_stress_test.cpp:292:17: error: reference to 'SEPResult' is ambiguous
   292 |       ASSERT_EQ(SEPResult::SUCCESS, handler_->update(pattern));
       |                 ^
@@ -743,6 +611,17 @@ gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:93: CMakeFiles/blender_te
 /sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
    37 | enum class SEPResult {
       |            ^
+/sep/tests/blender/pattern_data_test.cpp:59:28: error: unknown type name 'GPUPatternData'
+   59 |     EXPECT_EQ(76, offsetof(GPUPatternData, flags));
+      |                            ^
+/sep/tests/blender/pattern_data_test.cpp:60:28: error: unknown type name 'GPUPatternData'
+   60 |     EXPECT_EQ(80, offsetof(GPUPatternData, offset_in_tier));
+      |                            ^
+/sep/tests/blender/pattern_data_test.cpp:61:28: error: unknown type name 'GPUPatternData'
+   61 |     EXPECT_EQ(88, offsetof(GPUPatternData, size_in_bytes));
+      |                            ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+1 warning and 20 errors generated.
 /sep/tests/blender/compression_test.cpp:23:25: error: no member named 'position' in 'sep::pattern::PatternState'
    23 |             patterns[i].position   = glm::vec4(v, v, v, 1.0f);
       |             ~~~~~~~~~~~ ^
@@ -761,6 +640,7 @@ gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:93: CMakeFiles/blender_te
 /sep/tests/blender/compression_test.cpp:34:25: error: no member named 'promotions' in 'sep::pattern::PatternState'
    34 |             patterns[i].promotions = static_cast<uint32_t>(i % 10);
       |             ~~~~~~~~~~~ ^
+gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:93: CMakeFiles/blender_tests.dir/pattern_data_test.o] Error 1
 /sep/tests/blender/compression_test.cpp:44:34: error: no member named 'position' in 'sep::pattern::PatternState'
    44 |         EXPECT_FLOAT_EQ(expected.position.x, actual.position.x);
       |                         ~~~~~~~~ ^
@@ -959,8 +839,8 @@ gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:93: CMakeFiles/blender_te
 fatal error: too many errors emitted, stopping now [-ferror-limit=]
 20 errors generated.
 gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:79: CMakeFiles/blender_tests.dir/compression_test.o] Error 1
-/sep/tests/blender/mesh_handler_perf_test.cpp:95:15: error: reference to 'SEPResult' is ambiguous
-   95 |     ASSERT_EQ(SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
+/sep/tests/blender/mesh_handler_test.cpp:73:15: error: reference to 'SEPResult' is ambiguous
+   73 |     ASSERT_EQ(SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
       |               ^
 /sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
    15 | using sep::SEPResult;
@@ -968,8 +848,119 @@ gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:79: CMakeFiles/blender_te
 /sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
    37 | enum class SEPResult {
       |            ^
-/sep/tests/blender/mesh_handler_perf_test.cpp:214:15: error: reference to 'SEPResult' is ambiguous
-  214 |     EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer(name, CD_PROP_FLOAT3));
+/sep/tests/blender/mesh_handler_test.cpp:93:13: error: no member named 'size_in_bytes' in 'sep::pattern::PatternData'
+   93 |     pattern.size_in_bytes = 96;  // Using size_in_bytes instead of block_size
+      |     ~~~~~~~ ^
+/sep/tests/blender/mesh_handler_test.cpp:104:13: error: reference to 'SEPResult' is ambiguous
+  104 |   EXPECT_EQ(SEPResult::SUCCESS, handler.init(object_.get(), mesh_.get()));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:117:13: error: reference to 'SEPResult' is ambiguous
+  117 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer("test_float", CD_PROP_FLOAT));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:120:13: error: reference to 'SEPResult' is ambiguous
+  120 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer("test_float3", CD_PROP_FLOAT3));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:123:13: error: reference to 'SEPResult' is ambiguous
+  123 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->removeCustomDataLayer("test_float"));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:130:13: error: reference to 'SEPResult' is ambiguous
+  130 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->update(pattern));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:140:13: error: reference to 'SEPResult' is ambiguous
+  140 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->update(pattern));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:148:13: error: reference to 'SEPResult' is ambiguous
+  148 |   EXPECT_EQ(SEPResult::SUCCESS, handler_->applyDeformation(params));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:160:13: error: reference to 'SEPResult' is ambiguous
+  160 |   EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(nullptr, mesh_.get()));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:163:13: error: reference to 'SEPResult' is ambiguous
+  163 |   EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(object_.get(), nullptr));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:167:13: error: reference to 'SEPResult' is ambiguous
+  167 |   EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(object_.get(), mesh_.get()));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:173:13: error: reference to 'SEPResult' is ambiguous
+  173 |   EXPECT_EQ(SEPResult::INVALID_STATE, handler_->update(pattern));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:177:13: error: reference to 'SEPResult' is ambiguous
+  177 |   EXPECT_EQ(SEPResult::INVALID_STATE, handler_->update(pattern));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
+/sep/tests/blender/mesh_handler_test.cpp:185:15: error: reference to 'SEPResult' is ambiguous
+  185 |     EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer(name, CD_PROP_FLOAT));
       |               ^
 /sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
    15 | using sep::SEPResult;
@@ -977,12 +968,21 @@ gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:79: CMakeFiles/blender_te
 /sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
    37 | enum class SEPResult {
       |            ^
-16 errors generated.
-gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:121: CMakeFiles/blender_tests.dir/mesh_handler_test.o] Error 1
-11 errors generated.
-gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:149: CMakeFiles/blender_tests.dir/mesh_handler_stress_test.o] Error 1
+/sep/tests/blender/mesh_handler_test.cpp:193:13: error: reference to 'SEPResult' is ambiguous
+  193 |   EXPECT_EQ(SEPResult::INVALID_STATE, handler_->addCustomDataLayer("overflow", CD_PROP_FLOAT));
+      |             ^
+/sep/include/blender/mesh_handler.h:15:12: note: candidate found by name lookup is 'SEPResult'
+   15 | using sep::SEPResult;
+      |            ^
+/sep/include/quantum/data.hpp:37:12: note: candidate found by name lookup is 'sep::pattern::SEPResult'
+   37 | enum class SEPResult {
+      |            ^
 2 errors generated.
 gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:135: CMakeFiles/blender_tests.dir/mesh_handler_perf_test.o] Error 1
+11 errors generated.
+gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:149: CMakeFiles/blender_tests.dir/mesh_handler_stress_test.o] Error 1
+16 errors generated.
+gmake[3]: *** [CMakeFiles/blender_tests.dir/build.make:121: CMakeFiles/blender_tests.dir/mesh_handler_test.o] Error 1
 /sep/tests/blender/api_test.cpp:62:29: error: no member named 'INIT_FAILED' in 'sep::SEPResult'
    62 |   EXPECT_EQ(sep::SEPResult::INIT_FAILED, sep_blender_init(nullptr, nullptr, &bridge));
       |             ~~~~~~~~~~~~~~~~^

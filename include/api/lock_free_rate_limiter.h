@@ -137,6 +137,11 @@ private:
       std::unordered_map<std::string, std::unique_ptr<ClientData>>;
 #endif
   ClientMap clients_;
+#else
+  using ClientMap = std::unordered_map<std::string, std::unique_ptr<ClientData>>;
+  ClientMap clients_;
+  mutable std::mutex clients_mutex_;
+#endif
 
   // Background cleanup
   std::unique_ptr<BackgroundCleanup> background_cleanup_;

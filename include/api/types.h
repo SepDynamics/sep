@@ -11,11 +11,31 @@ namespace sep::api {
 
 constexpr int HTTP_OK = 200;
 constexpr int HTTP_CREATED = 201;
+constexpr int HTTP_ACCEPTED = 202;
+constexpr int HTTP_NO_CONTENT = 204;
 constexpr int HTTP_BAD_REQUEST = 400;
 constexpr int HTTP_UNAUTHORIZED = 401;
+constexpr int HTTP_FORBIDDEN = 403;
 constexpr int HTTP_NOT_FOUND = 404;
+constexpr int HTTP_METHOD_NOT_ALLOWED = 405;
+constexpr int HTTP_CONFLICT = 409;
 constexpr int HTTP_INTERNAL_ERROR = 500;
+constexpr int HTTP_NOT_IMPLEMENTED = 501;
 constexpr int HTTP_SERVICE_UNAVAILABLE = 503;
+constexpr int HTTP_TOO_MANY_REQUESTS = 429;
+
+enum class Status { OK = 0, ERROR = 1 };
+enum class Priority { LOW = 0, NORMAL = 1, HIGH = 2, CRITICAL = 3 };
+
+enum HttpMethod {
+    HTTP_GET,
+    HTTP_POST,
+    HTTP_PUT,
+    HTTP_DELETE,
+    HTTP_PATCH,
+    HTTP_OPTIONS,
+    HTTP_HEAD
+};
 
 class HttpRequest {
 public:
@@ -121,3 +141,34 @@ bool validate_fields(const nlohmann::json& data,
                      nlohmann::json& error);
 
 } // namespace sep::api
+
+namespace sep::ollama {
+
+struct OllamaConfig {
+    std::string host{"http://127.0.0.1:11434"};
+    std::string model{"llama2"};
+};
+
+struct GenerateRequest {
+    std::string model;
+    std::string prompt;
+    std::string system;
+    bool stream{false};
+};
+
+struct GenerateResponse {
+    std::string response;
+    bool done{false};
+    std::string model;
+};
+
+struct EmbeddingRequest {
+    std::string model;
+    std::string prompt;
+};
+
+struct EmbeddingResponse {
+    std::vector<float> embedding;
+};
+
+}  // namespace sep::ollama

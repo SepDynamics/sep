@@ -14,7 +14,7 @@
 
 // GLM isolation layer
 #if defined(__CUDACC__) || defined(SEP_USE_CUDA)
-#include <compat/cuda_runtime.h>
+#include <cuda_runtime.h>
 #else
 #include "compat/cuda_impl.h"
 #endif

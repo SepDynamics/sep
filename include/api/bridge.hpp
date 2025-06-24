@@ -13,10 +13,10 @@
 namespace sep::api::bridge {
 
 // JSON conversion utilities
-nlohmann::json contextToJson(const ::sep::context::Context &context);
-::sep::context::Context jsonToContext(const nlohmann::json &json);
-nlohmann::json resultToJson(const ::sep::context::CheckResult &result);
-::sep::context::CheckResult jsonToCheckResult(const nlohmann::json &json);
+nlohmann::json contextToJson(const ::sep::quantum::quantum &context);
+::sep::quantum::Context jsonToContext(const nlohmann::json &json);
+nlohmann::json resultToJson(const ::sep::quantum::CheckResult &result);
+::sep::quantum::CheckResult jsonToCheckResult(const nlohmann::json &json);
 
 // Internal bridge utilities
 namespace detail {

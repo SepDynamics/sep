@@ -81,15 +81,21 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       if (!process_result.success) {
         std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
         sep::api::bridge::detail::setLastError(
-            std::string(process_result.error.c_str()));
+            std::string(process_result.error_message.c_str()));
         return static_cast<int>(sep::api::ErrorCode::ProcessingError);
       }
 
       nlohmann::json result_json;
       result_json["success"] = true;
       result_json["results"] = nlohmann::json::array();
-      for (const auto &check_result : process_result.value) {
-        result_json["results"].push_back(sep::api::bridge::resultToJson(check_result));
+      for (const auto &processing_result : process_result.results) {
+        nlohmann::json result_entry;
+        result_entry["success"] = processing_result.success;
+        result_entry["pattern"] = processing_result.pattern.id;
+        if (!processing_result.success) {
+          result_entry["error"] = processing_result.error_message;
+        }
+        result_json["results"].push_back(result_entry);
       }
 
       std::string result_str = result_json.dump();

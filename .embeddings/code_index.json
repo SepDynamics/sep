@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "model": "mxbai-embed-large",
+  "created": "2025-06-24T03:42:22-05:00",
+  "chunks": [
+    {
+      "id": 1,
+      "file": "example.cpp",
+      "start_line": 1,
+      "end_line": 10,
+      "content": "Example code",
+      "embedding": [0.1, 0.2, 0.3]
+    }
+  ]
+}

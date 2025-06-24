@@ -52,7 +52,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
     impl_->config = config;
     auto& cuda_core = cuda::CudaCore::instance();
     auto init_err = cuda_core.initialize();
-    if (init_err.status != cuda::Status::Success) {
+    if (init_err.code != SEPResult::SUCCESS) {
         return false;
     }
 
@@ -141,7 +141,7 @@ void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
                              ::sep::shim::vector<std::uint32_t>& expectations, std::uint64_t tick ) {
     if (inputs.empty()) {
         ::sep::core::ErrorHandler::instance().reportError(
-            {sep::Status::Error, "No input states", "Engine::generate_probes", sep::api::ErrorCode::InvalidArgument});
+            {SEPResult::INVALID_ARGUMENT, "No input states", "Engine::generate_probes"});
         return;
     }
 
@@ -175,13 +175,13 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
                            ::sep::quantum::QBSAResult& qbsa_result, ::sep::cuda::QSHResult& qsh_result) {
     if (inputs.empty()) {
         ::sep::core::ErrorHandler::instance().reportError(
-            {sep::Status::Error, "No input states", "Engine::process_batch", sep::api::ErrorCode::InvalidArgument});
+            {SEPResult::INVALID_ARGUMENT, "No input states", "Engine::process_batch"});
         return;
     }
 
     if (inputs.size() > DEFAULT_SIZE) {
         ::sep::core::ErrorHandler::instance().reportError(
-            {sep::Status::Error, "Batch too large", "Engine::process_batch", sep::api::ErrorCode::InvalidArgument});
+            {SEPResult::INVALID_ARGUMENT, "Batch too large", "Engine::process_batch"});
         return;
     }
 

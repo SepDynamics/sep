@@ -22,11 +22,11 @@ sleep 1
 rm -rf compile_commands.json \
     Makefile reports CMakeCache.txt \
     build build.ninja out \
-    .codechecker .codacy \
+    .codacy \
     Makefiles CMakeFiles \
     .ninja_* Testing *.log \
     shutil output/* report.md \
-    CTestTestfile* MakeFile 
+    CTestTestfile* MakeFile
   
 echo "emptying trash..."
 sudo rm -rf /workspace/.Trash-1000

@@ -380,6 +380,11 @@ std::string Processor::getStatus() const { return impl_->getStatus(); }
 ProcessingConfig Processor::getConfig() const { return impl_->getConfig(); }
 void Processor::updateConfig(const ProcessingConfig& config) { impl_->updateConfig(config); }
 
+Processor::ProcessResult Processor::processContext(const context::Context& /*context*/) {
+    // Stub implementation for API compatibility
+    return ProcessResult::ok();
+}
+
 std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config) {
     return std::make_unique<Processor>(config);
 }

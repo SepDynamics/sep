@@ -8,6 +8,7 @@
 #include "core/types.h"
 #include "quantum/gpu_context.h"
 #include "quantum/data.hpp"
+#include "quantum/resource_predictor.h" // provides Context and CheckResult
 #include <memory>
 #include <vector>
 #include <string>
@@ -110,6 +111,25 @@ public:
     SEPResult addRelationship(const std::string& pattern_id1, const std::string& pattern_id2,
                               float strength, RelationshipType type);
     float calculateCoherence(const std::string& pattern_id1, const std::string& pattern_id2) const;
+
+    struct ProcessResult {
+        bool success{true};
+        std::vector<context::CheckResult> value{};
+        shim::string error_message{};
+
+        static ProcessResult ok(std::vector<context::CheckResult> v = {}) {
+            return {true, std::move(v), {}};
+        }
+
+        static ProcessResult fail(const std::string& err) {
+            ProcessResult r;
+            r.success = false;
+            r.error_message = shim::string(err.c_str());
+            return r;
+        }
+    };
+
+    ProcessResult processContext(const context::Context& context);
 
     std::string getStatus() const;
     ProcessingConfig getConfig() const;

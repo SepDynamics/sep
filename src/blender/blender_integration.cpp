@@ -44,10 +44,6 @@ std::shared_ptr<BlenderBridge> BlenderBridge::create()
     return std::shared_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge());
 }
 
-static bool isValidConfig(const PatternConfig& cfg)
-{
-    return cfg.max_patterns > 0 && cfg.batch_size > 0;
-}
 
 sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
 {
@@ -92,8 +88,8 @@ sep::SEPResult BlenderBridge::registerObject(Object* obj, const PatternConfig& c
         return sep::SEPResult::INVALID_ARGUMENT;
     }
 
-    // Validate configuration
-    if (!isValidConfig(config))
+    // Validate configuration using shared helper
+    if (!sep::pattern::isValidConfig(config))
     {
         return sep::SEPResult::INVALID_ARGUMENT;
     }

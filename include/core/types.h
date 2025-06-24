@@ -19,6 +19,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
+#include <vector>
 
 namespace sep {
 namespace config {
@@ -228,6 +229,15 @@ inline void from_json(const nlohmann::json& j, APIConfig& c)
 }
 
 }  // namespace config
+
+struct PinState {
+    std::uint64_t id{0};
+    std::uint32_t value{0};
+
+    bool operator==(const PinState& other) const {
+        return id == other.id && value == other.value;
+    }
+};
 
 enum class PatternStateEnum {
     UNINITIALIZED = 0,

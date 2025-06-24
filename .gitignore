@@ -92,3 +92,4 @@ compile_commands.json
 .ninja_log
 !CMakeLists.txt
 !build.log
+assets/sep_engine

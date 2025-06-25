@@ -32,6 +32,6 @@ set_source_files_properties(
 target_include_directories(sep_compat 
   PUBLIC
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/third_party/glm
+    ${CMAKE_SOURCE_DIR}/extern/glm
     ${CMAKE_SOURCE_DIR}/src
 )

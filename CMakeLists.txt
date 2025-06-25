@@ -66,9 +66,9 @@ include_directories(
 add_subdirectory(include/crow)
 
 include_directories(
-  ${CMAKE_SOURCE_DIR}/third_party
-  ${CMAKE_SOURCE_DIR}/third_party/glm
-  ${CMAKE_SOURCE_DIR}/third_party/tbb
+  ${CMAKE_SOURCE_DIR}/extern
+  ${CMAKE_SOURCE_DIR}/extern/glm
+  ${CMAKE_SOURCE_DIR}/extern/tbb
 )
 
 # Optional Cycles renderer
@@ -83,7 +83,7 @@ endif()
 add_compile_definitions(SEP_HAS_CYCLES=${SEP_HAS_CYCLES})
 
 # Fetch the Crow web framework if it is not present
-if(NOT EXISTS "${CMAKE_SOURCE_DIR}/third_party/crow/include")
+if(NOT EXISTS "${CMAKE_SOURCE_DIR}/extern/crow/include")
     message(STATUS "Fetching Crow framework...")
     FetchContent_Declare(
         crow
@@ -93,7 +93,7 @@ if(NOT EXISTS "${CMAKE_SOURCE_DIR}/third_party/crow/include")
     FetchContent_MakeAvailable(crow)
     include_directories(${crow_SOURCE_DIR}/include)
 else()
-    include_directories(${CMAKE_SOURCE_DIR}/third_party/crow/include)
+    include_directories(${CMAKE_SOURCE_DIR}/extern/crow/include)
 endif()
 
 set(CUDA_SOURCES
@@ -113,6 +113,7 @@ add_subdirectory(src/compat)
 add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
+add_subdirectory(src/tests)
 
 
 target_include_directories(sep_engine

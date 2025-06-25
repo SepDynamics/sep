@@ -64,6 +64,15 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/third_party/tbb
 )
 
+# Optional Cycles renderer
+if(EXISTS "${CMAKE_SOURCE_DIR}/extern/cycles/CMakeLists.txt")
+    set(SEP_HAS_CYCLES 1)
+    add_subdirectory(extern/cycles)
+else()
+    set(SEP_HAS_CYCLES 0)
+endif()
+add_compile_definitions(SEP_HAS_CYCLES=${SEP_HAS_CYCLES})
+
 # Fetch the Crow web framework if it is not present
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/third_party/crow/include")
     message(STATUS "Fetching Crow framework...")

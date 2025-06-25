@@ -1,0 +1,3 @@
+[submodule "extern/cycles"]
+	path = extern/cycles
+	url = https://github.com/blender/cycles.git

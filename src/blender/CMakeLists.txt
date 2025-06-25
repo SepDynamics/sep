@@ -3,6 +3,7 @@ add_library(sep_blender STATIC
     blender_integration.cpp
     compression_utils.cpp
     compression.cpp
+    gpu_context.cpp
     mesh_handler.cpp
     pattern_visualization_pipeline.cpp
     cycles_renderer.cpp
@@ -11,7 +12,6 @@ add_library(sep_blender STATIC
 target_include_directories(sep_blender
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include/blender
 )
 
 # Link against Cycles if available

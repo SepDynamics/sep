@@ -30,7 +30,7 @@ actions-runner/
 
 # Dependencies (second most common)
 vendor/
-blender/
+/sep/blender/
 cmake-make/
 intern/
 source/
@@ -99,3 +99,4 @@ compile_commands.json
 !CMakeLists.txt
 !build.log
 assets/sep_engine
+blender

@@ -11,6 +11,14 @@
             "preLaunchTask": "Build"
         },
         {
+            "name": "Run Blender-SEP",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/cmake-make/bin/blender",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
             "name": "Debug Tests",
             "type": "node",
             "request": "launch",

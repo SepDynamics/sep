@@ -80,18 +80,19 @@ The future development of the SEP Engine is focused on enhancing its capabilitie
 4.  **Quantum Hardware Migration**: Design a path to migrate the SEP algorithms to physical quantum hardware to leverage true quantum entanglement and superposition.
 
 ## 5. Repository Structure
-```
+
 .
-├── include/              # Public headers for all engine modules
-├── src/                  # Source code for all modules (api, core, quantum, etc.)
-├── assets/               # Test data and shaders
-├── third_party/          # External libraries (Crow, nlohmann, etc.)
-├── tests/                # Unit and integration tests
-├── ARCHITECTURE.md       # Detailed system architecture
-├── GAMEPLAN.md           # Guide for testing and exploring the engine
-├── THESIS.md             # The full theoretical thesis behind the framework
-└── README.md             # This document
-```
+├── include/ # Public headers for all engine modules
+├── src/ # Source code for all modules (api, core, quantum, etc.)
+├── assets/ # Test data and shaders
+├── third_party/ # External libraries (Crow, nlohmann, etc.)
+├── extern/ # External submodules (e.g., Blender Cycles)
+├── tests/ # Unit and integration tests
+├── ARCHITECTURE.md # Detailed system architecture
+├── GAMEPLAN.md # Guide for testing and exploring the engine
+├── CYCLES_INTEGRATION.md # Steps for integrating Blender Cycles
+├── THESIS.md # The full theoretical thesis behind the framework
+└── README.md # This document
 
 ---
 

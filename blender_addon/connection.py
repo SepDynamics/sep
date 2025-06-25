@@ -6,7 +6,6 @@ HTTP API and direct C bridge connections.
 """
 
 import bpy
-import requests
 import ctypes
 import threading
 import queue

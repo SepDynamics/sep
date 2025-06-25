@@ -9,14 +9,28 @@ bl_info = {
 }
 
 import bpy
-import requests
 import bmesh
 import json
-import numpy as np
 import os
 import time
 import socket
 from bpy.props import FloatProperty, BoolProperty, EnumProperty, StringProperty, IntProperty
+
+# Optional imports - will be handled gracefully if missing
+REQUESTS_AVAILABLE = False
+NUMPY_AVAILABLE = False
+
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    print("SEP Engine: 'requests' module not available. HTTP API will be disabled.")
+
+try:
+    import numpy as np
+    NUMPY_AVAILABLE = True
+except ImportError:
+    print("SEP Engine: 'numpy' module not available. Some features will be limited.")
 
 # Import direct bridge if available
 try:
@@ -96,35 +110,41 @@ class SEPEngineSettings:
             if self.try_direct_bridge():
                 return True
         
-        # Fall back to HTTP API
-        try:
-            response = requests.get(
-                f"{self.get_base_url()}/health",
-                timeout=self.connection_timeout
-            )
-            self.connected = response.ok
-            if response.ok:
-                self.last_status = "HTTP API: Connected"
-                self.connection_mode = "http"
-                # Parse health data if available
-                try:
-                    data = response.json()
-                    if "status" in data:
-                        self.last_status = f"HTTP API: {data['status']}"
-                except:
-                    pass
-            else:
-                self.last_status = f"HTTP Error: {response.status_code}"
+        # Fall back to HTTP API if requests module is available
+        if REQUESTS_AVAILABLE:
+            try:
+                import requests
+                response = requests.get(
+                    f"{self.get_base_url()}/health",
+                    timeout=self.connection_timeout
+                )
+                self.connected = response.ok
+                if response.ok:
+                    self.last_status = "HTTP API: Connected"
+                    self.connection_mode = "http"
+                    # Parse health data if available
+                    try:
+                        data = response.json()
+                        if "status" in data:
+                            self.last_status = f"HTTP API: {data['status']}"
+                    except:
+                        pass
+                else:
+                    self.last_status = f"HTTP Error: {response.status_code}"
+                    self.connected = False
+            except requests.exceptions.ConnectionError:
                 self.connected = False
-        except requests.exceptions.ConnectionError:
+                self.last_status = "HTTP API: Connection failed"
+            except requests.exceptions.Timeout:
+                self.connected = False
+                self.last_status = "HTTP API: Connection timeout"
+            except Exception as e:
+                self.connected = False
+                self.last_status = f"Error: {str(e)}"
+        else:
+            # HTTP API not available - requests module missing
             self.connected = False
-            self.last_status = "HTTP API: Connection failed"
-        except requests.exceptions.Timeout:
-            self.connected = False
-            self.last_status = "HTTP API: Connection timeout"
-        except Exception as e:
-            self.connected = False
-            self.last_status = f"Error: {str(e)}"
+            self.last_status = "HTTP API unavailable - 'requests' module missing"
             
         return self.connected
     

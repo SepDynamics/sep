@@ -2,12 +2,15 @@
 #include "core/engine.h"
 #include "memory/manager.h"
 #include "api/server.h"
+#include "blender/cycles_renderer.h"
 #include <curl/curl.h>
 #include <exception>
 #include <iostream>
+#include <fstream>
 #include <spdlog/spdlog.h>
 #include <string>
 #include <csignal>
+#include <nlohmann/json.hpp>
 
 #ifndef SEP_HAS_EXCEPTIONS
 #    if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
@@ -35,10 +38,19 @@ int main(int argc, char* argv[]) {
   signal(SIGTERM, signal_handler);
 
   bool server_mode = false;
+  bool cycles_mode = false;
+  std::string render_file;
+  
   for (int i = 1; i < argc; i++) {
-    if (std::string(argv[i]) == "--server") {
+    std::string arg = argv[i];
+    if (arg == "--server") {
       server_mode = true;
-      break;
+    }
+    else if (arg == "--cycles") {
+      cycles_mode = true;
+    }
+    else if (arg == "--render" && i + 1 < argc) {
+      render_file = argv[++i];
     }
   }
 
@@ -48,6 +60,99 @@ int main(int argc, char* argv[]) {
     auto& config = sep::config::ConfigManager::getInstance();
     config.initialize(argc, argv);
 
+    // Handle Cycles rendering if requested
+    if (cycles_mode && !render_file.empty()) {
+      spdlog::info("Initializing Cycles renderer...");
+      
+#if SEP_HAS_CYCLES
+      // Create the Cycles renderer
+      sep::blender::CyclesRenderer renderer;
+      
+      // Initialize the renderer
+      sep::SEPResult result = renderer.initialize();
+      if (result != sep::SEPResult::SUCCESS) {
+        spdlog::critical("Failed to initialize Cycles renderer");
+        curl_global_cleanup();
+        sep::logging::shutdownLogging();
+        return 1;
+      }
+      
+      spdlog::info("Loading scene from {}", render_file);
+      
+      // Load scene from JSON file
+      std::ifstream file(render_file);
+      if (!file.is_open()) {
+        spdlog::critical("Failed to open scene file: {}", render_file);
+        curl_global_cleanup();
+        sep::logging::shutdownLogging();
+        return 1;
+      }
+      
+      // Parse JSON and convert to pattern data
+      std::string json_content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+      file.close();
+      
+      try {
+        auto json = nlohmann::json::parse(json_content);
+        std::vector<sep::pattern::PatternData> patterns;
+        
+        // Convert JSON to pattern data
+        if (json.is_array()) {
+          for (const auto& item : json) {
+            sep::pattern::PatternData pattern;
+            pattern.coherence = item.value("coherence", 0.5f);
+            pattern.stability = item.value("stability", 0.5f);
+            pattern.entropy = item.value("entropy", 0.5f);
+            patterns.push_back(pattern);
+          }
+        }
+        
+        // Create scene from patterns
+        result = renderer.createSceneFromPatterns(patterns);
+        if (result != sep::SEPResult::SUCCESS) {
+          spdlog::critical("Failed to create scene from patterns");
+          curl_global_cleanup();
+          sep::logging::shutdownLogging();
+          return 1;
+        }
+        
+        // Set up render parameters
+        sep::blender::CyclesRenderer::RenderParams params;
+        params.width = json.value("width", 1920);
+        params.height = json.value("height", 1080);
+        params.samples = json.value("samples", 128);
+        params.output_path = json.value("output", "render.ppm");
+        
+        // Render the scene
+        spdlog::info("Rendering scene to {}", params.output_path);
+        result = renderer.renderScene(params);
+        if (result != sep::SEPResult::SUCCESS) {
+          spdlog::critical("Failed to render scene");
+          curl_global_cleanup();
+          sep::logging::shutdownLogging();
+          return 1;
+        }
+        
+        spdlog::info("Render completed successfully");
+        curl_global_cleanup();
+        sep::logging::shutdownLogging();
+        return 0;
+      }
+      catch (const std::exception& e) {
+        spdlog::critical("Error parsing scene file: {}", e.what());
+        curl_global_cleanup();
+        sep::logging::shutdownLogging();
+        return 1;
+      }
+#else
+      spdlog::critical("Cycles support is not available in this build");
+      curl_global_cleanup();
+      sep::logging::shutdownLogging();
+      return 1;
+#endif
+    }
+
+    // Normal engine initialization and server mode
     sep::core::Engine engine;
     if (!engine.init(config.getAPIConfig())) {
 #if SEP_HAS_EXCEPTIONS

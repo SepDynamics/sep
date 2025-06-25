@@ -1,11 +1,128 @@
 #pragma once
 
-// Forward declarations and includes
-#include "macros.h"
-
 // This header provides compatibility for Cycles integration
-// When SEP_HAS_CYCLES is defined, the actual Cycles headers should be included
-// Otherwise, we provide stub implementations for development and testing
+// It defines the CCL_NAMESPACE_BEGIN and CCL_NAMESPACE_END macros
+// that are used throughout the Cycles codebase
+
+#ifdef __cplusplus
+// Include standard headers
+#include <memory>
+
+// Define size_t if not already defined
+#ifndef _SIZE_T_DEFINED
+typedef unsigned long size_t;
+#define _SIZE_T_DEFINED
+#endif
+
+// Define CCL namespace macros for compatibility
+// These are also defined at the compiler level with -D flags
+#ifndef CCL_NAMESPACE_BEGIN
+#define CCL_NAMESPACE_BEGIN namespace ccl {
+#endif
+
+#ifndef CCL_NAMESPACE_END
+#define CCL_NAMESPACE_END }
+#endif
+
+#ifndef CCL_NAMESPACE_USING_DIRECTIVE
+#define CCL_NAMESPACE_USING_DIRECTIVE using namespace ccl;
+#endif
+
+// Define OpenVDB types needed for compilation
+namespace openvdb {
+    class GridBase {
+    public:
+        typedef GridBase* Ptr;
+        typedef std::shared_ptr<const GridBase> ConstPtr;
+    };
+    
+    // Define Coord in openvdb namespace to match system headers
+    class Coord {
+    public:
+        Coord() : mX(0), mY(0), mZ(0) {}
+        Coord(int x, int y, int z) : mX(x), mY(y), mZ(z) {}
+        int x() const { return mX; }
+        int y() const { return mY; }
+        int z() const { return mZ; }
+        Coord min() const { return *this; }
+    private:
+        int mX, mY, mZ;
+    };
+    
+    namespace math {
+        // Forward declare Mat4f
+        class Mat4f {
+        public:
+            Mat4f() {}
+            
+            // Support 2D array access
+            float operator()(int row, int col) const { return 0.0f; }
+            
+            // Support 1D array access
+            float operator[](int i) const { return 0.0f; }
+            float& operator[](int i) { static float dummy = 0.0f; return dummy; }
+        };
+        
+        // Complete definition for CoordBBox
+        class CoordBBox {
+        public:
+            CoordBBox() {}
+            CoordBBox(const Coord& min, const Coord& max) {}
+            
+            // Add assignment operator
+            CoordBBox& operator=(const CoordBBox& other) { return *this; }
+            
+            bool empty() const { return true; }
+            Coord dim() const { return Coord(); }
+            Coord min() const { return Coord(); }
+        };
+    }
+}
+
+// Define NanoVDB types needed for compilation
+namespace nanovdb {
+    // Forward declarations
+    template<typename T> class Vec3;
+    template<typename T> class BBox;
+    template<typename T> class CoordBBox;
+    template<typename T> class NanoGrid;
+    
+    // Minimal implementation of GridHandle
+    template<typename BufferT = std::shared_ptr<void>>
+    class GridHandle {
+    private:
+        bool mValid = false;
+        size_t mSize = 0;
+        void* mData = nullptr;
+    
+    public:
+        GridHandle() : mValid(false), mSize(0), mData(nullptr) {}
+        
+        // Allow implicit conversion to bool for validity checks
+        operator bool() const { return mValid; }
+        
+        template<typename ValueT>
+        const NanoGrid<ValueT>* grid() const { return nullptr; }
+        
+        bool isValid() const { return mValid; }
+        
+        // Data access methods
+        void* data() const { return mData; }
+        size_t size() const { return mSize; }
+        
+        // Reset method
+        void reset() { mValid = false; mSize = 0; mData = nullptr; }
+    };
+}
+
+// Define basic types for Cycles compatibility
+namespace ccl {
+    // Forward declarations for common Cycles types
+    class ImageLoader;
+    class ImageDeviceFeatures;
+    struct ImageMetaData;
+    struct Transform;
+}
 
 // Define stub types for Cycles
 namespace ccl {
@@ -49,3 +166,5 @@ namespace ccl {
 
 // Note: We don't use 'using namespace ccl' here to avoid namespace pollution
 // Instead, we use explicit ccl:: prefixes in the code
+
+#endif // __cplusplus

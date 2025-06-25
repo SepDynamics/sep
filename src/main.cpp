@@ -97,7 +97,16 @@ int main(int argc, char* argv[]) {
         std::vector<sep::pattern::PatternData> patterns;
         
         // Convert JSON to pattern data
-        if (json.is_array()) {
+        if (json.contains("patterns") && json["patterns"].is_array()) {
+          for (const auto& item : json["patterns"]) {
+            sep::pattern::PatternData pattern;
+            pattern.coherence = item.value("coherence", 0.5f);
+            pattern.stability = item.value("stability", 0.5f);
+            pattern.entropy = item.value("entropy", 0.5f);
+            patterns.push_back(pattern);
+          }
+        } else if (json.is_array()) {
+          // For backward compatibility with array-only format
           for (const auto& item : json) {
             sep::pattern::PatternData pattern;
             pattern.coherence = item.value("coherence", 0.5f);
@@ -145,10 +154,98 @@ int main(int argc, char* argv[]) {
         return 1;
       }
 #else
-      spdlog::critical("Cycles support is not available in this build");
-      curl_global_cleanup();
-      sep::logging::shutdownLogging();
-      return 1;
+      // Even though Cycles support is not available in this build,
+      // we can still use the stub implementation
+      spdlog::info("Using Cycles stub implementation");
+      
+      // Create the Cycles renderer (will use stub implementation)
+      sep::blender::CyclesRenderer renderer;
+      
+      // Initialize the renderer
+      sep::SEPResult result = renderer.initialize();
+      if (result != sep::SEPResult::SUCCESS) {
+        spdlog::critical("Failed to initialize Cycles renderer");
+        curl_global_cleanup();
+        sep::logging::shutdownLogging();
+        return 1;
+      }
+      
+      spdlog::info("Loading scene from {}", render_file);
+      
+      // Load scene from JSON file
+      std::ifstream file(render_file);
+      if (!file.is_open()) {
+        spdlog::critical("Failed to open scene file: {}", render_file);
+        curl_global_cleanup();
+        sep::logging::shutdownLogging();
+        return 1;
+      }
+      
+      // Parse JSON and convert to pattern data
+      std::string json_content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+      file.close();
+      
+      try {
+        auto json = nlohmann::json::parse(json_content);
+        std::vector<sep::pattern::PatternData> patterns;
+        
+        // Convert JSON to pattern data
+        if (json.contains("patterns") && json["patterns"].is_array()) {
+          for (const auto& item : json["patterns"]) {
+            sep::pattern::PatternData pattern;
+            pattern.coherence = item.value("coherence", 0.5f);
+            pattern.stability = item.value("stability", 0.5f);
+            pattern.entropy = item.value("entropy", 0.5f);
+            patterns.push_back(pattern);
+          }
+        } else if (json.is_array()) {
+          // For backward compatibility with array-only format
+          for (const auto& item : json) {
+            sep::pattern::PatternData pattern;
+            pattern.coherence = item.value("coherence", 0.5f);
+            pattern.stability = item.value("stability", 0.5f);
+            pattern.entropy = item.value("entropy", 0.5f);
+            patterns.push_back(pattern);
+          }
+        }
+        
+        // Create scene from patterns
+        result = renderer.createSceneFromPatterns(patterns);
+        if (result != sep::SEPResult::SUCCESS) {
+          spdlog::critical("Failed to create scene from patterns");
+          curl_global_cleanup();
+          sep::logging::shutdownLogging();
+          return 1;
+        }
+        
+        // Set up render parameters
+        sep::blender::CyclesRenderer::RenderParams params;
+        params.width = json.value("width", 1920);
+        params.height = json.value("height", 1080);
+        params.samples = json.value("samples", 128);
+        params.output_path = json.value("output", "render.ppm");
+        
+        // Render the scene
+        spdlog::info("Rendering scene to {}", params.output_path);
+        result = renderer.renderScene(params);
+        if (result != sep::SEPResult::SUCCESS) {
+          spdlog::critical("Failed to render scene");
+          curl_global_cleanup();
+          sep::logging::shutdownLogging();
+          return 1;
+        }
+        
+        spdlog::info("Render completed successfully");
+        curl_global_cleanup();
+        sep::logging::shutdownLogging();
+        return 0;
+      }
+      catch (const std::exception& e) {
+        spdlog::critical("Error parsing scene file: {}", e.what());
+        curl_global_cleanup();
+        sep::logging::shutdownLogging();
+        return 1;
+      }
 #endif
     }
 

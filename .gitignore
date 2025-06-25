@@ -30,6 +30,12 @@ actions-runner/
 
 # Dependencies (second most common)
 vendor/
+blender/
+cmake-make/
+intern/
+source/
+release/
+*.cmake
 externals/
 boost/
 !third_party/

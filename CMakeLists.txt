@@ -51,8 +51,15 @@ add_compile_definitions(SEP_HAS_BLENDER=${SEP_HAS_BLENDER})
 
 
 # This ensures our fixed headers are used instead of the problematic ones
-include_directories(BEFORE
-  ${CMAKE_SOURCE_DIR}/include
+include_directories(
+  BEFORE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/blender
+    ${CMAKE_SOURCE_DIR}/include/compat
+    ${CMAKE_SOURCE_DIR}/include/core
+    ${CMAKE_SOURCE_DIR}/include/crow
+    ${CMAKE_SOURCE_DIR}/include/memory
+    ${CMAKE_SOURCE_DIR}/include/quantum
 )
 
 # Add our fixed Crow headers subdirectory
@@ -67,7 +74,9 @@ include_directories(
 # Optional Cycles renderer
 if(EXISTS "${CMAKE_SOURCE_DIR}/extern/cycles/CMakeLists.txt")
     set(SEP_HAS_CYCLES 1)
-    add_subdirectory(extern/cycles)
+    # Use our custom FindCycles module
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+    include(FindCycles)
 else()
     set(SEP_HAS_CYCLES 0)
 endif()

@@ -10,6 +10,7 @@ Makefile
 _work/
 _diag/
 _deps/
+!cmake/**
 output/
 .codechecker/
 opentelemetry-cpp/

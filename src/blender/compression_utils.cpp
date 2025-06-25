@@ -1,5 +1,5 @@
 #include "blender/compression.h"
-#include "compat/math_common.h"
+#include "../../include/compat/math_common.h"
 
 #include <array>
 #include <vector>

@@ -1,4 +1,11 @@
 # Build artifacts (most frequent)
+tests/compositor_cpu/
+tests/cycles/
+tests/sequence_editing/
+Testing/
+tests/io_curve_svg/
+sep_engine
+extern/*
 build/
 _build/
 out/
@@ -41,7 +48,6 @@ externals/
 boost/
 !third_party/
 !src/
-!tests/
 !include/
 tbb/
 temp/
@@ -68,10 +74,7 @@ asio/
 cmake_install.cmake
 .pnpm-store/
 node_modules/
-extern/*
 !extern/patches/
-!extern/cycles
-!extern/cycles/**
 blender-src/
 
 # Security

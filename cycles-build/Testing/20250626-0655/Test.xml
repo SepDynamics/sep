@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-clang++"
+	BuildStamp="20250626-0655-Experimental"
+	Name="sep-OS"
+	Generator="ctest-3.31.6"
+	CompilerName="/usr/lib64/llvm19/bin/clang++"
+	CompilerVersion="19.1.7"
+	OSName="Linux"
+	Hostname="sep-OS"
+	OSRelease="6.15.3-200.fc42.x86_64"
+	OSVersion="#1 SMP PREEMPT_DYNAMIC Thu Jun 19 15:00:25 UTC 2025"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="151"
+	ModelName="12th Gen Intel(R) Core(TM) i9-12900K"
+	ProcessorCacheSize="30720"
+	NumberOfLogicalCPU="18"
+	NumberOfPhysicalCPU="10"
+	TotalVirtualMemory="8191"
+	TotalPhysicalMemory="64117"
+	LogicalProcessorsPerPhysical="1"
+	ProcessorClockFrequency="3200"
+	>
+	<Testing>
+		<StartDateTime>Jun 26 10:08 CDT</StartDateTime>
+		<StartTestTime>1750950519</StartTestTime>
+		<TestList/>
+		<EndDateTime>Jun 26 10:08 CDT</EndDateTime>
+		<EndTestTime>1750950519</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

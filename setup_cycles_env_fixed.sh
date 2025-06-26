@@ -946,14 +946,6 @@ touch /sep/openvdb-install/lib/libopenvdb.so
 # Now build Cycles with our mock SDL2 and CUDA support
 cd /sep/cycles-build || exit 1
 
-# Create a modified toolchain file that uses clang instead of gcc
-cp /sep/cmake/cuda-toolchain.cmake /sep/cmake/cuda-toolchain-clang.cmake
-
-# Update the host compiler to use clang instead of gcc
-sed -i 's|/usr/bin/g++-14|/usr/bin/clang++|g' /sep/cmake/cuda-toolchain-clang.cmake
-# Update the pre-include path to use the absolute path
-sed -i 's|${CMAKE_SOURCE_DIR}/include/cuda_unified_fix.h|/sep/extern/cycles/include/cuda_unified_fix.h|g' /sep/cmake/cuda-toolchain-clang.cmake
-
 # Copy the cuda_unified_fix.h file to the expected location
 mkdir -p /sep/extern/cycles/include
 cp /sep/include/compat/cuda_unified_fix.h /sep/extern/cycles/include/cuda_unified_fix.h

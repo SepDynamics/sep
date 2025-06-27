@@ -7,7 +7,7 @@ add_executable(cycles_test cycles_test.cpp)
 target_link_libraries(cycles_test
     PRIVATE
     # Your internal project libraries
-    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
+    ${SEP_INTERNAL_LIBS}
     # All external dependencies (same as sep_engine)
     ${SEP_LINK_LIBS}
     # Required package libraries

@@ -69,6 +69,13 @@ else()
     message(WARNING "Cycles OSL library not found; disabling OSL features.")
 endif()
 
+if(CYCLES_OSL_LIBRARY)
+    list(APPEND SEP_LINK_LIBS ${CYCLES_OSL_LIBRARY})
+    message(STATUS "Found Cycles OSL library: ${CYCLES_OSL_LIBRARY}")
+else()
+    message(WARNING "Cycles OSL library not found. Disabling OSL support.")
+endif()
+
 # Find and add Blender internal libraries
 find_library(BF_BLENKERNEL_LIBRARY NAMES bf_blenkernel PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(BF_BLENLIB_LIBRARY NAMES bf_blenlib PATHS ${CMAKE_SOURCE_DIR}/lib)

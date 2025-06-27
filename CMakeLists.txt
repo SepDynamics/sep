@@ -72,7 +72,7 @@ include_directories(
 )
 
 # Optional Cycles renderer
-if(EXISTS "${CMAKE_SOURCE_DIR}/cycles/CMakeLists.txt")
+if(EXISTS "${CMAKE_SOURCE_DIR}/extern/cycles/CMakeLists.txt")
     set(SEP_HAS_CYCLES 1)
     # Use our custom FindCycles module
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)

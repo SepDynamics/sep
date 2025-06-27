@@ -216,16 +216,21 @@ endif()
 # if find_package(CYCLES) manages to find a comprehensive set.
 list(APPEND CYCLES_ESSENTIAL_LIBS ${CYCLES_LIBRARIES})
 
-
-# Find specific TBB version required by OpenSubdiv (2.x)
-# This prevents version conflicts with other TBB libraries (12.x)
-find_library(TBB_OPENSUBDIV_LIBRARY NAMES
-  tbb.so.2
-  libtbb.so.2
-  osdGPU
+# OpenSubdiv libraries require an older TBB version. Mirror the setup used by the
+# Cycles test target so the engine links against the correct combination.
+find_library(OPENSUBDIV_CPU_LIBRARY NAMES
   osdCPU
   libosdCPU.so
   libosdCPU.so.3.6.0
+  PATHS
+  ${CMAKE_SOURCE_DIR}/lib
+  /usr/lib64
+  /usr/lib
+  /usr/local/lib
+)
+
+find_library(OPENSUBDIV_GPU_LIBRARY NAMES
+  osdGPU
   libosdGPU.so
   libosdGPU.so.3.6.0
   PATHS
@@ -235,7 +240,18 @@ find_library(TBB_OPENSUBDIV_LIBRARY NAMES
   /usr/local/lib
 )
 
+find_library(TBB_OPENSUBDIV_LIBRARY NAMES
+  tbb.so.2
+  libtbb.so.2
+  PATHS
+  /usr/lib64
+  /usr/lib
+  /usr/local/lib
+)
+
 message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")
+
+find_library(TBB_LIBRARY NAMES tbb)
 
 # Find OpenVDB library and its dependencies
 find_library(OPENVDB_LIBRARY NAMES openvdb libopenvdb.so.11.0 libopenvdb.so)
@@ -371,7 +387,10 @@ target_link_libraries(sep_engine
     ${CURL_LIBRARIES}
     ${CUDA_LIBRARIES} # General CUDA libraries (cudart, cudadevrt etc.)
     ${HIREDIS_LIBRARIES}
+    ${OPENSUBDIV_CPU_LIBRARY}
+    ${OPENSUBDIV_GPU_LIBRARY}
     ${TBB_OPENSUBDIV_LIBRARY}
+    ${TBB_LIBRARY}
     fmt::fmt
     spdlog::spdlog
     # Standard system libraries - usually last

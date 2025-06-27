@@ -19,31 +19,31 @@ Running CMake configuration...
 -- Found OSL_COMP_LIBRARY: /usr/lib64/liboslcomp.so
 -- Found OSL_EXEC_LIBRARY: /usr/lib64/liboslexec.so
 -- Found OSL_QUERY_LIBRARY: /usr/lib64/liboslquery.so
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:92 (message):
   OPENSUBDIV_CPU_LIBRARY (osdCPU libosdCPU.so.3.6.0) not found.  Linking may
   fail if required.
 Call Stack (most recent call first):
-  CMakeLists.txt:88 (find_and_add_library)
+  CMakeLists.txt:99 (find_and_add_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:92 (message):
   OPENSUBDIV_GPU_LIBRARY (osdGPU libosdGPU.so.3.6.0) not found.  Linking may
   fail if required.
 Call Stack (most recent call first):
-  CMakeLists.txt:89 (find_and_add_library)
+  CMakeLists.txt:100 (find_and_add_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:92 (message):
   TBB_OPENSUBDIV_LIBRARY (tbb.so.2 libtbb.so.2) not found.  Linking may fail
   if required.
 Call Stack (most recent call first):
-  CMakeLists.txt:90 (find_and_add_library)
+  CMakeLists.txt:101 (find_and_add_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:92 (message):
   OpenPGL_LIBRARY (OpenPGL pgl) not found.  Linking may fail if required.
 Call Stack (most recent call first):
-  CMakeLists.txt:91 (find_and_add_library)
+  CMakeLists.txt:102 (find_and_add_library)
 
 
 -- Found OPENVDB_LIBRARY: /usr/lib64/libopenvdb.so

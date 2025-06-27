@@ -32,8 +32,8 @@
 				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
 				"-DCMAKE_BUILD_TYPE=Release",
 				"-DSEP_HAS_CUDA=1",
-				"-DSEP_HAS_BLENDER=0",
-				"-DSEP_HAS_CYCLES=0"
+				"-DSEP_HAS_BLENDER=1",
+				"-DSEP_HAS_CYCLES=1"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -147,7 +147,7 @@
 			"command": "bash",
 			"args": [
 				"-c",
-				"cd ${workspaceFolder} && CodeChecker analyze cmake-make/compile_commands.json -o reports --analyzers clangsa clang-tidy"
+				"cd ${workspaceFolder} && CodeChecker analyze cmake-make/compile_commands.json -o .codechecker/reports --analyzers clangsa clang-tidy"
 			],
 			"group": "none",
 			"presentation": {
@@ -245,7 +245,7 @@
 			"command": "bash",
 			"args": [
 				"-c",
-				"cd ${workspaceFolder} && ./scripts/setup_cycles_env_fixed.sh"
+				"cd ${workspaceFolder} && ./sep-build.sh"
 			],
 			"group": "build",
 			"presentation": {

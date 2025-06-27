@@ -1,0 +1,70 @@
+#!/bin/bash
+# Customize these paths to match your local library installations.
+# Copy this file to local_env_paths.sh and edit the variables as needed.
+
+# Python
+export PYTHON_VERSION="3.11"
+export PYTHON_LIBRARY="/usr/lib64/libpython3.11.so"
+export PYTHON_LIBPATH="/usr/lib64"
+export PYTHON_INCLUDE_DIR="/usr/include/python3.11"
+export PYTHON_INCLUDE_CONFIG_DIR="/usr/include/python3.11"
+
+# Zlib
+export ZLIB_INCLUDE_DIR="/usr/include"
+export ZLIB_LIBRARY="/usr/lib/libz.so"
+
+# OpenImageIO
+export OPENIMAGEIO_ROOT_DIR="/usr"
+export OPENIMAGEIO_INCLUDE_DIR="/usr/include"
+export OPENIMAGEIO_LIBRARY="/usr/lib64/libOpenImageIO.so"
+export OPENIMAGEIO_UTIL_LIBRARY="/usr/lib64/libOpenImageIO_Util.so"
+
+# OpenJPEG
+export OPENJPEG_INCLUDE_DIR="/usr/include/openjpeg-2.5"
+export OPENJPEG_LIBRARY="/usr/lib64/libopenjp2.so"
+
+# JPEG
+export JPEG_INCLUDE_DIR="/usr/include"
+export JPEG_LIBRARY="/usr/lib64/libjpeg.so"
+
+# TIFF
+export TIFF_INCLUDE_DIR="/usr/include"
+export TIFF_LIBRARY="/usr/lib64/libtiff.so"
+
+# PNG
+export PNG_INCLUDE_DIR="/usr/include"
+export PNG_LIBRARY="/usr/lib64/libpng.so"
+
+# Jemalloc
+export JEMALLOC_INCLUDE_DIR="/usr/include/jemalloc"
+export JEMALLOC_LIBRARY="/usr/lib64/libjemalloc.so.2"
+
+# OpenColorIO
+export OPENCOLORIO_INCLUDE_DIR="/usr/include"
+export OPENCOLORIO_LIBRARY="/usr/lib64/libOpenColorIO.so"
+
+# OpenSubdiv
+export OPENSUBDIV_INCLUDE_DIR="/usr/include"
+export OPENSUBDIV_OSDCPU_LIBRARY="/usr/lib64/libosdCPU.so"
+export OPENSUBDIV_OSDGPU_LIBRARY="/usr/lib64/libosdGPU.so"
+
+# OpenEXR / Imath
+export OPENEXR_INCLUDE_DIR="/usr/include/OpenEXR"
+export OPENEXR_LIBRARY="/usr/lib64/libOpenEXR.so"
+export OPENEXR_ROOT_DIR="/usr"
+
+# Boost / TBB
+export BOOST_ROOT="/usr"
+export Boost_INCLUDE_DIR="/usr/include"
+export Boost_LIBRARY_DIR="/usr/lib64"
+export TBB_INCLUDE_DIR="/usr/include"
+export TBB_LIBRARY="/usr/lib64/libtbb.so"
+
+# OptiX (optional)
+export OPTIX_ROOT_DIR="/sep/extern/optix-dev"
+
+# OpenVDB (optional if building with volumetrics)
+export OPENVDB_ROOT_DIR="/usr"
+export OPENVDB_INCLUDE_DIR="/usr/include"
+export OPENVDB_LIBRARY="/usr/lib64/libopenvdb.so"
+

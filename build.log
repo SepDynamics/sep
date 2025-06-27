@@ -60,7 +60,8 @@ Call Stack (most recent call first):
 -- Found OPENIMAGEIO_LIBRARY: /usr/lib64/libOpenImageIO.so
 -- Found OPENIMAGEIO_UTIL_LIBRARY: /usr/lib64/libOpenImageIO_Util.so
 -- Found ZLIB_LIBRARY: /usr/lib64/libz.so
--- Found PipeWire: pipewire-0.3
+-- PipeWire found via pkg-config: pipewire-0.3
+-- Using PipeWire at: pipewire-0.3
 -- Using custom CUDA compilation pipeline
 -- CUDA Path: /usr/local/cuda-12.9
 -- CUDA NVCC: /usr/local/cuda-12.9/bin/nvcc

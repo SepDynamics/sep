@@ -60,6 +60,7 @@ find_library(CYCLES_DEVICE_LIBRARY NAMES cycles_device libcycles_device.a PATHS 
 find_library(CYCLES_UTIL_LIBRARY NAMES cycles_util libcycles_util.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_BVH_LIBRARY NAMES cycles_bvh libcycles_bvh.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_OSL_LIBRARY NAMES cycles_osl libcycles_osl.a PATHS ${CMAKE_SOURCE_DIR}/lib)
+
 list(APPEND SEP_LINK_LIBS
     ${CYCLES_SESSION_LIBRARY}
     ${CYCLES_SCENE_LIBRARY}
@@ -67,9 +68,15 @@ list(APPEND SEP_LINK_LIBS
     ${CYCLES_KERNEL_LIBRARY}
     ${CYCLES_DEVICE_LIBRARY}
     ${CYCLES_UTIL_LIBRARY}
-    ${CYCLES_OSL_LIBRARY}
     ${CYCLES_BVH_LIBRARY}
 )
+
+if(CYCLES_OSL_LIBRARY)
+    list(APPEND SEP_LINK_LIBS ${CYCLES_OSL_LIBRARY})
+    message(STATUS "Found Cycles OSL library: ${CYCLES_OSL_LIBRARY}")
+else()
+    message(WARNING "Cycles OSL library not found. Disabling OSL support.")
+endif()
 
 # Find and add Blender internal libraries
 find_library(BF_BLENKERNEL_LIBRARY NAMES bf_blenkernel PATHS ${CMAKE_SOURCE_DIR}/lib)
@@ -297,8 +304,6 @@ find_library(TBB_OPENSUBDIV_LIBRARY NAMES
 )
 
 message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")
-    ${TBB_LIBRARY}
-
 find_library(TBB_LIBRARY NAMES tbb)
 
 # Find OpenVDB library and its dependencies

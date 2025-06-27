@@ -30,7 +30,18 @@ add_compile_definitions(SEP_HAS_BLENDER=${SEP_HAS_BLENDER})
 set(SEP_HAS_CYCLES 1)
 add_compile_definitions(SEP_HAS_CYCLES=${SEP_HAS_CYCLES})
 
-# This list will hold all libraries to be linked by the final targets.
+# Internal libraries used by all executables
+set(SEP_INTERNAL_LIBS
+    sep_api
+    sep_memory
+    sep_quantum
+    sep_core
+    sep_audio
+    sep_blender
+    sep_compat
+)
+
+# This list will hold all external libraries to be linked by the final targets.
 set(SEP_LINK_LIBS "")
 
 # Find and add all static Cycles component libraries to our link list
@@ -124,8 +135,8 @@ add_executable(sep_engine src/main.cpp)
 
 target_link_libraries(sep_engine
     PRIVATE
-    # Your internal project libraries first
-    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
+    # Internal libraries first
+    ${SEP_INTERNAL_LIBS}
     # Then all found external dependencies
     ${SEP_LINK_LIBS}
     # Then required package libraries

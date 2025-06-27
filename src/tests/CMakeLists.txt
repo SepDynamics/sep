@@ -6,8 +6,8 @@ add_executable(cycles_test cycles_test.cpp)
 # The SEP_LINK_LIBS variable is defined in the root CMakeLists.txt.
 target_link_libraries(cycles_test
     PRIVATE
-    # Your internal project libraries
-    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
+    # Internal project libraries
+    ${SEP_INTERNAL_LIBS}
     # All external dependencies (same as sep_engine)
     ${SEP_LINK_LIBS}
     # Required package libraries

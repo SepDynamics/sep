@@ -44,6 +44,13 @@ set(SEP_INTERNAL_LIBS
 # This list will hold all external libraries to be linked by the final targets.
 set(SEP_LINK_LIBS "")
 
+# Internal libraries built as part of this project. Having them in a
+# separate variable lets us easily link the same set of libraries in
+# tests and executables.
+set(SEP_INTERNAL_LIBS
+    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
+)
+
 # Find and add all static Cycles component libraries to our link list
 find_library(CYCLES_SESSION_LIBRARY NAMES cycles_session libcycles_session.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_SCENE_LIBRARY NAMES cycles_scene libcycles_scene.a PATHS ${CMAKE_SOURCE_DIR}/lib)
@@ -135,7 +142,7 @@ add_executable(sep_engine src/main.cpp)
 
 target_link_libraries(sep_engine
     PRIVATE
-    # Internal libraries first
+    # Your internal project libraries first
     ${SEP_INTERNAL_LIBS}
     # Then all found external dependencies
     ${SEP_LINK_LIBS}
@@ -144,3 +151,4 @@ target_link_libraries(sep_engine
     # Finally, standard system libs
     -ldl -lm
 )
+

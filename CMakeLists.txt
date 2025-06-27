@@ -122,6 +122,18 @@ find_and_add_library(OPENIMAGEIO_LIBRARY "OpenImageIO")
 find_and_add_library(OPENIMAGEIO_UTIL_LIBRARY "OpenImageIO_Util")
 find_and_add_library(ZLIB_LIBRARY "z")
 
+# Consolidate internal libraries and all dependencies for reuse across targets
+set(SEP_INTERNAL_LIBS
+    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
+)
+set(SEP_ENGINE_LIBS
+    ${SEP_INTERNAL_LIBS}
+    ${SEP_LINK_LIBS}
+    ${CURL_LIBRARIES} ${HIREDIS_LIBRARIES} ${CUDA_LIBRARIES}
+    Threads::Threads fmt::fmt spdlog::spdlog
+    -ldl -lm
+)
+
 # --- Project Structure and Includes ---
 include_directories(
     ${CMAKE_SOURCE_DIR}/include

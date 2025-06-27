@@ -3,6 +3,7 @@ add_library(sep_api STATIC auth_middleware.cpp bridge.cpp bridge_c.cpp client.cp
 target_include_directories(sep_api
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/extern
 )
 
 # Link external dependencies when available

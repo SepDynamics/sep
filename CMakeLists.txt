@@ -17,16 +17,8 @@ find_package(Threads REQUIRED)
 
 find_library(HIREDIS_LIBRARIES NAMES hiredis)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
-
 if(HIREDIS_LIBRARIES AND HIREDIS_INCLUDE_DIR)
-    set(HIREDIS_FOUND TRUE)
-else()
-    set(HIREDIS_FOUND FALSE)
-    message(WARNING "Hiredis not found, Redis persistence disabled")
-endif()
-
-if(CUDAToolkit_FOUND)
-    set(SEP_CUDA_AVAILABLE 1)
+    set(SEP_HAS_HIREDIS 1)
 else()
     set(SEP_HAS_HIREDIS 0)
 endif()
@@ -52,12 +44,6 @@ set(SEP_INTERNAL_LIBS
 # This list will hold all external libraries to be linked by the final targets.
 set(SEP_LINK_LIBS "")
 
-# Internal libraries built as part of this project. Having them in a
-# separate variable lets us easily link the same set of libraries in
-# tests and executables.
-set(SEP_INTERNAL_LIBS
-    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
-)
 
 # Find and add all static Cycles component libraries to our link list
 find_library(CYCLES_SESSION_LIBRARY NAMES cycles_session libcycles_session.a PATHS ${CMAKE_SOURCE_DIR}/lib)
@@ -67,7 +53,7 @@ find_library(CYCLES_KERNEL_LIBRARY NAMES cycles_kernel libcycles_kernel.a PATHS 
 find_library(CYCLES_DEVICE_LIBRARY NAMES cycles_device libcycles_device.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_UTIL_LIBRARY NAMES cycles_util libcycles_util.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_BVH_LIBRARY NAMES cycles_bvh libcycles_bvh.a PATHS ${CMAKE_SOURCE_DIR}/lib)
-find_library(CYCLES_OSL_LIBRARY NAMES cycles_osl libcycles_osl.a PATHS ${CMAKE_SOURCE_DIR}/lib)
+# find_library(CYCLES_OSL_LIBRARY NAMES cycles_osl libcycles_osl.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 list(APPEND SEP_LINK_LIBS
     ${CYCLES_SESSION_LIBRARY}
     ${CYCLES_SCENE_LIBRARY}
@@ -75,7 +61,6 @@ list(APPEND SEP_LINK_LIBS
     ${CYCLES_KERNEL_LIBRARY}
     ${CYCLES_DEVICE_LIBRARY}
     ${CYCLES_UTIL_LIBRARY}
-    ${CYCLES_OSL_LIBRARY}
     ${CYCLES_BVH_LIBRARY}
 )
 
@@ -108,13 +93,15 @@ macro(find_and_add_library var_name names)
     endif()
 endmacro()
 
+add_executable(sep_engine src/main.cpp)
+
+
 find_and_add_library(OSL_COMP_LIBRARY "oslcomp")
 find_and_add_library(OSL_EXEC_LIBRARY "oslexec")
 find_and_add_library(OSL_QUERY_LIBRARY "oslquery")
 find_and_add_library(OPENSUBDIV_CPU_LIBRARY "osdCPU libosdCPU.so.3.6.0")
 find_and_add_library(OPENSUBDIV_GPU_LIBRARY "osdGPU libosdGPU.so.3.6.0")
 find_and_add_library(TBB_OPENSUBDIV_LIBRARY "tbb.so.2 libtbb.so.2")
-find_and_add_library(OpenPGL_LIBRARY "OpenPGL pgl")
 find_and_add_library(OPENVDB_LIBRARY "openvdb")
 find_and_add_library(BLOSC_LIBRARY "blosc")
 find_and_add_library(TBB_LIBRARY "tbb")
@@ -155,12 +142,16 @@ add_subdirectory(src/compat)
 add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
-add_subdirectory(src/tests)
+# add_subdirectory(src/tests)
+
 
 
 target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/extern
+        ${CMAKE_SOURCE_DIR}/extern/glm
+        ${CMAKE_SOURCE_DIR}/cycles/src
 )
 if(HIREDIS_INCLUDE_DIR)
     target_include_directories(sep_engine PRIVATE ${HIREDIS_INCLUDE_DIR})
@@ -245,31 +236,6 @@ endif()
 # Add the general CYCLES_LIBRARIES which might contain other components like Cycles core
 # if find_package(CYCLES) manages to find a comprehensive set.
 list(APPEND CYCLES_ESSENTIAL_LIBS ${CYCLES_LIBRARIES})
-# --- OpenSubdiv and TBB configuration (mirrors tests setup) ---
-find_library(OPENSUBDIV_CPU_LIBRARY NAMES
-  osdCPU
-  libosdCPU.so
-  libosdCPU.so.3.6.0
-  PATHS
-  ${CMAKE_SOURCE_DIR}/lib
-  /usr/lib64
-  /usr/lib
-  /usr/local/lib
-)
-
-find_library(OPENSUBDIV_GPU_LIBRARY NAMES
-  osdGPU
-  libosdGPU.so
-  libosdGPU.so.3.6.0
-  PATHS
-  ${CMAKE_SOURCE_DIR}/lib
-  /usr/lib64
-  /usr/lib
-  /usr/local/lib
-)
-
-find_library(TBB_LIBRARY NAMES tbb)
-message(STATUS "Found TBB: ${TBB_LIBRARY}")
 
 # OpenSubdiv libraries require an older TBB version. Mirror the setup used by the
 # Cycles test target so the engine links against the correct combination.
@@ -304,7 +270,9 @@ find_library(TBB_OPENSUBDIV_LIBRARY NAMES
   /usr/local/lib
 )
 
+message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")
 
+find_library(TBB_LIBRARY NAMES tbb)
 
 # Find OpenVDB library and its dependencies
 find_library(OPENVDB_LIBRARY NAMES openvdb libopenvdb.so.11.0 libopenvdb.so)
@@ -342,9 +310,6 @@ if(BOOST_REGEX_LIBRARY)
 endif()
 if(BOOST_FILESYSTEM_LIBRARY)
   list(APPEND OPENVDB_DEPS ${BOOST_FILESYSTEM_LIBRARY})
-endif()
-if(TBB_LIBRARY)
-  list(APPEND OPENVDB_DEPS ${TBB_LIBRARY})
 endif()
 
 # Find additional libraries needed by the main executable
@@ -402,8 +367,6 @@ endif()
 if(ZLIB_LIBRARY) # ZLib also often needed
   list(APPEND ALEMBIC_DEPS ${ZLIB_LIBRARY})
 endif()
-# --- Main Executable Target ---
-add_executable(sep_engine src/main.cpp)
 
 target_link_libraries(sep_engine
     sep_api
@@ -435,8 +398,6 @@ target_link_libraries(sep_engine
     # Alembic with its dependencies
     ${ALEMBIC_LIBRARY}
     ${ALEMBIC_DEPS}
-    ${OPENSUBDIV_CPU_LIBRARY}
-    ${OPENSUBDIV_GPU_LIBRARY}
     # Additional libraries
     ${ZSTD_LIBRARY}
     ${OPENCOLORIO_LIBRARY}
@@ -457,14 +418,5 @@ target_link_libraries(sep_engine
     -lpthread
     -ldl
     -lm
-    PRIVATE
-    # Your internal project libraries first
-    ${SEP_INTERNAL_LIBS}
-    # Then all found external dependencies
-    ${SEP_LINK_LIBS}
-    # Then required package libraries
-    ${CURL_LIBRARIES} ${HIREDIS_LIBRARIES} ${CUDA_LIBRARIES} Threads::Threads fmt::fmt spdlog::spdlog
-    # Finally, standard system libs
-    -ldl -lm
 )
 

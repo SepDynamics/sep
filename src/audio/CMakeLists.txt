@@ -54,4 +54,5 @@ endif()
 target_include_directories(sep_audio
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/extern
 )

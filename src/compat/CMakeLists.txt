@@ -34,4 +34,5 @@ target_include_directories(sep_compat
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/extern/glm
     ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/extern
 )

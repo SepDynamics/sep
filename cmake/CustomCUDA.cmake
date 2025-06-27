@@ -15,7 +15,13 @@ set(CUDA_ARCHITECTURES "70;75;80;86;89" CACHE STRING "CUDA architectures to comp
 set(CUDA_INCLUDE_DIRS "${CUDA_PATH}/include" CACHE PATH "CUDA include directories")
 
 #--- CUDA libraries ---
-set(CUDA_LIBRARIES "cudart;cudart_static;cudadevrt;cuda" CACHE STRING "CUDA libraries")
+# Use full paths to CUDA libraries instead of just names to fix linking issues
+set(CUDA_LIBRARIES
+    "${CUDA_PATH}/lib64/libcudart.so"
+    "${CUDA_PATH}/lib64/libcudadevrt.a"
+    "${CUDA_PATH}/lib64/libcudart_static.a"
+    CACHE STRING "CUDA libraries" FORCE
+)
 set(CUDA_LIBRARY_DIRS
     "${CUDA_PATH}/lib64"
     "${CUDA_PATH}/targets/x86_64-linux/lib"

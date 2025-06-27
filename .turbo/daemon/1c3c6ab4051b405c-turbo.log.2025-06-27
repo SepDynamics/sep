@@ -74,3 +74,9 @@
 2025-06-27T12:01:19.559388Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 1
 2025-06-27T12:01:19.559441Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 1
 2025-06-27T14:04:26.570076Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running
+2025-06-27T19:12:08.105669Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 58
+2025-06-27T19:12:08.105682Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 9
+2025-06-27T19:12:08.105686Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 1
+2025-06-27T19:12:08.105690Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 2
+2025-06-27T19:12:08.105694Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 1
+2025-06-27T19:12:08.105702Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 1

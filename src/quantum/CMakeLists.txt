@@ -3,4 +3,5 @@ add_library(sep_quantum STATIC qbsa.cpp qbsa_qfh.cpp qfh.cpp quantum_processor.c
 target_include_directories(sep_quantum
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/extern
 )

@@ -12,11 +12,17 @@ target_link_libraries(cycles_test
     ${SEP_INTERNAL_LIBS}
     # All external dependencies (same as sep_engine)
     ${SEP_LINK_LIBS}
-    # Required package libraries
-    ${CURL_LIBRARIES} ${HIREDIS_LIBRARIES} ${CUDA_LIBRARIES} Threads::Threads fmt::fmt spdlog::spdlog
-    # Standard system libs
-    -ldl -lm
+    ${CURL_LIBRARIES}
+    ${HIREDIS_LIBRARIES}
+    ${CUDA_LIBRARIES}
+    Threads::Threads
+    fmt::fmt
+    spdlog::spdlog
+    dl
+    m
 )
+
+target_link_libraries(cycles_test PRIVATE ${CYCLES_TEST_LIBS})
 
 add_custom_target(run_cycles_test
     COMMAND cycles_test ${CMAKE_BINARY_DIR}/cycles_render.ppm

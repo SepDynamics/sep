@@ -9,3 +9,19 @@
 2025-06-27T06:15:13.274977Z  WARN turborepo_filewatch::package_watcher: lagged behind 9 processing file watching events
 2025-06-27T06:15:13.274979Z  WARN turborepo_filewatch::package_watcher: lagged behind 4 processing file watching events
 2025-06-27T07:03:12.302489Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running
+2025-06-27T09:45:04.238217Z  WARN turborepo_filewatch::package_watcher: lagged behind 117 processing file watching events
+2025-06-27T09:45:04.238238Z  WARN turborepo_filewatch::package_watcher: lagged behind 5 processing file watching events
+2025-06-27T09:45:04.238242Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238246Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238250Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238317Z  WARN turborepo_filewatch::package_watcher: lagged behind 15 processing file watching events
+2025-06-27T09:45:04.238470Z  WARN turborepo_filewatch::package_watcher: lagged behind 4 processing file watching events
+2025-06-27T09:45:04.238476Z  WARN turborepo_filewatch::package_watcher: lagged behind 2 processing file watching events
+2025-06-27T09:45:04.238480Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238485Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238491Z  WARN turborepo_filewatch::package_watcher: lagged behind 2 processing file watching events
+2025-06-27T09:45:04.238508Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238512Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238522Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238525Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events
+2025-06-27T09:45:04.238528Z  WARN turborepo_filewatch::package_watcher: lagged behind 1 processing file watching events

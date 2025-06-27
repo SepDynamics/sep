@@ -3,4 +3,5 @@ add_library(sep_memory STATIC memory_tier.cpp memory_tier_manager.cpp manager.cp
 target_include_directories(sep_memory
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/extern
 )

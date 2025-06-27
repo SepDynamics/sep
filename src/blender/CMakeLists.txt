@@ -12,6 +12,9 @@ add_library(sep_blender STATIC
 target_include_directories(sep_blender
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/extern
+        ${CMAKE_SOURCE_DIR}/extern/glm
+        ${CMAKE_SOURCE_DIR}/cycles/src
 )
 
 # Link against Cycles if available

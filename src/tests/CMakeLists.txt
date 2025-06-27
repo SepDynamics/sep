@@ -1,6 +1,12 @@
 # CMakeLists.txt for Cycles integration tests
 
 add_executable(cycles_test cycles_test.cpp)
+target_include_directories(sep_quantum
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/extern
+)
+
 
 # Link against the same libraries as the main executable to ensure consistency.
 # The SEP_LINK_LIBS variable is defined in the root CMakeLists.txt.

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 project(SEPEngine LANGUAGES CXX)
+add_executable(sep_engine src/main.cpp)
 
 # --- Global Settings ---
 set(CMAKE_CXX_STANDARD 17)
@@ -44,6 +45,12 @@ set(SEP_INTERNAL_LIBS
 # This list will hold all external libraries to be linked by the final targets.
 set(SEP_LINK_LIBS "")
 
+# Internal libraries built as part of this project. Having them in a
+# separate variable lets us easily link the same set of libraries in
+# tests and executables.
+set(SEP_INTERNAL_LIBS
+    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
+)
 
 # Find and add all static Cycles component libraries to our link list
 find_library(CYCLES_SESSION_LIBRARY NAMES cycles_session libcycles_session.a PATHS ${CMAKE_SOURCE_DIR}/lib)
@@ -53,7 +60,25 @@ find_library(CYCLES_KERNEL_LIBRARY NAMES cycles_kernel libcycles_kernel.a PATHS 
 find_library(CYCLES_DEVICE_LIBRARY NAMES cycles_device libcycles_device.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_UTIL_LIBRARY NAMES cycles_util libcycles_util.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_BVH_LIBRARY NAMES cycles_bvh libcycles_bvh.a PATHS ${CMAKE_SOURCE_DIR}/lib)
-# find_library(CYCLES_OSL_LIBRARY NAMES cycles_osl libcycles_osl.a PATHS ${CMAKE_SOURCE_DIR}/lib)
+
+
+# Find Cycles OSL library with fallback
+find_library(CYCLES_OSL_LIBRARY NAMES cycles_osl libcycles_osl.a PATHS ${CMAKE_SOURCE_DIR}/lib /usr/lib /usr/lib64 /usr/local/lib)
+if(CYCLES_OSL_LIBRARY)
+  message(STATUS "Found Cycles OSL library: ${CYCLES_OSL_LIBRARY}")
+else()
+  message(WARNING "Cycles OSL library not found. Setting empty placeholder.")
+  set(CYCLES_OSL_LIBRARY "")
+endif()
+
+# Ensure it's added exactly once
+if(CYCLES_OSL_LIBRARY)
+    list(APPEND SEP_LINK_LIBS ${CYCLES_OSL_LIBRARY})
+else()
+    message(WARNING "Cycles OSL library not found; OSL features will be disabled.")
+endif()
+
+
 list(APPEND SEP_LINK_LIBS
     ${CYCLES_SESSION_LIBRARY}
     ${CYCLES_SCENE_LIBRARY}
@@ -61,20 +86,9 @@ list(APPEND SEP_LINK_LIBS
     ${CYCLES_KERNEL_LIBRARY}
     ${CYCLES_DEVICE_LIBRARY}
     ${CYCLES_UTIL_LIBRARY}
+    ${CYCLES_OSL_LIBRARY}
     ${CYCLES_BVH_LIBRARY}
 )
-if(CYCLES_OSL_LIBRARY)
-    list(APPEND SEP_LINK_LIBS ${CYCLES_OSL_LIBRARY})
-else()
-    message(WARNING "Cycles OSL library not found; disabling OSL features.")
-endif()
-
-if(CYCLES_OSL_LIBRARY)
-    list(APPEND SEP_LINK_LIBS ${CYCLES_OSL_LIBRARY})
-    message(STATUS "Found Cycles OSL library: ${CYCLES_OSL_LIBRARY}")
-else()
-    message(WARNING "Cycles OSL library not found. Disabling OSL support.")
-endif()
 
 # Find and add Blender internal libraries
 find_library(BF_BLENKERNEL_LIBRARY NAMES bf_blenkernel PATHS ${CMAKE_SOURCE_DIR}/lib)
@@ -105,7 +119,6 @@ macro(find_and_add_library var_name names)
     endif()
 endmacro()
 
-add_executable(sep_engine src/main.cpp)
 
 
 find_and_add_library(OSL_COMP_LIBRARY "oslcomp")
@@ -114,6 +127,7 @@ find_and_add_library(OSL_QUERY_LIBRARY "oslquery")
 find_and_add_library(OPENSUBDIV_CPU_LIBRARY "osdCPU libosdCPU.so.3.6.0")
 find_and_add_library(OPENSUBDIV_GPU_LIBRARY "osdGPU libosdGPU.so.3.6.0")
 find_and_add_library(TBB_OPENSUBDIV_LIBRARY "tbb.so.2 libtbb.so.2")
+find_and_add_library(OpenPGL_LIBRARY "OpenPGL pgl")
 find_and_add_library(OPENVDB_LIBRARY "openvdb")
 find_and_add_library(BLOSC_LIBRARY "blosc")
 find_and_add_library(TBB_LIBRARY "tbb")
@@ -154,7 +168,7 @@ add_subdirectory(src/compat)
 add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
-# add_subdirectory(src/tests)
+add_subdirectory(src/tests)
 
 
 
@@ -286,6 +300,52 @@ message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")
 
 find_library(TBB_LIBRARY NAMES tbb)
 
+# Find OpenPGL library and its dependencies
+find_library(OpenPGL_LIBRARY NAMES openpgl libopenpgl.so)
+if(OpenPGL_LIBRARY)
+  message(STATUS "Found OpenPGL library: ${OpenPGL_LIBRARY}")
+else()
+  message(WARNING "OpenPGL library not found, using default path /usr/lib64/libopenpgl.so")
+  set(OpenPGL_LIBRARY "/usr/lib64/libopenpgl.so")
+endif()
+
+# PipeWire
+find_library(PIPEWIRE_LIBRARY NAMES pipewire-0.3 libpipewire-0.3.so)
+if(PIPEWIRE_LIBRARY)
+  message(STATUS "Found PipeWire: ${PIPEWIRE_LIBRARY}")
+else()
+  message(WARNING "PipeWire library not found, defaulting to /usr/lib64/libpipewire-0.3.so")
+  set(PIPEWIRE_LIBRARY "/usr/lib64/libpipewire-0.3.so")
+endif()
+
+# OpenSubdiv CPU
+find_library(OPENSUBDIV_CPU_LIBRARY NAMES osdCPU libosdCPU.so)
+if(OPENSUBDIV_CPU_LIBRARY)
+  message(STATUS "Found OpenSubdiv CPU: ${OPENSUBDIV_CPU_LIBRARY}")
+else()
+  message(WARNING "OpenSubdiv CPU not found, defaulting to /usr/lib64/libosdCPU.so")
+  set(OPENSUBDIV_CPU_LIBRARY "/usr/lib64/libosdCPU.so")
+endif()
+
+# OpenSubdiv GPU
+find_library(OPENSUBDIV_GPU_LIBRARY NAMES osdGPU libosdGPU.so)
+if(OPENSUBDIV_GPU_LIBRARY)
+  message(STATUS "Found OpenSubdiv GPU: ${OPENSUBDIV_GPU_LIBRARY}")
+else()
+  message(WARNING "OpenSubdiv GPU not found, defaulting to /usr/lib64/libosdGPU.so")
+  set(OPENSUBDIV_GPU_LIBRARY "/usr/lib64/libosdGPU.so")
+endif()
+
+# TBB
+find_library(TBB_LIBRARY NAMES tbb libtbb.so)
+if(TBB_LIBRARY)
+  message(STATUS "Found TBB: ${TBB_LIBRARY}")
+else()
+  message(WARNING "TBB library not found, defaulting to /usr/lib64/libtbb.so")
+  set(TBB_LIBRARY "/usr/lib64/libtbb.so")
+endif()
+
+
 # Find OpenVDB library and its dependencies
 find_library(OPENVDB_LIBRARY NAMES openvdb libopenvdb.so.11.0 libopenvdb.so)
 if(OPENVDB_LIBRARY)
@@ -380,55 +440,65 @@ if(ZLIB_LIBRARY) # ZLib also often needed
   list(APPEND ALEMBIC_DEPS ${ZLIB_LIBRARY})
 endif()
 
-target_link_libraries(sep_engine
-    sep_api
-    sep_memory
-    sep_quantum
-    sep_core
-    sep_audio
-    sep_blender
-    sep_compat
-    
-    # USD_LIBRARIES should be found by find_package(USD) if used, but it's not explicitly in this snippet.
-    # Assuming it's handled by a custom module or provided externally.
-    ${USD_LIBRARIES}
-    # Link all general Boost libraries found by find_package(Boost)
-    # The `find_library` calls above are specific to OpenVDB's dependencies.
-    # You might have a `find_package(Boost COMPONENTS ...)` that sets `Boost_LIBRARIES`.
-    ${BOOST_LIBRARIES} # Ensure this is linked if Boost is used generally.
-    ${CYCLES_ESSENTIAL_LIBS} # Consolidated list of Cycles libraries
-    ${OSL_LIBRARIES} # OSL libraries (now explicitly listing known good components)
-    ${OpenPGL_LIBRARY} # OpenPGL library
-    # Link OpenVDB and its direct dependencies in order
+target_link_libraries(sep_engine PRIVATE
+    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
+
+    # MUST BE THIS EXACT ORDER
+    ${CYCLES_KERNEL_LIBRARY}   # libcycles_kernel.a
+    ${CYCLES_DEVICE_LIBRARY}   # libcycles_device.a
+    ${CYCLES_SESSION_LIBRARY}  # libcycles_session.a
+    ${CYCLES_SCENE_LIBRARY}    # libcycles_scene.a
+    ${CYCLES_GRAPH_LIBRARY}    # libcycles_graph.a
+    ${CYCLES_BVH_LIBRARY}      # libcycles_bvh.a
+    ${CYCLES_INTEGRATOR_LIBRARY} # <- CRITICAL! Verify this library.
+    ${CYCLES_OSL_LIBRARY}      # libcycles_osl.a (after integrator/kernel)
+
+    # OSL runtime libraries after Cycles OSL static lib
+    ${OSL_LIBRARIES}
+
+    # Blender and remaining deps after cycles
+    ${BF_BLENKERNEL_LIBRARY}
+    ${BF_BLENLIB_LIBRARY}
+    ${BF_DRAW_LIBRARY}
+    ${BF_GPU_LIBRARY}
+    ${BF_GUARDEDALLOC_LIBRARY}
+    ${BF_INTERN_SKY_LIBRARY}
+    ${BF_INTERN_OPENSUBDIV_LIBRARY}
+
+    # OpenSubdiv (legacy TBB first)
+    ${OPENSUBDIV_CPU_LIBRARY}
+    ${OPENSUBDIV_GPU_LIBRARY}
+    ${TBB_OPENSUBDIV_LIBRARY}   # libtbb.so.2
+
+    # OpenPGL (path-guiding)
+    ${OpenPGL_LIBRARY}
+
+    # OpenVDB and Boost dependencies
     ${OPENVDB_LIBRARY}
     ${OPENVDB_DEPS}
-    # OpenImageIO often needs to be linked after OpenVDB
+
+    # TBB current version (after legacy)
+    ${TBB_LIBRARY}              # libtbb.so.12
+
+    # Remaining dependencies
     ${OPENIMAGEIO_LIBRARY}
     ${OPENIMAGEIO_UTIL_LIBRARY}
-    # Embree for ray tracing
     ${EMBREE_LIBRARY}
-    # Alembic with its dependencies
     ${ALEMBIC_LIBRARY}
     ${ALEMBIC_DEPS}
-    # Additional libraries
+    ${GLOG_LIBRARY}
+    ${GFLAGS_LIBRARIES}
     ${ZSTD_LIBRARY}
     ${OPENCOLORIO_LIBRARY}
     ${OPENEXR_LIBRARY}
-    # GFLAGS_LIBRARIES is the standard variable set by find_package(GFlags)
-    # Added GFLAGS if it was found
-    ${GFLAGS_LIBRARIES}
+
+    # Core system and utility deps
     ${CURL_LIBRARIES}
-    ${CUDA_LIBRARIES} # General CUDA libraries (cudart, cudadevrt etc.)
+    ${CUDA_LIBRARIES}
     ${HIREDIS_LIBRARIES}
-    ${OPENSUBDIV_CPU_LIBRARY}
-    ${OPENSUBDIV_GPU_LIBRARY}
-    ${TBB_OPENSUBDIV_LIBRARY}
-    ${TBB_LIBRARY}
     fmt::fmt
     spdlog::spdlog
-    # Standard system libraries - usually last
-    -lpthread
-    -ldl
-    -lm
+    Threads::Threads
+    -lpthread -ldl -lm
 )
 

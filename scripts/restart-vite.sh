@@ -54,30 +54,12 @@ EOL
   echo "Created .env.local with default configuration"
 fi
 
-# Identify the Vite config path based on the instance
-VITE_CONFIG_PATH=""
-case "$INSTANCE_ID" in
-  "blender-kilocode")
-    VITE_CONFIG_PATH="/sep/extern/blender/kilocode/webview-ui"
-    ;;
-  # Add more cases as needed for other instances
-  *)
-    echo "Unknown instance ID: $INSTANCE_ID"
-    echo "Searching for matching webview-ui directories..."
-    POSSIBLE_PATHS=$(find /sep -path "*/$INSTANCE_ID*/webview-ui" -type d)
-    if [ -n "$POSSIBLE_PATHS" ]; then
-      VITE_CONFIG_PATH=$(echo "$POSSIBLE_PATHS" | head -n 1)
-      echo "Found potential config path: $VITE_CONFIG_PATH"
-    else
-      echo "No matching directories found."
-      exit 1
-    fi
-    ;;
-esac
+VITE_CONFIG_PATH="/sep/extern/Kilo-Code/webview-ui"
+
 
 if [ -d "$VITE_CONFIG_PATH" ]; then
   echo "Starting Vite server from: $VITE_CONFIG_PATH"
-  cd "$VITE_CONFIG_PATH" && INSTANCE_ID="$INSTANCE_ID" npm run dev
+  cd "$VITE_CONFIG_PATH" && INSTANCE_ID="$INSTANCE_ID" pnpm run dev
 else
   echo "Error: Could not find Vite configuration directory at $VITE_CONFIG_PATH"
   exit 1

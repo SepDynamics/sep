@@ -45,8 +45,8 @@ else()
 endif()
 add_compile_definitions(SEP_HAS_HIREDIS=${SEP_HAS_HIREDIS})
 
-# Blender support is disabled in this build
-set(SEP_HAS_BLENDER 0)
+# Enable Blender support
+set(SEP_HAS_BLENDER 1)
 add_compile_definitions(SEP_HAS_BLENDER=${SEP_HAS_BLENDER})
 
 

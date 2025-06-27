@@ -17,8 +17,16 @@ find_package(Threads REQUIRED)
 
 find_library(HIREDIS_LIBRARIES NAMES hiredis)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
+
 if(HIREDIS_LIBRARIES AND HIREDIS_INCLUDE_DIR)
-    set(SEP_HAS_HIREDIS 1)
+    set(HIREDIS_FOUND TRUE)
+else()
+    set(HIREDIS_FOUND FALSE)
+    message(WARNING "Hiredis not found, Redis persistence disabled")
+endif()
+
+if(CUDAToolkit_FOUND)
+    set(SEP_CUDA_AVAILABLE 1)
 else()
     set(SEP_HAS_HIREDIS 0)
 endif()

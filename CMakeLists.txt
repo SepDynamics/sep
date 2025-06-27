@@ -15,6 +15,10 @@ find_package(CUDAToolkit QUIET)
 find_package(CURL QUIET)
 find_package(CROW QUIET)
 find_package(TBB QUIET)
+find_library(TBB_LIBRARY NAMES tbb)
+if(TBB_LIBRARY)
+  message(STATUS "Found TBB: ${TBB_LIBRARY}")
+endif()
 find_package(glm QUIET)
 find_package(fmt QUIET)
 find_package(spdlog QUIET)
@@ -217,17 +221,39 @@ endif()
 list(APPEND CYCLES_ESSENTIAL_LIBS ${CYCLES_LIBRARIES})
 
 
+# Find OpenSubdiv libraries
+find_library(OPENSUBDIV_CPU_LIBRARY NAMES
+  osdCPU
+  libosdCPU.so
+  libosdCPU.so.3.6.0
+  PATHS
+  ${CMAKE_SOURCE_DIR}/lib
+  /usr/lib64
+  /usr/lib
+  /usr/local/lib
+)
+if(OPENSUBDIV_CPU_LIBRARY)
+  message(STATUS "Found OpenSubdiv CPU library: ${OPENSUBDIV_CPU_LIBRARY}")
+endif()
+find_library(OPENSUBDIV_GPU_LIBRARY NAMES
+  osdGPU
+  libosdGPU.so
+  libosdGPU.so.3.6.0
+  PATHS
+  ${CMAKE_SOURCE_DIR}/lib
+  /usr/lib64
+  /usr/lib
+  /usr/local/lib
+)
+if(OPENSUBDIV_GPU_LIBRARY)
+  message(STATUS "Found OpenSubdiv GPU library: ${OPENSUBDIV_GPU_LIBRARY}")
+endif()
+
 # Find specific TBB version required by OpenSubdiv (2.x)
 # This prevents version conflicts with other TBB libraries (12.x)
 find_library(TBB_OPENSUBDIV_LIBRARY NAMES
   tbb.so.2
   libtbb.so.2
-  osdGPU
-  osdCPU
-  libosdCPU.so
-  libosdCPU.so.3.6.0
-  libosdGPU.so
-  libosdGPU.so.3.6.0
   PATHS
   ${CMAKE_SOURCE_DIR}/lib
   /usr/lib64
@@ -271,9 +297,12 @@ endif()
 if(BOOST_REGEX_LIBRARY)
   list(APPEND OPENVDB_DEPS ${BOOST_REGEX_LIBRARY})
 endif()
-if(BOOST_FILESYSTEM_LIBRARY)
-  list(APPEND OPENVDB_DEPS ${BOOST_FILESYSTEM_LIBRARY})
-endif()
+  if(BOOST_FILESYSTEM_LIBRARY)
+    list(APPEND OPENVDB_DEPS ${BOOST_FILESYSTEM_LIBRARY})
+  endif()
+  if(TBB_LIBRARY)
+    list(APPEND OPENVDB_DEPS ${TBB_LIBRARY})
+  endif()
 
 # Find additional libraries needed by the main executable
 find_library(OPENIMAGEIO_LIBRARY NAMES OpenImageIO)
@@ -351,29 +380,32 @@ target_link_libraries(sep_engine
     ${OSL_LIBRARIES} # OSL libraries (now explicitly listing known good components)
     ${OpenPGL_LIBRARY} # OpenPGL library
     # Link OpenVDB and its direct dependencies in order
-    ${OPENVDB_LIBRARY}
-    ${OPENVDB_DEPS}
-    # OpenImageIO often needs to be linked after OpenVDB
-    ${OPENIMAGEIO_LIBRARY}
-    ${OPENIMAGEIO_UTIL_LIBRARY}
-    # Embree for ray tracing
-    ${EMBREE_LIBRARY}
-    # Alembic with its dependencies
-    ${ALEMBIC_LIBRARY}
-    ${ALEMBIC_DEPS}
-    # Additional libraries
-    ${ZSTD_LIBRARY}
-    ${OPENCOLORIO_LIBRARY}
-    ${OPENEXR_LIBRARY}
-    # GFLAGS_LIBRARIES is the standard variable set by find_package(GFlags)
-    # Added GFLAGS if it was found
-    ${GFLAGS_LIBRARIES}
-    ${CURL_LIBRARIES}
-    ${CUDA_LIBRARIES} # General CUDA libraries (cudart, cudadevrt etc.)
-    ${HIREDIS_LIBRARIES}
-    ${TBB_OPENSUBDIV_LIBRARY}
-    fmt::fmt
-    spdlog::spdlog
+      ${OPENVDB_LIBRARY}
+      ${OPENVDB_DEPS}
+      # OpenImageIO often needs to be linked after OpenVDB
+      ${OPENIMAGEIO_LIBRARY}
+      ${OPENIMAGEIO_UTIL_LIBRARY}
+      # Embree for ray tracing
+      ${EMBREE_LIBRARY}
+      # Alembic with its dependencies
+      ${ALEMBIC_LIBRARY}
+      ${ALEMBIC_DEPS}
+      # Additional libraries
+      ${ZSTD_LIBRARY}
+      ${OPENCOLORIO_LIBRARY}
+      ${OPENEXR_LIBRARY}
+      # GFLAGS_LIBRARIES is the standard variable set by find_package(GFlags)
+      # Added GFLAGS if it was found
+      ${GFLAGS_LIBRARIES}
+      ${CURL_LIBRARIES}
+      ${CUDA_LIBRARIES} # General CUDA libraries (cudart, cudadevrt etc.)
+      ${HIREDIS_LIBRARIES}
+      ${OPENSUBDIV_CPU_LIBRARY}
+      ${OPENSUBDIV_GPU_LIBRARY}
+      ${TBB_OPENSUBDIV_LIBRARY}
+      ${TBB_LIBRARY}
+      fmt::fmt
+      spdlog::spdlog
     # Standard system libraries - usually last
     -lpthread
     -ldl

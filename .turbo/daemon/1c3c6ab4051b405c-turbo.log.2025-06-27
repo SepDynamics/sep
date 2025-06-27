@@ -80,3 +80,4 @@
 2025-06-27T19:12:08.105690Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 2
 2025-06-27T19:12:08.105694Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 1
 2025-06-27T19:12:08.105702Z  WARN turborepo_filewatch::globwatcher: encountered filewatching error, flushing all globs: channel lagged by 1
+2025-06-27T20:46:09.186485Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running

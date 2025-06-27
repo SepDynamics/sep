@@ -106,6 +106,6 @@ compile_commands.json
 .ninja_deps
 .ninja_log
 !CMakeLists.txt
-!build.log
+build.log
 assets/sep_engine
 blender

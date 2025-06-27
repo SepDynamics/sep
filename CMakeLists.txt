@@ -274,10 +274,7 @@ find_library(TBB_OPENSUBDIV_LIBRARY NAMES
   /usr/local/lib
 )
 
-message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")
-    ${TBB_LIBRARY}
 
-find_library(TBB_LIBRARY NAMES tbb)
 
 # Find OpenVDB library and its dependencies
 find_library(OPENVDB_LIBRARY NAMES openvdb libopenvdb.so.11.0 libopenvdb.so)

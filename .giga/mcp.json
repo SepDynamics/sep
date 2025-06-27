@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "code-analyzer": {
+      "command": "node",
+      "args": [
+        "/home/ajn/.local/share/Kilo-Code/MCP/code-analyzer/build/index.js"
+      ],
+      "env": {
+        "CODECHECKER_PORT": "8001",
+        "OLLAMA_URL": "http://localhost:11434",
+        "OLLAMA_MODEL": "mxbai-embed-large",
+        "WORKSPACE_DIR": "/sep"
+      },
+      "disabled": false,
+      "alwaysAllow": [
+        "cycles_render",
+        "check_status"
+      ],
+      "timeout": 300
+    }
+  }
+}

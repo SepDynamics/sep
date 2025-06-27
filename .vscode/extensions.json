@@ -14,6 +14,12 @@
         "giga-ai.giga-ai",
         "neuronlink.neuronlink-ca",
         "sourcegraph.cody-ai",
-        "google.geminicodeassist"
+        "google.geminicodeassist",
+        "dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"csstools.postcss",
+		"bradlc.vscode-tailwindcss",
+		"connor4312.esbuild-problem-matchers",
+		"yoavbls.pretty-ts-errors"
     ]
 }

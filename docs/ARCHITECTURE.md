@@ -104,10 +104,11 @@ Each module is built as a self-contained static library, providing a clear and r
 ### `blender` & `audio` - Specialized Integrations
 *   **Purpose**: These are optional, platform-specific integrations that can be enabled or disabled at build time.
 *   **Key Files**:
-    *   **blender**: `api.cpp`, `blender_integration.cpp`, `mesh_handler.cpp`.
+    *   **blender**: `api.cpp`, `blender_integration.cpp`, `mesh_handler.cpp`, `cycles_renderer.cpp`.
     *   **audio**: `pipewire_capture.cpp`, `pipeline.cpp`.
 *   **Dependencies**: `core`, `context`.
 *   **Rationale**: Keeping these integrations as separate modules prevents their specific dependencies (e.g., Blender headers, PipeWire) from polluting the core engine build.
+*   **Cycles Integration**: The `cycles_renderer.cpp` provides pattern-driven rendering through Blender's Cycles renderer when `SEP_HAS_CYCLES` is enabled.
 
 ## 4. Detailed Interaction and Data Flows
 

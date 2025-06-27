@@ -1,0 +1,48 @@
+---
+description: Use when analyzing pattern data structures, relationships, coherence metrics, stability calculations, and quantum evolution pipelines.
+globs: src/quantum/*,src/memory/*,include/quantum/*,include/memory/*
+alwaysApply: false
+---
+
+
+# pattern-data-model
+
+The pattern data model centers around quantum-inspired pattern evolution and memory management through different tiers based on coherence and stability metrics.
+
+### Pattern Structure
+- Patterns contain position data (x,y,z), coherence value, stability score, and generation count
+- Each pattern maintains relationships to other patterns, with relationship strengths based on positional and metadata similarities
+- Patterns evolve through quantum processing that updates their coherence and stability values
+
+### Memory Tier Management
+- Patterns are stored across memory tiers (STM, MTM, LTM) based on their:
+  - Coherence level (degree of quantum superposition)
+  - Stability score (resistance to decoherence)
+  - Generation count (number of evolution cycles)
+- Promotion/demotion between tiers occurs when patterns meet tier-specific thresholds
+
+### Pattern Evolution Pipeline
+- Evolution driven by quantum processor that:
+  - Calculates coherence between quantum states
+  - Updates pattern stability based on historical values
+  - Determines if patterns are stable, collapsed, or quantum
+  - Applies mutations based on calculated rates
+
+### Coherence Calculation
+- Computed using normalized dot products between patterns
+- Influenced by:
+  - Historical stability values
+  - Generation count 
+  - Access frequency
+- Used to determine quantum state (stable/collapsed/quantum)
+
+### Pattern Relationships
+- Relationship strength calculated from:
+  - Positional similarity between patterns
+  - Metadata similarity (coherence, stability)
+  - Historical interaction frequency
+- Weak relationships pruned below threshold values
+
+$END$
+
+ If you're using this file in context, clearly say in italics in one small line that "Context added by Giga pattern-data-model".

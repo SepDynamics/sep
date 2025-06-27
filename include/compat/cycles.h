@@ -8,12 +8,6 @@
 // Include standard headers
 #include <memory>
 
-// Define size_t if not already defined
-#ifndef _SIZE_T_DEFINED
-typedef unsigned long size_t;
-#define _SIZE_T_DEFINED
-#endif
-
 // Define CCL namespace macros for compatibility
 // These are also defined at the compiler level with -D flags
 #ifndef CCL_NAMESPACE_BEGIN
@@ -28,7 +22,23 @@ typedef unsigned long size_t;
 #define CCL_NAMESPACE_USING_DIRECTIVE using namespace ccl;
 #endif
 
-// Define OpenVDB types needed for compilation
+// Include real Cycles headers
+#ifdef SEP_HAS_CYCLES
+// Core Cycles headers
+#include "scene/scene.h"
+#include "session/session.h"
+#include "scene/camera.h"
+#include "scene/mesh.h"
+#include "scene/shader.h"
+#include "scene/light.h"
+#include "scene/background.h"
+#include "scene/film.h"
+#include "scene/integrator.h"
+#include "session/buffers.h"
+
+// No need for stub implementations when using real Cycles
+#else
+// Define OpenVDB types needed for compilation when Cycles is not available
 namespace openvdb {
     class GridBase {
     public:
@@ -115,17 +125,14 @@ namespace nanovdb {
     };
 }
 
-// Define basic types for Cycles compatibility
+// Define stub types for Cycles when real Cycles is not available
 namespace ccl {
     // Forward declarations for common Cycles types
     class ImageLoader;
     class ImageDeviceFeatures;
     struct ImageMetaData;
     struct Transform;
-}
-
-// Define stub types for Cycles
-namespace ccl {
+    
     class SceneParams {
     public:
         bool background = true;
@@ -163,6 +170,7 @@ namespace ccl {
         int height = 0;
     };
 }
+#endif // SEP_HAS_CYCLES
 
 // Note: We don't use 'using namespace ccl' here to avoid namespace pollution
 // Instead, we use explicit ccl:: prefixes in the code

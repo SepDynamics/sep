@@ -104,6 +104,18 @@ find_and_add_library(OPENIMAGEIO_LIBRARY "OpenImageIO")
 find_and_add_library(OPENIMAGEIO_UTIL_LIBRARY "OpenImageIO_Util")
 find_and_add_library(ZLIB_LIBRARY "z")
 
+# Consolidate internal libraries and all dependencies for reuse across targets
+set(SEP_INTERNAL_LIBS
+    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
+)
+set(SEP_ENGINE_LIBS
+    ${SEP_INTERNAL_LIBS}
+    ${SEP_LINK_LIBS}
+    ${CURL_LIBRARIES} ${HIREDIS_LIBRARIES} ${CUDA_LIBRARIES}
+    Threads::Threads fmt::fmt spdlog::spdlog
+    -ldl -lm
+)
+
 # --- Project Structure and Includes ---
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
@@ -122,14 +134,4 @@ add_subdirectory(src/tests)
 # --- Main Executable Target ---
 add_executable(sep_engine src/main.cpp)
 
-target_link_libraries(sep_engine
-    PRIVATE
-    # Your internal project libraries first
-    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
-    # Then all found external dependencies
-    ${SEP_LINK_LIBS}
-    # Then required package libraries
-    ${CURL_LIBRARIES} ${HIREDIS_LIBRARIES} ${CUDA_LIBRARIES} Threads::Threads fmt::fmt spdlog::spdlog
-    # Finally, standard system libs
-    -ldl -lm
-)
+target_link_libraries(sep_engine PRIVATE ${SEP_ENGINE_LIBS})

@@ -234,7 +234,9 @@
 			},
 			"problemMatcher": [
 				"$nvcc",
-				"$gcc"
+				"$gcc",
+				"$nvcc",
+				"$tsc-watch"
 			]
 		},
 		{
@@ -274,7 +276,7 @@
 		{
 			"label": "watch:webview",
 			"type": "shell",
-			"command": "pnpm --filter @roo-code/vscode-webview dev",
+			"command": "pnpm --filter @roo-code/vscode-webview dev --host",
 			"group": "build",
 			"problemMatcher": {
 				"owner": "vite",
@@ -329,6 +331,28 @@
 		},
 		// ===== Vite Server Management =====
 		{
+			"label": "UI: Start Kilo-Code Webview",
+			"type": "shell",
+			"command": "cd ${workspaceFolder}/extern/Kilo-Code/webview-ui && PORT=5175 INSTANCE_ID=\"kilo_code\" pnpm dev",
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"group": "webview"
+			},
+			"problemMatcher": {
+				"pattern": {
+					"regexp": "^$"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": ".*VITE.*",
+					"endsPattern": ".*Local:.*"
+				}
+			},
+			"isBackground": true
+		},
+		{
 			"label": "UI: Restart Vite Server",
 			"type": "shell",
 			"command": "${workspaceFolder}/scripts/restart-vite.sh",
@@ -341,7 +365,11 @@
 				"panel": "dedicated",
 				"group": "webview"
 			},
-			"problemMatcher": []
+			"problemMatcher": [
+				"$gcc",
+				"$nvcc",
+				"$tsc-watch"
+			]
 		}
 	],
 	"inputs": [
@@ -352,9 +380,16 @@
 			"options": [
 				"blender-kilocode",
 				"api-viewer",
-				"dashboard"
+				"dashboard",
+				"kilo_code"
 			],
 			"default": "blender-kilocode"
+		},
+		// ===== Compound Tasks =====
+		{
+			"id": "Build & Run SEP Engine",
+			"type": "promptString",
+			"description": "Enter the name of the scene to run"
 		}
 	]
 }

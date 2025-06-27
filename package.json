@@ -7,9 +7,7 @@
 		"build": "turbo build",
 		"test": "turbo test",
 		"lint": "turbo lint",
-		"dev": "turbo dev",
-		"watch:bundle": "turbo watch:bundle",
-		"watch:tsc": "turbo watch:tsc"
+		"dev": "turbo dev"
 	},
 	"packageManager": "pnpm@8.6.0",
 	"engines": {
@@ -29,5 +27,8 @@
 				"strictPort": true
 			}
 		}
+	},
+	"dependencies": {
+		"zod": "^3.25.67"
 	}
 }

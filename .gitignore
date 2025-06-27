@@ -52,6 +52,8 @@ boost/
 tbb/
 temp/
 ollama/
+.turbo/
+extern/cycles
 
 #.vscode/
 .idea/

@@ -23,8 +23,9 @@
 #endif
 
 // Include real Cycles headers when SEP_HAS_CYCLES is explicitly set to 1
-// This is controlled by CMake and passed to the compiler
-#if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES == 1
+// AND we're not specifically requesting stub implementations with SEP_USE_CYCLES_STUB
+// These are controlled by CMake and passed to the compiler
+#if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES == 1 && (!defined(SEP_USE_CYCLES_STUB) || SEP_USE_CYCLES_STUB == 0)
 // Core Cycles headers - use relative paths for portability
 #include "../../extern/cycles/src/scene/scene.h"
 #include "../../extern/cycles/src/session/session.h"
@@ -39,6 +40,8 @@
 
 // No need for stub implementations when using real Cycles
 #else
+// Using stub implementations either because SEP_HAS_CYCLES is not defined
+// or because SEP_USE_CYCLES_STUB is explicitly set to 1
 // Define OpenVDB types needed for compilation when Cycles is not available
 namespace openvdb {
     class GridBase {

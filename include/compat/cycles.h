@@ -22,19 +22,20 @@
 #define CCL_NAMESPACE_USING_DIRECTIVE using namespace ccl;
 #endif
 
-// Include real Cycles headers
-#ifdef SEP_HAS_CYCLES
-// Core Cycles headers
-#include "scene/scene.h"
-#include "session/session.h"
-#include "scene/camera.h"
-#include "scene/mesh.h"
-#include "scene/shader.h"
-#include "scene/light.h"
-#include "scene/background.h"
-#include "scene/film.h"
-#include "scene/integrator.h"
-#include "session/buffers.h"
+// Include real Cycles headers when SEP_HAS_CYCLES is explicitly set to 1
+// This is controlled by CMake and passed to the compiler
+#if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES == 1
+// Core Cycles headers - use relative paths for portability
+#include "../../extern/cycles/src/scene/scene.h"
+#include "../../extern/cycles/src/session/session.h"
+#include "../../extern/cycles/src/scene/camera.h"
+#include "../../extern/cycles/src/scene/mesh.h"
+#include "../../extern/cycles/src/scene/shader.h"
+#include "../../extern/cycles/src/scene/light.h"
+#include "../../extern/cycles/src/scene/background.h"
+#include "../../extern/cycles/src/scene/film.h"
+#include "../../extern/cycles/src/scene/integrator.h"
+#include "../../extern/cycles/src/session/buffers.h"
 
 // No need for stub implementations when using real Cycles
 #else

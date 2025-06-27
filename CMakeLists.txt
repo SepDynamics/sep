@@ -219,15 +219,35 @@ list(APPEND CYCLES_ESSENTIAL_LIBS ${CYCLES_LIBRARIES})
 
 # Find specific TBB version required by OpenSubdiv (2.x)
 # This prevents version conflicts with other TBB libraries (12.x)
-find_library(TBB_OPENSUBDIV_LIBRARY NAMES
-  tbb.so.2
-  libtbb.so.2
-  osdGPU
+find_library(OPENSUBDIV_CPU_LIBRARY NAMES
   osdCPU
   libosdCPU.so
   libosdCPU.so.3.6.0
+  PATHS
+  ${CMAKE_SOURCE_DIR}/lib
+  /usr/lib64
+  /usr/lib
+  /usr/local/lib
+)
+
+find_library(OPENSUBDIV_GPU_LIBRARY NAMES
+  osdGPU
   libosdGPU.so
   libosdGPU.so.3.6.0
+  PATHS
+  ${CMAKE_SOURCE_DIR}/lib
+  /usr/lib64
+  /usr/lib
+  /usr/local/lib
+)
+
+message(STATUS "Found OpenSubdiv CPU: ${OPENSUBDIV_CPU_LIBRARY}")
+message(STATUS "Found OpenSubdiv GPU: ${OPENSUBDIV_GPU_LIBRARY}")
+
+# Specific TBB version required by OpenSubdiv (2.x) to avoid conflicts
+find_library(TBB_OPENSUBDIV_LIBRARY NAMES
+  tbb.so.2
+  libtbb.so.2
   PATHS
   ${CMAKE_SOURCE_DIR}/lib
   /usr/lib64
@@ -253,6 +273,13 @@ find_library(BOOST_SYSTEM_LIBRARY NAMES boost_system)
 find_library(BOOST_IOSTREAMS_LIBRARY NAMES boost_iostreams)
 find_library(BOOST_REGEX_LIBRARY NAMES boost_regex)
 find_library(BOOST_FILESYSTEM_LIBRARY NAMES boost_filesystem)
+find_library(TBB_LIBRARY NAMES tbb) # General TBB library
+message(STATUS "Found TBB: ${TBB_LIBRARY}")
+if(TBB_LIBRARY)
+  add_compile_definitions(SEP_USE_TBB=1)
+else()
+  add_compile_definitions(SEP_USE_TBB=0)
+endif()
 
 # Set OpenVDB dependencies - IMPORTANT: Collect and link directly after OpenVDB
 set(OPENVDB_DEPS "")
@@ -273,6 +300,9 @@ if(BOOST_REGEX_LIBRARY)
 endif()
 if(BOOST_FILESYSTEM_LIBRARY)
   list(APPEND OPENVDB_DEPS ${BOOST_FILESYSTEM_LIBRARY})
+endif()
+if(TBB_LIBRARY)
+  list(APPEND OPENVDB_DEPS ${TBB_LIBRARY})
 endif()
 
 # Find additional libraries needed by the main executable
@@ -361,6 +391,9 @@ target_link_libraries(sep_engine
     # Alembic with its dependencies
     ${ALEMBIC_LIBRARY}
     ${ALEMBIC_DEPS}
+    ${OPENSUBDIV_CPU_LIBRARY}
+    ${OPENSUBDIV_GPU_LIBRARY}
+    ${TBB_OPENSUBDIV_LIBRARY}
     # Additional libraries
     ${ZSTD_LIBRARY}
     ${OPENCOLORIO_LIBRARY}
@@ -371,7 +404,7 @@ target_link_libraries(sep_engine
     ${CURL_LIBRARIES}
     ${CUDA_LIBRARIES} # General CUDA libraries (cudart, cudadevrt etc.)
     ${HIREDIS_LIBRARIES}
-    ${TBB_OPENSUBDIV_LIBRARY}
+    ${TBB_LIBRARY}
     fmt::fmt
     spdlog::spdlog
     # Standard system libraries - usually last

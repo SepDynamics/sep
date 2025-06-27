@@ -1,16 +1,106 @@
 {
     "files.autoSave": "onFocusChange",
     "files.autoSaveDelay": 10,
+    // CodeChecker Integration
     "codechecker.backend.compilationDatabasePath": "/sep/cmake-make/compile_commands.json",
+    "codechecker.backend.serverUrl": "http://localhost:8001",
+    "codechecker.backend.productName": "sep-engine",
+    // SEP Engine Project Settings
+    "sep.workspace.root": "/sep",
+    "sep.build.directory": "cmake-make",
+    "sep.build.type": "Release",
+    "sep.cycles.enabled": false, // Set to true when Cycles is properly integrated
+    // MCP Integration
+    "kilocode.mcp.servers": {
+        "code-analyzer": {
+            "enabled": true,
+            "alwaysAllow": [
+                "cycles_render",
+                "check_status",
+                "run_analysis",
+                "store_results",
+                "semantic_search",
+                "analyze_issues"
+            ]
+        }
+    },
+    // C++ Configuration
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/cmake-make/compile_commands.json",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/include/sep",
+        "${workspaceFolder}/extern/cycles/src",
+        "${workspaceFolder}/third_party/include"
+    ],
+    // Clangd Configuration
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/cmake-make",
+        "--header-insertion=iwyu",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--fallback-style=llvm",
+        "-j=8"
+    ],
+    // CMake Configuration
+    "cmake.configureOnOpen": false,
+    "cmake.buildDirectory": "${workspaceFolder}/cmake-make",
+    "cmake.configureArgs": [
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DSEP_HAS_BLENDER=0",
+        "-DSEP_HAS_CYCLES=0",
+        "-DSEP_HAS_CUDA=1"
+    ],
+    // File Associations
+    "files.associations": {
+        "*.cu": "cuda-cpp",
+        "*.cuh": "cuda-cpp",
+        "*.hpp": "cpp",
+        "*.mdc": "markdown"
+    },
+    // Exclude and Search Settings
     "files.exclude": {
-		"out": false, // set this to true to hide the "out" folder with the compiled JS files
-		"dist": false // set this to true to hide the "dist" folder with the compiled JS files
-	},
-	"search.exclude": {
-		"out": true, // set this to false to include "out" folder in search results
-		"dist": true // set this to false to include "dist" folder in search results
-	},
-	// Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-	"typescript.tsc.autoDetect": "off",
-	"i18n-ally.localesPaths": ["webview-ui/src/i18n", "webview-ui/src/__mocks__/i18n", "webview-ui/src/i18n/locales"]
+        "out": false,
+        "dist": false,
+        "cmake-make/CMakeFiles": true,
+        "cycles-build": true,
+        "cycles-install": true,
+        "**/.git": true,
+        "**/.DS_Store": true
+    },
+    "search.exclude": {
+        "out": true,
+        "dist": true,
+        "cmake-make": true,
+        "cycles-build": true,
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true
+    },
+    // Editor Settings for SEP Project
+    "editor.formatOnSave": true,
+    "[cpp]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+    },
+    "[cuda-cpp]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+    },
+    // TypeScript Settings
+    "typescript.tsc.autoDetect": "off",
+    "i18n-ally.localesPaths": [
+        "webview-ui/src/i18n",
+        "webview-ui/src/__mocks__/i18n",
+        "webview-ui/src/i18n/locales"
+    ],
+    // Terminal Settings for Development
+    "terminal.integrated.env.linux": {
+        "SEP_WORKSPACE": "/sep",
+        "SEP_BUILD_DIR": "/sep/cmake-make",
+        "CODECHECKER_PORT": "8001",
+        "OLLAMA_URL": "http://localhost:11434",
+        "OLLAMA_MODEL": "mxbai-embed-large"
+    }
 }

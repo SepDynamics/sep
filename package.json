@@ -1,0 +1,33 @@
+{
+	"name": "sep-engine",
+	"version": "1.0.0",
+	"description": "SEP Engine - Quantum-inspired pattern analysis and evolution framework",
+	"private": true,
+	"scripts": {
+		"build": "turbo build",
+		"test": "turbo test",
+		"lint": "turbo lint",
+		"dev": "turbo dev",
+		"watch:bundle": "turbo watch:bundle",
+		"watch:tsc": "turbo watch:tsc"
+	},
+	"packageManager": "pnpm@8.6.0",
+	"engines": {
+		"node": ">=18 <23",
+		"pnpm": ">=8.6.0"
+	},
+	"devDependencies": {
+		"turbo": "^2.5.4"
+	},
+	"overrides": {
+		"vite": {
+			"server": {
+				"port": {
+					"$env": "VITE_PORT",
+					"$default": 5173
+				},
+				"strictPort": true
+			}
+		}
+	}
+}

@@ -9,14 +9,134 @@
         "CODECHECKER_PORT": "8001",
         "OLLAMA_URL": "http://localhost:11434",
         "OLLAMA_MODEL": "mxbai-embed-large",
-        "WORKSPACE_DIR": "/sep"
+        "WORKSPACE_DIR": "/sep",
+        "SEP_BUILD_DIR": "/sep/cmake-make",
+        "SEP_CONFIG_FILE": "/sep/config/default.json"
       },
       "disabled": false,
       "alwaysAllow": [
         "cycles_render",
-        "check_status"
+        "check_status",
+        "run_analysis",
+        "store_results",
+        "semantic_search",
+        "analyze_issues"
       ],
-      "timeout": 300
+      "timeout": 300,
+      "description": "SEP Engine code analysis server with CodeChecker integration and Cycles rendering support"
+    }
+  },
+  "globalSettings": {
+    "autoStart": [
+      "code-analyzer"
+    ],
+    "defaultTimeout": 300,
+    "logLevel": "info"
+  },
+  "projectSettings": {
+    "name": "SEP Engine",
+    "type": "cpp",
+    "buildSystem": "cmake",
+    "features": {
+      "quantum": true,
+      "cuda": true,
+      "blender": false,
+      "cycles": false,
+      "audio": true
+    },
+    "analyzers": {
+      "clangsa": {
+        "enabled": true,
+        "checkers": [
+          "core",
+          "cplusplus",
+          "deadcode",
+          "security"
+        ]
+      },
+      "clang-tidy": {
+        "enabled": true,
+        "checks": "bugprone-*,performance-*,readability-*,modernize-*,-modernize-use-trailing-return-type"
+      }
+    },
+    "semanticSearch": {
+      "indexPaths": [
+        "src/quantum",
+        "src/memory",
+        "src/core",
+        "src/api",
+        "include/sep"
+      ],
+      "excludePatterns": [
+        "*.cu",
+        "*.cuh",
+        "build/**",
+        "cmake-make/**"
+      ]
+    }
+  },
+  "cyclesIntegration": {
+    "enabled": false,
+    "cyclesPath": "/sep/extern/cycles",
+    "optixPath": "/sep/extern/optix-dev",
+    "renderSettings": {
+      "defaultSamples": 64,
+      "defaultResolution": [
+        1920,
+        1080
+      ],
+      "device": "GPU",
+      "features": {
+        "patternVisualization": true,
+        "coherenceMapping": true,
+        "temporalEvolution": true
+      }
+    }
+  },
+  "workflowPresets": {
+    "development": {
+      "tasks": [
+        "Auto Build",
+        "MCP: Start Code Analyzer"
+      ],
+      "launch": "SEP: Run Engine",
+      "environment": {
+        "SEP_LOG_LEVEL": "DEBUG",
+        "SEP_METRICS_ENABLED": "1"
+      }
+    },
+    "testing": {
+      "tasks": [
+        "Build",
+        "SEP: Run CodeChecker Analysis"
+      ],
+      "launch": "SEP: Debug Tests",
+      "environment": {
+        "GTEST_COLOR": "yes",
+        "SEP_TEST_MODE": "1"
+      }
+    },
+    "analysis": {
+      "tasks": [
+        "SEP: Run CodeChecker Analysis",
+        "SEP: Store CodeChecker Results"
+      ],
+      "mcpTools": [
+        "semantic_search",
+        "analyze_issues"
+      ],
+      "reportPath": "/sep/reports"
+    },
+    "cycles": {
+      "tasks": [
+        "Cycles: Configure Build",
+        "Cycles: Build External"
+      ],
+      "launch": "Blender: Run with SEP",
+      "environment": {
+        "SEP_HAS_CYCLES": "1",
+        "SEP_BLENDER_MODE": "1"
+      }
     }
   }
 }

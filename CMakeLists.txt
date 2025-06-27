@@ -67,9 +67,13 @@ list(APPEND SEP_LINK_LIBS
     ${CYCLES_KERNEL_LIBRARY}
     ${CYCLES_DEVICE_LIBRARY}
     ${CYCLES_UTIL_LIBRARY}
-    ${CYCLES_OSL_LIBRARY}
     ${CYCLES_BVH_LIBRARY}
 )
+if(CYCLES_OSL_LIBRARY)
+    list(APPEND SEP_LINK_LIBS ${CYCLES_OSL_LIBRARY})
+else()
+    message(WARNING "Cycles OSL library not found; disabling OSL features.")
+endif()
 
 # Find and add Blender internal libraries
 find_library(BF_BLENKERNEL_LIBRARY NAMES bf_blenkernel PATHS ${CMAKE_SOURCE_DIR}/lib)
@@ -297,7 +301,6 @@ find_library(TBB_OPENSUBDIV_LIBRARY NAMES
 )
 
 message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")
-    ${TBB_LIBRARY}
 
 find_library(TBB_LIBRARY NAMES tbb)
 

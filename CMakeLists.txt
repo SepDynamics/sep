@@ -215,6 +215,31 @@ endif()
 # Add the general CYCLES_LIBRARIES which might contain other components like Cycles core
 # if find_package(CYCLES) manages to find a comprehensive set.
 list(APPEND CYCLES_ESSENTIAL_LIBS ${CYCLES_LIBRARIES})
+# --- OpenSubdiv and TBB configuration (mirrors tests setup) ---
+find_library(OPENSUBDIV_CPU_LIBRARY NAMES
+  osdCPU
+  libosdCPU.so
+  libosdCPU.so.3.6.0
+  PATHS
+  ${CMAKE_SOURCE_DIR}/lib
+  /usr/lib64
+  /usr/lib
+  /usr/local/lib
+)
+
+find_library(OPENSUBDIV_GPU_LIBRARY NAMES
+  osdGPU
+  libosdGPU.so
+  libosdGPU.so.3.6.0
+  PATHS
+  ${CMAKE_SOURCE_DIR}/lib
+  /usr/lib64
+  /usr/lib
+  /usr/local/lib
+)
+
+find_library(TBB_LIBRARY NAMES tbb)
+message(STATUS "Found TBB: ${TBB_LIBRARY}")
 
 # OpenSubdiv libraries require an older TBB version. Mirror the setup used by the
 # Cycles test target so the engine links against the correct combination.
@@ -250,6 +275,7 @@ find_library(TBB_OPENSUBDIV_LIBRARY NAMES
 )
 
 message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")
+    ${TBB_LIBRARY}
 
 find_library(TBB_LIBRARY NAMES tbb)
 
@@ -289,6 +315,9 @@ if(BOOST_REGEX_LIBRARY)
 endif()
 if(BOOST_FILESYSTEM_LIBRARY)
   list(APPEND OPENVDB_DEPS ${BOOST_FILESYSTEM_LIBRARY})
+endif()
+if(TBB_LIBRARY)
+  list(APPEND OPENVDB_DEPS ${TBB_LIBRARY})
 endif()
 
 # Find additional libraries needed by the main executable
@@ -377,6 +406,8 @@ target_link_libraries(sep_engine
     # Alembic with its dependencies
     ${ALEMBIC_LIBRARY}
     ${ALEMBIC_DEPS}
+    ${OPENSUBDIV_CPU_LIBRARY}
+    ${OPENSUBDIV_GPU_LIBRARY}
     # Additional libraries
     ${ZSTD_LIBRARY}
     ${OPENCOLORIO_LIBRARY}

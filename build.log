@@ -1,0 +1,86 @@
+[H[2J[3J==== SEP Engine Build Script with FULL Cycles and PipeWire Support ====
+Setting up build environment with real library paths - NO STUBS!
+Using Cycles root: /sep/extern/cycles
+Checking for PipeWire development headers...
+Warning: pkg-config found libpipewire-0.3 but library file not at /libpipewire-0.3.so. PipeWire disabled.
+Cleaning build directory...
+Running CMake configuration...
+-- The CXX compiler identification is GNU 14.2.1
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++-14 - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found CUDAToolkit: /usr/local/cuda-12.9/targets/x86_64-linux/include (found version "12.9.86")
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
+-- Found OSL_COMP_LIBRARY: /usr/lib64/liboslcomp.so
+-- Found OSL_EXEC_LIBRARY: /usr/lib64/liboslexec.so
+-- Found OSL_QUERY_LIBRARY: /usr/lib64/liboslquery.so
+CMake Warning at CMakeLists.txt:81 (message):
+  OPENSUBDIV_CPU_LIBRARY (osdCPU libosdCPU.so.3.6.0) not found.  Linking may
+  fail if required.
+Call Stack (most recent call first):
+  CMakeLists.txt:88 (find_and_add_library)
+
+
+CMake Warning at CMakeLists.txt:81 (message):
+  OPENSUBDIV_GPU_LIBRARY (osdGPU libosdGPU.so.3.6.0) not found.  Linking may
+  fail if required.
+Call Stack (most recent call first):
+  CMakeLists.txt:89 (find_and_add_library)
+
+
+CMake Warning at CMakeLists.txt:81 (message):
+  TBB_OPENSUBDIV_LIBRARY (tbb.so.2 libtbb.so.2) not found.  Linking may fail
+  if required.
+Call Stack (most recent call first):
+  CMakeLists.txt:90 (find_and_add_library)
+
+
+CMake Warning at CMakeLists.txt:81 (message):
+  OpenPGL_LIBRARY (OpenPGL pgl) not found.  Linking may fail if required.
+Call Stack (most recent call first):
+  CMakeLists.txt:91 (find_and_add_library)
+
+
+-- Found OPENVDB_LIBRARY: /usr/lib64/libopenvdb.so
+-- Found BLOSC_LIBRARY: /usr/lib64/libblosc.so
+-- Found TBB_LIBRARY: /usr/lib64/libtbb.so
+-- Found ALEMBIC_LIBRARY: /usr/lib64/libAlembic.so
+-- Found IMATH_LIBRARY: /usr/lib64/libImath.so
+-- Found GFLAGS_LIBRARY: /usr/lib64/libgflags.so
+-- Found GLOG_LIBRARY: /usr/lib64/libglog.so
+-- Found EMBREE_LIBRARY: /usr/lib64/libembree4.so
+-- Found ZSTD_LIBRARY: /usr/lib64/libzstd.so
+-- Found OPENCOLORIO_LIBRARY: /usr/lib64/libOpenColorIO.so
+-- Found OPENEXR_LIBRARY: /usr/lib64/libOpenEXR.so
+-- Found OPENIMAGEIO_LIBRARY: /usr/lib64/libOpenImageIO.so
+-- Found OPENIMAGEIO_UTIL_LIBRARY: /usr/lib64/libOpenImageIO_Util.so
+-- Found ZLIB_LIBRARY: /usr/lib64/libz.so
+-- Found PipeWire: pipewire-0.3
+-- Using custom CUDA compilation pipeline
+-- CUDA Path: /usr/local/cuda-12.9
+-- CUDA NVCC: /usr/local/cuda-12.9/bin/nvcc
+-- CUDA Host Compiler: /usr/bin/g++-14
+-- CUDA Architectures: 70;75;80;86;89
+-- CUDA Libraries: cudart;cudart_static;cudadevrt;cuda
+-- CUDA Library Dirs: /usr/local/cuda-12.9/lib64;/usr/local/cuda-12.9/targets/x86_64-linux/lib;/usr/local/cuda-12.9/targets/x86_64-linux/lib/stubs
+-- Configuring done (1.0s)
+CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
+Please set them or make sure they are set and tested correctly in the CMake files:
+CYCLES_OSL_LIBRARY
+    linked by target "sep_engine" in directory /sep
+    linked by target "cycles_test" in directory /sep/src/tests
+
+-- Generating done (0.0s)
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    SEP_HAS_PIPEWIRE
+    WITH_OPENIMAGEDENOISE
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.

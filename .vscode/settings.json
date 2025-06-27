@@ -2,7 +2,7 @@
     "files.autoSave": "onFocusChange",
     "files.autoSaveDelay": 10,
     // CodeChecker Integration
-    "codechecker.backend.compilationDatabasePath": "/sep/cmake-make/compile_commands.json",
+    "codechecker.backend.compilationDatabasePath": "compile_commands.json",
     "codechecker.backend.serverUrl": "http://localhost:8001",
     "codechecker.backend.productName": "sep-engine",
     // SEP Engine Project Settings
@@ -26,12 +26,12 @@
     },
     // C++ Configuration
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "C_Cpp.default.compileCommands": "${workspaceFolder}/cmake-make/compile_commands.json",
+    "C_Cpp.default.compileCommands": "compile_commands.json",
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/include",
         "${workspaceFolder}/include/sep",
         "${workspaceFolder}/extern/cycles/src",
-        "${workspaceFolder}/third_party/include"
+        "/usr/lib/include"
     ],
     // Clangd Configuration
     "clangd.arguments": [
@@ -48,8 +48,8 @@
     "cmake.configureArgs": [
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
         "-DCMAKE_BUILD_TYPE=Release",
-        "-DSEP_HAS_BLENDER=0",
-        "-DSEP_HAS_CYCLES=0",
+        "-DSEP_HAS_BLENDER=1",
+        "-DSEP_HAS_CYCLES=1",
         "-DSEP_HAS_CUDA=1"
     ],
     // File Associations

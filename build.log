@@ -1,0 +1,13 @@
+[H[2J[3J==== SEP Engine Build Script with FULL Cycles and PipeWire Support ====
+Setting up build environment with real library paths - NO STUBS!
+Using Cycles root: /sep/extern/cycles
+Checking for PipeWire development headers...
+Warning: pkg-config found libpipewire-0.3 but library file not at /libpipewire-0.3.so. PipeWire disabled.
+Cleaning build directory...
+Running CMake configuration...
+CMake Error at CMakeLists.txt:278:
+  Parse error.  Expected a command name, got unquoted argument with text
+  "${TBB_LIBRARY}".
+
+
+-- Configuring incomplete, errors occurred!

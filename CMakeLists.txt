@@ -284,6 +284,7 @@ add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 add_subdirectory(src/tests)
+add_subdirectory(tests/quantum)
 
 # === Main Executable Configuration ===
 add_executable(sep_engine src/main.cpp)

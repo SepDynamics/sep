@@ -238,3 +238,28 @@ Start with **Phase 0 and 1**. Getting a simple version string back from your `.s
 The custom build in Phase 3 is the ultimate goal, but it requires a solid understanding of Blender's source and build system. Master the addon approach first.
 
 Pick a phase and let's get building. You got this.
+
+## Component Dependencies
+
+The engine is split into optional components. Each module can be toggled via
+CMake options and requires certain third-party libraries:
+
+| Component       | Required Libraries      | CMake Option               |
+|-----------------|-------------------------|----------------------------|
+| Audio           | PipeWire                | `-DSEP_HAS_PIPEWIRE=ON`    |
+| Rendering       | OpenSubdiv, OpenPGL     | `-DWITH_RENDER=ON` (default)|
+| Volumetrics     | OpenVDB, Blosc, TBB     | `-DWITH_VOLUMETRICS=ON`     |
+
+Disable a component by passing the corresponding option to CMake with `OFF`.
+If a library is missing, the build scripts attempt to create symlinks in `lib/`
+using the `component_bridge` helper. Check `cmake` output for warnings about
+missing paths and ensure your system packages are installed.
+
+**Troubleshooting**
+
+* Verify `pkg-config` paths with `pkg-config --libs <name>`.
+* When `sep_audio` complains about PipeWire, ensure `libpipewire-0.3` is
+  installed. If pkg-config reports no library path, the audio module will be
+  disabled automatically.
+* OpenSubdiv symlinks in `lib/` can be inspected and updated manually if the
+  system libraries move to a new location

@@ -1,5 +1,6 @@
 #include <memory>
 
+#include "compat/cuda_runtime.h" // Ensure cudaStream_t is defined
 #include "compat/stream.h"
 
 namespace sep::cuda {

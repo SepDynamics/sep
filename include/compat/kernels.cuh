@@ -6,6 +6,7 @@
 #ifdef __CUDACC__
 #include <cmath>
 #include <cuda_runtime.h>
+#include "compat/cuda_helpers.h"
 #include <device_launch_parameters.h>
 #endif
 

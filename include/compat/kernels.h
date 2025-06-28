@@ -7,6 +7,7 @@
 
 #ifdef __CUDACC__
 #include <cuda_runtime.h>
+#include "compat/cuda_helpers.h"
 #endif
 
 namespace sep {

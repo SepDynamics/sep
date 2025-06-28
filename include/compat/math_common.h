@@ -49,6 +49,7 @@
 
 // Use the standard CUDA runtime instead of the custom wrapper
 #include <cuda_runtime.h>
+#include "compat/cuda_helpers.h"
 #endif
 
 // Include GLM after defining compatibility macros

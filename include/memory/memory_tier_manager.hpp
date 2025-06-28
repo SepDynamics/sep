@@ -38,6 +38,10 @@ namespace core {
 class SystemHooks;
 }
 
+namespace persistence {
+class RedisManager;
+}
+
 namespace memory {
 
 

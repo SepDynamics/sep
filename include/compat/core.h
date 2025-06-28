@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cuda_runtime.h>
+#include "compat/cuda_helpers.h"
 
 // Include the standard CUDA runtime first
 #include "compat/types.h"

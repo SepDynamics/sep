@@ -1,4 +1,5 @@
 #include "memory/quantum_coherence_manager.h"
+#include "compat/cuda.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "memory/memory_tier_manager.hpp"

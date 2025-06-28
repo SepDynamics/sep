@@ -2,7 +2,7 @@
 #include "memory/types.h"
 
 #if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
+#include "compat/cuda_common.h"
 #endif
 
 #include "compat/component_bridge.h"
@@ -33,7 +33,7 @@ MemoryTierManager::~MemoryTierManager() {
     shutdown();
 }
 
-void MemoryTierManager::init(const sep::memory::Config& config) override {
+void MemoryTierManager::init(const sep::memory::Config& config) {
     config_ = config;
     MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), config.stm_size};
     MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), config.mtm_size};
@@ -43,7 +43,7 @@ void MemoryTierManager::init(const sep::memory::Config& config) override {
     ltm_ = std::make_unique<MemoryTier>(lcfg);
 }
 
-void MemoryTierManager::shutdown() override {
+void MemoryTierManager::shutdown() {
     stm_.reset();
     mtm_.reset();
     ltm_.reset();
@@ -53,7 +53,7 @@ void MemoryTierManager::shutdown() override {
     redis_manager_.reset();
 }
 
-MemoryBlock* MemoryTierManager::allocate(std::size_t size, sep::memory::TierType tier) override {
+MemoryBlock* MemoryTierManager::allocate(std::size_t size, sep::memory::TierType tier) {
     MemoryTier* t = getTier(tier);
     if (!t)
         return nullptr;
@@ -63,7 +63,7 @@ MemoryBlock* MemoryTierManager::allocate(std::size_t size, sep::memory::TierType
     return blk;
 }
 
-void MemoryTierManager::deallocate(MemoryBlock* block) override {
+void MemoryTierManager::deallocate(MemoryBlock* block) {
     if (!block)
         return;
     lookup_map_.erase(block->ptr);
@@ -84,24 +84,24 @@ MemoryTier* MemoryTierManager::getTier(sep::memory::TierType tier) {
     }
 }
 
-double MemoryTierManager::getTierUtilization(sep::memory::TierType tier) const override {
+double MemoryTierManager::getTierUtilization(sep::memory::TierType tier) const {
     const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
     return t ? t->calculateUtilization() : 0.0;
 }
 
-double MemoryTierManager::getTierFragmentation(sep::memory::TierType tier) const override {
+double MemoryTierManager::getTierFragmentation(sep::memory::TierType tier) const {
     const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
     return t ? t->calculateFragmentation() : 0.0;
 }
 
-double MemoryTierManager::getTotalUtilization() const override {
+double MemoryTierManager::getTotalUtilization() const {
     double stm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::STM));
     double mtm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::MTM));
     double ltm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::LTM));
     return (stm_util + mtm_util + ltm_util) / 3.0;
 }
 
-double MemoryTierManager::getTotalFragmentation() const override {
+double MemoryTierManager::getTotalFragmentation() const {
     double stm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::STM));
     double mtm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::MTM));
     double ltm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::LTM));
@@ -115,7 +115,7 @@ std::size_t MemoryTierManager::getTotalAllocated() const {
     return used_stm + used_mtm + used_ltm;
 }
 
-void MemoryTierManager::rebuildLookup() override {
+void MemoryTierManager::rebuildLookup() {
     lookup_map_.clear();
 
     auto rebuild = [this](MemoryTier* tier) {
@@ -132,28 +132,28 @@ void MemoryTierManager::rebuildLookup() override {
     rebuild(ltm_.get());
 }
 
-void MemoryTierManager::defragmentTier(sep::memory::TierType tier) override {
+void MemoryTierManager::defragmentTier(sep::memory::TierType tier) {
     if (MemoryTier* t = getTier(tier))
         t->defragment();
 }
 
-void MemoryTierManager::optimizeBlocks() override {
+void MemoryTierManager::optimizeBlocks() {
     stm_->defragment();
     mtm_->defragment();
     ltm_->defragment();
 }
 
-void MemoryTierManager::optimizeTiers() override {
+void MemoryTierManager::optimizeTiers() {
     optimizeBlocks();
 }
 
-MemoryTier& MemoryTierManager::getSTM() override {
+MemoryTier& MemoryTierManager::getSTM() {
     return *stm_;
 }
-MemoryTier& MemoryTierManager::getMTM() override {
+MemoryTier& MemoryTierManager::getMTM() {
     return *mtm_;
 }
-MemoryTier& MemoryTierManager::getLTM() override {
+MemoryTier& MemoryTierManager::getLTM() {
     return *ltm_;
 }
 
@@ -202,7 +202,7 @@ sep::SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData
                                                             const pattern::PatternConfig& config,
                                                             size_t pattern_count,
                                                             const pattern::PatternData* previous_patterns,
-                                                            void* stream) override {
+                                                            void* stream) {
 #ifdef SEP_USE_CUDA
     cudaStream_t cuda_stream = static_cast<cudaStream_t>(stream);
     cudaError_t err = sep::cuda::launch_pattern_processing(
@@ -222,7 +222,7 @@ sep::SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData
 }
 
 void MemoryTierManager::updateBlockMetrics(MemoryBlock* block, float coherence, float stability,
-                                         std::uint32_t generation, float context_score) override {
+                                         std::uint32_t generation, float context_score) {
     if (!block)
         return;
     block->coherence = coherence;
@@ -253,13 +253,13 @@ MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, i
     return stm_.get();
 }
 
-void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type) override {
+void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type) {
     pattern_relationships_[id_a][id_b] = 1.0;  // Already using double
     pattern_relationships_[id_b][id_a] = 1.0;  // Already using double
     (void)type;  // Prevent unused parameter warning
 }
 
-void MemoryTierManager::removePattern(std::size_t id) override {
+void MemoryTierManager::removePattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end())
         return;
@@ -272,7 +272,7 @@ void MemoryTierManager::removePattern(std::size_t id) override {
         r.second.erase(id);
 }
 
-void MemoryTierManager::pruneWeakRelationships() override {
+void MemoryTierManager::pruneWeakRelationships() {
     for (auto& map : pattern_relationships_)
         for (auto it = map.second.begin(); it != map.second.end();)
             if (it->second < config_.demote_threshold)
@@ -281,7 +281,7 @@ void MemoryTierManager::pruneWeakRelationships() override {
                 ++it;
 }
 
-void MemoryTierManager::calculateRelationshipCoherence() override {
+void MemoryTierManager::calculateRelationshipCoherence() {
     for (auto& entry : pattern_relationships_) {
         std::size_t id = entry.first;
         const auto& rels = entry.second;
@@ -299,7 +299,7 @@ void MemoryTierManager::calculateRelationshipCoherence() override {
     }
 }
 
-void MemoryTierManager::loadLTMFromPersistence() override {
+void MemoryTierManager::loadLTMFromPersistence() {
     if (!redis_manager_ || !redis_manager_->isConnected())
         return;
     auto ids = redis_manager_->getPatternIds("ltm");
@@ -328,7 +328,7 @@ void MemoryTierManager::loadLTMFromPersistence() override {
     }
 }
 
-void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern& pattern) override {
+void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern& pattern) {
     if (!redis_manager_ || !redis_manager_->isConnected())
         return;
 
@@ -351,7 +351,7 @@ void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern& pattern) o
     redis_manager_->storePattern(id, data, "ltm");
 }
 
-quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) override {
+quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
@@ -368,7 +368,7 @@ quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) override {
     return pattern;
 }
 
-const quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const override {
+const quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
@@ -385,7 +385,7 @@ const quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const ove
     return pattern;
 }
 
-void MemoryTierManager::cleanupExpiredPatterns() override {
+void MemoryTierManager::cleanupExpiredPatterns() {
     std::vector<std::size_t> to_remove;
     for (const auto& p : pattern_registry_) {
         if (p.second->coherence < static_cast<double>(config_.demote_threshold))
@@ -395,7 +395,7 @@ void MemoryTierManager::cleanupExpiredPatterns() override {
         removePattern(id);
 }
 
-void MemoryTierManager::prunePatternsByPriority(sep::memory::TierType tier, size_t max_count) override {
+void MemoryTierManager::prunePatternsByPriority(sep::memory::TierType tier, size_t max_count) {
     MemoryTier* t = getTier(tier);
     if (!t)
         return;
@@ -417,11 +417,11 @@ void MemoryTierManager::prunePatternsByPriority(sep::memory::TierType tier, size
     }
 }
 
-void MemoryTierManager::registerPattern(std::size_t id, const pattern::PatternData& pattern) override {
+void MemoryTierManager::registerPattern(std::size_t id, const pattern::PatternData& pattern) {
     pattern_registry_[id] = std::make_unique<pattern::PatternData>(pattern);
 }
 
-const pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const override {
+const pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     return it == pattern_registry_.end() ? nullptr : it->second.get();
 }

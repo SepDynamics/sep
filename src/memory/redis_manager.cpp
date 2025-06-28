@@ -1,4 +1,5 @@
 #include "memory/types.h"
+#include "memory/redis_manager.h"
 #include "memory/manager.h" // For logging manager
 
 // Define namespace alias to clarify that Manager is in the logging namespace

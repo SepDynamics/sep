@@ -2,6 +2,7 @@
 #include "audio/pipewire_capture.h"
 #include "audio/pipewire_stubs.h"
 #include "blender/bridge.h"
+#include "blender/api.h"
 #include "blender/cycles_renderer.h"
 
 namespace sep {
@@ -19,8 +20,10 @@ std::unique_ptr<audio::AudioCapture> createAudioCapture() {
 std::unique_ptr<audio::AudioCapture> createAudioCaptureStub() { // Fix: Add missing stub definition
     return std::make_unique<audio::PipeWireCaptureStub>();
 }
-std::shared_ptr<pattern::BlenderBridge> createBlenderBridge() {
-    return std::make_shared<pattern::BlenderBridge>();
+std::unique_ptr<SEPBlenderBridge> createBlenderBridge() {
+    auto bridge = std::make_unique<SEPBlenderBridge>();
+    bridge->impl = std::make_shared<pattern::BlenderBridge>();
+    return bridge;
 }
 
 std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer() {

@@ -4,6 +4,7 @@
 #include "audio/config.h"
 #include "audio/pipewire_includes.h"
 #include "compat/component_bridge.h"
+#include "compat/math_common.h"
 
 
 // Standard library headers
@@ -33,8 +34,6 @@ struct PWInit
 static PWInit pw_init_once;
 
 PipeWireCapture::PipeWireCapture() = default;
-
-namespace PipeWireCapture {
 const struct pw_stream_events createStreamEvents()
 {
     struct pw_stream_events events = {};

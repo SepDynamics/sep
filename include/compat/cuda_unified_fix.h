@@ -129,9 +129,9 @@ CUDA_UNIFIED_FIX_END_SCOPE()
 #ifdef __CUDACC__
 #endif
 
-// Ensure c++17 ABI compatibility
-#ifndef SEP_LIBCXX_USE_CXX17_ABI
-#define SEP_LIBCXX_USE_CXX17_ABI 1
+// Ensure c++20 ABI compatibility
+#ifndef SEP_LIBCXX_USE_CXX20_ABI
+#define SEP_LIBCXX_USE_CXX20_ABI 1
 #endif
 
 // Floating point classification constants (IEEE 754 standard)

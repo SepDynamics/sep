@@ -1,7 +1,7 @@
 #pragma once
 
 #include "compat/raii.h"
-#include "compat/cuda_defs.h"
+#include "compat/cuda_common.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "memory/memory_tier.hpp"

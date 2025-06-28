@@ -6,11 +6,7 @@
 #include "compat/cuda_helpers.h"
 
 // GLM isolation layer
-#if defined(__CUDACC__) || defined(SEP_USE_CUDA)
-#include <cuda_runtime.h>
-#else
-#include "compat/cuda_impl.h"
-#endif
+#include "compat/cuda_common.h"
 
 #include "compat/core.h"
 #include "compat/event.h"

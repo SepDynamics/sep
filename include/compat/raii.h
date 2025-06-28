@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "compat/math_common.h"
-#include "compat/cuda_defs.h"
+#include "compat/cuda_common.h"
 #include "core/types.h"
 
 namespace sep {

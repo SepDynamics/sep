@@ -235,9 +235,75 @@ void MemoryTierManager::pruneWeakRelationships() {
                 ++it;
 }
 
-void MemoryTierManager::calculateRelationshipCoherence() {}
-void MemoryTierManager::loadLTMFromPersistence() {}
-void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern&) {}
+void MemoryTierManager::calculateRelationshipCoherence() {
+    for (auto& entry : pattern_relationships_) {
+        std::size_t id = entry.first;
+        const auto& rels = entry.second;
+        float avg = 0.0f;
+        if (!rels.empty()) {
+            float sum = 0.0f;
+            for (const auto& r : rels)
+                sum += static_cast<float>(r.second);
+            avg = sum / static_cast<float>(rels.size());
+        }
+        auto pit = pattern_registry_.find(id);
+        if (pit != pattern_registry_.end()) {
+            pit->second->coherence = avg;
+        }
+    }
+}
+
+void MemoryTierManager::loadLTMFromPersistence() {
+    if (!redis_manager_ || !redis_manager_->isConnected())
+        return;
+    auto ids = redis_manager_->getPatternIds("ltm");
+    for (std::size_t id : ids) {
+        auto data_opt = redis_manager_->loadPattern(id, "ltm");
+        if (!data_opt)
+            continue;
+        ltm_->addPattern(id, *data_opt);
+
+        auto pat = std::make_unique<pattern::PatternData>();
+        pat->id = std::to_string(id);
+        pat->generation = data_opt->generation_count;
+        pat->position = glm::vec4(data_opt->position, 0.0f);
+        pat->coherence = data_opt->coherence;
+        pat->stability = data_opt->stability;
+        pat->memory_tier = MemoryTierEnum::LTM;
+        for (const auto& rel : data_opt->relationship_data) {
+            quantum::PatternRelationship pr;
+            pr.targetId = std::to_string(rel.id);
+            pr.type = static_cast<quantum::RelationshipType>(rel.type);
+            pr.strength = rel.strength;
+            pat->relationships.push_back(pr);
+            pattern_relationships_[id][rel.id] = rel.strength;
+        }
+        pattern_registry_[id] = std::move(pat);
+    }
+}
+
+void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern& pattern) {
+    if (!redis_manager_ || !redis_manager_->isConnected())
+        return;
+
+    persistence::PatternData data{};
+    data.position = glm::vec3(pattern.position);
+    data.coherence = pattern.quantum_state.coherence;
+    data.stability = pattern.quantum_state.stability;
+    data.generation_count = pattern.quantum_state.generation;
+    data.access_frequency = pattern.quantum_state.access_frequency;
+    data.timestamp = shim::chrono::system_clock::now();
+    for (const auto& rel : pattern.relationships) {
+        persistence::RelationshipData rd{};
+        rd.id = rel.targetId.empty() ? 0 : std::stoull(rel.targetId);
+        rd.type = static_cast<uint8_t>(rel.type);
+        rd.strength = rel.strength;
+        data.relationships.push_back(rd.id);
+        data.relationship_data.push_back(rd);
+    }
+    std::size_t id = pattern.id.empty() ? 0 : std::stoull(pattern.id);
+    redis_manager_->storePattern(id, data, "ltm");
+}
 
 quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
@@ -273,7 +339,45 @@ const quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
     return pattern;
 }
 
-void MemoryTierManager::cleanupExpiredPatterns() {}
-void MemoryTierManager::prunePatternsByPriority(sep::memory::TierType, size_t) {}
+void MemoryTierManager::cleanupExpiredPatterns() {
+    std::vector<std::size_t> to_remove;
+    for (const auto& p : pattern_registry_) {
+        if (p.second->coherence < config_.demote_threshold)
+            to_remove.push_back(p.first);
+    }
+    for (std::size_t id : to_remove)
+        removePattern(id);
+}
+
+void MemoryTierManager::prunePatternsByPriority(sep::memory::TierType tier, size_t max_count) {
+    MemoryTier* t = getTier(tier);
+    if (!t)
+        return;
+    const auto& patterns = t->getPatterns();
+    if (patterns.size() <= max_count)
+        return;
+
+    std::vector<std::pair<std::size_t, float>> ids;
+    ids.reserve(patterns.size());
+    for (const auto& pair : patterns)
+        ids.emplace_back(pair.first, pair.second.coherence);
+    std::sort(ids.begin(), ids.end(), [](auto& a, auto& b) { return a.second > b.second; });
+    for (size_t i = max_count; i < ids.size(); ++i) {
+        std::size_t id = ids[i].first;
+        if (pattern_registry_.count(id))
+            removePattern(id);
+        else
+            t->removePattern(id);
+    }
+}
+
+void MemoryTierManager::registerPattern(std::size_t id, const pattern::PatternData& pattern) {
+    pattern_registry_[id] = std::make_unique<pattern::PatternData>(pattern);
+}
+
+const pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
+    auto it = pattern_registry_.find(id);
+    return it == pattern_registry_.end() ? nullptr : it->second.get();
+}
 
 }  // namespace sep::memory

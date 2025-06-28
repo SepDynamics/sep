@@ -8,6 +8,7 @@ sep_engine
 extern/*
 build/
 _build/
+changes.diff
 out/
 dist/
 bin/

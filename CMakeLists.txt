@@ -91,7 +91,16 @@ list(APPEND SEP_LINK_LIBS ${EXTERN_CUEW_LIBRARY} ${EXTERN_HIPEW_LIBRARY})
 
 # Find and add all other external dependencies conditionally
 macro(find_and_add_library var_name names)
-    find_library(${var_name} NAMES ${names})
+    find_library(
+        ${var_name}
+        NAMES ${names}
+        PATHS
+            ${CMAKE_SOURCE_DIR}/lib
+            /usr/lib64
+            /usr/local/lib
+            ${CMAKE_INSTALL_PREFIX}/lib
+            /usr/lib
+    )
     if(${var_name})
         message(STATUS "Found ${var_name}: ${${var_name}}")
         list(APPEND SEP_LINK_LIBS ${${var_name}})
@@ -105,6 +114,36 @@ find_and_add_library(OSL_EXEC_LIBRARY "oslexec")
 find_and_add_library(OSL_QUERY_LIBRARY "oslquery")
 find_and_add_library(OPENSUBDIV_CPU_LIBRARY "osdCPU libosdCPU.so.3.6.0")
 find_and_add_library(OPENSUBDIV_GPU_LIBRARY "osdGPU libosdGPU.so.3.6.0")
+if(NOT OPENSUBDIV_CPU_LIBRARY)
+    find_library(SYS_OSDCPU
+        NAMES osdCPU libosdCPU.so libosdCPU.so.3.6.0
+        PATHS /usr/lib64 /usr/lib /usr/local/lib
+    )
+    if(SYS_OSDCPU)
+        file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+        get_filename_component(osd_cpu_name ${SYS_OSDCPU} NAME)
+        set(OSDCPU_LINK ${CMAKE_SOURCE_DIR}/lib/${osd_cpu_name})
+        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${SYS_OSDCPU} ${OSDCPU_LINK})
+        set(OPENSUBDIV_CPU_LIBRARY ${OSDCPU_LINK})
+        list(APPEND SEP_LINK_LIBS ${OPENSUBDIV_CPU_LIBRARY})
+        message(STATUS "Symlinked OpenSubdiv CPU library: ${OSDCPU_LINK}")
+    endif()
+endif()
+if(NOT OPENSUBDIV_GPU_LIBRARY)
+    find_library(SYS_OSDGPU
+        NAMES osdGPU libosdGPU.so libosdGPU.so.3.6.0
+        PATHS /usr/lib64 /usr/lib /usr/local/lib
+    )
+    if(SYS_OSDGPU)
+        file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+        get_filename_component(osd_gpu_name ${SYS_OSDGPU} NAME)
+        set(OSDGPU_LINK ${CMAKE_SOURCE_DIR}/lib/${osd_gpu_name})
+        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${SYS_OSDGPU} ${OSDGPU_LINK})
+        set(OPENSUBDIV_GPU_LIBRARY ${OSDGPU_LINK})
+        list(APPEND SEP_LINK_LIBS ${OPENSUBDIV_GPU_LIBRARY})
+        message(STATUS "Symlinked OpenSubdiv GPU library: ${OSDGPU_LINK}")
+    endif()
+endif()
 find_and_add_library(TBB_OPENSUBDIV_LIBRARY "tbb.so.2 libtbb.so.2")
 find_and_add_library(OpenPGL_LIBRARY "OpenPGL pgl")
 find_and_add_library(OPENVDB_LIBRARY "openvdb")
@@ -297,7 +336,6 @@ find_library(TBB_OPENSUBDIV_LIBRARY NAMES
 )
 
 message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")
-    ${TBB_LIBRARY}
 
 find_library(TBB_LIBRARY NAMES tbb)
 

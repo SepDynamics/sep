@@ -1,8 +1,6 @@
 #include <memory>
 
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#endif
+#include "compat/cuda_common.h"
 
 #include "compat/stream.h"
 #include "compat/cuda_runtime.h" // ensure cudaStream_t is defined

@@ -1,3 +1,4 @@
+#include "memory/redis_manager.h"
 #include "memory/types.h"
 #include "memory/manager.h" // For logging manager
 

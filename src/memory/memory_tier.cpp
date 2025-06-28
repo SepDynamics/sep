@@ -19,7 +19,6 @@
 // CUDA headers after standard library
 #include "compat/cuda_common.h"
 #include "compat/macros.h"
-#include "compat/cuda_impl.h"
 
 #include "compat/math_common.h"
 #include "memory/logger.hpp"

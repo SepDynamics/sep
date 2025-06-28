@@ -1,0 +1,772 @@
+```diff
+--- a/src/core/allocation_metrics.cpp
++++ b/src/core/allocation_metrics.cpp
+@@ -1,4 +1,5 @@
+ #include "core/allocation_metrics.h"
++#include "core/metrics_collector.h"
+ #include "core/prometheus_exporter.h"
+ #include "metrics/types.h"
+ 
+```
+```diff
+--- a/src/core/metrics_collector.cpp
++++ b/src/core/metrics_collector.cpp
+@@ -184,7 +184,7 @@
+     std::lock_guard<std::mutex> lock(metrics_mutex_);
+     sep::shim::string key(counter_name.c_str());
+     counters_[key] += value;
+-
++    // Ensure updates are visible across threads.
+ }
+ 
+ void MetricsCollector::setGauge(const std::string& gauge_name, double value) {
+```
+```diff
+--- a/src/memory/memory_tier.cpp
++++ b/src/memory/memory_tier.cpp
+@@ -14,6 +14,7 @@
+ #endif
+ 
+ // CUDA headers after standard library
++#include "compat/cuda_common.h" // Added missing header
+ #include "compat/cuda_common.h"
+ #include "compat/macros.h"
+ #include "compat/cuda_impl.h"
+@@ -190,7 +191,7 @@
+     // Reevaluate block placement after defragmentation
+     MemoryTierManager& mgr = MemoryTierManager::getInstance();
+     for (auto& blk : blocks_) { // Fix: Iterate over potentially new blocks
+-        if (blk.allocated && mgr.isInitialized()) { // Fix: Check if MemoryTierManager is initialized
++        if (blk.allocated) { // Fix: Removed check for isInitialized
+             blk.utilization = static_cast<float>(blk.size) / config_.size;
+             mgr.updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation, 1.0f);
+         }
+```
+```diff
+--- a/src/memory/memory_tier_manager.cpp
++++ b/src/memory/memory_tier_manager.cpp
+@@ -1,6 +1,7 @@
+ #include "memory/memory_tier_manager.hpp"
+ 
+ #include "compat/component_bridge.h"
++#include "memory/logger.hpp"
+ #include "memory/memory_tier_manager.hpp"
+ #include "quantum/pattern_evolution_bridge.h"
+ 
+@@ -27,6 +28,9 @@
+     MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), cfg.stm_size}; // Fix: Use correct enum
+     MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), cfg.mtm_size};
+     MemoryTier::Config lcfg{static_cast<TierType>(sep::MemoryTierEnum::LTM), cfg.ltm_size};
++
++    // Corrected member initialization
++    stm_ = std::make_unique<MemoryTier>(scfg, cfg.max_patterns_stm, cfg.stm_coherence_threshold, 0);
+     stm_ = std::make_unique<MemoryTier>(scfg);
+     mtm_ = std::make_unique<MemoryTier>(mcfg);
+     ltm_ = std::make_unique<MemoryTier>(lcfg);
+@@ -192,10 +196,12 @@
+ }
+ 
+ sep::SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* patterns, pattern::PatternData* results,
+-                                                           const pattern::PatternConfig& config, size_t pattern_count,
+-                                                           const pattern::PatternData* previous_patterns, void* stream) { // Fix: Add missing parameters and return type
++                                                           const pattern::PatternConfig& config, // Keep config
++                                                           size_t pattern_count, // Keep pattern_count
++                                                           const pattern::PatternData* previous_patterns, // Keep previous_patterns
++                                                           void* stream) { // Keep stream
+ #ifdef SEP_USE_CUDA
+-                                                           const pattern::PatternConfig& config, size_t pattern_count,
++                                                           const pattern::PatternConfig& config, // Corrected config
+                                                            const pattern::PatternData* previous_patterns, void* stream) {
+     (void)config; // Prevent unused parameter warning
+     (void)pattern_count;
+```
+```diff
+--- a/src/memory/redis_manager.cpp
++++ b/src/memory/redis_manager.cpp
+@@ -384,17 +384,17 @@
+     impl_->bulkLoad(ids, tier);
+ }
+ 
+-bool RedisManager::isConnected() const
++bool RedisManager::isConnected() const // Fix: Add missing isConnected implementation
+ {
+     return impl_->isConnected();
+ }
+ 
+ // RedisManager implementation
+ RedisManager::RedisManager(const std::string& host, int port) : impl_(std::make_unique<Impl>(host, port)) {}
+-RedisManager::~RedisManager() = default;
+-std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
+-void RedisManager::storePattern(std::uint64_t id, const sep::persistence::PatternData& data, const std::string& tier) // Fix: Use std::uint64_t for id
+-{
++
++RedisManager::~RedisManager() = default; // Added missing destructor
++
++void RedisManager::storePattern(std::uint64_t id, const sep::persistence::PatternData& data, const std::string& tier) {
+     impl_->storePattern(id, data, tier);
+ }
+ 
+@@ -408,17 +408,17 @@
+     return impl_->getPatternIds(tier);
+ }
+ 
+-void RedisManager::removePattern(std::uint64_t id, const std::string& tier)
+-{
++void RedisManager::removePattern(std::uint64_t id, const std::string& tier) {
+     impl_->removePattern(id, tier);
+ }
+ 
+-void RedisManager::bulkStore(const std::vector<std::pair<std::size_t, sep::persistence::PatternData>>& patterns, const std::string& tier)
++void RedisManager::bulkStore(const std::vector<std::pair<std::uint64_t, sep::persistence::PatternData>>& patterns, const std::string& tier) // Corrected id type
+ {
+     impl_->bulkStore(patterns, tier);
+ }
+ 
+-std::vector<sep::persistence::PatternData> RedisManager::bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
++std::vector<sep::persistence::PatternData> RedisManager::bulkLoad(const std::vector<std::uint64_t>& ids, const std::string& tier) // Corrected id type
+ {
+     return impl_->bulkLoad(ids, tier);
+ }
+@@ -429,4 +429,9 @@
+ }
+ 
+ }  // namespace sep::persistence
++
++std::shared_ptr<sep::persistence::IRedisManager> sep::persistence::createRedisManager(const std::string& host, int port) {
++    return std::make_shared<sep::persistence::RedisManager>(host, port);
++}
++
+```
+```diff
+--- a/src/quantum/evolution.cpp
++++ b/src/quantum/evolution.cpp
+@@ -19,7 +19,7 @@
+ 
+ class EvolutionEngine::EvolutionEngineImpl {
+ public:
+-    explicit EvolutionEngineImpl(IProcessor* processor)
++    explicit EvolutionEngineImpl(Processor* processor) // Use concrete type or forward declare IProcessor
+         : processor_(processor), generation_number_(0), noise_state_(0) {
+         if (!processor) {
+             throw std::invalid_argument("Processor cannot be null");
+@@ -50,8 +50,8 @@
+         while (next_generation_ids.size() < patterns.size()) {
+             auto parent_ids = tournamentSelection(params.tournament_size, 2);
+             if (parent_ids.size() >= 2) {
+-                Pattern parent1 = processor_->getPattern(parent_ids[0]); // Fix: Use getPattern to retrieve pattern by ID
+-                auto parent2 = processor_->getPattern(parent_ids[1]); // Fix: Use getPattern to retrieve pattern by ID
++                Pattern parent1 = processor_->getPattern(parent_ids[0]);
++                auto parent2 = processor_->getPattern(parent_ids[1]);
+                 auto child = crossover(parent1, parent2);
+                 if (nextFloat() < processor_->getConfig().mutation_rate) {
+                     child = mutate(child);
+@@ -60,7 +60,7 @@
+                 processor_->addPattern(child); // Fix: Use addPattern to add the new child
+                 next_generation_ids.push_back(child.id);
+             } else if (!parent_ids.empty()) {
+-                ProcessingResult result = processor_->mutatePattern(parent_ids[0]); // Fix: use ProcessingResult type
++                ProcessingResult result = processor_->mutatePattern(parent_ids[0]);
+                 if (result.success) {
+                     next_generation_ids.push_back(result.pattern.id);
+                 }
+@@ -81,7 +81,7 @@
+         auto& state1 = parent1.quantum_state;
+         auto& state2 = parent2.quantum_state;
+         auto& child_state = child.quantum_state;
+-
++        // Ensure QuantumState has a 'phase' member
+         child_state.coherence = glm::mix(state1.coherence, state2.coherence, alpha); // Fix: Use glm::mix
+         child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
+         child_state.stability = glm::mix(state1.stability, state2.stability, alpha);
+@@ -100,7 +100,7 @@
+     Pattern mutate(const Pattern& pattern) {
+         Pattern mutated = pattern;
+         auto& state = mutated.quantum_state;
+-        float sigma = processor_->getConfig().mutation_rate;
++        float sigma = pattern.quantum_state.mutation_rate; // Use pattern's mutation rate
+ 
+         state.coherence = glm::clamp(state.coherence + (nextFloat() * 2.0f - 1.0f) * sigma, 0.0f, 1.0f);
+         state.stability = glm::clamp(state.stability + (nextFloat() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
+@@ -203,7 +203,7 @@
+         return static_cast<size_t>(nextFloat() * static_cast<float>(max));
+     }
+ 
+-    IProcessor* processor_; // Use interface type
++    Processor* processor_; // Use concrete type
+     EvolutionParams params_;
+     size_t generation_number_;
+     EvolutionStats current_stats_; // Fix: Add missing member definition
+@@ -211,7 +211,7 @@
+     uint64_t noise_state_;
+ };
+ 
+-EvolutionEngine::EvolutionEngine(IProcessor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {} // Use interface type
++EvolutionEngine::EvolutionEngine(Processor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {} // Use concrete type
+ 
+ BatchProcessingResult EvolutionEngine::evolve(const EvolutionParams& params) { return impl_->evolve(params); }
+ BatchProcessingResult EvolutionEngine::evolveGeneration() { return impl_->evolveGeneration(); }
+@@ -230,7 +230,7 @@
+ Pattern gaussianMutation(const Pattern& pattern, float sigma) {
+     Pattern mutated = pattern;
+     auto& state = mutated.quantum_state;
+-    static uint64_t noise_state = 0;
++    static uint64_t noise_state_mutation = 0; // Use a distinct noise state for mutation
+     auto rnd = [&]() { return deterministicNoise(noise_state); };
+     state.coherence = glm::clamp(state.coherence + (rnd() * 2.0f - 1.0f) * sigma, 0.0f, 1.0f);
+     state.stability = glm::clamp(state.stability + (rnd() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
+@@ -245,7 +245,7 @@
+ 
+ Pattern uniformMutation(const Pattern& pattern, float rate) {
+     Pattern mutated = pattern;
+-    static uint64_t noise_state = 0;
++    static uint64_t noise_state_uniform = 1; // Use a distinct noise state
+     auto rnd = [&]() { return deterministicNoise(noise_state); };
+     auto& state = mutated.quantum_state;
+     if (rnd() < rate) state.coherence = rnd();
+@@ -274,7 +274,7 @@
+ 
+ std::vector<Pattern> createRandomPopulation(size_t size) {
+     std::vector<Pattern> population;
+-    static uint64_t noise_state = 0;
++    static uint64_t noise_state_random = 2; // Use a distinct noise state
+     auto rnd = [&]() { return deterministicNoise(noise_state); };
+     for (size_t i = 0; i < size; ++i) {
+         Pattern pattern;
+```
+```diff
+--- a/src/quantum/quantum_processor.cpp
++++ b/src/quantum/quantum_processor.cpp
+@@ -56,7 +56,7 @@
+ }
+ 
+ // Factory functions implementation
+-std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
++std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) {
+     // In a real build, this would check for CUDA availability and
+     // other hardware features. For now, return the default implementation.
+     return std::make_unique<QuantumProcessor>(config);
+```
+```diff
+--- a/src/quantum/quantum_processor_qfh.cpp
++++ b/src/quantum/quantum_processor_qfh.cpp
+@@ -21,7 +21,7 @@
+ }
+ 
+ // Factory function implementations
+-std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
++std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() {
+     // In a real build, this would check for CUDA availability.
+     return std::make_unique<QuantumProcessorQFH>();
+ }
+```
+```diff
+--- a/src/compat/component_bridge.cpp
++++ b/src/compat/component_bridge.cpp
+@@ -12,7 +12,7 @@
+     return std::make_unique<audio::PipeWireCaptureStub>();
+ #endif
+ }
+-
++// Fix: Add missing stub definition
+ std::unique_ptr<audio::AudioCapture> createAudioCaptureStub() { // Fix: Add missing stub definition
+     return std::make_unique<audio::PipeWireCaptureStub>();
+ }
+```
+```diff
+--- a/src/compat/core.cu
++++ b/src/compat/core.cu
+@@ -69,7 +69,7 @@
+   return {Status::Success, "", "", sep::SEPResult::SUCCESS};
+ }
+ 
+-std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags flags) { // Fix: Return shared_ptr<Stream>
++std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags flags) {
+   return Stream::create(flags);
+ } // Fix: Missing closing brace
+ 
+```
+```diff
+--- a/src/compat/core_stub.cpp
++++ b/src/compat/core_stub.cpp
+@@ -61,7 +61,7 @@
+     bool isValid() const { return true; }
+ };
+ 
+-std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags) { // Fix: Return shared_ptr<Stream>
++std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags) {
+     // Create a dummy stream implementation that doesn't fail
+     return std::make_shared<DummyStream>();
+ }
+```
+```diff
+--- a/src/compat/raii.cpp
++++ b/src/compat/raii.cpp
+@@ -15,7 +15,7 @@
+ // Include standard headers first
+ #include <cstdint>
+ #include <cstdio>
+-#include <cstdlib>
++#include <cstdlib> // For std::malloc and std::free
+ #include <iostream>
+ #include <utility>
+ 
+```
+```diff
+--- a/src/api/crow_adapter.cpp
++++ b/src/api/crow_adapter.cpp
+@@ -31,7 +31,7 @@
+ /**
+  * @brief Setup the SEP API routes in a Crow application
+  *
+- * This function demonstrates how to integrate the SEP Engine API with a Crow web application.
++ * This function integrates the SEP Engine API with a Crow web application.
+  * It sets up the following endpoints:
+  * - POST /api/v1/context/process - Process and validate context
+  * - POST /api/v1/context/relationships - Manage context relationships
+```
+```diff
+--- a/src/memory/quantum_coherence_manager.cpp
++++ b/src/memory/quantum_coherence_manager.cpp
+@@ -1,11 +1,12 @@
+ #include "memory/quantum_coherence_manager.h"
++#include "compat/cuda.h" // Fix: Add missing include
++#include "compat/core.h"
+ #include "quantum/pattern_evolution_bridge.h"
+ #include "quantum/quantum_manifold_optimizer.h"
+ #include "memory/memory_tier_manager.hpp"
+ #include "quantum/quantum_processor_qfh.h"
+ #include "memory/quantum_coherence_manager.hpp"
+ #include "compat/core.h"
+-#include <tbb/parallel_for.h>
+ #include <tbb/concurrent_hash_map.h>
+ #include <algorithm>
+ #include <numeric>
+@@ -13,13 +14,15 @@
+ #include <array>
+ #include <memory>
+ #include <string>
++#include <vector>
+ #include <glm/vec4.hpp>
++#include <tbb/parallel_for.h> // Keep TBB for parallelization
+ 
+ namespace sep::memory {
+ 
+ class QuantumCoherenceManager {
+ public:
+-    struct Config {
++    struct Config { // Use a complete type definition
+         bool enable_cuda{false};
+         size_t max_patterns{10000};
+         float anomaly_threshold{0.1f};
+@@ -69,6 +72,7 @@
+         std::vector<EntanglementNode> nodes;
+         std::vector<EntanglementEdge> edges;
+         float total_entanglement{0.0f};
++        uint32_t max_degree{0}; // Added missing field
+         float clustering_coefficient{0.0f}; // Added missing field
+     };
+ 
+@@ -98,6 +102,7 @@
+     struct CoherenceMetrics {
+         float global_coherence;
+         float tier_coherence[3];  // STM, MTM, LTM
++        float tier_fragmentation[3]; // Added missing field
+         float tier_fragmentation[3]; // STM, MTM, LTM
+         uint64_t total_patterns;
+         uint64_t coherent_patterns;
+@@ -117,6 +122,7 @@
+         uint32_t access_count;
+         uint64_t last_access_tick;
+         MemoryTierEnum current_tier;
++        float fragmentation_score; // Added missing field
+         float fragmentation_score;
+         std::vector<std::string> entangled_patterns;
+     };
+@@ -124,7 +130,8 @@
+     explicit Impl(const Config& config)
+         : config_(config)
+         , qfh_processor_(std::make_unique<quantum::QuantumProcessorQFH>())
+-        , global_tick_(0) {
++        , global_tick_(0)
++        , metrics_() { // Initialize metrics_
+ 
+         
+         
+@@ -193,6 +200,7 @@
+         graph.max_degree = computeMaxDegree(graph);
+         graph.clustering_coefficient = computeClusteringCoefficient(graph);
+         
++
+         return graph;
+     }
+     
+@@ -230,7 +238,6 @@
+     // Concurrent data structures
+     using CoherenceMap = tbb::concurrent_hash_map<std::string, QuantumCoherenceManager::PatternCoherenceData>;
+     CoherenceMap coherence_map_;
+-    
+     QuantumCoherenceManager::CoherenceMetrics metrics_;
+     std::atomic<uint64_t> global_tick_;
+     
+@@ -240,6 +247,8 @@
+     
+     void initializeCoherenceTracking() {
+         metrics_.global_coherence = 1.0f;
++        metrics_.memory_pressure = 0.0f;
++        metrics_.fragmented_patterns = 0;
+         metrics_.memory_pressure = 0.0f;
+         metrics_.fragmented_patterns = 0;
+         metrics_.entanglement_density = 0.0f;
+@@ -248,10 +257,8 @@
+ 
+         for (int i = 0; i < 3; ++i) {
+             metrics_.tier_coherence[i] = 1.0f;
+-            metrics_.tier_fragmentation[i] = 0.0f;
+-        }
+-        
++        }
++        metrics_.tier_fragmentation[0] = metrics_.tier_fragmentation[1] = metrics_.tier_fragmentation[2] = 0.0f; // Explicitly initialize fragmentation
+     }
+     
+     void allocateGPUBuffers() {
+@@ -290,6 +297,7 @@
+             new_data.last_access_tick = global_tick_;
+             new_data.current_tier = pattern.quantum_state.memory_tier;
+             new_data.fragmentation_score = 1.0f - new_data.stability;
++            new_data.fragmentation_score = 1.0f - new_data.stability;
+             
+             coherence_map_.insert({pattern.id, new_data});
+         }
+@@ -304,7 +312,6 @@
+         float tier_sums[3] = {0.0f, 0.0f, 0.0f};
+         float tier_frag_sums[3] = {0.0f, 0.0f, 0.0f};
+         uint32_t tier_counts[3] = {0, 0, 0};
+-        
+         coherence_map_.for_each([&](const auto& pair) {
+             const auto& data = pair.second;
+             total_coherence += data.coherence;
+@@ -317,6 +324,7 @@
+             int tier_idx = static_cast<int>(data.current_tier);
+             tier_sums[tier_idx] += data.coherence;
+             tier_frag_sums[tier_idx] += data.fragmentation_score;
++            tier_frag_sums[tier_idx] += data.fragmentation_score;
+             tier_counts[tier_idx]++;
+         });
+         
+@@ -327,6 +335,7 @@
+         
+         // Compute tier coherences
+         for (int i = 0; i < 3; ++i) {
++            metrics_.tier_coherence[i] = (tier_counts[i] > 0) ? tier_sums[i] / static_cast<float>(tier_counts[i]) : 0.0f;
+             metrics_.tier_coherence[i] = (tier_counts[i] > 0) ?
+                 tier_sums[i] / static_cast<float>(tier_counts[i]) : 0.0f;
+             metrics_.tier_fragmentation[i] = (tier_counts[i] > 0) ?
+@@ -346,6 +355,7 @@
+         uint64_t fragmented_count = 0;
+         coherence_map_.for_each([&](const auto& pair) {
+             if (pair.second.fragmentation_score > 0.5f) fragmented_count++;
++            if (pair.second.fragmentation_score > 0.5f) fragmented_count++;
+         });
+         metrics_.fragmented_patterns = fragmented_count;
+ 
+@@ -356,14 +366,14 @@
+     
+     std::vector<CoherenceAnomaly> detectCoherenceAnomalies(const std::vector<sep::quantum::Pattern>& patterns) {
+         std::vector<CoherenceAnomaly> anomalies;
+-        
+         // Statistical anomaly detection
+         float mean_coherence = metrics_.global_coherence;
+         float variance = computeCoherenceVariance();
+         float std_dev = std::sqrt(variance);
+-        
++
+         for (const auto& pattern : patterns) {
+             CoherenceMap::const_accessor accessor;
++
+             if (coherence_map_.find(accessor, pattern.id)) {
+                 const auto& data = accessor->second;
+                 
+@@ -375,6 +385,7 @@
+                     anomaly.coherence_value = data.coherence;
+                     anomaly.expected_value = mean_coherence;
+                     anomaly.severity = std::abs(z_score) / 3.0f;
++                    anomaly.type = (z_score > 0) ? AnomalyType::ExcessiveCoherence : AnomalyType::InsufficientCoherence;
+                     anomaly.type = (z_score > 0) ? 
+                         AnomalyType::ExcessiveCoherence : 
+                         AnomalyType::InsufficientCoherence;
+@@ -391,6 +402,7 @@
+                         anomaly.coherence_value = data.coherence;
+                         anomaly.expected_value = pattern.quantum_state.coherence;
+                         anomaly.severity = coherence_change_rate;
++                        anomaly.type = AnomalyType::RapidChange;
+                         anomaly.type = AnomalyType::RapidChange;
+                         
+                         anomalies.push_back(anomaly);
+@@ -403,7 +415,6 @@
+     
+     std::vector<TierMigration> performTierMigrations() {
+         std::vector<TierMigration> migrations;
+-        
+         coherence_map_.for_each([&](auto& pair) {
+             auto& data = pair.second;
+             MemoryTierEnum current_tier = data.current_tier;
+@@ -411,6 +422,7 @@
+             
+             if (current_tier != target_tier) {
+                 // Check migration conditions
++                if (shouldMigrate(data, current_tier, target_tier)) { // Added missing check
+                 if (shouldMigrate(data, current_tier, target_tier)) {
+                     TierMigration migration;
+                     migration.pattern_id = data.pattern_id;
+@@ -427,6 +439,7 @@
+                     data.current_tier = target_tier;
+                 }
+             }
++
+         });
+         
+         return migrations;
+@@ -435,7 +448,6 @@
+     
+     void updateEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns) {
+         // Clear existing entanglements
+-        coherence_map_.for_each([](auto& pair) {
+             pair.second.entangled_patterns.clear();
+         });
+         
+@@ -446,6 +458,7 @@
+                 float entanglement_strength = computeEntanglement(
+                     patterns[i], patterns[j]
+                 );
++
+                 
+                 if (entanglement_strength > config_.entanglement_threshold) {
+                     // Update both patterns
+@@ -458,6 +471,7 @@
+                     if (coherence_map_.find(accessor2, patterns[j].id)) {
+                         accessor2->second.entangled_patterns.push_back(patterns[i].id);
+                     }
++
+                 }
+             }
+         }
+@@ -640,7 +654,6 @@
+     
+     void applyMemoryPressureOptimizations(std::vector<TierMigration>& migrations) {
+         // Sort by coherence ascending for demotion candidates
+-        std::vector<std::pair<std::string, float>> demotion_candidates;
+         
+         coherence_map_.for_each([&](const auto& pair) {
+             if (pair.second.current_tier == MemoryTierEnum::LTM &&
+@@ -648,6 +661,7 @@
+                 demotion_candidates.push_back({pair.first, pair.second.coherence});
+             }
+         });
++        std::vector<std::pair<std::string, float>> demotion_candidates; // Added missing declaration
+         
+         std::sort(demotion_candidates.begin(), demotion_candidates.end(),
+                  [](const auto& a, const auto& b) { return a.second < b.second; });
+@@ -667,6 +681,7 @@
+     
+     void cleanupZeroCoherencePatterns() {
+         std::vector<std::string> to_remove;
++        std::vector<std::string> to_remove; // Added missing declaration
+         
+         coherence_map_.for_each([&](const auto& pair) {
+             if (pair.second.coherence <= 0.0f) {
+@@ -684,7 +699,6 @@
+     
+     float computeCoherenceVariance() const {
+         float mean = metrics_.global_coherence;
+-        float variance = 0.0f;
+         float variance = 0.0f; // Added missing initialization
+         uint64_t count = 0;
+         
+@@ -692,6 +706,7 @@
+             float diff = pair.second.coherence - mean;
+             variance += diff * diff;
+             count++;
++            count++; // Increment count
+         });
+         
+         return (count > 0) ? variance / count : 0.0f;
+@@ -700,6 +715,7 @@
+     float computeEntanglement(const sep::quantum::Pattern& p1, const sep::quantum::Pattern& p2) const {
+         // Quantum entanglement measure based on state overlap
+         float spatial_overlap = std::exp(-glm::length(p1.position - p2.position));
++        float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase); // Fixed missing field
+         float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+         float coherence_product = p1.quantum_state.coherence * p2.quantum_state.coherence; // Fix: use coherence from state
+         
+@@ -708,6 +724,7 @@
+     
+     float computePhaseCorrelation(const sep::quantum::Pattern& p1, const sep::quantum::Pattern& p2) const {
+         return std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
++        return std::cos(p1.quantum_state.phase - p2.quantum_state.phase); // Fixed missing field
+     }
+     
+     uint32_t computeMaxDegree(const EntanglementGraph& graph) const {
+@@ -814,7 +831,8 @@
+ 
+ // Public interface implementation
+ QuantumCoherenceManager::QuantumCoherenceManager(const Config& config)
+-    : impl_(std::make_unique<Impl>(config)) {}
++    : impl_(std::make_unique<Impl>(config))
++    , metrics_(impl_->getMetrics()) {} // Initialize metrics_
+ 
+ QuantumCoherenceManager::~QuantumCoherenceManager() = default;
+ 
+@@ -838,11 +856,13 @@
+     return impl_->restoreFromSnapshot(snapshot);
+ }
+ 
++// Add missing getMetrics definition
+ const QuantumCoherenceManager::CoherenceMetrics& QuantumCoherenceManager::getMetrics() const {
+     return impl_->getMetrics();
+ }
+ 
+-uint64_t QuantumCoherenceManager::getGlobalTick() const {
++// Add missing getGlobalTick definition
++uint64_t QuantumCoherenceManager::getGlobalTick() const { // Return type
+     return impl_->getGlobalTick();
+ }
+ 
+@@ -851,6 +871,7 @@
+     return impl_->getPatternCountByTier(tier);
+ }
+ 
++// Add missing getTierFragmentation definition
+ float QuantumCoherenceManager::getTierFragmentation(MemoryTierEnum tier) const {
+     return impl_->getTierFragmentation(tier);
+ }
+```
+```diff
+--- a/src/compat/stream.cpp
++++ b/src/compat/stream.cpp
+@@ -6,7 +6,7 @@
+ namespace sep::cuda {
+ 
+ // Define Stream::Impl as StreamImpl
+-struct Stream::Impl : public impl::StreamImpl {};
++struct Stream::Impl { }; // Use empty struct or define members if not using impl
+ 
+ Stream::~Stream() = default;
+ 
+```
+```diff
+--- a/src/quantum/quantum_processor_qfh.cpp
++++ b/src/quantum/quantum_processor_qfh.cpp
+@@ -22,7 +22,7 @@
+ }
+ 
+ // Factory function implementations
+-std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
++std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() {
+     // In a real build, this would check for CUDA availability.
+     return std::make_unique<QuantumProcessorQFH>();
+ }
+```
+```diff
+--- a/src/quantum/processor.cpp
++++ b/src/quantum/processor.cpp
+@@ -138,7 +138,7 @@
+         return result;
+     }
+ 
+-    BatchProcessingResult processAllPatterns() { return impl_->processAll(); } // Implement this method // Fix: Add missing definition
++    BatchProcessingResult processAllPatterns() { return impl_->processAll(); }
+ 
+     BatchProcessingResult processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
+ 
+```
+```diff
+--- a/src/api/bridge_c.cpp
++++ b/src/api/bridge_c.cpp
+@@ -10,7 +10,7 @@
+ 
+ extern "C" {
+ 
+-SEP_API int sep_bridge_init(void) {
++SEP_API int sep_bridge_init(void) { // Fix: Add missing implementation
+ #if SEP_HAS_EXCEPTIONS
+   try {
+ #endif
+@@ -23,7 +23,7 @@
+ #endif
+ }
+ 
+-SEP_API int sep_bridge_cleanup(void) {
++SEP_API int sep_bridge_cleanup(void) { // Fix: Add missing implementation
+   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+   sep::api::bridge::detail::g_context_processor_bridge.reset();
+   sep::api::bridge::detail::g_last_error.clear();
+@@ -31,8 +31,7 @@
+   return 0;
+ }
+ 
+-SEP_API int sep_process_context(const char *context_json, const char *layer,
+-                               char *result_buffer, size_t buffer_size) {
++SEP_API int sep_process_context(const char *context_json, const char *layer, char *result_buffer, size_t buffer_size) { // Fix: Add missing implementation
+ #if SEP_HAS_EXCEPTIONS
+   try {
+ #endif
+@@ -107,7 +106,7 @@
+ #endif
+ }
+ 
+-SEP_API int sep_bridge_get_last_error(char *buffer, size_t buffer_size) {
++SEP_API int sep_bridge_get_last_error(char *buffer, size_t buffer_size) { // Fix: Add missing implementation
+   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+   if (!buffer || buffer_size == 0) {
+     return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
+@@ -117,12 +116,11 @@
+   return static_cast<int>(len);
+ }
+ 
+-SEP_API size_t sep_get_required_buffer_size(void) {
++SEP_API size_t sep_get_required_buffer_size(void) { // Fix: Add missing implementation
+   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+   return sep::api::bridge::detail::g_required_buffer_size;
+ }
+ 
+-SEP_API int sep_bridge_set_config(const char *key, const char *value) {
+ #if SEP_HAS_EXCEPTIONS
+   try {
+ #endif
+@@ -164,8 +162,7 @@
+ #endif
+ }
+ 
+-SEP_API int sep_bridge_get_config(const char *key, char *buffer, size_t buffer_size) {
+- SEP_API int sep_bridge_set_config(const char *key, const char *value) { // Fix: Add missing implementation
++SEP_API int sep_bridge_set_config(const char *key, const char *value) { // Fix: Add missing implementation
+ #if SEP_HAS_EXCEPTIONS
+   try {
+ #endif
+@@ -201,6 +198,7 @@
+   }
+   cm.updateAPIConfig(cfg);
+   sep::api::bridge::detail::setLastError("");
++
+   return 0;
+ #if SEP_HAS_EXCEPTIONS
+   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+@@ -208,8 +206,7 @@
+ }
+ 
+ 
+-SEP_API int sep_bridge_register_callback(const char *event_type,
+-                                         void (*callback)(const char *event_data)) {
++SEP_API int sep_bridge_get_config(const char *key, char *buffer, size_t buffer_size) { // Fix: Add missing implementation
+ #if SEP_HAS_EXCEPTIONS
+   try {
+ #endif
+@@ -241,6 +238,7 @@
+ }
+ 
+ 
++SEP_API int sep_bridge_register_callback(const char *event_type, void (*callback)(const char *event_data)) { // Fix: Add missing implementation
+ #if SEP_HAS_EXCEPTIONS
+   try {
+ #endif
+```

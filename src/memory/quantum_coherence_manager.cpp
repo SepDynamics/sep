@@ -159,6 +159,7 @@ public:
         : config_(config)
         , qfh_processor_(std::make_unique<quantum::QuantumProcessorQFH>())
         , global_tick_(0) {
+
         
         initializeCoherenceTracking();
         
@@ -366,7 +367,7 @@ private:
         metrics_.entanglement_density = 0.0f;
         metrics_.total_patterns = 0;
         metrics_.coherent_patterns = 0;
-        
+
         for (int i = 0; i < 3; ++i) {
             metrics_.tier_coherence[i] = 1.0f;
             metrics_.tier_fragmentation[i] = 0.0f;
@@ -824,7 +825,7 @@ void QuantumCoherenceManager::applyCoherenceDecay(float decay_factor) {
     impl_->applyCoherenceDecay(decay_factor);
 }
 
-QuantumCoherenceManager::CoherenceSnapshot 
+QuantumCoherenceManager::CoherenceSnapshot
 QuantumCoherenceManager::createSnapshot() const {
     return impl_->createSnapshot();
 }

@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 
   // Setup signal handling for graceful shutdown
   signal(SIGINT, signal_handler);
-  signal(SIGTERM, signal_handler);
+  signal(SIGTERM, signal_handler); // Fix: Call signal for SIGTERM
 
   bool server_mode = false;
   bool cycles_mode = false;

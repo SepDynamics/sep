@@ -67,7 +67,7 @@ std::unique_ptr<HttpRequest> makeRequest(::crow::request &req) {
 /**
  * @brief Setup the SEP API routes in a Crow application
  *
- * This function demonstrates how to integrate the SEP Engine API with a Crow web application.
+ * This function integrates the SEP Engine API with a Crow web application.
  * It sets up the following endpoints:
  * - POST /api/v1/context/process - Process and validate context
  * - POST /api/v1/context/relationships - Manage context relationships

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "quantum/types.h"
-#include "quantum/quantum_manifold_optimizer.h"
 #include <string>
 #include <vector>
 #include <memory>

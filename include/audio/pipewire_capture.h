@@ -11,6 +11,7 @@
 #include <mutex>
 
 #include "audio/pipewire_includes.h"
+#include <pipewire/stream.h> // ensure pw_stream_state is defined
 #include "audio/capture.h"
 
 #if __has_include(<pipewire/stream.h>)

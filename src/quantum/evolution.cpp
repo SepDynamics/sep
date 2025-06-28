@@ -1,5 +1,5 @@
 #include "quantum/evolution.h"
-#include "quantum/processor.h" // Ensure IProcessor definition is included
+#include "quantum/processor.h"
 #include <algorithm>
 #include <numeric>
 #include <stdexcept>
@@ -19,7 +19,7 @@ namespace sep::quantum {
 
 class EvolutionEngine::EvolutionEngineImpl {
 public:
-    explicit EvolutionEngineImpl(IProcessor* processor)
+    explicit EvolutionEngineImpl(Processor* processor)
         : processor_(processor), generation_number_(0), noise_state_(0) {
         if (!processor) {
             throw std::invalid_argument("Processor cannot be null");
@@ -287,7 +287,7 @@ private:
         return static_cast<size_t>(nextFloat() * static_cast<float>(max));
     }
 
-    IProcessor* processor_; // Use interface type
+    Processor* processor_;
     EvolutionParams params_;
     size_t generation_number_;
     EvolutionStats current_stats_; // Fix: Add missing member definition
@@ -295,7 +295,7 @@ private:
     uint64_t noise_state_;
 };
 
-EvolutionEngine::EvolutionEngine(IProcessor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {} // Use interface type
+EvolutionEngine::EvolutionEngine(Processor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {}
 
 BatchProcessingResult EvolutionEngine::evolve(const EvolutionParams& params) { return impl_->evolve(params); }
 BatchProcessingResult EvolutionEngine::evolveGeneration() { return impl_->evolveGeneration(); }

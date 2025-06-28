@@ -329,3 +329,24 @@ nm -u build/sep_engine | grep -E "(ccl::|osd::)" || echo "✓ No undefined Cycle
 ## Conclusion
 
 The SEP Engine's build system requires systematic refactoring to properly bridge stub implementations with real components. The key is implementing a flexible component detection and loading system that gracefully degrades when optional dependencies are unavailable. This approach maintains build determinism while supporting diverse deployment environments.
+
+## Component Dependency Matrix
+
+The table below lists optional components, their required libraries, and the CMake options controlling them.
+
+| Component | Libraries | CMake Option |
+|-----------|-----------|--------------|
+| Cycles renderer | libcycles\_* | `SEP_HAS_CYCLES` |
+| PipeWire audio  | libpipewire-0.3 | `SEP_HAS_PIPEWIRE` |
+| OpenSubdiv      | libosdCPU, libosdGPU | `SEP_HAS_OPENSUBDIV` |
+| Path Guiding    | libopenpgl | `SEP_HAS_OPENPGL` |
+
+To enable or disable a component, pass the corresponding `-D` flag when invoking CMake. If a library is missing, the build system falls back to a stub via the `component_bridge` mechanism.
+
+### Troubleshooting Missing Libraries
+
+1. Verify that libraries reside in standard locations such as `/usr/lib64`, `/usr/local/lib`, or `${CMAKE_INSTALL_PREFIX}/lib`.
+2. When OpenSubdiv libraries are unavailable, create symlinks in the project's `lib/` directory pointing to the system versions.
+3. If `pkg-config` yields an empty path for PipeWire, the audio module is disabled automatically.
+
+The `component_bridge` pattern ensures that missing optional components do not cause build failures while still allowing real implementations when the libraries are present.

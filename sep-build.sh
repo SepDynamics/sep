@@ -33,6 +33,20 @@ if [ ! -d "${CYCLES_ROOT_DIR}" ]; then
 fi
 echo "Using Cycles root: ${CYCLES_ROOT_DIR}"
 
+# Ensure OpenSubdiv libraries are present in lib/
+mkdir -p "${LIB_DIR}"
+for lib in libosdCPU.so libosdGPU.so; do
+  if [ ! -e "${LIB_DIR}/${lib}" ]; then
+    if [ -f "/usr/lib64/${lib}" ]; then
+      ln -sf "/usr/lib64/${lib}" "${LIB_DIR}/${lib}"
+      echo "Symlinked ${lib} from /usr/lib64"
+    elif [ -f "/usr/lib/${lib}" ]; then
+      ln -sf "/usr/lib/${lib}" "${LIB_DIR}/${lib}"
+      echo "Symlinked ${lib} from /usr/lib"
+    fi
+  fi
+done
+
 # --- Dependency Detection ---
 # Check for PipeWire using pkg-config (most reliable method)
 echo "Checking for PipeWire development headers..."
@@ -40,13 +54,16 @@ PIPEWIRE_CMAKE_ARGS="-DSEP_HAS_PIPEWIRE=OFF"
 if command -v pkg-config >/dev/null && pkg-config --exists libpipewire-0.3; then
   PIPEWIRE_INCLUDE_DIR=$(pkg-config --variable=includedir libpipewire-0.3)
   PIPEWIRE_LIB_PATH=$(pkg-config --libs-only-L libpipewire-0.3 | sed 's/-L//g')
-  PIPEWIRE_LIB_FILE="${PIPEWIRE_LIB_PATH}/libpipewire-0.3.so"
-
-  if [ -f "${PIPEWIRE_LIB_FILE}" ]; then
-    echo "PipeWire found via pkg-config: ${PIPEWIRE_LIB_FILE}"
-    PIPEWIRE_CMAKE_ARGS="-DSEP_HAS_PIPEWIRE=ON -DPIPEWIRE_INCLUDE_DIR=${PIPEWIRE_INCLUDE_DIR} -DPIPEWIRE_LIBRARY=${PIPEWIRE_LIB_FILE}"
+  if [ -z "${PIPEWIRE_LIB_PATH}" ]; then
+    echo "Warning: pkg-config returned empty PipeWire library path. Audio module disabled."
   else
-    echo "Warning: pkg-config found libpipewire-0.3 but library file not at ${PIPEWIRE_LIB_FILE}. PipeWire disabled."
+    PIPEWIRE_LIB_FILE="${PIPEWIRE_LIB_PATH}/libpipewire-0.3.so"
+    if [ -f "${PIPEWIRE_LIB_FILE}" ]; then
+      echo "PipeWire found via pkg-config: ${PIPEWIRE_LIB_FILE}"
+      PIPEWIRE_CMAKE_ARGS="-DSEP_HAS_PIPEWIRE=ON -DPIPEWIRE_INCLUDE_DIR=${PIPEWIRE_INCLUDE_DIR} -DPIPEWIRE_LIBRARY=${PIPEWIRE_LIB_FILE}"
+    else
+      echo "Warning: pkg-config found libpipewire-0.3 but library file not at ${PIPEWIRE_LIB_FILE}. PipeWire disabled."
+    fi
   fi
 else
   echo "Warning: pkg-config not found or libpipewire-0.3 is not available. Audio capture will be disabled."

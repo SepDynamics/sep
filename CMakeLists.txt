@@ -44,12 +44,6 @@ set(SEP_INTERNAL_LIBS
 # This list will hold all external libraries to be linked by the final targets.
 set(SEP_LINK_LIBS "")
 
-# Internal libraries built as part of this project. Having them in a
-# separate variable lets us easily link the same set of libraries in
-# tests and executables.
-set(SEP_INTERNAL_LIBS
-    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
-)
 
 # Find and add all static Cycles component libraries to our link list
 find_library(CYCLES_SESSION_LIBRARY NAMES cycles_session libcycles_session.a PATHS ${CMAKE_SOURCE_DIR}/lib)
@@ -59,7 +53,10 @@ find_library(CYCLES_KERNEL_LIBRARY NAMES cycles_kernel libcycles_kernel.a PATHS 
 find_library(CYCLES_DEVICE_LIBRARY NAMES cycles_device libcycles_device.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_UTIL_LIBRARY NAMES cycles_util libcycles_util.a PATHS ${CMAKE_SOURCE_DIR}/lib)
 find_library(CYCLES_BVH_LIBRARY NAMES cycles_bvh libcycles_bvh.a PATHS ${CMAKE_SOURCE_DIR}/lib)
-find_library(CYCLES_OSL_LIBRARY NAMES cycles_osl libcycles_osl.a PATHS ${CMAKE_SOURCE_DIR}/lib)
+find_library(CYCLES_OSL_LIBRARY
+    NAMES cycles_osl libcycles_osl.a
+    PATHS ${CMAKE_SOURCE_DIR}/lib /usr/lib64 /usr/local/lib ${CYCLES_ROOT}/lib
+)
 list(APPEND SEP_LINK_LIBS
     ${CYCLES_SESSION_LIBRARY}
     ${CYCLES_SCENE_LIBRARY}
@@ -103,9 +100,6 @@ endmacro()
 find_and_add_library(OSL_COMP_LIBRARY "oslcomp")
 find_and_add_library(OSL_EXEC_LIBRARY "oslexec")
 find_and_add_library(OSL_QUERY_LIBRARY "oslquery")
-find_and_add_library(OPENSUBDIV_CPU_LIBRARY "osdCPU libosdCPU.so.3.6.0")
-find_and_add_library(OPENSUBDIV_GPU_LIBRARY "osdGPU libosdGPU.so.3.6.0")
-find_and_add_library(TBB_OPENSUBDIV_LIBRARY "tbb.so.2 libtbb.so.2")
 find_and_add_library(OpenPGL_LIBRARY "OpenPGL pgl")
 find_and_add_library(OPENVDB_LIBRARY "openvdb")
 find_and_add_library(BLOSC_LIBRARY "blosc")
@@ -123,9 +117,6 @@ find_and_add_library(OPENIMAGEIO_UTIL_LIBRARY "OpenImageIO_Util")
 find_and_add_library(ZLIB_LIBRARY "z")
 
 # Consolidate internal libraries and all dependencies for reuse across targets
-set(SEP_INTERNAL_LIBS
-    sep_api sep_memory sep_quantum sep_core sep_audio sep_blender sep_compat
-)
 set(SEP_ENGINE_LIBS
     ${SEP_INTERNAL_LIBS}
     ${SEP_LINK_LIBS}
@@ -238,31 +229,6 @@ endif()
 # if find_package(CYCLES) manages to find a comprehensive set.
 list(APPEND CYCLES_ESSENTIAL_LIBS ${CYCLES_LIBRARIES})
 # --- OpenSubdiv and TBB configuration (mirrors tests setup) ---
-find_library(OPENSUBDIV_CPU_LIBRARY NAMES
-  osdCPU
-  libosdCPU.so
-  libosdCPU.so.3.6.0
-  PATHS
-  ${CMAKE_SOURCE_DIR}/lib
-  /usr/lib64
-  /usr/lib
-  /usr/local/lib
-)
-
-find_library(OPENSUBDIV_GPU_LIBRARY NAMES
-  osdGPU
-  libosdGPU.so
-  libosdGPU.so.3.6.0
-  PATHS
-  ${CMAKE_SOURCE_DIR}/lib
-  /usr/lib64
-  /usr/lib
-  /usr/local/lib
-)
-
-find_library(TBB_LIBRARY NAMES tbb)
-message(STATUS "Found TBB: ${TBB_LIBRARY}")
-
 # OpenSubdiv libraries require an older TBB version. Mirror the setup used by the
 # Cycles test target so the engine links against the correct combination.
 find_library(OPENSUBDIV_CPU_LIBRARY NAMES
@@ -274,6 +240,7 @@ find_library(OPENSUBDIV_CPU_LIBRARY NAMES
   /usr/lib64
   /usr/lib
   /usr/local/lib
+  ${CMAKE_INSTALL_PREFIX}/lib
 )
 
 find_library(OPENSUBDIV_GPU_LIBRARY NAMES
@@ -285,6 +252,7 @@ find_library(OPENSUBDIV_GPU_LIBRARY NAMES
   /usr/lib64
   /usr/lib
   /usr/local/lib
+  ${CMAKE_INSTALL_PREFIX}/lib
 )
 
 find_library(TBB_OPENSUBDIV_LIBRARY NAMES
@@ -294,6 +262,7 @@ find_library(TBB_OPENSUBDIV_LIBRARY NAMES
   /usr/lib64
   /usr/lib
   /usr/local/lib
+  ${CMAKE_INSTALL_PREFIX}/lib
 )
 
 message(STATUS "Found TBB for OpenSubdiv: ${TBB_OPENSUBDIV_LIBRARY}")

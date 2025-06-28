@@ -81,7 +81,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       if (!process_result.success) {
         std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
         sep::api::bridge::detail::setLastError(
-            std::string(process_result.error_message.c_str()));
+            process_result.error_message.c_str());
         return static_cast<int>(sep::api::ErrorCode::ProcessingError);
       }
 
@@ -122,7 +122,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
 SEP_API int sep_bridge_get_last_error(char *buffer, size_t buffer_size) {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!buffer || buffer_size == 0) {
-    return 0;
+    return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
   }
   size_t len = std::min(sep::api::bridge::detail::g_last_error.size(), buffer_size - 1);
   (void)std::snprintf(buffer, buffer_size, "%s", sep::api::bridge::detail::g_last_error.c_str());
@@ -166,7 +166,7 @@ SEP_API int sep_bridge_set_config(const char *key, const char *value) {
     }
   } catch (...) {
     sep::api::bridge::detail::setLastError("Invalid value");
-    return static_cast<int>(sep::api::ErrorCode::InvalidArgument);
+    return static_cast<int>(sep::api::ErrorCode::GeneralError);
   }
   cm.updateAPIConfig(cfg);
   sep::api::bridge::detail::setLastError("");

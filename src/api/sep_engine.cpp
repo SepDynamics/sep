@@ -135,7 +135,6 @@ nlohmann::json SepEngine::shutdown()
 
 nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
 {
-        if (!impl_->initialized)
         {
             (void)fprintf(stderr, "%s\n", "Engine not initialized");
             json result;
@@ -144,6 +143,14 @@ nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
             return result;
         }
 
+        if (!impl_->initialized)
+        {
+            (void)fprintf(stderr, "%s\n", "Engine not initialized");
+            json result;
+            result["success"] = false;
+            result["error"]   = "Engine not initialized";
+            return result;
+        }
         impl_->health_metrics.totalRequests++;
         impl_->health_metrics.lastRequestTime = std::chrono::steady_clock::now();
 
@@ -201,7 +208,6 @@ nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
 {
-        if (!impl_->initialized)
         {
             (void)fprintf(stderr, "%s\n", "Engine not initialized");
             json result;
@@ -210,6 +216,14 @@ nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
             return result;
         }
 
+        if (!impl_->initialized)
+        {
+            (void)fprintf(stderr, "%s\n", "Engine not initialized");
+            json result;
+            result["success"] = false;
+            result["error"]   = "Engine not initialized";
+            return result;
+        }
         impl_->health_metrics.totalRequests++;
         impl_->health_metrics.lastRequestTime = std::chrono::steady_clock::now();
 
@@ -269,7 +283,6 @@ nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 {
-        if (!impl_->initialized)
         {
             (void)fprintf(stderr, "%s\n", "Engine not initialized");
             json result;
@@ -278,6 +291,14 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
             return result;
         }
 
+        if (!impl_->initialized)
+        {
+            (void)fprintf(stderr, "%s\n", "Engine not initialized");
+            json result;
+            result["success"] = false;
+            result["error"]   = "Engine not initialized";
+            return result;
+        }
         impl_->health_metrics.totalRequests++;
 
         // Mock context validation
@@ -295,7 +316,6 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
 {
     (void)request_data;
-        if (!impl_->initialized)
         {
             (void)fprintf(stderr, "%s\n", "Engine not initialized");
             json result;
@@ -304,6 +324,14 @@ nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
             return result;
         }
 
+        if (!impl_->initialized)
+        {
+            (void)fprintf(stderr, "%s\n", "Engine not initialized");
+            json result;
+            result["success"] = false;
+            result["error"]   = "Engine not initialized";
+            return result;
+        }
         json        history  = json::array();
         const auto& patterns = impl_->pattern_processor->getPatterns();
         for (const auto& p : patterns)
@@ -322,7 +350,6 @@ nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
 {
-        if (!impl_->initialized)
         {
             (void)fprintf(stderr, "%s\n", "Engine not initialized");
             json result;
@@ -331,6 +358,14 @@ nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
             return result;
         }
 
+        if (!impl_->initialized)
+        {
+            (void)fprintf(stderr, "%s\n", "Engine not initialized");
+            json result;
+            result["success"] = false;
+            result["error"]   = "Engine not initialized";
+            return result;
+        }
         impl_->health_metrics.totalRequests++;
 
         std::vector<double> embeddings;
@@ -410,7 +445,6 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
 {
     (void)request_data;  // Mark parameter as used
 
-        if (!impl_->initialized)
         {
             (void)fprintf(stderr, "%s\n", "Engine not initialized");
             json result;
@@ -419,6 +453,14 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
             return result;
         }
 
+        if (!impl_->initialized)
+        {
+            (void)fprintf(stderr, "%s\n", "Engine not initialized");
+            json result;
+            result["success"] = false;
+            result["error"]   = "Engine not initialized";
+            return result;
+        }
         // Mock context blending
         json blend_result;
         blend_result["blended_context_id"] = generateId("blend");
@@ -432,7 +474,6 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::getHealthStatus()
 {
-        const auto& metrics = impl_->health_metrics;
 
         auto now    = std::chrono::steady_clock::now();
         auto uptime = std::chrono::duration_cast<std::chrono::seconds>(now - metrics.startTime).count();

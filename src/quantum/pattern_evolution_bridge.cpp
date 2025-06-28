@@ -63,7 +63,7 @@ public:
     
     explicit Impl(const Config& config)
         : config_(config)
-        , manifold_optimizer_(createQuantumManifoldOptimizer(createManifoldConfig(config)))
+        , manifold_optimizer_(QuantumManifoldOptimizer(createManifoldConfig(config)))
         , evolution_state_(std::make_unique<EvolutionState>())
         , worker_threads_(config.num_threads) {
         
@@ -336,7 +336,7 @@ private:
         // Bell inequality violation measure
         float phase_diff = std::abs(p1.quantum_state.phase - p2.quantum_state.phase);
         float coherence_product = p1.quantum_state.coherence * p2.quantum_state.coherence; // Fix: use coherence from state
-        float spatial_overlap = std::exp(-glm::length2(p1.position - p2.position));
+        float spatial_overlap = std::exp(-glm::length(p1.position - p2.position));
         
         return coherence_product * spatial_overlap * std::cos(phase_diff);
     }
@@ -348,7 +348,7 @@ private:
     float computePairCoherence(const Pattern& p1, const Pattern& p2) const {
         if (p1.id == p2.id) return 1.0f;
         
-        float spatial_coherence = std::exp(-glm::length2(p1.position - p2.position));
+        float spatial_coherence = std::exp(-glm::length(p1.position - p2.position));
         float quantum_coherence = p1.quantum_state.coherence * p2.quantum_state.coherence; // Fix: use coherence from state
         
         return spatial_coherence * quantum_coherence;

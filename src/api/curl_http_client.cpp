@@ -95,5 +95,4 @@ APIResponse CurlHttpClient::send_request(const APIRequest &request) {
     
     return resp;
 }
-
 } // namespace sep::api

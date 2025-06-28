@@ -57,5 +57,3 @@ struct ObjectState {
 
 }  // namespace pattern
 }  // namespace sep
-
-#endif  // SEP_BLENDER_PATTERN_BRIDGE_H

@@ -230,38 +230,279 @@ Call Stack (most recent call first):
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/build
 Building SEP Engine...
-[  2%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[  2%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[  5%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  8%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 11%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 14%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 17%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 20%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
-[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 26%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[  1%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[  5%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[  7%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 10%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 10%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 11%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 14%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 15%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 18%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 23%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 24%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 27%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 28%] Linking CXX static library /sep/lib/libcycles_osl.a
-[ 28%] Built target cycles_osl
-[ 30%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 33%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 34%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
-[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 39%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 30%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 30%] Built target cycles_osl
+[ 31%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
+[ 33%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
+[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 36%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+In file included from /sep/include/compat/cuda_defs.h:13,
+                 from /sep/include/compat/raii.h:9,
+                 from /sep/src/compat/raii.cpp:15:
+/sep/include/compat/cuda_impl.h:24:35: error: ‘cudaDeviceProp’ in namespace ‘sep::cuda’ does not name a type
+   24 | using cudaDeviceProp = sep::cuda::cudaDeviceProp;
+      |                                   ^~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:75:39: error: ‘cudaError_t’ was not declared in this scope
+   75 | inline const char* cudaGetErrorString(cudaError_t error) {
+      |                                       ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:85:8: error: ‘cudaError_t’ does not name a type
+   85 | inline cudaError_t cudaSetDevice(int device) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:96:8: error: ‘cudaError_t’ does not name a type
+   96 | inline cudaError_t cudaGetDeviceCount(int* count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:108:8: error: ‘cudaError_t’ does not name a type
+  108 | inline cudaError_t cudaEventCreate(cudaEvent_t* event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:119:8: error: ‘cudaError_t’ does not name a type
+  119 | inline cudaError_t cudaEventDestroy(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:128:8: error: ‘cudaError_t’ does not name a type
+  128 | inline cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:138:8: error: ‘cudaError_t’ does not name a type
+  138 | inline cudaError_t cudaEventSynchronize(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:147:8: error: ‘cudaError_t’ does not name a type
+  147 | inline cudaError_t cudaEventElapsedTime(float* outMilliseconds, cudaEvent_t start, cudaEvent_t end) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:160:8: error: ‘cudaError_t’ does not name a type
+  160 | inline cudaError_t cudaStreamCreate(cudaStream_t* stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:171:8: error: ‘cudaError_t’ does not name a type
+  171 | inline cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:183:8: error: ‘cudaError_t’ does not name a type
+  183 | inline cudaError_t cudaStreamDestroy(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:192:8: error: ‘cudaError_t’ does not name a type
+  192 | inline cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:216:8: error: ‘cudaError_t’ does not name a type
+  216 | inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:232:8: error: ‘cudaError_t’ does not name a type
+  232 | inline cudaError_t cudaGetLastError() {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:241:8: error: ‘cudaError_t’ does not name a type
+  241 | inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:250:8: error: ‘cudaError_t’ does not name a type
+  250 | inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:259:8: error: ‘cudaError_t’ does not name a type
+  259 | inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:272:8: error: ‘cudaError_t’ does not name a type
+  272 | inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:316:8: error: ‘cudaError_t’ does not name a type
+  316 | inline cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:327:8: error: ‘cudaError_t’ does not name a type
+  327 | inline cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:340:8: error: ‘cudaError_t’ does not name a type
+  340 | inline cudaError_t cudaStreamAttachMemAsync_ptsz(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:353:8: error: ‘cudaError_t’ does not name a type
+  353 | inline cudaError_t cudaStreamSynchronize_ptsz(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:367:5: error: ‘cudaMemcpyKind’ does not name a type
+  367 |     cudaMemcpyKind direction;
+      |     ^~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:368:5: error: ‘cudaStream_t’ does not name a type
+  368 |     cudaStream_t stream;
+      |     ^~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:372:8: error: ‘cudaError_t’ does not name a type
+  372 | inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:386:8: error: ‘cudaError_t’ does not name a type
+  386 | inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+[ 37%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+/sep/include/compat/raii.h:26:3: error: ‘cudaStream_t’ does not name a type
+   26 |   cudaStream_t get() const { return stream_; }
+      |   ^~~~~~~~~~~~
+/sep/include/compat/raii.h:31:3: error: ‘cudaStream_t’ does not name a type
+   31 |   cudaStream_t stream_{nullptr};
+      |   ^~~~~~~~~~~~
+/sep/include/compat/raii.h: In member function ‘bool sep::cuda::StreamRAII::valid() const’:
+/sep/include/compat/raii.h:27:31: error: ‘stream_’ was not declared in this scope
+   27 |   bool valid() const { return stream_ != nullptr; }
+      |                               ^~~~~~~
+/sep/include/compat/raii.h: At global scope:
+/sep/include/compat/raii.h:45:3: error: ‘cudaEvent_t’ does not name a type
+   45 |   cudaEvent_t get() const { return event_; }
+      |   ^~~~~~~~~~~
+/sep/include/compat/raii.h:50:3: error: ‘cudaEvent_t’ does not name a type
+   50 |   cudaEvent_t event_{nullptr};
+      |   ^~~~~~~~~~~
+/sep/include/compat/raii.h: In member function ‘bool sep::cuda::EventRAII::valid() const’:
+/sep/include/compat/raii.h:46:31: error: ‘event_’ was not declared in this scope
+   46 |   bool valid() const { return event_ != nullptr; }
+      |                               ^~~~~~
+/sep/include/compat/raii.h: At global scope:
+/sep/include/compat/raii.h:80:47: error: ‘cudaStream_t’ has not been declared
+   80 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
+      |                                               ^~~~~~~~~~~~
+/sep/include/compat/raii.h:80:76: error: could not convert ‘nullptr’ from ‘std::nullptr_t’ to ‘int’
+   80 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
+      |                                                                            ^
+      |                                                                            |
+      |                                                                            std::nullptr_t
+In file included from /sep/include/compat/cuda_common.h:10,
+                 from /sep/src/memory/memory_tier.cpp:20:
+/sep/include/compat/cuda_impl.h:24:35: error: ‘cudaDeviceProp’ in namespace ‘sep::cuda’ does not name a type
+   24 | using cudaDeviceProp = sep::cuda::cudaDeviceProp;
+      |                                   ^~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:75:39: error: ‘cudaError_t’ was not declared in this scope
+   75 | inline const char* cudaGetErrorString(cudaError_t error) {
+      |                                       ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:85:8: error: ‘cudaError_t’ does not name a type
+   85 | inline cudaError_t cudaSetDevice(int device) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:96:8: error: ‘cudaError_t’ does not name a type
+   96 | inline cudaError_t cudaGetDeviceCount(int* count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:108:8: error: ‘cudaError_t’ does not name a type
+  108 | inline cudaError_t cudaEventCreate(cudaEvent_t* event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:119:8: error: ‘cudaError_t’ does not name a type
+  119 | inline cudaError_t cudaEventDestroy(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:128:8: error: ‘cudaError_t’ does not name a type
+  128 | inline cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:138:8: error: ‘cudaError_t’ does not name a type
+  138 | inline cudaError_t cudaEventSynchronize(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:147:8: error: ‘cudaError_t’ does not name a type
+  147 | inline cudaError_t cudaEventElapsedTime(float* outMilliseconds, cudaEvent_t start, cudaEvent_t end) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:160:8: error: ‘cudaError_t’ does not name a type
+  160 | inline cudaError_t cudaStreamCreate(cudaStream_t* stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:171:8: error: ‘cudaError_t’ does not name a type
+  171 | inline cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:183:8: error: ‘cudaError_t’ does not name a type
+  183 | inline cudaError_t cudaStreamDestroy(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:192:8: error: ‘cudaError_t’ does not name a type
+  192 | inline cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:216:8: error: ‘cudaError_t’ does not name a type
+  216 | inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:232:8: error: ‘cudaError_t’ does not name a type
+  232 | inline cudaError_t cudaGetLastError() {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:241:8: error: ‘cudaError_t’ does not name a type
+  241 | inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:250:8: error: ‘cudaError_t’ does not name a type
+  250 | inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:259:8: error: ‘cudaError_t’ does not name a type
+  259 | inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:272:8: error: ‘cudaError_t’ does not name a type
+  272 | inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:316:8: error: ‘cudaError_t’ does not name a type
+  316 | inline cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:327:8: error: ‘cudaError_t’ does not name a type
+  327 | inline cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:340:8: error: ‘cudaError_t’ does not name a type
+  340 | inline cudaError_t cudaStreamAttachMemAsync_ptsz(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:353:8: error: ‘cudaError_t’ does not name a type
+  353 | inline cudaError_t cudaStreamSynchronize_ptsz(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:367:5: error: ‘cudaMemcpyKind’ does not name a type
+  367 |     cudaMemcpyKind direction;
+      |     ^~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:368:5: error: ‘cudaStream_t’ does not name a type
+  368 |     cudaStream_t stream;
+      |     ^~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:372:8: error: ‘cudaError_t’ does not name a type
+  372 | inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:386:8: error: ‘cudaError_t’ does not name a type
+  386 | inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_common.h:23:42: error: ‘cudaError_t’ has not been declared
+   23 | void logCudaError(const char* operation, cudaError_t error);
+      |                                          ^~~~~~~~~~~
+In file included from /sep/include/compat/cuda_helpers.h:13,
+                 from /sep/src/compat/raii.cpp:17:
+/sep/include/compat/cuda_common.h:23:42: error: ‘cudaError_t’ has not been declared
+   23 | void logCudaError(const char* operation, cudaError_t error);
+      |                                          ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:20:58: error: ‘cudaError_t’ has not been declared
+   20 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+      |                                                          ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
+/sep/include/compat/cuda_helpers.h:21:18: error: ‘cudaSuccess’ was not declared in this scope
+   21 |     if (error != cudaSuccess) {
+      |                  ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:22:91: error: ‘cudaGetErrorString’ cannot be used as a function
+   22 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
+      |                                                                         ~~~~~~~~~~~~~~~~~~^~~~~~~
 /sep/src/audio/pipewire_capture.cpp: In function ‘const pw_stream_events PipeWireCapture::createStreamEvents()’:
 /sep/src/audio/pipewire_capture.cpp:42:29: error: ‘streamStateChanged’ was not declared in this scope
    42 |     events.state_changed = &streamStateChanged;
       |                             ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: At global scope:
+/sep/src/compat/raii.cpp:46:1: error: ‘cudaError_t’ does not name a type
+   46 | cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream,
+      | ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:54:1: error: ‘cudaError_t’ does not name a type
+   54 | cudaError_t cudaStreamDestroy(cudaStream_t /*stream*/) {
+      | ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:58:1: error: ‘cudaError_t’ does not name a type
+   58 | cudaError_t cudaStreamSynchronize(cudaStream_t /*stream*/) {
+      | ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:62:1: error: ‘cudaError_t’ does not name a type
+   62 | cudaError_t cudaEventCreate(void** event) {
+      | ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:68:12: error: ‘cudaError_t’ does not name a type
+   68 | extern "C" cudaError_t cudaEventDestroy(cudaEvent_t /*event*/) {
+      |            ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:71:1: error: ‘cudaError_t’ does not name a type
+   71 | cudaError_t cudaEventSynchronize(cudaEvent_t /*event*/) {
+      | ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:75:1: error: ‘cudaError_t’ does not name a type
+   75 | cudaError_t cudaStreamAttachMemAsync(cudaStream_t /*stream*/, void* /*ptr*/,
+      | ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:80:32: error: ‘cudaError_t’ was not declared in this scope
+   80 | const char* cudaGetErrorString(cudaError_t /*error*/) {
+      |                                ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:43:29: error: ‘streamProcess’ was not declared in this scope
    43 |     events.process       = &streamProcess;
       |                             ^~~~~~~~~~~~~
@@ -273,17 +514,43 @@ Building SEP Engine...
 /sep/src/audio/pipewire_capture.cpp:50:9: error: ‘stream_’ was not declared in this scope
    50 |     if (stream_)
       |         ^~~~~~~
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::StreamRAII::StreamRAII(sep::StreamFlags)’:
+/sep/src/compat/raii.cpp:86:74: error: ‘cudaStreamNonBlocking’ was not declared in this scope
+   86 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+      |                                                                          ^~~~~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:86:98: error: ‘cudaStreamDefault’ was not declared in this scope
+   86 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+      |                                                                                                  ^~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:87:5: error: ‘cudaError_t’ was not declared in this scope
+   87 |     cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
+      |     ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:52:13: error: ‘stream_listener_’ was not declared in this scope
    52 |         if (stream_listener_)
       |             ^~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:88:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+   88 |     if (err != cudaSuccess) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:88:16: error: ‘cudaSuccess’ was not declared in this scope
+   88 |     if (err != cudaSuccess) {
+      |                ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:60:9: error: ‘core_’ was not declared in this scope
    60 |     if (core_)
       |         ^~~~~
+/sep/src/compat/raii.cpp:89:9: error: ‘stream_’ was not declared in this scope
+   89 |         stream_ = nullptr;
+      |         ^~~~~~~
+/sep/src/compat/raii.cpp:91:91: error: ‘sep::cuda::cudaGetErrorString’ cannot be used as a function
+   91 |             (void)fprintf(stderr, "Failed to create CUDA stream: %s\n", cudaGetErrorString(err));
+      |                                                                         ~~~~~~~~~~~~~~~~~~^~~~~
 /sep/src/audio/pipewire_capture.cpp:65:9: error: ‘context_’ was not declared in this scope; did you mean ‘ucontext_t’?
    65 |     if (context_)
       |         ^~~~~~~~
       |         ucontext_t
+/sep/src/compat/raii.cpp: In destructor ‘sep::cuda::StreamRAII::~StreamRAII()’:
+/sep/src/compat/raii.cpp:99:9: error: ‘stream_’ was not declared in this scope
+   99 |     if (stream_) {
+      |         ^~~~~~~
 /sep/src/audio/pipewire_capture.cpp:70:9: error: ‘loop_’ was not declared in this scope
    70 |     if (loop_)
       |         ^~~~~
@@ -291,27 +558,87 @@ Building SEP Engine...
 /sep/src/audio/pipewire_capture.cpp:77:18: error: scope ‘PipeWireCapture’ before ‘~’ is not a class-name
    77 | PipeWireCapture::~PipeWireCapture()
       |                  ^
+/sep/include/compat/cuda_helpers.h:30:9: error: ‘cudaError_t’ was not declared in this scope
+   30 |         cudaError_t error = call;                    \
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:103:9: note: in expansion of macro ‘CUDA_CHECK’
+  103 |         CUDA_CHECK(cudaStreamDestroy(stream_));
+      |         ^~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:82:59: error: ‘sep::audio::AudioError PipeWireCapture::init(const sep::audio::AudioConfig&)’ should have been declared inside ‘PipeWireCapture’
    82 | AudioError PipeWireCapture::init(const AudioConfig& config)
       |                                                           ^
+/sep/include/compat/cuda_helpers.h:31:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
+   31 |         if (error != cudaSuccess) {                  \
+      |             ^~~~~
+/sep/src/compat/raii.cpp:103:9: note: in expansion of macro ‘CUDA_CHECK’
+  103 |         CUDA_CHECK(cudaStreamDestroy(stream_));
+      |         ^~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::init(const sep::audio::AudioConfig&)’:
 /sep/src/audio/pipewire_capture.cpp:84:38: error: ‘mutex_’ was not declared in this scope
    84 |     std::lock_guard<std::mutex> lock(mutex_);
       |                                      ^~~~~~
+/sep/include/compat/cuda_helpers.h:31:22: error: ‘cudaSuccess’ was not declared in this scope
+   31 |         if (error != cudaSuccess) {                  \
+      |                      ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:103:9: note: in expansion of macro ‘CUDA_CHECK’
+  103 |         CUDA_CHECK(cudaStreamDestroy(stream_));
+      |         ^~~~~~~~~~
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::StreamRAII::StreamRAII(sep::cuda::StreamRAII&&)’:
+/sep/src/compat/raii.cpp:108:55: error: class ‘sep::cuda::StreamRAII’ does not have any field named ‘stream_’
+  108 | StreamRAII::StreamRAII(StreamRAII&& other) noexcept : stream_(std::exchange(other.stream_, nullptr)) {}
+      |                                                       ^~~~~~~
+/sep/src/compat/raii.cpp:108:83: error: ‘class sep::cuda::StreamRAII’ has no member named ‘stream_’
+  108 | StreamRAII::StreamRAII(StreamRAII&& other) noexcept : stream_(std::exchange(other.stream_, nullptr)) {}
+      |                                                                                   ^~~~~~~
 /sep/src/audio/pipewire_capture.cpp:85:5: error: ‘config_’ was not declared in this scope; did you mean ‘config’?
    85 |     config_ = config;
       |     ^~~~~~~
       |     config
+/sep/src/compat/raii.cpp: In member function ‘sep::cuda::StreamRAII& sep::cuda::StreamRAII::operator=(sep::cuda::StreamRAII&&)’:
+/sep/src/compat/raii.cpp:112:13: error: ‘stream_’ was not declared in this scope
+  112 |         if (stream_) {
+      |             ^~~~~~~
+/sep/include/compat/cuda_helpers.h:30:9: error: ‘cudaError_t’ was not declared in this scope
+   30 |         cudaError_t error = call;                    \
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:113:13: note: in expansion of macro ‘CUDA_CHECK’
+  113 |             CUDA_CHECK(cudaStreamDestroy(stream_));
+      |             ^~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:88:5: error: ‘loop_’ was not declared in this scope
    88 |     loop_ = pw_thread_loop_new("sep-audio", nullptr);
       |     ^~~~~
+/sep/include/compat/cuda_helpers.h:31:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
+   31 |         if (error != cudaSuccess) {                  \
+      |             ^~~~~
+/sep/src/compat/raii.cpp:113:13: note: in expansion of macro ‘CUDA_CHECK’
+  113 |             CUDA_CHECK(cudaStreamDestroy(stream_));
+      |             ^~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:97:5: error: ‘context_’ was not declared in this scope; did you mean ‘ucontext_t’?
    97 |     context_                    = pw_context_new(pw_thread_loop_get_loop(loop_), props, 0);
       |     ^~~~~~~~
       |     ucontext_t
+/sep/include/compat/cuda_helpers.h:31:22: error: ‘cudaSuccess’ was not declared in this scope
+   31 |         if (error != cudaSuccess) {                  \
+      |                      ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:113:13: note: in expansion of macro ‘CUDA_CHECK’
+  113 |             CUDA_CHECK(cudaStreamDestroy(stream_));
+      |             ^~~~~~~~~~
+/sep/src/compat/raii.cpp:115:9: error: ‘stream_’ was not declared in this scope
+  115 |         stream_ = std::exchange(other.stream_, nullptr);
+      |         ^~~~~~~
+/sep/src/compat/raii.cpp:115:39: error: ‘class sep::cuda::StreamRAII’ has no member named ‘stream_’
+  115 |         stream_ = std::exchange(other.stream_, nullptr);
+      |                                       ^~~~~~~
 /sep/src/audio/pipewire_capture.cpp:108:5: error: ‘core_’ was not declared in this scope
   108 |     core_                            = pw_context_connect(context_, core_props, 0);
       |     ^~~~~
+/sep/src/compat/raii.cpp: In member function ‘void sep::cuda::StreamRAII::synchronize() const’:
+/sep/src/compat/raii.cpp:121:9: error: ‘stream_’ was not declared in this scope
+  121 |     if (stream_) {
+      |         ^~~~~~~
+/sep/src/compat/raii.cpp:122:9: error: ‘cudaError_t’ was not declared in this scope
+  122 |         cudaError_t err = cudaStreamSynchronize(stream_);
+      |         ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:117:12: error: ‘setupStream’ was not declared in this scope
   117 |     return setupStream();
       |            ^~~~~~~~~~~
@@ -319,62 +646,50 @@ Building SEP Engine...
 /sep/src/audio/pipewire_capture.cpp:120:41: error: ‘sep::audio::AudioError PipeWireCapture::setupStream()’ should have been declared inside ‘PipeWireCapture’
   120 | AudioError PipeWireCapture::setupStream()
       |                                         ^
+/sep/src/compat/raii.cpp:123:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  123 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
+/sep/src/compat/raii.cpp:123:20: error: ‘cudaSuccess’ was not declared in this scope
+  123 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:125:100: error: ‘sep::cuda::cudaGetErrorString’ cannot be used as a function
+  125 |                 (void)fprintf(stderr, "Failed to synchronize CUDA stream: %s\n", cudaGetErrorString(err));
+      |                                                                                  ~~~~~~~~~~~~~~~~~~^~~~~
 /sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::setupStream()’:
 /sep/src/audio/pipewire_capture.cpp:125:5: error: ‘stream_’ was not declared in this scope
   125 |     stream_ = pw_stream_new(core_,
       |     ^~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:26:44: error: ‘Config’ in namespace ‘sep::memory’ does not name a type
-   26 | void MemoryTierManager::init(const memory::Config& config){
-      |                                            ^~~~~~
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::EventRAII::EventRAII()’:
+/sep/src/compat/raii.cpp:136:5: error: ‘cudaError_t’ was not declared in this scope
+  136 |     cudaError_t err = cudaEventCreate(&event_);
+      |     ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:125:29: error: ‘core_’ was not declared in this scope
   125 |     stream_ = pw_stream_new(core_,
       |                             ^~~~~
-/sep/src/memory/memory_tier_manager.cpp:26:6: error: no declaration matches ‘void sep::memory::MemoryTierManager::init(const int&)’
-   26 | void MemoryTierManager::init(const memory::Config& config){
-      |      ^~~~~~~~~~~~~~~~~
-In file included from /sep/src/memory/memory_tier_manager.cpp:1:
-/sep/include/memory/memory_tier_manager.hpp:71:10: note: candidate is: ‘void sep::memory::MemoryTierManager::init(const Config&)’
-   71 |     void init(const Config& config);
-      |          ^~~~
-/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
-   44 | class MemoryTierManager {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:50:1: error: no declaration matches ‘sep::memory::MemoryTierManager::MemoryTierManager()’
-   50 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
-      | ^~~~~~~~~~~~~~~~~
-/sep/include/memory/memory_tier_manager.hpp:44:7: note: candidates are: ‘sep::memory::MemoryTierManager::MemoryTierManager(const sep::memory::MemoryTierManager&)’
-   44 | class MemoryTierManager {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:46:1: note:                 ‘sep::memory::MemoryTierManager::MemoryTierManager(const Config&)’
-   46 | MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
-      | ^~~~~~~~~~~~~~~~~
-/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
-   44 | class MemoryTierManager {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:50:68: error: expected unqualified-id before ‘)’ token
-   50 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
-      |                                                                    ^
-/sep/src/memory/memory_tier_manager.cpp:56:44: error: ‘Config’ in namespace ‘sep::memory’ does not name a type
-   56 | void MemoryTierManager::init(const memory::Config& config) {
-      |                                            ^~~~~~
-/sep/src/memory/memory_tier_manager.cpp:56:6: error: no declaration matches ‘void sep::memory::MemoryTierManager::init(const int&)’
-   56 | void MemoryTierManager::init(const memory::Config& config) {
-      |      ^~~~~~~~~~~~~~~~~
-/sep/include/memory/memory_tier_manager.hpp:71:10: note: candidate is: ‘void sep::memory::MemoryTierManager::init(const Config&)’
-   71 |     void init(const Config& config);
-      |          ^~~~
-/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
-   44 | class MemoryTierManager {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:66:6: error: redefinition of ‘void sep::memory::MemoryTierManager::shutdown()’
-   66 | void MemoryTierManager::shutdown() {
-      |      ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:36:6: note: ‘void sep::memory::MemoryTierManager::shutdown()’ previously defined here
-   36 | void MemoryTierManager::shutdown(){
-      |      ^~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:137:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  137 |     if (err != cudaSuccess) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:137:16: error: ‘cudaSuccess’ was not declared in this scope
+  137 |     if (err != cudaSuccess) {
+      |                ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:126:29: error: ‘config_’ was not declared in this scope
   126 |                             config_.description.c_str(),
       |                             ^~~~~~~
+/sep/src/compat/raii.cpp:138:9: error: ‘event_’ was not declared in this scope
+  138 |         event_ = nullptr;
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:140:90: error: ‘sep::cuda::cudaGetErrorString’ cannot be used as a function
+  140 |             (void)fprintf(stderr, "Failed to create CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                        ~~~~~~~~~~~~~~~~~~^~~~~
+/sep/src/compat/raii.cpp: In destructor ‘sep::cuda::EventRAII::~EventRAII()’:
+/sep/src/compat/raii.cpp:148:9: error: ‘event_’ was not declared in this scope
+  148 |     if (event_) {
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:152:9: error: ‘cudaError_t’ was not declared in this scope
+  152 |         cudaError_t err = cudaEventDestroy(event_);
+      |         ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:161:5: error: ‘stream_listener_’ was not declared in this scope
   161 |     stream_listener_ = std::make_unique<spa_hook>();
       |     ^~~~~~~~~~~~~~~~
@@ -385,47 +700,128 @@ In file included from /sep/src/memory/memory_tier_manager.cpp:1:
 /sep/src/audio/pipewire_capture.cpp:201:35: error: ‘sep::audio::AudioError PipeWireCapture::start()’ should have been declared inside ‘PipeWireCapture’
   201 | AudioError PipeWireCapture::start()
       |                                   ^
+/sep/src/compat/raii.cpp:153:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  153 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
 /sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::start()’:
 /sep/src/audio/pipewire_capture.cpp:203:38: error: ‘mutex_’ was not declared in this scope
   203 |     std::lock_guard<std::mutex> lock(mutex_);
       |                                      ^~~~~~
+/sep/src/compat/raii.cpp:153:20: error: ‘cudaSuccess’ was not declared in this scope
+  153 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:155:95: error: ‘sep::cuda::cudaGetErrorString’ cannot be used as a function
+  155 |                 (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                             ~~~~~~~~~~~~~~~~~~^~~~~
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::EventRAII::EventRAII(sep::cuda::EventRAII&&)’:
+/sep/src/compat/raii.cpp:162:52: error: class ‘sep::cuda::EventRAII’ does not have any field named ‘event_’
+  162 | EventRAII::EventRAII(EventRAII&& other) noexcept : event_(std::exchange(other.event_, nullptr)) {}
+      |                                                    ^~~~~~
+/sep/src/compat/raii.cpp:162:79: error: ‘class sep::cuda::EventRAII’ has no member named ‘event_’
+  162 | EventRAII::EventRAII(EventRAII&& other) noexcept : event_(std::exchange(other.event_, nullptr)) {}
+      |                                                                               ^~~~~~
 /sep/src/audio/pipewire_capture.cpp:205:10: error: ‘loop_’ was not declared in this scope
   205 |     if (!loop_ || !stream_)
       |          ^~~~~
+In file included from /sep/include/compat/cuda_helpers.h:8,
+                 from /sep/src/api/bridge_c.cpp:6:
+/sep/include/compat/cuda_impl.h:24:35: error: ‘cudaDeviceProp’ in namespace ‘sep::cuda’ does not name a type
+   24 | using cudaDeviceProp = sep::cuda::cudaDeviceProp;
+      |                                   ^~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In member function ‘sep::cuda::EventRAII& sep::cuda::EventRAII::operator=(sep::cuda::EventRAII&&)’:
+/sep/src/compat/raii.cpp:166:13: error: ‘event_’ was not declared in this scope
+  166 |         if (event_) {
+      |             ^~~~~~
+/sep/include/compat/cuda_impl.h:75:39: error: ‘cudaError_t’ was not declared in this scope
+   75 | inline const char* cudaGetErrorString(cudaError_t error) {
+      |                                       ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:167:13: error: ‘cudaError_t’ was not declared in this scope
+  167 |             cudaError_t err = cudaEventDestroy(event_);
+      |             ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:205:20: error: ‘stream_’ was not declared in this scope
   205 |     if (!loop_ || !stream_)
       |                    ^~~~~~~
+/sep/include/compat/cuda_impl.h:85:8: error: ‘cudaError_t’ does not name a type
+   85 | inline cudaError_t cudaSetDevice(int device) {
+      |        ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:168:17: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  168 |             if (err != cudaSuccess) {
+      |                 ^~~
+      |                 erf
+/sep/include/compat/cuda_impl.h:96:8: error: ‘cudaError_t’ does not name a type
+   96 | inline cudaError_t cudaGetDeviceCount(int* count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:108:8: error: ‘cudaError_t’ does not name a type
+  108 | inline cudaError_t cudaEventCreate(cudaEvent_t* event) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:210:36: error: ‘loop_’ was not declared in this scope
   210 |     int err = pw_thread_loop_start(loop_);
       |                                    ^~~~~
-/sep/src/memory/memory_tier_manager.cpp:426:6: error: no declaration matches ‘void sep::memory::MemoryTierManager::registerPattern(std::size_t, const sep::pattern::PatternData&)’
-  426 | void MemoryTierManager::registerPattern(std::size_t id, const pattern::PatternData& pattern) {
-      |      ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:426:6: note: no functions named ‘void sep::memory::MemoryTierManager::registerPattern(std::size_t, const sep::pattern::PatternData&)’
-/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
-   44 | class MemoryTierManager {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:430:29: error: no declaration matches ‘const sep::pattern::PatternData* sep::memory::MemoryTierManager::getPatternData(std::size_t) const’
-  430 | const pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
-      |                             ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:430:29: note: no functions named ‘const sep::pattern::PatternData* sep::memory::MemoryTierManager::getPatternData(std::size_t) const’
-/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
-   44 | class MemoryTierManager {
-      |       ^~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:168:24: error: ‘cudaSuccess’ was not declared in this scope
+  168 |             if (err != cudaSuccess) {
+      |                        ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:170:99: error: ‘sep::cuda::cudaGetErrorString’ cannot be used as a function
+  170 |                     (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                                 ~~~~~~~~~~~~~~~~~~^~~~~
+/sep/include/compat/cuda_impl.h:119:8: error: ‘cudaError_t’ does not name a type
+  119 | inline cudaError_t cudaEventDestroy(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:128:8: error: ‘cudaError_t’ does not name a type
+  128 | inline cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:217:5: error: ‘running_’ was not declared in this scope
   217 |     running_ = true;
       |     ^~~~~~~~
+/sep/src/compat/raii.cpp:174:9: error: ‘event_’ was not declared in this scope
+  174 |         event_ = std::exchange(other.event_, nullptr);
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:174:38: error: ‘class sep::cuda::EventRAII’ has no member named ‘event_’
+  174 |         event_ = std::exchange(other.event_, nullptr);
+      |                                      ^~~~~~
 /sep/src/audio/pipewire_capture.cpp: At global scope:
 /sep/src/audio/pipewire_capture.cpp:221:34: error: ‘sep::audio::AudioError PipeWireCapture::stop()’ should have been declared inside ‘PipeWireCapture’
   221 | AudioError PipeWireCapture::stop()
       |                                  ^
+/sep/include/compat/cuda_impl.h:138:8: error: ‘cudaError_t’ does not name a type
+  138 | inline cudaError_t cudaEventSynchronize(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:147:8: error: ‘cudaError_t’ does not name a type
+  147 | inline cudaError_t cudaEventElapsedTime(float* outMilliseconds, cudaEvent_t start, cudaEvent_t end) {
+      |        ^~~~~~~~~~~
+/sep/src/compat/raii.cpp: In member function ‘void sep::cuda::EventRAII::synchronize() const’:
+/sep/src/compat/raii.cpp:180:9: error: ‘event_’ was not declared in this scope
+  180 |     if (event_) {
+      |         ^~~~~~
 /sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::stop()’:
 /sep/src/audio/pipewire_capture.cpp:223:38: error: ‘mutex_’ was not declared in this scope
   223 |     std::lock_guard<std::mutex> lock(mutex_);
       |                                      ^~~~~~
+/sep/include/compat/cuda_impl.h:160:8: error: ‘cudaError_t’ does not name a type
+  160 | inline cudaError_t cudaStreamCreate(cudaStream_t* stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:171:8: error: ‘cudaError_t’ does not name a type
+  171 | inline cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:183:8: error: ‘cudaError_t’ does not name a type
+  183 | inline cudaError_t cudaStreamDestroy(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:181:9: error: ‘cudaError_t’ was not declared in this scope
+  181 |         cudaError_t err = cudaEventSynchronize(event_);
+      |         ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:192:8: error: ‘cudaError_t’ does not name a type
+  192 | inline cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:224:5: error: ‘running_’ was not declared in this scope
   224 |     running_ = false;
       |     ^~~~~~~~
+/sep/src/compat/raii.cpp:182:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  182 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
+/sep/include/compat/cuda_impl.h:216:8: error: ‘cudaError_t’ does not name a type
+  216 | inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:226:9: error: ‘loop_’ was not declared in this scope
   226 |     if (loop_)
       |         ^~~~~
@@ -433,20 +829,77 @@ In file included from /sep/src/memory/memory_tier_manager.cpp:1:
 /sep/src/audio/pipewire_capture.cpp:233:6: error: variable or field ‘setCallback’ declared void
   233 | void PipeWireCapture::setCallback(AudioCallback callback)
       |      ^~~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:232:8: error: ‘cudaError_t’ does not name a type
+  232 | inline cudaError_t cudaGetLastError() {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:241:8: error: ‘cudaError_t’ does not name a type
+  241 | inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
+      |        ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:182:20: error: ‘cudaSuccess’ was not declared in this scope
+  182 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:184:99: error: ‘sep::cuda::cudaGetErrorString’ cannot be used as a function
+  184 |                 (void)fprintf(stderr, "Failed to synchronize CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                                 ~~~~~~~~~~~~~~~~~~^~~~~
+/sep/include/compat/cuda_impl.h:250:8: error: ‘cudaError_t’ does not name a type
+  250 | inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
+      |        ^~~~~~~~~~~
+/sep/src/compat/raii.cpp: At global scope:
+/sep/src/compat/raii.cpp:249:47: error: ‘cudaStream_t’ has not been declared
+  249 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
+      |                                               ^~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:259:8: error: ‘cudaError_t’ does not name a type
+  259 | inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:272:8: error: ‘cudaError_t’ does not name a type
+  272 | inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:233:35: error: ‘AudioCallback’ was not declared in this scope
   233 | void PipeWireCapture::setCallback(AudioCallback callback)
       |                                   ^~~~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:239:44: error: ‘sep::audio::AudioMetrics PipeWireCapture::getMetrics()’ should have been declared inside ‘PipeWireCapture’
   239 | AudioMetrics PipeWireCapture::getMetrics() const
       |                                            ^~~~~
+/sep/include/compat/cuda_impl.h:316:8: error: ‘cudaError_t’ does not name a type
+  316 | inline cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:239:44: error: non-member function ‘sep::audio::AudioMetrics PipeWireCapture::getMetrics()’ cannot have cv-qualifier
+/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateUnifiedMemory(std::size_t, int)’:
+/sep/src/compat/raii.cpp:252:9: error: ‘cudaError_t’ was not declared in this scope
+  252 |         cudaError_t err = cudaStreamAttachMemAsync(stream, blk->ptr, 0, 0);
+      |         ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:327:8: error: ‘cudaError_t’ does not name a type
+  327 | inline cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:340:8: error: ‘cudaError_t’ does not name a type
+  340 | inline cudaError_t cudaStreamAttachMemAsync_ptsz(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:353:8: error: ‘cudaError_t’ does not name a type
+  353 | inline cudaError_t cudaStreamSynchronize_ptsz(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioMetrics PipeWireCapture::getMetrics()’:
 /sep/src/audio/pipewire_capture.cpp:241:38: error: ‘mutex_’ was not declared in this scope
   241 |     std::lock_guard<std::mutex> lock(mutex_);
       |                                      ^~~~~~
+/sep/src/compat/raii.cpp:253:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  253 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
+/sep/include/compat/cuda_impl.h:367:5: error: ‘cudaMemcpyKind’ does not name a type
+  367 |     cudaMemcpyKind direction;
+      |     ^~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:368:5: error: ‘cudaStream_t’ does not name a type
+  368 |     cudaStream_t stream;
+      |     ^~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:372:8: error: ‘cudaError_t’ does not name a type
+  372 | inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp:242:12: error: ‘metrics_’ was not declared in this scope
   242 |     return metrics_;
       |            ^~~~~~~~
+/sep/include/compat/cuda_impl.h:386:8: error: ‘cudaError_t’ does not name a type
+  386 | inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp: At global scope:
 /sep/src/audio/pipewire_capture.cpp:248:68: error: ‘void PipeWireCapture::streamStateChanged(void*, pw_stream_state, pw_stream_state, const char*)’ should have been declared inside ‘PipeWireCapture’
   248 |                                          const char*          error)
@@ -455,6 +908,10 @@ In file included from /sep/src/memory/memory_tier_manager.cpp:1:
 /sep/src/audio/pipewire_capture.cpp:250:30: error: reference to ‘PipeWireCapture’ is ambiguous
   250 |     auto* self = static_cast<PipeWireCapture*>(data);
       |                              ^~~~~~~~~~~~~~~
+In file included from /sep/include/compat/cuda_helpers.h:13:
+/sep/include/compat/cuda_common.h:23:42: error: ‘cudaError_t’ has not been declared
+   23 | void logCudaError(const char* operation, cudaError_t error);
+      |                                          ^~~~~~~~~~~
 In file included from /sep/src/audio/pipewire_capture.cpp:3:
 /sep/include/audio/pipewire_capture.h:31:7: note: candidates are: ‘class sep::audio::PipeWireCapture’
    31 | class PipeWireCapture : public AudioCapture {
@@ -476,6 +933,15 @@ In file included from /sep/src/audio/pipewire_capture.cpp:3:
   250 |     auto* self = static_cast<PipeWireCapture*>(data);
       |                                                     ^
       |                                                     )
+/sep/src/compat/raii.cpp:253:20: error: ‘cudaSuccess’ was not declared in this scope
+  253 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:255:105: error: ‘sep::cuda::cudaGetErrorString’ cannot be used as a function
+  255 |                 (void)fprintf(stderr, "Failed to attach memory to CUDA stream: %s\n", cudaGetErrorString(err));
+      |                                                                                       ~~~~~~~~~~~~~~~~~~^~~~~
+/sep/include/compat/cuda_helpers.h:20:58: error: ‘cudaError_t’ has not been declared
+   20 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+      |                                                          ^~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp: At global scope:
 /sep/src/audio/pipewire_capture.cpp:263:47: error: ‘void PipeWireCapture::streamProcess(void*)’ should have been declared inside ‘PipeWireCapture’
   263 | void PipeWireCapture::streamProcess(void* data)
@@ -511,167 +977,20 @@ In file included from /sep/src/audio/pipewire_capture.cpp:3:
 /sep/src/audio/pipewire_capture.cpp:324:52: error: definition of ‘std::unique_ptr<sep::audio::AudioCapture> sep::audio::AudioCapture::create()’ is not in namespace enclosing ‘sep::audio::AudioCapture’ [-fpermissive]
   324 | std::unique_ptr<AudioCapture> AudioCapture::create()
       |                                                    ^
-/sep/src/core/metrics_collector.cpp:27:7: error: ‘MetricsCollector’ has not been declared
-   27 | class MetricsCollector::Impl {
-      |       ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:27:30: error: expected unqualified-id before ‘{’ token
-   27 | class MetricsCollector::Impl {
-      |                              ^
-/sep/src/core/metrics_collector.cpp:234:1: error: ‘MetricsCollector’ does not name a type
-  234 | MetricsCollector& MetricsCollector::instance() {
-      | ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:243:6: error: ‘MetricsCollector’ has not been declared
-  243 | void MetricsCollector::recordOperation(const std::string& operation_name, bool success, double duration_ms) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void recordOperation(const std::string&, bool, double)’:
-/sep/src/core/metrics_collector.cpp:244:38: error: ‘metrics_mutex_’ was not declared in this scope
-  244 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:246:18: error: ‘performance_metrics_’ was not declared in this scope
-  246 |     auto& perf = performance_metrics_[key];
-      |                  ^~~~~~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:261:6: error: ‘MetricsCollector’ has not been declared
-  261 | void MetricsCollector::incrementCounter(const std::string& counter_name, std::uint64_t value) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void incrementCounter(const std::string&, uint64_t)’:
-/sep/src/core/metrics_collector.cpp:262:38: error: ‘metrics_mutex_’ was not declared in this scope
-  262 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:264:5: error: ‘counters_’ was not declared in this scope
-  264 |     counters_[key] += value;
-      |     ^~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:268:6: error: ‘MetricsCollector’ has not been declared
-  268 | void MetricsCollector::setGauge(const std::string& gauge_name, double value) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void setGauge(const std::string&, double)’:
-/sep/src/core/metrics_collector.cpp:269:38: error: ‘metrics_mutex_’ was not declared in this scope
-  269 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:271:5: error: ‘gauges_’ was not declared in this scope
-  271 |     gauges_[key] = value;
-      |     ^~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:274:6: error: ‘MetricsCollector’ has not been declared
-  274 | void MetricsCollector::recordAllocation(std::uint64_t bytes) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void recordAllocation(uint64_t)’:
-/sep/src/core/metrics_collector.cpp:275:38: error: ‘metrics_mutex_’ was not declared in this scope
-  275 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:276:5: error: ‘memory_metrics_’ was not declared in this scope
-  276 |     memory_metrics_.allocated_bytes += bytes;
-      |     ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:282:6: error: ‘MetricsCollector’ has not been declared
-  282 | void MetricsCollector::recordDeallocation(std::uint64_t bytes) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void recordDeallocation(uint64_t)’:
-/sep/src/core/metrics_collector.cpp:283:38: error: ‘metrics_mutex_’ was not declared in this scope
-  283 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:284:5: error: ‘memory_metrics_’ was not declared in this scope
-  284 |     memory_metrics_.allocated_bytes -= bytes;
-      |     ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:288:6: error: ‘MetricsCollector’ has not been declared
-  288 | void MetricsCollector::updateSystemMetrics() {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void updateSystemMetrics()’:
-/sep/src/core/metrics_collector.cpp:289:9: error: ‘pImpl’ was not declared in this scope
-  289 |     if (pImpl) {
-      |         ^~~~~
-/sep/src/core/metrics_collector.cpp:293:42: error: ‘metrics_mutex_’ was not declared in this scope
-  293 |         std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                          ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:295:9: error: ‘system_metrics_’ was not declared in this scope
-  295 |         system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage); // Fix: Cast to double
-      |         ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:302:1: error: ‘MetricsCollector’ does not name a type
-  302 | MetricsCollector::PerformanceMetrics MetricsCollector::getPerformanceMetrics(const std::string& operation_name) const {
-      | ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:312:1: error: ‘MetricsCollector’ does not name a type
-  312 | MetricsCollector::MemoryMetrics MetricsCollector::getMemoryMetrics() const {
-      | ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:317:1: error: ‘MetricsCollector’ does not name a type
-  317 | MetricsCollector::SystemMetrics MetricsCollector::getSystemMetrics() const {
-      | ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:322:15: error: ‘MetricsCollector’ has not been declared
-  322 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
-      |               ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:322:77: error: non-member function ‘uint64_t getCounter(const std::string&)’ cannot have cv-qualifier
-  322 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
-      |                                                                             ^~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘uint64_t getCounter(const std::string&)’:
-/sep/src/core/metrics_collector.cpp:323:38: error: ‘metrics_mutex_’ was not declared in this scope
-  323 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:325:15: error: ‘counters_’ was not declared in this scope
-  325 |     auto it = counters_.find(key);
-      |               ^~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:329:8: error: ‘MetricsCollector’ has not been declared
-  329 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
-      |        ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:329:66: error: non-member function ‘double getGauge(const std::string&)’ cannot have cv-qualifier
-  329 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
-      |                                                                  ^~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘double getGauge(const std::string&)’:
-/sep/src/core/metrics_collector.cpp:330:38: error: ‘metrics_mutex_’ was not declared in this scope
-  330 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:332:15: error: ‘gauges_’ was not declared in this scope
-  332 |     auto it = gauges_.find(key);
-      |               ^~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:336:1: error: ‘DetailedMetrics’ does not name a type
-  336 | DetailedMetrics MetricsCollector::getDetailedMetrics() const {
-      | ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:343:6: error: ‘MetricsCollector’ has not been declared
-  343 | void MetricsCollector::reset() {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void reset()’:
-/sep/src/core/metrics_collector.cpp:344:38: error: ‘metrics_mutex_’ was not declared in this scope
-  344 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:345:5: error: ‘performance_metrics_’ was not declared in this scope
-  345 |     performance_metrics_.clear();
-      |     ^~~~~~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:346:5: error: ‘counters_’ was not declared in this scope
-  346 |     counters_.clear(); // Fix: Clear counters_
-      |     ^~~~~~~~~
-/sep/src/core/metrics_collector.cpp:347:5: error: ‘gauges_’ was not declared in this scope
-  347 |     gauges_.clear(); // Fix: Clear gauges_
-      |     ^~~~~~~
-/sep/src/core/metrics_collector.cpp:348:5: error: ‘memory_metrics_’ was not declared in this scope
-  348 |     memory_metrics_ = MemoryMetrics{};
-      |     ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:348:23: error: ‘MemoryMetrics’ was not declared in this scope
-  348 |     memory_metrics_ = MemoryMetrics{};
-      |                       ^~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:349:5: error: ‘system_metrics_’ was not declared in this scope
-  349 |     system_metrics_ = SystemMetrics{};
-      |     ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:349:23: error: ‘SystemMetrics’ was not declared in this scope; did you mean ‘updateSystemMetrics’?
-  349 |     system_metrics_ = SystemMetrics{};
-      |                       ^~~~~~~~~~~~~
-      |                       updateSystemMetrics
-/sep/src/core/metrics_collector.cpp:350:9: error: ‘pImpl’ was not declared in this scope
-  350 |     if (pImpl) {
-      |         ^~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:355:6: error: ‘MetricsCollector’ has not been declared
-  355 | void MetricsCollector::resetOperation(const std::string& operation_name) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void resetOperation(const std::string&)’:
-/sep/src/core/metrics_collector.cpp:356:38: error: ‘metrics_mutex_’ was not declared in this scope
-  356 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:358:5: error: ‘performance_metrics_’ was not declared in this scope
-  358 |     performance_metrics_.erase(key);
-      |     ^~~~~~~~~~~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
+/sep/include/compat/cuda_helpers.h:21:18: error: ‘cudaSuccess’ was not declared in this scope
+   21 |     if (error != cudaSuccess) {
+      |                  ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:22:91: error: ‘cudaGetErrorString’ cannot be used as a function
+   22 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
+      |                                                                         ~~~~~~~~~~~~~~~~~~^~~~~~~
+/sep/src/api/bridge_c.cpp: In function ‘int sep_process_context(const char*, const char*, char*, size_t)’:
+/sep/src/api/bridge_c.cpp:94:48: error: ‘struct sep::quantum::BatchProcessingResult’ has no member named ‘error_code’
+   94 |         return static_cast<int>(process_result.error_code); // Use specific error code
+      |                                                ^~~~~~~~~~
+[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
 /sep/src/core/manager.cpp:13:22: error: declaration of ‘class sep::config::ConfigManager::Impl’ in namespace ‘sep::config::{anonymous}’ which does not enclose ‘class sep::config::ConfigManager’
    13 | class ConfigManager::Impl {
       |                      ^~~~
@@ -779,13 +1098,9 @@ In file included from /sep/src/core/manager.cpp:1:
 /sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
    60 |   class Impl;
       |         ^~~~
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 42%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 In file included from /usr/include/c++/14/memory:78,
                  from /sep/include/compat/cuda.h:14,
-                 from /sep/include/core/types.h:10,
+                 from /sep/include/core/types.h:11,
                  from /sep/include/core/manager.h:4:
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::config::ConfigManager::Impl; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::config::ConfigManager::Impl>]’:
 /sep/src/core/manager.cpp:138:62:   required from here
@@ -797,10 +1112,106 @@ In file included from /usr/include/c++/14/memory:78,
 /sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
    60 |   class Impl;
       |         ^~~~
-/sep/src/api/bridge_c.cpp: In function ‘int sep_process_context(const char*, const char*, char*, size_t)’:
-/sep/src/api/bridge_c.cpp:94:48: error: ‘struct sep::quantum::BatchProcessingResult’ has no member named ‘error_code’
-   94 |         return static_cast<int>(process_result.error_code); // Use specific error code
-      |                                                ^~~~~~~~~~
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from /sep/include/compat/cuda_helpers.h:8,
+                 from /sep/src/memory/memory_tier_manager.cpp:9:
+/sep/include/compat/cuda_impl.h:24:35: error: ‘cudaDeviceProp’ in namespace ‘sep::cuda’ does not name a type
+   24 | using cudaDeviceProp = sep::cuda::cudaDeviceProp;
+      |                                   ^~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:75:39: error: ‘cudaError_t’ was not declared in this scope
+   75 | inline const char* cudaGetErrorString(cudaError_t error) {
+      |                                       ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:85:8: error: ‘cudaError_t’ does not name a type
+   85 | inline cudaError_t cudaSetDevice(int device) {
+      |        ^~~~~~~~~~~
+[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+/sep/include/compat/cuda_impl.h:96:8: error: ‘cudaError_t’ does not name a type
+   96 | inline cudaError_t cudaGetDeviceCount(int* count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:108:8: error: ‘cudaError_t’ does not name a type
+  108 | inline cudaError_t cudaEventCreate(cudaEvent_t* event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:119:8: error: ‘cudaError_t’ does not name a type
+  119 | inline cudaError_t cudaEventDestroy(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:128:8: error: ‘cudaError_t’ does not name a type
+  128 | inline cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:138:8: error: ‘cudaError_t’ does not name a type
+  138 | inline cudaError_t cudaEventSynchronize(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:147:8: error: ‘cudaError_t’ does not name a type
+  147 | inline cudaError_t cudaEventElapsedTime(float* outMilliseconds, cudaEvent_t start, cudaEvent_t end) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:160:8: error: ‘cudaError_t’ does not name a type
+  160 | inline cudaError_t cudaStreamCreate(cudaStream_t* stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:171:8: error: ‘cudaError_t’ does not name a type
+  171 | inline cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:183:8: error: ‘cudaError_t’ does not name a type
+  183 | inline cudaError_t cudaStreamDestroy(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:192:8: error: ‘cudaError_t’ does not name a type
+  192 | inline cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:216:8: error: ‘cudaError_t’ does not name a type
+  216 | inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:232:8: error: ‘cudaError_t’ does not name a type
+  232 | inline cudaError_t cudaGetLastError() {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:241:8: error: ‘cudaError_t’ does not name a type
+  241 | inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:250:8: error: ‘cudaError_t’ does not name a type
+  250 | inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:259:8: error: ‘cudaError_t’ does not name a type
+  259 | inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:272:8: error: ‘cudaError_t’ does not name a type
+  272 | inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:316:8: error: ‘cudaError_t’ does not name a type
+  316 | inline cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:327:8: error: ‘cudaError_t’ does not name a type
+  327 | inline cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:340:8: error: ‘cudaError_t’ does not name a type
+  340 | inline cudaError_t cudaStreamAttachMemAsync_ptsz(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:353:8: error: ‘cudaError_t’ does not name a type
+  353 | inline cudaError_t cudaStreamSynchronize_ptsz(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:367:5: error: ‘cudaMemcpyKind’ does not name a type
+  367 |     cudaMemcpyKind direction;
+      |     ^~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:368:5: error: ‘cudaStream_t’ does not name a type
+  368 |     cudaStream_t stream;
+      |     ^~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:372:8: error: ‘cudaError_t’ does not name a type
+  372 | inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:386:8: error: ‘cudaError_t’ does not name a type
+  386 | inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+In file included from /sep/include/compat/cuda_helpers.h:13:
+/sep/include/compat/cuda_common.h:23:42: error: ‘cudaError_t’ has not been declared
+   23 | void logCudaError(const char* operation, cudaError_t error);
+      |                                          ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:20:58: error: ‘cudaError_t’ has not been declared
+   20 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+      |                                                          ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
+/sep/include/compat/cuda_helpers.h:21:18: error: ‘cudaSuccess’ was not declared in this scope
+   21 |     if (error != cudaSuccess) {
+      |                  ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:22:91: error: ‘cudaGetErrorString’ cannot be used as a function
+   22 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
+      |                                                                         ~~~~~~~~~~~~~~~~~~^~~~~~~
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::config::ConfigManager::Impl]’:
 /usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::config::ConfigManager::Impl; _Dp = std::default_delete<sep::config::ConfigManager::Impl>]’
   399 |           get_deleter()(std::move(__ptr));
@@ -811,26 +1222,334 @@ In file included from /usr/include/c++/14/memory:78,
 /usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::config::ConfigManager::Impl’
    91 |         static_assert(sizeof(_Tp)>0,
       |                       ^~~~~~~~~~~
-[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+[ 47%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+In file included from /sep/include/compat/cuda_common.h:10,
+                 from /sep/src/core/metrics_collector.cpp:2:
+/sep/include/compat/cuda_impl.h:24:29: error: ‘cuda’ in namespace ‘sep’ does not name a type
+   24 | using cudaDeviceProp = sep::cuda::cudaDeviceProp;
+      |                             ^~~~
+/sep/include/compat/cuda_impl.h:75:39: error: ‘cudaError_t’ was not declared in this scope
+   75 | inline const char* cudaGetErrorString(cudaError_t error) {
+      |                                       ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:85:8: error: ‘cudaError_t’ does not name a type
+   85 | inline cudaError_t cudaSetDevice(int device) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:96:8: error: ‘cudaError_t’ does not name a type
+   96 | inline cudaError_t cudaGetDeviceCount(int* count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:108:8: error: ‘cudaError_t’ does not name a type
+  108 | inline cudaError_t cudaEventCreate(cudaEvent_t* event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:119:8: error: ‘cudaError_t’ does not name a type
+  119 | inline cudaError_t cudaEventDestroy(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:128:8: error: ‘cudaError_t’ does not name a type
+  128 | inline cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:138:8: error: ‘cudaError_t’ does not name a type
+  138 | inline cudaError_t cudaEventSynchronize(cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:147:8: error: ‘cudaError_t’ does not name a type
+  147 | inline cudaError_t cudaEventElapsedTime(float* outMilliseconds, cudaEvent_t start, cudaEvent_t end) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:160:8: error: ‘cudaError_t’ does not name a type
+  160 | inline cudaError_t cudaStreamCreate(cudaStream_t* stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:171:8: error: ‘cudaError_t’ does not name a type
+  171 | inline cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:183:8: error: ‘cudaError_t’ does not name a type
+  183 | inline cudaError_t cudaStreamDestroy(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:192:8: error: ‘cudaError_t’ does not name a type
+  192 | inline cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:216:8: error: ‘cudaError_t’ does not name a type
+  216 | inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:232:8: error: ‘cudaError_t’ does not name a type
+  232 | inline cudaError_t cudaGetLastError() {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:241:8: error: ‘cudaError_t’ does not name a type
+  241 | inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:250:8: error: ‘cudaError_t’ does not name a type
+  250 | inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:259:8: error: ‘cudaError_t’ does not name a type
+  259 | inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:272:8: error: ‘cudaError_t’ does not name a type
+  272 | inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:316:8: error: ‘cudaError_t’ does not name a type
+  316 | inline cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:327:8: error: ‘cudaError_t’ does not name a type
+  327 | inline cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:340:8: error: ‘cudaError_t’ does not name a type
+  340 | inline cudaError_t cudaStreamAttachMemAsync_ptsz(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:353:8: error: ‘cudaError_t’ does not name a type
+  353 | inline cudaError_t cudaStreamSynchronize_ptsz(cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:367:5: error: ‘cudaMemcpyKind’ does not name a type
+  367 |     cudaMemcpyKind direction;
+      |     ^~~~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:368:5: error: ‘cudaStream_t’ does not name a type
+  368 |     cudaStream_t stream;
+      |     ^~~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:372:8: error: ‘cudaError_t’ does not name a type
+  372 | inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_impl.h:386:8: error: ‘cudaError_t’ does not name a type
+  386 | inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
+      |        ^~~~~~~~~~~
+/sep/include/compat/cuda_common.h:23:42: error: ‘cudaError_t’ has not been declared
+   23 | void logCudaError(const char* operation, cudaError_t error);
+      |                                          ^~~~~~~~~~~
+In file included from /sep/src/core/metrics_collector.cpp:3:
+/sep/include/compat/cuda_helpers.h:20:58: error: ‘cudaError_t’ has not been declared
+   20 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+      |                                                          ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
+/sep/include/compat/cuda_helpers.h:21:18: error: ‘cudaSuccess’ was not declared in this scope
+   21 |     if (error != cudaSuccess) {
+      |                  ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:22:91: error: ‘cudaGetErrorString’ cannot be used as a function
+   22 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
+      |                                                                         ~~~~~~~~~~~~~~~~~~^~~~~~~
+/sep/src/memory/memory_tier_manager.cpp: At global scope:
+/sep/src/memory/memory_tier_manager.cpp:30:1: error: no declaration matches ‘sep::memory::MemoryTierManager::MemoryTierManager()’
+   30 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      | ^~~~~~~~~~~~~~~~~
+In file included from /sep/src/memory/memory_tier_manager.cpp:1:
+/sep/include/memory/memory_tier_manager.hpp:48:7: note: candidates are: ‘sep::memory::MemoryTierManager::MemoryTierManager(const sep::memory::MemoryTierManager&)’
+   48 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:26:1: note:                 ‘sep::memory::MemoryTierManager::MemoryTierManager(const Config&)’
+   26 | MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
+      | ^~~~~~~~~~~~~~~~~
+/sep/include/memory/memory_tier_manager.hpp:48:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   48 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:30:68: error: expected unqualified-id before ‘)’ token
+   30 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      |                                                                    ^
+/sep/src/memory/memory_tier_manager.cpp:36:44: error: ‘Config’ in namespace ‘sep::memory’ does not name a type
+   36 | void MemoryTierManager::init(const memory::Config& config) {
+      |                                            ^~~~~~
+/sep/src/memory/memory_tier_manager.cpp:36:6: error: no declaration matches ‘void sep::memory::MemoryTierManager::init(const int&)’
+   36 | void MemoryTierManager::init(const memory::Config& config) {
+      |      ^~~~~~~~~~~~~~~~~
+/sep/include/memory/memory_tier_manager.hpp:75:10: note: candidate is: ‘void sep::memory::MemoryTierManager::init(const Config&)’
+   75 |     void init(const Config& config);
+      |          ^~~~
+/sep/include/memory/memory_tier_manager.hpp:48:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   48 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:27:7: error: ‘MetricsCollector’ has not been declared
+   27 | class MetricsCollector::Impl {
+      |       ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:27:30: error: expected unqualified-id before ‘{’ token
+   27 | class MetricsCollector::Impl {
+      |                              ^
+/sep/src/core/metrics_collector.cpp:234:1: error: ‘MetricsCollector’ does not name a type
+  234 | MetricsCollector& MetricsCollector::instance() {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:243:6: error: ‘MetricsCollector’ has not been declared
+  243 | void MetricsCollector::recordOperation(const std::string& operation_name, bool success, double duration_ms) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void recordOperation(const std::string&, bool, double)’:
+/sep/src/core/metrics_collector.cpp:244:38: error: ‘metrics_mutex_’ was not declared in this scope
+  244 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:406:6: error: no declaration matches ‘void sep::memory::MemoryTierManager::registerPattern(std::size_t, const sep::pattern::PatternData&)’
+  406 | void MemoryTierManager::registerPattern(std::size_t id, const pattern::PatternData& pattern) {
+      |      ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:406:6: note: no functions named ‘void sep::memory::MemoryTierManager::registerPattern(std::size_t, const sep::pattern::PatternData&)’
+/sep/include/memory/memory_tier_manager.hpp:48:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   48 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:410:29: error: no declaration matches ‘const sep::pattern::PatternData* sep::memory::MemoryTierManager::getPatternData(std::size_t) const’
+  410 | const pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
+      |                             ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:410:29: note: no functions named ‘const sep::pattern::PatternData* sep::memory::MemoryTierManager::getPatternData(std::size_t) const’
+/sep/include/memory/memory_tier_manager.hpp:48:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   48 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:246:18: error: ‘performance_metrics_’ was not declared in this scope
+  246 |     auto& perf = performance_metrics_[key];
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:261:6: error: ‘MetricsCollector’ has not been declared
+  261 | void MetricsCollector::incrementCounter(const std::string& counter_name, std::uint64_t value) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void incrementCounter(const std::string&, uint64_t)’:
+/sep/src/core/metrics_collector.cpp:262:38: error: ‘metrics_mutex_’ was not declared in this scope
+  262 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:264:5: error: ‘counters_’ was not declared in this scope
+  264 |     counters_[key] += value;
+      |     ^~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:268:6: error: ‘MetricsCollector’ has not been declared
+  268 | void MetricsCollector::setGauge(const std::string& gauge_name, double value) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void setGauge(const std::string&, double)’:
+/sep/src/core/metrics_collector.cpp:269:38: error: ‘metrics_mutex_’ was not declared in this scope
+  269 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:271:5: error: ‘gauges_’ was not declared in this scope
+  271 |     gauges_[key] = value;
+      |     ^~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:274:6: error: ‘MetricsCollector’ has not been declared
+  274 | void MetricsCollector::recordAllocation(std::uint64_t bytes) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void recordAllocation(uint64_t)’:
+/sep/src/core/metrics_collector.cpp:275:38: error: ‘metrics_mutex_’ was not declared in this scope
+  275 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:276:5: error: ‘memory_metrics_’ was not declared in this scope
+  276 |     memory_metrics_.allocated_bytes += bytes;
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:282:6: error: ‘MetricsCollector’ has not been declared
+  282 | void MetricsCollector::recordDeallocation(std::uint64_t bytes) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void recordDeallocation(uint64_t)’:
+/sep/src/core/metrics_collector.cpp:283:38: error: ‘metrics_mutex_’ was not declared in this scope
+  283 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+[ 50%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+/sep/src/core/metrics_collector.cpp:284:5: error: ‘memory_metrics_’ was not declared in this scope
+  284 |     memory_metrics_.allocated_bytes -= bytes;
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:288:6: error: ‘MetricsCollector’ has not been declared
+  288 | void MetricsCollector::updateSystemMetrics() {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void updateSystemMetrics()’:
+/sep/src/core/metrics_collector.cpp:289:9: error: ‘pImpl’ was not declared in this scope
+  289 |     if (pImpl) {
+      |         ^~~~~
+/sep/src/core/metrics_collector.cpp:293:42: error: ‘metrics_mutex_’ was not declared in this scope
+  293 |         std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                          ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:295:9: error: ‘system_metrics_’ was not declared in this scope
+  295 |         system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage); // Fix: Cast to double
+      |         ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:302:1: error: ‘MetricsCollector’ does not name a type
+  302 | MetricsCollector::PerformanceMetrics MetricsCollector::getPerformanceMetrics(const std::string& operation_name) const {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:312:1: error: ‘MetricsCollector’ does not name a type
+  312 | MetricsCollector::MemoryMetrics MetricsCollector::getMemoryMetrics() const {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:317:1: error: ‘MetricsCollector’ does not name a type
+  317 | MetricsCollector::SystemMetrics MetricsCollector::getSystemMetrics() const {
+      | ^~~~~~~~~~~~~~~~
+[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+/sep/src/core/metrics_collector.cpp:322:15: error: ‘MetricsCollector’ has not been declared
+  322 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
+      |               ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:322:77: error: non-member function ‘uint64_t getCounter(const std::string&)’ cannot have cv-qualifier
+  322 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
+      |                                                                             ^~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘uint64_t getCounter(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:323:38: error: ‘metrics_mutex_’ was not declared in this scope
+  323 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:325:15: error: ‘counters_’ was not declared in this scope
+  325 |     auto it = counters_.find(key);
+      |               ^~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:329:8: error: ‘MetricsCollector’ has not been declared
+  329 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
+      |        ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:329:66: error: non-member function ‘double getGauge(const std::string&)’ cannot have cv-qualifier
+  329 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
+      |                                                                  ^~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘double getGauge(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:330:38: error: ‘metrics_mutex_’ was not declared in this scope
+  330 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:332:15: error: ‘gauges_’ was not declared in this scope
+  332 |     auto it = gauges_.find(key);
+      |               ^~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:336:1: error: ‘DetailedMetrics’ does not name a type
+  336 | DetailedMetrics MetricsCollector::getDetailedMetrics() const {
+      | ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:343:6: error: ‘MetricsCollector’ has not been declared
+  343 | void MetricsCollector::reset() {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void reset()’:
+/sep/src/core/metrics_collector.cpp:344:38: error: ‘metrics_mutex_’ was not declared in this scope
+  344 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:345:5: error: ‘performance_metrics_’ was not declared in this scope
+  345 |     performance_metrics_.clear();
+      |     ^~~~~~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:346:5: error: ‘counters_’ was not declared in this scope
+  346 |     counters_.clear(); // Fix: Clear counters_
+      |     ^~~~~~~~~
+/sep/src/core/metrics_collector.cpp:347:5: error: ‘gauges_’ was not declared in this scope
+  347 |     gauges_.clear(); // Fix: Clear gauges_
+      |     ^~~~~~~
+/sep/src/core/metrics_collector.cpp:348:5: error: ‘memory_metrics_’ was not declared in this scope
+  348 |     memory_metrics_ = MemoryMetrics{};
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:348:23: error: ‘MemoryMetrics’ was not declared in this scope
+  348 |     memory_metrics_ = MemoryMetrics{};
+      |                       ^~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:349:5: error: ‘system_metrics_’ was not declared in this scope
+  349 |     system_metrics_ = SystemMetrics{};
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:349:23: error: ‘SystemMetrics’ was not declared in this scope; did you mean ‘updateSystemMetrics’?
+  349 |     system_metrics_ = SystemMetrics{};
+      |                       ^~~~~~~~~~~~~
+      |                       updateSystemMetrics
+/sep/src/core/metrics_collector.cpp:350:9: error: ‘pImpl’ was not declared in this scope
+  350 |     if (pImpl) {
+      |         ^~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:355:6: error: ‘MetricsCollector’ has not been declared
+  355 | void MetricsCollector::resetOperation(const std::string& operation_name) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void resetOperation(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:356:38: error: ‘metrics_mutex_’ was not declared in this scope
+  356 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:358:5: error: ‘performance_metrics_’ was not declared in this scope
+  358 |     performance_metrics_.erase(key);
+      |     ^~~~~~~~~~~~~~~~~~~~
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 47%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 53%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
 make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
-[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 /sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::setupStream()’:
 /sep/src/audio/pipewire_capture.cpp:199:1: warning: control reaches end of non-void function [-Wreturn-type]
   199 | }
       | ^
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
 make[2]: *** [src/audio/CMakeFiles/sep_audio.dir/build.make:107: src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:79: src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o] Error 1
+[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 /sep/src/memory/redis_manager.cpp:384:17: error: ‘IRedisManager’ was not declared in this scope; did you mean ‘RedisManager’?
   384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
       |                 ^~~~~~~~~~~~~
@@ -844,10 +1563,6 @@ make[2]: *** Waiting for unfinished jobs....
       |                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
       |                                                                                                                             |
       |                                                                                                                             std::shared_ptr<sep::persistence::RedisManager>
-[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 /sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::to_json(nlohmann::json_abi_v3_11_3::json&, const QuantumState&)’:
 /sep/src/quantum/types_serialization.cpp:16:34: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘evolution_rate’
    16 |         {"evolution_rate", state.evolution_rate}, // Fix: Add missing field
@@ -1048,7 +1763,6 @@ In file included from /sep/src/quantum/processor.cpp:1:
       |                                     ^~~~~~
 make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:191: src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:177: src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o] Error 1
 make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:205: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o] Error 1
 /sep/src/memory/quantum_coherence_manager.cpp:22:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
    22 | class QuantumCoherenceManager {
@@ -1067,6 +1781,7 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
 /sep/src/memory/quantum_coherence_manager.cpp:211:20: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceResult = struct sep::memory::QuantumCoherenceManager::CoherenceResult’ {aka ‘struct sep::memory::QuantumCoherenceManager::CoherenceResult’} has no member named ‘tier_pattern_count’
   211 |             result.tier_pattern_count[i] = countPatternsInTier(static_cast<MemoryTierEnum>(i));
       |                    ^~~~~~~~~~~~~~~~~~
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:177: src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o] Error 1
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::TierMigration> sep::memory::QuantumCoherenceManager::Impl::optimizeMemoryLayout()’:
 /sep/src/memory/quantum_coherence_manager.cpp:224:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
   224 |         coherence_map_.for_each([&](const auto& pair) {
@@ -1168,7 +1883,6 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
 /sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
    14 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:367: src/audio/CMakeFiles/sep_audio.dir/all] Error 2
 make[1]: *** Waiting for unfinished jobs....
 In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:8:
@@ -1179,55 +1893,7 @@ In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:12:
 /sep/include/memory/manager.h:78:18: error: ‘level_enum’ in ‘using sep::spdlog::level = enum spdlog::level::level_enum’ {aka ‘enum spdlog::level::level_enum’} does not name a type
    78 |   spdlog::level::level_enum toSpdLogLevel(Level level);
       |                  ^~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:61:38: error: qualified name does not name a class before ‘{’ token
-   61 | class QuantumManifoldOptimizer::Impl {
-      |                                      ^
-/sep/src/quantum/quantum_manifold_optimizer.cpp:519:58: error: ‘Config’ does not name a type
-  519 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
-      |                                                          ^~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:519:72: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  519 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
-      |                                                                        ^
-In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:4:
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:522:53: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  522 | QuantumManifoldOptimizer::~QuantumManifoldOptimizer() = default;
-      |                                                     ^
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:524:27: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  524 | QuantumManifoldOptimizer::OptimizationResult
-      |                           ^~~~~~~~~~~~~~~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:530:102: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  530 | void QuantumManifoldOptimizer::updateManifoldGeometry(const std::vector<QuantumState>& quantum_states) {
-      |                                                                                                      ^
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:534:85: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  534 | float QuantumManifoldOptimizer::computeManifoldCoherence(const glm::vec3& position) const {
-      |                                                                                     ^~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:539:91: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  539 |                                                                     uint32_t num_samples) const {
-      |                                                                                           ^~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:544:106: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  544 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
-      |                                                                                                          ^~~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
 /sep/src/quantum/pattern_evolution_bridge.cpp:464:31: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
   464 |     QuantumManifoldOptimizer::Config createManifoldConfig(const Config& config) {
       |                               ^~~~~~
@@ -1368,33 +2034,57 @@ In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:3:
 /sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
   187 |     std::unique_ptr<EvolutionState> evolution_state_;
       |                                     ^~~~~~~~~~~~~~~~
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/compat/cuda.h:14,
-                 from /sep/include/core/types.h:10,
-                 from /sep/include/memory/types.h:6,
-                 from /sep/include/quantum/quantum_processor_qfh.h:4,
-                 from /sep/include/quantum/quantum_manifold_optimizer.h:6,
-                 from /sep/src/quantum/quantum_manifold_optimizer.cpp:2:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Args = {const int&}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::quantum::QuantumManifoldOptimizer>]’:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:545:54:   required from here
-  545 |     return std::make_unique<QuantumManifoldOptimizer>(config);
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
- 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:61:38: error: qualified name does not name a class before ‘{’ token
+   61 | class QuantumManifoldOptimizer::Impl {
+      |                                      ^
+/sep/src/quantum/quantum_manifold_optimizer.cpp:519:58: error: ‘Config’ does not name a type
+  519 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
+      |                                                          ^~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:519:72: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  519 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
+      |                                                                        ^
+In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:4:
 /sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
    16 | class QuantumManifoldOptimizer;
       |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::quantum::QuantumManifoldOptimizer]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Dp = std::default_delete<sep::quantum::QuantumManifoldOptimizer>]’
-  399 |           get_deleter()(std::move(__ptr));
-      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:545:54:   required from here
-  545 |     return std::make_unique<QuantumManifoldOptimizer>(config);
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::quantum::QuantumManifoldOptimizer’
-   91 |         static_assert(sizeof(_Tp)>0,
-      |                       ^~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:522:53: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  522 | QuantumManifoldOptimizer::~QuantumManifoldOptimizer() = default;
+      |                                                     ^
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:524:27: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  524 | QuantumManifoldOptimizer::OptimizationResult
+      |                           ^~~~~~~~~~~~~~~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:530:102: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  530 | void QuantumManifoldOptimizer::updateManifoldGeometry(const std::vector<QuantumState>& quantum_states) {
+      |                                                                                                      ^
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:534:85: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  534 | float QuantumManifoldOptimizer::computeManifoldCoherence(const glm::vec3& position) const {
+      |                                                                                     ^~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:539:91: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  539 |                                                                     uint32_t num_samples) const {
+      |                                                                                           ^~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:544:106: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  544 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+      |                                                                                                          ^~~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
 In file included from /usr/include/glm/detail/type_vec3.hpp:435,
                  from /usr/include/glm/ext/vector_bool3.hpp:5,
                  from /usr/include/glm/vec3.hpp:5,
@@ -1414,8 +2104,23 @@ In file included from /usr/include/glm/detail/type_vec3.hpp:435,
 /usr/include/glm/detail/type_vec3.inl:230:28: error: invalid ‘static_cast’ from type ‘glm::vec<4, float, glm::packed_highp>’ to type ‘float’
   230 |                 this->z += static_cast<T>(scalar);
       |                            ^~~~~~~~~~~~~~~~~~~~~~
-make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
-[ 63%] Linking CXX static library libsep_compat.a
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/include/compat/cuda.h:14,
+                 from /sep/include/core/types.h:11,
+                 from /sep/include/memory/types.h:6,
+                 from /sep/include/quantum/quantum_processor_qfh.h:4,
+                 from /sep/include/quantum/quantum_manifold_optimizer.h:6,
+                 from /sep/src/quantum/quantum_manifold_optimizer.cpp:2:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Args = {const int&}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::quantum::QuantumManifoldOptimizer>]’:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:545:54:   required from here
+  545 |     return std::make_unique<QuantumManifoldOptimizer>(config);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
 In file included from /usr/include/c++/14/memory:78,
                  from /sep/include/blender/compression.h:4,
                  from /sep/include/memory/memory_tier.hpp:10,
@@ -1430,11 +2135,20 @@ In file included from /usr/include/c++/14/memory:78,
 /usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::quantum::QuantumManifoldOptimizer’
    91 |         static_assert(sizeof(_Tp)>0,
       |                       ^~~~~~~~~~~
-[ 63%] Built target sep_compat
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::quantum::QuantumManifoldOptimizer]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Dp = std::default_delete<sep::quantum::QuantumManifoldOptimizer>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:545:54:   required from here
+  545 |     return std::make_unique<QuantumManifoldOptimizer>(config);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::quantum::QuantumManifoldOptimizer’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
 make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:233: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
 make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:247: src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

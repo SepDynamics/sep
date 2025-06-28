@@ -23,26 +23,6 @@ MemoryTierManager& MemoryTierManager::getInstance() {
     return *instance_;
 }
 
-void MemoryTierManager::init(const memory::Config& config){
-    config_ = config;
-    MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), config.stm_size};
-    MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), config.mtm_size};
-    MemoryTier::Config lcfg{static_cast<TierType>(sep::MemoryTierEnum::LTM), config.ltm_size};
-    stm_ = std::make_unique<MemoryTier>(scfg);
-    mtm_ = std::make_unique<MemoryTier>(mcfg);
-    ltm_ = std::make_unique<MemoryTier>(lcfg);
-}
-
-void MemoryTierManager::shutdown(){
-    stm_.reset();
-    mtm_.reset();
-    ltm_.reset();
-    lookup_map_.clear();
-    pattern_registry_.clear();
-    pattern_relationships_.clear();
-    redis_manager_.reset();
-}
-
 MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
     init(cfg);
 }

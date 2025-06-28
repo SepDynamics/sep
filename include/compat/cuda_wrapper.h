@@ -14,7 +14,7 @@
 #include <stddef.h>
 #include <cstdio>
 #include <cstdlib>
-#include "cuda_defs.h"
+#include "compat/cuda_common.h"
 
 
 

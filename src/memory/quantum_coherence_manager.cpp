@@ -221,7 +221,8 @@ public:
         auto tier_analysis = analyzeTierCoherence();
         
         // Identify patterns that should migrate
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             const auto& data = pair.second;
             MemoryTierEnum target_tier = determineOptimalTier(data);
             
@@ -234,7 +235,7 @@ public:
                 migration.reason = determineMigrationReason(data, target_tier);
                 migrations.push_back(migration);
             }
-        });
+        }
         
         // Apply memory pressure optimizations
         if (metrics_.memory_pressure > MEMORY_PRESSURE_FACTOR) {
@@ -286,7 +287,8 @@ public:
     }
     
     void applyCoherenceDecay(float decay_factor) {
-        coherence_map_.for_each([decay_factor](auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            auto& pair = *it;
             auto& data = pair.second;
             data.coherence *= (1.0f - decay_factor * COHERENCE_DECAY_RATE);
             
@@ -294,7 +296,7 @@ public:
             if (data.coherence < MIN_COHERENCE_FOR_PERSISTENCE) {
                 data.coherence = 0.0f;
             }
-        });
+        }
         
         // Clean up zero-coherence patterns
         cleanupZeroCoherencePatterns();
@@ -306,9 +308,10 @@ public:
         snapshot.global_metrics = metrics_;
         
         // Capture pattern states
-        coherence_map_.for_each([&snapshot](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             snapshot.pattern_states.push_back(pair.second);
-        });
+        }
         
         // Capture tier distributions
         snapshot.tier_distribution[0] = countPatternsInTier(MemoryTierEnum::STM);
@@ -443,7 +446,8 @@ private:
         float tier_frag_sums[3] = {0.0f, 0.0f, 0.0f};
         uint32_t tier_counts[3] = {0, 0, 0};
         
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             const auto& data = pair.second;
             total_coherence += data.coherence;
             pattern_count++;
@@ -456,7 +460,7 @@ private:
             tier_sums[tier_idx] += data.coherence;
             tier_frag_sums[tier_idx] += data.fragmentation_score;
             tier_counts[tier_idx]++;
-        });
+        }
         
         // Update metrics
         metrics_.global_coherence = (pattern_count > 0) ? 

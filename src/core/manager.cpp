@@ -51,6 +51,10 @@ public:
     if (const char *log_file = std::getenv(ENV_LOG_FILE)) {
       config.logging.log_file = log_file;
     }
+    if (const char *console_output = std::getenv(ENV_LOG_CONSOLE)) {
+      sep::shim::string val = console_output;
+      config.logging.console_output = (val == "1" || val == "true");
+    }
     if (const char *data_dir = std::getenv(ENV_DATA_DIR)) {
       config.data_path = data_dir;
     }

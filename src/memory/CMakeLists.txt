@@ -4,10 +4,7 @@ add_library(sep_memory
     memory_tier_manager.cpp
     manager.cpp
     redis_manager.cpp
-)
-
-target_sources(sep_memory PRIVATE
-  quantum_coherence_manager.cpp
+    quantum_coherence_manager.cpp
 )
 
 target_include_directories(sep_memory

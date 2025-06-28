@@ -34,16 +34,45 @@ static PWInit pw_init_once;
 
 PipeWireCapture::PipeWireCapture() = default;
 
-namespace {
+namespace PipeWireCapture {
 const struct pw_stream_events createStreamEvents()
 {
     struct pw_stream_events events = {};
     events.version                 = PW_VERSION_STREAM_EVENTS;
-    events.state_changed = &PipeWireCapture::streamStateChanged;
-    events.process       = &PipeWireCapture::streamProcess;
+    events.state_changed = &streamStateChanged;
+    events.process       = &streamProcess;
     return events;
 }
-}  // namespace
+
+
+void PipeWireCapture::cleanup()
+{
+    if (stream_)
+    {
+        if (stream_listener_)
+        {
+            spa_hook_remove(stream_listener_.get());
+            stream_listener_.reset();
+        }
+        pw_stream_destroy(stream_);
+        stream_ = nullptr;
+    }
+    if (core_)
+    {
+        pw_core_disconnect(core_);
+        core_ = nullptr;
+    }
+    if (context_)
+    {
+        pw_context_destroy(context_);
+        context_ = nullptr;
+    }
+    if (loop_)
+    {
+        pw_thread_loop_destroy(loop_);
+        loop_ = nullptr;
+    }
+}
 
 PipeWireCapture::~PipeWireCapture()
 {
@@ -213,35 +242,6 @@ AudioMetrics PipeWireCapture::getMetrics() const
     return metrics_;
 }
 
-void PipeWireCapture::cleanup()
-{
-    if (stream_)
-    {
-        if (stream_listener_)
-        {
-            spa_hook_remove(stream_listener_.get());
-            stream_listener_.reset();
-        }
-        pw_stream_destroy(stream_);
-        stream_ = nullptr;
-    }
-    if (core_)
-    {
-        pw_core_disconnect(core_);
-        core_ = nullptr;
-    }
-    if (context_)
-    {
-        pw_context_destroy(context_);
-        context_ = nullptr;
-    }
-    if (loop_)
-    {
-        pw_thread_loop_destroy(loop_);
-        loop_ = nullptr;
-    }
-}
-
 void PipeWireCapture::streamStateChanged(void*        data,
                                          enum pw_stream_state old_state,
                                          enum pw_stream_state new_state,
@@ -325,3 +325,5 @@ std::unique_ptr<AudioCapture> AudioCapture::create()
 {
     return compat::createAudioCapture();
 }
+
+}  // namespace audio

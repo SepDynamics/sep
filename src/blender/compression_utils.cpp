@@ -1,5 +1,5 @@
 #include "blender/compression.h"
-#include "../../include/compat/math_common.h"
+#include "compat/math_common.h"
 
 // Standard library includes
 #include <array>

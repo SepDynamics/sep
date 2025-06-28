@@ -27,16 +27,16 @@
 // These are controlled by CMake and passed to the compiler
 #if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES == 1 && (!defined(SEP_USE_CYCLES_STUB) || SEP_USE_CYCLES_STUB == 0)
 // Core Cycles headers - use relative paths for portability
-#include "../../extern/cycles/src/scene/scene.h"
-#include "../../extern/cycles/src/session/session.h"
-#include "../../extern/cycles/src/scene/camera.h"
-#include "../../extern/cycles/src/scene/mesh.h"
-#include "../../extern/cycles/src/scene/shader.h"
-#include "../../extern/cycles/src/scene/light.h"
-#include "../../extern/cycles/src/scene/background.h"
-#include "../../extern/cycles/src/scene/film.h"
-#include "../../extern/cycles/src/scene/integrator.h"
-#include "../../extern/cycles/src/session/buffers.h"
+#include "../extern/cycles/src/scene/scene.h"
+#include "../extern/cycles/src/session/session.h"
+#include "../extern/cycles/src/scene/camera.h"
+#include "../extern/cycles/src/scene/mesh.h"
+#include "../extern/cycles/src/scene/shader.h"
+#include "../extern/cycles/src/scene/light.h"
+#include "../extern/cycles/src/scene/background.h"
+#include "../extern/cycles/src/scene/film.h"
+#include "../extern/cycles/src/scene/integrator.h"
+#include "../extern/cycles/src/session/buffers.h"
 
 // No need for stub implementations when using real Cycles
 #else

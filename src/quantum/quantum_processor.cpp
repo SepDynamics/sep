@@ -1,6 +1,7 @@
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "compat/math_common.h"
+#include "quantum/qbsa_qfh.h"
 #include <glm/glm.hpp>
 #include <vector>
 #include <memory>
@@ -61,16 +62,6 @@ QuantumProcessor::QuantumProcessor(const Config& config)
     qbsa_processor_ = createQFHBasedQBSAProcessor({});
 }
 
-// Factory functions implementation
-std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-    // In a real build, this would check for CUDA availability and
-    // other hardware features. For now, return the default implementation.
-    return std::make_unique<QuantumProcessor>(config);
-}
-
-std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
-    return std::make_unique<QuantumProcessor>(QuantumProcessor::Config{});
-}
 float QuantumProcessor::calculateCoherence(const glm::vec3& pattern_a, const glm::vec3& pattern_b) {
     // Calculate dot product normalized by magnitudes
     float dot_product = glm::dot(pattern_a, pattern_b);

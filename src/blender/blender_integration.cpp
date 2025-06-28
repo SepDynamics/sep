@@ -1,4 +1,4 @@
-#include "../../include/blender/pattern_bridge.h"
+#include "blender/pattern_bridge.h"
 #include <thread>
 #include <chrono>
 

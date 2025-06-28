@@ -65,7 +65,6 @@ public:
     // Singleton access
     static MemoryTierManager& getInstance();
 
-    MemoryTierManager();
     MemoryTierManager(const Config& cfg = Config());
     ~MemoryTierManager();
 
@@ -121,10 +120,6 @@ public:
     const quantum::Pattern* findPattern(std::size_t id) const;
     void cleanupExpiredPatterns();
     void prunePatternsByPriority(sep::memory::TierType tier, size_t max_count);
-
-    // Test helpers
-    void registerPattern(std::size_t id, const pattern::PatternData& pattern);
-    const pattern::PatternData* getPatternData(std::size_t id) const;
 
     dag::DagGraph& getDagGraph() {
         return dag_graph_;

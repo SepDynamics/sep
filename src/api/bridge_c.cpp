@@ -1,7 +1,13 @@
 #define BUILDING_SEP_BRIDGE
+#include "quantum/types.h"
 #include "api/bridge.h"
 #include "api/bridge_internal.hpp"
 #include "core/manager.h"
+#include "compat/cuda_helpers.h"
+#include "compat/shim.h"
+#include "crow/asio_isolation.h"
+#include "crow/socket_adaptors.h"
+#include <ios>
 #include <nlohmann/json.hpp>
 #include <cstdio>
 #include <cstring>

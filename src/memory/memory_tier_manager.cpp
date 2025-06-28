@@ -1,6 +1,12 @@
 #include "memory/memory_tier_manager.hpp"
+#include "memory/types.h"
+
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime.h>
+#endif
 
 #include "compat/component_bridge.h"
+#include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/data.hpp" // For PatternData definition
@@ -17,18 +23,55 @@ MemoryTierManager& MemoryTierManager::getInstance() {
     return *instance_;
 }
 
-MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
-    MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), cfg.stm_size}; // Fix: Use correct enum
-    MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), cfg.mtm_size};
-    MemoryTier::Config lcfg{static_cast<TierType>(sep::MemoryTierEnum::LTM), cfg.ltm_size};
+void MemoryTierManager::init(const memory::Config& config){
+    config_ = config;
+    MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), config.stm_size};
+    MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), config.mtm_size};
+    MemoryTier::Config lcfg{static_cast<TierType>(sep::MemoryTierEnum::LTM), config.ltm_size};
     stm_ = std::make_unique<MemoryTier>(scfg);
     mtm_ = std::make_unique<MemoryTier>(mcfg);
     ltm_ = std::make_unique<MemoryTier>(lcfg);
 }
 
+void MemoryTierManager::shutdown(){
+    stm_.reset();
+    mtm_.reset();
+    ltm_.reset();
+    lookup_map_.clear();
+    pattern_registry_.clear();
+    pattern_relationships_.clear();
+    redis_manager_.reset();
+}
+
+MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
+    init(cfg);
+}
+
 MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
 
-MemoryTierManager::~MemoryTierManager() = default;
+MemoryTierManager::~MemoryTierManager() {
+    shutdown();
+}
+
+void MemoryTierManager::init(const memory::Config& config) {
+    config_ = config;
+    MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), config.stm_size};
+    MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), config.mtm_size};
+    MemoryTier::Config lcfg{static_cast<TierType>(sep::MemoryTierEnum::LTM), config.ltm_size};
+    stm_ = std::make_unique<MemoryTier>(scfg);
+    mtm_ = std::make_unique<MemoryTier>(mcfg);
+    ltm_ = std::make_unique<MemoryTier>(lcfg);
+}
+
+void MemoryTierManager::shutdown() {
+    stm_.reset();
+    mtm_.reset();
+    ltm_.reset();
+    lookup_map_.clear();
+    pattern_registry_.clear();
+    pattern_relationships_.clear();
+    redis_manager_.reset();
+}
 
 MemoryBlock* MemoryTierManager::allocate(std::size_t size, sep::memory::TierType tier) {
     MemoryTier* t = getTier(tier);
@@ -217,8 +260,8 @@ MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, i
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type) {
-    pattern_relationships_[id_a][id_b] = 1.0;
-    pattern_relationships_[id_b][id_a] = 1.0;
+    pattern_relationships_[id_a][id_b] = 1.0f;
+    pattern_relationships_[id_b][id_a] = 1.0f;
     (void)type;  // Prevent unused parameter warning
 }
 
@@ -387,16 +430,6 @@ void MemoryTierManager::registerPattern(std::size_t id, const pattern::PatternDa
 const pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     return it == pattern_registry_.end() ? nullptr : it->second.get();
-}
-
-std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
-    // In a real build, this would check for CUDA availability and
-    // other hardware features. For now, return the default implementation.
-    return std::make_unique<MemoryTierManager>();
-}
-
-std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
-    return std::make_unique<MemoryTierManager>();
 }
 
 }  // namespace sep::memory

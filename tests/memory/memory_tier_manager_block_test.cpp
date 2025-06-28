@@ -1,4 +1,4 @@
-#include "memory/memory_tier_manager.hpp"
+#include "memory/memory_tier_manager.h"
 #include <gtest/gtest.h>
 
 using namespace sep::memory;

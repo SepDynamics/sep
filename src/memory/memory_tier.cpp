@@ -145,7 +145,7 @@ void MemoryTier::deallocate(MemoryBlock* block) {
     mergeAdjacentBlocks();
 }
 
-SEPResult MemoryTier::defragment() {
+sep::SEPResult MemoryTier::defragment() {
     auto logger = sep::logging::Manager::getInstance().getLogger("memory");
     if (logger) {
         LOG_DEBUG(logger, "Defragmenting tier {}", static_cast<int>(config_.type));
@@ -166,7 +166,7 @@ SEPResult MemoryTier::defragment() {
                 if (err != cudaSuccess) {
                     if (logger)
                         LOG_ERROR(logger, "Defragment cudaMemcpy failed: {}", cudaGetErrorString(err));
-                    return SEPResult::CUDA_ERROR;
+                    return sep::SEPResult::CUDA_ERROR;
                 }
 #else
                 std::memmove(new_location, block.ptr, block.size);
@@ -201,7 +201,7 @@ SEPResult MemoryTier::defragment() {
     if (logger) {
         LOG_INFO(logger, "Tier {} fragmentation now {:.2f}", static_cast<int>(config_.type), calculateFragmentation());
     }
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 float MemoryTier::calculateFragmentation() const {

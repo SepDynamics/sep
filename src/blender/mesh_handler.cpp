@@ -6,8 +6,6 @@
 #include "blender/mesh_handler.h"
 #include "core/types.h"  // for sep::SEPResult
 
-// Use the SEPResult from sep namespace
-using sep::SEPResult;
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow
 // the library to link without the real Blender environment.
@@ -28,42 +26,42 @@ MeshHandler::MeshHandler()
 
 MeshHandler::~MeshHandler() { cleanupCustomData(); }
 
-SEPResult MeshHandler::init(Object* bl_object, Mesh* bl_mesh) {
+sep::SEPResult MeshHandler::init(Object* bl_object, Mesh* bl_mesh) {
   if (!bl_object || !bl_mesh) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
 
   object_ = bl_object;
   mesh_ = bl_mesh;
   initialized_ = true;
   cache_.metrics_valid = false;
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MeshHandler::update(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::update(const sep::pattern::PatternData& pattern_data) {
   if (!initialized_) {
-    return SEPResult::INITIALIZATION_FAILED;
+    return sep::SEPResult::INITIALIZATION_FAILED;
   }
 
   if (!validatePattern(pattern_data)) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
 
   pattern_state_.coherence = pattern_data.coherence;
 
-  SEPResult res = updateVertices(pattern_data);
-  if (res != SEPResult::SUCCESS) {
+  sep::SEPResult res = updateVertices(pattern_data);
+  if (res != sep::SEPResult::SUCCESS) {
     return res;
   }
 
   res = updateCustomData(pattern_data);
-  if (res != SEPResult::SUCCESS) {
+  if (res != sep::SEPResult::SUCCESS) {
     return res;
   }
 
   updateNormals();
   cache_.metrics_valid = false;
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 MeshHandler::MeshMetrics MeshHandler::getMetrics() const {
@@ -83,21 +81,21 @@ MeshHandler::MeshMetrics MeshHandler::getMetrics() const {
   return metrics;
 }
 
-SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
+sep::SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
   if (!initialized_) {
-    return SEPResult::INITIALIZATION_FAILED;
+    return sep::SEPResult::INITIALIZATION_FAILED;
   }
 
   if (!name || std::strlen(name) == 0) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
 
   if (hasCustomDataLayer(name)) {
-    return SEPResult::ALREADY_EXISTS;
+    return sep::SEPResult::ALREADY_EXISTS;
   }
 
   if (custom_layers_.size() >= 16) {
-    return SEPResult::INVALID_STATE;
+    return sep::SEPResult::INVALID_STATE;
   }
 
   CustomDataLayer layer;
@@ -115,27 +113,27 @@ SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
 
   custom_layers_.push_back(layer);
   cache_.metrics_valid = false;
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MeshHandler::removeCustomDataLayer(const char* name) {
+sep::SEPResult MeshHandler::removeCustomDataLayer(const char* name) {
   if (!initialized_) {
-    return SEPResult::INITIALIZATION_FAILED;
+    return sep::SEPResult::INITIALIZATION_FAILED;
   }
 
   if (!name || std::strlen(name) == 0) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
 
   for (auto it = custom_layers_.begin(); it != custom_layers_.end(); ++it) {
     if (std::strcmp(it->name, name) == 0) {
       custom_layers_.erase(it);
       cache_.metrics_valid = false;
-      return SEPResult::SUCCESS;
+      return sep::SEPResult::SUCCESS;
     }
   }
 
-  return SEPResult::NOT_FOUND;
+  return sep::SEPResult::NOT_FOUND;
 }
 
 bool MeshHandler::hasCustomDataLayer(const char* name) const {
@@ -151,13 +149,13 @@ bool MeshHandler::hasCustomDataLayer(const char* name) const {
   return false;
 }
 
-SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) {
+sep::SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) {
   if (!initialized_) {
-    return SEPResult::INITIALIZATION_FAILED;
+    return sep::SEPResult::INITIALIZATION_FAILED;
   }
 
   if (!name || std::strlen(name) == 0) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
 
   for (auto& layer : custom_layers_) {
@@ -167,21 +165,21 @@ SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) {
       for (size_t i = 0; i < count; ++i) {
         data[i] = value;
       }
-      return SEPResult::SUCCESS;
+      return sep::SEPResult::SUCCESS;
     }
   }
 
-  return SEPResult::NOT_FOUND;
+  return sep::SEPResult::NOT_FOUND;
 }
 
-SEPResult MeshHandler::applyDeformation(const DeformParams& params) {
+sep::SEPResult MeshHandler::applyDeformation(const DeformParams& params) {
   if (!initialized_) {
-    return SEPResult::INITIALIZATION_FAILED;
+    return sep::SEPResult::INITIALIZATION_FAILED;
   }
 
   if (pattern_state_.weights.empty()) {
     // No pattern data applied yet; nothing to deform
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
   }
 
   for (int i = 0; i < mesh_->totvert; ++i) {
@@ -195,13 +193,13 @@ SEPResult MeshHandler::applyDeformation(const DeformParams& params) {
   return notifyDepsgraph();
 }
 
-SEPResult MeshHandler::generateHyperMesh(const sep::pattern::PatternData& pattern,
+sep::SEPResult MeshHandler::generateHyperMesh(const sep::pattern::PatternData& pattern,
                                          int dimensions) {
   if (!initialized_) {
-    return SEPResult::INITIALIZATION_FAILED;
+    return sep::SEPResult::INITIALIZATION_FAILED;
   }
   if (dimensions < 3 || !validatePattern(pattern)) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
 
   for (int d = 3; d < dimensions; ++d) {
@@ -213,16 +211,16 @@ SEPResult MeshHandler::generateHyperMesh(const sep::pattern::PatternData& patter
   }
 
   cache_.metrics_valid = false;
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 // ---------------------------------------------------------------------------
 // Private helpers
 // ---------------------------------------------------------------------------
 
-SEPResult MeshHandler::updateVertices(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::updateVertices(const sep::pattern::PatternData& pattern_data) {
   if (!validateMesh()) {
-    return SEPResult::INVALID_STATE;
+    return sep::SEPResult::INVALID_STATE;
   }
 
   pattern_state_.weights.resize(static_cast<size_t>(mesh_->totvert));
@@ -233,10 +231,10 @@ SEPResult MeshHandler::updateVertices(const sep::pattern::PatternData& pattern_d
     pattern_state_.weights[i] = w;
   }
 
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MeshHandler::updateCustomData(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::updateCustomData(const sep::pattern::PatternData& pattern_data) {
   if (custom_layers_.empty()) {
     (void)addCustomDataLayer("pattern_weight", 0);
   }
@@ -251,15 +249,15 @@ SEPResult MeshHandler::updateCustomData(const sep::pattern::PatternData& pattern
     }
   }
 
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MeshHandler::notifyDepsgraph() {
+sep::SEPResult MeshHandler::notifyDepsgraph() {
   if (mesh_) {
     BKE_mesh_batch_cache_dirty_tag(mesh_, BKE_MESH_BATCH_DIRTY_ALL);
     DEG_id_tag_update(mesh_, ID_RECALC_GEOMETRY);
   }
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 bool MeshHandler::validateMesh() const { return initialized_ && mesh_ != nullptr; }

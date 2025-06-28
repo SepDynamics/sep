@@ -8,15 +8,15 @@ using namespace sep;
 
 TEST(GPUContextTestbed, ShaderReload) {
     GPUContext ctx;
-    ASSERT_EQ(ctx.init(), SEPResult::SUCCESS);
+    ASSERT_EQ(ctx.init(), sep::SEPResult::SUCCESS);
 
     sep::shim::string shader = "src/blender/shaders/pattern_process.spv";
-    ASSERT_EQ(ctx.loadComputeShader(shader), SEPResult::SUCCESS);
+    ASSERT_EQ(ctx.loadComputeShader(shader), sep::SEPResult::SUCCESS);
     uint32_t rev1 = ctx.getShaderRevision();
     EXPECT_GT(rev1, 0u);
 
     // Reload without modification should keep revision
-    EXPECT_EQ(ctx.reloadComputeShaderIfNeeded(), SEPResult::SUCCESS);
+    EXPECT_EQ(ctx.reloadComputeShaderIfNeeded(), sep::SEPResult::SUCCESS);
     EXPECT_EQ(ctx.getShaderRevision(), rev1);
 
     // Copy shader to temp file to simulate update
@@ -26,7 +26,7 @@ TEST(GPUContextTestbed, ShaderReload) {
         std::ofstream out(temp, std::ios::binary);
         out << in.rdbuf();
     }
-    ASSERT_EQ(ctx.loadComputeShader(temp), SEPResult::SUCCESS);
+    ASSERT_EQ(ctx.loadComputeShader(temp), sep::SEPResult::SUCCESS);
     uint32_t rev2 = ctx.getShaderRevision();
     EXPECT_GT(rev2, rev1);
 

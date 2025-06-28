@@ -136,53 +136,53 @@ MemoryTier& MemoryTierManager::getLTM() {
     return *ltm_;
 }
 
-SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
+sep::SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     sep::memory::TierType next = block->tier == static_cast<TierType>(MemoryTierEnum::STM)
                                      ? static_cast<TierType>(MemoryTierEnum::MTM)
                                      : static_cast<TierType>(MemoryTierEnum::LTM);
     MemoryTier* dst = getTier(next);
     if (!dst)
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     out_block = dst->allocate(block->size);
     if (!out_block)
-        return SEPResult::ALLOCATION_FAILED;
+        return sep::SEPResult::ALLOCATION_FAILED;
     dst->moveData(out_block, block);  // block is already a pointer
     lookup_map_[out_block->ptr] = out_block;
     getTier(block->tier)->deallocate(block);
     lookup_map_.erase(block->ptr);
     out_block->tier = next;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MemoryTierManager::demoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
+sep::SEPResult MemoryTierManager::demoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     sep::memory::TierType next = block->tier == static_cast<TierType>(MemoryTierEnum::LTM)
                                      ? static_cast<TierType>(MemoryTierEnum::MTM)
                                      : static_cast<TierType>(MemoryTierEnum::STM);
     MemoryTier* dst = getTier(next);
     if (!dst)
-        return SEPResult::INVALID_ARGUMENT;
+        return sep::SEPResult::INVALID_ARGUMENT;
     out_block = dst->allocate(block->size);
     if (!out_block)
-        return SEPResult::ALLOCATION_FAILED;
+        return sep::SEPResult::ALLOCATION_FAILED;
     dst->moveData(out_block, block);  // block is already a pointer
     lookup_map_[out_block->ptr] = out_block;
     getTier(block->tier)->deallocate(block);
     lookup_map_.erase(block->ptr);
     out_block->tier = next;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* patterns, pattern::PatternData* results,
+sep::SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* patterns, pattern::PatternData* results,
                                                        const pattern::PatternConfig& config, size_t pattern_count,
                                                        const pattern::PatternData* previous_patterns, void* stream) {
 #ifdef __CUDACC__
     cudaError_t err =
         sep::cuda::launch_pattern_processing(patterns, results, config, pattern_count, previous_patterns, stream);
-    return err == cudaSuccess ? SEPResult::SUCCESS : SEPResult::PROCESSING_ERROR;
+      return err == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::PROCESSING_ERROR;
 #else
     (void)patterns;
     (void)results;
@@ -190,7 +190,7 @@ SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* pat
     (void)pattern_count;
     (void)previous_patterns;
     (void)stream;
-    return SEPResult::SUCCESS;
+      return sep::SEPResult::SUCCESS;
 #endif
 }
 

@@ -70,7 +70,7 @@ class MeshHandlerTest : public ::testing::Test {
 
     // Initialize handler
     handler_ = std::make_unique<MeshHandler>();
-    ASSERT_EQ(SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
   }
 
   void TearDown() override {
@@ -101,7 +101,7 @@ class MeshHandlerTest : public ::testing::Test {
 
 TEST_F(MeshHandlerTest, InitializationTest) {
   MeshHandler handler;
-  EXPECT_EQ(SEPResult::SUCCESS, handler.init(object_.get(), mesh_.get()));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, handler.init(object_.get(), mesh_.get()));
 }
 
 TEST_F(MeshHandlerTest, MetricsTest) {
@@ -114,20 +114,20 @@ TEST_F(MeshHandlerTest, MetricsTest) {
 }
 
 TEST_F(MeshHandlerTest, CustomDataTest) {
-  EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer("test_float", CD_PROP_FLOAT));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, handler_->addCustomDataLayer("test_float", CD_PROP_FLOAT));
   EXPECT_TRUE(handler_->hasCustomDataLayer("test_float"));
 
-  EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer("test_float3", CD_PROP_FLOAT3));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, handler_->addCustomDataLayer("test_float3", CD_PROP_FLOAT3));
   EXPECT_TRUE(handler_->hasCustomDataLayer("test_float3"));
 
-  EXPECT_EQ(SEPResult::SUCCESS, handler_->removeCustomDataLayer("test_float"));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, handler_->removeCustomDataLayer("test_float"));
   EXPECT_FALSE(handler_->hasCustomDataLayer("test_float"));
   EXPECT_TRUE(handler_->hasCustomDataLayer("test_float3"));
 }
 
 TEST_F(MeshHandlerTest, PatternUpdateTest) {
   auto pattern = createTestPattern();
-  EXPECT_EQ(SEPResult::SUCCESS, handler_->update(pattern));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, handler_->update(pattern));
 
   // Verify metrics after update
   auto metrics = handler_->getMetrics();
@@ -137,7 +137,7 @@ TEST_F(MeshHandlerTest, PatternUpdateTest) {
 
 TEST_F(MeshHandlerTest, DeformationTest) {
   auto pattern = createTestPattern();
-  EXPECT_EQ(SEPResult::SUCCESS, handler_->update(pattern));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, handler_->update(pattern));
 
   MeshHandler::DeformParams params;
   params.strength = 0.5f;
@@ -145,7 +145,7 @@ TEST_F(MeshHandlerTest, DeformationTest) {
   params.preserve_volume = true;
   params.use_falloff = true;
 
-  EXPECT_EQ(SEPResult::SUCCESS, handler_->applyDeformation(params));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, handler_->applyDeformation(params));
 
   // Verify deformation
   float* v0 = mesh_->mvert[0].co;
@@ -157,24 +157,24 @@ TEST_F(MeshHandlerTest, DeformationTest) {
 TEST_F(MeshHandlerTest, InvalidInputTest) {
   // Test null object
   MeshHandler handler;
-  EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(nullptr, mesh_.get()));
+  EXPECT_EQ(sep::SEPResult::INVALID_OBJECT, handler.init(nullptr, mesh_.get()));
 
   // Test null mesh
-  EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(object_.get(), nullptr));
+  EXPECT_EQ(sep::SEPResult::INVALID_OBJECT, handler.init(object_.get(), nullptr));
 
   // Test invalid object type
   object_->type = OB_EMPTY;
-  EXPECT_EQ(SEPResult::INVALID_OBJECT, handler.init(object_.get(), mesh_.get()));
+  EXPECT_EQ(sep::SEPResult::INVALID_OBJECT, handler.init(object_.get(), mesh_.get()));
 }
 
 TEST_F(MeshHandlerTest, PatternValidationTest) {
   PatternData pattern = createTestPattern();
   pattern.coherence = 2.0f;  // Invalid value
-  EXPECT_EQ(SEPResult::INVALID_STATE, handler_->update(pattern));
+  EXPECT_EQ(sep::SEPResult::INVALID_STATE, handler_->update(pattern));
 
   pattern.coherence = 0.5f;
   pattern.entropy = -1.0f;  // Invalid value
-  EXPECT_EQ(SEPResult::INVALID_STATE, handler_->update(pattern));
+  EXPECT_EQ(sep::SEPResult::INVALID_STATE, handler_->update(pattern));
 }
 
 TEST_F(MeshHandlerTest, CustomDataLayerLimitsTest) {
@@ -182,7 +182,7 @@ TEST_F(MeshHandlerTest, CustomDataLayerLimitsTest) {
   for (int i = 0; i < 16; ++i) {
     char name[32];
     (void)snprintf(name, sizeof(name), "layer_%d", i);
-    EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer(name, CD_PROP_FLOAT));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, handler_->addCustomDataLayer(name, CD_PROP_FLOAT));
   }
 
   // Verify metrics
@@ -190,6 +190,6 @@ TEST_F(MeshHandlerTest, CustomDataLayerLimitsTest) {
   EXPECT_TRUE(metrics.has_custom_data);
 
   // Try to add one more layer
-  EXPECT_EQ(SEPResult::INVALID_STATE, handler_->addCustomDataLayer("overflow", CD_PROP_FLOAT));
+  EXPECT_EQ(sep::SEPResult::INVALID_STATE, handler_->addCustomDataLayer("overflow", CD_PROP_FLOAT));
 }
 

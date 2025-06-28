@@ -78,14 +78,14 @@ std::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getP
     return patterns;
 }
 
-sep::pattern::SEPResult sep::quantum::mcp::PatternEvolution::processPatterns(const std::vector<sep::pattern::PatternData>& input,
+sep::pattern::PatternResult sep::quantum::mcp::PatternEvolution::processPatterns(const std::vector<sep::pattern::PatternData>& input,
                                                               const ::sep::pattern::PatternConfig& config,
                                                               std::vector<sep::pattern::PatternData>& output)
 {
     if (input.empty())
     {
         output.clear();
-        return pattern::SEPResult::SUCCESS;
+        return pattern::PatternResult::SUCCESS;
     }
     
     output.resize(input.size());
@@ -102,7 +102,7 @@ sep::pattern::SEPResult sep::quantum::mcp::PatternEvolution::processPatterns(con
         output[i].id = shim::string(api::SepEngine::generateId("pat").c_str());
     }
     
-    return pattern::SEPResult::SUCCESS;
+    return pattern::PatternResult::SUCCESS;
 }
 
 float sep::quantum::mcp::PatternEvolution::calculateRelationshipStrength(const sep::pattern::PatternData& pattern1,

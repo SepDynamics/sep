@@ -92,7 +92,7 @@ class MeshHandlerPerfTest : public ::testing::Test {
 
     // Initialize handler
     handler_ = std::make_unique<MeshHandler>();
-    ASSERT_EQ(SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
   }
 
   void setupPatterns() {
@@ -211,7 +211,7 @@ TEST_F(MeshHandlerPerfTest, MemoryUsage) {
   for (int i = 0; i < 5; ++i) {
     char name[32];
     (void)snprintf(name, sizeof(name), "memory_layer_%d", i);
-    EXPECT_EQ(SEPResult::SUCCESS, handler_->addCustomDataLayer(name, CD_PROP_FLOAT3));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, handler_->addCustomDataLayer(name, CD_PROP_FLOAT3));
   }
 
   auto metrics = handler_->getMetrics();

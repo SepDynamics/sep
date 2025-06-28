@@ -15,7 +15,7 @@ TEST(OllamaClientTest, FileGet) {
     cfg.host = std::string("file://") + std::string("./");
     OllamaClient client(cfg);
     std::string result;
-    EXPECT_EQ(client.get(path, result), SEPResult::SUCCESS);
+    EXPECT_EQ(client.get(path, result), sep::SEPResult::SUCCESS);
     EXPECT_NE(result.find("ok"), std::string::npos);
     std::remove(path);
 }

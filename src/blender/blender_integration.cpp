@@ -174,26 +174,26 @@ void BlenderBridge::notifyError(sep::SEPResult error, const char* message)
     std::lock_guard<std::mutex> lock(m_observer_mutex);
     for (const auto& observer : m_observers)
     {
-        // Convert from sep::SEPResult to sep::pattern::SEPResult
-        sep::pattern::SEPResult pattern_error;
+        // Convert from sep::SEPResult to sep::pattern::PatternResult
+        sep::pattern::PatternResult pattern_error;
         
         // Map the most common error codes
         switch (error) {
             case sep::SEPResult::SUCCESS:
-                pattern_error = sep::pattern::SEPResult::SUCCESS;
+                pattern_error = sep::pattern::PatternResult::SUCCESS;
                 break;
             case sep::SEPResult::INVALID_ARGUMENT:
-                pattern_error = sep::pattern::SEPResult::INVALID_ARGUMENT;
+                pattern_error = sep::pattern::PatternResult::INVALID_ARGUMENT;
                 break;
             case sep::SEPResult::ALLOCATION_FAILED:
-                pattern_error = sep::pattern::SEPResult::ALLOCATION_FAILED;
+                pattern_error = sep::pattern::PatternResult::ALLOCATION_FAILED;
                 break;
             case sep::SEPResult::PROCESSING_ERROR:
-                pattern_error = sep::pattern::SEPResult::PROCESSING_ERROR;
+                pattern_error = sep::pattern::PatternResult::PROCESSING_ERROR;
                 break;
             default:
                 // Default to PROCESSING_ERROR for any unmapped error
-                pattern_error = sep::pattern::SEPResult::PROCESSING_ERROR;
+                pattern_error = sep::pattern::PatternResult::PROCESSING_ERROR;
                 break;
         }
         

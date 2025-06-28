@@ -6,7 +6,7 @@ using namespace sep;
 TEST(PatternProcessorRelationships, UpdatesBidirectional)
 {
     pattern::PatternProcessor proc(pattern::PatternProcessor::Implementation::CPU);
-    ASSERT_EQ(proc.init(nullptr), SEPResult::Success);
+    ASSERT_EQ(proc.init(nullptr), sep::SEPResult::SUCCESS);
 
     pattern::PatternData a{};
     a.id = "a";

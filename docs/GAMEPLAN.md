@@ -229,6 +229,35 @@ This is where you achieve your ideal state. We'll modify Blender's build process
 
 You will now have a custom, lightweight `blender` executable in `build_sep/bin/` that is fundamentally integrated with your SEP engine at the C++ level.
 
+## Component Dependencies & CMake Options
+
+Several engine modules rely on optional third-party libraries. Each component can
+be toggled through the CMake configuration and will gracefully fall back when a
+library is missing. The `component_bridge` mechanism coordinates these
+dependencies so that builds do not fail outright if a library is unavailable.
+
+| Component   | Required Library      | CMake Option            |
+|-------------|----------------------|-------------------------|
+| Blender     | OpenSubdiv, OSL      | `SEP_HAS_BLENDER`       |
+| Audio       | PipeWire             | `SEP_HAS_PIPEWIRE`      |
+| Rendering   | OpenPGL, Embree      | `SEP_WITH_RENDERING`    |
+
+Disable a component by passing `-D<OPTION>=OFF` to CMake. For example:
+
+```bash
+cmake -DSEP_HAS_PIPEWIRE=OFF ..
+```
+
+### Troubleshooting Missing Libraries
+
+1. **Check System Paths** – Ensure `/usr/lib64`, `/usr/local/lib`, or
+   `${CMAKE_INSTALL_PREFIX}/lib` contain the expected `.so` files.
+2. **Use `component_bridge`** – When enabled, this module creates symlinks or
+   stubs so that optional features compile even if a dependency is absent.
+3. **Reconfigure** – Run `cmake ..` again after installing libraries so the
+   discovery step can pick them up.
+
+
 ---
 
 ### **Your Next Move**

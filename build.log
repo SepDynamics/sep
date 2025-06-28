@@ -229,60 +229,50 @@ CMake Warning:
 -- Build files have been written to: /sep/build
 Building SEP Engine...
 [  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  2%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  4%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[  7%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[  8%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  8%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 10%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 11%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 13%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 15%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 18%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 20%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[  5%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 10%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[ 14%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 14%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 15%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 17%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 17%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 18%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 20%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
 [ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 23%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 24%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-[ 26%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 24%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 28%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 30%] Linking CXX static library /sep/lib/libcycles_osl.a
 /sep/src/quantum/quantum_processor.cpp:4:10: fatal error: quantum/quantum_processor_qfh_common.h: No such file or directory
     4 | #include "quantum/quantum_processor_qfh_common.h"
       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 compilation terminated.
 make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 27%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 28%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 30%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 31%] Linking CXX static library /sep/lib/libcycles_osl.a
-[ 31%] Built target cycles_osl
-[ 33%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
-[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 36%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 37%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 31%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 33%] Built target cycles_osl
+[ 34%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+/sep/src/quantum/quantum_processor_qfh.cpp:4:10: fatal error: quantum/quantum_processor_qfh_common.h: No such file or directory
+    4 | #include "quantum/quantum_processor_qfh_common.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
+[ 37%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
 make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 make[1]: *** Waiting for unfinished jobs....
-[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 42%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 43%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 44%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-In file included from /sep/include/blender/cycles_renderer.h:4,
-                 from /sep/src/compat/component_bridge.cpp:12:
-/sep/include/blender/pattern_bridge.h:30:8: error: redefinition of ‘struct sep::pattern::PatternLimits’
-   30 | struct PatternLimits {
-      |        ^~~~~~~~~~~~~
-In file included from /sep/src/compat/component_bridge.cpp:8:
-/sep/include/blender/bridge.h:27:8: note: previous definition of ‘struct sep::pattern::PatternLimits’
-   27 | struct PatternLimits {
-      |        ^~~~~~~~~~~~~
-/sep/include/blender/pattern_bridge.h:62:7: error: redefinition of ‘class sep::pattern::BlenderBridge’
-   62 | class BlenderBridge {
-      |       ^~~~~~~~~~~~~
-/sep/include/blender/bridge.h:36:7: note: previous definition of ‘class sep::pattern::BlenderBridge’
-   36 | class BlenderBridge {
-      |       ^~~~~~~~~~~~~
+[ 40%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 44%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
 /sep/src/core/engine.cpp: In member function ‘bool sep::core::Engine::init(const sep::config::APIConfig&)’:
 /sep/src/core/engine.cpp:147:26: error: ‘compat’ has not been declared
   147 |         audio_capture_ = compat::createAudioCapture();
@@ -290,29 +280,9 @@ In file included from /sep/src/compat/component_bridge.cpp:8:
 /sep/src/core/engine.cpp:175:27: error: ‘compat’ has not been declared
   175 |         blender_bridge_ = compat::createBlenderBridge();
       |                           ^~~~~~
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/compat/component_bridge.h:2,
-                 from /sep/src/compat/component_bridge.cpp:1:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::audio::AudioCapture]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::audio::AudioCapture; _Dp = std::default_delete<sep::audio::AudioCapture>]’
-  399 |           get_deleter()(std::move(__ptr));
-      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/compat/component_bridge.cpp:22:12:   required from here
-   22 |     return nullptr;
-      |            ^~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::audio::AudioCapture’
-   91 |         static_assert(sizeof(_Tp)>0,
-      |                       ^~~~~~~~~~~
-[ 46%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 47%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
-[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 52%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 53%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 55%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 56%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 46%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
+[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
 /sep/src/memory/redis_manager.cpp: In constructor ‘sep::persistence::RedisManager::Impl::Impl(const std::string&, int)’:
 /sep/src/memory/redis_manager.cpp:37:27: error: ‘sep::logging::Manager’ has not been declared
    37 |             sep::logging::Manager::getInstance().getLogger("redis");
@@ -333,14 +303,46 @@ make[2]: *** Waiting for unfinished jobs....
 /sep/src/memory/redis_manager.cpp:323:37: error: ‘sep::logging::Manager’ has not been declared
   323 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
       |                                     ^~~~~~~
+In file included from /sep/include/blender/cycles_renderer.h:4,
+                 from /sep/src/compat/component_bridge.cpp:12:
+/sep/include/blender/pattern_bridge.h:30:8: error: redefinition of ‘struct sep::pattern::PatternLimits’
+   30 | struct PatternLimits {
+      |        ^~~~~~~~~~~~~
+In file included from /sep/src/compat/component_bridge.cpp:8:
+/sep/include/blender/bridge.h:27:8: note: previous definition of ‘struct sep::pattern::PatternLimits’
+   27 | struct PatternLimits {
+      |        ^~~~~~~~~~~~~
+/sep/include/blender/pattern_bridge.h:62:7: error: redefinition of ‘class sep::pattern::BlenderBridge’
+   62 | class BlenderBridge {
+      |       ^~~~~~~~~~~~~
+/sep/include/blender/bridge.h:36:7: note: previous definition of ‘class sep::pattern::BlenderBridge’
+   36 | class BlenderBridge {
+      |       ^~~~~~~~~~~~~
 make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:107: src/core/CMakeFiles/sep_core.dir/engine.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 59%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 53%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/include/compat/component_bridge.h:2,
+                 from /sep/src/compat/component_bridge.cpp:1:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::audio::AudioCapture]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::audio::AudioCapture; _Dp = std::default_delete<sep::audio::AudioCapture>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/compat/component_bridge.cpp:22:12:   required from here
+   22 |     return nullptr;
+      |            ^~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::audio::AudioCapture’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+[ 55%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 56%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
-make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
 In file included from /sep/src/memory/quantum_coherence_manager.cpp:3:
 /sep/include/quantum/quantum_manifold_optimizer.h:137:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   137 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
@@ -372,10 +374,6 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:3:
 /sep/include/quantum/quantum_manifold_optimizer.h:306:64: error: unable to find numeric literal operator ‘operator""QUANTUM42’
   306 |         explicit DeterministicPatternGenerator(uint64_t seed = 0x42QUANTUM42)
       |                                                                ^~~~~~~~~~~~~
-/sep/src/api/server.cpp: In member function ‘void sep::api::SEPApiServer::setup_logging()’:
-/sep/src/api/server.cpp:250:21: error: ‘initializeLogging’ is not a member of ‘sep::logging’
-  250 |     ::sep::logging::initializeLogging();
-      |                     ^~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:29:7: error: ‘QuantumCoherenceManager’ has not been declared
    29 | class QuantumCoherenceManager::Impl {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
@@ -430,10 +428,16 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:3:
 /sep/src/memory/quantum_coherence_manager.cpp:687:12: error: ‘impl_’ was not declared in this scope
   687 |     return impl_->restoreFromSnapshot(snapshot);
       |            ^~~~~
-[ 60%] Linking CXX static library libsep_audio.a
-[ 60%] Built target sep_audio
+make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+/sep/src/api/server.cpp: In member function ‘void sep::api::SEPApiServer::setup_logging()’:
+/sep/src/api/server.cpp:250:21: error: ‘initializeLogging’ is not a member of ‘sep::logging’
+  250 |     ::sep::logging::initializeLogging();
+      |                     ^~~~~~~~~~~~~~~~~
+[ 59%] Linking CXX static library libsep_audio.a
+[ 59%] Built target sep_audio
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:247: src/api/CMakeFiles/sep_api.dir/server.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

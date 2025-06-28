@@ -56,7 +56,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
     impl_->config = config;
     printf("DEBUG: Engine::init - Before CudaCore instance\n");
     fflush(stdout);
-    
+
     auto& cuda_core = cuda::CudaCore::instance();
     printf("DEBUG: Engine::init - Got CudaCore instance\n");
     fflush(stdout);

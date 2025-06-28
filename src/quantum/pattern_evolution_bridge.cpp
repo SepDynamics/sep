@@ -504,22 +504,15 @@ PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
                     pattern.quantum_state.coherence
                 );
                 entanglement_graph.push_back(
-                    pattern.quantum_state.entanglement_graph
+                    static_cast<uint32_t>(pattern.relationships.size()) // Example: Use relationship count as entanglement proxy
                 );
-                total_energy += pattern.quantum_state.energy;
                 entropy += -pattern
                 .quantum_state.coherence * std::log2(pattern.quantum_state.coherence);
 
                 entropy += -pattern.quantum_state.phase * std::log2(pattern.quantum_state.phase);
                 }
                 
-            entropy += -pattern.quantum_state.entanglement_graph * std::log2(pattern.quantum_state.entanglement_graph);
-            
-                }
-                std::lock_guard<std::mutex> lock(impl_->state_mutex_);
-                impl_->evolution_state_->active_patterns = active_patterns;
-                impl_->evolution_state_->coherence_matrix = coherence_matrix;
-                impl_->evolution_state_->entanglement_graph = entanglement_graph;
+            }
                 impl_->evolution_state_->total_energy = total_energy;
                 impl_->evolution_state_->entropy = entropy;
                 impl_->evolution_state_->evolution_tick++;

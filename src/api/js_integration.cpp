@@ -42,7 +42,5 @@ std::string JSIntegration::processContextCheck(const std::string& context_json,
     while (actual_length < buffer_size && result_buffer[actual_length] != '\0') {
         ++actual_length;
     }
-    return result_buffer.substr(0, actual_length);
 }
-
 } // namespace sep::api

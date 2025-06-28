@@ -164,7 +164,7 @@ public:
         // Find local manifold point
         auto nearest = std::min_element(manifold_points_.begin(), manifold_points_.end(),
             [&position](const ManifoldPoint& a, const ManifoldPoint& b) {
-                return glm::length2(a.position - position) < glm::length2(b.position - position);
+                return glm::length(a.position - position) < glm::length(b.position - position);
             });
         
         if (nearest == manifold_points_.end()) {
@@ -421,7 +421,7 @@ private:
         
         for (size_t i = 1; i < path.points.size(); ++i) {
             glm::vec3 displacement = path.points[i].position - path.points[i-1].position;
-            float kinetic = 0.5f * glm::length2(displacement);
+            float kinetic = 0.5f * glm::length(displacement);
             float potential = path.points[i].curvature * path.points[i].coherence;
             action += kinetic - potential;
         }

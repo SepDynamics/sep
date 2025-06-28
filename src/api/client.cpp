@@ -139,7 +139,7 @@ APIResponse Client::sendWithRetry(const APIRequest &request) {
   return response;
 }
 
-void Client::updateMetrics( const APIRequest &request,
+void Client::updateMetrics(const APIRequest &request,
                            const APIResponse &response) {
   std::lock_guard<std::mutex> lock(impl_->mutex);
   impl_->metrics.totalRequests++;

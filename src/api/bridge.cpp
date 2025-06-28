@@ -19,6 +19,10 @@
 #define SEP_HAS_EXCEPTIONS 0
 #endif
 
+#if !SEP_HAS_EXCEPTIONS
+#include "crow/crow_error.h"
+#endif
+
 #if SEP_HAS_EXCEPTIONS
 #define SEP_TRY try
 #define SEP_CATCH_RETURN(core) \
@@ -29,8 +33,7 @@
 #else
 #define SEP_TRY
 #define SEP_CATCH_RETURN(core) \
-  do { \
-    sep::api::bridge::detail::setLastError("exceptions disabled"); \
+  do { sep::crow::error::set_last_error("exceptions disabled"); \
     return static_cast<int>(core); \
   } while (0)
 #endif
@@ -48,7 +51,11 @@ std::unordered_map<std::string, std::vector<void (*)(const char *)>>
 namespace sep::api::bridge::detail {
 
 void setLastError(const std::string &error) { g_last_error = error; }
-
+void setLastError(const std::string& error) {
+#if !SEP_HAS_EXCEPTIONS
+    sep::crow::error::set_last_error(error.c_str());
+#endif
+}
 std::string getLastError() { return g_last_error; }
 
 void setRequiredBufferSize(size_t size) { g_required_buffer_size = size; }

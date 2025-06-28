@@ -5,6 +5,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)
 add_library(sep_compat STATIC
     stream.cpp
     raii.cpp
+    component_bridge.cpp
     # Add all .cu files here to be compiled by NVCC
     core.cu
     cuda_api.cu

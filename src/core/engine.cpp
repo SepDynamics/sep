@@ -144,7 +144,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
     fflush(stdout);
     
     try {
-        audio_capture_ = audio::AudioCapture::create();
+        audio_capture_ = compat::createAudioCapture();
         if (!audio_capture_) {
             printf("DEBUG: Engine::init - Failed to create audio capture\n");
             fflush(stdout);
@@ -172,7 +172,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
     fflush(stdout);
     
     try {
-        blender_bridge_ = std::make_shared<pattern::BlenderBridge>();
+        blender_bridge_ = compat::createBlenderBridge();
         printf("DEBUG: Engine::init - Blender bridge created successfully\n");
         fflush(stdout);
     } catch (const std::exception& e) {

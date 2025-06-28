@@ -3,6 +3,7 @@
 #include "blender/types.h"
 #include "blender/config.h"
 #include "blender/pattern_bridge.h"
+#include "compat/component_bridge.h"
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -53,7 +54,7 @@ extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPCo
     {
         return sep::SEPResult::ALLOCATION_FAILED;
     }
-    bridge_ptr->impl            = sep::pattern::BlenderBridge::create();
+    bridge_ptr->impl            = sep::compat::createBlenderBridge();
     bridge_ptr->audio_metrics   = SEPAudioMetrics{};
     bridge_ptr->pattern_metrics = SEPPatternMetrics{};
 

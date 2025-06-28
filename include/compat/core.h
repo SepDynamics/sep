@@ -2,14 +2,11 @@
 #define SEP_CUDA_CORE_H
 
 #include <vector>
-#include <cuda_runtime.h>
+#include "compat/cuda_common.h"
 #include "compat/cuda_helpers.h"
-
-// Include the standard CUDA runtime first
 #include "compat/types.h"
 #include "compat/memory.h"
 #include "compat/stream.h"
-#include "compat/cuda_defs.h"
 
 namespace sep::cuda {
 

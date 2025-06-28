@@ -72,6 +72,7 @@ struct BatchProcessingResult {
     bool success{false};
     std::vector<ProcessingResult> results;
     std::string error_message;
+    int error_code{0};
 };
 
 } // namespace sep::quantum

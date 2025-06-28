@@ -15,7 +15,7 @@
 #include "compat/raii.h"
 #include "memory/memory_tier_manager.hpp" // Include header for interface
 #include "compat/cuda_helpers.h" // Fix: Include cuda_helpers for CUDA_CHECK
-#include "compat/cuda_impl.h"
+#include "compat/cuda_common.h"
 
 // Simple debug flag check without external logger dependency
 namespace {

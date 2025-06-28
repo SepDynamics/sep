@@ -1,4 +1,5 @@
 #include "quantum/pattern_processor.h"
+#include "quantum/quantum_processor.h"
 #include "quantum/types.h"
 
 #include <algorithm>
@@ -102,10 +103,6 @@ private:
 };
 } // namespace
 
-std::unique_ptr<PatternQuantumProcessor> createPatternQuantumProcessor(
-    const QuantumProcessor::Config& config) {
-    return std::make_unique<PatternQuantumProcessorImpl>(config);
-}
 
 } // namespace sep::quantum
 

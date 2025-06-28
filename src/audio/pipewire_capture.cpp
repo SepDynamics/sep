@@ -36,7 +36,7 @@ static PWInit pw_init_once;
 
 PipeWireCapture::PipeWireCapture() = default;
 
-namespace PipeWireCapture {
+namespace {
 const struct pw_stream_events createStreamEvents()
 {
     struct pw_stream_events events = {};
@@ -45,6 +45,8 @@ const struct pw_stream_events createStreamEvents()
     events.process       = &streamProcess;
     return events;
 }
+
+}  // namespace
 
 
 void PipeWireCapture::cleanup()

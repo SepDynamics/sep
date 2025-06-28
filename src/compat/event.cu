@@ -2,15 +2,9 @@
 
 #include "compat/cuda_unified_fix.h"
 
-
 #include "compat/cuda_helpers.h"
 
 // GLM isolation layer
-#if defined(__CUDACC__) || defined(SEP_USE_CUDA)
-#include <cuda_runtime.h>
-#else
-#include "compat/cuda_impl.h"
-#endif
 
 #include "compat/core.h"
 #include "compat/event.h"

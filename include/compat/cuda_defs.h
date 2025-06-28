@@ -13,45 +13,6 @@ typedef int cudaError_t;
 typedef void* cudaStream_t;
 typedef void* cudaEvent_t;
 
-// Error codes
-constexpr cudaError_t cudaSuccess = 0;
-constexpr cudaError_t cudaErrorInvalidValue = 1;
-constexpr cudaError_t cudaErrorMemoryAllocation = 2;
-constexpr cudaError_t cudaErrorInvalidDevice = 3;
-constexpr cudaError_t cudaErrorNotInitialized = 4;
-
-// Memory copy kinds
-enum cudaMemcpyKind {
-    cudaMemcpyHostToHost = 0,
-    cudaMemcpyHostToDevice = 1,
-    cudaMemcpyDeviceToHost = 2,
-    cudaMemcpyDeviceToDevice = 3,
-    cudaMemcpyDefault = 4
-};
-
-// Device properties structure
-struct cudaDeviceProp {
-    char name[256];
-    size_t totalGlobalMem;
-    int major;
-    int minor;
-    int multiProcessorCount;
-    int maxThreadsPerBlock;
-    int warpSize;
-    size_t sharedMemPerBlock;
-    int maxThreadsDim[3];
-    int maxGridSize[3];
-    size_t totalConstMem;
-    int clockRate;
-    int deviceOverlap;
-    int kernelExecTimeoutEnabled;
-    int integrated;
-    int canMapHostMemory;
-    int concurrentKernels;
-    int unifiedAddressing;
-    int maxThreadsPerMultiProcessor;
-};
-
 #endif
 
 // SEP CUDA namespace for additional functionality

@@ -365,11 +365,9 @@ std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { r
 size_t Processor::getPatternCount() const { return impl_->getPatternCount(); }
 ProcessingResult Processor::processPattern(const std::string& pattern_id) { return impl_->processPattern(pattern_id); }
 
-BatchProcessingResult Processor::processAllPatterns() { return impl_->processAll(); } // Implement this method // Fix: Add missing definition
 
 BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
 
-BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
 BatchProcessingResult Processor::processAll() { return impl_->processAll(); }
 ProcessingResult Processor::evolvePattern(const std::string& pattern_id) { return impl_->evolvePattern(pattern_id); }
 ProcessingResult Processor::collapsePattern(const std::string& pattern_id) { return impl_->collapsePattern(pattern_id); }

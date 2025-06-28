@@ -214,7 +214,7 @@ class SEPApiServer : public Server {
   mutable std::mutex metrics_mutex_;
 
   // Clients
-  std::unique_ptr<sep::ollama::OllamaClient> ollama_client_;
+  std::unique_ptr<ollama::OllamaClient> ollama_client_;
 };
 
 }  // namespace sep::api

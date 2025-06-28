@@ -14,11 +14,6 @@
 #include "crow/http_request.h"
 #include "crow/http_response.h"
 
-// Include standard headers
-#include <memory>
-#include <string>
-#include <nlohmann/json.hpp>
-
 // Include our API headers
 #include "api/crow_adapter.h"
 #include "api/json_helpers.h"
@@ -26,6 +21,11 @@
 #include "api/sep_engine.h"
 #include "api/server.h" // Include server header
 #include "memory/memory_tier_manager.hpp"
+
+// Include standard headers
+#include <memory>
+#include <string>
+#include <nlohmann/json.hpp>
 
 namespace sep::api {
 

@@ -1,26 +1,24 @@
 // Project headers
-#include <cfloat>
 #include "audio/pipewire_capture.h"
 #include "audio/config.h"
 #include "audio/pipewire_includes.h"
 #include "compat/component_bridge.h"
 #include "compat/math_common.h"
 
-
 // Standard library headers
+#include <new>
 #include <cstddef>
 #include <cstring>
 #include <memory>
-#include <new>
-
-// Third-party headers
+#include <cfloat>
+#include <cmath>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/constants.hpp>
-#include <cmath>
+
 
 namespace sep {
 namespace audio {
-
+    
 struct PWInit
 {
     PWInit()
@@ -36,7 +34,6 @@ static PWInit pw_init_once;
 
 PipeWireCapture::PipeWireCapture() = default;
 
-namespace {
 const struct pw_stream_events createStreamEvents()
 {
     struct pw_stream_events events = {};
@@ -45,9 +42,6 @@ const struct pw_stream_events createStreamEvents()
     events.process       = &streamProcess;
     return events;
 }
-
-}  // namespace
-
 
 void PipeWireCapture::cleanup()
 {
@@ -246,10 +240,7 @@ AudioMetrics PipeWireCapture::getMetrics() const
     return metrics_;
 }
 
-void PipeWireCapture::streamStateChanged(void*        data,
-                                         enum pw_stream_state old_state,
-                                         enum pw_stream_state new_state,
-                                         const char*          error)
+void PipeWireCapture::streamStateChanged()
 {
     auto* self = static_cast<PipeWireCapture*>(data);
 

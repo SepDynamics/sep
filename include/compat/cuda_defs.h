@@ -37,8 +37,8 @@ public:
 };
 
 // Legacy type aliases for backward compatibility
-using SepCudaStatus = sep::cuda::Status;
-#define SEP_CUDA_SUCCESS (sep::cuda::Status::Success)
+using SepCudaStatus = Status;
+#define SEP_CUDA_SUCCESS (Status::Success)
 
 }  // namespace cuda
 }  // namespace sep

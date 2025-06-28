@@ -43,7 +43,7 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
     setup_logging();
 
     // Initialize Ollama client
-    ollama_client_ = std::make_unique<sep::ollama::OllamaClient>(config_.ollama);
+    ollama_client_ = std::make_unique<ollama::OllamaClient>(config_.ollama);
 }
 
 SEPApiServer::~SEPApiServer() {
@@ -752,7 +752,7 @@ void SEPApiServer::initClients() {
   try {
 #endif
     // Initialize Ollama client if configured
-    ollama_client_ = std::make_unique<sep::ollama::OllamaClient>(config_.ollama);
+    ollama_client_ = std::make_unique<ollama::OllamaClient>(config_.ollama);
     logger_->info("Ollama client initialized");
 #if SEP_HAS_EXCEPTIONS
   } catch (const std::exception& e) {

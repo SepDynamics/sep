@@ -76,17 +76,17 @@ public:
     void shutdown();
 
     // Memory block allocation and management
-    MemoryBlock* allocate(std::size_t size, sep::memory::TierType tier);
+    MemoryBlock* allocate(std::size_t size, TierType tier);
     void deallocate(MemoryBlock* block);
     MemoryBlock* findBlockByPtr(void* ptr);
 
     // Tier management
-    MemoryTier* getTier(sep::memory::TierType tier);
-    float getTierUtilization(sep::memory::TierType tier) const;
-    float getTierFragmentation(sep::memory::TierType tier) const;
+    MemoryTier* getTier(TierType tier);
+    float getTierUtilization(TierType tier) const;
+    float getTierFragmentation(TierType tier) const;
     float getTotalUtilization() const;
     float getTotalFragmentation() const;
-    void defragmentTier(sep::memory::TierType tier);
+    void defragmentTier(TierType tier);
     void optimizeBlocks();
     void optimizeTiers();
 
@@ -123,7 +123,7 @@ public:
     quantum::Pattern* findPattern(std::size_t id);
     const quantum::Pattern* findPattern(std::size_t id) const;
     void cleanupExpiredPatterns();
-    void prunePatternsByPriority(sep::memory::TierType tier, size_t max_count);
+    void prunePatternsByPriority(TierType tier, size_t max_count);
 
     dag::DagGraph& getDagGraph() {
         return dag_graph_;
@@ -146,7 +146,7 @@ private:
     core::SystemHooks* hooks_{nullptr};
 
     std::unordered_map<std::size_t, std::unique_ptr<pattern::PatternData>> pattern_registry_;
-    std::unordered_map<std::size_t, std::unordered_map<std::size_t, double>> pattern_relationships_;
+    std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>> pattern_relationships_;
 
     SEPResult promoteToTier(MemoryBlock* block, MemoryTier tier, MemoryBlock*& out_block);
     SEPResult compressBlock(MemoryBlock* block);

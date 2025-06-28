@@ -26,7 +26,7 @@
 #include "memory/memory_tier_manager.hpp"
 #include "core/allocation_metrics.h"
 
-namespace sep::memory::cuda {
+namespace sep::memory {
 
 using namespace sep::cuda;
 

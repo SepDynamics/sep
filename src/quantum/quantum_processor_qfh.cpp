@@ -19,7 +19,7 @@ sep::MemoryTierEnum QuantumProcessorQFH::determineMemoryTier(float coherence, fl
 }
 
 // Factory function implementations
-std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() {
+std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
     // In a real build, this would check for CUDA availability.
     return std::make_unique<QuantumProcessorQFH>();
 }

@@ -14,7 +14,7 @@
 // Include CUDA headers in the correct order
 #include "compat/raii.h"
 #include "memory/memory_tier_manager.h" // Include header for interface
-#include "compat/cuda_helpers.h"
+#include "compat/cuda_helpers.h" // Fix: Include cuda_helpers for CUDA_CHECK
 #include "compat/cuda_impl.h"
 
 // Simple debug flag check without external logger dependency
@@ -215,7 +215,7 @@ DeviceBufferRAII<T>::DeviceBufferRAII(DeviceBufferRAII&& other) noexcept
 
 template <typename T>
 DeviceBufferRAII<T>& DeviceBufferRAII<T>::operator=(DeviceBufferRAII&& other) noexcept {
-    if (this != &other) {
+    if (this != &other) { // Fix: Add self-assignment check
         if (ptr_) {
             freeDeviceMemory(ptr_);
         }

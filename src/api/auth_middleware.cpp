@@ -24,5 +24,4 @@ bool AuthMiddleware::validate_token(const std::string& header) const {
 }
 
 
-
 }  // namespace sep::api

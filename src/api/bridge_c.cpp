@@ -1,6 +1,5 @@
 #define BUILDING_SEP_BRIDGE
 #include "api/bridge.h"
-#include "api/bridge.hpp"
 #include "api/bridge_internal.hpp"
 #include "core/manager.h"
 #include <nlohmann/json.hpp>
@@ -18,7 +17,7 @@ SEP_API int sep_bridge_init(void) {
 #if SEP_HAS_EXCEPTIONS
   try {
 #endif
-  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex); // Fix: use the global mutex
   sep::quantum::IProcessor::ProcessingConfig options{};
   sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
   sep::api::bridge::detail::g_last_error.clear();

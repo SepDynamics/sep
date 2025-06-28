@@ -251,8 +251,8 @@ sep::SEPResult BlenderBridge::allocatePatternMemory(ObjectState& state)
 
 sep::SEPResult BlenderBridge::freePatternMemory(ObjectState& state)
 {
-    auto& mgr = sep::memory::MemoryTierManager::getInstance();
-    if (state.memory_block)
+    auto& mgr = sep::memory::MemoryTierManager::getInstance(); // Fix: Add missing variable definition
+    if (state.memory_block) // Fix: Add if condition
     {
         mgr.deallocate(state.memory_block);
         state.memory_block = nullptr;

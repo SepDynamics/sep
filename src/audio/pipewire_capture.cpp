@@ -302,9 +302,11 @@ void PipeWireCapture::streamProcess(void* data)
     float rms_sum = 0.0f;
     for (uint32_t i = 0; i < n_samples; i++)
     {
-        float abs_sample = std::abs(samples[i]);
+        // Calculate levels per channel if needed, currently sums all
+        float sample = samples[i];
+        float abs_sample = std::fabs(sample);
         peak             = std::max(peak, abs_sample);
-        rms_sum += abs_sample * abs_sample;
+        rms_sum += sample * sample;
     }
 
     // Update metrics
@@ -313,7 +315,7 @@ void PipeWireCapture::streamProcess(void* data)
         self->metrics_.total_samples += n_samples;
         self->metrics_.peak_level    = peak;
         self->metrics_.rms_level =
-            sep::math::to_float(math::sqrt_safe(static_cast<double>(rms_sum / n_samples)));
+            sep::math::to_float(math::sqrt_safe(static_cast<double>(rms_sum / n_samples))); // Correct calculation
     }
 
     pw_stream_queue_buffer(self->stream_, buf);

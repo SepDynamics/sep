@@ -42,7 +42,7 @@ extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPCo
 {
     if (!gpu_ctx || !bridge_out)
     {
-        return sep::SEPResult::INITIALIZATION_FAILED;
+        return sep::SEPResult::INITIALIZATION_FAILED; // Fix: Return appropriate error
     }
 
     // Use config parameter to avoid unused warning

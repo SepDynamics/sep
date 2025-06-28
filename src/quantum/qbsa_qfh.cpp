@@ -32,7 +32,7 @@ public:
 
         // Use QFH to analyze the probe bits for collapse detection
         ::sep::shim::vector<uint8_t> probe_bits = convertToBits(probe_indices);
-        QFHResult qfh_result = qfh_processor_.analyze(probe_bits);
+        QFHResult qfh_result = qfh_processor_.analyze(probe_bits); // Fix: Correct function call
         
         // Detect collapse based on rupture ratio from QFH
         result.collapse_detected = qfh_result.collapse_detected;

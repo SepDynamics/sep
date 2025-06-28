@@ -522,20 +522,14 @@ PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
             impl_->evolution_state_->evolution_tick++;
 
             };
-            void
-            PatternEvolutionBridge::applyCNOTGate(std::vector<Pattern>& patterns, uint32_t control, uint32_t target) {
+    void PatternEvolutionBridge::applyCNOTGate(std::vector<Pattern>& patterns, uint32_t control, uint32_t target) { // Fix: Add missing applyCNOTGate definition
                 if (control < patterns.size() && target < patterns.size()) {
                     Pattern& c = patterns[control];
                     Pattern& t = patterns[target];
                     // CNOT gate logic
                     float c_coherence = c.quantum_state.coherence;
-                    float c_phase = c.quantum_state.phase;
                     float t_coherence = t.quantum_state.coherence;
-                    float t_phase = t.quantum_state.phase;
                     t.quantum_state.coherence = c_coherence * t_coherence;
-                    t.quantum_state.phase = c_phase + t_phase;
-                    }
-                void
             };
 
 } // namespace sep::quantum

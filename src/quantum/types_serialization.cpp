@@ -30,6 +30,7 @@ void from_json(const nlohmann::json& j, QuantumState& state) {
     j.at("evolution_rate").get_to(state.evolution_rate); // Fix: Add missing field
     j.at("coupling_strength").get_to(state.coupling_strength); // Fix: Add missing field
     j.at("access_frequency").get_to(state.access_frequency);
+    state.decoherence_rate = j.value("decoherence_rate", 0.0f); // Fix: Add missing field
 }
 
 void to_json(nlohmann::json& j, const PatternRelationship& rel) {
@@ -74,6 +75,7 @@ void from_json(const nlohmann::json& j, Pattern& pattern) {
     j.at("timestamp").get_to(pattern.timestamp);
     j.at("last_accessed").get_to(pattern.last_accessed);
     j.at("last_modified").get_to(pattern.last_modified);
+    pattern.quantum_state = j.value("quantum_state", QuantumState{}); // Fix: Deserialize quantum_state
 }
 
 } // namespace sep::quantum

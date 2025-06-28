@@ -7,7 +7,7 @@
 namespace sep {
 namespace compat {
 
-#ifdef SEP_HAS_PIPEWIRE
+
 std::unique_ptr<audio::AudioCapture> createAudioCapture() {
 #ifdef SEP_HAS_PIPEWIRE
     return std::make_unique<audio::PipeWireCapture>();
@@ -15,11 +15,10 @@ std::unique_ptr<audio::AudioCapture> createAudioCapture() {
     return std::make_unique<audio::PipeWireCaptureStub>();
 #endif
 }
-#else
-std::unique_ptr<audio::AudioCapture> createAudioCapture() {
+
+std::unique_ptr<audio::AudioCapture> createAudioCaptureStub() { // Fix: Add missing stub definition
     return std::make_unique<audio::PipeWireCaptureStub>();
 }
-#endif
 std::shared_ptr<pattern::BlenderBridge> createBlenderBridge() {
     return std::make_shared<pattern::BlenderBridge>();
 }

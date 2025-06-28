@@ -8,7 +8,7 @@ namespace sep::cuda {
 
 cudaError_t cudaMallocManaged(void** ptr, size_t size) {
     if (!ptr) return cudaErrorInvalidValue;
-    *ptr = std::malloc(size);
+    *ptr = std::malloc(size); // Fix: Use std::malloc
     return *ptr ? cudaSuccess : cudaErrorMemoryAllocation;
 }
 

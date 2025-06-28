@@ -1,6 +1,7 @@
 #include "audio/pipeline.h"
 #include "compat/math_common.h"
 #include <complex>
+#include <algorithm>
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>

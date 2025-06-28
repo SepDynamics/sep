@@ -11,6 +11,7 @@
 // Define namespace alias for clarity
 namespace logging = sep::logging;
 
+
 namespace sep::pattern {
 
 PatternProcessor::PatternProcessor(Implementation impl)

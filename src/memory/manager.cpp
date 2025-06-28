@@ -61,6 +61,7 @@ void *Manager::getTracer() {
 }
 
 // Tracing stub retained for API compatibility
+// Note: This stub assumes no actual tracing implementation.
 
 std::shared_ptr<spdlog::logger> Manager::createLogger(const std::string &name,
                                                       const LoggerConfig &config) {
@@ -136,6 +137,7 @@ std::string Manager::levelToString(Level level) {
 
 void LoggingMiddleware::before_handle(::crow::request& req, ::crow::response& res,
                                       LoggingMiddleware::context &ctx) {
+
   (void)req;
   if (!isReady()) {
     res.code = 503;  // Service Unavailable
@@ -153,6 +155,7 @@ void LoggingMiddleware::before_handle(::crow::request& req, ::crow::response& re
 
 void LoggingMiddleware::after_handle(::crow::request &req, ::crow::response &res,
                                      LoggingMiddleware::context &ctx) {
+
   if (!isReady()) {
     return;
   }

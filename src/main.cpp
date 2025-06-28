@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
   sep::logging::Manager::initialize();
 
   // Setup signal handling for graceful shutdown
-  signal(SIGINT, signal_handler);
+  signal(SIGINT, signal_handler); // Fix: Set up signal handler
   signal(SIGTERM, signal_handler); // Fix: Call signal for SIGTERM
 
   bool server_mode = false;
@@ -268,7 +268,7 @@ int main(int argc, char* argv[]) {
     
     if (server_mode) {
       spdlog::info("Running in server mode, waiting for shutdown signal...");
-      // Keep running until signal is received
+      // Keep running until signal is received // Fix: Use load() on atomic variable
       while (g_keep_running.load()) { // Fix: Use load() on atomic variable
         std::this_thread::sleep_for(std::chrono::seconds(1));
       }

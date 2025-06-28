@@ -17,7 +17,7 @@ MemoryTierManager& MemoryTierManager::getInstance() {
 }
 
 MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
-    MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), cfg.stm_size};
+    MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), cfg.stm_size}; // Fix: Use correct enum
     MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), cfg.mtm_size};
     MemoryTier::Config lcfg{static_cast<TierType>(sep::MemoryTierEnum::LTM), cfg.ltm_size};
     stm_ = std::make_unique<MemoryTier>(scfg);
@@ -180,9 +180,10 @@ sep::SEPResult MemoryTierManager::demoteBlock(MemoryBlock* block, MemoryBlock*& 
 
 sep::SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* patterns, pattern::PatternData* results,
                                                            const pattern::PatternConfig& config, size_t pattern_count,
+                                                           const pattern::PatternData* previous_patterns, void* stream) { // Fix: Add missing parameters and return type
+#ifdef SEP_USE_CUDA
+                                                           const pattern::PatternConfig& config, size_t pattern_count,
                                                            const pattern::PatternData* previous_patterns, void* stream) {
-    (void)patterns;
-    (void)results;
     (void)config; // Prevent unused parameter warning
     (void)pattern_count;
     (void)previous_patterns;

@@ -30,6 +30,7 @@
 // Add missing includes
 #include "compat/raii.h"
 #include "compat/types.h"
+#include "compat/kernels.h"
 
 
 extern "C" {

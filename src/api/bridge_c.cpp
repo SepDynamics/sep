@@ -88,6 +88,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       // Replacing with a dummy success for now, assuming the actual processing logic will be integrated later.
       sep::quantum::BatchProcessingResult process_result;
       process_result.success = true;
+      process_result.error_code = 0;
       
       if (!process_result.success) {
         sep::api::bridge::detail::setLastError(process_result.error_message.c_str());

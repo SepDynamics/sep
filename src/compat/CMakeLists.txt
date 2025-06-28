@@ -34,6 +34,14 @@ set_source_files_properties(
 target_include_directories(sep_compat
   PUBLIC
     ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/include/api
+        ${CMAKE_SOURCE_DIR}/include/audio
+        ${CMAKE_SOURCE_DIR}/include/blender
+        ${CMAKE_SOURCE_DIR}/include/compat
+        ${CMAKE_SOURCE_DIR}/include/core
+        ${CMAKE_SOURCE_DIR}/include/crow
+        ${CMAKE_SOURCE_DIR}/include/memory
+        ${CMAKE_SOURCE_DIR}/include/quantum
     ${CMAKE_SOURCE_DIR}/extern/glm
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/extern

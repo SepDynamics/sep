@@ -11,6 +11,14 @@ add_executable(quantum_optimizer_tests
 target_include_directories(quantum_optimizer_tests
     PRIVATE
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/include/api
+        ${CMAKE_SOURCE_DIR}/include/audio
+        ${CMAKE_SOURCE_DIR}/include/blender
+        ${CMAKE_SOURCE_DIR}/include/compat
+        ${CMAKE_SOURCE_DIR}/include/core
+        ${CMAKE_SOURCE_DIR}/include/crow
+        ${CMAKE_SOURCE_DIR}/include/memory
+        ${CMAKE_SOURCE_DIR}/include/quantum
 )
 
 target_link_libraries(quantum_optimizer_tests

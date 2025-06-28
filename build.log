@@ -230,436 +230,287 @@ Call Stack (most recent call first):
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/build
 Building SEP Engine...
-[  2%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[  5%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  5%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[  8%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[  8%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 13%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 14%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 18%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 20%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 23%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 23%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 26%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 27%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[  2%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[  2%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[  5%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[  8%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 11%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 14%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 17%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 20%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
+[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 26%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
 [ 28%] Linking CXX static library /sep/lib/libcycles_osl.a
-[ 30%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 30%] Built target cycles_osl
-[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 33%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-/sep/src/compat/stream.cpp: In static member function ‘static std::shared_ptr<sep::cuda::Stream> sep::cuda::Stream::create(sep::StreamFlags)’:
-/sep/src/compat/stream.cpp:79:18: error: ‘logCudaError’ is not a member of ‘sep::cuda’
-   79 |     ::sep::cuda::logCudaError("cudaStreamCreateWithFlags", err);
-      |                  ^~~~~~~~~~~~
-[ 37%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-In file included from /sep/extern/pipewire/src/pipewire/impl.h:23,
-                 from /sep/extern/pipewire/src/pipewire/global.h:39,
-                 from /sep/include/audio/pipewire_includes.h:25,
-                 from /sep/include/audio/pipewire_capture.h:13,
-                 from /sep/src/compat/component_bridge.cpp:2:
-/sep/extern/pipewire/src/pipewire/pipewire.h:38:10: fatal error: pipewire/version.h: No such file or directory
-   38 | #include <pipewire/version.h>
-      |          ^~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-/sep/src/quantum/quantum_processor.cpp: In constructor ‘sep::quantum::QuantumProcessor::QuantumProcessor(const Config&)’:
-/sep/src/quantum/quantum_processor.cpp:61:23: error: ‘createQFHBasedQBSAProcessor’ was not declared in this scope
-   61 |     qbsa_processor_ = createQFHBasedQBSAProcessor({});
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor.cpp: At global scope:
-/sep/src/quantum/quantum_processor.cpp:65:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                 ^~~~~~~~~~~~~~~~~
-      |                 QuantumProcessor
-/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 1 is invalid
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                                  ^
-/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor.cpp:65:36: error: ambiguating new declaration of ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                                    ^~~~~~~~~~~~~~~~~~~~~~
-In file included from /sep/src/quantum/quantum_processor.cpp:1:
-/sep/include/quantum/quantum_processor.h:57:35: note: old declaration ‘std::unique_ptr<sep::quantum::QuantumProcessor> sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
-   57 | std::unique_ptr<QuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config);
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’:
-/sep/src/quantum/quantum_processor.cpp:68:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
-   68 |     return std::make_unique<QuantumProcessor>(config);
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-      |                                              |
-      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
-/sep/src/quantum/quantum_processor.cpp: At global scope:
-/sep/src/quantum/quantum_processor.cpp:71:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
-   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
-      |                 ^~~~~~~~~~~~~~~~~
-      |                 QuantumProcessor
-/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 1 is invalid
-   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
-      |                                  ^
-/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessorStub()’:
-/sep/src/quantum/quantum_processor.cpp:72:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
-   72 |     return std::make_unique<QuantumProcessor>(QuantumProcessor::Config{});
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                              |
-      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
-/sep/src/api/bridge_c.cpp: In function ‘int sep_process_context(const char*, const char*, char*, size_t)’:
-/sep/src/api/bridge_c.cpp:88:48: error: ‘struct sep::quantum::BatchProcessingResult’ has no member named ‘error_code’
-   88 |         return static_cast<int>(process_result.error_code); // Use specific error code
-      |                                                ^~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:392:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
-  392 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
-      |                 ^~~~~~~~~~~~~~~~~~
-      |                 MemoryTierManager
-/sep/src/memory/memory_tier_manager.cpp:392:35: error: template argument 1 is invalid
-  392 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
-      |                                   ^
-/sep/src/memory/memory_tier_manager.cpp:392:35: error: template argument 2 is invalid
-/sep/src/memory/memory_tier_manager.cpp: In function ‘int sep::memory::createMemoryTierManager()’:
-/sep/src/memory/memory_tier_manager.cpp:395:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
-  395 |     return std::make_unique<MemoryTierManager>();
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-      |                                               |
-      |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
-/sep/src/memory/memory_tier_manager.cpp: At global scope:
-/sep/src/memory/memory_tier_manager.cpp:398:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
-  398 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
-      |                 ^~~~~~~~~~~~~~~~~~
-      |                 MemoryTierManager
-/sep/src/memory/memory_tier_manager.cpp:398:35: error: template argument 1 is invalid
-  398 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
-      |                                   ^
-/sep/src/memory/memory_tier_manager.cpp:398:35: error: template argument 2 is invalid
-/sep/src/memory/memory_tier_manager.cpp: In function ‘int sep::memory::createMemoryTierManagerStub()’:
-/sep/src/memory/memory_tier_manager.cpp:399:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
-  399 |     return std::make_unique<MemoryTierManager>();
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-      |                                               |
-      |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
-[ 42%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/blender/compression.h:4,
-                 from /sep/include/memory/memory_tier.hpp:10,
-                 from /sep/include/memory/memory_tier_manager.hpp:13,
-                 from /sep/src/memory/memory_tier_manager.cpp:1:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::memory::MemoryTierManager; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::memory::MemoryTierManager>]’:
-/sep/src/memory/memory_tier_manager.cpp:16:86:   required from here
-   16 |     std::call_once(once_flag_, []() { instance_ = std::make_unique<MemoryTierManager>(); });
-      |                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: call of overloaded ‘MemoryTierManager()’ is ambiguous
- 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:20:1: note: candidate: ‘sep::memory::MemoryTierManager::MemoryTierManager(const Config&)’
-   20 | MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
-      | ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:29:1: note: candidate: ‘sep::memory::MemoryTierManager::MemoryTierManager()’
-   29 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
-      | ^~~~~~~~~~~~~~~~~
-[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
-[ 44%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-/sep/src/quantum/quantum_processor_qfh.cpp:23:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
-   23 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
-      |                 ^~~~~~~~~~~~~~~~~~~~
-      |                 QuantumProcessorQFH
-/sep/src/quantum/quantum_processor_qfh.cpp:23:37: error: template argument 1 is invalid
-   23 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
-      |                                     ^
-/sep/src/quantum/quantum_processor_qfh.cpp:23:37: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor_qfh.cpp: In function ‘int sep::quantum::createQuantumProcessorQFH()’:
-/sep/src/quantum/quantum_processor_qfh.cpp:25:49: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>’ to ‘int’ in return
-   25 |     return std::make_unique<QuantumProcessorQFH>();
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-      |                                                 |
-      |                                                 std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>
-/sep/src/quantum/quantum_processor_qfh.cpp: At global scope:
-/sep/src/quantum/quantum_processor_qfh.cpp:28:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
-   28 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFHStub() {
-      |                 ^~~~~~~~~~~~~~~~~~~~
-      |                 QuantumProcessorQFH
-/sep/src/quantum/quantum_processor_qfh.cpp:28:37: error: template argument 1 is invalid
-   28 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFHStub() {
-      |                                     ^
-/sep/src/quantum/quantum_processor_qfh.cpp:28:37: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor_qfh.cpp: In function ‘int sep::quantum::createQuantumProcessorQFHStub()’:
-/sep/src/quantum/quantum_processor_qfh.cpp:29:49: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>’ to ‘int’ in return
-   29 |     return std::make_unique<QuantumProcessorQFH>();
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-      |                                                 |
-      |                                                 std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>
-[ 46%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 50%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 52%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-/sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
-/sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
-  170 | }
-      | ^
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
-[ 53%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-In file included from /usr/include/c++/14/fstream:44,
-                 from /sep/src/core/manager.cpp:7:
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:85:32: error: ‘ios_base’ has not been declared
-   85 |       open(const char* __name, ios_base::openmode __mode, int __prot = 0664);
-      |                                ^~~~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:85:51: error: expected ‘,’ or ‘...’ before ‘__mode’
-   85 |       open(const char* __name, ios_base::openmode __mode, int __prot = 0664);
-      |                                                   ^~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:93:34: error: ‘ios_base’ has not been declared
-   93 |       sys_open(__c_file* __file, ios_base::openmode);
-      |                                  ^~~~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:96:26: error: ‘ios_base’ has not been declared
-   96 |       sys_open(int __fd, ios_base::openmode __mode) throw ();
-      |                          ^~~~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:96:45: error: expected ‘,’ or ‘...’ before ‘__mode’
-   96 |       sys_open(int __fd, ios_base::openmode __mode) throw ();
-      |                                             ^~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:112:7: error: ‘streamsize’ does not name a type
-  112 |       streamsize
-      |       ^~~~~~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:115:7: error: ‘streamsize’ does not name a type
-  115 |       streamsize
-      |       ^~~~~~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:119:7: error: ‘streamsize’ does not name a type
-  119 |       streamsize
-      |       ^~~~~~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:122:7: error: ‘streamoff’ does not name a type
-  122 |       streamoff
-      |       ^~~~~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:128:7: error: ‘streamsize’ does not name a type
-  128 |       streamsize
-      |       ^~~~~~~~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h: In member function ‘void sep::config::std::__basic_file<char>::swap(sep::config::std::__basic_file<char>&)’:
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:79:14: error: ‘swap’ is not a member of ‘sep::config::std’
-   79 |         std::swap(_M_cfile, __f._M_cfile);
-      |              ^~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:79:14: note: suggested alternatives:
-In file included from /usr/include/c++/14/bits/quoted_string.h:38,
-                 from /usr/include/c++/14/iomanip:50,
-                 from /usr/include/c++/14/bits/fs_path.h:38,
-                 from /usr/include/c++/14/filesystem:52,
-                 from /sep/extern/nlohmann/json.hpp:4643,
-                 from /sep/include/api/types.h:8,
-                 from /sep/include/core/types.h:11,
-                 from /sep/include/core/manager.h:4,
-                 from /sep/src/core/manager.cpp:1:
-/usr/include/c++/14/sstream:1226:5: note:   ‘std::__cxx11::swap’
- 1226 |     swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
-      |     ^~~~
-In file included from /usr/include/c++/14/bits/stl_pair.h:61,
-                 from /usr/include/c++/14/bits/stl_algobase.h:64,
-                 from /usr/include/c++/14/vector:62,
-                 from /sep/include/compat/types.h:5,
-                 from /sep/include/compat/cuda.h:12,
-                 from /sep/include/core/types.h:10:
-/usr/include/c++/14/bits/move.h:226:5: note:   ‘std::swap’
-  226 |     swap(_Tp& __a, _Tp& __b)
-      |     ^~~~
-/usr/include/c++/14/bits/move.h:226:5: note:   ‘std::swap’
-In file included from /usr/include/c++/14/exception:166,
-                 from /usr/include/c++/14/ext/concurrence.h:34,
-                 from /usr/include/c++/14/bits/shared_ptr_base.h:62,
-                 from /usr/include/c++/14/bits/shared_ptr.h:53,
-                 from /usr/include/c++/14/memory:80,
-                 from /sep/include/compat/cuda.h:14:
-/usr/include/c++/14/bits/exception_ptr.h:229:5: note:   ‘std::__exception_ptr::swap’
-  229 |     swap(exception_ptr& __lhs, exception_ptr& __rhs)
-      |     ^~~~
-/usr/include/c++/14/bits/fs_path.h:736:15: note:   ‘std::filesystem::__cxx11::swap’
-  736 |   inline void swap(path& __lhs, path& __rhs) noexcept { __lhs.swap(__rhs); }
-      |               ^~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:80:14: error: ‘swap’ is not a member of ‘sep::config::std’
-   80 |         std::swap(_M_cfile_created, __f._M_cfile_created);
-      |              ^~~~
-/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:80:14: note: suggested alternatives:
-/usr/include/c++/14/sstream:1226:5: note:   ‘std::__cxx11::swap’
- 1226 |     swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
-      |     ^~~~
-/usr/include/c++/14/bits/move.h:226:5: note:   ‘std::swap’
-  226 |     swap(_Tp& __a, _Tp& __b)
-      |     ^~~~
-/usr/include/c++/14/bits/move.h:226:5: note:   ‘std::swap’
-/usr/include/c++/14/bits/exception_ptr.h:229:5: note:   ‘std::__exception_ptr::swap’
-  229 |     swap(exception_ptr& __lhs, exception_ptr& __rhs)
-      |     ^~~~
-/usr/include/c++/14/bits/fs_path.h:736:15: note:   ‘std::filesystem::__cxx11::swap’
-  736 |   inline void swap(path& __lhs, path& __rhs) noexcept { __lhs.swap(__rhs); }
-      |               ^~~~
-/usr/include/c++/14/fstream: At global scope:
-/usr/include/c++/14/fstream:64:28: error: ‘declval’ is not a member of ‘sep::config::std’; did you mean ‘std::declval’?
-   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
-      |                            ^~~~~~~
-In file included from /usr/include/c++/14/bits/stl_pair.h:60:
-/usr/include/c++/14/type_traits:2485:10: note: ‘std::declval’ declared here
- 2485 |     auto declval() noexcept -> decltype(__declval<_Tp>(0))
-      |          ^~~~~~~
-/usr/include/c++/14/fstream:64:28: error: ‘declval’ is not a member of ‘sep::config::std’; did you mean ‘std::declval’?
-   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
-      |                            ^~~~~~~
-/usr/include/c++/14/type_traits:2485:10: note: ‘std::declval’ declared here
- 2485 |     auto declval() noexcept -> decltype(__declval<_Tp>(0))
-      |          ^~~~~~~
-/usr/include/c++/14/fstream:64:41: error: expected primary-expression before ‘&’ token
-   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
+[ 28%] Built target cycles_osl
+[ 30%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 33%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 34%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
+[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 39%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+/sep/src/audio/pipewire_capture.cpp: In function ‘const pw_stream_events PipeWireCapture::createStreamEvents()’:
+/sep/src/audio/pipewire_capture.cpp:42:29: error: ‘streamStateChanged’ was not declared in this scope
+   42 |     events.state_changed = &streamStateChanged;
+      |                             ^~~~~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:43:29: error: ‘streamProcess’ was not declared in this scope
+   43 |     events.process       = &streamProcess;
+      |                             ^~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:48:31: error: ‘void PipeWireCapture::cleanup()’ should have been declared inside ‘PipeWireCapture’
+   48 | void PipeWireCapture::cleanup()
+      |                               ^
+/sep/src/audio/pipewire_capture.cpp: In function ‘void PipeWireCapture::cleanup()’:
+/sep/src/audio/pipewire_capture.cpp:50:9: error: ‘stream_’ was not declared in this scope
+   50 |     if (stream_)
+      |         ^~~~~~~
+[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+/sep/src/audio/pipewire_capture.cpp:52:13: error: ‘stream_listener_’ was not declared in this scope
+   52 |         if (stream_listener_)
+      |             ^~~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:60:9: error: ‘core_’ was not declared in this scope
+   60 |     if (core_)
+      |         ^~~~~
+/sep/src/audio/pipewire_capture.cpp:65:9: error: ‘context_’ was not declared in this scope; did you mean ‘ucontext_t’?
+   65 |     if (context_)
+      |         ^~~~~~~~
+      |         ucontext_t
+/sep/src/audio/pipewire_capture.cpp:70:9: error: ‘loop_’ was not declared in this scope
+   70 |     if (loop_)
+      |         ^~~~~
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:77:18: error: scope ‘PipeWireCapture’ before ‘~’ is not a class-name
+   77 | PipeWireCapture::~PipeWireCapture()
+      |                  ^
+/sep/src/audio/pipewire_capture.cpp:82:59: error: ‘sep::audio::AudioError PipeWireCapture::init(const sep::audio::AudioConfig&)’ should have been declared inside ‘PipeWireCapture’
+   82 | AudioError PipeWireCapture::init(const AudioConfig& config)
+      |                                                           ^
+/sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::init(const sep::audio::AudioConfig&)’:
+/sep/src/audio/pipewire_capture.cpp:84:38: error: ‘mutex_’ was not declared in this scope
+   84 |     std::lock_guard<std::mutex> lock(mutex_);
+      |                                      ^~~~~~
+/sep/src/audio/pipewire_capture.cpp:85:5: error: ‘config_’ was not declared in this scope; did you mean ‘config’?
+   85 |     config_ = config;
+      |     ^~~~~~~
+      |     config
+/sep/src/audio/pipewire_capture.cpp:88:5: error: ‘loop_’ was not declared in this scope
+   88 |     loop_ = pw_thread_loop_new("sep-audio", nullptr);
+      |     ^~~~~
+/sep/src/audio/pipewire_capture.cpp:97:5: error: ‘context_’ was not declared in this scope; did you mean ‘ucontext_t’?
+   97 |     context_                    = pw_context_new(pw_thread_loop_get_loop(loop_), props, 0);
+      |     ^~~~~~~~
+      |     ucontext_t
+/sep/src/audio/pipewire_capture.cpp:108:5: error: ‘core_’ was not declared in this scope
+  108 |     core_                            = pw_context_connect(context_, core_props, 0);
+      |     ^~~~~
+/sep/src/audio/pipewire_capture.cpp:117:12: error: ‘setupStream’ was not declared in this scope
+  117 |     return setupStream();
+      |            ^~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:120:41: error: ‘sep::audio::AudioError PipeWireCapture::setupStream()’ should have been declared inside ‘PipeWireCapture’
+  120 | AudioError PipeWireCapture::setupStream()
       |                                         ^
-/usr/include/c++/14/fstream:64:42: error: expected primary-expression before ‘>’ token
-   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
-      |                                          ^
-/usr/include/c++/14/fstream:64:44: error: expected primary-expression before ‘)’ token
-   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
-      |                                            ^
-/usr/include/c++/14/fstream:65:25: error: ‘enable_if_t’ does not name a type
-   65 |     using _If_fs_path = enable_if_t<is_same_v<_Path, _Path2>, _Result>;
-      |                         ^~~~~~~~~~~
-/usr/include/c++/14/fstream:90:49: error: expected template-name before ‘<’ token
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |                                                 ^
-/usr/include/c++/14/fstream:90:49: error: expected ‘{’ before ‘<’ token
-/usr/include/c++/14/fstream:532:48: error: expected template-name before ‘<’ token
-  532 |     class basic_ifstream : public basic_istream<_CharT, _Traits>
-      |                                                ^
-/usr/include/c++/14/fstream:532:48: error: expected ‘{’ before ‘<’ token
-/usr/include/c++/14/fstream:802:48: error: expected template-name before ‘<’ token
-  802 |     class basic_ofstream : public basic_ostream<_CharT,_Traits>
-      |                                                ^
-/usr/include/c++/14/fstream:802:48: error: expected ‘{’ before ‘<’ token
-/usr/include/c++/14/fstream:1074:48: error: expected template-name before ‘<’ token
- 1074 |     class basic_fstream : public basic_iostream<_CharT, _Traits>
-      |                                                ^
-/usr/include/c++/14/fstream:1074:48: error: expected ‘{’ before ‘<’ token
-In file included from /usr/include/c++/14/fstream:1360:
-/usr/include/c++/14/bits/fstream.tcc:50:33: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   50 |     _M_allocate_internal_buffer()
-      |                                 ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:64:40: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   64 |     _M_destroy_internal_buffer() throw()
-      |                                        ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:81:19: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   81 |     basic_filebuf() : __streambuf_type(), _M_lock(), _M_file(&_M_lock),
-      |                   ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:95:19: error: missing template argument list after ‘sep::config::std::basic_filebuf’; template placeholder not permitted in parameter
-   95 |     basic_filebuf(basic_filebuf&& __rhs)
-      |                   ^~~~~~~~~~~~~
-      |                                <>
-/usr/include/c++/14/fstream:90:11: note: ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’ declared here
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:95:40: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   95 |     basic_filebuf(basic_filebuf&& __rhs)
-      |                                        ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:124:15: error: missing template argument list after ‘sep::config::std::basic_filebuf’; template placeholder not permitted in parameter
-  124 |     operator=(basic_filebuf&& __rhs)
-      |               ^~~~~~~~~~~~~
-      |                            <>
-/usr/include/c++/14/fstream:90:11: note: ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’ declared here
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:124:36: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-  124 |     operator=(basic_filebuf&& __rhs)
-      |                                    ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:153:10: error: missing template argument list after ‘sep::config::std::basic_filebuf’; template placeholder not permitted in parameter
-  153 |     swap(basic_filebuf& __rhs)
-      |          ^~~~~~~~~~~~~
-      |                       <>
-/usr/include/c++/14/fstream:90:11: note: ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’ declared here
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:153:30: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-  153 |     swap(basic_filebuf& __rhs)
-      |                              ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:179:27: error: ‘ios_base’ has not been declared
-  179 |     open(const char* __s, ios_base::openmode __mode)
-      |                           ^~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:179:46: error: expected ‘,’ or ‘...’ before ‘__mode’
-  179 |     open(const char* __s, ios_base::openmode __mode)
-      |                                              ^~~~~~
-/usr/include/c++/14/bits/fstream.tcc:179:52: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-  179 |     open(const char* __s, ios_base::openmode __mode)
+/sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::setupStream()’:
+/sep/src/audio/pipewire_capture.cpp:125:5: error: ‘stream_’ was not declared in this scope
+  125 |     stream_ = pw_stream_new(core_,
+      |     ^~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:26:44: error: ‘Config’ in namespace ‘sep::memory’ does not name a type
+   26 | void MemoryTierManager::init(const memory::Config& config){
+      |                                            ^~~~~~
+/sep/src/audio/pipewire_capture.cpp:125:29: error: ‘core_’ was not declared in this scope
+  125 |     stream_ = pw_stream_new(core_,
+      |                             ^~~~~
+/sep/src/memory/memory_tier_manager.cpp:26:6: error: no declaration matches ‘void sep::memory::MemoryTierManager::init(const int&)’
+   26 | void MemoryTierManager::init(const memory::Config& config){
+      |      ^~~~~~~~~~~~~~~~~
+In file included from /sep/src/memory/memory_tier_manager.cpp:1:
+/sep/include/memory/memory_tier_manager.hpp:71:10: note: candidate is: ‘void sep::memory::MemoryTierManager::init(const Config&)’
+   71 |     void init(const Config& config);
+      |          ^~~~
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   44 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:50:1: error: no declaration matches ‘sep::memory::MemoryTierManager::MemoryTierManager()’
+   50 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      | ^~~~~~~~~~~~~~~~~
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: candidates are: ‘sep::memory::MemoryTierManager::MemoryTierManager(const sep::memory::MemoryTierManager&)’
+   44 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:46:1: note:                 ‘sep::memory::MemoryTierManager::MemoryTierManager(const Config&)’
+   46 | MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
+      | ^~~~~~~~~~~~~~~~~
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   44 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:50:68: error: expected unqualified-id before ‘)’ token
+   50 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      |                                                                    ^
+/sep/src/memory/memory_tier_manager.cpp:56:44: error: ‘Config’ in namespace ‘sep::memory’ does not name a type
+   56 | void MemoryTierManager::init(const memory::Config& config) {
+      |                                            ^~~~~~
+/sep/src/memory/memory_tier_manager.cpp:56:6: error: no declaration matches ‘void sep::memory::MemoryTierManager::init(const int&)’
+   56 | void MemoryTierManager::init(const memory::Config& config) {
+      |      ^~~~~~~~~~~~~~~~~
+/sep/include/memory/memory_tier_manager.hpp:71:10: note: candidate is: ‘void sep::memory::MemoryTierManager::init(const Config&)’
+   71 |     void init(const Config& config);
+      |          ^~~~
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   44 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:66:6: error: redefinition of ‘void sep::memory::MemoryTierManager::shutdown()’
+   66 | void MemoryTierManager::shutdown() {
+      |      ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:36:6: note: ‘void sep::memory::MemoryTierManager::shutdown()’ previously defined here
+   36 | void MemoryTierManager::shutdown(){
+      |      ^~~~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:126:29: error: ‘config_’ was not declared in this scope
+  126 |                             config_.description.c_str(),
+      |                             ^~~~~~~
+/sep/src/audio/pipewire_capture.cpp:161:5: error: ‘stream_listener_’ was not declared in this scope
+  161 |     stream_listener_ = std::make_unique<spa_hook>();
+      |     ^~~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:167:70: error: invalid use of ‘this’ in non-member function
+  167 |     pw_stream_add_listener(stream_, stream_listener_.get(), &events, this);
+      |                                                                      ^~~~
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:201:35: error: ‘sep::audio::AudioError PipeWireCapture::start()’ should have been declared inside ‘PipeWireCapture’
+  201 | AudioError PipeWireCapture::start()
+      |                                   ^
+/sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::start()’:
+/sep/src/audio/pipewire_capture.cpp:203:38: error: ‘mutex_’ was not declared in this scope
+  203 |     std::lock_guard<std::mutex> lock(mutex_);
+      |                                      ^~~~~~
+/sep/src/audio/pipewire_capture.cpp:205:10: error: ‘loop_’ was not declared in this scope
+  205 |     if (!loop_ || !stream_)
+      |          ^~~~~
+/sep/src/audio/pipewire_capture.cpp:205:20: error: ‘stream_’ was not declared in this scope
+  205 |     if (!loop_ || !stream_)
+      |                    ^~~~~~~
+/sep/src/audio/pipewire_capture.cpp:210:36: error: ‘loop_’ was not declared in this scope
+  210 |     int err = pw_thread_loop_start(loop_);
+      |                                    ^~~~~
+/sep/src/memory/memory_tier_manager.cpp:426:6: error: no declaration matches ‘void sep::memory::MemoryTierManager::registerPattern(std::size_t, const sep::pattern::PatternData&)’
+  426 | void MemoryTierManager::registerPattern(std::size_t id, const pattern::PatternData& pattern) {
+      |      ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:426:6: note: no functions named ‘void sep::memory::MemoryTierManager::registerPattern(std::size_t, const sep::pattern::PatternData&)’
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   44 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:430:29: error: no declaration matches ‘const sep::pattern::PatternData* sep::memory::MemoryTierManager::getPatternData(std::size_t) const’
+  430 | const pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
+      |                             ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:430:29: note: no functions named ‘const sep::pattern::PatternData* sep::memory::MemoryTierManager::getPatternData(std::size_t) const’
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   44 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:217:5: error: ‘running_’ was not declared in this scope
+  217 |     running_ = true;
+      |     ^~~~~~~~
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:221:34: error: ‘sep::audio::AudioError PipeWireCapture::stop()’ should have been declared inside ‘PipeWireCapture’
+  221 | AudioError PipeWireCapture::stop()
+      |                                  ^
+/sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::stop()’:
+/sep/src/audio/pipewire_capture.cpp:223:38: error: ‘mutex_’ was not declared in this scope
+  223 |     std::lock_guard<std::mutex> lock(mutex_);
+      |                                      ^~~~~~
+/sep/src/audio/pipewire_capture.cpp:224:5: error: ‘running_’ was not declared in this scope
+  224 |     running_ = false;
+      |     ^~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:226:9: error: ‘loop_’ was not declared in this scope
+  226 |     if (loop_)
+      |         ^~~~~
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:233:6: error: variable or field ‘setCallback’ declared void
+  233 | void PipeWireCapture::setCallback(AudioCallback callback)
+      |      ^~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:233:35: error: ‘AudioCallback’ was not declared in this scope
+  233 | void PipeWireCapture::setCallback(AudioCallback callback)
+      |                                   ^~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:239:44: error: ‘sep::audio::AudioMetrics PipeWireCapture::getMetrics()’ should have been declared inside ‘PipeWireCapture’
+  239 | AudioMetrics PipeWireCapture::getMetrics() const
+      |                                            ^~~~~
+/sep/src/audio/pipewire_capture.cpp:239:44: error: non-member function ‘sep::audio::AudioMetrics PipeWireCapture::getMetrics()’ cannot have cv-qualifier
+/sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioMetrics PipeWireCapture::getMetrics()’:
+/sep/src/audio/pipewire_capture.cpp:241:38: error: ‘mutex_’ was not declared in this scope
+  241 |     std::lock_guard<std::mutex> lock(mutex_);
+      |                                      ^~~~~~
+/sep/src/audio/pipewire_capture.cpp:242:12: error: ‘metrics_’ was not declared in this scope
+  242 |     return metrics_;
+      |            ^~~~~~~~
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:248:68: error: ‘void PipeWireCapture::streamStateChanged(void*, pw_stream_state, pw_stream_state, const char*)’ should have been declared inside ‘PipeWireCapture’
+  248 |                                          const char*          error)
+      |                                                                    ^
+/sep/src/audio/pipewire_capture.cpp: In function ‘void PipeWireCapture::streamStateChanged(void*, pw_stream_state, pw_stream_state, const char*)’:
+/sep/src/audio/pipewire_capture.cpp:250:30: error: reference to ‘PipeWireCapture’ is ambiguous
+  250 |     auto* self = static_cast<PipeWireCapture*>(data);
+      |                              ^~~~~~~~~~~~~~~
+In file included from /sep/src/audio/pipewire_capture.cpp:3:
+/sep/include/audio/pipewire_capture.h:31:7: note: candidates are: ‘class sep::audio::PipeWireCapture’
+   31 | class PipeWireCapture : public AudioCapture {
+      |       ^~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:37:11: note:                 ‘namespace PipeWireCapture { }’
+   37 | namespace PipeWireCapture {
+      |           ^~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:250:45: error: expected ‘>’ before ‘*’ token
+  250 |     auto* self = static_cast<PipeWireCapture*>(data);
+      |                                             ^
+/sep/src/audio/pipewire_capture.cpp:250:45: error: expected ‘(’ before ‘*’ token
+  250 |     auto* self = static_cast<PipeWireCapture*>(data);
+      |                                             ^
+      |                                             (
+/sep/src/audio/pipewire_capture.cpp:250:46: error: expected primary-expression before ‘>’ token
+  250 |     auto* self = static_cast<PipeWireCapture*>(data);
+      |                                              ^
+/sep/src/audio/pipewire_capture.cpp:250:53: error: expected ‘)’ before ‘;’ token
+  250 |     auto* self = static_cast<PipeWireCapture*>(data);
+      |                                                     ^
+      |                                                     )
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:263:47: error: ‘void PipeWireCapture::streamProcess(void*)’ should have been declared inside ‘PipeWireCapture’
+  263 | void PipeWireCapture::streamProcess(void* data)
+      |                                               ^
+/sep/src/audio/pipewire_capture.cpp: In function ‘void PipeWireCapture::streamProcess(void*)’:
+/sep/src/audio/pipewire_capture.cpp:265:42: error: reference to ‘PipeWireCapture’ is ambiguous
+  265 |     auto*             self = static_cast<PipeWireCapture*>(data);
+      |                                          ^~~~~~~~~~~~~~~
+/sep/include/audio/pipewire_capture.h:31:7: note: candidates are: ‘class sep::audio::PipeWireCapture’
+   31 | class PipeWireCapture : public AudioCapture {
+      |       ^~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:37:11: note:                 ‘namespace PipeWireCapture { }’
+   37 | namespace PipeWireCapture {
+      |           ^~~~~~~~~~~~~~~
+/sep/src/audio/pipewire_capture.cpp:265:57: error: expected ‘>’ before ‘*’ token
+  265 |     auto*             self = static_cast<PipeWireCapture*>(data);
+      |                                                         ^
+/sep/src/audio/pipewire_capture.cpp:265:57: error: expected ‘(’ before ‘*’ token
+  265 |     auto*             self = static_cast<PipeWireCapture*>(data);
+      |                                                         ^
+      |                                                         (
+/sep/src/audio/pipewire_capture.cpp:265:58: error: expected primary-expression before ‘>’ token
+  265 |     auto*             self = static_cast<PipeWireCapture*>(data);
+      |                                                          ^
+/sep/src/audio/pipewire_capture.cpp:265:65: error: expected ‘)’ before ‘;’ token
+  265 |     auto*             self = static_cast<PipeWireCapture*>(data);
+      |                                                                 ^
+      |                                                                 )
+/sep/src/audio/pipewire_capture.cpp:318:33: error: ‘math’ has not been declared
+  318 |             sep::math::to_float(math::sqrt_safe(static_cast<double>(rms_sum / n_samples))); // Correct calculation
+      |                                 ^~~~
+/sep/src/audio/pipewire_capture.cpp: At global scope:
+/sep/src/audio/pipewire_capture.cpp:324:52: error: definition of ‘std::unique_ptr<sep::audio::AudioCapture> sep::audio::AudioCapture::create()’ is not in namespace enclosing ‘sep::audio::AudioCapture’ [-fpermissive]
+  324 | std::unique_ptr<AudioCapture> AudioCapture::create()
       |                                                    ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:249:11: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-  249 |     close()
-      |           ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:295:5: error: ‘streamsize’ does not name a type
-  295 |     streamsize
-      |     ^~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:323:15: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-  323 |     underflow()
-      |               ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:482:15: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::int_type sep::config::std::basic_filebuf<_CharT, _Traits>::pbackfail’
-  482 |     pbackfail(int_type __i)
-      |               ^~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:482:15: error: ‘int_type’ was not declared in this scope
-/usr/include/c++/14/bits/fstream.tcc:541:14: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::int_type sep::config::std::basic_filebuf<_CharT, _Traits>::overflow’
-  541 |     overflow(int_type __c)
-      |              ^~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:541:14: error: ‘int_type’ was not declared in this scope
-/usr/include/c++/14/bits/fstream.tcc:606:44: error: ‘streamsize’ has not been declared
-  606 |     _M_convert_to_external(_CharT* __ibuf, streamsize __ilen)
-      |                                            ^~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:606:61: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-  606 |     _M_convert_to_external(_CharT* __ibuf, streamsize __ilen)
-      |                                                             ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:667:5: error: ‘streamsize’ does not name a type
-  667 |     streamsize
-      |     ^~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:753:5: error: ‘streamsize’ does not name a type
-  753 |     streamsize
-      |     ^~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:800:12: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::__streambuf_type* sep::config::std::basic_filebuf<_CharT, _Traits>::setbuf’
-  800 |     setbuf(char_type* __s, streamsize __n)
-      |            ^~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:800:12: error: ‘char_type’ was not declared in this scope
 /sep/src/core/metrics_collector.cpp:27:7: error: ‘MetricsCollector’ has not been declared
    27 | class MetricsCollector::Impl {
       |       ^~~~~~~~~~~~~~~~
@@ -672,39 +523,10 @@ In file included from /usr/include/c++/14/fstream:1360:
 /sep/src/core/metrics_collector.cpp:243:6: error: ‘MetricsCollector’ has not been declared
   243 | void MetricsCollector::recordOperation(const std::string& operation_name, bool success, double duration_ms) {
       |      ^~~~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:800:23: error: ‘__s’ was not declared in this scope; did you mean ‘__s8’?
-  800 |     setbuf(char_type* __s, streamsize __n)
-      |                       ^~~
-      |                       __s8
-/usr/include/c++/14/bits/fstream.tcc:800:28: error: ‘streamsize’ was not declared in this scope; did you mean ‘std::streamsize’?
-  800 |     setbuf(char_type* __s, streamsize __n)
-      |                            ^~~~~~~~~~
-      |                            std::streamsize
-In file included from /usr/include/c++/14/iosfwd:42,
-                 from /usr/include/c++/14/bits/shared_ptr.h:52:
-/usr/include/c++/14/bits/postypes.h:68:25: note: ‘std::streamsize’ declared here
-   68 |   typedef ptrdiff_t     streamsize; // Signed integral type
-      |                         ^~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:829:13: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::pos_type sep::config::std::basic_filebuf<_CharT, _Traits>::seekoff’
-  829 |     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
-      |             ^~~~~~~~
 /sep/src/core/metrics_collector.cpp: In function ‘void recordOperation(const std::string&, bool, double)’:
 /sep/src/core/metrics_collector.cpp:244:38: error: ‘metrics_mutex_’ was not declared in this scope
   244 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
       |                                      ^~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:829:13: error: ‘off_type’ was not declared in this scope; did you mean ‘off_t’?
-  829 |     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
-      |             ^~~~~~~~
-      |             off_t
-/usr/include/c++/14/bits/fstream.tcc:829:29: error: ‘ios_base’ has not been declared
-  829 |     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
-      |                             ^~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:829:54: error: ‘ios_base’ has not been declared
-  829 |     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
-      |                                                      ^~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:889:13: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::pos_type sep::config::std::basic_filebuf<_CharT, _Traits>::seekpos’
-  889 |     seekpos(pos_type __pos, ios_base::openmode)
-      |             ^~~~~~~~
 /sep/src/core/metrics_collector.cpp:246:18: error: ‘performance_metrics_’ was not declared in this scope
   246 |     auto& perf = performance_metrics_[key];
       |                  ^~~~~~~~~~~~~~~~~~~~
@@ -712,27 +534,13 @@ In file included from /usr/include/c++/14/iosfwd:42,
 /sep/src/core/metrics_collector.cpp:261:6: error: ‘MetricsCollector’ has not been declared
   261 | void MetricsCollector::incrementCounter(const std::string& counter_name, std::uint64_t value) {
       |      ^~~~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:889:13: error: ‘pos_type’ was not declared in this scope
-/usr/include/c++/14/bits/fstream.tcc:889:29: error: ‘ios_base’ has not been declared
-  889 |     seekpos(pos_type __pos, ios_base::openmode)
-      |                             ^~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:904:13: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::pos_type sep::config::std::basic_filebuf<_CharT, _Traits>::_M_seek’
-  904 |     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
-      |             ^~~~~~~~
 /sep/src/core/metrics_collector.cpp: In function ‘void incrementCounter(const std::string&, uint64_t)’:
 /sep/src/core/metrics_collector.cpp:262:38: error: ‘metrics_mutex_’ was not declared in this scope
   262 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
       |                                      ^~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:904:13: error: ‘off_type’ was not declared in this scope; did you mean ‘off_t’?
-  904 |     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
-      |             ^~~~~~~~
-      |             off_t
 /sep/src/core/metrics_collector.cpp:264:5: error: ‘counters_’ was not declared in this scope
   264 |     counters_[key] += value;
       |     ^~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:904:29: error: ‘ios_base’ has not been declared
-  904 |     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
-      |                             ^~~~~~~~
 /sep/src/core/metrics_collector.cpp: At global scope:
 /sep/src/core/metrics_collector.cpp:268:6: error: ‘MetricsCollector’ has not been declared
   268 | void MetricsCollector::setGauge(const std::string& gauge_name, double value) {
@@ -748,17 +556,10 @@ In file included from /usr/include/c++/14/iosfwd:42,
 /sep/src/core/metrics_collector.cpp:274:6: error: ‘MetricsCollector’ has not been declared
   274 | void MetricsCollector::recordAllocation(std::uint64_t bytes) {
       |      ^~~~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:904:54: error: ‘__state_type’ was not declared in this scope
-  904 |     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
-      |                                                      ^~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:929:20: error: template definition of non-template ‘int sep::config::std::basic_filebuf<_CharT, _Traits>::_M_get_ext_pos’
-  929 |     _M_get_ext_pos(__state_type& __state)
-      |                    ^~~~~~~~~~~~
 /sep/src/core/metrics_collector.cpp: In function ‘void recordAllocation(uint64_t)’:
 /sep/src/core/metrics_collector.cpp:275:38: error: ‘metrics_mutex_’ was not declared in this scope
   275 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
       |                                      ^~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:929:20: error: ‘__state_type’ was not declared in this scope
 /sep/src/core/metrics_collector.cpp:276:5: error: ‘memory_metrics_’ was not declared in this scope
   276 |     memory_metrics_.allocated_bytes += bytes;
       |     ^~~~~~~~~~~~~~~
@@ -770,110 +571,6 @@ In file included from /usr/include/c++/14/iosfwd:42,
 /sep/src/core/metrics_collector.cpp:283:38: error: ‘metrics_mutex_’ was not declared in this scope
   283 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
       |                                      ^~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:929:34: error: ‘__state’ was not declared in this scope
-  929 |     _M_get_ext_pos(__state_type& __state)
-      |                                  ^~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:948:25: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-  948 |     _M_terminate_output()
-      |                         ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1009:10: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
- 1009 |     sync()
-      |          ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1026:17: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
- 1026 |     imbue(const locale& __loc)
-      |                 ^~~~~~
-      |                 locale_t
-/usr/include/c++/14/bits/fstream.tcc:1026:30: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
- 1026 |     imbue(const locale& __loc)
-      |                              ^
-/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1081:43: error: wrong number of template arguments (1, should be 2)
- 1081 |   extern template class basic_filebuf<char>;
-      |                                           ^
-/usr/include/c++/14/fstream:90:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1082:44: error: wrong number of template arguments (1, should be 2)
- 1082 |   extern template class basic_ifstream<char>;
-      |                                            ^
-/usr/include/c++/14/fstream:532:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_ifstream’
-  532 |     class basic_ifstream : public basic_istream<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1083:44: error: wrong number of template arguments (1, should be 2)
- 1083 |   extern template class basic_ofstream<char>;
-      |                                            ^
-/usr/include/c++/14/fstream:802:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_ofstream’
-  802 |     class basic_ofstream : public basic_ostream<_CharT,_Traits>
-      |           ^~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1084:43: error: wrong number of template arguments (1, should be 2)
- 1084 |   extern template class basic_fstream<char>;
-      |                                           ^
-/usr/include/c++/14/fstream:1074:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_fstream’
- 1074 |     class basic_fstream : public basic_iostream<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1087:46: error: wrong number of template arguments (1, should be 2)
- 1087 |   extern template class basic_filebuf<wchar_t>;
-      |                                              ^
-/usr/include/c++/14/fstream:90:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’
-   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1088:47: error: wrong number of template arguments (1, should be 2)
- 1088 |   extern template class basic_ifstream<wchar_t>;
-      |                                               ^
-/usr/include/c++/14/fstream:532:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_ifstream’
-  532 |     class basic_ifstream : public basic_istream<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1089:47: error: wrong number of template arguments (1, should be 2)
- 1089 |   extern template class basic_ofstream<wchar_t>;
-      |                                               ^
-/usr/include/c++/14/fstream:802:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_ofstream’
-  802 |     class basic_ofstream : public basic_ostream<_CharT,_Traits>
-      |           ^~~~~~~~~~~~~~
-/usr/include/c++/14/bits/fstream.tcc:1090:46: error: wrong number of template arguments (1, should be 2)
- 1090 |   extern template class basic_fstream<wchar_t>;
-      |                                              ^
-/usr/include/c++/14/fstream:1074:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_fstream’
- 1074 |     class basic_fstream : public basic_iostream<_CharT, _Traits>
-      |           ^~~~~~~~~~~~~
-/sep/src/core/manager.cpp:12:22: error: declaration of ‘class sep::config::ConfigManager::Impl’ in namespace ‘sep::config::{anonymous}’ which does not enclose ‘class sep::config::ConfigManager’
-   12 | class ConfigManager::Impl {
-      |                      ^~~~
-/sep/src/core/manager.cpp: In constructor ‘sep::config::ConfigManager::ConfigManager()’:
-/sep/src/core/manager.cpp:137:45: error: ‘make_unique’ is not a member of ‘sep::config::std’; did you mean ‘std::make_unique’?
-  137 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
-      |                                             ^~~~~~~~~~~
-In file included from /usr/include/c++/14/memory:78:
-/usr/include/c++/14/bits/unique_ptr.h:1101:5: note: ‘std::make_unique’ declared here
- 1101 |     make_unique(_Args&&...) = delete;
-      |     ^~~~~~~~~~~
-/sep/src/core/manager.cpp:137:61: error: expected primary-expression before ‘>’ token
-  137 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
-      |                                                             ^
-/sep/src/core/manager.cpp:137:63: error: expected primary-expression before ‘)’ token
-  137 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
-      |                                                               ^
-/sep/src/core/manager.cpp: In member function ‘const sep::config::SystemConfig& sep::config::ConfigManager::getConfig() const’:
-/sep/src/core/manager.cpp:142:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  142 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:142:8: note: suggested alternatives:
-In file included from /usr/include/c++/14/mutex:47,
-                 from /sep/include/core/manager.h:6:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-In file included from /sep/include/core/manager.h:8:
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
 /sep/src/core/metrics_collector.cpp:284:5: error: ‘memory_metrics_’ was not declared in this scope
   284 |     memory_metrics_.allocated_bytes -= bytes;
       |     ^~~~~~~~~~~~~~~
@@ -881,466 +578,23 @@ In file included from /sep/include/core/manager.h:8:
 /sep/src/core/metrics_collector.cpp:288:6: error: ‘MetricsCollector’ has not been declared
   288 | void MetricsCollector::updateSystemMetrics() {
       |      ^~~~~~~~~~~~~~~~
-/sep/src/core/manager.cpp:142:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  142 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:142:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:142:35: error: no matching function for call to ‘lock(std::mutex&)’
-  142 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:143:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  143 |   return impl_->config;
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::setConfig(const sep::config::SystemConfig&)’:
-/sep/src/core/manager.cpp:147:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  147 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:147:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:147:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  147 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:147:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:147:35: error: no matching function for call to ‘lock(std::mutex&)’
-  147 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:148:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  148 |   impl_->config = config;
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromFile(const sep::shim::string&)’:
-/sep/src/core/manager.cpp:152:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  152 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:152:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:152:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  152 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:152:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:152:35: error: no matching function for call to ‘lock(std::mutex&)’
-  152 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:153:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  153 |   return impl_->loadFromFile(filename);
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromEnvironment()’:
-/sep/src/core/manager.cpp:157:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  157 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:157:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:157:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  157 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:157:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:157:35: error: no matching function for call to ‘lock(std::mutex&)’
-  157 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:158:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  158 |   return impl_->loadFromEnvironment();
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromCommandLine(int, char**)’:
-/sep/src/core/manager.cpp:162:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  162 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:162:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:162:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  162 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:162:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:162:35: error: no matching function for call to ‘lock(std::mutex&)’
-  162 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
 /sep/src/core/metrics_collector.cpp: In function ‘void updateSystemMetrics()’:
 /sep/src/core/metrics_collector.cpp:289:9: error: ‘pImpl’ was not declared in this scope
   289 |     if (pImpl) {
       |         ^~~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:163:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  163 |   return impl_->loadFromCommandLine(argc, argv);
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘const sep::config::APIConfig& sep::config::ConfigManager::getAPIConfig() const’:
-/sep/src/core/manager.cpp:167:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  167 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:167:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:167:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  167 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:167:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:167:35: error: no matching function for call to ‘lock(std::mutex&)’
-  167 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:168:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  168 |   return impl_->config.api;
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘const sep::config::CUDAConfig& sep::config::ConfigManager::getCUDAConfig() const’:
-/sep/src/core/manager.cpp:172:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  172 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:172:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:172:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  172 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:172:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:172:35: error: no matching function for call to ‘lock(std::mutex&)’
-  172 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:173:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  173 |   return impl_->config.cuda;
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘const sep::config::LogConfig& sep::config::ConfigManager::getLogConfig() const’:
-/sep/src/core/manager.cpp:177:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  177 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:177:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:177:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  177 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:177:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:177:35: error: no matching function for call to ‘lock(std::mutex&)’
-  177 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:178:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  178 |   return impl_->config.logging;
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
 /sep/src/core/metrics_collector.cpp:293:42: error: ‘metrics_mutex_’ was not declared in this scope
   293 |         std::lock_guard<std::mutex> lock(metrics_mutex_);
       |                                          ^~~~~~~~~~~~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateAPIConfig(const sep::config::APIConfig&)’:
-/sep/src/core/manager.cpp:182:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  182 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:182:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:182:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  182 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:182:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:182:35: error: no matching function for call to ‘lock(std::mutex&)’
-  182 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:183:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  183 |   impl_->config.api = config;
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateCUDAConfig(const sep::config::CUDAConfig&)’:
-/sep/src/core/manager.cpp:187:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  187 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:187:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:187:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  187 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:187:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:187:35: error: no matching function for call to ‘lock(std::mutex&)’
-  187 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:188:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  188 |   impl_->config.cuda = config;
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateLogConfig(const sep::config::LogConfig&)’:
-/sep/src/core/manager.cpp:192:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  192 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:192:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:192:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  192 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:192:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:192:35: error: no matching function for call to ‘lock(std::mutex&)’
-  192 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:193:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  193 |   impl_->config.logging = config;
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::resetToDefaults()’:
-/sep/src/core/manager.cpp:197:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  197 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:197:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
 /sep/src/core/metrics_collector.cpp:295:9: error: ‘system_metrics_’ was not declared in this scope
   295 |         system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage); // Fix: Cast to double
       |         ^~~~~~~~~~~~~~~
-/sep/src/core/manager.cpp:197:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  197 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
-/sep/src/core/manager.cpp:197:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:197:35: error: no matching function for call to ‘lock(std::mutex&)’
-  197 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:198:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  198 |   impl_->loadDefaults();
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::initialize(int, char**)’:
-/sep/src/core/manager.cpp:202:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
-  202 |   std::lock_guard<std::mutex> lock(mutex_);
-      |        ^~~~~~~~~~
-/sep/src/core/manager.cpp:202:8: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
-  243 |     class lock_guard
-      |           ^~~~~~~~~~
-/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
-  430 |   class lock_guard {
-      |         ^~~~~~~~~~
-/sep/src/core/manager.cpp:202:24: error: ‘mutex’ is not a member of ‘sep::config::std’
-  202 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                        ^~~~~
 /sep/src/core/metrics_collector.cpp: At global scope:
 /sep/src/core/metrics_collector.cpp:302:1: error: ‘MetricsCollector’ does not name a type
   302 | MetricsCollector::PerformanceMetrics MetricsCollector::getPerformanceMetrics(const std::string& operation_name) const {
       | ^~~~~~~~~~~~~~~~
-/sep/src/core/manager.cpp:202:24: note: suggested alternatives:
-/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
-   96 |   class mutex : private __mutex_base
-      |         ^~~~~
-/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
-  423 |   class mutex {
-      |         ^~~~~
-/sep/src/core/manager.cpp:202:35: error: no matching function for call to ‘lock(std::mutex&)’
-  202 |   std::lock_guard<std::mutex> lock(mutex_);
-      |                               ~~~~^~~~~~~~
-/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
-  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
-      |     ^~~~
-/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
-/sep/src/core/manager.cpp:203:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  203 |   impl_->loadDefaults();
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp:204:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  204 |   impl_->loadFromEnvironment();
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp:205:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  205 |   impl_->loadFromCommandLine(argc, argv);
-      |        ^~
 /sep/src/core/metrics_collector.cpp:312:1: error: ‘MetricsCollector’ does not name a type
   312 | MetricsCollector::MemoryMetrics MetricsCollector::getMemoryMetrics() const {
       | ^~~~~~~~~~~~~~~~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
 /sep/src/core/metrics_collector.cpp:317:1: error: ‘MetricsCollector’ does not name a type
   317 | MetricsCollector::SystemMetrics MetricsCollector::getSystemMetrics() const {
       | ^~~~~~~~~~~~~~~~
@@ -1418,18 +672,165 @@ In file included from /sep/include/core/manager.h:8:
 /sep/src/core/metrics_collector.cpp:358:5: error: ‘performance_metrics_’ was not declared in this scope
   358 |     performance_metrics_.erase(key);
       |     ^~~~~~~~~~~~~~~~~~~~
+/sep/src/core/manager.cpp:13:22: error: declaration of ‘class sep::config::ConfigManager::Impl’ in namespace ‘sep::config::{anonymous}’ which does not enclose ‘class sep::config::ConfigManager’
+   13 | class ConfigManager::Impl {
+      |                      ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::SystemConfig& sep::config::ConfigManager::getConfig() const’:
+/sep/src/core/manager.cpp:144:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  144 |   return impl_->config;
+      |               ^~
+In file included from /sep/src/core/manager.cpp:1:
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::setConfig(const sep::config::SystemConfig&)’:
+/sep/src/core/manager.cpp:149:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  149 |   impl_->config = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromFile(const sep::shim::string&)’:
+/sep/src/core/manager.cpp:154:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  154 |   return impl_->loadFromFile(filename);
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromEnvironment()’:
+/sep/src/core/manager.cpp:159:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  159 |   return impl_->loadFromEnvironment();
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromCommandLine(int, char**)’:
+/sep/src/core/manager.cpp:164:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  164 |   return impl_->loadFromCommandLine(argc, argv);
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::APIConfig& sep::config::ConfigManager::getAPIConfig() const’:
+/sep/src/core/manager.cpp:169:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  169 |   return impl_->config.api;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::CUDAConfig& sep::config::ConfigManager::getCUDAConfig() const’:
+/sep/src/core/manager.cpp:174:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  174 |   return impl_->config.cuda;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::LogConfig& sep::config::ConfigManager::getLogConfig() const’:
+/sep/src/core/manager.cpp:179:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  179 |   return impl_->config.logging;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateAPIConfig(const sep::config::APIConfig&)’:
+/sep/src/core/manager.cpp:184:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  184 |   impl_->config.api = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateCUDAConfig(const sep::config::CUDAConfig&)’:
+/sep/src/core/manager.cpp:189:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  189 |   impl_->config.cuda = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateLogConfig(const sep::config::LogConfig&)’:
+/sep/src/core/manager.cpp:194:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  194 |   impl_->config.logging = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::resetToDefaults()’:
+/sep/src/core/manager.cpp:199:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  199 |   impl_->loadDefaults();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::initialize(int, char**)’:
+/sep/src/core/manager.cpp:204:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  204 |   impl_->loadDefaults();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp:205:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  205 |   impl_->loadFromEnvironment();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp:206:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  206 |   impl_->loadFromCommandLine(argc, argv);
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
 make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
+[ 42%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/include/compat/cuda.h:14,
+                 from /sep/include/core/types.h:10,
+                 from /sep/include/core/manager.h:4:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::config::ConfigManager::Impl; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::config::ConfigManager::Impl>]’:
+/sep/src/core/manager.cpp:138:62:   required from here
+  138 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                        ~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/api/bridge_c.cpp: In function ‘int sep_process_context(const char*, const char*, char*, size_t)’:
+/sep/src/api/bridge_c.cpp:94:48: error: ‘struct sep::quantum::BatchProcessingResult’ has no member named ‘error_code’
+   94 |         return static_cast<int>(process_result.error_code); // Use specific error code
+      |                                                ^~~~~~~~~~
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::config::ConfigManager::Impl]’:
 /usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::config::ConfigManager::Impl; _Dp = std::default_delete<sep::config::ConfigManager::Impl>]’
   399 |           get_deleter()(std::move(__ptr));
       |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/core/manager.cpp:137:34:   required from here
-  137 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
-      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/core/manager.cpp:138:62:   required from here
+  138 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                        ~~~~~~~~~~~~~~~~~~~~~~^~
 /usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::config::ConfigManager::Impl’
    91 |         static_assert(sizeof(_Tp)>0,
       |                       ^~~~~~~~~~~
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 47%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
+[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+/sep/src/audio/pipewire_capture.cpp: In function ‘sep::audio::AudioError PipeWireCapture::setupStream()’:
+/sep/src/audio/pipewire_capture.cpp:199:1: warning: control reaches end of non-void function [-Wreturn-type]
+  199 | }
+      | ^
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+make[2]: *** [src/audio/CMakeFiles/sep_audio.dir/build.make:107: src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
 /sep/src/memory/redis_manager.cpp:384:17: error: ‘IRedisManager’ was not declared in this scope; did you mean ‘RedisManager’?
   384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
       |                 ^~~~~~~~~~~~~
@@ -1443,18 +844,219 @@ make[2]: *** Waiting for unfinished jobs....
       |                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
       |                                                                                                                             |
       |                                                                                                                             std::shared_ptr<sep::persistence::RedisManager>
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
+[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+/sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::to_json(nlohmann::json_abi_v3_11_3::json&, const QuantumState&)’:
+/sep/src/quantum/types_serialization.cpp:16:34: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘evolution_rate’
+   16 |         {"evolution_rate", state.evolution_rate}, // Fix: Add missing field
+      |                                  ^~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp:17:37: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘coupling_strength’
+   17 |         {"coupling_strength", state.coupling_strength}, // Fix: Add missing field
+      |                                     ^~~~~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp:19:5: error: no matching function for call to ‘nlohmann::json_abi_v3_11_3::basic_json<>::basic_json(<brace-enclosed initializer list>)’
+   19 |     };
+      |     ^
+In file included from /sep/src/quantum/types_serialization.cpp:2:
+/sep/extern/nlohmann/json.hpp:20443:5: note: candidate: ‘template<class JsonRef, typename std::enable_if<nlohmann::json_abi_v3_11_3::detail::conjunction<nlohmann::json_abi_v3_11_3::detail::is_json_ref<JsonRef>, std::is_same<typename JsonRef::value_type, nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long int, long unsigned int, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> > >::value, int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const JsonRef&) [with typename std::enable_if<nlohmann::json_abi_v3_11_3::detail::conjunction<nlohmann::json_abi_v3_11_3::detail::is_json_ref<JsonRef>, std::is_same<typename JsonRef::value_type, nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value, int>::type <anonymous> = JsonRef; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20443 |     basic_json(const JsonRef& ref) : basic_json(ref.moved_or_copied()) {}
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20443:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20334:5: note: candidate: ‘template<class InputIT, typename std::enable_if<(std::is_same<IterImpl, nlohmann::json_abi_v3_11_3::detail::iter_impl<nlohmann::json_abi_v3_11_3::basic_json<> > >::value || std::is_same<IterImpl, nlohmann::json_abi_v3_11_3::detail::iter_impl<const nlohmann::json_abi_v3_11_3::basic_json<> > >::value), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(InputIT, InputIT) [with typename std::enable_if<(std::is_same<InputIT, nlohmann::json_abi_v3_11_3::detail::iter_impl<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value || std::is_same<InputIT, nlohmann::json_abi_v3_11_3::detail::iter_impl<const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value), int>::type <anonymous> = InputIT; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20334 |     basic_json(InputIT first, InputIT last)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20334:5: note:   candidate expects 2 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20151:5: note: candidate: ‘template<class BasicJsonType, typename std::enable_if<(nlohmann::json_abi_v3_11_3::detail::is_basic_json<BasicJsonType>::value && (! std::is_same<nlohmann::json_abi_v3_11_3::basic_json<>, BasicJsonType>::value)), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const BasicJsonType&) [with typename std::enable_if<(nlohmann::json_abi_v3_11_3::detail::is_basic_json<BasicJsonType>::value && (! std::is_same<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>, BasicJsonType>::value)), int>::type <anonymous> = BasicJsonType; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20151 |     basic_json(const BasicJsonType& val)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20151:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20137:5: note: candidate: ‘template<class CompatibleType, class U, typename std::enable_if<((! nlohmann::json_abi_v3_11_3::detail::is_basic_json<T>::value) && nlohmann::json_abi_v3_11_3::detail::is_compatible_type<nlohmann::json_abi_v3_11_3::basic_json<>, U>::value), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(CompatibleType&&) [with U = CompatibleType; typename std::enable_if<((! nlohmann::json_abi_v3_11_3::detail::is_basic_json<U>::value) && nlohmann::json_abi_v3_11_3::detail::is_compatible_type<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>, U>::value), int>::type <anonymous> = U; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20137 |     basic_json(CompatibleType && val) noexcept(noexcept( // NOLINT(bugprone-forwarding-reference-overload,bugprone-exception-escape)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20137:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20516:1: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20516 | basic_json(basic_json&& other) noexcept
+      | ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20516:1: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20447:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20447 |     basic_json(const basic_json& other)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20447:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20322:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(size_type, const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; size_type = long unsigned int]’
+20322 |     basic_json(size_type cnt, const basic_json& val):
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20322:5: note:   candidate expects 2 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20204:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(initializer_list_t, bool, value_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; initializer_list_t = std::initializer_list<nlohmann::json_abi_v3_11_3::detail::json_ref<nlohmann::json_abi_v3_11_3::basic_json<> > >; value_t = nlohmann::json_abi_v3_11_3::detail::value_t]’
+20204 |     basic_json(initializer_list_t init,
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20204:5: note:   candidate expects 3 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20125:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(std::nullptr_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; std::nullptr_t = std::nullptr_t]’
+20125 |     basic_json(std::nullptr_t = nullptr) noexcept // NOLINT(bugprone-exception-escape)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20125:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20117:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(value_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; value_t = nlohmann::json_abi_v3_11_3::detail::value_t]’
+20117 |     basic_json(const value_t v)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20117:5: note:   candidate expects 1 argument, 10 provided
+/sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::from_json(const nlohmann::json_abi_v3_11_3::json&, QuantumState&)’:
+/sep/src/quantum/types_serialization.cpp:30:41: error: ‘struct sep::quantum::QuantumState’ has no member named ‘evolution_rate’
+   30 |     j.at("evolution_rate").get_to(state.evolution_rate); // Fix: Add missing field
+      |                                         ^~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp:31:44: error: ‘struct sep::quantum::QuantumState’ has no member named ‘coupling_strength’
+   31 |     j.at("coupling_strength").get_to(state.coupling_strength); // Fix: Add missing field
+      |                                            ^~~~~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp:33:11: error: ‘struct sep::quantum::QuantumState’ has no member named ‘decoherence_rate’
+   33 |     state.decoherence_rate = j.value("decoherence_rate", 0.0f); // Fix: Add missing field
+      |           ^~~~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::to_json(nlohmann::json_abi_v3_11_3::json&, const Pattern&)’:
+/sep/src/quantum/types_serialization.cpp:55:31: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+   55 |         {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
+      |                               ^~~~~~~~
+/sep/src/quantum/types_serialization.cpp:55:51: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+   55 |         {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
+      |                                                   ^~~~~~~~
+/sep/src/quantum/types_serialization.cpp:55:71: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+   55 |         {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
+      |                                                                       ^~~~~~~~
+/sep/src/quantum/types_serialization.cpp:55:91: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+   55 |         {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
+      |                                                                                           ^~~~~~~~
+/sep/src/quantum/types_serialization.cpp:62:5: error: no matching function for call to ‘nlohmann::json_abi_v3_11_3::basic_json<>::basic_json(<brace-enclosed initializer list>)’
+   62 |     };
+      |     ^
+/sep/extern/nlohmann/json.hpp:20443:5: note: candidate: ‘template<class JsonRef, typename std::enable_if<nlohmann::json_abi_v3_11_3::detail::conjunction<nlohmann::json_abi_v3_11_3::detail::is_json_ref<JsonRef>, std::is_same<typename JsonRef::value_type, nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long int, long unsigned int, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> > >::value, int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const JsonRef&) [with typename std::enable_if<nlohmann::json_abi_v3_11_3::detail::conjunction<nlohmann::json_abi_v3_11_3::detail::is_json_ref<JsonRef>, std::is_same<typename JsonRef::value_type, nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value, int>::type <anonymous> = JsonRef; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20443 |     basic_json(const JsonRef& ref) : basic_json(ref.moved_or_copied()) {}
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20443:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20334:5: note: candidate: ‘template<class InputIT, typename std::enable_if<(std::is_same<IterImpl, nlohmann::json_abi_v3_11_3::detail::iter_impl<nlohmann::json_abi_v3_11_3::basic_json<> > >::value || std::is_same<IterImpl, nlohmann::json_abi_v3_11_3::detail::iter_impl<const nlohmann::json_abi_v3_11_3::basic_json<> > >::value), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(InputIT, InputIT) [with typename std::enable_if<(std::is_same<InputIT, nlohmann::json_abi_v3_11_3::detail::iter_impl<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value || std::is_same<InputIT, nlohmann::json_abi_v3_11_3::detail::iter_impl<const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value), int>::type <anonymous> = InputIT; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20334 |     basic_json(InputIT first, InputIT last)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20334:5: note:   candidate expects 2 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20151:5: note: candidate: ‘template<class BasicJsonType, typename std::enable_if<(nlohmann::json_abi_v3_11_3::detail::is_basic_json<BasicJsonType>::value && (! std::is_same<nlohmann::json_abi_v3_11_3::basic_json<>, BasicJsonType>::value)), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const BasicJsonType&) [with typename std::enable_if<(nlohmann::json_abi_v3_11_3::detail::is_basic_json<BasicJsonType>::value && (! std::is_same<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>, BasicJsonType>::value)), int>::type <anonymous> = BasicJsonType; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20151 |     basic_json(const BasicJsonType& val)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20151:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20137:5: note: candidate: ‘template<class CompatibleType, class U, typename std::enable_if<((! nlohmann::json_abi_v3_11_3::detail::is_basic_json<T>::value) && nlohmann::json_abi_v3_11_3::detail::is_compatible_type<nlohmann::json_abi_v3_11_3::basic_json<>, U>::value), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(CompatibleType&&) [with U = CompatibleType; typename std::enable_if<((! nlohmann::json_abi_v3_11_3::detail::is_basic_json<U>::value) && nlohmann::json_abi_v3_11_3::detail::is_compatible_type<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>, U>::value), int>::type <anonymous> = U; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20137 |     basic_json(CompatibleType && val) noexcept(noexcept( // NOLINT(bugprone-forwarding-reference-overload,bugprone-exception-escape)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20137:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20516:1: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20516 | basic_json(basic_json&& other) noexcept
+      | ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20516:1: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20447:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20447 |     basic_json(const basic_json& other)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20447:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20322:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(size_type, const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; size_type = long unsigned int]’
+20322 |     basic_json(size_type cnt, const basic_json& val):
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20322:5: note:   candidate expects 2 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20204:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(initializer_list_t, bool, value_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; initializer_list_t = std::initializer_list<nlohmann::json_abi_v3_11_3::detail::json_ref<nlohmann::json_abi_v3_11_3::basic_json<> > >; value_t = nlohmann::json_abi_v3_11_3::detail::value_t]’
+20204 |     basic_json(initializer_list_t init,
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20204:5: note:   candidate expects 3 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20125:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(std::nullptr_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; std::nullptr_t = std::nullptr_t]’
+20125 |     basic_json(std::nullptr_t = nullptr) noexcept // NOLINT(bugprone-exception-escape)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20125:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20117:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(value_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; value_t = nlohmann::json_abi_v3_11_3::detail::value_t]’
+20117 |     basic_json(const value_t v)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20117:5: note:   candidate expects 1 argument, 10 provided
+/sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::from_json(const nlohmann::json_abi_v3_11_3::json&, Pattern&)’:
+/sep/src/quantum/types_serialization.cpp:69:53: error: ‘struct sep::quantum::QuantumState’ has no member named ‘get_to’
+   69 |     j.value("quantum_state", pattern.quantum_state).get_to(pattern.quantum_state); // Fix: Use value with default
+      |                                                     ^~~~~~
+/sep/src/quantum/types_serialization.cpp:70:80: error: ‘class std::vector<float>’ has no member named ‘get’
+   70 |     auto mom = j.value("momentum", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}).get<std::vector<float>>(); // Fix: Add momentum
+      |                                                                                ^~~
+/sep/src/quantum/types_serialization.cpp:70:101: error: expected primary-expression before ‘>’ token
+   70 |     auto mom = j.value("momentum", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}).get<std::vector<float>>(); // Fix: Add momentum
+      |                                                                                                     ^~
+/sep/src/quantum/types_serialization.cpp:70:104: error: expected primary-expression before ‘)’ token
+   70 |     auto mom = j.value("momentum", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}).get<std::vector<float>>(); // Fix: Add momentum
+      |                                                                                                        ^
+/sep/src/quantum/types_serialization.cpp:71:13: error: ‘struct sep::quantum::Pattern’ has no member named ‘momentum’
+   71 |     pattern.momentum = glm::vec4(mom[0], mom[1], mom[2], mom[3]);
+      |             ^~~~~~~~
+/sep/src/quantum/processor.cpp:368:23: error: no declaration matches ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processAllPatterns()’
+  368 | BatchProcessingResult Processor::processAllPatterns() { return impl_->processAll(); } // Implement this method // Fix: Add missing definition
+      |                       ^~~~~~~~~
+/sep/src/quantum/processor.cpp:368:23: note: no functions named ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processAllPatterns()’
+In file included from /sep/src/quantum/processor.cpp:1:
+/sep/include/quantum/processor.h:79:7: note: ‘class sep::quantum::Processor’ defined here
+   79 | class Processor {
+      |       ^~~~~~~~~
+/sep/src/quantum/processor.cpp:372:23: error: redefinition of ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processBatch(const std::vector<std::__cxx11::basic_string<char> >&)’
+  372 | BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
+      |                       ^~~~~~~~~
+/sep/src/quantum/processor.cpp:370:23: note: ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processBatch(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+  370 | BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
+      |                       ^~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:12:48: error: ‘QuantumProcessor’ does not name a type; did you mean ‘PatternQuantumProcessor’?
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                                ^~~~~~~~~~~~~~~~
+      |                                                PatternQuantumProcessor
+/sep/src/quantum/pattern_processor.cpp:12:72: error: expected unqualified-id before ‘&’ token
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                                                        ^
+/sep/src/quantum/pattern_processor.cpp:12:72: error: expected ‘)’ before ‘&’ token
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                         ~                              ^
+      |                                                                        )
+/sep/src/quantum/pattern_processor.cpp:12:72: error: constructors may not be ref-qualified
+/sep/src/quantum/pattern_processor.cpp:12:72: error: expected ‘;’ at end of member declaration
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                                                        ^
+      |                                                                         ;
+/sep/src/quantum/pattern_processor.cpp:12:74: error: ‘config’ does not name a type
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                                                          ^~~~~~
+/sep/src/quantum/pattern_processor.cpp:101:21: error: ‘QuantumProcessor’ was not declared in this scope
+  101 |     std::unique_ptr<QuantumProcessor> quantum_processor_;
+      |                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:101:37: error: template argument 1 is invalid
+  101 |     std::unique_ptr<QuantumProcessor> quantum_processor_;
+      |                                     ^
+/sep/src/quantum/pattern_processor.cpp:101:37: error: template argument 2 is invalid
+/sep/src/quantum/pattern_processor.cpp: In member function ‘virtual sep::quantum::PatternProcessResult sep::quantum::{anonymous}::PatternQuantumProcessorImpl::processPattern(const sep::quantum::QuantumState&, const std::string&)’:
+/sep/src/quantum/pattern_processor.cpp:29:42: error: base operand of ‘->’ is not a pointer
+   29 |         bool success = quantum_processor_->processPattern(stateData, numericId);
+      |                                          ^~
+/sep/src/quantum/pattern_processor.cpp: In member function ‘virtual float sep::quantum::{anonymous}::PatternQuantumProcessorImpl::calculateCoherence(const sep::quantum::QuantumState&, const sep::quantum::QuantumState&) const’:
+/sep/src/quantum/pattern_processor.cpp:85:34: error: base operand of ‘->’ is not a pointer
+   85 |         return quantum_processor_->calculateCoherence(vec_a, vec_b);
+      |                                  ^~
+/sep/src/quantum/pattern_processor.cpp: At global scope:
+/sep/src/quantum/pattern_processor.cpp:106:11: error: ‘QuantumProcessor’ does not name a type
+  106 |     const QuantumProcessor::Config& config) {
+      |           ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:106:35: error: expected unqualified-id before ‘&’ token
+  106 |     const QuantumProcessor::Config& config) {
+      |                                   ^
+/sep/src/quantum/pattern_processor.cpp:106:35: error: expected ‘)’ before ‘&’ token
+  106 |     const QuantumProcessor::Config& config) {
+      |                                   ^
+      |                                   )
+/sep/src/quantum/pattern_processor.cpp:105:71: note: to match this ‘(’
+  105 | std::unique_ptr<PatternQuantumProcessor> createPatternQuantumProcessor(
+      |                                                                       ^
+/sep/src/quantum/pattern_processor.cpp:106:37: error: expected initializer before ‘config’
+  106 |     const QuantumProcessor::Config& config) {
+      |                                     ^~~~~~
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:191: src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:177: src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o] Error 1
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:205: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o] Error 1
 /sep/src/memory/quantum_coherence_manager.cpp:22:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
    22 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
 In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
-/sep/include/memory/quantum_coherence_manager.h:13:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
-   13 | class QuantumCoherenceManager {
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
+   14 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:155:50: error: ‘AnomalyType’ in ‘class sep::memory::QuantumCoherenceManager’ does not name a type
-  155 |     using AnomalyType = QuantumCoherenceManager::AnomalyType;
-      |                                                  ^~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘sep::memory::QuantumCoherenceManager::Impl::CoherenceResult sep::memory::QuantumCoherenceManager::Impl::updateCoherence(const std::vector<sep::quantum::Pattern>&)’:
 /sep/src/memory/quantum_coherence_manager.cpp:210:20: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceResult = struct sep::memory::QuantumCoherenceManager::CoherenceResult’ {aka ‘struct sep::memory::QuantumCoherenceManager::CoherenceResult’} has no member named ‘tier_fragmentation’
   210 |             result.tier_fragmentation[i] = metrics_.tier_fragmentation[i];
@@ -1513,16 +1115,6 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
   490 |         metrics_.fragmented_patterns = fragmented_count;
       |                  ^~~~~~~~~~~~~~~~~~~
       |                  coherent_patterns
-/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::CoherenceAnomaly> sep::memory::QuantumCoherenceManager::Impl::detectCoherenceAnomalies(const std::vector<sep::quantum::Pattern>&)’:
-/sep/src/memory/quantum_coherence_manager.cpp:519:25: error: ‘AnomalyType’ has not been declared
-  519 |                         AnomalyType::ExcessiveCoherence :
-      |                         ^~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:520:25: error: ‘AnomalyType’ has not been declared
-  520 |                         AnomalyType::InsufficientCoherence;
-      |                         ^~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:537:40: error: ‘AnomalyType’ has not been declared
-  537 |                         anomaly.type = AnomalyType::RapidChange;
-      |                                        ^~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::TierMigration> sep::memory::QuantumCoherenceManager::Impl::performTierMigrations()’:
 /sep/src/memory/quantum_coherence_manager.cpp:551:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
   551 |         coherence_map_.for_each([&](auto& pair) {
@@ -1552,35 +1144,297 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
   847 | const QuantumCoherenceManager::CoherenceMetrics& QuantumCoherenceManager::getMetrics() const {
       |                                                  ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:847:50: note: no functions named ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
-/sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
-   13 | class QuantumCoherenceManager {
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
+   14 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:851:10: error: no declaration matches ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
   851 | uint64_t QuantumCoherenceManager::getGlobalTick() const {
       |          ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:851:10: note: no functions named ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
-/sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
-   13 | class QuantumCoherenceManager {
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
+   14 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:855:10: error: no declaration matches ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum) const’
   855 | uint32_t QuantumCoherenceManager::getPatternCountByTier(MemoryTierEnum tier) const {
       |          ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:855:10: note: no functions named ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum) const’
-/sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
-   13 | class QuantumCoherenceManager {
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
+   14 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:859:7: error: no declaration matches ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum) const’
   859 | float QuantumCoherenceManager::getTierFragmentation(MemoryTierEnum tier) const {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:859:7: note: no functions named ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum) const’
-/sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
-   13 | class QuantumCoherenceManager {
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
+   14 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-[ 55%] Linking CXX static library libsep_audio.a
-[ 55%] Built target sep_audio
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:367: src/audio/CMakeFiles/sep_audio.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:8:
+/sep/include/memory/manager.h:78:18: error: ‘level_enum’ in ‘using sep::spdlog::level = enum spdlog::level::level_enum’ {aka ‘enum spdlog::level::level_enum’} does not name a type
+   78 |   spdlog::level::level_enum toSpdLogLevel(Level level);
+      |                  ^~~~~~~~~~
+In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:12:
+/sep/include/memory/manager.h:78:18: error: ‘level_enum’ in ‘using sep::spdlog::level = enum spdlog::level::level_enum’ {aka ‘enum spdlog::level::level_enum’} does not name a type
+   78 |   spdlog::level::level_enum toSpdLogLevel(Level level);
+      |                  ^~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:61:38: error: qualified name does not name a class before ‘{’ token
+   61 | class QuantumManifoldOptimizer::Impl {
+      |                                      ^
+/sep/src/quantum/quantum_manifold_optimizer.cpp:519:58: error: ‘Config’ does not name a type
+  519 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
+      |                                                          ^~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:519:72: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  519 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
+      |                                                                        ^
+In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:4:
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:522:53: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  522 | QuantumManifoldOptimizer::~QuantumManifoldOptimizer() = default;
+      |                                                     ^
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:524:27: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  524 | QuantumManifoldOptimizer::OptimizationResult
+      |                           ^~~~~~~~~~~~~~~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:530:102: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  530 | void QuantumManifoldOptimizer::updateManifoldGeometry(const std::vector<QuantumState>& quantum_states) {
+      |                                                                                                      ^
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:534:85: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  534 | float QuantumManifoldOptimizer::computeManifoldCoherence(const glm::vec3& position) const {
+      |                                                                                     ^~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:539:91: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  539 |                                                                     uint32_t num_samples) const {
+      |                                                                                           ^~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:544:106: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  544 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+      |                                                                                                          ^~~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:464:31: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  464 |     QuantumManifoldOptimizer::Config createManifoldConfig(const Config& config) {
+      |                               ^~~~~~
+In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:3:
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In constructor ‘sep::quantum::PatternEvolutionBridge::Impl::Impl(const sep::quantum::PatternEvolutionBridge::Config&)’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:66:56: error: ‘createManifoldConfig’ was not declared in this scope
+   66 |         , manifold_optimizer_(QuantumManifoldOptimizer(createManifoldConfig(config)))
+      |                                                        ^~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:66:84: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+   66 |         , manifold_optimizer_(QuantumManifoldOptimizer(createManifoldConfig(config)))
+      |                                                                                    ^
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘sep::quantum::Pattern sep::quantum::PatternEvolutionBridge::Impl::evolveIndividualPattern(const sep::quantum::Pattern&, float)’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:254:31: error: ‘struct sep::quantum::QuantumState’ has no member named ‘evolution_rate’
+  254 |         evolved.quantum_state.evolution_rate = energy / time_step;
+      |                               ^~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:258:35: error: incomplete type ‘sep::quantum::QuantumManifoldOptimizer’ used in nested name specifier
+  258 |         QuantumManifoldOptimizer::OptimizationTarget target;
+      |                                   ^~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:259:9: error: ‘target’ was not declared in this scope
+  259 |         target.target_coherence = config_.target_coherence;
+      |         ^~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:262:55: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  262 |         auto optimization_result = manifold_optimizer_->optimize(
+      |                                                       ^~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘std::vector<sep::quantum::PhaseTransition> sep::quantum::PatternEvolutionBridge::Impl::detectPhaseTransitions(const std::vector<sep::quantum::Pattern>&)’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:296:39: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘energy’
+  296 |             if (pattern.quantum_state.energy > PHASE_TRANSITION_ENERGY) {
+      |                                       ^~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:299:78: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘energy’
+  299 |                 transition.from_phase = determinePhase(pattern.quantum_state.energy - 0.1f);
+      |                                                                              ^~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:300:76: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘energy’
+  300 |                 transition.to_phase = determinePhase(pattern.quantum_state.energy);
+      |                                                                            ^~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:301:70: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘energy’
+  301 |                 transition.transition_energy = pattern.quantum_state.energy;
+      |                                                                      ^~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘float sep::quantum::PatternEvolutionBridge::Impl::computePatternEnergy(const sep::quantum::Pattern&) const’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:311:49: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+  311 |         float kinetic = 0.5f * glm::dot(pattern.momentum, pattern.momentum); // Use dot product for squared length
+      |                                                 ^~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:311:67: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+  311 |         float kinetic = 0.5f * glm::dot(pattern.momentum, pattern.momentum); // Use dot product for squared length
+      |                                                                   ^~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:312:69: error: ‘const struct sep::quantum::PatternEvolutionBridge::Config’ has no member named ‘coupling_strength’
+  312 |         float potential = pattern.quantum_state.coherence * config_.coupling_strength;
+      |                                                                     ^~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘float sep::quantum::PatternEvolutionBridge::Impl::computeInteractionEnergy(const sep::quantum::Pattern&) const’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:326:58: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘coupling_strength’
+  326 |                     interaction += pattern.quantum_state.coupling_strength *
+      |                                                          ^~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘void sep::quantum::PatternEvolutionBridge::initializeEvolutionState()’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:487:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  487 |     impl_->evolution_state_->active_patterns.clear();
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:488:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  488 |     impl_->evolution_state_->coherence_matrix.clear();
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:489:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  489 |     impl_->evolution_state_->entanglement_graph.clear();
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:490:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  490 |     impl_->evolution_state_->total_energy = 0.0f;
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:491:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  491 |     impl_->evolution_state_->entropy = 0.0f;
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:492:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  492 |     impl_->evolution_state_->evolution_tick = 0;
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘void sep::quantum::PatternEvolutionBridge::updatePatterns(const std::vector<sep::quantum::Pattern>&)’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:515:45: error: ‘std::mutex sep::quantum::PatternEvolutionBridge::Impl::state_mutex_’ is private within this context
+  515 |     std::lock_guard<std::mutex> lock(impl_->state_mutex_);
+      |                                             ^~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:190:24: note: declared private here
+  190 |     mutable std::mutex state_mutex_;
+      |                        ^~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:516:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  516 |     impl_->evolution_state_->active_patterns = std::move(active_patterns);
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:517:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  517 |     impl_->evolution_state_->coherence_matrix = std::move(coherence_matrix);
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:518:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  518 |     impl_->evolution_state_->entanglement_graph = std::move(entanglement_graph);
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:519:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  519 |     impl_->evolution_state_->total_energy = total_energy;
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:520:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  520 |     impl_->evolution_state_->entropy = entropy;
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:521:12: error: ‘std::unique_ptr<sep::quantum::PatternEvolutionBridge::Impl::EvolutionState> sep::quantum::PatternEvolutionBridge::Impl::evolution_state_’ is private within this context
+  521 |     impl_->evolution_state_->evolution_tick++;
+      |            ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:187:37: note: declared private here
+  187 |     std::unique_ptr<EvolutionState> evolution_state_;
+      |                                     ^~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/include/compat/cuda.h:14,
+                 from /sep/include/core/types.h:10,
+                 from /sep/include/memory/types.h:6,
+                 from /sep/include/quantum/quantum_processor_qfh.h:4,
+                 from /sep/include/quantum/quantum_manifold_optimizer.h:6,
+                 from /sep/src/quantum/quantum_manifold_optimizer.cpp:2:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Args = {const int&}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::quantum::QuantumManifoldOptimizer>]’:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:545:54:   required from here
+  545 |     return std::make_unique<QuantumManifoldOptimizer>(config);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+   16 | class QuantumManifoldOptimizer;
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::quantum::QuantumManifoldOptimizer]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Dp = std::default_delete<sep::quantum::QuantumManifoldOptimizer>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:545:54:   required from here
+  545 |     return std::make_unique<QuantumManifoldOptimizer>(config);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::quantum::QuantumManifoldOptimizer’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+In file included from /usr/include/glm/detail/type_vec3.hpp:435,
+                 from /usr/include/glm/ext/vector_bool3.hpp:5,
+                 from /usr/include/glm/vec3.hpp:5,
+                 from /sep/include/core/dag_graph.h:4,
+                 from /sep/include/memory/memory_tier_manager.hpp:12,
+                 from /sep/src/quantum/pattern_evolution_bridge.cpp:2:
+/usr/include/glm/detail/type_vec3.inl: In instantiation of ‘constexpr glm::vec<3, T, Q>& glm::vec<3, T, Q>::operator+=(U) [with U = glm::vec<4, float, glm::packed_highp>; T = float; glm::qualifier Q = glm::packed_highp]’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:396:55:   required from here
+  396 |             weighted_center += patterns[i].position * weight;
+      |                                                       ^~~~~~
+/usr/include/glm/detail/type_vec3.inl:228:28: error: invalid ‘static_cast’ from type ‘glm::vec<4, float, glm::packed_highp>’ to type ‘float’
+  228 |                 this->x += static_cast<T>(scalar);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~
+/usr/include/glm/detail/type_vec3.inl:229:28: error: invalid ‘static_cast’ from type ‘glm::vec<4, float, glm::packed_highp>’ to type ‘float’
+  229 |                 this->y += static_cast<T>(scalar);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~
+/usr/include/glm/detail/type_vec3.inl:230:28: error: invalid ‘static_cast’ from type ‘glm::vec<4, float, glm::packed_highp>’ to type ‘float’
+  230 |                 this->z += static_cast<T>(scalar);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~
 make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
-make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
+[ 63%] Linking CXX static library libsep_compat.a
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/include/blender/compression.h:4,
+                 from /sep/include/memory/memory_tier.hpp:10,
+                 from /sep/include/memory/memory_tier_manager.hpp:13:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::quantum::QuantumManifoldOptimizer]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Dp = std::default_delete<sep::quantum::QuantumManifoldOptimizer>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:66:11:   required from here
+   66 |         , manifold_optimizer_(QuantumManifoldOptimizer(createManifoldConfig(config)))
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::quantum::QuantumManifoldOptimizer’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+[ 63%] Built target sep_compat
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:233: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:247: src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

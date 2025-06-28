@@ -2,6 +2,7 @@
 
 #include "memory/types.h"
 #include "quantum/types.h"
+#include <glm/vec4.hpp>
 #include <glm/glm.hpp>
 #include <array>
 #include <memory>
@@ -11,11 +12,17 @@
 namespace sep::memory {
 
 class QuantumCoherenceManager {
-public:
+  public:
     struct Config {
-        std::size_t max_patterns{1024};
+        std::size_t max_patterns{1000};
         float anomaly_threshold{0.1f};
         bool enable_cuda{false};
+    };
+
+    enum class AnomalyType {
+        ExcessiveCoherence,
+        InsufficientCoherence,
+        RapidChange
     };
 
     enum class MigrationReason {
@@ -27,85 +34,85 @@ public:
         LowActivity
     };
 
+    struct CoherenceAnomaly {
+        std::string pattern_id;
+        float coherence_value{0.f};
+        float expected_value{0.f};
+        float severity{0.f};
+        AnomalyType type{AnomalyType::RapidChange};
+    };
+
     struct TierMigration {
         std::string pattern_id;
         MemoryTierEnum from_tier{MemoryTierEnum::STM};
         MemoryTierEnum to_tier{MemoryTierEnum::STM};
-        float coherence{0.0f};
+        float coherence{0.f};
         MigrationReason reason{MigrationReason::LowActivity};
-    };
-
-    struct CoherenceAnomaly {
-        std::string pattern_id;
-        float coherence_value{0.0f};
-        float expected_value{0.0f};
-        float severity{0.0f};
-        enum class Type { ExcessiveCoherence, InsufficientCoherence, RapidChange } type{Type::RapidChange};
-    };
-
-    struct CoherenceResult {
-        bool success{false};
-        float global_coherence{0.0f};
-        float memory_pressure{0.0f};
-        std::vector<CoherenceAnomaly> anomalies;
-        std::vector<TierMigration> tier_migrations;
-        std::size_t total_migrations{0};
     };
 
     struct EntanglementNode {
         std::string pattern_id;
-        float coherence{0.0f};
-        glm::vec3 position{0.0f};
+        float coherence{0.f};
+        glm::vec4 position{0.f};
     };
 
     struct EntanglementEdge {
         std::size_t node1_idx{0};
         std::size_t node2_idx{0};
-        float strength{0.0f};
-        float phase_correlation{0.0f};
+        float strength{0.f};
+        float phase_correlation{0.f};
     };
 
     struct EntanglementGraph {
         std::vector<EntanglementNode> nodes;
         std::vector<EntanglementEdge> edges;
-        float total_entanglement{0.0f};
+        float total_entanglement{0.f};
         std::uint32_t max_degree{0};
-        float clustering_coefficient{0.0f};
+        float clustering_coefficient{0.f};
     };
 
-    struct TierAnalysis {
-        float tier_coherence[3]{0.0f, 0.0f, 0.0f};
-        std::uint32_t tier_pattern_count[3]{0, 0, 0};
-        std::array<float,3> optimal_distribution{0.0f,0.0f,0.0f};
+    struct CoherenceMetrics {
+        float global_coherence{0.f};
+        float tier_coherence[3]{0.f, 0.f, 0.f};
+        std::uint64_t total_patterns{0};
+        std::uint64_t coherent_patterns{0};
+        float memory_pressure{0.f};
+        float entanglement_density{0.f};
     };
 
     struct PatternCoherenceData {
         std::string pattern_id;
-        float coherence{0.0f};
-        float stability{0.0f};
+        float coherence{0.f};
+        float stability{0.f};
         std::uint32_t access_count{0};
         std::uint64_t last_access_tick{0};
         MemoryTierEnum current_tier{MemoryTierEnum::STM};
         std::vector<std::string> entangled_patterns;
     };
 
-    struct CoherenceMetrics {
-        float global_coherence{0.0f};
-        float tier_coherence[3]{0.0f,0.0f,0.0f};
-        std::uint64_t total_patterns{0};
-        std::uint64_t coherent_patterns{0};
-        float memory_pressure{0.0f};
-        float entanglement_density{0.0f};
+    struct CoherenceResult {
+        bool success{false};
+        float global_coherence{0.f};
+        float memory_pressure{0.f};
+        std::size_t total_migrations{0};
+        std::vector<CoherenceAnomaly> anomalies;
+        std::vector<TierMigration> tier_migrations;
+    };
+
+    struct TierAnalysis {
+        float tier_coherence[3]{0.f, 0.f, 0.f};
+        std::uint32_t tier_pattern_count[3]{0, 0, 0};
+        std::array<float, 3> optimal_distribution{};
     };
 
     struct CoherenceSnapshot {
         std::uint64_t timestamp{0};
-        CoherenceMetrics global_metrics{};
+        CoherenceMetrics global_metrics;
         std::vector<PatternCoherenceData> pattern_states;
-        std::array<std::uint32_t,3> tier_distribution{0,0,0};
+        std::array<std::uint32_t, 3> tier_distribution{};
     };
 
-    QuantumCoherenceManager(const Config& config);
+    explicit QuantumCoherenceManager(const Config& config);
     ~QuantumCoherenceManager();
 
     CoherenceResult updateCoherence(const std::vector<quantum::Pattern>& patterns);
@@ -115,7 +122,7 @@ public:
     CoherenceSnapshot createSnapshot() const;
     bool restoreFromSnapshot(const CoherenceSnapshot& snapshot);
 
-private:
+  private:
     class Impl;
     std::unique_ptr<Impl> impl_;
 };

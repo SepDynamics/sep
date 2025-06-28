@@ -6,10 +6,7 @@
 
 #include "compat/stream.h"
 #include "compat/cuda_runtime.h" // ensure cudaStream_t is defined
-
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#endif
+#include "compat/cuda_helpers.h" // for logCudaError
 
 namespace sep::cuda {
 

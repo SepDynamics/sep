@@ -9,7 +9,7 @@
 #pragma once
 
 // Include Crow headers with correct path
-#include "../../extern/crow/crow_isolation.h"
+#include "../extern/crow/crow_isolation.h"
 
 #include <string>
 #include <memory>

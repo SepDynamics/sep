@@ -2,9 +2,10 @@
 #include "core/env_keys.h"
 #include "compat/shim.h"
 
-namespace sep::config {
+#include <fstream>
+#include <ios>
 
-#include <fstream> // Required for std::ifstream
+namespace sep::config {
 
 namespace {
 using namespace env_keys;

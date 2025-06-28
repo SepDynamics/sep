@@ -13,6 +13,10 @@
 #include "audio/pipewire_includes.h"
 #include "audio/capture.h"
 
+#if __has_include(<pipewire/stream.h>)
+#include <pipewire/stream.h>
+#endif
+
 // Forward declarations to avoid exposing PipeWire types in header
 struct pw_context;
 struct pw_core;

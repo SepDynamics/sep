@@ -1,4 +1,8 @@
 #include "memory/types.h"
+#include "memory/manager.h" // For logging manager
+
+// Define namespace alias to clarify that Manager is in the logging namespace
+namespace logging = sep::logging;
 #include <cstdint>
 #if __has_include(<hiredis/hiredis.h>)
 #    include <hiredis/hiredis.h>

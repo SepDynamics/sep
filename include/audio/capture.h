@@ -1,10 +1,10 @@
 #pragma once
+#include "audio/types.h"
 
 #include <functional>
 #include <memory>
 #include <vector>
 
-#include "types.h"
 
 namespace sep {
 namespace audio {

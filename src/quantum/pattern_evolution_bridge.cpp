@@ -9,7 +9,10 @@
 #include "blender/bridge.h"
 #include "blender/types.h"
 #include "compat/core.h"
-#include "memory/manager.h"
+#include "memory/manager.h"  // This is actually the logging manager
+
+// Define namespace alias for clarity
+namespace logging = sep::logging;
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <algorithm>

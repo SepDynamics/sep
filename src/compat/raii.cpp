@@ -7,13 +7,13 @@
 // Include standard headers first
 #include <cstdint>
 #include <cstdio>
-#include <cstdlib>
+#include <cstdlib> // For std::malloc and std::free
 #include <iostream>
 #include <utility>
 
 // Include CUDA headers in the correct order
 #include "compat/raii.h"
-#include "memory/memory_tier_manager.h" // Include header for interface
+#include "memory/memory_tier_manager.hpp" // Include header for interface
 #include "compat/cuda_helpers.h" // Fix: Include cuda_helpers for CUDA_CHECK
 #include "compat/cuda_impl.h"
 

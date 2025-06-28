@@ -187,7 +187,7 @@ sep::SEPResult MemoryTier::defragment() {
     // Reevaluate block placement after defragmentation
     MemoryTierManager& mgr = MemoryTierManager::getInstance();
     for (auto& blk : blocks_) { // Fix: Iterate over potentially new blocks
-        if (blk.allocated && mgr.isInitialized()) { // Fix: Check if MemoryTierManager is initialized
+        if (blk.allocated) {
             blk.utilization = static_cast<float>(blk.size) / config_.size;
             mgr.updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation, 1.0f);
         }

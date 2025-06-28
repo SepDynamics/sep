@@ -91,7 +91,11 @@ list(APPEND SEP_LINK_LIBS ${EXTERN_CUEW_LIBRARY} ${EXTERN_HIPEW_LIBRARY})
 
 # Find and add all other external dependencies conditionally
 macro(find_and_add_library var_name names)
-    find_library(${var_name} NAMES ${names})
+    find_library(
+        ${var_name}
+        NAMES ${names}
+        PATHS /usr/lib64 /usr/local/lib ${CMAKE_INSTALL_PREFIX}/lib ${ARGN}
+    )
     if(${var_name})
         message(STATUS "Found ${var_name}: ${${var_name}}")
         list(APPEND SEP_LINK_LIBS ${${var_name}})
@@ -106,7 +110,39 @@ find_and_add_library(OSL_QUERY_LIBRARY "oslquery")
 find_and_add_library(OPENSUBDIV_CPU_LIBRARY "osdCPU libosdCPU.so.3.6.0")
 find_and_add_library(OPENSUBDIV_GPU_LIBRARY "osdGPU libosdGPU.so.3.6.0")
 find_and_add_library(TBB_OPENSUBDIV_LIBRARY "tbb.so.2 libtbb.so.2")
-find_and_add_library(OpenPGL_LIBRARY "OpenPGL pgl")
+
+if(NOT OPENSUBDIV_CPU_LIBRARY)
+    find_library(SYS_OSDCPU_LIBRARY
+        NAMES libosdCPU.so.3.6.0 libosdCPU.so osdCPU
+        PATHS /usr/lib64 /usr/lib /usr/local/lib)
+    if(SYS_OSDCPU_LIBRARY)
+        file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+        get_filename_component(_cpu_name ${SYS_OSDCPU_LIBRARY} NAME)
+        set(_cpu_link ${CMAKE_SOURCE_DIR}/lib/${_cpu_name})
+        if(NOT EXISTS ${_cpu_link})
+            file(CREATE_LINK ${SYS_OSDCPU_LIBRARY} ${_cpu_link} SYMBOLIC)
+        endif()
+        set(OPENSUBDIV_CPU_LIBRARY ${_cpu_link})
+        list(APPEND SEP_LINK_LIBS ${OPENSUBDIV_CPU_LIBRARY})
+    endif()
+endif()
+
+if(NOT OPENSUBDIV_GPU_LIBRARY)
+    find_library(SYS_OSDGPU_LIBRARY
+        NAMES libosdGPU.so.3.6.0 libosdGPU.so osdGPU
+        PATHS /usr/lib64 /usr/lib /usr/local/lib)
+    if(SYS_OSDGPU_LIBRARY)
+        file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+        get_filename_component(_gpu_name ${SYS_OSDGPU_LIBRARY} NAME)
+        set(_gpu_link ${CMAKE_SOURCE_DIR}/lib/${_gpu_name})
+        if(NOT EXISTS ${_gpu_link})
+            file(CREATE_LINK ${SYS_OSDGPU_LIBRARY} ${_gpu_link} SYMBOLIC)
+        endif()
+        set(OPENSUBDIV_GPU_LIBRARY ${_gpu_link})
+        list(APPEND SEP_LINK_LIBS ${OPENSUBDIV_GPU_LIBRARY})
+    endif()
+endif()
+find_and_add_library(OpenPGL_LIBRARY "OpenPGL pgl" /usr/lib64 /usr/local/lib ${CMAKE_INSTALL_PREFIX}/lib)
 find_and_add_library(OPENVDB_LIBRARY "openvdb")
 find_and_add_library(BLOSC_LIBRARY "blosc")
 find_and_add_library(TBB_LIBRARY "tbb")

@@ -12,4 +12,3 @@ void sep::crow::error::log(sep::crow::error::Code code, const sep::shim::string&
 #if !defined(__cpp_exceptions) && !defined(__EXCEPTIONS) && !defined(_CPPUNWIND)
 const char* crow::last_error = nullptr;
 #endif
-

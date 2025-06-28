@@ -68,6 +68,22 @@ endif()
 target_include_directories(sep_audio
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/include/api
+        ${CMAKE_SOURCE_DIR}/include/audio
+        ${CMAKE_SOURCE_DIR}/include/blender
+        ${CMAKE_SOURCE_DIR}/include/compat
+        ${CMAKE_SOURCE_DIR}/include/core
+        ${CMAKE_SOURCE_DIR}/include/crow
+        ${CMAKE_SOURCE_DIR}/include/memory
+        ${CMAKE_SOURCE_DIR}/include/quantum
+        ${CMAKE_SOURCE_DIR}/include/api
+        ${CMAKE_SOURCE_DIR}/include/audio
+        ${CMAKE_SOURCE_DIR}/include/blender
+        ${CMAKE_SOURCE_DIR}/include/compat
+        ${CMAKE_SOURCE_DIR}/include/core
+        ${CMAKE_SOURCE_DIR}/include/crow
+        ${CMAKE_SOURCE_DIR}/include/memory
+        ${CMAKE_SOURCE_DIR}/include/quantum
         ${CMAKE_SOURCE_DIR}/cycles/src
         ${CMAKE_SOURCE_DIR}/extern
         ${CMAKE_SOURCE_DIR}/extern/cycles/src

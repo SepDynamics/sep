@@ -19,6 +19,7 @@
 
 namespace sep::memory {
 
+// Correct and unified definition of QuantumCoherenceManager class and its nested types
 class QuantumCoherenceManager {
 public:
     struct Config {
@@ -54,21 +55,13 @@ public:
         AnomalyType type{AnomalyType::RapidChange};
     };
 
-    struct PatternCoherenceData {
-        std::string pattern_id;
-        float coherence{0.0f};
-        float stability{0.0f};
-        uint32_t access_count{0};
-        uint64_t last_access_tick{0};
-        MemoryTierEnum current_tier{MemoryTierEnum::STM};
-        std::vector<std::string> entangled_patterns;
-    };
-
     struct CoherenceMetrics {
         float global_coherence{1.0f};
         float tier_coherence[3]{1.0f,1.0f,1.0f};
+        float tier_fragmentation[3]{0.0f, 0.0f, 0.0f}; // Added missing field
         uint64_t total_patterns{0};
         uint64_t coherent_patterns{0};
+        uint64_t fragmented_patterns{0}; // Added missing field
         float memory_pressure{0.0f};
         float entanglement_density{0.0f};
     };
@@ -86,6 +79,8 @@ public:
         std::vector<EntanglementNode> nodes;
         std::vector<EntanglementEdge> edges;
         float total_entanglement{0.0f};
+        uint32_t max_degree{0}; // Added missing field
+        float clustering_coefficient{0.0f}; // Added missing field
     };
 
     struct TierAnalysis {
@@ -101,6 +96,8 @@ public:
         size_t total_migrations{0};
         std::vector<CoherenceAnomaly> anomalies;
         std::vector<TierMigration> tier_migrations;
+        float tier_fragmentation[3]{0.0f, 0.0f, 0.0f}; // Added missing field
+        uint32_t tier_pattern_count[3]{0,0,0}; // Added missing field
     };
 
     explicit QuantumCoherenceManager(const Config& config = {});
@@ -113,7 +110,25 @@ public:
     CoherenceSnapshot createSnapshot() const;
     bool restoreFromSnapshot(const CoherenceSnapshot& snapshot);
 
+    // Public accessors for metrics and state
+    const CoherenceMetrics& getMetrics() const;
+    uint64_t getGlobalTick() const;
+    uint32_t getPatternCountByTier(MemoryTierEnum tier) const;
+    float getTierFragmentation(MemoryTierEnum tier) const;
+
 private:
+    // Pattern coherence data struct used internally by Impl
+    struct PatternCoherenceData {
+        std::string pattern_id;
+        float coherence{0.0f};
+        float stability{0.0f};
+        uint32_t access_count{0};
+        uint64_t last_access_tick{0};
+        MemoryTierEnum current_tier{MemoryTierEnum::STM};
+        float fragmentation_score{0.0f}; // Added missing field
+        std::vector<std::string> entangled_patterns;
+    };
+
     class Impl;
     std::unique_ptr<Impl> impl_;
 };
@@ -134,28 +149,16 @@ namespace {
 
 class QuantumCoherenceManager::Impl {
 public:
-    struct CoherenceMetrics {
-        float global_coherence;
-        float tier_coherence[3];  // STM, MTM, LTM
-        float tier_fragmentation[3]; // STM, MTM, LTM
-        uint64_t total_patterns;
-        uint64_t coherent_patterns;
-        uint64_t fragmented_patterns;
-        float memory_pressure;
-        float entanglement_density;
-    };
-    
-    struct PatternCoherenceData {
-        std::string pattern_id;
-        float coherence;
-        float stability;
-        uint32_t access_count;
-        uint64_t last_access_tick;
-        MemoryTierEnum current_tier;
-        float fragmentation_score;
-        std::vector<std::string> entangled_patterns;
-    };
-    
+    // Use the nested CoherenceMetrics struct from the outer class
+    using CoherenceMetrics = QuantumCoherenceManager::CoherenceMetrics;
+    using PatternCoherenceData = QuantumCoherenceManager::PatternCoherenceData;
+    using TierMigration = QuantumCoherenceManager::TierMigration;
+    using AnomalyType = QuantumCoherenceManager::AnomalyType;
+    using CoherenceAnomaly = QuantumCoherenceManager::CoherenceAnomaly;
+    using EntanglementGraph = QuantumCoherenceManager::EntanglementGraph;
+    using TierAnalysis = QuantumCoherenceManager::TierAnalysis;
+    using CoherenceResult = QuantumCoherenceManager::CoherenceResult;
+
     explicit Impl(const Config& config)
         : config_(config)
         , qfh_processor_(std::make_unique<quantum::QuantumProcessorQFH>())
@@ -202,6 +205,12 @@ public:
         result.memory_pressure = metrics_.memory_pressure;
         result.total_migrations = result.tier_migrations.size();
         result.success = true;
+
+        // Fill in missing fields in result
+        for(int i = 0; i < 3; ++i) {
+            result.tier_fragmentation[i] = metrics_.tier_fragmentation[i];
+            result.tier_pattern_count[i] = countPatternsInTier(static_cast<MemoryTierEnum>(i));
+        }
         
         return result;
     }

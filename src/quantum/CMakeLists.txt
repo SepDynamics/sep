@@ -10,8 +10,13 @@ add_library(sep_quantum STATIC
     types_serialization.cpp
     pattern_processor.cpp
     pattern_processor_interface.cpp
-    quantum_manifold_optimizer.cpp
 )
+
+target_sources(sep_quantum PRIVATE
+  quantum_manifold_optimizer.cpp
+  pattern_evolution_bridge.cpp
+)
+
 target_include_directories(sep_quantum
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
@@ -20,6 +25,10 @@ target_include_directories(sep_quantum
         ${CMAKE_SOURCE_DIR}/extern/cycles/src
         ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
         ${CMAKE_SOURCE_DIR}/extern/eigen
+)
+
+target_sources(sep_quantum PRIVATE
+  
 )
 
 # Link against Eigen if available

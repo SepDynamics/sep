@@ -1,530 +1,540 @@
-// quantum_manifold_optimizer.cpp - Implementation with proper compatibility layer
+// /sep/src/quantum/quantum_manifold_optimizer.cpp
 #include "quantum/quantum_manifold_optimizer.h"
+#include "quantum/quantum_processor_qfh.h"
 #include "quantum/evolution.h"
-#include "compat/cufft.h"
-#include "core/common.h"
+#include "quantum/types.h"
+#include "compat/math_common.h"
+#include "compat/core.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/norm.hpp>
 #include <algorithm>
+#include <cmath>
 #include <numeric>
-#include <vector>
+#include <execution>
 
-namespace sep::quantum::manifold {
+namespace sep::quantum {
 
-// Constants
-constexpr double ERROR_TOLERANCE = 0.001;
-
-// Simplified implementation classes
-
-// HamiltonianEvolver implementation
-class HamiltonianEvolver {
-public:
-    explicit HamiltonianEvolver(double coupling) : coupling_(coupling) {}
+namespace {
+    // Manifold curvature constants for quantum state optimization
+    constexpr float RICCI_FLOW_RATE = 0.01f;
+    constexpr float GEODESIC_DEVIATION_THRESHOLD = 0.3f;
+    constexpr float MANIFOLD_DIMENSION = 8.0f;
+    constexpr float HOLONOMY_CORRECTION_FACTOR = 0.95f;
+    constexpr uint32_t MIN_TANGENT_SAMPLES = 16;
+    constexpr uint32_t MAX_GEODESIC_ITERATIONS = 100;
     
-    double evolve(const QuantumPattern& pattern, double dt) {
-        // Simple implementation of Hamiltonian evolution
-        double energy = pattern.coherence * pattern.stability;
-        return energy * coupling_ * dt;
+    // Christoffel symbol approximation for local geometry
+    glm::mat3 computeChristoffelSymbols(const glm::vec3& position, float curvature) {
+        float r2 = glm::length2(position);
+        float factor = curvature / (1.0f + r2);
+        
+        return glm::mat3(
+            1.0f - factor * position.x * position.x, -factor * position.x * position.y, -factor * position.x * position.z,
+            -factor * position.y * position.x, 1.0f - factor * position.y * position.y, -factor * position.y * position.z,
+            -factor * position.z * position.x, -factor * position.z * position.y, 1.0f - factor * position.z * position.z
+        );
     }
     
+    // Parallel transport along geodesic
+    glm::vec3 parallelTransport(const glm::vec3& vector, const glm::vec3& from, const glm::vec3& to, float curvature) {
+        glm::vec3 direction = glm::normalize(to - from);
+        float distance = glm::length(to - from);
+        
+        // Approximate parallel transport using Schild's ladder
+        glm::vec3 midpoint = 0.5f * (from + to);
+        glm::mat3 christoffel = computeChristoffelSymbols(midpoint, curvature);
+        
+        glm::vec3 transported = vector - distance * christoffel * direction;
+        return glm::normalize(transported) * glm::length(vector);
+    }
+}
+
+class QuantumManifoldOptimizer::Impl {
+public:
+    struct ManifoldPoint {
+        glm::vec3 position;
+        glm::vec3 momentum;
+        float curvature;
+        float coherence;
+        uint32_t dimension_index;
+        std::vector<uint32_t> neighbor_indices;
+    };
+    
+    struct GeodesicPath {
+        std::vector<ManifoldPoint> points;
+        float total_action;
+        float stability_metric;
+        bool is_minimal;
+    };
+    
+    explicit Impl(const Config& config) 
+        : config_(config)
+        , manifold_points_(config.initial_points)
+        , riemannian_metric_(1.0f)
+        , qfh_processor_(std::make_unique<QuantumProcessorQFH>()) {
+        initializeManifold();
+    }
+    
+    OptimizationResult optimize(const QuantumState& initial_state, const OptimizationTarget& target) {
+        OptimizationResult result;
+        result.initial_state = initial_state;
+        result.target = target;
+        
+        // Convert quantum state to manifold representation
+        ManifoldPoint start_point = quantumStateToManifold(initial_state);
+        ManifoldPoint target_point = targetToManifold(target);
+        
+        // Find optimal geodesic path
+        GeodesicPath optimal_path = findOptimalGeodesic(start_point, target_point);
+        
+        // Apply Ricci flow to smooth the manifold
+        applyRicciFlow(optimal_path);
+        
+        // Extract optimized quantum state
+        result.optimized_state = manifoldToQuantumState(optimal_path.points.back());
+        result.convergence_metric = computeConvergenceMetric(optimal_path);
+        result.iterations = optimal_path.points.size();
+        result.success = optimal_path.is_minimal && result.convergence_metric < config_.convergence_threshold;
+        
+        // Compute manifold invariants
+        result.manifold_curvature = computeRicciScalar(optimal_path);
+        result.geodesic_distance = computeGeodesicDistance(optimal_path);
+        result.holonomy_phase = computeHolonomyPhase(optimal_path);
+        
+        return result;
+    }
+    
+    void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states) {
+        // Update manifold points based on quantum state distribution
+        manifold_points_.clear();
+        manifold_points_.reserve(quantum_states.size());
+        
+        for (const auto& state : quantum_states) {
+            manifold_points_.push_back(quantumStateToManifold(state));
+        }
+        
+        // Recompute neighbor relationships
+        computeNeighborhoods();
+        
+        // Update Riemannian metric based on state density
+        updateRiemannianMetric();
+    }
+    
+    float computeManifoldCoherence(const glm::vec3& position) const {
+        // Sample local neighborhood
+        std::vector<float> local_coherences;
+        local_coherences.reserve(MIN_TANGENT_SAMPLES);
+        
+        for (size_t i = 0; i < manifold_points_.size() && local_coherences.size() < MIN_TANGENT_SAMPLES; ++i) {
+            float distance = glm::length(manifold_points_[i].position - position);
+            if (distance < config_.neighborhood_radius) {
+                local_coherences.push_back(manifold_points_[i].coherence / (1.0f + distance));
+            }
+        }
+        
+        if (local_coherences.empty()) {
+            return 0.0f;
+        }
+        
+        // Weighted average with Gaussian kernel
+        float total_weight = 0.0f;
+        float weighted_coherence = 0.0f;
+        
+        for (size_t i = 0; i < local_coherences.size(); ++i) {
+            float weight = std::exp(-0.5f * i * i / (MIN_TANGENT_SAMPLES * MIN_TANGENT_SAMPLES));
+            weighted_coherence += local_coherences[i] * weight;
+            total_weight += weight;
+        }
+        
+        return weighted_coherence / total_weight;
+    }
+    
+    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const {
+        std::vector<glm::vec3> tangent_vectors;
+        tangent_vectors.reserve(num_samples);
+        
+        // Find local manifold point
+        auto nearest = std::min_element(manifold_points_.begin(), manifold_points_.end(),
+            [&position](const ManifoldPoint& a, const ManifoldPoint& b) {
+                return glm::length2(a.position - position) < glm::length2(b.position - position);
+            });
+        
+        if (nearest == manifold_points_.end()) {
+            return tangent_vectors;
+        }
+        
+        // Sample tangent space using parallel transport
+        float angle_step = 2.0f * M_PI / num_samples;
+        glm::mat3 christoffel = computeChristoffelSymbols(position, nearest->curvature);
+        
+        for (uint32_t i = 0; i < num_samples; ++i) {
+            float angle = i * angle_step;
+            glm::vec3 tangent(std::cos(angle), std::sin(angle), 0.0f);
+            
+            // Apply Christoffel connection
+            tangent = glm::normalize(tangent - christoffel * tangent);
+            tangent_vectors.push_back(tangent);
+        }
+        
+        return tangent_vectors;
+    }
+
 private:
-    double coupling_;
+    Config config_;
+    std::vector<ManifoldPoint> manifold_points_;
+    glm::mat4 riemannian_metric_;
+    std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
+    
+    void initializeManifold() {
+        // Initialize manifold with quantum-inspired geometry
+        computeNeighborhoods();
+        updateRiemannianMetric();
+        
+        // Set initial curvatures based on quantum coherence
+        for (auto& point : manifold_points_) {
+            point.curvature = computeLocalCurvature(point.position);
+            point.coherence = qfh_processor_->processPattern(point.position);
+        }
+    }
+    
+    ManifoldPoint quantumStateToManifold(const QuantumState& state) {
+        ManifoldPoint point;
+        
+        // Map quantum amplitudes to manifold position
+        point.position = glm::vec3(
+            state.coherence * std::cos(state.phase),
+            state.coherence * std::sin(state.phase),
+            state.entropy
+        );
+        
+        // Momentum from quantum evolution rate
+        point.momentum = glm::vec3(
+            state.evolution_rate * 0.1f,
+            state.coupling_strength * 0.1f,
+            -state.decoherence_rate * 0.1f
+        );
+        
+        point.coherence = state.coherence;
+        point.curvature = computeLocalCurvature(point.position);
+        point.dimension_index = static_cast<uint32_t>(state.memory_tier);
+        
+        return point;
+    }
+    
+    QuantumState manifoldToQuantumState(const ManifoldPoint& point) {
+        QuantumState state;
+        
+        // Extract quantum properties from manifold geometry
+        float r = glm::length(glm::vec2(point.position.x, point.position.y));
+        state.coherence = glm::clamp(r, 0.0f, 1.0f);
+        state.phase = std::atan2(point.position.y, point.position.x);
+        state.entropy = glm::clamp(point.position.z, 0.0f, 1.0f);
+        
+        // Derive evolution parameters from momentum
+        state.evolution_rate = glm::length(point.momentum) * 10.0f;
+        state.coupling_strength = std::abs(point.momentum.y) * 10.0f;
+        state.decoherence_rate = std::max(0.0f, -point.momentum.z * 10.0f);
+        
+        // Map dimension index back to memory tier
+        state.memory_tier = static_cast<MemoryTierEnum>(point.dimension_index % 3);
+        
+        // Quantum field values from curvature
+        state.qfh_field = point.curvature * MANIFOLD_DIMENSION;
+        state.resonance_strength = computeResonanceFromCurvature(point.curvature);
+        
+        return state;
+    }
+    
+    ManifoldPoint targetToManifold(const OptimizationTarget& target) {
+        ManifoldPoint point;
+        
+        // Map target constraints to manifold position
+        point.position = glm::vec3(
+            target.target_coherence * std::cos(target.target_phase),
+            target.target_coherence * std::sin(target.target_phase),
+            1.0f - target.target_stability  // Lower stability = higher entropy
+        );
+        
+        point.momentum = glm::vec3(0.0f);  // Target has no momentum
+        point.coherence = target.target_coherence;
+        point.curvature = 0.0f;  // Flat target region
+        
+        return point;
+    }
+    
+    GeodesicPath findOptimalGeodesic(const ManifoldPoint& start, const ManifoldPoint& target) {
+        GeodesicPath path;
+        path.points.push_back(start);
+        
+        ManifoldPoint current = start;
+        glm::vec3 velocity = glm::normalize(target.position - start.position) * config_.step_size;
+        
+        for (uint32_t iter = 0; iter < MAX_GEODESIC_ITERATIONS; ++iter) {
+            // Geodesic equation with Christoffel symbols
+            glm::mat3 christoffel = computeChristoffelSymbols(current.position, current.curvature);
+            glm::vec3 acceleration = -christoffel * velocity;
+            
+            // Update velocity and position
+            velocity += acceleration * config_.step_size;
+            current.position += velocity * config_.step_size;
+            
+            // Update quantum properties along geodesic
+            current.coherence = computeManifoldCoherence(current.position);
+            current.curvature = computeLocalCurvature(current.position);
+            
+            path.points.push_back(current);
+            
+            // Check convergence
+            float distance_to_target = glm::length(current.position - target.position);
+            if (distance_to_target < config_.convergence_threshold) {
+                path.is_minimal = true;
+                break;
+            }
+            
+            // Apply quantum constraints
+            if (current.coherence < config_.min_coherence_threshold) {
+                velocity *= HOLONOMY_CORRECTION_FACTOR;
+            }
+        }
+        
+        // Compute path action
+        path.total_action = computePathAction(path);
+        path.stability_metric = computePathStability(path);
+        
+        return path;
+    }
+    
+    void applyRicciFlow(GeodesicPath& path) {
+        // Smooth the path using Ricci flow
+        for (size_t i = 1; i < path.points.size() - 1; ++i) {
+            ManifoldPoint& point = path.points[i];
+            
+            // Compute Ricci curvature
+            float ricci = computeRicciCurvature(point, path.points[i-1], path.points[i+1]);
+            
+            // Flow equation: d/dt g_ij = -2 R_ij
+            point.curvature -= 2.0f * ricci * RICCI_FLOW_RATE;
+            point.curvature = glm::clamp(point.curvature, -1.0f, 1.0f);
+            
+            // Update position based on flow
+            glm::vec3 flow_direction = computeFlowDirection(point, ricci);
+            point.position += flow_direction * RICCI_FLOW_RATE;
+        }
+    }
+    
+    void computeNeighborhoods() {
+        // Build spatial index for efficient neighbor queries
+        for (size_t i = 0; i < manifold_points_.size(); ++i) {
+            manifold_points_[i].neighbor_indices.clear();
+            
+            for (size_t j = 0; j < manifold_points_.size(); ++j) {
+                if (i != j) {
+                    float distance = glm::length(manifold_points_[i].position - manifold_points_[j].position);
+                    if (distance < config_.neighborhood_radius) {
+                        manifold_points_[i].neighbor_indices.push_back(j);
+                    }
+                }
+            }
+        }
+    }
+    
+    void updateRiemannianMetric() {
+        // Compute metric tensor from point distribution
+        glm::mat4 covariance(0.0f);
+        glm::vec4 mean(0.0f);
+        
+        // Compute mean position
+        for (const auto& point : manifold_points_) {
+            mean += glm::vec4(point.position, 1.0f);
+        }
+        mean /= static_cast<float>(manifold_points_.size());
+        
+        // Compute covariance
+        for (const auto& point : manifold_points_) {
+            glm::vec4 diff = glm::vec4(point.position, 1.0f) - mean;
+            covariance += glm::outerProduct(diff, diff);
+        }
+        covariance /= static_cast<float>(manifold_points_.size());
+        
+        // Metric is inverse covariance
+        riemannian_metric_ = glm::inverse(covariance + 0.01f * glm::mat4(1.0f));
+    }
+    
+    float computeLocalCurvature(const glm::vec3& position) const {
+        // Approximate Gaussian curvature using local neighborhood
+        float curvature = 0.0f;
+        uint32_t sample_count = 0;
+        
+        for (const auto& point : manifold_points_) {
+            float distance = glm::length(point.position - position);
+            if (distance < config_.neighborhood_radius && distance > 0.001f) {
+                // Compute angle deficit
+                glm::vec3 v1 = glm::normalize(point.position - position);
+                float local_curv = 1.0f - glm::dot(v1, glm::vec3(0, 0, 1));
+                curvature += local_curv / distance;
+                sample_count++;
+            }
+        }
+        
+        return (sample_count > 0) ? curvature / sample_count : 0.0f;
+    }
+    
+    float computeRicciCurvature(const ManifoldPoint& point, 
+                                const ManifoldPoint& prev, 
+                                const ManifoldPoint& next) const {
+        // Approximate Ricci curvature from geodesic deviation
+        glm::vec3 v1 = glm::normalize(point.position - prev.position);
+        glm::vec3 v2 = glm::normalize(next.position - point.position);
+        
+        float deviation = glm::length(v2 - v1);
+        float distance = glm::length(next.position - prev.position);
+        
+        return (distance > 0.001f) ? deviation / distance : 0.0f;
+    }
+    
+    glm::vec3 computeFlowDirection(const ManifoldPoint& point, float ricci_curvature) const {
+        // Compute gradient of scalar curvature
+        glm::vec3 gradient(0.0f);
+        float h = 0.01f;  // Finite difference step
+        
+        gradient.x = (computeLocalCurvature(point.position + glm::vec3(h, 0, 0)) - 
+                     computeLocalCurvature(point.position - glm::vec3(h, 0, 0))) / (2.0f * h);
+        gradient.y = (computeLocalCurvature(point.position + glm::vec3(0, h, 0)) - 
+                     computeLocalCurvature(point.position - glm::vec3(0, h, 0))) / (2.0f * h);
+        gradient.z = (computeLocalCurvature(point.position + glm::vec3(0, 0, h)) - 
+                     computeLocalCurvature(point.position - glm::vec3(0, 0, h))) / (2.0f * h);
+        
+        // Flow opposite to gradient weighted by Ricci curvature
+        return -gradient * ricci_curvature;
+    }
+    
+    float computePathAction(const GeodesicPath& path) const {
+        float action = 0.0f;
+        
+        for (size_t i = 1; i < path.points.size(); ++i) {
+            glm::vec3 displacement = path.points[i].position - path.points[i-1].position;
+            float kinetic = 0.5f * glm::length2(displacement);
+            float potential = path.points[i].curvature * path.points[i].coherence;
+            action += kinetic - potential;
+        }
+        
+        return action;
+    }
+    
+    float computePathStability(const GeodesicPath& path) const {
+        if (path.points.size() < 2) return 0.0f;
+        
+        // Compute variation of coherence along path
+        float mean_coherence = 0.0f;
+        float variance = 0.0f;
+        
+        for (const auto& point : path.points) {
+            mean_coherence += point.coherence;
+        }
+        mean_coherence /= path.points.size();
+        
+        for (const auto& point : path.points) {
+            float diff = point.coherence - mean_coherence;
+            variance += diff * diff;
+        }
+        variance /= path.points.size();
+        
+        // Stability is inverse of variance
+        return 1.0f / (1.0f + variance);
+    }
+    
+    float computeConvergenceMetric(const GeodesicPath& path) const {
+        if (path.points.empty()) return 1.0f;
+        
+        const ManifoldPoint& final_point = path.points.back();
+        float position_error = glm::length(final_point.position - path.points[0].position);
+        float coherence_error = std::abs(final_point.coherence - config_.target_coherence);
+        
+        return position_error + coherence_error;
+    }
+    
+    float computeRicciScalar(const GeodesicPath& path) const {
+        float total_curvature = 0.0f;
+        
+        for (const auto& point : path.points) {
+            total_curvature += point.curvature;
+        }
+        
+        return total_curvature / path.points.size();
+    }
+    
+    float computeGeodesicDistance(const GeodesicPath& path) const {
+        float distance = 0.0f;
+        
+        for (size_t i = 1; i < path.points.size(); ++i) {
+            // Use Riemannian metric for proper distance
+            glm::vec4 v = glm::vec4(path.points[i].position - path.points[i-1].position, 0.0f);
+            float metric_distance = std::sqrt(glm::dot(v, riemannian_metric_ * v));
+            distance += metric_distance;
+        }
+        
+        return distance;
+    }
+    
+    float computeHolonomyPhase(const GeodesicPath& path) const {
+        float phase = 0.0f;
+        
+        // Compute parallel transport around closed loop
+        if (path.points.size() > 3) {
+            glm::vec3 initial_vector(1, 0, 0);
+            glm::vec3 transported = initial_vector;
+            
+            for (size_t i = 1; i < path.points.size(); ++i) {
+                transported = parallelTransport(
+                    transported,
+                    path.points[i-1].position,
+                    path.points[i].position,
+                    path.points[i].curvature
+                );
+            }
+            
+            // Holonomy is angle between initial and final vectors
+            phase = std::acos(glm::clamp(glm::dot(initial_vector, transported), -1.0f, 1.0f));
+        }
+        
+        return phase;
+    }
+    
+    float computeResonanceFromCurvature(float curvature) const {
+        // Map curvature to resonance frequency
+        return std::exp(-std::abs(curvature)) * config_.base_resonance_frequency;
+    }
 };
 
-// AdvancedMemoryTierOptimizer implementation
-AdvancedMemoryTierOptimizer::AdvancedMemoryTierOptimizer(const ManifoldConfig& config)
-    : config_(config),
-      adaptive_thresholds_{0.5, 0.7, 0.9} {
-    hamiltonian_ = std::make_unique<HamiltonianEvolver>(config.memory.hamiltonian_coupling);
+// Public interface implementation
+QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
+    : impl_(std::make_unique<Impl>(config)) {}
+
+QuantumManifoldOptimizer::~QuantumManifoldOptimizer() = default;
+
+QuantumManifoldOptimizer::OptimizationResult 
+QuantumManifoldOptimizer::optimize(const QuantumState& initial_state, 
+                                   const OptimizationTarget& target) {
+    return impl_->optimize(initial_state, target);
 }
 
-void AdvancedMemoryTierOptimizer::optimizeThresholds(const std::vector<QuantumPattern>& patterns) {
-    std::lock_guard<std::mutex> lock(threshold_mutex_);
-    
-    // Calculate coherence distribution across patterns
-    std::vector<double> coherence_values;
-    coherence_values.reserve(patterns.size());
-    
-    for (const auto& pattern : patterns) {
-        coherence_values.push_back(pattern.coherence);
-    }
-    
-    // Sort for percentile calculation
-    std::sort(coherence_values.begin(), coherence_values.end());
-    
-    // Adaptive threshold adjustment based on distribution
-    if (!coherence_values.empty()) {
-        size_t n = coherence_values.size();
-        adaptive_thresholds_[0] = coherence_values[n * 0.33];  // 33rd percentile for STM
-        adaptive_thresholds_[1] = coherence_values[n * 0.66];  // 66th percentile for MTM
-        adaptive_thresholds_[2] = coherence_values[n * 0.90];  // 90th percentile for LTM
-        
-        // Apply Hamiltonian smoothing
-        for (auto& threshold : adaptive_thresholds_) {
-            threshold = threshold * (1.0 - config_.memory.adaptive_threshold_rate) +
-                       calculateHamiltonianEnergy(patterns[0]) * config_.memory.adaptive_threshold_rate;
-        }
-    }
-    
-    SPDLOG_DEBUG("Adaptive thresholds updated: STM={:.3f}, MTM={:.3f}, LTM={:.3f}",
-              adaptive_thresholds_[0], adaptive_thresholds_[1], adaptive_thresholds_[2]);
+void QuantumManifoldOptimizer::updateManifoldGeometry(const std::vector<QuantumState>& quantum_states) {
+    impl_->updateManifoldGeometry(quantum_states);
 }
 
-void AdvancedMemoryTierOptimizer::predictiveMigration(int pattern_id, double time_horizon_ms) {
-    // Predictive coherence evolution using Hamiltonian dynamics
-    double dt = time_horizon_ms / 1000.0;
-    
-    // Simplified example
-    QuantumPattern pattern;
-    pattern.coherence = 0.6;
-    pattern.stability = 0.7;
-    
-    double predicted_coherence = predictFutureCoherence(pattern, dt);
-    
-    // Preemptive tier assignment based on prediction
-    MemoryTierEnum predicted_tier = MemoryTierEnum::STM;
-    if (predicted_coherence > adaptive_thresholds_[2]) {
-        predicted_tier = MemoryTierEnum::LTM;
-    } else if (predicted_coherence > adaptive_thresholds_[1]) {
-        predicted_tier = MemoryTierEnum::MTM;
-    }
-    
-    SPDLOG_DEBUG("Pattern {} predicted to migrate to tier {} in {:.1f}ms",
-              pattern_id, static_cast<int>(predicted_tier), time_horizon_ms);
+float QuantumManifoldOptimizer::computeManifoldCoherence(const glm::vec3& position) const {
+    return impl_->computeManifoldCoherence(position);
 }
 
-double AdvancedMemoryTierOptimizer::calculateHamiltonianEnergy(const QuantumPattern& pattern) const {
-    // Simplified for single pattern
-    double spin = pattern.coherence * 2.0 - 1.0;  // Map [0,1] to [-1,1]
-    double energy = -config_.memory.hamiltonian_coupling * spin * spin + 0.1 * spin;
-    return std::tanh(energy);  // Normalize to [0,1]
+std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::vec3& position, 
+                                                                    uint32_t num_samples) const {
+    return impl_->sampleTangentSpace(position, num_samples);
 }
 
-double AdvancedMemoryTierOptimizer::predictFutureCoherence(const QuantumPattern& pattern, double dt) const {
-    double H = calculateHamiltonianEnergy(pattern);
-    double decay_rate = 0.1 * (1.0 - pattern.stability);
-    double growth_rate = 0.2 * H;
-    
-    return pattern.coherence * std::exp((growth_rate - decay_rate) * dt);
+// Factory function
+std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+    return std::make_unique<QuantumManifoldOptimizer>(config);
 }
 
-// QuantumManifoldProcessor implementation - no Eigen
-QuantumManifoldProcessor::QuantumManifoldProcessor(const ManifoldConfig& config)
-    : QuantumProcessorQFH(), config_(config) {
-    // Skip CUDA kernel initialization
-    // cuda_kernel_ = std::make_unique<CUDAQuantumKernel>(config.cuda);
-}
-
-QuantumManifoldProcessor::ManifoldAnalysis
-QuantumManifoldProcessor::analyzeCoherenceManifold(const std::vector<QuantumPattern>& patterns) {
-    ManifoldAnalysis analysis;
-    size_t n = patterns.size();
-    
-    // Build coherence matrix
-    analysis.coherence_matrix.resize(n, std::vector<double>(n));
-    
-    for (size_t i = 0; i < n; ++i) {
-        for (size_t j = 0; j < n; ++j) {
-            if (i == j) {
-                analysis.coherence_matrix[i][j] = 1.0;
-            } else {
-                // Calculate coherence between patterns
-                double dot = 0.0;
-                double norm_i = 0.0, norm_j = 0.0;
-                
-                for (size_t k = 0; k < patterns[i].position.size(); ++k) {
-                    dot += patterns[i].position[k] * patterns[j].position[k];
-                    norm_i += patterns[i].position[k] * patterns[i].position[k];
-                    norm_j += patterns[j].position[k] * patterns[j].position[k];
-                }
-                
-                analysis.coherence_matrix[i][j] = dot / (std::sqrt(norm_i) * std::sqrt(norm_j) + 1e-8);
-            }
-        }
-    }
-    
-    // Simplified eigenvalue computation
-    analysis.eigenvalues.resize(n, 0.0);
-    analysis.eigenvectors.resize(n, std::vector<double>(n, 0.0));
-    
-    // Power method to find dominant eigenvalue
-    if (n > 0) {
-        std::vector<double> x(n, 1.0/std::sqrt(n));
-        std::vector<double> y(n, 0.0);
-        
-        for (int iter = 0; iter < 10; ++iter) {
-            // Matrix-vector multiplication
-            std::fill(y.begin(), y.end(), 0.0);
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 0; j < n; ++j) {
-                    y[i] += analysis.coherence_matrix[i][j] * x[j];
-                }
-            }
-            
-            // Normalize
-            double norm = 0.0;
-            for (double val : y) {
-                norm += val * val;
-            }
-            norm = std::sqrt(norm);
-            
-            for (size_t i = 0; i < n; ++i) {
-                x[i] = y[i] / norm;
-            }
-        }
-        
-        // Rayleigh quotient to get eigenvalue
-        double eigenvalue = 0.0;
-        for (size_t i = 0; i < n; ++i) {
-            for (size_t j = 0; j < n; ++j) {
-                eigenvalue += x[i] * analysis.coherence_matrix[i][j] * x[j];
-            }
-        }
-        
-        // Store results
-        analysis.eigenvalues[0] = eigenvalue;
-        for (size_t i = 0; i < n; ++i) {
-            analysis.eigenvectors[0][i] = x[i];
-        }
-    }
-    
-    // Compute manifold curvature and detect defects
-    computeManifoldCurvature(analysis);
-    analysis.topological_defect_detected = detectTopologicalDefects(analysis);
-    
-    return analysis;
-}
-
-void QuantumManifoldProcessor::computeManifoldCurvature(ManifoldAnalysis& analysis) const {
-    // Ricci curvature approximation from eigenvalue spectrum
-    double trace = 0.0;
-    double sum_squared = 0.0;
-    
-    for (double eigenval : analysis.eigenvalues) {
-        trace += eigenval;
-        sum_squared += eigenval * eigenval;
-    }
-    
-    size_t n = analysis.eigenvalues.size();
-    if (n > 1) {
-        analysis.manifold_curvature = (trace * trace - sum_squared) / (n * (n - 1));
-    } else {
-        analysis.manifold_curvature = 0.0;
-    }
-}
-
-bool QuantumManifoldProcessor::detectTopologicalDefects(const ManifoldAnalysis& analysis) const {
-    // Detect defects through eigenvalue gaps and curvature anomalies
-    if (analysis.eigenvalues.size() < 2) return false;
-    
-    // Check for large eigenvalue gaps
-    for (size_t i = 1; i < analysis.eigenvalues.size(); ++i) {
-        double gap = std::abs(analysis.eigenvalues[i] - analysis.eigenvalues[i-1]);
-        if (gap > 0.5) return true;  // Significant gap indicates defect
-    }
-    
-    // Check for negative curvature
-    return analysis.manifold_curvature < -0.1;
-}
-
-// Stub for APICoherenceModulator
-APICoherenceModulator::APICoherenceModulator(double base_coherence)
-    : base_coherence_(base_coherence) {
-    // Initialize context coherence mappings
-    context_coherence_map_["query"] = 0.8;
-    context_coherence_map_["command"] = 0.6;
-    context_coherence_map_["conversation"] = 0.7;
-    context_coherence_map_["analysis"] = 0.9;
-}
-
-APICoherenceModulator::CoherenceResponse
-APICoherenceModulator::synthesizeResponse(const std::string& client_context,
-                                       const std::unordered_map<std::string, double>& system_state) {
-    CoherenceResponse response;
-    
-    // Extract coherence factors from context and state
-    std::vector<double> factors = extractCoherenceFactors(client_context, system_state);
-    
-    // Calculate superposition weights
-    response.superposition_weights.resize(4); // Default size
-    double total_weight = 0.0;
-    
-    for (int i = 0; i < 4; ++i) {
-        double phase = 2.0 * M_PI * i / 4;
-        response.superposition_weights[i] = std::abs(std::cos(phase) + std::sin(phase)) / std::sqrt(2.0);
-        total_weight += response.superposition_weights[i];
-    }
-    
-    // Normalize weights
-    for (auto& w : response.superposition_weights) {
-        w /= total_weight;
-    }
-    
-    // Calculate final coherence through superposition
-    response.final_coherence = calculateSuperpositionCoherence(factors, response.superposition_weights);
-    
-    // Determine modulation strategy
-    if (response.final_coherence > 0.8) {
-        response.modulation_strategy = "high_coherence_direct";
-    } else if (response.final_coherence > 0.5) {
-        response.modulation_strategy = "medium_coherence_balanced";
-    } else {
-        response.modulation_strategy = "low_coherence_exploratory";
-    }
-    
-    return response;
-}
-
-std::vector<double> APICoherenceModulator::extractCoherenceFactors(
-    const std::string& context,
-    const std::unordered_map<std::string, double>& state) {
-    
-    std::vector<double> factors;
-    factors.push_back(base_coherence_);
-    
-    // Add context coherence if available
-    auto it = context_coherence_map_.find(context);
-    if (it != context_coherence_map_.end()) {
-        factors.push_back(it->second);
-    }
-    
-    // Add state coherence values
-    for (const auto& [key, value] : state) {
-        factors.push_back(value);
-    }
-    
-    return factors;
-}
-
-double APICoherenceModulator::calculateSuperpositionCoherence(
-    const std::vector<double>& coherence_factors,
-    const std::vector<double>& weights) {
-    
-    double result = 0.0;
-    for (size_t i = 0; i < std::min(coherence_factors.size(), weights.size()); ++i) {
-        result += coherence_factors[i] * weights[i];
-    }
-    return result;
-}
-
-// QuantumManifoldOptimizationEngine implementation - simplified
-QuantumManifoldOptimizationEngine::QuantumManifoldOptimizationEngine(const ManifoldConfig& config)
-    : config_(config) {
-    initialize();
-}
-
-void QuantumManifoldOptimizationEngine::initialize() {
-    LOG_INFO("Initializing Quantum Manifold Optimization Engine");
-    
-    // Initialize main subsystems
-    memory_optimizer_ = std::make_unique<AdvancedMemoryTierOptimizer>(config_);
-    quantum_processor_ = std::make_unique<QuantumManifoldProcessor>(config_);
-    
-    // Simplified initialization for APICoherenceModulator
-    api_modulator_ = std::make_unique<APICoherenceModulator>(0.5);
-    
-    // Don't initialize other subsystems in this simplified version
-    validator_ = std::make_unique<ManifoldValidator>();
-    
-    // Setup integration with existing infrastructure - stubs
-    // integrateWithExistingMemoryTiers();
-    // setupQuantumProcessingPipeline();
-    
-    // Start processing thread
-    running_ = true;
-    processing_thread_ = std::thread(&QuantumManifoldOptimizationEngine::processingLoop, this);
-    
-    LOG_INFO("Quantum Manifold Optimization Engine initialized successfully");
-}
-
-void QuantumManifoldOptimizationEngine::processingLoop() {
-    while (running_) {
-        // Simplified processing loop
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-}
-
-ManifoldValidator::ValidationResult QuantumManifoldOptimizationEngine::validate() {
-    LOG_INFO("Starting comprehensive system validation");
-    
-    // Create a simple validation result
-    ManifoldValidator::ValidationResult result;
-    result.passed = true;
-    result.processing_rate = 5000;
-    result.error_rate = 0.0005;
-    result.total_time = std::chrono::milliseconds(50);
-    
-    return result;
-}
-
-
-// CUDA Kernel Implementation with proper conditional compilation
-CUDAQuantumKernel::CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config)
-    : config_(config) {
-    
-#if SEP_CUDA_AVAILABLE
-    cudaStreamCreate(&stream_);
-    
-    // Allocate workspace for operations
-    workspace_size_ = 1024 * 1024 * 100;  // 100MB workspace
-    cudaMalloc(&d_workspace_, workspace_size_);
-    
-    // Create FFT plan for QFH operations
-    cufftPlan1d(&fft_plan_, 1024, CUFFT_C2C, 1);
-#else
-    stream_ = nullptr;
-    d_workspace_ = nullptr;
-    workspace_size_ = 0;
-#endif
-}
-
-CUDAQuantumKernel::~CUDAQuantumKernel() {
-#if SEP_CUDA_AVAILABLE
-    if (d_workspace_) {
-        cudaFree(d_workspace_);
-    }
-    cufftDestroy(fft_plan_);
-    cudaStreamDestroy(stream_);
-#endif
-}
-
-#if SEP_CUDA_AVAILABLE
-// CUDA kernel for coherence calculation
-__global__ void coherenceKernel(const float* patterns_a, const float* patterns_b,
-                               float* coherence_out, int n_patterns, int dim) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (tid >= n_patterns) return;
-    
-    float dot = 0.0f;
-    float norm_a = 0.0f;
-    float norm_b = 0.0f;
-    
-    for (int i = 0; i < dim; ++i) {
-        float a = patterns_a[tid * dim + i];
-        float b = patterns_b[tid * dim + i];
-        dot += a * b;
-        norm_a += a * a;
-        norm_b += b * b;
-    }
-    
-    coherence_out[tid] = dot / (sqrtf(norm_a) * sqrtf(norm_b) + 1e-8f);
-}
-#endif
-
-void CUDAQuantumKernel::coherenceCalculationKernel(const float* patterns_a, const float* patterns_b,
-                                                  float* coherence_out, int n_patterns, int dim) {
-#if SEP_CUDA_AVAILABLE
-    int block_size = config_.coherence_block_size;
-    int grid_size = (n_patterns + block_size - 1) / block_size;
-    
-    coherenceKernel<<<grid_size, block_size, 0, stream_>>>(
-        patterns_a, patterns_b, coherence_out, n_patterns, dim);
-    
-    cudaStreamSynchronize(stream_);
-#else
-    // CPU fallback implementation
-    for (int i = 0; i < n_patterns; ++i) {
-        float dot = 0.0f;
-        float norm_a = 0.0f;
-        float norm_b = 0.0f;
-        
-        for (int j = 0; j < dim; ++j) {
-            float a = patterns_a[i * dim + j];
-            float b = patterns_b[i * dim + j];
-            dot += a * b;
-            norm_a += a * a;
-            norm_b += b * b;
-        }
-        
-        coherence_out[i] = dot / (sqrt(norm_a) * sqrt(norm_b) + 1e-8f);
-    }
-#endif
-}
-
-
-APICoherenceModulator::CoherenceResponse 
-APICoherenceModulator::synthesizeResponse(const std::string& client_context,
-                                        const std::unordered_map<std::string, double>& system_state) {
-    CoherenceResponse response;
-    
-    // Extract coherence factors from context and state
-    std::vector<double> factors = extractCoherenceFactors(client_context, system_state);
-    
-    // Calculate superposition weights using quantum principles
-    response.superposition_weights.resize(config_.superposition_states);
-    double total_weight = 0.0;
-    
-    for (int i = 0; i < config_.superposition_states; ++i) {
-        double phase = 2.0 * M_PI * i / config_.superposition_states;
-        response.superposition_weights[i] = std::abs(std::cos(phase) + std::sin(phase)) / std::sqrt(2.0);
-        total_weight += response.superposition_weights[i];
-    }
-    
-    // Normalize weights
-    for (auto& w : response.superposition_weights) {
-        w /= total_weight;
-    }
-    
-    // Calculate final coherence through superposition
-    response.final_coherence = calculateSuperpositionCoherence(factors, response.superposition_weights);
-    
-    // Determine modulation strategy
-    if (response.final_coherence > 0.8) {
-        response.modulation_strategy = "high_coherence_direct";
-    } else if (response.final_coherence > 0.5) {
-        response.modulation_strategy = "medium_coherence_balanced";
-    } else {
-        response.modulation_strategy = "low_coherence_exploratory";
-    }
-    
-    return response;
-}
-
-// Removed duplicate implementation
-void QuantumManifoldOptimizationEngine::initialize() {
-    LOG_INFO("Initializing Quantum Manifold Optimization Engine");
-    
-    
-    // Initialize all subsystems
-    memory_optimizer_ = std::make_unique<AdvancedMemoryTierOptimizer>(config_);
-    quantum_processor_ = std::make_unique<QuantumManifoldProcessor>(config_);
-    api_modulator_ = std::make_unique<APICoherenceModulator>(config_.api);
-    semantic_processor_ = std::make_unique<SemanticProcessor>(config_.semantic);
-    performance_analyzer_ = std::make_unique<PerformanceAnalyzer>(config_.analytics);
-    validator_ = std::make_unique<ManifoldValidator>();
-    
-    // Setup integration with existing infrastructure
-    integrateWithExistingMemoryTiers();
-    setupQuantumProcessingPipeline();
-    
-    // Start processing thread
-    running_ = true;
-    processing_thread_ = std::thread(&QuantumManifoldOptimizationEngine::processingLoop, this);
-    
-    LOG_INFO("Quantum Manifold Optimization Engine initialized successfully");
-}
-
-void QuantumManifoldOptimizationEngine::processingLoop() {
-    while (running_) {
-        // Main processing loop implementing three-phase approach:
-        // Phase 1: Pattern collection and analysis
-        // Phase 2: Quantum processing and optimization
-        // Phase 3: Validation and metric collection
-        
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-}
-
-ManifoldValidator::ValidationResult QuantumManifoldOptimizationEngine::validate() {
-    LOG_INFO("Starting comprehensive system validation");
-    
-    return validator_->validateSystemIntegration(
-        *memory_optimizer_,
-        *quantum_processor_,
-        *api_modulator_,
-        *semantic_processor_,
-        *performance_analyzer_,
-        config_.analytics.prediction_window_size,
-        ERROR_TOLERANCE
-    );
-}
-
-} // namespace sep::quantum::manifold
+} // namespace sep::quantum

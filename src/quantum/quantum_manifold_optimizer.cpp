@@ -405,11 +405,11 @@ private:
         glm::vec3 gradient(0.0f);
         float h = 0.01f;  // Finite difference step
         
-        gradient.x = (computeLocalCurvature(point.position + glm::vec3(h, 0, 0)) - 
+        gradient.x = (computeLocalCurvature(point.position + glm::vec3(h, 0, 0)) -
                      computeLocalCurvature(point.position - glm::vec3(h, 0, 0))) / (2.0f * h);
         gradient.y = (computeLocalCurvature(point.position + glm::vec3(0, h, 0)) - // Fix: compute gradient correctly
                      computeLocalCurvature(point.position - glm::vec3(0, h, 0))) / (2.0f * h);
-        gradient.z = (computeLocalCurvature(point.position + glm::vec3(0, 0, h)) - 
+        gradient.z = (computeLocalCurvature(point.position + glm::vec3(0, 0, h)) -
                      computeLocalCurvature(point.position - glm::vec3(0, 0, h))) / (2.0f * h);
         
         // Flow opposite to gradient weighted by Ricci curvature

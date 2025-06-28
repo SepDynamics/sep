@@ -161,6 +161,7 @@ public:
         , global_tick_(0) {
 
         
+        
         initializeCoherenceTracking();
         
         if (config_.enable_cuda) {

@@ -71,7 +71,7 @@ macro(find_required_library var_name lib_names paths)
     find_library(${var_name} 
         NAMES ${lib_names}
         PATHS ${paths}
-        PATH_SUFFIXES lib lib64
+        PATH_SUFFIXES "lib" "lib64" "lib/x86_64-linux-gnu" "lib/x86_64-linux-gnu/x86_64-linux-gnu"
         NO_DEFAULT_PATH
     )
     if(${var_name})

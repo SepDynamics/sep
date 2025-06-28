@@ -75,7 +75,7 @@ class Manager {
   Manager() = default;
 
  private:
-  spdlog::level::level_enum toSpdLogLevel(Level level);
+  ::spdlog::level::level_enum toSpdLogLevel(Level level);
 };
 
 // Global functions

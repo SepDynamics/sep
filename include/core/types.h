@@ -3,7 +3,7 @@
 
 // Include order optimized for CUDA compatibility
 #ifdef __CUDACC__
-#include <cuda_runtime.h>
+#include "compat/cuda_common.h"
 #include "compat/cuda_helpers.h"
 #endif
 

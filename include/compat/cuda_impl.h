@@ -7,10 +7,10 @@
 #include <stdlib.h>  // For malloc/free
 #include <string.h>  // For strcpy, memcpy, memset
 #include "compat/cuda_defs.h"
-
-#if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
 #include "compat/cuda_helpers.h"
+
+#if SEP_CUDA_AVAILABLE
 #define SEP_HD __host__ __device__
 #else
 #define SEP_HD
@@ -25,18 +25,6 @@ inline cudaError_t cudaSetDevice(int device) {
     return cudaSuccess;
 }
 
-// Report a single available device to satisfy callers that expect at least one
-// GPU in the system.
-inline cudaError_t cudaGetDeviceCount(int* count) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaGetDeviceCount(count);
-#else
-    if (count) {
-        *count = 1;
-    }
-    return cudaSuccess;
-#endif
-}
 
 // Additional CUDA function stubs for missing functions
 inline cudaError_t cudaEventCreate(cudaEvent_t* event) {
@@ -123,14 +111,6 @@ inline cudaError_t cudaStreamDestroy(cudaStream_t stream) {
 #endif
 }
 
-inline cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaStreamSynchronize(stream);
-#else
-    (void)stream;
-    return cudaSuccess;
-#endif
-}
 
 // cudaStreamSynchronize_ptsz is already defined as a macro in cuda_runtime.h
 
@@ -161,27 +141,9 @@ inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
 }
 extern "C" {
 
-// Event management functions
-cudaError_t cudaEventCreate(cudaEvent_t* event);
-cudaError_t cudaEventDestroy(cudaEvent_t event);
-cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream);
-cudaError_t cudaEventSynchronize(cudaEvent_t event);
-cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end);
-
-// Stream management functions
-cudaError_t cudaStreamCreate(cudaStream_t* stream);
-cudaError_t cudaStreamDestroy(cudaStream_t stream);
-cudaError_t cudaStreamSynchronize(cudaStream_t stream);
-
 // Memory management functions
 cudaError_t cudaMemset(void* devPtr, int value, size_t count);
 cudaError_t cudaMallocManaged(void** ptr, size_t size);
-
-// Device management functions
-cudaError_t cudaGetLastError();
-cudaError_t cudaGetDeviceCount(int* count);
-cudaError_t cudaSetDevice(int device);
-cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device);
 
 // Memory copy functions
 cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind);
@@ -189,51 +151,8 @@ cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpy
 
 } // extern "C"
 
-#endif // !SEP_CUDA_AVAILABLE
-// Populate device properties with conservative values so callers relying on
-// hardware characteristics can continue running without real GPU hardware.
-inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaGetDeviceProperties(prop, device);
-#else
-    if (!prop) {
-        return sep::cuda::cudaErrorInvalidValue;
-    }
-    // Only 1 stub device
-    if (device < 0 || device >= 1) {
-        return cudaErrorInvalidDevice;
-    }
-    
-    if (prop) {
-        strcpy(prop->name, "Stub GPU Device");
-        prop->totalGlobalMem = 1024 * 1024 * 1024;  // 1GB
-        prop->major = 3;
-        prop->minor = 0;
-        prop->multiProcessorCount = 8;
-        prop->maxThreadsPerBlock = 1024;
-        prop->warpSize = 32;
-        prop->sharedMemPerBlock = 49152;
-        prop->maxThreadsDim[0] = 1024;
-        prop->maxThreadsDim[1] = 1024;
-        prop->maxThreadsDim[2] = 64;
-        prop->maxGridSize[0] = 65535;
-        prop->maxGridSize[1] = 65535;
-        prop->maxGridSize[2] = 65535;
-        prop->totalConstMem = 65536;
-        prop->clockRate = 1000000;
-        prop->deviceOverlap = 1;
-        prop->kernelExecTimeoutEnabled = 0;
-        prop->integrated = 0;
-        prop->canMapHostMemory = 1;
-        prop->concurrentKernels = 1;
-        prop->unifiedAddressing = 1;
-        prop->maxThreadsPerMultiProcessor = 2048;
-        
-        // Note: We're not setting fields that don't exist in our simplified cudaDeviceProp
-    }
-    return cudaSuccess;
-#endif
-}
+#endif 
+
 // Synchronize a stream with a recorded event. The stub ignores both arguments
 // and immediately returns success.
 inline cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event) {

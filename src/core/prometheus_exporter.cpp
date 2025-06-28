@@ -1,6 +1,7 @@
 #include "core/prometheus_exporter.h"
 
 // Standard library includes
+#include <sstream>
 
 namespace sep::metrics {
 

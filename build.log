@@ -16,181 +16,190 @@ Running CMake configuration...
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
 -- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
+-- Checking for module 'libpipewire-0.3'
+--   Found libpipewire-0.3, version 1.4.5
+-- Using system PipeWire
 -- Redis support: ENABLED
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_UTIL_LIBRARY (cycles_util libcycles_util.a
   libcycles_util.so libcycles_util.so.* cycles_util.dll cycles_util.lib) -
-  Build may fail
+  Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:95 (find_required_library)
+  CMakeLists.txt:135 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_GRAPH_LIBRARY (cycles_graph libcycles_graph.a
   libcycles_graph.so libcycles_graph.so.* cycles_graph.dll cycles_graph.lib)
-  - Build may fail
+  - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:96 (find_required_library)
+  CMakeLists.txt:136 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_KERNEL_LIBRARY (cycles_kernel libcycles_kernel.a
   libcycles_kernel.so libcycles_kernel.so.* cycles_kernel.dll
-  cycles_kernel.lib) - Build may fail
+  cycles_kernel.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:97 (find_required_library)
+  CMakeLists.txt:137 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_BVH_LIBRARY (cycles_bvh libcycles_bvh.a libcycles_bvh.so
-  libcycles_bvh.so.* cycles_bvh.dll cycles_bvh.lib) - Build may fail
+  libcycles_bvh.so.* cycles_bvh.dll cycles_bvh.lib) - Using library from
+  /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:98 (find_required_library)
+  CMakeLists.txt:138 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_SUBD_LIBRARY (cycles_subd libcycles_subd.a
   libcycles_subd.so libcycles_subd.so.* cycles_subd.dll cycles_subd.lib) -
-  Build may fail
+  Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:99 (find_required_library)
+  CMakeLists.txt:139 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_DEVICE_LIBRARY (cycles_device libcycles_device.a
   libcycles_device.so libcycles_device.so.* cycles_device.dll
-  cycles_device.lib) - Build may fail
+  cycles_device.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:100 (find_required_library)
+  CMakeLists.txt:140 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_SCENE_LIBRARY (cycles_scene libcycles_scene.a
   libcycles_scene.so libcycles_scene.so.* cycles_scene.dll cycles_scene.lib)
-  - Build may fail
+  - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:101 (find_required_library)
+  CMakeLists.txt:141 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_SESSION_LIBRARY (cycles_session libcycles_session.a
   libcycles_session.so libcycles_session.so.* cycles_session.dll
-  cycles_session.lib) - Build may fail
+  cycles_session.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:102 (find_required_library)
+  CMakeLists.txt:142 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_INTEGRATOR_LIBRARY (cycles_integrator
   libcycles_integrator.a libcycles_integrator.so libcycles_integrator.so.*
-  cycles_integrator.dll cycles_integrator.lib) - Build may fail
+  cycles_integrator.dll cycles_integrator.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:103 (find_required_library)
+  CMakeLists.txt:143 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] CYCLES_OSL_LIBRARY (cycles_osl libcycles_osl.a libcycles_osl.so
-  libcycles_osl.so.* cycles_osl.dll cycles_osl.lib) - Build may fail
+  libcycles_osl.so.* cycles_osl.dll cycles_osl.lib) - Using library from
+  /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:106 (find_required_library)
+  CMakeLists.txt:146 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_INTERN_GUARDEDALLOC (bf_intern_guardedalloc
   libbf_intern_guardedalloc.a libbf_intern_guardedalloc.so
   libbf_intern_guardedalloc.so.* bf_intern_guardedalloc.dll
-  bf_intern_guardedalloc.lib) - Build may fail
+  bf_intern_guardedalloc.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:116 (find_required_library)
+  CMakeLists.txt:156 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_INTERN_ATOMIC (bf_intern_atomic libbf_intern_atomic.a
   libbf_intern_atomic.so libbf_intern_atomic.so.* bf_intern_atomic.dll
-  bf_intern_atomic.lib) - Build may fail
+  bf_intern_atomic.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:117 (find_required_library)
+  CMakeLists.txt:157 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_INTERN_MEMUTIL (bf_intern_memutil libbf_intern_memutil.a
   libbf_intern_memutil.so libbf_intern_memutil.so.* bf_intern_memutil.dll
-  bf_intern_memutil.lib) - Build may fail
+  bf_intern_memutil.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:118 (find_required_library)
+  CMakeLists.txt:158 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_INTERN_SKY (bf_intern_sky libbf_intern_sky.a
   libbf_intern_sky.so libbf_intern_sky.so.* bf_intern_sky.dll
-  bf_intern_sky.lib) - Build may fail
+  bf_intern_sky.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:119 (find_required_library)
+  CMakeLists.txt:159 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_INTERN_OPENSUBDIV (bf_intern_opensubdiv
   libbf_intern_opensubdiv.a libbf_intern_opensubdiv.so
   libbf_intern_opensubdiv.so.* bf_intern_opensubdiv.dll
-  bf_intern_opensubdiv.lib) - Build may fail
+  bf_intern_opensubdiv.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:120 (find_required_library)
+  CMakeLists.txt:160 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_BLENLIB (bf_blenlib libbf_blenlib.a libbf_blenlib.so
-  libbf_blenlib.so.* bf_blenlib.dll bf_blenlib.lib) - Build may fail
+  libbf_blenlib.so.* bf_blenlib.dll bf_blenlib.lib) - Using library from
+  /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:121 (find_required_library)
+  CMakeLists.txt:161 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_BLENKERNEL (bf_blenkernel libbf_blenkernel.a
   libbf_blenkernel.so libbf_blenkernel.so.* bf_blenkernel.dll
-  bf_blenkernel.lib) - Build may fail
+  bf_blenkernel.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:122 (find_required_library)
+  CMakeLists.txt:162 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_GPU (bf_gpu libbf_gpu.a libbf_gpu.so libbf_gpu.so.* bf_gpu.dll
-  bf_gpu.lib) - Build may fail
+  bf_gpu.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:123 (find_required_library)
+  CMakeLists.txt:163 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] BF_DRAW (bf_draw libbf_draw.a libbf_draw.so libbf_draw.so.*
-  bf_draw.dll bf_draw.lib) - Build may fail
+  bf_draw.dll bf_draw.lib) - Using library from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:124 (find_required_library)
+  CMakeLists.txt:164 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] EXTERN_CUEW (extern_cuew libextern_cuew.a libextern_cuew.so
-  libextern_cuew.so.* extern_cuew.dll extern_cuew.lib) - Build may fail
+  libextern_cuew.so.* extern_cuew.dll extern_cuew.lib) - Using library from
+  /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:127 (find_required_library)
+  CMakeLists.txt:167 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] EXTERN_HIPEW (extern_hipew libextern_hipew.a libextern_hipew.so
-  libextern_hipew.so.* extern_hipew.dll extern_hipew.lib) - Build may fail
+  libextern_hipew.so.* extern_hipew.dll extern_hipew.lib) - Using library
+  from /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:128 (find_required_library)
+  CMakeLists.txt:168 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:81 (message):
+CMake Warning at CMakeLists.txt:116 (message):
   [MISSING] EXTERN_CLEW (extern_clew libextern_clew.a libextern_clew.so
-  libextern_clew.so.* extern_clew.dll extern_clew.lib) - Build may fail
+  libextern_clew.so.* extern_clew.dll extern_clew.lib) - Using library from
+  /sep/lib
 Call Stack (most recent call first):
-  CMakeLists.txt:129 (find_required_library)
+  CMakeLists.txt:169 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:153 (message):
+CMake Warning at CMakeLists.txt:193 (message):
   [MISSING] OpenPGL_LIBRARY
 Call Stack (most recent call first):
-  CMakeLists.txt:160 (find_and_add_library)
+  CMakeLists.txt:200 (find_and_add_library)
 
 
 -- TBB2 library not found, using stub
@@ -212,60 +221,59 @@ Call Stack (most recent call first):
 -- Cycles support: 1
 -- Blender support: 1
 -- Redis support: 1
--- Cycles root: /sep/extern/cycles
+-- Cycles root: 
 -- OSL libraries: /usr/lib64/liboslcomp.so /usr/lib64/liboslexec.so /usr/lib64/liboslquery.so
--- Critical Cycles OSL: 
+-- Critical Cycles OSL: /sep/lib/libcycles_osl libcycles_osl.a libcycles_osl.so libcycles_osl.so.* cycles_osl.dll cycles_osl.lib.a
 -- Build type: 
 -- =====================================
--- Configuring done (0.9s)
+-- Configuring done (1.2s)
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/build
 Building SEP Engine...
-[  1%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[  2%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 13%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 13%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 21%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 21%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 23%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[  2%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[  5%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  5%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[  8%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[  8%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
 [ 13%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 23%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 17%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 24%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 26%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-In file included from /sep/src/compat/component_bridge.cpp:2:
-/sep/include/audio/pipewire_capture.h:14:10: fatal error: pipewire/stream.h: No such file or directory
-   14 | #include <pipewire/stream.h> // ensure pw_stream_state is defined
-      |          ^~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 27%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 28%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 30%] Linking CXX static library /sep/lib/libcycles_osl.a
+[ 14%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 18%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 20%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 23%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 23%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 26%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 27%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 28%] Linking CXX static library /sep/lib/libcycles_osl.a
+[ 30%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
 [ 30%] Built target cycles_osl
-[ 31%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 33%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 34%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 36%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 37%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-/sep/src/api/bridge_c.cpp: In function ‘int sep_process_context(const char*, const char*, char*, size_t)’:
-/sep/src/api/bridge_c.cpp:79:40: error: ‘class sep::quantum::Processor’ has no member named ‘processAllPatterns’; did you mean ‘processPattern’?
-   79 |       auto process_result = processor->processAllPatterns();
-      |                                        ^~~~~~~~~~~~~~~~~~
-      |                                        processPattern
-[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 33%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 /sep/src/compat/stream.cpp: In static member function ‘static std::shared_ptr<sep::cuda::Stream> sep::cuda::Stream::create(sep::StreamFlags)’:
 /sep/src/compat/stream.cpp:79:18: error: ‘logCudaError’ is not a member of ‘sep::cuda’
    79 |     ::sep::cuda::logCudaError("cudaStreamCreateWithFlags", err);
       |                  ^~~~~~~~~~~~
-[ 40%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 37%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+In file included from /sep/extern/pipewire/src/pipewire/impl.h:23,
+                 from /sep/extern/pipewire/src/pipewire/global.h:39,
+                 from /sep/include/audio/pipewire_includes.h:25,
+                 from /sep/include/audio/pipewire_capture.h:13,
+                 from /sep/src/compat/component_bridge.cpp:2:
+/sep/extern/pipewire/src/pipewire/pipewire.h:38:10: fatal error: pipewire/version.h: No such file or directory
+   38 | #include <pipewire/version.h>
+      |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
 /sep/src/quantum/quantum_processor.cpp: In constructor ‘sep::quantum::QuantumProcessor::QuantumProcessor(const Config&)’:
 /sep/src/quantum/quantum_processor.cpp:61:23: error: ‘createQFHBasedQBSAProcessor’ was not declared in this scope
    61 |     qbsa_processor_ = createQFHBasedQBSAProcessor({});
@@ -307,6 +315,10 @@ In file included from /sep/src/quantum/quantum_processor.cpp:1:
       |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
       |                                              |
       |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
+/sep/src/api/bridge_c.cpp: In function ‘int sep_process_context(const char*, const char*, char*, size_t)’:
+/sep/src/api/bridge_c.cpp:88:48: error: ‘struct sep::quantum::BatchProcessingResult’ has no member named ‘error_code’
+   88 |         return static_cast<int>(process_result.error_code); // Use specific error code
+      |                                                ^~~~~~~~~~
 /sep/src/memory/memory_tier_manager.cpp:392:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
   392 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
       |                 ^~~~~~~~~~~~~~~~~~
@@ -336,10 +348,7 @@ In file included from /sep/src/quantum/quantum_processor.cpp:1:
       |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
       |                                               |
       |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
-[ 42%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 42%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
 In file included from /usr/include/c++/14/memory:78,
                  from /sep/include/blender/compression.h:4,
                  from /sep/include/memory/memory_tier.hpp:10,
@@ -358,328 +367,9 @@ In file included from /usr/include/c++/14/memory:78,
 /sep/src/memory/memory_tier_manager.cpp:29:1: note: candidate: ‘sep::memory::MemoryTierManager::MemoryTierManager()’
    29 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
       | ^~~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:26:7: error: ‘MetricsCollector’ has not been declared
-   26 | class MetricsCollector::Impl {
-      |       ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:26:30: error: expected unqualified-id before ‘{’ token
-   26 | class MetricsCollector::Impl {
-      |                              ^
-/sep/src/core/metrics_collector.cpp:233:1: error: ‘MetricsCollector’ does not name a type
-  233 | MetricsCollector& MetricsCollector::instance() {
-      | ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:242:6: error: ‘MetricsCollector’ has not been declared
-  242 | void MetricsCollector::recordOperation(const std::string& operation_name, bool success, double duration_ms) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void recordOperation(const std::string&, bool, double)’:
-/sep/src/core/metrics_collector.cpp:243:38: error: ‘metrics_mutex_’ was not declared in this scope
-  243 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:245:18: error: ‘performance_metrics_’ was not declared in this scope
-  245 |     auto& perf = performance_metrics_[key];
-      |                  ^~~~~~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:260:6: error: ‘MetricsCollector’ has not been declared
-  260 | void MetricsCollector::incrementCounter(const std::string& counter_name, std::uint64_t value) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void incrementCounter(const std::string&, uint64_t)’:
-/sep/src/core/metrics_collector.cpp:261:38: error: ‘metrics_mutex_’ was not declared in this scope
-  261 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:263:5: error: ‘counters_’ was not declared in this scope
-  263 |     counters_[key] += value;
-      |     ^~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:267:6: error: ‘MetricsCollector’ has not been declared
-  267 | void MetricsCollector::setGauge(const std::string& gauge_name, double value) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void setGauge(const std::string&, double)’:
-/sep/src/core/metrics_collector.cpp:268:38: error: ‘metrics_mutex_’ was not declared in this scope
-  268 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:270:5: error: ‘gauges_’ was not declared in this scope
-  270 |     gauges_[key] = value;
-      |     ^~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:273:6: error: ‘MetricsCollector’ has not been declared
-  273 | void MetricsCollector::recordAllocation(std::uint64_t bytes) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void recordAllocation(uint64_t)’:
-/sep/src/core/metrics_collector.cpp:274:38: error: ‘metrics_mutex_’ was not declared in this scope
-  274 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:275:5: error: ‘memory_metrics_’ was not declared in this scope
-  275 |     memory_metrics_.allocated_bytes += bytes;
-      |     ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:281:6: error: ‘MetricsCollector’ has not been declared
-  281 | void MetricsCollector::recordDeallocation(std::uint64_t bytes) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void recordDeallocation(uint64_t)’:
-/sep/src/core/metrics_collector.cpp:282:38: error: ‘metrics_mutex_’ was not declared in this scope
-  282 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:283:5: error: ‘memory_metrics_’ was not declared in this scope
-  283 |     memory_metrics_.allocated_bytes -= bytes;
-      |     ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:287:6: error: ‘MetricsCollector’ has not been declared
-  287 | void MetricsCollector::updateSystemMetrics() {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void updateSystemMetrics()’:
-/sep/src/core/metrics_collector.cpp:288:9: error: ‘pImpl’ was not declared in this scope
-  288 |     if (pImpl) {
-      |         ^~~~~
-/sep/src/core/metrics_collector.cpp:292:42: error: ‘metrics_mutex_’ was not declared in this scope
-  292 |         std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                          ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:294:9: error: ‘system_metrics_’ was not declared in this scope
-  294 |         system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage);
-      |         ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:301:1: error: ‘MetricsCollector’ does not name a type
-  301 | MetricsCollector::PerformanceMetrics MetricsCollector::getPerformanceMetrics(const std::string& operation_name) const {
-      | ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:311:1: error: ‘MetricsCollector’ does not name a type
-  311 | MetricsCollector::MemoryMetrics MetricsCollector::getMemoryMetrics() const {
-      | ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:316:1: error: ‘MetricsCollector’ does not name a type
-  316 | MetricsCollector::SystemMetrics MetricsCollector::getSystemMetrics() const {
-      | ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:321:15: error: ‘MetricsCollector’ has not been declared
-  321 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
-      |               ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:321:77: error: non-member function ‘uint64_t getCounter(const std::string&)’ cannot have cv-qualifier
-  321 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
-      |                                                                             ^~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘uint64_t getCounter(const std::string&)’:
-/sep/src/core/metrics_collector.cpp:322:38: error: ‘metrics_mutex_’ was not declared in this scope
-  322 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:324:15: error: ‘counters_’ was not declared in this scope
-  324 |     auto it = counters_.find(key);
-      |               ^~~~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:328:8: error: ‘MetricsCollector’ has not been declared
-  328 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
-      |        ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:328:66: error: non-member function ‘double getGauge(const std::string&)’ cannot have cv-qualifier
-  328 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
-      |                                                                  ^~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘double getGauge(const std::string&)’:
-/sep/src/core/metrics_collector.cpp:329:38: error: ‘metrics_mutex_’ was not declared in this scope
-  329 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:331:15: error: ‘gauges_’ was not declared in this scope
-  331 |     auto it = gauges_.find(key);
-      |               ^~~~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:335:1: error: ‘DetailedMetrics’ does not name a type
-  335 | DetailedMetrics MetricsCollector::getDetailedMetrics() const {
-      | ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:342:6: error: ‘MetricsCollector’ has not been declared
-  342 | void MetricsCollector::reset() {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void reset()’:
-/sep/src/core/metrics_collector.cpp:343:38: error: ‘metrics_mutex_’ was not declared in this scope
-  343 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:344:5: error: ‘performance_metrics_’ was not declared in this scope
-  344 |     performance_metrics_.clear();
-      |     ^~~~~~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:345:5: error: ‘counters_’ was not declared in this scope
-  345 |     counters_.clear();
-      |     ^~~~~~~~~
-/sep/src/core/metrics_collector.cpp:346:5: error: ‘gauges_’ was not declared in this scope
-  346 |     gauges_.clear();
-      |     ^~~~~~~
-/sep/src/core/metrics_collector.cpp:347:5: error: ‘memory_metrics_’ was not declared in this scope
-  347 |     memory_metrics_ = MemoryMetrics{};
-      |     ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:347:23: error: ‘MemoryMetrics’ was not declared in this scope
-  347 |     memory_metrics_ = MemoryMetrics{};
-      |                       ^~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:348:5: error: ‘system_metrics_’ was not declared in this scope
-  348 |     system_metrics_ = SystemMetrics{};
-      |     ^~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:348:23: error: ‘SystemMetrics’ was not declared in this scope; did you mean ‘updateSystemMetrics’?
-  348 |     system_metrics_ = SystemMetrics{};
-      |                       ^~~~~~~~~~~~~
-      |                       updateSystemMetrics
-/sep/src/core/metrics_collector.cpp:349:9: error: ‘pImpl’ was not declared in this scope
-  349 |     if (pImpl) {
-      |         ^~~~~
-/sep/src/core/metrics_collector.cpp: At global scope:
-/sep/src/core/metrics_collector.cpp:354:6: error: ‘MetricsCollector’ has not been declared
-  354 | void MetricsCollector::resetOperation(const std::string& operation_name) {
-      |      ^~~~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp: In function ‘void resetOperation(const std::string&)’:
-/sep/src/core/metrics_collector.cpp:355:38: error: ‘metrics_mutex_’ was not declared in this scope
-  355 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
-      |                                      ^~~~~~~~~~~~~~
-/sep/src/core/metrics_collector.cpp:357:5: error: ‘performance_metrics_’ was not declared in this scope
-  357 |     performance_metrics_.erase(key);
-      |     ^~~~~~~~~~~~~~~~~~~~
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 46%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
 make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
-[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-/sep/src/core/manager.cpp:10:22: error: declaration of ‘class sep::config::ConfigManager::Impl’ in namespace ‘sep::config::{anonymous}’ which does not enclose ‘class sep::config::ConfigManager’
-   10 | class ConfigManager::Impl {
-      |                      ^~~~
-/sep/src/core/manager.cpp: In member function ‘const sep::config::SystemConfig& sep::config::ConfigManager::getConfig() const’:
-/sep/src/core/manager.cpp:140:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  140 |   return impl_->config;
-      |               ^~
-In file included from /sep/src/core/manager.cpp:1:
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::setConfig(const sep::config::SystemConfig&)’:
-/sep/src/core/manager.cpp:145:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  145 |   impl_->config = config;
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromFile(const sep::shim::string&)’:
-/sep/src/core/manager.cpp:150:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  150 |   return impl_->loadFromFile(filename);
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromEnvironment()’:
-/sep/src/core/manager.cpp:155:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  155 |   return impl_->loadFromEnvironment();
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromCommandLine(int, char**)’:
-/sep/src/core/manager.cpp:160:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  160 |   return impl_->loadFromCommandLine(argc, argv);
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘const sep::config::APIConfig& sep::config::ConfigManager::getAPIConfig() const’:
-/sep/src/core/manager.cpp:165:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  165 |   return impl_->config.api;
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘const sep::config::CUDAConfig& sep::config::ConfigManager::getCUDAConfig() const’:
-/sep/src/core/manager.cpp:170:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  170 |   return impl_->config.cuda;
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘const sep::config::LogConfig& sep::config::ConfigManager::getLogConfig() const’:
-/sep/src/core/manager.cpp:175:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  175 |   return impl_->config.logging;
-      |               ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateAPIConfig(const sep::config::APIConfig&)’:
-/sep/src/core/manager.cpp:180:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  180 |   impl_->config.api = config;
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateCUDAConfig(const sep::config::CUDAConfig&)’:
-/sep/src/core/manager.cpp:185:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  185 |   impl_->config.cuda = config;
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateLogConfig(const sep::config::LogConfig&)’:
-/sep/src/core/manager.cpp:190:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  190 |   impl_->config.logging = config;
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::resetToDefaults()’:
-/sep/src/core/manager.cpp:195:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  195 |   impl_->loadDefaults();
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::initialize(int, char**)’:
-/sep/src/core/manager.cpp:200:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  200 |   impl_->loadDefaults();
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp:201:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  201 |   impl_->loadFromEnvironment();
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/sep/src/core/manager.cpp:202:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
-  202 |   impl_->loadFromCommandLine(argc, argv);
-      |        ^~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/compat/cuda.h:14,
-                 from /sep/include/core/types.h:10,
-                 from /sep/include/core/manager.h:4:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::config::ConfigManager::Impl; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::config::ConfigManager::Impl>]’:
-/sep/src/core/manager.cpp:135:62:   required from here
-  135 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
-      |                                        ~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
- 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
-   60 |   class Impl;
-      |         ^~~~
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::config::ConfigManager::Impl]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::config::ConfigManager::Impl; _Dp = std::default_delete<sep::config::ConfigManager::Impl>]’
-  399 |           get_deleter()(std::move(__ptr));
-      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/core/manager.cpp:135:62:   required from here
-  135 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
-      |                                        ~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::config::ConfigManager::Impl’
-   91 |         static_assert(sizeof(_Tp)>0,
-      |                       ^~~~~~~~~~~
-make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-/sep/src/memory/redis_manager.cpp:384:17: error: ‘IRedisManager’ was not declared in this scope; did you mean ‘RedisManager’?
-  384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
-      |                 ^~~~~~~~~~~~~
-      |                 RedisManager
-/sep/src/memory/redis_manager.cpp:384:30: error: template argument 1 is invalid
-  384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
-      |                              ^
-/sep/src/memory/redis_manager.cpp: In function ‘int sep::persistence::createRedisManager(const std::string&, int)’:
-/sep/src/memory/redis_manager.cpp:384:125: error: cannot convert ‘std::shared_ptr<sep::persistence::RedisManager>’ to ‘int’ in return
-  384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
-      |                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-      |                                                                                                                             |
-      |                                                                                                                             std::shared_ptr<sep::persistence::RedisManager>
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-/sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
-/sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
-  170 | }
-      | ^
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
+[ 44%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 /sep/src/quantum/quantum_processor_qfh.cpp:23:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
    23 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
       |                 ^~~~~~~~~~~~~~~~~~~~
@@ -709,6 +399,1052 @@ make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFil
       |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
       |                                                 |
       |                                                 std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>
+[ 46%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 50%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 52%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+/sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
+/sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
+  170 | }
+      | ^
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
+[ 53%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from /usr/include/c++/14/fstream:44,
+                 from /sep/src/core/manager.cpp:7:
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:85:32: error: ‘ios_base’ has not been declared
+   85 |       open(const char* __name, ios_base::openmode __mode, int __prot = 0664);
+      |                                ^~~~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:85:51: error: expected ‘,’ or ‘...’ before ‘__mode’
+   85 |       open(const char* __name, ios_base::openmode __mode, int __prot = 0664);
+      |                                                   ^~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:93:34: error: ‘ios_base’ has not been declared
+   93 |       sys_open(__c_file* __file, ios_base::openmode);
+      |                                  ^~~~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:96:26: error: ‘ios_base’ has not been declared
+   96 |       sys_open(int __fd, ios_base::openmode __mode) throw ();
+      |                          ^~~~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:96:45: error: expected ‘,’ or ‘...’ before ‘__mode’
+   96 |       sys_open(int __fd, ios_base::openmode __mode) throw ();
+      |                                             ^~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:112:7: error: ‘streamsize’ does not name a type
+  112 |       streamsize
+      |       ^~~~~~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:115:7: error: ‘streamsize’ does not name a type
+  115 |       streamsize
+      |       ^~~~~~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:119:7: error: ‘streamsize’ does not name a type
+  119 |       streamsize
+      |       ^~~~~~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:122:7: error: ‘streamoff’ does not name a type
+  122 |       streamoff
+      |       ^~~~~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:128:7: error: ‘streamsize’ does not name a type
+  128 |       streamsize
+      |       ^~~~~~~~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h: In member function ‘void sep::config::std::__basic_file<char>::swap(sep::config::std::__basic_file<char>&)’:
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:79:14: error: ‘swap’ is not a member of ‘sep::config::std’
+   79 |         std::swap(_M_cfile, __f._M_cfile);
+      |              ^~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:79:14: note: suggested alternatives:
+In file included from /usr/include/c++/14/bits/quoted_string.h:38,
+                 from /usr/include/c++/14/iomanip:50,
+                 from /usr/include/c++/14/bits/fs_path.h:38,
+                 from /usr/include/c++/14/filesystem:52,
+                 from /sep/extern/nlohmann/json.hpp:4643,
+                 from /sep/include/api/types.h:8,
+                 from /sep/include/core/types.h:11,
+                 from /sep/include/core/manager.h:4,
+                 from /sep/src/core/manager.cpp:1:
+/usr/include/c++/14/sstream:1226:5: note:   ‘std::__cxx11::swap’
+ 1226 |     swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
+      |     ^~~~
+In file included from /usr/include/c++/14/bits/stl_pair.h:61,
+                 from /usr/include/c++/14/bits/stl_algobase.h:64,
+                 from /usr/include/c++/14/vector:62,
+                 from /sep/include/compat/types.h:5,
+                 from /sep/include/compat/cuda.h:12,
+                 from /sep/include/core/types.h:10:
+/usr/include/c++/14/bits/move.h:226:5: note:   ‘std::swap’
+  226 |     swap(_Tp& __a, _Tp& __b)
+      |     ^~~~
+/usr/include/c++/14/bits/move.h:226:5: note:   ‘std::swap’
+In file included from /usr/include/c++/14/exception:166,
+                 from /usr/include/c++/14/ext/concurrence.h:34,
+                 from /usr/include/c++/14/bits/shared_ptr_base.h:62,
+                 from /usr/include/c++/14/bits/shared_ptr.h:53,
+                 from /usr/include/c++/14/memory:80,
+                 from /sep/include/compat/cuda.h:14:
+/usr/include/c++/14/bits/exception_ptr.h:229:5: note:   ‘std::__exception_ptr::swap’
+  229 |     swap(exception_ptr& __lhs, exception_ptr& __rhs)
+      |     ^~~~
+/usr/include/c++/14/bits/fs_path.h:736:15: note:   ‘std::filesystem::__cxx11::swap’
+  736 |   inline void swap(path& __lhs, path& __rhs) noexcept { __lhs.swap(__rhs); }
+      |               ^~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:80:14: error: ‘swap’ is not a member of ‘sep::config::std’
+   80 |         std::swap(_M_cfile_created, __f._M_cfile_created);
+      |              ^~~~
+/usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h:80:14: note: suggested alternatives:
+/usr/include/c++/14/sstream:1226:5: note:   ‘std::__cxx11::swap’
+ 1226 |     swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
+      |     ^~~~
+/usr/include/c++/14/bits/move.h:226:5: note:   ‘std::swap’
+  226 |     swap(_Tp& __a, _Tp& __b)
+      |     ^~~~
+/usr/include/c++/14/bits/move.h:226:5: note:   ‘std::swap’
+/usr/include/c++/14/bits/exception_ptr.h:229:5: note:   ‘std::__exception_ptr::swap’
+  229 |     swap(exception_ptr& __lhs, exception_ptr& __rhs)
+      |     ^~~~
+/usr/include/c++/14/bits/fs_path.h:736:15: note:   ‘std::filesystem::__cxx11::swap’
+  736 |   inline void swap(path& __lhs, path& __rhs) noexcept { __lhs.swap(__rhs); }
+      |               ^~~~
+/usr/include/c++/14/fstream: At global scope:
+/usr/include/c++/14/fstream:64:28: error: ‘declval’ is not a member of ‘sep::config::std’; did you mean ‘std::declval’?
+   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
+      |                            ^~~~~~~
+In file included from /usr/include/c++/14/bits/stl_pair.h:60:
+/usr/include/c++/14/type_traits:2485:10: note: ‘std::declval’ declared here
+ 2485 |     auto declval() noexcept -> decltype(__declval<_Tp>(0))
+      |          ^~~~~~~
+/usr/include/c++/14/fstream:64:28: error: ‘declval’ is not a member of ‘sep::config::std’; did you mean ‘std::declval’?
+   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
+      |                            ^~~~~~~
+/usr/include/c++/14/type_traits:2485:10: note: ‘std::declval’ declared here
+ 2485 |     auto declval() noexcept -> decltype(__declval<_Tp>(0))
+      |          ^~~~~~~
+/usr/include/c++/14/fstream:64:41: error: expected primary-expression before ‘&’ token
+   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
+      |                                         ^
+/usr/include/c++/14/fstream:64:42: error: expected primary-expression before ‘>’ token
+   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
+      |                                          ^
+/usr/include/c++/14/fstream:64:44: error: expected primary-expression before ‘)’ token
+   64 |            = decltype(std::declval<_Path&>().make_preferred().filename())>
+      |                                            ^
+/usr/include/c++/14/fstream:65:25: error: ‘enable_if_t’ does not name a type
+   65 |     using _If_fs_path = enable_if_t<is_same_v<_Path, _Path2>, _Result>;
+      |                         ^~~~~~~~~~~
+/usr/include/c++/14/fstream:90:49: error: expected template-name before ‘<’ token
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |                                                 ^
+/usr/include/c++/14/fstream:90:49: error: expected ‘{’ before ‘<’ token
+/usr/include/c++/14/fstream:532:48: error: expected template-name before ‘<’ token
+  532 |     class basic_ifstream : public basic_istream<_CharT, _Traits>
+      |                                                ^
+/usr/include/c++/14/fstream:532:48: error: expected ‘{’ before ‘<’ token
+/usr/include/c++/14/fstream:802:48: error: expected template-name before ‘<’ token
+  802 |     class basic_ofstream : public basic_ostream<_CharT,_Traits>
+      |                                                ^
+/usr/include/c++/14/fstream:802:48: error: expected ‘{’ before ‘<’ token
+/usr/include/c++/14/fstream:1074:48: error: expected template-name before ‘<’ token
+ 1074 |     class basic_fstream : public basic_iostream<_CharT, _Traits>
+      |                                                ^
+/usr/include/c++/14/fstream:1074:48: error: expected ‘{’ before ‘<’ token
+In file included from /usr/include/c++/14/fstream:1360:
+/usr/include/c++/14/bits/fstream.tcc:50:33: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   50 |     _M_allocate_internal_buffer()
+      |                                 ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:64:40: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   64 |     _M_destroy_internal_buffer() throw()
+      |                                        ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:81:19: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   81 |     basic_filebuf() : __streambuf_type(), _M_lock(), _M_file(&_M_lock),
+      |                   ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:95:19: error: missing template argument list after ‘sep::config::std::basic_filebuf’; template placeholder not permitted in parameter
+   95 |     basic_filebuf(basic_filebuf&& __rhs)
+      |                   ^~~~~~~~~~~~~
+      |                                <>
+/usr/include/c++/14/fstream:90:11: note: ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’ declared here
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:95:40: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   95 |     basic_filebuf(basic_filebuf&& __rhs)
+      |                                        ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:124:15: error: missing template argument list after ‘sep::config::std::basic_filebuf’; template placeholder not permitted in parameter
+  124 |     operator=(basic_filebuf&& __rhs)
+      |               ^~~~~~~~~~~~~
+      |                            <>
+/usr/include/c++/14/fstream:90:11: note: ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’ declared here
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:124:36: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+  124 |     operator=(basic_filebuf&& __rhs)
+      |                                    ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:153:10: error: missing template argument list after ‘sep::config::std::basic_filebuf’; template placeholder not permitted in parameter
+  153 |     swap(basic_filebuf& __rhs)
+      |          ^~~~~~~~~~~~~
+      |                       <>
+/usr/include/c++/14/fstream:90:11: note: ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’ declared here
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:153:30: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+  153 |     swap(basic_filebuf& __rhs)
+      |                              ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:179:27: error: ‘ios_base’ has not been declared
+  179 |     open(const char* __s, ios_base::openmode __mode)
+      |                           ^~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:179:46: error: expected ‘,’ or ‘...’ before ‘__mode’
+  179 |     open(const char* __s, ios_base::openmode __mode)
+      |                                              ^~~~~~
+/usr/include/c++/14/bits/fstream.tcc:179:52: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+  179 |     open(const char* __s, ios_base::openmode __mode)
+      |                                                    ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:249:11: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+  249 |     close()
+      |           ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:295:5: error: ‘streamsize’ does not name a type
+  295 |     streamsize
+      |     ^~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:323:15: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+  323 |     underflow()
+      |               ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:482:15: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::int_type sep::config::std::basic_filebuf<_CharT, _Traits>::pbackfail’
+  482 |     pbackfail(int_type __i)
+      |               ^~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:482:15: error: ‘int_type’ was not declared in this scope
+/usr/include/c++/14/bits/fstream.tcc:541:14: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::int_type sep::config::std::basic_filebuf<_CharT, _Traits>::overflow’
+  541 |     overflow(int_type __c)
+      |              ^~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:541:14: error: ‘int_type’ was not declared in this scope
+/usr/include/c++/14/bits/fstream.tcc:606:44: error: ‘streamsize’ has not been declared
+  606 |     _M_convert_to_external(_CharT* __ibuf, streamsize __ilen)
+      |                                            ^~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:606:61: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+  606 |     _M_convert_to_external(_CharT* __ibuf, streamsize __ilen)
+      |                                                             ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:667:5: error: ‘streamsize’ does not name a type
+  667 |     streamsize
+      |     ^~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:753:5: error: ‘streamsize’ does not name a type
+  753 |     streamsize
+      |     ^~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:800:12: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::__streambuf_type* sep::config::std::basic_filebuf<_CharT, _Traits>::setbuf’
+  800 |     setbuf(char_type* __s, streamsize __n)
+      |            ^~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:800:12: error: ‘char_type’ was not declared in this scope
+/sep/src/core/metrics_collector.cpp:27:7: error: ‘MetricsCollector’ has not been declared
+   27 | class MetricsCollector::Impl {
+      |       ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:27:30: error: expected unqualified-id before ‘{’ token
+   27 | class MetricsCollector::Impl {
+      |                              ^
+/sep/src/core/metrics_collector.cpp:234:1: error: ‘MetricsCollector’ does not name a type
+  234 | MetricsCollector& MetricsCollector::instance() {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:243:6: error: ‘MetricsCollector’ has not been declared
+  243 | void MetricsCollector::recordOperation(const std::string& operation_name, bool success, double duration_ms) {
+      |      ^~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:800:23: error: ‘__s’ was not declared in this scope; did you mean ‘__s8’?
+  800 |     setbuf(char_type* __s, streamsize __n)
+      |                       ^~~
+      |                       __s8
+/usr/include/c++/14/bits/fstream.tcc:800:28: error: ‘streamsize’ was not declared in this scope; did you mean ‘std::streamsize’?
+  800 |     setbuf(char_type* __s, streamsize __n)
+      |                            ^~~~~~~~~~
+      |                            std::streamsize
+In file included from /usr/include/c++/14/iosfwd:42,
+                 from /usr/include/c++/14/bits/shared_ptr.h:52:
+/usr/include/c++/14/bits/postypes.h:68:25: note: ‘std::streamsize’ declared here
+   68 |   typedef ptrdiff_t     streamsize; // Signed integral type
+      |                         ^~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:829:13: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::pos_type sep::config::std::basic_filebuf<_CharT, _Traits>::seekoff’
+  829 |     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
+      |             ^~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void recordOperation(const std::string&, bool, double)’:
+/sep/src/core/metrics_collector.cpp:244:38: error: ‘metrics_mutex_’ was not declared in this scope
+  244 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:829:13: error: ‘off_type’ was not declared in this scope; did you mean ‘off_t’?
+  829 |     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
+      |             ^~~~~~~~
+      |             off_t
+/usr/include/c++/14/bits/fstream.tcc:829:29: error: ‘ios_base’ has not been declared
+  829 |     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
+      |                             ^~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:829:54: error: ‘ios_base’ has not been declared
+  829 |     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
+      |                                                      ^~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:889:13: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::pos_type sep::config::std::basic_filebuf<_CharT, _Traits>::seekpos’
+  889 |     seekpos(pos_type __pos, ios_base::openmode)
+      |             ^~~~~~~~
+/sep/src/core/metrics_collector.cpp:246:18: error: ‘performance_metrics_’ was not declared in this scope
+  246 |     auto& perf = performance_metrics_[key];
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:261:6: error: ‘MetricsCollector’ has not been declared
+  261 | void MetricsCollector::incrementCounter(const std::string& counter_name, std::uint64_t value) {
+      |      ^~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:889:13: error: ‘pos_type’ was not declared in this scope
+/usr/include/c++/14/bits/fstream.tcc:889:29: error: ‘ios_base’ has not been declared
+  889 |     seekpos(pos_type __pos, ios_base::openmode)
+      |                             ^~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:904:13: error: template definition of non-template ‘typename sep::config::std::basic_filebuf<_CharT, _Traits>::pos_type sep::config::std::basic_filebuf<_CharT, _Traits>::_M_seek’
+  904 |     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+      |             ^~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void incrementCounter(const std::string&, uint64_t)’:
+/sep/src/core/metrics_collector.cpp:262:38: error: ‘metrics_mutex_’ was not declared in this scope
+  262 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:904:13: error: ‘off_type’ was not declared in this scope; did you mean ‘off_t’?
+  904 |     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+      |             ^~~~~~~~
+      |             off_t
+/sep/src/core/metrics_collector.cpp:264:5: error: ‘counters_’ was not declared in this scope
+  264 |     counters_[key] += value;
+      |     ^~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:904:29: error: ‘ios_base’ has not been declared
+  904 |     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+      |                             ^~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:268:6: error: ‘MetricsCollector’ has not been declared
+  268 | void MetricsCollector::setGauge(const std::string& gauge_name, double value) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void setGauge(const std::string&, double)’:
+/sep/src/core/metrics_collector.cpp:269:38: error: ‘metrics_mutex_’ was not declared in this scope
+  269 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:271:5: error: ‘gauges_’ was not declared in this scope
+  271 |     gauges_[key] = value;
+      |     ^~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:274:6: error: ‘MetricsCollector’ has not been declared
+  274 | void MetricsCollector::recordAllocation(std::uint64_t bytes) {
+      |      ^~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:904:54: error: ‘__state_type’ was not declared in this scope
+  904 |     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+      |                                                      ^~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:929:20: error: template definition of non-template ‘int sep::config::std::basic_filebuf<_CharT, _Traits>::_M_get_ext_pos’
+  929 |     _M_get_ext_pos(__state_type& __state)
+      |                    ^~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void recordAllocation(uint64_t)’:
+/sep/src/core/metrics_collector.cpp:275:38: error: ‘metrics_mutex_’ was not declared in this scope
+  275 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:929:20: error: ‘__state_type’ was not declared in this scope
+/sep/src/core/metrics_collector.cpp:276:5: error: ‘memory_metrics_’ was not declared in this scope
+  276 |     memory_metrics_.allocated_bytes += bytes;
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:282:6: error: ‘MetricsCollector’ has not been declared
+  282 | void MetricsCollector::recordDeallocation(std::uint64_t bytes) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void recordDeallocation(uint64_t)’:
+/sep/src/core/metrics_collector.cpp:283:38: error: ‘metrics_mutex_’ was not declared in this scope
+  283 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:929:34: error: ‘__state’ was not declared in this scope
+  929 |     _M_get_ext_pos(__state_type& __state)
+      |                                  ^~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:948:25: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+  948 |     _M_terminate_output()
+      |                         ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1009:10: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+ 1009 |     sync()
+      |          ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1026:17: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+ 1026 |     imbue(const locale& __loc)
+      |                 ^~~~~~
+      |                 locale_t
+/usr/include/c++/14/bits/fstream.tcc:1026:30: error: invalid use of incomplete type ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+ 1026 |     imbue(const locale& __loc)
+      |                              ^
+/usr/include/c++/14/fstream:90:11: note: declaration of ‘class sep::config::std::basic_filebuf<_CharT, _Traits>’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1081:43: error: wrong number of template arguments (1, should be 2)
+ 1081 |   extern template class basic_filebuf<char>;
+      |                                           ^
+/usr/include/c++/14/fstream:90:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1082:44: error: wrong number of template arguments (1, should be 2)
+ 1082 |   extern template class basic_ifstream<char>;
+      |                                            ^
+/usr/include/c++/14/fstream:532:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_ifstream’
+  532 |     class basic_ifstream : public basic_istream<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1083:44: error: wrong number of template arguments (1, should be 2)
+ 1083 |   extern template class basic_ofstream<char>;
+      |                                            ^
+/usr/include/c++/14/fstream:802:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_ofstream’
+  802 |     class basic_ofstream : public basic_ostream<_CharT,_Traits>
+      |           ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1084:43: error: wrong number of template arguments (1, should be 2)
+ 1084 |   extern template class basic_fstream<char>;
+      |                                           ^
+/usr/include/c++/14/fstream:1074:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_fstream’
+ 1074 |     class basic_fstream : public basic_iostream<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1087:46: error: wrong number of template arguments (1, should be 2)
+ 1087 |   extern template class basic_filebuf<wchar_t>;
+      |                                              ^
+/usr/include/c++/14/fstream:90:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_filebuf’
+   90 |     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1088:47: error: wrong number of template arguments (1, should be 2)
+ 1088 |   extern template class basic_ifstream<wchar_t>;
+      |                                               ^
+/usr/include/c++/14/fstream:532:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_ifstream’
+  532 |     class basic_ifstream : public basic_istream<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1089:47: error: wrong number of template arguments (1, should be 2)
+ 1089 |   extern template class basic_ofstream<wchar_t>;
+      |                                               ^
+/usr/include/c++/14/fstream:802:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_ofstream’
+  802 |     class basic_ofstream : public basic_ostream<_CharT,_Traits>
+      |           ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/fstream.tcc:1090:46: error: wrong number of template arguments (1, should be 2)
+ 1090 |   extern template class basic_fstream<wchar_t>;
+      |                                              ^
+/usr/include/c++/14/fstream:1074:11: note: provided for ‘template<class _CharT, class _Traits> class sep::config::std::basic_fstream’
+ 1074 |     class basic_fstream : public basic_iostream<_CharT, _Traits>
+      |           ^~~~~~~~~~~~~
+/sep/src/core/manager.cpp:12:22: error: declaration of ‘class sep::config::ConfigManager::Impl’ in namespace ‘sep::config::{anonymous}’ which does not enclose ‘class sep::config::ConfigManager’
+   12 | class ConfigManager::Impl {
+      |                      ^~~~
+/sep/src/core/manager.cpp: In constructor ‘sep::config::ConfigManager::ConfigManager()’:
+/sep/src/core/manager.cpp:137:45: error: ‘make_unique’ is not a member of ‘sep::config::std’; did you mean ‘std::make_unique’?
+  137 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                             ^~~~~~~~~~~
+In file included from /usr/include/c++/14/memory:78:
+/usr/include/c++/14/bits/unique_ptr.h:1101:5: note: ‘std::make_unique’ declared here
+ 1101 |     make_unique(_Args&&...) = delete;
+      |     ^~~~~~~~~~~
+/sep/src/core/manager.cpp:137:61: error: expected primary-expression before ‘>’ token
+  137 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                                             ^
+/sep/src/core/manager.cpp:137:63: error: expected primary-expression before ‘)’ token
+  137 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                                               ^
+/sep/src/core/manager.cpp: In member function ‘const sep::config::SystemConfig& sep::config::ConfigManager::getConfig() const’:
+/sep/src/core/manager.cpp:142:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  142 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:142:8: note: suggested alternatives:
+In file included from /usr/include/c++/14/mutex:47,
+                 from /sep/include/core/manager.h:6:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+In file included from /sep/include/core/manager.h:8:
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:284:5: error: ‘memory_metrics_’ was not declared in this scope
+  284 |     memory_metrics_.allocated_bytes -= bytes;
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:288:6: error: ‘MetricsCollector’ has not been declared
+  288 | void MetricsCollector::updateSystemMetrics() {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/manager.cpp:142:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  142 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:142:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:142:35: error: no matching function for call to ‘lock(std::mutex&)’
+  142 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:143:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  143 |   return impl_->config;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::setConfig(const sep::config::SystemConfig&)’:
+/sep/src/core/manager.cpp:147:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  147 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:147:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:147:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  147 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:147:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:147:35: error: no matching function for call to ‘lock(std::mutex&)’
+  147 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:148:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  148 |   impl_->config = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromFile(const sep::shim::string&)’:
+/sep/src/core/manager.cpp:152:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  152 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:152:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:152:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  152 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:152:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:152:35: error: no matching function for call to ‘lock(std::mutex&)’
+  152 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:153:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  153 |   return impl_->loadFromFile(filename);
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromEnvironment()’:
+/sep/src/core/manager.cpp:157:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  157 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:157:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:157:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  157 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:157:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:157:35: error: no matching function for call to ‘lock(std::mutex&)’
+  157 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:158:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  158 |   return impl_->loadFromEnvironment();
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromCommandLine(int, char**)’:
+/sep/src/core/manager.cpp:162:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  162 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:162:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:162:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  162 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:162:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:162:35: error: no matching function for call to ‘lock(std::mutex&)’
+  162 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void updateSystemMetrics()’:
+/sep/src/core/metrics_collector.cpp:289:9: error: ‘pImpl’ was not declared in this scope
+  289 |     if (pImpl) {
+      |         ^~~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:163:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  163 |   return impl_->loadFromCommandLine(argc, argv);
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::APIConfig& sep::config::ConfigManager::getAPIConfig() const’:
+/sep/src/core/manager.cpp:167:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  167 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:167:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:167:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  167 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:167:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:167:35: error: no matching function for call to ‘lock(std::mutex&)’
+  167 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:168:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  168 |   return impl_->config.api;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::CUDAConfig& sep::config::ConfigManager::getCUDAConfig() const’:
+/sep/src/core/manager.cpp:172:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  172 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:172:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:172:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  172 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:172:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:172:35: error: no matching function for call to ‘lock(std::mutex&)’
+  172 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:173:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  173 |   return impl_->config.cuda;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::LogConfig& sep::config::ConfigManager::getLogConfig() const’:
+/sep/src/core/manager.cpp:177:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  177 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:177:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:177:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  177 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:177:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:177:35: error: no matching function for call to ‘lock(std::mutex&)’
+  177 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:178:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  178 |   return impl_->config.logging;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/metrics_collector.cpp:293:42: error: ‘metrics_mutex_’ was not declared in this scope
+  293 |         std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                          ^~~~~~~~~~~~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateAPIConfig(const sep::config::APIConfig&)’:
+/sep/src/core/manager.cpp:182:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  182 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:182:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:182:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  182 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:182:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:182:35: error: no matching function for call to ‘lock(std::mutex&)’
+  182 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:183:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  183 |   impl_->config.api = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateCUDAConfig(const sep::config::CUDAConfig&)’:
+/sep/src/core/manager.cpp:187:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  187 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:187:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:187:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  187 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:187:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:187:35: error: no matching function for call to ‘lock(std::mutex&)’
+  187 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:188:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  188 |   impl_->config.cuda = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateLogConfig(const sep::config::LogConfig&)’:
+/sep/src/core/manager.cpp:192:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  192 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:192:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:192:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  192 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:192:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:192:35: error: no matching function for call to ‘lock(std::mutex&)’
+  192 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:193:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  193 |   impl_->config.logging = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::resetToDefaults()’:
+/sep/src/core/manager.cpp:197:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  197 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:197:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:295:9: error: ‘system_metrics_’ was not declared in this scope
+  295 |         system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage); // Fix: Cast to double
+      |         ^~~~~~~~~~~~~~~
+/sep/src/core/manager.cpp:197:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  197 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/manager.cpp:197:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:197:35: error: no matching function for call to ‘lock(std::mutex&)’
+  197 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:198:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  198 |   impl_->loadDefaults();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::initialize(int, char**)’:
+/sep/src/core/manager.cpp:202:8: error: ‘lock_guard’ is not a member of ‘sep::config::std’
+  202 |   std::lock_guard<std::mutex> lock(mutex_);
+      |        ^~~~~~~~~~
+/sep/src/core/manager.cpp:202:8: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:243:11: note:   ‘std::lock_guard’
+  243 |     class lock_guard
+      |           ^~~~~~~~~~
+/sep/include/compat/shim.h:430:9: note:   ‘sep::shim::lock_guard’
+  430 |   class lock_guard {
+      |         ^~~~~~~~~~
+/sep/src/core/manager.cpp:202:24: error: ‘mutex’ is not a member of ‘sep::config::std’
+  202 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                        ^~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:302:1: error: ‘MetricsCollector’ does not name a type
+  302 | MetricsCollector::PerformanceMetrics MetricsCollector::getPerformanceMetrics(const std::string& operation_name) const {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/manager.cpp:202:24: note: suggested alternatives:
+/usr/include/c++/14/bits/std_mutex.h:96:9: note:   ‘std::mutex’
+   96 |   class mutex : private __mutex_base
+      |         ^~~~~
+/sep/include/compat/shim.h:423:9: note:   ‘sep::shim::mutex’
+  423 |   class mutex {
+      |         ^~~~~
+/sep/src/core/manager.cpp:202:35: error: no matching function for call to ‘lock(std::mutex&)’
+  202 |   std::lock_guard<std::mutex> lock(mutex_);
+      |                               ~~~~^~~~~~~~
+/usr/include/c++/14/mutex:698:5: note: candidate: ‘template<class _L1, class _L2, class ... _L3> void std::lock(_L1&, _L2&, _L3& ...)’
+  698 |     lock(_L1& __l1, _L2& __l2, _L3&... __l3)
+      |     ^~~~
+/usr/include/c++/14/mutex:698:5: note:   candidate expects at least 2 arguments, 1 provided
+/sep/src/core/manager.cpp:203:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  203 |   impl_->loadDefaults();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp:204:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  204 |   impl_->loadFromEnvironment();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp:205:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  205 |   impl_->loadFromCommandLine(argc, argv);
+      |        ^~
+/sep/src/core/metrics_collector.cpp:312:1: error: ‘MetricsCollector’ does not name a type
+  312 | MetricsCollector::MemoryMetrics MetricsCollector::getMemoryMetrics() const {
+      | ^~~~~~~~~~~~~~~~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/metrics_collector.cpp:317:1: error: ‘MetricsCollector’ does not name a type
+  317 | MetricsCollector::SystemMetrics MetricsCollector::getSystemMetrics() const {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:322:15: error: ‘MetricsCollector’ has not been declared
+  322 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
+      |               ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:322:77: error: non-member function ‘uint64_t getCounter(const std::string&)’ cannot have cv-qualifier
+  322 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
+      |                                                                             ^~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘uint64_t getCounter(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:323:38: error: ‘metrics_mutex_’ was not declared in this scope
+  323 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:325:15: error: ‘counters_’ was not declared in this scope
+  325 |     auto it = counters_.find(key);
+      |               ^~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:329:8: error: ‘MetricsCollector’ has not been declared
+  329 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
+      |        ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:329:66: error: non-member function ‘double getGauge(const std::string&)’ cannot have cv-qualifier
+  329 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
+      |                                                                  ^~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘double getGauge(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:330:38: error: ‘metrics_mutex_’ was not declared in this scope
+  330 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:332:15: error: ‘gauges_’ was not declared in this scope
+  332 |     auto it = gauges_.find(key);
+      |               ^~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:336:1: error: ‘DetailedMetrics’ does not name a type
+  336 | DetailedMetrics MetricsCollector::getDetailedMetrics() const {
+      | ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:343:6: error: ‘MetricsCollector’ has not been declared
+  343 | void MetricsCollector::reset() {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void reset()’:
+/sep/src/core/metrics_collector.cpp:344:38: error: ‘metrics_mutex_’ was not declared in this scope
+  344 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:345:5: error: ‘performance_metrics_’ was not declared in this scope
+  345 |     performance_metrics_.clear();
+      |     ^~~~~~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:346:5: error: ‘counters_’ was not declared in this scope
+  346 |     counters_.clear(); // Fix: Clear counters_
+      |     ^~~~~~~~~
+/sep/src/core/metrics_collector.cpp:347:5: error: ‘gauges_’ was not declared in this scope
+  347 |     gauges_.clear(); // Fix: Clear gauges_
+      |     ^~~~~~~
+/sep/src/core/metrics_collector.cpp:348:5: error: ‘memory_metrics_’ was not declared in this scope
+  348 |     memory_metrics_ = MemoryMetrics{};
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:348:23: error: ‘MemoryMetrics’ was not declared in this scope
+  348 |     memory_metrics_ = MemoryMetrics{};
+      |                       ^~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:349:5: error: ‘system_metrics_’ was not declared in this scope
+  349 |     system_metrics_ = SystemMetrics{};
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:349:23: error: ‘SystemMetrics’ was not declared in this scope; did you mean ‘updateSystemMetrics’?
+  349 |     system_metrics_ = SystemMetrics{};
+      |                       ^~~~~~~~~~~~~
+      |                       updateSystemMetrics
+/sep/src/core/metrics_collector.cpp:350:9: error: ‘pImpl’ was not declared in this scope
+  350 |     if (pImpl) {
+      |         ^~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:355:6: error: ‘MetricsCollector’ has not been declared
+  355 | void MetricsCollector::resetOperation(const std::string& operation_name) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void resetOperation(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:356:38: error: ‘metrics_mutex_’ was not declared in this scope
+  356 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:358:5: error: ‘performance_metrics_’ was not declared in this scope
+  358 |     performance_metrics_.erase(key);
+      |     ^~~~~~~~~~~~~~~~~~~~
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::config::ConfigManager::Impl]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::config::ConfigManager::Impl; _Dp = std::default_delete<sep::config::ConfigManager::Impl>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/core/manager.cpp:137:34:   required from here
+  137 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::config::ConfigManager::Impl’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/sep/src/memory/redis_manager.cpp:384:17: error: ‘IRedisManager’ was not declared in this scope; did you mean ‘RedisManager’?
+  384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
+      |                 ^~~~~~~~~~~~~
+      |                 RedisManager
+/sep/src/memory/redis_manager.cpp:384:30: error: template argument 1 is invalid
+  384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
+      |                              ^
+/sep/src/memory/redis_manager.cpp: In function ‘int sep::persistence::createRedisManager(const std::string&, int)’:
+/sep/src/memory/redis_manager.cpp:384:125: error: cannot convert ‘std::shared_ptr<sep::persistence::RedisManager>’ to ‘int’ in return
+  384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
+      |                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+      |                                                                                                                             |
+      |                                                                                                                             std::shared_ptr<sep::persistence::RedisManager>
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 /sep/src/memory/quantum_coherence_manager.cpp:22:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
    22 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
@@ -840,28 +1576,11 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:368:23: error: no declaration matches ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processAllPatterns()’
-  368 | BatchProcessingResult Processor::processAllPatterns() { return impl_->processAll(); } // Implement this method // Fix: Add missing definition
-      |                       ^~~~~~~~~
-/sep/src/quantum/processor.cpp:368:23: note: no functions named ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processAllPatterns()’
-In file included from /sep/src/quantum/processor.cpp:1:
-/sep/include/quantum/processor.h:79:7: note: ‘class sep::quantum::Processor’ defined here
-   79 | class Processor {
-      |       ^~~~~~~~~
-/sep/src/quantum/processor.cpp:372:23: error: redefinition of ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processBatch(const std::vector<std::__cxx11::basic_string<char> >&)’
-  372 | BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
-      |                       ^~~~~~~~~
-/sep/src/quantum/processor.cpp:370:23: note: ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processBatch(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
-  370 | BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
-      |                       ^~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:177: src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
+[ 55%] Linking CXX static library libsep_audio.a
+[ 55%] Built target sep_audio
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
-[ 49%] Linking CXX static library libsep_audio.a
-[ 49%] Built target sep_audio
+make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
-make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

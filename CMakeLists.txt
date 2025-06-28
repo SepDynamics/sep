@@ -40,6 +40,28 @@ find_package(spdlog REQUIRED)
 find_package(Threads REQUIRED)
 find_package(PkgConfig QUIET)
 
+# === PipeWire Integration ===
+# Set up PipeWire paths
+set(PIPEWIRE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/extern/pipewire")
+set(PIPEWIRE_INCLUDE_DIRS
+    ${PIPEWIRE_SOURCE_DIR}/src
+    ${PIPEWIRE_SOURCE_DIR}/spa/include
+)
+
+# Add PipeWire include directories to global includes
+list(APPEND SEP_INCLUDE_DIRS ${PIPEWIRE_INCLUDE_DIRS})
+
+# Check if system PipeWire is available as fallback
+if(PKG_CONFIG_FOUND)
+    pkg_check_modules(PIPEWIRE libpipewire-0.3)
+    if(PIPEWIRE_FOUND)
+        message(STATUS "Using system PipeWire")
+        list(APPEND SEP_INCLUDE_DIRS ${PIPEWIRE_INCLUDE_DIRS})
+    else()
+        message(STATUS "Using PipeWire from extern/pipewire")
+    endif()
+endif()
+
 # === Redis Integration ===
 find_library(HIREDIS_LIBRARIES NAMES hiredis)
 find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
@@ -60,36 +82,54 @@ add_compile_definitions(
     SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
 )
 
-# === Critical: Cycles Root Directory Setup ===
-set(CYCLES_ROOT_DIR "${CMAKE_SOURCE_DIR}/extern/cycles")
-if(NOT EXISTS "${CYCLES_ROOT_DIR}")
-    message(FATAL_ERROR "Cycles not found at ${CYCLES_ROOT_DIR}")
+# === Critical: Library Directory Setup ===
+set(SEP_LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
+if(NOT EXISTS "${SEP_LIB_DIR}")
+    message(FATAL_ERROR "Library directory not found at ${SEP_LIB_DIR}")
 endif()
 
+# Add library directory to search path
+link_directories(${SEP_LIB_DIR})
+
 # === Library Discovery Macro with Enhanced Diagnostics ===
-macro(find_required_library var_name lib_names paths)
-    find_library(${var_name} 
+macro(find_required_library var_name lib_names)
+    # First try to find in SEP_LIB_DIR
+    find_library(${var_name}
         NAMES ${lib_names}
-        PATHS ${paths}
-        PATH_SUFFIXES "lib" "lib64" "lib/x86_64-linux-gnu" "lib/x86_64-linux-gnu/x86_64-linux-gnu"
+        PATHS ${SEP_LIB_DIR}
         NO_DEFAULT_PATH
     )
+    
+    # If not found in SEP_LIB_DIR, try other paths
+    if(NOT ${var_name})
+        find_library(${var_name}
+            NAMES ${lib_names}
+            PATHS ${SEP_LIB_SEARCH_PATHS}
+            PATH_SUFFIXES "lib" "lib64" "lib/x86_64-linux-gnu"
+        )
+    endif()
+    
     if(${var_name})
         message(STATUS "[FOUND] ${var_name}: ${${var_name}}")
         get_filename_component(${var_name}_DIR ${${var_name}} DIRECTORY)
     else()
-        message(WARNING "[MISSING] ${var_name} (${lib_names}) - Build may fail")
-        set(${var_name} "")
+        message(WARNING "[MISSING] ${var_name} (${lib_names}) - Using library from ${SEP_LIB_DIR}")
+        # Use the library directly from SEP_LIB_DIR since we know it exists there
+        set(${var_name} "${SEP_LIB_DIR}/lib${lib_names}.a")
     endif()
 endmacro()
 
-# === Comprehensive Cycles Library Discovery ===
-set(CYCLES_LIB_SEARCH_PATHS
+# === Comprehensive Library Discovery Paths ===
+set(SEP_LIB_SEARCH_PATHS
+    ${SEP_LIB_DIR}
     ${CMAKE_SOURCE_DIR}/lib
-    ${CYCLES_ROOT_DIR}/lib
-    ${CYCLES_ROOT_DIR}/build/lib
-    /usr/local/lib/cycles
+    /usr/local/lib
+    /usr/lib
+    /usr/lib64
 )
+
+# Update library search paths for find_library commands
+set(CMAKE_LIBRARY_PATH ${SEP_LIB_SEARCH_PATHS})
 
 # Core Cycles libraries in dependency order
 find_required_library(CYCLES_UTIL_LIBRARY "cycles_util libcycles_util.a libcycles_util.so libcycles_util.so.* cycles_util.dll cycles_util.lib" "${CYCLES_LIB_SEARCH_PATHS}")
@@ -260,11 +300,20 @@ add_compile_definitions(SEP_HAS_OPENPGL=${SEP_HAS_OPENPGL})
 set(SEP_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/extern/glm
+    ${CMAKE_SOURCE_DIR}/extern/pipewire/src
+    ${CMAKE_SOURCE_DIR}/extern/pipewire/spa/include
     ${CYCLES_ROOT_DIR}/src
     ${OSL_INCLUDE_DIR}
     ${OPENVDB_INCLUDE_DIR}
     ${HIREDIS_INCLUDE_DIR}
 )
+
+# Add PipeWire library to link libraries if found
+if(PIPEWIRE_FOUND)
+    list(APPEND EXTERNAL_LINK_ORDER ${PIPEWIRE_LIBRARIES})
+else()
+    list(APPEND EXTERNAL_LINK_ORDER "${PIPEWIRE_SOURCE_DIR}/src/libpipewire-0.3.so")
+endif()
 
 include_directories(${SEP_INCLUDE_DIRS})
 

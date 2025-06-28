@@ -1,6 +1,7 @@
 #include "core/error_handler.h"
 #include "compat/shim.h"
 
+#include <functional> // Required for std::function
 
 // Standard Library Includes
 namespace sep::core {

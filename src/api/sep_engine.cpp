@@ -29,6 +29,7 @@ namespace sep::api {
 
 // Implementation details struct
 struct SepEngine::Impl
+
 {
     bool          initialized = false;
     HealthMetrics health_metrics;
@@ -36,10 +37,11 @@ struct SepEngine::Impl
     std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor;
     sep::memory::MemoryTierManager&                 memory_manager;
     std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor;
+    
     // PatternEvolution is a static class, no need to instantiate
 
     Impl()
-        : quantum_processor(sep::quantum::createQuantumProcessor(sep::quantum::QuantumProcessor::Config{})) // Fix: Use factory function
+        : quantum_processor(sep::quantum::createQuantumProcessor({})) // Use factory function
         , memory_manager(sep::memory::MemoryTierManager::getInstance())
         , pattern_processor(std::make_unique<sep::pattern::PatternProcessor>())
     {

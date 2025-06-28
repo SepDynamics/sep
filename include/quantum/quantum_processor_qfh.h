@@ -58,7 +58,6 @@ private:
  */
 class QuantumProcessorQFH : public QuantumProcessorQFHCommon {
 public:
-    QuantumProcessorQFH();
 
     const QFHResult& getLastQFHResult() const;
 

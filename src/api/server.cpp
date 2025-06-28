@@ -8,6 +8,7 @@
 #include "api/request_interface.h"
 #include "api/sep_engine.h"
 #include "quantum/types.h"
+#include "memory/manager.h"
 #include "api/server.h"
 #include "compat/types.h"
 

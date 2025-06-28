@@ -12,50 +12,35 @@
 // Include necessary headers
 #include <string.h> // For memcpy
 
-#if SEP_CUDA_AVAILABLE
-// When CUDA is available, include the real CUDA runtime
-#include <cuda_runtime.h>
-#include "compat/cuda_helpers.h"
-#else
-// When CUDA is not available, define stub types and functions
-
-#ifdef __cplusplus
-namespace sep {
-namespace cuda {
-
-// Basic CUDA types
+// Forward declare CUDA types in global scope
+#if !SEP_CUDA_AVAILABLE
 typedef int cudaError_t;
-typedef int CUresult;
 typedef void* cudaStream_t;
 typedef void* cudaEvent_t;
 
-// Define cudaMemcpyKind enum
-typedef enum {
+// Error codes in global scope
+constexpr cudaError_t cudaSuccess = 0;
+constexpr cudaError_t cudaErrorMemoryAllocation = 2;
+constexpr cudaError_t cudaErrorInitializationError = 3;
+constexpr cudaError_t cudaErrorInvalidDevice = 10;
+constexpr cudaError_t cudaErrorInvalidValue = 11;
+constexpr cudaError_t cudaErrorDeviceUninitialized = 37;
+constexpr cudaError_t cudaErrorNotReady = 34;
+constexpr cudaError_t cudaErrorSetOnActiveProcess = 711;
+constexpr cudaError_t cudaErrorStreamCaptureUnsupported = 900;
+constexpr cudaError_t cudaErrorInvalidMemcpyDirection = 21;
+constexpr cudaError_t cudaErrorInvalidResourceHandle = 400;
+
+// Memory copy kinds in global scope
+enum cudaMemcpyKind {
     cudaMemcpyHostToHost = 0,
     cudaMemcpyHostToDevice = 1,
     cudaMemcpyDeviceToHost = 2,
     cudaMemcpyDeviceToDevice = 3,
     cudaMemcpyDefault = 4
-} cudaMemcpyKind;
+};
 
-// Error codes
-static const cudaError_t cudaSuccess = 0;
-static const cudaError_t cudaErrorMemoryAllocation = 2;
-static const cudaError_t cudaErrorInitializationError = 3;
-static const cudaError_t cudaErrorInvalidDevice = 10;
-static const cudaError_t cudaErrorDeviceUninitialized = 37;
-static const cudaError_t cudaErrorInvalidValue = 11;
-static const cudaError_t cudaErrorNotReady = 34;
-static const cudaError_t cudaErrorSetOnActiveProcess = 711;
-static const cudaError_t cudaErrorStreamCaptureUnsupported = 900;
-static const cudaError_t cudaErrorInvalidMemcpyDirection = 21;
-static const cudaError_t cudaErrorInvalidResourceHandle = 400;
-
-// Stream creation flags
-static const unsigned int cudaStreamDefault = 0x00;
-static const unsigned int cudaStreamNonBlocking = 0x01;
-
-// Device properties structure
+// Device properties structure in global scope
 struct cudaDeviceProp {
     char name[256];
     int major;
@@ -78,6 +63,22 @@ struct cudaDeviceProp {
     int concurrentKernels;
 };
 
+// Stream flags in global scope
+constexpr unsigned int cudaStreamDefault = 0x00;
+constexpr unsigned int cudaStreamNonBlocking = 0x01;
+#endif
+
+#if SEP_CUDA_AVAILABLE
+// When CUDA is available, include the real CUDA runtime
+#include <cuda_runtime.h>
+#include "compat/cuda_helpers.h"
+#else
+// When CUDA is not available, define stub types and functions
+
+#ifdef __cplusplus
+namespace sep {
+namespace cuda {
+
 // Function declarations
 cudaError_t cudaSetDevice(int device);
 cudaError_t cudaGetDeviceCount(int* count);
@@ -98,31 +99,6 @@ cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
 
 }  // namespace cuda
 }  // namespace sep
-
-// Make the sep::cuda types available in global namespace for compatibility
-using sep::cuda::cudaError_t;
-using sep::cuda::cudaStream_t;
-using sep::cuda::cudaEvent_t;
-using sep::cuda::cudaMemcpyKind;
-using sep::cuda::cudaDeviceProp;
-using sep::cuda::cudaMemcpyHostToHost;
-using sep::cuda::cudaMemcpyHostToDevice;
-using sep::cuda::cudaMemcpyDeviceToHost;
-using sep::cuda::cudaMemcpyDeviceToDevice;
-using sep::cuda::cudaMemcpyDefault;
-using sep::cuda::cudaSuccess;
-using sep::cuda::cudaErrorMemoryAllocation;
-using sep::cuda::cudaErrorInitializationError;
-using sep::cuda::cudaErrorInvalidDevice;
-using sep::cuda::cudaErrorDeviceUninitialized;
-using sep::cuda::cudaErrorInvalidValue;
-using sep::cuda::cudaErrorNotReady;
-using sep::cuda::cudaErrorSetOnActiveProcess;
-using sep::cuda::cudaErrorStreamCaptureUnsupported;
-using sep::cuda::cudaErrorInvalidMemcpyDirection;
-using sep::cuda::cudaErrorInvalidResourceHandle;
-using sep::cuda::cudaStreamDefault;
-using sep::cuda::cudaStreamNonBlocking;
 
 #endif // __cplusplus
 #endif // !SEP_CUDA_AVAILABLE

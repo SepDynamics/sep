@@ -146,7 +146,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
 
     printf("DEBUG: Engine::init - Initializing audio capture\n");
     fflush(stdout);
-    
+
     try {
         audio_capture_ = compat::createAudioCapture();
         if (!audio_capture_) {

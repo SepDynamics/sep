@@ -2,7 +2,6 @@
 // Added more comprehensive stubs for both OSL and OpenPGL functions
 
 #include <memory>
-#include <string>
 #include <vector>
 #include <iostream>
 

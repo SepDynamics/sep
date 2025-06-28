@@ -1,7 +1,5 @@
 #include "core/prometheus_exporter.h"
 
-#include <sstream>
-
 namespace sep::metrics {
 
 PrometheusExporter &PrometheusExporter::instance() {

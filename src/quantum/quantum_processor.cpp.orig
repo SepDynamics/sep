@@ -1,6 +1,8 @@
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"
+#include "quantum/pattern_evolution_bridge.h"
 #include "compat/math_common.h"
+#include "quantum/qbsa_qfh.h"
 #include <glm/glm.hpp>
 #include <vector>
 #include <memory>
@@ -22,7 +24,7 @@ QuantumProcessorError::QuantumProcessorError(const std::string& message)
 class QuantumProcessorImpl : public QuantumProcessorQFHCommon {
 public:
     QuantumProcessorImpl() = default;
-    
+
     bool processPatternWithId(const glm::vec3& pattern_data, size_t pattern_id) {
         if (glm::length(pattern_data) < 1e-6f) {
             return false;
@@ -61,16 +63,6 @@ QuantumProcessor::QuantumProcessor(const Config& config)
     qbsa_processor_ = createQFHBasedQBSAProcessor({});
 }
 
-// Factory functions implementation
-std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) {
-    // In a real build, this would check for CUDA availability and
-    // other hardware features. For now, return the default implementation.
-    return std::make_unique<QuantumProcessor>(config);
-}
-
-std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
-    return std::make_unique<QuantumProcessor>(QuantumProcessor::Config{});
-}
 float QuantumProcessor::calculateCoherence(const glm::vec3& pattern_a, const glm::vec3& pattern_b) {
     // Calculate dot product normalized by magnitudes
     float dot_product = glm::dot(pattern_a, pattern_b);
@@ -142,6 +134,11 @@ void QuantumProcessor::updateConfig(const Config& new_config) {
     impl_ = std::make_unique<QuantumProcessorImpl>();
 }
 
+// Factory functions
+std::unique_ptr<QuantumProcessor> createQuantumProcessor(
+    const QuantumProcessor::Config& config) {
+    return std::make_unique<QuantumProcessor>(config);
+}
 
 QuantumProcessor::Config::operator ProcessingConfig() const {
     ProcessingConfig pc;

@@ -1,9 +1,6 @@
-
 #include "quantum/pattern_evolution.h"
 #include "quantum/types.h"
-#include "quantum/data.hpp"
 #include <nlohmann/json.hpp>
-#include "compat/shim.h"
 #include "api/sep_engine.h"
 #include "quantum/pattern_evolution_bridge.h"
 

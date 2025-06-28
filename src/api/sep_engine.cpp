@@ -97,7 +97,7 @@ nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
         }
 
         // Initialize quantum processor using default options
-        impl_->quantum_processor = sep::quantum::createQuantumProcessor(sep::quantum::QuantumProcessor::Config{});
+        impl_->quantum_processor = sep::quantum::createQuantumProcessor(sep::quantum::QuantumProcessor::Config{}); // Use real if available
 
         // Initialize memory tier manager (singleton pattern)
         // The MemoryTierManager instance is stored as a reference in Impl

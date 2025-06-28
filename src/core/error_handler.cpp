@@ -2,7 +2,6 @@
 #include "compat/shim.h"
 
 namespace sep::core {
-// Using declarations to simplify code
 using ::sep::Error;
 using ::sep::shim::vector;
 using ::sep::shim::mutex;

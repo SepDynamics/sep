@@ -9,8 +9,8 @@
 
 namespace sep {
 namespace audio {
-namespace {
-} // anonymous namespace
+
+// AudioPipeline implementation
 AudioPipeline::AudioPipeline(size_t sample_rate, size_t channels)
     : m_sample_rate(sample_rate),
       m_channels(channels),

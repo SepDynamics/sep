@@ -5,10 +5,8 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
-#include <deque>
-#include <iterator>
-#include <memory>
 #include <stdexcept>
+#include <vector>
 
 #ifndef SEP_HAS_EXCEPTIONS
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
@@ -21,10 +19,8 @@
 // CUDA headers after standard library
 #include "compat/cuda_common.h"
 #include "compat/macros.h"
-// Include only one of the CUDA headers to avoid redefinition errors
 #include "compat/cuda_impl.h"
 
-#include "blender/compression.h"
 #include "compat/math_common.h"
 #include "memory/logger.hpp"
 #include "memory/manager.h"
@@ -146,7 +142,7 @@ void MemoryTier::deallocate(MemoryBlock* block) {
 }
 
 sep::SEPResult MemoryTier::defragment() {
-    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+    auto logger = sep::logging::Manager::getInstance().getLogger("memory"); // Fix: use fully qualified name
     if (logger) {
         LOG_DEBUG(logger, "Defragmenting tier {}", static_cast<int>(config_.type));
     }
@@ -179,7 +175,7 @@ sep::SEPResult MemoryTier::defragment() {
     }
 
     // Merge all free space into one block at the end
-    if (current_offset < config_.size) {
+    if (current_offset < config_.size && !blocks_.empty()) { // Check if blocks_ is not empty
         blocks_.erase(
             std::remove_if(blocks_.begin(), blocks_.end(), [](const MemoryBlock& block) { return !block.allocated; }),
             blocks_.end());
@@ -190,7 +186,7 @@ sep::SEPResult MemoryTier::defragment() {
 
     // Reevaluate block placement after defragmentation
     MemoryTierManager& mgr = MemoryTierManager::getInstance();
-    for (auto& blk : blocks_) {
+    for (auto& blk : blocks_) { // Fix: Iterate over potentially new blocks
         if (blk.allocated) {
             blk.utilization = static_cast<float>(blk.size) / config_.size;
             mgr.updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation, 1.0f);

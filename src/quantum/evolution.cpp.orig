@@ -1,5 +1,6 @@
 #include "quantum/evolution.h"
-#include "quantum/processor.h" // Ensure IProcessor definition is included
+#include "quantum/processor.h"
+#include <glm/glm.hpp>
 #include <algorithm>
 #include <numeric>
 #include <stdexcept>
@@ -19,7 +20,7 @@ namespace sep::quantum {
 
 class EvolutionEngine::EvolutionEngineImpl {
 public:
-    explicit EvolutionEngineImpl(IProcessor* processor)
+    explicit EvolutionEngineImpl(Processor* processor)
         : processor_(processor), generation_number_(0), noise_state_(0) {
         if (!processor) {
             throw std::invalid_argument("Processor cannot be null");
@@ -53,7 +54,7 @@ public:
         while (next_generation_ids.size() < patterns.size()) {
             auto parent_ids = tournamentSelection(params.tournament_size, 2);
             if (parent_ids.size() >= 2) {
-                Pattern parent1 = processor_->getPattern(parent_ids[0]); // Fix: use Pattern type
+                auto parent1 = processor_->getPattern(parent_ids[0]);
                 auto parent2 = processor_->getPattern(parent_ids[1]);
                 auto child = crossover(parent1, parent2);
                 if (nextFloat() < processor_->getConfig().mutation_rate) {
@@ -62,7 +63,7 @@ public:
                 processor_->addPattern(child);
                 next_generation_ids.push_back(child.id);
             } else if (!parent_ids.empty()) {
-                ProcessingResult result = processor_->mutatePattern(parent_ids[0]); // Fix: use ProcessingResult type
+                auto result = processor_->mutatePattern(parent_ids[0]);
                 if (result.success) {
                     next_generation_ids.push_back(result.pattern.id);
                 }
@@ -99,7 +100,6 @@ public:
         auto& child_state = child.quantum_state;
 
         child_state.coherence = glm::mix(state1.coherence, state2.coherence, alpha);
-        child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
         child_state.stability = glm::mix(state1.stability, state2.stability, alpha);
         child_state.entropy = glm::mix(state1.entropy, state2.entropy, alpha);
         child_state.mutation_rate = glm::mix(state1.mutation_rate, state2.mutation_rate, alpha);
@@ -124,7 +124,6 @@ public:
 
         state.coherence = glm::clamp(state.coherence + (nextFloat() * 2.0f - 1.0f) * sigma, 0.0f, 1.0f);
         state.stability = glm::clamp(state.stability + (nextFloat() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
-        state.phase += (nextFloat() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
         state.entropy = glm::clamp(state.entropy + (nextFloat() * 2.0f - 1.0f) * sigma * 2.0f, 0.0f, 1.0f);
 
         mutated.position += glm::vec4((nextFloat() * 2.0f - 1.0f) * sigma,
@@ -287,7 +286,7 @@ private:
         return static_cast<size_t>(nextFloat() * static_cast<float>(max));
     }
 
-    IProcessor* processor_; // Use interface type
+    Processor* processor_;
     EvolutionParams params_;
     size_t generation_number_;
     EvolutionStats current_stats_;
@@ -295,7 +294,7 @@ private:
     uint64_t noise_state_;
 };
 
-EvolutionEngine::EvolutionEngine(IProcessor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {} // Use interface type
+EvolutionEngine::EvolutionEngine(Processor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {}
 
 BatchProcessingResult EvolutionEngine::evolve(const EvolutionParams& params) { return impl_->evolve(params); }
 BatchProcessingResult EvolutionEngine::evolveGeneration() { return impl_->evolveGeneration(); }
@@ -322,7 +321,6 @@ Pattern gaussianMutation(const Pattern& pattern, float sigma) {
     auto rnd = [&]() { return deterministicNoise(noise_state); };
     state.coherence = glm::clamp(state.coherence + (rnd() * 2.0f - 1.0f) * sigma, 0.0f, 1.0f);
     state.stability = glm::clamp(state.stability + (rnd() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
-    state.phase += (rnd() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
     state.entropy = glm::clamp(state.entropy + (rnd() * 2.0f - 1.0f) * sigma * 2.0f, 0.0f, 1.0f);
     mutated.position += glm::vec4((rnd() * 2.0f - 1.0f) * sigma,
                                   (rnd() * 2.0f - 1.0f) * sigma,
@@ -353,7 +351,6 @@ Pattern blendCrossover(const Pattern& parent1, const Pattern& parent2, float alp
     auto& state2 = parent2.quantum_state;
     auto& child_state = child.quantum_state;
     child_state.coherence = glm::mix(state1.coherence, state2.coherence, alpha);
-    child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
     child_state.stability = glm::mix(state1.stability, state2.stability, alpha);
     child_state.entropy = glm::mix(state1.entropy, state2.entropy, alpha);
     child.position = glm::mix(parent1.position, parent2.position, alpha);
@@ -374,7 +371,6 @@ std::vector<Pattern> createRandomPopulation(size_t size) {
     for (size_t i = 0; i < size; ++i) {
         Pattern pattern;
         pattern.id = "rand_" + std::to_string(i);
-        pattern.quantum_state.phase = rnd() * 2.0f * M_PI; // Initialize phase
         auto& state = pattern.quantum_state;
         state.coherence = rnd();
         state.stability = rnd();

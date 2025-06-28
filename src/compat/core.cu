@@ -1,11 +1,8 @@
 #include "compat/core.h"
 
-#include <stdexcept>
-
 #include "compat/cuda_common.h"
 #include "compat/kernels.h"
-#include "compat/macros.h"  // for SEP_CUDA_CHECK_NOTHROW
-#include "compat/stream.h"  // for Stream::create()
+
 #include "compat/cuda_helpers.h"
 
 namespace sep::cuda {
@@ -63,9 +60,9 @@ Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const {
   return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
-StreamPtr CudaCore::createStream(sep::StreamFlags flags) {
+std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags flags) { // Fix: Return shared_ptr<Stream>
   return Stream::create(flags);
-}
+} // Fix: Missing closing brace
 
 Error CudaCore::destroyStream(cudaStream_t stream) {
   if (!stream) {

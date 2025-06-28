@@ -40,7 +40,7 @@ sep::SEPResult PatternVisualizationPipeline::checkShaderReload() {
 }
 
 sep::SEPResult PatternVisualizationPipeline::updatePattern(
-    const sep::pattern::PatternData &pattern) {
+    const pattern::PatternData &pattern) {
   if (!handler_) {
     return sep::SEPResult::INVALID_STATE;
   }
@@ -59,7 +59,7 @@ sep::SEPResult PatternVisualizationPipeline::deformMesh(
 }
 
 sep::SEPResult PatternVisualizationPipeline::generateMesh(
-    const sep::pattern::PatternData &pattern, int dimensionality) {
+    const pattern::PatternData &pattern, int dimensionality) {
   if (!handler_ || dimensionality < 2) {
     return sep::SEPResult::INVALID_ARGUMENT;
   }
@@ -67,7 +67,7 @@ sep::SEPResult PatternVisualizationPipeline::generateMesh(
 }
 
 sep::SEPResult PatternVisualizationPipeline::renderManifold(
-    const sep::pattern::PatternData &pattern, int dimensionality) {
+    const pattern::PatternData &pattern, int dimensionality) {
   sep::SEPResult r = generateMesh(pattern, dimensionality);
   if (r != sep::SEPResult::SUCCESS)
     return r;

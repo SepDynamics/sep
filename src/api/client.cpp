@@ -1,7 +1,5 @@
-#include "api/api_exception.h"
 #include "api/client.h"
 #include "curl/curl.h"
-
 #include <stdexcept>
 
 

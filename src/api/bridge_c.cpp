@@ -19,7 +19,7 @@ SEP_API int sep_bridge_init(void) {
   try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-  sep::quantum::ProcessingConfig options{};
+  sep::quantum::IProcessor::ProcessingConfig options{};
   sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
   sep::api::bridge::detail::g_last_error.clear();
   sep::api::bridge::detail::g_required_buffer_size = 0;
@@ -47,7 +47,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
     }
 
-    sep::quantum::Processor *processor = nullptr;
+    sep::quantum::IProcessor *processor = nullptr;
     {
       std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
       if (!sep::api::bridge::detail::g_context_processor_bridge) {
@@ -77,12 +77,12 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
         }
       }
 
-      auto process_result = processor->processAll();
+      auto process_result = processor->processAllPatterns();
       if (!process_result.success) {
         std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
         sep::api::bridge::detail::setLastError(
             process_result.error_message.c_str());
-        return static_cast<int>(sep::api::ErrorCode::ProcessingError);
+        return static_cast<int>(process_result.error_code); // Use specific error code
       }
 
       nlohmann::json result_json;

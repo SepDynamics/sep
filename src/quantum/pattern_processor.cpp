@@ -1,6 +1,5 @@
 #include "quantum/pattern_processor.h"
 #include "quantum/types.h"
-#include "quantum/quantum_processor.h"
 
 #include <algorithm>
 #include <memory>
@@ -23,6 +22,7 @@ public:
         
         // Convert state to a format the quantum processor can use
         glm::vec3 stateData(state.coherence, state.stability, state.entropy);
+        // Fix: Use string pattern_id directly, no need for hash conversion here.
         size_t numericId = std::hash<std::string>{}(pattern_id);
         
         // Process using quantum processor

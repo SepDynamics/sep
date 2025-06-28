@@ -86,8 +86,6 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
     }
 
     return setupStream();
-    spdlog::warn("PipeWire support is disabled or not available via this path");
-    return AudioError::INIT_FAILED;
 }
 
 AudioError PipeWireCapture::setupStream()

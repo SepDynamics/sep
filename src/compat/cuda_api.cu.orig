@@ -27,7 +27,6 @@
 #include "compat/kernels.h"
 #include "compat/macros.h"
 
-// Add missing includes
 #include "compat/raii.h"
 #include "compat/types.h"
 
@@ -80,9 +79,9 @@ int sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32
     }
 
     // Get constants
-    const uint32_t bitfield_words = constants::get_bitfield_words();
-    const uint32_t max_block_size = constants::get_max_block_size();
-    
+    const uint32_t bitfield_words = sep::cuda::constants::get_bitfield_words();
+    const uint32_t max_block_size = sep::cuda::constants::get_max_block_size();
+
     // Pre-calculate all sizes
     const size_t probe_size = num_probes * sizeof(std::uint32_t);
     const size_t bitfield_size = bitfield_words * sizeof(std::uint32_t);
@@ -144,7 +143,7 @@ int sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chu
     }
 
     // Get constants
-    const uint32_t symmetry_pairs = constants::get_symmetry_pairs();
+    const uint32_t symmetry_pairs = sep::cuda::constants::get_symmetry_pairs();
 
     // Pre-calculate sizes
     const size_t chunks_size = num_chunks * sizeof(std::uint64_t);

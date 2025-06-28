@@ -38,7 +38,7 @@ sep::SEPResult MeshHandler::init(Object* bl_object, Mesh* bl_mesh) {
   return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult MeshHandler::update(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::update(const pattern::PatternData& pattern_data) {
   if (!initialized_) {
     return sep::SEPResult::INITIALIZATION_FAILED;
   }
@@ -193,7 +193,7 @@ sep::SEPResult MeshHandler::applyDeformation(const DeformParams& params) {
   return notifyDepsgraph();
 }
 
-sep::SEPResult MeshHandler::generateHyperMesh(const sep::pattern::PatternData& pattern,
+sep::SEPResult MeshHandler::generateHyperMesh(const pattern::PatternData& pattern,
                                          int dimensions) {
   if (!initialized_) {
     return sep::SEPResult::INITIALIZATION_FAILED;
@@ -218,7 +218,7 @@ sep::SEPResult MeshHandler::generateHyperMesh(const sep::pattern::PatternData& p
 // Private helpers
 // ---------------------------------------------------------------------------
 
-sep::SEPResult MeshHandler::updateVertices(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::updateVertices(const pattern::PatternData& pattern_data) {
   if (!validateMesh()) {
     return sep::SEPResult::INVALID_STATE;
   }
@@ -234,7 +234,7 @@ sep::SEPResult MeshHandler::updateVertices(const sep::pattern::PatternData& patt
   return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult MeshHandler::updateCustomData(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::updateCustomData(const pattern::PatternData& pattern_data) {
   if (custom_layers_.empty()) {
     (void)addCustomDataLayer("pattern_weight", 0);
   }
@@ -262,7 +262,7 @@ sep::SEPResult MeshHandler::notifyDepsgraph() {
 
 bool MeshHandler::validateMesh() const { return initialized_ && mesh_ != nullptr; }
 
-bool MeshHandler::validatePattern(const sep::pattern::PatternData& pattern_data) const {
+bool MeshHandler::validatePattern(const pattern::PatternData& pattern_data) const {
   return pattern_data.coherence >= 0.0f && pattern_data.coherence <= 1.0f;
 }
 
@@ -341,7 +341,7 @@ void MeshHandler::ensureCustomDataCapacity(size_t vertex_count) {
   }
 }
 
-float MeshHandler::calculateVertexInfluence(const sep::pattern::PatternData& pattern,
+float MeshHandler::calculateVertexInfluence(const pattern::PatternData& pattern,
                                            const float* vertex) const {
   float dx = vertex[0] - pattern.position.x;
   float dy = vertex[1] - pattern.position.y;
@@ -351,7 +351,7 @@ float MeshHandler::calculateVertexInfluence(const sep::pattern::PatternData& pat
   return computeCoherenceWeight(weight);
 }
 
-void MeshHandler::calculateDisplacement(const sep::pattern::PatternData& pattern,
+void MeshHandler::calculateDisplacement(const pattern::PatternData& pattern,
                                        const float* vertex,
                                        float* displacement) const {
   float w = calculateVertexInfluence(pattern, vertex);

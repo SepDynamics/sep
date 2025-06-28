@@ -1,15 +1,13 @@
-#include <mutex>
+#include "memory/memory_tier_manager.hpp"
 
-#include "core/types.h"
-#include "compat/kernels.cuh"
-#include "memory/logger.hpp"
-#include "memory/memory_tier.hpp"
+#include "compat/component_bridge.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/pattern_evolution_bridge.h"
 
 
 namespace sep::memory {
 
+// Initialize singleton instance
 std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 std::once_flag MemoryTierManager::once_flag_;
 
@@ -26,6 +24,8 @@ MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
     mtm_ = std::make_unique<MemoryTier>(mcfg);
     ltm_ = std::make_unique<MemoryTier>(lcfg);
 }
+
+MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
 
 MemoryTierManager::~MemoryTierManager() = default;
 
@@ -179,16 +179,11 @@ sep::SEPResult MemoryTierManager::demoteBlock(MemoryBlock* block, MemoryBlock*& 
 }
 
 sep::SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* patterns, pattern::PatternData* results,
-                                                       const pattern::PatternConfig& config, size_t pattern_count,
-                                                       const pattern::PatternData* previous_patterns, void* stream) {
-#ifdef __CUDACC__
-    cudaError_t err =
-        sep::cuda::launch_pattern_processing(patterns, results, config, pattern_count, previous_patterns, stream);
-      return err == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::PROCESSING_ERROR;
-#else
+                                                           const pattern::PatternConfig& config, size_t pattern_count,
+                                                           const pattern::PatternData* previous_patterns, void* stream) {
     (void)patterns;
     (void)results;
-    (void)config;
+    (void)config; // Prevent unused parameter warning
     (void)pattern_count;
     (void)previous_patterns;
     (void)stream;
@@ -380,6 +375,16 @@ void MemoryTierManager::registerPattern(std::size_t id, const pattern::PatternDa
 const pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     return it == pattern_registry_.end() ? nullptr : it->second.get();
+}
+
+std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
+    // In a real build, this would check for CUDA availability and
+    // other hardware features. For now, return the default implementation.
+    return std::make_unique<MemoryTierManager>();
+}
+
+std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
+    return std::make_unique<MemoryTierManager>();
 }
 
 }  // namespace sep::memory

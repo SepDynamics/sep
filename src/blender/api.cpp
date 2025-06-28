@@ -5,7 +5,6 @@
 #include "blender/pattern_bridge.h"
 #include "compat/component_bridge.h"
 #include <memory>
-#include <stdexcept>
 #include <string>
 // Bridge implementation structure
 struct SEPBlenderBridge

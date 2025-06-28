@@ -4,6 +4,7 @@
 #include "memory/logger.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/pattern_evolution_bridge.h"
+#include "quantum/data.hpp" // For PatternData definition
 
 
 namespace sep::memory {

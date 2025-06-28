@@ -50,10 +50,10 @@ std::unordered_map<std::string, std::vector<void (*)(const char *)>>
 
 namespace sep::api::bridge::detail {
 
-void setLastError(const std::string &error) { g_last_error = error; }
 void setLastError(const std::string& error) {
+  g_last_error = error;
 #if !SEP_HAS_EXCEPTIONS
-    sep::crow::error::set_last_error(error.c_str());
+  sep::crow::error::set_last_error(error.c_str());
 #endif
 }
 std::string getLastError() { return g_last_error; }

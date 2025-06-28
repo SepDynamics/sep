@@ -9,6 +9,7 @@ constexpr const char *ENV_CONFIG_PATH = "SEP_CONFIG_PATH";
 constexpr const char *ENV_LOG_DIR = "SEP_LOG_DIR";
 constexpr const char *ENV_LOG_LEVEL = "SEP_LOG_LEVEL";
 constexpr const char *ENV_LOG_FILE = "SEP_LOG_FILE";
+constexpr const char *ENV_LOG_CONSOLE = "SEP_LOG_CONSOLE";
 constexpr const char *ENV_API_PORT = "SEP_API_PORT";
 constexpr const char *ENV_API_THREADS = "SEP_API_THREADS";
 constexpr const char *ENV_API_ENABLE_METRICS = "SEP_API_ENABLE_METRICS";

@@ -1,6 +1,5 @@
 #include "quantum/types.h"
 #include <nlohmann/json.hpp>
-
 #include "compat/shim.h" // Ensure shim is included if needed
 
 namespace sep::quantum {

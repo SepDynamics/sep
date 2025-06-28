@@ -9,7 +9,11 @@ namespace compat {
 
 #ifdef SEP_HAS_PIPEWIRE
 std::unique_ptr<audio::AudioCapture> createAudioCapture() {
+#ifdef SEP_HAS_PIPEWIRE
     return std::make_unique<audio::PipeWireCapture>();
+#else
+    return std::make_unique<audio::PipeWireCaptureStub>();
+#endif
 }
 #else
 std::unique_ptr<audio::AudioCapture> createAudioCapture() {

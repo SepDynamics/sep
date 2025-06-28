@@ -9,10 +9,8 @@ Counter g_allocation_failures{"allocation_failures_total", "Total memory allocat
 bool registered = false;
 } // namespace
 
-Counter& allocationFailures()
-{
-    if (!registered)
-    {
+Counter& allocationFailures() {
+    if (!registered) {
         PrometheusExporter::instance().registerCounter(&g_allocation_failures);
         registered = true;
     }

@@ -4,8 +4,39 @@
 
 namespace sep::cuda {
 
-// Minimal implementation to decouple from internal StreamImpl
-struct Stream::Impl {};
+// Implementation storing the underlying CUDA stream handle
+struct Stream::Impl {
+  cudaStream_t stream_handle_{nullptr};
+
+  void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
+  void synchronize() {
+#if SEP_CUDA_AVAILABLE
+    if (stream_handle_) cudaStreamSynchronize(stream_handle_);
+#else
+    (void)stream_handle_;
+#endif
+  }
+  void wait(void* event) {
+#if SEP_CUDA_AVAILABLE
+    if (stream_handle_ && event)
+      cudaStreamWaitEvent(stream_handle_, static_cast<cudaEvent_t>(event), 0);
+#else
+    (void)stream_handle_;
+    (void)event;
+#endif
+  }
+  void record(void* event) {
+#if SEP_CUDA_AVAILABLE
+    if (stream_handle_ && event)
+      cudaEventRecord(static_cast<cudaEvent_t>(event), stream_handle_);
+#else
+    (void)stream_handle_;
+    (void)event;
+#endif
+  }
+  void* handle() const { return stream_handle_; }
+  bool isValid() const { return stream_handle_ != nullptr; }
+};
 
 Stream::~Stream() = default;
 

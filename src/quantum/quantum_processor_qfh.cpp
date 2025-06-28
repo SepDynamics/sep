@@ -1,5 +1,6 @@
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/types.h"
+#include "quantum/processor.h"
 #include "compat/component_bridge.h" // For factory functions
 
 namespace sep::quantum {

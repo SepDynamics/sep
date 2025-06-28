@@ -1,10 +1,14 @@
 #pragma once
 
 #include "core/common.h"
+#include <memory>
 
 // Forward declaration for MemoryTierEnum from sep::math_common.h
 namespace sep {
   enum class MemoryTierEnum : int;
+  namespace pattern {
+    class BlenderBridge;
+  }
 }
 
 // Using the SEPResult enum from sep namespace
@@ -43,3 +47,10 @@ inline const char* sep_result_to_string(sep::SEPResult result) {
       return "UNKNOWN_SEP_RESULT";
   }
 }
+
+// Bridge structure used by the C API
+struct SEPBlenderBridge {
+    std::shared_ptr<sep::pattern::BlenderBridge> impl;
+    SEPAudioMetrics                              audio_metrics{};
+    SEPPatternMetrics                            pattern_metrics{};
+};

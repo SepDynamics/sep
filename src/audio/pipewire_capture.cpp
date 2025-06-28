@@ -4,6 +4,7 @@
 #include "audio/config.h"
 #include "audio/pipewire_includes.h"
 #include "compat/component_bridge.h"
+#include "compat/math_common.h"
 
 
 // Standard library headers
@@ -17,7 +18,8 @@
 #include <glm/gtc/constants.hpp>
 #include <cmath>
 
-using namespace sep::audio;
+namespace sep {
+namespace audio {
 
 struct PWInit
 {
@@ -327,3 +329,4 @@ std::unique_ptr<AudioCapture> AudioCapture::create()
 }
 
 }  // namespace audio
+}  // namespace sep

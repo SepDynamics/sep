@@ -8,13 +8,14 @@ class AudioCapture;
 namespace pattern {
 class BlenderBridge;
 }
+struct SEPBlenderBridge;
 namespace blender {
 class CyclesRenderer; // Forward declaration if header not available
 }
 namespace compat {
 
 std::unique_ptr<audio::AudioCapture> createAudioCapture();
-std::shared_ptr<pattern::BlenderBridge> createBlenderBridge();
+std::unique_ptr<SEPBlenderBridge> createBlenderBridge();
 std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer();
 
 } // namespace compat

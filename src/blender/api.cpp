@@ -6,13 +6,6 @@
 #include "compat/component_bridge.h"
 #include <memory>
 #include <string>
-// Bridge implementation structure
-struct SEPBlenderBridge
-{
-    std::shared_ptr<sep::pattern::BlenderBridge> impl;
-    SEPAudioMetrics                              audio_metrics{};    // last computed audio metrics
-    SEPPatternMetrics                            pattern_metrics{};  // last collected pattern metrics
-};
 
 namespace {
 // Version information
@@ -48,12 +41,11 @@ extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPCo
     // Use config parameter to avoid unused warning
     (void)config;
 
-    auto bridge_ptr = std::unique_ptr<SEPBlenderBridge>(new (std::nothrow) SEPBlenderBridge());
+    auto bridge_ptr = sep::compat::createBlenderBridge();
     if (!bridge_ptr)
     {
         return sep::SEPResult::ALLOCATION_FAILED;
     }
-    bridge_ptr->impl            = sep::compat::createBlenderBridge();
     bridge_ptr->audio_metrics   = SEPAudioMetrics{};
     bridge_ptr->pattern_metrics = SEPPatternMetrics{};
 

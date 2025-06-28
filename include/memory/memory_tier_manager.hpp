@@ -65,6 +65,7 @@ public:
     // Singleton access
     static MemoryTierManager& getInstance();
 
+    MemoryTierManager();
     MemoryTierManager(const Config& cfg = Config());
     ~MemoryTierManager();
 

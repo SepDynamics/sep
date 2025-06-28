@@ -9,7 +9,7 @@
 // Bridge implementation structure
 struct SEPBlenderBridge
 {
-    std::shared_ptr<sep::pattern::BlenderBridge> impl;
+    std::unique_ptr<sep::pattern::BlenderBridge> impl;
     SEPAudioMetrics                              audio_metrics{};    // last computed audio metrics
     SEPPatternMetrics                            pattern_metrics{};  // last collected pattern metrics
 };

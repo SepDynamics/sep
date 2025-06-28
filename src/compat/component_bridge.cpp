@@ -19,8 +19,8 @@ std::unique_ptr<audio::AudioCapture> createAudioCapture() {
 std::unique_ptr<audio::AudioCapture> createAudioCaptureStub() { // Fix: Add missing stub definition
     return std::make_unique<audio::PipeWireCaptureStub>();
 }
-std::shared_ptr<pattern::BlenderBridge> createBlenderBridge() {
-    return std::make_shared<pattern::BlenderBridge>();
+std::unique_ptr<pattern::BlenderBridge> createBlenderBridge() {
+    return std::make_unique<pattern::BlenderBridge>();
 }
 
 std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer() {

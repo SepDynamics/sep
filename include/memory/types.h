@@ -11,6 +11,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include "memory/redis_manager.h"
 #include <glm/glm.hpp>
 #include <chrono>
 #include <glm/vec3.hpp>
@@ -39,7 +40,7 @@ struct PatternData {
     uint64_t dag_node_id = 0;              // DAG node ID for pattern
 };
 
-class RedisManager {
+class RedisManager : public IRedisManager {
 public:
     RedisManager(const std::string& host = "localhost", int port = 6379);
     ~RedisManager();

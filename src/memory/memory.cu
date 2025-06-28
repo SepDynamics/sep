@@ -2,11 +2,7 @@
 // Include CUDA compatibility layer for C++ standard library functions
 
 // Include CUDA headers
-#if defined(__CUDACC__) || defined(SEP_USE_CUDA)
-#include <cuda_runtime.h>
-#else
-#include "compat/cuda_impl.h"
-#endif
+#include "compat/cuda_common.h"
 
 
 #include "compat/raii.h"

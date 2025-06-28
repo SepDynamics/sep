@@ -10,12 +10,6 @@
 #endif
 #include "compat/constants.h"
 
-#if defined(__CUDACC__) || defined(SEP_USE_CUDA)
-#include <cuda_runtime.h>
-#else
-#include "compat/cuda_impl.h"
-#endif
-
 #if !defined(__CUDACC__)
 #include <cstdlib>
 #include <sstream>

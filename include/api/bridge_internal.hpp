@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include "quantum/processor.h"
+#include "api/types.h" // for ErrorCode definition
 // Forward declarations
 namespace sep {
 namespace context {

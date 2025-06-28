@@ -18,7 +18,7 @@ SEP_API int sep_bridge_init(void) {
   try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex); // Fix: use the global mutex
-  sep::quantum::IProcessor::ProcessingConfig options{};
+  sep::quantum::ProcessingConfig options{};
   sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
   sep::api::bridge::detail::g_last_error.clear();
   sep::api::bridge::detail::g_required_buffer_size = 0;
@@ -46,7 +46,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
     }
 
-    sep::quantum::IProcessor *processor = nullptr;
+    sep::quantum::Processor *processor = nullptr;
     {
       std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
       if (!sep::api::bridge::detail::g_context_processor_bridge) {

@@ -1,5 +1,5 @@
 #if !SEP_CUDA_AVAILABLE
-#include "compat/core_stub.h" // Include the stub header
+#include "compat/core.h" // Use the main CUDA core header for stub builds
 #include "compat/cuda_runtime.h"
 #include <cstring>
 #include <cstdlib>

@@ -182,6 +182,27 @@ endif()
 find_library(OPENSUBDIV_CPU_LIBRARY NAMES osdCPU)
 find_library(OPENSUBDIV_GPU_LIBRARY NAMES osdGPU)
 
+# If the OpenSubdiv libraries are missing try to symlink system copies
+if(NOT OPENSUBDIV_CPU_LIBRARY OR NOT OPENSUBDIV_GPU_LIBRARY)
+  set(_osd_paths /usr/lib64 /usr/local/lib /usr/lib)
+  foreach(_p ${_osd_paths})
+    if(NOT OPENSUBDIV_CPU_LIBRARY AND EXISTS "${_p}/libosdCPU.so")
+      file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+      execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+        "${_p}/libosdCPU.so" "${CMAKE_SOURCE_DIR}/lib/libosdCPU.so")
+      set(OPENSUBDIV_CPU_LIBRARY "${CMAKE_SOURCE_DIR}/lib/libosdCPU.so")
+      message(STATUS "Symlinked osdCPU from ${_p}")
+    endif()
+    if(NOT OPENSUBDIV_GPU_LIBRARY AND EXISTS "${_p}/libosdGPU.so")
+      file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+      execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+        "${_p}/libosdGPU.so" "${CMAKE_SOURCE_DIR}/lib/libosdGPU.so")
+      set(OPENSUBDIV_GPU_LIBRARY "${CMAKE_SOURCE_DIR}/lib/libosdGPU.so")
+      message(STATUS "Symlinked osdGPU from ${_p}")
+    endif()
+  endforeach()
+endif()
+
 # OpenPGL (Path Guiding Library)
 find_library(OpenPGL_LIBRARY
     NAMES openpgl pgl

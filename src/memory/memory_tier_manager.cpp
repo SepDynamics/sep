@@ -1,5 +1,7 @@
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
+#include "quantum/types.h"        // For MemoryTierEnum definition
+#include "quantum/pattern.h"      // For QuantumPattern definition
 
 #include "compat/cuda_common.h"
 
@@ -7,8 +9,10 @@
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
 #include "memory/redis_manager.h"
+#include "quantum/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/data.hpp"
+#include "quantum/types.h"
 
 
 namespace sep::memory {

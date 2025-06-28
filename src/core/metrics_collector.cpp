@@ -1,6 +1,9 @@
 #include "core/metrics_collector.h"
 #include "compat/cuda_common.h"
 #include "compat/cuda_helpers.h"
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime_api.h>
+#endif
 
 #include <sys/resource.h>
 #include <sys/sysinfo.h>
@@ -23,6 +26,7 @@
 using namespace sep::shim::chrono_literals;
 using namespace sep::cuda;
 
+namespace sep::metrics {
 
 class MetricsCollector::Impl {
  public:
@@ -357,4 +361,6 @@ void MetricsCollector::resetOperation(const std::string& operation_name) {
     sep::shim::string key(operation_name.c_str());
     performance_metrics_.erase(key);
 }
+
+}  // namespace sep::metrics
 

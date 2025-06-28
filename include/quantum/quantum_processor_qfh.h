@@ -61,7 +61,7 @@ public:
 
     const QFHResult& getLastQFHResult() const;
 
-    ::sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
+    sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
 };
 
 }  // namespace sep::quantum

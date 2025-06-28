@@ -4,8 +4,8 @@
 
 namespace sep::cuda {
 
-// Define Stream::Impl as StreamImpl
-struct Stream::Impl : public impl::StreamImpl {};
+// Minimal implementation to decouple from internal StreamImpl
+struct Stream::Impl {};
 
 Stream::~Stream() = default;
 

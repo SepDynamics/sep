@@ -17,6 +17,11 @@
 #include <condition_variable>
 #include <complex>
 #include <functional>
+#include <vector>
+#include <unordered_map>
+#include <array>
+#include <string>
+#include "compat/cufft.h"
 
 namespace sep::quantum::manifold {
 

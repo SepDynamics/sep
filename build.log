@@ -140,36 +140,36 @@ CMake Warning:
 
 -- Build files have been written to: /sep/build
 Building SEP Engine...
-[  1%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 17%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 13%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 11%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 18%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 20%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 21%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 24%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 26%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 27%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 28%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[  1%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[  2%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[  4%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[  7%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  8%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[ 10%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 11%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 13%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 14%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 15%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 18%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 20%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 24%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 24%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 28%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
 [ 30%] Linking CXX static library /sep/lib/libcycles_osl.a
 [ 30%] Built target cycles_osl
-[ 31%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 33%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 36%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 40%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
-[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 31%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 33%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
+[ 34%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 36%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 37%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 39%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 42%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 /sep/src/core/engine.cpp: In member function ‘bool sep::core::Engine::init(const sep::config::APIConfig&)’:
 /sep/src/core/engine.cpp:147:26: error: ‘compat’ has not been declared
   147 |         audio_capture_ = compat::createAudioCapture();
@@ -177,9 +177,8 @@ Building SEP Engine...
 /sep/src/core/engine.cpp:175:27: error: ‘compat’ has not been declared
   175 |         blender_bridge_ = compat::createBlenderBridge();
       |                           ^~~~~~
-[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 46%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 43%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
 In file included from /sep/include/blender/cycles_renderer.h:4,
                  from /sep/src/compat/component_bridge.cpp:12:
 /sep/include/blender/pattern_bridge.h:30:8: error: redefinition of ‘struct sep::pattern::PatternLimits’
@@ -195,8 +194,6 @@ In file included from /sep/src/compat/component_bridge.cpp:8:
 /sep/include/blender/bridge.h:36:7: note: previous definition of ‘class sep::pattern::BlenderBridge’
    36 | class BlenderBridge {
       |       ^~~~~~~~~~~~~
-[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 49%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
 /sep/src/memory/redis_manager.cpp: In constructor ‘sep::persistence::RedisManager::Impl::Impl(const std::string&, int)’:
 /sep/src/memory/redis_manager.cpp:37:27: error: ‘sep::logging::Manager’ has not been declared
    37 |             sep::logging::Manager::getInstance().getLogger("redis");
@@ -208,6 +205,14 @@ In file included from /sep/src/compat/component_bridge.cpp:8:
 /sep/src/memory/redis_manager.cpp: In member function ‘std::optional<sep::persistence::PatternData> sep::persistence::RedisManager::Impl::loadPattern(std::size_t, const std::string&)’:
 /sep/src/memory/redis_manager.cpp:172:37: error: ‘sep::logging::Manager’ has not been declared
   172 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
+      |                                     ^~~~~~~
+/sep/src/memory/redis_manager.cpp: In member function ‘std::vector<long unsigned int> sep::persistence::RedisManager::Impl::getPatternIds(const std::string&)’:
+/sep/src/memory/redis_manager.cpp:284:37: error: ‘sep::logging::Manager’ has not been declared
+  284 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
+      |                                     ^~~~~~~
+/sep/src/memory/redis_manager.cpp: In member function ‘void sep::persistence::RedisManager::Impl::removePattern(std::size_t, const std::string&)’:
+/sep/src/memory/redis_manager.cpp:323:37: error: ‘sep::logging::Manager’ has not been declared
+  323 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
       |                                     ^~~~~~~
 In file included from /usr/include/c++/14/memory:78,
                  from /sep/include/compat/component_bridge.h:2,
@@ -222,28 +227,7 @@ In file included from /usr/include/c++/14/memory:78,
 /usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::audio::AudioCapture’
    91 |         static_assert(sizeof(_Tp)>0,
       |                       ^~~~~~~~~~~
-/sep/src/memory/redis_manager.cpp: In member function ‘std::vector<long unsigned int> sep::persistence::RedisManager::Impl::getPatternIds(const std::string&)’:
-/sep/src/memory/redis_manager.cpp:284:37: error: ‘sep::logging::Manager’ has not been declared
-  284 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
-      |                                     ^~~~~~~
-/sep/src/memory/redis_manager.cpp: In member function ‘void sep::persistence::RedisManager::Impl::removePattern(std::size_t, const std::string&)’:
-/sep/src/memory/redis_manager.cpp:323:37: error: ‘sep::logging::Manager’ has not been declared
-  323 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
-      |                                     ^~~~~~~
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:107: src/core/CMakeFiles/sep_core.dir/engine.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 53%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 55%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 59%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 46%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
 In file included from /sep/src/memory/quantum_coherence_manager.cpp:2:
 /sep/include/quantum/quantum_manifold_optimizer.h:137:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   137 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
@@ -275,14 +259,10 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:2:
 /sep/include/quantum/quantum_manifold_optimizer.h:306:64: error: unable to find numeric literal operator ‘operator""QUANTUM42’
   306 |         explicit DeterministicPatternGenerator(uint64_t seed = 0x42QUANTUM42)
       |                                                                ^~~~~~~~~~~~~
-make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 66%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 68%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 50%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 52%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
 /sep/src/memory/quantum_coherence_manager.cpp:28:7: error: ‘QuantumCoherenceManager’ has not been declared
    28 | class QuantumCoherenceManager::Impl {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
@@ -298,7 +278,9 @@ make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all
 /sep/src/memory/quantum_coherence_manager.cpp:661:1: error: ‘QuantumCoherenceManager’ does not name a type
   661 | QuantumCoherenceManager::CoherenceResult
       | ^~~~~~~~~~~~~~~~~~~~~~~
-[ 69%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:107: src/core/CMakeFiles/sep_core.dir/engine.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
 /sep/src/memory/quantum_coherence_manager.cpp:666:13: error: ‘QuantumCoherenceManager’ was not declared in this scope
   666 | std::vector<QuantumCoherenceManager::TierMigration>
       |             ^~~~~~~~~~~~~~~~~~~~~~~
@@ -338,10 +320,23 @@ make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all
 /sep/src/memory/quantum_coherence_manager.cpp:686:12: error: ‘impl_’ was not declared in this scope
   686 |     return impl_->restoreFromSnapshot(snapshot);
       |            ^~~~~
-[ 71%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 73%] Linking CXX static library libsep_audio.a
-[ 73%] Built target sep_audio
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 55%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 59%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 60%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 62%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 63%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 65%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 66%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 68%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:3:
 /sep/include/quantum/quantum_manifold_optimizer.h:137:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   137 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
@@ -373,10 +368,10 @@ In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:3:
 /sep/include/quantum/quantum_manifold_optimizer.h:306:64: error: unable to find numeric literal operator ‘operator""QUANTUM42’
   306 |         explicit DeterministicPatternGenerator(uint64_t seed = 0x42QUANTUM42)
       |                                                                ^~~~~~~~~~~~~
-/sep/src/api/server.cpp: In member function ‘void sep::api::SEPApiServer::setup_logging()’:
-/sep/src/api/server.cpp:250:21: error: ‘initializeLogging’ is not a member of ‘sep::logging’
-  250 |     ::sep::logging::initializeLogging();
-      |                     ^~~~~~~~~~~~~~~~~
+In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:11:
+/sep/include/memory/manager.h:78:18: error: ‘level_enum’ in ‘using sep::spdlog::level = enum spdlog::level::level_enum’ {aka ‘enum spdlog::level::level_enum’} does not name a type
+   78 |   spdlog::level::level_enum toSpdLogLevel(Level level);
+      |                  ^~~~~~~~~~
 In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:2:
 /sep/include/quantum/quantum_manifold_optimizer.h:137:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   137 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
@@ -393,7 +388,6 @@ In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:2:
 /sep/include/quantum/quantum_manifold_optimizer.h:181:21: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   181 |     ManifoldConfig::ApiConfig config_;
       |                     ^~~~~~~~~
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 /sep/include/quantum/quantum_manifold_optimizer.h:191:54: error: ‘SemanticConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   191 |     explicit SemanticProcessor(const ManifoldConfig::SemanticConfig& config);
       |                                                      ^~~~~~~~~~~~~~
@@ -409,14 +403,11 @@ make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CM
 /sep/include/quantum/quantum_manifold_optimizer.h:306:64: error: unable to find numeric literal operator ‘operator""QUANTUM42’
   306 |         explicit DeterministicPatternGenerator(uint64_t seed = 0x42QUANTUM42)
       |                                                                ^~~~~~~~~~~~~
-In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:11:
-/sep/include/memory/manager.h:78:18: error: ‘level_enum’ in ‘using sep::spdlog::level = enum spdlog::level::level_enum’ {aka ‘enum spdlog::level::level_enum’} does not name a type
-   78 |   spdlog::level::level_enum toSpdLogLevel(Level level);
-      |                  ^~~~~~~~~~
 In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:6:
 /sep/include/memory/manager.h:78:18: error: ‘level_enum’ in ‘using sep::spdlog::level = enum spdlog::level::level_enum’ {aka ‘enum spdlog::level::level_enum’} does not name a type
    78 |   spdlog::level::level_enum toSpdLogLevel(Level level);
       |                  ^~~~~~~~~~
+make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
 /sep/src/quantum/pattern_evolution_bridge.cpp:43:10: error: variable or field ‘PatternEvolutionBridge’ declared void
    43 |     void PatternEvolutionBridge;
       |          ^~~~~~~~~~~~~~~~~~~~~~
@@ -438,12 +429,6 @@ In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:6:
 /sep/src/quantum/pattern_evolution_bridge.cpp:482:10: error: ‘PatternEvolutionBridge’ has not been declared
   482 |     void PatternEvolutionBridge::initializeEvolutionState() {
       |          ^~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:55:7: error: ‘QuantumManifoldOptimizer’ has not been declared
-   55 | class QuantumManifoldOptimizer::Impl {
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:55:38: error: expected unqualified-id before ‘{’ token
-   55 | class QuantumManifoldOptimizer::Impl {
-      |                                      ^
 /sep/src/quantum/pattern_evolution_bridge.cpp: In function ‘void sep::quantum::initializeEvolutionState()’:
 /sep/src/quantum/pattern_evolution_bridge.cpp:483:9: error: ‘impl_’ was not declared in this scope
   483 |         impl_->evolution_state_->active_patterns.clear();
@@ -471,9 +456,6 @@ In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:6:
 /sep/src/quantum/pattern_evolution_bridge.cpp:514:100: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘entanglement_graph’
   514 |             entropy += -pattern.quantum_state.entanglement_graph * std::log2(pattern.quantum_state.entanglement_graph);
       |                                                                                                    ^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:513:1: error: ‘QuantumManifoldOptimizer’ does not name a type
-  513 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
-      | ^~~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/quantum/pattern_evolution_bridge.cpp:517:50: error: ‘impl_’ was not declared in this scope
   517 |                 std::lock_guard<std::mutex> lock(impl_->state_mutex_);
       |                                                  ^~~~~
@@ -494,6 +476,15 @@ In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:6:
 /sep/src/quantum/pattern_evolution_bridge.cpp:540:13: error: expected unqualified-id before ‘}’ token
   540 |             }
       |             ^
+/sep/src/quantum/quantum_manifold_optimizer.cpp:55:7: error: ‘QuantumManifoldOptimizer’ has not been declared
+   55 | class QuantumManifoldOptimizer::Impl {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:55:38: error: expected unqualified-id before ‘{’ token
+   55 | class QuantumManifoldOptimizer::Impl {
+      |                                      ^
+/sep/src/quantum/quantum_manifold_optimizer.cpp:513:1: error: ‘QuantumManifoldOptimizer’ does not name a type
+  513 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/quantum/quantum_manifold_optimizer.cpp:516:1: error: ‘QuantumManifoldOptimizer’ does not name a type
   516 | QuantumManifoldOptimizer::~QuantumManifoldOptimizer() = default;
       | ^~~~~~~~~~~~~~~~~~~~~~~~
@@ -550,11 +541,17 @@ In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:6:
 /sep/src/quantum/quantum_manifold_optimizer.cpp:538:114: error: expected initializer before ‘config’
   538 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
       |                                                                                                                  ^~~~~~
+/sep/src/api/server.cpp: In member function ‘void sep::api::SEPApiServer::setup_logging()’:
+/sep/src/api/server.cpp:250:21: error: ‘initializeLogging’ is not a member of ‘sep::logging’
+  250 |     ::sep::logging::initializeLogging();
+      |                     ^~~~~~~~~~~~~~~~~
 make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
+[ 69%] Linking CXX static library libsep_audio.a
+[ 69%] Built target sep_audio
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:247: src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:233: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:247: src/api/CMakeFiles/sep_api.dir/server.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:233: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:247: src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

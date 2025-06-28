@@ -1,4 +1,4 @@
-add_library(sep_audio STATIC config.cpp pipeline.cpp pipewire_capture.cpp)
+add_library(sep_audio STATIC config.cpp pipeline.cpp pipewire_capture.cpp pipewire_stubs.cpp)
 
 # Find PipeWire using both pkg-config and direct library find for robustness
 find_package(PkgConfig QUIET)

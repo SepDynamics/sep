@@ -1,5 +1,6 @@
 #include "quantum/types.h"
 #include <nlohmann/json.hpp>
+#include "compat/shim.h" // Ensure shim is included if needed
 
 namespace sep::quantum {
 
@@ -11,7 +12,9 @@ void to_json(nlohmann::json& j, const QuantumState& state) {
         {"mutation_rate", state.mutation_rate},
         {"generation", state.generation},
         {"mutation_count", state.mutation_count},
-        {"memory_tier", static_cast<int>(state.memory_tier)},
+        {"memory_tier", static_cast<int>(state.memory_tier)}, // Fix: serialize memory_tier as int
+        {"evolution_rate", state.evolution_rate}, // Fix: Add missing field
+        {"coupling_strength", state.coupling_strength}, // Fix: Add missing field
         {"access_frequency", state.access_frequency}
     };
 }
@@ -23,7 +26,9 @@ void from_json(const nlohmann::json& j, QuantumState& state) {
     j.at("mutation_rate").get_to(state.mutation_rate);
     j.at("generation").get_to(state.generation);
     j.at("mutation_count").get_to(state.mutation_count);
-    state.memory_tier = static_cast<MemoryTierEnum>(j.at("memory_tier").get<int>());
+    state.memory_tier = static_cast<MemoryTierEnum>(j.value("memory_tier", 0)); // Fix: default value for memory_tier
+    j.at("evolution_rate").get_to(state.evolution_rate); // Fix: Add missing field
+    j.at("coupling_strength").get_to(state.coupling_strength); // Fix: Add missing field
     j.at("access_frequency").get_to(state.access_frequency);
 }
 
@@ -38,7 +43,7 @@ void to_json(nlohmann::json& j, const PatternRelationship& rel) {
 void from_json(const nlohmann::json& j, PatternRelationship& rel) {
     j.at("targetId").get_to(rel.targetId);
     j.at("strength").get_to(rel.strength);
-    rel.type = static_cast<RelationshipType>(j.at("type").get<int>());
+    rel.type = static_cast<RelationshipType>(j.value("type", 0)); // Fix: default value for type
 }
 
 void to_json(nlohmann::json& j, const Pattern& pattern) {
@@ -46,6 +51,7 @@ void to_json(nlohmann::json& j, const Pattern& pattern) {
         {"id", pattern.id},
         {"position", {pattern.position.x, pattern.position.y, pattern.position.z, pattern.position.w}},
         {"quantum_state", pattern.quantum_state},
+        {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
         {"relationships", pattern.relationships},
         {"data", pattern.data},
         {"parent_ids", pattern.parent_ids},
@@ -59,7 +65,9 @@ void from_json(const nlohmann::json& j, Pattern& pattern) {
     j.at("id").get_to(pattern.id);
     auto pos = j.at("position").get<std::vector<float>>();
     pattern.position = glm::vec4(pos[0], pos[1], pos[2], pos[3]);
-    j.at("quantum_state").get_to(pattern.quantum_state);
+    j.value("quantum_state", pattern.quantum_state).get_to(pattern.quantum_state); // Fix: Use value with default
+    auto mom = j.value("momentum", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}).get<std::vector<float>>(); // Fix: Add momentum
+    pattern.momentum = glm::vec4(mom[0], mom[1], mom[2], mom[3]);
     j.at("relationships").get_to(pattern.relationships);
     j.at("data").get_to(pattern.data);
     j.at("parent_ids").get_to(pattern.parent_ids);

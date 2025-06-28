@@ -33,18 +33,18 @@ namespace {
     
     // Christoffel symbol approximation for local geometry
     glm::mat3 computeChristoffelSymbols(const glm::vec3& position, float curvature) {
-        float r2 = glm::length2(position);
-        float factor = curvature / (1.0f + r2);
+        float r2 = glm::dot(position, position); // Use dot product for squared length
+        float factor = curvature / (1.0f + r2 + 1e-6f); // Add epsilon to avoid division by zero
         
         return glm::mat3(
             1.0f - factor * position.x * position.x, -factor * position.x * position.y, -factor * position.x * position.z,
             -factor * position.y * position.x, 1.0f - factor * position.y * position.y, -factor * position.y * position.z,
-            -factor * position.z * position.x, -factor * position.z * position.y, 1.0f - factor * position.z * position.z
+            -factor * position.z * position.x, -factor * position.z * position.y, 1.0f - factor * position.z * position.z // Add epsilon to avoid division by zero
         );
     }
-    
+
     // Parallel transport along geodesic
-    glm::vec3 parallelTransport(const glm::vec3& vector, const glm::vec3& from, const glm::vec3& to, float curvature) {
+    glm::vec3 parallelTransport(const glm::vec3& vector, const glm::vec3& from, const glm::vec3& to, float curvature) { // Add curvature parameter
         glm::vec3 direction = glm::normalize(to - from);
         float distance = glm::length(to - from);
         

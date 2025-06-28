@@ -6,6 +6,7 @@
 #include "compat/component_bridge.h"
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
+#include "memory/redis_manager.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/data.hpp" // For PatternData definition
 

@@ -11,6 +11,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include "memory/redis_manager.h"
 #include <glm/glm.hpp>
 #include <chrono>
 #include <glm/vec3.hpp>

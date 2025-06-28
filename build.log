@@ -221,51 +221,58 @@ Call Stack (most recent call first):
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/build
 Building SEP Engine...
-[  1%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[  4%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[  5%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[  8%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 10%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 13%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 14%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 15%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 18%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 18%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 21%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 23%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[  4%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[  4%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 13%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 10%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 14%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 15%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 17%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
 [ 24%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 26%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-/sep/src/core/allocation_metrics.cpp:3:10: fatal error: metrics/types.h: No such file or directory
-    3 | #include "metrics/types.h"
+[ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+/sep/src/core/allocation_metrics.cpp:4:10: fatal error: metrics/types.h: No such file or directory
+    4 | #include "metrics/types.h"
       |          ^~~~~~~~~~~~~~~~~
 compilation terminated.
 make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:79: src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 27%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 28%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+make[2]: *** Waiting for unfinished jobs....
+[ 28%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
+/sep/src/compat/core_stub.cpp:2:10: fatal error: compat/core_stub.h: No such file or directory
+    2 | #include "compat/core_stub.h" // Include the stub header
+      |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:135: src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 30%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
 /sep/src/compat/raii.cpp:16:10: fatal error: memory/memory_tier_manager.h: No such file or directory
    16 | #include "memory/memory_tier_manager.h" // Include header for interface
       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 compilation terminated.
 make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 30%] Linking CXX static library /sep/lib/libcycles_osl.a
-[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-In file included from /sep/src/api/bridge_c.cpp:3:
-/sep/include/api/bridge_internal.hpp:37:29: error: ‘quantum’ is not a member of ‘sep’
-   37 | extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
-      |                             ^~~~~~~
-/sep/include/api/bridge_internal.hpp:37:47: error: template argument 1 is invalid
-   37 | extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
-      |                                               ^
-/sep/include/api/bridge_internal.hpp:37:47: error: template argument 2 is invalid
-[ 31%] Built target cycles_osl
-[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 31%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 33%] Linking CXX static library /sep/lib/libcycles_osl.a
+[ 34%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 34%] Built target cycles_osl
+[ 36%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+/sep/src/core/dag_graph.cpp: In member function ‘void sep::dag::DagGraph::removeNode(uint64_t)’:
+/sep/src/core/dag_graph.cpp:67:13: error: ‘node’ was not declared in this scope; did you mean ‘nodes_’?
+   67 |             node.parents.erase(std::remove(node.parents.begin(), node.parents.end(), id), node.parents.end());
+      |             ^~~~
+      |             nodes_
+[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:93: src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o] Error 1
+[ 39%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
 In file included from /sep/src/compat/component_bridge.cpp:2:
 /sep/include/audio/pipewire_capture.h:40:51: error: ‘pw_stream_state’ referred to as enum
    40 |   static void streamStateChanged(void *data, enum pw_stream_state old_state,
@@ -279,10 +286,6 @@ In file included from /sep/src/compat/component_bridge.cpp:2:
 /sep/include/audio/pipewire_capture.h:22:8: note: ‘pw_stream_state’ has a previous declaration here
    22 | struct pw_stream_state;
       |        ^~~~~~~~~~~~~~~
-/sep/src/quantum/qfh.cpp: In member function ‘sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const sep::shim::vector<unsigned char>&)’:
-/sep/src/quantum/qfh.cpp:78:12: error: ‘struct sep::quantum::QFHResult’ has no member named ‘collapse_threshold’
-   78 |     result.collapse_threshold = options_.collapse_threshold; // Fix: Initialize collapse_threshold
-      |            ^~~~~~~~~~~~~~~~~~
 In file included from /sep/src/audio/pipewire_capture.cpp:3:
 /sep/include/audio/pipewire_capture.h:22:8: error: ‘pw_stream_state’ referred to as ‘struct’
    22 | struct pw_stream_state;
@@ -295,11 +298,249 @@ In file included from /usr/include/pipewire-0.3/pipewire/pipewire.h:36,
 /usr/include/pipewire-0.3/pipewire/stream.h:246:6: note: ‘pw_stream_state’ has a previous declaration here
   246 | enum pw_stream_state {
       |      ^~~~~~~~~~~~~~~
+In file included from /sep/src/api/bridge_c.cpp:3:
+/sep/include/api/bridge_internal.hpp:37:29: error: ‘quantum’ is not a member of ‘sep’
+   37 | extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
+      |                             ^~~~~~~
+/sep/include/api/bridge_internal.hpp:37:47: error: template argument 1 is invalid
+   37 | extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
+      |                                               ^
+/sep/include/api/bridge_internal.hpp:37:47: error: template argument 2 is invalid
+[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+/sep/src/core/manager.cpp:10:22: error: declaration of ‘class sep::config::ConfigManager::Impl’ in namespace ‘sep::config::{anonymous}’ which does not enclose ‘class sep::config::ConfigManager’
+   10 | class ConfigManager::Impl {
+      |                      ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::SystemConfig& sep::config::ConfigManager::getConfig() const’:
+/sep/src/core/manager.cpp:140:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  140 |   return impl_->config;
+      |               ^~
+In file included from /sep/src/core/manager.cpp:1:
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::setConfig(const sep::config::SystemConfig&)’:
+/sep/src/core/manager.cpp:145:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  145 |   impl_->config = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromFile(const sep::shim::string&)’:
+/sep/src/core/manager.cpp:150:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  150 |   return impl_->loadFromFile(filename);
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromEnvironment()’:
+/sep/src/core/manager.cpp:155:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  155 |   return impl_->loadFromEnvironment();
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘bool sep::config::ConfigManager::loadFromCommandLine(int, char**)’:
+/sep/src/core/manager.cpp:160:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  160 |   return impl_->loadFromCommandLine(argc, argv);
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::APIConfig& sep::config::ConfigManager::getAPIConfig() const’:
+/sep/src/core/manager.cpp:165:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  165 |   return impl_->config.api;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::CUDAConfig& sep::config::ConfigManager::getCUDAConfig() const’:
+/sep/src/core/manager.cpp:170:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  170 |   return impl_->config.cuda;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘const sep::config::LogConfig& sep::config::ConfigManager::getLogConfig() const’:
+/sep/src/core/manager.cpp:175:15: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  175 |   return impl_->config.logging;
+      |               ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateAPIConfig(const sep::config::APIConfig&)’:
+/sep/src/core/manager.cpp:180:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  180 |   impl_->config.api = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateCUDAConfig(const sep::config::CUDAConfig&)’:
+/sep/src/core/manager.cpp:185:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  185 |   impl_->config.cuda = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::updateLogConfig(const sep::config::LogConfig&)’:
+/sep/src/core/manager.cpp:190:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  190 |   impl_->config.logging = config;
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::resetToDefaults()’:
+/sep/src/core/manager.cpp:195:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  195 |   impl_->loadDefaults();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp: In member function ‘void sep::config::ConfigManager::initialize(int, char**)’:
+/sep/src/core/manager.cpp:200:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  200 |   impl_->loadDefaults();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp:201:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  201 |   impl_->loadFromEnvironment();
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/core/manager.cpp:202:8: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+  202 |   impl_->loadFromCommandLine(argc, argv);
+      |        ^~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/sep/src/quantum/qfh.cpp: In member function ‘sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const sep::shim::vector<unsigned char>&)’:
+/sep/src/quantum/qfh.cpp:78:12: error: ‘struct sep::quantum::QFHResult’ has no member named ‘collapse_threshold’
+   78 |     result.collapse_threshold = options_.collapse_threshold; // Fix: Initialize collapse_threshold
+      |            ^~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/include/compat/cuda.h:14,
+                 from /sep/include/core/types.h:10,
+                 from /sep/include/core/manager.h:4:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::config::ConfigManager::Impl; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::config::ConfigManager::Impl>]’:
+/sep/src/core/manager.cpp:135:62:   required from here
+  135 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                        ~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::config::ConfigManager::Impl’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
+   60 |   class Impl;
+      |         ^~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::config::ConfigManager::Impl]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::config::ConfigManager::Impl; _Dp = std::default_delete<sep::config::ConfigManager::Impl>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/core/manager.cpp:135:62:   required from here
+  135 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                        ~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::config::ConfigManager::Impl’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/sep/src/compat/stream.cpp:8:30: error: ‘impl’ has not been declared
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                              ^~~~
+/sep/src/compat/stream.cpp:8:36: error: expected ‘{’ before ‘StreamImpl’
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                                    ^~~~~~~~~~
+/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::synchronize()’:
+/sep/src/compat/stream.cpp:18:35: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
+   18 | void Stream::synchronize() { impl_->synchronize(); }
+      |                                   ^~
+/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                ^~~~
+/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::wait(void*)’:
+/sep/src/compat/stream.cpp:20:39: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
+   20 | void Stream::wait(void* event) { impl_->wait(event); }
+      |                                       ^~
+/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                ^~~~
+/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::record(void*)’:
+/sep/src/compat/stream.cpp:22:41: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
+   22 | void Stream::record(void* event) { impl_->record(event); }
+      |                                         ^~
+/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                ^~~~
+/sep/src/compat/stream.cpp: In member function ‘void* sep::cuda::Stream::handle() const’:
+/sep/src/compat/stream.cpp:24:44: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
+   24 | void* Stream::handle() const { return impl_->handle(); }
+      |                                            ^~
+/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                ^~~~
+/sep/src/compat/stream.cpp: In member function ‘bool sep::cuda::Stream::isValid() const’:
+/sep/src/compat/stream.cpp:26:44: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
+   26 | bool Stream::isValid() const { return impl_->isValid(); }
+      |                                            ^~
+/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                ^~~~
 make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:107: src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 34%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 36%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 37%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+/sep/src/compat/stream.cpp: In static member function ‘static std::shared_ptr<sep::cuda::Stream> sep::cuda::Stream::create(sep::StreamFlags)’:
+/sep/src/compat/stream.cpp:31:3: error: ‘cudaStream_t’ was not declared in this scope
+   31 |   cudaStream_t cuda_stream;
+      |   ^~~~~~~~~~~~
+/sep/src/compat/stream.cpp:34:7: error: ‘cudaStreamNonBlocking’ was not declared in this scope
+   34 |       cudaStreamNonBlocking :
+      |       ^~~~~~~~~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp:35:7: error: ‘cudaStreamDefault’ was not declared in this scope
+   35 |       cudaStreamDefault;
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp:37:3: error: ‘cudaError_t’ was not declared in this scope
+   37 |   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
+      |   ^~~~~~~~~~~
+/sep/src/compat/stream.cpp:38:7: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+   38 |   if (err != cudaSuccess) {
+      |       ^~~
+      |       erf
+/sep/src/compat/stream.cpp:38:14: error: ‘cudaSuccess’ was not declared in this scope
+   38 |   if (err != cudaSuccess) {
+      |              ^~~~~~~~~~~
+/sep/src/compat/stream.cpp:39:18: error: ‘logCudaError’ is not a member of ‘sep::cuda’
+   39 |     ::sep::cuda::logCudaError("cudaStreamCreateWithFlags", err);
+      |                  ^~~~~~~~~~~~
+/sep/src/compat/stream.cpp:42:16: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
+   42 |   stream->impl_->setHandle(cuda_stream);
+      |                ^~
+/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                ^~~~
+/sep/src/compat/stream.cpp:42:28: error: ‘cuda_stream’ was not declared in this scope
+   42 |   stream->impl_->setHandle(cuda_stream);
+      |                            ^~~~~~~~~~~
+[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/src/compat/stream.cpp:1:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::cuda::Stream::Impl; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::cuda::Stream::Impl>]’:
+/sep/src/compat/stream.cpp:16:48:   required from here
+   16 | Stream::Stream() : impl_(std::make_unique<Impl>()) {}
+      |                          ~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
+    8 | struct Stream::Impl : public impl::StreamImpl {};
+      |                ^~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::cuda::Stream::Impl]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::cuda::Stream::Impl; _Dp = std::default_delete<sep::cuda::Stream::Impl>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp:10:1:   required from here
+   10 | Stream::~Stream() = default;
+      | ^~~~~~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::cuda::Stream::Impl’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
 /sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_init()’:
 /sep/src/api/bridge_c.cpp:21:8: error: ‘sep::quantum’ has not been declared
    21 |   sep::quantum::IProcessor::ProcessingConfig options{};
@@ -355,51 +596,6 @@ make[2]: *** Waiting for unfinished jobs....
 /sep/src/api/bridge_c.cpp:82:35: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
    82 |         sep::api::bridge::detail::setLastError(
       |                                   ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:8:30: error: ‘impl’ has not been declared
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                              ^~~~
-/sep/src/compat/stream.cpp:8:36: error: expected ‘{’ before ‘StreamImpl’
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                                    ^~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::synchronize()’:
-/sep/src/compat/stream.cpp:18:35: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
-   18 | void Stream::synchronize() { impl_->synchronize(); }
-      |                                   ^~
-/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                ^~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::wait(void*)’:
-/sep/src/compat/stream.cpp:20:39: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
-   20 | void Stream::wait(void* event) { impl_->wait(event); }
-      |                                       ^~
-/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                ^~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::record(void*)’:
-/sep/src/compat/stream.cpp:22:41: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
-   22 | void Stream::record(void* event) { impl_->record(event); }
-      |                                         ^~
-/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                ^~~~
-/sep/src/compat/stream.cpp: In member function ‘void* sep::cuda::Stream::handle() const’:
-/sep/src/compat/stream.cpp:24:44: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
-   24 | void* Stream::handle() const { return impl_->handle(); }
-      |                                            ^~
-/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                ^~~~
-/sep/src/compat/stream.cpp: In member function ‘bool sep::cuda::Stream::isValid() const’:
-/sep/src/compat/stream.cpp:26:44: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
-   26 | bool Stream::isValid() const { return impl_->isValid(); }
-      |                                            ^~
-/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                ^~~~
-/sep/src/compat/stream.cpp: In static member function ‘static std::shared_ptr<sep::cuda::Stream> sep::cuda::Stream::create(sep::StreamFlags)’:
-/sep/src/compat/stream.cpp:31:3: error: ‘cudaStream_t’ was not declared in this scope
-   31 |   cudaStream_t cuda_stream;
-      |   ^~~~~~~~~~~~
 /sep/src/api/bridge_c.cpp:103:35: error: ‘setRequiredBufferSize’ is not a member of ‘sep::api::bridge::detail’; did you mean ‘g_required_buffer_size’?
   103 |         sep::api::bridge::detail::setRequiredBufferSize(result_str.size() + 1);
       |                                   ^~~~~~~~~~~~~~~~~~~~~
@@ -413,9 +609,6 @@ make[2]: *** Waiting for unfinished jobs....
 /sep/src/api/bridge_c.cpp:116:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
   116 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(sep::api::ErrorCode::ProcessingError));
       |                                                       ^~~~~~~~~~~
-/sep/src/compat/stream.cpp:34:7: error: ‘cudaStreamNonBlocking’ was not declared in this scope
-   34 |       cudaStreamNonBlocking :
-      |       ^~~~~~~~~~~~~~~~~~~~~
 /sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_set_config(const char*, const char*)’:
 /sep/src/api/bridge_c.cpp:142:31: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
   142 |     sep::api::bridge::detail::setLastError("Invalid parameters");
@@ -467,15 +660,9 @@ make[2]: *** Waiting for unfinished jobs....
 /sep/src/api/bridge_c.cpp:222:31: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
   222 |     sep::api::bridge::detail::setLastError("Invalid parameters");
       |                               ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:35:7: error: ‘cudaStreamDefault’ was not declared in this scope
-   35 |       cudaStreamDefault;
-      |       ^~~~~~~~~~~~~~~~~
 /sep/src/api/bridge_c.cpp:226:29: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
   226 |   sep::api::bridge::detail::setLastError("");
       |                             ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:37:3: error: ‘cudaError_t’ was not declared in this scope
-   37 |   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
-      |   ^~~~~~~~~~~
 /sep/include/api/bridge_internal.hpp:24:31: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
    24 |     sep::api::bridge::detail::setLastError(e.what()); \
       |                               ^~~~~~~~~~~~
@@ -488,220 +675,44 @@ make[2]: *** Waiting for unfinished jobs....
 /sep/src/api/bridge_c.cpp:229:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
   229 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
       |     ^~~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:38:7: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-   38 |   if (err != cudaSuccess) {
-      |       ^~~
-      |       erf
-/sep/src/compat/stream.cpp:38:14: error: ‘cudaSuccess’ was not declared in this scope
-   38 |   if (err != cudaSuccess) {
-      |              ^~~~~~~~~~~
-/sep/src/compat/stream.cpp:39:18: error: ‘logCudaError’ is not a member of ‘sep::cuda’
-   39 |     ::sep::cuda::logCudaError("cudaStreamCreateWithFlags", err);
-      |                  ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:42:16: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
-   42 |   stream->impl_->setHandle(cuda_stream);
-      |                ^~
-/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                ^~~~
-/sep/src/compat/stream.cpp:42:28: error: ‘cuda_stream’ was not declared in this scope
-   42 |   stream->impl_->setHandle(cuda_stream);
-      |                            ^~~~~~~~~~~
-/sep/src/quantum/evolution.cpp:22:44: error: expected ‘)’ before ‘*’ token
-   22 |     explicit EvolutionEngineImpl(IProcessor* processor)
-      |                                 ~          ^
-      |                                            )
-/sep/src/quantum/evolution.cpp:290:5: error: ‘IProcessor’ does not name a type; did you mean ‘Processor’?
-  290 |     IProcessor* processor_; // Use interface type
-      |     ^~~~~~~~~~
-      |     Processor
-/sep/src/quantum/evolution.cpp: In member function ‘sep::quantum::BatchProcessingResult sep::quantum::EvolutionEngine::EvolutionEngineImpl::evolve(const sep::quantum::EvolutionEngine::EvolutionParams&)’:
-/sep/src/quantum/evolution.cpp:31:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
-   31 |         auto patterns = processor_->getPatterns();
-      |                         ^~~~~~~~~~
-      |                         Processor
-/sep/src/quantum/evolution.cpp:41:37: error: no matching function for call to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::push_back(<brace-enclosed initializer list>)’
-   41 |             fitness_scores.push_back({pattern.id, calculateFitness(pattern)});
-      |             ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from /usr/include/c++/14/vector:66,
-                 from /sep/include/quantum/types.h:5,
-                 from /sep/include/quantum/evolution.h:4,
-                 from /sep/src/quantum/evolution.cpp:1:
-/usr/include/c++/14/bits/stl_vector.h:1283:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
- 1283 |       push_back(const value_type& __x)
-      |       ^~~~~~~~~
-/usr/include/c++/14/bits/stl_vector.h:1283:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&’ {aka ‘const std::pair<std::__cxx11::basic_string<char>, float>&’}
- 1283 |       push_back(const value_type& __x)
-      |                 ~~~~~~~~~~~~~~~~~~^~~
-/usr/include/c++/14/bits/stl_vector.h:1300:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
- 1300 |       push_back(value_type&& __x)
-      |       ^~~~~~~~~
-/usr/include/c++/14/bits/stl_vector.h:1300:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&&’ {aka ‘std::pair<std::__cxx11::basic_string<char>, float>&&’}
- 1300 |       push_back(value_type&& __x)
-      |                 ~~~~~~~~~~~~~^~~
-/sep/src/quantum/evolution.cpp: In member function ‘sep::quantum::Pattern sep::quantum::EvolutionEngine::EvolutionEngineImpl::crossover(const sep::quantum::Pattern&, const sep::quantum::Pattern&)’:
-/sep/src/quantum/evolution.cpp:102:21: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
-  102 |         child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
-      |                     ^~~~~
-/sep/src/quantum/evolution.cpp:102:45: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
-  102 |         child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
-      |                                             ^~~~~
-/sep/src/quantum/evolution.cpp:102:59: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
-  102 |         child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
-      |                                                           ^~~~~
-/sep/src/quantum/evolution.cpp: In member function ‘sep::quantum::Pattern sep::quantum::EvolutionEngine::EvolutionEngineImpl::mutate(const sep::quantum::Pattern&)’:
-/sep/src/quantum/evolution.cpp:123:23: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
-  123 |         float sigma = processor_->getConfig().mutation_rate;
-      |                       ^~~~~~~~~~
-      |                       Processor
-/sep/src/quantum/evolution.cpp:127:15: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
-  127 |         state.phase += (nextFloat() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
-      |               ^~~~~
-/sep/src/quantum/evolution.cpp: In member function ‘std::vector<std::__cxx11::basic_string<char> > sep::quantum::EvolutionEngine::EvolutionEngineImpl::selectElite(size_t)’:
-/sep/src/quantum/evolution.cpp:139:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
-  139 |         auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
-      |                         ^~~~~~~~~~
-      |                         Processor
-/sep/src/quantum/evolution.cpp:142:37: error: no matching function for call to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::push_back(<brace-enclosed initializer list>)’
-  142 |             fitness_scores.push_back({pattern.id, calculateFitness(pattern)});
-      |             ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/14/bits/stl_vector.h:1283:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
- 1283 |       push_back(const value_type& __x)
-      |       ^~~~~~~~~
-/usr/include/c++/14/bits/stl_vector.h:1283:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&’ {aka ‘const std::pair<std::__cxx11::basic_string<char>, float>&’}
- 1283 |       push_back(const value_type& __x)
-      |                 ~~~~~~~~~~~~~~~~~~^~~
-/usr/include/c++/14/bits/stl_vector.h:1300:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
- 1300 |       push_back(value_type&& __x)
-      |       ^~~~~~~~~
-/usr/include/c++/14/bits/stl_vector.h:1300:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&&’ {aka ‘std::pair<std::__cxx11::basic_string<char>, float>&&’}
- 1300 |       push_back(value_type&& __x)
-      |                 ~~~~~~~~~~~~~^~~
-/sep/src/quantum/evolution.cpp: In member function ‘std::vector<std::__cxx11::basic_string<char> > sep::quantum::EvolutionEngine::EvolutionEngineImpl::tournamentSelection(size_t, size_t)’:
-/sep/src/quantum/evolution.cpp:156:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
-  156 |         auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
-      |                         ^~~~~~~~~~
-      |                         Processor
-/sep/src/quantum/evolution.cpp:164:37: error: no matching function for call to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::push_back(<brace-enclosed initializer list>)’
-  164 |                 tournament.push_back({patterns[idx].id, calculateFitness(patterns[idx])});
-      |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/14/bits/stl_vector.h:1283:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
- 1283 |       push_back(const value_type& __x)
-      |       ^~~~~~~~~
-/usr/include/c++/14/bits/stl_vector.h:1283:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&’ {aka ‘const std::pair<std::__cxx11::basic_string<char>, float>&’}
- 1283 |       push_back(const value_type& __x)
-      |                 ~~~~~~~~~~~~~~~~~~^~~
-/usr/include/c++/14/bits/stl_vector.h:1300:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
- 1300 |       push_back(value_type&& __x)
-      |       ^~~~~~~~~
-/usr/include/c++/14/bits/stl_vector.h:1300:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&&’ {aka ‘std::pair<std::__cxx11::basic_string<char>, float>&&’}
- 1300 |       push_back(value_type&& __x)
-      |                 ~~~~~~~~~~~~~^~~
-/sep/src/quantum/evolution.cpp: In member function ‘std::vector<std::__cxx11::basic_string<char> > sep::quantum::EvolutionEngine::EvolutionEngineImpl::rouletteWheelSelection(size_t)’:
-/sep/src/quantum/evolution.cpp:174:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
-  174 |         auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
-      |                         ^~~~~~~~~~
-      |                         Processor
-/sep/src/quantum/evolution.cpp: In member function ‘float sep::quantum::EvolutionEngine::EvolutionEngineImpl::calculatePatternDiversity(const sep::quantum::Pattern&) const’:
-/sep/src/quantum/evolution.cpp:233:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
-  233 |         auto patterns = processor_->getPatterns();
-      |                         ^~~~~~~~~~
-      |                         Processor
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/src/compat/stream.cpp:1:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::cuda::Stream::Impl; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::cuda::Stream::Impl>]’:
-/sep/src/compat/stream.cpp:16:48:   required from here
-   16 | Stream::Stream() : impl_(std::make_unique<Impl>()) {}
-      |                          ~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘struct sep::cuda::Stream::Impl’
- 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:8:16: note: forward declaration of ‘struct sep::cuda::Stream::Impl’
-    8 | struct Stream::Impl : public impl::StreamImpl {};
-      |                ^~~~
-/sep/src/quantum/evolution.cpp: At global scope:
-/sep/src/quantum/evolution.cpp:298:33: error: expected constructor, destructor, or type conversion before ‘(’ token
-  298 | EvolutionEngine::EvolutionEngine(IProcessor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {} // Use interface type
-      |                                 ^
-/sep/src/quantum/evolution.cpp: In function ‘sep::quantum::Pattern sep::quantum::evolution::gaussianMutation(const sep::quantum::Pattern&, float)’:
-/sep/src/quantum/evolution.cpp:325:11: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
-  325 |     state.phase += (rnd() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
-      |           ^~~~~
-/sep/src/quantum/evolution.cpp: In function ‘sep::quantum::Pattern sep::quantum::evolution::blendCrossover(const sep::quantum::Pattern&, const sep::quantum::Pattern&, float)’:
-/sep/src/quantum/evolution.cpp:356:17: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
-  356 |     child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
-      |                 ^~~~~
-/sep/src/quantum/evolution.cpp:356:41: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
-  356 |     child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
-      |                                         ^~~~~
-/sep/src/quantum/evolution.cpp:356:55: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
-  356 |     child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
-      |                                                       ^~~~~
-/sep/src/quantum/evolution.cpp: In function ‘std::vector<sep::quantum::Pattern> sep::quantum::evolution::createRandomPopulation(size_t)’:
-/sep/src/quantum/evolution.cpp:377:31: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
-  377 |         pattern.quantum_state.phase = rnd() * 2.0f * M_PI; // Initialize phase
-      |                               ^~~~~
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::cuda::Stream::Impl]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::cuda::Stream::Impl; _Dp = std::default_delete<sep::cuda::Stream::Impl>]’
-  399 |           get_deleter()(std::move(__ptr));
-      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:10:1:   required from here
-   10 | Stream::~Stream() = default;
-      | ^~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::cuda::Stream::Impl’
-   91 |         static_assert(sizeof(_Tp)>0,
-      |                       ^~~~~~~~~~~
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
+[ 46%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 /sep/src/api/bridge.cpp:54:6: error: redefinition of ‘void sep::api::bridge::detail::setLastError(const std::string&)’
    54 | void setLastError(const std::string& error) {
       |      ^~~~~~~~~~~~
 /sep/src/api/bridge.cpp:53:6: note: ‘void sep::api::bridge::detail::setLastError(const std::string&)’ previously defined here
    53 | void setLastError(const std::string &error) { g_last_error = error; }
       |      ^~~~~~~~~~~~
-[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-/sep/src/quantum/quantum_processor.cpp: In constructor ‘sep::quantum::QuantumProcessor::QuantumProcessor(const Config&)’:
-/sep/src/quantum/quantum_processor.cpp:61:23: error: ‘createQFHBasedQBSAProcessor’ was not declared in this scope
-   61 |     qbsa_processor_ = createQFHBasedQBSAProcessor({});
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor.cpp: At global scope:
-/sep/src/quantum/quantum_processor.cpp:65:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                 ^~~~~~~~~~~~~~~~~
-      |                 QuantumProcessor
-/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 1 is invalid
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                                  ^
-/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor.cpp:65:36: error: ambiguating new declaration of ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                                    ^~~~~~~~~~~~~~~~~~~~~~
-In file included from /sep/src/quantum/quantum_processor.cpp:1:
-/sep/include/quantum/quantum_processor.h:57:35: note: old declaration ‘std::unique_ptr<sep::quantum::QuantumProcessor> sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
-   57 | std::unique_ptr<QuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config);
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’:
-/sep/src/quantum/quantum_processor.cpp:68:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
-   68 |     return std::make_unique<QuantumProcessor>(config);
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-      |                                              |
-      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
-[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-/sep/src/quantum/quantum_processor.cpp: At global scope:
-/sep/src/quantum/quantum_processor.cpp:71:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
-   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
-      |                 ^~~~~~~~~~~~~~~~~
-      |                 QuantumProcessor
-/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 1 is invalid
-   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
-      |                                  ^
-/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessorStub()’:
-/sep/src/quantum/quantum_processor.cpp:72:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
-   72 |     return std::make_unique<QuantumProcessor>(QuantumProcessor::Config{});
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                              |
-      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:163: src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o] Error 1
-[ 42%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+/sep/src/memory/memory_tier_manager.cpp:29:1: error: no declaration matches ‘sep::memory::MemoryTierManager::MemoryTierManager()’
+   29 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      | ^~~~~~~~~~~~~~~~~
+In file included from /sep/src/memory/memory_tier_manager.cpp:1:
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: candidates are: ‘sep::memory::MemoryTierManager::MemoryTierManager(const sep::memory::MemoryTierManager&)’
+   44 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:20:1: note:                 ‘sep::memory::MemoryTierManager::MemoryTierManager(const Config&)’
+   20 | MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
+      | ^~~~~~~~~~~~~~~~~
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
+   44 | class MemoryTierManager {
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:29:68: error: expected unqualified-id before ‘)’ token
+   29 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      |                                                                    ^
+/sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::removePattern(std::size_t)’:
+/sep/src/memory/memory_tier_manager.cpp:230:69: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  230 |     if (MemoryTier* t = getTier(static_cast<sep::memory::TierType>(p->memory_tier)))
+      |                                                                     ^~
+/sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
+   33 | struct PatternData;
+      |        ^~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::calculateRelationshipCoherence()’:
+/sep/src/memory/memory_tier_manager.cpp:260:24: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  260 |             pit->second->coherence = avg;
+      |                        ^~
+/sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
+   33 | struct PatternData;
+      |        ^~~~~~~~~~~
 /sep/src/quantum/quantum_processor_qfh.cpp:22:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
    22 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
       |                 ^~~~~~~~~~~~~~~~~~~~
@@ -731,244 +742,246 @@ make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:163: src/quantum
       |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
       |                                                 |
       |                                                 std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>
-/sep/src/memory/memory_tier_manager.cpp:28:1: error: no declaration matches ‘sep::memory::MemoryTierManager::MemoryTierManager()’
-   28 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
-      | ^~~~~~~~~~~~~~~~~
-In file included from /sep/src/memory/memory_tier_manager.cpp:1:
-/sep/include/memory/memory_tier_manager.hpp:44:7: note: candidates are: ‘sep::memory::MemoryTierManager::MemoryTierManager(const sep::memory::MemoryTierManager&)’
-   44 | class MemoryTierManager {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:19:1: note:                 ‘sep::memory::MemoryTierManager::MemoryTierManager(const Config&)’
-   19 | MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
-      | ^~~~~~~~~~~~~~~~~
-/sep/include/memory/memory_tier_manager.hpp:44:7: note: ‘class sep::memory::MemoryTierManager’ defined here
-   44 | class MemoryTierManager {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:28:68: error: expected unqualified-id before ‘)’ token
-   28 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
-      |                                                                    ^
-/sep/src/memory/memory_tier_manager.cpp: In member function ‘sep::SEPResult sep::memory::MemoryTierManager::launch_pattern_processing(sep::pattern::PatternData*, sep::pattern::PatternData*, const sep::pattern::PatternConfig&, size_t, const sep::pattern::PatternData*, void*)’:
-/sep/src/memory/memory_tier_manager.cpp:193:1: warning: no return statement in function returning non-void [-Wreturn-type]
-  193 | }
-      | ^
-/sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::removePattern(std::size_t)’:
-/sep/src/memory/memory_tier_manager.cpp:219:69: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  219 |     if (MemoryTier* t = getTier(static_cast<sep::memory::TierType>(p->memory_tier)))
-      |                                                                     ^~
-/sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
-   33 | struct PatternData;
-      |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::calculateRelationshipCoherence()’:
-/sep/src/memory/memory_tier_manager.cpp:249:24: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  249 |             pit->second->coherence = avg;
-      |                        ^~
-/sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
-   33 | struct PatternData;
-      |        ^~~~~~~~~~~
 /sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::loadLTMFromPersistence()’:
-/sep/src/memory/memory_tier_manager.cpp:265:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  265 |         pat->id = std::to_string(id);
+/sep/src/memory/memory_tier_manager.cpp:276:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  276 |         pat->id = std::to_string(id);
       |            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:266:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  266 |         pat->generation = data_opt->generation_count;
+/sep/src/memory/memory_tier_manager.cpp:277:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  277 |         pat->generation = data_opt->generation_count;
       |            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:267:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  267 |         pat->position = glm::vec4(data_opt->position, 0.0f);
+/sep/src/memory/memory_tier_manager.cpp:278:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  278 |         pat->position = glm::vec4(data_opt->position, 0.0f);
       |            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:268:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  268 |         pat->coherence = data_opt->coherence;
+/sep/src/memory/memory_tier_manager.cpp:279:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  279 |         pat->coherence = data_opt->coherence;
       |            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:269:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  269 |         pat->stability = data_opt->stability;
+/sep/src/memory/memory_tier_manager.cpp:280:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  280 |         pat->stability = data_opt->stability;
       |            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:270:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  270 |         pat->memory_tier = MemoryTierEnum::LTM;
+/sep/src/memory/memory_tier_manager.cpp:281:12: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  281 |         pat->memory_tier = MemoryTierEnum::LTM;
       |            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:276:16: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  276 |             pat->relationships.push_back(pr);
+/sep/src/memory/memory_tier_manager.cpp:287:16: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  287 |             pat->relationships.push_back(pr);
       |                ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
 /sep/src/memory/memory_tier_manager.cpp: In member function ‘sep::quantum::Pattern* sep::memory::MemoryTierManager::findPattern(std::size_t)’:
-/sep/src/memory/memory_tier_manager.cpp:313:23: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  313 |     pattern->id = data->id;
+/sep/src/memory/memory_tier_manager.cpp:324:23: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  324 |     pattern->id = data->id;
       |                       ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:314:33: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  314 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
+/sep/src/memory/memory_tier_manager.cpp:325:33: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  325 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
       |                                 ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:314:53: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  314 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
+/sep/src/memory/memory_tier_manager.cpp:325:53: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  325 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
       |                                                     ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:314:73: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  314 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
+/sep/src/memory/memory_tier_manager.cpp:325:73: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  325 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
       |                                                                         ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:314:93: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  314 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
+/sep/src/memory/memory_tier_manager.cpp:325:93: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  325 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
       |                                                                                             ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:316:44: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  316 |     pattern->quantum_state.coherence = data->coherence;
+/sep/src/memory/memory_tier_manager.cpp:327:44: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  327 |     pattern->quantum_state.coherence = data->coherence;
       |                                            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:317:44: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  317 |     pattern->quantum_state.stability = data->stability;
+/sep/src/memory/memory_tier_manager.cpp:328:44: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  328 |     pattern->quantum_state.stability = data->stability;
       |                                            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:318:45: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  318 |     pattern->quantum_state.generation = data->generation;
+/sep/src/memory/memory_tier_manager.cpp:329:45: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  329 |     pattern->quantum_state.generation = data->generation;
       |                                             ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:319:34: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  319 |     pattern->relationships = data->relationships;
+/sep/src/memory/memory_tier_manager.cpp:330:34: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  330 |     pattern->relationships = data->relationships;
       |                                  ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
 /sep/src/memory/memory_tier_manager.cpp: In member function ‘const sep::quantum::Pattern* sep::memory::MemoryTierManager::findPattern(std::size_t) const’:
-/sep/src/memory/memory_tier_manager.cpp:330:23: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  330 |     pattern->id = data->id;
+/sep/src/memory/memory_tier_manager.cpp:341:23: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  341 |     pattern->id = data->id;
       |                       ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:331:33: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  331 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
+/sep/src/memory/memory_tier_manager.cpp:342:33: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  342 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
       |                                 ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:331:53: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  331 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
+/sep/src/memory/memory_tier_manager.cpp:342:53: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  342 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
       |                                                     ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:331:73: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  331 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
+/sep/src/memory/memory_tier_manager.cpp:342:73: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  342 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
       |                                                                         ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:331:93: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  331 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
+/sep/src/memory/memory_tier_manager.cpp:342:93: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  342 |     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
       |                                                                                             ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:333:44: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  333 |     pattern->quantum_state.coherence = data->coherence;
+/sep/src/memory/memory_tier_manager.cpp:344:44: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  344 |     pattern->quantum_state.coherence = data->coherence;
       |                                            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:334:44: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  334 |     pattern->quantum_state.stability = data->stability;
+/sep/src/memory/memory_tier_manager.cpp:345:44: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  345 |     pattern->quantum_state.stability = data->stability;
       |                                            ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:335:45: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  335 |     pattern->quantum_state.generation = data->generation;
+/sep/src/memory/memory_tier_manager.cpp:346:45: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  346 |     pattern->quantum_state.generation = data->generation;
       |                                             ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:336:34: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
-  336 |     pattern->relationships = data->relationships;
+/sep/src/memory/memory_tier_manager.cpp:347:34: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  347 |     pattern->relationships = data->relationships;
       |                                  ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
 /sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::cleanupExpiredPatterns()’:
-/sep/src/memory/memory_tier_manager.cpp:343:21: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
-  343 |         if (p.second->coherence < config_.demote_threshold)
+/sep/src/memory/memory_tier_manager.cpp:354:21: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+  354 |         if (p.second->coherence < config_.demote_threshold)
       |                     ^~
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
 /sep/src/memory/memory_tier_manager.cpp: At global scope:
-/sep/src/memory/memory_tier_manager.cpp:381:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
-  381 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
+/sep/src/memory/memory_tier_manager.cpp:392:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
+  392 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
       |                 ^~~~~~~~~~~~~~~~~~
       |                 MemoryTierManager
-/sep/src/memory/memory_tier_manager.cpp:381:35: error: template argument 1 is invalid
-  381 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
+/sep/src/memory/memory_tier_manager.cpp:392:35: error: template argument 1 is invalid
+  392 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
       |                                   ^
-/sep/src/memory/memory_tier_manager.cpp:381:35: error: template argument 2 is invalid
+/sep/src/memory/memory_tier_manager.cpp:392:35: error: template argument 2 is invalid
 /sep/src/memory/memory_tier_manager.cpp: In function ‘int sep::memory::createMemoryTierManager()’:
-/sep/src/memory/memory_tier_manager.cpp:384:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
-  384 |     return std::make_unique<MemoryTierManager>();
+/sep/src/memory/memory_tier_manager.cpp:395:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
+  395 |     return std::make_unique<MemoryTierManager>();
       |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
       |                                               |
       |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
 /sep/src/memory/memory_tier_manager.cpp: At global scope:
-/sep/src/memory/memory_tier_manager.cpp:387:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
-  387 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
+/sep/src/memory/memory_tier_manager.cpp:398:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
+  398 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
       |                 ^~~~~~~~~~~~~~~~~~
       |                 MemoryTierManager
-/sep/src/memory/memory_tier_manager.cpp:387:35: error: template argument 1 is invalid
-  387 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
+/sep/src/memory/memory_tier_manager.cpp:398:35: error: template argument 1 is invalid
+  398 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
       |                                   ^
-/sep/src/memory/memory_tier_manager.cpp:387:35: error: template argument 2 is invalid
+/sep/src/memory/memory_tier_manager.cpp:398:35: error: template argument 2 is invalid
 /sep/src/memory/memory_tier_manager.cpp: In function ‘int sep::memory::createMemoryTierManagerStub()’:
-/sep/src/memory/memory_tier_manager.cpp:388:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
-  388 |     return std::make_unique<MemoryTierManager>();
+/sep/src/memory/memory_tier_manager.cpp:399:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
+  399 |     return std::make_unique<MemoryTierManager>();
       |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
       |                                               |
       |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
-[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+/sep/src/quantum/quantum_processor.cpp: In constructor ‘sep::quantum::QuantumProcessor::QuantumProcessor(const Config&)’:
+/sep/src/quantum/quantum_processor.cpp:61:23: error: ‘createQFHBasedQBSAProcessor’ was not declared in this scope
+   61 |     qbsa_processor_ = createQFHBasedQBSAProcessor({});
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_processor.cpp: At global scope:
+/sep/src/quantum/quantum_processor.cpp:65:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                 ^~~~~~~~~~~~~~~~~
+      |                 QuantumProcessor
+/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 1 is invalid
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                                  ^
+/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 2 is invalid
+/sep/src/quantum/quantum_processor.cpp:65:36: error: ambiguating new declaration of ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /sep/src/quantum/quantum_processor.cpp:1:
+/sep/include/quantum/quantum_processor.h:57:35: note: old declaration ‘std::unique_ptr<sep::quantum::QuantumProcessor> sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
+   57 | std::unique_ptr<QuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config);
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’:
+/sep/src/quantum/quantum_processor.cpp:68:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
+   68 |     return std::make_unique<QuantumProcessor>(config);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+      |                                              |
+      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
+/sep/src/quantum/quantum_processor.cpp: At global scope:
+/sep/src/quantum/quantum_processor.cpp:71:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
+   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
+      |                 ^~~~~~~~~~~~~~~~~
+      |                 QuantumProcessor
+/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 1 is invalid
+   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
+      |                                  ^
+/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 2 is invalid
+/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessorStub()’:
+/sep/src/quantum/quantum_processor.cpp:72:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
+   72 |     return std::make_unique<QuantumProcessor>(QuantumProcessor::Config{});
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                              |
+      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
 make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
-[ 44%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-/sep/src/memory/memory_tier.cpp: In member function ‘sep::SEPResult sep::memory::MemoryTier::defragment()’:
-/sep/src/memory/memory_tier.cpp:190:34: error: ‘class sep::memory::MemoryTierManager’ has no member named ‘isInitialized’
-  190 |         if (blk.allocated && mgr.isInitialized()) { // Fix: Check if MemoryTierManager is initialized
-      |                                  ^~~~~~~~~~~~~
+[ 47%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
 In file included from /usr/include/c++/14/memory:78,
                  from /sep/include/blender/compression.h:4,
                  from /sep/include/memory/memory_tier.hpp:10,
                  from /sep/include/memory/memory_tier_manager.hpp:13:
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::pattern::PatternData; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::pattern::PatternData>]’:
-/sep/src/memory/memory_tier_manager.cpp:264:58:   required from here
-  264 |         auto pat = std::make_unique<pattern::PatternData>();
+/sep/src/memory/memory_tier_manager.cpp:275:58:   required from here
+  275 |         auto pat = std::make_unique<pattern::PatternData>();
       |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
 /usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
  1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
@@ -977,8 +990,8 @@ In file included from /usr/include/c++/14/memory:78,
    33 | struct PatternData;
       |        ^~~~~~~~~~~
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::pattern::PatternData; _Args = {const sep::pattern::PatternData&}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::pattern::PatternData>]’:
-/sep/src/memory/memory_tier_manager.cpp:373:67:   required from here
-  373 |     pattern_registry_[id] = std::make_unique<pattern::PatternData>(pattern);
+/sep/src/memory/memory_tier_manager.cpp:384:67:   required from here
+  384 |     pattern_registry_[id] = std::make_unique<pattern::PatternData>(pattern);
       |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
 /usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
  1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
@@ -986,34 +999,19 @@ In file included from /usr/include/c++/14/memory:78,
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::pattern::PatternData]’:
 /usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::pattern::PatternData; _Dp = std::default_delete<sep::pattern::PatternData>]’
   399 |           get_deleter()(std::move(__ptr));
       |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:264:58:   required from here
-  264 |         auto pat = std::make_unique<pattern::PatternData>();
+/sep/src/memory/memory_tier_manager.cpp:275:58:   required from here
+  275 |         auto pat = std::make_unique<pattern::PatternData>();
       |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
 /usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::pattern::PatternData’
    91 |         static_assert(sizeof(_Tp)>0,
       |                       ^~~~~~~~~~~
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
 make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:93: src/api/CMakeFiles/sep_api.dir/bridge.cpp.o] Error 1
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
-/sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
-/sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
-  170 | }
-      | ^
-make[2]: *** [src/audio/CMakeFiles/sep_audio.dir/build.make:107: src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-/sep/src/api/lock_free_rate_limiter.cpp: In lambda function:
-/sep/src/api/lock_free_rate_limiter.cpp:20:9: error: ‘metrics_mutex_’ was not declared in this scope
-   20 |         metrics_mutex_.lock();
-      |         ^~~~~~~~~~~~~~
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 /sep/src/memory/redis_manager.cpp:384:17: error: ‘IRedisManager’ was not declared in this scope; did you mean ‘RedisManager’?
   384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
       |                 ^~~~~~~~~~~~~
@@ -1027,12 +1025,19 @@ make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/a
       |                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
       |                                                                                                                             |
       |                                                                                                                             std::shared_ptr<sep::persistence::RedisManager>
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:191: src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:79: src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o] Error 1
-In file included from /sep/src/memory/quantum_coherence_manager.cpp:6:
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
+/sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
+/sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
+  170 | }
+      | ^
+make[2]: *** [src/audio/CMakeFiles/sep_audio.dir/build.make:107: src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+In file included from /sep/src/memory/quantum_coherence_manager.cpp:8:
 /sep/include/memory/quantum_coherence_manager.hpp:13:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
@@ -1040,143 +1045,147 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:21:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
-   21 | class QuantumCoherenceManager {
+make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+/sep/src/memory/quantum_coherence_manager.cpp:22:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
+   22 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::TierMigration> sep::memory::QuantumCoherenceManager::Impl::optimizeMemoryLayout()’:
-/sep/src/memory/quantum_coherence_manager.cpp:215:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  215 |         coherence_map_.for_each([&](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:216:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  216 |         coherence_map_.for_each([&](const auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::applyCoherenceDecay(float)’:
-/sep/src/memory/quantum_coherence_manager.cpp:280:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  280 |         coherence_map_.for_each([decay_factor](auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:281:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  281 |         coherence_map_.for_each([decay_factor](auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘sep::memory::QuantumCoherenceManager::CoherenceSnapshot sep::memory::QuantumCoherenceManager::Impl::createSnapshot() const’:
-/sep/src/memory/quantum_coherence_manager.cpp:300:24: error: ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMap’ {aka ‘const class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  300 |         coherence_map_.for_each([&snapshot](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:301:24: error: ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMap’ {aka ‘const class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  301 |         coherence_map_.for_each([&snapshot](const auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMetrics& sep::memory::QuantumCoherenceManager::Impl::getMetrics() const’:
-/sep/src/memory/quantum_coherence_manager.cpp:329:16: error: invalid initialization of reference of type ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMetrics&’ from expression of type ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics’
-  329 |         return metrics_;
+/sep/src/memory/quantum_coherence_manager.cpp:330:16: error: invalid initialization of reference of type ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMetrics&’ from expression of type ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics’
+  330 |         return metrics_;
       |                ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘float sep::memory::QuantumCoherenceManager::Impl::getTierFragmentation(sep::MemoryTierEnum) const’:
-/sep/src/memory/quantum_coherence_manager.cpp:343:29: error: ‘const struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘tier_fragmentation’
-  343 |             return metrics_.tier_fragmentation[tier_idx];
+/sep/src/memory/quantum_coherence_manager.cpp:344:29: error: ‘const struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘tier_fragmentation’
+  344 |             return metrics_.tier_fragmentation[tier_idx];
       |                             ^~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::initializeCoherenceTracking()’:
-/sep/src/memory/quantum_coherence_manager.cpp:367:18: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘fragmented_patterns’; did you mean ‘coherent_patterns’?
-  367 |         metrics_.fragmented_patterns = 0;
+/sep/src/memory/quantum_coherence_manager.cpp:368:18: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘fragmented_patterns’; did you mean ‘coherent_patterns’?
+  368 |         metrics_.fragmented_patterns = 0;
       |                  ^~~~~~~~~~~~~~~~~~~
       |                  coherent_patterns
-/sep/src/memory/quantum_coherence_manager.cpp:374:22: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘tier_fragmentation’
-  374 |             metrics_.tier_fragmentation[i] = 0.0f;
+/sep/src/memory/quantum_coherence_manager.cpp:375:22: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘tier_fragmentation’
+  375 |             metrics_.tier_fragmentation[i] = 0.0f;
       |                      ^~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::updatePatternCoherence(const sep::quantum::Pattern&)’:
-/sep/src/memory/quantum_coherence_manager.cpp:410:18: error: ‘struct sep::memory::QuantumCoherenceManager::PatternCoherenceData’ has no member named ‘fragmentation_score’
-  410 |             data.fragmentation_score = 1.0f - data.stability;
+/sep/src/memory/quantum_coherence_manager.cpp:411:18: error: ‘struct sep::memory::QuantumCoherenceManager::PatternCoherenceData’ has no member named ‘fragmentation_score’
+  411 |             data.fragmentation_score = 1.0f - data.stability;
       |                  ^~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:423:22: error: ‘struct sep::memory::QuantumCoherenceManager::PatternCoherenceData’ has no member named ‘fragmentation_score’
-  423 |             new_data.fragmentation_score = 1.0f - new_data.stability;
+/sep/src/memory/quantum_coherence_manager.cpp:424:22: error: ‘struct sep::memory::QuantumCoherenceManager::PatternCoherenceData’ has no member named ‘fragmentation_score’
+  424 |             new_data.fragmentation_score = 1.0f - new_data.stability;
       |                      ^~~~~~~~~~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::computeGlobalMetrics()’:
-/sep/src/memory/quantum_coherence_manager.cpp:437:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  437 |         coherence_map_.for_each([&](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:438:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  438 |         coherence_map_.for_each([&](const auto& pair) {
       |                        ^~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:462:22: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘tier_fragmentation’
-  462 |             metrics_.tier_fragmentation[i] = (tier_counts[i] > 0) ?
+/sep/src/memory/quantum_coherence_manager.cpp:463:22: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘tier_fragmentation’
+  463 |             metrics_.tier_fragmentation[i] = (tier_counts[i] > 0) ?
       |                      ^~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:472:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  472 |         coherence_map_.for_each([&](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:473:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  473 |         coherence_map_.for_each([&](const auto& pair) {
       |                        ^~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:478:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  478 |         coherence_map_.for_each([&](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:479:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  479 |         coherence_map_.for_each([&](const auto& pair) {
       |                        ^~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:481:18: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘fragmented_patterns’; did you mean ‘coherent_patterns’?
-  481 |         metrics_.fragmented_patterns = fragmented_count;
+/sep/src/memory/quantum_coherence_manager.cpp:482:18: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘fragmented_patterns’; did you mean ‘coherent_patterns’?
+  482 |         metrics_.fragmented_patterns = fragmented_count;
       |                  ^~~~~~~~~~~~~~~~~~~
       |                  coherent_patterns
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::CoherenceAnomaly> sep::memory::QuantumCoherenceManager::Impl::detectCoherenceAnomalies(const std::vector<sep::quantum::Pattern>&)’:
-/sep/src/memory/quantum_coherence_manager.cpp:510:25: error: ‘AnomalyType’ has not been declared
-  510 |                         AnomalyType::ExcessiveCoherence :
-      |                         ^~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:511:25: error: ‘AnomalyType’ has not been declared
-  511 |                         AnomalyType::InsufficientCoherence;
+  511 |                         AnomalyType::ExcessiveCoherence :
       |                         ^~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:528:40: error: ‘AnomalyType’ has not been declared
-  528 |                         anomaly.type = AnomalyType::RapidChange;
+/sep/src/memory/quantum_coherence_manager.cpp:512:25: error: ‘AnomalyType’ has not been declared
+  512 |                         AnomalyType::InsufficientCoherence;
+      |                         ^~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:529:40: error: ‘AnomalyType’ has not been declared
+  529 |                         anomaly.type = AnomalyType::RapidChange;
       |                                        ^~~~~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::TierMigration> sep::memory::QuantumCoherenceManager::Impl::performTierMigrations()’:
-/sep/src/memory/quantum_coherence_manager.cpp:542:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  542 |         coherence_map_.for_each([&](auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:543:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  543 |         coherence_map_.for_each([&](auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::updateEntanglementGraph(const std::vector<sep::quantum::Pattern>&)’:
-/sep/src/memory/quantum_coherence_manager.cpp:570:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  570 |         coherence_map_.for_each([](auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:571:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  571 |         coherence_map_.for_each([](auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::applyMemoryPressureOptimizations(std::vector<sep::memory::QuantumCoherenceManager::TierMigration>&)’:
-/sep/src/memory/quantum_coherence_manager.cpp:645:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  645 |         coherence_map_.for_each([&](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:646:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  646 |         coherence_map_.for_each([&](const auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::cleanupZeroCoherencePatterns()’:
-/sep/src/memory/quantum_coherence_manager.cpp:673:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  673 |         coherence_map_.for_each([&](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:674:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  674 |         coherence_map_.for_each([&](const auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘float sep::memory::QuantumCoherenceManager::Impl::computeCoherenceVariance() const’:
-/sep/src/memory/quantum_coherence_manager.cpp:689:24: error: ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMap’ {aka ‘const class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  689 |         coherence_map_.for_each([&](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:690:24: error: ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMap’ {aka ‘const class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  690 |         coherence_map_.for_each([&](const auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘float sep::memory::QuantumCoherenceManager::Impl::computeEntanglement(const sep::quantum::Pattern&, const sep::quantum::Pattern&) const’:
-/sep/src/memory/quantum_coherence_manager.cpp:701:61: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
-  701 |         float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+/sep/src/memory/quantum_coherence_manager.cpp:702:61: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  702 |         float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
       |                                                             ^~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:701:86: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
-  701 |         float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+/sep/src/memory/quantum_coherence_manager.cpp:702:86: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  702 |         float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
       |                                                                                      ^~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘float sep::memory::QuantumCoherenceManager::Impl::computePhaseCorrelation(const sep::quantum::Pattern&, const sep::quantum::Pattern&) const’:
-/sep/src/memory/quantum_coherence_manager.cpp:708:42: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
-  708 |         return std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+/sep/src/memory/quantum_coherence_manager.cpp:709:42: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  709 |         return std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
       |                                          ^~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:708:67: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
-  708 |         return std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+/sep/src/memory/quantum_coherence_manager.cpp:709:67: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  709 |         return std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
       |                                                                   ^~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘sep::uint32_t sep::memory::QuantumCoherenceManager::Impl::countPatternsInTier(sep::MemoryTierEnum) const’:
-/sep/src/memory/quantum_coherence_manager.cpp:762:24: error: ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMap’ {aka ‘const class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
-  762 |         coherence_map_.for_each([&](const auto& pair) {
+/sep/src/memory/quantum_coherence_manager.cpp:763:24: error: ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMap’ {aka ‘const class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  763 |         coherence_map_.for_each([&](const auto& pair) {
       |                        ^~~~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: At global scope:
-/sep/src/memory/quantum_coherence_manager.cpp:838:50: error: no declaration matches ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
-  838 | const QuantumCoherenceManager::CoherenceMetrics& QuantumCoherenceManager::getMetrics() const {
+/sep/src/memory/quantum_coherence_manager.cpp:839:50: error: no declaration matches ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
+  839 | const QuantumCoherenceManager::CoherenceMetrics& QuantumCoherenceManager::getMetrics() const {
       |                                                  ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:838:50: note: no functions named ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
+/sep/src/memory/quantum_coherence_manager.cpp:839:50: note: no functions named ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:842:10: error: no declaration matches ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
-  842 | uint64_t QuantumCoherenceManager::getGlobalTick() const {
+/sep/src/memory/quantum_coherence_manager.cpp:843:10: error: no declaration matches ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
+  843 | uint64_t QuantumCoherenceManager::getGlobalTick() const {
       |          ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:842:10: note: no functions named ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
+/sep/src/memory/quantum_coherence_manager.cpp:843:10: note: no functions named ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:846:10: error: no declaration matches ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum) const’
-  846 | uint32_t QuantumCoherenceManager::getPatternCountByTier(MemoryTierEnum tier) const {
+/sep/src/memory/quantum_coherence_manager.cpp:847:10: error: no declaration matches ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum) const’
+  847 | uint32_t QuantumCoherenceManager::getPatternCountByTier(MemoryTierEnum tier) const {
       |          ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:846:10: note: no functions named ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum) const’
+/sep/src/memory/quantum_coherence_manager.cpp:847:10: note: no functions named ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum) const’
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:850:7: error: no declaration matches ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum) const’
-  850 | float QuantumCoherenceManager::getTierFragmentation(MemoryTierEnum tier) const {
+/sep/src/memory/quantum_coherence_manager.cpp:851:7: error: no declaration matches ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum) const’
+  851 | float QuantumCoherenceManager::getTierFragmentation(MemoryTierEnum tier) const {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:850:7: note: no functions named ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum) const’
+/sep/src/memory/quantum_coherence_manager.cpp:851:7: note: no functions named ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum) const’
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-make[1]: *** [CMakeFiles/Makefile2:367: src/audio/CMakeFiles/sep_audio.dir/all] Error 2
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:367: src/audio/CMakeFiles/sep_audio.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

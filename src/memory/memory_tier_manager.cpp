@@ -179,18 +179,28 @@ sep::SEPResult MemoryTierManager::demoteBlock(MemoryBlock* block, MemoryBlock*& 
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* patterns, pattern::PatternData* results,
-                                                           const pattern::PatternConfig& config, size_t pattern_count,
-                                                           const pattern::PatternData* previous_patterns, void* stream) { // Fix: Add missing parameters and return type
+sep::SEPResult MemoryTierManager::launch_pattern_processing(pattern::PatternData* patterns,
+                                                           pattern::PatternData* results,
+                                                           const pattern::PatternConfig& config,
+                                                           size_t pattern_count,
+                                                           const pattern::PatternData* previous_patterns,
+                                                           void* stream) {
 #ifdef SEP_USE_CUDA
-                                                           const pattern::PatternConfig& config, size_t pattern_count,
-                                                           const pattern::PatternData* previous_patterns, void* stream) {
-    (void)config; // Prevent unused parameter warning
+    cudaStream_t cuda_stream = static_cast<cudaStream_t>(stream);
+    cudaError_t err = sep::cuda::launch_pattern_processing(
+        patterns, results, config, pattern_count, previous_patterns, cuda_stream);
+    if (err != cudaSuccess) {
+        return sep::SEPResult::CUDA_ERROR;
+    }
+#else
+    (void)patterns;
+    (void)results;
+    (void)config;
     (void)pattern_count;
     (void)previous_patterns;
     (void)stream;
-      return sep::SEPResult::SUCCESS;
 #endif
+    return sep::SEPResult::SUCCESS;
 }
 
 MemoryBlock* MemoryTierManager::findBlockByPtr(void* ptr) {

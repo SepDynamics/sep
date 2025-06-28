@@ -402,12 +402,14 @@ void RedisManager::removePattern(std::uint64_t id, const std::string& tier)
     impl_->removePattern(id, tier);
 }
 
-void RedisManager::bulkStore(const std::vector<std::pair<std::size_t, sep::persistence::PatternData>>& patterns, const std::string& tier)
+void RedisManager::bulkStore(const std::vector<std::pair<std::uint64_t, sep::persistence::PatternData>>& patterns,
+                             const std::string& tier)
 {
     impl_->bulkStore(patterns, tier);
 }
 
-std::vector<sep::persistence::PatternData> RedisManager::bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier)
+std::vector<sep::persistence::PatternData> RedisManager::bulkLoad(const std::vector<std::uint64_t>& ids,
+                                                                  const std::string& tier)
 {
     return impl_->bulkLoad(ids, tier);
 }

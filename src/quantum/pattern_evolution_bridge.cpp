@@ -480,56 +480,45 @@ private:
 };
 PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
     : impl_(std::make_unique<Impl>(config)) {}
-    PatternEvolutionBridge::~PatternEvolutionBridge() = default;
-    void PatternEvolutionBridge::initializeEvolutionState() {
-        impl_->evolution_state_->active_patterns.clear();
-        impl_->evolution_state_->coherence_matrix.clear();
-        impl_->evolution_state_->entanglement_graph.clear();
-        impl_->evolution_state_->total_energy = 0.0f;
-        impl_->evolution_state_->entropy = 0.0f;
-        impl_->evolution_state_->evolution_tick = 0;
+
+PatternEvolutionBridge::~PatternEvolutionBridge() = default;
+
+void PatternEvolutionBridge::initializeEvolutionState() {
+    impl_->evolution_state_->active_patterns.clear();
+    impl_->evolution_state_->coherence_matrix.clear();
+    impl_->evolution_state_->entanglement_graph.clear();
+    impl_->evolution_state_->total_energy = 0.0f;
+    impl_->evolution_state_->entropy = 0.0f;
+    impl_->evolution_state_->evolution_tick = 0;
+}
+
+void PatternEvolutionBridge::updatePatterns(const std::vector<Pattern>& patterns) {
+    std::vector<Pattern> active_patterns;
+    std::vector<float> coherence_matrix;
+    std::vector<uint32_t> entanglement_graph;
+    float total_energy = 0.0f;
+    float entropy = 0.0f;
+
+    for (const auto& pattern : patterns) {
+        if (pattern.quantum_state.coherence > COHERENCE_COLLAPSE_THRESHOLD) {
+            active_patterns.push_back(pattern);
+            coherence_matrix.push_back(pattern.quantum_state.coherence);
+            entanglement_graph.push_back(
+                static_cast<uint32_t>(pattern.relationships.size()));
+            entropy += -pattern.quantum_state.coherence *
+                       std::log2(pattern.quantum_state.coherence);
+            entropy += -pattern.quantum_state.phase *
+                       std::log2(pattern.quantum_state.phase);
+        }
     }
 
-    void PatternEvolutionBridge::updatePatterns(const std::vector<Pattern>& patterns) {
-        std::vector<Pattern> active_patterns;
-        std::vector<float> coherence_matrix;
-        std::vector<uint32_t> entanglement_graph;
-        float total_energy = 0.0f;
-        float entropy = 0.0f;
-
-        for (const auto& pattern : patterns) {
-            if (pattern.quantum_state.coherence > COHERENCE_COLLAPSE_THRESHOLD) {
-                active_patterns.push_back(pattern);
-                coherence_matrix.push_back(
-                    pattern.quantum_state.coherence
-                );
-                entanglement_graph.push_back(
-                    static_cast<uint32_t>(pattern.relationships.size()) // Example: Use relationship count as entanglement proxy
-                );
-                entropy += -pattern
-                .quantum_state.coherence * std::log2(pattern.quantum_state.coherence);
-
-                entropy += -pattern.quantum_state.phase * std::log2(pattern.quantum_state.phase);
-                }
-                
-            }
-            std::lock_guard<std::mutex> lock(impl_->state_mutex_);
-            impl_->evolution_state_->active_patterns = active_patterns;
-            impl_->evolution_state_->coherence_matrix = coherence_matrix;
-            impl_->evolution_state_->entanglement_graph = entanglement_graph;
-            impl_->evolution_state_->total_energy = total_energy;
-            impl_->evolution_state_->entropy = entropy;
-            impl_->evolution_state_->evolution_tick++;
-
-            };
-    void PatternEvolutionBridge::applyCNOTGate(std::vector<Pattern>& patterns, uint32_t control, uint32_t target) { // Fix: Add missing applyCNOTGate definition
-                if (control < patterns.size() && target < patterns.size()) {
-                    Pattern& c = patterns[control];
-                    Pattern& t = patterns[target];
-                    // CNOT gate logic
-                    float c_coherence = c.quantum_state.coherence;
-                    float t_coherence = t.quantum_state.coherence;
-                    t.quantum_state.coherence = c_coherence * t_coherence;
-            };
+    std::lock_guard<std::mutex> lock(impl_->state_mutex_);
+    impl_->evolution_state_->active_patterns = std::move(active_patterns);
+    impl_->evolution_state_->coherence_matrix = std::move(coherence_matrix);
+    impl_->evolution_state_->entanglement_graph = std::move(entanglement_graph);
+    impl_->evolution_state_->total_energy = total_energy;
+    impl_->evolution_state_->entropy = entropy;
+    impl_->evolution_state_->evolution_tick++;
+}
 
 } // namespace sep::quantum

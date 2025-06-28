@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "quantum/processor.h"
 // Forward declarations
 namespace sep {
 namespace context {
@@ -40,4 +41,11 @@ extern size_t g_required_buffer_size;
 extern std::mutex g_bridge_mutex;
 extern std::unordered_map<std::string, std::vector<void (*)(const char *)>>
     g_callback_map;
+
+// Utility functions used by C bridge layer
+void setLastError(const std::string &error);
+std::string getLastError();
+void setRequiredBufferSize(size_t size);
+size_t getRequiredBufferSize();
+::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
 } // namespace sep::api::bridge::detail

@@ -6,6 +6,10 @@
 
 #include "compat/stream.h"
 
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime.h>
+#endif
+
 namespace sep::cuda {
 
 // Implementation storing the underlying CUDA stream handle

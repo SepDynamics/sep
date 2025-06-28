@@ -221,175 +221,139 @@ Call Stack (most recent call first):
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/build
 Building SEP Engine...
-[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[  7%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 10%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 11%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 13%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 13%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 15%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 15%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 18%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 20%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 21%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 23%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 24%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 26%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 27%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
+[  2%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  2%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[  4%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 11%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 11%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 11%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 13%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 15%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 15%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 17%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 18%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 21%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 24%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
 [ 28%] Linking CXX static library /sep/lib/libcycles_osl.a
 [ 28%] Built target cycles_osl
-[ 30%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
-In file included from /sep/src/quantum/qbsa_qfh.cpp:2:
-/sep/include/quantum/qfh.h:65:34: error: redeclaration of ‘float sep::quantum::QFHResult::collapse_threshold’
-   65 |     float collapse_threshold{0.0f};
-      |                                  ^
-/sep/include/quantum/qfh.h:63:11: note: previous declaration ‘float sep::quantum::QFHResult::collapse_threshold’
-   63 |     float collapse_threshold{0.0f};
-      |           ^~~~~~~~~~~~~~~~~~
-[ 31%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-/sep/src/core/dag_graph.cpp: In member function ‘void sep::dag::DagGraph::removeNode(uint64_t)’:
-/sep/src/core/dag_graph.cpp:67:13: error: ‘node’ was not declared in this scope; did you mean ‘nodes_’?
-   67 |             node.parents.erase(std::remove(node.parents.begin(), node.parents.end(), id), node.parents.end());
-      |             ^~~~
-      |             nodes_
-[ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-In file included from /sep/src/quantum/qfh.cpp:1:
-/sep/include/quantum/qfh.h:65:34: error: redeclaration of ‘float sep::quantum::QFHResult::collapse_threshold’
-   65 |     float collapse_threshold{0.0f};
-      |                                  ^
-/sep/include/quantum/qfh.h:63:11: note: previous declaration ‘float sep::quantum::QFHResult::collapse_threshold’
-   63 |     float collapse_threshold{0.0f};
-      |           ^~~~~~~~~~~~~~~~~~
-In file included from /sep/src/compat/component_bridge.cpp:2:
-/sep/include/audio/pipewire_capture.h:39:51: error: use of enum ‘pw_stream_state’ without previous declaration
-   39 |   static void streamStateChanged(void *data, enum pw_stream_state old_state,
-      |                                                   ^~~~~~~~~~~~~~~
-/sep/include/audio/pipewire_capture.h:40:38: error: use of enum ‘pw_stream_state’ without previous declaration
-   40 |                                 enum pw_stream_state new_state,
-      |                                      ^~~~~~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:93: src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 34%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 36%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:93: src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:107: src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o] Error 1
-[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-/sep/src/compat/stream.cpp:13:3: error: ‘cudaStream_t’ does not name a type
-   13 |   cudaStream_t stream_handle_{nullptr};
-      |   ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:15:18: error: ‘cudaStream_t’ has not been declared
-   15 |   void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
-      |                  ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::setHandle(int)’:
-/sep/src/compat/stream.cpp:15:41: error: ‘stream_handle_’ was not declared in this scope
-   15 |   void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
-      |                                         ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::synchronize()’:
-/sep/src/compat/stream.cpp:20:11: error: ‘stream_handle_’ was not declared in this scope
-   20 |     (void)stream_handle_;
-      |           ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::wait(void*)’:
-/sep/src/compat/stream.cpp:28:11: error: ‘stream_handle_’ was not declared in this scope
-   28 |     (void)stream_handle_;
-      |           ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::record(void*)’:
-/sep/src/compat/stream.cpp:37:11: error: ‘stream_handle_’ was not declared in this scope
-   37 |     (void)stream_handle_;
-      |           ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void* sep::cuda::Stream::Impl::handle() const’:
-/sep/src/compat/stream.cpp:41:33: error: ‘stream_handle_’ was not declared in this scope
-   41 |   void* handle() const { return stream_handle_; }
-      |                                 ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘bool sep::cuda::Stream::Impl::isValid() const’:
-/sep/src/compat/stream.cpp:42:33: error: ‘stream_handle_’ was not declared in this scope
-   42 |   bool isValid() const { return stream_handle_ != nullptr; }
-      |                                 ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In static member function ‘static std::shared_ptr<sep::cuda::Stream> sep::cuda::Stream::create(sep::StreamFlags)’:
-/sep/src/compat/stream.cpp:66:3: error: ‘cudaStream_t’ was not declared in this scope
-   66 |   cudaStream_t cuda_stream;
-      |   ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:69:7: error: ‘cudaStreamNonBlocking’ was not declared in this scope
-   69 |       cudaStreamNonBlocking :
-      |       ^~~~~~~~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:70:7: error: ‘cudaStreamDefault’ was not declared in this scope
-   70 |       cudaStreamDefault;
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:72:3: error: ‘cudaError_t’ was not declared in this scope
-   72 |   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
-      |   ^~~~~~~~~~~
-/sep/src/compat/stream.cpp:73:7: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-   73 |   if (err != cudaSuccess) {
-      |       ^~~
-      |       erf
-/sep/src/compat/stream.cpp:73:14: error: ‘cudaSuccess’ was not declared in this scope
-   73 |   if (err != cudaSuccess) {
-      |              ^~~~~~~~~~~
-/sep/src/compat/stream.cpp:74:18: error: ‘logCudaError’ is not a member of ‘sep::cuda’
-   74 |     ::sep::cuda::logCudaError("cudaStreamCreateWithFlags", err);
-      |                  ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:77:28: error: ‘cuda_stream’ was not declared in this scope
-   77 |   stream->impl_->setHandle(cuda_stream);
-      |                            ^~~~~~~~~~~
-[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-/sep/src/memory/memory_tier_manager.cpp:393:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
-  393 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
-      |                 ^~~~~~~~~~~~~~~~~~
-      |                 MemoryTierManager
-/sep/src/memory/memory_tier_manager.cpp:393:35: error: template argument 1 is invalid
-  393 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
-      |                                   ^
-/sep/src/memory/memory_tier_manager.cpp:393:35: error: template argument 2 is invalid
-/sep/src/memory/memory_tier_manager.cpp: In function ‘int sep::memory::createMemoryTierManager()’:
-/sep/src/memory/memory_tier_manager.cpp:396:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
-  396 |     return std::make_unique<MemoryTierManager>();
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-      |                                               |
-      |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
-/sep/src/memory/memory_tier_manager.cpp: At global scope:
-/sep/src/memory/memory_tier_manager.cpp:399:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
-  399 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
-      |                 ^~~~~~~~~~~~~~~~~~
-      |                 MemoryTierManager
-/sep/src/memory/memory_tier_manager.cpp:399:35: error: template argument 1 is invalid
-  399 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
-      |                                   ^
-/sep/src/memory/memory_tier_manager.cpp:399:35: error: template argument 2 is invalid
-/sep/src/memory/memory_tier_manager.cpp: In function ‘int sep::memory::createMemoryTierManagerStub()’:
-/sep/src/memory/memory_tier_manager.cpp:400:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
-  400 |     return std::make_unique<MemoryTierManager>();
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-      |                                               |
-      |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
+[ 30%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 31%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 33%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
 In file included from /sep/src/api/bridge_c.cpp:3:
 /sep/include/api/bridge_internal.hpp:49:13: error: ‘ErrorCode’ in namespace ‘sep::api’ does not name a type
    49 | ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode code);
       |             ^~~~~~~~~
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/blender/compression.h:4,
-                 from /sep/include/memory/memory_tier.hpp:10,
-                 from /sep/include/memory/memory_tier_manager.hpp:13,
-                 from /sep/src/memory/memory_tier_manager.cpp:1:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::memory::MemoryTierManager; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::memory::MemoryTierManager>]’:
-/sep/src/memory/memory_tier_manager.cpp:17:86:   required from here
-   17 |     std::call_once(once_flag_, []() { instance_ = std::make_unique<MemoryTierManager>(); });
-      |                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: call of overloaded ‘MemoryTierManager()’ is ambiguous
- 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:21:1: note: candidate: ‘sep::memory::MemoryTierManager::MemoryTierManager(const Config&)’
-   21 | MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
-      | ^~~~~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp:30:1: note: candidate: ‘sep::memory::MemoryTierManager::MemoryTierManager()’
-   30 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
-      | ^~~~~~~~~~~~~~~~~
+[ 34%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 36%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+/sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_init()’:
+/sep/src/api/bridge_c.cpp:21:17: error: ‘sep::quantum::IProcessor’ has not been declared
+   21 |   sep::quantum::IProcessor::ProcessingConfig options{};
+      |                 ^~~~~~~~~~
+/sep/src/api/bridge_c.cpp:22:88: error: ‘options’ was not declared in this scope
+   22 |   sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
+      |                                                                                        ^~~~~~~
+/sep/include/api/bridge_internal.hpp:26:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
+   26 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
+      |                                                       ^~~~~~~~~~~
+/sep/src/api/bridge_c.cpp:27:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
+   27 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
+      |     ^~~~~~~~~~~~~~~~
+/sep/src/api/bridge_c.cpp: In function ‘int sep_process_context(const char*, const char*, char*, size_t)’:
+/sep/src/api/bridge_c.cpp:49:19: error: ‘IProcessor’ is not a member of ‘sep::quantum’; did you mean ‘Processor’?
+   49 |     sep::quantum::IProcessor *processor = nullptr;
+      |                   ^~~~~~~~~~
+      |                   Processor
+/sep/src/api/bridge_c.cpp:49:31: error: ‘processor’ was not declared in this scope
+   49 |     sep::quantum::IProcessor *processor = nullptr;
+      |                               ^~~~~~~~~
+/sep/src/api/bridge_c.cpp:116:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
+  116 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(sep::api::ErrorCode::ProcessingError));
+      |                                                       ^~~~~~~~~~~
+/sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_set_config(const char*, const char*)’:
+/sep/include/api/bridge_internal.hpp:26:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
+   26 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
+      |                                                       ^~~~~~~~~~~
+/sep/src/api/bridge_c.cpp:174:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
+  174 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+      |     ^~~~~~~~~~~~~~~~
+/sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_get_config(const char*, char*, size_t)’:
+/sep/include/api/bridge_internal.hpp:26:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
+   26 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
+      |                                                       ^~~~~~~~~~~
+/sep/src/api/bridge_c.cpp:211:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
+  211 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+      |     ^~~~~~~~~~~~~~~~
+/sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_register_callback(const char*, void (*)(const char*))’:
+/sep/include/api/bridge_internal.hpp:26:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
+   26 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
+      |                                                       ^~~~~~~~~~~
+/sep/src/api/bridge_c.cpp:229:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
+  229 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+      |     ^~~~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp:17:3: error: ‘cudaStream_t’ does not name a type
+   17 |   cudaStream_t stream_handle_{nullptr};
+      |   ^~~~~~~~~~~~
+/sep/src/compat/stream.cpp:19:18: error: ‘cudaStream_t’ has not been declared
+   19 |   void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
+      |                  ^~~~~~~~~~~~
+/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::setHandle(int)’:
+/sep/src/compat/stream.cpp:19:41: error: ‘stream_handle_’ was not declared in this scope
+   19 |   void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
+      |                                         ^~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::synchronize()’:
+/sep/src/compat/stream.cpp:24:11: error: ‘stream_handle_’ was not declared in this scope
+   24 |     (void)stream_handle_;
+      |           ^~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::wait(void*)’:
+/sep/src/compat/stream.cpp:32:11: error: ‘stream_handle_’ was not declared in this scope
+   32 |     (void)stream_handle_;
+      |           ^~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::record(void*)’:
+/sep/src/compat/stream.cpp:41:11: error: ‘stream_handle_’ was not declared in this scope
+   41 |     (void)stream_handle_;
+      |           ^~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp: In member function ‘void* sep::cuda::Stream::Impl::handle() const’:
+/sep/src/compat/stream.cpp:45:33: error: ‘stream_handle_’ was not declared in this scope
+   45 |   void* handle() const { return stream_handle_; }
+      |                                 ^~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp: In member function ‘bool sep::cuda::Stream::Impl::isValid() const’:
+/sep/src/compat/stream.cpp:46:33: error: ‘stream_handle_’ was not declared in this scope
+   46 |   bool isValid() const { return stream_handle_ != nullptr; }
+      |                                 ^~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp: In static member function ‘static std::shared_ptr<sep::cuda::Stream> sep::cuda::Stream::create(sep::StreamFlags)’:
+/sep/src/compat/stream.cpp:70:3: error: ‘cudaStream_t’ was not declared in this scope
+   70 |   cudaStream_t cuda_stream;
+      |   ^~~~~~~~~~~~
+/sep/src/compat/stream.cpp:73:7: error: ‘cudaStreamNonBlocking’ was not declared in this scope
+   73 |       cudaStreamNonBlocking :
+      |       ^~~~~~~~~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp:74:7: error: ‘cudaStreamDefault’ was not declared in this scope
+   74 |       cudaStreamDefault;
+      |       ^~~~~~~~~~~~~~~~~
+/sep/src/compat/stream.cpp:76:3: error: ‘cudaError_t’ was not declared in this scope
+   76 |   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
+      |   ^~~~~~~~~~~
+/sep/src/compat/stream.cpp:77:7: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+   77 |   if (err != cudaSuccess) {
+      |       ^~~
+      |       erf
+[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+/sep/src/compat/stream.cpp:77:14: error: ‘cudaSuccess’ was not declared in this scope
+   77 |   if (err != cudaSuccess) {
+      |              ^~~~~~~~~~~
+/sep/src/compat/stream.cpp:78:18: error: ‘logCudaError’ is not a member of ‘sep::cuda’
+   78 |     ::sep::cuda::logCudaError("cudaStreamCreateWithFlags", err);
+      |                  ^~~~~~~~~~~~
+/sep/src/compat/stream.cpp:81:28: error: ‘cuda_stream’ was not declared in this scope
+   81 |   stream->impl_->setHandle(cuda_stream);
+      |                            ^~~~~~~~~~~
+[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
 /sep/src/core/manager.cpp:10:22: error: declaration of ‘class sep::config::ConfigManager::Impl’ in namespace ‘sep::config::{anonymous}’ which does not enclose ‘class sep::config::ConfigManager’
    10 | class ConfigManager::Impl {
       |                      ^~~~
@@ -497,9 +461,6 @@ In file included from /sep/src/core/manager.cpp:1:
 /sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
    60 |   class Impl;
       |         ^~~~
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 42%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 In file included from /usr/include/c++/14/memory:78,
                  from /sep/include/compat/cuda.h:14,
                  from /sep/include/core/types.h:10,
@@ -514,56 +475,6 @@ In file included from /usr/include/c++/14/memory:78,
 /sep/include/core/manager.h:60:9: note: forward declaration of ‘class sep::config::ConfigManager::Impl’
    60 |   class Impl;
       |         ^~~~
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::config::ConfigManager::Impl]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::config::ConfigManager::Impl; _Dp = std::default_delete<sep::config::ConfigManager::Impl>]’
-  399 |           get_deleter()(std::move(__ptr));
-      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/core/manager.cpp:135:62:   required from here
-  135 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
-      |                                        ~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::config::ConfigManager::Impl’
-   91 |         static_assert(sizeof(_Tp)>0,
-      |                       ^~~~~~~~~~~
-[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-/sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_init()’:
-/sep/src/api/bridge_c.cpp:21:17: error: ‘sep::quantum::IProcessor’ has not been declared
-   21 |   sep::quantum::IProcessor::ProcessingConfig options{};
-      |                 ^~~~~~~~~~
-/sep/src/api/bridge_c.cpp:22:88: error: ‘options’ was not declared in this scope
-   22 |   sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
-      |                                                                                        ^~~~~~~
-[ 44%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-/sep/include/api/bridge_internal.hpp:26:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
-   26 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
-      |                                                       ^~~~~~~~~~~
-/sep/src/api/bridge_c.cpp:27:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
-   27 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
-      |     ^~~~~~~~~~~~~~~~
-/sep/src/api/bridge_c.cpp: In function ‘int sep_process_context(const char*, const char*, char*, size_t)’:
-/sep/src/api/bridge_c.cpp:49:19: error: ‘IProcessor’ is not a member of ‘sep::quantum’; did you mean ‘Processor’?
-   49 |     sep::quantum::IProcessor *processor = nullptr;
-      |                   ^~~~~~~~~~
-      |                   Processor
-/sep/src/api/bridge_c.cpp:49:31: error: ‘processor’ was not declared in this scope
-   49 |     sep::quantum::IProcessor *processor = nullptr;
-      |                               ^~~~~~~~~
-/sep/src/api/bridge_c.cpp:116:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
-  116 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(sep::api::ErrorCode::ProcessingError));
-      |                                                       ^~~~~~~~~~~
-/sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_set_config(const char*, const char*)’:
-/sep/include/api/bridge_internal.hpp:26:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
-   26 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
-      |                                                       ^~~~~~~~~~~
-/sep/src/api/bridge_c.cpp:174:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
-  174 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-      |     ^~~~~~~~~~~~~~~~
-/sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_get_config(const char*, char*, size_t)’:
-/sep/include/api/bridge_internal.hpp:26:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
-   26 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
-      |                                                       ^~~~~~~~~~~
-/sep/src/api/bridge_c.cpp:211:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
-  211 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-      |     ^~~~~~~~~~~~~~~~
 /sep/src/memory/redis_manager.cpp:384:17: error: ‘IRedisManager’ was not declared in this scope; did you mean ‘RedisManager’?
   384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
       |                 ^~~~~~~~~~~~~
@@ -577,41 +488,567 @@ In file included from /usr/include/c++/14/memory:78,
       |                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
       |                                                                                                                             |
       |                                                                                                                             std::shared_ptr<sep::persistence::RedisManager>
-/sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_register_callback(const char*, void (*)(const char*))’:
-/sep/include/api/bridge_internal.hpp:26:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
-   26 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
-      |                                                       ^~~~~~~~~~~
-/sep/src/api/bridge_c.cpp:229:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
-  229 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-      |     ^~~~~~~~~~~~~~~~
-[ 46%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 47%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
-[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-In file included from /sep/include/quantum/quantum_processor_qfh.h:6,
-                 from /sep/src/memory/manager.cpp:9:
-/sep/include/quantum/qfh.h:65:34: error: redeclaration of ‘float sep::quantum::QFHResult::collapse_threshold’
-   65 |     float collapse_threshold{0.0f};
-      |                                  ^
-/sep/include/quantum/qfh.h:63:11: note: previous declaration ‘float sep::quantum::QFHResult::collapse_threshold’
-   63 |     float collapse_threshold{0.0f};
-      |           ^~~~~~~~~~~~~~~~~~
-In file included from /sep/include/quantum/quantum_manifold_optimizer.h:5,
-                 from /sep/src/memory/quantum_coherence_manager.cpp:5:
-/sep/include/quantum/qfh.h:65:34: error: redeclaration of ‘float sep::quantum::QFHResult::collapse_threshold’
-   65 |     float collapse_threshold{0.0f};
-      |                                  ^
-/sep/include/quantum/qfh.h:63:11: note: previous declaration ‘float sep::quantum::QFHResult::collapse_threshold’
-   63 |     float collapse_threshold{0.0f};
-      |           ^~~~~~~~~~~~~~~~~~
-[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+/sep/src/memory/memory_tier_manager.cpp:393:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
+  393 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
+      |                 ^~~~~~~~~~~~~~~~~~
+      |                 MemoryTierManager
+/sep/src/memory/memory_tier_manager.cpp:393:35: error: template argument 1 is invalid
+  393 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
+      |                                   ^
+/sep/src/memory/memory_tier_manager.cpp:393:35: error: template argument 2 is invalid
+/sep/src/memory/memory_tier_manager.cpp: In function ‘int sep::memory::createMemoryTierManager()’:
+/sep/src/memory/memory_tier_manager.cpp:396:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
+  396 |     return std::make_unique<MemoryTierManager>();
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+      |                                               |
+      |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
+/sep/src/memory/memory_tier_manager.cpp: At global scope:
+/sep/src/memory/memory_tier_manager.cpp:399:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
+  399 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
+      |                 ^~~~~~~~~~~~~~~~~~
+      |                 MemoryTierManager
+/sep/src/memory/memory_tier_manager.cpp:399:35: error: template argument 1 is invalid
+  399 | std::unique_ptr<IMemoryTierManager> createMemoryTierManagerStub() {
+      |                                   ^
+/sep/src/memory/memory_tier_manager.cpp:399:35: error: template argument 2 is invalid
+/sep/src/memory/memory_tier_manager.cpp: In function ‘int sep::memory::createMemoryTierManagerStub()’:
+/sep/src/memory/memory_tier_manager.cpp:400:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
+  400 |     return std::make_unique<MemoryTierManager>();
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+      |                                               |
+      |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::config::ConfigManager::Impl]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::config::ConfigManager::Impl; _Dp = std::default_delete<sep::config::ConfigManager::Impl>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/core/manager.cpp:135:62:   required from here
+  135 | ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
+      |                                        ~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::config::ConfigManager::Impl’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/include/blender/compression.h:4,
+                 from /sep/include/memory/memory_tier.hpp:10,
+                 from /sep/include/memory/memory_tier_manager.hpp:13,
+                 from /sep/src/memory/memory_tier_manager.cpp:1:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::memory::MemoryTierManager; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::memory::MemoryTierManager>]’:
+/sep/src/memory/memory_tier_manager.cpp:17:86:   required from here
+   17 |     std::call_once(once_flag_, []() { instance_ = std::make_unique<MemoryTierManager>(); });
+      |                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: call of overloaded ‘MemoryTierManager()’ is ambiguous
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:21:1: note: candidate: ‘sep::memory::MemoryTierManager::MemoryTierManager(const Config&)’
+   21 | MemoryTierManager::MemoryTierManager(const Config& cfg) : config_(cfg) {
+      | ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:30:1: note: candidate: ‘sep::memory::MemoryTierManager::MemoryTierManager()’
+   30 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      | ^~~~~~~~~~~~~~~~~
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 40%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:135: src/core/CMakeFiles/sep_core.dir/manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 46%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+/sep/src/quantum/quantum_processor.cpp: In constructor ‘sep::quantum::QuantumProcessor::QuantumProcessor(const Config&)’:
+/sep/src/quantum/quantum_processor.cpp:61:23: error: ‘createQFHBasedQBSAProcessor’ was not declared in this scope
+   61 |     qbsa_processor_ = createQFHBasedQBSAProcessor({});
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_processor.cpp: At global scope:
+/sep/src/quantum/quantum_processor.cpp:65:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                 ^~~~~~~~~~~~~~~~~
+      |                 QuantumProcessor
+/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 1 is invalid
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                                  ^
+/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 2 is invalid
+/sep/src/quantum/quantum_processor.cpp:65:36: error: ambiguating new declaration of ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /sep/src/quantum/quantum_processor.cpp:1:
+/sep/include/quantum/quantum_processor.h:57:35: note: old declaration ‘std::unique_ptr<sep::quantum::QuantumProcessor> sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
+   57 | std::unique_ptr<QuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config);
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’:
+/sep/src/quantum/quantum_processor.cpp:68:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
+   68 |     return std::make_unique<QuantumProcessor>(config);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+      |                                              |
+      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
+/sep/src/quantum/quantum_processor.cpp: At global scope:
+/sep/src/quantum/quantum_processor.cpp:71:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
+   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
+      |                 ^~~~~~~~~~~~~~~~~
+      |                 QuantumProcessor
+/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 1 is invalid
+   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
+      |                                  ^
+/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 2 is invalid
+/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessorStub()’:
+/sep/src/quantum/quantum_processor.cpp:72:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
+   72 |     return std::make_unique<QuantumProcessor>(QuantumProcessor::Config{});
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                              |
+      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
+In file included from /sep/src/compat/component_bridge.cpp:2:
+/sep/include/audio/pipewire_capture.h:43:51: error: use of enum ‘pw_stream_state’ without previous declaration
+   43 |   static void streamStateChanged(void *data, enum pw_stream_state old_state,
+      |                                                   ^~~~~~~~~~~~~~~
+/sep/include/audio/pipewire_capture.h:44:38: error: use of enum ‘pw_stream_state’ without previous declaration
+   44 |                                 enum pw_stream_state new_state,
+      |                                      ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:26:7: error: ‘MetricsCollector’ has not been declared
+   26 | class MetricsCollector::Impl {
+      |       ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:26:30: error: expected unqualified-id before ‘{’ token
+   26 | class MetricsCollector::Impl {
+      |                              ^
+/sep/src/core/metrics_collector.cpp:233:1: error: ‘MetricsCollector’ does not name a type
+  233 | MetricsCollector& MetricsCollector::instance() {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:242:6: error: ‘MetricsCollector’ has not been declared
+  242 | void MetricsCollector::recordOperation(const std::string& operation_name, bool success, double duration_ms) {
+      |      ^~~~~~~~~~~~~~~~
 /sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
 /sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
   170 | }
       | ^
+/sep/src/core/metrics_collector.cpp: In function ‘void recordOperation(const std::string&, bool, double)’:
+/sep/src/core/metrics_collector.cpp:243:38: error: ‘metrics_mutex_’ was not declared in this scope
+  243 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:245:18: error: ‘performance_metrics_’ was not declared in this scope
+  245 |     auto& perf = performance_metrics_[key];
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:260:6: error: ‘MetricsCollector’ has not been declared
+  260 | void MetricsCollector::incrementCounter(const std::string& counter_name, std::uint64_t value) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void incrementCounter(const std::string&, uint64_t)’:
+/sep/src/core/metrics_collector.cpp:261:38: error: ‘metrics_mutex_’ was not declared in this scope
+  261 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:263:5: error: ‘counters_’ was not declared in this scope
+  263 |     counters_[key] += value;
+      |     ^~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:267:6: error: ‘MetricsCollector’ has not been declared
+  267 | void MetricsCollector::setGauge(const std::string& gauge_name, double value) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void setGauge(const std::string&, double)’:
+/sep/src/core/metrics_collector.cpp:268:38: error: ‘metrics_mutex_’ was not declared in this scope
+  268 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:270:5: error: ‘gauges_’ was not declared in this scope
+  270 |     gauges_[key] = value;
+      |     ^~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:273:6: error: ‘MetricsCollector’ has not been declared
+  273 | void MetricsCollector::recordAllocation(std::uint64_t bytes) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void recordAllocation(uint64_t)’:
+/sep/src/core/metrics_collector.cpp:274:38: error: ‘metrics_mutex_’ was not declared in this scope
+  274 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:275:5: error: ‘memory_metrics_’ was not declared in this scope
+  275 |     memory_metrics_.allocated_bytes += bytes;
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:281:6: error: ‘MetricsCollector’ has not been declared
+  281 | void MetricsCollector::recordDeallocation(std::uint64_t bytes) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void recordDeallocation(uint64_t)’:
+/sep/src/core/metrics_collector.cpp:282:38: error: ‘metrics_mutex_’ was not declared in this scope
+  282 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:283:5: error: ‘memory_metrics_’ was not declared in this scope
+  283 |     memory_metrics_.allocated_bytes -= bytes;
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:287:6: error: ‘MetricsCollector’ has not been declared
+  287 | void MetricsCollector::updateSystemMetrics() {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void updateSystemMetrics()’:
+/sep/src/core/metrics_collector.cpp:288:9: error: ‘pImpl’ was not declared in this scope
+  288 |     if (pImpl) {
+      |         ^~~~~
+/sep/src/core/metrics_collector.cpp:292:42: error: ‘metrics_mutex_’ was not declared in this scope
+  292 |         std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                          ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:294:9: error: ‘system_metrics_’ was not declared in this scope
+  294 |         system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage);
+      |         ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:301:1: error: ‘MetricsCollector’ does not name a type
+  301 | MetricsCollector::PerformanceMetrics MetricsCollector::getPerformanceMetrics(const std::string& operation_name) const {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:311:1: error: ‘MetricsCollector’ does not name a type
+  311 | MetricsCollector::MemoryMetrics MetricsCollector::getMemoryMetrics() const {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:316:1: error: ‘MetricsCollector’ does not name a type
+  316 | MetricsCollector::SystemMetrics MetricsCollector::getSystemMetrics() const {
+      | ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:321:15: error: ‘MetricsCollector’ has not been declared
+  321 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
+      |               ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:321:77: error: non-member function ‘uint64_t getCounter(const std::string&)’ cannot have cv-qualifier
+  321 | std::uint64_t MetricsCollector::getCounter(const std::string& counter_name) const {
+      |                                                                             ^~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘uint64_t getCounter(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:322:38: error: ‘metrics_mutex_’ was not declared in this scope
+  322 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:324:15: error: ‘counters_’ was not declared in this scope
+  324 |     auto it = counters_.find(key);
+      |               ^~~~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:328:8: error: ‘MetricsCollector’ has not been declared
+  328 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
+      |        ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:328:66: error: non-member function ‘double getGauge(const std::string&)’ cannot have cv-qualifier
+  328 | double MetricsCollector::getGauge(const std::string& gauge_name) const {
+      |                                                                  ^~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘double getGauge(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:329:38: error: ‘metrics_mutex_’ was not declared in this scope
+  329 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:331:15: error: ‘gauges_’ was not declared in this scope
+  331 |     auto it = gauges_.find(key);
+      |               ^~~~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:335:1: error: ‘DetailedMetrics’ does not name a type
+  335 | DetailedMetrics MetricsCollector::getDetailedMetrics() const {
+      | ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:342:6: error: ‘MetricsCollector’ has not been declared
+  342 | void MetricsCollector::reset() {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void reset()’:
+/sep/src/core/metrics_collector.cpp:343:38: error: ‘metrics_mutex_’ was not declared in this scope
+  343 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:344:5: error: ‘performance_metrics_’ was not declared in this scope
+  344 |     performance_metrics_.clear();
+      |     ^~~~~~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:345:5: error: ‘counters_’ was not declared in this scope
+  345 |     counters_.clear();
+      |     ^~~~~~~~~
+/sep/src/core/metrics_collector.cpp:346:5: error: ‘gauges_’ was not declared in this scope
+  346 |     gauges_.clear();
+      |     ^~~~~~~
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/sep/src/core/metrics_collector.cpp:347:5: error: ‘memory_metrics_’ was not declared in this scope
+  347 |     memory_metrics_ = MemoryMetrics{};
+      |     ^~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:347:23: error: ‘MemoryMetrics’ was not declared in this scope
+  347 |     memory_metrics_ = MemoryMetrics{};
+      |                       ^~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:348:5: error: ‘system_metrics_’ was not declared in this scope
+  348 |     system_metrics_ = SystemMetrics{};
+      |     ^~~~~~~~~~~~~~~
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+/sep/src/core/metrics_collector.cpp:348:23: error: ‘SystemMetrics’ was not declared in this scope; did you mean ‘updateSystemMetrics’?
+  348 |     system_metrics_ = SystemMetrics{};
+      |                       ^~~~~~~~~~~~~
+      |                       updateSystemMetrics
+/sep/src/core/metrics_collector.cpp:349:9: error: ‘pImpl’ was not declared in this scope
+  349 |     if (pImpl) {
+      |         ^~~~~
+/sep/src/core/metrics_collector.cpp: At global scope:
+/sep/src/core/metrics_collector.cpp:354:6: error: ‘MetricsCollector’ has not been declared
+  354 | void MetricsCollector::resetOperation(const std::string& operation_name) {
+      |      ^~~~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp: In function ‘void resetOperation(const std::string&)’:
+/sep/src/core/metrics_collector.cpp:355:38: error: ‘metrics_mutex_’ was not declared in this scope
+  355 |     std::lock_guard<std::mutex> lock(metrics_mutex_);
+      |                                      ^~~~~~~~~~~~~~
+/sep/src/core/metrics_collector.cpp:357:5: error: ‘performance_metrics_’ was not declared in this scope
+  357 |     performance_metrics_.erase(key);
+      |     ^~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/evolution.cpp:22:44: error: expected ‘)’ before ‘*’ token
+   22 |     explicit EvolutionEngineImpl(IProcessor* processor)
+      |                                 ~          ^
+      |                                            )
+/sep/src/quantum/evolution.cpp:290:5: error: ‘IProcessor’ does not name a type; did you mean ‘Processor’?
+  290 |     IProcessor* processor_; // Use interface type
+      |     ^~~~~~~~~~
+      |     Processor
+/sep/src/quantum/evolution.cpp: In member function ‘sep::quantum::BatchProcessingResult sep::quantum::EvolutionEngine::EvolutionEngineImpl::evolve(const sep::quantum::EvolutionEngine::EvolutionParams&)’:
+/sep/src/quantum/evolution.cpp:31:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
+   31 |         auto patterns = processor_->getPatterns();
+      |                         ^~~~~~~~~~
+      |                         Processor
+/sep/src/quantum/evolution.cpp:41:37: error: no matching function for call to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::push_back(<brace-enclosed initializer list>)’
+   41 |             fitness_scores.push_back({pattern.id, calculateFitness(pattern)});
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/14/vector:66,
+                 from /sep/include/quantum/types.h:5,
+                 from /sep/include/quantum/evolution.h:4,
+                 from /sep/src/quantum/evolution.cpp:1:
+/usr/include/c++/14/bits/stl_vector.h:1283:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
+ 1283 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/14/bits/stl_vector.h:1283:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&’ {aka ‘const std::pair<std::__cxx11::basic_string<char>, float>&’}
+ 1283 |       push_back(const value_type& __x)
+      |                 ~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/14/bits/stl_vector.h:1300:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
+ 1300 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/14/bits/stl_vector.h:1300:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&&’ {aka ‘std::pair<std::__cxx11::basic_string<char>, float>&&’}
+ 1300 |       push_back(value_type&& __x)
+      |                 ~~~~~~~~~~~~~^~~
+/sep/src/quantum/evolution.cpp: In member function ‘sep::quantum::Pattern sep::quantum::EvolutionEngine::EvolutionEngineImpl::mutate(const sep::quantum::Pattern&)’:
+/sep/src/quantum/evolution.cpp:123:23: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
+  123 |         float sigma = processor_->getConfig().mutation_rate;
+      |                       ^~~~~~~~~~
+      |                       Processor
+/sep/src/quantum/evolution.cpp: In member function ‘std::vector<std::__cxx11::basic_string<char> > sep::quantum::EvolutionEngine::EvolutionEngineImpl::selectElite(size_t)’:
+/sep/src/quantum/evolution.cpp:139:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
+  139 |         auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
+      |                         ^~~~~~~~~~
+      |                         Processor
+/sep/src/quantum/evolution.cpp:142:37: error: no matching function for call to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::push_back(<brace-enclosed initializer list>)’
+  142 |             fitness_scores.push_back({pattern.id, calculateFitness(pattern)});
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/stl_vector.h:1283:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
+ 1283 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/14/bits/stl_vector.h:1283:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&’ {aka ‘const std::pair<std::__cxx11::basic_string<char>, float>&’}
+ 1283 |       push_back(const value_type& __x)
+      |                 ~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/14/bits/stl_vector.h:1300:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
+ 1300 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/14/bits/stl_vector.h:1300:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&&’ {aka ‘std::pair<std::__cxx11::basic_string<char>, float>&&’}
+ 1300 |       push_back(value_type&& __x)
+      |                 ~~~~~~~~~~~~~^~~
+/sep/src/quantum/evolution.cpp: In member function ‘std::vector<std::__cxx11::basic_string<char> > sep::quantum::EvolutionEngine::EvolutionEngineImpl::tournamentSelection(size_t, size_t)’:
+/sep/src/quantum/evolution.cpp:156:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
+  156 |         auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
+      |                         ^~~~~~~~~~
+      |                         Processor
+/sep/src/quantum/evolution.cpp:164:37: error: no matching function for call to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::push_back(<brace-enclosed initializer list>)’
+  164 |                 tournament.push_back({patterns[idx].id, calculateFitness(patterns[idx])});
+      |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/stl_vector.h:1283:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
+ 1283 |       push_back(const value_type& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/14/bits/stl_vector.h:1283:35: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&’ {aka ‘const std::pair<std::__cxx11::basic_string<char>, float>&’}
+ 1283 |       push_back(const value_type& __x)
+      |                 ~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/14/bits/stl_vector.h:1300:7: note: candidate: ‘void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = std::pair<std::__cxx11::basic_string<char>, float>; _Alloc = std::allocator<std::pair<std::__cxx11::basic_string<char>, float> >; value_type = std::pair<std::__cxx11::basic_string<char>, float>]’
+ 1300 |       push_back(value_type&& __x)
+      |       ^~~~~~~~~
+/usr/include/c++/14/bits/stl_vector.h:1300:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘std::vector<std::pair<std::__cxx11::basic_string<char>, float> >::value_type&&’ {aka ‘std::pair<std::__cxx11::basic_string<char>, float>&&’}
+ 1300 |       push_back(value_type&& __x)
+      |                 ~~~~~~~~~~~~~^~~
+/sep/src/quantum/evolution.cpp: In member function ‘std::vector<std::__cxx11::basic_string<char> > sep::quantum::EvolutionEngine::EvolutionEngineImpl::rouletteWheelSelection(size_t)’:
+/sep/src/quantum/evolution.cpp:174:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
+  174 |         auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
+      |                         ^~~~~~~~~~
+      |                         Processor
+/sep/src/quantum/evolution.cpp: In member function ‘float sep::quantum::EvolutionEngine::EvolutionEngineImpl::calculatePatternDiversity(const sep::quantum::Pattern&) const’:
+/sep/src/quantum/evolution.cpp:233:25: error: ‘processor_’ was not declared in this scope; did you mean ‘Processor’?
+  233 |         auto patterns = processor_->getPatterns();
+      |                         ^~~~~~~~~~
+      |                         Processor
+/sep/src/quantum/evolution.cpp: At global scope:
+/sep/src/quantum/evolution.cpp:298:33: error: expected constructor, destructor, or type conversion before ‘(’ token
+  298 | EvolutionEngine::EvolutionEngine(IProcessor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {} // Use interface type
+      |                                 ^
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
+[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:163: src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
+/sep/src/quantum/quantum_processor_qfh.cpp:23:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
+   23 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
+      |                 ^~~~~~~~~~~~~~~~~~~~
+      |                 QuantumProcessorQFH
+/sep/src/quantum/quantum_processor_qfh.cpp:23:37: error: template argument 1 is invalid
+   23 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
+      |                                     ^
+/sep/src/quantum/quantum_processor_qfh.cpp:23:37: error: template argument 2 is invalid
+/sep/src/quantum/quantum_processor_qfh.cpp: In function ‘int sep::quantum::createQuantumProcessorQFH()’:
+/sep/src/quantum/quantum_processor_qfh.cpp:25:49: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>’ to ‘int’ in return
+   25 |     return std::make_unique<QuantumProcessorQFH>();
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+      |                                                 |
+      |                                                 std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>
+/sep/src/quantum/quantum_processor_qfh.cpp: At global scope:
+/sep/src/quantum/quantum_processor_qfh.cpp:28:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
+   28 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFHStub() {
+      |                 ^~~~~~~~~~~~~~~~~~~~
+      |                 QuantumProcessorQFH
+/sep/src/quantum/quantum_processor_qfh.cpp:28:37: error: template argument 1 is invalid
+   28 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFHStub() {
+      |                                     ^
+/sep/src/quantum/quantum_processor_qfh.cpp:28:37: error: template argument 2 is invalid
+/sep/src/quantum/quantum_processor_qfh.cpp: In function ‘int sep::quantum::createQuantumProcessorQFHStub()’:
+/sep/src/quantum/quantum_processor_qfh.cpp:29:49: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>’ to ‘int’ in return
+   29 |     return std::make_unique<QuantumProcessorQFH>();
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+      |                                                 |
+      |                                                 std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>
+/sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::to_json(nlohmann::json_abi_v3_11_3::json&, const QuantumState&)’:
+/sep/src/quantum/types_serialization.cpp:16:34: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘evolution_rate’
+   16 |         {"evolution_rate", state.evolution_rate}, // Fix: Add missing field
+      |                                  ^~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp:17:37: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘coupling_strength’
+   17 |         {"coupling_strength", state.coupling_strength}, // Fix: Add missing field
+      |                                     ^~~~~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp:19:5: error: no matching function for call to ‘nlohmann::json_abi_v3_11_3::basic_json<>::basic_json(<brace-enclosed initializer list>)’
+   19 |     };
+      |     ^
+In file included from /sep/src/quantum/types_serialization.cpp:2:
+/sep/extern/nlohmann/json.hpp:20443:5: note: candidate: ‘template<class JsonRef, typename std::enable_if<nlohmann::json_abi_v3_11_3::detail::conjunction<nlohmann::json_abi_v3_11_3::detail::is_json_ref<JsonRef>, std::is_same<typename JsonRef::value_type, nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long int, long unsigned int, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> > >::value, int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const JsonRef&) [with typename std::enable_if<nlohmann::json_abi_v3_11_3::detail::conjunction<nlohmann::json_abi_v3_11_3::detail::is_json_ref<JsonRef>, std::is_same<typename JsonRef::value_type, nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value, int>::type <anonymous> = JsonRef; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20443 |     basic_json(const JsonRef& ref) : basic_json(ref.moved_or_copied()) {}
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20443:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20334:5: note: candidate: ‘template<class InputIT, typename std::enable_if<(std::is_same<IterImpl, nlohmann::json_abi_v3_11_3::detail::iter_impl<nlohmann::json_abi_v3_11_3::basic_json<> > >::value || std::is_same<IterImpl, nlohmann::json_abi_v3_11_3::detail::iter_impl<const nlohmann::json_abi_v3_11_3::basic_json<> > >::value), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(InputIT, InputIT) [with typename std::enable_if<(std::is_same<InputIT, nlohmann::json_abi_v3_11_3::detail::iter_impl<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value || std::is_same<InputIT, nlohmann::json_abi_v3_11_3::detail::iter_impl<const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value), int>::type <anonymous> = InputIT; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20334 |     basic_json(InputIT first, InputIT last)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20334:5: note:   candidate expects 2 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20151:5: note: candidate: ‘template<class BasicJsonType, typename std::enable_if<(nlohmann::json_abi_v3_11_3::detail::is_basic_json<BasicJsonType>::value && (! std::is_same<nlohmann::json_abi_v3_11_3::basic_json<>, BasicJsonType>::value)), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const BasicJsonType&) [with typename std::enable_if<(nlohmann::json_abi_v3_11_3::detail::is_basic_json<BasicJsonType>::value && (! std::is_same<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>, BasicJsonType>::value)), int>::type <anonymous> = BasicJsonType; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20151 |     basic_json(const BasicJsonType& val)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20151:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20137:5: note: candidate: ‘template<class CompatibleType, class U, typename std::enable_if<((! nlohmann::json_abi_v3_11_3::detail::is_basic_json<T>::value) && nlohmann::json_abi_v3_11_3::detail::is_compatible_type<nlohmann::json_abi_v3_11_3::basic_json<>, U>::value), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(CompatibleType&&) [with U = CompatibleType; typename std::enable_if<((! nlohmann::json_abi_v3_11_3::detail::is_basic_json<U>::value) && nlohmann::json_abi_v3_11_3::detail::is_compatible_type<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>, U>::value), int>::type <anonymous> = U; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20137 |     basic_json(CompatibleType && val) noexcept(noexcept( // NOLINT(bugprone-forwarding-reference-overload,bugprone-exception-escape)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20137:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20516:1: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20516 | basic_json(basic_json&& other) noexcept
+      | ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20516:1: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20447:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20447 |     basic_json(const basic_json& other)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20447:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20322:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(size_type, const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; size_type = long unsigned int]’
+20322 |     basic_json(size_type cnt, const basic_json& val):
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20322:5: note:   candidate expects 2 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20204:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(initializer_list_t, bool, value_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; initializer_list_t = std::initializer_list<nlohmann::json_abi_v3_11_3::detail::json_ref<nlohmann::json_abi_v3_11_3::basic_json<> > >; value_t = nlohmann::json_abi_v3_11_3::detail::value_t]’
+20204 |     basic_json(initializer_list_t init,
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20204:5: note:   candidate expects 3 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20125:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(std::nullptr_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; std::nullptr_t = std::nullptr_t]’
+20125 |     basic_json(std::nullptr_t = nullptr) noexcept // NOLINT(bugprone-exception-escape)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20125:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20117:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(value_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; value_t = nlohmann::json_abi_v3_11_3::detail::value_t]’
+20117 |     basic_json(const value_t v)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20117:5: note:   candidate expects 1 argument, 10 provided
+/sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::from_json(const nlohmann::json_abi_v3_11_3::json&, QuantumState&)’:
+/sep/src/quantum/types_serialization.cpp:30:41: error: ‘struct sep::quantum::QuantumState’ has no member named ‘evolution_rate’
+   30 |     j.at("evolution_rate").get_to(state.evolution_rate); // Fix: Add missing field
+      |                                         ^~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp:31:44: error: ‘struct sep::quantum::QuantumState’ has no member named ‘coupling_strength’
+   31 |     j.at("coupling_strength").get_to(state.coupling_strength); // Fix: Add missing field
+      |                                            ^~~~~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp:33:11: error: ‘struct sep::quantum::QuantumState’ has no member named ‘decoherence_rate’
+   33 |     state.decoherence_rate = j.value("decoherence_rate", 0.0f); // Fix: Add missing field
+      |           ^~~~~~~~~~~~~~~~
+/sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::to_json(nlohmann::json_abi_v3_11_3::json&, const Pattern&)’:
+/sep/src/quantum/types_serialization.cpp:55:31: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+   55 |         {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
+      |                               ^~~~~~~~
+/sep/src/quantum/types_serialization.cpp:55:51: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+   55 |         {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
+      |                                                   ^~~~~~~~
+/sep/src/quantum/types_serialization.cpp:55:71: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+   55 |         {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
+      |                                                                       ^~~~~~~~
+/sep/src/quantum/types_serialization.cpp:55:91: error: ‘const struct sep::quantum::Pattern’ has no member named ‘momentum’
+   55 |         {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z, pattern.momentum.w}}, // Fix: Add momentum
+      |                                                                                           ^~~~~~~~
+/sep/src/quantum/types_serialization.cpp:62:5: error: no matching function for call to ‘nlohmann::json_abi_v3_11_3::basic_json<>::basic_json(<brace-enclosed initializer list>)’
+   62 |     };
+      |     ^
+/sep/extern/nlohmann/json.hpp:20443:5: note: candidate: ‘template<class JsonRef, typename std::enable_if<nlohmann::json_abi_v3_11_3::detail::conjunction<nlohmann::json_abi_v3_11_3::detail::is_json_ref<JsonRef>, std::is_same<typename JsonRef::value_type, nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long int, long unsigned int, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> > >::value, int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const JsonRef&) [with typename std::enable_if<nlohmann::json_abi_v3_11_3::detail::conjunction<nlohmann::json_abi_v3_11_3::detail::is_json_ref<JsonRef>, std::is_same<typename JsonRef::value_type, nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value, int>::type <anonymous> = JsonRef; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20443 |     basic_json(const JsonRef& ref) : basic_json(ref.moved_or_copied()) {}
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20443:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20334:5: note: candidate: ‘template<class InputIT, typename std::enable_if<(std::is_same<IterImpl, nlohmann::json_abi_v3_11_3::detail::iter_impl<nlohmann::json_abi_v3_11_3::basic_json<> > >::value || std::is_same<IterImpl, nlohmann::json_abi_v3_11_3::detail::iter_impl<const nlohmann::json_abi_v3_11_3::basic_json<> > >::value), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(InputIT, InputIT) [with typename std::enable_if<(std::is_same<InputIT, nlohmann::json_abi_v3_11_3::detail::iter_impl<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value || std::is_same<InputIT, nlohmann::json_abi_v3_11_3::detail::iter_impl<const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass> > >::value), int>::type <anonymous> = InputIT; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20334 |     basic_json(InputIT first, InputIT last)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20334:5: note:   candidate expects 2 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20151:5: note: candidate: ‘template<class BasicJsonType, typename std::enable_if<(nlohmann::json_abi_v3_11_3::detail::is_basic_json<BasicJsonType>::value && (! std::is_same<nlohmann::json_abi_v3_11_3::basic_json<>, BasicJsonType>::value)), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const BasicJsonType&) [with typename std::enable_if<(nlohmann::json_abi_v3_11_3::detail::is_basic_json<BasicJsonType>::value && (! std::is_same<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>, BasicJsonType>::value)), int>::type <anonymous> = BasicJsonType; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20151 |     basic_json(const BasicJsonType& val)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20151:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20137:5: note: candidate: ‘template<class CompatibleType, class U, typename std::enable_if<((! nlohmann::json_abi_v3_11_3::detail::is_basic_json<T>::value) && nlohmann::json_abi_v3_11_3::detail::is_compatible_type<nlohmann::json_abi_v3_11_3::basic_json<>, U>::value), int>::type <anonymous> > nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(CompatibleType&&) [with U = CompatibleType; typename std::enable_if<((! nlohmann::json_abi_v3_11_3::detail::is_basic_json<U>::value) && nlohmann::json_abi_v3_11_3::detail::is_compatible_type<nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>, U>::value), int>::type <anonymous> = U; ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20137 |     basic_json(CompatibleType && val) noexcept(noexcept( // NOLINT(bugprone-forwarding-reference-overload,bugprone-exception-escape)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20137:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20516:1: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20516 | basic_json(basic_json&& other) noexcept
+      | ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20516:1: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20447:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]’
+20447 |     basic_json(const basic_json& other)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20447:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20322:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(size_type, const nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>&) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; size_type = long unsigned int]’
+20322 |     basic_json(size_type cnt, const basic_json& val):
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20322:5: note:   candidate expects 2 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20204:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(initializer_list_t, bool, value_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; initializer_list_t = std::initializer_list<nlohmann::json_abi_v3_11_3::detail::json_ref<nlohmann::json_abi_v3_11_3::basic_json<> > >; value_t = nlohmann::json_abi_v3_11_3::detail::value_t]’
+20204 |     basic_json(initializer_list_t init,
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20204:5: note:   candidate expects 3 arguments, 10 provided
+/sep/extern/nlohmann/json.hpp:20125:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(std::nullptr_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; std::nullptr_t = std::nullptr_t]’
+20125 |     basic_json(std::nullptr_t = nullptr) noexcept // NOLINT(bugprone-exception-escape)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20125:5: note:   candidate expects 1 argument, 10 provided
+/sep/extern/nlohmann/json.hpp:20117:5: note: candidate: ‘nlohmann::json_abi_v3_11_3::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::basic_json(value_t) [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_11_3::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void; value_t = nlohmann::json_abi_v3_11_3::detail::value_t]’
+20117 |     basic_json(const value_t v)
+      |     ^~~~~~~~~~
+/sep/extern/nlohmann/json.hpp:20117:5: note:   candidate expects 1 argument, 10 provided
+/sep/src/quantum/types_serialization.cpp: In function ‘void sep::quantum::from_json(const nlohmann::json_abi_v3_11_3::json&, Pattern&)’:
+/sep/src/quantum/types_serialization.cpp:69:53: error: ‘struct sep::quantum::QuantumState’ has no member named ‘get_to’
+   69 |     j.value("quantum_state", pattern.quantum_state).get_to(pattern.quantum_state); // Fix: Use value with default
+      |                                                     ^~~~~~
+/sep/src/quantum/types_serialization.cpp:70:80: error: ‘class std::vector<float>’ has no member named ‘get’
+   70 |     auto mom = j.value("momentum", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}).get<std::vector<float>>(); // Fix: Add momentum
+      |                                                                                ^~~
+/sep/src/quantum/types_serialization.cpp:70:101: error: expected primary-expression before ‘>’ token
+   70 |     auto mom = j.value("momentum", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}).get<std::vector<float>>(); // Fix: Add momentum
+      |                                                                                                     ^~
+/sep/src/quantum/types_serialization.cpp:70:104: error: expected primary-expression before ‘)’ token
+   70 |     auto mom = j.value("momentum", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}).get<std::vector<float>>(); // Fix: Add momentum
+      |                                                                                                        ^
+/sep/src/quantum/types_serialization.cpp:71:13: error: ‘struct sep::quantum::Pattern’ has no member named ‘momentum’
+   71 |     pattern.momentum = glm::vec4(mom[0], mom[1], mom[2], mom[3]);
+      |             ^~~~~~~~
+/sep/src/quantum/processor.cpp:368:23: error: no declaration matches ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processAllPatterns()’
+  368 | BatchProcessingResult Processor::processAllPatterns() { return impl_->processAll(); } // Implement this method // Fix: Add missing definition
+      |                       ^~~~~~~~~
+/sep/src/quantum/processor.cpp:368:23: note: no functions named ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processAllPatterns()’
+In file included from /sep/src/quantum/processor.cpp:1:
+/sep/include/quantum/processor.h:79:7: note: ‘class sep::quantum::Processor’ defined here
+   79 | class Processor {
+      |       ^~~~~~~~~
+/sep/src/quantum/processor.cpp:372:23: error: redefinition of ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processBatch(const std::vector<std::__cxx11::basic_string<char> >&)’
+  372 | BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
+      |                       ^~~~~~~~~
+/sep/src/quantum/processor.cpp:370:23: note: ‘sep::quantum::BatchProcessingResult sep::quantum::Processor::processBatch(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+  370 | BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
+      |                       ^~~~~~~~~
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
 In file included from /sep/src/memory/quantum_coherence_manager.cpp:8:
 /sep/include/memory/quantum_coherence_manager.hpp:13:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
    13 | class QuantumCoherenceManager {
@@ -620,18 +1057,68 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-[ 53%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:191: src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o] Error 1
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
+/sep/src/quantum/pattern_processor.cpp:12:48: error: ‘QuantumProcessor’ does not name a type; did you mean ‘PatternQuantumProcessor’?
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                                ^~~~~~~~~~~~~~~~
+      |                                                PatternQuantumProcessor
+/sep/src/quantum/pattern_processor.cpp:12:72: error: expected unqualified-id before ‘&’ token
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                                                        ^
+/sep/src/quantum/pattern_processor.cpp:12:72: error: expected ‘)’ before ‘&’ token
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                         ~                              ^
+      |                                                                        )
+/sep/src/quantum/pattern_processor.cpp:12:72: error: constructors may not be ref-qualified
+/sep/src/quantum/pattern_processor.cpp:12:72: error: expected ‘;’ at end of member declaration
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                                                        ^
+      |                                                                         ;
+/sep/src/quantum/pattern_processor.cpp:12:74: error: ‘config’ does not name a type
+   12 |     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
+      |                                                                          ^~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp:23:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
    23 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:101:21: error: ‘QuantumProcessor’ was not declared in this scope
+  101 |     std::unique_ptr<QuantumProcessor> quantum_processor_;
+      |                     ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:101:37: error: template argument 1 is invalid
+  101 |     std::unique_ptr<QuantumProcessor> quantum_processor_;
+      |                                     ^
+/sep/src/quantum/pattern_processor.cpp:101:37: error: template argument 2 is invalid
 /sep/src/memory/quantum_coherence_manager.cpp:156:50: error: ‘AnomalyType’ in ‘class sep::memory::QuantumCoherenceManager’ does not name a type
   156 |     using AnomalyType = QuantumCoherenceManager::AnomalyType;
       |                                                  ^~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp: In member function ‘virtual sep::quantum::PatternProcessResult sep::quantum::{anonymous}::PatternQuantumProcessorImpl::processPattern(const sep::quantum::QuantumState&, const std::string&)’:
+/sep/src/quantum/pattern_processor.cpp:29:42: error: base operand of ‘->’ is not a pointer
+   29 |         bool success = quantum_processor_->processPattern(stateData, numericId);
+      |                                          ^~
+/sep/src/quantum/pattern_processor.cpp: In member function ‘virtual float sep::quantum::{anonymous}::PatternQuantumProcessorImpl::calculateCoherence(const sep::quantum::QuantumState&, const sep::quantum::QuantumState&) const’:
+/sep/src/quantum/pattern_processor.cpp:85:34: error: base operand of ‘->’ is not a pointer
+   85 |         return quantum_processor_->calculateCoherence(vec_a, vec_b);
+      |                                  ^~
+/sep/src/quantum/pattern_processor.cpp: At global scope:
+/sep/src/quantum/pattern_processor.cpp:106:11: error: ‘QuantumProcessor’ does not name a type
+  106 |     const QuantumProcessor::Config& config) {
+      |           ^~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:106:35: error: expected unqualified-id before ‘&’ token
+  106 |     const QuantumProcessor::Config& config) {
+      |                                   ^
+/sep/src/quantum/pattern_processor.cpp:106:35: error: expected ‘)’ before ‘&’ token
+  106 |     const QuantumProcessor::Config& config) {
+      |                                   ^
+      |                                   )
+/sep/src/quantum/pattern_processor.cpp:105:71: note: to match this ‘(’
+  105 | std::unique_ptr<PatternQuantumProcessor> createPatternQuantumProcessor(
+      |                                                                       ^
+/sep/src/quantum/pattern_processor.cpp:106:37: error: expected initializer before ‘config’
+  106 |     const QuantumProcessor::Config& config) {
+      |                                     ^~~~~~
 /sep/src/memory/quantum_coherence_manager.cpp: In member function ‘sep::memory::QuantumCoherenceManager::Impl::CoherenceResult sep::memory::QuantumCoherenceManager::Impl::updateCoherence(const std::vector<sep::quantum::Pattern>&)’:
 /sep/src/memory/quantum_coherence_manager.cpp:211:20: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceResult = struct sep::memory::QuantumCoherenceManager::CoherenceResult’ {aka ‘struct sep::memory::QuantumCoherenceManager::CoherenceResult’} has no member named ‘tier_fragmentation’
   211 |             result.tier_fragmentation[i] = metrics_.tier_fragmentation[i];
@@ -753,419 +1240,14 @@ make[2]: *** Waiting for unfinished jobs....
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/api/lock_free_rate_limiter.cpp: In lambda function:
-/sep/src/api/lock_free_rate_limiter.cpp:20:9: error: ‘metrics_mutex_’ was not declared in this scope
-   20 |         metrics_mutex_.lock();
-      |         ^~~~~~~~~~~~~~
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:191: src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o] Error 1
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:177: src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o] Error 1
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:205: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o] Error 1
+[ 53%] Linking CXX static library libsep_audio.a
+[ 53%] Built target sep_audio
 make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-/sep/src/api/sep_engine.cpp:124:9: error: ‘impl_’ does not name a type
-  124 |         impl_->health_metrics.totalRequests++;
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:125:9: error: ‘impl_’ does not name a type
-  125 |         impl_->health_metrics.lastRequestTime = std::chrono::steady_clock::now();
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:129:9: error: expected unqualified-id before ‘if’
-  129 |         if (!validateFields(request_data, {"pattern_data"}, error))
-      |         ^~
-/sep/src/api/sep_engine.cpp:129:59: error: expected unqualified-id before ‘,’ token
-  129 |         if (!validateFields(request_data, {"pattern_data"}, error))
-      |                                                           ^
-/sep/src/api/sep_engine.cpp:129:66: error: expected constructor, destructor, or type conversion before ‘)’ token
-  129 |         if (!validateFields(request_data, {"pattern_data"}, error))
-      |                                                                  ^
-/sep/src/api/sep_engine.cpp:135:36: error: ‘request_data’ was not declared in this scope
-  135 |         const auto& pattern_data = request_data["pattern_data"];
-      |                                    ^~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:136:9: error: expected unqualified-id before ‘if’
-  136 |         if (!pattern_data.is_array() || pattern_data.size() != 3)
-      |         ^~
-/sep/src/api/sep_engine.cpp:141:47: error: expected primary-expression before ‘float’
-  141 |         glm::vec3 pattern{pattern_data[0].get<float>(), pattern_data[1].get<float>(), pattern_data[2].get<float>()};
-      |                                               ^~~~~
-/sep/src/api/sep_engine.cpp:141:47: error: expected ‘}’ before ‘float’
-  141 |         glm::vec3 pattern{pattern_data[0].get<float>(), pattern_data[1].get<float>(), pattern_data[2].get<float>()};
-      |                          ~                    ^~~~~
-/sep/src/api/sep_engine.cpp:141:47: error: no matching function for call to ‘glm::vec<3, float, glm::packed_highp>::vec(<brace-enclosed initializer list>)’
-In file included from /usr/include/glm/ext/vector_bool3.hpp:5,
-                 from /usr/include/glm/vec3.hpp:5,
-                 from /usr/include/glm/glm.hpp:118,
-                 from /sep/include/quantum/types.h:4,
-                 from /sep/include/api/sep_engine.h:13,
-                 from /sep/src/api/sep_engine.cpp:1:
-/usr/include/glm/detail/type_vec3.hpp:155:44: note: candidate: ‘template<class U, glm::qualifier P> constexpr glm::vec<3, T, Q>::vec(const glm::vec<3, U, P>&) [with glm::qualifier P = U; T = float; glm::qualifier Q = glm::packed_highp]’
-  155 |                 GLM_CTOR_DECL GLM_EXPLICIT vec(vec<3, U, P> const& v);
-      |                                            ^~~
-/usr/include/glm/detail/type_vec3.hpp:155:44: note:   template argument deduction/substitution failed:
-/usr/include/glm/detail/type_vec3.hpp:151:44: note: candidate: ‘template<class U, glm::qualifier P> constexpr glm::vec<3, T, Q>::vec(const glm::vec<4, U, P>&) [with glm::qualifier P = U; T = float; glm::qualifier Q = glm::packed_highp]’
-  151 |                 GLM_CTOR_DECL GLM_EXPLICIT vec(vec<4, U, P> const& v);
-      |                                            ^~~
-/usr/include/glm/detail/type_vec3.hpp:151:44: note:   template argument deduction/substitution failed:
-/usr/include/glm/detail/type_vec3.hpp:148:31: note: candidate: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<3, T, Q>::vec(const glm::vec<1, A, P>&, const glm::vec<2, B, P>&) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
-  148 |                 GLM_CTOR_DECL vec(vec<1, A, P> const& _x, vec<2, B, P> const& _yz);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:148:31: note:   candidate expects 2 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:145:31: note: candidate: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<3, T, Q>::vec(A, const glm::vec<2, B, P>&) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
-  145 |                 GLM_CTOR_DECL vec(A _x, vec<2, B, P> const& _yz);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:145:31: note:   candidate expects 2 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:142:31: note: candidate: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<3, T, Q>::vec(const glm::vec<2, A, P>&, const glm::vec<1, B, P>&) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
-  142 |                 GLM_CTOR_DECL vec(vec<2, A, P> const& _xy, vec<1, B, P> const& _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:142:31: note:   candidate expects 2 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:139:31: note: candidate: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<3, T, Q>::vec(const glm::vec<2, A, P>&, B) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
-  139 |                 GLM_CTOR_DECL vec(vec<2, A, P> const& _xy, B _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:139:31: note:   candidate expects 2 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:133:31: note: candidate: ‘template<class X, class Y, class Z> constexpr glm::vec<3, T, Q>::vec(const glm::vec<1, A, Q>&, const glm::vec<1, B, Q>&, const glm::vec<1, Z, Q>&) [with Y = X; Z = Y; T = float; glm::qualifier Q = glm::packed_highp]’
-  133 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, vec<1, Y, Q> const& _y, vec<1, Z, Q> const& _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:133:31: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:131:31: note: candidate: ‘template<class X, class Y, class Z> constexpr glm::vec<3, T, Q>::vec(X, const glm::vec<1, B, Q>&, const glm::vec<1, Z, Q>&) [with Y = X; Z = Y; T = float; glm::qualifier Q = glm::packed_highp]’
-  131 |                 GLM_CTOR_DECL vec(X _x, vec<1, Y, Q> const& _y, vec<1, Z, Q> const& _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:131:31: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:129:31: note: candidate: ‘template<class X, class Y, class Z> constexpr glm::vec<3, T, Q>::vec(const glm::vec<1, A, Q>&, Y, const glm::vec<1, Z, Q>&) [with Y = X; Z = Y; T = float; glm::qualifier Q = glm::packed_highp]’
-  129 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, Y _y, vec<1, Z, Q> const& _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:129:31: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:127:31: note: candidate: ‘template<class X, class Y, class Z> constexpr glm::vec<3, T, Q>::vec(X, Y, const glm::vec<1, Z, Q>&) [with Y = X; Z = Y; T = float; glm::qualifier Q = glm::packed_highp]’
-  127 |                 GLM_CTOR_DECL vec(X _x, Y _y, vec<1, Z, Q> const& _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:127:31: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:125:31: note: candidate: ‘template<class X, class Y, class Z> constexpr glm::vec<3, T, Q>::vec(const glm::vec<1, A, Q>&, const glm::vec<1, B, Q>&, Z) [with Y = X; Z = Y; T = float; glm::qualifier Q = glm::packed_highp]’
-  125 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, vec<1, Y, Q> const& _y, Z _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:125:31: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:123:31: note: candidate: ‘template<class X, class Y, class Z> constexpr glm::vec<3, T, Q>::vec(X, const glm::vec<1, B, Q>&, Z) [with Y = X; Z = Y; T = float; glm::qualifier Q = glm::packed_highp]’
-  123 |                 GLM_CTOR_DECL vec(X _x, vec<1, Y, Q> const& _y, Z _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:123:31: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:121:31: note: candidate: ‘template<class X, class Y, class Z> constexpr glm::vec<3, T, Q>::vec(const glm::vec<1, A, Q>&, Y, Z) [with Y = X; Z = Y; T = float; glm::qualifier Q = glm::packed_highp]’
-  121 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, Y _y, Z _z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:121:31: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:119:31: note: candidate: ‘template<class X, class Y, class Z> constexpr glm::vec<3, T, Q>::vec(X, Y, Z) [with Y = X; Z = Y; T = float; glm::qualifier Q = glm::packed_highp]’
-  119 |                 GLM_CTOR_DECL vec(X x, Y y, Z z);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:119:31: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.hpp:115:40: note: candidate: ‘template<class U, glm::qualifier P> constexpr glm::vec<3, T, Q>::vec(const glm::vec<1, U, P>&) [with glm::qualifier P = U; T = float; glm::qualifier Q = glm::packed_highp]’
-  115 |                 GLM_CTOR_DECL explicit vec(vec<1, U, P> const& v);
-      |                                        ^~~
-/usr/include/glm/detail/type_vec3.hpp:115:40: note:   template argument deduction/substitution failed:
-/usr/include/glm/detail/type_vec3.hpp:105:31: note: candidate: ‘template<glm::qualifier P> constexpr glm::vec<3, T, Q>::vec(const glm::vec<3, T, P>&) [with glm::qualifier P = P; T = float; glm::qualifier Q = glm::packed_highp]’
-  105 |                 GLM_CTOR_DECL vec(vec<3, T, P> const& v);
-      |                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:105:31: note:   template argument deduction/substitution failed:
-In file included from /usr/include/glm/detail/type_vec3.hpp:435:
-/usr/include/glm/detail/type_vec3.inl:39:42: note: candidate: ‘constexpr glm::vec<3, T, Q>::vec(T, T, T) [with T = float; glm::qualifier Q = glm::packed_highp]’
-   39 |         GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<3, T, Q>::vec(T _x, T _y, T _z)
-      |                                          ^~~~~~~~~~~~
-/usr/include/glm/detail/type_vec3.inl:39:42: note:   candidate expects 3 arguments, 1 provided
-/usr/include/glm/detail/type_vec3.inl:34:42: note: candidate: ‘constexpr glm::vec<3, T, Q>::vec(T) [with T = float; glm::qualifier Q = glm::packed_highp]’
-   34 |         GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<3, T, Q>::vec(T scalar)
-      |                                          ^~~~~~~~~~~~
-/usr/include/glm/detail/type_vec3.inl:34:42: note:   conversion of argument 1 would be ill-formed:
-/usr/include/glm/detail/type_vec3.hpp:103:55: note: candidate: ‘constexpr glm::vec<3, T, Q>::vec(const glm::vec<3, T, Q>&) [with T = float; glm::qualifier Q = glm::packed_highp]’
-  103 |                 GLM_DEFAULTED_FUNC_DECL GLM_CONSTEXPR vec(vec const& v) GLM_DEFAULT;
-      |                                                       ^~~
-/usr/include/glm/detail/type_vec3.hpp:103:55: note:   conversion of argument 1 would be ill-formed:
-/usr/include/glm/detail/type_vec3.hpp:102:63: note: candidate: ‘glm::vec<3, T, Q>::vec() [with T = float; glm::qualifier Q = glm::packed_highp]’
-  102 |                 GLM_DEFAULTED_DEFAULT_CTOR_DECL GLM_CONSTEXPR vec() GLM_DEFAULT_CTOR;
-      |                                                               ^~~
-/usr/include/glm/detail/type_vec3.hpp:102:63: note:   candidate expects 0 arguments, 1 provided
-/sep/src/api/sep_engine.cpp:141:47: error: expected ‘,’ or ‘;’ before ‘float’
-  141 |         glm::vec3 pattern{pattern_data[0].get<float>(), pattern_data[1].get<float>(), pattern_data[2].get<float>()};
-      |                                               ^~~~~
-/sep/src/api/sep_engine.cpp:144:34: error: ‘generateId’ was not declared in this scope
-  144 |         std::string pattern_id = generateId("pat");
-      |                                  ^~~~~~~~~~
-/sep/src/api/sep_engine.cpp:151:32: error: ‘impl_’ was not declared in this scope
-  151 |         bool process_success = impl_->quantum_processor->processPattern(pattern, numeric_id);
-      |                                ^~~~~
-/sep/src/api/sep_engine.cpp:151:73: error: ‘pattern’ was not declared in this scope
-  151 |         bool process_success = impl_->quantum_processor->processPattern(pattern, numeric_id);
-      |                                                                         ^~~~~~~
-/sep/src/api/sep_engine.cpp:151:73: note: suggested alternatives:
-/sep/include/api/sep_engine.h:26:16: note:   ‘sep::pattern’
-   26 | namespace sep::pattern {
-      |                ^~~~~~~
-/sep/src/api/sep_engine.cpp:141:19: note:   ‘sep::api::pattern’
-  141 |         glm::vec3 pattern{pattern_data[0].get<float>(), pattern_data[1].get<float>(), pattern_data[2].get<float>()};
-      |                   ^~~~~~~
-/sep/src/api/sep_engine.cpp:152:9: error: expected unqualified-id before ‘if’
-  152 |         if (!process_success)
-      |         ^~
-/sep/src/api/sep_engine.cpp:158:9: error: ‘coherence’ does not name a type
-  158 |         coherence = impl_->quantum_processor->calculateCoherence(pattern, pattern);
-      |         ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:159:9: error: ‘stability’ does not name a type
-  159 |         stability = impl_->quantum_processor->calculateStability(coherence, 0.0f, 1, 1.0f);
-      |         ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:162:29: error: ‘impl_’ was not declared in this scope
-  162 |         bool is_collapsed = impl_->quantum_processor->isCollapsed(coherence);
-      |                             ^~~~~
-/sep/src/api/sep_engine.cpp:163:29: error: ‘impl_’ was not declared in this scope
-  163 |         bool is_stable    = impl_->quantum_processor->isStable(coherence);
-      |                             ^~~~~
-/sep/src/api/sep_engine.cpp:165:9: error: ‘impl_’ does not name a type
-  165 |         impl_->health_metrics.successfulRequests++;
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:166:9: error: ‘impl_’ does not name a type
-  166 |         impl_->health_metrics.lastSuccessTime = std::chrono::system_clock::now();
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:169:9: error: ‘result’ does not name a type
-  169 |         result["success"]      = true;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:170:9: error: ‘result’ does not name a type
-  170 |         result["pattern_id"]   = pattern_id;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:171:9: error: ‘result’ does not name a type
-  171 |         result["coherence"]    = coherence;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:172:9: error: ‘result’ does not name a type
-  172 |         result["stability"]    = stability;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:173:9: error: ‘result’ does not name a type
-  173 |         result["is_collapsed"] = is_collapsed;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:174:9: error: ‘result’ does not name a type
-  174 |         result["is_stable"]    = is_stable;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:175:9: error: expected unqualified-id before ‘return’
-  175 |         return result;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:177:1: error: expected declaration before ‘}’ token
-  177 | }
-      | ^
-/sep/src/api/sep_engine.cpp:179:16: error: ‘SepEngine’ has not been declared
-  179 | nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:187:9: error: ‘impl_’ does not name a type
-  187 |         impl_->health_metrics.totalRequests++;
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:188:9: error: ‘impl_’ does not name a type
-  188 |         impl_->health_metrics.lastRequestTime = std::chrono::steady_clock::now();
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:190:9: error: expected unqualified-id before ‘if’
-  190 |         if (!request_data.contains("patterns") || !request_data["patterns"].is_array())
-      |         ^~
-/sep/src/api/sep_engine.cpp:198:32: error: ‘generateId’ was not declared in this scope
-  198 |         std::string batch_id = generateId("batch");
-      |                                ^~~~~~~~~~
-/sep/src/api/sep_engine.cpp:201:9: error: expected unqualified-id before ‘for’
-  201 |         for (const auto& p : request_data["patterns"])
-      |         ^~~
-/sep/src/api/sep_engine.cpp:234:9: error: ‘impl_’ does not name a type
-  234 |         impl_->health_metrics.successfulRequests++;
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:235:9: error: ‘impl_’ does not name a type
-  235 |         impl_->health_metrics.lastSuccessTime = std::chrono::system_clock::now();
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:237:14: error: redefinition of ‘json result’
-  237 |         json result;
-      |              ^~~~~~
-/sep/src/api/sep_engine.cpp:168:14: note: ‘json result’ previously declared here
-  168 |         json result;
-      |              ^~~~~~
-/sep/src/api/sep_engine.cpp:238:9: error: ‘result’ does not name a type
-  238 |         result["success"]  = true;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:239:9: error: ‘result’ does not name a type
-  239 |         result["batch_id"] = batch_id;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:240:9: error: ‘result’ does not name a type
-  240 |         result["results"]  = results;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:241:9: error: expected unqualified-id before ‘return’
-  241 |         return result;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:242:1: error: expected declaration before ‘}’ token
-  242 | }
-      | ^
-/sep/src/api/sep_engine.cpp:244:16: error: ‘SepEngine’ has not been declared
-  244 | nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:252:9: error: ‘impl_’ does not name a type
-  252 |         impl_->health_metrics.totalRequests++;
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:255:22: error: ‘request_data’ was not declared in this scope
-  255 |         bool valid = request_data.contains("contexts") && request_data["contexts"].is_array();
-      |                      ^~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:255:59: error: ‘request_data’ was not declared in this scope
-  255 |         bool valid = request_data.contains("contexts") && request_data["contexts"].is_array();
-      |                                                           ^~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:257:9: error: ‘impl_’ does not name a type
-  257 |         impl_->health_metrics.successfulRequests++;
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:259:14: error: redefinition of ‘json result’
-  259 |         json result;
-      |              ^~~~~~
-/sep/src/api/sep_engine.cpp:168:14: note: ‘json result’ previously declared here
-  168 |         json result;
-      |              ^~~~~~
-/sep/src/api/sep_engine.cpp:260:9: error: ‘result’ does not name a type
-  260 |         result["success"]       = true;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:261:9: error: ‘result’ does not name a type
-  261 |         result["valid"]         = valid;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:262:9: error: ‘result’ does not name a type
-  262 |         result["context_count"] = valid ? request_data["contexts"].size() : 0;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:263:9: error: expected unqualified-id before ‘return’
-  263 |         return result;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:264:1: error: expected declaration before ‘}’ token
-  264 | }
-      | ^
-/sep/src/api/sep_engine.cpp:266:16: error: ‘SepEngine’ has not been declared
-  266 | nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json getPatternHistory(const nlohmann::json_abi_v3_11_3::json&)’:
-/sep/src/api/sep_engine.cpp:277:32: error: ‘impl_’ was not declared in this scope
-  277 |         const auto& patterns = impl_->pattern_processor->getPatterns();
-      |                                ^~~~~
-/sep/src/api/sep_engine.cpp: At global scope:
-/sep/src/api/sep_engine.cpp:292:16: error: ‘SepEngine’ has not been declared
-  292 | nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:300:9: error: ‘impl_’ does not name a type
-  300 |         impl_->health_metrics.totalRequests++;
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:308:9: error: expected unqualified-id before ‘if’
-  308 |         if (embeddings.empty())
-      |         ^~
-/sep/src/api/sep_engine.cpp:314:9: error: ‘impl_’ does not name a type
-  314 |         impl_->health_metrics.successfulRequests++;
-      |         ^~~~~
-/sep/src/api/sep_engine.cpp:316:14: error: redefinition of ‘json result’
-  316 |         json result;
-      |              ^~~~~~
-/sep/src/api/sep_engine.cpp:168:14: note: ‘json result’ previously declared here
-  168 |         json result;
-      |              ^~~~~~
-/sep/src/api/sep_engine.cpp:317:9: error: ‘result’ does not name a type
-  317 |         result["success"]    = true;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:318:9: error: ‘result’ does not name a type
-  318 |         result["embeddings"] = embeddings;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:319:9: error: expected unqualified-id before ‘return’
-  319 |         return result;
-      |         ^~~~~~
-/sep/src/api/sep_engine.cpp:320:1: error: expected declaration before ‘}’ token
-  320 | }
-      | ^
-/sep/src/api/sep_engine.cpp:322:16: error: ‘SepEngine’ has not been declared
-  322 | nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:366:16: error: ‘SepEngine’ has not been declared
-  366 | nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json blendContexts(const nlohmann::json_abi_v3_11_3::json&)’:
-/sep/src/api/sep_engine.cpp:379:46: error: ‘generateId’ was not declared in this scope
-  379 |         blend_result["blended_context_id"] = generateId("blend");
-      |                                              ^~~~~~~~~~
-/sep/src/api/sep_engine.cpp: At global scope:
-/sep/src/api/sep_engine.cpp:388:16: error: ‘SepEngine’ has not been declared
-  388 | nlohmann::json SepEngine::getHealthStatus()
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json getHealthStatus()’:
-/sep/src/api/sep_engine.cpp:391:78: error: ‘metrics’ was not declared in this scope
-  391 |         auto uptime = std::chrono::duration_cast<std::chrono::seconds>(now - metrics.startTime).count();
-      |                                                                              ^~~~~~~
-/sep/src/api/sep_engine.cpp:407:36: error: ‘impl_’ was not declared in this scope
-  407 |         result["initialized"]    = impl_->initialized;
-      |                                    ^~~~~
-/sep/src/api/sep_engine.cpp: At global scope:
-/sep/src/api/sep_engine.cpp:412:16: error: ‘SepEngine’ has not been declared
-  412 | nlohmann::json SepEngine::getMemoryMetrics()
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:441:16: error: ‘SepEngine’ has not been declared
-  441 | nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:477:16: error: ‘SepEngine’ has not been declared
-  477 | nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:477:45: error: ‘api’ has not been declared
-  477 | nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
-      |                                             ^~~
-/sep/src/api/sep_engine.cpp:477:66: error: expected primary-expression before ‘const’
-  477 | nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
-      |                                                                  ^~~~~
-/sep/src/api/sep_engine.cpp:478:1: error: expected ‘,’ or ‘;’ before ‘{’ token
-  478 | {
-      | ^
-/sep/src/api/sep_engine.cpp:486:6: error: ‘SepEngine’ has not been declared
-  486 | bool SepEngine::validateFields(const nlohmann::json&           data,
-      |      ^~~~~~~~~
-/sep/src/api/sep_engine.cpp: In function ‘bool validateFields(const nlohmann::json_abi_v3_11_3::json&, const std::vector<std::__cxx11::basic_string<char>, std::allocator<std::__cxx11::basic_string<char> > >&, nlohmann::json_abi_v3_11_3::json&)’:
-/sep/src/api/sep_engine.cpp:492:39: error: ‘api’ has not been declared
-  492 |             error = makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing field: " + field);
-      |                                       ^~~
-/sep/src/api/sep_engine.cpp: At global scope:
-/sep/src/api/sep_engine.cpp:499:16: error: ‘SepEngine’ has not been declared
-  499 | nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
-      |                ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:499:44: error: ‘HealthMetrics’ does not name a type
-  499 | nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
-      |                                            ^~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json getMetrics(const int&)’:
-/sep/src/api/sep_engine.cpp:502:82: error: request for member ‘startTime’ in ‘metrics’, which is of non-class type ‘const int’
-  502 |     auto uptime = std::chrono::duration_cast<std::chrono::seconds>(now - metrics.startTime).count();
-      |                                                                                  ^~~~~~~~~
-/sep/src/api/sep_engine.cpp:505:40: error: request for member ‘totalRequests’ in ‘metrics’, which is of non-class type ‘const int’
-  505 |     requests["total"]        = metrics.totalRequests.load();
-      |                                        ^~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:506:40: error: request for member ‘successfulRequests’ in ‘metrics’, which is of non-class type ‘const int’
-  506 |     requests["successful"]   = metrics.successfulRequests.load();
-      |                                        ^~~~~~~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:507:40: error: request for member ‘failedRequests’ in ‘metrics’, which is of non-class type ‘const int’
-  507 |     requests["failed"]       = metrics.failedRequests.load();
-      |                                        ^~~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:508:40: error: request for member ‘timeoutRequests’ in ‘metrics’, which is of non-class type ‘const int’
-  508 |     requests["timeout"]      = metrics.timeoutRequests.load();
-      |                                        ^~~~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:509:40: error: request for member ‘rateLimitedCount’ in ‘metrics’, which is of non-class type ‘const int’
-  509 |     requests["rate_limited"] = metrics.rateLimitedCount.load();
-      |                                        ^~~~~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:512:40: error: request for member ‘averageResponseTime’ in ‘metrics’, which is of non-class type ‘const int’
-  512 |     response_time["average"] = metrics.averageResponseTime.load();
-      |                                        ^~~~~~~~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:513:40: error: request for member ‘lastResponseTime’ in ‘metrics’, which is of non-class type ‘const int’
-  513 |     response_time["last"]    = metrics.lastResponseTime.count();
-      |                                        ^~~~~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:517:66: error: request for member ‘lastRequestTime’ in ‘metrics’, which is of non-class type ‘const int’
-  517 |         std::chrono::duration_cast<std::chrono::seconds>(metrics.lastRequestTime.time_since_epoch()).count();
-      |                                                                  ^~~~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp:519:66: error: request for member ‘lastSuccessTime’ in ‘metrics’, which is of non-class type ‘const int’
-  519 |         std::chrono::duration_cast<std::chrono::seconds>(metrics.lastSuccessTime.time_since_epoch()).count();
-      |                                                                  ^~~~~~~~~~~~~~~
-/sep/src/api/sep_engine.cpp: At global scope:
-/sep/src/api/sep_engine.cpp:529:1: error: expected declaration before ‘}’ token
-  529 | }  // namespace sep::api
-      | ^
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
-/sep/src/api/server.cpp:82:6: error: no declaration matches ‘void sep::api::SEPApiServer::start()’
-   82 | void SEPApiServer::start() {
-      |      ^~~~~~~~~~~~
-/sep/src/api/server.cpp:64:6: note: candidate is: ‘bool sep::api::SEPApiServer::start()’
-   64 | bool SEPApiServer::start() {
-      |      ^~~~~~~~~~~~
-In file included from /sep/include/memory/manager.h:23,
-                 from /sep/src/api/server.cpp:1:
-/sep/include/api/server.h:60:7: note: ‘class sep::api::SEPApiServer’ defined here
-   60 | class SEPApiServer : public Server {
-      |       ^~~~~~~~~~~~
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:107: src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o] Error 1
-[ 55%] Linking CXX static library libsep_audio.a
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:233: src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o] Error 1
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
-[ 55%] Built target sep_audio
-make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
 make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:247: src/api/CMakeFiles/sep_api.dir/server.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

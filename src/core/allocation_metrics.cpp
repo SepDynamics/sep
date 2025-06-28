@@ -1,4 +1,5 @@
 #include "core/allocation_metrics.h"
+#include "core/metrics_collector.h"  // Needed for reporting
 #include "core/prometheus_exporter.h"
 #include "metrics/types.h"
 

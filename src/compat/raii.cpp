@@ -7,7 +7,7 @@
 // Include standard headers first
 #include <cstdint>
 #include <cstdio>
-#include <cstdlib>
+#include <cstdlib>  // for std::malloc and std::free
 #include <iostream>
 #include <utility>
 

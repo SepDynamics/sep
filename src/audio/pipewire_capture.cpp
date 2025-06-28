@@ -38,8 +38,8 @@ const struct pw_stream_events createStreamEvents()
 {
     struct pw_stream_events events = {};
     events.version                 = PW_VERSION_STREAM_EVENTS;
-    events.state_changed = &streamStateChanged;
-    events.process       = &streamProcess;
+    events.state_changed = &PipeWireCapture::streamStateChanged;
+    events.process       = &PipeWireCapture::streamProcess;
     return events;
 }
 
@@ -187,13 +187,15 @@ AudioError PipeWireCapture::setupStream()
                                 1);
 
     if (err < 0)
-    {   
+    {
         spdlog::error("Failed to connect stream: {}", strerror(-err));
         spdlog::error("Stream flags: autoconnect={}, rt_process={}",
                       (err & PW_STREAM_FLAG_AUTOCONNECT),
                       (err & PW_STREAM_FLAG_RT_PROCESS));
         return AudioError::STREAM_FAILED;
     }
+
+    return AudioError::NONE;
 }
 
 AudioError PipeWireCapture::start()
@@ -240,7 +242,10 @@ AudioMetrics PipeWireCapture::getMetrics() const
     return metrics_;
 }
 
-void PipeWireCapture::streamStateChanged()
+void PipeWireCapture::streamStateChanged(void* data,
+                                         enum pw_stream_state old_state,
+                                         enum pw_stream_state new_state,
+                                         const char*          error)
 {
     auto* self = static_cast<PipeWireCapture*>(data);
 

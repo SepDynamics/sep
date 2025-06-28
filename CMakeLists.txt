@@ -92,18 +92,18 @@ set(CYCLES_LIB_SEARCH_PATHS
 )
 
 # Core Cycles libraries in dependency order
-find_required_library(CYCLES_UTIL_LIBRARY "cycles_util libcycles_util.a" "${CYCLES_LIB_SEARCH_PATHS}")
-find_required_library(CYCLES_GRAPH_LIBRARY "cycles_graph libcycles_graph.a" "${CYCLES_LIB_SEARCH_PATHS}")
-find_required_library(CYCLES_KERNEL_LIBRARY "cycles_kernel libcycles_kernel.a" "${CYCLES_LIB_SEARCH_PATHS}")
-find_required_library(CYCLES_BVH_LIBRARY "cycles_bvh libcycles_bvh.a" "${CYCLES_LIB_SEARCH_PATHS}")
-find_required_library(CYCLES_SUBD_LIBRARY "cycles_subd libcycles_subd.a" "${CYCLES_LIB_SEARCH_PATHS}")
-find_required_library(CYCLES_DEVICE_LIBRARY "cycles_device libcycles_device.a" "${CYCLES_LIB_SEARCH_PATHS}")
-find_required_library(CYCLES_SCENE_LIBRARY "cycles_scene libcycles_scene.a" "${CYCLES_LIB_SEARCH_PATHS}")
-find_required_library(CYCLES_SESSION_LIBRARY "cycles_session libcycles_session.a" "${CYCLES_LIB_SEARCH_PATHS}")
-find_required_library(CYCLES_INTEGRATOR_LIBRARY "cycles_integrator libcycles_integrator.a" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_UTIL_LIBRARY "cycles_util libcycles_util.a libcycles_util.so libcycles_util.so.* cycles_util.dll cycles_util.lib" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_GRAPH_LIBRARY "cycles_graph libcycles_graph.a libcycles_graph.so libcycles_graph.so.* cycles_graph.dll cycles_graph.lib" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_KERNEL_LIBRARY "cycles_kernel libcycles_kernel.a libcycles_kernel.so libcycles_kernel.so.* cycles_kernel.dll cycles_kernel.lib" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_BVH_LIBRARY "cycles_bvh libcycles_bvh.a libcycles_bvh.so libcycles_bvh.so.* cycles_bvh.dll cycles_bvh.lib" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_SUBD_LIBRARY "cycles_subd libcycles_subd.a libcycles_subd.so libcycles_subd.so.* cycles_subd.dll cycles_subd.lib" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_DEVICE_LIBRARY "cycles_device libcycles_device.a libcycles_device.so libcycles_device.so.* cycles_device.dll cycles_device.lib" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_SCENE_LIBRARY "cycles_scene libcycles_scene.a libcycles_scene.so libcycles_scene.so.* cycles_scene.dll cycles_scene.lib" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_SESSION_LIBRARY "cycles_session libcycles_session.a libcycles_session.so libcycles_session.so.* cycles_session.dll cycles_session.lib" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_INTEGRATOR_LIBRARY "cycles_integrator libcycles_integrator.a libcycles_integrator.so libcycles_integrator.so.* cycles_integrator.dll cycles_integrator.lib" "${CYCLES_LIB_SEARCH_PATHS}")
 
 # OSL support (critical for resolving your error)
-find_required_library(CYCLES_OSL_LIBRARY "cycles_osl libcycles_osl.a" "${CYCLES_LIB_SEARCH_PATHS}")
+find_required_library(CYCLES_OSL_LIBRARY "cycles_osl libcycles_osl.a libcycles_osl.so libcycles_osl.so.* cycles_osl.dll cycles_osl.lib" "${CYCLES_LIB_SEARCH_PATHS}")
 
 # === OSL Dependencies (System) ===
 find_library(OSL_COMP_LIBRARY NAMES oslcomp PATHS /usr/lib64 /usr/local/lib)
@@ -113,20 +113,20 @@ find_path(OSL_INCLUDE_DIR OSL/oslcomp.h PATHS /usr/include /usr/local/include)
 
 # === Blender Internal Libraries ===
 set(BLENDER_LIB_PATHS ${CMAKE_SOURCE_DIR}/lib)
-find_required_library(BF_INTERN_GUARDEDALLOC "bf_intern_guardedalloc" "${BLENDER_LIB_PATHS}")
-find_required_library(BF_INTERN_ATOMIC "bf_intern_atomic" "${BLENDER_LIB_PATHS}")
-find_required_library(BF_INTERN_MEMUTIL "bf_intern_memutil" "${BLENDER_LIB_PATHS}")
-find_required_library(BF_INTERN_SKY "bf_intern_sky" "${BLENDER_LIB_PATHS}")
-find_required_library(BF_INTERN_OPENSUBDIV "bf_intern_opensubdiv" "${BLENDER_LIB_PATHS}")
-find_required_library(BF_BLENLIB "bf_blenlib" "${BLENDER_LIB_PATHS}")
-find_required_library(BF_BLENKERNEL "bf_blenkernel" "${BLENDER_LIB_PATHS}")
-find_required_library(BF_GPU "bf_gpu" "${BLENDER_LIB_PATHS}")
-find_required_library(BF_DRAW "bf_draw" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_INTERN_GUARDEDALLOC "bf_intern_guardedalloc libbf_intern_guardedalloc.a libbf_intern_guardedalloc.so libbf_intern_guardedalloc.so.* bf_intern_guardedalloc.dll bf_intern_guardedalloc.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_INTERN_ATOMIC "bf_intern_atomic libbf_intern_atomic.a libbf_intern_atomic.so libbf_intern_atomic.so.* bf_intern_atomic.dll bf_intern_atomic.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_INTERN_MEMUTIL "bf_intern_memutil libbf_intern_memutil.a libbf_intern_memutil.so libbf_intern_memutil.so.* bf_intern_memutil.dll bf_intern_memutil.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_INTERN_SKY "bf_intern_sky libbf_intern_sky.a libbf_intern_sky.so libbf_intern_sky.so.* bf_intern_sky.dll bf_intern_sky.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_INTERN_OPENSUBDIV "bf_intern_opensubdiv libbf_intern_opensubdiv.a libbf_intern_opensubdiv.so libbf_intern_opensubdiv.so.* bf_intern_opensubdiv.dll bf_intern_opensubdiv.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_BLENLIB "bf_blenlib libbf_blenlib.a libbf_blenlib.so libbf_blenlib.so.* bf_blenlib.dll bf_blenlib.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_BLENKERNEL "bf_blenkernel libbf_blenkernel.a libbf_blenkernel.so libbf_blenkernel.so.* bf_blenkernel.dll bf_blenkernel.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_GPU "bf_gpu libbf_gpu.a libbf_gpu.so libbf_gpu.so.* bf_gpu.dll bf_gpu.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(BF_DRAW "bf_draw libbf_draw.a libbf_draw.so libbf_draw.so.* bf_draw.dll bf_draw.lib" "${BLENDER_LIB_PATHS}")
 
 # === External Wrapper Libraries ===
-find_required_library(EXTERN_CUEW "extern_cuew" "${BLENDER_LIB_PATHS}")
-find_required_library(EXTERN_HIPEW "extern_hipew" "${BLENDER_LIB_PATHS}")
-find_required_library(EXTERN_CLEW "extern_clew" "${BLENDER_LIB_PATHS}")
+find_required_library(EXTERN_CUEW "extern_cuew libextern_cuew.a libextern_cuew.so libextern_cuew.so.* extern_cuew.dll extern_cuew.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(EXTERN_HIPEW "extern_hipew libextern_hipew.a libextern_hipew.so libextern_hipew.so.* extern_hipew.dll extern_hipew.lib" "${BLENDER_LIB_PATHS}")
+find_required_library(EXTERN_CLEW "extern_clew libextern_clew.a libextern_clew.so libextern_clew.so.* extern_clew.dll extern_clew.lib" "${BLENDER_LIB_PATHS}")
 
 # === Third-Party Dependencies ===
 # OpenVDB and dependencies

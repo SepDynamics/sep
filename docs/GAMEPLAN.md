@@ -238,3 +238,33 @@ Start with **Phase 0 and 1**. Getting a simple version string back from your `.s
 The custom build in Phase 3 is the ultimate goal, but it requires a solid understanding of Blender's source and build system. Master the addon approach first.
 
 Pick a phase and let's get building. You got this.
+
+---
+
+## Component Dependencies and Build Options
+
+The engine is split into several components that can be toggled on or off when
+running CMake. Each component pulls in different third-party libraries.
+
+| Component | Required Libraries | CMake Option |
+|-----------|-------------------|--------------|
+| **Audio** | PipeWire           | `-DSEP_ENABLE_AUDIO=ON` |
+| **Blender bridge** | Blender headers | `-DSEP_ENABLE_BLENDER=ON` |
+| **Cycles** | OpenSubdiv, OpenImageIO, Embree | `-DSEP_ENABLE_CYCLES=ON` |
+
+Use these options to disable a subsystem if a dependency is missing. The
+`component_bridge` mechanism transparently loads only the components that were
+enabled at configure time.
+
+### Troubleshooting Missing Libraries
+
+- **PipeWire**: If `pkg-config` reports an empty library path, CMake will emit a
+  warning and the audio module is disabled automatically.
+- **OpenSubdiv**: When the CPU or GPU libraries are absent, symlinks are created
+  in `lib/` pointing to the system versions. Verify the paths printed during the
+  CMake run if linking fails.
+- **General**: Ensure `/usr/lib64`, `/usr/local/lib` and `${CMAKE_INSTALL_PREFIX}/lib`
+  are in your library search path or specify them with `CMAKE_PREFIX_PATH`.
+
+These steps keep optional modules from blocking the build while still allowing
+you to opt into a full feature set when all dependencies are available.

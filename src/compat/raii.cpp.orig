@@ -13,7 +13,7 @@
 
 // Include CUDA headers in the correct order
 #include "compat/raii.h"
-#include "memory/memory_tier_manager.h" // Include header for interface
+#include "memory/memory_tier_manager.hpp"
 #include "compat/cuda_helpers.h"
 #include "compat/cuda_impl.h"
 
@@ -233,7 +233,7 @@ template class DeviceBufferRAII<double>;
 
 // Implementation of memory management functions
 void* allocateDeviceMemory(std::size_t size) {
-    auto* block = sep::memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED); // Fix: Use fully qualified name
+    auto* block = memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED);
     return block ? block->ptr : nullptr;
 }
 
@@ -241,7 +241,7 @@ void freeDeviceMemory(void* ptr) {
     if (!ptr)
         return;
     auto& mgr = memory::MemoryTierManager::getInstance();
-    auto* blk = mgr.findBlockByPtr(ptr); // Fix: Use findBlockByPtr
+    auto* blk = mgr.findBlockByPtr(ptr);
     if (blk)
         mgr.deallocate(blk);
 }

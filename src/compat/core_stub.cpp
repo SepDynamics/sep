@@ -1,5 +1,5 @@
 #if !SEP_CUDA_AVAILABLE
-#include "compat/core.h"
+#include "compat/core_stub.h" // Include the stub header
 #include "compat/cuda_runtime.h"
 #include <cstring>
 #include <cstdlib>
@@ -62,7 +62,7 @@ public:
     bool isValid() const { return true; }
 };
 
-StreamPtr CudaCore::createStream(sep::StreamFlags) {
+std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags) { // Fix: Return shared_ptr<Stream>
     // Create a dummy stream implementation that doesn't fail
     return std::make_shared<DummyStream>();
 }

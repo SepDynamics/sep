@@ -12,7 +12,7 @@ namespace sep::quantum {
 
 namespace {
 
-float vectorCoherence(const glm::vec3& a, const glm::vec3& b) { // Remove unused parameter
+float vectorCoherence(const glm::vec3& a, const glm::vec3& b) {
     float dot = glm::dot(a, b);
     float mags = glm::length(a) * glm::length(b);
     if (mags <= 0.0f)

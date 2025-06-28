@@ -95,7 +95,7 @@ void setupSepApiRoutes(::crow::crow<>* app)
     using json_t = nlohmann::json;
     
     // Common helper function to create a consistent JSON response
-    auto makeJsonResponse = [](const json_t& data, int status_code = 200) {
+    auto makeJsonResponse = [](const json_t& data, unsigned int status_code = 200) {
         ::crow::response res;
         res.body = data.dump();
         res.code = status_code;

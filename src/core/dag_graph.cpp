@@ -1,6 +1,4 @@
 #include "core/dag_graph.h"
-#include <algorithm>
-#include <vector>
 
 namespace sep {
 namespace dag {

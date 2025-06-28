@@ -292,6 +292,7 @@ private:
 
     void mutateQuantumState(QuantumState& state) {
         static uint64_t noise_state = 0;
+        // Fix: use a different noise_state for mutation to avoid dependency
         auto rnd = [&]() { return deterministicNoise(noise_state); };
         state.coherence = glm::clamp(state.coherence + (rnd() * 2.0f - 1.0f) * config_.mutation_rate, 0.0f, 1.0f);
         state.stability = glm::clamp(state.stability + (rnd() * 2.0f - 1.0f) * config_.mutation_rate * 0.5f, 0.0f, 1.0f);
@@ -352,17 +353,22 @@ Processor::Processor(const ProcessingConfig& config) : impl_(std::make_unique<Pr
 Processor::~Processor() = default;
 Processor::Processor(Processor&&) noexcept = default;
 Processor& Processor::operator=(Processor&&) noexcept = default;
-
 sep::SEPResult Processor::init(GPUContext* gpu_context) { return impl_->init(gpu_context); }
 void Processor::setHooks(core::SystemHooks* hooks) { impl_->setHooks(hooks); }
 sep::SEPResult Processor::addPattern(const Pattern& pattern) { return impl_->addPattern(pattern); }
 sep::SEPResult Processor::removePattern(const std::string& pattern_id) { return impl_->removePattern(pattern_id); }
 sep::SEPResult Processor::updatePattern(const std::string& pattern_id, const Pattern& pattern) { return impl_->updatePattern(pattern_id, pattern); }
 Pattern Processor::getPattern(const std::string& pattern_id) const { return impl_->getPattern(pattern_id); }
+
 std::vector<Pattern> Processor::getPatterns() const { return impl_->getPatterns(); }
 std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
 size_t Processor::getPatternCount() const { return impl_->getPatternCount(); }
 ProcessingResult Processor::processPattern(const std::string& pattern_id) { return impl_->processPattern(pattern_id); }
+
+BatchProcessingResult Processor::processAllPatterns() { return impl_->processAll(); } // Implement this method
+
+BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
+
 BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
 BatchProcessingResult Processor::processAll() { return impl_->processAll(); }
 ProcessingResult Processor::evolvePattern(const std::string& pattern_id) { return impl_->evolvePattern(pattern_id); }

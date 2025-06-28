@@ -34,7 +34,7 @@ namespace sep::api {
 SEPApiServer* SEPApiServer::instance_ = nullptr;
 
 SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
-    : config_(config), running_(false) {
+    : config_(config), running_(false), logger_(nullptr) {
     instance_ = this;
 
     // Initialize the Crow app with middlewares

@@ -8,8 +8,6 @@
 #include <chrono>
 #include <cstring>
 
-#include "../../include/memory/memory_tier_manager.hpp"
-
 namespace blender {
 
 // ----------------------------- DeltaCompression -----------------------------

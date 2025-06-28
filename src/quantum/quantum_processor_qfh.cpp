@@ -1,7 +1,6 @@
 #include "quantum/quantum_processor_qfh.h"
-#include "quantum/pattern_evolution_bridge.h"
-#include "quantum/quantum_processor.h"
 #include "quantum/types.h"
+#include "compat/component_bridge.h" // For factory functions
 
 namespace sep::quantum {
 
@@ -17,6 +16,16 @@ sep::MemoryTierEnum QuantumProcessorQFH::determineMemoryTier(float coherence, fl
     if (coherence >= 0.7f && generation_count >= 5)
         return sep::MemoryTierEnum::MTM;
     return sep::MemoryTierEnum::STM;
+}
+
+// Factory function implementations
+std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() {
+    // In a real build, this would check for CUDA availability.
+    return std::make_unique<QuantumProcessorQFH>();
+}
+
+std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFHStub() {
+    return std::make_unique<QuantumProcessorQFH>();
 }
 
 }  // namespace sep::quantum

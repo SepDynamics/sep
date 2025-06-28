@@ -1,6 +1,13 @@
 #include "compat/cuda_common.h"
 
 #include "compat/cuda_unified_fix.h"
+#ifndef __CUDACC__
+#define __CUDACC__ 1
+#endif
+#ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
+#define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
+#endif
+
 
 
 #include "compat/cuda_helpers.h"
@@ -15,6 +22,7 @@
 #include "compat/core.h"
 #include "compat/event.h"
 #include "compat/macros.h"
+
 // Ensure CUDA_CHECK is defined before use
 #include "compat/sep_glm_wrapper.h"
 

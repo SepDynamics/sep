@@ -1,6 +1,4 @@
 #include "quantum/qbsa.h"
-
-#include <algorithm>
 #include <cstdint>
 #include <vector>
 

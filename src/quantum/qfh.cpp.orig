@@ -1,4 +1,5 @@
 #include "quantum/qfh.h"
+#include <algorithm>
 #include <numeric>
 
 namespace sep::quantum {
@@ -70,7 +71,6 @@ void QFHProcessor::reset() {
     prev_bit.reset();
 }
 
-// QFHBasedProcessor implementation
 QFHBasedProcessor::QFHBasedProcessor(const QFHOptions& options) : options_(options) {}
 
 QFHResult QFHBasedProcessor::analyze(const ::sep::shim::vector<uint8_t>& bits) {

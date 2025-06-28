@@ -101,7 +101,6 @@ float AudioCoherenceEngine::assessStability(const float* pPatternHistory, uint32
 // Configuration management
 bool initializeAudioConfig(const AudioPipelineConfig& config)
 {
-    spdlog::info("Initializing audio pipeline configuration");
     g_audio_config = config;
 
     // Validate configuration

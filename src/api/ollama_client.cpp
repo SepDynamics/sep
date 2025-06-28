@@ -4,7 +4,6 @@
 #include <chrono>
 #include <fstream>
 #include <sstream>
-#include <stdexcept>
 
 namespace sep {
 namespace ollama {

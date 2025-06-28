@@ -1,6 +1,5 @@
 #include "api/client.h"
 #include "core/error_handler.h"
-#include <curl/curl.h>
 #include <stdexcept>
 #include <chrono>
 

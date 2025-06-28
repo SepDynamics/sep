@@ -1,13 +1,10 @@
 #include "core/manager.h"
 #include "core/env_keys.h"
-#include <cstdlib>
-#include <fstream>
-#include <nlohmann/json.hpp>
-#include <sstream>
 #include "compat/shim.h"
 
 namespace sep::config {
 
+namespace {
 using namespace env_keys;
 
 class ConfigManager::Impl {
@@ -133,6 +130,7 @@ public:
 
   SystemConfig config;
 };
+} // anonymous namespace
 
 ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
 ConfigManager::~ConfigManager() {}

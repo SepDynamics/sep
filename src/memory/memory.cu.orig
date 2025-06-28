@@ -9,6 +9,8 @@
 #endif
 
 
+// After CUDA headers, include the rest
+
 #include "compat/raii.h"
 #include "memory/types.h"
 

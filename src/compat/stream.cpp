@@ -1,5 +1,9 @@
 #include <memory>
 
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime.h>
+#endif
+
 #include "compat/stream.h"
 
 namespace sep::cuda {

@@ -40,8 +40,6 @@ namespace {
         );
     }
         
-    void PatternEvolutionBridge;
-    void PhaseTransition;
     // Quantum decoherence model
     float computeDecoherence(float coherence, float environment_coupling, float time) {
         return coherence * std::exp(-environment_coupling * time);
@@ -537,6 +535,6 @@ PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
                     t.quantum_state.phase = c_phase + t_phase;
                     }
                 void
-            }
+            };
 
 } // namespace sep::quantum

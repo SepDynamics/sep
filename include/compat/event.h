@@ -2,11 +2,9 @@
 #define SEP_CUDA_EVENT_H
 
 #include "compat/macros.h"
+#include "compat/cuda_common.h"
 #if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
 #include "compat/cuda_helpers.h"
-#else
-#include "cuda_impl.h"
 #endif
 #include "core/types.h"
 

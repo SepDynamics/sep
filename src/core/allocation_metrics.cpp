@@ -3,10 +3,11 @@
 #include "core/prometheus_exporter.h"
 #include "core/types.h"
 
+namespace sep::metrics {
 namespace {
 Counter g_allocation_failures{"allocation_failures_total", "Total memory allocation failures"};
-bool    registered = false;
-}  // namespace
+bool registered = false;
+} // namespace
 
 Counter& allocationFailures()
 {

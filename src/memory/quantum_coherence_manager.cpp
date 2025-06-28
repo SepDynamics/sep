@@ -5,7 +5,6 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor_qfh.h"
-#include "memory/quantum_coherence_manager.hpp"
 #include <tbb/parallel_for.h>
 #include <tbb/concurrent_hash_map.h>
 #include <algorithm>

@@ -115,13 +115,13 @@ nlohmann::json SepEngine::shutdown()
 
 nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
 {
-            (void)fprintf(stderr, "%s\n", "Engine not initialized");
-            json result;
-            result["success"] = false;
-            result["error"]   = "Engine not initialized";
-            return result;
-        }
-        impl_->health_metrics.totalRequests++;
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+    impl_->health_metrics.totalRequests++;
         impl_->health_metrics.lastRequestTime = std::chrono::steady_clock::now();
 
         // Validate required fields
@@ -178,13 +178,13 @@ nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
 {
-            (void)fprintf(stderr, "%s\n", "Engine not initialized");
-            json result;
-            result["success"] = false;
-            result["error"]   = "Engine not initialized";
-            return result;
-        }
-        impl_->health_metrics.totalRequests++;
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+    impl_->health_metrics.totalRequests++;
         impl_->health_metrics.lastRequestTime = std::chrono::steady_clock::now();
 
         if (!request_data.contains("patterns") || !request_data["patterns"].is_array())
@@ -243,13 +243,13 @@ nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 {
-            (void)fprintf(stderr, "%s\n", "Engine not initialized");
-            json result;
-            result["success"] = false;
-            result["error"]   = "Engine not initialized";
-            return result;
-        }
-        impl_->health_metrics.totalRequests++;
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+    impl_->health_metrics.totalRequests++;
 
         // Mock context validation
         bool valid = request_data.contains("contexts") && request_data["contexts"].is_array();
@@ -266,14 +266,13 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
 {
     (void)request_data;
-        {
-            (void)fprintf(stderr, "%s\n", "Engine not initialized");
-            json result;
-            result["success"] = false;
-            result["error"]   = "Engine not initialized";
-            return result;
-        }
-        json        history  = json::array();
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+    json        history  = json::array();
         const auto& patterns = impl_->pattern_processor->getPatterns();
         for (const auto& p : patterns)
         {
@@ -291,13 +290,13 @@ nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
 {
-            (void)fprintf(stderr, "%s\n", "Engine not initialized");
-            json result;
-            result["success"] = false;
-            result["error"]   = "Engine not initialized";
-            return result;
-        }
-        impl_->health_metrics.totalRequests++;
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+    impl_->health_metrics.totalRequests++;
 
         std::vector<double> embeddings;
 
@@ -321,6 +320,13 @@ nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data)
 {
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+
         if (!request_data.contains("embedding1") || !request_data.contains("embedding2"))
         {
             json result;
@@ -366,14 +372,12 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
 nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
 {
     (void)request_data;  // Mark parameter as used
-
-        {
-            (void)fprintf(stderr, "%s\n", "Engine not initialized");
-            json result;
-            result["success"] = false;
-            result["error"]   = "Engine not initialized";
-            return result;
-        }
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
         // Mock context blending
         json blend_result;
         blend_result["blended_context_id"] = generateId("blend");
@@ -387,8 +391,14 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::getHealthStatus()
 {
-        auto now    = std::chrono::steady_clock::now();
-        auto uptime = std::chrono::duration_cast<std::chrono::seconds>(now - metrics.startTime).count();
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+    auto now    = std::chrono::steady_clock::now();
+    auto uptime = std::chrono::duration_cast<std::chrono::seconds>(now - metrics.startTime).count();
     
         json metrics_json;
         metrics_json["total_requests"]        = metrics.totalRequests.load();
@@ -411,6 +421,13 @@ nlohmann::json SepEngine::getHealthStatus()
 
 nlohmann::json SepEngine::getMemoryMetrics()
 {
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+
         // Mock memory statistics
         json stm_tier;
         stm_tier["total_size"]     = 1024;
@@ -440,6 +457,13 @@ nlohmann::json SepEngine::getMemoryMetrics()
 
 nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
 {
+    if (!impl_->initialized) {
+        json result;
+        result["success"] = false;
+        result["error"]   = "Engine not initialized";
+        return result;
+    }
+
         json cors_config;
         cors_config["enabled"] = config.cors.enabled;
 
@@ -524,33 +548,6 @@ nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
     result["response_time"]  = response_time;
     result["timestamps"]     = timestamps;
     return result;
-}
-
-}  // namespace sep::api
-
-namespace sep::api {
-
-nlohmann::json make_error_response(api::ErrorCode code, const std::string& message) {
-    nlohmann::json result;
-    result["success"] = false;
-    nlohmann::json err;
-    err["code"] = static_cast<int>(code);
-    err["message"] = message;
-    result["error"] = err;
-    return result;
-}
-
-bool validate_fields(const nlohmann::json& data,
-                     const std::vector<std::string>& fields,
-                     nlohmann::json& error) {
-    for (const auto& field : fields) {
-        if (!data.contains(field)) {
-            error = make_error_response(api::ErrorCode::InvalidArgument,
-                                        "Missing field: " + field);
-            return false;
-        }
-    }
-    return true;
 }
 
 }  // namespace sep::api

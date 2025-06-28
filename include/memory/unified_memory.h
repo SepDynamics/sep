@@ -2,7 +2,7 @@
 
 #include "compat/raii.h"
 #include "compat/cuda_defs.h"
-#include "memory/manager.h"
+#include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "memory/memory_tier.hpp"
 #include <cstddef>

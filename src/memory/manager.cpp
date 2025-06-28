@@ -5,6 +5,8 @@
 #include "api/types.h"
 #include "api/server.h"
 #include "core/common.h"
+#include "memory/memory_tier_manager.hpp"
+#include "quantum/quantum_processor_qfh.h"
 #include "memory/manager.h"
 #include "api/crow_adapter.h"
 

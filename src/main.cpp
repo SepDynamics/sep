@@ -1,6 +1,6 @@
 #include "core/manager.h"
 #include "core/engine.h"
-#include "memory/manager.h"
+#include "memory/memory_tier_manager.hpp"
 #include "api/server.h"
 #include "blender/cycles_renderer.h"
 #include <curl/curl.h>

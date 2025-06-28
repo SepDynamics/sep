@@ -3,6 +3,8 @@
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/evolution.h"
 #include "quantum/types.h"
+#include "memory/manager.h"
+#include "memory/memory_tier_manager.hpp"
 #include "compat/math_common.h"
 #include "compat/core.h"
 #include <glm/glm.hpp>

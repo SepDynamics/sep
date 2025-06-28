@@ -1,6 +1,6 @@
 // /sep/src/memory/quantum_coherence_manager.cpp
-#include "memory/quantum_coherence_manager.h"
-#include "memory/tier_manager.h"
+#include "quantum/quantum_manifold_optimizer.h"
+#include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor_qfh.h"
 #include "compat/core.h"
 #include <tbb/parallel_for.h>

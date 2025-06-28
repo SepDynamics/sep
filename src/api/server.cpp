@@ -247,7 +247,7 @@ void SEPApiServer::setup_logging() {
 #if SEP_HAS_EXCEPTIONS
   try {
 #endif
-    ::sep::logging::initializeLogging();
+    ::sep::logging::Manager::initialize();
     logger_ = spdlog::get("sep_api");
     if (!logger_) {
       logger_ = spdlog::default_logger();

@@ -65,7 +65,10 @@ void *Manager::getTracer() {
 std::shared_ptr<spdlog::logger> Manager::createLogger(const std::string &name,
                                                       const LoggerConfig &config) {
   auto logger = spdlog::get(name);
-  if (logger) {
+  // Check if a logger with this name already exists and if it has sinks.
+  // If it exists but has no sinks, it was likely created by spdlog::get(name)
+  // before we explicitly created it. We should replace it in this case.
+  if (logger && !logger->sinks().empty()) {
     return logger;
   }
 

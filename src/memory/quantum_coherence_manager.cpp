@@ -20,7 +20,7 @@ namespace {
     constexpr uint32_t COHERENCE_UPDATE_BATCH_SIZE = 128;
     constexpr float MIN_COHERENCE_FOR_PERSISTENCE = 0.1f;
     
-    // Memory tier coherence thresholds
+    // Memory tier coherence thresholds (example values)
     constexpr float LTM_COHERENCE_THRESHOLD = 0.8f;
     constexpr float MTM_COHERENCE_THRESHOLD = 0.5f;
     constexpr float STM_COHERENCE_THRESHOLD = 0.2f;
@@ -31,8 +31,10 @@ public:
     struct CoherenceMetrics {
         float global_coherence;
         float tier_coherence[3];  // STM, MTM, LTM
+        float tier_fragmentation[3]; // STM, MTM, LTM
         uint64_t total_patterns;
         uint64_t coherent_patterns;
+        uint64_t fragmented_patterns;
         float memory_pressure;
         float entanglement_density;
     };
@@ -44,6 +46,7 @@ public:
         uint32_t access_count;
         uint64_t last_access_tick;
         MemoryTierEnum current_tier;
+        float fragmentation_score;
         std::vector<std::string> entangled_patterns;
     };
     
@@ -51,6 +54,7 @@ public:
         : config_(config)
         , qfh_processor_(std::make_unique<quantum::QuantumProcessorQFH>())
         , global_tick_(0) {
+        
         
         initializeCoherenceTracking();
         
@@ -211,8 +215,28 @@ public:
         // Restore metrics
         metrics_ = snapshot.global_metrics;
         global_tick_ = snapshot.timestamp;
-        
+
         return true;
+    }
+
+    const CoherenceMetrics& getMetrics() const {
+        return metrics_;
+    }
+
+    uint64_t getGlobalTick() const {
+        return global_tick_.load();
+    }
+
+    uint32_t getPatternCountByTier(MemoryTierEnum tier) const {
+        return countPatternsInTier(tier);
+    }
+
+    float getTierFragmentation(MemoryTierEnum tier) const {
+        int tier_idx = static_cast<int>(tier);
+        if (tier_idx >= 0 && tier_idx < 3) {
+            return metrics_.tier_fragmentation[tier_idx];
+        }
+        return 0.0f;
     }
 
 private:
@@ -234,12 +258,14 @@ private:
     void initializeCoherenceTracking() {
         metrics_.global_coherence = 1.0f;
         metrics_.memory_pressure = 0.0f;
+        metrics_.fragmented_patterns = 0;
         metrics_.entanglement_density = 0.0f;
         metrics_.total_patterns = 0;
         metrics_.coherent_patterns = 0;
         
         for (int i = 0; i < 3; ++i) {
             metrics_.tier_coherence[i] = 1.0f;
+            metrics_.tier_fragmentation[i] = 0.0f;
         }
     }
     
@@ -272,6 +298,9 @@ private:
             
             data.access_count++;
             data.last_access_tick = global_tick_;
+
+            // Update fragmentation score (example: inverse of stability)
+            data.fragmentation_score = 1.0f - data.stability;
             
         } else {
             // Insert new pattern
@@ -284,6 +313,7 @@ private:
             new_data.access_count = 1;
             new_data.last_access_tick = global_tick_;
             new_data.current_tier = pattern.quantum_state.memory_tier;
+            new_data.fragmentation_score = 1.0f - new_data.stability;
             
             coherence_map_.insert({pattern.id, new_data});
         }
@@ -294,6 +324,7 @@ private:
         uint64_t pattern_count = 0;
         uint64_t coherent_count = 0;
         float tier_sums[3] = {0.0f, 0.0f, 0.0f};
+        float tier_frag_sums[3] = {0.0f, 0.0f, 0.0f};
         uint32_t tier_counts[3] = {0, 0, 0};
         
         coherence_map_.for_each([&](const auto& pair) {
@@ -307,6 +338,7 @@ private:
             
             int tier_idx = static_cast<int>(data.current_tier);
             tier_sums[tier_idx] += data.coherence;
+            tier_frag_sums[tier_idx] += data.fragmentation_score;
             tier_counts[tier_idx]++;
         });
         
@@ -318,8 +350,9 @@ private:
         
         // Compute tier coherences
         for (int i = 0; i < 3; ++i) {
-            metrics_.tier_coherence[i] = (tier_counts[i] > 0) ? 
-                tier_sums[i] / tier_counts[i] : 0.0f;
+            metrics_.tier_coherence[i] = (tier_counts[i] > 0) ?
+                tier_sums[i] / static_cast<float>(tier_counts[i]) : 0.0f;
+            metrics_.tier_fragmentation[i] = (tier_counts[i] > 0) ? tier_frag_sums[i] / static_cast<float>(tier_counts[i]) : 0.0f;
         }
         
         // Compute memory pressure
@@ -331,6 +364,13 @@ private:
         coherence_map_.for_each([&](const auto& pair) {
             total_entanglements += pair.second.entangled_patterns.size();
         });
+        
+        // Compute fragmented patterns (example: fragmentation score > 0.5)
+        uint64_t fragmented_count = 0;
+        coherence_map_.for_each([&](const auto& pair) {
+            if (pair.second.fragmentation_score > 0.5f) fragmented_count++;
+        });
+        metrics_.fragmented_patterns = fragmented_count;
         
         metrics_.entanglement_density = (pattern_count > 1) ?
             static_cast<float>(total_entanglements) / (pattern_count * (pattern_count - 1)) : 0.0f;
@@ -685,6 +725,26 @@ QuantumCoherenceManager::createSnapshot() const {
 
 bool QuantumCoherenceManager::restoreFromSnapshot(const CoherenceSnapshot& snapshot) {
     return impl_->restoreFromSnapshot(snapshot);
+}
+
+const QuantumCoherenceManager::CoherenceMetrics& QuantumCoherenceManager::getMetrics() const {
+    return impl_->getMetrics();
+}
+
+uint64_t QuantumCoherenceManager::getGlobalTick() const {
+    return impl_->getGlobalTick();
+}
+
+uint32_t QuantumCoherenceManager::getPatternCountByTier(MemoryTierEnum tier) const {
+    return impl_->getPatternCountByTier(tier);
+}
+
+float QuantumCoherenceManager::getTierFragmentation(MemoryTierEnum tier) const {
+    return impl_->getTierFragmentation(tier);
+}
+
+std::unique_ptr<QuantumCoherenceManager> createQuantumCoherenceManager(const QuantumCoherenceManager::Config& config) {
+    return std::make_unique<QuantumCoherenceManager>(config);
 }
 
 } // namespace sep::memory

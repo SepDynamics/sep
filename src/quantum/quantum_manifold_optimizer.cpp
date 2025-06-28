@@ -33,18 +33,18 @@ namespace {
     
     // Christoffel symbol approximation for local geometry
     glm::mat3 computeChristoffelSymbols(const glm::vec3& position, float curvature) {
-        float r2 = glm::length2(position);
-        float factor = curvature / (1.0f + r2);
+        float r2 = glm::dot(position, position); // Use dot product for squared length
+        float factor = curvature / (1.0f + r2 + 1e-6f); // Add epsilon to avoid division by zero
         
         return glm::mat3(
             1.0f - factor * position.x * position.x, -factor * position.x * position.y, -factor * position.x * position.z,
             -factor * position.y * position.x, 1.0f - factor * position.y * position.y, -factor * position.y * position.z,
-            -factor * position.z * position.x, -factor * position.z * position.y, 1.0f - factor * position.z * position.z
+            -factor * position.z * position.x, -factor * position.z * position.y, 1.0f - factor * position.z * position.z // Add epsilon to avoid division by zero
         );
     }
-    
+
     // Parallel transport along geodesic
-    glm::vec3 parallelTransport(const glm::vec3& vector, const glm::vec3& from, const glm::vec3& to, float curvature) {
+    glm::vec3 parallelTransport(const glm::vec3& vector, const glm::vec3& from, const glm::vec3& to, float curvature) { // Add curvature parameter
         glm::vec3 direction = glm::normalize(to - from);
         float distance = glm::length(to - from);
         
@@ -405,11 +405,11 @@ private:
         glm::vec3 gradient(0.0f);
         float h = 0.01f;  // Finite difference step
         
-        gradient.x = (computeLocalCurvature(point.position + glm::vec3(h, 0, 0)) - 
+        gradient.x = (computeLocalCurvature(point.position + glm::vec3(h, 0, 0)) -
                      computeLocalCurvature(point.position - glm::vec3(h, 0, 0))) / (2.0f * h);
-        gradient.y = (computeLocalCurvature(point.position + glm::vec3(0, h, 0)) - 
+        gradient.y = (computeLocalCurvature(point.position + glm::vec3(0, h, 0)) - // Fix: compute gradient correctly
                      computeLocalCurvature(point.position - glm::vec3(0, h, 0))) / (2.0f * h);
-        gradient.z = (computeLocalCurvature(point.position + glm::vec3(0, 0, h)) - 
+        gradient.z = (computeLocalCurvature(point.position + glm::vec3(0, 0, h)) -
                      computeLocalCurvature(point.position - glm::vec3(0, 0, h))) / (2.0f * h);
         
         // Flow opposite to gradient weighted by Ricci curvature

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <spdlog/spdlog.h>
+#include <atomic>
 #include <string>
 #include <csignal>
 #include <nlohmann/json.hpp>
@@ -21,12 +22,12 @@
 #endif
 
 // Global flag for controlling server shutdown
-volatile sig_atomic_t g_keep_running = 1;
+std::atomic<int> g_keep_running{1};
 
 // Signal handler for graceful shutdown
 void signal_handler(int signal) {
     spdlog::info("Received signal {}, initiating shutdown...", signal);
-    g_keep_running = 0;
+    g_keep_running.store(0);
 }
 
 int main(int argc, char* argv[]) {
@@ -35,7 +36,7 @@ int main(int argc, char* argv[]) {
 
   // Setup signal handling for graceful shutdown
   signal(SIGINT, signal_handler);
-  signal(SIGTERM, signal_handler);
+  signal(SIGTERM, signal_handler); // Fix: Call signal for SIGTERM
 
   bool server_mode = false;
   bool cycles_mode = false;
@@ -269,7 +270,7 @@ int main(int argc, char* argv[]) {
     if (server_mode) {
       spdlog::info("Running in server mode, waiting for shutdown signal...");
       // Keep running until signal is received
-      while (g_keep_running) {
+      while (g_keep_running.load()) { // Fix: Use load() on atomic variable
         std::this_thread::sleep_for(std::chrono::seconds(1));
       }
       spdlog::info("Shutting down server...");

@@ -2,6 +2,7 @@
 #include "audio/pipewire_capture.h"
 #include "audio/pipewire_stubs.h"
 #include "blender/bridge.h"
+#include "blender/api.h"
 #include "blender/cycles_renderer.h"
 #include "blender/types.h"
 

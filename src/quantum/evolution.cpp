@@ -20,7 +20,7 @@ namespace sep::quantum {
 class EvolutionEngine::EvolutionEngineImpl {
 public:
     explicit EvolutionEngineImpl(Processor* processor)
-        : processor_(processor), generation_number_(0), noise_state_(0) {
+        : processor_(processor), generation_number_(0), noise_state_(0), current_stats_() {
         if (!processor) {
             throw std::invalid_argument("Processor cannot be null");
         }
@@ -104,13 +104,13 @@ public:
         child_state.entropy = glm::mix(state1.entropy, state2.entropy, alpha);
         child_state.mutation_rate = glm::mix(state1.mutation_rate, state2.mutation_rate, alpha);
 
-        child.position = glm::mix(parent1.position, parent2.position, alpha);
+        child.position = parent1.position * (1.0f - alpha) + parent2.position * alpha;
 
         if (!parent1.data.empty() && !parent2.data.empty()) {
             size_t size = std::min(parent1.data.size(), parent2.data.size());
             child.data.resize(size);
             for (size_t i = 0; i < size; ++i) { // Fix: Iterate up to size
-                child.data[i] = glm::mix(parent1.data[i], parent2.data[i], alpha);
+                child.data[i] = parent1.data[i] * (1.0f - alpha) + parent2.data[i] * alpha;
             }
         }
 
@@ -356,7 +356,7 @@ Pattern blendCrossover(const Pattern& parent1, const Pattern& parent2, float alp
     child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
     child_state.stability = glm::mix(state1.stability, state2.stability, alpha);
     child_state.entropy = glm::mix(state1.entropy, state2.entropy, alpha);
-    child.position = glm::mix(parent1.position, parent2.position, alpha);
+    child.position = parent1.position * (1.0f - alpha) + parent2.position * alpha;
     return child;
 }
 

@@ -8,11 +8,9 @@
 
 // Include CUDA runtime only when CUDA is available
 #include "compat/macros.h"
+#include "compat/cuda_common.h"
 #if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
 #include "compat/cuda_helpers.h"
-#else
-#include "cuda_impl.h"
 #endif
 
 namespace sep {

@@ -2,93 +2,27 @@
 #define SEP_CUDA_IMPL_H
 #pragma once
 
-// Added to ensure consistent macro definitions
 #include <stddef.h>  // For size_t
 #include <stdio.h>   // For fprintf
 #include <stdlib.h>  // For malloc/free
 #include <string.h>  // For strcpy, memcpy, memset
-
+#include "compat/cuda_defs.h"
 
 #if SEP_CUDA_AVAILABLE
-// When CUDA is available, include the real CUDA runtime
 #include <cuda_runtime.h>
 #include "compat/cuda_helpers.h"
 #define SEP_HD __host__ __device__
 #else
 #define SEP_HD
-#endif
 
-#if !SEP_CUDA_AVAILABLE
-// Additional implementation details for CUDA stubs
-// Use the cudaDeviceProp from cuda_runtime.h
-using cudaDeviceProp = sep::cuda::cudaDeviceProp;
-
-constexpr size_t STUB_GLOBAL_MEM = 1024 * 1024 * 1024;  // 1GB
-constexpr int STUB_MAJOR_VERSION = 3;
-constexpr int STUB_MINOR_VERSION = 0;
-constexpr int STUB_MP_COUNT = 8;
-constexpr int STUB_MAX_THREADS_PER_BLOCK = 1024;
-constexpr int STUB_WARP_SIZE = 32;
-constexpr size_t STUB_SHARED_MEM_PER_BLOCK = 49152;
-constexpr int STUB_REGS_PER_BLOCK = 65536;
-constexpr size_t STUB_MEM_PITCH = 2147483647;
-constexpr int STUB_MAX_THREADS_DIM_0 = 1024;
-constexpr int STUB_MAX_THREADS_DIM_1 = 1024;
-constexpr int STUB_MAX_THREADS_DIM_2 = 64;
-constexpr int STUB_MAX_GRID_SIZE_0 = 65535;
-constexpr int STUB_MAX_GRID_SIZE_1 = 65535;
-constexpr int STUB_MAX_GRID_SIZE_2 = 65535;
-constexpr size_t STUB_TOTAL_CONST_MEM = 65536;
-constexpr int STUB_CLOCK_RATE = 1000000;
-constexpr size_t STUB_TEXTURE_ALIGNMENT = 512;
-constexpr int STUB_DEVICE_OVERLAP = 1;
-constexpr int STUB_KERNEL_EXEC_TIMEOUT_ENABLED = 0;
-constexpr int STUB_INTEGRATED = 0;
-constexpr int STUB_CAN_MAP_HOST_MEMORY = 1;
-constexpr int STUB_COMPUTE_MODE = 0;
-constexpr int STUB_MAX_TEXTURE_1D = 65536;
-constexpr int STUB_MAX_TEXTURE_2D_0 = 65536;
-constexpr int STUB_MAX_TEXTURE_2D_1 = 65536;
-constexpr int STUB_MAX_TEXTURE_3D_0 = 4096;
-constexpr int STUB_MAX_TEXTURE_3D_1 = 4096;
-constexpr int STUB_MAX_TEXTURE_3D_2 = 4096;
-constexpr int STUB_MAX_TEXTURE_1D_LAYERED_0 = 16384;
-constexpr int STUB_MAX_TEXTURE_1D_LAYERED_1 = 2048;
-constexpr int STUB_MAX_TEXTURE_2D_LAYERED_0 = 16384;
-constexpr int STUB_MAX_TEXTURE_2D_LAYERED_1 = 16384;
-constexpr int STUB_MAX_TEXTURE_2D_LAYERED_2 = 2048;
-constexpr size_t STUB_SURFACE_ALIGNMENT = 512;
-constexpr int STUB_CONCURRENT_KERNELS = 1;
-constexpr int STUB_ECC_ENABLED = 0;
-constexpr int STUB_PCI_BUS_ID = 0;
-constexpr int STUB_PCI_DEVICE_ID = 0;
-constexpr int STUB_PCI_DOMAIN_ID = 0;
-constexpr int STUB_TCC_DRIVER = 0;
-constexpr int STUB_ASYNC_ENGINE_COUNT = 2;
-constexpr int STUB_UNIFIED_ADDRESSING = 1;
-constexpr int STUB_MEMORY_CLOCK_RATE = 2000000;
-constexpr int STUB_MEMORY_BUS_WIDTH = 256;
-constexpr size_t STUB_L2_CACHE_SIZE = 1048576;
-constexpr int STUB_MAX_THREADS_PER_MULTI_PROCESSOR = 2048;
-// Return a human readable error message. Always indicates failure is due to the
-// runtime stubs when CUDA is unavailable.
+// CUDA function implementations when CUDA is not available
 inline const char* cudaGetErrorString(cudaError_t error) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaGetErrorString(error);
-#else
     return (error == cudaSuccess) ? "success" : "CUDA not available";
-#endif
 }
-namespace cuda_stub_constants {
-// Select a CUDA device. This stub ignores the requested device and simply
-// reports success so that host builds can proceed without errors.
+
 inline cudaError_t cudaSetDevice(int device) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaSetDevice(device);
-#else
     (void)device;
     return cudaSuccess;
-#endif
 }
 
 // Report a single available device to satisfy callers that expect at least one
@@ -225,48 +159,37 @@ inline cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
     return cudaSuccess;
 #endif
 }
-}  // namespace cuda_stub_constants
+extern "C" {
 
-// Retrieve the last CUDA error. Since the stub never fails, this always
-// returns `cudaSuccess`.
-inline cudaError_t cudaGetLastError() {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaGetLastError();
-#else
-    return cudaSuccess;
-#endif
-}
+// Event management functions
+cudaError_t cudaEventCreate(cudaEvent_t* event);
+cudaError_t cudaEventDestroy(cudaEvent_t event);
+cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream);
+cudaError_t cudaEventSynchronize(cudaEvent_t event);
+cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end);
 
-// Wrapper function to avoid similar parameter types
-inline cudaError_t cudaFillMemory(void* devicePtr, size_t numBytes, int value) {
-    if (!devicePtr) {
-        return cudaErrorInvalidValue;
-    }
-    memset(devicePtr, value, numBytes);
-    return sep::cuda::cudaSuccess;
-}
+// Stream management functions
+cudaError_t cudaStreamCreate(cudaStream_t* stream);
+cudaError_t cudaStreamDestroy(cudaStream_t stream);
+cudaError_t cudaStreamSynchronize(cudaStream_t stream);
 
-// Initialize a memory region with the given value - wrapper around memset
-inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaMemset(devPtr, value, count);
-#else
-    return cudaFillMemory(devPtr, count, value);
-#endif
-}
+// Memory management functions
+cudaError_t cudaMemset(void* devPtr, int value, size_t count);
+cudaError_t cudaMallocManaged(void** ptr, size_t size);
 
-// Allocate managed memory using host malloc when CUDA is unavailable
-inline cudaError_t cudaMallocManaged(void** ptr, size_t size) {
-#if SEP_CUDA_AVAILABLE
-    return ::cudaMallocManaged(ptr, size);
-#else
-    if (!ptr) {
-        return sep::cuda::cudaErrorInvalidValue;
-    }
-    *ptr = malloc(size);
-    return (*ptr) ? sep::cuda::cudaSuccess : sep::cuda::cudaErrorMemoryAllocation;
-#endif
-}
+// Device management functions
+cudaError_t cudaGetLastError();
+cudaError_t cudaGetDeviceCount(int* count);
+cudaError_t cudaSetDevice(int device);
+cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device);
+
+// Memory copy functions
+cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind);
+cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream);
+
+} // extern "C"
+
+#endif // !SEP_CUDA_AVAILABLE
 // Populate device properties with conservative values so callers relying on
 // hardware characteristics can continue running without real GPU hardware.
 inline cudaError_t cudaGetDeviceProperties(cudaDeviceProp *prop, int device) {
@@ -386,7 +309,5 @@ inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
 inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
     return performCudaMemcpyAsync({dst, src, count, kind, stream});
 }
-// End of the implementation section
-#endif  // !SEP_CUDA_AVAILABLE
 
-#endif  // SEP_CUDA_IMPL_H
+#endif // !SEP_CUDA_AVAILABLE

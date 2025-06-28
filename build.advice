@@ -1,64 +1,96 @@
-Okay, let's break down the issues from the build log and provided files, focusing on targeted advice for a full build. The primary errors are related to include order, conflicting definitions (especially around CUDA and Crow stubs/real implementations), and missing member definitions.
+Here's a targeted analysis of the issues in the provided source files and build output, focusing on identifying the problems without providing full rewrites or disabling features.
 
-Here's a breakdown by area:
+**Overall Observations:**
 
-**1. CUDA Compatibility and Stub/Real Implementation Conflicts:**
+The build output shows a cascade of errors, primarily stemming from conflicts in CUDA header definitions and issues with class declarations and definitions being split between `.h`/`.hpp` and `.cpp` files incorrectly, especially with nested classes and friend declarations. There are also issues with using incomplete types.
 
-*   **Problem:** The build log shows numerous errors like `‘cudaDeviceProp’ in namespace ‘sep::cuda’ does not name a type`, `‘cudaError_t’ was not declared in this scope`, and function definition mismatches (`cudaStreamCreateWithFlags`, etc.). This indicates a conflict between the real CUDA headers (when `SEP_USE_CUDA` or `__CUDACC__` is defined) and your custom stub implementations (`compat/cuda_impl.h`, `compat/raii.cpp`, `compat/core_stub.cpp`, `compat/cuda_api.cu`, `compat/event.cu`, `compat/quantum_kernels.cu`, `compat/utils.cu`). The stub implementations seem to be included even when real CUDA is available, leading to redefinitions or declarations of types that should come from the real CUDA headers.
-*   **Files Involved:** `compat/raii.cpp`, `compat/memory_tier.cpp`, `compat/core_stub.cpp`, `compat/metrics_collector.cpp`, `compat/core.cu`, `compat/cuda_api.cu`, `compat/event.cu`, `compat/quantum_kernels.cu`, `compat/utils.cu`, `audio/pipewire_capture.cpp`, `memory/memory_tier_manager.cpp`.
-*   **Targeted Advice:**
-    *   **Review `#if defined(__CUDACC__) || defined(SEP_USE_CUDA)`:** Ensure that the stub implementations (`compat/cuda_impl.h` etc.) are *only* included and compiled when CUDA is *not* available (i.e., using `#if !defined(__CUDACC__) && !defined(SEP_USE_CUDA)` or similar logic). The real CUDA headers should be included directly when CUDA is available.
-    *   **Namespace Consistency:** Confirm that CUDA types and functions are consistently used within or outside the `sep::cuda` namespace based on whether you're using the real headers or your stubs. If you `using namespace cuda;` or use aliases, ensure this is done conditionally based on CUDA availability.
-    *   **Correct Inclusion Order:** The real CUDA headers (`cuda_runtime.h`, etc.) should generally be included *before* standard library headers that might redefine macros or types, but after essential configuration headers that define conditional compilation flags like `SEP_USE_CUDA`. Your current inclusion order seems inconsistent in some files.
-    *   **RAII and Stub Compatibility:** Your `compat/raii.cpp` explicitly defines stub `cudaError_t` and functions. This should be part of the conditional compilation for stubs, not present when real CUDA is available. The same applies to `compat/core_stub.cpp`.
-    *   **Kernel Launchers:** The host-side kernel launching functions (`launchQBSAKernel`, etc.) in `compat/quantum_kernels.cu` need to be conditionally compiled (`#if !defined(__CUDACC__)`). The device-side kernel code (`__global__` functions) should be compiled when `__CUDACC__` is defined.
+**Specific Issues Identified:**
 
-**2. Crow Adapter and Isolation Header Issues:**
+1.  **CUDA Header Conflicts (`compat/cuda_defs.h`, `compat/cuda_impl.h`, `compat/cuda_runtime.h`)**
+    *   **Problem:** Multiple definitions of `cudaError_t` enum values (`cudaSuccess`, `cudaErrorInvalidValue`, etc.) and the `cudaMemcpyKind` enum and `cudaDeviceProp` struct. This indicates that multiple CUDA compatibility headers are being included in the same translation unit, and they are defining the same symbols.
+    *   **Locations:** Errors show up when compiling `compat/stream.cpp`, `compat/raii.cpp`, `compat/core_stub.cpp`, `memory/memory_tier.cpp`, `memory/memory_tier_manager.cpp`, `api/bridge_c.cpp`, `core/engine.cpp`, `core/metrics_collector.cpp`, `quantum/quantum_manifold_optimizer.cpp`, `quantum/pattern_evolution_bridge.cpp`. This is a widespread problem affecting multiple modules.
+    *   **Targeted Advice:** Review the include directives in each `.cpp` file. Ensure that a consistent set of CUDA compatibility headers is used throughout the project. Ideally, there should be one primary compatibility layer (`compat/cuda_common.h` or similar) that other files include, and that layer should manage which underlying headers (`cuda_runtime.h`, `compat/cuda_impl.h`, `compat/cuda_defs.h`) are included based on the `SEP_CUDA_AVAILABLE` macro. Avoid including both `compat/cuda_impl.h` and `compat/cuda_runtime.h` directly in the same file.
 
-*   **Problem:** The build log shows errors related to Crow types not being found or used incorrectly. The inclusion of `crow/crow_isolation.h` and other Crow headers before or alongside your own API headers seems problematic. There's also a redefinition warning in the `api/crow_adapter.cpp` regarding the Crow application setup.
-*   **Files Involved:** `api/rate_limit_middleware.cpp`, `api/lock_free_rate_limiter.cpp`, `api/server.cpp`, `api/crow_adapter.cpp`, `memory/manager.cpp`.
-*   **Targeted Advice:**
-    *   **Crow Isolation:** Ensure `crow/crow_isolation.h` is correctly used as an isolation layer. It should ideally be the *first* Crow-related header included, and it should manage which Crow headers are included based on your build configuration (e.g., using a bundled Crow or system Crow).
-    *   **Conditional Compilation:** If you are using a bundled version of Crow with custom isolation, ensure your codebase consistently uses your isolation layer headers (`api/crow_request.h`, `api/crow_error.h` etc.) and not directly include the original Crow headers unless the isolation header explicitly pulls them in.
-    *   **Server and Adapter Logic:** The `SEPApiServer` in `api/server.cpp` and `setupSepApiRoutes` in `api/crow_adapter.cpp` both seem to be trying to set up Crow routes and initialize the engine. This likely leads to conflicts or double initialization. Decide on a single place (e.g., the `SEPApiServer`) to manage the Crow application instance and route setup. The `crow_adapter.cpp` might be intended for a different use case or needs significant refactoring to avoid conflicts.
+2.  **`PipeWireCapture` Class Definition/Declaration Mismatch**
+    *   **Problem:** Functions like `cleanup()`, `init()`, `setupStream()`, `start()`, `stop()`, `setCallback()`, `getMetrics()`, `streamStateChanged()`, and `streamProcess()` are defined outside the `sep::audio::PipeWireCapture` class scope in `pipewire_capture.cpp` but are expected to be members (indicated by `PipeWireCapture::function_name`). Some are missing their required `override` specifier in the definition. The `streamStateChanged` and `streamProcess` callbacks are not declared within the `PipeWireCapture` class scope, leading to "not declared in this scope" errors when referenced in `createStreamEvents()`. The use of `this` in a non-member function (`streamStateChanged` and `streamProcess`) is also incorrect.
+    *   **Locations:** `audio/pipewire_capture.cpp`.
+    *   **Targeted Advice:**
+        *   Move the definitions of `PipeWireCapture::*` methods *inside* the `sep::audio` namespace but *outside* the `PipeWireCapture` class definition in `pipewire_capture.hpp` (or directly inside the class if they are very short).
+        *   Ensure `streamStateChanged` and `streamProcess` are declared as static member functions *inside* the `PipeWireCapture` class definition in `pipewire_capture.hpp`.
+        *   Pass the `PipeWireCapture` instance pointer (`self`) correctly to the `streamStateChanged` and `streamProcess` callbacks.
+        *   Verify that the `override` keyword is used correctly in the `.cpp` definitions for virtual functions.
 
-**3. Missing Member Definitions and Class Redefinitions:**
+3.  **Incomplete Type Usage (`sep::config::ConfigManager::Impl`, `sep::quantum::QuantumManifoldOptimizer::Impl`, `sep::quantum::QuantumManifoldOptimizer`)**
+    *   **Problem:** The nested classes `ConfigManager::Impl` and `QuantumManifoldOptimizer::Impl` are declared as incomplete types (forward declared) in their respective headers, but their definitions are not available when the outer class's methods are being compiled. This prevents the compiler from knowing the size and members of these nested classes when trying to create/use them (e.g., in `std::make_unique`). The `QuantumManifoldOptimizer` class itself is forward-declared in `pattern_evolution_bridge.h` but its full definition isn't available when `pattern_evolution_bridge.cpp` tries to instantiate and use it.
+    *   **Locations:** `core/manager.cpp`, `memory/quantum_coherence_manager.cpp`, `quantum/quantum_manifold_optimizer.cpp`, `quantum/pattern_evolution_bridge.cpp`.
+    *   **Targeted Advice:** Ensure that the full definitions of nested classes (`Impl`) and forward-declared classes (`QuantumManifoldOptimizer`) are available (by including the `.cpp` or the header containing the full definition) in the translation units where they are being instantiated or where their members are accessed. For `Impl` classes, this often means including the header *after* the nested class definition. For `QuantumManifoldOptimizer`, `pattern_evolution_bridge.cpp` needs to include `quantum/quantum_manifold_optimizer.h`.
 
-*   **Problem:** Several errors indicate that members are not found (`‘struct sep::quantum::BatchProcessingResult’ has no member named ‘error_code’`, `‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘tier_fragmentation’`, etc.). There are also class redefinitions (`redefinition of ‘class sep::memory::QuantumCoherenceManager’`). This points to either missing fields in struct/class definitions or issues with how headers are included, leading to incomplete or conflicting type definitions.
-*   **Files Involved:** `api/bridge_c.cpp`, `memory/quantum_coherence_manager.cpp`, `memory/memory_tier_manager.cpp`, `quantum/types_serialization.cpp`, `quantum/pattern_processor.cpp`, `quantum/processor.cpp`, `quantum/pattern_evolution_bridge.cpp`, `quantum/evolution.cpp`.
-*   **Targeted Advice:**
-    *   **Check Struct/Class Definitions:** For each error mentioning a missing member (`error_code`, `tier_fragmentation`, `momentum`, `evolution_rate`, `coupling_strength`, `decoherence_rate`, `fragmentation_score`, `fragmented_patterns`, `energy`, `state_mutex_`), verify the definition of the struct/class (`sep::quantum::BatchProcessingResult`, `sep::memory::QuantumCoherenceManager::CoherenceMetrics`, `sep::quantum::Pattern`, `sep::quantum::QuantumState`, `sep::memory::QuantumCoherenceManager::PatternCoherenceData`, `sep::quantum::PatternEvolutionBridge::Config`, `sep::quantum::PatternEvolutionBridge::Impl`) in its corresponding header file. Ensure the member is declared with the correct type and access specifier.
-    *   **Include Correct Headers:** Make sure that the header defining the complete struct/class is included *before* the code that uses it. For example, ensure `memory/quantum_coherence_manager.h` is included where `sep::memory::QuantumCoherenceManager::CoherenceMetrics` is used.
-    *   **Avoid Redefinitions:** The redefinition of `sep::memory::QuantumCoherenceManager` in `memory/quantum_coherence_manager.cpp` suggests that the class is defined in both the header and the .cpp file, or that the header lacks include guards. Ensure `#pragma once` or standard include guards (`#ifndef ... #define ... #endif`) are used in all header files.
-    *   **Incomplete Types:** The errors about incomplete types (`invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’`) mean that the compiler has seen a forward declaration but not the full definition of the class before it's used in a way that requires the full definition (e.g., creating an instance or accessing members). Include the full header (`quantum/quantum_manifold_optimizer.h`) where needed.
-    *   **Factory Function Mismatches:** The error `cannot convert ‘std::shared_ptr<sep::persistence::RedisManager>’ to ‘int’ in return` for `createRedisManager` in `memory/redis_manager.cpp` indicates a mismatch between the declared return type (`std::shared_ptr<IRedisManager>`) and the actual return statement (`return std::make_shared<RedisManager>(host, port);`). This function should return `std::shared_ptr<IRedisManager>`, implying `RedisManager` should inherit from `IRedisManager`, and the return type should be `std::shared_ptr<IRedisManager>`. The function signature `int createRedisManager(...)` in the error message from the build log is likely a mangled name or a misinterpretation by the compiler output; focus on the C++ signature in the source code. The factory function `createRedisManager` signature seems correct based on the header, but the function is defined as a non-member function in the `.cpp` file, which might be causing linking issues or interpretation problems by the compiler.
-    *   **Corrected `PatternQuantumProcessor` Constructor:** The error related to the `PatternQuantumProcessorImpl` constructor signature (`explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config)`) needs to be fixed. The constructor should accept `const sep::quantum::QuantumProcessor::Config&`.
+4.  **`BatchProcessingResult` Missing `error_code` Member**
+    *   **Problem:** `sep_process_context` in `api/bridge_c.cpp` attempts to access `process_result.error_code`, but the `BatchProcessingResult` struct definition in `quantum/types.h` does not have this member.
+    *   **Location:** `api/bridge_c.cpp`.
+    *   **Targeted Advice:** Remove the access to `process_result.error_code` or add this member to the `BatchProcessingResult` struct if it's intended to exist. Based on the usage, it seems like `process_result.success` and `process_result.error_message` are the relevant fields. The C-bridge function might need to map the internal `SEPResult` codes to the C-API error codes differently.
 
-**4. Blender/Cycles Integration Issues:**
+5.  **`sep::math` Not Declared**
+    *   **Problem:** `pipewire_capture.cpp` uses `sep::math::to_float` and `math::sqrt_safe`, but the `sep::math` namespace isn't correctly included or declared.
+    *   **Location:** `audio/pipewire_capture.cpp`.
+    *   **Targeted Advice:** Include the appropriate header for `sep::math` utilities, likely `compat/math_common.h`.
 
-*   **Problem:** The build log shows numerous `[MISSING]` warnings for Blender libraries. While you state you are building with full Cycles support, the build system seems to be falling back to using libraries from `/sep/lib`, which might be stub libraries or incompatible versions. There are also issues with using Blender-specific types and functions (`Object`, `Mesh`, `BKE_mesh_calc_normals`, `DEG_id_tag_update`, etc.) when the Blender environment is not fully linked or available.
-*   **Files Involved:** `blender/api.cpp`, `blender/mesh_handler.cpp`, `blender/cycles_renderer.cpp`, `blender/blender_integration.cpp`, `tests/cycles_test.cpp`, `main.cpp`.
-*   **Targeted Advice:**
-    *   **CMake Configuration:** Carefully review your `CMakeLists.txt` to ensure that when `SEP_HAS_CYCLES` and `SEP_HAS_BLENDER` are defined, you are correctly locating and linking against the *real* Blender and Cycles libraries. The current warnings suggest this isn't happening correctly. You might need to adjust `find_library` calls, set `CMAKE_PREFIX_PATH`, or use specific find modules provided by Blender or Cycles.
-    *   **Conditional Compilation:** Use `#ifdef SEP_HAS_BLENDER` and `#ifdef SEP_HAS_CYCLES` extensively in your Blender-related source files (`blender/*.cpp`) and any code that interacts with them. When these macros are *not* defined, include or use your stub implementations (`blender/mesh_handler.h` defines stubs for Blender functions, for example) to allow the code to compile without the real libraries. The `cycles_test.cpp` and `main.cpp` correctly check `SEP_HAS_CYCLES`, but the underlying implementation files need to handle the stub/real logic consistently.
-    *   **Blender API Usage:** Code directly using Blender API types (`Object`, `Mesh`, `CustomDataLayer`, etc.) must be strictly contained within `#ifdef SEP_HAS_BLENDER` blocks or rely on stub definitions provided by your compatibility layer headers when Blender is absent.
-    *   **OSL Stubs:** The `compat/cycles_osl_stub.cpp` seems to be attempting to provide stubs for Cycles' internal OSL and OpenPGL integration. Ensure this file is *only* compiled when `SEP_HAS_CYCLES` is defined but the real OSL libraries are *not* found, or when `SEP_HAS_CYCLES` is not defined at all. The CMake script suggests it's adding this stub library even when real OSL is not found, which is the correct behavior for a fallback. However, ensure the `cycles_renderer.cpp` and other Cycles-dependent code uses conditional compilation based on `SEP_HAS_CYCLES` to decide whether to interact with the real Cycles API or the stub.
+6.  **`MemoryTierManager` Definition/Declaration Mismatch**
+    *   **Problem:** Similar to `PipeWireCapture`, methods of `MemoryTierManager` are defined outside the class scope with `override` specifiers, which is incorrect. Also, there are issues with the constructors not matching declarations.
+    *   **Location:** `memory/memory_tier_manager.cpp`.
+    *   **Targeted Advice:** Correct the definitions of `MemoryTierManager::*` methods in `memory_tier_manager.cpp` to be within the class scope or remove the incorrect `override` specifiers. Ensure the constructor signatures match the declarations.
 
-**5. PipeWire Integration Issues:**
+7.  **`QuantumCoherenceManager` Redefinition and Member Issues**
+    *   **Problem:** The `QuantumCoherenceManager` class is defined in both `quantum_coherence_manager.h` and `quantum_coherence_manager.cpp`, leading to a redefinition error. Additionally, members and nested types declared in the `.cpp` file (`Impl`, `CoherenceMetrics`, `PatternCoherenceData`, etc.) are not accessible from the `.h` definition or from code using the class, leading to "has no member named..." errors.
+    *   **Location:** `memory/quantum_coherence_manager.cpp`, `memory/quantum_coherence_manager.h`.
+    *   **Targeted Advice:** Move the full definition of the `QuantumCoherenceManager` class and its nested types *only* into `quantum_coherence_manager.h`. The `.cpp` file should then define the methods of the class as `ClassName::methodName(...)`.
 
-*   **Problem:** The build log explicitly states "Warning: PipeWire headers or library missing. PipeWire disabled." followed by errors related to PipeWire function calls (`streamStateChanged`, `streamProcess`, `pw_stream_add_listener`, `pw_thread_loop_start`) in `audio/pipewire_capture.cpp`. This indicates that even though CMake *found* the PipeWire library, the C++ code isn't correctly handling the case where PipeWire is available vs. when using the stub.
-*   **Files Involved:** `audio/pipewire_capture.cpp`, `compat/component_bridge.cpp`.
-*   **Targeted Advice:**
-    *   **Conditional Compilation:** Use `#ifdef SEP_HAS_PIPEWIRE` in `audio/pipewire_capture.cpp`. The real PipeWire code should be within this block. The stub implementation (`audio/pipewire_stubs.cpp`) should contain the stub class definition and be compiled when `!SEP_HAS_PIPEWIRE`.
-    *   **Factory Function:** The `createAudioCapture()` factory function in `compat/component_bridge.cpp` correctly uses `#ifdef SEP_HAS_PIPEWIRE` to return either `PipeWireCapture` or `PipeWireCaptureStub`. Ensure the `PipeWireCaptureStub` class is defined in `audio/pipewire_stubs.h` and `audio/pipewire_stubs.cpp`. The build log shows a missing stub definition for `createAudioCaptureStub()` in `compat/component_bridge.cpp`, which is then correctly defined.
+8.  **`IRedisManager` Undeclared**
+    *   **Problem:** `redis_manager.cpp` attempts to return `std::shared_ptr<IRedisManager>` from `createRedisManager`, but `IRedisManager` is not declared or defined before this point.
+    *   **Location:** `memory/redis_manager.cpp`.
+    *   **Targeted Advice:** Ensure the header defining `IRedisManager` is included in `redis_manager.cpp`.
 
-**General Advice for a Full Build:**
+9.  **`tbb::concurrent_hash_map::for_each` Member Missing**
+    *   **Problem:** The `concurrent_hash_map` in the version of TBB being used (or the stub) does not appear to have a `for_each` member function used in `quantum_coherence_manager.cpp`.
+    *   **Location:** `memory/quantum_coherence_manager.cpp`.
+    *   **Targeted Advice:** Replace the `coherence_map_.for_each(...)` calls with a standard iteration approach that is compatible with the specific `concurrent_hash_map` being used (e.g., using iterators if available, or a different TBB mechanism for concurrent iteration).
 
-1.  **Consistent Conditional Compilation:** Go through every source file (`.cpp`, `.cu`) and header file (`.h`, `.hpp`) that interacts with external libraries (CUDA, Crow, Blender, Cycles, PipeWire, Redis, TBB) or has stub/real implementations. Ensure that all relevant code paths are guarded with appropriate `#ifdef` directives (`SEP_USE_CUDA`, `SEP_HAS_BLENDER`, `SEP_HAS_CYCLES`, `SEP_HAS_PIPEWIRE`, `SEP_HAS_REDIS`, `SEP_USE_TBB`, `SEP_HAS_EXCEPTIONS`).
-2.  **Header Include Guards:** Double-check that all header files have include guards to prevent multiple inclusions.
-3.  **Forward Declarations vs. Full Includes:** Use forward declarations (`class MyClass;`) in headers where possible to reduce compilation dependencies, but include the full header (`#include "MyClass.h"`) in `.cpp` files where the class is used (e.g., creating instances, calling methods, accessing members).
-4.  **Namespace Resolution:** Be explicit with namespaces (e.g., `sep::cuda::CudaCore`) or use `using` declarations carefully, especially in conditionally compiled code.
-5.  **Review CMake Output:** Pay close attention to the CMake warnings and messages. They indicate which dependencies are being found and where potential issues lie (like using fallback libraries). Ensure CMake is correctly detecting and linking against your installed real libraries.
-6.  **Address All Errors:** Start with the first few errors in the build log, as they often cause a cascade of subsequent errors. Fixing the CUDA and Crow include order issues is likely a good starting point.
+10. **`PatternQuantumProcessorImpl` Constructor and Member Usage Issues**
+    *   **Problem:** The constructor signature in `pattern_processor.cpp` does not match the declaration in `pattern_processor.h`. The class also attempts to use `quantum_processor_->*` members, but `quantum_processor_` is a `std::unique_ptr` to an incomplete type `QuantumProcessor` at this point, or the factory function call might be incorrect.
+    *   **Location:** `quantum/pattern_processor.cpp`.
+    *   **Targeted Advice:**
+        *   Correct the constructor signature of `PatternQuantumProcessorImpl` to match the base class or the factory function's expected type.
+        *   Ensure that the full definition of `QuantumProcessor` is available in `pattern_processor.cpp` *before* its members are accessed via `quantum_processor_`.
+        *   Review the factory function `createQuantumProcessor` usage to ensure it's returning the expected type.
 
-By systematically addressing these points and ensuring the conditional compilation logic correctly separates stub and real implementations, you should be able to progress towards a successful full build. Focus on fixing the type definition and scope errors first, as they often hide deeper issues with header inclusion and conditional compilation.
+11. **`PatternEvolutionBridge::Impl` Member Access**
+    *   **Problem:** The public methods of `PatternEvolutionBridge` (`initializeEvolutionState`, `updatePatterns`) attempt to access private members of the `Impl` class (`evolution_state_`, `state_mutex_`).
+    *   **Location:** `quantum/pattern_evolution_bridge.cpp`.
+    *   **Targeted Advice:** Make `initializeEvolutionState` and `updatePatterns` methods of the `Impl` class, and call them from the public `PatternEvolutionBridge` methods using `impl_->initializeEvolutionState()` and `impl_->updatePatterns(...)`.
+
+12. **`EvolutionEngineImpl` Missing Member Definition**
+    *   **Problem:** `EvolutionEngineImpl` in `evolution.cpp` is missing the definition of the `current_stats_` member.
+    *   **Location:** `quantum/evolution.cpp`.
+    *   **Targeted Advice:** Add `EvolutionStats current_stats_;` to the private members of `EvolutionEngineImpl`.
+
+13. **`EvolutionEngineImpl::calculateFitness` Parameter Usage**
+    *   **Problem:** `calculateFitness` in `evolution.cpp` refers to `state` members but should be using `pattern.quantum_state` as it receives a `Pattern` object.
+    *   **Location:** `quantum/evolution.cpp`.
+    *   **Targeted Advice:** Change `state.*` to `pattern.quantum_state.*` within `calculateFitness`.
+
+14. **`EvolutionEngineImpl::crossover` `glm::mix` Usage**
+    *   **Problem:** The `glm::mix` function for `glm::vec4` is being called with `float` arguments for `alpha`, which is incorrect.
+    *   **Location:** `quantum/evolution.cpp`.
+    *   **Targeted Advice:** Ensure that the `alpha` argument passed to `glm::mix` is of the correct type (`float` for vector mixing, or the same type as the vector components). The current usage seems intended for scalar mixing of individual components, so using `glm::mix` might not be the correct approach for `glm::vec4`. Consider manually mixing the vector components.
+
+15. **`SEPBlenderBridge::create` Return Type Mismatch**
+    *   **Problem:** `createBlenderBridge` in `component_bridge.cpp` returns a `std::shared_ptr<pattern::BlenderBridge>` but `sep_blender_init` in `api.cpp` expects `std::unique_ptr<SEPBlenderBridge>`.
+    *   **Location:** `compat/component_bridge.cpp`, `blender/api.cpp`.
+    *   **Targeted Advice:** Ensure the return type of the factory function matches the expected type in the calling code. Either change `createBlenderBridge` to return `std::unique_ptr<SEPBlenderBridge>` or adjust `sep_blender_init` to handle a `std::shared_ptr`. Given the `release()` call in `sep_blender_init`, `std::unique_ptr` seems intended. Update `createBlenderBridge` to return `std::unique_ptr<SEPBlenderBridge>(new (std::nothrow) SEPBlenderBridge())`.
+
+16. **Redefinition of `sep::compat::createAudioCaptureStub`**
+    *   **Problem:** `createAudioCaptureStub` is defined in both `component_bridge.cpp` and `pipewire_stubs.cpp`.
+    *   **Location:** `compat/component_bridge.cpp`, `audio/pipewire_stubs.cpp`.
+    *   **Targeted Advice:** Remove the definition from `pipewire_stubs.cpp`. It should only be defined in `component_bridge.cpp` and declared in a header included by both.
+
+By addressing these specific points, particularly the CUDA header conflicts and the class definition/declaration mismatches, the build should progress further. Remember to focus on including the necessary full definitions in the `.cpp` files where they are used.

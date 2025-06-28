@@ -193,6 +193,9 @@ private:
     std::vector<ManifoldPoint> manifold_points_;
     glm::mat4 riemannian_metric_;
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
+
+    // Forward declaration for helper
+    float computeResonanceFromCurvature(float curvature) const;
     
     void initializeManifold() {
         // Initialize manifold with quantum-inspired geometry

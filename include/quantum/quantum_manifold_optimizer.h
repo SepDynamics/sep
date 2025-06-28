@@ -4,10 +4,12 @@
 #include "quantum/qbsa.h"
 #include "quantum/qfh.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "memory/memory_tier_manager.h"
+#include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
-#include <cuda_runtime.h>
-#include <cufft.h>
+#include "memory/spdlog_isolation.h"
+#include "compat/cuda_runtime.h"
+#include "compat/cuda.h"
+#include "quantum/pattern.h"
 #include <chrono>
 #include <atomic>
 #include <thread>

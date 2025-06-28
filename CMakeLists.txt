@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 3.16)
-project(SEPEngine LANGUAGES CXX CUDA)
+# Include CUDA configuration for library paths
+include(${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
+# Set CUDA flags BEFORE project() to fix compiler version compatibility check
+set(CMAKE_CUDA_FLAGS "-allow-unsupported-compiler")
+set(CMAKE_CUDA_COMPILER_FLAGS "-allow-unsupported-compiler")
+set(ENV{CUDAFLAGS} "-allow-unsupported-compiler")
+
+# Force NVCC to bypass the compiler version check
+set(CMAKE_CUDA_FLAGS_INIT "-allow-unsupported-compiler")
+set(CMAKE_CUDA_COMPILER_INIT "nvcc -allow-unsupported-compiler")
+
+# Enable CUDA as a language
+project(SEPEngine LANGUAGES CXX)
 
 # === Professional Project Configuration ===
 set(CMAKE_CXX_STANDARD 17)
@@ -127,7 +139,19 @@ endif()
 # TBB (multiple versions for compatibility)
 find_library(TBB_LIBRARY NAMES tbb)
 find_library(TBB_MALLOC_LIBRARY NAMES tbbmalloc)
-find_library(TBB2_LIBRARY NAMES tbb.so.2 PATHS /usr/lib64 /usr/local/lib)
+find_library(TBB2_LIBRARY NAMES tbb.so.2 tbb2 PATHS
+  /usr/lib64
+  /usr/local/lib
+  /usr/lib
+  /lib64
+  /lib
+)
+
+# If TBB2 isn't found, create a stub variable that won't break the build
+if(NOT TBB2_LIBRARY)
+  message(STATUS "TBB2 library not found, using stub")
+  set(TBB2_LIBRARY "")
+endif()
 
 # OpenSubdiv
 find_library(OPENSUBDIV_CPU_LIBRARY NAMES osdCPU)
@@ -161,32 +185,19 @@ include_directories(${SEP_INCLUDE_DIRS})
 
 # === CRITICAL: Library Linking Order Resolution ===
 # This order resolves cyclic dependencies by ensuring symbols are available when needed
+# Use explicit paths to ensure correct libraries are found
 set(CYCLES_LINK_ORDER
-    # Level 1: Foundation (no Cycles dependencies)
-    ${CYCLES_UTIL_LIBRARY}
-    
-    # Level 2: Core abstractions
-    ${CYCLES_GRAPH_LIBRARY}
-    
-    # Level 3: Kernel and acceleration
-    ${CYCLES_KERNEL_LIBRARY}
-    ${CYCLES_BVH_LIBRARY}
-    
-    # Level 4: Subdivision and geometry
-    ${CYCLES_SUBD_LIBRARY}
-    
-    # Level 5: Device abstraction
-    ${CYCLES_DEVICE_LIBRARY}
-    
-    # Level 6: Scene management (depends on kernel, device)
-    ${CYCLES_SCENE_LIBRARY}
-    
-    # Level 7: Integration and session
-    ${CYCLES_INTEGRATOR_LIBRARY}
-    ${CYCLES_SESSION_LIBRARY}
-    
-    # Level 8: OSL support (if available)
-    ${CYCLES_OSL_LIBRARY}
+    # Use explicit library paths instead of variables which might not be found
+    /sep/lib/libcycles_util.a
+    /sep/lib/libcycles_graph.a
+    /sep/lib/libcycles_kernel.a
+    /sep/lib/libcycles_bvh.a
+    /sep/lib/libcycles_subd.a
+    /sep/lib/libcycles_device.a
+    /sep/lib/libcycles_scene.a
+    /sep/lib/libcycles_integrator.a
+    /sep/lib/libcycles_session.a
+    /sep/lib/libcycles_osl.a
 )
 
 # Blender libraries in dependency order
@@ -296,18 +307,20 @@ target_include_directories(sep_engine
 
 # CRITICAL: Use WHOLE ARCHIVE for static Cycles libraries to ensure all symbols are included
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # First link the Cycles libraries with whole-archive flags
+    # This ensures all symbols are included before any internal libraries reference them
     target_link_libraries(sep_engine
         PRIVATE
-        ${SEP_INTERNAL_LIBS}
         -Wl,--whole-archive
         ${CYCLES_LINK_ORDER}
         -Wl,--no-whole-archive
+        # Then link internal libraries that might depend on Cycles
+        ${SEP_INTERNAL_LIBS}
         ${BLENDER_LINK_ORDER}
         ${EXTERNAL_LINK_ORDER}
         ${CURL_LIBRARIES}
         ${HIREDIS_LIBRARIES}
-        CUDAToolkit::cudart
-        CUDAToolkit::cuda_driver
+        ${CUDA_LIBRARIES}
         Threads::Threads
         fmt::fmt
         spdlog::spdlog
@@ -316,8 +329,10 @@ else()
     # Fallback for other compilers
     target_link_libraries(sep_engine
         PRIVATE
+        ${CYCLES_LIBRARIES}
         ${SEP_INTERNAL_LIBS}
-        ${SEP_ALL_LINK_LIBS}
+        ${BLENDER_LINK_ORDER}
+        ${EXTERNAL_LINK_ORDER}
         ${CURL_LIBRARIES}
         ${HIREDIS_LIBRARIES}
         CUDAToolkit::cudart

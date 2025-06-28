@@ -3,5 +3,9 @@ add_library(sep_core STATIC allocation_metrics.cpp dag_graph.cpp engine.cpp erro
 target_include_directories(sep_core
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/cycles/src
         ${CMAKE_SOURCE_DIR}/extern
+        ${CMAKE_SOURCE_DIR}/extern/cycles/src
+        ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
+        ${CMAKE_SOURCE_DIR}/extern/eigen
 )

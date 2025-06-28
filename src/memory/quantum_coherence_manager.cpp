@@ -1,4 +1,5 @@
 // /sep/src/memory/quantum_coherence_manager.cpp
+#include "memory/quantum_coherence_manager.hpp"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "memory/memory_tier_manager.hpp"

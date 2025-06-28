@@ -1,4 +1,5 @@
 #include "memory/types.h"
+#include "memory/manager.h"
 #include <cstdint>
 #if __has_include(<hiredis/hiredis.h>)
 #    include <hiredis/hiredis.h>

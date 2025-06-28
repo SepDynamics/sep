@@ -1,5 +1,4 @@
-#ifndef SEP_BLENDER_PATTERN_BRIDGE_H
-#define SEP_BLENDER_PATTERN_BRIDGE_H
+#pragma once
 
 #include "compat/shim.h"
 

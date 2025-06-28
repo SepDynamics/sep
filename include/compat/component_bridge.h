@@ -11,10 +11,12 @@ class BlenderBridge;
 namespace blender {
 class CyclesRenderer; // Forward declaration if header not available
 }
+struct SEPBlenderBridge;
 namespace compat {
 
 std::unique_ptr<audio::AudioCapture> createAudioCapture();
-std::shared_ptr<pattern::BlenderBridge> createBlenderBridge();
+std::unique_ptr<audio::AudioCapture> createAudioCaptureStub();
+std::unique_ptr<SEPBlenderBridge> createBlenderBridge();
 std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer();
 
 } // namespace compat

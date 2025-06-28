@@ -221,7 +221,8 @@ public:
         auto tier_analysis = analyzeTierCoherence();
         
         // Identify patterns that should migrate
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             const auto& data = pair.second;
             MemoryTierEnum target_tier = determineOptimalTier(data);
             
@@ -234,7 +235,7 @@ public:
                 migration.reason = determineMigrationReason(data, target_tier);
                 migrations.push_back(migration);
             }
-        });
+        }
         
         // Apply memory pressure optimizations
         if (metrics_.memory_pressure > MEMORY_PRESSURE_FACTOR) {
@@ -286,15 +287,16 @@ public:
     }
     
     void applyCoherenceDecay(float decay_factor) {
-        coherence_map_.for_each([decay_factor](auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            auto& pair = *it;
             auto& data = pair.second;
             data.coherence *= (1.0f - decay_factor * COHERENCE_DECAY_RATE);
-            
+
             // Remove patterns below minimum coherence
             if (data.coherence < MIN_COHERENCE_FOR_PERSISTENCE) {
                 data.coherence = 0.0f;
             }
-        });
+        }
         
         // Clean up zero-coherence patterns
         cleanupZeroCoherencePatterns();
@@ -306,9 +308,10 @@ public:
         snapshot.global_metrics = metrics_;
         
         // Capture pattern states
-        coherence_map_.for_each([&snapshot](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             snapshot.pattern_states.push_back(pair.second);
-        });
+        }
         
         // Capture tier distributions
         snapshot.tier_distribution[0] = countPatternsInTier(MemoryTierEnum::STM);
@@ -443,7 +446,8 @@ private:
         float tier_frag_sums[3] = {0.0f, 0.0f, 0.0f};
         uint32_t tier_counts[3] = {0, 0, 0};
         
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             const auto& data = pair.second;
             total_coherence += data.coherence;
             pattern_count++;
@@ -456,7 +460,7 @@ private:
             tier_sums[tier_idx] += data.coherence;
             tier_frag_sums[tier_idx] += data.fragmentation_score;
             tier_counts[tier_idx]++;
-        });
+        }
         
         // Update metrics
         metrics_.global_coherence = (pattern_count > 0) ? 
@@ -478,15 +482,17 @@ private:
         
         // Compute entanglement density
         uint32_t total_entanglements = 0;
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             total_entanglements += pair.second.entangled_patterns.size();
-        });
+        }
 
         // Compute fragmented patterns (example: fragmentation score > 0.5)
         uint64_t fragmented_count = 0;
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             if (pair.second.fragmentation_score > 0.5f) fragmented_count++;
-        });
+        }
         metrics_.fragmented_patterns = fragmented_count;
 
         metrics_.entanglement_density = (pattern_count > 1) ?
@@ -548,7 +554,8 @@ private:
     std::vector<TierMigration> performTierMigrations() {
         std::vector<TierMigration> migrations;
         
-        coherence_map_.for_each([&](auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            auto& pair = *it;
             auto& data = pair.second;
             MemoryTierEnum current_tier = data.current_tier;
             MemoryTierEnum target_tier = determineOptimalTier(data);
@@ -569,16 +576,17 @@ private:
                     data.current_tier = target_tier;
                 }
             }
-        });
+        }
         
         return migrations;
     }
     
     void updateEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns) {
         // Clear existing entanglements
-        coherence_map_.for_each([](auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            auto& pair = *it;
             pair.second.entangled_patterns.clear();
-        });
+        }
         
         // Compute new entanglements
         for (size_t i = 0; i < patterns.size(); ++i) {
@@ -651,12 +659,13 @@ private:
         // Sort by coherence ascending for demotion candidates
         std::vector<std::pair<std::string, float>> demotion_candidates;
         
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             if (pair.second.current_tier == MemoryTierEnum::LTM &&
                 pair.second.coherence < LTM_COHERENCE_THRESHOLD) {
                 demotion_candidates.push_back({pair.first, pair.second.coherence});
             }
-        });
+        }
         
         std::sort(demotion_candidates.begin(), demotion_candidates.end(),
                  [](const auto& a, const auto& b) { return a.second < b.second; });
@@ -679,11 +688,12 @@ private:
     void cleanupZeroCoherencePatterns() {
         std::vector<std::string> to_remove;
         
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             if (pair.second.coherence <= 0.0f) {
                 to_remove.push_back(pair.first);
             }
-        });
+        }
         
         for (const auto& id : to_remove) {
             coherence_map_.erase(id);
@@ -695,11 +705,12 @@ private:
         float variance = 0.0f;
         uint64_t count = 0;
         
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             float diff = pair.second.coherence - mean;
             variance += diff * diff;
             count++;
-        });
+        }
         
         return (count > 0) ? variance / count : 0.0f;
     }

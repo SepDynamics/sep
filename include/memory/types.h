@@ -15,6 +15,7 @@
 #include <chrono>
 #include <glm/vec3.hpp>
 #include <vector>
+#include "memory/redis_manager.h"
 
 namespace sep {
 namespace persistence {
@@ -39,7 +40,7 @@ struct PatternData {
     uint64_t dag_node_id = 0;              // DAG node ID for pattern
 };
 
-class RedisManager {
+class RedisManager : public IRedisManager {
 public:
     RedisManager(const std::string& host = "localhost", int port = 6379);
     ~RedisManager();

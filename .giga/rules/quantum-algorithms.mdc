@@ -1,57 +1,49 @@
 ---
-description: Pattern processing using quantum-inspired algorithms (QBSA, QFH) to analyze quantum states and calculate coherence
-globs: src/quantum/*,include/quantum/*,src/memory/manager.cpp,src/memory/memory.cu
+description: Specifies quantum processing algorithms for pattern analysis, coherence calculation and stability determination in the SEP framework
+globs: src/quantum/**,src/core/quantum/*,*.qsa,*.qfh
 alwaysApply: false
 ---
 
 
 # quantum-algorithms
 
-The core quantum processing algorithms implement specialized logic for pattern evolution, coherence calculation, stability determination and quantum state analysis.
+### Core Quantum Processing Components
 
-### Quantum Binary State Analysis (QBSA)
-- Analyzes quantum states through probe indices and expected values
-- Detects misalignments between states using correction ratio thresholds
-- Determines quantum collapse based on correction patterns and stability metrics
+The SEP framework implements several quantum-inspired algorithms for pattern analysis and coherence determination:
 
-### Quantum Fourier Hierarchy (QFH) 
-- Transforms bit vectors into transition events for state analysis
-- Aggregates events by state type (NULL_STATE, FLIP, RUPTURE)
-- Detects quantum collapse based on rupture ratios and hierarchy metrics
-- Calculates coherence through quantum state comparisons
+#### Quantum Binary State Analysis (QBSA)
+Importance Score: 95
+- Analyzes bitfield patterns to detect quantum state misalignments
+- Guides system toward coherence through state comparison
+- Maps binary patterns to quantum superposition analogues
 
-### Pattern Evolution Engine
-- Evolves quantum patterns using genetic algorithms with:
-  - Fitness calculation based on coherence, stability, entropy and diversity metrics  
-  - Tournament selection of parent patterns
-  - Weighted crossover of quantum states
-  - Gaussian mutation of coherence and stability values
-  - Elitism preservation of top patterns
+#### Quantum Fourier Hierarchy (QFH) 
+Importance Score: 90
+- Multi-level transform detecting coherence ruptures
+- Signals quantum state collapse conditions
+- Processes pattern hierarchies through fourier-based decomposition
 
-### Coherence Calculation
-- Computes normalized coherence between quantum states
-- Uses weighted factors for historical coherence values
-- Considers access frequency and generation counts
-- Determines pattern stability through coherence thresholds
+#### Pattern Evolution System
+Importance Score: 85
+- Hamiltonian-based pattern evolution
+- Coupling strength determined by resonance ratios
+- Tracks pattern lineage through DAG structure
 
-### Stability Analysis
-- Calculates stability scores from coherence metrics
-- Evaluates historical stability trends
-- Determines quantum state (stable, collapsed, quantum)
-- Uses decoherence rates from configuration
+### Stability Determination
 
-### Memory Tier Integration
-- Updates memory tier assignments based on coherence values
-- Promotes/demotes patterns between tiers using stability metrics
-- Manages pattern relationships through coherence calculation
+#### Coherence Calculation
+Importance Score: 80
+- Measures pattern stability through recursive collapse analysis
+- Maps stable resonant energy states
+- Links to Riemann zeta function zeros for stability validation
 
-File paths:
-- `src/quantum/evolution.cpp`
-- `src/quantum/pattern_evolution.cpp` 
-- `src/quantum/pattern_processor.cpp`
-- `src/quantum/quantum_processor.cpp`
-- `src/quantum/qbsa.cpp`
-- `src/quantum/qfh.cpp`
+Relevant File Paths:
+```
+src/quantum/qbsa.cpp
+src/quantum/qfh.cpp
+src/core/quantum/pattern_evolution.cpp
+src/quantum/coherence_calc.cpp
+```
 
 $END$
 

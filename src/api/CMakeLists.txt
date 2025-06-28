@@ -3,7 +3,11 @@ add_library(sep_api STATIC auth_middleware.cpp bridge.cpp bridge_c.cpp client.cp
 target_include_directories(sep_api
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/cycles/src
         ${CMAKE_SOURCE_DIR}/extern
+        ${CMAKE_SOURCE_DIR}/extern/cycles/src
+        ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
+        ${CMAKE_SOURCE_DIR}/extern/eigen
 )
 
 # Link external dependencies when available

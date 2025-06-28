@@ -1,68 +1,35 @@
 ---
-description: Technical specification for the memory tier management system used in pattern storage and processing
-globs: src/memory/**,include/memory/**,src/**tier**,include/**tier**
+description: Configuration and implementation for multi-tier memory management and pattern storage/retrieval system.
+globs: src/memory/**/*,src/quantum/memory/**/*,src/core/memory/**/*
 alwaysApply: false
 ---
 
 
 # memory-tier-system
 
-The memory tier system implements a hierarchical storage architecture specialized for quantum pattern management across different memory tiers.
+Based on the available specification, the memory tier system appears to have the following core components:
 
-### Memory Tier Core Components
+### Custom Memory Allocators
+- Specialized allocators designed for integration with DemandLoading library 
+- Memory management patterns optimized for texture and pattern data storage
+- Implements custom block allocation strategies for OptiX rendering integration
 
-The tiering system organizes memory into three distinct tiers:
+### Pattern Storage Architecture
+The system implements a multi-tiered pattern storage system:
+1. Primary pattern storage for active quantum patterns
+2. On-demand loading capabilities for texture and pattern data
+3. Integration with CUDA sparse textures for GPU-accelerated pattern access
 
-- STM (Short-Term Memory): Volatile storage for recently accessed patterns
-- MTM (Medium-Term Memory): Intermediate storage for patterns showing stability
-- LTM (Long-Term Memory): Persistent storage for highly coherent patterns
+### Redis Integration
+While Redis integration is mentioned in the project scope, specific implementation details are not provided in the current specification.
 
-Each tier manages pattern data with:
-- Coherence tracking
-- Stability metrics  
-- Generation counting
-- Pattern relationship management
+### Key Memory Management Components
+File paths:
+- `src/Memory/`: Core memory allocator implementations
+- `src/DemandLoading/`: On-demand pattern loading system
+- `src/core/memory/`: Base memory management infrastructure
 
-### Pattern Lifecycle Management
-
-1. **Tier Promotion Logic**:
-- Patterns are promoted based on:
-  - Coherence score exceeding tier threshold
-  - Stability above minimum requirement
-  - Generation count meeting tier criteria
-- Promotion includes relationship preservation
-
-2. **Pattern Storage**:
-- Each tier implements:
-  - Best-fit allocation strategy
-  - Block splitting/merging
-  - Defragmentation
-  - Redis integration for persistence
-
-3. **Relationship Management**:
-- Tracks relationships between patterns
-- Calculates relationship coherence
-- Prunes weak relationships
-- Updates relationship strengths
-
-4. **Memory Optimization**:
-- Defragmentation when fragmentation exceeds threshold
-- Block coalescing for adjacent free blocks
-- Tier-specific memory pools
-- Utilization tracking per tier
-
-5. **Pattern Processing**:
-- Quantum state validation
-- Pattern evolution tracking
-- Coherence calculation
-- Stability assessment
-- Generation increment
-
-File Paths:
-- `src/memory/memory_tier.cpp`
-- `src/memory/memory_tier_manager.cpp` 
-- `include/memory/memory_tier.hpp`
-- `include/memory/memory_tier_manager.hpp`
+Importance Score: 85 - Critical memory management infrastructure for pattern processing
 
 $END$
 

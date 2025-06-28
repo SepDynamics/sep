@@ -10,42 +10,49 @@
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-The SEP Engine implements a quantum-inspired pattern processing system with sophisticated memory management and API capabilities:
+The project integrates several specialized rendering and computation engines with custom CUDA configurations:
 
-### Memory Management and Pattern Processing
-- **Memory Tier System** (`src/memory/`): Three-tier memory architecture (STM, MTM, LTM) managing pattern storage and evolution based on coherence and stability metrics. Patterns are promoted/demoted between tiers using custom quantum-inspired algorithms.
+### Core Components
 
-- **Quantum Processing** (`src/quantum/`): 
-  - QBSA (Quantum Binary State Analysis) analyzes bitfields for coherence misalignments
-  - QFH (Quantum Fourier Hierarchy) detects coherence ruptures indicating state collapse
-  - Pattern evolution through Hamiltonian-like processes using resonance ratios
+1. OptiX Toolkit Integration (Importance: 95)
+- Demand Loading Library for on-demand CUDA sparse textures
+- Custom memory allocators for DemandLoading operations
+- Opacity Micromap Arrays (OmmBaking) for textured geometry optimization
+- Python bindings for OptiX host API automation
+File paths: `src/DemandLoading/`, `src/Memory/`, `src/OmmBaking/`, `src/PyOptiX/`
 
-### Core Engine Components
-- **Pattern Management** (`src/core/`): Manages pattern DAGs with coherence relationships, implements quantum state evolution, and handles collapse detection.
+2. Cycles Render Engine Integration (Importance: 90)
+- Hydra render delegate for USD and Houdini integration
+- GPU rendering pipeline with CUDA and OptiX support
+- Custom build configurations for USD/Houdini compatibility
+File paths: `src/cycles/install/hydra/`, `src/cycles/install/houdini/`
 
-- **API Server** (`src/api/`): REST API exposing pattern processing capabilities with:
-  - Pattern evolution endpoints
-  - Coherence modulation for responses
-  - Memory tier queries
-  - Context relationship management
+3. CUDA Compilation Framework (Importance: 85)
+- Custom CUDA compilation pipeline bypassing CMake defaults
+- Specialized GPU architecture targeting (70-89)
+- Forced compiler configurations for GCC 14 and Clang
+File paths: `cmake/CustomCUDA.cmake`, `cmake/cuda-toolchain.cmake`
 
-### CUDA Acceleration
-- **CUDA Integration** (`src/compat/`): Custom quantum kernels for:
-  - Coherence calculation
-  - Pattern similarity analysis  
-  - QFH transformations
-  - Quantum state evolution
+4. SEP Framework Core (Importance: 92)
+- Spin-2 coherence field implementation
+- Quantum Binary State Analysis (QBSA)
+- Pattern evolution through Hamiltonian processes
+- Quantum Fourier Hierarchy for coherence detection
 
-### Data Storage and Processing
-- **Redis Integration** (`src/memory/redis_manager.cpp`): Pattern storage with tier-based indexing and relationship tracking
-- **Cycles Integration**: Optional 3D rendering capabilities for pattern visualization
+### Integration Architecture
 
-Key file paths for core business logic:
-- `src/quantum/evolution.cpp`: Pattern evolution algorithms
-- `src/quantum/quantum_processor.cpp`: Quantum state processing
-- `src/memory/memory_tier_manager.cpp`: Memory tier management
-- `src/api/sep_engine.cpp`: Core API implementation
-- `src/compat/quantum_kernels.cu`: CUDA quantum kernels
+The system connects these components through:
+- Custom CUDA toolchain configurations
+- Specialized render delegate implementations
+- Memory management systems for texture handling
+- Python-based automation interfaces
+
+### Processing Pipeline
+
+1. Demand loading system handles texture management
+2. OptiX-based rendering pipeline processes geometry
+3. Custom memory allocators optimize resource usage
+4. Cycles integration provides final rendering output
 
 $END$
 

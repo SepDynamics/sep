@@ -1,98 +1,54 @@
 ---
-description: Specification for analyzing data flow patterns between memory tiers, quantum states, pattern processing, and system components
-globs: 
+description: Documents data flow patterns and transformations in quantum computing and rendering systems
+globs: src/quantum/**/*,src/core/**/*,src/cycles/**/*,src/DemandLoading/**/*
 alwaysApply: false
 ---
 
 
-# Data-Flow
+# Data Flow
 
-## Core Data Flow Patterns
+### Quantum Pattern Processing Pipeline
+
+Key data transformations through the quantum processing layers:
+
+1. Quantum Binary State Analysis (QBSA) Pipeline:
+- Input: Raw bitfields
+- Transform: Detection of coherence misalignments
+- Output: Coherence guidance signals
+Importance: 95
+
+2. Quantum Fourier Hierarchy (QFH):
+- Input: Pattern states
+- Transform: Multi-level coherence analysis
+- Output: State collapse signals
+Importance: 90
 
 ### Memory Tier Transitions
-The system implements a three-tier memory architecture that manages data flow between:
-- Short-term Memory (STM)
-- Medium-term Memory (MTM) 
-- Long-term Memory (LTM)
 
-Pattern data flows between tiers based on:
-- Coherence scores
-- Stability metrics
-- Generation counts
-- Access frequency
+DemandLoading Library Pipeline:
+- Source: CUDA sparse textures
+- Processing: On-demand texture loading
+- Destination: OptiX renderers
+Importance: 85
 
-Key paths:
-```
-STM -> MTM: When coherence > 0.7 && generations > 100
-MTM -> LTM: When stability > 0.8 && generations > 1000
-LTM -> MTM: When access frequency drops below threshold
-MTM -> STM: When stability decreases below 0.5
-```
+OptiX Memory Management:
+- Custom allocators for DemandLoading
+- Texture data transformation between tiers
+- Opacity Micromap Array caching
+Importance: 80
 
-### Pattern Processing Pipeline
-Quantum patterns flow through a multi-stage processing pipeline:
+### Render Engine Data Flow
 
-1. Input Pattern -> QBSA Analysis
-2. QBSA Results -> QFH Transform 
-3. QFH Output -> Coherence Calculation
-4. Coherence Metrics -> Stability Assessment
-5. Stability Score -> Memory Tier Assignment
+Cycles Render Pipeline:
+- Input: USD/Houdini scene data
+- Transform: GPU-based rendering (CUDA/OptiX)
+- Output: Rendered frames
+Importance: 75
 
-Key files:
-- `src/quantum/pattern_processor.cpp`
-- `src/quantum/qbsa.cpp`
-- `src/quantum/qfh.cpp`
-
-### Quantum State Transformations
-Patterns undergo state transitions based on quantum metrics:
-
-1. Quantum -> Collapsed
-- When coherence drops below threshold
-- After rupture detection in QFH
-- On stability score decrease
-
-2. Collapsed -> Stable
-- After sustained high coherence
-- With sufficient generation count
-- Through pattern evolution
-
-Files:
-- `src/quantum/quantum_processor.cpp` 
-- `src/quantum/pattern_evolution.cpp`
-
-### System Interactions
-Data flows between major system components:
-
-```
-API Server <-> Pattern Processor
-Pattern Processor <-> Memory Manager
-Memory Manager <-> Redis Storage
-Redis Storage <-> Pattern Evolution
-```
-
-Core interaction paths:
-- `src/api/server.cpp -> src/quantum/pattern_processor.cpp`
-- `src/quantum/pattern_processor.cpp -> src/memory/manager.cpp`
-- `src/memory/manager.cpp -> src/memory/redis_manager.cpp`
-
-### Pattern Relationship Management
-Patterns form relationships through:
-
-1. Coherence connections
-2. Stability correlations  
-3. Evolution histories
-4. Memory tier co-location
-
-Data flows:
-```
-Pattern A -> Relationship Calculator -> Pattern B
-Relationship Strength -> Memory Tier Manager
-Memory Tier Manager -> Relationship Pruning
-```
-
-Files:
-- `src/quantum/relationship.h`
-- `src/memory/memory_tier_manager.cpp`
+Key file paths:
+- `src/quantum/qbsa.h`
+- `src/DemandLoading/TextureManager.h`
+- `src/cycles/render/`
 
 $END$
 

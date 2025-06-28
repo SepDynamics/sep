@@ -10,6 +10,7 @@
 #include <spdlog/spdlog.h>
 #include <string>
 #include <csignal>
+#include <atomic>
 #include <nlohmann/json.hpp>
 
 #ifndef SEP_HAS_EXCEPTIONS

@@ -5,7 +5,6 @@
 
 namespace sep::quantum {
 
-QuantumProcessorQFH::QuantumProcessorQFH() = default;
 
 const QFHResult& QuantumProcessorQFH::getLastQFHResult() const {
     return lastQFHResult();

@@ -60,6 +60,7 @@ struct QFHResult {
     int rupture_count{0};
     float rupture_ratio{0.0f};
     float flip_ratio{0.0f};
+    float collapse_threshold{0.0f};
     bool collapse_detected{false};
 };
 

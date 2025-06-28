@@ -9,14 +9,19 @@ if(PKG_CONFIG_FOUND)
   pkg_check_modules(PIPEWIRE_PKG libpipewire-0.3 QUIET)
   if(PIPEWIRE_PKG_FOUND)
     message(STATUS "PipeWire found via pkg-config: pipewire-0.3")
-    
+
+    if(NOT PIPEWIRE_PKG_LIBRARY_DIRS)
+      message(WARNING "PipeWire pkg-config returned empty library path; disabling audio module")
+      set(PIPEWIRE_FOUND FALSE)
+    else()
+
     # Verify that the library actually exists at the expected location
     find_library(PIPEWIRE_ACTUAL_LIB
       NAMES pipewire-0.3 libpipewire-0.3
       PATHS ${PIPEWIRE_PKG_LIBRARY_DIRS} /usr/lib /usr/lib64 /usr/local/lib /usr/local/lib64
       NO_DEFAULT_PATH
     )
-      
+
     if(PIPEWIRE_ACTUAL_LIB)
       message(STATUS "Verified PipeWire library: ${PIPEWIRE_ACTUAL_LIB}")
       set(PIPEWIRE_FOUND TRUE)
@@ -25,6 +30,7 @@ if(PKG_CONFIG_FOUND)
     else()
       message(WARNING "PipeWire libraries found by pkg-config but could not verify their existence")
       set(PIPEWIRE_FOUND FALSE)
+    endif()
     endif()
   endif()
 endif()

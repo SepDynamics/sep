@@ -19,8 +19,6 @@
 
 using namespace sep::audio;
 
-#if SEP_HAS_PIPEWIRE
-// Ensure PipeWire is initialized only once
 struct PWInit
 {
     PWInit()
@@ -33,11 +31,9 @@ struct PWInit
     }
 };
 static PWInit pw_init_once;
-#endif // SEP_HAS_PIPEWIRE
 
 PipeWireCapture::PipeWireCapture() = default;
 
-#if SEP_HAS_PIPEWIRE
 namespace {
 const struct pw_stream_events createStreamEvents()
 {
@@ -48,7 +44,6 @@ const struct pw_stream_events createStreamEvents()
     return events;
 }
 }  // namespace
-#endif // SEP_HAS_PIPEWIRE
 
 PipeWireCapture::~PipeWireCapture()
 {
@@ -60,7 +55,6 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
     std::lock_guard<std::mutex> lock(mutex_);
     config_ = config;
 
-#if SEP_HAS_PIPEWIRE
     // Create threading loop
     loop_ = pw_thread_loop_new("sep-audio", nullptr);
     if (!loop_)
@@ -92,15 +86,12 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
     }
 
     return setupStream();
-#else
     spdlog::warn("PipeWire support is disabled or not available");
     return AudioError::INIT_FAILED;
-#endif // SEP_HAS_PIPEWIRE
 }
 
 AudioError PipeWireCapture::setupStream()
 {
-#if SEP_HAS_PIPEWIRE
     static const struct pw_stream_events events = createStreamEvents();
 
     // Create stream with test sink target
@@ -178,18 +169,12 @@ AudioError PipeWireCapture::setupStream()
                       (err & PW_STREAM_FLAG_RT_PROCESS));
         return AudioError::STREAM_FAILED;
     }
-
-    return AudioError::NONE;
-#else
-    return AudioError::INIT_FAILED;
-#endif // SEP_HAS_PIPEWIRE
 }
 
 AudioError PipeWireCapture::start()
 {
     std::lock_guard<std::mutex> lock(mutex_);
 
-#if SEP_HAS_PIPEWIRE
     if (!loop_ || !stream_)
     {
         return AudioError::INIT_FAILED;
@@ -204,10 +189,6 @@ AudioError PipeWireCapture::start()
 
     running_ = true;
     return AudioError::NONE;
-#else
-    spdlog::warn("PipeWire support is disabled or not available");
-    return AudioError::INIT_FAILED;
-#endif // SEP_HAS_PIPEWIRE
 }
 
 AudioError PipeWireCapture::stop()
@@ -215,15 +196,11 @@ AudioError PipeWireCapture::stop()
     std::lock_guard<std::mutex> lock(mutex_);
     running_ = false;
 
-#if SEP_HAS_PIPEWIRE
     if (loop_)
     {
         pw_thread_loop_stop(loop_);
     }
     return AudioError::NONE;
-#else
-    return AudioError::INIT_FAILED;
-#endif // SEP_HAS_PIPEWIRE
 }
 
 void PipeWireCapture::setCallback(AudioCallback callback)
@@ -240,7 +217,6 @@ AudioMetrics PipeWireCapture::getMetrics() const
 
 void PipeWireCapture::cleanup()
 {
-#if SEP_HAS_PIPEWIRE
     if (stream_)
     {
         if (stream_listener_)
@@ -266,10 +242,9 @@ void PipeWireCapture::cleanup()
         pw_thread_loop_destroy(loop_);
         loop_ = nullptr;
     }
-#endif // SEP_HAS_PIPEWIRE
+    return AudioError::STREAM_FAILED;
 }
 
-#if SEP_HAS_PIPEWIRE
 void PipeWireCapture::streamStateChanged(void*        data,
                                          enum pw_stream_state old_state,
                                          enum pw_stream_state new_state,
@@ -346,7 +321,6 @@ void PipeWireCapture::streamProcess(void* data)
 
     pw_stream_queue_buffer(self->stream_, buf);
 }
-#endif // SEP_HAS_PIPEWIRE
 
 std::unique_ptr<AudioCapture> AudioCapture::create()
 {

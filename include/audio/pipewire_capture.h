@@ -10,8 +10,8 @@
 #include <atomic>
 #include <mutex>
 
-#include "capture.h"
-#include "pipewire_includes.h"
+#include "audio/pipewire_includes.h"
+#include "audio/capture.h"
 
 // Forward declarations to avoid exposing PipeWire types in header
 struct pw_context;
@@ -19,6 +19,7 @@ struct pw_core;
 struct pw_stream;
 struct pw_thread_loop;
 struct spa_hook;
+struct pw_stream_state;
 
 namespace sep {
 namespace audio {

@@ -4,8 +4,12 @@
 #include "blender/pattern_bridge.h"
 #include "memory/memory_tier_manager.hpp"
 
+#include "memory/manager.h"  // This is actually the logging manager
 #include "compat/shim.h"
 #include "core/error_handler.h"
+
+// Define namespace alias for clarity
+namespace logging = sep::logging;
 #include <cstdint>
 #include <cstdio>
 #include <exception>

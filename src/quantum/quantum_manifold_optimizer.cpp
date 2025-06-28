@@ -5,10 +5,13 @@
 
 #include "quantum/evolution.h"
 #include "quantum/types.h"
-#include "memory/manager.h"
+#include "memory/manager.h"  // This is actually the logging manager
 #include "memory/memory_tier_manager.hpp"
 #include "compat/math_common.h"
 #include "compat/core.h"
+
+// Define namespace alias for clarity
+namespace logging = sep::logging;
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/norm.hpp>

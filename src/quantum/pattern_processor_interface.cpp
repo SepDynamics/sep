@@ -5,8 +5,11 @@
 #include "quantum/types.h"
 #include "compat/core.h"
 #include "memory/memory_tier_manager.hpp"
-#include "memory/manager.h"
+#include "memory/manager.h"  // This is actually the logging manager
 #include "quantum/quantum_manifold_optimizer.h"
+
+// Define namespace alias for clarity
+namespace logging = sep::logging;
 
 namespace sep::pattern {
 

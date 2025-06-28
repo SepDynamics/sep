@@ -24,7 +24,7 @@
 #include "api/json_helpers.h"
 #include "api/types.h"
 #include "api/sep_engine.h"
-#include "memory/manager.h"
+#include "memory/memory_tier_manager.hpp"
 
 namespace sep::api {
 

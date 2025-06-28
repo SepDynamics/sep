@@ -20,7 +20,7 @@ inline void* redisCommand(redisContext*, const char*, ...)
     return nullptr;
 }
 #endif
-#include "memory/manager.h"
+#include "memory/memory_tier_manager.hpp"
 #include <memory>
 #include <mutex>
 #include <sstream>

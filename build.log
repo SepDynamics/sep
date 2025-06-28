@@ -140,56 +140,175 @@ CMake Warning:
 
 -- Build files have been written to: /sep/build
 Building SEP Engine...
-[  3%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[  3%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  6%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[  6%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[  9%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[  9%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 12%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-[ 13%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 16%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 16%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 18%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 19%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 22%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 25%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 27%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 28%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 30%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 31%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 33%] Linking CXX static library /sep/lib/libcycles_osl.a
-[ 33%] Built target cycles_osl
-[ 34%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 36%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 39%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 43%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
-[ 45%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 48%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 51%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 53%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 59%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 60%] Linking CXX static library libsep_compat.a
-[ 60%] Built target sep_compat
-[ 62%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 65%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 66%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 68%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 69%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[  2%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[  2%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[  4%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[  5%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
+[  8%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 10%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 11%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 16%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 17%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
+[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 29%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 30%] Linking CXX static library /sep/lib/libcycles_osl.a
+[ 32%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 32%] Built target cycles_osl
+[ 33%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 36%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 38%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 39%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 42%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 44%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[ 45%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 48%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 50%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 51%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 55%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 57%] Linking CXX static library libsep_compat.a
+[ 58%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 58%] Built target sep_compat
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 61%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 69%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 70%] Linking CXX static library libsep_core.a
+[ 72%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 72%] Built target sep_core
+[ 73%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+/sep/src/memory/redis_manager.cpp: In constructor ‘sep::persistence::RedisManager::Impl::Impl(const std::string&, int)’:
+/sep/src/memory/redis_manager.cpp:37:27: error: ‘sep::logging::Manager’ has not been declared
+   37 |             sep::logging::Manager::getInstance().getLogger("redis");
+      |                           ^~~~~~~
+/sep/src/memory/redis_manager.cpp: In member function ‘void sep::persistence::RedisManager::Impl::storePattern(std::size_t, const sep::persistence::PatternData&, const std::string&)’:
+/sep/src/memory/redis_manager.cpp:90:37: error: ‘sep::logging::Manager’ has not been declared
+   90 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
+      |                                     ^~~~~~~
+/sep/src/memory/redis_manager.cpp: In member function ‘std::optional<sep::persistence::PatternData> sep::persistence::RedisManager::Impl::loadPattern(std::size_t, const std::string&)’:
+/sep/src/memory/redis_manager.cpp:172:37: error: ‘sep::logging::Manager’ has not been declared
+  172 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
+      |                                     ^~~~~~~
+/sep/src/memory/redis_manager.cpp: In member function ‘std::vector<long unsigned int> sep::persistence::RedisManager::Impl::getPatternIds(const std::string&)’:
+/sep/src/memory/redis_manager.cpp:284:37: error: ‘sep::logging::Manager’ has not been declared
+  284 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
+      |                                     ^~~~~~~
+/sep/src/memory/redis_manager.cpp: In member function ‘void sep::persistence::RedisManager::Impl::removePattern(std::size_t, const std::string&)’:
+/sep/src/memory/redis_manager.cpp:323:37: error: ‘sep::logging::Manager’ has not been declared
+  323 |         auto logger = sep::logging::Manager::getInstance().getLogger("redis");
+      |                                     ^~~~~~~
+[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 77%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+In file included from /sep/src/memory/quantum_coherence_manager.cpp:2:
+/sep/include/quantum/quantum_manifold_optimizer.h:137:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  137 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
+      |                                                      ^~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:154:5: error: ‘cufftHandle’ does not name a type
+  154 |     cufftHandle fft_plan_;
+      |     ^~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:155:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  155 |     ManifoldConfig::CudaConfig config_;
+      |                     ^~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:164:58: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  164 |     explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
+      |                                                          ^~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:181:21: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  181 |     ManifoldConfig::ApiConfig config_;
+      |                     ^~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:191:54: error: ‘SemanticConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  191 |     explicit SemanticProcessor(const ManifoldConfig::SemanticConfig& config);
+      |                                                      ^~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:218:21: error: ‘SemanticConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  218 |     ManifoldConfig::SemanticConfig config_;
+      |                     ^~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:228:56: error: ‘AnalyticsConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  228 |     explicit PerformanceAnalyzer(const ManifoldConfig::AnalyticsConfig& config);
+      |                                                        ^~~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:261:21: error: ‘AnalyticsConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  261 |     ManifoldConfig::AnalyticsConfig config_;
+      |                     ^~~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:306:64: error: unable to find numeric literal operator ‘operator""QUANTUM42’
+  306 |         explicit DeterministicPatternGenerator(uint64_t seed = 0x42QUANTUM42)
+      |                                                                ^~~~~~~~~~~~~
+[ 79%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 80%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+/sep/src/memory/quantum_coherence_manager.cpp:28:7: error: ‘QuantumCoherenceManager’ has not been declared
+   28 | class QuantumCoherenceManager::Impl {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:28:37: error: expected unqualified-id before ‘{’ token
+   28 | class QuantumCoherenceManager::Impl {
+      |                                     ^
+/sep/src/memory/quantum_coherence_manager.cpp:656:1: error: ‘QuantumCoherenceManager’ does not name a type
+  656 | QuantumCoherenceManager::QuantumCoherenceManager(const Config& config)
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:659:1: error: ‘QuantumCoherenceManager’ does not name a type
+  659 | QuantumCoherenceManager::~QuantumCoherenceManager() = default;
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:661:1: error: ‘QuantumCoherenceManager’ does not name a type
+  661 | QuantumCoherenceManager::CoherenceResult
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:666:13: error: ‘QuantumCoherenceManager’ was not declared in this scope
+  666 | std::vector<QuantumCoherenceManager::TierMigration>
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:666:51: error: template argument 1 is invalid
+  666 | std::vector<QuantumCoherenceManager::TierMigration>
+      |                                                   ^
+/sep/src/memory/quantum_coherence_manager.cpp:666:51: error: template argument 2 is invalid
+/sep/src/memory/quantum_coherence_manager.cpp:667:1: error: ‘QuantumCoherenceManager’ has not been declared
+  667 | QuantumCoherenceManager::optimizeMemoryLayout() {
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp: In function ‘int sep::memory::optimizeMemoryLayout()’:
+/sep/src/memory/quantum_coherence_manager.cpp:668:12: error: ‘impl_’ was not declared in this scope
+  668 |     return impl_->optimizeMemoryLayout();
+      |            ^~~~~
+/sep/src/memory/quantum_coherence_manager.cpp: At global scope:
+/sep/src/memory/quantum_coherence_manager.cpp:671:1: error: ‘QuantumCoherenceManager’ does not name a type
+  671 | QuantumCoherenceManager::EntanglementGraph
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:676:6: error: ‘QuantumCoherenceManager’ has not been declared
+  676 | void QuantumCoherenceManager::applyCoherenceDecay(float decay_factor) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp: In function ‘void sep::memory::applyCoherenceDecay(float)’:
+/sep/src/memory/quantum_coherence_manager.cpp:677:5: error: ‘impl_’ was not declared in this scope
+  677 |     impl_->applyCoherenceDecay(decay_factor);
+      |     ^~~~~
+/sep/src/memory/quantum_coherence_manager.cpp: At global scope:
+/sep/src/memory/quantum_coherence_manager.cpp:680:1: error: ‘QuantumCoherenceManager’ does not name a type
+  680 | QuantumCoherenceManager::CoherenceSnapshot
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:685:6: error: ‘QuantumCoherenceManager’ has not been declared
+  685 | bool QuantumCoherenceManager::restoreFromSnapshot(const CoherenceSnapshot& snapshot) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:685:57: error: ‘CoherenceSnapshot’ does not name a type
+  685 | bool QuantumCoherenceManager::restoreFromSnapshot(const CoherenceSnapshot& snapshot) {
+      |                                                         ^~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp: In function ‘bool sep::memory::restoreFromSnapshot(const int&)’:
+/sep/src/memory/quantum_coherence_manager.cpp:686:12: error: ‘impl_’ was not declared in this scope
+  686 |     return impl_->restoreFromSnapshot(snapshot);
+      |            ^~~~~
+[ 82%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 83%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 85%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 86%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:2:
 /sep/include/quantum/quantum_manifold_optimizer.h:137:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   137 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
@@ -221,229 +340,193 @@ In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:2:
 /sep/include/quantum/quantum_manifold_optimizer.h:306:64: error: unable to find numeric literal operator ‘operator""QUANTUM42’
   306 |         explicit DeterministicPatternGenerator(uint64_t seed = 0x42QUANTUM42)
       |                                                                ^~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:229:1: error: no declaration matches ‘sep::quantum::manifold::APICoherenceModulator::APICoherenceModulator(double)’
-  229 | APICoherenceModulator::APICoherenceModulator(double base_coherence)
-      | ^~~~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:162:7: note: candidates are: ‘sep::quantum::manifold::APICoherenceModulator::APICoherenceModulator(sep::quantum::manifold::APICoherenceModulator&&)’
-  162 | class APICoherenceModulator {
-      |       ^~~~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:162:7: note:                 ‘sep::quantum::manifold::APICoherenceModulator::APICoherenceModulator(const sep::quantum::manifold::APICoherenceModulator&)’
-/sep/include/quantum/quantum_manifold_optimizer.h:164:14: note:                 ‘sep::quantum::manifold::APICoherenceModulator::APICoherenceModulator(const int&)’
+In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:6:
+/sep/include/memory/manager.h:78:18: error: ‘level_enum’ in ‘using sep::spdlog::level = enum spdlog::level::level_enum’ {aka ‘enum spdlog::level::level_enum’} does not name a type
+   78 |   spdlog::level::level_enum toSpdLogLevel(Level level);
+      |                  ^~~~~~~~~~
+[ 88%] Linking CXX static library libsep_audio.a
+/sep/src/api/server.cpp: In member function ‘void sep::api::SEPApiServer::setup_logging()’:
+/sep/src/api/server.cpp:250:21: error: ‘initializeLogging’ is not a member of ‘sep::logging’
+  250 |     ::sep::logging::initializeLogging();
+      |                     ^~~~~~~~~~~~~~~~~
+[ 88%] Built target sep_audio
+In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:3:
+/sep/include/quantum/quantum_manifold_optimizer.h:137:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  137 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
+      |                                                      ^~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:154:5: error: ‘cufftHandle’ does not name a type
+  154 |     cufftHandle fft_plan_;
+      |     ^~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:155:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  155 |     ManifoldConfig::CudaConfig config_;
+      |                     ^~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:164:58: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   164 |     explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
-      |              ^~~~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:162:7: note: ‘class sep::quantum::manifold::APICoherenceModulator’ defined here
-  162 | class APICoherenceModulator {
-      |       ^~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp: In member function ‘std::vector<double> sep::quantum::manifold::APICoherenceModulator::extractCoherenceFactors(const std::string&, const std::unordered_map<std::__cxx11::basic_string<char>, double>&)’:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:281:23: error: ‘base_coherence_’ was not declared in this scope
-  281 |     factors.push_back(base_coherence_);
-      |                       ^~~~~~~~~~~~~~~
-In file included from /sep/include/memory/spdlog_isolation.h:299,
-                 from /sep/include/quantum/quantum_manifold_optimizer.h:9:
-/sep/src/quantum/quantum_manifold_optimizer.cpp: In member function ‘void sep::quantum::manifold::QuantumManifoldOptimizationEngine::initialize()’:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:315:5: error: ‘default_logger_raw’ is not a member of ‘sep::spdlog’; did you mean ‘spdlog::default_logger_raw’?
-  315 |     SPDLOG_INFO("Initializing Quantum Manifold Optimization Engine");
-      |     ^~~~~~~~~~~
-In file included from /usr/local/include/spdlog/spdlog.h:354:
-/usr/local/include/spdlog/spdlog-inl.h:84:31: note: ‘spdlog::default_logger_raw’ declared here
-   84 | SPDLOG_INLINE spdlog::logger *default_logger_raw() {
-      |                               ^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:315:5: error: ‘source_loc’ is not a member of ‘sep::spdlog’; did you mean ‘spdlog::source_loc’?
-  315 |     SPDLOG_INFO("Initializing Quantum Manifold Optimization Engine");
-      |     ^~~~~~~~~~~
-In file included from /usr/local/include/spdlog/spdlog.h:12:
-/usr/local/include/spdlog/common.h:315:8: note: ‘spdlog::source_loc’ declared here
-  315 | struct source_loc {
-      |        ^~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:335:5: error: ‘default_logger_raw’ is not a member of ‘sep::spdlog’; did you mean ‘spdlog::default_logger_raw’?
-  335 |     SPDLOG_INFO("Quantum Manifold Optimization Engine initialized successfully");
-      |     ^~~~~~~~~~~
-/usr/local/include/spdlog/spdlog-inl.h:84:31: note: ‘spdlog::default_logger_raw’ declared here
-   84 | SPDLOG_INLINE spdlog::logger *default_logger_raw() {
-      |                               ^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:335:5: error: ‘source_loc’ is not a member of ‘sep::spdlog’; did you mean ‘spdlog::source_loc’?
-  335 |     SPDLOG_INFO("Quantum Manifold Optimization Engine initialized successfully");
-      |     ^~~~~~~~~~~
-/usr/local/include/spdlog/common.h:315:8: note: ‘spdlog::source_loc’ declared here
-  315 | struct source_loc {
-      |        ^~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp: In member function ‘sep::quantum::manifold::ManifoldValidator::ValidationResult sep::quantum::manifold::QuantumManifoldOptimizationEngine::validate()’:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:346:5: error: ‘default_logger_raw’ is not a member of ‘sep::spdlog’; did you mean ‘spdlog::default_logger_raw’?
-  346 |     SPDLOG_INFO("Starting comprehensive system validation");
-      |     ^~~~~~~~~~~
-/usr/local/include/spdlog/spdlog-inl.h:84:31: note: ‘spdlog::default_logger_raw’ declared here
-   84 | SPDLOG_INLINE spdlog::logger *default_logger_raw() {
-      |                               ^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:346:5: error: ‘source_loc’ is not a member of ‘sep::spdlog’; did you mean ‘spdlog::source_loc’?
-  346 |     SPDLOG_INFO("Starting comprehensive system validation");
-      |     ^~~~~~~~~~~
-/usr/local/include/spdlog/common.h:315:8: note: ‘spdlog::source_loc’ declared here
-  315 | struct source_loc {
-      |        ^~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp: At global scope:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:368:1: error: ‘CUDAQuantumKernel’ does not name a type
-  368 | CUDAQuantumKernel::CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config)
-      | ^~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:387:1: error: ‘CUDAQuantumKernel’ does not name a type
-  387 | CUDAQuantumKernel::~CUDAQuantumKernel() {
-      | ^~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:420:6: error: ‘CUDAQuantumKernel’ has not been declared
-  420 | void CUDAQuantumKernel::coherenceCalculationKernel(const float* patterns_a, const float* patterns_b,
-      |      ^~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:452:1: error: ‘APICoherenceModulator’ does not name a type
-  452 | APICoherenceModulator::CoherenceResponse
-      | ^~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:491:6: error: ‘QuantumManifoldOptimizationEngine’ has not been declared
-  491 | void QuantumManifoldOptimizationEngine::initialize() {
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp: In function ‘void initialize()’:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:496:5: error: ‘memory_optimizer_’ was not declared in this scope
-  496 |     memory_optimizer_ = std::make_unique<AdvancedMemoryTierOptimizer>(config_);
-      |     ^~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:496:42: error: ‘AdvancedMemoryTierOptimizer’ was not declared in this scope; did you mean ‘sep::quantum::manifold::AdvancedMemoryTierOptimizer’?
-  496 |     memory_optimizer_ = std::make_unique<AdvancedMemoryTierOptimizer>(config_);
-      |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                          sep::quantum::manifold::AdvancedMemoryTierOptimizer
-/sep/include/quantum/quantum_manifold_optimizer.h:81:7: note: ‘sep::quantum::manifold::AdvancedMemoryTierOptimizer’ declared here
-   81 | class AdvancedMemoryTierOptimizer {
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:496:71: error: ‘config_’ was not declared in this scope
-  496 |     memory_optimizer_ = std::make_unique<AdvancedMemoryTierOptimizer>(config_);
-      |                                                                       ^~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:497:5: error: ‘quantum_processor_’ was not declared in this scope
-  497 |     quantum_processor_ = std::make_unique<QuantumManifoldProcessor>(config_);
-      |     ^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:497:43: error: ‘QuantumManifoldProcessor’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumManifoldProcessor’?
-  497 |     quantum_processor_ = std::make_unique<QuantumManifoldProcessor>(config_);
-      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                                           sep::quantum::manifold::QuantumManifoldProcessor
-/sep/include/quantum/quantum_manifold_optimizer.h:105:7: note: ‘sep::quantum::manifold::QuantumManifoldProcessor’ declared here
-  105 | class QuantumManifoldProcessor : public QuantumProcessorQFH {
+      |                                                          ^~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:181:21: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  181 |     ManifoldConfig::ApiConfig config_;
+      |                     ^~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:191:54: error: ‘SemanticConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  191 |     explicit SemanticProcessor(const ManifoldConfig::SemanticConfig& config);
+      |                                                      ^~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:218:21: error: ‘SemanticConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  218 |     ManifoldConfig::SemanticConfig config_;
+      |                     ^~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:228:56: error: ‘AnalyticsConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  228 |     explicit PerformanceAnalyzer(const ManifoldConfig::AnalyticsConfig& config);
+      |                                                        ^~~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:261:21: error: ‘AnalyticsConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  261 |     ManifoldConfig::AnalyticsConfig config_;
+      |                     ^~~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:306:64: error: unable to find numeric literal operator ‘operator""QUANTUM42’
+  306 |         explicit DeterministicPatternGenerator(uint64_t seed = 0x42QUANTUM42)
+      |                                                                ^~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:55:7: error: ‘QuantumManifoldOptimizer’ has not been declared
+   55 | class QuantumManifoldOptimizer::Impl {
       |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:498:5: error: ‘api_modulator_’ was not declared in this scope
-  498 |     api_modulator_ = std::make_unique<APICoherenceModulator>(config_.api);
-      |     ^~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:498:39: error: ‘APICoherenceModulator’ was not declared in this scope; did you mean ‘sep::quantum::manifold::APICoherenceModulator’?
-  498 |     api_modulator_ = std::make_unique<APICoherenceModulator>(config_.api);
-      |                                       ^~~~~~~~~~~~~~~~~~~~~
-      |                                       sep::quantum::manifold::APICoherenceModulator
-/sep/include/quantum/quantum_manifold_optimizer.h:162:7: note: ‘sep::quantum::manifold::APICoherenceModulator’ declared here
-  162 | class APICoherenceModulator {
-      |       ^~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:499:5: error: ‘semantic_processor_’ was not declared in this scope
-  499 |     semantic_processor_ = std::make_unique<SemanticProcessor>(config_.semantic);
-      |     ^~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:499:44: error: ‘SemanticProcessor’ was not declared in this scope; did you mean ‘sep::quantum::manifold::SemanticProcessor’?
-  499 |     semantic_processor_ = std::make_unique<SemanticProcessor>(config_.semantic);
-      |                                            ^~~~~~~~~~~~~~~~~
-      |                                            sep::quantum::manifold::SemanticProcessor
-/sep/include/quantum/quantum_manifold_optimizer.h:189:7: note: ‘sep::quantum::manifold::SemanticProcessor’ declared here
-  189 | class SemanticProcessor {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:500:5: error: ‘performance_analyzer_’ was not declared in this scope
-  500 |     performance_analyzer_ = std::make_unique<PerformanceAnalyzer>(config_.analytics);
-      |     ^~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:500:46: error: ‘PerformanceAnalyzer’ was not declared in this scope; did you mean ‘sep::quantum::manifold::PerformanceAnalyzer’?
-  500 |     performance_analyzer_ = std::make_unique<PerformanceAnalyzer>(config_.analytics);
-      |                                              ^~~~~~~~~~~~~~~~~~~
-      |                                              sep::quantum::manifold::PerformanceAnalyzer
-/sep/include/quantum/quantum_manifold_optimizer.h:226:7: note: ‘sep::quantum::manifold::PerformanceAnalyzer’ declared here
-  226 | class PerformanceAnalyzer {
-      |       ^~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:501:5: error: ‘validator_’ was not declared in this scope
-  501 |     validator_ = std::make_unique<ManifoldValidator>();
-      |     ^~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:501:35: error: ‘ManifoldValidator’ was not declared in this scope; did you mean ‘sep::quantum::manifold::ManifoldValidator’?
-  501 |     validator_ = std::make_unique<ManifoldValidator>();
-      |                                   ^~~~~~~~~~~~~~~~~
-      |                                   sep::quantum::manifold::ManifoldValidator
-/sep/include/quantum/quantum_manifold_optimizer.h:270:7: note: ‘sep::quantum::manifold::ManifoldValidator’ declared here
-  270 | class ManifoldValidator {
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:501:53: error: no matching function for call to ‘make_unique<<expression error> >()’
-  501 |     validator_ = std::make_unique<ManifoldValidator>();
-      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/compat/cuda.h:14,
-                 from /sep/include/core/types.h:10,
-                 from /sep/include/memory/types.h:6,
-                 from /sep/include/quantum/quantum_processor_qfh.h:4,
-                 from /sep/include/quantum/quantum_manifold_optimizer.h:6:
-/usr/include/c++/14/bits/unique_ptr.h:1076:5: note: candidate: ‘template<class _Tp, class ... _Args> std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...)’
- 1076 |     make_unique(_Args&&... __args)
-      |     ^~~~~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:1076:5: note:   template argument deduction/substitution failed:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:501:53: error: template argument 1 is invalid
-  501 |     validator_ = std::make_unique<ManifoldValidator>();
-      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:1091:5: note: candidate: ‘template<class _Tp> std::__detail::__unique_ptr_array_t<_Tp> std::make_unique(size_t)’
- 1091 |     make_unique(size_t __num)
-      |     ^~~~~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:1091:5: note:   candidate expects 1 argument, 0 provided
-/usr/include/c++/14/bits/unique_ptr.h:1101:5: note: candidate: ‘template<class _Tp, class ... _Args> std::__detail::__invalid_make_unique_t<_Tp> std::make_unique(_Args&& ...)’ (deleted)
- 1101 |     make_unique(_Args&&...) = delete;
-      |     ^~~~~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:1101:5: note:   template argument deduction/substitution failed:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:501:53: error: template argument 1 is invalid
-  501 |     validator_ = std::make_unique<ManifoldValidator>();
-      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:504:5: error: ‘integrateWithExistingMemoryTiers’ was not declared in this scope
-  504 |     integrateWithExistingMemoryTiers();
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:505:5: error: ‘setupQuantumProcessingPipeline’ was not declared in this scope
-  505 |     setupQuantumProcessingPipeline();
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:508:5: error: ‘running_’ was not declared in this scope
-  508 |     running_ = true;
-      |     ^~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:509:5: error: ‘processing_thread_’ was not declared in this scope
-  509 |     processing_thread_ = std::thread(&QuantumManifoldOptimizationEngine::processingLoop, this);
-      |     ^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:509:39: error: ‘QuantumManifoldOptimizationEngine’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumManifoldOptimizationEngine’?
-  509 |     processing_thread_ = std::thread(&QuantumManifoldOptimizationEngine::processingLoop, this);
-      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                       sep::quantum::manifold::QuantumManifoldOptimizationEngine
-/sep/include/quantum/quantum_manifold_optimizer.h:343:7: note: ‘sep::quantum::manifold::QuantumManifoldOptimizationEngine’ declared here
-  343 | class QuantumManifoldOptimizationEngine {
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:509:90: error: invalid use of ‘this’ in non-member function
-  509 |     processing_thread_ = std::thread(&QuantumManifoldOptimizationEngine::processingLoop, this);
-      |                                                                                          ^~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:511:5: error: ‘LOG_INFO’ was not declared in this scope; did you mean ‘SPDLOG_INFO’?
-  511 |     LOG_INFO("Quantum Manifold Optimization Engine initialized successfully");
-      |     ^~~~~~~~
-      |     SPDLOG_INFO
+/sep/src/quantum/quantum_manifold_optimizer.cpp:55:38: error: expected unqualified-id before ‘{’ token
+   55 | class QuantumManifoldOptimizer::Impl {
+      |                                      ^
+/sep/src/quantum/quantum_manifold_optimizer.cpp:513:1: error: ‘QuantumManifoldOptimizer’ does not name a type
+  513 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:516:1: error: ‘QuantumManifoldOptimizer’ does not name a type
+  516 | QuantumManifoldOptimizer::~QuantumManifoldOptimizer() = default;
+      | ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:518:1: error: ‘QuantumManifoldOptimizer’ does not name a type
+  518 | QuantumManifoldOptimizer::OptimizationResult
+      | ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:524:6: error: ‘QuantumManifoldOptimizer’ has not been declared
+  524 | void QuantumManifoldOptimizer::updateManifoldGeometry(const std::vector<QuantumState>& quantum_states) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp: In function ‘void sep::quantum::updateManifoldGeometry(const std::vector<QuantumState>&)’:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:525:5: error: ‘impl_’ was not declared in this scope
+  525 |     impl_->updateManifoldGeometry(quantum_states);
+      |     ^~~~~
 /sep/src/quantum/quantum_manifold_optimizer.cpp: At global scope:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:514:6: error: ‘QuantumManifoldOptimizationEngine’ has not been declared
-  514 | void QuantumManifoldOptimizationEngine::processingLoop() {
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp: In function ‘void processingLoop()’:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:515:12: error: ‘running_’ was not declared in this scope
-  515 |     while (running_) {
-      |            ^~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:528:7: error: ‘QuantumManifoldOptimizer’ has not been declared
+  528 | float QuantumManifoldOptimizer::computeManifoldCoherence(const glm::vec3& position) const {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:528:85: error: non-member function ‘float sep::quantum::computeManifoldCoherence(const glm::vec3&)’ cannot have cv-qualifier
+  528 | float QuantumManifoldOptimizer::computeManifoldCoherence(const glm::vec3& position) const {
+      |                                                                                     ^~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp: In function ‘float sep::quantum::computeManifoldCoherence(const glm::vec3&)’:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:529:12: error: ‘impl_’ was not declared in this scope
+  529 |     return impl_->computeManifoldCoherence(position);
+      |            ^~~~~
 /sep/src/quantum/quantum_manifold_optimizer.cpp: At global scope:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:525:1: error: ‘ManifoldValidator’ does not name a type
-  525 | ManifoldValidator::ValidationResult QuantumManifoldOptimizationEngine::validate() {
-      | ^~~~~~~~~~~~~~~~~
-[ 74%] Linking CXX static library libsep_audio.a
-[ 74%] Built target sep_audio
-[ 75%] Linking CXX static library libsep_core.a
-[ 75%] Built target sep_core
-[ 78%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 78%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 80%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 83%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 86%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 87%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:233: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
+/sep/src/quantum/quantum_manifold_optimizer.cpp:532:24: error: ‘QuantumManifoldOptimizer’ has not been declared
+  532 | std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::vec3& position,
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:533:91: error: non-member function ‘std::vector<glm::vec<3, float, glm::packed_highp> > sep::quantum::sampleTangentSpace(const glm::vec3&, sep::uint32_t)’ cannot have cv-qualifier
+  533 |                                                                     uint32_t num_samples) const {
+      |                                                                                           ^~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp: In function ‘std::vector<glm::vec<3, float, glm::packed_highp> > sep::quantum::sampleTangentSpace(const glm::vec3&, sep::uint32_t)’:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:534:12: error: ‘impl_’ was not declared in this scope
+  534 |     return impl_->sampleTangentSpace(position, num_samples);
+      |            ^~~~~
+In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:11:
+/sep/include/memory/manager.h:78:18: error: ‘level_enum’ in ‘using sep::spdlog::level = enum spdlog::level::level_enum’ {aka ‘enum spdlog::level::level_enum’} does not name a type
+   78 |   spdlog::level::level_enum toSpdLogLevel(Level level);
+      |                  ^~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp: At global scope:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:538:17: error: ‘QuantumManifoldOptimizer’ was not declared in this scope
+  538 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:538:41: error: template argument 1 is invalid
+  538 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+      |                                         ^
+/sep/src/quantum/quantum_manifold_optimizer.cpp:538:41: error: template argument 2 is invalid
+/sep/src/quantum/quantum_manifold_optimizer.cpp:538:80: error: ‘QuantumManifoldOptimizer’ does not name a type
+  538 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+      |                                                                                ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:538:112: error: expected unqualified-id before ‘&’ token
+  538 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+      |                                                                                                                ^
+/sep/src/quantum/quantum_manifold_optimizer.cpp:538:112: error: expected ‘)’ before ‘&’ token
+  538 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+      |                                                                         ~                                      ^
+      |                                                                                                                )
+/sep/src/quantum/quantum_manifold_optimizer.cpp:538:114: error: expected initializer before ‘config’
+  538 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
+      |                                                                                                                  ^~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:43:10: error: variable or field ‘PatternEvolutionBridge’ declared void
+   43 |     void PatternEvolutionBridge;
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:44:10: error: variable or field ‘PhaseTransition’ declared void
+   44 |     void PhaseTransition;
+      |          ^~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:51:7: error: ‘PatternEvolutionBridge’ has not been declared
+   51 | class PatternEvolutionBridge::Impl {
+      |       ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:51:36: error: expected unqualified-id before ‘{’ token
+   51 | class PatternEvolutionBridge::Impl {
+      |                                    ^
+/sep/src/quantum/pattern_evolution_bridge.cpp:479:1: error: ‘PatternEvolutionBridge’ does not name a type
+  479 | PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
+      | ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:481:5: error: ‘PatternEvolutionBridge’ does not name a type
+  481 |     PatternEvolutionBridge::~PatternEvolutionBridge() = default;
+      |     ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:482:10: error: ‘PatternEvolutionBridge’ has not been declared
+  482 |     void PatternEvolutionBridge::initializeEvolutionState() {
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In function ‘void sep::quantum::initializeEvolutionState()’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:483:9: error: ‘impl_’ was not declared in this scope
+  483 |         impl_->evolution_state_->active_patterns.clear();
+      |         ^~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: At global scope:
+/sep/src/quantum/pattern_evolution_bridge.cpp:491:10: error: ‘PatternEvolutionBridge’ has not been declared
+  491 |     void PatternEvolutionBridge::updatePatterns(const std::vector<Pattern>& patterns) {
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In function ‘void sep::quantum::updatePatterns(const std::vector<Pattern>&)’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:505:43: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘entanglement_graph’
+  505 |                     pattern.quantum_state.entanglement_graph
+      |                                           ^~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:507:55: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘energy’
+  507 |                 total_energy += pattern.quantum_state.energy;
+      |                                                       ^~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:511:51: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  511 |                 entropy += -pattern.quantum_state.phase * std::log2(pattern.quantum_state.phase);
+      |                                                   ^~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:511:91: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  511 |                 entropy += -pattern.quantum_state.phase * std::log2(pattern.quantum_state.phase);
+      |                                                                                           ^~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:514:47: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘entanglement_graph’
+  514 |             entropy += -pattern.quantum_state.entanglement_graph * std::log2(pattern.quantum_state.entanglement_graph);
+      |                                               ^~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:514:100: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘entanglement_graph’
+  514 |             entropy += -pattern.quantum_state.entanglement_graph * std::log2(pattern.quantum_state.entanglement_graph);
+      |                                                                                                    ^~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:517:50: error: ‘impl_’ was not declared in this scope
+  517 |                 std::lock_guard<std::mutex> lock(impl_->state_mutex_);
+      |                                                  ^~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: At global scope:
+/sep/src/quantum/pattern_evolution_bridge.cpp:527:13: error: ‘PatternEvolutionBridge’ has not been declared
+  527 |             PatternEvolutionBridge::applyCNOTGate(std::vector<Pattern>& patterns, uint32_t control, uint32_t target) {
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp: In function ‘void sep::quantum::applyCNOTGate(std::vector<Pattern>&, sep::uint32_t, sep::uint32_t)’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:533:53: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
+  533 |                     float c_phase = c.quantum_state.phase;
+      |                                                     ^~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:535:53: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
+  535 |                     float t_phase = t.quantum_state.phase;
+      |                                                     ^~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:537:37: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
+  537 |                     t.quantum_state.phase = c_phase + t_phase;
+      |                                     ^~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:540:13: error: expected unqualified-id before ‘}’ token
+  540 |             }
+      |             ^
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
 make[1]: *** Waiting for unfinished jobs....
-[ 89%] Linking CXX static library libsep_memory.a
-[ 89%] Built target sep_memory
-[ 90%] Linking CXX static library libsep_api.a
-[ 90%] Built target sep_api
-[ 92%] Linking CXX static library libsep_blender.a
-[ 92%] Built target sep_blender
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:247: src/api/CMakeFiles/sep_api.dir/server.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:233: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:247: src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
+[ 89%] Linking CXX static library libsep_blender.a
+[ 89%] Built target sep_blender
 make: *** [Makefile:136: all] Error 2

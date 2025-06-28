@@ -18,6 +18,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
+#include "memory/manager.h"
 
 namespace sep::api {
 

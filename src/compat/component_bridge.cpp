@@ -1,15 +1,10 @@
 #include "compat/component_bridge.h"
+#include "audio/capture.h"
+#include "blender/bridge.h"
+#include "blender/cycles_renderer.h"
 
 #if defined(SEP_HAS_PIPEWIRE) && SEP_HAS_PIPEWIRE
 #include "audio/pipewire_capture.h"
-#endif
-
-#if defined(SEP_HAS_BLENDER) && SEP_HAS_BLENDER
-#include "blender/bridge.h"
-#endif
-
-#if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES
-#include "blender/cycles_renderer.h"
 #endif
 
 namespace sep {

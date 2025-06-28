@@ -326,6 +326,31 @@ nm -u build/sep_engine | grep -E "(ccl::|osd::)" || echo "✓ No undefined Cycle
    sudo ln -sf /usr/lib64/libosdGPU.so.3.5.0 /usr/lib64/libosdGPU.so.3.6.0
    ```
 
+## Component Dependencies
+
+The build is split into optional modules controlled by CMake options.  Each
+module depends on external libraries as shown below:
+
+| Component            | CMake Option        | Required Libraries                 |
+|----------------------|---------------------|------------------------------------|
+| Audio Capture        | `SEP_HAS_PIPEWIRE`  | libpipewire-0.3                    |
+| Renderer (Cycles)    | `SEP_HAS_CYCLES`    | Cycles, OpenImageIO, OpenSubdiv     |
+| Redis Integration    | `SEP_HAS_HIREDIS`   | hiredis                             |
+| Path Guiding         | `SEP_HAS_OPENPGL`   | OpenPGL                             |
+
+Disable a component by passing `-D<OPTION>=OFF` when invoking CMake.  If a
+library is missing, the `component_bridge` infrastructure selects a stub
+implementation so the engine still compiles.
+
+### Troubleshooting Missing Libraries
+
+1. Ensure the development package for the library is installed.
+2. Add custom paths using `CMAKE_PREFIX_PATH` or environment variables.
+3. If OpenSubdiv libraries are installed system-wide, symlinks can be created in
+   the `lib/` directory as shown above.
+4. When disabling a component, verify the corresponding `SEP_HAS_*` option is
+   set to `OFF` to avoid unresolved symbols.
+
 ## Conclusion
 
 The SEP Engine's build system requires systematic refactoring to properly bridge stub implementations with real components. The key is implementing a flexible component detection and loading system that gracefully degrades when optional dependencies are unavailable. This approach maintains build determinism while supporting diverse deployment environments.

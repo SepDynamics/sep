@@ -190,6 +190,26 @@ find_library(BLOSC_LIBRARY blosc)
 find_library(ZSTD_LIBRARY zstd)
 find_library(PUGIXML_LIBRARY pugixml)
 
+# Path guiding via OpenPGL
+find_library(OpenPGL_LIBRARY
+    NAMES OpenPGL pgl
+    PATHS
+        ${CMAKE_SOURCE_DIR}/lib
+        ${CMAKE_INSTALL_PREFIX}/lib
+        /usr/lib64
+        /usr/local/lib
+        /usr/lib
+)
+if(OpenPGL_LIBRARY)
+    set(SEP_HAS_OPENPGL 1)
+    message(STATUS "Found OpenPGL: ${OpenPGL_LIBRARY}")
+else()
+    set(SEP_HAS_OPENPGL 0)
+    message(WARNING "OpenPGL not found. Path guiding features disabled")
+    set(OpenPGL_LIBRARY "")
+endif()
+add_compile_definitions(SEP_HAS_OPENPGL=${SEP_HAS_OPENPGL})
+
 # === Include Directories Configuration ===
 set(SEP_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/include
@@ -277,6 +297,7 @@ set(EXTERNAL_LINK_ORDER
     ${BLOSC_LIBRARY}
     ${ZSTD_LIBRARY}
     ${PUGIXML_LIBRARY}
+    ${OpenPGL_LIBRARY}
     ${GLOG_LIBRARY}
     ${GFLAGS_LIBRARY}
     

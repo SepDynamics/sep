@@ -157,6 +157,25 @@ endif()
 find_library(OPENSUBDIV_CPU_LIBRARY NAMES osdCPU)
 find_library(OPENSUBDIV_GPU_LIBRARY NAMES osdGPU)
 
+# OpenPGL (Path Guiding Library)
+find_library(OpenPGL_LIBRARY
+    NAMES openpgl pgl
+    PATHS
+        ${CMAKE_INSTALL_PREFIX}/lib
+        /usr/lib64
+        /usr/local/lib
+        /usr/lib
+)
+if(OpenPGL_LIBRARY)
+    set(SEP_HAS_OPENPGL 1)
+    message(STATUS "[FOUND] OpenPGL: ${OpenPGL_LIBRARY}")
+else()
+    set(SEP_HAS_OPENPGL 0)
+    message(WARNING "OpenPGL library not found. Path guiding disabled.")
+    set(OpenPGL_LIBRARY "")
+endif()
+add_compile_definitions(SEP_HAS_OPENPGL=${SEP_HAS_OPENPGL})
+
 # Other critical dependencies
 find_library(OPENIMAGEIO_LIBRARY OpenImageIO)
 find_library(OPENIMAGEIO_UTIL_LIBRARY OpenImageIO_Util)
@@ -236,6 +255,9 @@ set(EXTERNAL_LINK_ORDER
     ${OPENSUBDIV_CPU_LIBRARY}
     ${OPENSUBDIV_GPU_LIBRARY}
     ${TBB2_LIBRARY}  # Specific version for OpenSubdiv
+
+    # Path guiding
+    ${OpenPGL_LIBRARY}
     
     # Core graphics libraries
     ${OPENIMAGEIO_LIBRARY}

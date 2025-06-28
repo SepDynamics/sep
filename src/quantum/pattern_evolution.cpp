@@ -5,6 +5,7 @@
 #include <nlohmann/json.hpp>
 #include "compat/shim.h"
 #include "api/sep_engine.h"
+#include "quantum/pattern_evolution_bridge.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

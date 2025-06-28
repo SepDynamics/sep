@@ -1,5 +1,7 @@
 #include "quantum/processor.h"
 #include "quantum/types.h"
+#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/quantum_processor_qfh.h"
 #include <glm/glm.hpp>
 #include <mutex>
 #include <unordered_map>

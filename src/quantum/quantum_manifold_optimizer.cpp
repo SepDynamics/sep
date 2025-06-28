@@ -1,6 +1,8 @@
 // /sep/src/quantum/quantum_manifold_optimizer.cpp
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
+#include "quantum/pattern_evolution_bridge.h"
+
 #include "quantum/evolution.h"
 #include "quantum/types.h"
 #include "memory/manager.h"

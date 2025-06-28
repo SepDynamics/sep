@@ -2,6 +2,8 @@
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"
+#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/types.h"
 #include <algorithm>
 #include <cmath>
 #include <glm/glm.hpp>

@@ -1,5 +1,6 @@
 // /sep/src/quantum/pattern_evolution_bridge.cpp
 #include "memory/memory_tier_manager.hpp"
+#include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/quantum_processor.h"

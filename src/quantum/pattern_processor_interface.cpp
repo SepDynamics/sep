@@ -1,4 +1,12 @@
 #include "quantum/processor.h"
+#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/quantum_processor_qfh.h"
+#include "quantum/quantum_processor.h"
+#include "quantum/types.h"
+#include "compat/core.h"
+#include "memory/memory_tier_manager.hpp"
+#include "memory/manager.h"
+#include "quantum/quantum_manifold_optimizer.h"
 
 namespace sep::pattern {
 

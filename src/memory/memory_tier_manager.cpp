@@ -5,6 +5,8 @@
 #include "memory/logger.hpp"
 #include "memory/memory_tier.hpp"
 #include "memory/memory_tier_manager.hpp"
+#include "quantum/pattern_evolution_bridge.h"
+
 
 namespace sep::memory {
 

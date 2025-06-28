@@ -18,120 +18,6 @@
 
 namespace sep::memory {
 
-// Correct and unified definition of QuantumCoherenceManager class and its nested types
-class QuantumCoherenceManager {
-public:
-    struct Config {
-        bool enable_cuda{false};
-        size_t max_patterns{10000};
-        float anomaly_threshold{0.1f};
-    };
-
-    enum class MigrationReason {
-        HighCoherence,
-        HighStability,
-        FrequentAccess,
-        Entanglement,
-        MemoryPressure,
-        LowActivity
-    };
-
-    struct TierMigration {
-        std::string pattern_id;
-        MemoryTierEnum from_tier{MemoryTierEnum::STM};
-        MemoryTierEnum to_tier{MemoryTierEnum::STM};
-        float coherence{0.0f};
-        MigrationReason reason{MigrationReason::LowActivity};
-    };
-
-    enum class AnomalyType { ExcessiveCoherence, InsufficientCoherence, RapidChange };
-
-    struct CoherenceAnomaly {
-        std::string pattern_id;
-        float coherence_value{0.0f};
-        float expected_value{0.0f};
-        float severity{0.0f};
-        AnomalyType type{AnomalyType::RapidChange};
-    };
-
-    struct CoherenceMetrics {
-        float global_coherence{1.0f};
-        float tier_coherence[3]{1.0f,1.0f,1.0f};
-        float tier_fragmentation[3]{0.0f, 0.0f, 0.0f}; // Added missing field
-        uint64_t total_patterns{0};
-        uint64_t coherent_patterns{0};
-        uint64_t fragmented_patterns{0}; // Added missing field
-        float memory_pressure{0.0f};
-        float entanglement_density{0.0f};
-    };
-
-    struct CoherenceSnapshot {
-        uint64_t timestamp{0};
-        CoherenceMetrics global_metrics{};
-        std::vector<PatternCoherenceData> pattern_states;
-        uint32_t tier_distribution[3]{0,0,0};
-    };
-
-    struct EntanglementNode { std::string pattern_id; glm::vec4 position; float coherence{0.0f}; };
-    struct EntanglementEdge { size_t node1_idx{0}; size_t node2_idx{0}; float strength{0.0f}; float phase_correlation{0.0f}; };
-    struct EntanglementGraph {
-        std::vector<EntanglementNode> nodes;
-        std::vector<EntanglementEdge> edges;
-        float total_entanglement{0.0f};
-        uint32_t max_degree{0}; // Added missing field
-        float clustering_coefficient{0.0f}; // Added missing field
-    };
-
-    struct TierAnalysis {
-        float tier_coherence[3]{0.0f,0.0f,0.0f};
-        uint32_t tier_pattern_count[3]{0,0,0};
-        std::array<float,3> optimal_distribution{};
-    };
-
-    struct CoherenceResult {
-        bool success{false};
-        float global_coherence{0.0f};
-        float memory_pressure{0.0f};
-        size_t total_migrations{0};
-        std::vector<CoherenceAnomaly> anomalies;
-        std::vector<TierMigration> tier_migrations;
-        float tier_fragmentation[3]{0.0f, 0.0f, 0.0f}; // Added missing field
-        uint32_t tier_pattern_count[3]{0,0,0}; // Added missing field
-    };
-
-    explicit QuantumCoherenceManager(const Config& config = {});
-    ~QuantumCoherenceManager();
-
-    CoherenceResult updateCoherence(const std::vector<sep::quantum::Pattern>& patterns);
-    std::vector<TierMigration> optimizeMemoryLayout();
-    EntanglementGraph computeEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns);
-    void applyCoherenceDecay(float decay_factor);
-    CoherenceSnapshot createSnapshot() const;
-    bool restoreFromSnapshot(const CoherenceSnapshot& snapshot);
-
-    // Public accessors for metrics and state
-    const CoherenceMetrics& getMetrics() const;
-    uint64_t getGlobalTick() const;
-    uint32_t getPatternCountByTier(MemoryTierEnum tier) const;
-    float getTierFragmentation(MemoryTierEnum tier) const;
-
-private:
-    // Pattern coherence data struct used internally by Impl
-    struct PatternCoherenceData {
-        std::string pattern_id;
-        float coherence{0.0f};
-        float stability{0.0f};
-        uint32_t access_count{0};
-        uint64_t last_access_tick{0};
-        MemoryTierEnum current_tier{MemoryTierEnum::STM};
-        float fragmentation_score{0.0f}; // Added missing field
-        std::vector<std::string> entangled_patterns;
-    };
-
-    class Impl;
-    std::unique_ptr<Impl> impl_;
-};
-
 namespace {
     // Memory coherence constants from quantum information theory
     constexpr float COHERENCE_DECAY_RATE = 0.02f;
@@ -225,7 +111,7 @@ public:
             const auto& pair = *it;
             const auto& data = pair.second;
             MemoryTierEnum target_tier = determineOptimalTier(data);
-            
+
             if (target_tier != data.current_tier) {
                 TierMigration migration;
                 migration.pattern_id = data.pattern_id;

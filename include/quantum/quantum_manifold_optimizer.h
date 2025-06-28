@@ -39,7 +39,7 @@ struct ManifoldConfig {
     } quantum;
 
     // CUDA acceleration parameters
-    struct {
+    struct CudaConfig {
         int warp_tile_size = 16;
         int coherence_block_size = 256;
         int similarity_grid_dim = 32;

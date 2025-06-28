@@ -37,8 +37,8 @@ namespace sep::logging {
 class SimpleTracer {
  public:
   template <typename... Args>
-  std::unique_ptr<sep::metrics::TraceSpan> startSpan(Args&&... args) {
-    return std::make_unique<sep::metrics::TraceSpan>(std::forward<Args>(args)...);
+  std::unique_ptr<metrics::TraceSpan> startSpan(Args&&... args) {
+    return std::make_unique<metrics::TraceSpan>(std::forward<Args>(args)...);
   }
 };
 #endif

@@ -90,8 +90,8 @@ public:
     SEPResult removePattern(const std::string& pattern_id);
     SEPResult updatePattern(const std::string& pattern_id, const Pattern& pattern);
     Pattern getPattern(const std::string& pattern_id) const;
-    std::vector<Pattern> getPatterns() const;
-    std::vector<Pattern> getPatternsByTier(MemoryTierEnum tier) const;
+    std::vector<sep::quantum::Pattern> getPatterns() const;
+    std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
     size_t getPatternCount() const;
 
     ProcessingResult processPattern(const std::string& pattern_id);

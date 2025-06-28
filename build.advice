@@ -1,86 +1,110 @@
-The build failed with a cascade of errors primarily related to type mismatches and incomplete type definitions, especially involving `sep::pattern::PatternData` and the `RedisManager`. The `MemoryTierManager` and `MetricsCollector` also show issues with incomplete types and undefined members, suggesting header inclusion order or forward declaration problems.
+Here's a targeted analysis of the issues found in the provided source files, focusing on identifying what's wrong and where, without providing full rewrites or incomplete implementations.
 
-Here's a breakdown of the issues by file and targeted advice:
+**General Issues:**
 
-**1. `/sep/src/memory/memory_tier.cpp` & `/sep/src/memory/memory_tier_manager.cpp` & `/sep/src/memory/redis_manager.cpp` & various headers including `redis_manager.h` and `types.h` in memory and quantum directories:**
+1.  **Inconsistent Namespace Usage:** There's a mix of fully qualified names (`sep::namespace::Class`) and `using namespace sep::namespace;` directives, sometimes within function bodies or anonymous namespaces. This can lead to "does not name a type" errors or ambiguity when symbol lookup occurs.
+2.  **Incomplete Type Usage:** Several files attempt to use types (like `sep::pattern::PatternData` or `sep::persistence::RedisManager`) that are only forward-declared in their headers but not defined. This causes `invalid use of incomplete type` errors when trying to access members or determine sizes (e.g., in `std::make_unique`).
+3.  **Mismatched Function Signatures/Names:** There are several instances where a function is declared in a header with one signature or name, but defined in a `.cpp` file with a different one (e.g., `sep::audio::PipeWireCapture::streamStateChanged`).
+4.  **Missing Includes:** Some files are missing includes for types or functions they use, leading to "was not declared in this scope" errors.
+5.  **Forward Declarations:** The overuse of forward declarations without providing the full definition in the corresponding `.cpp` file is a primary cause of "invalid use of incomplete type" errors.
+6.  **`SEPResult` Usage:** The `sep::SEPResult` enum is used in multiple places but its definition might not be consistently available, causing "does not name a type" errors. Ensure the header defining `sep::SEPResult` is included wherever it's used as a return type or parameter.
+7.  **Crow Integration Issues:** Errors in `crow_adapter.cpp` suggest issues with lambda captures or accessing objects declared outside the lambda scope.
+8.  **CUDA Compatibility Issues:** Although `compat` files exist, there are errors indicating issues with CUDA calls (`cudaMemcpyAsync`, `cudaEventRecord`, `cudaStreamCreateWithFlags`) and access to `DeviceMemory`. This might point to inconsistencies in the CUDA compatibility layer or incorrect usage of CUDA functions in the stubbed environment.
+9.  **Metrics Collector Implementation:** The `MetricsCollector::Impl` definition is problematic; the compiler expects `MetricsCollector` to be a complete type before its nested class `Impl` is defined.
 
-*   **Problem:** Multiple files and headers have conflicting definitions or incomplete definitions for `sep::pattern::PatternData`. `redis_manager.h` and `memory/types.h` are defining virtual functions and member variables using `sep::pattern::PatternData` before its full definition is likely available, leading to "does not name a type" and template argument invalid errors. The `RedisManager` implementation in `redis_manager.cpp` also fails because the type is not fully defined. `MemoryTierManager.cpp` has method implementations that don't match declarations (e.g., `getTierUtilization` returning `double` instead of `float`) and tries to access members of `MemoryTierManager::Config` which might be the forward-declared `Config` struct within `MemoryTierManager` itself, creating an incomplete type issue.
-*   **Targeted Advice:**
-    *   Ensure that the full definition of `sep::pattern::PatternData` is included *before* any declarations or definitions that use it in `redis_manager.h`, `memory/types.h`, and any `.cpp` files depending on them (like `memory_tier.cpp`, `memory_tier_manager.cpp`, `redis_manager.cpp`).
-    *   Review the return types and function signatures in `MemoryTierManager` headers (`memory_tier_manager.hpp`) and implementation (`memory_tier_manager.cpp`) to ensure they match exactly (`float` vs `double` for utilization/fragmentation methods).
-    *   Verify the definition of `sep::memory::Config` used in `MemoryTierManager`. If it's a nested class/struct, ensure it's used with the correct scope resolution (`MemoryTierManager::Config`). If it's a separate struct, ensure its header is included. The error `MemoryTierManager::MemoryTierManager(const sep::memory::Config& cfg)` not matching suggests a potential issue with the `Config` type definition or visibility.
-    *   Check the definition of `SEPBlenderBridge` in `compat/component_bridge.h`. The error in `compat/component_bridge.cpp` about "invalid use of incomplete type" suggests `SEPBlenderBridge` is forward-declared but its definition is not available when `std::make_unique<SEPBlenderBridge>()` is called. The full definition of `SEPBlenderBridge` must be included.
+**Specific File Issues:**
 
-**2. `/sep/src/core/metrics_collector.cpp`:**
+*   **`/sep/src/audio/pipewire_capture.cpp`**:
+    *   `streamStateChanged` and `streamProcess` are used in `createStreamEvents` without being declared in that scope. They are declared as `static` member functions, so the function pointer assignment should be qualified with the class name (e.g., `&PipeWireCapture::streamStateChanged`).
+    *   The definitions of `streamStateChanged` and `streamProcess` at the end of the file do not match the `static` member function signatures declared in the header (`void*, pw_stream_state, ...`). They are defined without the `data` pointer and state parameters.
+    *   Missing `return` statement in `PipeWireCapture::setupStream()`.
 
-*   **Problem:** This file has multiple errors indicating that `MetricsCollector` and its member variables (`pImpl`, `metrics_mutex_`, `performance_metrics_`, `counters_`, `gauges_`, `memory_metrics_`, `system_metrics_`) are not recognized within the method definitions. This strongly suggests that the definition of the `MetricsCollector::Impl` class and the member variables of the `MetricsCollector` class are not visible at the point where these methods are defined.
-*   **Targeted Advice:**
-    *   Ensure that the complete definition of the `MetricsCollector` class, including its `Impl` nested class or pointer and all member variables (`metrics_mutex_`, etc.), is placed in a header file (likely `core/metrics_collector.h`).
-    *   The implementation file (`core/metrics_collector.cpp`) should then `#include` this header file *before* the definitions of the `MetricsCollector::Impl` and `MetricsCollector` methods. The current structure where `Impl` is defined in the `.cpp` file is problematic for methods defined outside the `Impl` class. Move the `Impl` definition to the header or define all `MetricsCollector` methods within the `Impl` class and access them through the `pImpl` pointer.
+*   **`/sep/src/memory/memory_tier.cpp`**:
+    *   `using namespace sep::cuda;` at the top of the file is likely problematic due to inconsistent CUDA setup.
+    *   Constructors and the destructor are defined outside the `sep::memory` namespace in the implementation file but within the namespace in the header, causing "definition of 'sep::memory::MemoryTier::MemoryTier(const Config&)' is not in namespace enclosing 'sep::memory::MemoryTier'" errors. All member function definitions should be within the `sep::memory` namespace.
+    *   Accessing `sep::metrics::allocationFailures()` without including the necessary header (`core/allocation_metrics.h`).
+    *   Issues with `MemoryTier::canAcceptPattern` and `MemoryTier::addPattern` parameter types (`sep::persistence::PatternData`). Ensure `sep::persistence::PatternData` is fully defined (included) where these methods are implemented, and the function signatures match the header.
+    *   `MemoryTier::addPattern(size_t id, sep::persistence::PatternData pattern)`: The parameter type `sep::persistence::PatternData` is used directly in the implementation despite potentially being an incomplete type based on the header. Also, the compiler sees a mismatch in the deduced signature.
 
-**3. `/sep/src/core/manager.cpp`:**
+*   **`/sep/src/memory/memory_tier_manager.cpp`**:
+    *   Numerous errors related to "does not name a type" for `quantum::Pattern` and `sep::MemoryTierEnum`. The full definitions for these types (by including their respective headers) are missing where these methods are implemented.
+    *   `storeLTMToPersistence(const quantum::Pattern& pattern)`: The signature in the implementation does not match the declaration in the header.
+    *   `findPattern(std::size_t id)`: Similar issue with `quantum::Pattern`.
+    *   `registerPattern(std::size_t id, const sep::pattern::PatternData& pattern)`: The implementation signature doesn't match the declaration in the header (missing `const`).
+    *   `getPatternData(std::size_t id) const`: The implementation signature doesn't match the declaration in the header (missing `const`).
+    *   Instantiation error for `std::make_unique<pattern::PatternData>()` indicates that `sep::pattern::PatternData` is an incomplete type where it's used. Include the full definition.
+    *   Instantiation error for `std::unique_ptr<sep::persistence::RedisManager>` indicates that `sep::persistence::RedisManager` is an incomplete type. Include the full definition of `RedisManager`.
 
-*   **Problem:** Similar to `metrics_collector.cpp`, the definition of `ConfigManager::Impl` is within the `.cpp` file, but method definitions outside this `Impl` class try to access its members (`impl_->config`). This leads to "invalid use of incomplete type" errors. The `std::make_unique<Impl>()` call in the constructor also fails for the same reason.
-*   **Targeted Advice:**
-    *   Move the complete definition of `ConfigManager::Impl` to the `core/manager.h` header file.
-    *   Alternatively, if `Impl` must be defined in the `.cpp`, change `ConfigManager`'s public methods to be defined within `Impl` and accessed via `impl_`. The current mix of defining methods outside the `Impl` class but trying to access `impl_` members directly in the `.cpp` is incorrect.
+*   **`/sep/src/core/manager.cpp`**:
+    *   The definition of `class ConfigManager::Impl` is within an anonymous namespace (`namespace {}`) in the implementation file, while the declaration is within the `sep::config` namespace in the header. This causes a mismatch and errors like "declaration of 'class sep::config::ConfigManager::Impl' in namespace 'sep::config::{anonymous}' which does not enclose 'class sep::config::ConfigManager'". The `Impl` definition should be directly within `namespace sep::config { ... }`.
+    *   Incomplete type errors for `ConfigManager::Impl` in various member functions because the full definition is not available. This is a direct consequence of the previous point.
 
-**4. `/sep/src/audio/pipewire_capture.cpp`:**
+*   **`/sep/src/api/crow_adapter.cpp`**:
+    *   Lambdas defined in `setupSepApiRoutes` are attempting to capture `engine` by reference (`[&engine]`) but `engine` is declared outside the lambda scope within the `setupSepApiRoutes` function. This should be fixed by explicitly capturing `engine` (e.g., `[this, &engine]`) or making `engine` a member variable of `SEPApiServer` and capturing `this`. Given the structure, it seems like `setupSepApiRoutes` is intended to be called by `SEPApiServer`, suggesting the routes should be set up *within* the `SEPApiServer` class, where it has access to its members like the `engine`.
+    *   Accessing `sep::config::APIConfig` without including the header that defines it.
 
-*   **Problem:** The `streamStateChanged` and `streamProcess` functions are used as callbacks but are not declared before they are used in the `createStreamEvents` function.
-*   **Targeted Advice:**
-    *   Add forward declarations for `streamStateChanged` and `streamProcess` at the top of `pipewire_capture.cpp`, before `createStreamEvents`.
+*   **`/sep/src/api/server.cpp`**:
+    *   Duplicate definition of `void SEPApiServer::start()`. There's one declared as `bool` and one defined as `void`.
+    *   Accessing `config_.ollama` in `SEPApiServer::initClients()` indicates that `ollama::OllamaConfig` and `ollama::OllamaClient` are being used without including their full definitions (likely from `api/ollama_client.h`).
+    *   Errors in `SEPApiServer::getHealthStatus()` related to accessing members of `impl_->health_metrics` (e.g., `startTime`, `totalRequests`) via `getMetrics()`. This suggests `getMetrics` is not correctly implemented or called, or `impl_->health_metrics` is not structured as expected.
+    *   Errors accessing `metrics_` members (`failedRequests`, `lastErrorCode`, etc.) directly in `handleError` and `logRequest` suggests `metrics_` is not a valid member of the `SEPApiServer` class. It appears `metrics_` is a local variable or not correctly declared as a member.
+    *   Accessing `config_.cors.enabled` and `config_.rate_limit.enabled`/`rpm` in `setup_middleware()` requires `sep::config::APIConfig` to be fully defined and accessible.
+    *   Accessing `config_.response_modulation.enabled`, `coherence_threshold`, and `max_detail_level` requires the `ResponseModulationConfig` structure within `sep::config::APIConfig` to be fully defined.
+    *   Parsing JSON with `nlohmann::json::parse` and accessing members like `["details"]` requires `nlohmann/json.hpp` to be included and the structure of the expected JSON to be understood.
 
-**5. `/sep/src/quantum/quantum_coherence_manager.cpp`:**
+*   **`/sep/src/compat/raii.cpp`**:
+    *   Issue with `StreamRAII::StreamRAII(sep::StreamFlags flags)`. The constructor definition does not match the declaration. Ensure the signature `StreamRAII(sep::StreamFlags flags)` is used correctly in the `.cpp` file.
+    *   Accessing `sep::memory::MemoryTierManager` and `sep::memory::TierType` without including the header (`memory/memory_tier_manager.hpp`) where these are defined.
+    *   Accessing `cudaStreamCreateWithFlags`, `cudaStreamDestroy`, `cudaStreamSynchronize`, `cudaEventCreate`, `cudaEventDestroy`, `cudaEventSynchronize`, `cudaStreamAttachMemAsync`, and `cudaGetErrorString` requires the CUDA runtime headers or their stubs to be correctly included. The code attempts to handle both cases (`SEP_CUDA_AVAILABLE`), but there might be an issue with how the stub functions are made available or linked.
 
-*   **Problem:** Errors like "`CoherenceResult` has no member named `tier_fragmentation`" indicate a mismatch between the `CoherenceMetrics` struct definition and how it's used in the implementation. The `for_each` method call on `coherence_map_` also suggests a potential issue with the TBB concurrent container usage or its interface.
-*   **Targeted Advice:**
-    *   Verify the definition of `QuantumCoherenceManager::CoherenceMetrics` in its header (`quantum_coherence_manager.h`). Ensure it contains all the members (`tier_fragmentation`, `tier_pattern_count`, `fragmented_patterns`) being accessed in the `.cpp` file.
-    *   Review the usage of `coherence_map_.for_each`. Ensure TBB's `concurrent_hash_map` actually provides a `for_each` method and that its signature is being used correctly. If not, iterate over the map using its iterators.
+*   **`/sep/src/core/metrics_collector.cpp`**:
+    *   Similar to `ConfigManager::Impl`, the definition of `class MetricsCollector::Impl` in the implementation file is problematic. It needs to be defined directly within `namespace sep::metrics { ... }`.
+    *   Accessing members like `running_`, `latency_window_size_`, `start_event_`, `stop_event_`, `latency_samples_`, and `metrics_mutex_` within `MetricsCollector::Impl` functions without these being declared members of `Impl`.
+    *   Accessing members like `performance_metrics_`, `counters_`, `gauges_`, `memory_metrics_`, and `system_metrics_` within `MetricsCollector` functions without these being declared members of `MetricsCollector`.
+    *   Accessing `pImpl` member in `updateSystemMetrics`, `getDetailedMetrics`, and `reset` without `pImpl` being declared a member of `MetricsCollector`.
+    *   Accessing CUDA functions (`cudaMemGetInfo`, `cudaEventRecord`, etc.) without including CUDA headers.
+    *   Using `MetricsCollector::PerformanceMetrics`, `MemoryMetrics`, and `SystemMetrics` as return types without correctly defining them within the `MetricsCollector` class or including their definitions.
 
-**6. `/sep/src/quantum/pattern_processor.cpp`:**
+*   **`/sep/src/quantum/quantum_processor_qfh.cpp`**:
+    *   `determineMemoryTier`: The definition signature does not match the declaration in the header. The return type is specified as `sep::MemoryTierEnum` in the header but `::sep::MemoryTierEnum` in the definition.
+    *   Numerous "does not name a type" errors for `PatternData`, `PatternConfig`, `RelationshipType`, etc. because the full definitions are not included.
 
-*   **Problem:** The `PatternQuantumProcessorImpl` constructor signature `explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config)` is mentioned as incorrect in the error message, but the code shows it matching the `createQuantumProcessor` factory function signature. The error messages seem to imply a mismatch in the arguments passed *to* `createQuantumProcessor`. Additionally, comments like "// Fix: Use string pattern_id directly, no need for hash conversion here. // Fix: Comment" and "// Fix: Use state.stability" indicate places where previous stubbing or incomplete implementation needs to be correctly hooked up to the intended logic and data structures.
-*   **Targeted Advice:**
-    *   Carefully check the `createQuantumProcessor` factory function definition and its expected parameters. Ensure the `PatternQuantumProcessorImpl` constructor is passing the correct type and value.
-    *   Address the "Fix:" comments by implementing the correct logic as intended, using the actual `pattern_id` string and accessing the correct members of the `QuantumState` struct.
+*   **`/sep/src/quantum/quantum_manifold_optimizer.cpp`**:
+    *   Errors related to `MemoryTierEnum`, `QuantumPattern`, etc. indicating missing includes for their full definitions.
+    *   `computeChristoffelSymbols`, `parallelTransport`: Functions used within the class implementation but defined outside the class/namespace, leading to "was not declared in this scope".
+    *   `computeResonanceFromCurvature`: Similar issue to the above.
 
-**7. `/sep/src/quantum/processor.cpp`:**
+*   **`/sep/src/quantum/pattern_processor.cpp`**:
+    *   `PatternQuantumProcessorImpl::PatternQuantumProcessorImpl`: The constructor signature in the definition does not match the declaration (missing `const QuantumProcessor::Config&`).
+    *   Numerous "does not name a type" errors for `PatternProcessResult`, `QuantumState`, etc. because full definitions are not included.
 
-*   **Problem:** The implementation uses an internal `ProcessorImpl` class but defines many public methods (`addPattern`, `removePattern`, `processPattern`, `calculateCoherence`, etc.) outside of this `Impl` and simply calls `impl_->method()`. However, some methods like `getPattern` and `getPatterns` seem to directly expose internal `patterns_` vectors or copies, which might not be thread-safe or the intended interaction pattern if `patterns_` is managed by `ProcessorImpl`. The factory functions `createProcessor`, `createCPUProcessor`, `createGPUProcessor` are also present in this file but are declared elsewhere, which is fine, but the primary issue is the inconsistent use of `ProcessorImpl` and the public interface.
-*   **Targeted Advice:**
-    *   Ensure consistency in how `ProcessorImpl` is used. All public methods of `Processor` should ideally delegate to methods of `ProcessorImpl`.
-    *   If `patterns_` is a member of `ProcessorImpl`, the public methods `getPattern` and `getPatterns` in `Processor` should access it through `impl_` and handle thread safety if necessary.
-    *   Verify that the factory functions `createProcessor`, etc., are correctly declared in a public header.
+*   **`/sep/src/quantum/evolution.cpp`**:
+    *   `evolve`: Attempts to retrieve patterns by ID using `processor_->getPattern(parent_ids[0])`, but `Processor::getPattern` is declared to return `Pattern`, not a pointer or reference, and doesn't seem to take an ID. Need to verify the `Processor` interface and how patterns are stored/retrieved.
+    *   `mutate`: Attempts to use `processor_->mutatePattern`, but the signature in the call doesn't match the `Processor` declaration.
+    *   Accessing `processor_->getConfig().mutation_rate` requires the `Processor` object to have a public `getConfig` method that returns a structure with `mutation_rate`.
+    *   `updateStats`: Calls `calculateDiversity` without providing the `patterns` argument.
+    *   `current_stats_`: The member definition is commented as "Fix: Add missing member definition" but is then used. It needs to be properly declared as a member of `EvolutionEngineImpl`.
 
-**8. `/sep/src/api/server.cpp`:**
+*   **`/sep/src/compat/core.cu`**:
+    *   `createStream`: Declared to return `std::shared_ptr<Stream>` but defined with a missing closing brace, causing a syntax error.
+    *   Accessing `launchQBSAKernel`, `launchQSHKernel`, `launchSimilarityKernel`, and `launchBlendKernel` without including the header where they are declared (`compat/kernels.h`).
 
-*   **Problem:** The `SEPApiServer::start()` method is defined twice with different return types (`bool` and `void`). This is a clear error. Also, the `getHealthStatus`, `getMemoryMetrics`, and `getConfig` routes defined here attempt to access `metrics` and `impl_` directly within static member functions, which is incorrect.
-*   **Targeted Advice:**
-    *   Remove the duplicate `void SEPApiServer::start()` definition. Keep the `bool SEPApiServer::start()` definition.
-    *   The routes for `getHealthStatus`, `getMemoryMetrics`, and `getConfig` in `SEPApiServer::setup_routes` should call non-static methods of the `SepEngine` instance (`engine`) to access metrics and configuration, or `SepEngine` should provide static methods specifically for retrieving static/singleton data if that's the intended design.
+*   **`/sep/src/compat/cuda_api.cu`**:
+    *   Accessing `constants::get_bitfield_words()`, etc., without including the header (`compat/constants.h`).
+    *   Accessing `sep::cuda::launchQBSAKernel`, etc., without including the header where they are declared (`compat/kernels.h`).
+    *   Using `sep::cuda::DeviceBufferRAII` without including the header where it's declared (`compat/raii.h`).
+    *   Using `sep::CudaException` without including the header where it's defined.
 
-**9. `/sep/src/api/sep_engine.cpp`:**
+**Recommendations:**
 
-*   **Problem:** The `getHealthStatus`, `getMemoryMetrics`, and `getConfig` methods are defined as static but try to access non-static member `impl_` and `metrics` (which is also a non-static member based on the `Impl` struct). This is incorrect for static methods.
-*   **Targeted Advice:**
-    *   Either make `getHealthStatus`, `getMemoryMetrics`, and `getConfig` non-static methods of `SepEngine` (which makes more sense if they access instance data like `impl_` and `metrics`), or ensure they only access static data if they remain static. If they are to remain static, `impl_` and `metrics` cannot be accessed directly.
+1.  **Fix Include Paths and Missing Includes:** Systematically go through each file and ensure all types and functions used are defined either in that file or in an included header. Pay special attention to types defined in different modules (audio, blender, core, memory, quantum, compat).
+2.  **Resolve Incomplete Types:** For types that are forward-declared in headers, ensure their full definitions are included in the corresponding `.cpp` files where their members are accessed or objects of that type are created/managed (e.g., in `std::unique_ptr`, `std::make_unique`).
+3.  **Align Declarations and Definitions:** Correct the signatures and names of all functions and members so they match between header and implementation files. Pay attention to `static` keywords, `const` qualifiers, return types, and parameter types.
+4.  **Namespace Consistency:** Decide on a consistent approach to namespaces (e.g., always using fully qualified names or using `using namespace` at the top of `.cpp` files, but avoid it in headers or anonymous namespaces).
+5.  **Refactor API Routes:** The Crow route setup in `crow_adapter.cpp` looks problematic due to lambda captures and accessing objects outside the function scope. Consider moving the route setup logic into the `SEPApiServer` class or restructuring how the `SepEngine` instance is accessed.
+6.  **Correct Metrics Class Definitions:** Fix the definitions of `MetricsCollector::Impl` and ensure `MetricsCollector` members are correctly declared within the `MetricsCollector` class definition in the header.
+7.  **Review CUDA Compatibility Layer:** Ensure that the CUDA compatibility layer (stubs or real wrappers) is correctly implemented and included. Verify that CUDA runtime functions are called correctly (`cudaMemcpy`, `cudaEventRecord`, etc.) and that error checking is consistent.
+8.  **Review `Processor` Interface:** Examine the `sep::quantum::Processor` interface and ensure methods like `getPattern` and `mutatePattern` are being used correctly according to their declarations.
+9.  **Address Specific Compiler Errors:** Go through the compiler output line by line, addressing the specific errors identified, as they often point directly to the problematic line and the nature of the issue (e.g., "no declaration matches", "invalid use of incomplete type").
 
-**10. `/sep/src/api/lock_free_rate_limiter.cpp`:**
-
-*   **Problem:** The lambda function for the metrics collector tries to access `metrics_mutex_` which is likely a member of the `LockFreeRateLimiter` class. To capture and use members of the enclosing class, the lambda needs to capture `this` (`[this]`).
-*   **Targeted Advice:**
-    *   Change the capture clause of the lambda for the metrics collector thread from `[this](const auto& now)` to `[this](const auto& now)` (it already has `this`, so this might be a misleading error or a cascading effect from other issues, but double-check). Ensure `metrics_mutex_` is correctly defined as a member of `LockFreeRateLimiter`.
-
-**General Advice:**
-
-*   **Header Inclusion Order:** Pay close attention to header inclusion order. Ensure that the full definition of a type is available *before* it's used in declarations or definitions. Use forward declarations (`class MyClass;`) in headers where a full definition is not needed to reduce dependencies, but include the full definition in `.cpp` files or headers where the type's size or methods are accessed.
-*   **Incomplete Types:** The cascade of errors related to incomplete types like `SEPBlenderBridge` and `sep::config::ConfigManager::Impl` points to a fundamental problem with where these types are defined and where their definitions are included. Ensure that the full class definitions are in the appropriate header files (`.h` or `.hpp`) and that these headers are included where the types are used beyond simple pointer/reference declarations.
-*   **Namespace Consistency:** Use fully qualified names or `using namespace` judiciously to avoid ambiguity, especially when dealing with nested namespaces or similar names in different namespaces (like `sep::pattern::PatternData` vs `sep::persistence::PatternData`).
-*   **Static vs Non-Static:** Be mindful of the difference between static and non-static members/methods. Static methods belong to the class itself and cannot directly access non-static (instance-specific) members unless they are given an instance pointer.
-*   **`const` Correctness:** Ensure `const` correctness between header declarations and `.cpp` definitions for member functions.
-*   **Factory Functions:** Ensure factory functions are correctly declared in headers and match the implementation signatures exactly.
-*   **Stubs vs. Real Implementations:** The goal is a full build, so ensure that conditional compilation flags (`#ifdef SEP_HAS_CYCLES`, `#ifdef SEP_HAS_PIPEWIRE`, etc.) correctly switch between stub and real implementations and that the necessary libraries and headers are available when the real implementations are compiled. The CMake output shows missing Cycles and Blender libraries, which will prevent a *full* Cycles/Blender build even if the code is corrected. The PipeWire warning indicates the same.
-*   **Compiler Errors:** Read the compiler errors carefully, especially the first few, as later errors are often consequences of earlier ones. The first error mentioning `sep::pattern::PatternData` in `redis_manager.h` is a critical starting point.
-
-By systematically addressing these points, starting with the type definition issues related to `PatternData` and the incomplete type problems with `Impl` classes and `SEPBlenderBridge`, you should be able to resolve this build failure.
+Focusing on these points systematically, starting with the most fundamental (includes, signatures, namespace usage, and incomplete types), will help resolve the build errors and connect the various components correctly.

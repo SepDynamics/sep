@@ -25,9 +25,6 @@ struct DetailedMetrics {
     float cpu_usage{0.0f};
 };
 
-// Forward declaration for PIMPL pattern
-class MetricsCollector;
-
 /**
  * @brief Metrics collection system for performance monitoring
  */

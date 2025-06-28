@@ -346,7 +346,7 @@ void MetricsCollector::reset() {
     counters_.clear(); // Fix: Clear counters_
     gauges_.clear(); // Fix: Clear gauges_
     memory_metrics_ = MemoryMetrics{};
-    system_metrics_ = SystemMetrics{};
+    system_metrics_ = updateSystemMetrics{};
     if (pImpl) {
         pImpl->resetMetrics();
     }

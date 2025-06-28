@@ -389,7 +389,7 @@ void RedisManager::storePattern(std::uint64_t id, const sep::persistence::Patter
     impl_->storePattern(id, data, tier);
 }
 
-std::optional<sep::persistence::PatternData> RedisManager::loadPattern(std::uint64_t id, const std::string& tier)
+std::optional<persistence::PatternData> RedisManager::loadPattern(std::uint64_t id, const std::string& tier)
 {
     return impl_->loadPattern(id, tier);
 }
@@ -404,13 +404,13 @@ void RedisManager::removePattern(std::uint64_t id, const std::string& tier)
     impl_->removePattern(id, tier);
 }
 
-void RedisManager::bulkStore(const std::vector<std::pair<std::uint64_t, sep::persistence::PatternData>>& patterns,
+void RedisManager::bulkStore(const std::vector<std::pair<std::uint64_t, persistence::PatternData>>& patterns,
                              const std::string& tier)
 {
     impl_->bulkStore(patterns, tier);
 }
 
-std::vector<sep::persistence::PatternData> RedisManager::bulkLoad(const std::vector<std::uint64_t>& ids,
+std::vector<persistence::PatternData> RedisManager::bulkLoad(const std::vector<std::uint64_t>& ids,
                                                                   const std::string& tier)
 {
     return impl_->bulkLoad(ids, tier);

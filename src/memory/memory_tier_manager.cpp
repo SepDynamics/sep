@@ -8,7 +8,7 @@
 #include "memory/logger.hpp"
 #include "memory/redis_manager.h"
 #include "quantum/pattern_evolution_bridge.h"
-#include "quantum/data.hpp" // For PatternData definition
+#include "quantum/data.hpp"
 
 
 namespace sep::memory {
@@ -52,7 +52,7 @@ void MemoryTierManager::shutdown() {
     redis_manager_.reset();
 }
 
-MemoryBlock* MemoryTierManager::allocate(std::size_t size, sep::memory::TierType tier) {
+MemoryBlock* MemoryTierManager::allocate(std::size_t size, TierType tier) {
     MemoryTier* t = getTier(tier);
     if (!t)
         return nullptr;
@@ -70,8 +70,8 @@ void MemoryTierManager::deallocate(MemoryBlock* block) {
         t->deallocate(block);
 }
 
-MemoryTier* MemoryTierManager::getTier(sep::memory::TierType tier) {
-    switch (static_cast<MemoryTierEnum>(tier)) {
+MemoryTier* MemoryTierManager::getTier(TierType tier) {
+    switch (static_cast<MemoryTier>(tier)) {
         case MemoryTierEnum::STM:
             return stm_.get();
         case MemoryTierEnum::MTM:
@@ -83,12 +83,12 @@ MemoryTier* MemoryTierManager::getTier(sep::memory::TierType tier) {
     }
 }
 
-double MemoryTierManager::getTierUtilization(sep::memory::TierType tier) const {
+double MemoryTierManager::getTierUtilization(TierType tier) const {
     const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
     return t ? t->calculateUtilization() : 0.0;
 }
 
-double MemoryTierManager::getTierFragmentation(sep::memory::TierType tier) const {
+double MemoryTierManager::getTierFragmentation(TierType tier) const {
     const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
     return t ? t->calculateFragmentation() : 0.0;
 }
@@ -131,7 +131,7 @@ void MemoryTierManager::rebuildLookup() {
     rebuild(ltm_.get());
 }
 
-void MemoryTierManager::defragmentTier(sep::memory::TierType tier) {
+void MemoryTierManager::defragmentTier(TierType tier) {
     if (MemoryTier* t = getTier(tier))
         t->defragment();
 }
@@ -159,7 +159,7 @@ MemoryTier& MemoryTierManager::getLTM() {
 sep::SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
         return sep::SEPResult::INVALID_ARGUMENT;
-    sep::memory::TierType next = block->tier == static_cast<TierType>(MemoryTierEnum::STM)
+    TierType next = block->tier == static_cast<TierType>(MemoryTierEnum::STM)
                                      ? static_cast<TierType>(MemoryTierEnum::MTM)
                                      : static_cast<TierType>(MemoryTierEnum::LTM);
     MemoryTier* dst = getTier(next);
@@ -179,7 +179,7 @@ sep::SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*&
 sep::SEPResult MemoryTierManager::demoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
         return sep::SEPResult::INVALID_ARGUMENT;
-    sep::memory::TierType next = block->tier == static_cast<TierType>(MemoryTierEnum::LTM)
+    TierType next = block->tier == static_cast<TierType>(MemoryTierEnum::LTM)
                                      ? static_cast<TierType>(MemoryTierEnum::MTM)
                                      : static_cast<TierType>(MemoryTierEnum::STM);
     MemoryTier* dst = getTier(next);
@@ -263,7 +263,7 @@ void MemoryTierManager::removePattern(std::size_t id) {
     if (it == pattern_registry_.end())
         return;
     const sep::pattern::PatternData* p = it->second.get();
-    if (MemoryTier* t = getTier(static_cast<sep::memory::TierType>(p->memory_tier)))
+    if (MemoryTier* t = getTier(static_cast<TierType>(p->memory_tier)))
         t->removePattern(id);
     pattern_registry_.erase(it);
     pattern_relationships_.erase(id);
@@ -316,7 +316,7 @@ void MemoryTierManager::loadLTMFromPersistence() {
         pat->stability = data_opt->stability;
         pat->memory_tier = MemoryTierEnum::LTM;
         for (const auto& rel : data_opt->relationship_data) {
-            quantum::PatternRelationship pr;
+            sep::quantum::PatternRelationship pr;
             pr.targetId = std::to_string(rel.id);
             pr.type = static_cast<quantum::RelationshipType>(rel.type);
             pr.strength = rel.strength;
@@ -394,7 +394,7 @@ void MemoryTierManager::cleanupExpiredPatterns() {
         removePattern(id);
 }
 
-void MemoryTierManager::prunePatternsByPriority(sep::memory::TierType tier, size_t max_count) {
+void MemoryTierManager::prunePatternsByPriority(TierType tier, size_t max_count) {
     MemoryTier* t = getTier(tier);
     if (!t)
         return;

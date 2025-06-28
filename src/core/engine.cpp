@@ -3,6 +3,7 @@
 #include "audio/capture.h"
 #include "blender/pattern_bridge.h"
 #include "memory/memory_tier_manager.hpp"
+#include "compat/component_bridge.h"
 
 #include "compat/shim.h"
 #include "core/error_handler.h"

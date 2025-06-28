@@ -17,13 +17,18 @@
 #include <condition_variable>
 #include <complex>
 #include <functional>
+#include <vector>
+#include <unordered_map>
+#include <array>
+#include <string>
+#include "compat/cufft.h"
 
 namespace sep::quantum::manifold {
 
 // Enhanced configuration for quantum manifold optimization
 struct ManifoldConfig {
     // Memory tier optimization parameters
-    struct {
+    struct MemoryConfig {
         double adaptive_threshold_rate = 0.02;
         double hamiltonian_coupling = 0.42;
         double predictive_horizon_ms = 100.0;
@@ -31,7 +36,7 @@ struct ManifoldConfig {
     } memory;
 
     // Quantum processing enhancement
-    struct {
+    struct QuantumConfig {
         int manifold_dimensions = 8;
         double coherence_modulation_factor = 0.707;
         double rupture_detection_sensitivity = 0.3;
@@ -39,7 +44,7 @@ struct ManifoldConfig {
     } quantum;
 
     // CUDA acceleration parameters
-    struct {
+    struct CudaConfig {
         int warp_tile_size = 16;
         int coherence_block_size = 256;
         int similarity_grid_dim = 32;
@@ -47,7 +52,7 @@ struct ManifoldConfig {
     } cuda;
 
     // API coherence modulation
-    struct {
+    struct ApiConfig {
         double base_coherence = 0.5;
         double context_weight = 0.3;
         double state_weight = 0.7;
@@ -55,7 +60,7 @@ struct ManifoldConfig {
     } api;
 
     // Semantic processing
-    struct {
+    struct SemanticConfig {
         int embedding_dimensions = 512;
         int hierarchy_levels = 4;
         double interference_threshold = 0.1;
@@ -63,7 +68,7 @@ struct ManifoldConfig {
     } semantic;
 
     // Performance analytics
-    struct {
+    struct AnalyticsConfig {
         int state_space_samples = 1000;
         double anomaly_z_score_threshold = 3.0;
         int prediction_window_size = 100;
@@ -303,7 +308,7 @@ private:
         double coherence_base_;
         
     public:
-        explicit DeterministicPatternGenerator(uint64_t seed = 0x42QUANTUM42) 
+        explicit DeterministicPatternGenerator(uint64_t seed = 0x42ULL)
             : state_(seed), phase_(0.0), coherence_base_(0.707) {}
         
         QuantumPattern generatePattern(int index) {

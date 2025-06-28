@@ -91,7 +91,8 @@ list(APPEND SEP_LINK_LIBS ${EXTERN_CUEW_LIBRARY} ${EXTERN_HIPEW_LIBRARY})
 
 # Find and add all other external dependencies conditionally
 macro(find_and_add_library var_name names)
-    find_library(${var_name} NAMES ${names})
+    # Allow optional search paths via ARGN to make the macro flexible
+    find_library(${var_name} NAMES ${names} ${ARGN})
     if(${var_name})
         message(STATUS "Found ${var_name}: ${${var_name}}")
         list(APPEND SEP_LINK_LIBS ${${var_name}})
@@ -106,7 +107,52 @@ find_and_add_library(OSL_QUERY_LIBRARY "oslquery")
 find_and_add_library(OPENSUBDIV_CPU_LIBRARY "osdCPU libosdCPU.so.3.6.0")
 find_and_add_library(OPENSUBDIV_GPU_LIBRARY "osdGPU libosdGPU.so.3.6.0")
 find_and_add_library(TBB_OPENSUBDIV_LIBRARY "tbb.so.2 libtbb.so.2")
-find_and_add_library(OpenPGL_LIBRARY "OpenPGL pgl")
+
+# If OpenSubdiv libraries were not found, attempt to create symlinks to
+# system installations so the build can proceed.
+set(_osd_system_paths
+    /usr/lib64
+    /usr/lib
+    /usr/local/lib)
+
+if(NOT OPENSUBDIV_CPU_LIBRARY)
+    foreach(_dir ${_osd_system_paths})
+        if(EXISTS "${_dir}/libosdCPU.so" OR EXISTS "${_dir}/libosdCPU.so.3.6.0")
+            set(_src "${_dir}/libosdCPU.so")
+            if(EXISTS "${_dir}/libosdCPU.so.3.6.0")
+                set(_src "${_dir}/libosdCPU.so.3.6.0")
+            endif()
+            file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
+            get_filename_component(_name "${_src}" NAME)
+            file(CREATE_LINK "${_src}" "${CMAKE_SOURCE_DIR}/lib/${_name}" SYMBOLIC)
+            set(OPENSUBDIV_CPU_LIBRARY "${CMAKE_SOURCE_DIR}/lib/${_name}")
+            list(APPEND SEP_LINK_LIBS ${OPENSUBDIV_CPU_LIBRARY})
+            message(WARNING "Created symlink for OpenSubdiv CPU library: ${OPENSUBDIV_CPU_LIBRARY}")
+            break()
+        endif()
+    endforeach()
+endif()
+
+if(NOT OPENSUBDIV_GPU_LIBRARY)
+    foreach(_dir ${_osd_system_paths})
+        if(EXISTS "${_dir}/libosdGPU.so" OR EXISTS "${_dir}/libosdGPU.so.3.6.0")
+            set(_src "${_dir}/libosdGPU.so")
+            if(EXISTS "${_dir}/libosdGPU.so.3.6.0")
+                set(_src "${_dir}/libosdGPU.so.3.6.0")
+            endif()
+            file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
+            get_filename_component(_name "${_src}" NAME)
+            file(CREATE_LINK "${_src}" "${CMAKE_SOURCE_DIR}/lib/${_name}" SYMBOLIC)
+            set(OPENSUBDIV_GPU_LIBRARY "${CMAKE_SOURCE_DIR}/lib/${_name}")
+            list(APPEND SEP_LINK_LIBS ${OPENSUBDIV_GPU_LIBRARY})
+            message(WARNING "Created symlink for OpenSubdiv GPU library: ${OPENSUBDIV_GPU_LIBRARY}")
+            break()
+        endif()
+    endforeach()
+endif()
+# Search common install locations for OpenPGL in addition to default paths
+find_and_add_library(OpenPGL_LIBRARY "OpenPGL pgl" 
+    PATHS /usr/lib64 /usr/local/lib ${CMAKE_INSTALL_PREFIX}/lib)
 find_and_add_library(OPENVDB_LIBRARY "openvdb")
 find_and_add_library(BLOSC_LIBRARY "blosc")
 find_and_add_library(TBB_LIBRARY "tbb")

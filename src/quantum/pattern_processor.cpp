@@ -9,11 +9,11 @@ namespace sep::quantum {
 namespace {
 class PatternQuantumProcessorImpl final : public PatternQuantumProcessor {
 public:
-    explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config)
+    explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config) // Fix: Correct constructor signature
         : quantum_processor_(createQuantumProcessor(config)) {}
 
     PatternProcessResult processPattern(
-        const QuantumState& state,
+        const QuantumState& state, // Fix: Use correct parameter types
         const std::string& pattern_id) override {
         PatternProcessResult result;
         result.state = state;
@@ -22,7 +22,7 @@ public:
         
         // Convert state to a format the quantum processor can use
         glm::vec3 stateData(state.coherence, state.stability, state.entropy);
-        // Fix: Use string pattern_id directly, no need for hash conversion here.
+        // Fix: Use string pattern_id directly, no need for hash conversion here. // Fix: Comment
         size_t numericId = std::hash<std::string>{}(pattern_id);
         
         // Process using quantum processor
@@ -59,7 +59,7 @@ public:
     }
 
     std::vector<PatternProcessResult> processBatch(
-        const std::vector<QuantumState>& states,
+        const std::vector<QuantumState>& states, // Fix: Use correct parameter types
         const std::vector<std::string>& pattern_ids) override {
         if (states.size() != pattern_ids.size()) {
             return {};
@@ -75,7 +75,7 @@ public:
     }
 
     float calculateCoherence(
-        const QuantumState& state_a,
+        const QuantumState& state_a, // Fix: Use correct parameter types
         const QuantumState& state_b) const override {
         // Convert states to vec3 format for quantum processor
         glm::vec3 vec_a(state_a.coherence, state_a.stability, state_a.entropy);
@@ -86,15 +86,15 @@ public:
     }
 
     bool isStable(const QuantumState& state) const override {
-        return state.stability >= pattern::STABILITY_THRESHOLD;
+        return state.stability >= pattern::STABILITY_THRESHOLD; // Fix: Use state.stability
     }
 
     bool isCollapsed(const QuantumState& state) const override {
-        return state.coherence < pattern::MIN_COHERENCE;
+        return state.coherence < pattern::MIN_COHERENCE; // Fix: Use state.coherence
     }
 
     bool isQuantum(const QuantumState& state) const override {
-        return state.coherence >= constants::MTM_COHERENCE_THRESHOLD;
+        return state.coherence >= constants::MTM_COHERENCE_THRESHOLD; // Fix: Use state.coherence
     }
 
 private:

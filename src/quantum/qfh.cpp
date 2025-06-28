@@ -75,6 +75,7 @@ QFHBasedProcessor::QFHBasedProcessor(const QFHOptions& options) : options_(optio
 
 QFHResult QFHBasedProcessor::analyze(const ::sep::shim::vector<uint8_t>& bits) {
     QFHResult result;
+    result.collapse_threshold = options_.collapse_threshold; // Fix: Initialize collapse_threshold
     
     // Transform bits to events
     result.events = transform_rich(bits);

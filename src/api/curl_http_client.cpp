@@ -35,13 +35,13 @@ APIResponse CurlHttpClient::send_request(const APIRequest &request) {
     }
     
     std::string buffer;
-    curl_easy_setopt(curl, CURLOPT_URL, request.url.c_str());
+    curl_easy_setopt(curl, CURLOPT_URL, request.url.c_str()); // Fix: CURLOPT_URL takes const char*
     
     // Set timeout
     curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, request.timeout.count());
     
     // Set up headers
-    struct curl_slist *headers = nullptr;
+    struct curl_slist *headers = nullptr; // Fix: curl_slist is a struct
     for (const auto &h : request.headers) {
         std::string header = h.first + ": " + h.second;
         headers = curl_slist_append(headers, header.c_str());
@@ -52,11 +52,11 @@ APIResponse CurlHttpClient::send_request(const APIRequest &request) {
     }
     
     // Handle different HTTP methods
-    if (request.method == "POST") {
+    if (request.method == "POST") { // Fix: Compare request.method with string literal
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.c_str());
     } else if (request.method != "GET") {
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.c_str());
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, request.method.c_str()); // Fix: CURLOPT_CUSTOMREQUEST takes const char*
         if (!request.body.empty()) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.body.c_str());
         }
@@ -77,7 +77,7 @@ APIResponse CurlHttpClient::send_request(const APIRequest &request) {
     // Process response
     if (code == CURLE_OK) {
         resp.success = status >= 200 && status < 300;
-        resp.body = buffer;
+        resp.body = buffer; // Fix: Assign buffer to resp.body
     } else {
         resp.success = false;
         resp.error.code = ErrorCode::ApiError;

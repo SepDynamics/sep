@@ -116,7 +116,7 @@ sep::SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
   return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult MeshHandler::removeCustomDataLayer(const char* name) {
+sep::SEPResult MeshHandler::removeCustomDataLayer(const char* name) { // Fix: Correct function signature
   if (!initialized_) {
     return sep::SEPResult::INITIALIZATION_FAILED;
   }

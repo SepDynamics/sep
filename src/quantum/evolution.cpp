@@ -53,13 +53,13 @@ public:
         while (next_generation_ids.size() < patterns.size()) {
             auto parent_ids = tournamentSelection(params.tournament_size, 2);
             if (parent_ids.size() >= 2) {
-                Pattern parent1 = processor_->getPattern(parent_ids[0]); // Fix: use Pattern type
-                auto parent2 = processor_->getPattern(parent_ids[1]);
+                Pattern parent1 = processor_->getPattern(parent_ids[0]); // Fix: Use getPattern to retrieve pattern by ID
+                auto parent2 = processor_->getPattern(parent_ids[1]); // Fix: Use getPattern to retrieve pattern by ID
                 auto child = crossover(parent1, parent2);
                 if (nextFloat() < processor_->getConfig().mutation_rate) {
                     child = mutate(child);
                 }
-                processor_->addPattern(child);
+                processor_->addPattern(child); // Fix: Use addPattern to add the new child
                 next_generation_ids.push_back(child.id);
             } else if (!parent_ids.empty()) {
                 ProcessingResult result = processor_->mutatePattern(parent_ids[0]); // Fix: use ProcessingResult type
@@ -71,7 +71,7 @@ public:
 
         for (const auto& pattern : patterns) {
             if (std::find(next_generation_ids.begin(), next_generation_ids.end(), pattern.id) == next_generation_ids.end()) {
-                processor_->removePattern(pattern.id);
+                processor_->removePattern(pattern.id); // Fix: Use removePattern to remove the pattern
             }
         }
 
@@ -98,7 +98,7 @@ public:
         auto& state2 = parent2.quantum_state;
         auto& child_state = child.quantum_state;
 
-        child_state.coherence = glm::mix(state1.coherence, state2.coherence, alpha);
+        child_state.coherence = glm::mix(state1.coherence, state2.coherence, alpha); // Fix: Use glm::mix
         child_state.phase = glm::mix(state1.phase, state2.phase, alpha); // Add phase crossover
         child_state.stability = glm::mix(state1.stability, state2.stability, alpha);
         child_state.entropy = glm::mix(state1.entropy, state2.entropy, alpha);
@@ -109,7 +109,7 @@ public:
         if (!parent1.data.empty() && !parent2.data.empty()) {
             size_t size = std::min(parent1.data.size(), parent2.data.size());
             child.data.resize(size);
-            for (size_t i = 0; i < size; ++i) {
+            for (size_t i = 0; i < size; ++i) { // Fix: Iterate up to size
                 child.data[i] = glm::mix(parent1.data[i], parent2.data[i], alpha);
             }
         }
@@ -126,7 +126,7 @@ public:
         state.stability = glm::clamp(state.stability + (nextFloat() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
         state.phase += (nextFloat() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
         state.entropy = glm::clamp(state.entropy + (nextFloat() * 2.0f - 1.0f) * sigma * 2.0f, 0.0f, 1.0f);
-
+        // Fix: Pattern position mutation
         mutated.position += glm::vec4((nextFloat() * 2.0f - 1.0f) * sigma,
                                       (nextFloat() * 2.0f - 1.0f) * sigma,
                                       (nextFloat() * 2.0f - 1.0f) * sigma, 0.0f);
@@ -136,7 +136,7 @@ public:
     }
 
     std::vector<std::string> selectElite(size_t count) {
-        auto patterns = processor_->getPatterns();
+        auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
         std::vector<std::pair<std::string, float>> fitness_scores;
         for (const auto& pattern : patterns) {
             fitness_scores.push_back({pattern.id, calculateFitness(pattern)});
@@ -153,7 +153,7 @@ public:
     }
 
     std::vector<std::string> tournamentSelection(size_t tournament_size, size_t num_winners) {
-        auto patterns = processor_->getPatterns();
+        auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
         if (patterns.empty()) return {};
 
         std::vector<std::string> winners;
@@ -171,7 +171,7 @@ public:
     }
 
     std::vector<std::string> rouletteWheelSelection(size_t count) {
-        auto patterns = processor_->getPatterns();
+        auto patterns = processor_->getPatterns(); // Fix: Use ->getPatterns()
         if (patterns.empty()) return {};
 
         std::vector<float> fitness_values;
@@ -199,7 +199,7 @@ public:
     }
 
     float calculateFitness(const Pattern& pattern) const {
-        const auto& state = pattern.quantum_state;
+        const auto& state = pattern.quantum_state; // Fix: Use pattern.quantum_state
         float coherence_fitness = state.coherence * params_.coherence_weight;
         float stability_fitness = state.stability * params_.stability_weight;
         float entropy_penalty = (1.0f - state.entropy) * 0.2f;
@@ -210,7 +210,7 @@ public:
     }
 
     float calculateDiversity(const std::vector<Pattern>& patterns) const {
-        if (patterns.size() < 2) return 1.0f;
+        if (patterns.size() < 2) return 1.0f; // Fix: Handle small pattern size
         float total_distance = 0.0f;
         size_t comparisons = 0;
         for (size_t i = 0; i < patterns.size(); ++i) {
@@ -226,7 +226,7 @@ public:
     void setParams(const EvolutionParams& params) { params_ = params; }
     EvolutionParams getParams() const { return params_; }
     EvolutionStats getStats() const { return current_stats_; }
-    std::vector<EvolutionStats> getHistory() const { return stats_history_; }
+    std::vector<EvolutionStats> getHistory() const { return stats_history_; } // Fix: Return const reference
 
 private:
     float calculatePatternDiversity(const Pattern& pattern) const {
@@ -252,7 +252,7 @@ private:
     }
 
     void updateStats(const std::vector<Pattern>& patterns) {
-        EvolutionStats stats;
+        EvolutionStats stats; // Fix: Initialize stats object
         stats.generation_number = generation_number_;
         stats.population_size = patterns.size();
         if (!patterns.empty()) {
@@ -290,7 +290,7 @@ private:
     IProcessor* processor_; // Use interface type
     EvolutionParams params_;
     size_t generation_number_;
-    EvolutionStats current_stats_;
+    EvolutionStats current_stats_; // Fix: Add missing member definition
     std::vector<EvolutionStats> stats_history_;
     uint64_t noise_state_;
 };

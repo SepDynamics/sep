@@ -1,6 +1,7 @@
 #include "api/client.h"
 #include "curl/curl.h"
 #include <stdexcept>
+#include <utility>
 
 
 #include "core/error_handler.h"  // For sep::ErrorCode

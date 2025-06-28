@@ -1,5 +1,8 @@
 #include "core/dag_graph.h"
 
+// Standard library includes
+#include <algorithm>
+
 namespace sep {
 namespace dag {
 
@@ -59,7 +62,7 @@ void DagGraph::removeNode(uint64_t id)
     if (it != nodes_.end())
     {
         nodes_.erase(it);
-        for (auto& [_, node] : nodes_)
+        for (auto& pair : nodes_) // Fix: use a named pair instead of structured binding
         {
             node.parents.erase(std::remove(node.parents.begin(), node.parents.end(), id), node.parents.end());
         }

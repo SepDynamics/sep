@@ -382,7 +382,7 @@ private:
 RedisManager::RedisManager(const std::string& host, int port) : impl_(std::make_unique<Impl>(host, port)) {}
 RedisManager::~RedisManager() = default;
 std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
-void RedisManager::storePattern(std::uint64_t id, const sep::persistence::PatternData& data, const std::string& tier)
+void RedisManager::storePattern(std::uint64_t id, const sep::persistence::PatternData& data, const std::string& tier) // Fix: Use std::uint64_t for id
 {
     impl_->storePattern(id, data, tier);
 }

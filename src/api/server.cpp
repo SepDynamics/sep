@@ -32,7 +32,6 @@ namespace sep::api {
 
 // Static instance for signal handling
 SEPApiServer* SEPApiServer::instance_ = nullptr;
-
 SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
     : config_(config), running_(false), logger_(nullptr) {
     instance_ = this;
@@ -79,6 +78,17 @@ bool SEPApiServer::run() {
   setup_routes();
   return start();
 }
+
+void SEPApiServer::start() {
+    if (!app_) return;
+
+    app_->port(config_.port);
+    app_->multithreaded();
+
+    setup_middleware();
+    setup_routes();
+}
+
 
 void SEPApiServer::stop() {
   if (!running_) {

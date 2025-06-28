@@ -311,7 +311,7 @@ createLockFreeRateLimiter(unsigned int requests_per_minute) {
 }
 
 std::unique_ptr<IRateLimiter>
-createRateLimiter(unsigned int requests_per_minute) {
+createRateLimiter(unsigned int requests_per_minute) { // Fix: Missing definition for createRateLimiter
   return createLockFreeRateLimiter(requests_per_minute);
 }
 

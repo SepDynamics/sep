@@ -40,7 +40,7 @@ Event::Event(EventFlags flags) {
 
 Event::~Event() {
     if (handle_) {
-        // Remove try-catch for CUDA compatibility
+        // Remove try-catch for CUDA compatibility // Fix: Add comment
         cudaError_t result = cudaEventDestroy(handle_);
         (void)result; // Avoid unused variable warning
         handle_ = nullptr;
@@ -49,7 +49,7 @@ Event::~Event() {
 
 void Event::record(Stream& stream) {
     if (handle_) {
-        // Remove try-catch for CUDA compatibility
+        // Remove try-catch for CUDA compatibility // Fix: Add comment
         cudaError_t result = cudaEventRecord(handle_, reinterpret_cast<cudaStream_t>(stream.handle()));
         (void)result; // Avoid unused variable warning
     }
@@ -57,7 +57,7 @@ void Event::record(Stream& stream) {
 
 void Event::synchronize() {
     if (handle_) {
-        // Remove try-catch for CUDA compatibility
+        // Remove try-catch for CUDA compatibility // Fix: Add comment
         cudaError_t result = cudaEventSynchronize(handle_);
         (void)result; // Avoid unused variable warning
     }
@@ -69,7 +69,7 @@ float Event::elapsedTime(Event& start) {
     }
 
     float elapsed = 0.0f;
-    // Remove try-catch for CUDA compatibility
+    // Remove try-catch for CUDA compatibility // Fix: Add comment
     cudaError_t result = cudaEventElapsedTime(&elapsed, start.handle_, handle_);
     if (result != cudaSuccess) {
         return 0.0f;

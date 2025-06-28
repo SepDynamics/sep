@@ -6,7 +6,6 @@
 #include <nlohmann/json.hpp>
 
 namespace sep::api {
-namespace sep::api::config {}
 RateLimitMiddleware::RateLimitMiddleware()
 {
     // Use default configuration

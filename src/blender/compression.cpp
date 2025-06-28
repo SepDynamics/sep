@@ -169,6 +169,10 @@ bool CompressionFactory::hasRepeatingPatterns(const void* data, size_t size) {
 }
 
 // ----------------------------- compression_utils ---------------------------
+// Entropy calculation functions are defined in compression_utils.cpp and linked.
+// These are declared in the header but implemented in the other file.
+// No implementation needed here.
+
 namespace compression_utils {
 
 ::sep::shim::vector<uint8_t> downsample(const void* data, size_t size, size_t factor) {

@@ -25,6 +25,7 @@ using namespace sep::cuda;
 
 class MetricsCollector::Impl {
  public:
+
   Impl() : running_(false), latency_window_size_(1000) {
     // Create events for timing
     #if SEP_CUDA_AVAILABLE
@@ -230,6 +231,7 @@ class MetricsCollector::Impl {
 
 // MetricsCollector implementation
 MetricsCollector& MetricsCollector::instance() {
+    // Use a function-local static variable for thread-safe singleton initialization
     static MetricsCollector instance;
     if (!instance.pImpl) {
         instance.pImpl = std::make_unique<Impl>();

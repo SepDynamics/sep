@@ -45,20 +45,20 @@ public:
     ~RedisManager();
 
     // Store a pattern in Redis with its full metadata
-    void storePattern(std::size_t id, const sep::persistence::PatternData& data, const std::string& tier);
+    void storePattern(std::uint64_t id, const sep::persistence::PatternData& data, const std::string& tier);
     
     // Load a pattern from Redis
-    std::optional<sep::persistence::PatternData> loadPattern(std::size_t id, const std::string& tier);
+    std::optional<sep::persistence::PatternData> loadPattern(std::uint64_t id, const std::string& tier);
     
     // Get all pattern IDs for a given tier
-    std::vector<std::size_t> getPatternIds(const std::string& tier);
+    std::vector<std::uint64_t> getPatternIds(const std::string& tier);
     
     // Remove a pattern from Redis
-    void removePattern(std::size_t id, const std::string& tier);
+    void removePattern(std::uint64_t id, const std::string& tier);
     
     // Batch operations for optimization
-    void bulkStore(const std::vector<std::pair<std::size_t, sep::persistence::PatternData>>& patterns, const std::string& tier);
-    std::vector<sep::persistence::PatternData> bulkLoad(const std::vector<std::size_t>& ids, const std::string& tier);
+    void bulkStore(const std::vector<std::pair<std::uint64_t, sep::persistence::PatternData>>& patterns, const std::string& tier);
+    std::vector<sep::persistence::PatternData> bulkLoad(const std::vector<std::uint64_t>& ids, const std::string& tier);
     
     // Status check
     bool isConnected() const;

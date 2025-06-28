@@ -1,4 +1,4 @@
-// /sep/src/memory/quantum_coherence_manager.cpp
+#include "memory/quantum_coherence_manager.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "memory/memory_tier_manager.hpp"
@@ -244,10 +244,10 @@ private:
     cuda::CudaCore* cuda_core_ = nullptr;
     
     // Concurrent data structures
-    using CoherenceMap = tbb::concurrent_hash_map<std::string, PatternCoherenceData>;
+    using CoherenceMap = tbb::concurrent_hash_map<std::string, QuantumCoherenceManager::PatternCoherenceData>;
     CoherenceMap coherence_map_;
     
-    CoherenceMetrics metrics_;
+    QuantumCoherenceManager::CoherenceMetrics metrics_;
     std::atomic<uint64_t> global_tick_;
     
     // GPU buffers for coherence computation
@@ -306,7 +306,7 @@ private:
             // Insert new pattern
             accessor.release();
             
-            PatternCoherenceData new_data;
+            QuantumCoherenceManager::PatternCoherenceData new_data;
             new_data.pattern_id = pattern.id;
             new_data.coherence = pattern.quantum_state.coherence;
             new_data.stability = pattern.quantum_state.stability;
@@ -485,7 +485,7 @@ private:
         }
     }
     
-    MemoryTierEnum determineOptimalTier(const PatternCoherenceData& data) const {
+    MemoryTierEnum determineOptimalTier(const QuantumCoherenceManager::PatternCoherenceData& data) const {
         // Multi-factor tier determination
         float coherence_score = data.coherence;
         float stability_score = data.stability;
@@ -508,7 +508,7 @@ private:
         }
     }
     
-    bool shouldMigrate(const PatternCoherenceData& data,
+    bool shouldMigrate(const QuantumCoherenceManager::PatternCoherenceData& data,
                       MemoryTierEnum from_tier,
                       MemoryTierEnum to_tier) const {
         // Hysteresis to prevent oscillation
@@ -521,7 +521,7 @@ private:
         }
     }
     
-    MigrationReason determineMigrationReason(const PatternCoherenceData& data,
+    MigrationReason determineMigrationReason(const QuantumCoherenceManager::PatternCoherenceData& data,
                                            MemoryTierEnum target_tier) const {
         if (data.coherence > 0.9f) return MigrationReason::HighCoherence;
         if (data.stability > 0.9f) return MigrationReason::HighStability;

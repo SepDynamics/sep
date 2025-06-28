@@ -36,9 +36,9 @@ MeshHandler::~MeshHandler() {
 }
 
 // Initialize with Blender mesh
-SEPResult MeshHandler::init(Object* bl_object, Mesh* bl_mesh) {
+sep::SEPResult MeshHandler::init(Object* bl_object, Mesh* bl_mesh) {
   if (!bl_object || !bl_mesh) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   
   object_ = bl_object;
@@ -48,17 +48,17 @@ SEPResult MeshHandler::init(Object* bl_object, Mesh* bl_mesh) {
   // Reset cache
   cache_.metrics_valid = false;
   
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 // Update mesh based on pattern data
-SEPResult MeshHandler::update(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::update(const sep::pattern::PatternData& pattern_data) {
   if (!initialized_) {
-    return SEPResult::NOT_INITIALIZED;
+    return sep::SEPResult::NOT_INITIALIZED;
   }
   
   if (!validatePattern(pattern_data)) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   
   // Store pattern coherence for later use
@@ -68,7 +68,7 @@ SEPResult MeshHandler::update(const sep::pattern::PatternData& pattern_data) {
   // For the mock, we'll just invalidate the cache
   cache_.metrics_valid = false;
   
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 // Get mesh metrics
@@ -90,18 +90,18 @@ MeshHandler::MeshMetrics MeshHandler::getMetrics() const {
 }
 
 // Custom data layer management
-SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
+sep::SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
   if (!initialized_) {
-    return SEPResult::NOT_INITIALIZED;
+    return sep::SEPResult::NOT_INITIALIZED;
   }
   
   if (!name || strlen(name) == 0) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   
   // Check if layer already exists
   if (hasCustomDataLayer(name)) {
-    return SEPResult::ALREADY_INITIALIZED;
+    return sep::SEPResult::ALREADY_INITIALIZED;
   }
   
   // Create new layer
@@ -122,16 +122,16 @@ SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
   // Invalidate cache
   cache_.metrics_valid = false;
   
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MeshHandler::removeCustomDataLayer(const char* name) {
+sep::SEPResult MeshHandler::removeCustomDataLayer(const char* name) {
   if (!initialized_) {
-    return SEPResult::NOT_INITIALIZED;
+    return sep::SEPResult::NOT_INITIALIZED;
   }
   
   if (!name || strlen(name) == 0) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   
   // Find layer
@@ -143,11 +143,11 @@ SEPResult MeshHandler::removeCustomDataLayer(const char* name) {
       // Invalidate cache
       cache_.metrics_valid = false;
       
-      return SEPResult::SUCCESS;
+      return sep::SEPResult::SUCCESS;
     }
   }
   
-  return SEPResult::OBJECT_NOT_FOUND;
+  return sep::SEPResult::OBJECT_NOT_FOUND;
 }
 
 bool MeshHandler::hasCustomDataLayer(const char* name) const {
@@ -165,13 +165,13 @@ bool MeshHandler::hasCustomDataLayer(const char* name) const {
   return false;
 }
 
-SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) {
+sep::SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) {
   if (!initialized_) {
-    return SEPResult::NOT_INITIALIZED;
+    return sep::SEPResult::NOT_INITIALIZED;
   }
   
   if (!name || strlen(name) == 0) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   
   // Find layer
@@ -185,40 +185,40 @@ SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) {
         data[i] = value;
       }
       
-      return SEPResult::SUCCESS;
+      return sep::SEPResult::SUCCESS;
     }
   }
   
-  return SEPResult::OBJECT_NOT_FOUND;
+  return sep::SEPResult::OBJECT_NOT_FOUND;
 }
 
 // Pattern-driven deformation
-SEPResult MeshHandler::applyDeformation(const DeformParams& params) {
+sep::SEPResult MeshHandler::applyDeformation(const DeformParams& params) {
   (void)params;
   if (!initialized_) {
-    return SEPResult::NOT_INITIALIZED;
+    return sep::SEPResult::NOT_INITIALIZED;
   }
   
   // In a real implementation, this would deform the mesh
   // For the mock, we'll just invalidate the cache
   cache_.metrics_valid = false;
   
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 // Generate an N-dimensional mesh
-SEPResult MeshHandler::generateHyperMesh(const sep::pattern::PatternData& pattern,
+sep::SEPResult MeshHandler::generateHyperMesh(const sep::pattern::PatternData& pattern,
                                          int dimensions) {
   if (!initialized_) {
-    return SEPResult::NOT_INITIALIZED;
+    return sep::SEPResult::NOT_INITIALIZED;
   }
   
   if (dimensions < 3) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   
   if (!validatePattern(pattern)) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   
   // In a real implementation, this would generate a hypermesh
@@ -236,31 +236,31 @@ SEPResult MeshHandler::generateHyperMesh(const sep::pattern::PatternData& patter
   // Invalidate cache
   cache_.metrics_valid = false;
   
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 // Private methods
 
 // Mesh operations
-SEPResult MeshHandler::updateVertices(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::updateVertices(const sep::pattern::PatternData& pattern_data) {
   (void)pattern_data;
   // Mock implementation
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MeshHandler::updateCustomData(const sep::pattern::PatternData& pattern_data) {
+sep::SEPResult MeshHandler::updateCustomData(const sep::pattern::PatternData& pattern_data) {
   (void)pattern_data;
   // Mock implementation
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult MeshHandler::notifyDepsgraph() {
+sep::SEPResult MeshHandler::notifyDepsgraph() {
   // Mock implementation
   if (mesh_) {
     BKE_mesh_batch_cache_dirty_tag(mesh_, BKE_MESH_BATCH_DIRTY_ALL);
     DEG_id_tag_update(mesh_, ID_RECALC_GEOMETRY);
   }
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 // Validation

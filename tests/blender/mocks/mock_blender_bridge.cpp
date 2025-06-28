@@ -37,25 +37,25 @@ void BlenderBridge::processingThreadMain() {
 }
 
 // Implementation of updateObject
-::SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics& metrics) {
+sep::SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics& metrics) {
     (void)handle;
     (void)metrics;
     if (!initialized_) {
-        return ::SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
 
     // In a mock implementation, we just return success
-    return ::SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 // Implementation of processPatterns
-::SEPResult BlenderBridge::processPatterns() {
+sep::SEPResult BlenderBridge::processPatterns() {
     if (!initialized_) {
-        return ::SEPResult::NOT_INITIALIZED;
+        return sep::SEPResult::NOT_INITIALIZED;
     }
     
     // In a mock implementation, we just return success
-    return ::SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 // Implementation of updateResourceStats

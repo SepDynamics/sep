@@ -66,7 +66,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
            static_cast<int>(init_err.code), init_err.message.c_str());
     fflush(stdout);
     
-    if (init_err.code != SEPResult::SUCCESS) {
+    if (init_err.code != sep::SEPResult::SUCCESS) {
         printf("DEBUG: Engine::init - Trying GPU device 1\n");
         fflush(stdout);
         
@@ -76,7 +76,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
                static_cast<int>(init_err.code), init_err.message.c_str());
         fflush(stdout);
         
-        if (init_err.code != SEPResult::SUCCESS) {
+        if (init_err.code != sep::SEPResult::SUCCESS) {
             printf("DEBUG: Engine::init - All GPU devices failed, giving up\n");
             fflush(stdout);
             return false;
@@ -249,7 +249,7 @@ void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
                              ::sep::shim::vector<std::uint32_t>& expectations, std::uint64_t tick ) {
     if (inputs.empty()) {
         ::sep::core::ErrorHandler::instance().reportError(
-            {SEPResult::INVALID_ARGUMENT, "No input states", "Engine::generate_probes"});
+            {sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::generate_probes"});
         return;
     }
 
@@ -283,13 +283,13 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
                            ::sep::quantum::QBSAResult& qbsa_result, ::sep::cuda::QSHResult& qsh_result) {
     if (inputs.empty()) {
         ::sep::core::ErrorHandler::instance().reportError(
-            {SEPResult::INVALID_ARGUMENT, "No input states", "Engine::process_batch"});
+            {sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::process_batch"});
         return;
     }
 
     if (inputs.size() > DEFAULT_SIZE) {
         ::sep::core::ErrorHandler::instance().reportError(
-            {SEPResult::INVALID_ARGUMENT, "Batch too large", "Engine::process_batch"});
+            {sep::SEPResult::INVALID_ARGUMENT, "Batch too large", "Engine::process_batch"});
         return;
     }
 

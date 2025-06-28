@@ -9,12 +9,12 @@ TEST(MemoryTierManagerBlockTest, PromoteAndDemoteBlock) {
     ASSERT_NE(blk, nullptr);
 
     MemoryBlock* promoted = nullptr;
-    EXPECT_EQ(mgr.promoteBlock(blk, promoted), SEPResult::SUCCESS);
+    EXPECT_EQ(mgr.promoteBlock(blk, promoted), sep::SEPResult::SUCCESS);
     ASSERT_NE(promoted, nullptr);
     EXPECT_EQ(promoted->tier, TierType::MTM);
 
     MemoryBlock* demoted = nullptr;
-    EXPECT_EQ(mgr.demoteBlock(promoted, demoted), SEPResult::SUCCESS);
+    EXPECT_EQ(mgr.demoteBlock(promoted, demoted), sep::SEPResult::SUCCESS);
     ASSERT_NE(demoted, nullptr);
     EXPECT_EQ(demoted->tier, TierType::STM);
 

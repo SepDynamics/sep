@@ -20,6 +20,7 @@
 #include "api/types.h"
 #include "api/sep_engine.h"
 #include "api/server.h" // Include server header
+#include "core/types.h"  // For sep::config::APIConfig
 #include "memory/memory_tier_manager.hpp"
 
 // Include standard headers
@@ -80,10 +81,10 @@ std::unique_ptr<HttpRequest> makeRequest(::crow::request &req) {
  *
  * @param app The Crow application instance
  */
-void setupSepApiRoutes(::crow::crow<>* app)
+void setupSepApiRoutes(::crow::Crow<>* app)
 {
     // Get singleton engine instance and initialize
-    auto&                  engine = sep::api::SepEngine::getInstance();
+    auto& engine = SepEngine::getInstance();
     sep::config::APIConfig config{};
     engine.initialize(config);
 

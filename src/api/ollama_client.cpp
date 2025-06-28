@@ -34,52 +34,52 @@ OllamaClient &OllamaClient::operator=(OllamaClient &&) noexcept = default;
 
 namespace ollama {
 
-SEPResult OllamaClient::get(const std::string &endpoint, std::string &response_out) {
+sep::SEPResult OllamaClient::get(const std::string &endpoint, std::string &response_out) {
   if (impl_->config.host.rfind("file://", 0) == 0) {
     std::string path = impl_->config.host.substr(7) + endpoint;
     std::ifstream file(path);
     if (!file) {
-      return SEPResult::INVALID_ARGUMENT;
+      return sep::SEPResult::INVALID_ARGUMENT;
     }
     std::ostringstream ss;
     ss << file.rdbuf();
     response_out = ss.str();
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
   }
   sep::api::APIResponse resp = impl_->client.get(endpoint);
   if (!resp.success) {
     response_out.clear();
     if (resp.error.code == sep::api::ErrorCode::ApiError) {
-      return SEPResult::PROCESSING_ERROR;
+      return sep::SEPResult::PROCESSING_ERROR;
     }
-    return SEPResult::UNKNOWN_ERROR;
+    return sep::SEPResult::UNKNOWN_ERROR;
   }
   response_out = resp.body;
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult OllamaClient::post(const std::string &endpoint, const nlohmann::json &payload,
+sep::SEPResult OllamaClient::post(const std::string &endpoint, const nlohmann::json &payload,
                              std::string &response_out) {
   if (impl_->config.host.rfind("file://", 0) == 0) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   sep::api::APIResponse resp = impl_->client.post(endpoint, payload.dump());
   if (!resp.success) {
     response_out.clear();
     if (resp.error.code == sep::api::ErrorCode::ApiError) {
-      return SEPResult::PROCESSING_ERROR;
+      return sep::SEPResult::PROCESSING_ERROR;
     }
-    return SEPResult::UNKNOWN_ERROR;
+    return sep::SEPResult::UNKNOWN_ERROR;
   }
   response_out = resp.body;
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
 GenerateResponse OllamaClient::generate(const GenerateRequest &request) {
   nlohmann::json payload{{"model", request.model}, {"prompt", request.prompt}};
   std::string result;
-  SEPResult res = post("/api/generate", payload, result);
-  if (res != SEPResult::SUCCESS) {
+  sep::SEPResult res = post("/api/generate", payload, result);
+  if (res != sep::SEPResult::SUCCESS) {
     return {};
   }
   nlohmann::json json_result = nlohmann::json::parse(result);
@@ -94,8 +94,8 @@ EmbeddingResponse OllamaClient::getEmbedding(
     const EmbeddingRequest &request) {
   nlohmann::json payload{{"model", request.model}, {"prompt", request.prompt}};
   std::string result;
-  SEPResult res = post("/api/embeddings", payload, result);
-  if (res != SEPResult::SUCCESS) {
+  sep::SEPResult res = post("/api/embeddings", payload, result);
+  if (res != sep::SEPResult::SUCCESS) {
     return {};
   }
   nlohmann::json json_result = nlohmann::json::parse(result);

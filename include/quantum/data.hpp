@@ -34,7 +34,7 @@ inline bool isValidConfig(const PatternConfig& cfg) {
     return cfg.max_patterns > 0 && cfg.batch_size > 0;
 }
 
-enum class SEPResult {
+enum class PatternResult {
     SUCCESS = 0,
     INVALID_ARGUMENT = -1,
     ALLOCATION_FAILED = -2,

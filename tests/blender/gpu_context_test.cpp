@@ -22,7 +22,7 @@ class GPUContextTest : public ::testing::Test {
 protected:
     void SetUp() override {
         context_ = std::make_unique<sep::GPUContext>();
-        ASSERT_EQ(SEPResult::SUCCESS, context_->init());
+        ASSERT_EQ(sep::SEPResult::SUCCESS, context_->init());
     }
 
     void TearDown() override {
@@ -43,18 +43,18 @@ protected:
 
 TEST_F(GPUContextTest, InitializationTest) {
     sep::GPUContext ctx;
-    EXPECT_EQ(SEPResult::SUCCESS, ctx.init());
+    EXPECT_EQ(sep::SEPResult::SUCCESS, ctx.init());
     EXPECT_FALSE(ctx.hasError());
 }
 
 TEST_F(GPUContextTest, DeviceSelectionTest) {
     int device_count;
-    ASSERT_EQ(SEPResult::SUCCESS, context_->getDeviceCount(device_count));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->getDeviceCount(device_count));
     if (device_count > 1) {
-        EXPECT_EQ(SEPResult::SUCCESS, context_->selectDevice(1));
+        EXPECT_EQ(sep::SEPResult::SUCCESS, context_->selectDevice(1));
         EXPECT_FALSE(context_->hasError());
     }
-    EXPECT_EQ(SEPResult::INVALID_DEVICE, context_->selectDevice(device_count + 1));
+    EXPECT_EQ(sep::SEPResult::INVALID_DEVICE, context_->selectDevice(device_count + 1));
     EXPECT_TRUE(context_->hasError());
 }
 
@@ -71,11 +71,11 @@ TEST_F(GPUContextTest, MemoryAllocationTest) {
     void* ptr = nullptr;
     const size_t size = 1024 * 1024;  // 1MB
 
-    EXPECT_EQ(SEPResult::SUCCESS, context_->allocateMemory(&ptr, size));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->allocateMemory(&ptr, size));
     EXPECT_NE(nullptr, ptr);
     EXPECT_GE(context_->getUsedMemory(), size);
 
-    EXPECT_EQ(SEPResult::SUCCESS, context_->freeMemory(ptr));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(ptr));
     EXPECT_EQ(0u, context_->getUsedMemory());
 }
 
@@ -85,49 +85,49 @@ TEST_F(GPUContextTest, MemoryTransferTest) {
     std::vector<float> result_data(size);
 
     void* device_ptr = nullptr;
-    ASSERT_EQ(SEPResult::SUCCESS, context_->allocateMemory(&device_ptr, size * sizeof(float)));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->allocateMemory(&device_ptr, size * sizeof(float)));
 
     // Host to Device
-    EXPECT_EQ(SEPResult::SUCCESS, context_->copyHostToDevice(device_ptr, host_data.data(), size * sizeof(float)));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->copyHostToDevice(device_ptr, host_data.data(), size * sizeof(float)));
 
     // Device to Host
-    EXPECT_EQ(SEPResult::SUCCESS, context_->copyDeviceToHost(result_data.data(), device_ptr, size * sizeof(float)));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->copyDeviceToHost(result_data.data(), device_ptr, size * sizeof(float)));
 
     // Verify data
     for (size_t i = 0; i < size; ++i) {
         EXPECT_FLOAT_EQ(host_data[i], result_data[i]);
     }
 
-    EXPECT_EQ(SEPResult::SUCCESS, context_->freeMemory(device_ptr));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(device_ptr));
 }
 
 TEST_F(GPUContextTest, StreamOperationsTest) {
     cudaStream_t stream;
-    EXPECT_EQ(SEPResult::SUCCESS, context_->createStream(stream));
-    EXPECT_EQ(SEPResult::SUCCESS, context_->synchronizeStream(stream));
-    EXPECT_EQ(SEPResult::SUCCESS, context_->destroyStream(stream));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->createStream(stream));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->synchronizeStream(stream));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->destroyStream(stream));
 }
 
 TEST_F(GPUContextTest, EventOperationsTest) {
     cudaEvent_t event;
-    EXPECT_EQ(SEPResult::SUCCESS, context_->createEvent(event));
-    EXPECT_EQ(SEPResult::SUCCESS, context_->destroyEvent(event));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->createEvent(event));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->destroyEvent(event));
 }
 
 TEST_F(GPUContextTest, EventRecordAndSyncTest) {
     cudaEvent_t event;
     cudaStream_t stream;
-    ASSERT_EQ(SEPResult::SUCCESS, context_->createStream(stream));
-    ASSERT_EQ(SEPResult::SUCCESS, context_->createEvent(event));
-    EXPECT_EQ(SEPResult::SUCCESS, context_->recordEvent(event, stream));
-    EXPECT_EQ(SEPResult::SUCCESS, context_->synchronizeEvent(event));
-    EXPECT_EQ(SEPResult::SUCCESS, context_->destroyEvent(event));
-    EXPECT_EQ(SEPResult::SUCCESS, context_->destroyStream(stream));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->createStream(stream));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->createEvent(event));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->recordEvent(event, stream));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->synchronizeEvent(event));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->destroyEvent(event));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->destroyStream(stream));
 }
 
 TEST_F(GPUContextTest, DeviceInfoTest) {
     cudaDeviceProp prop{};
-    EXPECT_EQ(SEPResult::SUCCESS, context_->getDeviceInfo(prop));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->getDeviceInfo(prop));
     EXPECT_GT(prop.totalGlobalMem, 0u);
 }
 
@@ -135,7 +135,7 @@ TEST_F(GPUContextTest, ErrorHandlingTest) {
     // Invalid memory allocation
     void* ptr = nullptr;
     const size_t huge_size = 1ULL << 40;  // 1TB
-    EXPECT_EQ(SEPResult::MEMORY_ERROR, context_->allocateMemory(&ptr, huge_size));
+    EXPECT_EQ(sep::SEPResult::MEMORY_ERROR, context_->allocateMemory(&ptr, huge_size));
     EXPECT_TRUE(context_->hasError());
     EXPECT_FALSE(context_->getLastError().empty());
 
@@ -153,22 +153,22 @@ TEST_F(GPUContextTest, ConcurrentOperationsTest) {
 
     // Initialize streams and allocate memory
     for (int i = 0; i < num_streams; ++i) {
-        ASSERT_EQ(SEPResult::SUCCESS, context_->createStream(streams[i]));
-        ASSERT_EQ(SEPResult::SUCCESS, context_->allocateMemory(&device_ptrs[i], size_per_stream * sizeof(float)));
+        ASSERT_EQ(sep::SEPResult::SUCCESS, context_->createStream(streams[i]));
+        ASSERT_EQ(sep::SEPResult::SUCCESS, context_->allocateMemory(&device_ptrs[i], size_per_stream * sizeof(float))); 
         host_data[i] = createTestData(size_per_stream);
         result_data[i].resize(size_per_stream);
     }
 
     // Perform concurrent operations
     for (int i = 0; i < num_streams; ++i) {
-        EXPECT_EQ(SEPResult::SUCCESS,
+        EXPECT_EQ(sep::SEPResult::SUCCESS,
                   context_->copyHostToDevice(device_ptrs[i], host_data[i].data(), size_per_stream * sizeof(float)));
     }
 
     // Synchronize and verify
     for (int i = 0; i < num_streams; ++i) {
-        EXPECT_EQ(SEPResult::SUCCESS, context_->synchronizeStream(streams[i]));
-        EXPECT_EQ(SEPResult::SUCCESS,
+        EXPECT_EQ(sep::SEPResult::SUCCESS, context_->synchronizeStream(streams[i]));
+        EXPECT_EQ(sep::SEPResult::SUCCESS,
                   context_->copyDeviceToHost(result_data[i].data(), device_ptrs[i], size_per_stream * sizeof(float)));
 
         for (size_t j = 0; j < size_per_stream; ++j) {
@@ -178,8 +178,8 @@ TEST_F(GPUContextTest, ConcurrentOperationsTest) {
 
     // Cleanup
     for (int i = 0; i < num_streams; ++i) {
-        EXPECT_EQ(SEPResult::SUCCESS, context_->freeMemory(device_ptrs[i]));
-        EXPECT_EQ(SEPResult::SUCCESS, context_->destroyStream(streams[i]));
+        EXPECT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(device_ptrs[i]));
+        EXPECT_EQ(sep::SEPResult::SUCCESS, context_->destroyStream(streams[i]));
     }
 }
 
@@ -190,13 +190,13 @@ TEST_F(GPUContextTest, MemoryTrackingTest) {
 
     size_t total_allocated = 0;
     for (size_t i = 0; i < num_allocs; ++i) {
-        ASSERT_EQ(SEPResult::SUCCESS, context_->allocateMemory(&ptrs[i], alloc_size));
+        ASSERT_EQ(sep::SEPResult::SUCCESS, context_->allocateMemory(&ptrs[i], alloc_size));
         total_allocated += alloc_size;
         EXPECT_EQ(total_allocated, context_->getUsedMemory());
     }
 
     for (size_t i = 0; i < num_allocs; ++i) {
-        EXPECT_EQ(SEPResult::SUCCESS, context_->freeMemory(ptrs[i]));
+        EXPECT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(ptrs[i]));
         total_allocated -= alloc_size;
         EXPECT_EQ(total_allocated, context_->getUsedMemory());
     }

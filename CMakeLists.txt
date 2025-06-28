@@ -136,6 +136,31 @@ if(NOT OpenVDB_FOUND)
     find_path(OPENVDB_INCLUDE_DIR openvdb/openvdb.h)
 endif()
 
+# Helper to locate optional libraries with extended search paths
+function(find_and_add_library _var)
+  set(options)
+  set(oneValueArgs)
+  set(multiValueArgs NAMES PATHS)
+  cmake_parse_arguments(_FAAL "" "" "NAMES;PATHS" ${ARGN})
+  find_library(${_var}
+    NAMES ${_FAAL_NAMES}
+    PATHS ${_FAAL_PATHS}
+    PATH_SUFFIXES lib lib64
+  )
+  if(${_var})
+    message(STATUS "[FOUND] ${_var}: ${${_var}}")
+  else()
+    message(WARNING "[MISSING] ${_var}")
+    set(${_var} "" PARENT_SCOPE)
+  endif()
+  set(${_var} ${${_var}} PARENT_SCOPE)
+endfunction()
+
+# OpenPGL (Path Guiding Library)
+find_and_add_library(OpenPGL_LIBRARY
+  NAMES pgl
+  PATHS ${CMAKE_SOURCE_DIR}/lib ${CMAKE_INSTALL_PREFIX}/lib /usr/lib64 /usr/local/lib /usr/lib)
+
 # TBB (multiple versions for compatibility)
 find_library(TBB_LIBRARY NAMES tbb)
 find_library(TBB_MALLOC_LIBRARY NAMES tbbmalloc)
@@ -270,6 +295,9 @@ set(EXTERNAL_LINK_ORDER
     ${OSL_COMP_LIBRARY}
     ${OSL_EXEC_LIBRARY}
     ${OSL_QUERY_LIBRARY}
+
+    # Path guiding
+    ${OpenPGL_LIBRARY}
     
     # OpenSubdiv with its TBB dependency
     ${OPENSUBDIV_CPU_LIBRARY}

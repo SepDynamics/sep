@@ -246,6 +246,32 @@ configure_component(PipeWire OPTIONAL ${SEP_HAS_PIPEWIRE})
 configure_component(OpenSubdiv OPTIONAL ${OPENSUBDIV_FOUND})
 ```
 
+### Component Dependencies and Configuration
+
+The build is organized around optional components that can be toggled via CMake
+options. The most common options are:
+
+| Component | CMake Option | Required Libraries |
+|-----------|-------------|--------------------|
+| Cycles Renderer | `SEP_HAS_CYCLES` | Cycles static libs, OSL |
+| PipeWire Audio | `SEP_HAS_PIPEWIRE` | `libpipewire-0.3` |
+| OpenSubdiv | `OPENSUBDIV_FOUND` | `libosdCPU.so`, `libosdGPU.so`, TBB |
+| Path Guiding | `OpenPGL_LIBRARY` | `libpgl.so` |
+
+Enable or disable a component by passing `-D<option>=ON/OFF` to CMake. Missing
+libraries fall back to stub implementations through the `component_bridge`
+helpers.
+
+Troubleshooting tips:
+
+- Ensure `CMAKE_PREFIX_PATH` includes locations of the libraries.
+- If PipeWire detection prints an empty library path, the audio module will be
+  disabled. Verify `pkg-config --libs libpipewire-0.3` returns a valid `-L`
+  directory.
+- When OpenSubdiv libraries cannot be found, symlinks are automatically created
+  under `lib/` pointing to system installations.
+
+
 #### 5.2 Implement Graceful Degradation
 ```cpp
 // src/blender/renderer_factory.cpp

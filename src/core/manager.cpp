@@ -4,6 +4,8 @@
 
 namespace sep::config {
 
+#include <fstream> // Required for std::ifstream
+
 namespace {
 using namespace env_keys;
 
@@ -135,6 +137,7 @@ public:
 ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
 ConfigManager::~ConfigManager() {}
 
+// Implementations of public methods
 const SystemConfig &ConfigManager::getConfig() const {
   std::lock_guard<std::mutex> lock(mutex_);
   return impl_->config;

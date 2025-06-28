@@ -160,7 +160,7 @@ AudioError PipeWireCapture::setupStream()
                                 1);
 
     if (err < 0)
-    {
+    {   
         spdlog::error("Failed to connect stream: {}", strerror(-err));
         spdlog::error("Stream flags: autoconnect={}, rt_process={}",
                       (err & PW_STREAM_FLAG_AUTOCONNECT),
@@ -209,7 +209,7 @@ void PipeWireCapture::setCallback(AudioCallback callback)
 
 AudioMetrics PipeWireCapture::getMetrics() const
 {
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::lock_guard<std::mutex> lock(mutex_); 
     return metrics_;
 }
 

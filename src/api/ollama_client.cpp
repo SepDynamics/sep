@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <stdexcept> // Required for std::runtime_error
 #include <sstream>
 
 namespace sep {

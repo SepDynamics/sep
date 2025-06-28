@@ -18,6 +18,7 @@
 #include <thread>
 #include <vector>
 #include <chrono>
+#include <cmath> // Required for std::sqrt
 
 using namespace sep::shim::chrono_literals;
 using namespace sep::cuda;
@@ -232,7 +233,7 @@ class MetricsCollector::Impl {
 // MetricsCollector implementation
 MetricsCollector& MetricsCollector::instance() {
     // Use a function-local static variable for thread-safe singleton initialization
-    static MetricsCollector instance;
+    static MetricsCollector instance; // Fix: Declare the static instance
     if (!instance.pImpl) {
         instance.pImpl = std::make_unique<Impl>();
     }
@@ -291,8 +292,8 @@ void MetricsCollector::updateSystemMetrics() {
         
         std::lock_guard<std::mutex> lock(metrics_mutex_);
         // cast to double to avoid implicit float-to-double conversion warning
-        system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage);
-        system_metrics_.memory_usage_bytes = detailed.memory_usage;
+        system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage); // Fix: Cast to double
+        system_metrics_.memory_usage_bytes = detailed.memory_usage; // Fix: Assign detailed.memory_usage
         system_metrics_.gpu_memory_usage_bytes = static_cast<std::uint64_t>(detailed.gpu_memory_usage);
         system_metrics_.gpu_utilization_percent = static_cast<double>(detailed.gpu_utilization);
     }
@@ -342,8 +343,8 @@ DetailedMetrics MetricsCollector::getDetailedMetrics() const {
 void MetricsCollector::reset() {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
     performance_metrics_.clear();
-    counters_.clear();
-    gauges_.clear();
+    counters_.clear(); // Fix: Clear counters_
+    gauges_.clear(); // Fix: Clear gauges_
     memory_metrics_ = MemoryMetrics{};
     system_metrics_ = SystemMetrics{};
     if (pImpl) {

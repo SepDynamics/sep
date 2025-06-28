@@ -8,7 +8,7 @@ namespace blender {
 
 PatternVisualizationPipeline::PatternVisualizationPipeline(MeshHandler *handler,
                                                            GPUContext *gpu_ctx)
-    : handler_(handler), gpu_ctx_(gpu_ctx), last_shader_revision_(0) {} // Fix: Initialize members
+    : handler_(handler), gpu_ctx_(gpu_ctx), last_shader_revision_(0) {} 
 
 std::array<float, 3> PatternVisualizationPipeline::projectNDim(
     const ::sep::shim::vector<float> &coords) const {

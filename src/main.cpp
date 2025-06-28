@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <spdlog/spdlog.h>
+#include <atomic>
 #include <string>
 #include <csignal>
 #include <atomic>

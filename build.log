@@ -6,205 +6,104 @@ Warning: pkg-config found libpipewire-0.3 but library file not at /libpipewire-0
 Cleaning build directory...
 Running CMake configuration...
 -- The CXX compiler identification is GNU 14.2.1
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/g++-14 - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Found CUDAToolkit: /usr/local/cuda-12.9/targets/x86_64-linux/include (found version "12.9.86")
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE
--- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
-CMake Warning at CMakeLists.txt:70 (message):
-  Cycles OSL library not found.  Setting empty placeholder.
+CMake Error at /usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:865 (message):
+  Compiling the CUDA compiler identification source file
+  "CMakeCUDACompilerId.cu" failed.
+
+  Compiler: /usr/local/cuda-12.9/bin/nvcc
+
+  Build flags:
+
+  Id flags: --keep;--keep-dir;tmp -v
 
 
-CMake Warning at CMakeLists.txt:78 (message):
-  Cycles OSL library not found; OSL features will be disabled.
+
+  The output was:
+
+  1
+
+  nvcc warning : Support for offline compilation for architectures prior to
+  '<compute/sm/lto>_75' will be removed in a future release (Use
+  -Wno-deprecated-gpu-targets to suppress warning).
+
+  #$ _NVVM_BRANCH_=nvvm
+
+  #$ _SPACE_=
+
+  #$ _CUDART_=cudart
+
+  #$ _HERE_=/usr/local/cuda-12.9/bin
+
+  #$ _THERE_=/usr/local/cuda-12.9/bin
+
+  #$ _TARGET_SIZE_=
+
+  #$ _TARGET_DIR_=
+
+  #$ _TARGET_DIR_=targets/x86_64-linux
+
+  #$ TOP=/usr/local/cuda-12.9/bin/..
+
+  #$ CICC_PATH=/usr/local/cuda-12.9/bin/../nvvm/bin
+
+  #$ NVVMIR_LIBRARY_DIR=/usr/local/cuda-12.9/bin/../nvvm/libdevice
+
+  #$
+  LD_LIBRARY_PATH=/usr/local/cuda-12.9/bin/../lib:/usr/local/cuda-12.9/lib64:/usr/local/cuda-12.9/lib64:
 
 
--- Found OSL_COMP_LIBRARY: /usr/lib64/liboslcomp.so
--- Found OSL_EXEC_LIBRARY: /usr/lib64/liboslexec.so
--- Found OSL_QUERY_LIBRARY: /usr/lib64/liboslquery.so
-CMake Warning at CMakeLists.txt:118 (message):
-  OPENSUBDIV_CPU_LIBRARY (osdCPU libosdCPU.so.3.6.0) not found.  Linking may
-  fail if required.
+  #$
+  PATH=/usr/local/cuda-12.9/bin/../nvvm/bin:/usr/local/cuda-12.9/bin:/home/ajn/bin:/home/ajn/.local/bin:/usr/local/cuda-12.9/bin:/home/ajn/.local/share/pnpm:/home/ajn/.local/bin:/home/ajn/bin:/home/ajn/.local/bin:/usr/local/cuda-12.9/bin:/home/ajn/.local/share/pnpm:/home/ajn/.local/bin:/usr/lib64/ccache:/home/ajn/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/var/lib/snapd/snap/bin:/home/ajn/.vscode-oss/extensions/ms-python.debugpy-2025.6.0-linux-x64/bundled/scripts/noConfigScripts
+
+
+  #$ INCLUDES="-I/usr/local/cuda-12.9/bin/../targets/x86_64-linux/include"
+
+  #$ LIBRARIES=
+  "-L/usr/local/cuda-12.9/bin/../targets/x86_64-linux/lib/stubs"
+  "-L/usr/local/cuda-12.9/bin/../targets/x86_64-linux/lib"
+
+  #$ CUDAFE_FLAGS=
+
+  #$ PTXAS_FLAGS=
+
+  #$ rm tmp/a_dlink.reg.c
+
+  #$ gcc -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -E -x c++ -D__CUDACC__
+  -D__NVCC__ "-I/usr/local/cuda-12.9/bin/../targets/x86_64-linux/include"
+  -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=9
+  -D__CUDACC_VER_BUILD__=86 -D__CUDA_API_VER_MAJOR__=12
+  -D__CUDA_API_VER_MINOR__=9 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1
+  -D__CUDACC_DEVICE_ATOMIC_BUILTINS__=1 -include "cuda_runtime.h" -m64
+  "CMakeCUDACompilerId.cu" -o "tmp/CMakeCUDACompilerId.cpp4.ii"
+
+  In file included from
+  /usr/local/cuda-12.9/bin/../targets/x86_64-linux/include/cuda_runtime.h:82,
+
+
+                   from <command-line>:
+
+  
+  /usr/local/cuda-12.9/bin/../targets/x86_64-linux/include/crt/host_config.h:143:2:
+  error: #error -- unsupported GNU version! gcc versions later than 14 are
+  not supported! The nvcc flag '-allow-unsupported-compiler' can be used to
+  override this version check; however, using an unsupported host compiler
+  may cause compilation failure or incorrect run time execution.  Use at your
+  own risk.
+
+    143 | #error -- unsupported GNU version! gcc versions later than 14 are not supported! The nvcc flag '-allow-unsupported-compiler' can be used to override this version check; however, using an unsupported host compiler may cause compilation failure or incorrect run time execution. Use at your own risk.
+        |  ^~~~~
+
+  # --error 0x1 --
+
+
+
+
+
 Call Stack (most recent call first):
-  CMakeLists.txt:127 (find_and_add_library)
+  /usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)
+  /usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:53 (__determine_compiler_id_test)
+  /usr/share/cmake/Modules/CMakeDetermineCUDACompiler.cmake:131 (CMAKE_DETERMINE_COMPILER_ID)
+  CMakeLists.txt:2 (project)
 
 
-CMake Warning at CMakeLists.txt:118 (message):
-  OPENSUBDIV_GPU_LIBRARY (osdGPU libosdGPU.so.3.6.0) not found.  Linking may
-  fail if required.
-Call Stack (most recent call first):
-  CMakeLists.txt:128 (find_and_add_library)
-
-
-CMake Warning at CMakeLists.txt:118 (message):
-  TBB_OPENSUBDIV_LIBRARY (tbb.so.2 libtbb.so.2) not found.  Linking may fail
-  if required.
-Call Stack (most recent call first):
-  CMakeLists.txt:129 (find_and_add_library)
-
-
-CMake Warning at CMakeLists.txt:118 (message):
-  OpenPGL_LIBRARY (OpenPGL pgl) not found.  Linking may fail if required.
-Call Stack (most recent call first):
-  CMakeLists.txt:130 (find_and_add_library)
-
-
--- Found OPENVDB_LIBRARY: /usr/lib64/libopenvdb.so
--- Found BLOSC_LIBRARY: /usr/lib64/libblosc.so
--- Found TBB_LIBRARY: /usr/lib64/libtbb.so
--- Found ALEMBIC_LIBRARY: /usr/lib64/libAlembic.so
--- Found IMATH_LIBRARY: /usr/lib64/libImath.so
--- Found GFLAGS_LIBRARY: /usr/lib64/libgflags.so
--- Found GLOG_LIBRARY: /usr/lib64/libglog.so
--- Found EMBREE_LIBRARY: /usr/lib64/libembree4.so
--- Found ZSTD_LIBRARY: /usr/lib64/libzstd.so
--- Found OPENCOLORIO_LIBRARY: /usr/lib64/libOpenColorIO.so
--- Found OPENEXR_LIBRARY: /usr/lib64/libOpenEXR.so
--- Found OPENIMAGEIO_LIBRARY: /usr/lib64/libOpenImageIO.so
--- Found OPENIMAGEIO_UTIL_LIBRARY: /usr/lib64/libOpenImageIO_Util.so
--- Found ZLIB_LIBRARY: /usr/lib64/libz.so
--- PipeWire found via pkg-config: pipewire-0.3
--- Using PipeWire at: pipewire-0.3
--- Using custom CUDA compilation pipeline
--- CUDA Path: /usr/local/cuda-12.9
--- CUDA NVCC: /usr/local/cuda-12.9/bin/nvcc
--- CUDA Host Compiler: /usr/bin/g++-14
--- CUDA Architectures: 70;75;80;86;89
--- CUDA Libraries: /usr/local/cuda-12.9/lib64/libcudart.so;/usr/local/cuda-12.9/lib64/libcudadevrt.a;/usr/local/cuda-12.9/lib64/libcudart_static.a
--- CUDA Library Dirs: /usr/local/cuda-12.9/lib64;/usr/local/cuda-12.9/targets/x86_64-linux/lib;/usr/local/cuda-12.9/targets/x86_64-linux/lib/stubs
--- Found OSL Comp: /usr/lib64/liboslcomp.so
--- Found OSL Exec: /usr/lib64/liboslexec.so
--- Found OSL Query: /usr/lib64/liboslquery.so
--- Final OSL libraries to link: /usr/lib64/liboslcomp.so;/usr/lib64/liboslexec.so;/usr/lib64/liboslquery.so
--- OSL include directory set to: /usr/include
--- Found Cycles Graph library: /sep/lib/libcycles_graph.a
--- Found TBB for OpenSubdiv: /usr/lib64/libtbb.so.2
--- Found OpenPGL library: /usr/lib64/libopenpgl.so
--- Found PipeWire: /usr/lib64/libpipewire-0.3.so
--- Found OpenSubdiv CPU: /usr/lib64/libosdCPU.so
--- Found OpenSubdiv GPU: /usr/lib64/libosdGPU.so
--- Found TBB: /usr/lib64/libtbb.so
--- Found OpenVDB library: /usr/lib64/libopenvdb.so
--- Found OpenImageIO: /usr/lib64/libOpenImageIO.so
--- Found OpenImageIO_Util: /usr/lib64/libOpenImageIO_Util.so
--- Found Alembic: /usr/lib64/libAlembic.so
--- Found ZSTD: /usr/lib64/libzstd.so
--- Found OpenColorIO: /usr/lib64/libOpenColorIO.so
--- Found Imath: /usr/lib64/libImath.so
--- Found OpenEXR: /usr/lib64/libOpenEXR.so
--- Found Embree: /usr/lib64/libembree4.so
--- Found GFlags library: /usr/lib64/libgflags.so
--- Configuring done (0.9s)
--- Generating done (0.0s)
-CMake Warning:
-  Manually-specified variables were not used by the project:
-
-    SEP_HAS_PIPEWIRE
-    WITH_OPENIMAGEDENOISE
-
-
--- Build files have been written to: /sep/build
-Building SEP Engine...
-[  1%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[  3%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[  4%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[  8%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[  8%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 11%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 12%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 16%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 16%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 17%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 20%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 24%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 22%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 25%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 29%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 30%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 33%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 35%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 38%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 40%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 41%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 45%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 48%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 51%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 53%] Linking CXX static library libsep_compat.a
-[ 53%] Built target sep_compat
-[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 56%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 58%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 59%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 62%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 64%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 66%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 67%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 69%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 79%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 80%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 82%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 83%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 85%] Linking CXX static library libsep_audio.a
-[ 85%] Built target sep_audio
-[ 87%] Linking CXX static library libsep_blender.a
-[ 87%] Built target sep_blender
-[ 88%] Linking CXX static library libsep_quantum.a
-[ 90%] Linking CXX static library libsep_core.a
-[ 90%] Built target sep_quantum
-[ 90%] Built target sep_core
-[ 91%] Linking CXX static library libsep_memory.a
-[ 91%] Built target sep_memory
-[ 93%] Linking CXX static library libsep_api.a
-[ 93%] Built target sep_api
-[ 96%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
-[ 96%] Building CXX object src/tests/CMakeFiles/cycles_test.dir/cycles_test.cpp.o
-[ 98%] Linking CXX executable cycles_test
-/usr/bin/ld: warning: libtbb.so.2, needed by /usr/lib64/libopenvdb.so, may conflict with libtbb.so.12
-/usr/bin/ld: /sep/lib/libcycles_scene.a(integrator.cpp.o): in function `ccl::Integrator::get_adaptive_sampling() const':
-integrator.cpp:(.text+0xd73): undefined reference to `ccl::AdaptiveSampling::AdaptiveSampling()'
-/usr/bin/ld: /sep/lib/libcycles_scene.a(camera.cpp.o): in function `ccl::Camera::world_to_raster_size(ccl::float3)':
-camera.cpp:(.text+0x96f0): undefined reference to `ccl::osl_eval_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::packed_float3, ccl::packed_float3, ccl::packed_float3, ccl::float2, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&)'
-/usr/bin/ld: /sep/lib/libcycles_scene.a(hair.cpp.o): in function `ccl::Hair::update_shadow_transparency(ccl::Device*, ccl::Scene*, ccl::Progress&)':
-hair.cpp:(.text+0x2748): undefined reference to `ccl::ShaderEval::ShaderEval(ccl::Device*, ccl::Progress&)'
-/usr/bin/ld: hair.cpp:(.text+0x27c2): undefined reference to `ccl::ShaderEval::eval(ccl::ShaderEvalType, int, int, std::function<int (ccl::device_vector<ccl::KernelShaderEvalInput>&)> const&, std::function<void (ccl::device_vector<float>&)> const&)'
-/usr/bin/ld: /sep/lib/libcycles_scene.a(light.cpp.o): in function `ccl::LightManager::device_update_background(ccl::Device*, ccl::DeviceScene*, ccl::Scene*, ccl::Progress&)':
-light.cpp:(.text+0x48e3): undefined reference to `ccl::ShaderEval::ShaderEval(ccl::Device*, ccl::Progress&)'
-/usr/bin/ld: light.cpp:(.text+0x49ac): undefined reference to `ccl::ShaderEval::eval(ccl::ShaderEvalType, int, int, std::function<int (ccl::device_vector<ccl::KernelShaderEvalInput>&)> const&, std::function<void (ccl::device_vector<float>&)> const&)'
-/usr/bin/ld: /sep/lib/libcycles_scene.a(osl.cpp.o): in function `ccl::OSLManager::device_update_post(ccl::Device*, ccl::Scene*, ccl::Progress&, bool)':
-osl.cpp:(.text+0xd43): undefined reference to `ccl::OSLRenderServices::image_manager'
-/usr/bin/ld: osl.cpp:(.text+0xdd3): undefined reference to `ccl::OSLRenderServices::image_manager'
-/usr/bin/ld: /sep/lib/libcycles_scene.a(osl.cpp.o): in function `std::_Function_handler<void (ccl::Device*, ccl::OSLGlobals*), ccl::OSLManager::shading_system_init()::$_0>::_M_invoke(std::_Any_data const&, ccl::Device*&&, ccl::OSLGlobals*&&)':
-osl.cpp:(.text+0x93df): undefined reference to `ccl::OSLRenderServices::OSLRenderServices(OpenImageIO_v2_5::TextureSystem*, int)'_ZNSt6vectorIN3ccl12BVHReferenceENS0_16GuardedAllocatorIS1_EEE17_M_realloc_appendIJRKS1_EEEvDpOT_[_ZNSt6vectorIN3ccl12BVHReferenceENS0_16GuardedAllocatorIS1_EEE17_M_realloc_appendIJRKS1_EEEvDpOT_]+0xfa): undefined reference to `ccl::util_guarded_mem_free(unsigned long)'
-/usr/bin/ld: /sep/lib/libcycles_bvh.a(split.cpp.o): in function `void std::vector<ccl::BVHReference, ccl::GuardedAllocator<ccl::BVHReference> >::_M_range_insert<__gnu_cxx::__normal_iterator<ccl::BVHReference*, std::vector<ccl::BVHReference, ccl::GuardedAllocator<ccl::BVHReference> > > >(__gnu_cxx::__normal_iterator<ccl::BVHReference*, std::vector<ccl::BVHReference, ccl::GuardedAllocator<ccl::BVHReference> > >, __gnu_cxx::__normal_iterator<ccl::BVHReference*, std::vector<ccl::BVHReference, ccl::GuardedAllocator<ccl::BVHReference> > >, __gnu_cxx::__normal_iterator<ccl::BVHReference*, std::vector<ccl::BVHReference, ccl::GuardedAllocator<ccl::BVHReference> > >, std::forward_iterator_tag)':
-split.cpp:(.text._ZNSt6vectorIN3ccl12BVHReferenceENS0_16GuardedAllocatorIS1_EEE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPS1_S4_EEEEvS9_T_SA_St20forward_iterator_tag[_ZNSt6vectorIN3ccl12BVHReferenceENS0_16GuardedAllocatorIS1_EEE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPS1_S4_EEEEvS9_T_SA_St20forward_iterator_tag]+0xa4): undefined reference to `ccl::util_guarded_mem_alloc(unsigned long)'
-/usr/bin/ld: split.cpp:(.text._ZNSt6vectorIN3ccl12BVHReferenceENS0_16GuardedAllocatorIS1_EEE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPS1_S4_EEEEvS9_T_SA_St20forward_iterator_tag[_ZNSt6vectorIN3ccl12BVHReferenceENS0_16GuardedAllocatorIS1_EEE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPS1_S4_EEEEvS9_T_SA_St20forward_iterator_tag]+0x174): undefined reference to `ccl::util_guarded_mem_free(unsigned long)'
-/usr/bin/ld: /sep/lib/libcycles_bvh.a(sort.cpp.o): in function `ccl::bvh_reference_sort(int, int, ccl::BVHReference*, int, ccl::BVHUnaligned const*, ccl::Transform const*)':
-sort.cpp:(.text+0xa8): undefined reference to `ccl::TaskPool::TaskPool()'
-/usr/bin/ld: sort.cpp:(.text+0xcb): undefined reference to `ccl::TaskPool::wait_work(ccl::TaskPool::Summary*)'
-/usr/bin/ld: sort.cpp:(.text+0xd5): undefined reference to `ccl::TaskPool::~TaskPool()'
-/usr/bin/ld: sort.cpp:(.text+0x1a3): undefined reference to `ccl::TaskPool::~TaskPool()'
-/usr/bin/ld: /sep/lib/libcycles_bvh.a(sort.cpp.o): in function `ccl::bvh_reference_sort_threaded(ccl::TaskPool*, ccl::BVHReference*, int, int, ccl::BVHReferenceCompare const&)':
-sort.cpp:(.text+0x925): undefined reference to `ccl::TaskPool::push(std::function<void ()>&&)'
-collect2: error: ld returned 1 exit status
-make[2]: *** [CMakeFiles/sep_engine.dir/build.make:179: sep_engine] Error 1
-make[1]: *** [CMakeFiles/Makefile2:277: CMakeFiles/sep_engine.dir/all] Error 2
-make: *** [Makefile:91: all] Error 2
+-- Configuring incomplete, errors occurred!

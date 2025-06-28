@@ -37,7 +37,7 @@
 
 // GLM compatibility defines - must come before any GLM includes
 #define GLM_FORCE_PURE   // Ensure GLM doesn't use any platform-specific optimizations
-#define GLM_FORCE_17  // Force C++14 mode for GLM
+#define GLM_FORCE_14  // Force C++14 mode for GLM
 #ifdef GLM_COMPILER
 #undef GLM_COMPILER
 #endif

@@ -4,6 +4,7 @@
 #include "audio/config.h"
 #include "audio/pipewire_includes.h"
 #include "compat/component_bridge.h"
+#include "compat/math_common.h"
 
 
 // Standard library headers
@@ -17,7 +18,9 @@
 #include <glm/gtc/constants.hpp>
 #include <cmath>
 
-using namespace sep::audio;
+namespace sep::audio {
+
+namespace {
 
 struct PWInit
 {
@@ -34,7 +37,7 @@ static PWInit pw_init_once;
 
 PipeWireCapture::PipeWireCapture() = default;
 
-namespace PipeWireCapture {
+namespace {
 const struct pw_stream_events createStreamEvents()
 {
     struct pw_stream_events events = {};
@@ -43,6 +46,8 @@ const struct pw_stream_events createStreamEvents()
     events.process       = &streamProcess;
     return events;
 }
+
+}  // namespace
 
 
 void PipeWireCapture::cleanup()
@@ -326,4 +331,5 @@ std::unique_ptr<AudioCapture> AudioCapture::create()
     return compat::createAudioCapture();
 }
 
-}  // namespace audio
+}  // namespace
+}  // namespace sep::audio

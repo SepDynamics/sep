@@ -27,6 +27,7 @@ struct QuantumState {
     float coherence;
     float stability;
     float entropy;
+    float phase{0.0f};
     float mutation_rate;
     int generation;
     int mutation_count;

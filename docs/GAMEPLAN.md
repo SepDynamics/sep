@@ -238,3 +238,26 @@ Start with **Phase 0 and 1**. Getting a simple version string back from your `.s
 The custom build in Phase 3 is the ultimate goal, but it requires a solid understanding of Blender's source and build system. Master the addon approach first.
 
 Pick a phase and let's get building. You got this.
+
+## Component Dependencies and CMake Options
+
+Each core module relies on external libraries. You can enable or disable these
+features when configuring the build:
+
+| Component      | Library Requirements                | CMake Option                |
+|----------------|------------------------------------|-----------------------------|
+| `sep_audio`    | PipeWire                            | `-DSEP_HAS_PIPEWIRE=ON`     |
+| `sep_render`   | OpenSubdiv, OpenVDB, Embree, OIIO   | `-DSEP_WITH_RENDER=ON`      |
+| `sep_ai`       | OpenPGL                             | `-DSEP_WITH_OPENPGL=ON`     |
+
+Disable a component by passing `OFF` for the relevant option. Missing libraries
+will trigger stub implementations via the `component_bridge` mechanism so the
+engine still compiles.
+
+### Troubleshooting Missing Libraries
+
+1. Verify `CMAKE_PREFIX_PATH` includes locations like `/usr/lib64` or
+   `/usr/local/lib`.
+2. If a library is installed but not found, create a symlink inside the `lib/`
+   directory pointing to the system copy.
+3. Rerun CMake after installing new packages so the cache updates.

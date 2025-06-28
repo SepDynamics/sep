@@ -221,47 +221,41 @@ Call Stack (most recent call first):
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/build
 Building SEP Engine...
-[  1%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[  2%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[  4%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  5%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[  8%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 14%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
-[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
-[ 15%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 17%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
-[ 18%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 21%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 21%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 23%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 24%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[  1%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[  4%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  4%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[  5%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[  7%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[  8%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 13%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 14%] Building CXX object src/compat/CMakeFiles/cycles_osl.dir/cycles_osl_stub.cpp.o
+[ 15%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
+[ 15%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cycles_osl_stub.cpp.o
+[ 17%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 18%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 20%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 24%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 24%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 28%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o
 /sep/src/compat/core_stub.cpp:2:10: fatal error: compat/core_stub.h: No such file or directory
     2 | #include "compat/core_stub.h" // Include the stub header
       |          ^~~~~~~~~~~~~~~~~~~~
 compilation terminated.
 make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:135: src/compat/CMakeFiles/sep_compat.dir/core_stub.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 27%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-/sep/src/core/allocation_metrics.cpp:4:10: fatal error: metrics/types.h: No such file or directory
-    4 | #include "metrics/types.h"
-      |          ^~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:79: src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 28%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_stubs.cpp.o
-[ 30%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 30%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
 [ 31%] Linking CXX static library /sep/lib/libcycles_osl.a
-[ 33%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-/sep/src/compat/raii.cpp:16:10: fatal error: memory/memory_tier_manager.h: No such file or directory
-   16 | #include "memory/memory_tier_manager.h" // Include header for interface
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
+/sep/src/core/dag_graph.cpp: In member function ‘void sep::dag::DagGraph::removeNode(uint64_t)’:
+/sep/src/core/dag_graph.cpp:67:13: error: ‘node’ was not declared in this scope; did you mean ‘nodes_’?
+   67 |             node.parents.erase(std::remove(node.parents.begin(), node.parents.end(), id), node.parents.end());
+      |             ^~~~
+      |             nodes_
+[ 31%] Built target cycles_osl
+[ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
 In file included from /sep/src/api/bridge_c.cpp:3:
 /sep/include/api/bridge_internal.hpp:37:29: error: ‘quantum’ is not a member of ‘sep’
    37 | extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
@@ -269,31 +263,11 @@ In file included from /sep/src/api/bridge_c.cpp:3:
 /sep/include/api/bridge_internal.hpp:37:47: error: template argument 1 is invalid
    37 | extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
       |                                               ^
-[ 34%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 /sep/include/api/bridge_internal.hpp:37:47: error: template argument 2 is invalid
-[ 34%] Built target cycles_osl
-[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-/sep/src/quantum/qfh.cpp: In member function ‘sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const sep::shim::vector<unsigned char>&)’:
-/sep/src/quantum/qfh.cpp:78:12: error: ‘struct sep::quantum::QFHResult’ has no member named ‘collapse_threshold’
-   78 |     result.collapse_threshold = options_.collapse_threshold; // Fix: Initialize collapse_threshold
-      |            ^~~~~~~~~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:107: src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o] Error 1
+[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:93: src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-In file included from /sep/src/audio/pipewire_capture.cpp:3:
-/sep/include/audio/pipewire_capture.h:22:8: error: ‘pw_stream_state’ referred to as ‘struct’
-   22 | struct pw_stream_state;
-      |        ^~~~~~~~~~~~~~~
-In file included from /usr/include/pipewire-0.3/pipewire/pipewire.h:36,
-                 from /usr/include/pipewire-0.3/pipewire/impl.h:23,
-                 from /usr/include/pipewire-0.3/pipewire/global.h:39,
-                 from /sep/include/audio/pipewire_includes.h:25,
-                 from /sep/include/audio/pipewire_capture.h:13:
-/usr/include/pipewire-0.3/pipewire/stream.h:246:6: note: ‘pw_stream_state’ has a previous declaration here
-  246 | enum pw_stream_state {
-      |      ^~~~~~~~~~~~~~~
-[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 36%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 In file included from /sep/src/compat/component_bridge.cpp:2:
 /sep/include/audio/pipewire_capture.h:40:51: error: ‘pw_stream_state’ referred to as enum
    40 |   static void streamStateChanged(void *data, enum pw_stream_state old_state,
@@ -307,8 +281,35 @@ In file included from /sep/src/compat/component_bridge.cpp:2:
 /sep/include/audio/pipewire_capture.h:22:8: note: ‘pw_stream_state’ has a previous declaration here
    22 | struct pw_stream_state;
       |        ^~~~~~~~~~~~~~~
-[ 42%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+In file included from /sep/src/audio/pipewire_capture.cpp:3:
+/sep/include/audio/pipewire_capture.h:22:8: error: ‘pw_stream_state’ referred to as ‘struct’
+   22 | struct pw_stream_state;
+      |        ^~~~~~~~~~~~~~~
+In file included from /usr/include/pipewire-0.3/pipewire/pipewire.h:36,
+                 from /usr/include/pipewire-0.3/pipewire/impl.h:23,
+                 from /usr/include/pipewire-0.3/pipewire/global.h:39,
+                 from /sep/include/audio/pipewire_includes.h:25,
+                 from /sep/include/audio/pipewire_capture.h:13:
+/usr/include/pipewire-0.3/pipewire/stream.h:246:6: note: ‘pw_stream_state’ has a previous declaration here
+  246 | enum pw_stream_state {
+      |      ^~~~~~~~~~~~~~~
+[ 37%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+/sep/src/quantum/qfh.cpp: In member function ‘sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const sep::shim::vector<unsigned char>&)’:
+/sep/src/quantum/qfh.cpp:78:12: error: ‘struct sep::quantum::QFHResult’ has no member named ‘collapse_threshold’
+   78 |     result.collapse_threshold = options_.collapse_threshold; // Fix: Initialize collapse_threshold
+      |            ^~~~~~~~~~~~~~~~~~
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:107: src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+/sep/src/core/allocation_metrics.cpp:7:1: error: ‘Counter’ does not name a type
+    7 | Counter g_allocation_failures{"allocation_failures_total", "Total memory allocation failures"};
+      | ^~~~~~~
+/sep/src/core/allocation_metrics.cpp:11:1: error: ‘Counter’ does not name a type
+   11 | Counter& allocationFailures()
+      | ^~~~~~~
+/sep/src/core/allocation_metrics.cpp:21:1: error: expected declaration before ‘}’ token
+   21 | }  // namespace sep::metrics
+      | ^
 /sep/src/api/bridge_c.cpp: In function ‘int sep_bridge_init()’:
 /sep/src/api/bridge_c.cpp:21:8: error: ‘sep::quantum’ has not been declared
    21 |   sep::quantum::IProcessor::ProcessingConfig options{};
@@ -428,21 +429,6 @@ In file included from /sep/src/compat/component_bridge.cpp:2:
 /sep/src/api/bridge_c.cpp:222:31: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
   222 |     sep::api::bridge::detail::setLastError("Invalid parameters");
       |                               ^~~~~~~~~~~~
-/sep/src/api/bridge_c.cpp:226:29: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
-  226 |   sep::api::bridge::detail::setLastError("");
-      |                             ^~~~~~~~~~~~
-/sep/include/api/bridge_internal.hpp:24:31: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
-   24 |     sep::api::bridge::detail::setLastError(e.what()); \
-      |                               ^~~~~~~~~~~~
-/sep/src/api/bridge_c.cpp:229:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
-  229 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-      |     ^~~~~~~~~~~~~~~~
-/sep/include/api/bridge_internal.hpp:25:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
-   25 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
-      |                                                       ^~~~~~~~~~~
-/sep/src/api/bridge_c.cpp:229:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
-  229 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-      |     ^~~~~~~~~~~~~~~~
 /sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::synchronize()’:
 /sep/src/compat/stream.cpp:18:37: error: ‘struct sep::cuda::Stream::Impl’ has no member named ‘synchronize’
    18 | void Stream::synchronize() { impl_->synchronize(); }
@@ -463,57 +449,37 @@ In file included from /sep/src/compat/component_bridge.cpp:2:
 /sep/src/compat/stream.cpp:26:46: error: ‘struct sep::cuda::Stream::Impl’ has no member named ‘isValid’
    26 | bool Stream::isValid() const { return impl_->isValid(); }
       |                                              ^~~~~~~
+/sep/src/api/bridge_c.cpp:226:29: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
+  226 |   sep::api::bridge::detail::setLastError("");
+      |                             ^~~~~~~~~~~~
+/sep/include/api/bridge_internal.hpp:24:31: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
+   24 |     sep::api::bridge::detail::setLastError(e.what()); \
+      |                               ^~~~~~~~~~~~
+/sep/src/api/bridge_c.cpp:229:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
+  229 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+      |     ^~~~~~~~~~~~~~~~
+/sep/include/api/bridge_internal.hpp:25:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
+   25 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
+      |                                                       ^~~~~~~~~~~
+/sep/src/api/bridge_c.cpp:229:5: note: in expansion of macro ‘SEP_CATCH_RETURN’
+  229 |   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+      |     ^~~~~~~~~~~~~~~~
 /sep/src/compat/stream.cpp: In static member function ‘static std::shared_ptr<sep::cuda::Stream> sep::cuda::Stream::create(sep::StreamFlags)’:
 /sep/src/compat/stream.cpp:31:3: error: ‘cudaStream_t’ was not declared in this scope
    31 |   cudaStream_t cuda_stream;
       |   ^~~~~~~~~~~~
-/sep/src/quantum/quantum_processor.cpp: In constructor ‘sep::quantum::QuantumProcessor::QuantumProcessor(const Config&)’:
-/sep/src/quantum/quantum_processor.cpp:61:23: error: ‘createQFHBasedQBSAProcessor’ was not declared in this scope
-   61 |     qbsa_processor_ = createQFHBasedQBSAProcessor({});
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor.cpp: At global scope:
-/sep/src/quantum/quantum_processor.cpp:65:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                 ^~~~~~~~~~~~~~~~~
-      |                 QuantumProcessor
-/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 1 is invalid
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                                  ^
-/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor.cpp:65:36: error: ambiguating new declaration of ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
-   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
-      |                                    ^~~~~~~~~~~~~~~~~~~~~~
-In file included from /sep/src/quantum/quantum_processor.cpp:1:
-/sep/include/quantum/quantum_processor.h:57:35: note: old declaration ‘std::unique_ptr<sep::quantum::QuantumProcessor> sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
-   57 | std::unique_ptr<QuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config);
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~
 /sep/src/compat/stream.cpp:34:7: error: ‘cudaStreamNonBlocking’ was not declared in this scope
    34 |       cudaStreamNonBlocking :
       |       ^~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’:
-/sep/src/quantum/quantum_processor.cpp:68:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
-   68 |     return std::make_unique<QuantumProcessor>(config);
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-      |                                              |
-      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
 /sep/src/compat/stream.cpp:35:7: error: ‘cudaStreamDefault’ was not declared in this scope
    35 |       cudaStreamDefault;
       |       ^~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor.cpp: At global scope:
-/sep/src/quantum/quantum_processor.cpp:71:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
-   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
-      |                 ^~~~~~~~~~~~~~~~~
-      |                 QuantumProcessor
-/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 1 is invalid
-   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
-      |                                  ^
-/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessorStub()’:
-/sep/src/quantum/quantum_processor.cpp:72:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
-   72 |     return std::make_unique<QuantumProcessor>(QuantumProcessor::Config{});
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                              |
-      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
+/sep/src/api/bridge.cpp:54:6: error: redefinition of ‘void sep::api::bridge::detail::setLastError(const std::string&)’
+   54 | void setLastError(const std::string& error) {
+      |      ^~~~~~~~~~~~
+/sep/src/api/bridge.cpp:53:6: note: ‘void sep::api::bridge::detail::setLastError(const std::string&)’ previously defined here
+   53 | void setLastError(const std::string &error) { g_last_error = error; }
+      |      ^~~~~~~~~~~~
 /sep/src/compat/stream.cpp:37:3: error: ‘cudaError_t’ was not declared in this scope
    37 |   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
       |   ^~~~~~~~~~~
@@ -524,12 +490,6 @@ In file included from /sep/src/quantum/quantum_processor.cpp:1:
 /sep/src/compat/stream.cpp:38:14: error: ‘cudaSuccess’ was not declared in this scope
    38 |   if (err != cudaSuccess) {
       |              ^~~~~~~~~~~
-/sep/src/api/bridge.cpp:54:6: error: redefinition of ‘void sep::api::bridge::detail::setLastError(const std::string&)’
-   54 | void setLastError(const std::string& error) {
-      |      ^~~~~~~~~~~~
-/sep/src/api/bridge.cpp:53:6: note: ‘void sep::api::bridge::detail::setLastError(const std::string&)’ previously defined here
-   53 | void setLastError(const std::string &error) { g_last_error = error; }
-      |      ^~~~~~~~~~~~
 /sep/src/compat/stream.cpp:39:18: error: ‘logCudaError’ is not a member of ‘sep::cuda’
    39 |     ::sep::cuda::logCudaError("cudaStreamCreateWithFlags", err);
       |                  ^~~~~~~~~~~~
@@ -539,35 +499,7 @@ In file included from /sep/src/quantum/quantum_processor.cpp:1:
 /sep/src/compat/stream.cpp:42:28: error: ‘cuda_stream’ was not declared in this scope
    42 |   stream->impl_->setHandle(cuda_stream);
       |                            ^~~~~~~~~~~
-/sep/src/quantum/quantum_processor_qfh.cpp:22:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
-   22 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
-      |                 ^~~~~~~~~~~~~~~~~~~~
-      |                 QuantumProcessorQFH
-/sep/src/quantum/quantum_processor_qfh.cpp:22:37: error: template argument 1 is invalid
-   22 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
-      |                                     ^
-/sep/src/quantum/quantum_processor_qfh.cpp:22:37: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor_qfh.cpp: In function ‘int sep::quantum::createQuantumProcessorQFH()’:
-/sep/src/quantum/quantum_processor_qfh.cpp:24:49: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>’ to ‘int’ in return
-   24 |     return std::make_unique<QuantumProcessorQFH>();
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-      |                                                 |
-      |                                                 std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>
-/sep/src/quantum/quantum_processor_qfh.cpp: At global scope:
-/sep/src/quantum/quantum_processor_qfh.cpp:27:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
-   27 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFHStub() {
-      |                 ^~~~~~~~~~~~~~~~~~~~
-      |                 QuantumProcessorQFH
-/sep/src/quantum/quantum_processor_qfh.cpp:27:37: error: template argument 1 is invalid
-   27 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFHStub() {
-      |                                     ^
-/sep/src/quantum/quantum_processor_qfh.cpp:27:37: error: template argument 2 is invalid
-/sep/src/quantum/quantum_processor_qfh.cpp: In function ‘int sep::quantum::createQuantumProcessorQFHStub()’:
-/sep/src/quantum/quantum_processor_qfh.cpp:28:49: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>’ to ‘int’ in return
-   28 |     return std::make_unique<QuantumProcessorQFH>();
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-      |                                                 |
-      |                                                 std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessorQFH>
+[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 /sep/src/memory/memory_tier_manager.cpp:29:1: error: no declaration matches ‘sep::memory::MemoryTierManager::MemoryTierManager()’
    29 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
       | ^~~~~~~~~~~~~~~~~
@@ -788,9 +720,6 @@ In file included from /sep/src/memory/memory_tier_manager.cpp:1:
       |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
       |                                               |
       |                                               std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:93: src/api/CMakeFiles/sep_api.dir/bridge.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
 In file included from /usr/include/c++/14/memory:78,
                  from /sep/include/blender/compression.h:4,
                  from /sep/include/memory/memory_tier.hpp:10,
@@ -805,7 +734,6 @@ In file included from /usr/include/c++/14/memory:78,
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::pattern::PatternData; _Args = {const sep::pattern::PatternData&}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::pattern::PatternData>]’:
 /sep/src/memory/memory_tier_manager.cpp:384:67:   required from here
   384 |     pattern_registry_[id] = std::make_unique<pattern::PatternData>(pattern);
@@ -816,7 +744,47 @@ make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/
 /sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
    33 | struct PatternData;
       |        ^~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
+/sep/src/quantum/quantum_processor.cpp: In constructor ‘sep::quantum::QuantumProcessor::QuantumProcessor(const Config&)’:
+/sep/src/quantum/quantum_processor.cpp:61:23: error: ‘createQFHBasedQBSAProcessor’ was not declared in this scope
+   61 |     qbsa_processor_ = createQFHBasedQBSAProcessor({});
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_processor.cpp: At global scope:
+/sep/src/quantum/quantum_processor.cpp:65:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                 ^~~~~~~~~~~~~~~~~
+      |                 QuantumProcessor
+/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 1 is invalid
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                                  ^
+/sep/src/quantum/quantum_processor.cpp:65:34: error: template argument 2 is invalid
+/sep/src/quantum/quantum_processor.cpp:65:36: error: ambiguating new declaration of ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /sep/src/quantum/quantum_processor.cpp:1:
+/sep/include/quantum/quantum_processor.h:57:35: note: old declaration ‘std::unique_ptr<sep::quantum::QuantumProcessor> sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
+   57 | std::unique_ptr<QuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config);
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’:
+/sep/src/quantum/quantum_processor.cpp:68:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
+   68 |     return std::make_unique<QuantumProcessor>(config);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+      |                                              |
+      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
+/sep/src/quantum/quantum_processor.cpp: At global scope:
+/sep/src/quantum/quantum_processor.cpp:71:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
+   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
+      |                 ^~~~~~~~~~~~~~~~~
+      |                 QuantumProcessor
+/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 1 is invalid
+   71 | std::unique_ptr<IQuantumProcessor> createQuantumProcessorStub() {
+      |                                  ^
+/sep/src/quantum/quantum_processor.cpp:71:34: error: template argument 2 is invalid
+/sep/src/quantum/quantum_processor.cpp: In function ‘int sep::quantum::createQuantumProcessorStub()’:
+/sep/src/quantum/quantum_processor.cpp:72:46: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>’ to ‘int’ in return
+   72 |     return std::make_unique<QuantumProcessor>(QuantumProcessor::Config{});
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                              |
+      |                                              std::__detail::__unique_ptr_t<sep::quantum::QuantumProcessor>
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::pattern::PatternData]’:
 /usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::pattern::PatternData; _Dp = std::default_delete<sep::pattern::PatternData>]’
   399 |           get_deleter()(std::move(__ptr));
@@ -827,15 +795,12 @@ make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum
 /usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::pattern::PatternData’
    91 |         static_assert(sizeof(_Tp)>0,
       |                       ^~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
-/sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
-/sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
-  170 | }
-      | ^
-make[2]: *** [src/audio/CMakeFiles/sep_audio.dir/build.make:107: src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o] Error 1
+[ 42%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:93: src/api/CMakeFiles/sep_api.dir/bridge.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:79: src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o] Error 1
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
 /sep/src/memory/redis_manager.cpp:384:17: error: ‘IRedisManager’ was not declared in this scope; did you mean ‘RedisManager’?
   384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
       |                 ^~~~~~~~~~~~~
@@ -849,7 +814,16 @@ make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Erro
       |                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
       |                                                                                                                             |
       |                                                                                                                             std::shared_ptr<sep::persistence::RedisManager>
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:559: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
+/sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
+  170 | }
+      | ^
+make[2]: *** [src/audio/CMakeFiles/sep_audio.dir/build.make:107: src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
 In file included from /sep/src/memory/quantum_coherence_manager.cpp:8:
 /sep/include/memory/quantum_coherence_manager.hpp:13:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
@@ -859,6 +833,9 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:335: src/api/CMakeFiles/sep_api.dir/all] Error 2
 /sep/src/memory/quantum_coherence_manager.cpp:22:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
    22 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
@@ -994,10 +971,9 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
 /sep/include/memory/quantum_coherence_manager.h:13:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
    13 | class QuantumCoherenceManager {
       |       ^~~~~~~~~~~~~~~~~~~~~~~
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:431: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:367: src/audio/CMakeFiles/sep_audio.dir/all] Error 2
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:495: src/core/CMakeFiles/sep_core.dir/all] Error 2
 make[1]: *** [CMakeFiles/Makefile2:527: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

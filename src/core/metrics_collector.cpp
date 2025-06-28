@@ -261,6 +261,7 @@ void MetricsCollector::incrementCounter(const std::string& counter_name, std::ui
     std::lock_guard<std::mutex> lock(metrics_mutex_);
     sep::shim::string key(counter_name.c_str());
     counters_[key] += value;
+    // Ensure updates are visible across threads.
 }
 
 void MetricsCollector::setGauge(const std::string& gauge_name, double value) {

@@ -24,5 +24,5 @@ TEST(PatternEvolutionError, KernelFailurePropagates) {
     PatternConfig cfg{0.1f, false, 1, 1};
     std::vector<PatternData> output;
     EXPECT_EQ(PatternEvolution::processPatterns(input, cfg, output),
-              SEPResult::PROCESSING_ERROR);
+              sep::pattern::PatternResult::PROCESSING_ERROR);
 }

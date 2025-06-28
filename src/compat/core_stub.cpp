@@ -33,12 +33,12 @@ CudaCore::CudaCore() = default;
 Error CudaCore::initialize(int device_id) {
   initialized_ = true;
   current_device_ = device_id;
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::setDevice(int device) {
   current_device_ = device;
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 int CudaCore::getDeviceCount() const { return 1; }
@@ -46,7 +46,7 @@ int CudaCore::getDeviceCount() const { return 1; }
 Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const {
   (void)device;
   std::memset(&props, 0, sizeof(props));
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 // Dummy implementation of Stream for CPU-only mode
@@ -67,52 +67,52 @@ StreamPtr CudaCore::createStream(sep::StreamFlags) {
     return std::make_shared<DummyStream>();
 }
 
-Error CudaCore::destroyStream(cudaStream_t) { return {Status::Success, "", "", SEPResult::SUCCESS}; }
+Error CudaCore::destroyStream(cudaStream_t) { return {Status::Success, "", "", sep::SEPResult::SUCCESS}; }
 
-Error CudaCore::synchronizeStream(cudaStream_t) { return {Status::Success, "", "", SEPResult::SUCCESS}; }
+Error CudaCore::synchronizeStream(cudaStream_t) { return {Status::Success, "", "", sep::SEPResult::SUCCESS}; }
 
 Error CudaCore::getMemoryInfo(size_t& free, size_t& total) const {
   free = total = 0;
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
-Error CudaCore::getLastError() const { return {Status::Success, "", "", SEPResult::SUCCESS}; }
+Error CudaCore::getLastError() const { return {Status::Success, "", "", sep::SEPResult::SUCCESS}; }
 
 std::string CudaCore::getErrorString(cudaError_t) const { return ""; }
 
 CudaMetrics CudaCore::getMetrics() const { return {}; }
 
-Error CudaCore::updateMetrics() { return {Status::Success, "", "", SEPResult::SUCCESS}; }
+Error CudaCore::updateMetrics() { return {Status::Success, "", "", sep::SEPResult::SUCCESS}; }
 
 Error CudaCore::initializeDevice(int device) {
   current_device_ = device;
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
-Error CudaCore::queryDeviceProperties() { return {Status::Success, "", "", SEPResult::SUCCESS}; }
+Error CudaCore::queryDeviceProperties() { return {Status::Success, "", "", sep::SEPResult::SUCCESS}; }
 
 Error CudaCore::launchQBSA(const DeviceMemory<std::uint32_t>&, const DeviceMemory<std::uint32_t>&,
                            std::uint32_t, DeviceMemory<std::uint32_t>&,
                            DeviceMemory<std::uint32_t>&, DeviceMemory<std::uint32_t>&,
                            Stream&) {
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::launchQSH(const DeviceMemory<std::uint64_t>&, std::uint32_t,
                           DeviceMemory<std::uint32_t>&, DeviceMemory<std::uint32_t>&,
                           Stream&) {
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::launchSimilarity(const DeviceMemory<float>&, const DeviceMemory<float>&,
                                  const DeviceMemory<float>&, std::uint32_t, Stream&) {
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::launchBlend(DeviceMemory<float>&, const DeviceMemory<float>&,
                             const DeviceMemory<float>&, std::uint32_t, std::uint32_t,
                             Stream&) {
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 }  // namespace sep::cuda

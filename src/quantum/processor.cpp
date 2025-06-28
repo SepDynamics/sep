@@ -23,11 +23,11 @@ public:
     explicit ProcessorImpl(const ProcessingConfig& config)
         : config_(config), initialized_(false), gpu_context_(nullptr), hooks_(nullptr) {}
 
-    SEPResult init(GPUContext* gpu_context) {
+    sep::SEPResult init(GPUContext* gpu_context) {
         std::lock_guard<std::mutex> lock(mutex_);
         gpu_context_ = gpu_context;
         initialized_ = true;
-        return SEPResult::SUCCESS;
+        return sep::SEPResult::SUCCESS;
     }
 
     void setHooks(core::SystemHooks* hooks) {
@@ -35,34 +35,34 @@ public:
         hooks_ = hooks;
     }
 
-    SEPResult addPattern(const Pattern& pattern) {
+    sep::SEPResult addPattern(const Pattern& pattern) {
         std::lock_guard<std::mutex> lock(mutex_);
         if (patterns_.size() >= config_.max_patterns) {
         }
         patterns_.push_back(pattern);
         pattern_map_[pattern.id] = patterns_.size() - 1;
-        return SEPResult::SUCCESS;
+        return sep::SEPResult::SUCCESS;
     }
 
-    SEPResult removePattern(const std::string& pattern_id) {
+    sep::SEPResult removePattern(const std::string& pattern_id) {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(pattern_id);
         if (it == pattern_map_.end()) {
-            return SEPResult::NOT_FOUND;
+            return sep::SEPResult::NOT_FOUND;
         }
         patterns_.erase(patterns_.begin() + it->second);
         rebuildPatternMap();
-        return SEPResult::SUCCESS;
+        return sep::SEPResult::SUCCESS;
     }
 
-    SEPResult updatePattern(const std::string& pattern_id, const Pattern& pattern) {
+    sep::SEPResult updatePattern(const std::string& pattern_id, const Pattern& pattern) {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(pattern_id);
         if (it == pattern_map_.end()) {
-            return SEPResult::NOT_FOUND;
+            return sep::SEPResult::NOT_FOUND;
         }
         patterns_[it->second] = pattern;
-        return SEPResult::SUCCESS;
+        return sep::SEPResult::SUCCESS;
     }
 
     Pattern getPattern(const std::string& pattern_id) const {
@@ -219,19 +219,19 @@ public:
         rebuildPatternMap();
     }
 
-    SEPResult addRelationship(const std::string& pattern_id1, const std::string& pattern_id2,
+    sep::SEPResult addRelationship(const std::string& pattern_id1, const std::string& pattern_id2,
                                float strength, RelationshipType type) {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it1 = pattern_map_.find(pattern_id1);
         auto it2 = pattern_map_.find(pattern_id2);
         if (it1 == pattern_map_.end() || it2 == pattern_map_.end()) {
-            return SEPResult::NOT_FOUND;
+            return sep::SEPResult::NOT_FOUND;
         }
         Pattern& p1 = patterns_[it1->second];
         Pattern& p2 = patterns_[it2->second];
         p1.relationships.push_back({pattern_id2, strength, type});
         p2.relationships.push_back({pattern_id1, strength, type});
-        return SEPResult::SUCCESS;
+        return sep::SEPResult::SUCCESS;
     }
 
     float calculateCoherence(const std::string& pattern_id1, const std::string& pattern_id2) const {
@@ -351,11 +351,11 @@ Processor::~Processor() = default;
 Processor::Processor(Processor&&) noexcept = default;
 Processor& Processor::operator=(Processor&&) noexcept = default;
 
-SEPResult Processor::init(GPUContext* gpu_context) { return impl_->init(gpu_context); }
+sep::SEPResult Processor::init(GPUContext* gpu_context) { return impl_->init(gpu_context); }
 void Processor::setHooks(core::SystemHooks* hooks) { impl_->setHooks(hooks); }
-SEPResult Processor::addPattern(const Pattern& pattern) { return impl_->addPattern(pattern); }
-SEPResult Processor::removePattern(const std::string& pattern_id) { return impl_->removePattern(pattern_id); }
-SEPResult Processor::updatePattern(const std::string& pattern_id, const Pattern& pattern) { return impl_->updatePattern(pattern_id, pattern); }
+sep::SEPResult Processor::addPattern(const Pattern& pattern) { return impl_->addPattern(pattern); }
+sep::SEPResult Processor::removePattern(const std::string& pattern_id) { return impl_->removePattern(pattern_id); }
+sep::SEPResult Processor::updatePattern(const std::string& pattern_id, const Pattern& pattern) { return impl_->updatePattern(pattern_id, pattern); }
 Pattern Processor::getPattern(const std::string& pattern_id) const { return impl_->getPattern(pattern_id); }
 std::vector<Pattern> Processor::getPatterns() const { return impl_->getPatterns(); }
 std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
@@ -370,7 +370,7 @@ ProcessingResult Processor::mutatePattern(const std::string& parent_id) { return
 void Processor::promotePatterns() { impl_->promotePatterns(); }
 void Processor::demotePatterns() { impl_->demotePatterns(); }
 void Processor::removeWeakPatterns() { impl_->removeWeakPatterns(); }
-SEPResult Processor::addRelationship(const std::string& pattern_id1, const std::string& pattern_id2, float strength, RelationshipType type) {
+sep::SEPResult Processor::addRelationship(const std::string& pattern_id1, const std::string& pattern_id2, float strength, RelationshipType type) {
     return impl_->addRelationship(pattern_id1, pattern_id2, strength, type);
 }
 float Processor::calculateCoherence(const std::string& pattern_id1, const std::string& pattern_id2) const {

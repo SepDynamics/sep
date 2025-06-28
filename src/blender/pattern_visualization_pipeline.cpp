@@ -29,47 +29,47 @@ std::array<float, 3> PatternVisualizationPipeline::projectNDim(
   return out;
 }
 
-SEPResult PatternVisualizationPipeline::checkShaderReload() {
+sep::SEPResult PatternVisualizationPipeline::checkShaderReload() {
   if (!gpu_ctx_)
-    return SEPResult::SUCCESS;
-  SEPResult res = gpu_ctx_->reloadComputeShaderIfNeeded();
-  if (res != SEPResult::SUCCESS)
+    return sep::SEPResult::SUCCESS;
+  sep::SEPResult res = gpu_ctx_->reloadComputeShaderIfNeeded();
+  if (res != sep::SEPResult::SUCCESS)
     return res;
   last_shader_revision_ = gpu_ctx_->getShaderRevision();
-  return SEPResult::SUCCESS;
+  return sep::SEPResult::SUCCESS;
 }
 
-SEPResult PatternVisualizationPipeline::updatePattern(
+sep::SEPResult PatternVisualizationPipeline::updatePattern(
     const sep::pattern::PatternData &pattern) {
   if (!handler_) {
-    return SEPResult::INVALID_STATE;
+    return sep::SEPResult::INVALID_STATE;
   }
   checkShaderReload();
   // MeshHandler handles depsgraph updates internally.
   return handler_->update(pattern);
 }
 
-SEPResult PatternVisualizationPipeline::deformMesh(
+sep::SEPResult PatternVisualizationPipeline::deformMesh(
     const MeshHandler::DeformParams &params) {
   if (!handler_) {
-    return SEPResult::INVALID_STATE;
+    return sep::SEPResult::INVALID_STATE;
   }
   // Deformation already triggers a depsgraph notification via MeshHandler.
   return handler_->applyDeformation(params);
 }
 
-SEPResult PatternVisualizationPipeline::generateMesh(
+sep::SEPResult PatternVisualizationPipeline::generateMesh(
     const sep::pattern::PatternData &pattern, int dimensionality) {
   if (!handler_ || dimensionality < 2) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   return handler_->generateHyperMesh(pattern, dimensionality);
 }
 
-SEPResult PatternVisualizationPipeline::renderManifold(
+sep::SEPResult PatternVisualizationPipeline::renderManifold(
     const sep::pattern::PatternData &pattern, int dimensionality) {
-  SEPResult r = generateMesh(pattern, dimensionality);
-  if (r != SEPResult::SUCCESS)
+  sep::SEPResult r = generateMesh(pattern, dimensionality);
+  if (r != sep::SEPResult::SUCCESS)
     return r;
 
   ::sep::shim::vector<float> coords;
@@ -107,16 +107,16 @@ SEPResult PatternVisualizationPipeline::renderManifold(
   return updatePattern(projected_pattern);
 }
 
-SEPResult PatternVisualizationPipeline::applyCoherenceOverlay(
+sep::SEPResult PatternVisualizationPipeline::applyCoherenceOverlay(
     const ::sep::shim::vector<float> &history) {
   if (!handler_ || history.empty()) {
-    return SEPResult::INVALID_ARGUMENT;
+    return sep::SEPResult::INVALID_ARGUMENT;
   }
   float avg =
       std::accumulate(history.begin(), history.end(), 0.0f) / history.size();
-  SEPResult r =
+  sep::SEPResult r =
       handler_->setUniformFloatLayer("coherence_overlay", history.back());
-  if (r != SEPResult::SUCCESS)
+  if (r != sep::SEPResult::SUCCESS)
     return r;
   return handler_->setUniformFloatLayer("coherence_average", avg);
 }

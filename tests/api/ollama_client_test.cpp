@@ -49,7 +49,7 @@ TEST(OllamaClientTest, GetInvalidHostReturnsError) {
 
   OllamaClient client(config);
   std::string result;
-  EXPECT_EQ(client.get("endpoint", result), SEPResult::PROCESSING_ERROR);
+  EXPECT_EQ(client.get("endpoint", result), sep::SEPResult::PROCESSING_ERROR);
 }
 
 TEST(OllamaClientTest, PostInvalidHostReturnsError) {
@@ -64,7 +64,7 @@ TEST(OllamaClientTest, PostInvalidHostReturnsError) {
   OllamaClient client(config);
   json payload = {{"prompt", "hello"}};
   std::string result;
-  EXPECT_EQ(client.post("endpoint", payload, result), SEPResult::PROCESSING_ERROR);
+  EXPECT_EQ(client.post("endpoint", payload, result), sep::SEPResult::PROCESSING_ERROR);
 }
 
 // Test request/response formatting using file:// protocol

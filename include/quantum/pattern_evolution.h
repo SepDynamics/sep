@@ -17,7 +17,7 @@ public:
 
     static std::vector<sep::pattern::PatternData> getPatterns(const nlohmann::json& args = {});
 
-    static pattern::SEPResult processPatterns(const std::vector<sep::pattern::PatternData>& input,
+    static pattern::PatternResult processPatterns(const std::vector<sep::pattern::PatternData>& input,
                                           const sep::pattern::PatternConfig& config,
                                           std::vector<sep::pattern::PatternData>& output);
 

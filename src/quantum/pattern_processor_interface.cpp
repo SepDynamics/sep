@@ -5,10 +5,10 @@ namespace sep::pattern {
 PatternProcessor::PatternProcessor(Implementation impl)
     : implementation_(impl) {}
 
-SEPResult PatternProcessor::init(quantum::GPUContext* ctx)
+sep::SEPResult PatternProcessor::init(quantum::GPUContext* ctx)
 {
     (void)ctx;
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 void PatternProcessor::evolvePatterns()
@@ -26,10 +26,10 @@ PatternData PatternProcessor::mutatePattern(const PatternData& parent)
     return child;
 }
 
-SEPResult PatternProcessor::addPattern(const PatternData& pattern)
+sep::SEPResult PatternProcessor::addPattern(const PatternData& pattern)
 {
     patterns_.push_back(pattern);
-    return SEPResult::SUCCESS;
+    return sep::SEPResult::SUCCESS;
 }
 
 const std::vector<PatternData>& PatternProcessor::getPatterns() const
@@ -42,7 +42,7 @@ CPUPatternProcessor::CPUPatternProcessor()
 {
 }
 
-SEPResult CPUPatternProcessor::init(quantum::GPUContext* ctx)
+sep::SEPResult CPUPatternProcessor::init(quantum::GPUContext* ctx)
 {
     return PatternProcessor::init(ctx);
 }

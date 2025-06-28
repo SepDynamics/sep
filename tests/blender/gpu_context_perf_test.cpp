@@ -15,7 +15,7 @@ class GPUContextPerfTest : public ::testing::Test {
  protected:
   void SetUp() override {
     context_ = std::make_unique<sep::GPUContext>();
-    ASSERT_EQ(SEPResult::SUCCESS, context_->init());
+    ASSERT_EQ(sep::SEPResult::SUCCESS, context_->init());
   }
 
   void TearDown() override { context_.reset(); }
@@ -209,22 +209,22 @@ TEST_F(GPUContextPerfTest, ConcurrentStreamPerformance) {
 
   // Cleanup
   for (int i = 0; i < num_streams; ++i) {
-    EXPECT_EQ(SEPResult::SUCCESS, context_->freeMemory(device_ptrs[i]));
-    EXPECT_EQ(SEPResult::SUCCESS, context_->destroyStream(streams[i]));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->freeMemory(device_ptrs[i]));
+    EXPECT_EQ(sep::SEPResult::SUCCESS, context_->destroyStream(streams[i]));
   }
 }
 
 TEST_F(GPUContextPerfTest, StreamLatencyTest) {
   const int iterations = 1000;
   cudaStream_t stream;
-  ASSERT_EQ(SEPResult::SUCCESS, context_->createStream(stream));
+  ASSERT_EQ(sep::SEPResult::SUCCESS, context_->createStream(stream));
 
   std::vector<double> latencies;
   latencies.reserve(iterations);
 
   for (int i = 0; i < iterations; ++i) {
     latencies.push_back(measureOperation(
-        [&]() { ASSERT_EQ(SEPResult::SUCCESS, context_->synchronizeStream(stream)); }));
+        [&]() { ASSERT_EQ(sep::SEPResult::SUCCESS, context_->synchronizeStream(stream)); }));
   }
 
   TimingStats stats(latencies);
@@ -233,6 +233,6 @@ TEST_F(GPUContextPerfTest, StreamLatencyTest) {
   EXPECT_LT(stats.avg, 0.1) << "Average stream sync latency too high";
   EXPECT_LT(stats.max, 1.0) << "Maximum stream sync latency too high";
 
-  EXPECT_EQ(SEPResult::SUCCESS, context_->destroyStream(stream));
+  EXPECT_EQ(sep::SEPResult::SUCCESS, context_->destroyStream(stream));
 }
 

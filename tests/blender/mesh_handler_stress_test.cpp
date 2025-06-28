@@ -66,7 +66,7 @@ class MeshHandlerStressTest : public ::testing::Test {
 
     // Initialize handler
     handler_ = std::make_unique<MeshHandler>();
-    ASSERT_EQ(SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, handler_->init(object_.get(), mesh_.get()));
   }
 
   void setupGridTopology(int GRID_SIZE) {
@@ -138,8 +138,8 @@ TEST_F(MeshHandlerStressTest, MassiveUpdateTest) {
 
   // OpenMP pragma removed to avoid compiler warnings
   for (int i = 0; i < ITERATIONS; ++i) {
-    SEPResult result = handler_->update(patterns_[i % patterns_.size()]);
-    if (result == SEPResult::SUCCESS) {
+    sep::SEPResult result = handler_->update(patterns_[i % patterns_.size()]);
+    if (result == sep::SEPResult::SUCCESS) {
       success_count++;
     } else {
       error_count++;
@@ -175,7 +175,7 @@ TEST_F(MeshHandlerStressTest, ConcurrentOperationsTest) {
       switch (i % 4) {
         case 0: {
           // Update pattern
-          if (handler_->update(patterns_[pattern_idx]) != SEPResult::SUCCESS) {
+          if (handler_->update(patterns_[pattern_idx]) != sep::SEPResult::SUCCESS) {
             errors++;
           }
           break;
@@ -184,7 +184,7 @@ TEST_F(MeshHandlerStressTest, ConcurrentOperationsTest) {
           // Add/remove custom data
           char name[32];
           (void)snprintf(name, sizeof(name), "stress_layer_%d_%d", thread_id, i);
-          if (handler_->addCustomDataLayer(name, CD_PROP_FLOAT) == SEPResult::SUCCESS) {
+          if (handler_->addCustomDataLayer(name, CD_PROP_FLOAT) == sep::SEPResult::SUCCESS) {
             handler_->removeCustomDataLayer(name);
           }
           break;
@@ -199,7 +199,7 @@ TEST_F(MeshHandlerStressTest, ConcurrentOperationsTest) {
           MeshHandler::DeformParams params;
           params.strength = 0.1f;
           params.smoothness = 0.3f;
-          if (handler_->applyDeformation(params) != SEPResult::SUCCESS) {
+          if (handler_->applyDeformation(params) != sep::SEPResult::SUCCESS) {
             errors++;
           }
           break;
@@ -246,7 +246,7 @@ TEST_F(MeshHandlerStressTest, MemoryStressTest) {
     char name[32];
     (void)snprintf(name, sizeof(name), "stress_memory_%d", i);
 
-    if (handler_->addCustomDataLayer(name, CD_PROP_FLOAT3) == SEPResult::SUCCESS) {
+    if (handler_->addCustomDataLayer(name, CD_PROP_FLOAT3) == sep::SEPResult::SUCCESS) {
       layer_names.push_back(name);
       successful_layers++;
     }
@@ -254,7 +254,7 @@ TEST_F(MeshHandlerStressTest, MemoryStressTest) {
 
   // Update patterns with all layers
   for (int i = 0; i < 10; ++i) {
-    ASSERT_EQ(SEPResult::SUCCESS, handler_->update(patterns_[i]));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, handler_->update(patterns_[i]));
   }
 
   // Get final metrics
@@ -289,14 +289,14 @@ TEST_F(MeshHandlerStressTest, PatternEvolutionStressTest) {
       pattern.stability *= (1.0f - pattern.mutation_rate);
 
       // Apply to mesh
-      ASSERT_EQ(SEPResult::SUCCESS, handler_->update(pattern));
+      ASSERT_EQ(sep::SEPResult::SUCCESS, handler_->update(pattern));
     }
 
     // Apply deformation
     MeshHandler::DeformParams params;
     params.strength = 0.1f;
     params.smoothness = 0.3f;
-    ASSERT_EQ(SEPResult::SUCCESS, handler_->applyDeformation(params));
+    ASSERT_EQ(sep::SEPResult::SUCCESS, handler_->applyDeformation(params));
   }
 
   auto end = std::chrono::high_resolution_clock::now();

@@ -15,8 +15,8 @@ TEST(PatternDeterminism, ProcessPatternsConsistent) {
     sep::pattern::PatternConfig cfg{0.1f, false, 1, 1};
     std::vector<PatternData> out1;
     std::vector<PatternData> out2;
-    ASSERT_EQ(PatternEvolution::processPatterns(input, cfg, out1), sep::pattern::SEPResult::SUCCESS);
-    ASSERT_EQ(PatternEvolution::processPatterns(input, cfg, out2), sep::pattern::SEPResult::SUCCESS);
+    ASSERT_EQ(PatternEvolution::processPatterns(input, cfg, out1), sep::pattern::PatternResult::SUCCESS);
+    ASSERT_EQ(PatternEvolution::processPatterns(input, cfg, out2), sep::pattern::PatternResult::SUCCESS);
     ASSERT_EQ(out1.size(), out2.size());
     if (!out1.empty()) {
         EXPECT_EQ(PatternEvolution::toJson(out1[0]).dump(), PatternEvolution::toJson(out2[0]).dump());

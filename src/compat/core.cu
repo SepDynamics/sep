@@ -14,7 +14,7 @@ CudaCore::CudaCore() = default;
 
 Error CudaCore::initialize(int device_id) {
   if (initialized_) {
-    return {Status::Success, "", "", SEPResult::SUCCESS};
+    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
   }
 
   Error error = initializeDevice(device_id);
@@ -33,18 +33,18 @@ Error CudaCore::initialize(int device_id) {
   }
 
   initialized_ = true;
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::setDevice(int device) {
   if (device < 0 || device >= getDeviceCount()) {
-    return {Status::Error, "Invalid device ID", "", SEPResult::INVALID_ARGUMENT};
+    return {Status::Error, "Invalid device ID", "", sep::SEPResult::INVALID_ARGUMENT};
   }
 
   CUDA_CHECK(cudaSetDevice(device));
 
   current_device_ = device;
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 int CudaCore::getDeviceCount() const {
@@ -55,12 +55,12 @@ int CudaCore::getDeviceCount() const {
 
 Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const {
   if (device < 0 || device >= getDeviceCount()) {
-    return {Status::Error, "Invalid device ID", "", SEPResult::INVALID_ARGUMENT};
+    return {Status::Error, "Invalid device ID", "", sep::SEPResult::INVALID_ARGUMENT};
   }
 
   CUDA_CHECK(cudaGetDeviceProperties(&props, device));
 
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 StreamPtr CudaCore::createStream(sep::StreamFlags flags) {
@@ -69,35 +69,35 @@ StreamPtr CudaCore::createStream(sep::StreamFlags flags) {
 
 Error CudaCore::destroyStream(cudaStream_t stream) {
   if (!stream) {
-    return {Status::Success, "", "", SEPResult::SUCCESS};
+    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
   }
 
   CUDA_CHECK(cudaStreamDestroy(stream));
 
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::synchronizeStream(cudaStream_t stream) {
   if (!stream) {
-    return {Status::Success, "", "", SEPResult::SUCCESS};
+    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
   }
 
   CUDA_CHECK(cudaStreamSynchronize(stream));
 
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::getMemoryInfo(size_t& free, size_t& total) const {
   CUDA_CHECK(cudaMemGetInfo(&free, &total));
 
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::getLastError() const {
   cudaError_t error = cudaGetLastError();
   return {error == cudaSuccess ? Status::Success : Status::Error,
           error != cudaSuccess ? cudaGetErrorString(error) : "", "",
-          error == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+          error == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
 }
 
 std::string CudaCore::getErrorString(cudaError_t error) const { return cudaGetErrorString(error); }
@@ -125,24 +125,24 @@ Error CudaCore::updateMetrics() {
     current_metrics_.active_kernels = 0;
   }
 
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::initializeDevice(int device) {
   if (device < 0) {
-    return {Status::Error, "Invalid device ID", "", SEPResult::INVALID_ARGUMENT};
+    return {Status::Error, "Invalid device ID", "", sep::SEPResult::INVALID_ARGUMENT};
   }
 
   CUDA_CHECK(cudaSetDevice(device));
 
   current_device_ = device;
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::queryDeviceProperties() {
   int count = getDeviceCount();
   if (count <= 0) {
-    return {Status::Error, "No CUDA devices found", "", SEPResult::INVALID_ARGUMENT};
+    return {Status::Error, "No CUDA devices found", "", sep::SEPResult::INVALID_ARGUMENT};
   }
 
   device_properties_.resize(count);
@@ -150,7 +150,7 @@ Error CudaCore::queryDeviceProperties() {
     CUDA_CHECK(cudaGetDeviceProperties(&device_properties_[i], i));
   }
 
-  return {Status::Success, "", "", SEPResult::SUCCESS};
+  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 Error CudaCore::launchQBSA(const DeviceMemory<std::uint32_t>& probe_indices,
@@ -163,7 +163,7 @@ Error CudaCore::launchQBSA(const DeviceMemory<std::uint32_t>& probe_indices,
                        corrections.get(), correction_count.get(), static_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
           result != cudaSuccess ? cudaGetErrorString(result) : "", "",
-          result == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+          result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
 }
 
 Error CudaCore::launchQSH(const DeviceMemory<std::uint64_t>& chunks, std::uint32_t num_chunks,
@@ -173,7 +173,7 @@ Error CudaCore::launchQSH(const DeviceMemory<std::uint64_t>& chunks, std::uint32
                                        collapse_counts.get(), static_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
           result != cudaSuccess ? cudaGetErrorString(result) : "", "",
-          result == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+          result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
 }
 
 Error CudaCore::launchSimilarity(const DeviceMemory<float>& similarity,
@@ -183,7 +183,7 @@ Error CudaCore::launchSimilarity(const DeviceMemory<float>& similarity,
                                              emb_b.get(), embedding_size, static_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
           result != cudaSuccess ? cudaGetErrorString(result) : "", "",
-          result == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+          result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
 }
 
 Error CudaCore::launchBlend(DeviceMemory<float>& output, const DeviceMemory<float>& embeddings,
@@ -193,7 +193,7 @@ Error CudaCore::launchBlend(DeviceMemory<float>& output, const DeviceMemory<floa
                                         num_contexts, embedding_size, static_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
           result != cudaSuccess ? cudaGetErrorString(result) : "", "",
-          result == cudaSuccess ? SEPResult::SUCCESS : SEPResult::CUDA_ERROR};
+          result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
 }
 
 }  // namespace sep::cuda

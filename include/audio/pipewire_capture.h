@@ -19,7 +19,6 @@ struct pw_core;
 struct pw_stream;
 struct pw_thread_loop;
 struct spa_hook;
-struct pw_stream_state;
 
 namespace sep {
 namespace audio {

@@ -7,7 +7,6 @@
 
 namespace sep::config {
 
-namespace {
 using namespace env_keys;
 
 class ConfigManager::Impl {
@@ -133,7 +132,6 @@ public:
 
   SystemConfig config;
 };
-} // anonymous namespace
 
 ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
 ConfigManager::~ConfigManager() {}

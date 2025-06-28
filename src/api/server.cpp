@@ -4,7 +4,7 @@
 #include "api/crow_request.h"
 #include "api/json_helpers.h"
 #include "api/types.h"
-#include "api/client.h"
+#include "api/ollama_client.h"
 #include "api/rate_limit_middleware.h"
 #include "api/request_interface.h"
 #include "api/sep_engine.h"
@@ -77,16 +77,6 @@ bool SEPApiServer::run() {
   // Ensure routes are registered just before starting
   setup_routes();
   return start();
-}
-
-void SEPApiServer::start() {
-    if (!app_) return;
-
-    app_->port(config_.port);
-    app_->multithreaded();
-
-    setup_middleware();
-    setup_routes();
 }
 
 

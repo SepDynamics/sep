@@ -122,6 +122,8 @@ public:
     void storeLTMToPersistence(const quantum::Pattern& pattern);
     quantum::Pattern* findPattern(std::size_t id);
     const quantum::Pattern* findPattern(std::size_t id) const;
+    void registerPattern(std::size_t id, const pattern::PatternData& pattern);
+    const pattern::PatternData* getPatternData(std::size_t id) const;
     void cleanupExpiredPatterns();
     void prunePatternsByPriority(TierType tier, size_t max_count);
 

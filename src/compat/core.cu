@@ -2,6 +2,8 @@
 
 #include "compat/cuda_common.h"
 #include "compat/kernels.h"
+#include "compat/constants.h"
+#include "compat/raii.h"
 
 #include "compat/cuda_helpers.h"
 
@@ -60,9 +62,9 @@ Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const {
   return {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
-std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags flags) { // Fix: Return shared_ptr<Stream>
+std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags flags) {
   return Stream::create(flags);
-} // Fix: Missing closing brace
+}
 
 Error CudaCore::destroyStream(cudaStream_t stream) {
   if (!stream) {

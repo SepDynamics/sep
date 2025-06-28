@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/common.h"
+#include "blender/config.h"
 #include <memory>
 
 // Forward declaration for MemoryTierEnum from sep::math_common.h

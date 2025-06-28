@@ -1,0 +1,677 @@
+```
+/sep/src/compat/core_stub.cpp:2:10: fatal error: compat/core_stub.h: No such file or directory
+    2 | #include "compat/core_stub.h" // Include the stub header
+      |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+```
+
+**Targeted Advice:**
+
+1.  **Fix the include path for `compat/core_stub.h`.** The build is failing because it cannot find this header file.
+    *   **Reasoning:** The compiler is looking for `compat/core_stub.h` inside the current include paths, but it seems to be missing or in the wrong location relative to where `core_stub.cpp` is being compiled.
+    *   **Action:**
+        *   Verify that `compat/core_stub.h` exists in the `/sep/include/compat/` directory.
+        *   Ensure that the CMake configuration properly adds `/sep/include` to the include paths for the `sep_compat` target. Look in `src/compat/CMakeLists.txt` and the top-level `CMakeLists.txt` for `target_include_directories`. It should be something like `target_include_directories(sep_compat PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)`.
+
+```
+/sep/src/core/dag_graph.cpp:67:13: error: ‘node’ was not declared in this scope; did you mean ‘nodes_’?
+   67 |             node.parents.erase(std::remove(node.parents.begin(), node.parents.end(), id), node.parents.end());
+      |             ^~~~
+      |             nodes_
+```
+
+**Targeted Advice:**
+
+2.  **Fix the variable name in the `for` loop within `DagGraph::removeNode`.** The variable `node` is not defined; it should be using the loop variable introduced in the fix comment.
+    *   **Reasoning:** The fix comment `// Fix: use a named pair instead of structured binding` indicates an attempted change, but the subsequent use of `node` suggests the loop variable wasn't correctly used.
+    *   **Action:** Change `node.parents` to `pair.second.parents` within the `for` loop. The corrected loop should look something like:
+        ```c++
+        for (auto& pair : nodes_)
+        {
+            pair.second.parents.erase(std::remove(pair.second.parents.begin(), pair.second.parents.end(), id), pair.second.parents.end());
+        }
+        ```
+
+```
+In file included from /sep/src/api/bridge_c.cpp:3:
+/sep/include/api/bridge_internal.hpp:37:29: error: ‘quantum’ is not a member of ‘sep’
+   37 | extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
+      |                             ^~~~~~~
+/sep/include/api/bridge_internal.hpp:37:47: error: template argument 1 is invalid
+   37 | extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
+      |                                               ^
+/sep/include/api/bridge_internal.hpp:37:47: error: template argument 2 is invalid
+```
+
+**Targeted Advice:**
+
+3.  **Ensure the `sep::quantum::Processor` type is fully defined before being used in `bridge_internal.hpp`.** This typically means including the header file that defines `sep::quantum::Processor`.
+    *   **Reasoning:** Forward declarations are not sufficient for using a type as a template argument for `std::unique_ptr`. The compiler needs the complete definition of the type.
+    *   **Action:** Add `#include "quantum/processor.h"` at the top of `/sep/include/api/bridge_internal.hpp`.
+
+```
+/sep/include/api/bridge_internal.hpp:24:31: error: ‘setLastError’ is not a member of ‘sep::api::bridge::detail’
+   24 |     sep::api::bridge::detail::setLastError(e.what()); \
+      |                               ^~~~~~~~~~~~
+/sep/include/api/bridge_internal.hpp:25:55: error: ‘mapSepError’ is not a member of ‘sep::api::bridge::detail’
+   25 |     return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
+      |                                                       ^~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+4.  **Define `setLastError` and `mapSepError` directly within the `sep::api::bridge::detail` namespace in `bridge_internal.hpp`.** The fix comments within `sep_bridge_c.cpp` seem to be pointing to the definitions in `bridge.cpp`, but these should be defined or declared in the internal header for use in `bridge_c.cpp`.
+    *   **Reasoning:** The `SEP_CATCH_RETURN` macro is defined in `bridge_internal.hpp` and uses `sep::api::bridge::detail::setLastError` and `sep::api::bridge::detail::mapSepError`. For this to compile, these functions must be declared within that header.
+    *   **Action:** Copy the declarations (or definitions if they are simple enough) of `setLastError`, `getLastError`, `setRequiredBufferSize`, `getRequiredBufferSize`, and `mapSepError` from `sep/src/api/bridge.cpp` into the `sep::api::bridge::detail` namespace in `sep/include/api/bridge_internal.hpp`.
+
+```
+/sep/src/api/bridge_c.cpp:33:56: error: request for member ‘reset’ in ‘sep::api::bridge::detail::g_context_processor_bridge’, which is of non-class type ‘int’
+   33 |   sep::api::bridge::detail::g_context_processor_bridge.reset();
+      |                                                        ^~~~~
+```
+
+**Targeted Advice:**
+
+5.  **Address the type mismatch for `g_context_processor_bridge`.** This error occurs because the previous errors prevented `g_context_processor_bridge` from being correctly declared as a `std::unique_ptr<sep::quantum::Processor>`.
+    *   **Reasoning:** Once the include for `quantum/processor.h` is fixed in `bridge_internal.hpp` and the `sep::quantum::Processor` type is available, the declaration `extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;` in `bridge_internal.hpp` should compile correctly, and `g_context_processor_bridge` will be a class type with a `reset()` method.
+    *   **Action:** This error should be resolved by fixing issue #3.
+
+```
+/sep/src/quantum/qfh.cpp:78:12: error: ‘struct sep::quantum::QFHResult’ has no member named ‘collapse_threshold’
+   78 |     result.collapse_threshold = options_.collapse_threshold; // Fix: Initialize collapse_threshold
+      |            ^~~~~~~~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+6.  **Add the `collapse_threshold` member to the `QFHResult` struct.** The comment indicates an attempt to initialize this member, but the compiler says it doesn't exist.
+    *   **Reasoning:** The `QFHBasedProcessor::analyze` function tries to copy the `collapse_threshold` from its `options_` to the `result` struct, but the `QFHResult` struct in `quantum/types.h` is missing this member.
+    *   **Action:** Add `float collapse_threshold{0.0f};` to the `QFHResult` struct definition in `sep/include/quantum/types.h`.
+
+```
+/sep/src/core/allocation_metrics.cpp:7:1: error: ‘Counter’ does not name a type
+    7 | Counter g_allocation_failures{"allocation_failures_total", "Total memory allocation failures"};
+      | ^~~~~~~
+/sep/src/core/allocation_metrics.cpp:11:1: error: ‘Counter’ does not name a type
+   11 | Counter& allocationFailures()
+      | ^~~~~~~
+/sep/src/core/allocation_metrics.cpp:21:1: error: expected declaration before ‘}’ token
+   21 | }  // namespace sep::metrics
+      | ^
+```
+
+**Targeted Advice:**
+
+7.  **Ensure the `Counter` type from the metrics system is correctly included and available in `allocation_metrics.cpp`.**
+    *   **Reasoning:** The `allocation_metrics.cpp` file uses the `Counter` type to define and register a metric. The compiler indicates that `Counter` is not defined in this scope. While `core/metrics_collector.h` and `core/prometheus_exporter.h` are included, it's possible the definition of `Counter` is within a different header or needs to be explicitly brought into the namespace.
+    *   **Action:** Verify that `sep/include/core/metrics_collector.h` or another relevant header defines the `Counter` type and that it is accessible within the `sep::metrics` namespace. If `Counter` is defined in `core/metrics_collector.h`, ensure it's not inside a private section or conditional compilation block that prevents its use here. It might be necessary to include the specific header defining `Counter` (e.g., `core/metrics.h` if it exists) in `allocation_metrics.cpp`.
+
+```
+In file included from /sep/src/compat/component_bridge.cpp:2:
+/sep/include/audio/pipewire_capture.h:40:51: error: ‘pw_stream_state’ referred to as enum
+   40 |   static void streamStateChanged(void *data, enum pw_stream_state old_state,
+      |                                                   ^~~~~~~~~~~~~~~
+/sep/include/audio/pipewire_capture.h:22:8: note: ‘pw_stream_state’ has a previous declaration here
+   22 | struct pw_stream_state;
+      |        ^~~~~~~~~~~~~~~
+/sep/include/audio/pipewire_capture.h:41:38: error: ‘pw_stream_state’ referred to as enum
+   41 |                                 enum pw_stream_state new_state,
+      |                                      ^~~~~~~~~~~~~~~
+/sep/include/audio/pipewire_capture.h:22:8: note: ‘pw_stream_state’ has a previous declaration here
+   22 | struct pw_stream_state;
+      |        ^~~~~~~~~~~~~~~
+In file included from /sep/src/audio/pipewire_capture.cpp:3:
+/sep/include/audio/pipewire_capture.h:22:8: error: ‘pw_stream_state’ referred to as ‘struct’
+   22 | struct pw_stream_state;
+      |        ^~~~~~~~~~~~~~~
+In file included from /usr/include/pipewire-0.3/pipewire/pipewire.h:36,
+                 from /usr/include/pipewire-0.3/pipewire/impl.h:23,
+                 from /usr/include/pipewire-0.3/pipewire/global.h:39,
+                 from /sep/include/audio/pipewire_includes.h:25,
+                 from /sep/include/audio/pipewire_capture.h:13:
+/usr/include/pipewire-0.3/pipewire/stream.h:246:6: note: ‘pw_stream_state’ has a previous declaration here
+  246 | enum pw_stream_state {
+      |      ^~~~~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+8.  **Remove the forward declaration `struct pw_stream_state;` from `pipewire_capture.h`.** The full definition of `pw_stream_state` is provided by the included PipeWire headers (`pipewire_includes.h`).
+    *   **Reasoning:** Forward declaring a struct with the same name as an enum that will be fully defined later can cause conflicts and ambiguity for the compiler, leading to "referred to as enum" and "referred to as struct" errors.
+    *   **Action:** Delete line 22 (`struct pw_stream_state;`) in `/sep/include/audio/pipewire_capture.h`.
+
+```
+/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::synchronize()’:
+/sep/src/compat/stream.cpp:18:37: error: ‘struct sep::cuda::Stream::Impl’ has no member named ‘synchronize’
+   18 | void Stream::synchronize() { impl_->synchronize(); }
+      |                                     ^~~~~~~~~~~
+... (similar errors for wait, record, handle, isValid) ...
+/sep/src/compat/stream.cpp:42:18: error: ‘struct sep::cuda::Stream::Impl’ has no member named ‘setHandle’
+   42 |   stream->impl_->setHandle(cuda_stream);
+      |                  ^~~~~~~~~
+```
+
+**Targeted Advice:**
+
+9.  **Define the member functions (`synchronize`, `wait`, `record`, `handle`, `isValid`, `setHandle`) within the `sep::cuda::Stream::Impl` struct/class in `stream.cpp` or an associated internal header.**
+    *   **Reasoning:** The `Stream` class uses a Pimpl (Pointer to Implementation) pattern, where the `Impl` struct is forward-declared in the header (`stream.h`) and defined in the `.cpp` file (`stream.cpp`). The compiler needs the definitions of the methods called on `impl_` within the `.cpp` file. The current `Impl` definition in `stream.cpp` is empty.
+    *   **Action:** Define the `Stream::Impl` class with the required member functions and data (`cudaStream_t stream_handle_`) in `stream.cpp`. The definitions should provide the actual CUDA calls or their stub equivalents if CUDA is not available. For example:
+        ```c++
+        struct Stream::Impl {
+            cudaStream_t stream_handle_ = nullptr; // Add handle member
+
+            void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
+            void synchronize() { if (stream_handle_) cudaStreamSynchronize(stream_handle_); }
+            void wait(void* event) { if (stream_handle_ && event) cudaStreamWaitEvent(stream_handle_, static_cast<cudaEvent_t>(event)); } // Add wait
+            void record(void* event) { if (stream_handle_ && event) cudaEventRecord(static_cast<cudaEvent_t>(event), stream_handle_); } // Add record
+            void* handle() const { return stream_handle_; }
+            bool isValid() const { return stream_handle_ != nullptr; }
+        };
+        ```
+    *   **Note:** Ensure `cudaStreamWaitEvent` is included or stubbed.
+
+```
+/sep/src/compat/stream.cpp:31:3: error: ‘cudaStream_t’ was not declared in this scope
+   31 |   cudaStream_t cuda_stream;
+      |   ^~~~~~~~~~~~
+/sep/src/compat/stream.cpp:37:3: error: ‘cudaError_t’ was not declared in this scope
+   37 |   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
+      |   ^~~~~~~~~~~
+/sep/src/compat/stream.cpp:38:14: error: ‘cudaSuccess’ was not declared in this scope
+   38 |   if (err != cudaSuccess) {
+      |              ^~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+10. **Include the necessary CUDA headers (`cuda_runtime.h` or equivalent) in `stream.cpp` to define CUDA types and constants.**
+    *   **Reasoning:** The `Stream::create` function directly uses CUDA types like `cudaStream_t`, `cudaError_t`, and constants like `cudaSuccess`, `cudaStreamNonBlocking`, and `cudaStreamDefault`. These are not defined without the appropriate CUDA headers.
+    *   **Action:** Add `#include <cuda_runtime.h>` (or include the compatibility header that provides these if building without CUDA) at the top of `stream.cpp`.
+
+```
+/sep/src/api/bridge.cpp:54:6: error: redefinition of ‘void sep::api::bridge::detail::setLastError(const std::string&)’
+   54 | void setLastError(const std::string& error) {
+      |      ^~~~~~~~~~~~
+/sep/src/api/bridge.cpp:53:6: note: ‘void sep::api::bridge::detail::setLastError(const std::string&)’ previously defined here
+   53 | void setLastError(const std::string &error) { g_last_error = error; }
+      |      ^~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+11. **Remove the duplicate definition of `setLastError` in `bridge.cpp`.**
+    *   **Reasoning:** The function is defined twice within the `sep::api::bridge::detail` namespace.
+    *   **Action:** Delete lines 54-58 in `sep/src/api/bridge.cpp`, which contain the duplicate definition.
+
+```
+/sep/src/memory/memory_tier_manager.cpp:29:1: error: no declaration matches ‘sep::memory::MemoryTierManager::MemoryTierManager()’
+   29 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      | ^~~~~~~~~~~~~~~~~
+...
+/sep/src/memory/memory_tier_manager.cpp:29:68: error: expected unqualified-id before ‘)’ token
+   29 | MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+      |                                                                    ^
+```
+
+**Targeted Advice:**
+
+12. **Add a declaration for the default constructor `MemoryTierManager()` in `memory_tier_manager.hpp`.**
+    *   **Reasoning:** The default constructor is defined in `memory_tier_manager.cpp` but not declared in the corresponding header file, making it invisible to the compiler when compiling other files that might try to use it or when the compiler verifies the definition against the declaration.
+    *   **Action:** Add `MemoryTierManager();` to the public section of the `MemoryTierManager` class definition in `sep/include/memory/memory_tier_manager.hpp`.
+
+```
+/sep/src/memory/memory_tier_manager.cpp:230:69: error: invalid use of incomplete type ‘const struct sep::pattern::PatternData’
+  230 |     if (MemoryTier* t = getTier(static_cast<sep::memory::TierType>(p->memory_tier)))
+      |                                                                     ^~
+... (many similar errors related to PatternData members) ...
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::pattern::PatternData; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::pattern::PatternData>]’:
+/sep/src/memory/memory_tier_manager.cpp:275:58:   required from here
+  275 |         auto pat = std::make_unique<pattern::PatternData>();
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘struct sep::pattern::PatternData’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/include/memory/memory_tier_manager.hpp:33:8: note: forward declaration of ‘struct sep::pattern::PatternData’
+   33 | struct PatternData;
+      |        ^~~~~~~~~~~
+... (similar errors for make_unique with copy constructor) ...
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::pattern::PatternData]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::pattern::PatternData; _Dp = std::default_delete<sep::pattern::PatternData>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:275:58:   required from here
+  275 |         auto pat = std::make_unique<pattern::PatternData>();
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::pattern::PatternData’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+13. **Include the full definition of `sep::pattern::PatternData` in `memory_tier_manager.cpp`.**
+    *   **Reasoning:** `memory_tier_manager.cpp` attempts to access members of `PatternData` (like `memory_tier`, `coherence`, `attributes`, `relationships`) and create instances using `std::make_unique`, which requires the complete definition of the type. The forward declaration in the header is not enough here.
+    *   **Action:** Add `#include "quantum/data.hpp"` (or the correct header defining `sep::pattern::PatternData`) at the top of `sep/src/memory/memory_tier_manager.cpp`.
+
+```
+/sep/src/memory/memory_tier_manager.cpp: At global scope:
+/sep/src/memory/memory_tier_manager.cpp:392:17: error: ‘IMemoryTierManager’ was not declared in this scope; did you mean ‘MemoryTierManager’?
+  392 | std::unique_ptr<IMemoryTierManager> createMemoryTierManager() {
+      |                 ^~~~~~~~~~~~~~~~~~
+      |                 MemoryTierManager
+... (similar errors for createMemoryTierManagerStub) ...
+/sep/src/memory/memory_tier_manager.cpp:395:47: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::memory::MemoryTierManager>’ to ‘int’ in return
+  395 |     return std::make_unique<MemoryTierManager>();
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+```
+
+**Targeted Advice:**
+
+14. **Include the header defining `sep::memory::IMemoryTierManager` and fix the return types of the factory functions.**
+    *   **Reasoning:** The factory functions `createMemoryTierManager` and `createMemoryTierManagerStub` return `std::unique_ptr<IMemoryTierManager>` but the compiler doesn't know about `IMemoryTierManager`. Also, the error message indicates a conversion to `int`, suggesting an issue with the function signature or a missing include that provides the correct return type.
+    *   **Action:**
+        *   Add `#include "memory/manager.h"` (which should define `IMemoryTierManager`) to the top of `sep/src/memory/memory_tier_manager.cpp`.
+        *   Ensure the function declarations in `memory/manager.h` match the definitions in `memory_tier_manager.cpp` (i.e., they both return `std::unique_ptr<IMemoryTierManager>`).
+
+```
+/sep/src/quantum/quantum_processor.cpp:61:23: error: ‘createQFHBasedQBSAProcessor’ was not declared in this scope
+   61 |     qbsa_processor_ = createQFHBasedQBSAProcessor({});
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+15. **Include the header that declares `createQFHBasedQBSAProcessor` in `quantum_processor.cpp`.**
+    *   **Reasoning:** `quantum_processor.cpp` uses this factory function but the compiler hasn't seen its declaration.
+    *   **Action:** Add `#include "quantum/qbsa_qfh.h"` at the top of `sep/src/quantum/quantum_processor.cpp`.
+
+```
+/sep/src/quantum/quantum_processor.cpp: At global scope:
+/sep/src/quantum/quantum_processor.cpp:65:17: error: ‘IQuantumProcessor’ was not declared in this scope; did you mean ‘QuantumProcessor’?
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                 ^~~~~~~~~~~~~~~~~
+      |                 QuantumProcessor
+... (similar errors for createQuantumProcessorStub) ...
+/sep/src/quantum/quantum_processor.cpp:65:36: error: ambiguating new declaration of ‘int sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
+   65 | std::unique_ptr<IQuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config) { // Fix: Add missing definition
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /sep/src/quantum/quantum_processor.cpp:1:
+/sep/include/quantum/quantum_processor.h:57:35: note: old declaration ‘std::unique_ptr<sep::quantum::QuantumProcessor> sep::quantum::createQuantumProcessor(const QuantumProcessor::Config&)’
+   57 | std::unique_ptr<QuantumProcessor> createQuantumProcessor(const QuantumProcessor::Config& config);
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+16. **Fix the declarations and definitions of `createQuantumProcessor` and `createQuantumProcessorStub`.** There's a conflict between the declaration in the header and the definition in the `.cpp` file regarding the return type (`std::unique_ptr<IQuantumProcessor>` vs `std::unique_ptr<QuantumProcessor>`). Also, the definition in the `.cpp` file seems to be interpreted as returning `int` due to the preceding errors.
+    *   **Reasoning:** The header declares these functions to return `std::unique_ptr<QuantumProcessor>`, while the definitions in the `.cpp` are attempting to return `std::unique_ptr<IQuantumProcessor>`. The build script messages suggest you are trying to build the *real* Cycles integration (indicated by `SEP_HAS_CYCLES` being defined and `real library paths`), which might imply you intend to use the interfaces (`IQuantumProcessor`).
+    *   **Action:**
+        *   Decide whether the factory functions should return `std::unique_ptr<IQuantumProcessor>` or `std::unique_ptr<QuantumProcessor>`. Given the presence of interfaces, returning the interface type is generally better practice for polymorphism.
+        *   **Option A (Return Interface):** Change the declarations in `sep/include/quantum/quantum_processor.h` to return `std::unique_ptr<IQuantumProcessor>`. Ensure `IQuantumProcessor` is properly defined (it seems to be declared in `quantum_processor.h` already). The definitions in `quantum_processor.cpp` should then match these updated declarations.
+        *   **Option B (Return Concrete Type):** Change the definitions in `sep/src/quantum/quantum_processor.cpp` to return `std::unique_ptr<QuantumProcessor>`. This would match the current header declarations but limits polymorphism.
+        *   Regardless of the option, ensure that `IQuantumProcessor` is correctly defined in `quantum_processor.h` and that the return types in both the header declarations and the `.cpp` definitions are consistent.
+
+```
+In file included from /usr/include/c++/14/bits/unique_ptr.h:91,
+                 from /usr/include/c++/14/memory:78,
+                 from /sep/include/blender/compression.h:4,
+                 from /sep/include/memory/memory_tier.hpp:10,
+                 from /sep/include/memory/memory_tier_manager.hpp:13:
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::pattern::PatternData’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+17. **This error is a consequence of issue #13.** The compiler needs the complete definition of `sep::pattern::PatternData` to determine its size when creating `std::unique_ptr` or using `std::default_delete`.
+    *   **Reasoning:** The `static_assert` within the standard library's `unique_ptr` implementation checks if the size of the managed type is greater than zero, which is only possible if the complete type definition is available.
+    *   **Action:** This error should be resolved by fixing issue #13.
+
+```
+/sep/src/memory/redis_manager.cpp:384:17: error: ‘IRedisManager’ was not declared in this scope; did you mean ‘RedisManager’?
+  384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
+      |                 ^~~~~~~~~~~~~
+      |                 RedisManager
+...
+/sep/src/memory/redis_manager.cpp:384:125: error: cannot convert ‘std::shared_ptr<sep::persistence::RedisManager>’ to ‘int’ in return
+  384 | std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
+      |                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+18. **Include the header that defines `IRedisManager` in `redis_manager.cpp` and ensure the factory function signature matches its declaration.**
+    *   **Reasoning:** Similar to issue #14, the compiler doesn't know about the `IRedisManager` interface type. The conversion error to `int` suggests a problem with the function signature, likely because the header declaring the function isn't included or declares a different return type.
+    *   **Action:** Add `#include "memory/manager.h"` (which should define `IRedisManager`) to the top of `sep/src/memory/redis_manager.cpp`. Ensure the declaration in `memory/manager.h` is `std::shared_ptr<IRedisManager> createRedisManager(...)`.
+
+```
+/sep/src/audio/pipewire_capture.cpp: In member function ‘sep::audio::AudioError sep::audio::PipeWireCapture::setupStream()’:
+/sep/src/audio/pipewire_capture.cpp:170:1: warning: control reaches end of non-void function [-Wreturn-type]
+  170 | }
+      | ^
+```
+
+**Targeted Advice:**
+
+19. **Add a `return` statement at the end of the `PipeWireCapture::setupStream` function.**
+    *   **Reasoning:** This function is declared to return `AudioError`, but the control flow can reach the end of the function without hitting a `return` statement if none of the error conditions are met.
+    *   **Action:** Add `return AudioError::NONE;` at the very end of the `PipeWireCapture::setupStream` function body.
+
+```
+In file included from /sep/src/memory/quantum_coherence_manager.cpp:8:
+/sep/include/memory/quantum_coherence_manager.hpp:13:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
+   13 | class QuantumCoherenceManager {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from /sep/src/memory/quantum_coherence_manager.cpp:1:
+/sep/include/memory/quantum_coherence_manager.h:13:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
+   13 | class QuantumCoherenceManager {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:22:7: error: redefinition of ‘class sep::memory::QuantumCoherenceManager’
+   22 | class QuantumCoherenceManager {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/include/memory/quantum_coherence_manager.h:13:7: note: previous definition of ‘class sep::memory::QuantumCoherenceManager’
+   13 | class QuantumCoherenceManager {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+20. **Ensure that `sep/src/memory/quantum_coherence_manager.cpp` does not define the `QuantumCoherenceManager` class more than once.** The redefinition errors indicate that the class definition is appearing multiple times.
+    *   **Reasoning:** C++ does not allow a class to be defined multiple times in the same translation unit. This is likely happening because the class is defined directly in the `.cpp` file, possibly within different anonymous namespaces or due to some copy-paste error.
+    *   **Action:** Review `sep/src/memory/quantum_coherence_manager.cpp` and ensure the class definition for `QuantumCoherenceManager` appears only once. It appears to be defined at least twice (lines 13 and 22 in the snippet). Keep only the intended definition.
+
+```
+/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::TierMigration> sep::memory::QuantumCoherenceManager::Impl::optimizeMemoryLayout()’:
+/sep/src/memory/quantum_coherence_manager.cpp:216:24: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceMap = class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’ {aka ‘class tbb::detail::d2::concurrent_hash_map<std::__cxx11::basic_string<char>, sep::memory::QuantumCoherenceManager::PatternCoherenceData>’} has no member named ‘for_each’
+  216 |         coherence_map_.for_each([&](const auto& pair) {
+      |                        ^~~~~~~~
+... (many similar errors related to `for_each` on `coherence_map_`) ...
+```
+
+**Targeted Advice:**
+
+21. **Replace `coherence_map_.for_each` with a standard iteration over the concurrent hash map.** The `tbb::concurrent_hash_map` does not have a `for_each` method that takes a lambda directly for iteration.
+    *   **Reasoning:** Concurrent containers in TBB often require specific iteration patterns (e.g., using iterators obtained via `begin()` and `end()`, potentially within a `tbb::parallel_for`). The `for_each` method seems to be a non-standard or a misunderstanding of the TBB API.
+    *   **Action:** Iterate over the `coherence_map_` using a range-based for loop or explicit iterators within a context that handles concurrency if needed (though simple iteration for reading metrics might be safe depending on other operations). For example, to iterate and access elements:
+        ```c++
+        for (const auto& pair : coherence_map_) {
+            const auto& data = pair.second;
+            // ... use data ...
+        }
+        ```
+        If modifications are needed within the loop, you might need to use `accessor`s or other TBB-specific mechanisms. Review the TBB concurrent container documentation for the correct iteration pattern for `concurrent_hash_map`.
+
+```
+/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMetrics& sep::memory::QuantumCoherenceManager::Impl::getMetrics() const’:
+/sep/src/memory/quantum_coherence_manager.cpp:330:16: error: invalid initialization of reference of type ‘const sep::memory::QuantumCoherenceManager::Impl::CoherenceMetrics&’ from expression of type ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics’
+  330 |         return metrics_;
+      |                ^~~~~~~~
+```
+
+**Targeted Advice:**
+
+22. **Correct the return type of `QuantumCoherenceManager::Impl::getMetrics()` to match the member variable type.**
+    *   **Reasoning:** The error message indicates a type mismatch: the function is declared to return `const sep::memory::QuantumCoherenceManager::Impl::CoherenceMetrics&`, but it's trying to return `metrics_` which is a `sep::memory::QuantumCoherenceManager::CoherenceMetrics`. This is likely a subtle naming or scope issue. Looking at the code, `QuantumCoherenceManager::CoherenceMetrics` seems to be defined multiple times (inside and outside the `Impl` class).
+    *   **Action:**
+        *   Ensure `CoherenceMetrics` is defined only *once* within the `sep::memory::QuantumCoherenceManager` class (or its `Impl`).
+        *   Update the return type of `getMetrics()` in `Impl` to match the single, correct definition of `CoherenceMetrics`. For example, if the intended type is `sep::memory::QuantumCoherenceManager::CoherenceMetrics`, the return type should be `const sep::memory::QuantumCoherenceManager::CoherenceMetrics&`.
+        *   Alternatively, if the `CoherenceMetrics` struct is *only* intended to be used within `Impl`, move its definition entirely inside the `Impl` class and update the return type accordingly: `const CoherenceMetrics& Impl::getMetrics() const`. Then the public `QuantumCoherenceManager::getMetrics()` would return the simpler `CoherenceMetrics` type declared outside `Impl`. This seems to be the likely intent given the redefinition errors in issue #20.
+
+```
+/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘float sep::memory::QuantumCoherenceManager::Impl::getTierFragmentation(sep::MemoryTierEnum) const’:
+/sep/src/memory/quantum_coherence_manager.cpp:344:29: error: ‘const struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘tier_fragmentation’
+  344 |             return metrics_.tier_fragmentation[tier_idx];
+      |                             ^~~~~~~~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+23. **Add the `tier_fragmentation` member to the `CoherenceMetrics` struct.** The compiler indicates this member doesn't exist.
+    *   **Reasoning:** The `getTierFragmentation` function attempts to access `metrics_.tier_fragmentation`, but the `CoherenceMetrics` struct definition is missing this array member.
+    *   **Action:** Add `float tier_fragmentation[3]; // STM, MTM, LTM` to the `CoherenceMetrics` struct definition. Make sure this is added to the *correct* and single definition of `CoherenceMetrics` after addressing issue #20.
+
+```
+/sep/src/memory/quantum_coherence_manager.cpp:368:18: error: ‘struct sep::memory::QuantumCoherenceManager::CoherenceMetrics’ has no member named ‘fragmented_patterns’; did you mean ‘coherent_patterns’?
+  368 |         metrics_.fragmented_patterns = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~
+      |                  coherent_patterns
+```
+
+**Targeted Advice:**
+
+24. **Add the `fragmented_patterns` member to the `CoherenceMetrics` struct.**
+    *   **Reasoning:** The `initializeCoherenceTracking` function attempts to set `metrics_.fragmented_patterns`, but the `CoherenceMetrics` struct definition is missing this member.
+    *   **Action:** Add `uint64_t fragmented_patterns{0};` to the `CoherenceMetrics` struct definition. Make sure this is added to the *correct* and single definition of `CoherenceMetrics` after addressing issue #20.
+
+```
+/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::CoherenceAnomaly> sep::memory::QuantumCoherenceManager::Impl::detectCoherenceAnomalies(const std::vector<sep::quantum::Pattern>&)’:
+/sep/src/memory/quantum_coherence_manager.cpp:511:25: error: ‘AnomalyType’ has not been declared
+  511 |                         AnomalyType::ExcessiveCoherence :
+      |                         ^~~~~~~~~~~
+... (similar errors for AnomalyType) ...
+```
+
+**Targeted Advice:**
+
+25. **Define the `AnomalyType` enum within the `sep::memory::QuantumCoherenceManager` class (or its `Impl`).** The compiler indicates that `AnomalyType` is not defined in this scope.
+    *   **Reasoning:** The `detectCoherenceAnomalies` function uses the `AnomalyType` enum members, but the enum itself is not declared where it's being used. It appears to be declared outside the `Impl` class in the `namespace { ... }` block, but needs to be accessible within the `Impl` class.
+    *   **Action:** Move the definition of the `AnomalyType` enum inside the `QuantumCoherenceManager::Impl` class definition.
+
+```
+/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘float sep::memory::QuantumCoherenceManager::Impl::computeEntanglement(const sep::quantum::Pattern&, const sep::quantum::Pattern&) const’:
+/sep/src/memory/quantum_coherence_manager.cpp:702:61: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  702 |         float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+      |                                                             ^~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:702:86: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  702 |         float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+      |                                                                                      ^~~~~
+/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘float sep::memory::QuantumCoherenceManager::Impl::computePhaseCorrelation(const sep::quantum::Pattern&, const sep::quantum::Pattern&) const’:
+/sep/src/memory/quantum_coherence_manager.cpp:709:42: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  709 |         return std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+      |                                          ^~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:709:67: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  709 |         return std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
+      |                                                                   ^~~~~
+```
+
+**Targeted Advice:**
+
+26. **Add the `phase` member to the `sep::quantum::QuantumState` struct.** The compiler indicates this member doesn't exist.
+    *   **Reasoning:** The `computeEntanglement` and `computePhaseCorrelation` functions in `quantum_coherence_manager.cpp` attempt to access `pattern.quantum_state.phase`, but the `QuantumState` struct definition is missing this member.
+    *   **Action:** Add `float phase{0.0f};` to the `QuantumState` struct definition in `sep/include/quantum/types.h`.
+
+```
+/sep/src/memory/quantum_coherence_manager.cpp: At global scope:
+/sep/src/memory/quantum_coherence_manager.cpp:839:50: error: no declaration matches ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
+  839 | const QuantumCoherenceManager::CoherenceMetrics& QuantumCoherenceManager::getMetrics() const {
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~
+... (similar errors for getGlobalTick, getPatternCountByTier, getTierFragmentation) ...
+```
+
+**Targeted Advice:**
+
+27. **Add declarations for the public member functions (`getMetrics`, `getGlobalTick`, `getPatternCountByTier`, `getTierFragmentation`) to the `sep::memory::QuantumCoherenceManager` class definition in `quantum_coherence_manager.h`.**
+    *   **Reasoning:** The public member functions of `QuantumCoherenceManager` are defined in the `.cpp` file but not declared in the header. This makes them invisible when other files try to call them and causes the compiler to report "no declaration matches" when it tries to verify the definitions against non-existent declarations.
+    *   **Action:** Add the declarations for these functions to the `public` section of the `QuantumCoherenceManager` class in `/sep/include/memory/quantum_coherence_manager.h`. Ensure the return types and parameters match the definitions in the `.cpp` file. For example:
+        ```c++
+        // In quantum_coherence_manager.h
+        class QuantumCoherenceManager {
+        public:
+            // ... other members ...
+            struct CoherenceMetrics; // Forward declaration if defined in .cpp Impl
+            const CoherenceMetrics& getMetrics() const;
+            uint64_t getGlobalTick() const;
+            uint32_t getPatternCountByTier(MemoryTierEnum tier) const;
+            float getTierFragmentation(MemoryTierEnum tier) const;
+            // ...
+        };
+        ```
+    *   **Note:** Pay attention to the `CoherenceMetrics` type. If it's defined *only* within `Impl` (after addressing issue #20), you might need a forward declaration in the header before its use in the public function declaration.
+
+```
+/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘void sep::quantum::PatternEvolutionBridge::updatePatterns(const std::vector<sep::quantum::Pattern>&)’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:150:17: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘phase’
+  150 |                 entropy += -pattern.quantum_state.phase * std::log2(pattern.quantum_state.phase);
+      |                                 ^~~~~
+```
+
+**Targeted Advice:**
+
+28. **This error is a consequence of issue #26.** The compiler needs the `phase` member in `QuantumState` to calculate entropy.
+    *   **Reasoning:** The `updatePatterns` function attempts to access `pattern.quantum_state.phase`, but the `QuantumState` struct definition is missing this member.
+    *   **Action:** This error should be resolved by fixing issue #26.
+
+```
+/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘void sep::quantum::PatternEvolutionBridge::applyCNOTGate(std::vector<sep::quantum::Pattern>&, sep::uint32_t, sep::uint32_t)’:
+/sep/src/quantum/pattern_evolution_bridge.cpp:156:21: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘coherence’
+  156 |                     float c_coherence = c.quantum_state.coherence;
+      |                                         ^~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:157:21: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘coherence’
+  157 |                     float t_coherence = t.quantum_state.coherence;
+      |                                         ^~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:158:25: error: ‘struct sep::quantum::QuantumState’ has no member named ‘coherence’
+  158 |                     t.quantum_state.coherence = c_coherence * t_coherence;
+      |                         ^~~~~~~~~
+```
+
+**Targeted Advice:**
+
+29. **Ensure the `coherence` member exists and is accessible in the `sep::quantum::QuantumState` struct.** The compiler indicates it cannot find this member.
+    *   **Reasoning:** The `applyCNOTGate` function attempts to access `pattern.quantum_state.coherence`, but the `QuantumState` struct definition might be missing this member or it's not publicly accessible.
+    *   **Action:** Add `float coherence{1.0f};` to the `QuantumState` struct definition in `sep/include/quantum/types.h` if it's missing or ensure it's in the public part of the struct.
+
+```
+/sep/src/quantum/pattern_evolution_bridge.cpp: At global scope:
+/sep/src/quantum/pattern_evolution_bridge.cpp:154:6: error: no declaration matches ‘void sep::quantum::PatternEvolutionBridge::applyCNOTGate(std::vector<sep::quantum::Pattern>&, sep::uint32_t, sep::uint32_t)’
+  154 | void PatternEvolutionBridge::applyCNOTGate(std::vector<Pattern>& patterns, uint32_t control, uint32_t target) { // Fix: Add missing applyCNOTGate definition
+      |      ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:154:6: note: candidate is: ‘void sep::quantum::PatternEvolutionBridge::applyCNOTGate(std::vector<sep::quantum::Pattern>&, unsigned int, unsigned int)’
+/sep/include/quantum/pattern_evolution_bridge.h:25:10: note:                 void applyCNOTGate(std::vector<Pattern>& patterns, uint32_t control, uint32_t target);
+   25 |     void applyCNOTGate(std::vector<Pattern>& patterns, uint32_t control, uint32_t target);
+      |          ^~~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+30. **Ensure the parameter types in the definition of `applyCNOTGate` match the declaration in the header.**
+    *   **Reasoning:** The compiler is flagging that the definition's parameter types (`sep::uint32_t`, `sep::uint32_t`) do not match the declaration's (`uint32_t`, `uint32_t`). While `sep::uint32_t` is likely an alias for `uint32_t`, explicitly using `uint32_t` in both places will resolve this ambiguity.
+    *   **Action:** Change the parameter types in the definition of `PatternEvolutionBridge::applyCNOTGate` in `sep/src/quantum/pattern_evolution_bridge.cpp` from `sep::uint32_t` to `uint32_t`.
+
+```
+/sep/src/quantum/quantum_manifold_optimizer.cpp: At global scope:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:42:45: error: use of undeclared identifier 'M_PI'
+   42 |         point.phase = std::fmod(state_vector.y, 2.0f * M_PI);
+      |                                             ^
+```
+
+**Targeted Advice:**
+
+31. **Include the header defining `M_PI` in `quantum_manifold_optimizer.cpp`.**
+    *   **Reasoning:** The constant `M_PI` is used for phase calculations but is not defined in the standard headers included by default. It's typically found in `<cmath>` or `<math.h>` when certain feature test macros are defined.
+    *   **Action:** Add `#define _USE_MATH_DEFINES` before including `<cmath>` (or `<math.h>`) at the top of `sep/src/quantum/quantum_manifold_optimizer.cpp`. Or, use `glm::pi<float>()` which is generally preferred with GLM. Since GLM headers are already included, using `glm::pi<float>()` is the better option. Change `2.0f * M_PI` to `2.0f * glm::pi<float>()`.
+
+```
+/sep/src/quantum/quantum_manifold_optimizer.cpp:74:47: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
+   74 |         target.target_coherence * std::cos(target.target_phase),
+      |                                               ^~~~~~~~~~~~~
+/sep/src/quantum/quantum_manifold_optimizer.cpp:75:47: error: ‘struct sep::quantum::QuantumState’ has no member named ‘phase’
+   75 |         target.target_coherence * std::sin(target.target_phase),
+      |                                               ^~~~~~~~~~~~~
+```
+
+**Targeted Advice:**
+
+32. **Add the `target_phase` member to the `OptimizationTarget` struct.** The compiler indicates this member doesn't exist.
+    *   **Reasoning:** The `targetToManifold` function in `quantum_manifold_optimizer.cpp` attempts to access `target.target_phase`, but the `OptimizationTarget` struct definition is missing this member.
+    *   **Action:** Add `float target_phase{0.0f};` to the `OptimizationTarget` struct definition in `sep/include/quantum/quantum_manifold_optimizer.h`.
+
+```
+/sep/src/quantum/quantum_manifold_optimizer.cpp: In member function ‘void sep::quantum::QuantumManifoldOptimizer::Impl::applyRicciFlow(GeodesicPath&)’:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:156:20: error: ‘glm::mat3’ {aka ‘glm::mat<3, 3, float, glm::packed_highp>’} has no member named ‘operator*’
+  156 |             point.position += flow_direction * RICCI_FLOW_RATE;
+      |                               ^
+```
+
+**Targeted Advice:**
+
+33. **Ensure GLM operators for scalar multiplication are available for `glm::vec3`.**
+    *   **Reasoning:** The compiler is complaining that it cannot multiply a `glm::vec3` by a scalar (`RICCI_FLOW_RATE`) using the `*` operator. This might indicate a missing GLM include or a GLM configuration issue. However, the error message specifically mentions `glm::mat3`, which is odd. It seems like `flow_direction` might be inferred as a `glm::mat3` incorrectly, or there's a typo. `flow_direction` should be a `glm::vec3`.
+    *   **Action:** Double-check the definition and usage of `flow_direction` to ensure it is a `glm::vec3`. Assuming it is, the error is unusual. Ensure all relevant GLM headers like `<glm/glm.hpp>` and possibly `<glm/gtc/matrix_transform.hpp>` or `<glm/gtc/type_ptr.hpp>` are included. If the error persists after verifying `flow_direction` is `glm::vec3` and basic GLM headers are included, it might be a more complex GLM setup issue or a compiler version incompatibility. For now, focus on verifying `flow_direction`'s type.
+
+```
+/sep/src/quantum/quantum_manifold_optimizer.cpp: In member function ‘float sep::quantum::QuantumManifoldOptimizer::Impl::computeGeodesicDistance(const GeodesicPath&) const’:
+/sep/src/quantum/quantum_manifold_optimizer.cpp:230:57: error: ‘glm::mat4’ {aka ‘glm::mat<4, 4, float, glm::packed_highp>’} has no member named ‘operator*’
+  230 |             float metric_distance = std::sqrt(glm::dot(v, riemannian_metric_ * v));
+      |                                                         ^
+```
+
+**Targeted Advice:**
+
+34. **Fix the matrix-vector multiplication in `computeGeodesicDistance`.**
+    *   **Reasoning:** The expression `riemannian_metric_ * v` is attempting to multiply a `glm::mat4` by a `glm::vec4` using the `*` operator, and the compiler says this operation is not defined for `glm::mat4`. In GLM, matrix-vector multiplication is typically done with the vector on the right: `matrix * vector`.
+    *   **Action:** Change `riemannian_metric_ * v` to `riemannian_metric_ * v` or, if the intention is `v * matrix`, ensure the GLM configuration supports that or rewrite it as `glm::transpose(riemannian_metric_) * v` (mathematically equivalent for a symmetric metric tensor, which is common). The standard GLM usage is `matrix * vector`. So, the line should probably be:
+        ```c++
+        float metric_distance = std::sqrt(glm::dot(v, riemannian_metric_ * v));
+        ```
+        This seems to be the correct GLM syntax for the operation `v^T * M * v`.
+
+```
+/sep/src/compat/cuda_api.cu: In function ‘int sep_cuda_init(int)’:
+/sep/src/compat/cuda_api.cu:37:33: error: ‘cudaStreamCreateWithFlags’ was not declared in this scope; did you mean ‘sep_cuda_create_stream’?
+   37 |     cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                 sep_cuda_create_stream
+... (many similar errors for CUDA API functions) ...
+```
+
+**Targeted Advice:**
+
+35. **Ensure the actual CUDA runtime headers are correctly included and linked when `SEP_CUDA_AVAILABLE` is defined.** Or, if `SEP_CUDA_AVAILABLE` is false, ensure the stub implementations are correctly defined and linked.
+    *   **Reasoning:** The `compat/cuda_api.cu` file uses CUDA runtime functions like `cudaStreamCreateWithFlags`, `cudaGetLastError`, etc. The compiler errors indicate these functions are not declared. This happens if the CUDA headers (`cuda_runtime.h`) are not correctly included or if the linker cannot find the CUDA runtime library. Since the build script output says `SEP_CUDA_AVAILABLE` is defined and it found the CUDA toolkit, the issue is likely with the include path or the CUDA runtime libraries not being found/linked.
+    *   **Action:**
+        *   **Verify Include Paths:** Double-check the CMake configuration to ensure the CUDA include directory (`/usr/local/cuda-12.9/targets/x86_64-linux/include` or similar) is correctly added to the include paths for targets compiling `.cu` and `.cpp` files that use CUDA types/functions.
+        *   **Verify Linker Paths and Libraries:** Ensure the CMake configuration links the necessary CUDA runtime library (`cudart`) to the relevant targets. The build script shows `/usr/local/cuda-12.9/lib64/libcudart.so` in `CUDA Libraries`, so ensure this library is being linked.
+        *   **Review Conditional Compilation:** Carefully review the `#if defined(__CUDACC__) || defined(SEP_USE_CUDA)` and `#if !defined(__CUDACC__)` blocks in CUDA-related files (`compat/cuda_api.cu`, `compat/kernels.cu`, etc.) to ensure the correct code (real CUDA or stub) is being compiled based on the build configuration.
+        *   **Stub Implementation:** If `SEP_CUDA_AVAILABLE` is *intended* to be false, ensure that the stub implementations of these CUDA runtime functions are correctly defined and accessible. The errors suggest they are missing even with the stub include.
+
+```
+/sep/src/compat/core.cu: In member function ‘Error sep::cuda::CudaCore::createStream(sep::StreamFlags)’:
+/sep/src/compat/core.cu:83:3: error: missing return statement in non-void function ‘sep::Error sep::cuda::CudaCore::createStream(sep::StreamFlags)’ [-Werror=return-type]
+   83 | } // Fix: Missing closing brace
+      | ^
+```
+
+**Targeted Advice:**
+
+36. **Add a `return` statement to the `CudaCore::createStream` function in `core.cu`.**
+    *   **Reasoning:** This function is declared to return `std::shared_ptr<Stream>`, but the control flow can reach the end of the function without returning a value. The Fix comment `// Fix: Missing closing brace` is misleading; the actual issue is the missing return value.
+    *   **Action:** Add `return nullptr;` at the end of the `CudaCore::createStream` function body to handle the case where a stream cannot be created.
+
+```
+/sep/src/quantum/quantum_processor_qfh.cpp:15:17: error: ‘IQuantumProcessorQFH’ was not declared in this scope; did you mean ‘QuantumProcessorQFH’?
+   15 | std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH() { // Fix: Add missing definition
+      |                 ^~~~~~~~~~~~~~~~~~~~
+      |                 QuantumProcessorQFH
+... (similar errors for createQuantumProcessorQFHStub) ...
+```
+
+**Targeted Advice:**
+
+37. **Include the header that defines `IQuantumProcessorQFH` and fix the return types of the factory functions.**
+    *   **Reasoning:** Similar to issues #14 and #18, the compiler doesn't know about the `IQuantumProcessorQFH` interface type.
+    *   **Action:** Add `#include "quantum/processor.h"` (which should define `IQuantumProcessorQFH`) to the top of `sep/src/quantum/quantum_processor_qfh.cpp`. Ensure the declaration in `quantum/processor.h` is `std::unique_ptr<IQuantumProcessorQFH> createQuantumProcessorQFH(...)` and the definition in `quantum_processor_qfh.cpp` matches.
+
+**General Advice:**
+
+*   **Include Headers:** The most frequent error pattern is "No such file or directory" or "was not declared in this scope". This strongly suggests missing `#include` directives or incorrect include paths in the CMake configuration. A systematic review of each `.cpp` and `.cu` file to ensure all necessary headers for the types and functions they use are included is crucial.
+*   **Forward Declarations:** Understand when forward declarations are sufficient (e.g., for pointers or references) and when full definitions are required (e.g., for creating instances, using types as template arguments, accessing members).
+*   **Match Declarations and Definitions:** Pay close attention to function signatures (return type, name, parameter types, `const`/`noexcept` qualifiers) in both header declarations and `.cpp` definitions. They must match exactly.
+*   **Namespace Usage:** Be consistent with namespace usage. Using fully qualified names (`sep::quantum::Processor`) or appropriate `using` declarations can help avoid ambiguity.
+*   **Compiler Warnings:** Address warnings, especially those related to unused variables or return types, as they can sometimes point to logic errors or potential issues.
+*   **Incremental Building:** Fix errors one by one or in small related groups. Rebuild after each fix to see the next set of errors, which are often revealed once previous errors are resolved.
+*   **Review Fix Comments:** The comments like `// Fix: ...` highlight areas that have been recently modified or identified as needing attention. Review these comments and the surrounding code carefully.
+*   **CUDA Compatibility:** When dealing with CUDA code and stubs, pay extra attention to conditional compilation (`#if defined(__CUDACC__)` etc.) and ensuring the correct headers and functions are used based on whether CUDA is available.
+*   **TBB API:** For the TBB concurrent hash map (`tbb::concurrent_hash_map`), refer to the official TBB documentation for the correct way to iterate and access elements, as standard container methods like `for_each` might not be available or behave differently.
+
+By addressing these specific errors and following the general advice, you should be able to make significant progress in resolving the build issues. Good luck!

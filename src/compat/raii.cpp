@@ -82,7 +82,7 @@ const char* cudaGetErrorString(cudaError_t /*error*/) {
 }
 #endif
 
-StreamRAII::StreamRAII(sep::StreamFlags flags) {
+StreamRAII::StreamRAII(::sep::StreamFlags flags) {
     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
     cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
     if (err != cudaSuccess) {

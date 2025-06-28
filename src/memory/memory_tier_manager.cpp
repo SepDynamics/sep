@@ -9,6 +9,7 @@
 #include "memory/redis_manager.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/data.hpp"
+#include "quantum/types.h"
 
 
 namespace sep::memory {

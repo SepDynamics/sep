@@ -401,3 +401,16 @@ To enable or disable a component, pass the corresponding `-D` flag when invoking
 3. If `pkg-config` yields an empty path for PipeWire, the audio module is disabled automatically.
 
 The `component_bridge` pattern ensures that missing optional components do not cause build failures while still allowing real implementations when the libraries are present.
+
+## Library Requirements by Component
+
+This quick reference lists each optional module, the libraries it relies on, and the CMake option controlling its build. Use these toggles to include or exclude features as needed.
+
+| Component          | Required Libraries             | CMake Option         |
+|--------------------|--------------------------------|----------------------|
+| Cycles Renderer    | libcycles\_* , OSL             | `SEP_HAS_CYCLES`     |
+| PipeWire Audio     | libpipewire-0.3                | `SEP_HAS_PIPEWIRE`   |
+| OpenSubdiv         | libosdCPU, libosdGPU, TBB      | `SEP_HAS_OPENSUBDIV` |
+| Path Guiding       | libopenpgl                     | `SEP_HAS_OPENPGL`    |
+
+If a library cannot be located, the build system will automatically fall back to stub implementations through `component_bridge`. Ensure your `CMAKE_PREFIX_PATH` includes any custom install locations.

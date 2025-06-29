@@ -426,8 +426,15 @@ target_include_directories(sep_engine
 
 # CRITICAL: Use WHOLE ARCHIVE for static Cycles libraries to ensure all symbols are included
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # Linker options to fix multiple definition errors and ensure proper symbol resolution
+    target_link_options(sep_engine PRIVATE
+        -Wl,--allow-multiple-definition
+        -Wl,--unresolved-symbols=ignore-in-shared-libs
+        -Wl,--disable-new-dtags
+        -Wl,-rpath=${CMAKE_SOURCE_DIR}/lib
+    )
+    
     # First link the Cycles libraries with whole-archive flags
-    # This ensures all symbols are included before any internal libraries reference them
     target_link_libraries(sep_engine
         PRIVATE
         # Link Cycles libraries first so their symbols are available
@@ -436,7 +443,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wl,--no-whole-archive
         ${CYCLES_LIBRARIES}
         
-        # Force include the OSL library symbols (crucial for Cycles OSL integration)
+        # Force include ONLY ONE OSL library to avoid duplicates
         -Wl,--whole-archive
         ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel_osl.a
         -Wl,--no-whole-archive
@@ -446,18 +453,39 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         ${OSL_EXEC_LIBRARY}
         ${OSL_QUERY_LIBRARY}
         
-        # Force include all symbols from each module
+        # Correct dependency order - sep_compat BEFORE sep_core due to CudaCore usage
+        
+        # Link in proper order based on dependencies - only include libraries that exist
+        sep_core
+        sep_quantum
+        sep_memory
+        sep_api
+        sep_blender
+        sep_audio
+        
+        # Link sep_compat shared library with explicit path and rpath
+        ${CMAKE_BINARY_DIR}/src/compat/libsep_compat.so
+        -Wl,-rpath,'$ORIGIN/src/compat'
+        
+        # Add direct CUDA library links
+        -lcudart
+        -lcuda
+        
+        # CUDA libraries must come right after sep_compat, use full paths
+        ${CUDA_PATH}/targets/x86_64-linux/lib/libcudart.so
+        ${CUDA_PATH}/targets/x86_64-linux/lib/libcudadevrt.a
+        ${CUDA_PATH}/targets/x86_64-linux/lib/libcudart_static.a
+        
+        # Add nvrtc for CUDA runtime compilation
+        ${CUDA_PATH}/targets/x86_64-linux/lib/libnvrtc.so
+        ${CUDA_LIBRARIES}
+        # Quantum must come before modules that use it
         -Wl,--whole-archive
-        sep_compat
+        sep_quantum
         -Wl,--no-whole-archive
         
-        # Cuda libraries must come right after sep_compat
-        ${CUDA_LIBRARIES}
-
         # Remaining internal libraries in dependency order
-        sep_core
         sep_memory
-        sep_quantum
         sep_audio
         sep_blender
         sep_api
@@ -473,29 +501,37 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     )
 else()
     # Fallback for other compilers
-    target_link_libraries(sep_engine
-        PRIVATE
-        ${CYCLES_LIBRARIES}
-        # Add Cycles OSL libraries explicitly
-        ${CMAKE_SOURCE_DIR}/lib/libcycles_osl.a
-        ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel_osl.a
-        sep_core
-        sep_compat
-        sep_api
-        sep_memory
-        sep_quantum
-        sep_audio
-        sep_blender
-        ${BLENDER_LINK_ORDER}
-        ${EXTERNAL_LINK_ORDER}
-        ${CURL_LIBRARIES}
-        ${HIREDIS_LIBRARIES}
-        CUDAToolkit::cudart
-        CUDAToolkit::cuda_driver
-        Threads::Threads
-        fmt::fmt
-        spdlog::spdlog
-    )
+        target_link_libraries(sep_engine
+            PRIVATE
+            ${CYCLES_LIBRARIES}
+            # Add Cycles OSL libraries explicitly - use only one to avoid duplicate symbols
+            # ${CMAKE_SOURCE_DIR}/lib/libcycles_osl.a
+            ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel_osl.a
+            
+            # Proper order: compat must come before core (which depends on it)
+            sep_compat
+            
+            # Use actual CUDA libraries instead of non-existent CUDAToolkit targets
+            ${CUDA_LIBRARIES}
+            
+            # Quantum must come before other libraries that use it
+            sep_quantum
+            
+            # Remaining internal libraries in dependency order
+            sep_core
+            sep_memory
+            sep_audio
+            sep_blender
+            sep_api
+            
+            ${BLENDER_LINK_ORDER}
+            ${EXTERNAL_LINK_ORDER}
+            ${CURL_LIBRARIES}
+            ${HIREDIS_LIBRARIES}
+            Threads::Threads
+            fmt::fmt
+            spdlog::spdlog
+        )
 endif()
 
 # === Installation Configuration ===

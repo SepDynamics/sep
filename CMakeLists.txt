@@ -505,9 +505,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         sep_core
         
         # Core libraries that may use CUDA through sep_compat
+        sep_memory
         sep_api
         sep_audio
-        sep_memory
         sep_blender
         sep_quantum
         
@@ -541,9 +541,9 @@ else()
             # Remaining internal libraries in dependency order
             sep_core
             sep_memory
+            sep_api
             sep_audio
             sep_blender
-            sep_api
             
             ${BLENDER_LINK_ORDER}
             ${EXTERNAL_LINK_ORDER}

@@ -1,9 +1,8 @@
 #include "core/engine.h"
 
 #include "audio/capture.h"
-#include "blender/types.h"
+#include "blender/types.h"  // For SEPBlenderBridge definition
 #include "blender/pattern_bridge.h"
-#include "blender/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "compat/component_bridge.h"
 

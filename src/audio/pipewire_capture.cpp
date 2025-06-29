@@ -34,7 +34,7 @@ static PWInit pw_init_once;
 
 PipeWireCapture::PipeWireCapture() = default;
 
-const struct pw_stream_events createStreamEvents()
+static const struct pw_stream_events createStreamEvents()
 {
     struct pw_stream_events events = {};
     events.version                 = PW_VERSION_STREAM_EVENTS;
@@ -186,16 +186,18 @@ AudioError PipeWireCapture::setupStream()
                                 params,
                                 1);
 
+    AudioError result = AudioError::NONE;
+
     if (err < 0)
     {
         spdlog::error("Failed to connect stream: {}", strerror(-err));
         spdlog::error("Stream flags: autoconnect={}, rt_process={}",
                       (err & PW_STREAM_FLAG_AUTOCONNECT),
                       (err & PW_STREAM_FLAG_RT_PROCESS));
-        return AudioError::STREAM_FAILED;
+        result = AudioError::STREAM_FAILED;
     }
 
-    return AudioError::NONE;
+    return result;
 }
 
 AudioError PipeWireCapture::start()
@@ -242,7 +244,7 @@ AudioMetrics PipeWireCapture::getMetrics() const
     return metrics_;
 }
 
-void PipeWireCapture::streamStateChanged(void* data,
+void PipeWireCapture::streamStateChanged(void*                data,
                                          enum pw_stream_state old_state,
                                          enum pw_stream_state new_state,
                                          const char*          error)

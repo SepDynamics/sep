@@ -1,221 +1,148 @@
-[H[2J[3J==== SEP Engine Build Script with FULL Cycles and PipeWire Support ====
-Setting up build environment with real library paths - NO STUBS!
-Using Cycles root: /sep/extern/cycles
-Checking for PipeWire development headers...
-PipeWire found via pkg-config: /usr/lib64/libpipewire-0.3.so
-Cleaning build directory...
-Running CMake configuration...
--- The CXX compiler identification is GNU 14.2.1
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/g++-14 - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Found CUDAToolkit: /usr/local/cuda-12.9/targets/x86_64-linux/include
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE
--- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
--- Checking for module 'libpipewire-0.3'
---   Found libpipewire-0.3, version 1.4.6
--- Using system PipeWire
--- Redis support: ENABLED
--- [FOUND] CYCLES_UTIL_LIBRARY: /sep/lib/libcycles_util.a
--- [FOUND] CYCLES_GRAPH_LIBRARY: /sep/lib/libcycles_graph.a
--- [FOUND] CYCLES_KERNEL_LIBRARY: /sep/lib/libcycles_kernel.a
--- [FOUND] CYCLES_BVH_LIBRARY: /sep/lib/libcycles_bvh.a
--- [FOUND] CYCLES_SUBD_LIBRARY: /sep/lib/libcycles_subd.a
--- [FOUND] CYCLES_DEVICE_LIBRARY: /sep/lib/libcycles_device.a
--- [FOUND] CYCLES_SCENE_LIBRARY: /sep/lib/libcycles_scene.a
--- [FOUND] CYCLES_SESSION_LIBRARY: /sep/lib/libcycles_session.a
--- [FOUND] CYCLES_INTEGRATOR_LIBRARY: /sep/lib/libcycles_integrator.a
--- [FOUND] CYCLES_OSL_LIBRARY: /sep/lib/libcycles_osl.a
--- [FOUND] BF_INTERN_GUARDEDALLOC: /sep/lib/libbf_intern_guardedalloc.a
--- [FOUND] BF_INTERN_ATOMIC: /sep/lib/libbf_intern_atomic.a
--- [FOUND] BF_INTERN_MEMUTIL: /sep/lib/libbf_intern_memutil.a
--- [FOUND] BF_INTERN_SKY: /sep/lib/libbf_intern_sky.a
--- [FOUND] BF_INTERN_OPENSUBDIV: /sep/lib/libbf_intern_opensubdiv.a
--- [FOUND] BF_BLENLIB: /sep/lib/libbf_blenlib.a
--- [FOUND] BF_BLENKERNEL: /sep/lib/libbf_blenkernel.a
--- [FOUND] BF_GPU: /sep/lib/libbf_gpu.a
--- [FOUND] BF_DRAW: /sep/lib/libbf_draw.a
--- [FOUND] EXTERN_CLEW: /sep/lib/libextern_clew.a
--- [FOUND] EXTERN_CUEW: /sep/lib/libextern_cuew.a
--- [FOUND] EXTERN_HIPEW: /sep/lib/libextern_hipew.a
--- [FOUND] EXTERN_CLEW: /sep/lib/libextern_clew.a
--- Found OpenPGL: /usr/lib64/libopenpgl.so
--- PipeWire found via pkg-config: pipewire-0.3
--- Verified PipeWire library: /usr/lib64/libpipewire-0.3.so
--- Using PipeWire at: /usr/lib64/libpipewire-0.3.so
--- Using custom CUDA compilation pipeline
--- CUDA Path: /usr/local/cuda-12.9
--- CUDA NVCC: /usr/local/cuda-12.9/bin/nvcc
--- CUDA Host Compiler: /usr/bin/g++
--- CUDA Architectures: 70;75;80;86;89
--- CUDA Libraries: /usr/local/cuda-12.9/lib64/libcudart.so;/usr/local/cuda-12.9/lib64/libcudadevrt.a;/usr/local/cuda-12.9/lib64/libcudart_static.a
--- CUDA Library Dirs: /usr/local/cuda-12.9/lib64;/usr/local/cuda-12.9/targets/x86_64-linux/lib;/usr/local/cuda-12.9/targets/x86_64-linux/lib/stubs
--- === SEP Engine Build Configuration ===
--- Cycles support: 1
--- Blender support: 1
--- Redis support: 1
--- Cycles root: /sep/extern/cycles
--- Cycles lib search: /sep/extern/cycles/lib;/sep/extern/cycles/build
--- OSL libraries: /usr/lib64/liboslcomp.so /usr/lib64/liboslexec.so /usr/lib64/liboslquery.so
--- Critical Cycles OSL: /sep/lib/libcycles_osl.a
--- Build type: 
--- =====================================
--- Configuring done (1.0s)
--- Generating done (0.0s)
-CMake Warning:
-  Manually-specified variables were not used by the project:
 
-    PIPEWIRE_INCLUDE_DIR
-    PIPEWIRE_LIBRARY
-
-
--- Build files have been written to: /sep/cmake-make
-Building SEP Engine...
-[  1%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[  3%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[  6%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 10%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 12%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 14%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 15%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 20%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 21%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 26%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 26%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 28%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 29%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-/sep/src/api/bridge.cpp:23:9: warning: "SEP_CATCH_RETURN" redefined
-   23 | #define SEP_CATCH_RETURN(core) \
-      |         ^~~~~~~~~~~~~~~~
-In file included from /sep/src/api/bridge.cpp:3:
-/sep/include/api/bridge_internal.hpp:24:9: note: this is the location of the previous definition
-   24 | #define SEP_CATCH_RETURN(code) \
-      |         ^~~~~~~~~~~~~~~~
-[ 31%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 32%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 34%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 37%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 45%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 48%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 53%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-/sep/src/memory/memory_tier_manager.cpp:32:1: error: redefinition of ‘sep::memory::MemoryTierManager::Config::Config()’
-   32 | MemoryTierManager::Config::Config()
-      | ^~~~~~~~~~~~~~~~~
-In file included from /sep/src/memory/memory_tier_manager.cpp:1:
-/sep/include/memory/memory_tier_manager.hpp:58:9: note: ‘sep::memory::MemoryTierManager::Config::Config()’ previously defined here
-   58 |         Config()
-      |         ^~~~~~
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 57%] Linking CXX static library libsep_compat.a
-[ 59%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 59%] Built target sep_compat
-[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 64%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 65%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 67%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 68%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 73%] Linking CXX static library libsep_audio.a
-[ 73%] Built target sep_audio
-/sep/src/api/rate_limit_middleware.cpp: In constructor ‘sep::api::RateLimitMiddleware::RateLimitMiddleware()’:
-/sep/src/api/rate_limit_middleware.cpp:10:7: error: class ‘sep::api::RateLimitMiddleware’ does not have any field named ‘app_metrics_ref_’
-   10 |     : app_metrics_ref_(nullptr) {
-      |       ^~~~~~~~~~~~~~~~
-/sep/src/api/rate_limit_middleware.cpp:13:37: error: qualified-id in declaration before ‘(’ token
-   13 | void RateLimitMiddleware::set_config(const sep::config::RateLimitConfig& config)
-      |                                     ^
-/sep/src/api/rate_limit_middleware.cpp:26:42: error: qualified-id in declaration before ‘(’ token
-   26 | void RateLimitMiddleware::set_app_metrics(ServerMetrics& app_metrics)
-      |                                          ^
-/sep/src/api/rate_limit_middleware.cpp:31:40: error: qualified-id in declaration before ‘(’ token
-   31 | void RateLimitMiddleware::before_handle(::crow::request& req, ::crow::response& res, context&)
-      |                                        ^
-/sep/src/api/rate_limit_middleware.cpp:49:39: error: qualified-id in declaration before ‘(’ token
-   49 | void RateLimitMiddleware::after_handle(::crow::request&, ::crow::response&, context&)
-      |                                       ^
-/sep/src/api/rate_limit_middleware.cpp: At global scope:
-/sep/src/api/rate_limit_middleware.cpp:54:2: error: expected ‘}’ at end of input
-   54 | }  // namespace sep::api
-      |  ^
-/sep/src/api/rate_limit_middleware.cpp:8:20: note: to match this ‘{’
-    8 | namespace sep::api {
-      |                    ^
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:219: src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 75%] Linking CXX static library libsep_core.a
-In file included from /sep/src/api/sep_engine.cpp:26:
-/sep/include/core/logging.h:6:7: error: redefinition of ‘class sep::logging::Manager’
-    6 | class Manager {
-      |       ^~~~~~~
-In file included from /sep/src/api/sep_engine.cpp:25:
-/sep/include/memory/manager.h:46:7: note: previous definition of ‘class sep::logging::Manager’
-   46 | class Manager {
-      |       ^~~~~~~
-/sep/src/api/sep_engine.cpp: In member function ‘nlohmann::json_abi_v3_11_3::json sep::api::SepEngine::processPatterns(const nlohmann::json_abi_v3_11_3::json&)’:
-/sep/src/api/sep_engine.cpp:161:82: error: cannot convert ‘std::string’ {aka ‘std::__cxx11::basic_string<char>’} to ‘size_t’ {aka ‘long unsigned int’}
-  161 |         bool process_success = impl_->quantum_processor->processPattern(pattern, pattern_id);
-      |                                                                                  ^~~~~~~~~~
-      |                                                                                  |
-      |                                                                                  std::string {aka std::__cxx11::basic_string<char>}
-In file included from /sep/src/api/sep_engine.cpp:22:
-/sep/include/quantum/quantum_processor.h:43:55: note:   initializing argument 2 of ‘bool sep::quantum::QuantumProcessor::processPattern(const glm::vec3&, size_t)’
-   43 |     bool processPattern(const glm::vec3& data, size_t id);
-      |                                                ~~~~~~~^~
-/sep/src/api/sep_engine.cpp:170:110: error: ‘glm::vec3’ {aka ‘struct glm::vec<3, float, glm::packed_highp>’} has no member named ‘generation’
-  170 |         stability = impl_->quantum_processor->calculateStability(coherence, 0.0f, static_cast<float>(pattern.generation), 1.0f);
-      |                                                                                                              ^~~~~~~~~~
-/sep/src/api/sep_engine.cpp: In member function ‘nlohmann::json_abi_v3_11_3::json sep::api::SepEngine::processBatch(const nlohmann::json_abi_v3_11_3::json&)’:
-/sep/src/api/sep_engine.cpp:224:86: error: cannot convert ‘std::string’ {aka ‘std::__cxx11::basic_string<char>’} to ‘size_t’ {aka ‘long unsigned int’}
-  224 |             bool process_success = impl_->quantum_processor->processPattern(pattern, id);
-      |                                                                                      ^~
-      |                                                                                      |
-      |                                                                                      std::string {aka std::__cxx11::basic_string<char>}
-/sep/include/quantum/quantum_processor.h:43:55: note:   initializing argument 2 of ‘bool sep::quantum::QuantumProcessor::processPattern(const glm::vec3&, size_t)’
-   43 |     bool processPattern(const glm::vec3& data, size_t id);
-      |                                                ~~~~~~~^~
-[ 75%] Built target sep_core
-[ 76%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 78%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 79%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 82%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 82%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 85%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 87%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-/sep/src/blender/cycles_renderer.cpp:5:10: fatal error: compat/osl_stub.h: No such file or directory
-    5 | #include "compat/osl_stub.h" // Fix: Add missing OSL stub header
-      |          ^~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:177: src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [CMakeFiles/Makefile2:492: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:233: src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:396: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
-[ 89%] Linking CXX static library libsep_quantum.a
-[ 89%] Built target sep_quantum
-make[1]: *** [CMakeFiles/Makefile2:332: src/api/CMakeFiles/sep_api.dir/all] Error 2
-make: *** [Makefile:136: all] Error 2
+[ 68%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 70%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 71%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 73%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 75%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 76%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 78%] Linking CXX static library libsep_blender.a
+[ 78%] Built target sep_blender
+[ 79%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 81%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 82%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 84%] Linking CXX static library libsep_compat.a
+[ 84%] Built target sep_compat
+[ 85%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 87%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 89%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 90%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 92%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 93%] Linking CXX static library libsep_memory.a
+[ 93%] Built target sep_memory
+[ 95%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
+[ 96%] Linking CXX executable sep_engine
+/usr/bin/ld: src/quantum/libsep_quantum.a(quantum_processor_qfh_common.cpp.o):(.data+0x0): multiple definition of `sep::quantum::manifold::memory'; src/memory/libsep_memory.a(quantum_coherence_manager.cpp.o):(.data+0x0): first defined here
+/usr/bin/ld: src/quantum/libsep_quantum.a(quantum_processor_qfh_common.cpp.o):(.data+0x20): multiple definition of `sep::quantum::manifold::quantum'; src/memory/libsep_memory.a(quantum_coherence_manager.cpp.o):(.data+0x20): first defined here
+/usr/bin/ld: src/quantum/libsep_quantum.a(quantum_processor_qfh_common.cpp.o):(.data+0x40): multiple definition of `sep::quantum::manifold::cuda'; src/memory/libsep_memory.a(quantum_coherence_manager.cpp.o):(.data+0x40): first defined here
+/usr/bin/ld: src/quantum/libsep_quantum.a(quantum_processor_qfh_common.cpp.o):(.data+0x58): multiple definition of `sep::quantum::manifold::api'; src/memory/libsep_memory.a(quantum_coherence_manager.cpp.o):(.data+0x58): first defined here
+/usr/bin/ld: warning: libtbb.so.2, needed by /usr/lib64/libosdCPU.so, may conflict with libtbb.so.12
+/usr/bin/ld: CMakeFiles/sep_engine.dir/src/main.cpp.o: in function `main':
+main.cpp:(.text+0x48e): undefined reference to `sep::logging::Manager::shutdownLogging()'
+/usr/bin/ld: main.cpp:(.text+0x5a9): undefined reference to `sep::logging::Manager::shutdownLogging()'
+/usr/bin/ld: main.cpp:(.text+0xcaa): undefined reference to `sep::logging::Manager::shutdownLogging()'
+/usr/bin/ld: main.cpp:(.text+0xe55): undefined reference to `sep::logging::Manager::shutdownLogging()'
+/usr/bin/ld: main.cpp:(.text+0xea7): undefined reference to `sep::logging::Manager::shutdownLogging()'
+/usr/bin/ld: CMakeFiles/sep_engine.dir/src/main.cpp.o:main.cpp:(.text+0xf8b): more undefined references to `sep::logging::Manager::shutdownLogging()' follow
+/usr/bin/ld: lib/libcycles_scene.a(camera.cpp.o): in function `ccl::Camera::world_to_raster_size(ccl::float3)':
+camera.cpp:(.text+0x96f0): undefined reference to `ccl::osl_eval_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::packed_float3, ccl::packed_float3, ccl::packed_float3, ccl::float2, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&)'
+/usr/bin/ld: lib/libcycles_scene.a(osl.cpp.o): in function `std::_Function_handler<void (ccl::Device*, ccl::OSLGlobals*), ccl::OSLManager::shading_system_init()::$_0>::_M_invoke(std::_Any_data const&, ccl::Device*&&, ccl::OSLGlobals*&&)':
+osl.cpp:(.text+0x93df): undefined reference to `ccl::OSLRenderServices::OSLRenderServices(OpenImageIO_v2_5::TextureSystem*, int)'
+/usr/bin/ld: osl.cpp:(.text+0x96da): undefined reference to `ccl::OSLRenderServices::register_closures(OSL_v1_13::ShadingSystem*)'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::init(sep::config::APIConfig const&)':
+engine.cpp:(.text+0x114): undefined reference to `sep::cuda::CudaCore::initialize(int)'
+/usr/bin/ld: engine.cpp:(.text+0x197): undefined reference to `sep::cuda::CudaCore::initialize(int)'
+/usr/bin/ld: engine.cpp:(.text+0x2a5): undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'
+/usr/bin/ld: engine.cpp:(.text+0x6c1): undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'
+/usr/bin/ld: engine.cpp:(.text+0x96a): undefined reference to `sep::compat::createAudioCapture()'
+/usr/bin/ld: engine.cpp:(.text+0xc3a): undefined reference to `sep::compat::createBlenderBridge()'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::~Engine()':
+engine.cpp:(.text+0xfd9): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0xff3): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::generate_probes(sep::shim::vector<sep::PinState> const&, sep::shim::vector<unsigned int>&, sep::shim::vector<unsigned int>&, unsigned long)':
+engine.cpp:(.text+0x1203): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x1225): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x137c): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x13e7): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x1409): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1468): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x148a): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x14b4): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x14ca): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::process_batch(sep::shim::vector<sep::PinState> const&, unsigned long, sep::quantum::QBSAResult&, sep::cuda::QSHResult&)':
+engine.cpp:(.text+0x17f8): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x181a): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1913): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x19d3): undefined reference to `sep::cuda::CudaCore::launchQSH(sep::cuda::DeviceMemory<unsigned long> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x1a24): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x1a44): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1b84): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x1bb3): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1bdf): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x1c02): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1d4d): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x1d7c): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1df3): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x1e22): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1e4e): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x1e71): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: engine.cpp:(.text+0x2086): undefined reference to `sep::cuda::Stream::handle() const'
+/usr/bin/ld: engine.cpp:(.text+0x20a9): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: lib/libcycles_kernel.a(globals.cpp.o): in function `ccl::ThreadKernelGlobalsCPU::ThreadKernelGlobalsCPU(ccl::KernelGlobalsCPU const&, ccl::OSLGlobals*, ccl::Profiler&, int)':
+globals.cpp:(.text+0x95): undefined reference to `ccl::OSLThreadData::OSLThreadData(ccl::OSLGlobals*, int)'
+/usr/bin/ld: globals.cpp:(.text+0x161): undefined reference to `ccl::OSLThreadData::~OSLThreadData()'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::kernel_cpu_integrator_init_from_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::KernelWorkTile*, float*)':
+kernel.cpp:(.text+0xd8a): undefined reference to `ccl::osl_eval_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::packed_float3, ccl::packed_float3, ccl::packed_float3, ccl::float2, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::integrator_megakernel(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel.cpp:(.text+0xd558): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: kernel.cpp:(.text+0xea88): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::kernel_cpu_shader_eval_displace(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel.cpp:(.text+0x12dc5): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)2>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::kernel_cpu_shader_eval_background(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel.cpp:(.text+0x13514): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::kernel_cpu_shader_eval_curve_shadow_transparency(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel.cpp:(.text+0x13a93): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::integrator_shade_shadow(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorShadowStateCPU*, float*)':
+kernel.cpp:(.text+0x1c064): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)1>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: kernel.cpp:(.text+0x210df): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::light_sample_shader_eval(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::LightSample*, float)':
+kernel.cpp:(.text+0x9f036): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `int ccl::integrate_surface<955u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel.cpp:(.text+0xb51a4): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::volume_integrate(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::Ray*, float*)':
+kernel.cpp:(.text+0xf3f63): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)1>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `int ccl::integrate_surface<1019u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel.cpp:(.text+0xfb699): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `int ccl::integrate_surface<8389563u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel.cpp:(.text+0x116edf): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel.cpp.o): in function `void ccl::surface_shader_eval<827u, ccl::IntegratorStateCPU*>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, float*, unsigned int, bool)':
+kernel.cpp:(.text+0x1372f0): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::kernel_cpu_avx2_integrator_init_from_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::KernelWorkTile*, float*)':
+kernel_avx2.cpp:(.text+0xd36): undefined reference to `ccl::osl_eval_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::packed_float3, ccl::packed_float3, ccl::packed_float3, ccl::float2, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::integrator_megakernel(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0xd197): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: kernel_avx2.cpp:(.text+0xf945): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::kernel_cpu_avx2_shader_eval_displace(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel_avx2.cpp:(.text+0x12a1d): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)2>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::kernel_cpu_avx2_shader_eval_background(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel_avx2.cpp:(.text+0x13147): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::kernel_cpu_avx2_shader_eval_curve_shadow_transparency(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel_avx2.cpp:(.text+0x13666): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::integrator_shade_shadow(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorShadowStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0x1a8b4): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)1>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: kernel_avx2.cpp:(.text+0x1f724): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::light_sample_shader_eval(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::LightSample*, float)':
+kernel_avx2.cpp:(.text+0x97bb6): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `int ccl::integrate_surface<955u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0xacff3): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::volume_integrate(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::Ray*, float*)':
+kernel_avx2.cpp:(.text+0xe79d6): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)1>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `int ccl::integrate_surface<1019u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0xf10e2): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `int ccl::integrate_surface<8389563u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0x10bc28): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `void ccl::surface_shader_eval<827u, ccl::IntegratorStateCPU*>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, float*, unsigned int, bool)':
+kernel_avx2.cpp:(.text+0x12b56b): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/bin/ld: lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::ThreadKernelGlobalsCPU::~ThreadKernelGlobalsCPU()':
+device_impl.cpp:(.text._ZN3ccl22ThreadKernelGlobalsCPUD2Ev[_ZN3ccl22ThreadKernelGlobalsCPUD2Ev]+0x9d): undefined reference to `ccl::OSLThreadData::~OSLThreadData()'
+/usr/bin/ld: lib/libcycles_device.a(device_impl.cpp.o): in function `void std::vector<ccl::ThreadKernelGlobalsCPU, ccl::GuardedAllocator<ccl::ThreadKernelGlobalsCPU> >::_M_realloc_append<ccl::KernelGlobalsCPU&, ccl::OSLGlobals*&, ccl::Profiler&, int&>(ccl::KernelGlobalsCPU&, ccl::OSLGlobals*&, ccl::Profiler&, int&)':
+device_impl.cpp:(.text._ZNSt6vectorIN3ccl22ThreadKernelGlobalsCPUENS0_16GuardedAllocatorIS1_EEE17_M_realloc_appendIJRNS0_16KernelGlobalsCPUERPNS0_10OSLGlobalsERNS0_8ProfilerERiEEEvDpOT_[_ZNSt6vectorIN3ccl22ThreadKernelGlobalsCPUENS0_16GuardedAllocatorIS1_EEE17_M_realloc_appendIJRNS0_16KernelGlobalsCPUERPNS0_10OSLGlobalsERNS0_8ProfilerERiEEEvDpOT_]+0x1a5): undefined reference to `ccl::OSLThreadData::OSLThreadData(ccl::OSLThreadData&&)'
+/usr/bin/ld: src/api/libsep_api.a(sep_engine.cpp.o): in function `sep::api::SepEngine::Impl::Impl()':
+sep_engine.cpp:(.text._ZN3sep3api9SepEngine4ImplC2Ev[_ZN3sep3api9SepEngine4ImplC2Ev]+0x4e): undefined reference to `sep::quantum::createQuantumProcessor(sep::quantum::QuantumProcessor::Config const&)'
+/usr/bin/ld: src/memory/libsep_memory.a(quantum_coherence_manager.cpp.o): in function `sep::cuda::CudaCore::instance()':
+quantum_coherence_manager.cpp:(.text._ZN3sep4cuda8CudaCore8instanceEv[_ZN3sep4cuda8CudaCore8instanceEv]+0x2d): undefined reference to `sep::cuda::CudaCore::CudaCore()'
+/usr/bin/ld: src/quantum/libsep_quantum.a(pattern_processor.cpp.o): in function `sep::quantum::(anonymous namespace)::PatternQuantumProcessorImpl::PatternQuantumProcessorImpl(sep::quantum::QuantumProcessor::Config const&)':
+pattern_processor.cpp:(.text+0x5f4): undefined reference to `sep::quantum::createQuantumProcessor(sep::quantum::QuantumProcessor::Config const&)'
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [CMakeFiles/sep_engine.dir/build.make:181: sep_engine] Error 1
+make[1]: *** [CMakeFiles/Makefile2:300: CMakeFiles/sep_engine.dir/all] Error 2
+make: *** [Makefile:156: all] Error 2

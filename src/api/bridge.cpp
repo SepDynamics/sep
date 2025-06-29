@@ -18,16 +18,9 @@
 #include "crow/crow_error.h"
 #endif
 
-#if SEP_HAS_EXCEPTIONS
-#define SEP_TRY try
-#define SEP_CATCH_RETURN(core) \
-  catch (const std::exception &e) { \
-    sep::api::bridge::detail::setLastError(e.what()); \
-    return static_cast<int>(sep::api::bridge::detail::mapSepError(core)); \
-  }
-#else
+// Use macros from bridge_internal.hpp
+#if !SEP_HAS_EXCEPTIONS
 #define SEP_TRY
-#define SEP_CATCH_RETURN(core) \
   do { sep::crow::error::set_last_error("exceptions disabled"); \
     return static_cast<int>(core); \
   } while (0)

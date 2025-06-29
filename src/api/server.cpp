@@ -52,7 +52,7 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
 SEPApiServer::~SEPApiServer() {
   if (running_.load()) { // Fix: Use load() on atomic
     stop();
-  }
+  } // Fix: Add closing brace
   instance_ = nullptr;
 } // Fix: Add closing brace
 
@@ -139,7 +139,7 @@ std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const std
 }
 
 std::string SEPApiServer::handleError(const std::string& message, int code) {
-  nlohmann::json error_response{}; // Fix: Initialize json object
+  nlohmann::json error_response{};
   error_response["error"] = true;
   error_response["message"] = message;
   error_response["code"] = code;
@@ -160,12 +160,7 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
 void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& body,
                                int64_t duration) {
     if (!logger_) return;
- std::lock_guard<std::mutex> lock(metrics_mutex_); // Fix: Acquire lock first
-
-    // Log the request body if it's not empty
-    if (!body.empty()) {
-        logger_->debug("Request body: {}", body);
-    }
+ std::lock_guard<std::mutex> lock(metrics_mutex_); // Fix: Acquire lock first // Fix: Added comment
 
   metrics_.totalRequests++;
   if (code >= 200 && code < 300) {

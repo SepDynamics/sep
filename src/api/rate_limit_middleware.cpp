@@ -6,39 +6,27 @@
 #include <nlohmann/json.hpp>
 
 namespace sep::api {
-RateLimitMiddleware::RateLimitMiddleware()
-    : app_metrics_ref_(nullptr) {
+RateLimitMiddleware::RateLimitMiddleware() {
     set_config(sep::config::RateLimitConfig{});
+}
 
-void RateLimitMiddleware::set_config(const sep::config::RateLimitConfig& config)
-{
+void RateLimitMiddleware::set_config(const sep::config::RateLimitConfig& config) {
     config_ = config;
-    if (config_.enabled)
-    {
+    if (config_.enabled) {
         rate_limiter_ = createRateLimiter(config_.rpm);
-    }
-    else
-    {
+    } else {
         rate_limiter_.reset();
     }
 }
 
-void RateLimitMiddleware::set_app_metrics(ServerMetrics& app_metrics)
-{
-    app_metrics_ref_ = &app_metrics;
-}
-
-void RateLimitMiddleware::before_handle(::crow::request& req, ::crow::response& res, context&)
-{
-    if (!config_.enabled || !rate_limiter_)
-    {
+void RateLimitMiddleware::before_handle(::crow::request& req, ::crow::response& res, context&) {
+    if (!config_.enabled || !rate_limiter_) {
         return;
     }
 
     CrowRequest wrapped(req);
-    if (!rate_limiter_->checkRateLimit(wrapped))
-    {
-        res.code      = 429;  // Too Many Requests
+    if (!rate_limiter_->checkRateLimit(wrapped)) {
+        res.code = 429;  // Too Many Requests
         auto err_json = nlohmann::json::parse(rate_limiter_->getErrorResponse("Rate limit exceeded", 429));
         res.set_header("Content-Type", "application/json");
         res.body = err_json.dump();
@@ -46,8 +34,7 @@ void RateLimitMiddleware::before_handle(::crow::request& req, ::crow::response& 
     }
 }
 
-void RateLimitMiddleware::after_handle(::crow::request&, ::crow::response&, context&)
-{
+void RateLimitMiddleware::after_handle(::crow::request&, ::crow::response&, context&) {
     // No-op
 }
 

@@ -29,8 +29,8 @@ namespace pattern {
 // Use the core SEPResult enum instead of the pattern-specific one
 // Constructor implementation - Initialize members in the correct order
 BlenderBridge::BlenderBridge()
-    : thread_running_(false), // Fix: Add comma
-    , gpu_context_(nullptr) // Fix: Initialize gpu_context_
+    : thread_running_(false),
+      gpu_context_(nullptr)
 {
     // Initialize the bridge
 }

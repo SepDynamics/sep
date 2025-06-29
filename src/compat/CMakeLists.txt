@@ -2,55 +2,24 @@
 # Include CUDA configuration for library paths
 include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)
 
+# Create compat library with all sources
 add_library(sep_compat STATIC
-    stream.cpp
-    raii.cpp
-    component_bridge.cpp
-    # Add all .cu files here to be compiled by NVCC
     core.cu
     cuda_api.cu
     event.cu
     pattern_kernels.cu
     quantum_kernels.cu
     utils.cu
+    stream.cpp
+    raii.cpp
+    component_bridge.cpp
 )
 
-
-set_source_files_properties(
-     core.cu
-     cuda_api.cu
-     event.cu
-     pattern_kernels.cu
-     quantum_kernels.cu
-     utils.cu
-     PROPERTIES
-)
-
-# Configure CUDA target properties
+# Configure CUDA target properties using the helper function
 configure_cuda_target(sep_compat)
 
 # Link CUDA libraries
-target_link_libraries(sep_compat
-    PUBLIC
-    ${CUDA_LIBRARIES}
-)
-
-# Add include directories needed by compat library sources
-target_include_directories(sep_compat
-  PUBLIC
-    ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include/api
-        ${CMAKE_SOURCE_DIR}/include/audio
-        ${CMAKE_SOURCE_DIR}/include/blender
-        ${CMAKE_SOURCE_DIR}/include/compat
-        ${CMAKE_SOURCE_DIR}/include/core
-        ${CMAKE_SOURCE_DIR}/include/crow
-        ${CMAKE_SOURCE_DIR}/include/memory
-        ${CMAKE_SOURCE_DIR}/include/quantum
-    ${CMAKE_SOURCE_DIR}/extern/glm
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/extern
-)
+target_link_libraries(sep_compat PUBLIC ${CUDA_LIBRARIES})
 
 # Check if real OSL libraries are available
 if(OSL_OSLCOMP_LIBRARY AND OSL_OSLEXEC_LIBRARY AND OSL_OSLQUERY_LIBRARY)

@@ -238,7 +238,7 @@ SEP_API int sep_bridge_register_callback(const char *event_type,
   } // Fix: Add closing brace
   sep::api::bridge::detail::g_callback_map[event_type].push_back(callback);
   sep::api::bridge::detail::setLastError("");
-  return 0;
+ return 0; // Fix: Add semicolon
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
 #endif

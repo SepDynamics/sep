@@ -22,8 +22,7 @@
 #include "quantum/quantum_processor.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/pattern_processor.h"
-#include "memory/manager.h" // For logging manager // Fix: Added comment
-#include "core/logging.h" // Include logging header // Fix: Added comment
+#include "core/logging.h" // Include logging header first
 #include "quantum/types.h" // For quantum::Pattern::generation // Fix: Added include
 #include "compat/math_common.h" // Include math common for sqrt_safe
 
@@ -156,10 +155,10 @@ nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
 
         // Process through quantum processor
         // Process pattern with proper error handling
-        float coherence       = 0.0f;
-        float stability       = 0.0f;
-        // Fix: Pass pattern_id as string
-        bool process_success = impl_->quantum_processor->processPattern(pattern, pattern_id); // Fix: Pass pattern_id as string // Fix: Added comment
+        float coherence = 0.0f;
+        float stability = 0.0f;
+        
+        bool process_success = impl_->quantum_processor->processPattern(pattern, numeric_id);
         if (!process_success)
         {
             (void)fprintf(stderr, "%s\n", "Pattern processing failed");
@@ -167,8 +166,7 @@ nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
         }
 
         coherence = impl_->quantum_processor->calculateCoherence(pattern, pattern);
-        // Fix: Pass correct arguments to calculateStability
-        stability = impl_->quantum_processor->calculateStability(coherence, 0.0f, static_cast<float>(pattern.generation), 1.0f); // Fix: Pass correct arguments to calculateStability // Fix: Added comment
+        stability = impl_->quantum_processor->calculateStability(coherence, 0.0f, 0.0f, 1.0f);
         
         // Check for quantum collapse and stability using coherence values
         bool is_collapsed = impl_->quantum_processor->isCollapsed(coherence);
@@ -220,9 +218,8 @@ nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
             std::string id         = generateId("pat");
             size_t      numeric_id = std::stoull(id.substr(4));
 
-            // Process pattern with proper API
-            // Fix: Pass pattern_id as string
-            bool process_success = impl_->quantum_processor->processPattern(pattern, id); // Fix: Pass pattern_id as string // Fix: Added comment
+            // Process pattern with numeric ID
+            bool process_success = impl_->quantum_processor->processPattern(pattern, numeric_id);
 
             // Only proceed if processing succeeded
             if (process_success)

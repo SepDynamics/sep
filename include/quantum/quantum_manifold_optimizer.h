@@ -45,7 +45,8 @@ namespace sep::quantum::manifold {
 
 using ::sep::memory::MemoryTierEnum;
 using ::sep::quantum::QuantumState;
-using QuantumPattern = ::sep::quantum::Pattern;
+using QuantumPattern = ::sep::quantum::manifold::QuantumPattern;
+using ManifoldQuantumState = ::sep::quantum::manifold::QuantumState;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
 // Configuration structures from the core configuration module use
@@ -62,16 +63,23 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CUDAConfig cuda;
-        APIConfig api;
+        CudaConfig cuda;
+        ApiConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
+        double convergence_threshold{0.001};
+        double step_size{0.05};
+        double neighborhood_radius{1.0};
+        double target_coherence{0.8};
+        double target_stability{0.7};
+        double min_coherence_threshold{0.1};
     };
 
     struct OptimizationResult {
         bool success{false};
         std::vector<float> optimized_values;
         std::string error_message;
+        QuantumState optimized_state{};
     };
 
     struct OptimizationTarget {
@@ -85,6 +93,8 @@ public:
     OptimizationResult optimize(const QuantumState& initial_state,
                               const OptimizationTarget& target);
     void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
+    float computeManifoldCoherence(const glm::vec3& position) const;
+    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
 
 private:
     class Impl;
@@ -119,7 +129,7 @@ class PerformanceAnalyzer;
     } quantum;
 
     // CUDA acceleration parameters
-    struct CUDAConfig {
+    struct CudaConfig {
         int warp_tile_size = 16;
         int coherence_block_size = 256;
         int similarity_grid_dim = 32;
@@ -128,7 +138,7 @@ class PerformanceAnalyzer;
     } cuda;
 
     // API coherence modulation
-    struct APIConfig {
+    struct ApiConfig {
         double base_coherence = 0.5;
         double context_weight = 0.3;
         double state_weight = 0.7;
@@ -145,8 +155,8 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    CUDAConfig cuda;
-    APIConfig api;
+    CudaConfig cuda;
+    ApiConfig api;
     LogConfig log;
     AnalyticsConfig analytics;
 };
@@ -209,7 +219,7 @@ private:
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
 class CUDAQuantumKernel {
 public:
-    explicit CUDAQuantumKernel(const ManifoldConfig::CUDAConfig& config);
+    explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
     ~CUDAQuantumKernel();
 
     // Warp-level primitive operations
@@ -227,7 +237,7 @@ public:
 private:
     cudaStream_t stream_;
     cufftHandle fft_plan_;
-    ManifoldConfig::CUDAConfig config_;
+    ManifoldConfig::CudaConfig config_;
     
     void* d_workspace_;
     size_t workspace_size_;
@@ -236,7 +246,7 @@ private:
 // 4. API COHERENCE MODULATION
 class APICoherenceModulator {
 public:
-    explicit APICoherenceModulator(const ManifoldConfig::APIConfig& config);
+    explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
 
     // Dynamic response coherence synthesis
     struct CoherenceResponse {
@@ -253,7 +263,7 @@ public:
                                          const std::vector<double>& weights);
 
 private:
-    ManifoldConfig::APIConfig config_;
+    ManifoldConfig::ApiConfig config_;
     std::unordered_map<std::string, double> context_coherence_map_;
     
     std::vector<double> extractCoherenceFactors(const std::string& context,
@@ -400,7 +410,7 @@ private:
             pattern.coherence = coherence_base_ * (1.0 + 0.1 * std::sin(t));
             pattern.stability = 0.5 + 0.5 * std::cos(t * 0.1);
             pattern.generation = index;
-            pattern.state = (pattern.coherence > 0.7) ? QuantumState::COHERENT : QuantumState::SUPERPOSITION;
+            pattern.state = (pattern.coherence > 0.7) ? ManifoldQuantumState::COHERENT : ManifoldQuantumState::SUPERPOSITION;
             pattern.phase = phase_;
             
             return pattern;

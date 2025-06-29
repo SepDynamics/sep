@@ -34,7 +34,7 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CUDAConfig cuda;
+        CudaConfig cuda;
         APIConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
@@ -64,6 +64,8 @@ private:
 };
 
 } // namespace sep::quantum::manifold
+
+namespace sep::quantum::manifold {
 
 // Forward declarations
 class HamiltonianEvolver;
@@ -136,7 +138,7 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    CUDAConfig cuda;
+    CudaConfig cuda;
     APIConfig api;
     LogConfig log;
 };
@@ -503,3 +505,5 @@ private:
     void integrateWithExistingMemoryTiers();
     void setupQuantumProcessingPipeline();
 };
+
+} // namespace sep::quantum::manifold

@@ -60,11 +60,9 @@ namespace {
     }
 }
 
-// Forward declare implementation
-class PatternEvolutionBridge::Impl;
-
-// Define implementation
-class PatternEvolutionBridge::Impl {
+namespace {
+// Implementation details
+class PatternEvolutionBridgeImpl {
 public:
     struct EvolutionState {
         std::vector<Pattern> active_patterns;
@@ -75,9 +73,9 @@ public:
         uint64_t evolution_tick;
     };
     
-    explicit Impl(const Config& config)
+    explicit Impl(const PatternEvolutionBridge::Config& config)
         : config_(config)
-        , manifold_optimizer_(QuantumManifoldOptimizer(
+        , manifold_optimizer_(std::make_unique<QuantumManifoldOptimizer>(
               QuantumManifoldOptimizer::createManifoldConfig(config)))
         , evolution_state_(std::make_unique<EvolutionState>())
         , worker_threads_(config.num_threads) {
@@ -228,7 +226,7 @@ public:
         }
     }
     
-    void evolutionWorker(size_t worker_id) {
+    void evolutionWorker(size_t) {  // Unused parameter removed
         while (running_) {
             // Process evolution tasks
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -254,13 +252,13 @@ public:
         
         // Update quantum properties
         evolved.quantum_state.coherence = glm::clamp(state_vector.x, 0.0f, 1.0f);
-        evolved.quantum_state.phase = std::fmod(state_vector.y, 2.0f * M_PI);
+        evolved.quantum_state.phase = std::fmod(state_vector.y, 2.0f * static_cast<float>(M_PI));
         evolved.quantum_state.entropy = glm::clamp(state_vector.z, 0.0f, 1.0f);
         
         // Apply decoherence
         float decoherence = computeDecoherence(
             evolved.quantum_state.coherence,
-            config_.environment_coupling,
+            this->config_.environment_coupling,
             time_step
         );
         evolved.quantum_state.coherence *= decoherence;
@@ -295,7 +293,7 @@ public:
         std::for_each(std::execution::par_unseq,
             patterns.begin(), patterns.end(),
             [this, &patterns, n](const Pattern& p1) {
-                size_t i = &p1 - &patterns[0];
+                size_t i = &p1 - patterns.data();
                 for (size_t j = 0; j < n; ++j) {
                     float coherence = computePairCoherence(p1, patterns[j]);
                     evolution_state_->coherence_matrix[i * n + j] = coherence;

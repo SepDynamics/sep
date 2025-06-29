@@ -57,7 +57,7 @@ TEST_F(ConfigManagerTest, ComponentSpecificAccess) {
 
   // Get component configs
   const auto &api_config = cm.getAPIConfig();
-  const auto &cuda_config = cm.getCUDAConfig();
+  const auto &cuda_config = cm.getCudaConfig();
   const auto &log_config = cm.getLogConfig();
 
   // Verify default values
@@ -87,10 +87,10 @@ TEST_F(ConfigManagerTest, UpdateConfigs) {
   EXPECT_EQ(cm.getAPIConfig().host, "new_host");
 
   // Update CUDA config
-  CUDAConfig cuda_config = cm.getCUDAConfig();
+  CudaConfig cuda_config = cm.getCudaConfig();
   cuda_config.max_memory_mb = 2048;
-  cm.updateCUDAConfig(cuda_config);
-  EXPECT_EQ(cm.getCUDAConfig().max_memory_mb, 2048);
+  cm.updateCudaConfig(cuda_config);
+  EXPECT_EQ(cm.getCudaConfig().max_memory_mb, 2048);
 
   // Update Log config
   LogConfig log_config = cm.getLogConfig();

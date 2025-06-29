@@ -169,7 +169,7 @@ const APIConfig &ConfigManager::getAPIConfig() const {
   return impl_->config.api;
 }
 
-const CUDAConfig &ConfigManager::getCUDAConfig() const {
+const CudaConfig &ConfigManager::getCudaConfig() const {
   std::lock_guard<std::mutex> lock(mutex_);
   return impl_->config.cuda;
 }
@@ -184,7 +184,7 @@ void ConfigManager::updateAPIConfig(const APIConfig &config) {
   impl_->config.api = config;
 }
 
-void ConfigManager::updateCUDAConfig(const CUDAConfig &config) {
+void ConfigManager::updateCudaConfig(const CudaConfig &config) {
   std::lock_guard<std::mutex> lock(mutex_);
   impl_->config.cuda = config;
 }

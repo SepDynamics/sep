@@ -4,6 +4,8 @@
  */
 
 #include "blender/mesh_handler.h"
+
+using namespace sep::pattern;
 #include "core/common.h"  // defines sep::SEPResult
 
 using namespace sep::pattern;

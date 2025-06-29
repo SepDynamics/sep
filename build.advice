@@ -11,10 +11,10 @@
 ```
 /sep/include/quantum/quantum_manifold_optimizer.h:236:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
 /sep/include/quantum/quantum_manifold_optimizer.h:255:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-/sep/include/quantum/quantum_manifold_optimizer.h:264:58: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-/sep/include/quantum/quantum_manifold_optimizer.h:283:21: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+/sep/include/quantum/quantum_manifold_optimizer.h:264:58: error: ‘APIConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+/sep/include/quantum/quantum_manifold_optimizer.h:283:21: error: ‘APIConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
 ```
-**Issue:** These errors are consequences of the previously fixed issue where `CudaConfig` and `ApiConfig` within `ManifoldConfig` were not correctly defined (they should be namespaced). The compiler messages in this output indicate that the fix from the previous turn (adding includes and qualifying with `sep::config::`) might not have been applied correctly to `quantum_manifold_optimizer.h`.
+**Issue:** These errors are consequences of the previously fixed issue where `CudaConfig` and `APIConfig` within `ManifoldConfig` were not correctly defined (they should be namespaced). The compiler messages in this output indicate that the fix from the previous turn (adding includes and qualifying with `sep::config::`) might not have been applied correctly to `quantum_manifold_optimizer.h`.
 **Target:** `/sep/include/quantum/quantum_manifold_optimizer.h`
 **Action:** Double-check that the fix from the previous turn was correctly applied to `quantum_manifold_optimizer.h`. Ensure `#include "core/types.h"` and `#include "api/types.h"` are present and that `ManifoldConfig` members are defined using `sep::config::CudaConfig`, `sep::config::APIConfig`, etc.
 

@@ -3,9 +3,14 @@
 
 // Include core types first for config definitions
 #include "core/types.h"
-
-// Other includes
 #include "quantum/pattern_evolution_bridge.h"
+
+namespace sep::config {
+class CudaConfig;
+class APIConfig;
+class LogConfig;
+class AnalyticsConfig;
+}
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -54,7 +59,7 @@ public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
         ::sep::config::CudaConfig cuda;
-        ::sep::config::ApiConfig api;
+        ::sep::config::APIConfig api;
         ::sep::config::LogConfig log;
         double base_resonance_frequency{0.42};
         double convergence_threshold{0.001};
@@ -150,7 +155,7 @@ struct CudaConfig {
 } cuda;
 
     // API coherence modulation
-    struct ApiConfig {
+    struct APIConfig {
         double base_coherence = 0.5;
         double context_weight = 0.3;
         double state_weight = 0.7;
@@ -167,9 +172,9 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    ::sep::config::CudaConfig cuda;
-    ::sep::config::ApiConfig api;
-    ::sep::config::LogConfig log;
+    sep::config::CudaConfig cuda;
+    sep::config::APIConfig api;
+    sep::config::LogConfig log;
     AnalyticsConfig analytics;
 };
 
@@ -233,7 +238,7 @@ private:
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
 class CUDAQuantumKernel {
 public:
-    explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
+    explicit CUDAQuantumKernel(const sep::config::CudaConfig& config);
     ~CUDAQuantumKernel();
 
   // Warp-level primitive operations
@@ -261,7 +266,7 @@ private:
 // 4. API COHERENCE MODULATION
 class APICoherenceModulator {
 public:
-    explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
+    explicit APICoherenceModulator(const sep::config::APIConfig& config);
 
   // Dynamic response coherence synthesis
   struct CoherenceResponse {
@@ -280,7 +285,7 @@ public:
                                   const std::vector<double> &weights);
 
 private:
-    ManifoldConfig::ApiConfig config_;
+    ManifoldConfig::APIConfig config_;
     std::unordered_map<std::string, double> context_coherence_map_;
     
     std::vector<double> extractCoherenceFactors(const std::string& context,
@@ -329,7 +334,7 @@ private:
 // 6. REAL-TIME PERFORMANCE ANALYTICS
 class PerformanceAnalyzer {
 public:
-  explicit PerformanceAnalyzer(const AnalyticsConfig &config);
+  explicit PerformanceAnalyzer(const sep::config::AnalyticsConfig &config);
 
   // Quantum state space analysis
   struct StateSpaceAnalysis {

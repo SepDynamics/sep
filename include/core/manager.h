@@ -39,12 +39,12 @@ public:
 
   // Component-specific access
   const APIConfig &getAPIConfig() const;
-  const CUDAConfig &getCUDAConfig() const;
+  const CudaConfig &getCudaConfig() const;
   const LogConfig &getLogConfig() const;
 
   // Update specific components
   void updateAPIConfig(const APIConfig &config);
-  void updateCUDAConfig(const CUDAConfig &config);
+  void updateCudaConfig(const CudaConfig &config);
   void updateLogConfig(const LogConfig &config);
 
   // Reset configuration to defaults

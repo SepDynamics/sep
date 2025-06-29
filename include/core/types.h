@@ -133,6 +133,10 @@ struct SystemConfig {
     std::string data_path;
 };
 
+// Backwards compatibility aliases for renamed configuration structs
+using CudaConfig = CUDAConfig;
+using ApiConfig = APIConfig;
+
 // JSON serialization helpers
 inline void to_json(nlohmann::json& j, const CORSConfig& c)
 {

@@ -83,7 +83,7 @@ public:
     void resetOperation(const std::string& operation_name);
 
 private:
-    MetricsCollector() = default;
+    MetricsCollector();
     ~MetricsCollector() = default;
     MetricsCollector(const MetricsCollector&) = delete;
     MetricsCollector& operator=(const MetricsCollector&) = delete;

@@ -238,12 +238,11 @@ class MetricsCollector::Impl {
 
 // MetricsCollector implementation
 
+MetricsCollector::MetricsCollector() : pImpl(std::make_unique<Impl>()) {}
+
 MetricsCollector& MetricsCollector::instance() {
     // Use a function-local static variable for thread-safe singleton initialization
-    static MetricsCollector instance; // Fix: Declare the static instance
-    if (!instance.pImpl) {
-        instance.pImpl = std::make_unique<Impl>();
-    }
+    static MetricsCollector instance;
     return instance;
 }
 

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <atomic>
+#include <cstdint>
 #include <chrono>
 #include <map>
 #include <vector>

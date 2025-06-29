@@ -453,8 +453,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         
         # Cuda libraries must come right after sep_compat
         ${CUDA_LIBRARIES}
-        CUDAToolkit::cudart
-        CUDAToolkit::cuda_driver
 
         # Remaining internal libraries in dependency order
         sep_core

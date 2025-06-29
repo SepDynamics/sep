@@ -1,20 +1,16 @@
 #ifndef SEP_QUANTUM_TYPES_H
 #define SEP_QUANTUM_TYPES_H
 
-#include <glm/glm.hpp>
-#include <vector>
-#include <string>
 #include "memory/types.h"
+#include <glm/glm.hpp>
+#include <string>
+#include <vector>
 
 #include "memory/types.h"
 
 namespace sep::quantum {
 
-enum class RelationshipType {
-    ENTANGLEMENT,
-    CAUSAL,
-    SIMILARITY
-};
+enum class RelationshipType { ENTANGLEMENT, CAUSAL, SIMILARITY };
 
 struct QuantumState {
     enum class Status { SUPERPOSITION, COHERENT, COLLAPSED };
@@ -34,44 +30,44 @@ struct QuantumState {
 };
 
 struct PatternRelationship {
-    std::string targetId;
-    float strength;
-    RelationshipType type;
+  std::string targetId;
+  float strength;
+  RelationshipType type;
 };
 
 struct Pattern {
-    std::string id;
-    glm::vec4 position;
-    glm::vec3 momentum{0.0f};
-    QuantumState quantum_state;
-    std::vector<PatternRelationship> relationships;
-    std::vector<float> data;
-    std::vector<std::string> parent_ids;
-    uint64_t timestamp;
-    uint64_t last_accessed;
-    uint64_t last_modified;
+  std::string id;
+  glm::vec4 position;
+  glm::vec3 momentum{0.0f};
+  QuantumState quantum_state;
+  std::vector<PatternRelationship> relationships;
+  std::vector<float> data;
+  std::vector<std::string> parent_ids;
+  uint64_t timestamp;
+  uint64_t last_accessed;
+  uint64_t last_modified;
 };
 
 struct ProcessingConfig {
-    size_t max_patterns{10000};
-    float mutation_rate{0.01f};
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
-    bool enable_cuda{false};
+  size_t max_patterns{10000};
+  float mutation_rate{0.01f};
+  float ltm_coherence_threshold{0.9f};
+  float mtm_coherence_threshold{0.6f};
+  float stability_threshold{0.8f};
+  bool enable_cuda{false};
 };
 
 struct ProcessingResult {
-    bool success{false};
-    Pattern pattern;
-    std::string error_message;
+  bool success{false};
+  Pattern pattern;
+  std::string error_message;
 };
 
 struct BatchProcessingResult {
-    bool success{false};
-    std::vector<ProcessingResult> results;
-    std::string error_message;
-    int error_code{0};
+  bool success{false};
+  std::vector<ProcessingResult> results;
+  std::string error_message;
+  int error_code{0};
 };
 
 } // namespace sep::quantum

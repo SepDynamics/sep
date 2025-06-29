@@ -311,6 +311,8 @@ createLockFreeRateLimiter(unsigned int requests_per_minute) {
   return std::make_unique<LockFreeRateLimiter>(requests_per_minute);
 }
 
+// Wrapper factory that currently returns the lock-free implementation.
+// This indirection allows swapping implementations without touching callers.
 std::unique_ptr<IRateLimiter>
 createRateLimiter(unsigned int requests_per_minute) {
   // Factory helper that allows the rest of the codebase to request a

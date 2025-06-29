@@ -4,7 +4,6 @@
  */
 
 #include "blender/mesh_handler.h"
-
 #include "core/common.h"  // defines sep::SEPResult
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow

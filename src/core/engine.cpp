@@ -1,3 +1,6 @@
+#if defined(SEP_HAS_CUDA) && !defined(SEP_USE_CUDA)
+#define SEP_USE_CUDA 1
+#endif
 #include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpyAsync
 #include "api/types.h"
 #include "core/common.h"  // defines sep::SEPResult

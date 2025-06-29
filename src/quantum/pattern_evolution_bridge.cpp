@@ -508,6 +508,7 @@ public:
         evolution_state_->evolution_tick++;
     }
 };
+} // namespace
 PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
     : impl_(std::make_unique<Impl>(config)) {}
 

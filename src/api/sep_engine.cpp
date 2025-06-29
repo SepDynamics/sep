@@ -426,7 +426,8 @@ nlohmann::json SepEngine::getHealthStatus()
 
 nlohmann::json SepEngine::getMemoryMetrics()
 {
-    if (!impl_->initialized) {
+    SepEngine& engine = SepEngine::getInstance();
+    if (!engine.impl_->initialized) {
         json result;
         result["success"] = false;
         result["error"]   = "Engine not initialized";
@@ -462,7 +463,8 @@ nlohmann::json SepEngine::getMemoryMetrics()
 
 nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
 {
-    if (!impl_->initialized) {
+    SepEngine& engine = SepEngine::getInstance();
+    if (!engine.impl_->initialized) {
         json result;
         result["success"] = false;
         result["error"]   = "Engine not initialized";
@@ -556,10 +558,7 @@ nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
             {"fragmentation", metrics.memoryFragmentation.load()}
         }}
     };
-    
-    return result;
-    result["response_time"]  = response_time;
-    result["timestamps"]     = timestamps;
+
     return result;
 }
 

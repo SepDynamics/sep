@@ -79,10 +79,10 @@ class BlenderBridge {
     } memory_usage;
 
     struct {
-      float last_process_time;
-      uint64_t total_updates;
-      size_t mutation_count;
-      float stability_score;
+      float processing_time{0.0f};
+      uint32_t pattern_count{0};
+      uint32_t update_count{0};
+      float coherence_score{0.0f};
     } stats;
   };
 

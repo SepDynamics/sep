@@ -73,7 +73,8 @@ public:
     
     explicit Impl(const Config& config)
         : config_(config)
-        , manifold_optimizer_(QuantumManifoldOptimizer(createManifoldConfig(config)))
+        , manifold_optimizer_(QuantumManifoldOptimizer(
+              QuantumManifoldOptimizer::createManifoldConfig(config)))
         , evolution_state_(std::make_unique<EvolutionState>())
         , worker_threads_(config.num_threads) {
         
@@ -471,16 +472,6 @@ private:
         }
     }
     
-    QuantumManifoldOptimizer::Config createManifoldConfig(const Config& config) {
-        QuantumManifoldOptimizer::Config manifold_config;
-        manifold_config.convergence_threshold = config.convergence_threshold;
-        manifold_config.step_size = config.evolution_step_size;
-        manifold_config.neighborhood_radius = config.interaction_radius;
-        manifold_config.target_coherence = config.target_coherence;
-        manifold_config.min_coherence_threshold = COHERENCE_COLLAPSE_THRESHOLD;
-        manifold_config.base_resonance_frequency = 1.0f;
-        return manifold_config;
-    }
     
     QuantumPhase determinePhase(float energy) const {
         if (energy < 0.3f) return QuantumPhase::Coherent;

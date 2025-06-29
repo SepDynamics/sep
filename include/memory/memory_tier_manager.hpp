@@ -15,6 +15,7 @@
 #include "compat/shim.h"
 #include "quantum/types.h"
 #include "quantum/data.hpp"
+#include "memory/redis_manager.h"
 
 // Standard library includes
 #include <cstddef>
@@ -117,8 +118,8 @@ public:
     void storeLTMToPersistence(const ::sep::quantum::Pattern& pattern, const persistence::PersistentPatternData& data);
     ::sep::quantum::Pattern* findPattern(std::size_t id);
     const ::sep::quantum::Pattern* findPattern(std::size_t id) const;
-    void registerPattern(std::size_t id, const pattern::PatternData& pattern);
-    const pattern::PatternData* getPatternData(std::size_t id) const;
+    void registerPattern(std::size_t id, const ::sep::pattern::PatternData& pattern);
+    const ::sep::pattern::PatternData* getPatternData(std::size_t id) const;
     void cleanupExpiredPatterns();
     void prunePatternsByPriority(TierType tier, size_t max_count);
 
@@ -142,15 +143,15 @@ private:
     std::unique_ptr<persistence::IRedisManager> redis_manager_;
     core::SystemHooks* hooks_{nullptr};
 
-    std::unordered_map<std::size_t, std::unique_ptr<pattern::PatternData>> pattern_registry_;
+    std::unordered_map<std::size_t, std::unique_ptr<::sep::pattern::PatternData>> pattern_registry_;
     std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>> pattern_relationships_;
 
     SEPResult promoteToTier(MemoryBlock* block, MemoryTier tier, MemoryBlock*& out_block);
     SEPResult compressBlock(MemoryBlock* block);
 
     // Pattern tier transition helpers
-    bool checkTierPromotion(const pattern::PatternData& pattern, MemoryTier target_tier) const;
-    bool checkTierDemotion(const pattern::PatternData& pattern) const;
+    bool checkTierPromotion(const ::sep::pattern::PatternData& pattern, MemoryTier target_tier) const;
+    bool checkTierDemotion(const ::sep::pattern::PatternData& pattern) const;
 };
 
 }  // namespace memory

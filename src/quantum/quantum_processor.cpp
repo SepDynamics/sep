@@ -143,4 +143,10 @@ QuantumProcessor::Config::operator ProcessingConfig() const {
     pc.enable_cuda = enable_gpu;
     return pc;
 }
+
+std::unique_ptr<QuantumProcessor>
+createQuantumProcessor(const QuantumProcessor::Config& config) {
+    return std::make_unique<QuantumProcessor>(config);
+}
+
 } // namespace sep::quantum

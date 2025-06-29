@@ -44,8 +44,8 @@ class QuantumCoherenceManager {
 
     struct TierMigration {
         std::string pattern_id;
-        MemoryTierEnum from_tier{MemoryTierEnum::STM};
-        MemoryTierEnum to_tier{MemoryTierEnum::STM};
+        ::sep::memory::MemoryTierEnum from_tier{::sep::memory::MemoryTierEnum::STM};
+        ::sep::memory::MemoryTierEnum to_tier{::sep::memory::MemoryTierEnum::STM};
         float coherence{0.f};
         MigrationReason reason{MigrationReason::LowActivity};
     };
@@ -88,7 +88,7 @@ class QuantumCoherenceManager {
         float stability{0.f};
         std::uint32_t access_count{0};
         std::uint64_t last_access_tick{0};
-        MemoryTierEnum current_tier{MemoryTierEnum::STM};
+        ::sep::memory::MemoryTierEnum current_tier{::sep::memory::MemoryTierEnum::STM};
         std::vector<std::string> entangled_patterns;
         float fragmentation_score{0.f};
     };

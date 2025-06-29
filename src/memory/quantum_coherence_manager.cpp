@@ -6,6 +6,8 @@
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor_qfh.h"
 #include "memory/types.h"
+
+using ::sep::memory::MemoryTierEnum;
 #include <tbb/parallel_for.h>
 #include <tbb/concurrent_hash_map.h>
 #include <algorithm>

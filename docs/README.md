@@ -36,6 +36,18 @@ The project uses CMake for building.
 **1. Install Dependencies:**
 Ensure you have a modern C++ compiler (GCC 12+), CMake (3.22+), and the required libraries (Boost, TBB, cURL). If GPU support is needed, the CUDA toolkit (12.x) is required.
 
+For TBB on a Debian-based system:
+
+```bash
+sudo apt-get install libtbb-dev
+```
+
+On Fedora/CentOS:
+
+```bash
+sudo dnf install tbb-devel
+```
+
 **2. Configure and Build:**
 
 ```bash

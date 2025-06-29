@@ -2,6 +2,7 @@
 
 #include <string>
 #include <atomic>
+#include <cstdint>
 #include <chrono>
 #include <map>
 #include <cstdint>
@@ -113,10 +114,10 @@ struct HealthMetrics {
     std::atomic<size_t> timeoutRequests{0};
     std::atomic<size_t> rateLimitedCount{0};
     std::atomic<double> averageResponseTime{0.0};
-    // Track memory usage statistics
-    std::atomic<uint64_t> allocatedMemory{0};
-    std::atomic<uint64_t> peakMemoryUsage{0};
-    std::atomic<float> memoryFragmentation{0.0f};
+    // Memory usage statistics captured by the engine
+    std::atomic<uint64_t> allocatedMemory{0};     ///< Current allocated memory in bytes
+    std::atomic<uint64_t> peakMemoryUsage{0};     ///< Peak memory usage in bytes
+    std::atomic<float>    memoryFragmentation{0.0f}; ///< Fragmentation ratio [0.0, 1.0]
     std::chrono::steady_clock::time_point lastRequestTime;
     std::chrono::steady_clock::time_point startTime;
     std::chrono::milliseconds lastResponseTime{0};

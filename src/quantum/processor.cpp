@@ -3,6 +3,9 @@
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"
 #include <glm/glm.hpp>
+#include "memory/types.h"
+
+using ::sep::memory::MemoryTierEnum;
 #include <mutex>
 #include <unordered_map>
 #include <chrono>

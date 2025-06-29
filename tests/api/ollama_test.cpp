@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "api/client.h"
+#include "api/ollama_client.h"
 #include <fstream>
 #include "api/ollama_types.h"
 // shim.h not required for this standalone test

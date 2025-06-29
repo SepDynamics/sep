@@ -40,23 +40,22 @@ namespace sep::quantum { class PatternEvolutionBridge; }
 namespace sep::quantum::manifold {
 
 using ::sep::memory::MemoryTierEnum;
-using ::sep::quantum::QuantumState;
+using QuantumStateStruct = ::sep::quantum::QuantumState;
 using QuantumPattern = ::sep::quantum::manifold::QuantumPattern;
-using ManifoldQuantumState = ::sep::quantum::manifold::QuantumState;
+using ManifoldQuantumState = ::sep::quantum::manifold::ManifoldQuantumState;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
 // Configuration structures from the core configuration module use
-// capitalised names (e.g. CUDAConfig).  The original code attempted to
-// import them with different casing which resulted in a large number of
-// "does not name a type" compilation errors.  Import them with the
-// correct names instead.
-using ::sep::config::CUDAConfig;
-using ::sep::config::APIConfig;
-using ::sep::config::LogConfig;
-using ::sep::config::AnalyticsConfig;
-using ::sep::config::APIConfig;
-using ::sep::config::CUDAConfig;
-using ::sep::config::LogConfig;
+// capitalised names (e.g. CUDAConfig). Import them with matching
+// casing to avoid "does not name a type" errors.
+using CoreCUDAConfig = ::sep::config::CUDAConfig;
+using CoreAPIConfig = ::sep::config::APIConfig;
+using CoreLogConfig = ::sep::config::LogConfig;
+using CoreAnalyticsConfig = ::sep::config::AnalyticsConfig;
+
+// Forward declare configuration structs used by QuantumManifoldOptimizer
+struct CudaConfig;
+struct ApiConfig;
 
 class QuantumManifoldOptimizer {
 public:
@@ -79,7 +78,6 @@ public:
         QuantumState optimized_state{};
         std::vector<float> optimized_values;
         std::string error_message;
-        QuantumState optimized_state{};
     };
 
     struct OptimizationTarget {
@@ -151,15 +149,6 @@ struct CudaConfig {
   bool enable_phase_modulation = true;
   cufftHandle fft_plan{};
 } cuda;
-
-    // CUDA acceleration parameters
-    struct CudaConfig {
-        int warp_tile_size = 16;
-        int coherence_block_size = 256;
-        int similarity_grid_dim = 32;
-        bool enable_phase_modulation = true;
-        cufftHandle fft_plan{};
-    } cuda;
 
     // API coherence modulation
     struct ApiConfig {

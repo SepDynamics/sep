@@ -1,16 +1,11 @@
-import { McpServer } from "@modelcontextprotocol/sdk/dist/esm/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/dist/esm/server/stdio.js";
+import { Server } from "@modelcontextprotocol/sdk/server";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
 
-const server = new McpServer({
+const server = new Server({
   name: "code-analyzer",
   version: "0.1.0",
-  protocolVersion: "2025-06-18"
+  transport: new StdioServerTransport(),
+  tools: []
 });
 
-const transport = new StdioServerTransport();
-
-async function main() {
-  await server.connect(transport);
-}
-
-main().catch(console.error);
+server.start();

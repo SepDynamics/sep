@@ -9,6 +9,7 @@
 #include "compat/cuda_common.h"
 #include "compat/cuda_runtime.h"
 #include "compat/cuda_helpers.h"
+#include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpyAsync
 
 // Standard library includes - only for host compilation
 #if !defined(__CUDACC__)

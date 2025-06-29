@@ -228,48 +228,52 @@ Call Stack (most recent call first):
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  3%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[  6%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[  9%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 10%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 15%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 18%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 21%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 25%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 26%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 28%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[  1%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  6%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[  9%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[  9%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 10%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 12%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 14%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 15%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 21%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 23%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 25%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 26%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 28%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 29%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 31%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 32%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 34%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 35%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 42%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 45%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 48%] Linking CXX static library libsep_compat.a
-[ 48%] Built target sep_compat
-[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 51%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 53%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 54%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 57%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 59%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 62%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 39%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 40%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 43%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[ 45%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 46%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 48%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 51%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 59%] Linking CXX static library libsep_compat.a
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 60%] Built target sep_compat
+[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 64%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 68%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 70%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 In file included from /sep/src/memory/quantum_coherence_manager.cpp:9:
 /sep/include/quantum/quantum_manifold_optimizer.h:173:5: error: ‘AnalyticsConfig’ does not name a type
   173 |     AnalyticsConfig analytics;
@@ -292,47 +296,12 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:9:
 /sep/include/quantum/quantum_manifold_optimizer.h:367:3: error: ‘AnalyticsConfig’ does not name a type
   367 |   AnalyticsConfig config_;
       |   ^~~~~~~~~~~~~~~
-[ 65%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 67%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 68%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 70%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 71%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
 [ 73%] Linking CXX static library libsep_audio.a
-[ 73%] Built target sep_audio
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-In file included from /sep/src/quantum/pattern_processor_interface.cpp:10:
-/sep/include/quantum/quantum_manifold_optimizer.h:173:5: error: ‘AnalyticsConfig’ does not name a type
-  173 |     AnalyticsConfig analytics;
-      |     ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:236:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  236 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
-      |                                                      ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:255:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  255 |     ManifoldConfig::CudaConfig config_;
-      |                     ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:264:58: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  264 |     explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
-      |                                                          ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:283:21: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  283 |     ManifoldConfig::ApiConfig config_;
-      |                     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:332:38: error: ‘AnalyticsConfig’ does not name a type
-  332 |   explicit PerformanceAnalyzer(const AnalyticsConfig &config);
-      |                                      ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:367:3: error: ‘AnalyticsConfig’ does not name a type
-  367 |   AnalyticsConfig config_;
-      |   ^~~~~~~~~~~~~~~
+[ 73%] Built target sep_audio
 [ 75%] Linking CXX static library libsep_core.a
-[ 75%] Built target sep_core
-[ 76%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 78%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 79%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 82%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 85%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 87%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
 In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:1:
 /sep/include/quantum/quantum_manifold_optimizer.h:173:5: error: ‘AnalyticsConfig’ does not name a type
   173 |     AnalyticsConfig analytics;
@@ -355,10 +324,41 @@ In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:1:
 /sep/include/quantum/quantum_manifold_optimizer.h:367:3: error: ‘AnalyticsConfig’ does not name a type
   367 |   AnalyticsConfig config_;
       |   ^~~~~~~~~~~~~~~
-In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:4:
+[ 75%] Built target sep_core
+[ 76%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 85%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 87%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:2:
 /sep/include/quantum/quantum_manifold_optimizer.h:173:5: error: ‘AnalyticsConfig’ does not name a type
   173 |     AnalyticsConfig analytics;
       |     ^~~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:236:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  236 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
+      |                                                      ^~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:255:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  255 |     ManifoldConfig::CudaConfig config_;
+      |                     ^~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:264:58: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  264 |     explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
+      |                                                          ^~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:283:21: error: ‘ApiConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
+  283 |     ManifoldConfig::ApiConfig config_;
+      |                     ^~~~~~~~~
+In file included from /sep/src/quantum/pattern_processor_interface.cpp:10:
+/sep/include/quantum/quantum_manifold_optimizer.h:173:5: error: ‘AnalyticsConfig’ does not name a type
+  173 |     AnalyticsConfig analytics;
+      |     ^~~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:332:38: error: ‘AnalyticsConfig’ does not name a type
+  332 |   explicit PerformanceAnalyzer(const AnalyticsConfig &config);
+      |                                      ^~~~~~~~~~~~~~~
+/sep/include/quantum/quantum_manifold_optimizer.h:367:3: error: ‘AnalyticsConfig’ does not name a type
+  367 |   AnalyticsConfig config_;
+      |   ^~~~~~~~~~~~~~~
 /sep/include/quantum/quantum_manifold_optimizer.h:236:54: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
   236 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
       |                                                      ^~~~~~~~~~
@@ -377,28 +377,33 @@ In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:4:
 /sep/include/quantum/quantum_manifold_optimizer.h:367:3: error: ‘AnalyticsConfig’ does not name a type
   367 |   AnalyticsConfig config_;
       |   ^~~~~~~~~~~~~~~
-make[1]: *** [CMakeFiles/Makefile2:492: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
+/sep/src/quantum/pattern_evolution_bridge.cpp:64:31: warning: declaration ‘class sep::quantum::PatternEvolutionBridge::Impl’ does not declare anything
+   64 | class PatternEvolutionBridge::Impl;
+      |                               ^~~~
+/sep/src/quantum/pattern_evolution_bridge.cpp:64:31: error: ‘class sep::quantum::PatternEvolutionBridge::Impl’ is private within this context
+In file included from /sep/include/quantum/quantum_manifold_optimizer.h:8:
+/sep/include/quantum/pattern_evolution_bridge.h:81:11: note: declared private here
+   81 |     class Impl;
+      |           ^~~~
 /sep/src/quantum/pattern_evolution_bridge.cpp: In constructor ‘sep::quantum::PatternEvolutionBridge::Impl::Impl(const sep::quantum::PatternEvolutionBridge::Config&)’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:77:41: error: incomplete type ‘sep::quantum::QuantumManifoldOptimizer’ used in nested name specifier
-   77 |               QuantumManifoldOptimizer::createManifoldConfig(config)))
+/sep/src/quantum/pattern_evolution_bridge.cpp:81:41: error: incomplete type ‘sep::quantum::QuantumManifoldOptimizer’ used in nested name specifier
+   81 |               QuantumManifoldOptimizer::createManifoldConfig(config)))
       |                                         ^~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:77:69: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-   77 |               QuantumManifoldOptimizer::createManifoldConfig(config)))
+/sep/src/quantum/pattern_evolution_bridge.cpp:81:69: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+   81 |               QuantumManifoldOptimizer::createManifoldConfig(config)))
       |                                                                     ^
-In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:3:
 /sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
    16 | class QuantumManifoldOptimizer;
       |       ^~~~~~~~~~~~~~~~~~~~~~~~
 /sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘sep::quantum::Pattern sep::quantum::PatternEvolutionBridge::Impl::evolveIndividualPattern(const sep::quantum::Pattern&, float)’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:269:35: error: incomplete type ‘sep::quantum::QuantumManifoldOptimizer’ used in nested name specifier
-  269 |         QuantumManifoldOptimizer::OptimizationTarget target;
+/sep/src/quantum/pattern_evolution_bridge.cpp:273:35: error: incomplete type ‘sep::quantum::QuantumManifoldOptimizer’ used in nested name specifier
+  273 |         QuantumManifoldOptimizer::OptimizationTarget target;
       |                                   ^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:270:9: error: ‘target’ was not declared in this scope
-  270 |         target.target_coherence = config_.target_coherence;
+/sep/src/quantum/pattern_evolution_bridge.cpp:274:9: error: ‘target’ was not declared in this scope
+  274 |         target.target_coherence = config_.target_coherence;
       |         ^~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:273:55: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  273 |         auto optimization_result = manifold_optimizer_->optimize(
+/sep/src/quantum/pattern_evolution_bridge.cpp:277:55: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
+  277 |         auto optimization_result = manifold_optimizer_->optimize(
       |                                                       ^~
 /sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
    16 | class QuantumManifoldOptimizer;
@@ -496,27 +501,28 @@ make[2]: *** Waiting for unfinished jobs....
 /sep/src/blender/mesh_handler.cpp:355:69: error: expected initializer before ‘pattern’
   355 | void MeshHandler::calculateDisplacement(const pattern::PatternData& pattern,
       |                                                                     ^~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:219: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o] Error 1
 In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/blender/compression.h:4,
-                 from /sep/include/memory/memory_tier.hpp:10,
-                 from /sep/include/memory/memory_tier_manager.hpp:13,
-                 from /sep/src/quantum/pattern_evolution_bridge.cpp:2:
+                 from /sep/include/compat/cuda.h:14,
+                 from /sep/include/core/types.h:11,
+                 from /sep/include/quantum/quantum_manifold_optimizer.h:5:
 /usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::quantum::QuantumManifoldOptimizer]’:
 /usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Dp = std::default_delete<sep::quantum::QuantumManifoldOptimizer>]’
   399 |           get_deleter()(std::move(__ptr));
       |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:76:11:   required from here
-   76 |         , manifold_optimizer_(QuantumManifoldOptimizer(
+/sep/src/quantum/pattern_evolution_bridge.cpp:80:11:   required from here
+   80 |         , manifold_optimizer_(QuantumManifoldOptimizer(
       |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   77 |               QuantumManifoldOptimizer::createManifoldConfig(config)))
+   81 |               QuantumManifoldOptimizer::createManifoldConfig(config)))
       |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::quantum::QuantumManifoldOptimizer’
    91 |         static_assert(sizeof(_Tp)>0,
       |                       ^~~~~~~~~~~
 make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:149: src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:492: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
 make[1]: *** [CMakeFiles/Makefile2:396: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:219: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o] Error 1
 make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:247: src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:524: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 [ 89%] Linking CXX static library libsep_api.a

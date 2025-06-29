@@ -1,6 +1,9 @@
 #include "memory/quantum_coherence_manager.h"
 #include "compat/cuda.h"
 #include "compat/core.h"
+#if !SEP_CUDA_AVAILABLE
+#include "compat/cuda_runtime.h"
+#endif
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "memory/memory_tier_manager.hpp"

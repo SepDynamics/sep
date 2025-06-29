@@ -4,6 +4,9 @@
 #include <mutex>
 // Define namespace alias to clarify that Manager is in the logging namespace
 namespace logging = sep::logging;
+#if !SEP_CUDA_AVAILABLE
+#include "compat/cuda_runtime.h"
+#endif
 #include <cstdint>
 #if __has_include(<hiredis/hiredis.h>)
 #    include <hiredis/hiredis.h>

@@ -21,14 +21,14 @@
 
 namespace sep::quantum::manifold {
 
-using ::sep::MemoryTierEnum;
+using ::sep::memory::MemoryTierEnum;
 using ::sep::quantum::QuantumState;
 using QuantumPattern = ::sep::quantum::Pattern;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
-using ::sep::config::CUDAConfig;
-using ::sep::config::APIConfig;
-using ::sep::config::LogConfig;
+using ::sep::CUDAConfig;
+using ::sep::APIConfig;
+using ::sep::LogConfig;
 
 class QuantumManifoldOptimizer {
 public:

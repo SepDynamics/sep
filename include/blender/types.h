@@ -49,7 +49,8 @@ inline const char* sep_result_to_string(sep::SEPResult result) {
   }
 }
 
-// Bridge structure used by the C API
+// Bridge structure used by the C API.  This definition must be
+// visible wherever SEPBlenderBridge is managed by std::unique_ptr.
 struct SEPBlenderBridge {
     std::shared_ptr<sep::pattern::BlenderBridge> impl;
     SEPAudioMetrics                              audio_metrics{};

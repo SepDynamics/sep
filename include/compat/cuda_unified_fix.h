@@ -90,13 +90,25 @@ CUDA_UNIFIED_FIX_END_SCOPE()
 
 // Define CUDA device/host function qualifiers
 #if (__CUDACC__)
+#ifndef SEP_HOST
 #define SEP_HOST __host__
+#endif
+#ifndef SEP_DEVICE
 #define SEP_DEVICE __device__
+#endif
+#ifndef SEP_HD
 #define SEP_HD __host__ __device__
+#endif
 #else
+#ifndef SEP_HOST
 #define SEP_HOST
+#endif
+#ifndef SEP_DEVICE
 #define SEP_DEVICE
+#endif
+#ifndef SEP_HD
 #define SEP_HD
+#endif
 #endif
 
 // *** CRITICAL: DISABLE EXCEPTION SPECIFICATION CHECKS ***

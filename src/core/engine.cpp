@@ -2,6 +2,7 @@
 
 #include "audio/capture.h"
 #include "blender/pattern_bridge.h"
+#include "blender/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "compat/component_bridge.h"
 
@@ -260,7 +261,7 @@ void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
     auto& cuda_core = cuda::CudaCore::instance();
 
     // Copy input states to device
-    SEP_CUDA_CHECK(cudaMemcpyAsync(impl_->d_chunks_.get(), reinterpret_cast<const std::uint64_t*>(inputs.data()),
+    SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(impl_->d_chunks_.get(), reinterpret_cast<const std::uint64_t*>(inputs.data()),
                                    inputs.size() * sizeof(std::uint64_t), cudaMemcpyHostToDevice,
                                    reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
 
@@ -272,10 +273,10 @@ void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
                          impl_->d_bitfield_, impl_->d_corrections_, impl_->d_correction_count_, *impl_->stream_);
 
     // Copy results back to host
-    SEP_CUDA_CHECK(cudaMemcpyAsync(indices.data(), impl_->d_probe_indices_.get(), inputs.size() * sizeof(std::uint32_t),
+    SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(indices.data(), impl_->d_probe_indices_.get(), inputs.size() * sizeof(std::uint32_t),
                                    cudaMemcpyDeviceToHost, reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
 
-    SEP_CUDA_CHECK(cudaMemcpyAsync(expectations.data(), impl_->d_expectations_.get(),
+    SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(expectations.data(), impl_->d_expectations_.get(),
                                    inputs.size() * sizeof(std::uint32_t), cudaMemcpyDeviceToHost,
                                    reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
 
@@ -300,7 +301,7 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
     auto& cuda_core = cuda::CudaCore::instance();
 
     // Copy input states to device
-    SEP_CUDA_CHECK(cudaMemcpyAsync(impl_->d_chunks_.get(), reinterpret_cast<const std::uint64_t*>(inputs.data()),
+    SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(impl_->d_chunks_.get(), reinterpret_cast<const std::uint64_t*>(inputs.data()),
                                    inputs.size() * sizeof(std::uint64_t), cudaMemcpyHostToDevice,
                                    reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
 
@@ -314,7 +315,7 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
 
     // Copy QBSA results
     std::uint32_t correction_count = 0;
-    SEP_CUDA_CHECK(cudaMemcpyAsync(&correction_count, impl_->d_correction_count_.get(), sizeof(std::uint32_t),
+    SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(&correction_count, impl_->d_correction_count_.get(), sizeof(std::uint32_t),
                                    cudaMemcpyDeviceToHost, reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
 
     // Set corrections count and calculate correction ratio
@@ -325,7 +326,7 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
 
     if (correction_count > 0) {
         ::sep::shim::vector<uint32_t> temp_corr(correction_count);
-        SEP_CUDA_CHECK(cudaMemcpyAsync(temp_corr.data(), impl_->d_corrections_.get(),
+        SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(temp_corr.data(), impl_->d_corrections_.get(),
                                        correction_count * sizeof(uint32_t), cudaMemcpyDeviceToHost,
                                        reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
         cuda_core.synchronizeStream(reinterpret_cast<cudaStream_t>(impl_->stream_->handle()));
@@ -342,11 +343,11 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
     // Temporary buffer for all possible indices
     ::sep::shim::vector<uint32_t> temp_indices(inputs.size() * PAIRS_PER_CHUNK);
 
-    SEP_CUDA_CHECK(cudaMemcpyAsync(temp_indices.data(), impl_->d_collapse_indices_.get(),
+    SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(temp_indices.data(), impl_->d_collapse_indices_.get(),
                                    temp_indices.size() * sizeof(std::uint32_t), cudaMemcpyDeviceToHost,
                                    reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
 
-    SEP_CUDA_CHECK(cudaMemcpyAsync(qsh_result.collapse_counts.data(), impl_->d_collapse_counts_.get(),
+    SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(qsh_result.collapse_counts.data(), impl_->d_collapse_counts_.get(),
 
                                    inputs.size() * sizeof(std::uint32_t), cudaMemcpyDeviceToHost,
                                    reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));

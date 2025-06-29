@@ -113,6 +113,7 @@ private:
   // System metrics
   AtomicSystemMetrics metrics_;
   std::unique_ptr<BackgroundCleanup> metrics_collector_;
+  mutable std::mutex metrics_mutex_;
 
   // Priority configuration
   struct PriorityConfig {

@@ -2,6 +2,7 @@
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
 #include "memory/types.h"
+#include "compat/math_common.h"
 
 #include <glm/vec3.hpp>
 
@@ -105,6 +106,16 @@ private:
 };
 } // namespace
 
+std::unique_ptr<PatternQuantumProcessor> createPatternQuantumProcessor(
+    const ProcessingConfig& config)
+{
+    QuantumProcessor::Config qp_cfg{};
+    qp_cfg.max_qubits = config.max_patterns;
+    qp_cfg.decoherence_rate = config.mutation_rate;
+    qp_cfg.measurement_threshold = config.ltm_coherence_threshold;
+    qp_cfg.enable_gpu = config.enable_cuda;
+    return std::make_unique<PatternQuantumProcessorImpl>(qp_cfg);
+}
 
 } // namespace sep::quantum
 

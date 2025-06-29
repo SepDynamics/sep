@@ -1,5 +1,6 @@
 #include "core/logging.h"
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 namespace sep {
 namespace logging {
@@ -10,7 +11,8 @@ void Manager::initialize() {
 }
 
 void Manager::shutdownLogging() {
-    // Stub implementation - just print to stderr
+    // Basic shutdown logic using spdlog
+    spdlog::shutdown();
     std::cerr << "Logging shutdown" << std::endl;
 }
 

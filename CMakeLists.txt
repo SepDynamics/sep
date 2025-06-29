@@ -338,7 +338,7 @@ set(EXTERNAL_LINK_ORDER
     # OpenSubdiv with its TBB dependency
     ${OPENSUBDIV_CPU_LIBRARY}
     ${OPENSUBDIV_GPU_LIBRARY}
-    ${TBB2_LIBRARY}  # Specific version for OpenSubdiv
+    TBB::tbb  # OpenSubdiv requires TBB
 
     # Path guiding
     ${OpenPGL_LIBRARY}
@@ -356,8 +356,8 @@ set(EXTERNAL_LINK_ORDER
     ${EMBREE_LIBRARY}
     
     # Utility libraries
-    ${TBB_LIBRARY}
-    ${TBB_MALLOC_LIBRARY}
+    TBB::tbb
+    TBB::tbbmalloc
     ${BLOSC_LIBRARY}
     ${ZSTD_LIBRARY}
     ${PUGIXML_LIBRARY}

@@ -17,6 +17,7 @@ enum class RelationshipType {
 };
 
 struct QuantumState {
+    enum class Status { SUPERPOSITION, COHERENT, COLLAPSED };
     float coherence{0.0f};
     float stability{0.0f};
     float entropy{0.0f};
@@ -29,6 +30,7 @@ struct QuantumState {
     int mutation_count{0};
     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
     float access_frequency{0.0f};
+    Status state{Status::SUPERPOSITION};
 };
 
 struct PatternRelationship {

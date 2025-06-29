@@ -3,8 +3,11 @@
 #ifndef MEMORY_TYPES_H
 #define MEMORY_TYPES_H
 
+#pragma once
+
 #include "core/types.h"
 #include "compat/shim.h"
+#include "quantum/data.hpp"  // For sep::pattern::PatternData
 
 #include <cstdint>
 #include <cstddef>
@@ -17,7 +20,6 @@
 #include <vector>
 
 namespace sep {
-#include "quantum/data.hpp"  // For full PatternData definition
 
 namespace persistence {
 
@@ -29,7 +31,7 @@ struct RelationshipData {
 };
 
 // Structure to store pattern data for persistence
-struct PatternData {
+struct PersistentPatternData {
     glm::vec3 position;                    // Pattern's 3D position data
     float coherence;                       // Pattern's coherence score
     float stability;                       // Pattern's stability score
@@ -40,6 +42,9 @@ struct PatternData {
     ::sep::shim::vector<RelationshipData> relationship_data; // Enhanced relationship data
     uint64_t dag_node_id = 0;              // DAG node ID for pattern
 };
+
+// Alias for backwards compatibility
+using PatternData = PersistentPatternData;
 
 }  // namespace persistence
 namespace logging {

@@ -7,6 +7,8 @@
 #include <stdlib.h>  // For malloc/free
 #include <string.h>  // For strcpy, memcpy, memset
 #include "compat/cuda_defs.h"
+
+#if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
 #include "compat/cuda_helpers.h"
 

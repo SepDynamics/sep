@@ -235,6 +235,8 @@ class MetricsCollector::Impl {
 };
 
 // MetricsCollector implementation
+MetricsCollector::MetricsCollector() : pImpl(std::make_unique<Impl>()) {}
+
 MetricsCollector& MetricsCollector::instance() {
     // Use a function-local static variable for thread-safe singleton initialization
     static MetricsCollector instance; // Fix: Declare the static instance
@@ -350,7 +352,7 @@ void MetricsCollector::reset() {
     counters_.clear(); // Fix: Clear counters_
     gauges_.clear(); // Fix: Clear gauges_
     memory_metrics_ = MemoryMetrics{};
-    system_metrics_ = updateSystemMetrics{};
+    system_metrics_ = SystemMetrics{};
     if (pImpl) {
         pImpl->resetMetrics();
     }

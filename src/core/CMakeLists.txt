@@ -13,6 +13,7 @@ target_include_directories(sep_core
         ${CMAKE_SOURCE_DIR}/include/quantum
         ${CMAKE_SOURCE_DIR}/cycles/src
         ${CMAKE_SOURCE_DIR}/extern
+        ${CMAKE_SOURCE_DIR}/extern/nlohmann
         ${CMAKE_SOURCE_DIR}/extern/cycles/src
         ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
         ${CMAKE_SOURCE_DIR}/extern/eigen

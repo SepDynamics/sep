@@ -1,32 +1,77 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
+#pragma once
+
 #include "quantum/qbsa.h"
 #include "quantum/qfh.h"
+#include "quantum/types.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
-#include "memory/spdlog_isolation.h"
+#include "core/types.h"
 #include "compat/cuda_runtime.h"
 #include "compat/cuda.h"
-#include "quantum/pattern.h"
-#include <chrono>
-#include <atomic>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <complex>
-#include <functional>
-#include <vector>
-#include <unordered_map>
-#include <array>
-#include <string>
 #include "compat/cufft.h"
+#include <glm/glm.hpp>
+#include <memory>
+#include <vector>
+#include <string>
+#include <cmath>
 
 namespace sep::quantum::manifold {
 
-// Enhanced configuration for quantum manifold optimization
-struct ManifoldConfig {
+using ::sep::MemoryTierEnum;
+using ::sep::quantum::QuantumState;
+using ::sep::quantum::QuantumPattern;
+using ::sep::quantum::QFHResult;
+using ::sep::quantum::QuantumProcessorQFH;
+using ::sep::config::CUDAConfig;
+using ::sep::config::APIConfig;
+using ::sep::config::LogConfig;
+
+class QuantumManifoldOptimizer {
+public:
+    struct Config {
+        MemoryTierEnum tier{MemoryTierEnum::STM};
+        CUDAConfig cuda;
+        APIConfig api;
+        LogConfig log;
+        double base_resonance_frequency{0.42};
+    };
+
+    struct OptimizationResult {
+        bool success{false};
+        std::vector<float> optimized_values;
+        std::string error_message;
+    };
+
+    struct OptimizationTarget {
+        std::vector<float> target_values;
+        float coherence_threshold{0.8f};
+    };
+
+    explicit QuantumManifoldOptimizer(const Config& config);
+    ~QuantumManifoldOptimizer();
+
+    OptimizationResult optimize(const QuantumState& initial_state,
+                              const OptimizationTarget& target);
+    void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
+
+private:
+    class Impl;
+    std::unique_ptr<Impl> impl_;
+};
+
+} // namespace sep::quantum::manifold
+
+// Forward declarations
+class HamiltonianEvolver;
+class CUDAQuantumKernel;
+class SemanticProcessor;
+class PerformanceAnalyzer;
+
+
     // Memory tier optimization parameters
     struct MemoryConfig {
         double adaptive_threshold_rate = 0.02;
@@ -49,6 +94,7 @@ struct ManifoldConfig {
         int coherence_block_size = 256;
         int similarity_grid_dim = 32;
         bool enable_phase_modulation = true;
+        cufftHandle fft_plan{};
     } cuda;
 
     // API coherence modulation
@@ -59,28 +105,98 @@ struct ManifoldConfig {
         int superposition_states = 4;
     } api;
 
-    // Semantic processing
-    struct SemanticConfig {
-        int embedding_dimensions = 512;
-        int hierarchy_levels = 4;
-        double interference_threshold = 0.1;
-        bool enable_multimodal_fusion = true;
-    } semantic;
+using sep::memory::MemoryTierEnum;
+#include <chrono>
+#include <atomic>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <complex>
+#include <functional>
+#include <vector>
+#include <unordered_map>
+#include <array>
+#include <string>
+#include "compat/cufft.h"
 
-    // Performance analytics
-    struct AnalyticsConfig {
-        int state_space_samples = 1000;
-        double anomaly_z_score_threshold = 3.0;
-        int prediction_window_size = 100;
-        bool enable_adaptive_optimization = true;
-    } analytics;
-};
 
 // Forward declarations
 class HamiltonianEvolver;
 class CUDAQuantumKernel;
 class SemanticProcessor;
 class PerformanceAnalyzer;
+
+struct SemanticConfig {
+    int embedding_dimensions = 512;
+    MemoryTierEnum tier = MemoryTierEnum::STM;
+    int hierarchy_levels = 4;
+    double interference_threshold = 0.1;
+    bool enable_multimodal_fusion = true;
+};
+
+struct ManifoldConfig {
+    SemanticConfig semantic;
+    CUDAConfig cuda;
+    APIConfig api;
+    LogConfig log;
+};
+
+// Forward declarations for external dependencies
+class HamiltonianEvolver;
+class CUDAQuantumKernel;
+class SemanticProcessor;
+class PerformanceAnalyzer;
+
+// Implementation class
+class QuantumManifoldOptimizer::Impl {
+public:
+    struct ManifoldPoint {
+        glm::vec3 position;
+        glm::vec3 momentum;
+        float curvature;
+        float coherence;
+        uint32_t dimension_index;
+        std::vector<uint32_t> neighbor_indices;
+    };
+    
+    struct GeodesicPath {
+        std::vector<ManifoldPoint> points;
+        float total_action;
+        float stability_metric;
+        bool is_minimal;
+    };
+    
+    explicit Impl(const Config& config);
+    OptimizationResult optimize(const QuantumState& initial_state, const OptimizationTarget& target);
+    void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
+    float computeManifoldCoherence(const glm::vec3& position) const;
+    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
+
+private:
+    Config config_;
+    std::vector<ManifoldPoint> manifold_points_;
+    glm::mat4 riemannian_metric_;
+    std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
+
+    void initializeManifold();
+    ManifoldPoint quantumStateToManifold(const QuantumState& state);
+    QuantumState manifoldToQuantumState(const ManifoldPoint& point);
+    ManifoldPoint targetToManifold(const OptimizationTarget& target);
+    GeodesicPath findOptimalGeodesic(const ManifoldPoint& start, const ManifoldPoint& target);
+    void applyRicciFlow(GeodesicPath& path);
+    void computeNeighborhoods();
+    void updateRiemannianMetric();
+    float computeLocalCurvature(const glm::vec3& position) const;
+    float computeRicciCurvature(const ManifoldPoint& point, const ManifoldPoint& prev, const ManifoldPoint& next) const;
+    glm::vec3 computeFlowDirection(const ManifoldPoint& point, float ricci_curvature) const;
+    float computePathAction(const GeodesicPath& path) const;
+    float computePathStability(const GeodesicPath& path) const;
+    float computeConvergenceMetric(const GeodesicPath& path) const;
+    float computeRicciScalar(const GeodesicPath& path) const;
+    float computeGeodesicDistance(const GeodesicPath& path) const;
+    float computeHolonomyPhase(const GeodesicPath& path) const;
+    float computeResonanceFromCurvature(float curvature) const;
+};
 
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
 class AdvancedMemoryTierOptimizer {
@@ -126,7 +242,7 @@ public:
     QFHResult processWithCrossScaleAnalysis(const std::vector<uint32_t>& pattern_bits);
     
     // Wavelet-based frequency domain processing
-    std::vector<std::complex<double>> waveletQFH(const std::vector<uint8_t>& bits, int levels);
+    std::vector<std::complex<double>> waveletQFH(const std::vector<uint8_t>& bits, int levels = 4);
 
 private:
     ManifoldConfig config_;
@@ -387,5 +503,3 @@ private:
     void integrateWithExistingMemoryTiers();
     void setupQuantumProcessingPipeline();
 };
-
-} // namespace sep::quantum::manifold

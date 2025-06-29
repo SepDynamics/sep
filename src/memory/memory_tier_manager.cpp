@@ -26,17 +26,17 @@ MemoryTierManager& MemoryTierManager::getInstance() {
     return *instance_;
 }
 
-MemoryTierManager::MemoryTierManager(const sep::memory::Config& cfg) : config_(cfg) {
+MemoryTierManager::MemoryTierManager(const MemoryTierManager::Config& cfg) : config_(cfg) {
     init(cfg);
 }
 
-MemoryTierManager::MemoryTierManager() : MemoryTierManager(sep::memory::Config{}) {}
+MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
 
 MemoryTierManager::~MemoryTierManager() {
     shutdown();
 }
 
-void MemoryTierManager::init(const sep::memory::Config& config) {
+void MemoryTierManager::init(const Config& config) {
     config_ = config;
     MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), config.stm_size};
     MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), config.mtm_size};
@@ -75,40 +75,40 @@ void MemoryTierManager::deallocate(MemoryBlock* block) {
 }
 
 MemoryTier* MemoryTierManager::getTier(TierType tier) {
-    switch (static_cast<MemoryTier>(tier)) {
-        case MemoryTierEnum::STM:
+    switch (tier) {
+        case static_cast<TierType>(MemoryTierEnum::STM):
             return stm_.get();
-        case MemoryTierEnum::MTM:
+        case static_cast<TierType>(MemoryTierEnum::MTM):
             return mtm_.get();
-        case MemoryTierEnum::LTM:
+        case static_cast<TierType>(MemoryTierEnum::LTM):
             return ltm_.get();
         default:
             return nullptr;
     }
 }
 
-double MemoryTierManager::getTierUtilization(TierType tier) const {
+float MemoryTierManager::getTierUtilization(TierType tier) const {
     const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
-    return t ? t->calculateUtilization() : 0.0;
+    return t ? t->calculateUtilization() : 0.0f;
 }
 
-double MemoryTierManager::getTierFragmentation(TierType tier) const {
+float MemoryTierManager::getTierFragmentation(TierType tier) const {
     const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
-    return t ? t->calculateFragmentation() : 0.0;
+    return t ? t->calculateFragmentation() : 0.0f;
 }
 
-double MemoryTierManager::getTotalUtilization() const {
-    double stm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::STM));
-    double mtm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::MTM));
-    double ltm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::LTM));
-    return (stm_util + mtm_util + ltm_util) / 3.0;
+float MemoryTierManager::getTotalUtilization() const {
+    float stm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::STM));
+    float mtm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::MTM));
+    float ltm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::LTM));
+    return (stm_util + mtm_util + ltm_util) / 3.0f;
 }
 
-double MemoryTierManager::getTotalFragmentation() const {
-    double stm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::STM));
-    double mtm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::MTM));
-    double ltm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::LTM));
-    return (stm_frag + mtm_frag + ltm_frag) / 3.0;
+float MemoryTierManager::getTotalFragmentation() const {
+    float stm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::STM));
+    float mtm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::MTM));
+    float ltm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::LTM));
+    return (stm_frag + mtm_frag + ltm_frag) / 3.0f;
 }
 
 std::size_t MemoryTierManager::getTotalAllocated() const {
@@ -331,25 +331,9 @@ void MemoryTierManager::loadLTMFromPersistence() {
     }
 }
 
-void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern& pattern) {
+void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern& pattern, const persistence::PersistentPatternData& data) {
     if (!redis_manager_ || !redis_manager_->isConnected())
         return;
-
-    persistence::PatternData data{};
-    data.position = glm::vec3(pattern.position);
-    data.coherence = pattern.quantum_state.coherence;
-    data.stability = pattern.quantum_state.stability;
-    data.generation_count = pattern.quantum_state.generation;
-    data.access_frequency = pattern.quantum_state.access_frequency;
-    data.timestamp = shim::chrono::system_clock::now();
-    for (const auto& rel : pattern.relationships) {
-        persistence::RelationshipData rd{};
-        rd.id = rel.targetId.empty() ? 0 : std::stoull(rel.targetId);
-        rd.type = static_cast<uint8_t>(rel.type);
-        rd.strength = rel.strength;
-        data.relationships.push_back(rd.id);
-        data.relationship_data.push_back(rd);
-    }
     std::size_t id = pattern.id.empty() ? 0 : std::stoull(pattern.id);
     redis_manager_->storePattern(id, data, "ltm");
 }

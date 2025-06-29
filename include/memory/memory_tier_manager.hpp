@@ -12,10 +12,9 @@
 #include "core/dag_graph.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
-#include "quantum/types.h"
 #include "compat/shim.h"
-#include "quantum/relationship.h"
 #include "quantum/types.h"
+#include "quantum/data.hpp"
 
 // Standard library includes
 #include <cstddef>
@@ -29,17 +28,12 @@
 #include <glm/vec3.hpp>
 
 namespace sep {
-namespace pattern {
-struct PatternData;
-struct PatternConfig;
-}
-
 namespace core {
 class SystemHooks;
 }
 
 namespace persistence {
-class RedisManager;
+class IRedisManager;
 }
 
 namespace memory {
@@ -69,7 +63,8 @@ public:
     // Singleton access
     static MemoryTierManager& getInstance();
 
-    MemoryTierManager(const Config& cfg = Config());
+    MemoryTierManager();
+    MemoryTierManager(const Config& cfg);
     ~MemoryTierManager();
 
     void init(const Config& config);
@@ -119,9 +114,9 @@ public:
     void pruneWeakRelationships();
     void calculateRelationshipCoherence();
     void loadLTMFromPersistence();
-    void storeLTMToPersistence(const quantum::Pattern& pattern);
-    quantum::Pattern* findPattern(std::size_t id);
-    const quantum::Pattern* findPattern(std::size_t id) const;
+    void storeLTMToPersistence(const ::sep::quantum::Pattern& pattern, const persistence::PersistentPatternData& data);
+    ::sep::quantum::Pattern* findPattern(std::size_t id);
+    const ::sep::quantum::Pattern* findPattern(std::size_t id) const;
     void registerPattern(std::size_t id, const pattern::PatternData& pattern);
     const pattern::PatternData* getPatternData(std::size_t id) const;
     void cleanupExpiredPatterns();
@@ -144,7 +139,7 @@ private:
 private:
     dag::DagGraph dag_graph_;
     std::unordered_map<std::size_t, uint64_t> pattern_dag_map_;
-    std::unique_ptr<persistence::RedisManager> redis_manager_;
+    std::unique_ptr<persistence::IRedisManager> redis_manager_;
     core::SystemHooks* hooks_{nullptr};
 
     std::unordered_map<std::size_t, std::unique_ptr<pattern::PatternData>> pattern_registry_;

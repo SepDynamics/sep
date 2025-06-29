@@ -1,110 +1,162 @@
-Here's a targeted analysis of the issues found in the provided source files, focusing on identifying what's wrong and where, without providing full rewrites or incomplete implementations.
+```
+/sep/src/compat/cuda_helpers.h:21:18: error: ‘cudaSuccess’ was not declared in this scope
+/sep/src/compat/cuda_helpers.h:22:73: error: ‘cudaGetErrorString’ was not declared in this scope
+```
+**Issue:** The CUDA success status and error string function are not declared when `SEP_CUDA_AVAILABLE` is not defined.
+**Target:** `/sep/include/compat/cuda_helpers.h`
+**Advice:** Add `#ifndef SEP_CUDA_AVAILABLE` blocks around the declarations of `cudaSuccess` and `cudaGetErrorString` (or functions/macros that use them) in `cuda_helpers.h` and provide stub definitions similar to what's done in `compat/core_stub.cpp`.
 
-**General Issues:**
+```
+/sep/src/compat/stream.cpp:68:7: error: ‘cudaStreamNonBlocking’ was not declared in this scope
+/sep/src/compat/stream.cpp:69:7: error: ‘cudaStreamDefault’ was not declared in this scope; did you mean ‘cudaStream_t’?
+/sep/src/compat/stream.cpp:71:21: error: ‘cudaStreamCreateWithFlags’ was not declared in this scope
+/sep/src/compat/stream.cpp:72:14: error: ‘cudaSuccess’ was not declared in this scope
+```
+**Issue:** CUDA stream creation related functions and flags are not declared when `SEP_CUDA_AVAILABLE` is not defined.
+**Target:** `/sep/src/compat/stream.cpp` and potentially `/sep/include/compat/stream.h`
+**Advice:**
+1.  In `compat/stream.h`, add `#ifndef SEP_CUDA_AVAILABLE` blocks around the declarations of `cudaStream_t`, `cudaStreamNonBlocking`, `cudaStreamDefault`, `cudaStreamCreateWithFlags`, `cudaStreamDestroy`, `cudaStreamSynchronize`, `cudaStreamWaitEvent`, and `cudaEventRecord`.
+2.  Provide stub definitions for these in `compat/core_stub.cpp` if they aren't already there.
+3.  Ensure `compat/stream.cpp` includes `compat/core_stub.cpp` (or the relevant header where the stubs are defined) when `SEP_CUDA_AVAILABLE` is not defined.
 
-1.  **Inconsistent Namespace Usage:** There's a mix of fully qualified names (`sep::namespace::Class`) and `using namespace sep::namespace;` directives, sometimes within function bodies or anonymous namespaces. This can lead to "does not name a type" errors or ambiguity when symbol lookup occurs.
-2.  **Incomplete Type Usage:** Several files attempt to use types (like `sep::pattern::PatternData` or `sep::persistence::RedisManager`) that are only forward-declared in their headers but not defined. This causes `invalid use of incomplete type` errors when trying to access members or determine sizes (e.g., in `std::make_unique`).
-3.  **Mismatched Function Signatures/Names:** There are several instances where a function is declared in a header with one signature or name, but defined in a `.cpp` file with a different one (e.g., `sep::audio::PipeWireCapture::streamStateChanged`).
-4.  **Missing Includes:** Some files are missing includes for types or functions they use, leading to "was not declared in this scope" errors.
-5.  **Forward Declarations:** The overuse of forward declarations without providing the full definition in the corresponding `.cpp` file is a primary cause of "invalid use of incomplete type" errors.
-6.  **`SEPResult` Usage:** The `sep::SEPResult` enum is used in multiple places but its definition might not be consistently available, causing "does not name a type" errors. Ensure the header defining `sep::SEPResult` is included wherever it's used as a return type or parameter.
-7.  **Crow Integration Issues:** Errors in `crow_adapter.cpp` suggest issues with lambda captures or accessing objects declared outside the lambda scope.
-8.  **CUDA Compatibility Issues:** Although `compat` files exist, there are errors indicating issues with CUDA calls (`cudaMemcpyAsync`, `cudaEventRecord`, `cudaStreamCreateWithFlags`) and access to `DeviceMemory`. This might point to inconsistencies in the CUDA compatibility layer or incorrect usage of CUDA functions in the stubbed environment.
-9.  **Metrics Collector Implementation:** The `MetricsCollector::Impl` definition is problematic; the compiler expects `MetricsCollector` to be a complete type before its nested class `Impl` is defined.
+```
+/sep/src/compat/raii.cpp:86:74: error: ‘cudaStreamNonBlocking’ was not declared in this scope
+/sep/src/compat/raii.cpp:86:98: error: ‘cudaStreamDefault’ was not declared in this scope; did you mean ‘cudaStreamDestroy’?
+/sep/src/compat/raii.cpp:88:16: error: ‘cudaSuccess’ was not declared in this scope
+/sep/src/compat/raii.cpp:103:9: note: in expansion of macro ‘CUDA_CHECK’
+```
+**Issue:** Similar to `compat/stream.cpp`, CUDA stream flags, success status, and destroy function are not declared when `SEP_CUDA_AVAILABLE` is not defined.
+**Target:** `/sep/src/compat/raii.cpp` and potentially `/sep/include/compat/raii.h`
+**Advice:**
+1.  In `compat/raii.h`, add `#ifndef SEP_CUDA_AVAILABLE` blocks around the declarations of `cudaStreamNonBlocking`, `cudaStreamDefault`, `cudaStreamDestroy`, `cudaSuccess`, and `cudaEventDestroy`.
+2.  Ensure stub definitions are provided in `compat/core_stub.cpp` and included.
 
-**Specific File Issues:**
+```
+/sep/src/compat/component_bridge.cpp:26:11: error: invalid use of incomplete type ‘struct sep::SEPBlenderBridge’
+```
+**Issue:** `SEPBlenderBridge` is forward declared but its definition is needed to construct and access its members (`impl`).
+**Target:** `/sep/src/compat/component_bridge.cpp`
+**Advice:** Include the header file where `SEPBlenderBridge` is fully defined (`blender/bridge.h` seems likely) in `compat/component_bridge.cpp`.
 
-*   **`/sep/src/audio/pipewire_capture.cpp`**:
-    *   `streamStateChanged` and `streamProcess` are used in `createStreamEvents` without being declared in that scope. They are declared as `static` member functions, so the function pointer assignment should be qualified with the class name (e.g., `&PipeWireCapture::streamStateChanged`).
-    *   The definitions of `streamStateChanged` and `streamProcess` at the end of the file do not match the `static` member function signatures declared in the header (`void*, pw_stream_state, ...`). They are defined without the `data` pointer and state parameters.
-    *   Missing `return` statement in `PipeWireCapture::setupStream()`.
+```
+/sep/src/memory/memory_tier.cpp:20: error: unterminated #ifndef
+```
+**Issue:** An `#ifndef` directive in `compat/cuda_impl.h` is not properly terminated.
+**Target:** `/sep/include/compat/cuda_impl.h`
+**Advice:** Add a `#endif` at the end of `compat/cuda_impl.h`.
 
-*   **`/sep/src/memory/memory_tier.cpp`**:
-    *   `using namespace sep::cuda;` at the top of the file is likely problematic due to inconsistent CUDA setup.
-    *   Constructors and the destructor are defined outside the `sep::memory` namespace in the implementation file but within the namespace in the header, causing "definition of 'sep::memory::MemoryTier::MemoryTier(const Config&)' is not in namespace enclosing 'sep::memory::MemoryTier'" errors. All member function definitions should be within the `sep::memory` namespace.
-    *   Accessing `sep::metrics::allocationFailures()` without including the necessary header (`core/allocation_metrics.h`).
-    *   Issues with `MemoryTier::canAcceptPattern` and `MemoryTier::addPattern` parameter types (`sep::persistence::PatternData`). Ensure `sep::persistence::PatternData` is fully defined (included) where these methods are implemented, and the function signatures match the header.
-    *   `MemoryTier::addPattern(size_t id, sep::persistence::PatternData pattern)`: The parameter type `sep::persistence::PatternData` is used directly in the implementation despite potentially being an incomplete type based on the header. Also, the compiler sees a mismatch in the deduced signature.
+```
+/sep/src/core/metrics_collector.cpp:181:16: error: ‘cudaMemGetInfo’ was not declared in this scope
+```
+**Issue:** The CUDA memory information function is not declared when `SEP_CUDA_AVAILABLE` is not defined.
+**Target:** `/sep/src/core/metrics_collector.cpp` and potentially `/sep/include/compat/cuda_helpers.h` or a dedicated CUDA memory stub header.
+**Advice:** Add a stub definition for `cudaMemGetInfo` in `compat/core_stub.cpp` (or similar) and ensure it's included in `metrics_collector.cpp` when `SEP_CUDA_AVAILABLE` is not defined.
 
-*   **`/sep/src/memory/memory_tier_manager.cpp`**:
-    *   Numerous errors related to "does not name a type" for `quantum::Pattern` and `sep::MemoryTierEnum`. The full definitions for these types (by including their respective headers) are missing where these methods are implemented.
-    *   `storeLTMToPersistence(const quantum::Pattern& pattern)`: The signature in the implementation does not match the declaration in the header.
-    *   `findPattern(std::size_t id)`: Similar issue with `quantum::Pattern`.
-    *   `registerPattern(std::size_t id, const sep::pattern::PatternData& pattern)`: The implementation signature doesn't match the declaration in the header (missing `const`).
-    *   `getPatternData(std::size_t id) const`: The implementation signature doesn't match the declaration in the header (missing `const`).
-    *   Instantiation error for `std::make_unique<pattern::PatternData>()` indicates that `sep::pattern::PatternData` is an incomplete type where it's used. Include the full definition.
-    *   Instantiation error for `std::unique_ptr<sep::persistence::RedisManager>` indicates that `sep::persistence::RedisManager` is an incomplete type. Include the full definition of `RedisManager`.
+```
+/sep/src/core/metrics_collector.cpp:238:1: error: definition of explicitly-defaulted ‘sep::metrics::MetricsCollector::MetricsCollector()’
+```
+**Issue:** An explicitly defaulted constructor is being defined in the `.cpp` file, which is not allowed.
+**Target:** `/sep/src/core/metrics_collector.cpp`
+**Advice:** Remove the definition `MetricsCollector::MetricsCollector() : pImpl(std::make_unique<Impl>()) {}` from the `.cpp` file. The `= default` declaration in the header is sufficient. The initialization of `pImpl` should happen within the `Impl` constructor or a dedicated `init` method.
 
-*   **`/sep/src/core/manager.cpp`**:
-    *   The definition of `class ConfigManager::Impl` is within an anonymous namespace (`namespace {}`) in the implementation file, while the declaration is within the `sep::config` namespace in the header. This causes a mismatch and errors like "declaration of 'class sep::config::ConfigManager::Impl' in namespace 'sep::config::{anonymous}' which does not enclose 'class sep::config::ConfigManager'". The `Impl` definition should be directly within `namespace sep::config { ... }`.
-    *   Incomplete type errors for `ConfigManager::Impl` in various member functions because the full definition is not available. This is a direct consequence of the previous point.
+```
+/sep/src/memory/redis_manager.cpp:35:21: error: redefinition of ‘class sep::persistence::RedisManager::Impl’
+```
+**Issue:** The definition of `RedisManager::Impl` is present in both the header and the `.cpp` file.
+**Target:** `/sep/src/memory/redis_manager.cpp` and `/sep/include/memory/redis_manager.h`
+**Advice:** Remove the definition of `class RedisManager::Impl { ... };` from `redis_manager.cpp`. Keep only the definition in `redis_manager.h`. The `.cpp` file should only contain the implementations of `Impl`'s member functions.
 
-*   **`/sep/src/api/crow_adapter.cpp`**:
-    *   Lambdas defined in `setupSepApiRoutes` are attempting to capture `engine` by reference (`[&engine]`) but `engine` is declared outside the lambda scope within the `setupSepApiRoutes` function. This should be fixed by explicitly capturing `engine` (e.g., `[this, &engine]`) or making `engine` a member variable of `SEPApiServer` and capturing `this`. Given the structure, it seems like `setupSepApiRoutes` is intended to be called by `SEPApiServer`, suggesting the routes should be set up *within* the `SEPApiServer` class, where it has access to its members like the `engine`.
-    *   Accessing `sep::config::APIConfig` without including the header that defines it.
+```
+/sep/src/memory/quantum_coherence_manager.cpp:96:20: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceResult = struct sep::memory::QuantumCoherenceManager::CoherenceResult’ {aka ‘struct sep::memory::QuantumCoherenceManager::CoherenceResult’} has no member named ‘tier_fragmentation’
+```
+**Issue:** The `CoherenceResult` struct is missing members like `tier_fragmentation` and `tier_pattern_count`.
+**Target:** `/sep/include/memory/quantum_coherence_manager.h`
+**Advice:** Add the missing members (`tier_fragmentation` (likely an array) and `tier_pattern_count` (likely an array)) to the `CoherenceResult` struct definition in the header file.
 
-*   **`/sep/src/api/server.cpp`**:
-    *   Duplicate definition of `void SEPApiServer::start()`. There's one declared as `bool` and one defined as `void`.
-    *   Accessing `config_.ollama` in `SEPApiServer::initClients()` indicates that `ollama::OllamaConfig` and `ollama::OllamaClient` are being used without including their full definitions (likely from `api/ollama_client.h`).
-    *   Errors in `SEPApiServer::getHealthStatus()` related to accessing members of `impl_->health_metrics` (e.g., `startTime`, `totalRequests`) via `getMetrics()`. This suggests `getMetrics` is not correctly implemented or called, or `impl_->health_metrics` is not structured as expected.
-    *   Errors accessing `metrics_` members (`failedRequests`, `lastErrorCode`, etc.) directly in `handleError` and `logRequest` suggests `metrics_` is not a valid member of the `SEPApiServer` class. It appears `metrics_` is a local variable or not correctly declared as a member.
-    *   Accessing `config_.cors.enabled` and `config_.rate_limit.enabled`/`rpm` in `setup_middleware()` requires `sep::config::APIConfig` to be fully defined and accessible.
-    *   Accessing `config_.response_modulation.enabled`, `coherence_threshold`, and `max_detail_level` requires the `ResponseModulationConfig` structure within `sep::config::APIConfig` to be fully defined.
-    *   Parsing JSON with `nlohmann::json::parse` and accessing members like `["details"]` requires `nlohmann/json.hpp` to be included and the structure of the expected JSON to be understood.
+```
+/sep/src/memory/quantum_coherence_manager.cpp:97:89: error: no matching function for call to ‘sep::memory::MemoryTier::MemoryTier(int&)’
+```
+**Issue:** The `countPatternsInTier` function is being called with a `MemoryTier` type, but the `MemoryTier` class doesn't have a constructor that takes an integer. The function likely expects a `MemoryTierEnum`.
+**Target:** `/sep/src/memory/quantum_coherence_manager.cpp`
+**Advice:** Change the argument type in the call to `countPatternsInTier` from `static_cast<MemoryTier>(i)` to `static_cast<MemoryTierEnum>(i)`.
 
-*   **`/sep/src/compat/raii.cpp`**:
-    *   Issue with `StreamRAII::StreamRAII(sep::StreamFlags flags)`. The constructor definition does not match the declaration. Ensure the signature `StreamRAII(sep::StreamFlags flags)` is used correctly in the `.cpp` file.
-    *   Accessing `sep::memory::MemoryTierManager` and `sep::memory::TierType` without including the header (`memory/memory_tier_manager.hpp`) where these are defined.
-    *   Accessing `cudaStreamCreateWithFlags`, `cudaStreamDestroy`, `cudaStreamSynchronize`, `cudaEventCreate`, `cudaEventDestroy`, `cudaEventSynchronize`, `cudaStreamAttachMemAsync`, and `cudaGetErrorString` requires the CUDA runtime headers or their stubs to be correctly included. The code attempts to handle both cases (`SEP_CUDA_AVAILABLE`), but there might be an issue with how the stub functions are made available or linked.
+```
+/sep/src/memory/quantum_coherence_manager.cpp:113:18: error: ‘sep::sep’ has not been declared
+```
+**Issue:** There's a repeated `sep::` namespace qualifier.
+**Target:** `/sep/src/memory/quantum_coherence_manager.cpp`
+**Advice:** Change `sep::sep::MemoryTierEnum` to `sep::MemoryTierEnum`.
 
-*   **`/sep/src/core/metrics_collector.cpp`**:
-    *   Similar to `ConfigManager::Impl`, the definition of `class MetricsCollector::Impl` in the implementation file is problematic. It needs to be defined directly within `namespace sep::metrics { ... }`.
-    *   Accessing members like `running_`, `latency_window_size_`, `start_event_`, `stop_event_`, `latency_samples_`, and `metrics_mutex_` within `MetricsCollector::Impl` functions without these being declared members of `Impl`.
-    *   Accessing members like `performance_metrics_`, `counters_`, `gauges_`, `memory_metrics_`, and `system_metrics_` within `MetricsCollector` functions without these being declared members of `MetricsCollector`.
-    *   Accessing `pImpl` member in `updateSystemMetrics`, `getDetailedMetrics`, and `reset` without `pImpl` being declared a member of `MetricsCollector`.
-    *   Accessing CUDA functions (`cudaMemGetInfo`, `cudaEventRecord`, etc.) without including CUDA headers.
-    *   Using `MetricsCollector::PerformanceMetrics`, `MemoryMetrics`, and `SystemMetrics` as return types without correctly defining them within the `MetricsCollector` class or including their definitions.
+```
+/sep/src/quantum/pattern_evolution_bridge.cpp:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
+```
+**Issue:** `QuantumManifoldOptimizer` is forward declared but its full definition is needed to access its members and nested types (like `OptimizationTarget`).
+**Target:** `/sep/src/quantum/pattern_evolution_bridge.cpp`
+**Advice:** Include the header where `QuantumManifoldOptimizer` is fully defined (`quantum/quantum_manifold_optimizer.h`) in `pattern_evolution_bridge.cpp`. It appears it's already included, so there might be a circular dependency or an issue with include guards. Check include guards in `quantum_manifold_optimizer.h` and ensure they are unique.
 
-*   **`/sep/src/quantum/quantum_processor_qfh.cpp`**:
-    *   `determineMemoryTier`: The definition signature does not match the declaration in the header. The return type is specified as `sep::MemoryTierEnum` in the header but `::sep::MemoryTierEnum` in the definition.
-    *   Numerous "does not name a type" errors for `PatternData`, `PatternConfig`, `RelationshipType`, etc. because the full definitions are not included.
+```
+/sep/src/quantum/pattern_evolution_bridge.cpp:64:11: error: ‘namespace sep::quantum::PatternEvolutionBridge { }’ redeclared as different kind of entity
+```
+**Issue:** The namespace `sep::quantum::PatternEvolutionBridge` is being declared both as a class (`class PatternEvolutionBridge`) and as a namespace (`namespace PatternEvolutionBridge`).
+**Target:** `/sep/src/quantum/pattern_evolution_bridge.cpp` and `/sep/include/quantum/pattern_evolution_bridge.h`
+**Advice:**
+1.  In `/sep/include/quantum/pattern_evolution_bridge.h`, ensure `PatternEvolutionBridge` is consistently declared as a class.
+2.  In `/sep/src/quantum/pattern_evolution_bridge.cpp`, remove the extra `namespace PatternEvolutionBridge { ... }` block and ensure that all member functions of the `PatternEvolutionBridge` class are defined using the `PatternEvolutionBridge::Impl::` or `PatternEvolutionBridge::` scope resolution operators as needed.
 
-*   **`/sep/src/quantum/quantum_manifold_optimizer.cpp`**:
-    *   Errors related to `MemoryTierEnum`, `QuantumPattern`, etc. indicating missing includes for their full definitions.
-    *   `computeChristoffelSymbols`, `parallelTransport`: Functions used within the class implementation but defined outside the class/namespace, leading to "was not declared in this scope".
-    *   `computeResonanceFromCurvature`: Similar issue to the above.
+```
+/sep/src/quantum/pattern_evolution_bridge.cpp:262:31: error: ‘struct sep::quantum::QuantumState’ has no member named ‘evolution_rate’
+```
+**Issue:** The `QuantumState` struct is missing members like `evolution_rate`, `energy`, and `coupling_strength`.
+**Target:** `/sep/include/quantum/types.h`
+**Advice:** Add the missing members to the `QuantumState` struct definition in `types.h`.
 
-*   **`/sep/src/quantum/pattern_processor.cpp`**:
-    *   `PatternQuantumProcessorImpl::PatternQuantumProcessorImpl`: The constructor signature in the definition does not match the declaration (missing `const QuantumProcessor::Config&`).
-    *   Numerous "does not name a type" errors for `PatternProcessResult`, `QuantumState`, etc. because full definitions are not included.
+```
+/sep/src/quantum/quantum_manifold_optimizer.cpp:26:23: error: ‘QuantumPattern’ has not been declared in ‘sep::quantum’
+```
+**Issue:** `QuantumPattern` is used but not defined or included.
+**Target:** `/sep/include/quantum/quantum_manifold_optimizer.h` and related `.cpp` files.
+**Advice:** Check if `QuantumPattern` is a standard type or needs to be defined. If it's meant to be an alias for `sep::quantum::Pattern`, use that directly or add a `using` declaration for `Pattern`. If it's a distinct type, define it and include its definition. It seems likely it should be `sep::quantum::Pattern`.
 
-*   **`/sep/src/quantum/evolution.cpp`**:
-    *   `evolve`: Attempts to retrieve patterns by ID using `processor_->getPattern(parent_ids[0])`, but `Processor::getPattern` is declared to return `Pattern`, not a pointer or reference, and doesn't seem to take an ID. Need to verify the `Processor` interface and how patterns are stored/retrieved.
-    *   `mutate`: Attempts to use `processor_->mutatePattern`, but the signature in the call doesn't match the `Processor` declaration.
-    *   Accessing `processor_->getConfig().mutation_rate` requires the `Processor` object to have a public `getConfig` method that returns a structure with `mutation_rate`.
-    *   `updateStats`: Calls `calculateDiversity` without providing the `patterns` argument.
-    *   `current_stats_`: The member definition is commented as "Fix: Add missing member definition" but is then used. It needs to be properly declared as a member of `EvolutionEngineImpl`.
+```
+/sep/src/quantum/quantum_manifold_optimizer.cpp:108:20: error: ‘MemoryTierEnum’ has not been declared in ‘sep::memory’
+```
+**Issue:** `MemoryTierEnum` is used within the `sep::memory` namespace but is declared in `sep::quantum`.
+**Target:** `/sep/include/memory/types.h` (or the header where `MemoryTierEnum` should reside).
+**Advice:** Move the definition of `MemoryTierEnum` to `sep::memory` namespace in `sep/include/memory/types.h` and ensure it's consistently used from that namespace.
 
-*   **`/sep/src/compat/core.cu`**:
-    *   `createStream`: Declared to return `std::shared_ptr<Stream>` but defined with a missing closing brace, causing a syntax error.
-    *   Accessing `launchQBSAKernel`, `launchQSHKernel`, `launchSimilarityKernel`, and `launchBlendKernel` without including the header where they are declared (`compat/kernels.h`).
+```
+/sep/src/quantum/quantum_manifold_optimizer.cpp:139:5: error: ‘CUDAConfig’ does not name a type; did you mean ‘CudaConfig’?
+/sep/src/quantum/quantum_manifold_optimizer.cpp:140:5: error: ‘APIConfig’ does not name a type; did you mean ‘ApiConfig’?
+/sep/src/quantum/quantum_manifold_optimizer.cpp:141:5: error: ‘LogConfig’ does not name a type; did you mean ‘ApiConfig’?
+```
+**Issue:** Configuration structs like `CUDAConfig`, `APIConfig`, and `LogConfig` are used within `ManifoldConfig` but their definitions are missing or in the wrong namespace.
+**Target:** `/sep/include/quantum/quantum_manifold_optimizer.h` and potentially configuration headers.
+**Advice:** Ensure that the necessary configuration struct definitions (likely from `core/config.h` or similar) are included in `quantum_manifold_optimizer.h` and used with the correct namespace (likely `sep::config::`).
 
-*   **`/sep/src/compat/cuda_api.cu`**:
-    *   Accessing `constants::get_bitfield_words()`, etc., without including the header (`compat/constants.h`).
-    *   Accessing `sep::cuda::launchQBSAKernel`, etc., without including the header where they are declared (`compat/kernels.h`).
-    *   Using `sep::cuda::DeviceBufferRAII` without including the header where it's declared (`compat/raii.h`).
-    *   Using `sep::CudaException` without including the header where it's defined.
+```
+/sep/src/quantum/quantum_manifold_optimizer.cpp:226:61: error: expected class-name before ‘{’ token
+```
+**Issue:** `QuantumManifoldProcessor` is trying to inherit from `QuantumProcessorQFH` but the inheritance syntax is incorrect or `QuantumManifoldProcessor` is already defined elsewhere.
+**Target:** `/sep/include/quantum/quantum_manifold_optimizer.h` and `/sep/src/quantum/quantum_manifold_optimizer.cpp`
+**Advice:** Review the definition of `QuantumManifoldProcessor` in the header and ensure it uses proper class definition and inheritance syntax. Check if it's defined in multiple places.
 
-**Recommendations:**
+```
+/sep/src/compat/cuda_api.cu:263:20: error: ‘cudaMemcpyAsync’ was not declared in this scope
+```
+**Issue:** CUDA memory copy functions (`cudaMemcpyAsync`, `cudaMemsetAsync`) are not declared when `SEP_CUDA_AVAILABLE` is not defined.
+**Target:** `/sep/src/compat/cuda_api.cu` and potentially stub headers.
+**Advice:** Add stub definitions for `cudaMemcpyAsync`, `cudaMemsetAsync` in `compat/core_stub.cpp` (or similar) and ensure they are included when `SEP_CUDA_AVAILABLE` is not defined.
 
-1.  **Fix Include Paths and Missing Includes:** Systematically go through each file and ensure all types and functions used are defined either in that file or in an included header. Pay special attention to types defined in different modules (audio, blender, core, memory, quantum, compat).
-2.  **Resolve Incomplete Types:** For types that are forward-declared in headers, ensure their full definitions are included in the corresponding `.cpp` files where their members are accessed or objects of that type are created/managed (e.g., in `std::unique_ptr`, `std::make_unique`).
-3.  **Align Declarations and Definitions:** Correct the signatures and names of all functions and members so they match between header and implementation files. Pay attention to `static` keywords, `const` qualifiers, return types, and parameter types.
-4.  **Namespace Consistency:** Decide on a consistent approach to namespaces (e.g., always using fully qualified names or using `using namespace` at the top of `.cpp` files, but avoid it in headers or anonymous namespaces).
-5.  **Refactor API Routes:** The Crow route setup in `crow_adapter.cpp` looks problematic due to lambda captures and accessing objects outside the function scope. Consider moving the route setup logic into the `SEPApiServer` class or restructuring how the `SepEngine` instance is accessed.
-6.  **Correct Metrics Class Definitions:** Fix the definitions of `MetricsCollector::Impl` and ensure `MetricsCollector` members are correctly declared within the `MetricsCollector` class definition in the header.
-7.  **Review CUDA Compatibility Layer:** Ensure that the CUDA compatibility layer (stubs or real wrappers) is correctly implemented and included. Verify that CUDA runtime functions are called correctly (`cudaMemcpy`, `cudaEventRecord`, etc.) and that error checking is consistent.
-8.  **Review `Processor` Interface:** Examine the `sep::quantum::Processor` interface and ensure methods like `getPattern` and `mutatePattern` are being used correctly according to their declarations.
-9.  **Address Specific Compiler Errors:** Go through the compiler output line by line, addressing the specific errors identified, as they often point directly to the problematic line and the nature of the issue (e.g., "no declaration matches", "invalid use of incomplete type").
+```
+/sep/src/compat/core.cu:37:29: error: ‘cudaDeviceProp’ has not been declared
+```
+**Issue:** `cudaDeviceProp` is used in `CudaCore`'s `getDeviceProperties` declaration but not defined when `SEP_CUDA_AVAILABLE` is not defined.
+**Target:** `/sep/include/compat/core.h` and `/sep/src/compat/core_stub.cpp`
+**Advice:** Add a stub definition for `cudaDeviceProp` when `SEP_CUDA_AVAILABLE` is not defined. This stub should match the structure expected by `getDeviceProperties`.
 
-Focusing on these points systematically, starting with the most fundamental (includes, signatures, namespace usage, and incomplete types), will help resolve the build errors and connect the various components correctly.
+```
+/sep/src/quantum/pattern_processor.cpp:111:21: error: ‘constants::LTM_COHERENCE_THRESHOLD’ has not been declared
+```
+**Issue:** Coherence threshold constants are used but not declared in the scope.
+**Target:** `/sep/src/quantum/pattern_processor.cpp` and potentially a constants header.
+**Advice:** Include the header where these constants are defined (e.g., `quantum/constants.h` or `memory/quantum_coherence_manager.h`) and ensure they are within an accessible namespace.

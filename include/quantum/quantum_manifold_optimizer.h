@@ -119,7 +119,7 @@ class PerformanceAnalyzer;
     } quantum;
 
     // CUDA acceleration parameters
-    struct CudaConfig {
+    struct CUDAConfig {
         int warp_tile_size = 16;
         int coherence_block_size = 256;
         int similarity_grid_dim = 32;
@@ -128,7 +128,7 @@ class PerformanceAnalyzer;
     } cuda;
 
     // API coherence modulation
-    struct ApiConfig {
+    struct APIConfig {
         double base_coherence = 0.5;
         double context_weight = 0.3;
         double state_weight = 0.7;

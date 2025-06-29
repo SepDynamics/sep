@@ -53,7 +53,7 @@ echo "Checking for PipeWire development headers..."
 PIPEWIRE_CMAKE_ARGS="-DSEP_HAS_PIPEWIRE=OFF"
 if command -v pkg-config >/dev/null && pkg-config --exists libpipewire-0.3; then
   PIPEWIRE_INCLUDE_DIR=$(pkg-config --variable=includedir libpipewire-0.3)
-  PIPEWIRE_LIB_PATH=$(pkg-config --libs-only-L libpipewire-0.3 | sed 's/-L//g')
+  PIPEWIRE_LIB_PATH=$(pkg-config --variable=libdir libpipewire-0.3)
   if [ -z "${PIPEWIRE_LIB_PATH}" ]; then
     echo "Warning: pkg-config returned empty PipeWire library path. Audio module disabled."
   else

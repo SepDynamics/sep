@@ -1,9 +1,9 @@
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
-#include "quantum/types.h"        // For MemoryTierEnum definition
+#include "memory/redis_manager.h"
 
-using ::sep::memory::MemoryTierEnum;
-#include "quantum/pattern.h"      // For QuantumPattern definition
+#include "quantum/types.h"        // For ::sep::quantum::Pattern
+#include "quantum/data.hpp"       // For ::sep::pattern::PatternData
 
 #include "compat/cuda_common.h"
 #if !SEP_CUDA_AVAILABLE
@@ -13,11 +13,7 @@ using ::sep::memory::MemoryTierEnum;
 #include "compat/component_bridge.h"
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
-#include "memory/redis_manager.h"
-#include "quantum/types.h"
 #include "quantum/pattern_evolution_bridge.h"
-#include "quantum/data.hpp"
-#include "quantum/types.h"
 
 
 namespace sep::memory {
@@ -338,14 +334,14 @@ void MemoryTierManager::loadLTMFromPersistence() {
     }
 }
 
-void MemoryTierManager::storeLTMToPersistence(const sep::quantum::Pattern& pattern, const persistence::PersistentPatternData& data) {
+void MemoryTierManager::storeLTMToPersistence(const ::sep::quantum::Pattern& pattern, const persistence::PersistentPatternData& data) {
     if (!redis_manager_ || !redis_manager_->isConnected())
         return;
     std::size_t id = pattern.id.empty() ? 0 : std::stoull(pattern.id);
     redis_manager_->storePattern(id, data, "ltm");
 }
 
-sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
+::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
@@ -362,7 +358,7 @@ sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     return pattern;
 }
 
-const sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
+const ::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
@@ -411,11 +407,11 @@ void MemoryTierManager::prunePatternsByPriority(TierType tier, size_t max_count)
     }
 }
 
-void MemoryTierManager::registerPattern(std::size_t id, const sep::pattern::PatternData& pattern) {
-    pattern_registry_[id] = std::make_unique<sep::pattern::PatternData>(pattern);
+void MemoryTierManager::registerPattern(std::size_t id, const ::sep::pattern::PatternData& pattern) {
+    pattern_registry_[id] = std::make_unique<::sep::pattern::PatternData>(pattern);
 }
 
-const sep::pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
+const ::sep::pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     return it == pattern_registry_.end() ? nullptr : it->second.get();
 }

@@ -5,6 +5,7 @@
 #include "api/json_helpers.h"
 #include "api/types.h"
 #include "api/ollama_client.h"
+#include "core/types.h"
 #include "api/rate_limit_middleware.h"
 #include "api/request_interface.h"
 #include "api/sep_engine.h"
@@ -63,22 +64,21 @@ ServerMetrics &SEPApiServer::getModifiableMetrics() {
   return server_metrics_;
 }
 
-bool SEPApiServer::start() {
-    if (!app_) return false;
+void SEPApiServer::start() {
+    if (!app_) return;
 
     app_->port(config_.port);
     app_->multithreaded();
 
     setup_middleware();
     setup_routes();
-
-    return true;
 }
 
 bool SEPApiServer::run() {
   // Ensure routes are registered just before starting
   setup_routes();
-  return start();
+  start();
+  return true;
 }
 
 

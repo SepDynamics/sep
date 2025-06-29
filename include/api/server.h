@@ -8,6 +8,8 @@
 #include "api/rate_limit_middleware.h"
 #include "api/types.h"
 #include "api/auth_middleware.h"
+#include "api/ollama_client.h"
+#include "core/types.h"
 #include <atomic>
 #include <memory>
 #include <mutex>
@@ -26,9 +28,7 @@ template <typename... Middlewares>
 class Crow;
 }  // namespace crow
 
-namespace sep::ollama {
-class OllamaClient;
-}
+
 
 namespace sep::api {
 class CrowRequest;
@@ -77,7 +77,7 @@ class SEPApiServer : public Server {
   /**
    * @brief Start the server
    */
-  bool start();
+  void start();
 
   /**
    * @brief Register routes and start the server

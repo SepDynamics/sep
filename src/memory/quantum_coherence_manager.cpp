@@ -8,6 +8,7 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor_qfh.h"
+#include "quantum/types.h"
 #include "memory/types.h"
 
 using ::sep::memory::MemoryTierEnum;

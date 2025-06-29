@@ -17,6 +17,7 @@ namespace logging = sep::logging;
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/norm.hpp>
 #include <algorithm>
+#include <atomic>
 #include <execution>
 #include <thread>
 #include <future>

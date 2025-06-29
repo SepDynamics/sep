@@ -17,8 +17,8 @@ struct PatternData {
   glm::vec4 velocity{0.0f};
   glm::vec4 attributes{0.0f};
   std::complex<float> amplitude{0.0f};
-  ::sep::quantum::QuantumState::State state{
-      ::sep::quantum::QuantumState::State::SUPERPOSITION};
+  ::sep::quantum::QuantumState::Status state{
+      ::sep::quantum::QuantumState::Status::SUPERPOSITION};
   float phase{0.0f};
   float coherence{0.0f};
   float stability{0.0f};

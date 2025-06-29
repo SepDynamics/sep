@@ -12,10 +12,11 @@ echo "==== SEP Engine Build Script with FULL Cycles and PipeWire Support ===="
 echo "Setting up build environment with real library paths - NO STUBS!"
 
 # --- Environment Setup ---
-# Using absolute paths in build scripts for reliability
-# These paths correspond to ${workspaceFolder} in VSCode settings
-BUILD_DIR="/sep/cmake-make"
-SRC_DIR="/sep"
+# Determine repository root dynamically so the script works regardless
+# of where the project directory is located on disk.
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+BUILD_DIR="${REPO_ROOT}/cmake-make"
+SRC_DIR="${REPO_ROOT}"
 LIB_DIR="${SRC_DIR}/lib"
 CYCLES_ROOT_DIR="${SRC_DIR}/extern/cycles"
 

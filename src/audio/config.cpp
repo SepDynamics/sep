@@ -46,7 +46,8 @@ float AudioCoherenceEngine::calculateCoherence(const float* pSamples, uint32_t c
     float base_coherence = (rms * 0.6f + spectral_coherence * 0.4f);
 
     // Apply quantum coherence transformation (sigmoid-like)
-    float quantum_coherence = 1.0f / (1.0f + math::exp_safe(-5.0f * (base_coherence - 0.5f)));
+    // Fix: Call math::exp_safe with correct arguments // Fix: Added comment
+    float quantum_coherence = 1.0f / (1.0f + sep::math::exp_safe(-5.0f * (static_cast<double>(base_coherence) - 0.5f)));
 
     return std::clamp(quantum_coherence, 0.0f, 1.0f);
 }

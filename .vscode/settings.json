@@ -108,5 +108,6 @@
     "codechecker.analyze.arguments": "",
     "codechecker.analyze.threadCount": 4,
     "codechecker.log.buildCommand": "make -j$(nproc)",
-    "codechecker.log.arguments": ""
+    "codechecker.log.arguments": "",
+    "makefile.makePath": ""
 }

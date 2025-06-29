@@ -37,7 +37,7 @@ APIResponse CurlHttpClient::send_request(const APIRequest &request) {
     
     std::string buffer;
     curl_easy_setopt(curl, CURLOPT_URL, request.url.c_str()); // Fix: CURLOPT_URL takes const char*
-    
+
     // Set timeout
     curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, request.timeout.count());
     

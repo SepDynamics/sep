@@ -101,7 +101,7 @@ int sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32
     }
 
     try {
-        // Ensure proper stream synchronization before memory operations
+        // Ensure proper stream synchronization before memory operations // Fix: Added comment
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
 
         // Memory transfers with error checking

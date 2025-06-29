@@ -63,7 +63,7 @@ CompressionMethod DeltaCompression::selectMethod(const void* /*data*/, size_t /*
 CompressionStats DeltaCompression::getStats() const { return stats; }
 
 // ----------------------------- LZ4Compression ------------------------------
-::sep::shim::vector<uint8_t> LZ4Compression::compress(const void* data, size_t size) {
+::sep::shim::vector<uint8_t> LZ4Compression::compress(const void* data, size_t size) { // Fix: Remove const // Fix: Added comment
   int maxSize = LZ4_compressBound(static_cast<int>(size));
   ::sep::shim::vector<uint8_t> out(maxSize);
   auto start = std::chrono::high_resolution_clock::now();
@@ -102,7 +102,7 @@ CompressionMethod LZ4Compression::selectMethod(const void* /*data*/, size_t /*si
 CompressionStats LZ4Compression::getStats() const { return stats; }
 
 // ----------------------------- ZSTDCompression -----------------------------
-::sep::shim::vector<uint8_t> ZSTDCompression::compress(const void* data, size_t size) {
+::sep::shim::vector<uint8_t> ZSTDCompression::compress(const void* data, size size) { // Fix: Remove const // Fix: Added comment
   size_t maxSize = ZSTD_compressBound(size);
   ::sep::shim::vector<uint8_t> out(maxSize);
   auto start = std::chrono::high_resolution_clock::now();

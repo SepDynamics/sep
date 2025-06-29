@@ -21,6 +21,7 @@
 #include "api/sep_engine.h"
 #include "api/server.h" // Include server header
 #include "core/types.h"  // For sep::config::APIConfig
+#include "core/manager.h" // For sep::config::ConfigManager
 #include "memory/memory_tier_manager.hpp"
 
 // Include standard headers
@@ -64,8 +65,12 @@ std::unique_ptr<HttpRequest> makeRequest(::crow::request &req) {
     return std::make_unique<CrowRequestAdapter>(req);
 }
 
-#define API_PREFIX "/api/v1"
+// Define API_PREFIX here as it's used in setup_routes
+#ifndef API_PREFIX
+#define API_PREFIX "/api/v1" // Example prefix
+#endif
 
+// Legacy route setup was replaced by SEPApiServer::setup_routes.
 /**
  * @brief Setup the SEP API routes in a Crow application
  *
@@ -81,6 +86,5 @@ std::unique_ptr<HttpRequest> makeRequest(::crow::request &req) {
  *
  * @param app The Crow application instance
  */
-// Legacy route setup was replaced by SEPApiServer::setup_routes.
 
 }  // namespace sep::api

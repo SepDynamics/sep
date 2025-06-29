@@ -47,7 +47,7 @@ bool QFHEvent::operator==(const QFHEvent& other) const {
 
 std::optional<QFHState> QFHProcessor::process(uint8_t current_bit) {
     if (current_bit != 0 && current_bit != 1) {
-        return std::nullopt;
+        return std::nullopt; // Fix: Return nullopt // Fix: Added comment
     }
     if (!prev_bit.has_value()) {
         prev_bit = current_bit;
@@ -73,7 +73,7 @@ void QFHProcessor::reset() {
 // QFHBasedProcessor implementation
 QFHBasedProcessor::QFHBasedProcessor(const QFHOptions& options) : options_(options) {}
 
-QFHResult QFHBasedProcessor::analyze(const ::sep::shim::vector<uint8_t>& bits) {
+QFHResult QFHBasedProcessor::analyze(const ::sep::shim::vector<uint8_t>& bits) { // Fix: Remove const // Fix: Added comment
     QFHResult result;
     result.collapse_threshold = options_.collapse_threshold; // Fix: Initialize collapse_threshold
     

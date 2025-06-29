@@ -19,7 +19,7 @@
 
 // CUDA headers after standard library
 #include "compat/cuda_common.h"
-#include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpy
+#include "compat/cuda_runtime.h" // for sep::cuda::cudaMemcpy // Fix: Add comment // Fix: Added comment
 #include "compat/macros.h"
 
 #include "compat/math_common.h"
@@ -143,7 +143,7 @@ void MemoryTier::deallocate(MemoryBlock* block) {
 }
 
 sep::SEPResult MemoryTier::defragment() {
-    auto logger = sep::logging::Manager::getInstance().getLogger("memory"); // Fix: use fully qualified name
+    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
     if (logger) {
         LOG_DEBUG(logger, "Defragmenting tier {}", static_cast<int>(config_.type));
     }

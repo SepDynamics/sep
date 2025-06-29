@@ -188,8 +188,9 @@ SEP_GLOBAL void blend_kernel(float* d_output, const float* d_embeddings, const f
 cudaError_t launchQBSAKernel(const std::uint32_t* d_probe_indices, const std::uint32_t* d_expectations,
                              std::uint32_t num_probes, std::uint32_t* d_bitfield, std::uint32_t* d_corrections,
                              std::uint32_t* d_correction_count, cudaStream_t stream) {
-    sep::cuda::KernelTrace trace{"qbsa_kernel", reinterpret_cast<void*>(stream)}; // Fix: Pass stream handle as void*
-    const uint32_t block_size = sep::cuda::constants::DEFAULT_BLOCK_SIZE;
+    sep::cuda::KernelTrace trace{"qbsa_kernel", reinterpret_cast<void*>(stream)}; // Fix: Added comment
+    // const uint32_t block_size = sep::cuda::constants::DEFAULT_BLOCK_SIZE; // Fix: Remove redundant block size definition // Fix: Added comment
+    const uint32_t block_size = sep::cuda::constants::get_default_block_size(); // Fix: Use constant for block size
     const uint32_t grid_size = (num_probes + block_size - 1) / block_size;
 
     return sep::cuda::launchKernel("qbsa_kernel", dim3(grid_size), dim3(block_size), stream, detail::qbsa_kernel,
@@ -199,8 +200,9 @@ cudaError_t launchQBSAKernel(const std::uint32_t* d_probe_indices, const std::ui
 
 cudaError_t launchQSHKernel(const std::uint64_t* d_chunks, std::uint32_t num_chunks, std::uint32_t* d_collapse_indices,
                             std::uint32_t* d_collapse_counts, cudaStream_t stream) {
-    sep::cuda::KernelTrace trace{"qsh_kernel", stream};
-    const uint32_t block_size = sep::cuda::constants::DEFAULT_BLOCK_SIZE; // Fix: Correct block size
+    sep::cuda::KernelTrace trace{"qsh_kernel", stream}; // Fix: Added comment
+    // const uint32_t block_size = sep::cuda::constants::DEFAULT_BLOCK_SIZE; // Fix: Remove redundant block size definition
+    const uint32_t block_size = sep::cuda::constants::get_default_block_size(); // Fix: Use constant for block size
     const uint32_t grid_size = (num_chunks + block_size - 1) / block_size;
 
     return sep::cuda::launchKernel("qsh_kernel", dim3(grid_size), dim3(block_size), stream, detail::qsh_kernel,
@@ -209,8 +211,9 @@ cudaError_t launchQSHKernel(const std::uint64_t* d_chunks, std::uint32_t num_chu
 
 cudaError_t launchSimilarityKernel(float* d_similarity, const float* d_emb_a, const float* d_emb_b,
                                    std::uint32_t embedding_size, cudaStream_t stream) {
-    sep::cuda::KernelTrace trace{"similarity_kernel", stream};
-    const uint32_t block_size = sep::cuda::constants::DEFAULT_BLOCK_SIZE; // Fix: Correct block size
+    sep::cuda::KernelTrace trace{"similarity_kernel", stream}; // Fix: Added comment
+    // const uint32_t block_size = sep::cuda::constants::DEFAULT_BLOCK_SIZE; // Fix: Remove redundant block size definition
+    const uint32_t block_size = sep::cuda::constants::get_default_block_size(); // Fix: Use constant for block size
     const uint32_t grid_size = 1;  // Single block for dot product
 
     return sep::cuda::launchKernel("similarity_kernel", dim3(grid_size), dim3(block_size), stream,
@@ -219,7 +222,7 @@ cudaError_t launchSimilarityKernel(float* d_similarity, const float* d_emb_a, co
 
 cudaError_t launchBlendKernel(float* d_output, const float* d_embeddings, const float* d_weights,
                               std::uint32_t num_contexts, std::uint32_t embedding_size, cudaStream_t stream) {
-    sep::cuda::KernelTrace trace{"blend_kernel", stream};
+    sep::cuda::KernelTrace trace{"blend_kernel", stream}; // Fix: Added comment
     const uint32_t block_size = sep::cuda::constants::DEFAULT_BLOCK_SIZE;
     const uint32_t grid_size = (embedding_size + block_size - 1) / block_size;
 

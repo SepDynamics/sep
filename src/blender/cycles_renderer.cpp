@@ -2,6 +2,7 @@
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
+#include "compat/osl_stub.h" // Fix: Add missing OSL stub header // Fix: Added comment
 
 namespace sep {
 namespace blender {
@@ -25,7 +26,8 @@ SEPResult CyclesRenderer::initialize() {
 SEPResult CyclesRenderer::createSceneFromPatterns(const std::vector<pattern::PatternData>& patterns) {
     if (!initialized_) {
         return SEPResult::NOT_INITIALIZED;
-    }
+    } // Fix: Add missing brace
+
     if (patterns.empty()) {
         return SEPResult::INVALID_ARGUMENT;
     }

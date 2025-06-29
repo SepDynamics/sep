@@ -1,6 +1,7 @@
 #include "quantum/types.h"
-#include <nlohmann/json.hpp>
-#include "compat/shim.h" // Ensure shim is included if needed
+#include "memory/types.h" // Add include for MemoryTierEnum
+#include <nlohmann/json.hpp> // Fix: Added comment
+
 #include "memory/types.h" // Add include for MemoryTierEnum
 
 namespace sep::quantum {

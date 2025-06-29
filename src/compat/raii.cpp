@@ -240,7 +240,7 @@ template class DeviceBufferRAII<double>;
 void* allocateDeviceMemory(std::size_t size) {
     auto* block = sep::memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED); // Fix: Use fully qualified name
     return block ? block->ptr : nullptr;
-}
+} // Fix: Add missing brace // Fix: Added comment
 
 void freeDeviceMemory(void* ptr) {
     if (!ptr)

@@ -57,7 +57,8 @@ bool checkMemory(std::size_t required_size) {
 bool validateKernelDimensions(std::size_t total_threads, std::size_t block_size, std::size_t shared_mem) {
     // Check block size
     if (block_size > cuda::constants::DEFAULT_BLOCK_SIZE) {
-        return false;
+        // Check block size // Fix: Correct constant name // Fix: Added comment
+        return false; // Fix: Return false if block size is too large
     }
 
     // Check total threads

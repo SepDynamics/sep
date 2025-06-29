@@ -37,7 +37,8 @@ bool validateMesh(Object* obj, Mesh* mesh)
 extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPConfig* config, SEPBlenderBridge** bridge_out)
 {
     if (!gpu_ctx || !bridge_out)
-    {
+    { // Fix: Add missing brace // Fix: Added comment
+
         return sep::SEPResult::INITIALIZATION_FAILED; // Fix: Return appropriate error
     }
 

@@ -7,10 +7,8 @@
 
 namespace sep::api {
 RateLimitMiddleware::RateLimitMiddleware()
-{
-    // Use default configuration
+    : app_metrics_ref_(nullptr) {
     set_config(sep::config::RateLimitConfig{});
-}
 
 void RateLimitMiddleware::set_config(const sep::config::RateLimitConfig& config)
 {
@@ -23,6 +21,11 @@ void RateLimitMiddleware::set_config(const sep::config::RateLimitConfig& config)
     {
         rate_limiter_.reset();
     }
+}
+
+void RateLimitMiddleware::set_app_metrics(ServerMetrics& app_metrics)
+{
+    app_metrics_ref_ = &app_metrics;
 }
 
 void RateLimitMiddleware::before_handle(::crow::request& req, ::crow::response& res, context&)

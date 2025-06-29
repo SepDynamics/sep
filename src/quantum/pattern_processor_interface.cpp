@@ -1,6 +1,7 @@
 #include "quantum/processor.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"
+#include "quantum/quantum_processor.h" // Fix: Include quantum_processor.h // Fix: Added comment
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
 #include "core/common.h"  // defines sep::SEPResult

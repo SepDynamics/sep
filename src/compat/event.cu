@@ -44,7 +44,7 @@ Event::~Event() {
 void Event::record(Stream& stream) {
     if (handle_) {
         // Remove try-catch for CUDA compatibility // Fix: Add comment
-        cudaError_t result = cudaEventRecord(handle_, reinterpret_cast<cudaStream_t>(stream.handle()));
+        cudaError_t result = cudaEventRecord(handle_, reinterpret_cast<cudaStream_t>(stream.handle())); // Fix: Cast handle to cudaStream_t // Fix: Added comment
         (void)result; // Avoid unused variable warning
     }
 }

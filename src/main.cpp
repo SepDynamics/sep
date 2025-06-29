@@ -2,7 +2,7 @@
 #include "core/engine.h"
 #include "core/common.h"  // defines sep::SEPResult
 #include "core/logging.h"
-#include <curl/curl.h>
+#include <curl/curl.h> // Include curl header // Fix: Added comment
 #include <exception>
 #include <iostream>
 #include <fstream>

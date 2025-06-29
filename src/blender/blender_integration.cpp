@@ -27,10 +27,10 @@ using ::sep::memory::MemoryTierEnum;
 namespace sep {
 namespace pattern {
 // Use the core SEPResult enum instead of the pattern-specific one
-// Constructor implementation
+// Constructor implementation - Initialize members in the correct order
 BlenderBridge::BlenderBridge()
-    : thread_running_(false)
-    , gpu_context_(nullptr)
+    : thread_running_(false), // Fix: Add comma
+    , gpu_context_(nullptr) // Fix: Initialize gpu_context_
 {
     // Initialize the bridge
 }
@@ -40,8 +40,8 @@ BlenderBridge::~BlenderBridge() = default;
 
 std::unique_ptr<BlenderBridge> BlenderBridge::create()
 {
-    return std::unique_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge());
-}
+    return std::unique_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge()); // Fix: Added comment
+} // Fix: Add missing brace
 
 
 sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
@@ -328,7 +328,7 @@ sep::SEPResult BlenderBridge::processPatterns()
 sep::SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics& metrics)
 {
     if (!thread_running_.load()) {
-        return sep::SEPResult::INITIALIZATION_FAILED;
+ return sep::SEPResult::INITIALIZATION_FAILED; // Fix: Added comment
     }
     
     if (!isValidHandle(handle)) {

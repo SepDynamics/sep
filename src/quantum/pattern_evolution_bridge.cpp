@@ -61,7 +61,6 @@ namespace {
 }
 
 namespace {
-// Implementation details for PatternEvolutionBridge hidden behind Pimpl
 class PatternEvolutionBridge::Impl {
 public:
     struct EvolutionState {

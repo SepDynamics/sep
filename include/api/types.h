@@ -2,6 +2,7 @@
 
 #include <string>
 #include <atomic>
+#include <cstdint>
 #include <chrono>
 #include <map>
 #include <vector>
@@ -118,6 +119,9 @@ struct HealthMetrics {
     std::chrono::system_clock::time_point lastSuccessTime;
     std::chrono::system_clock::time_point lastErrorTime;
     int lastErrorCode{0};
+    std::atomic<std::uint64_t> allocatedMemory{0};
+    std::atomic<std::uint64_t> peakMemoryUsage{0};
+    std::atomic<float> memoryFragmentation{0.0f};
 };
 
 struct RateLimitConfig {

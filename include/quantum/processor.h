@@ -8,6 +8,7 @@
 // Removed duplicate include of core/types.h
 #include "quantum/gpu_context.h"
 #include "quantum/data.hpp"
+#include "memory/types.h"
 #include <memory>
 #include <vector>
 #include <string>
@@ -91,7 +92,7 @@ public:
     SEPResult updatePattern(const std::string& pattern_id, const Pattern& pattern);
     Pattern getPattern(const std::string& pattern_id) const;
     std::vector<sep::quantum::Pattern> getPatterns() const;
-    std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
+    std::vector<sep::quantum::Pattern> getPatternsByTier(::sep::memory::MemoryTierEnum tier) const;
     size_t getPatternCount() const;
 
     ProcessingResult processPattern(const std::string& pattern_id);

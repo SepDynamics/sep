@@ -139,7 +139,7 @@ sep_process_audio(SEPBlenderBridge* bridge, const float* samples, size_t count, 
     return sep::SEPResult::SUCCESS;
 }
 
-extern "C" sep::SEPResult sep_sync_memory(SEPBlenderBridge* bridge, sep::MemoryTierEnum tier, bool force)
+extern "C" sep::SEPResult sep_sync_memory(SEPBlenderBridge* bridge, ::sep::memory::MemoryTierEnum tier, bool force)
 {
     if (!validateBridge(bridge))
     {

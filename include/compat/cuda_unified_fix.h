@@ -92,11 +92,15 @@ CUDA_UNIFIED_FIX_END_SCOPE()
 #if (__CUDACC__)
 #define SEP_HOST __host__
 #define SEP_DEVICE __device__
+#ifndef SEP_HD
 #define SEP_HD __host__ __device__
+#endif
 #else
 #define SEP_HOST
 #define SEP_DEVICE
+#ifndef SEP_HD
 #define SEP_HD
+#endif
 #endif
 
 // *** CRITICAL: DISABLE EXCEPTION SPECIFICATION CHECKS ***

@@ -176,6 +176,9 @@ find_required_library(BF_BLENKERNEL "bf_blenkernel libbf_blenkernel.a libbf_blen
 find_required_library(BF_GPU "bf_gpu libbf_gpu.a libbf_gpu.so libbf_gpu.so.* bf_gpu.dll bf_gpu.lib" "${BLENDER_LIB_PATHS}")
 find_required_library(BF_DRAW "bf_draw libbf_draw.a libbf_draw.so libbf_draw.so.* bf_draw.dll bf_draw.lib" "${BLENDER_LIB_PATHS}")
 
+# === External Libraries ===
+find_required_library(EXTERN_CLEW "extern_clew libextern_clew.a libextern_clew.so libextern_clew.so.* extern_clew.dll extern_clew.lib" "${BLENDER_LIB_PATHS}")
+
 # === External Wrapper Libraries ===
 find_required_library(EXTERN_CUEW "extern_cuew libextern_cuew.a libextern_cuew.so libextern_cuew.so.* extern_cuew.dll extern_cuew.lib" "${BLENDER_LIB_PATHS}")
 find_required_library(EXTERN_HIPEW "extern_hipew libextern_hipew.a libextern_hipew.so libextern_hipew.so.* extern_hipew.dll extern_hipew.lib" "${BLENDER_LIB_PATHS}")
@@ -242,6 +245,7 @@ find_library(GFLAGS_LIBRARY gflags)
 find_library(BLOSC_LIBRARY blosc)
 find_library(ZSTD_LIBRARY zstd)
 find_library(PUGIXML_LIBRARY pugixml)
+
 
 # Path guiding via OpenPGL
 find_library(OpenPGL_LIBRARY

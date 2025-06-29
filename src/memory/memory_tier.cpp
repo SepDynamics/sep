@@ -18,6 +18,7 @@
 
 // CUDA headers after standard library
 #include "compat/cuda_common.h"
+#include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpy
 #include "compat/macros.h"
 
 #include "compat/math_common.h"
@@ -158,7 +159,7 @@ sep::SEPResult MemoryTier::defragment() {
                 // Move memory to new position
                 void* new_location = static_cast<char*>(memory_pool_) + current_offset;
 #if SEP_CUDA_AVAILABLE
-                cudaError_t err = cudaMemcpy(new_location, block.ptr, block.size, cudaMemcpyDefault);
+                cudaError_t err = sep::cuda::cudaMemcpy(new_location, block.ptr, block.size, cudaMemcpyDefault);
                 if (err != cudaSuccess) {
                     if (logger)
                         LOG_ERROR(logger, "Defragment cudaMemcpy failed: {}", cudaGetErrorString(err));

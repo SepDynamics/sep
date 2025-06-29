@@ -312,6 +312,11 @@ createLockFreeRateLimiter(unsigned int requests_per_minute) {
 
 std::unique_ptr<IRateLimiter>
 createRateLimiter(unsigned int requests_per_minute) {
+  // Factory helper that allows the rest of the codebase to request a
+  // new rate limiter instance without needing to know about the concrete
+  // implementation type. Currently we simply forward to
+  // `createLockFreeRateLimiter`, which constructs `LockFreeRateLimiter`.
+  // Additional implementations can be swapped in here as needed.
   return createLockFreeRateLimiter(requests_per_minute);
 }
 

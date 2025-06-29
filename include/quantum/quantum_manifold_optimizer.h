@@ -137,8 +137,8 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    CudaConfig cuda;
-    ApiConfig api;
+    CUDAConfig cuda;
+    APIConfig api;
     LogConfig log;
     AnalyticsConfig analytics;
 };

@@ -176,22 +176,41 @@ if(NOT OpenVDB_FOUND)
     find_path(OPENVDB_INCLUDE_DIR openvdb/openvdb.h)
 endif()
 
-# TBB (multiple versions for compatibility)
-find_library(TBB_LIBRARY NAMES tbb)
-find_library(TBB_MALLOC_LIBRARY NAMES tbbmalloc)
-find_library(TBB2_LIBRARY NAMES tbb.so.2 tbb2 PATHS
-  /usr/lib64
-  /usr/local/lib
-  /usr/lib
-  /lib64
-  /lib
-)
+# Helper to locate optional libraries with extended search paths
+function(find_and_add_library _var)
+  set(options)
+  set(oneValueArgs)
+  set(multiValueArgs NAMES PATHS)
+  cmake_parse_arguments(_FAAL "" "" "NAMES;PATHS" ${ARGN})
+  find_library(${_var}
+    NAMES ${_FAAL_NAMES}
+    PATHS ${_FAAL_PATHS}
+    PATH_SUFFIXES lib lib64
+  )
+  if(${_var})
+    message(STATUS "[FOUND] ${_var}: ${${_var}}")
+  else()
+    message(WARNING "[MISSING] ${_var}")
+    set(${_var} "" PARENT_SCOPE)
+  endif()
+  set(${_var} ${${_var}} PARENT_SCOPE)
+endfunction()
 
-# If TBB2 isn't found, create a stub variable that won't break the build
-if(NOT TBB2_LIBRARY)
-  message(STATUS "TBB2 library not found, using stub")
-  set(TBB2_LIBRARY "")
-endif()
+# OpenPGL (Path Guiding Library)
+find_and_add_library(OpenPGL_LIBRARY
+  NAMES pgl
+  PATHS ${CMAKE_SOURCE_DIR}/lib ${CMAKE_INSTALL_PREFIX}/lib /usr/lib64 /usr/local/lib /usr/lib)
+
+# TBB (Threading Building Blocks) -- require a real installation
+find_package(TBB REQUIRED COMPONENTS tbb tbbmalloc)
+
+# Expose library paths for legacy variables
+get_target_property(TBB_LIBRARY_PATH TBB::tbb LOCATION)
+get_target_property(TBB_MALLOC_LIBRARY_PATH TBB::tbbmalloc LOCATION)
+
+set(TBB_LIBRARY ${TBB_LIBRARY_PATH})
+set(TBB_MALLOC_LIBRARY ${TBB_MALLOC_LIBRARY_PATH})
+set(TBB2_LIBRARY ${TBB_LIBRARY_PATH})
 
 # OpenSubdiv
 find_library(OPENSUBDIV_CPU_LIBRARY NAMES osdCPU)

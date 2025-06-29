@@ -758,11 +758,11 @@ uint64_t QuantumCoherenceManager::getGlobalTick() const {
     return impl_->getGlobalTick();
 }
 
-uint32_t QuantumCoherenceManager::getPatternCountByTier(::sep::memory::MemoryTierEnum tier) const {
+uint32_t QuantumCoherenceManager::getPatternCountByTier(MemoryTierEnum tier) const {
     return impl_->getPatternCountByTier(tier);
 }
 
-float QuantumCoherenceManager::getTierFragmentation(::sep::memory::MemoryTierEnum tier) const {
+float QuantumCoherenceManager::getTierFragmentation(MemoryTierEnum tier) const {
     return impl_->getTierFragmentation(tier);
 }
 

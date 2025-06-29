@@ -232,3 +232,5 @@ inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cud
 }
 
 #endif // !SEP_CUDA_AVAILABLE
+
+#endif // SEP_CUDA_IMPL_H

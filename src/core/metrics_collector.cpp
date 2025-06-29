@@ -235,7 +235,6 @@ class MetricsCollector::Impl {
 };
 
 // MetricsCollector implementation
-MetricsCollector::MetricsCollector() : pImpl(std::make_unique<Impl>()) {}
 
 MetricsCollector& MetricsCollector::instance() {
     // Use a function-local static variable for thread-safe singleton initialization

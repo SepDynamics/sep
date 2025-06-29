@@ -10,7 +10,7 @@ set(CMAKE_CUDA_FLAGS_INIT "-allow-unsupported-compiler")
 set(CMAKE_CUDA_COMPILER_INIT "nvcc -allow-unsupported-compiler")
 
 # Enable CUDA as a language so .cu files are compiled
-project(SEPEngine LANGUAGES CXX)
+project(SEPEngine LANGUAGES CXX CUDA)
 
 # Configure CUDA for the project
 set(SEP_CUDA_AVAILABLE ON)

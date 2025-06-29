@@ -6,6 +6,7 @@
 #include "blender/mesh_handler.h"
 #include "core/common.h"  // defines sep::SEPResult
 
+using namespace sep::pattern;
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow
 // the library to link without the real Blender environment.

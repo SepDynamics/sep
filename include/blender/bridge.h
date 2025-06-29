@@ -54,7 +54,7 @@ class BlenderBridge {
   virtual sep::SEPResult processPatterns();  // Changed to global SEPResult
 
   virtual sep::SEPResult syncMemory(  // Changed to global SEPResult
-      MemoryTierEnum tier, bool force = false);
+      ::sep::memory::MemoryTierEnum tier, bool force = false);
 
   void addObserver(std::shared_ptr<PatternObserver> observer);
   void removeObserver(std::shared_ptr<PatternObserver> observer);
@@ -106,7 +106,7 @@ class BlenderBridge {
   sep::SEPResult allocatePatternMemory(ObjectState& state);  // Changed to global SEPResult
   sep::SEPResult freePatternMemory(ObjectState& state);      // Changed to global SEPResult
   sep::SEPResult promotePatterns(sep::pattern::ObjectHandle handle,
-                              MemoryTierEnum target_tier);  // Changed to global SEPResult
+                              ::sep::memory::MemoryTierEnum target_tier);  // Changed to global SEPResult
   sep::SEPResult syncPatternData(sep::pattern::ObjectHandle handle,
                               bool force);  // Changed to global SEPResult
 

@@ -263,7 +263,7 @@ sep::SEPResult BlenderBridge::freePatternMemory(ObjectState& state)
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::syncMemory(MemoryTierEnum tier, bool force)
+sep::SEPResult BlenderBridge::syncMemory(::sep::memory::MemoryTierEnum tier, bool force)
 {
     if (!m_processing_thread_active.load())
     {
@@ -274,17 +274,17 @@ sep::SEPResult BlenderBridge::syncMemory(MemoryTierEnum tier, bool force)
 
     switch (tier)
     {
-        case MemoryTierEnum::STM:
+        case ::sep::memory::MemoryTierEnum::STM:
             manager.defragmentTier(sep::memory::TierType::HOST);
             break;
-        case MemoryTierEnum::MTM:
+        case ::sep::memory::MemoryTierEnum::MTM:
             manager.defragmentTier(sep::memory::TierType::DEVICE);
             if (force)
             {
                 manager.defragmentTier(sep::memory::TierType::HOST);
             }
             break;
-        case MemoryTierEnum::LTM:
+        case ::sep::memory::MemoryTierEnum::LTM:
             manager.defragmentTier(sep::memory::TierType::UNIFIED);
             break;
         default:
@@ -473,7 +473,7 @@ sep::SEPResult BlenderBridge::validatePatternCoherence(const ObjectState& state)
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::promotePatterns(ObjectHandle handle, MemoryTierEnum target_tier)
+sep::SEPResult BlenderBridge::promotePatterns(ObjectHandle handle, ::sep::memory::MemoryTierEnum target_tier)
 {
     (void)handle;
     (void)target_tier;

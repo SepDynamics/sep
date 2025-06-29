@@ -399,12 +399,13 @@ list(REMOVE_ITEM SEP_ALL_LINK_LIBS "")
 # === Internal SEP Libraries ===
 set(SEP_INTERNAL_LIBS
     sep_api
-    sep_memory
-    sep_quantum
-    sep_core
-    sep_audio
     sep_blender
+    sep_audio
+    sep_context
+    sep_quantum
+    sep_memory
     sep_compat
+    sep_core
 )
 
 # === Add Subdirectories ===

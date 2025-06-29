@@ -82,6 +82,17 @@ add_compile_definitions(
     SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
 )
 
+# Default Cycles root if not provided
+if(NOT DEFINED CYCLES_ROOT_DIR)
+    set(CYCLES_ROOT_DIR "${CMAKE_SOURCE_DIR}/extern/cycles" CACHE PATH "Cycles root directory")
+endif()
+
+# Paths to search for prebuilt Cycles libraries
+set(CYCLES_LIB_SEARCH_PATHS
+    ${CYCLES_ROOT_DIR}/lib
+    ${CYCLES_ROOT_DIR}/build
+)
+
 # === Critical: Library Directory Setup ===
 set(SEP_LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
 if(NOT EXISTS "${SEP_LIB_DIR}")
@@ -93,29 +104,30 @@ link_directories(${SEP_LIB_DIR})
 
 # === Library Discovery Macro with Enhanced Diagnostics ===
 macro(find_required_library var_name lib_names)
-    # First try to find in SEP_LIB_DIR
+    string(REPLACE " " ";" _lib_list "${lib_names}")
+    list(GET _lib_list 0 _first)
+    set(_extra_paths ${ARGN})
+
     find_library(${var_name}
-        NAMES ${lib_names}
+        NAMES ${_lib_list}
         PATHS ${SEP_LIB_DIR}
         NO_DEFAULT_PATH
     )
-    
-    # If not found in SEP_LIB_DIR, try other paths
+
     if(NOT ${var_name})
         find_library(${var_name}
-            NAMES ${lib_names}
-            PATHS ${SEP_LIB_SEARCH_PATHS}
+            NAMES ${_lib_list}
+            PATHS ${_extra_paths} ${CYCLES_LIB_SEARCH_PATHS} ${SEP_LIB_SEARCH_PATHS}
             PATH_SUFFIXES "lib" "lib64" "lib/x86_64-linux-gnu"
         )
     endif()
-    
+
     if(${var_name})
         message(STATUS "[FOUND] ${var_name}: ${${var_name}}")
         get_filename_component(${var_name}_DIR ${${var_name}} DIRECTORY)
     else()
-        message(WARNING "[MISSING] ${var_name} (${lib_names}) - Using library from ${SEP_LIB_DIR}")
-        # Use the library directly from SEP_LIB_DIR since we know it exists there
-        set(${var_name} "${SEP_LIB_DIR}/lib${lib_names}.a")
+        message(WARNING "[MISSING] ${var_name} (${lib_names}) - Fallback to ${SEP_LIB_DIR}/lib${_first}.a")
+        set(${var_name} "${SEP_LIB_DIR}/lib${_first}.a")
     endif()
 endmacro()
 
@@ -123,13 +135,14 @@ endmacro()
 set(SEP_LIB_SEARCH_PATHS
     ${SEP_LIB_DIR}
     ${CMAKE_SOURCE_DIR}/lib
+    ${CYCLES_LIB_SEARCH_PATHS}
     /usr/local/lib
     /usr/lib
     /usr/lib64
 )
 
 # Update library search paths for find_library commands
-set(CMAKE_LIBRARY_PATH ${SEP_LIB_SEARCH_PATHS})
+set(CMAKE_LIBRARY_PATH ${CYCLES_LIB_SEARCH_PATHS} ${SEP_LIB_SEARCH_PATHS})
 
 # Core Cycles libraries in dependency order
 find_required_library(CYCLES_UTIL_LIBRARY "cycles_util libcycles_util.a libcycles_util.so libcycles_util.so.* cycles_util.dll cycles_util.lib" "${CYCLES_LIB_SEARCH_PATHS}")
@@ -321,17 +334,16 @@ include_directories(${SEP_INCLUDE_DIRS})
 # This order resolves cyclic dependencies by ensuring symbols are available when needed
 # Use explicit paths to ensure correct libraries are found
 set(CYCLES_LINK_ORDER
-    # Use explicit library paths instead of variables which might not be found
-    /sep/lib/libcycles_util.a
-    /sep/lib/libcycles_graph.a
-    /sep/lib/libcycles_kernel.a
-    /sep/lib/libcycles_bvh.a
-    /sep/lib/libcycles_subd.a
-    /sep/lib/libcycles_device.a
-    /sep/lib/libcycles_scene.a
-    /sep/lib/libcycles_integrator.a
-    /sep/lib/libcycles_session.a
-    /sep/lib/libcycles_osl.a
+    ${CYCLES_UTIL_LIBRARY}
+    ${CYCLES_GRAPH_LIBRARY}
+    ${CYCLES_KERNEL_LIBRARY}
+    ${CYCLES_BVH_LIBRARY}
+    ${CYCLES_SUBD_LIBRARY}
+    ${CYCLES_DEVICE_LIBRARY}
+    ${CYCLES_SCENE_LIBRARY}
+    ${CYCLES_INTEGRATOR_LIBRARY}
+    ${CYCLES_SESSION_LIBRARY}
+    ${CYCLES_OSL_LIBRARY}
 )
 
 # Blender libraries in dependency order
@@ -497,6 +509,7 @@ message(STATUS "Cycles support: ${SEP_HAS_CYCLES}")
 message(STATUS "Blender support: ${SEP_HAS_BLENDER}")
 message(STATUS "Redis support: ${SEP_HAS_HIREDIS}")
 message(STATUS "Cycles root: ${CYCLES_ROOT_DIR}")
+message(STATUS "Cycles lib search: ${CYCLES_LIB_SEARCH_PATHS}")
 message(STATUS "OSL libraries: ${OSL_COMP_LIBRARY} ${OSL_EXEC_LIBRARY} ${OSL_QUERY_LIBRARY}")
 message(STATUS "Critical Cycles OSL: ${CYCLES_OSL_LIBRARY}")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")

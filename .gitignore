@@ -110,3 +110,7 @@ compile_commands.json
 build.log
 assets/sep_engine
 blender
+!include/blender/
+!src/blender/
+!include/blender/cycles_renderer.h
+!src/blender/cycles_renderer.cpp

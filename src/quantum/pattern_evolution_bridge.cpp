@@ -62,7 +62,6 @@ namespace {
 }
 
 namespace {
-// Implementation details
 class PatternEvolutionBridge::Impl {
 public:
     struct EvolutionState {
@@ -510,8 +509,7 @@ public:
         evolution_state_->evolution_tick++;
     }
 };
-} // anonymous namespace
-
+} // namespace
 PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
     : impl_(std::make_unique<Impl>(config)) {}
 

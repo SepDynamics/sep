@@ -369,7 +369,7 @@ public:
                         const std::vector<double> &performance_metrics);
 
 private:
-  AnalyticsConfig config_;
+  sep::config::AnalyticsConfig config_;
   std::vector<double> performance_history_;
   std::mutex history_mutex_;
 

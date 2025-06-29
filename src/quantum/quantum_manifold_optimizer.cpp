@@ -28,9 +28,13 @@ namespace logging = sep::logging;
 #include <execution>
 #include <memory>
 #include <vector>
+#include <string>
+#include <array>
+#include <unordered_map>
+#include <atomic>
 #include <stdexcept>
 
-namespace sep::quantum {
+namespace sep::quantum::manifold {
 
 namespace {
     // Manifold curvature constants for quantum state optimization
@@ -96,4 +100,4 @@ std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::v
 std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
     return std::make_unique<QuantumManifoldOptimizer>(config);
 }
-} // namespace sep::quantum
+} // namespace sep::quantum::manifold

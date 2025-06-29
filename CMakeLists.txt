@@ -190,29 +190,6 @@ if(NOT OpenVDB_FOUND)
 endif()
 
 # Helper to locate optional libraries with extended search paths
-function(find_and_add_library _var)
-  set(options)
-  set(oneValueArgs)
-  set(multiValueArgs NAMES PATHS)
-  cmake_parse_arguments(_FAAL "" "" "NAMES;PATHS" ${ARGN})
-  find_library(${_var}
-    NAMES ${_FAAL_NAMES}
-    PATHS ${_FAAL_PATHS}
-    PATH_SUFFIXES lib lib64
-  )
-  if(${_var})
-    message(STATUS "[FOUND] ${_var}: ${${_var}}")
-  else()
-    message(WARNING "[MISSING] ${_var}")
-    set(${_var} "" PARENT_SCOPE)
-  endif()
-  set(${_var} ${${_var}} PARENT_SCOPE)
-endfunction()
-
-# OpenPGL (Path Guiding Library)
-find_and_add_library(OpenPGL_LIBRARY
-  NAMES pgl
-  PATHS ${CMAKE_SOURCE_DIR}/lib ${CMAKE_INSTALL_PREFIX}/lib /usr/lib64 /usr/local/lib /usr/lib)
 
 # TBB (Threading Building Blocks) -- require a real installation
 find_package(TBB REQUIRED COMPONENTS tbb tbbmalloc)
@@ -267,7 +244,7 @@ find_library(PUGIXML_LIBRARY pugixml)
 
 # Path guiding via OpenPGL
 find_library(OpenPGL_LIBRARY
-    NAMES OpenPGL pgl
+    NAMES OpenPGL openpgl pgl
     PATHS
         ${CMAKE_SOURCE_DIR}/lib
         ${CMAKE_INSTALL_PREFIX}/lib

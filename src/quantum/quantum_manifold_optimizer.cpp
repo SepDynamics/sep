@@ -13,24 +13,28 @@
 
 // Define namespace alias for clarity
 namespace logging = sep::logging;
-#include <glm/glm.hpp>
+#include <algorithm>
+#include <array>
+#include <atomic>
 #include <chrono>
-#include <future>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
 #include <complex>
+#include <condition_variable>
+#include <execution>
+#include <future>
+#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/norm.hpp>
-#include <algorithm>
-#include <cmath>
-#include <numeric>
-#include <execution>
 #include <memory>
-#include <vector>
+#include <mutex>
+#include <numeric>
 #include <stdexcept>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+#include <cmath>
 
-namespace sep::quantum {
+namespace sep::quantum::manifold {
 
 namespace {
     // Manifold curvature constants for quantum state optimization
@@ -67,6 +71,58 @@ namespace {
     }
 }
 
+// Implementation of the optimizer internals
+
+class QuantumManifoldOptimizer::Impl {
+public:
+    struct ManifoldPoint {
+        glm::vec3 position;
+        glm::vec3 momentum;
+        float curvature;
+        float coherence;
+        uint32_t dimension_index;
+        std::vector<uint32_t> neighbor_indices;
+    };
+
+    struct GeodesicPath {
+        std::vector<ManifoldPoint> points;
+        float total_action;
+        float stability_metric;
+        bool is_minimal;
+    };
+
+    explicit Impl(const Config& config);
+    OptimizationResult optimize(const QuantumState& initial_state, const OptimizationTarget& target);
+    void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
+    float computeManifoldCoherence(const glm::vec3& position) const;
+    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
+
+private:
+    Config config_;
+    std::vector<ManifoldPoint> manifold_points_;
+    glm::mat4 riemannian_metric_;
+    std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
+
+    void initializeManifold();
+    ManifoldPoint quantumStateToManifold(const QuantumState& state);
+    QuantumState manifoldToQuantumState(const ManifoldPoint& point);
+    ManifoldPoint targetToManifold(const OptimizationTarget& target);
+    GeodesicPath findOptimalGeodesic(const ManifoldPoint& start, const ManifoldPoint& target);
+    void applyRicciFlow(GeodesicPath& path);
+    void computeNeighborhoods();
+    void updateRiemannianMetric();
+    float computeLocalCurvature(const glm::vec3& position) const;
+    float computeRicciCurvature(const ManifoldPoint& point, const ManifoldPoint& prev, const ManifoldPoint& next) const;
+    glm::vec3 computeFlowDirection(const ManifoldPoint& point, float ricci_curvature) const;
+    float computePathAction(const GeodesicPath& path) const;
+    float computePathStability(const GeodesicPath& path) const;
+    float computeConvergenceMetric(const GeodesicPath& path) const;
+    float computeRicciScalar(const GeodesicPath& path) const;
+    float computeGeodesicDistance(const GeodesicPath& path) const;
+    float computeHolonomyPhase(const GeodesicPath& path) const;
+    float computeResonanceFromCurvature(float curvature) const;
+};
+
 // Public interface implementation
 QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
     : impl_(std::make_unique<Impl>(config)) {}
@@ -96,4 +152,4 @@ std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::v
 std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
     return std::make_unique<QuantumManifoldOptimizer>(config);
 }
-} // namespace sep::quantum
+} // namespace sep::quantum::manifold

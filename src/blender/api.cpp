@@ -3,6 +3,8 @@
 #include "blender/types.h"
 #include "blender/config.h"
 #include "blender/pattern_bridge.h"
+#include "quantum/data.hpp"          // For PatternData/PatternConfig
+#include "memory/types.h"            // For MemoryTierEnum
 #include "compat/component_bridge.h"
 #include <memory>
 #include <string>

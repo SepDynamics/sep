@@ -1,5 +1,5 @@
 #include "api/ollama_client.h"
-#include "ollama/types.h"
+#include "api/ollama_types.h"
 #include <cstdio>
 #include <fstream>
 #include <gtest/gtest.h>

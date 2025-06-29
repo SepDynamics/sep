@@ -201,22 +201,16 @@ find_and_add_library(OpenPGL_LIBRARY
   NAMES pgl
   PATHS ${CMAKE_SOURCE_DIR}/lib ${CMAKE_INSTALL_PREFIX}/lib /usr/lib64 /usr/local/lib /usr/lib)
 
-# TBB (multiple versions for compatibility)
-find_library(TBB_LIBRARY NAMES tbb)
-find_library(TBB_MALLOC_LIBRARY NAMES tbbmalloc)
-find_library(TBB2_LIBRARY NAMES tbb.so.2 tbb2 PATHS
-  /usr/lib64
-  /usr/local/lib
-  /usr/lib
-  /lib64
-  /lib
-)
+# TBB (Threading Building Blocks) -- require a real installation
+find_package(TBB REQUIRED COMPONENTS tbb tbbmalloc)
 
-# If TBB2 isn't found, create a stub variable that won't break the build
-if(NOT TBB2_LIBRARY)
-  message(STATUS "TBB2 library not found, using stub")
-  set(TBB2_LIBRARY "")
-endif()
+# Expose library paths for legacy variables
+get_target_property(TBB_LIBRARY_PATH TBB::tbb LOCATION)
+get_target_property(TBB_MALLOC_LIBRARY_PATH TBB::tbbmalloc LOCATION)
+
+set(TBB_LIBRARY ${TBB_LIBRARY_PATH})
+set(TBB_MALLOC_LIBRARY ${TBB_MALLOC_LIBRARY_PATH})
+set(TBB2_LIBRARY ${TBB_LIBRARY_PATH})
 
 # OpenSubdiv
 find_library(OPENSUBDIV_CPU_LIBRARY NAMES osdCPU)
@@ -243,24 +237,6 @@ if(NOT OPENSUBDIV_CPU_LIBRARY OR NOT OPENSUBDIV_GPU_LIBRARY)
   endforeach()
 endif()
 
-# OpenPGL (Path Guiding Library)
-find_library(OpenPGL_LIBRARY
-    NAMES openpgl pgl
-    PATHS
-        ${CMAKE_INSTALL_PREFIX}/lib
-        /usr/lib64
-        /usr/local/lib
-        /usr/lib
-)
-if(OpenPGL_LIBRARY)
-    set(SEP_HAS_OPENPGL 1)
-    message(STATUS "[FOUND] OpenPGL: ${OpenPGL_LIBRARY}")
-else()
-    set(SEP_HAS_OPENPGL 0)
-    message(WARNING "OpenPGL library not found. Path guiding disabled.")
-    set(OpenPGL_LIBRARY "")
-endif()
-add_compile_definitions(SEP_HAS_OPENPGL=${SEP_HAS_OPENPGL})
 
 # Other critical dependencies
 find_library(OPENIMAGEIO_LIBRARY OpenImageIO)

@@ -26,7 +26,7 @@ Candidates:
 - `OPENSUBDIV_CPU_LIBRARY` (osdCPU/libosdCPU.so.3.6.0)
 - `OPENSUBDIV_GPU_LIBRARY` (osdGPU/libosdGPU.so.3.6.0)
 - `TBB_OPENSUBDIV_LIBRARY` (tbb.so.2/libtbb.so.2)
-- `OpenPGL_LIBRARY` (OpenPGL/pgl)
+- `SEP_HAS_OPENPGL` (libopenpgl.so or libpgl.so)
 
 ### 4. **PipeWire Configuration Issue**
 ```
@@ -256,7 +256,7 @@ options. The most common options are:
 | Cycles Renderer | `SEP_HAS_CYCLES` | Cycles static libs, OSL |
 | PipeWire Audio | `SEP_HAS_PIPEWIRE` | `libpipewire-0.3` |
 | OpenSubdiv | `OPENSUBDIV_FOUND` | `libosdCPU.so`, `libosdGPU.so`, TBB |
-| Path Guiding | `OpenPGL_LIBRARY` | `libpgl.so` |
+| Path Guiding | `SEP_HAS_OPENPGL` | `libopenpgl.so`/`libpgl.so` |
 
 Enable or disable a component by passing `-D<option>=ON/OFF` to CMake. Missing
 libraries fall back to stub implementations through the `component_bridge`

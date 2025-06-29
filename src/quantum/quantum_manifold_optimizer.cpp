@@ -61,8 +61,6 @@ namespace {
     }
 }
 
-namespace PatternEvolutionBridge {
-
 // Public interface implementation
 QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
     : impl_(std::make_unique<Impl>(config)) {}
@@ -92,5 +90,4 @@ std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::v
 std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
     return std::make_unique<QuantumManifoldOptimizer>(config);
 }
-} // namespace PatternEvolutionBridge
 } // namespace sep::quantum

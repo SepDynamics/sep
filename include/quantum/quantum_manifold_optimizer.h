@@ -6,6 +6,7 @@
 #include <chrono>
 #include <complex>
 #include <condition_variable>
+#include <cstdint>
 #include <functional>
 #include <future>
 #include <memory>
@@ -139,6 +140,7 @@ struct ManifoldConfig {
     CudaConfig cuda;
     ApiConfig api;
     LogConfig log;
+    AnalyticsConfig analytics;
 };
 
 // Implementation class

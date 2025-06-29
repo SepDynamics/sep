@@ -1,16 +1,55 @@
 cmake_minimum_required(VERSION 3.16)
-# Include CUDA configuration for library paths
-# Set CUDA flags BEFORE project() to fix compiler version compatibility check
-set(CMAKE_CUDA_FLAGS "-allow-unsupported-compiler")
-set(CMAKE_CUDA_COMPILER_FLAGS "-allow-unsupported-compiler")
-set(ENV{CUDAFLAGS} "-allow-unsupported-compiler")
 
-# Force NVCC to bypass the compiler version check
-set(CMAKE_CUDA_FLAGS_INIT "-allow-unsupported-compiler")
-set(CMAKE_CUDA_COMPILER_INIT "nvcc -allow-unsupported-compiler")
+# Find GCC-14 first
+find_program(GCC_14 NAMES g++-14 REQUIRED)
+if(NOT GCC_14)
+    message(FATAL_ERROR "g++-14 not found. Please install gcc-14")
+endif()
 
-# Enable CUDA as a language so .cu files are compiled
+# Set C++ compiler to GCC-14
+set(CMAKE_CXX_COMPILER ${GCC_14})
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Initialize project with CXX first
 project(SEPEngine LANGUAGES CXX)
+
+# Configure CUDA before finding it
+set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
+set(CMAKE_CUDA_HOST_COMPILER ${GCC_14})
+set(CMAKE_CUDA_ARCHITECTURES "75;80;86")
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+# Set CUDA flags before enabling the language
+set(CMAKE_CUDA_FLAGS_INIT "-allow-unsupported-compiler")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS_INIT}")
+
+# Find CUDA toolkit
+find_package(CUDAToolkit REQUIRED)
+if(NOT CUDAToolkit_FOUND)
+    message(FATAL_ERROR "CUDA Toolkit not found")
+endif()
+
+
+# Additional CUDA configuration after language is enabled
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Wno-deprecated-gpu-targets")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --compiler-bindir=${GCC_14}")
+
+# Configure CUDA compiler
+set(CMAKE_CUDA_COMPILER ${CUDA_NVCC})
+set(CMAKE_CUDA_HOST_COMPILER ${GCC_14})
+
+#--- Host compiler configuration ---
+# Force GCC 14 as the host compiler
+find_program(GCC_14 NAMES g++-14 REQUIRED)
+if(NOT GCC_14)
+    message(FATAL_ERROR "g++-14 not found. Please install gcc-14")
+endif()
+
+set(CMAKE_CXX_COMPILER ${GCC_14})
+set(CMAKE_CUDA_HOST_COMPILER ${GCC_14})
+set(HOST_CXX_FLAGS "-std=c++17")
 
 # Configure CUDA for the project
 set(SEP_CUDA_AVAILABLE ON)
@@ -398,6 +437,7 @@ list(REMOVE_ITEM SEP_ALL_LINK_LIBS "")
 
 # === Internal SEP Libraries ===
 set(SEP_INTERNAL_LIBS
+    sep_main
     sep_api
     sep_blender
     sep_audio
@@ -453,42 +493,22 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         ${OSL_EXEC_LIBRARY}
         ${OSL_QUERY_LIBRARY}
         
-        # Correct dependency order - sep_compat BEFORE sep_core due to CudaCore usage
-        
-        # Link in proper order based on dependencies - only include libraries that exist
-        sep_core
-        sep_quantum
-        sep_memory
-        sep_api
-        sep_blender
-        sep_audio
-        
-        # Link sep_compat shared library with explicit path and rpath
-        ${CMAKE_BINARY_DIR}/src/compat/libsep_compat.so
-        -Wl,-rpath,'$ORIGIN/src/compat'
-        
-        # Add direct CUDA library links
-        -lcudart
-        -lcuda
-        
-        # CUDA libraries must come right after sep_compat, use full paths
-        ${CUDA_PATH}/targets/x86_64-linux/lib/libcudart.so
-        ${CUDA_PATH}/targets/x86_64-linux/lib/libcudadevrt.a
-        ${CUDA_PATH}/targets/x86_64-linux/lib/libcudart_static.a
-        
-        # Add nvrtc for CUDA runtime compilation
-        ${CUDA_PATH}/targets/x86_64-linux/lib/libnvrtc.so
-        ${CUDA_LIBRARIES}
-        # Quantum must come before modules that use it
+        # Link SEP libraries in correct dependency order
         -Wl,--whole-archive
-        sep_quantum
+        sep_compat
         -Wl,--no-whole-archive
+        -Wl,-rpath,'$ORIGIN/src/compat'
+
+        # Link sep_compat first to ensure CUDA symbols are available
+        sep_compat
+        sep_core
         
-        # Remaining internal libraries in dependency order
-        sep_memory
-        sep_audio
-        sep_blender
+        # Core libraries that may use CUDA through sep_compat
         sep_api
+        sep_audio
+        sep_memory
+        sep_blender
+        sep_quantum
         
         # External dependencies
         ${BLENDER_LINK_ORDER}

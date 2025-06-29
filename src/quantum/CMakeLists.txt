@@ -1,21 +1,40 @@
 add_library(sep_quantum STATIC
-    qbsa.cpp
-    qbsa_qfh.cpp
-    qfh.cpp
-    quantum_processor.cpp
-    quantum_processor_qfh.cpp
-    quantum_processor_qfh_common.cpp
     evolution.cpp
-    processor.cpp
+    pattern_evolution.cpp
+    quantum_processor_qfh.cpp
+    qbsa_qfh.cpp
+    qbsa.cpp
+    qfh.cpp
+    quantum_processor_qfh_common.cpp
     types_serialization.cpp
     pattern_processor.cpp
     pattern_processor_interface.cpp
+    processor.cpp
+    quantum_manifold_optimizer.cpp
+    pattern_evolution_bridge.cpp
+    quantum_processor.cpp
 )
 
-target_sources(sep_quantum PRIVATE
-  quantum_manifold_optimizer.cpp
-  pattern_evolution_bridge.cpp
+# Link dependencies
+target_link_libraries(sep_quantum
+    PUBLIC
+        sep_core
+    PRIVATE
+        sep_compat # Link compat once, it handles CUDA internally
 )
+
+# Configure basic properties
+set_target_properties(sep_quantum PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    CXX_VISIBILITY_PRESET default
+    VISIBILITY_INLINES_HIDDEN OFF
+)
+
+# Configure CUDA options if available
+if(SEP_CUDA_AVAILABLE)
+    target_compile_definitions(sep_quantum PRIVATE SEP_HAS_CUDA=1)
+    # CUDA includes and device symbols are handled by sep_compat
+endif()
 
 target_include_directories(sep_quantum
     PUBLIC

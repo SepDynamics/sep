@@ -1,55 +1,113 @@
 #CustomCUDA.cmake
 #Custom CMake module for CUDA compilation that bypasses CMake's built-in CUDA language support
-set(LANGUAGES CUDA)
-# Force apply CUDA flags early for compiler identification
+# Find CUDA toolkit and set paths
+find_package(CUDAToolkit REQUIRED)
+if(NOT CUDAToolkit_FOUND)
+    message(FATAL_ERROR "CUDA Toolkit not found")
+endif()
 
-find_package(CUDAToolkit QUIET)
+# Set CUDA paths based on found toolkit
+set(CUDA_PATH ${CUDAToolkit_ROOT_DIR} CACHE PATH "Path to CUDA installation")
+message(STATUS "Found CUDA Toolkit at: ${CUDA_PATH}")
 
-#--- CUDA paths and settings ---
-set(CUDA_PATH "/usr/local/cuda-12.9" CACHE PATH "Path to CUDA installation")
+# Ensure CUDA runtime library exists
+if(NOT EXISTS "${CUDAToolkit_LIBRARY_DIR}/libcudart.so")
+    message(FATAL_ERROR "CUDA runtime library not found in ${CUDAToolkit_LIBRARY_DIR}")
+endif()
+# Find CUDA compiler with expanded search paths
+find_program(CUDA_NVCC
+    NAMES nvcc
+    PATHS
+        ${CUDA_PATH}/bin
+        /usr/local/cuda*/bin
+        /usr/local/cuda/bin
+        /opt/cuda/bin
+    DOC "CUDA compiler (nvcc)"
+    NO_DEFAULT_PATH
+)
 
-#--- CUDA architectures ---
-set(CUDA_ARCHITECTURES "70;75;80;86;89" CACHE STRING "CUDA architectures to compile for")
+if(NOT CUDA_NVCC)
+    message(FATAL_ERROR "CUDA nvcc compiler not found. Searched in: ${CUDA_PATH}/bin, /usr/local/cuda*/bin")
+endif()
+
+message(STATUS "Found CUDA compiler: ${CUDA_NVCC}")
+
+# Get CUDA version and set architectures
+execute_process(
+    COMMAND ${CUDA_NVCC} --version
+    OUTPUT_VARIABLE NVCC_OUT
+    ERROR_VARIABLE NVCC_ERR
+    RESULT_VARIABLE NVCC_RES
+)
+
+if(NVCC_RES EQUAL 0)
+    string(REGEX MATCH "release ([0-9]+)\\.([0-9]+)" CUDA_VERSION_MATCH "${NVCC_OUT}")
+    set(CUDA_VERSION_MAJOR "${CMAKE_MATCH_1}")
+    set(CUDA_VERSION_MINOR "${CMAKE_MATCH_2}")
+    
+    # Set architectures based on CUDA version
+    if(CUDA_VERSION_MAJOR GREATER_EQUAL 11)
+        set(CUDA_ARCHITECTURES "70;75;80;86" CACHE STRING "CUDA architectures to compile for")
+    else()
+        set(CUDA_ARCHITECTURES "60;70;75" CACHE STRING "CUDA architectures to compile for")
+    endif()
+else()
+    message(WARNING "Failed to detect CUDA version, defaulting to common architectures")
+    set(CUDA_ARCHITECTURES "70;75" CACHE STRING "CUDA architectures to compile for")
+endif()
 
 #--- CUDA include directories ---
 set(CUDA_INCLUDE_DIRS "${CUDA_PATH}/include" CACHE PATH "CUDA include directories")
 
 #--- CUDA libraries ---
 # Use full paths to CUDA libraries instead of just names to fix linking issues
-set(CUDA_LIBRARIES
-    "${CUDA_PATH}/targets/x86_64-linux/lib/libcudart.so"
-    "${CUDA_PATH}/targets/x86_64-linux/lib/libcudadevrt.a"
-    "${CUDA_PATH}/targets/x86_64-linux/lib/libcudart_static.a"
-    CACHE STRING "CUDA libraries" FORCE
-)
+# Set CUDA library paths based on actual installation
+# Dynamically find CUDA library directories
 set(CUDA_LIBRARY_DIRS
-    "${CUDA_PATH}/lib64"
     "${CUDA_PATH}/targets/x86_64-linux/lib"
-    "${CUDA_PATH}/targets/x86_64-linux/lib/stubs"
+    "${CUDA_PATH}/lib64"
+    "${CUDA_PATH}/lib"
     CACHE STRING "CUDA library directories"
 )
 
-# Check if the expected CUDA library path exists; if not, disable CUDA support.
-if(NOT EXISTS "${CUDA_PATH}/lib64")
-    message(WARNING "CUDA path ${CUDA_PATH} not found; disabling CUDA support")
-    set(CUDAToolkit_FOUND OFF CACHE BOOL "CUDA toolkit found" FORCE)
-    set(CUDA_LIBRARIES "" CACHE STRING "CUDA libraries" FORCE)
-    set(CUDA_LIBRARY_DIRS "" CACHE STRING "CUDA library directories" FORCE)
-else()
-    # Add CUDA library directories and include directories globally
-    link_directories(${CUDA_LIBRARY_DIRS})
-    include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
+# Find CUDA runtime library
+find_library(CUDA_CUDART_LIBRARY
+    NAMES cudart
+    PATHS ${CUDAToolkit_LIBRARY_DIR}
+    NO_DEFAULT_PATH
+)
+
+if(NOT CUDA_CUDART_LIBRARY)
+    message(FATAL_ERROR "Could not find CUDA runtime library (libcudart.so) in ${CUDA_LIBRARY_DIRS}")
 endif()
 
-#--- Host compiler flags ---
-# Enforce C++20 for GCC 14
-set(HOST_CXX_FLAGS "-std=c++17")
+message(STATUS "Found CUDA Runtime Library: ${CUDA_CUDART_LIBRARY}")
 
-# Make sure CMake uses the GCC 14 host compiler for CUDA
-set(CMAKE_CUDA_HOST_COMPILER ${CUDA_HOST_COMPILER})
+set(CUDA_LIBRARIES
+    ${CUDA_CUDART_LIBRARY}
+    CACHE STRING "CUDA libraries" FORCE
+)
+
+# Add runtime path for dynamic linking
+set(CMAKE_BUILD_RPATH ${CUDA_LIBRARY_DIRS})
+
+# Add CUDA library directories and include directories globally
+link_directories(${CUDA_LIBRARY_DIRS})
+include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
+
+
+
+# Find GCC 14
+find_program(GCC_14 NAMES g++-14 g++)
+if(NOT GCC_14)
+    message(FATAL_ERROR "GCC 14 compiler not found")
+endif()
 
 #--- CUDA compilation flags ---
 set(CUDA_NVCC_FLAGS)
+
+# Ensure CUDA uses GCC 14
+set(CUDA_HOST_COMPILER ${GCC_14})
 list(APPEND CUDA_NVCC_FLAGS
     "-allow-unsupported-compiler"
     "-use_fast_math"

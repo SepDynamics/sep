@@ -60,7 +60,6 @@ target_include_directories(blender_tests
         /sep/include/sep
         /sep/include/sep/pattern
         /sep/include/sep/memory
-        /sep/include/sep/context
         /sep/include/sep/core
         /sep/include/sep/api
         /sep/include/sep/quantum

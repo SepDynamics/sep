@@ -54,20 +54,20 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         # First link CUDA implementation to resolve sep::cuda symbols
         ${CUDA_LIBRARIES}
         ${CYCLES_CUDA_LIBRARIES}
-        # Then link all Cycles components with whole-archive
-        -Wl,--whole-archive
+        # Then link all Cycles components grouped for dependency resolution
+        -Wl,--start-group
         ${CYCLES_LINK_ORDER}
         ${CYCLES_SCENE_LIBRARIES}
         ${CYCLES_KERNEL_LIBRARIES}
         ${CYCLES_DEVICE_LIBRARIES}
         ${CYCLES_RENDER_LIBRARIES}
         ${CYCLES_RENDER_LIB}
-        -Wl,--no-whole-archive
+        -Wl,--end-group
 
-        # Link OSL implementation with whole-archive
-        -Wl,--whole-archive
+        # Link OSL implementation with group to avoid duplicate symbols
+        -Wl,--start-group
         ${CYCLES_OSL_LIBRARY}
-        -Wl,--no-whole-archive
+        -Wl,--end-group
 
         # Then link system OSL libraries in correct order
         ${OSL_COMP_LIBRARY}

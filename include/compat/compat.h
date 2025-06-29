@@ -5,7 +5,6 @@
 #include "compat/macros.h"
 
 // CUDA compatibility layer for SEP engine
-#include "compat/macros.h"
 #if SEP_CUDA_AVAILABLE
 #include "compat/math_common.h"
 #include <cuda_runtime.h>

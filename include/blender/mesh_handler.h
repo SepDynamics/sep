@@ -4,7 +4,7 @@
 #include <memory>
 #include "compat/shim.h"
 
-#include "blender/compat/blender_types.h"
+#include "blender/blender_types.h"
 #include "blender/pattern_common.h"
 #include "quantum/data.hpp"
 

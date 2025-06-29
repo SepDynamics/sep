@@ -1,6 +1,6 @@
 #pragma once
 
-#include "blender/compat/blender_types.h"
+#include "blender/blender_types.h"
 
 /*
  * Minimal Blender type definitions for tests and standalone builds.

@@ -4,7 +4,7 @@
 
 // Assuming these are the correct paths and necessary includes from the original bridge.h
 #include "blender/base_types.h"
-#include "blender/compat/blender_types.h"  // If still needed
+#include "blender/blender_types.h"  // If still needed
 #include "blender/gpu_context.h"           // For GPUContext
 #include "blender/pattern_common.h"  // For ObjectState (assuming)
 #include "blender/bridge.h"

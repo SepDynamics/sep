@@ -26,7 +26,6 @@ namespace logging = sep::logging; // Fix: Use namespace alias
 
 #include "compat/core.h" // Fix: Include core
 #include "compat/cuda_common.h" // Fix: Include cuda_common
-#include "compat/shim.h" // Fix: Include shim
 
 namespace sep {
 namespace core {
@@ -52,57 +51,57 @@ Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
 bool Engine::init(const sep::config::APIConfig& config) {
     impl_->config = config;
     printf("DEBUG: Engine::init - Before CudaCore instance\n");
-    fflush(stdout);
+     // fflush(stdout);
 
     auto& cuda_core = cuda::CudaCore::instance();
     printf("DEBUG: Engine::init - Got CudaCore instance\n");
-    fflush(stdout);
+     // fflush(stdout);
     
     // Try GPU device 0 first with extensive error logging
     printf("DEBUG: Engine::init - Trying GPU device 0\n");
-    fflush(stdout);
+     // fflush(stdout);
 
     auto init_err = cuda_core.initialize(0);
     printf("DEBUG: Engine::init - initialize(0) returned code %d, message: %s\n",
            static_cast<int>(init_err.code), init_err.message.c_str());
-    fflush(stdout);
+     // fflush(stdout);
     
     if (init_err.code != sep::SEPResult::SUCCESS) {
         printf("DEBUG: Engine::init - Trying GPU device 1\n");
-        fflush(stdout);
+         // fflush(stdout);
 
         // Try GPU device 1 as fallback
         init_err = cuda_core.initialize(1);
         printf("DEBUG: Engine::init - initialize(1) returned code %d, message: %s\n",
                static_cast<int>(init_err.code), init_err.message.c_str());
-        fflush(stdout);
+         // fflush(stdout);
         
         if (init_err.code != sep::SEPResult::SUCCESS) {
  printf("DEBUG: Engine::init - All GPU devices failed, giving up\n"); // Fix: Use printf
-            fflush(stdout);
+             // fflush(stdout);
             return false;
         }
     }
 
  printf("DEBUG: Engine::init - CUDA initialized successfully\n"); // Fix: Use printf
-    fflush(stdout);
+     // fflush(stdout);
     
     // Create default stream
     printf("DEBUG: Engine::init - Creating CUDA stream\n");
-    fflush(stdout);
+     // fflush(stdout);
     
     impl_->stream_ = cuda_core.createStream(sep::StreamFlags::Default);
     if (!impl_->stream_) {
         printf("DEBUG: Engine::init - Failed to create CUDA stream\n");
-        fflush(stdout);
+         // fflush(stdout);
         return false;
     }
     printf("DEBUG: Engine::init - CUDA stream created successfully\n");
-    fflush(stdout);
+     // fflush(stdout);
 
     // Allocate device memory
     printf("DEBUG: Engine::init - Allocating device memory\n");
-    fflush(stdout); // Fix: Use printf
+     // fflush(stdout); // Fix: Use printf
     
     try {
         impl_->d_bitfield_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
@@ -115,14 +114,14 @@ bool Engine::init(const sep::config::APIConfig& config) {
         impl_->d_collapse_counts_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
         
         printf("DEBUG: Engine::init - Device memory allocated successfully\n");
-        fflush(stdout);
+         // fflush(stdout);
     } catch (const std::exception& e) {
         printf("DEBUG: Engine::init - Exception during device memory allocation: %s\n", e.what());
-        fflush(stdout);
+         // fflush(stdout);
         return false;
     } catch (...) {
         printf("DEBUG: Engine::init - Unknown exception during device memory allocation\n");
-        fflush(stdout);
+         // fflush(stdout);
         return false;
     }
 
@@ -142,51 +141,51 @@ bool Engine::init(const sep::config::APIConfig& config) {
     impl_->d_collapse_counts_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
 
     printf("DEBUG: Engine::init - Initializing audio capture\n");
-    fflush(stdout);
+     // fflush(stdout);
 
     try {
         audio_capture_ = ::sep::compat::createAudioCapture();
         if (!audio_capture_) {
             printf("DEBUG: Engine::init - Failed to create audio capture\n");
-            fflush(stdout);
+             // fflush(stdout);
         } else {
             auto err = audio_capture_->init(audio::AudioConfig{});
             if (err != audio::AudioError::NONE) {
                 printf("DEBUG: Engine::init - Audio capture init failed with error %d\n", static_cast<int>(err));
-                fflush(stdout);
+                 // fflush(stdout);
                 audio_capture_.reset();
             } else {
                 printf("DEBUG: Engine::init - Audio capture initialized successfully\n");
-                fflush(stdout);
+                 // fflush(stdout);
             }
         }
     } catch (const std::exception& e) {
         printf("DEBUG: Engine::init - Exception during audio capture init: %s\n", e.what());
-        fflush(stdout);
+         // fflush(stdout);
     } catch (...) {
         printf("DEBUG: Engine::init - Unknown exception during audio capture init\n");
-        fflush(stdout);
+         // fflush(stdout);
     }
 
 #if SEP_HAS_BLENDER
     printf("DEBUG: Engine::init - Initializing Blender bridge\n");
-    fflush(stdout);
+     // fflush(stdout);
 
     try {
         blender_bridge_ = ::sep::compat::createBlenderBridge();
         printf("DEBUG: Engine::init - Blender bridge created successfully\n");
-        fflush(stdout);
+         // fflush(stdout);
     } catch (const std::exception& e) {
         printf("DEBUG: Engine::init - Exception during Blender bridge creation: %s\n", e.what());
-        fflush(stdout);
+         // fflush(stdout);
     } catch (...) {
         printf("DEBUG: Engine::init - Unknown exception during Blender bridge creation\n");
-        fflush(stdout);
+         // fflush(stdout);
     }
 #endif
 
     printf("DEBUG: Engine::init - Setting initialized flag\n");
-    fflush(stdout);
+     // fflush(stdout);
 
     impl_->initialized = true;
     return true;
@@ -246,8 +245,8 @@ Engine::~Engine() {
 }
 
 void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
-                             ::sep::shim::vector<std::uint32_t>& indices,
-                             ::sep::shim::vector<std::uint32_t>& expectations, std::uint64_t tick ) {
+                              ::sep::shim::vector<std::uint32_t>& indices,
+                              ::sep::shim::vector<std::uint32_t>& expectations, std::uint64_t  tick) {
     if (inputs.empty()) {
         ::sep::core::ErrorHandler::instance().reportError(
             {sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::generate_probes"});

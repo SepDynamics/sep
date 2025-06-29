@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "memory/types.h"
-
 namespace sep::quantum {
 
 enum class RelationshipType { ENTANGLEMENT, CAUSAL, SIMILARITY };

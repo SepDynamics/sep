@@ -62,7 +62,7 @@ namespace {
 
 namespace {
 // Implementation details
-class PatternEvolutionBridgeImpl {
+class PatternEvolutionBridge::Impl {
 public:
     struct EvolutionState {
         std::vector<Pattern> active_patterns;

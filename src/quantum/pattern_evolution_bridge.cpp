@@ -31,6 +31,7 @@ namespace logging = sep::logging;
 
 namespace sep::quantum {
 
+using manifold::QuantumManifoldOptimizer;
 
 namespace {
     // Evolution constants from quantum field theory
@@ -520,6 +521,20 @@ void PatternEvolutionBridge::initializeEvolutionState() {
 
 void PatternEvolutionBridge::updatePatterns(const std::vector<Pattern>& patterns) {
     impl_->updatePatterns(patterns);
+}
+
+EvolutionResult PatternEvolutionBridge::evolvePatterns(std::vector<Pattern>& patterns,
+                                                       float time_step) {
+    return impl_->evolvePatterns(patterns, time_step);
+}
+
+std::vector<EntanglementPair> PatternEvolutionBridge::computeEntanglements(
+    const std::vector<Pattern>& patterns) {
+    return impl_->computeEntanglements(patterns);
+}
+
+CollapseEvent PatternEvolutionBridge::detectCollapse(const std::vector<Pattern>& patterns) {
+    return impl_->detectCollapse(patterns);
 }
 
 } // namespace sep::quantum

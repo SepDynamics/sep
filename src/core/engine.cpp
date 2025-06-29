@@ -19,6 +19,9 @@ namespace logging = sep::logging;
 
 #include "compat/core.h"
 #include "compat/cuda_common.h"
+#if !SEP_CUDA_AVAILABLE
+#include "compat/cuda_runtime.h"
+#endif
 
 #include "compat/macros.h"
 #include "compat/memory.h"

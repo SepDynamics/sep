@@ -4,6 +4,9 @@
 #include "quantum/pattern.h"      // For QuantumPattern definition
 
 #include "compat/cuda_common.h"
+#if !SEP_CUDA_AVAILABLE
+#include "compat/cuda_runtime.h"
+#endif
 
 #include "compat/component_bridge.h"
 #include "compat/cuda_helpers.h"

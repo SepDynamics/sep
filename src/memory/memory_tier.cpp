@@ -18,6 +18,9 @@
 
 // CUDA headers after standard library
 #include "compat/cuda_common.h"
+#if !SEP_CUDA_AVAILABLE
+#include "compat/cuda_runtime.h"
+#endif
 #include "compat/macros.h"
 
 #include "compat/math_common.h"

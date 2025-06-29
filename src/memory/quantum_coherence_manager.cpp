@@ -110,7 +110,7 @@ public:
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
             const auto& data = pair.second;
-            sep::MemoryTierEnum target_tier = determineOptimalTier(data);
+            ::sep::memory::MemoryTierEnum target_tier = determineOptimalTier(data);
 
             if (target_tier != data.current_tier) {
                 TierMigration migration;
@@ -562,8 +562,8 @@ private:
         for (size_t i = 0; i < demote_count && i < demotion_candidates.size(); ++i) {
             TierMigration migration;
             migration.pattern_id = demotion_candidates[i].first;
-            migration.from_tier = sep::MemoryTierEnum::LTM;
-            migration.to_tier = sep::MemoryTierEnum::MTM;
+            migration.from_tier = ::sep::memory::MemoryTierEnum::LTM;
+            migration.to_tier = ::sep::memory::MemoryTierEnum::MTM;
             migration.coherence = demotion_candidates[i].second;
             migration.reason = MigrationReason::MemoryPressure;
             
@@ -676,9 +676,9 @@ private:
     
     float getThresholdForTier(sep::memory::MemoryTierEnum tier) const {
         switch (tier) {
-            case sep::MemoryTierEnum::LTM: return LTM_COHERENCE_THRESHOLD;
-            case sep::MemoryTierEnum::MTM: return MTM_COHERENCE_THRESHOLD;
-            case sep::MemoryTierEnum::STM: return STM_COHERENCE_THRESHOLD;
+            case ::sep::memory::MemoryTierEnum::LTM: return LTM_COHERENCE_THRESHOLD;
+            case ::sep::memory::MemoryTierEnum::MTM: return MTM_COHERENCE_THRESHOLD;
+            case ::sep::memory::MemoryTierEnum::STM: return STM_COHERENCE_THRESHOLD;
             default: return 0.0f;
         }
     }
@@ -688,7 +688,7 @@ private:
         
         for (int i = 0; i < 3; ++i) {
             analysis.tier_coherence[i] = metrics_.tier_coherence[i];
-            analysis.tier_pattern_count[i] = countPatternsInTier(static_cast<sep::MemoryTierEnum>(i));
+            analysis.tier_pattern_count[i] = countPatternsInTier(static_cast<::sep::memory::MemoryTierEnum>(i));
         }
         
         analysis.optimal_distribution = computeOptimalDistribution();
@@ -750,11 +750,11 @@ uint64_t QuantumCoherenceManager::getGlobalTick() const {
     return impl_->getGlobalTick();
 }
 
-uint32_t QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum tier) const {
+uint32_t QuantumCoherenceManager::getPatternCountByTier(::sep::memory::MemoryTierEnum tier) const {
     return impl_->getPatternCountByTier(tier);
 }
 
-float QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum tier) const {
+float QuantumCoherenceManager::getTierFragmentation(::sep::memory::MemoryTierEnum tier) const {
     return impl_->getTierFragmentation(tier);
 }
 

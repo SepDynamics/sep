@@ -50,7 +50,7 @@ sep::SEPResult sep_process_audio(
 // Synchronize SEP memory tiers with Blender
 sep::SEPResult sep_sync_memory(
     SEPBlenderBridge* bridge,      // [in] Bridge instance
-    sep::MemoryTierEnum tier,      // [in] Target memory tier
+    ::sep::memory::MemoryTierEnum tier,      // [in] Target memory tier
     bool force                     // [in] Force immediate sync
 );
 

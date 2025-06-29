@@ -2,6 +2,7 @@
 
 #include "compat/shim.h"
 #include "quantum/types.h"
+#include "memory/types.h"
 #include <glm/glm.hpp>
 #include <vector>
 

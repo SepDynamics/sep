@@ -383,11 +383,11 @@ sep::SEPResult BlenderBridge::updateResourceStats()
     auto& manager = sep::memory::MemoryTierManager::getInstance();
 
     float stm_util = manager.getTierUtilization(
-        static_cast<sep::memory::TierType>(sep::MemoryTierEnum::STM));
+        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::STM));
     float mtm_util = manager.getTierUtilization(
-        static_cast<sep::memory::TierType>(sep::MemoryTierEnum::MTM));
+        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::MTM));
     float ltm_util = manager.getTierUtilization(
-        static_cast<sep::memory::TierType>(sep::MemoryTierEnum::LTM));
+        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::LTM));
 
     if (stm_util > 0.9f)
         notifyResourceWarning(ResourceType::HOST_MEMORY, stm_util);

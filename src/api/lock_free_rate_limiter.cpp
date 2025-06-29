@@ -1,4 +1,5 @@
 #include "api/lock_free_rate_limiter.h"
+#include "api/rate_limiter.h" // for factory declaration
 #include "api/background_cleanup.h"
 #include "crow/crow_isolation.h"
 #include <nlohmann/json.hpp>

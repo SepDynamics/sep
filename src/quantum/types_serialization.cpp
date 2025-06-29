@@ -13,6 +13,8 @@ void to_json(nlohmann::json& j, const QuantumState& state) {
         {"mutation_rate", state.mutation_rate},
         {"generation", state.generation},
         {"mutation_count", state.mutation_count},
+        {"amplitudes", state.amplitudes},
+        {"basis_states", state.basis_states},
         {"memory_tier", static_cast<int>(state.memory_tier)}, // Fix: serialize memory_tier as int
         {"access_frequency", state.access_frequency}
     };
@@ -25,6 +27,8 @@ void from_json(const nlohmann::json& j, QuantumState& state) {
     j.at("mutation_rate").get_to(state.mutation_rate);
     j.at("generation").get_to(state.generation);
     j.at("mutation_count").get_to(state.mutation_count);
+    if (j.contains("amplitudes")) j.at("amplitudes").get_to(state.amplitudes);
+    if (j.contains("basis_states")) j.at("basis_states").get_to(state.basis_states);
     state.memory_tier = static_cast<sep::memory::MemoryTierEnum>(j.value("memory_tier", 0)); // Fix: default value for memory_tier
     j.at("access_frequency").get_to(state.access_frequency);
 }
@@ -48,6 +52,7 @@ void to_json(nlohmann::json& j, const Pattern& pattern) {
         {"id", pattern.id},
         {"position", {pattern.position.x, pattern.position.y, pattern.position.z, pattern.position.w}},
         {"quantum_state", pattern.quantum_state},
+        {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z}},
         {"relationships", pattern.relationships},
         {"data", pattern.data},
         {"parent_ids", pattern.parent_ids},
@@ -61,6 +66,12 @@ void from_json(const nlohmann::json& j, Pattern& pattern) {
     j.at("id").get_to(pattern.id);
     auto pos = j.at("position").get<std::vector<float>>();
     pattern.position = glm::vec4(pos[0], pos[1], pos[2], pos[3]);
+    if (j.contains("momentum")) {
+        auto mom = j.at("momentum").get<std::vector<float>>();
+        if (mom.size() >= 3) {
+            pattern.momentum = glm::vec3(mom[0], mom[1], mom[2]);
+        }
+    }
     j.at("relationships").get_to(pattern.relationships);
     j.at("data").get_to(pattern.data);
     j.at("parent_ids").get_to(pattern.parent_ids);

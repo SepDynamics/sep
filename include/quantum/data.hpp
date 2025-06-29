@@ -5,6 +5,8 @@
 #include "memory/types.h"
 #include <glm/glm.hpp>
 #include <vector>
+#include <complex>
+#include "quantum/pattern.h"
 
 namespace sep {
 namespace pattern {
@@ -20,6 +22,9 @@ struct PatternData {
     float entropy{0.0f};
     float mutation_rate{0.0f};
     std::uint32_t mutation_count{0};
+    std::complex<float> amplitude{1.0f, 0.0f};
+    ::sep::quantum::manifold::QuantumState state{::sep::quantum::manifold::QuantumState::SUPERPOSITION};
+    float phase{0.0f};
     ::sep::memory::MemoryTierEnum memory_tier{::sep::memory::MemoryTierEnum::STM};
     std::vector<quantum::PatternRelationship> relationships;
 };

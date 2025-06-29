@@ -22,7 +22,7 @@ public:
     PatternProcessResult processPattern(
         const QuantumState& state,
         const std::string& pattern_id) override {
-        PatternProcessResult result;
+        PatternProcessResult result{};
         result.state = state;
         result.pattern_id = pattern_id;
         result.memory_tier = ::sep::memory::MemoryTierEnum::STM; // Default to Short-Term Memory
@@ -33,6 +33,8 @@ public:
         
         // Process using quantum processor
         bool success = quantum_processor_->processPattern(stateData, numericId);
+        result.success = success;
+        result.error_message.clear();
         
         if (success) {
             // Update state values based on processing
@@ -51,6 +53,7 @@ public:
             // Handle error case
             result.coherence_score = 0.0f;
             result.stability_score = 0.0f;
+            result.error_message = "processing_failed";
         }
 
         // Determine memory tier
@@ -60,6 +63,10 @@ public:
         } else if (result.coherence_score >= constants::MTM_COHERENCE_THRESHOLD) {
             result.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
         }
+
+        result.tier_changed = (result.memory_tier != state.memory_tier);
+        result.state.memory_tier = result.memory_tier;
+        result.generation = result.state.generation;
 
         return result;
     }

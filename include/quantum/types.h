@@ -27,6 +27,8 @@ struct QuantumState {
     float mutation_rate{0.0f};
     int generation{0};
     int mutation_count{0};
+    std::vector<double> amplitudes;
+    std::vector<std::uint32_t> basis_states;
     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
     float access_frequency{0.0f};
 };
@@ -40,6 +42,7 @@ struct PatternRelationship {
 struct Pattern {
     std::string id;
     glm::vec4 position;
+    glm::vec3 momentum{0.0f};
     QuantumState quantum_state;
     std::vector<PatternRelationship> relationships;
     std::vector<float> data;

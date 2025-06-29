@@ -30,6 +30,9 @@ struct PatternProcessResult {
     bool tier_changed{false};
     float coherence_score{0.0F};
     float stability_score{0.0F};
+    int generation{0};
+    bool success{false};
+    std::string error_message;
 };
 
 // Pattern quantum processor interface

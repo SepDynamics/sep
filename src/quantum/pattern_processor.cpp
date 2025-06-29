@@ -25,7 +25,7 @@ public:
         PatternProcessResult result;
         result.state = state;
         result.pattern_id = pattern_id;
-        result.memory_tier = MemoryTierEnum::STM; // Default to Short-Term Memory
+        result.memory_tier = ::sep::memory::MemoryTierEnum::STM; // Default to Short-Term Memory
         
         // Convert state to a format the quantum processor can use
         glm::vec3 stateData(state.coherence, state.stability, state.entropy);
@@ -56,9 +56,9 @@ public:
         // Determine memory tier
         if (result.coherence_score >= constants::LTM_COHERENCE_THRESHOLD &&
             result.stability_score >= pattern::STABILITY_THRESHOLD) {
-            result.memory_tier = MemoryTierEnum::LTM;
+            result.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
         } else if (result.coherence_score >= constants::MTM_COHERENCE_THRESHOLD) {
-            result.memory_tier = MemoryTierEnum::MTM;
+            result.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
         }
 
         return result;

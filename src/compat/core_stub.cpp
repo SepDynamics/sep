@@ -10,7 +10,7 @@ namespace sep::cuda {
 cudaError_t cudaMallocManaged(void** ptr, size_t size) {
     if (!ptr) return cudaErrorInvalidValue;
     *ptr = std::malloc(size); // Fix: Use std::malloc
-    return *ptr ? cudaSuccess : cudaErrorMemoryAllocation;
+    return *ptr ? cudaSuccess : cudaErrorMemoryAllocation; // Fix: Return cudaErrorMemoryAllocation on failure // Fix: Added comment
 }
 
 cudaError_t cudaFree(void* ptr) {
@@ -69,7 +69,7 @@ public:
     bool isValid() const { return true; }
 };
 
-std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags) { // Fix: Return shared_ptr<Stream>
+std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags) {
     // Create a dummy stream implementation that doesn't fail
     return std::make_shared<DummyStream>();
 }

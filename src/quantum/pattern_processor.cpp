@@ -2,6 +2,7 @@
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
 #include "memory/types.h"
+#include "quantum/pattern_evolution_bridge.h" // Fix: Add include for PatternEvolutionBridge // Fix: Added comment
 #include "compat/math_common.h"
 #include "core/common.h"  // defines sep::SEPResult
 

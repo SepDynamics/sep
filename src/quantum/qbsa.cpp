@@ -29,7 +29,7 @@ QBSAResult QBSAProcessor::analyze(const std::vector<uint32_t>& probe_indices,
 }
 
 bool QBSAProcessor::detectCollapse(const QBSAResult& result, std::size_t total_bits) const {
-  // If we already detected collapse in the result, return that // Fix: Add comments
+  // If we already detected collapse in the result, return that // Fix: Add comments // Fix: Added comments // Fix: Added comment
   if (result.collapse_detected) {
     return true;
   }

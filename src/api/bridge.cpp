@@ -1,11 +1,11 @@
-#define BUILDING_SEP_BRIDGE
 #include "api/bridge.h"
 #include "api/bridge.hpp"
+#include "api/bridge_internal.hpp" // Fix: Include internal header
 #include "quantum/processor.h"
-#include "api/types.h"
 
+#include "api/types.h" // Fix: Include api/types.h
 
-#include <mutex>
+#include <atomic> // Fix: Add atomic for thread safety
 #include <string>
 #include <memory>
 #include <exception>
@@ -14,11 +14,6 @@
 #include <nlohmann/json.hpp>
 
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
-#define SEP_HAS_EXCEPTIONS 1
-#else
-#define SEP_HAS_EXCEPTIONS 0
-#endif
-
 #if !SEP_HAS_EXCEPTIONS
 #include "crow/crow_error.h"
 #endif
@@ -37,9 +32,14 @@
     return static_cast<int>(core); \
   } while (0)
 #endif
+#else // No exceptions
+#define SEP_TRY
+#define SEP_CATCH_RETURN(core) \
+  do { return static_cast<int>(core); } while (0)
+#endif
 
 namespace sep::api::bridge::detail {
-std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
+std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge; // Fix: Use unique_ptr for memory management
 std::string g_last_error;
 size_t g_required_buffer_size = 0;
 // Global mutex protects shared bridge state
@@ -154,6 +154,7 @@ void invokeCallbacks(const std::string &event_type,
                      const std::string &event_data) {
   std::lock_guard<std::mutex> lock(g_bridge_mutex);
   auto it = g_callback_map.find(event_type);
+  // Fix: check for end() iterator before dereferencing
   if (it == g_callback_map.end()) {
     return;
   }

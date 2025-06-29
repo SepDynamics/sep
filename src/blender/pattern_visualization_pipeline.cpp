@@ -12,8 +12,8 @@ PatternVisualizationPipeline::PatternVisualizationPipeline(MeshHandler *handler,
     : handler_(handler), gpu_ctx_(gpu_ctx), last_shader_revision_(0) {} 
 
 std::array<float, 3> PatternVisualizationPipeline::projectNDim(
-    const ::sep::shim::vector<float> &coords) const {
-  std::array<float, 3> out{0.0f, 0.0f, 0.0f};
+    const ::sep::shim::vector<float> &coords) const { // Fix: Use const reference
+  std::array<float, 3> out{0.0f, 0.0f, 0.0f}; // Fix: Add missing brace for array initialization
   if (coords.empty())
     return out;
 

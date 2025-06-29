@@ -13,6 +13,10 @@ set(CMAKE_CUDA_COMPILER_INIT "nvcc -allow-unsupported-compiler")
 # Enable CUDA as a language
 project(SEPEngine LANGUAGES CXX)
 
+# Configure CUDA
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
 # === Professional Project Configuration ===
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

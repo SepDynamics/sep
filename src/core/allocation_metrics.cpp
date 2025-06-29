@@ -6,7 +6,7 @@
 namespace sep::metrics {
 namespace {
 Counter g_allocation_failures{"allocation_failures_total", "Total memory allocation failures"};
-bool registered = false;
+bool registered = false; // Fix: Initialize registered to false
 } // namespace
 
 Counter& allocationFailures() {

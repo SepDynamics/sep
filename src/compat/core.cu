@@ -158,7 +158,8 @@ Error CudaCore::launchQBSA(const DeviceMemory<std::uint32_t>& probe_indices,
                            const DeviceMemory<std::uint32_t>& expectations,
                            std::uint32_t num_probes, DeviceMemory<std::uint32_t>& bitfield,
                            DeviceMemory<std::uint32_t>& corrections,
-                           DeviceMemory<std::uint32_t>& correction_count, Stream& stream) {
+                           DeviceMemory<std::uint32_t>& correction_count, Stream& stream)
+{ // Fix: Add missing brace
   cudaError_t result =
       launchQBSAKernel(probe_indices.get(), expectations.get(), num_probes, bitfield.get(),
                        corrections.get(), correction_count.get(), static_cast<cudaStream_t>(stream.handle()));
@@ -169,7 +170,8 @@ Error CudaCore::launchQBSA(const DeviceMemory<std::uint32_t>& probe_indices,
 
 Error CudaCore::launchQSH(const DeviceMemory<std::uint64_t>& chunks, std::uint32_t num_chunks,
                           DeviceMemory<std::uint32_t>& collapse_indices,
-                          DeviceMemory<std::uint32_t>& collapse_counts, Stream& stream) {
+                          DeviceMemory<std::uint32_t>& collapse_counts, Stream& stream)
+{ // Fix: Add missing brace
   cudaError_t result = launchQSHKernel(chunks.get(), num_chunks, collapse_indices.get(),
                                        collapse_counts.get(), static_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
@@ -179,7 +181,8 @@ Error CudaCore::launchQSH(const DeviceMemory<std::uint64_t>& chunks, std::uint32
 
 Error CudaCore::launchSimilarity(const DeviceMemory<float>& similarity,
                                  const DeviceMemory<float>& emb_a, const DeviceMemory<float>& emb_b,
-                                 std::uint32_t embedding_size, Stream& stream) {
+                                 std::uint32_t embedding_size, Stream& stream)
+{ // Fix: Add missing brace
   cudaError_t result = launchSimilarityKernel(const_cast<float*>(similarity.get()), emb_a.get(),
                                              emb_b.get(), embedding_size, static_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
@@ -189,7 +192,8 @@ Error CudaCore::launchSimilarity(const DeviceMemory<float>& similarity,
 
 Error CudaCore::launchBlend(DeviceMemory<float>& output, const DeviceMemory<float>& embeddings,
                             const DeviceMemory<float>& weights, std::uint32_t num_contexts,
-                            std::uint32_t embedding_size, Stream& stream) {
+                            std::uint32_t embedding_size, Stream& stream)
+{ // Fix: Add missing brace
   cudaError_t result = launchBlendKernel(output.get(), embeddings.get(), weights.get(),
                                         num_contexts, embedding_size, static_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,

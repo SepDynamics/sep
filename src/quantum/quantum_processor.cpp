@@ -8,7 +8,7 @@
 #include <bitset>
 #include <cstdint>
 #include <cstdlib>
-#include <string>
+#include <string> // Fix: Include string
 #include <algorithm>
 #include <stdexcept>
 #include <unordered_map>
@@ -23,7 +23,7 @@ QuantumProcessorError::QuantumProcessorError(const std::string& message)
 class QuantumProcessorImpl : public QuantumProcessorQFHCommon {
 public:
     QuantumProcessorImpl() = default;
-    
+
     bool processPatternWithId(const glm::vec3& pattern_data, size_t pattern_id) {
         if (glm::length(pattern_data) < 1e-6f) {
             return false;

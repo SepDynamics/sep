@@ -1,6 +1,7 @@
 #include "memory/quantum_coherence_manager.h"
 #include "compat/cuda.h"
 #include "compat/core.h"
+#include "compat/cuda_helpers.h" // Fix: Include CUDA helpers for logging
 #if !SEP_CUDA_AVAILABLE
 #include "compat/cuda_runtime.h"
 #endif
@@ -14,6 +15,7 @@
 #include "memory/types.h"
 
 using ::sep::memory::MemoryTierEnum;
+#include "core/logging.h" // Fix: Add include for logging
 #include <tbb/parallel_for.h>
 #include <tbb/concurrent_hash_map.h>
 #include <algorithm>

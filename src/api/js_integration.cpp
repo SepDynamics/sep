@@ -16,7 +16,7 @@ std::string JSIntegration::processContextCheck(const std::string& context_json,
         ret_code = sep_process_context(
             context_json.c_str(),
             layer.c_str(),
-            result_buffer.data(), // result_buffer.data() is char*
+ result_buffer.data(),  // result_buffer.data() is char*
             buffer_size           // buffer_size is size_t, matching API
         );
 

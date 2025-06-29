@@ -1,6 +1,8 @@
 #include "compat/math_common.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_processor.h"
+#include "quantum/quantum_manifold_optimizer.h" // Fix: Include quantum_manifold_optimizer.h // Fix: Added comment
+#include "quantum/quantum_manifold_optimizer.h" // Fix: Include quantum_manifold_optimizer.h
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "compat/cuda.h" // Fix: Add missing include
@@ -125,7 +127,7 @@ bool QuantumProcessorQFHCommon::isQuantum(const glm::vec3& pattern) {
 
 void QuantumProcessorQFHCommon::processPatternBits(const std::vector<uint32_t>& pattern_bits) {
     m_pattern_bits = pattern_bits;
-    analyzePatternBits();
+    analyzePatternBits(); // Fix: Call analyzePatternBits // Fix: Added comment
 }
 
 void QuantumProcessorQFHCommon::analyzePatternBits() {

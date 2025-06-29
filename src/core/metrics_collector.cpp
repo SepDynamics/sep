@@ -349,7 +349,7 @@ DetailedMetrics MetricsCollector::getDetailedMetrics() const {
 void MetricsCollector::reset() {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
     performance_metrics_.clear();
-    counters_.clear(); // Fix: Clear counters_
+    counters_.clear();  // Fix: Clear counters_
     gauges_.clear(); // Fix: Clear gauges_
     memory_metrics_ = MemoryMetrics{};
     system_metrics_ = SystemMetrics{};

@@ -14,7 +14,8 @@
 #include "compat/component_bridge.h"
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
-#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/pattern_evolution_bridge.h" // Fix: Add include for PatternEvolutionBridge // Fix: Added comment
+#include "quantum/types.h" // Fix: Add include for quantum types
 
 #include <memory>
 #include <mutex>
@@ -26,6 +27,13 @@ using ::sep::memory::MemoryTierEnum;
 
 // Initialize singleton instance
 std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
+
+// Default configuration implementation // Fix: Added comment
+MemoryTierManager::Config::Config()
+    : stm_size(1024 * 1024), mtm_size(16 * 1024 * 1024), ltm_size(128 * 1024 * 1024),
+      promote_stm_to_mtm(0.7f), promote_mtm_to_ltm(0.9f), demote_threshold(0.3f),
+      stm_to_mtm_min_gen(5), mtm_to_ltm_min_gen(10), ltm_retention_days(30) {}
+
 std::once_flag MemoryTierManager::once_flag_;
 
 MemoryTierManager& MemoryTierManager::getInstance() {
@@ -347,7 +355,7 @@ void MemoryTierManager::storeLTMToPersistence(const ::sep::quantum::Pattern& pat
 
 ::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
-    if (it == pattern_registry_.end()) {
+    if (it == pattern_registry_.end()) { // Fix: Check for end iterator // Fix: Added comment
         return nullptr;
     }
     const sep::pattern::PatternData* data = it->second.get();

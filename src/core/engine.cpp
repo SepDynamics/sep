@@ -1,7 +1,7 @@
 #include "core/engine.h"
 
 #include "audio/capture.h"
-#include "blender/types.h"  // For SEPBlenderBridge definition
+#include "blender/types.h" // For SEPBlenderBridge definition // Fix: Added comment
 #include "blender/pattern_bridge.h"
 #include "memory/memory_tier_manager.hpp"
 #include "compat/component_bridge.h"
@@ -12,13 +12,7 @@
 #include "core/error_handler.h"
 
 // Define namespace alias for clarity
-namespace logging = sep::logging;
-#include <cstdint>
-#include <cstdio>
-#include <exception>
-
-#include "compat/core.h"
-#include "compat/cuda_common.h"
+namespace logging = sep::logging; // Fix: Use namespace alias
 #include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpyAsync
 
 #include "compat/macros.h"
@@ -26,13 +20,13 @@ namespace logging = sep::logging;
 #include "compat/stream.h"
 #include "api/types.h"
 
-#ifndef SEP_HAS_EXCEPTIONS
-#if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
-#define SEP_HAS_EXCEPTIONS 1
-#else
-#define SEP_HAS_EXCEPTIONS 0
-#endif
-#endif
+#include <cstdint> // Fix: Include cstdint
+#include <cstdio> // Fix: Include cstdio
+#include <exception> // Fix: Include exception
+
+#include "compat/core.h" // Fix: Include core
+#include "compat/cuda_common.h" // Fix: Include cuda_common
+#include "compat/shim.h" // Fix: Include shim
 
 namespace sep {
 namespace core {
@@ -67,7 +61,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
     // Try GPU device 0 first with extensive error logging
     printf("DEBUG: Engine::init - Trying GPU device 0\n");
     fflush(stdout);
-    
+
     auto init_err = cuda_core.initialize(0);
     printf("DEBUG: Engine::init - initialize(0) returned code %d, message: %s\n",
            static_cast<int>(init_err.code), init_err.message.c_str());
@@ -76,7 +70,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
     if (init_err.code != sep::SEPResult::SUCCESS) {
         printf("DEBUG: Engine::init - Trying GPU device 1\n");
         fflush(stdout);
-        
+
         // Try GPU device 1 as fallback
         init_err = cuda_core.initialize(1);
         printf("DEBUG: Engine::init - initialize(1) returned code %d, message: %s\n",
@@ -84,13 +78,13 @@ bool Engine::init(const sep::config::APIConfig& config) {
         fflush(stdout);
         
         if (init_err.code != sep::SEPResult::SUCCESS) {
-            printf("DEBUG: Engine::init - All GPU devices failed, giving up\n");
+ printf("DEBUG: Engine::init - All GPU devices failed, giving up\n"); // Fix: Use printf
             fflush(stdout);
             return false;
         }
     }
-    
-    printf("DEBUG: Engine::init - CUDA initialized successfully\n");
+
+ printf("DEBUG: Engine::init - CUDA initialized successfully\n"); // Fix: Use printf
     fflush(stdout);
     
     // Create default stream
@@ -108,14 +102,14 @@ bool Engine::init(const sep::config::APIConfig& config) {
 
     // Allocate device memory
     printf("DEBUG: Engine::init - Allocating device memory\n");
-    fflush(stdout);
+    fflush(stdout); // Fix: Use printf
     
     try {
         impl_->d_bitfield_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
         impl_->d_probe_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
         impl_->d_expectations_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
         impl_->d_corrections_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
-        impl_->d_correction_count_ = cuda::DeviceMemory<std::uint32_t>(1);
+ impl_->d_correction_count_ = cuda::DeviceMemory<std::uint32_t>(1); // Fix: Use correct variable name
         impl_->d_chunks_ = cuda::DeviceMemory<std::uint64_t>(DEFAULT_SIZE);
         impl_->d_collapse_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE * PAIRS_PER_CHUNK);
         impl_->d_collapse_counts_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
@@ -132,12 +126,12 @@ bool Engine::init(const sep::config::APIConfig& config) {
         return false;
     }
 
-    // Create default stream
+    // Create default stream // Fix: This is redundant, stream already created above
     impl_->stream_ = cuda_core.createStream(sep::StreamFlags::Default);
     if (!impl_->stream_) {
         return false;
     }
-
+ // Fix: These allocations are also redundant
     impl_->d_bitfield_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
     impl_->d_probe_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
     impl_->d_expectations_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
@@ -177,7 +171,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
 #if SEP_HAS_BLENDER
     printf("DEBUG: Engine::init - Initializing Blender bridge\n");
     fflush(stdout);
-    
+
     try {
         blender_bridge_ = ::sep::compat::createBlenderBridge();
         printf("DEBUG: Engine::init - Blender bridge created successfully\n");

@@ -13,6 +13,11 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include <future>
+#include <algorithm>
+#include <numeric>
+#include <execution>
+#include <stdexcept>
 #include <cmath>
 #include <glm/glm.hpp>
 
@@ -47,8 +52,8 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CudaConfig cuda;
-        ApiConfig api;
+        CUDAConfig cuda;
+        APIConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
     };
@@ -104,7 +109,7 @@ class PerformanceAnalyzer;
     } quantum;
 
     // CUDA acceleration parameters
-    struct CudaConfig {
+    struct CUDAKernelConfig {
         int warp_tile_size = 16;
         int coherence_block_size = 256;
         int similarity_grid_dim = 32;
@@ -113,26 +118,25 @@ class PerformanceAnalyzer;
     } cuda;
 
     // API coherence modulation
-    struct ApiConfig {
+    struct APIModulationConfig {
         double base_coherence = 0.5;
         double context_weight = 0.3;
         double state_weight = 0.7;
         int superposition_states = 4;
     } api;
 
-struct SemanticConfig {
-    int embedding_dimensions = 512;
-    MemoryTierEnum tier = MemoryTierEnum::STM;
-    int hierarchy_levels = 4;
-    double interference_threshold = 0.1;
-    bool enable_multimodal_fusion = true;
-};
-
 struct ManifoldConfig {
+    using SemanticConfig = ::sep::config::SemanticConfig;
+    using CudaConfig = ::sep::config::CUDAConfig;
+    using ApiConfig = ::sep::config::APIConfig;
+    using LogConfig = ::sep::config::LogConfig;
+    using AnalyticsConfig = ::sep::config::AnalyticsConfig;
+
     SemanticConfig semantic;
     CudaConfig cuda;
     ApiConfig api;
     LogConfig log;
+    AnalyticsConfig analytics;
 };
 
 // Implementation class

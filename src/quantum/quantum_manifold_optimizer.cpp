@@ -1,6 +1,5 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
-
 #include <numeric>
 #include <vector>
 #include <memory>

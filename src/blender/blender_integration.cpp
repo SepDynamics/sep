@@ -37,9 +37,9 @@ BlenderBridge::BlenderBridge()
 BlenderBridge::~BlenderBridge() = default;
 
 
-std::shared_ptr<BlenderBridge> BlenderBridge::create()
+std::unique_ptr<BlenderBridge> BlenderBridge::create()
 {
-    return std::shared_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge());
+    return std::unique_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge());
 }
 
 
@@ -417,12 +417,12 @@ sep::SEPResult BlenderBridge::processObjectPatterns(sep::pattern::ObjectHandle h
 
     const auto& results = pattern_processor_->process();
     state.patterns.assign(results.begin(), results.end());
-    state.stats.pattern_count = static_cast<uint32_t>(state.patterns.size());
+    // pattern count tracked via metrics
 
     updatePatternMetrics(state);
     validatePatternCoherence(state);
 
-    state.stats.update_count++;
+    state.stats.total_updates++;
     notifyObservers(handle, state.metrics);
 
     state.is_processing = false;
@@ -448,10 +448,10 @@ sep::SEPResult BlenderBridge::updatePatternMetrics(ObjectState& state)
 
     state.metrics.avg_coherence = pattern_count ? coherence_sum / pattern_count : 0.0f;
     state.metrics.peak_entropy  = max_entropy;
-    state.metrics.updates_processed = state.stats.update_count;
+    state.metrics.updates_processed = state.stats.total_updates;
     state.metrics.evolution.mutations = mutation_total;
     state.metrics.evolution.stability = pattern_count ? stability_sum / pattern_count : 0.0f;
-    state.metrics.performance.process_time = state.stats.processing_time;
+    state.metrics.performance.process_time = state.stats.last_process_time;
     state.metrics.performance.gpu_utilization = 0.0f;
 
     return sep::SEPResult::SUCCESS;

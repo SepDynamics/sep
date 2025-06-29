@@ -1,4 +1,5 @@
 #include "quantum/pattern_evolution.h"
+#include "quantum/data.hpp"  // For PatternData/PatternConfig
 #include "quantum/types.h"
 #include <nlohmann/json.hpp>
 #include "api/sep_engine.h"

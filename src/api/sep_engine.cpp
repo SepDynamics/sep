@@ -56,6 +56,9 @@ struct SepEngine::Impl
         health_metrics.timeoutRequests     = 0;
         health_metrics.rateLimitedCount    = 0;
         health_metrics.averageResponseTime = 0.0;
+        health_metrics.allocatedMemory     = 0;
+        health_metrics.peakMemoryUsage    = 0;
+        health_metrics.memoryFragmentation = 0.0;
         health_metrics.lastResponseTime    = std::chrono::milliseconds{0};
         health_metrics.lastErrorCode       = 0;
     }

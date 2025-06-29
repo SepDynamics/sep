@@ -34,8 +34,13 @@ using ::sep::quantum::QuantumState;
 using QuantumPattern = ::sep::quantum::Pattern;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
-using ::sep::config::CudaConfig;
-using ::sep::config::ApiConfig;
+// Configuration structures from the core configuration module use
+// capitalised names (e.g. CUDAConfig).  The original code attempted to
+// import them with different casing which resulted in a large number of
+// "does not name a type" compilation errors.  Import them with the
+// correct names instead.
+using ::sep::config::CUDAConfig;
+using ::sep::config::APIConfig;
 using ::sep::config::LogConfig;
 
 class QuantumManifoldOptimizer {

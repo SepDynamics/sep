@@ -40,6 +40,7 @@ struct PatternRelationship {
 struct Pattern {
     std::string id;
     glm::vec4 position;
+    glm::vec3 momentum{0.0f};
     QuantumState quantum_state;
     std::vector<PatternRelationship> relationships;
     std::vector<float> data;

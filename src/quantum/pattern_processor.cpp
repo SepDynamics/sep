@@ -33,7 +33,8 @@ public:
         
         // Process using quantum processor
         bool success = quantum_processor_->processPattern(stateData, numericId);
-        
+        result.success = success;
+
         if (success) {
             // Update state values based on processing
             result.coherence_score = state.coherence * 1.05f; // Simulate evolution
@@ -51,6 +52,7 @@ public:
             // Handle error case
             result.coherence_score = 0.0f;
             result.stability_score = 0.0f;
+            result.error_message = "Processing failed";
         }
 
         // Determine memory tier

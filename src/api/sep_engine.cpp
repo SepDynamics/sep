@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
+#include <atomic>
 #include <thread>
 #include <vector>
 

@@ -41,7 +41,7 @@ struct CollapseEvent {
 };
 
 struct EvolutionResult {
-    std::vector<sep::quantum::Pattern> evolved_patterns;
+    std::vector<Pattern> evolved_patterns;
     std::vector<PhaseTransition> phase_transitions;
     float total_coherence;
     float entropy_change;
@@ -66,13 +66,12 @@ public:
     explicit PatternEvolutionBridge(const Config& config);
     ~PatternEvolutionBridge();
 
-    EvolutionResult evolvePatterns(std::vector<sep::quantum::Pattern>& patterns, float time_step);
-    std::vector<EntanglementPair> computeEntanglements(const std::vector<sep::quantum::Pattern>& patterns);
-    CollapseEvent detectCollapse(const std::vector<sep::quantum::Pattern>& patterns);
+    EvolutionResult evolvePatterns(std::vector<Pattern>& patterns, float time_step);
+    std::vector<EntanglementPair> computeEntanglements(const std::vector<Pattern>& patterns);
+    CollapseEvent detectCollapse(const std::vector<Pattern>& patterns);
     
-    // Added based on implementation file
     void initializeEvolutionState();
-    void updatePatterns(const std::vector<sep::quantum::Pattern>& patterns);
+    void updatePatterns(std::vector<Pattern>& patterns);
 
 private:
     class Impl;

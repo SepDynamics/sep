@@ -29,7 +29,9 @@ enum class SEPResult : int32_t {
     CUDA_ERROR = -19,
     MEMORY_ERROR = -20,
     PROCESSING_ERROR = -21,
-    ALLOCATION_FAILED = -22
+    ALLOCATION_FAILED = -22,
+    FEATURE_UNAVAILABLE = -23,
+    NOT_INITIALIZED = -24
 };
 
 // Basic status enumeration for engine components

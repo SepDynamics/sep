@@ -53,8 +53,8 @@ using ::sep::quantum::QuantumProcessorQFH;
 // import them with different casing which resulted in a large number of
 // "does not name a type" compilation errors.  Import them with the
 // correct names instead.
-using ::sep::config::CudaConfig;
-using ::sep::config::ApiConfig;
+using ::sep::config::CUDAConfig;
+using ::sep::config::APIConfig;
 using ::sep::config::LogConfig;
 using ::sep::config::AnalyticsConfig;
 

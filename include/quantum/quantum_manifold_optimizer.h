@@ -41,11 +41,13 @@
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/types.h"
 
+namespace sep::quantum { class PatternEvolutionBridge; }
+
 namespace sep::quantum::manifold {
 
 using ::sep::memory::MemoryTierEnum;
 using ::sep::quantum::QuantumState;
-using QuantumPattern = ::sep::quantum::Pattern;
+using QuantumPattern = ::sep::quantum::manifold::QuantumPattern;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
 // Configuration structures from the core configuration module use
@@ -62,14 +64,20 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CUDAConfig cuda;
-        APIConfig api;
+        CudaConfig cuda;
+        ApiConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
+        double convergence_threshold{0.001};
+        double step_size{0.1};
+        float neighborhood_radius{1.0f};
+        float target_coherence{0.8f};
+        float min_coherence_threshold{0.1f};
     };
 
     struct OptimizationResult {
         bool success{false};
+        QuantumState optimized_state{};
         std::vector<float> optimized_values;
         std::string error_message;
     };
@@ -83,12 +91,62 @@ public:
     ~QuantumManifoldOptimizer();
 
     OptimizationResult optimize(const QuantumState& initial_state,
-                              const OptimizationTarget& target);
+                                const OptimizationTarget& target);
     void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
+    float computeManifoldCoherence(const glm::vec3& position) const;
+    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
+
+    static Config createManifoldConfig(const ::sep::quantum::PatternEvolutionBridge::Config& config);
 
 private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+    struct ManifoldPoint {
+        glm::vec3 position;
+        glm::vec3 momentum{0.0f};
+        float curvature{0.0f};
+        float coherence{0.0f};
+        uint32_t dimension_index{0};
+        std::vector<uint32_t> neighbor_indices;
+    };
+
+    struct GeodesicPath {
+        std::vector<ManifoldPoint> points;
+        float total_action{0.0f};
+        float stability_metric{0.0f};
+        bool is_minimal{true};
+    };
+
+    Config config_;
+    std::vector<ManifoldPoint> manifold_points_;
+    glm::mat4 riemannian_metric_{1.0f};
+    std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
+
+    struct EvolutionState {
+        std::vector<QuantumState> active_states;
+    };
+
+    std::unique_ptr<EvolutionState> evolution_state_;
+    std::vector<std::thread> worker_threads_;
+    std::atomic<bool> running_{false};
+    mutable std::mutex state_mutex_;
+
+    void initializeManifold();
+    ManifoldPoint quantumStateToManifold(const QuantumState& state);
+    QuantumState manifoldToQuantumState(const ManifoldPoint& point);
+    ManifoldPoint targetToManifold(const OptimizationTarget& target);
+    GeodesicPath findOptimalGeodesic(const ManifoldPoint& start, const ManifoldPoint& target);
+    void applyRicciFlow(GeodesicPath& path);
+    void computeNeighborhoods();
+    void updateRiemannianMetric();
+    float computeLocalCurvature(const glm::vec3& position) const;
+    float computeRicciCurvature(const ManifoldPoint& point, const ManifoldPoint& prev, const ManifoldPoint& next) const;
+    glm::vec3 computeFlowDirection(const ManifoldPoint& point, float ricci_curvature) const;
+    float computePathAction(const GeodesicPath& path) const;
+    float computePathStability(const GeodesicPath& path) const;
+    float computeConvergenceMetric(const GeodesicPath& path) const;
+    float computeRicciScalar(const GeodesicPath& path) const;
+    float computeGeodesicDistance(const GeodesicPath& path) const;
+    float computeHolonomyPhase(const GeodesicPath& path) const;
+    float computeResonanceFromCurvature(float curvature) const;
 };
 
 } // namespace sep::quantum::manifold

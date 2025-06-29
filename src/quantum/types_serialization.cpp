@@ -14,7 +14,8 @@ void to_json(nlohmann::json& j, const QuantumState& state) {
         {"generation", state.generation},
         {"mutation_count", state.mutation_count},
         {"memory_tier", static_cast<int>(state.memory_tier)}, // Fix: serialize memory_tier as int
-        {"access_frequency", state.access_frequency}
+        {"access_frequency", state.access_frequency},
+        {"state", static_cast<int>(state.state)}
     };
 }
 
@@ -27,6 +28,7 @@ void from_json(const nlohmann::json& j, QuantumState& state) {
     j.at("mutation_count").get_to(state.mutation_count);
     state.memory_tier = static_cast<sep::memory::MemoryTierEnum>(j.value("memory_tier", 0)); // Fix: default value for memory_tier
     j.at("access_frequency").get_to(state.access_frequency);
+    state.state = static_cast<QuantumState::Status>(j.value("state", 0));
 }
 
 void to_json(nlohmann::json& j, const sep::quantum::PatternRelationship& rel) {

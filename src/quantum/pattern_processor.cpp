@@ -1,6 +1,7 @@
 #include "quantum/pattern_processor.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
+#include "memory/types.h"
 
 #include <glm/vec3.hpp>
 

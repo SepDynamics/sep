@@ -26,9 +26,9 @@ using ::sep::quantum::QuantumState;
 using QuantumPattern = ::sep::quantum::Pattern;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
-using ::sep::CUDAConfig;
-using ::sep::APIConfig;
-using ::sep::LogConfig;
+using ::sep::config::CUDAConfig;
+using ::sep::config::APIConfig;
+using ::sep::config::LogConfig;
 
 class QuantumManifoldOptimizer {
 public:

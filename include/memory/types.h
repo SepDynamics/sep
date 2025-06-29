@@ -21,6 +21,18 @@
 
 namespace sep {
 
+namespace memory {
+
+enum class MemoryTierEnum {
+    STM,
+    MTM,
+    LTM
+};
+
+} // namespace memory
+
+using MemoryTierEnum = memory::MemoryTierEnum;
+
 namespace persistence {
 
 // Structure to store relationship metadata for persistence

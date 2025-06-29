@@ -383,7 +383,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     return true;
 }
 
-bool MemoryTier::canAcceptPattern(const sep::persistence::PatternData& pattern) const {
+bool MemoryTier::canAcceptPattern(const sep::persistence::PersistentPatternData& pattern) const {
     if (m_patterns.size() >= m_max_patterns)
         return false;
     if (pattern.coherence < m_coherence_threshold)
@@ -396,7 +396,7 @@ bool MemoryTier::canAcceptPattern(const sep::persistence::PatternData& pattern) 
     return true;
 }
 
-void MemoryTier::addPattern(size_t id, sep::persistence::PatternData pattern) {
+void MemoryTier::addPattern(size_t id, sep::persistence::PersistentPatternData pattern) {
     if (!canAcceptPattern(pattern))
         return;
     // PatternData doesn't have id or memory_tier fields
@@ -408,12 +408,12 @@ void MemoryTier::removePattern(size_t id) {
     m_patterns.erase(id);
 }
 
-const sep::persistence::PatternData* MemoryTier::getPattern(size_t id) const {
+const sep::persistence::PersistentPatternData* MemoryTier::getPattern(size_t id) const {
     auto it = m_patterns.find(id);
     return it == m_patterns.end() ? nullptr : &it->second;
 }
 
-sep::persistence::PatternData* MemoryTier::getPattern(size_t id) {
+sep::persistence::PersistentPatternData* MemoryTier::getPattern(size_t id) {
     auto it = m_patterns.find(id);
     return it == m_patterns.end() ? nullptr : &it->second;
 }

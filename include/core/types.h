@@ -110,8 +110,22 @@ struct LogConfig
     std::size_t queue_size{8192};                         // Async queue size
 };
 
-struct SystemConfig
-{
+struct SemanticConfig {
+    int embedding_dimensions{512};
+    double coherence_threshold{0.7};
+    bool enable_adaptive_processing{true};
+    std::size_t max_batch_size{1024};
+};
+
+struct AnalyticsConfig {
+    bool enable_profiling{false};
+    bool track_memory_usage{true};
+    bool collect_metrics{true};
+    std::size_t history_size{1000};
+    double sampling_rate{0.1};
+};
+
+struct SystemConfig {
     APIConfig   api;
     CUDAConfig  cuda;
     LogConfig   logging;
@@ -226,6 +240,41 @@ inline void from_json(const nlohmann::json& j, APIConfig& c)
         c.response_modulation.simplify_low_coherence = rm.value("simplify_low_coherence", true);
         c.response_modulation.max_detail_level       = rm.value("max_detail_level", static_cast<size_t>(3));
     }
+}
+
+// JSON serialization helpers for quantum configs
+inline void to_json(nlohmann::json& j, const SemanticConfig& c) {
+    j = nlohmann::json{
+        {"embedding_dimensions", c.embedding_dimensions},
+        {"coherence_threshold", c.coherence_threshold},
+        {"enable_adaptive_processing", c.enable_adaptive_processing},
+        {"max_batch_size", c.max_batch_size}
+    };
+}
+
+inline void from_json(const nlohmann::json& j, SemanticConfig& c) {
+    c.embedding_dimensions = j.value("embedding_dimensions", 512);
+    c.coherence_threshold = j.value("coherence_threshold", 0.7);
+    c.enable_adaptive_processing = j.value("enable_adaptive_processing", true);
+    c.max_batch_size = j.value("max_batch_size", static_cast<size_t>(1024));
+}
+
+inline void to_json(nlohmann::json& j, const AnalyticsConfig& c) {
+    j = nlohmann::json{
+        {"enable_profiling", c.enable_profiling},
+        {"track_memory_usage", c.track_memory_usage},
+        {"collect_metrics", c.collect_metrics},
+        {"history_size", c.history_size},
+        {"sampling_rate", c.sampling_rate}
+    };
+}
+
+inline void from_json(const nlohmann::json& j, AnalyticsConfig& c) {
+    c.enable_profiling = j.value("enable_profiling", false);
+    c.track_memory_usage = j.value("track_memory_usage", true);
+    c.collect_metrics = j.value("collect_metrics", true);
+    c.history_size = j.value("history_size", static_cast<size_t>(1000));
+    c.sampling_rate = j.value("sampling_rate", 0.1);
 }
 
 }  // namespace config

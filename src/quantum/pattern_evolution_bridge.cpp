@@ -15,9 +15,17 @@
 namespace logging = sep::logging;
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/norm.hpp>
 #include <algorithm>
 #include <execution>
 #include <thread>
+#include <future>
+#include <mutex>
+#include <memory>
+#include <chrono>
+#include <cmath>
+#include <mutex>
+#include <vector>
 
 namespace sep::quantum {
 

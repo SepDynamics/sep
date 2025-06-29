@@ -1,6 +1,7 @@
 #include "core/manager.h"
 #include "core/env_keys.h"
 #include "compat/shim.h"
+#include "api/json_helpers.h"
 
 #include <fstream>
 #include <ios>

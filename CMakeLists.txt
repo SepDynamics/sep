@@ -411,6 +411,7 @@ set(SEP_INTERNAL_LIBS
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 add_subdirectory(src/blender)
+add_subdirectory(src/compat)
 add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
@@ -452,8 +453,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         
         # Cuda libraries must come right after sep_compat
         ${CUDA_LIBRARIES}
-        
-        
+        CUDAToolkit::cudart
+        CUDAToolkit::cuda_driver
+
         # Remaining internal libraries in dependency order
         sep_core
         sep_memory

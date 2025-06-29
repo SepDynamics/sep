@@ -20,6 +20,10 @@ namespace logging = sep::logging;
 #include <mutex>
 #include <condition_variable>
 #include <complex>
+#include <string>
+#include <unordered_map>
+#include <array>
+#include <atomic>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/norm.hpp>
 #include <algorithm>
@@ -66,6 +70,56 @@ namespace {
         return glm::normalize(transported) * glm::length(vector);
     }
 }
+
+class QuantumManifoldOptimizer::Impl {
+public:
+    struct ManifoldPoint {
+        glm::vec3 position;
+        glm::vec3 momentum;
+        float curvature;
+        float coherence;
+        uint32_t dimension_index;
+        std::vector<uint32_t> neighbor_indices;
+    };
+
+    struct GeodesicPath {
+        std::vector<ManifoldPoint> points;
+        float total_action;
+        float stability_metric;
+        bool is_minimal;
+    };
+
+    explicit Impl(const Config& config);
+    OptimizationResult optimize(const QuantumState& initial_state, const OptimizationTarget& target);
+    void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
+    float computeManifoldCoherence(const glm::vec3& position) const;
+    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
+
+private:
+    Config config_;
+    std::vector<ManifoldPoint> manifold_points_;
+    glm::mat4 riemannian_metric_;
+    std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
+
+    void initializeManifold();
+    ManifoldPoint quantumStateToManifold(const QuantumState& state);
+    QuantumState manifoldToQuantumState(const ManifoldPoint& point);
+    ManifoldPoint targetToManifold(const OptimizationTarget& target);
+    GeodesicPath findOptimalGeodesic(const ManifoldPoint& start, const ManifoldPoint& target);
+    void applyRicciFlow(GeodesicPath& path);
+    void computeNeighborhoods();
+    void updateRiemannianMetric();
+    float computeLocalCurvature(const glm::vec3& position) const;
+    float computeRicciCurvature(const ManifoldPoint& point, const ManifoldPoint& prev, const ManifoldPoint& next) const;
+    glm::vec3 computeFlowDirection(const ManifoldPoint& point, float ricci_curvature) const;
+    float computePathAction(const GeodesicPath& path) const;
+    float computePathStability(const GeodesicPath& path) const;
+    float computeConvergenceMetric(const GeodesicPath& path) const;
+    float computeRicciScalar(const GeodesicPath& path) const;
+    float computeGeodesicDistance(const GeodesicPath& path) const;
+    float computeHolonomyPhase(const GeodesicPath& path) const;
+    float computeResonanceFromCurvature(float curvature) const;
+};
 
 // Public interface implementation
 QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)

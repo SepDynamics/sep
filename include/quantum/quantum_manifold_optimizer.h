@@ -1,8 +1,6 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
-#pragma once
-
 #include "quantum/qbsa.h"
 #include "quantum/qfh.h"
 #include "quantum/types.h"
@@ -18,6 +16,15 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <chrono>
+#include <atomic>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <complex>
+#include <functional>
+#include <unordered_map>
+#include <array>
 
 namespace sep::quantum::manifold {
 
@@ -108,18 +115,6 @@ class PerformanceAnalyzer;
     } api;
 
 using sep::memory::MemoryTierEnum;
-#include <chrono>
-#include <atomic>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <complex>
-#include <functional>
-#include <vector>
-#include <unordered_map>
-#include <array>
-#include <string>
-#include "compat/cufft.h"
 
 
 // Forward declarations

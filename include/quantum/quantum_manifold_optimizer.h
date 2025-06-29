@@ -47,8 +47,8 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CudaConfig cuda;
-        ApiConfig api;
+        CUDAConfig cuda;
+        APIConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
     };
@@ -130,8 +130,8 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    CudaConfig cuda;
-    ApiConfig api;
+    CUDAConfig cuda;
+    APIConfig api;
     LogConfig log;
 };
 

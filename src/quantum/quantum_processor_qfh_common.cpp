@@ -1,12 +1,11 @@
+#include "compat/cuda.h"
 #include "compat/math_common.h"
+#include "quantum/types.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_processor.h"
-#include "quantum/quantum_manifold_optimizer.h" // Fix: Include quantum_manifold_optimizer.h // Fix: Added comment
-#include "quantum/quantum_manifold_optimizer.h" // Fix: Include quantum_manifold_optimizer.h
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/pattern_evolution_bridge.h"
-#include "compat/cuda.h" // Fix: Add missing include
-#include "quantum/types.h"
+#include "quantum/quantum_manifold_optimizer.h"
 #include <algorithm>
 #include <cmath>
 #include <glm/glm.hpp>

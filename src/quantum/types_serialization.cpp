@@ -2,8 +2,6 @@
 #include "memory/types.h" // Add include for MemoryTierEnum
 #include <nlohmann/json.hpp> // Fix: Added comment
 
-#include "memory/types.h" // Add include for MemoryTierEnum
-
 namespace sep::quantum {
 
 void to_json(nlohmann::json& j, const QuantumState& state) {

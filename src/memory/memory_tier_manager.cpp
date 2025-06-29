@@ -15,7 +15,6 @@
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
 #include "quantum/pattern_evolution_bridge.h" // Fix: Add include for PatternEvolutionBridge // Fix: Added comment
-#include "quantum/types.h" // Fix: Add include for quantum types
 
 #include <memory>
 #include <mutex>

@@ -20,10 +20,10 @@ public:
     virtual ~GPUContext() = default;
 
     // The only method actually used by pattern_processor.cpp
-    virtual SEPResult init(int device_index [[maybe_unused]] = -1) { return SEPResult::SUCCESS; }
+    virtual SEPResult init(int device_index  = -1) { return SEPResult::SUCCESS; }
 
     // Simplified shader handling for tests
-    SEPResult loadComputeShader(const ::sep::shim::string& path [[maybe_unused]]) {
+    SEPResult loadComputeShader(const ::sep::shim::string& path ) {
         ++shader_revision_;
         return SEPResult::SUCCESS;
     }
@@ -32,9 +32,9 @@ public:
     uint32_t getShaderRevision() const { return shader_revision_; }
 
     // These methods are included for API compatibility with the original implementation
-    virtual void deleteBuffer(GPUBuffer* buffer [[maybe_unused]]) {}
-    virtual void* mapBuffer(GPUBuffer* buffer [[maybe_unused]]) { return nullptr; }
-    virtual void unmapBuffer(GPUBuffer* buffer [[maybe_unused]]) {}
+    virtual void deleteBuffer(GPUBuffer* buffer ) {}
+    virtual void* mapBuffer(GPUBuffer* buffer ) { return nullptr; }
+    virtual void unmapBuffer(GPUBuffer* buffer ) {}
 
 private:
     uint32_t shader_revision_{0};

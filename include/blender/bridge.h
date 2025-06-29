@@ -9,7 +9,7 @@
 #include "compat/shim.h"
 
 #include "blender/base_types.h"
-#include "blender/compat/blender_types.h"
+#include "blender/blender_types.h"
 #include "blender/gpu_context.h"
 #include "blender/pattern_common.h"
 #include "quantum/data.hpp"

@@ -2,11 +2,9 @@
 #include "api/server.h"
 #include "api/crow_adapter.h" // Fix: Include crow_adapter for LoggingMiddleware
 #include "core/common.h" // Fix: Include common
-#include "core/common.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor_qfh.h"
 #include "memory/manager.h"
-#include "api/crow_adapter.h"
 
 // Debug logging for OpenTelemetry headers
 #ifdef SEP_HAS_OPENTELEMETRY

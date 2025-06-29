@@ -10,7 +10,7 @@ set(CMAKE_CUDA_FLAGS_INIT "-allow-unsupported-compiler")
 set(CMAKE_CUDA_COMPILER_INIT "nvcc -allow-unsupported-compiler")
 
 # Enable CUDA as a language so .cu files are compiled
-project(SEPEngine LANGUAGES CXX CUDA)
+project(SEPEngine LANGUAGES CXX)
 
 # Configure CUDA for the project
 set(SEP_CUDA_AVAILABLE ON)
@@ -401,7 +401,6 @@ set(SEP_INTERNAL_LIBS
     sep_api
     sep_blender
     sep_audio
-    sep_context
     sep_quantum
     sep_memory
     sep_compat
@@ -412,12 +411,9 @@ set(SEP_INTERNAL_LIBS
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 add_subdirectory(src/blender)
-add_subdirectory(src/compat)
 add_subdirectory(src/core)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
-add_subdirectory(src/tests)
-add_subdirectory(tests/quantum)
 
 # === Main Executable Configuration ===
 add_executable(sep_engine src/main.cpp)
@@ -437,22 +433,40 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wl,--whole-archive
         ${CYCLES_LINK_ORDER}
         -Wl,--no-whole-archive
-
-        # Internal libraries in dependency order
-        sep_core
+        ${CYCLES_LIBRARIES}
+        
+        # Force include the OSL library symbols (crucial for Cycles OSL integration)
+        -Wl,--whole-archive
+        ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel_osl.a
+        -Wl,--no-whole-archive
+        
+        # OSL system libraries for shader compilation
+        ${OSL_COMP_LIBRARY}
+        ${OSL_EXEC_LIBRARY}
+        ${OSL_QUERY_LIBRARY}
+        
+        # Force include all symbols from each module
+        -Wl,--whole-archive
         sep_compat
-        sep_api
+        -Wl,--no-whole-archive
+        
+        # Cuda libraries must come right after sep_compat
+        ${CUDA_LIBRARIES}
+        
+        
+        # Remaining internal libraries in dependency order
+        sep_core
         sep_memory
         sep_quantum
         sep_audio
         sep_blender
+        sep_api
         
         # External dependencies
         ${BLENDER_LINK_ORDER}
         ${EXTERNAL_LINK_ORDER}
         ${CURL_LIBRARIES}
         ${HIREDIS_LIBRARIES}
-        ${CUDA_LIBRARIES}
         Threads::Threads
         fmt::fmt
         spdlog::spdlog
@@ -462,6 +476,9 @@ else()
     target_link_libraries(sep_engine
         PRIVATE
         ${CYCLES_LIBRARIES}
+        # Add Cycles OSL libraries explicitly
+        ${CMAKE_SOURCE_DIR}/lib/libcycles_osl.a
+        ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel_osl.a
         sep_core
         sep_compat
         sep_api

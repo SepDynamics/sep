@@ -1,17 +1,16 @@
+#include "quantum/types.h"
 #include "memory/quantum_coherence_manager.h"
+#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/quantum_manifold_optimizer.h"
+#include "quantum/quantum_processor_qfh.h"
 #include "compat/cuda.h"
 #include "compat/core.h"
 #include "compat/cuda_helpers.h" // Fix: Include CUDA helpers for logging
 #if !SEP_CUDA_AVAILABLE
 #include "compat/cuda_runtime.h"
 #endif
-#include "quantum/pattern_evolution_bridge.h"
-#include "quantum/types.h" // Ensure Pattern definition with momentum
-#include "quantum/quantum_manifold_optimizer.h"
-#include "quantum/types.h" // Ensure Pattern definition includes momentum
+
 #include "memory/memory_tier_manager.hpp"
-#include "quantum/quantum_processor_qfh.h"
-#include "quantum/types.h"
 #include "memory/types.h"
 
 using ::sep::memory::MemoryTierEnum;

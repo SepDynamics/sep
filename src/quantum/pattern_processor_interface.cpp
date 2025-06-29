@@ -1,14 +1,13 @@
-#include "quantum/processor.h"
-#include "quantum/pattern_evolution_bridge.h"
-#include "quantum/quantum_processor_qfh.h"
-#include "quantum/quantum_processor.h" // Fix: Include quantum_processor.h // Fix: Added comment
-#include "quantum/quantum_processor.h"
 #include "quantum/types.h"
+#include "quantum/processor.h"
+#include "quantum/quantum_processor.h"
+#include "quantum/quantum_processor_qfh.h"
+#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/quantum_manifold_optimizer.h"
 #include "core/common.h"  // defines sep::SEPResult
 #include "compat/core.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/manager.h"  // This is actually the logging manager
-#include "quantum/quantum_manifold_optimizer.h"
 
 // Define namespace alias for clarity
 namespace logging = sep::logging;

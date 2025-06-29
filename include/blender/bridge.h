@@ -35,7 +35,7 @@ class PatternObserver;
 
 class BlenderBridge {
  public:
-  BlenderBridge() = default;
+  BlenderBridge();
   BlenderBridge(const BlenderBridge&) = delete;
   BlenderBridge& operator=(const BlenderBridge&) = delete;
   BlenderBridge(BlenderBridge&&) noexcept = delete;

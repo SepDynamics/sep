@@ -15,6 +15,8 @@
 #include "blender/pattern_observer.h"
 #include "quantum/types.h"
 #include "memory/types.h"
+
+using ::sep::memory::MemoryTierEnum;
 #include "core/common.h"  // For sep::SEPResult
 
 #include "memory/memory_tier_manager.hpp"

@@ -1,6 +1,8 @@
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/types.h"        // For MemoryTierEnum definition
+
+using ::sep::memory::MemoryTierEnum;
 #include "quantum/pattern.h"      // For QuantumPattern definition
 
 #include "compat/cuda_common.h"

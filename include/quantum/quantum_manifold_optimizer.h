@@ -84,22 +84,38 @@ public:
     };
 
     struct OptimizationTarget {
-        std::vector<float> target_values;
-        float coherence_threshold{0.8f};
+        float target_coherence{0.8f};
+        float target_stability{0.5f};
     };
 
+    QuantumManifoldOptimizer();
     explicit QuantumManifoldOptimizer(const Config& config);
-    ~QuantumManifoldOptimizer();
 
     OptimizationResult optimize(const QuantumState& initial_state,
-                              const OptimizationTarget& target);
+                                const OptimizationTarget& target);
     void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
     float computeManifoldCoherence(const glm::vec3& position) const;
     std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
 
 private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+    struct ManifoldPoint {
+        glm::vec3 position{};
+        glm::vec3 momentum{};
+        float curvature{0.0f};
+    };
+
+    struct EvolutionState {
+        uint64_t tick{0};
+    };
+
+    Config config_{};
+    std::vector<ManifoldPoint> manifold_points_{};
+    glm::mat4 riemannian_metric_{1.0f};
+    std::unique_ptr<QuantumProcessorQFH> qfh_processor_{};
+    std::unique_ptr<EvolutionState> evolution_state_{};
+    std::vector<std::thread> worker_threads_{};
+    std::atomic<bool> running_{false};
+    mutable std::mutex state_mutex_{};
 };
 
 } // namespace sep::quantum::manifold

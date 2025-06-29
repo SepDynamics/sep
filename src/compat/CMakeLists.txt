@@ -39,6 +39,8 @@ set_target_properties(sep_compat PROPERTIES
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
 )
 
+configure_cuda_target(sep_compat)
+
 # Link CUDA libraries with explicit absolute paths to ensure they're found
 target_link_libraries(sep_compat PUBLIC
     ${CUDA_LIBRARIES}

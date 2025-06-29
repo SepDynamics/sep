@@ -14,9 +14,11 @@
 // Include CUDA headers in the correct order
 #include "compat/raii.h"
 #include "memory/memory_tier_manager.hpp" // Include header for interface
-#include "compat/cuda_helpers.h" // Fix: Include cuda_helpers for CUDA_CHECK
+#include "compat/cuda_helpers.h"         // For CUDA_CHECK macro
 #include "compat/cuda_common.h"
-#if !SEP_CUDA_AVAILABLE
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime.h>
+#else
 #include "compat/cuda_runtime.h"
 #endif
 
@@ -85,7 +87,7 @@ const char* cudaGetErrorString(cudaError_t /*error*/) {
 }
 #endif
 
-StreamRAII::StreamRAII(::sep::StreamFlags flags) {
+StreamRAII::StreamRAII(sep::StreamFlags flags) {
     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
     cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
     if (err != cudaSuccess) {

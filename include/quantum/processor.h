@@ -8,6 +8,7 @@
 // Removed duplicate include of core/types.h
 #include "quantum/gpu_context.h"
 #include "quantum/data.hpp"
+#include "memory/types.h"
 #include <memory>
 #include <vector>
 #include <string>

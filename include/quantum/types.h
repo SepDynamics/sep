@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-
+#include "memory/types.h"
 
 namespace sep::quantum {
 

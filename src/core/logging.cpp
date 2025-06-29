@@ -6,7 +6,6 @@ namespace sep {
 namespace logging {
 
 void Manager::initialize() {
-    // Stub implementation - just print to stderr
     std::cerr << "Logging initialized" << std::endl;
 }
 

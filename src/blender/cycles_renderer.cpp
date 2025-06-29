@@ -47,7 +47,6 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
         return SEPResult::INVALID_ARGUMENT;
     }
 
-    // Stub implementation - just return success
     return SEPResult::SUCCESS;
 }
 

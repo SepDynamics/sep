@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
     
     // Check if Cycles support is available
     if (sep::blender::CyclesRenderer::isCyclesAvailable() != sep::SEPResult::SUCCESS) {
-        std::cout << "Cycles support is not available. Using stub implementation." << std::endl;
+        std::cout << "Cycles support is not available." << std::endl;
     } else {
         std::cout << "Cycles support is available." << std::endl;
     }

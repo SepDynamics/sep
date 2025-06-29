@@ -24,6 +24,7 @@ namespace logging = sep::logging;
 #include <memory>
 #include <chrono>
 #include <cmath>
+#include <numeric>
 #include <mutex>
 #include <vector>
 

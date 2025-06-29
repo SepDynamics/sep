@@ -40,6 +40,7 @@
 #include "quantum/qfh.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/types.h"
+#include "quantum/pattern.h"
 
 namespace sep::quantum::manifold {
 

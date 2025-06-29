@@ -58,7 +58,7 @@ struct MemoryBlock {
 
     MemoryBlock() = default;
     MemoryBlock(void* p, std::size_t s, std::size_t off, TierType t)
-        : ptr(p), size(s), offset(off), tier(t), original_size(s) {}
+        : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
 

@@ -22,8 +22,8 @@
 
 // Forward declarations for Crow request/response and application
 namespace crow {
-struct request;
-struct response;
+class request;
+class response;
 template <typename... Middlewares>
 class Crow;
 }  // namespace crow

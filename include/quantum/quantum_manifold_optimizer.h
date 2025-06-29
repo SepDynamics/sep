@@ -175,7 +175,7 @@ struct ManifoldConfig {
     sep::config::CudaConfig cuda;
     sep::config::APIConfig api;
     sep::config::LogConfig log;
-    AnalyticsConfig analytics;
+    sep::config::AnalyticsConfig analytics;
 };
 
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
@@ -257,7 +257,7 @@ public:
 private:
     cudaStream_t stream_;
     cufftHandle fft_plan_;
-    ManifoldConfig::CudaConfig config_;
+    sep::config::CudaConfig config_;
     
     void* d_workspace_;
     size_t workspace_size_;
@@ -285,7 +285,7 @@ public:
                                   const std::vector<double> &weights);
 
 private:
-    ManifoldConfig::APIConfig config_;
+    sep::config::APIConfig config_;
     std::unordered_map<std::string, double> context_coherence_map_;
     
     std::vector<double> extractCoherenceFactors(const std::string& context,

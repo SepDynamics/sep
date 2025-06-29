@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "quantum/processor.h"  // Ensure PatternProcessor is complete
+#include "quantum/data.hpp"      // For PatternData/PatternConfig
 
 #include "blender/pattern_observer.h"
 #include "quantum/types.h"

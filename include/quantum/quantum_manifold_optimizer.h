@@ -7,12 +7,17 @@
 #include <complex>
 #include <condition_variable>
 #include <functional>
+#include <future>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include <algorithm>
+#include <numeric>
+#include <execution>
+#include <stdexcept>
 #include <cmath>
 #include <glm/glm.hpp>
 
@@ -42,13 +47,14 @@ using ::sep::quantum::QuantumProcessorQFH;
 using ::sep::config::CUDAConfig;
 using ::sep::config::APIConfig;
 using ::sep::config::LogConfig;
+using ::sep::config::AnalyticsConfig;
 
 class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CudaConfig cuda;
-        ApiConfig api;
+        CUDAConfig cuda;
+        APIConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
     };
@@ -334,7 +340,7 @@ private:
 // 6. REAL-TIME PERFORMANCE ANALYTICS
 class PerformanceAnalyzer {
 public:
-    explicit PerformanceAnalyzer(const ManifoldConfig::AnalyticsConfig& config);
+    explicit PerformanceAnalyzer(const AnalyticsConfig& config);
 
     // Quantum state space analysis
     struct StateSpaceAnalysis {
@@ -367,7 +373,7 @@ public:
                                               const std::vector<double>& performance_metrics);
 
 private:
-    ManifoldConfig::AnalyticsConfig config_;
+    AnalyticsConfig config_;
     std::vector<double> performance_history_;
     std::mutex history_mutex_;
     

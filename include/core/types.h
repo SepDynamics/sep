@@ -86,7 +86,7 @@ struct APIConfig
     } response_modulation;
 };
 
-struct CUDAConfig
+struct CudaConfig
 {
     bool        use_gpu{true};
     std::size_t max_memory_mb{8192};  // 8GB
@@ -128,14 +128,14 @@ struct AnalyticsConfig {
 
 struct SystemConfig {
     APIConfig   api;
-    CUDAConfig  cuda;
+    CudaConfig  cuda;
     LogConfig   logging;
     std::string data_path;
 };
 
 // Backwards compatibility aliases for renamed configuration structs
-using CudaConfig = CUDAConfig;
-using ApiConfig = APIConfig;
+using CudaConfig = CudaConfig;
+using APIConfig = APIConfig;
 
 // JSON serialization helpers
 inline void to_json(nlohmann::json& j, const CORSConfig& c)

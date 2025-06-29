@@ -505,14 +505,14 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:5:
   139 |     CUDAConfig cuda;
       |     ^~~~~~~~~~
       |     CudaConfig
-/sep/include/quantum/quantum_manifold_optimizer.h:140:5: error: ‘APIConfig’ does not name a type; did you mean ‘ApiConfig’?
+/sep/include/quantum/quantum_manifold_optimizer.h:140:5: error: ‘APIConfig’ does not name a type; did you mean ‘APIConfig’?
   140 |     APIConfig api;
       |     ^~~~~~~~~
-      |     ApiConfig
-/sep/include/quantum/quantum_manifold_optimizer.h:141:5: error: ‘LogConfig’ does not name a type; did you mean ‘ApiConfig’?
+      |     APIConfig
+/sep/include/quantum/quantum_manifold_optimizer.h:141:5: error: ‘LogConfig’ does not name a type; did you mean ‘APIConfig’?
   141 |     LogConfig log;
       |     ^~~~~~~~~
-      |     ApiConfig
+      |     APIConfig
 /sep/include/quantum/quantum_manifold_optimizer.h:151:7: error: ‘QuantumManifoldOptimizer’ has not been declared
   151 | class QuantumManifoldOptimizer::Impl {
       |       ^~~~~~~~~~~~~~~~~~~~~~~~
@@ -562,11 +562,11 @@ In file included from /sep/src/memory/quantum_coherence_manager.cpp:5:
 /sep/include/quantum/quantum_manifold_optimizer.h:276:21: error: ‘CudaConfig’ in ‘struct ManifoldConfig’ does not name a type
   276 |     ManifoldConfig::CudaConfig config_;
       |                     ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:285:58: error: ‘ApiConfig’ in ‘struct ManifoldConfig’ does not name a type
-  285 |     explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
+/sep/include/quantum/quantum_manifold_optimizer.h:285:58: error: ‘APIConfig’ in ‘struct ManifoldConfig’ does not name a type
+  285 |     explicit APICoherenceModulator(const ManifoldConfig::APIConfig& config);
       |                                                          ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:302:21: error: ‘ApiConfig’ in ‘struct ManifoldConfig’ does not name a type
-  302 |     ManifoldConfig::ApiConfig config_;
+/sep/include/quantum/quantum_manifold_optimizer.h:302:21: error: ‘APIConfig’ in ‘struct ManifoldConfig’ does not name a type
+  302 |     ManifoldConfig::APIConfig config_;
       |                     ^~~~~~~~~
 /sep/include/quantum/quantum_manifold_optimizer.h:312:54: error: ‘SemanticConfig’ in ‘struct ManifoldConfig’ does not name a type
   312 |     explicit SemanticProcessor(const ManifoldConfig::SemanticConfig& config);

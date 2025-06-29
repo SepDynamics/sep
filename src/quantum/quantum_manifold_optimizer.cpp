@@ -73,5 +73,5 @@ std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::v
     return samples;
 }
 
-// -----------------------------------------------------------------------------
-}
+
+} // namespace sep::quantum::manifold

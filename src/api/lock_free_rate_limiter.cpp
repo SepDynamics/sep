@@ -2,6 +2,7 @@
 #include "api/background_cleanup.h"
 #include "crow/crow_isolation.h"
 #include <nlohmann/json.hpp>
+#include <string>
 
 namespace sep::api {
 

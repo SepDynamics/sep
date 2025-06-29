@@ -7,7 +7,6 @@
 
 #include "core/types.h"
 #include "compat/shim.h"
-#include "quantum/data.hpp"  // For sep::pattern::PatternData
 
 #include <cstdint>
 #include <cstddef>

@@ -63,7 +63,7 @@ public:
         MemoryTierEnum tier{MemoryTierEnum::STM};
         CudaConfig cuda;
         ApiConfig api;
-        LogConfig log;
+        ::sep::config::LogConfig log;
         double base_resonance_frequency{0.42};
         double convergence_threshold{0.001};
         double step_size{0.05};
@@ -83,10 +83,15 @@ public:
     struct OptimizationTarget {
         float target_coherence{0.8f};
         float target_stability{0.5f};
+        std::vector<float> target_values{};
+        float coherence_threshold{0.5f};
     };
 
     QuantumManifoldOptimizer();
     explicit QuantumManifoldOptimizer(const Config& config);
+
+    static Config createManifoldConfig(
+        const ::sep::quantum::PatternEvolutionBridge::Config& cfg);
 
     OptimizationResult optimize(const QuantumState& initial_state,
                                 const OptimizationTarget& target);

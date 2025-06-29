@@ -23,6 +23,8 @@ inline float deterministicNoise(uint64_t& state) {
 
 namespace sep::quantum {
 
+using sep::memory::MemoryTierEnum;
+
 class ProcessorImpl {
 public:
     explicit ProcessorImpl(const ProcessingConfig& config)

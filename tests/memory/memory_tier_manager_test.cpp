@@ -221,7 +221,7 @@ TEST(MemoryTierManagerTest, PrunePatternsByPriority) {
         sep::pattern::PatternData pat;
         pat.id = std::to_string(i);
         pat.coherence = pdata.coherence;
-        pat.memory_tier = sep::MemoryTierEnum::LTM;
+        pat.memory_tier = sep::memory::MemoryTierEnum::LTM;
         mgr.registerPattern(i, pat);
     }
     mgr.prunePatternsByPriority(sep::memory::TierType::LTM, 2);

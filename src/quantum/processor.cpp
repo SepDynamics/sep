@@ -84,7 +84,7 @@ public:
         return patterns_;
     }
 
-    std::vector<Pattern> getPatternsByTier(MemoryTierEnum tier) const {
+    std::vector<Pattern> getPatternsByTier(::sep::memory::MemoryTierEnum tier) const {
         std::lock_guard<std::mutex> lock(mutex_);
         std::vector<Pattern> result;
         for (const auto& pattern : patterns_) {
@@ -208,9 +208,9 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
         for (auto& pattern : patterns_) {
             if (pattern.quantum_state.coherence < config_.mtm_coherence_threshold) {
-                pattern.quantum_state.memory_tier = MemoryTierEnum::STM;
+                pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
             } else if (pattern.quantum_state.coherence < config_.ltm_coherence_threshold) {
-                pattern.quantum_state.memory_tier = MemoryTierEnum::MTM;
+                pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
             }
         }
     }
@@ -263,9 +263,9 @@ public:
         size_t stm_count = 0, mtm_count = 0, ltm_count = 0;
         for (const auto& pattern : patterns_) {
             switch (pattern.quantum_state.memory_tier) {
-                case MemoryTierEnum::STM: stm_count++; break;
-                case MemoryTierEnum::MTM: mtm_count++; break;
-                case MemoryTierEnum::LTM: ltm_count++; break;
+                case ::sep::memory::MemoryTierEnum::STM: stm_count++; break;
+                case ::sep::memory::MemoryTierEnum::MTM: mtm_count++; break;
+                case ::sep::memory::MemoryTierEnum::LTM: ltm_count++; break;
             }
         }
         status += "  STM patterns: " + std::to_string(stm_count) + "\n";
@@ -306,13 +306,13 @@ private:
 
     void updateMemoryTier(Pattern& pattern) {
         auto& state = pattern.quantum_state;
-        MemoryTierEnum previous_tier = state.memory_tier;
+        ::sep::memory::MemoryTierEnum previous_tier = state.memory_tier;
         if (state.coherence >= config_.ltm_coherence_threshold && state.stability >= config_.stability_threshold) {
-            state.memory_tier = MemoryTierEnum::LTM;
+            state.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
         } else if (state.coherence >= config_.mtm_coherence_threshold) {
-            state.memory_tier = MemoryTierEnum::MTM;
+            state.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
         } else {
-            state.memory_tier = MemoryTierEnum::STM;
+            state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
         }
         if (state.memory_tier != previous_tier) {
             state.access_frequency = 1.0f;
@@ -364,7 +364,7 @@ sep::SEPResult Processor::updatePattern(const std::string& pattern_id, const Pat
 Pattern Processor::getPattern(const std::string& pattern_id) const { return impl_->getPattern(pattern_id); }
 
 std::vector<Pattern> Processor::getPatterns() const { return impl_->getPatterns(); }
-std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
+std::vector<Pattern> Processor::getPatternsByTier(::sep::memory::MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
 size_t Processor::getPatternCount() const { return impl_->getPatternCount(); }
 ProcessingResult Processor::processPattern(const std::string& pattern_id) { return impl_->processPattern(pattern_id); }
 

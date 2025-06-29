@@ -94,7 +94,7 @@ public:
         // Fill in missing fields in result
         for(int i = 0; i < 3; ++i) {
             result.tier_fragmentation[i] = metrics_.tier_fragmentation[i];
-            result.tier_pattern_count[i] = countPatternsInTier(static_cast<MemoryTier>(i));
+            result.tier_pattern_count[i] = countPatternsInTier(static_cast<MemoryTierEnum>(i));
         }
         
         return result;
@@ -110,7 +110,7 @@ public:
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
             const auto& data = pair.second;
-            sep::sep::MemoryTierEnum target_tier = determineOptimalTier(data);
+            sep::MemoryTierEnum target_tier = determineOptimalTier(data);
 
             if (target_tier != data.current_tier) {
                 TierMigration migration;
@@ -443,8 +443,8 @@ private:
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             auto& pair = *it;
             auto& data = pair.second;
-            sep::sep::MemoryTierEnum current_tier = data.current_tier;
-            sep::sep::MemoryTierEnum target_tier = determineOptimalTier(data);
+            sep::MemoryTierEnum current_tier = data.current_tier;
+            sep::MemoryTierEnum target_tier = determineOptimalTier(data);
             
             if (current_tier != target_tier) {
                 // Check migration conditions
@@ -687,7 +687,7 @@ private:
         
         for (int i = 0; i < 3; ++i) {
             analysis.tier_coherence[i] = metrics_.tier_coherence[i];
-            analysis.tier_pattern_count[i] = countPatternsInTier(static_cast<MemoryTier>(i));
+            analysis.tier_pattern_count[i] = countPatternsInTier(static_cast<MemoryTierEnum>(i));
         }
         
         analysis.optimal_distribution = computeOptimalDistribution();
@@ -749,11 +749,11 @@ uint64_t QuantumCoherenceManager::getGlobalTick() const {
     return impl_->getGlobalTick();
 }
 
-uint32_t QuantumCoherenceManager::getPatternCountByTier(sep::sep::MemoryTierEnum tier) const {
+uint32_t QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum tier) const {
     return impl_->getPatternCountByTier(tier);
 }
 
-float QuantumCoherenceManager::getTierFragmentation(sep::sep::MemoryTierEnum tier) const {
+float QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum tier) const {
     return impl_->getTierFragmentation(tier);
 }
 

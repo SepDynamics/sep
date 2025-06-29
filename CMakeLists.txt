@@ -198,8 +198,14 @@ endfunction()
 
 # OpenPGL (Path Guiding Library)
 find_and_add_library(OpenPGL_LIBRARY
-  NAMES pgl
+  NAMES openpgl pgl
   PATHS ${CMAKE_SOURCE_DIR}/lib ${CMAKE_INSTALL_PREFIX}/lib /usr/lib64 /usr/local/lib /usr/lib)
+if(OpenPGL_LIBRARY)
+  set(SEP_HAS_OPENPGL 1)
+else()
+  set(SEP_HAS_OPENPGL 0)
+endif()
+add_compile_definitions(SEP_HAS_OPENPGL=${SEP_HAS_OPENPGL})
 
 # TBB (multiple versions for compatibility)
 find_library(TBB_LIBRARY NAMES tbb)
@@ -243,30 +249,12 @@ if(NOT OPENSUBDIV_CPU_LIBRARY OR NOT OPENSUBDIV_GPU_LIBRARY)
   endforeach()
 endif()
 
-# OpenPGL (Path Guiding Library)
-find_library(OpenPGL_LIBRARY
-    NAMES openpgl pgl
-    PATHS
-        ${CMAKE_INSTALL_PREFIX}/lib
-        /usr/lib64
-        /usr/local/lib
-        /usr/lib
-)
-if(OpenPGL_LIBRARY)
-    set(SEP_HAS_OPENPGL 1)
-    message(STATUS "[FOUND] OpenPGL: ${OpenPGL_LIBRARY}")
-else()
-    set(SEP_HAS_OPENPGL 0)
-    message(WARNING "OpenPGL library not found. Path guiding disabled.")
-    set(OpenPGL_LIBRARY "")
-endif()
-add_compile_definitions(SEP_HAS_OPENPGL=${SEP_HAS_OPENPGL})
-
 # Other critical dependencies
 find_library(OPENIMAGEIO_LIBRARY OpenImageIO)
 find_library(OPENIMAGEIO_UTIL_LIBRARY OpenImageIO_Util)
 find_library(OPENCOLORIO_LIBRARY OpenColorIO)
 find_library(OPENEXR_LIBRARY OpenEXR)
+# Remaining critical libraries
 find_library(IMATH_LIBRARY Imath)
 find_library(ALEMBIC_LIBRARY Alembic)
 find_library(EMBREE_LIBRARY embree4)
@@ -275,27 +263,6 @@ find_library(GFLAGS_LIBRARY gflags)
 find_library(BLOSC_LIBRARY blosc)
 find_library(ZSTD_LIBRARY zstd)
 find_library(PUGIXML_LIBRARY pugixml)
-
-# Path guiding via OpenPGL
-find_library(OpenPGL_LIBRARY
-    NAMES OpenPGL pgl
-    PATHS
-        ${CMAKE_SOURCE_DIR}/lib
-        ${CMAKE_INSTALL_PREFIX}/lib
-        /usr/lib64
-        /usr/local/lib
-        /usr/lib
-)
-if(OpenPGL_LIBRARY)
-    set(SEP_HAS_OPENPGL 1)
-    message(STATUS "Found OpenPGL: ${OpenPGL_LIBRARY}")
-else()
-    set(SEP_HAS_OPENPGL 0)
-    message(WARNING "OpenPGL not found. Path guiding features disabled")
-    set(OpenPGL_LIBRARY "")
-endif()
-add_compile_definitions(SEP_HAS_OPENPGL=${SEP_HAS_OPENPGL})
-
 # === Include Directories Configuration ===
 set(SEP_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/include

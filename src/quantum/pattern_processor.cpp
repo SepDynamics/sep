@@ -3,6 +3,8 @@
 #include "quantum/types.h"
 #include "memory/types.h"
 
+using ::sep::memory::MemoryTierEnum;
+
 #include <glm/vec3.hpp>
 
 #include <algorithm>

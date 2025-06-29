@@ -61,7 +61,6 @@ namespace {
 }
 
 namespace {
-// Implementation details
 class PatternEvolutionBridge::Impl {
 public:
     struct EvolutionState {

@@ -16,7 +16,6 @@ add_library(sep_compat STATIC
 )
 
 
-# Comment out CUDA configuration
 set_source_files_properties(
      core.cu
      cuda_api.cu
@@ -24,6 +23,16 @@ set_source_files_properties(
      pattern_kernels.cu
      quantum_kernels.cu
      utils.cu
+     PROPERTIES
+)
+
+# Configure CUDA target properties
+configure_cuda_target(sep_compat)
+
+# Link CUDA libraries
+target_link_libraries(sep_compat
+    PUBLIC
+    ${CUDA_LIBRARIES}
 )
 
 # Add include directories needed by compat library sources

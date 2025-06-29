@@ -1,6 +1,6 @@
 #CustomCUDA.cmake
 #Custom CMake module for CUDA compilation that bypasses CMake's built-in CUDA language support
-
+set(LANGUAGES CUDA)
 # Force apply CUDA flags early for compiler identification
 if(NOT DEFINED CMAKE_CUDA_FLAGS)
   set(CMAKE_CUDA_FLAGS "-allow-unsupported-compiler")
@@ -80,6 +80,7 @@ list(APPEND CUDA_NVCC_FLAGS
     "${CUDA_PATH}/include"
     "-std=c++17"
 )
+
 
 # Pass host compiler flags through -Xcompiler
 list(APPEND CUDA_NVCC_FLAGS "-Xcompiler" "${HOST_CXX_FLAGS}")

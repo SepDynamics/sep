@@ -41,14 +41,14 @@ echo "Checking for PipeWire development headers..."
 export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:$PKG_CONFIG_PATH 
 if command -v pkg-config >/dev/null && pkg-config --exists libpipewire-0.3; then
   PIPEWIRE_INCLUDE_DIR=$(pkg-config --variable=includedir libpipewire-0.3)
-  PIPEWIRE_LIB_PATH=$(pkg-config --libs-only-L libpipewire-0.3 | sed 's/-L//g')
-  PIPEWIRE_LIB_FILE="${PIPEWIRE_LIB_PATH}/libpipewire-0.3.so"
+  PIPEWIRE_LIB_DIR=$(pkg-config --variable=libdir libpipewire-0.3)
+  PIPEWIRE_LIB_FILE="${PIPEWIRE_LIB_DIR}/libpipewire-0.3.so"
 
   if [ -d "${PIPEWIRE_INCLUDE_DIR}" ] && [ -f "${PIPEWIRE_LIB_FILE}" ]; then
     echo "PipeWire found via pkg-config: ${PIPEWIRE_LIB_FILE}"
     PIPEWIRE_CMAKE_ARGS="-DPIPEWIRE_INCLUDE_DIR=${PIPEWIRE_INCLUDE_DIR} -DPIPEWIRE_LIBRARY=${PIPEWIRE_LIB_FILE}"
   else
-    echo "Warning: PipeWire headers or library missing. PipeWire disabled."
+    echo "Warning: PipeWire headers or library missing at expected paths. PipeWire disabled."
   fi
 else
   echo "Warning: pkg-config not found or libpipewire-0.3 is not available. Audio capture will be disabled."

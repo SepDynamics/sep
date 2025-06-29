@@ -2,7 +2,7 @@
 Setting up build environment with real library paths - NO STUBS!
 Using Cycles root: /sep/extern/cycles
 Checking for PipeWire development headers...
-Warning: PipeWire headers or library missing. PipeWire disabled.
+PipeWire found via pkg-config: /usr/lib64/libpipewire-0.3.so
 Cleaning build directory...
 Running CMake configuration...
 -- The CXX compiler identification is GNU 14.2.1
@@ -20,190 +20,42 @@ Running CMake configuration...
 --   Found libpipewire-0.3, version 1.4.6
 -- Using system PipeWire
 -- Redis support: ENABLED
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_UTIL_LIBRARY (cycles_util libcycles_util.a
-  libcycles_util.so libcycles_util.so.* cycles_util.dll cycles_util.lib) -
-  Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:135 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_GRAPH_LIBRARY (cycles_graph libcycles_graph.a
-  libcycles_graph.so libcycles_graph.so.* cycles_graph.dll cycles_graph.lib)
-  - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:136 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_KERNEL_LIBRARY (cycles_kernel libcycles_kernel.a
-  libcycles_kernel.so libcycles_kernel.so.* cycles_kernel.dll
-  cycles_kernel.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:137 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_BVH_LIBRARY (cycles_bvh libcycles_bvh.a libcycles_bvh.so
-  libcycles_bvh.so.* cycles_bvh.dll cycles_bvh.lib) - Using library from
-  /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:138 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_SUBD_LIBRARY (cycles_subd libcycles_subd.a
-  libcycles_subd.so libcycles_subd.so.* cycles_subd.dll cycles_subd.lib) -
-  Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:139 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_DEVICE_LIBRARY (cycles_device libcycles_device.a
-  libcycles_device.so libcycles_device.so.* cycles_device.dll
-  cycles_device.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:140 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_SCENE_LIBRARY (cycles_scene libcycles_scene.a
-  libcycles_scene.so libcycles_scene.so.* cycles_scene.dll cycles_scene.lib)
-  - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:141 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_SESSION_LIBRARY (cycles_session libcycles_session.a
-  libcycles_session.so libcycles_session.so.* cycles_session.dll
-  cycles_session.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:142 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_INTEGRATOR_LIBRARY (cycles_integrator
-  libcycles_integrator.a libcycles_integrator.so libcycles_integrator.so.*
-  cycles_integrator.dll cycles_integrator.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:143 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] CYCLES_OSL_LIBRARY (cycles_osl libcycles_osl.a libcycles_osl.so
-  libcycles_osl.so.* cycles_osl.dll cycles_osl.lib) - Using library from
-  /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:146 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] BF_INTERN_GUARDEDALLOC (bf_intern_guardedalloc
-  libbf_intern_guardedalloc.a libbf_intern_guardedalloc.so
-  libbf_intern_guardedalloc.so.* bf_intern_guardedalloc.dll
-  bf_intern_guardedalloc.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:156 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
+-- [FOUND] CYCLES_UTIL_LIBRARY: /sep/lib/libcycles_util.a
+-- [FOUND] CYCLES_GRAPH_LIBRARY: /sep/lib/libcycles_graph.a
+-- [FOUND] CYCLES_KERNEL_LIBRARY: /sep/lib/libcycles_kernel.a
+-- [FOUND] CYCLES_BVH_LIBRARY: /sep/lib/libcycles_bvh.a
+-- [FOUND] CYCLES_SUBD_LIBRARY: /sep/lib/libcycles_subd.a
+-- [FOUND] CYCLES_DEVICE_LIBRARY: /sep/lib/libcycles_device.a
+-- [FOUND] CYCLES_SCENE_LIBRARY: /sep/lib/libcycles_scene.a
+-- [FOUND] CYCLES_SESSION_LIBRARY: /sep/lib/libcycles_session.a
+-- [FOUND] CYCLES_INTEGRATOR_LIBRARY: /sep/lib/libcycles_integrator.a
+-- [FOUND] CYCLES_OSL_LIBRARY: /sep/lib/libcycles_osl.a
+-- [FOUND] BF_INTERN_GUARDEDALLOC: /sep/lib/libbf_intern_guardedalloc.a
+CMake Warning at CMakeLists.txt:129 (message):
   [MISSING] BF_INTERN_ATOMIC (bf_intern_atomic libbf_intern_atomic.a
   libbf_intern_atomic.so libbf_intern_atomic.so.* bf_intern_atomic.dll
-  bf_intern_atomic.lib) - Using library from /sep/lib
+  bf_intern_atomic.lib) - Fallback to /sep/lib/libbf_intern_atomic.a
 Call Stack (most recent call first):
-  CMakeLists.txt:157 (find_required_library)
+  CMakeLists.txt:170 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] BF_INTERN_MEMUTIL (bf_intern_memutil libbf_intern_memutil.a
-  libbf_intern_memutil.so libbf_intern_memutil.so.* bf_intern_memutil.dll
-  bf_intern_memutil.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:158 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] BF_INTERN_SKY (bf_intern_sky libbf_intern_sky.a
-  libbf_intern_sky.so libbf_intern_sky.so.* bf_intern_sky.dll
-  bf_intern_sky.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:159 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] BF_INTERN_OPENSUBDIV (bf_intern_opensubdiv
-  libbf_intern_opensubdiv.a libbf_intern_opensubdiv.so
-  libbf_intern_opensubdiv.so.* bf_intern_opensubdiv.dll
-  bf_intern_opensubdiv.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:160 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] BF_BLENLIB (bf_blenlib libbf_blenlib.a libbf_blenlib.so
-  libbf_blenlib.so.* bf_blenlib.dll bf_blenlib.lib) - Using library from
-  /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:161 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] BF_BLENKERNEL (bf_blenkernel libbf_blenkernel.a
-  libbf_blenkernel.so libbf_blenkernel.so.* bf_blenkernel.dll
-  bf_blenkernel.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:162 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] BF_GPU (bf_gpu libbf_gpu.a libbf_gpu.so libbf_gpu.so.* bf_gpu.dll
-  bf_gpu.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:163 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] BF_DRAW (bf_draw libbf_draw.a libbf_draw.so libbf_draw.so.*
-  bf_draw.dll bf_draw.lib) - Using library from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:164 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] EXTERN_CUEW (extern_cuew libextern_cuew.a libextern_cuew.so
-  libextern_cuew.so.* extern_cuew.dll extern_cuew.lib) - Using library from
-  /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:167 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
-  [MISSING] EXTERN_HIPEW (extern_hipew libextern_hipew.a libextern_hipew.so
-  libextern_hipew.so.* extern_hipew.dll extern_hipew.lib) - Using library
-  from /sep/lib
-Call Stack (most recent call first):
-  CMakeLists.txt:168 (find_required_library)
-
-
-CMake Warning at CMakeLists.txt:116 (message):
+-- [FOUND] BF_INTERN_MEMUTIL: /sep/lib/libbf_intern_memutil.a
+-- [FOUND] BF_INTERN_SKY: /sep/lib/libbf_intern_sky.a
+-- [FOUND] BF_INTERN_OPENSUBDIV: /sep/lib/libbf_intern_opensubdiv.a
+-- [FOUND] BF_BLENLIB: /sep/lib/libbf_blenlib.a
+-- [FOUND] BF_BLENKERNEL: /sep/lib/libbf_blenkernel.a
+-- [FOUND] BF_GPU: /sep/lib/libbf_gpu.a
+-- [FOUND] BF_DRAW: /sep/lib/libbf_draw.a
+-- [FOUND] EXTERN_CUEW: /sep/lib/libextern_cuew.a
+-- [FOUND] EXTERN_HIPEW: /sep/lib/libextern_hipew.a
+CMake Warning at CMakeLists.txt:129 (message):
   [MISSING] EXTERN_CLEW (extern_clew libextern_clew.a libextern_clew.so
-  libextern_clew.so.* extern_clew.dll extern_clew.lib) - Using library from
-  /sep/lib
+  libextern_clew.so.* extern_clew.dll extern_clew.lib) - Fallback to
+  /sep/lib/libextern_clew.a
 Call Stack (most recent call first):
-  CMakeLists.txt:169 (find_required_library)
+  CMakeLists.txt:182 (find_required_library)
 
 
-CMake Warning at CMakeLists.txt:193 (message):
-  [MISSING] OpenPGL_LIBRARY
-Call Stack (most recent call first):
-  CMakeLists.txt:200 (find_and_add_library)
-
-
--- TBB2 library not found, using stub
--- [FOUND] OpenPGL: /usr/lib64/libopenpgl.so
 -- Found OpenPGL: /usr/lib64/libopenpgl.so
 -- PipeWire found via pkg-config: pipewire-0.3
 -- Verified PipeWire library: /usr/lib64/libpipewire-0.3.so
@@ -219,347 +71,97 @@ Call Stack (most recent call first):
 -- Cycles support: 1
 -- Blender support: 1
 -- Redis support: 1
--- Cycles root: 
+-- Cycles root: /sep/extern/cycles
+-- Cycles lib search: /sep/extern/cycles/lib;/sep/extern/cycles/build
 -- OSL libraries: /usr/lib64/liboslcomp.so /usr/lib64/liboslexec.so /usr/lib64/liboslquery.so
--- Critical Cycles OSL: /sep/lib/libcycles_osl libcycles_osl.a libcycles_osl.so libcycles_osl.so.* cycles_osl.dll cycles_osl.lib.a
+-- Critical Cycles OSL: /sep/lib/libcycles_osl.a
 -- Build type: 
 -- =====================================
 -- Configuring done (1.1s)
 -- Generating done (0.0s)
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    PIPEWIRE_INCLUDE_DIR
+    PIPEWIRE_LIBRARY
+
+
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  3%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[  3%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  6%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  7%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[  9%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 12%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 18%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 21%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 21%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 25%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 25%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 26%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 28%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 29%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 32%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 35%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 37%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 39%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 45%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 46%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  1%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  6%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[  6%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[  9%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 12%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 14%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 12%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 14%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 18%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 18%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 20%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 21%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 23%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 26%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 26%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 28%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 29%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 31%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 32%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 35%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 45%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 46%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
 [ 48%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 51%] Linking CXX static library libsep_compat.a
-[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 53%] Built target sep_compat
-[ 54%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 59%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 62%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 67%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-In file included from /sep/src/memory/quantum_coherence_manager.cpp:9:
-/sep/include/quantum/quantum_manifold_optimizer.h:178:5: error: ‘AnalyticsConfig’ does not name a type
-  178 |     AnalyticsConfig analytics;
-      |     ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:260:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  260 |     ManifoldConfig::CudaConfig config_;
-      |                     ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:288:21: error: ‘APIConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  288 |     ManifoldConfig::APIConfig config_;
-      |                     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:372:3: error: ‘AnalyticsConfig’ does not name a type
-  372 |   AnalyticsConfig config_;
-      |   ^~~~~~~~~~~~~~~
-[ 68%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 70%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 53%] Linking CXX static library libsep_compat.a
+[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 54%] Built target sep_compat
+[ 56%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 60%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 62%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 67%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 68%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
 [ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
 [ 73%] Linking CXX static library libsep_audio.a
 [ 73%] Built target sep_audio
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-In file included from /sep/src/quantum/pattern_processor_interface.cpp:10:
-/sep/include/quantum/quantum_manifold_optimizer.h:178:5: error: ‘AnalyticsConfig’ does not name a type
-  178 |     AnalyticsConfig analytics;
-      |     ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:260:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  260 |     ManifoldConfig::CudaConfig config_;
-      |                     ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:288:21: error: ‘APIConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  288 |     ManifoldConfig::APIConfig config_;
-      |                     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:372:3: error: ‘AnalyticsConfig’ does not name a type
-  372 |   AnalyticsConfig config_;
-      |   ^~~~~~~~~~~~~~~
 [ 75%] Linking CXX static library libsep_core.a
 [ 75%] Built target sep_core
-[ 79%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 79%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 79%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
 [ 82%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 85%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 87%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:2:
-/sep/include/quantum/quantum_manifold_optimizer.h:178:5: error: ‘AnalyticsConfig’ does not name a type
-  178 |     AnalyticsConfig analytics;
-      |     ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:260:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  260 |     ManifoldConfig::CudaConfig config_;
-      |                     ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:288:21: error: ‘APIConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  288 |     ManifoldConfig::APIConfig config_;
-      |                     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:372:3: error: ‘AnalyticsConfig’ does not name a type
-  372 |   AnalyticsConfig config_;
-      |   ^~~~~~~~~~~~~~~
-In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:1:
-/sep/include/quantum/quantum_manifold_optimizer.h:178:5: error: ‘AnalyticsConfig’ does not name a type
-  178 |     AnalyticsConfig analytics;
-      |     ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:260:21: error: ‘CudaConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  260 |     ManifoldConfig::CudaConfig config_;
-      |                     ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:288:21: error: ‘APIConfig’ in ‘struct sep::quantum::manifold::ManifoldConfig’ does not name a type
-  288 |     ManifoldConfig::APIConfig config_;
-      |                     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:372:3: error: ‘AnalyticsConfig’ does not name a type
-  372 |   AnalyticsConfig config_;
-      |   ^~~~~~~~~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:76:14: error: ISO C++ forbids declaration of ‘Impl’ with no type [-fpermissive]
-   76 |     explicit Impl(const PatternEvolutionBridge::Config& config)
-      |              ^~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:76:5: error: only declarations of constructors and conversion operators can be ‘explicit’
-   76 |     explicit Impl(const PatternEvolutionBridge::Config& config)
-      |     ^~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:87:10: error: expected class-name before ‘(’ token
-   87 |     ~Impl() {
-      |          ^
-/sep/src/quantum/pattern_evolution_bridge.cpp:198:5: error: ‘Config’ does not name a type
-  198 |     Config config_;
-      |     ^~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘int sep::quantum::{anonymous}::PatternEvolutionBridgeImpl::Impl(const sep::quantum::PatternEvolutionBridge::Config&)’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:77:11: error: only constructors take member initializers
-   77 |         : config_(config)
-      |           ^~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:77:11: error: class ‘sep::quantum::{anonymous}::PatternEvolutionBridgeImpl’ does not have any field named ‘config_’
-/sep/src/quantum/pattern_evolution_bridge.cpp:79:41: error: incomplete type ‘sep::quantum::QuantumManifoldOptimizer’ used in nested name specifier
-   79 |               QuantumManifoldOptimizer::createManifoldConfig(config)))
-      |                                         ^~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:85:5: warning: no return statement in function returning non-void [-Wreturn-type]
-   85 |     }
-      |     ^
-/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘std::vector<sep::quantum::EntanglementPair> sep::quantum::{anonymous}::PatternEvolutionBridgeImpl::computeEntanglements(const std::vector<sep::quantum::Pattern>&)’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:143:45: error: ‘config_’ was not declared in this scope; did you mean ‘config’?
-  143 |                 if (entanglement_strength > config_.entanglement_threshold) {
-      |                                             ^~~~~~~
-      |                                             config
-/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘sep::quantum::CollapseEvent sep::quantum::{anonymous}::PatternEvolutionBridgeImpl::detectCollapse(const std::vector<sep::quantum::Pattern>&)’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:179:24: error: ‘config_’ was not declared in this scope; did you mean ‘config’?
-  179 |         if (variance > config_.collapse_variance_threshold &&
-      |                        ^~~~~~~
-      |                        config
-/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘sep::quantum::Pattern sep::quantum::{anonymous}::PatternEvolutionBridgeImpl::evolveIndividualPattern(const sep::quantum::Pattern&, float)’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:261:19: error: ‘class sep::quantum::{anonymous}::PatternEvolutionBridgeImpl’ has no member named ‘config_’
-  261 |             this->config_.environment_coupling,
-      |                   ^~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:271:35: error: incomplete type ‘sep::quantum::QuantumManifoldOptimizer’ used in nested name specifier
-  271 |         QuantumManifoldOptimizer::OptimizationTarget target;
-      |                                   ^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:272:9: error: ‘target’ was not declared in this scope
-  272 |         target.target_coherence = config_.target_coherence;
-      |         ^~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:272:35: error: ‘config_’ was not declared in this scope; did you mean ‘config’?
-  272 |         target.target_coherence = config_.target_coherence;
-      |                                   ^~~~~~~
-      |                                   config
-/sep/src/quantum/pattern_evolution_bridge.cpp:275:55: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-  275 |         auto optimization_result = manifold_optimizer_->optimize(
-      |                                                       ^~
-In file included from /sep/include/quantum/quantum_manifold_optimizer.h:6:
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘float sep::quantum::{anonymous}::PatternEvolutionBridgeImpl::computePatternEnergy(const sep::quantum::Pattern&) const’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:325:61: error: ‘config_’ was not declared in this scope; did you mean ‘config’?
-  325 |         float potential = pattern.quantum_state.coherence * config_.coupling_strength;
-      |                                                             ^~~~~~~
-      |                                                             config
-/sep/src/quantum/pattern_evolution_bridge.cpp: At global scope:
-/sep/src/quantum/pattern_evolution_bridge.cpp:512:68: error: definition of ‘sep::quantum::PatternEvolutionBridge::PatternEvolutionBridge(const Config&)’ is not in namespace enclosing ‘sep::quantum::PatternEvolutionBridge’ [-fpermissive]
-  512 | PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
-      |                                                                    ^
-/sep/src/quantum/pattern_evolution_bridge.cpp:515:49: error: definition of ‘sep::quantum::PatternEvolutionBridge::~PatternEvolutionBridge()’ is not in namespace enclosing ‘sep::quantum::PatternEvolutionBridge’ [-fpermissive]
-  515 | PatternEvolutionBridge::~PatternEvolutionBridge() = default;
-      |                                                 ^
-/sep/src/quantum/pattern_evolution_bridge.cpp:517:55: error: definition of ‘void sep::quantum::PatternEvolutionBridge::initializeEvolutionState()’ is not in namespace enclosing ‘sep::quantum::PatternEvolutionBridge’ [-fpermissive]
-  517 | void PatternEvolutionBridge::initializeEvolutionState() {
-      |                                                       ^
-/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘void sep::quantum::PatternEvolutionBridge::initializeEvolutionState()’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:518:10: error: invalid use of incomplete type ‘class sep::quantum::PatternEvolutionBridge::Impl’
-  518 |     impl_->initializeEvolutionState();
-      |          ^~
-/sep/include/quantum/pattern_evolution_bridge.h:81:11: note: forward declaration of ‘class sep::quantum::PatternEvolutionBridge::Impl’
-   81 |     class Impl;
-      |           ^~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp: At global scope:
-/sep/src/quantum/pattern_evolution_bridge.cpp:521:81: error: definition of ‘void sep::quantum::PatternEvolutionBridge::updatePatterns(const std::vector<sep::quantum::Pattern>&)’ is not in namespace enclosing ‘sep::quantum::PatternEvolutionBridge’ [-fpermissive]
-  521 | void PatternEvolutionBridge::updatePatterns(const std::vector<Pattern>& patterns) {
-      |                                                                                 ^
-/sep/src/quantum/pattern_evolution_bridge.cpp: In member function ‘void sep::quantum::PatternEvolutionBridge::updatePatterns(const std::vector<sep::quantum::Pattern>&)’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:522:10: error: invalid use of incomplete type ‘class sep::quantum::PatternEvolutionBridge::Impl’
-  522 |     impl_->updatePatterns(patterns);
-      |          ^~
-/sep/include/quantum/pattern_evolution_bridge.h:81:11: note: forward declaration of ‘class sep::quantum::PatternEvolutionBridge::Impl’
-   81 |     class Impl;
-      |           ^~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp: At global scope:
-/sep/src/quantum/pattern_evolution_bridge.cpp:525:2: error: expected ‘}’ at end of input
-  525 | } // namespace sep::quantum
-      |  ^
-/sep/src/quantum/pattern_evolution_bridge.cpp:32:24: note: to match this ‘{’
-   32 | namespace sep::quantum {
-      |                        ^
-make[1]: *** [CMakeFiles/Makefile2:492: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
+[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 85%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 87%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 89%] Linking CXX static library libsep_memory.a
+[ 89%] Built target sep_memory
+[ 90%] Linking CXX static library libsep_blender.a
+[ 90%] Built target sep_blender
+[ 92%] Linking CXX static library libsep_quantum.a
+[ 92%] Built target sep_quantum
+[ 93%] Linking CXX static library libsep_api.a
+[ 93%] Built target sep_api
+make[2]: *** No rule to make target '/sep/lib/libbf_intern_atomic.a', needed by 'sep_engine'.  Stop.
+make[2]: *** Waiting for unfinished jobs....
+make[2]: *** No rule to make target '/sep/lib/libbf_intern_atomic.a', needed by 'src/tests/cycles_test'.  Stop.
+make[2]: *** Waiting for unfinished jobs....
+[ 96%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
+[ 96%] Building CXX object src/tests/CMakeFiles/cycles_test.dir/cycles_test.cpp.o
+make[1]: *** [CMakeFiles/Makefile2:562: src/tests/CMakeFiles/cycles_test.dir/all] Error 2
 make[1]: *** Waiting for unfinished jobs....
-/sep/src/blender/mesh_handler.cpp:44:42: error: ‘pattern’ does not name a type
-   44 | sep::SEPResult MeshHandler::update(const pattern::PatternData& pattern_data) {
-      |                                          ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:44:62: error: expected unqualified-id before ‘&’ token
-   44 | sep::SEPResult MeshHandler::update(const pattern::PatternData& pattern_data) {
-      |                                                              ^
-/sep/src/blender/mesh_handler.cpp:44:62: error: expected ‘)’ before ‘&’ token
-   44 | sep::SEPResult MeshHandler::update(const pattern::PatternData& pattern_data) {
-      |                                   ~                          ^
-      |                                                              )
-/sep/src/blender/mesh_handler.cpp:44:64: error: expected initializer before ‘pattern_data’
-   44 | sep::SEPResult MeshHandler::update(const pattern::PatternData& pattern_data) {
-      |                                                                ^~~~~~~~~~~~
-/sep/src/blender/mesh_handler.cpp:199:53: error: ‘pattern’ does not name a type
-  199 | sep::SEPResult MeshHandler::generateHyperMesh(const pattern::PatternData& pattern,
-      |                                                     ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:199:73: error: expected unqualified-id before ‘&’ token
-  199 | sep::SEPResult MeshHandler::generateHyperMesh(const pattern::PatternData& pattern,
-      |                                                                         ^
-/sep/src/blender/mesh_handler.cpp:199:73: error: expected ‘)’ before ‘&’ token
-  199 | sep::SEPResult MeshHandler::generateHyperMesh(const pattern::PatternData& pattern,
-      |                                              ~                          ^
-      |                                                                         )
-/sep/src/blender/mesh_handler.cpp:199:75: error: expected initializer before ‘pattern’
-  199 | sep::SEPResult MeshHandler::generateHyperMesh(const pattern::PatternData& pattern,
-      |                                                                           ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:224:50: error: ‘pattern’ does not name a type
-  224 | sep::SEPResult MeshHandler::updateVertices(const pattern::PatternData& pattern_data) {
-      |                                                  ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:224:70: error: expected unqualified-id before ‘&’ token
-  224 | sep::SEPResult MeshHandler::updateVertices(const pattern::PatternData& pattern_data) {
-      |                                                                      ^
-/sep/src/blender/mesh_handler.cpp:224:70: error: expected ‘)’ before ‘&’ token
-  224 | sep::SEPResult MeshHandler::updateVertices(const pattern::PatternData& pattern_data) {
-      |                                           ~                          ^
-      |                                                                      )
-/sep/src/blender/mesh_handler.cpp:224:72: error: expected initializer before ‘pattern_data’
-  224 | sep::SEPResult MeshHandler::updateVertices(const pattern::PatternData& pattern_data) {
-      |                                                                        ^~~~~~~~~~~~
-/sep/src/blender/mesh_handler.cpp:240:52: error: ‘pattern’ does not name a type
-  240 | sep::SEPResult MeshHandler::updateCustomData(const pattern::PatternData& pattern_data) {
-      |                                                    ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:240:72: error: expected unqualified-id before ‘&’ token
-  240 | sep::SEPResult MeshHandler::updateCustomData(const pattern::PatternData& pattern_data) {
-      |                                                                        ^
-/sep/src/blender/mesh_handler.cpp:240:72: error: expected ‘)’ before ‘&’ token
-  240 | sep::SEPResult MeshHandler::updateCustomData(const pattern::PatternData& pattern_data) {
-      |                                             ~                          ^
-      |                                                                        )
-/sep/src/blender/mesh_handler.cpp:240:74: error: expected initializer before ‘pattern_data’
-  240 | sep::SEPResult MeshHandler::updateCustomData(const pattern::PatternData& pattern_data) {
-      |                                                                          ^~~~~~~~~~~~
-/sep/src/blender/mesh_handler.cpp:268:41: error: ‘pattern’ does not name a type
-  268 | bool MeshHandler::validatePattern(const pattern::PatternData& pattern_data) const {
-      |                                         ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:268:61: error: expected unqualified-id before ‘&’ token
-  268 | bool MeshHandler::validatePattern(const pattern::PatternData& pattern_data) const {
-      |                                                             ^
-/sep/src/blender/mesh_handler.cpp:268:61: error: expected ‘)’ before ‘&’ token
-  268 | bool MeshHandler::validatePattern(const pattern::PatternData& pattern_data) const {
-      |                                  ~                          ^
-      |                                                             )
-/sep/src/blender/mesh_handler.cpp:268:63: error: expected initializer before ‘pattern_data’
-  268 | bool MeshHandler::validatePattern(const pattern::PatternData& pattern_data) const {
-      |                                                               ^~~~~~~~~~~~
-/sep/src/blender/mesh_handler.cpp:347:51: error: ‘pattern’ does not name a type
-  347 | float MeshHandler::calculateVertexInfluence(const pattern::PatternData& pattern,
-      |                                                   ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:347:71: error: expected unqualified-id before ‘&’ token
-  347 | float MeshHandler::calculateVertexInfluence(const pattern::PatternData& pattern,
-      |                                                                       ^
-/sep/src/blender/mesh_handler.cpp:347:71: error: expected ‘)’ before ‘&’ token
-  347 | float MeshHandler::calculateVertexInfluence(const pattern::PatternData& pattern,
-      |                                            ~                          ^
-      |                                                                       )
-/sep/src/blender/mesh_handler.cpp:347:73: error: expected initializer before ‘pattern’
-  347 | float MeshHandler::calculateVertexInfluence(const pattern::PatternData& pattern,
-      |                                                                         ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:357:47: error: ‘pattern’ does not name a type
-  357 | void MeshHandler::calculateDisplacement(const pattern::PatternData& pattern,
-      |                                               ^~~~~~~
-/sep/src/blender/mesh_handler.cpp:357:67: error: expected unqualified-id before ‘&’ token
-  357 | void MeshHandler::calculateDisplacement(const pattern::PatternData& pattern,
-      |                                                                   ^
-/sep/src/blender/mesh_handler.cpp:357:67: error: expected ‘)’ before ‘&’ token
-  357 | void MeshHandler::calculateDisplacement(const pattern::PatternData& pattern,
-      |                                        ~                          ^
-      |                                                                   )
-/sep/src/blender/mesh_handler.cpp:357:69: error: expected initializer before ‘pattern’
-  357 | void MeshHandler::calculateDisplacement(const pattern::PatternData& pattern,
-      |                                                                     ^~~~~~~
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/compat/cuda.h:14,
-                 from /sep/include/core/types.h:11,
-                 from /sep/include/quantum/quantum_manifold_optimizer.h:5:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::quantum::PatternEvolutionBridge::Impl; _Args = {const sep::quantum::PatternEvolutionBridge::Config&}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::quantum::PatternEvolutionBridge::Impl>]’:
-/sep/src/quantum/pattern_evolution_bridge.cpp:513:35:   required from here
-  513 |     : impl_(std::make_unique<Impl>(config)) {}
-      |             ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::quantum::PatternEvolutionBridge::Impl’
- 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:81:11: note: forward declaration of ‘class sep::quantum::PatternEvolutionBridge::Impl’
-   81 |     class Impl;
-      |           ^~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:233: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::quantum::PatternEvolutionBridge::Impl]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::quantum::PatternEvolutionBridge::Impl; _Dp = std::default_delete<sep::quantum::PatternEvolutionBridge::Impl>]’
-  399 |           get_deleter()(std::move(__ptr));
-      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/pattern_evolution_bridge.cpp:513:35:   required from here
-  513 |     : impl_(std::make_unique<Impl>(config)) {}
-      |             ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::quantum::PatternEvolutionBridge::Impl’
-   91 |         static_assert(sizeof(_Tp)>0,
-      |                       ^~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:219: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o] Error 1
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:149: src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [CMakeFiles/Makefile2:396: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:247: src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:524: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
-[ 89%] Linking CXX static library libsep_api.a
-[ 89%] Built target sep_api
+make[1]: *** [CMakeFiles/Makefile2:300: CMakeFiles/sep_engine.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

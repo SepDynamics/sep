@@ -1,6 +1,7 @@
 #include "core/manager.h"
 #include "core/engine.h"
 #include "core/common.h"  // defines sep::SEPResult
+#include "core/logging.h"
 #include <curl/curl.h>
 #include <exception>
 #include <iostream>
@@ -35,8 +36,14 @@ int main(int argc, char* argv[]) {
   sep::logging::Manager::initialize();
 
   // Setup signal handling for graceful shutdown
-  signal(SIGINT, signal_handler); // Fix: Set up signal handler
-  signal(SIGTERM, signal_handler); // Fix: Call signal for SIGTERM
+  if (signal(SIGINT, signal_handler) == SIG_ERR) { // Fix: Set up signal handler
+    std::cerr << "Failed to set SIGINT handler" << std::endl;
+    return 1;
+  }
+  if (signal(SIGTERM, signal_handler) == SIG_ERR) { // Fix: Call signal for SIGTERM
+    std::cerr << "Failed to set SIGTERM handler" << std::endl;
+    return 1;
+  }
 
   bool server_mode = false;
   bool cycles_mode = false;
@@ -74,7 +81,7 @@ int main(int argc, char* argv[]) {
       if (result != sep::SEPResult::SUCCESS) {
         spdlog::critical("Failed to initialize Cycles renderer");
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdownLogging();
         return 1;
       }
       
@@ -85,7 +92,7 @@ int main(int argc, char* argv[]) {
       if (!file.is_open()) {
         spdlog::critical("Failed to open scene file: {}", render_file);
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdownLogging();
         return 1;
       }
       
@@ -99,21 +106,21 @@ int main(int argc, char* argv[]) {
         
         // Convert JSON to pattern data
         if (json.contains("patterns") && json["patterns"].is_array()) {
-          for (const auto& item : json["patterns"]) {
-            sep::pattern::PatternData pattern;
-            pattern.coherence = item.value("coherence", 0.5f);
-            pattern.stability = item.value("stability", 0.5f);
-            pattern.entropy = item.value("entropy", 0.5f);
-            patterns.push_back(pattern);
+          for (const auto& item : json["patterns"].items()) {
+            sep::pattern::PatternData pattern_data;
+            pattern_data.coherence = item.value().value("coherence", 0.5f);
+            pattern_data.stability = item.value().value("stability", 0.5f);
+            pattern_data.entropy = item.value().value("entropy", 0.5f);
+            patterns.push_back(pattern_data);
           }
         } else if (json.is_array()) {
           // For backward compatibility with array-only format
-          for (const auto& item : json) {
-            sep::pattern::PatternData pattern;
-            pattern.coherence = item.value("coherence", 0.5f);
-            pattern.stability = item.value("stability", 0.5f);
-            pattern.entropy = item.value("entropy", 0.5f);
-            patterns.push_back(pattern);
+          for (const auto& item : json.items()) {
+            sep::pattern::PatternData pattern_data;
+            pattern_data.coherence = item.value().value("coherence", 0.5f);
+            pattern_data.stability = item.value().value("stability", 0.5f);
+            pattern_data.entropy = item.value().value("entropy", 0.5f);
+            patterns.push_back(pattern_data);
           }
         }
         
@@ -122,7 +129,7 @@ int main(int argc, char* argv[]) {
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to create scene from patterns");
           curl_global_cleanup();
-          sep::logging::shutdownLogging();
+          sep::logging::Manager::shutdownLogging();
           return 1;
         }
         
@@ -131,27 +138,27 @@ int main(int argc, char* argv[]) {
         params.width = json.value("width", 1920);
         params.height = json.value("height", 1080);
         params.samples = json.value("samples", 128);
-        params.output_path = json.value("output", "render.ppm");
+        params.output_format = json.value("output", "render.ppm");
         
         // Render the scene
-        spdlog::info("Rendering scene to {}", params.output_path);
+        spdlog::info("Rendering scene to {}", params.output_format);
         result = renderer.renderScene(params);
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to render scene");
           curl_global_cleanup();
-          sep::logging::shutdownLogging();
+          sep::logging::Manager::shutdownLogging();
           return 1;
         }
         
         spdlog::info("Render completed successfully");
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdownLogging();
         return 0;
       }
       catch (const std::exception& e) {
         spdlog::critical("Error parsing scene file: {}", e.what());
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdownLogging();
         return 1;
       }
 #else
@@ -167,7 +174,7 @@ int main(int argc, char* argv[]) {
       if (result != sep::SEPResult::SUCCESS) {
         spdlog::critical("Failed to initialize Cycles renderer");
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdownLogging();
         return 1;
       }
       
@@ -178,7 +185,7 @@ int main(int argc, char* argv[]) {
       if (!file.is_open()) {
         spdlog::critical("Failed to open scene file: {}", render_file);
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdownLogging();
         return 1;
       }
       
@@ -192,21 +199,21 @@ int main(int argc, char* argv[]) {
         
         // Convert JSON to pattern data
         if (json.contains("patterns") && json["patterns"].is_array()) {
-          for (const auto& item : json["patterns"]) {
-            sep::pattern::PatternData pattern;
-            pattern.coherence = item.value("coherence", 0.5f);
-            pattern.stability = item.value("stability", 0.5f);
-            pattern.entropy = item.value("entropy", 0.5f);
-            patterns.push_back(pattern);
+          for (const auto& item : json["patterns"].items()) {
+            sep::pattern::PatternData pattern_data;
+            pattern_data.coherence = item.value().value("coherence", 0.5f);
+            pattern_data.stability = item.value().value("stability", 0.5f);
+            pattern_data.entropy = item.value().value("entropy", 0.5f);
+            patterns.push_back(pattern_data);
           }
         } else if (json.is_array()) {
           // For backward compatibility with array-only format
-          for (const auto& item : json) {
-            sep::pattern::PatternData pattern;
-            pattern.coherence = item.value("coherence", 0.5f);
-            pattern.stability = item.value("stability", 0.5f);
-            pattern.entropy = item.value("entropy", 0.5f);
-            patterns.push_back(pattern);
+          for (const auto& item : json.items()) {
+            sep::pattern::PatternData pattern_data;
+            pattern_data.coherence = item.value().value("coherence", 0.5f);
+            pattern_data.stability = item.value().value("stability", 0.5f);
+            pattern_data.entropy = item.value().value("entropy", 0.5f);
+            patterns.push_back(pattern_data);
           }
         }
         
@@ -215,7 +222,7 @@ int main(int argc, char* argv[]) {
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to create scene from patterns");
           curl_global_cleanup();
-          sep::logging::shutdownLogging();
+          sep::logging::Manager::shutdownLogging();
           return 1;
         }
         
@@ -224,27 +231,27 @@ int main(int argc, char* argv[]) {
         params.width = json.value("width", 1920);
         params.height = json.value("height", 1080);
         params.samples = json.value("samples", 128);
-        params.output_path = json.value("output", "render.ppm");
+        params.output_format = json.value("output", "render.ppm");
         
         // Render the scene
-        spdlog::info("Rendering scene to {}", params.output_path);
+        spdlog::info("Rendering scene to {}", params.output_format);
         result = renderer.renderScene(params);
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to render scene");
           curl_global_cleanup();
-          sep::logging::shutdownLogging();
+          sep::logging::Manager::shutdownLogging();
           return 1;
         }
         
         spdlog::info("Render completed successfully");
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdownLogging();
         return 0;
       }
       catch (const std::exception& e) {
         spdlog::critical("Error parsing scene file: {}", e.what());
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdownLogging();
         return 1;
       }
 #endif
@@ -258,7 +265,7 @@ int main(int argc, char* argv[]) {
 #else
       spdlog::critical("Engine initialization failed");
       curl_global_cleanup();
-      sep::logging::shutdownLogging();
+      sep::logging::Manager::shutdownLogging();
       return 1;
 #endif
     }
@@ -285,12 +292,12 @@ int main(int argc, char* argv[]) {
   } catch (const std::exception& e) {
     spdlog::critical("Unhandled exception: {}", e.what());
     curl_global_cleanup();
-    sep::logging::shutdownLogging();
+    sep::logging::Manager::shutdownLogging();
     return 1;
   }
 #endif
 
   curl_global_cleanup();
-  sep::logging::shutdownLogging();
+  sep::logging::Manager::shutdownLogging();
   return 0;
 }

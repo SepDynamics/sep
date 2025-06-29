@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
     sep::blender::CyclesRenderer renderer;
     
     // Check if Cycles support is available
-    if (!sep::blender::CyclesRenderer::isCyclesAvailable()) {
+    if (sep::blender::CyclesRenderer::isCyclesAvailable() != sep::SEPResult::SUCCESS) {
         std::cout << "Cycles support is not available. Using stub implementation." << std::endl;
     } else {
         std::cout << "Cycles support is available." << std::endl;
@@ -81,15 +81,15 @@ int main(int argc, char* argv[]) {
     params.height = 480;
     params.samples = 32;
     params.use_denoising = true;
-    params.output_path = "cycles_render.ppm";
+    params.output_format = "cycles_render.ppm";
     
     // Parse command line arguments for output path
     if (argc > 1) {
-        params.output_path = argv[1];
+        params.output_format = argv[1];
     }
     
     // Render the scene
-    std::cout << "Rendering scene to " << params.output_path << "..." << std::endl;
+    std::cout << "Rendering scene to " << params.output_format << "..." << std::endl;
     result = renderer.renderScene(params);
     if (result != sep::SEPResult::SUCCESS) {
         std::cout << "Failed to render scene." << std::endl;
@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
     }
     
     std::cout << "Render completed successfully." << std::endl;
-    std::cout << "Output file: " << params.output_path << std::endl;
+    std::cout << "Output file: " << params.output_format << std::endl;
     
     return 0;
 }

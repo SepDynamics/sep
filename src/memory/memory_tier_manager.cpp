@@ -16,6 +16,9 @@
 #include "memory/logger.hpp"
 #include "quantum/pattern_evolution_bridge.h"
 
+#include <memory>
+#include <mutex>
+#include <vector>
 
 namespace sep::memory {
 

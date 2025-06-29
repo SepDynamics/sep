@@ -228,25 +228,25 @@ Call Stack (most recent call first):
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[  6%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[  6%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  9%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[  1%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  3%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[  4%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[  6%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[  9%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
 [ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 12%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 12%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
 [ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 15%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 17%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 18%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 15%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 18%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
 [ 20%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 21%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 23%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 25%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 26%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 28%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 29%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 23%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 21%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 25%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 26%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 28%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 29%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 In file included from /sep/include/compat/cuda_common.h:10,
                  from /sep/src/compat/stream.cpp:3:
 /sep/include/compat/cuda_impl.h: In function ‘cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams&)’:
@@ -260,8 +260,8 @@ In file included from /sep/include/cuda_runtime.h:1,
 /sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
    96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
       |             ^~~~~~~~~~~~~~~
-[ 31%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 32%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 32%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
 In file included from /sep/include/compat/cuda_common.h:10,
                  from /sep/include/compat/raii.h:10,
                  from /sep/src/compat/raii.cpp:15:
@@ -274,13 +274,39 @@ In file included from /sep/include/compat/raii.h:9:
 /sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
    96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
       |             ^~~~~~~~~~~~~~~
-[ 34%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 34%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+In file included from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/types.h:7,
+                 from /sep/include/quantum/processor.h:5,
+                 from /sep/include/api/bridge.hpp:5,
+                 from /sep/src/api/bridge.cpp:3:
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                 ^~~~~~~
+/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                                             ^
+/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
 In file included from /sep/include/quantum/data.hpp:4,
                  from /sep/include/memory/types.h:10,
                  from /sep/include/memory/memory_tier.hpp:13,
                  from /sep/include/memory/memory_tier_manager.hpp:13,
                  from /sep/src/memory/memory_tier_manager.cpp:1:
+/sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
+   30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
+      |          ^~~~~~
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+In file included from /sep/include/quantum/data.hpp:4,
+                 from /sep/include/memory/types.h:10,
+                 from /sep/include/memory/memory_tier.hpp:13,
+                 from /sep/include/memory/memory_tier_manager.hpp:13,
+                 from /sep/src/compat/raii.cpp:16:
+/sep/include/quantum/types.h: At global scope:
 /sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
    30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
       |          ^~~~~~
@@ -300,6 +326,34 @@ In file included from /sep/include/cuda_runtime.h:1,
 /sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
    96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
       |             ^~~~~~~~~~~~~~~
+[ 35%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+In file included from /sep/include/quantum/data.hpp:4,
+                 from /sep/include/memory/types.h:10,
+                 from /sep/include/memory/redis_manager.h:3,
+                 from /sep/src/memory/redis_manager.cpp:1:
+/sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
+   30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
+      |          ^~~~~~
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+In file included from /sep/include/blender/bridge.h:15,
+                 from /sep/src/compat/component_bridge.cpp:4:
+/sep/include/quantum/data.hpp:23:48: error: ‘STM’ is not a member of ‘sep::MemoryTierEnum’
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |                                                ^~~
+/sep/include/quantum/data.hpp:23:51: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::MemoryTierEnum’ in initialization
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |                                                   ^
+[ 37%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+/sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::removePattern(std::size_t)’:
+/sep/src/memory/memory_tier_manager.cpp:270:58: error: ‘const struct sep::pattern::PatternData’ has no member named ‘memory_tier’
+  270 |     if (MemoryTier* t = getTier(static_cast<TierType>(p->memory_tier)))
+      |                                                          ^~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::loadLTMFromPersistence()’:
+/sep/src/memory/memory_tier_manager.cpp:321:14: error: ‘struct sep::pattern::PatternData’ has no member named ‘memory_tier’
+  321 |         pat->memory_tier = MemoryTierEnum::LTM;
+      |              ^~~~~~~~~~~
 In file included from /sep/include/quantum/data.hpp:4,
                  from /sep/include/memory/types.h:10,
                  from /sep/include/memory/memory_tier.hpp:13,
@@ -307,17 +361,16 @@ In file included from /sep/include/quantum/data.hpp:4,
 /sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
    30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
       |          ^~~~~~
-/sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::removePattern(std::size_t)’:
-/sep/src/memory/memory_tier_manager.cpp:270:58: error: ‘const struct sep::pattern::PatternData’ has no member named ‘memory_tier’
-  270 |     if (MemoryTier* t = getTier(static_cast<TierType>(p->memory_tier)))
-      |                                                          ^~~~~~~~~~~
 /sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
    23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
       |     ^~~~~~~~~~~~~~
-/sep/src/memory/memory_tier_manager.cpp: In member function ‘void sep::memory::MemoryTierManager::loadLTMFromPersistence()’:
-/sep/src/memory/memory_tier_manager.cpp:321:14: error: ‘struct sep::pattern::PatternData’ has no member named ‘memory_tier’
-  321 |         pat->memory_tier = MemoryTierEnum::LTM;
-      |              ^~~~~~~~~~~
+In file included from /sep/include/blender/bridge.h:16:
+/sep/include/quantum/pattern_processor.h:29:48: error: ‘STM’ is not a member of ‘sep::MemoryTierEnum’
+   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |                                                ^~~
+/sep/include/quantum/pattern_processor.h:29:51: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::MemoryTierEnum’ in initialization
+   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |                                                   ^
 In file included from /sep/include/compat/cuda_common.h:10,
                  from /sep/src/memory/memory_tier.cpp:20:
 /sep/include/compat/cuda_impl.h: In function ‘cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams&)’:
@@ -331,48 +384,15 @@ In file included from /sep/include/cuda_runtime.h:1,
 /sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
    96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
       |             ^~~~~~~~~~~~~~~
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/quantum/processor.h:5,
-                 from /sep/include/api/bridge.hpp:5,
-                 from /sep/src/api/bridge.cpp:3:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                 ^~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
-In file included from /sep/include/blender/bridge.h:15,
-                 from /sep/include/blender/pattern_bridge.h:10,
-                 from /sep/src/core/engine.cpp:4:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-In file included from /sep/include/quantum/pattern_processor.h:3,
-                 from /sep/include/blender/bridge.h:16:
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
+[ 39%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
 In file included from /sep/include/quantum/data.hpp:4,
                  from /sep/include/memory/types.h:10,
-                 from /sep/include/memory/redis_manager.h:3,
-                 from /sep/src/memory/redis_manager.cpp:1:
+                 from /sep/include/memory/memory_tier.hpp:13,
+                 from /sep/include/memory/memory_tier_manager.hpp:13,
+                 from /sep/src/memory/manager.cpp:8:
 /sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
    30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
       |          ^~~~~~
-/sep/include/quantum/pattern_processor.h:29:5: error: ‘MemoryTierEnum’ does not name a type
-   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
 In file included from /sep/include/memory/types.h:10,
                  from /sep/include/quantum/types.h:7,
                  from /sep/src/api/bridge_c.cpp:2:
@@ -382,15 +402,21 @@ In file included from /sep/include/memory/types.h:10,
 /sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
    24 |     std::vector<quantum::PatternRelationship> relationships;
       |                 ^~~~~~~
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
 /sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
    24 |     std::vector<quantum::PatternRelationship> relationships;
       |                                             ^
 /sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-In file included from /sep/include/api/bridge_internal.hpp:7,
-                 from /sep/src/api/bridge_c.cpp:4:
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
+/sep/src/compat/component_bridge.cpp: In function ‘std::unique_ptr<sep::SEPBlenderBridge> sep::compat::createBlenderBridge()’:
+/sep/src/compat/component_bridge.cpp:17:11: error: invalid use of incomplete type ‘struct sep::SEPBlenderBridge’
+   17 |     bridge->impl = std::make_shared<pattern::BlenderBridge>();
+      |           ^~
+In file included from /sep/src/compat/component_bridge.cpp:2:
+/sep/include/compat/component_bridge.h:11:8: note: forward declaration of ‘struct sep::SEPBlenderBridge’
+   11 | struct SEPBlenderBridge;
+      |        ^~~~~~~~~~~~~~~~
 In file included from /sep/include/compat/cuda_common.h:10,
                  from /sep/include/compat/cuda_helpers.h:6,
                  from /sep/src/api/bridge_c.cpp:6:
@@ -405,6 +431,47 @@ In file included from /sep/include/cuda_runtime.h:1,
 /sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
    96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
       |             ^~~~~~~~~~~~~~~
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/include/blender/types.h:5,
+                 from /sep/src/compat/component_bridge.cpp:1:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::SEPBlenderBridge; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::SEPBlenderBridge>]’:
+/sep/src/compat/component_bridge.cpp:16:53:   required from here
+   16 |     auto bridge = std::make_unique<SEPBlenderBridge>();
+      |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘struct sep::SEPBlenderBridge’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/include/compat/component_bridge.h:11:8: note: forward declaration of ‘struct sep::SEPBlenderBridge’
+   11 | struct SEPBlenderBridge;
+      |        ^~~~~~~~~~~~~~~~
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::SEPBlenderBridge]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::SEPBlenderBridge; _Dp = std::default_delete<sep::SEPBlenderBridge>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/src/compat/component_bridge.cpp:16:53:   required from here
+   16 |     auto bridge = std::make_unique<SEPBlenderBridge>();
+      |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::SEPBlenderBridge’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+In file included from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/types.h:7,
+                 from /sep/include/quantum/processor.h:5,
+                 from /sep/include/quantum/quantum_processor.h:4,
+                 from /sep/src/quantum/quantum_processor.cpp:1:
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                 ^~~~~~~
+/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                                             ^
+/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
 In file included from /sep/include/quantum/data.hpp:4,
                  from /sep/include/memory/types.h:10,
                  from /sep/include/memory/quantum_coherence_manager.h:3,
@@ -412,18 +479,6 @@ In file included from /sep/include/quantum/data.hpp:4,
 /sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
    30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
       |          ^~~~~~
-In file included from /sep/include/quantum/data.hpp:4,
-                 from /sep/include/memory/types.h:10,
-                 from /sep/include/memory/memory_tier.hpp:13,
-                 from /sep/include/memory/memory_tier_manager.hpp:13,
-                 from /sep/src/compat/raii.cpp:16:
-/sep/include/quantum/types.h: At global scope:
-/sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
-   30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
-      |          ^~~~~~
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
 /sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
    23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
       |     ^~~~~~~~~~~~~~
@@ -441,796 +496,10 @@ In file included from /sep/include/cuda_runtime.h:1,
 /sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
    96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
       |             ^~~~~~~~~~~~~~~
-In file included from /sep/include/compat/cuda_common.h:10,
-                 from /sep/src/core/metrics_collector.cpp:2:
-/sep/include/compat/cuda_impl.h: In function ‘cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams&)’:
-/sep/include/compat/cuda_impl.h:24:14: error: ‘::cudaMemcpyAsync’ has not been declared; did you mean ‘sep::cuda::cudaMemcpyAsync’?
-   24 |     return ::cudaMemcpyAsync(params.destination, params.source, params.sizeInBytes, params.direction, params.stream);
-      |              ^~~~~~~~~~~~~~~
-      |              sep::cuda::cudaMemcpyAsync
-In file included from /sep/include/cuda_runtime.h:1,
-                 from /sep/include/compat/cuda_defs.h:7,
-                 from /sep/include/compat/cuda_impl.h:7:
-/sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
-   96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
-      |             ^~~~~~~~~~~~~~~
-In file included from /sep/include/quantum/quantum_manifold_optimizer.h:9,
-                 from /sep/src/memory/quantum_coherence_manager.cpp:5:
-/sep/include/quantum/quantum_processor_qfh.h: At global scope:
-/sep/include/quantum/quantum_processor_qfh.h:64:10: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-   64 |     sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
-      |          ^~~~~~~~~~~~~~
-In file included from /sep/include/quantum/data.hpp:4,
-                 from /sep/include/memory/types.h:10,
-                 from /sep/include/memory/memory_tier.hpp:13,
-                 from /sep/include/memory/memory_tier_manager.hpp:13,
-                 from /sep/src/memory/manager.cpp:8:
-/sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
-   30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
-      |          ^~~~~~
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-In file included from /sep/src/memory/manager.cpp:9:
-/sep/include/quantum/quantum_processor_qfh.h:64:10: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-   64 |     sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
-      |          ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:139:5: error: ‘CUDAConfig’ does not name a type; did you mean ‘CudaConfig’?
-  139 |     CUDAConfig cuda;
-      |     ^~~~~~~~~~
-      |     CudaConfig
-/sep/include/quantum/quantum_manifold_optimizer.h:140:5: error: ‘APIConfig’ does not name a type; did you mean ‘ApiConfig’?
-  140 |     APIConfig api;
-      |     ^~~~~~~~~
-      |     ApiConfig
-/sep/include/quantum/quantum_manifold_optimizer.h:141:5: error: ‘LogConfig’ does not name a type; did you mean ‘ApiConfig’?
-  141 |     LogConfig log;
-      |     ^~~~~~~~~
-      |     ApiConfig
-/sep/include/quantum/quantum_manifold_optimizer.h:151:7: error: ‘QuantumManifoldOptimizer’ has not been declared
-  151 | class QuantumManifoldOptimizer::Impl {
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:151:38: error: expected unqualified-id before ‘{’ token
-  151 | class QuantumManifoldOptimizer::Impl {
-      |                                      ^
-/sep/include/quantum/quantum_manifold_optimizer.h:207:47: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  207 |     void optimizeThresholds(const std::vector<QuantumPattern>& patterns);
-      |                                               ^~~~~~~~~~~~~~
-      |                                               sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:207:61: error: template argument 1 is invalid
-  207 |     void optimizeThresholds(const std::vector<QuantumPattern>& patterns);
-      |                                                             ^
-/sep/include/quantum/quantum_manifold_optimizer.h:207:61: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:213:40: error: ‘QuantumPattern’ does not name a type
-  213 |     MemoryTierEnum recommendTier(const QuantumPattern& pattern) const;
-      |                                        ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:221:45: error: ‘QuantumPattern’ does not name a type
-  221 |     double calculateHamiltonianEnergy(const QuantumPattern& pattern) const;
-      |                                             ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:222:41: error: ‘QuantumPattern’ does not name a type
-  222 |     double predictFutureCoherence(const QuantumPattern& pattern, double dt) const;
-      |                                         ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:226:61: error: expected class-name before ‘{’ token
-  226 | class QuantumManifoldProcessor : public QuantumProcessorQFH {
-      |                                                             ^
-/sep/include/quantum/quantum_manifold_optimizer.h:239:65: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  239 |     ManifoldAnalysis analyzeCoherenceManifold(const std::vector<QuantumPattern>& patterns);
-      |                                                                 ^~~~~~~~~~~~~~
-      |                                                                 sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:239:79: error: template argument 1 is invalid
-  239 |     ManifoldAnalysis analyzeCoherenceManifold(const std::vector<QuantumPattern>& patterns);
-      |                                                                               ^
-/sep/include/quantum/quantum_manifold_optimizer.h:239:79: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:242:5: error: ‘QFHResult’ does not name a type
-  242 |     QFHResult processWithCrossScaleAnalysis(const std::vector<uint32_t>& pattern_bits);
-      |     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:258:54: error: ‘CudaConfig’ in ‘struct ManifoldConfig’ does not name a type
-  258 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
-      |                                                      ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:276:21: error: ‘CudaConfig’ in ‘struct ManifoldConfig’ does not name a type
-  276 |     ManifoldConfig::CudaConfig config_;
-      |                     ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:285:58: error: ‘ApiConfig’ in ‘struct ManifoldConfig’ does not name a type
-  285 |     explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
-      |                                                          ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:302:21: error: ‘ApiConfig’ in ‘struct ManifoldConfig’ does not name a type
-  302 |     ManifoldConfig::ApiConfig config_;
-      |                     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:312:54: error: ‘SemanticConfig’ in ‘struct ManifoldConfig’ does not name a type
-  312 |     explicit SemanticProcessor(const ManifoldConfig::SemanticConfig& config);
-      |                                                      ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:332:62: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  332 |                                            const std::vector<QuantumPattern>& patterns);
-      |                                                              ^~~~~~~~~~~~~~
-      |                                                              sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:332:76: error: template argument 1 is invalid
-  332 |                                            const std::vector<QuantumPattern>& patterns);
-      |                                                                            ^
-/sep/include/quantum/quantum_manifold_optimizer.h:332:76: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:339:21: error: ‘SemanticConfig’ in ‘struct ManifoldConfig’ does not name a type
-  339 |     ManifoldConfig::SemanticConfig config_;
-      |                     ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:349:56: error: ‘AnalyticsConfig’ in ‘struct ManifoldConfig’ does not name a type
-  349 |     explicit PerformanceAnalyzer(const ManifoldConfig::AnalyticsConfig& config);
-      |                                                        ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:359:60: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  359 |     StateSpaceAnalysis analyzeStateSpace(const std::vector<QuantumPattern>& pattern_history);
-      |                                                            ^~~~~~~~~~~~~~
-      |                                                            sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:359:74: error: template argument 1 is invalid
-  359 |     StateSpaceAnalysis analyzeStateSpace(const std::vector<QuantumPattern>& pattern_history);
-      |                                                                          ^
-/sep/include/quantum/quantum_manifold_optimizer.h:359:74: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:382:21: error: ‘AnalyticsConfig’ in ‘struct ManifoldConfig’ does not name a type
-  382 |     ManifoldConfig::AnalyticsConfig config_;
-      |                     ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:387:51: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  387 |     double calculateEntropyRate(const std::vector<QuantumPattern>& patterns);
-      |                                                   ^~~~~~~~~~~~~~
-      |                                                   sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:387:65: error: template argument 1 is invalid
-  387 |     double calculateEntropyRate(const std::vector<QuantumPattern>& patterns);
-      |                                                                 ^
-/sep/include/quantum/quantum_manifold_optimizer.h:387:65: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:430:9: error: ‘QuantumPattern’ does not name a type
-  430 |         QuantumPattern generatePattern(int index) {
-      |         ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:458:17: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  458 |     std::vector<QuantumPattern> generateTestPatterns(int count);
-      |                 ^~~~~~~~~~~~~~
-      |                 sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:458:31: error: template argument 1 is invalid
-  458 |     std::vector<QuantumPattern> generateTestPatterns(int count);
-      |                               ^
-/sep/include/quantum/quantum_manifold_optimizer.h:458:31: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:472:44: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  472 |     void processPatterns(const std::vector<QuantumPattern>& patterns);
-      |                                            ^~~~~~~~~~~~~~
-      |                                            sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:472:58: error: template argument 1 is invalid
-  472 |     void processPatterns(const std::vector<QuantumPattern>& patterns);
-      |                                                          ^
-/sep/include/quantum/quantum_manifold_optimizer.h:472:58: error: template argument 2 is invalid
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 39%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-In file included from /sep/include/compat/cuda_common.h:10,
-                 from /sep/include/compat/core.h:5,
-                 from /sep/src/core/engine.cpp:19:
-/sep/include/compat/cuda_impl.h: In function ‘cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams&)’:
-/sep/include/compat/cuda_impl.h:24:14: error: ‘::cudaMemcpyAsync’ has not been declared; did you mean ‘sep::cuda::cudaMemcpyAsync’?
-   24 |     return ::cudaMemcpyAsync(params.destination, params.source, params.sizeInBytes, params.direction, params.stream);
-      |              ^~~~~~~~~~~~~~~
-      |              sep::cuda::cudaMemcpyAsync
-In file included from /sep/include/cuda_runtime.h:1,
-                 from /sep/include/compat/cuda_defs.h:7,
-                 from /sep/include/compat/cuda_impl.h:7:
-/sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
-   96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
-      |             ^~~~~~~~~~~~~~~
-[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 42%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-In file included from /sep/include/blender/bridge.h:15,
-                 from /sep/src/compat/component_bridge.cpp:4:
-/sep/include/quantum/data.hpp:23:48: error: ‘STM’ is not a member of ‘sep::MemoryTierEnum’
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |                                                ^~~
-/sep/include/quantum/data.hpp:23:51: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::MemoryTierEnum’ in initialization
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |                                                   ^
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/api/sep_engine.h:13,
-                 from /sep/src/api/crow_adapter.cpp:21:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-In file included from /sep/include/blender/bridge.h:16:
-/sep/include/quantum/pattern_processor.h:29:48: error: ‘STM’ is not a member of ‘sep::MemoryTierEnum’
-   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |                                                ^~~
-/sep/include/quantum/pattern_processor.h:29:51: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::MemoryTierEnum’ in initialization
-   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |                                                   ^
-/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                 ^~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-/sep/src/compat/component_bridge.cpp: In function ‘std::unique_ptr<sep::SEPBlenderBridge> sep::compat::createBlenderBridge()’:
-/sep/src/compat/component_bridge.cpp:17:11: error: invalid use of incomplete type ‘struct sep::SEPBlenderBridge’
-   17 |     bridge->impl = std::make_shared<pattern::BlenderBridge>();
-      |           ^~
-In file included from /sep/src/compat/component_bridge.cpp:2:
-/sep/include/compat/component_bridge.h:11:8: note: forward declaration of ‘struct sep::SEPBlenderBridge’
-   11 | struct SEPBlenderBridge;
-      |        ^~~~~~~~~~~~~~~~
-[ 45%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘std::vector<sep::memory::QuantumCoherenceManager::TierMigration> sep::memory::QuantumCoherenceManager::Impl::optimizeMemoryLayout()’:
-/sep/src/memory/quantum_coherence_manager.cpp:114:18: error: ‘MemoryTierEnum’ is not a member of ‘sep’
-  114 |             sep::MemoryTierEnum target_tier = determineOptimalTier(data);
-      |                  ^~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:114:18: note: suggested alternatives:
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-   26 | enum class MemoryTierEnum { STM, MTM, LTM };
-      |            ^~~~~~~~~~~~~~
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/blender/types.h:5,
-                 from /sep/src/compat/component_bridge.cpp:1:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::SEPBlenderBridge; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::SEPBlenderBridge>]’:
-/sep/src/compat/component_bridge.cpp:16:53:   required from here
-   16 |     auto bridge = std::make_unique<SEPBlenderBridge>();
-      |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘struct sep::SEPBlenderBridge’
- 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/include/compat/component_bridge.h:11:8: note: forward declaration of ‘struct sep::SEPBlenderBridge’
-   11 | struct SEPBlenderBridge;
-      |        ^~~~~~~~~~~~~~~~
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 46%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-/sep/src/memory/quantum_coherence_manager.cpp:116:17: error: ‘target_tier’ was not declared in this scope
-  116 |             if (target_tier != data.current_tier) {
-      |                 ^~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::updatePatternCoherence(const sep::quantum::Pattern&)’:
-/sep/src/memory/quantum_coherence_manager.cpp:321:59: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘memory_tier’
-  321 |             new_data.current_tier = pattern.quantum_state.memory_tier;
-      |                                                           ^~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::applyMemoryPressureOptimizations(std::vector<sep::memory::QuantumCoherenceManager::TierMigration>&)’:
-/sep/src/memory/quantum_coherence_manager.cpp:566:40: error: ‘sep::MemoryTierEnum’ has not been declared
-  566 |             migration.from_tier = sep::MemoryTierEnum::LTM;
-      |                                        ^~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:567:38: error: ‘sep::MemoryTierEnum’ has not been declared
-  567 |             migration.to_tier = sep::MemoryTierEnum::MTM;
-      |                                      ^~~~~~~~~~~~~~
+[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
-/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘float sep::memory::QuantumCoherenceManager::Impl::getThresholdForTier(sep::memory::MemoryTierEnum) const’:
-/sep/src/memory/quantum_coherence_manager.cpp:680:23: error: ‘sep::MemoryTierEnum’ has not been declared
-  680 |             case sep::MemoryTierEnum::LTM: return LTM_COHERENCE_THRESHOLD;
-      |                       ^~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:681:23: error: ‘sep::MemoryTierEnum’ has not been declared
-  681 |             case sep::MemoryTierEnum::MTM: return MTM_COHERENCE_THRESHOLD;
-      |                       ^~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:682:23: error: ‘sep::MemoryTierEnum’ has not been declared
-  682 |             case sep::MemoryTierEnum::STM: return STM_COHERENCE_THRESHOLD;
-      |                       ^~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘sep::memory::QuantumCoherenceManager::Impl::TierAnalysis sep::memory::QuantumCoherenceManager::Impl::analyzeTierCoherence() const’:
-/sep/src/memory/quantum_coherence_manager.cpp:692:83: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-  692 |             analysis.tier_pattern_count[i] = countPatternsInTier(static_cast<sep::MemoryTierEnum>(i));
-      |                                                                                   ^~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp: At global scope:
-/sep/src/memory/quantum_coherence_manager.cpp:746:50: error: no declaration matches ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
-  746 | const QuantumCoherenceManager::CoherenceMetrics& QuantumCoherenceManager::getMetrics() const {
-      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:746:50: note: no functions named ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
-/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
-   14 | class QuantumCoherenceManager {
-      |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:750:10: error: no declaration matches ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
-  750 | uint64_t QuantumCoherenceManager::getGlobalTick() const {
-      |          ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:750:10: note: no functions named ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
-/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
-   14 | class QuantumCoherenceManager {
-      |       ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:754:10: error: ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier’ is not a static data member of ‘class sep::memory::QuantumCoherenceManager’
-  754 | uint32_t QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum tier) const {
-      |          ^~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:754:62: error: ‘MemoryTierEnum’ is not a member of ‘sep’
-  754 | uint32_t QuantumCoherenceManager::getPatternCountByTier(sep::MemoryTierEnum tier) const {
-      |                                                              ^~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:754:62: note: suggested alternatives:
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-   26 | enum class MemoryTierEnum { STM, MTM, LTM };
-      |            ^~~~~~~~~~~~~~
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-/sep/src/memory/quantum_coherence_manager.cpp:758:7: error: ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation’ is not a static data member of ‘class sep::memory::QuantumCoherenceManager’
-  758 | float QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum tier) const {
-      |       ^~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::SEPBlenderBridge]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::SEPBlenderBridge; _Dp = std::default_delete<sep::SEPBlenderBridge>]’
-  399 |           get_deleter()(std::move(__ptr));
-      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/compat/component_bridge.cpp:16:53:   required from here
-   16 |     auto bridge = std::make_unique<SEPBlenderBridge>();
-      |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::SEPBlenderBridge’
-   91 |         static_assert(sizeof(_Tp)>0,
-      |                       ^~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:758:58: error: ‘MemoryTierEnum’ is not a member of ‘sep’
-  758 | float QuantumCoherenceManager::getTierFragmentation(sep::MemoryTierEnum tier) const {
-      |                                                          ^~~~~~~~~~~~~~
-/sep/src/memory/quantum_coherence_manager.cpp:758:58: note: suggested alternatives:
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-   26 | enum class MemoryTierEnum { STM, MTM, LTM };
-      |            ^~~~~~~~~~~~~~
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-/sep/include/memory/types.h:26:12: note:   ‘sep::memory::MemoryTierEnum’
-[ 48%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:93: src/api/CMakeFiles/sep_api.dir/bridge.cpp.o] Error 1
-[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/core/engine.h:5,
-                 from /sep/src/core/engine.cpp:1:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::SEPBlenderBridge]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::SEPBlenderBridge; _Dp = std::default_delete<sep::SEPBlenderBridge>]’
-  399 |           get_deleter()(std::move(__ptr));
-      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/core/engine.cpp:54:66:   required from here
-   54 | Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
-      |                                                                  ^
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::SEPBlenderBridge’
-   91 |         static_assert(sizeof(_Tp)>0,
-      |                       ^~~~~~~~~~~
-In file included from /sep/include/quantum/data.hpp:4,
-                 from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/quantum_processor_qfh.h:4,
-                 from /sep/src/quantum/quantum_processor_qfh.cpp:1:
-/sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
-   30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
-      |          ^~~~~~
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_processor_qfh.h:64:10: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-   64 |     sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
-      |          ^~~~~~~~~~~~~~
-In file included from /sep/src/quantum/quantum_processor_qfh.cpp:3:
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor_qfh.cpp:13:29: error: no declaration matches ‘sep::memory::MemoryTierEnum sep::quantum::QuantumProcessorQFH::determineMemoryTier(float, float, uint32_t) const’
-   13 | sep::memory::MemoryTierEnum QuantumProcessorQFH::determineMemoryTier(float coherence, float stability,
-      |                             ^~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_processor_qfh.cpp:13:29: note: no functions named ‘sep::memory::MemoryTierEnum sep::quantum::QuantumProcessorQFH::determineMemoryTier(float, float, uint32_t) const’
-/sep/include/quantum/quantum_processor_qfh.h:59:7: note: ‘class sep::quantum::QuantumProcessorQFH’ defined here
-   59 | class QuantumProcessorQFH : public QuantumProcessorQFHCommon {
-      |       ^~~~~~~~~~~~~~~~~~~
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:428: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/quantum/processor.h:5,
-                 from /sep/include/quantum/quantum_processor.h:4,
-                 from /sep/src/quantum/quantum_processor.cpp:1:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                 ^~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
-In file included from /sep/src/quantum/quantum_processor.cpp:2:
-/sep/include/quantum/quantum_processor_qfh.h:64:10: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-   64 |     sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
-      |          ^~~~~~~~~~~~~~
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:79: src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o] Error 1
-[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/quantum/processor.h:5,
-                 from /sep/include/quantum/quantum_processor.h:4,
-                 from /sep/src/quantum/quantum_processor_qfh_common.cpp:3:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:26: error: ‘PatternRelationship’ is not a member of ‘sep::quantum’
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                          ^~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
-In file included from /sep/src/quantum/quantum_processor_qfh_common.cpp:4:
-/sep/include/quantum/quantum_processor_qfh.h:64:10: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-   64 |     sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
-      |          ^~~~~~~~~~~~~~
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/quantum/evolution.h:4,
-                 from /sep/src/quantum/evolution.cpp:1:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                 ^~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-In file included from /sep/src/quantum/evolution.cpp:2:
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/quantum/processor.h:5,
-                 from /sep/src/quantum/processor.cpp:1:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                 ^~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:107: src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o] Error 1
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
-In file included from /sep/src/quantum/processor.cpp:4:
-/sep/include/quantum/quantum_processor_qfh.h:64:10: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-   64 |     sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
-      |          ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:84:44: error: ‘MemoryTierEnum’ has not been declared
-   84 |     std::vector<Pattern> getPatternsByTier(MemoryTierEnum tier) const {
-      |                                            ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp: In member function ‘std::vector<sep::quantum::Pattern> sep::quantum::ProcessorImpl::getPatternsByTier(int) const’:
-/sep/src/quantum/processor.cpp:88:51: error: no match for ‘operator==’ (operand types are ‘const sep::memory::MemoryTierEnum’ and ‘int’)
-   88 |             if (pattern.quantum_state.memory_tier == tier) {
-      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~ ~~~~
-      |                                       |              |
-      |                                       |              int
-      |                                       const sep::memory::MemoryTierEnum
-/sep/src/quantum/processor.cpp: In member function ‘void sep::quantum::ProcessorImpl::demotePatterns()’:
-/sep/src/quantum/processor.cpp:208:53: error: ‘MemoryTierEnum’ has not been declared
-  208 |                 pattern.quantum_state.memory_tier = MemoryTierEnum::STM;
-      |                                                     ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:210:53: error: ‘MemoryTierEnum’ has not been declared
-  210 |                 pattern.quantum_state.memory_tier = MemoryTierEnum::MTM;
-      |                                                     ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp: In member function ‘std::string sep::quantum::ProcessorImpl::getStatus() const’:
-/sep/src/quantum/processor.cpp:263:22: error: ‘MemoryTierEnum’ has not been declared
-  263 |                 case MemoryTierEnum::STM: stm_count++; break;
-      |                      ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:264:22: error: ‘MemoryTierEnum’ has not been declared
-  264 |                 case MemoryTierEnum::MTM: mtm_count++; break;
-      |                      ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:265:22: error: ‘MemoryTierEnum’ has not been declared
-  265 |                 case MemoryTierEnum::LTM: ltm_count++; break;
-      |                      ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp: In member function ‘void sep::quantum::ProcessorImpl::updateMemoryTier(sep::quantum::Pattern&)’:
-/sep/src/quantum/processor.cpp:306:9: error: ‘MemoryTierEnum’ was not declared in this scope; did you mean ‘sep::memory::MemoryTierEnum’?
-  306 |         MemoryTierEnum previous_tier = state.memory_tier;
-      |         ^~~~~~~~~~~~~~
-      |         sep::memory::MemoryTierEnum
-/sep/include/memory/types.h:26:12: note: ‘sep::memory::MemoryTierEnum’ declared here
-   26 | enum class MemoryTierEnum { STM, MTM, LTM };
-      |            ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:308:33: error: ‘MemoryTierEnum’ is not a class, namespace, or enumeration
-  308 |             state.memory_tier = MemoryTierEnum::LTM;
-      |                                 ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:310:33: error: ‘MemoryTierEnum’ is not a class, namespace, or enumeration
-  310 |             state.memory_tier = MemoryTierEnum::MTM;
-      |                                 ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:312:33: error: ‘MemoryTierEnum’ is not a class, namespace, or enumeration
-  312 |             state.memory_tier = MemoryTierEnum::STM;
-      |                                 ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:314:34: error: ‘previous_tier’ was not declared in this scope
-  314 |         if (state.memory_tier != previous_tier) {
-      |                                  ^~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp: At global scope:
-/sep/src/quantum/processor.cpp:364:22: error: ‘std::vector<sep::quantum::Pattern> sep::quantum::Processor::getPatternsByTier’ is not a static data member of ‘class sep::quantum::Processor’
-  364 | std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
-      |                      ^~~~~~~~~
-/sep/src/quantum/processor.cpp:364:51: error: ‘MemoryTierEnum’ was not declared in this scope; did you mean ‘sep::memory::MemoryTierEnum’?
-  364 | std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
-      |                                                   ^~~~~~~~~~~~~~
-      |                                                   sep::memory::MemoryTierEnum
-/sep/include/memory/types.h:26:12: note: ‘sep::memory::MemoryTierEnum’ declared here
-   26 | enum class MemoryTierEnum { STM, MTM, LTM };
-      |            ^~~~~~~~~~~~~~
-/sep/src/quantum/processor.cpp:364:72: error: expected ‘,’ or ‘;’ before ‘const’
-  364 | std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
-      |                                                                        ^~~~~
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:492: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:107: src/core/CMakeFiles/sep_core.dir/engine.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:460: src/core/CMakeFiles/sep_core.dir/all] Error 2
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/src/quantum/types_serialization.cpp:1:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                 ^~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/quantum/processor.h:5,
-                 from /sep/include/quantum/pattern_processor.h:3,
-                 from /sep/src/quantum/pattern_processor.cpp:1:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                 ^~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
-/sep/include/quantum/pattern_processor.h:29:5: error: ‘MemoryTierEnum’ does not name a type
-   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/src/quantum/pattern_processor.cpp: In member function ‘virtual sep::quantum::PatternProcessResult sep::quantum::{anonymous}::PatternQuantumProcessorImpl::processPattern(const sep::quantum::QuantumState&, const std::string&)’:
-/sep/src/quantum/pattern_processor.cpp:25:16: error: ‘struct sep::quantum::PatternProcessResult’ has no member named ‘memory_tier’
-   25 |         result.memory_tier = MemoryTierEnum::STM; // Default to Short-Term Memory
-      |                ^~~~~~~~~~~
-/sep/src/quantum/pattern_processor.cpp:25:30: error: ‘MemoryTierEnum’ has not been declared
-   25 |         result.memory_tier = MemoryTierEnum::STM; // Default to Short-Term Memory
-      |                              ^~~~~~~~~~~~~~
-/sep/src/quantum/pattern_processor.cpp:56:20: error: ‘struct sep::quantum::PatternProcessResult’ has no member named ‘memory_tier’
-   56 |             result.memory_tier = MemoryTierEnum::LTM;
-      |                    ^~~~~~~~~~~
-/sep/src/quantum/pattern_processor.cpp:56:34: error: ‘MemoryTierEnum’ has not been declared
-   56 |             result.memory_tier = MemoryTierEnum::LTM;
-      |                                  ^~~~~~~~~~~~~~
-/sep/src/quantum/pattern_processor.cpp:58:20: error: ‘struct sep::quantum::PatternProcessResult’ has no member named ‘memory_tier’
-   58 |             result.memory_tier = MemoryTierEnum::MTM;
-      |                    ^~~~~~~~~~~
-/sep/src/quantum/pattern_processor.cpp:58:34: error: ‘MemoryTierEnum’ has not been declared
-   58 |             result.memory_tier = MemoryTierEnum::MTM;
-      |                                  ^~~~~~~~~~~~~~
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:135: src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:332: src/api/CMakeFiles/sep_api.dir/all] Error 2
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:149: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o] Error 1
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/quantum/processor.h:5,
-                 from /sep/src/quantum/pattern_processor_interface.cpp:1:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                 ^~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-/sep/include/quantum/processor.h:95:58: error: ‘MemoryTierEnum’ has not been declared
-   95 |     std::vector<sep::quantum::Pattern> getPatternsByTier(MemoryTierEnum tier) const;
-      |                                                          ^~~~~~~~~~~~~~
-In file included from /sep/include/memory/types.h:10,
-                 from /sep/include/quantum/types.h:7,
-                 from /sep/include/quantum/quantum_manifold_optimizer.h:8,
-                 from /sep/src/quantum/quantum_manifold_optimizer.cpp:2:
-/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
-   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-      |     ^~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:26: error: ‘PatternRelationship’ is not a member of ‘sep::quantum’
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                          ^~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
-   24 |     std::vector<quantum::PatternRelationship> relationships;
-      |                                             ^
-/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
-In file included from /sep/include/quantum/quantum_manifold_optimizer.h:9:
-/sep/include/quantum/quantum_processor_qfh.h:64:10: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-   64 |     sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
-      |          ^~~~~~~~~~~~~~
-In file included from /sep/src/quantum/pattern_processor_interface.cpp:3:
-/sep/include/quantum/quantum_processor_qfh.h:64:10: error: ‘MemoryTierEnum’ in namespace ‘sep’ does not name a type
-   64 |     sep::MemoryTierEnum determineMemoryTier(float coherence, float stability, uint32_t generation_count) const;
-      |          ^~~~~~~~~~~~~~
-In file included from /sep/include/compat/cuda_common.h:10,
-                 from /sep/include/compat/core.h:5,
-                 from /sep/src/quantum/pattern_processor_interface.cpp:6:
-/sep/include/compat/cuda_impl.h: In function ‘cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams&)’:
-/sep/include/compat/cuda_impl.h:24:14: error: ‘::cudaMemcpyAsync’ has not been declared; did you mean ‘sep::cuda::cudaMemcpyAsync’?
-   24 |     return ::cudaMemcpyAsync(params.destination, params.source, params.sizeInBytes, params.direction, params.stream);
-      |              ^~~~~~~~~~~~~~~
-      |              sep::cuda::cudaMemcpyAsync
-In file included from /sep/include/cuda_runtime.h:1,
-                 from /sep/include/compat/cuda_defs.h:7,
-                 from /sep/include/compat/cuda_impl.h:7:
-/sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
-   96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
-      |             ^~~~~~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:163: src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o] Error 1
-/sep/include/quantum/quantum_manifold_optimizer.h:139:5: error: ‘CUDAConfig’ does not name a type; did you mean ‘CudaConfig’?
-  139 |     CUDAConfig cuda;
-      |     ^~~~~~~~~~
-      |     CudaConfig
-/sep/include/quantum/quantum_manifold_optimizer.h:140:5: error: ‘APIConfig’ does not name a type; did you mean ‘ApiConfig’?
-  140 |     APIConfig api;
-      |     ^~~~~~~~~
-      |     ApiConfig
-/sep/include/quantum/quantum_manifold_optimizer.h:141:5: error: ‘LogConfig’ does not name a type; did you mean ‘ApiConfig’?
-  141 |     LogConfig log;
-      |     ^~~~~~~~~
-      |     ApiConfig
-/sep/include/quantum/quantum_manifold_optimizer.h:151:7: error: ‘QuantumManifoldOptimizer’ has not been declared
-  151 | class QuantumManifoldOptimizer::Impl {
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:151:38: error: expected unqualified-id before ‘{’ token
-  151 | class QuantumManifoldOptimizer::Impl {
-      |                                      ^
-/sep/include/quantum/quantum_manifold_optimizer.h:207:47: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  207 |     void optimizeThresholds(const std::vector<QuantumPattern>& patterns);
-      |                                               ^~~~~~~~~~~~~~
-      |                                               sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:207:61: error: template argument 1 is invalid
-  207 |     void optimizeThresholds(const std::vector<QuantumPattern>& patterns);
-      |                                                             ^
-/sep/include/quantum/quantum_manifold_optimizer.h:207:61: error: template argument 2 is invalid
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:177: src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o] Error 1
-/sep/include/quantum/quantum_manifold_optimizer.h:213:40: error: ‘QuantumPattern’ does not name a type
-  213 |     MemoryTierEnum recommendTier(const QuantumPattern& pattern) const;
-      |                                        ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:221:45: error: ‘QuantumPattern’ does not name a type
-  221 |     double calculateHamiltonianEnergy(const QuantumPattern& pattern) const;
-      |                                             ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:222:41: error: ‘QuantumPattern’ does not name a type
-  222 |     double predictFutureCoherence(const QuantumPattern& pattern, double dt) const;
-      |                                         ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:226:61: error: expected class-name before ‘{’ token
-  226 | class QuantumManifoldProcessor : public QuantumProcessorQFH {
-      |                                                             ^
-/sep/include/quantum/quantum_manifold_optimizer.h:239:65: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  239 |     ManifoldAnalysis analyzeCoherenceManifold(const std::vector<QuantumPattern>& patterns);
-      |                                                                 ^~~~~~~~~~~~~~
-      |                                                                 sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:239:79: error: template argument 1 is invalid
-  239 |     ManifoldAnalysis analyzeCoherenceManifold(const std::vector<QuantumPattern>& patterns);
-      |                                                                               ^
-/sep/include/quantum/quantum_manifold_optimizer.h:239:79: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:242:5: error: ‘QFHResult’ does not name a type
-  242 |     QFHResult processWithCrossScaleAnalysis(const std::vector<uint32_t>& pattern_bits);
-      |     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:258:54: error: ‘CudaConfig’ in ‘struct ManifoldConfig’ does not name a type
-  258 |     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
-      |                                                      ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:276:21: error: ‘CudaConfig’ in ‘struct ManifoldConfig’ does not name a type
-  276 |     ManifoldConfig::CudaConfig config_;
-      |                     ^~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:285:58: error: ‘ApiConfig’ in ‘struct ManifoldConfig’ does not name a type
-  285 |     explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
-      |                                                          ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:302:21: error: ‘ApiConfig’ in ‘struct ManifoldConfig’ does not name a type
-  302 |     ManifoldConfig::ApiConfig config_;
-      |                     ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:312:54: error: ‘SemanticConfig’ in ‘struct ManifoldConfig’ does not name a type
-  312 |     explicit SemanticProcessor(const ManifoldConfig::SemanticConfig& config);
-      |                                                      ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:332:62: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  332 |                                            const std::vector<QuantumPattern>& patterns);
-      |                                                              ^~~~~~~~~~~~~~
-      |                                                              sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:332:76: error: template argument 1 is invalid
-  332 |                                            const std::vector<QuantumPattern>& patterns);
-      |                                                                            ^
-/sep/include/quantum/quantum_manifold_optimizer.h:332:76: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:339:21: error: ‘SemanticConfig’ in ‘struct ManifoldConfig’ does not name a type
-  339 |     ManifoldConfig::SemanticConfig config_;
-      |                     ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:349:56: error: ‘AnalyticsConfig’ in ‘struct ManifoldConfig’ does not name a type
-  349 |     explicit PerformanceAnalyzer(const ManifoldConfig::AnalyticsConfig& config);
-      |                                                        ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:359:60: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  359 |     StateSpaceAnalysis analyzeStateSpace(const std::vector<QuantumPattern>& pattern_history);
-      |                                                            ^~~~~~~~~~~~~~
-      |                                                            sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:359:74: error: template argument 1 is invalid
-  359 |     StateSpaceAnalysis analyzeStateSpace(const std::vector<QuantumPattern>& pattern_history);
-      |                                                                          ^
-/sep/include/quantum/quantum_manifold_optimizer.h:359:74: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:382:21: error: ‘AnalyticsConfig’ in ‘struct ManifoldConfig’ does not name a type
-  382 |     ManifoldConfig::AnalyticsConfig config_;
-      |                     ^~~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:387:51: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  387 |     double calculateEntropyRate(const std::vector<QuantumPattern>& patterns);
-      |                                                   ^~~~~~~~~~~~~~
-      |                                                   sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:387:65: error: template argument 1 is invalid
-  387 |     double calculateEntropyRate(const std::vector<QuantumPattern>& patterns);
-      |                                                                 ^
-/sep/include/quantum/quantum_manifold_optimizer.h:387:65: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:430:9: error: ‘QuantumPattern’ does not name a type
-  430 |         QuantumPattern generatePattern(int index) {
-      |         ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:458:17: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  458 |     std::vector<QuantumPattern> generateTestPatterns(int count);
-      |                 ^~~~~~~~~~~~~~
-      |                 sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:458:31: error: template argument 1 is invalid
-  458 |     std::vector<QuantumPattern> generateTestPatterns(int count);
-      |                               ^
-/sep/include/quantum/quantum_manifold_optimizer.h:458:31: error: template argument 2 is invalid
-/sep/include/quantum/quantum_manifold_optimizer.h:472:44: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
-  472 |     void processPatterns(const std::vector<QuantumPattern>& patterns);
-      |                                            ^~~~~~~~~~~~~~
-      |                                            sep::quantum::manifold::QuantumPattern
-/sep/include/quantum/quantum_manifold_optimizer.h:26:7: note: ‘sep::quantum::manifold::QuantumPattern’ declared here
-   26 | using QuantumPattern = ::sep::quantum::Pattern;
-      |       ^~~~~~~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:472:58: error: template argument 1 is invalid
-  472 |     void processPatterns(const std::vector<QuantumPattern>& patterns);
-      |                                                          ^
-/sep/include/quantum/quantum_manifold_optimizer.h:472:58: error: template argument 2 is invalid
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:205: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o] Error 1
-In file included from /sep/src/quantum/pattern_processor_interface.cpp:9:
+[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+In file included from /sep/src/memory/quantum_coherence_manager.cpp:5:
 /sep/include/quantum/quantum_manifold_optimizer.h: At global scope:
 /sep/include/quantum/quantum_manifold_optimizer.h:139:5: error: ‘CUDAConfig’ does not name a type; did you mean ‘CudaConfig’?
   139 |     CUDAConfig cuda;
@@ -1358,7 +627,6 @@ In file included from /sep/src/quantum/pattern_processor_interface.cpp:9:
   458 |     std::vector<QuantumPattern> generateTestPatterns(int count);
       |                               ^
 /sep/include/quantum/quantum_manifold_optimizer.h:458:31: error: template argument 2 is invalid
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:191: src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o] Error 1
 /sep/include/quantum/quantum_manifold_optimizer.h:472:44: error: ‘QuantumPattern’ was not declared in this scope; did you mean ‘sep::quantum::manifold::QuantumPattern’?
   472 |     void processPatterns(const std::vector<QuantumPattern>& patterns);
       |                                            ^~~~~~~~~~~~~~
@@ -1370,92 +638,308 @@ make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:191: src/quantum
   472 |     void processPatterns(const std::vector<QuantumPattern>& patterns);
       |                                                          ^
 /sep/include/quantum/quantum_manifold_optimizer.h:472:58: error: template argument 2 is invalid
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:93: src/api/CMakeFiles/sep_api.dir/bridge.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 45%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+In file included from /sep/include/quantum/data.hpp:4,
+                 from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/quantum_processor_qfh.h:4,
+                 from /sep/src/quantum/quantum_processor_qfh.cpp:1:
+/sep/include/quantum/types.h:30:10: error: ‘memory’ in namespace ‘sep’ does not name a type
+   30 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
+      |          ^~~~~~
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 46%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:107: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:428: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 48%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+In file included from /sep/include/blender/bridge.h:15,
+                 from /sep/include/blender/pattern_bridge.h:10,
+                 from /sep/src/core/engine.cpp:5:
+/sep/include/quantum/data.hpp:23:48: error: ‘STM’ is not a member of ‘sep::MemoryTierEnum’
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |                                                ^~~
+/sep/include/quantum/data.hpp:23:51: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::MemoryTierEnum’ in initialization
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |                                                   ^
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+In file included from /sep/include/blender/bridge.h:16:
+/sep/include/quantum/pattern_processor.h:29:48: error: ‘STM’ is not a member of ‘sep::MemoryTierEnum’
+   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |                                                ^~~
+/sep/include/quantum/pattern_processor.h:29:51: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::MemoryTierEnum’ in initialization
+   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |                                                   ^
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:121: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 51%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+/sep/src/memory/quantum_coherence_manager.cpp: In member function ‘void sep::memory::QuantumCoherenceManager::Impl::updatePatternCoherence(const sep::quantum::Pattern&)’:
+/sep/src/memory/quantum_coherence_manager.cpp:321:59: error: ‘const struct sep::quantum::QuantumState’ has no member named ‘memory_tier’
+  321 |             new_data.current_tier = pattern.quantum_state.memory_tier;
+      |                                                           ^~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp: At global scope:
+/sep/src/memory/quantum_coherence_manager.cpp:746:50: error: no declaration matches ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
+  746 | const QuantumCoherenceManager::CoherenceMetrics& QuantumCoherenceManager::getMetrics() const {
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:746:50: note: no functions named ‘const sep::memory::QuantumCoherenceManager::CoherenceMetrics& sep::memory::QuantumCoherenceManager::getMetrics() const’
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
+   14 | class QuantumCoherenceManager {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:750:10: error: no declaration matches ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
+  750 | uint64_t QuantumCoherenceManager::getGlobalTick() const {
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:750:10: note: no functions named ‘sep::uint64_t sep::memory::QuantumCoherenceManager::getGlobalTick() const’
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
+   14 | class QuantumCoherenceManager {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:754:10: error: no declaration matches ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier(sep::memory::MemoryTierEnum) const’
+  754 | uint32_t QuantumCoherenceManager::getPatternCountByTier(::sep::memory::MemoryTierEnum tier) const {
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:754:10: note: no functions named ‘sep::uint32_t sep::memory::QuantumCoherenceManager::getPatternCountByTier(sep::memory::MemoryTierEnum) const’
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
+   14 | class QuantumCoherenceManager {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:758:7: error: no declaration matches ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation(sep::memory::MemoryTierEnum) const’
+  758 | float QuantumCoherenceManager::getTierFragmentation(::sep::memory::MemoryTierEnum tier) const {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/quantum_coherence_manager.cpp:758:7: note: no functions named ‘float sep::memory::QuantumCoherenceManager::getTierFragmentation(sep::memory::MemoryTierEnum) const’
+/sep/include/memory/quantum_coherence_manager.h:14:7: note: ‘class sep::memory::QuantumCoherenceManager’ defined here
+   14 | class QuantumCoherenceManager {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/types.h:7,
+                 from /sep/include/quantum/processor.h:5,
+                 from /sep/include/quantum/quantum_processor.h:4,
+                 from /sep/src/quantum/quantum_processor_qfh_common.cpp:3:
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+/sep/include/quantum/data.hpp:24:26: error: ‘PatternRelationship’ is not a member of ‘sep::quantum’
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                          ^~~~~~~~~~~~~~~~~~~
+/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                                             ^
+/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
 In file included from /sep/include/compat/cuda_common.h:10,
                  from /sep/include/compat/core.h:5,
-                 from /sep/src/quantum/quantum_manifold_optimizer.cpp:12:
+                 from /sep/src/core/engine.cpp:20:
 /sep/include/compat/cuda_impl.h: In function ‘cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams&)’:
 /sep/include/compat/cuda_impl.h:24:14: error: ‘::cudaMemcpyAsync’ has not been declared; did you mean ‘sep::cuda::cudaMemcpyAsync’?
    24 |     return ::cudaMemcpyAsync(params.destination, params.source, params.sizeInBytes, params.direction, params.stream);
       |              ^~~~~~~~~~~~~~~
       |              sep::cuda::cudaMemcpyAsync
-In file included from /sep/include/quantum/quantum_manifold_optimizer.h:13:
+In file included from /sep/include/cuda_runtime.h:1,
+                 from /sep/include/compat/cuda_defs.h:7,
+                 from /sep/include/compat/cuda_impl.h:7:
 /sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
    96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
       |             ^~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp: At global scope:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:65:58: error: ‘Config’ does not name a type
-   65 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
-      |                                                          ^~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:65:72: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-   65 | QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
-      |                                                                        ^
-In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:4:
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:68:53: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-   68 | QuantumManifoldOptimizer::~QuantumManifoldOptimizer() = default;
-      |                                                     ^
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:70:27: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-   70 | QuantumManifoldOptimizer::OptimizationResult
-      |                           ^~~~~~~~~~~~~~~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:76:102: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-   76 | void QuantumManifoldOptimizer::updateManifoldGeometry(const std::vector<QuantumState>& quantum_states) {
-      |                                                                                                      ^
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:80:85: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-   80 | float QuantumManifoldOptimizer::computeManifoldCoherence(const glm::vec3& position) const {
-      |                                                                                     ^~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:85:91: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-   85 |                                                                     uint32_t num_samples) const {
-      |                                                                                           ^~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:90:106: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
-   90 | std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
-      |                                                                                                          ^~~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
+[ 53%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:135: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o] Error 1
+[ 54%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+In file included from /sep/include/compat/cuda_common.h:10,
+                 from /sep/src/core/metrics_collector.cpp:2:
+/sep/include/compat/cuda_impl.h: In function ‘cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams&)’:
+/sep/include/compat/cuda_impl.h:24:14: error: ‘::cudaMemcpyAsync’ has not been declared; did you mean ‘sep::cuda::cudaMemcpyAsync’?
+   24 |     return ::cudaMemcpyAsync(params.destination, params.source, params.sizeInBytes, params.direction, params.stream);
+      |              ^~~~~~~~~~~~~~~
+      |              sep::cuda::cudaMemcpyAsync
+In file included from /sep/include/cuda_runtime.h:1,
+                 from /sep/include/compat/cuda_defs.h:7,
+                 from /sep/include/compat/cuda_impl.h:7:
+/sep/include/compat/cuda_runtime.h:96:13: note: ‘sep::cuda::cudaMemcpyAsync’ declared here
+   96 | cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
+      |             ^~~~~~~~~~~~~~~
+In file included from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/types.h:7,
+                 from /sep/include/quantum/evolution.h:4,
+                 from /sep/src/quantum/evolution.cpp:1:
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+In file included from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/types.h:7,
+                 from /sep/include/api/sep_engine.h:13,
+                 from /sep/src/api/crow_adapter.cpp:21:
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                 ^~~~~~~
+/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                                             ^
+/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
+/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                 ^~~~~~~
+/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                                             ^
+/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
+In file included from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/types.h:7,
+                 from /sep/src/quantum/types_serialization.cpp:1:
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                 ^~~~~~~
+/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                                             ^
+/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:79: src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o] Error 1
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:149: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:135: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
 In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/compat/cuda.h:14,
-                 from /sep/include/core/types.h:11,
-                 from /sep/include/memory/types.h:8:
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Args = {const int&}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::quantum::QuantumManifoldOptimizer>]’:
-/sep/src/quantum/quantum_manifold_optimizer.cpp:91:54:   required from here
-   91 |     return std::make_unique<QuantumManifoldOptimizer>(config);
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::quantum::QuantumManifoldOptimizer’
- 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/include/quantum/pattern_evolution_bridge.h:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-   16 | class QuantumManifoldOptimizer;
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::quantum::QuantumManifoldOptimizer]’:
-/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::quantum::QuantumManifoldOptimizer; _Dp = std::default_delete<sep::quantum::QuantumManifoldOptimizer>]’
+                 from /sep/include/core/engine.h:5,
+                 from /sep/src/core/engine.cpp:1:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::SEPBlenderBridge]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::SEPBlenderBridge; _Dp = std::default_delete<sep::SEPBlenderBridge>]’
   399 |           get_deleter()(std::move(__ptr));
       |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/quantum/quantum_manifold_optimizer.cpp:91:54:   required from here
-   91 |     return std::make_unique<QuantumManifoldOptimizer>(config);
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::quantum::QuantumManifoldOptimizer’
+/sep/src/core/engine.cpp:55:66:   required from here
+   55 | Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
+      |                                                                  ^
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::SEPBlenderBridge’
    91 |         static_assert(sizeof(_Tp)>0,
       |                       ^~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:219: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o] Error 1
-[ 59%] Linking CXX static library libsep_audio.a
-[ 59%] Built target sep_audio
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:233: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
+In file included from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/types.h:7,
+                 from /sep/include/quantum/processor.h:5,
+                 from /sep/include/quantum/pattern_processor.h:3,
+                 from /sep/src/quantum/pattern_processor.cpp:1:
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                 ^~~~~~~
+/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                                             ^
+/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
+In file included from /sep/include/memory/types.h:10,
+                 from /sep/include/quantum/types.h:7,
+                 from /sep/include/quantum/processor.h:5,
+                 from /sep/src/quantum/processor.cpp:1:
+/sep/include/quantum/data.hpp:23:5: error: ‘MemoryTierEnum’ does not name a type
+   23 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+/sep/include/quantum/pattern_processor.h:29:5: error: ‘MemoryTierEnum’ does not name a type
+   29 |     MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+      |     ^~~~~~~~~~~~~~
+/sep/include/quantum/data.hpp:24:17: error: ‘quantum’ was not declared in this scope
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                 ^~~~~~~
+/sep/include/quantum/data.hpp:24:45: error: template argument 1 is invalid
+   24 |     std::vector<quantum::PatternRelationship> relationships;
+      |                                             ^
+/sep/include/quantum/data.hpp:24:45: error: template argument 2 is invalid
+/sep/src/quantum/pattern_processor.cpp: In member function ‘virtual sep::quantum::PatternProcessResult sep::quantum::{anonymous}::PatternQuantumProcessorImpl::processPattern(const sep::quantum::QuantumState&, const std::string&)’:
+/sep/src/quantum/pattern_processor.cpp:25:16: error: ‘struct sep::quantum::PatternProcessResult’ has no member named ‘memory_tier’
+   25 |         result.memory_tier = MemoryTierEnum::STM; // Default to Short-Term Memory
+      |                ^~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:25:30: error: ‘MemoryTierEnum’ has not been declared
+   25 |         result.memory_tier = MemoryTierEnum::STM; // Default to Short-Term Memory
+      |                              ^~~~~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:56:20: error: ‘struct sep::quantum::PatternProcessResult’ has no member named ‘memory_tier’
+   56 |             result.memory_tier = MemoryTierEnum::LTM;
+      |                    ^~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:56:34: error: ‘MemoryTierEnum’ has not been declared
+   56 |             result.memory_tier = MemoryTierEnum::LTM;
+      |                                  ^~~~~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:58:20: error: ‘struct sep::quantum::PatternProcessResult’ has no member named ‘memory_tier’
+   58 |             result.memory_tier = MemoryTierEnum::MTM;
+      |                    ^~~~~~~~~~~
+/sep/src/quantum/pattern_processor.cpp:58:34: error: ‘MemoryTierEnum’ has not been declared
+   58 |             result.memory_tier = MemoryTierEnum::MTM;
+      |                                  ^~~~~~~~~~~~~~
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:107: src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o] Error 1
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:149: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o] Error 1
+/sep/src/quantum/processor.cpp:84:44: error: ‘MemoryTierEnum’ has not been declared
+   84 |     std::vector<Pattern> getPatternsByTier(MemoryTierEnum tier) const {
+      |                                            ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp: In member function ‘std::vector<sep::quantum::Pattern> sep::quantum::ProcessorImpl::getPatternsByTier(int) const’:
+/sep/src/quantum/processor.cpp:88:51: error: no match for ‘operator==’ (operand types are ‘const sep::memory::MemoryTierEnum’ and ‘int’)
+   88 |             if (pattern.quantum_state.memory_tier == tier) {
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~ ~~~~
+      |                                       |              |
+      |                                       |              int
+      |                                       const sep::memory::MemoryTierEnum
+/sep/src/quantum/processor.cpp: In member function ‘void sep::quantum::ProcessorImpl::demotePatterns()’:
+/sep/src/quantum/processor.cpp:208:53: error: ‘MemoryTierEnum’ has not been declared
+  208 |                 pattern.quantum_state.memory_tier = MemoryTierEnum::STM;
+      |                                                     ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp:210:53: error: ‘MemoryTierEnum’ has not been declared
+  210 |                 pattern.quantum_state.memory_tier = MemoryTierEnum::MTM;
+      |                                                     ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp: In member function ‘std::string sep::quantum::ProcessorImpl::getStatus() const’:
+/sep/src/quantum/processor.cpp:263:22: error: ‘MemoryTierEnum’ has not been declared
+  263 |                 case MemoryTierEnum::STM: stm_count++; break;
+      |                      ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp:264:22: error: ‘MemoryTierEnum’ has not been declared
+  264 |                 case MemoryTierEnum::MTM: mtm_count++; break;
+      |                      ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp:265:22: error: ‘MemoryTierEnum’ has not been declared
+  265 |                 case MemoryTierEnum::LTM: ltm_count++; break;
+      |                      ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp: In member function ‘void sep::quantum::ProcessorImpl::updateMemoryTier(sep::quantum::Pattern&)’:
+/sep/src/quantum/processor.cpp:306:9: error: ‘MemoryTierEnum’ was not declared in this scope; did you mean ‘sep::memory::MemoryTierEnum’?
+  306 |         MemoryTierEnum previous_tier = state.memory_tier;
+      |         ^~~~~~~~~~~~~~
+      |         sep::memory::MemoryTierEnum
+/sep/include/memory/types.h:26:12: note: ‘sep::memory::MemoryTierEnum’ declared here
+   26 | enum class MemoryTierEnum { STM, MTM, LTM };
+      |            ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp:308:33: error: ‘MemoryTierEnum’ is not a class, namespace, or enumeration
+  308 |             state.memory_tier = MemoryTierEnum::LTM;
+      |                                 ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp:310:33: error: ‘MemoryTierEnum’ is not a class, namespace, or enumeration
+  310 |             state.memory_tier = MemoryTierEnum::MTM;
+      |                                 ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp:312:33: error: ‘MemoryTierEnum’ is not a class, namespace, or enumeration
+  312 |             state.memory_tier = MemoryTierEnum::STM;
+      |                                 ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp:314:34: error: ‘previous_tier’ was not declared in this scope
+  314 |         if (state.memory_tier != previous_tier) {
+      |                                  ^~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp: At global scope:
+/sep/src/quantum/processor.cpp:364:22: error: ‘std::vector<sep::quantum::Pattern> sep::quantum::Processor::getPatternsByTier’ is not a static data member of ‘class sep::quantum::Processor’
+  364 | std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
+      |                      ^~~~~~~~~
+/sep/src/quantum/processor.cpp:364:51: error: ‘MemoryTierEnum’ was not declared in this scope; did you mean ‘sep::memory::MemoryTierEnum’?
+  364 | std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
+      |                                                   ^~~~~~~~~~~~~~
+      |                                                   sep::memory::MemoryTierEnum
+/sep/include/memory/types.h:26:12: note: ‘sep::memory::MemoryTierEnum’ declared here
+   26 | enum class MemoryTierEnum { STM, MTM, LTM };
+      |            ^~~~~~~~~~~~~~
+/sep/src/quantum/processor.cpp:364:72: error: expected ‘,’ or ‘;’ before ‘const’
+  364 | std::vector<Pattern> Processor::getPatternsByTier(MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
+      |                                                                        ^~~~~
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:163: src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o] Error 1
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:492: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:191: src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o] Error 1
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:205: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o] Error 1
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:177: src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:524: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
+make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:107: src/core/CMakeFiles/sep_core.dir/engine.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:460: src/core/CMakeFiles/sep_core.dir/all] Error 2
+[ 56%] Linking CXX static library libsep_audio.a
+[ 56%] Built target sep_audio
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:135: src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:332: src/api/CMakeFiles/sep_api.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

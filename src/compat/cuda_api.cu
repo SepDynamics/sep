@@ -7,6 +7,7 @@
 #define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
 #endif
 #include "compat/cuda_common.h"
+#include "compat/cuda_runtime.h"
 #include "compat/cuda_helpers.h"
 
 // Standard library includes - only for host compilation
@@ -104,11 +105,11 @@ int sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32
 
         // Memory transfers with error checking
         CUDA_CHECK(
-            cudaMemcpyAsync(d_probe_indices.get(), probe_indices, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
+            sep::cuda::cudaMemcpyAsync(d_probe_indices.get(), probe_indices, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
 
         CUDA_CHECK(
-            cudaMemcpyAsync(d_expectations.get(), expectations, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
+            sep::cuda::cudaMemcpyAsync(d_expectations.get(), expectations, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
 
         CUDA_CHECK(cudaMemsetAsync(d_correction_count.get(), 0, count_size, g_stream->get()));
@@ -118,12 +119,12 @@ int sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32
                                                d_bitfield.get(), d_corrections.get(), d_correction_count.get(),
                                                g_stream->get()));
 
-        CUDA_CHECK(cudaMemcpyAsync(bitfield, d_bitfield.get(), bitfield_size, cudaMemcpyDeviceToHost, g_stream->get()));
+        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(bitfield, d_bitfield.get(), bitfield_size, cudaMemcpyDeviceToHost, g_stream->get()));
 
-        CUDA_CHECK(cudaMemcpyAsync(correction_indices, d_corrections.get(), corrections_size, cudaMemcpyDeviceToHost,
+        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(correction_indices, d_corrections.get(), corrections_size, cudaMemcpyDeviceToHost,
                                    g_stream->get()));
 
-        CUDA_CHECK(cudaMemcpyAsync(correction_count, d_correction_count.get(), count_size, cudaMemcpyDeviceToHost,
+        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(correction_count, d_correction_count.get(), count_size, cudaMemcpyDeviceToHost,
                                    g_stream->get()));
 
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
@@ -162,16 +163,16 @@ int sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chu
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
 
         // Memory transfer with error checking
-        CUDA_CHECK(cudaMemcpyAsync(d_chunks.get(), chunks, chunks_size, cudaMemcpyHostToDevice, g_stream->get()));
+        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(d_chunks.get(), chunks, chunks_size, cudaMemcpyHostToDevice, g_stream->get()));
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
 
         CUDA_CHECK(sep::cuda::launchQSHKernel(d_chunks.get(), num_chunks, d_collapse_indices.get(),
                                               d_collapse_counts.get(), g_stream->get()));
 
-        CUDA_CHECK(cudaMemcpyAsync(collapse_indices, d_collapse_indices.get(), indices_size, cudaMemcpyDeviceToHost,
+        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(collapse_indices, d_collapse_indices.get(), indices_size, cudaMemcpyDeviceToHost,
                                    g_stream->get()));
 
-        CUDA_CHECK(cudaMemcpyAsync(collapse_counts, d_collapse_counts.get(), counts_size, cudaMemcpyDeviceToHost,
+        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(collapse_counts, d_collapse_counts.get(), counts_size, cudaMemcpyDeviceToHost,
                                    g_stream->get()));
 
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));

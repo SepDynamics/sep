@@ -1,6 +1,7 @@
 #include "quantum/types.h"
 #include <nlohmann/json.hpp>
 #include "compat/shim.h" // Ensure shim is included if needed
+#include "memory/types.h" // Add include for MemoryTierEnum
 
 namespace sep::quantum {
 
@@ -24,7 +25,7 @@ void from_json(const nlohmann::json& j, QuantumState& state) {
     j.at("mutation_rate").get_to(state.mutation_rate);
     j.at("generation").get_to(state.generation);
     j.at("mutation_count").get_to(state.mutation_count);
-    state.memory_tier = static_cast<MemoryTierEnum>(j.value("memory_tier", 0)); // Fix: default value for memory_tier
+    state.memory_tier = static_cast<sep::memory::MemoryTierEnum>(j.value("memory_tier", 0)); // Fix: default value for memory_tier
     j.at("access_frequency").get_to(state.access_frequency);
 }
 

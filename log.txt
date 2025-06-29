@@ -1,0 +1,13 @@
+--- a/sep/src/main.cpp
++++ b/sep/src/main.cpp
+@@ -19,8 +19,8 @@
+   sep::logging::Manager::initialize();
+ 
+   // Setup signal handling for graceful shutdown
+-  signal(SIGINT, signal_handler); // Fix: Set up signal handler
+-  signal(SIGTERM, signal_handler); // Fix: Call signal for SIGTERM
++  signal(SIGINT, signal_handler);
++  signal(SIGTERM, signal_handler);
+ 
+   bool server_mode = false;
+   bool cycles_mode = false;

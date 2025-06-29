@@ -2,7 +2,7 @@
     "files.autoSave": "onFocusChange",
     "files.autoSaveDelay": 10,
     // CodeChecker Integration
-    "codechecker.backend.compilationDatabasePath": "compile_commands.json",
+    "codechecker.backend.compilationDatabasePath": "${workspaceFolder}/cmake-make/compile_commands.json",
     "codechecker.backend.serverUrl": "http://localhost:8001",
     "codechecker.backend.productName": "sep-engine",
     // SEP Engine Project Settings
@@ -97,10 +97,16 @@
     ],
     // Terminal Settings for Development
     "terminal.integrated.env.linux": {
-        "SEP_WORKSPACE": "/sep",
-        "SEP_BUILD_DIR": "/sep/cmake-make",
+        "SEP_WORKSPACE": "${workspaceFolder}",
+        "SEP_BUILD_DIR": "${workspaceFolder}/cmake-make",
+        "SEP_CONFIG_FILE": "${workspaceFolder}/config/default.json",
         "CODECHECKER_PORT": "8001",
         "OLLAMA_URL": "http://localhost:11434",
         "OLLAMA_MODEL": "mxbai-embed-large"
-    }
+    },
+    "codechecker.backend.outputFolder": "${workspaceFolder}/.cache",
+    "codechecker.analyze.arguments": "",
+    "codechecker.analyze.threadCount": 4,
+    "codechecker.log.buildCommand": "make -j$(nproc)",
+    "codechecker.log.arguments": ""
 }

@@ -235,7 +235,7 @@ public:
         return countPatternsInTier(tier);
     }
 
-    float getTierFragmentation(MemoryTierEnum tier) const {
+    float getTierFragmentation(sep::memory::MemoryTierEnum tier) const {
         int tier_idx = static_cast<int>(tier);
         if (tier_idx >= 0 && tier_idx < 3) {
             return metrics_.tier_fragmentation[tier_idx];
@@ -443,8 +443,8 @@ private:
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             auto& pair = *it;
             auto& data = pair.second;
-            sep::MemoryTierEnum current_tier = data.current_tier;
-            sep::MemoryTierEnum target_tier = determineOptimalTier(data);
+            sep::memory::MemoryTierEnum current_tier = data.current_tier;
+            sep::memory::MemoryTierEnum target_tier = determineOptimalTier(data);
             
             if (current_tier != target_tier) {
                 // Check migration conditions
@@ -495,7 +495,7 @@ private:
         }
     }
     
-    MemoryTier determineOptimalTier(const QuantumCoherenceManager::PatternCoherenceData& data) const {
+    sep::memory::MemoryTierEnum determineOptimalTier(const QuantumCoherenceManager::PatternCoherenceData& data) const {
         // Multi-factor tier determination
         float coherence_score = data.coherence;
         float stability_score = data.stability;
@@ -510,17 +510,17 @@ private:
             0.1f * glm::clamp(entanglement_score, 0.0f, 1.0f);
         
         if (total_score >= LTM_COHERENCE_THRESHOLD) {
-            return MemoryTierEnum::LTM;
+            return sep::memory::MemoryTierEnum::LTM;
         } else if (total_score >= MTM_COHERENCE_THRESHOLD) {
-            return MemoryTierEnum::MTM;
+            return sep::memory::MemoryTierEnum::MTM;
         } else {
-            return MemoryTierEnum::STM;
+            return sep::memory::MemoryTierEnum::STM;
         }
     }
     
     bool shouldMigrate(const QuantumCoherenceManager::PatternCoherenceData& data,
-                      MemoryTierEnum from_tier,
-                      MemoryTierEnum to_tier) const {
+                      sep::memory::MemoryTierEnum from_tier,
+                      sep::memory::MemoryTierEnum to_tier) const {
         // Hysteresis to prevent oscillation
         float hysteresis = 0.1f;
         
@@ -532,7 +532,7 @@ private:
     }
     
     MigrationReason determineMigrationReason(const QuantumCoherenceManager::PatternCoherenceData& data,
-                                           MemoryTierEnum target_tier) const {
+                                            sep::memory::MemoryTierEnum target_tier) const {
         if (data.coherence > 0.9f) return MigrationReason::HighCoherence;
         if (data.stability > 0.9f) return MigrationReason::HighStability;
         if (data.access_count > global_tick_ / 10) return MigrationReason::FrequentAccess;
@@ -547,7 +547,7 @@ private:
         
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
-            if (pair.second.current_tier == MemoryTierEnum::LTM &&
+            if (pair.second.current_tier == sep::memory::MemoryTierEnum::LTM &&
                 pair.second.coherence < LTM_COHERENCE_THRESHOLD) {
                 demotion_candidates.push_back({pair.first, pair.second.coherence});
             }
@@ -562,8 +562,8 @@ private:
         for (size_t i = 0; i < demote_count && i < demotion_candidates.size(); ++i) {
             TierMigration migration;
             migration.pattern_id = demotion_candidates[i].first;
-            migration.from_tier = MemoryTierEnum::LTM;
-            migration.to_tier = MemoryTierEnum::MTM;
+            migration.from_tier = sep::MemoryTierEnum::LTM;
+            migration.to_tier = sep::MemoryTierEnum::MTM;
             migration.coherence = demotion_candidates[i].second;
             migration.reason = MigrationReason::MemoryPressure;
             
@@ -663,21 +663,22 @@ private:
         return total_clustering / graph.nodes.size();
     }
     
-    uint32_t countPatternsInTier(MemoryTierEnum tier) const {
+    uint32_t countPatternsInTier(sep::memory::MemoryTierEnum tier) const {
         uint32_t count = 0;
-        coherence_map_.for_each([&](const auto& pair) {
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+            const auto& pair = *it;
             if (pair.second.current_tier == tier) {
                 count++;
             }
-        });
+        }
         return count;
     }
     
-    float getThresholdForTier(MemoryTierEnum tier) const {
+    float getThresholdForTier(sep::memory::MemoryTierEnum tier) const {
         switch (tier) {
-            case MemoryTierEnum::LTM: return LTM_COHERENCE_THRESHOLD;
-            case MemoryTierEnum::MTM: return MTM_COHERENCE_THRESHOLD;
-            case MemoryTierEnum::STM: return STM_COHERENCE_THRESHOLD;
+            case sep::MemoryTierEnum::LTM: return LTM_COHERENCE_THRESHOLD;
+            case sep::MemoryTierEnum::MTM: return MTM_COHERENCE_THRESHOLD;
+            case sep::MemoryTierEnum::STM: return STM_COHERENCE_THRESHOLD;
             default: return 0.0f;
         }
     }
@@ -687,7 +688,7 @@ private:
         
         for (int i = 0; i < 3; ++i) {
             analysis.tier_coherence[i] = metrics_.tier_coherence[i];
-            analysis.tier_pattern_count[i] = countPatternsInTier(static_cast<MemoryTierEnum>(i));
+            analysis.tier_pattern_count[i] = countPatternsInTier(static_cast<sep::MemoryTierEnum>(i));
         }
         
         analysis.optimal_distribution = computeOptimalDistribution();

@@ -1,54 +1,81 @@
 ---
-description: Documents data flow patterns and transformations in quantum computing and rendering systems
-globs: src/quantum/**/*,src/core/**/*,src/cycles/**/*,src/DemandLoading/**/*
+description: Specification for analyzing data flow between components in quantum computing and CUDA processing systems
+globs: **/*.cu,**/*.cpp,**/quantum/**/*,**/memory/**/*,**/cuda/**/*
 alwaysApply: false
 ---
 
 
-# Data Flow
+# data-flow
 
-### Quantum Pattern Processing Pipeline
+### Quantum State Processing Pipeline
+**Importance: 95**
 
-Key data transformations through the quantum processing layers:
+Data flows through a multi-stage quantum processing pipeline:
+1. Quantum states evolve through the `QuantumState` structure containing:
+   - Evolution rate parameters
+   - Energy levels
+   - Coupling strength metrics
 
-1. Quantum Binary State Analysis (QBSA) Pipeline:
-- Input: Raw bitfields
-- Transform: Detection of coherence misalignments
-- Output: Coherence guidance signals
-Importance: 95
+2. Pattern transformations occur via `PatternEvolutionBridge` which:
+   - Interfaces with `QuantumManifoldOptimizer`
+   - Processes quantum pattern transitions
+   - Maps patterns to quantum states
 
-2. Quantum Fourier Hierarchy (QFH):
-- Input: Pattern states
-- Transform: Multi-level coherence analysis
-- Output: State collapse signals
-Importance: 90
+File paths:
+- `/sep/include/quantum/types.h`
+- `/sep/src/quantum/pattern_evolution_bridge.cpp`
 
 ### Memory Tier Transitions
+**Importance: 90**
 
-DemandLoading Library Pipeline:
-- Source: CUDA sparse textures
-- Processing: On-demand texture loading
-- Destination: OptiX renderers
-Importance: 85
+Data flows through three memory tiers with specific transition patterns:
 
-OptiX Memory Management:
-- Custom allocators for DemandLoading
-- Texture data transformation between tiers
-- Opacity Micromap Array caching
-Importance: 80
+1. Short-Term Memory (STM) → Medium-Term Memory (MTM):
+   - Pattern recognition triggers
+   - Coherence threshold checks
+   - Fragmentation analysis
 
-### Render Engine Data Flow
+2. MTM → Long-Term Memory (LTM):
+   - Pattern consolidation
+   - Quantum coherence verification
+   - Redis persistence integration
 
-Cycles Render Pipeline:
-- Input: USD/Houdini scene data
-- Transform: GPU-based rendering (CUDA/OptiX)
-- Output: Rendered frames
-Importance: 75
+File paths:
+- `/sep/include/memory/quantum_coherence_manager.h`
+- `/sep/src/memory/memory_tier.cpp`
+- `/sep/src/memory/redis_manager.cpp`
 
-Key file paths:
-- `src/quantum/qbsa.h`
-- `src/DemandLoading/TextureManager.h`
-- `src/cycles/render/`
+### CUDA Processing Pipeline
+**Importance: 85**
+
+Data flows through specialized CUDA processing stages:
+
+1. Device Memory Operations:
+   - Asynchronous memory transfers
+   - Pattern buffer management
+   - Device property-based optimizations
+
+2. Quantum Manifold Processing:
+   - CUDA-accelerated quantum computations
+   - Pattern evolution acceleration
+   - Memory coherence maintenance
+
+File paths:
+- `/sep/src/compat/cuda_api.cu`
+- `/sep/src/compat/core.cu`
+- `/sep/src/quantum/quantum_manifold_optimizer.cpp`
+
+### Metrics Collection Flow
+**Importance: 75**
+
+System-wide metrics collection pipeline:
+- Pattern processing statistics
+- Memory tier transition metrics
+- Quantum coherence measurements
+- Redis persistence statistics
+
+File path:
+- `/sep/src/core/metrics_collector.cpp`
 
 $END$
 

@@ -147,7 +147,7 @@
 			"command": "bash",
 			"args": [
 				"-c",
-				"cd ${workspaceFolder} && CodeChecker analyze cmake-make/compile_commands.json -o .codechecker/reports --analyzers clangsa clang-tidy"
+				"cd ${workspaceFolder} && CodeChecker analyze ${workspaceFolder}/cmake-make/compile_commands.json -o ${workspaceFolder}/.codechecker/reports --analyzers clangsa clang-tidy"
 			],
 			"group": "none",
 			"presentation": {
@@ -162,7 +162,7 @@
 			"command": "CodeChecker",
 			"args": [
 				"store",
-				"${workspaceFolder}/reports",
+				"${workspaceFolder}/.codechecker/reports",
 				"--name",
 				"sep-engine",
 				"--url",
@@ -191,7 +191,9 @@
 					"CODECHECKER_PORT": "8001",
 					"OLLAMA_URL": "http://localhost:11434",
 					"OLLAMA_MODEL": "mxbai-embed-large",
-					"WORKSPACE_DIR": "${workspaceFolder}"
+					"WORKSPACE_DIR": "${workspaceFolder}",
+					"SEP_BUILD_DIR": "${workspaceFolder}/cmake-make",
+					"SEP_CONFIG_FILE": "${workspaceFolder}/config/default.json"
 				}
 			},
 			"isBackground": true,

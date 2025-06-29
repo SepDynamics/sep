@@ -394,9 +394,9 @@ private:
         return stability_sum / patterns.size();
     }
     
-    glm::vec3 findCollapseCenter(const std::vector<Pattern>& patterns,
-                                 const std::vector<float>& coherences) const {
-        glm::vec3 weighted_center(0.0f);
+    glm::vec4 findCollapseCenter(const std::vector<Pattern>& patterns,
+                                  const std::vector<float>& coherences) const {
+        glm::vec4 weighted_center(0.0f);
         float total_weight = 0.0f;
         
         for (size_t i = 0; i < patterns.size(); ++i) {
@@ -405,7 +405,7 @@ private:
             total_weight += weight;
         }
         
-        return (total_weight > 0.0f) ? weighted_center / total_weight : glm::vec3(0.0f);
+        return (total_weight > 0.0f) ? weighted_center / total_weight : glm::vec4(0.0f);
     }
     
     void applyHadamardGate(std::vector<Pattern>& patterns, const std::vector<uint32_t>& indices) {

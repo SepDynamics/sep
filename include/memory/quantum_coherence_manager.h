@@ -90,6 +90,7 @@ class QuantumCoherenceManager {
         std::uint64_t last_access_tick{0};
         MemoryTierEnum current_tier{MemoryTierEnum::STM};
         std::vector<std::string> entangled_patterns;
+        float fragmentation_score{0.f};
     };
 
     struct CoherenceResult {
@@ -101,8 +102,6 @@ class QuantumCoherenceManager {
         std::uint32_t tier_pattern_count[3]{0, 0, 0};
         std::vector<CoherenceAnomaly> anomalies;
         std::vector<TierMigration> tier_migrations;
-        float tier_fragmentation[3]{0.f, 0.f, 0.f};
-        std::uint32_t tier_pattern_count[3]{0, 0, 0};
     };
 
     struct TierAnalysis {

@@ -267,22 +267,28 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 
 nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
 {
-    (void)request_data;
     if (!impl_->initialized) {
         json result;
         result["success"] = false;
         result["error"]   = "Engine not initialized";
         return result;
     }
-    json        history  = json::array();
-        const auto& patterns = impl_->pattern_processor->getPatterns();
-        for (const auto& p : patterns)
-        {
+
+    // Extract optional filter parameters
+    float min_coherence = request_data.value("min_coherence", 0.0f);
+    float min_stability = request_data.value("min_stability", 0.0f);
+    
+    json history = json::array();
+    const auto& patterns = impl_->pattern_processor->getPatterns();
+    for (const auto& p : patterns) {
+        // Apply filters if specified
+        if (p.coherence >= min_coherence && p.stability >= min_stability) {
             json e;
             e["coherence"] = p.coherence;
             e["stability"] = p.stability;
             history.push_back(e);
         }
+    }
 
         json result;
         result["success"] = true;
@@ -518,29 +524,37 @@ bool SepEngine::validateFields(const nlohmann::json&           data,
 
 nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
 {
-    auto now    = std::chrono::steady_clock::now();
-    auto uptime = std::chrono::duration_cast<std::chrono::seconds>(now - metrics.startTime).count();
+    using json = nlohmann::json;
+    using namespace std::chrono;
+    
+    auto now = steady_clock::now();
+    auto uptime = duration_cast<seconds>(now - metrics.startTime).count();
 
-    json requests;
-    requests["total"]        = metrics.totalRequests.load();
-    requests["successful"]   = metrics.successfulRequests.load();
-    requests["failed"]       = metrics.failedRequests.load();
-    requests["timeout"]      = metrics.timeoutRequests.load();
-    requests["rate_limited"] = metrics.rateLimitedCount.load();
-
-    json response_time;
-    response_time["average"] = metrics.averageResponseTime.load();
-    response_time["last"]    = metrics.lastResponseTime.count();
-
-    json timestamps;
-    timestamps["last_request"] =
-        std::chrono::duration_cast<std::chrono::seconds>(metrics.lastRequestTime.time_since_epoch()).count();
-    timestamps["last_success"] =
-        std::chrono::duration_cast<std::chrono::seconds>(metrics.lastSuccessTime.time_since_epoch()).count();
-
-    json result;
-    result["uptime_seconds"] = uptime;
-    result["requests"]       = requests;
+    json result = {
+        {"uptime_seconds", uptime},
+        {"requests", {
+            {"total", metrics.totalRequests.load()},
+            {"successful", metrics.successfulRequests.load()},
+            {"failed", metrics.failedRequests.load()},
+            {"timeout", metrics.timeoutRequests.load()},
+            {"rate_limited", metrics.rateLimitedCount.load()}
+        }},
+        {"response_time", {
+            {"average", metrics.averageResponseTime.load()},
+            {"last", metrics.lastResponseTime.count()}
+        }},
+        {"timestamps", {
+            {"last_request", duration_cast<seconds>(metrics.lastRequestTime.time_since_epoch()).count()},
+            {"last_success", duration_cast<seconds>(metrics.lastSuccessTime.time_since_epoch()).count()}
+        }},
+        {"memory", {
+            {"allocated_bytes", metrics.allocatedMemory.load()},
+            {"peak_bytes", metrics.peakMemoryUsage.load()},
+            {"fragmentation", metrics.memoryFragmentation.load()}
+        }}
+    };
+    
+    return result;
     result["response_time"]  = response_time;
     result["timestamps"]     = timestamps;
     return result;

@@ -290,9 +290,9 @@ private:
     Processor* processor_;
     EvolutionParams params_;
     size_t generation_number_;
-    EvolutionStats current_stats_; // Fix: Add missing member definition
-    std::vector<EvolutionStats> stats_history_;
     uint64_t noise_state_;
+    EvolutionStats current_stats_;
+    std::vector<EvolutionStats> stats_history_;
 };
 
 EvolutionEngine::EvolutionEngine(Processor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {}

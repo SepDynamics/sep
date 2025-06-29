@@ -4,18 +4,8 @@
 #include <string>
 #include "core/common.h"
 #include "compat/macros.h"
+#include <cuda_runtime.h>
 
-// CUDA types and constants must be in global scope to match CUDA runtime
-#if !SEP_CUDA_AVAILABLE
-
-// Basic CUDA types
-typedef int cudaError_t;
-typedef void* cudaStream_t;
-typedef void* cudaEvent_t;
-
-#endif
-
-// SEP CUDA namespace for additional functionality
 namespace sep {
 namespace cuda {
 
@@ -45,5 +35,4 @@ using SepCudaStatus = Status;
 
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
-#include "compat/cuda_helpers.h"
 #endif

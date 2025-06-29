@@ -436,10 +436,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         # First link CUDA-dependent libraries
         sep_compat
         
-        # Then Cycles with whole-archive
-        -Wl,--whole-archive
+        # Then Cycles libraries grouped to resolve cross-dependencies
+        -Wl,--start-group
         ${CYCLES_LINK_ORDER}
-        -Wl,--no-whole-archive
+        -Wl,--end-group
         
         # Then remaining internal libraries
         sep_api

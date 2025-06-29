@@ -9,6 +9,7 @@
 #include <spdlog/spdlog.h>
 #include "api/server.h" // Include server header
 #include "blender/cycles_renderer.h" // Include cycles renderer header
+#include "quantum/data.hpp"
 #include <atomic>
 #include <string>
 #include <csignal>

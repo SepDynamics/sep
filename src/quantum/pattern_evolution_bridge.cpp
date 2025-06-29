@@ -61,8 +61,8 @@ namespace {
 }
 
 namespace {
-// Implementation details
-class PatternEvolutionBridgeImpl {
+// Implementation details for PatternEvolutionBridge hidden behind Pimpl
+class PatternEvolutionBridge::Impl {
 public:
     struct EvolutionState {
         std::vector<Pattern> active_patterns;

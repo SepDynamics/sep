@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 
 namespace sep::quantum {
+
 enum class QuantumPhase {
     Coherent,
     Superposition,

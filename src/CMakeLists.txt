@@ -13,7 +13,10 @@ add_subdirectory(cuda)
 add_subdirectory(blender)
 
 # Main executable
-
+add_library(sep_main
+  STATIC
+    main.cpp
+)
 # No need for CUDA-specific compile options as they're handled by our custom module
 
 # Install headers

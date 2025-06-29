@@ -11,17 +11,20 @@ Running CMake configuration...
 -- Check for working CXX compiler: /usr/bin/g++-14 - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
+-- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
+-- Found CUDA Toolkit at: 
+-- Found CUDA compiler: /usr/local/cuda/bin/nvcc
+-- Found CUDA Runtime Library: /usr/local/cuda/lib64/libcudart.so
 -- Using custom CUDA compilation pipeline
--- CUDA Path: /usr/local/cuda-12.9
--- CUDA NVCC: 
--- CUDA Host Compiler: 
--- CUDA Architectures: 70;75;80;86;89
--- CUDA Libraries: /usr/local/cuda-12.9/targets/x86_64-linux/lib/libcudart.so;/usr/local/cuda-12.9/targets/x86_64-linux/lib/libcudadevrt.a;/usr/local/cuda-12.9/targets/x86_64-linux/lib/libcudart_static.a
--- CUDA Library Dirs: /usr/local/cuda-12.9/lib64;/usr/local/cuda-12.9/targets/x86_64-linux/lib;/usr/local/cuda-12.9/targets/x86_64-linux/lib/stubs
--- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
+-- CUDA Path: 
+-- CUDA NVCC: /usr/local/cuda/bin/nvcc
+-- CUDA Host Compiler: /usr/bin/g++-14
+-- CUDA Architectures: 70;75;80;86
+-- CUDA Libraries: /usr/local/cuda/lib64/libcudart.so
+-- CUDA Library Dirs: /targets/x86_64-linux/lib;/lib64;/lib
 -- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
 -- Checking for module 'libpipewire-0.3'
 --   Found libpipewire-0.3, version 1.4.6
@@ -75,332 +78,105 @@ CMake Warning:
 
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  3%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[  3%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  9%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 11%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 14%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 17%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 19%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 19%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 20%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 22%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 25%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 26%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 28%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 30%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 33%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 36%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 42%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 44%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 47%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 50%] Linking CXX shared library libsep_compat.so
-Ensuring device symbols are linked for sep_compat
+[  1%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 12%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 15%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 18%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 26%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 28%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 29%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 31%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 32%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 34%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 35%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 37%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 39%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 40%] Linking CXX static library libsep_audio.a
+[ 40%] Built target sep_audio
+[ 42%] Linking CXX static library libsep_core.a
+[ 42%] Built target sep_core
+[ 43%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 45%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 46%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 48%] Linking CXX static library libsep_api.a
+[ 48%] Built target sep_api
+[ 50%] Linking CXX static library libsep_compat.a
 [ 50%] Built target sep_compat
-[ 52%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 53%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 57%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 60%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 61%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 63%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 65%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 66%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 68%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 69%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 71%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 76%] Linking CXX static library libsep_audio.a
-[ 76%] Built target sep_audio
-[ 77%] Linking CXX static library libsep_core.a
-[ 77%] Built target sep_core
-[ 79%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 80%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 85%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 87%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 88%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 90%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 92%] Linking CXX static library libsep_memory.a
-[ 92%] Built target sep_memory
+[ 53%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 54%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 56%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 59%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 60%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 64%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 65%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 67%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 68%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 70%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 71%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 73%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 75%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 76%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 78%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 79%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 82%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 84%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 85%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 87%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 89%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 90%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 92%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 [ 93%] Linking CXX static library libsep_blender.a
 [ 93%] Built target sep_blender
-[ 95%] Linking CXX static library libsep_quantum.a
-[ 95%] Built target sep_quantum
-[ 96%] Linking CXX static library libsep_api.a
-[ 96%] Built target sep_api
+[ 95%] Linking CXX static library libsep_memory.a
+[ 95%] Built target sep_memory
+[ 96%] Linking CXX static library libsep_quantum.a
+[ 96%] Built target sep_quantum
 [ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
 [100%] Linking CXX executable sep_engine
-/usr/bin/ld: warning: type of symbol `cuDriverGetVersion' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGetErrorString' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGetErrorName' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuInit' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGet' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetCount' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetName' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetUuid' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceTotalMem_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetAttribute' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetProperties' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceComputeCapability' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxRetain' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxRelease' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxSetFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxGetState' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxReset' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxCreate_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxDestroy_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxPushCurrent_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxPopCurrent_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSetCurrent' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetCurrent' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetDevice' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSynchronize' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSetLimit' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetLimit' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetCacheConfig' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSetCacheConfig' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetSharedMemConfig' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSetSharedMemConfig' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetApiVersion' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetStreamPriorityRange' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxAttach' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxDetach' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleLoad' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleLoadData' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleLoadDataEx' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleLoadFatBinary' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleUnload' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleGetFunction' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleGetGlobal_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleGetTexRef' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleGetSurfRef' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkCreate_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkAddData_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkAddFile_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkComplete' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkDestroy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemGetInfo_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAlloc_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAllocPitch_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemFree_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemGetAddressRange_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAllocHost_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemFreeHost' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostAlloc' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostGetDevicePointer_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostGetFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAllocManaged' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetByPCIBusId' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetPCIBusId' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcGetEventHandle' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcOpenEventHandle' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcGetMemHandle' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcOpenMemHandle' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcCloseMemHandle' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostRegister_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostUnregister' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyPeer' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyHtoD_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoH_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoD_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoA_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAtoD_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyHtoA_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAtoH_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAtoA_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy2D_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy2DUnaligned_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy3D_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy3DPeer' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAsync' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyPeerAsync' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyHtoDAsync_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoHAsync_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoDAsync_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyHtoAAsync_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAtoHAsync_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy2DAsync_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy3DAsync_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy3DPeerAsync' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD8_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD16_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD32_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D8_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D16_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D32_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD8Async' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD16Async' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD32Async' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D8Async' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D16Async' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D32Async' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArrayCreate_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArrayGetDescriptor_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArrayDestroy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArray3DCreate_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArray3DGetDescriptor_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMipmappedArrayCreate' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMipmappedArrayGetLevel' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMipmappedArrayDestroy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuPointerGetAttribute' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemPrefetchAsync' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAdvise' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemRangeGetAttribute' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemRangeGetAttributes' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuPointerSetAttribute' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuPointerGetAttributes' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamCreate' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamCreateWithPriority' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamGetPriority' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamGetFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamGetCtx' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWaitEvent' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamAddCallback' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamAttachMemAsync' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamQuery' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamSynchronize' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamDestroy_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventCreate' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventRecord' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventQuery' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventSynchronize' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventDestroy_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventElapsedTime' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWaitValue32' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWaitValue64' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWriteValue32' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWriteValue64' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamBatchMemOp' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncGetAttribute' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetAttribute' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetCacheConfig' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetSharedMemConfig' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchKernel' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchCooperativeKernel' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchCooperativeKernelMultiDevice' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetBlockShape' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetSharedSize' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSetSize' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSeti' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSetf' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSetv' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunch' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchGrid' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchGridAsync' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSetTexRef' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuOccupancyMaxActiveBlocksPerMultiprocessor' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuOccupancyMaxPotentialBlockSize' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuOccupancyMaxPotentialBlockSizeWithFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMipmappedArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetAddress_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetAddress2D_v3' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetFormat' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetAddressMode' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetFilterMode' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMipmapFilterMode' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMipmapLevelBias' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMipmapLevelClamp' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMaxAnisotropy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetBorderColor' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetAddress_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMipmappedArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetAddressMode' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetFilterMode' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetFormat' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMipmapFilterMode' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMipmapLevelBias' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMipmapLevelClamp' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMaxAnisotropy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetBorderColor' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefCreate' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefDestroy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfRefSetArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfRefGetArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectCreate' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectDestroy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectGetResourceDesc' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectGetTextureDesc' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectGetResourceViewDesc' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfObjectCreate' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfObjectDestroy' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfObjectGetResourceDesc' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceCanAccessPeer' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxEnablePeerAccess' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxDisablePeerAccess' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetP2PAttribute' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsUnregisterResource' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsSubResourceGetMappedArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsResourceGetMappedMipmappedArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsResourceGetMappedPointer_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsResourceSetMapFlags_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsMapResources' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsUnmapResources' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGetExportTable' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsGLRegisterBuffer' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsGLRegisterImage' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLGetDevices_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLCtxCreate_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLInit' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLRegisterBufferObject' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLMapBufferObject_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLUnmapBufferObject' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLUnregisterBufferObject' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLSetBufferObjectMapFlags' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLMapBufferObjectAsync_v2' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLUnmapBufferObjectAsync' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuImportExternalMemory' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuExternalMemoryGetMappedBuffer' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuExternalMemoryGetMappedMipmappedArray' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDestroyExternalMemory' changed from 2 to 1 in /sep/lib/libextern_cuew.a(cuew.c.o)
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::init(sep::config::APIConfig const&)':
-engine.cpp:(.text+0x12b): undefined reference to `sep::cuda::CudaCore::initialize(int)'
-/usr/bin/ld: engine.cpp:(.text+0x195): undefined reference to `sep::cuda::CudaCore::initialize(int)'
-/usr/bin/ld: engine.cpp:(.text+0x24b): undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'
+engine.cpp:(.text+0x161): undefined reference to `sep::cuda::CudaCore::initialize(int)'
+/usr/bin/ld: engine.cpp:(.text+0x1ef): undefined reference to `sep::cuda::CudaCore::initialize(int)'
+/usr/bin/ld: engine.cpp:(.text+0x2ed): undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::~Engine()':
-engine.cpp:(.text+0xafd): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+engine.cpp:(.text+0xd55): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::generate_probes(sep::shim::vector<sep::PinState> const&, sep::shim::vector<unsigned int>&, sep::shim::vector<unsigned int>&, unsigned long)':
-engine.cpp:(.text+0xce4): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0xe05): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
-/usr/bin/ld: engine.cpp:(.text+0xe94): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0xf10): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0xf48): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+engine.cpp:(.text+0xf3c): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x105d): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x10ec): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1168): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x11a0): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::process_batch(sep::shim::vector<sep::PinState> const&, unsigned long, sep::quantum::QBSAResult&, sep::cuda::QSHResult&)':
-engine.cpp:(.text+0x122f): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x12e6): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
-/usr/bin/ld: engine.cpp:(.text+0x1382): undefined reference to `sep::cuda::CudaCore::launchQSH(sep::cuda::DeviceMemory<unsigned long> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
-/usr/bin/ld: engine.cpp:(.text+0x13fb): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x1572): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x15aa): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
-/usr/bin/ld: engine.cpp:(.text+0x16ea): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x176a): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x17a2): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
-/usr/bin/ld: engine.cpp:(.text+0x1925): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+engine.cpp:(.text+0x1487): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x153e): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x15da): undefined reference to `sep::cuda::CudaCore::launchQSH(sep::cuda::DeviceMemory<unsigned long> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x1653): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x17ca): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1802): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1942): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x19c2): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x19fa): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1b7d): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::cuda::CudaCore::instance()':
 engine.cpp:(.text._ZN3sep4cuda8CudaCore8instanceEv[_ZN3sep4cuda8CudaCore8instanceEv]+0x43): undefined reference to `sep::cuda::CudaCore::CudaCore()'
+/usr/bin/ld: src/memory/libsep_memory.a(manager.cpp.o): in function `sep::logging::LoggingMiddleware::after_handle(crow::request&, crow::response&, sep::logging::LoggingMiddleware::context&)':
+manager.cpp:(.text+0xa3e): undefined reference to `sep::api::makeRequest(crow::request&)'
 collect2: error: ld returned 1 exit status
-make[2]: *** [CMakeFiles/sep_engine.dir/build.make:223: sep_engine] Error 1
+make[2]: *** [CMakeFiles/sep_engine.dir/build.make:211: sep_engine] Error 1
 make[1]: *** [CMakeFiles/Makefile2:252: CMakeFiles/sep_engine.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

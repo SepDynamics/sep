@@ -1,23 +1,31 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
-#pragma once
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <complex>
+#include <condition_variable>
+#include <functional>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+#include <cmath>
+#include <glm/glm.hpp>
 
-#include "quantum/qbsa.h"
-#include "quantum/qfh.h"
-#include "quantum/types.h"
-#include "quantum/quantum_processor_qfh.h"
+#include "compat/cuda.h"
+#include "compat/cuda_runtime.h"
+#include "compat/cufft.h"
+#include "core/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
-#include "core/types.h"
-#include "compat/cuda_runtime.h"
-#include "compat/cuda.h"
-#include "compat/cufft.h"
-#include <glm/glm.hpp>
-#include <memory>
-#include <vector>
-#include <string>
-#include <cmath>
+#include "quantum/qbsa.h"
+#include "quantum/qfh.h"
+#include "quantum/quantum_processor_qfh.h"
+#include "quantum/types.h"
 
 namespace sep::quantum::manifold {
 
@@ -107,27 +115,6 @@ class PerformanceAnalyzer;
         int superposition_states = 4;
     } api;
 
-using sep::memory::MemoryTierEnum;
-#include <chrono>
-#include <atomic>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <complex>
-#include <functional>
-#include <vector>
-#include <unordered_map>
-#include <array>
-#include <string>
-#include "compat/cufft.h"
-
-
-// Forward declarations
-class HamiltonianEvolver;
-class CUDAQuantumKernel;
-class SemanticProcessor;
-class PerformanceAnalyzer;
-
 struct SemanticConfig {
     int embedding_dimensions = 512;
     MemoryTierEnum tier = MemoryTierEnum::STM;
@@ -142,12 +129,6 @@ struct ManifoldConfig {
     ApiConfig api;
     LogConfig log;
 };
-
-// Forward declarations for external dependencies
-class HamiltonianEvolver;
-class CUDAQuantumKernel;
-class SemanticProcessor;
-class PerformanceAnalyzer;
 
 // Implementation class
 class QuantumManifoldOptimizer::Impl {

@@ -19,6 +19,7 @@ namespace logging = sep::logging;
 
 #include "compat/core.h"
 #include "compat/cuda_common.h"
+#include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpyAsync
 
 #include "compat/macros.h"
 #include "compat/memory.h"

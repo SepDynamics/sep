@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "api/client.h"
 #include <fstream>
+#include "api/ollama_types.h"
 // shim.h not required for this standalone test
 
 using namespace sep::api;

@@ -233,6 +233,7 @@ find_library(OPENIMAGEIO_LIBRARY OpenImageIO)
 find_library(OPENIMAGEIO_UTIL_LIBRARY OpenImageIO_Util)
 find_library(OPENCOLORIO_LIBRARY OpenColorIO)
 find_library(OPENEXR_LIBRARY OpenEXR)
+# Remaining critical libraries
 find_library(IMATH_LIBRARY Imath)
 find_library(ALEMBIC_LIBRARY Alembic)
 find_library(EMBREE_LIBRARY embree4)

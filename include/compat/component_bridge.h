@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "blender/types.h"
 
 namespace sep {
 namespace audio {

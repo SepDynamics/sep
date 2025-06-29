@@ -95,7 +95,7 @@ sep::SEPResult BlenderBridge::registerObject(Object* obj, const PatternConfig& c
 
     {
         // Create new object state
-        ObjectState state;
+        BlenderBridge::ObjectState state;
         state.object        = obj;
         state.config        = config;
         state.state         = PatternStateEnum::INITIALIZING;
@@ -220,7 +220,7 @@ bool BlenderBridge::isValidHandle(ObjectHandle handle) const
     return objects_.find(handle) != objects_.end();
 }
 
-ObjectState* BlenderBridge::getObjectState(sep::pattern::ObjectHandle handle)
+BlenderBridge::ObjectState* BlenderBridge::getObjectState(sep::pattern::ObjectHandle handle)
 {
     std::lock_guard<std::mutex> lock(objects_mutex_);
     auto                        it = objects_.find(handle);
@@ -238,7 +238,7 @@ void BlenderBridge::cleanupObject(sep::pattern::ObjectHandle handle)
     }
 }
 
-sep::SEPResult BlenderBridge::allocatePatternMemory(ObjectState& state)
+sep::SEPResult BlenderBridge::allocatePatternMemory(BlenderBridge::ObjectState& state)
 {
     std::size_t bytes  = state.config.max_patterns * sizeof(sep::pattern::PatternData);
     auto&       mgr    = sep::memory::MemoryTierManager::getInstance();
@@ -252,7 +252,7 @@ sep::SEPResult BlenderBridge::allocatePatternMemory(ObjectState& state)
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::freePatternMemory(ObjectState& state)
+sep::SEPResult BlenderBridge::freePatternMemory(BlenderBridge::ObjectState& state)
 {
     auto& mgr = sep::memory::MemoryTierManager::getInstance(); // Fix: Add missing variable definition
     if (state.memory_block) // Fix: Add if condition
@@ -332,7 +332,7 @@ sep::SEPResult BlenderBridge::processPatterns()
     }
 
     // Snapshot object list to avoid holding the lock while processing
-    std::vector<std::pair<ObjectHandle, ObjectState*>> to_process;
+    std::vector<std::pair<ObjectHandle, BlenderBridge::ObjectState*>> to_process;
     {
         std::lock_guard<std::mutex> lock(objects_mutex_);
         for (auto& [h, s] : objects_) {
@@ -403,7 +403,7 @@ void BlenderBridge::processingThreadMain()
     }
 }
 
-sep::SEPResult BlenderBridge::processObjectPatterns(sep::pattern::ObjectHandle handle, ObjectState& state)
+sep::SEPResult BlenderBridge::processObjectPatterns(sep::pattern::ObjectHandle handle, BlenderBridge::ObjectState& state)
 {
     if (!state.object) {
         return sep::SEPResult::INVALID_ARGUMENT;
@@ -423,14 +423,14 @@ sep::SEPResult BlenderBridge::processObjectPatterns(sep::pattern::ObjectHandle h
     updatePatternMetrics(state);
     validatePatternCoherence(state);
 
-    state.stats.total_updates++;
+    state.stats.update_count++;
     notifyObservers(handle, state.metrics);
 
     state.is_processing = false;
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::updatePatternMetrics(ObjectState& state)
+sep::SEPResult BlenderBridge::updatePatternMetrics(BlenderBridge::ObjectState& state)
 {
     const auto pattern_count = state.patterns.size();
     state.metrics.active_patterns = pattern_count;
@@ -449,16 +449,16 @@ sep::SEPResult BlenderBridge::updatePatternMetrics(ObjectState& state)
 
     state.metrics.avg_coherence = pattern_count ? coherence_sum / pattern_count : 0.0f;
     state.metrics.peak_entropy  = max_entropy;
-    state.metrics.updates_processed = state.stats.total_updates;
+    state.metrics.updates_processed = state.stats.update_count;
     state.metrics.evolution.mutations = mutation_total;
     state.metrics.evolution.stability = pattern_count ? stability_sum / pattern_count : 0.0f;
-    state.metrics.performance.process_time = state.stats.last_process_time;
+    state.metrics.performance.process_time = state.stats.processing_time;
     state.metrics.performance.gpu_utilization = 0.0f;
 
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::validatePatternCoherence(const ObjectState& state)
+sep::SEPResult BlenderBridge::validatePatternCoherence(const BlenderBridge::ObjectState& state)
 {
     for (const auto& pat : state.patterns) {
         if (pat.coherence < PatternLimits::MIN_COHERENCE_VALUE ||

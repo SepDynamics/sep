@@ -61,8 +61,8 @@ namespace {
 }
 
 namespace {
-// Implementation details
-class PatternEvolutionBridgeImpl {
+// Implementation details for PatternEvolutionBridge
+class PatternEvolutionBridge::Impl {
 public:
     struct EvolutionState {
         std::vector<Pattern> active_patterns;
@@ -509,6 +509,7 @@ public:
         evolution_state_->evolution_tick++;
     }
 };
+} // namespace
 PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
     : impl_(std::make_unique<Impl>(config)) {}
 

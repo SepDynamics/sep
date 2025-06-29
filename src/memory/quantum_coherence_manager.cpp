@@ -102,7 +102,7 @@ public:
         // Fill in missing fields in result
         for(int i = 0; i < 3; ++i) {
             result.tier_fragmentation[i] = metrics_.tier_fragmentation[i];
-            result.tier_pattern_count[i] = countPatternsInTier(static_cast<MemoryTierEnum>(i));
+            result.tier_pattern_count[i] = countPatternsInTier(static_cast<sep::memory::MemoryTierEnum>(i));
         }
         
         return result;
@@ -208,9 +208,9 @@ public:
         }
         
         // Capture tier distributions
-        snapshot.tier_distribution[0] = countPatternsInTier(MemoryTierEnum::STM);
-        snapshot.tier_distribution[1] = countPatternsInTier(MemoryTierEnum::MTM);
-        snapshot.tier_distribution[2] = countPatternsInTier(MemoryTierEnum::LTM);
+        snapshot.tier_distribution[0] = countPatternsInTier(sep::memory::MemoryTierEnum::STM);
+        snapshot.tier_distribution[1] = countPatternsInTier(sep::memory::MemoryTierEnum::MTM);
+        snapshot.tier_distribution[2] = countPatternsInTier(sep::memory::MemoryTierEnum::LTM);
         
         return snapshot;
     }
@@ -239,7 +239,7 @@ public:
         return global_tick_.load();
     }
 
-    uint32_t getPatternCountByTier(MemoryTierEnum tier) const {
+    uint32_t getPatternCountByTier(sep::memory::MemoryTierEnum tier) const {
         return countPatternsInTier(tier);
     }
 

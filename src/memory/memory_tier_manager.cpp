@@ -83,11 +83,11 @@ void MemoryTierManager::deallocate(MemoryBlock* block) {
 
 MemoryTier* MemoryTierManager::getTier(TierType tier) {
     switch (tier) {
-        case static_cast<TierType>(MemoryTierEnum::STM):
+        case static_cast<TierType>(sep::memory::MemoryTierEnum::STM):
             return stm_.get();
-        case static_cast<TierType>(MemoryTierEnum::MTM):
+        case static_cast<TierType>(sep::memory::MemoryTierEnum::MTM):
             return mtm_.get();
-        case static_cast<TierType>(MemoryTierEnum::LTM):
+        case static_cast<TierType>(sep::memory::MemoryTierEnum::LTM):
             return ltm_.get();
         default:
             return nullptr;
@@ -105,16 +105,16 @@ float MemoryTierManager::getTierFragmentation(TierType tier) const {
 }
 
 float MemoryTierManager::getTotalUtilization() const {
-    float stm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::STM));
-    float mtm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::MTM));
-    float ltm_util = getTierUtilization(static_cast<TierType>(MemoryTierEnum::LTM));
+    float stm_util = getTierUtilization(static_cast<TierType>(sep::memory::MemoryTierEnum::STM));
+    float mtm_util = getTierUtilization(static_cast<TierType>(sep::memory::MemoryTierEnum::MTM));
+    float ltm_util = getTierUtilization(static_cast<TierType>(sep::memory::MemoryTierEnum::LTM));
     return (stm_util + mtm_util + ltm_util) / 3.0f;
 }
 
 float MemoryTierManager::getTotalFragmentation() const {
-    float stm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::STM));
-    float mtm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::MTM));
-    float ltm_frag = getTierFragmentation(static_cast<TierType>(MemoryTierEnum::LTM));
+    float stm_frag = getTierFragmentation(static_cast<TierType>(sep::memory::MemoryTierEnum::STM));
+    float mtm_frag = getTierFragmentation(static_cast<TierType>(sep::memory::MemoryTierEnum::MTM));
+    float ltm_frag = getTierFragmentation(static_cast<TierType>(sep::memory::MemoryTierEnum::LTM));
     return (stm_frag + mtm_frag + ltm_frag) / 3.0f;
 }
 

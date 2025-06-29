@@ -48,7 +48,7 @@ public:
     virtual std::string body() const = 0;
 
     virtual std::string getHeader(const std::string& name) const {
-        (void)name; // suppress unused parameter warning
+        (void)name;
         return "";
     }
 };

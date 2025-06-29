@@ -433,19 +433,17 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # This ensures all symbols are included before any internal libraries reference them
     target_link_libraries(sep_engine
         PRIVATE
-        # First link CUDA-dependent libraries
-        sep_compat
-        
-        # Then Cycles with whole-archive
+        # Link Cycles libraries first so their symbols are available
         -Wl,--whole-archive
         ${CYCLES_LINK_ORDER}
         -Wl,--no-whole-archive
-        
-        # Then remaining internal libraries
+
+        # Internal libraries in dependency order
+        sep_core
+        sep_compat
         sep_api
         sep_memory
         sep_quantum
-        sep_core
         sep_audio
         sep_blender
         
@@ -464,7 +462,13 @@ else()
     target_link_libraries(sep_engine
         PRIVATE
         ${CYCLES_LIBRARIES}
-        ${SEP_INTERNAL_LIBS}
+        sep_core
+        sep_compat
+        sep_api
+        sep_memory
+        sep_quantum
+        sep_audio
+        sep_blender
         ${BLENDER_LINK_ORDER}
         ${EXTERNAL_LINK_ORDER}
         ${CURL_LIBRARIES}

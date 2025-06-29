@@ -20,7 +20,7 @@ namespace cuda {
 
 class StreamRAII {
  public:
-  explicit StreamRAII(::sep::StreamFlags flags = ::sep::StreamFlags::Default);
+  explicit StreamRAII(sep::StreamFlags flags = sep::StreamFlags::Default);
   ~StreamRAII() noexcept;
 
   StreamRAII(const StreamRAII&) = delete;

@@ -135,7 +135,7 @@ struct MemoryConfig {
   double hamiltonian_coupling = 0.42;
   double predictive_horizon_ms = 100.0;
   int pattern_cache_size = 10000;
-} memory;
+} inline memory;
 
 // Quantum processing enhancement
 struct QuantumConfig {
@@ -143,7 +143,7 @@ struct QuantumConfig {
   double coherence_modulation_factor = 0.707;
   double rupture_detection_sensitivity = 0.3;
   int qfh_hierarchy_depth = 5;
-} quantum;
+} inline quantum;
 
 // CUDA acceleration parameters
 struct CudaConfig {
@@ -152,7 +152,7 @@ struct CudaConfig {
   int similarity_grid_dim = 32;
   bool enable_phase_modulation = true;
   cufftHandle fft_plan{};
-} cuda;
+} inline cuda;
 
     // API coherence modulation
     struct APIConfig {
@@ -160,7 +160,7 @@ struct CudaConfig {
         double context_weight = 0.3;
         double state_weight = 0.7;
         int superposition_states = 4;
-    } api;
+    } inline api;
 
 struct SemanticConfig {
   int embedding_dimensions = 512;

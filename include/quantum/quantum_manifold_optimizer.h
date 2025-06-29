@@ -1,34 +1,27 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
+#include "quantum/pattern_evolution_bridge.h"
 #include <algorithm>
 #include <array>
 #include <atomic>
 #include <chrono>
+#include <cmath>
 #include <complex>
 #include <condition_variable>
 #include <cstdint>
+#include <execution>
 #include <functional>
 #include <future>
+#include <glm/glm.hpp>
 #include <memory>
 #include <mutex>
 #include <numeric>
-#include <string>
 #include <stdexcept>
+#include <string>
 #include <thread>
 #include <unordered_map>
 #include <vector>
-#include <algorithm>
-#include <numeric>
-#include <execution>
-#include <stdexcept>
-#include <cmath>
-#include <future>
-#include <algorithm>
-#include <numeric>
-#include <execution>
-#include <stdexcept>
-#include <glm/glm.hpp>
 
 #include "compat/cuda.h"
 #include "compat/cuda_runtime.h"
@@ -61,6 +54,9 @@ using ::sep::config::CUDAConfig;
 using ::sep::config::APIConfig;
 using ::sep::config::LogConfig;
 using ::sep::config::AnalyticsConfig;
+using ::sep::config::APIConfig;
+using ::sep::config::CUDAConfig;
+using ::sep::config::LogConfig;
 
 class QuantumManifoldOptimizer {
 public:
@@ -131,22 +127,30 @@ class CUDAQuantumKernel;
 class SemanticProcessor;
 class PerformanceAnalyzer;
 
+// Memory tier optimization parameters
+struct MemoryConfig {
+  double adaptive_threshold_rate = 0.02;
+  double hamiltonian_coupling = 0.42;
+  double predictive_horizon_ms = 100.0;
+  int pattern_cache_size = 10000;
+} memory;
 
-    // Memory tier optimization parameters
-    struct MemoryConfig {
-        double adaptive_threshold_rate = 0.02;
-        double hamiltonian_coupling = 0.42;
-        double predictive_horizon_ms = 100.0;
-        int pattern_cache_size = 10000;
-    } memory;
+// Quantum processing enhancement
+struct QuantumConfig {
+  int manifold_dimensions = 8;
+  double coherence_modulation_factor = 0.707;
+  double rupture_detection_sensitivity = 0.3;
+  int qfh_hierarchy_depth = 5;
+} quantum;
 
-    // Quantum processing enhancement
-    struct QuantumConfig {
-        int manifold_dimensions = 8;
-        double coherence_modulation_factor = 0.707;
-        double rupture_detection_sensitivity = 0.3;
-        int qfh_hierarchy_depth = 5;
-    } quantum;
+// CUDA acceleration parameters
+struct CudaConfig {
+  int warp_tile_size = 16;
+  int coherence_block_size = 256;
+  int similarity_grid_dim = 32;
+  bool enable_phase_modulation = true;
+  cufftHandle fft_plan{};
+} cuda;
 
     // CUDA acceleration parameters
     struct CudaConfig {
@@ -166,11 +170,11 @@ class PerformanceAnalyzer;
     } api;
 
 struct SemanticConfig {
-    int embedding_dimensions = 512;
-    MemoryTierEnum tier = MemoryTierEnum::STM;
-    int hierarchy_levels = 4;
-    double interference_threshold = 0.1;
-    bool enable_multimodal_fusion = true;
+  int embedding_dimensions = 512;
+  MemoryTierEnum tier = MemoryTierEnum::STM;
+  int hierarchy_levels = 4;
+  double interference_threshold = 0.1;
+  bool enable_multimodal_fusion = true;
 };
 
 struct ManifoldConfig {
@@ -181,59 +185,61 @@ struct ManifoldConfig {
     AnalyticsConfig analytics;
 };
 
-
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
 class AdvancedMemoryTierOptimizer {
 public:
-    explicit AdvancedMemoryTierOptimizer(const ManifoldConfig& config);
+  explicit AdvancedMemoryTierOptimizer(const ManifoldConfig &config);
 
-    // Adaptive coherence threshold optimization
-    void optimizeThresholds(const std::vector<QuantumPattern>& patterns);
-    
-    // Predictive pattern migration using Hamiltonian evolution
-    void predictiveMigration(int pattern_id, double time_horizon_ms);
-    
-    // Intelligent tier promotion decisions
-    MemoryTierEnum recommendTier(const QuantumPattern& pattern) const;
+  // Adaptive coherence threshold optimization
+  void optimizeThresholds(const std::vector<QuantumPattern> &patterns);
+
+  // Predictive pattern migration using Hamiltonian evolution
+  void predictiveMigration(int pattern_id, double time_horizon_ms);
+
+  // Intelligent tier promotion decisions
+  MemoryTierEnum recommendTier(const QuantumPattern &pattern) const;
 
 private:
-    ManifoldConfig config_;
-    std::unique_ptr<HamiltonianEvolver> hamiltonian_;
-    std::array<double, 3> adaptive_thresholds_;
-    std::mutex threshold_mutex_;
-    
-    double calculateHamiltonianEnergy(const QuantumPattern& pattern) const;
-    double predictFutureCoherence(const QuantumPattern& pattern, double dt) const;
+  ManifoldConfig config_;
+  std::unique_ptr<HamiltonianEvolver> hamiltonian_;
+  std::array<double, 3> adaptive_thresholds_;
+  std::mutex threshold_mutex_;
+
+  double calculateHamiltonianEnergy(const QuantumPattern &pattern) const;
+  double predictFutureCoherence(const QuantumPattern &pattern, double dt) const;
 };
 
 // 2. ENHANCED QUANTUM PROCESSING WITH MANIFOLD ANALYSIS
 class QuantumManifoldProcessor : public QuantumProcessorQFH {
 public:
-    explicit QuantumManifoldProcessor(const ManifoldConfig& config);
+  explicit QuantumManifoldProcessor(const ManifoldConfig &config);
 
-    // Multi-dimensional coherence manifold analysis
-    struct ManifoldAnalysis {
-        std::vector<std::vector<double>> coherence_matrix;
-        std::vector<double> eigenvalues;
-        std::vector<std::vector<double>> eigenvectors;
-        double manifold_curvature;
-        bool topological_defect_detected;
-    };
+  // Multi-dimensional coherence manifold analysis
+  struct ManifoldAnalysis {
+    std::vector<std::vector<double>> coherence_matrix;
+    std::vector<double> eigenvalues;
+    std::vector<std::vector<double>> eigenvectors;
+    double manifold_curvature;
+    bool topological_defect_detected;
+  };
 
-    ManifoldAnalysis analyzeCoherenceManifold(const std::vector<QuantumPattern>& patterns);
-    
-    // Enhanced QFH with cross-scale rupture detection
-    QFHResult processWithCrossScaleAnalysis(const std::vector<uint32_t>& pattern_bits);
-    
-    // Wavelet-based frequency domain processing
-    std::vector<std::complex<double>> waveletQFH(const std::vector<uint8_t>& bits, int levels = 4);
+  ManifoldAnalysis
+  analyzeCoherenceManifold(const std::vector<QuantumPattern> &patterns);
+
+  // Enhanced QFH with cross-scale rupture detection
+  QFHResult
+  processWithCrossScaleAnalysis(const std::vector<uint32_t> &pattern_bits);
+
+  // Wavelet-based frequency domain processing
+  std::vector<std::complex<double>> waveletQFH(const std::vector<uint8_t> &bits,
+                                               int levels = 4);
 
 private:
-    ManifoldConfig config_;
-    std::unique_ptr<CUDAQuantumKernel> cuda_kernel_;
-    
-    void computeManifoldCurvature(ManifoldAnalysis& analysis) const;
-    bool detectTopologicalDefects(const ManifoldAnalysis& analysis) const;
+  ManifoldConfig config_;
+  std::unique_ptr<CUDAQuantumKernel> cuda_kernel_;
+
+  void computeManifoldCurvature(ManifoldAnalysis &analysis) const;
+  bool detectTopologicalDefects(const ManifoldAnalysis &analysis) const;
 };
 
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
@@ -242,17 +248,18 @@ public:
     explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
     ~CUDAQuantumKernel();
 
-    // Warp-level primitive operations
-    void coherenceCalculationKernel(const float* patterns_a, const float* patterns_b, 
-                                   float* coherence_out, int n_patterns, int dim);
-    
-    // Tiled memory access for quantum similarity
-    void quantumSimilarityKernel(const float* patterns, float* similarity_matrix, 
-                                int n_patterns, int dim, float phase_modulation);
-    
-    // Phase-dependent coherence modulation
-    void phaseModulationKernel(float* coherence_values, const float* phases, 
-                              int n_values, float modulation_strength);
+  // Warp-level primitive operations
+  void coherenceCalculationKernel(const float *patterns_a,
+                                  const float *patterns_b, float *coherence_out,
+                                  int n_patterns, int dim);
+
+  // Tiled memory access for quantum similarity
+  void quantumSimilarityKernel(const float *patterns, float *similarity_matrix,
+                               int n_patterns, int dim, float phase_modulation);
+
+  // Phase-dependent coherence modulation
+  void phaseModulationKernel(float *coherence_values, const float *phases,
+                             int n_values, float modulation_strength);
 
 private:
     cudaStream_t stream_;
@@ -268,19 +275,21 @@ class APICoherenceModulator {
 public:
     explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
 
-    // Dynamic response coherence synthesis
-    struct CoherenceResponse {
-        double final_coherence;
-        std::vector<double> superposition_weights;
-        std::string modulation_strategy;
-    };
+  // Dynamic response coherence synthesis
+  struct CoherenceResponse {
+    double final_coherence;
+    std::vector<double> superposition_weights;
+    std::string modulation_strategy;
+  };
 
-    CoherenceResponse synthesizeResponse(const std::string& client_context, 
-                                       const std::unordered_map<std::string, double>& system_state);
-    
-    // Quantum superposition of coherence factors
-    double calculateSuperpositionCoherence(const std::vector<double>& coherence_factors,
-                                         const std::vector<double>& weights);
+  CoherenceResponse synthesizeResponse(
+      const std::string &client_context,
+      const std::unordered_map<std::string, double> &system_state);
+
+  // Quantum superposition of coherence factors
+  double
+  calculateSuperpositionCoherence(const std::vector<double> &coherence_factors,
+                                  const std::vector<double> &weights);
 
 private:
     ManifoldConfig::ApiConfig config_;
@@ -293,112 +302,115 @@ private:
 // 5. HIERARCHICAL SEMANTIC PROCESSING
 class SemanticProcessor {
 public:
-    explicit SemanticProcessor(const SemanticConfig& config);
+  explicit SemanticProcessor(const SemanticConfig &config);
 
-    // Code embedding with structural awareness
-    struct CodeEmbedding {
-        std::vector<double> vector;
-        std::vector<int> hierarchy_indices;
-        double structural_coherence;
-    };
+  // Code embedding with structural awareness
+  struct CodeEmbedding {
+    std::vector<double> vector;
+    std::vector<int> hierarchy_indices;
+    double structural_coherence;
+  };
 
-    CodeEmbedding embedCode(const std::string& code_snippet);
-    
-    // Context-aware search with quantum interference
-    struct SearchResult {
-        int pattern_id;
-        double relevance_score;
-        double interference_factor;
-        std::vector<int> entangled_patterns;
-    };
+  CodeEmbedding embedCode(const std::string &code_snippet);
 
-    std::vector<SearchResult> quantumSearch(const CodeEmbedding& query,
-                                           const std::vector<QuantumPattern>& patterns);
-    
-    // Multi-modal result fusion
-    std::vector<SearchResult> fuseMultiModalResults(
-        const std::vector<std::vector<SearchResult>>& modal_results);
+  // Context-aware search with quantum interference
+  struct SearchResult {
+    int pattern_id;
+    double relevance_score;
+    double interference_factor;
+    std::vector<int> entangled_patterns;
+  };
+
+  std::vector<SearchResult>
+  quantumSearch(const CodeEmbedding &query,
+                const std::vector<QuantumPattern> &patterns);
+
+  // Multi-modal result fusion
+  std::vector<SearchResult> fuseMultiModalResults(
+      const std::vector<std::vector<SearchResult>> &modal_results);
 
 private:
-    SemanticConfig config_;
-    std::unique_ptr<CUDAQuantumKernel> cuda_kernel_;
-    
-    double calculateQuantumInterference(const CodeEmbedding& a, const CodeEmbedding& b);
-    void buildHierarchicalIndex(const std::vector<CodeEmbedding>& embeddings);
+  SemanticConfig config_;
+  std::unique_ptr<CUDAQuantumKernel> cuda_kernel_;
+
+  double calculateQuantumInterference(const CodeEmbedding &a,
+                                      const CodeEmbedding &b);
+  void buildHierarchicalIndex(const std::vector<CodeEmbedding> &embeddings);
 };
 
 // 6. REAL-TIME PERFORMANCE ANALYTICS
 class PerformanceAnalyzer {
 public:
-    explicit PerformanceAnalyzer(const AnalyticsConfig& config);
+  explicit PerformanceAnalyzer(const AnalyticsConfig &config);
 
-    // Quantum state space analysis
-    struct StateSpaceAnalysis {
-        std::vector<std::vector<double>> state_trajectories;
-        std::vector<double> lyapunov_exponents;
-        double entropy_rate;
-        std::vector<int> anomaly_indices;
-    };
+  // Quantum state space analysis
+  struct StateSpaceAnalysis {
+    std::vector<std::vector<double>> state_trajectories;
+    std::vector<double> lyapunov_exponents;
+    double entropy_rate;
+    std::vector<int> anomaly_indices;
+  };
 
-    StateSpaceAnalysis analyzeStateSpace(const std::vector<QuantumPattern>& pattern_history);
-    
-    // Anomaly detection with predictive modeling
-    struct AnomalyPrediction {
-        double probability;
-        int predicted_time_steps;
-        std::string anomaly_type;
-        std::vector<double> confidence_interval;
-    };
+  StateSpaceAnalysis
+  analyzeStateSpace(const std::vector<QuantumPattern> &pattern_history);
 
-    AnomalyPrediction predictAnomaly(const StateSpaceAnalysis& analysis);
-    
-    // Adaptive optimization deployment
-    struct OptimizationStrategy {
-        std::string strategy_name;
-        std::unordered_map<std::string, double> parameters;
-        double expected_improvement;
-    };
+  // Anomaly detection with predictive modeling
+  struct AnomalyPrediction {
+    double probability;
+    int predicted_time_steps;
+    std::string anomaly_type;
+    std::vector<double> confidence_interval;
+  };
 
-    OptimizationStrategy recommendOptimization(const StateSpaceAnalysis& analysis,
-                                              const std::vector<double>& performance_metrics);
+  AnomalyPrediction predictAnomaly(const StateSpaceAnalysis &analysis);
+
+  // Adaptive optimization deployment
+  struct OptimizationStrategy {
+    std::string strategy_name;
+    std::unordered_map<std::string, double> parameters;
+    double expected_improvement;
+  };
+
+  OptimizationStrategy
+  recommendOptimization(const StateSpaceAnalysis &analysis,
+                        const std::vector<double> &performance_metrics);
 
 private:
-    AnalyticsConfig config_;
-    std::vector<double> performance_history_;
-    std::mutex history_mutex_;
-    
-    double calculateLyapunovExponent(const std::vector<std::vector<double>>& trajectory);
-    double calculateEntropyRate(const std::vector<QuantumPattern>& patterns);
+  AnalyticsConfig config_;
+  std::vector<double> performance_history_;
+  std::mutex history_mutex_;
+
+  double
+  calculateLyapunovExponent(const std::vector<std::vector<double>> &trajectory);
+  double calculateEntropyRate(const std::vector<QuantumPattern> &patterns);
 };
 
 // COMPREHENSIVE VALIDATION FRAMEWORK
 class ManifoldValidator {
 public:
-    struct ValidationResult {
-        bool passed;
-        double processing_rate;  // patterns/second
-        double error_rate;
-        std::vector<std::string> failed_tests;
-        std::chrono::milliseconds total_time;
-    };
+  struct ValidationResult {
+    bool passed;
+    double processing_rate; // patterns/second
+    double error_rate;
+    std::vector<std::string> failed_tests;
+    std::chrono::milliseconds total_time;
+  };
 
-    // Deterministic coherence validation
-    ValidationResult validateCoherenceSimulation(AdvancedMemoryTierOptimizer& optimizer,
-                                               int n_simulations = 10000);
-    
-    // CUDA profiling analysis
-    ValidationResult validateCUDAPerformance(CUDAQuantumKernel& kernel,
+  // Deterministic coherence validation
+  ValidationResult
+  validateCoherenceSimulation(AdvancedMemoryTierOptimizer &optimizer,
+                              int n_simulations = 10000);
+
+  // CUDA profiling analysis
+  ValidationResult validateCUDAPerformance(CUDAQuantumKernel &kernel,
                                            int n_patterns = 100000);
-    
-    // End-to-end system validation
-    ValidationResult validateSystemIntegration(
-        AdvancedMemoryTierOptimizer& memory_opt,
-        QuantumManifoldProcessor& quantum_proc,
-        APICoherenceModulator& api_mod,
-        SemanticProcessor& semantic_proc,
-        PerformanceAnalyzer& perf_analyzer,
-        int target_patterns_per_second = 10000,
-        double max_error_rate = 0.001);
+
+  // End-to-end system validation
+  ValidationResult validateSystemIntegration(
+      AdvancedMemoryTierOptimizer &memory_opt,
+      QuantumManifoldProcessor &quantum_proc, APICoherenceModulator &api_mod,
+      SemanticProcessor &semantic_proc, PerformanceAnalyzer &perf_analyzer,
+      int target_patterns_per_second = 10000, double max_error_rate = 0.001);
 
 private:
     // Deterministic quantum state generator based on Hamiltonian evolution
@@ -447,45 +459,45 @@ private:
 // Integration with existing SEP architecture
 class QuantumManifoldOptimizationEngine {
 public:
-    explicit QuantumManifoldOptimizationEngine(const ManifoldConfig& config = {});
+  explicit QuantumManifoldOptimizationEngine(const ManifoldConfig &config = {});
 
-    // Initialize all subsystems
-    void initialize();
-    
-    // Process patterns through complete optimization pipeline
-    void processPatterns(const std::vector<QuantumPattern>& patterns);
-    
-    // Get optimization metrics
-    struct OptimizationMetrics {
-        double avg_coherence;
-        double processing_rate;
-        double memory_efficiency;
-        double cuda_utilization;
-        double api_response_coherence;
-        double semantic_accuracy;
-        double anomaly_detection_rate;
-    };
+  // Initialize all subsystems
+  void initialize();
 
-    OptimizationMetrics getMetrics() const;
-    
-    // Validate system performance
-    ManifoldValidator::ValidationResult validate();
+  // Process patterns through complete optimization pipeline
+  void processPatterns(const std::vector<QuantumPattern> &patterns);
+
+  // Get optimization metrics
+  struct OptimizationMetrics {
+    double avg_coherence;
+    double processing_rate;
+    double memory_efficiency;
+    double cuda_utilization;
+    double api_response_coherence;
+    double semantic_accuracy;
+    double anomaly_detection_rate;
+  };
+
+  OptimizationMetrics getMetrics() const;
+
+  // Validate system performance
+  ManifoldValidator::ValidationResult validate();
 
 private:
-    ManifoldConfig config_;
-    std::unique_ptr<AdvancedMemoryTierOptimizer> memory_optimizer_;
-    std::unique_ptr<QuantumManifoldProcessor> quantum_processor_;
-    std::unique_ptr<APICoherenceModulator> api_modulator_;
-    std::unique_ptr<SemanticProcessor> semantic_processor_;
-    std::unique_ptr<PerformanceAnalyzer> performance_analyzer_;
-    std::unique_ptr<ManifoldValidator> validator_;
-    
-    std::atomic<bool> running_{false};
-    std::thread processing_thread_;
-    
-    void processingLoop();
-    void integrateWithExistingMemoryTiers();
-    void setupQuantumProcessingPipeline();
+  ManifoldConfig config_;
+  std::unique_ptr<AdvancedMemoryTierOptimizer> memory_optimizer_;
+  std::unique_ptr<QuantumManifoldProcessor> quantum_processor_;
+  std::unique_ptr<APICoherenceModulator> api_modulator_;
+  std::unique_ptr<SemanticProcessor> semantic_processor_;
+  std::unique_ptr<PerformanceAnalyzer> performance_analyzer_;
+  std::unique_ptr<ManifoldValidator> validator_;
+
+  std::atomic<bool> running_{false};
+  std::thread processing_thread_;
+
+  void processingLoop();
+  void integrateWithExistingMemoryTiers();
+  void setupQuantumProcessingPipeline();
 };
 
 } // namespace sep::quantum::manifold

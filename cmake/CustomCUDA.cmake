@@ -17,9 +17,9 @@ set(CUDA_INCLUDE_DIRS "${CUDA_PATH}/include" CACHE PATH "CUDA include directorie
 #--- CUDA libraries ---
 # Use full paths to CUDA libraries instead of just names to fix linking issues
 set(CUDA_LIBRARIES
-    "${CUDA_PATH}/lib64/libcudart.so"
-    "${CUDA_PATH}/lib64/libcudadevrt.a"
-    "${CUDA_PATH}/lib64/libcudart_static.a"
+    "${CUDA_PATH}/targets/x86_64-linux/lib/libcudart.so"
+    "${CUDA_PATH}/targets/x86_64-linux/lib/libcudadevrt.a"
+    "${CUDA_PATH}/targets/x86_64-linux/lib/libcudart_static.a"
     CACHE STRING "CUDA libraries" FORCE
 )
 set(CUDA_LIBRARY_DIRS
@@ -70,23 +70,6 @@ list(APPEND CUDA_NVCC_FLAGS
     "${CUDA_PATH}/include"
     "-std=c++17"
 )
-
-
-# Create compat library with all sources
-add_library(sep_compat STATIC
-    src/compat/core.cu
-    src/compat/cuda_api.cu
-    src/compat/utils.cu
-    src/compat/event.cu
-    src/compat/pattern_kernels.cu
-    src/compat/quantum_kernels.cu
-    src/compat/stream.cpp
-    src/compat/raii.cpp
-    src/compat/component_bridge.cpp
-)
-
-# Link CUDA libraries
-target_link_libraries(sep_compat PUBLIC ${CUDA_LIBRARIES})
 
 # Check if real OSL libraries are available
 if(OSL_OSLCOMP_LIBRARY AND OSL_OSLEXEC_LIBRARY AND OSL_OSLQUERY_LIBRARY)

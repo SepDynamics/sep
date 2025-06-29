@@ -125,20 +125,8 @@ bool Engine::init(const sep::config::APIConfig& config) {
         return false;
     }
 
-    // Create default stream // Fix: This is redundant, stream already created above
-    impl_->stream_ = cuda_core.createStream(sep::StreamFlags::Default);
-    if (!impl_->stream_) {
-        return false;
-    }
- // Fix: These allocations are also redundant
-    impl_->d_bitfield_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
-    impl_->d_probe_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
-    impl_->d_expectations_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
-    impl_->d_corrections_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
-    impl_->d_correction_count_ = cuda::DeviceMemory<std::uint32_t>(1);
-    impl_->d_chunks_ = cuda::DeviceMemory<std::uint64_t>(DEFAULT_SIZE);
-    impl_->d_collapse_indices_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE * PAIRS_PER_CHUNK);
-    impl_->d_collapse_counts_ = cuda::DeviceMemory<std::uint32_t>(DEFAULT_SIZE);
+    // Stream was already created and memory was already allocated above
+    // No redundant calls needed here
 
     printf("DEBUG: Engine::init - Initializing audio capture\n");
      // fflush(stdout);

@@ -1,17 +1,17 @@
 #pragma once
 
 #ifdef SEP_USE_TBB
-#  include <tbb/concurrent_hash_map.h>
+#include <tbb/concurrent_hash_map.h>
 #else
-#  include "api/rate_limiter.h"
+#include "api/rate_limiter.h"
 #endif
 
-#include <mutex>
-#include <thread>
 #include <array>
 #include <atomic>
 #include <chrono>
 #include <memory>
+#include <mutex>
+#include <thread>
 #include <unordered_map>
 
 namespace sep::api {
@@ -113,6 +113,7 @@ private:
   // System metrics
   AtomicSystemMetrics metrics_;
   std::unique_ptr<BackgroundCleanup> metrics_collector_;
+  mutable std::mutex metrics_mutex_;
 
   // Priority configuration
   struct PriorityConfig {
@@ -134,7 +135,8 @@ private:
       tbb::concurrent_hash_map<std::string, std::unique_ptr<ClientData>>;
   ClientMap clients_;
 #else
-  using ClientMap = std::unordered_map<std::string, std::unique_ptr<ClientData>>;
+  using ClientMap =
+      std::unordered_map<std::string, std::unique_ptr<ClientData>>;
   ClientMap clients_;
   mutable std::mutex clients_mutex_;
 #endif

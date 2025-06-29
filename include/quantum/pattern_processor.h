@@ -4,6 +4,7 @@
 #include "quantum/types.h"
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
+#include "memory/types.h"
 #include "quantum/gpu_context.h"
 #include <vector>
 #include <memory>

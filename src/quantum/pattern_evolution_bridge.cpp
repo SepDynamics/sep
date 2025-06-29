@@ -1,7 +1,7 @@
 // /sep/src/quantum/pattern_evolution_bridge.cpp
+#include "quantum/quantum_manifold_optimizer.h"  // Must be first for complete type
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/pattern_evolution_bridge.h"
-#include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/evolution.h"
@@ -60,6 +60,10 @@ namespace {
     }
 }
 
+// Forward declare implementation
+class PatternEvolutionBridge::Impl;
+
+// Define implementation
 class PatternEvolutionBridge::Impl {
 public:
     struct EvolutionState {

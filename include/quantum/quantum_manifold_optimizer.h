@@ -42,6 +42,8 @@
 #include "quantum/types.h"
 #include "quantum/pattern.h"
 
+namespace sep::quantum { class PatternEvolutionBridge; }
+
 namespace sep::quantum::manifold {
 
 using ::sep::memory::MemoryTierEnum;
@@ -78,6 +80,7 @@ public:
 
     struct OptimizationResult {
         bool success{false};
+        QuantumState optimized_state{};
         std::vector<float> optimized_values;
         std::string error_message;
         QuantumState optimized_state{};

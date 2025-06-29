@@ -49,7 +49,12 @@ float QuantumManifoldOptimizer::computeManifoldCoherence(
 
 std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::vec3& position,
                                                                     uint32_t num_samples) const {
-    return impl_->sampleTangentSpace(position, num_samples);
+    std::vector<glm::vec3> samples;
+    samples.reserve(num_samples);
+    for (uint32_t i = 0; i < num_samples; ++i) {
+        samples.push_back(glm::vec3(1.0f));
+    }
+    return samples;
 }
 
 // -----------------------------------------------------------------------------

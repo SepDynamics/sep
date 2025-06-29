@@ -5,6 +5,9 @@
 #include "core/manager.h"
 #include "compat/cuda_helpers.h"
 #include "compat/shim.h"
+#if !SEP_CUDA_AVAILABLE
+#include "compat/cuda_runtime.h"
+#endif
 #include "crow/asio_isolation.h"
 #include "crow/socket_adaptors.h"
 #include <ios>

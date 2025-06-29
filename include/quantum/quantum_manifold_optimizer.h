@@ -26,16 +26,16 @@ using ::sep::quantum::QuantumState;
 using QuantumPattern = ::sep::quantum::Pattern;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
-using ::sep::config::CUDAConfig;
-using ::sep::config::APIConfig;
+using sep::config::CudaConfig;
+using sep::config::ApiConfig;
 using ::sep::config::LogConfig;
 
 class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CUDAConfig cuda;
-        APIConfig api;
+        CudaConfig cuda;
+        ApiConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
     };
@@ -136,8 +136,8 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    CUDAConfig cuda;
-    APIConfig api;
+    CudaConfig cuda;
+    ApiConfig api;
     LogConfig log;
 };
 

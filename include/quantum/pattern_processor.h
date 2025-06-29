@@ -26,7 +26,7 @@ constexpr float MTM_COHERENCE_THRESHOLD = 0.7F;
 struct PatternProcessResult {
     QuantumState state;
     std::string pattern_id;
-    MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+    sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
     bool tier_changed{false};
     float coherence_score{0.0F};
     float stability_score{0.0F};

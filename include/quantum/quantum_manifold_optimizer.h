@@ -175,7 +175,7 @@ struct ManifoldConfig {
     sep::config::CudaConfig cuda;
     sep::config::APIConfig api;
     sep::config::LogConfig log;
-    AnalyticsConfig analytics;
+    sep::config::AnalyticsConfig analytics;
 };
 
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
@@ -369,7 +369,7 @@ public:
                         const std::vector<double> &performance_metrics);
 
 private:
-  AnalyticsConfig config_;
+  sep::config::AnalyticsConfig config_;
   std::vector<double> performance_history_;
   std::mutex history_mutex_;
 

@@ -28,8 +28,8 @@ namespace pattern {
 // Use the core SEPResult enum instead of the pattern-specific one
 // Constructor implementation
 BlenderBridge::BlenderBridge()
-    : m_processing_thread_active(false)
-    , m_gpu_context(nullptr)
+    : thread_running_(false)
+    , gpu_context_(nullptr)
 {
     // Initialize the bridge
 }
@@ -50,17 +50,17 @@ sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
         return sep::SEPResult::INVALID_ARGUMENT;
     }
 
-    if (m_processing_thread_active.load())
+    if (thread_running_.load())
     {
         return sep::SEPResult::ALREADY_EXISTS;
     }
 
     // Store GPU context
-    m_gpu_context = ctx;
+    gpu_context_ = ctx;
 
     // Initialize pattern processor
-    m_pattern_processor.reset(new (std::nothrow) sep::pattern::PatternProcessor());
-    if (!m_pattern_processor)
+    pattern_processor_.reset(new (std::nothrow) sep::pattern::PatternProcessor());
+    if (!pattern_processor_)
     {
         notifyError(sep::SEPResult::ALLOCATION_FAILED, "Failed to allocate pattern processor");
         return sep::SEPResult::ALLOCATION_FAILED;
@@ -76,7 +76,7 @@ sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
 
 sep::SEPResult BlenderBridge::registerObject(Object* obj, const PatternConfig& config, ObjectHandle* handle_out)
 {
-    if (!m_processing_thread_active.load())
+    if (!thread_running_.load())
     {
         return sep::SEPResult::INITIALIZATION_FAILED;
     }
@@ -141,8 +141,8 @@ void BlenderBridge::addObserver(std::shared_ptr<PatternObserver> observer)
     if (!observer)
         return;
 
-    std::lock_guard<std::mutex> lock(m_observer_mutex);
-    m_observers.push_back(observer);
+    std::lock_guard<std::mutex> lock(observers_mutex_);
+    observers_.push_back(observer);
 }
 
 void BlenderBridge::removeObserver(std::shared_ptr<PatternObserver> observer)
@@ -150,14 +150,14 @@ void BlenderBridge::removeObserver(std::shared_ptr<PatternObserver> observer)
     if (!observer)
         return;
 
-    std::lock_guard<std::mutex> lock(m_observer_mutex);
-    m_observers.erase(std::find(m_observers.begin(), m_observers.end(), observer));
+    std::lock_guard<std::mutex> lock(observers_mutex_);
+    observers_.erase(std::find(observers_.begin(), observers_.end(), observer));
 }
 
 void BlenderBridge::notifyObservers(ObjectHandle handle, const PatternMetrics& metrics)
 {
-    std::lock_guard<std::mutex> lock(m_observer_mutex);
-    for (const auto& observer : m_observers)
+    std::lock_guard<std::mutex> lock(observers_mutex_);
+    for (const auto& observer : observers_)
     {
         observer->onPatternUpdate(handle, metrics);
     }
@@ -165,8 +165,8 @@ void BlenderBridge::notifyObservers(ObjectHandle handle, const PatternMetrics& m
 
 void BlenderBridge::notifyStateChange(ObjectHandle handle, PatternStateEnum old_state, PatternStateEnum new_state)
 {
-    std::lock_guard<std::mutex> lock(m_observer_mutex);
-    for (const auto& observer : m_observers)
+    std::lock_guard<std::mutex> lock(observers_mutex_);
+    for (const auto& observer : observers_)
     {
         observer->onStateChange(handle, old_state, new_state);
     }
@@ -174,8 +174,8 @@ void BlenderBridge::notifyStateChange(ObjectHandle handle, PatternStateEnum old_
 
 void BlenderBridge::notifyError(sep::SEPResult error, const char* message)
 {
-    std::lock_guard<std::mutex> lock(m_observer_mutex);
-    for (const auto& observer : m_observers)
+    std::lock_guard<std::mutex> lock(observers_mutex_);
+    for (const auto& observer : observers_)
     {
         // Convert from sep::SEPResult to sep::pattern::PatternResult
         sep::pattern::PatternResult pattern_error;
@@ -206,8 +206,8 @@ void BlenderBridge::notifyError(sep::SEPResult error, const char* message)
 
 void BlenderBridge::notifyResourceWarning(ResourceType type, float utilization)
 {
-    std::lock_guard<std::mutex> lock(m_observer_mutex);
-    for (const auto& observer : m_observers)
+    std::lock_guard<std::mutex> lock(observers_mutex_);
+    for (const auto& observer : observers_)
     {
         observer->onResourceWarning(type, utilization);
     }
@@ -219,14 +219,14 @@ bool BlenderBridge::isValidHandle(ObjectHandle handle) const
     return objects_.find(handle) != objects_.end();
 }
 
-ObjectState* BlenderBridge::getObjectStatePtr(sep::pattern::ObjectHandle handle)
+ObjectState* BlenderBridge::getObjectState(sep::pattern::ObjectHandle handle)
 {
     std::lock_guard<std::mutex> lock(objects_mutex_);
     auto                        it = objects_.find(handle);
     return it != objects_.end() ? &it->second : nullptr;
 }
 
-sep::SEPResult BlenderBridge::cleanupObject(sep::pattern::ObjectHandle handle)
+void BlenderBridge::cleanupObject(sep::pattern::ObjectHandle handle)
 {
     std::lock_guard<std::mutex> lock(objects_mutex_);
     auto                        it = objects_.find(handle);
@@ -235,7 +235,6 @@ sep::SEPResult BlenderBridge::cleanupObject(sep::pattern::ObjectHandle handle)
         freePatternMemory(it->second);
         objects_.erase(it);
     }
-    return sep::SEPResult::SUCCESS;
 }
 
 sep::SEPResult BlenderBridge::allocatePatternMemory(ObjectState& state)
@@ -267,7 +266,7 @@ sep::SEPResult BlenderBridge::freePatternMemory(ObjectState& state)
 
 sep::SEPResult BlenderBridge::syncMemory(::sep::memory::MemoryTierEnum tier, bool force)
 {
-    if (!m_processing_thread_active.load())
+    if (!thread_running_.load())
     {
         return sep::SEPResult::INITIALIZATION_FAILED;
     }
@@ -298,40 +297,36 @@ sep::SEPResult BlenderBridge::syncMemory(::sep::memory::MemoryTierEnum tier, boo
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::startProcessingThread()
+void BlenderBridge::startProcessingThread()
 {
-    if (m_processing_thread_active.load()) {
-        return sep::SEPResult::ALREADY_EXISTS;
+    if (thread_running_.load()) {
+        return;
     }
-    
-    if (!m_gpu_context) {
-        return sep::SEPResult::INITIALIZATION_FAILED;
+
+    if (!gpu_context_) {
+        return;
     }
 
     // Launch background thread for pattern processing
-    m_processing_thread_active.store(true);
-    m_processing_thread.reset(
-        new std::thread(&BlenderBridge::processingThreadMain, this));
-
-    return sep::SEPResult::SUCCESS;
+    thread_running_.store(true);
+    processing_thread_ = std::thread(&BlenderBridge::processingThreadMain, this);
 }
 
-sep::SEPResult BlenderBridge::stopProcessingThread()
+void BlenderBridge::stopProcessingThread()
 {
-    if (!m_processing_thread_active.load()) {
-        return sep::SEPResult::INITIALIZATION_FAILED;
+    if (!thread_running_.load()) {
+        return;
     }
-    
-    m_processing_thread_active.store(false);
-    if (m_processing_thread && m_processing_thread->joinable()) {
-        m_processing_thread->join();
+
+    thread_running_.store(false);
+    if (processing_thread_.joinable()) {
+        processing_thread_.join();
     }
-    return sep::SEPResult::SUCCESS;
 }
 
 sep::SEPResult BlenderBridge::processPatterns()
 {
-    if (!m_processing_thread_active.load()) {
+    if (!thread_running_.load()) {
         return sep::SEPResult::INITIALIZATION_FAILED;
     }
 
@@ -354,7 +349,7 @@ sep::SEPResult BlenderBridge::processPatterns()
 
 sep::SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics& metrics)
 {
-    if (!m_processing_thread_active.load()) {
+    if (!thread_running_.load()) {
         return sep::SEPResult::INITIALIZATION_FAILED;
     }
     
@@ -362,7 +357,7 @@ sep::SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMet
         return sep::SEPResult::INVALID_ARGUMENT;
     }
     
-    auto* state = getObjectStatePtr(handle);
+    auto* state = getObjectState(handle);
     if (!state) {
         return sep::SEPResult::INVALID_ARGUMENT;
     }
@@ -376,10 +371,10 @@ sep::SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMet
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::updateResourceStats()
+void BlenderBridge::updateResourceStats()
 {
-    if (!m_processing_thread_active.load()) {
-        return sep::SEPResult::INITIALIZATION_FAILED;
+    if (!thread_running_.load()) {
+        return;
     }
 
     auto& manager = sep::memory::MemoryTierManager::getInstance();
@@ -397,13 +392,11 @@ sep::SEPResult BlenderBridge::updateResourceStats()
         notifyResourceWarning(ResourceType::GPU_MEMORY, mtm_util);
     if (ltm_util > 0.9f)
         notifyResourceWarning(ResourceType::STORAGE_RESOURCES, ltm_util);
-
-    return sep::SEPResult::SUCCESS;
 }
 
 void BlenderBridge::processingThreadMain()
 {
-    while (m_processing_thread_active.load()) {
+    while (thread_running_.load()) {
         processPatterns();
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
@@ -419,10 +412,10 @@ sep::SEPResult BlenderBridge::processObjectPatterns(sep::pattern::ObjectHandle h
 
     // Run pattern evolution using the processor
     for (auto& pat : state.patterns) {
-        m_pattern_processor->addPattern(pat);
+        pattern_processor_->addPattern(pat);
     }
 
-    const auto& results = m_pattern_processor->process();
+    const auto& results = pattern_processor_->process();
     state.patterns.assign(results.begin(), results.end());
     state.stats.pattern_count = static_cast<uint32_t>(state.patterns.size());
 
@@ -494,12 +487,12 @@ sep::SEPResult BlenderBridge::checkResourceLimits()
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::checkResourceThresholds()
+bool BlenderBridge::checkResourceThresholds()
 {
-    return sep::SEPResult::SUCCESS;
+    return true;
 }
 
-float BlenderBridge::calculateResourceUtilization(ResourceType type)
+float BlenderBridge::calculateResourceUtilization(ResourceType type) const
 {
     (void)type;
     return 0.0f;

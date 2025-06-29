@@ -312,6 +312,7 @@ createLockFreeRateLimiter(unsigned int requests_per_minute) {
 
 std::unique_ptr<IRateLimiter>
 createRateLimiter(unsigned int requests_per_minute) {
+  // Dispatch to the lock-free implementation by default
   return createLockFreeRateLimiter(requests_per_minute);
 }
 

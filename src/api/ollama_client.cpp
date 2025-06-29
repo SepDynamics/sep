@@ -1,6 +1,7 @@
 #include "api/client.h"
 #include "api/types.h"
 #include "api/ollama_types.h"
+#include "core/common.h"  // defines sep::SEPResult
 
 #include <chrono>
 #include <fstream>

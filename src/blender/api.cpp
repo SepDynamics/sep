@@ -6,6 +6,7 @@
 #include "quantum/data.hpp"          // For PatternData/PatternConfig
 #include "memory/types.h"            // For MemoryTierEnum
 #include "compat/component_bridge.h"
+#include "core/common.h"  // defines sep::SEPResult
 #include <memory>
 #include <string>
 

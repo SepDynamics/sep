@@ -3,6 +3,7 @@
 #include "quantum/types.h"
 #include "memory/types.h"
 #include "compat/math_common.h"
+#include "core/common.h"  // defines sep::SEPResult
 
 using ::sep::memory::MemoryTierEnum;
 

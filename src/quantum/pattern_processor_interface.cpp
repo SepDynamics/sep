@@ -3,6 +3,7 @@
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
+#include "core/common.h"  // defines sep::SEPResult
 #include "compat/core.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/manager.h"  // This is actually the logging manager

@@ -127,6 +127,11 @@ class QuantumCoherenceManager {
     CoherenceSnapshot createSnapshot() const;
     bool restoreFromSnapshot(const CoherenceSnapshot& snapshot);
 
+    const CoherenceMetrics& getMetrics() const;
+    uint64_t getGlobalTick() const;
+    uint32_t getPatternCountByTier(::sep::memory::MemoryTierEnum tier) const;
+    float getTierFragmentation(::sep::memory::MemoryTierEnum tier) const;
+
   private:
     class Impl;
     std::unique_ptr<Impl> impl_;

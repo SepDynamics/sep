@@ -349,8 +349,8 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
 
     SEP_CUDA_CHECK(::sep::cuda::cudaMemcpyAsync(qsh_result.collapse_counts.data(), impl_->d_collapse_counts_.get(),
 
-                                   inputs.size() * sizeof(std::uint32_t), cudaMemcpyDeviceToHost,
-                                   reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
+                                              inputs.size() * sizeof(std::uint32_t), cudaMemcpyDeviceToHost,
+                                              reinterpret_cast<cudaStream_t>(impl_->stream_->handle())));
 
     // Wait for copies to complete before processing
     cuda_core.synchronizeStream(reinterpret_cast<cudaStream_t>(impl_->stream_->handle()));

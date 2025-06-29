@@ -30,7 +30,6 @@
 
 namespace sep::memory {
 
-using namespace sep::cuda;
 
 MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nullptr), used_space_(0) {
     // Allocate memory pool based on tier type
@@ -38,7 +37,7 @@ MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nul
         memory_pool_ = std::malloc(config.size);
     } else {
 #if SEP_CUDA_AVAILABLE
-        cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
+        cudaError_t err = sep::cuda::cudaMallocManaged(&memory_pool_, config.size);
         if (err != cudaSuccess)
             memory_pool_ = nullptr;
 #else
@@ -79,7 +78,7 @@ MemoryTier::~MemoryTier() {
             std::free(memory_pool_);
         } else {
 #if SEP_CUDA_AVAILABLE
-            cudaFree(memory_pool_);
+            sep::cuda::cudaFree(memory_pool_);
 #else
             std::free(memory_pool_);
 #endif
@@ -162,7 +161,7 @@ sep::SEPResult MemoryTier::defragment() {
                 cudaError_t err = sep::cuda::cudaMemcpy(new_location, block.ptr, block.size, cudaMemcpyDefault);
                 if (err != cudaSuccess) {
                     if (logger)
-                        LOG_ERROR(logger, "Defragment cudaMemcpy failed: {}", cudaGetErrorString(err));
+                        LOG_ERROR(logger, "Defragment cudaMemcpy failed: {}", sep::cuda::cudaGetErrorString(err));
                     return sep::SEPResult::CUDA_ERROR;
                 }
 #else
@@ -314,7 +313,7 @@ bool MemoryTier::resize(std::size_t new_size) {
         new_pool = std::malloc(new_size);
     } else {
 #if SEP_CUDA_AVAILABLE
-        cudaError_t err = cudaMallocManaged(&new_pool, new_size);
+        cudaError_t err = sep::cuda::cudaMallocManaged(&new_pool, new_size);
         if (err != cudaSuccess)
             new_pool = nullptr;
 #else
@@ -336,7 +335,7 @@ bool MemoryTier::resize(std::size_t new_size) {
                 std::free(new_pool);
             else {
 #if SEP_CUDA_AVAILABLE
-                cudaFree(new_pool);
+                sep::cuda::cudaFree(new_pool);
 #else
                 std::free(new_pool);
 #endif
@@ -371,7 +370,7 @@ bool MemoryTier::resize(std::size_t new_size) {
             std::free(memory_pool_);
         else {
 #if SEP_CUDA_AVAILABLE
-            cudaFree(memory_pool_);
+            sep::cuda::cudaFree(memory_pool_);
 #else
             std::free(memory_pool_);
 #endif
@@ -384,7 +383,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     return true;
 }
 
-bool MemoryTier::canAcceptPattern(const sep::persistence::PersistentPatternData& pattern) const {
+bool MemoryTier::canAcceptPattern(const ::sep::persistence::PersistentPatternData& pattern) const {
     if (m_patterns.size() >= m_max_patterns)
         return false;
     if (pattern.coherence < m_coherence_threshold)
@@ -397,7 +396,7 @@ bool MemoryTier::canAcceptPattern(const sep::persistence::PersistentPatternData&
     return true;
 }
 
-void MemoryTier::addPattern(size_t id, sep::persistence::PersistentPatternData pattern) {
+void MemoryTier::addPattern(size_t id, ::sep::persistence::PersistentPatternData pattern) {
     if (!canAcceptPattern(pattern))
         return;
     // PatternData doesn't have id or memory_tier fields
@@ -409,12 +408,12 @@ void MemoryTier::removePattern(size_t id) {
     m_patterns.erase(id);
 }
 
-const sep::persistence::PersistentPatternData* MemoryTier::getPattern(size_t id) const {
+const ::sep::persistence::PersistentPatternData* MemoryTier::getPattern(size_t id) const {
     auto it = m_patterns.find(id);
     return it == m_patterns.end() ? nullptr : &it->second;
 }
 
-sep::persistence::PersistentPatternData* MemoryTier::getPattern(size_t id) {
+::sep::persistence::PersistentPatternData* MemoryTier::getPattern(size_t id) {
     auto it = m_patterns.find(id);
     return it == m_patterns.end() ? nullptr : &it->second;
 }

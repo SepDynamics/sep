@@ -65,6 +65,8 @@ private:
 
 } // namespace sep::quantum::manifold
 
+namespace sep::quantum::manifold {
+
 // Forward declarations
 class HamiltonianEvolver;
 class CUDAQuantumKernel;
@@ -503,3 +505,5 @@ private:
     void integrateWithExistingMemoryTiers();
     void setupQuantumProcessingPipeline();
 };
+
+} // namespace sep::quantum::manifold

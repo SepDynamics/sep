@@ -37,6 +37,11 @@ extern "C" {
 // Memory management functions
 cudaError_t cudaMemset(void* devPtr, int value, size_t count);
 cudaError_t cudaMallocManaged(void** ptr, size_t size);
+// Async memset is not available in stub builds; provide simple wrapper
+inline cudaError_t cudaMemsetAsync(void* devPtr, int value, size_t count,
+                                   cudaStream_t /*stream*/) {
+    return cudaMemset(devPtr, value, count);
+}
 
 // Memory copy functions
 cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind);

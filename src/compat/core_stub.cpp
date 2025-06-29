@@ -1,6 +1,7 @@
 #if !SEP_CUDA_AVAILABLE
 #include "compat/core.h"
 #include "compat/cuda_runtime.h"
+#include "core/common.h"  // defines sep::SEPResult
 #include <cstring>
 #include <cstdlib>
 

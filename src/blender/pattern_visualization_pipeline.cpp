@@ -1,5 +1,6 @@
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"
+#include "core/common.h"  // defines sep::SEPResult
 #include <algorithm>
 #include <numeric>
 

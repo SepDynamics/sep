@@ -4,6 +4,7 @@
 #include "blender/config.h"
 #include "blender/pattern_bridge.h"
 #include "compat/component_bridge.h"
+#include "core/common.h"  // defines sep::SEPResult
 #include <memory>
 #include <string>
 

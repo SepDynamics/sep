@@ -1,5 +1,6 @@
 // Standard library headers FIRST to ensure proper namespace resolution
 #include "memory/memory_tier.hpp"
+#include "core/common.h"  // defines sep::SEPResult
 
 #include <algorithm>
 #include <cassert>

@@ -1,4 +1,5 @@
 #include "memory/memory_tier_manager.hpp"
+#include "core/common.h"  // defines sep::SEPResult
 #include "memory/types.h"
 #include "quantum/types.h"        // For MemoryTierEnum definition
 

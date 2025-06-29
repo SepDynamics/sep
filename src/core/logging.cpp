@@ -5,9 +5,7 @@
 namespace sep {
 namespace logging {
 
-void Manager::initialize() {
-    std::cerr << "Logging initialized" << std::endl;
-}
+// Manager::initialize() is defined in src/memory/manager.cpp
 
 void Manager::shutdownLogging() {
     // Basic shutdown logic using spdlog

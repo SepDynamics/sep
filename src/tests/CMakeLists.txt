@@ -66,7 +66,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
         # Link OSL implementation with whole-archive
         -Wl,--whole-archive
-        ${CYCLES_OSL_LIB}
+        ${CYCLES_OSL_LIBRARY}
         -Wl,--no-whole-archive
 
         # Then link system OSL libraries in correct order
@@ -80,9 +80,14 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         ${LLVM_LIBRARIES}
         ${PUGIXML_LIBRARIES}
         # Link compat library for CUDA implementation
-        ${SEP_COMPAT_LIBRARY}
+        sep_compat
         # Then link internal libraries that might depend on Cycles
-        ${SEP_INTERNAL_LIBS}
+        sep_api
+        sep_blender
+        sep_audio
+        sep_quantum
+        sep_memory
+        sep_core
         ${BLENDER_LINK_ORDER}
         ${EXTERNAL_LINK_ORDER}
         ${CURL_LIBRARIES}

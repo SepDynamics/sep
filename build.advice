@@ -1,155 +1,52 @@
-Issue 1: Multiple Symbol Definitions in Manifold Namespace
-Problem
-Multiple definitions of sep::quantum::manifold::memory, quantum, cuda, and api between quantum_processor_qfh_common.cpp and quantum_coherence_manager.cpp.
-Root Cause
-These symbols are likely defined in a header file (quantum_manifold_optimizer.h) without proper inline or extern declarations.
-Solution
-Modify include/quantum/quantum_manifold_optimizer.h:
-cppnamespace sep {
-namespace quantum {
-namespace manifold {
-    // Change from direct definitions to inline declarations
-    inline Component memory = Component::Memory;
-    inline Component quantum = Component::Quantum;
-    inline Component cuda = Component::CUDA;
-    inline Component api = Component::API;
-    
-    // OR move to a single .cpp file with extern declarations:
-    // In header:
-    extern Component memory;
-    extern Component quantum;
-    extern Component cuda;
-    extern Component api;
-    
-    // In quantum_manifold_optimizer.cpp:
-    // Component manifold::memory = Component::Memory;
-    // Component manifold::quantum = Component::Quantum;
-    // Component manifold::cuda = Component::CUDA;
-    // Component manifold::api = Component::API;
-}
-}
-}
-Issue 2: Missing OSL Libraries for Cycles
-Problem
-Undefined references to OSL functions from Cycles libraries.
-Solution
-Update the main CMakeLists.txt to ensure OSL libraries are properly linked:
-cmake# After line 146 where CYCLES_OSL_LIBRARY is found, add to CYCLES_LINK_ORDER:
-set(CYCLES_LINK_ORDER
-    ${CYCLES_KERNEL_LIBRARY}
-    ${CYCLES_SUBD_LIBRARY}
-    ${CYCLES_DEVICE_LIBRARY}
-    ${CYCLES_SCENE_LIBRARY}
-    ${CYCLES_SESSION_LIBRARY}
-    ${CYCLES_INTEGRATOR_LIBRARY}
-    ${CYCLES_OSL_LIBRARY}  # Add this if not present
-)
+Okay, let's break down these linker errors. The core issue is that the linker is trying to find symbols (functions and objects) that are declared in header files but not defined in any of the object files or libraries being linked.
 
-# Add OSL libraries to EXTERNAL_LINK_ORDER after line 200:
-list(APPEND EXTERNAL_LINK_ORDER
-    ${OSL_EXEC_LIBRARY}
-    ${OSL_COMP_LIBRARY}
-    ${OSL_QUERY_LIBRARY}
-    ${OSL_NOISE_LIBRARY}  # If available
-)
-Issue 3: CUDA Symbols Not Found
-Problem
-CUDA symbols from sep::cuda namespace are undefined despite being in .cu files.
-Solution
-The issue is the linking order. Update main CMakeLists.txt line ~287:
-cmake# Ensure sep_compat is linked BEFORE other libraries that use it
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_link_libraries(sep_engine
-        PRIVATE
-        # First link CUDA-dependent libraries
-        sep_compat  # Move this BEFORE other SEP libraries
-        
-        # Then Cycles with whole-archive
-        -Wl,--whole-archive
-        ${CYCLES_LINK_ORDER}
-        -Wl,--no-whole-archive
-        
-        # OSL must come after Cycles
-        ${OSL_EXEC_LIBRARY}
-        ${OSL_COMP_LIBRARY}
-        ${OSL_QUERY_LIBRARY}
-        
-        # Then remaining internal libraries
-        sep_api
-        sep_memory
-        sep_quantum
-        sep_core
-        sep_audio
-        sep_blender
-        
-        # External dependencies
-        ${BLENDER_LINK_ORDER}
-        ${EXTERNAL_LINK_ORDER}
-        ${CURL_LIBRARIES}
-        ${HIREDIS_LIBRARIES}
-        ${CUDA_LIBRARIES}
-        Threads::Threads
-        fmt::fmt
-        spdlog::spdlog
-    )
-endif()
-Issue 4: Missing createQuantumProcessor Function
-Problem
-undefined reference to 'sep::quantum::createQuantumProcessor'
-Solution
-Add to src/quantum/CMakeLists.txt:
-cmake# Ensure processor.cpp is included in the quantum library
-add_library(sep_quantum STATIC
-    evolution.cpp
-    pattern_processor.cpp
-    processor.cpp  # Verify this is present
-    qbsa.cpp
-    qfh.cpp
-    quantum_processor_qfh_common.cpp
-    stabilization.cpp
-    types_serialization.cpp
-)
-Then verify the function exists in src/quantum/processor.cpp:
-cppnamespace sep {
-namespace quantum {
+Here's a targeted analysis of the errors you're seeing:
 
-// This function MUST be defined (not just declared)
-std::unique_ptr<QuantumProcessor> createQuantumProcessor(
-    const QuantumProcessor::Config& config) {
-    // Implementation should be here
-    return std::make_unique<QuantumProcessorImpl>(config);
-}
+**Common Theme:**
 
-} // namespace quantum
-} // namespace sep
-Issue 5: Missing shutdownLogging Function
-Problem
-undefined reference to 'sep::logging::Manager::shutdownLogging()'
-Solution
-Add to src/core/logging.cpp:
-cppnamespace sep {
-namespace logging {
+The vast majority of your errors are related to:
+1.  **Cycles/OSL:** Many `undefined reference to ccl::osl_eval_camera`, `ccl::OSLRenderServices`, `ccl::OSLThreadData`, and `ccl::osl_eval_nodes`. These indicate that the Cycles renderer, specifically the parts that interact with Open Shading Language (OSL), is not being linked correctly.
+2.  **CUDA Compatibility Layer:** Numerous `undefined reference to sep::cuda::...` and `sep::compat::...`. This points to issues linking the custom CUDA compatibility layer and potentially the component bridge.
+3.  **Multiple Definitions:** You have `multiple definition of sep::logging::Manager::initialize()`. This means the same function is defined in more than one object file being linked into the final executable.
 
-// Add the missing implementation
-void Manager::shutdownLogging() {
-    // Implement shutdown logic
-    if (logger_) {
-        spdlog::shutdown();
-        logger_.reset();
-    }
-}
+**Specific Error Breakdown and Targeted Advice:**
 
-} // namespace logging
-} // namespace sep
-Also ensure logging.cpp is added to src/core/CMakeLists.txt:
-cmakeadd_library(sep_core STATIC
-    allocation_metrics.cpp
-    dag_graph.cpp
-    engine.cpp
-    error_handler.cpp
-    logging.cpp  # Add this line
-    manager.cpp
-    metrics_collector.cpp
-    prometheus_exporter.cpp
-    tracing.cpp
-)
+1.  **Cycles/OSL Errors (e.g., `ccl::osl_eval_camera`, `ccl::OSLRenderServices`, `ccl::OSLThreadData`, `ccl::osl_eval_nodes`)**:
+    *   **Issue:** These symbols belong to the Cycles renderer's implementation, particularly its OSL integration. They are being called from within your Cycles-related object files (`libcycles_scene.a`, `libcycles_kernel.a`, `libcycles_device.a`) but the libraries containing their definitions (`libcycles_osl.a` or similar) are not being included in the final link command for `cycles_test` and `sep_engine`.
+    *   **Targeted Advice:**
+        *   **CMakeLists.txt:** In the `CMakeLists.txt` files where `cycles_test` and `sep_engine` are defined, explicitly link the necessary Cycles OSL libraries. Look for `target_link_libraries` calls and add the OSL library there. The exact name might be something like `cycles_osl`, `blender_cycles_osl`, or similar, depending on how your Cycles dependencies are structured in CMake.
+        *   **Blender Integration:** Ensure that your Blender integration build process correctly builds and makes available the OSL components of Cycles as libraries.
+
+2.  **CUDA Compatibility Layer Errors (e.g., `sep::cuda::CudaCore::initialize`, `sep::cuda::CudaCore::createStream`, `sep::cuda::cudaMemcpyAsync`, `sep::cuda::CudaCore::synchronizeStream`, `sep::cuda::CudaCore::launchQBSA`, etc.)**:
+    *   **Issue:** These symbols are defined within your `compat` directory, likely in `.cu` files (CUDA source files). CUDA compilation often generates separate object files (`.o`) or libraries (`.a`) for device code and host code, or requires linking against the CUDA runtime libraries (`libcudart.so`). Your main executable linking step isn't finding the definitions for the host-side functions that call into the CUDA runtime or manage the CUDA compatibility layer objects.
+    *   **Targeted Advice:**
+        *   **CMakeLists.txt:** In the `CMakeLists.txt` file for the `sep_engine` executable and the `cycles_test` executable (since it uses `sep::blender::CyclesRenderer`), ensure you are linking against:
+            *   The library built from your CUDA compatibility files (`libsep_compat_cuda.a`).
+            *   The CUDA runtime library (`cudart`). In CMake, this is often done by finding the CUDA toolkit and linking to `CUDA::cudart`.
+            *   Any other necessary CUDA-related libraries if your compatibility layer depends on specific CUDA features (e.g., NPP, CuFFT, etc., though not apparent from these errors).
+        *   **Compilation:** Verify that your CUDA `.cu` files are being compiled correctly using the CUDA compiler (nvcc) as part of your build process. CMake should handle this if configured correctly for CUDA.
+
+3.  **Component Bridge Errors (e.g., `sep::compat::createAudioCapture`, `sep::compat::createBlenderBridge`)**:
+    *   **Issue:** These factory functions are declared in `compat/component_bridge.h` but defined in `compat/component_bridge.cpp`. The library containing the definition (`libsep_compat.a`) is likely not being linked correctly into the `sep_engine` executable.
+    *   **Targeted Advice:**
+        *   **CMakeLists.txt:** In the `CMakeLists.txt` for `sep_engine`, ensure `libsep_compat.a` is listed in `target_link_libraries`. It should be linked after `libsep_core.a` since `libsep_core.a` depends on it.
+
+4.  **Multiple Definition Error (`sep::logging::Manager::initialize()`)**:
+    *   **Issue:** The function `sep::logging::Manager::initialize()` is defined in both `src/core/logging.cpp` and `src/memory/manager.cpp`. You should only define a function's body once across all compilation units that will be linked together.
+    *   **Targeted Advice:**
+        *   **Consolidate Definition:** Choose one place (e.g., `src/core/logging.cpp`) to define `sep::logging::Manager::initialize()`. In the other file (`src/memory/manager.cpp`), *only* include the header file (`core/logging.h`) that declares the function, but do *not* provide a definition.
+        *   **Check for ODR Violations:** This kind of error often indicates Violations of the One Definition Rule (ODR). Ensure that non-inline functions are defined in exactly one `.cpp` file. Inline functions should be defined in header files but must be marked `inline`.
+
+**In Summary - Action Plan:**
+
+1.  **Fix Multiple Definitions:** Remove the duplicate definition of `sep::logging::Manager::initialize` from either `src/core/logging.cpp` or `src/memory/manager.cpp`. Keep the definition in one place and ensure the header is included where needed.
+2.  **Review CMake Linking for Executables:**
+    *   Open the `CMakeLists.txt` files that define the `cycles_test` and `sep_engine` executables.
+    *   Locate the `target_link_libraries` command(s).
+    *   Ensure that all necessary static libraries (`.a`) for the components they use are listed. Pay close attention to the order of linking: generally, libraries that depend on others should come *before* the libraries they depend on in the link command.
+    *   Specifically, make sure `libsep_compat_cuda.a` and `libsep_compat.a` are linked into `sep_engine`.
+    *   Ensure the Cycles OSL library (e.g., `cycles_osl`) is linked into both `cycles_test` and `sep_engine` (if `sep_engine` is intended to use Cycles).
+    *   Ensure the CUDA runtime library (`CUDA::cudart`) is linked into executables that use CUDA features.
+3.  **Verify CUDA Compilation:** Double-check your CMake configuration to ensure that `.cu` files are being compiled correctly by `nvcc` and that the resulting object files are being included in `libsep_compat_cuda.a`.
+
+Focus on these specific areas in your CMake files and source code definitions. The linker errors clearly point to missing definitions in the final executable binary, caused by libraries not being included or source files not being compiled/linked correctly.

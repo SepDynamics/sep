@@ -13,6 +13,9 @@
 #include <string>
 #include <csignal>
 #include <nlohmann/json.hpp>
+#include "quantum/data.hpp" // For sep::pattern::PatternData
+#include <thread>
+#include <chrono>
 
 #ifndef SEP_HAS_EXCEPTIONS
 #    if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)

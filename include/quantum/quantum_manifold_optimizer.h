@@ -104,6 +104,8 @@ private:
         glm::vec3 position{};
         glm::vec3 momentum{};
         float curvature{0.0f};
+        float coherence{0.0f};
+        uint32_t dimension_index{0};
     };
 
     struct EvolutionState {

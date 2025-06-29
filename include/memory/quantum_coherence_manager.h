@@ -126,6 +126,10 @@ class QuantumCoherenceManager {
     void applyCoherenceDecay(float decay_factor);
     CoherenceSnapshot createSnapshot() const;
     bool restoreFromSnapshot(const CoherenceSnapshot& snapshot);
+    const CoherenceMetrics& getMetrics() const;
+    uint64_t getGlobalTick() const;
+    uint32_t getPatternCountByTier(MemoryTierEnum tier) const;
+    float getTierFragmentation(MemoryTierEnum tier) const;
 
     // Metrics and diagnostics
     const CoherenceMetrics& getMetrics() const;

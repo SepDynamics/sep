@@ -12,8 +12,10 @@
 
 namespace sep::quantum {
 
-// Forward declarations
+// Forward declaration placed in the correct namespace
+namespace manifold {
 class QuantumManifoldOptimizer;
+} // namespace manifold
 
 enum class QuantumPhase {
     Coherent,

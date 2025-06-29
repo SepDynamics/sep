@@ -5,15 +5,7 @@
 #include <vector>
 #include <string>
 
-namespace sep {
 
-enum class MemoryTierEnum {
-    STM,
-    MTM,
-    LTM
-};
-
-} // namespace sep
 
 namespace sep::quantum {
 
@@ -34,6 +26,9 @@ struct QuantumState {
     float mutation_rate;
     int generation;
     int mutation_count;
+    float evolution_rate{0.0f};
+    float energy{0.0f};
+    float coupling_strength{0.0f};
     MemoryTierEnum memory_tier;
     float access_frequency;
 };

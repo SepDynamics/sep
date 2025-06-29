@@ -4,6 +4,7 @@
 #include "quantum/quantum_processor_qfh.h"
 #include <glm/glm.hpp>
 #include "memory/types.h"
+#include "core/common.h"  // defines sep::SEPResult
 
 using ::sep::memory::MemoryTierEnum;
 #include <mutex>

@@ -1,6 +1,10 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
 #include <numeric>
+#include <vector>
+#include <memory>
+#include <mutex>
+#include <thread>
 
 namespace sep::quantum::manifold {
 

@@ -1,5 +1,6 @@
 #include "core/manager.h"
 #include "core/engine.h"
+#include "core/common.h"  // defines sep::SEPResult
 #include <curl/curl.h>
 #include <exception>
 #include <iostream>

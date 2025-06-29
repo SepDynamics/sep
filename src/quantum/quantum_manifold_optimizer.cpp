@@ -189,8 +189,4 @@ QuantumManifoldOptimizer::Impl::sampleTangentSpace(const glm::vec3& position, ui
     return samples;
 }
 
-// Factory function
-std::unique_ptr<QuantumManifoldOptimizer> createQuantumManifoldOptimizer(const QuantumManifoldOptimizer::Config& config) {
-    return std::make_unique<QuantumManifoldOptimizer>(config);
-}
 } // namespace sep::quantum::manifold

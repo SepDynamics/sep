@@ -50,8 +50,13 @@ inline const char* sep_result_to_string(sep::SEPResult result) {
 }
 
 // Bridge structure used by the C API
+namespace sep {
 struct SEPBlenderBridge {
-    std::shared_ptr<sep::pattern::BlenderBridge> impl;
-    SEPAudioMetrics                              audio_metrics{};
-    SEPPatternMetrics                            pattern_metrics{};
+    std::shared_ptr<pattern::BlenderBridge> impl;
+    SEPAudioMetrics                         audio_metrics{};
+    SEPPatternMetrics                       pattern_metrics{};
 };
+}  // namespace sep
+
+// Provide global alias for C API compatibility
+using SEPBlenderBridge = sep::SEPBlenderBridge;

@@ -5,6 +5,7 @@
 #include "compat/cuda_runtime.h"
 #endif
 #include "quantum/pattern_evolution_bridge.h"
+#include "quantum/types.h" // Ensure Pattern definition with momentum
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/types.h" // Ensure Pattern definition includes momentum
 #include "memory/memory_tier_manager.hpp"

@@ -28,6 +28,9 @@ struct QuantumState {
     float stability;
     float entropy;
     float phase{0.0f};
+    float evolution_rate{0.0f};
+    float energy{0.0f};
+    float coupling_strength{0.0f};
     float mutation_rate;
     int generation;
     int mutation_count;

@@ -23,7 +23,7 @@ namespace sep::quantum::manifold {
 
 using ::sep::MemoryTierEnum;
 using ::sep::quantum::QuantumState;
-using ::sep::quantum::QuantumPattern;
+using QuantumPattern = ::sep::quantum::Pattern;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
 using ::sep::config::CUDAConfig;

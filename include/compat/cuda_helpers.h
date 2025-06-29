@@ -5,6 +5,7 @@
 #include <cuda_runtime.h>
 #include "compat/cuda_helpers.h"
 #else
+#include "compat/cuda_runtime.h" // Provide cudaSuccess and related stubs
 #include "compat/cuda_impl.h"
 #endif
 

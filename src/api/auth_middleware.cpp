@@ -1,5 +1,8 @@
 #include "api/auth_middleware.h"
 
+#include <string>
+#include <vector>
+
 namespace sep::api {
 
 void AuthMiddleware::set_tokens(std::vector<std::string> tokens) { tokens_ = std::move(tokens); }

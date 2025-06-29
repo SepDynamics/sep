@@ -10,6 +10,7 @@
 #include "crow/crow_isolation.h"
 #endif
 #include <vector>
+#include <string>
 
 namespace sep::api {
 

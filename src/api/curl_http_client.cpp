@@ -1,7 +1,8 @@
 #include "api/client.h"
 #include "core/error_handler.h"
-#include <stdexcept>
 #include <chrono>
+#include <stdexcept>
+#include <string>
 
 namespace sep::api {
 

@@ -6,6 +6,13 @@
 #include "compat/cuda_helpers.h"
 #else
 #include "compat/cuda_impl.h"
+// Provide minimal definitions when CUDA is unavailable
+#ifndef cudaSuccess
+constexpr cudaError_t cudaSuccess = 0;
+#endif
+#ifndef cudaGetErrorString
+inline const char* cudaGetErrorString(cudaError_t) { return "CUDA not available"; }
+#endif
 #endif
 
 #include <cstdio>

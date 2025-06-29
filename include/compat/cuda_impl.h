@@ -6,7 +6,9 @@
 #include <string.h>  // For strcpy, memcpy, memset
 #include "compat/cuda_defs.h"
 
+#ifndef SEP_HD
 #define SEP_HD __host__ __device__
+#endif
 
 // Structure to hold memory copy parameters to avoid similar adjacent parameters
 struct CudaMemcpyParams {

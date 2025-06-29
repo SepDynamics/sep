@@ -462,7 +462,11 @@ add_executable(sep_engine src/main.cpp)
 
 # Configure include directories
 target_include_directories(sep_engine
-    PUBLIC ${SEP_INCLUDE_DIRS}
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}/src
+        ${SEP_INCLUDE_DIRS}
+    INTERFACE
+        ${CUDA_INCLUDE_DIRS}
 )
 
 # CRITICAL: Use WHOLE ARCHIVE for static Cycles libraries to ensure all symbols are included
@@ -530,10 +534,10 @@ else()
             ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel_osl.a
             
             # Proper order: compat must come before core (which depends on it)
-            sep_compat
             
             # Use actual CUDA libraries instead of non-existent CUDAToolkit targets
             ${CUDA_LIBRARIES}
+            sep_compat
             
             # Quantum must come before other libraries that use it
             sep_quantum

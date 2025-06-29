@@ -12,10 +12,7 @@ add_library(sep_core
 )
 
 # Link dependencies
-target_link_libraries(sep_core
-    PRIVATE
-        sep_compat # Link compat once, it handles CUDA internally
-)
+target_link_libraries(sep_core)
 
 # Configure CUDA support if available
 if(SEP_CUDA_AVAILABLE)

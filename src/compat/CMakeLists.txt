@@ -30,7 +30,6 @@ target_link_libraries(sep_compat
     PUBLIC
         ${CUDA_LIBRARIES}
         ${CUDAToolkit_LIBRARY_DIR}/libcudart.so
-    PRIVATE
         sep_core
 )
 

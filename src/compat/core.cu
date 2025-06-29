@@ -11,7 +11,12 @@
 
 namespace sep::cuda {
 
-CudaCore::CudaCore() = default;
+CudaCore::CudaCore() : initialized_(false), current_device_(-1) {}
+
+CudaCore& CudaCore::instance() {
+    static CudaCore instance;
+    return instance;
+}
 
 Error CudaCore::initialize(int device_id) {
   if (initialized_) {

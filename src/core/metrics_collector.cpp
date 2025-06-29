@@ -3,6 +3,8 @@
 #include "compat/cuda_helpers.h"
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime_api.h>
+#else
+#include "compat/cuda_runtime.h"
 #endif
 
 #include <sys/resource.h>

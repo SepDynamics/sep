@@ -45,18 +45,6 @@ using QuantumPattern = ::sep::quantum::manifold::QuantumPattern;
 using ManifoldQuantumState = ::sep::quantum::manifold::QuantumState;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
-// Configuration structures from the core configuration module use
-// capitalised names (e.g. CUDAConfig).  The original code attempted to
-// import them with different casing which resulted in a large number of
-// "does not name a type" compilation errors.  Import them with the
-// correct names instead.
-using ::sep::config::CUDAConfig;
-using ::sep::config::APIConfig;
-using ::sep::config::LogConfig;
-using ::sep::config::AnalyticsConfig;
-using ::sep::config::APIConfig;
-using ::sep::config::CUDAConfig;
-using ::sep::config::LogConfig;
 
 class QuantumManifoldOptimizer {
 public:
@@ -64,7 +52,7 @@ public:
         MemoryTierEnum tier{MemoryTierEnum::STM};
         CudaConfig cuda;
         ApiConfig api;
-        LogConfig log;
+        ::sep::config::LogConfig log;
         double base_resonance_frequency{0.42};
         double convergence_threshold{0.001};
         double step_size{0.05};
@@ -79,16 +67,20 @@ public:
         QuantumState optimized_state{};
         std::vector<float> optimized_values;
         std::string error_message;
-        QuantumState optimized_state{};
     };
 
     struct OptimizationTarget {
         float target_coherence{0.8f};
         float target_stability{0.5f};
+        std::vector<float> target_values{};
+        float coherence_threshold{0.5f};
     };
 
     QuantumManifoldOptimizer();
     explicit QuantumManifoldOptimizer(const Config& config);
+
+    static Config createManifoldConfig(
+        const ::sep::quantum::PatternEvolutionBridge::Config& cfg);
 
     OptimizationResult optimize(const QuantumState& initial_state,
                                 const OptimizationTarget& target);
@@ -151,15 +143,6 @@ struct CudaConfig {
   bool enable_phase_modulation = true;
   cufftHandle fft_plan{};
 } cuda;
-
-    // CUDA acceleration parameters
-    struct CudaConfig {
-        int warp_tile_size = 16;
-        int coherence_block_size = 256;
-        int similarity_grid_dim = 32;
-        bool enable_phase_modulation = true;
-        cufftHandle fft_plan{};
-    } cuda;
 
     // API coherence modulation
     struct ApiConfig {

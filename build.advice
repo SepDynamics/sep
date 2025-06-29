@@ -1,52 +1,162 @@
-Okay, let's break down these linker errors. The core issue is that the linker is trying to find symbols (functions and objects) that are declared in header files but not defined in any of the object files or libraries being linked.
+Okay, let's break down the build report and address the issues systematically. The report indicates a mix of critical errors and lower-severity warnings. The critical errors (like "unknown type name", "no member named", "incomplete type", "use of undeclared identifier", "duplicate member") are the primary cause of the build failure. The lower-severity warnings (like "unused parameter", "implicit conversion increases floating-point precision", "field will be initialized after field", "mismatched tags", "reserved identifier", "circular header file dependency", "suspicious usage of sizeof", "value returned by this function should not be disregarded", "dead stores", "definitions in headers") are not build-breaking but should be addressed for cleaner, more robust code.
 
-Here's a targeted analysis of the errors you're seeing:
+Here's a targeted plan to tackle the issues, focusing on the critical errors first, followed by the high-severity warnings, and then the mediums and lows:
 
-**Common Theme:**
+**Critical Errors (CRITICAL, HIGH)**
 
-The vast majority of your errors are related to:
-1.  **Cycles/OSL:** Many `undefined reference to ccl::osl_eval_camera`, `ccl::OSLRenderServices`, `ccl::OSLThreadData`, and `ccl::osl_eval_nodes`. These indicate that the Cycles renderer, specifically the parts that interact with Open Shading Language (OSL), is not being linked correctly.
-2.  **CUDA Compatibility Layer:** Numerous `undefined reference to sep::cuda::...` and `sep::compat::...`. This points to issues linking the custom CUDA compatibility layer and potentially the component bridge.
-3.  **Multiple Definitions:** You have `multiple definition of sep::logging::Manager::initialize()`. This means the same function is defined in more than one object file being linked into the final executable.
+These errors typically relate to missing definitions, incorrect types, or syntax errors that prevent the compiler from understanding the code.
 
-**Specific Error Breakdown and Targeted Advice:**
+1.  **`/sep/include/quantum/data.hpp`, `/sep/include/quantum/processor.h`, `/sep/include/quantum/quantum_processor_qfh.h`, `/sep/include/quantum/types.h`: unknown type name 'MemoryTierEnum'`**
+    *   **Problem:** The `MemoryTierEnum` type is used but not defined or correctly referenced in these header files.
+    *   **Location:**
+        *   `/sep/include/quantum/data.hpp:22:5`
+        *   `/sep/include/quantum/processor.h:94:58`
+        *   `/sep/include/quantum/quantum_processor_qfh.h:64:5` (Note: The report even suggests `memory::MemoryTierEnum` here, indicating a likely namespace issue).
+        *   `/sep/include/quantum/types.h:32:5`
+    *   **Targeted Advice:** Ensure that the header file defining `MemoryTierEnum` (likely something like `/sep/include/memory/types.h` or `/sep/include/memory/memory_tier.h`) is included in each of these quantum header files. If `MemoryTierEnum` is defined within a namespace (like `sep::memory`), make sure to use the fully qualified name (`sep::memory::MemoryTierEnum`) or add a `using namespace sep::memory;` declaration (though the latter can sometimes lead to other issues in header files).
 
-1.  **Cycles/OSL Errors (e.g., `ccl::osl_eval_camera`, `ccl::OSLRenderServices`, `ccl::OSLThreadData`, `ccl::osl_eval_nodes`)**:
-    *   **Issue:** These symbols belong to the Cycles renderer's implementation, particularly its OSL integration. They are being called from within your Cycles-related object files (`libcycles_scene.a`, `libcycles_kernel.a`, `libcycles_device.a`) but the libraries containing their definitions (`libcycles_osl.a` or similar) are not being included in the final link command for `cycles_test` and `sep_engine`.
+2.  **`/sep/include/quantum/types.h`: duplicate member 'evolution_rate', 'energy', 'coupling_strength'`**
+    *   **Problem:** The members `evolution_rate`, `energy`, and `coupling_strength` are declared multiple times within the same scope in `/sep/include/quantum/types.h`.
+    *   **Location:**
+        *   `/sep/include/quantum/types.h:29:11`
+        *   `/sep/include/quantum/types.h:30:11`
+        *   `/sep/include/quantum/types.h:31:11`
+    *   **Targeted Advice:** Review the definition of the struct or class where these members are declared in `/sep/include/quantum/types.h`. Remove the duplicate declarations, keeping only one instance of each member.
+
+3.  **`/sep/include/quantum/quantum_manifold_optimizer.h`: unknown type name 'AnalyticsConfig'; did you mean 'config::AnalyticsConfig'?`**
+    *   **Problem:** The `AnalyticsConfig` type is used without a proper declaration or namespace qualification.
+    *   **Location:** `/sep/include/quantum/quantum_manifold_optimizer.h:178:5`
+    *   **Targeted Advice:** Include the header file that defines `AnalyticsConfig` (likely within a `config` namespace) in `/sep/include/quantum/quantum_manifold_optimizer.h`. Use the fully qualified name `config::AnalyticsConfig` or add a `using namespace config;` declaration if appropriate.
+
+4.  **`/sep/include/quantum/quantum_manifold_optimizer.h`: no type named 'CudaConfig' in 'sep::quantum::manifold::ManifoldConfig'; did you mean simply 'CudaConfig'?` and `no type named 'APIConfig' in 'sep::quantum::manifold::ManifoldConfig'; did you mean simply 'APIConfig'?`**
+    *   **Problem:** `CudaConfig` and `APIConfig` are being looked for within the `sep::quantum::manifold::ManifoldConfig` scope, which is incorrect. They are likely global or in another namespace.
+    *   **Location:**
+        *   `/sep/include/quantum/quantum_manifold_optimizer.h:260:5`
+        *   `/sep/include/quantum/quantum_manifold_optimizer.h:288:5`
+    *   **Targeted Advice:** Ensure that `CudaConfig` and `APIConfig` are correctly declared or included in `/sep/include/quantum/quantum_manifold_optimizer.h`. Remove any incorrect `ManifoldConfig::` prefixes if they are being used where they shouldn't be. The compiler's suggestion to use "simply 'CudaConfig'" and "simply 'APIConfig'" hints at this.
+
+5.  **`/sep/include/quantum/quantum_manifold_optimizer.h`: unknown type name 'AnalyticsConfig'; did you mean 'config::AnalyticsConfig'?`**
+    *   **Problem:** Another instance of the `AnalyticsConfig` type name issue.
+    *   **Location:** `/sep/include/quantum/quantum_manifold_optimizer.h:372:3`
+    *   **Targeted Advice:** Same as point 3: include the header defining `AnalyticsConfig` and use the correct namespace or fully qualified name.
+
+6.  **`/sep/src/quantum/pattern_evolution_bridge.cpp`: various errors related to 'PatternEvolutionBridgeImpl', 'config_', and incomplete type 'sep::quantum::QuantumManifoldOptimizer'`**
+    *   **Problem:** There are numerous errors in `pattern_evolution_bridge.cpp` indicating problems with the `PatternEvolutionBridgeImpl` struct/class, access to a member named `config_`, and the incomplete type `sep::quantum::QuantumManifoldOptimizer`. This strongly suggests that the definition of `PatternEvolutionBridge::Impl` is either missing, incorrect, or the required header for `QuantumManifoldOptimizer` is not included in the `.cpp` file (only a forward declaration exists in the header).
+    *   **Location:** `/sep/src/quantum/pattern_evolution_bridge.cpp` (lines 76, 77, 79, 87, 261, 271, 272, 273, 275, 325, 512, 513, 513, 515, 517)
     *   **Targeted Advice:**
-        *   **CMakeLists.txt:** In the `CMakeLists.txt` files where `cycles_test` and `sep_engine` are defined, explicitly link the necessary Cycles OSL libraries. Look for `target_link_libraries` calls and add the OSL library there. The exact name might be something like `cycles_osl`, `blender_cycles_osl`, or similar, depending on how your Cycles dependencies are structured in CMake.
-        *   **Blender Integration:** Ensure that your Blender integration build process correctly builds and makes available the OSL components of Cycles as libraries.
+        *   Ensure that the full definition of `PatternEvolutionBridge::Impl` is present in `pattern_evolution_bridge.cpp` or a dedicated internal header included *only* in the `.cpp` file.
+        *   Verify the declaration of `config_` within `PatternEvolutionBridge::Impl`.
+        *   **Crucially:** Include the full definition of `sep::quantum::QuantumManifoldOptimizer` in `pattern_evolution_bridge.cpp`. The forward declaration in the header is sufficient for pointer/reference types, but the compiler needs the full definition to access members (like `config_`) or create instances. Add `#include "quantum/quantum_manifold_optimizer.h"` to `pattern_evolution_bridge.cpp`.
 
-2.  **CUDA Compatibility Layer Errors (e.g., `sep::cuda::CudaCore::initialize`, `sep::cuda::CudaCore::createStream`, `sep::cuda::cudaMemcpyAsync`, `sep::cuda::CudaCore::synchronizeStream`, `sep::cuda::CudaCore::launchQBSA`, etc.)**:
-    *   **Issue:** These symbols are defined within your `compat` directory, likely in `.cu` files (CUDA source files). CUDA compilation often generates separate object files (`.o`) or libraries (`.a`) for device code and host code, or requires linking against the CUDA runtime libraries (`libcudart.so`). Your main executable linking step isn't finding the definitions for the host-side functions that call into the CUDA runtime or manage the CUDA compatibility layer objects.
+7.  **`/sep/src/main.cpp`: no member named 'logging' in namespace 'sep'`**
+    *   **Problem:** The `logging` namespace or a member named `logging` within the `sep` namespace is not found.
+    *   **Location:** `/sep/src/main.cpp` (lines 35, 77, 88)
+    *   **Targeted Advice:** Ensure that the header defining `sep::logging` (likely `/sep/core/logging.h`) is included in `main.cpp`. Verify that the code using `sep::logging` is correctly referencing the `logging` namespace (e.g., `sep::logging::Manager::initialize()`).
+
+8.  **`/sep/src/main.cpp`: no member named 'initialize' in 'sep::blender::CyclesRenderer'`**
+    *   **Problem:** The `CyclesRenderer` class is used in `main.cpp`, but the compiler cannot find a member function named `initialize`.
+    *   **Location:** `/sep/src/main.cpp:73:40`
+    *   **Targeted Advice:** Ensure that the definition of `sep::blender::CyclesRenderer::initialize()` is available to `main.cpp`. This typically means including the header file where `CyclesRenderer` is fully defined (`/sep/blender/cycles_renderer.h`) and ensuring the function is correctly declared (e.g., `public: SEPResult initialize();`).
+
+9.  **`/sep/src/main.cpp`: no member named 'PatternData' in namespace 'sep::pattern'`**
+    *   **Problem:** The `PatternData` type is used within the `sep::pattern` namespace, but its definition is not available.
+    *   **Location:** `/sep/src/main.cpp` (lines 98, 103, 112)
+    *   **Targeted Advice:** Include the header file that defines `sep::pattern::PatternData` (likely `/sep/include/quantum/data.hpp`) in `main.cpp`.
+
+10. **`/sep/src/main.cpp`: expected ';' after expression`**
+    *   **Problem:** A semicolon is missing after an expression. This is a syntax error.
+    *   **Location:** `/sep/src/main.cpp` (lines 103, 112)
+    *   **Targeted Advice:** Add a semicolon at the indicated locations. This might be a cascading error from the previous "no member named 'PatternData'" issue if the declaration or usage is malformed.
+
+11. **`/sep/src/main.cpp`: use of undeclared identifier 'pattern'; did you mean 'patterns'?`**
+    *   **Problem:** The variable `pattern` is used without being declared, but a variable named `patterns` exists.
+    *   **Location:** `/sep/src/main.cpp` (lines 103, 104, 105, 106, 107, 112, 113, 114, 115, 116)
+    *   **Targeted Advice:** Examine the loops or code blocks using `pattern`. It seems you intended to iterate through the `patterns` vector, and the loop variable should likely be named `pattern` or the code inside the loop should reference elements from the `patterns` vector (e.g., `patterns[i]`). Correct the variable name usage to match the intended logic.
+
+12. **`/sep/src/tests/cycles_test.cpp`: no member named 'isCyclesAvailable' in 'sep::blender::CyclesRenderer'`**
+    *   **Problem:** The `CyclesRenderer` class is used in `cycles_test.cpp`, but the compiler cannot find a member function named `isCyclesAvailable`.
+    *   **Location:** `/sep/src/tests/cycles_test.cpp:50:40`
+    *   **Targeted Advice:** Ensure that the definition of `sep::blender::CyclesRenderer::isCyclesAvailable()` is available to `cycles_test.cpp`. This typically means including the header file where `CyclesRenderer` is fully defined (`/sep/blender/cycles_renderer.h`) and ensuring the function is correctly declared (e.g., `public: static SEPResult isCyclesAvailable();`).
+
+13. **`/sep/src/tests/cycles_test.cpp`: no member named 'initialize' in 'sep::blender::CyclesRenderer'`**
+    *   **Problem:** Another instance of the missing `initialize` member function in `CyclesRenderer`.
+    *   **Location:** `/sep/src/tests/cycles_test.cpp:57:38`
+    *   **Targeted Advice:** Same as point 8, ensure the header and declaration are correct.
+
+14. **`/sep/src/tests/cycles_test.cpp`: no member named 'createSceneFromPatterns' in 'sep::blender::CyclesRenderer'`**
+    *   **Problem:** The `CyclesRenderer` class is used in `cycles_test.cpp`, but the compiler cannot find a member function named `createSceneFromPatterns`.
+    *   **Location:** `/sep/src/tests/cycles_test.cpp:72:23`
+    *   **Targeted Advice:** Ensure that the definition of `sep::blender::CyclesRenderer::createSceneFromPatterns()` is available to `cycles_test.cpp`. Include the header (`/sep/blender/cycles_renderer.h`) and verify the declaration.
+
+15. **`/sep/src/tests/cycles_test.cpp`: no type named 'RenderParams' in 'sep::blender::CyclesRenderer'`**
+    *   **Problem:** The `RenderParams` type is used within the `sep::blender::CyclesRenderer` scope, but its definition is not available.
+    *   **Location:** `/sep/src/tests/cycles_test.cpp:79:35`
+    *   **Targeted Advice:** Ensure that the definition of `sep::blender::CyclesRenderer::RenderParams` is available to `cycles_test.cpp`. This likely means ensuring that `RenderParams` is defined as a nested type within `CyclesRenderer` and that the header (`/sep/blender/cycles_renderer.h`) is correctly included.
+
+16. **`/sep/src/tests/cycles_test.cpp`: no member named 'renderScene' in 'sep::blender::CyclesRenderer'`**
+    *   **Problem:** The `CyclesRenderer` class is used in `cycles_test.cpp`, but the compiler cannot find a member function named `renderScene`.
+    *   **Location:** `/sep/src/tests/cycles_test.cpp:93:23`
+    *   **Targeted Advice:** Ensure that the definition of `sep::blender::CyclesRenderer::renderScene()` is available to `cycles_test.cpp`. Include the header (`/sep/blender/cycles_renderer.h`) and verify the declaration.
+
+17. **`/sep/include/compat/cuda_impl.h`: no member named 'cudaMemcpyAsync' in the global namespace; did you mean 'sep::cuda::cudaMemcpyAsync'?`**
+    *   **Problem:** The compiler is looking for `cudaMemcpyAsync` in the global namespace, but it's likely defined within the `sep::cuda` namespace in your compatibility layer.
+    *   **Location:** `/sep/include/compat/cuda_impl.h:22:12`
+    *   **Targeted Advice:** Explicitly qualify the function call with the namespace: `sep::cuda::cudaMemcpyAsync`. Ensure that the header defining `sep::cuda::cudaMemcpyAsync` (`/sep/include/compat/cuda_runtime.h`) is included.
+
+18. **`/sep/src/blender/mesh_handler.cpp`: use of undeclared identifier 'pattern'; did you mean 'sep::pattern'?`**
+    *   **Problem:** The `pattern` identifier is used without a proper declaration or namespace qualification.
+    *   **Location:** `/sep/src/blender/mesh_handler.cpp` (lines 44, 199, 224, 240, 268, 347, 357)
+    *   **Targeted Advice:** Ensure that the `sep::pattern` namespace is correctly used or brought into scope. You can add `using namespace sep::pattern;` or use the fully qualified name `sep::pattern::` where `pattern` is used. Given the compiler suggestion, adding `using namespace sep::pattern;` at the top of the `.cpp` file after includes might be the intended solution.
+
+19. **`/sep/src/blender/cycles_renderer.cpp`: use of undeclared identifier 'ccl'`**
+    *   **Problem:** The `ccl` identifier is used repeatedly without being declared. This likely refers to the Cycles C++ library namespace.
+    *   **Location:** `/sep/src/blender/cycles_renderer.cpp` (lines 39, 40, 71, 72, 75, 79, 80, 84, 84, 91, 94, 101)
+    *   **Targeted Advice:** This indicates a significant issue with the integration of the real Cycles library. The `ccl` namespace and its contents are not being properly linked or included. You need to ensure that the Cycles C++ headers are correctly included and that the Cycles libraries are properly linked during the build process. This is a complex integration step and might require reviewing how Cycles is built and linked in your project's CMake files. Adding `#include <cycles_headers/ccl/ccl.h>` (or the correct path to the main Cycles header) and ensuring the Cycles libraries are in the linker path are necessary steps.
+
+20. **`/sep/extern/pipewire/spa/include/spa/pod/builder.h`: suspicious usage of 'sizeof(K)'; did you mean 'K'?`**
+    *   **Problem:** The `SPA_FLAG_CLEAR` macro or the underlying code seems to be incorrectly using `sizeof(K)` where `K` (the value itself) is likely intended. This is a high-severity bugprone warning.
+    *   **Location:** `/sep/extern/pipewire/spa/include/spa/pod/builder.h` (lines 213, 235)
+    *   **Targeted Advice:** This issue is within the PipeWire external library code. While it's a warning, fixing it would require modifying the PipeWire source code, which is generally not recommended unless you are maintaining your own fork. For now, you might choose to suppress this warning if it's not causing functional issues, but be aware of the potential bug. If you need to modify it, examine the `SPA_FLAG_CLEAR` macro and the context where it's used in `builder.h`.
+
+21. **Linker Errors (`undefined reference to ...`)**
+    *   **Problem:** The build fails during the linking phase because the compiled object files refer to functions or symbols (like `sep::cuda::CudaCore::initialize`, `sep::cuda::cudaMemcpyAsync`, `sep::cuda::CudaCore::launchQBSA`, `sep::cuda::CudaCore::launchQSH`, `sep::cuda::CudaCore::instance`, and various CUDA runtime functions) that are declared in header files but not defined in any of the compiled source files or linked libraries. The warnings about symbol types changing also indicate potential linking issues.
+    *   **Location:** The linker output at the end of the report lists these (e.g., `/usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function ... undefined reference to ...`).
     *   **Targeted Advice:**
-        *   **CMakeLists.txt:** In the `CMakeLists.txt` file for the `sep_engine` executable and the `cycles_test` executable (since it uses `sep::blender::CyclesRenderer`), ensure you are linking against:
-            *   The library built from your CUDA compatibility files (`libsep_compat_cuda.a`).
-            *   The CUDA runtime library (`cudart`). In CMake, this is often done by finding the CUDA toolkit and linking to `CUDA::cudart`.
-            *   Any other necessary CUDA-related libraries if your compatibility layer depends on specific CUDA features (e.g., NPP, CuFFT, etc., though not apparent from these errors).
-        *   **Compilation:** Verify that your CUDA `.cu` files are being compiled correctly using the CUDA compiler (nvcc) as part of your build process. CMake should handle this if configured correctly for CUDA.
+        *   **CUDA Functions:** Ensure that the source files containing the definitions for the CUDA compatibility functions (`sep::cuda::cudaMemcpyAsync`, `sep::cuda::launchQBSAKernel`, `sep::cuda::launchQSHKernel`, etc., likely in `.cu` files or other `.cpp` files in the `compat` directory) are being compiled and included in the `libsep_compat.so` or `libsep_compat.a` library. Verify the CMakeLists.txt for the `compat` library is correctly adding all necessary source files.
+        *   **`sep::cuda::CudaCore`:** The `CudaCore` class methods (`initialize`, `createStream`, `launchQBSA`, `launchQSH`, `instance`, etc.) are declared in `/sep/include/compat/core.h` but their definitions are needed. Ensure the source file (likely `/sep/src/compat/core.cu` or a related `.cpp` file) containing the definition of `sep::cuda::CudaCore::Impl` and its methods is compiled and linked. The error `undefined reference to sep::cuda::CudaCore::CudaCore()` specifically points to the constructor definition being missing.
+        *   **CUDA Runtime Linking:** The linker warnings about `cuDriverGetVersion`, `cuGetErrorString`, `cuInit`, etc., changing type strongly suggest an issue with how the CUDA runtime library (`cudart`) and possibly the CUDA driver API library (`cuda`) are being linked. Ensure your CMake configuration correctly finds and links against the *real* CUDA libraries provided by your CUDA installation (`/usr/local/cuda-12.9/targets/x86_64-linux/lib/libcudart.so`, etc.) and not potentially incompatible stubs or conflicting versions. The `FindCUDAToolkit` module in CMake should handle this, but double-check the `CUDA_LIBRARIES` and `CUDA_LIBRARY_DIRS` variables.
+        *   **Order of Linking:** Sometimes, the order in which libraries are linked matters. Ensure that libraries are linked in the correct dependency order (e.g., libraries that depend on CUDA are linked *before* the CUDA libraries).
 
-3.  **Component Bridge Errors (e.g., `sep::compat::createAudioCapture`, `sep::compat::createBlenderBridge`)**:
-    *   **Issue:** These factory functions are declared in `compat/component_bridge.h` but defined in `compat/component_bridge.cpp`. The library containing the definition (`libsep_compat.a`) is likely not being linked correctly into the `sep_engine` executable.
-    *   **Targeted Advice:**
-        *   **CMakeLists.txt:** In the `CMakeLists.txt` for `sep_engine`, ensure `libsep_compat.a` is listed in `target_link_libraries`. It should be linked after `libsep_core.a` since `libsep_core.a` depends on it.
+**Medium and Low Severity Warnings**
 
-4.  **Multiple Definition Error (`sep::logging::Manager::initialize()`)**:
-    *   **Issue:** The function `sep::logging::Manager::initialize()` is defined in both `src/core/logging.cpp` and `src/memory/manager.cpp`. You should only define a function's body once across all compilation units that will be linked together.
-    *   **Targeted Advice:**
-        *   **Consolidate Definition:** Choose one place (e.g., `src/core/logging.cpp`) to define `sep::logging::Manager::initialize()`. In the other file (`src/memory/manager.cpp`), *only* include the header file (`core/logging.h`) that declares the function, but do *not* provide a definition.
-        *   **Check for ODR Violations:** This kind of error often indicates Violations of the One Definition Rule (ODR). Ensure that non-inline functions are defined in exactly one `.cpp` file. Inline functions should be defined in header files but must be marked `inline`.
+These should be addressed after the critical errors prevent the build.
 
-**In Summary - Action Plan:**
+1.  **Unused Parameters (`clang-diagnostic-unused-parameter`)**: Many functions have parameters that are declared but not used within the function body.
+    *   **Targeted Advice:** Review each instance. If the parameter is genuinely not needed, remove it from the function signature. If the parameter is intended for future use or part of an interface that requires it, you can explicitly mark it as unused using `(void)parameter_name;` at the beginning of the function body to silence the warning.
 
-1.  **Fix Multiple Definitions:** Remove the duplicate definition of `sep::logging::Manager::initialize` from either `src/core/logging.cpp` or `src/memory/manager.cpp`. Keep the definition in one place and ensure the header is included where needed.
-2.  **Review CMake Linking for Executables:**
-    *   Open the `CMakeLists.txt` files that define the `cycles_test` and `sep_engine` executables.
-    *   Locate the `target_link_libraries` command(s).
-    *   Ensure that all necessary static libraries (`.a`) for the components they use are listed. Pay close attention to the order of linking: generally, libraries that depend on others should come *before* the libraries they depend on in the link command.
-    *   Specifically, make sure `libsep_compat_cuda.a` and `libsep_compat.a` are linked into `sep_engine`.
-    *   Ensure the Cycles OSL library (e.g., `cycles_osl`) is linked into both `cycles_test` and `sep_engine` (if `sep_engine` is intended to use Cycles).
-    *   Ensure the CUDA runtime library (`CUDA::cudart`) is linked into executables that use CUDA features.
-3.  **Verify CUDA Compilation:** Double-check your CMake configuration to ensure that `.cu` files are being compiled correctly by `nvcc` and that the resulting object files are being included in `libsep_compat_cuda.a`.
+2.  **Implicit Conversions (`clang-diagnostic-double-promotion`, `clang-diagnostic-float-conversion`)**: Floating-point values are being implicitly converted to types with potentially lower precision (float to double is usually safe, but float to integer can lose data).
+    *   **Targeted Advice:** Use explicit casts (e.g., `static_cast<double>(float_value)` or `static_cast<size_t>(float_value)`) to make the conversion intent clear and control potential data loss when converting to integers.
 
-Focus on these specific areas in your CMake files and source code definitions. The linker errors clearly point to missing definitions in the final executable binary, caused by libraries not being included or source files not being compiled/linked correctly.
+3.  **Field Initialization Order (`clang-diagnostic-reorder-ctor`)**: Class member fields are being initialized in the constructor initializer list in an order different from their declaration order in the class definition. This can be confusing and slightly less efficient, though usually not functionally incorrect.
+    *   **Targeted Advice:** Reorder the members in the constructor initializer list to match the order they are declared in the class definition. The compiler often provides a fix-it hint for this.
+
+4.  **Mismatched Tags (`clang-diagnostic-mismatched-tags`)**: A type (struct or class) is declared with one tag (e.g., `struct request`) but previously declared with a different tag (e.g., `class request`). While valid in C++, it can cause issues with some ABIs (like Microsoft C++) or lead to confusion.
+    *   **Targeted Advice:** Be consistent with using either `struct` or `class` for a given type throughout your codebase. In C++, the main difference when defining members is the default access specifier (`public` for struct, `private` for class), so choose the tag that best reflects the intended design, but use it consistently.
+
+5.  **Reserved Identifiers (`clang-diagnostic-reserved-identifier`, `clang-diagnostic-reserved-macro-identifier`)**: Identifiers (variables, functions, macros) starting with underscores followed by a capital letter, or double underscores (`__`), are reserved by the C++ standard for the implementation (compiler, standard library). Using them in your code can lead to conflicts.
+    *   **Targeted Advice:** This is primarily an issue within the external PipeWire library. You cannot easily fix this without modifying the library code. You may need to suppress these warnings if they are not causing runtime issues. If you are maintaining a fork of PipeWire, rename these identifiers to not start with reserved prefixes.
+
+6.  **Circular Header Dependencies (`misc-header-include-cycle`)**: Two or more header files include each other directly or indirectly in a cycle. This can be resolved by include guards but can indicate poor design or excessive coupling between components.
+    *   **Targeted Advice:** Review the include structure. Can forward declarations be used instead of full includes in header files? Move definitions to `.cpp` files. Refactor the code to reduce the dependency between the involved components.
+
+7.  **Value Returned Not Disregarded (`cert-err33-c`)**: The return value of a function that indicates success or failure (like `printf`, `scanf`, `malloc`, or certain system calls) is not being checked. This can hide potential errors.
+    *   **Targeted Advice:** Check the return value of the function. If the return value is deliberately ignored (e.g., calling a function for its side effects and not caring about the result in this specific context), cast the call to `void` (e.g., `(void)fprintf(...)`) to make your intention explicit and silence the warning.
+
+8.  **Forward Declaration Namespace Mismatch (`bugprone-forward-declaration-namespace`)**: A forward declaration is found for a type, but a definition with the same name exists in a different namespace.
+    *   **Targeted Advice:** This often occurs when you forward declare a type in one namespace but the full definition is in another. Ensure that when you use the forward-declared type, you use the correct namespace, or that the forward declaration itself correctly specifies the namespace of the *definition*.
+
+9.  **Dead Stores (`deadcode.DeadStores`)**: A variable is assigned a value, but that value is never read later in the code.
+    *   **Targeted Advice:** If the variable is truly unused, remove it. If it's intended to be used but the subsequent code is missing, implement the missing logic. Sometimes, a variable is assigned but only used in debug builds; you can wrap such assignments in `#ifdef DEBUG` or similar.
+
+10. **Definitions in Headers (`misc-definitions-in-headers`)**: Variables or non-inline functions are defined in header files. This violates the One Definition Rule (ODR) and can lead to linker errors if the header is included in multiple compilation units.
+    *   **Targeted Advice:** Move variable definitions and non-inline function definitions from header files (`.h`, `.hpp`) to source files (`.cpp`, `.cu`). Declare variables with `extern` in the header if they need to be accessed from multiple files. For functions, ensure they are marked `inline` if defined in the header and intended for inlining.

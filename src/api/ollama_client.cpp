@@ -1,5 +1,6 @@
 #include "api/client.h"
 #include "api/types.h"
+#include "api/ollama_types.h"
 
 #include <chrono>
 #include <fstream>

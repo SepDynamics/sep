@@ -13,6 +13,7 @@
 #include <mutex>
 #include <thread>
 #include <unordered_map>
+#include <string>
 
 namespace sep::api {
 

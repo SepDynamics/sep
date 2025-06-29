@@ -37,7 +37,7 @@ struct EntanglementPair {
 
 struct CollapseEvent {
     bool detected;
-    glm::vec3 collapse_center;
+    glm::vec4 collapse_center;
     float affected_radius;
     float severity;
     std::vector<std::string> collapsed_pattern_ids;

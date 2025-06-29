@@ -71,7 +71,6 @@ constexpr unsigned int cudaStreamNonBlocking = 0x01;
 #if SEP_CUDA_AVAILABLE
 // When CUDA is available, include the real CUDA runtime
 #include <cuda_runtime.h>
-#include "compat/cuda_helpers.h"
 #else
 // When CUDA is not available, define stub types and functions
 

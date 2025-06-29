@@ -1,25 +1,9 @@
 #pragma once
 
-#include "compat/macros.h"
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#include "compat/cuda_helpers.h"
-#else
-#include "compat/cuda_runtime.h" // Provide cudaSuccess and related stubs
-#include "compat/cuda_impl.h"
-// Provide minimal definitions when CUDA is unavailable
-#ifndef cudaSuccess
-constexpr cudaError_t cudaSuccess = 0;
-#endif
-#ifndef cudaGetErrorString
-inline const char* cudaGetErrorString(cudaError_t) { return "CUDA not available"; }
-#endif
-#endif
-
 #include <cstdio>
-
-#include "compat/cuda_common.h"
 #include "compat/macros.h"
+#include "compat/cuda_defs.h"
+#include "compat/cuda_common.h"
 
 // Comprehensive CUDA helper utilities - consolidated from multiple files
 namespace sep {

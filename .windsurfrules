@@ -10,49 +10,51 @@
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-The project integrates several specialized rendering and computation engines with custom CUDA configurations:
+The system architecture combines specialized CUDA processing, OptiX rendering, and quantum state management through three primary components:
 
-### Core Components
+### CUDA Processing Infrastructure
+Implements custom CUDA compilation and toolchain management for specialized GPU processing:
+- Custom compilation pipeline bypassing CMake defaults
+- Explicit CUDA architecture configurations
+- Forced compiler identification and path management
 
-1. OptiX Toolkit Integration (Importance: 95)
-- Demand Loading Library for on-demand CUDA sparse textures
-- Custom memory allocators for DemandLoading operations
-- Opacity Micromap Arrays (OmmBaking) for textured geometry optimization
-- Python bindings for OptiX host API automation
-File paths: `src/DemandLoading/`, `src/Memory/`, `src/OmmBaking/`, `src/PyOptiX/`
+Key files:
+- `cmake/CustomCUDA.cmake`
+- `cmake/cuda-toolchain.cmake`
 
-2. Cycles Render Engine Integration (Importance: 90)
-- Hydra render delegate for USD and Houdini integration
-- GPU rendering pipeline with CUDA and OptiX support
-- Custom build configurations for USD/Houdini compatibility
-File paths: `src/cycles/install/hydra/`, `src/cycles/install/houdini/`
+### OptiX Rendering System
+Provides advanced rendering capabilities through:
+1. DemandLoading Library
+- On-demand CUDA sparse texture loading
+- Integration with OpenEXR and OpenImageIO
 
-3. CUDA Compilation Framework (Importance: 85)
-- Custom CUDA compilation pipeline bypassing CMake defaults
-- Specialized GPU architecture targeting (70-89)
-- Forced compiler configurations for GCC 14 and Clang
-File paths: `cmake/CustomCUDA.cmake`, `cmake/cuda-toolchain.cmake`
+2. OmmBaking Library
+- Opacity Micromap Array baking for textured geometry
+- CUDA-accelerated texture processing
 
-4. SEP Framework Core (Importance: 92)
-- Spin-2 coherence field implementation
-- Quantum Binary State Analysis (QBSA)
-- Pattern evolution through Hamiltonian processes
-- Quantum Fourier Hierarchy for coherence detection
+3. ShaderUtil Library
+- Vector math utilities for OptiX kernels
+- Self Intersection Avoidance algorithms
 
-### Integration Architecture
+### Quantum Processing Engine
+Implements quantum state management and evolution through:
 
-The system connects these components through:
-- Custom CUDA toolchain configurations
-- Specialized render delegate implementations
-- Memory management systems for texture handling
-- Python-based automation interfaces
+1. Quantum Coherence Management
+- Pattern recognition across memory tiers
+- Coherence state evaluation
+- Quantum manifold optimization
 
-### Processing Pipeline
+2. State Evolution System
+- Quantum state modeling with evolution rates
+- Energy and coupling strength management
+- Pattern evolution bridging
 
-1. Demand loading system handles texture management
-2. OptiX-based rendering pipeline processes geometry
-3. Custom memory allocators optimize resource usage
-4. Cycles integration provides final rendering output
+3. Memory Architecture
+- Multi-tier memory management
+- Redis integration for persistent storage
+- Coherence threshold monitoring
+
+The system uses a three-tier memory architecture (STM, MTM, LTM) for pattern data management and implements quantum-inspired algorithms including Quantum Binary State Analysis (QBSA) and Quantum Fourier Hierarchy (QFH).
 
 $END$
 

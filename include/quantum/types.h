@@ -16,21 +16,18 @@ enum class RelationshipType {
 };
 
 struct QuantumState {
-    float coherence;
-    float stability;
-    float entropy;
+    float coherence{0.0f};
+    float stability{0.0f};
+    float entropy{0.0f};
     float phase{0.0f};
     float evolution_rate{0.0f};
     float energy{0.0f};
     float coupling_strength{0.0f};
-    float mutation_rate;
-    int generation;
-    int mutation_count;
-    float evolution_rate{0.0f};
-    float energy{0.0f};
-    float coupling_strength{0.0f};
-    MemoryTierEnum memory_tier;
-    float access_frequency;
+    float mutation_rate{0.0f};
+    int generation{0};
+    int mutation_count{0};
+    sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
+    float access_frequency{0.0f};
 };
 
 struct PatternRelationship {

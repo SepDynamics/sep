@@ -5,7 +5,7 @@ set -e
 CODECHECKER_PORT=8001
 CODECHECKER_WORKSPACE="$PWD/.codechecker"
 REPORTS_DIR="$CODECHECKER_WORKSPACE/reports"
-COMPILE_COMMANDS="$PWD/build/compile_commands.json"
+COMPILE_COMMANDS="$PWD/cmake-make/compile_commands.json"  # Using $PWD is appropriate in shell scripts
 
 # Function to show usage
 show_usage() {

@@ -38,9 +38,9 @@ MemoryTierManager::~MemoryTierManager() {
 
 void MemoryTierManager::init(const Config& config) {
     config_ = config;
-    MemoryTier::Config scfg{static_cast<TierType>(sep::MemoryTierEnum::STM), config.stm_size};
-    MemoryTier::Config mcfg{static_cast<TierType>(sep::MemoryTierEnum::MTM), config.mtm_size};
-    MemoryTier::Config lcfg{static_cast<TierType>(sep::MemoryTierEnum::LTM), config.ltm_size};
+    MemoryTier::Config scfg{static_cast<TierType>(sep::memory::MemoryTierEnum::STM), config.stm_size};
+    MemoryTier::Config mcfg{static_cast<TierType>(sep::memory::MemoryTierEnum::MTM), config.mtm_size};
+    MemoryTier::Config lcfg{static_cast<TierType>(sep::memory::MemoryTierEnum::LTM), config.ltm_size};
     stm_ = std::make_unique<MemoryTier>(scfg);
     mtm_ = std::make_unique<MemoryTier>(mcfg);
     ltm_ = std::make_unique<MemoryTier>(lcfg);

@@ -1,162 +1,31 @@
-```
-/sep/src/compat/cuda_helpers.h:21:18: error: ‘cudaSuccess’ was not declared in this scope
-/sep/src/compat/cuda_helpers.h:22:73: error: ‘cudaGetErrorString’ was not declared in this scope
-```
-**Issue:** The CUDA success status and error string function are not declared when `SEP_CUDA_AVAILABLE` is not defined.
-**Target:** `/sep/include/compat/cuda_helpers.h`
-**Advice:** Add `#ifndef SEP_CUDA_AVAILABLE` blocks around the declarations of `cudaSuccess` and `cudaGetErrorString` (or functions/macros that use them) in `cuda_helpers.h` and provide stub definitions similar to what's done in `compat/core_stub.cpp`.
-
-```
-/sep/src/compat/stream.cpp:68:7: error: ‘cudaStreamNonBlocking’ was not declared in this scope
-/sep/src/compat/stream.cpp:69:7: error: ‘cudaStreamDefault’ was not declared in this scope; did you mean ‘cudaStream_t’?
-/sep/src/compat/stream.cpp:71:21: error: ‘cudaStreamCreateWithFlags’ was not declared in this scope
-/sep/src/compat/stream.cpp:72:14: error: ‘cudaSuccess’ was not declared in this scope
-```
-**Issue:** CUDA stream creation related functions and flags are not declared when `SEP_CUDA_AVAILABLE` is not defined.
-**Target:** `/sep/src/compat/stream.cpp` and potentially `/sep/include/compat/stream.h`
-**Advice:**
-1.  In `compat/stream.h`, add `#ifndef SEP_CUDA_AVAILABLE` blocks around the declarations of `cudaStream_t`, `cudaStreamNonBlocking`, `cudaStreamDefault`, `cudaStreamCreateWithFlags`, `cudaStreamDestroy`, `cudaStreamSynchronize`, `cudaStreamWaitEvent`, and `cudaEventRecord`.
-2.  Provide stub definitions for these in `compat/core_stub.cpp` if they aren't already there.
-3.  Ensure `compat/stream.cpp` includes `compat/core_stub.cpp` (or the relevant header where the stubs are defined) when `SEP_CUDA_AVAILABLE` is not defined.
-
-```
-/sep/src/compat/raii.cpp:86:74: error: ‘cudaStreamNonBlocking’ was not declared in this scope
-/sep/src/compat/raii.cpp:86:98: error: ‘cudaStreamDefault’ was not declared in this scope; did you mean ‘cudaStreamDestroy’?
-/sep/src/compat/raii.cpp:88:16: error: ‘cudaSuccess’ was not declared in this scope
-/sep/src/compat/raii.cpp:103:9: note: in expansion of macro ‘CUDA_CHECK’
-```
-**Issue:** Similar to `compat/stream.cpp`, CUDA stream flags, success status, and destroy function are not declared when `SEP_CUDA_AVAILABLE` is not defined.
-**Target:** `/sep/src/compat/raii.cpp` and potentially `/sep/include/compat/raii.h`
-**Advice:**
-1.  In `compat/raii.h`, add `#ifndef SEP_CUDA_AVAILABLE` blocks around the declarations of `cudaStreamNonBlocking`, `cudaStreamDefault`, `cudaStreamDestroy`, `cudaSuccess`, and `cudaEventDestroy`.
-2.  Ensure stub definitions are provided in `compat/core_stub.cpp` and included.
-
-```
-/sep/src/compat/component_bridge.cpp:26:11: error: invalid use of incomplete type ‘struct sep::SEPBlenderBridge’
-```
-**Issue:** `SEPBlenderBridge` is forward declared but its definition is needed to construct and access its members (`impl`).
-**Target:** `/sep/src/compat/component_bridge.cpp`
-**Advice:** Include the header file where `SEPBlenderBridge` is fully defined (`blender/bridge.h` seems likely) in `compat/component_bridge.cpp`.
-
-```
-/sep/src/memory/memory_tier.cpp:20: error: unterminated #ifndef
-```
-**Issue:** An `#ifndef` directive in `compat/cuda_impl.h` is not properly terminated.
-**Target:** `/sep/include/compat/cuda_impl.h`
-**Advice:** Add a `#endif` at the end of `compat/cuda_impl.h`.
-
-```
-/sep/src/core/metrics_collector.cpp:181:16: error: ‘cudaMemGetInfo’ was not declared in this scope
-```
-**Issue:** The CUDA memory information function is not declared when `SEP_CUDA_AVAILABLE` is not defined.
-**Target:** `/sep/src/core/metrics_collector.cpp` and potentially `/sep/include/compat/cuda_helpers.h` or a dedicated CUDA memory stub header.
-**Advice:** Add a stub definition for `cudaMemGetInfo` in `compat/core_stub.cpp` (or similar) and ensure it's included in `metrics_collector.cpp` when `SEP_CUDA_AVAILABLE` is not defined.
-
-```
-/sep/src/core/metrics_collector.cpp:238:1: error: definition of explicitly-defaulted ‘sep::metrics::MetricsCollector::MetricsCollector()’
-```
-**Issue:** An explicitly defaulted constructor is being defined in the `.cpp` file, which is not allowed.
-**Target:** `/sep/src/core/metrics_collector.cpp`
-**Advice:** Remove the definition `MetricsCollector::MetricsCollector() : pImpl(std::make_unique<Impl>()) {}` from the `.cpp` file. The `= default` declaration in the header is sufficient. The initialization of `pImpl` should happen within the `Impl` constructor or a dedicated `init` method.
-
-```
-/sep/src/memory/redis_manager.cpp:35:21: error: redefinition of ‘class sep::persistence::RedisManager::Impl’
-```
-**Issue:** The definition of `RedisManager::Impl` is present in both the header and the `.cpp` file.
-**Target:** `/sep/src/memory/redis_manager.cpp` and `/sep/include/memory/redis_manager.h`
-**Advice:** Remove the definition of `class RedisManager::Impl { ... };` from `redis_manager.cpp`. Keep only the definition in `redis_manager.h`. The `.cpp` file should only contain the implementations of `Impl`'s member functions.
-
-```
-/sep/src/memory/quantum_coherence_manager.cpp:96:20: error: ‘using sep::memory::QuantumCoherenceManager::Impl::CoherenceResult = struct sep::memory::QuantumCoherenceManager::CoherenceResult’ {aka ‘struct sep::memory::QuantumCoherenceManager::CoherenceResult’} has no member named ‘tier_fragmentation’
-```
-**Issue:** The `CoherenceResult` struct is missing members like `tier_fragmentation` and `tier_pattern_count`.
-**Target:** `/sep/include/memory/quantum_coherence_manager.h`
-**Advice:** Add the missing members (`tier_fragmentation` (likely an array) and `tier_pattern_count` (likely an array)) to the `CoherenceResult` struct definition in the header file.
-
-```
-/sep/src/memory/quantum_coherence_manager.cpp:97:89: error: no matching function for call to ‘sep::memory::MemoryTier::MemoryTier(int&)’
-```
-**Issue:** The `countPatternsInTier` function is being called with a `MemoryTier` type, but the `MemoryTier` class doesn't have a constructor that takes an integer. The function likely expects a `MemoryTierEnum`.
-**Target:** `/sep/src/memory/quantum_coherence_manager.cpp`
-**Advice:** Change the argument type in the call to `countPatternsInTier` from `static_cast<MemoryTier>(i)` to `static_cast<MemoryTierEnum>(i)`.
-
-```
-/sep/src/memory/quantum_coherence_manager.cpp:113:18: error: ‘sep::sep’ has not been declared
-```
-**Issue:** There's a repeated `sep::` namespace qualifier.
-**Target:** `/sep/src/memory/quantum_coherence_manager.cpp`
-**Advice:** Change `sep::sep::MemoryTierEnum` to `sep::MemoryTierEnum`.
-
-```
-/sep/src/quantum/pattern_evolution_bridge.cpp:16:7: note: forward declaration of ‘class sep::quantum::QuantumManifoldOptimizer’
-```
-**Issue:** `QuantumManifoldOptimizer` is forward declared but its full definition is needed to access its members and nested types (like `OptimizationTarget`).
-**Target:** `/sep/src/quantum/pattern_evolution_bridge.cpp`
-**Advice:** Include the header where `QuantumManifoldOptimizer` is fully defined (`quantum/quantum_manifold_optimizer.h`) in `pattern_evolution_bridge.cpp`. It appears it's already included, so there might be a circular dependency or an issue with include guards. Check include guards in `quantum_manifold_optimizer.h` and ensure they are unique.
-
-```
-/sep/src/quantum/pattern_evolution_bridge.cpp:64:11: error: ‘namespace sep::quantum::PatternEvolutionBridge { }’ redeclared as different kind of entity
-```
-**Issue:** The namespace `sep::quantum::PatternEvolutionBridge` is being declared both as a class (`class PatternEvolutionBridge`) and as a namespace (`namespace PatternEvolutionBridge`).
-**Target:** `/sep/src/quantum/pattern_evolution_bridge.cpp` and `/sep/include/quantum/pattern_evolution_bridge.h`
-**Advice:**
-1.  In `/sep/include/quantum/pattern_evolution_bridge.h`, ensure `PatternEvolutionBridge` is consistently declared as a class.
-2.  In `/sep/src/quantum/pattern_evolution_bridge.cpp`, remove the extra `namespace PatternEvolutionBridge { ... }` block and ensure that all member functions of the `PatternEvolutionBridge` class are defined using the `PatternEvolutionBridge::Impl::` or `PatternEvolutionBridge::` scope resolution operators as needed.
-
-```
-/sep/src/quantum/pattern_evolution_bridge.cpp:262:31: error: ‘struct sep::quantum::QuantumState’ has no member named ‘evolution_rate’
-```
-**Issue:** The `QuantumState` struct is missing members like `evolution_rate`, `energy`, and `coupling_strength`.
-**Target:** `/sep/include/quantum/types.h`
-**Advice:** Add the missing members to the `QuantumState` struct definition in `types.h`.
-
-```
-/sep/src/quantum/quantum_manifold_optimizer.cpp:26:23: error: ‘QuantumPattern’ has not been declared in ‘sep::quantum’
-```
-**Issue:** `QuantumPattern` is used but not defined or included.
-**Target:** `/sep/include/quantum/quantum_manifold_optimizer.h` and related `.cpp` files.
-**Advice:** Check if `QuantumPattern` is a standard type or needs to be defined. If it's meant to be an alias for `sep::quantum::Pattern`, use that directly or add a `using` declaration for `Pattern`. If it's a distinct type, define it and include its definition. It seems likely it should be `sep::quantum::Pattern`.
-
-```
-/sep/src/quantum/quantum_manifold_optimizer.cpp:108:20: error: ‘MemoryTierEnum’ has not been declared in ‘sep::memory’
-```
-**Issue:** `MemoryTierEnum` is used within the `sep::memory` namespace but is declared in `sep::quantum`.
-**Target:** `/sep/include/memory/types.h` (or the header where `MemoryTierEnum` should reside).
-**Advice:** Move the definition of `MemoryTierEnum` to `sep::memory` namespace in `sep/include/memory/types.h` and ensure it's consistently used from that namespace.
-
-```
-/sep/src/quantum/quantum_manifold_optimizer.cpp:139:5: error: ‘CUDAConfig’ does not name a type; did you mean ‘CudaConfig’?
-/sep/src/quantum/quantum_manifold_optimizer.cpp:140:5: error: ‘APIConfig’ does not name a type; did you mean ‘ApiConfig’?
-/sep/src/quantum/quantum_manifold_optimizer.cpp:141:5: error: ‘LogConfig’ does not name a type; did you mean ‘ApiConfig’?
-```
-**Issue:** Configuration structs like `CUDAConfig`, `APIConfig`, and `LogConfig` are used within `ManifoldConfig` but their definitions are missing or in the wrong namespace.
-**Target:** `/sep/include/quantum/quantum_manifold_optimizer.h` and potentially configuration headers.
-**Advice:** Ensure that the necessary configuration struct definitions (likely from `core/config.h` or similar) are included in `quantum_manifold_optimizer.h` and used with the correct namespace (likely `sep::config::`).
-
-```
-/sep/src/quantum/quantum_manifold_optimizer.cpp:226:61: error: expected class-name before ‘{’ token
-```
-**Issue:** `QuantumManifoldProcessor` is trying to inherit from `QuantumProcessorQFH` but the inheritance syntax is incorrect or `QuantumManifoldProcessor` is already defined elsewhere.
-**Target:** `/sep/include/quantum/quantum_manifold_optimizer.h` and `/sep/src/quantum/quantum_manifold_optimizer.cpp`
-**Advice:** Review the definition of `QuantumManifoldProcessor` in the header and ensure it uses proper class definition and inheritance syntax. Check if it's defined in multiple places.
-
-```
-/sep/src/compat/cuda_api.cu:263:20: error: ‘cudaMemcpyAsync’ was not declared in this scope
-```
-**Issue:** CUDA memory copy functions (`cudaMemcpyAsync`, `cudaMemsetAsync`) are not declared when `SEP_CUDA_AVAILABLE` is not defined.
-**Target:** `/sep/src/compat/cuda_api.cu` and potentially stub headers.
-**Advice:** Add stub definitions for `cudaMemcpyAsync`, `cudaMemsetAsync` in `compat/core_stub.cpp` (or similar) and ensure they are included when `SEP_CUDA_AVAILABLE` is not defined.
-
-```
-/sep/src/compat/core.cu:37:29: error: ‘cudaDeviceProp’ has not been declared
-```
-**Issue:** `cudaDeviceProp` is used in `CudaCore`'s `getDeviceProperties` declaration but not defined when `SEP_CUDA_AVAILABLE` is not defined.
-**Target:** `/sep/include/compat/core.h` and `/sep/src/compat/core_stub.cpp`
-**Advice:** Add a stub definition for `cudaDeviceProp` when `SEP_CUDA_AVAILABLE` is not defined. This stub should match the structure expected by `getDeviceProperties`.
-
-```
-/sep/src/quantum/pattern_processor.cpp:111:21: error: ‘constants::LTM_COHERENCE_THRESHOLD’ has not been declared
-```
-**Issue:** Coherence threshold constants are used but not declared in the scope.
-**Target:** `/sep/src/quantum/pattern_processor.cpp` and potentially a constants header.
-**Advice:** Include the header where these constants are defined (e.g., `quantum/constants.h` or `memory/quantum_coherence_manager.h`) and ensure they are within an accessible namespace.
+1. sep::memory::MemoryTierEnum Not Found:
+Problem: The primary error message "‘memory’ in namespace ‘sep’ does not name a type" and "‘MemoryTierEnum’ does not name a type" indicates that the MemoryTierEnum is not properly visible or defined in the compilation units where these errors occur. This enum is defined in memory/types.h.
+Locations: This error appears in numerous files, including quantum/types.h, quantum/data.hpp, quantum/processor.h, quantum/quantum_processor.h, quantum/quantum_processor_qfh.h, quantum/types_serialization.cpp, quantum/pattern_processor.cpp, memory/quantum_coherence_manager.cpp, memory/memory_tier_manager.cpp, and memory/memory_tier.cpp.
+Targeted Advice:
+Include Order: Ensure that memory/types.h is included before any header or source file that uses sep::memory::MemoryTierEnum. Review the include directives in the affected files and reorder them if necessary. Standard library headers should generally come first, followed by project-specific headers, ensuring dependencies are included before the code that uses them.
+Forward Declarations: While you have struct SEPBlenderBridge; in compat/component_bridge.h, you need the full definition of MemoryTierEnum wherever it's being used directly (e.g., as a type for a member variable or function parameter). Forward declarations are not sufficient in these cases.
+Namespace: Double-check that MemoryTierEnum is correctly defined within the sep::memory namespace in memory/types.h. And when referencing it outside the sep::memory namespace, use the fully qualified name sep::memory::MemoryTierEnum.
+2. Invalid Use of Incomplete Type struct sep::SEPBlenderBridge:
+Problem: The compiler sees a forward declaration of SEPBlenderBridge (struct SEPBlenderBridge;) but the code tries to use the type in ways that require its full definition (e.g., creating an instance with std::make_unique).
+Locations: This error occurs in compat/component_bridge.cpp and core/engine.cpp.
+Targeted Advice:
+Include the full definition of SEPBlenderBridge (blender/types.h) in the .cpp files where you are creating or manipulating instances of SEPBlenderBridge (e.g., compat/component_bridge.cpp, core/engine.cpp if impl_ uses SEPBlenderBridge).
+3. cudaMemcpyAsync Not Declared (or Redefined):
+Problem: There's a warning about "SEP_HD" redefined and an error about "‘::cudaMemcpyAsync’ has not been declared". This suggests conflicting definitions or include order issues related to CUDA headers and your compatibility layers.
+Locations: This appears in various .cpp and .cu files, including compat/stream.cpp, compat/raii.cpp, core/engine.cpp, api/bridge_c.cpp, memory/memory_tier.cpp, memory/memory_tier_manager.cpp, memory/manager.cpp, quantum/quantum_processor_qfh_common.cpp, quantum/types_serialization.cpp, and quantum/pattern_processor_interface.cpp.
+Targeted Advice:
+Standardize CUDA Includes: Consistently include your CUDA compatibility header (compat/cuda_common.h) and ensure it manages the inclusion of underlying CUDA runtime headers (cuda_runtime.h or your stub) and helper macros/functions.
+Check SEP_HD Definition: The warning about SEP_HD being redefined indicates a potential issue where the macro is defined differently in different parts of your code or included headers. Ensure SEP_HD has a single, consistent definition (likely in compat/macros.h or a dedicated compat header).
+Namespace Resolution: The compiler suggests sep::cuda::cudaMemcpyAsync. This means your CUDA wrapper functions are likely in the sep::cuda namespace. When calling them, ensure you use the sep::cuda:: prefix or a using namespace sep::cuda; declaration in the appropriate scope. The error message suggests that the call ::cudaMemcpyAsync (which looks for cudaMemcpyAsync in the global namespace) is failing because the function is expected within the sep::cuda namespace. This confirms that your CUDA wrapper is doing its job but the call site needs adjustment.
+CUDA Implementation Headers: Headers like compat/cuda_impl.h might be included prematurely in some files. These should typically only be included by the corresponding .cpp or .cu implementation file.
+4. Member Not Found:
+Problem: Errors like "‘const struct sep::quantum::QuantumState’ has no member named ‘memory_tier’" indicate that the QuantumState struct does not contain the memory_tier member where it's being accessed.
+Locations: This occurs in memory/quantum_coherence_manager.cpp, memory/memory_tier_manager.cpp, quantum/types_serialization.cpp, and quantum/processor.cpp.
+Targeted Advice:
+Check QuantumState Definition: Verify the definition of QuantumState (likely in quantum/types.h or quantum/data.hpp). Ensure it actually includes the memory_tier member of type sep::memory::MemoryTierEnum. If the member was removed during stubbing, you'll need to add it back as you are trying to hook things up again.
+Include memory/types.h: Make sure memory/types.h is included in the files that define or use QuantumState and its memory_tier member, so the compiler knows about sep::memory::MemoryTierEnum.
+5. Missing Type Definitions in quantum/quantum_manifold_optimizer.h:
+Problem: Errors like "‘CUDAConfig’ has not been declared in ‘sep’", "‘APIConfig’ has not been declared in ‘sep’", and "‘LogConfig’ has not been declared in ‘sep’" indicate that these configuration types are not visible within the scope of quantum/quantum_manifold_optimizer.h.
+Locations: This appears in quantum/quantum_manifold_optimizer.h and consequently in files that include it.
+Targeted Advice:
+Include the header that defines sep::config::CUDAConfig, sep::config::APIConfig, and sep::config::LogConfig (likely core/config.h or a similar config-specific header) in quantum/quantum_manifold_optimizer.h. Ensure this inclusion is done correctly within the appropriate namespaces.

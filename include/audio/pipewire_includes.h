@@ -1,8 +1,5 @@
 #pragma once
 
-// Check if we can find the PipeWire headers
-#if __has_include(<spa/support/log.h>) && __has_include(<pipewire/pipewire.h>)
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,6 +29,4 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-#endif  // __has_include check
 

@@ -33,7 +33,8 @@ namespace sep::api {
 // Static instance for signal handling
 SEPApiServer* SEPApiServer::instance_ = nullptr;
 SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
-    : config_(config), running_(false), logger_(nullptr) {
+    : config_(config), logger_(nullptr), app_(nullptr), server_thread_(nullptr),
+      running_(false), metrics_(), server_metrics_(), metrics_mutex_(), ollama_client_(nullptr) {
     instance_ = this;
 
     // Initialize the Crow app with middlewares
@@ -156,9 +157,19 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
 }
 
 void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& body,
-                              int64_t duration) {
+                               int64_t duration) {
     if (!logger_) return;
     std::lock_guard<std::mutex> lock(metrics_mutex_);
+
+    // Log the request body if it's not empty
+    if (!body.empty()) {
+        logger_->debug("Request body: {}", body);
+    }
+
+    // Log the request body if it's not empty
+    if (!body.empty()) {
+        logger_->debug("Request body: {}", body);
+    }
 
   metrics_.totalRequests++;
   if (code >= 200 && code < 300) {
@@ -279,8 +290,8 @@ void SEPApiServer::setup_middleware() {
   if (!app_) return;
 
   // Configure rate limiting middleware
-   auto& rate_limit_mw =
-      app_->get_middleware<RateLimitMiddleware>();
+   auto& rate_limit_mw = app_->get_middleware<RateLimitMiddleware>();
+   (void)rate_limit_mw; // Middleware is used implicitly through registration
 
   // Configure auth middleware
   auto& auth_mw = app_->get_middleware<AuthMiddleware>();

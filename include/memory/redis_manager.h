@@ -2,6 +2,14 @@
 
 #include "memory/types.h"
 
+#if __has_include(<hiredis/hiredis.h>)
+#    include <hiredis/hiredis.h>
+#    define SEP_HAS_HIREDIS 1
+#else
+#    define SEP_HAS_HIREDIS 0
+struct redisContext;
+struct redisReply;
+#endif
 
 #include <memory>
 #include <optional>

@@ -1,58 +1,59 @@
 ---
-description: Documents pattern data structures, relationships, coherence metrics and stability calculations in quantum processing
-globs: src/quantum/**/*,src/core/patterns/*,src/core/metrics/*
+description: Specification for quantum pattern data structures, their relationships, coherence metrics, and evolution through processing
+globs: /sep/include/quantum/**/*.h,/sep/src/quantum/**/*.cpp,/sep/include/memory/**/*.h
 alwaysApply: false
 ---
 
 
 # pattern-data-model
 
-The pattern data model centers on quantum-inspired representations and transformations:
+## Core Pattern Data Structures (Importance: 95)
 
-## Core Pattern Structures
+### Quantum State Patterns
+- Defined in `QuantumState` struct with evolution rate, energy, and coupling strength metrics
+- Patterns evolve through Hamiltonian-like processes where coupling strength depends on resonance ratios
+- File: `/sep/include/quantum/types.h`
 
-- Patterns evolve through a Hamiltonian-like process where coupling strength is determined by resonance ratios
-- Identity patterns are defined relationally and recursively
-- Pattern stability is measured through coherence metrics
+### Pattern Coherence Metrics
+- `CoherenceResult` struct tracks pattern fragmentation and distribution across memory tiers
+- Includes tier-specific pattern counts and coherence thresholds
+- File: `/sep/include/memory/quantum_coherence_manager.h`
 
-Key files:
-- `src/quantum/` - Core quantum pattern processing
-- `src/core/patterns/` - Pattern definition and relationships
+## Pattern Evolution Pipeline (Importance: 90)
 
-## Coherence Analysis
+### Pattern Evolution Bridge
+- Manages quantum pattern transformations through optimization stages
+- Integrates with manifold optimizer for complex quantum computations
+- File: `/sep/src/quantum/pattern_evolution_bridge.cpp`
 
-The Quantum Binary State Analysis (QBSA) examines pattern bitfields to:
-- Detect misalignments between pattern states
-- Guide patterns toward increased coherence 
-- Calculate stability metrics based on resonance
+### Memory Tier Organization
+- Three-tiered pattern storage system (STM, MTM, LTM)
+- Patterns migrate between tiers based on coherence metrics and usage patterns
+- File: `/sep/src/memory/memory_tier.cpp`
 
-## Pattern Hierarchy
+## Pattern Processing (Importance: 85)
 
-Quantum Fourier Hierarchy (QFH) implements:
-- Multi-level transforms for pattern analysis
-- Detection of coherence "ruptures" signaling state collapse
-- Pattern evolution tracking via Directed Acyclic Graph (DAG)
+### Quantum Binary State Analysis
+- Analyzes bitfield patterns to detect misalignments
+- Guides system toward coherent pattern states
+- File: `/sep/src/quantum/pattern_processor.cpp`
 
-## Pattern Processing Pipeline
+### Quantum Fourier Hierarchy 
+- Multi-level transform for analyzing relational structure of patterns
+- Detects coherence ruptures in pattern relationships
+- File: `/sep/include/quantum/types.h`
 
-The spin-2 coherence field $Q_{\mu\nu}(x)$ provides:
-- Massive field modeling for pattern dynamics
-- Pattern resistance metrics tied to spacetime curvature
-- Recursive collapse resolution during measurement
+## Pattern Storage (Importance: 75)
 
-## Integration Points 
+### Redis Pattern Persistence
+- Manages persistent storage of evolved patterns
+- Handles pattern serialization and retrieval
+- File: `/sep/src/memory/redis_manager.cpp`
 
-Patterns interface with:
-- Real-time learning modules for reference refinement
-- LLM continuous feedback loop
-- 3D mesh and audio stream pattern conversion
-
-Importance Scores:
-- Core Pattern Structures: 95
-- Coherence Analysis: 90  
-- Pattern Hierarchy: 85
-- Pattern Processing: 80
-- Integration Points: 70
+### Pattern Metrics Collection
+- Tracks pattern evolution metrics and coherence statistics
+- Monitors pattern distribution across memory tiers
+- File: `/sep/src/core/metrics_collector.cpp`
 
 $END$
 

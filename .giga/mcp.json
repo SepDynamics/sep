@@ -9,9 +9,9 @@
         "CODECHECKER_PORT": "8001",
         "OLLAMA_URL": "http://localhost:11434",
         "OLLAMA_MODEL": "mxbai-embed-large",
-        "WORKSPACE_DIR": "/sep",
-        "SEP_BUILD_DIR": "/sep/cmake-make",
-        "SEP_CONFIG_FILE": "/sep/config/default.json"
+        "WORKSPACE_DIR": "${workspaceFolder}",
+        "SEP_BUILD_DIR": "${workspaceFolder}/cmake-make",
+        "SEP_CONFIG_FILE": "${workspaceFolder}/config/default.json"
       },
       "disabled": false,
       "alwaysAllow": [
@@ -77,8 +77,8 @@
   },
   "cyclesIntegration": {
     "enabled": false,
-    "cyclesPath": "/sep/extern/cycles",
-    "optixPath": "/sep/extern/optix-dev",
+    "cyclesPath": "${workspaceFolder}/extern/cycles",
+    "optixPath": "${workspaceFolder}/extern/optix-dev",
     "renderSettings": {
       "defaultSamples": 64,
       "defaultResolution": [
@@ -125,7 +125,7 @@
         "semantic_search",
         "analyze_issues"
       ],
-      "reportPath": "/sep/reports"
+      "reportPath": "${workspaceFolder}/.codechecker/reports"
     },
     "cycles": {
       "tasks": [

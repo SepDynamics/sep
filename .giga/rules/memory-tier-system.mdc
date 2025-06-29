@@ -1,35 +1,57 @@
 ---
-description: Configuration and implementation for multi-tier memory management and pattern storage/retrieval system.
-globs: src/memory/**/*,src/quantum/memory/**/*,src/core/memory/**/*
+description: Defines memory tier management, pattern storage/retrieval, and Redis integration for quantum pattern processing
+globs: /sep/src/memory/**,/sep/include/memory/**,/sep/src/quantum/pattern_*.cpp
 alwaysApply: false
 ---
 
 
 # memory-tier-system
 
-Based on the available specification, the memory tier system appears to have the following core components:
+The memory tier system implements a specialized hierarchy for managing quantum patterns and coherence states across multiple storage layers.
 
-### Custom Memory Allocators
-- Specialized allocators designed for integration with DemandLoading library 
-- Memory management patterns optimized for texture and pattern data storage
-- Implements custom block allocation strategies for OptiX rendering integration
+### Core Components
 
-### Pattern Storage Architecture
-The system implements a multi-tiered pattern storage system:
-1. Primary pattern storage for active quantum patterns
-2. On-demand loading capabilities for texture and pattern data
-3. Integration with CUDA sparse textures for GPU-accelerated pattern access
+#### Memory Tier Management (Importance: 95)
+- Three distinct tiers handle pattern evolution:
+  - Short-Term Memory (STM)
+  - Medium-Term Memory (MTM) 
+  - Long-Term Memory (LTM)
+- Located in `/sep/src/memory/memory_tier.cpp`
+- Manages pattern promotion/demotion between tiers based on coherence thresholds
+- Tracks tier fragmentation and pattern counts through `CoherenceResult` structure
 
-### Redis Integration
-While Redis integration is mentioned in the project scope, specific implementation details are not provided in the current specification.
+#### Pattern Storage Logic (Importance: 90)
+- Implements quantum pattern storage across tiers
+- Utilizes `QuantumState` structures containing:
+  - Evolution rates
+  - Energy levels
+  - Coupling strength values
+- Manages pattern allocation and deallocation based on coherence metrics
+- Located in `/sep/include/memory/quantum_coherence_manager.h`
 
-### Key Memory Management Components
-File paths:
-- `src/Memory/`: Core memory allocator implementations
-- `src/DemandLoading/`: On-demand pattern loading system
-- `src/core/memory/`: Base memory management infrastructure
+#### Redis Integration Layer (Importance: 85)
+- Provides persistent storage for long-term patterns
+- Located in `/sep/src/memory/redis_manager.cpp`
+- Handles pattern serialization/deserialization
+- Manages distributed pattern storage across nodes
+- Synchronizes coherence states between memory tiers
 
-Importance Score: 85 - Critical memory management infrastructure for pattern processing
+#### Pattern Evolution Bridge (Importance: 80)
+- Located in `/sep/src/quantum/pattern_evolution_bridge.cpp`
+- Facilitates pattern transitions between memory tiers
+- Integrates with `QuantumManifoldOptimizer` for coherence optimization
+- Tracks pattern lifecycle and evolution metrics
+
+### Key Files
+```
+/sep/src/memory/
+  |- memory_tier.cpp
+  |- redis_manager.cpp
+/sep/include/memory/
+  |- quantum_coherence_manager.h
+/sep/src/quantum/
+  |- pattern_evolution_bridge.cpp
+```
 
 $END$
 

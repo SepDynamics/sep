@@ -1,49 +1,79 @@
 ---
-description: Specifies quantum processing algorithms for pattern analysis, coherence calculation and stability determination in the SEP framework
-globs: src/quantum/**,src/core/quantum/*,*.qsa,*.qfh
+description: Specification for quantum processing algorithms including state analysis, pattern evolution, and coherence calculation
+globs: **/quantum/*.{cpp,h},**/quantum/**/*.{cpp,h},**/include/quantum/*.h
 alwaysApply: false
 ---
 
 
 # quantum-algorithms
 
-### Core Quantum Processing Components
+## Core Quantum Processing Components
 
-The SEP framework implements several quantum-inspired algorithms for pattern analysis and coherence determination:
+### Quantum Binary State Analysis (QBSA)
+- Analyzes quantum bitfields for coherence misalignments
+- Implements pattern detection across quantum states
+- Handles state collapse through recursive uncertainty resolution
 
-#### Quantum Binary State Analysis (QBSA)
-Importance Score: 95
-- Analyzes bitfield patterns to detect quantum state misalignments
-- Guides system toward coherence through state comparison
-- Maps binary patterns to quantum superposition analogues
+**File Path:** `/sep/src/quantum/pattern_processor.cpp`
+**Importance Score:** 95
 
-#### Quantum Fourier Hierarchy (QFH) 
-Importance Score: 90
-- Multi-level transform detecting coherence ruptures
-- Signals quantum state collapse conditions
-- Processes pattern hierarchies through fourier-based decomposition
+### Quantum Fourier Hierarchy (QFH)
+- Multi-level transform system for analyzing relational data structures
+- Detects coherence ruptures across quantum manifolds
+- Processes quantum state evolution through hierarchical transforms
 
-#### Pattern Evolution System
-Importance Score: 85
-- Hamiltonian-based pattern evolution
-- Coupling strength determined by resonance ratios
-- Tracks pattern lineage through DAG structure
+**File Path:** `/sep/include/quantum/types.h`
+**Importance Score:** 90
 
-### Stability Determination
+### Pattern Evolution System
+- Manages quantum pattern evolution through Hamiltonian-like processes
+- Calculates coupling strengths based on resonance ratios
+- Implements coherence threshold monitoring
 
-#### Coherence Calculation
-Importance Score: 80
-- Measures pattern stability through recursive collapse analysis
-- Maps stable resonant energy states
-- Links to Riemann zeta function zeros for stability validation
+**File Path:** `/sep/src/quantum/pattern_evolution_bridge.cpp`
+**Importance Score:** 85
 
-Relevant File Paths:
-```
-src/quantum/qbsa.cpp
-src/quantum/qfh.cpp
-src/core/quantum/pattern_evolution.cpp
-src/quantum/coherence_calc.cpp
-```
+### Quantum Coherence Management
+- Tracks tier-based fragmentation patterns
+- Monitors coherence states across memory hierarchies
+- Calculates pattern distribution across quantum tiers
+
+**File Path:** `/sep/include/memory/quantum_coherence_manager.h`
+**Importance Score:** 88
+
+### Quantum Manifold Optimization
+- Optimizes quantum manifolds using specialized processors
+- Integrates with CUDA for parallel quantum computations
+- Manages quantum state evolution rates and coupling strengths
+
+**File Path:** `/sep/src/quantum/quantum_manifold_optimizer.cpp`
+**Importance Score:** 92
+
+### State Evolution Engine
+- Processes quantum state transitions
+- Manages evolution rates and energy calculations
+- Handles coupling strength adjustments
+
+**File Path:** `/sep/src/quantum/quantum_manifold_optimizer.cpp`
+**Importance Score:** 87
+
+## Integration Components
+
+### Pattern Evolution Bridge
+- Connects quantum pattern processing with manifold optimization
+- Manages state transitions between processing stages
+- Coordinates coherence calculations across system components
+
+**File Path:** `/sep/src/quantum/pattern_evolution_bridge.cpp`
+**Importance Score:** 82
+
+### Quantum Memory Interface
+- Manages quantum state storage across memory tiers
+- Implements coherence-aware memory management
+- Handles pattern persistence and retrieval
+
+**File Path:** `/sep/src/memory/memory_tier.cpp`
+**Importance Score:** 78
 
 $END$
 

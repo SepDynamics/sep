@@ -1,4 +1,4 @@
-add_library(sep_audio STATIC config.cpp pipeline.cpp pipewire_capture.cpp pipewire_stubs.cpp)
+add_library(sep_audio STATIC config.cpp pipeline.cpp pipewire_capture.cpp)
 
 # Find PipeWire using both pkg-config and direct library find for robustness
 find_package(PkgConfig QUIET)
@@ -61,8 +61,6 @@ if(PIPEWIRE_FOUND)
   # Propagate to parent scope for main executable linking
   set(PIPEWIRE_LIBRARIES ${PIPEWIRE_LIBRARIES} PARENT_SCOPE)
   set(PIPEWIRE_FOUND ${PIPEWIRE_FOUND} PARENT_SCOPE)
-else()
-  message(STATUS "PipeWire not found, using stub implementation")
 endif()
 
 target_include_directories(sep_audio

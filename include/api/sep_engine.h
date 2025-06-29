@@ -166,7 +166,7 @@ private:
     /**
      * @brief Get metrics from HealthMetrics struct
      */
-    nlohmann::json getMetrics(const HealthMetrics& metrics);
+    static nlohmann::json getMetrics(const HealthMetrics& metrics);
 
     /**
      * @brief ID counter for deterministic identifiers

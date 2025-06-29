@@ -6,7 +6,8 @@
 #include <fstream>
 #include <ios>
 
-namespace sep::config {
+namespace sep {
+namespace config {
 
 using namespace env_keys;
 
@@ -205,4 +206,5 @@ void ConfigManager::initialize(int argc, char **argv) {
   impl_->loadFromCommandLine(argc, argv);
 }
 
-} // namespace sep::config
+} // namespace config
+} // namespace sep

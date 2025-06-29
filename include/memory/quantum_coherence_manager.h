@@ -90,14 +90,16 @@ class QuantumCoherenceManager {
         std::vector<std::string> entangled_patterns;
     };
 
-    struct CoherenceResult {
-        bool success{false};
-        float global_coherence{0.f};
-        float memory_pressure{0.f};
-        std::size_t total_migrations{0};
-        std::vector<CoherenceAnomaly> anomalies;
-        std::vector<TierMigration> tier_migrations;
-    };
+struct CoherenceResult {
+    bool success{false};
+    float global_coherence{0.f};
+    float memory_pressure{0.f};
+    std::size_t total_migrations{0};
+    std::vector<CoherenceAnomaly> anomalies;
+    std::vector<TierMigration> tier_migrations;
+    float tier_fragmentation[3]{0.f, 0.f, 0.f};
+    std::uint32_t tier_pattern_count[3]{0, 0, 0};
+};
 
     struct TierAnalysis {
         float tier_coherence[3]{0.f, 0.f, 0.f};

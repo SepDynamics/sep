@@ -7,6 +7,7 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <atomic>
 #include <thread>
 #include <vector>
 

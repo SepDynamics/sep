@@ -17,6 +17,7 @@ using ::sep::memory::MemoryTierEnum;
 #include <tbb/parallel_for.h>
 #include <tbb/concurrent_hash_map.h>
 #include <algorithm>
+#include <atomic>
 #include <numeric>
 #include <cmath>
 #include <array>

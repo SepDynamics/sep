@@ -503,11 +503,11 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         # Link sep_compat first to ensure CUDA symbols are available
         sep_compat
         sep_core
-        
+
         # Core libraries that may use CUDA through sep_compat
+        sep_memory
         sep_api
         sep_audio
-        sep_memory
         sep_blender
         sep_quantum
         

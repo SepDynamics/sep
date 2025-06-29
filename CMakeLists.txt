@@ -1,28 +1,29 @@
 cmake_minimum_required(VERSION 3.16)
 
-# Find GCC-14 first
-find_program(GCC_14 NAMES g++-14 REQUIRED)
-if(NOT GCC_14)
-    message(FATAL_ERROR "g++-14 not found. Please install gcc-14")
+# Find CLANG first
+find_program(CLANG NAMES clang++-15 REQUIRED)
+if(NOT CLANG)
+    message(FATAL_ERROR "clang++ not found. Please install clang++")
 endif()
 
-# Set C++ compiler to GCC-14
-set(CMAKE_CXX_COMPILER ${GCC_14})
+# Set C++ compiler to CLANG
+set(CMAKE_CXX_COMPILER ${CLANG})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Initialize project with CXX first
-project(SEPEngine LANGUAGES CXX)
 
 # Configure CUDA before finding it
 set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
-set(CMAKE_CUDA_HOST_COMPILER ${GCC_14})
+set(CMAKE_CUDA_HOST_COMPILER ${CLANG})
 set(CMAKE_CUDA_ARCHITECTURES "75;80;86")
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
+# Initialize project with CXX first
+project(SEPEngine LANGUAGES CXX)
+
 # Set CUDA flags before enabling the language
-set(CMAKE_CUDA_FLAGS_INIT "-allow-unsupported-compiler")
+set(CMAKE_CUDA_FLAGS_INIT "-allow-unsupported-compiler -Wno-deprecated-gpu-targets")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS_INIT}")
 
 # Find CUDA toolkit
@@ -34,21 +35,21 @@ endif()
 
 # Additional CUDA configuration after language is enabled
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Wno-deprecated-gpu-targets")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --compiler-bindir=${GCC_14}")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --compiler-bindir=${CLANG}")
 
 # Configure CUDA compiler
 set(CMAKE_CUDA_COMPILER ${CUDA_NVCC})
-set(CMAKE_CUDA_HOST_COMPILER ${GCC_14})
+set(CMAKE_CUDA_HOST_COMPILER ${CLANG})
 
 #--- Host compiler configuration ---
 # Force GCC 14 as the host compiler
-find_program(GCC_14 NAMES g++-14 REQUIRED)
-if(NOT GCC_14)
-    message(FATAL_ERROR "g++-14 not found. Please install gcc-14")
+find_program(CLANG NAMES clang++ REQUIRED)
+if(NOT CLANG)
+    message(FATAL_ERROR "clang++ not found. Please install gcc-14")
 endif()
 
-set(CMAKE_CXX_COMPILER ${GCC_14})
-set(CMAKE_CUDA_HOST_COMPILER ${GCC_14})
+set(CMAKE_CXX_COMPILER ${CLANG})
+set(CMAKE_CUDA_HOST_COMPILER ${CLANG})
 set(HOST_CXX_FLAGS "-std=c++17")
 
 # Configure CUDA for the project

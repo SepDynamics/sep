@@ -5,10 +5,10 @@ Checking for PipeWire development headers...
 PipeWire found via pkg-config: /usr/lib64/libpipewire-0.3.so
 Cleaning build directory...
 Running CMake configuration...
--- The CXX compiler identification is GNU 14.2.1
+-- The CXX compiler identification is Clang 15.0.7
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/g++-14 - skipped
+-- Check for working CXX compiler: /usr/bin/clang++-15 - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
 -- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
@@ -67,7 +67,7 @@ Running CMake configuration...
 -- Critical Cycles OSL: /sep/lib/libcycles_osl.a
 -- Build type: 
 -- =====================================
--- Configuring done (1.1s)
+-- Configuring done (1.2s)
 -- Generating done (0.0s)
 CMake Warning:
   Manually-specified variables were not used by the project:
@@ -78,24 +78,24 @@ CMake Warning:
 
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[  4%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  1%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  6%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
 [  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 12%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 15%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[  9%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 17%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
 [ 18%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 26%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 28%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 23%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 25%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 26%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 28%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
 [ 29%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
 [ 31%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
 [ 32%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
@@ -107,40 +107,40 @@ Building SEP Engine...
 [ 40%] Built target sep_audio
 [ 42%] Linking CXX static library libsep_core.a
 [ 42%] Built target sep_core
-[ 43%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 45%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 46%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 43%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 46%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 46%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
 [ 48%] Linking CXX static library libsep_api.a
 [ 48%] Built target sep_api
 [ 50%] Linking CXX static library libsep_compat.a
 [ 50%] Built target sep_compat
-[ 53%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 54%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 56%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 59%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 60%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 64%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
-[ 65%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 67%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 68%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
-[ 70%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 71%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 73%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 75%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 76%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 78%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 79%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 81%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 82%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 84%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 85%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 87%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 89%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 90%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 92%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 56%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 59%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 62%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 62%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 64%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 64%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 65%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/manager.cpp.o
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 68%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 70%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 71%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 73%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 75%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 76%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 78%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 79%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 81%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 82%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 84%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 85%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 87%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 89%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 90%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 92%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
 [ 93%] Linking CXX static library libsep_blender.a
 [ 93%] Built target sep_blender
 [ 95%] Linking CXX static library libsep_memory.a
@@ -150,33 +150,33 @@ Building SEP Engine...
 [ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
 [100%] Linking CXX executable sep_engine
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::init(sep::config::APIConfig const&)':
-engine.cpp:(.text+0x161): undefined reference to `sep::cuda::CudaCore::initialize(int)'
-/usr/bin/ld: engine.cpp:(.text+0x1ef): undefined reference to `sep::cuda::CudaCore::initialize(int)'
-/usr/bin/ld: engine.cpp:(.text+0x2ed): undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'
+engine.cpp:(.text+0x114): undefined reference to `sep::cuda::CudaCore::initialize(int)'
+/usr/bin/ld: engine.cpp:(.text+0x1a3): undefined reference to `sep::cuda::CudaCore::initialize(int)'
+/usr/bin/ld: engine.cpp:(.text+0x2d3): undefined reference to `sep::cuda::CudaCore::createStream(sep::StreamFlags)'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::~Engine()':
-engine.cpp:(.text+0xd55): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+engine.cpp:(.text+0xf4b): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::generate_probes(sep::shim::vector<sep::PinState> const&, sep::shim::vector<unsigned int>&, sep::shim::vector<unsigned int>&, unsigned long)':
-engine.cpp:(.text+0xf3c): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x105d): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
-/usr/bin/ld: engine.cpp:(.text+0x10ec): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x1168): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x11a0): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+engine.cpp:(.text+0x1198): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x12ef): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x137c): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x13fd): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x143d): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::process_batch(sep::shim::vector<sep::PinState> const&, unsigned long, sep::quantum::QBSAResult&, sep::cuda::QSHResult&)':
-engine.cpp:(.text+0x1487): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x153e): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
-/usr/bin/ld: engine.cpp:(.text+0x15da): undefined reference to `sep::cuda::CudaCore::launchQSH(sep::cuda::DeviceMemory<unsigned long> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
-/usr/bin/ld: engine.cpp:(.text+0x1653): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x17ca): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x1802): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
-/usr/bin/ld: engine.cpp:(.text+0x1942): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x19c2): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
-/usr/bin/ld: engine.cpp:(.text+0x19fa): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
-/usr/bin/ld: engine.cpp:(.text+0x1b7d): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+engine.cpp:(.text+0x17bc): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x18b5): undefined reference to `sep::cuda::CudaCore::launchQBSA(sep::cuda::DeviceMemory<unsigned int> const&, sep::cuda::DeviceMemory<unsigned int> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x1975): undefined reference to `sep::cuda::CudaCore::launchQSH(sep::cuda::DeviceMemory<unsigned long> const&, unsigned int, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::DeviceMemory<unsigned int>&, sep::cuda::Stream&)'
+/usr/bin/ld: engine.cpp:(.text+0x19e6): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1b62): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1bb7): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1d43): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1df5): undefined reference to `sep::cuda::cudaMemcpyAsync(void*, void const*, unsigned long, int, void*)'
+/usr/bin/ld: engine.cpp:(.text+0x1e4a): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
+/usr/bin/ld: engine.cpp:(.text+0x20ad): undefined reference to `sep::cuda::CudaCore::synchronizeStream(void*)'
 /usr/bin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::cuda::CudaCore::instance()':
-engine.cpp:(.text._ZN3sep4cuda8CudaCore8instanceEv[_ZN3sep4cuda8CudaCore8instanceEv]+0x43): undefined reference to `sep::cuda::CudaCore::CudaCore()'
+engine.cpp:(.text._ZN3sep4cuda8CudaCore8instanceEv[_ZN3sep4cuda8CudaCore8instanceEv]+0x35): undefined reference to `sep::cuda::CudaCore::CudaCore()'
 /usr/bin/ld: src/memory/libsep_memory.a(manager.cpp.o): in function `sep::logging::LoggingMiddleware::after_handle(crow::request&, crow::response&, sep::logging::LoggingMiddleware::context&)':
-manager.cpp:(.text+0xa3e): undefined reference to `sep::api::makeRequest(crow::request&)'
-collect2: error: ld returned 1 exit status
+manager.cpp:(.text+0xc21): undefined reference to `sep::api::makeRequest(crow::request&)'
+clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
 make[2]: *** [CMakeFiles/sep_engine.dir/build.make:211: sep_engine] Error 1
 make[1]: *** [CMakeFiles/Makefile2:252: CMakeFiles/sep_engine.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

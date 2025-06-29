@@ -47,6 +47,7 @@ void to_json(nlohmann::json& j, const Pattern& pattern) {
     j = nlohmann::json{
         {"id", pattern.id},
         {"position", {pattern.position.x, pattern.position.y, pattern.position.z, pattern.position.w}},
+        {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z}},
         {"quantum_state", pattern.quantum_state},
         {"relationships", pattern.relationships},
         {"data", pattern.data},
@@ -61,6 +62,10 @@ void from_json(const nlohmann::json& j, Pattern& pattern) {
     j.at("id").get_to(pattern.id);
     auto pos = j.at("position").get<std::vector<float>>();
     pattern.position = glm::vec4(pos[0], pos[1], pos[2], pos[3]);
+    auto mom = j.value("momentum", std::vector<float>{0.0f, 0.0f, 0.0f});
+    if (mom.size() == 3) {
+        pattern.momentum = glm::vec3(mom[0], mom[1], mom[2]);
+    }
     j.at("relationships").get_to(pattern.relationships);
     j.at("data").get_to(pattern.data);
     j.at("parent_ids").get_to(pattern.parent_ids);

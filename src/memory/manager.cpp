@@ -161,7 +161,7 @@ void LoggingMiddleware::after_handle(::crow::request &req, ::crow::response &res
     return;
   }
 
-  auto req_ptr = sep::api::makeRequest(req);
+  auto req_ptr = std::make_unique<sep::api::CrowRequestAdapter>(req);
 
   if (ctx.start != std::chrono::high_resolution_clock::time_point{}) {
     auto end = std::chrono::high_resolution_clock::now();

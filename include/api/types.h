@@ -4,6 +4,7 @@
 #include <atomic>
 #include <chrono>
 #include <map>
+#include <cstdint>
 #include <vector>
 #include <nlohmann/json.hpp>
 

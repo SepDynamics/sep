@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 # Include CUDA configuration for library paths
-include(${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
 # Set CUDA flags BEFORE project() to fix compiler version compatibility check
 set(CMAKE_CUDA_FLAGS "-allow-unsupported-compiler")
 set(CMAKE_CUDA_COMPILER_FLAGS "-allow-unsupported-compiler")
@@ -12,6 +11,13 @@ set(CMAKE_CUDA_COMPILER_INIT "nvcc -allow-unsupported-compiler")
 
 # Enable CUDA as a language
 project(SEPEngine LANGUAGES CXX)
+
+# Configure CUDA for the project
+set(SEP_CUDA_AVAILABLE ON)
+include(${CMAKE_SOURCE_DIR}/cmake/CustomCUDA.cmake)
+
+# Add CUDA libraries to external link order
+list(APPEND EXTERNAL_LINK_ORDER ${CUDA_LIBRARIES})
 
 # Configure CUDA
 set(CMAKE_CUDA_STANDARD 17)
@@ -343,29 +349,29 @@ set(EXTERNAL_LINK_ORDER
     # Path guiding
     ${OpenPGL_LIBRARY}
     
-    # OpenSubdiv with its TBB dependency
-    ${OPENSUBDIV_CPU_LIBRARY}
-    ${OPENSUBDIV_GPU_LIBRARY}
-    TBB::tbb  # OpenSubdiv requires TBB
-
-    # Path guiding
-    ${OpenPGL_LIBRARY}
-    
-    # Core graphics libraries
-    ${OPENIMAGEIO_LIBRARY}
-    ${OPENIMAGEIO_UTIL_LIBRARY}
-    ${OPENCOLORIO_LIBRARY}
-    ${OPENEXR_LIBRARY}
-    ${IMATH_LIBRARY}
-    
-    # Scene and geometry libraries
-    ${ALEMBIC_LIBRARY}
-    ${OPENVDB_LIBRARY}
-    ${EMBREE_LIBRARY}
-    
-    # Utility libraries
-    TBB::tbb
-    TBB::tbbmalloc
+    # OpenSubdiv with its TBB 2.x dependency
+        -Wl,--push-state,--no-as-needed
+        ${OPENSUBDIV_CPU_LIBRARY}
+        ${OPENSUBDIV_GPU_LIBRARY}
+        -Wl,--pop-state
+        
+        # Core graphics libraries
+        ${OPENIMAGEIO_LIBRARY}
+        ${OPENIMAGEIO_UTIL_LIBRARY}
+        ${OPENCOLORIO_LIBRARY}
+        ${OPENEXR_LIBRARY}
+        ${IMATH_LIBRARY}
+        
+        # Scene and geometry libraries
+        ${ALEMBIC_LIBRARY}
+        ${OPENVDB_LIBRARY}
+        ${EMBREE_LIBRARY}
+        
+        # Utility libraries (TBB 12.x)
+        -Wl,--push-state,--no-as-needed
+        TBB::tbb
+        TBB::tbbmalloc
+        -Wl,--pop-state
     ${BLOSC_LIBRARY}
     ${ZSTD_LIBRARY}
     ${PUGIXML_LIBRARY}
@@ -426,11 +432,23 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # This ensures all symbols are included before any internal libraries reference them
     target_link_libraries(sep_engine
         PRIVATE
+        # First link CUDA-dependent libraries
+        sep_compat
+        
+        # Then Cycles with whole-archive
         -Wl,--whole-archive
         ${CYCLES_LINK_ORDER}
         -Wl,--no-whole-archive
-        # Then link internal libraries that might depend on Cycles
-        ${SEP_INTERNAL_LIBS}
+        
+        # Then remaining internal libraries
+        sep_api
+        sep_memory
+        sep_quantum
+        sep_core
+        sep_audio
+        sep_blender
+        
+        # External dependencies
         ${BLENDER_LINK_ORDER}
         ${EXTERNAL_LINK_ORDER}
         ${CURL_LIBRARIES}

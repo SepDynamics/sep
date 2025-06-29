@@ -8,6 +8,10 @@
 #include "memory/manager.h"
 #include "api/crow_adapter.h"
 
+// Debug logging for OpenTelemetry headers
+#ifdef SEP_HAS_OPENTELEMETRY
+#include <opentelemetry/trace/provider.h>
+#endif
 // CROW_DISABLE_RTTI is defined globally via CMake
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/basic_file_sink.h> // Fix: Include basic file sink
@@ -141,7 +145,7 @@ void LoggingMiddleware::before_handle(::crow::request& req, ::crow::response& re
                                       LoggingMiddleware::context &ctx) {
 
   (void)req;
-  if (!isReady()) { // Fix: Added comment
+  if (!isReady()) { // Fix: Added comment // Fix: Added comment
     res.code = 503;  // Service Unavailable
     res.end();
     return;

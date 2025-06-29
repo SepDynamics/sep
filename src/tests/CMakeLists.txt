@@ -1,8 +1,36 @@
 # CMakeLists.txt for Cycles integration tests
 
-add_executable(cycles_test cycles_test.cpp)
+# Include CUDA configuration
+include(${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
+
+# Configure CUDA compiler and flags
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -allow-unsupported-compiler")
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+# Add CUDA source files
+set(CUDA_SOURCES
+    ${CMAKE_SOURCE_DIR}/src/memory/memory.cu
+    ${CMAKE_SOURCE_DIR}/src/compat/cuda_api.cu
+    ${CMAKE_SOURCE_DIR}/src/compat/core.cu
+    ${CMAKE_SOURCE_DIR}/src/compat/pattern_kernels.cu
+    ${CMAKE_SOURCE_DIR}/src/compat/quantum_kernels.cu
+    ${CMAKE_SOURCE_DIR}/src/compat/utils.cu
+    ${CMAKE_SOURCE_DIR}/src/compat/event.cu
+)
+
+# Add main test executable
+add_executable(cycles_test
+    cycles_test.cpp
+    ${CUDA_SOURCES}
+)
+
+# Configure include directories
 target_include_directories(cycles_test
     PUBLIC
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/include
+    ${CUDA_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/include/api
         ${CMAKE_SOURCE_DIR}/include/audio
@@ -23,14 +51,36 @@ target_include_directories(cycles_test
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_link_libraries(cycles_test
         PRIVATE
-        # First link Cycles libraries with whole-archive to ensure all symbols are included
+        # First link CUDA implementation to resolve sep::cuda symbols
+        ${CUDA_LIBRARIES}
+        ${CYCLES_CUDA_LIBRARIES}
+        # Then link all Cycles components with whole-archive
         -Wl,--whole-archive
         ${CYCLES_LINK_ORDER}
+        ${CYCLES_SCENE_LIBRARIES}
+        ${CYCLES_KERNEL_LIBRARIES}
+        ${CYCLES_DEVICE_LIBRARIES}
+        ${CYCLES_RENDER_LIBRARIES}
+        ${CYCLES_RENDER_LIB}
         -Wl,--no-whole-archive
-        # OSL libraries
+
+        # Link OSL implementation with whole-archive
+        -Wl,--whole-archive
+        ${CYCLES_OSL_LIB}
+        -Wl,--no-whole-archive
+
+        # Then link system OSL libraries in correct order
         ${OSL_COMP_LIBRARY}
         ${OSL_EXEC_LIBRARY}
         ${OSL_QUERY_LIBRARY}
+        
+        # Then OpenImageIO which OSL depends on
+        ${OPENIMAGEIO_LIBRARY}
+        ${OPENIMAGEIO_UTIL_LIBRARY}
+        ${LLVM_LIBRARIES}
+        ${PUGIXML_LIBRARIES}
+        # Link compat library for CUDA implementation
+        ${SEP_COMPAT_LIBRARY}
         # Then link internal libraries that might depend on Cycles
         ${SEP_INTERNAL_LIBS}
         ${BLENDER_LINK_ORDER}

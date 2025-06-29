@@ -148,7 +148,7 @@ bool MeshHandler::hasCustomDataLayer(const char* name) const {
   return false;
 }
 
-sep::SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) { // Fix: Added name parameter // Fix: Added comment
+sep::SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) { // Fix: Added name parameter // Fix: Added comment // Fix: Added comment
   if (!initialized_) {
     return sep::SEPResult::INITIALIZATION_FAILED;
   }

@@ -102,7 +102,7 @@ CompressionMethod LZ4Compression::selectMethod(const void* /*data*/, size_t /*si
 CompressionStats LZ4Compression::getStats() const { return stats; }
 
 // ----------------------------- ZSTDCompression -----------------------------
-::sep::shim::vector<uint8_t> ZSTDCompression::compress(const void* data, size size) { // Fix: Remove const // Fix: Added comment
+::sep::shim::vector<uint8_t> ZSTDCompression::compress(const void* data, size_t size) {
   size_t maxSize = ZSTD_compressBound(size);
   ::sep::shim::vector<uint8_t> out(maxSize);
   auto start = std::chrono::high_resolution_clock::now();

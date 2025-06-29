@@ -2,21 +2,11 @@
 #Custom CMake module for CUDA compilation that bypasses CMake's built-in CUDA language support
 set(LANGUAGES CUDA)
 # Force apply CUDA flags early for compiler identification
-if(NOT DEFINED CMAKE_CUDA_FLAGS)
-  set(CMAKE_CUDA_FLAGS "-allow-unsupported-compiler")
-endif()
-
-# Ensure compiler flags are passed during compiler ID detection
-set(CMAKE_CUDA_COMPILER_ID_FLAGS "-allow-unsupported-compiler")
 
 find_package(CUDAToolkit QUIET)
 
 #--- CUDA paths and settings ---
 set(CUDA_PATH "/usr/local/cuda-12.9" CACHE PATH "Path to CUDA installation")
-set(CUDA_BIN_PATH "${CUDA_PATH}/bin" CACHE PATH "Path to CUDA binaries")
-set(CUDA_NVCC "${CUDA_BIN_PATH}/nvcc" CACHE FILEPATH "Path to NVCC compiler")
-set(CUDA_HOST_COMPILER "/usr/bin/g++" CACHE FILEPATH "Host compiler for CUDA")
-set(ENV{CUDAFLAGS} "-allow-unsupported-compiler")
 
 #--- CUDA architectures ---
 set(CUDA_ARCHITECTURES "70;75;80;86;89" CACHE STRING "CUDA architectures to compile for")

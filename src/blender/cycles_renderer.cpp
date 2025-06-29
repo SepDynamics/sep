@@ -2,7 +2,6 @@
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
-#include "compat/osl_stub.h" // Fix: Add missing OSL stub header // Fix: Added comment
 
 namespace sep {
 namespace blender {

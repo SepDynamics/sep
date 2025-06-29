@@ -13,12 +13,10 @@
 
 // Define namespace alias for clarity
 namespace logging = sep::logging;
-#include <glm/glm.hpp>
+#include <algorithm>
+#include <array>
+#include <atomic>
 #include <chrono>
-#include <future>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
 #include <complex>
 #include <string>
 #include <unordered_map>
@@ -26,10 +24,6 @@ namespace logging = sep::logging;
 #include <atomic>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/norm.hpp>
-#include <algorithm>
-#include <cmath>
-#include <numeric>
-#include <execution>
 #include <memory>
 #include <vector>
 #include <string>
@@ -37,6 +31,11 @@ namespace logging = sep::logging;
 #include <unordered_map>
 #include <atomic>
 #include <stdexcept>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+#include <cmath>
 
 namespace sep::quantum::manifold {
 

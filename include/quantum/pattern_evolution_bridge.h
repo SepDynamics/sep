@@ -62,6 +62,7 @@ public:
         float convergence_threshold{0.001f};
         float evolution_step_size{0.05f};
         float interaction_radius{2.0f};
+        float coupling_strength{0.42f};  // Added for quantum state coupling
         size_t num_threads{4};
     };
 

@@ -184,10 +184,9 @@ SEP_GLOBAL void blend_kernel(float* d_output, const float* d_embeddings, const f
 }  // namespace detail
 
 // Kernel launch implementations
-#if !defined(__CUDACC__)
 cudaError_t launchQBSAKernel(const std::uint32_t* d_probe_indices, const std::uint32_t* d_expectations,
-                             std::uint32_t num_probes, std::uint32_t* d_bitfield, std::uint32_t* d_corrections,
-                             std::uint32_t* d_correction_count, cudaStream_t stream) {
+                              std::uint32_t num_probes, std::uint32_t* d_bitfield, std::uint32_t* d_corrections,
+                              std::uint32_t* d_correction_count, cudaStream_t stream) {
     sep::cuda::KernelTrace trace{"qbsa_kernel", reinterpret_cast<void*>(stream)}; // Fix: Added comment
     // const uint32_t block_size = sep::cuda::constants::DEFAULT_BLOCK_SIZE; // Fix: Remove redundant block size definition // Fix: Added comment
     const uint32_t block_size = sep::cuda::constants::get_default_block_size(); // Fix: Use constant for block size

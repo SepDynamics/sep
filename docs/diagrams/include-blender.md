@@ -45,7 +45,7 @@ flowchart TD
 
 ## Objects and Outputs
 
-- **`SEPBlenderBridge`** (defined in `src/blender/api.cpp`)
+- **`SEPBlenderBridge`** (defined in `include/blender/types.h`)
   - Holds a `std::shared_ptr<sep::pattern::BlenderBridge>` instance.
   - Provides access to `SEPAudioMetrics` and `SEPPatternMetrics` produced during processing.
 - **`sep::pattern::BlenderBridge`** (declared in `bridge.h`)

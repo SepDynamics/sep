@@ -51,7 +51,9 @@ inline const char* sep_result_to_string(sep::SEPResult result) {
   }
 }
 
-// Bridge structure used by the C API
+// Bridge structure used by the C API.
+// This header is the canonical home of the definition so that
+// any source including it has the complete type available.
 namespace sep {
 struct SEPBlenderBridge {
     std::shared_ptr<pattern::BlenderBridge> impl;

@@ -8,6 +8,7 @@
 #include "api/rate_limit_middleware.h"
 #include "api/types.h"
 #include "api/auth_middleware.h"
+#include "core/types.h"  // for sep::config::APIConfig
 #include <atomic>
 #include <memory>
 #include <mutex>

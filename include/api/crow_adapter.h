@@ -29,7 +29,7 @@ namespace sep::api {
  *
  * @param app The Crow application instance
  */
-void setupSepApiRoutes(::crow::Crow<>* app);
+// Route setup moved to SEPApiServer::setup_routes
 
 // Adapter for crow::request to HttpRequest
 class CrowRequestAdapter : public HttpRequest {

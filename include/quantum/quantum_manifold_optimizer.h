@@ -20,6 +20,11 @@
 #include <execution>
 #include <stdexcept>
 #include <cmath>
+#include <future>
+#include <algorithm>
+#include <numeric>
+#include <execution>
+#include <stdexcept>
 #include <glm/glm.hpp>
 
 #include "compat/cuda.h"
@@ -143,56 +148,6 @@ struct ManifoldConfig {
     AnalyticsConfig analytics;
 };
 
-// Implementation class
-class QuantumManifoldOptimizer::Impl {
-public:
-    struct ManifoldPoint {
-        glm::vec3 position;
-        glm::vec3 momentum;
-        float curvature;
-        float coherence;
-        uint32_t dimension_index;
-        std::vector<uint32_t> neighbor_indices;
-    };
-    
-    struct GeodesicPath {
-        std::vector<ManifoldPoint> points;
-        float total_action;
-        float stability_metric;
-        bool is_minimal;
-    };
-    
-    explicit Impl(const Config& config);
-    OptimizationResult optimize(const QuantumState& initial_state, const OptimizationTarget& target);
-    void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
-    float computeManifoldCoherence(const glm::vec3& position) const;
-    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
-
-private:
-    Config config_;
-    std::vector<ManifoldPoint> manifold_points_;
-    glm::mat4 riemannian_metric_;
-    std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
-
-    void initializeManifold();
-    ManifoldPoint quantumStateToManifold(const QuantumState& state);
-    QuantumState manifoldToQuantumState(const ManifoldPoint& point);
-    ManifoldPoint targetToManifold(const OptimizationTarget& target);
-    GeodesicPath findOptimalGeodesic(const ManifoldPoint& start, const ManifoldPoint& target);
-    void applyRicciFlow(GeodesicPath& path);
-    void computeNeighborhoods();
-    void updateRiemannianMetric();
-    float computeLocalCurvature(const glm::vec3& position) const;
-    float computeRicciCurvature(const ManifoldPoint& point, const ManifoldPoint& prev, const ManifoldPoint& next) const;
-    glm::vec3 computeFlowDirection(const ManifoldPoint& point, float ricci_curvature) const;
-    float computePathAction(const GeodesicPath& path) const;
-    float computePathStability(const GeodesicPath& path) const;
-    float computeConvergenceMetric(const GeodesicPath& path) const;
-    float computeRicciScalar(const GeodesicPath& path) const;
-    float computeGeodesicDistance(const GeodesicPath& path) const;
-    float computeHolonomyPhase(const GeodesicPath& path) const;
-    float computeResonanceFromCurvature(float curvature) const;
-};
 
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
 class AdvancedMemoryTierOptimizer {
@@ -305,7 +260,7 @@ private:
 // 5. HIERARCHICAL SEMANTIC PROCESSING
 class SemanticProcessor {
 public:
-    explicit SemanticProcessor(const ManifoldConfig::SemanticConfig& config);
+    explicit SemanticProcessor(const SemanticConfig& config);
 
     // Code embedding with structural awareness
     struct CodeEmbedding {
@@ -332,7 +287,7 @@ public:
         const std::vector<std::vector<SearchResult>>& modal_results);
 
 private:
-    ManifoldConfig::SemanticConfig config_;
+    SemanticConfig config_;
     std::unique_ptr<CUDAQuantumKernel> cuda_kernel_;
     
     double calculateQuantumInterference(const CodeEmbedding& a, const CodeEmbedding& b);

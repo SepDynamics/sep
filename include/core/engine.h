@@ -25,7 +25,6 @@ class AudioCapture;
 namespace pattern {
 class BlenderBridge;
 }  // namespace pattern
-struct SEPBlenderBridge;
 }  // namespace sep
 
 namespace sep {

@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "blender/types.h"
 
 namespace sep {
 namespace audio {
@@ -8,11 +9,9 @@ class AudioCapture;
 namespace pattern {
 class BlenderBridge;
 }
-struct SEPBlenderBridge;
 namespace blender {
 class CyclesRenderer; // Forward declaration if header not available
 }
-struct SEPBlenderBridge;
 namespace compat {
 
 std::unique_ptr<audio::AudioCapture> createAudioCapture();

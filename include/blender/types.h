@@ -55,3 +55,9 @@ struct SEPBlenderBridge {
     SEPAudioMetrics                              audio_metrics{};
     SEPPatternMetrics                            pattern_metrics{};
 };
+
+#ifdef __cplusplus
+namespace sep {
+using SEPBlenderBridge = ::SEPBlenderBridge;
+}  // namespace sep
+#endif

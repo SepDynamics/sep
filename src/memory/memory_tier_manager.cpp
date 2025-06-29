@@ -322,7 +322,7 @@ void MemoryTierManager::loadLTMFromPersistence() {
         for (const auto& rel : data_opt->relationship_data) {
             sep::quantum::PatternRelationship pr;
             pr.targetId = std::to_string(rel.id);
-            pr.type = static_cast<quantum::RelationshipType>(rel.type);
+            pr.type = static_cast<::sep::quantum::RelationshipType>(rel.type);
             pr.strength = rel.strength;
             pat->relationships.push_back(pr);
             pattern_relationships_[id][rel.id] = rel.strength;
@@ -331,20 +331,21 @@ void MemoryTierManager::loadLTMFromPersistence() {
     }
 }
 
-void MemoryTierManager::storeLTMToPersistence(const quantum::Pattern& pattern, const persistence::PersistentPatternData& data) {
+void MemoryTierManager::storeLTMToPersistence(const ::sep::quantum::Pattern& pattern,
+                                              const persistence::PersistentPatternData& data) {
     if (!redis_manager_ || !redis_manager_->isConnected())
         return;
     std::size_t id = pattern.id.empty() ? 0 : std::stoull(pattern.id);
     redis_manager_->storePattern(id, data, "ltm");
 }
 
-quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
+::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
     }
     const sep::pattern::PatternData* data = it->second.get();
-    quantum::Pattern* pattern = new quantum::Pattern();
+    ::sep::quantum::Pattern* pattern = new ::sep::quantum::Pattern();
     pattern->id = data->id;
     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
     pattern->data.assign(values, values + 4);
@@ -355,13 +356,13 @@ quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     return pattern;
 }
 
-const quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
+const ::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
     }
     const sep::pattern::PatternData* data = it->second.get();
-    quantum::Pattern* pattern = new quantum::Pattern();
+    ::sep::quantum::Pattern* pattern = new ::sep::quantum::Pattern();
     pattern->id = data->id;
     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
     pattern->data.assign(values, values + 4);

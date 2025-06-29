@@ -47,7 +47,7 @@ public:
 
     explicit Impl(const Config& config)
         : config_(config)
-        , qfh_processor_(std::make_unique<quantum::QuantumProcessorQFH>())
+        , qfh_processor_(std::make_unique<::sep::quantum::QuantumProcessorQFH>())
         , global_tick_(0) {
 
         
@@ -246,7 +246,7 @@ public:
 
 private:
     Config config_;
-    std::unique_ptr<quantum::QuantumProcessorQFH> qfh_processor_;
+    std::unique_ptr<::sep::quantum::QuantumProcessorQFH> qfh_processor_;
     cuda::CudaCore* cuda_core_ = nullptr;
     
     // Concurrent data structures

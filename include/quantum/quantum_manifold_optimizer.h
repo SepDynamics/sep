@@ -14,6 +14,11 @@
 #include <unordered_map>
 #include <vector>
 #include <cmath>
+#include <future>
+#include <algorithm>
+#include <numeric>
+#include <execution>
+#include <stdexcept>
 #include <glm/glm.hpp>
 
 #include "compat/cuda.h"
@@ -42,13 +47,14 @@ using ::sep::quantum::QuantumProcessorQFH;
 using ::sep::config::CUDAConfig;
 using ::sep::config::APIConfig;
 using ::sep::config::LogConfig;
+using ::sep::config::AnalyticsConfig;
 
 class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CudaConfig cuda;
-        ApiConfig api;
+        CUDAConfig cuda;
+        APIConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
     };
@@ -130,61 +136,11 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    CudaConfig cuda;
-    ApiConfig api;
+    CUDAConfig cuda;
+    APIConfig api;
     LogConfig log;
 };
 
-// Implementation class
-class QuantumManifoldOptimizer::Impl {
-public:
-    struct ManifoldPoint {
-        glm::vec3 position;
-        glm::vec3 momentum;
-        float curvature;
-        float coherence;
-        uint32_t dimension_index;
-        std::vector<uint32_t> neighbor_indices;
-    };
-    
-    struct GeodesicPath {
-        std::vector<ManifoldPoint> points;
-        float total_action;
-        float stability_metric;
-        bool is_minimal;
-    };
-    
-    explicit Impl(const Config& config);
-    OptimizationResult optimize(const QuantumState& initial_state, const OptimizationTarget& target);
-    void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
-    float computeManifoldCoherence(const glm::vec3& position) const;
-    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
-
-private:
-    Config config_;
-    std::vector<ManifoldPoint> manifold_points_;
-    glm::mat4 riemannian_metric_;
-    std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
-
-    void initializeManifold();
-    ManifoldPoint quantumStateToManifold(const QuantumState& state);
-    QuantumState manifoldToQuantumState(const ManifoldPoint& point);
-    ManifoldPoint targetToManifold(const OptimizationTarget& target);
-    GeodesicPath findOptimalGeodesic(const ManifoldPoint& start, const ManifoldPoint& target);
-    void applyRicciFlow(GeodesicPath& path);
-    void computeNeighborhoods();
-    void updateRiemannianMetric();
-    float computeLocalCurvature(const glm::vec3& position) const;
-    float computeRicciCurvature(const ManifoldPoint& point, const ManifoldPoint& prev, const ManifoldPoint& next) const;
-    glm::vec3 computeFlowDirection(const ManifoldPoint& point, float ricci_curvature) const;
-    float computePathAction(const GeodesicPath& path) const;
-    float computePathStability(const GeodesicPath& path) const;
-    float computeConvergenceMetric(const GeodesicPath& path) const;
-    float computeRicciScalar(const GeodesicPath& path) const;
-    float computeGeodesicDistance(const GeodesicPath& path) const;
-    float computeHolonomyPhase(const GeodesicPath& path) const;
-    float computeResonanceFromCurvature(float curvature) const;
-};
 
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
 class AdvancedMemoryTierOptimizer {
@@ -243,7 +199,7 @@ private:
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
 class CUDAQuantumKernel {
 public:
-    explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
+    explicit CUDAQuantumKernel(const CUDAConfig& config);
     ~CUDAQuantumKernel();
 
     // Warp-level primitive operations
@@ -261,7 +217,7 @@ public:
 private:
     cudaStream_t stream_;
     cufftHandle fft_plan_;
-    ManifoldConfig::CudaConfig config_;
+    CUDAConfig config_;
     
     void* d_workspace_;
     size_t workspace_size_;
@@ -270,7 +226,7 @@ private:
 // 4. API COHERENCE MODULATION
 class APICoherenceModulator {
 public:
-    explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
+    explicit APICoherenceModulator(const APIConfig& config);
 
     // Dynamic response coherence synthesis
     struct CoherenceResponse {
@@ -287,7 +243,7 @@ public:
                                          const std::vector<double>& weights);
 
 private:
-    ManifoldConfig::ApiConfig config_;
+    APIConfig config_;
     std::unordered_map<std::string, double> context_coherence_map_;
     
     std::vector<double> extractCoherenceFactors(const std::string& context,
@@ -297,7 +253,7 @@ private:
 // 5. HIERARCHICAL SEMANTIC PROCESSING
 class SemanticProcessor {
 public:
-    explicit SemanticProcessor(const ManifoldConfig::SemanticConfig& config);
+    explicit SemanticProcessor(const SemanticConfig& config);
 
     // Code embedding with structural awareness
     struct CodeEmbedding {
@@ -324,7 +280,7 @@ public:
         const std::vector<std::vector<SearchResult>>& modal_results);
 
 private:
-    ManifoldConfig::SemanticConfig config_;
+    SemanticConfig config_;
     std::unique_ptr<CUDAQuantumKernel> cuda_kernel_;
     
     double calculateQuantumInterference(const CodeEmbedding& a, const CodeEmbedding& b);
@@ -334,7 +290,7 @@ private:
 // 6. REAL-TIME PERFORMANCE ANALYTICS
 class PerformanceAnalyzer {
 public:
-    explicit PerformanceAnalyzer(const ManifoldConfig::AnalyticsConfig& config);
+    explicit PerformanceAnalyzer(const AnalyticsConfig& config);
 
     // Quantum state space analysis
     struct StateSpaceAnalysis {
@@ -367,7 +323,7 @@ public:
                                               const std::vector<double>& performance_metrics);
 
 private:
-    ManifoldConfig::AnalyticsConfig config_;
+    AnalyticsConfig config_;
     std::vector<double> performance_history_;
     std::mutex history_mutex_;
     

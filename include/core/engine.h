@@ -11,6 +11,7 @@
 #include "blender/types.h"  // Ensure SEPBlenderBridge definition available
 #include "compat/types.h"  // for QSHResult
 #include "quantum/qbsa.h"
+#include "blender/types.h"
 
 namespace sep {
 namespace cuda {

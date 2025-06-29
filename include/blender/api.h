@@ -13,7 +13,6 @@ extern "C" {
 struct GPUContext;
 struct Object;
 struct Mesh;
-struct SEPBlenderBridge;
 typedef uint64_t SEPMeshHandle;
 
 // Initialize bridge with Blender GPU context

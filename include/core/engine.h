@@ -10,6 +10,7 @@
 #include "core/types.h"
 #include "compat/types.h"  // for QSHResult
 #include "quantum/qbsa.h"
+#include "blender/types.h"
 
 namespace sep {
 namespace cuda {

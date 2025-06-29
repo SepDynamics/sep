@@ -9,7 +9,6 @@ class AudioCapture;
 namespace pattern {
 class BlenderBridge;
 }  // namespace pattern
-struct SEPBlenderBridge;
 namespace blender {
 class CyclesRenderer; // Forward declaration if header not available
 }

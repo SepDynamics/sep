@@ -112,7 +112,7 @@ struct HealthMetrics {
     std::atomic<size_t> timeoutRequests{0};
     std::atomic<size_t> rateLimitedCount{0};
     std::atomic<double> averageResponseTime{0.0};
-    // Track memory usage statistics
+    // Track memory usage statistics for API health reporting
     std::atomic<uint64_t> allocatedMemory{0};
     std::atomic<uint64_t> peakMemoryUsage{0};
     std::atomic<float> memoryFragmentation{0.0f};

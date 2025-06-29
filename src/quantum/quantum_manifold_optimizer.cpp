@@ -14,6 +14,12 @@
 // Define namespace alias for clarity
 namespace logging = sep::logging;
 #include <glm/glm.hpp>
+#include <chrono>
+#include <future>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <complex>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/norm.hpp>
 #include <algorithm>

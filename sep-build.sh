@@ -12,8 +12,10 @@ echo "==== SEP Engine Build Script with FULL Cycles and PipeWire Support ===="
 echo "Setting up build environment with real library paths - NO STUBS!"
 
 # --- Environment Setup ---
-BUILD_DIR="/sep/build"
-SRC_DIR="/sep"
+# Determine repository root dynamically so the script can run from any location
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+BUILD_DIR="${REPO_ROOT}/build"
+SRC_DIR="${REPO_ROOT}"
 LIB_DIR="${SRC_DIR}/lib"
 CYCLES_ROOT_DIR="${SRC_DIR}/extern/cycles"
 

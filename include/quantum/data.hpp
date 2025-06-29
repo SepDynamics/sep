@@ -20,7 +20,7 @@ struct PatternData {
     float entropy{0.0f};
     float mutation_rate{0.0f};
     std::uint32_t mutation_count{0};
-    MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+    sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
     std::vector<quantum::PatternRelationship> relationships;
 };
 

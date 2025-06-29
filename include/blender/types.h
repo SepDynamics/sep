@@ -6,10 +6,12 @@
 
 // Forward declaration for MemoryTierEnum from sep::math_common.h
 namespace sep {
+namespace memory {
   enum class MemoryTierEnum : int;
-  namespace pattern {
-    class BlenderBridge;
-  }
+}
+namespace pattern {
+  class BlenderBridge;
+}
 }
 
 // Using the SEPResult enum from sep namespace

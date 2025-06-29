@@ -1,10 +1,118 @@
-Of course. After analyzing all the provided materials—the source code, the architectural plans, and the newly drafted Mermaid diagrams—I have created a new, comprehensive architecture document.
-
-This document replaces the previous `ARCHITECTURE.md` and serves as the primary technical reference for the SEP Engine. It provides a high-level system overview, details the purpose and dependencies of each module, and uses your diagrams to illustrate the data and control flows.
-
----
-
 # SEP Engine: System Architecture
+
+
+```mermaid
+graph TB
+    %% Main Executable
+    subgraph "Executable Layer"
+        exe[sep_engine<br/>Final Binary]
+    end
+
+    %% Static Libraries with detailed component mapping
+    subgraph "Static Library Layer"
+        subgraph "API & Interface"
+            api[libsep_api.a<br/>HTTP/C Bridge/Rate Limiting<br/>└─ server.cpp<br/>└─ bridge_c.cpp<br/>└─ crow_adapter.cpp<br/>└─ sep_engine.cpp]
+        end
+
+        subgraph "Domain Components"
+            blender[libsep_blender.a<br/>Cycles Integration<br/>└─ cycles_renderer.cpp<br/>└─ mesh_handler.cpp<br/>└─ gpu_context.cpp]
+            audio[libsep_audio.a<br/>PipeWire Integration<br/>└─ pipewire_capture.cpp<br/>└─ pipeline.cpp]
+        end
+
+        subgraph "Quantum Processing"
+            quantum[libsep_quantum.a<br/>QBSA/QFH Algorithms<br/>└─ processor.cpp<br/>└─ evolution.cpp<br/>└─ pattern_processor.cpp<br/>└─ qfh.cpp]
+        end
+
+        subgraph "Memory Management"
+            memory[libsep_memory.a<br/>Tiered Storage<br/>└─ memory_tier_manager.cpp<br/>└─ quantum_coherence_manager.cpp<br/>└─ redis_manager.cpp]
+        end
+
+        subgraph "CUDA Backend"
+            compat[libsep_compat.a<br/>GPU Abstraction<br/>└─ core.cu<br/>└─ stream.cpp<br/>└─ cuda_api.cu<br/>└─ quantum_kernels.cu<br/>└─ pattern_kernels.cu]
+        end
+
+        subgraph "Core Foundation"
+            core[libsep_core.a<br/>Base Infrastructure<br/>└─ engine.cpp<br/>└─ manager.cpp<br/>└─ metrics_collector.cpp<br/>└─ logging.cpp<br/>└─ dag_graph.cpp]
+        end
+    end
+
+    %% External Dependencies
+    subgraph "Cycles Dependencies"
+        cycles_kernel[libcycles_kernel.a]
+        cycles_scene[libcycles_scene.a]
+        cycles_device[libcycles_device.a]
+        cycles_osl[libcycles_osl.a<br/>MISSING!]
+        osl_exec[liboslexec.so]
+        osl_comp[liboslcomp.so]
+        osl_query[liboslquery.so]
+    end
+
+    subgraph "System Libraries"
+        cuda_runtime[CUDA Runtime<br/>cudart/cuda_driver]
+        pthread[pthread]
+        redis[hiredis]
+        pipewire[pipewire-0.3]
+    end
+
+    %% Dependency Arrows with Link Order
+    exe -.->|1| compat
+    exe -.->|2| cycles_kernel
+    exe -.->|3| cycles_scene
+    exe -.->|4| cycles_device
+    exe -.->|5| cycles_osl
+    exe -.->|6| osl_exec
+    exe -.->|7| osl_comp
+    exe -.->|8| osl_query
+    exe ==>|9| api
+    exe ==>|10| memory
+    exe ==>|11| quantum
+    exe ==>|12| core
+    exe ==>|13| audio
+    exe ==>|14| blender
+
+    %% Internal Dependencies
+    api --> quantum
+    api --> memory
+    api --> core
+
+    blender --> cycles_kernel
+    blender --> cycles_scene
+    blender --> cycles_device
+    blender --> cycles_osl
+    blender --> core
+
+    audio --> core
+
+    quantum --> compat
+    quantum --> core
+    quantum -.->|manifold symbols| memory
+
+    memory --> core
+    memory --> redis
+
+    compat --> cuda_runtime
+
+    %% Critical Missing Links
+    cycles_device -.->|undefined refs| osl_exec
+    cycles_scene -.->|undefined refs| osl_comp
+    cycles_kernel -.->|undefined refs| osl_query
+
+    %% Symbol Conflicts
+    quantum x--x|multiple defs<br/>manifold::memory<br/>manifold::quantum<br/>manifold::cuda<br/>manifold::api| memory
+
+    %% Missing Implementations
+    api -.->|undefined| createQuantumProcessor[createQuantumProcessor<br/>NOT FOUND]
+    exe -.->|undefined| shutdownLogging[shutdownLogging<br/>NOT FOUND]
+
+    %% Styling
+    classDef missing fill:#ff6666,stroke:#ff0000,stroke-width:3px
+    classDef conflict fill:#ffaa66,stroke:#ff6600,stroke-width:3px
+    classDef critical fill:#66ff66,stroke:#00ff00,stroke-width:2px
+    
+    class cycles_osl,createQuantumProcessor,shutdownLogging missing
+    class quantum,memory conflict
+    class compat,core critical
+```
 
 ## 1. Introduction
 

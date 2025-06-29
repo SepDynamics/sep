@@ -61,4 +61,4 @@ struct SEPBlenderBridge {
 }  // namespace sep
 
 // Provide global alias for C API compatibility
-using SEPBlenderBridge = sep::SEPBlenderBridge;
+typedef sep::SEPBlenderBridge SEPBlenderBridge;

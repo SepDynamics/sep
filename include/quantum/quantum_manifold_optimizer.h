@@ -6,7 +6,9 @@
 #include <chrono>
 #include <complex>
 #include <condition_variable>
+#include <cstdint>
 #include <functional>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -42,6 +44,7 @@ using ::sep::quantum::QuantumProcessorQFH;
 using ::sep::config::CUDAConfig;
 using ::sep::config::APIConfig;
 using ::sep::config::LogConfig;
+using ::sep::config::AnalyticsConfig;
 
 class QuantumManifoldOptimizer {
 public:
@@ -133,6 +136,7 @@ struct ManifoldConfig {
     CudaConfig cuda;
     ApiConfig api;
     LogConfig log;
+    AnalyticsConfig analytics;
 };
 
 // Implementation class

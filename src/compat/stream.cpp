@@ -7,6 +7,9 @@
 
 #include "compat/stream.h"
 #include "compat/cuda_helpers.h" // for logCudaError
+#if !SEP_CUDA_AVAILABLE
+#include "compat/cuda_impl.h"
+#endif
 
 namespace sep::cuda {
 

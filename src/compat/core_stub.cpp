@@ -28,6 +28,12 @@ cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, c
     return cudaMemcpy(dst, src, size, kind);
 }
 
+cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
+    if (free) *free = 0;
+    if (total) *total = 0;
+    return cudaSuccess;
+}
+
 CudaCore::CudaCore() = default;
 
 Error CudaCore::initialize(int device_id) {

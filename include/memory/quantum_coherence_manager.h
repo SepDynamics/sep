@@ -74,8 +74,10 @@ class QuantumCoherenceManager {
     struct CoherenceMetrics {
         float global_coherence{0.f};
         float tier_coherence[3]{0.f, 0.f, 0.f};
+        float tier_fragmentation[3]{0.f, 0.f, 0.f};
         std::uint64_t total_patterns{0};
         std::uint64_t coherent_patterns{0};
+        std::uint64_t fragmented_patterns{0};
         float memory_pressure{0.f};
         float entanglement_density{0.f};
     };
@@ -99,6 +101,8 @@ class QuantumCoherenceManager {
         std::uint32_t tier_pattern_count[3]{0, 0, 0};
         std::vector<CoherenceAnomaly> anomalies;
         std::vector<TierMigration> tier_migrations;
+        float tier_fragmentation[3]{0.f, 0.f, 0.f};
+        std::uint32_t tier_pattern_count[3]{0, 0, 0};
     };
 
     struct TierAnalysis {

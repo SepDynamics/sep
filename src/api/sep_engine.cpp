@@ -428,7 +428,7 @@ nlohmann::json SepEngine::getHealthStatus()
 
 nlohmann::json SepEngine::getMemoryMetrics()
 {
-    SepEngine& engine = SepEngine::getInstance();
+    auto& engine = SepEngine::getInstance();
     if (!engine.impl_->initialized) {
         json result;
         result["success"] = false;
@@ -465,7 +465,7 @@ nlohmann::json SepEngine::getMemoryMetrics()
 
 nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
 {
-    SepEngine& engine = SepEngine::getInstance();
+    auto& engine = SepEngine::getInstance();
     if (!engine.impl_->initialized) {
         json result;
         result["success"] = false;

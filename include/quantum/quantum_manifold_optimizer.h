@@ -40,11 +40,22 @@ namespace sep::quantum { class PatternEvolutionBridge; }
 namespace sep::quantum::manifold {
 
 using ::sep::memory::MemoryTierEnum;
-using ::sep::quantum::QuantumState;
+using QuantumStateStruct = ::sep::quantum::QuantumState;
 using QuantumPattern = ::sep::quantum::manifold::QuantumPattern;
-using ManifoldQuantumState = ::sep::quantum::manifold::QuantumState;
+using ManifoldQuantumState = ::sep::quantum::manifold::ManifoldQuantumState;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
+// Configuration structures from the core configuration module use
+// capitalised names (e.g. CUDAConfig). Import them with matching
+// casing to avoid "does not name a type" errors.
+using CoreCUDAConfig = ::sep::config::CUDAConfig;
+using CoreAPIConfig = ::sep::config::APIConfig;
+using CoreLogConfig = ::sep::config::LogConfig;
+using CoreAnalyticsConfig = ::sep::config::AnalyticsConfig;
+
+// Forward declare configuration structs used by QuantumManifoldOptimizer
+struct CudaConfig;
+struct ApiConfig;
 
 class QuantumManifoldOptimizer {
 public:

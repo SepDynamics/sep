@@ -17,6 +17,8 @@
 
 namespace sep::memory {
 
+using ::sep::memory::MemoryTierEnum;
+
 // Initialize singleton instance
 std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 std::once_flag MemoryTierManager::once_flag_;

@@ -19,6 +19,8 @@
 
 namespace sep::memory {
 
+using ::sep::memory::MemoryTierEnum;
+
 namespace {
     // Memory coherence constants from quantum information theory
     constexpr float COHERENCE_DECAY_RATE = 0.02f;

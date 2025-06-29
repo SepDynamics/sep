@@ -17,7 +17,7 @@ LockFreeRateLimiter::LockFreeRateLimiter(unsigned int requests_per_minute)
   metrics_collector_ = std::make_unique<BackgroundCleanup>(
       METRICS_UPDATE_INTERVAL, [this](const auto& now) {
         (void)now;
-        metrics_mutex_.lock();
+        std::lock_guard<std::mutex> lock(metrics_mutex_);
         adaptive_multiplier_.store(calculateAdaptiveMultiplier(),
                                    std::memory_order_release);
       });

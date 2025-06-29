@@ -41,7 +41,7 @@ echo "Checking for PipeWire development headers..."
 export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:$PKG_CONFIG_PATH 
 if command -v pkg-config >/dev/null && pkg-config --exists libpipewire-0.3; then
   PIPEWIRE_INCLUDE_DIR=$(pkg-config --variable=includedir libpipewire-0.3)
-  PIPEWIRE_LIB_PATH=$(pkg-config --libs-only-L libpipewire-0.3 | sed 's/-L//g')
+  PIPEWIRE_LIB_PATH=$(pkg-config --variable=libdir libpipewire-0.3)
   PIPEWIRE_LIB_FILE="${PIPEWIRE_LIB_PATH}/libpipewire-0.3.so"
 
   if [ -d "${PIPEWIRE_INCLUDE_DIR}" ] && [ -f "${PIPEWIRE_LIB_FILE}" ]; then

@@ -12,11 +12,6 @@
 
 namespace sep::quantum {
 
-// Forward declarations
-namespace manifold {
-class QuantumManifoldOptimizer;
-}
-
 enum class QuantumPhase {
     Coherent,
     Superposition,

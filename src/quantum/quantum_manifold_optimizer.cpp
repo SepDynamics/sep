@@ -20,6 +20,11 @@ namespace logging = sep::logging;
 #include <mutex>
 #include <condition_variable>
 #include <complex>
+#include <string>
+#include <unordered_map>
+#include <atomic>
+#include <array>
+#include <cstdint>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/norm.hpp>
 #include <algorithm>

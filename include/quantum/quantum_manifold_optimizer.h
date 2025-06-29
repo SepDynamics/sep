@@ -13,6 +13,12 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include <future>
+#include <algorithm>
+#include <numeric>
+#include <execution>
+#include <stdexcept>
+#include <cstdint>
 #include <cmath>
 #include <glm/glm.hpp>
 
@@ -47,8 +53,8 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CudaConfig cuda;
-        ApiConfig api;
+        sep::config::CUDAConfig cuda;
+        sep::config::APIConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
     };
@@ -104,7 +110,7 @@ class PerformanceAnalyzer;
     } quantum;
 
     // CUDA acceleration parameters
-    struct CudaConfig {
+    struct CUDAConfig {
         int warp_tile_size = 16;
         int coherence_block_size = 256;
         int similarity_grid_dim = 32;
@@ -113,7 +119,7 @@ class PerformanceAnalyzer;
     } cuda;
 
     // API coherence modulation
-    struct ApiConfig {
+    struct APIConfig {
         double base_coherence = 0.5;
         double context_weight = 0.3;
         double state_weight = 0.7;
@@ -130,9 +136,15 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    CudaConfig cuda;
-    ApiConfig api;
-    LogConfig log;
+    sep::config::CUDAConfig cuda;
+    sep::config::APIConfig api;
+    sep::config::LogConfig log;
+    sep::config::AnalyticsConfig analytics;
+
+    using CUDAConfig = sep::config::CUDAConfig;
+    using APIConfig = sep::config::APIConfig;
+    using LogConfig = sep::config::LogConfig;
+    using AnalyticsConfig = sep::config::AnalyticsConfig;
 };
 
 // Implementation class
@@ -243,7 +255,7 @@ private:
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
 class CUDAQuantumKernel {
 public:
-    explicit CUDAQuantumKernel(const ManifoldConfig::CudaConfig& config);
+    explicit CUDAQuantumKernel(const ManifoldConfig::CUDAConfig& config);
     ~CUDAQuantumKernel();
 
     // Warp-level primitive operations
@@ -261,7 +273,7 @@ public:
 private:
     cudaStream_t stream_;
     cufftHandle fft_plan_;
-    ManifoldConfig::CudaConfig config_;
+    ManifoldConfig::CUDAConfig config_;
     
     void* d_workspace_;
     size_t workspace_size_;
@@ -270,7 +282,7 @@ private:
 // 4. API COHERENCE MODULATION
 class APICoherenceModulator {
 public:
-    explicit APICoherenceModulator(const ManifoldConfig::ApiConfig& config);
+    explicit APICoherenceModulator(const ManifoldConfig::APIConfig& config);
 
     // Dynamic response coherence synthesis
     struct CoherenceResponse {
@@ -287,7 +299,7 @@ public:
                                          const std::vector<double>& weights);
 
 private:
-    ManifoldConfig::ApiConfig config_;
+    ManifoldConfig::APIConfig config_;
     std::unordered_map<std::string, double> context_coherence_map_;
     
     std::vector<double> extractCoherenceFactors(const std::string& context,

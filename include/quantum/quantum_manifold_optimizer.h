@@ -1,8 +1,6 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
-#pragma once
-
 #include "quantum/qbsa.h"
 #include "quantum/qfh.h"
 #include "quantum/types.h"
@@ -13,11 +11,22 @@
 #include "compat/cuda_runtime.h"
 #include "compat/cuda.h"
 #include "compat/cufft.h"
+
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <cmath>
+#include <complex>
+#include <condition_variable>
+#include <future>
 #include <glm/glm.hpp>
 #include <memory>
-#include <vector>
+#include <mutex>
 #include <string>
-#include <cmath>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
 
 namespace sep::quantum::manifold {
 
@@ -108,19 +117,6 @@ class PerformanceAnalyzer;
     } api;
 
 using sep::memory::MemoryTierEnum;
-#include <chrono>
-#include <atomic>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <complex>
-#include <functional>
-#include <vector>
-#include <unordered_map>
-#include <array>
-#include <string>
-#include "compat/cufft.h"
-
 
 // Forward declarations
 class HamiltonianEvolver;

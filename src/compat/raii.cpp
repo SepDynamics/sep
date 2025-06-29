@@ -35,16 +35,6 @@ bool debugAllocEnabled() {
 
 namespace sep::cuda {
 
-// The real CUDA headers (or their stub replacements) already provide the
-// necessary type aliases. Do not redefine them here to avoid conflicts with
-// the declarations pulled in by <compat/cuda_defs.h>.
-// Using constants from cuda.h instead of redefining them
-
-// The inline stub implementations provided by <compat/cuda_impl.h> are
-// sufficient for building without the real CUDA runtime, so no additional
-// shims are required here.  When CUDA is unavailable, bring those
-// stub functions into this namespace so the rest of the code can call
-// them transparently.
 #if !SEP_CUDA_AVAILABLE
 // Provide lightweight wrappers when the real CUDA runtime is absent.
 // These implementations match the declarations in cuda_runtime.h
@@ -134,10 +124,6 @@ void StreamRAII::synchronize() const {
 }
 
 EventRAII::EventRAII() {
-    // Use the generic pointer version for maximum compatibility with either
-    // the real CUDA runtime or the stub implementation. Casting through
-    // the stub-specific type is unnecessary and breaks when the stub is
-    // absent, so simply pass the address of the underlying handle.
     cudaError_t err = cudaEventCreate(&event_);
     if (err != cudaSuccess) {
         event_ = nullptr;

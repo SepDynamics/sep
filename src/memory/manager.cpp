@@ -66,9 +66,6 @@ void *Manager::getTracer() {
 #endif
 }
 
-// Tracing stub retained for API compatibility
-// Note: This stub assumes no actual tracing implementation.
-
 std::shared_ptr<spdlog::logger> Manager::createLogger(const std::string &name,
                                                       const LoggerConfig &config) {
   auto logger = spdlog::get(name);

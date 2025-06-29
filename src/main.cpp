@@ -162,11 +162,6 @@ int main(int argc, char* argv[]) {
         return 1;
       }
 #else
-      // Even though Cycles support is not available in this build,
-      // we can still use the stub implementation
-      spdlog::info("Using Cycles stub implementation");
-      
-      // Create the Cycles renderer (will use stub implementation)
       sep::blender::CyclesRenderer renderer;
       
       // Initialize the renderer

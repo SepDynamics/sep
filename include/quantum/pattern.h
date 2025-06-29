@@ -7,7 +7,7 @@
 
 namespace sep::quantum::manifold {
 
-enum class QuantumState {
+enum class ManifoldQuantumState {
     SUPERPOSITION,
     COHERENT,
     COLLAPSED
@@ -18,7 +18,7 @@ struct QuantumPattern {
     double coherence;
     double stability;
     int generation;
-    QuantumState state;
+    ManifoldQuantumState state;
     double phase;
     std::complex<double> amplitude;
 };

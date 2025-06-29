@@ -9,7 +9,7 @@ class AudioCapture;
 namespace pattern {
 class BlenderBridge;
 }  // namespace pattern
-struct SEPBlenderBridge;
+// SEPBlenderBridge is fully defined in blender/types.h
 namespace blender {
 class CyclesRenderer; // Forward declaration if header not available
 }

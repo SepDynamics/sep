@@ -54,16 +54,13 @@ using ::sep::config::CUDAConfig;
 using ::sep::config::APIConfig;
 using ::sep::config::LogConfig;
 using ::sep::config::AnalyticsConfig;
-using ::sep::config::APIConfig;
-using ::sep::config::CUDAConfig;
-using ::sep::config::LogConfig;
 
 class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CudaConfig cuda;
-        ApiConfig api;
+        CUDAConfig cuda;
+        APIConfig api;
         LogConfig log;
         double base_resonance_frequency{0.42};
         double convergence_threshold{0.001};
@@ -79,7 +76,6 @@ public:
         QuantumState optimized_state{};
         std::vector<float> optimized_values;
         std::string error_message;
-        QuantumState optimized_state{};
     };
 
     struct OptimizationTarget {

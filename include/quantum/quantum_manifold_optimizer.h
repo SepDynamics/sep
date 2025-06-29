@@ -40,12 +40,13 @@
 #include "quantum/qfh.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/types.h"
+#include "quantum/pattern.h"
 
 namespace sep::quantum::manifold {
 
 using ::sep::memory::MemoryTierEnum;
 using ::sep::quantum::QuantumState;
-using QuantumPattern = ::sep::quantum::Pattern;
+using QuantumPattern = ::sep::quantum::manifold::QuantumPattern;
 using ::sep::quantum::QFHResult;
 using ::sep::quantum::QuantumProcessorQFH;
 // Configuration structures from the core configuration module use
@@ -53,8 +54,8 @@ using ::sep::quantum::QuantumProcessorQFH;
 // import them with different casing which resulted in a large number of
 // "does not name a type" compilation errors.  Import them with the
 // correct names instead.
-using ::sep::config::CudaConfig;
-using ::sep::config::ApiConfig;
+using ::sep::config::CUDAConfig;
+using ::sep::config::APIConfig;
 using ::sep::config::LogConfig;
 using ::sep::config::AnalyticsConfig;
 

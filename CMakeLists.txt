@@ -201,22 +201,8 @@ find_and_add_library(OpenPGL_LIBRARY
   NAMES pgl
   PATHS ${CMAKE_SOURCE_DIR}/lib ${CMAKE_INSTALL_PREFIX}/lib /usr/lib64 /usr/local/lib /usr/lib)
 
-# TBB (multiple versions for compatibility)
-find_library(TBB_LIBRARY NAMES tbb)
-find_library(TBB_MALLOC_LIBRARY NAMES tbbmalloc)
-find_library(TBB2_LIBRARY NAMES tbb.so.2 tbb2 PATHS
-  /usr/lib64
-  /usr/local/lib
-  /usr/lib
-  /lib64
-  /lib
-)
-
-# If TBB2 isn't found, create a stub variable that won't break the build
-if(NOT TBB2_LIBRARY)
-  message(STATUS "TBB2 library not found, using stub")
-  set(TBB2_LIBRARY "")
-endif()
+# TBB (Threading Building Blocks)
+find_package(TBB REQUIRED COMPONENTS tbb tbbmalloc)
 
 # OpenSubdiv
 find_library(OPENSUBDIV_CPU_LIBRARY NAMES osdCPU)
@@ -372,7 +358,7 @@ set(EXTERNAL_LINK_ORDER
     # OpenSubdiv with its TBB dependency
     ${OPENSUBDIV_CPU_LIBRARY}
     ${OPENSUBDIV_GPU_LIBRARY}
-    ${TBB2_LIBRARY}  # Specific version for OpenSubdiv
+    TBB::tbb  # OpenSubdiv requires TBB
 
     # Path guiding
     ${OpenPGL_LIBRARY}
@@ -390,8 +376,8 @@ set(EXTERNAL_LINK_ORDER
     ${EMBREE_LIBRARY}
     
     # Utility libraries
-    ${TBB_LIBRARY}
-    ${TBB_MALLOC_LIBRARY}
+    TBB::tbb
+    TBB::tbbmalloc
     ${BLOSC_LIBRARY}
     ${ZSTD_LIBRARY}
     ${PUGIXML_LIBRARY}

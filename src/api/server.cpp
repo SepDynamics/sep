@@ -6,11 +6,15 @@
 #include "api/types.h"
 #include "api/ollama_client.h"
 #include "core/types.h"
+#include "core/common.h"
 #include "api/rate_limit_middleware.h"
 #include "api/request_interface.h"
 #include "api/sep_engine.h"
 #include "quantum/types.h"
+#include "quantum/processor.h"
 #include "api/server.h"
+#include "quantum/cycles.h"
+
 #include "compat/types.h"
 
 #include <chrono>
@@ -157,7 +161,7 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
   return error_response.dump();
 }
 
-void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& body,
+void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& response_body,
                                int64_t duration) {
     if (!logger_) return;
  std::lock_guard<std::mutex> lock(metrics_mutex_); // Fix: Acquire lock first // Fix: Added comment
@@ -782,6 +786,199 @@ void SEPApiServer::handleSignal(int signal) {
     instance_->logger_->info("Received signal {}, shutting down", signal); // Fix: Use logger_
     instance_->stop();
   }
+}
+
+void SEPApiServer::setupBlenderRoutes() {
+    // Pattern processing endpoint
+    app_->route_dynamic("/api/v1/patterns/process")
+    .methods(::crow::HTTPMethod::POST)
+    ([](const ::crow::request& req) {
+        try {
+            auto json = nlohmann::json::parse(std::string(req.body));
+            if (!json.is_object()) {
+                ::crow::response res;
+                res.code = HTTP_BAD_REQUEST;
+                res.write("Invalid JSON format");
+                return res;
+            }
+
+            // Extract mesh data
+            auto mesh = json["mesh"];
+            auto config = json["config"];
+            
+            // Configure processing
+            sep::quantum::ProcessingConfig proc_config;
+            proc_config.max_patterns = config.value("max_patterns", 10000);
+            proc_config.mutation_rate = config.value("mutation_rate", 0.01f);
+            proc_config.ltm_coherence_threshold = config.value("ltm_threshold", 0.9f);
+            proc_config.mtm_coherence_threshold = config.value("mtm_threshold", 0.6f);
+            proc_config.stability_threshold = config.value("stability", 0.8f);
+            proc_config.enable_cuda = config.value("enable_cuda", false);
+            
+            // Create pattern processor
+            auto processor = std::make_unique<sep::pattern::PatternProcessor>();
+            if (processor->init(nullptr) != sep::SEPResult::SUCCESS) {
+                ::crow::response res;
+                res.body = "Failed to initialize pattern processor";
+                res.code = 500;
+                return res;
+            }
+
+            // Process vertices through quantum manifold
+            std::vector<sep::pattern::PatternData> patterns;
+            for (const auto& v : mesh["vertices"]) {
+                sep::pattern::PatternData pattern;
+                pattern.position = glm::vec4(
+                    v[0].get<float>(),
+                    v[1].get<float>(),
+                    v[2].get<float>(),
+                    1.0f
+                );
+                pattern.attributes = glm::vec4(0.0f);
+                patterns.push_back(pattern);
+            }
+
+            // Add patterns to processor
+            for (const auto& pattern : patterns) {
+                if (processor->addPattern(pattern) != sep::SEPResult::SUCCESS) {
+                    ::crow::response res;
+                    res.body = "Failed to add pattern to processor";
+                    res.code = 500;
+                    return res;
+                }
+            }
+
+            // Process patterns
+            const auto& results = processor->process();
+
+            // Prepare response JSON
+            nlohmann::json response;
+            response["success"] = true;
+
+            // Processed patterns
+            nlohmann::json processed_patterns = nlohmann::json::array();
+            for (const auto& pattern : results) {
+                nlohmann::json processed;
+                nlohmann::json attr_array = nlohmann::json::array();
+                attr_array.push_back(pattern.attributes.x);
+                attr_array.push_back(pattern.attributes.y);
+                attr_array.push_back(pattern.attributes.z);
+                attr_array.push_back(pattern.attributes.w);
+                processed["attributes"] = attr_array;
+                processed["metrics"] = {
+                    {"coherence", pattern.coherence},
+                    {"stability", pattern.stability},
+                    {"entropy", pattern.entropy}
+                };
+                processed_patterns.push_back(processed);
+            }
+            response["processed_patterns"] = processed_patterns;
+
+            // Return success response
+            ::crow::response res;
+            res.body = response.dump();
+            res.code = 200;
+            return res;
+
+        } catch (const std::exception& e) {
+            ::crow::response res;
+            res.body = std::string("Error processing request: ") + e.what();
+            res.code = 500;
+            return res;
+        }
+    });
+    
+    // Cycles evolution endpoint
+    app_->route_dynamic("/api/v1/cycles/evolve")
+    .methods(::crow::HTTPMethod::POST)
+    ([](const ::crow::request& req) {
+        try {
+            auto json = nlohmann::json::parse(std::string(req.body));
+            
+            // Get parameters
+            std::string object_name = json["object_name"].get<std::string>();
+            int iterations = json["iterations"].get<int>();
+            auto pattern_state = json["pattern_state"];
+            auto cycles_config = json["cycles_config"];
+            
+            // Initialize Cycles integration
+            sep::quantum::cycles::QuantumRenderer renderer;
+            renderer.initialize(cycles_config["device"].get<std::string>() == "GPU");
+            
+            // Create quantum evolution scene
+            sep::quantum::cycles::QuantumScene scene;
+            scene.coherence = static_cast<double>(pattern_state["coherence"].get<float>());
+            scene.stability = static_cast<double>(pattern_state["stability"].get<float>());
+            scene.entropy = static_cast<double>(pattern_state["entropy"].get<float>());
+            scene.complexity = static_cast<double>(pattern_state["complexity"].get<float>());
+            scene.qbsa_state = pattern_state["qbsa_state"].get<int>();
+            scene.qfh_level = pattern_state["qfh_level"].get<int>();
+            
+            // Run quantum evolution through Cycles
+            auto evolution_result = renderer.evolveQuantumPattern(scene, iterations);
+            
+            // Prepare response
+            nlohmann::json response;
+            response["success"] = true;
+            
+            // Final quantum state after evolution
+            response["final_state"] = {
+                {"coherence", evolution_result.final_coherence},
+                {"stability", evolution_result.final_stability},
+                {"entropy", evolution_result.final_entropy},
+                {"complexity", evolution_result.final_complexity}
+            };
+            
+            // Evolution trajectory
+            nlohmann::json trajectory = nlohmann::json::array();
+            for (size_t i = 0; i < evolution_result.trajectory.size(); ++i) {
+                trajectory.push_back({
+                    {"step", i},
+                    {"coherence", evolution_result.trajectory[i].coherence},
+                    {"field_strength", evolution_result.trajectory[i].field_strength}
+                });
+            }
+            response["evolution_trajectory"] = trajectory;
+            
+            // Mesh evolution if requested
+            if (evolution_result.has_mesh_data) {
+                nlohmann::json mesh_evo = nlohmann::json::array();
+                for (const auto& vertex : evolution_result.evolved_vertices) {
+                    mesh_evo.push_back({vertex.x, vertex.y, vertex.z});
+                }
+                response["mesh_evolution"] = mesh_evo;
+            }
+            
+            ::crow::response res;
+            res.body = response.dump();
+            res.code = 200;
+            return res;
+            
+        } catch (const std::exception& e) {
+            ::crow::response res;
+            res.body = std::string("Error processing request: ") + e.what();
+            res.code = 500;
+            return res;
+        }
+    });
+    
+    // Health check endpoint
+    app_->route_dynamic("/health")
+    .methods(::crow::HTTPMethod::GET)
+    ([](const ::crow::request&) {
+        nlohmann::json response = {
+            {"status", "running"},
+            {"engine_initialized", sep::api::SepEngine::getInstance().getHealthStatus()["initialized"]},
+            {"quantum_processor_ready", true},
+            {"cycles_available", true}, // Cycles support determined at build time
+            {"timestamp", std::time(nullptr)}
+        };
+        
+        ::crow::response res;
+        res.body = response.dump();
+        res.code = 200;
+        return res;
+    });
 }
 
 }  // namespace sep::api

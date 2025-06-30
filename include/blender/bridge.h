@@ -13,7 +13,8 @@
 #include "blender/gpu_context.h"
 #include "blender/pattern_common.h"
 #include "quantum/data.hpp"
-#include "quantum/pattern_processor.h"
+#include "quantum/processor.h"
+
 #include "blender/config.h"
 
 #include "blender/types.h"
@@ -120,7 +121,7 @@ class BlenderBridge {
   bool checkResourceThresholds();
 
   sep::GPUContext* gpu_context_;  // Changed to sep::GPUContext
-  std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor_;
+  std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor_;  // Base pattern processor from processor.h
 
   std::unordered_map<sep::pattern::ObjectHandle, ObjectState> objects_;
   ::sep::shim::vector<std::shared_ptr<sep::pattern::PatternObserver>> observers_;

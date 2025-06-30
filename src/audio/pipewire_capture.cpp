@@ -77,12 +77,33 @@ PipeWireCapture::~PipeWireCapture()
     cleanup();
 }
 
+// Updated src/audio/pipewire_capture.cpp segment
+// Replace the init method with this improved version
+
 AudioError PipeWireCapture::init(const AudioConfig& config)
 {
     std::lock_guard<std::mutex> lock(mutex_);
     config_ = config;
 
-    // Create threading loop
+    // Check for runtime directory first
+    const char* runtime_dir = getenv("XDG_RUNTIME_DIR");
+    if (!runtime_dir) {
+        // Try to set it based on UID
+        uid_t uid = getuid();
+        char runtime_path[256];
+        snprintf(runtime_path, sizeof(runtime_path), "/run/user/%d", uid);
+        
+        // Check if directory exists
+        struct stat st;
+        if (stat(runtime_path, &st) == 0 && S_ISDIR(st.st_mode)) {
+            setenv("XDG_RUNTIME_DIR", runtime_path, 1);
+            spdlog::info("Set XDG_RUNTIME_DIR to: {}", runtime_path);
+        } else {
+            spdlog::warn("XDG_RUNTIME_DIR not set and {} doesn't exist", runtime_path);
+        }
+    }
+
+    // Create threading loop with better error handling
     loop_ = pw_thread_loop_new("sep-audio", nullptr);
     if (!loop_)
     {
@@ -90,29 +111,76 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
         return AudioError::INIT_FAILED;
     }
 
+    // Start the loop before creating context
+    if (pw_thread_loop_start(loop_) < 0) {
+        spdlog::error("Failed to start PipeWire thread loop");
+        cleanup();
+        return AudioError::INIT_FAILED;
+    }
+
+    // Lock the thread loop for setup
+    pw_thread_loop_lock(loop_);
+
     // Create context with client config
-    struct pw_properties* props = pw_properties_new(PW_KEY_CONFIG_NAME, "client.conf", nullptr);
-    context_                    = pw_context_new(pw_thread_loop_get_loop(loop_), props, 0);
+    struct pw_properties* props = pw_properties_new(
+        PW_KEY_CONFIG_NAME, "client.conf",
+        PW_KEY_CLIENT_NAME, "SEP Engine",
+        PW_KEY_CLIENT_API, "alsa",
+        nullptr
+    );
+    
+    context_ = pw_context_new(pw_thread_loop_get_loop(loop_), props, 0);
     if (!context_)
     {
         spdlog::error("Failed to create PipeWire context");
-        spdlog::error("Runtime dir: {}", getenv("XDG_RUNTIME_DIR") ? getenv("XDG_RUNTIME_DIR") : "not set");
+        pw_thread_loop_unlock(loop_);
         cleanup();
         return AudioError::INIT_FAILED;
     }
 
-    // Connect to existing PipeWire daemon
-    struct pw_properties* core_props = pw_properties_new(PW_KEY_REMOTE_NAME, "pipewire-0", nullptr);
-    core_                            = pw_context_connect(context_, core_props, 0);
-    if (!core_)
-    {
-        spdlog::error("Failed to connect to PipeWire: {}", strerror(errno));
-        spdlog::error("Runtime dir: {}", getenv("XDG_RUNTIME_DIR") ? getenv("XDG_RUNTIME_DIR") : "not set");
+    // Try to connect with retry logic
+    int retry_count = 3;
+    while (retry_count > 0) {
+        struct pw_properties* core_props = pw_properties_new(
+            PW_KEY_REMOTE_NAME, nullptr,  // Use default daemon
+            nullptr
+        );
+        
+        core_ = pw_context_connect(context_, core_props, 0);
+        if (core_) {
+            break;
+        }
+        
+        spdlog::warn("Failed to connect to PipeWire (attempt {}/3): {}", 
+                     4 - retry_count, strerror(errno));
+        retry_count--;
+        
+        if (retry_count > 0) {
+            pw_thread_loop_unlock(loop_);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            pw_thread_loop_lock(loop_);
+        }
+    }
+
+    if (!core_) {
+        spdlog::error("Failed to connect to PipeWire after 3 attempts");
+        spdlog::error("Make sure PipeWire is running: systemctl --user status pipewire");
+        pw_thread_loop_unlock(loop_);
         cleanup();
         return AudioError::INIT_FAILED;
     }
 
-    return setupStream();
+    pw_thread_loop_unlock(loop_);
+
+    // Setup stream
+    auto result = setupStream();
+    if (result != AudioError::NONE) {
+        cleanup();
+        return result;
+    }
+
+    spdlog::info("PipeWire audio capture initialized successfully");
+    return AudioError::NONE;
 }
 
 AudioError PipeWireCapture::setupStream()

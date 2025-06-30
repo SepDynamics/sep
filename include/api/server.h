@@ -175,6 +175,11 @@ class SEPApiServer : public Server {
   void setup_routes();
 
   /**
+   * @brief Setup Blender-specific routes
+   */
+  void setupBlenderRoutes();
+
+  /**
    * @brief Setup signal handlers
    */
   void setup_signal_handlers();

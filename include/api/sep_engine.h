@@ -20,7 +20,6 @@
 #include <string>
 
 namespace sep::context {
-class Processor;
 class RelationshipManager;
 }  // namespace sep::context
 namespace sep::pattern {

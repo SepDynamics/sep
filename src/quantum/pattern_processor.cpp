@@ -1,4 +1,4 @@
-#include "quantum/pattern_processor.h"
+
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
 #include "memory/types.h"
@@ -14,75 +14,63 @@ using ::sep::memory::MemoryTierEnum;
 #include <memory>
 
 namespace sep::quantum {
-
 namespace {
-class PatternQuantumProcessorImpl final : public PatternQuantumProcessor {
+class PatternQuantumProcessorImpl final : public sep::pattern::PatternProcessor {
 public:
     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config)
         : quantum_processor_(createQuantumProcessor(config)) {}
 
-    PatternProcessResult processPattern(
-        const QuantumState& state,
-        const std::string& pattern_id) override {
-        PatternProcessResult result;
-        result.state = state;
-        result.pattern_id = pattern_id;
-        result.memory_tier = ::sep::memory::MemoryTierEnum::STM; // Default to Short-Term Memory
+    sep::quantum::ProcessingResult processPattern(
+        const sep::quantum::Pattern& pattern) {
+        sep::quantum::ProcessingResult result;
+        result.pattern = pattern;
+        result.pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
         result.success = false;
-        result.error_message.clear();
         
-        // Convert state to a format the quantum processor can use
-        glm::vec3 stateData(state.coherence, state.stability, state.entropy);
-        size_t numericId = std::hash<std::string>{}(pattern_id);
+        // Convert quantum state to a format the quantum processor can use
+        const auto& quantum_state = pattern.quantum_state;
+        glm::vec3 stateData(quantum_state.coherence, quantum_state.stability, quantum_state.entropy);
         
         // Process using quantum processor
-        bool success = quantum_processor_->processPattern(stateData, numericId);
+        bool success = quantum_processor_->processPattern(stateData, std::hash<std::string>{}(pattern.id));
         
         result.success = success;
         if (success) {
-            // Update state values based on processing
-            result.coherence_score = state.coherence * 1.05f; // Simulate evolution
-            result.stability_score = state.stability * 1.02f;
-            
-            // Clamp values
-            result.coherence_score = std::min(1.0f, result.coherence_score);
-            result.stability_score = std::min(1.0f, result.stability_score);
-            
-            // Update state
-            result.state.coherence = result.coherence_score;
-            result.state.stability = result.stability_score;
-            result.state.generation++;
+            // Update quantum state values based on processing
+            auto& evolved_state = result.pattern.quantum_state;
+            evolved_state.coherence = std::min(1.0f, quantum_state.coherence * 1.05f);
+            evolved_state.stability = std::min(1.0f, quantum_state.stability * 1.02f);
+            evolved_state.generation++;
+
+            // Determine memory tier based on coherence and stability
+            ::sep::memory::MemoryTierEnum previous_tier = evolved_state.memory_tier;
+            if (evolved_state.coherence >= pattern::LTM_COHERENCE_THRESHOLD &&
+                evolved_state.stability >= sep::quantum::STABILITY_THRESHOLD) {
+                evolved_state.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
+            } else if (evolved_state.coherence >= pattern::MTM_COHERENCE_THRESHOLD) {
+                evolved_state.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
+            }
+            // Memory tier transition is tracked in the quantum state
+            result.success = true;
         } else {
             // Handle error case
-            result.coherence_score = 0.0f;
-            result.stability_score = 0.0f;
+            auto& failed_state = result.pattern.quantum_state;
+            failed_state.coherence = 0.0f;
+            failed_state.stability = 0.0f;
             result.error_message = "QuantumProcessor failed";
+            result.success = false;
         }
-
-        // Determine memory tier
-        ::sep::memory::MemoryTierEnum previous_tier = result.memory_tier;
-        if (result.coherence_score >= constants::LTM_COHERENCE_THRESHOLD &&
-            result.stability_score >= pattern::STABILITY_THRESHOLD) {
-            result.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
-        } else if (result.coherence_score >= constants::MTM_COHERENCE_THRESHOLD) {
-            result.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
-        }
-        result.tier_changed = result.memory_tier != previous_tier;
 
         return result;
     }
 
-    std::vector<PatternProcessResult> processBatch(
-        const std::vector<QuantumState>& states,
-        const std::vector<std::string>& pattern_ids) override {
-        if (states.size() != pattern_ids.size()) {
-            return {};
-        }
+    std::vector<sep::quantum::ProcessingResult> processBatch(
+        const std::vector<sep::quantum::Pattern>& patterns) {
+        std::vector<sep::quantum::ProcessingResult> results;
+        results.reserve(patterns.size());
         
-        std::vector<PatternProcessResult> results(states.size());
-        
-        for (size_t i = 0; i < states.size(); ++i) {
-            results.push_back(processPattern(states[i], pattern_ids[i]));
+        for (const auto& pattern : patterns) {
+            results.push_back(processPattern(pattern));
         }
         
         return results;
@@ -90,7 +78,7 @@ public:
 
     float calculateCoherence(
         const QuantumState& state_a,
-        const QuantumState& state_b) const override {
+        const QuantumState& state_b) const {
         // Convert states to vec3 format for quantum processor
         glm::vec3 vec_a(state_a.coherence, state_a.stability, state_a.entropy);
         glm::vec3 vec_b(state_b.coherence, state_b.stability, state_b.entropy);
@@ -99,24 +87,23 @@ public:
         return quantum_processor_->calculateCoherence(vec_a, vec_b);
     }
 
-    bool isStable(const QuantumState& state) const override {
+    bool isStable(const QuantumState& state) const {
         return state.stability >= pattern::STABILITY_THRESHOLD;
     }
 
-    bool isCollapsed(const QuantumState& state) const override {
+    bool isCollapsed(const QuantumState& state) const {
         return state.coherence < pattern::MIN_COHERENCE;
     }
 
-    bool isQuantum(const QuantumState& state) const override {
-        return state.coherence >= constants::MTM_COHERENCE_THRESHOLD;
+    bool isQuantum(const QuantumState& state) const {
+        return state.coherence >= sep::quantum::MIN_COHERENCE;
     }
-
 private:
     std::unique_ptr<QuantumProcessor> quantum_processor_;
 };
-} // namespace
+}
 
-std::unique_ptr<PatternQuantumProcessor> createPatternQuantumProcessor(
+std::unique_ptr<PatternQuantumProcessorImpl> createPatternQuantumProcessor(
     const ProcessingConfig& config)
 {
     QuantumProcessor::Config qp_cfg{};

@@ -5,6 +5,8 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
+#include <compat/cufft.h>
+#include <fftw3.h>
 #include <queue>
 #include <vector>
 
@@ -91,18 +93,42 @@ void AudioPipeline::applyHannWindow(std::vector<float>& samples) {
 SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
     SpectralData spectral;
 
-    // Prepare FFT input
-    std::vector<std::complex<float>> fft_input(samples.size());
-    for (size_t i = 0; i < samples.size(); ++i) {
-        fft_input[i] = std::complex<float>(samples[i], 0.0f);
+    const size_t n = samples.size();
+    spectral.fft.resize(n);
+
+#if SEP_CUDA_AVAILABLE
+    std::vector<cufftComplex> input(n);
+    std::vector<cufftComplex> output(n);
+    for (size_t i = 0; i < n; ++i) {
+        input[i].x = samples[i];
+        input[i].y = 0.0f;
     }
+    cufftHandle plan;
+    cufftPlan1d(&plan, static_cast<int>(n), CUFFT_C2C, 1);
+    cufftExecC2C(plan, input.data(), output.data(), CUFFT_FORWARD);
+    cufftDestroy(plan);
+    for (size_t i = 0; i < n; ++i) {
+        spectral.fft[i] = std::complex<float>(output[i].x, output[i].y);
+    }
+#else
+    fftwf_complex* in = reinterpret_cast<fftwf_complex*>(fftwf_malloc(sizeof(fftwf_complex) * n));
+    fftwf_complex* out = reinterpret_cast<fftwf_complex*>(fftwf_malloc(sizeof(fftwf_complex) * n));
+    for (size_t i = 0; i < n; ++i) {
+        in[i][0] = samples[i];
+        in[i][1] = 0.0f;
+    }
+    fftwf_plan plan = fftwf_plan_dft_1d(static_cast<int>(n), in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftwf_execute(plan);
+    fftwf_destroy_plan(plan);
+    for (size_t i = 0; i < n; ++i) {
+        spectral.fft[i] = std::complex<float>(out[i][0], out[i][1]);
+    }
+    fftwf_free(in);
+    fftwf_free(out);
+#endif
 
-    // Perform FFT (simplified for demo)
-    spectral.fft = fft_input;  // Would use actual FFT implementation
-
-    // Calculate magnitudes and phases
-    spectral.magnitudes.resize(samples.size() / 2 + 1);
-    spectral.phases.resize(samples.size() / 2 + 1);
+    spectral.magnitudes.resize(n / 2 + 1);
+    spectral.phases.resize(n / 2 + 1);
 
     for (size_t i = 0; i < spectral.magnitudes.size(); ++i) {
         auto& bin = spectral.fft[i];

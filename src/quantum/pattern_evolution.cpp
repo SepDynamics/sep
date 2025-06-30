@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include "api/sep_engine.h"
 #include "quantum/pattern_evolution_bridge.h"
+#include "compat/kernels.cuh"
 
 // Standard Library Includes
 #include <glm/glm.hpp>
@@ -75,6 +76,22 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
 std::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns( const nlohmann::json& args)
 {
     std::vector<sep::pattern::PatternData> patterns;
+
+    float min_coherence = args.value("min_coherence", 0.0f);
+    float min_stability = args.value("min_stability", 0.0f);
+
+    if (args.contains("patterns") && args["patterns"].is_array())
+    {
+        for (const auto& j : args["patterns"])
+        {
+            auto p = fromJson(j);
+            if (p.coherence >= min_coherence && p.stability >= min_stability)
+            {
+                patterns.push_back(p);
+            }
+        }
+    }
+
     return patterns;
 }
 
@@ -87,21 +104,29 @@ sep::pattern::PatternResult sep::quantum::mcp::PatternEvolution::processPatterns
         output.clear();
         return pattern::PatternResult::SUCCESS;
     }
-    
+
     output.resize(input.size());
-    
-    // Simple CPU-based processing for now
-    // Copy input patterns and apply basic evolution
+
+#if SEP_CUDA_AVAILABLE
+    cudaError_t err = sep::cuda::launch_pattern_processing(
+        const_cast<sep::pattern::PatternData*>(input.data()),
+        output.data(), config, input.size(), nullptr, nullptr);
+    if (err != cudaSuccess)
+    {
+        return pattern::PatternResult::PROCESSING_ERROR;
+    }
+#else
+    const float up = config.update_threshold;
     for (std::size_t i = 0; i < input.size(); ++i)
     {
-        // Use assignment operator instead of constructor
         output[i] = input[i];
         output[i].generation++;
-        output[i].coherence = std::min(1.0f, output[i].coherence * 1.01f);
-        output[i].stability = std::max(0.0f, output[i].stability * 0.99f);
+        output[i].coherence = std::min(1.0f, input[i].coherence * (1.0f + up));
+        output[i].stability = std::max(0.0f, input[i].stability * (1.0f - up));
         output[i].id = shim::string(api::SepEngine::generateId("pat").c_str());
     }
-    
+#endif
+
     return pattern::PatternResult::SUCCESS;
 }
 

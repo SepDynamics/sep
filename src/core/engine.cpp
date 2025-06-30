@@ -14,7 +14,7 @@
 #include "compat/macros.h"
 #include "compat/memory.h"
 #include "compat/stream.h"
-#include "memory/manager.h"  // This is actually the logging manager
+#include "core/logging.h"  // This is actually the logging manager
 #include "memory/memory_tier_manager.hpp"
 #include "blender/pattern_bridge.h"
 #include "blender/types.h" // For SEPBlenderBridge definition // Fix: Added comment

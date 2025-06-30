@@ -1,12 +1,15 @@
 add_library(blender_tests STATIC
-    mock_blender_bridge.cpp
-    mock_mesh_handler.cpp
-    mock_pattern_evolution.cpp
-    mock_cuda_wrappers.cpp
-    mock_trace_span.cpp
-    mock_pattern_compression.cpp
-    pattern_integration_test.cpp
+    api_test.cpp
+    compression_test.cpp
+    gpu_context_perf_test.cpp
+    gpu_context_test.cpp
+    mesh_handler_benchmark.cpp
+    mesh_handler_perf_test.cpp
+    mesh_handler_stress_test.cpp
     mesh_handler_test.cpp
+    pattern_data_test.cpp
+    scene_load_test.cpp
+    shader_test.cpp
 )
 
 target_include_directories(blender_tests PRIVATE

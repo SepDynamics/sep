@@ -24,11 +24,11 @@ SEP_API int sep_bridge_init(void) {
 #ifdef SEP_HAS_EXCEPTIONS
   try {
 #endif
-  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex); // Fix: use the global mutex
+  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   sep::quantum::ProcessingConfig options{};
   sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
- sep::api::bridge::detail::g_last_error.clear(); // Fix: Add semicolon
-  // Fix: Initialize g_required_buffer_size to 0 here
+ sep::api::bridge::detail::g_last_error.clear();
+  // Initialize g_required_buffer_size to 0 here
   sep::api::bridge::detail::g_required_buffer_size = 0;
   return 0;
 #if SEP_HAS_EXCEPTIONS
@@ -38,9 +38,9 @@ SEP_API int sep_bridge_init(void) {
 
 SEP_API int sep_bridge_cleanup(void) {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
- sep::api::bridge::detail::g_context_processor_bridge.reset(); // Fix: Add semicolon
+ sep::api::bridge::detail::g_context_processor_bridge.reset();
   sep::api::bridge::detail::g_last_error.clear();
-  // Fix: Initialize g_required_buffer_size to 0 here
+  // Initialize g_required_buffer_size to 0 here
   sep::api::bridge::detail::g_required_buffer_size = 0;
   return 0;
 }
@@ -48,7 +48,7 @@ SEP_API int sep_bridge_cleanup(void) {
 SEP_API int sep_process_context(const char *context_json, const char *layer,
                                char *result_buffer, size_t buffer_size) {
 #if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
+  try {
 #endif
     if (!context_json || !result_buffer || !layer || buffer_size == 0) {
       sep::api::bridge::detail::setLastError("Invalid parameters");
@@ -80,7 +80,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       std::string test_str = test_result.dump();
       {
         std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
- sep::api::bridge::detail::setRequiredBufferSize(test_str.size() + 1); // Fix: Add semicolon
+        sep::api::bridge::detail::setRequiredBufferSize(test_str.size() + 1);
         if (test_str.size() >= buffer_size) {
           sep::api::bridge::detail::setLastError("Result buffer too small");
           return static_cast<int>(sep::api::ErrorCode::BufferTooSmall);
@@ -91,7 +91,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       // Replacing with a dummy success for now, assuming the actual processing logic will be integrated later.
       sep::quantum::BatchProcessingResult process_result;
       process_result.success = true;
- process_result.error_code = 0; // Fix: Initialize error_code
+      process_result.error_code = 0;
       
       if (!process_result.success) {
         sep::api::bridge::detail::setLastError(process_result.error_message.c_str());
@@ -113,7 +113,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
 
       std::string result_str = result_json.dump();
       {
- std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex); // Fix: Add semicolon
+        std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
         sep::api::bridge::detail::setRequiredBufferSize(result_str.size() + 1);
         if (result_str.size() >= buffer_size) {
           sep::api::bridge::detail::setLastError("Result buffer too small");
@@ -134,7 +134,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
 
 SEP_API int sep_bridge_get_last_error(char *buffer, size_t buffer_size) {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-  if (!buffer || buffer_size == 0) { // Fix: Check for null buffer or zero size
+  if (!buffer || buffer_size == 0) {
     return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
   }
   size_t len = std::min(sep::api::bridge::detail::g_last_error.size(), buffer_size - 1);
@@ -149,7 +149,7 @@ SEP_API size_t sep_get_required_buffer_size(void) {
 
 SEP_API int sep_bridge_set_config(const char *key, const char *value) {
 #if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
+  try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!key || !value) {
@@ -183,7 +183,7 @@ SEP_API int sep_bridge_set_config(const char *key, const char *value) {
   }
   cm.updateAPIConfig(cfg);
   sep::api::bridge::detail::setLastError("");
- return 0; // Fix: Add semicolon
+  return 0;
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
 #endif
@@ -191,7 +191,7 @@ SEP_API int sep_bridge_set_config(const char *key, const char *value) {
 
 SEP_API int sep_bridge_get_config(const char *key, char *buffer, size_t buffer_size) {
 #if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
+  try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!key || !buffer || buffer_size == 0) {
@@ -220,7 +220,7 @@ SEP_API int sep_bridge_get_config(const char *key, char *buffer, size_t buffer_s
   }
   (void)std::snprintf(buffer, buffer_size, "%s", val.c_str());
   sep::api::bridge::detail::setLastError("");
- return 0; // Fix: Add semicolon
+  return 0;
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
 #endif
@@ -229,16 +229,16 @@ SEP_API int sep_bridge_get_config(const char *key, char *buffer, size_t buffer_s
 SEP_API int sep_bridge_register_callback(const char *event_type,
                                          void (*callback)(const char *event_data)) {
 #if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
+  try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!event_type || !callback) {
     sep::api::bridge::detail::setLastError("Invalid parameters");
     return static_cast<int>(sep::api::ErrorCode::GeneralError);
-  } // Fix: Add closing brace
+  }
   sep::api::bridge::detail::g_callback_map[event_type].push_back(callback);
   sep::api::bridge::detail::setLastError("");
- return 0; // Fix: Add semicolon
+  return 0;
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
 #endif

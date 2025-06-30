@@ -131,8 +131,13 @@ struct MemoryThresholdConfig {
     float promote_mtm_to_ltm{0.9f};
     float demote_threshold{0.3f};
     float fragmentation_threshold{0.3f};
+    std::size_t stm_size{1 << 20};
+    std::size_t mtm_size{4 << 20};
+    std::size_t ltm_size{16 << 20};
     uint32_t stm_to_mtm_min_gen{5};
     uint32_t mtm_to_ltm_min_gen{100};
+    bool use_unified_memory{true};
+    bool enable_compression{true};
 };
 
 struct QuantumThresholdConfig {
@@ -210,8 +215,13 @@ inline void to_json(nlohmann::json& j, const MemoryThresholdConfig& c) {
                        {"promote_mtm_to_ltm", c.promote_mtm_to_ltm},
                        {"demote_threshold", c.demote_threshold},
                        {"fragmentation_threshold", c.fragmentation_threshold},
+                       {"stm_size", c.stm_size},
+                       {"mtm_size", c.mtm_size},
+                       {"ltm_size", c.ltm_size},
                        {"stm_to_mtm_min_gen", c.stm_to_mtm_min_gen},
-                       {"mtm_to_ltm_min_gen", c.mtm_to_ltm_min_gen}};
+                       {"mtm_to_ltm_min_gen", c.mtm_to_ltm_min_gen},
+                       {"use_unified_memory", c.use_unified_memory},
+                       {"enable_compression", c.enable_compression}};
 }
 
 inline void from_json(const nlohmann::json& j, MemoryThresholdConfig& c) {
@@ -219,8 +229,13 @@ inline void from_json(const nlohmann::json& j, MemoryThresholdConfig& c) {
     c.promote_mtm_to_ltm = j.value("promote_mtm_to_ltm", 0.9f);
     c.demote_threshold = j.value("demote_threshold", 0.3f);
     c.fragmentation_threshold = j.value("fragmentation_threshold", 0.3f);
+    c.stm_size = j.value("stm_size", static_cast<std::size_t>(1 << 20));
+    c.mtm_size = j.value("mtm_size", static_cast<std::size_t>(4 << 20));
+    c.ltm_size = j.value("ltm_size", static_cast<std::size_t>(16 << 20));
     c.stm_to_mtm_min_gen = j.value("stm_to_mtm_min_gen", 5u);
     c.mtm_to_ltm_min_gen = j.value("mtm_to_ltm_min_gen", 100u);
+    c.use_unified_memory = j.value("use_unified_memory", true);
+    c.enable_compression = j.value("enable_compression", true);
 }
 
 inline void to_json(nlohmann::json& j, const QuantumThresholdConfig& c) {

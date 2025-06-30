@@ -100,9 +100,9 @@ using StreamPtr = std::unique_ptr<sep::cuda::StreamRAII>;
 static StreamPtr g_stream;
 static bool g_initialized = false;
 
-int sep_cuda_init(int device_id) {
+sep::SEPResult sep_cuda_init(int device_id) {
     if (g_initialized) {
-        return 0;
+        return sep::SEPResult::SUCCESS;
     }
 
     if (device_id >= 0) {
@@ -112,28 +112,28 @@ int sep_cuda_init(int device_id) {
     g_stream = std::make_unique<sep::cuda::StreamRAII>();
     if (!g_stream || !g_stream->valid()) {
         g_stream.reset();
-        return static_cast<int>(sep::ErrorCode::GeneralError);
+        return sep::SEPResult::UNKNOWN_ERROR;
     }
 
     g_initialized = true;
-    return 0;
+    return sep::SEPResult::SUCCESS;
 }
 
-int sep_cuda_cleanup(void) {
+sep::SEPResult sep_cuda_cleanup(void) {
     if (!g_initialized) {
-        return 0;
+        return sep::SEPResult::SUCCESS;
     }
 
     g_stream.reset();
     g_initialized = false;
-    return 0;
+    return sep::SEPResult::SUCCESS;
 }
 
-int sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32_t* expectations,
+sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32_t* expectations,
                            std::uint32_t num_probes, std::uint32_t* bitfield, std::uint32_t* correction_indices,
                            std::uint32_t* correction_count) {
     if (!g_initialized) {
-        return static_cast<int>(sep::ErrorCode::GeneralError);
+        return sep::SEPResult::UNKNOWN_ERROR;
     }
 
     // Get constants
@@ -155,7 +155,7 @@ int sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32
 
     if (!d_probe_indices.valid() || !d_expectations.valid() || !d_bitfield.valid() || !d_corrections.valid() ||
         !d_correction_count.valid()) {
-        return static_cast<int>(sep::ErrorCode::GeneralError);
+        return sep::SEPResult::UNKNOWN_ERROR;
     }
 
     try {
@@ -188,16 +188,16 @@ int sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32
 
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
     } catch (const sep::CudaException&) {
-        return static_cast<int>(sep::ErrorCode::GeneralError);
+        return sep::SEPResult::UNKNOWN_ERROR;
     }
 
-    return 0;
+    return sep::SEPResult::SUCCESS;
 }
 
-int sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chunks, std::uint32_t* collapse_indices,
+sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chunks, std::uint32_t* collapse_indices,
                               std::uint32_t* collapse_counts) {
     if (!g_initialized) {
-        return static_cast<int>(sep::ErrorCode::GeneralError);
+        return sep::SEPResult::UNKNOWN_ERROR;
     }
 
     // Get constants
@@ -214,7 +214,7 @@ int sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chu
     sep::cuda::DeviceBufferRAII<std::uint32_t> d_collapse_counts(num_chunks);
 
     if (!d_chunks.valid() || !d_collapse_indices.valid() || !d_collapse_counts.valid()) {
-        return static_cast<int>(sep::ErrorCode::GeneralError);
+        return sep::SEPResult::UNKNOWN_ERROR;
     }
 
     try {
@@ -236,10 +236,10 @@ int sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chu
 
         CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
     } catch (const sep::CudaException&) {
-        return static_cast<int>(sep::ErrorCode::GeneralError);
+        return sep::SEPResult::UNKNOWN_ERROR;
     }
 
-    return 0;
+    return sep::SEPResult::SUCCESS;
 }
 
 #endif

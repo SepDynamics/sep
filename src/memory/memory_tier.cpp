@@ -1,13 +1,13 @@
-// Standard library headers FIRST to ensure proper namespace resolution
-#include "memory/memory_tier.hpp"
-#include "core/common.h"  // defines sep::SEPResult
-
+// Standard library headers
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <stdexcept>
 #include <vector>
+
+// Project headers
+#include "core/common.h"  // defines sep::SEPResult
 
 #ifndef SEP_HAS_EXCEPTIONS
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
@@ -19,14 +19,14 @@
 
 // CUDA headers after standard library
 #include "compat/cuda_common.h"
-#include "compat/cuda_runtime.h" // for sep::cuda::cudaMemcpy // Fix: Add comment // Fix: Added comment
+#include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpy
 #include "compat/macros.h"
 
 #include "compat/math_common.h"
+#include "core/allocation_metrics.h"
 #include "memory/logger.hpp"
 #include "memory/manager.h"
 #include "memory/memory_tier_manager.hpp"
-#include "core/allocation_metrics.h"
 #include "memory/types.h"
 
 namespace sep::memory {

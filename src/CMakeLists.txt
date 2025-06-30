@@ -33,6 +33,10 @@ target_link_libraries(sep_main PRIVATE
     fmt::fmt
 )
 
+if(SEP_HAS_BLENDER)
+    target_link_libraries(sep_main PRIVATE sep_blender)
+endif()
+
 if(SEP_ENABLE_CUDA)
     target_link_libraries(sep_main PRIVATE
         CUDA::cudart

@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef SEP_HAS_BLENDER
+
 #include <atomic>
 #include <condition_variable>
 #include <memory>
@@ -165,3 +167,7 @@ class BlenderBridge {
 
 }  // namespace pattern
 }  // namespace sep
+#endif // SEP_HAS_BLENDER
+#ifndef SEP_HAS_BLENDER
+namespace sep { namespace pattern { class BlenderBridge {}; } }
+#endif

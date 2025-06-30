@@ -74,7 +74,7 @@ class CudaCore {
                     std::uint32_t embedding_size, Stream& stream);
 
  private:
-  inline CudaCore() : initialized_(false), current_device_(-1) {}
+  CudaCore() : initialized_(false), current_device_(-1) {}
   ~CudaCore() = default;  // Private destructor
 
   CudaCore(const CudaCore&) = delete;
@@ -89,7 +89,6 @@ class CudaCore {
   Error queryDeviceProperties();
 };
 
-inline CudaCore::CudaCore() : initialized_{false}, current_device_{-1} {}
 
 }  // namespace sep::cuda
 

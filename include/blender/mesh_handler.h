@@ -11,7 +11,6 @@
 #include "blender/types.h"
 #include "core/common.h"  // for sep::SEPResult
 
-// Use the SEPResult from sep namespace
 using sep::SEPResult;
 
 // Blender mesh batch flags
@@ -21,18 +20,12 @@ using sep::SEPResult;
 namespace sep::blender {
 class PatternVisualizationPipeline;
 }
+
 class MeshHandler {
  public:
   MeshHandler();
-  ~MeshHandler();
+  virtual ~MeshHandler();
 
-  // Initialize with Blender mesh
-  SEPResult init(Object* bl_object, Mesh* bl_mesh);
-
-  // Update mesh based on pattern data
-  SEPResult update(const sep::pattern::PatternData& pattern_data);
-
-  // Get mesh metrics
   struct MeshMetrics {
     size_t vertex_count;
     size_t edge_count;
@@ -51,15 +44,7 @@ class MeshHandler {
           has_custom_data(false),
           pattern_count(0) {}
   };
-  MeshMetrics getMetrics() const;
 
-  // Custom data layer management
-  SEPResult addCustomDataLayer(const char* name, int type);
-  SEPResult removeCustomDataLayer(const char* name);
-  bool hasCustomDataLayer(const char* name) const;
-  SEPResult setUniformFloatLayer(const char* name, float value);
-
-  // Pattern-driven deformation
   struct DeformParams {
     float strength;        // Deformation strength (0-1)
     float smoothness;      // Smoothing factor (0-1)
@@ -68,15 +53,32 @@ class MeshHandler {
 
     DeformParams() : strength(1.0f), smoothness(0.5f), preserve_volume(true), use_falloff(true) {}
   };
-  SEPResult applyDeformation(const DeformParams& params);
 
-  // Generate an N-dimensional mesh. For dimensions greater than 3 the extra
-  // coordinates are stored in custom data layers named "coord_dimX".
-  SEPResult generateHyperMesh(const sep::pattern::PatternData& pattern,
-                             int dimensions);
+  // Initialize with Blender mesh
+  virtual SEPResult init(Object* bl_object, Mesh* bl_mesh);
+
+  // Update mesh based on pattern data
+  virtual SEPResult update(const sep::pattern::PatternData& pattern_data);
+
+  // Get mesh metrics
+  virtual MeshMetrics getMetrics() const;
+
+  // Custom data layer management
+  virtual SEPResult addCustomDataLayer(const char* name, int type);
+  virtual SEPResult removeCustomDataLayer(const char* name);
+  virtual bool hasCustomDataLayer(const char* name) const;
+  virtual SEPResult setUniformFloatLayer(const char* name, float value);
+
+  // Pattern-driven deformation
+  virtual SEPResult applyDeformation(const DeformParams& params);
+
+  // Generate an N-dimensional mesh
+  virtual SEPResult generateHyperMesh(const sep::pattern::PatternData& pattern,
+                                    int dimensions);
 
  private:
   friend class sep::blender::PatternVisualizationPipeline;
+
   // Blender data
   Object* object_;
   Mesh* mesh_;
@@ -156,9 +158,9 @@ class MeshHandler {
 
   // Pattern influence calculation
   float calculateVertexInfluence(const sep::pattern::PatternData& pattern,
-                                 const float* vertex) const;
+                               const float* vertex) const;
   void calculateDisplacement(const sep::pattern::PatternData& pattern, const float* vertex,
-                             float* displacement) const;
+                           float* displacement) const;
   void updateFloatLayer(CustomDataLayer& layer, const sep::pattern::PatternData& pattern);
   void updateFloat3Layer(CustomDataLayer& layer, const sep::pattern::PatternData& pattern);
   float computeCoherenceWeight(float weight) const;

@@ -40,10 +40,24 @@ set_target_properties(sep_compat PROPERTIES
 )
 
 # Export CUDA includes through sep_compat interface
+# Find PipeWire using pkg-config
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
+
 target_include_directories(sep_compat
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include/compat
         ${CMAKE_SOURCE_DIR}/include/core
+        ${CMAKE_SOURCE_DIR}/include/audio
+        ${PIPEWIRE_INCLUDE_DIRS}
     INTERFACE
         ${CUDA_INCLUDE_DIRS}
+)
+
+target_link_libraries(sep_compat
+    PUBLIC
+        ${CUDA_LIBRARIES}
+        ${CUDAToolkit_LIBRARY_DIR}/libcudart.so
+        sep_core
+        ${PIPEWIRE_LIBRARIES}
 )

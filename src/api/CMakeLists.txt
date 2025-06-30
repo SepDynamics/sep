@@ -32,8 +32,22 @@ target_include_directories(sep_api
         ${CMAKE_SOURCE_DIR}/extern/eigen
 )
 
-# Link external dependencies when available
-target_link_libraries(sep_api PRIVATE ${CURL_LIBRARIES})
+# Find curl package
+find_package(CURL REQUIRED)
+
+# Link external dependencies
+target_link_libraries(sep_api
+    PRIVATE
+        ${CURL_LIBRARIES}
+        sep_core
+)
+
 if(HIREDIS_FOUND)
     target_link_libraries(sep_api PRIVATE ${HIREDIS_LIBRARIES})
 endif()
+
+# Add curl include directories
+target_include_directories(sep_api
+    PRIVATE
+        ${CURL_INCLUDE_DIRS}
+)

@@ -1,0 +1,352 @@
+"""
+SEP Engine Event Handlers
+=========================
+Frame change, depsgraph update, and other event handlers for
+continuous pattern evolution and quantum state synchronization.
+"""
+
+import bpy
+from bpy.app.handlers import persistent
+import time
+import threading
+import queue
+from typing import Dict, Set, Optional
+from . import connection
+from . import mesh_utils
+from . import pattern_processor
+
+# Global state for handlers
+_handler_state = {
+    'last_frame': None,
+    'last_update_time': 0.0,
+    'evolution_queue': queue.Queue(),
+    'active_evolutions': set(),
+    'worker_thread': None,
+    'running': False
+}
+
+@persistent
+def sep_frame_change_handler(scene):
+    """Handle frame changes for pattern evolution"""
+    global _handler_state
+    
+    # Check if we should process
+    if not scene.sep_settings.auto_process:
+        return
+    
+    manager = connection.get_manager()
+    if not manager.is_connected():
+        return
+    
+    current_frame = scene.frame_current
+    
+    # Skip if frame hasn't changed
+    if _handler_state['last_frame'] == current_frame:
+        return
+    
+    _handler_state['last_frame'] = current_frame
+    
+    # Check time interval
+    current_time = time.time()
+    if current_time - _handler_state['last_update_time'] < scene.sep_settings.process_interval:
+        return
+    
+    _handler_state['last_update_time'] = current_time
+    
+    # Process objects with auto-evolve enabled
+    for obj in scene.objects:
+        if (obj.type == 'MESH' and 
+            obj.sep_settings.enabled and 
+            obj.sep_settings.auto_evolve and
+            obj.sep_settings.pattern_id):
+            
+            # Queue evolution
+            _handler_state['evolution_queue'].put({
+                'object': obj.name,
+                'pattern_id': obj.sep_settings.pattern_id,
+                'rate': obj.sep_settings.evolution_rate,
+                'frame': current_frame
+            })
+
+@persistent
+def sep_depsgraph_update_handler(scene):
+    """Handle depsgraph updates for mesh changes"""
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    
+    # Track updated objects
+    updated_meshes = set()
+    
+    for update in depsgraph.updates:
+        if isinstance(update.id, bpy.types.Object):
+            obj = update.id
+            if obj.type == 'MESH' and obj.sep_settings.enabled:
+                # Check if mesh data changed
+                if update.is_updated_geometry:
+                    updated_meshes.add(obj.name)
+    
+    # Process updated meshes
+    if updated_meshes and scene.sep_settings.auto_process:
+        manager = connection.get_manager()
+        if manager.is_connected():
+            for obj_name in updated_meshes:
+                obj = scene.objects.get(obj_name)
+                if obj:
+                    # Extract and process mesh
+                    mesh_data = mesh_utils.extract_mesh_data(obj)
+                    pattern_data = {
+                        "type": "mesh_update",
+                        "object": obj_name,
+                        "mesh_data": mesh_data,
+                        "pattern_id": obj.sep_settings.pattern_id
+                    }
+                    
+                    # Queue for async processing
+                    manager.queue_pattern(
+                        pattern_data,
+                        callback=lambda result: _apply_mesh_update(obj_name, result)
+                    )
+
+@persistent
+def sep_load_post_handler(filepath):
+    """Handle file load events"""
+    # Reconnect to SEP Engine if needed
+    settings = bpy.context.scene.sep_settings
+    manager = connection.get_manager()
+    
+    if settings.host and not manager.is_connected():
+        # Try to reconnect
+        bpy.ops.sep.connect()
+    
+    # Sync memory state
+    if manager.is_connected():
+        bpy.ops.sep.sync_memory()
+
+@persistent
+def sep_save_pre_handler(filepath):
+    """Handle pre-save events"""
+    # Ensure all patterns are synced
+    manager = connection.get_manager()
+    if manager.is_connected():
+        # Force sync before save
+        sync_data = {
+            "action": "force_sync",
+            "patterns": []
+        }
+        
+        # Collect all active patterns
+        for obj in bpy.data.objects:
+            if obj.type == 'MESH' and obj.sep_settings.pattern_id:
+                sync_data["patterns"].append({
+                    "id": obj.sep_settings.pattern_id,
+                    "object": obj.name,
+                    "metrics": obj.sep_settings.metrics.to_dict()
+                })
+        
+        # Send sync request
+        manager.queue_pattern(sync_data)
+
+def _evolution_worker():
+    """Worker thread for processing pattern evolutions"""
+    global _handler_state
+    
+    while _handler_state['running']:
+        try:
+            # Get evolution task with timeout
+            task = _handler_state['evolution_queue'].get(timeout=0.1)
+            
+            # Skip if already processing this pattern
+            if task['pattern_id'] in _handler_state['active_evolutions']:
+                continue
+            
+            _handler_state['active_evolutions'].add(task['pattern_id'])
+            
+            # Process evolution
+            try:
+                _process_evolution(task)
+            finally:
+                _handler_state['active_evolutions'].discard(task['pattern_id'])
+                
+        except queue.Empty:
+            continue
+        except Exception as e:
+            print(f"Evolution worker error: {e}")
+
+def _process_evolution(task: Dict):
+    """Process a single evolution task"""
+    manager = connection.get_manager()
+    if not manager.is_connected():
+        return
+    
+    # Calculate evolution steps based on rate
+    steps = max(1, int(task['rate']))
+    
+    # Request evolution
+    pattern_data = {
+        "action": "evolve",
+        "pattern_id": task['pattern_id'],
+        "steps": steps,
+        "frame": task['frame'],
+        "options": {
+            "smooth_transition": True,
+            "preserve_coherence": True
+        }
+    }
+    
+    result = manager.active_connection.process_pattern(pattern_data)
+    
+    if result and "result" in result:
+        # Apply to object in main thread
+        bpy.app.timers.register(
+            lambda: _apply_evolution_result(task['object'], result['result']),
+            first_interval=0.0
+        )
+
+def _apply_evolution_result(obj_name: str, result: Dict):
+    """Apply evolution result to object (main thread)"""
+    obj = bpy.data.objects.get(obj_name)
+    if not obj:
+        return
+    
+    # Update metrics
+    if "metrics" in result:
+        obj.sep_settings.metrics.from_dict(result["metrics"])
+    
+    # Update quantum state
+    if "quantum_state" in result:
+        state = result["quantum_state"]
+        obj.sep_settings.quantum_state.qbsa_state = state.get("qbsa", 0)
+        obj.sep_settings.quantum_state.qfh_level = state.get("qfh_level", 0)
+        obj.sep_settings.quantum_state.rupture_detected = state.get("rupture", False)
+        obj.sep_settings.quantum_state.phase = state.get("phase", 0.0)
+        obj.sep_settings.quantum_state.amplitude = state.get("amplitude", 1.0)
+    
+    # Apply deformation if enabled
+    if obj.sep_settings.apply_deformation and "deformation" in result:
+        mesh_utils.apply_deformation(
+            obj,
+            result["deformation"],
+            obj.sep_settings.deformation_strength
+        )
+    
+    # Update evolution count
+    obj.sep_settings.evolution_count += result.get("steps", 1)
+    
+    # Mark for redraw
+    obj.update_tag()
+    for area in bpy.context.screen.areas:
+        if area.type == 'VIEW_3D':
+            area.tag_redraw()
+
+def _apply_mesh_update(obj_name: str, result: Optional[Dict]):
+    """Apply mesh update result"""
+    if not result:
+        return
+    
+    obj = bpy.data.objects.get(obj_name)
+    if not obj:
+        return
+    
+    # Update pattern ID if new
+    if "pattern_id" in result:
+        obj.sep_settings.pattern_id = result["pattern_id"]
+    
+    # Update metrics
+    if "metrics" in result:
+        obj.sep_settings.metrics.from_dict(result["metrics"])
+
+def register_handlers():
+    """Register all event handlers"""
+    global _handler_state
+    
+    # Add handlers
+    bpy.app.handlers.frame_change_post.append(sep_frame_change_handler)
+    bpy.app.handlers.depsgraph_update_post.append(sep_depsgraph_update_handler)
+    bpy.app.handlers.load_post.append(sep_load_post_handler)
+    bpy.app.handlers.save_pre.append(sep_save_pre_handler)
+    
+    # Start worker thread
+    _handler_state['running'] = True
+    _handler_state['worker_thread'] = threading.Thread(
+        target=_evolution_worker,
+        daemon=True
+    )
+    _handler_state['worker_thread'].start()
+    
+    # Register viewport drawing
+    from . import ui
+    ui.register_draw_handler()
+    
+    # Register timers
+    register_timers()
+
+def unregister_handlers():
+    """Unregister all event handlers"""
+    global _handler_state
+    
+    # Stop worker thread
+    _handler_state['running'] = False
+    if _handler_state['worker_thread']:
+        _handler_state['worker_thread'].join(timeout=1.0)
+    
+    # Remove handlers
+    if sep_frame_change_handler in bpy.app.handlers.frame_change_post:
+        bpy.app.handlers.frame_change_post.remove(sep_frame_change_handler)
+    
+    if sep_depsgraph_update_handler in bpy.app.handlers.depsgraph_update_post:
+        bpy.app.handlers.depsgraph_update_post.remove(sep_depsgraph_update_handler)
+    
+    if sep_load_post_handler in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.remove(sep_load_post_handler)
+    
+    if sep_save_pre_handler in bpy.app.handlers.save_pre:
+        bpy.app.handlers.save_pre.remove(sep_save_pre_handler)
+    
+    # Unregister viewport drawing
+    from . import ui
+    ui.unregister_draw_handler()
+    
+    # Unregister timers
+    unregister_timers()
+
+# Timer functions for periodic tasks
+def sep_periodic_sync():
+    """Periodic memory synchronization"""
+    if not bpy.context.scene.sep_settings.auto_process:
+        return 10.0  # Check again in 10 seconds
+    
+    manager = connection.get_manager()
+    if manager.is_connected():
+        # Check for patterns needing promotion
+        settings = bpy.context.scene.sep_settings
+        
+        if settings.auto_promote:
+            promote_patterns = []
+            
+            for pattern in settings.patterns:
+                if (pattern.memory_tier == 'STM' and 
+                    pattern.metrics.coherence >= settings.promotion_threshold):
+                    promote_patterns.append(pattern.pattern_id)
+            
+            if promote_patterns:
+                promotion_data = {
+                    "action": "promote_patterns",
+                    "pattern_ids": promote_patterns,
+                    "target_tier": "MTM"
+                }
+                manager.queue_pattern(promotion_data)
+    
+    return 10.0  # Run every 10 seconds
+
+def register_timers():
+    """Register timer functions"""
+    if bpy.app.timers.is_registered(sep_periodic_sync):
+        bpy.app.timers.unregister(sep_periodic_sync)
+    bpy.app.timers.register(sep_periodic_sync, first_interval=5.0)
+
+def unregister_timers():
+    """Unregister timer functions"""
+    if bpy.app.timers.is_registered(sep_periodic_sync):
+        bpy.app.timers.unregister(sep_periodic_sync)
+
+# No classes to register - handlers are registered directly
+classes = []

@@ -11,8 +11,6 @@
 
 namespace sep::cuda {
 
-CudaCore::CudaCore() : initialized_(false), current_device_(-1) {}
-
 CudaCore& CudaCore::instance() {
     static CudaCore instance;
     return instance;

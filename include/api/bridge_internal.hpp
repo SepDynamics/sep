@@ -47,6 +47,6 @@ void setLastError(const std::string& error);
 std::string getLastError();
 void setRequiredBufferSize(size_t size);
 size_t getRequiredBufferSize();
-::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode code);
+sep::SEPResult mapSepError(::sep::api::ErrorCode code);
 void invokeCallbacks(const std::string& event_type, const std::string& event_data);
 } // namespace sep::api::bridge::detail

@@ -119,6 +119,7 @@ public:
     void updateConfig(const ProcessingConfig& config);
 
 private:
+    // All mutable state lives inside ProcessorImpl which uses a mutex internally
     std::unique_ptr<ProcessorImpl> impl_;
 };
 

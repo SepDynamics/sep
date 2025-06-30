@@ -127,7 +127,9 @@ class BlenderBridge {
   sep::GPUContext* gpu_context_;  // Changed to sep::GPUContext
   std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor_;  // Base pattern processor from processor.h
 
+  // Access to objects_ must be guarded by objects_mutex_
   std::unordered_map<sep::pattern::ObjectHandle, ObjectState> objects_;
+  // observers_ is modified by multiple threads and protected by observers_mutex_
   ::sep::shim::vector<std::shared_ptr<sep::pattern::PatternObserver>> observers_;
 
   std::atomic<bool> initialized_{false};

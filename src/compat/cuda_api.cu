@@ -1,5 +1,13 @@
-#include "compat/cuda_common.h"
+#if !defined(__CUDACC__)
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <utility>
+#endif
 
+#include "core/common.h"
+
+#include "compat/cuda_common.h"
 #include "compat/cuda_unified_fix.h"
 
 // CUDA runtime must come first

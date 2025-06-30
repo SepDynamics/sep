@@ -44,16 +44,26 @@ std::unordered_map<std::string, std::vector<void (*)(const char *)>>
 namespace sep::api::bridge::detail {
 
 void setLastError(const std::string& error) {
+  std::lock_guard<std::mutex> lock(g_bridge_mutex);
   g_last_error = error;
 #if !SEP_HAS_EXCEPTIONS
   sep::crow::error::set_last_error(error.c_str());
 #endif
 }
-std::string getLastError() { return g_last_error; }
+std::string getLastError() {
+  std::lock_guard<std::mutex> lock(g_bridge_mutex);
+  return g_last_error;
+}
 
-void setRequiredBufferSize(size_t size) { g_required_buffer_size = size; }
+void setRequiredBufferSize(size_t size) {
+  std::lock_guard<std::mutex> lock(g_bridge_mutex);
+  g_required_buffer_size = size;
+}
 
-size_t getRequiredBufferSize() { return g_required_buffer_size; }
+size_t getRequiredBufferSize() {
+  std::lock_guard<std::mutex> lock(g_bridge_mutex);
+  return g_required_buffer_size;
+}
 
 sep::api::ErrorCode mapSepError(sep::api::ErrorCode core) {
   switch (core) {

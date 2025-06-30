@@ -40,7 +40,18 @@ MemoryTierManager::MemoryTierManager(const MemoryTierManager::Config& cfg) : con
     init(cfg);
 }
 
-MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+MemoryTierManager::MemoryTierManager()
+    : MemoryTierManager([]{
+        Config cfg;
+        const auto& mcfg = sep::config::ConfigManager::getInstance().getMemoryConfig();
+        cfg.promote_stm_to_mtm = mcfg.promote_stm_to_mtm;
+        cfg.promote_mtm_to_ltm = mcfg.promote_mtm_to_ltm;
+        cfg.demote_threshold = mcfg.demote_threshold;
+        cfg.fragmentation_threshold = mcfg.fragmentation_threshold;
+        cfg.stm_to_mtm_min_gen = mcfg.stm_to_mtm_min_gen;
+        cfg.mtm_to_ltm_min_gen = mcfg.mtm_to_ltm_min_gen;
+        return cfg;
+    }()) {}
 
 MemoryTierManager::~MemoryTierManager() {
     shutdown();

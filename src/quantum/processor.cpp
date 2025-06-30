@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "memory/types.h"
 #include "core/common.h"  // defines sep::SEPResult
+#include "core/manager.h"
 
 using ::sep::memory::MemoryTierEnum;
 #include <mutex>
@@ -395,6 +396,15 @@ void Processor::updateConfig(const ProcessingConfig& config) { impl_->updateConf
 
 std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config) {
     return std::make_unique<Processor>(config); // Fix: Use make_unique // Fix: Added comment
+}
+
+std::unique_ptr<Processor> createProcessor() {
+    const auto& cfg = sep::config::ConfigManager::getInstance().getQuantumConfig();
+    ProcessingConfig pc;
+    pc.ltm_coherence_threshold = cfg.ltm_coherence_threshold;
+    pc.mtm_coherence_threshold = cfg.mtm_coherence_threshold;
+    pc.stability_threshold = cfg.stability_threshold;
+    return std::make_unique<Processor>(pc);
 }
 
 std::unique_ptr<Processor> createCPUProcessor(const ProcessingConfig& config) {

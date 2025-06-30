@@ -126,11 +126,28 @@ struct AnalyticsConfig {
     double sampling_rate{0.1};
 };
 
+struct MemoryThresholdConfig {
+    float promote_stm_to_mtm{0.7f};
+    float promote_mtm_to_ltm{0.9f};
+    float demote_threshold{0.3f};
+    float fragmentation_threshold{0.3f};
+    std::uint32_t stm_to_mtm_min_gen{5};
+    std::uint32_t mtm_to_ltm_min_gen{100};
+};
+
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 struct SystemConfig {
     APIConfig   api;
     CudaConfig  cuda;
     LogConfig   logging;
     std::string data_path;
+    MemoryThresholdConfig memory;
+    QuantumThresholdConfig quantum;
 };
 
 // Backwards compatibility aliases for renamed configuration structs
@@ -186,6 +203,36 @@ inline void from_json(const nlohmann::json& j, LoggingConfig& l)
     l.max_file_size = j.value("max_file_size", static_cast<size_t>(10 * 1024 * 1024));
     l.max_files     = j.value("max_files", static_cast<size_t>(5));
     l.level         = j.value("level", std::string{"info"});
+}
+
+inline void to_json(nlohmann::json& j, const MemoryThresholdConfig& c) {
+    j = nlohmann::json{{"promote_stm_to_mtm", c.promote_stm_to_mtm},
+                       {"promote_mtm_to_ltm", c.promote_mtm_to_ltm},
+                       {"demote_threshold", c.demote_threshold},
+                       {"fragmentation_threshold", c.fragmentation_threshold},
+                       {"stm_to_mtm_min_gen", c.stm_to_mtm_min_gen},
+                       {"mtm_to_ltm_min_gen", c.mtm_to_ltm_min_gen}};
+}
+
+inline void from_json(const nlohmann::json& j, MemoryThresholdConfig& c) {
+    c.promote_stm_to_mtm = j.value("promote_stm_to_mtm", 0.7f);
+    c.promote_mtm_to_ltm = j.value("promote_mtm_to_ltm", 0.9f);
+    c.demote_threshold = j.value("demote_threshold", 0.3f);
+    c.fragmentation_threshold = j.value("fragmentation_threshold", 0.3f);
+    c.stm_to_mtm_min_gen = j.value("stm_to_mtm_min_gen", 5u);
+    c.mtm_to_ltm_min_gen = j.value("mtm_to_ltm_min_gen", 100u);
+}
+
+inline void to_json(nlohmann::json& j, const QuantumThresholdConfig& c) {
+    j = nlohmann::json{{"ltm_coherence_threshold", c.ltm_coherence_threshold},
+                       {"mtm_coherence_threshold", c.mtm_coherence_threshold},
+                       {"stability_threshold", c.stability_threshold}};
+}
+
+inline void from_json(const nlohmann::json& j, QuantumThresholdConfig& c) {
+    c.ltm_coherence_threshold = j.value("ltm_coherence_threshold", 0.9f);
+    c.mtm_coherence_threshold = j.value("mtm_coherence_threshold", 0.6f);
+    c.stability_threshold = j.value("stability_threshold", 0.8f);
 }
 
 inline void to_json(nlohmann::json& j, const APIConfig& c)

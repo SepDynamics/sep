@@ -121,6 +121,7 @@ private:
 };
 
 std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config);
+std::unique_ptr<Processor> createProcessor();
 std::unique_ptr<Processor> createCPUProcessor(const ProcessingConfig& config);
 std::unique_ptr<Processor> createGPUProcessor(const ProcessingConfig& config);
 

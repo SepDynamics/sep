@@ -21,14 +21,14 @@
 // Use macros from bridge_internal.hpp
 #if !SEP_HAS_EXCEPTIONS
 #define SEP_TRY
-  do { sep::crow::error::set_last_error("exceptions disabled"); 
-    return static_cast<int>(core); 
+  do { sep::crow::error::set_last_error("exceptions disabled");
+    return sep::api::bridge::detail::mapSepError(core);
   } while (0)
 #endif
 #else // No exceptions
 #define SEP_TRY
-#define SEP_CATCH_RETURN(core) 
-  do { return static_cast<int>(core); } while (0)
+#define SEP_CATCH_RETURN(core)
+  do { return sep::api::bridge::detail::mapSepError(core); } while (0)
 #endif
 
 namespace sep::api::bridge::detail {
@@ -55,21 +55,30 @@ void setRequiredBufferSize(size_t size) { g_required_buffer_size = size; }
 
 size_t getRequiredBufferSize() { return g_required_buffer_size; }
 
-sep::api::ErrorCode mapSepError(sep::api::ErrorCode core) {
+sep::SEPResult mapSepError(sep::api::ErrorCode core) {
   switch (core) {
+    case sep::api::ErrorCode::Success:
+      return sep::SEPResult::SUCCESS;
     case sep::api::ErrorCode::InvalidArgument:
-      return sep::api::ErrorCode::InvalidParameter;
+    case sep::api::ErrorCode::InvalidParameter:
+      return sep::SEPResult::INVALID_ARGUMENT;
+    case sep::api::ErrorCode::ResourceNotFound:
+      return sep::SEPResult::NOT_FOUND;
+    case sep::api::ErrorCode::OutOfMemory:
+      return sep::SEPResult::OUT_OF_MEMORY;
+    case sep::api::ErrorCode::InvalidState:
+      return sep::SEPResult::INVALID_STATE;
     case sep::api::ErrorCode::CudaError:
+      return sep::SEPResult::CUDA_ERROR;
+    case sep::api::ErrorCode::ProcessingError:
     case sep::api::ErrorCode::ApiError:
     case sep::api::ErrorCode::InvalidOperation:
-    case sep::api::ErrorCode::ResourceNotFound:
-    case sep::api::ErrorCode::OutOfMemory:
-    case sep::api::ErrorCode::InvalidState:
     case sep::api::ErrorCode::SystemError:
-    case sep::api::ErrorCode::Unknown:
-      return sep::api::ErrorCode::ProcessingError;
+      return sep::SEPResult::PROCESSING_ERROR;
+    case sep::api::ErrorCode::BufferTooSmall:
+      return sep::SEPResult::BUFFER_TOO_SMALL;
     default:
-      return sep::api::ErrorCode::GeneralError;
+      return sep::SEPResult::UNKNOWN_ERROR;
   }
 }
 

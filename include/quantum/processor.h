@@ -77,6 +77,8 @@ namespace core { class SystemHooks; }
 
 class ProcessorImpl;
 
+// Processor is thread-safe. All mutations of internal state are
+// guarded by an internal mutex within the implementation.
 class Processor {
 public:
     explicit Processor(const ProcessingConfig& config);

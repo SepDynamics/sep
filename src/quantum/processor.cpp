@@ -1,5 +1,6 @@
 #include "quantum/processor.h"
 #include "quantum/types.h"
+#include "core/manager.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"
 #include <glm/glm.hpp>
@@ -419,13 +420,13 @@ std::unique_ptr<Processor> createProcessor() {
 std::unique_ptr<Processor> createCPUProcessor(const ProcessingConfig& config) {
     ProcessingConfig cpu_config = config;
     cpu_config.enable_cuda = false;
-    return std::make_unique<Processor>(cpu_config);
+    return createProcessor(cpu_config);
 }
 
 std::unique_ptr<Processor> createGPUProcessor(const ProcessingConfig& config) {
     ProcessingConfig gpu_config = config;
     gpu_config.enable_cuda = true;
-    return std::make_unique<Processor>(gpu_config);
+    return createProcessor(gpu_config);
 }
 
 } // namespace sep::quantum

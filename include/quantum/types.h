@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 namespace sep::quantum {
 
@@ -54,6 +55,26 @@ struct ProcessingConfig {
   float stability_threshold{0.8f};
   bool enable_cuda{false};
 };
+
+inline void to_json(nlohmann::json& j, const ProcessingConfig& c) {
+    j = nlohmann::json{
+        {"max_patterns", c.max_patterns},
+        {"mutation_rate", c.mutation_rate},
+        {"ltm_coherence_threshold", c.ltm_coherence_threshold},
+        {"mtm_coherence_threshold", c.mtm_coherence_threshold},
+        {"stability_threshold", c.stability_threshold},
+        {"enable_cuda", c.enable_cuda}
+    };
+}
+
+inline void from_json(const nlohmann::json& j, ProcessingConfig& c) {
+    c.max_patterns = j.value("max_patterns", static_cast<size_t>(10000));
+    c.mutation_rate = j.value("mutation_rate", 0.01f);
+    c.ltm_coherence_threshold = j.value("ltm_coherence_threshold", 0.9f);
+    c.mtm_coherence_threshold = j.value("mtm_coherence_threshold", 0.6f);
+    c.stability_threshold = j.value("stability_threshold", 0.8f);
+    c.enable_cuda = j.value("enable_cuda", false);
+}
 
 struct ProcessingResult {
   bool success{false};

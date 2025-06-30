@@ -2,6 +2,8 @@
 #define SEP_CONFIG_MANAGER_H
 
 #include "types.h"
+#include "memory/memory_tier_manager.hpp"
+#include "quantum/types.h"
 #include <memory>
 #include <mutex>
 #include <string>

@@ -1,17 +1,159 @@
 #include "core/logging.h"
-#include <iostream>
+#include "api/types.h"
+#include "api/server.h"
+#include "api/crow_adapter.h"
+#include "core/common.h"
+#include "memory/memory_tier_manager.hpp"
+#include "quantum/quantum_processor_qfh.h"
+
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/daily_file_sink.h>
+#include <spdlog/sinks/dist_sink.h>
+#include <spdlog/sinks/null_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
+#include <atomic>
 
-namespace sep {
-namespace logging {
+#ifdef SEP_HAS_OPENTELEMETRY
+#include <opentelemetry/trace/provider.h>
+#endif
 
-// Manager::initialize() is defined in src/memory/manager.cpp
+namespace sep::logging {
 
-void Manager::shutdownLogging() {
-    // Basic shutdown logic using spdlog
-    spdlog::shutdown();
-    std::cerr << "Logging shutdown" << std::endl;
+spdlog::level::level_enum Manager::toSpdLogLevel(Level level) {
+  switch (level) {
+    case Level::TRACE:
+      return spdlog::level::trace;
+    case Level::DEBUG:
+      return spdlog::level::debug;
+    case Level::INFO:
+      return spdlog::level::info;
+    case Level::WARN:
+      return spdlog::level::warn;
+    case Level::ERROR:
+      return spdlog::level::err;
+    case Level::CRITICAL:
+      return spdlog::level::critical;
+    default:
+      return spdlog::level::info;
+  }
 }
 
-} // namespace logging
-} // namespace sep
+void Manager::initialize() {
+  spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%^%l%$] %v");
+  spdlog::set_level(spdlog::level::info);
+}
+
+void Manager::shutdown() { spdlog::shutdown(); }
+
+void *Manager::getTracer() {
+#ifdef SEP_HAS_OPENTELEMETRY
+  static auto tracer = opentelemetry::trace::Provider::GetTracerProvider()
+                           ->GetTracer("sep_logging");
+  return tracer.get();
+#else
+  static SimpleTracer tracer;
+  return &tracer;
+#endif
+}
+
+std::shared_ptr<spdlog::logger> Manager::createLogger(const std::string &name,
+                                                      const LoggerConfig &config) {
+  auto logger = spdlog::get(name);
+  if (logger && !logger->sinks().empty()) {
+    return logger;
+  }
+
+  std::vector<spdlog::sink_ptr> sinks;
+
+  if (config.console.enabled) {
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    console_sink->set_level(toSpdLogLevel(config.level));
+    sinks.push_back(console_sink);
+  }
+
+  if (!config.file.path.empty()) {
+    auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
+        config.file.path, config.file.max_size, config.file.max_files);
+    file_sink->set_level(toSpdLogLevel(config.level));
+    sinks.push_back(file_sink);
+  }
+
+  logger = std::make_shared<spdlog::logger>(name, sinks.begin(), sinks.end());
+  logger->set_level(toSpdLogLevel(config.level));
+  if (!config.pattern.empty()) {
+    logger->set_pattern(config.pattern);
+  }
+  spdlog::register_logger(logger);
+
+  return logger;
+}
+
+std::shared_ptr<spdlog::logger> Manager::getLogger(const std::string &name) {
+  return spdlog::get(name);
+}
+
+void Manager::setGlobalLevel(Level level) { spdlog::set_level(toSpdLogLevel(level)); }
+
+Level Manager::levelFromString(const std::string &level) {
+  if (level == "trace") return Level::TRACE;
+  if (level == "debug") return Level::DEBUG;
+  if (level == "info") return Level::INFO;
+  if (level == "warn") return Level::WARN;
+  if (level == "error") return Level::ERROR;
+  if (level == "critical") return Level::CRITICAL;
+  return Level::INFO;
+}
+
+std::string Manager::levelToString(Level level) {
+  switch (level) {
+    case Level::TRACE:
+      return "trace";
+    case Level::DEBUG:
+      return "debug";
+    case Level::INFO:
+      return "info";
+    case Level::WARN:
+      return "warn";
+    case Level::ERROR:
+      return "error";
+    case Level::CRITICAL:
+      return "critical";
+    default:
+      return "info";
+  }
+}
+
+void LoggingMiddleware::before_handle(::crow::request &req, ::crow::response &res,
+                                      LoggingMiddleware::context &ctx) {
+  (void)req;
+  if (!isReady()) {
+    res.code = 503;
+    res.end();
+    return;
+  }
+
+  ctx.start = std::chrono::high_resolution_clock::now();
+  std::atomic_thread_fence(std::memory_order_release);
+}
+
+void LoggingMiddleware::after_handle(::crow::request &req, ::crow::response &res,
+                                     LoggingMiddleware::context &ctx) {
+  if (!isReady()) {
+    return;
+  }
+
+  auto req_ptr = std::make_unique<sep::api::CrowRequestAdapter>(req);
+
+  if (ctx.start != std::chrono::high_resolution_clock::time_point{}) {
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - ctx.start);
+    server_->logRequest(*req_ptr, res.code, res.body, duration.count());
+  } else {
+    server_->logRequest(*req_ptr, res.code, res.body, 0);
+  }
+}
+
+}  // namespace sep::logging
+

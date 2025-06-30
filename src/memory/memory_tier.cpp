@@ -24,7 +24,7 @@
 
 #include "compat/math_common.h"
 #include "memory/logger.hpp"
-#include "memory/manager.h"
+#include "core/logging.h"
 #include "memory/memory_tier_manager.hpp"
 #include "core/allocation_metrics.h"
 #include "memory/types.h"

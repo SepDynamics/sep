@@ -1,6 +1,6 @@
 #include "memory/redis_manager.h"
 #include "memory/types.h"
-#include "memory/manager.h" // For logging manager
+#include "core/logging.h" // logging manager
 #include <mutex>
 
 #include "compat/cuda_common.h" // For SEP_CUDA_AVAILABLE

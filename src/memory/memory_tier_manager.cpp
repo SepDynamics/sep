@@ -2,6 +2,7 @@
 #include "core/common.h"  // defines sep::SEPResult
 #include "memory/types.h"
 #include "memory/redis_manager.h"
+#include "core/manager.h"
 
 #include "quantum/types.h"        // For ::sep::quantum::Pattern
 #include "quantum/data.hpp"       // For ::sep::pattern::PatternData
@@ -259,9 +260,10 @@ MemoryBlock* MemoryTierManager::findBlockByPtr(void* ptr) {
 }
 
 MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, int generation_count) {
-    if (coherence >= config_.promote_mtm_to_ltm && generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen))
+    auto cfg = sep::config::ConfigManager::getInstance().getMemoryConfig();
+    if (coherence >= cfg.promote_mtm_to_ltm && generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen))
         return ltm_.get();
-    if (coherence >= config_.promote_stm_to_mtm && generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen))
+    if (coherence >= cfg.promote_stm_to_mtm && generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen))
         return mtm_.get();
     return stm_.get();
 }
@@ -286,12 +288,14 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::pruneWeakRelationships() {
+    auto cfg = sep::config::ConfigManager::getInstance().getMemoryConfig();
     for (auto& map : pattern_relationships_)
-        for (auto it = map.second.begin(); it != map.second.end();)
-            if (it->second < config_.demote_threshold)
+        for (auto it = map.second.begin(); it != map.second.end();) {
+            if (it->second < cfg.demote_threshold)
                 it = map.second.erase(it);
             else
                 ++it;
+        }
 }
 
 void MemoryTierManager::calculateRelationshipCoherence() {
@@ -384,8 +388,9 @@ const ::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) co
 
 void MemoryTierManager::cleanupExpiredPatterns() {
     std::vector<std::size_t> to_remove;
+    auto cfg = sep::config::ConfigManager::getInstance().getMemoryConfig();
     for (const auto& p : pattern_registry_) {
-        if (p.second->coherence < static_cast<double>(config_.demote_threshold))
+        if (p.second->coherence < static_cast<double>(cfg.demote_threshold))
             to_remove.push_back(p.first);
     }
     for (std::size_t id : to_remove)

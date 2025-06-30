@@ -41,11 +41,15 @@ public:
   const APIConfig &getAPIConfig() const;
   const CudaConfig &getCudaConfig() const;
   const LogConfig &getLogConfig() const;
+  const MemoryConfig &getMemoryConfig() const;
+  const QuantumConfig &getQuantumConfig() const;
 
   // Update specific components
   void updateAPIConfig(const APIConfig &config);
   void updateCudaConfig(const CudaConfig &config);
   void updateLogConfig(const LogConfig &config);
+  void updateMemoryConfig(const MemoryConfig &config);
+  void updateQuantumConfig(const QuantumConfig &config);
 
   // Reset configuration to defaults
   void resetToDefaults();

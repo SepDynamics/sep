@@ -18,5 +18,15 @@
         "log_file": "sep.log",
         "console_output": true,
         "file_output": true
+    },
+    "memory": {
+        "promote_stm_to_mtm": 0.7,
+        "promote_mtm_to_ltm": 0.9,
+        "demote_threshold": 0.3
+    },
+    "quantum": {
+        "ltm_coherence_threshold": 0.9,
+        "mtm_coherence_threshold": 0.6,
+        "stability_threshold": 0.8
     }
 }

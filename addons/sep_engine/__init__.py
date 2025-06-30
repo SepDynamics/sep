@@ -25,6 +25,7 @@ REQUESTS_AVAILABLE = False
 NUMPY_AVAILABLE = False
 
 try:
+    import requests
     REQUESTS_AVAILABLE = True
 except ImportError:
     print("SEP Engine: 'requests' module not available. HTTP API will be disabled.")
@@ -116,7 +117,6 @@ class SEPEngineSettings:
         # Fall back to HTTP API if requests module is available
         if REQUESTS_AVAILABLE:
             try:
-                import requests
                 response = requests.get(
                     f"{self.get_base_url()}/health",
                     timeout=self.connection_timeout
@@ -135,15 +135,14 @@ class SEPEngineSettings:
                 else:
                     self.last_status = f"HTTP Error: {response.status_code}"
                     self.connected = False
-            except requests.exceptions.ConnectionError:
-                self.connected = False
-                self.last_status = "HTTP API: Connection failed"
-            except requests.exceptions.Timeout:
-                self.connected = False
-                self.last_status = "HTTP API: Connection timeout"
             except Exception as e:
                 self.connected = False
-                self.last_status = f"Error: {str(e)}"
+                if isinstance(e, requests.exceptions.ConnectionError):
+                    self.last_status = "HTTP API: Connection failed"
+                elif isinstance(e, requests.exceptions.Timeout):
+                    self.last_status = "HTTP API: Connection timeout"
+                else:
+                    self.last_status = f"Error: {str(e)}"
         else:
             # HTTP API not available - requests module missing
             self.connected = False
@@ -623,6 +622,17 @@ def update_library_path(self, context):
     return None
 
 def register():
+    # Install dependencies if needed
+    if not REQUESTS_AVAILABLE:
+        try:
+            from . import install_script
+            if install_script.install_requirements():
+                global REQUESTS_AVAILABLE
+                import requests
+                REQUESTS_AVAILABLE = True
+        except Exception as e:
+            print(f"Failed to install dependencies: {e}")
+    
     # Register quantum components first
     from . import quantum_state
     from . import quantum_processor

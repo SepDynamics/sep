@@ -15,6 +15,7 @@
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
 #include "quantum/pattern_evolution_bridge.h" // Fix: Add include for PatternEvolutionBridge // Fix: Added comment
+#include "core/manager.h"
 
 #include <memory>
 #include <mutex>
@@ -40,7 +41,15 @@ MemoryTierManager::MemoryTierManager(const MemoryTierManager::Config& cfg) : con
     init(cfg);
 }
 
-MemoryTierManager::MemoryTierManager() : MemoryTierManager(Config{}) {}
+MemoryTierManager::MemoryTierManager() {
+    auto& cm = sep::config::ConfigManager::getInstance();
+    Config cfg{};
+    const auto& mc = cm.getMemoryConfig();
+    cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
+    cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
+    cfg.demote_threshold = mc.demote_threshold;
+    init(cfg);
+}
 
 MemoryTierManager::~MemoryTierManager() {
     shutdown();

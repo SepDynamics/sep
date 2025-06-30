@@ -12,7 +12,9 @@ target_include_directories(sep_main PRIVATE ${SEP_INCLUDE_DIRS})
 # Add component subdirectories
 add_subdirectory(api)
 add_subdirectory(audio)
-add_subdirectory(blender)
+if(SEP_HAS_BLENDER)
+    add_subdirectory(blender)
+endif()
 add_subdirectory(compat)
 add_subdirectory(core)
 add_subdirectory(memory)
@@ -22,11 +24,11 @@ add_subdirectory(quantum)
 target_link_libraries(sep_main PRIVATE
     sep_api
     sep_audio
-    sep_blender
     sep_compat
     sep_core
     sep_memory
     sep_quantum
+    $<$<BOOL:${SEP_HAS_BLENDER}>:sep_blender>
     ${PIPEWIRE_LIBRARIES}
     fmt::fmt
 )

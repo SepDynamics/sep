@@ -146,11 +146,11 @@ std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const std
   return std::make_unique<SimpleHttpResponse>(code, response.dump());
 }
 
-std::string SEPApiServer::handleError(const std::string& message, int code, const std::string& body) {
-  nlohmann::json error_response{};
-  error_response["error"] = true;
-  error_response["message"] = message;
-  error_response["code"] = code;
+std::string SEPApiServer::handleError(const std::string& message, int code) {
+    nlohmann::json error_response{};
+    error_response["error"] = true;
+    error_response["message"] = message;
+    error_response["code"] = code;
   error_response["timestamp"] = std::chrono::duration_cast<std::chrono::seconds>(
                                     std::chrono::system_clock::now().time_since_epoch())
                                     .count();

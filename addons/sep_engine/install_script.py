@@ -180,6 +180,27 @@ class SEPAddonInstaller:
         libs_path = addon_path / "libs"
         libs_path.mkdir(exist_ok=True)
         
+        # Verify required files
+        required_files = [
+            "__init__.py",
+            "connection.py",
+            "operators.py",
+            "ui.py",
+            "mesh_utils.py",
+            "pattern_processor.py"
+        ]
+        
+        missing_files = []
+        for file in required_files:
+            if not (addon_path / file).exists():
+                missing_files.append(file)
+        
+        if missing_files:
+            print(f"Error: Missing required files: {', '.join(missing_files)}")
+            # Clean up failed installation
+            shutil.rmtree(addon_path)
+            return False
+        
         print("Installation complete!")
         print(f"Addon installed to: {addon_path}")
         print("\nNext steps:")
@@ -199,27 +220,47 @@ class SEPAddonInstaller:
         else:
             lib_name = "libsep_blender.so"
         
-        # In production, would download from actual URL
-        download_url = f"https://sep-engine.org/downloads/{lib_name}"
+        # Base URL for downloads
+        base_url = "https://sep-engine.org/downloads"
+        
+        # Required files to download
+        required_files = {
+            "lib": lib_name,
+            "mesh_utils": "mesh_utils.py",
+            "pattern_processor": "pattern_processor.py"
+        }
         
         if target_dir:
-            target_path = Path(target_dir) / "libs" / lib_name
+            target_base = Path(target_dir)
         else:
             # Try to find installed addon
             user_path = self.get_user_addon_path()
             if user_path and (user_path / self.addon_name).exists():
-                target_path = user_path / self.addon_name / "libs" / lib_name
+                target_base = user_path / self.addon_name
             else:
-                target_path = Path.cwd() / "libs" / lib_name
+                target_base = Path.cwd()
         
-        target_path.parent.mkdir(parents=True, exist_ok=True)
+        # Create directories
+        (target_base / "libs").mkdir(parents=True, exist_ok=True)
         
-        print(f"Downloading {lib_name} to {target_path}")
-        print(f"URL: {download_url}")
+        downloaded_files = []
         
-        # In production, implement actual download
-        # For now, create placeholder
-        target_path.touch()
+        # Download each required file
+        for file_type, filename in required_files.items():
+            download_url = f"{base_url}/{filename}"
+            
+            if file_type == "lib":
+                target_path = target_base / "libs" / filename
+            else:
+                target_path = target_base / filename
+            
+            print(f"Downloading {filename} to {target_path}")
+            print(f"URL: {download_url}")
+            
+            # In production, implement actual download
+            # For now, create placeholder
+            target_path.touch()
+            downloaded_files.append(target_path)
         
         print(f"Library downloaded to: {target_path}")
         return target_path
@@ -239,7 +280,14 @@ class SEPAddonInstaller:
             return False
         
         # Check for required files
-        required_files = ["__init__.py", "connection.py", "operators.py", "ui.py"]
+        required_files = [
+            "__init__.py",
+            "connection.py",
+            "operators.py",
+            "ui.py",
+            "mesh_utils.py",
+            "pattern_processor.py"
+        ]
         missing_files = []
         
         for file in required_files:

@@ -92,6 +92,14 @@ public:
         config.logging.file_output = logging.value("file_output", true);
       }
 
+      if (json.contains("memory")) {
+        json.at("memory").get_to(config.memory);
+      }
+
+      if (json.contains("processor")) {
+        json.at("processor").get_to(config.processor);
+      }
+
       return true;
   }
 
@@ -179,6 +187,16 @@ const LogConfig &ConfigManager::getLogConfig() const {
   return impl_->config.logging;
 }
 
+const memory::MemoryTierManager::Config &ConfigManager::getMemoryConfig() const {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return impl_->config.memory;
+}
+
+const quantum::ProcessingConfig &ConfigManager::getProcessorConfig() const {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return impl_->config.processor;
+}
+
 void ConfigManager::updateAPIConfig(const APIConfig &config) {
   std::lock_guard<std::mutex> lock(mutex_);
   impl_->config.api = config;
@@ -192,6 +210,16 @@ void ConfigManager::updateCudaConfig(const CudaConfig &config) {
 void ConfigManager::updateLogConfig(const LogConfig &config) {
   std::lock_guard<std::mutex> lock(mutex_);
   impl_->config.logging = config;
+}
+
+void ConfigManager::updateMemoryConfig(const memory::MemoryTierManager::Config &config) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  impl_->config.memory = config;
+}
+
+void ConfigManager::updateProcessorConfig(const quantum::ProcessingConfig &config) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  impl_->config.processor = config;
 }
 
 void ConfigManager::resetToDefaults() {

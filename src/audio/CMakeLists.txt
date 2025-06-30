@@ -93,3 +93,17 @@ target_include_directories(sep_audio
         ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
         ${CMAKE_SOURCE_DIR}/extern/eigen
 )
+
+# FFT dependencies
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(FFTW3F QUIET fftw3f)
+if(FFTW3F_FOUND)
+    target_include_directories(sep_audio PRIVATE ${FFTW3F_INCLUDE_DIRS})
+    target_link_libraries(sep_audio PRIVATE ${FFTW3F_LIBRARIES})
+else()
+    message(WARNING "FFTW3f not found; audio FFT will be disabled")
+endif()
+
+if(SEP_ENABLE_CUDA)
+    target_link_libraries(sep_audio PRIVATE CUDA::cufft CUDA::cudart)
+endif()

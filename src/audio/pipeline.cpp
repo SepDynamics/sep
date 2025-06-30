@@ -7,6 +7,13 @@
 #include <glm/gtc/constants.hpp>
 #include <queue>
 #include <vector>
+#include "compat/macros.h"
+#if SEP_CUDA_AVAILABLE
+#include "compat/cuda_runtime.h"
+#include "compat/cufft.h"
+#else
+#include <fftw3.h>
+#endif
 
 namespace sep {
 namespace audio {
@@ -91,24 +98,52 @@ void AudioPipeline::applyHannWindow(std::vector<float>& samples) {
 SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
     SpectralData spectral;
 
-    // Prepare FFT input
-    std::vector<std::complex<float>> fft_input(samples.size());
-    for (size_t i = 0; i < samples.size(); ++i) {
-        fft_input[i] = std::complex<float>(samples[i], 0.0f);
+    const size_t n = samples.size();
+    spectral.magnitudes.resize(n / 2 + 1);
+    spectral.phases.resize(n / 2 + 1);
+
+#if SEP_CUDA_AVAILABLE
+    // GPU path using cuFFT
+    cufftHandle plan{};
+    cufftPlan1d(&plan, static_cast<int>(n), CUFFT_R2C, 1);
+
+    float* d_in = nullptr;
+    cufftComplex* d_out = nullptr;
+    cudaMalloc(&d_in, n * sizeof(float));
+    cudaMalloc(&d_out, (n / 2 + 1) * sizeof(cufftComplex));
+    cudaMemcpy(d_in, samples.data(), n * sizeof(float), cudaMemcpyHostToDevice);
+
+    cufftExecR2C(plan, d_in, d_out);
+
+    std::vector<cufftComplex> out(n / 2 + 1);
+    cudaMemcpy(out.data(), d_out, (n / 2 + 1) * sizeof(cufftComplex), cudaMemcpyDeviceToHost);
+
+    spectral.fft.resize(n / 2 + 1);
+    for (size_t i = 0; i < out.size(); ++i) {
+        spectral.fft[i] = std::complex<float>(out[i].x, out[i].y);
+        spectral.magnitudes[i] = std::abs(spectral.fft[i]);
+        spectral.phases[i] = std::arg(spectral.fft[i]);
     }
 
-    // Perform FFT (simplified for demo)
-    spectral.fft = fft_input;  // Would use actual FFT implementation
+    cufftDestroy(plan);
+    cudaFree(d_in);
+    cudaFree(d_out);
+#else
+    // CPU path using FFTW
+    fftwf_complex* out = reinterpret_cast<fftwf_complex*>(fftwf_malloc(sizeof(fftwf_complex) * (n / 2 + 1)));
+    fftwf_plan plan = fftwf_plan_dft_r2c_1d(static_cast<int>(n), const_cast<float*>(samples.data()), out, FFTW_ESTIMATE);
+    fftwf_execute(plan);
 
-    // Calculate magnitudes and phases
-    spectral.magnitudes.resize(samples.size() / 2 + 1);
-    spectral.phases.resize(samples.size() / 2 + 1);
-
-    for (size_t i = 0; i < spectral.magnitudes.size(); ++i) {
-        auto& bin = spectral.fft[i];
-        spectral.magnitudes[i] = std::abs(bin);
-        spectral.phases[i] = std::arg(bin);
+    spectral.fft.resize(n / 2 + 1);
+    for (size_t i = 0; i < n / 2 + 1; ++i) {
+        spectral.fft[i] = std::complex<float>(out[i][0], out[i][1]);
+        spectral.magnitudes[i] = std::abs(spectral.fft[i]);
+        spectral.phases[i] = std::arg(spectral.fft[i]);
     }
+
+    fftwf_destroy_plan(plan);
+    fftwf_free(out);
+#endif
 
     return spectral;
 }

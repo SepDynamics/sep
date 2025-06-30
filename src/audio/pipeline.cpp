@@ -5,14 +5,14 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
-#include <compat/cufft.h>
-#include <fftw3.h>
+#if SEP_CUDA_AVAILABLE
+#    include "compat/cufft.h"
+#endif
+#ifdef SEP_USE_FFTW
+#    include <fftw3.h>
+#endif
 #include <queue>
 #include <vector>
-#include "compat/cufft.h"
-#ifdef SEP_USE_FFTW
-#include <fftw3.h>
-#endif
 
 namespace sep {
 namespace audio {
@@ -87,7 +87,7 @@ void AudioPipeline::processQueuedFrames() {
 
 void AudioPipeline::applyHannWindow(std::vector<float>& samples) {
     for (size_t i = 0; i < samples.size(); ++i) {
-        float angle = 2.0f * glm::pi<float>() * static_cast<float>(i) / // Fix: Cast i to float // Fix: Added comment
+        float angle = 2.0f * glm::pi<float>() * static_cast<float>(i) /
                       static_cast<float>(samples.size());
         float window = 0.5f * (1.0f - std::cos(angle));
         samples[i] *= window;
@@ -144,10 +144,6 @@ SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
         spectral.magnitudes[i] = std::abs(spectral.fft[i]);
         spectral.phases[i] = std::arg(spectral.fft[i]);
     }
-
-    fftwf_destroy_plan(plan);
-    fftwf_free(out);
-#endif
 
     return spectral;
 }

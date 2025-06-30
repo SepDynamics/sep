@@ -14,7 +14,11 @@ import json
 import os
 import time
 import socket
-from bpy.props import FloatProperty, BoolProperty, EnumProperty, StringProperty, IntProperty
+from bpy.props import FloatProperty, BoolProperty, EnumProperty, StringProperty, IntProperty, PointerProperty
+
+# Import quantum components
+from . import quantum_state
+from . import quantum_processor
 
 # Optional imports - will be handled gracefully if missing
 REQUESTS_AVAILABLE = False
@@ -155,6 +159,60 @@ class SEPEngineSettings:
 
 # Initialize settings
 sep_settings = SEPEngineSettings.get_instance()
+
+class SEP_OT_ResetQuantumState(bpy.types.Operator):
+    """Reset quantum state to default values"""
+    bl_idname = "sep.reset_quantum"
+    bl_label = "Reset State"
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    def execute(self, context):
+        state = context.scene.sep_quantum_state
+        state.qbsa_state = 0
+        state.qfh_level = 0
+        state.rupture_detected = False
+        state.phase = 0.0
+        state.amplitude = 1.0
+        self.report({'INFO'}, "Reset quantum state")
+        return {'FINISHED'}
+
+class SEP_OT_DetectRupture(bpy.types.Operator):
+    """Detect quantum coherence ruptures in mesh"""
+    bl_idname = "sep.detect_rupture"
+    bl_label = "Detect Rupture"
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    def execute(self, context):
+        obj = context.active_object
+        if obj is None or obj.type != 'MESH':
+            self.report({'ERROR'}, "Select a mesh object first")
+            return {'CANCELLED'}
+            
+        try:
+            # Get quantum state
+            state = context.scene.sep_quantum_state
+            
+            # Analyze mesh for ruptures
+            result = quantum_processor.process_mesh_quantum(
+                obj,
+                mode=quantum_processor.ProcessingMode.COHERENCE,
+                strength=1.0
+            )
+            
+            # Update quantum state
+            if result.get("coherence_applied"):
+                if state.qbsa_state > 200:  # High QBSA state indicates instability
+                    state.rupture_detected = True
+                    state.qfh_level = min(state.qfh_level + 2, 16)
+                    self.report({'WARNING'}, "Quantum rupture detected!")
+                else:
+                    self.report({'INFO'}, "No ruptures detected")
+            
+        except Exception as e:
+            self.report({'ERROR'}, f"Error: {str(e)}")
+            return {'CANCELLED'}
+            
+        return {'FINISHED'}
 
 class SEP_OT_ProcessMesh(bpy.types.Operator):
     """Process the active mesh through SEP Engine"""
@@ -323,82 +381,42 @@ class SEP_OT_ProcessMesh(bpy.types.Operator):
             return {'CANCELLED'}
         
         try:
-            # Check connection to SEP Engine
-            if not sep_settings.check_connection():
-                self.report({'ERROR'}, f"Cannot connect to SEP Engine: {sep_settings.last_status}")
-                return {'CANCELLED'}
-                
-            # Extract mesh data
-            mesh_data = self.extract_mesh_data(obj)
+            # Get quantum state
+            state = context.scene.sep_quantum_state
             
-            # Add pattern parameters
-            pattern_data = {
-                "pattern": {
-                    "coherence": self.coherence,
-                    "stability": self.stability,
-                    "entropy": self.entropy,
-                    "complexity": self.complexity
-                },
-                "mesh_data": mesh_data,
-                "options": {
-                    "return_deformation": True,
-                    "preserve_topology": True
-                }
-            }
+            # Select processing mode based on quantum state
+            mode = quantum_processor.ProcessingMode.EVOLUTION
+            if state.rupture_detected:
+                mode = quantum_processor.ProcessingMode.COLLAPSE
+            elif state.qfh_level > 8:
+                mode = quantum_processor.ProcessingMode.ENTANGLEMENT
+            elif state.qbsa_state > 128:
+                mode = quantum_processor.ProcessingMode.COHERENCE
             
-            # Send to SEP engine
-            self.report({'INFO'}, "Sending data to SEP Engine...")
+            # Process mesh through quantum algorithms
+            result = quantum_processor.process_mesh_quantum(
+                obj,
+                mode=mode,
+                strength=state.amplitude
+            )
             
-            # Try potential API endpoints from most likely to least likely
-            endpoints = [
-                "/pattern/evolve",      # Primary endpoint for pattern evolution
-                "/pattern/analyze",     # Alternative endpoint for analysis
-                "/memory/query"         # Memory-based endpoint
-            ]
-            
-            response = None
-            endpoint_used = None
-            
-            for endpoint in endpoints:
-                try:
-                    api_url = f"{sep_settings.get_base_url()}{endpoint}"
-                    self.report({'INFO'}, f"Trying endpoint: {api_url}")
-                    
-                    response = requests.post(
-                        api_url,
-                        json=pattern_data,
-                        headers={"Content-Type": "application/json"},
-                        timeout=sep_settings.connection_timeout
-                    )
-                    
-                    if response.ok:
-                        endpoint_used = endpoint
-                        break
-                except requests.exceptions.RequestException:
-                    continue
-            
-            if response is None or not response.ok:
-                if response is not None:
-                    self.report({'ERROR'}, f"SEP Engine error: {response.status_code}")
-                else:
-                    self.report({'ERROR'}, "Failed to communicate with SEP Engine service")
-                return {'CANCELLED'}
-                
-            # Apply quantum patterns back to mesh
-            response_data = response.json()
-            success = self.apply_patterns(obj, response_data)
-            
-            if success:
-                self.report({'INFO'}, f"Applied SEP patterns from {endpoint_used} to mesh")
+            # Update quantum state based on result
+            if result.get("coherence_applied"):
+                state.qbsa_state = min(state.qbsa_state + 32, 255)
+                self.report({'INFO'}, "Applied quantum coherence")
+            elif result.get("evolution_applied"):
+                state.phase += 0.1
+                self.report({'INFO'}, "Applied quantum evolution")
+            elif result.get("entanglement_applied"):
+                state.qfh_level = min(state.qfh_level + 1, 16)
+                self.report({'INFO'}, "Applied quantum entanglement")
+            elif result.get("collapse_applied"):
+                state.rupture_detected = False
+                state.qbsa_state = max(state.qbsa_state - 64, 0)
+                self.report({'INFO'}, "Applied quantum collapse")
             else:
-                self.report({'WARNING'}, "Received response but no pattern applied")
+                self.report({'WARNING'}, "No quantum changes applied")
                 
-        except requests.exceptions.ConnectionError:
-            self.report({'ERROR'}, "Connection to SEP Engine lost")
-            return {'CANCELLED'}
-        except requests.exceptions.Timeout:
-            self.report({'ERROR'}, "SEP Engine request timed out")
-            return {'CANCELLED'}
         except Exception as e:
             self.report({'ERROR'}, f"Error: {str(e)}")
             return {'CANCELLED'}
@@ -491,6 +509,21 @@ class SEP_PT_MeshPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         
+        # Quantum state
+        box = layout.box()
+        box.label(text="Quantum State", icon='PHYSICS')
+        
+        state = context.scene.sep_quantum_state
+        col = box.column(align=True)
+        col.prop(state, "qbsa_state")
+        col.prop(state, "qfh_level")
+        col.prop(state, "phase")
+        col.prop(state, "amplitude")
+        col.prop(state, "rupture_detected")
+        
+        row = box.row()
+        row.operator("sep.reset_quantum", icon='FILE_REFRESH')
+        
         # Engine connection settings
         box = layout.box()
         box.label(text="SEP Engine Connection", icon='NETWORK_DRIVE')
@@ -527,7 +560,9 @@ class SEP_PT_MeshPanel(bpy.types.Panel):
         box = layout.box()
         box.label(text="Process Mesh", icon='MESH_DATA')
         
-        op = box.operator("sep.process_mesh")
+        row = box.row()
+        row.operator("sep.detect_rupture", icon='ERROR')
+        row.operator("sep.process_mesh", icon='PLAY')
         
         # Export/visualization options
         row = box.row()
@@ -588,7 +623,14 @@ def update_library_path(self, context):
     return None
 
 def register():
+    # Register quantum components first
+    from . import quantum_state
+    from . import quantum_processor
+    quantum_state.register()
+    
     # Register operators
+    bpy.utils.register_class(SEP_OT_ResetQuantumState)
+    bpy.utils.register_class(SEP_OT_DetectRupture)
     bpy.utils.register_class(SEP_OT_ProcessMesh)
     bpy.utils.register_class(SEP_OT_CheckConnection)
     bpy.utils.register_class(SEP_OT_ToggleConnectionMode)
@@ -683,7 +725,13 @@ def unregister():
         settings.direct_bridge.cleanup()
         settings.direct_bridge = None
     
+    # Unregister quantum components first
+    from . import quantum_state
+    quantum_state.unregister()
+    
     # Unregister operators
+    bpy.utils.unregister_class(SEP_OT_ResetQuantumState)
+    bpy.utils.unregister_class(SEP_OT_DetectRupture)
     bpy.utils.unregister_class(SEP_OT_ProcessMesh)
     bpy.utils.unregister_class(SEP_OT_CheckConnection)
     bpy.utils.unregister_class(SEP_OT_ToggleConnectionMode)

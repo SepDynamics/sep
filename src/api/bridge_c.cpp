@@ -21,35 +21,30 @@
 extern "C" {
 
 SEP_API int sep_bridge_init(void) {
-#ifdef SEP_HAS_EXCEPTIONS
-  try {
-#endif
+  SEP_TRY {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex); // Fix: use the global mutex
   sep::quantum::ProcessingConfig options{};
   sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
- sep::api::bridge::detail::g_last_error.clear(); // Fix: Add semicolon
+  sep::api::bridge::detail::g_last_error.clear(); // Fix: Add semicolon
   // Fix: Initialize g_required_buffer_size to 0 here
   sep::api::bridge::detail::g_required_buffer_size = 0;
   return 0;
-#if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
-#endif
 }
 
 SEP_API int sep_bridge_cleanup(void) {
-  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
- sep::api::bridge::detail::g_context_processor_bridge.reset(); // Fix: Add semicolon
-  sep::api::bridge::detail::g_last_error.clear();
-  // Fix: Initialize g_required_buffer_size to 0 here
-  sep::api::bridge::detail::g_required_buffer_size = 0;
-  return 0;
+  SEP_TRY {
+    std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+    sep::api::bridge::detail::g_context_processor_bridge.reset();
+    sep::api::bridge::detail::g_last_error.clear();
+    sep::api::bridge::detail::g_required_buffer_size = 0;
+    return 0;
+  } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
 }
 
 SEP_API int sep_process_context(const char *context_json, const char *layer,
                                char *result_buffer, size_t buffer_size) {
-#if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
-#endif
+  SEP_TRY {
     if (!context_json || !result_buffer || !layer || buffer_size == 0) {
       sep::api::bridge::detail::setLastError("Invalid parameters");
       return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
@@ -124,12 +119,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       (void)std::snprintf(result_buffer, buffer_size, "%s", result_str.c_str());
       return 0;
     }
-#ifdef SEP_HAS_EXCEPTIONS
-  } catch (const std::exception &e) {
-    sep::api::bridge::detail::setLastError(e.what());
-    return static_cast<int>(sep::api::bridge::detail::mapSepError(sep::api::ErrorCode::ProcessingError));
-  }
-#endif
+  } SEP_CATCH_RETURN(sep::api::ErrorCode::ProcessingError);
 }
 
 SEP_API int sep_bridge_get_last_error(char *buffer, size_t buffer_size) {
@@ -148,9 +138,7 @@ SEP_API size_t sep_get_required_buffer_size(void) {
 }
 
 SEP_API int sep_bridge_set_config(const char *key, const char *value) {
-#if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
-#endif
+  SEP_TRY {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!key || !value) {
     sep::api::bridge::detail::setLastError("Invalid parameters");
@@ -183,16 +171,12 @@ SEP_API int sep_bridge_set_config(const char *key, const char *value) {
   }
   cm.updateAPIConfig(cfg);
   sep::api::bridge::detail::setLastError("");
- return 0; // Fix: Add semicolon
-#if SEP_HAS_EXCEPTIONS
+  return 0;
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-#endif
 }
 
 SEP_API int sep_bridge_get_config(const char *key, char *buffer, size_t buffer_size) {
-#if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
-#endif
+  SEP_TRY {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!key || !buffer || buffer_size == 0) {
     sep::api::bridge::detail::setLastError("Invalid parameters");
@@ -220,17 +204,13 @@ SEP_API int sep_bridge_get_config(const char *key, char *buffer, size_t buffer_s
   }
   (void)std::snprintf(buffer, buffer_size, "%s", val.c_str());
   sep::api::bridge::detail::setLastError("");
- return 0; // Fix: Add semicolon
-#if SEP_HAS_EXCEPTIONS
+  return 0;
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-#endif
 }
 
 SEP_API int sep_bridge_register_callback(const char *event_type,
                                          void (*callback)(const char *event_data)) {
-#if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
-#endif
+  SEP_TRY {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!event_type || !callback) {
     sep::api::bridge::detail::setLastError("Invalid parameters");
@@ -238,10 +218,8 @@ SEP_API int sep_bridge_register_callback(const char *event_type,
   } // Fix: Add closing brace
   sep::api::bridge::detail::g_callback_map[event_type].push_back(callback);
   sep::api::bridge::detail::setLastError("");
- return 0; // Fix: Add semicolon
-#if SEP_HAS_EXCEPTIONS
+  return 0;
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-#endif
 }
 
 } // extern "C"

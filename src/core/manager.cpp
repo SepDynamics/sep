@@ -92,6 +92,14 @@ public:
         config.logging.file_output = logging.value("file_output", true);
       }
 
+      if (json.contains("memory")) {
+        json.at("memory").get_to(config.memory);
+      }
+
+      if (json.contains("quantum")) {
+        json.at("quantum").get_to(config.quantum);
+      }
+
       return true;
   }
 
@@ -179,6 +187,16 @@ const LogConfig &ConfigManager::getLogConfig() const {
   return impl_->config.logging;
 }
 
+const MemoryThresholdConfig &ConfigManager::getMemoryConfig() const {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return impl_->config.memory;
+}
+
+const QuantumThresholdConfig &ConfigManager::getQuantumConfig() const {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return impl_->config.quantum;
+}
+
 void ConfigManager::updateAPIConfig(const APIConfig &config) {
   std::lock_guard<std::mutex> lock(mutex_);
   impl_->config.api = config;
@@ -192,6 +210,16 @@ void ConfigManager::updateCudaConfig(const CudaConfig &config) {
 void ConfigManager::updateLogConfig(const LogConfig &config) {
   std::lock_guard<std::mutex> lock(mutex_);
   impl_->config.logging = config;
+}
+
+void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig &config) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  impl_->config.memory = config;
+}
+
+void ConfigManager::updateQuantumConfig(const QuantumThresholdConfig &config) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  impl_->config.quantum = config;
 }
 
 void ConfigManager::resetToDefaults() {

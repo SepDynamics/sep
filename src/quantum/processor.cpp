@@ -4,6 +4,7 @@
 #include "quantum/quantum_processor_qfh.h"
 #include <glm/glm.hpp>
 #include "memory/types.h"
+#include "core/manager.h"
 #include "core/common.h"  // defines sep::SEPResult
 
 using ::sep::memory::MemoryTierEnum;
@@ -394,7 +395,12 @@ ProcessingConfig Processor::getConfig() const { return impl_->getConfig(); }
 void Processor::updateConfig(const ProcessingConfig& config) { impl_->updateConfig(config); }
 
 std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config) {
-    return std::make_unique<Processor>(config); // Fix: Use make_unique // Fix: Added comment
+    ProcessingConfig cfg = config;
+    const auto& qcfg = sep::config::ConfigManager::getInstance().getQuantumConfig();
+    cfg.ltm_coherence_threshold = qcfg.ltm_coherence_threshold;
+    cfg.mtm_coherence_threshold = qcfg.mtm_coherence_threshold;
+    cfg.stability_threshold = qcfg.stability_threshold;
+    return std::make_unique<Processor>(cfg);
 }
 
 std::unique_ptr<Processor> createCPUProcessor(const ProcessingConfig& config) {

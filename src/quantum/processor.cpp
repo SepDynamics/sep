@@ -1,5 +1,6 @@
 #include "quantum/processor.h"
 #include "quantum/types.h"
+#include "core/manager.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"
 #include <glm/glm.hpp>
@@ -394,19 +395,24 @@ ProcessingConfig Processor::getConfig() const { return impl_->getConfig(); }
 void Processor::updateConfig(const ProcessingConfig& config) { impl_->updateConfig(config); }
 
 std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config) {
-    return std::make_unique<Processor>(config); // Fix: Use make_unique // Fix: Added comment
+    ProcessingConfig merged = config;
+    const auto& global_cfg = sep::config::ConfigManager::getInstance().getProcessorConfig();
+    merged.ltm_coherence_threshold = global_cfg.ltm_coherence_threshold;
+    merged.mtm_coherence_threshold = global_cfg.mtm_coherence_threshold;
+    merged.stability_threshold = global_cfg.stability_threshold;
+    return std::make_unique<Processor>(merged);
 }
 
 std::unique_ptr<Processor> createCPUProcessor(const ProcessingConfig& config) {
     ProcessingConfig cpu_config = config;
     cpu_config.enable_cuda = false;
-    return std::make_unique<Processor>(cpu_config);
+    return createProcessor(cpu_config);
 }
 
 std::unique_ptr<Processor> createGPUProcessor(const ProcessingConfig& config) {
     ProcessingConfig gpu_config = config;
     gpu_config.enable_cuda = true;
-    return std::make_unique<Processor>(gpu_config);
+    return createProcessor(gpu_config);
 }
 
 } // namespace sep::quantum

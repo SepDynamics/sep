@@ -1,5 +1,6 @@
 #include "memory/memory_tier_manager.hpp"
 #include "core/common.h"  // defines sep::SEPResult
+#include "core/manager.h"
 #include "memory/types.h"
 #include "memory/redis_manager.h"
 
@@ -32,7 +33,10 @@ std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 std::once_flag MemoryTierManager::once_flag_;
 
 MemoryTierManager& MemoryTierManager::getInstance() {
-    std::call_once(once_flag_, []() { instance_ = std::make_unique<MemoryTierManager>(); });
+    std::call_once(once_flag_, []() {
+        const auto& cfg = sep::config::ConfigManager::getInstance().getMemoryConfig();
+        instance_ = std::make_unique<MemoryTierManager>(cfg);
+    });
     return *instance_;
 }
 

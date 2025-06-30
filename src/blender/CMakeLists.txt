@@ -1,3 +1,7 @@
+if(NOT SEP_HAS_BLENDER)
+    return()
+endif()
+
 add_library(sep_blender STATIC
     compression_utils.cpp
     gpu_context.cpp

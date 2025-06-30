@@ -2,6 +2,8 @@
 #define SEP_CONFIG_MANAGER_H
 
 #include "types.h"
+#include "memory/memory_tier_manager.hpp"
+#include "quantum/types.h"
 #include <memory>
 #include <mutex>
 #include <string>
@@ -41,11 +43,15 @@ public:
   const APIConfig &getAPIConfig() const;
   const CudaConfig &getCudaConfig() const;
   const LogConfig &getLogConfig() const;
+  const memory::MemoryTierManager::Config &getMemoryConfig() const;
+  const quantum::ProcessingConfig &getProcessorConfig() const;
 
   // Update specific components
   void updateAPIConfig(const APIConfig &config);
   void updateCudaConfig(const CudaConfig &config);
   void updateLogConfig(const LogConfig &config);
+  void updateMemoryConfig(const memory::MemoryTierManager::Config &config);
+  void updateProcessorConfig(const quantum::ProcessingConfig &config);
 
   // Reset configuration to defaults
   void resetToDefaults();

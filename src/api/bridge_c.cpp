@@ -37,12 +37,17 @@ SEP_API int sep_bridge_init(void) {
 }
 
 SEP_API int sep_bridge_cleanup(void) {
+#if SEP_HAS_EXCEPTIONS
+  try {
+#endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
- sep::api::bridge::detail::g_context_processor_bridge.reset(); // Fix: Add semicolon
+  sep::api::bridge::detail::g_context_processor_bridge.reset();
   sep::api::bridge::detail::g_last_error.clear();
-  // Fix: Initialize g_required_buffer_size to 0 here
   sep::api::bridge::detail::g_required_buffer_size = 0;
   return 0;
+#if SEP_HAS_EXCEPTIONS
+  } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
+#endif
 }
 
 SEP_API int sep_process_context(const char *context_json, const char *layer,
@@ -133,18 +138,30 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
 }
 
 SEP_API int sep_bridge_get_last_error(char *buffer, size_t buffer_size) {
+#if SEP_HAS_EXCEPTIONS
+  try {
+#endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-  if (!buffer || buffer_size == 0) { // Fix: Check for null buffer or zero size
+  if (!buffer || buffer_size == 0) {
     return static_cast<int>(sep::api::ErrorCode::InvalidParameter);
   }
   size_t len = std::min(sep::api::bridge::detail::g_last_error.size(), buffer_size - 1);
   (void)std::snprintf(buffer, buffer_size, "%s", sep::api::bridge::detail::g_last_error.c_str());
   return static_cast<int>(len);
+#if SEP_HAS_EXCEPTIONS
+  } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+#endif
 }
 
 SEP_API size_t sep_get_required_buffer_size(void) {
+#if SEP_HAS_EXCEPTIONS
+  try {
+#endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   return sep::api::bridge::detail::g_required_buffer_size;
+#if SEP_HAS_EXCEPTIONS
+  } SEP_CATCH_RETURN(static_cast<size_t>(0));
+#endif
 }
 
 SEP_API int sep_bridge_set_config(const char *key, const char *value) {

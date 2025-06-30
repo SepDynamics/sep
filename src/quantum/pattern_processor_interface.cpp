@@ -7,7 +7,7 @@
 #include "core/common.h"  // defines sep::SEPResult
 #include "compat/core.h"
 #include "memory/memory_tier_manager.hpp"
-#include "core/logging.h"  // This is actually the logging manager
+#include "core/logging.h"
 
 // Define namespace alias for clarity
 namespace logging = sep::logging;

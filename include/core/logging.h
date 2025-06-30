@@ -31,9 +31,6 @@ std::unique_ptr<HttpRequest> makeRequest(::crow::request &req);
 namespace sep::logging {
 
 #ifndef SEP_HAS_OPENTELEMETRY
-// Minimal tracer that creates TraceSpan instances for instrumentation without
-// relying on OpenTelemetry. It exposes a `startSpan` helper mirroring the
-// OpenTelemetry API shape in a limited form.
 class SimpleTracer {
  public:
   template <typename... Args>

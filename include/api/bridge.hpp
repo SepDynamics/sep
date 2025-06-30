@@ -47,21 +47,21 @@ SEP_API int sep_bridge_register_callback(const char *event_type,
 
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
 #define SEP_BRIDGE_TRY try
-#define SEP_BRIDGE_CATCH(core)                                                   \
-  catch (const std::exception &e) {                                             \
-    sep::api::bridge::detail::setLastError(e.what());                            \
-    return static_cast<int>(core);                                              \
-  }                                                                             \
-  catch (...) {                                                                 \
-    sep::api::bridge::detail::setLastError("Unknown error");                   \
-    return static_cast<int>(core);                                              \
+#define SEP_BRIDGE_CATCH(core)                                                   
+  catch (const std::exception &e) {                                             
+    sep::api::bridge::detail::setLastError(e.what());                            
+    return static_cast<int>(core);                                              
+  }                                                                             
+  catch (...) {                                                                 
+    sep::api::bridge::detail::setLastError("Unknown error");                   
+    return static_cast<int>(core);                                              
   }
 #else
 #define SEP_BRIDGE_TRY if (true)
-#define SEP_BRIDGE_CATCH(core)                                                   \
-  {                                                                             \
-    sep::api::bridge::detail::setLastError("exceptions disabled");              \
-    return static_cast<int>(core);                                              \
+#define SEP_BRIDGE_CATCH(core)                                                   
+  {                                                                             
+    sep::api::bridge::detail::setLastError("exceptions disabled");              
+    return static_cast<int>(core);                                              
   }
 #endif
 

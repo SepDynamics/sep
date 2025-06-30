@@ -8,6 +8,7 @@ add_library(sep_audio
 # Find PipeWire using both pkg-config and direct library find for robustness
 find_package(PkgConfig QUIET)
 set(PIPEWIRE_FOUND FALSE)
+pkg_check_modules(FFTW QUIET fftw3f)
 
 # Try using pkg-config first
 if(PKG_CONFIG_FOUND)
@@ -101,3 +102,10 @@ target_include_directories(sep_audio
         ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
         ${CMAKE_SOURCE_DIR}/extern/eigen
 )
+
+if(FFTW_FOUND)
+  target_include_directories(sep_audio PRIVATE ${FFTW_INCLUDE_DIRS})
+  target_link_libraries(sep_audio PRIVATE ${FFTW_LIBRARIES})
+  set(FFTW_LIBRARIES ${FFTW_LIBRARIES} PARENT_SCOPE)
+  set(FFTW_FOUND ${FFTW_FOUND} PARENT_SCOPE)
+endif()

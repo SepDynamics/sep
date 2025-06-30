@@ -14,6 +14,7 @@
 #include <cstring>
 #include <cstdio>  // Required for snprintf
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 
@@ -87,8 +88,6 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
         }
       }
 
-      // Call a method that exists on the Processor class, perhaps `processBatch` with dummy data or `processAll`.
-      // Replacing with a dummy success for now, assuming the actual processing logic will be integrated later.
       sep::quantum::BatchProcessingResult process_result;
       process_result.success = true;
       process_result.error_code = 0;

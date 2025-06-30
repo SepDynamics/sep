@@ -22,7 +22,14 @@
     "memory": {
         "promote_stm_to_mtm": 0.7,
         "promote_mtm_to_ltm": 0.9,
-        "demote_threshold": 0.3
+        "demote_threshold": 0.3,
+        "stm_size": 1048576,
+        "mtm_size": 4194304,
+        "ltm_size": 16777216,
+        "stm_to_mtm_min_gen": 5,
+        "mtm_to_ltm_min_gen": 100,
+        "use_unified_memory": true,
+        "enable_compression": true
     },
     "quantum": {
         "ltm_coherence_threshold": 0.9,

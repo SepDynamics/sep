@@ -67,6 +67,7 @@ public:
 
     MemoryTierManager();
     MemoryTierManager(const Config& cfg);
+    MemoryTierManager(const sep::config::MemoryThresholdConfig& cfg);
     ~MemoryTierManager();
 
     void init(const Config& config);

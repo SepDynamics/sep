@@ -32,6 +32,23 @@ Execute the engine from the build directory:
 
 Configuration files are located in `config`. Command‑line flags and environment variables override these defaults.
 
+### New Configuration Sections
+
+`memory` and `quantum` sections expose promotion and coherence thresholds. Example:
+
+```json
+"memory": {
+    "promote_stm_to_mtm": 0.7,
+    "promote_mtm_to_ltm": 0.9,
+    "demote_threshold": 0.3
+},
+"quantum": {
+    "ltm_coherence_threshold": 0.9,
+    "mtm_coherence_threshold": 0.6,
+    "stability_threshold": 0.8
+}
+```
+
 ## Tests
 
 The `/tests` directory contains a minimal suite. Enable it in CMake with:

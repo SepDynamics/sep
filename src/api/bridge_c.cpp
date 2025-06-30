@@ -142,8 +142,14 @@ SEP_API sep::SEPResult sep_bridge_get_last_error(char *buffer, size_t buffer_siz
 }
 
 SEP_API size_t sep_get_required_buffer_size(void) {
+#if SEP_HAS_EXCEPTIONS
+  try {
+#endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   return sep::api::bridge::detail::g_required_buffer_size;
+#if SEP_HAS_EXCEPTIONS
+  } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+#endif
 }
 
 SEP_API sep::SEPResult sep_bridge_set_config(const char *key, const char *value) {

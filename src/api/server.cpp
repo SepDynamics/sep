@@ -788,6 +788,7 @@ void SEPApiServer::handleSignal(int signal) {
   }
 }
 
+#if SEP_HAS_BLENDER
 void SEPApiServer::setupBlenderRoutes() {
     // Pattern processing endpoint
     app_->route_dynamic("/api/v1/patterns/process")
@@ -980,5 +981,8 @@ void SEPApiServer::setupBlenderRoutes() {
         return res;
     });
 }
+#else
+void SEPApiServer::setupBlenderRoutes() {}
+#endif
 
 }  // namespace sep::api

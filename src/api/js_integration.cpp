@@ -13,12 +13,12 @@ std::string JSIntegration::processContextCheck(const std::string& context_json,
     int ret_code;
 
     do {
-        ret_code = sep_process_context(
+        ret_code = static_cast<int>(sep_process_context(
             context_json.c_str(),
             layer.c_str(),
- result_buffer.data(),  // result_buffer.data() is char*
-            buffer_size           // buffer_size is size_t, matching API
-        );
+            result_buffer.data(),
+            buffer_size
+        ));
 
         if (ret_code == static_cast<int>(ErrorCode::BufferTooSmall)) { // Buffer too small
             size_t required = sep_get_required_buffer_size();

@@ -9,6 +9,7 @@
 #include <string>
 #include <memory>
 #include <exception>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 #include <nlohmann/json.hpp>

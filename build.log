@@ -24,7 +24,7 @@ Running CMake configuration...
 -- Verified PipeWire library: /usr/lib64/libpipewire-0.3.so
 -- Using PipeWire at: /usr/lib64/libpipewire-0.3.so
 -- Found FFTW: fftw3f
--- Configuring done (1.2s)
+-- Configuring done (1.3s)
 -- Generating done (0.0s)
 CMake Warning:
   Manually-specified variables were not used by the project:
@@ -35,94 +35,112 @@ CMake Warning:
 
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  5%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  9%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
 [ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 21%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 21%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
 [ 23%] Linking CXX static library libsep_audio.a
 [ 23%] Built target sep_audio
 [ 25%] Linking CXX static library libsep_core.a
 [ 25%] Built target sep_core
-[ 27%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 29%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 30%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 38%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 43%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 27%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 29%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 32%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 32%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 38%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
 [ 45%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 47%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 47%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
 [ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 56%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-/sep/src/api/crow_request_adapter.cpp:1:10: fatal error: 'api/crow_request_adapter.h' file not found
-#include "api/crow_request_adapter.h"
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1 error generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:163: src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-/sep/src/compat/component_bridge.cpp:29:35: error: redefinition of 'createBlenderBridge'
-std::unique_ptr<SEPBlenderBridge> createBlenderBridge() { return nullptr; }
-                                  ^
-/sep/include/compat/component_bridge.h:28:42: note: previous definition is here
-inline std::unique_ptr<SEPBlenderBridge> createBlenderBridge() { return nullptr; }
-                                         ^
-/sep/src/compat/component_bridge.cpp:30:42: error: redefinition of 'createCyclesRenderer'
-std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer() { return nullptr; }
-                                         ^
-/sep/include/compat/component_bridge.h:29:49: note: previous definition is here
-inline std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer() { return nullptr; }
-                                                ^
-2 errors generated.
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-/sep/src/api/js_integration.cpp:16:20: error: assigning to 'int' from incompatible type 'sep::SEPResult'
-        ret_code = sep_process_context(
-                   ^~~~~~~~~~~~~~~~~~~~
-1 error generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:107: src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o] Error 1
-/sep/src/api/bridge_c.cpp:158:5: error: cannot initialize return object of type 'size_t' (aka 'unsigned long') with an rvalue of type 'sep::SEPResult'
-  } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/include/api/bridge_internal.hpp:27:12: note: expanded from macro 'SEP_CATCH_RETURN'
-    return sep::SEPResult::UNKNOWN_ERROR; \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/api/bridge_c.cpp:252:2: error: unterminated conditional directive
-#if SEP_HAS_EXCEPTIONS
- ^
-/sep/src/api/bridge_c.cpp:235:2: error: unterminated conditional directive
-#if SEP_HAS_EXCEPTIONS
- ^
-/sep/src/api/bridge_c.cpp:199:2: error: unterminated conditional directive
-#if SEP_HAS_EXCEPTIONS
- ^
-/sep/src/api/bridge_c.cpp:42:2: error: unterminated conditional directive
-#if SEP_HAS_EXCEPTIONS
- ^
-/sep/src/api/server.cpp:985:20: error: redefinition of 'setupBlenderRoutes'
-void SEPApiServer::setupBlenderRoutes() {}
-                   ^
-/sep/include/api/server.h:183:15: note: previous definition is here
-  inline void setupBlenderRoutes() {}
-              ^
-5 errors generated.
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:247: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:394: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
+[ 56%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+/sep/src/api/server.cpp:149:27: error: out-of-line definition of 'handleError' does not match any declaration in 'sep::api::SEPApiServer'
+std::string SEPApiServer::handleError(const std::string& message, int code, const std::string& body) {
+                          ^~~~~~~~~~~
+[ 58%] Linking CXX static library libsep_compat.a
+[ 58%] Built target sep_compat
+[ 61%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 65%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 67%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 69%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 70%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 72%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 76%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 76%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 78%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 80%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 81%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 83%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 85%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 87%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 89%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 90%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+/sep/src/memory/memory_tier_manager.cpp:45:20: error: out-of-line definition of 'MemoryTierManager' does not match any declaration in 'sep::memory::MemoryTierManager'
+MemoryTierManager::MemoryTierManager(const sep::config::MemoryThresholdConfig& mc) {
+                   ^~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:50:23: error: no member named 'stm_size' in 'sep::config::MemoryThresholdConfig'
+    cfg.stm_size = mc.stm_size;
+                   ~~ ^
+/sep/src/memory/memory_tier_manager.cpp:51:23: error: no member named 'mtm_size' in 'sep::config::MemoryThresholdConfig'
+    cfg.mtm_size = mc.mtm_size;
+                   ~~ ^
+/sep/src/memory/memory_tier_manager.cpp:52:23: error: no member named 'ltm_size' in 'sep::config::MemoryThresholdConfig'
+    cfg.ltm_size = mc.ltm_size;
+                   ~~ ^
+/sep/src/memory/memory_tier_manager.cpp:65:23: error: no member named 'stm_size' in 'sep::config::MemoryThresholdConfig'
+    cfg.stm_size = mc.stm_size;
+                   ~~ ^
+/sep/src/memory/memory_tier_manager.cpp:66:23: error: no member named 'mtm_size' in 'sep::config::MemoryThresholdConfig'
+    cfg.mtm_size = mc.mtm_size;
+                   ~~ ^
+/sep/src/memory/memory_tier_manager.cpp:67:23: error: no member named 'ltm_size' in 'sep::config::MemoryThresholdConfig'
+    cfg.ltm_size = mc.ltm_size;
+                   ~~ ^
 1 error generated.
 make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:261: src/api/CMakeFiles/sep_api.dir/server.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from /sep/src/memory/memory_tier_manager.cpp:1:
+In file included from /sep/include/memory/memory_tier_manager.hpp:13:
+In file included from /sep/include/memory/memory_tier.hpp:10:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:80:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/unique_ptr.h:1085:34: error: no matching constructor for initialization of 'sep::memory::MemoryTierManager'
+    { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+                                 ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:40:26: note: in instantiation of function template specialization 'std::make_unique<sep::memory::MemoryTierManager, const sep::config::MemoryThresholdConfig &>' requested here
+        instance_ = std::make_unique<MemoryTierManager>(cfg);
+                         ^
+/sep/include/memory/memory_tier_manager.hpp:44:7: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'const sep::config::MemoryThresholdConfig' to 'const sep::memory::MemoryTierManager' for 1st argument
+class MemoryTierManager {
+      ^
+/sep/include/memory/memory_tier_manager.hpp:69:5: note: candidate constructor not viable: no known conversion from 'const sep::config::MemoryThresholdConfig' to 'const sep::memory::MemoryTierManager::Config' for 1st argument
+    MemoryTierManager(const Config& cfg);
+    ^
+/sep/src/memory/memory_tier_manager.cpp:58:20: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+MemoryTierManager::MemoryTierManager() {
+                   ^
+8 errors generated.
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
 make[1]: *** [CMakeFiles/Makefile2:330: src/api/CMakeFiles/sep_api.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 92%] Linking CXX static library libsep_quantum.a
+[ 92%] Built target sep_quantum
+make[1]: *** [CMakeFiles/Makefile2:459: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
 make: *** [Makefile:91: all] Error 2

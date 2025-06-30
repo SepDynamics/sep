@@ -23,7 +23,6 @@ set_source_files_properties(
 )
 
 # Configure CUDA target using custom pipeline
-configure_cuda_target(sep_compat)
 
 # Link CUDA libraries and dependencies
 target_link_libraries(sep_compat

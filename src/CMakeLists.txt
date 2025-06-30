@@ -1,32 +1,39 @@
-# Use our custom CUDA module instead of CMake's built-in CUDA support
-# The custom module is included in the top-level CMakeLists.txt
-
-# Add modular build targets in dependency order
-add_subdirectory(config)
-add_subdirectory(metrics)
-add_subdirectory(dag)
-add_subdirectory(memory)
-add_subdirectory(quantum)
-add_subdirectory(core)
-add_subdirectory(api)
-add_subdirectory(cuda)
-add_subdirectory(blender)
+# Configure include paths for all targets
+set(SEP_INCLUDE_DIRS
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/extern/pipewire/spa/include
+    ${PIPEWIRE_INCLUDE_DIRS}
+)
 
 # Main executable
-add_library(sep_main
-  STATIC
-    main.cpp
-)
-# No need for CUDA-specific compile options as they're handled by our custom module
+add_executable(sep_main main.cpp)
+target_include_directories(sep_main PRIVATE ${SEP_INCLUDE_DIRS})
 
-# Install headers
-install(DIRECTORY include/
-  DESTINATION include
-  FILES_MATCHING PATTERN "*.h*"
+# Add component subdirectories
+add_subdirectory(api)
+add_subdirectory(audio)
+add_subdirectory(blender)
+add_subdirectory(compat)
+add_subdirectory(core)
+add_subdirectory(memory)
+add_subdirectory(quantum)
+
+# Link dependencies
+target_link_libraries(sep_main PRIVATE
+    sep_api
+    sep_audio
+    sep_blender
+    sep_compat
+    sep_core
+    sep_memory
+    sep_quantum
+    ${PIPEWIRE_LIBRARIES}
+    fmt::fmt
 )
 
-# Install source
-install(DIRECTORY src/
-  DESTINATION src
-  FILES_MATCHING PATTERN "*.c*"
-)
+if(SEP_ENABLE_CUDA)
+    target_link_libraries(sep_main PRIVATE
+        CUDA::cudart
+        CUDA::cuda_driver
+    )
+endif()

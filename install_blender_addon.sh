@@ -1,7 +1,7 @@
 #!/bin/bash
 # SEP Engine Blender Addon Installation Script
 
-ADDON_NAME="sep_engine_quantum"
+ADDON_NAME="sep_engine"
 BLENDER_VERSION="5.0"
 ADDON_DIR="$HOME/.config/blender/$BLENDER_VERSION/scripts/addons/$ADDON_NAME"
 

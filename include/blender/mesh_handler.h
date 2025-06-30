@@ -40,6 +40,7 @@ class MeshHandler {
     float average_edge_length;
     float surface_area;
     bool has_custom_data;
+    size_t pattern_count;
 
     MeshMetrics()
         : vertex_count(0),
@@ -47,7 +48,8 @@ class MeshHandler {
           face_count(0),
           average_edge_length(0.0f),
           surface_area(0.0f),
-          has_custom_data(false) {}
+          has_custom_data(false),
+          pattern_count(0) {}
   };
   MeshMetrics getMetrics() const;
 

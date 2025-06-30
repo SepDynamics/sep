@@ -19,7 +19,6 @@ cp -r addons/sep_engine/* "$ADDON_DIR/"
 # Create __init__.py from the main module
 echo "Setting up addon structure..."
 cat > "$ADDON_DIR/__init__.py" << 'EOF'
-"""
 bl_info = {
     "name": "SEP Engine Integration",
     "author": "Alexander J Nagy",
@@ -47,9 +46,11 @@ REQUESTS_AVAILABLE = False
 NUMPY_AVAILABLE = False
 
 try:
+    import urllib.request
+    import urllib.error
     REQUESTS_AVAILABLE = True
 except ImportError:
-    print("SEP Engine: 'requests' module not available. HTTP API will be disabled.")
+    print("SEP Engine: 'urllib' module not available. HTTP API will be disabled.")
 
 try:
     import numpy as np
@@ -85,7 +86,7 @@ class SEPEngineSettings:
         self.connected = False
         self.connection_mode = "http"  # "http" or "direct"
         self.direct_bridge = None
-        self.lib_path = os.path.join(os.path.dirname(__file__), "libsep_blender.so")
+        self.lib_path = "/usr/local/lib/libsep_blender.so"
     
     def get_base_url(self):
         return f"http://{self.host}:{self.port}{self.api_base}"
@@ -138,29 +139,32 @@ class SEPEngineSettings:
         # Fall back to HTTP API if requests module is available
         if REQUESTS_AVAILABLE:
             try:
-                import requests
-                response = requests.get(
+                request = urllib.request.Request(
                     f"{self.get_base_url()}/health",
+                    method="GET"
+                )
+                response = urllib.request.urlopen(
+                    request,
                     timeout=self.connection_timeout
                 )
-                self.connected = response.ok
-                if response.ok:
+                self.connected = response.code == 200
+                if self.connected:
                     self.last_status = "HTTP API: Connected"
                     self.connection_mode = "http"
                     # Parse health data if available
                     try:
-                        data = response.json()
+                        data = json.loads(response.read().decode('utf-8'))
                         if "status" in data:
                             self.last_status = f"HTTP API: {data['status']}"
                     except:
                         pass
                 else:
-                    self.last_status = f"HTTP Error: {response.status_code}"
+                    self.last_status = f"HTTP Error: {response.code}"
                     self.connected = False
-            except requests.exceptions.ConnectionError:
+            except urllib.error.URLError as e:
                 self.connected = False
                 self.last_status = "HTTP API: Connection failed"
-            except requests.exceptions.Timeout:
+            except TimeoutError:
                 self.connected = False
                 self.last_status = "HTTP API: Connection timeout"
             except Exception as e:

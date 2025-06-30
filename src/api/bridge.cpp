@@ -21,13 +21,13 @@
 // Use macros from bridge_internal.hpp
 #if !SEP_HAS_EXCEPTIONS
 #define SEP_TRY
-  do { sep::crow::error::set_last_error("exceptions disabled"); \
-    return static_cast<int>(core); \
+  do { sep::crow::error::set_last_error("exceptions disabled"); 
+    return static_cast<int>(core); 
   } while (0)
 #endif
 #else // No exceptions
 #define SEP_TRY
-#define SEP_CATCH_RETURN(core) \
+#define SEP_CATCH_RETURN(core) 
   do { return static_cast<int>(core); } while (0)
 #endif
 

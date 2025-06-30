@@ -21,10 +21,10 @@ class Processor;
 
 #if SEP_HAS_EXCEPTIONS
 #define SEP_TRY try
-#define SEP_CATCH_RETURN(code) 
-  catch (const std::exception &e) { 
-    sep::api::bridge::detail::setLastError(e.what()); 
-    return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); 
+#define SEP_CATCH_RETURN(code) \
+  catch (const std::exception &e) { \
+    sep::api::bridge::detail::setLastError(e.what()); \
+    return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
   }
 #else
 #define SEP_TRY if (true)

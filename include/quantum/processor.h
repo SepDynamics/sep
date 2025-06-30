@@ -79,6 +79,7 @@ class ProcessorImpl;
 
 class Processor {
 public:
+    // All public methods are thread-safe. Internal state is protected by a mutex.
     explicit Processor(const ProcessingConfig& config);
     ~Processor();
     Processor(Processor&&) noexcept;

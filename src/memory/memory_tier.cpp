@@ -1,13 +1,11 @@
-// Standard library headers FIRST to ensure proper namespace resolution
-#include "memory/memory_tier.hpp"
-#include "core/common.h"  // defines sep::SEPResult
-
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <stdexcept>
-#include <vector>
+
+#include "memory/memory_tier.hpp"
+#include "core/common.h"  // defines sep::SEPResult
 
 #ifndef SEP_HAS_EXCEPTIONS
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)

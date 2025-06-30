@@ -130,7 +130,9 @@ class BlenderBridge {
   std::atomic<bool> processing_{false};
   std::atomic<sep::pattern::ObjectHandle> next_handle_{1};
 
+  // Protects access to objects_ map
   mutable std::mutex objects_mutex_;
+  // Guards observer list modifications
   mutable std::mutex observers_mutex_;
   std::mutex processing_mutex_;
   std::condition_variable processing_cv_;

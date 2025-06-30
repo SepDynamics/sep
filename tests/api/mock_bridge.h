@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <string>
+#include "core/common.h"
 
 namespace sep::test {
 
@@ -26,15 +27,15 @@ struct MockGuard {
 // Mock bridge functions declarations
 extern "C" {
 
-__attribute__((weak)) int sep_process_context(const char *context_json,
-                                              const char *layer,
-                                              char *result_buffer,
-                                              size_t buffer_size);
+__attribute__((weak)) sep::SEPResult sep_process_context(const char *context_json,
+                                                         const char *layer,
+                                                         char *result_buffer,
+                                                         size_t buffer_size);
 
 __attribute__((weak)) size_t sep_get_required_buffer_size();
 
-__attribute__((weak)) int sep_bridge_get_last_error(char *error_buffer,
-                                                    size_t buffer_size);
+__attribute__((weak)) sep::SEPResult sep_bridge_get_last_error(char *error_buffer,
+                                                              size_t buffer_size);
 
 } // extern "C"
 

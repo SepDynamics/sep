@@ -1,6 +1,5 @@
 #include "api/js_integration.h"
 #include "api/bridge.h"
-#include "api/types.h"  // For sep::api::ErrorCode
 
 #include <string>
 
@@ -10,7 +9,7 @@ std::string JSIntegration::processContextCheck(const std::string& context_json,
                                                const std::string& layer) {
     size_t buffer_size = initial_buffer_size;
     std::string result_buffer(buffer_size, '\0');
-    int ret_code;
+    sep::SEPResult ret_code;
 
     do {
         ret_code = sep_process_context(
@@ -20,7 +19,7 @@ std::string JSIntegration::processContextCheck(const std::string& context_json,
             buffer_size           // buffer_size is size_t, matching API
         );
 
-        if (ret_code == static_cast<int>(ErrorCode::BufferTooSmall)) { // Buffer too small
+        if (ret_code == sep::SEPResult::BUFFER_TOO_SMALL) {
             size_t required = sep_get_required_buffer_size();
             if (required > 0) {
                 buffer_size = required;
@@ -29,9 +28,9 @@ std::string JSIntegration::processContextCheck(const std::string& context_json,
             }
             result_buffer.resize(buffer_size);
         }
-    } while (ret_code == static_cast<int>(ErrorCode::BufferTooSmall));
+    } while (ret_code == sep::SEPResult::BUFFER_TOO_SMALL);
 
-    if (ret_code != 0) {
+    if (ret_code != sep::SEPResult::SUCCESS) {
         char error_buffer[1024] = {0};
         sep_bridge_get_last_error(error_buffer, sizeof(error_buffer));
         return std::string("{\"error\":\"") + error_buffer + "\"}";

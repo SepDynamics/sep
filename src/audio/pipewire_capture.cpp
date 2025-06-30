@@ -362,7 +362,7 @@ void PipeWireCapture::streamProcess(void* data)
         for (uint32_t i = 0; i < n_samples; i++)
         {
             float angle = 2.0f * glm::pi<float>() * frequency * phase;
-            samples[i] = amplitude * std::sinf(angle);
+            samples[i] = amplitude * std::sin(angle);
             phase += 1.0f / self->config_.rate;
         }
     }

@@ -14,23 +14,7 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 
-#if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
-#if !SEP_HAS_EXCEPTIONS
-#include "crow/crow_error.h"
-#endif
 
-// Use macros from bridge_internal.hpp
-#if !SEP_HAS_EXCEPTIONS
-#define SEP_TRY
-  do { sep::crow::error::set_last_error("exceptions disabled"); 
-    return static_cast<int>(core); 
-  } while (0)
-#endif
-#else // No exceptions
-#define SEP_TRY
-#define SEP_CATCH_RETURN(core) 
-  do { return static_cast<int>(core); } while (0)
-#endif
 
 namespace sep::api::bridge::detail {
 std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;

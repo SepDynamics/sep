@@ -6,6 +6,9 @@ find_package(GTest REQUIRED)
 
 add_executable(quantum_optimizer_tests
     quantum_manifold_optimizer_test.cpp
+    pattern_evolution_test.cpp
+    pattern_evolution_regression_test.cpp
+    process_patterns_update_test.cpp
 )
 
 target_include_directories(quantum_optimizer_tests

@@ -100,6 +100,11 @@ sep::pattern::PatternResult sep::quantum::mcp::PatternEvolution::processPatterns
                                                               const ::sep::pattern::PatternConfig& config,
                                                               std::vector<sep::pattern::PatternData>& output)
 {
+    if (!pattern::isValidConfig(config))
+    {
+        return pattern::PatternResult::INVALID_ARGUMENT;
+    }
+
     if (input.empty())
     {
         output.clear();

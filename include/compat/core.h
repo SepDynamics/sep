@@ -89,6 +89,8 @@ class CudaCore {
   Error queryDeviceProperties();
 };
 
+inline CudaCore::CudaCore() : initialized_{false}, current_device_{-1} {}
+
 }  // namespace sep::cuda
 
 #endif  // SEP_CUDA_CORE_H

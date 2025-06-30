@@ -114,3 +114,4 @@ blender
 !src/blender/
 !include/blender/cycles_renderer.h
 !src/blender/cycles_renderer.cpp
+!sep_engine/

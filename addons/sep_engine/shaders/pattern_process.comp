@@ -1,0 +1,207 @@
+#version 450
+
+// Quantum-inspired pattern processing compute shader
+// Used in the visualization pipeline for processing pattern data
+
+// Layout bindings
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(binding = 0) buffer PatternData {
+    vec4 patterns[];  // x,y,z: pattern coords, w: coherence score
+};
+layout(binding = 1) buffer StabilityData {
+    vec4 stability[];  // x: stability, y: entropy, z: generation, w: reserved
+};
+layout(binding = 2) buffer RelationshipData {
+    vec4 relationships[];  // x,y: pattern indices, z: strength, w: type
+};
+layout(binding = 3, rgba32f) uniform image2D outputImage;
+
+// Uniforms
+layout(push_constant) uniform PatternParams {
+    float time;
+    float coherenceThreshold;
+    float stabilityThreshold;
+    float entropyWeight;
+    float symmetryWeight;
+    float stabilityWeight;
+    int maxIterations;
+    int viewMode;  // 0: coherence, 1: stability, 2: entropy, 3: combined
+} params;
+
+// Constants matching SEP system thresholds
+const float MIN_COHERENCE = 0.1;
+const float DEMOTION_THRESHOLD = 0.3;
+const float MTM_PROMOTION = 0.7;
+const float LTM_PROMOTION = 0.9;
+const float MIN_RELATIONSHIP_STRENGTH = 0.6;
+
+// Helper functions
+float calculateWeightedStability(float symmetry, float coherenceHistory, float entropy) {
+    return symmetry * params.symmetryWeight + 
+           coherenceHistory * params.stabilityWeight + 
+           entropy * params.entropyWeight;
+}
+
+vec4 colorFromCoherence(float coherence) {
+    // Color coding:
+    // < 0.3: blue (collapsed/demotion)
+    // 0.3-0.7: green (STM)
+    // 0.7-0.9: yellow (MTM)
+    // > 0.9: red (LTM)
+    if (coherence < DEMOTION_THRESHOLD) {
+        return vec4(0.0, 0.0, 1.0, 1.0);
+    } else if (coherence < MTM_PROMOTION) {
+        float t = (coherence - DEMOTION_THRESHOLD) / (MTM_PROMOTION - DEMOTION_THRESHOLD);
+        return vec4(0.0, 1.0, 1.0-t, 1.0);
+    } else if (coherence < LTM_PROMOTION) {
+        float t = (coherence - MTM_PROMOTION) / (LTM_PROMOTION - MTM_PROMOTION);
+        return vec4(t, 1.0, 0.0, 1.0);
+    } else {
+        float t = min(1.0, (coherence - LTM_PROMOTION) * 5.0);
+        return vec4(1.0, 1.0-t, 0.0, 1.0);
+    }
+}
+
+vec4 colorFromStability(float stability) {
+    // Stability visualization
+    if (stability < 0.5) {
+        float t = stability / 0.5;
+        return vec4(0.0, 0.0, t, 1.0);
+    } else if (stability < 0.85) {
+        float t = (stability - 0.5) / 0.35;
+        return vec4(0.0, t, 1.0, 1.0);
+    } else {
+        float t = (stability - 0.85) / 0.15;
+        return vec4(t, 1.0, 1.0-t, 1.0);
+    }
+}
+
+vec4 colorFromEntropy(float entropy) {
+    // Entropy visualization - higher entropy = more red
+    return vec4(entropy, 1.0-entropy, 1.0-entropy, 1.0);
+}
+
+void main() {
+    // Get dimensions
+    ivec2 imgSize = imageSize(outputImage);
+    ivec2 pixelCoord = ivec2(gl_GlobalInvocationID.xy);
+    
+    // Skip if out of bounds
+    if (pixelCoord.x >= imgSize.x || pixelCoord.y >= imgSize.y) {
+        return;
+    }
+    
+    // Calculate normalized coordinates
+    vec2 uv = vec2(pixelCoord) / vec2(imgSize);
+    
+    // Initialize pixel color
+    vec4 pixelColor = vec4(0.0, 0.0, 0.0, 1.0);
+    
+    // Process each pattern's influence on this pixel
+    for (int i = 0; i < patterns.length(); i++) {
+        vec4 pattern = patterns[i];
+        vec4 stabilityData = stability[i];
+        
+        // Skip patterns with coherence below minimum threshold
+        if (pattern.w < MIN_COHERENCE) {
+            continue;
+        }
+        
+        // Calculate distance from pixel to pattern center
+        vec2 center = pattern.xy * vec2(imgSize);
+        float dist = distance(vec2(pixelCoord), center);
+        float radius = 50.0 * pattern.w; // Size based on coherence
+        
+        // If pixel is within pattern's influence
+        if (dist < radius) {
+            float influence = 1.0 - (dist / radius);
+            influence = pow(influence, 2.0); // Falloff curve
+            
+            // Get pattern color based on view mode
+            vec4 patternColor;
+            switch (params.viewMode) {
+                case 0: // Coherence
+                    patternColor = colorFromCoherence(pattern.w);
+                    break;
+                case 1: // Stability
+                    patternColor = colorFromStability(stabilityData.x);
+                    break;
+                case 2: // Entropy
+                    patternColor = colorFromEntropy(stabilityData.y);
+                    break;
+                case 3: // Combined
+                    patternColor = colorFromCoherence(pattern.w) * 0.5 + 
+                                   colorFromStability(stabilityData.x) * 0.3 +
+                                   colorFromEntropy(stabilityData.y) * 0.2;
+                    break;
+                default:
+                    patternColor = colorFromCoherence(pattern.w);
+            }
+            
+            // Add pattern contribution to pixel color
+            pixelColor = mix(pixelColor, patternColor, influence);
+        }
+    }
+    
+    // Render relationship lines between patterns
+    for (int i = 0; i < relationships.length(); i++) {
+        vec4 rel = relationships[i];
+        
+        // Skip weak relationships
+        if (rel.z < MIN_RELATIONSHIP_STRENGTH) {
+            continue;
+        }
+        
+        // Get pattern indices
+        int idxA = int(rel.x);
+        int idxB = int(rel.y);
+        
+        // Skip invalid indices
+        if (idxA >= patterns.length() || idxB >= patterns.length()) {
+            continue;
+        }
+        
+        // Get pattern positions
+        vec2 posA = patterns[idxA].xy * vec2(imgSize);
+        vec2 posB = patterns[idxB].xy * vec2(imgSize);
+        
+        // Draw line if pixel is close to the line between patterns
+        float lineWidth = 2.0 * rel.z; // Width based on relationship strength
+        float distToLine = distance(pixelCoord, posA + (posB - posA) * 
+                        clamp(dot(vec2(pixelCoord) - posA, posB - posA) / 
+                        dot(posB - posA, posB - posA), 0.0, 1.0));
+        
+        if (distToLine < lineWidth) {
+            // Line color based on relationship type
+            vec4 lineColor;
+            int relType = int(rel.w);
+            switch (relType) {
+                case 0: // Parent/Child
+                    lineColor = vec4(1.0, 0.0, 0.0, 1.0);
+                    break;
+                case 1: // Reference
+                    lineColor = vec4(0.0, 1.0, 0.0, 1.0);
+                    break;
+                case 2: // Evolution
+                    lineColor = vec4(0.0, 0.0, 1.0, 1.0);
+                    break;
+                case 3: // Semantic
+                    lineColor = vec4(1.0, 1.0, 0.0, 1.0);
+                    break;
+                default:
+                    lineColor = vec4(0.5, 0.5, 0.5, 1.0);
+            }
+            
+            // Apply line to pixel
+            float lineInfluence = 1.0 - (distToLine / lineWidth);
+            pixelColor = mix(pixelColor, lineColor, lineInfluence);
+        }
+    }
+    
+    // Add time-based animation effect
+    float pulse = (sin(params.time * 2.0) + 1.0) * 0.15;
+    pixelColor.rgb += pulse * pixelColor.rgb;
+    
+    // Write final color to output image
+    imageStore(outputImage, pixelCoord, pixelColor);
+}

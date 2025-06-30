@@ -76,7 +76,7 @@ TEST_F(BridgeTest, BasicContextProcessing) {
                   {"metadata", json::object()}};
 
   char result_buffer[1024];
-  int result = sep_process_context(context.dump().c_str(), "test_layer", result_buffer,
+  sep::SEPResult result = sep_process_context(context.dump().c_str(), "test_layer", result_buffer,
                                    sizeof(result_buffer));
   EXPECT_EQ(result, sep::SEPResult::SUCCESS) << "Process context failed with code " << static_cast<int>(result);
 

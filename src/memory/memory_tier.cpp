@@ -24,10 +24,10 @@
 #endif
 
 #include "compat/math_common.h"
+#include "core/allocation_metrics.h"
 #include "memory/logger.hpp"
 #include "core/logging.h"
 #include "memory/memory_tier_manager.hpp"
-#include "core/allocation_metrics.h"
 #include "memory/types.h"
 
 namespace sep::memory {

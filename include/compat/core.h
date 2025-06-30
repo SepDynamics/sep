@@ -69,12 +69,12 @@ class CudaCore {
                          const DeviceMemory<float>& emb_b, std::uint32_t embedding_size,
                          Stream& stream);
 
-  Error launchBlend(DeviceMemory<float>& output, const DeviceMemory<float>& embeddings,
+ Error launchBlend(DeviceMemory<float>& output, const DeviceMemory<float>& embeddings,
                     const DeviceMemory<float>& weights, std::uint32_t num_contexts,
                     std::uint32_t embedding_size, Stream& stream);
 
  private:
-  CudaCore() : initialized_{false}, current_device_{-1} {}
+  inline CudaCore() : initialized_(false), current_device_(-1) {}
   ~CudaCore() = default;  // Private destructor
 
   CudaCore(const CudaCore&) = delete;
@@ -88,6 +88,8 @@ class CudaCore {
   Error initializeDevice(int device);
   Error queryDeviceProperties();
 };
+
+inline CudaCore::CudaCore() : initialized_{false}, current_device_{-1} {}
 
 }  // namespace sep::cuda
 

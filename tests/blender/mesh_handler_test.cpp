@@ -1,15 +1,14 @@
 #include "blender/mesh_handler.h"
 
-#include "../../include/quantum/types.h"
 #include <gtest/gtest.h>
-
 #include <cmath>
 #include <memory>
+#include "quantum/data.hpp"
+#include "quantum/types.h"
+#include "blender/mesh_handler.h"
+#include "blender/config.h"
 
-#include "blender/compat/blender_types.h"
-
-// Explicitly bring PatternData into scope
-using namespace sep::pattern;
+using sep::pattern::PatternData;
 
 class MeshHandlerTest : public ::testing::Test {
  protected:
@@ -83,14 +82,21 @@ class MeshHandlerTest : public ::testing::Test {
 
   PatternData createTestPattern() {
     PatternData pattern;
-    pattern.coherence = 0.8f;
-    pattern.entropy = 0.2f;
-    pattern.stability = 0.9f;
-    pattern.mutation_rate = 0.1f;
+    pattern.id = "";
     pattern.generation = 1;
-    pattern.position = {0.0f, 0.0f, 0.0f, 1.0f};
-    pattern.velocity = {1.0f, 0.0f, 0.0f, 0.0f};
-    pattern.size_in_bytes = 96;  // Using size_in_bytes instead of block_size
+    pattern.position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    pattern.velocity = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+    pattern.attributes = glm::vec4(0.5f, 0.5f, 0.5f, 0.5f);
+    pattern.amplitude = std::complex<float>(0.8f, 0.0f);
+    pattern.state = ::sep::quantum::QuantumState::Status::SUPERPOSITION;
+    pattern.phase = 0.0f;
+    pattern.coherence = 0.8f;
+    pattern.stability = 0.9f;
+    pattern.entropy = 0.2f;
+    pattern.mutation_rate = 0.1f;
+    pattern.mutation_count = 0;
+    pattern.memory_tier = ::sep::memory::MemoryTierEnum::STM;
+    pattern.relationships.clear();
     return pattern;
   }
 
@@ -133,6 +139,8 @@ TEST_F(MeshHandlerTest, PatternUpdateTest) {
   auto metrics = handler_->getMetrics();
   EXPECT_EQ(8u, metrics.vertex_count);
   EXPECT_TRUE(metrics.has_custom_data);
+  EXPECT_GT(metrics.pattern_count, 0u);
+  EXPECT_GT(metrics.pattern_count, 0u);
 }
 
 TEST_F(MeshHandlerTest, DeformationTest) {
@@ -157,23 +165,36 @@ TEST_F(MeshHandlerTest, DeformationTest) {
 TEST_F(MeshHandlerTest, InvalidInputTest) {
   // Test null object
   MeshHandler handler;
-  EXPECT_EQ(sep::SEPResult::INVALID_OBJECT, handler.init(nullptr, mesh_.get()));
+  EXPECT_EQ(sep::SEPResult::INVALID_ARGUMENT, handler.init(nullptr, mesh_.get()));
 
   // Test null mesh
-  EXPECT_EQ(sep::SEPResult::INVALID_OBJECT, handler.init(object_.get(), nullptr));
+  EXPECT_EQ(sep::SEPResult::INVALID_ARGUMENT, handler.init(object_.get(), nullptr));
 
   // Test invalid object type
   object_->type = OB_EMPTY;
-  EXPECT_EQ(sep::SEPResult::INVALID_OBJECT, handler.init(object_.get(), mesh_.get()));
+  EXPECT_EQ(sep::SEPResult::INVALID_ARGUMENT, handler.init(object_.get(), mesh_.get()));
 }
 
 TEST_F(MeshHandlerTest, PatternValidationTest) {
-  PatternData pattern = createTestPattern();
-  pattern.coherence = 2.0f;  // Invalid value
+  sep::pattern::PatternData pattern = createTestPattern();
+  
+  // Test invalid coherence
+  pattern.coherence = 2.0f;  // Invalid: must be [0,1]
   EXPECT_EQ(sep::SEPResult::INVALID_STATE, handler_->update(pattern));
 
+  // Test invalid entropy
   pattern.coherence = 0.5f;
-  pattern.entropy = -1.0f;  // Invalid value
+  pattern.entropy = -1.0f;  // Invalid: must be [0,1]
+  EXPECT_EQ(sep::SEPResult::INVALID_STATE, handler_->update(pattern));
+
+  // Test invalid mutation rate
+  pattern.entropy = 0.3f;
+  pattern.mutation_rate = 1.5f;  // Invalid: must be [0,1]
+  EXPECT_EQ(sep::SEPResult::INVALID_STATE, handler_->update(pattern));
+
+  // Test invalid stability
+  pattern.mutation_rate = 0.1f;
+  pattern.stability = -0.5f;  // Invalid: must be [0,1]
   EXPECT_EQ(sep::SEPResult::INVALID_STATE, handler_->update(pattern));
 }
 

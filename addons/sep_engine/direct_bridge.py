@@ -55,17 +55,71 @@ class SEPEngineBridge:
         self.bridge = None
         self.mesh_handles = {}
     
-    def load_library(self, lib_path="./libsep_blender.so"):
+    def load_library(self, lib_path=None):
         """Load the SEP Engine shared library"""
+        if not lib_path:
+            # Try multiple potential library paths
+            search_paths = [
+                os.path.join(os.path.dirname(__file__), "libs", "libsep_blender.so"),
+                os.path.join(os.path.dirname(__file__), "libsep_blender.so"),
+                os.path.expanduser("~/.config/blender/5.0/scripts/addons/sep_engine_quantum/libs/libsep_blender.so")
+            ]
+            
+            for path in search_paths:
+                if os.path.exists(path):
+                    lib_path = path
+                    break
+                    
+        if not lib_path or not os.path.exists(lib_path):
+            print("SEP Engine library not found in search paths:")
+            for path in search_paths:
+                print(f"  - {path}")
+            return False
+            
         try:
-            self.lib = ctypes.CDLL(lib_path)
-            print(f"Loaded SEP Engine library: {lib_path}")
+            # Check file permissions
+            if not os.access(lib_path, os.R_OK | os.X_OK):
+                print(f"Error: Insufficient permissions for library at {lib_path}")
+                return False
+                
+            # Try loading the library
+            try:
+                self.lib = ctypes.CDLL(lib_path)
+            except OSError as e:
+                print(f"Failed to load library: {e}")
+                # Check for common issues
+                if "No such file or directory" in str(e):
+                    print("Possible missing dependencies. Try running: ldd", lib_path)
+                return False
+                
+            print(f"Successfully loaded SEP Engine library from: {lib_path}")
+            
+            # Verify required functions exist
+            required_functions = ['sep_get_version', 'sep_blender_init', 'sep_register_mesh']
+            missing_functions = [f for f in required_functions if not hasattr(self.lib, f)]
+            if missing_functions:
+                print("Error: Library missing required functions:", missing_functions)
+                self.lib = None
+                return False
+                
+            # Test version info
+            try:
+                version = self.lib.sep_get_version()
+                if version:
+                    print(f"Library version: {version.decode('utf-8')}")
+                else:
+                    print("Warning: Could not get library version")
+            except Exception as e:
+                print(f"Warning: Error getting version: {e}")
             
             # Define function signatures
             self._define_function_signatures()
             return True
+            
         except Exception as e:
             print(f"Error loading SEP Engine library: {e}")
+            if self.lib:
+                self.lib = None
             return False
     
     def _define_function_signatures(self):
@@ -112,34 +166,56 @@ class SEPEngineBridge:
         self.lib.sep_get_build_info.argtypes = []
         self.lib.sep_get_build_info.restype = c_char_p
     
-    def initialize(self, gpu_context=None, enable_cuda=False):
+    def initialize(self, gpu_context=None, enable_cuda=False, http_fallback=True):
         """Initialize the SEP Engine bridge"""
         if not self.lib:
             print("Library not loaded")
+            if http_fallback:
+                print("Falling back to HTTP API mode (localhost:8080)")
+                return True  # Allow fallback to HTTP
             return False
             
-        # Create config struct
-        config = SEPConfig()
-        config.version = 1
-        config.log_level = 2  # INFO
-        config.enable_cuda = enable_cuda
-        
-        # Create bridge pointer
-        bridge_pp = POINTER(c_void_p)()
-        
-        # Initialize bridge
-        result = self.lib.sep_blender_init(
-            c_void_p(gpu_context) if gpu_context else None,
-            ctypes.byref(config),
-            ctypes.byref(bridge_pp)
-        )
-        
-        if result == SEP_SUCCESS:
-            self.bridge = bridge_pp.contents
-            print("SEP Engine bridge initialized successfully")
-            return True
-        else:
-            print(f"Failed to initialize SEP Engine bridge: {result}")
+        try:
+            # Create config struct
+            config = SEPConfig()
+            config.version = 1
+            config.log_level = 2  # INFO
+            config.enable_cuda = enable_cuda
+            
+            # Create bridge pointer
+            bridge_pp = POINTER(c_void_p)()
+            
+            # Initialize bridge
+            result = self.lib.sep_blender_init(
+                c_void_p(gpu_context) if gpu_context else None,
+                ctypes.byref(config),
+                ctypes.byref(bridge_pp)
+            )
+            
+            if result == SEP_SUCCESS:
+                self.bridge = bridge_pp.contents
+                print("SEP Engine bridge initialized successfully")
+                return True
+            else:
+                error_msg = {
+                    SEP_INIT_FAILED: "Initialization failed",
+                    SEP_INVALID_ARGUMENT: "Invalid arguments",
+                    SEP_INVALID_STATE: "Invalid state",
+                    SEP_ALLOCATION_FAILED: "Memory allocation failed"
+                }.get(result, f"Unknown error: {result}")
+                
+                print(f"Failed to initialize SEP Engine bridge: {error_msg}")
+                
+                if http_fallback:
+                    print("Falling back to HTTP API mode (localhost:8080)")
+                    return True  # Allow fallback to HTTP
+                return False
+                
+        except Exception as e:
+            print(f"Error during bridge initialization: {e}")
+            if http_fallback:
+                print("Falling back to HTTP API mode (localhost:8080)")
+                return True  # Allow fallback to HTTP
             return False
     
     def register_mesh(self, blender_object, mesh_data):

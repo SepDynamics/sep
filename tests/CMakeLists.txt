@@ -1,9 +1,31 @@
-find_package(GTest REQUIRED)
+# Common test configuration
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(blender_api_test blender/api_test.cpp)
-target_link_libraries(blender_api_test sep_blender sep_core GTest::GTest GTest::Main)
+# Configure test output directory
+set(TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/tests)
+file(MAKE_DIRECTORY ${TEST_OUTPUT_DIR})
 
-add_executable(quantum_manifold_optimizer_test quantum/quantum_manifold_optimizer_test.cpp)
-target_link_libraries(quantum_manifold_optimizer_test sep_quantum GTest::GTest GTest::Main)
+# Set test data directory
+set(SEP_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
+file(MAKE_DIRECTORY ${SEP_TEST_DATA_DIR})
 
-add_test(NAME quantum_manifold_optimizer_test COMMAND quantum_manifold_optimizer_test)
+# Common test compile definitions
+add_compile_definitions(
+    SEP_TEST_DATA_DIR="${SEP_TEST_DATA_DIR}"
+    SEP_TEST_BUILD=1
+)
+
+# Common test include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# Add test subdirectories
+add_subdirectory(blender)
+
+# Configure test discovery
+include(CTest)
+enable_testing()

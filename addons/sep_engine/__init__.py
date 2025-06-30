@@ -64,7 +64,7 @@ class SEPEngineSettings:
         self.connected = False
         self.connection_mode = "http"  # "http" or "direct"
         self.direct_bridge = None
-        self.lib_path = os.path.join(os.path.dirname(__file__), "libsep_blender.so")
+        self.lib_path = os.path.join(os.path.dirname(__file__), "libs", "libsep_blender.so")
     
     def get_base_url(self):
         return f"http://{self.host}:{self.port}{self.api_base}"
@@ -679,7 +679,7 @@ def register():
     )
     
     # Library path for direct bridge
-    default_lib_path = os.path.join(os.path.dirname(__file__), "libsep_blender.so")
+    default_lib_path = os.path.join(os.path.dirname(__file__), "libs", "libsep_blender.so")
     bpy.types.Scene.sep_library_path = StringProperty(
         name="Library Path",
         description="Path to libsep_blender.so",

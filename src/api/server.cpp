@@ -146,7 +146,7 @@ std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const std
   return std::make_unique<SimpleHttpResponse>(code, response.dump());
 }
 
-std::string SEPApiServer::handleError(const std::string& message, int code, const std::string& body) {
+std::string SEPApiServer::handleError(const std::string& message, int code) {
   nlohmann::json error_response{};
   error_response["error"] = true;
   error_response["message"] = message;

@@ -24,11 +24,11 @@ SEP_API sep::SEPResult sep_bridge_init(void) {
 #ifdef SEP_HAS_EXCEPTIONS
   try {
 #endif
-  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex); // Fix: use the global mutex
+  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   sep::quantum::ProcessingConfig options{};
   sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
- sep::api::bridge::detail::g_last_error.clear(); // Fix: Add semicolon
-  // Fix: Initialize g_required_buffer_size to 0 here
+  sep::api::bridge::detail::g_last_error.clear();
+  // Initialize g_required_buffer_size to 0 here
   sep::api::bridge::detail::g_required_buffer_size = 0;
   return sep::SEPResult::SUCCESS;
 #if SEP_HAS_EXCEPTIONS
@@ -38,9 +38,9 @@ SEP_API sep::SEPResult sep_bridge_init(void) {
 
 SEP_API sep::SEPResult sep_bridge_cleanup(void) {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
- sep::api::bridge::detail::g_context_processor_bridge.reset(); // Fix: Add semicolon
+  sep::api::bridge::detail::g_context_processor_bridge.reset();
   sep::api::bridge::detail::g_last_error.clear();
-  // Fix: Initialize g_required_buffer_size to 0 here
+  // Initialize g_required_buffer_size to 0 here
   sep::api::bridge::detail::g_required_buffer_size = 0;
   return sep::SEPResult::SUCCESS;
 }
@@ -48,7 +48,7 @@ SEP_API sep::SEPResult sep_bridge_cleanup(void) {
 SEP_API sep::SEPResult sep_process_context(const char *context_json, const char *layer,
                                char *result_buffer, size_t buffer_size) {
 #if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
+  try {
 #endif
     if (!context_json || !result_buffer || !layer || buffer_size == 0) {
       sep::api::bridge::detail::setLastError("Invalid parameters");
@@ -80,7 +80,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
       std::string test_str = test_result.dump();
       {
         std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
- sep::api::bridge::detail::setRequiredBufferSize(test_str.size() + 1); // Fix: Add semicolon
+        sep::api::bridge::detail::setRequiredBufferSize(test_str.size() + 1);
         if (test_str.size() >= buffer_size) {
           sep::api::bridge::detail::setLastError("Result buffer too small");
           return sep::SEPResult::BUFFER_TOO_SMALL;
@@ -91,7 +91,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
       // Replacing with a dummy success for now, assuming the actual processing logic will be integrated later.
       sep::quantum::BatchProcessingResult process_result;
       process_result.success = true;
- process_result.error_code = 0; // Fix: Initialize error_code
+      process_result.error_code = 0;
       
       if (!process_result.success) {
         sep::api::bridge::detail::setLastError(process_result.error_message.c_str());
@@ -112,9 +112,9 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
       }
 
       std::string result_str = result_json.dump();
-      {
- std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex); // Fix: Add semicolon
-        sep::api::bridge::detail::setRequiredBufferSize(result_str.size() + 1);
+        {
+          std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+          sep::api::bridge::detail::setRequiredBufferSize(result_str.size() + 1);
         if (result_str.size() >= buffer_size) {
           sep::api::bridge::detail::setLastError("Result buffer too small");
           return sep::SEPResult::BUFFER_TOO_SMALL;
@@ -150,7 +150,7 @@ SEP_API size_t sep_get_required_buffer_size(void) {
 
 SEP_API sep::SEPResult sep_bridge_set_config(const char *key, const char *value) {
 #if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
+  try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!key || !value) {
@@ -192,7 +192,7 @@ SEP_API sep::SEPResult sep_bridge_set_config(const char *key, const char *value)
 
 SEP_API sep::SEPResult sep_bridge_get_config(const char *key, char *buffer, size_t buffer_size) {
 #if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
+  try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!key || !buffer || buffer_size == 0) {
@@ -230,7 +230,7 @@ SEP_API sep::SEPResult sep_bridge_get_config(const char *key, char *buffer, size
 SEP_API sep::SEPResult sep_bridge_register_callback(const char *event_type,
                                          void (*callback)(const char *event_data)) {
 #if SEP_HAS_EXCEPTIONS
-  try { // Fix: Use try block when exceptions are enabled
+  try {
 #endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   if (!event_type || !callback) {

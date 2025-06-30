@@ -1,11 +1,11 @@
 #include "api/bridge.h"
 #include "api/bridge.hpp"
-#include "api/bridge_internal.hpp" // Fix: Include internal header
+#include "api/bridge_internal.hpp"
 #include "quantum/processor.h"
 
-#include "api/types.h" // Fix: Include api/types.h
+#include "api/types.h"
 
-#include <atomic> // Fix: Add atomic for thread safety
+#include <atomic>
 #include <string>
 #include <memory>
 #include <exception>
@@ -32,7 +32,7 @@
 #endif
 
 namespace sep::api::bridge::detail {
-std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge; // Fix: Use unique_ptr for memory management
+std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
 std::string g_last_error;
 size_t g_required_buffer_size = 0;
 // Global mutex protects shared bridge state
@@ -147,7 +147,6 @@ void invokeCallbacks(const std::string &event_type,
                      const std::string &event_data) {
   std::lock_guard<std::mutex> lock(g_bridge_mutex);
   auto it = g_callback_map.find(event_type);
-  // Fix: check for end() iterator before dereferencing
   if (it == g_callback_map.end()) {
     return;
   }

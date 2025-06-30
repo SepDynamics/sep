@@ -5,8 +5,6 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
-#include <compat/cufft.h>
-#include <fftw3.h>
 #include <queue>
 #include <vector>
 #include "compat/cufft.h"
@@ -144,10 +142,6 @@ SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
         spectral.magnitudes[i] = std::abs(spectral.fft[i]);
         spectral.phases[i] = std::arg(spectral.fft[i]);
     }
-
-    fftwf_destroy_plan(plan);
-    fftwf_free(out);
-#endif
 
     return spectral;
 }

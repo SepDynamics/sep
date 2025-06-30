@@ -24,14 +24,14 @@ class Processor;
 #define SEP_CATCH_RETURN(code) \
   catch (const std::exception &e) { \
     sep::api::bridge::detail::setLastError(e.what()); \
-    return static_cast<int>(sep::api::bridge::detail::mapSepError(code)); \
+    return sep::api::bridge::detail::mapSepError(code); \
   }
 #else
 #define SEP_TRY if (true)
-#define SEP_CATCH_RETURN(code) 
-  do { 
-    sep::api::bridge::detail::setLastError("exceptions disabled"); 
-    return static_cast<int>(code); 
+#define SEP_CATCH_RETURN(code) \
+  do { \
+    sep::api::bridge::detail::setLastError("exceptions disabled"); \
+    return code; \
   } while (0)
 #endif
 
@@ -47,6 +47,6 @@ void setLastError(const std::string& error);
 std::string getLastError();
 void setRequiredBufferSize(size_t size);
 size_t getRequiredBufferSize();
-::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode code);
+sep::SEPResult mapSepError(::sep::api::ErrorCode code);
 void invokeCallbacks(const std::string& event_type, const std::string& event_data);
 } // namespace sep::api::bridge::detail

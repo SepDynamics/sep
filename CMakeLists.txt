@@ -19,8 +19,8 @@ set(CMAKE_CUDA_ARCHITECTURES "75;80;86")
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
-# Initialize project with CXX first
-project(SEPEngine LANGUAGES CXX)
+# Initialize project with CXX and CUDA so NVCC compiles our .cu sources
+project(SEPEngine LANGUAGES CXX CUDA)
 
 # Set CUDA flags before enabling the language
 set(CMAKE_CUDA_FLAGS_INIT "-allow-unsupported-compiler -Wno-deprecated-gpu-targets")

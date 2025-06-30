@@ -5,6 +5,7 @@ add_library(sep_api STATIC
     rate_limit_middleware.cpp
     bridge.cpp
     crow_adapter.cpp
+    crow_request_adapter.cpp
     curl_http_client.cpp
     auth_middleware.cpp
     client.cpp

@@ -3,6 +3,7 @@ add_library(sep_blender STATIC
     gpu_context.cpp
     compression.cpp
     cycles_renderer.cpp
+    blender_bridge.cpp
     api.cpp
     pattern_visualization_pipeline.cpp
     blender_integration.cpp

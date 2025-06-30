@@ -5,6 +5,11 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
+#if SEP_HAS_CUDA
+#include "compat/cufft.h"
+#else
+#include <fftw3.h>
+#endif
 #include <queue>
 #include <vector>
 
@@ -91,18 +96,31 @@ void AudioPipeline::applyHannWindow(std::vector<float>& samples) {
 SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
     SpectralData spectral;
 
-    // Prepare FFT input
-    std::vector<std::complex<float>> fft_input(samples.size());
-    for (size_t i = 0; i < samples.size(); ++i) {
-        fft_input[i] = std::complex<float>(samples[i], 0.0f);
+    const size_t n = samples.size();
+#if SEP_HAS_CUDA
+    std::vector<cufftComplex> out(n);
+    cufftHandle plan;
+    cufftPlan1d(&plan, static_cast<int>(n), CUFFT_R2C, 1);
+    cufftExecR2C(plan, const_cast<float*>(samples.data()), reinterpret_cast<cufftComplex*>(out.data()));
+    cufftDestroy(plan);
+    spectral.fft.resize(n);
+    for (size_t i = 0; i < n; ++i) {
+        spectral.fft[i] = std::complex<float>(out[i].x, out[i].y);
     }
-
-    // Perform FFT (simplified for demo)
-    spectral.fft = fft_input;  // Would use actual FFT implementation
+#else
+    std::vector<fftwf_complex> out(n);
+    fftwf_plan plan = fftwf_plan_dft_r2c_1d(static_cast<int>(n), const_cast<float*>(samples.data()), out.data(), FFTW_ESTIMATE);
+    fftwf_execute(plan);
+    fftwf_destroy_plan(plan);
+    spectral.fft.resize(n);
+    for (size_t i = 0; i < n; ++i) {
+        spectral.fft[i] = std::complex<float>(out[i][0], out[i][1]);
+    }
+#endif
 
     // Calculate magnitudes and phases
-    spectral.magnitudes.resize(samples.size() / 2 + 1);
-    spectral.phases.resize(samples.size() / 2 + 1);
+    spectral.magnitudes.resize(n / 2 + 1);
+    spectral.phases.resize(n / 2 + 1);
 
     for (size_t i = 0; i < spectral.magnitudes.size(); ++i) {
         auto& bin = spectral.fft[i];

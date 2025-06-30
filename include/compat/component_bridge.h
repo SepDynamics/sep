@@ -4,7 +4,6 @@
 #include "blender/types.h"
 #else
 struct SEPBlenderBridge;
-namespace blender { class CyclesRenderer; }
 #endif
 
 namespace sep {
@@ -15,8 +14,8 @@ namespace pattern {
 class BlenderBridge;
 }  // namespace pattern
 namespace blender {
-class CyclesRenderer; // Forward declaration if header not available
-}
+class CyclesRenderer;
+}  // namespace blender
 namespace compat {
 
 std::unique_ptr<audio::AudioCapture> createAudioCapture();
@@ -25,8 +24,8 @@ std::unique_ptr<audio::AudioCapture> createAudioCapture();
 std::unique_ptr<SEPBlenderBridge> createBlenderBridge();
 std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer();
 #else
-inline std::unique_ptr<SEPBlenderBridge> createBlenderBridge() { return nullptr; }
-inline std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer() { return nullptr; }
+std::unique_ptr<SEPBlenderBridge> createBlenderBridge();
+std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer();
 #endif
 
 } // namespace compat

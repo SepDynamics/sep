@@ -42,17 +42,31 @@ MemoryTierManager& MemoryTierManager::getInstance() {
     return *instance_;
 }
 
-MemoryTierManager::MemoryTierManager(const MemoryTierManager::Config& cfg) : config_(cfg) {
+MemoryTierManager::MemoryTierManager(const sep::config::MemoryThresholdConfig& mc) {
+    Config cfg{};
+    cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
+    cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
+    cfg.demote_threshold = mc.demote_threshold;
+    cfg.stm_size = mc.stm_size;
+    cfg.mtm_size = mc.mtm_size;
+    cfg.ltm_size = mc.ltm_size;
+    cfg.stm_to_mtm_min_gen = mc.stm_to_mtm_min_gen;
+    cfg.mtm_to_ltm_min_gen = mc.mtm_to_ltm_min_gen;
     init(cfg);
 }
 
 MemoryTierManager::MemoryTierManager() {
     auto& cm = sep::config::ConfigManager::getInstance();
-    Config cfg{};
     const auto& mc = cm.getMemoryConfig();
+    Config cfg{};
     cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
     cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
     cfg.demote_threshold = mc.demote_threshold;
+    cfg.stm_size = mc.stm_size;
+    cfg.mtm_size = mc.mtm_size;
+    cfg.ltm_size = mc.ltm_size;
+    cfg.stm_to_mtm_min_gen = mc.stm_to_mtm_min_gen;
+    cfg.mtm_to_ltm_min_gen = mc.mtm_to_ltm_min_gen;
     init(cfg);
 }
 

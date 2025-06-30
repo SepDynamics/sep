@@ -41,6 +41,7 @@ SEP_API sep::SEPResult sep_bridge_init(void) {
   return sep::SEPResult::SUCCESS;
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
+#endif
 }
 
 SEP_API sep::SEPResult sep_bridge_cleanup(void) {
@@ -62,14 +63,12 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
       return sep::SEPResult::INVALID_ARGUMENT;
     }
 
-    sep::quantum::Processor *processor = nullptr;
     {
       std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
       if (!sep::api::bridge::detail::g_context_processor_bridge) {
         sep::api::bridge::detail::setLastError("Context processor not initialized");
         return sep::SEPResult::UNKNOWN_ERROR;
       }
-      processor = sep::api::bridge::detail::g_context_processor_bridge.get();
     }
 
     {
@@ -149,14 +148,8 @@ SEP_API sep::SEPResult sep_bridge_get_last_error(char *buffer, size_t buffer_siz
 }
 
 SEP_API size_t sep_get_required_buffer_size(void) {
-#if SEP_HAS_EXCEPTIONS
-  try {
-#endif
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
   return sep::api::bridge::detail::g_required_buffer_size;
-#if SEP_HAS_EXCEPTIONS
-  } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-#endif
 }
 
 SEP_API sep::SEPResult sep_bridge_set_config(const char *key, const char *value) {
@@ -195,9 +188,10 @@ SEP_API sep::SEPResult sep_bridge_set_config(const char *key, const char *value)
   }
   cm.updateAPIConfig(cfg);
   sep::api::bridge::detail::setLastError("");
- return sep::SEPResult::SUCCESS; // Fix: Add semicolon
+ return sep::SEPResult::SUCCESS;
 #if SEP_HAS_EXCEPTIONS
-  } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+ } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+#endif
 }
 
 SEP_API sep::SEPResult sep_bridge_get_config(const char *key, char *buffer, size_t buffer_size) {
@@ -231,9 +225,10 @@ SEP_API sep::SEPResult sep_bridge_get_config(const char *key, char *buffer, size
   }
   (void)std::snprintf(buffer, buffer_size, "%s", val.c_str());
   sep::api::bridge::detail::setLastError("");
- return sep::SEPResult::SUCCESS; // Fix: Add semicolon
+ return sep::SEPResult::SUCCESS;
 #if SEP_HAS_EXCEPTIONS
-  } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+ } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+#endif
 }
 
 SEP_API sep::SEPResult sep_bridge_register_callback(const char *event_type,
@@ -245,12 +240,13 @@ SEP_API sep::SEPResult sep_bridge_register_callback(const char *event_type,
   if (!event_type || !callback) {
     sep::api::bridge::detail::setLastError("Invalid parameters");
     return sep::SEPResult::UNKNOWN_ERROR;
-  } // Fix: Add closing brace
+  }
   sep::api::bridge::detail::g_callback_map[event_type].push_back(callback);
   sep::api::bridge::detail::setLastError("");
- return sep::SEPResult::SUCCESS; // Fix: Add semicolon
+  return sep::SEPResult::SUCCESS;
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
+#endif
 }
 
 } // extern "C"

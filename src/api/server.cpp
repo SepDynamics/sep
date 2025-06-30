@@ -17,6 +17,10 @@
 
 #include "compat/types.h"
 
+#if SEP_HAS_BLENDER
+#include "blender/api.h"
+#endif
+
 #include <chrono>
 #include <thread>
 #include <csignal>
@@ -142,7 +146,7 @@ std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const std
   return std::make_unique<SimpleHttpResponse>(code, response.dump());
 }
 
-std::string SEPApiServer::handleError(const std::string& message, int code) {
+std::string SEPApiServer::handleError(const std::string& message, int code, const std::string& body) {
   nlohmann::json error_response{};
   error_response["error"] = true;
   error_response["message"] = message;
@@ -161,8 +165,8 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
   return error_response.dump();
 }
 
-void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& response_body,
-                               int64_t duration) {
+void SEPApiServer::logRequest(const HttpRequest& req, int code, [[maybe_unused]] const std::string& response_body,
+                                int64_t duration) {
     if (!logger_) return;
  std::lock_guard<std::mutex> lock(metrics_mutex_); // Fix: Acquire lock first // Fix: Added comment
 
@@ -221,7 +225,7 @@ nlohmann::json SEPApiServer::handleCrowError(const std::string& message,
 }
 
 void SEPApiServer::logRequest(const ::crow::request& req, int status_code,
-                              const std::string& response_body, int64_t duration_ms) {
+                               [[maybe_unused]] const std::string& response_body, int64_t duration_ms) {
     if (!logger_) return; // Fix: Check logger first
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 
@@ -788,12 +792,12 @@ void SEPApiServer::handleSignal(int signal) {
   }
 }
 
-#if SEP_HAS_BLENDER
 void SEPApiServer::setupBlenderRoutes() {
+#if SEP_HAS_BLENDER
     // Pattern processing endpoint
     app_->route_dynamic("/api/v1/patterns/process")
     .methods(::crow::HTTPMethod::POST)
-    ([](const ::crow::request& req) {
+    .handler([](const ::crow::request& req) -> ::crow::response {
         try {
             auto json = nlohmann::json::parse(std::string(req.body));
             if (!json.is_object()) {
@@ -888,11 +892,11 @@ void SEPApiServer::setupBlenderRoutes() {
             return res;
         }
     });
-    
+
     // Cycles evolution endpoint
     app_->route_dynamic("/api/v1/cycles/evolve")
     .methods(::crow::HTTPMethod::POST)
-    ([](const ::crow::request& req) {
+    .handler([](const ::crow::request& req) -> ::crow::response {
         try {
             auto json = nlohmann::json::parse(std::string(req.body));
             
@@ -979,10 +983,11 @@ void SEPApiServer::setupBlenderRoutes() {
         res.body = response.dump();
         res.code = 200;
         return res;
+        
     });
-}
-#else
-void SEPApiServer::setupBlenderRoutes() {}
-#endif
+#endif  // SEP_HAS_BLENDER
 
-}  // namespace sep::api
+}
+
+
+} // end namespace sep::api

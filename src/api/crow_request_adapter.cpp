@@ -5,30 +5,44 @@ namespace api {
 
 CrowRequestAdapter::CrowRequestAdapter(crow::request& req) : request_(req) {}
 
-const std::string& CrowRequestAdapter::getHeader(const std::string& key) const {
-    static const std::string empty;
-    auto it = request_.headers.find(key);
-    return it != request_.headers.end() ? it->second : empty;
+std::string CrowRequestAdapter::getHeader(const std::string& key) const {
+    return request_.get_header_value(key);
 }
 
-const std::string& CrowRequestAdapter::getBody() const {
-    return request_.body;
+std::string CrowRequestAdapter::getBody() const {
+    return std::string(request_.body);
 }
 
-const std::string& CrowRequestAdapter::getMethod() const {
-    return request_.method;
+std::string CrowRequestAdapter::getMethod() const {
+    return std::string(crow::method_name(request_.method));
 }
 
-const std::string& CrowRequestAdapter::getUrl() const {
-    return request_.url;
+std::string CrowRequestAdapter::getUrl() const {
+    return std::string(request_.url);
 }
 
-const std::unordered_map<std::string, std::string>& CrowRequestAdapter::getHeaders() const {
-    return request_.headers;
-}
+std::string CrowRequestAdapter::getQueryParam(const std::string& name) const {
+    // Parse query parameters from URL
+    std::string url = request_.url;
+    size_t pos = url.find('?');
+    if (pos == std::string::npos) {
+        return std::string();
+    }
 
-const std::unordered_map<std::string, std::string>& CrowRequestAdapter::getParams() const {
-    return request_.url_params;
+    std::string query = url.substr(pos + 1);
+    std::string param = name + "=";
+    pos = query.find(param);
+    if (pos == std::string::npos) {
+        return std::string();
+    }
+
+    size_t start = pos + param.length();
+    size_t end = query.find('&', start);
+    if (end == std::string::npos) {
+        end = query.length();
+    }
+
+    return query.substr(start, end - start);
 }
 
 } // namespace api

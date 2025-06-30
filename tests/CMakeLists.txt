@@ -24,7 +24,9 @@ include_directories(
 )
 
 # Add test subdirectories
-add_subdirectory(blender)
+if(SEP_HAS_BLENDER)
+    add_subdirectory(blender)
+endif()
 
 # Configure test discovery
 include(CTest)

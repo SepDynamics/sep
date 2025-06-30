@@ -32,6 +32,7 @@ file(MAKE_DIRECTORY ${SEP_TEST_DATA_DIR})
 option(SEP_BUILD_TESTS "Build test suite" ON)
 option(SEP_ENABLE_CUDA "Enable CUDA support" ON)
 option(SEP_HAS_CYCLES "Enable Blender Cycles integration" OFF)
+option(SEP_HAS_BLENDER "Enable Blender integration" ON)
 
 # Configure compiler flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -44,6 +45,12 @@ endif()
 
 if(SEP_HAS_CYCLES)
     add_compile_definitions(SEP_HAS_CYCLES)
+endif()
+
+if(SEP_HAS_BLENDER)
+    add_compile_definitions(SEP_HAS_BLENDER=1)
+else()
+    add_compile_definitions(SEP_HAS_BLENDER=0)
 endif()
 
 # Set output directories

@@ -7,6 +7,10 @@
 #include <glm/gtc/constants.hpp>
 #include <queue>
 #include <vector>
+#include "compat/cufft.h"
+#ifdef SEP_USE_FFTW
+#include <fftw3.h>
+#endif
 
 namespace sep {
 namespace audio {
@@ -90,24 +94,53 @@ void AudioPipeline::applyHannWindow(std::vector<float>& samples) {
 
 SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
     SpectralData spectral;
+    const size_t N = samples.size();
 
-    // Prepare FFT input
-    std::vector<std::complex<float>> fft_input(samples.size());
-    for (size_t i = 0; i < samples.size(); ++i) {
-        fft_input[i] = std::complex<float>(samples[i], 0.0f);
+#if SEP_CUDA_AVAILABLE
+    cufftHandle plan;
+    cufftPlan1d(&plan, static_cast<int>(N), CUFFT_R2C, 1);
+    std::vector<cufftReal> input(samples.begin(), samples.end());
+    std::vector<cufftComplex> output(N / 2 + 1);
+    cufftExecR2C(plan, input.data(), output.data());
+    cufftDestroy(plan);
+
+    spectral.fft.resize(output.size());
+    for (size_t i = 0; i < output.size(); ++i) {
+        spectral.fft[i] = std::complex<float>(output[i].x, output[i].y);
     }
+#elif defined(SEP_USE_FFTW)
+    fftwf_complex* out = reinterpret_cast<fftwf_complex*>(
+        fftwf_malloc(sizeof(fftwf_complex) * (N / 2 + 1)));
+    fftwf_plan plan = fftwf_plan_dft_r2c_1d(static_cast<int>(N),
+                                           const_cast<float*>(samples.data()),
+                                           out, FFTW_ESTIMATE);
+    fftwf_execute(plan);
+    fftwf_destroy_plan(plan);
 
-    // Perform FFT (simplified for demo)
-    spectral.fft = fft_input;  // Would use actual FFT implementation
+    spectral.fft.resize(N / 2 + 1);
+    for (size_t i = 0; i < spectral.fft.size(); ++i) {
+        spectral.fft[i] = std::complex<float>(out[i][0], out[i][1]);
+    }
+    fftwf_free(out);
+#else
+    spectral.fft.resize(N);
+    for (size_t k = 0; k < N; ++k) {
+        std::complex<float> sum(0.0f, 0.0f);
+        for (size_t n = 0; n < N; ++n) {
+            float angle = -2.0f * glm::pi<float>() * static_cast<float>(n * k) /
+                          static_cast<float>(N);
+            sum += std::complex<float>(samples[n] * std::cos(angle),
+                                      samples[n] * std::sin(angle));
+        }
+        spectral.fft[k] = sum;
+    }
+#endif
 
-    // Calculate magnitudes and phases
-    spectral.magnitudes.resize(samples.size() / 2 + 1);
-    spectral.phases.resize(samples.size() / 2 + 1);
-
-    for (size_t i = 0; i < spectral.magnitudes.size(); ++i) {
-        auto& bin = spectral.fft[i];
-        spectral.magnitudes[i] = std::abs(bin);
-        spectral.phases[i] = std::arg(bin);
+    spectral.magnitudes.resize(spectral.fft.size());
+    spectral.phases.resize(spectral.fft.size());
+    for (size_t i = 0; i < spectral.fft.size(); ++i) {
+        spectral.magnitudes[i] = std::abs(spectral.fft[i]);
+        spectral.phases[i] = std::arg(spectral.fft[i]);
     }
 
     return spectral;

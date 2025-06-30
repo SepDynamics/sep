@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include "api/sep_engine.h"
 #include "quantum/pattern_evolution_bridge.h"
+#include "quantum/quantum_processor_qfh.h"
 
 // Standard Library Includes
 #include <glm/glm.hpp>
@@ -75,6 +76,23 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
 std::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns( const nlohmann::json& args)
 {
     std::vector<sep::pattern::PatternData> patterns;
+    auto json_patterns = args.value("patterns", nlohmann::json::array());
+    float min_coherence = args.value("min_coherence", 0.0f);
+    float min_stability = args.value("min_stability", 0.0f);
+
+    for (const auto& jp : json_patterns)
+    {
+        auto p = fromJson(jp);
+        if (p.id.empty())
+        {
+            p.id = shim::string(api::SepEngine::generateId("pat").c_str());
+        }
+        if (p.coherence >= min_coherence && p.stability >= min_stability)
+        {
+            patterns.push_back(p);
+        }
+    }
+
     return patterns;
 }
 
@@ -87,21 +105,25 @@ sep::pattern::PatternResult sep::quantum::mcp::PatternEvolution::processPatterns
         output.clear();
         return pattern::PatternResult::SUCCESS;
     }
-    
+
     output.resize(input.size());
-    
-    // Simple CPU-based processing for now
-    // Copy input patterns and apply basic evolution
+
+    ::sep::quantum::QuantumProcessorQFH tier_helper;
+
     for (std::size_t i = 0; i < input.size(); ++i)
     {
-        // Use assignment operator instead of constructor
         output[i] = input[i];
         output[i].generation++;
-        output[i].coherence = std::min(1.0f, output[i].coherence * 1.01f);
-        output[i].stability = std::max(0.0f, output[i].stability * 0.99f);
+        output[i].coherence = std::clamp(input[i].coherence * (1.0f + config.update_threshold), 0.0f, 1.0f);
+        output[i].stability = std::clamp(input[i].stability * (1.0f - config.update_threshold / 2.0f), 0.0f, 1.0f);
+        output[i].entropy = std::clamp(input[i].entropy + 0.01f, 0.0f, 1.0f);
+        output[i].mutation_count += config.enable_mutations ? 1u : 0u;
+        output[i].memory_tier = tier_helper.determineMemoryTier(output[i].coherence,
+                                                                output[i].stability,
+                                                                output[i].generation);
         output[i].id = shim::string(api::SepEngine::generateId("pat").c_str());
     }
-    
+
     return pattern::PatternResult::SUCCESS;
 }
 

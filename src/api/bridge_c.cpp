@@ -14,6 +14,7 @@
 #include <cstring>
 #include <cstdio>  // Required for snprintf
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 
@@ -87,11 +88,11 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
         }
       }
 
-      // Call a method that exists on the Processor class, perhaps `processBatch` with dummy data or `processAll`.
-      // Replacing with a dummy success for now, assuming the actual processing logic will be integrated later.
       sep::quantum::BatchProcessingResult process_result;
-      process_result.success = true;
- process_result.error_code = 0; // Fix: Initialize error_code
+      {
+        std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+        process_result = sep::api::bridge::detail::g_context_processor_bridge->processAll();
+      }
       
       if (!process_result.success) {
         sep::api::bridge::detail::setLastError(process_result.error_message.c_str());

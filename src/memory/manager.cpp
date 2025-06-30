@@ -1,24 +1,24 @@
-#include "api/types.h"
-#include "api/server.h"
-#include "api/crow_adapter.h" // Fix: Include crow_adapter for LoggingMiddleware
-#include "core/common.h" // Fix: Include common
-#include "memory/memory_tier_manager.hpp"
-#include "quantum/quantum_processor_qfh.h"
-#include "memory/manager.h"
+// Standard library
+#include <atomic>
 
-// Debug logging for OpenTelemetry headers
+// External libraries
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/daily_file_sink.h>
+#include <spdlog/sinks/dist_sink.h>
+#include <spdlog/sinks/null_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
 #ifdef SEP_HAS_OPENTELEMETRY
 #include <opentelemetry/trace/provider.h>
 #endif
-// CROW_DISABLE_RTTI is defined globally via CMake
-#include <spdlog/sinks/rotating_file_sink.h>
-#include <spdlog/sinks/basic_file_sink.h> // Fix: Include basic file sink
-#include <spdlog/sinks/daily_file_sink.h> // Fix: Include daily file sink
-#include <spdlog/sinks/dist_sink.h> // Fix: Include distributed sink
-#include <spdlog/sinks/null_sink.h> // Fix: Include null sink
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
-#include <atomic>
+
+// Project headers
+#include "api/server.h"
+#include "api/crow_adapter.h"
+#include "memory/manager.h"
+
+
 
 namespace sep::logging {
 

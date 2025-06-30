@@ -49,9 +49,7 @@ MemoryTierManager& MemoryTierManager::getInstance() {
     return *instance_;
 }
 
-MemoryTierManager::MemoryTierManager() {
-    auto& cm = sep::config::ConfigManager::getInstance();
-    const auto& mc = cm.getMemoryConfig();
+MemoryTierManager::MemoryTierManager(const sep::config::MemoryThresholdConfig& mc) {
     Config cfg{};
     cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
     cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
@@ -65,6 +63,7 @@ MemoryTierManager::MemoryTierManager() {
 MemoryTierManager::MemoryTierManager(const Config& cfg) {
     init(cfg);
 }
+
 
 MemoryTierManager::~MemoryTierManager() {
     shutdown();

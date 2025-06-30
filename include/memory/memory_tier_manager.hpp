@@ -9,6 +9,7 @@
 
 // Project includes
 #include "core/common.h"
+#include "core/types.h"
 #include "core/dag_graph.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
@@ -66,8 +67,8 @@ public:
     static MemoryTierManager& getInstance();
 
     MemoryTierManager();
-    MemoryTierManager(const Config& cfg);
-    MemoryTierManager(const sep::config::MemoryThresholdConfig& cfg);
+    explicit MemoryTierManager(const Config& cfg);
+    explicit MemoryTierManager(const sep::config::MemoryThresholdConfig& cfg);
     ~MemoryTierManager();
 
     void init(const Config& config);

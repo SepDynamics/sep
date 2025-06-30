@@ -16,8 +16,10 @@
 #include "compat/stream.h"
 #include "core/logging.h"  // This is actually the logging manager
 #include "memory/memory_tier_manager.hpp"
+#if SEP_HAS_BLENDER
 #include "blender/pattern_bridge.h"
-#include "blender/types.h" // For SEPBlenderBridge definition // Fix: Added comment
+#include "blender/types.h" // For SEPBlenderBridge definition
+#endif
 #include "audio/capture.h"
 
 #include <cstdint> // Fix: Include cstdint

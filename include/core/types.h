@@ -126,10 +126,24 @@ struct AnalyticsConfig {
     double sampling_rate{0.1};
 };
 
+struct MemoryThresholdConfig {
+    float promote_stm_to_mtm{0.7f};
+    float promote_mtm_to_ltm{0.9f};
+    float demote_threshold{0.3f};
+};
+
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 struct SystemConfig {
     APIConfig   api;
     CudaConfig  cuda;
     LogConfig   logging;
+    MemoryThresholdConfig memory;
+    QuantumThresholdConfig quantum;
     std::string data_path;
 };
 
@@ -280,6 +294,30 @@ inline void from_json(const nlohmann::json& j, AnalyticsConfig& c) {
     c.collect_metrics = j.value("collect_metrics", true);
     c.history_size = j.value("history_size", static_cast<size_t>(1000));
     c.sampling_rate = j.value("sampling_rate", 0.1);
+}
+
+inline void to_json(nlohmann::json& j, const MemoryThresholdConfig& c) {
+    j = nlohmann::json{{"promote_stm_to_mtm", c.promote_stm_to_mtm},
+                       {"promote_mtm_to_ltm", c.promote_mtm_to_ltm},
+                       {"demote_threshold", c.demote_threshold}};
+}
+
+inline void from_json(const nlohmann::json& j, MemoryThresholdConfig& c) {
+    c.promote_stm_to_mtm = j.value("promote_stm_to_mtm", 0.7f);
+    c.promote_mtm_to_ltm = j.value("promote_mtm_to_ltm", 0.9f);
+    c.demote_threshold = j.value("demote_threshold", 0.3f);
+}
+
+inline void to_json(nlohmann::json& j, const QuantumThresholdConfig& c) {
+    j = nlohmann::json{{"ltm_coherence_threshold", c.ltm_coherence_threshold},
+                       {"mtm_coherence_threshold", c.mtm_coherence_threshold},
+                       {"stability_threshold", c.stability_threshold}};
+}
+
+inline void from_json(const nlohmann::json& j, QuantumThresholdConfig& c) {
+    c.ltm_coherence_threshold = j.value("ltm_coherence_threshold", 0.9f);
+    c.mtm_coherence_threshold = j.value("mtm_coherence_threshold", 0.6f);
+    c.stability_threshold = j.value("stability_threshold", 0.8f);
 }
 
 }  // namespace config

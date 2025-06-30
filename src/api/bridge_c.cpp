@@ -34,7 +34,6 @@ SEP_API sep::SEPResult sep_bridge_init(void) {
   return sep::SEPResult::SUCCESS;
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
-#endif
 }
 
 SEP_API sep::SEPResult sep_bridge_cleanup(void) {
@@ -186,7 +185,6 @@ SEP_API sep::SEPResult sep_bridge_set_config(const char *key, const char *value)
  return sep::SEPResult::SUCCESS; // Fix: Add semicolon
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-#endif
 }
 
 SEP_API sep::SEPResult sep_bridge_get_config(const char *key, char *buffer, size_t buffer_size) {
@@ -223,7 +221,6 @@ SEP_API sep::SEPResult sep_bridge_get_config(const char *key, char *buffer, size
  return sep::SEPResult::SUCCESS; // Fix: Add semicolon
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-#endif
 }
 
 SEP_API sep::SEPResult sep_bridge_register_callback(const char *event_type,
@@ -241,7 +238,6 @@ SEP_API sep::SEPResult sep_bridge_register_callback(const char *event_type,
  return sep::SEPResult::SUCCESS; // Fix: Add semicolon
 #if SEP_HAS_EXCEPTIONS
   } SEP_CATCH_RETURN(sep::api::ErrorCode::GeneralError);
-#endif
 }
 
 } // extern "C"

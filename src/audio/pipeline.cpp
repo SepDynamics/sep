@@ -117,12 +117,11 @@ SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
                                            const_cast<float*>(samples.data()),
                                            out, FFTW_ESTIMATE);
     fftwf_execute(plan);
-    fftwf_destroy_plan(plan);
-
     spectral.fft.resize(N / 2 + 1);
     for (size_t i = 0; i < spectral.fft.size(); ++i) {
         spectral.fft[i] = std::complex<float>(out[i][0], out[i][1]);
     }
+    fftwf_destroy_plan(plan);
     fftwf_free(out);
 #else
     spectral.fft.resize(N);

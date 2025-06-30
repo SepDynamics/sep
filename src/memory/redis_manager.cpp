@@ -1,11 +1,11 @@
 #include "memory/redis_manager.h"
 #include "memory/types.h"
-#include "core/logging.h" // For logging manager
+#include "core/logging.h"
 #include <mutex>
 
-#include "compat/cuda_common.h" // For SEP_CUDA_AVAILABLE
+#include "compat/cuda_common.h"
 #if !SEP_CUDA_AVAILABLE
-#include "compat/cuda_runtime.h" // For cuda headers in case of no CUDA
+#include "compat/cuda_runtime.h"
 #endif
 #include <cstdint>
 #if __has_include(<hiredis/hiredis.h>)

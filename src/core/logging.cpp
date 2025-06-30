@@ -42,17 +42,12 @@ spdlog::level::level_enum Manager::toSpdLogLevel(Level level) {
 }
 
 void Manager::initialize() {
-  // Set up default configuration
   spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%^%l%$] %v");
   spdlog::set_level(spdlog::level::info);
-
-  // Tracing hooks removed
 }
 
 void Manager::shutdown() { spdlog::shutdown(); }
 
-// Return tracer based on available backend. With OpenTelemetry built in, defer
-// to the provider. Otherwise return a lightweight internal tracer.
 void *Manager::getTracer() {
 #ifdef SEP_HAS_OPENTELEMETRY
   static auto tracer = opentelemetry::trace::Provider::GetTracerProvider()
@@ -67,23 +62,18 @@ void *Manager::getTracer() {
 std::shared_ptr<spdlog::logger> Manager::createLogger(const std::string &name,
                                                       const LoggerConfig &config) {
   auto logger = spdlog::get(name);
-  // Check if a logger with this name already exists and if it has sinks.
-  // If it exists but has no sinks, it was likely created by spdlog::get(name)
-  // before we explicitly created it. We should replace it in this case.
   if (logger && !logger->sinks().empty()) {
     return logger;
   }
 
   std::vector<spdlog::sink_ptr> sinks;
 
-  // Add console sink if enabled
   if (config.console.enabled) {
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     console_sink->set_level(toSpdLogLevel(config.level));
     sinks.push_back(console_sink);
   }
 
-  // Add file sink if path is provided
   if (!config.file.path.empty()) {
     auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
         config.file.path, config.file.max_size, config.file.max_files);
@@ -114,7 +104,7 @@ Level Manager::levelFromString(const std::string &level) {
   if (level == "warn") return Level::WARN;
   if (level == "error") return Level::ERROR;
   if (level == "critical") return Level::CRITICAL;
-  return Level::INFO;  // Default to info
+  return Level::INFO;
 }
 
 std::string Manager::levelToString(Level level) {
@@ -136,27 +126,21 @@ std::string Manager::levelToString(Level level) {
   }
 }
 
-void LoggingMiddleware::before_handle(::crow::request& req, ::crow::response& res,
+void LoggingMiddleware::before_handle(::crow::request &req, ::crow::response &res,
                                       LoggingMiddleware::context &ctx) {
-
   (void)req;
-  if (!isReady()) { // Fix: Added comment // Fix: Added comment
-    res.code = 503;  // Service Unavailable
+  if (!isReady()) {
+    res.code = 503;
     res.end();
     return;
   }
 
   ctx.start = std::chrono::high_resolution_clock::now();
-  // Ensure ctx.start write is visible before any other thread reads it. The
-  // middleware currently runs sequentially but this guard preserves ordering if
-  // the server is extended with asynchronous handlers.
   std::atomic_thread_fence(std::memory_order_release);
-
 }
 
 void LoggingMiddleware::after_handle(::crow::request &req, ::crow::response &res,
                                      LoggingMiddleware::context &ctx) {
-
   if (!isReady()) {
     return;
   }
@@ -173,3 +157,4 @@ void LoggingMiddleware::after_handle(::crow::request &req, ::crow::response &res
 }
 
 }  // namespace sep::logging
+

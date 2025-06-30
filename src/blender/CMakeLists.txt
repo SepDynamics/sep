@@ -7,6 +7,7 @@ add_library(sep_blender STATIC
     api.cpp
     pattern_visualization_pipeline.cpp
     blender_integration.cpp
+    blender_bridge.cpp
     mesh_handler.cpp
 )
 

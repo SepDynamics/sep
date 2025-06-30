@@ -12,6 +12,7 @@
 
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
+#include "blender/bridge.h"
 
 using ::sep::memory::MemoryTierEnum;
 #include "core/logging.h" // Fix: Add include for logging // Fix: Added comment
@@ -545,7 +546,7 @@ private:
     }
     
     MigrationReason determineMigrationReason(const QuantumCoherenceManager::PatternCoherenceData& data,
-                                            sep::memory::MemoryTierEnum target_tier) const {
+                                            sep::memory::MemoryTierEnum tier_analysis) const {
         if (data.coherence > 0.9f) return MigrationReason::HighCoherence;
         if (data.stability > 0.9f) return MigrationReason::HighStability;
         if (data.access_count > global_tick_ / 10) return MigrationReason::FrequentAccess;
@@ -570,7 +571,7 @@ private:
                  [](const auto& a, const auto& b) { return a.second < b.second; });
         
         // Demote lowest coherence patterns
-        size_t demote_count = demotion_candidates.size() * 0.2f;  // Demote 20%
+        float demote_count = demotion_candidates.size() * 0.2f;  // Demote 20%
         
         for (size_t i = 0; i < demote_count && i < demotion_candidates.size(); ++i) {
             TierMigration migration;

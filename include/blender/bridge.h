@@ -34,6 +34,8 @@ struct PatternLimits {
 // Forward declarations
 class PatternObserver;
 
+// Thread-safe bridge for coordinating Blender objects with the quantum processor.
+// Access to internal maps and observer lists is protected by mutexes.
 class BlenderBridge {
  public:
   BlenderBridge();
@@ -130,7 +132,9 @@ class BlenderBridge {
   std::atomic<bool> processing_{false};
   std::atomic<sep::pattern::ObjectHandle> next_handle_{1};
 
+  // guards access to objects_ map
   mutable std::mutex objects_mutex_;
+  // guards observers_ list
   mutable std::mutex observers_mutex_;
   std::mutex processing_mutex_;
   std::condition_variable processing_cv_;

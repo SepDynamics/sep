@@ -20,10 +20,10 @@
 #include <spdlog/spdlog.h>
 #endif
 
-#include "api/server.h"
 namespace sep {
 namespace api {
 class HttpRequest;
+class Server;
 std::unique_ptr<HttpRequest> makeRequest(::crow::request &req);
 }  // namespace api
 }  // namespace sep

@@ -17,7 +17,7 @@ using json = nlohmann::json;
 
 class BridgeTest : public ::testing::Test {
  protected:
-  void SetUp() override { ASSERT_EQ(sep_bridge_init(), 0); }
+  void SetUp() override { ASSERT_EQ(sep_bridge_init(), sep::SEPResult::SUCCESS); }
 
   void TearDown() override { sep_bridge_cleanup(); }
 
@@ -76,9 +76,9 @@ TEST_F(BridgeTest, BasicContextProcessing) {
                   {"metadata", json::object()}};
 
   char result_buffer[1024];
-  int result = sep_process_context(context.dump().c_str(), "test_layer", result_buffer,
+  sep::SEPResult result = sep_process_context(context.dump().c_str(), "test_layer", result_buffer,
                                    sizeof(result_buffer));
-  EXPECT_EQ(result, 0) << "Process context failed with code " << result;
+  EXPECT_EQ(result, sep::SEPResult::SUCCESS) << "Process context failed with code " << static_cast<int>(result);
 
   json result_json = json::parse(result_buffer);
   EXPECT_TRUE(result_json["success"].get<bool>());
@@ -90,7 +90,7 @@ TEST_F(BridgeTest, InvalidJsonProcessing) {
   char result_buffer[1024];
 
   EXPECT_EQ(sep_process_context(invalid_json, "test_layer", result_buffer, sizeof(result_buffer)),
-            -4);
+            sep::SEPResult::PROCESSING_ERROR);
 
   char error_buffer[1024];
   sep_bridge_get_last_error(error_buffer, sizeof(error_buffer));
@@ -108,7 +108,7 @@ TEST_F(BridgeTest, BufferSizeHandling) {
   char small_buffer[10];
   EXPECT_EQ(sep_process_context(large_context.dump().c_str(), "test_layer", small_buffer,
                                 sizeof(small_buffer)),
-            -3);
+            sep::SEPResult::BUFFER_TOO_SMALL);
 
   size_t required_size = sep_get_required_buffer_size();
   EXPECT_GT(required_size, sizeof(small_buffer));
@@ -117,19 +117,19 @@ TEST_F(BridgeTest, BufferSizeHandling) {
 // Error Handling Tests
 TEST_F(BridgeTest, NullParameterHandling) {
   char buffer[1024];
-  EXPECT_EQ(sep_process_context(nullptr, "layer", buffer, sizeof(buffer)), -2);
-  EXPECT_EQ(sep_process_context("test", nullptr, buffer, sizeof(buffer)), -2);
-  EXPECT_EQ(sep_process_context("test", "layer", nullptr, sizeof(buffer)), -2);
+  EXPECT_EQ(sep_process_context(nullptr, "layer", buffer, sizeof(buffer)), sep::SEPResult::INVALID_ARGUMENT);
+  EXPECT_EQ(sep_process_context("test", nullptr, buffer, sizeof(buffer)), sep::SEPResult::INVALID_ARGUMENT);
+  EXPECT_EQ(sep_process_context("test", "layer", nullptr, sizeof(buffer)), sep::SEPResult::INVALID_ARGUMENT);
 }
 
 TEST_F(BridgeTest, ErrorBufferHandling) {
   char error_buffer[1024];
 
   // Test with null buffer
-  EXPECT_EQ(sep_bridge_get_last_error(nullptr, 1024), 0);
+  EXPECT_EQ(sep_bridge_get_last_error(nullptr, 1024), sep::SEPResult::SUCCESS);
 
   // Test with zero size
-  EXPECT_EQ(sep_bridge_get_last_error(error_buffer, 0), 0);
+  EXPECT_EQ(sep_bridge_get_last_error(error_buffer, 0), sep::SEPResult::SUCCESS);
 
   // Test with small buffer
   detail::setLastError("Long error message for testing buffer handling");
@@ -143,18 +143,18 @@ TEST_F(BridgeTest, ConfigurationManagement) {
   char buffer[1024];
 
   // Test invalid parameters
-  EXPECT_EQ(sep_bridge_set_config(nullptr, "value"), -1);
-  EXPECT_EQ(sep_bridge_set_config("key", nullptr), -1);
-  EXPECT_EQ(sep_bridge_get_config(nullptr, buffer, sizeof(buffer)), -1);
-  EXPECT_EQ(sep_bridge_get_config("key", nullptr, sizeof(buffer)), -1);
+  EXPECT_EQ(sep_bridge_set_config(nullptr, "value"), sep::SEPResult::UNKNOWN_ERROR);
+  EXPECT_EQ(sep_bridge_set_config("key", nullptr), sep::SEPResult::UNKNOWN_ERROR);
+  EXPECT_EQ(sep_bridge_get_config(nullptr, buffer, sizeof(buffer)), sep::SEPResult::UNKNOWN_ERROR);
+  EXPECT_EQ(sep_bridge_get_config("key", nullptr, sizeof(buffer)), sep::SEPResult::UNKNOWN_ERROR);
 
   // Basic set and get using ConfigManager
-  EXPECT_EQ(sep_bridge_set_config("api.host", "example.com"), 0);
-  EXPECT_EQ(sep_bridge_get_config("api.host", buffer, sizeof(buffer)), 0);
+  EXPECT_EQ(sep_bridge_set_config("api.host", "example.com"), sep::SEPResult::SUCCESS);
+  EXPECT_EQ(sep_bridge_get_config("api.host", buffer, sizeof(buffer)), sep::SEPResult::SUCCESS);
   EXPECT_STREQ(buffer, "example.com");
 
   // Non-existent key
-  EXPECT_EQ(sep_bridge_get_config("api.missing", buffer, sizeof(buffer)), -2);
+  EXPECT_EQ(sep_bridge_get_config("api.missing", buffer, sizeof(buffer)), sep::SEPResult::INVALID_ARGUMENT);
 }
 
 // Callback Registration Tests
@@ -167,11 +167,11 @@ TEST_F(BridgeTest, CallbackRegistration) {
   };
 
   // Test invalid parameters
-  EXPECT_EQ(sep_bridge_register_callback(nullptr, callback), -1);
-  EXPECT_EQ(sep_bridge_register_callback("event", nullptr), -1);
+  EXPECT_EQ(sep_bridge_register_callback(nullptr, callback), sep::SEPResult::UNKNOWN_ERROR);
+  EXPECT_EQ(sep_bridge_register_callback("event", nullptr), sep::SEPResult::UNKNOWN_ERROR);
 
   // Successful registration and invocation
-  EXPECT_EQ(sep_bridge_register_callback("test_event", callback), 0);
+  EXPECT_EQ(sep_bridge_register_callback("test_event", callback), sep::SEPResult::SUCCESS);
   detail::invokeCallbacks("test_event", "payload");
   EXPECT_TRUE(called);
   EXPECT_EQ(data, "payload");
@@ -193,7 +193,7 @@ TEST_F(BridgeTest, ConcurrentProcessing) {
   for (int i = 0; i < num_threads; ++i) {
     threads.emplace_back([&]() {
       char buffer[1024];
-      if (sep_process_context(context_json.c_str(), "test_layer", buffer, sizeof(buffer)) == 0) {
+      if (sep_process_context(context_json.c_str(), "test_layer", buffer, sizeof(buffer)) == sep::SEPResult::SUCCESS) {
         success_count++;
       }
     });
@@ -210,8 +210,8 @@ TEST_F(BridgeTest, ConcurrentProcessing) {
 TEST_F(BridgeTest, MultipleInitCleanup) {
   // Test multiple init/cleanup cycles
   for (int i = 0; i < 5; ++i) {
-    EXPECT_EQ(sep_bridge_cleanup(), 0);
-    EXPECT_EQ(sep_bridge_init(), 0);
+    EXPECT_EQ(sep_bridge_cleanup(), sep::SEPResult::SUCCESS);
+    EXPECT_EQ(sep_bridge_init(), sep::SEPResult::SUCCESS);
   }
 }
 
@@ -219,7 +219,8 @@ TEST_F(BridgeTest, ProcessingAfterCleanup) {
   sep_bridge_cleanup();
 
   char buffer[1024];
-  EXPECT_EQ(sep_process_context(R"({"type": "test"})", "layer", buffer, sizeof(buffer)), -1);
+  EXPECT_EQ(sep_process_context(R"({"type": "test"})", "layer", buffer, sizeof(buffer)),
+            sep::SEPResult::UNKNOWN_ERROR);
 
   char error_buffer[1024];
   sep_bridge_get_last_error(error_buffer, sizeof(error_buffer));

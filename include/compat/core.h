@@ -74,7 +74,7 @@ class CudaCore {
                     std::uint32_t embedding_size, Stream& stream);
 
  private:
-  CudaCore();   // Private constructor for singleton
+  CudaCore() : initialized_{false}, current_device_{-1} {}
   ~CudaCore() = default;  // Private destructor
 
   CudaCore(const CudaCore&) = delete;

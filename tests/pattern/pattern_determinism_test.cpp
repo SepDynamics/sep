@@ -32,3 +32,16 @@ TEST(PatternDeterminism, JsonRoundTripStable) {
     EXPECT_EQ(PatternEvolution::toJson(r1).dump(), PatternEvolution::toJson(r2).dump());
 }
 
+TEST(PatternDeterminism, ProcessPatternsUpdateThreshold) {
+    PatternData in{};
+    in.coherence = 0.5f;
+    in.stability = 0.8f;
+    std::vector<PatternData> input{in};
+    sep::pattern::PatternConfig cfg{0.2f, false, 1, 1};
+    std::vector<PatternData> output;
+    ASSERT_EQ(PatternEvolution::processPatterns(input, cfg, output), sep::pattern::PatternResult::SUCCESS);
+    ASSERT_EQ(output.size(), 1u);
+    EXPECT_GT(output[0].coherence, input[0].coherence);
+    EXPECT_LT(output[0].stability, input[0].stability);
+}
+

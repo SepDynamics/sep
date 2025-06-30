@@ -68,6 +68,14 @@ if(PIPEWIRE_FOUND)
   set(PIPEWIRE_FOUND ${PIPEWIRE_FOUND} PARENT_SCOPE)
 endif()
 
+# FFTW (for CPU FFT implementation)
+pkg_check_modules(FFTW QUIET fftw3f)
+if(FFTW_FOUND)
+  message(STATUS "Found FFTW: ${FFTW_LIBRARIES}")
+  target_include_directories(sep_audio PRIVATE ${FFTW_INCLUDE_DIRS})
+  target_link_libraries(sep_audio PRIVATE ${FFTW_LIBRARIES})
+endif()
+
 target_include_directories(sep_audio
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include

@@ -5,6 +5,8 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
+#include <compat/cufft.h>
+#include <fftw3.h>
 #include <queue>
 #include <vector>
 #include "compat/cufft.h"

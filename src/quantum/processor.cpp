@@ -213,9 +213,10 @@ public:
     void demotePatterns() {
         std::lock_guard<std::mutex> lock(mutex_);
         for (auto& pattern : patterns_) {
-            if (pattern.quantum_state.coherence < config_.mtm_coherence_threshold) {
+            auto qcfg = sep::config::ConfigManager::getInstance().getQuantumConfig();
+            if (pattern.quantum_state.coherence < qcfg.mtm_coherence_threshold) {
                 pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
-            } else if (pattern.quantum_state.coherence < config_.ltm_coherence_threshold) {
+            } else if (pattern.quantum_state.coherence < qcfg.ltm_coherence_threshold) {
                 pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
             }
         }
@@ -225,7 +226,8 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
         patterns_.erase(std::remove_if(patterns_.begin(), patterns_.end(),
             [this](const Pattern& p) {
-                return p.quantum_state.coherence < config_.mtm_coherence_threshold / 2;
+                auto qcfg = sep::config::ConfigManager::getInstance().getQuantumConfig();
+                return p.quantum_state.coherence < qcfg.mtm_coherence_threshold / 2;
             }), patterns_.end());
         rebuildPatternMap();
     }
@@ -313,9 +315,10 @@ private:
     void updateMemoryTier(Pattern& pattern) {
         auto& state = pattern.quantum_state;
         ::sep::memory::MemoryTierEnum previous_tier = state.memory_tier;
-        if (state.coherence >= config_.ltm_coherence_threshold && state.stability >= config_.stability_threshold) {
+        auto qcfg = sep::config::ConfigManager::getInstance().getQuantumConfig();
+        if (state.coherence >= qcfg.ltm_coherence_threshold && state.stability >= qcfg.stability_threshold) {
             state.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
-        } else if (state.coherence >= config_.mtm_coherence_threshold) {
+        } else if (state.coherence >= qcfg.mtm_coherence_threshold) {
             state.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
         } else {
             state.memory_tier = ::sep::memory::MemoryTierEnum::STM;

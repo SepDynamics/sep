@@ -47,11 +47,13 @@ MemoryTierManager::MemoryTierManager(const sep::config::MemoryThresholdConfig& m
     cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
     cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
     cfg.demote_threshold = mc.demote_threshold;
-    cfg.stm_size = mc.stm_size;
-    cfg.mtm_size = mc.mtm_size;
-    cfg.ltm_size = mc.ltm_size;
+    cfg.fragmentation_threshold = mc.fragmentation_threshold;
     cfg.stm_to_mtm_min_gen = mc.stm_to_mtm_min_gen;
     cfg.mtm_to_ltm_min_gen = mc.mtm_to_ltm_min_gen;
+    init(cfg);
+}
+
+MemoryTierManager::MemoryTierManager(const Config& cfg) {
     init(cfg);
 }
 
@@ -62,9 +64,7 @@ MemoryTierManager::MemoryTierManager() {
     cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
     cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
     cfg.demote_threshold = mc.demote_threshold;
-    cfg.stm_size = mc.stm_size;
-    cfg.mtm_size = mc.mtm_size;
-    cfg.ltm_size = mc.ltm_size;
+    cfg.fragmentation_threshold = mc.fragmentation_threshold;
     cfg.stm_to_mtm_min_gen = mc.stm_to_mtm_min_gen;
     cfg.mtm_to_ltm_min_gen = mc.mtm_to_ltm_min_gen;
     init(cfg);

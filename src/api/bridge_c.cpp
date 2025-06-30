@@ -1,3 +1,10 @@
+#include <cstring>
+#include <cstdio>
+#include <memory>
+#include <mutex>
+
+#include <nlohmann/json.hpp>
+
 #include "api/bridge.h"
 #include "quantum/types.h"
 #include "api/bridge_internal.hpp"

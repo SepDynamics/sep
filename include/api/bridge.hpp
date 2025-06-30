@@ -2,6 +2,7 @@
 #define SEP_API_BRIDGE_HPP
 
 #include "api/types.h"
+#include "core/common.h"
 #include "quantum/processor.h"
 #include "quantum/types.h"
 #include "quantum/resource_predictor.h" // Provides context types
@@ -25,7 +26,7 @@ void setLastError(const std::string &error);
 std::string getLastError();
   void setRequiredBufferSize(size_t size);
   size_t getRequiredBufferSize();
-  ::sep::api::ErrorCode mapSepError(::sep::api::ErrorCode core);
+  sep::SEPResult mapSepError(::sep::api::ErrorCode core);
   void invokeCallbacks(const std::string &event_type,
                        const std::string &event_data);
 } // namespace detail
@@ -50,18 +51,18 @@ SEP_API sep::SEPResult sep_bridge_register_callback(const char *event_type,
 #define SEP_BRIDGE_CATCH(core) \
   catch (const std::exception &e) { \
     sep::api::bridge::detail::setLastError(e.what()); \
-    return static_cast<int>(core); \
+    return sep::api::bridge::detail::mapSepError(core); \
   } \
   catch (...) { \
     sep::api::bridge::detail::setLastError("Unknown error"); \
-    return static_cast<int>(core); \
+    return sep::api::bridge::detail::mapSepError(core); \
   }
 #else
 #define SEP_BRIDGE_TRY if (true)
 #define SEP_BRIDGE_CATCH(core)                                                   
   {                                                                             
     sep::api::bridge::detail::setLastError("exceptions disabled");              
-    return static_cast<int>(core);                                              
+    return sep::api::bridge::detail::mapSepError(core);                                              
   }
 #endif
 

@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include "core/common.h"
 #include "compat/cuda_runtime.h"
 #include "core/common.h"  // for sep::SEPResult
 

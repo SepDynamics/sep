@@ -24,7 +24,7 @@ Running CMake configuration...
 -- Verified PipeWire library: /usr/lib64/libpipewire-0.3.so
 -- Using PipeWire at: /usr/lib64/libpipewire-0.3.so
 -- Found FFTW: fftw3f
--- Configuring done (1.3s)
+-- Configuring done (1.2s)
 -- Generating done (0.0s)
 CMake Warning:
   Manually-specified variables were not used by the project:
@@ -35,39 +35,39 @@ CMake Warning:
 
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  7%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 10%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  5%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  9%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
 [ 12%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
 [ 21%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 21%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 [ 23%] Linking CXX static library libsep_audio.a
 [ 23%] Built target sep_audio
 [ 25%] Linking CXX static library libsep_core.a
 [ 25%] Built target sep_core
-[ 27%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 27%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
 [ 32%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 32%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
 [ 32%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
-[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 38%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 34%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 36%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 40%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
 [ 41%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 45%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 45%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 47%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 43%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 36%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 38%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 45%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
 [ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 56%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 50%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 49%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 52%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 54%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 56%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
 /sep/src/api/crow_request_adapter.cpp:1:10: fatal error: 'api/crow_request_adapter.h' file not found
 #include "api/crow_request_adapter.h"
          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -118,10 +118,10 @@ void SEPApiServer::setupBlenderRoutes() {}
 /sep/include/api/server.h:183:15: note: previous definition is here
   inline void setupBlenderRoutes() {}
               ^
-make[1]: *** [CMakeFiles/Makefile2:394: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
 5 errors generated.
 make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:247: src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:394: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
 1 error generated.
 make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:261: src/api/CMakeFiles/sep_api.dir/server.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:330: src/api/CMakeFiles/sep_api.dir/all] Error 2

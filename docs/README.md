@@ -7,6 +7,7 @@ This folder contains notes and references for navigating and maintaining the SEP
 - **`GAMEPLAN.md`** — Historical build issues and how they were resolved.
 - **`THESIS.md`** — Background theory behind the project.
 - **`vscodium.md`** — Notes on the development environment setup.
+- **`CONFIG_OPTIONS.md`** — Description of configurable runtime parameters.
 
 Most documentation assumes the code has already been built with CUDA support and that `sep_engine` runs. See below for a refresher on building and running.
 

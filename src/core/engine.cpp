@@ -7,9 +7,9 @@
 #include "core/engine.h"
 #include "core/types.h"
 #include "core/error_handler.h"
-#include "compat/core.h" // Fix: Include core
+#include "compat/core.h" 
 #include "compat/shim.h"
-#include "compat/cuda_common.h" // Fix: Include cuda_common
+#include "compat/cuda_common.h" 
 #include "compat/macros.h"
 #include "compat/memory.h"
 #include "compat/stream.h"
@@ -23,12 +23,12 @@
 #include "audio/capture.h"
 #include "audio/factory.h"
 
-#include <cstdint> // Fix: Include cstdint
-#include <cstdio> // Fix: Include cstdio
-#include <exception> // Fix: Include exception
+#include <cstdint> 
+#include <cstdio> 
+#include <exception> 
 
 // Define namespace alias for clarity
-namespace logging = sep::logging; // Fix: Use namespace alias
+namespace logging = sep::logging; 
 
 namespace sep {
 namespace core {

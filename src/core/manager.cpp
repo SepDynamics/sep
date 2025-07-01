@@ -78,7 +78,7 @@ public:
       }
 
       // Parse API config using direct conversion
-      if (json.contains("api")) { // Fix: Check if json contains "api"
+      if (json.contains("api")) { 
         json.at("api").get_to(config.api);
       }
 

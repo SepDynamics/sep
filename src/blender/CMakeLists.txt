@@ -61,10 +61,10 @@ target_include_directories(sep_blender PRIVATE
 # The CYCLES_TARGET_PREFIX is empty by default but can be overridden if
 # custom target names are desired.
 target_link_libraries(sep_blender PRIVATE
-    ${CYCLES_TARGET_PREFIX}cycles_device
-    ${CYCLES_TARGET_PREFIX}cycles_kernel
-    ${CYCLES_TARGET_PREFIX}cycles_util
-    ${CYCLES_TARGET_PREFIX}cycles_subd
+    cycles_device
+    cycles_kernel
+    cycles_util
+    cycles_subd
 )
 
 # Set library properties

@@ -29,7 +29,6 @@ SEPResult CyclesRenderer::initialize() {
         return SEPResult::FEATURE_UNAVAILABLE;
     }
     try {
-        initialized_ = true;
 #ifdef SEP_HAS_CYCLES
         ::ccl::DeviceInfo device_info;
         device_ = ::ccl::Device::create(device_info, stats_, profiler_, true);

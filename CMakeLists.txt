@@ -13,7 +13,7 @@ find_package(fmt REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 
-# Detect optional libraries and define feature macros once
+# Detect optional libraries and store presence flags
 find_path(NANOVDB_INCLUDE_DIR nanovdb/NanoVDB.h)
 if(NANOVDB_INCLUDE_DIR)
     message(STATUS "NanoVDB found: ${NANOVDB_INCLUDE_DIR}")

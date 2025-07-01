@@ -13,6 +13,9 @@ std::vector<PinState> makeStates(size_t count) {
     for (size_t i = 0; i < count; ++i) {
         states[i].state = static_cast<uint32_t>(i);
         states[i].flags = ~0u;
+        states[i].pin_id = static_cast<std::uint32_t>(i);
+        states[i].value = static_cast<float>(i) + 1.0f;
+        states[i].coherence = 0.75f;
     }
     return states;
 }

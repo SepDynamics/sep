@@ -46,21 +46,11 @@ target_compile_definitions(sep_blender
         WITH_CYCLES_DEVICE_CUDA
 )
 
-# Configure Cycles build options - all features enabled
-set(WITH_CYCLES_STANDALONE ON)
-set(WITH_CYCLES_DEVICE_CUDA ON)
-set(WITH_CYCLES_DEVICE_OPTIX ON)
-set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF)
-set(WITH_BLENDER OFF)
-
 # Use bundled dependencies
 target_include_directories(sep_blender PRIVATE
     ${CMAKE_SOURCE_DIR}/extern/nanovdb
     ${CMAKE_SOURCE_DIR}/extern/oidn
 )
-
-# Build Cycles libraries
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/cycles ${CMAKE_BINARY_DIR}/extern/cycles EXCLUDE_FROM_ALL)
 
 # Set compiler flags for Cycles targets
 set_target_properties(cycles_device cycles_kernel cycles_util cycles_subd PROPERTIES

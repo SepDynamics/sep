@@ -165,94 +165,12 @@ int main(int argc, char* argv[]) {
         sep::logging::shutdownLogging();
         return 1;
       }
-#else
-      sep::blender::ccl::CyclesRenderer renderer;
-      
-      // Initialize the renderer
-      sep::SEPResult result = renderer.initialize();
-      if (result != sep::SEPResult::SUCCESS) {
-        spdlog::critical("Failed to initialize Cycles renderer");
-        curl_global_cleanup();
-        sep::logging::shutdownLogging();
-        return 1;
-      }
-      
-      spdlog::info("Loading scene from {}", render_file);
-      
-      // Load scene from JSON file
-      std::ifstream file(render_file);
-      if (!file.is_open()) {
-        spdlog::critical("Failed to open scene file: {}", render_file);
-        curl_global_cleanup();
-        sep::logging::shutdownLogging();
-        return 1;
-      }
-      
-      // Parse JSON and convert to pattern data
-      std::string json_content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-      file.close();
-      
-      try {
-        auto json = nlohmann::json::parse(json_content);
-        std::vector<sep::pattern::PatternData> patterns;
-        
-        // Convert JSON to pattern data
-        if (json.contains("patterns") && json["patterns"].is_array()) {
-          for (const auto& item : json["patterns"].items()) {
-            sep::pattern::PatternData pattern_data;
-            pattern_data.coherence = item.value().value("coherence", 0.5f);
-            pattern_data.stability = item.value().value("stability", 0.5f);
-            pattern_data.entropy = item.value().value("entropy", 0.5f);
-            patterns.push_back(pattern_data);
-          }
-        } else if (json.is_array()) {
-          // For backward compatibility with array-only format
-          for (const auto& item : json.items()) {
-            sep::pattern::PatternData pattern_data;
-            pattern_data.coherence = item.value().value("coherence", 0.5f);
-            pattern_data.stability = item.value().value("stability", 0.5f);
-            pattern_data.entropy = item.value().value("entropy", 0.5f);
-            patterns.push_back(pattern_data);
-          }
-        }
-        
-        // Create scene from patterns
-        result = renderer.createSceneFromPatterns(patterns);
-        if (result != sep::SEPResult::SUCCESS) {
-          spdlog::critical("Failed to create scene from patterns");
-          curl_global_cleanup();
-          sep::logging::shutdownLogging();
-          return 1;
-        }
-        
-        // Set up render parameters
-        sep::blender::ccl::CyclesRenderer::RenderParams params;
-        params.width = json.value("width", 1920);
-        params.height = json.value("height", 1080);
-        params.samples = json.value("samples", 128);
-        params.output_format = json.value("output", "render.ppm");
-        
-        // Render the scene
-        spdlog::info("Rendering scene to {}", params.output_format);
-        result = renderer.renderScene(params);
-        if (result != sep::SEPResult::SUCCESS) {
-          spdlog::critical("Failed to render scene");
-          curl_global_cleanup();
-          sep::logging::shutdownLogging();
-          return 1;
-        }
-        
-        spdlog::info("Render completed successfully");
-        curl_global_cleanup();
-        sep::logging::shutdownLogging();
-        return 0;
-      }
-      catch (const std::exception& e) {
-        spdlog::critical("Error parsing scene file: {}", e.what());
-        curl_global_cleanup();
-        sep::logging::shutdownLogging();
-        return 1;
-      }
+#endif
+#if !SEP_HAS_CYCLES
+      spdlog::error("Cycles mode requested without Cycles support");
+      curl_global_cleanup();
+      sep::logging::shutdownLogging();
+      return 1;
 #endif
     }
 

@@ -56,15 +56,15 @@ target_include_directories(sep_blender PRIVATE
     ${CMAKE_SOURCE_DIR}/extern/oidn
 )
 
-# Link against Cycles libraries
-if(SEP_HAS_CYCLES)
-  target_link_libraries(sep_blender PRIVATE
-      cycles_device
-      cycles_kernel
-      cycles_util
-      cycles_subd
-  )
-endif()
+# Link against Cycles libraries built in the extern/cycles subdirectory.
+# Respect the target prefix configured at the project root so the linker
+# resolves the correct library names when a custom prefix is in use.
+target_link_libraries(sep_blender PRIVATE
+    ${CYCLES_TARGET_PREFIX}cycles_device
+    ${CYCLES_TARGET_PREFIX}cycles_kernel
+    ${CYCLES_TARGET_PREFIX}cycles_util
+    ${CYCLES_TARGET_PREFIX}cycles_subd
+)
 
 # Set library properties
 set_target_properties(sep_blender PROPERTIES

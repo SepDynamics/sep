@@ -134,7 +134,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.threads = 0; // Auto-detect thread count
     
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
-    session->scene = cycles_scene_.get();
+    session->scene.swap(cycles_scene_);
 
     session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
         filepath.c_str(), "Combined", [](const ::ccl::string &msg) {
@@ -145,6 +145,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session->start();
     session->wait();
 
+    cycles_scene_.swap(session->scene);
     delete session;
     return true;
 #else

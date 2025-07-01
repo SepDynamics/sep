@@ -199,7 +199,7 @@ export OPENIMAGEDENOISE_LIBRARY=/sep/extern/oidn/build/lib/libOpenImageDenoise.s
 export OPENIMAGEDENOISE_OPENIMAGEDENOISE_LIBRARY=/sep/extern/oidn/build/lib/libOpenImageDenoise.so
 
 # Disable OpenImageDenoise in Cycles build
-export WITH_OPENIMAGEDENOISE=ON
+# OIDN is optional; allow CMake detection to decide
 
 # Set up Epoxy
 export Epoxy_INCLUDE_DIR=/sep/extern/libepoxy/include
@@ -305,7 +305,7 @@ rm -rf CMakeFiles/
 echo "Configuring Cycles with CMake..."
 # Add explicit find paths and library properties for OpenVDB if necessary
 cmake -S /sep/extern/cycles -B . \
-  -G Ninja -DWITH_OPENIMAGEDENOISE=ON \
+  -G Ninja \
   -DCMAKE_INSTALL_PREFIX=/sep/cycles-install \
   -DWITH_CYCLES_STANDALONE=ON \
   -DWITH_CYCLES_DEVICE_CUDA=ON \
@@ -360,7 +360,6 @@ cmake -S /sep/extern/cycles -B . \
   -DZSTD_INCLUDE_DIR=${ZSTD_INCLUDE_DIR} \
   -DZSTD_LIBRARY=${ZSTD_LIBRARY} \
   -DWITH_OPENVDB=ON \
-  -DWITH_NANOVDB=ON \
   -DWITH_CYCLES_DEVICE_OPTIX=ON \
   -DPUGIXML_INCLUDE_DIR=${PUGIXML_INCLUDE_DIR} \
   -DPUGIXML_LIBRARY=${PUGIXML_LIBRARY} \

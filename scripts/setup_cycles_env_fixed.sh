@@ -201,7 +201,7 @@ export OPENIMAGEDENOISE_LIBRARY=/sep/extern/oidn/build/lib/libOpenImageDenoise.s
 export OPENIMAGEDENOISE_OPENIMAGEDENOISE_LIBRARY=/sep/extern/oidn/build/lib/libOpenImageDenoise.so
 
 # Disable OpenImageDenoise in Cycles build
-export WITH_OPENIMAGEDENOISE=OFF
+# Let CMake decide whether OpenImageDenoise is enabled
 
 # Set up Epoxy
 export Epoxy_INCLUDE_DIR=/sep/extern/libepoxy/include
@@ -972,7 +972,6 @@ cmake -DCMAKE_INSTALL_PREFIX=/sep/cycles-install \
       -DWITH_CYCLES_DEVICE_HIP=OFF \
       -DWITH_CYCLES_DEVICE_METAL=OFF \
       -DWITH_CYCLES_DEVICE_ONEAPI=OFF \
-      -DWITH_OPENIMAGEDENOISE=OFF \
       -DWITH_OPENVDB=ON \
       -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 \
       -DCUDA_NVCC_FLAGS="--allow-unsupported-compiler;-D__CUDACC_DISABLE_EXCEPTION_SPEC_CONFLICTS=1;-Xcompiler;-fno-exceptions;--diag-suppress;20012;--diag-suppress;541;--diag-suppress;177" \

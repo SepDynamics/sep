@@ -1,3 +1,5 @@
+include(SetCXXStandard)
+
 add_library(blender_tests STATIC
     api_test.cpp
     compression_test.cpp

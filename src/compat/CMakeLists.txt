@@ -3,6 +3,8 @@
 
 
 # Build sep_compat as a static library that encapsulates all CUDA functionality
+include(SetCXXStandard)
+
 add_library(sep_compat STATIC
     cuda_api.cu
     core.cu

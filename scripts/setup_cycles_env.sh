@@ -7,10 +7,16 @@
 # Script to set up environment for building Cycles
 
 # Validate C++ standard
+
+# Validate C++ standard
 if [ "${CMAKE_CXX_STANDARD:-}" != "17" ]; then
   echo "Error: CMAKE_CXX_STANDARD must be set to 17 before running this script." >&2
   exit 1
 fi
+
+# Determine repository root
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 # Create build and install directories
 mkdir -p /sep/cycles-build
@@ -310,7 +316,7 @@ rm -rf CMakeFiles/
 
 echo "Configuring Cycles with CMake..."
 # Add explicit find paths and library properties for OpenVDB if necessary
-cmake -S /sep/extern/cycles -B . \
+cmake -S "${REPO_ROOT}/extern/cycles" -B . \
   -G Ninja \
   -DCMAKE_CXX_STANDARD=17 \
   -DCMAKE_INSTALL_PREFIX=/sep/cycles-install \

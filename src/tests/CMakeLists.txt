@@ -1,3 +1,6 @@
+# Set C++ standard
+include(SetCXXStandard)
+
 # Find required packages
 find_package(CUDAToolkit REQUIRED)
 find_package(fmt REQUIRED)

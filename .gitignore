@@ -6,6 +6,7 @@ Testing/
 tests/io_curve_svg/
 sep_engine
 extern/*
+!extern/cycles/
 build/
 _build/
 changes.diff
@@ -54,7 +55,6 @@ tbb/
 temp/
 ollama/
 .turbo/
-extern/cycles
 
 #.vscode/
 .idea/

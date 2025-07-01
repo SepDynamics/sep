@@ -12,6 +12,9 @@ if [ "${CMAKE_CXX_STANDARD:-}" != "17" ]; then
   exit 1
 fi
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
 # Create build and install directories
 mkdir -p /sep/cycles-build
 mkdir -p /sep/cycles-install
@@ -953,8 +956,8 @@ touch /sep/openvdb-install/lib/libopenvdb.so
 cd /sep/cycles-build || exit 1
 
 # Copy the cuda_unified_fix.h file to the expected location
-mkdir -p /sep/extern/cycles/include
-cp /sep/include/compat/cuda_unified_fix.h /sep/extern/cycles/include/cuda_unified_fix.h
+mkdir -p "${REPO_ROOT}/extern/cycles/include"
+cp "${REPO_ROOT}/include/compat/cuda_unified_fix.h" "${REPO_ROOT}/extern/cycles/include/cuda_unified_fix.h"
 
 # Use clang as the C and C++ compiler
 export CC=/usr/bin/clang
@@ -981,7 +984,7 @@ cmake -DCMAKE_INSTALL_PREFIX=/sep/cycles-install \
       -DWITH_OPENVDB=ON \
       -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 \
       -DCUDA_NVCC_FLAGS="--allow-unsupported-compiler;-D__CUDACC_DISABLE_EXCEPTION_SPEC_CONFLICTS=1;-Xcompiler;-fno-exceptions;--diag-suppress;20012;--diag-suppress;541;--diag-suppress;177" \
-      /sep/extern/cycles
+      "${REPO_ROOT}/extern/cycles"
 
 # Build Cycles
 make -j$(nproc) install

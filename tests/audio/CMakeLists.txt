@@ -2,6 +2,8 @@ if(NOT BUILD_TESTING)
     return()
 endif()
 
+include(SetCXXStandard)
+
 find_package(GTest REQUIRED)
 
 add_executable(audio_tests

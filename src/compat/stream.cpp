@@ -84,7 +84,7 @@ std::shared_ptr<Stream> Stream::create(sep::StreamFlags flags) {
 }
 
 void synchronizeStream(Stream& stream) { stream.synchronize(); }
-// Fix: Added waitEvent and recordEvent implementations // Fix: Added comment
+
 void waitEvent(Stream& stream, void* event) { stream.wait(event); }
 
 void recordEvent(Stream& stream, void* event) { stream.record(event); }

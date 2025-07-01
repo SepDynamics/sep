@@ -224,15 +224,15 @@ template class DeviceBufferRAII<double>;
 
 // Implementation of memory management functions
 void* allocateDeviceMemory(std::size_t size) {
-    auto* block = sep::memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED); // Fix: Use fully qualified name
+    auto* block = sep::memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED); 
     return block ? block->ptr : nullptr;
-} // Fix: Add missing brace // Fix: Added comment // Fix: Added comment
+} 
 
 void freeDeviceMemory(void* ptr) {
     if (!ptr)
         return;
     auto& mgr = memory::MemoryTierManager::getInstance();
-    auto* blk = mgr.findBlockByPtr(ptr); // Fix: Use findBlockByPtr
+    auto* blk = mgr.findBlockByPtr(ptr); 
     if (blk)
         mgr.deallocate(blk);
 }

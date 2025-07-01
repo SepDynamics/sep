@@ -5,7 +5,7 @@
 #include "quantum/quantum_processor_qfh.h"
 #include "compat/cuda.h"
 #include "compat/core.h"
-#include "compat/cuda_helpers.h" // Fix: Include CUDA helpers for logging
+#include "compat/cuda_helpers.h" 
 #if !SEP_CUDA_AVAILABLE
 #include "compat/cuda_runtime.h"
 #endif
@@ -17,7 +17,7 @@
 #endif
 
 using ::sep::memory::MemoryTierEnum;
-#include "core/logging.h" // Fix: Add include for logging // Fix: Added comment
+#include "core/logging.h" 
 #include <tbb/parallel_for.h>
 #include <tbb/concurrent_hash_map.h>
 #include <algorithm>

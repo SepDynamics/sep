@@ -1,9 +1,9 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/pattern_evolution_bridge.h"
-#include <numeric> // Fix: Added comment
+#include <numeric> 
 #include <vector>
-#include <glm/glm.hpp> // Fix: Include glm
+#include <glm/glm.hpp> 
 #include <memory>
 #include <mutex>
 #include <thread>

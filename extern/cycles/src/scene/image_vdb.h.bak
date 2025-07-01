@@ -1,0 +1,95 @@
+/* SPDX-FileCopyrightText: 2011-2022 Blender Foundation
+ *
+ * SPDX-License-Identifier: Apache-2.0 */
+
+#pragma once
+
+// Include the image.h header first to ensure its definitions take precedence
+#include "scene/image.h"
+
+#ifdef __cplusplus
+// Include standard headers
+#include <cstddef>  // For size_t
+#include <string>   // For std::string
+
+// Define image data types
+#define IMAGE_DATA_TYPE_FLOAT 3
+#define IMAGE_DATA_TYPE_FLOAT4 0
+#define IMAGE_DATA_TYPE_NANOVDB_FLOAT 8
+#define IMAGE_DATA_TYPE_NANOVDB_FLOAT3 9
+#define IMAGE_DATA_TYPE_NANOVDB_FPN 10
+#define IMAGE_DATA_TYPE_NANOVDB_FP16 11
+
+// Forward declarations for OpenVDB types
+namespace openvdb {
+    class GridBase {
+    public:
+        typedef GridBase* Ptr;
+        typedef const GridBase* ConstPtr;
+    };
+    
+    namespace math {
+        class CoordBBox;
+    }
+    
+    class Coord {
+    public:
+        Coord() : mX(0), mY(0), mZ(0) {}
+        Coord(int x, int y, int z) : mX(x), mY(y), mZ(z) {}
+        int x() const { return mX; }
+        int y() const { return mY; }
+        int z() const { return mZ; }
+        
+        // Add min method for CoordBBox
+        Coord min() const { return *this; }
+    private:
+        int mX, mY, mZ;
+    };
+}
+
+// Forward declaration for NanoVDB
+#ifdef WITH_NANOVDB
+namespace nanovdb {
+    template<typename T = unsigned char> class GridHandle;
+}
+#endif
+
+/* Force disable NanoVDB functionality to avoid compilation issues */
+#undef WITH_NANOVDB
+
+CCL_NAMESPACE_BEGIN
+
+// VDBImageLoader class declaration
+class VDBImageLoader : public ImageLoader {
+public:
+    // Constructors
+    VDBImageLoader(const std::string &grid_name);
+    VDBImageLoader(openvdb::GridBase::ConstPtr grid_, const std::string &grid_name);
+    ~VDBImageLoader();
+
+    // Methods from ImageLoader
+    bool load_metadata(const ImageDeviceFeatures &features, ImageMetaData &metadata);
+    bool load_pixels(const ImageMetaData &metadata, void *pixels, const size_t pixels_size, const bool associate_alpha);
+    std::string name() const;
+    bool equals(const ImageLoader &other) const;
+    void cleanup();
+    bool is_vdb_loader() const;
+
+#ifdef WITH_OPENVDB
+    openvdb::GridBase::ConstPtr get_grid();
+#endif
+
+private:
+    std::string grid_name;
+#ifdef WITH_OPENVDB
+    openvdb::GridBase::ConstPtr grid;
+    void* bbox_ptr; // Use a void pointer instead of openvdb::math::CoordBBox
+#endif
+#ifdef WITH_NANOVDB
+    int precision = 0;
+    void* nanogrid_ptr; // Use a void pointer instead of nanovdb::GridHandle<>
+#endif
+};
+
+} // namespace ccl
+#endif // __cplusplus

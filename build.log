@@ -35,6 +35,115 @@ CMake Error at src/audio/CMakeLists.txt:1 (include):
 -- Found PkgConfig: /usr/bin/pkg-config (found version "2.3.0")
 -- Checking for module 'libpipewire-0.3'
 --   Found libpipewire-0.3, version 1.4.6
+-- The C compiler identification is GNU 14.2.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/gcc-14 - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- No precompiled libraries found at /sep/lib/legacy/linux_x64
+-- Attempting to use system libraries instead
+-- Found USD: /usr/lib64/libusd_ms.so
+-- Found PythonLibsUnix: /usr/lib64/libpython3.11.so
+-- Found ZLIB: /usr/lib64/libz.so (found version "1.3.1")
+-- Found OpenImageIO: /usr/lib64/libOpenImageIO.so;/usr/lib64/libOpenImageIO_Util.so
+-- Found PugiXML: /usr/lib64/libpugixml.so
+-- Found OpenJPEG: /usr/lib64/libopenjp2.so
+-- Found JPEG: /usr/lib64/libjpeg.so
+-- Found TIFF: /usr/lib64/libtiff.so
+-- Found WebP: /usr/lib64/libwebp.so;/usr/lib64/libwebpmux.so;/usr/lib64/libwebpdemux.so;/usr/lib64/libsharpyuv.so
+-- Found PNG: /usr/lib64/libpng.so
+-- #define OPENEXR_VERSION_STRING "3.2.4"
+-- Found OpenEXR: /usr/lib64/libIex-3_2.so;/usr/lib64/libOpenEXR-3_2.so;/usr/lib64/libOpenEXRCore-3_2.so;/usr/lib64/libIlmThread-3_2.so;/usr/lib64/libImath-3_1.so
+-- Found OSL: /usr/lib64/liboslcomp.so;/usr/lib64/liboslexec.so;/usr/lib64/liboslquery.so;/usr/lib64/liboslnoise.so (found version "1.13.12")
+-- Found OpenColorIO: /usr/lib64/libOpenColorIO.so (found version "2.4.2")
+CMake Warning (dev) at extern/cycles/src/cmake/external_libs.cmake:497 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  extern/cycles/CMakeLists.txt:246 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found suitable version "1.83.0", minimum required is "1.48") found components: iostreams filesystem regex system thread date_time wave python313
+-- Found Embree: /usr/lib64/libembree4.so (Required is at least version "3.8.0")
+CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (GLOG) does
+  not match the name of the calling package (Glog).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  extern/cycles/src/cmake/Modules/FindGlog.cmake:194 (find_package_handle_standard_args)
+  extern/cycles/src/cmake/external_libs.cmake:570 (find_package)
+  extern/cycles/CMakeLists.txt:246 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found GLOG: /usr/include
+-- No preference for use of exported gflags CMake configuration set, and no hints for include/library directories provided. Defaulting to preferring an installed/exported gflags CMake configuration if available.
+-- Found installed version of gflags: /usr/lib64/cmake/gflags
+-- Detected gflags version: 2.2.2
+-- Fixing invalid GFLAGS_INCLUDE_DIR: '//include'
+-- Set GFLAGS_INCLUDE_DIR to: '/usr/include'
+-- Looking for gflags.h at: /usr/include/gflags/gflags.h
+-- Reading gflags.h from: /usr/include/gflags/gflags.h
+CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (GFLAGS)
+  does not match the name of the calling package (Gflags).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  extern/cycles/src/cmake/Modules/FindGflags.cmake:585 (find_package_handle_standard_args)
+  extern/cycles/src/cmake/external_libs.cmake:571 (find_package)
+  extern/cycles/CMakeLists.txt:246 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found GFLAGS: //include
+-- Found OpenSubdiv: /usr/lib64/libosdGPU.so;/usr/lib64/libosdCPU.so
+-- Found OpenVDB: /usr/lib64/libopenvdb.so
+-- NanoVDB not found, continuing without NanoVDB support
+-- OpenImageDenoise not found, continuing without OpenImageDenoise support
+-- Found TBB: /usr/include (found version "2022.0") found components: tbb tbbmalloc tbbmalloc_proxy
+-- Found Epoxy: /usr/lib64/libepoxy.so
+-- Found Alembic: /usr/lib64/libAlembic.so
+-- Found Zstd: /usr/lib64/libzstd.so
+-- Performing Test SUPPORT_NEON_BUILD
+-- Performing Test SUPPORT_NEON_BUILD - Failed
+-- Found SDL2: /usr/lib64/libSDL2.so
+-- Performing Test CXX_HAS_SSE42
+-- Performing Test CXX_HAS_SSE42 - Success
+-- Performing Test CXX_HAS_AVX2
+-- Performing Test CXX_HAS_AVX2 - Success
+-- Found OptiX: /sep/extern/optix-dev/include (found suitable version "9.0.0", minimum required is "7.3.0")
+-- Performing Test _has_no_error_unused_macros
+-- Performing Test _has_no_error_unused_macros - Success
+-- Found Cycles Integrator library: /sep/lib/libcycles_integrator.a
+-- Performing Test _has_cxxflag_float_conversion
+-- Performing Test _has_cxxflag_float_conversion - Success
+-- Performing Test _has_cxxflag_double_promotion
+-- Performing Test _has_cxxflag_double_promotion - Success
+COMPONENT = openvdb
+-- Found OpenVDB: /usr/include (found version "11.0.0") found components: openvdb
+-- OpenVDB ABI Version: 11
+-- Found TBB: /usr/include (found version "2022.0") found components: tbb
+CMake Warning (dev) at /usr/lib64/cmake/OpenVDB/FindOpenVDB.cmake:494 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:73 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: iostreams
+-- Found Blosc: /usr/lib64/libblosc.so (found version "1.21.6")
+-- Found OpenColorIO: /usr/lib64/cmake/OpenColorIO/OpenColorIOConfig.cmake (found version "2.4.2")
+-- NanoVDB found: NANOVDB_INCLUDE_DIR-NOTFOUND
+-- OpenImageDenoise found: 
+-- OpenVDB found: 
+-- OpenColorIO found: 
+-- OpenSubdiv found: 
+-- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
 -- Checking for module 'fftw3f'
 --   Found fftw3f, version 3.3.10
 -- Using PipeWire at: pipewire-0.3
@@ -64,11 +173,89 @@ CMake Error at src/memory/CMakeLists.txt:1 (include):
 
 
 -- Found hiredis: /usr/lib64/libhiredis.so
--- Found hiredis headers: /usr/include
-CMake Error at src/quantum/CMakeLists.txt:1 (include):
-  include could not find requested file:
-
-    SetCXXStandard
-
-
--- Configuring incomplete, errors occurred!
+-- Found hiredis headers: /usr/include/hiredis
+-- Configuring done (3.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: /sep/cmake-make
+Building SEP Engine...
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 16%] Linking CXX static library libsep_core.a
+[ 16%] Built target sep_core
+[ 16%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 27%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 27%] Linking CXX static library libsep_compat.a
+[ 27%] Built target sep_compat
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 61%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 61%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 66%] Linking CXX static library libsep_audio.a
+[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 72%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 72%] Built target sep_audio
+[ 72%] Linking CXX static library libsep_blender.a
+[ 72%] Built target sep_blender
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 94%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[100%] Linking CXX static library libsep_memory.a
+[100%] Built target sep_memory
+[100%] Linking CXX static library libsep_quantum.a
+[100%] Built target sep_quantum
+[100%] Linking CXX static library libsep_api.a
+[100%] Built target sep_api
+[100%] Building CXX object src/CMakeFiles/sep_main.dir/main.cpp.o
+[100%] Linking CXX executable sep_main
+/usr/sbin/ld: cannot find -lcycles_ext_cycles_device: No such file or directory
+/usr/sbin/ld: cannot find -lcycles_ext_cycles_kernel: No such file or directory
+/usr/sbin/ld: cannot find -lcycles_ext_cycles_util: No such file or directory
+/usr/sbin/ld: cannot find -lcycles_ext_cycles_subd: No such file or directory
+collect2: error: ld returned 1 exit status
+make[2]: *** [src/CMakeFiles/sep_main.dir/build.make:120: src/sep_main] Error 1
+make[1]: *** [CMakeFiles/Makefile2:1378: src/CMakeFiles/sep_main.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

@@ -92,6 +92,7 @@ public:
 
     OptimizationResult optimize(const QuantumState& initial_state,
                                 const OptimizationTarget& target);
+    std::vector<Pattern> optimize(const std::vector<Pattern>& patterns);
     void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
     float computeManifoldCoherence(const glm::vec3& position) const;
     std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;

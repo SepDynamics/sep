@@ -47,6 +47,7 @@ private:
     ::ccl::Stats cycles_stats_;
     ::ccl::Profiler cycles_profiler_;
     std::unique_ptr<::ccl::Device> cycles_device_;
+    std::unique_ptr<::ccl::Scene> cycles_scene_;
 #endif
 
 #ifdef SEP_HAS_CYCLES

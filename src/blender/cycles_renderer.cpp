@@ -21,6 +21,8 @@
 #  include "scene/mesh.h"
 #  include "scene/scene.h"
 #  include "session/session.h"
+#  include "session/output_driver.h"
+#  include "app/oiio_output_driver.h"
 #  include "util/stats.h"
 #  include "util/profiling.h"
 #  include "device/device.h"
@@ -129,18 +131,20 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
     
-    ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
+    auto session = std::make_unique<::ccl::Session>(session_params, cycles_scene_->params);
     session->scene = cycles_scene_.get();
 
-    auto driver = ::ccl::make_unique<::ccl::OIIOOutputDriver>(
-        filepath.c_str(), "Combined",
-        [](const ::ccl::string &msg) { printf("%s\n", msg.c_str()); });
-    session->set_output_driver(std::move(driver));
+    session->set_output_driver(std::make_unique<::ccl::OIIOOutputDriver>(
+        filepath.c_str(),
+        "Combined",
+        [](const std::string &msg) { /* TODO: hook logging */ }));
 
     // Start render
     session->start();
     session->wait();
-    delete session;
+
+    // Clean up session
+    session.reset();
     return true;
 #else
     (void)filepath;

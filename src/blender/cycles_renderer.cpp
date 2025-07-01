@@ -3,6 +3,7 @@
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
+#include <utility>
 #ifdef SEP_HAS_CYCLES
 #include "device/device.h"
 #include "scene/camera.h"
@@ -134,7 +135,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.threads = 0; // Auto-detect thread count
     
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
-    session->scene = cycles_scene_.get();
+    session->scene = std::move(cycles_scene_);
 
     session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
         filepath.c_str(), "Combined", [](const ::ccl::string &msg) {

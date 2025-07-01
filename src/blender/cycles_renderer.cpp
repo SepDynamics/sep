@@ -2,14 +2,8 @@
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
-#ifdef SEP_HAS_CYCLES
-#  include "scene/camera.h"
-#  include "scene/mesh.h"
-#  include "session/session.h"
-#  include "session/session_params.h"
-#  include "util/stats.h"
-#  include "util/profiling.h"
-#endif
+#include "compat/cycles.h"
+#include <memory>
 
 namespace sep {
 namespace blender {
@@ -28,14 +22,12 @@ SEPResult CyclesRenderer::initialize() {
         return SEPResult::FEATURE_UNAVAILABLE;
     }
     try {
-        initialized_ = true;
 #ifdef SEP_HAS_CYCLES
         ::ccl::SceneParams scene_params;
-        ::ccl::Stats stats;
-        ::ccl::Profiler profiler;
-        ::ccl::DeviceInfo device_info = ::ccl::Device::dummy_device();
-        device_ = ::ccl::Device::create(device_info, stats, profiler, true);
-        cycles_scene_ = new ::ccl::Scene(scene_params, device_.get());
+        initialized_ = true;
+        cycles_scene_ = new ::ccl::Scene(scene_params, nullptr);
+#else
+        initialized_ = true;
 #endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
@@ -104,9 +96,8 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.progressive = true;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
-    session_params.samples = static_cast<int>(last_render_params_.samples);
-
-    ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
+    
+    ::ccl::Session *session = new ::ccl::Session(session_params);
     session->scene = cycles_scene_;
 
     // Start render
@@ -115,8 +106,8 @@ bool CyclesRenderer::render(const std::string& filepath) {
 
     // Save render result
     ::ccl::ImageFormat format;
-    format.width = last_render_params_.width;
-    format.height = last_render_params_.height;
+    format.width = cycles_scene_->params.width;
+    format.height = cycles_scene_->params.height;
     format.type = ::ccl::IMAGE_DATA_TYPE_FLOAT;
     format.channels = 4;
 

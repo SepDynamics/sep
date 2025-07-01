@@ -18,6 +18,15 @@ find_package(fmt REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 
+# Provide explicit OpenShadingLanguage paths when available on the system.
+# These help the bundled Cycles build link against the real OSL libraries
+# instead of relying on stub versions.
+set(OSL_INCLUDE_DIR "/usr/include/OSL" CACHE PATH "OSL include directory")
+set(OSL_OSLCOMP_LIBRARY "/usr/lib64/liboslcomp.so" CACHE FILEPATH "OSL compiler library")
+set(OSL_OSLEXEC_LIBRARY "/usr/lib64/liboslexec.so" CACHE FILEPATH "OSL execution library")
+set(OSL_OSLQUERY_LIBRARY "/usr/lib64/liboslquery.so" CACHE FILEPATH "OSL query library")
+set(OSL_OSLNOISE_LIBRARY "/usr/lib64/liboslnoise.so" CACHE FILEPATH "OSL noise library")
+
 # Set CMake policies for Cycles build
 cmake_policy(SET CMP0002 NEW)
 cmake_policy(SET CMP0079 NEW)

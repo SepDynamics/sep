@@ -1,7 +1,16 @@
 #include "blender/cycles_renderer.h"
+#include <memory>
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
+#ifdef SEP_HAS_CYCLES
+#include "device/device.h"
+#include "scene/camera.h"
+#include "scene/mesh.h"
+#include "session/session.h"
+#include "util/math_base.h"
+#include "util/texture.h"
+#endif
 
 namespace sep {
 namespace blender {
@@ -22,7 +31,10 @@ SEPResult CyclesRenderer::initialize() {
     try {
         initialized_ = true;
 #ifdef SEP_HAS_CYCLES
-        cycles_scene_ = new ::ccl::Scene();
+        ::ccl::DeviceInfo device_info;
+        device_ = ::ccl::Device::create(device_info, stats_, profiler_, true);
+        ::ccl::SceneParams scene_params;
+        cycles_scene_ = new ::ccl::Scene(scene_params, device_.get());
 #endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
@@ -57,22 +69,16 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
     }
     try {
 #ifdef SEP_HAS_CYCLES
+        width_ = params.width;
+        height_ = params.height;
         if (!cycles_scene_) {
             return SEPResult::NOT_INITIALIZED;
         }
 
-        // Update scene parameters
-        cycles_scene_->params.width = params.width;
-        cycles_scene_->params.height = params.height;
-        cycles_scene_->params.samples = params.samples;
-        cycles_scene_->params.background = true;
-        cycles_scene_->params.progressive = true;
-
         // Create camera
-        ::ccl::Camera *cam = new ::ccl::Camera();
-        cam->width = params.width;
-        cam->height = params.height;
-        cam->fov = 45.0f;
+        ::ccl::Camera *cam = cycles_scene_->create_node<::ccl::Camera>();
+        cam->set_screen_size(params.width, params.height);
+        cam->set_fov(M_PI_4_F);
         cycles_scene_->camera = cam;
 
         // Create geometry from patterns
@@ -93,23 +99,24 @@ bool CyclesRenderer::render(const std::string& filepath) {
 
 #ifdef SEP_HAS_CYCLES
     // Initialize session
-    ccl::SessionParams session_params;
+    ::ccl::SessionParams session_params;
     session_params.progressive = true;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
-    
-    ccl::Session *session = new ccl::Session(session_params);
-    session->scene = cycles_scene_;
+
+    ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
+    session->scene.reset(cycles_scene_);
+    cycles_scene_ = nullptr;
 
     // Start render
     session->start();
     session->wait();
 
     // Save render result
-    ccl::ImageFormat format;
-    format.width = cycles_scene_->params.width;
-    format.height = cycles_scene_->params.height;
-    format.type = ccl::IMAGE_DATA_TYPE_FLOAT;
+    ::ccl::ImageFormat format;
+    format.width = width_;
+    format.height = height_;
+    format.type = ::ccl::IMAGE_DATA_TYPE_FLOAT;
     format.channels = 4;
 
     session->write_render_tile(filepath.c_str(), &format);
@@ -138,7 +145,7 @@ void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& patte
     mesh->attributes.add(::ccl::ATTR_STD_UV, "uvmap");
     
     // Add mesh to scene
-    cycles_scene_->geometry.push_back(mesh);
+    cycles_scene_->geometry.push_back(std::unique_ptr<::ccl::Geometry>(mesh));
 }
 
 void CyclesRenderer::convertPatternToMesh(const pattern::PatternData& pattern,
@@ -147,20 +154,10 @@ void CyclesRenderer::convertPatternToMesh(const pattern::PatternData& pattern,
     // Convert pattern data into mesh vertices and triangles
     // This is a simple example - you'll want to implement your own conversion logic
     float scale = 0.1f;
-    for (size_t i = 0; i < pattern.data.size(); i++) {
-        float x = scale * static_cast<float>(i % 10);
-        float y = scale * static_cast<float>(i / 10);
-        float z = scale * pattern.data[i];
-        verts.push_back(::ccl::make_float3(x, y, z));
-    }
-
-    // Create triangles from vertices
-    for (size_t i = 0; i < verts.size() - 11; i++) {
-        if ((i + 1) % 10 != 0) {
-            triangles.push_back(::ccl::make_int3(i, i + 1, i + 10));
-            triangles.push_back(::ccl::make_int3(i + 1, i + 11, i + 10));
-        }
-    }
+    verts.push_back(::ccl::make_float3(pattern.position.x, pattern.position.y, pattern.position.z));
+    verts.push_back(::ccl::make_float3(pattern.position.x + scale, pattern.position.y, pattern.position.z));
+    verts.push_back(::ccl::make_float3(pattern.position.x, pattern.position.y + scale, pattern.position.z));
+    triangles.push_back(::ccl::make_int3(0, 1, 2));
 }
 #endif
 

@@ -21,6 +21,16 @@ pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 # Set CMake policies for Cycles build
 cmake_policy(SET CMP0002 NEW)
 cmake_policy(SET CMP0079 NEW)
+# Disable unneeded components from the bundled Cycles build
+set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable Cycles standalone" FORCE)
+set(WITH_CYCLES_STANDALONE_GUI OFF CACHE BOOL "Disable Cycles GUI" FORCE)
+set(WITH_CYCLES_PRECOMPUTE OFF CACHE BOOL "Disable Cycles precompute tool" FORCE)
+set(WITH_CYCLES_CUDA_BINARIES OFF CACHE BOOL "Disable Cycles CUDA kernels" FORCE)
+set(WITH_CYCLES_HIP_BINARIES OFF CACHE BOOL "Disable Cycles HIP kernels" FORCE)
+set(WITH_CYCLES_ONEAPI_BINARIES OFF CACHE BOOL "Disable Cycles oneAPI kernels" FORCE)
+set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Cycles Hydra" FORCE)
+set(WITH_GTESTS OFF CACHE BOOL "Disable Cycles GTests" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "Disable Cycles tests" FORCE)
 
 # Add Cycles source directory with custom binary dir and target prefix
 set(CYCLES_TARGET_PREFIX "cycles_ext_" CACHE STRING "Prefix for Cycles targets")

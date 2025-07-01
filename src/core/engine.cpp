@@ -13,6 +13,7 @@
 #include "compat/macros.h"
 #include "compat/memory.h"
 #include "compat/stream.h"
+#include "compat/cuda_api.hpp"
 #include "core/logging.h"  // This is actually the logging manager
 #include "memory/memory_tier_manager.hpp"
 #if SEP_HAS_BLENDER

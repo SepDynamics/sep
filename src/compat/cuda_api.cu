@@ -99,7 +99,6 @@ cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
 
 
 extern "C" {
-#if !defined(__CUDACC__)
 
 // Global state
 namespace {
@@ -256,5 +255,4 @@ sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint3
     return sep::SEPResult::SUCCESS;
 }
 
-#endif
 }  // extern "C"

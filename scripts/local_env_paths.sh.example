@@ -144,3 +144,10 @@ export TBB_LIBRARY="${TBB_LIBRARY:-/usr/lib64/libtbb.so}"
 export OPENVDB_ROOT_DIR="${OPENVDB_ROOT_DIR:-/usr}"
 export OPENVDB_INCLUDE_DIR="${OPENVDB_INCLUDE_DIR:-/usr/include}"
 export OPENVDB_LIBRARY="${OPENVDB_LIBRARY:-/usr/lib64/libopenvdb.so}"
+
+# OpenShadingLanguage
+export OSL_INCLUDE_DIR="${OSL_INCLUDE_DIR:-/usr/include/OSL}"
+export OSL_OSLCOMP_LIBRARY="${OSL_OSLCOMP_LIBRARY:-/usr/lib64/liboslcomp.so}"
+export OSL_OSLEXEC_LIBRARY="${OSL_OSLEXEC_LIBRARY:-/usr/lib64/liboslexec.so}"
+export OSL_OSLQUERY_LIBRARY="${OSL_OSLQUERY_LIBRARY:-/usr/lib64/liboslquery.so}"
+export OSL_OSLNOISE_LIBRARY="${OSL_OSLNOISE_LIBRARY:-/usr/lib64/liboslnoise.so}"

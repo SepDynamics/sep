@@ -796,8 +796,7 @@ void SEPApiServer::setupBlenderRoutes() {
 #if SEP_HAS_BLENDER
     // Pattern processing endpoint
     app_->route_dynamic("/api/v1/patterns/process")
-    .methods(::crow::HTTPMethod::POST)
-    .handler([](const ::crow::request& req) -> ::crow::response {
+    .methods(::crow::HTTPMethod::POST)([](const ::crow::request& req) {
         try {
             auto json = nlohmann::json::parse(std::string(req.body));
             if (!json.is_object()) {
@@ -895,8 +894,7 @@ void SEPApiServer::setupBlenderRoutes() {
 
     // Cycles evolution endpoint
     app_->route_dynamic("/api/v1/cycles/evolve")
-    .methods(::crow::HTTPMethod::POST)
-    .handler([](const ::crow::request& req) -> ::crow::response {
+    .methods(::crow::HTTPMethod::POST)([](const ::crow::request& req) {
         try {
             auto json = nlohmann::json::parse(std::string(req.body));
             

@@ -12,9 +12,7 @@ target_include_directories(sep_main PRIVATE ${SEP_INCLUDE_DIRS})
 # Add component subdirectories
 add_subdirectory(api)
 add_subdirectory(audio)
-if(SEP_HAS_BLENDER)
-    add_subdirectory(blender)
-endif()
+add_subdirectory(blender)
 add_subdirectory(compat)
 add_subdirectory(core)
 add_subdirectory(memory)
@@ -33,13 +31,7 @@ target_link_libraries(sep_main PRIVATE
     fmt::fmt
 )
 
-if(SEP_HAS_BLENDER)
-    target_link_libraries(sep_main PRIVATE sep_blender)
-endif()
-
-if(SEP_ENABLE_CUDA)
-    target_link_libraries(sep_main PRIVATE
-        CUDA::cudart
-        CUDA::cuda_driver
-    )
-endif()
+target_link_libraries(sep_main PRIVATE
+    CUDA::cudart
+    CUDA::cuda_driver
+)

@@ -5,19 +5,19 @@ namespace api {
 
 CrowRequestAdapter::CrowRequestAdapter(crow::request& req) : request_(req) {}
 
-std::string CrowRequestAdapter::getHeader(const std::string& key) const {
-    return request_.get_header_value(key);
+std::string CrowRequestAdapter::getHeader(const std::string& name) const {
+    return request_.get_header_value(name);
 }
 
-std::string CrowRequestAdapter::getBody() const {
+std::string CrowRequestAdapter::body() const {
     return std::string(request_.body);
 }
 
-std::string CrowRequestAdapter::getMethod() const {
+std::string CrowRequestAdapter::method() const {
     return std::string(crow::method_name(request_.method));
 }
 
-std::string CrowRequestAdapter::getUrl() const {
+std::string CrowRequestAdapter::url() const {
     return std::string(request_.url);
 }
 

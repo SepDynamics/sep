@@ -28,35 +28,27 @@ add_subdirectory(tests)
 set(SEP_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/tests/test_data)
 file(MAKE_DIRECTORY ${SEP_TEST_DATA_DIR})
 
-# Set build options
+# Set build options with dependencies
 option(SEP_BUILD_TESTS "Build test suite" ON)
 option(SEP_ENABLE_CUDA "Enable CUDA support" ON)
-option(SEP_HAS_CYCLES "Enable Blender Cycles integration" OFF)
 option(SEP_HAS_BLENDER "Build Blender integration" ON)
+option(SEP_HAS_CYCLES "Enable Blender Cycles integration" ON)
 
-# Configure compiler flags
+# Enforce dependencies
+if(SEP_HAS_CYCLES AND NOT SEP_HAS_BLENDER)
+    message(FATAL_ERROR "Cycles integration requires Blender integration to be enabled")
+endif()
+
+# Configure feature flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_definitions(SEP_DEBUG)
+    add_compile_definitions(SEP_DEBUG=1)
 endif()
 
-if(SEP_ENABLE_CUDA)
-    add_compile_definitions(SEP_HAS_CUDA)
-endif()
-
-if(SEP_HAS_CYCLES)
-    add_compile_definitions(SEP_HAS_CYCLES)
-endif()
-if(SEP_HAS_BLENDER)
-    add_compile_definitions(SEP_HAS_BLENDER=1)
-else()
-    add_compile_definitions(SEP_HAS_BLENDER=0)
-endif()
-
-if(SEP_HAS_BLENDER)
-    add_compile_definitions(SEP_HAS_BLENDER=1)
-else()
-    add_compile_definitions(SEP_HAS_BLENDER=0)
-endif()
+add_compile_definitions(
+    SEP_HAS_CUDA=1
+    SEP_HAS_BLENDER=1
+    SEP_HAS_CYCLES=1
+)
 
 # Set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

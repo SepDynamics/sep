@@ -1,24 +1,13 @@
-#include "api/types.h"
-#include "api/server.h"
-#include "api/crow_adapter.h" // Fix: Include crow_adapter for LoggingMiddleware
-#include "core/common.h" // Fix: Include common
-#include "memory/memory_tier_manager.hpp"
-#include "quantum/quantum_processor_qfh.h"
 #include "core/logging.h"
+#include "core/common.h"
 
-// Debug logging for OpenTelemetry headers
 #ifdef SEP_HAS_OPENTELEMETRY
 #include <opentelemetry/trace/provider.h>
 #endif
-// CROW_DISABLE_RTTI is defined globally via CMake
+
 #include <spdlog/sinks/rotating_file_sink.h>
-#include <spdlog/sinks/basic_file_sink.h> // Fix: Include basic file sink
-#include <spdlog/sinks/daily_file_sink.h> // Fix: Include daily file sink
-#include <spdlog/sinks/dist_sink.h> // Fix: Include distributed sink
-#include <spdlog/sinks/null_sink.h> // Fix: Include null sink
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
-#include <atomic>
 
 namespace sep::logging {
 
@@ -123,36 +112,6 @@ std::string Manager::levelToString(Level level) {
       return "critical";
     default:
       return "info";
-  }
-}
-
-void LoggingMiddleware::before_handle(::crow::request &req, ::crow::response &res,
-                                      LoggingMiddleware::context &ctx) {
-  (void)req;
-  if (!isReady()) {
-    res.code = 503;
-    res.end();
-    return;
-  }
-
-  ctx.start = std::chrono::high_resolution_clock::now();
-  std::atomic_thread_fence(std::memory_order_release);
-}
-
-void LoggingMiddleware::after_handle(::crow::request &req, ::crow::response &res,
-                                     LoggingMiddleware::context &ctx) {
-  if (!isReady()) {
-    return;
-  }
-
-  auto req_ptr = std::make_unique<sep::api::CrowRequestAdapter>(req);
-
-  if (ctx.start != std::chrono::high_resolution_clock::time_point{}) {
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - ctx.start);
-    server_->logRequest(*req_ptr, res.code, res.body, duration.count());
-  } else {
-    server_->logRequest(*req_ptr, res.code, res.body, 0);
   }
 }
 

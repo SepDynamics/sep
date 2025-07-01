@@ -4,9 +4,12 @@
 #include "quantum/data.hpp"
 #include "core/types.h"
 #include "core/common.h"
+#include "blender/cycles_compat.h"
 
 namespace sep {
 namespace blender {
+namespace ccl {
+
 
 class CyclesRenderer {
 public:
@@ -29,7 +32,16 @@ public:
 private:
     bool initialized_{false};
     std::vector<pattern::PatternData> patterns_;
+    ::ccl::Scene* cycles_scene_{nullptr};
+
+#ifdef SEP_HAS_CYCLES
+    void createGeometryFromPattern(const pattern::PatternData& pattern);
+    void convertPatternToMesh(const pattern::PatternData& pattern,
+                             std::vector<::ccl::float3>& verts,
+                             std::vector<::ccl::int3>& triangles);
+#endif
 };
 
+} // namespace ccl
 } // namespace blender
 } // namespace sep

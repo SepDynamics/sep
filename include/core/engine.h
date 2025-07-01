@@ -8,11 +8,7 @@
 #include "core/common.h"
 
 #include "core/types.h"
-#if SEP_HAS_BLENDER
-#include "blender/types.h"  // Ensure SEPBlenderBridge definition available
-#else
-struct SEPBlenderBridge;
-#endif
+#include "blender/types.h"  // SEPBlenderBridge definition
 #include "compat/types.h"  // for QSHResult
 #include "quantum/qbsa.h"
 

@@ -24,40 +24,30 @@ set_source_files_properties(
 
 # Configure CUDA target using custom pipeline
 
-# Link CUDA libraries and dependencies
-target_link_libraries(sep_compat
-    PUBLIC
-        ${CUDA_LIBRARIES}
-        ${CUDAToolkit_LIBRARY_DIR}/libcudart.so
-        sep_core
-)
-
-# Ensure CUDA compilation
+# Configure CUDA properties
 set_target_properties(sep_compat PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     POSITION_INDEPENDENT_CODE ON
 )
 
-# Export CUDA includes through sep_compat interface
-# Find PipeWire using pkg-config
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
-
+# Include directories
 target_include_directories(sep_compat
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include/compat
         ${CMAKE_SOURCE_DIR}/include/core
         ${CMAKE_SOURCE_DIR}/include/audio
+    PRIVATE
         ${PIPEWIRE_INCLUDE_DIRS}
-    INTERFACE
         ${CUDA_INCLUDE_DIRS}
 )
 
+# Dependencies
 target_link_libraries(sep_compat
     PUBLIC
+        sep_core
+    PRIVATE
         ${CUDA_LIBRARIES}
         ${CUDAToolkit_LIBRARY_DIR}/libcudart.so
-        sep_core
         ${PIPEWIRE_LIBRARIES}
 )

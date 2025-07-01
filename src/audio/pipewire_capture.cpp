@@ -16,21 +16,14 @@
 #include <glm/gtc/constants.hpp>
 
 
+// Initialize PipeWire before namespace declarations
+static struct PWInit {
+    PWInit() { pw_init(nullptr, nullptr); }
+    ~PWInit() { pw_deinit(); }
+} pw_init_once;
+
 namespace sep {
 namespace audio {
-    
-struct PWInit
-{
-    PWInit()
-    {
-        pw_init(nullptr, nullptr);
-    }
-    ~PWInit()
-    {
-        pw_deinit();
-    }
-};
-static PWInit pw_init_once;
 
 PipeWireCapture::PipeWireCapture() = default;
 

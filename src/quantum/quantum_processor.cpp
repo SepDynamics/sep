@@ -8,7 +8,7 @@
 #include <bitset>
 #include <cstdint>
 #include <cstdlib>
-#include <string> // Fix: Include string
+#include <string>
 #include <algorithm>
 #include <stdexcept>
 #include <unordered_map>
@@ -119,9 +119,13 @@ bool QuantumProcessor::isStable(float coherence) const {
     return coherence >= config_.measurement_threshold;
 }
 
+namespace {
+constexpr float kCollapseThreshold = 0.3f;
+} // namespace
+
 bool QuantumProcessor::isCollapsed(float coherence) const {
     // Using a fixed threshold for now. Config value is named decoherence_rate but might not be directly used as threshold.
-    return coherence < 0.3f; // Fix: Use a fixed threshold
+    return coherence < kCollapseThreshold;
 }
 
 bool QuantumProcessor::isQuantum(float coherence) const {

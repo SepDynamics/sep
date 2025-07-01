@@ -57,8 +57,9 @@ target_include_directories(sep_blender PRIVATE
 )
 
 # Link against Cycles libraries built in the extern/cycles subdirectory.
-# Respect the target prefix configured at the project root so the linker
-# resolves the correct library names when a custom prefix is in use.
+# Link against the Cycles libraries built in the extern/cycles directory.
+# The CYCLES_TARGET_PREFIX is empty by default but can be overridden if
+# custom target names are desired.
 target_link_libraries(sep_blender PRIVATE
     cycles_device
     cycles_kernel

@@ -39,8 +39,10 @@ set(WITH_CYCLES_PRECOMPUTE OFF CACHE BOOL "Disable Cycles precompute executable"
 set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Cycles Hydra delegate" FORCE)
 set(WITH_GTESTS OFF CACHE BOOL "Disable Cycles tests" FORCE)
 
-# Add Cycles source directory with custom binary dir and target prefix
-set(CYCLES_TARGET_PREFIX "cycles_ext_" CACHE STRING "Prefix for Cycles targets")
+# Add Cycles source directory. Disable target prefixing so that the
+# library names match the upstream Cycles build which expects targets
+# like `cycles_device` and `cycles_kernel`.
+set(CYCLES_TARGET_PREFIX "" CACHE STRING "Prefix for Cycles targets")
 
 # Disable standalone executables and heavy kernel build targets from Cycles.
 set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable standalone Cycles executable" FORCE)

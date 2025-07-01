@@ -62,3 +62,6 @@ struct SEPBlenderBridge {
 };
 }  // namespace sep
 
+// Make SEPBlenderBridge accessible from the global namespace for C++ code
+using SEPBlenderBridge = sep::SEPBlenderBridge;
+

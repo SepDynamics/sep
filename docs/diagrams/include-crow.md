@@ -20,8 +20,8 @@ HTTP API layer that external clients interact with.
                                |                   |
                                v                   v
                        +-------+---------+  +------+------+
-                       | Memory Manager  |  | Quantum /   |
-                       | (memory)        |  | Context     |
+                       | Memory Manager  |  | Quantum     |
+                       | (memory)        |  | Module      |
                        +-----------------+  +-------------+
 ```
 
@@ -31,11 +31,11 @@ HTTP API layer that external clients interact with.
    incoming JSON, invoke `SepEngine` methods, and build responses.
 3. **Crow Adapter** – `crow_adapter.h/cpp` bridges Crow’s `request` and `response`
    objects with the internal `HttpRequest`/`HttpResponse` interfaces.
-4. **SepEngine API** – Implements the high‑level operations. It consumes context
-   or pattern data and returns JSON results. Located under `src/api` and uses
+4. **SepEngine API** – Implements the high‑level operations. It consumes pattern
+   data and returns JSON results. Located under `src/api` and uses
    headers in `include/api`.
-5. **Memory Manager / Quantum / Context** – Lower‑level modules (`src/memory`,
-   `src/quantum`, `src/context`). These modules provide data storage and algorithmic
+5. **Memory Manager / Quantum Modules** – Lower‑level modules (`src/memory`,
+   `src/quantum`). These modules provide data storage and algorithmic
    processing. The `SepEngine` API passes data from HTTP requests down to these
    subsystems and aggregates their results.
 

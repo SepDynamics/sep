@@ -25,6 +25,9 @@
 #  include "util/profiling.h"
 #  include "device/device.h"
 #  include "scene/image.h"
+#  include "util/vector.h"
+#  include "util/array.h"
+#  include "util/string.h"
 #endif
 
 namespace sep {
@@ -159,21 +162,22 @@ void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& patte
     convertPatternToMesh(pattern, verts, triangles);
 
     // Add vertices and faces to mesh
+    ::ccl::vector<::ccl::float3> verts_vec(verts.begin(), verts.end());
     ::ccl::array<::ccl::float3> verts_array;
-    verts_array = ::ccl::vector<::ccl::float3>(verts.begin(), verts.end());
-    mesh->set_verts(verts_array);
+    verts_array = verts_vec;
 
-    ::ccl::vector<int> tri_indices;
-    tri_indices.reserve(triangles.size() * 3);
-    for (const auto &tri : triangles) {
-        tri_indices.push_back(tri.x);
-        tri_indices.push_back(tri.y);
-        tri_indices.push_back(tri.z);
+    ::ccl::vector<int> tri_flat;
+    tri_flat.reserve(triangles.size() * 3);
+    for (const auto &t : triangles) {
+        tri_flat.push_back(t.x);
+        tri_flat.push_back(t.y);
+        tri_flat.push_back(t.z);
     }
-    ::ccl::array<int> triangles_array;
-    triangles_array = tri_indices;
-    mesh->set_triangles(triangles_array);
+    ::ccl::array<int> tri_array;
+    tri_array = tri_flat;
 
+    mesh->set_verts(verts_array);
+    mesh->set_triangles(tri_array);
     mesh->attributes.add(::ccl::ATTR_STD_UV, ::ccl::ustring("uvmap"));
     
     // Add mesh to scene

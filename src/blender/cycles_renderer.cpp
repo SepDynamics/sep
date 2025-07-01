@@ -1,39 +1,29 @@
 #include "blender/cycles_renderer.h"
 #include <memory>
+#include <utility>
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
-#ifdef SEP_HAS_CYCLES
-#include "device/device.h"
-#include "scene/camera.h"
-#include "scene/mesh.h"
-#include "session/session.h"
-#include "util/math_base.h"
-#include "util/texture.h"
-#include "util/param.h"
-#include "util/unique_ptr.h"
-#include "app/oiio_output_driver.h"
-#endif
 
 #ifdef SEP_HAS_CYCLES
 #  include <cmath>
-#  include <memory>
-#  include "util/math_base.h"
+#  include "app/oiio_output_driver.h"
+#  include "device/device.h"
 #  include "scene/camera.h"
+#  include "scene/image.h"
 #  include "scene/mesh.h"
 #  include "scene/scene.h"
-#  include "session/session.h"
 #  include "session/output_driver.h"
-#  include "app/oiio_output_driver.h"
-#  include "util/stats.h"
-#  include "util/profiling.h"
-#  include "device/device.h"
-#  include "app/oiio_output_driver.h"
-#  include "scene/image.h"
-#  include "app/oiio_output_driver.h"
-#  include "util/vector.h"
+#  include "session/session.h"
 #  include "util/array.h"
+#  include "util/math_base.h"
+#  include "util/param.h"
+#  include "util/profiling.h"
+#  include "util/stats.h"
 #  include "util/string.h"
+#  include "util/texture.h"
+#  include "util/unique_ptr.h"
+#  include "util/vector.h"
 #endif
 
 namespace sep {
@@ -134,7 +124,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.threads = 0; // Auto-detect thread count
     
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
-    session->scene = cycles_scene_.get();
+    session->scene = std::move(cycles_scene_);
 
     session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
         filepath.c_str(), "Combined", [](const ::ccl::string &msg) {

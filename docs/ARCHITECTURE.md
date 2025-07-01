@@ -75,12 +75,16 @@ graph TB
     api --> memory
     api --> core
 
+    blender --> quantum
+    blender --> memory
     blender --> cycles_kernel
     blender --> cycles_scene
     blender --> cycles_device
     blender --> cycles_osl
     blender --> core
 
+    audio --> quantum
+    audio --> memory
     audio --> core
 
     quantum --> compat
@@ -148,7 +152,6 @@ graph TD
         api[libsep_api.a]
         blender[libsep_blender.a]
         audio[libsep_audio.a]
-        context[libsep_context.a]
         quantum[libsep_quantum.a]
         memory[libsep_memory.a]
         compat[libsep_compat.a]
@@ -159,12 +162,12 @@ graph TD
     main --> api
     main --> core
 
-    api --> context
-    blender --> context
-    audio --> context
-
-    context --> quantum
-    context --> memory
+    api --> quantum
+    api --> memory
+    blender --> quantum
+    blender --> memory
+    audio --> quantum
+    audio --> memory
 
     quantum --> compat
     quantum --> core
@@ -198,23 +201,17 @@ Each module is built as a self-contained static library, providing a clear and r
 *   **Key Files**: `memory_tier_manager.cpp`, `memory_tier.cpp`, `redis_manager.cpp`.
 *   **Dependencies**: `core`.
 
-### `context` - High-Level Logic
-*   **Purpose**: Acts as the "business logic" layer. It uses the `quantum` algorithms and `memory` tiers to process high-level `Context` objects, extract embeddings, and manage relationships.
-*   **Key Files**: `processor.cpp`, `relationship.cpp`.
-*   **Dependencies**: `core`, `quantum`, `memory`.
-*   **Rationale**: This logic is a clear, high-level abstraction that separates the core algorithms from their application.
-
 ### `api` - The Public Interface
 *   **Purpose**: Exposes the engine's functionality to the outside world via an HTTP server (Crow) and a stable C-style bridge.
 *   **Key Files**: `server.cpp`, `sep_engine.cpp` (facade), `bridge_c.cpp`, `rate_limit_middleware.cpp`.
-*   **Dependencies**: `core`, `context`.
+*   **Dependencies**: `core`, `quantum`, `memory`.
 
 ### `blender` & `audio` - Specialized Integrations
 *   **Purpose**: These are optional, platform-specific integrations that can be enabled or disabled at build time.
 *   **Key Files**:
     *   **blender**: `api.cpp`, `blender_integration.cpp`, `mesh_handler.cpp`, `cycles_renderer.cpp`.
     *   **audio**: `pipewire_capture.cpp`, `pipeline.cpp`.
-*   **Dependencies**: `core`, `context`.
+*   **Dependencies**: `core`, `quantum`, `memory`.
 *   **Rationale**: Keeping these integrations as separate modules prevents their specific dependencies (e.g., Blender headers, PipeWire) from polluting the core engine build.
 *   **Cycles Integration**: The `cycles_renderer.cpp` provides pattern-driven rendering through Blender's Cycles renderer when `SEP_HAS_CYCLES` is enabled.
 

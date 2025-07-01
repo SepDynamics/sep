@@ -60,20 +60,30 @@ if(NOT PIPEWIRE_FOUND)
   endif()
 endif()
 
-# Setup based on whether PipeWire was found
-if(PIPEWIRE_FOUND)
-  message(STATUS "Using PipeWire at: ${PIPEWIRE_LIBRARIES}")
-  target_include_directories(sep_audio PRIVATE ${PIPEWIRE_INCLUDE_DIRS})
-  target_link_libraries(sep_audio
-      PRIVATE
-          ${PIPEWIRE_LIBRARIES}
-      PUBLIC
-          sep_core
-  )
-  # Propagate to parent scope for main executable linking
-  set(PIPEWIRE_LIBRARIES ${PIPEWIRE_LIBRARIES} PARENT_SCOPE)
-  set(PIPEWIRE_FOUND ${PIPEWIRE_FOUND} PARENT_SCOPE)
+# PipeWire is required
+if(NOT PIPEWIRE_FOUND)
+  message(FATAL_ERROR "PipeWire is required but was not found")
 endif()
+
+message(STATUS "Using PipeWire at: ${PIPEWIRE_LIBRARIES}")
+target_include_directories(sep_audio PRIVATE ${PIPEWIRE_INCLUDE_DIRS})
+target_link_libraries(sep_audio
+    PRIVATE
+        ${PIPEWIRE_LIBRARIES}
+    PUBLIC
+        sep_core
+)
+  
+# Ensure symbols are exported
+set_target_properties(sep_audio PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    VISIBILITY_INLINES_HIDDEN ON
+    C_VISIBILITY_PRESET default
+    CXX_VISIBILITY_PRESET default
+)
+# Propagate to parent scope for main executable linking
+set(PIPEWIRE_LIBRARIES ${PIPEWIRE_LIBRARIES} PARENT_SCOPE)
+set(PIPEWIRE_FOUND ${PIPEWIRE_FOUND} PARENT_SCOPE)
 
 # FFTW (for CPU FFT implementation)
 pkg_check_modules(FFTW QUIET fftw3f)

@@ -134,8 +134,14 @@ set(Boost_PYTHON_VERSION ${PYTHON_VERSION})
 # Use bundled SDL2
 if(EXISTS ${_cycles_lib_dir})
   set(SDL2_ROOT_DIR "${_cycles_lib_dir}/sdl")
+  set(SDL2_LIBRARY "${_cycles_lib_dir}/sdl/lib/libSDL2.so")
+  set(SDL2_INCLUDE_DIR "${_cycles_lib_dir}/sdl/include/SDL2")
 endif()
-find_package(SDL2 REQUIRED)
+find_package(SDL2 QUIET)
+if(NOT SDL2_FOUND)
+  message(STATUS "Using bundled SDL2")
+  set(SDL2_FOUND TRUE)
+endif()
 
 # NVIDIA CUDA & OptiX
 if(NOT APPLE AND NOT (WIN32 AND CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64"))

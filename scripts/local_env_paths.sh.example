@@ -3,11 +3,12 @@
 # Copy this file to local_env_paths.sh and edit the variables as needed.
 
 # Python
-export PYTHON_VERSION="3.11"
-export PYTHON_LIBRARY="/usr/lib64/libpython3.11.so"
+PY_VER=$(python3 -c 'import sys;print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+export PYTHON_VERSION="${PY_VER}"
+export PYTHON_LIBRARY="/usr/lib64/libpython${PY_VER}.so"
 export PYTHON_LIBPATH="/usr/lib64"
-export PYTHON_INCLUDE_DIR="/usr/include/python3.11"
-export PYTHON_INCLUDE_CONFIG_DIR="/usr/include/python3.11"
+export PYTHON_INCLUDE_DIR="/usr/include/python${PY_VER}"
+export PYTHON_INCLUDE_CONFIG_DIR="/usr/include/python${PY_VER}"
 
 # Zlib
 export ZLIB_INCLUDE_DIR="/usr/include"
@@ -78,7 +79,7 @@ export OPENVDB_LIBRARY="/usr/lib64/libopenvdb.so"
 # directly set needed environment variables for real libraries
 
 # Direct system paths for Python - NO STUBS!
-export PYTHON_VERSION="${PYTHON_VERSION:-3.11}"
+export PYTHON_VERSION="${PYTHON_VERSION:-$PY_VER}"
 export PYTHON_LIBRARY="${PYTHON_LIBRARY:-/usr/lib64/libpython${PYTHON_VERSION}.so}"
 export PYTHON_LIBPATH="${PYTHON_LIBPATH:-/usr/lib64}"
 export PYTHON_INCLUDE_DIR="${PYTHON_INCLUDE_DIR:-/usr/include/python${PYTHON_VERSION}}"

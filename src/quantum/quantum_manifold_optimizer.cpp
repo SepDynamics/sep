@@ -39,6 +39,20 @@ QuantumManifoldOptimizer::optimize(const QuantumState& initial_state,
     return result;
 }
 
+std::vector<Pattern> QuantumManifoldOptimizer::optimize(
+    const std::vector<Pattern>& patterns) {
+    std::vector<Pattern> result = patterns;
+    OptimizationTarget target{};
+    target.target_coherence = config_.target_coherence;
+    target.target_stability = config_.target_stability;
+
+    for (auto& pattern : result) {
+        auto opt = optimize(pattern.quantum_state, target);
+        pattern.quantum_state = opt.optimized_state;
+    }
+    return result;
+}
+
 void QuantumManifoldOptimizer::updateManifoldGeometry(
     const std::vector<QuantumState>& states) {
     std::lock_guard<std::mutex> lock(state_mutex_);

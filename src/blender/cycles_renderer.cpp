@@ -11,6 +11,8 @@
 #include "util/math_base.h"
 #include "util/texture.h"
 #include "util/param.h"
+#include "util/unique_ptr.h"
+#include "app/oiio_output_driver.h"
 #endif
 
 #ifdef SEP_HAS_CYCLES
@@ -61,7 +63,7 @@ SEPResult CyclesRenderer::initialize() {
             return SEPResult::INITIALIZATION_FAILED;
         }
         ::ccl::SceneParams scene_params;
-        cycles_scene_ = std::make_unique<::ccl::Scene>(scene_params, cycles_device_.get());
+        cycles_scene_ = ::ccl::make_unique<::ccl::Scene>(scene_params, cycles_device_.get());
 #endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
@@ -131,20 +133,19 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
     
-    auto session = std::make_unique<::ccl::Session>(session_params, cycles_scene_->params);
+    ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = cycles_scene_.get();
 
-    session->set_output_driver(std::make_unique<::ccl::OIIOOutputDriver>(
-        filepath.c_str(),
-        "Combined",
-        [](const std::string &msg) { /* TODO: hook logging */ }));
+    session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
+        filepath.c_str(), "Combined", [](const ::ccl::string &msg) {
+        (void)msg;
+    }));
 
     // Start render
     session->start();
     session->wait();
 
-    // Clean up session
-    session.reset();
+    delete session;
     return true;
 #else
     (void)filepath;

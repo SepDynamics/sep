@@ -2,7 +2,7 @@
  * Unit tests for quantum processing functionality
  */
 
-#include "core/quantum_processor.h"
+#include "quantum/quantum_processor.h"
 #include "compat/kernel_interface.h"
 
 #include <gtest/gtest.h>

@@ -2,11 +2,11 @@
 #include <memory>
 
 namespace sep {
-namespace blender {
-
+namespace pattern {
 class BlenderBridge;
+}
 
-std::unique_ptr<BlenderBridge> createBlenderBridge();
-
+namespace blender {
+std::unique_ptr<pattern::BlenderBridge> createBlenderBridge();
 } // namespace blender
 } // namespace sep

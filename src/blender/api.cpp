@@ -44,8 +44,13 @@ extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPCo
     // Use config parameter to avoid unused warning
     (void)config;
 
-    auto bridge_ptr = sep::blender::createBlenderBridge();
+    auto bridge_ptr = std::make_unique<sep::SEPBlenderBridge>();
     if (!bridge_ptr)
+    {
+        return sep::SEPResult::ALLOCATION_FAILED;
+    }
+    bridge_ptr->impl = sep::pattern::BlenderBridge::create();
+    if (!bridge_ptr->impl)
     {
         return sep::SEPResult::ALLOCATION_FAILED;
     }

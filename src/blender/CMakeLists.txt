@@ -28,12 +28,18 @@ target_link_libraries(sep_blender
 # Add cycles_renderer.cpp unconditionally
 target_sources(sep_blender PRIVATE cycles_renderer.cpp)
 
-if(SEP_HAS_CYCLES)
-    find_package(Cycles REQUIRED)
-    target_compile_definitions(sep_blender PUBLIC SEP_HAS_CYCLES=1)
-    target_include_directories(sep_blender PRIVATE ${CYCLES_INCLUDE_DIRS})
-    target_link_libraries(sep_blender PUBLIC ${CYCLES_LIBRARIES})
-endif()
+# Cycles is a required dependency
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+find_package(Cycles REQUIRED HINTS
+    /usr/lib/cmake
+    /usr/local/lib/cmake
+    ${BLENDER_ROOT}/lib/cmake
+    $ENV{BLENDER_ROOT}/lib/cmake
+)
+
+target_compile_definitions(sep_blender PUBLIC SEP_HAS_CYCLES=1)
+target_include_directories(sep_blender PRIVATE ${CYCLES_INCLUDE_DIRS})
+target_link_libraries(sep_blender PUBLIC ${CYCLES_LIBRARIES})
 
 # Set library properties
 set_target_properties(sep_blender PROPERTIES

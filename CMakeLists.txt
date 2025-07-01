@@ -28,15 +28,14 @@ set(SEP_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/tests/test_data)
 file(MAKE_DIRECTORY ${SEP_TEST_DATA_DIR})
 
 # Set build options with dependencies
-option(SEP_BUILD_TESTS "Build test suite" ON)
-option(SEP_ENABLE_CUDA "Enable CUDA support" ON)
-option(SEP_HAS_BLENDER "Build Blender integration" ON)
-option(SEP_HAS_CYCLES "Enable Blender Cycles integration" ON)
+# All features are required
+set(SEP_BUILD_TESTS ON CACHE BOOL "Build test suite" FORCE)
+set(SEP_ENABLE_CUDA ON CACHE BOOL "Enable CUDA support" FORCE)
+set(SEP_HAS_BLENDER ON CACHE BOOL "Build Blender integration" FORCE)
+set(SEP_HAS_CYCLES ON CACHE BOOL "Enable Blender Cycles integration" FORCE)
 
-# Enforce dependencies
-if(SEP_HAS_CYCLES AND NOT SEP_HAS_BLENDER)
-    message(FATAL_ERROR "Cycles integration requires Blender integration to be enabled")
-endif()
+# Enforce all required dependencies
+find_package(Cycles REQUIRED)
 
 # Configure feature flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

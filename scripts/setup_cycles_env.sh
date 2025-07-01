@@ -292,6 +292,12 @@ if ! cmake --build . --target install; then
 fi
 echo "OpenVDB build and install completed."
 
+# Build OpenShadingLanguage when system headers are missing
+if [ ! -f "${OSL_INCLUDE_DIR:-/usr/include/OSL}/OSL/oslversion.h" ]; then
+  echo "--- OpenShadingLanguage headers not found, building locally ---"
+  "${REPO_ROOT}/scripts/build_osl.sh"
+fi
+
 # Verify OpenVDB library existence and name
 OPENVDB_INSTALLED_LIB="/sep/extern/openvdb/install/lib/libopenvdb.so"
 if [ -f "$OPENVDB_INSTALLED_LIB" ]; then

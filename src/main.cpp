@@ -76,7 +76,6 @@ int main(int argc, char* argv[]) {
     if (cycles_mode && !render_file.empty()) {
       spdlog::info("Initializing Cycles renderer...");
       
-#if SEP_HAS_CYCLES
       // Create the Cycles renderer
       sep::blender::ccl::CyclesRenderer renderer;
       
@@ -165,13 +164,10 @@ int main(int argc, char* argv[]) {
         sep::logging::shutdownLogging();
         return 1;
       }
-#endif
-#if !SEP_HAS_CYCLES
       spdlog::error("Cycles mode requested without Cycles support");
       curl_global_cleanup();
       sep::logging::shutdownLogging();
       return 1;
-#endif
     }
 
     // Normal engine initialization and server mode

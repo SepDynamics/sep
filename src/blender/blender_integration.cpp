@@ -38,8 +38,8 @@ BlenderBridge::~BlenderBridge() = default;
 
 std::unique_ptr<BlenderBridge> BlenderBridge::create()
 {
-    return std::unique_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge()); // Fix: Added comment
-} // Fix: Add missing brace
+    return std::unique_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge()); 
+} 
 
 
 sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
@@ -229,8 +229,8 @@ sep::SEPResult BlenderBridge::allocatePatternMemory(BlenderBridge::ObjectState& 
 
 sep::SEPResult BlenderBridge::freePatternMemory(BlenderBridge::ObjectState& state)
 {
-    auto& mgr = sep::memory::MemoryTierManager::getInstance(); // Fix: Add missing variable definition
-    if (state.memory_block) // Fix: Add if condition
+    auto& mgr = sep::memory::MemoryTierManager::getInstance(); 
+    if (state.memory_block) 
     {
         mgr.deallocate(state.memory_block);
         state.memory_block = nullptr;
@@ -326,7 +326,7 @@ sep::SEPResult BlenderBridge::processPatterns()
 sep::SEPResult BlenderBridge::updateObject(ObjectHandle handle, const PatternMetrics& metrics)
 {
     if (!thread_running_.load()) {
- return sep::SEPResult::INITIALIZATION_FAILED; // Fix: Added comment
+ return sep::SEPResult::INITIALIZATION_FAILED; 
     }
     
     if (!isValidHandle(handle)) {

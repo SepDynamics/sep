@@ -2,7 +2,7 @@
 #include "core/engine.h"
 #include "core/common.h"  // defines sep::SEPResult
 #include "core/logging.h"
-#include <curl/curl.h> // Include curl header // Fix: Added comment
+#include <curl/curl.h> // Include curl header 
 #include <exception>
 #include <iostream>
 #include <fstream>
@@ -40,11 +40,11 @@ int main(int argc, char* argv[]) {
   sep::logging::Manager::initialize();
 
   // Setup signal handling for graceful shutdown
-  if (signal(SIGINT, signal_handler) == SIG_ERR) { // Fix: Set up signal handler
+  if (signal(SIGINT, signal_handler) == SIG_ERR) { 
     std::cerr << "Failed to set SIGINT handler" << std::endl;
     return 1;
   }
-  if (signal(SIGTERM, signal_handler) == SIG_ERR) { // Fix: Call signal for SIGTERM
+  if (signal(SIGTERM, signal_handler) == SIG_ERR) { 
     std::cerr << "Failed to set SIGTERM handler" << std::endl;
     return 1;
   }
@@ -193,8 +193,8 @@ int main(int argc, char* argv[]) {
     
     if (server_mode) {
       spdlog::info("Running in server mode, waiting for shutdown signal...");
-      // Keep running until signal is received // Fix: Use load() on atomic variable
-      while (g_keep_running.load()) { // Fix: Use load() on atomic variable
+      // Keep running until signal is received 
+      while (g_keep_running.load()) { 
         std::this_thread::sleep_for(std::chrono::seconds(1));
       }
       spdlog::info("Shutting down server...");

@@ -63,7 +63,7 @@ CompressionMethod DeltaCompression::selectMethod(const void* /*data*/, size_t /*
 CompressionStats DeltaCompression::getStats() const { return stats; }
 
 // ----------------------------- LZ4Compression ------------------------------
-::sep::shim::vector<uint8_t> LZ4Compression::compress(const void* data, size_t size) { // Fix: Remove const // Fix: Added comment
+::sep::shim::vector<uint8_t> LZ4Compression::compress(const void* data, size_t size) { 
   int maxSize = LZ4_compressBound(static_cast<int>(size));
   ::sep::shim::vector<uint8_t> out(maxSize);
   auto start = std::chrono::high_resolution_clock::now();

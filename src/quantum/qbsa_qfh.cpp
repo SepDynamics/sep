@@ -32,7 +32,7 @@ public:
 
         // Use QFH to analyze the probe bits for collapse detection
         ::sep::shim::vector<uint8_t> probe_bits = convertToBits(probe_indices);
-        QFHResult qfh_result = qfh_processor_.analyze(probe_bits); // Fix: Correct function call
+        QFHResult qfh_result = qfh_processor_.analyze(probe_bits); 
 
         // Detect collapse based on rupture ratio from QFH
         result.collapse_detected = qfh_result.collapse_detected;
@@ -42,7 +42,7 @@ public:
 
     bool detectCollapse(const QBSAResult& result, std::size_t total_bits) const override {
         // If we already detected collapse in the result, return that
-        if (result.collapse_detected) { // Fix: Use collapse_detected from result
+        if (result.collapse_detected) { 
             return true;
         }
 

@@ -1,7 +1,7 @@
 #include "api/server.h"
 #include <logging/manager.h>
 #include <gtest/gtest.h>
-#include <crow.h>
+#include "crow/crow_isolation.h"
 #include <chrono>
 #include <thread>
 

@@ -35,74 +35,76 @@ CMake Warning:
 
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
 [ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 15%] Linking CXX static library libsep_core.a
 [ 15%] Built target sep_core
-[ 16%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 18%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 16%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
 [ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 24%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/component_bridge.cpp.o
+[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [ 26%] Linking CXX static library libsep_compat.a
 [ 26%] Built target sep_compat
-[ 27%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 29%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 30%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 27%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 30%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
 [ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 36%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 43%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 50%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 52%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 35%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 52%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 [ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
 [ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
 [ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
 [ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 61%] Linking CXX static library libsep_audio.a
-[ 61%] Built target sep_audio
-[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 63%] Linking CXX static library libsep_audio.a
+[ 63%] Built target sep_audio
 [ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
 [ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 [ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 [ 69%] Linking CXX static library libsep_blender.a
 [ 69%] Built target sep_blender
-[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
 [ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 [ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
 [ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
 [ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
 [ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
 [ 93%] Linking CXX static library libsep_memory.a
 [ 93%] Built target sep_memory
+[ 95%] Linking CXX static library libsep_quantum.a
+[ 95%] Built target sep_quantum
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:3:
 /usr/local/include/crow/http_parser_merged.h:54:16: error: implicit declaration introduced by elaborated type conflicts with a non-class type of the same name
 typedef struct http_parser http_parser;
@@ -111,7 +113,7 @@ typedef struct http_parser http_parser;
     namespace http_parser {
               ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:3:
 /usr/local/include/crow/http_parser_merged.h:75:30: error: must use 'struct' tag to refer to type 'http_parser' in this scope
 typedef int (*http_data_cb) (http_parser*, const char *at, size_t length);
@@ -120,7 +122,7 @@ typedef int (*http_data_cb) (http_parser*, const char *at, size_t length);
     namespace http_parser {
               ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:3:
 /usr/local/include/crow/http_parser_merged.h:76:25: error: must use 'struct' tag to refer to type 'http_parser' in this scope
 typedef int (*http_cb) (http_parser*);
@@ -129,7 +131,7 @@ typedef int (*http_cb) (http_parser*);
     namespace http_parser {
               ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:3:
 /usr/local/include/crow/http_parser_merged.h:147:12: error: redefinition of 'http_parser' as different kind of symbol
     struct http_parser
@@ -138,7 +140,7 @@ In file included from /usr/local/include/crow.h:3:
     namespace http_parser {
               ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:3:
 /usr/local/include/crow/http_parser_merged.h:485:45: error: must use 'struct' tag to refer to type 'http_parser' in this scope
 parse_url_char(enum state s, const char ch, http_parser *parser, const char* url_mark, const char* p)
@@ -147,7 +149,7 @@ parse_url_char(enum state s, const char ch, http_parser *parser, const char* url
     namespace http_parser {
               ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:3:
 /usr/local/include/crow/http_parser_merged.h:633:36: error: unexpected namespace name 'http_parser': expected expression
 inline size_t http_parser_execute (http_parser *parser,
@@ -168,14 +170,13 @@ inline size_t http_parser_execute (http_parser *parser,
 extern int pause (void);
            ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:3:
 /usr/local/include/crow/http_parser_merged.h:636:40: error: expected ';' after top level declarator
                             size_t len)
                                        ^
-[ 95%] Linking CXX static library libsep_quantum.a
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:4:
 In file included from /usr/local/include/crow/ci_map.h:7:
 /sep/extern/crow/utility.h:684:13: error: use of class template 'crow' requires template arguments
@@ -188,7 +189,7 @@ In file included from /usr/local/include/crow/ci_map.h:7:
     class crow : public CrowBase {
           ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:4:
 In file included from /usr/local/include/crow/ci_map.h:7:
 /sep/extern/crow/utility.h:684:13: error: use of class template 'crow' requires template arguments
@@ -200,9 +201,8 @@ In file included from /usr/local/include/crow/ci_map.h:7:
 /sep/include/crow/crow_isolation.h:179:11: note: template is declared here
     class crow : public CrowBase {
           ^
-[ 95%] Built target sep_quantum
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:8:
 /usr/local/include/crow/json.h:189:31: error: use of class template 'crow' requires template arguments
                 friend rvalue crow::json::load(const char* data, size_t size);
@@ -211,7 +211,7 @@ In file included from /usr/local/include/crow.h:8:
     class crow : public CrowBase {
           ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:8:
 /usr/local/include/crow/json.h:1267:26: error: 'force' is a private member of 'crow::json::detail::r_string'
                 ret.key_.force(s, size);
@@ -226,7 +226,7 @@ In file included from /usr/local/include/crow.h:8:
     class crow : public CrowBase {
           ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:8:
 /usr/local/include/crow/json.h:1308:20: error: use of class template 'crow' requires template arguments
             static crow::json::wvalue empty_object() { return crow::json::wvalue::object(); }
@@ -235,7 +235,7 @@ In file included from /usr/local/include/crow.h:8:
     class crow : public CrowBase {
           ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:8:
 /usr/local/include/crow/json.h:1308:63: error: use of class template 'crow' requires template arguments
             static crow::json::wvalue empty_object() { return crow::json::wvalue::object(); }
@@ -244,7 +244,7 @@ In file included from /usr/local/include/crow.h:8:
     class crow : public CrowBase {
           ^
 In file included from /sep/src/api/logging_middleware.cpp:1:
-In file included from /sep/include/api/logging_middleware.h:5:
+In file included from /sep/include/api/logging_middleware.h:8:
 In file included from /usr/local/include/crow.h:8:
 /usr/local/include/crow/json.h:1866:33: error: use of class template 'crow' requires template arguments
                                 CROW_LOG_WARNING << "Invalid JSON value detected (" << v.num.d << "), value set to null";

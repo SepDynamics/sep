@@ -20,6 +20,7 @@ COMPILE_COMMANDS="${BUILD_DIR}/compile_commands.json"
 SRC_DIR="${REPO_ROOT}"
 LIB_DIR="${SRC_DIR}/lib"
 CYCLES_ROOT_DIR="${SRC_DIR}/extern/cycles"
+CMAKE_C_COMPILER_ID="/usr/bin/g++-14"
 
 # Create build directory
 mkdir -p "${BUILD_DIR}"
@@ -66,8 +67,8 @@ echo "Running CMake configuration..."
 cd "${BUILD_DIR}"
 
 cmake -S "${SRC_DIR}" -B "${BUILD_DIR}" \
-  -DCMAKE_C_COMPILER=/usr/bin/clang-15 \
-  -DCMAKE_CXX_COMPILER=/usr/bin/clang++-15 \
+  -DCMAKE_C_COMPILER=/usr/bin/gcc-14 \
+  -DCMAKE_CXX_COMPILER=/usr/bin/g++-14 \
   -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
   -DCMAKE_EXE_LINKER_FLAGS="-Wl,--no-as-needed" \

@@ -46,32 +46,18 @@ target_compile_definitions(sep_blender
         WITH_CYCLES_DEVICE_CUDA
 )
 
-# Configure Cycles build options
-set(WITH_CYCLES_STANDALONE ON CACHE BOOL "Build Cycles standalone")
-set(WITH_CYCLES_DEVICE_CUDA ON CACHE BOOL "Enable CUDA support")
-set(WITH_CYCLES_DEVICE_OPTIX ON CACHE BOOL "Enable OptiX support")
-set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Hydra delegate")
-set(WITH_BLENDER OFF CACHE BOOL "Disable Blender integration")
+# Configure Cycles build options - all features enabled
+set(WITH_CYCLES_STANDALONE ON)
+set(WITH_CYCLES_DEVICE_CUDA ON)
+set(WITH_CYCLES_DEVICE_OPTIX ON)
+set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF)
+set(WITH_BLENDER OFF)
 
-# Resolve NanoVDB support once and export compile definition only once
-if(WITH_NANOVDB)
-    find_path(NANOVDB_INCLUDE_DIR nanovdb/NanoVDB.h)
-    if(NANOVDB_INCLUDE_DIR)
-        target_include_directories(sep_blender PRIVATE ${NANOVDB_INCLUDE_DIR})
-    else()
-        message(WARNING "NanoVDB headers not found, disabling")
-    endif()
-endif()
-
-# Resolve OpenImageDenoise support once and export compile definition only once
-if(WITH_OPENIMAGEDENOISE)
-    find_path(OIDN_INCLUDE_DIR OpenImageDenoise/oidn.hpp)
-    if(OIDN_INCLUDE_DIR)
-        target_include_directories(sep_blender PRIVATE ${OIDN_INCLUDE_DIR})
-    else()
-        message(WARNING "OpenImageDenoise headers not found, disabling")
-    endif()
-endif()
+# Use bundled dependencies
+target_include_directories(sep_blender PRIVATE
+    ${CMAKE_SOURCE_DIR}/extern/nanovdb
+    ${CMAKE_SOURCE_DIR}/extern/oidn
+)
 
 # Build Cycles libraries
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/cycles ${CMAKE_BINARY_DIR}/extern/cycles EXCLUDE_FROM_ALL)

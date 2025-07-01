@@ -960,8 +960,8 @@ mkdir -p "${REPO_ROOT}/extern/cycles/include"
 cp "${REPO_ROOT}/include/compat/cuda_unified_fix.h" "${REPO_ROOT}/extern/cycles/include/cuda_unified_fix.h"
 
 # Use clang as the C and C++ compiler
-export CC=/usr/bin/clang
-export CXX=/usr/bin/clang++
+export CC=/usr/bin/gcc-14
+export CXX=/usr/bin/g++-14
 
 cmake -DCMAKE_INSTALL_PREFIX=/sep/cycles-install \
       -DCMAKE_TOOLCHAIN_FILE=/sep/cmake/cuda-toolchain-clang.cmake \

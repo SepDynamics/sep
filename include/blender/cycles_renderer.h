@@ -6,6 +6,7 @@
 #include "core/types.h"
 #include "core/common.h"
 #include "blender/cycles_compat.h"
+#include "compat/cycles.h"
 
 namespace sep {
 namespace blender {

@@ -1,0 +1,16 @@
+baseURL = 'https://www.cycles-renderer.org'
+title = 'Cycles'
+theme = "custom"
+
+[params]
+  subtitle = 'Open Source Production Rendering'
+
+[menu]
+  [[menu.main]]
+    name = "Features"
+    url = "/features/"
+    weight = 2
+  [[menu.main]]
+    name = "Development"
+    url = "/development/"
+    weight = 3

@@ -1,0 +1,7 @@
+// Simple cerrno header for CUDA compatibility
+#ifndef _CERRNO_
+#define _CERRNO_
+
+#include <errno.h>
+
+#endif // _CERRNO_

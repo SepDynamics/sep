@@ -98,7 +98,7 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
         ::ccl::Camera *cam = cycles_scene_->camera;
         if (cam) {
             cam->set_screen_size(params.width, params.height);
-            cam->fov = 45.0f * (M_PI_F / 180.0f);
+            cam->set_fov(45.0f * (M_PI_F / 180.0f));
         }
 
         // Create geometry from patterns
@@ -120,11 +120,10 @@ bool CyclesRenderer::render(const std::string& filepath) {
 #ifdef SEP_HAS_CYCLES
     // Initialize session
     ::ccl::SessionParams session_params;
-    session_params.progressive = true;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
     
-    ccl::Session *session = new ccl::Session(session_params, cycles_scene_->params);
+    ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = cycles_scene_;
 
     // Start render
@@ -132,10 +131,10 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session->wait();
 
     // Save render result
-    ccl::ImageFormat format;
+    ::ccl::ImageFormat format;
     format.width = cycles_scene_->camera->get_full_width();
     format.height = cycles_scene_->camera->get_full_height();
-    format.type = ccl::IMAGE_DATA_TYPE_FLOAT;
+    format.type = ::ccl::IMAGE_DATA_TYPE_FLOAT;
     format.channels = 4;
 
     session->write_render_tile(filepath.c_str(), &format);
@@ -159,9 +158,19 @@ void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& patte
     convertPatternToMesh(pattern, verts, triangles);
     
     // Add vertices and faces to mesh
-    mesh->verts = verts;
-    mesh->triangles = triangles;
-    mesh->attributes.add(::ccl::ATTR_STD_UV, "uvmap");
+    ::ccl::array<::ccl::float3> cverts(verts.size());
+    if (!verts.empty()) {
+        memcpy(cverts.data(), verts.data(), verts.size() * sizeof(::ccl::float3));
+    }
+    mesh->set_verts(cverts);
+
+    ::ccl::array<int> ctris(triangles.size() * 3);
+    if (!triangles.empty()) {
+        memcpy(ctris.data(), triangles.data(), triangles.size() * sizeof(::ccl::int3));
+    }
+    mesh->set_triangles(ctris);
+
+    mesh->attributes.add(::ccl::ATTR_STD_UV, ::ccl::ustring("uvmap"));
     
     // Add mesh to scene
     cycles_scene_->geometry.push_back(std::unique_ptr<::ccl::Geometry>(mesh));

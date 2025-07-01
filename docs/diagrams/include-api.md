@@ -12,7 +12,7 @@ flowchart TD
     CrowServer[Crow Server]
     Middleware[Auth/Rate Limit]
     SepEngine[SepEngine]
-    Processor[Context Processor]
+    Processor[Pattern Processor]
     HttpClient -- request --> CrowServer
     CrowServer -- wrapped request --> Middleware
     Middleware -- validated --> SepEngine
@@ -111,7 +111,7 @@ Abstract interface for rate limiter implementations.
 Defines the abstract `IRequest` base class used across adapters.
 
 ### `sep_engine.h`
-Singleton providing the main API for context validation, pattern processing, embeddings, and other high level operations.
+Singleton providing the main API for pattern processing, embeddings, and other high level operations.
 
 ### `server.h`
 Defines `SEPApiServer` which ties together the Crow server, middleware, and `SepEngine` to form the running HTTP API service.

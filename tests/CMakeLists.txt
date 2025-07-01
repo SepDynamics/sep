@@ -1,7 +1,5 @@
 # Common test configuration
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+include(SetCXXStandard)
 
 # Configure test output directory
 set(TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/tests)

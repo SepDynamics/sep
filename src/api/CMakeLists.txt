@@ -23,6 +23,7 @@ target_link_libraries(sep_api
         ${CURL_LIBRARIES}
         sep_compat
         sep_blender
+        sep_audio
 )
 
 target_include_directories(sep_api
@@ -46,15 +47,6 @@ target_include_directories(sep_api
 # Find curl package
 find_package(CURL REQUIRED)
 
-# Link external dependencies
-target_link_libraries(sep_api
-    PRIVATE
-        ${CURL_LIBRARIES}
-        sep_compat
-        sep_blender
-    PUBLIC
-        sep_core
-)
 target_compile_definitions(sep_api PRIVATE SEP_HAS_BLENDER=1)
 
 if(HIREDIS_FOUND)
@@ -66,3 +58,6 @@ target_include_directories(sep_api
     PRIVATE
         ${CURL_INCLUDE_DIRS}
 )
+
+# Link curl library
+target_link_libraries(sep_api PRIVATE ${CURL_LIBRARIES})

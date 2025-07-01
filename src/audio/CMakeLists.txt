@@ -3,6 +3,7 @@ add_library(sep_audio
     config.cpp
     pipeline.cpp
     pipewire_capture.cpp
+    factory.cpp
 )
 
 # Find PipeWire using both pkg-config and direct library find for robustness

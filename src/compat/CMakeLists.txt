@@ -36,7 +36,6 @@ target_include_directories(sep_compat
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include/compat
         ${CMAKE_SOURCE_DIR}/include/core
-        ${CMAKE_SOURCE_DIR}/include/audio
     PRIVATE
         ${PIPEWIRE_INCLUDE_DIRS}
         ${CUDA_INCLUDE_DIRS}
@@ -49,5 +48,5 @@ target_link_libraries(sep_compat
     PRIVATE
         ${CUDA_LIBRARIES}
         ${CUDAToolkit_LIBRARY_DIR}/libcudart.so
-        ${PIPEWIRE_LIBRARIES}
+        sep_audio
 )

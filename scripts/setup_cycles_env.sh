@@ -306,6 +306,7 @@ echo "Configuring Cycles with CMake..."
 # Add explicit find paths and library properties for OpenVDB if necessary
 cmake -S /sep/extern/cycles -B . \
   -G Ninja \
+  -DCMAKE_CXX_STANDARD=17 \
   -DCMAKE_INSTALL_PREFIX=/sep/cycles-install \
   -DWITH_CYCLES_STANDALONE=ON \
   -DWITH_CYCLES_DEVICE_CUDA=ON \

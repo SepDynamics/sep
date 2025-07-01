@@ -19,6 +19,7 @@
 
 #if SEP_HAS_BLENDER
 #include "blender/api.h"
+#include "blender/cycles_renderer.h"
 #endif
 
 #include <chrono>
@@ -43,8 +44,17 @@ namespace sep::api {
 // Static instance for signal handling
 SEPApiServer* SEPApiServer::instance_ = nullptr;
 SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
-    : config_(config), logger_(nullptr), app_(nullptr), server_thread_(nullptr),
-      running_(false), metrics_(), server_metrics_(), metrics_mutex_(), ollama_client_(nullptr) {
+    : config_(config),
+      logger_(nullptr),
+      app_(nullptr),
+      server_thread_(nullptr),
+      running_(false),
+      metrics_(),
+      server_metrics_(),
+      metrics_mutex_(),
+      ollama_client_(nullptr),
+      pattern_processor_(std::make_unique<sep::pattern::PatternProcessor>()),
+      cycles_renderer_(std::make_unique<sep::blender::ccl::CyclesRenderer>()) {
     instance_ = this;
 
     // Initialize the Crow app with middlewares
@@ -55,6 +65,15 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
 
     // Initialize Ollama client
     ollama_client_ = std::make_unique<ollama::OllamaClient>(config_.ollama);
+
+    if (pattern_processor_) {
+        (void)pattern_processor_->init(nullptr);
+    }
+#if SEP_HAS_BLENDER
+    if (cycles_renderer_) {
+        (void)cycles_renderer_->initialize();
+    }
+#endif
 }
 
 SEPApiServer::~SEPApiServer() {
@@ -796,7 +815,7 @@ void SEPApiServer::setupBlenderRoutes() {
 #if SEP_HAS_BLENDER
     // Pattern processing endpoint
     app_->route_dynamic("/api/v1/patterns/process")
-    .methods(::crow::HTTPMethod::POST)([](const ::crow::request& req) {
+    .methods(::crow::HTTPMethod::POST)([this](const ::crow::request& req) {
         try {
             auto json = nlohmann::json::parse(std::string(req.body));
             if (!json.is_object()) {
@@ -819,11 +838,11 @@ void SEPApiServer::setupBlenderRoutes() {
             proc_config.stability_threshold = config.value("stability", 0.8f);
             proc_config.enable_cuda = config.value("enable_cuda", false);
             
-            // Create pattern processor
-            auto processor = std::make_unique<sep::pattern::PatternProcessor>();
-            if (processor->init(nullptr) != sep::SEPResult::SUCCESS) {
+            // Use persistent pattern processor
+            auto* processor = pattern_processor_.get();
+            if (!processor) {
                 ::crow::response res;
-                res.body = "Failed to initialize pattern processor";
+                res.body = "Pattern processor unavailable";
                 res.code = 500;
                 return res;
             }
@@ -894,7 +913,7 @@ void SEPApiServer::setupBlenderRoutes() {
 
     // Cycles evolution endpoint
     app_->route_dynamic("/api/v1/cycles/evolve")
-    .methods(::crow::HTTPMethod::POST)([](const ::crow::request& req) {
+    .methods(::crow::HTTPMethod::POST)([this](const ::crow::request& req) {
         try {
             auto json = nlohmann::json::parse(std::string(req.body));
             
@@ -903,54 +922,47 @@ void SEPApiServer::setupBlenderRoutes() {
             int iterations = json["iterations"].get<int>();
             auto pattern_state = json["pattern_state"];
             auto cycles_config = json["cycles_config"];
-            
-            // Initialize Cycles integration
-            sep::quantum::cycles::QuantumRenderer renderer;
-            renderer.initialize(cycles_config["device"].get<std::string>() == "GPU");
-            
-            // Create quantum evolution scene
-            sep::quantum::cycles::QuantumScene scene;
-            scene.coherence = static_cast<double>(pattern_state["coherence"].get<float>());
-            scene.stability = static_cast<double>(pattern_state["stability"].get<float>());
-            scene.entropy = static_cast<double>(pattern_state["entropy"].get<float>());
-            scene.complexity = static_cast<double>(pattern_state["complexity"].get<float>());
-            scene.qbsa_state = pattern_state["qbsa_state"].get<int>();
-            scene.qfh_level = pattern_state["qfh_level"].get<int>();
-            
-            // Run quantum evolution through Cycles
-            auto evolution_result = renderer.evolveQuantumPattern(scene, iterations);
-            
-            // Prepare response
+
+            // Use persistent Cycles renderer
+            auto* renderer = cycles_renderer_.get();
+            if (!renderer) {
+                ::crow::response res;
+                res.body = "Cycles renderer unavailable";
+                res.code = 500;
+                return res;
+            }
+            renderer->initialize();
+
+            // Build pattern data from state
+            sep::pattern::PatternData pattern;
+            pattern.coherence = pattern_state.value("coherence", 0.5f);
+            pattern.stability = pattern_state.value("stability", 0.5f);
+            pattern.entropy = pattern_state.value("entropy", 0.5f);
+
+            std::vector<sep::pattern::PatternData> patterns{pattern};
+
+            if (renderer->createSceneFromPatterns(patterns) != sep::SEPResult::SUCCESS) {
+                ::crow::response res;
+                res.body = "Failed to create scene";
+                res.code = 500;
+                return res;
+            }
+
+            sep::blender::ccl::CyclesRenderer::RenderParams params;
+            params.width = cycles_config.value("width", 640);
+            params.height = cycles_config.value("height", 480);
+            params.samples = cycles_config.value("samples", 32);
+            params.output_format = cycles_config.value("output", std::string("render.ppm"));
+
+            if (renderer->renderScene(params) != sep::SEPResult::SUCCESS) {
+                ::crow::response res;
+                res.body = "Render failed";
+                res.code = 500;
+                return res;
+            }
+
             nlohmann::json response;
             response["success"] = true;
-            
-            // Final quantum state after evolution
-            response["final_state"] = {
-                {"coherence", evolution_result.final_coherence},
-                {"stability", evolution_result.final_stability},
-                {"entropy", evolution_result.final_entropy},
-                {"complexity", evolution_result.final_complexity}
-            };
-            
-            // Evolution trajectory
-            nlohmann::json trajectory = nlohmann::json::array();
-            for (size_t i = 0; i < evolution_result.trajectory.size(); ++i) {
-                trajectory.push_back({
-                    {"step", i},
-                    {"coherence", evolution_result.trajectory[i].coherence},
-                    {"field_strength", evolution_result.trajectory[i].field_strength}
-                });
-            }
-            response["evolution_trajectory"] = trajectory;
-            
-            // Mesh evolution if requested
-            if (evolution_result.has_mesh_data) {
-                nlohmann::json mesh_evo = nlohmann::json::array();
-                for (const auto& vertex : evolution_result.evolved_vertices) {
-                    mesh_evo.push_back({vertex.x, vertex.y, vertex.z});
-                }
-                response["mesh_evolution"] = mesh_evo;
-            }
             
             ::crow::response res;
             res.body = response.dump();

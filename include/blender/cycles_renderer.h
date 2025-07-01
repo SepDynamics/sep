@@ -6,6 +6,7 @@
 #include "core/types.h"
 #include "core/common.h"
 #include "blender/cycles_compat.h"
+#include <memory>
 #include "compat/cycles.h"
 
 namespace sep {
@@ -36,12 +37,10 @@ private:
     std::vector<pattern::PatternData> patterns_;
     ::ccl::Scene* cycles_scene_{nullptr};
 #ifdef SEP_HAS_CYCLES
-    std::unique_ptr<::ccl::Device> device_;
-    ::ccl::Stats stats_;
-    ::ccl::Profiler profiler_;
+    ::ccl::Stats cycles_stats_;
+    ::ccl::Profiler cycles_profiler_;
+    std::unique_ptr<::ccl::Device> cycles_device_;
 #endif
-    int width_{0};
-    int height_{0};
 
 #ifdef SEP_HAS_CYCLES
     void createGeometryFromPattern(const pattern::PatternData& pattern);

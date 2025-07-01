@@ -32,11 +32,8 @@ set_target_properties(sep_quantum PROPERTIES
     VISIBILITY_INLINES_HIDDEN OFF
 )
 
-# Configure CUDA options if available
-if(SEP_CUDA_AVAILABLE)
-    target_compile_definitions(sep_quantum PRIVATE SEP_HAS_CUDA=1)
-    # CUDA includes and device symbols are handled by sep_compat
-endif()
+# CUDA is always required
+target_compile_definitions(sep_quantum PRIVATE SEP_HAS_CUDA=1)
 
 target_include_directories(sep_quantum
     PUBLIC
@@ -56,16 +53,5 @@ target_include_directories(sep_quantum
         ${CMAKE_SOURCE_DIR}/extern/eigen
 )
 
-target_sources(sep_quantum PRIVATE
-  
-)
-
-# Link against Eigen if available
-find_package(Eigen3 QUIET)
-if(Eigen3_FOUND)
-    target_link_libraries(sep_quantum PRIVATE Eigen3::Eigen)
-    target_compile_definitions(sep_quantum PRIVATE -DHAS_EIGEN)
-else()
-    # Use bundled Eigen
-    target_include_directories(sep_quantum PRIVATE ${CMAKE_SOURCE_DIR}/extern/eigen)
-endif()
+# Always use bundled Eigen
+target_include_directories(sep_quantum PRIVATE ${CMAKE_SOURCE_DIR}/extern/eigen)

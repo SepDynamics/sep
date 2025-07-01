@@ -16,11 +16,8 @@ add_library(sep_core
 # Link dependencies
 target_link_libraries(sep_core)
 
-# Configure CUDA support if available
-if(SEP_CUDA_AVAILABLE)
-    target_compile_definitions(sep_core PRIVATE SEP_HAS_CUDA=1)
-    # CUDA includes and device symbols are handled by sep_compat
-endif()
+# CUDA is always required
+target_compile_definitions(sep_core PRIVATE SEP_HAS_CUDA=1)
 
 # Set library properties
 set_target_properties(sep_core PROPERTIES

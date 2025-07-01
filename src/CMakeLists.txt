@@ -29,7 +29,7 @@ target_link_libraries(sep_main PRIVATE
     sep_core
     sep_memory
     sep_quantum
-    $<$<BOOL:${SEP_HAS_BLENDER}>:sep_blender>
+    sep_blender
     ${PIPEWIRE_LIBRARIES}
     fmt::fmt
 )

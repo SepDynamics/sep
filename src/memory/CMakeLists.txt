@@ -8,19 +8,29 @@ add_library(sep_memory
     quantum_coherence_manager.cpp
 )
 
+# Find required Redis library
+find_library(HIREDIS_LIB NAMES hiredis PATHS /usr/lib64 REQUIRED)
+find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis REQUIRED)
+
 # Link dependencies
 target_link_libraries(sep_memory
     PUBLIC
         sep_core
     PRIVATE
         sep_compat # Link compat once, it handles CUDA internally
+        ${HIREDIS_LIB}
 )
 
-# Configure CUDA support if available
-if(SEP_CUDA_AVAILABLE)
-    target_compile_definitions(sep_memory PRIVATE SEP_HAS_CUDA=1)
-    # CUDA includes and device symbols are handled by sep_compat
-endif()
+# CUDA and Redis are always required
+target_compile_definitions(sep_memory PRIVATE
+    SEP_HAS_CUDA=1
+    SEP_HAS_REDIS=1
+)
+
+target_include_directories(sep_memory PRIVATE ${HIREDIS_INCLUDE_DIR})
+
+message(STATUS "Found hiredis: ${HIREDIS_LIB}")
+message(STATUS "Found hiredis headers: ${HIREDIS_INCLUDE_DIR}")
 
 # Set library properties
 set_target_properties(sep_memory PROPERTIES

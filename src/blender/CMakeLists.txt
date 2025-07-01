@@ -50,8 +50,6 @@ set(WITH_CYCLES_DEVICE_CUDA ON CACHE BOOL "Enable CUDA support")
 set(WITH_CYCLES_DEVICE_OPTIX ON CACHE BOOL "Enable OptiX support")
 set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Hydra delegate")
 set(WITH_BLENDER OFF CACHE BOOL "Disable Blender integration")
-set(WITH_NANOVDB OFF CACHE BOOL "Disable NanoVDB")
-set(WITH_OPENIMAGEDENOISE OFF CACHE BOOL "Disable OpenImageDenoise")
 
 # Build Cycles libraries
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/cycles ${CMAKE_BINARY_DIR}/extern/cycles EXCLUDE_FROM_ALL)

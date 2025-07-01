@@ -186,13 +186,13 @@ void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
         
         // Generate probe index based on pin state and current tick
         std::uint32_t probe_idx = static_cast<std::uint32_t>(
-            (pin_state.pin_id * tick) % DEFAULT_SIZE
+            (pin_state.pin_id + tick) % DEFAULT_SIZE
         );
         probe_indices.push_back(probe_idx);
         
         // Calculate expected value based on pin state and coherence
         std::uint32_t expected = static_cast<std::uint32_t>(
-            pin_state.value * pin_state.coherence * 1000.0f
+            pin_state.value * pin_state.coherence * 1000.f
         );
         expectations.push_back(expected);
     }

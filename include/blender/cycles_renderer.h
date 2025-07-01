@@ -45,6 +45,11 @@ private:
 #endif
 
 #ifdef SEP_HAS_CYCLES
+    int width_{0};
+    int height_{0};
+#endif
+
+#ifdef SEP_HAS_CYCLES
     void createGeometryFromPattern(const pattern::PatternData& pattern);
     void convertPatternToMesh(const pattern::PatternData& pattern,
                              std::vector<::ccl::float3>& verts,

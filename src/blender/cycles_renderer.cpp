@@ -125,7 +125,6 @@ bool CyclesRenderer::render(const std::string& filepath) {
     ::ccl::SessionParams session_params;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
-
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = cycles_scene_;
 
@@ -161,14 +160,18 @@ void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& patte
     convertPatternToMesh(pattern, verts, triangles);
     
     // Add vertices and faces to mesh
-    ::ccl::vector<::ccl::float3> verts_vec(verts.begin(), verts.end());
-    ::ccl::vector<::ccl::int3> tris_vec(triangles.begin(), triangles.end());
-    ::ccl::array<::ccl::float3> verts_array;
-    ::ccl::array<::ccl::int3> triangles_array;
-    verts_array = verts_vec;
-    triangles_array = tris_vec;
-    mesh->set_verts(verts_array);
-    mesh->set_triangles(triangles_array);
+    ::ccl::array<::ccl::float3> cverts(verts.size());
+    if (!verts.empty()) {
+        memcpy(cverts.data(), verts.data(), verts.size() * sizeof(::ccl::float3));
+    }
+    mesh->set_verts(cverts);
+
+    ::ccl::array<int> ctris(triangles.size() * 3);
+    if (!triangles.empty()) {
+        memcpy(ctris.data(), triangles.data(), triangles.size() * sizeof(::ccl::int3));
+    }
+    mesh->set_triangles(ctris);
+
     mesh->attributes.add(::ccl::ATTR_STD_UV, ::ccl::ustring("uvmap"));
     
     // Add mesh to scene

@@ -59,10 +59,7 @@ target_include_directories(sep_blender PRIVATE
     ${CMAKE_SOURCE_DIR}/extern/oidn
 )
 
-# Build Cycles libraries
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/cycles ${CMAKE_BINARY_DIR}/extern/cycles EXCLUDE_FROM_ALL)
-
-# Set compiler flags for Cycles targets
+# Cycles is added at the top-level CMake. Only adjust properties here.
 set_target_properties(cycles_device cycles_kernel cycles_util cycles_subd PROPERTIES
     COMPILE_FLAGS "-D_LIBCPP_HAS_NO_INCOMPLETE_FORMAT -DFMT_DEPRECATED_OSTREAM"
 )

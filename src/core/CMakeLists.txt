@@ -1,5 +1,3 @@
-include(SetCXXStandard)
-
 add_library(sep_core
   STATIC
     tracing.cpp

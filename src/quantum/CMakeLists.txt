@@ -1,5 +1,3 @@
-include(SetCXXStandard)
-
 add_library(sep_quantum STATIC
         evolution.cpp
     quantum_processor_qfh.cpp

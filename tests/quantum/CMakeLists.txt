@@ -2,8 +2,6 @@ if(NOT BUILD_TESTING)
     return()
 endif()
 
-include(SetCXXStandard)
-
 find_package(GTest REQUIRED)
 
 add_executable(quantum_optimizer_tests

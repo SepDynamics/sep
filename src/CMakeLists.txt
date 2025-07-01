@@ -1,6 +1,4 @@
 # Configure C++ standard
-include(SetCXXStandard)
-
 # Configure include paths for all targets
 set(SEP_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/include

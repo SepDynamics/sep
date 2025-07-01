@@ -1,6 +1,4 @@
 # Common test configuration
-include(SetCXXStandard)
-
 # Configure test output directory
 set(TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/tests)
 file(MAKE_DIRECTORY ${TEST_OUTPUT_DIR})

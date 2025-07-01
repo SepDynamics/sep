@@ -11,251 +11,292 @@ Running CMake configuration...
 -- Check for working CXX compiler: /usr/bin/g++-14 - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
-Updating and loading repositories:
-Repositories loaded.
-Package "openvdb-devel-11.0.0-19.fc42.x86_64" is already installed.
-
-Nothing to do.
+-- Looking for a CUDA compiler
+-- Looking for a CUDA compiler - NOTFOUND
+-- CUDA support disabled - compiler not found
+-- Cycles integration disabled - CYCLES_ROOT not set
+-- Redis support disabled - hiredis not found
+-- PipeWire support disabled
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
 -- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
-CMake Error at src/api/CMakeLists.txt:1 (include):
-  include could not find requested file:
+-- Found nlohmann_json: /usr/share/cmake/nlohmann_json/nlohmann_jsonConfig.cmake (found version "3.11.3")
+CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (Hiredis)
+  does not match the name of the calling package (hiredis).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  cmake/Findhiredis.cmake:26 (find_package_handle_standard_args)
+  CMakeLists.txt:14 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
 
-    SetCXXStandard
-
-
-CMake Error at src/audio/CMakeLists.txt:1 (include):
-  include could not find requested file:
-
-    SetCXXStandard
-
-
+-- Could NOT find Hiredis (missing: HIREDIS_INCLUDE_DIRS) 
+-- Found hiredis: /usr/lib64/libhiredis.so
+-- Found hiredis headers: /usr/include/hiredis
 -- Found PkgConfig: /usr/bin/pkg-config (found version "2.3.0")
 -- Checking for module 'libpipewire-0.3'
 --   Found libpipewire-0.3, version 1.4.6
--- The C compiler identification is GNU 14.2.1
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: /usr/bin/gcc-14 - skipped
--- Detecting C compile features
--- Detecting C compile features - done
--- No precompiled libraries found at /sep/lib/legacy/linux_x64
--- Attempting to use system libraries instead
--- Found USD: /usr/lib64/libusd_ms.so
--- Found PythonLibsUnix: /usr/lib64/libpython3.11.so
--- Found ZLIB: /usr/lib64/libz.so (found version "1.3.1")
--- Found OpenImageIO: /usr/lib64/libOpenImageIO.so;/usr/lib64/libOpenImageIO_Util.so
--- Found PugiXML: /usr/lib64/libpugixml.so
--- Found OpenJPEG: /usr/lib64/libopenjp2.so
--- Found JPEG: /usr/lib64/libjpeg.so
--- Found TIFF: /usr/lib64/libtiff.so
--- Found WebP: /usr/lib64/libwebp.so;/usr/lib64/libwebpmux.so;/usr/lib64/libwebpdemux.so;/usr/lib64/libsharpyuv.so
--- Found PNG: /usr/lib64/libpng.so
--- #define OPENEXR_VERSION_STRING "3.2.4"
--- Found OpenEXR: /usr/lib64/libIex-3_2.so;/usr/lib64/libOpenEXR-3_2.so;/usr/lib64/libOpenEXRCore-3_2.so;/usr/lib64/libIlmThread-3_2.so;/usr/lib64/libImath-3_1.so
--- Found OSL: /usr/lib64/liboslcomp.so;/usr/lib64/liboslexec.so;/usr/lib64/liboslquery.so;/usr/lib64/liboslnoise.so (found version "1.13.12")
--- Found OpenColorIO: /usr/lib64/libOpenColorIO.so (found version "2.4.2")
-CMake Warning (dev) at extern/cycles/src/cmake/external_libs.cmake:497 (find_package):
-  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
-  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
-  set the policy and suppress this warning.
-
-Call Stack (most recent call first):
-  extern/cycles/CMakeLists.txt:246 (include)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found suitable version "1.83.0", minimum required is "1.48") found components: iostreams filesystem regex system thread date_time wave python313
--- Found Embree: /usr/lib64/libembree4.so (Required is at least version "3.8.0")
-CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
-  The package name passed to `find_package_handle_standard_args` (GLOG) does
-  not match the name of the calling package (Glog).  This can lead to
-  problems in calling code that expects `find_package` result variables
-  (e.g., `_FOUND`) to follow a certain pattern.
-Call Stack (most recent call first):
-  extern/cycles/src/cmake/Modules/FindGlog.cmake:194 (find_package_handle_standard_args)
-  extern/cycles/src/cmake/external_libs.cmake:570 (find_package)
-  extern/cycles/CMakeLists.txt:246 (include)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Found GLOG: /usr/include
--- No preference for use of exported gflags CMake configuration set, and no hints for include/library directories provided. Defaulting to preferring an installed/exported gflags CMake configuration if available.
--- Found installed version of gflags: /usr/lib64/cmake/gflags
--- Detected gflags version: 2.2.2
--- Fixing invalid GFLAGS_INCLUDE_DIR: '//include'
--- Set GFLAGS_INCLUDE_DIR to: '/usr/include'
--- Looking for gflags.h at: /usr/include/gflags/gflags.h
--- Reading gflags.h from: /usr/include/gflags/gflags.h
-CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
-  The package name passed to `find_package_handle_standard_args` (GFLAGS)
-  does not match the name of the calling package (Gflags).  This can lead to
-  problems in calling code that expects `find_package` result variables
-  (e.g., `_FOUND`) to follow a certain pattern.
-Call Stack (most recent call first):
-  extern/cycles/src/cmake/Modules/FindGflags.cmake:585 (find_package_handle_standard_args)
-  extern/cycles/src/cmake/external_libs.cmake:571 (find_package)
-  extern/cycles/CMakeLists.txt:246 (include)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Found GFLAGS: //include
--- Found OpenSubdiv: /usr/lib64/libosdGPU.so;/usr/lib64/libosdCPU.so
--- Found OpenVDB: /usr/lib64/libopenvdb.so
--- NanoVDB not found, continuing without NanoVDB support
--- OpenImageDenoise not found, continuing without OpenImageDenoise support
--- Found TBB: /usr/include (found version "2022.0") found components: tbb tbbmalloc tbbmalloc_proxy
--- Found Epoxy: /usr/lib64/libepoxy.so
--- Found Alembic: /usr/lib64/libAlembic.so
--- Found Zstd: /usr/lib64/libzstd.so
--- Performing Test SUPPORT_NEON_BUILD
--- Performing Test SUPPORT_NEON_BUILD - Failed
--- Found SDL2: /usr/lib64/libSDL2.so
--- Performing Test CXX_HAS_SSE42
--- Performing Test CXX_HAS_SSE42 - Success
--- Performing Test CXX_HAS_AVX2
--- Performing Test CXX_HAS_AVX2 - Success
--- Found OptiX: /sep/extern/optix-dev/include (found suitable version "9.0.0", minimum required is "7.3.0")
--- Performing Test _has_no_error_unused_macros
--- Performing Test _has_no_error_unused_macros - Success
--- Found Cycles Integrator library: /sep/lib/libcycles_integrator.a
--- Performing Test _has_cxxflag_float_conversion
--- Performing Test _has_cxxflag_float_conversion - Success
--- Performing Test _has_cxxflag_double_promotion
--- Performing Test _has_cxxflag_double_promotion - Success
-COMPONENT = openvdb
--- Found OpenVDB: /usr/include (found version "11.0.0") found components: openvdb
--- OpenVDB ABI Version: 11
--- Found TBB: /usr/include (found version "2022.0") found components: tbb
-CMake Warning (dev) at /usr/lib64/cmake/OpenVDB/FindOpenVDB.cmake:494 (find_package):
-  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
-  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
-  set the policy and suppress this warning.
-
-Call Stack (most recent call first):
-  CMakeLists.txt:73 (find_package)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: iostreams
--- Found Blosc: /usr/lib64/libblosc.so (found version "1.21.6")
--- Found OpenColorIO: /usr/lib64/cmake/OpenColorIO/OpenColorIOConfig.cmake (found version "2.4.2")
--- NanoVDB found: NANOVDB_INCLUDE_DIR-NOTFOUND
--- OpenImageDenoise found: 
--- OpenVDB found: 
--- OpenColorIO found: 
--- OpenSubdiv found: 
--- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
 -- Checking for module 'fftw3f'
 --   Found fftw3f, version 3.3.10
 -- Using PipeWire at: pipewire-0.3
 -- Using FFTW at: fftw3f
-CMake Error at src/blender/CMakeLists.txt:1 (include):
-  include could not find requested file:
-
-    SetCXXStandard
-
-
-CMake Error at src/compat/CMakeLists.txt:6 (include):
-  include could not find requested file:
-
-    SetCXXStandard
-
-
-CMake Error at src/core/CMakeLists.txt:1 (include):
-  include could not find requested file:
-
-    SetCXXStandard
-
-
-CMake Error at src/memory/CMakeLists.txt:1 (include):
-  include could not find requested file:
-
-    SetCXXStandard
-
-
--- Found hiredis: /usr/lib64/libhiredis.so
--- Found hiredis headers: /usr/include/hiredis
--- Configuring done (3.0s)
--- Generating done (0.1s)
+-- Configuring done (0.9s)
+-- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 16%] Linking CXX static library libsep_core.a
-[ 16%] Built target sep_core
-[ 16%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 27%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 27%] Linking CXX static library libsep_compat.a
-[ 27%] Built target sep_compat
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
-[ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 15%] Linking CXX static library ../../lib/libsep_core.a
+[ 15%] Built target sep_core
+[ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 26%] Linking CXX static library ../../lib/libsep_compat.a
+[ 26%] Built target sep_compat
+[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 30%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 35%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 35%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
 [ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 61%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 61%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 50%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 58%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
 [ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 66%] Linking CXX static library libsep_audio.a
-[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 72%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 72%] Built target sep_audio
-[ 72%] Linking CXX static library libsep_blender.a
-[ 72%] Built target sep_blender
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 67%] Linking CXX static library ../../lib/libsep_audio.a
+[ 67%] Built target sep_audio
+[ 69%] Linking CXX static library ../../lib/libsep_blender.a
+[ 69%] Built target sep_blender
+[ 70%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
 [ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 94%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[100%] Linking CXX static library libsep_memory.a
-[100%] Built target sep_memory
-[100%] Linking CXX static library libsep_quantum.a
-[100%] Built target sep_quantum
-[100%] Linking CXX static library libsep_api.a
-[100%] Built target sep_api
-[100%] Building CXX object src/CMakeFiles/sep_main.dir/main.cpp.o
-[100%] Linking CXX executable sep_main
-/usr/sbin/ld: cannot find -lcycles_ext_cycles_device: No such file or directory
-/usr/sbin/ld: cannot find -lcycles_ext_cycles_kernel: No such file or directory
-/usr/sbin/ld: cannot find -lcycles_ext_cycles_util: No such file or directory
-/usr/sbin/ld: cannot find -lcycles_ext_cycles_subd: No such file or directory
-collect2: error: ld returned 1 exit status
-make[2]: *** [src/CMakeFiles/sep_main.dir/build.make:120: src/sep_main] Error 1
-make[1]: *** [CMakeFiles/Makefile2:1378: src/CMakeFiles/sep_main.dir/all] Error 2
-make: *** [Makefile:136: all] Error 2
+[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+In file included from /sep/include/blender/cycles_renderer.h:10,
+                 from /sep/src/api/server.cpp:22:
+/sep/include/compat/cycles.h:28:47: error: operator '&&' has no right operand
+   28 | #if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES == 1 && (!defined(SEP_USE_CYCLES_STUB) || SEP_USE_CYCLES_STUB == 0)
+      |                                               ^~
+In file included from /sep/src/api/server.cpp:21:
+/sep/include/blender/api.h:22:5: error: ‘SEPBlenderBridge’ has not been declared
+   22 |     SEPBlenderBridge** bridge_out  // [out] Bridge instance
+      |     ^~~~~~~~~~~~~~~~
+/sep/include/blender/api.h:27:5: error: ‘SEPBlenderBridge’ was not declared in this scope; did you mean ‘sep::SEPBlenderBridge’?
+   27 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |     ^~~~~~~~~~~~~~~~
+      |     sep::SEPBlenderBridge
+In file included from /sep/include/blender/api.h:3:
+/sep/include/blender/types.h:58:8: note: ‘sep::SEPBlenderBridge’ declared here
+   58 | struct SEPBlenderBridge {
+      |        ^~~~~~~~~~~~~~~~
+/sep/include/blender/api.h:27:23: error: ‘bridge’ was not declared in this scope
+   27 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |                       ^~~~~~
+/sep/include/blender/api.h:28:11: error: expected primary-expression before ‘*’ token
+   28 |     Object* bl_object,             // [in] Blender object (lifetime: caller)
+      |           ^
+/sep/include/blender/api.h:28:13: error: ‘bl_object’ was not declared in this scope; did you mean ‘Object’?
+   28 |     Object* bl_object,             // [in] Blender object (lifetime: caller)
+      |             ^~~~~~~~~
+      |             Object
+/sep/include/blender/api.h:29:9: error: expected primary-expression before ‘*’ token
+   29 |     Mesh* bl_mesh,                 // [in] Mesh data (lifetime: caller)
+      |         ^
+/sep/include/blender/api.h:29:11: error: ‘bl_mesh’ was not declared in this scope
+   29 |     Mesh* bl_mesh,                 // [in] Mesh data (lifetime: caller)
+      |           ^~~~~~~
+/sep/include/blender/api.h:30:18: error: expected primary-expression before ‘*’ token
+   30 |     SEPMeshHandle* handle_out      // [out] Monitoring handle
+      |                  ^
+/sep/include/blender/api.h:30:20: error: ‘handle_out’ was not declared in this scope
+   30 |     SEPMeshHandle* handle_out      // [out] Monitoring handle
+      |                    ^~~~~~~~~~
+/sep/include/blender/api.h:31:1: error: expression list treated as compound expression in initializer [-fpermissive]
+   31 | );
+      | ^
+/sep/include/blender/api.h:35:5: error: ‘SEPBlenderBridge’ was not declared in this scope; did you mean ‘sep::SEPBlenderBridge’?
+   35 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |     ^~~~~~~~~~~~~~~~
+      |     sep::SEPBlenderBridge
+/sep/include/blender/types.h:58:8: note: ‘sep::SEPBlenderBridge’ declared here
+   58 | struct SEPBlenderBridge {
+      |        ^~~~~~~~~~~~~~~~
+/sep/include/blender/api.h:35:23: error: ‘bridge’ was not declared in this scope
+   35 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |                       ^~~~~~
+/sep/include/blender/api.h:36:19: error: expected primary-expression before ‘handle’
+   36 |     SEPMeshHandle handle,          // [in] Mesh handle
+      |                   ^~~~~~
+/sep/include/blender/api.h:37:5: error: expected primary-expression before ‘const’
+   37 |     const SEPPatternMetrics* data, // [in] Pattern data
+      |     ^~~~~
+/sep/include/blender/api.h:38:5: error: expected primary-expression before ‘bool’
+   38 |     bool* updated_out             // [out] True if mesh was modified
+      |     ^~~~
+/sep/include/blender/api.h:39:1: error: expression list treated as compound expression in initializer [-fpermissive]
+   39 | );
+      | ^
+/sep/include/blender/api.h:43:5: error: ‘SEPBlenderBridge’ was not declared in this scope; did you mean ‘sep::SEPBlenderBridge’?
+   43 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |     ^~~~~~~~~~~~~~~~
+      |     sep::SEPBlenderBridge
+/sep/include/blender/types.h:58:8: note: ‘sep::SEPBlenderBridge’ declared here
+   58 | struct SEPBlenderBridge {
+      |        ^~~~~~~~~~~~~~~~
+/sep/include/blender/api.h:43:23: error: ‘bridge’ was not declared in this scope
+   43 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |                       ^~~~~~
+/sep/include/blender/api.h:44:5: error: expected primary-expression before ‘const’
+   44 |     const float* samples,          // [in] Audio samples
+      |     ^~~~~
+/sep/include/blender/api.h:45:12: error: expected primary-expression before ‘count’
+   45 |     size_t count,                  // [in] Sample count
+      |            ^~~~~
+/sep/include/blender/api.h:46:20: error: expected primary-expression before ‘*’ token
+   46 |     SEPAudioMetrics* metrics_out   // [out] Processing metrics
+      |                    ^
+/sep/include/blender/api.h:46:22: error: ‘metrics_out’ was not declared in this scope
+   46 |     SEPAudioMetrics* metrics_out   // [out] Processing metrics
+      |                      ^~~~~~~~~~~
+/sep/include/blender/api.h:47:1: error: expression list treated as compound expression in initializer [-fpermissive]
+   47 | );
+      | ^
+/sep/include/blender/api.h:51:5: error: ‘SEPBlenderBridge’ was not declared in this scope; did you mean ‘sep::SEPBlenderBridge’?
+   51 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |     ^~~~~~~~~~~~~~~~
+      |     sep::SEPBlenderBridge
+/sep/include/blender/types.h:58:8: note: ‘sep::SEPBlenderBridge’ declared here
+   58 | struct SEPBlenderBridge {
+      |        ^~~~~~~~~~~~~~~~
+/sep/include/blender/api.h:51:23: error: ‘bridge’ was not declared in this scope
+   51 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |                       ^~~~~~
+/sep/include/blender/api.h:52:35: error: expected primary-expression before ‘tier’
+   52 |     ::sep::memory::MemoryTierEnum tier,      // [in] Target memory tier
+      |                                   ^~~~
+/sep/include/blender/api.h:53:5: error: expected primary-expression before ‘bool’
+   53 |     bool force                     // [in] Force immediate sync
+      |     ^~~~
+/sep/include/blender/api.h:54:1: error: expression list treated as compound expression in initializer [-fpermissive]
+   54 | );
+      | ^
+/sep/include/blender/api.h:58:5: error: ‘SEPBlenderBridge’ was not declared in this scope; did you mean ‘sep::SEPBlenderBridge’?
+   58 |     SEPBlenderBridge* bridge       // [in] Bridge instance to clean up
+      |     ^~~~~~~~~~~~~~~~
+      |     sep::SEPBlenderBridge
+/sep/include/blender/types.h:58:8: note: ‘sep::SEPBlenderBridge’ declared here
+   58 | struct SEPBlenderBridge {
+      |        ^~~~~~~~~~~~~~~~
+/sep/include/blender/api.h:58:23: error: ‘bridge’ was not declared in this scope
+   58 |     SEPBlenderBridge* bridge       // [in] Bridge instance to clean up
+      |                       ^~~~~~
+/sep/include/blender/api.h:63:5: error: ‘SEPBlenderBridge’ was not declared in this scope; did you mean ‘sep::SEPBlenderBridge’?
+   63 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |     ^~~~~~~~~~~~~~~~
+      |     sep::SEPBlenderBridge
+/sep/include/blender/types.h:58:8: note: ‘sep::SEPBlenderBridge’ declared here
+   58 | struct SEPBlenderBridge {
+      |        ^~~~~~~~~~~~~~~~
+/sep/include/blender/api.h:63:23: error: ‘bridge’ was not declared in this scope
+   63 |     SEPBlenderBridge* bridge,      // [in] Bridge instance
+      |                       ^~~~~~
+/sep/include/blender/api.h:64:22: error: expected primary-expression before ‘*’ token
+   64 |     SEPPatternMetrics* metrics_out // [out] Current metrics
+      |                      ^
+/sep/include/blender/api.h:64:24: error: ‘metrics_out’ was not declared in this scope
+   64 |     SEPPatternMetrics* metrics_out // [out] Current metrics
+      |                        ^~~~~~~~~~~
+/sep/include/blender/api.h:65:1: error: expression list treated as compound expression in initializer [-fpermissive]
+   65 | );
+      | ^
+/sep/include/blender/api.h:69:5: error: ‘SEPBlenderBridge’ was not declared in this scope; did you mean ‘sep::SEPBlenderBridge’?
+   69 |     SEPBlenderBridge* bridge       // [in] Bridge instance to reset
+      |     ^~~~~~~~~~~~~~~~
+      |     sep::SEPBlenderBridge
+/sep/include/blender/types.h:58:8: note: ‘sep::SEPBlenderBridge’ declared here
+   58 | struct SEPBlenderBridge {
+      |        ^~~~~~~~~~~~~~~~
+/sep/include/blender/api.h:69:23: error: ‘bridge’ was not declared in this scope
+   69 |     SEPBlenderBridge* bridge       // [in] Bridge instance to reset
+      |                       ^~~~~~
+[ 93%] Linking CXX static library ../../lib/libsep_memory.a
+[ 93%] Built target sep_memory
+/sep/include/compat/cycles.h:140:11: error: redefinition of ‘class ccl::SceneParams’
+  140 |     class SceneParams {
+      |           ^~~~~~~~~~~
+In file included from /sep/include/blender/cycles_compat.h:22,
+                 from /sep/include/blender/cycles_renderer.h:8:
+/sep/extern/cycles/src/scene/scene.h:56:7: note: previous definition of ‘class ccl::SceneParams’
+   56 | class SceneParams {
+      |       ^~~~~~~~~~~
+/sep/include/compat/cycles.h:145:11: error: redefinition of ‘class ccl::Scene’
+  145 |     class Scene {
+      |           ^~~~~
+/sep/extern/cycles/src/scene/scene.h:114:7: note: previous definition of ‘class ccl::Scene’
+  114 | class Scene : public NodeOwner {
+      |       ^~~~~
+/sep/include/compat/cycles.h:151:11: error: redefinition of ‘class ccl::SessionParams’
+  151 |     class SessionParams {
+      |           ^~~~~~~~~~~~~
+In file included from /sep/include/blender/cycles_compat.h:23:
+/sep/extern/cycles/src/session/session.h:36:7: note: previous definition of ‘class ccl::SessionParams’
+   36 | class SessionParams {
+      |       ^~~~~~~~~~~~~
+/sep/include/compat/cycles.h:159:11: error: redefinition of ‘class ccl::Session’
+  159 |     class Session {
+      |           ^~~~~~~
+/sep/extern/cycles/src/session/session.h:112:7: note: previous definition of ‘class ccl::Session’
+  112 | class Session {
+      |       ^~~~~~~
+/sep/include/compat/cycles.h:171:11: error: redefinition of ‘class ccl::BufferParams’
+  171 |     class BufferParams {
+      |           ^~~~~~~~~~~~
+In file included from /sep/extern/cycles/src/integrator/render_scheduler.h:10,
+                 from /sep/extern/cycles/src/session/session.h:10:
+/sep/extern/cycles/src/session/buffers.h:65:7: note: previous definition of ‘class ccl::BufferParams’
+   65 | class BufferParams : public Node {
+      |       ^~~~~~~~~~~~
+[ 95%] Linking CXX static library ../../lib/libsep_quantum.a
+[ 95%] Built target sep_quantum
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:275: src/api/CMakeFiles/sep_api.dir/server.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:1342: src/api/CMakeFiles/sep_api.dir/all] Error 2
+make: *** [Makefile:101: all] Error 2

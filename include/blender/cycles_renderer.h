@@ -35,8 +35,13 @@ private:
     bool initialized_{false};
     std::vector<pattern::PatternData> patterns_;
     ::ccl::Scene* cycles_scene_{nullptr};
+#ifdef SEP_HAS_CYCLES
     std::unique_ptr<::ccl::Device> device_;
-    RenderParams last_render_params_{};
+    ::ccl::Stats stats_;
+    ::ccl::Profiler profiler_;
+#endif
+    int width_{0};
+    int height_{0};
 
 #ifdef SEP_HAS_CYCLES
     void createGeometryFromPattern(const pattern::PatternData& pattern);

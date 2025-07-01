@@ -1,6 +1,6 @@
 #include "quantum/types.h"
 #include "memory/types.h" // Add include for MemoryTierEnum
-#include <nlohmann/json.hpp> // Fix: Added comment
+#include <nlohmann/json.hpp> 
 
 namespace sep::quantum {
 
@@ -12,7 +12,7 @@ void to_json(nlohmann::json& j, const QuantumState& state) {
         {"mutation_rate", state.mutation_rate},
         {"generation", state.generation},
         {"mutation_count", state.mutation_count},
-        {"memory_tier", static_cast<int>(state.memory_tier)}, // Fix: serialize memory_tier as int
+        {"memory_tier", static_cast<int>(state.memory_tier)}, 
         {"access_frequency", state.access_frequency},
         {"state", static_cast<int>(state.state)}
     };
@@ -25,7 +25,7 @@ void from_json(const nlohmann::json& j, QuantumState& state) {
     j.at("mutation_rate").get_to(state.mutation_rate);
     j.at("generation").get_to(state.generation);
     j.at("mutation_count").get_to(state.mutation_count);
-    state.memory_tier = static_cast<sep::memory::MemoryTierEnum>(j.value("memory_tier", 0)); // Fix: default value for memory_tier
+    state.memory_tier = static_cast<sep::memory::MemoryTierEnum>(j.value("memory_tier", 0)); 
     j.at("access_frequency").get_to(state.access_frequency);
     state.state = static_cast<QuantumState::Status>(j.value("state", 0));
 }
@@ -41,7 +41,7 @@ void to_json(nlohmann::json& j, const sep::quantum::PatternRelationship& rel) {
 void from_json(const nlohmann::json& j, sep::quantum::PatternRelationship& rel) {
     j.at("targetId").get_to(rel.targetId);
     j.at("strength").get_to(rel.strength);
-    rel.type = static_cast<RelationshipType>(j.value("type", 0)); // Fix: default value for type
+    rel.type = static_cast<RelationshipType>(j.value("type", 0)); 
 }
 
 void to_json(nlohmann::json& j, const Pattern& pattern) {
@@ -75,7 +75,7 @@ void from_json(const nlohmann::json& j, Pattern& pattern) {
     j.at("timestamp").get_to(pattern.timestamp);
     j.at("last_accessed").get_to(pattern.last_accessed);
     j.at("last_modified").get_to(pattern.last_modified);
-    pattern.quantum_state = j.value("quantum_state", QuantumState{}); // Fix: Deserialize quantum_state
+    pattern.quantum_state = j.value("quantum_state", QuantumState{}); 
 }
 
 } // namespace sep::quantum

@@ -210,6 +210,7 @@ cudaError_t launchSimilarityKernel(float* d_similarity, const float* d_emb_a, co
                                    std::uint32_t embedding_size, cudaStream_t stream) {
     sep::cuda::KernelTrace trace{"similarity_kernel", stream};
     const uint32_t block_size = sep::cuda::constants::get_default_block_size();
+
     const uint32_t grid_size = 1;  // Single block for dot product
 
     return sep::cuda::launchKernel("similarity_kernel", dim3(grid_size), dim3(block_size), stream,
@@ -220,6 +221,7 @@ cudaError_t launchBlendKernel(float* d_output, const float* d_embeddings, const 
                               std::uint32_t num_contexts, std::uint32_t embedding_size, cudaStream_t stream) {
     sep::cuda::KernelTrace trace{"blend_kernel", stream};
     const uint32_t block_size = sep::cuda::constants::get_default_block_size();
+
     const uint32_t grid_size = (embedding_size + block_size - 1) / block_size;
 
     return sep::cuda::launchKernel("blend_kernel", dim3(grid_size), dim3(block_size), stream, detail::blend_kernel,

@@ -167,8 +167,8 @@ public:
         Pattern& pattern = patterns_[it->second];
         pattern.quantum_state.coherence = 0.0f;
         pattern.last_modified = getCurrentTimestamp();
-        // Fix: Ensure success is true for collapse (it's a valid operation) // Fix: Added comment
-        return {true, pattern, ""}; // Fix: Set success to true
+        
+        return {true, pattern, ""}; 
     }
 
     ProcessingResult entanglePatterns(const std::string& pattern_id1, const std::string& pattern_id2) {
@@ -304,7 +304,7 @@ private:
 
     void mutateQuantumState(QuantumState& state) {
         static uint64_t noise_state = 0;
-        // Fix: use a different noise_state for mutation to avoid dependency
+        
         auto rnd = [&]() { return deterministicNoise(noise_state); };
         state.coherence = glm::clamp(state.coherence + (rnd() * 2.0f - 1.0f) * config_.mutation_rate, 0.0f, 1.0f);
         state.stability = glm::clamp(state.stability + (rnd() * 2.0f - 1.0f) * config_.mutation_rate * 0.5f, 0.0f, 1.0f);

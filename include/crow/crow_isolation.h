@@ -208,7 +208,7 @@ namespace crow {
     #define CROW_BP_CATCHALL_ROUTE(bp) bp.catchall_rule()
 
     // HTTP parser stubs
-    namespace http_parser {
+    namespace http_parser_stub {
         enum class http_errno {
             HPE_OK,
             HPE_UNKNOWN
@@ -249,5 +249,5 @@ namespace crow {
             void* on_chunk_header;
             void* on_chunk_complete;
         };
-    }  // namespace http_parser
+    }  // namespace http_parser_stub
 }  // namespace crow

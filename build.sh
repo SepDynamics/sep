@@ -65,6 +65,7 @@ fi
 # Clean build directory to ensure a fresh state
 echo "Cleaning build directory..."
 rm -rf "${BUILD_DIR:?}"/*
+rm -rf "${REPO_ROOT}/lib" "${REPO_ROOT}/bin"
 # Copy cmake modules needed by the project
 cp -r "${SRC_DIR}/cmake" "${BUILD_DIR}"
 

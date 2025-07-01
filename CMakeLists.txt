@@ -24,6 +24,15 @@ cmake_policy(SET CMP0079 NEW)
 
 # Add Cycles source directory with custom binary dir and target prefix
 set(CYCLES_TARGET_PREFIX "cycles_ext_" CACHE STRING "Prefix for Cycles targets")
+
+# Disable standalone executables and heavy kernel build targets from Cycles.
+set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable standalone Cycles executable" FORCE)
+set(WITH_CYCLES_STANDALONE_GUI OFF CACHE BOOL "Disable Cycles standalone GUI" FORCE)
+set(WITH_CYCLES_PRECOMPUTE OFF CACHE BOOL "Disable Cycles precompute executable" FORCE)
+set(WITH_CYCLES_CUDA_BINARIES OFF CACHE BOOL "Disable precompiled CUDA kernels" FORCE)
+set(WITH_CYCLES_HIP_BINARIES OFF CACHE BOOL "Disable precompiled HIP kernels" FORCE)
+set(WITH_CYCLES_ONEAPI_BINARIES OFF CACHE BOOL "Disable precompiled oneAPI kernels" FORCE)
+
 add_subdirectory(extern/cycles ${CMAKE_BINARY_DIR}/cycles-build EXCLUDE_FROM_ALL)
 
 # Use Cycles' include directories for NanoVDB and OpenImageDenoise

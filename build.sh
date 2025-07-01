@@ -42,11 +42,10 @@ echo "Checking for PipeWire development headers..."
 export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:$PKG_CONFIG_PATH
 PIPEWIRE_CMAKE_ARGS=""
 if command -v pkg-config >/dev/null && pkg-config --exists libpipewire-0.3; then
-  PIPEWIRE_INCLUDE_DIR=$(pkg-config --variable=includedir libpipewire-0.3)
-  PIPEWIRE_LIB_DIR=$(pkg-config --variable=libdir libpipewire-0.3)
-  PIPEWIRE_LIB_FILE="${PIPEWIRE_LIB_DIR}/libpipewire-0.3.so"
-  echo "PipeWire found via pkg-config: ${PIPEWIRE_LIB_FILE}"
-  PIPEWIRE_CMAKE_ARGS="-DPIPEWIRE_INCLUDE_DIR=${PIPEWIRE_INCLUDE_DIR} -DPIPEWIRE_LIBRARY=${PIPEWIRE_LIB_FILE}"
+  # Rely on pkg-config to locate PipeWire; avoid manually setting unused variables
+  echo "PipeWire found via pkg-config"
+  # PIPEWIRE_CMAKE_ARGS can remain empty because the CMake scripts handle
+  # discovery internally via pkg-config.
 else
   echo "PipeWire not found via pkg-config. Audio capture will be disabled."
 fi

@@ -166,24 +166,69 @@ Engine::~Engine() {
 }
 
 void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
-                              ::sep::shim::vector<std::uint32_t>& indices,
-                              ::sep::shim::vector<std::uint32_t>& expectations, std::uint64_t tick) {
+                           ::sep::shim::vector<std::uint32_t>& probe_indices,
+                           ::sep::shim::vector<std::uint32_t>& expectations,
+                           std::uint64_t tick) {
     if (inputs.empty()) {
         ::sep::core::ErrorHandler::instance().reportError(
             {sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::generate_probes"});
         return;
     }
 
-    indices.resize(inputs.size());
-    expectations.resize(inputs.size());
+    probe_indices.clear();
+    expectations.clear();
+    probe_indices.reserve(inputs.size());
+    expectations.reserve(inputs.size());
+
+    // Convert each input state to probe indices and expectations
     for (size_t i = 0; i < inputs.size(); ++i) {
-        indices[i] = static_cast<std::uint32_t>(i);
-        expectations[i] = static_cast<std::uint32_t>(inputs[i].state);
+        const auto& pin_state = inputs[i];
+        
+        // Generate probe index based on pin state and current tick
+        std::uint32_t probe_idx = static_cast<std::uint32_t>(
+            (pin_state.pin_id * tick) % DEFAULT_SIZE
+        );
+        probe_indices.push_back(probe_idx);
+        
+        // Calculate expected value based on pin state and coherence
+        std::uint32_t expected = static_cast<std::uint32_t>(
+            pin_state.value * pin_state.coherence * 1000.0f
+        );
+        expectations.push_back(expected);
     }
+
+    // Ensure device buffers are properly sized
+    if (impl_->d_bitfield_.size() < inputs.size()) {
+        impl_->d_bitfield_.resize(inputs.size());
+    }
+    if (impl_->d_corrections_.size() < inputs.size()) {
+        impl_->d_corrections_.resize(inputs.size());
+    }
+    if (impl_->d_correction_count_.size() < 1) {
+        impl_->d_correction_count_.resize(1);
+    }
+    if (impl_->d_collapse_indices_.size() < inputs.size()) {
+        impl_->d_collapse_indices_.resize(inputs.size());
+    }
+    if (impl_->d_collapse_counts_.size() < inputs.size()) {
+        impl_->d_collapse_counts_.resize(inputs.size());
+    }
+    if (impl_->d_chunks_.size() < inputs.size()) {
+        impl_->d_chunks_.resize(inputs.size());
+    }
+
+    // Initialize device buffers
+    std::fill(impl_->d_bitfield_.begin(), impl_->d_bitfield_.end(), 0);
+    std::fill(impl_->d_corrections_.begin(), impl_->d_corrections_.end(), 0);
+    impl_->d_correction_count_[0] = 0;
+    std::fill(impl_->d_collapse_indices_.begin(), impl_->d_collapse_indices_.end(), 0);
+    std::fill(impl_->d_collapse_counts_.begin(), impl_->d_collapse_counts_.end(), 0);
+    std::fill(impl_->d_chunks_.begin(), impl_->d_chunks_.end(), 0);
 }
 
 void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, std::uint64_t tick,
-                           ::sep::quantum::QBSAResult& qbsa_result, ::sep::cuda::QSHResult& qsh_result) {
+                            ::sep::quantum::QBSAResult& qbsa_result, ::sep::cuda::QSHResult& qsh_result) {
+    // Input validation
     if (inputs.empty()) {
         ::sep::core::ErrorHandler::instance().reportError({sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::process_batch"});
         return;
@@ -194,6 +239,7 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
         return;
     }
 
+    // Initialize result structures
     qbsa_result.corrections.clear();
     qbsa_result.correction_ratio = 0.0f;
     qbsa_result.collapse_detected = false;
@@ -203,14 +249,69 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
     qsh_result.total_collapses = 0;
     qsh_result.total_states = inputs.size();
 
-    StateNode node;
-    node.tick = tick;
-    node.coherence = 1.0f;
-    node.rupture = false;
-    if (!impl_->state_history_.empty()) {
-        node.parents.push_back(impl_->state_history_.size() - 1);
+    try {
+        // Generate probes from inputs
+        ::sep::shim::vector<std::uint32_t> probe_indices;
+        ::sep::shim::vector<std::uint32_t> expectations;
+        generate_probes(inputs, probe_indices, expectations, tick);
+
+        // Process QBSA using CUDA
+        auto qbsa_status = sep_cuda_process_batch(
+            probe_indices.data(),
+            expectations.data(),
+            static_cast<std::uint32_t>(inputs.size()),
+            impl_->d_bitfield_.data(),
+            impl_->d_corrections_.data(),
+            impl_->d_correction_count_.data()
+        );
+
+        if (qbsa_status != sep::SEPResult::SUCCESS) {
+            ::sep::core::ErrorHandler::instance().reportError({qbsa_status, "QBSA processing failed", "Engine::process_batch"});
+            return;
+        }
+
+        // Process QSH using CUDA
+        auto qsh_status = sep_cuda_process_symmetry(
+            impl_->d_chunks_.data(),
+            static_cast<std::uint32_t>(inputs.size()),
+            impl_->d_collapse_indices_.data(),
+            impl_->d_collapse_counts_.data()
+        );
+
+        if (qsh_status != sep::SEPResult::SUCCESS) {
+            ::sep::core::ErrorHandler::instance().reportError({qsh_status, "QSH processing failed", "Engine::process_batch"});
+            return;
+        }
+
+        // Update results from device buffers
+        qbsa_result.corrections = impl_->d_corrections_;
+        qbsa_result.correction_ratio = static_cast<float>(impl_->d_correction_count_[0]) / inputs.size();
+        qbsa_result.collapse_detected = impl_->d_correction_count_[0] > 0;
+
+        qsh_result.collapse_indices = impl_->d_collapse_indices_;
+        qsh_result.collapse_counts = impl_->d_collapse_counts_;
+        qsh_result.total_collapses = std::accumulate(
+            impl_->d_collapse_counts_.begin(),
+            impl_->d_collapse_counts_.end(),
+            0u
+        );
+
+        // Update state history
+        StateNode node;
+        node.tick = tick;
+        node.coherence = 1.0f - qbsa_result.correction_ratio;
+        node.rupture = qbsa_result.collapse_detected;
+        if (!impl_->state_history_.empty()) {
+            node.parents.push_back(impl_->state_history_.size() - 1);
+        }
+        impl_->state_history_.push_back(node);
+
+    } catch (const std::exception& e) {
+        ::sep::core::ErrorHandler::instance().reportError(
+            {sep::SEPResult::INTERNAL_ERROR, e.what(), "Engine::process_batch"}
+        );
+        return;
     }
-    impl_->state_history_.push_back(node);
 }
 
 const ::sep::shim::vector<Engine::StateNode>& Engine::getStateHistory() const noexcept {

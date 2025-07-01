@@ -28,18 +28,46 @@ target_link_libraries(sep_blender
 # Add cycles_renderer.cpp unconditionally
 target_sources(sep_blender PRIVATE cycles_renderer.cpp)
 
-# Cycles is a required dependency
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-find_package(Cycles REQUIRED HINTS
-    /usr/lib/cmake
-    /usr/local/lib/cmake
-    ${BLENDER_ROOT}/lib/cmake
-    $ENV{BLENDER_ROOT}/lib/cmake
+# Link directly against Blender's Cycles
+set(BLENDER_VERSION "5.0")
+set(BLENDER_USER_CONFIG_DIR "$ENV{HOME}/.config/blender/${BLENDER_VERSION}")
+
+# Use bundled Cycles headers
+target_include_directories(sep_blender PRIVATE
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
 
-target_compile_definitions(sep_blender PUBLIC SEP_HAS_CYCLES=1)
-target_include_directories(sep_blender PRIVATE ${CYCLES_INCLUDE_DIRS})
-target_link_libraries(sep_blender PUBLIC ${CYCLES_LIBRARIES})
+target_compile_definitions(sep_blender
+    PUBLIC
+        SEP_HAS_CYCLES=1
+    PRIVATE
+        WITH_CYCLES_DEVICE_CUDA
+)
+
+# Configure Cycles build options
+set(WITH_CYCLES_STANDALONE ON CACHE BOOL "Build Cycles standalone")
+set(WITH_CYCLES_DEVICE_CUDA ON CACHE BOOL "Enable CUDA support")
+set(WITH_CYCLES_DEVICE_OPTIX ON CACHE BOOL "Enable OptiX support")
+set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Hydra delegate")
+set(WITH_BLENDER OFF CACHE BOOL "Disable Blender integration")
+set(WITH_NANOVDB OFF CACHE BOOL "Disable NanoVDB")
+set(WITH_OPENIMAGEDENOISE OFF CACHE BOOL "Disable OpenImageDenoise")
+
+# Build Cycles libraries
+add_subdirectory(${CMAKE_SOURCE_DIR}/extern/cycles ${CMAKE_BINARY_DIR}/extern/cycles EXCLUDE_FROM_ALL)
+
+# Set compiler flags for Cycles targets
+set_target_properties(cycles_device cycles_kernel cycles_util cycles_subd PROPERTIES
+    COMPILE_FLAGS "-D_LIBCPP_HAS_NO_INCOMPLETE_FORMAT -DFMT_DEPRECATED_OSTREAM"
+)
+
+# Link against Cycles libraries
+target_link_libraries(sep_blender PRIVATE
+    cycles_device
+    cycles_kernel
+    cycles_util
+    cycles_subd
+)
 
 # Set library properties
 set_target_properties(sep_blender PROPERTIES

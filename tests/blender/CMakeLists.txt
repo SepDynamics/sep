@@ -7,6 +7,7 @@ add_library(blender_tests STATIC
     mesh_handler_perf_test.cpp
     mesh_handler_stress_test.cpp
     mesh_handler_test.cpp
+    feature_flags_test.cpp
     pattern_data_test.cpp
     scene_load_test.cpp
     shader_test.cpp

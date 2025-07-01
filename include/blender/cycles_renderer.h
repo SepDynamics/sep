@@ -34,6 +34,8 @@ public:
 
 private:
     bool initialized_{false};
+    int width_{0};
+    int height_{0};
     std::vector<pattern::PatternData> patterns_;
     ::ccl::Scene* cycles_scene_{nullptr};
 #ifdef SEP_HAS_CYCLES

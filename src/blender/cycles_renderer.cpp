@@ -24,6 +24,9 @@
 #  include "util/profiling.h"
 #  include "device/device.h"
 #  include "scene/image.h"
+#  include "util/vector.h"
+#  include "util/array.h"
+#  include "util/string.h"
 #endif
 
 namespace sep {
@@ -98,7 +101,7 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
         ::ccl::Camera *cam = cycles_scene_->camera;
         if (cam) {
             cam->set_screen_size(params.width, params.height);
-            cam->fov = 45.0f * (M_PI_F / 180.0f);
+            cam->set_fov(45.0f * (M_PI_F / 180.0f));
         }
 
         // Create geometry from patterns
@@ -120,11 +123,10 @@ bool CyclesRenderer::render(const std::string& filepath) {
 #ifdef SEP_HAS_CYCLES
     // Initialize session
     ::ccl::SessionParams session_params;
-    session_params.progressive = true;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
-    
-    ccl::Session *session = new ccl::Session(session_params, cycles_scene_->params);
+
+    ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = cycles_scene_;
 
     // Start render
@@ -132,10 +134,10 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session->wait();
 
     // Save render result
-    ccl::ImageFormat format;
+    ::ccl::ImageFormat format;
     format.width = cycles_scene_->camera->get_full_width();
     format.height = cycles_scene_->camera->get_full_height();
-    format.type = ccl::IMAGE_DATA_TYPE_FLOAT;
+    format.type = ::ccl::IMAGE_DATA_TYPE_FLOAT;
     format.channels = 4;
 
     session->write_render_tile(filepath.c_str(), &format);
@@ -159,9 +161,15 @@ void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& patte
     convertPatternToMesh(pattern, verts, triangles);
     
     // Add vertices and faces to mesh
-    mesh->verts = verts;
-    mesh->triangles = triangles;
-    mesh->attributes.add(::ccl::ATTR_STD_UV, "uvmap");
+    ::ccl::vector<::ccl::float3> verts_vec(verts.begin(), verts.end());
+    ::ccl::vector<::ccl::int3> tris_vec(triangles.begin(), triangles.end());
+    ::ccl::array<::ccl::float3> verts_array;
+    ::ccl::array<::ccl::int3> triangles_array;
+    verts_array = verts_vec;
+    triangles_array = tris_vec;
+    mesh->set_verts(verts_array);
+    mesh->set_triangles(triangles_array);
+    mesh->attributes.add(::ccl::ATTR_STD_UV, ::ccl::ustring("uvmap"));
     
     // Add mesh to scene
     cycles_scene_->geometry.push_back(std::unique_ptr<::ccl::Geometry>(mesh));

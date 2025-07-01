@@ -6,6 +6,10 @@
 #include <cstddef>
 
 #ifdef __cplusplus
+namespace sep {
+struct SEPBlenderBridge;
+}
+using SEPBlenderBridge = sep::SEPBlenderBridge;
 extern "C" {
 #endif
 

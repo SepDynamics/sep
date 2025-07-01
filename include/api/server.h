@@ -27,12 +27,12 @@ class response;
 template <typename... Middlewares>
 class Crow;
 }  // namespace crow
-
-
-
+namespace sep {
+namespace pattern { class PatternProcessor; }
+namespace blender { namespace ccl { class CyclesRenderer; } }
+}  // namespace sep
 namespace sep::api {
 class CrowRequest;
-
 
 struct ServerMetrics {
   std::atomic<uint64_t> rateLimitedCount{0};
@@ -220,6 +220,10 @@ class SEPApiServer : public Server {
 
   // Clients
   std::unique_ptr<ollama::OllamaClient> ollama_client_;
+
+  // Persistent processors for Blender routes
+  std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor_;
+  std::unique_ptr<sep::blender::ccl::CyclesRenderer> cycles_renderer_;
 };
 
 }  // namespace sep::api

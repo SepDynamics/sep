@@ -4,7 +4,7 @@
 namespace sep {
 namespace audio {
 
-std::unique_ptr<AudioCapture> AudioCapture::create() {
+std::unique_ptr<AudioCapture> createAudioCapture() {
     return std::make_unique<PipeWireCapture>();
 }
 

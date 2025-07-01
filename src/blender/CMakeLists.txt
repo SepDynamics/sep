@@ -6,6 +6,7 @@ add_library(sep_blender STATIC
     pattern_visualization_pipeline.cpp
     blender_integration.cpp
     mesh_handler.cpp
+    factory.cpp
 )
 
 # Define required features

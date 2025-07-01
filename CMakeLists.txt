@@ -17,17 +17,9 @@ pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 find_path(NANOVDB_INCLUDE_DIR nanovdb/NanoVDB.h)
 if(NANOVDB_INCLUDE_DIR)
     message(STATUS "NanoVDB found: ${NANOVDB_INCLUDE_DIR}")
-    add_compile_definitions(WITH_NANOVDB=1)
-else()
-    add_compile_definitions(WITH_NANOVDB=0)
 endif()
 
 find_package(OpenImageDenoise QUIET)
-if(OpenImageDenoise_FOUND)
-    add_compile_definitions(WITH_OPENIMAGEDENOISE=1)
-else()
-    add_compile_definitions(WITH_OPENIMAGEDENOISE=0)
-endif()
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -67,13 +59,13 @@ add_compile_definitions(
     SEP_HAS_CYCLES=1
 )
 
-if(NANOVDB_FOUND)
+if(NANOVDB_INCLUDE_DIR)
     add_compile_definitions(WITH_NANOVDB=1)
 else()
     add_compile_definitions(WITH_NANOVDB=0)
 endif()
 
-if(OPENIMAGEDENOISE_FOUND)
+if(OpenImageDenoise_FOUND)
     add_compile_definitions(WITH_OPENIMAGEDENOISE=1)
 else()
     add_compile_definitions(WITH_OPENIMAGEDENOISE=0)

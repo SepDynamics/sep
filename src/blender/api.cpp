@@ -3,11 +3,15 @@
 #include "blender/types.h"
 #include "blender/config.h"
 #include "blender/pattern_bridge.h"
-#include "quantum/data.hpp"          // For PatternData/PatternConfig
-#include "memory/types.h"            // For MemoryTierEnum
-#include "core/common.h"  // defines sep::SEPResult
 #include <memory>
 #include <string>
+// Bridge implementation structure
+struct SEPBlenderBridge
+{
+    std::shared_ptr<sep::pattern::BlenderBridge> impl;
+    SEPAudioMetrics                              audio_metrics{};    // last computed audio metrics
+    SEPPatternMetrics                            pattern_metrics{};  // last collected pattern metrics
+};
 
 namespace {
 // Version information

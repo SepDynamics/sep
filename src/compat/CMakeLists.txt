@@ -4,7 +4,6 @@
 
 # Build sep_compat as a static library that encapsulates all CUDA functionality
 add_library(sep_compat STATIC
-    component_bridge.cpp
     cuda_api.cu
     core.cu
     pattern_kernels.cu
@@ -37,7 +36,6 @@ target_include_directories(sep_compat
         ${CMAKE_SOURCE_DIR}/include/compat
         ${CMAKE_SOURCE_DIR}/include/core
     PRIVATE
-        ${PIPEWIRE_INCLUDE_DIRS}
         ${CUDA_INCLUDE_DIRS}
 )
 
@@ -48,5 +46,4 @@ target_link_libraries(sep_compat
     PRIVATE
         ${CUDA_LIBRARIES}
         ${CUDAToolkit_LIBRARY_DIR}/libcudart.so
-        sep_audio
 )

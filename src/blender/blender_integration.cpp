@@ -21,8 +21,6 @@ using ::sep::memory::MemoryTierEnum;
 #include "core/common.h"  // For sep::SEPResult
 
 #include "memory/memory_tier_manager.hpp"
-#include "compat/component_bridge.h" // For createBlenderBridge
-
 
 namespace sep {
 namespace pattern {

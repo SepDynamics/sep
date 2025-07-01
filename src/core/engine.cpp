@@ -10,7 +10,6 @@
 #include "compat/core.h" // Fix: Include core
 #include "compat/shim.h"
 #include "compat/cuda_common.h" // Fix: Include cuda_common
-#include "compat/component_bridge.h"
 #include "compat/macros.h"
 #include "compat/memory.h"
 #include "compat/stream.h"
@@ -21,6 +20,7 @@
 #include "blender/types.h" // For SEPBlenderBridge definition
 #endif
 #include "audio/capture.h"
+#include "audio/factory.h"
 
 #include <cstdint> // Fix: Include cstdint
 #include <cstdio> // Fix: Include cstdio
@@ -65,7 +65,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
      fflush(stdout);
 
     try {
-        audio_capture_ = ::sep::compat::createAudioCapture();
+        audio_capture_ = ::sep::audio::createAudioCapture();
         if (!audio_capture_) {
             printf("DEBUG: Engine::init - Failed to create audio capture\n");
              fflush(stdout);

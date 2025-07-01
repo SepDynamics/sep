@@ -13,7 +13,6 @@
 #include "compat/cuda_runtime.h"
 #endif
 
-#include "compat/component_bridge.h"
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
 #include "quantum/pattern_evolution_bridge.h" // Fix: Add include for PatternEvolutionBridge // Fix: Added comment

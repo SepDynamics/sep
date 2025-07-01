@@ -2,7 +2,6 @@
 #include "audio/pipewire_capture.h"
 #include "audio/config.h"
 #include "audio/pipewire_includes.h"
-#include "compat/component_bridge.h"
 #include "compat/math_common.h"
 
 // Standard library headers
@@ -386,7 +385,7 @@ void PipeWireCapture::streamProcess(void* data)
 
 std::unique_ptr<AudioCapture> AudioCapture::create()
 {
-    return compat::createAudioCapture();
+    return std::make_unique<PipeWireCapture>();
 }
 
 }  // namespace audio

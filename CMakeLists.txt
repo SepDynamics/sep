@@ -14,8 +14,8 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Add subdirectories for main project components

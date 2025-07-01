@@ -66,17 +66,11 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
             return SEPResult::NOT_INITIALIZED;
         }
 
-        // Update scene parameters
-        cycles_scene_->params.width = params.width;
-        cycles_scene_->params.height = params.height;
-        cycles_scene_->params.samples = params.samples;
-        cycles_scene_->params.background = true;
-        cycles_scene_->params.progressive = true;
+        last_render_params_ = params;
 
         // Create camera
         ::ccl::Camera *cam = new ::ccl::Camera();
-        cam->width = params.width;
-        cam->height = params.height;
+        cam->set_screen_size(params.width, params.height);
         cam->fov = 45.0f;
         cycles_scene_->camera = cam;
 
@@ -152,18 +146,19 @@ void CyclesRenderer::convertPatternToMesh(const pattern::PatternData& pattern,
     // Convert pattern data into mesh vertices and triangles
     // This is a simple example - you'll want to implement your own conversion logic
     float scale = 0.1f;
-    for (size_t i = 0; i < pattern.data.size(); i++) {
-        float x = scale * static_cast<float>(i % 10);
-        float y = scale * static_cast<float>(i / 10);
-        float z = scale * pattern.data[i];
+    float z = scale * pattern.amplitude.real();
+    const size_t grid = 10;
+    for (size_t i = 0; i < grid * grid; ++i) {
+        float x = scale * static_cast<float>(i % grid);
+        float y = scale * static_cast<float>(i / grid);
         verts.push_back(::ccl::make_float3(x, y, z));
     }
 
     // Create triangles from vertices
-    for (size_t i = 0; i < verts.size() - 11; i++) {
-        if ((i + 1) % 10 != 0) {
-            triangles.push_back(::ccl::make_int3(i, i + 1, i + 10));
-            triangles.push_back(::ccl::make_int3(i + 1, i + 11, i + 10));
+    for (size_t i = 0; i < verts.size() - grid - 1; i++) {
+        if ((i + 1) % grid != 0) {
+            triangles.push_back(::ccl::make_int3(i, i + 1, i + grid));
+            triangles.push_back(::ccl::make_int3(i + 1, i + grid + 1, i + grid));
         }
     }
 }

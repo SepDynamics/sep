@@ -11,6 +11,8 @@
 #include "util/math_base.h"
 #include "util/texture.h"
 #include "util/param.h"
+#include "util/unique_ptr.h"
+#include "app/oiio_output_driver.h"
 #endif
 
 #ifdef SEP_HAS_CYCLES
@@ -57,7 +59,7 @@ SEPResult CyclesRenderer::initialize() {
             return SEPResult::INITIALIZATION_FAILED;
         }
         ::ccl::SceneParams scene_params;
-        cycles_scene_ = new ::ccl::Scene(scene_params, cycles_device_.get());
+        cycles_scene_ = ::ccl::make_unique<::ccl::Scene>(scene_params, cycles_device_.get());
 #endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
@@ -128,20 +130,16 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.threads = 0; // Auto-detect thread count
     
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
-    session->scene = cycles_scene_;
+    session->scene = cycles_scene_.get();
+
+    session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
+        filepath.c_str(), "Combined", [](const ::ccl::string &msg) {
+        (void)msg;
+    }));
 
     // Start render
     session->start();
     session->wait();
-
-    // Save render result
-    ::ccl::ImageFormat format;
-    format.width = cycles_scene_->camera->get_full_width();
-    format.height = cycles_scene_->camera->get_full_height();
-    format.type = ::ccl::IMAGE_DATA_TYPE_FLOAT;
-    format.channels = 4;
-
-    session->write_render_tile(filepath.c_str(), &format);
 
     delete session;
     return true;

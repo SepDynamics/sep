@@ -3,30 +3,9 @@
 
 #include "memory/types.h"
 #include "core/tracing.h"
-
+#include <spdlog/spdlog.h>
 #include <memory>
 #include <string>
-#include <chrono>
-
-
-// Handle ASIO/Crow includes based on RTTI availability
-#ifndef CROW_DISABLE_RTTI
-// Use real headers in non-CUDA mode
-#include "api/types.h"
-#include <spdlog/spdlog.h>
-#else
-// Use isolation headers in CUDA mode
-#include "crow/crow_isolation.h"
-#include <spdlog/spdlog.h>
-#endif
-
-#include "api/server.h"
-namespace sep {
-namespace api {
-class HttpRequest;
-std::unique_ptr<HttpRequest> makeRequest(::crow::request &req);
-}  // namespace api
-}  // namespace sep
 
 namespace sep::logging {
 
@@ -84,25 +63,6 @@ inline Level levelFromString(const std::string &level) {
 inline std::string levelToString(Level level) {
   return Manager::getInstance().levelToString(level);
 }
-
-// Middleware for HTTP request logging
-class LoggingMiddleware {
- public:
-  struct context {
-    std::chrono::high_resolution_clock::time_point start;
-  };
-
-  explicit LoggingMiddleware(api::Server *server) : server_(server) {}
-
-  void before_handle(::crow::request &req, ::crow::response &res,
-                     LoggingMiddleware::context &ctx);
-  void after_handle(::crow::request &req, ::crow::response &res,
-                    LoggingMiddleware::context &ctx);
-
- private:
-  bool isReady() const { return server_ != nullptr; }
-  api::Server *server_;
-};
 
 }  // namespace sep::logging
 

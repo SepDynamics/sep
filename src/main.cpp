@@ -78,14 +78,14 @@ int main(int argc, char* argv[]) {
       
 #if SEP_HAS_CYCLES
       // Create the Cycles renderer
-      sep::blender::CyclesRenderer renderer;
+      sep::blender::ccl::CyclesRenderer renderer;
       
       // Initialize the renderer
       sep::SEPResult result = renderer.initialize();
       if (result != sep::SEPResult::SUCCESS) {
         spdlog::critical("Failed to initialize Cycles renderer");
         curl_global_cleanup();
-        sep::logging::Manager::shutdownLogging();
+        sep::logging::shutdownLogging();
         return 1;
       }
       
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
       if (!file.is_open()) {
         spdlog::critical("Failed to open scene file: {}", render_file);
         curl_global_cleanup();
-        sep::logging::Manager::shutdownLogging();
+        sep::logging::shutdownLogging();
         return 1;
       }
       
@@ -133,12 +133,12 @@ int main(int argc, char* argv[]) {
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to create scene from patterns");
           curl_global_cleanup();
-          sep::logging::Manager::shutdownLogging();
+          sep::logging::shutdownLogging();
           return 1;
         }
         
         // Set up render parameters
-        sep::blender::CyclesRenderer::RenderParams params;
+        sep::blender::ccl::CyclesRenderer::RenderParams params;
         params.width = json.value("width", 1920);
         params.height = json.value("height", 1080);
         params.samples = json.value("samples", 128);
@@ -150,30 +150,30 @@ int main(int argc, char* argv[]) {
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to render scene");
           curl_global_cleanup();
-          sep::logging::Manager::shutdownLogging();
+          sep::logging::shutdownLogging();
           return 1;
         }
         
         spdlog::info("Render completed successfully");
         curl_global_cleanup();
-        sep::logging::Manager::shutdownLogging();
+        sep::logging::shutdownLogging();
         return 0;
       }
       catch (const std::exception& e) {
         spdlog::critical("Error parsing scene file: {}", e.what());
         curl_global_cleanup();
-        sep::logging::Manager::shutdownLogging();
+        sep::logging::shutdownLogging();
         return 1;
       }
 #else
-      sep::blender::CyclesRenderer renderer;
+      sep::blender::ccl::CyclesRenderer renderer;
       
       // Initialize the renderer
       sep::SEPResult result = renderer.initialize();
       if (result != sep::SEPResult::SUCCESS) {
         spdlog::critical("Failed to initialize Cycles renderer");
         curl_global_cleanup();
-        sep::logging::Manager::shutdownLogging();
+        sep::logging::shutdownLogging();
         return 1;
       }
       
@@ -184,7 +184,7 @@ int main(int argc, char* argv[]) {
       if (!file.is_open()) {
         spdlog::critical("Failed to open scene file: {}", render_file);
         curl_global_cleanup();
-        sep::logging::Manager::shutdownLogging();
+        sep::logging::shutdownLogging();
         return 1;
       }
       
@@ -221,12 +221,12 @@ int main(int argc, char* argv[]) {
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to create scene from patterns");
           curl_global_cleanup();
-          sep::logging::Manager::shutdownLogging();
+          sep::logging::shutdownLogging();
           return 1;
         }
         
         // Set up render parameters
-        sep::blender::CyclesRenderer::RenderParams params;
+        sep::blender::ccl::CyclesRenderer::RenderParams params;
         params.width = json.value("width", 1920);
         params.height = json.value("height", 1080);
         params.samples = json.value("samples", 128);
@@ -238,19 +238,19 @@ int main(int argc, char* argv[]) {
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to render scene");
           curl_global_cleanup();
-          sep::logging::Manager::shutdownLogging();
+          sep::logging::shutdownLogging();
           return 1;
         }
         
         spdlog::info("Render completed successfully");
         curl_global_cleanup();
-        sep::logging::Manager::shutdownLogging();
+        sep::logging::shutdownLogging();
         return 0;
       }
       catch (const std::exception& e) {
         spdlog::critical("Error parsing scene file: {}", e.what());
         curl_global_cleanup();
-        sep::logging::Manager::shutdownLogging();
+        sep::logging::shutdownLogging();
         return 1;
       }
 #endif
@@ -264,7 +264,7 @@ int main(int argc, char* argv[]) {
 #else
       spdlog::critical("Engine initialization failed");
       curl_global_cleanup();
-      sep::logging::Manager::shutdownLogging();
+      sep::logging::shutdownLogging();
       return 1;
 #endif
     }
@@ -291,12 +291,12 @@ int main(int argc, char* argv[]) {
   } catch (const std::exception& e) {
     spdlog::critical("Unhandled exception: {}", e.what());
     curl_global_cleanup();
-    sep::logging::Manager::shutdownLogging();
+    sep::logging::shutdownLogging();
     return 1;
   }
 #endif
 
   curl_global_cleanup();
-  sep::logging::Manager::shutdownLogging();
+  sep::logging::shutdownLogging();
   return 0;
 }

@@ -63,7 +63,12 @@ endif()
 if(PIPEWIRE_FOUND)
   message(STATUS "Using PipeWire at: ${PIPEWIRE_LIBRARIES}")
   target_include_directories(sep_audio PRIVATE ${PIPEWIRE_INCLUDE_DIRS})
-  target_link_libraries(sep_audio PRIVATE ${PIPEWIRE_LIBRARIES})
+  target_link_libraries(sep_audio
+      PRIVATE
+          ${PIPEWIRE_LIBRARIES}
+      PUBLIC
+          sep_core
+  )
   # Propagate to parent scope for main executable linking
   set(PIPEWIRE_LIBRARIES ${PIPEWIRE_LIBRARIES} PARENT_SCOPE)
   set(PIPEWIRE_FOUND ${PIPEWIRE_FOUND} PARENT_SCOPE)

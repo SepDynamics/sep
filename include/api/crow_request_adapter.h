@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "crow/app.h"
+#include "api/types.h"
 
 namespace sep {
 namespace api {
@@ -10,7 +11,7 @@ namespace api {
 /**
  * @brief Adapts Crow's request object to provide a consistent interface for request handling
  */
-class CrowRequestAdapter {
+class CrowRequestAdapter : public HttpRequest {
 public:
     /**
      * @brief Constructs a new adapter around a Crow request
@@ -19,29 +20,29 @@ public:
     explicit CrowRequestAdapter(crow::request& req);
 
     /**
-     * @brief Gets the value of a specific header
-     * @param key The header key to look up
-     * @return The header value if found, empty string otherwise
-     */
-    std::string getHeader(const std::string& key) const;
-
-    /**
-     * @brief Gets the request body content
-     * @return The request body as a copy
-     */
-    std::string getBody() const;
-
-    /**
-     * @brief Gets the HTTP method of the request
-     * @return The request method as a string copy
-     */
-    std::string getMethod() const;
-
-    /**
      * @brief Gets the request URL
      * @return The request URL as a copy
      */
-    std::string getUrl() const;
+    std::string url() const override;
+
+    /**
+     * @brief Gets the HTTP method
+     * @return The request method as a copy
+     */
+    std::string method() const override;
+
+    /**
+     * @brief Gets the request body
+     * @return The request body as a copy
+     */
+    std::string body() const override;
+
+    /**
+     * @brief Gets the value of a specific header
+     * @param name The header name to look up
+     * @return The header value if found, empty string otherwise
+     */
+    std::string getHeader(const std::string& name) const override;
 
     /**
      * @brief Gets a URL parameter value

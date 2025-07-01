@@ -16,6 +16,8 @@ BlenderBridge::~BlenderBridge() {
     cleanup();
 }
 
+mutable std::mutex objects_mutex_;
+
 sep::SEPResult BlenderBridge::init(::sep::GPUContext* ctx) {
     std::lock_guard<std::mutex> lock(objects_mutex_);
     

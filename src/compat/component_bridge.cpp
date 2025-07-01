@@ -22,12 +22,12 @@ std::unique_ptr<SEPBlenderBridge> createBlenderBridge() {
     return bridge;
 }
 
-std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer() {
-    return std::make_unique<blender::CyclesRenderer>();
+std::unique_ptr<blender::ccl::CyclesRenderer> createCyclesRenderer() {
+    return std::make_unique<blender::ccl::CyclesRenderer>();
 }
 #else
 std::unique_ptr<SEPBlenderBridge> createBlenderBridge() { return nullptr; }
-std::unique_ptr<blender::CyclesRenderer> createCyclesRenderer() { return nullptr; }
+std::unique_ptr<blender::ccl::CyclesRenderer> createCyclesRenderer() { return nullptr; }
 #endif
 } // namespace compat
 } // namespace sep

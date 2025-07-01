@@ -1,4 +1,4 @@
-add_library(sep_core 
+add_library(sep_core
   STATIC
     tracing.cpp
     allocation_metrics.cpp

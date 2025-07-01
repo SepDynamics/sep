@@ -1,8 +1,9 @@
-add_library(sep_api STATIC 
+add_library(sep_api STATIC
     crow_error.cpp
     lock_free_rate_limiter.cpp
     js_integration.cpp
     rate_limit_middleware.cpp
+    logging_middleware.cpp
     bridge.cpp
     crow_adapter.cpp
     crow_request_adapter.cpp
@@ -13,6 +14,15 @@ add_library(sep_api STATIC
     sep_engine.cpp
     bridge_c.cpp
     server.cpp
+)
+
+target_link_libraries(sep_api
+    PUBLIC
+        sep_core
+    PRIVATE
+        ${CURL_LIBRARIES}
+        sep_compat
+        sep_blender
 )
 
 target_include_directories(sep_api
@@ -40,9 +50,12 @@ find_package(CURL REQUIRED)
 target_link_libraries(sep_api
     PRIVATE
         ${CURL_LIBRARIES}
+        sep_compat
+        sep_blender
+    PUBLIC
         sep_core
-        $<IF:$<BOOL:${SEP_HAS_BLENDER}>,sep_blender,>
 )
+target_compile_definitions(sep_api PRIVATE SEP_HAS_BLENDER=1)
 
 if(HIREDIS_FOUND)
     target_link_libraries(sep_api PRIVATE ${HIREDIS_LIBRARIES})

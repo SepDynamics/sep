@@ -50,13 +50,21 @@ set(WITH_CYCLES_CUDA_BINARIES OFF CACHE BOOL "Disable precompiled CUDA kernels" 
 set(WITH_CYCLES_HIP_BINARIES OFF CACHE BOOL "Disable precompiled HIP kernels" FORCE)
 set(WITH_CYCLES_ONEAPI_BINARIES OFF CACHE BOOL "Disable precompiled oneAPI kernels" FORCE)
 
-add_subdirectory(extern/cycles ${CMAKE_BINARY_DIR}/cycles-build EXCLUDE_FROM_ALL)
+if(EXISTS "${CMAKE_SOURCE_DIR}/extern/cycles/CMakeLists.txt")
+  add_subdirectory(extern/cycles ${CMAKE_BINARY_DIR}/cycles-build EXCLUDE_FROM_ALL)
+  set(SEP_HAS_CYCLES 1)
+else()
+  message(WARNING "Cycles submodule not found, disabling Cycles integration")
+  set(SEP_HAS_CYCLES 0)
+endif()
 
 # Use Cycles' include directories for NanoVDB and OpenImageDenoise
-include_directories(
-    ${CMAKE_SOURCE_DIR}/extern/cycles/third_party/nanovdb
-    ${CMAKE_SOURCE_DIR}/extern/cycles/third_party/OpenImageDenoise/include
-)
+if(SEP_HAS_CYCLES)
+  include_directories(
+      ${CMAKE_SOURCE_DIR}/extern/cycles/third_party/nanovdb
+      ${CMAKE_SOURCE_DIR}/extern/cycles/third_party/OpenImageDenoise/include
+  )
+endif()
 
 # Set CMake module path for OpenVDB
 list(APPEND CMAKE_MODULE_PATH "/usr/lib64/cmake/OpenVDB")
@@ -108,7 +116,7 @@ set(SEP_BUILD_TESTS 1)
 set(SEP_ENABLE_CUDA 1)
 set(SEP_HAS_BLENDER 1)
 set(SEP_HAS_CUDA 1)
-set(SEP_HAS_CYCLES 1)
+# SEP_HAS_CYCLES is set above based on submodule availability
 
 # Configure Blender paths
 set(BLENDER_VERSION "5.0")
@@ -120,7 +128,7 @@ add_compile_definitions(
     SEP_ENABLE_CUDA=1
     SEP_HAS_BLENDER=1
     SEP_HAS_CUDA=1
-    SEP_HAS_CYCLES=1
+    SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
     WITH_CYCLES_NANOVDB=1
     WITH_CYCLES_OPENIMAGEDENOISE=1
     WITH_CYCLES_OPENVDB=1

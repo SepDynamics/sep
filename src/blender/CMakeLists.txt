@@ -27,21 +27,25 @@ target_link_libraries(sep_blender
         sep_compat
 )
 
-# Add cycles_renderer.cpp unconditionally
-target_sources(sep_blender PRIVATE cycles_renderer.cpp)
+# Add Cycles renderer when available
+if(SEP_HAS_CYCLES)
+  target_sources(sep_blender PRIVATE cycles_renderer.cpp)
+endif()
 
 # Link directly against Blender's Cycles
 set(BLENDER_VERSION "5.0")
 set(BLENDER_USER_CONFIG_DIR "$ENV{HOME}/.config/blender/${BLENDER_VERSION}")
 
-# Use bundled Cycles headers
-target_include_directories(sep_blender PRIVATE
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src
-)
+# Use bundled Cycles headers when available
+if(SEP_HAS_CYCLES)
+  target_include_directories(sep_blender PRIVATE
+      ${CMAKE_SOURCE_DIR}/extern/cycles/src
+  )
+endif()
 
 target_compile_definitions(sep_blender
     PUBLIC
-        SEP_HAS_CYCLES=1
+        SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
     PRIVATE
         WITH_CYCLES_DEVICE_CUDA
 )
@@ -53,12 +57,14 @@ target_include_directories(sep_blender PRIVATE
 )
 
 # Link against Cycles libraries
-target_link_libraries(sep_blender PRIVATE
-    cycles_device
-    cycles_kernel
-    cycles_util
-    cycles_subd
-)
+if(SEP_HAS_CYCLES)
+  target_link_libraries(sep_blender PRIVATE
+      cycles_device
+      cycles_kernel
+      cycles_util
+      cycles_subd
+  )
+endif()
 
 # Set library properties
 set_target_properties(sep_blender PROPERTIES
@@ -74,5 +80,9 @@ target_include_directories(sep_blender
         ${CMAKE_SOURCE_DIR}/extern
         ${CMAKE_SOURCE_DIR}/extern/glm
         ${CMAKE_SOURCE_DIR}/extern/eigen
-        ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
+if(SEP_HAS_CYCLES)
+  target_include_directories(sep_blender PUBLIC
+      ${CMAKE_SOURCE_DIR}/extern/cycles/src
+  )
+endif()

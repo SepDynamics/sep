@@ -65,7 +65,7 @@ if [[ "$SOURCE_FILE" == *.cu ]]; then
         -o "$OUTPUT_FILE"
         "${INCLUDES[@]}"
         "${DEFINES[@]}"
-        -std=c++20
+        -std=c++17
         --compiler-bindir=/usr/bin/g++-14
     )
 
@@ -112,6 +112,6 @@ else # For C++ files (not .cu)
         "${INCLUDES[@]}" \
         "${DEFINES[@]}" \
         "${FLAGS[@]}" \
-        -std=c++20 \
+        -std=c++17 \
         -fPIC
 fi

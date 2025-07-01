@@ -116,10 +116,6 @@ if(OSL_INCLUDE_DIR)
     string(REGEX REPLACE ".*#define[ \t]+OSL_LIBRARY_VERSION_PATCH[ \t]+([.0-9]+).*"
            "\\1" OSL_LIBRARY_VERSION_PATCH ${OSL_LIBRARY_VERSION_PATCH})
     set(OSL_VERSION "${OSL_LIBRARY_VERSION_MAJOR}.${OSL_LIBRARY_VERSION_MINOR}.${OSL_LIBRARY_VERSION_PATCH}")
-  else()
-    # Fallback when the version header is missing. Allows configuration to
-    # proceed on systems that provide the libraries but not the header.
-    set(OSL_VERSION "0.0.0")
   endif()
 endif()
 

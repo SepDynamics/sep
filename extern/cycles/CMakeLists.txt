@@ -127,7 +127,7 @@ set(WITH_CYCLES_NATIVE_ONLY OFF CACHE BOOL "Build Cycles with all kernels" FORCE
 set(WITH_CYCLES_STANDALONE_GUI ON CACHE BOOL "Build Cycles standalone with GUI" FORCE)
 
 # Force Python version
-set(PYTHON_VERSION "3.11" CACHE STRING "Python version" FORCE)
+set(PYTHON_VERSION "3.12" CACHE STRING "Python version" FORCE)
 string(REPLACE "." "" PYTHON_VERSION_NO_DOTS ${PYTHON_VERSION})
 set(Boost_PYTHON_VERSION ${PYTHON_VERSION})
 

@@ -323,7 +323,7 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
 
     } catch (const std::exception& e) {
         ::sep::core::ErrorHandler::instance().reportError(
-            {sep::SEPResult::INTERNAL_ERROR, e.what(), "Engine::process_batch"}
+            {sep::SEPResult::PROCESSING_ERROR, e.what(), "Engine::process_batch"}
         );
         return;
     }

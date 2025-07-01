@@ -143,45 +143,45 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Generating done (0.1s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
 [  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
 [ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 16%] Linking CXX static library libsep_core.a
 [ 16%] Built target sep_core
-[ 16%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
 [ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [ 27%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
 [ 27%] Linking CXX static library libsep_compat.a
 [ 27%] Built target sep_compat
-[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 27%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 27%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 27%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
 [ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
 [ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
-[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
 [ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 50%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 61%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 61%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
 [ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
 [ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
@@ -190,107 +190,67 @@ Building SEP Engine...
 [ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 [ 72%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 [ 72%] Linking CXX static library libsep_audio.a
-[ 72%] Built target sep_audio
 In file included from /sep/src/blender/cycles_renderer.cpp:1:
-/sep/include/blender/cycles_renderer.h:42:17: error: redeclaration of ‘int sep::blender::ccl::CyclesRenderer::width_’
-   42 |     int width_{0};
-      |                 ^
-/sep/include/blender/cycles_renderer.h:37:9: note: previous declaration ‘int sep::blender::ccl::CyclesRenderer::width_’
-   37 |     int width_{0};
-      |         ^~~~~~
-/sep/include/blender/cycles_renderer.h:43:18: error: redeclaration of ‘int sep::blender::ccl::CyclesRenderer::height_’
-   43 |     int height_{0};
-      |                  ^
-/sep/include/blender/cycles_renderer.h:38:9: note: previous declaration ‘int sep::blender::ccl::CyclesRenderer::height_’
-   38 |     int height_{0};
-      |         ^~~~~~~
-/sep/include/blender/cycles_renderer.h:51:17: error: redeclaration of ‘int sep::blender::ccl::CyclesRenderer::width_’
-   51 |     int width_{0};
-      |                 ^
-/sep/include/blender/cycles_renderer.h:37:9: note: previous declaration ‘int sep::blender::ccl::CyclesRenderer::width_’
-   37 |     int width_{0};
-      |         ^~~~~~
-/sep/include/blender/cycles_renderer.h:52:18: error: redeclaration of ‘int sep::blender::ccl::CyclesRenderer::height_’
-   52 |     int height_{0};
-      |                  ^
-/sep/include/blender/cycles_renderer.h:38:9: note: previous declaration ‘int sep::blender::ccl::CyclesRenderer::height_’
-   38 |     int height_{0};
-      |         ^~~~~~~
-/sep/include/blender/cycles_renderer.h:55:17: error: redeclaration of ‘int sep::blender::ccl::CyclesRenderer::width_’
-   55 |     int width_{0};
-      |                 ^
-/sep/include/blender/cycles_renderer.h:37:9: note: previous declaration ‘int sep::blender::ccl::CyclesRenderer::width_’
-   37 |     int width_{0};
-      |         ^~~~~~
-/sep/include/blender/cycles_renderer.h:56:18: error: redeclaration of ‘int sep::blender::ccl::CyclesRenderer::height_’
-   56 |     int height_{0};
-      |                  ^
-/sep/include/blender/cycles_renderer.h:38:9: note: previous declaration ‘int sep::blender::ccl::CyclesRenderer::height_’
-   38 |     int height_{0};
-      |         ^~~~~~~
+/sep/include/blender/cycles_renderer.h:46:35: error: redeclaration of ‘sep::blender::ccl::CyclesRenderer::ScenePtr sep::blender::ccl::CyclesRenderer::cycles_scene_’
+   46 |     ScenePtr cycles_scene_{nullptr};
+      |                                   ^
+/sep/include/blender/cycles_renderer.h:44:35: note: previous declaration ‘std::unique_ptr<ccl::Scene> sep::blender::ccl::CyclesRenderer::cycles_scene_’
+   44 |     std::unique_ptr<::ccl::Scene> cycles_scene_;
+      |                                   ^~~~~~~~~~~~~
+/sep/include/blender/cycles_renderer.h:50:35: error: redeclaration of ‘std::unique_ptr<ccl::Scene> sep::blender::ccl::CyclesRenderer::cycles_scene_’
+   50 |     std::unique_ptr<::ccl::Scene> cycles_scene_;
+      |                                   ^~~~~~~~~~~~~
+/sep/include/blender/cycles_renderer.h:44:35: note: previous declaration ‘std::unique_ptr<ccl::Scene> sep::blender::ccl::CyclesRenderer::cycles_scene_’
+   44 |     std::unique_ptr<::ccl::Scene> cycles_scene_;
+      |                                   ^~~~~~~~~~~~~
+In file included from /sep/src/blender/cycles_renderer.cpp:27:
+/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: error: redefinition of ‘class ccl::OIIOOutputDriver’
+   13 | class OIIOOutputDriver : public OutputDriver {
+      |       ^~~~~~~~~~~~~~~~
+In file included from /sep/src/blender/cycles_renderer.cpp:15:
+/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: note: previous definition of ‘class ccl::OIIOOutputDriver’
+   13 | class OIIOOutputDriver : public OutputDriver {
+      |       ^~~~~~~~~~~~~~~~
+In file included from /sep/src/blender/cycles_renderer.cpp:31:
+/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: error: redefinition of ‘class ccl::OIIOOutputDriver’
+   13 | class OIIOOutputDriver : public OutputDriver {
+      |       ^~~~~~~~~~~~~~~~
+/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: note: previous definition of ‘class ccl::OIIOOutputDriver’
+   13 | class OIIOOutputDriver : public OutputDriver {
+      |       ^~~~~~~~~~~~~~~~
+In file included from /sep/src/blender/cycles_renderer.cpp:33:
+/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: error: redefinition of ‘class ccl::OIIOOutputDriver’
+   13 | class OIIOOutputDriver : public OutputDriver {
+      |       ^~~~~~~~~~~~~~~~
+/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: note: previous definition of ‘class ccl::OIIOOutputDriver’
+   13 | class OIIOOutputDriver : public OutputDriver {
+      |       ^~~~~~~~~~~~~~~~
 /sep/src/blender/cycles_renderer.cpp: In member function ‘bool sep::blender::ccl::CyclesRenderer::render(const std::string&)’:
-/sep/src/blender/cycles_renderer.cpp:131:22: error: no match for ‘operator=’ (operand types are ‘std::unique_ptr<ccl::Scene>’ and ‘ccl::Scene*’)
-  131 |     session->scene = cycles_scene_;
-      |                      ^~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:137:40: error: no match for ‘operator=’ (operand types are ‘std::unique_ptr<ccl::Scene>’ and ‘std::unique_ptr<ccl::Scene>::pointer’ {aka ‘ccl::Scene*’})
+  137 |     session->scene = cycles_scene_.get();
+      |                                        ^
 In file included from /usr/include/c++/14/memory:78,
                  from /sep/include/blender/cycles_renderer.h:4:
 /usr/include/c++/14/bits/unique_ptr.h:425:9: note: candidate: ‘template<class _Up, class _Ep> typename std::enable_if<std::__and_<std::__and_<std::is_convertible<typename std::unique_ptr<_Up, _Ep>::pointer, typename std::__uniq_ptr_impl<_Tp, _Dp>::pointer>, std::__not_<std::is_array<_Up> > >, std::is_assignable<_T2&, _U2&&> >::value, std::unique_ptr<_Tp, _Dp>&>::type std::unique_ptr<_Tp, _Dp>::operator=(std::unique_ptr<_Up, _Ep>&&) [with _Ep = _Up; _Tp = ccl::Scene; _Dp = std::default_delete<ccl::Scene>]’
   425 |         operator=(unique_ptr<_Up, _Ep>&& __u) noexcept
       |         ^~~~~~~~
 /usr/include/c++/14/bits/unique_ptr.h:425:9: note:   template argument deduction/substitution failed:
-/sep/src/blender/cycles_renderer.cpp:131:22: note:   mismatched types ‘std::unique_ptr<_Tp, _Dp>’ and ‘ccl::Scene*’
-  131 |     session->scene = cycles_scene_;
-      |                      ^~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:137:40: note:   mismatched types ‘std::unique_ptr<_Tp, _Dp>’ and ‘std::unique_ptr<ccl::Scene>::pointer’ {aka ‘ccl::Scene*’}
+  137 |     session->scene = cycles_scene_.get();
+      |                                        ^
 /usr/include/c++/14/bits/unique_ptr.h:409:19: note: candidate: ‘std::unique_ptr<_Tp, _Dp>& std::unique_ptr<_Tp, _Dp>::operator=(std::unique_ptr<_Tp, _Dp>&&) [with _Tp = ccl::Scene; _Dp = std::default_delete<ccl::Scene>]’
   409 |       unique_ptr& operator=(unique_ptr&&) = default;
       |                   ^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:409:29: note:   no known conversion for argument 1 from ‘ccl::Scene*’ to ‘std::unique_ptr<ccl::Scene>&&’
+/usr/include/c++/14/bits/unique_ptr.h:409:29: note:   no known conversion for argument 1 from ‘std::unique_ptr<ccl::Scene>::pointer’ {aka ‘ccl::Scene*’} to ‘std::unique_ptr<ccl::Scene>&&’
   409 |       unique_ptr& operator=(unique_ptr&&) = default;
       |                             ^~~~~~~~~~~~
 /usr/include/c++/14/bits/unique_ptr.h:435:7: note: candidate: ‘std::unique_ptr<_Tp, _Dp>& std::unique_ptr<_Tp, _Dp>::operator=(std::nullptr_t) [with _Tp = ccl::Scene; _Dp = std::default_delete<ccl::Scene>; std::nullptr_t = std::nullptr_t]’
   435 |       operator=(nullptr_t) noexcept
       |       ^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:435:17: note:   no known conversion for argument 1 from ‘ccl::Scene*’ to ‘std::nullptr_t’
+/usr/include/c++/14/bits/unique_ptr.h:435:17: note:   no known conversion for argument 1 from ‘std::unique_ptr<ccl::Scene>::pointer’ {aka ‘ccl::Scene*’} to ‘std::nullptr_t’
   435 |       operator=(nullptr_t) noexcept
       |                 ^~~~~~~~~
-/sep/src/blender/cycles_renderer.cpp:138:12: error: ‘ImageFormat’ is not a member of ‘ccl’
-  138 |     ::ccl::ImageFormat format;
-      |            ^~~~~~~~~~~
-/sep/src/blender/cycles_renderer.cpp:139:5: error: ‘format’ was not declared in this scope
-  139 |     format.width = cycles_scene_->camera->get_full_width();
-      |     ^~~~~~
-/sep/src/blender/cycles_renderer.cpp:139:5: note: suggested alternatives:
-In file included from /usr/include/OpenImageIO/detail/fmt.h:66,
-                 from /usr/include/OpenImageIO/string_view.h:20,
-                 from /usr/include/OpenImageIO/attrdelegate.h:12,
-                 from /usr/include/OpenImageIO/paramlist.h:17,
-                 from /sep/extern/cycles/src/util/param.h:10,
-                 from /sep/extern/cycles/src/graph/node_enum.h:8,
-                 from /sep/extern/cycles/src/graph/node_type.h:7,
-                 from /sep/extern/cycles/src/graph/node.h:9,
-                 from /sep/extern/cycles/src/device/denoise.h:7,
-                 from /sep/extern/cycles/src/device/device.h:12,
-                 from /sep/extern/cycles/src/scene/devicescene.h:9,
-                 from /sep/extern/cycles/src/scene/scene.h:9,
-                 from /sep/include/blender/cycles_compat.h:22,
-                 from /sep/include/blender/cycles_renderer.h:8:
-/usr/include/OpenImageIO/detail/fmt/format.h:4188:31: note:   ‘fmt::v11::format’
- 4188 | FMT_NODISCARD FMT_INLINE auto format(format_string<T...> fmt, T&&... args)
-      |                               ^~~~~~
-In file included from /usr/include/OpenImageIO/typedesc.h:29,
-                 from /usr/include/OpenImageIO/attrdelegate.h:13:
-/usr/include/OpenImageIO/strutil.h:137:20: note:   ‘OpenImageIO_v2_5::Strutil::old::format’
-  137 | inline std::string format (const char* fmt, const Args&... args)
-      |                    ^~~~~~
-/usr/include/OpenImageIO/strutil.h:128:20: note:   ‘OpenImageIO_v2_5::Strutil::fmt::format’
-  128 | inline std::string format(const Str& fmt, Args&&... args)
-      |                    ^~~~~~
-/usr/include/OpenImageIO/strutil.h:146:20: note:   ‘OpenImageIO_v2_5::Strutil::old::format’
-  146 | inline std::string format (string_view fmt, const Args&... args)
-      |                    ^~~~~~
-/sep/src/blender/cycles_renderer.cpp:144:14: error: ‘class ccl::Session’ has no member named ‘write_render_tile’
-  144 |     session->write_render_tile(filepath.c_str(), &format);
-      |              ^~~~~~~~~~~~~~~~~
+[ 72%] Built target sep_audio
 make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:191: src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o] Error 1
 make[1]: *** [CMakeFiles/Makefile2:1478: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
 make[1]: *** Waiting for unfinished jobs....

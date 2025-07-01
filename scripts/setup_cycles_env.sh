@@ -23,11 +23,12 @@ mkdir -p /sep/cycles-build
 mkdir -p /sep/cycles-install
 
 # Set up environment variables for all dependencies (keep as is, they look mostly correct)
-export PYTHONPATH=/usr/lib/python3.11/site-packages
-export PYTHON_INCLUDE_DIR=/usr/include/python3.11
-export PYTHON_LIBRARY=/usr/lib64/libpython3.11.so
+PY_VER=$(python3 -c 'import sys;print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+export PYTHONPATH="/usr/lib/python${PY_VER}/site-packages"
+export PYTHON_INCLUDE_DIR="/usr/include/python${PY_VER}"
+export PYTHON_LIBRARY="/usr/lib64/libpython${PY_VER}.so"
 export PYTHON_LIBPATH=/usr/lib64
-export PYTHON_INCLUDE_CONFIG_DIR=/usr/include/python3.11
+export PYTHON_INCLUDE_CONFIG_DIR="/usr/include/python${PY_VER}"
 
 # Set up zlib
 export ZLIB_INCLUDE_DIR=/usr/include
@@ -332,7 +333,7 @@ cmake -S "${REPO_ROOT}/extern/cycles" -B . \
   -DWITH_CYCLES_STANDALONE_GUI=OFF \
   -DWITH_PYTHON_INSTALL=ON \
   -DWITH_PYTHON_MODULE=ON \
-  -DPYTHON_VERSION=3.11 \
+  -DPYTHON_VERSION=${PY_VER} \
   -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} \
   -DPYTHON_LIBRARY=${PYTHON_LIBRARY} \
   -DPYTHON_LIBPATH=${PYTHON_LIBPATH} \

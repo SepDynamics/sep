@@ -2,6 +2,8 @@
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
+#include "compat/cycles.h"
+#include <memory>
 
 namespace sep {
 namespace blender {
@@ -20,9 +22,12 @@ SEPResult CyclesRenderer::initialize() {
         return SEPResult::FEATURE_UNAVAILABLE;
     }
     try {
-        initialized_ = true;
 #ifdef SEP_HAS_CYCLES
-        cycles_scene_ = new ::ccl::Scene();
+        ::ccl::SceneParams scene_params;
+        initialized_ = true;
+        cycles_scene_ = new ::ccl::Scene(scene_params, nullptr);
+#else
+        initialized_ = true;
 #endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
@@ -93,12 +98,12 @@ bool CyclesRenderer::render(const std::string& filepath) {
 
 #ifdef SEP_HAS_CYCLES
     // Initialize session
-    ccl::SessionParams session_params;
+    ::ccl::SessionParams session_params;
     session_params.progressive = true;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
     
-    ccl::Session *session = new ccl::Session(session_params);
+    ::ccl::Session *session = new ::ccl::Session(session_params);
     session->scene = cycles_scene_;
 
     // Start render
@@ -106,10 +111,10 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session->wait();
 
     // Save render result
-    ccl::ImageFormat format;
+    ::ccl::ImageFormat format;
     format.width = cycles_scene_->params.width;
     format.height = cycles_scene_->params.height;
-    format.type = ccl::IMAGE_DATA_TYPE_FLOAT;
+    format.type = ::ccl::IMAGE_DATA_TYPE_FLOAT;
     format.channels = 4;
 
     session->write_render_tile(filepath.c_str(), &format);
@@ -138,7 +143,7 @@ void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& patte
     mesh->attributes.add(::ccl::ATTR_STD_UV, "uvmap");
     
     // Add mesh to scene
-    cycles_scene_->geometry.push_back(mesh);
+    cycles_scene_->geometry.push_back(std::unique_ptr<::ccl::Geometry>(mesh));
 }
 
 void CyclesRenderer::convertPatternToMesh(const pattern::PatternData& pattern,

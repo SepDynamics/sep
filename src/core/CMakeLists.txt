@@ -11,6 +11,8 @@ add_library(sep_core
     metrics_collector.cpp
     engine.cpp
     logging.cpp
+    error_handler.cpp
+    dag_graph.cpp
 )
 
 # Link dependencies
@@ -29,18 +31,17 @@ set_target_properties(sep_core PROPERTIES
 target_include_directories(sep_core
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include/api
-        ${CMAKE_SOURCE_DIR}/include/audio
-        ${CMAKE_SOURCE_DIR}/include/blender
-        ${CMAKE_SOURCE_DIR}/include/compat
-        ${CMAKE_SOURCE_DIR}/include/core
-        ${CMAKE_SOURCE_DIR}/include/crow
-        ${CMAKE_SOURCE_DIR}/include/memory
-        ${CMAKE_SOURCE_DIR}/include/quantum
-        ${CMAKE_SOURCE_DIR}/cycles/src
-        ${CMAKE_SOURCE_DIR}/extern
-        ${CMAKE_SOURCE_DIR}/extern/nlohmann
-        ${CMAKE_SOURCE_DIR}/extern/cycles/src
-        ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
-        ${CMAKE_SOURCE_DIR}/extern/eigen
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/src
+)
+
+target_link_libraries(sep_core
+    PUBLIC
+        Threads::Threads
+)
+
+# Export include directories for dependent targets
+target_include_directories(sep_core PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )

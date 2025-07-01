@@ -139,123 +139,88 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Using FFTW at: fftw3f
 -- Found hiredis: /usr/lib64/libhiredis.so
 -- Found hiredis headers: /usr/include/hiredis
--- Configuring done (3.0s)
+-- Configuring done (2.9s)
 -- Generating done (0.1s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
 [  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
 [ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 16%] Linking CXX static library libsep_core.a
 [ 16%] Built target sep_core
-[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 16%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
 [ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 16%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
 [ 27%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
 [ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [ 27%] Linking CXX static library libsep_compat.a
 [ 27%] Built target sep_compat
-[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 27%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 27%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
 [ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
 [ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 27%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
 [ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
 [ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 72%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 72%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 72%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 [ 72%] Linking CXX static library libsep_audio.a
-In file included from /sep/src/blender/cycles_renderer.cpp:1:
-/sep/include/blender/cycles_renderer.h:46:35: error: redeclaration of ‘sep::blender::ccl::CyclesRenderer::ScenePtr sep::blender::ccl::CyclesRenderer::cycles_scene_’
-   46 |     ScenePtr cycles_scene_{nullptr};
-      |                                   ^
-/sep/include/blender/cycles_renderer.h:44:35: note: previous declaration ‘std::unique_ptr<ccl::Scene> sep::blender::ccl::CyclesRenderer::cycles_scene_’
-   44 |     std::unique_ptr<::ccl::Scene> cycles_scene_;
-      |                                   ^~~~~~~~~~~~~
-/sep/include/blender/cycles_renderer.h:50:35: error: redeclaration of ‘std::unique_ptr<ccl::Scene> sep::blender::ccl::CyclesRenderer::cycles_scene_’
-   50 |     std::unique_ptr<::ccl::Scene> cycles_scene_;
-      |                                   ^~~~~~~~~~~~~
-/sep/include/blender/cycles_renderer.h:44:35: note: previous declaration ‘std::unique_ptr<ccl::Scene> sep::blender::ccl::CyclesRenderer::cycles_scene_’
-   44 |     std::unique_ptr<::ccl::Scene> cycles_scene_;
-      |                                   ^~~~~~~~~~~~~
-In file included from /sep/src/blender/cycles_renderer.cpp:27:
-/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: error: redefinition of ‘class ccl::OIIOOutputDriver’
-   13 | class OIIOOutputDriver : public OutputDriver {
-      |       ^~~~~~~~~~~~~~~~
-In file included from /sep/src/blender/cycles_renderer.cpp:15:
-/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: note: previous definition of ‘class ccl::OIIOOutputDriver’
-   13 | class OIIOOutputDriver : public OutputDriver {
-      |       ^~~~~~~~~~~~~~~~
-In file included from /sep/src/blender/cycles_renderer.cpp:31:
-/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: error: redefinition of ‘class ccl::OIIOOutputDriver’
-   13 | class OIIOOutputDriver : public OutputDriver {
-      |       ^~~~~~~~~~~~~~~~
-/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: note: previous definition of ‘class ccl::OIIOOutputDriver’
-   13 | class OIIOOutputDriver : public OutputDriver {
-      |       ^~~~~~~~~~~~~~~~
-In file included from /sep/src/blender/cycles_renderer.cpp:33:
-/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: error: redefinition of ‘class ccl::OIIOOutputDriver’
-   13 | class OIIOOutputDriver : public OutputDriver {
-      |       ^~~~~~~~~~~~~~~~
-/sep/extern/cycles/src/app/oiio_output_driver.h:13:7: note: previous definition of ‘class ccl::OIIOOutputDriver’
-   13 | class OIIOOutputDriver : public OutputDriver {
-      |       ^~~~~~~~~~~~~~~~
-/sep/src/blender/cycles_renderer.cpp: In member function ‘bool sep::blender::ccl::CyclesRenderer::render(const std::string&)’:
-/sep/src/blender/cycles_renderer.cpp:137:40: error: no match for ‘operator=’ (operand types are ‘std::unique_ptr<ccl::Scene>’ and ‘std::unique_ptr<ccl::Scene>::pointer’ {aka ‘ccl::Scene*’})
-  137 |     session->scene = cycles_scene_.get();
-      |                                        ^
-In file included from /usr/include/c++/14/memory:78,
-                 from /sep/include/blender/cycles_renderer.h:4:
-/usr/include/c++/14/bits/unique_ptr.h:425:9: note: candidate: ‘template<class _Up, class _Ep> typename std::enable_if<std::__and_<std::__and_<std::is_convertible<typename std::unique_ptr<_Up, _Ep>::pointer, typename std::__uniq_ptr_impl<_Tp, _Dp>::pointer>, std::__not_<std::is_array<_Up> > >, std::is_assignable<_T2&, _U2&&> >::value, std::unique_ptr<_Tp, _Dp>&>::type std::unique_ptr<_Tp, _Dp>::operator=(std::unique_ptr<_Up, _Ep>&&) [with _Ep = _Up; _Tp = ccl::Scene; _Dp = std::default_delete<ccl::Scene>]’
-  425 |         operator=(unique_ptr<_Up, _Ep>&& __u) noexcept
-      |         ^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:425:9: note:   template argument deduction/substitution failed:
-/sep/src/blender/cycles_renderer.cpp:137:40: note:   mismatched types ‘std::unique_ptr<_Tp, _Dp>’ and ‘std::unique_ptr<ccl::Scene>::pointer’ {aka ‘ccl::Scene*’}
-  137 |     session->scene = cycles_scene_.get();
-      |                                        ^
-/usr/include/c++/14/bits/unique_ptr.h:409:19: note: candidate: ‘std::unique_ptr<_Tp, _Dp>& std::unique_ptr<_Tp, _Dp>::operator=(std::unique_ptr<_Tp, _Dp>&&) [with _Tp = ccl::Scene; _Dp = std::default_delete<ccl::Scene>]’
-  409 |       unique_ptr& operator=(unique_ptr&&) = default;
-      |                   ^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:409:29: note:   no known conversion for argument 1 from ‘std::unique_ptr<ccl::Scene>::pointer’ {aka ‘ccl::Scene*’} to ‘std::unique_ptr<ccl::Scene>&&’
-  409 |       unique_ptr& operator=(unique_ptr&&) = default;
-      |                             ^~~~~~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:435:7: note: candidate: ‘std::unique_ptr<_Tp, _Dp>& std::unique_ptr<_Tp, _Dp>::operator=(std::nullptr_t) [with _Tp = ccl::Scene; _Dp = std::default_delete<ccl::Scene>; std::nullptr_t = std::nullptr_t]’
-  435 |       operator=(nullptr_t) noexcept
-      |       ^~~~~~~~
-/usr/include/c++/14/bits/unique_ptr.h:435:17: note:   no known conversion for argument 1 from ‘std::unique_ptr<ccl::Scene>::pointer’ {aka ‘ccl::Scene*’} to ‘std::nullptr_t’
-  435 |       operator=(nullptr_t) noexcept
-      |                 ^~~~~~~~~
 [ 72%] Built target sep_audio
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:191: src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:1478: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 77%] Linking CXX static library libsep_memory.a
-[ 77%] Built target sep_memory
-[ 77%] Linking CXX static library libsep_quantum.a
-[ 77%] Built target sep_quantum
+[ 72%] Linking CXX static library libsep_blender.a
+[ 72%] Built target sep_blender
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 94%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 94%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 94%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 94%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[100%] Linking CXX static library libsep_memory.a
+[100%] Built target sep_memory
+[100%] Linking CXX static library libsep_quantum.a
+[100%] Built target sep_quantum
+[100%] Linking CXX static library libsep_api.a
+[100%] Built target sep_api
+[100%] Building CXX object src/CMakeFiles/sep_main.dir/main.cpp.o
+[100%] Linking CXX executable sep_main
+/usr/sbin/ld: cannot find -lcycles_device: No such file or directory
+/usr/sbin/ld: cannot find -lcycles_kernel: No such file or directory
+/usr/sbin/ld: cannot find -lcycles_util: No such file or directory
+/usr/sbin/ld: cannot find -lcycles_subd: No such file or directory
+collect2: error: ld returned 1 exit status
+make[2]: *** [src/CMakeFiles/sep_main.dir/build.make:120: src/sep_main] Error 1
+make[1]: *** [CMakeFiles/Makefile2:1378: src/CMakeFiles/sep_main.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2

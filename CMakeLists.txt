@@ -18,6 +18,7 @@ find_path(NANOVDB_INCLUDE_DIR nanovdb/NanoVDB.h)
 if(NANOVDB_INCLUDE_DIR)
     message(STATUS "NanoVDB found: ${NANOVDB_INCLUDE_DIR}")
 endif()
+add_compile_definitions(WITH_NANOVDB=${WITH_NANOVDB})
 
 find_package(OpenImageDenoise QUIET)
 

@@ -41,15 +41,15 @@ set(WITH_GTESTS OFF CACHE BOOL "Disable Cycles tests" FORCE)
 
 # Add Cycles source directory with custom binary dir and target prefix
 set(CYCLES_TARGET_PREFIX "cycles_ext_" CACHE STRING "Prefix for Cycles targets")
-set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable Cycles standalone executable" FORCE)
+
+# Disable standalone executables and heavy kernel build targets from Cycles.
+set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable standalone Cycles executable" FORCE)
+set(WITH_CYCLES_STANDALONE_GUI OFF CACHE BOOL "Disable Cycles standalone GUI" FORCE)
 set(WITH_CYCLES_PRECOMPUTE OFF CACHE BOOL "Disable Cycles precompute executable" FORCE)
-set(WITH_CYCLES_CUDA_BINARIES OFF CACHE BOOL "Disable CUDA binaries" FORCE)
-set(WITH_CYCLES_HIP_BINARIES OFF CACHE BOOL "Disable HIP binaries" FORCE)
-set(WITH_CYCLES_ONEAPI_BINARIES OFF CACHE BOOL "Disable oneAPI binaries" FORCE)
-set(WITH_GTESTS OFF CACHE BOOL "Disable gtests" FORCE)
-set(BUILD_TESTING OFF CACHE BOOL "Disable tests" FORCE)
-set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Hydra delegate" FORCE)
-set(WITH_CYCLES_STANDALONE_GUI OFF CACHE BOOL "Disable Cycles GUI" FORCE)
+set(WITH_CYCLES_CUDA_BINARIES OFF CACHE BOOL "Disable precompiled CUDA kernels" FORCE)
+set(WITH_CYCLES_HIP_BINARIES OFF CACHE BOOL "Disable precompiled HIP kernels" FORCE)
+set(WITH_CYCLES_ONEAPI_BINARIES OFF CACHE BOOL "Disable precompiled oneAPI kernels" FORCE)
+
 add_subdirectory(extern/cycles ${CMAKE_BINARY_DIR}/cycles-build EXCLUDE_FROM_ALL)
 
 # Use Cycles' include directories for NanoVDB and OpenImageDenoise

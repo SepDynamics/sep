@@ -52,7 +52,6 @@ target_include_directories(sep_blender PRIVATE
     ${CMAKE_SOURCE_DIR}/extern/oidn
 )
 
-# Set compiler flags for Cycles targets
 set_target_properties(cycles_device cycles_kernel cycles_util cycles_subd PROPERTIES
     COMPILE_FLAGS "-D_LIBCPP_HAS_NO_INCOMPLETE_FORMAT -DFMT_DEPRECATED_OSTREAM"
 )

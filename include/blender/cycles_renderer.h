@@ -41,6 +41,7 @@ private:
     int width_{0};
     int height_{0};
     std::vector<pattern::PatternData> patterns_;
+    std::unique_ptr<::ccl::Scene> cycles_scene_;
 #ifdef SEP_HAS_CYCLES
     ScenePtr cycles_scene_{nullptr};
     ::ccl::Stats cycles_stats_;

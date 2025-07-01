@@ -26,6 +26,7 @@
 #  include "device/device.h"
 #  include "app/oiio_output_driver.h"
 #  include "scene/image.h"
+#  include "app/oiio_output_driver.h"
 #  include "util/vector.h"
 #  include "util/array.h"
 #  include "util/string.h"
@@ -139,8 +140,6 @@ bool CyclesRenderer::render(const std::string& filepath) {
     // Start render
     session->start();
     session->wait();
-
-
     delete session;
     return true;
 #else

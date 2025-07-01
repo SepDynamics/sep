@@ -46,6 +46,9 @@ intern/
 source/
 release/
 *.cmake
+!extern/cycles/src/cmake/**
+!extern/cycles/src/cmake/*.cmake
+!extern/cycles/cmake/cuda-toolchain.cmake
 externals/
 boost/
 !third_party/

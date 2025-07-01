@@ -1,4 +1,6 @@
-add_library(sep_memory 
+include(SetCXXStandard)
+
+add_library(sep_memory
   STATIC 
     memory_tier.cpp
     memory_tier_manager.cpp

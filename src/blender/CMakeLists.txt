@@ -1,3 +1,5 @@
+include(SetCXXStandard)
+
 add_library(sep_blender STATIC
     compression_utils.cpp
     gpu_context.cpp
@@ -52,30 +54,24 @@ set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Hydra delegate")
 set(WITH_BLENDER OFF CACHE BOOL "Disable Blender integration")
 
 # Resolve NanoVDB support once and export compile definition only once
-set(WITH_NANOVDB_DEFINE 0)
 if(WITH_NANOVDB)
     find_path(NANOVDB_INCLUDE_DIR nanovdb/NanoVDB.h)
     if(NANOVDB_INCLUDE_DIR)
         target_include_directories(sep_blender PRIVATE ${NANOVDB_INCLUDE_DIR})
-        set(WITH_NANOVDB_DEFINE 1)
     else()
         message(WARNING "NanoVDB headers not found, disabling")
     endif()
 endif()
-target_compile_definitions(sep_blender PRIVATE WITH_NANOVDB=${WITH_NANOVDB_DEFINE})
 
 # Resolve OpenImageDenoise support once and export compile definition only once
-set(WITH_OPENIMAGEDENOISE_DEFINE 0)
 if(WITH_OPENIMAGEDENOISE)
     find_path(OIDN_INCLUDE_DIR OpenImageDenoise/oidn.hpp)
     if(OIDN_INCLUDE_DIR)
         target_include_directories(sep_blender PRIVATE ${OIDN_INCLUDE_DIR})
-        set(WITH_OPENIMAGEDENOISE_DEFINE 1)
     else()
         message(WARNING "OpenImageDenoise headers not found, disabling")
     endif()
 endif()
-target_compile_definitions(sep_blender PRIVATE WITH_OPENIMAGEDENOISE=${WITH_OPENIMAGEDENOISE_DEFINE})
 
 # Build Cycles libraries
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/cycles ${CMAKE_BINARY_DIR}/extern/cycles EXCLUDE_FROM_ALL)

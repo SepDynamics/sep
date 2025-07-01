@@ -1,3 +1,5 @@
+include(SetCXXStandard)
+
 add_library(sep_api STATIC
     crow_error.cpp
     lock_free_rate_limiter.cpp

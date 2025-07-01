@@ -1,3 +1,5 @@
+include(SetCXXStandard)
+
 add_library(sep_quantum STATIC
     evolution.cpp
     pattern_evolution.cpp

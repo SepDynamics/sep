@@ -414,3 +414,14 @@ This quick reference lists each optional module, the libraries it relies on, and
 | Path Guiding       | libopenpgl                     | `SEP_HAS_OPENPGL`    |
 
 If a library cannot be located, the build system will automatically fall back to stub implementations through `component_bridge`. Ensure your `CMAKE_PREFIX_PATH` includes any custom install locations.
+
+### Initializing External Dependencies
+
+After cloning the repository run:
+
+```bash
+git submodule update --init extern/cycles
+python install_dependencies.py
+```
+
+This downloads the Cycles source and installs Python packages required by the build helpers. When configuring with CMake, check the log for `WITH_NANOVDB` and `WITH_OPENIMAGEDENOISE` to confirm optional libraries were detected.

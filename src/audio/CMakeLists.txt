@@ -1,3 +1,5 @@
+include(SetCXXStandard)
+
 add_library(sep_audio
   STATIC
     config.cpp

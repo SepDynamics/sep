@@ -48,7 +48,7 @@ void PipeWireCapture::cleanup()
         stream_ = nullptr;
     }
     if (core_)
-    { // Fix: Add missing brace // Fix: Added comment
+    { 
         pw_core_disconnect(core_);
         core_ = nullptr;
     }
@@ -374,7 +374,7 @@ void PipeWireCapture::streamProcess(void* data)
     // Update metrics
     {
         std::lock_guard<std::mutex> lock(self->mutex_);
-        self->metrics_.total_samples += n_samples; // Fix: Add semicolon // Fix: Added comment
+        self->metrics_.total_samples += n_samples; 
         self->metrics_.peak_level    = peak;
         self->metrics_.rms_level =
             sep::math::to_float(math::sqrt_safe(static_cast<double>(rms_sum / n_samples))); // Correct calculation

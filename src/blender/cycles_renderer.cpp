@@ -12,6 +12,20 @@
 #include "util/texture.h"
 #endif
 
+#ifdef SEP_HAS_CYCLES
+#  include <cmath>
+#  include <memory>
+#  include "util/math_base.h"
+#  include "scene/camera.h"
+#  include "scene/mesh.h"
+#  include "scene/scene.h"
+#  include "session/session.h"
+#  include "util/stats.h"
+#  include "util/profiling.h"
+#  include "device/device.h"
+#  include "scene/image.h"
+#endif
+
 namespace sep {
 namespace blender {
 namespace ccl {
@@ -31,9 +45,15 @@ SEPResult CyclesRenderer::initialize() {
     try {
 #ifdef SEP_HAS_CYCLES
         ::ccl::DeviceInfo device_info;
-        device_ = ::ccl::Device::create(device_info, stats_, profiler_, true);
+        cycles_device_ = ::ccl::Device::create(device_info,
+                                               cycles_stats_,
+                                               cycles_profiler_,
+                                               true);
+        if (!cycles_device_) {
+            return SEPResult::INITIALIZATION_FAILED;
+        }
         ::ccl::SceneParams scene_params;
-        cycles_scene_ = new ::ccl::Scene(scene_params, device_.get());
+        cycles_scene_ = new ::ccl::Scene(scene_params, cycles_device_.get());
 #endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
@@ -74,11 +94,12 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
             return SEPResult::NOT_INITIALIZED;
         }
 
-        // Create camera
-        ::ccl::Camera *cam = cycles_scene_->create_node<::ccl::Camera>();
-        cam->set_screen_size(params.width, params.height);
-        cam->set_fov(M_PI_4_F);
-        cycles_scene_->camera = cam;
+        // Configure camera
+        ::ccl::Camera *cam = cycles_scene_->camera;
+        if (cam) {
+            cam->set_screen_size(params.width, params.height);
+            cam->fov = 45.0f * (M_PI_F / 180.0f);
+        }
 
         // Create geometry from patterns
         for (const auto& pattern : patterns_) {
@@ -102,20 +123,19 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.progressive = true;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
-
-    ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
-    session->scene.reset(cycles_scene_);
-    cycles_scene_ = nullptr;
+    
+    ccl::Session *session = new ccl::Session(session_params, cycles_scene_->params);
+    session->scene = cycles_scene_;
 
     // Start render
     session->start();
     session->wait();
 
     // Save render result
-    ::ccl::ImageFormat format;
-    format.width = width_;
-    format.height = height_;
-    format.type = ::ccl::IMAGE_DATA_TYPE_FLOAT;
+    ccl::ImageFormat format;
+    format.width = cycles_scene_->camera->get_full_width();
+    format.height = cycles_scene_->camera->get_full_height();
+    format.type = ccl::IMAGE_DATA_TYPE_FLOAT;
     format.channels = 4;
 
     session->write_render_tile(filepath.c_str(), &format);
@@ -153,9 +173,12 @@ void CyclesRenderer::convertPatternToMesh(const pattern::PatternData& pattern,
     // Convert pattern data into mesh vertices and triangles
     // This is a simple example - you'll want to implement your own conversion logic
     float scale = 0.1f;
-    verts.push_back(::ccl::make_float3(pattern.position.x, pattern.position.y, pattern.position.z));
-    verts.push_back(::ccl::make_float3(pattern.position.x + scale, pattern.position.y, pattern.position.z));
-    verts.push_back(::ccl::make_float3(pattern.position.x, pattern.position.y + scale, pattern.position.z));
+    ::ccl::float3 base = ::ccl::make_float3(pattern.position.x,
+                                            pattern.position.y,
+                                            pattern.position.z);
+    verts.push_back(base);
+    verts.push_back(::ccl::make_float3(base.x + scale, base.y, base.z));
+    verts.push_back(::ccl::make_float3(base.x, base.y + scale, base.z));
     triangles.push_back(::ccl::make_int3(0, 1, 2));
 }
 #endif

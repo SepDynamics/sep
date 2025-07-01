@@ -22,12 +22,17 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 mkdir -p /sep/cycles-build
 mkdir -p /sep/cycles-install
 
-# Set up environment variables for all dependencies (keep as is, they look mostly correct)
-export PYTHONPATH=/usr/lib/python3.11/site-packages
-export PYTHON_INCLUDE_DIR=/usr/include/python3.11
-export PYTHON_LIBRARY=/usr/lib64/libpython3.11.so
+# Set up Python paths dynamically to match the installed version
+PY_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+export PYTHONPATH=$(python3 - <<'EOF'
+import site
+print(":".join(site.getsitepackages()))
+EOF
+)
+export PYTHON_INCLUDE_DIR=/usr/include/python${PY_VERSION}
+export PYTHON_LIBRARY=/usr/lib64/libpython${PY_VERSION}.so
 export PYTHON_LIBPATH=/usr/lib64
-export PYTHON_INCLUDE_CONFIG_DIR=/usr/include/python3.11
+export PYTHON_INCLUDE_CONFIG_DIR=/usr/include/python${PY_VERSION}
 
 # Set up zlib
 export ZLIB_INCLUDE_DIR=/usr/include
@@ -291,6 +296,12 @@ if ! cmake --build . --target install; then
 fi
 echo "OpenVDB build and install completed."
 
+# Build OpenShadingLanguage when system headers are missing
+if [ ! -f "${OSL_INCLUDE_DIR:-/usr/include/OSL}/OSL/oslversion.h" ]; then
+  echo "--- OpenShadingLanguage headers not found, building locally ---"
+  "${REPO_ROOT}/scripts/build_osl.sh"
+fi
+
 # Verify OpenVDB library existence and name
 OPENVDB_INSTALLED_LIB="/sep/extern/openvdb/install/lib/libopenvdb.so"
 if [ -f "$OPENVDB_INSTALLED_LIB" ]; then
@@ -332,7 +343,7 @@ cmake -S "${REPO_ROOT}/extern/cycles" -B . \
   -DWITH_CYCLES_STANDALONE_GUI=OFF \
   -DWITH_PYTHON_INSTALL=ON \
   -DWITH_PYTHON_MODULE=ON \
-  -DPYTHON_VERSION=3.11 \
+  -DPYTHON_VERSION=${PY_VERSION} \
   -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} \
   -DPYTHON_LIBRARY=${PYTHON_LIBRARY} \
   -DPYTHON_LIBPATH=${PYTHON_LIBPATH} \

@@ -73,8 +73,9 @@ variables set.
 
 The script defines variables including `OPENVDB_INCLUDE_DIR`,
 `OPENVDB_LIBRARY`, `OPENIMAGEIO_INCLUDE_DIR`, `OPENIMAGEIO_LIBRARY`,
-`OPENEXR_INCLUDE_DIR` and others. After executing it you can build Cycles from
-`/sep/cycles-build`:
+`OPENEXR_INCLUDE_DIR` and others. When no OpenShadingLanguage headers are found
+on the system it automatically clones and builds version `v1.13.12.0` under
+`/sep/extern/osl`. After executing it you can build Cycles from `/sep/cycles-build`:
 
 ```bash
 cd /sep/cycles-build

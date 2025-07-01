@@ -2,7 +2,7 @@
 
 #include "core/logging.h"
 #include "api/server.h"
-#include <crow.h>
+#include "crow/crow_isolation.h"
 #include <chrono>
 
 namespace sep::api {

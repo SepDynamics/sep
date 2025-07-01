@@ -43,8 +43,17 @@ enum class Status { Success = 0, Error = 1 };
 struct PinState {
     std::uint64_t state{0};
     std::uint32_t flags{0};
+    std::uint32_t pin_id{0};
+    float value{0.f};
+    float coherence{1.f};
+
+    PinState() = default;
+    PinState(std::uint64_t s, std::uint32_t f, std::uint32_t id = 0,
+             float v = 0.f, float c = 1.f)
+        : state(s), flags(f), pin_id(id), value(v), coherence(c) {}
     bool operator==(const PinState& other) const noexcept {
-        return state == other.state && flags == other.flags;
+        return state == other.state && flags == other.flags && pin_id == other.pin_id &&
+               value == other.value && coherence == other.coherence;
     }
 };
 #endif // SEP_PINSTATE_DEFINED

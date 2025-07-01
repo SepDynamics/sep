@@ -5,6 +5,7 @@
 #include "core/types.h"
 #include "core/common.h"
 #include "blender/cycles_compat.h"
+#include <memory>
 
 namespace sep {
 namespace blender {
@@ -33,6 +34,11 @@ private:
     bool initialized_{false};
     std::vector<pattern::PatternData> patterns_;
     ::ccl::Scene* cycles_scene_{nullptr};
+#ifdef SEP_HAS_CYCLES
+    ::ccl::Stats cycles_stats_;
+    ::ccl::Profiler cycles_profiler_;
+    std::unique_ptr<::ccl::Device> cycles_device_;
+#endif
 
 #ifdef SEP_HAS_CYCLES
     void createGeometryFromPattern(const pattern::PatternData& pattern);

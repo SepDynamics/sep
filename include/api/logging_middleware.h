@@ -2,7 +2,11 @@
 
 #include "core/logging.h"
 #include "api/server.h"
+#ifdef CROW_DISABLE_RTTI
+#include "crow/crow_isolation.h"
+#else
 #include <crow.h>
+#endif
 #include <chrono>
 
 namespace sep::api {

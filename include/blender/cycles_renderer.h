@@ -37,23 +37,11 @@ private:
     int width_{0};
     int height_{0};
     std::vector<pattern::PatternData> patterns_;
-    ::ccl::Scene* cycles_scene_{nullptr};
-#ifdef SEP_HAS_CYCLES
-    int width_{0};
-    int height_{0};
-#endif
 #ifdef SEP_HAS_CYCLES
     ::ccl::Stats cycles_stats_;
     ::ccl::Profiler cycles_profiler_;
     std::unique_ptr<::ccl::Device> cycles_device_;
-#endif
-
-    int width_{0};
-    int height_{0};
-
-#ifdef SEP_HAS_CYCLES
-    int width_{0};
-    int height_{0};
+    std::unique_ptr<::ccl::Scene> cycles_scene_;
 #endif
 
 #ifdef SEP_HAS_CYCLES

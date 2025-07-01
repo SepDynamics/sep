@@ -1,35 +1,14 @@
 #!/bin/bash
-set -eo pipefail
-clear
+set -euo pipefail
 
-# Source user-provided library paths if available
-if [ -f "scripts/local_env_paths.sh" ]; then
-  echo "Loading local library paths from scripts/local_env_paths.sh"
-  source scripts/local_env_paths.sh
-fi
+BUILD_DIR="cmake-make"
 
-echo "==== SEP Engine Build Script with FULL Cycles and PipeWire Support ===="
-echo "Setting up build environment with real library paths - NO STUBS!"
+# Clean previous build
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
 
-# --- Environment Setup ---
-# Determine repository root dynamically so the script works regardless
-# of where the project directory is located on disk.
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-BUILD_DIR="${REPO_ROOT}/cmake-make"
-COMPILE_COMMANDS="${BUILD_DIR}/compile_commands.json"
-SRC_DIR="${REPO_ROOT}"
-LIB_DIR="${SRC_DIR}/lib"
-CYCLES_ROOT_DIR="${SRC_DIR}/extern/cycles"
-# Resolve compilers. Use GCC/G++ 14 if available, otherwise
-# fall back to the default versions installed on the system.
-C_COMPILER="/usr/bin/gcc-14"
-CXX_COMPILER="/usr/bin/g++-14"
-if [ ! -x "$C_COMPILER" ]; then
-  C_COMPILER="/usr/bin/gcc"
-fi
-if [ ! -x "$CXX_COMPILER" ]; then
-  CXX_COMPILER="/usr/bin/g++"
-fi
+# Configure project
+cmake -S . -B "$BUILD_DIR"
 
 # Create build directory
 mkdir -p "${BUILD_DIR}"
@@ -65,6 +44,7 @@ fi
 # Clean build directory to ensure a fresh state
 echo "Cleaning build directory..."
 rm -rf "${BUILD_DIR}"
+rm -rf "${REPO_ROOT}/lib" "${REPO_ROOT}/bin"
 mkdir -p "${BUILD_DIR}"
 # Copy cmake modules needed by the project
 cp -r "${SRC_DIR}/cmake" "${BUILD_DIR}"

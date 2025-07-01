@@ -124,7 +124,6 @@ constexpr float kCollapseThreshold = 0.3f;
 } // namespace
 
 bool QuantumProcessor::isCollapsed(float coherence) const {
-    // Using a fixed threshold for now. Config value is named decoherence_rate but might not be directly used as threshold.
     return coherence < kCollapseThreshold;
 }
 

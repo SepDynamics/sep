@@ -298,8 +298,8 @@ void MetricsCollector::updateSystemMetrics() {
         
         std::lock_guard<std::mutex> lock(metrics_mutex_);
         // cast to double to avoid implicit float-to-double conversion warning
-        system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage); // Fix: Cast to double
-        system_metrics_.memory_usage_bytes = detailed.memory_usage; // Fix: Assign detailed.memory_usage
+        system_metrics_.cpu_usage_percent = static_cast<double>(detailed.cpu_usage); 
+        system_metrics_.memory_usage_bytes = detailed.memory_usage; 
         system_metrics_.gpu_memory_usage_bytes = static_cast<std::uint64_t>(detailed.gpu_memory_usage);
         system_metrics_.gpu_utilization_percent = static_cast<double>(detailed.gpu_utilization);
     }
@@ -349,8 +349,8 @@ DetailedMetrics MetricsCollector::getDetailedMetrics() const {
 void MetricsCollector::reset() {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
     performance_metrics_.clear();
-    counters_.clear();  // Fix: Clear counters_
-    gauges_.clear(); // Fix: Clear gauges_
+    counters_.clear();  
+    gauges_.clear(); 
     memory_metrics_ = MemoryMetrics{};
     system_metrics_ = SystemMetrics{};
     if (pImpl) {

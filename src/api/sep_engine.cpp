@@ -23,7 +23,7 @@
 #include "memory/memory_tier_manager.hpp"
 
 #include "core/logging.h" // Include logging header first
-#include "quantum/types.h" // For quantum::Pattern::generation // Fix: Added include
+#include "quantum/types.h" // For quantum::Pattern::generation 
 #include "compat/math_common.h" // Include math common for sqrt_safe
 
 using json = nlohmann::json;
@@ -39,7 +39,7 @@ struct SepEngine::Impl
     // Using forward declaration instead of direct dependency
     std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor;
     sep::memory::MemoryTierManager&                 memory_manager;
-    std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor; // Fix: Use correct type // Fix: Added comment
+    std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor; 
     
     // PatternEvolution is a static class, no need to instantiate
 
@@ -47,7 +47,7 @@ struct SepEngine::Impl
         : quantum_processor(sep::quantum::createQuantumProcessor({})) // Use factory function
         , memory_manager(sep::memory::MemoryTierManager::getInstance())
         , pattern_processor(std::make_unique<sep::pattern::PatternProcessor>())
-    { // Fix: Add opening brace for constructor body // Fix: Added comment
+    { 
         // MemoryTierManager uses singleton pattern; store reference for convenience
         health_metrics.startTime           = std::chrono::steady_clock::now();
         health_metrics.lastRequestTime     = std::chrono::steady_clock::now();
@@ -65,7 +65,7 @@ struct SepEngine::Impl
         health_metrics.lastResponseTime    = std::chrono::milliseconds{0};
         health_metrics.lastErrorCode       = 0;
     }
- // Fix: Add closing brace for constructor body // Fix: Added comment
+ 
 };
 
 // Static member definitions
@@ -99,12 +99,12 @@ nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
 {
     if (impl_->initialized) {
         json result;
-        result["success"] = false; // Fix: Set success to false // Fix: Added comment
+        result["success"] = false; 
         result["error"] = "Engine already initialized";
         return result;
     }
         json result;
-        result["success"] = true; // Fix: Set success to true
+        result["success"] = true; 
         result["message"] = "SEP Engine initialized successfully";
         return result;
 
@@ -126,7 +126,7 @@ nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; // Fix: Set success to false
+        result["success"] = false; 
         result["error"]   = "Engine not initialized";
         return result;
     }
@@ -190,7 +190,7 @@ nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; // Fix: Set success to false // Fix: Added comment
+        result["success"] = false; 
         result["error"]   = "Engine not initialized";
         return result;
     }
@@ -225,9 +225,9 @@ nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
             if (process_success)
             {
                 float coherence = impl_->quantum_processor->calculateCoherence(pattern, pattern);
-                // Fix: Pass correct arguments to calculateStability
+                
                 float stability = impl_->quantum_processor->calculateStability(coherence, 0.0f, 1.0f, 1.0f); // Use dummy values for history, generation, access_frequency
- // Fix: Added comment
+ 
                 // Check states using coherence values
                 bool collapsed = impl_->quantum_processor->isCollapsed(coherence);
                 bool stable    = impl_->quantum_processor->isStable(coherence);
@@ -256,7 +256,7 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; // Fix: Set success to false // Fix: Added comment
+        result["success"] = false; 
         result["error"]   = "Engine not initialized";
         return result;
     }
@@ -268,7 +268,7 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
         impl_->health_metrics.successfulRequests++;
 
         json result;
-        result["success"]       = true; // Fix: Set success to true // Fix: Added comment
+        result["success"]       = true; 
         result["valid"]         = valid;
         result["context_count"] = valid ? request_data["contexts"].size() : 0;
         return result;
@@ -278,7 +278,7 @@ nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; // Fix: Set success to false // Fix: Added comment
+        result["success"] = false; 
         result["error"]   = "Engine not initialized";
         return result;
     }
@@ -289,9 +289,9 @@ nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
     
     json history = json::array();
     const auto& patterns = impl_->pattern_processor->getPatterns();
-    for (const auto& p : patterns) { // Fix: Iterate over patterns_
+    for (const auto& p : patterns) { 
         // Apply filters if specified
-        // Fix: Add missing pattern fields
+        
         if (p.coherence >= min_coherence && p.stability >= min_stability) {
             json e;
             e["coherence"] = p.coherence;
@@ -300,7 +300,7 @@ nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
         }
     }
 
-        json result; // Fix: Initialize json object // Fix: Added comment
+        json result; 
         result["success"] = true;
         result["history"] = history;
         return result;
@@ -310,7 +310,7 @@ nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; // Fix: Set success to false // Fix: Added comment
+        result["success"] = false; 
         result["error"]   = "Engine not initialized";
         return result;
     }
@@ -331,7 +331,7 @@ nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
         impl_->health_metrics.successfulRequests++;
 
         json result;
-        result["success"]    = true; // Fix: Set success to true // Fix: Added comment
+        result["success"]    = true; 
         result["embeddings"] = embeddings;
         return result;
 }
@@ -340,7 +340,7 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; // Fix: Set success to false // Fix: Added comment
+        result["success"] = false; 
         result["error"]   = "Engine not initialized";
         return result;
     }
@@ -348,7 +348,7 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
         if (!request_data.contains("embedding1") || !request_data.contains("embedding2"))
         {
             json result;
-            result["success"] = false; // Fix: Set success to false
+            result["success"] = false; 
             result["error"]   = "Missing required embeddings";
             return result;
         }
@@ -359,7 +359,7 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
         if (emb1.size() != emb2.size())
         {
             json result;
-            result["success"] = false; // Fix: Set success to false
+            result["success"] = false; 
             result["error"]   = "Embeddings must have the same dimension";
             return result;
         }
@@ -382,7 +382,7 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
         double similarity = dot_product / (sep::math::sqrt_safe(norm1) * sep::math::sqrt_safe(norm2));
 
         json result;
-        result["success"]    = true; // Fix: Set success to true // Fix: Added comment
+        result["success"]    = true; 
         result["similarity"] = similarity;
         return result;
 }
@@ -391,8 +391,8 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
 {
     (void)request_data;  // Mark parameter as used
     if (!impl_->initialized) {
-        json result; // Fix: Initialize json object // Fix: Added comment
-        result["success"] = false; // Fix: Set success to false
+        json result; 
+        result["success"] = false; 
         result["error"]   = "Engine not initialized";
         return result;
     }
@@ -402,7 +402,7 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
         blend_result["coherence"]          = 0.75;
 
         json result;
-        result["success"] = true; // Fix: Set success to true // Fix: Added comment
+        result["success"] = true; 
         result["result"]  = blend_result;
         return result;
 }
@@ -411,7 +411,7 @@ nlohmann::json SepEngine::getHealthStatus()
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; // Fix: Set success to false // Fix: Added comment
+        result["success"] = false; 
         result["error"]   = "Engine not initialized";
         return result;
     }
@@ -423,7 +423,7 @@ nlohmann::json SepEngine::getHealthStatus()
     auto metrics_json = getMetrics(impl_->health_metrics);
 
     json result;
-    result["success"]        = true; // Fix: Set success to true // Fix: Added comment
+    result["success"]        = true; 
     result["status"]         = "healthy";
     result["uptime_seconds"] = uptime;
     result["initialized"]    = impl_->initialized;
@@ -435,7 +435,7 @@ nlohmann::json SepEngine::getMemoryMetrics()
 {
     auto& engine = SepEngine::getInstance();
     if (!engine.impl_->initialized) {
-        json result; // Fix: Initialize json object // Fix: Added comment
+        json result; 
         result["success"] = false;
         result["error"]   = "Engine not initialized";
         return result;
@@ -463,7 +463,7 @@ nlohmann::json SepEngine::getMemoryMetrics()
         memory_tiers["LTM"] = ltm_tier;
 
         json result;
-        result["success"]      = true; // Fix: Set success to true // Fix: Added comment
+        result["success"]      = true; 
         result["memory_tiers"] = memory_tiers;
         return result;
 }
@@ -472,7 +472,7 @@ nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
 {
     auto& engine = SepEngine::getInstance();
     if (!engine.impl_->initialized) {
-        json result; // Fix: Initialize json object // Fix: Added comment
+        json result; 
         result["success"] = false;
         result["error"]   = "Engine not initialized";
         return result;
@@ -502,7 +502,7 @@ nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
         memory_config["ltm_compression"] = true;
 
         json config_json;
-        config_json["api"]     = api_config; // Fix: Assign config_json // Fix: Added comment
+        config_json["api"]     = api_config; 
         config_json["quantum"] = quantum_config;
         config_json["memory"]  = memory_config;
 

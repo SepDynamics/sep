@@ -1,7 +1,7 @@
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include <algorithm>
-#include <glm/glm.hpp> // Fix: Include glm // Fix: Added comment
+#include <glm/glm.hpp> 
 #include <iterator>
 #include <memory>
 #include <numeric>

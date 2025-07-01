@@ -29,7 +29,7 @@ inline void* redisCommand(redisContext*, const char*, ...)
 }
 #endif
 // Define namespace alias to clarify that Manager is in the logging namespace
-namespace logging = sep::logging; // Fix: Namespace alias after includes
+namespace logging = sep::logging; 
 #include "memory/memory_tier_manager.hpp"
 #include <memory>
 #include <sstream>
@@ -43,7 +43,7 @@ RedisManager::Impl::Impl(const std::string& host, int port)
     : context_(nullptr), connected_(false) {
 #if SEP_HAS_HIREDIS
     auto logger = logging::Manager::getInstance().getLogger("redis");
-    context_ = redisConnect(host.c_str(), port); // Fix: Initialize context_
+    context_ = redisConnect(host.c_str(), port); 
     if (context_ == nullptr || context_->err) {
         if (logger) {
             if (context_) {

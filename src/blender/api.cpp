@@ -67,7 +67,6 @@ extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPCo
         // bridge_ptr goes out of scope and cleans up
         return static_cast<sep::SEPResult>(static_cast<int32_t>(result));
     }
-    *bridge_out = bridge_ptr.release();  // Release ownership to the caller
     return sep::SEPResult::SUCCESS;
 }
 

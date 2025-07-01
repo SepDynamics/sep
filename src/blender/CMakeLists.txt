@@ -1,5 +1,3 @@
-include(SetCXXStandard)
-
 add_library(sep_blender STATIC
     compression_utils.cpp
     gpu_context.cpp

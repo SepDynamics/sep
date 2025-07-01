@@ -3,8 +3,6 @@
 
 
 # Build sep_compat as a static library that encapsulates all CUDA functionality
-include(SetCXXStandard)
-
 # Use Cycles naming convention for feature flags
 if(WITH_NANOVDB)
     set(WITH_CYCLES_NANOVDB ${WITH_NANOVDB})

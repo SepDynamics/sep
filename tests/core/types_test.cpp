@@ -4,10 +4,10 @@
 
 // Test PinState equality operator
 TEST(TypesTest, PinStateEquality) {
-  sep::PinState a{42ULL, 7u};
-  sep::PinState b{42ULL, 7u};
-  sep::PinState c{43ULL, 7u};
-  sep::PinState d{42ULL, 8u};
+  sep::PinState a{42ULL, 7u, 1u, 1.0f, 0.9f};
+  sep::PinState b{42ULL, 7u, 1u, 1.0f, 0.9f};
+  sep::PinState c{43ULL, 7u, 2u, 1.0f, 0.9f};
+  sep::PinState d{42ULL, 8u, 1u, 1.0f, 0.9f};
 
   EXPECT_TRUE(a == b);
   EXPECT_FALSE(a == c);

@@ -21,10 +21,11 @@ endif()
 
 find_package(OpenImageDenoise QUIET)
 
+# Make custom CMake modules available
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
 # Set C++ standard
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_EXTENSIONS OFF)
+include(SetCXXStandard)
 
 # Add subdirectories for main project components
 add_subdirectory(src)

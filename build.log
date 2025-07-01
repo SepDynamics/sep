@@ -111,22 +111,6 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Performing Test _has_cxxflag_float_conversion - Success
 -- Performing Test _has_cxxflag_double_promotion
 -- Performing Test _has_cxxflag_double_promotion - Success
-CMake Warning (dev) at extern/cycles/src/cmake/macros.cmake:228 (install):
-  Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
-  "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
-  command to set the policy and suppress this warning.
-Call Stack (most recent call first):
-  extern/cycles/src/hydra/CMakeLists.txt:126 (cycles_install_libraries)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
-CMake Warning (dev) at extern/cycles/src/cmake/macros.cmake:233 (install):
-  Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
-  "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
-  command to set the policy and suppress this warning.
-Call Stack (most recent call first):
-  extern/cycles/src/hydra/CMakeLists.txt:126 (cycles_install_libraries)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
 COMPONENT = openvdb
 -- Found OpenVDB: /usr/include (found version "11.0.0") found components: openvdb
 -- OpenVDB ABI Version: 11
@@ -137,7 +121,7 @@ CMake Warning (dev) at /usr/lib64/cmake/OpenVDB/FindOpenVDB.cmake:494 (find_pack
   set the policy and suppress this warning.
 
 Call Stack (most recent call first):
-  CMakeLists.txt:39 (find_package)
+  CMakeLists.txt:65 (find_package)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
 -- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: iostreams
@@ -153,241 +137,231 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 --   Found fftw3f, version 3.3.10
 -- Using PipeWire at: pipewire-0.3
 -- Using FFTW at: fftw3f
--- No precompiled libraries found at /sep/lib/legacy/linux_x64
--- Attempting to use system libraries instead
--- Found OpenEXR: /usr/include/OpenEXR (found version "3.2") found components: OpenEXR OpenEXRUtil Iex IlmThread
--- Found OpenColorIO: /usr/lib64/libOpenColorIO.so (found version "2.4.2")
-CMake Warning (dev) at extern/cycles/src/cmake/external_libs.cmake:497 (find_package):
-  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
-  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
-  set the policy and suppress this warning.
-
-Call Stack (most recent call first):
-  extern/cycles/CMakeLists.txt:246 (include)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found suitable version "1.83.0", minimum required is "1.48") found components: iostreams filesystem regex system thread date_time wave python313
-CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
-  The package name passed to `find_package_handle_standard_args` (GLOG) does
-  not match the name of the calling package (Glog).  This can lead to
-  problems in calling code that expects `find_package` result variables
-  (e.g., `_FOUND`) to follow a certain pattern.
-Call Stack (most recent call first):
-  extern/cycles/src/cmake/Modules/FindGlog.cmake:194 (find_package_handle_standard_args)
-  extern/cycles/src/cmake/external_libs.cmake:570 (find_package)
-  extern/cycles/CMakeLists.txt:246 (include)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- No preference for use of exported gflags CMake configuration set, and no hints for include/library directories provided. Defaulting to preferring an installed/exported gflags CMake configuration if available.
--- Found installed version of gflags: /usr/lib64/cmake/gflags
--- Detected gflags version: 2.2.2
--- Fixing invalid GFLAGS_INCLUDE_DIR: '//include'
--- Set GFLAGS_INCLUDE_DIR to: '/usr/include'
--- Looking for gflags.h at: /usr/include/gflags/gflags.h
--- Reading gflags.h from: /usr/include/gflags/gflags.h
-CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
-  The package name passed to `find_package_handle_standard_args` (GFLAGS)
-  does not match the name of the calling package (Gflags).  This can lead to
-  problems in calling code that expects `find_package` result variables
-  (e.g., `_FOUND`) to follow a certain pattern.
-Call Stack (most recent call first):
-  extern/cycles/src/cmake/Modules/FindGflags.cmake:585 (find_package_handle_standard_args)
-  extern/cycles/src/cmake/external_libs.cmake:571 (find_package)
-  extern/cycles/CMakeLists.txt:246 (include)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
-COMPONENT = openvdb
--- OpenVDB ABI Version: 11
--- Found TBB: /usr/include (found version "2022.0") found components: tbb
-CMake Warning (dev) at /usr/lib64/cmake/OpenVDB/FindOpenVDB.cmake:494 (find_package):
-  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
-  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
-  set the policy and suppress this warning.
-
-Call Stack (most recent call first):
-  extern/cycles/src/cmake/external_libs.cmake:606 (find_package)
-  extern/cycles/CMakeLists.txt:246 (include)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: iostreams
--- NanoVDB not found, continuing without NanoVDB support
--- OpenImageDenoise not found, continuing without OpenImageDenoise support
--- Found TBB: /usr/include (found version "2022.0") found components: tbb tbbmalloc tbbmalloc_proxy
-CMake Error at extern/cycles/src/app/CMakeLists.txt:99 (add_executable):
-  add_executable cannot create target "cycles" because another target with
-  the same name already exists.  The existing target is an executable created
-  in source directory "/sep/extern/cycles/src/app".  See documentation for
-  policy CMP0002 for more details.
-
-
-CMake Error at extern/cycles/src/app/CMakeLists.txt:102 (target_link_libraries):
-  Attempt to add link library "cycles_device" to target "cycles" which is not
-  built in this directory.
-
-  This is allowed only when policy CMP0079 is set to NEW.
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__ab0a133d" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/bvh".  See
-  documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/bvh/CMakeLists.txt:74 (cycles_add_library)
-
-
--- Found Cycles Integrator library: /sep/lib/libcycles_integrator.a
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__35508d16" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/device".  See
-  documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/device/CMakeLists.txt:236 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__46077633" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/graph".  See
-  documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/graph/CMakeLists.txt:32 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__e5762bdc" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/integrator".
-  See documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/integrator/CMakeLists.txt:84 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/kernel/CMakeLists.txt:434 (add_executable):
-  add_executable cannot create target "zstd_compress" because another target
-  with the same name already exists.  The existing target is an executable
-  created in source directory "/sep/extern/cycles/src/kernel".  See
-  documentation for policy CMP0002 for more details.
-
-
-CMake Error at extern/cycles/src/kernel/CMakeLists.txt:437 (target_link_libraries):
-  Attempt to add link library "/usr/lib64/libzstd.so" to target
-  "zstd_compress" which is not built in this directory.
-
-  This is allowed only when policy CMP0079 is set to NEW.
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__55fc681a" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/kernel/osl".
-  See documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/kernel/osl/CMakeLists.txt:50 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/kernel/osl/shaders/CMakeLists.txt:160 (add_custom_target):
-  add_custom_target cannot create target "cycles_osl_shaders" because another
-  target with the same name already exists.  The existing target is a custom
-  target created in source directory
-  "/sep/extern/cycles/src/kernel/osl/shaders".  See documentation for policy
-  CMP0002 for more details.
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__b25ca18a" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/kernel".  See
-  documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/kernel/CMakeLists.txt:1273 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__6b26cc6d" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/scene".  See
-  documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/scene/CMakeLists.txt:164 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__8210d552" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/session".  See
-  documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/session/CMakeLists.txt:39 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__1a5ac6b4" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/subd".  See
-  documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/subd/CMakeLists.txt:37 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
-  add_library cannot create target "cycles_ext__96a37b35" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory "/sep/extern/cycles/src/util".  See
-  documentation for policy CMP0002 for more details.
-Call Stack (most recent call first):
-  extern/cycles/src/util/CMakeLists.txt:136 (cycles_add_library)
-
-
-CMake Error at extern/cycles/src/hydra/CMakeLists.txt:93 (add_library):
-  add_library cannot create target "cycles_hydra" because another target with
-  the same name already exists.  The existing target is a static library
-  created in source directory "/sep/extern/cycles/src/hydra".  See
-  documentation for policy CMP0002 for more details.
-
-
-CMake Error at extern/cycles/src/hydra/CMakeLists.txt:112 (target_link_libraries):
-  Attempt to add link library "/usr/lib64/libusd_ms.so" to target
-  "cycles_hydra" which is not built in this directory.
-
-  This is allowed only when policy CMP0079 is set to NEW.
-
-
-CMake Error at extern/cycles/third_party/cuew/CMakeLists.txt:14 (add_library):
-  add_library cannot create target "extern_cuew" because another target with
-  the same name already exists.  The existing target is a static library
-  created in source directory "/sep/extern/cycles/third_party/cuew".  See
-  documentation for policy CMP0002 for more details.
-
-
-CMake Error at extern/cycles/third_party/hipew/CMakeLists.txt:30 (add_library):
-  add_library cannot create target "extern_hipew" because another target with
-  the same name already exists.  The existing target is a static library
-  created in source directory "/sep/extern/cycles/third_party/hipew".  See
-  documentation for policy CMP0002 for more details.
-
-
-CMake Error at extern/cycles/third_party/sky/CMakeLists.txt:40 (add_library):
-  add_library cannot create target "extern_sky" because another target with
-  the same name already exists.  The existing target is a static library
-  created in source directory "/sep/extern/cycles/third_party/sky".  See
-  documentation for policy CMP0002 for more details.
-
-
-CMake Error at extern/cycles/third_party/libc_compat/CMakeLists.txt:32 (add_library):
-  add_library cannot create target "extern_libc_compat" because another
-  target with the same name already exists.  The existing target is a static
-  library created in source directory
-  "/sep/extern/cycles/third_party/libc_compat".  See documentation for policy
-  CMP0002 for more details.
-
-
-CMake Error at src/blender/CMakeLists.txt:66 (set_target_properties):
-  set_target_properties Can not find target to add properties to:
-  cycles_device
-
-
 -- Found hiredis: /usr/lib64/libhiredis.so
 -- Found hiredis headers: /usr/include/hiredis
--- Configuring incomplete, errors occurred!
+-- Configuring done (3.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: /sep/cmake-make
+Building SEP Engine...
+[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  0%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 16%] Linking CXX static library libsep_core.a
+[ 16%] Built target sep_core
+[ 16%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 27%] Linking CXX static library libsep_compat.a
+[ 27%] Built target sep_compat
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 27%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 61%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 61%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 61%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 66%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 66%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 72%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 72%] Linking CXX static library libsep_audio.a
+[ 72%] Built target sep_audio
+/sep/src/blender/cycles_renderer.cpp: In member function ‘sep::SEPResult sep::blender::ccl::CyclesRenderer::initialize()’:
+/sep/src/blender/cycles_renderer.cpp:25:42: error: no matching function for call to ‘ccl::Scene::Scene()’
+   25 |         cycles_scene_ = new ::ccl::Scene();
+      |                                          ^
+In file included from /sep/include/blender/cycles_compat.h:22,
+                 from /sep/include/blender/cycles_renderer.h:7,
+                 from /sep/src/blender/cycles_renderer.cpp:1:
+/sep/extern/cycles/src/scene/scene.h:175:3: note: candidate: ‘ccl::Scene::Scene(const ccl::SceneParams&, ccl::Device*)’
+  175 |   Scene(const SceneParams &params, Device *device);
+      |   ^~~~~
+/sep/extern/cycles/src/scene/scene.h:175:3: note:   candidate expects 2 arguments, 0 provided
+/sep/src/blender/cycles_renderer.cpp: In member function ‘sep::SEPResult sep::blender::ccl::CyclesRenderer::renderScene(const RenderParams&)’:
+/sep/src/blender/cycles_renderer.cpp:65:31: error: ‘class ccl::SceneParams’ has no member named ‘width’
+   65 |         cycles_scene_->params.width = params.width;
+      |                               ^~~~~
+/sep/src/blender/cycles_renderer.cpp:66:31: error: ‘class ccl::SceneParams’ has no member named ‘height’
+   66 |         cycles_scene_->params.height = params.height;
+      |                               ^~~~~~
+/sep/src/blender/cycles_renderer.cpp:67:31: error: ‘class ccl::SceneParams’ has no member named ‘samples’
+   67 |         cycles_scene_->params.samples = params.samples;
+      |                               ^~~~~~~
+/sep/src/blender/cycles_renderer.cpp:69:31: error: ‘class ccl::SceneParams’ has no member named ‘progressive’
+   69 |         cycles_scene_->params.progressive = true;
+      |                               ^~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:72:48: error: invalid use of incomplete type ‘class ccl::Camera’
+   72 |         ::ccl::Camera *cam = new ::ccl::Camera();
+      |                                                ^
+/sep/extern/cycles/src/scene/scene.h:26:7: note: forward declaration of ‘class ccl::Camera’
+   26 | class Camera;
+      |       ^~~~~~
+/sep/src/blender/cycles_renderer.cpp:73:12: error: invalid use of incomplete type ‘class ccl::Camera’
+   73 |         cam->width = params.width;
+      |            ^~
+/sep/extern/cycles/src/scene/scene.h:26:7: note: forward declaration of ‘class ccl::Camera’
+   26 | class Camera;
+      |       ^~~~~~
+/sep/src/blender/cycles_renderer.cpp:74:12: error: invalid use of incomplete type ‘class ccl::Camera’
+   74 |         cam->height = params.height;
+      |            ^~
+/sep/extern/cycles/src/scene/scene.h:26:7: note: forward declaration of ‘class ccl::Camera’
+   26 | class Camera;
+      |       ^~~~~~
+/sep/src/blender/cycles_renderer.cpp:75:12: error: invalid use of incomplete type ‘class ccl::Camera’
+   75 |         cam->fov = 45.0f;
+      |            ^~
+/sep/extern/cycles/src/scene/scene.h:26:7: note: forward declaration of ‘class ccl::Camera’
+   26 | class Camera;
+      |       ^~~~~~
+/sep/src/blender/cycles_renderer.cpp: In member function ‘bool sep::blender::ccl::CyclesRenderer::render(const std::string&)’:
+/sep/src/blender/cycles_renderer.cpp:96:10: error: ‘SessionParams’ is not a member of ‘sep::blender::ccl’; did you mean ‘ccl::SessionParams’?
+   96 |     ccl::SessionParams session_params;
+      |          ^~~~~~~~~~~~~
+In file included from /sep/include/blender/cycles_compat.h:23:
+/sep/extern/cycles/src/session/session.h:36:7: note: ‘ccl::SessionParams’ declared here
+   36 | class SessionParams {
+      |       ^~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:97:5: error: ‘session_params’ was not declared in this scope
+   97 |     session_params.progressive = true;
+      |     ^~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:101:10: error: ‘Session’ is not a member of ‘sep::blender::ccl’; did you mean ‘ccl::Session’?
+  101 |     ccl::Session *session = new ccl::Session(session_params);
+      |          ^~~~~~~
+/sep/extern/cycles/src/session/session.h:112:7: note: ‘ccl::Session’ declared here
+  112 | class Session {
+      |       ^~~~~~~
+/sep/src/blender/cycles_renderer.cpp:101:19: error: ‘session’ was not declared in this scope
+  101 |     ccl::Session *session = new ccl::Session(session_params);
+      |                   ^~~~~~~
+/sep/src/blender/cycles_renderer.cpp:101:33: error: expected type-specifier
+  101 |     ccl::Session *session = new ccl::Session(session_params);
+      |                                 ^~~
+/sep/src/blender/cycles_renderer.cpp:109:10: error: ‘ImageFormat’ is not a member of ‘sep::blender::ccl’
+  109 |     ccl::ImageFormat format;
+      |          ^~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:110:5: error: ‘format’ was not declared in this scope
+  110 |     format.width = cycles_scene_->params.width;
+      |     ^~~~~~
+/sep/src/blender/cycles_renderer.cpp:110:5: note: suggested alternatives:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66,
+                 from /usr/include/OpenImageIO/string_view.h:20,
+                 from /usr/include/OpenImageIO/attrdelegate.h:12,
+                 from /usr/include/OpenImageIO/paramlist.h:17,
+                 from /sep/extern/cycles/src/util/param.h:10,
+                 from /sep/extern/cycles/src/graph/node_enum.h:8,
+                 from /sep/extern/cycles/src/graph/node_type.h:7,
+                 from /sep/extern/cycles/src/graph/node.h:9,
+                 from /sep/extern/cycles/src/device/denoise.h:7,
+                 from /sep/extern/cycles/src/device/device.h:12,
+                 from /sep/extern/cycles/src/scene/devicescene.h:9,
+                 from /sep/extern/cycles/src/scene/scene.h:9:
+/usr/include/OpenImageIO/detail/fmt/format.h:4188:31: note:   ‘fmt::v11::format’
+ 4188 | FMT_NODISCARD FMT_INLINE auto format(format_string<T...> fmt, T&&... args)
+      |                               ^~~~~~
+In file included from /usr/include/OpenImageIO/typedesc.h:29,
+                 from /usr/include/OpenImageIO/attrdelegate.h:13:
+/usr/include/OpenImageIO/strutil.h:137:20: note:   ‘OpenImageIO_v2_5::Strutil::old::format’
+  137 | inline std::string format (const char* fmt, const Args&... args)
+      |                    ^~~~~~
+/usr/include/OpenImageIO/strutil.h:128:20: note:   ‘OpenImageIO_v2_5::Strutil::fmt::format’
+  128 | inline std::string format(const Str& fmt, Args&&... args)
+      |                    ^~~~~~
+/usr/include/OpenImageIO/strutil.h:146:20: note:   ‘OpenImageIO_v2_5::Strutil::old::format’
+  146 | inline std::string format (string_view fmt, const Args&... args)
+      |                    ^~~~~~
+/sep/src/blender/cycles_renderer.cpp:110:42: error: ‘class ccl::SceneParams’ has no member named ‘width’
+  110 |     format.width = cycles_scene_->params.width;
+      |                                          ^~~~~
+/sep/src/blender/cycles_renderer.cpp:111:43: error: ‘class ccl::SceneParams’ has no member named ‘height’
+  111 |     format.height = cycles_scene_->params.height;
+      |                                           ^~~~~~
+/sep/src/blender/cycles_renderer.cpp:112:24: error: ‘IMAGE_DATA_TYPE_FLOAT’ is not a member of ‘sep::blender::ccl’; did you mean ‘ccl::IMAGE_DATA_TYPE_FLOAT’?
+  112 |     format.type = ccl::IMAGE_DATA_TYPE_FLOAT;
+      |                        ^~~~~~~~~~~~~~~~~~~~~
+In file included from /sep/extern/cycles/src/device/memory.h:14,
+                 from /sep/extern/cycles/src/device/device.h:13:
+/sep/extern/cycles/src/device/../util/texture.h:35:3: note: ‘ccl::IMAGE_DATA_TYPE_FLOAT’ declared here
+   35 |   IMAGE_DATA_TYPE_FLOAT = 3,
+      |   ^~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:117:5: error: type ‘<type error>’ argument given to ‘delete’, expected pointer
+  117 |     delete session;
+      |     ^~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp: In member function ‘void sep::blender::ccl::CyclesRenderer::createGeometryFromPattern(const sep::pattern::PatternData&)’:
+/sep/src/blender/cycles_renderer.cpp:128:41: error: invalid use of incomplete type ‘class ccl::Mesh’
+  128 |     ::ccl::Mesh *mesh = new ::ccl::Mesh();
+      |                                         ^
+In file included from /sep/extern/cycles/src/scene/shader.h:16,
+                 from /sep/extern/cycles/src/scene/scene.h:12:
+/sep/extern/cycles/src/scene/attribute.h:26:7: note: forward declaration of ‘class ccl::Mesh’
+   26 | class Mesh;
+      |       ^~~~
+/sep/src/blender/cycles_renderer.cpp:136:9: error: invalid use of incomplete type ‘class ccl::Mesh’
+  136 |     mesh->verts = verts;
+      |         ^~
+/sep/extern/cycles/src/scene/attribute.h:26:7: note: forward declaration of ‘class ccl::Mesh’
+   26 | class Mesh;
+      |       ^~~~
+/sep/src/blender/cycles_renderer.cpp:137:9: error: invalid use of incomplete type ‘class ccl::Mesh’
+  137 |     mesh->triangles = triangles;
+      |         ^~
+/sep/extern/cycles/src/scene/attribute.h:26:7: note: forward declaration of ‘class ccl::Mesh’
+   26 | class Mesh;
+      |       ^~~~
+/sep/src/blender/cycles_renderer.cpp:138:9: error: invalid use of incomplete type ‘class ccl::Mesh’
+  138 |     mesh->attributes.add(::ccl::ATTR_STD_UV, "uvmap");
+      |         ^~
+/sep/extern/cycles/src/scene/attribute.h:26:7: note: forward declaration of ‘class ccl::Mesh’
+   26 | class Mesh;
+      |       ^~~~
+/sep/src/blender/cycles_renderer.cpp:141:39: error: cannot convert ‘ccl::Mesh*’ to ‘std::unique_ptr<ccl::Geometry, std::default_delete<ccl::Geometry> >&&’
+  141 |     cycles_scene_->geometry.push_back(mesh);
+      |                                       ^~~~
+      |                                       |
+      |                                       ccl::Mesh*
+In file included from /sep/extern/cycles/src/scene/pass.h:10,
+                 from /sep/extern/cycles/src/scene/film.h:7,
+                 from /sep/extern/cycles/src/scene/scene.h:10:
+/sep/extern/cycles/src/util/unique_ptr_vector.h:37:34: note:   initializing argument 1 of ‘void ccl::unique_ptr_vector<T>::push_back(std::unique_ptr<_Tp>&&) [with T = ccl::Geometry]’
+   37 |   void push_back(unique_ptr<T> &&value)
+      |                  ~~~~~~~~~~~~~~~~^~~~~
+/sep/src/blender/cycles_renderer.cpp: In member function ‘void sep::blender::ccl::CyclesRenderer::convertPatternToMesh(const sep::pattern::PatternData&, std::vector<ccl::float3>&, std::vector<ccl::int3>&)’:
+/sep/src/blender/cycles_renderer.cpp:150:36: error: ‘const struct sep::pattern::PatternData’ has no member named ‘data’
+  150 |     for (size_t i = 0; i < pattern.data.size(); i++) {
+      |                                    ^~~~
+/sep/src/blender/cycles_renderer.cpp:153:35: error: ‘const struct sep::pattern::PatternData’ has no member named ‘data’
+  153 |         float z = scale * pattern.data[i];
+      |                                   ^~~~
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:191: src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:1478: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 72%] Linking CXX static library libsep_quantum.a
+[ 72%] Built target sep_quantum
+[ 77%] Linking CXX static library libsep_memory.a
+[ 77%] Built target sep_memory
+make: *** [Makefile:136: all] Error 2

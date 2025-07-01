@@ -60,3 +60,24 @@ ctest
 ```
 
 Refer to `STRUCTURE.md` whenever you need a reminder of where things are.
+
+## Building Cycles
+
+SEP can optionally render through Blender's Cycles engine. Building it requires
+a number of external packages such as OpenVDB, OpenImageIO, OpenEXR/Imath,
+OpenSubdiv and OpenImageDenoise. The helper script
+`scripts/setup_cycles_env.sh` exports all required environment variables, builds
+OpenVDB and then configures Cycles with CMake. Run this script after installing
+the dependencies and whenever you start a new shell that doesn't have those
+variables set.
+
+The script defines variables including `OPENVDB_INCLUDE_DIR`,
+`OPENVDB_LIBRARY`, `OPENIMAGEIO_INCLUDE_DIR`, `OPENIMAGEIO_LIBRARY`,
+`OPENEXR_INCLUDE_DIR` and others. After executing it you can build Cycles from
+`/sep/cycles-build`:
+
+```bash
+cd /sep/cycles-build
+ninja install
+```
+

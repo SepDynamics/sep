@@ -24,6 +24,7 @@
 #  include "util/stats.h"
 #  include "util/profiling.h"
 #  include "device/device.h"
+#  include "app/oiio_output_driver.h"
 #  include "scene/image.h"
 #  include "app/oiio_output_driver.h"
 #  include "util/vector.h"
@@ -131,8 +132,10 @@ bool CyclesRenderer::render(const std::string& filepath) {
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = cycles_scene_.get();
 
-    session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
-        filepath.c_str(), "combined", [](const ::ccl::string &) {}));
+    auto driver = ::ccl::make_unique<::ccl::OIIOOutputDriver>(
+        filepath.c_str(), "Combined",
+        [](const ::ccl::string &msg) { printf("%s\n", msg.c_str()); });
+    session->set_output_driver(std::move(driver));
 
     // Start render
     session->start();

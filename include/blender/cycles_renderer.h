@@ -42,6 +42,9 @@ private:
     std::unique_ptr<::ccl::Device> cycles_device_;
 #endif
 
+    int width_{0};
+    int height_{0};
+
 #ifdef SEP_HAS_CYCLES
     void createGeometryFromPattern(const pattern::PatternData& pattern);
     void convertPatternToMesh(const pattern::PatternData& pattern,

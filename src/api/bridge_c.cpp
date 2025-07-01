@@ -138,7 +138,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
 
 SEP_API sep::SEPResult sep_bridge_get_last_error(char *buffer, size_t buffer_size) {
   std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-  if (!buffer || buffer_size == 0) { // Fix: Check for null buffer or zero size
+  if (!buffer || buffer_size == 0) { 
     return sep::SEPResult::INVALID_ARGUMENT;
   }
   size_t len = std::min(sep::api::bridge::detail::g_last_error.size(), buffer_size - 1);

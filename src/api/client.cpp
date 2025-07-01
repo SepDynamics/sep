@@ -13,7 +13,7 @@ namespace sep::api {
 Client::Impl::Impl(const ClientConfig &config, std::unique_ptr<IHttpClient> httpClient)
     : config(config), httpClient(std::move(httpClient)) {
   // httpClient can be null, send operations will fail gracefully.
-  } // Fix: Add closing brace
+  } 
 
 Client::Impl::~Impl() = default;
 

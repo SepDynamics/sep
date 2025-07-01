@@ -5,7 +5,7 @@ set -e
 CODECHECKER_PORT=8001
 CODECHECKER_WORKSPACE="$PWD/.codechecker"
 REPORTS_DIR="$CODECHECKER_WORKSPACE/reports"
-COMPILE_COMMANDS="$PWD/build/compile_commands.json"
+COMPILE_COMMANDS="$PWD/cmake-make/compile_commands.json"
 OLLAMA_URL="http://localhost:11434"
 OLLAMA_MODEL="${OLLAMA_MODEL:-mxbai-embed-large}"
 EMBEDDINGS_DIR="$PWD/.embeddings"

@@ -15,7 +15,7 @@
 
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"
-#include "quantum/pattern_evolution_bridge.h" // Fix: Add include for PatternEvolutionBridge // Fix: Added comment
+#include "quantum/pattern_evolution_bridge.h" 
 #include "core/manager.h"
 
 #include <memory>
@@ -375,7 +375,7 @@ void MemoryTierManager::storeLTMToPersistence(const ::sep::quantum::Pattern& pat
 
 ::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
-    if (it == pattern_registry_.end()) { // Fix: Check for end iterator // Fix: Added comment
+    if (it == pattern_registry_.end()) { 
         return nullptr;
     }
     const sep::pattern::PatternData* data = it->second.get();

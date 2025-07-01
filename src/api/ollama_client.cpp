@@ -17,7 +17,7 @@ struct OllamaClient::Impl {
 
   Impl(const OllamaConfig &cfg)
       : config(cfg),
- client(sep::api::ClientConfig{cfg.host, // Fix: Removed excess brace // Fix: Added comment
+ client(sep::api::ClientConfig{cfg.host, 
                             std::chrono::milliseconds(5000),
                             3,
                             true,

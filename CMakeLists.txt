@@ -21,36 +21,11 @@ pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 # Set CMake policies for Cycles build
 cmake_policy(SET CMP0002 NEW)
 cmake_policy(SET CMP0079 NEW)
-# Disable unneeded components from the bundled Cycles build
-set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable Cycles standalone" FORCE)
-set(WITH_CYCLES_STANDALONE_GUI OFF CACHE BOOL "Disable Cycles GUI" FORCE)
-set(WITH_CYCLES_PRECOMPUTE OFF CACHE BOOL "Disable Cycles precompute tool" FORCE)
-set(WITH_CYCLES_CUDA_BINARIES OFF CACHE BOOL "Disable Cycles CUDA kernels" FORCE)
-set(WITH_CYCLES_HIP_BINARIES OFF CACHE BOOL "Disable Cycles HIP kernels" FORCE)
-set(WITH_CYCLES_ONEAPI_BINARIES OFF CACHE BOOL "Disable Cycles oneAPI kernels" FORCE)
-set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Cycles Hydra" FORCE)
-set(WITH_GTESTS OFF CACHE BOOL "Disable Cycles GTests" FORCE)
-set(BUILD_TESTING OFF CACHE BOOL "Disable Cycles tests" FORCE)
-
-# Disable standalone Cycles executables and tests
-set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable Cycles standalone executable" FORCE)
-set(WITH_CYCLES_STANDALONE_GUI OFF CACHE BOOL "Disable Cycles standalone GUI" FORCE)
-set(WITH_CYCLES_PRECOMPUTE OFF CACHE BOOL "Disable Cycles precompute executable" FORCE)
-set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Cycles Hydra delegate" FORCE)
-set(WITH_GTESTS OFF CACHE BOOL "Disable Cycles tests" FORCE)
-
-# Add Cycles source directory. Disable target prefixing so that the
-# library names match the upstream Cycles build which expects targets
-# like `cycles_device` and `cycles_kernel`.
+# Enable all bundled Cycles components for a full-feature build
+# The upstream Cycles build uses the standard target names (e.g. cycles_device).
+# Avoid setting a custom target prefix so the linker can locate the generated
+# libraries without additional indirection.
 set(CYCLES_TARGET_PREFIX "" CACHE STRING "Prefix for Cycles targets")
-
-# Disable standalone executables and heavy kernel build targets from Cycles.
-set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable standalone Cycles executable" FORCE)
-set(WITH_CYCLES_STANDALONE_GUI OFF CACHE BOOL "Disable Cycles standalone GUI" FORCE)
-set(WITH_CYCLES_PRECOMPUTE OFF CACHE BOOL "Disable Cycles precompute executable" FORCE)
-set(WITH_CYCLES_CUDA_BINARIES OFF CACHE BOOL "Disable precompiled CUDA kernels" FORCE)
-set(WITH_CYCLES_HIP_BINARIES OFF CACHE BOOL "Disable precompiled HIP kernels" FORCE)
-set(WITH_CYCLES_ONEAPI_BINARIES OFF CACHE BOOL "Disable precompiled oneAPI kernels" FORCE)
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/extern/cycles/CMakeLists.txt")
   add_subdirectory(extern/cycles ${CMAKE_BINARY_DIR}/cycles-build EXCLUDE_FROM_ALL)

@@ -32,6 +32,13 @@ set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Cycles Hydra" FORC
 set(WITH_GTESTS OFF CACHE BOOL "Disable Cycles GTests" FORCE)
 set(BUILD_TESTING OFF CACHE BOOL "Disable Cycles tests" FORCE)
 
+# Disable standalone Cycles executables and tests
+set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable Cycles standalone executable" FORCE)
+set(WITH_CYCLES_STANDALONE_GUI OFF CACHE BOOL "Disable Cycles standalone GUI" FORCE)
+set(WITH_CYCLES_PRECOMPUTE OFF CACHE BOOL "Disable Cycles precompute executable" FORCE)
+set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Cycles Hydra delegate" FORCE)
+set(WITH_GTESTS OFF CACHE BOOL "Disable Cycles tests" FORCE)
+
 # Add Cycles source directory with custom binary dir and target prefix
 set(CYCLES_TARGET_PREFIX "cycles_ext_" CACHE STRING "Prefix for Cycles targets")
 set(WITH_CYCLES_STANDALONE OFF CACHE BOOL "Disable Cycles standalone executable" FORCE)

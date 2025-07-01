@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <memory>
 #include "quantum/data.hpp"
 #include "core/types.h"
 #include "core/common.h"
@@ -34,6 +35,8 @@ private:
     bool initialized_{false};
     std::vector<pattern::PatternData> patterns_;
     ::ccl::Scene* cycles_scene_{nullptr};
+    std::unique_ptr<::ccl::Device> device_;
+    RenderParams last_render_params_{};
 
 #ifdef SEP_HAS_CYCLES
     void createGeometryFromPattern(const pattern::PatternData& pattern);

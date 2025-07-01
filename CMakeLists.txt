@@ -67,18 +67,6 @@ add_compile_definitions(
     SEP_HAS_CYCLES=1
 )
 
-if(NANOVDB_FOUND)
-    add_compile_definitions(WITH_NANOVDB=1)
-else()
-    add_compile_definitions(WITH_NANOVDB=0)
-endif()
-
-if(OPENIMAGEDENOISE_FOUND)
-    add_compile_definitions(WITH_OPENIMAGEDENOISE=1)
-else()
-    add_compile_definitions(WITH_OPENIMAGEDENOISE=0)
-endif()
-
 # Set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

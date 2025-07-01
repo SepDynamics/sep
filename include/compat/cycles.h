@@ -22,18 +22,10 @@
 #define CCL_NAMESPACE_USING_DIRECTIVE using namespace ccl;
 #endif
 
-// Ensure feature toggles have numeric defaults so conditional logic is robust
-#ifndef SEP_HAS_CYCLES
-#define SEP_HAS_CYCLES 0
-#endif
-#ifndef SEP_USE_CYCLES_STUB
-#define SEP_USE_CYCLES_STUB 0
-#endif
-
-// Include real Cycles headers when SEP_HAS_CYCLES is enabled and we are not
-// forcing stub implementations via SEP_USE_CYCLES_STUB. These macros are
-// typically defined through the build system but default to 0 when absent.
-#if SEP_HAS_CYCLES && !SEP_USE_CYCLES_STUB
+// Include real Cycles headers when SEP_HAS_CYCLES is explicitly set to 1
+// AND we're not specifically requesting stub implementations with SEP_USE_CYCLES_STUB
+// These are controlled by CMake and passed to the compiler
+#if defined(SEP_HAS_CYCLES) && (!defined(SEP_USE_CYCLES_STUB) || SEP_USE_CYCLES_STUB == 0)
 // Core Cycles headers - use relative paths for portability
 #include "../extern/cycles/src/scene/scene.h"
 #include "../extern/cycles/src/session/session.h"

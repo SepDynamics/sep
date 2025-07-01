@@ -158,20 +158,24 @@ void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& patte
     std::vector<::ccl::float3> verts;
     std::vector<::ccl::int3> triangles;
     convertPatternToMesh(pattern, verts, triangles);
-    
+
     // Add vertices and faces to mesh
-    ::ccl::array<::ccl::float3> cverts(verts.size());
-    if (!verts.empty()) {
-        memcpy(cverts.data(), verts.data(), verts.size() * sizeof(::ccl::float3));
-    }
-    mesh->set_verts(cverts);
+    ::ccl::vector<::ccl::float3> verts_vec(verts.begin(), verts.end());
+    ::ccl::array<::ccl::float3> verts_array;
+    verts_array = verts_vec;
 
-    ::ccl::array<int> ctris(triangles.size() * 3);
-    if (!triangles.empty()) {
-        memcpy(ctris.data(), triangles.data(), triangles.size() * sizeof(::ccl::int3));
+    ::ccl::vector<int> tri_flat;
+    tri_flat.reserve(triangles.size() * 3);
+    for (const auto &t : triangles) {
+        tri_flat.push_back(t.x);
+        tri_flat.push_back(t.y);
+        tri_flat.push_back(t.z);
     }
-    mesh->set_triangles(ctris);
+    ::ccl::array<int> tri_array;
+    tri_array = tri_flat;
 
+    mesh->set_verts(verts_array);
+    mesh->set_triangles(tri_array);
     mesh->attributes.add(::ccl::ATTR_STD_UV, ::ccl::ustring("uvmap"));
     
     // Add mesh to scene

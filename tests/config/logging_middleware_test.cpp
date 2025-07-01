@@ -1,7 +1,11 @@
 #include "api/server.h"
 #include <logging/manager.h>
 #include <gtest/gtest.h>
+#ifdef CROW_DISABLE_RTTI
+#include "crow/crow_isolation.h"
+#else
 #include <crow.h>
+#endif
 #include <chrono>
 #include <thread>
 

@@ -10,6 +10,7 @@
 #include "session/session.h"
 #include "util/math_base.h"
 #include "util/texture.h"
+#include "util/param.h"
 #endif
 
 #ifdef SEP_HAS_CYCLES
@@ -125,6 +126,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     ::ccl::SessionParams session_params;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
+    
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = cycles_scene_;
 

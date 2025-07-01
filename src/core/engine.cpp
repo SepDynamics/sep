@@ -284,17 +284,31 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
         }
 
         // Update results from device buffers
-        qbsa_result.corrections = impl_->d_corrections_;
-        qbsa_result.correction_ratio = static_cast<float>(impl_->d_correction_count_[0]) / inputs.size();
+        qbsa_result.corrections.assign(
+            impl_->d_corrections_.begin(),
+            impl_->d_corrections_.end());
+        qbsa_result.correction_ratio =
+            static_cast<float>(impl_->d_correction_count_[0]) /
+            inputs.size();
         qbsa_result.collapse_detected = impl_->d_correction_count_[0] > 0;
 
-        qsh_result.collapse_indices = impl_->d_collapse_indices_;
-        qsh_result.collapse_counts = impl_->d_collapse_counts_;
-        qsh_result.total_collapses = std::accumulate(
+        // Reconstruct nested collapse indices using counts
+        qsh_result.collapse_indices.clear();
+        qsh_result.collapse_indices.resize(inputs.size());
+        for (std::size_t i = 0; i < inputs.size(); ++i) {
+            const std::uint32_t count = impl_->d_collapse_counts_[i];
+            const std::size_t base = i * PAIRS_PER_CHUNK;
+            qsh_result.collapse_indices[i].assign(
+                impl_->d_collapse_indices_.begin() + base,
+                impl_->d_collapse_indices_.begin() + base + count);
+        }
+        qsh_result.collapse_counts.assign(
             impl_->d_collapse_counts_.begin(),
-            impl_->d_collapse_counts_.end(),
-            0u
-        );
+            impl_->d_collapse_counts_.begin() + inputs.size());
+        qsh_result.total_collapses = std::accumulate(
+            qsh_result.collapse_counts.begin(),
+            qsh_result.collapse_counts.end(),
+            0u);
 
         // Update state history
         StateNode node;

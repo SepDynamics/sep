@@ -25,6 +25,11 @@ if(SEP_HAS_BLENDER)
 add_subdirectory(blender)
 endif()
 
+add_subdirectory(quantum)
+add_subdirectory(memory)
+add_subdirectory(audio)
+add_subdirectory(api)
+
 # Configure test discovery
 include(CTest)
 enable_testing()

@@ -77,11 +77,11 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
 }
 
 SEPApiServer::~SEPApiServer() {
-  if (running_.load()) { 
+  if (running_.load()) {
     stop();
-  } 
+  }
   instance_ = nullptr;
-} 
+}
 
 std::mutex &SEPApiServer::getMetricsMutex() {
   return metrics_mutex_;
@@ -187,7 +187,7 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
 void SEPApiServer::logRequest(const HttpRequest& req, int code, [[maybe_unused]] const std::string& response_body,
                                 int64_t duration) {
     if (!logger_) return;
- std::lock_guard<std::mutex> lock(metrics_mutex_); 
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
 
   metrics_.totalRequests++;
   if (code >= 200 && code < 300) {
@@ -217,7 +217,7 @@ std::string SEPApiServer::getErrorResponse(const std::string& message, int statu
 
 ::crow::response SEPApiServer::makeCrowJsonResponse(int status_code, const nlohmann::json& data) {
   ::crow::response res(status_code);
-  res.set_header("Content-Type", "application/json"); 
+  res.set_header("Content-Type", "application/json");
   res.body = data.dump();
   return res;
 }
@@ -245,7 +245,7 @@ nlohmann::json SEPApiServer::handleCrowError(const std::string& message,
 
 void SEPApiServer::logRequest(const ::crow::request& req, int status_code,
                                [[maybe_unused]] const std::string& response_body, int64_t duration_ms) {
-    if (!logger_) return; 
+    if (!logger_) return;
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 
   metrics_.totalRequests++;

@@ -1,7 +1,16 @@
 #include "blender/cycles_renderer.h"
+#include <memory>
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
+#ifdef SEP_HAS_CYCLES
+#include "device/device.h"
+#include "scene/camera.h"
+#include "scene/mesh.h"
+#include "session/session.h"
+#include "util/math_base.h"
+#include "util/texture.h"
+#endif
 
 #ifdef SEP_HAS_CYCLES
 #  include <cmath>
@@ -34,7 +43,6 @@ SEPResult CyclesRenderer::initialize() {
         return SEPResult::FEATURE_UNAVAILABLE;
     }
     try {
-        initialized_ = true;
 #ifdef SEP_HAS_CYCLES
         ::ccl::DeviceInfo device_info;
         cycles_device_ = ::ccl::Device::create(device_info,
@@ -80,6 +88,8 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
     }
     try {
 #ifdef SEP_HAS_CYCLES
+        width_ = params.width;
+        height_ = params.height;
         if (!cycles_scene_) {
             return SEPResult::NOT_INITIALIZED;
         }
@@ -109,7 +119,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
 
 #ifdef SEP_HAS_CYCLES
     // Initialize session
-    ccl::SessionParams session_params;
+    ::ccl::SessionParams session_params;
     session_params.progressive = true;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count

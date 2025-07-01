@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <memory>
 #include "quantum/data.hpp"
 #include "core/types.h"
 #include "core/common.h"
 #include "blender/cycles_compat.h"
 #include <memory>
+#include "compat/cycles.h"
 
 namespace sep {
 namespace blender {

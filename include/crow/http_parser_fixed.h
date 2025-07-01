@@ -13,7 +13,7 @@
 #define HTTP_PARSER_VERSION_MINOR 9
 
 namespace crow {
-    namespace http_parser {
+    namespace http_stub {
         // These are already defined in crow_isolation.h, so we don't need to redefine them
         // enum class http_errno {...};
         // enum class http_parser_type {...};

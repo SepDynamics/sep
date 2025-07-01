@@ -50,8 +50,6 @@ set(WITH_CYCLES_DEVICE_CUDA ON CACHE BOOL "Enable CUDA support")
 set(WITH_CYCLES_DEVICE_OPTIX ON CACHE BOOL "Enable OptiX support")
 set(WITH_CYCLES_HYDRA_RENDER_DELEGATE OFF CACHE BOOL "Disable Hydra delegate")
 set(WITH_BLENDER OFF CACHE BOOL "Disable Blender integration")
-option(WITH_NANOVDB "Enable NanoVDB" OFF)
-option(WITH_OPENIMAGEDENOISE "Enable OpenImageDenoise" OFF)
 
 # Resolve NanoVDB support once and export compile definition only once
 set(WITH_NANOVDB_DEFINE 0)

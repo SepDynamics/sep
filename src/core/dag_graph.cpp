@@ -23,7 +23,7 @@ uint64_t DagGraph::addNodeWithId(uint64_t                           id,
     {
         next_id_ = id + 1;
     }
-    // Fix: Check if node with id already exists before adding
+    
     nodes_[id] = DagNode{id, pattern, coherence, parents};
     return id;
 }

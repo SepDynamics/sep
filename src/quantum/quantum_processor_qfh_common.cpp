@@ -126,7 +126,7 @@ bool QuantumProcessorQFHCommon::isQuantum(const glm::vec3& pattern) {
 
 void QuantumProcessorQFHCommon::processPatternBits(const std::vector<uint32_t>& pattern_bits) {
     m_pattern_bits = pattern_bits;
-    analyzePatternBits(); // Fix: Call analyzePatternBits // Fix: Added comment
+    analyzePatternBits(); 
 }
 
 void QuantumProcessorQFHCommon::analyzePatternBits() {

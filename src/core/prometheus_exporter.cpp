@@ -13,8 +13,8 @@ PrometheusExporter &PrometheusExporter::instance() {
 void PrometheusExporter::registerCounter(Counter *counter) {
   if (!counter) return;
   std::lock_guard<std::mutex> lock(mutex_);
-  // Fix: Check if counter already registered
-  counters_.push_back(counter); // Fix: Add semicolon
+  
+  counters_.push_back(counter); 
 }
 
 void PrometheusExporter::registerGauge(Gauge *gauge) {

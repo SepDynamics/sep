@@ -26,6 +26,7 @@ cmake_policy(SET CMP0079 NEW)
 # Avoid setting a custom target prefix so the linker can locate the generated
 # libraries without additional indirection.
 set(CYCLES_TARGET_PREFIX "" CACHE STRING "Prefix for Cycles targets")
+set(WITH_LIBS_PRECOMPILED OFF CACHE BOOL "Use precompiled library dependencies")
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/extern/cycles/CMakeLists.txt")
   add_subdirectory(extern/cycles ${CMAKE_BINARY_DIR}/cycles-build EXCLUDE_FROM_ALL)

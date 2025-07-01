@@ -11,6 +11,11 @@ Running CMake configuration...
 -- Check for working CXX compiler: /usr/bin/g++-14 - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
+Updating and loading repositories:
+Repositories loaded.
+Package "openvdb-devel-11.0.0-19.fc42.x86_64" is already installed.
+
+Nothing to do.
 -- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
@@ -19,45 +24,12 @@ Running CMake configuration...
 -- Found PkgConfig: /usr/bin/pkg-config (found version "2.3.0")
 -- Checking for module 'libpipewire-0.3'
 --   Found libpipewire-0.3, version 1.4.6
--- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
--- Checking for module 'fftw3f'
---   Found fftw3f, version 3.3.10
--- Using PipeWire at: pipewire-0.3
--- Using FFTW at: fftw3f
 -- The C compiler identification is GNU 14.2.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/gcc-14 - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Found SDL2: /usr/lib64/libSDL2.so
-CMake Warning (dev) at extern/cycles/CMakeLists.txt:142 (option):
-  Policy CMP0077 is not set: option() honors normal variables.  Run "cmake
-  --help-policy CMP0077" for policy details.  Use the cmake_policy command to
-  set the policy and suppress this warning.
-
-  For compatibility with older versions of CMake, option is clearing the
-  normal variable 'WITH_CYCLES_DEVICE_CUDA'.
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
-CMake Warning (dev) at extern/cycles/CMakeLists.txt:143 (option):
-  Policy CMP0077 is not set: option() honors normal variables.  Run "cmake
-  --help-policy CMP0077" for policy details.  Use the cmake_policy command to
-  set the policy and suppress this warning.
-
-  For compatibility with older versions of CMake, option is clearing the
-  normal variable 'WITH_CYCLES_DEVICE_OPTIX'.
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
-CMake Warning (dev) at extern/cycles/CMakeLists.txt:230 (option):
-  Policy CMP0077 is not set: option() honors normal variables.  Run "cmake
-  --help-policy CMP0077" for policy details.  Use the cmake_policy command to
-  set the policy and suppress this warning.
-
-  For compatibility with older versions of CMake, option is clearing the
-  normal variable 'WITH_CYCLES_HYDRA_RENDER_DELEGATE'.
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
 -- No precompiled libraries found at /sep/lib/legacy/linux_x64
 -- Attempting to use system libraries instead
 -- Found USD: /usr/lib64/libusd_ms.so
@@ -80,7 +52,7 @@ CMake Warning (dev) at extern/cycles/src/cmake/external_libs.cmake:497 (find_pac
   set the policy and suppress this warning.
 
 Call Stack (most recent call first):
-  extern/cycles/CMakeLists.txt:240 (include)
+  extern/cycles/CMakeLists.txt:246 (include)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
 -- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found suitable version "1.83.0", minimum required is "1.48") found components: iostreams filesystem regex system thread date_time wave python313
@@ -93,7 +65,7 @@ CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cm
 Call Stack (most recent call first):
   extern/cycles/src/cmake/Modules/FindGlog.cmake:194 (find_package_handle_standard_args)
   extern/cycles/src/cmake/external_libs.cmake:570 (find_package)
-  extern/cycles/CMakeLists.txt:240 (include)
+  extern/cycles/CMakeLists.txt:246 (include)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
 -- Found GLOG: /usr/include
@@ -112,7 +84,7 @@ CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cm
 Call Stack (most recent call first):
   extern/cycles/src/cmake/Modules/FindGflags.cmake:585 (find_package_handle_standard_args)
   extern/cycles/src/cmake/external_libs.cmake:571 (find_package)
-  extern/cycles/CMakeLists.txt:240 (include)
+  extern/cycles/CMakeLists.txt:246 (include)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
 -- Found GFLAGS: //include
@@ -126,6 +98,7 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Found Zstd: /usr/lib64/libzstd.so
 -- Performing Test SUPPORT_NEON_BUILD
 -- Performing Test SUPPORT_NEON_BUILD - Failed
+-- Found SDL2: /usr/lib64/libSDL2.so
 -- Performing Test CXX_HAS_SSE42
 -- Performing Test CXX_HAS_SSE42 - Success
 -- Performing Test CXX_HAS_AVX2
@@ -138,307 +111,283 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Performing Test _has_cxxflag_float_conversion - Success
 -- Performing Test _has_cxxflag_double_promotion
 -- Performing Test _has_cxxflag_double_promotion - Success
+CMake Warning (dev) at extern/cycles/src/cmake/macros.cmake:228 (install):
+  Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
+  "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+Call Stack (most recent call first):
+  extern/cycles/src/hydra/CMakeLists.txt:126 (cycles_install_libraries)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at extern/cycles/src/cmake/macros.cmake:233 (install):
+  Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
+  "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+Call Stack (most recent call first):
+  extern/cycles/src/hydra/CMakeLists.txt:126 (cycles_install_libraries)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+COMPONENT = openvdb
+-- Found OpenVDB: /usr/include (found version "11.0.0") found components: openvdb
+-- OpenVDB ABI Version: 11
+-- Found TBB: /usr/include (found version "2022.0") found components: tbb
+CMake Warning (dev) at /usr/lib64/cmake/OpenVDB/FindOpenVDB.cmake:494 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  CMakeLists.txt:39 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: iostreams
+-- Found Blosc: /usr/lib64/libblosc.so (found version "1.21.6")
+-- Found OpenColorIO: /usr/lib64/cmake/OpenColorIO/OpenColorIOConfig.cmake (found version "2.4.2")
+-- NanoVDB found: NANOVDB_INCLUDE_DIR-NOTFOUND
+-- OpenImageDenoise found: 
+-- OpenVDB found: 
+-- OpenColorIO found: 
+-- OpenSubdiv found: 
+-- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
+-- Checking for module 'fftw3f'
+--   Found fftw3f, version 3.3.10
+-- Using PipeWire at: pipewire-0.3
+-- Using FFTW at: fftw3f
+-- No precompiled libraries found at /sep/lib/legacy/linux_x64
+-- Attempting to use system libraries instead
+-- Found OpenEXR: /usr/include/OpenEXR (found version "3.2") found components: OpenEXR OpenEXRUtil Iex IlmThread
+-- Found OpenColorIO: /usr/lib64/libOpenColorIO.so (found version "2.4.2")
+CMake Warning (dev) at extern/cycles/src/cmake/external_libs.cmake:497 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  extern/cycles/CMakeLists.txt:246 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found suitable version "1.83.0", minimum required is "1.48") found components: iostreams filesystem regex system thread date_time wave python313
+CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (GLOG) does
+  not match the name of the calling package (Glog).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  extern/cycles/src/cmake/Modules/FindGlog.cmake:194 (find_package_handle_standard_args)
+  extern/cycles/src/cmake/external_libs.cmake:570 (find_package)
+  extern/cycles/CMakeLists.txt:246 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- No preference for use of exported gflags CMake configuration set, and no hints for include/library directories provided. Defaulting to preferring an installed/exported gflags CMake configuration if available.
+-- Found installed version of gflags: /usr/lib64/cmake/gflags
+-- Detected gflags version: 2.2.2
+-- Fixing invalid GFLAGS_INCLUDE_DIR: '//include'
+-- Set GFLAGS_INCLUDE_DIR to: '/usr/include'
+-- Looking for gflags.h at: /usr/include/gflags/gflags.h
+-- Reading gflags.h from: /usr/include/gflags/gflags.h
+CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (GFLAGS)
+  does not match the name of the calling package (Gflags).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  extern/cycles/src/cmake/Modules/FindGflags.cmake:585 (find_package_handle_standard_args)
+  extern/cycles/src/cmake/external_libs.cmake:571 (find_package)
+  extern/cycles/CMakeLists.txt:246 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+COMPONENT = openvdb
+-- OpenVDB ABI Version: 11
+-- Found TBB: /usr/include (found version "2022.0") found components: tbb
+CMake Warning (dev) at /usr/lib64/cmake/OpenVDB/FindOpenVDB.cmake:494 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  extern/cycles/src/cmake/external_libs.cmake:606 (find_package)
+  extern/cycles/CMakeLists.txt:246 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Boost: /usr/lib64/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: iostreams
+-- NanoVDB not found, continuing without NanoVDB support
+-- OpenImageDenoise not found, continuing without OpenImageDenoise support
+-- Found TBB: /usr/include (found version "2022.0") found components: tbb tbbmalloc tbbmalloc_proxy
+CMake Error at extern/cycles/src/app/CMakeLists.txt:99 (add_executable):
+  add_executable cannot create target "cycles" because another target with
+  the same name already exists.  The existing target is an executable created
+  in source directory "/sep/extern/cycles/src/app".  See documentation for
+  policy CMP0002 for more details.
+
+
+CMake Error at extern/cycles/src/app/CMakeLists.txt:102 (target_link_libraries):
+  Attempt to add link library "cycles_device" to target "cycles" which is not
+  built in this directory.
+
+  This is allowed only when policy CMP0079 is set to NEW.
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__ab0a133d" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/bvh".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/bvh/CMakeLists.txt:74 (cycles_add_library)
+
+
+-- Found Cycles Integrator library: /sep/lib/libcycles_integrator.a
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__35508d16" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/device".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/device/CMakeLists.txt:236 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__46077633" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/graph".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/graph/CMakeLists.txt:32 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__e5762bdc" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/integrator".
+  See documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/integrator/CMakeLists.txt:84 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/kernel/CMakeLists.txt:434 (add_executable):
+  add_executable cannot create target "zstd_compress" because another target
+  with the same name already exists.  The existing target is an executable
+  created in source directory "/sep/extern/cycles/src/kernel".  See
+  documentation for policy CMP0002 for more details.
+
+
+CMake Error at extern/cycles/src/kernel/CMakeLists.txt:437 (target_link_libraries):
+  Attempt to add link library "/usr/lib64/libzstd.so" to target
+  "zstd_compress" which is not built in this directory.
+
+  This is allowed only when policy CMP0079 is set to NEW.
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__55fc681a" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/kernel/osl".
+  See documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/kernel/osl/CMakeLists.txt:50 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/kernel/osl/shaders/CMakeLists.txt:160 (add_custom_target):
+  add_custom_target cannot create target "cycles_osl_shaders" because another
+  target with the same name already exists.  The existing target is a custom
+  target created in source directory
+  "/sep/extern/cycles/src/kernel/osl/shaders".  See documentation for policy
+  CMP0002 for more details.
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__b25ca18a" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/kernel".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/kernel/CMakeLists.txt:1273 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__6b26cc6d" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/scene".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/scene/CMakeLists.txt:164 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__8210d552" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/session".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/session/CMakeLists.txt:39 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__1a5ac6b4" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/subd".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/subd/CMakeLists.txt:37 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/cmake/macros.cmake:49 (add_library):
+  add_library cannot create target "cycles_ext__96a37b35" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory "/sep/extern/cycles/src/util".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  extern/cycles/src/util/CMakeLists.txt:136 (cycles_add_library)
+
+
+CMake Error at extern/cycles/src/hydra/CMakeLists.txt:93 (add_library):
+  add_library cannot create target "cycles_hydra" because another target with
+  the same name already exists.  The existing target is a static library
+  created in source directory "/sep/extern/cycles/src/hydra".  See
+  documentation for policy CMP0002 for more details.
+
+
+CMake Error at extern/cycles/src/hydra/CMakeLists.txt:112 (target_link_libraries):
+  Attempt to add link library "/usr/lib64/libusd_ms.so" to target
+  "cycles_hydra" which is not built in this directory.
+
+  This is allowed only when policy CMP0079 is set to NEW.
+
+
+CMake Error at extern/cycles/third_party/cuew/CMakeLists.txt:14 (add_library):
+  add_library cannot create target "extern_cuew" because another target with
+  the same name already exists.  The existing target is a static library
+  created in source directory "/sep/extern/cycles/third_party/cuew".  See
+  documentation for policy CMP0002 for more details.
+
+
+CMake Error at extern/cycles/third_party/hipew/CMakeLists.txt:30 (add_library):
+  add_library cannot create target "extern_hipew" because another target with
+  the same name already exists.  The existing target is a static library
+  created in source directory "/sep/extern/cycles/third_party/hipew".  See
+  documentation for policy CMP0002 for more details.
+
+
+CMake Error at extern/cycles/third_party/sky/CMakeLists.txt:40 (add_library):
+  add_library cannot create target "extern_sky" because another target with
+  the same name already exists.  The existing target is a static library
+  created in source directory "/sep/extern/cycles/third_party/sky".  See
+  documentation for policy CMP0002 for more details.
+
+
+CMake Error at extern/cycles/third_party/libc_compat/CMakeLists.txt:32 (add_library):
+  add_library cannot create target "extern_libc_compat" because another
+  target with the same name already exists.  The existing target is a static
+  library created in source directory
+  "/sep/extern/cycles/third_party/libc_compat".  See documentation for policy
+  CMP0002 for more details.
+
+
+CMake Error at src/blender/CMakeLists.txt:66 (set_target_properties):
+  set_target_properties Can not find target to add properties to:
+  cycles_device
+
+
 -- Found hiredis: /usr/lib64/libhiredis.so
 -- Found hiredis headers: /usr/include/hiredis
--- Configuring done (1.9s)
--- Generating done (0.1s)
--- Build files have been written to: /sep/cmake-make
-Building SEP Engine...
-[  1%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
-[  1%] Building CXX object extern/cycles/src/subd/CMakeFiles/cycles_subd.dir/patch.cpp.o
-[  3%] Building CXX object extern/cycles/third_party/sky/CMakeFiles/extern_sky.dir/source/sky_nishita.cpp.o
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  3%] Building CXX object extern/cycles/src/subd/CMakeFiles/cycles_subd.dir/dice.cpp.o
-[  3%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/debug.cpp.o
-[  3%] Building CXX object extern/cycles/src/subd/CMakeFiles/cycles_subd.dir/osd.cpp.o
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  4%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
-[  4%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/aligned_malloc.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  4%] Building CXX object extern/cycles/src/subd/CMakeFiles/cycles_subd.dir/interpolation.cpp.o
-[  4%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/log.cpp.o
-[  4%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/ies.cpp.o
-[  4%] Building CXX object extern/cycles/src/subd/CMakeFiles/cycles_subd.dir/split.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  6%] Building CXX object extern/cycles/third_party/sky/CMakeFiles/extern_sky.dir/source/sky_model.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-/sep/extern/cycles/third_party/hipew/src/hipew.c: In function ‘hipewCompilerVersion’:
-/sep/extern/cycles/third_party/hipew/src/hipew.c:586:15: warning: unused variable ‘marker’ [-Wunused-variable]
-  586 |   const char *marker = "Hip compilation tools, release ";
-      |               ^~~~~~
-[  6%] Linking C static library ../../../../lib/libextern_cuew.a
-[  8%] Linking C static library ../../../../lib/libextern_hipew.a
-[  8%] Built target extern_cuew
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[  9%] Built target extern_hipew
-[ 11%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/math_cdf.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 11%] Linking CXX static library ../../../../lib/libextern_sky.a
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 11%] Built target extern_sky
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 13%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/md5.cpp.o
-[ 13%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/murmurhash.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 14%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/path.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 14%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/profiling.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 14%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/string.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 14%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/system.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 16%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/task.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 16%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/thread.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 16%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/time.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 16%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/transform.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 18%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/transform_avx2.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 18%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/windows.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 18%] Building CXX object extern/cycles/src/util/CMakeFiles/cycles_util.dir/guarded_allocator.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 19%] Linking CXX static library ../../../../lib/libcycles_util.a
-[ 19%] Built target cycles_util
-[ 19%] Linking CXX static library ../../../../lib/libcycles_subd.a
-[ 19%] Built target cycles_subd
-[ 19%] Building CXX object extern/cycles/src/session/CMakeFiles/cycles_session.dir/tile.cpp.o
-[ 19%] Building CXX object extern/cycles/src/session/CMakeFiles/cycles_session.dir/buffers.cpp.o
-[ 19%] Building CXX object extern/cycles/src/session/CMakeFiles/cycles_session.dir/merge.cpp.o
-[ 19%] Building CXX object extern/cycles/src/session/CMakeFiles/cycles_session.dir/session.cpp.o
-[ 21%] Building CXX object extern/cycles/src/session/CMakeFiles/cycles_session.dir/denoising.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 21%] Linking CXX static library libsep_core.a
-[ 21%] Built target sep_core
-[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 24%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 26%] Linking CXX static library ../../../../lib/libcycles_session.a
-[ 26%] Built target cycles_session
-[ 27%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/camera.cpp.o
-[ 29%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/bake.cpp.o
-[ 29%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/alembic_read.cpp.o
-[ 29%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/attribute.cpp.o
-[ 29%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/geometry.cpp.o
-[ 29%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/background.cpp.o
-[ 29%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/film.cpp.o
-[ 29%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/constant_fold.cpp.o
-[ 31%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/devicescene.cpp.o
-[ 32%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/geometry_bvh.cpp.o
-[ 32%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/alembic.cpp.o
-[ 32%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/colorspace.cpp.o
-[ 32%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/geometry_attributes.cpp.o
-[ 32%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/geometry_mesh.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 32%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/hair.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 32%] Linking CXX static library libsep_compat.a
-[ 32%] Built target sep_compat
-[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 32%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/image.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-[ 34%] Building CXX object extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/image_oiio.cpp.o
-<command-line>: warning: "WITH_NANOVDB" redefined
-<command-line>: note: this is the location of the previous definition
-<command-line>: warning: "WITH_OPENIMAGEDENOISE" redefined
-<command-line>: note: this is the location of the previous definition
-In file included from /sep/extern/cycles/src/scene/image.cpp:9:
-/sep/extern/cycles/src/scene/../scene/image_vdb.h:9:10: fatal error: ../compat/image.h: No such file or directory
-    9 | #include "../compat/image.h"
-      |          ^~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/build.make:289: extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/image.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
-[ 36%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 37%] Linking CXX static library libsep_audio.a
-[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 37%] Built target sep_audio
-[ 39%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-make[1]: *** [CMakeFiles/Makefile2:2157: extern/cycles/src/scene/CMakeFiles/cycles_scene.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 44%] Linking CXX static library libsep_quantum.a
-[ 44%] Built target sep_quantum
-[ 44%] Linking CXX static library libsep_memory.a
-[ 44%] Built target sep_memory
-make: *** [Makefile:136: all] Error 2
+-- Configuring incomplete, errors occurred!

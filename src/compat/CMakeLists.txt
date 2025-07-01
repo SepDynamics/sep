@@ -5,6 +5,27 @@
 # Build sep_compat as a static library that encapsulates all CUDA functionality
 include(SetCXXStandard)
 
+# Use Cycles naming convention for feature flags
+if(WITH_NANOVDB)
+    set(WITH_CYCLES_NANOVDB ${WITH_NANOVDB})
+endif()
+
+if(WITH_OPENIMAGEDENOISE)
+    set(WITH_CYCLES_OPENIMAGEDENOISE ${WITH_OPENIMAGEDENOISE})
+endif()
+
+if(WITH_OPENVDB)
+    set(WITH_CYCLES_OPENVDB ${WITH_OPENVDB})
+endif()
+
+if(WITH_OPENCOLORIO)
+    set(WITH_CYCLES_OPENCOLORIO ${WITH_OPENCOLORIO})
+endif()
+
+if(WITH_OPENSUBDIV)
+    set(WITH_CYCLES_OPENSUBDIV ${WITH_OPENSUBDIV})
+endif()
+
 add_library(sep_compat STATIC
     cuda_api.cu
     core.cu
@@ -39,6 +60,7 @@ target_include_directories(sep_compat
         ${CMAKE_SOURCE_DIR}/include/core
     PRIVATE
         ${CUDA_INCLUDE_DIRS}
+        ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
 
 # Dependencies

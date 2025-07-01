@@ -133,9 +133,8 @@ __global__ void processPatternKernel(PatternData* patterns, PatternData* results
 extern "C" cudaError_t launchProcessPatternKernel(PatternData* patterns, PatternData* results, PatternConfig config,
                                                    size_t patternCount, const PatternData* previousPatterns,
                                                    cudaStream_t stream) {
-    const uint32_t blockSizeVal = sep::cuda::constants::get_default_block_size();
-    dim3 blockSize(blockSizeVal);
-    dim3 gridSize((patternCount + blockSizeVal - 1) / blockSizeVal);
+    dim3 blockSize(constants::get_default_block_size());
+    dim3 gridSize((patternCount + BLOCK_SIZE - 1) / BLOCK_SIZE);
 
     processPatternKernel<<<gridSize, blockSize, 0, stream>>>(patterns, results, config, patternCount, previousPatterns);
 

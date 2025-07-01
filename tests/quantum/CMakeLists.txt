@@ -9,6 +9,7 @@ add_executable(quantum_optimizer_tests
     pattern_evolution_test.cpp
     pattern_evolution_regression_test.cpp
     process_patterns_update_test.cpp
+    quantum_processor_calculations_test.cpp
     processor_metrics_test.cpp
     quantum_processor_metrics_test.cpp
 )

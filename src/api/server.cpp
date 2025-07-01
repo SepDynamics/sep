@@ -185,7 +185,7 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
 }
 
 void SEPApiServer::logRequest(const HttpRequest& req, int code, [[maybe_unused]] const std::string& response_body,
-                                int64_t duration) {
+                               int64_t duration) {
     if (!logger_) return;
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 
@@ -308,9 +308,8 @@ void SEPApiServer::setup_middleware() {
   if (!app_) return;
 
   // Configure rate limiting middleware
-  
-   auto& rate_limit_mw = app_->get_middleware<RateLimitMiddleware>();
-   (void)rate_limit_mw; // Middleware is used implicitly through registration
+  auto& rate_limit_mw = app_->get_middleware<RateLimitMiddleware>();
+  (void)rate_limit_mw; // Middleware is used implicitly through registration
 
   // Configure auth middleware
   auto& auth_mw = app_->get_middleware<AuthMiddleware>();

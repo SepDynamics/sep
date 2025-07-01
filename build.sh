@@ -43,8 +43,9 @@ fi
 # --- CMake Configuration ---
 # Clean build directory to ensure a fresh state
 echo "Cleaning build directory..."
-rm -rf "${BUILD_DIR:?}"/*
+rm -rf "${BUILD_DIR}"
 rm -rf "${REPO_ROOT}/lib" "${REPO_ROOT}/bin"
+mkdir -p "${BUILD_DIR}"
 # Copy cmake modules needed by the project
 cp -r "${SRC_DIR}/cmake" "${BUILD_DIR}"
 

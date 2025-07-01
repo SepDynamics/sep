@@ -25,7 +25,9 @@ cmake_policy(SET CMP0079 NEW)
 # The upstream Cycles build uses the standard target names (e.g. cycles_device).
 # Avoid setting a custom target prefix so the linker can locate the generated
 # libraries without additional indirection.
-set(CYCLES_TARGET_PREFIX "" CACHE STRING "Prefix for Cycles targets")
+# Ensure the Cycles libraries use their standard target names so our
+# external linkage does not need any custom prefixes.
+set(CYCLES_TARGET_PREFIX "" CACHE STRING "Prefix for Cycles targets" FORCE)
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/extern/cycles/CMakeLists.txt")
   add_subdirectory(extern/cycles ${CMAKE_BINARY_DIR}/cycles-build EXCLUDE_FROM_ALL)

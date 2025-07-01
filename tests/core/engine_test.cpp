@@ -28,6 +28,9 @@ class EngineTest : public ::testing::Test {
     for (size_t i = 0; i < count; i++) {
       states[i].state = i;
       states[i].flags = ~0u;  // All flags set
+      states[i].pin_id = static_cast<std::uint32_t>(i);
+      states[i].value = 1.0f + static_cast<float>(i);
+      states[i].coherence = 0.5f;
     }
     return states;
   }

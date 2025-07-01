@@ -6,6 +6,18 @@
 #define PATTERN_BLOCK_SIZE 256
 #endif
 
+#include <cstdint>
+
+namespace sep {
+namespace cuda {
+namespace constants {
+inline constexpr std::uint32_t get_default_block_size() {
+    return PATTERN_BLOCK_SIZE;
+}
+} // namespace constants
+} // namespace cuda
+} // namespace sep
+
 // CUDA memory management
 #ifndef CUDA_MIN_MEMORY
 #define CUDA_MIN_MEMORY (64UL * 1024UL * 1024UL)

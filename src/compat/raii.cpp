@@ -206,7 +206,7 @@ DeviceBufferRAII<T>::DeviceBufferRAII(DeviceBufferRAII&& other) noexcept
 
 template <typename T>
 DeviceBufferRAII<T>& DeviceBufferRAII<T>::operator=(DeviceBufferRAII&& other) noexcept {
-    if (this != &other) { // Fix: Add self-assignment check
+    if (this != &other) {
         if (ptr_) {
             freeDeviceMemory(ptr_);
         }

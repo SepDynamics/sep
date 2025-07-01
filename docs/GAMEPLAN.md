@@ -377,6 +377,18 @@ implementation so the engine still compiles.
 4. When disabling a component, verify the corresponding `SEP_HAS_*` option is
    set to `OFF` to avoid unresolved symbols.
 
+### Initializing External Dependencies
+
+Before building, initialize the Cycles submodule and verify optional libraries:
+
+```bash
+git submodule update --init extern/cycles
+cmake -DWITH_OPENVDB=ON -DWITH_OPENIMAGEDENOISE=ON
+```
+
+If libraries are missing, consult `install_dependencies.py` for Python package
+requirements and system package hints.
+
 ## Conclusion
 
 The SEP Engine's build system requires systematic refactoring to properly bridge stub implementations with real components. The key is implementing a flexible component detection and loading system that gracefully degrades when optional dependencies are unavailable. This approach maintains build determinism while supporting diverse deployment environments.

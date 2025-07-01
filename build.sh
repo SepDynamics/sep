@@ -16,6 +16,7 @@ echo "Setting up build environment with real library paths - NO STUBS!"
 # of where the project directory is located on disk.
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 BUILD_DIR="${REPO_ROOT}/cmake-make"
+COMPILE_COMMANDS="${BUILD_DIR}/compile_commands.json"
 SRC_DIR="${REPO_ROOT}"
 LIB_DIR="${SRC_DIR}/lib"
 CYCLES_ROOT_DIR="${SRC_DIR}/extern/cycles"
@@ -71,6 +72,9 @@ cmake -S "${SRC_DIR}" -B "${BUILD_DIR}" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
   -DCMAKE_EXE_LINKER_FLAGS="-Wl,--no-as-needed" \
   ${PIPEWIRE_CMAKE_ARGS}
+
+# Link compile_commands.json to the repository root for tool integration
+ln -sf "${COMPILE_COMMANDS}" "${REPO_ROOT}/compile_commands.json"
 
 # --- Build and Install ---
 echo "Building SEP Engine..."

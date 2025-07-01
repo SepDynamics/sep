@@ -15,3 +15,8 @@ memory promotion thresholds and quantum processing limits.
 - `ltm_coherence_threshold`: coherence needed for patterns to reach LTM.
 - `mtm_coherence_threshold`: coherence needed for MTM.
 - `stability_threshold`: minimum stability for promotion.
+
+## build scripts
+Both `scripts/setup_cycles_env.sh` and `scripts/setup_cycles_env_fixed.sh` require
+the environment variable `CMAKE_CXX_STANDARD` to be set to `17`. The scripts will
+abort before running CMake if this variable differs from `17`.

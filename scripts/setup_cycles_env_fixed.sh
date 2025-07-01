@@ -6,6 +6,12 @@
 
 # Script to set up environment for building Cycles
 
+# Validate C++ standard
+if [ "${CMAKE_CXX_STANDARD:-}" != "17" ]; then
+  echo "Error: CMAKE_CXX_STANDARD must be set to 17 before running this script." >&2
+  exit 1
+fi
+
 # Create build and install directories
 mkdir -p /sep/cycles-build
 mkdir -p /sep/cycles-install

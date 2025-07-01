@@ -14,17 +14,17 @@ Most documentation assumes the code has already been built with CUDA support and
 ## Build Recap
 
 ```bash
-mkdir build
-cd build
+mkdir cmake-make
+cd cmake-make
 cmake ..
 make -j$(nproc)
 ```
 
-The resulting executable lives in `build/sep_engine`. Additional static libraries for each module are produced in the same directory.
+The resulting executable lives in `cmake-make/sep_engine`. Additional static libraries for each module are produced in the same directory.
 
 ## Running the Engine
 
-Execute the engine from the build directory:
+Execute the engine from the build directory (`cmake-make`):
 
 ```bash
 ./sep_engine

@@ -4,7 +4,7 @@
 set -e
 
 # Build directory
-BUILD_DIR="build"
+BUILD_DIR="cmake-make"
 
 # Colors for output
 GREEN='\033[0;32m'

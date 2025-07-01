@@ -2,13 +2,13 @@
 
 1. **Build Directory Inconsistency**:
    - MCP config: `/sep/cmake-make`
-   - build.sh: `/sep/build`
+   - build.sh: `/sep/cmake-make`
    - VSCode: `${workspaceFolder}/cmake-make`
-   - CodeChecker helper: `$PWD/build/compile_commands.json`
+   - CodeChecker helper: `$PWD/cmake-make/compile_commands.json`
 
 2. **Compile Commands Location**:
-   - VSCode settings: `${workspaceFolder}/compile_commands.json`
-   - CodeChecker expects: `build/compile_commands.json`
+   - VSCode settings: `${workspaceFolder}/compile_commands.json` (symlink)
+   - CodeChecker expects: `cmake-make/compile_commands.json`
    - CMake generates: in the build directory
 
 3. **Path References**: Mix of absolute (`/sep`) and relative paths
@@ -214,8 +214,8 @@ graph TD
 
 ### 1. **Standardize Build Directory**
    - Use `/sep/cmake-make` consistently across all tools
-   - Update build.sh to use `cmake-make` instead of `build`
-   - Ensure compile_commands.json is generated in the build directory
+   - `build.sh` outputs to `cmake-make` and symlinks `compile_commands.json` to the repo root
+   - Analysis scripts read `cmake-make/compile_commands.json`
 
 ### 2. **Update Configuration Files**
    - Synchronize paths in all configuration files

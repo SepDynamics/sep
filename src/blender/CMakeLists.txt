@@ -6,6 +6,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/extern/cycles/src/cmake/Module
 
 find_package(Embree REQUIRED)
 find_package(GLOG REQUIRED)
+find_package(OSL REQUIRED)
+find_package(OpenSubdiv REQUIRED)
 pkg_check_modules(OIIO REQUIRED OpenImageIO)
 pkg_check_modules(ZSTD REQUIRED libzstd)
 
@@ -71,6 +73,8 @@ target_include_directories(sep_blender PUBLIC
     ${GLOG_INCLUDE_DIRS}
     ${EMBREE_INCLUDE_DIRS}
     ${ZSTD_INCLUDE_DIRS}
+    ${OSL_INCLUDE_DIRS}
+    ${OPENSUBDIV_INCLUDE_DIRS}
 )
 
 # Define Cycles support
@@ -114,6 +118,7 @@ target_link_libraries(sep_blender PRIVATE
     cycles_graph
     cycles_kernel_osl
     ${OSL_LIBRARIES}
+    ${OPENSUBDIV_LIBRARIES}
 )
 
 
@@ -139,6 +144,8 @@ target_include_directories(sep_blender
         ${CMAKE_SOURCE_DIR}/extern
         ${CMAKE_SOURCE_DIR}/extern/glm
         ${CMAKE_SOURCE_DIR}/extern/eigen
+        ${OSL_INCLUDE_DIRS}
+        ${OPENSUBDIV_INCLUDE_DIRS}
 )
 target_include_directories(sep_blender PUBLIC
     ${CMAKE_SOURCE_DIR}/extern/cycles/src

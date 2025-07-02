@@ -36,18 +36,16 @@ if(SEP_HAS_CUDA)
     target_link_libraries(sep_blender PRIVATE CUDA::cudart)
 endif()
 
-# Add Cycles renderer when available
-if(SEP_HAS_CYCLES)
-  target_sources(sep_blender PRIVATE
+# Always compile the Cycles renderer. When SEP_HAS_CYCLES is 0, the
+# implementation falls back to stub definitions via preprocessor checks.
+target_sources(sep_blender PRIVATE
     cycles_renderer.cpp
-  )
-  
-  # Ensure Cycles renderer is built with CUDA support
-  set_source_files_properties(cycles_renderer.cpp
-    PROPERTIES
-    COMPILE_FLAGS "-DWITH_CYCLES_DEVICE_CUDA"
-  )
-endif()
+)
+
+set_source_files_properties(cycles_renderer.cpp
+  PROPERTIES
+  COMPILE_FLAGS "-DWITH_CYCLES_DEVICE_CUDA"
+)
 
 # Link directly against Blender's Cycles
 set(BLENDER_VERSION "5.0")

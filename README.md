@@ -96,4 +96,22 @@ The future development of the SEP Engine is focused on enhancing its capabilitie
 
 ---
 
+## PipeWire Runtime Dependencies
+
+The audio module uses PipeWire for capturing realtime audio. Make sure the
+`libpipewire-0.3` libraries and the PipeWire daemon are available on your
+system. On Debian-based distributions install them with:
+
+```bash
+sudo apt-get install pipewire pipewire-audio-client-libraries
+```
+
+After installation, confirm the daemon is running:
+
+```bash
+systemctl --user status pipewire
+```
+
+Audio initialization will fail if PipeWire is not active.
+
 This project represents an attempt to construct a first-principles, computationally-grounded theory of everything. It is a work in progress, but it offers a robust and testable foundation for exploring the deepest questions about our reality.

@@ -113,7 +113,6 @@ target_link_libraries(sep_blender PRIVATE
     cycles_kernel_osl
     extern_cuew
     extern_hipew
-    openpgl_stub
     ${OSL_LIBRARIES}
 )
 

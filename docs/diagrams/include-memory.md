@@ -34,7 +34,7 @@ graph TD
 
 ### unified_memory.h
 - **`UnifiedMemory<T>`** – RAII wrapper for CUDA unified memory.
-- **CUDA helpers** `allocateDeviceMemory()`, `freeDeviceMemory()`, `allocateUnifiedMemory()`, `freeUnifiedMemory()` route calls through `MemoryTierManager` so allocations go to the correct tier.
+- **CUDA helpers** `allocateDeviceMemory()`, `freeDeviceMemory()`, `allocateUnifiedMemory()`, `freeUnifiedMemory()` use the CUDA runtime when available and fall back to standard allocations on the host when CUDA is disabled.
 
 ### logger.hpp
 - Minimal logger interface used by the memory subsystem for diagnostics.

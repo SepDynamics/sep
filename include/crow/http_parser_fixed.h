@@ -10,9 +10,7 @@
 #include "crow_isolation.h"
 #include <http_parser.h>
 
-// Define HTTP parser constants
-#define HTTP_PARSER_VERSION_MAJOR 2
-#define HTTP_PARSER_VERSION_MINOR 9
+// Reuse version constants from the official library
 
 namespace crow {
     namespace http_parser_stub {
@@ -59,5 +57,5 @@ namespace crow {
         inline const char* http_method_str(unsigned int method) {
             return ::http_method_str(static_cast<http_method>(method));
         }
-    }  // namespace http_parser_stub
-}  // namespace crow
+    } // namespace http_parser_stub
+} // namespace crow

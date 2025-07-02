@@ -91,6 +91,7 @@ cudaError_t cudaMallocManaged(void** ptr, size_t size);
 cudaError_t cudaMemcpy(void* dst, const void* src, size_t size, int kind);
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
 cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
+cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* ptr, size_t size, unsigned int flags);
 
 }  // namespace cuda
 }  // namespace sep

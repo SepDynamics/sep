@@ -58,7 +58,6 @@ if(SEP_HAS_CUDA)
 else()
     # CPU fallback when CUDA is not available
     add_library(sep_compat STATIC
-        cuda_api_stub.cpp
         stream.cpp
         raii.cpp
     )

@@ -1,15 +1,20 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
-// Include core types first for config definitions
 #include "core/types.h"
+#include "core/config.h"
+#include "compat/cuda_runtime.h"
+#include "compat/cufft.h"
+#include "compat/cuda_api.hpp"
+#include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
+#include "quantum/types.h"
 
-namespace sep::config {
-class CudaConfig;
-class APIConfig;
-class LogConfig;
-class AnalyticsConfig;
+// Forward declarations
+namespace sep::cuda {
+class CudaCore;
+struct cufftHandle_t;
+using cufftHandle = cufftHandle_t*;
 }
 #include <algorithm>
 #include <array>
@@ -32,9 +37,7 @@ class AnalyticsConfig;
 #include <unordered_map>
 #include <vector>
 
-#include "compat/cuda.h"
 #include "compat/cuda_runtime.h"
-#include "compat/cufft.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/qbsa.h"
@@ -57,17 +60,19 @@ using ::sep::quantum::QuantumProcessorQFH;
 class QuantumManifoldOptimizer {
 public:
     struct Config {
+        using namespace sep::config;
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        ::sep::config::CudaConfig cuda;
-        ::sep::config::APIConfig api;
-        ::sep::config::LogConfig log;
-        double base_resonance_frequency{0.42};
-        double convergence_threshold{0.001};
-        double step_size{0.05};
-        double neighborhood_radius{1.0};
-        double target_coherence{0.8};
-        double target_stability{0.7};
-        double min_coherence_threshold{0.1};
+        CudaConfig cuda;
+        APIConfig api;
+        LogConfig log;
+        AnalyticsConfig analytics;
+        float base_resonance_frequency{0.42f};
+        float convergence_threshold{0.001f};
+        float step_size{0.05f};
+        float neighborhood_radius{1.0f};
+        float target_coherence{0.8f};
+        float target_stability{0.7f};
+        float min_coherence_threshold{0.1f};
     };
 
     struct OptimizationResult {
@@ -130,38 +135,7 @@ class CUDAQuantumKernel;
 class SemanticProcessor;
 class PerformanceAnalyzer;
 
-// Memory tier optimization parameters
-struct MemoryConfig {
-  double adaptive_threshold_rate = 0.02;
-  double hamiltonian_coupling = 0.42;
-  double predictive_horizon_ms = 100.0;
-  int pattern_cache_size = 10000;
-} inline memory;
-
-// Quantum processing enhancement
-struct QuantumConfig {
-  int manifold_dimensions = 8;
-  double coherence_modulation_factor = 0.707;
-  double rupture_detection_sensitivity = 0.3;
-  int qfh_hierarchy_depth = 5;
-} inline quantum;
-
-// CUDA acceleration parameters
-struct CudaConfig {
-  int warp_tile_size = 16;
-  int coherence_block_size = 256;
-  int similarity_grid_dim = 32;
-  bool enable_phase_modulation = true;
-  cufftHandle fft_plan{};
-} inline cuda;
-
-    // API coherence modulation
-    struct APIConfig {
-        double base_coherence = 0.5;
-        double context_weight = 0.3;
-        double state_weight = 0.7;
-        int superposition_states = 4;
-    } inline api;
+// Config types moved to core/config.h
 
 struct SemanticConfig {
   int embedding_dimensions = 512;

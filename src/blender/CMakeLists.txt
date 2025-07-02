@@ -50,8 +50,6 @@ if(SEP_HAS_CUDA)
     target_link_libraries(sep_blender PRIVATE CUDA::cudart)
 endif()
 
-# Always compile the Cycles renderer. When SEP_HAS_CYCLES is 0, the
-# implementation falls back to stub definitions via preprocessor checks.
 target_sources(sep_blender PRIVATE
     cycles_renderer.cpp
 )

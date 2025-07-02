@@ -1,27 +1,38 @@
 #ifndef CUDA_COMMON_H
 #define CUDA_COMMON_H
 
-#include "compat/macros.h"
+// Include CUDA runtime or provide shims first
 #if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
-#include "compat/cuda_helpers.h"
 #else
-#include "compat/cuda_impl.h"
+#include "compat/cuda_runtime.h"  // Contains shim definitions
 #endif
 
-// Forward declaration for compat/cuda_helpers.h functionality
-// These are defined in compat/cuda_helpers.h
+// GLM configuration after CUDA runtime
+#ifndef GLM_FORCE_CUDA
+#define GLM_FORCE_CUDA
+#endif
+
+#ifndef GLM_CUDA_VERSION_CHECK
+#define GLM_CUDA_VERSION_CHECK 90  // Require CUDA 9.0+
+#endif
+
+// Only set GLM compiler if not already defined
+#ifndef GLM_COMPILER
+#define GLM_COMPILER GLM_COMPILER_GCC
+#endif
+
+#ifndef GLM_FORCE_CXX17
+#define GLM_FORCE_CXX17
+#endif
+
+#include "compat/cuda_defs.h"
+
 namespace sep::cuda {
-#if SEP_CUDA_AVAILABLE
-void logCudaError(const char* operation, cudaError_t error);
-#else
-// The stub implementation shares the same cudaError_t type defined in
-// compat/cuda_impl.h, so keep the interface consistent regardless of build
-// mode. Using the fully qualified name from the stub namespace caused build
-// failures because the type alias lives outside that namespace.
-void logCudaError(const char* operation, cudaError_t error);
-#endif
-}  // namespace sep::cuda
 
+// Forward declarations of helper functions
+void logCudaError(const char* operation, cudaError_t error);
+
+}  // namespace sep::cuda
 
 #endif  // CUDA_COMMON_H

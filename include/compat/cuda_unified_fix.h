@@ -1,3 +1,18 @@
+#pragma once
+
+#ifndef CUDA_UNIFIED_FIX_H
+#define CUDA_UNIFIED_FIX_H
+
+// Include CUDA runtime first
+#ifdef __CUDACC__
+#include <cuda_runtime.h>
+#endif
+
+// Handle CUDA keyword conflicts first
+#ifdef __CUDACC__
+#define _GLIBCXX_INCLUDE_NEXT_C_HEADERS
+#endif
+
 // *** CRITICAL: COMPATIBILITY SETTINGS FOR GCC 14 AND CUDA 12.9 ***
 // These must be defined before any CUDA headers are included
 #ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
@@ -18,13 +33,8 @@
 #endif
 
 #ifndef __CUDA_NO_BFLOAT16_CONVERSIONS__
-#define __CUDA_NO_BFLOAT16_CONVERSIONS__ 1 
+#define __CUDA_NO_BFLOAT16_CONVERSIONS__ 1
 #endif
-
-#pragma once
-
-#ifndef CUDA_UNIFIED_FIX_H
-#define CUDA_UNIFIED_FIX_H
 
 // Feature toggles must be defined early so later sections can use them.
 #ifndef CUDA_UNIFIED_FIX_ENABLE_MATH_STUBS
@@ -33,12 +43,6 @@
 
 #ifndef CUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING
 #define CUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING 1
-#endif
-
-// *** CRITICAL: DISABLE EXCEPTION SPECIFICATION CHECKS ***
-// This must be defined before any CUDA headers are included
-#ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
-#define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
 #endif
 
 // Macro scope guards
@@ -63,18 +67,16 @@
 #define sincospif __cuda_sincospif
 #endif
 
+// Include math headers after CUDA runtime
+CUDA_UNIFIED_FIX_BEGIN_SCOPE()
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #include <cerrno>
-#pragma GCC diagnostic pop
-
-CUDA_UNIFIED_FIX_BEGIN_SCOPE()
 #if !defined(__CUDACC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #include <cmath>
-#pragma GCC diagnostic pop
 #endif
+#pragma GCC diagnostic pop
 
 // Map standard long double functions to SEP implementations
 #define acosl sep_acosl
@@ -83,6 +85,7 @@ CUDA_UNIFIED_FIX_BEGIN_SCOPE()
 #define atan2l sep_atan2l
 #define sqrtl sep_sqrtl
 #define logl sep_logl
+
 CUDA_UNIFIED_FIX_END_SCOPE()
 
 // Indicate whether CUDA support is available for this compilation unit.
@@ -117,36 +120,6 @@ CUDA_UNIFIED_FIX_END_SCOPE()
 #ifndef SEP_HD
 #define SEP_HD
 #endif
-#endif
-
-// *** CRITICAL: DISABLE EXCEPTION SPECIFICATION CHECKS ***
-// This must be defined before any CUDA headers are included
-#ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
-#define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
-#endif
-
-// Handle CUDA keyword conflicts first
-#ifdef __CUDACC__
-#define _GLIBCXX_INCLUDE_NEXT_C_HEADERS
-#endif
-
-// Include math compatibility headers
-#ifdef __has_include
-#if __has_include("compat/math_common.h")
-#include "compat/math_common.h"
-#define SEP_MATH_COMMON_AVAILABLE 1
-#else
-// Fallback for older compilers
-
-#define SEP_MATH_COMMON_AVAILABLE 0
-#endif
-#else
-// Very old compiler fallback
-
-#define SEP_MATH_COMMON_AVAILABLE 0
-#endif
-
-#ifdef __CUDACC__
 #endif
 
 // Ensure c++20 ABI compatibility

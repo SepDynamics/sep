@@ -1,65 +1,34 @@
-#pragma once
-
 #ifndef SEP_MATH_COMMON_H
 #define SEP_MATH_COMMON_H
+#pragma once
 
+// CUDA runtime must come first
+#ifdef __CUDACC__
+#include <cuda_runtime.h>
+#endif
+
+// Project headers
+#include "compat/glm_config.h"
 #include "compat/shim.h"
 #include "compat/macros.h"
 
-/* Standard includes */
-#ifdef __cplusplus
+// Standard C++ headers
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
-
-// First include C++ std headers for GCC 14.2.1 compatibility
-#if defined(__GNUC__) && __GNUC__ >= 14
-#ifndef SEP_HAD_CUDACC
-#ifdef __CUDACC__
-#define SEP_HAD_CUDACC 1
-#undef __CUDACC__
-#else
-#define SEP_HAD_CUDACC 0
-#endif
-#endif
-
-// Include C++ headers first to avoid conflicts with CUDA headers
-#include <cmath>
 #include <type_traits>
 
-// Restore __CUDACC__ if it was defined
-#if SEP_HAD_CUDACC
-#define __CUDACC__ 1
-#endif
-#undef SEP_HAD_CUDACC
-#endif
-
-// GLM compatibility defines - must come before any GLM includes
-#define GLM_FORCE_PURE   // Ensure GLM doesn't use any platform-specific optimizations
-#define GLM_FORCE_14  // Force C++14 mode for GLM
-#ifdef GLM_COMPILER
-#undef GLM_COMPILER
-#endif
-#define GLM_COMPILER 0
-
-#ifdef __CUDACC__
-#define CUDA_VERSION 9000  // Force CUDA version to 9.0 for GLM
-#define GLM_FORCE_CUDA     // Force CUDA mode
-
-// Use the standard CUDA runtime instead of the custom wrapper
-#include <cuda_runtime.h>
-#include "compat/cuda_helpers.h"
-#endif
-
-// Include GLM after defining compatibility macros
+// GLM headers (after CUDA runtime)
 #include <glm/glm.hpp>
+#include <glm/ext.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 #ifndef __CUDACC__
 #if !defined(__GNUC__) || __GNUC__ < 14
 #include <cmath>
-#endif
 #endif
 #endif
 

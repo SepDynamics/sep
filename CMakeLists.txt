@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
 project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
 
+# Enable CUDA
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
 # Add cmake directory to module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -21,10 +25,6 @@ add_compile_definitions(SEP_HAS_CUDA=${SEP_HAS_CUDA})
 
 # Disable Blender integration by default to reduce dependencies
 option(SEP_HAS_BLENDER "Build Blender integration" OFF)
-
-# Build stub implementation of the OpenPGL API to satisfy linking against
-# precompiled Cycles libraries when the real OpenPGL dependency is missing.
-add_subdirectory(extern/openpgl_stub)
 
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE

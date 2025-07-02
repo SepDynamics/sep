@@ -2,7 +2,6 @@
 
 #include <cstddef>
 #include <cstdint>
-#include "core/common.h"
 #include "compat/cuda_runtime.h"
 #include "core/common.h"  // for sep::SEPResult
 
@@ -12,8 +11,9 @@ namespace sep::cuda {
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
                            cudaMemcpyKind kind, cudaStream_t stream);
 
+// Overload taking raw stream pointer for backward compatibility
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
-                           int kind, void* stream);
+                            cudaMemcpyKind kind, void* stream);
 
 // CUDA kernel launch functions
 cudaError_t launchQBSAKernel(const std::uint32_t *d_probe_indices,

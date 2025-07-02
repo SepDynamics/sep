@@ -56,6 +56,14 @@ cudaError_t cudaStreamSynchronize(cudaStream_t /*stream*/) {
     return cudaSuccess;
 }
 
+cudaError_t cudaStreamWaitEvent(cudaStream_t /*stream*/, cudaEvent_t /*event*/, unsigned int /*flags*/) {
+    return cudaSuccess;
+}
+
+cudaError_t cudaEventRecord(cudaEvent_t /*event*/, cudaStream_t /*stream*/) {
+    return cudaSuccess;
+}
+
 cudaError_t cudaEventCreate(void** event) {
     if (event) {
         *event = nullptr;

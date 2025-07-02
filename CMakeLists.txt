@@ -44,6 +44,7 @@ add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 add_subdirectory(src/blender)
+add_subdirectory(extern/openpgl_stub)
 
 # Main executable
 add_executable(sep_engine src/main.cpp)
@@ -75,4 +76,5 @@ target_link_libraries(sep_engine
         gflags
         embree4
         ${HTTP_PARSER_LIBRARY}
+        openpgl_stub
 )

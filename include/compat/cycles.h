@@ -22,8 +22,8 @@
 #define CCL_NAMESPACE_USING_DIRECTIVE using namespace ccl;
 #endif
 
-// Core Cycles headers - only include if SEP_HAS_CYCLES is defined
-#ifdef SEP_HAS_CYCLES
+// Core Cycles headers - only include if SEP_HAS_CYCLES is enabled
+#if SEP_HAS_CYCLES
 // Core Cycles headers
 #include "../extern/cycles/src/device/device.h"
 #include "../extern/cycles/src/scene/scene.h"

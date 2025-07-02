@@ -56,6 +56,12 @@ add_subdirectory(src/blender)
 add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)
 
+# Build Cycles from source when precompiled libraries are not available
+if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
+  message(STATUS "Prebuilt Cycles libraries not found; building from source")
+  add_subdirectory(extern/cycles)
+endif()
+
 # Main executable
 add_executable(sep_engine src/main.cpp)
 

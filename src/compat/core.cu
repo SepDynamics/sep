@@ -11,6 +11,18 @@
 
 namespace sep::cuda {
 
+namespace detail {
+SEP_GLOBAL void qbsa_kernel(const std::uint32_t* d_probe_indices,
+                           const std::uint32_t* d_expectations,
+                           std::uint32_t num_probes, std::uint32_t* d_bitfield,
+                           std::uint32_t* d_corrections,
+                           std::uint32_t* d_correction_count);
+
+SEP_GLOBAL void qsh_kernel(const std::uint64_t* d_chunks, std::uint32_t num_chunks,
+                          std::uint32_t* d_collapse_indices,
+                          std::uint32_t* d_collapse_counts);
+}  // namespace detail
+
 CudaCore& CudaCore::instance() {
     static CudaCore instance;
     return instance;
@@ -99,22 +111,19 @@ cudaError_t launchQBSAKernel(const std::uint32_t* d_probe_indices,
                            const std::uint32_t* d_expectations, std::uint32_t num_probes,
                            std::uint32_t* d_bitfield, std::uint32_t* d_corrections,
                            std::uint32_t* d_correction_count, cudaStream_t stream) {
-  // Simple implementation for stub
-  if (!d_probe_indices || !d_expectations || !d_bitfield || !d_corrections || !d_correction_count) {
+  if (!d_probe_indices || !d_expectations || !d_bitfield || !d_corrections ||
+      !d_correction_count) {
     return cudaErrorInvalidValue;
   }
-  
-  try {
-    const uint32_t block_size = 256;
-    const uint32_t grid_size = (num_probes + block_size - 1) / block_size;
-    
-    // In a real implementation, this would launch the kernel
-    // detail::qbsa_kernel<<<grid_size, block_size, 0, stream>>>(...)
-    
-    return cudaSuccess;
-  } catch (...) {
-    return cudaErrorUnknown;
-  }
+
+  const uint32_t block_size = constants::get_default_block_size();
+  const uint32_t grid_size = (num_probes + block_size - 1) / block_size;
+
+  detail::qbsa_kernel<<<grid_size, block_size, 0, stream>>>(
+      d_probe_indices, d_expectations, num_probes, d_bitfield, d_corrections,
+      d_correction_count);
+
+  return cudaGetLastError();
 }
 
 cudaError_t launchQSHKernel(const std::uint64_t* d_chunks,
@@ -122,22 +131,17 @@ cudaError_t launchQSHKernel(const std::uint64_t* d_chunks,
                           std::uint32_t* d_collapse_indices,
                           std::uint32_t* d_collapse_counts,
                           cudaStream_t stream) {
-  // Simple implementation for stub
   if (!d_chunks || !d_collapse_indices || !d_collapse_counts) {
     return cudaErrorInvalidValue;
   }
-  
-  try {
-    const uint32_t block_size = 256;
-    const uint32_t grid_size = (num_chunks + block_size - 1) / block_size;
-    
-    // In a real implementation, this would launch the kernel
-    // detail::qsh_kernel<<<grid_size, block_size, 0, stream>>>(...)
-    
-    return cudaSuccess;
-  } catch (...) {
-    return cudaErrorUnknown;
-  }
+
+  const uint32_t block_size = constants::get_default_block_size();
+  const uint32_t grid_size = (num_chunks + block_size - 1) / block_size;
+
+  detail::qsh_kernel<<<grid_size, block_size, 0, stream>>>(
+      d_chunks, num_chunks, d_collapse_indices, d_collapse_counts);
+
+  return cudaGetLastError();
 }
 
 Error CudaCore::getMemoryInfo(size_t& free, size_t& total) const {

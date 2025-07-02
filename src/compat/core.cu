@@ -92,7 +92,7 @@ Error CudaCore::synchronizeStream(cudaStream_t stream) {
 }
 
 Error CudaCore::synchronizeStream(void* stream) {
-  return synchronizeStream(static_cast<cudaStream_t>(stream));
+  return synchronizeStream(reinterpret_cast<cudaStream_t>(stream));
 }
 
 cudaError_t launchQBSAKernel(const std::uint32_t* d_probe_indices,
@@ -216,7 +216,7 @@ Error CudaCore::launchQBSA(const DeviceMemory<std::uint32_t>& probe_indices,
 { 
   cudaError_t result =
       launchQBSAKernel(probe_indices.get(), expectations.get(), num_probes, bitfield.get(),
-                       corrections.get(), correction_count.get(), static_cast<cudaStream_t>(stream.handle()));
+                      corrections.get(), correction_count.get(), reinterpret_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
           result != cudaSuccess ? cudaGetErrorString(result) : "", "",
           result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
@@ -227,7 +227,7 @@ Error CudaCore::launchQSH(const DeviceMemory<std::uint64_t>& chunks, std::uint32
                           DeviceMemory<std::uint32_t>& collapse_counts, Stream& stream)
 { 
   cudaError_t result = launchQSHKernel(chunks.get(), num_chunks, collapse_indices.get(),
-                                       collapse_counts.get(), static_cast<cudaStream_t>(stream.handle()));
+                                       collapse_counts.get(), reinterpret_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
           result != cudaSuccess ? cudaGetErrorString(result) : "", "",
           result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
@@ -238,7 +238,7 @@ Error CudaCore::launchSimilarity(const DeviceMemory<float>& similarity,
                                  std::uint32_t embedding_size, Stream& stream)
 { 
   cudaError_t result = launchSimilarityKernel(const_cast<float*>(similarity.get()), emb_a.get(),
-                                             emb_b.get(), embedding_size, static_cast<cudaStream_t>(stream.handle()));
+                                            emb_b.get(), embedding_size, reinterpret_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
           result != cudaSuccess ? cudaGetErrorString(result) : "", "",
           result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
@@ -249,7 +249,7 @@ Error CudaCore::launchBlend(DeviceMemory<float>& output, const DeviceMemory<floa
                             std::uint32_t embedding_size, Stream& stream)
 { 
   cudaError_t result = launchBlendKernel(output.get(), embeddings.get(), weights.get(),
-                                        num_contexts, embedding_size, static_cast<cudaStream_t>(stream.handle()));
+                                       num_contexts, embedding_size, reinterpret_cast<cudaStream_t>(stream.handle()));
   return {result == cudaSuccess ? Status::Success : Status::Error,
           result != cudaSuccess ? cudaGetErrorString(result) : "", "",
           result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};

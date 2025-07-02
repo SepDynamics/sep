@@ -24,6 +24,7 @@ target_link_libraries(sep_api
         sep_compat
         sep_blender
         sep_audio
+        http_parser::http_parser
 )
 
 target_include_directories(sep_api

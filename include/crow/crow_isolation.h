@@ -207,47 +207,13 @@ namespace crow {
     #define CROW_CATCHALL_ROUTE(app) app.catchall_route()
     #define CROW_BP_CATCHALL_ROUTE(bp) bp.catchall_rule()
 
-    // HTTP parser stubs
+    // Use the official http-parser types inside a dedicated namespace to keep
+    // compatibility with code that expects crow::http_parser_stub symbols.
     namespace http_parser_stub {
-        enum class http_errno {
-            HPE_OK,
-            HPE_UNKNOWN
-        };
-
-        enum class http_parser_type {
-            HTTP_REQUEST,
-            HTTP_RESPONSE,
-            HTTP_BOTH
-        };
-
-        struct http_parser {
-            unsigned int   type : 2;
-            unsigned int   flags : 8;
-            unsigned int   state : 8;
-            unsigned int   header_state : 8;
-            unsigned int   index : 8;
-            uint32_t  nread;
-            uint64_t  content_length;
-            unsigned short http_major;
-            unsigned short http_minor;
-            unsigned int   status_code : 16;
-            unsigned int   method : 8;
-            unsigned int   http_errno : 7;
-            unsigned int   upgrade : 1;
-            void*          data;
-        };
-
-        struct http_parser_settings {
-            void* on_message_begin;
-            void* on_url;
-            void* on_status;
-            void* on_header_field;
-            void* on_header_value;
-            void* on_headers_complete;
-            void* on_body;
-            void* on_message_complete;
-            void* on_chunk_header;
-            void* on_chunk_complete;
-        };
+        using http_errno = ::http_errno;
+        using http_parser_type = ::http_parser_type;
+        using http_parser = ::http_parser;
+        using http_parser_settings = ::http_parser_settings;
+        using http_parser_url = ::http_parser_url;
     }  // namespace http_parser_stub
 }  // namespace crow

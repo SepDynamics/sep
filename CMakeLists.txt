@@ -13,6 +13,17 @@ find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(spdlog REQUIRED)
+find_path(HTTP_PARSER_INCLUDE_DIR http_parser.h)
+find_library(HTTP_PARSER_LIBRARY http_parser)
+if(HTTP_PARSER_INCLUDE_DIR AND HTTP_PARSER_LIBRARY)
+    add_library(http_parser::http_parser INTERFACE IMPORTED)
+    set_target_properties(http_parser::http_parser PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES ${HTTP_PARSER_INCLUDE_DIR}
+        INTERFACE_LINK_LIBRARIES ${HTTP_PARSER_LIBRARY}
+    )
+else()
+    message(FATAL_ERROR "http_parser library not found")
+endif()
 
 # Add subdirectories
 add_subdirectory(src/core)
@@ -45,6 +56,7 @@ target_link_libraries(sep_engine
         ${OIIO_LIBRARIES}
         ${ZSTD_LIBRARIES}
         ${CURL_LIBRARIES}
+        http_parser::http_parser
         fmt::fmt
         spdlog::spdlog
         glog

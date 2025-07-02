@@ -3,7 +3,8 @@
 // This is a fixed version of the http_parser_fixed.h file from the Crow framework
 // It provides stub implementations for HTTP parser functionality
 
-// Include our own headers
+// Include the official http-parser header and our compatibility helpers
+#include <http_parser.h>
 #include "compat/shim.h"
 #include "common.h"
 #include "crow_isolation.h"

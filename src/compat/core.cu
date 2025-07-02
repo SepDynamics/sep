@@ -11,6 +11,62 @@
 
 namespace sep::cuda {
 
+namespace detail {
+
+#ifdef __CUDACC__
+SEP_GLOBAL void qbsa_kernel(const std::uint32_t* probe_idx,
+                            const std::uint32_t* expectations,
+                            std::uint32_t num_probes, std::uint32_t* bitfield,
+                            std::uint32_t* corrections,
+                            std::uint32_t* correction_count) {
+  const std::uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
+  if (tid >= num_probes) return;
+
+  const std::uint32_t bit_index = probe_idx[tid];
+  const std::uint32_t expected = expectations[tid];
+
+  const std::uint32_t word_idx = bit_index / WARP_SIZE;
+  const std::uint32_t bit_pos = bit_index % WARP_SIZE;
+  const std::uint32_t mask = 1U << bit_pos;
+
+  const std::uint32_t current = atomicOr(&bitfield[word_idx], 0);
+  const std::uint32_t current_bit = (current & mask) ? 1U : 0U;
+
+  if (current_bit != expected) {
+    atomicXor(&bitfield[word_idx], mask);
+    const std::uint32_t idx = atomicAdd(correction_count, 1U);
+    if (idx < MAX_BLOCK_SIZE) corrections[idx] = bit_index;
+  }
+}
+
+SEP_GLOBAL void qsh_kernel(const std::uint64_t* chunks, std::uint32_t num_chunks,
+                           std::uint32_t* collapse_indices,
+                           std::uint32_t* collapse_counts) {
+  const std::uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
+  if (tid >= num_chunks) return;
+
+  const std::uint64_t chunk = chunks[tid];
+  const std::uint64_t reversed = __brevll(chunk);
+  const std::uint64_t diff = chunk ^ reversed;
+
+  std::uint32_t collapse_count = 0;
+  std::uint32_t match_mask = static_cast<std::uint32_t>(~diff) &
+                             ((1U << SYMMETRY_PAIRS) - 1U);
+  const std::uint32_t base = tid * SYMMETRY_PAIRS;
+
+  while (match_mask && collapse_count < SYMMETRY_PAIRS) {
+    std::uint32_t i = __ffs(match_mask) - 1U;
+    collapse_indices[base + collapse_count] = i;
+    collapse_count++;
+    match_mask &= match_mask - 1U;
+  }
+
+  collapse_counts[tid] = collapse_count;
+}
+#endif
+
+}  // namespace detail
+
 CudaCore& CudaCore::instance() {
     static CudaCore instance;
     return instance;

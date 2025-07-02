@@ -44,6 +44,8 @@ add_subdirectory(src/quantum)
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 add_subdirectory(src/blender)
+add_subdirectory(extern/cuew_stub)
+add_subdirectory(extern/openpgl_stub)
 
 # Main executable
 add_executable(sep_engine src/main.cpp)

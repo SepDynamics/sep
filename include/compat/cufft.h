@@ -9,15 +9,18 @@
 #define SEP_CUDA_AVAILABLE 0
 #endif
 
-#if SEP_CUDA_AVAILABLE && defined(__has_include)
-#if __has_include(<cufft.h>)
-#include <cufft.h>
-#define SEP_HAS_CUFFT 1
+#if SEP_CUDA_AVAILABLE
+#  if defined(__has_include_next) && __has_include_next(<cufft.h>)
+#    include_next <cufft.h>
+#    define SEP_HAS_CUFFT 1
+#  elif defined(__has_include) && __has_include(<cufft.h>)
+#    include <cufft.h>
+#    define SEP_HAS_CUFFT 1
+#  else
+#    define SEP_HAS_CUFFT 0
+#  endif
 #else
-#define SEP_HAS_CUFFT 0
-#endif
-#else
-#define SEP_HAS_CUFFT 0
+#  define SEP_HAS_CUFFT 0
 #endif
 
 #if SEP_HAS_CUFFT

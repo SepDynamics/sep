@@ -94,6 +94,19 @@ The future development of the SEP Engine is focused on enhancing its capabilitie
 ├── THESIS.md # The full theoretical thesis behind the framework
 └── README.md # This document
 
+### Runtime Dependencies
+
+The audio module uses PipeWire for real-time capture and analysis. A running
+PipeWire daemon and the `libpipewire-0.3` package are required at runtime. On
+Debian-based systems install it via:
+
+```bash
+sudo apt install libpipewire-0.3-dev libfftw3-dev
+```
+
+Make sure the service is active (`systemctl --user status pipewire`) before
+executing `sep_engine` or the audio tests.
+
 ---
 
 This project represents an attempt to construct a first-principles, computationally-grounded theory of everything. It is a work in progress, but it offers a robust and testable foundation for exploring the deepest questions about our reality.

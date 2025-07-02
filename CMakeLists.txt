@@ -31,14 +31,8 @@ add_compile_definitions(CROW_USE_BOOST)
 # Find required packages
 find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
-find_library(HTTP_PARSER_LIBRARY http_parser REQUIRED)
-find_path(HTTP_PARSER_INCLUDE_DIR http_parser.h REQUIRED)
-add_library(http_parser::http_parser INTERFACE IMPORTED)
-set_target_properties(http_parser::http_parser PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES ${HTTP_PARSER_INCLUDE_DIR}
-    INTERFACE_LINK_LIBRARIES ${HTTP_PARSER_LIBRARY}
-)
 find_package(fmt REQUIRED)
+find_package(http_parser REQUIRED)
 find_package(spdlog REQUIRED)
 
 # Add subdirectories

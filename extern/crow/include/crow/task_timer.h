@@ -12,6 +12,7 @@
 
 namespace crow
 {
+    namespace asio = boost::asio;
     namespace detail
     {
 

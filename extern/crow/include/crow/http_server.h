@@ -18,6 +18,7 @@
 
 namespace crow
 {
+    namespace asio = boost::asio;
     using tcp = asio::ip::tcp;
 
     template<typename Handler, typename Adaptor = SocketAdaptor, typename... Middlewares>

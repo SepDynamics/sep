@@ -8,6 +8,7 @@
 
 namespace crow
 {
+    namespace asio = boost::asio;
     namespace websocket
     {
         enum class WebSocketReadState

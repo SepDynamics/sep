@@ -30,7 +30,27 @@ TEST(SepEngineContextValidation, InvalidContextMissingType) {
         }}}
     };
     auto res = engine.validateContexts(req);
-    EXPECT_FALSE(res["success"].get<bool>());
+    EXPECT_TRUE(res["success"].get<bool>());
+    EXPECT_FALSE(res["valid"].get<bool>());
+    ASSERT_EQ(res["invalid_indices"].size(), 1u);
+    EXPECT_EQ(res["invalid_indices"][0].get<size_t>(), 0u);
+}
+
+TEST(SepEngineContextValidation, InvalidContextBadTimestamp) {
+    auto &engine = SepEngine::getInstance();
+    ASSERT_TRUE(engine.initialize({}));
+    nlohmann::json req = {
+        {"contexts", {{
+            {"type", "message"},
+            {"content", {1,2,3}},
+            {"metadata", {{"timestamp", "bad"}}}
+        }}}
+    };
+    auto res = engine.validateContexts(req);
+    EXPECT_TRUE(res["success"].get<bool>());
+    EXPECT_FALSE(res["valid"].get<bool>());
+    ASSERT_EQ(res["invalid_indices"].size(), 1u);
+    EXPECT_EQ(res["invalid_indices"][0].get<size_t>(), 0u);
 }
 
 TEST(SepEngineBlendContexts, BasicBlend) {
@@ -38,15 +58,19 @@ TEST(SepEngineBlendContexts, BasicBlend) {
     ASSERT_TRUE(engine.initialize({}));
     nlohmann::json req = {
         {"contexts", {
-            {{"content", {0.0, 1.0}}},
-            {{"content", {1.0, 0.0}}}
+            {{"content", {0.0, 1.0}}, {"metadata", {{"timestamp", 1}}}},
+            {{"content", {1.0, 0.0}}, {"metadata", {{"timestamp", 3}}}}
         }},
-        {"weights", {0.5, 0.5}}
+        {"weights", {0.25, 0.75}}
     };
     auto res = engine.blendContexts(req);
     EXPECT_TRUE(res["success"].get<bool>());
-    auto coherence = res["result"]["coherence"].get<double>();
-    EXPECT_GT(coherence, 0.0);
+    auto result = res["result"];
+    auto emb    = result["embedding"].get<std::vector<double>>();
+    ASSERT_EQ(emb.size(), 2u);
+    EXPECT_NEAR(emb[0], 1.5, 1e-6);
+    EXPECT_NEAR(emb[1], 0.25, 1e-6);
+    EXPECT_NEAR(result["metadata"]["timestamp"].get<double>(), 2.5, 1e-6);
 }
 
 TEST(SepEngineBlendContexts, DimensionMismatch) {
@@ -54,8 +78,8 @@ TEST(SepEngineBlendContexts, DimensionMismatch) {
     ASSERT_TRUE(engine.initialize({}));
     nlohmann::json req = {
         {"contexts", {
-            {{"content", {0.0, 1.0}}},
-            {{"content", {1.0}}}
+            {{"content", {0.0, 1.0}}, {"metadata", {{"timestamp", 1}}}},
+            {{"content", {1.0}}, {"metadata", {{"timestamp", 2}}}}
         }}
     };
     auto res = engine.blendContexts(req);

@@ -28,9 +28,12 @@ inline std::pair<bool,int> validate_contexts_impl(const nlohmann::json& contexts
             return {false, static_cast<int>(i)};
         }
         if (ctx.contains("metadata") && ctx["metadata"].is_object()) {
-            if (!ctx["metadata"].contains("timestamp")) {
+            if (!ctx["metadata"].contains("timestamp") ||
+                !ctx["metadata"]["timestamp"].is_number()) {
                 return {false, static_cast<int>(i)};
             }
+        } else {
+            return {false, static_cast<int>(i)};
         }
     }
     return {true, -1};
@@ -104,7 +107,8 @@ inline ValidationReport validate_contexts(const nlohmann::json& contexts) {
     for (const auto& ctx : contexts) {
         bool ok = ctx.is_object() && ctx.contains("type") && ctx["type"].is_string() &&
                   ctx.contains("metadata") && ctx["metadata"].is_object() &&
-                  ctx["metadata"].contains("timestamp");
+                  ctx["metadata"].contains("timestamp") &&
+                  ctx["metadata"]["timestamp"].is_number();
         if (!ok) {
             report.overall_valid = false;
             report.invalid_indices.push_back(index);

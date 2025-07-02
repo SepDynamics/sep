@@ -1,9 +1,8 @@
 #include "blender/gpu_context.h"
 #include <cstdlib>
 #include <cstring>
-
-#include <cstring>
 #include <new>
+#include <sys/stat.h>
 
 namespace sep {
 
@@ -12,6 +11,16 @@ GPUContext::GPUContext() = default;
 GPUContext::~GPUContext() = default;
 
 SEPResult GPUContext::init(int device_index) {
+    int count = 0;
+    SEP_RETURN_IF_ERROR(getDeviceCount(count));
+    if (device_index == -1) {
+        device_index = 0;
+    }
+    if (device_index < 0 || device_index >= count) {
+        has_error_ = true;
+        last_error_ = "Invalid device index";
+        return SEPResult::INVALID_DEVICE;
+    }
     device_index_ = device_index;
     initialized_ = true;
     clearError();
@@ -32,6 +41,37 @@ SEPResult GPUContext::selectDevice(int device_index) {
         return SEPResult::INVALID_DEVICE;
     }
     device_index_ = device_index;
+    return SEPResult::SUCCESS;
+}
+
+SEPResult GPUContext::loadComputeShader(const ::sep::shim::string& path) {
+    struct stat st;
+    if (stat(path.c_str(), &st) != 0) {
+        has_error_ = true;
+        last_error_ = "shader not found";
+        return SEPResult::FILE_NOT_FOUND;
+    }
+    shader_path_ = path;
+    shader_timestamp_ = static_cast<long long>(st.st_mtime);
+    ++shader_revision_;
+    return SEPResult::SUCCESS;
+}
+
+SEPResult GPUContext::reloadComputeShaderIfNeeded() {
+    if (shader_path_.empty()) {
+        return SEPResult::SUCCESS;
+    }
+    struct stat st;
+    if (stat(shader_path_.c_str(), &st) != 0) {
+        has_error_ = true;
+        last_error_ = "shader not found";
+        return SEPResult::FILE_NOT_FOUND;
+    }
+    long long mtime = static_cast<long long>(st.st_mtime);
+    if (mtime != shader_timestamp_) {
+        shader_timestamp_ = mtime;
+        ++shader_revision_;
+    }
     return SEPResult::SUCCESS;
 }
 
@@ -71,7 +111,7 @@ void GPUContext::deleteBuffer(GPUBuffer* buffer) {
 }
 
 void* GPUContext::mapBuffer(GPUBuffer* buffer) {
-    if (!buffer || buffer->mapped) {
+    if (!initialized_ || !buffer || buffer->mapped) {
         has_error_ = true;
         last_error_ = "invalid map";
         return nullptr;

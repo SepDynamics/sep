@@ -11,9 +11,9 @@
 namespace blender {
 
 // ----------------------------- DeltaCompression -----------------------------
-::sep::shim::vector<uint8_t> DeltaCompression::compress(const void* data, size_t size) {
+std::vector<uint8_t> DeltaCompression::compress(const void* data, size_t size) {
   const uint8_t* bytes = static_cast<const uint8_t*>(data);
-  ::sep::shim::vector<uint8_t> out(size);
+  std::vector<uint8_t> out(size);
   auto start = std::chrono::high_resolution_clock::now();
 
   if (previousBlock.empty()) {
@@ -35,7 +35,7 @@ namespace blender {
   return out;
 }
 
-bool DeltaCompression::decompress(const ::sep::shim::vector<uint8_t>& compressed, void* output,
+bool DeltaCompression::decompress(const std::vector<uint8_t>& compressed, void* output,
                                   size_t outputSize) {
   if (outputSize != compressed.size()) return false;
   uint8_t* out = static_cast<uint8_t*>(output);
@@ -63,9 +63,9 @@ CompressionMethod DeltaCompression::selectMethod(const void* /*data*/, size_t /*
 CompressionStats DeltaCompression::getStats() const { return stats; }
 
 // ----------------------------- LZ4Compression ------------------------------
-::sep::shim::vector<uint8_t> LZ4Compression::compress(const void* data, size_t size) { 
+std::vector<uint8_t> LZ4Compression::compress(const void* data, size_t size) {
   int maxSize = LZ4_compressBound(static_cast<int>(size));
-  ::sep::shim::vector<uint8_t> out(maxSize);
+  std::vector<uint8_t> out(maxSize);
   auto start = std::chrono::high_resolution_clock::now();
 
   int compressedSize =
@@ -84,7 +84,7 @@ CompressionStats DeltaCompression::getStats() const { return stats; }
   return out;
 }
 
-bool LZ4Compression::decompress(const ::sep::shim::vector<uint8_t>& compressed, void* output,
+bool LZ4Compression::decompress(const std::vector<uint8_t>& compressed, void* output,
                                 size_t outputSize) {
   auto start = std::chrono::high_resolution_clock::now();
   int result = LZ4_decompress_safe(
@@ -102,9 +102,9 @@ CompressionMethod LZ4Compression::selectMethod(const void* /*data*/, size_t /*si
 CompressionStats LZ4Compression::getStats() const { return stats; }
 
 // ----------------------------- ZSTDCompression -----------------------------
-::sep::shim::vector<uint8_t> ZSTDCompression::compress(const void* data, size_t size) {
+std::vector<uint8_t> ZSTDCompression::compress(const void* data, size_t size) {
   size_t maxSize = ZSTD_compressBound(size);
-  ::sep::shim::vector<uint8_t> out(maxSize);
+  std::vector<uint8_t> out(maxSize);
   auto start = std::chrono::high_resolution_clock::now();
   size_t compressedSize = ZSTD_compress(out.data(), maxSize, data, size, 1);
   auto end = std::chrono::high_resolution_clock::now();
@@ -119,7 +119,7 @@ CompressionStats LZ4Compression::getStats() const { return stats; }
   return out;
 }
 
-bool ZSTDCompression::decompress(const ::sep::shim::vector<uint8_t>& compressed, void* output,
+bool ZSTDCompression::decompress(const std::vector<uint8_t>& compressed, void* output,
                                  size_t outputSize) {
   auto start = std::chrono::high_resolution_clock::now();
   size_t result = ZSTD_decompress(output, outputSize, compressed.data(), compressed.size());
@@ -175,10 +175,10 @@ bool CompressionFactory::hasRepeatingPatterns(const void* data, size_t size) {
 
 namespace compression_utils {
 
-::sep::shim::vector<uint8_t> downsample(const void* data, size_t size, size_t factor) {
+std::vector<uint8_t> downsample(const void* data, size_t size, size_t factor) {
   const uint8_t* bytes = static_cast<const uint8_t*>(data);
   size_t out_size = (size + factor - 1) / factor;
-  ::sep::shim::vector<uint8_t> result(out_size);
+  std::vector<uint8_t> result(out_size);
   if (out_size > 0) {
     std::memset(result.data(), 0, out_size);
   }
@@ -192,9 +192,9 @@ namespace compression_utils {
   return result;
 }
 
-::sep::shim::vector<uint8_t> upsample(const ::sep::shim::vector<uint8_t>& data, size_t original_size,
+std::vector<uint8_t> upsample(const std::vector<uint8_t>& data, size_t original_size,
                               size_t factor) {
-  ::sep::shim::vector<uint8_t> result(original_size);
+  std::vector<uint8_t> result(original_size);
   for (size_t i = 0; i < original_size; ++i) {
     result[i] = data[i / factor];
   }
@@ -215,7 +215,7 @@ float estimateCompressionRatio(const void* data, size_t size, CompressionMethod 
   switch (method) {
     case CompressionMethod::LZ4: {
       int maxSize = LZ4_compressBound(static_cast<int>(size));
-      ::sep::shim::vector<uint8_t> buf(maxSize);
+      std::vector<uint8_t> buf(maxSize);
       int csize = LZ4_compress_default(reinterpret_cast<const char*>(data),
                                        reinterpret_cast<char*>(buf.data()), static_cast<int>(size),
                                        maxSize);
@@ -224,7 +224,7 @@ float estimateCompressionRatio(const void* data, size_t size, CompressionMethod 
     }
     case CompressionMethod::ZSTD: {
       size_t maxSize = ZSTD_compressBound(size);
-      ::sep::shim::vector<uint8_t> buf(maxSize);
+      std::vector<uint8_t> buf(maxSize);
       size_t csize = ZSTD_compress(buf.data(), maxSize, data, size, 1);
       if (ZSTD_isError(csize)) return 1.0f;
       return static_cast<float>(csize) / static_cast<float>(size);

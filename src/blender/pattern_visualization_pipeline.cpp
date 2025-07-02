@@ -1,6 +1,7 @@
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"
 #include "core/common.h"  // defines sep::SEPResult
+#include <vector>
 #include <algorithm>
 #include <numeric>
 
@@ -12,7 +13,7 @@ PatternVisualizationPipeline::PatternVisualizationPipeline(MeshHandler *handler,
     : handler_(handler), gpu_ctx_(gpu_ctx), last_shader_revision_(0) {} 
 
 std::array<float, 3> PatternVisualizationPipeline::projectNDim(
-    const ::sep::shim::vector<float> &coords) const { 
+    const std::vector<float> &coords) const {
   std::array<float, 3> out{0.0f, 0.0f, 0.0f}; 
   if (coords.empty())
     return out;
@@ -73,7 +74,7 @@ sep::SEPResult PatternVisualizationPipeline::renderManifold(
   if (r != sep::SEPResult::SUCCESS)
     return r;
 
-  ::sep::shim::vector<float> coords;
+  std::vector<float> coords;
   coords.reserve(static_cast<size_t>(dimensionality));
   coords.push_back(pattern.position.x);
   if (dimensionality > 1)
@@ -109,7 +110,7 @@ sep::SEPResult PatternVisualizationPipeline::renderManifold(
 }
 
 sep::SEPResult PatternVisualizationPipeline::applyCoherenceOverlay(
-    const ::sep::shim::vector<float> &history) {
+    const std::vector<float> &history) {
   if (!handler_ || history.empty()) {
     return sep::SEPResult::INVALID_ARGUMENT;
   }

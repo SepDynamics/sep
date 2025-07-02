@@ -188,13 +188,11 @@ inline long double acosl(long double x) {
         errno = EDOM;
         return NAN;
     }
-#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
-    return ::acosl(x);
+#if defined(__CUDA_ARCH__)
+    long double r = sqrtl(1.0L - x * x);
+    return atan2l(r, x);
 #else
-    long double r = static_cast<long double>(acos(static_cast<double>(x)));
-    long double delta = (cos(r) - x) / sin(r);
-    r += delta;
-    return r;
+    return std::acosl(x);
 #endif
 }
 inline long double asinl(long double x) {
@@ -202,30 +200,25 @@ inline long double asinl(long double x) {
         errno = EDOM;
         return NAN;
     }
-#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
-    return ::asinl(x);
+#if defined(__CUDA_ARCH__)
+    long double r = sqrtl(1.0L - x * x);
+    return atan2l(x, r);
 #else
-    long double r = static_cast<long double>(asin(static_cast<double>(x)));
-    long double delta = (x - sin(r)) / cos(r);
-    r += delta;
-    return r;
+    return std::asinl(x);
 #endif
 }
 inline long double atanl(long double x) {
-#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
-    return ::atanl(x);
+#if defined(__CUDA_ARCH__)
+    return atan((double)x);
 #else
-    long double r = static_cast<long double>(atan(static_cast<double>(x)));
-    long double t = tan(r);
-    r -= (t - x) * (1.0L / (1.0L + t * t));
-    return r;
+    return std::atanl(x);
 #endif
 }
 inline long double atan2l(long double y, long double x) {
-#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
-    return ::atan2l(y, x);
+#if defined(__CUDA_ARCH__)
+    return atan2((double)y, (double)x);
 #else
-    return static_cast<long double>(atan2(static_cast<double>(y), static_cast<double>(x)));
+    return std::atan2l(y, x);
 #endif
 }
 inline long double ceill(long double x) {

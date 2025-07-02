@@ -19,7 +19,6 @@ CMake Warning at CMakeLists.txt:26 (message):
   http_parser library not found; using bundled header-only implementation
 
 
--- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
 -- Found hiredis: /usr/lib64/libhiredis.so
 -- Found hiredis headers: /usr/include/hiredis
 -- Found PkgConfig: /usr/bin/pkg-config (found version "2.3.0")
@@ -29,6 +28,7 @@ CMake Warning at CMakeLists.txt:26 (message):
 --   Found fftw3f, version 3.3.10
 -- Using PipeWire at: pipewire-0.3
 -- Using FFTW at: fftw3f
+-- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
 -- Found Embree: /usr/lib64/libembree4.so
 CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
   The package name passed to `find_package_handle_standard_args` (GLOG) does
@@ -49,45 +49,45 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
 [  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 [ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
 [ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 15%] Linking CXX static library libsep_core.a
 [ 15%] Built target sep_core
-[ 18%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
 [ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
 [ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 24%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
 [ 25%] Linking CXX static library libsep_compat.a
 [ 25%] Built target sep_compat
-[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 30%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 37%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 45%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 45%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 31%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 34%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 36%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 42%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 45%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 48%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 53%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 56%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 [ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 [ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
@@ -99,28 +99,21 @@ Building SEP Engine...
 [ 68%] Built target sep_blender
 [ 69%] Linking CXX static library libsep_audio.a
 [ 69%] Built target sep_audio
-[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-In file included from /usr/local/include/crow/http_parser_merged.h:40,
-                 from /usr/local/include/crow.h:3,
-                 from /sep/include/crow/crow_isolation.h:11,
-                 from /sep/include/crow/app.h:6,
-                 from /sep/include/api/crow_request_adapter.h:5,
-                 from /sep/src/api/crow_request_adapter.cpp:1:
-/sep/include/crow/common.h:4: error: unterminated #else
-    4 | #ifndef __CUDACC__
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
 In file included from /usr/local/include/crow/http_parser_merged.h:40,
                  from /usr/local/include/crow.h:3,
                  from /sep/include/crow/crow_isolation.h:11,
@@ -132,15 +125,23 @@ In file included from /usr/local/include/crow/http_parser_merged.h:40,
 In file included from /usr/local/include/crow/http_parser_merged.h:40,
                  from /usr/local/include/crow.h:3,
                  from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/include/crow/http_request.h:7,
+                 from /sep/include/api/rate_limit_middleware.h:6,
+                 from /sep/src/api/rate_limit_middleware.cpp:2:
+/sep/include/crow/common.h:4: error: unterminated #else
+    4 | #ifndef __CUDACC__
+In file included from /usr/local/include/crow/http_parser_merged.h:40,
+                 from /usr/local/include/crow.h:3,
+                 from /sep/include/crow/crow_isolation.h:11,
                  from /sep/src/api/crow_adapter.cpp:12:
 /sep/include/crow/common.h:4: error: unterminated #else
     4 | #ifndef __CUDACC__
 In file included from /usr/local/include/crow/http_parser_merged.h:40,
                  from /usr/local/include/crow.h:3,
                  from /sep/include/crow/crow_isolation.h:11,
-                 from /sep/include/crow/http_request.h:7,
-                 from /sep/include/api/rate_limit_middleware.h:6,
-                 from /sep/src/api/rate_limit_middleware.cpp:2:
+                 from /sep/include/crow/app.h:6,
+                 from /sep/include/api/crow_request_adapter.h:5,
+                 from /sep/src/api/crow_request_adapter.cpp:1:
 /sep/include/crow/common.h:4: error: unterminated #else
     4 | #ifndef __CUDACC__
 In file included from /usr/local/include/crow/http_parser_merged.h:40,
@@ -157,5 +158,11 @@ In file included from /usr/local/include/crow/http_parser_merged.h:40,
                  from /sep/include/api/server.h:8,
                  from /sep/include/api/logging_middleware.h:4,
                  from /sep/src/api/logging_middleware.cpp:1:
+/sep/include/crow/common.h:4: error: unterminated #else
+    4 | #ifndef __CUDACC__
+In file included from /usr/local/include/crow/http_parser_merged.h:40,
+                 from /usr/local/include/crow.h:3,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/src/api/server.cpp:3:
 /sep/include/crow/common.h:4: error: unterminated #else
     4 | #ifndef __CUDACC__

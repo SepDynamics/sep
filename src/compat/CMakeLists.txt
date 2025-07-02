@@ -24,7 +24,10 @@ if(WITH_OPENSUBDIV)
 endif()
 
 # Find CUDA toolkit to provide imported targets and variables
-find_package(CUDAToolkit REQUIRED)
+find_package(CUDAToolkit QUIET)
+if(NOT CUDAToolkit_FOUND OR NOT CUDAToolkit_NVCC_EXECUTABLE)
+    message(FATAL_ERROR "CUDA toolkit not found. Install 'nvidia-cuda-toolkit' or set CUDAToolkit_ROOT")
+endif()
 
 add_library(sep_compat STATIC
     cuda_api.cu

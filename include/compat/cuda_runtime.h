@@ -99,6 +99,11 @@ cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
 }  // namespace cuda
 }  // namespace sep
 
+#if defined(__cplusplus)
+// Expose stub functions in the global namespace for drop-in compatibility
+using namespace sep::cuda;
+#endif
+
 #endif // __cplusplus
 #endif // !SEP_CUDA_AVAILABLE
 

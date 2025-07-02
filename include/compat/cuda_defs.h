@@ -4,7 +4,11 @@
 #include <string>
 #include "core/common.h"
 #include "compat/macros.h"
+#if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
+#else
+#include "compat/cuda_runtime.h"
+#endif
 
 namespace sep {
 namespace cuda {
@@ -33,6 +37,3 @@ using SepCudaStatus = Status;
 }  // namespace cuda
 }  // namespace sep
 
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#endif

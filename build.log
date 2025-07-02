@@ -36,167 +36,371 @@ Running CMake configuration...
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  2%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  1%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  2%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
 [  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 16%] Linking CXX static library libsep_embeddings.a
 [ 16%] Built target sep_embeddings
 [ 17%] Linking CXX static library libsep_core.a
 [ 17%] Built target sep_core
+[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
 [ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [ 27%] Linking CXX static library libsep_compat.a
 [ 27%] Built target sep_compat
 [ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 33%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 39%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 42%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 45%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 48%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 51%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 60%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 41%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 45%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 48%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 52%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 /sep/src/memory/memory_tier_manager.cpp: In member function ‘sep::SEPResult sep::memory::MemoryTierManager::launch_pattern_processing(sep::pattern::PatternData*, sep::pattern::PatternData*, const sep::pattern::PatternConfig&, size_t, const sep::pattern::PatternData*, void*)’:
-/sep/src/memory/memory_tier_manager.cpp:241:34: error: ‘launch_pattern_processing’ is not a member of ‘sep::cuda’
-  241 |     cudaError_t err = sep::cuda::launch_pattern_processing(
-      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/memory/memory_tier_manager.cpp:242:37: error: ‘sep::pattern::cuda’ has not been declared
+  242 |     cudaError_t err = sep::pattern::cuda::launch_pattern_processing(
+      |                                     ^~~~
 [ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
 [ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
 [ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-In file included from /sep/src/memory/quantum_coherence_manager.cpp:4:
-/sep/include/quantum/quantum_manifold_optimizer.h:63:15: error: expected nested-name-specifier before ‘namespace’
-   63 |         using namespace sep::config;
-      |               ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:65:9: error: ‘CudaConfig’ does not name a type; did you mean ‘Config’?
-   65 |         CudaConfig cuda;
-      |         ^~~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:66:9: error: ‘APIConfig’ does not name a type; did you mean ‘Config’?
-   66 |         APIConfig api;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:67:9: error: ‘LogConfig’ does not name a type; did you mean ‘Config’?
-   67 |         LogConfig log;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:68:9: error: ‘AnalyticsConfig’ does not name a type
-   68 |         AnalyticsConfig analytics;
-      |         ^~~~~~~~~~~~~~~
-In file included from /sep/src/quantum/quantum_processor_qfh_common.cpp:8:
-/sep/include/quantum/quantum_manifold_optimizer.h:63:15: error: expected nested-name-specifier before ‘namespace’
-   63 |         using namespace sep::config;
-      |               ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:65:9: error: ‘CudaConfig’ does not name a type; did you mean ‘Config’?
-   65 |         CudaConfig cuda;
-      |         ^~~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:66:9: error: ‘APIConfig’ does not name a type; did you mean ‘Config’?
-   66 |         APIConfig api;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:67:9: error: ‘LogConfig’ does not name a type; did you mean ‘Config’?
-   67 |         LogConfig log;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:68:9: error: ‘AnalyticsConfig’ does not name a type
-   68 |         AnalyticsConfig analytics;
-      |         ^~~~~~~~~~~~~~~
 make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
 [ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:149: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-In file included from /sep/src/quantum/pattern_evolution_bridge.cpp:2:
-/sep/include/quantum/quantum_manifold_optimizer.h:63:15: error: expected nested-name-specifier before ‘namespace’
-   63 |         using namespace sep::config;
-      |               ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:65:9: error: ‘CudaConfig’ does not name a type; did you mean ‘Config’?
-   65 |         CudaConfig cuda;
-      |         ^~~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:66:9: error: ‘APIConfig’ does not name a type; did you mean ‘Config’?
-   66 |         APIConfig api;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:67:9: error: ‘LogConfig’ does not name a type; did you mean ‘Config’?
-   67 |         LogConfig log;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:68:9: error: ‘AnalyticsConfig’ does not name a type
-   68 |         AnalyticsConfig analytics;
-      |         ^~~~~~~~~~~~~~~
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:191: src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o] Error 1
-In file included from /sep/src/quantum/pattern_processor_interface.cpp:6:
-/sep/include/quantum/quantum_manifold_optimizer.h:63:15: error: expected nested-name-specifier before ‘namespace’
-   63 |         using namespace sep::config;
-      |               ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:65:9: error: ‘CudaConfig’ does not name a type; did you mean ‘Config’?
-   65 |         CudaConfig cuda;
-      |         ^~~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:66:9: error: ‘APIConfig’ does not name a type; did you mean ‘Config’?
-   66 |         APIConfig api;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:67:9: error: ‘LogConfig’ does not name a type; did you mean ‘Config’?
-   67 |         LogConfig log;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:68:9: error: ‘AnalyticsConfig’ does not name a type
-   68 |         AnalyticsConfig analytics;
-      |         ^~~~~~~~~~~~~~~
-make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
-In file included from /sep/src/quantum/quantum_manifold_optimizer.cpp:1:
-/sep/include/quantum/quantum_manifold_optimizer.h:63:15: error: expected nested-name-specifier before ‘namespace’
-   63 |         using namespace sep::config;
-      |               ^~~~~~~~~
-/sep/include/quantum/quantum_manifold_optimizer.h:65:9: error: ‘CudaConfig’ does not name a type; did you mean ‘Config’?
-   65 |         CudaConfig cuda;
-      |         ^~~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:66:9: error: ‘APIConfig’ does not name a type; did you mean ‘Config’?
-   66 |         APIConfig api;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:67:9: error: ‘LogConfig’ does not name a type; did you mean ‘Config’?
-   67 |         LogConfig log;
-      |         ^~~~~~~~~
-      |         Config
-/sep/include/quantum/quantum_manifold_optimizer.h:68:9: error: ‘AnalyticsConfig’ does not name a type
-   68 |         AnalyticsConfig analytics;
-      |         ^~~~~~~~~~~~~~~
 [ 69%] Linking CXX static library libsep_blender.a
 [ 69%] Built target sep_blender
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:261: src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o] Error 1
-make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:219: src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:407: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
 [ 70%] Linking CXX static library libsep_audio.a
 [ 70%] Built target sep_audio
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 82%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 85%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+In file included from /sep/src/api/sep_engine.cpp:28:
+/sep/src/api/../../_sep/testbed/context_algorithms.hpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::testbed::blend_contexts_impl(const std::vector<std::vector<double> >&, const std::vector<float>&)’:
+/sep/src/api/../../_sep/testbed/context_algorithms.hpp:100:75: error: a function-definition is not allowed here before ‘{’ token
+  100 | inline ValidationReport validate_contexts(const nlohmann::json& contexts) {
+      |                                                                           ^
+/sep/src/api/../../_sep/testbed/context_algorithms.hpp:129:72: error: a function-definition is not allowed here before ‘{’ token
+  129 |                                    const std::vector<double>& weights) {
+      |                                                                        ^
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:36:8: error: ‘SepEngine’ has not been declared
+   36 | struct SepEngine::Impl
+      |        ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:38:1: error: expected unqualified-id before ‘{’ token
+   38 | {
+      | ^
+/sep/src/api/sep_engine.cpp:75:23: error: ‘SepEngine’ has not been declared
+   75 | std::atomic<uint64_t> SepEngine::id_counter_{1};
+      |                       ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:78:1: error: ‘SepEngine’ does not name a type
+   78 | SepEngine& SepEngine::getInstance()
+      | ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:85:1: error: ‘SepEngine’ does not name a type
+   85 | SepEngine::SepEngine() : impl_(std::make_unique<Impl>()) {}
+      | ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:88:1: error: ‘SepEngine’ does not name a type
+   88 | SepEngine::~SepEngine() = default;
+      | ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:91:13: error: ‘SepEngine’ has not been declared
+   91 | std::string SepEngine::generateId(const std::string& prefix)
+      |             ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:100:16: error: ‘SepEngine’ has not been declared
+  100 | nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:100:49: error: ‘config’ in namespace ‘sep::sep’ does not name a type
+  100 | nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
+      |                                                 ^~~~~~
+/sep/src/api/sep_engine.cpp:100:66: error: expected unqualified-id before ‘&’ token
+  100 | nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
+      |                                                                  ^
+/sep/src/api/sep_engine.cpp:100:66: error: expected ‘)’ before ‘&’ token
+  100 | nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
+      |                                     ~                            ^
+      |                                                                  )
+/sep/src/api/sep_engine.cpp:100:78: error: expected initializer before ‘)’ token
+  100 | nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
+      |                                                                              ^
+/sep/src/api/sep_engine.cpp:115:16: error: ‘SepEngine’ has not been declared
+  115 | nlohmann::json SepEngine::shutdown()
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::shutdown()’:
+/sep/src/api/sep_engine.cpp:118:9: error: ‘impl_’ was not declared in this scope
+  118 |         impl_->quantum_processor.reset();
+      |         ^~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:127:16: error: ‘SepEngine’ has not been declared
+  127 | nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::processPatterns(const nlohmann::json_abi_v3_11_3::json&)’:
+/sep/src/api/sep_engine.cpp:129:10: error: ‘impl_’ was not declared in this scope
+  129 |     if (!impl_->initialized) {
+      |          ^~~~~
+/sep/src/api/sep_engine.cpp:135:5: error: ‘impl_’ was not declared in this scope
+  135 |     impl_->health_metrics.totalRequests++;
+      |     ^~~~~
+/sep/src/api/sep_engine.cpp:140:14: error: ‘validateFields’ was not declared in this scope
+  140 |         if (!validateFields(request_data, {"pattern_data"}, error))
+      |              ^~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:150:43: error: ‘sep::sep::api::ErrorCode’ has not been declared
+  150 |             return makeErrorResponse(api::ErrorCode::InvalidArgument, "Invalid pattern data format");
+      |                                           ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:150:20: error: ‘makeErrorResponse’ was not declared in this scope
+  150 |             return makeErrorResponse(api::ErrorCode::InvalidArgument, "Invalid pattern data format");
+      |                    ^~~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:167:43: error: ‘sep::sep::api::ErrorCode’ has not been declared
+  167 |             return makeErrorResponse(api::ErrorCode::SystemError, "Pattern processing failed");
+      |                                           ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:167:20: error: ‘makeErrorResponse’ was not declared in this scope
+  167 |             return makeErrorResponse(api::ErrorCode::SystemError, "Pattern processing failed");
+      |                    ^~~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:191:16: error: ‘SepEngine’ has not been declared
+  191 | nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::processBatch(const nlohmann::json_abi_v3_11_3::json&)’:
+/sep/src/api/sep_engine.cpp:193:10: error: ‘impl_’ was not declared in this scope
+  193 |     if (!impl_->initialized) {
+      |          ^~~~~
+/sep/src/api/sep_engine.cpp:199:5: error: ‘impl_’ was not declared in this scope
+  199 |     impl_->health_metrics.totalRequests++;
+      |     ^~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:257:16: error: ‘SepEngine’ has not been declared
+  257 | nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::validateContexts(const nlohmann::json_abi_v3_11_3::json&)’:
+/sep/src/api/sep_engine.cpp:259:10: error: ‘impl_’ was not declared in this scope
+  259 |     if (!impl_->initialized) {
+      |          ^~~~~
+/sep/src/api/sep_engine.cpp:266:5: error: ‘impl_’ was not declared in this scope
+  266 |     impl_->health_metrics.totalRequests++;
+      |     ^~~~~
+/sep/src/api/sep_engine.cpp:270:39: error: ‘sep::sep::api::ErrorCode’ has not been declared
+  270 |         return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
+      |                                       ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:270:16: error: ‘makeErrorResponse’ was not declared in this scope
+  270 |         return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
+      |                ^~~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:273:24: error: ‘sep::sep::testbed’ has not been declared
+  273 |     auto report = sep::testbed::validate_contexts(request_data["contexts"]);
+      |                        ^~~~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:285:16: error: ‘SepEngine’ has not been declared
+  285 | nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::getPatternHistory(const nlohmann::json_abi_v3_11_3::json&)’:
+/sep/src/api/sep_engine.cpp:287:10: error: ‘impl_’ was not declared in this scope
+  287 |     if (!impl_->initialized) {
+      |          ^~~~~
+/sep/src/api/sep_engine.cpp:299:28: error: ‘impl_’ was not declared in this scope
+  299 |     const auto& patterns = impl_->pattern_processor->getPatterns();
+      |                            ^~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:317:16: error: ‘SepEngine’ has not been declared
+  317 | nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::extractEmbeddings(const nlohmann::json_abi_v3_11_3::json&)’:
+/sep/src/api/sep_engine.cpp:319:10: error: ‘impl_’ was not declared in this scope
+  319 |     if (!impl_->initialized) {
+      |          ^~~~~
+/sep/src/api/sep_engine.cpp:325:5: error: ‘impl_’ was not declared in this scope
+  325 |     impl_->health_metrics.totalRequests++;
+      |     ^~~~~
+/sep/src/api/sep_engine.cpp:328:39: error: ‘sep::sep::api::ErrorCode’ has not been declared
+  328 |         return makeErrorResponse(api::ErrorCode::InvalidArgument,
+      |                                       ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:328:16: error: ‘makeErrorResponse’ was not declared in this scope
+  328 |         return makeErrorResponse(api::ErrorCode::InvalidArgument,
+      |                ^~~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:343:16: error: ‘SepEngine’ has not been declared
+  343 | nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::calculateSimilarity(const nlohmann::json_abi_v3_11_3::json&)’:
+/sep/src/api/sep_engine.cpp:345:10: error: ‘impl_’ was not declared in this scope
+  345 |     if (!impl_->initialized) {
+      |          ^~~~~
+/sep/src/api/sep_engine.cpp:386:49: error: ‘sep::sep::math’ has not been declared
+  386 |         double similarity = dot_product / (sep::math::sqrt_safe(norm1) * sep::math::sqrt_safe(norm2));
+      |                                                 ^~~~
+/sep/src/api/sep_engine.cpp:386:79: error: ‘sep::sep::math’ has not been declared
+  386 |         double similarity = dot_product / (sep::math::sqrt_safe(norm1) * sep::math::sqrt_safe(norm2));
+      |                                                                               ^~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:394:16: error: ‘SepEngine’ has not been declared
+  394 | nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::blendContexts(const nlohmann::json_abi_v3_11_3::json&)’:
+/sep/src/api/sep_engine.cpp:396:10: error: ‘impl_’ was not declared in this scope
+  396 |     if (!impl_->initialized) {
+      |          ^~~~~
+/sep/src/api/sep_engine.cpp:475:30: error: ‘sep::sep::testbed’ has not been declared
+  475 |     auto blend_report = sep::testbed::blend_embeddings(embeddings, weights);
+      |                              ^~~~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:501:16: error: ‘SepEngine’ has not been declared
+  501 | nlohmann::json SepEngine::getHealthStatus()
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::getHealthStatus()’:
+/sep/src/api/sep_engine.cpp:503:10: error: ‘impl_’ was not declared in this scope
+  503 |     if (!impl_->initialized) {
+      |          ^~~~~
+/sep/src/api/sep_engine.cpp:511:15: error: ‘impl_’ was not declared in this scope
+  511 |         now - impl_->health_metrics.startTime)
+      |               ^~~~~
+/sep/src/api/sep_engine.cpp:514:25: error: ‘getMetrics’ was not declared in this scope; did you mean ‘metrics’?
+  514 |     auto metrics_json = getMetrics(impl_->health_metrics);
+      |                         ^~~~~~~~~~
+      |                         metrics
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:525:16: error: ‘SepEngine’ has not been declared
+  525 | nlohmann::json SepEngine::getMemoryMetrics()
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::getMemoryMetrics()’:
+/sep/src/api/sep_engine.cpp:527:20: error: ‘SepEngine’ has not been declared
+  527 |     auto& engine = SepEngine::getInstance();
+      |                    ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:562:16: error: ‘SepEngine’ has not been declared
+  562 | nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:562:48: error: ‘config’ in namespace ‘sep::sep’ does not name a type
+  562 | nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
+      |                                                ^~~~~~
+/sep/src/api/sep_engine.cpp:562:65: error: expected unqualified-id before ‘&’ token
+  562 | nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
+      |                                                                 ^
+/sep/src/api/sep_engine.cpp:562:65: error: expected ‘)’ before ‘&’ token
+  562 | nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
+      |                                    ~                            ^
+      |                                                                 )
+/sep/src/api/sep_engine.cpp:562:67: error: expected initializer before ‘config’
+  562 | nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
+      |                                                                   ^~~~~~
+/sep/src/api/sep_engine.cpp:606:16: error: ‘SepEngine’ has not been declared
+  606 | nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:606:50: error: ‘ErrorCode’ is not a member of ‘sep::sep::api’; did you mean ‘sep::api::ErrorCode’?
+  606 | nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
+      |                                                  ^~~~~~~~~
+In file included from /sep/include/api/sep_engine.h:11,
+                 from /sep/src/api/sep_engine.cpp:1:
+/sep/include/api/types.h:71:12: note: ‘sep::api::ErrorCode’ declared here
+   71 | enum class ErrorCode {
+      |            ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:606:66: error: expected primary-expression before ‘const’
+  606 | nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
+      |                                                                  ^~~~~
+/sep/src/api/sep_engine.cpp:607:1: error: expected ‘,’ or ‘;’ before ‘{’ token
+  607 | {
+      | ^
+/sep/src/api/sep_engine.cpp:615:6: error: ‘SepEngine’ has not been declared
+  615 | bool SepEngine::validateFields(const nlohmann::json&           data,
+      |      ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘bool sep::sep::api::validateFields(const nlohmann::json_abi_v3_11_3::json&, const std::vector<std::__cxx11::basic_string<char>, std::allocator<std::__cxx11::basic_string<char> > >&, nlohmann::json_abi_v3_11_3::json&)’:
+/sep/src/api/sep_engine.cpp:621:44: error: ‘sep::sep::api::ErrorCode’ has not been declared
+  621 |             error = makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing field: " + field);
+      |                                            ^~~~~~~~~
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:628:16: error: ‘SepEngine’ has not been declared
+  628 | nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
+      |                ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:628:44: error: ‘HealthMetrics’ does not name a type
+  628 | nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
+      |                                            ^~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp: In function ‘nlohmann::json_abi_v3_11_3::json sep::sep::api::getMetrics(const int&)’:
+/sep/src/api/sep_engine.cpp:634:56: error: request for member ‘startTime’ in ‘metrics’, which is of non-class type ‘const int’
+  634 |     auto uptime = duration_cast<seconds>(now - metrics.startTime).count();
+      |                                                        ^~~~~~~~~
+/sep/src/api/sep_engine.cpp:639:31: error: request for member ‘totalRequests’ in ‘metrics’, which is of non-class type ‘const int’
+  639 |             {"total", metrics.totalRequests.load()},
+      |                               ^~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:640:36: error: request for member ‘successfulRequests’ in ‘metrics’, which is of non-class type ‘const int’
+  640 |             {"successful", metrics.successfulRequests.load()},
+      |                                    ^~~~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:641:32: error: request for member ‘failedRequests’ in ‘metrics’, which is of non-class type ‘const int’
+  641 |             {"failed", metrics.failedRequests.load()},
+      |                                ^~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:642:33: error: request for member ‘timeoutRequests’ in ‘metrics’, which is of non-class type ‘const int’
+  642 |             {"timeout", metrics.timeoutRequests.load()},
+      |                                 ^~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:643:38: error: request for member ‘rateLimitedCount’ in ‘metrics’, which is of non-class type ‘const int’
+  643 |             {"rate_limited", metrics.rateLimitedCount.load()}
+      |                                      ^~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:646:33: error: request for member ‘averageResponseTime’ in ‘metrics’, which is of non-class type ‘const int’
+  646 |             {"average", metrics.averageResponseTime.load()},
+      |                                 ^~~~~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:647:30: error: request for member ‘lastResponseTime’ in ‘metrics’, which is of non-class type ‘const int’
+  647 |             {"last", metrics.lastResponseTime.count()}
+      |                              ^~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:650:61: error: request for member ‘lastRequestTime’ in ‘metrics’, which is of non-class type ‘const int’
+  650 |             {"last_request", duration_cast<seconds>(metrics.lastRequestTime.time_since_epoch()).count()},
+      |                                                             ^~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:651:61: error: request for member ‘lastSuccessTime’ in ‘metrics’, which is of non-class type ‘const int’
+  651 |             {"last_success", duration_cast<seconds>(metrics.lastSuccessTime.time_since_epoch()).count()}
+      |                                                             ^~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:654:41: error: request for member ‘allocatedMemory’ in ‘metrics’, which is of non-class type ‘const int’
+  654 |             {"allocated_bytes", metrics.allocatedMemory.load()},
+      |                                         ^~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:655:36: error: request for member ‘peakMemoryUsage’ in ‘metrics’, which is of non-class type ‘const int’
+  655 |             {"peak_bytes", metrics.peakMemoryUsage.load()},
+      |                                    ^~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:656:39: error: request for member ‘memoryFragmentation’ in ‘metrics’, which is of non-class type ‘const int’
+  656 |             {"fragmentation", metrics.memoryFragmentation.load()}
+      |                                       ^~~~~~~~~~~~~~~~~~~
+/sep/src/api/sep_engine.cpp:658:5: error: could not convert ‘{{"uptime_seconds", uptime}, {"requests", {{"total", <expression error>}, {"successful", <expression error>}, {"failed", <expression error>}, {"timeout", <expression error>}, {"rate_limited", <expression error>}}}, {"response_time", {{"average", <expression error>}, {"last", <expression error>}}}, {"timestamps", {{"last_request", <expression error>}, {"last_success", <expression error>}}}, {"memory", {{"allocated_bytes", <expression error>}, {"peak_bytes", <expression error>}, {"fragmentation", <expression error>}}}}’ from ‘<brace-enclosed initializer list>’ to ‘json’ {aka ‘nlohmann::json_abi_v3_11_3::basic_json<>’}
+  658 |     };
+      |     ^
+      |     |
+      |     <brace-enclosed initializer list>
+/sep/src/api/sep_engine.cpp: At global scope:
+/sep/src/api/sep_engine.cpp:663:2: error: expected ‘}’ at end of input
+  663 | }  // namespace sep::api
+      |  ^
+/sep/src/api/../../_sep/testbed/context_algorithms.hpp:12:15: note: to match this ‘{’
+   12 | namespace sep {
+      |               ^
 make[1]: *** [CMakeFiles/Makefile2:374: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:247: src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 94%] Linking CXX static library libsep_quantum.a
+[ 94%] Built target sep_quantum
+make[1]: *** [CMakeFiles/Makefile2:475: src/api/CMakeFiles/sep_api.dir/all] Error 2
 make: *** [Makefile:91: all] Error 2

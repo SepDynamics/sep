@@ -1,6 +1,5 @@
 
 #pragma once
-
 #define SEP_CROW_ISOLATION_INCLUDED
 
 // This header isolates Crow-related code from CUDA compilation.  When not

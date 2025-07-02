@@ -8,6 +8,11 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(SEPConfig)
 configure_sep()
 
+# Build lightweight stubs for optional GPU and path guiding libraries
+add_subdirectory(extern/cuew_stub)
+add_subdirectory(extern/openpgl_stub)
+add_subdirectory(extern/cycles/third_party/hipew)
+
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/include
@@ -74,4 +79,7 @@ target_link_libraries(sep_engine
         gflags
         embree4
         ${HTTP_PARSER_LIBRARY}
+        cuew_stub
+        openpgl_stub
+        extern_hipew
 )

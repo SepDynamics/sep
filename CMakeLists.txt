@@ -12,19 +12,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(SEPConfig)
 configure_sep()
 
-# Detect CUDA toolkit and expose SEP_HAS_CUDA for conditional builds
-find_package(CUDAToolkit QUIET)
-if(CUDAToolkit_FOUND AND CUDAToolkit_NVCC_EXECUTABLE)
-    set(SEP_HAS_CUDA 1)
-else()
-    set(SEP_HAS_CUDA 0)
-endif()
-message(STATUS "CUDA support: ${SEP_HAS_CUDA}")
+# CUDA is a hard requirement for the project
+find_package(CUDAToolkit REQUIRED)
+set(SEP_HAS_CUDA 1)
+add_compile_definitions(SEP_HAS_CUDA=1)
 
-add_compile_definitions(SEP_HAS_CUDA=${SEP_HAS_CUDA})
-
-# Disable Blender integration by default to reduce dependencies
-option(SEP_HAS_BLENDER "Build Blender integration" OFF)
+# Blender integration is always built
+set(SEP_HAS_BLENDER 1)
 
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
@@ -63,9 +57,7 @@ add_subdirectory(src/quantum)
 add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
-if(SEP_HAS_BLENDER)
-    add_subdirectory(src/blender)
-endif()
+add_subdirectory(src/blender)
 
 # Main executable
 add_executable(sep_engine src/main.cpp)

@@ -1,6 +1,4 @@
-if(SEP_HAS_CUDA)
-    find_package(CUDAToolkit REQUIRED)
-endif()
+find_package(CUDAToolkit REQUIRED)
 find_package(TBB REQUIRED)
 find_package(PkgConfig REQUIRED)
 
@@ -27,7 +25,7 @@ target_compile_definitions(sep_blender
     PUBLIC
         SEP_HAS_BLENDER=1
     PRIVATE
-        SEP_HAS_CUDA=${SEP_HAS_CUDA}
+        SEP_HAS_CUDA=1
 )
 
 # Link dependencies
@@ -45,10 +43,8 @@ target_link_libraries(sep_blender
 )
 
 # Enable CUDA support
-if(SEP_HAS_CUDA)
-    target_compile_definitions(sep_blender PRIVATE SEP_HAS_CUDA=1)
-    target_link_libraries(sep_blender PRIVATE CUDA::cudart)
-endif()
+target_compile_definitions(sep_blender PRIVATE SEP_HAS_CUDA=1)
+target_link_libraries(sep_blender PRIVATE CUDA::cudart)
 
 target_sources(sep_blender PRIVATE
     cycles_renderer.cpp
@@ -88,7 +84,7 @@ target_compile_definitions(sep_blender
 
 target_compile_definitions(sep_blender
     PUBLIC
-        SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
+        SEP_HAS_CYCLES=1
     PRIVATE
         WITH_CYCLES_DEVICE_CUDA
 )
@@ -100,22 +96,20 @@ target_include_directories(sep_blender PRIVATE
 )
 
 # Link against Cycles libraries and required dependencies
-if(SEP_HAS_CYCLES)
-  target_link_libraries(sep_blender PRIVATE
-      ${CMAKE_SOURCE_DIR}/lib/libcycles_device.a
-      ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel.a
-      ${CMAKE_SOURCE_DIR}/lib/libcycles_util.a
-      ${CMAKE_SOURCE_DIR}/lib/libcycles_subd.a
-      ${CMAKE_SOURCE_DIR}/lib/libbf_intern_guardedalloc.a # For MEM_* functions
-      TBB::tbb  # For parallel execution
-      CUDA::cudart  # For CUDA runtime
-      CUDA::cuda_driver
-      CUDA::nvrtc
-      glog
-      gflags
-      embree4
-  )
-endif()
+target_link_libraries(sep_blender PRIVATE
+    ${CMAKE_SOURCE_DIR}/lib/libcycles_device.a
+    ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel.a
+    ${CMAKE_SOURCE_DIR}/lib/libcycles_util.a
+    ${CMAKE_SOURCE_DIR}/lib/libcycles_subd.a
+    ${CMAKE_SOURCE_DIR}/lib/libbf_intern_guardedalloc.a # For MEM_* functions
+    TBB::tbb  # For parallel execution
+    CUDA::cudart  # For CUDA runtime
+    CUDA::cuda_driver
+    CUDA::nvrtc
+    glog
+    gflags
+    embree4
+)
 
 
 # Add Blender's include directories for memory allocation functions
@@ -141,11 +135,9 @@ target_include_directories(sep_blender
         ${CMAKE_SOURCE_DIR}/extern/glm
         ${CMAKE_SOURCE_DIR}/extern/eigen
 )
-if(SEP_HAS_CYCLES)
-  target_include_directories(sep_blender PUBLIC
-      ${CMAKE_SOURCE_DIR}/extern/cycles/src
-  )
-endif()
+target_include_directories(sep_blender PUBLIC
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src
+)
 
 set(OIIO_LIBRARIES ${OIIO_LIBRARIES} PARENT_SCOPE)
 set(GLOG_LIBRARIES ${GLOG_LIBRARIES} PARENT_SCOPE)

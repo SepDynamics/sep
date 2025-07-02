@@ -17,7 +17,7 @@ add_library(sep_core
 target_link_libraries(sep_core)
 
 # Enable CUDA support when available
-target_compile_definitions(sep_core PRIVATE SEP_HAS_CUDA=${SEP_HAS_CUDA})
+target_compile_definitions(sep_core PRIVATE SEP_HAS_CUDA=1)
 
 # Set library properties
 set_target_properties(sep_core PROPERTIES

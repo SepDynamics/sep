@@ -15,6 +15,12 @@ include_directories(BEFORE
 )
 add_compile_definitions(CROW_USE_BOOST)
 
+# Build shim libraries that replace stub implementations with minimal
+# functional versions. These are linked into all targets so that
+# Cycles and other dependencies resolve symbols correctly.
+add_subdirectory(extern/cuew_stub)
+add_subdirectory(extern/openpgl_stub)
+
 # Find required packages
 find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
@@ -74,4 +80,6 @@ target_link_libraries(sep_engine
         gflags
         embree4
         ${HTTP_PARSER_LIBRARY}
+        cuew_stub
+        openpgl_stub
 )

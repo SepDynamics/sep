@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
+project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
 
 # Add cmake directory to module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -8,12 +8,22 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(SEPConfig)
 configure_sep()
 
+# Build stub implementation of the OpenPGL API to satisfy linking against
+# precompiled Cycles libraries when the real OpenPGL dependency is missing.
+add_subdirectory(extern/openpgl_stub)
+
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/extern/crow/include
 )
 add_compile_definitions(CROW_USE_BOOST)
+
+# Build shim libraries that replace stub implementations with minimal
+# functional versions. These are linked into all targets so that
+# Cycles and other dependencies resolve symbols correctly.
+add_subdirectory(extern/cuew_stub)
+add_subdirectory(extern/openpgl_stub)
 
 # Find required packages
 find_package(Threads REQUIRED)
@@ -73,5 +83,8 @@ target_link_libraries(sep_engine
         glog
         gflags
         embree4
+        openpgl_stub
         ${HTTP_PARSER_LIBRARY}
+        cuew_stub
+        openpgl_stub
 )

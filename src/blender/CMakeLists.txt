@@ -36,6 +36,7 @@ target_link_libraries(sep_blender
         ${GLOG_LIBRARIES}
         ${ZSTD_LIBRARIES}
         ${EMBREE_LIBRARIES}
+        openpgl_stub
     PRIVATE
         sep_compat
         ${CMAKE_SOURCE_DIR}/libsep_compat.a
@@ -111,9 +112,12 @@ if(SEP_HAS_CYCLES)
       CUDA::cudart  # For CUDA runtime
       CUDA::cuda_driver
       CUDA::nvrtc
+      cuew_stub
+      openpgl_stub
       glog
       gflags
       embree4
+      openpgl_stub
   )
 endif()
 

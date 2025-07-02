@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
+project(sep_engine VERSION 1.0.0 LANGUAGES C CXX CUDA)
 
 # Enable CUDA
 set(CMAKE_CUDA_STANDARD 17)
@@ -43,6 +43,7 @@ find_package(OpenVDB REQUIRED)
 find_package(OpenPGL REQUIRED)
 find_package(OpenColorIO REQUIRED)
 find_package(Imath REQUIRED)
+find_package(OSL REQUIRED)
 
 # Add subdirectories
 add_subdirectory(src/core)

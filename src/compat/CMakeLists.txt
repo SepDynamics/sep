@@ -24,6 +24,9 @@ if(WITH_OPENSUBDIV)
     set(WITH_CYCLES_OPENSUBDIV ${WITH_OPENSUBDIV})
 endif()
 
+# Find CUDA toolkit to provide imported targets and variables
+find_package(CUDAToolkit REQUIRED)
+
 add_library(sep_compat STATIC
     cuda_api.cu
     core.cu
@@ -66,6 +69,6 @@ target_link_libraries(sep_compat
     PUBLIC
         sep_core
     PRIVATE
-        ${CUDA_LIBRARIES}
-        ${CUDAToolkit_LIBRARY_DIR}/libcudart.so
+        CUDA::cudart
+        CUDA::cuda_driver
 )

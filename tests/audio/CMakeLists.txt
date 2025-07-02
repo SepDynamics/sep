@@ -12,6 +12,7 @@ add_executable(audio_tests
     fft_accuracy_test.cpp
     pipewire_lifecycle_test.cpp
     pipewire_capture_metrics_test.cpp
+    pipewire_capture_integration_test.cpp
 )
 
 target_include_directories(audio_tests PRIVATE

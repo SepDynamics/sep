@@ -51,29 +51,22 @@ set_source_files_properties(cycles_renderer.cpp
 set(BLENDER_VERSION "5.0")
 set(BLENDER_USER_CONFIG_DIR "$ENV{HOME}/.config/blender/${BLENDER_VERSION}")
 
-# Use bundled Cycles headers when available
-if(SEP_HAS_CYCLES)
-  target_include_directories(sep_blender SYSTEM PRIVATE
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src
-  )
-  target_include_directories(sep_blender PRIVATE
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/app
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/bvh
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/cmake
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/compat
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/device
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/doc
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/graph
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/hydra
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/integrator
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/kernel
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/scene
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/session
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/subd
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/test
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/util
-  )
-endif()
+# Set Cycles root directory and enable integration
+set(CYCLES_ROOT ${CMAKE_SOURCE_DIR}/extern/cycles)
+set(SEP_HAS_CYCLES 1)
+
+# Use bundled Cycles headers
+target_include_directories(sep_blender SYSTEM PRIVATE
+  ${CYCLES_ROOT}/src
+)
+
+# Define Cycles support
+target_compile_definitions(sep_blender
+  PUBLIC
+    SEP_HAS_CYCLES=1
+  PRIVATE
+    WITH_CYCLES_DEVICE_CUDA
+)
 
 target_compile_definitions(sep_blender
     PUBLIC

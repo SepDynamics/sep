@@ -37,65 +37,289 @@ Running CMake configuration...
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
 [  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
 [ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 [ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 14%] Linking CXX static library ../../lib/libsep_core.a
 [ 14%] Built target sep_core
-[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 17%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
 [ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cuda_api_stub.cpp.o
-[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
 [ 26%] Linking CXX static library ../../lib/libsep_compat.a
 [ 26%] Built target sep_compat
+[ 28%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
 [ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 47%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 56%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 47%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 52%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 53%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
 [ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-In file included from /sep/include/blender/cycles_renderer.h:8,
-                 from /sep/src/blender/cycles_renderer.cpp:7:
-/sep/include/compat/cycles.h:35:10: fatal error: device/device.h: No such file or directory
-   35 | #include "device/device.h"
-      |          ^~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:191: src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
 [ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
 [ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
 [ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-make[1]: *** [CMakeFiles/Makefile2:1407: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
 [ 68%] Linking CXX static library ../../lib/libsep_audio.a
 [ 68%] Built target sep_audio
+/sep/src/blender/cycles_renderer.cpp: In member function ‘sep::SEPResult sep::blender::ccl::CyclesRenderer::renderScene(const RenderParams&)’:
+/sep/src/blender/cycles_renderer.cpp:112:18: error: ‘class ccl::Camera’ has no member named ‘set_perspective_motion’; did you mean ‘bool ccl::Camera::use_perspective_motion’? (not accessible from this context)
+  112 |             cam->set_perspective_motion(true);
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /sep/extern/cycles/src/device/denoise.h:7,
+                 from /sep/extern/cycles/src/device/device.h:12,
+                 from /sep/include/compat/cycles.h:25,
+                 from /sep/include/blender/cycles_renderer.h:8,
+                 from /sep/src/blender/cycles_renderer.cpp:7:
+/sep/extern/cycles/src/scene/camera.h:145:3: note: declared protected here
+  145 |   NODE_SOCKET_API(bool, use_perspective_motion)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:113:29: error: cannot convert ‘bool’ to ‘ccl::array<ccl::Transform>&’
+  113 |             cam->set_motion(false);
+      |                             ^~~~~
+      |                             |
+      |                             bool
+/sep/extern/cycles/src/scene/camera.h:144:3: note:   initializing argument 1 of ‘void ccl::Camera::set_motion(ccl::array<ccl::Transform>&)’
+  144 |   NODE_SOCKET_API_ARRAY(array<Transform>, motion)
+      |   ^
+/sep/src/blender/cycles_renderer.cpp:114:18: error: ‘class ccl::Camera’ has no member named ‘shutter_time’; did you mean ‘float ccl::Camera::shuttertime’? (not accessible from this context)
+  114 |             cam->shutter_time = 0.0f;
+      |                  ^~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:51:3: note: declared protected here
+   51 |   NODE_SOCKET_API(float, shuttertime)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:115:18: error: ‘ccl::Camera::RollingShutterType ccl::Camera::rolling_shutter_type’ is protected within this context
+  115 |             cam->rolling_shutter_type = ::ccl::ROLLING_SHUTTER_NONE;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:58:3: note: declared protected here
+   58 |   NODE_SOCKET_API(RollingShutterType, rolling_shutter_type)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:115:48: error: ‘ROLLING_SHUTTER_NONE’ is not a member of ‘ccl’
+  115 |             cam->rolling_shutter_type = ::ccl::ROLLING_SHUTTER_NONE;
+      |                                                ^~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:116:32: error: cannot convert ‘ccl::CameraType’ to ‘const ccl::NodeType*’ in assignment
+  116 |             cam->type = ::ccl::CAMERA_PERSPECTIVE;
+      |                         ~~~~~~~^~~~~~~~~~~~~~~~~~
+      |                                |
+      |                                ccl::CameraType
+/sep/src/blender/cycles_renderer.cpp:117:18: error: ‘bool ccl::Camera::use_spherical_stereo’ is protected within this context
+  117 |             cam->use_spherical_stereo = false;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:96:3: note: declared protected here
+   96 |   NODE_SOCKET_API(bool, use_spherical_stereo)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:118:18: error: ‘ccl::Camera::StereoEye ccl::Camera::stereo_eye’ is protected within this context
+  118 |             cam->stereo_eye = ::ccl::STEREO_NONE;
+      |                  ^~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:95:3: note: declared protected here
+   95 |   NODE_SOCKET_API(StereoEye, stereo_eye)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:118:38: error: ‘STEREO_NONE’ is not a member of ‘ccl’
+  118 |             cam->stereo_eye = ::ccl::STEREO_NONE;
+      |                                      ^~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:119:18: error: ‘float ccl::Camera::interocular_distance’ is protected within this context
+  119 |             cam->interocular_distance = 0.0f;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:97:3: note: declared protected here
+   97 |   NODE_SOCKET_API(float, interocular_distance)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:120:18: error: ‘float ccl::Camera::convergence_distance’ is protected within this context
+  120 |             cam->convergence_distance = 0.0f;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:98:3: note: declared protected here
+   98 |   NODE_SOCKET_API(float, convergence_distance)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:121:18: error: ‘bool ccl::Camera::use_pole_merge’ is protected within this context
+  121 |             cam->use_pole_merge = false;
+      |                  ^~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:99:3: note: declared protected here
+   99 |   NODE_SOCKET_API(bool, use_pole_merge)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:122:18: error: ‘float ccl::Camera::pole_merge_angle_from’ is protected within this context
+  122 |             cam->pole_merge_angle_from = 0.0f;
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:100:3: note: declared protected here
+  100 |   NODE_SOCKET_API(float, pole_merge_angle_from)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:123:18: error: ‘float ccl::Camera::pole_merge_angle_to’ is protected within this context
+  123 |             cam->pole_merge_angle_to = 0.0f;
+      |                  ^~~~~~~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:101:3: note: declared protected here
+  101 |   NODE_SOCKET_API(float, pole_merge_angle_to)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:124:18: error: ‘float ccl::Camera::sensorwidth’ is protected within this context
+  124 |             cam->sensorwidth = 36.0f;
+      |                  ^~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:107:3: note: declared protected here
+  107 |   NODE_SOCKET_API(float, sensorwidth)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:125:18: error: ‘float ccl::Camera::sensorheight’ is protected within this context
+  125 |             cam->sensorheight = 24.0f;
+      |                  ^~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:108:3: note: declared protected here
+  108 |   NODE_SOCKET_API(float, sensorheight)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:126:18: error: ‘float ccl::Camera::nearclip’ is protected within this context
+  126 |             cam->nearclip = 0.1f;
+      |                  ^~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:111:3: note: declared protected here
+  111 |   NODE_SOCKET_API(float, nearclip)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:127:18: error: ‘float ccl::Camera::farclip’ is protected within this context
+  127 |             cam->farclip = 100.0f;
+      |                  ^~~~~~~
+/sep/extern/cycles/src/scene/camera.h:112:3: note: declared protected here
+  112 |   NODE_SOCKET_API(float, farclip)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:128:18: error: ‘class ccl::Camera’ has no member named ‘aperture_size’; did you mean ‘float ccl::Camera::aperturesize’? (not accessible from this context)
+  128 |             cam->aperture_size = 0.0f;
+      |                  ^~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:66:3: note: declared protected here
+   66 |   NODE_SOCKET_API(float, aperturesize)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:129:18: error: ‘ccl::uint ccl::Camera::blades’ is protected within this context
+  129 |             cam->blades = 0;
+      |                  ^~~~~~
+/sep/extern/cycles/src/scene/camera.h:67:3: note: declared protected here
+   67 |   NODE_SOCKET_API(uint, blades)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:130:18: error: ‘class ccl::Camera’ has no member named ‘blade_rotation’; did you mean ‘float ccl::Camera::bladesrotation’? (not accessible from this context)
+  130 |             cam->blade_rotation = 0.0f;
+      |                  ^~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:68:3: note: declared protected here
+   68 |   NODE_SOCKET_API(float, bladesrotation)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:131:18: error: ‘class ccl::Camera’ has no member named ‘focal_distance’; did you mean ‘float ccl::Camera::focaldistance’? (not accessible from this context)
+  131 |             cam->focal_distance = 10.0f;
+      |                  ^~~~~~~~~~~~~~
+/sep/extern/cycles/src/scene/camera.h:65:3: note: declared protected here
+   65 |   NODE_SOCKET_API(float, focaldistance)
+      |   ^~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:132:18: error: ‘class ccl::Camera’ has no member named ‘compute_viewplane’; did you mean ‘compute_auto_viewplane’?
+  132 |             cam->compute_viewplane();
+      |                  ^~~~~~~~~~~~~~~~~
+      |                  compute_auto_viewplane
+/sep/src/blender/cycles_renderer.cpp:136:31: error: ‘class ccl::SceneParams’ has no member named ‘samples’
+  136 |         cycles_scene_->params.samples = params.samples;
+      |                               ^~~~~~~
+/sep/src/blender/cycles_renderer.cpp:137:31: error: ‘class ccl::SceneParams’ has no member named ‘use_denoising’
+  137 |         cycles_scene_->params.use_denoising = params.use_denoising;
+      |                               ^~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:139:31: error: ‘class ccl::SceneParams’ has no member named ‘threads’
+  139 |         cycles_scene_->params.threads = 0; // Auto-detect thread count
+      |                               ^~~~~~~
+/sep/src/blender/cycles_renderer.cpp:140:31: error: ‘class ccl::SceneParams’ has no member named ‘pixel_size’
+  140 |         cycles_scene_->params.pixel_size = 1;
+      |                               ^~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:141:31: error: ‘class ccl::SceneParams’ has no member named ‘progressive’
+  141 |         cycles_scene_->params.progressive = true;
+      |                               ^~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:142:31: error: ‘class ccl::SceneParams’ has no member named ‘progressive_refine’
+  142 |         cycles_scene_->params.progressive_refine = true;
+      |                               ^~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:143:31: error: ‘class ccl::SceneParams’ has no member named ‘progressive_update_timeout’
+  143 |         cycles_scene_->params.progressive_update_timeout = 1.0;
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:144:31: error: ‘class ccl::SceneParams’ has no member named ‘tile_size’
+  144 |         cycles_scene_->params.tile_size = ::ccl::TileManager::get_tile_size();
+      |                               ^~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:144:63: error: ‘get_tile_size’ is not a member of ‘ccl::TileManager’
+  144 |         cycles_scene_->params.tile_size = ::ccl::TileManager::get_tile_size();
+      |                                                               ^~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:145:31: error: ‘class ccl::SceneParams’ has no member named ‘start_resolution’
+  145 |         cycles_scene_->params.start_resolution = 1;
+      |                               ^~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:146:31: error: ‘class ccl::SceneParams’ has no member named ‘pixel_filter’
+  146 |         cycles_scene_->params.pixel_filter = ::ccl::FILTER_GAUSSIAN;
+      |                               ^~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:147:31: error: ‘class ccl::SceneParams’ has no member named ‘filter_width’
+  147 |         cycles_scene_->params.filter_width = 1.5f;
+      |                               ^~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:148:31: error: ‘class ccl::SceneParams’ has no member named ‘film_exposure’
+  148 |         cycles_scene_->params.film_exposure = 1.0f;
+      |                               ^~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:149:31: error: ‘class ccl::SceneParams’ has no member named ‘film_transparent’
+  149 |         cycles_scene_->params.film_transparent = false;
+      |                               ^~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:150:31: error: ‘class ccl::SceneParams’ has no member named ‘film_transparent_glass’
+  150 |         cycles_scene_->params.film_transparent_glass = false;
+      |                               ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:151:31: error: ‘class ccl::SceneParams’ has no member named ‘film_transparent_roughness’
+  151 |         cycles_scene_->params.film_transparent_roughness = 0.1f;
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:152:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_radius’
+  152 |         cycles_scene_->params.denoising_radius = 8;
+      |                               ^~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:153:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_strength’
+  153 |         cycles_scene_->params.denoising_strength = 0.5f;
+      |                               ^~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:154:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_feature_strength’
+  154 |         cycles_scene_->params.denoising_feature_strength = 0.5f;
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:155:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_relative_pca’
+  155 |         cycles_scene_->params.denoising_relative_pca = false;
+      |                               ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:156:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_store_passes’
+  156 |         cycles_scene_->params.denoising_store_passes = false;
+      |                               ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:157:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_diffuse’
+  157 |         cycles_scene_->params.denoising_diffuse = true;
+      |                               ^~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:158:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_glossy’
+  158 |         cycles_scene_->params.denoising_glossy = true;
+      |                               ^~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:159:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_transmission’
+  159 |         cycles_scene_->params.denoising_transmission = true;
+      |                               ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:160:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_clean_aux’
+  160 |         cycles_scene_->params.denoising_clean_aux = true;
+      |                               ^~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:161:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_prefilter’
+  161 |         cycles_scene_->params.denoising_prefilter = ::ccl::DENOISER_PREFILTER_FAST;
+      |                               ^~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:162:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_use_passes’
+  162 |         cycles_scene_->params.denoising_use_passes = false;
+      |                               ^~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:163:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_start_sample’
+  163 |         cycles_scene_->params.denoising_start_sample = 0;
+      |                               ^~~~~~~~~~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:164:31: error: ‘class ccl::SceneParams’ has no member named ‘denoising_type’
+  164 |         cycles_scene_->params.denoising_type = ::ccl::DENOISER_NLM;
+      |                               ^~~~~~~~~~~~~~
+/sep/src/blender/cycles_renderer.cpp:164:55: error: ‘DENOISER_NLM’ is not a member of ‘ccl’; did you mean ‘DENOISER_NUM’?
+  164 |         cycles_scene_->params.denoising_type = ::ccl::DENOISER_NLM;
+      |                                                       ^~~~~~~~~~~~
+      |                                                       DENOISER_NUM
+/sep/src/blender/cycles_renderer.cpp:170:31: error: ‘class ccl::SceneParams’ has no member named ‘use_qbvh’
+  170 |         cycles_scene_->params.use_qbvh = true;
+      |                               ^~~~~~~~
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:191: src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:1407: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
 [ 70%] Linking CXX static library ../../lib/libsep_memory.a
 [ 70%] Built target sep_memory
 [ 71%] Linking CXX static library ../../lib/libsep_quantum.a

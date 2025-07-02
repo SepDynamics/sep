@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "util/types.h"  // IWYU pragma: export
+#include "types.h"  // IWYU pragma: export
 
 #include "util/math_base.h"  // IWYU pragma: export
 

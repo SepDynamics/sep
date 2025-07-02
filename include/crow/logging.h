@@ -1,11 +1,14 @@
 #pragma once
 
-// This is a minimal version of the logging.h file from the Crow framework
-// It provides stub implementations for logging functionality
+// Minimal logging helpers used by tests and small utilities.
+// These wrappers route Crow style log calls through spdlog so that
+// log output behaves consistently with the rest of the project.
 
-// Use relative path from project root
 #include "compat/shim.h"
+#include "memory/spdlog_isolation.h"
 #include <sstream>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <memory>
 
 namespace crow {
     enum class LogLevel {
@@ -18,33 +21,57 @@ namespace crow {
 
     class LogHandler {
     public:
-        void operator()(const sep::shim::string& message) {
-            // In a real implementation, this would log to stderr
-            // For now, we'll just provide a stub
+        explicit LogHandler(std::shared_ptr<sep::spdlog::logger> logger = sep::spdlog::details::registry::instance().get("crow"))
+            : logger_(std::move(logger))
+        {
+            if (!logger_)
+            {
+                logger_ = ::spdlog::stderr_color_mt("crow");
+            }
         }
+
+        void operator()(LogLevel level, const sep::shim::string& message) const
+        {
+            logger_->log(toSpdLevel(level), message.c_str());
+        }
+
+    private:
+        static sep::spdlog::level toSpdLevel(LogLevel level)
+        {
+            switch (level)
+            {
+                case LogLevel::Debug:    return sep::spdlog::level::debug;
+                case LogLevel::Info:     return sep::spdlog::level::info;
+                case LogLevel::Warning:  return sep::spdlog::level::warn;
+                case LogLevel::Error:    return sep::spdlog::level::err;
+                case LogLevel::Critical: return sep::spdlog::level::critical;
+            }
+            return sep::spdlog::level::info;
+        }
+
+        std::shared_ptr<sep::spdlog::logger> logger_;
     };
 
     class Logger {
     public:
-        Logger(LogLevel level) : level_(level) {}
+        explicit Logger(LogLevel level) : level_(level) {}
 
         template <typename T>
-        Logger& operator<<(T const& value) {
-            // In a real implementation, this would append to a message
-            // For now, we'll just provide a stub
+        Logger& operator<<(const T& value)
+        {
+            ss_ << value;
             return *this;
         }
 
-        ~Logger() {
-            // In a real implementation, this would flush the log message
-            // For now, we'll just provide a stub
+        ~Logger()
+        {
+            handler_(level_, ss_.str().c_str());
         }
 
     private:
         LogLevel level_;
-        // Using a simple string instead of stringstream to avoid template issues
-        sep::shim::string message_;
-        LogHandler handler_;
+        std::ostringstream ss_;
+        LogHandler        handler_;
     };
 }
 

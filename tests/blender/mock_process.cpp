@@ -37,8 +37,8 @@ cudaError_t launch_pattern_processing(PatternData* patterns,
 
 // Also provide the mangled name version for extra safety
 extern "C" {
-    // Old mangled name retained for compatibility
-    cudaError_t _ZN3sep7pattern4cuda23launch_pattern_processingEPNS0_11PatternDataEPS2_RKNS0_13PatternConfigEmPKS2_P11CUstream_st(
+    // This is the mangled name for the launch_pattern_processing function
+    cudaError_t _ZN3sep4cuda25launch_pattern_processingEPNS_7pattern11PatternDataES3_RKNS1_13PatternConfigEmPKS2_P11CUstream_st(
         sep::pattern::PatternData* patterns,
         sep::pattern::PatternData* results,
         const sep::pattern::PatternConfig& config,
@@ -48,7 +48,7 @@ extern "C" {
 
         std::cout << "Mock launch_pattern_processing called via mangled name" << std::endl;
 
-        // Forward to the current implementation
+        // Just call our implementation above
         return sep::cuda::launch_pattern_processing(
             patterns, results, config, pattern_count, previous_patterns, stream);
     }

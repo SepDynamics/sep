@@ -8,10 +8,6 @@
 #include "compat/math_common.h"
 #include "compat/cuda_runtime.h"
 #include "compat/cuda_common.h"
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#else
-#endif
 #include "core/types.h"
 
 namespace sep {

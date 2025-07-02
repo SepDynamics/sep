@@ -2,11 +2,7 @@
 #define CUDA_COMMON_H
 
 // Include CUDA runtime or provide shims first
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#else
-#include "compat/cuda_runtime.h"  // Contains shim definitions
-#endif
+#include "compat/cuda_runtime.h"  // Always rely on the shim header
 
 // GLM configuration after CUDA runtime
 #ifndef GLM_FORCE_CUDA

@@ -1,13 +1,9 @@
 #ifndef SEP_COMPAT_CUDA_RUNTIME_H
 #define SEP_COMPAT_CUDA_RUNTIME_H
 
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#else
-
-// Include standard headers needed for types
-#include <stddef.h>  // For size_t
-#include <string.h> // For memcpy
+// Always use the lightweight runtime shim
+#include <stddef.h>
+#include <string.h>
 
 // Forward declare CUDA types in global scope
 typedef int cudaError_t;
@@ -62,13 +58,6 @@ struct cudaDeviceProp {
 // Stream flags in global scope
 constexpr unsigned int cudaStreamDefault = 0x00;
 constexpr unsigned int cudaStreamNonBlocking = 0x01;
-#endif
-
-#if SEP_CUDA_AVAILABLE
-// When CUDA is available, include the real CUDA runtime
-#include <cuda_runtime.h>
-#else
-// When CUDA is not available, define stub types and functions
 
 #ifdef __cplusplus
 namespace sep {
@@ -78,7 +67,6 @@ using ::cudaError_t;
 using ::cudaStream_t;
 using ::cudaEvent_t;
 using ::cudaMemcpyKind;
-
 
 // Function declarations
 cudaError_t cudaSetDevice(int device);
@@ -90,6 +78,11 @@ cudaError_t cudaStreamCreate(cudaStream_t* stream);
 cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags);
 cudaError_t cudaStreamDestroy(cudaStream_t stream);
 cudaError_t cudaStreamSynchronize(cudaStream_t stream);
+cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags);
+cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream);
+cudaError_t cudaEventCreate(cudaEvent_t* event);
+cudaError_t cudaEventDestroy(cudaEvent_t event);
+cudaError_t cudaEventSynchronize(cudaEvent_t event);
 cudaError_t cudaMalloc(void** ptr, size_t size);
 cudaError_t cudaFree(void* ptr);
 cudaError_t cudaMallocHost(void** ptr, size_t size);
@@ -102,11 +95,9 @@ cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
 }  // namespace sep
 
 #if defined(__cplusplus)
-// Expose stub functions in the global namespace for drop-in compatibility
-using namespace sep::cuda;
+using namespace sep::cuda; // Provide global aliases
 #endif
 
 #endif // __cplusplus
-#endif // !SEP_CUDA_AVAILABLE
 
 #endif // SEP_COMPAT_CUDA_RUNTIME_H

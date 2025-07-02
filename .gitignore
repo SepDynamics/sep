@@ -117,6 +117,7 @@ assets/sep_engine
 blender
 !include/blender/
 !src/blender/
+!tests/blender/
 !include/blender/cycles_renderer.h
 !src/blender/cycles_renderer.cpp
 !sep_engine/

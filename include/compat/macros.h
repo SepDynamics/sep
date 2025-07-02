@@ -15,6 +15,15 @@
 #endif
 #endif
 
+// -----------------------------------------------------------------------------
+// Cycles renderer availability
+// -----------------------------------------------------------------------------
+// Default to disabled when not explicitly specified. This avoids undefined macro
+// errors when building without Cycles integration.
+#ifndef SEP_HAS_CYCLES
+#define SEP_HAS_CYCLES 0
+#endif
+
 // Backwards compatibility for legacy macros used across the code base.
 #ifndef SEP_HAS_CUDA_RUNTIME
 #define SEP_HAS_CUDA_RUNTIME SEP_CUDA_AVAILABLE

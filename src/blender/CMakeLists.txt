@@ -111,6 +111,8 @@ if(SEP_HAS_CYCLES)
       CUDA::cudart  # For CUDA runtime
       CUDA::cuda_driver
       CUDA::nvrtc
+      cuew_stub
+      openpgl_stub
       glog
       gflags
       embree4

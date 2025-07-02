@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <vector>
 #include <cstring>
 
 namespace blender {

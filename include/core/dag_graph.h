@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 #include "compat/shim.h"
+#include <vector>
 
 namespace sep {
 namespace dag {

@@ -11,6 +11,7 @@ add_library(blender_tests STATIC
     pattern_data_test.cpp
     scene_load_test.cpp
     shader_test.cpp
+    gpu_context_integration_test.cpp
 )
 
 target_include_directories(blender_tests PRIVATE

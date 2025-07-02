@@ -37,45 +37,45 @@ Running CMake configuration...
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  2%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
 [  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 14%] Linking CXX static library ../../lib/libsep_core.a
 [ 14%] Built target sep_core
-[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cuda_api_stub.cpp.o
-[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 16%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 17%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cuda_api_stub.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
 [ 26%] Linking CXX static library ../../lib/libsep_compat.a
 [ 26%] Built target sep_compat
-[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 32%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 35%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 37%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 41%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 41%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 43%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 46%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 47%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 28%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 31%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 41%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 [ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
 [ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
@@ -85,24 +85,1367 @@ Building SEP Engine...
 [ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
 [ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
 [ 68%] Linking CXX static library ../../lib/libsep_audio.a
-/sep/src/blender/cycles_renderer.cpp: In member function ‘sep::SEPResult sep::blender::ccl::CyclesRenderer::renderScene(const RenderParams&)’:
-/sep/src/blender/cycles_renderer.cpp:131:18: error: ‘class ccl::Camera’ has no member named ‘compute_viewplane’; did you mean ‘compute_auto_viewplane’?
-  131 |             cam->compute_viewplane();
-      |                  ^~~~~~~~~~~~~~~~~
-      |                  compute_auto_viewplane
-/sep/src/blender/cycles_renderer.cpp:135:31: error: ‘class ccl::SceneParams’ has no member named ‘samples’
-  135 |         cycles_scene_->params.samples = params.samples;
-      |                               ^~~~~~~
-/sep/src/blender/cycles_renderer.cpp: In member function ‘bool sep::blender::ccl::CyclesRenderer::render(const std::string&)’:
-/sep/src/blender/cycles_renderer.cpp:171:47: error: ‘params’ was not declared in this scope
-  171 |     session_params.samples = static_cast<int>(params.samples);
-      |                                               ^~~~~~
 [ 68%] Built target sep_audio
-make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:191: src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:1407: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-[ 70%] Linking CXX static library ../../lib/libsep_memory.a
-[ 70%] Built target sep_memory
-[ 71%] Linking CXX static library ../../lib/libsep_quantum.a
-[ 71%] Built target sep_quantum
+[ 70%] Linking CXX static library ../../lib/libsep_blender.a
+[ 70%] Built target sep_blender
+[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 82%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 85%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 94%] Linking CXX static library ../../lib/libsep_memory.a
+[ 94%] Built target sep_memory
+[ 95%] Linking CXX static library ../../lib/libsep_quantum.a
+[ 95%] Built target sep_quantum
+[ 97%] Linking CXX static library ../../lib/libsep_api.a
+[ 97%] Built target sep_api
+[ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
+[100%] Linking CXX executable bin/sep_engine
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::Device::build_bvh(ccl::BVH*, ccl::Progress&, bool)':
+device.cpp:(.text+0x5b): undefined reference to `ccl::BVH2::refit(ccl::Progress&)'
+/usr/sbin/ld: device.cpp:(.text+0x70): undefined reference to `ccl::BVH2::build(ccl::Progress&, ccl::Stats*)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::Device::get_multi_device(ccl::vector<ccl::DeviceInfo, ccl::GuardedAllocator<ccl::DeviceInfo> > const&, int, bool)':
+device.cpp:(.text+0xd5a): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xd6a): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xd7b): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xd97): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xd9f): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xe03): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xe95): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xea5): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xeb6): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xed2): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xeda): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xef6): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xfb4): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::Device::gpu_queue_create()':
+device.cpp:(.text+0x1288): undefined reference to `google::LogMessageFatal::LogMessageFatal(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1290): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x12a7): undefined reference to `google::LogMessageFatal::~LogMessageFatal()'
+/usr/sbin/ld: device.cpp:(.text+0x12af): undefined reference to `google::LogMessageFatal::~LogMessageFatal()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::Device::get_cpu_kernel_thread_globals(ccl::vector<ccl::ThreadKernelGlobalsCPU, ccl::GuardedAllocator<ccl::ThreadKernelGlobalsCPU> >&)':
+device.cpp:(.text+0x1338): undefined reference to `google::LogMessageFatal::LogMessageFatal(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1340): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x1357): undefined reference to `google::LogMessageFatal::~LogMessageFatal()'
+/usr/sbin/ld: device.cpp:(.text+0x135f): undefined reference to `google::LogMessageFatal::~LogMessageFatal()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::GPUDevice::init_host_memory(unsigned long, unsigned long)':
+device.cpp:(.text+0x1522): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x1532): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x1543): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1560): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1568): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x1586): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x15da): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x15ea): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x15fb): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x161c): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1624): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x16ee): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x1757): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::GPUDevice::move_textures_to_host(unsigned long, unsigned long, bool)':
+device.cpp:(.text+0x1940): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x1950): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x1961): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x197d): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1985): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x19ea): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x1a6b): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::GPUDevice::generic_alloc(ccl::device_memory&, unsigned long)':
+device.cpp:(.text+0x1da8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x1db8): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x1dc9): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1dea): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1df2): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x1f62): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x217e): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::Device::get_guiding_device() const':
+device.cpp:(.text._ZNK3ccl6Device18get_guiding_deviceEv[_ZNK3ccl6Device18get_guiding_deviceEv]+0x1d): undefined reference to `google::LogMessage::LogMessage(char const*, int, int)'
+/usr/sbin/ld: device.cpp:(.text._ZNK3ccl6Device18get_guiding_deviceEv[_ZNK3ccl6Device18get_guiding_deviceEv]+0x25): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text._ZNK3ccl6Device18get_guiding_deviceEv[_ZNK3ccl6Device18get_guiding_deviceEv]+0x41): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text._ZNK3ccl6Device18get_guiding_deviceEv[_ZNK3ccl6Device18get_guiding_deviceEv]+0x54): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x10): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x18): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x20): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x28): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x30): more undefined references to `google::kLogSiteUninitialized' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o): in function `ccl::DenoiseParams::get_type_enum()':
+denoise.cpp:(.text+0x67): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text+0xc9): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o): in function `ccl::DenoiseParams::get_prefilter_enum()':
+denoise.cpp:(.text+0x1f7): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text+0x259): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text+0x2ad): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o):denoise.cpp:(.text+0x3e7): more undefined references to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o): in function `ccl::DenoiseParams::DenoiseParams()':
+denoise.cpp:(.text+0x611): undefined reference to `ccl::Node::Node(ccl::NodeType const*, OpenImageIO_v2_5::ustring)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o): in function `ccl::NodeType const* ccl::DenoiseParams::register_type<ccl::DenoiseParams>()':
+denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x1b): undefined reference to `ccl::NodeType::add(char const*, std::unique_ptr<ccl::Node, std::default_delete<ccl::Node> > (*)(ccl::NodeType const*), ccl::NodeType::Type, ccl::NodeType const*)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x4c): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x73): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0xbc): undefined reference to `ccl::NodeType::register_input(OpenImageIO_v2_5::ustring, OpenImageIO_v2_5::ustring, ccl::SocketType::Type, int, void const*, ccl::NodeEnum const*, ccl::NodeType const*, int, int)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0xdb): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x102): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x158): undefined reference to `ccl::NodeType::register_input(OpenImageIO_v2_5::ustring, OpenImageIO_v2_5::ustring, ccl::SocketType::Type, int, void const*, ccl::NodeEnum const*, ccl::NodeType const*, int, int)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x177): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x19e): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x1e7): undefined reference to `ccl::NodeType::register_input(OpenImageIO_v2_5::ustring, OpenImageIO_v2_5::ustring, ccl::SocketType::Type, int, void const*, ccl::NodeEnum const*, ccl::NodeType const*, int, int)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x206): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x22a): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x26a): undefined reference to `ccl::NodeType::register_input(OpenImageIO_v2_5::ustring, OpenImageIO_v2_5::ustring, ccl::SocketType::Type, int, void const*, ccl::NodeEnum const*, ccl::NodeType const*, int, int)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x289): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x2ad): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x2ed): undefined reference to `ccl::NodeType::register_input(OpenImageIO_v2_5::ustring, OpenImageIO_v2_5::ustring, ccl::SocketType::Type, int, void const*, ccl::NodeEnum const*, ccl::NodeType const*, int, int)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x30c): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x330): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x370): undefined reference to `ccl::NodeType::register_input(OpenImageIO_v2_5::ustring, OpenImageIO_v2_5::ustring, ccl::SocketType::Type, int, void const*, ccl::NodeEnum const*, ccl::NodeType const*, int, int)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x38f): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x3b3): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x400): undefined reference to `ccl::NodeType::register_input(OpenImageIO_v2_5::ustring, OpenImageIO_v2_5::ustring, ccl::SocketType::Type, int, void const*, ccl::NodeEnum const*, ccl::NodeType const*, int, int)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x41f): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x443): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv]+0x490): undefined reference to `ccl::NodeType::register_input(OpenImageIO_v2_5::ustring, OpenImageIO_v2_5::ustring, ccl::SocketType::Type, int, void const*, ccl::NodeEnum const*, ccl::NodeType const*, int, int)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o): in function `ccl::DenoiseParams::~DenoiseParams()':
+denoise.cpp:(.text._ZN3ccl13DenoiseParamsD0Ev[_ZN3ccl13DenoiseParamsD0Ev]+0x5): undefined reference to `ccl::Node::~Node()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o):(.data.rel.ro._ZTVN3ccl13DenoiseParamsE[_ZTVN3ccl13DenoiseParamsE]+0x10): undefined reference to `ccl::Node::~Node()'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(path.cpp.o): in function `ccl::path_get(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+path.cpp:(.text+0xf0): undefined reference to `OpenImageIO_v2_5::Sysutil::this_program_path[abi:cxx11]()'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(path.cpp.o): in function `ccl::path_user_get(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+path.cpp:(.text+0x5c6): undefined reference to `OpenImageIO_v2_5::Sysutil::this_program_path[abi:cxx11]()'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(path.cpp.o): in function `ccl::path_read_compressed_binary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, ccl::vector<unsigned char, ccl::GuardedAllocator<unsigned char> >&)':
+path.cpp:(.text+0x16c2): undefined reference to `ZSTD_getFrameContentSize'
+/usr/sbin/ld: path.cpp:(.text+0x1729): undefined reference to `ZSTD_decompress'
+/usr/sbin/ld: path.cpp:(.text+0x1731): undefined reference to `ZSTD_isError'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(path.cpp.o): in function `ccl::path_cache_kernel_exists_and_mark_used(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+path.cpp:(.text+0x2351): undefined reference to `OpenImageIO_v2_5::Filesystem::last_write_time(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, long)'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(path.cpp.o): in function `ccl::path_cache_kernel_mark_added_and_clear_old(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long)':
+path.cpp:(.text+0x23b1): undefined reference to `OpenImageIO_v2_5::Filesystem::last_write_time(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, long)'
+/usr/sbin/ld: path.cpp:(.text+0x250e): undefined reference to `OpenImageIO_v2_5::Filesystem::last_write_time(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(task.cpp.o): in function `ccl::TaskScheduler::init(int)':
+task.cpp:(.text+0x280): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: task.cpp:(.text+0x290): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: task.cpp:(.text+0x2a1): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: task.cpp:(.text+0x2b9): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: task.cpp:(.text+0x2c1): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: task.cpp:(.text+0x2fe): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: task.cpp:(.text+0x3b9): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(task.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::createSceneFromPatterns(std::vector<sep::pattern::PatternData, std::allocator<sep::pattern::PatternData> > const&)':
+cycles_renderer.cpp:(.text+0x2a5): undefined reference to `ccl::Camera::Camera()'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::renderScene(sep::blender::ccl::CyclesRenderer::RenderParams const&)':
+cycles_renderer.cpp:(.text+0x4e0): undefined reference to `ccl::Camera::set_screen_size(int, int)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x7f6): undefined reference to `ccl::Camera::compute_auto_viewplane()'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+cycles_renderer.cpp:(.text+0xb8d): undefined reference to `ccl::Session::Session(ccl::SessionParams const&, ccl::SceneParams const&)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xc27): undefined reference to `ccl::Session::set_output_driver(std::unique_ptr<ccl::OutputDriver, std::default_delete<ccl::OutputDriver> >)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xc4b): undefined reference to `ccl::Session::start()'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xc57): undefined reference to `ccl::Session::wait()'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xc68): undefined reference to `ccl::Session::~Session()'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::createGeometryFromPattern(sep::pattern::PatternData const&)':
+cycles_renderer.cpp:(.text+0xd29): undefined reference to `ccl::Mesh::Mesh()'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xf60): undefined reference to `ccl::AttributeSet::add(ccl::AttributeStandard, OpenImageIO_v2_5::ustring)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `std::__detail::_MakeUniq<ccl::OIIOOutputDriver>::__single_object std::make_unique<ccl::OIIOOutputDriver, char const*, char const (&) [9], sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)::{lambda(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)#1}>(char const*&&, char const (&) [9], sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)::{lambda(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)#1}&&)':
+cycles_renderer.cpp:(.text+0x147f): undefined reference to `ccl::OIIOOutputDriver::OIIOOutputDriver(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, std::function<void (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)>)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `OpenImageIO_v2_5::ustring::ustring(char const*)':
+cycles_renderer.cpp:(.text._ZN16OpenImageIO_v2_57ustringC2EPKc[_ZN16OpenImageIO_v2_57ustringC5EPKc]+0x32): undefined reference to `OpenImageIO_v2_5::ustring::make_unique(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::get_exposure_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl4Film19get_exposure_socketEv[_ZNK3ccl4Film19get_exposure_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::set_exposure(float)':
+cycles_renderer.cpp:(.text._ZN3ccl4Film12set_exposureEf[_ZN3ccl4Film12set_exposureEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::get_filter_type_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl4Film22get_filter_type_socketEv[_ZNK3ccl4Film22get_filter_type_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::get_filter_width_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl4Film23get_filter_width_socketEv[_ZNK3ccl4Film23get_filter_width_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::set_filter_width(float)':
+cycles_renderer.cpp:(.text._ZN3ccl4Film16set_filter_widthEf[_ZN3ccl4Film16set_filter_widthEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_shuttertime_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera22get_shuttertime_socketEv[_ZNK3ccl6Camera22get_shuttertime_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_shuttertime(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera15set_shuttertimeEf[_ZN3ccl6Camera15set_shuttertimeEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_rolling_shutter_type_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera31get_rolling_shutter_type_socketEv[_ZNK3ccl6Camera31get_rolling_shutter_type_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_focaldistance_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera24get_focaldistance_socketEv[_ZNK3ccl6Camera24get_focaldistance_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_focaldistance(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera17set_focaldistanceEf[_ZN3ccl6Camera17set_focaldistanceEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_aperturesize_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera23get_aperturesize_socketEv[_ZNK3ccl6Camera23get_aperturesize_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_aperturesize(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera16set_aperturesizeEf[_ZN3ccl6Camera16set_aperturesizeEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_blades_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera17get_blades_socketEv[_ZNK3ccl6Camera17get_blades_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_blades(unsigned int)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera10set_bladesEj[_ZN3ccl6Camera10set_bladesEj]+0x31): undefined reference to `ccl::Node::set(ccl::SocketType const&, unsigned int)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_bladesrotation_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera25get_bladesrotation_socketEv[_ZNK3ccl6Camera25get_bladesrotation_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_bladesrotation(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera18set_bladesrotationEf[_ZN3ccl6Camera18set_bladesrotationEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_camera_type_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera22get_camera_type_socketEv[_ZNK3ccl6Camera22get_camera_type_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_fov_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera14get_fov_socketEv[_ZNK3ccl6Camera14get_fov_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_fov(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera7set_fovEf[_ZN3ccl6Camera7set_fovEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_stereo_eye_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera21get_stereo_eye_socketEv[_ZNK3ccl6Camera21get_stereo_eye_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_use_spherical_stereo_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera31get_use_spherical_stereo_socketEv[_ZNK3ccl6Camera31get_use_spherical_stereo_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_use_spherical_stereo(bool)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera24set_use_spherical_stereoEb[_ZN3ccl6Camera24set_use_spherical_stereoEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_interocular_distance_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera31get_interocular_distance_socketEv[_ZNK3ccl6Camera31get_interocular_distance_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_interocular_distance(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera24set_interocular_distanceEf[_ZN3ccl6Camera24set_interocular_distanceEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_convergence_distance_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera31get_convergence_distance_socketEv[_ZNK3ccl6Camera31get_convergence_distance_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_convergence_distance(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera24set_convergence_distanceEf[_ZN3ccl6Camera24set_convergence_distanceEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_use_pole_merge_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera25get_use_pole_merge_socketEv[_ZNK3ccl6Camera25get_use_pole_merge_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_use_pole_merge(bool)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera18set_use_pole_mergeEb[_ZN3ccl6Camera18set_use_pole_mergeEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_pole_merge_angle_from_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera32get_pole_merge_angle_from_socketEv[_ZNK3ccl6Camera32get_pole_merge_angle_from_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_pole_merge_angle_from(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera25set_pole_merge_angle_fromEf[_ZN3ccl6Camera25set_pole_merge_angle_fromEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_pole_merge_angle_to_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera30get_pole_merge_angle_to_socketEv[_ZNK3ccl6Camera30get_pole_merge_angle_to_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_pole_merge_angle_to(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera23set_pole_merge_angle_toEf[_ZN3ccl6Camera23set_pole_merge_angle_toEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_sensorwidth_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera22get_sensorwidth_socketEv[_ZNK3ccl6Camera22get_sensorwidth_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_sensorwidth(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera15set_sensorwidthEf[_ZN3ccl6Camera15set_sensorwidthEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_sensorheight_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera23get_sensorheight_socketEv[_ZNK3ccl6Camera23get_sensorheight_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_sensorheight(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera16set_sensorheightEf[_ZN3ccl6Camera16set_sensorheightEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_nearclip_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera19get_nearclip_socketEv[_ZNK3ccl6Camera19get_nearclip_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_nearclip(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera12set_nearclipEf[_ZN3ccl6Camera12set_nearclipEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_farclip_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera18get_farclip_socketEv[_ZNK3ccl6Camera18get_farclip_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_farclip(float)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera11set_farclipEf[_ZN3ccl6Camera11set_farclipEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_matrix_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera17get_matrix_socketEv[_ZNK3ccl6Camera17get_matrix_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_matrix(ccl::Transform)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera10set_matrixENS_9TransformE[_ZN3ccl6Camera10set_matrixENS_9TransformE]+0x2f): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::Transform const&)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_use_perspective_motion_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl6Camera33get_use_perspective_motion_socketEv[_ZNK3ccl6Camera33get_use_perspective_motion_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_use_perspective_motion(bool)':
+cycles_renderer.cpp:(.text._ZN3ccl6Camera26set_use_perspective_motionEb[_ZN3ccl6Camera26set_use_perspective_motionEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Mesh::get_triangles_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl4Mesh20get_triangles_socketEv[_ZNK3ccl4Mesh20get_triangles_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Mesh::set_triangles(ccl::array<int, 16ul>&)':
+cycles_renderer.cpp:(.text._ZN3ccl4Mesh13set_trianglesERNS_5arrayIiLm16EEE[_ZN3ccl4Mesh13set_trianglesERNS_5arrayIiLm16EEE]+0x33): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::array<int, 16ul>&)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Mesh::get_verts_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl4Mesh16get_verts_socketEv[_ZNK3ccl4Mesh16get_verts_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Mesh::set_verts(ccl::array<ccl::float3, 16ul>&)':
+cycles_renderer.cpp:(.text._ZN3ccl4Mesh9set_vertsERNS_5arrayINS_6float3ELm16EEE[_ZN3ccl4Mesh9set_vertsERNS_5arrayINS_6float3ELm16EEE]+0x33): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::array<ccl::float3, 16ul>&)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::get_transparent_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl10Background22get_transparent_socketEv[_ZNK3ccl10Background22get_transparent_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::set_transparent(bool)':
+cycles_renderer.cpp:(.text._ZN3ccl10Background15set_transparentEb[_ZN3ccl10Background15set_transparentEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::get_transparent_glass_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl10Background28get_transparent_glass_socketEv[_ZNK3ccl10Background28get_transparent_glass_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::set_transparent_glass(bool)':
+cycles_renderer.cpp:(.text._ZN3ccl10Background21set_transparent_glassEb[_ZN3ccl10Background21set_transparent_glassEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::get_transparent_roughness_threshold_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl10Background42get_transparent_roughness_threshold_socketEv[_ZNK3ccl10Background42get_transparent_roughness_threshold_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::set_transparent_roughness_threshold(float)':
+cycles_renderer.cpp:(.text._ZN3ccl10Background35set_transparent_roughness_thresholdEf[_ZN3ccl10Background35set_transparent_roughness_thresholdEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Integrator::get_aa_samples_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl10Integrator21get_aa_samples_socketEv[_ZNK3ccl10Integrator21get_aa_samples_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Integrator::set_aa_samples(int)':
+cycles_renderer.cpp:(.text._ZN3ccl10Integrator14set_aa_samplesEi[_ZN3ccl10Integrator14set_aa_samplesEi]+0x31): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Integrator::get_use_denoise_socket() const':
+cycles_renderer.cpp:(.text._ZNK3ccl10Integrator22get_use_denoise_socketEv[_ZNK3ccl10Integrator22get_use_denoise_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Integrator::set_use_denoise(bool)':
+cycles_renderer.cpp:(.text._ZN3ccl10Integrator15set_use_denoiseEb[_ZN3ccl10Integrator15set_use_denoiseEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `void ccl::Node::set<ccl::FilterType, true>(ccl::SocketType const&, ccl::FilterType const&)':
+cycles_renderer.cpp:(.text._ZN3ccl4Node3setINS_10FilterTypeELb1EEEvRKNS_10SocketTypeERKT_[_ZN3ccl4Node3setINS_10FilterTypeELb1EEEvRKNS_10SocketTypeERKT_]+0x2b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `void ccl::Node::set<ccl::Camera::RollingShutterType, true>(ccl::SocketType const&, ccl::Camera::RollingShutterType const&)':
+cycles_renderer.cpp:(.text._ZN3ccl4Node3setINS_6Camera18RollingShutterTypeELb1EEEvRKNS_10SocketTypeERKT_[_ZN3ccl4Node3setINS_6Camera18RollingShutterTypeELb1EEEvRKNS_10SocketTypeERKT_]+0x2b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `void ccl::Node::set<ccl::CameraType, true>(ccl::SocketType const&, ccl::CameraType const&)':
+cycles_renderer.cpp:(.text._ZN3ccl4Node3setINS_10CameraTypeELb1EEEvRKNS_10SocketTypeERKT_[_ZN3ccl4Node3setINS_10CameraTypeELb1EEEvRKNS_10SocketTypeERKT_]+0x2b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `void ccl::Node::set<ccl::Camera::StereoEye, true>(ccl::SocketType const&, ccl::Camera::StereoEye const&)':
+cycles_renderer.cpp:(.text._ZN3ccl4Node3setINS_6Camera9StereoEyeELb1EEEvRKNS_10SocketTypeERKT_[_ZN3ccl4Node3setINS_6Camera9StereoEyeELb1EEEvRKNS_10SocketTypeERKT_]+0x2b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `std::__detail::_MakeUniq<ccl::Scene>::__single_object std::make_unique<ccl::Scene, ccl::SceneParams&, ccl::Device*>(ccl::SceneParams&, ccl::Device*&&)':
+cycles_renderer.cpp:(.text._ZSt11make_uniqueIN3ccl5SceneEJRNS0_11SceneParamsEPNS0_6DeviceEEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_[_ZSt11make_uniqueIN3ccl5SceneEJRNS0_11SceneParamsEPNS0_6DeviceEEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_]+0x51): undefined reference to `ccl::Scene::Scene(ccl::SceneParams const&, ccl::Device*)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::CPUDevice(ccl::DeviceInfo const&, ccl::Stats&, ccl::Profiler&, bool)':
+device_impl.cpp:(.text+0x58e): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x59e): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5af): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5cb): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5d3): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x645): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x665): undefined reference to `rtcNewDevice'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6b9): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::~CPUDevice()':
+device_impl.cpp:(.text+0x72e): undefined reference to `rtcReleaseDevice'
+/usr/sbin/ld: device_impl.cpp:(.text+0x785): undefined reference to `pglReleaseDevice'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::mem_alloc(ccl::device_memory&)':
+device_impl.cpp:(.text+0x99e): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x9ae): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x9bf): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x9e0): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x9e8): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0xb45): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0xc3c): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::global_alloc(ccl::device_memory&)':
+device_impl.cpp:(.text+0xd34): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0xd44): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0xd55): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0xd76): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0xd7e): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0xedb): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0xfac): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::tex_alloc(ccl::device_texture&)':
+device_impl.cpp:(.text+0x1017): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1027): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1038): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1059): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1061): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x11be): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1584): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::build_bvh(ccl::BVH*, ccl::Progress&, bool)':
+device_impl.cpp:(.text+0x17ce): undefined reference to `ccl::BVHEmbree::refit(ccl::Progress&)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x17f6): undefined reference to `ccl::BVHEmbree::build(ccl::Progress&, ccl::Stats*, RTCDeviceTy*, bool)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1809): undefined reference to `rtcGetSceneTraversable'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::get_guiding_device() const':
+device_impl.cpp:(.text+0x1882): undefined reference to `pglNewDevice'
+/usr/sbin/ld: device_impl.cpp:(.text+0x18a0): undefined reference to `pglReleaseDevice'
+/usr/sbin/ld: device_impl.cpp:(.text+0x18e1): undefined reference to `pglNewDevice'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1903): undefined reference to `pglReleaseDevice'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `std::unique_ptr<openpgl::cpp::Device, std::default_delete<openpgl::cpp::Device> >::~unique_ptr()':
+device_impl.cpp:(.text._ZNSt10unique_ptrIN7openpgl3cpp6DeviceESt14default_deleteIS2_EED2Ev[_ZNSt10unique_ptrIN7openpgl3cpp6DeviceESt14default_deleteIS2_EED2Ev]+0x13): undefined reference to `pglReleaseDevice'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::ThreadKernelGlobalsCPU::~ThreadKernelGlobalsCPU()':
+device_impl.cpp:(.text._ZN3ccl22ThreadKernelGlobalsCPUD2Ev[_ZN3ccl22ThreadKernelGlobalsCPUD2Ev]+0x1c): undefined reference to `pglReleaseVolumeSamplingDistribution'
+/usr/sbin/ld: device_impl.cpp:(.text._ZN3ccl22ThreadKernelGlobalsCPUD2Ev[_ZN3ccl22ThreadKernelGlobalsCPUD2Ev]+0x4d): undefined reference to `pglReleaseSurfaceSamplingDistribution'
+/usr/sbin/ld: device_impl.cpp:(.text._ZN3ccl22ThreadKernelGlobalsCPUD2Ev[_ZN3ccl22ThreadKernelGlobalsCPUD2Ev]+0x79): undefined reference to `pglReleasePathSegmentStorage'
+/usr/sbin/ld: device_impl.cpp:(.text._ZN3ccl22ThreadKernelGlobalsCPUD2Ev[_ZN3ccl22ThreadKernelGlobalsCPUD2Ev]+0x9d): undefined reference to `ccl::OSLThreadData::~OSLThreadData()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `void std::vector<ccl::ThreadKernelGlobalsCPU, ccl::GuardedAllocator<ccl::ThreadKernelGlobalsCPU> >::_M_realloc_append<ccl::KernelGlobalsCPU&, ccl::OSLGlobals*&, ccl::Profiler&, int&>(ccl::KernelGlobalsCPU&, ccl::OSLGlobals*&, ccl::Profiler&, int&)':
+device_impl.cpp:(.text._ZNSt6vectorIN3ccl22ThreadKernelGlobalsCPUENS0_16GuardedAllocatorIS1_EEE17_M_realloc_appendIJRNS0_16KernelGlobalsCPUERPNS0_10OSLGlobalsERNS0_8ProfilerERiEEEvDpOT_[_ZNSt6vectorIN3ccl22ThreadKernelGlobalsCPUENS0_16GuardedAllocatorIS1_EEE17_M_realloc_appendIJRNS0_16KernelGlobalsCPUERPNS0_10OSLGlobalsERNS0_8ProfilerERiEEEvDpOT_]+0x1a5): undefined reference to `ccl::OSLThreadData::OSLThreadData(ccl::OSLThreadData&&)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x10): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x18): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_cuda_init()':
+device.cpp:(.text+0x21): undefined reference to `cuewInit'
+/usr/sbin/ld: device.cpp:(.text+0x42): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x52): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x63): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x84): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x8c): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xd7): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xef): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xff): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x110): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x12d): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x135): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x153): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x173): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x183): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x194): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1b5): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x1bd): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x1db): undefined reference to `cuewCompilerPath'
+/usr/sbin/ld: device.cpp:(.text+0x1fb): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x20b): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x21c): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x23d): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x245): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x261): undefined reference to `cuewCompilerPath'
+/usr/sbin/ld: device.cpp:(.text+0x29f): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x2af): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x2c0): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x2dd): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x2e5): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x338): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x363): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_cuda_info(ccl::vector<ccl::DeviceInfo, ccl::GuardedAllocator<ccl::DeviceInfo> >&)':
+device.cpp:(.text+0x419): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0x663): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x673): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x684): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x6a5): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x6ad): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x6f8): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x97c): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0xa39): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xa49): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xa5a): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xa72): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xa7a): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xa96): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xb0f): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xb1f): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xb30): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xb48): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xb50): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xb6c): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xbc0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xbd0): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xbe1): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xbfd): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xc05): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xc79): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xc9e): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xcae): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xcbf): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xcdb): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xce3): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xd88): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xee2): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0xf43): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xf52): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_cuda_capabilities[abi:cxx11]()':
+device.cpp:(.text+0x10a1): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0x1159): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x10): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x18): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x20): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x28): more undefined references to `google::kLogSiteUninitialized' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::CUDADevice(ccl::DeviceInfo const&, ccl::Stats&, ccl::Profiler&, bool)':
+device_impl.cpp:(.text+0x1ed): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x236): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x27d): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2f8): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x391): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):device_impl.cpp:(.text+0x409): more undefined references to `cuewErrorString' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::compile_kernel(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*, char const*, bool)':
+device_impl.cpp:(.text+0x130a): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x131a): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x132b): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1345): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x134f): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1393): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x13b6): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x13c6): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x13d7): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x13f5): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x13ff): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1687): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1697): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x16a8): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x16c2): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x16cc): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1719): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1741): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1751): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1762): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x177c): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1786): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x17a4): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1804): undefined reference to `cuewCompilerPath'
+/usr/sbin/ld: device_impl.cpp:(.text+0x181a): undefined reference to `cuewCompilerVersion'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1834): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1844): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1855): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1873): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x187d): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x18ef): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x19c1): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x19d1): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x19e2): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x19fa): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1a02): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1a44): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1da3): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1db3): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1dc4): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1de2): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1dec): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1e0a): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x25a2): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x264d): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x272a): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::load_kernels(unsigned int)':
+device_impl.cpp:(.text+0x27b3): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x27c3): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x27d4): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x27f5): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x27fd): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x281b): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x28e3): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2a9b): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::reserve_local_memory(unsigned int)':
+device_impl.cpp:(.text+0x2c2a): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2c3a): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2c4b): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2c6c): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2c74): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2d54): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2dbe): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::free_device(void*)':
+device_impl.cpp:(.text+0x2ecb): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::shared_to_device_pointer(void const*)':
+device_impl.cpp:(.text+0x305d): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::copy_host_to_device(void*, void*, unsigned long)':
+device_impl.cpp:(.text+0x314b): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::tex_copy_to(ccl::device_texture&)':
+device_impl.cpp:(.text+0x351c): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3623): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::tex_alloc(ccl::device_texture&)':
+device_impl.cpp:(.text+0x3bbf): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3bcf): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3be0): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3bfe): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3c08): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3efc): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3f1d): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x404b): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x429b): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x4403): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x478e): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x4ca1): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::mem_copy_from(ccl::device_memory&, unsigned long, unsigned long, unsigned long, unsigned long)':
+device_impl.cpp:(.text+0x4d48): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::mem_zero(ccl::device_memory&)':
+device_impl.cpp:(.text+0x4eab): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::const_copy_to(char const*, void*, unsigned long)':
+device_impl.cpp:(.text+0x507c): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x555a): undefined reference to `cuewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x55b6): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):device_impl.cpp:(.text+0x5617): more undefined references to `cuewErrorString' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::should_use_graphics_interop(ccl::GraphicsInteropDevice const&, bool)':
+device_impl.cpp:(.text+0x6d69): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6d79): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6d8a): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6da8): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6db2): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6dd0): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6e4b): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6e5b): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6e6c): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6e88): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6e90): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6eac): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6eca): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6eda): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6eeb): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6f03): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6f0b): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6f27): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6f40): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6f50): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6f61): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6f7f): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6f89): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x7042): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x7066): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x7076): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x7087): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x70a1): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x70ab): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x70c9): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x7167): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x71a0): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x71cf): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x10): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x18): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x20): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x28): more undefined references to `google::kLogSiteUninitialized' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(kernel.cpp.o): in function `ccl::CUDADeviceKernels::load(ccl::CUDADevice*)':
+kernel.cpp:(.text+0x160): undefined reference to `cuewErrorString'
+/usr/sbin/ld: kernel.cpp:(.text+0x1d2): undefined reference to `cuewErrorString'
+/usr/sbin/ld: kernel.cpp:(.text+0x257): undefined reference to `cuewErrorString'
+/usr/sbin/ld: kernel.cpp:(.text+0x2be): undefined reference to `google::LogMessage::LogMessage(char const*, int, int)'
+/usr/sbin/ld: kernel.cpp:(.text+0x2c6): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: kernel.cpp:(.text+0x2f7): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: kernel.cpp:(.text+0x390): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::CUDADeviceQueue::CUDADeviceQueue(ccl::CUDADevice*)':
+queue.cpp:(.text+0x50): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::CUDADeviceQueue::num_concurrent_states(unsigned long) const':
+queue.cpp:(.text+0x221): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x231): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x242): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x25f): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x267): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0x285): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: queue.cpp:(.text+0x29c): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x2ac): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x2bd): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x2de): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x2e6): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0x367): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: queue.cpp:(.text+0x3ae): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::CUDADeviceQueue::init_execution()':
+queue.cpp:(.text+0x433): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::CUDADeviceQueue::enqueue(ccl::DeviceKernel, int, ccl::DeviceKernelArguments const&)':
+queue.cpp:(.text+0x55f): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::CUDADeviceQueue::assert_success(cudaError_enum, char const*)':
+queue.cpp:(.text+0x70c): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(util.cpp.o): in function `ccl::CUDAContextScope::CUDAContextScope(ccl::CUDADevice*)':
+util.cpp:(.text+0x24): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(util.cpp.o): in function `ccl::CUDAContextScope::~CUDAContextScope()':
+util.cpp:(.text+0xca): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_hip_init()':
+device.cpp:(.text+0x1f): undefined reference to `hipewInit'
+/usr/sbin/ld: device.cpp:(.text+0x4c): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x5c): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x6d): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x88): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x90): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xac): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xdd): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xed): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xfe): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x11d): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x125): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x155): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x165): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x176): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x195): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x19d): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x1cd): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x1dd): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x1ee): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x20d): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x215): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x245): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x255): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x266): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x285): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x28d): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x2b6): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x2c6): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x2d7): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x2f2): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x2fa): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x316): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x328): undefined reference to `hipewCompilerPath'
+/usr/sbin/ld: device.cpp:(.text+0x344): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x354): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x365): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x380): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x388): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x3a4): undefined reference to `hipewCompilerPath'
+/usr/sbin/ld: device.cpp:(.text+0x3b7): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0x3da): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0x3ea): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0x3fb): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x41a): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0x422): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0x46b): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_hip_info(ccl::vector<ccl::DeviceInfo, ccl::GuardedAllocator<ccl::DeviceInfo> >&)':
+device.cpp:(.text+0x507): undefined reference to `hipInit'
+/usr/sbin/ld: device.cpp:(.text+0x529): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0x55d): undefined reference to `hipGetDeviceCount'
+/usr/sbin/ld: device.cpp:(.text+0x5ad): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: device.cpp:(.text+0x5d8): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0x60e): undefined reference to `hipDeviceGetName'
+/usr/sbin/ld: device.cpp:(.text+0x8b7): undefined reference to `hipDeviceCanAccessPeer'
+/usr/sbin/ld: device.cpp:(.text+0xa5e): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xa6e): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xa7f): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xa97): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xa9f): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xabb): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xb2b): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xb3b): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xb4c): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xb64): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xb6c): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xb88): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xbdc): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xbec): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xbfd): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xc19): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xc21): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xc95): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xcba): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device.cpp:(.text+0xcca): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device.cpp:(.text+0xcdb): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xcf7): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device.cpp:(.text+0xcff): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device.cpp:(.text+0xda5): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device.cpp:(.text+0xf02): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0xf5f): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_hip_capabilities[abi:cxx11]()':
+device.cpp:(.text+0xfa7): undefined reference to `hipInit'
+/usr/sbin/ld: device.cpp:(.text+0x1014): undefined reference to `hipGetDeviceCount'
+/usr/sbin/ld: device.cpp:(.text+0x109a): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0x1155): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device.cpp:(.text+0x126d): undefined reference to `hipDeviceGetName'
+/usr/sbin/ld: device.cpp:(.text+0x1436): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: device.cpp:(.text+0x14ab): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: device.cpp:(.text+0x1520): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: device.cpp:(.text+0x1595): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: device.cpp:(.text+0x160a): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):device.cpp:(.text+0x167f): more undefined references to `hipDeviceGetAttribute' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x10): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x18): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x20): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):(.data+0x28): more undefined references to `google::kLogSiteUninitialized' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::HIPDevice(ccl::DeviceInfo const&, ccl::Stats&, ccl::Profiler&, bool)':
+device_impl.cpp:(.text+0x1df): undefined reference to `hipInit'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1ee): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x225): undefined reference to `hipDeviceGet'
+/usr/sbin/ld: device_impl.cpp:(.text+0x23b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x26b): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: device_impl.cpp:(.text+0x286): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x306): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x38b): undefined reference to `hipCtxCreate'
+/usr/sbin/ld: device_impl.cpp:(.text+0x39d): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x42a): undefined reference to `hipRuntimeGetVersion'
+/usr/sbin/ld: device_impl.cpp:(.text+0x43e): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x499): undefined reference to `hipCtxPopCurrent'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::~HIPDevice()':
+device_impl.cpp:(.text+0x577): undefined reference to `hipModuleUnload'
+/usr/sbin/ld: device_impl.cpp:(.text+0x584): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5df): undefined reference to `hipCtxDestroy'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5f3): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::support_device(unsigned int)':
+device_impl.cpp:(.text+0x709): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: device_impl.cpp:(.text+0x737): undefined reference to `hipGetDevicePropertiesR0600'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::check_peer_access(ccl::Device*)':
+device_impl.cpp:(.text+0x803): undefined reference to `hipDeviceCanAccessPeer'
+/usr/sbin/ld: device_impl.cpp:(.text+0x822): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x889): undefined reference to `hipDeviceGetP2PAttribute'
+/usr/sbin/ld: device_impl.cpp:(.text+0x8ad): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x91d): undefined reference to `hipCtxEnablePeerAccess'
+/usr/sbin/ld: device_impl.cpp:(.text+0x934): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x9bf): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::compile_kernel[abi:cxx11](unsigned int, char const*, char const*)':
+device_impl.cpp:(.text+0x11ed): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1226): undefined reference to `hipGetDevicePropertiesR0600'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1374): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1384): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1395): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x13b2): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x13bf): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x140a): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1432): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1442): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1453): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1474): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1481): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x14a2): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1859): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1869): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x187a): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1894): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x189e): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x18eb): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1913): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1923): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1934): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x194e): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1958): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1976): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x19df): undefined reference to `hipewCompilerPath'
+/usr/sbin/ld: device_impl.cpp:(.text+0x19f0): undefined reference to `hipewCompilerVersion'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1a09): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1a19): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1a2a): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1a48): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1a52): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x1abb): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2676): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x26aa): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::load_kernels(unsigned int)':
+device_impl.cpp:(.text+0x2860): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2870): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2881): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x28a0): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x28a8): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x28c4): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2960): undefined reference to `hipModuleLoadData'
+/usr/sbin/ld: device_impl.cpp:(.text+0x297a): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2aef): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::reserve_local_memory(unsigned int)':
+device_impl.cpp:(.text+0x2b3f): undefined reference to `hipMemGetInfo'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2c7a): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2c8a): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2c9b): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2cbc): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2cc4): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2da4): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2e0e): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_device_memory_info(unsigned long&, unsigned long&)':
+device_impl.cpp:(.text+0x2e68): undefined reference to `hipMemGetInfo'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::alloc_device(void*&, unsigned long)':
+device_impl.cpp:(.text+0x2eb8): undefined reference to `hipMalloc'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::free_device(void*)':
+device_impl.cpp:(.text+0x2f0b): undefined reference to `hipFree'
+/usr/sbin/ld: device_impl.cpp:(.text+0x2f1b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::shared_alloc(void*&, unsigned long)':
+device_impl.cpp:(.text+0x2fd8): undefined reference to `hipHostMalloc'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::shared_free(void*)':
+device_impl.cpp:(.text+0x3038): undefined reference to `hipHostFree'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::shared_to_device_pointer(void const*)':
+device_impl.cpp:(.text+0x3096): undefined reference to `hipHostGetDevicePointer'
+/usr/sbin/ld: device_impl.cpp:(.text+0x30ad): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::copy_host_to_device(void*, void*, unsigned long)':
+device_impl.cpp:(.text+0x3185): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x319b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::tex_copy_to(ccl::device_texture&)':
+device_impl.cpp:(.text+0x354e): undefined reference to `hipDrvMemcpy3D'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3564): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3659): undefined reference to `hipDrvMemcpy2DUnaligned'
+/usr/sbin/ld: device_impl.cpp:(.text+0x366b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::tex_free(ccl::device_texture&)':
+device_impl.cpp:(.text+0x39ce): undefined reference to `hipTexObjectDestroy'
+/usr/sbin/ld: device_impl.cpp:(.text+0x39f3): undefined reference to `hipArrayDestroy'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::tex_alloc(ccl::device_texture&)':
+device_impl.cpp:(.text+0x3c01): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3c11): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3c22): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3c40): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3c4a): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3dcb): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3f3c): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3f43): undefined reference to `hipArray3DCreate'
+/usr/sbin/ld: device_impl.cpp:(.text+0x3f5d): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x408b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x42c5): undefined reference to `hipDrvMemcpy2DUnaligned'
+/usr/sbin/ld: device_impl.cpp:(.text+0x42db): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x4429): undefined reference to `hipDrvMemcpy3D'
+/usr/sbin/ld: device_impl.cpp:(.text+0x443b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x47ac): undefined reference to `hipTexObjectCreate'
+/usr/sbin/ld: device_impl.cpp:(.text+0x4d2a): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::mem_copy_from(ccl::device_memory&, unsigned long, unsigned long, unsigned long, unsigned long)':
+device_impl.cpp:(.text+0x4da8): undefined reference to `hipMemcpyDtoH'
+/usr/sbin/ld: device_impl.cpp:(.text+0x4dc8): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::mem_zero(ccl::device_memory&)':
+device_impl.cpp:(.text+0x4eec): undefined reference to `hipMemsetD8'
+/usr/sbin/ld: device_impl.cpp:(.text+0x4f2b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::const_copy_to(char const*, void*, unsigned long)':
+device_impl.cpp:(.text+0x50d7): undefined reference to `hipModuleGetGlobal'
+/usr/sbin/ld: device_impl.cpp:(.text+0x50fc): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x55b9): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x55da): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x561a): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5636): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5676): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5697): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x56d7): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x56f8): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5738): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5759): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5799): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x57ba): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x57fa): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x581b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x585b): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x587c): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x58bc): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x58dd): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x591d): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x593e): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x597e): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x599f): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x59df): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5a00): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5a40): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5a61): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5aa1): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5ac2): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5b02): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5b23): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5b63): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5b84): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5bc4): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5be5): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5c25): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5c46): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5c86): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5ca7): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5ce7): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5d08): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5d48): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5d69): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5da9): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5dca): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5e0a): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5e2b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5e6b): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5e8c): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5ecc): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5eed): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5f2d): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5f4e): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5f8e): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5faf): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x5fef): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6010): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6050): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6071): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x60b1): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x60d2): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6112): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6133): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6173): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6194): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x61d4): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x61f5): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6235): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6256): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6296): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x62b7): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x62f7): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6318): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6358): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6379): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x63b9): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x63da): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x641a): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x643b): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x647b): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x649c): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x64dc): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x64fd): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x653d): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x655e): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x659e): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x65bf): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x65ff): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6620): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6660): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6681): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x66c1): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x66e2): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6722): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6743): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x6783): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x67a4): undefined reference to `hipewErrorString'
+/usr/sbin/ld: device_impl.cpp:(.text+0x67e1): undefined reference to `hipMemcpyHtoD'
+/usr/sbin/ld: device_impl.cpp:(.text+0x67fe): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_num_multiprocessors()':
+device_impl.cpp:(.text+0x6c90): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_device_default_attribute(hipDeviceAttribute_t, int)':
+device_impl.cpp:(.text+0x6d07): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_max_num_threads_per_multiprocessor()':
+device_impl.cpp:(.text+0x6d70): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_device_attribute(hipDeviceAttribute_t, int*)':
+device_impl.cpp:(.text+0x6de0): undefined reference to `hipDeviceGetAttribute'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x10): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x18): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x20): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):(.data+0x28): more undefined references to `google::kLogSiteUninitialized' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(kernel.cpp.o): in function `ccl::HIPDeviceKernels::load(ccl::HIPDevice*)':
+kernel.cpp:(.text+0x150): undefined reference to `hipModuleGetFunction'
+/usr/sbin/ld: kernel.cpp:(.text+0x160): undefined reference to `hipewErrorString'
+/usr/sbin/ld: kernel.cpp:(.text+0x1c5): undefined reference to `hipFuncSetCacheConfig'
+/usr/sbin/ld: kernel.cpp:(.text+0x1d2): undefined reference to `hipewErrorString'
+/usr/sbin/ld: kernel.cpp:(.text+0x243): undefined reference to `hipModuleOccupancyMaxPotentialBlockSize'
+/usr/sbin/ld: kernel.cpp:(.text+0x254): undefined reference to `hipewErrorString'
+/usr/sbin/ld: kernel.cpp:(.text+0x2bb): undefined reference to `google::LogMessage::LogMessage(char const*, int, int)'
+/usr/sbin/ld: kernel.cpp:(.text+0x2c3): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: kernel.cpp:(.text+0x2f4): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: kernel.cpp:(.text+0x38d): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::HIPDeviceQueue(ccl::HIPDevice*)':
+queue.cpp:(.text+0x3e): undefined reference to `hipStreamCreateWithFlags'
+/usr/sbin/ld: queue.cpp:(.text+0x50): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::~HIPDeviceQueue()':
+queue.cpp:(.text+0x137): undefined reference to `hipStreamDestroy'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::num_concurrent_states(unsigned long) const':
+queue.cpp:(.text+0x220): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x230): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x241): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x25e): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x266): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0x284): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: queue.cpp:(.text+0x29b): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x2ab): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x2bc): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x2dd): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x2e5): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0x366): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: queue.cpp:(.text+0x3ad): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::init_execution()':
+queue.cpp:(.text+0x426): undefined reference to `hipDeviceSynchronize'
+/usr/sbin/ld: queue.cpp:(.text+0x433): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::enqueue(ccl::DeviceKernel, int, ccl::DeviceKernelArguments const&)':
+queue.cpp:(.text+0x552): undefined reference to `hipDeviceSynchronize'
+/usr/sbin/ld: queue.cpp:(.text+0x55f): undefined reference to `hipewErrorString'
+/usr/sbin/ld: queue.cpp:(.text+0x62d): undefined reference to `hipModuleLaunchKernel'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::assert_success(hipError_t, char const*)':
+queue.cpp:(.text+0x70c): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::synchronize()':
+queue.cpp:(.text+0x80e): undefined reference to `hipStreamSynchronize'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::zero_to_device(ccl::device_memory&)':
+queue.cpp:(.text+0x8cd): undefined reference to `hipMemsetD8Async'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::copy_to_device(ccl::device_memory&)':
+queue.cpp:(.text+0x99d): undefined reference to `hipMemcpyHtoDAsync'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::copy_from_device(ccl::device_memory&)':
+queue.cpp:(.text+0xa56): undefined reference to `hipMemcpyDtoHAsync'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(util.cpp.o): in function `ccl::HIPContextScope::HIPContextScope(ccl::HIPDevice*)':
+util.cpp:(.text+0x10): undefined reference to `hipCtxPushCurrent'
+/usr/sbin/ld: util.cpp:(.text+0x24): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(util.cpp.o): in function `ccl::HIPContextScope::~HIPContextScope()':
+util.cpp:(.text+0xbb): undefined reference to `hipCtxPopCurrent'
+/usr/sbin/ld: util.cpp:(.text+0xca): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::MultiDevice::build_bvh(ccl::BVH*, ccl::Progress&, bool)':
+device.cpp:(.text._ZN3ccl11MultiDevice9build_bvhEPNS_3BVHERNS_8ProgressEb[_ZN3ccl11MultiDevice9build_bvhEPNS_3BVHERNS_8ProgressEb]+0x329): undefined reference to `ccl::Geometry::is_instanced() const'
+/usr/sbin/ld: device.cpp:(.text._ZN3ccl11MultiDevice9build_bvhEPNS_3BVHERNS_8ProgressEb[_ZN3ccl11MultiDevice9build_bvhEPNS_3BVHERNS_8ProgressEb]+0x367): undefined reference to `ccl::BVH::create(ccl::BVHParams const&, ccl::vector<ccl::Geometry*, ccl::GuardedAllocator<ccl::Geometry*> > const&, ccl::vector<ccl::Object*, ccl::GuardedAllocator<ccl::Object*> > const&, ccl::Device*)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(kernel.cpp.o): in function `ccl::device_kernel_as_string(ccl::DeviceKernel)':
+kernel.cpp:(.text+0x7b): undefined reference to `google::LogMessageFatal::LogMessageFatal(char const*, int)'
+/usr/sbin/ld: kernel.cpp:(.text+0x83): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: kernel.cpp:(.text+0xbd): undefined reference to `google::LogMessageFatal::~LogMessageFatal()'
+/usr/sbin/ld: kernel.cpp:(.text+0xc7): undefined reference to `google::LogMessageFatal::~LogMessageFatal()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::DeviceQueue::~DeviceQueue()':
+queue.cpp:(.text+0xa2): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0xb2): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0xc3): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x540): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x550): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x561): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x579): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x581): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0x59d): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: queue.cpp:(.text+0x5c6): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x5e4): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: queue.cpp:(.text+0x621): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x62e): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x642): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x64a): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0x75d): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x76d): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x77e): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x796): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x79e): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0x7f2): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::DeviceQueue::debug_init_execution()':
+queue.cpp:(.text+0x883): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x893): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x8a4): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::DeviceQueue::debug_enqueue_begin(ccl::DeviceKernel, int)':
+queue.cpp:(.text+0x8e7): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x8f7): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x908): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x927): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0x937): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0x948): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x967): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0x96f): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0x9ee): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: queue.cpp:(.text+0xa3b): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::DeviceQueue::debug_enqueue_end()':
+queue.cpp:(.text+0xa60): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0xa70): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0xa87): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::DeviceQueue::debug_synchronize()':
+queue.cpp:(.text+0xad3): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0xae3): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0xaf4): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0xb29): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: queue.cpp:(.text+0xb39): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: queue.cpp:(.text+0xb4a): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0xb67): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text+0xb6f): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text+0xbc2): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: queue.cpp:(.text+0xc89): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::DeviceQueue::graphics_interop_create()':
+queue.cpp:(.text._ZN3ccl11DeviceQueue23graphics_interop_createEv[_ZN3ccl11DeviceQueue23graphics_interop_createEv]+0x18): undefined reference to `google::LogMessageFatal::LogMessageFatal(char const*, int)'
+/usr/sbin/ld: queue.cpp:(.text._ZN3ccl11DeviceQueue23graphics_interop_createEv[_ZN3ccl11DeviceQueue23graphics_interop_createEv]+0x20): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: queue.cpp:(.text._ZN3ccl11DeviceQueue23graphics_interop_createEv[_ZN3ccl11DeviceQueue23graphics_interop_createEv]+0x37): undefined reference to `google::LogMessageFatal::~LogMessageFatal()'
+/usr/sbin/ld: queue.cpp:(.text._ZN3ccl11DeviceQueue23graphics_interop_createEv[_ZN3ccl11DeviceQueue23graphics_interop_createEv]+0x3f): undefined reference to `google::LogMessageFatal::~LogMessageFatal()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x8): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x10): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x18): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x20): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o):(.data+0x28): more undefined references to `google::kLogSiteUninitialized' follow
+/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::CUDADeviceGraphicsInterop::free()':
+graphics_interop.cpp:(.text+0xb5): undefined reference to `cuewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x130): undefined reference to `cuewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x1ab): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::CUDADeviceGraphicsInterop::set_buffer(ccl::GraphicsInteropBuffer&)':
+graphics_interop.cpp:(.text+0x295): undefined reference to `ccl::GraphicsInteropBuffer::is_empty() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x2ae): undefined reference to `ccl::GraphicsInteropBuffer::take_zero()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x2b9): undefined reference to `ccl::GraphicsInteropBuffer::has_new_handle() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x2d1): undefined reference to `ccl::GraphicsInteropBuffer::get_type() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x2f5): undefined reference to `ccl::GraphicsInteropBuffer::take_handle()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x325): undefined reference to `google::LogMessage::LogMessage(char const*, int, int)'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x32f): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x34d): undefined reference to `cuewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x3b1): undefined reference to `ccl::GraphicsInteropBuffer::take_handle()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x3bd): undefined reference to `ccl::GraphicsInteropBuffer::get_size() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x405): undefined reference to `google::LogMessage::LogMessage(char const*, int, int)'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x412): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x430): undefined reference to `cuewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x45f): undefined reference to `ccl::GraphicsInteropBuffer::get_size() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x470): undefined reference to `ccl::GraphicsInteropBuffer::get_size() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x51b): undefined reference to `google::LogMessage::LogMessage(char const*, int, int)'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x525): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x543): undefined reference to `cuewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x59b): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x5ce): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x5e6): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x5f5): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::CUDADeviceGraphicsInterop::map()':
+graphics_interop.cpp:(.text+0x66d): undefined reference to `cuewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x6e1): undefined reference to `cuewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x78a): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::CUDADeviceGraphicsInterop::unmap()':
+graphics_interop.cpp:(.text+0x8cb): undefined reference to `cuewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::HIPDeviceGraphicsInterop::free()':
+graphics_interop.cpp:(.text+0x98): undefined reference to `hipGraphicsUnregisterResource'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0xa5): undefined reference to `hipewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x113): undefined reference to `hipFree'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x120): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::HIPDeviceGraphicsInterop::set_buffer(ccl::GraphicsInteropBuffer&)':
+graphics_interop.cpp:(.text+0x200): undefined reference to `ccl::GraphicsInteropBuffer::is_empty() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x219): undefined reference to `ccl::GraphicsInteropBuffer::take_zero()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x224): undefined reference to `ccl::GraphicsInteropBuffer::has_new_handle() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x23c): undefined reference to `ccl::GraphicsInteropBuffer::get_type() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x24c): undefined reference to `hipGraphicsGLRegisterBuffer'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x257): undefined reference to `ccl::GraphicsInteropBuffer::take_handle()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x283): undefined reference to `google::LogMessage::LogMessage(char const*, int, int)'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x28d): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x2ab): undefined reference to `hipewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x2d3): undefined reference to `ccl::GraphicsInteropBuffer::get_size() const'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x2fc): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x320): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::HIPDeviceGraphicsInterop::map()':
+graphics_interop.cpp:(.text+0x373): undefined reference to `hipGraphicsMapResources'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x39d): undefined reference to `hipewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x3f7): undefined reference to `hipGraphicsResourceGetMappedPointer'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x411): undefined reference to `hipewErrorString'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x48d): undefined reference to `hipMemsetD8Async'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x4ba): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::HIPDeviceGraphicsInterop::unmap()':
+graphics_interop.cpp:(.text+0x5d4): undefined reference to `hipGraphicsUnmapResources'
+/usr/sbin/ld: graphics_interop.cpp:(.text+0x5fb): undefined reference to `hipewErrorString'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(globals.cpp.o): in function `ccl::ThreadKernelGlobalsCPU::ThreadKernelGlobalsCPU(ccl::KernelGlobalsCPU const&, ccl::OSLGlobals*, ccl::Profiler&, int)':
+globals.cpp:(.text+0x95): undefined reference to `ccl::OSLThreadData::OSLThreadData(ccl::OSLGlobals*, int)'
+/usr/sbin/ld: globals.cpp:(.text+0xd8): undefined reference to `pglNewPathSegmentStorage'
+/usr/sbin/ld: globals.cpp:(.text+0xef): undefined reference to `pglReleasePathSegmentStorage'
+/usr/sbin/ld: globals.cpp:(.text+0x161): undefined reference to `ccl::OSLThreadData::~OSLThreadData()'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(globals.cpp.o): in function `std::unique_ptr<openpgl::cpp::PathSegmentStorage, std::default_delete<openpgl::cpp::PathSegmentStorage> >::~unique_ptr()':
+globals.cpp:(.text._ZNSt10unique_ptrIN7openpgl3cpp18PathSegmentStorageESt14default_deleteIS2_EED2Ev[_ZNSt10unique_ptrIN7openpgl3cpp18PathSegmentStorageESt14default_deleteIS2_EED2Ev]+0x13): undefined reference to `pglReleasePathSegmentStorage'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(globals.cpp.o): in function `std::unique_ptr<openpgl::cpp::VolumeSamplingDistribution, std::default_delete<openpgl::cpp::VolumeSamplingDistribution> >::~unique_ptr()':
+globals.cpp:(.text._ZNSt10unique_ptrIN7openpgl3cpp26VolumeSamplingDistributionESt14default_deleteIS2_EED2Ev[_ZNSt10unique_ptrIN7openpgl3cpp26VolumeSamplingDistributionESt14default_deleteIS2_EED2Ev]+0x18): undefined reference to `pglReleaseVolumeSamplingDistribution'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(globals.cpp.o): in function `std::unique_ptr<openpgl::cpp::SurfaceSamplingDistribution, std::default_delete<openpgl::cpp::SurfaceSamplingDistribution> >::~unique_ptr()':
+globals.cpp:(.text._ZNSt10unique_ptrIN7openpgl3cpp27SurfaceSamplingDistributionESt14default_deleteIS2_EED2Ev[_ZNSt10unique_ptrIN7openpgl3cpp27SurfaceSamplingDistributionESt14default_deleteIS2_EED2Ev]+0x18): undefined reference to `pglReleaseSurfaceSamplingDistribution'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::kernel_cpu_integrator_init_from_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::KernelWorkTile*, float*)':
+kernel.cpp:(.text+0xd8a): undefined reference to `ccl::osl_eval_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::packed_float3, ccl::packed_float3, ccl::packed_float3, ccl::float2, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::integrator_megakernel(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel.cpp:(.text+0x7c9a): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel.cpp:(.text+0x7cd5): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x7ce4): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x832e): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: kernel.cpp:(.text+0x8726): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel.cpp:(.text+0x8761): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x8770): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x8bbd): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel.cpp:(.text+0x98d9): undefined reference to `pglPathSegmentStorageAddSegment'
+/usr/sbin/ld: kernel.cpp:(.text+0xd558): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel.cpp:(.text+0xea88): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel.cpp:(.text+0xf970): undefined reference to `pglPathSegmentStorageAddSegment'
+/usr/sbin/ld: kernel.cpp:(.text+0x12588): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::kernel_cpu_shader_eval_displace(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel.cpp:(.text+0x12dc5): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)2>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::kernel_cpu_shader_eval_background(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel.cpp:(.text+0x13514): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::kernel_cpu_shader_eval_curve_shadow_transparency(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel.cpp:(.text+0x13a93): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::integrator_intersect_shadow(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorShadowStateCPU*)':
+kernel.cpp:(.text+0x183eb): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel.cpp:(.text+0x18423): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x18432): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::integrator_shade_shadow(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorShadowStateCPU*, float*)':
+kernel.cpp:(.text+0x1c064): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)1>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel.cpp:(.text+0x210df): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::integrator_intersect_subsurface(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*)':
+kernel.cpp:(.text+0x2498e): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x249ab): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: kernel.cpp:(.text+0x24df4): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: kernel.cpp:(.text+0x25fb1): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x25fce): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::integrate_intersect_shadow_transparent(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorShadowStateCPU*, ccl::Ray const*, unsigned int)':
+kernel.cpp:(.text+0x290c1): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::light_sample_shader_eval(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::LightSample*, float)':
+kernel.cpp:(.text+0x9f036): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `int ccl::integrate_surface<955u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel.cpp:(.text+0xb4fed): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel.cpp:(.text+0xb51a4): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel.cpp:(.text+0xb6222): undefined reference to `pglFieldInitSurfaceSamplingDistribution'
+/usr/sbin/ld: kernel.cpp:(.text+0xb6246): undefined reference to `pglSurfaceSamplingDistributionApplyCosineProduct'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::surface_shader_bsdf_eval(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::float3, ccl::BsdfEval*, unsigned int)':
+kernel.cpp:(.text+0xca376): undefined reference to `pglSurfaceSamplingDistributionPDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::surface_shader_bsdf_guided_sample_closure(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::ShaderClosure const*, ccl::float3, ccl::BsdfEval*, ccl::float3*, float*, float*, float*, ccl::float2*, float*, ccl::RNGState const*)':
+kernel.cpp:(.text+0xdab03): undefined reference to `pglSurfaceSamplingDistributionSamplePDF'
+/usr/sbin/ld: kernel.cpp:(.text+0xdcd8e): undefined reference to `pglSurfaceSamplingDistributionPDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::surface_shader_bsdf_guided_sample_closure_ris(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::ShaderClosure const*, ccl::float3, ccl::RNGState const*, ccl::BsdfEval*, ccl::float3*, float*, float*, float*, ccl::float2*, float*)':
+kernel.cpp:(.text+0xe2535): undefined reference to `pglSurfaceSamplingDistributionPDF'
+/usr/sbin/ld: kernel.cpp:(.text+0xe2573): undefined reference to `pglSurfaceSamplingDistributionIncomingRadiancePDF'
+/usr/sbin/ld: kernel.cpp:(.text+0xe25ce): undefined reference to `pglSurfaceSamplingDistributionSamplePDF'
+/usr/sbin/ld: kernel.cpp:(.text+0xe2612): undefined reference to `pglSurfaceSamplingDistributionIncomingRadiancePDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::volume_integrate(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::Ray*, float*)':
+kernel.cpp:(.text+0xf3f63): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)1>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel.cpp:(.text+0xf56af): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel.cpp:(.text+0xf5c21): undefined reference to `pglFieldInitVolumeSamplingDistribution'
+/usr/sbin/ld: kernel.cpp:(.text+0xf5c4f): undefined reference to `pglVolumeSamplingDistributionApplySingleLobeHenyeyGreensteinProduct'
+/usr/sbin/ld: kernel.cpp:(.text+0xf6113): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel.cpp:(.text+0xf66f9): undefined reference to `pglFieldInitVolumeSamplingDistribution'
+/usr/sbin/ld: kernel.cpp:(.text+0xf6724): undefined reference to `pglVolumeSamplingDistributionApplySingleLobeHenyeyGreensteinProduct'
+/usr/sbin/ld: kernel.cpp:(.text+0xf6caa): undefined reference to `pglVolumeSamplingDistributionSamplePDF'
+/usr/sbin/ld: kernel.cpp:(.text+0xf6dbe): undefined reference to `pglVolumeSamplingDistributionPDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `ccl::volume_shader_phase_eval(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData const*, ccl::ShaderVolumePhases const*, ccl::float3, ccl::BsdfEval*, unsigned int)':
+kernel.cpp:(.text+0xf82c5): undefined reference to `pglVolumeSamplingDistributionPDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `int ccl::integrate_surface<1019u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel.cpp:(.text+0xfb4e2): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel.cpp:(.text+0xfb699): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel.cpp:(.text+0xfc712): undefined reference to `pglFieldInitSurfaceSamplingDistribution'
+/usr/sbin/ld: kernel.cpp:(.text+0xfc736): undefined reference to `pglSurfaceSamplingDistributionApplyCosineProduct'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `void ccl::svm_eval_nodes<1019u, (ccl::ShaderType)0, ccl::IntegratorStateCPU*>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, float*, unsigned int)':
+kernel.cpp:(.text+0x10510e): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x10512b): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: kernel.cpp:(.text+0x10a842): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel.cpp:(.text+0x10a87f): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x10a88e): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x10b34d): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x10b36a): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `int ccl::integrate_surface<8389563u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel.cpp:(.text+0x116d32): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel.cpp:(.text+0x116edf): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel.cpp:(.text+0x117f1e): undefined reference to `pglFieldInitSurfaceSamplingDistribution'
+/usr/sbin/ld: kernel.cpp:(.text+0x117f39): undefined reference to `pglSurfaceSamplingDistributionApplyCosineProduct'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `void ccl::integrate_surface_direct_light<8389563u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::RNGState const*)':
+kernel.cpp:(.text+0x11df72): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel.cpp:(.text+0x11dfaa): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x11dfb9): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x121ba8): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel.cpp:(.text+0x121be0): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x121bef): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x126974): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel.cpp:(.text+0x1269ac): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel.cpp:(.text+0x1269bb): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel.cpp.o): in function `void ccl::surface_shader_eval<827u, ccl::IntegratorStateCPU*>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, float*, unsigned int, bool)':
+kernel.cpp:(.text+0x1372f0): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::kernel_cpu_avx2_integrator_init_from_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::KernelWorkTile*, float*)':
+kernel_avx2.cpp:(.text+0xd36): undefined reference to `ccl::osl_eval_camera(ccl::ThreadKernelGlobalsCPU const*, ccl::packed_float3, ccl::packed_float3, ccl::packed_float3, ccl::float2, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&, ccl::packed_float3&)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::integrator_megakernel(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0x79ff): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x7a3a): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x7a49): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x80e0): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x8507): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x8542): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x8551): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x89a8): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x9786): undefined reference to `pglPathSegmentStorageAddSegment'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xd197): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xee02): undefined reference to `pglPathSegmentStorageAddSegment'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xf945): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x121c3): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::kernel_cpu_avx2_shader_eval_displace(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel_avx2.cpp:(.text+0x12a1d): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)2>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::kernel_cpu_avx2_shader_eval_background(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel_avx2.cpp:(.text+0x13147): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::kernel_cpu_avx2_shader_eval_curve_shadow_transparency(ccl::ThreadKernelGlobalsCPU const*, ccl::KernelShaderEvalInput const*, float*, int)':
+kernel_avx2.cpp:(.text+0x13666): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::integrator_intersect_shadow(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorShadowStateCPU*)':
+kernel_avx2.cpp:(.text+0x16d48): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x16d80): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x16d8f): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::integrator_shade_shadow(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorShadowStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0x1a8b4): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)1>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x1f724): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::integrator_intersect_subsurface(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*)':
+kernel_avx2.cpp:(.text+0x22e34): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x22e51): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x2329b): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x24333): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x24350): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::integrate_intersect_shadow_transparent(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorShadowStateCPU*, ccl::Ray const*, unsigned int)':
+kernel_avx2.cpp:(.text+0x272f5): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::light_sample_shader_eval(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::LightSample*, float)':
+kernel_avx2.cpp:(.text+0x97bb6): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `int ccl::integrate_surface<955u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0xace32): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xacff3): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xae103): undefined reference to `pglFieldInitSurfaceSamplingDistribution'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xae128): undefined reference to `pglSurfaceSamplingDistributionApplyCosineProduct'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::surface_shader_bsdf_eval(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::float3, ccl::BsdfEval*, unsigned int)':
+kernel_avx2.cpp:(.text+0xc1d7d): undefined reference to `pglSurfaceSamplingDistributionPDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::surface_shader_bsdf_guided_sample_closure(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::ShaderClosure const*, ccl::float3, ccl::BsdfEval*, ccl::float3*, float*, float*, float*, ccl::float2*, float*, ccl::RNGState const*)':
+kernel_avx2.cpp:(.text+0xd1268): undefined reference to `pglSurfaceSamplingDistributionSamplePDF'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xd3553): undefined reference to `pglSurfaceSamplingDistributionPDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::surface_shader_bsdf_guided_sample_closure_ris(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::ShaderClosure const*, ccl::float3, ccl::RNGState const*, ccl::BsdfEval*, ccl::float3*, float*, float*, float*, ccl::float2*, float*)':
+kernel_avx2.cpp:(.text+0xd8d0f): undefined reference to `pglSurfaceSamplingDistributionPDF'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xd8d4b): undefined reference to `pglSurfaceSamplingDistributionIncomingRadiancePDF'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xd8dac): undefined reference to `pglSurfaceSamplingDistributionSamplePDF'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xd8def): undefined reference to `pglSurfaceSamplingDistributionIncomingRadiancePDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::volume_integrate(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::Ray*, float*)':
+kernel_avx2.cpp:(.text+0xe79d6): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)1>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xe9121): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xe9e11): undefined reference to `pglFieldInitVolumeSamplingDistribution'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xe9e3e): undefined reference to `pglVolumeSamplingDistributionApplySingleLobeHenyeyGreensteinProduct'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xea325): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xeb107): undefined reference to `pglFieldInitVolumeSamplingDistribution'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xeb134): undefined reference to `pglVolumeSamplingDistributionApplySingleLobeHenyeyGreensteinProduct'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xeb6c4): undefined reference to `pglVolumeSamplingDistributionSamplePDF'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xeb7e4): undefined reference to `pglVolumeSamplingDistributionPDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `ccl::volume_shader_phase_eval(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData const*, ccl::ShaderVolumePhases const*, ccl::float3, ccl::BsdfEval*, unsigned int)':
+kernel_avx2.cpp:(.text+0xee022): undefined reference to `pglVolumeSamplingDistributionPDF'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `int ccl::integrate_surface<1019u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0xf0f21): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xf10e2): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xf21f3): undefined reference to `pglFieldInitSurfaceSamplingDistribution'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xf2218): undefined reference to `pglSurfaceSamplingDistributionApplyCosineProduct'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `void ccl::svm_eval_nodes<1019u, (ccl::ShaderType)0, ccl::IntegratorStateCPU*>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, float*, unsigned int)':
+kernel_avx2.cpp:(.text+0xfa871): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xfa88e): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xff9e3): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xffa20): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0xffa2f): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x1003b5): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x1003d5): undefined reference to `rtcTraversableOccluded1'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `int ccl::integrate_surface<8389563u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, float*)':
+kernel_avx2.cpp:(.text+0x10ba6c): undefined reference to `pglPathSegmentStorageNextSegment'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x10bc28): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x10ccec): undefined reference to `pglFieldInitSurfaceSamplingDistribution'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x10cd09): undefined reference to `pglSurfaceSamplingDistributionApplyCosineProduct'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `void ccl::integrate_surface_direct_light<8389563u>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, ccl::RNGState const*)':
+kernel_avx2.cpp:(.text+0x112c4d): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x112c85): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x112c94): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x11649f): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x1164d7): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x1164e6): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x11aff8): undefined reference to `rtcTraversableIntersect1'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x11b030): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: kernel_avx2.cpp:(.text+0x11b03f): undefined reference to `rtcGetGeometryUserDataFromTraversable'
+/usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `void ccl::surface_shader_eval<827u, ccl::IntegratorStateCPU*>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, float*, unsigned int, bool)':
+kernel_avx2.cpp:(.text+0x12b56b): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(debug.cpp.o): in function `ccl::DebugFlags::CPU::reset()':
+debug.cpp:(.text+0x55): undefined reference to `google::kLogSiteUninitialized'
+/usr/sbin/ld: debug.cpp:(.text+0x65): undefined reference to `fLI::FLAGS_v'
+/usr/sbin/ld: debug.cpp:(.text+0x76): undefined reference to `google::InitVLOG3__(int**, int*, char const*, int)'
+/usr/sbin/ld: debug.cpp:(.text+0x93): undefined reference to `google::LogMessage::LogMessage(char const*, int)'
+/usr/sbin/ld: debug.cpp:(.text+0x9b): undefined reference to `google::LogMessage::stream()'
+/usr/sbin/ld: debug.cpp:(.text+0xe4): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: debug.cpp:(.text+0x100): undefined reference to `google::LogMessage::~LogMessage()'
+/usr/sbin/ld: /sep/lib/libcycles_util.a(debug.cpp.o):(.data+0x0): undefined reference to `google::kLogSiteUninitialized'
+collect2: error: ld returned 1 exit status
+make[2]: *** [CMakeFiles/sep_engine.dir/build.make:127: bin/sep_engine] Error 1
+make[1]: *** [CMakeFiles/Makefile2:1177: CMakeFiles/sep_engine.dir/all] Error 2
 make: *** [Makefile:101: all] Error 2

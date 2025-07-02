@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
+project(sep_engine VERSION 1.0.0 LANGUAGES C CXX CUDA)
 
 # Enable CUDA
 set(CMAKE_CUDA_STANDARD 17)
@@ -9,6 +9,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # Add cmake directory to module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+# Use Cycles' custom CMake modules for dependencies like OSL and Alembic.
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/cycles/src/cmake/Modules")
 
 # Add library search paths
 link_directories(${CMAKE_SOURCE_DIR}/lib)
@@ -43,6 +45,8 @@ find_package(OpenVDB REQUIRED)
 find_package(OpenPGL REQUIRED)
 find_package(OpenColorIO REQUIRED)
 find_package(Imath REQUIRED)
+find_package(OSL REQUIRED)
+find_package(Alembic REQUIRED)
 
 # Add subdirectories
 add_subdirectory(src/core)
@@ -100,4 +104,6 @@ target_link_libraries(sep_engine
         openvdb
         OpenColorIO
         Imath
+        ${OSL_LIBRARIES}
+        ${ALEMBIC_LIBRARIES}
 )

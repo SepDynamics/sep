@@ -173,7 +173,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session_params.threads = 0; // Auto-detect thread count
     session_params.samples = static_cast<int>(last_params_.samples);
     
-    ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
+    auto session = std::make_unique<::ccl::Session>(session_params, cycles_scene_->params);
     session->scene = std::move(cycles_scene_);
 
     session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
@@ -185,13 +185,13 @@ bool CyclesRenderer::render(const std::string& filepath) {
     session->start();
     session->wait();
 
-    delete session;
+    session.reset();
     return true;
 }
 
 void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& pattern) {
     // Create mesh
-    ::ccl::Mesh *mesh = new ::ccl::Mesh();
+    auto mesh = std::make_unique<::ccl::Mesh>();
     
     // Convert pattern data to vertices and faces
     std::vector<::ccl::float3> verts;
@@ -218,7 +218,7 @@ void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& patte
     mesh->attributes.add(::ccl::ATTR_STD_UV, ::ccl::ustring("uvmap"));
     
     // Add mesh to scene
-    cycles_scene_->geometry.push_back(std::unique_ptr<::ccl::Geometry>(mesh));
+    cycles_scene_->geometry.push_back(std::move(mesh));
 }
 
 void CyclesRenderer::convertPatternToMesh(const pattern::PatternData& pattern,

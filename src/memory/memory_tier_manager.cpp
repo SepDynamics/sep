@@ -12,6 +12,7 @@
 #include <cuda_runtime.h>
 
 #include "compat/cuda_helpers.h"
+#include "compat/kernels.cuh"
 #include "memory/logger.hpp"
 #include "quantum/pattern_evolution_bridge.h" 
 #include "core/manager.h"

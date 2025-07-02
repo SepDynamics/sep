@@ -37,12 +37,15 @@ if(SEP_HAS_CUDA)
 endif()
 
 # Add Cycles renderer when available
+# Always compile the Cycles renderer source. It contains internal
+# compile-time guards to fall back to stub implementations when
+# `SEP_HAS_CYCLES` is not enabled, so excluding the file leads to
+# missing symbols at link time.
+target_sources(sep_blender PRIVATE cycles_renderer.cpp)
+
 if(SEP_HAS_CYCLES)
-  target_sources(sep_blender PRIVATE
-    cycles_renderer.cpp
-  )
-  
-  # Ensure Cycles renderer is built with CUDA support
+  # Ensure Cycles renderer is built with CUDA support when the real
+  # Cycles integration is enabled.
   set_source_files_properties(cycles_renderer.cpp
     PROPERTIES
     COMPILE_FLAGS "-DWITH_CYCLES_DEVICE_CUDA"

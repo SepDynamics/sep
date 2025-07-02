@@ -33,6 +33,7 @@ add_library(sep_compat STATIC
     quantum_kernels.cu
     utils.cu
     event.cu
+    cuda_api_stub.cpp
     stream.cpp
     raii.cpp
 )

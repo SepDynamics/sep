@@ -61,11 +61,9 @@ else()
         cuda_api_stub.cpp
         stream.cpp
         raii.cpp
-        event.cu
     )
 
-    # Compile .cu sources with the host compiler
-    set_source_files_properties(event.cu PROPERTIES LANGUAGE CXX)
+    # event.cu depends on CUDA headers; skip when CUDA is unavailable
 
     set_target_properties(sep_compat PROPERTIES
         POSITION_INDEPENDENT_CODE ON

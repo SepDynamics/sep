@@ -18,8 +18,26 @@
 
 // Initialize PipeWire before namespace declarations
 static struct PWInit {
-    PWInit() { pw_init(nullptr, nullptr); }
-    ~PWInit() { pw_deinit(); }
+    bool ok{false};
+    PWInit()
+    {
+        int err = pw_init(nullptr, nullptr);
+        if (err >= 0)
+        {
+            ok = true;
+        }
+        else
+        {
+            spdlog::error("PipeWire initialization failed: {}", spa_strerror(err));
+        }
+    }
+    ~PWInit()
+    {
+        if (ok)
+        {
+            pw_deinit();
+        }
+    }
 } pw_init_once;
 
 namespace sep {
@@ -78,6 +96,12 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
     std::lock_guard<std::mutex> lock(mutex_);
     config_ = config;
 
+    if (!pw_init_once.ok)
+    {
+        spdlog::error("PipeWire library failed to initialize");
+        return AudioError::INIT_FAILED;
+    }
+
     // Check for runtime directory first
     const char* runtime_dir = getenv("XDG_RUNTIME_DIR");
     if (!runtime_dir) {
@@ -101,6 +125,7 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
     if (!loop_)
     {
         spdlog::error("Failed to create PipeWire thread loop: {}", strerror(errno));
+        spdlog::error("Ensure libpipewire is installed and accessible");
         return AudioError::INIT_FAILED;
     }
 
@@ -186,7 +211,7 @@ AudioError PipeWireCapture::setupStream()
 {
     static const struct pw_stream_events events = createStreamEvents();
 
-    // Create stream with test sink target
+    // Create stream for capturing audio
     stream_ = pw_stream_new(core_,
                             config_.description.c_str(),
                             pw_properties_new(PW_KEY_MEDIA_TYPE,
@@ -218,7 +243,6 @@ AudioError PipeWireCapture::setupStream()
     if (!stream_)
     {
         spdlog::error("Failed to create PipeWire stream");
-        spdlog::error("Target sink: sep_test_sink");
         return AudioError::STREAM_FAILED;
     }
 

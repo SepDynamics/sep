@@ -19,7 +19,7 @@ QuantumConfig quantum{
 };
 
 // CUDA acceleration parameters
-CudaConfig cuda{
+::sep::config::CudaConfig cuda{
   .warp_tile_size = 16,
   .coherence_block_size = 256,
   .similarity_grid_dim = 32,
@@ -27,7 +27,7 @@ CudaConfig cuda{
 };
 
 // API coherence modulation
-APIConfig api{
+::sep::config::APIConfig api{
   .base_coherence = 0.5f,
   .context_weight = 0.3f,
   .state_weight = 0.7f,

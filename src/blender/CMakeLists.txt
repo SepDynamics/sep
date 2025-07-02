@@ -54,7 +54,22 @@ set(BLENDER_USER_CONFIG_DIR "$ENV{HOME}/.config/blender/${BLENDER_VERSION}")
 # Use bundled Cycles headers when available
 if(SEP_HAS_CYCLES)
   target_include_directories(sep_blender PRIVATE
-      ${CMAKE_SOURCE_DIR}/extern/cycles/src
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/app
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/bvh
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/cmake
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/compat
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/device
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/doc
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/graph
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/hydra
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/integrator
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/kernel
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/scene
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/session
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/subd
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/test
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/util
   )
 endif()
 

@@ -31,11 +31,55 @@ QuantumManifoldOptimizer::QuantumManifoldOptimizer(const Config& config)
 
 QuantumManifoldOptimizer::OptimizationResult
 QuantumManifoldOptimizer::optimize(const QuantumState& initial_state,
-                                   const OptimizationTarget& target) {
+                                    const OptimizationTarget& target) {
     OptimizationResult result;
     result.optimized_state = initial_state;
-    result.optimized_values = {initial_state.coherence, target.target_coherence};
-    result.success = true;
+
+    // Calculate initial manifold position
+    glm::vec3 position(initial_state.coherence, initial_state.stability, initial_state.entropy);
+    float initial_coherence = computeManifoldCoherence(position);
+
+    // Perform gradient descent on the manifold
+    float step = config_.step_size;
+    float current_coherence = initial_coherence;
+    
+    for (int iter = 0; iter < 100 && current_coherence < target.target_coherence; ++iter) {
+        // Sample tangent space for descent directions
+        auto tangent_vectors = sampleTangentSpace(position, 8);
+        
+        // Find best descent direction
+        glm::vec3 best_direction(0.0f);
+        float best_improvement = 0.0f;
+        
+        for (const auto& direction : tangent_vectors) {
+            glm::vec3 test_pos = position + step * direction;
+            float test_coherence = computeManifoldCoherence(test_pos);
+            float improvement = test_coherence - current_coherence;
+            
+            if (improvement > best_improvement) {
+                best_improvement = improvement;
+                best_direction = direction;
+            }
+        }
+        
+        // Update position if improvement found
+        if (best_improvement > config_.convergence_threshold) {
+            // Update position and quantum state
+            position += step * best_direction;
+            current_coherence += best_improvement;
+            
+            result.optimized_state.coherence = position.x;
+            result.optimized_state.stability = position.y;
+            result.optimized_state.entropy = position.z;
+        } else {
+            // Reduce step size and continue
+            step *= 0.5f;
+            if (step < 1e-6f) break;
+        }
+    }
+    
+    result.optimized_values = {initial_coherence, current_coherence, target.target_coherence};
+    result.success = current_coherence >= target.target_coherence;
     return result;
 }
 
@@ -79,12 +123,33 @@ float QuantumManifoldOptimizer::computeManifoldCoherence(
 }
 
 std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::vec3& position,
-                                                                    uint32_t num_samples) const {
+                                                                     uint32_t num_samples) const {
     std::vector<glm::vec3> samples;
     samples.reserve(num_samples);
+
+    // Calculate orthonormal basis for tangent space using Gram-Schmidt
+    std::vector<glm::vec3> basis;
+    basis.reserve(2);
+
+    // First basis vector: project onto manifold surface
+    glm::vec3 v1 = glm::normalize(glm::vec3(1.0f, 0.0f, 0.0f) -
+                                 position * glm::dot(glm::vec3(1.0f, 0.0f, 0.0f), position));
+    basis.push_back(v1);
+
+    // Second basis vector: orthogonal to both position and v1
+    glm::vec3 v2 = glm::normalize(glm::cross(position, v1));
+    basis.push_back(v2);
+
+    // Generate samples in tangent space
+    const float PI = 3.14159265359f;
     for (uint32_t i = 0; i < num_samples; ++i) {
-        samples.push_back(glm::vec3(1.0f));
+        float angle = (2.0f * PI * i) / num_samples;
+        float radius = config_.neighborhood_radius;
+        
+        glm::vec3 sample = radius * (std::cos(angle) * basis[0] + std::sin(angle) * basis[1]);
+        samples.push_back(glm::normalize(sample));
     }
+
     return samples;
 }
 

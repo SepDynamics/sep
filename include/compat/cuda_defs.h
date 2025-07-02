@@ -1,12 +1,27 @@
 #pragma once
 
+// CUDA function attributes
+#ifdef __CUDACC__
+#define SEP_HOST __host__
+#define SEP_DEVICE __device__
+#define SEP_HD __host__ __device__
+#else
+#define SEP_HOST
+#define SEP_DEVICE
+#define SEP_HD
+#endif
+
+// Include CUDA runtime first if available
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime.h>
+#endif
+
 #include <cstddef>
 #include <string>
 #include "core/common.h"
 #include "compat/macros.h"
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#else
+
+#if !SEP_CUDA_AVAILABLE
 #include "compat/cuda_runtime.h"
 #endif
 

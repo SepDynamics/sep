@@ -53,10 +53,11 @@ cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
   return ::cudaMemcpyAsync(dst, src, count, kind, stream);
 }
 
+// Overload taking raw stream pointer for backward compatibility
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
-                           int kind, void* stream) {
-  return ::cudaMemcpyAsync(dst, src, count, static_cast<cudaMemcpyKind>(kind),
-                           reinterpret_cast<cudaStream_t>(stream));
+                            cudaMemcpyKind kind, void* stream) {
+  return ::cudaMemcpyAsync(dst, src, count, kind,
+                            reinterpret_cast<cudaStream_t>(stream));
 }
 
 // Implement CUDA kernel launch functions

@@ -1,19 +1,15 @@
 #ifndef SEP_COMPAT_CUDA_RUNTIME_H
 #define SEP_COMPAT_CUDA_RUNTIME_H
 
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime.h>
+#else
+
 // Include standard headers needed for types
 #include <stddef.h>  // For size_t
-
-// Define SEP_CUDA_AVAILABLE if not already defined
-#ifndef SEP_CUDA_AVAILABLE
-#define SEP_CUDA_AVAILABLE 0
-#endif
-
-// Include necessary headers
 #include <string.h> // For memcpy
 
 // Forward declare CUDA types in global scope
-#if !SEP_CUDA_AVAILABLE
 typedef int cudaError_t;
 typedef void* cudaStream_t;
 typedef void* cudaEvent_t;

@@ -30,144 +30,49 @@ CMake Warning at CMakeLists.txt:49 (message):
 --   Found fftw3f, version 3.3.10
 -- Using PipeWire at: pipewire-0.3
 -- Using FFTW at: fftw3f
--- Configuring done (1.0s)
+-- Configuring done (1.2s)
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  5%] Building CXX object extern/openpgl_stub/CMakeFiles/openpgl_stub.dir/openpgl_stub.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 20%] Linking CXX static library libopenpgl_stub.a
-[ 20%] Built target openpgl_stub
-[ 21%] Linking CXX static library libsep_embeddings.a
-[ 21%] Built target sep_embeddings
-[ 23%] Linking CXX static library libsep_core.a
-[ 23%] Built target sep_core
-[ 30%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 30%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 30%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 31%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 33%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-In file included from /sep/include/compat/cuda_common.h:7,
-                 from /sep/src/compat/stream.cpp:3:
-/sep/include/compat/cuda_helpers.h:12:58: error: ‘cudaError_t’ has not been declared
-   12 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
-      |                                                          ^~~~~~~~~~~
-/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
-/sep/include/compat/cuda_helpers.h:13:18: error: ‘cudaSuccess’ was not declared in this scope
-   13 |     if (error != cudaSuccess) {
-      |                  ^~~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:14:73: error: ‘cudaGetErrorString’ was not declared in this scope
-   14 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
-      |                                                                         ^~~~~~~~~~~~~~~~~~
-/sep/include/compat/cuda_common.h: At global scope:
-/sep/include/compat/cuda_common.h:16:42: error: ‘cudaError_t’ has not been declared
-   16 | void logCudaError(const char* operation, cudaError_t error);
-      |                                          ^~~~~~~~~~~
-In file included from /sep/include/compat/cuda_common.h:7,
-                 from /sep/include/compat/raii.h:10,
+[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  6%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 17%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 18%] Linking CXX static library libsep_embeddings.a
+[ 18%] Built target sep_embeddings
+[ 20%] Linking CXX static library libsep_core.a
+[ 20%] Built target sep_core
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 25%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 29%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 31%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+In file included from /sep/include/compat/raii.h:10,
                  from /sep/src/compat/raii.cpp:18:
-/sep/include/compat/cuda_helpers.h:12:58: error: ‘cudaError_t’ has not been declared
-   12 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
-      |                                                          ^~~~~~~~~~~
-/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
-/sep/include/compat/cuda_helpers.h:13:18: error: ‘cudaSuccess’ was not declared in this scope
-   13 |     if (error != cudaSuccess) {
-      |                  ^~~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:14:73: error: ‘cudaGetErrorString’ was not declared in this scope
-   14 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
-      |                                                                         ^~~~~~~~~~~~~~~~~~
-/sep/include/compat/cuda_common.h: At global scope:
-/sep/include/compat/cuda_common.h:16:42: error: ‘cudaError_t’ has not been declared
-   16 | void logCudaError(const char* operation, cudaError_t error);
+/sep/include/compat/cuda_common.h:34:42: error: ‘cudaError_t’ has not been declared
+   34 | void logCudaError(const char* operation, cudaError_t error);
       |                                          ^~~~~~~~~~~
-/sep/src/audio/pipewire_capture.cpp: In constructor ‘PWInit::PWInit()’:
-/sep/src/audio/pipewire_capture.cpp:24:26: error: void value not ignored as it ought to be
-   24 |         int err = pw_init(nullptr, nullptr);
-      |                   ~~~~~~~^~~~~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:18:3: error: ‘cudaStream_t’ does not name a type
-   18 |   cudaStream_t stream_handle_{nullptr};
-      |   ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:20:18: error: ‘cudaStream_t’ has not been declared
-   20 |   void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
-      |                  ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::setHandle(int)’:
-/sep/src/compat/stream.cpp:20:41: error: ‘stream_handle_’ was not declared in this scope
-   20 |   void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
-      |                                         ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::synchronize()’:
-/sep/src/compat/stream.cpp:23:9: error: ‘stream_handle_’ was not declared in this scope
-   23 |     if (stream_handle_) cudaStreamSynchronize(stream_handle_);
-      |         ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:23:25: error: ‘cudaStreamSynchronize’ was not declared in this scope
-   23 |     if (stream_handle_) cudaStreamSynchronize(stream_handle_);
-      |                         ^~~~~~~~~~~~~~~~~~~~~
 /sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::wait(void*)’:
-/sep/src/compat/stream.cpp:30:9: error: ‘stream_handle_’ was not declared in this scope
-   30 |     if (stream_handle_ && event)
-      |         ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:31:55: error: ‘cudaEvent_t’ does not name a type
-   31 |       cudaStreamWaitEvent(stream_handle_, static_cast<cudaEvent_t>(event), 0);
-      |                                                       ^~~~~~~~~~~
 /sep/src/compat/stream.cpp:31:7: error: ‘cudaStreamWaitEvent’ was not declared in this scope
    31 |       cudaStreamWaitEvent(stream_handle_, static_cast<cudaEvent_t>(event), 0);
       |       ^~~~~~~~~~~~~~~~~~~
 /sep/src/compat/stream.cpp: In member function ‘void sep::cuda::Stream::Impl::record(void*)’:
-/sep/src/compat/stream.cpp:39:9: error: ‘stream_handle_’ was not declared in this scope
-   39 |     if (stream_handle_ && event)
-      |         ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:40:35: error: ‘cudaEvent_t’ does not name a type
-   40 |       cudaEventRecord(static_cast<cudaEvent_t>(event), stream_handle_);
-      |                                   ^~~~~~~~~~~
 /sep/src/compat/stream.cpp:40:7: error: ‘cudaEventRecord’ was not declared in this scope
    40 |       cudaEventRecord(static_cast<cudaEvent_t>(event), stream_handle_);
       |       ^~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘void* sep::cuda::Stream::Impl::handle() const’:
-/sep/src/compat/stream.cpp:46:33: error: ‘stream_handle_’ was not declared in this scope
-   46 |   void* handle() const { return stream_handle_; }
-      |                                 ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In member function ‘bool sep::cuda::Stream::Impl::isValid() const’:
-/sep/src/compat/stream.cpp:47:33: error: ‘stream_handle_’ was not declared in this scope
-   47 |   bool isValid() const { return stream_handle_ != nullptr; }
-      |                                 ^~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp: In static member function ‘static std::shared_ptr<sep::cuda::Stream> sep::cuda::Stream::create(sep::StreamFlags)’:
-/sep/src/compat/stream.cpp:71:3: error: ‘cudaStream_t’ was not declared in this scope
-   71 |   cudaStream_t cuda_stream;
-      |   ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:74:7: error: ‘cudaStreamNonBlocking’ was not declared in this scope
-   74 |       cudaStreamNonBlocking :
-      |       ^~~~~~~~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:75:7: error: ‘cudaStreamDefault’ was not declared in this scope
-   75 |       cudaStreamDefault;
-      |       ^~~~~~~~~~~~~~~~~
-/sep/src/compat/stream.cpp:77:3: error: ‘cudaError_t’ was not declared in this scope
-   77 |   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
-      |   ^~~~~~~~~~~
-/sep/src/compat/stream.cpp:78:7: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-   78 |   if (err != cudaSuccess) {
-      |       ^~~
-      |       erf
 /sep/include/compat/raii.h:31:3: error: ‘cudaStream_t’ does not name a type
    31 |   cudaStream_t get() const { return stream_; }
       |   ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:78:14: error: ‘cudaSuccess’ was not declared in this scope
-   78 |   if (err != cudaSuccess) {
-      |              ^~~~~~~~~~~
 /sep/include/compat/raii.h:36:3: error: ‘cudaStream_t’ does not name a type
    36 |   cudaStream_t stream_{nullptr};
       |   ^~~~~~~~~~~~
-/sep/src/compat/stream.cpp:82:28: error: ‘cuda_stream’ was not declared in this scope
-   82 |   stream->impl_->setHandle(cuda_stream);
-      |                            ^~~~~~~~~~~
 /sep/include/compat/raii.h: In member function ‘bool sep::cuda::StreamRAII::valid() const’:
 /sep/include/compat/raii.h:32:31: error: ‘stream_’ was not declared in this scope
    32 |   bool valid() const { return stream_ != nullptr; }
@@ -192,6 +97,17 @@ In file included from /sep/include/compat/cuda_common.h:7,
       |                                                                            ^
       |                                                                            |
       |                                                                            std::nullptr_t
+In file included from /sep/src/compat/raii.cpp:19:
+/sep/include/compat/cuda_helpers.h:15:58: error: ‘cudaError_t’ has not been declared
+   15 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+      |                                                          ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
+/sep/include/compat/cuda_helpers.h:16:18: error: ‘cudaSuccess’ was not declared in this scope
+   16 |     if (error != cudaSuccess) {
+      |                  ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:17:73: error: ‘cudaGetErrorString’ was not declared in this scope
+   17 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
+      |                                                                         ^~~~~~~~~~~~~~~~~~
 /sep/src/compat/raii.cpp: In constructor ‘sep::cuda::StreamRAII::StreamRAII(sep::StreamFlags)’:
 /sep/src/compat/raii.cpp:83:74: error: ‘cudaStreamNonBlocking’ was not declared in this scope
    83 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
@@ -219,20 +135,20 @@ In file included from /sep/include/compat/cuda_common.h:7,
 /sep/src/compat/raii.cpp:96:9: error: ‘stream_’ was not declared in this scope
    96 |     if (stream_) {
       |         ^~~~~~~
-/sep/include/compat/cuda_helpers.h:22:9: error: ‘cudaError_t’ was not declared in this scope
-   22 |         cudaError_t error = call;                    \
+/sep/include/compat/cuda_helpers.h:25:9: error: ‘cudaError_t’ was not declared in this scope
+   25 |         cudaError_t error = call;                    \
       |         ^~~~~~~~~~~
 /sep/src/compat/raii.cpp:100:9: note: in expansion of macro ‘CUDA_CHECK’
   100 |         CUDA_CHECK(cudaStreamDestroy(stream_));
       |         ^~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:23:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
-   23 |         if (error != cudaSuccess) {                  \
+/sep/include/compat/cuda_helpers.h:26:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
+   26 |         if (error != cudaSuccess) {                  \
       |             ^~~~~
 /sep/src/compat/raii.cpp:100:9: note: in expansion of macro ‘CUDA_CHECK’
   100 |         CUDA_CHECK(cudaStreamDestroy(stream_));
       |         ^~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:23:22: error: ‘cudaSuccess’ was not declared in this scope
-   23 |         if (error != cudaSuccess) {                  \
+/sep/include/compat/cuda_helpers.h:26:22: error: ‘cudaSuccess’ was not declared in this scope
+   26 |         if (error != cudaSuccess) {                  \
       |                      ^~~~~~~~~~~
 /sep/src/compat/raii.cpp:100:9: note: in expansion of macro ‘CUDA_CHECK’
   100 |         CUDA_CHECK(cudaStreamDestroy(stream_));
@@ -248,20 +164,20 @@ In file included from /sep/include/compat/cuda_common.h:7,
 /sep/src/compat/raii.cpp:109:13: error: ‘stream_’ was not declared in this scope
   109 |         if (stream_) {
       |             ^~~~~~~
-/sep/include/compat/cuda_helpers.h:22:9: error: ‘cudaError_t’ was not declared in this scope
-   22 |         cudaError_t error = call;                    \
+/sep/include/compat/cuda_helpers.h:25:9: error: ‘cudaError_t’ was not declared in this scope
+   25 |         cudaError_t error = call;                    \
       |         ^~~~~~~~~~~
 /sep/src/compat/raii.cpp:110:13: note: in expansion of macro ‘CUDA_CHECK’
   110 |             CUDA_CHECK(cudaStreamDestroy(stream_));
       |             ^~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:23:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
-   23 |         if (error != cudaSuccess) {                  \
+/sep/include/compat/cuda_helpers.h:26:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
+   26 |         if (error != cudaSuccess) {                  \
       |             ^~~~~
 /sep/src/compat/raii.cpp:110:13: note: in expansion of macro ‘CUDA_CHECK’
   110 |             CUDA_CHECK(cudaStreamDestroy(stream_));
       |             ^~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:23:22: error: ‘cudaSuccess’ was not declared in this scope
-   23 |         if (error != cudaSuccess) {                  \
+/sep/include/compat/cuda_helpers.h:26:22: error: ‘cudaSuccess’ was not declared in this scope
+   26 |         if (error != cudaSuccess) {                  \
       |                      ^~~~~~~~~~~
 /sep/src/compat/raii.cpp:110:13: note: in expansion of macro ‘CUDA_CHECK’
   110 |             CUDA_CHECK(cudaStreamDestroy(stream_));
@@ -303,3 +219,137 @@ In file included from /sep/include/compat/cuda_common.h:7,
 /sep/src/compat/raii.cpp:131:9: error: ‘event_’ was not declared in this scope
   131 |         event_ = nullptr;
       |         ^~~~~~
+/sep/src/compat/raii.cpp:133:72: error: ‘cudaGetErrorString’ was not declared in this scope
+  133 |             (void)fprintf(stderr, "Failed to create CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                        ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In destructor ‘sep::cuda::EventRAII::~EventRAII()’:
+/sep/src/compat/raii.cpp:141:9: error: ‘event_’ was not declared in this scope
+  141 |     if (event_) {
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:145:9: error: ‘cudaError_t’ was not declared in this scope
+  145 |         cudaError_t err = cudaEventDestroy(event_);
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:146:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  146 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
+/sep/src/compat/raii.cpp:146:20: error: ‘cudaSuccess’ was not declared in this scope
+  146 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:148:77: error: ‘cudaGetErrorString’ was not declared in this scope
+  148 |                 (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                             ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::EventRAII::EventRAII(sep::cuda::EventRAII&&)’:
+/sep/src/compat/raii.cpp:155:52: error: class ‘sep::cuda::EventRAII’ does not have any field named ‘event_’
+  155 | EventRAII::EventRAII(EventRAII&& other) noexcept : event_(std::exchange(other.event_, nullptr)) {}
+      |                                                    ^~~~~~
+/sep/src/compat/raii.cpp:155:79: error: ‘class sep::cuda::EventRAII’ has no member named ‘event_’
+  155 | EventRAII::EventRAII(EventRAII&& other) noexcept : event_(std::exchange(other.event_, nullptr)) {}
+      |                                                                               ^~~~~~
+/sep/src/compat/raii.cpp: In member function ‘sep::cuda::EventRAII& sep::cuda::EventRAII::operator=(sep::cuda::EventRAII&&)’:
+/sep/src/compat/raii.cpp:159:13: error: ‘event_’ was not declared in this scope
+  159 |         if (event_) {
+      |             ^~~~~~
+/sep/src/compat/raii.cpp:160:13: error: ‘cudaError_t’ was not declared in this scope
+  160 |             cudaError_t err = cudaEventDestroy(event_);
+      |             ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:161:17: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  161 |             if (err != cudaSuccess) {
+      |                 ^~~
+      |                 erf
+/sep/src/compat/raii.cpp:161:24: error: ‘cudaSuccess’ was not declared in this scope
+  161 |             if (err != cudaSuccess) {
+      |                        ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:163:81: error: ‘cudaGetErrorString’ was not declared in this scope
+  163 |                     (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                                 ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:167:9: error: ‘event_’ was not declared in this scope
+  167 |         event_ = std::exchange(other.event_, nullptr);
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:167:38: error: ‘class sep::cuda::EventRAII’ has no member named ‘event_’
+  167 |         event_ = std::exchange(other.event_, nullptr);
+      |                                      ^~~~~~
+/sep/src/compat/raii.cpp: In member function ‘void sep::cuda::EventRAII::synchronize() const’:
+/sep/src/compat/raii.cpp:173:9: error: ‘event_’ was not declared in this scope
+  173 |     if (event_) {
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:174:9: error: ‘cudaError_t’ was not declared in this scope
+  174 |         cudaError_t err = cudaEventSynchronize(event_);
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:175:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  175 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
+/sep/src/compat/raii.cpp:175:20: error: ‘cudaSuccess’ was not declared in this scope
+  175 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:177:81: error: ‘cudaGetErrorString’ was not declared in this scope
+  177 |                 (void)fprintf(stderr, "Failed to synchronize CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                                 ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateDeviceMemory(std::size_t)’:
+/sep/src/compat/raii.cpp:231:5: error: ‘cudaError_t’ was not declared in this scope
+  231 |     cudaError_t err = cudaMalloc(&ptr, size);
+      |     ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:232:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  232 |     if (err != cudaSuccess) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:232:16: error: ‘cudaSuccess’ was not declared in this scope
+  232 |     if (err != cudaSuccess) {
+      |                ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:234:62: error: ‘cudaGetErrorString’ was not declared in this scope
+  234 |             (void)fprintf(stderr, "cudaMalloc failed: %s\n", cudaGetErrorString(err));
+      |                                                              ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In function ‘void sep::cuda::freeDeviceMemory(void*)’:
+/sep/src/compat/raii.cpp:250:5: error: ‘cudaError_t’ was not declared in this scope
+  250 |     cudaError_t err = cudaFree(ptr);
+      |     ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:251:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  251 |     if (err != cudaSuccess && debugAllocEnabled()) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:251:16: error: ‘cudaSuccess’ was not declared in this scope
+  251 |     if (err != cudaSuccess && debugAllocEnabled()) {
+      |                ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:252:56: error: ‘cudaGetErrorString’ was not declared in this scope
+  252 |         (void)fprintf(stderr, "cudaFree failed: %s\n", cudaGetErrorString(err));
+      |                                                        ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: At global scope:
+/sep/src/compat/raii.cpp:259:47: error: ‘cudaStream_t’ has not been declared
+  259 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
+      |                                               ^~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateUnifiedMemory(std::size_t, int)’:
+/sep/src/compat/raii.cpp:262:5: error: ‘cudaError_t’ was not declared in this scope
+  262 |     cudaError_t err = cudaMallocManaged(&ptr, size);
+      |     ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:263:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  263 |     if (err != cudaSuccess) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:263:16: error: ‘cudaSuccess’ was not declared in this scope
+  263 |     if (err != cudaSuccess) {
+      |                ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:265:69: error: ‘cudaGetErrorString’ was not declared in this scope
+  265 |             (void)fprintf(stderr, "cudaMallocManaged failed: %s\n", cudaGetErrorString(err));
+      |                                                                     ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:270:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  270 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
+      |         ^~~
+      |         erf
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:79: src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/sep/src/compat/raii.cpp:270:15: error: ‘cudaStreamAttachMemAsync’ was not declared in this scope
+  270 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:271:20: error: ‘cudaSuccess’ was not declared in this scope
+  271 |         if (err != cudaSuccess && debugAllocEnabled()) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:272:76: error: ‘cudaGetErrorString’ was not declared in this scope
+  272 |             (void)fprintf(stderr, "cudaStreamAttachMemAsync failed: %s\n", cudaGetErrorString(err));
+      |                                                                            ^~~~~~~~~~~~~~~~~~
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:317: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 32%] Linking CXX static library libsep_audio.a
+[ 32%] Built target sep_audio
+make: *** [Makefile:91: all] Error 2

@@ -3,25 +3,11 @@
 
 # Build sep_compat as a static library that encapsulates all CUDA functionality
 # Use Cycles naming convention for feature flags
-if(WITH_NANOVDB)
-    set(WITH_CYCLES_NANOVDB ${WITH_NANOVDB})
-endif()
-
-if(WITH_OPENIMAGEDENOISE)
-    set(WITH_CYCLES_OPENIMAGEDENOISE ${WITH_OPENIMAGEDENOISE})
-endif()
-
-if(WITH_OPENVDB)
-    set(WITH_CYCLES_OPENVDB ${WITH_OPENVDB})
-endif()
-
-if(WITH_OPENCOLORIO)
-    set(WITH_CYCLES_OPENCOLORIO ${WITH_OPENCOLORIO})
-endif()
-
-if(WITH_OPENSUBDIV)
-    set(WITH_CYCLES_OPENSUBDIV ${WITH_OPENSUBDIV})
-endif()
+set(WITH_CYCLES_NANOVDB ON)
+set(WITH_CYCLES_OPENIMAGEDENOISE ON)
+set(WITH_CYCLES_OPENVDB ON)
+set(WITH_CYCLES_OPENCOLORIO ON)
+set(WITH_CYCLES_OPENSUBDIV ON)
 
 # Build full CUDA implementation
 find_package(CUDAToolkit REQUIRED)

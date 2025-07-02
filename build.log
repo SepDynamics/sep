@@ -36,33 +36,72 @@ Running CMake configuration...
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  2%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
 [  4%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 16%] Linking CXX static library libsep_embeddings.a
 [ 16%] Built target sep_embeddings
 [ 17%] Linking CXX static library libsep_core.a
 [ 17%] Built target sep_core
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
 [ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateUnifiedMemory(std::size_t, cudaStream_t)’:
-/sep/src/compat/raii.cpp:270:15: error: ‘cudaStreamAttachMemAsync’ was not declared in this scope
-  270 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
-      |               ^~~~~~~~~~~~~~~~~~~~~~~~
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:341: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+[ 27%] Linking CXX static library libsep_compat.a
+[ 27%] Built target sep_compat
+[ 29%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 30%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 32%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 39%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 42%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 45%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 47%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+In file included from /sep/src/memory/quantum_coherence_manager.cpp:4:
+/sep/include/quantum/quantum_manifold_optimizer.h:5:10: fatal error: core/config.h: No such file or directory
+    5 | #include "core/config.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:121: src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+In file included from /sep/src/quantum/quantum_processor_qfh_common.cpp:8:
+/sep/include/quantum/quantum_manifold_optimizer.h:5:10: fatal error: core/config.h: No such file or directory
+    5 | #include "core/config.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [src/quantum/CMakeFiles/sep_quantum.dir/build.make:149: src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 57%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+/sep/src/memory/memory_tier_manager.cpp: In member function ‘sep::SEPResult sep::memory::MemoryTierManager::launch_pattern_processing(sep::pattern::PatternData*, sep::pattern::PatternData*, const sep::pattern::PatternConfig&, size_t, const sep::pattern::PatternData*, void*)’:
+/sep/src/memory/memory_tier_manager.cpp:241:34: error: ‘launch_pattern_processing’ is not a member of ‘sep::cuda’
+  241 |     cudaError_t err = sep::cuda::launch_pattern_processing(
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [src/memory/CMakeFiles/sep_memory.dir/build.make:93: src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:407: src/quantum/CMakeFiles/sep_quantum.dir/all] Error 2
 make[1]: *** Waiting for unfinished jobs....
-[ 27%] Linking CXX static library libsep_audio.a
-[ 27%] Built target sep_audio
+[ 58%] Linking CXX static library libsep_blender.a
+[ 58%] Built target sep_blender
+[ 60%] Linking CXX static library libsep_audio.a
+[ 60%] Built target sep_audio
+make[1]: *** [CMakeFiles/Makefile2:374: src/memory/CMakeFiles/sep_memory.dir/all] Error 2
 make: *** [Makefile:91: all] Error 2

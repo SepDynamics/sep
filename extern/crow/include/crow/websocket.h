@@ -9,6 +9,7 @@
 namespace crow
 {
     namespace asio = boost::asio;
+    using error_code = boost::system::error_code;
     namespace websocket
     {
         enum class WebSocketReadState

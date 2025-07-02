@@ -128,7 +128,7 @@ class SEPEngineBridge:
             return
             
         # sep_blender_init
-        self.lib.sep_blender_init.argtypes = [c_void_p, POINTER(SEPConfig), POINTER(POINTER(c_void_p))]
+        self.lib.sep_blender_init.argtypes = [c_void_p, POINTER(SEPConfig), POINTER(c_void_p)]
         self.lib.sep_blender_init.restype = c_int
         
         # sep_register_mesh

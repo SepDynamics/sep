@@ -1,12 +1,17 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
+project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Enable CUDA
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # Add cmake directory to module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# Add library search paths
+link_directories(${CMAKE_SOURCE_DIR}/lib)
 
 # Include unified configuration module
 include(SEPConfig)
@@ -34,9 +39,12 @@ find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(http_parser REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(OpenVDB REQUIRED)
+find_package(OpenPGL REQUIRED)
+find_package(OpenColorIO REQUIRED)
+find_package(Imath REQUIRED)
 
 # Add subdirectories
-add_subdirectory(extern/openpgl_stub)
 add_subdirectory(src/core)
 add_subdirectory(src/compat)
 add_subdirectory(src/memory)
@@ -80,4 +88,10 @@ target_link_libraries(sep_engine
         ${HTTP_PARSER_LIBRARY}
         extern_cuew
         extern_hipew
+        ${OpenVDB_LIBRARIES}
+        ${OpenPGL_LIBRARIES}
+        ${OpenColorIO_LIBRARIES}
+        openvdb
+        OpenColorIO
+        Imath
 )

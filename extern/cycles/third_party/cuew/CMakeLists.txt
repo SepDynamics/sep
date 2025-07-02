@@ -12,3 +12,7 @@ include_directories(
 )
 
 add_library(extern_cuew ${SRC} ${SRC_HEADERS})
+set_target_properties(extern_cuew PROPERTIES
+    C_STANDARD 11
+    C_STANDARD_REQUIRED ON
+)

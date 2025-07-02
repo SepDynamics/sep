@@ -239,7 +239,7 @@ sep::SEPResult MemoryTierManager::launch_pattern_processing(sep::pattern::Patter
                                                             void* stream) {
 #ifdef SEP_USE_CUDA
     cudaStream_t cuda_stream = reinterpret_cast<cudaStream_t>(stream);
-    cudaError_t err = sep::cuda::launch_pattern_processing(
+    cudaError_t err = sep::pattern::cuda::launch_pattern_processing(
         patterns, results, config, pattern_count, previous_patterns, cuda_stream);
     if (err != cudaSuccess) {
         return sep::SEPResult::CUDA_ERROR;

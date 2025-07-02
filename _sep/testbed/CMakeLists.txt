@@ -9,6 +9,7 @@ add_library(testbed_tests STATIC
     audio_pipeline_test.cpp
     api_makejsonresponse_test.cpp
 )
+add_subdirectory(embeddings)
 
 target_include_directories(testbed_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/include

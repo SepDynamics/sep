@@ -18,6 +18,7 @@ add_subdirectory(compat)
 add_subdirectory(core)
 add_subdirectory(memory)
 add_subdirectory(quantum)
+add_subdirectory(embeddings)
 
 # Link dependencies
 target_link_libraries(sep_main PRIVATE

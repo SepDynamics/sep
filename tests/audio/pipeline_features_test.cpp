@@ -13,7 +13,7 @@ TEST(AudioPipelineTest, SineWaveFeatureExtraction) {
     const float frequency = 440.0f; // A4
     for (int i = 0; i < 2048; ++i) {
         float sample = std::sin(2.0f * glm::pi<float>() * frequency * i / sample_rate);
-        pipeline.processAudioFrame(sep::shim::vector<float>{sample});
+        pipeline.processAudioFrame(std::vector<float>{sample});
     }
 
     auto patterns = pipeline.getPatterns();

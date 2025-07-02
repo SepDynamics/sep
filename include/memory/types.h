@@ -43,8 +43,8 @@ struct PersistentPatternData {
     int generation_count;                  // Pattern's generation count
     float access_frequency;                // Pattern's access frequency
     ::sep::shim::chrono::system_clock::time_point timestamp;  // Pattern's timestamp
-    ::sep::shim::vector<std::size_t> relationships;          // Legacy relationships (just IDs)
-    ::sep::shim::vector<RelationshipData> relationship_data; // Enhanced relationship data
+    std::vector<std::size_t> relationships;          // Legacy relationships (just IDs)
+    std::vector<RelationshipData> relationship_data; // Enhanced relationship data
     uint64_t dag_node_id = 0;              // DAG node ID for pattern
 };
 

@@ -22,11 +22,11 @@ protected:
 };
 
 TEST_F(BlendErrorTest, InconsistentEmbeddingDimensions) {
-    sep::shim::vector<context::Context> contexts;
+    std::vector<context::Context> contexts;
     contexts.push_back(createEmbedding({0.1f, 0.2f}));
     contexts.push_back(createEmbedding({0.3f, 0.4f, 0.5f}));
 
-    sep::shim::vector<float> weights{0.5f, 0.5f};
+    std::vector<float> weights{0.5f, 0.5f};
     auto result = processor->blendContexts(contexts, weights);
     EXPECT_FALSE(result.success);
     EXPECT_EQ(result.error, "Inconsistent embedding dimensions");

@@ -50,7 +50,7 @@ struct ObjectState {
         uint32_t update_count = 0;
         float coherence_score = 0.0f;
     } stats;
-    ::sep::shim::vector<::sep::pattern::PatternData> patterns;
+    std::vector<::sep::pattern::PatternData> patterns;
     sep::memory::MemoryBlock* memory_block = nullptr;
 };
 

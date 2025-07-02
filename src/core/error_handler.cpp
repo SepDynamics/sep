@@ -6,9 +6,9 @@
 // Standard Library Includes 
 namespace sep::core {
 using ::sep::Error;
-using ::sep::shim::vector;
-using ::sep::shim::mutex;
-using ::sep::shim::lock_guard;
+using std::vector;
+using std::mutex;
+using std::lock_guard;
 
 ErrorHandler &ErrorHandler::instance() {
   static ErrorHandler handler;

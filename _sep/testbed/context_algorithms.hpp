@@ -92,6 +92,8 @@ inline nlohmann::json blend_contexts_impl(
     result["embedding"] = blend;
     result["coherence"] = coherence;
     return result;
+}
+
 struct ValidationReport {
     bool overall_valid{true};
     std::vector<size_t> invalid_indices;

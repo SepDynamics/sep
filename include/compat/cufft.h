@@ -23,6 +23,10 @@ namespace cuda {
 typedef int cufftResult;
 typedef int cufftHandle;
 typedef int cufftType;
+typedef float cufftReal;
+typedef double cufftDoubleReal;
+struct cufftComplex { float x, y; };
+struct cufftDoubleComplex { double x, y; };
 
 // CUFFT Transform types
 #define CUFFT_R2C 0x2a
@@ -57,6 +61,10 @@ cufftResult cufftExecC2R(cufftHandle plan, void* idata, void* odata);
 using sep::cuda::cufftResult;
 using sep::cuda::cufftHandle;
 using sep::cuda::cufftType;
+using sep::cuda::cufftReal;
+using sep::cuda::cufftDoubleReal;
+using sep::cuda::cufftComplex;
+using sep::cuda::cufftDoubleComplex;
 
 // Define the function prototypes in global namespace
 inline cufftResult cufftPlan1d(cufftHandle* plan, int nx, int type, int batch) {

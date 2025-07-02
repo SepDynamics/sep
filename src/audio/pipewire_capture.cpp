@@ -21,15 +21,8 @@ static struct PWInit {
     bool ok{false};
     PWInit()
     {
-        int err = pw_init(nullptr, nullptr);
-        if (err >= 0)
-        {
-            ok = true;
-        }
-        else
-        {
-            spdlog::error("PipeWire initialization failed: {}", spa_strerror(err));
-        }
+        pw_init(nullptr, nullptr);
+        ok = true;
     }
     ~PWInit()
     {

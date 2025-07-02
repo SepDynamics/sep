@@ -9,6 +9,13 @@
 #include "core/types.h"
 #include "quantum/data.hpp"
 
+// If SEP_HAS_CYCLES was not provided by the build system, fall back to the
+// default defined in the header. This allows compilation of stub versions
+// without special build flags.
+#ifndef SEP_HAS_CYCLES
+#define SEP_HAS_CYCLES 0
+#endif
+
 #if SEP_HAS_CYCLES
 // Cycles core includes
 #include "device/device.h"
@@ -194,11 +201,11 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
 }
 
 bool CyclesRenderer::render(const std::string& filepath) {
+#if SEP_HAS_CYCLES
     if (!initialized_ || patterns_.empty() || !cycles_scene_) {
         return false;
     }
 
-#if SEP_HAS_CYCLES
     // Initialize session
     ::ccl::SessionParams session_params;
     session_params.background = true;

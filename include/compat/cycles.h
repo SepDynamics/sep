@@ -8,6 +8,13 @@
 // Include standard headers
 #include <memory>
 
+// Provide a default value for SEP_HAS_CYCLES so that headers can be parsed even
+// when the build system does not define it. This avoids preprocessor errors in
+// files that use `#if SEP_HAS_CYCLES`.
+#ifndef SEP_HAS_CYCLES
+#define SEP_HAS_CYCLES 0
+#endif
+
 // Define CCL namespace macros for compatibility
 // These are also defined at the compiler level with -D flags
 #ifndef CCL_NAMESPACE_BEGIN

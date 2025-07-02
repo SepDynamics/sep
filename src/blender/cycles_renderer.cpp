@@ -168,6 +168,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     ::ccl::SessionParams session_params;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
+    session_params.samples = static_cast<int>(params.samples);
     
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = std::move(cycles_scene_);

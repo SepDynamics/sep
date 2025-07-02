@@ -58,14 +58,14 @@ cudaError_t launchQBSAKernel(const std::uint32_t *d_probe_indices,
   }
   
   try {
-    // Simple implementation for stub - actual implementation would configure and launch real CUDA kernel
-    const uint32_t block_size = 256;
+    const uint32_t block_size = sep::cuda::constants::get_default_block_size();
     const uint32_t grid_size = (num_probes + block_size - 1) / block_size;
-    
-    // In a real implementation, this would launch the kernel
-    // detail::qbsa_kernel<<<grid_size, block_size, 0, stream>>>(...)
-    
-    return cudaSuccess;
+
+    detail::qbsa_kernel<<<grid_size, block_size, 0, stream>>>(
+        d_probe_indices, d_expectations, num_probes, d_bitfield, d_corrections,
+        d_correction_count);
+
+    return cudaGetLastError();
   } catch (...) {
     return cudaErrorUnknown;
   }
@@ -82,14 +82,13 @@ cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
   }
   
   try {
-    // Simple implementation for stub - actual implementation would configure and launch real CUDA kernel
-    const uint32_t block_size = 256;
+    const uint32_t block_size = sep::cuda::constants::get_default_block_size();
     const uint32_t grid_size = (num_chunks + block_size - 1) / block_size;
-    
-    // In a real implementation, this would launch the kernel
-    // detail::qsh_kernel<<<grid_size, block_size, 0, stream>>>(...)
-    
-    return cudaSuccess;
+
+    detail::qsh_kernel<<<grid_size, block_size, 0, stream>>>(
+        d_chunks, num_chunks, d_collapse_indices, d_collapse_counts);
+
+    return cudaGetLastError();
   } catch (...) {
     return cudaErrorUnknown;
   }

@@ -105,7 +105,7 @@ namespace crow {
         error_code close() {
             error_code ec;
             if (!is_open()) {
-                ec = boost::asio::error::not_connected;
+                ec = asio::error::not_connected;
             } else {
                 raw_socket().close(ec);
             }

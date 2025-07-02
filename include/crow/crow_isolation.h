@@ -199,4 +199,6 @@ namespace crow {
     }  // namespace http_parser_stub
 
 #endif  // CROW_ISOLATION_H
+#ifdef __CUDACC__
 }  // namespace crow
+#endif

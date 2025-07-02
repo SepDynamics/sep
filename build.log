@@ -15,7 +15,7 @@ Running CMake configuration...
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
 -- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
-CMake Error at CMakeLists.txt:28 (message):
+CMake Error at CMakeLists.txt:19 (message):
   http_parser library not found
 
 

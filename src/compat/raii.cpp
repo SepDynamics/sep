@@ -13,7 +13,6 @@
 
 // Include CUDA headers in the correct order
 #include "compat/raii.h"
-#include "memory/memory_tier_manager.hpp" // Include header for interface
 #include "compat/cuda_helpers.h"         // For CUDA_CHECK macro
 #include "compat/cuda_common.h"
 #if SEP_CUDA_AVAILABLE
@@ -224,34 +223,65 @@ template class DeviceBufferRAII<double>;
 
 // Implementation of memory management functions
 void* allocateDeviceMemory(std::size_t size) {
-    auto* block = sep::memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED);
-    return block ? block->ptr : nullptr;
+#if SEP_CUDA_AVAILABLE
+    void* ptr = nullptr;
+    cudaError_t err = cudaMalloc(&ptr, size);
+    if (err != cudaSuccess) {
+        if (debugAllocEnabled()) {
+            (void)fprintf(stderr, "cudaMalloc failed: %s\n", cudaGetErrorString(err));
+        }
+        return nullptr;
+    }
+    return ptr;
+#else
+    if (size == 0)
+        return nullptr;
+    return new (std::nothrow) std::uint8_t[size];
+#endif
 }
 
 void freeDeviceMemory(void* ptr) {
     if (!ptr)
         return;
-    auto& mgr = memory::MemoryTierManager::getInstance();
-    auto* blk = mgr.findBlockByPtr(ptr);
-    if (blk)
-        mgr.deallocate(blk);
+#if SEP_CUDA_AVAILABLE
+    cudaError_t err = cudaFree(ptr);
+    if (err != cudaSuccess && debugAllocEnabled()) {
+        (void)fprintf(stderr, "cudaFree failed: %s\n", cudaGetErrorString(err));
+    }
+#else
+    delete[] static_cast<std::uint8_t*>(ptr);
+#endif
 }
 
 void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
-    auto* blk = memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED);
-    if (blk && stream) {
-        cudaError_t err = cudaStreamAttachMemAsync(stream, blk->ptr, 0, 0);
-        if (err != cudaSuccess) {
-            if (debugAllocEnabled()) {
-                (void)fprintf(stderr, "Failed to attach memory to CUDA stream: %s\n", cudaGetErrorString(err));
-            }
+#if SEP_CUDA_AVAILABLE
+    void* ptr = nullptr;
+    cudaError_t err = cudaMallocManaged(&ptr, size);
+    if (err != cudaSuccess) {
+        if (debugAllocEnabled()) {
+            (void)fprintf(stderr, "cudaMallocManaged failed: %s\n", cudaGetErrorString(err));
+        }
+        return nullptr;
+    }
+    if (stream) {
+        err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
+        if (err != cudaSuccess && debugAllocEnabled()) {
+            (void)fprintf(stderr, "cudaStreamAttachMemAsync failed: %s\n", cudaGetErrorString(err));
         }
     }
-    return blk ? blk->ptr : nullptr;
+    return ptr;
+#else
+    (void)stream;
+    return allocateDeviceMemory(size);
+#endif
 }
 
 void freeUnifiedMemory(void* ptr) {
+#if SEP_CUDA_AVAILABLE
     freeDeviceMemory(ptr);
+#else
+    freeDeviceMemory(ptr);
+#endif
 }
 
 }  // namespace sep::cuda

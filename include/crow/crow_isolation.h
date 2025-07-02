@@ -194,5 +194,9 @@ namespace crow {
         using ::http_parser_type;
         using ::http_parser_url;
         using ::http_errno;
+
+
     }  // namespace http_parser_stub
+
+#endif  // CROW_ISOLATION_H
 }  // namespace crow

@@ -83,6 +83,11 @@ public:
     /**
      * @brief Validate context data
      *
+     * Expects a JSON object containing a "contexts" array where each element
+     * has a string "type", arbitrary "content" and a metadata object with a
+     * numeric "timestamp" field. The response includes a boolean "valid" flag
+     * and the indices of any invalid contexts.
+     *
      * @param request_data JSON request data containing context information
      * @return JSON response with validation results
      */
@@ -111,6 +116,11 @@ public:
 
     /**
      * @brief Blend contexts together
+     *
+     * Combines the numeric embeddings from each context using optional
+     * weights and returns a new context with the averaged embedding,
+     * aggregated timestamp and a coherence score measuring similarity of the
+     * inputs.
      *
      * @param request_data JSON request data containing contexts to blend
      * @return JSON response with blending results

@@ -31,7 +31,8 @@ enum class SEPResult : int32_t {
     PROCESSING_ERROR = -21,
     ALLOCATION_FAILED = -22,
     FEATURE_UNAVAILABLE = -23,
-    NOT_INITIALIZED = -24
+    NOT_INITIALIZED = -24,
+    INVALID_DEVICE = -25
 };
 
 // Basic status enumeration for engine components
@@ -80,6 +81,9 @@ inline const char* to_string(SEPResult result) {
         case SEPResult::CUDA_ERROR: return "CUDA_ERROR";
         case SEPResult::MEMORY_ERROR: return "MEMORY_ERROR";
         case SEPResult::ALLOCATION_FAILED: return "ALLOCATION_FAILED";
+        case SEPResult::FEATURE_UNAVAILABLE: return "FEATURE_UNAVAILABLE";
+        case SEPResult::NOT_INITIALIZED: return "NOT_INITIALIZED";
+        case SEPResult::INVALID_DEVICE: return "INVALID_DEVICE";
         default: return "UNKNOWN";
     }
 }

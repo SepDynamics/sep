@@ -2,13 +2,14 @@
 #include "compat/shim.h"
 
 #include <functional> // Required for std::function
+#include <mutex>
+#include <vector>
 
-// Standard Library Includes 
 namespace sep::core {
 using ::sep::Error;
-using ::sep::shim::vector;
-using ::sep::shim::mutex;
-using ::sep::shim::lock_guard;
+using std::lock_guard;
+using std::mutex;
+using std::vector;
 
 ErrorHandler &ErrorHandler::instance() {
   static ErrorHandler handler;

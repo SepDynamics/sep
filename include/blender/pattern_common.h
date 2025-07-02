@@ -3,6 +3,7 @@
 #include "compat/shim.h"
 #include <cstdint>
 #include <glm/glm.hpp>
+#include <vector>
 
 namespace sep {
 namespace blender {
@@ -132,7 +133,7 @@ public:
     }
     
     uint32_t count;         // Number of patterns
-    shim::vector<float> data; // Raw pattern data (position, color, scale)
+    std::vector<float> data; // Raw pattern data (position, color, scale)
 };
 
 /**

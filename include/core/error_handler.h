@@ -3,6 +3,8 @@
 
 #include "compat/shim.h"
 #include "core/common.h"
+#include <mutex>
+#include <vector>
 // Removed duplicate include of core/types.h
 
 namespace sep {
@@ -26,7 +28,7 @@ class ErrorHandler {
 
   void reportError(const ::sep::Error &error, std::function<bool()> retry = {});
 
-  ::sep::shim::vector<::sep::Error> getErrors() const;
+  std::vector<::sep::Error> getErrors() const;
 
   void clearErrors();
 
@@ -42,8 +44,8 @@ class ErrorHandler {
   ErrorHandler() = default;
   void processRetriesLocked();
 
-  mutable ::sep::shim::mutex mutex_;
-  ::sep::shim::vector<Entry> errors_;
+  mutable std::mutex mutex_;
+  std::vector<Entry> errors_;
 };
 
 }  // namespace core

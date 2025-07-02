@@ -144,4 +144,5 @@ namespace crow {
         routing_handle_result() {}
     };
 
-} // namespace crow\n#endif
+} // namespace crow
+#endif

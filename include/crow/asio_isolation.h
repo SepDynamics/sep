@@ -15,5 +15,9 @@ namespace asio = ::asio;
 namespace crow {
 // Alias the stub namespace inside crow as before
 namespace asio_stub = ::crow_asio_stub;
+// Provide a direct alias matching the upstream library expectations
+// so headers can refer to `crow::asio::...` types without pulling in
+// Boost. This maps directly to the standalone Asio namespace.
+using namespace ::asio;
 using error_code = ::asio::error_code;
 } // namespace crow

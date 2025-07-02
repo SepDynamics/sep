@@ -2,6 +2,7 @@
 #include "compat/raii.h"
 #include "compat/kernels.h"
 #include "compat/shim.h"
+#include <vector>
 
 
 using namespace sep;
@@ -10,9 +11,9 @@ TEST(CUDATest, QSHKernelBasic) {
     cuda::StreamRAII stream;
     ASSERT_TRUE(stream.valid());
 
-    sep::shim::vector<uint64_t> chunks(32, 0xAAAAAAAAAAAAAAAAULL);
-    sep::shim::vector<uint32_t> collapse_indices(chunks.size());
-    sep::shim::vector<uint32_t> collapse_counts(chunks.size());
+    std::vector<uint64_t> chunks(32, 0xAAAAAAAAAAAAAAAAULL);
+    std::vector<uint32_t> collapse_indices(chunks.size());
+    std::vector<uint32_t> collapse_counts(chunks.size());
 
     cuda::DeviceBufferRAII<uint64_t> d_chunks(chunks.size());
     cuda::DeviceBufferRAII<uint32_t> d_idx(chunks.size());

@@ -13,6 +13,7 @@
 #include "compat/macros.h"
 #include "compat/memory.h"
 #include "compat/stream.h"
+#include <vector>
 #include "compat/cuda_api.hpp"
 #include "core/logging.h"  // This is actually the logging manager
 #include "memory/memory_tier_manager.hpp"
@@ -36,15 +37,15 @@ using namespace ::sep::cuda;
 
 struct Engine::Impl {
     // CPU fallback buffers
-    ::sep::shim::vector<std::uint32_t> d_bitfield_;
-    ::sep::shim::vector<std::uint32_t> d_probe_indices_;
-    ::sep::shim::vector<std::uint32_t> d_expectations_;
-    ::sep::shim::vector<std::uint32_t> d_corrections_;
-    ::sep::shim::vector<std::uint32_t> d_correction_count_;
-    ::sep::shim::vector<std::uint64_t> d_chunks_;
-    ::sep::shim::vector<std::uint32_t> d_collapse_indices_;
-    ::sep::shim::vector<std::uint32_t> d_collapse_counts_;
-    ::sep::shim::vector<StateNode> state_history_;
+    std::vector<std::uint32_t> d_bitfield_;
+    std::vector<std::uint32_t> d_probe_indices_;
+    std::vector<std::uint32_t> d_expectations_;
+    std::vector<std::uint32_t> d_corrections_;
+    std::vector<std::uint32_t> d_correction_count_;
+    std::vector<std::uint64_t> d_chunks_;
+    std::vector<std::uint32_t> d_collapse_indices_;
+    std::vector<std::uint32_t> d_collapse_counts_;
+    std::vector<StateNode> state_history_;
     ::sep::config::APIConfig config;
     bool initialized{false};
 };
@@ -166,9 +167,9 @@ Engine::~Engine() {
 #endif
 }
 
-void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
-                           ::sep::shim::vector<std::uint32_t>& probe_indices,
-                           ::sep::shim::vector<std::uint32_t>& expectations,
+void Engine::generate_probes(const std::vector<::sep::PinState>& inputs,
+                           std::vector<std::uint32_t>& probe_indices,
+                           std::vector<std::uint32_t>& expectations,
                            std::uint64_t tick) {
     if (inputs.empty()) {
         ::sep::core::ErrorHandler::instance().reportError(
@@ -227,7 +228,7 @@ void Engine::generate_probes(const ::sep::shim::vector<::sep::PinState>& inputs,
     std::fill(impl_->d_chunks_.begin(), impl_->d_chunks_.end(), 0);
 }
 
-void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, std::uint64_t tick,
+void Engine::process_batch(const std::vector<::sep::PinState>& inputs, std::uint64_t tick,
                             ::sep::quantum::QBSAResult& qbsa_result, ::sep::cuda::QSHResult& qsh_result) {
     // Input validation
     if (inputs.empty()) {
@@ -252,8 +253,8 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
 
     try {
         // Generate probes from inputs
-        ::sep::shim::vector<std::uint32_t> probe_indices;
-        ::sep::shim::vector<std::uint32_t> expectations;
+        std::vector<std::uint32_t> probe_indices;
+        std::vector<std::uint32_t> expectations;
         generate_probes(inputs, probe_indices, expectations, tick);
 
         // Process QBSA using CUDA
@@ -329,12 +330,12 @@ void Engine::process_batch(const ::sep::shim::vector<::sep::PinState>& inputs, s
     }
 }
 
-const ::sep::shim::vector<Engine::StateNode>& Engine::getStateHistory() const noexcept {
+const std::vector<Engine::StateNode>& Engine::getStateHistory() const noexcept {
     return impl_->state_history_;
 }
 
-::sep::shim::vector<float> Engine::getCoherenceHistory() const {
-    ::sep::shim::vector<float> history;
+std::vector<float> Engine::getCoherenceHistory() const {
+    std::vector<float> history;
     history.reserve(impl_->state_history_.size());
     for (const auto& n : impl_->state_history_) {
         history.push_back(n.coherence);

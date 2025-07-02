@@ -11,18 +11,10 @@ Running CMake configuration...
 -- Check for working CXX compiler: /usr/bin/g++-14 - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Looking for a CUDA compiler
--- Looking for a CUDA compiler - NOTFOUND
--- CUDA support disabled - compiler not found
--- Cycles integration disabled - CYCLES_ROOT not set
--- Redis support disabled - hiredis not found
--- PipeWire support disabled
--- TBB support enabled
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
 -- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
--- Found nlohmann_json: /usr/share/cmake/nlohmann_json/nlohmann_jsonConfig.cmake (found version "3.11.3")
 -- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
 -- Found hiredis: /usr/lib64/libhiredis.so
 -- Found hiredis headers: /usr/include/hiredis
@@ -49,85 +41,144 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 --   Found OpenImageIO, version 2.5.16.0
 -- Checking for module 'libzstd'
 --   Found libzstd, version 1.5.7
--- Configuring done (1.5s)
+-- Configuring done (1.4s)
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  2%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 14%] Linking CXX static library ../../lib/libsep_core.a
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 14%] Linking CXX static library libsep_core.a
 [ 14%] Built target sep_core
-[ 16%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cuda_api_stub.cpp.o
-[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 26%] Linking CXX static library ../../lib/libsep_compat.a
+[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cuda_api_stub.cpp.o
+[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 26%] Linking CXX static library libsep_compat.a
 [ 26%] Built target sep_compat
-[ 31%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
 [ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 35%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 41%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 46%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
-[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 41%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 53%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 65%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 [ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 68%] Linking CXX static library ../../lib/libsep_audio.a
+[ 68%] Linking CXX static library libsep_audio.a
 [ 68%] Built target sep_audio
-[ 70%] Linking CXX static library ../../lib/libsep_blender.a
+[ 70%] Linking CXX static library libsep_blender.a
 [ 70%] Built target sep_blender
-[ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 [ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 82%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 82%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 85%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 94%] Linking CXX static library ../../lib/libsep_memory.a
-[ 94%] Built target sep_memory
-[ 95%] Linking CXX static library ../../lib/libsep_quantum.a
-[ 95%] Built target sep_quantum
-[ 97%] Linking CXX static library ../../lib/libsep_api.a
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 82%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 85%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 94%] Linking CXX static library libsep_quantum.a
+[ 94%] Built target sep_quantum
+[ 95%] Linking CXX static library libsep_memory.a
+[ 95%] Built target sep_memory
+[ 97%] Linking CXX static library libsep_api.a
 [ 97%] Built target sep_api
 [ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
-[100%] Linking CXX executable bin/sep_engine
+[100%] Linking CXX executable sep_engine
 /usr/sbin/ld: warning: libtbb.so.2, needed by /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libOpenImageIO.so, may conflict with libtbb.so.12
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::initialize()':
+cycles_renderer.cpp:(.text+0x38c): undefined reference to `ccl::Scene::Scene(ccl::SceneParams const&, ccl::Device*)'
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::renderScene(sep::blender::ccl::CyclesRenderer::RenderParams const&)':
+cycles_renderer.cpp:(.text+0x52f): undefined reference to `ccl::Camera::set_screen_size(int, int)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x55c): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x5ae): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::Transform const&)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x5d7): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x5ff): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x625): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x64b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x671): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x697): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x6bf): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x6e7): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x70d): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x735): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x75d): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x789): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x7b5): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x7e1): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o):cycles_renderer.cpp:(.text+0x80d): more undefined references to `ccl::Node::set(ccl::SocketType const&, float)' follow
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::renderScene(sep::blender::ccl::CyclesRenderer::RenderParams const&)':
+cycles_renderer.cpp:(.text+0x85b): undefined reference to `ccl::Node::set(ccl::SocketType const&, unsigned int)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x883): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x8af): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x8b7): undefined reference to `ccl::Camera::compute_auto_viewplane()'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x920): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x95b): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x9c2): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x9f8): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xa2e): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xa6b): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xa9e): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xad6): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xb3a): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xbaa): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xc2a): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xcaa): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0xd2a): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o):cycles_renderer.cpp:(.text+0xdaa): more undefined references to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const' follow
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+cycles_renderer.cpp:(.text+0x1c8b): undefined reference to `ccl::Session::Session(ccl::SessionParams const&, ccl::SceneParams const&)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d2e): undefined reference to `ccl::OIIOOutputDriver::OIIOOutputDriver(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, std::function<void (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)>)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d58): undefined reference to `ccl::Session::set_output_driver(std::unique_ptr<ccl::OutputDriver, std::default_delete<ccl::OutputDriver> >)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d70): undefined reference to `ccl::Session::start()'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d78): undefined reference to `ccl::Session::wait()'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d80): undefined reference to `ccl::Session::~Session()'
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::createGeometryFromPattern(sep::pattern::PatternData const&)':
+cycles_renderer.cpp:(.text+0x28fd): undefined reference to `ccl::Mesh::Mesh()'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x2d5c): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::array<ccl::float3, 16ul>&)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x2d89): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::array<int, 16ul>&)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x2dc7): undefined reference to `ccl::AttributeSet::add(ccl::AttributeStandard, OpenImageIO_v2_5::ustring)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x2f22): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x2f92): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::createSceneFromPatterns(std::vector<sep::pattern::PatternData, std::allocator<sep::pattern::PatternData> > const&)':
+cycles_renderer.cpp:(.text+0x3ced): undefined reference to `ccl::Scene::Scene(ccl::SceneParams const&, ccl::Device*)'
+/usr/sbin/ld: cycles_renderer.cpp:(.text+0x3d25): undefined reference to `ccl::Camera::Camera()'
+/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [clone .cold]':
+cycles_renderer.cpp:(.text.unlikely+0x276): undefined reference to `ccl::Session::~Session()'
 /usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::Device::build_bvh(ccl::BVH*, ccl::Progress&, bool)':
 device.cpp:(.text+0x5b): undefined reference to `ccl::BVH2::refit(ccl::Progress&)'
 /usr/sbin/ld: device.cpp:(.text+0x70): undefined reference to `ccl::BVH2::build(ccl::Progress&, ccl::Stats*)'
@@ -144,151 +195,6 @@ denoise.cpp:(.text._ZN3ccl13DenoiseParams13register_typeIS0_EEPKNS_8NodeTypeEv[_
 /usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o): in function `ccl::DenoiseParams::~DenoiseParams()':
 denoise.cpp:(.text._ZN3ccl13DenoiseParamsD0Ev[_ZN3ccl13DenoiseParamsD0Ev]+0x5): undefined reference to `ccl::Node::~Node()'
 /usr/sbin/ld: /sep/lib/libcycles_device.a(denoise.cpp.o):(.data.rel.ro._ZTVN3ccl13DenoiseParamsE[_ZTVN3ccl13DenoiseParamsE]+0x10): undefined reference to `ccl::Node::~Node()'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::createSceneFromPatterns(std::vector<sep::pattern::PatternData, std::allocator<sep::pattern::PatternData> > const&)':
-cycles_renderer.cpp:(.text+0x2a5): undefined reference to `ccl::Camera::Camera()'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::renderScene(sep::blender::ccl::CyclesRenderer::RenderParams const&)':
-cycles_renderer.cpp:(.text+0x4e0): undefined reference to `ccl::Camera::set_screen_size(int, int)'
-/usr/sbin/ld: cycles_renderer.cpp:(.text+0x7f6): undefined reference to `ccl::Camera::compute_auto_viewplane()'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-cycles_renderer.cpp:(.text+0xc13): undefined reference to `ccl::Session::set_output_driver(std::unique_ptr<ccl::OutputDriver, std::default_delete<ccl::OutputDriver> >)'
-/usr/sbin/ld: cycles_renderer.cpp:(.text+0xc42): undefined reference to `ccl::Session::start()'
-/usr/sbin/ld: cycles_renderer.cpp:(.text+0xc59): undefined reference to `ccl::Session::wait()'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::createGeometryFromPattern(sep::pattern::PatternData const&)':
-cycles_renderer.cpp:(.text+0xf3d): undefined reference to `ccl::AttributeSet::add(ccl::AttributeStandard, OpenImageIO_v2_5::ustring)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `std::__detail::_MakeUniq<ccl::OIIOOutputDriver>::__single_object std::make_unique<ccl::OIIOOutputDriver, char const*, char const (&) [9], sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)::{lambda(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)#1}>(char const*&&, char const (&) [9], sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)::{lambda(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)#1}&&)':
-cycles_renderer.cpp:(.text+0x1451): undefined reference to `ccl::OIIOOutputDriver::OIIOOutputDriver(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, std::function<void (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)>)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::get_exposure_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl4Film19get_exposure_socketEv[_ZNK3ccl4Film19get_exposure_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::set_exposure(float)':
-cycles_renderer.cpp:(.text._ZN3ccl4Film12set_exposureEf[_ZN3ccl4Film12set_exposureEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::get_filter_type_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl4Film22get_filter_type_socketEv[_ZNK3ccl4Film22get_filter_type_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::get_filter_width_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl4Film23get_filter_width_socketEv[_ZNK3ccl4Film23get_filter_width_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Film::set_filter_width(float)':
-cycles_renderer.cpp:(.text._ZN3ccl4Film16set_filter_widthEf[_ZN3ccl4Film16set_filter_widthEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_shuttertime_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera22get_shuttertime_socketEv[_ZNK3ccl6Camera22get_shuttertime_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_shuttertime(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera15set_shuttertimeEf[_ZN3ccl6Camera15set_shuttertimeEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_rolling_shutter_type_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera31get_rolling_shutter_type_socketEv[_ZNK3ccl6Camera31get_rolling_shutter_type_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_focaldistance_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera24get_focaldistance_socketEv[_ZNK3ccl6Camera24get_focaldistance_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_focaldistance(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera17set_focaldistanceEf[_ZN3ccl6Camera17set_focaldistanceEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_aperturesize_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera23get_aperturesize_socketEv[_ZNK3ccl6Camera23get_aperturesize_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_aperturesize(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera16set_aperturesizeEf[_ZN3ccl6Camera16set_aperturesizeEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_blades_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera17get_blades_socketEv[_ZNK3ccl6Camera17get_blades_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_blades(unsigned int)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera10set_bladesEj[_ZN3ccl6Camera10set_bladesEj]+0x31): undefined reference to `ccl::Node::set(ccl::SocketType const&, unsigned int)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_bladesrotation_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera25get_bladesrotation_socketEv[_ZNK3ccl6Camera25get_bladesrotation_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_bladesrotation(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera18set_bladesrotationEf[_ZN3ccl6Camera18set_bladesrotationEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_camera_type_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera22get_camera_type_socketEv[_ZNK3ccl6Camera22get_camera_type_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_fov_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera14get_fov_socketEv[_ZNK3ccl6Camera14get_fov_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_fov(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera7set_fovEf[_ZN3ccl6Camera7set_fovEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_stereo_eye_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera21get_stereo_eye_socketEv[_ZNK3ccl6Camera21get_stereo_eye_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_use_spherical_stereo_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera31get_use_spherical_stereo_socketEv[_ZNK3ccl6Camera31get_use_spherical_stereo_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_use_spherical_stereo(bool)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera24set_use_spherical_stereoEb[_ZN3ccl6Camera24set_use_spherical_stereoEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_interocular_distance_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera31get_interocular_distance_socketEv[_ZNK3ccl6Camera31get_interocular_distance_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_interocular_distance(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera24set_interocular_distanceEf[_ZN3ccl6Camera24set_interocular_distanceEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_convergence_distance_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera31get_convergence_distance_socketEv[_ZNK3ccl6Camera31get_convergence_distance_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_convergence_distance(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera24set_convergence_distanceEf[_ZN3ccl6Camera24set_convergence_distanceEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_use_pole_merge_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera25get_use_pole_merge_socketEv[_ZNK3ccl6Camera25get_use_pole_merge_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_use_pole_merge(bool)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera18set_use_pole_mergeEb[_ZN3ccl6Camera18set_use_pole_mergeEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_pole_merge_angle_from_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera32get_pole_merge_angle_from_socketEv[_ZNK3ccl6Camera32get_pole_merge_angle_from_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_pole_merge_angle_from(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera25set_pole_merge_angle_fromEf[_ZN3ccl6Camera25set_pole_merge_angle_fromEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_pole_merge_angle_to_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera30get_pole_merge_angle_to_socketEv[_ZNK3ccl6Camera30get_pole_merge_angle_to_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_pole_merge_angle_to(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera23set_pole_merge_angle_toEf[_ZN3ccl6Camera23set_pole_merge_angle_toEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_sensorwidth_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera22get_sensorwidth_socketEv[_ZNK3ccl6Camera22get_sensorwidth_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_sensorwidth(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera15set_sensorwidthEf[_ZN3ccl6Camera15set_sensorwidthEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_sensorheight_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera23get_sensorheight_socketEv[_ZNK3ccl6Camera23get_sensorheight_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_sensorheight(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera16set_sensorheightEf[_ZN3ccl6Camera16set_sensorheightEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_nearclip_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera19get_nearclip_socketEv[_ZNK3ccl6Camera19get_nearclip_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_nearclip(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera12set_nearclipEf[_ZN3ccl6Camera12set_nearclipEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_farclip_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera18get_farclip_socketEv[_ZNK3ccl6Camera18get_farclip_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_farclip(float)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera11set_farclipEf[_ZN3ccl6Camera11set_farclipEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_matrix_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera17get_matrix_socketEv[_ZNK3ccl6Camera17get_matrix_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_matrix(ccl::Transform)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera10set_matrixENS_9TransformE[_ZN3ccl6Camera10set_matrixENS_9TransformE]+0x2f): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::Transform const&)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::get_use_perspective_motion_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl6Camera33get_use_perspective_motion_socketEv[_ZNK3ccl6Camera33get_use_perspective_motion_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Camera::set_use_perspective_motion(bool)':
-cycles_renderer.cpp:(.text._ZN3ccl6Camera26set_use_perspective_motionEb[_ZN3ccl6Camera26set_use_perspective_motionEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Mesh::get_triangles_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl4Mesh20get_triangles_socketEv[_ZNK3ccl4Mesh20get_triangles_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Mesh::set_triangles(ccl::array<int, 16ul>&)':
-cycles_renderer.cpp:(.text._ZN3ccl4Mesh13set_trianglesERNS_5arrayIiLm16EEE[_ZN3ccl4Mesh13set_trianglesERNS_5arrayIiLm16EEE]+0x33): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::array<int, 16ul>&)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Mesh::get_verts_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl4Mesh16get_verts_socketEv[_ZNK3ccl4Mesh16get_verts_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Mesh::set_verts(ccl::array<ccl::float3, 16ul>&)':
-cycles_renderer.cpp:(.text._ZN3ccl4Mesh9set_vertsERNS_5arrayINS_6float3ELm16EEE[_ZN3ccl4Mesh9set_vertsERNS_5arrayINS_6float3ELm16EEE]+0x33): undefined reference to `ccl::Node::set(ccl::SocketType const&, ccl::array<ccl::float3, 16ul>&)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::get_transparent_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl10Background22get_transparent_socketEv[_ZNK3ccl10Background22get_transparent_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::set_transparent(bool)':
-cycles_renderer.cpp:(.text._ZN3ccl10Background15set_transparentEb[_ZN3ccl10Background15set_transparentEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::get_transparent_glass_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl10Background28get_transparent_glass_socketEv[_ZNK3ccl10Background28get_transparent_glass_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::set_transparent_glass(bool)':
-cycles_renderer.cpp:(.text._ZN3ccl10Background21set_transparent_glassEb[_ZN3ccl10Background21set_transparent_glassEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::get_transparent_roughness_threshold_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl10Background42get_transparent_roughness_threshold_socketEv[_ZNK3ccl10Background42get_transparent_roughness_threshold_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Background::set_transparent_roughness_threshold(float)':
-cycles_renderer.cpp:(.text._ZN3ccl10Background35set_transparent_roughness_thresholdEf[_ZN3ccl10Background35set_transparent_roughness_thresholdEf]+0x37): undefined reference to `ccl::Node::set(ccl::SocketType const&, float)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Integrator::get_aa_samples_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl10Integrator21get_aa_samples_socketEv[_ZNK3ccl10Integrator21get_aa_samples_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Integrator::set_aa_samples(int)':
-cycles_renderer.cpp:(.text._ZN3ccl10Integrator14set_aa_samplesEi[_ZN3ccl10Integrator14set_aa_samplesEi]+0x31): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Integrator::get_use_denoise_socket() const':
-cycles_renderer.cpp:(.text._ZNK3ccl10Integrator22get_use_denoise_socketEv[_ZNK3ccl10Integrator22get_use_denoise_socketEv]+0x71): undefined reference to `ccl::NodeType::find_input(OpenImageIO_v2_5::ustring) const'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `ccl::Integrator::set_use_denoise(bool)':
-cycles_renderer.cpp:(.text._ZN3ccl10Integrator15set_use_denoiseEb[_ZN3ccl10Integrator15set_use_denoiseEb]+0x34): undefined reference to `ccl::Node::set(ccl::SocketType const&, bool)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `void ccl::Node::set<ccl::FilterType, true>(ccl::SocketType const&, ccl::FilterType const&)':
-cycles_renderer.cpp:(.text._ZN3ccl4Node3setINS_10FilterTypeELb1EEEvRKNS_10SocketTypeERKT_[_ZN3ccl4Node3setINS_10FilterTypeELb1EEEvRKNS_10SocketTypeERKT_]+0x2b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `void ccl::Node::set<ccl::Camera::RollingShutterType, true>(ccl::SocketType const&, ccl::Camera::RollingShutterType const&)':
-cycles_renderer.cpp:(.text._ZN3ccl4Node3setINS_6Camera18RollingShutterTypeELb1EEEvRKNS_10SocketTypeERKT_[_ZN3ccl4Node3setINS_6Camera18RollingShutterTypeELb1EEEvRKNS_10SocketTypeERKT_]+0x2b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `void ccl::Node::set<ccl::CameraType, true>(ccl::SocketType const&, ccl::CameraType const&)':
-cycles_renderer.cpp:(.text._ZN3ccl4Node3setINS_10CameraTypeELb1EEEvRKNS_10SocketTypeERKT_[_ZN3ccl4Node3setINS_10CameraTypeELb1EEEvRKNS_10SocketTypeERKT_]+0x2b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `void ccl::Node::set<ccl::Camera::StereoEye, true>(ccl::SocketType const&, ccl::Camera::StereoEye const&)':
-cycles_renderer.cpp:(.text._ZN3ccl4Node3setINS_6Camera9StereoEyeELb1EEEvRKNS_10SocketTypeERKT_[_ZN3ccl4Node3setINS_6Camera9StereoEyeELb1EEEvRKNS_10SocketTypeERKT_]+0x2b): undefined reference to `ccl::Node::set(ccl::SocketType const&, int)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `std::__detail::_MakeUniq<ccl::Scene>::__single_object std::make_unique<ccl::Scene, ccl::SceneParams&, ccl::Device*>(ccl::SceneParams&, ccl::Device*&&)':
-cycles_renderer.cpp:(.text._ZSt11make_uniqueIN3ccl5SceneEJRNS0_11SceneParamsEPNS0_6DeviceEEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_[_ZSt11make_uniqueIN3ccl5SceneEJRNS0_11SceneParamsEPNS0_6DeviceEEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_]+0x51): undefined reference to `ccl::Scene::Scene(ccl::SceneParams const&, ccl::Device*)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `std::__detail::_MakeUniq<ccl::Session>::__single_object std::make_unique<ccl::Session, ccl::SessionParams&, ccl::SceneParams&>(ccl::SessionParams&, ccl::SceneParams&)':
-cycles_renderer.cpp:(.text._ZSt11make_uniqueIN3ccl7SessionEJRNS0_13SessionParamsERNS0_11SceneParamsEEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_[_ZSt11make_uniqueIN3ccl7SessionEJRNS0_13SessionParamsERNS0_11SceneParamsEEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_]+0x51): undefined reference to `ccl::Session::Session(ccl::SessionParams const&, ccl::SceneParams const&)'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `std::__detail::_MakeUniq<ccl::Mesh>::__single_object std::make_unique<ccl::Mesh>()':
-cycles_renderer.cpp:(.text._ZSt11make_uniqueIN3ccl4MeshEJEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_[_ZSt11make_uniqueIN3ccl4MeshEJEENSt8__detail9_MakeUniqIT_E15__single_objectEDpOT0_]+0x28): undefined reference to `ccl::Mesh::Mesh()'
-/usr/sbin/ld: lib/libsep_blender.a(cycles_renderer.cpp.o): in function `std::default_delete<ccl::Session>::operator()(ccl::Session*) const':
-cycles_renderer.cpp:(.text._ZNKSt14default_deleteIN3ccl7SessionEEclEPS1_[_ZNKSt14default_deleteIN3ccl7SessionEEclEPS1_]+0x1e): undefined reference to `ccl::Session::~Session()'
 /usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::~CPUDevice()':
 device_impl.cpp:(.text+0x785): undefined reference to `pglReleaseDevice'
 /usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::build_bvh(ccl::BVH*, ccl::Progress&, bool)':
@@ -763,6 +669,6 @@ kernel_avx2.cpp:(.text+0x10ba6c): undefined reference to `pglPathSegmentStorageN
 /usr/sbin/ld: /sep/lib/libcycles_kernel.a(kernel_avx2.cpp.o): in function `void ccl::surface_shader_eval<827u, ccl::IntegratorStateCPU*>(ccl::ThreadKernelGlobalsCPU const*, ccl::IntegratorStateCPU*, ccl::ShaderData*, float*, unsigned int, bool)':
 kernel_avx2.cpp:(.text+0x12b56b): undefined reference to `void ccl::osl_eval_nodes<(ccl::ShaderType)0>(ccl::ThreadKernelGlobalsCPU const*, void const*, ccl::ShaderData*, unsigned int)'
 collect2: error: ld returned 1 exit status
-make[2]: *** [CMakeFiles/sep_engine.dir/build.make:129: bin/sep_engine] Error 1
-make[1]: *** [CMakeFiles/Makefile2:1177: CMakeFiles/sep_engine.dir/all] Error 2
-make: *** [Makefile:101: all] Error 2
+make[2]: *** [CMakeFiles/sep_engine.dir/build.make:129: sep_engine] Error 1
+make[1]: *** [CMakeFiles/Makefile2:253: CMakeFiles/sep_engine.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2

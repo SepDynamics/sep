@@ -45,7 +45,6 @@ add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 add_subdirectory(src/blender)
-add_subdirectory(extern/openpgl_stub)
 add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)
 
@@ -79,7 +78,6 @@ target_link_libraries(sep_engine
         gflags
         embree4
         ${HTTP_PARSER_LIBRARY}
-        openpgl_stub
         extern_cuew
         extern_hipew
 )

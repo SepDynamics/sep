@@ -177,21 +177,29 @@ constexpr int FP_CLASS_NAN = 4;        // NaN values
 extern "C" {
 
 // Define stubs for long double math functions that GCC-14 expects but are missing in CUDA
-inline long double acosl(long double x) {
+SEP_HD inline long double acosl(long double x) {
     if (x < -1.0L || x > 1.0L) {
         errno = EDOM;
         return NAN;
     }
     return static_cast<long double>(acos(static_cast<double>(x)));
 }
-inline long double asinl(long double x) {
-    return asin((double)x);
+SEP_HD inline long double asinl(long double x) {
+    if (x < -1.0L || x > 1.0L) {
+        errno = EDOM;
+        return NAN;
+    }
+    return static_cast<long double>(asin(static_cast<double>(x)));
 }
-inline long double atanl(long double x) {
-    return atan((double)x);
+SEP_HD inline long double atanl(long double x) {
+    return static_cast<long double>(atan(static_cast<double>(x)));
 }
-inline long double atan2l(long double y, long double x) {
-    return atan2((double)y, (double)x);
+SEP_HD inline long double atan2l(long double y, long double x) {
+    if (x == 0.0L && y == 0.0L) {
+        errno = EDOM;
+        return NAN;
+    }
+    return static_cast<long double>(atan2((double)y, (double)x));
 }
 inline long double ceill(long double x) {
     return ceil((double)x);
@@ -220,7 +228,7 @@ inline long double frexpl(long double x, int* exp) {
 inline long double ldexpl(long double x, int exp) {
     return ldexp((double)x, exp);
 }
-inline long double logl(long double x) {
+SEP_HD inline long double logl(long double x) {
     if (x <= 0.0L) {
         errno = EDOM;
         return NAN;

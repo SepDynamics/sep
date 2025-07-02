@@ -3,9 +3,7 @@
 // This is a fixed version of the http_request.h file from the Crow framework
 // It provides stub implementations for HTTP request functionality
 
-// Include our own headers
-#include "compat/shim.h"
-#include "common.h"
+// Include the isolation header which pulls in the real Crow request
 #include "crow_isolation.h"
 
 namespace crow {

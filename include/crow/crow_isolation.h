@@ -1,12 +1,19 @@
+
 #pragma once
 
 #define SEP_CROW_ISOLATION_INCLUDED
 
-// This header file is used to isolate Crow-related code from CUDA compilation
-// It provides stub implementations for Crow functionality that can be
-// safely included in CUDA files without causing template instantiation errors
+// This header isolates Crow-related code from CUDA compilation.  When not
+// compiling with NVCC we simply include the real Crow headers.  Otherwise we
+// provide lightweight stub definitions that avoid heavy template instantiation.
 
-// Include our own headers
+#ifndef __CUDACC__
+
+#include <crow.h>
+
+#else
+
+// Include our own headers when building with CUDA
 #include "compat/shim.h"
 #include "common.h"
 
@@ -104,25 +111,6 @@ namespace crow {
         response res;
     };
 
-    // Minimal stub representing a route rule returned by CROW_ROUTE and friends
-    class DummyRoute {
-    public:
-        template<typename... Args>
-        DummyRoute& methods(Args&&...) {
-            return *this;
-        }
-
-        template<typename F>
-        DummyRoute& operator()(F&& f) {
-            return *this;
-        }
-
-        template<typename... Args>
-        DummyRoute& websocket(Args&&...) {
-            return *this;
-        }
-    };
-
     // Non-templated base class for Crow app to avoid template issues
     class CrowBase {
     public:
@@ -134,17 +122,9 @@ namespace crow {
         void run() {}
         void stop() {}
 
-        DummyRoute route(const sep::shim::string&) {
-            return {};
-        }
-
-        DummyRoute route_dynamic(const sep::shim::string&) {
-            return {};
-        }
-
-        DummyRoute catchall_route() {
-            return {};
-        }
+        void route(const sep::shim::string&) {}
+        void route_dynamic(const sep::shim::string&) {}
+        void catchall_route() {}
     };
 
     // Forward declaration of the templated Crow class
@@ -250,4 +230,4 @@ namespace crow {
             void* on_chunk_complete;
         };
     }  // namespace http_parser_stub
-}  // namespace crow
+}  // namespace crow\n#endif

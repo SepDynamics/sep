@@ -29,6 +29,7 @@ add_subdirectory(quantum)
 add_subdirectory(memory)
 add_subdirectory(audio)
 add_subdirectory(api)
+add_subdirectory(cuda)
 
 # Configure test discovery
 include(CTest)

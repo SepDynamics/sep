@@ -60,6 +60,13 @@ cudaError_t cudaEventRecord(cudaEvent_t /*event*/, cudaStream_t /*stream*/) {
     return cudaSuccess;
 }
 
+cudaError_t cudaEventCreateWithFlags(cudaEvent_t* event, unsigned int /*flags*/) {
+    if (event) {
+        *event = nullptr;
+    }
+    return cudaSuccess;
+}
+
 cudaError_t cudaEventCreate(void** event) {
     if (event) {
         *event = nullptr;
@@ -70,6 +77,13 @@ extern "C" cudaError_t cudaEventDestroy(cudaEvent_t /*event*/) {
     return cudaSuccess;
 }
 cudaError_t cudaEventSynchronize(cudaEvent_t /*event*/) {
+    return cudaSuccess;
+}
+
+cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t /*start*/, cudaEvent_t /*end*/) {
+    if (ms) {
+        *ms = 0.0f;
+    }
     return cudaSuccess;
 }
 

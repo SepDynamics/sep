@@ -8,6 +8,15 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(SEPConfig)
 configure_sep()
 
+# Build minimal stub libraries and third-party helpers needed for
+# the precompiled Cycles integration. These provide implementations
+# for CUDA and path guiding entry points when the real SDKs are
+# not available during compilation.
+add_subdirectory(extern/openpgl_stub)
+add_subdirectory(extern/cuew_stub)
+add_subdirectory(extern/cycles/third_party/cuew)
+add_subdirectory(extern/cycles/third_party/hipew)
+
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/include

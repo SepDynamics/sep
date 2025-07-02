@@ -40,6 +40,10 @@ target_link_libraries(sep_blender
         sep_compat
         ${CMAKE_SOURCE_DIR}/libsep_compat.a
         TBB::tbb
+        extern_cuew
+        extern_hipew
+        cuew_stub
+        openpgl_stub
 )
 
 # Enable CUDA support

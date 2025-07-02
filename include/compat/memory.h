@@ -103,7 +103,6 @@ void* allocateDeviceMemory(size_t size);
 void freeDeviceMemory(void* ptr);
 void* allocateUnifiedMemory(size_t size, cudaStream_t stream = nullptr);
 void freeUnifiedMemory(void* ptr);
-#endif
 
 // Memory copy utilities
 template <typename T>

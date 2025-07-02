@@ -268,6 +268,7 @@ void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
         if (err != cudaSuccess && debugAllocEnabled()) {
             (void)fprintf(stderr, "cudaStreamAttachMemAsync failed: %s\n", cudaGetErrorString(err));
         }
+        return nullptr;
     }
     return ptr;
 #else

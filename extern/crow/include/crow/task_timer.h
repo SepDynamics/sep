@@ -12,6 +12,9 @@
 
 namespace crow
 {
+    // Provide the boost::asio alias used throughout the Crow headers.
+    namespace asio = boost::asio;
+    using error_code = boost::system::error_code;
     namespace detail
     {
 

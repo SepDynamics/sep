@@ -8,6 +8,12 @@
 
 namespace crow
 {
+    // The original Crow headers rely on a short alias for boost::asio
+    // but this file was missing the declaration which caused build
+    // failures when referring to `asio::io_service` and related types.
+    // Match the upstream headers and provide the alias here.
+    namespace asio = boost::asio;
+    using error_code = boost::system::error_code;
     /// Find and return the value associated with the key. (returns an empty string if nothing is found)
     template<typename T>
     inline const std::string& get_header_value(const T& headers, const std::string& key)

@@ -53,8 +53,10 @@ set(BLENDER_USER_CONFIG_DIR "$ENV{HOME}/.config/blender/${BLENDER_VERSION}")
 
 # Use bundled Cycles headers when available
 if(SEP_HAS_CYCLES)
-  target_include_directories(sep_blender PRIVATE
+  target_include_directories(sep_blender SYSTEM PRIVATE
     ${CMAKE_SOURCE_DIR}/extern/cycles/src
+  )
+  target_include_directories(sep_blender PRIVATE
     ${CMAKE_SOURCE_DIR}/extern/cycles/src/app
     ${CMAKE_SOURCE_DIR}/extern/cycles/src/bvh
     ${CMAKE_SOURCE_DIR}/extern/cycles/src/cmake

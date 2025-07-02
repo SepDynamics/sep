@@ -83,7 +83,6 @@ SEPResult CyclesRenderer::createSceneFromPatterns(const std::vector<pattern::Pat
         return SEPResult::INVALID_ARGUMENT;
     }
     try {
-#if SEP_HAS_CYCLES
         patterns_ = patterns;
         
         // Create scene if not already created
@@ -227,6 +226,8 @@ bool CyclesRenderer::render(const std::string& filepath) {
     return true;
 #else
     (void)filepath;
+    (void)initialized_;
+    (void)patterns_;
     return false;
 #endif
 }

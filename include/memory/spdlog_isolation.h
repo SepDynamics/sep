@@ -1,6 +1,7 @@
 #pragma once
 
 #include "compat/cuda_common.h"
+#include "compat/macros.h"
 
 #include <sstream>
 #include <string>
@@ -41,8 +42,8 @@ public:
 // It provides stub implementations for spdlog functionality that can be
 // safely included in CUDA files without causing template instantiation errors
 
-// Check for CUDA compilation - either via __CUDACC__ or our custom SEP_CUDA_COMPILATION flag
-#if defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)
+// Check for CUDA compilation or missing spdlog headers
+#if defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION) || !SEP_HAS_SPDLOG
 // When compiling with CUDA, provide stub implementations
 
 // Include our isolation headers
@@ -367,4 +368,4 @@ public:
 } // namespace details
 } // namespace spdlog
 } // namespace sep
-#endif // defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)
+#endif // defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION) || !SEP_HAS_SPDLOG

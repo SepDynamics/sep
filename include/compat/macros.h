@@ -24,6 +24,17 @@
 #define SEP_HAS_CYCLES 0
 #endif
 
+// -----------------------------------------------------------------------------
+// spdlog availability
+// -----------------------------------------------------------------------------
+#ifndef SEP_HAS_SPDLOG
+#if __has_include(<spdlog/spdlog.h>)
+#define SEP_HAS_SPDLOG 1
+#else
+#define SEP_HAS_SPDLOG 0
+#endif
+#endif
+
 // Backwards compatibility for legacy macros used across the code base.
 #ifndef SEP_HAS_CUDA_RUNTIME
 #define SEP_HAS_CUDA_RUNTIME SEP_CUDA_AVAILABLE

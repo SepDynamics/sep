@@ -9,7 +9,7 @@ include(SEPConfig)
 configure_sep()
 
 # Make the real Crow headers available to all targets
-include_directories(BEFORE ${CMAKE_SOURCE_DIR}/extern/Crow/include)
+include_directories(BEFORE ${CMAKE_SOURCE_DIR}/extern/crow/include)
 
 # Find required packages
 find_package(Threads REQUIRED)
@@ -26,7 +26,7 @@ else()
     message(WARNING "http_parser library not found; using bundled header-only implementation")
     add_library(http_parser INTERFACE)
     add_library(http_parser::http_parser ALIAS http_parser)
-    target_include_directories(http_parser INTERFACE ${CMAKE_SOURCE_DIR}/extern/crow)
+    target_include_directories(http_parser INTERFACE ${CMAKE_SOURCE_DIR}/extern/crow/include)
     set(HTTP_PARSER_LIBRARY http_parser)
 endif()
 find_package(fmt REQUIRED)

@@ -5,9 +5,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
-#if SEP_CUDA_AVAILABLE
-#    include "compat/cufft.h"
-#endif
+#include "compat/cufft.h"  // provides real CUFFT API or stubs
 #ifdef SEP_USE_FFTW
 #    include <fftw3.h>
 #endif

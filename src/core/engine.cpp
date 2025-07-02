@@ -1,7 +1,7 @@
-#ifndef SEP_USE_CUDA
-#define SEP_USE_CUDA 1
-#endif
+#include "compat/macros.h"
+#if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>  // for sep::cuda::cudaMemcpyAsync
+#endif
 #include "api/types.h"
 #include "core/common.h"  // defines sep::SEPResult
 #include "core/engine.h"
@@ -10,8 +10,7 @@
 #include "compat/core.h"
 #include "compat/shim.h"
 #include <vector>
-#include "compat/cuda_common.h" 
-#include "compat/macros.h"
+#include "compat/cuda_common.h"
 #include "compat/memory.h"
 #include "compat/stream.h"
 #include <vector>

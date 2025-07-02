@@ -8,15 +8,7 @@
 #include <vector>
 #include <mutex>
 
-#if defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)
-#  define SEP_SPDLOG_FALLBACK 1
-#elif defined(__has_include)
-#  if __has_include(<spdlog/spdlog.h>)
-#    define SEP_SPDLOG_AVAILABLE 1
-#  else
-#    define SEP_SPDLOG_FALLBACK 1
-#  endif
-#endif
+#define SEP_SPDLOG_AVAILABLE 1
 
 namespace sep {
 namespace spdlog {

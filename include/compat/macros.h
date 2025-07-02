@@ -21,18 +21,14 @@
 // Default to disabled when not explicitly specified. This avoids undefined macro
 // errors when building without Cycles integration.
 #ifndef SEP_HAS_CYCLES
-#define SEP_HAS_CYCLES 0
+#define SEP_HAS_CYCLES 1
 #endif
 
 // -----------------------------------------------------------------------------
 // spdlog availability
 // -----------------------------------------------------------------------------
 #ifndef SEP_HAS_SPDLOG
-#if __has_include(<spdlog/spdlog.h>)
 #define SEP_HAS_SPDLOG 1
-#else
-#define SEP_HAS_SPDLOG 0
-#endif
 #endif
 
 // Backwards compatibility for legacy macros used across the code base.

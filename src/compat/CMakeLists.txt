@@ -1,7 +1,6 @@
 # src/compat/CMakeLists.txt
 # Enhanced CUDA compatibility library with explicit symbol exports
 
-
 # Build sep_compat as a static library that encapsulates all CUDA functionality
 # Use Cycles naming convention for feature flags
 if(WITH_NANOVDB)
@@ -52,7 +51,11 @@ set_target_properties(sep_compat PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     POSITION_INDEPENDENT_CODE ON
+    CUDA_ARCHITECTURES native
 )
+
+# Set CUDA standard
+set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)
 
 # Include directories
 target_include_directories(sep_compat
@@ -68,7 +71,6 @@ target_include_directories(sep_compat
 target_link_libraries(sep_compat
     PUBLIC
         sep_core
-    PRIVATE
         CUDA::cudart
         CUDA::cuda_driver
 )

@@ -1,40 +1,35 @@
-#include "blender/cycles_renderer.h"
+// Standard includes
+#include <cmath>
 #include <memory>
+#include <utility>
+
+// SEP includes
+#include "blender/cycles_renderer.h"
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
-#include <utility>
-#ifdef SEP_HAS_CYCLES
-#include "device/device.h"
-#include "scene/camera.h"
-#include "scene/mesh.h"
-#include "session/session.h"
-#include "util/math_base.h"
-#include "util/texture.h"
-#include "util/param.h"
-#include "util/unique_ptr.h"
-#include "app/oiio_output_driver.h"
-#endif
 
 #ifdef SEP_HAS_CYCLES
-#  include <cmath>
-#  include <memory>
-#  include "util/math_base.h"
-#  include "scene/camera.h"
-#  include "scene/mesh.h"
-#  include "scene/scene.h"
-#  include "session/session.h"
-#  include "session/output_driver.h"
-#  include "app/oiio_output_driver.h"
-#  include "util/stats.h"
-#  include "util/profiling.h"
-#  include "device/device.h"
-#  include "app/oiio_output_driver.h"
-#  include "scene/image.h"
-#  include "app/oiio_output_driver.h"
-#  include "util/vector.h"
-#  include "util/array.h"
-#  include "util/string.h"
+// Cycles core includes
+#include "device/device.h"
+#include "scene/camera.h"
+#include "scene/image.h"
+#include "scene/mesh.h"
+#include "scene/scene.h"
+#include "session/output_driver.h"
+#include "session/session.h"
+
+// Cycles utility includes
+#include "app/oiio_output_driver.h"
+#include "util/array.h"
+#include "util/math_base.h"
+#include "util/param.h"
+#include "util/profiling.h"
+#include "util/stats.h"
+#include "util/string.h"
+#include "util/texture.h"
+#include "util/unique_ptr.h"
+#include "util/vector.h"
 #endif
 
 namespace sep {
@@ -65,6 +60,7 @@ SEPResult CyclesRenderer::initialize() {
         }
         ::ccl::SceneParams scene_params;
         cycles_scene_ = ::ccl::make_unique<::ccl::Scene>(scene_params, cycles_device_.get());
+        initialized_ = true;
 #endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
@@ -80,7 +76,27 @@ SEPResult CyclesRenderer::createSceneFromPatterns(const std::vector<pattern::Pat
         return SEPResult::INVALID_ARGUMENT;
     }
     try {
+#ifdef SEP_HAS_CYCLES
         patterns_ = patterns;
+        
+        // Create scene if not already created
+        if (!cycles_scene_) {
+            ::ccl::SceneParams scene_params;
+            cycles_scene_ = ::ccl::make_unique<::ccl::Scene>(scene_params, cycles_device_.get());
+        }
+
+        // Create camera
+        ::ccl::Camera *cam = cycles_scene_->camera;
+        if (!cam) {
+            cam = new ::ccl::Camera();
+            cycles_scene_->camera = cam;
+        }
+
+        // Create geometry from patterns
+        for (const auto& pattern : patterns_) {
+            createGeometryFromPattern(pattern);
+        }
+#endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
         return SEPResult::PROCESSING_ERROR;
@@ -110,12 +126,66 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
         if (cam) {
             cam->set_screen_size(params.width, params.height);
             cam->set_fov(45.0f * (M_PI_F / 180.0f));
+            cam->set_matrix(::ccl::transform_identity());
+            cam->set_use_perspective(true);
+            cam->set_use_motion(false);
+            cam->set_shuttertime(0.0f);
+            cam->set_rolling_shutter_type(::ccl::Camera::ROLLING_SHUTTER_NONE);
+            cam->set_panorama_type(::ccl::Camera::PANORAMA_NONE);
+            cam->set_use_spherical_stereo(false);
+            cam->set_stereo_eye(::ccl::Camera::STEREO_NONE);
+            cam->set_interocular_distance(0.0f);
+            cam->set_convergence_distance(0.0f);
+            cam->set_use_pole_merge(false);
+            cam->set_pole_merge_angle_from(0.0f);
+            cam->set_pole_merge_angle_to(0.0f);
+            cam->set_sensorwidth(36.0f);
+            cam->set_sensorheight(24.0f);
+            cam->set_nearclip(0.1f);
+            cam->set_farclip(100.0f);
+            cam->set_aperturesize(0.0f);
+            cam->set_blades(0);
+            cam->set_bladesrotation(0.0f);
+            cam->set_focaldistance(10.0f);
+            cam->set_viewplane();
         }
 
-        // Create geometry from patterns
-        for (const auto& pattern : patterns_) {
-            createGeometryFromPattern(pattern);
-        }
+        // Configure render settings
+        cycles_scene_->params.samples = params.samples;
+        cycles_scene_->params.use_denoising = params.use_denoising;
+        cycles_scene_->params.background = true;
+        cycles_scene_->params.threads = 0; // Auto-detect thread count
+        cycles_scene_->params.pixel_size = 1;
+        cycles_scene_->params.progressive = true;
+        cycles_scene_->params.progressive_refine = true;
+        cycles_scene_->params.progressive_update_timeout = 1.0;
+        cycles_scene_->params.tile_size = ::ccl::TileManager::get_tile_size();
+        cycles_scene_->params.start_resolution = 1;
+        cycles_scene_->params.pixel_filter = ::ccl::FILTER_GAUSSIAN;
+        cycles_scene_->params.filter_width = 1.5f;
+        cycles_scene_->params.film_exposure = 1.0f;
+        cycles_scene_->params.film_transparent = false;
+        cycles_scene_->params.film_transparent_glass = false;
+        cycles_scene_->params.film_transparent_roughness = 0.1f;
+        cycles_scene_->params.denoising_radius = 8;
+        cycles_scene_->params.denoising_strength = 0.5f;
+        cycles_scene_->params.denoising_feature_strength = 0.5f;
+        cycles_scene_->params.denoising_relative_pca = false;
+        cycles_scene_->params.denoising_store_passes = false;
+        cycles_scene_->params.denoising_diffuse = true;
+        cycles_scene_->params.denoising_glossy = true;
+        cycles_scene_->params.denoising_transmission = true;
+        cycles_scene_->params.denoising_clean_aux = true;
+        cycles_scene_->params.denoising_prefilter = ::ccl::DENOISER_PREFILTER_FAST;
+        cycles_scene_->params.denoising_use_passes = false;
+        cycles_scene_->params.denoising_start_sample = 0;
+        cycles_scene_->params.denoising_type = ::ccl::DENOISER_NLM;
+        cycles_scene_->params.use_bvh_spatial_split = true;
+        cycles_scene_->params.use_bvh_unaligned_nodes = true;
+        cycles_scene_->params.num_bvh_time_steps = 0;
+        cycles_scene_->params.bvh_type = ::ccl::BVH_TYPE_DYNAMIC;
+        cycles_scene_->params.bvh_layout = ::ccl::BVH_LAYOUT_BVH2;
+        cycles_scene_->params.use_qbvh = true;
 #endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {

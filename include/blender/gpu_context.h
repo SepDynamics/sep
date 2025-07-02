@@ -16,11 +16,27 @@ struct GPUBuffer {
 // Minimal implementation of GPU context for pattern_processor.cpp
 class GPUContext {
 public:
-    GPUContext() = default;
-    virtual ~GPUContext() = default;
+    GPUContext();
+    virtual ~GPUContext();
 
-    // The only method actually used by pattern_processor.cpp
-    virtual SEPResult init(int device_index  = -1) { return SEPResult::SUCCESS; }
+    // Initialize the context on the given device index. Passing -1 selects the
+    // default device.
+    virtual SEPResult init(int device_index = -1);
+
+    // Query and select devices
+    virtual SEPResult getDeviceCount(int& count) const;
+    virtual SEPResult selectDevice(int device_index);
+
+    // Error state helpers
+    bool hasError() const { return has_error_; }
+    const ::sep::shim::string& getLastError() const { return last_error_; }
+    void clearError() { has_error_ = false; last_error_.clear(); }
+
+    // Buffer helpers
+    virtual GpuBufferPtr createBuffer(size_t size, const void* data = nullptr);
+    virtual void deleteBuffer(GPUBuffer* buffer);
+    virtual void* mapBuffer(GPUBuffer* buffer);
+    virtual void unmapBuffer(GPUBuffer* buffer);
 
     // Simplified shader handling for tests
     SEPResult loadComputeShader(const ::sep::shim::string& path ) {
@@ -31,12 +47,11 @@ public:
     SEPResult reloadComputeShaderIfNeeded() { return SEPResult::SUCCESS; }
     uint32_t getShaderRevision() const { return shader_revision_; }
 
-    // These methods are included for API compatibility with the original implementation
-    virtual void deleteBuffer(GPUBuffer* buffer ) {}
-    virtual void* mapBuffer(GPUBuffer* buffer ) { return nullptr; }
-    virtual void unmapBuffer(GPUBuffer* buffer ) {}
-
 private:
+    int device_index_{-1};
+    bool initialized_{false};
+    bool has_error_{false};
+    ::sep::shim::string last_error_{};
     uint32_t shader_revision_{0};
 };
 

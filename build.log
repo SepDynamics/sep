@@ -15,8 +15,117 @@ Running CMake configuration...
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
 -- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
-CMake Error at CMakeLists.txt:19 (message):
-  http_parser library not found
+CMake Warning at CMakeLists.txt:26 (message):
+  http_parser library not found; using bundled header-only implementation
 
 
--- Configuring incomplete, errors occurred!
+-- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
+-- Found hiredis: /usr/lib64/libhiredis.so
+-- Found hiredis headers: /usr/include/hiredis
+-- Found PkgConfig: /usr/bin/pkg-config (found version "2.3.0")
+-- Checking for module 'libpipewire-0.3'
+--   Found libpipewire-0.3, version 1.4.6
+-- Checking for module 'fftw3f'
+--   Found fftw3f, version 3.3.10
+-- Using PipeWire at: pipewire-0.3
+-- Using FFTW at: fftw3f
+-- Found Embree: /usr/lib64/libembree4.so
+CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (GLOG) does
+  not match the name of the calling package (Glog).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  extern/cycles/src/cmake/Modules/FindGlog.cmake:194 (find_package_handle_standard_args)
+  src/blender/CMakeLists.txt:8 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found GLOG: /usr/include
+-- Checking for module 'OpenImageIO'
+--   Found OpenImageIO, version 2.5.16.0
+-- Checking for module 'libzstd'
+--   Found libzstd, version 1.5.7
+-- Configuring done (1.4s)
+-- Generating done (0.0s)
+-- Build files have been written to: /sep/cmake-make
+Building SEP Engine...
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+In file included from /sep/include/compat/core.h:8,
+                 from /sep/src/core/engine.cpp:10:
+/sep/include/compat/memory.h:80: error: unterminated #else
+   80 | #if !SEP_CUDA_AVAILABLE
+In file included from /sep/src/core/engine.cpp:18:
+/sep/include/compat/cuda_api.hpp:35:6: error: ‘SEPResult’ in namespace ‘sep::cuda::sep’ does not name a type
+   35 | sep::SEPResult sep_cuda_init(int device_id);
+      |      ^~~~~~~~~
+/sep/include/compat/cuda_api.hpp:36:6: error: ‘SEPResult’ in namespace ‘sep::cuda::sep’ does not name a type
+   36 | sep::SEPResult sep_cuda_cleanup(void);
+      |      ^~~~~~~~~
+/sep/include/compat/cuda_api.hpp:38:6: error: ‘SEPResult’ in namespace ‘sep::cuda::sep’ does not name a type
+   38 | sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32_t* expectations,
+      |      ^~~~~~~~~
+/sep/include/compat/cuda_api.hpp:42:6: error: ‘SEPResult’ in namespace ‘sep::cuda::sep’ does not name a type
+   42 | sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chunks,
+      |      ^~~~~~~~~
+In file included from /sep/include/memory/types.h:14,
+                 from /sep/include/core/logging.h:4,
+                 from /sep/src/core/engine.cpp:19:
+/usr/include/c++/14/optional:95:3: error: expected class-name before ‘{’ token
+   95 |   {
+      |   ^
+/usr/include/c++/14/optional:100:17: error: ‘const char* sep::cuda::std::bad_optional_access::what() const’ marked ‘override’, but does not override
+  100 |     const char* what() const noexcept override
+      |                 ^~~~
+/usr/include/c++/14/optional:114:28: error: ‘remove_const_t’ does not name a type
+  114 |       using _Stored_type = remove_const_t<_Tp>;
+      |                            ^~~~~~~~~~~~~~
+/usr/include/c++/14/optional:121:42: error: expected ‘)’ before ‘__tag’
+  121 |         _Optional_payload_base(in_place_t __tag, _Args&&... __args)
+      |                               ~          ^~~~~~
+      |                                          )
+/usr/include/c++/14/optional:128:53: error: expected ‘)’ before ‘<’ token
+  128 |         _Optional_payload_base(std::initializer_list<_Up> __il,
+      |                               ~                     ^
+      |                                                     )
+/usr/include/c++/14/optional:202:37: error: ‘is_trivially_destructible_v’ was not declared in this scope; did you mean ‘std::is_trivially_destructible_v<_Tp>’?
+  202 |       template<typename _Up, bool = is_trivially_destructible_v<_Up>>
+      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                     std::is_trivially_destructible_v<_Tp>
+In file included from /usr/include/c++/14/bits/char_traits.h:50,
+                 from /usr/include/c++/14/string:42,
+                 from /sep/include/api/types.h:3,
+                 from /sep/src/core/engine.cpp:5:
+/usr/include/c++/14/type_traits:3462:25: note: ‘std::is_trivially_destructible_v<_Tp>’ declared here
+ 3462 |   inline constexpr bool is_trivially_destructible_v =
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/14/optional:202:68: error: expected primary-expression before ‘>>’ token
+  202 |       template<typename _Up, bool = is_trivially_destructible_v<_Up>>
+      |                                                                    ^~
+/usr/include/c++/14/optional:202:68: error: expected ‘>’ before ‘>>’ token
+/usr/include/c++/14/optional:209:32: error: expected ‘)’ before ‘,’ token
+  209 |             _Storage(in_place_t, _Args&&... __args)
+      |                     ~          ^
+      |                                )
+/usr/include/c++/14/optional:215:43: error: expected ‘)’ before ‘<’ token
+  215 |             _Storage(std::initializer_list<_Vp> __il, _Args&&... __args)
+      |                     ~                     ^
+      |                                           )
+/usr/include/c++/14/optional:239:32: error: expected ‘)’ before ‘,’ token
+  239 |             _Storage(in_place_t, _Args&&... __args)
+      |                     ~          ^
+      |                                )
+/usr/include/c++/14/optional:245:43: error: expected ‘)’ before ‘<’ token
+  245 |             _Storage(std::initializer_list<_Vp> __il, _Args&&... __args)
+      |                     ~                     ^
+      |                                           )
+/usr/include/c++/14/optional:265:16: error: ‘_Stored_type’ was not declared in this scope
+  265 |       _Storage<_Stored_type> _M_payload;
+      |                ^~~~~~~~~~~~

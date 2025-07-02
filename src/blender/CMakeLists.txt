@@ -108,9 +108,12 @@ target_link_libraries(sep_blender PRIVATE
     glog
     gflags
     embree4
-    openpgl_stub
+    cycles_scene
+    cycles_graph
+    cycles_kernel_osl
     extern_cuew
     extern_hipew
+    ${OSL_LIBRARIES}
 )
 
 

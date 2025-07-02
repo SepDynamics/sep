@@ -99,6 +99,7 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
     try {
         width_ = params.width;
         height_ = params.height;
+        last_params_ = params;
         if (!cycles_scene_) {
             return SEPResult::NOT_INITIALIZED;
         }

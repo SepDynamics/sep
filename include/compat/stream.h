@@ -5,11 +5,7 @@
 #include "compat/macros.h"
 
 // Then include CUDA runtime compatibility header for GCC 14 fixes
-#if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
-#else
-#include "compat/cuda_runtime.h"
-#endif
 
 // Standard includes
 #include <memory>

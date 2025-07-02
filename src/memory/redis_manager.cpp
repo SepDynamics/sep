@@ -4,9 +4,7 @@
 #include <mutex>
 
 #include "compat/cuda_common.h"
-#if !SEP_CUDA_AVAILABLE
-#include "compat/cuda_runtime.h"
-#endif
+#include <cuda_runtime.h>
 #include <cstdint>
 #if __has_include(<hiredis/hiredis.h>)
 #    include <hiredis/hiredis.h>

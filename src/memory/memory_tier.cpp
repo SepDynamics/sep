@@ -8,7 +8,7 @@
 
 // External libraries
 #include "compat/cuda_common.h"
-#include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpy
+#include <cuda_runtime.h>  // for sep::cuda::cudaMemcpy
 #include "compat/macros.h"
 
 // Project headers
@@ -38,13 +38,10 @@ MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nul
     if (config.type == TierType::HOST) {
         memory_pool_ = std::malloc(config.size);
     } else {
-#if SEP_CUDA_AVAILABLE
         cudaError_t err = sep::cuda::cudaMallocManaged(&memory_pool_, config.size);
         if (err != cudaSuccess)
             memory_pool_ = nullptr;
-#else
-        memory_pool_ = std::malloc(config.size);
-#endif
+
     }
     if (!memory_pool_) {
 #if SEP_HAS_EXCEPTIONS
@@ -79,11 +76,8 @@ MemoryTier::~MemoryTier() {
         if (config_.type == TierType::HOST) {
             std::free(memory_pool_);
         } else {
-#if SEP_CUDA_AVAILABLE
             sep::cuda::cudaFree(memory_pool_);
-#else
-            std::free(memory_pool_);
-#endif
+
         }
         memory_pool_ = nullptr;
     }
@@ -159,16 +153,13 @@ sep::SEPResult MemoryTier::defragment() {
             if (block.offset != current_offset) {
                 // Move memory to new position
                 void* new_location = static_cast<char*>(memory_pool_) + current_offset;
-#if SEP_CUDA_AVAILABLE
                 cudaError_t err = sep::cuda::cudaMemcpy(new_location, block.ptr, block.size, cudaMemcpyDefault);
                 if (err != cudaSuccess) {
                     if (logger)
                         LOG_ERROR(logger, "Defragment cudaMemcpy failed: {}", sep::cuda::cudaGetErrorString(err));
                     return sep::SEPResult::CUDA_ERROR;
                 }
-#else
-                std::memmove(new_location, block.ptr, block.size);
-#endif
+
                 block.ptr = new_location;
                 block.offset = current_offset;
             }
@@ -314,13 +305,10 @@ bool MemoryTier::resize(std::size_t new_size) {
     if (config_.type == TierType::HOST) {
         new_pool = std::malloc(new_size);
     } else {
-#if SEP_CUDA_AVAILABLE
         cudaError_t err = sep::cuda::cudaMallocManaged(&new_pool, new_size);
         if (err != cudaSuccess)
             new_pool = nullptr;
-#else
-        new_pool = std::malloc(new_size);
-#endif
+
     }
     if (!new_pool) {
         sep::metrics::allocationFailures().value++;
@@ -336,11 +324,8 @@ bool MemoryTier::resize(std::size_t new_size) {
             if (config_.type == TierType::HOST)
                 std::free(new_pool);
             else {
-#if SEP_CUDA_AVAILABLE
                 sep::cuda::cudaFree(new_pool);
-#else
-                std::free(new_pool);
-#endif
+
             }
             sep::metrics::allocationFailures().value++;
             return false;
@@ -371,11 +356,8 @@ bool MemoryTier::resize(std::size_t new_size) {
         if (config_.type == TierType::HOST)
             std::free(memory_pool_);
         else {
-#if SEP_CUDA_AVAILABLE
             sep::cuda::cudaFree(memory_pool_);
-#else
-            std::free(memory_pool_);
-#endif
+
         }
     }
     memory_pool_ = new_pool;

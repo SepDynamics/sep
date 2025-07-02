@@ -2,7 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
-#include "compat/cuda_runtime.h"
+#include <cuda_runtime.h>
 #include "core/common.h"  // for sep::SEPResult
 
 namespace sep::cuda {

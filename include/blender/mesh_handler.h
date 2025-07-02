@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "compat/shim.h"
+#include <vector>
 
 #include "blender/blender_types.h"
 #include "blender/pattern_common.h"

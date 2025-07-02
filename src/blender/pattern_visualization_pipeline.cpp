@@ -3,6 +3,7 @@
 #include "core/common.h"  // defines sep::SEPResult
 #include <algorithm>
 #include <numeric>
+#include <vector>
 
 namespace sep {
 namespace blender {

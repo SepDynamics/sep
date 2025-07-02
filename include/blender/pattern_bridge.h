@@ -6,6 +6,7 @@
 #include "blender/base_types.h"
 #include "blender/blender_types.h"  // If still needed
 #include "blender/gpu_context.h"           // For GPUContext
+#include <vector>
 #include "blender/pattern_common.h"  // For ObjectState (assuming)
 #include "blender/bridge.h"
 #include "quantum/data.hpp"

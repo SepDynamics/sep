@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include "compat/shim.h"
+#include <vector>
 
 #include "core/common.h"
 
@@ -60,8 +61,8 @@ class Engine {
 
   void process_batch(const std::vector<::sep::PinState> &inputs,
                      std::uint64_t tick,
-                     ::sep::quantum::QBSAResult &qbsa_result,
-                     ::sep::cuda::QSHResult &qsh_result);
+                      ::sep::quantum::QBSAResult &qbsa_result,
+                      ::sep::cuda::QSHResult &qsh_result);
 
   // DAG accessors
   struct StateNode {

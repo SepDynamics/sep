@@ -45,6 +45,9 @@ find_package(OpenVDB REQUIRED)
 find_package(OpenPGL REQUIRED)
 find_package(OpenColorIO REQUIRED)
 find_package(Imath REQUIRED)
+find_package(TBB REQUIRED)
+find_package(OpenImageIO REQUIRED)
+find_package(embree REQUIRED)
 find_package(OSL REQUIRED)
 find_package(Alembic REQUIRED)
 
@@ -104,6 +107,8 @@ target_link_libraries(sep_engine
         openvdb
         OpenColorIO
         Imath
+        tbb
+        embree
         ${OSL_LIBRARIES}
         ${ALEMBIC_LIBRARIES}
 )

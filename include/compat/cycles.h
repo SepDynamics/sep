@@ -180,6 +180,29 @@ namespace ccl {
         int width = 0;
         int height = 0;
     };
+
+    /* Minimal profiler and statistics stubs used when Cycles is not available. */
+    class Profiler {
+    public:
+        Profiler() = default;
+        ~Profiler() = default;
+
+        void reset(int /*num_shaders*/, int /*num_objects*/) {}
+        void start() {}
+        void stop() {}
+    };
+
+    class Stats {
+    public:
+        size_t mem_used = 0;
+        size_t mem_peak = 0;
+
+        Stats() = default;
+        explicit Stats(int /*static_init*/) {}
+
+        void mem_alloc(size_t /*size*/) {}
+        void mem_free(size_t /*size*/) {}
+    };
 }
 #endif // SEP_HAS_CYCLES
 

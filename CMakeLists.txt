@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-# Enable CUDA as a first-class language so that .cu files are compiled with
-# nvcc rather than being treated as plain C++ sources. This ensures the CUDA
-# compatibility library (sep_compat) correctly links device code.
-project(sep_engine VERSION 1.0.0 LANGUAGES C CXX CUDA)
+project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Enable CUDA
 set(CMAKE_CUDA_STANDARD 17)

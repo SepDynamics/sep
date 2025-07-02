@@ -16,7 +16,7 @@
 #include "compat/cuda_api.hpp"
 #include "core/logging.h"  // This is actually the logging manager
 #include "memory/memory_tier_manager.hpp"
-#if SEP_HAS_BLENDER
+#ifdef SEP_HAS_BLENDER
 #include "blender/pattern_bridge.h"
 #include "blender/types.h" // For SEPBlenderBridge definition
 #endif
@@ -89,7 +89,7 @@ bool Engine::init(const sep::config::APIConfig& config) {
          fflush(stdout);
     }
 
-#if SEP_HAS_BLENDER
+#ifdef SEP_HAS_BLENDER
     printf("DEBUG: Engine::init - Initializing Blender bridge\n");
      fflush(stdout);
 

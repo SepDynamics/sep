@@ -39,6 +39,8 @@ namespace crow {
                 socket_.get_executor().context());
         }
 
+        asio::io_context& get_io_context() { return *io_ctx_; }
+
         tcp::socket& raw_socket() { return socket_; }
         tcp::socket& socket() { return socket_; }
         tcp::endpoint remote_endpoint() {
@@ -77,7 +79,7 @@ namespace crow {
 
         template <typename F>
         void start(F f) {
-            f(error_code());
+            f(error_code{});
         }
 
         tcp::socket socket_;
@@ -102,7 +104,9 @@ namespace crow {
 
         error_code close() {
             error_code ec;
-            if (is_open()) {
+            if (!is_open()) {
+                ec = boost::asio::error::not_connected;
+            } else {
                 raw_socket().close(ec);
             }
             return ec;

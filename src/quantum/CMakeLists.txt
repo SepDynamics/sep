@@ -35,7 +35,7 @@ target_include_directories(sep_quantum PUBLIC
 )
 
 # Enable CUDA when available for quantum operations
-target_compile_definitions(sep_quantum PRIVATE SEP_HAS_CUDA=${SEP_HAS_CUDA})
+target_compile_definitions(sep_quantum PRIVATE SEP_HAS_CUDA=1)
 
 # Set library properties
 set_target_properties(sep_quantum PROPERTIES

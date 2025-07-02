@@ -23,51 +23,37 @@ if(WITH_OPENSUBDIV)
     set(WITH_CYCLES_OPENSUBDIV ${WITH_OPENSUBDIV})
 endif()
 
-if(SEP_HAS_CUDA)
-    # Build full CUDA implementation when the toolkit is available
-    find_package(CUDAToolkit REQUIRED)
+# Build full CUDA implementation
+find_package(CUDAToolkit REQUIRED)
 
-    add_library(sep_compat STATIC
-        cuda_api.cu
-        core.cu
-        pattern_kernels.cu
-        kernels.cu
-        quantum_kernels.cu
-        utils.cu
-        event.cu
-        stream.cpp
-        raii.cpp
-    )
+add_library(sep_compat STATIC
+    cuda_api.cu
+    core.cu
+    pattern_kernels.cu
+    kernels.cu
+    quantum_kernels.cu
+    utils.cu
+    event.cu
+    stream.cpp
+    raii.cpp
+)
 
-    set_source_files_properties(
-        cuda_api.cu core.cu pattern_kernels.cu kernels.cu quantum_kernels.cu utils.cu event.cu
-        PROPERTIES
-        COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
-    )
+set_source_files_properties(
+    cuda_api.cu core.cu pattern_kernels.cu kernels.cu quantum_kernels.cu utils.cu event.cu
+    PROPERTIES
+    COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
+)
 
-    set_target_properties(sep_compat PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
-        CUDA_RESOLVE_DEVICE_SYMBOLS ON
-        POSITION_INDEPENDENT_CODE ON
-        CUDA_ARCHITECTURES native
-    )
+set_target_properties(sep_compat PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    POSITION_INDEPENDENT_CODE ON
+    CUDA_ARCHITECTURES native
+)
 
-    set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)
+set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)
 
-    target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=1)
-else()
-    # CPU fallback when CUDA is not available
-    add_library(sep_compat STATIC
-        stream.cpp
-        raii.cpp
-    )
-
-    # event.cu depends on CUDA headers; skip when CUDA is unavailable
-
-    set_target_properties(sep_compat PROPERTIES
-        POSITION_INDEPENDENT_CODE ON
-    )
-endif()
+target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=1)
 
 # Include directories
 target_include_directories(sep_compat
@@ -83,6 +69,6 @@ target_include_directories(sep_compat
 target_link_libraries(sep_compat
     PUBLIC
         sep_core
-        $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cudart,>
-        $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cuda_driver,>
+        CUDA::cudart
+        CUDA::cuda_driver
 )

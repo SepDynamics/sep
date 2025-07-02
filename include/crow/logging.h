@@ -5,6 +5,7 @@
 
 // Use relative path from project root
 #include "compat/shim.h"
+#include "memory/spdlog_isolation.h"
 #include <sstream>
 
 namespace crow {
@@ -18,33 +19,66 @@ namespace crow {
 
     class LogHandler {
     public:
+        explicit LogHandler(spdlog::level::level_enum level,
+                            std::shared_ptr<spdlog::logger> logger =
+                                spdlog::default_logger())
+            : level_(level), logger_(std::move(logger)) {}
+
         void operator()(const sep::shim::string& message) {
-            // In a real implementation, this would log to stderr
-            // For now, we'll just provide a stub
+            if (logger_) {
+                logger_->log(level_, message.c_str());
+            } else {
+                spdlog::log(level_, message.c_str());
+            }
         }
+
+    private:
+        spdlog::level::level_enum           level_;
+        std::shared_ptr<spdlog::logger> logger_;
     };
 
     class Logger {
     public:
-        Logger(LogLevel level) : level_(level) {}
+        explicit Logger(LogLevel level,
+                        std::shared_ptr<spdlog::logger> logger =
+                            spdlog::default_logger())
+            : level_(level), logger_(std::move(logger)) {}
 
         template <typename T>
         Logger& operator<<(T const& value) {
-            // In a real implementation, this would append to a message
-            // For now, we'll just provide a stub
+            message_ << value;
             return *this;
         }
 
         ~Logger() {
-            // In a real implementation, this would flush the log message
-            // For now, we'll just provide a stub
+            if (logger_) {
+                logger_->log(toSpd(level_), message_.str());
+            } else {
+                spdlog::log(toSpd(level_), message_.str());
+            }
         }
 
     private:
-        LogLevel level_;
-        // Using a simple string instead of stringstream to avoid template issues
-        sep::shim::string message_;
-        LogHandler handler_;
+        static spdlog::level::level_enum toSpd(LogLevel level) {
+            switch (level) {
+            case LogLevel::Debug:
+                return spdlog::level::debug;
+            case LogLevel::Info:
+                return spdlog::level::info;
+            case LogLevel::Warning:
+                return spdlog::level::warn;
+            case LogLevel::Error:
+                return spdlog::level::err;
+            case LogLevel::Critical:
+                return spdlog::level::critical;
+            default:
+                return spdlog::level::info;
+            }
+        }
+
+        LogLevel                                level_;
+        std::shared_ptr<spdlog::logger>         logger_;
+        std::ostringstream                      message_;
     };
 }
 

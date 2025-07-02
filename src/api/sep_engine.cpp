@@ -25,6 +25,7 @@
 #include "core/logging.h" // Include logging header first
 #include "quantum/types.h" // For quantum::Pattern::generation 
 #include "compat/math_common.h" // Include math common for sqrt_safe
+#include "../../_sep/testbed/context_algorithms.hpp"
 
 using json = nlohmann::json;
 
@@ -262,16 +263,20 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
     }
     impl_->health_metrics.totalRequests++;
 
-        // Mock context validation
-        bool valid = request_data.contains("contexts") && request_data["contexts"].is_array();
+    if (!request_data.contains("contexts") || !request_data["contexts"].is_array()) {
+        return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
+    }
 
-        impl_->health_metrics.successfulRequests++;
+    auto report = sep::testbed::validate_contexts(request_data["contexts"]);
 
-        json result;
-        result["success"]       = true; 
-        result["valid"]         = valid;
-        result["context_count"] = valid ? request_data["contexts"].size() : 0;
-        return result;
+    impl_->health_metrics.successfulRequests++;
+
+    json result;
+    result["success"]       = true;
+    result["valid"]         = report.overall_valid;
+    result["context_count"] = request_data["contexts"].size();
+    result["invalid_indices"] = report.invalid_indices;
+    return result;
 }
 
 nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
@@ -389,22 +394,58 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
 
 nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
 {
-    (void)request_data;  // Mark parameter as used
     if (!impl_->initialized) {
-        json result; 
-        result["success"] = false; 
+        json result;
+        result["success"] = false;
         result["error"]   = "Engine not initialized";
         return result;
     }
-        // Mock context blending
-        json blend_result;
-        blend_result["blended_context_id"] = generateId("blend");
-        blend_result["coherence"]          = 0.75;
+    if (!request_data.contains("contexts") || !request_data["contexts"].is_array()) {
+        return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
+    }
 
-        json result;
-        result["success"] = true; 
-        result["result"]  = blend_result;
-        return result;
+    std::vector<std::vector<double>> embeddings;
+    for (const auto& c : request_data["contexts"]) {
+        if (!c.is_array()) {
+            return makeErrorResponse(api::ErrorCode::InvalidArgument, "Context must be an array of numbers");
+        }
+        std::vector<double> vec;
+        for (const auto& v : c) {
+            if (!v.is_number()) {
+                return makeErrorResponse(api::ErrorCode::InvalidArgument, "Context contains non-numeric value");
+            }
+            vec.push_back(v.get<double>());
+        }
+        embeddings.push_back(std::move(vec));
+    }
+
+    std::vector<double> weights;
+    if (request_data.contains("weights")) {
+        if (!request_data["weights"].is_array()) {
+            return makeErrorResponse(api::ErrorCode::InvalidArgument, "Weights must be an array");
+        }
+        for (const auto& w : request_data["weights"]) {
+            if (!w.is_number()) {
+                return makeErrorResponse(api::ErrorCode::InvalidArgument, "Weights contain non-numeric value");
+            }
+            weights.push_back(w.get<double>());
+        }
+    }
+
+    auto blend = sep::testbed::blend_embeddings(embeddings, weights);
+    if (!blend.success) {
+        return makeErrorResponse(api::ErrorCode::InvalidArgument, blend.error);
+    }
+
+    json blend_result;
+    blend_result["blended_context_id"] = generateId("blend");
+    blend_result["coherence"]          = blend.coherence;
+    blend_result["embedding"]          = blend.blended;
+
+    json result;
+    result["success"] = true;
+    result["result"]  = blend_result;
+    return result;
 }
 
 nlohmann::json SepEngine::getHealthStatus()

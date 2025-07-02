@@ -1,1 +1,3 @@
 add_library(openpgl_stub STATIC openpgl_stub.cpp)
+target_include_directories(openpgl_stub PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set_target_properties(openpgl_stub PROPERTIES POSITION_INDEPENDENT_CODE ON)

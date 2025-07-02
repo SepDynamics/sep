@@ -34,8 +34,7 @@ namespace crow
               io_service_(io_service), timer_(io_service_)
             {
                 timer_.expires_after(std::chrono::seconds(1));
-                timer_.async_wait(
-                  std::bind(&task_timer::tick_handler, this, std::placeholders::_1));
+                timer_.async_wait([this](const error_code& e) { tick_handler(e); });
             }
 
             ~task_timer() { timer_.cancel(); }
@@ -112,15 +111,14 @@ namespace crow
                 if (tasks_.empty()) highest_id_ = 0;
             }
 
-            void tick_handler(const asio::error_code& ec)
+            void tick_handler(const error_code& ec)
             {
                 if (ec) return;
 
                 process_tasks();
 
                 timer_.expires_after(std::chrono::seconds(1));
-                timer_.async_wait(
-                  std::bind(&task_timer::tick_handler, this, std::placeholders::_1));
+                timer_.async_wait([this](const error_code& e) { tick_handler(e); });
             }
 
         private:

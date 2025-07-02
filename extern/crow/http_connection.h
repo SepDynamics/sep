@@ -1,12 +1,6 @@
 #pragma once
 
-#ifdef CROW_USE_BOOST
 #include <boost/asio.hpp>
-#else
-#ifndef ASIO_STANDALONE
-#define ASIO_STANDALONE
-#endif
-#include <asio.hpp>
 #include "crow/asio_isolation.h"
 #endif
 

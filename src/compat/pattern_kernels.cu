@@ -133,10 +133,25 @@ __global__ void processPatternKernel(PatternData* patterns, PatternData* results
 extern "C" cudaError_t launchProcessPatternKernel(PatternData* patterns, PatternData* results, PatternConfig config,
                                                    size_t patternCount, const PatternData* previousPatterns,
                                                    cudaStream_t stream) {
-    dim3 blockSize(constants::get_default_block_size());
+    dim3 blockSize(sep::cuda::constants::get_default_block_size());
     dim3 gridSize((patternCount + BLOCK_SIZE - 1) / BLOCK_SIZE);
 
     processPatternKernel<<<gridSize, blockSize, 0, stream>>>(patterns, results, config, patternCount, previousPatterns);
+
+    return cudaGetLastError();
+}
+
+cudaError_t ::sep::cuda::launch_pattern_processing(pattern::PatternData* patterns,
+                                                 pattern::PatternData* results,
+                                                 const pattern::PatternConfig& config,
+                                                 size_t pattern_count,
+                                                 const pattern::PatternData* previous_patterns,
+                                                 cudaStream_t stream) {
+    dim3 block_size(sep::cuda::constants::get_default_block_size());
+    dim3 grid_size((pattern_count + block_size.x - 1) / block_size.x);
+
+    processPatternKernel<<<grid_size, block_size, 0, stream>>>(
+        patterns, results, config, pattern_count, previous_patterns);
 
     return cudaGetLastError();
 }

@@ -94,8 +94,5 @@ target_link_libraries(sep_engine
         glog
         gflags
         embree4
-        openpgl_stub
         ${HTTP_PARSER_LIBRARY}
-        cuew_stub
-        openpgl_stub
 )

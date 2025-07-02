@@ -1,15 +1,7 @@
 #pragma once
 
-#ifdef CROW_USE_BOOST
 #include <boost/asio.hpp>
 #include <boost/asio/basic_waitable_timer.hpp>
-#else
-#ifndef ASIO_STANDALONE
-#define ASIO_STANDALONE
-#endif
-#include <asio.hpp>
-#include <asio/basic_waitable_timer.hpp>
-#endif
 
 #include <chrono>
 #include <functional>

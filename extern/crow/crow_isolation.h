@@ -47,7 +47,7 @@ extern const char* last_error;
 // Check for CUDA compilation or absence of the full Crow headers
 // We also fall back to the stubs when RTTI is disabled or <crow/app.h> cannot be found
 #if defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION) || defined(CROW_DISABLE_RTTI) \
-    || !(__has_include(<crow/app.h>) && __has_include(<asio.hpp>))
+    || !(__has_include(<crow/app.h>) && __has_include(<boost/asio.hpp>))
 // When compiling with CUDA or Crow is unavailable, provide stub implementations
 #    ifndef SEP_FULL_CROW_AVAILABLE
 #        define SEP_FULL_CROW_AVAILABLE 0

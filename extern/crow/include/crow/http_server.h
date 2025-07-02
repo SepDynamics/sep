@@ -1,12 +1,9 @@
 #pragma once
 
 #include <chrono>
-#ifndef ASIO_STANDALONE
-#define ASIO_STANDALONE
-#endif
-#include <asio.hpp>
+#include <boost/asio.hpp>
 #ifdef CROW_ENABLE_SSL
-#include <asio/ssl.hpp>
+#include <boost/asio/ssl.hpp>
 #endif
 #include <cstdint>
 #include <atomic>

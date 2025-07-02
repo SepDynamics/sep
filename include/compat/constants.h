@@ -14,6 +14,8 @@ namespace constants {
 inline constexpr std::uint32_t get_default_block_size() {
     return PATTERN_BLOCK_SIZE;
 }
+inline constexpr std::uint32_t BITFIELD_WORDS = 64;
+inline constexpr std::uint32_t SYMMETRY_PAIRS = 32;
 } // namespace constants
 } // namespace cuda
 } // namespace sep

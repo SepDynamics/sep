@@ -86,17 +86,23 @@ cudaError_t cudaGetDeviceCount(int* count);
 cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device);
 cudaError_t cudaGetLastError(void);
 const char* cudaGetErrorString(cudaError_t error);
-cudaError_t cudaStreamCreate(cudaStream_t* stream);
-cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags);
-cudaError_t cudaStreamDestroy(cudaStream_t stream);
-cudaError_t cudaStreamSynchronize(cudaStream_t stream);
-cudaError_t cudaMalloc(void** ptr, size_t size);
-cudaError_t cudaFree(void* ptr);
-cudaError_t cudaMallocHost(void** ptr, size_t size);
-cudaError_t cudaMallocManaged(void** ptr, size_t size);
-cudaError_t cudaMemcpy(void* dst, const void* src, size_t size, int kind);
-cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
-cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
+  cudaError_t cudaStreamCreate(cudaStream_t* stream);
+  cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags);
+  cudaError_t cudaStreamDestroy(cudaStream_t stream);
+  cudaError_t cudaStreamSynchronize(cudaStream_t stream);
+  cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags);
+  cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream);
+  cudaError_t cudaEventCreate(void** event);
+  cudaError_t cudaEventDestroy(cudaEvent_t event);
+  cudaError_t cudaEventSynchronize(cudaEvent_t event);
+  cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end);
+  cudaError_t cudaMalloc(void** ptr, size_t size);
+  cudaError_t cudaFree(void* ptr);
+  cudaError_t cudaMallocHost(void** ptr, size_t size);
+  cudaError_t cudaMallocManaged(void** ptr, size_t size);
+  cudaError_t cudaMemcpy(void* dst, const void* src, size_t size, int kind);
+  cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, int kind, cudaStream_t stream);
+  cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
 
 }  // namespace cuda
 }  // namespace sep

@@ -8,7 +8,7 @@
 // inconsistent checks.
 
 #ifndef SEP_CUDA_AVAILABLE
-#if defined(__CUDACC__) || defined(SEP_USE_CUDA)
+#if defined(__CUDACC__) || defined(SEP_USE_CUDA) || (defined(SEP_HAS_CUDA) && SEP_HAS_CUDA)
 #define SEP_CUDA_AVAILABLE 1
 #else
 #define SEP_CUDA_AVAILABLE 0

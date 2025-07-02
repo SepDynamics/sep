@@ -45,52 +45,52 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 --   Found OpenImageIO, version 2.5.16.0
 -- Checking for module 'libzstd'
 --   Found libzstd, version 1.5.7
--- Configuring done (1.5s)
+-- Configuring done (1.4s)
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  3%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 [ 15%] Linking CXX static library libsep_core.a
 [ 15%] Built target sep_core
-[ 16%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 18%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
 [ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 21%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
 [ 25%] Linking CXX static library libsep_compat.a
 [ 25%] Built target sep_compat
-[ 27%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 28%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 30%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 34%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 36%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 39%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 39%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 43%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 48%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 45%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 46%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 51%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 53%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 31%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 31%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 34%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 34%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 39%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 46%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 48%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 51%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 53%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 56%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 57%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 60%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 57%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 [ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
 [ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
 [ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
@@ -99,122 +99,28 @@ Building SEP Engine...
 [ 68%] Built target sep_blender
 [ 69%] Linking CXX static library libsep_audio.a
 [ 69%] Built target sep_audio
-[ 71%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
 [ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 89%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
 [ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
 [ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-In file included from /sep/extern/crow/include/crow/http_response.h:19,
-                 from /sep/extern/crow/include/crow/routing.h:13,
-                 from /sep/extern/crow/include/crow/app.h:17,
-                 from /sep/include/api/crow_request_adapter.h:5,
-                 from /sep/src/api/crow_request_adapter.cpp:1:
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::close()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   55 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: note: suggested alternatives:
-In file included from /usr/include/c++/14/future:42,
-                 from /sep/extern/crow/include/crow/app.h:7:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-In file included from /sep/extern/crow/include/crow/http_response.h:17:
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-In file included from /usr/include/boost/system/error_code.hpp:13,
-                 from /usr/include/boost/asio/detail/throw_error.hpp:20,
-                 from /usr/include/boost/asio/detail/impl/posix_event.ipp:23,
-                 from /usr/include/boost/asio/detail/posix_event.hpp:172,
-                 from /usr/include/boost/asio/detail/event.hpp:25,
-                 from /usr/include/boost/asio/execution/blocking_adaptation.hpp:19,
-                 from /usr/include/boost/asio/execution.hpp:22,
-                 from /usr/include/boost/asio/any_completion_executor.hpp:22,
-                 from /usr/include/boost/asio.hpp:20,
-                 from /sep/extern/crow/include/crow/http_request.h:3:
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:56:27: error: ‘ec’ was not declared in this scope
-   56 |             socket_.close(ec);
-      |                           ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_readwrite()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   61 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:62:79: error: ‘ec’ was not declared in this scope
-   62 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_both, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_write()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   67 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:68:79: error: ‘ec’ was not declared in this scope
-   68 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_send, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_read()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   73 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:74:82: error: ‘ec’ was not declared in this scope
-   74 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_receive, ec);
-      |                                                                                  ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::start(F)’:
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: error: ‘error_code’ is not a member of ‘crow::asio’
-   80 |             f(asio::error_code());
-      |                     ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-In file included from /sep/extern/crow/include/crow/routing.h:17:
+In file included from /sep/extern/crow/include/crow.h:13,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/src/api/lock_free_rate_limiter.cpp:4:
+/sep/extern/crow/include/crow/task_timer.h:115:43: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  115 |             void tick_handler(const asio::error_code& ec)
+      |                                           ^~~~~~~~~~
+In file included from /sep/extern/crow/include/crow.h:15:
 /sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
 /sep/extern/crow/include/crow/websocket.h:303:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
   303 |                           [this](const asio::error_code& ec, std::size_t
@@ -289,104 +195,171 @@ In file included from /sep/extern/crow/include/crow/routing.h:17:
 /sep/extern/crow/include/crow/websocket.h:643:38: note: to match this ‘(’
   643 |                     asio::async_write(
       |                                      ^
-In file included from /sep/extern/crow/include/crow/http_response.h:19,
-                 from /sep/include/api/auth_middleware.h:7,
-                 from /sep/src/api/auth_middleware.cpp:1:
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::close()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   55 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: note: suggested alternatives:
-In file included from /usr/include/boost/system/detail/error_category.hpp:22,
-                 from /usr/include/boost/system/detail/error_code.hpp:14,
-                 from /usr/include/boost/system/error_code.hpp:13,
-                 from /usr/include/boost/asio/detail/throw_error.hpp:20,
-                 from /usr/include/boost/asio/detail/impl/posix_event.ipp:23,
-                 from /usr/include/boost/asio/detail/posix_event.hpp:172,
-                 from /usr/include/boost/asio/detail/event.hpp:25,
-                 from /usr/include/boost/asio/execution/blocking_adaptation.hpp:19,
-                 from /usr/include/boost/asio/execution.hpp:22,
-                 from /usr/include/boost/asio/any_completion_executor.hpp:22,
-                 from /usr/include/boost/asio.hpp:20,
-                 from /sep/extern/crow/include/crow/http_request.h:3,
-                 from /sep/include/api/auth_middleware.h:6:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:56:27: error: ‘ec’ was not declared in this scope
-   56 |             socket_.close(ec);
-      |                           ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_readwrite()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   61 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:62:79: error: ‘ec’ was not declared in this scope
-   62 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_both, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_write()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   67 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:68:79: error: ‘ec’ was not declared in this scope
-   68 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_send, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_read()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   73 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:74:82: error: ‘ec’ was not declared in this scope
-   74 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_receive, ec);
-      |                                                                                  ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::start(F)’:
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: error: ‘error_code’ is not a member of ‘crow::asio’
-   80 |             f(asio::error_code());
-      |                     ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
+In file included from /sep/extern/crow/include/crow/routing.h:17,
+                 from /sep/extern/crow/include/crow/app.h:17,
+                 from /sep/include/api/crow_request_adapter.h:5,
+                 from /sep/src/api/crow_request_adapter.cpp:1:
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:303:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  303 |                           [this](const asio::error_code& ec, std::size_t
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:362:29: error: expected ‘{’ before ‘;’ token
+  362 |                           });
+      |                             ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:362:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:301:58: note: to match this ‘(’
+  301 |                         adaptor_.socket().async_read_some(
+      |                                                          ^
+/sep/extern/crow/include/crow/websocket.h:371:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  371 |                           [this](const asio::error_code& ec, std::size_t
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘{’ before ‘;’ token
+  400 |                           });
+      |                             ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:369:41: note: to match this ‘(’
+  369 |                         asio::async_read(
+      |                                         ^
+/sep/extern/crow/include/crow/websocket.h:407:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  407 |                           [this](const asio::error_code& ec, std::size_t
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:435:29: error: expected ‘{’ before ‘;’ token
+  435 |                           });
+      |                             ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:435:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:405:41: note: to match this ‘(’
+  405 |                         asio::async_read(
+      |                                         ^
+/sep/extern/crow/include/crow/websocket.h:451:50: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  451 |                               [this](const asio::error_code& ec, std::size_t
+      |                                                  ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:478:33: error: expected ‘{’ before ‘;’ token
+  478 |                               });
+      |                                 ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:478:33: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:449:45: note: to match this ‘(’
+  449 |                             asio::async_read(
+      |                                             ^
+/sep/extern/crow/include/crow/websocket.h:493:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  493 |                           [this](const asio::error_code& ec, std::size_t bytes_transferred) {
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:520:29: error: expected ‘{’ before ‘;’ token
+  520 |                           });
+      |                             ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:520:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:491:58: note: to match this ‘(’
+  491 |                         adaptor_.socket().async_read_some(
+      |                                                          ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_write()’:
+/sep/extern/crow/include/crow/websocket.h:645:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  645 |                       [&, watch](const asio::error_code& ec, std::size_t /*bytes_transferred*/) {
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:663:25: error: expected ‘{’ before ‘;’ token
+  663 |                       });
+      |                         ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_write()’:
+/sep/extern/crow/include/crow/websocket.h:663:25: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:643:38: note: to match this ‘(’
+  643 |                     asio::async_write(
+      |                                      ^
+In file included from /sep/extern/crow/include/crow.h:23:
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::start()’:
+/sep/extern/crow/include/crow/http_connection.h:82:47: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+   82 |             adaptor_.start([self](const asio::error_code& ec) {
+      |                                               ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_connection.h: In lambda function:
+/sep/extern/crow/include/crow/http_connection.h:94:15: error: expected ‘{’ before ‘;’ token
+   94 |             });
+      |               ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::start()’:
+/sep/extern/crow/include/crow/http_connection.h:94:15: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_connection.h:82:27: note: to match this ‘(’
+   82 |             adaptor_.start([self](const asio::error_code& ec) {
+      |                           ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_read()’:
+/sep/extern/crow/include/crow/http_connection.h:469:34: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  469 |               [self](const asio::error_code& ec, std::size_t bytes_transferred) {
+      |                                  ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_connection.h: In lambda function:
+/sep/extern/crow/include/crow/http_connection.h:504:17: error: expected ‘{’ before ‘;’ token
+  504 |               });
+      |                 ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_read()’:
+/sep/extern/crow/include/crow/http_connection.h:504:17: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_connection.h:467:46: note: to match this ‘(’
+  467 |             adaptor_.socket().async_read_some(
+      |                                              ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write()’:
+/sep/extern/crow/include/crow/http_connection.h:512:34: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  512 |               [self](const asio::error_code& ec, std::size_t /*bytes_transferred*/) {
+      |                                  ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_connection.h: In lambda function:
+/sep/extern/crow/include/crow/http_connection.h:537:17: error: expected ‘{’ before ‘;’ token
+  537 |               });
+      |                 ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write()’:
+/sep/extern/crow/include/crow/http_connection.h:537:17: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_connection.h:510:30: note: to match this ‘(’
+  510 |             asio::async_write(
+      |                              ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write_sync(std::vector<boost::asio::const_buffer>&)’:
+/sep/extern/crow/include/crow/http_connection.h:543:57: error: ‘crow::asio::error_code’ has not been declared
+  543 |             asio::write(adaptor_.socket(), buffers, [&](asio::error_code ec, std::size_t) {
+      |                                                         ^~~~
+In file included from /sep/extern/crow/include/crow.h:24:
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::on_tick()’:
+/sep/extern/crow/include/crow/http_server.h:53:55: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+   53 |             tick_timer_.async_wait([this](const asio::error_code& ec) {
+      |                                                       ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_server.h: In lambda function:
+/sep/extern/crow/include/crow/http_server.h:57:15: error: expected ‘{’ before ‘;’ token
+   57 |             });
+      |               ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::on_tick()’:
+/sep/extern/crow/include/crow/http_server.h:57:15: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_server.h:53:35: note: to match this ‘(’
+   53 |             tick_timer_.async_wait([this](const asio::error_code& ec) {
+      |                                   ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
+/sep/extern/crow/include/crow/http_server.h:129:38: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  129 |                   [this](const asio::error_code& ec) {
+      |                                      ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_server.h: In lambda function:
+/sep/extern/crow/include/crow/http_server.h:133:21: error: expected ‘{’ before ‘;’ token
+  133 |                   });
+      |                     ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
+/sep/extern/crow/include/crow/http_server.h:133:21: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_server.h:128:39: note: to match this ‘(’
+  128 |                 tick_timer_.async_wait(
+      |                                       ^
+/sep/extern/crow/include/crow/http_server.h:144:31: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  144 |               [&](const asio::error_code& /*error*/, int /*signal_number*/) {
+      |                               ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_server.h: In lambda function:
+/sep/extern/crow/include/crow/http_server.h:146:17: error: expected ‘{’ before ‘;’ token
+  146 |               });
+      |                 ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
+/sep/extern/crow/include/crow/http_server.h:146:17: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_server.h:143:32: note: to match this ‘(’
+  143 |             signals_.async_wait(
+      |                                ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::do_accept()’:
+/sep/extern/crow/include/crow/http_server.h:228:47: error: ‘crow::asio::error_code’ has not been declared
+  228 |                   [this, p, &is, service_idx](asio::error_code ec) {
+      |                                               ^~~~
 In file included from /sep/extern/crow/include/crow/http_connection.h:15,
                  from /sep/extern/crow/include/crow/http_server.h:15,
                  from /sep/extern/crow/include/crow/app.h:20:
@@ -479,195 +452,16 @@ In file included from /sep/extern/crow/include/crow/http_connection.h:15,
 /sep/extern/crow/include/crow/http_server.h:228:47: error: ‘crow::asio::error_code’ has not been declared
   228 |                   [this, p, &is, service_idx](asio::error_code ec) {
       |                                               ^~~~
-In file included from /sep/extern/crow/include/crow/http_response.h:19,
-                 from /sep/include/api/rate_limit_middleware.h:7,
-                 from /sep/src/api/rate_limit_middleware.cpp:2:
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::close()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   55 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: note: suggested alternatives:
-In file included from /usr/include/boost/system/detail/error_category.hpp:22,
-                 from /usr/include/boost/system/detail/error_code.hpp:14,
-                 from /usr/include/boost/system/error_code.hpp:13,
-                 from /usr/include/boost/asio/detail/throw_error.hpp:20,
-                 from /usr/include/boost/asio/detail/impl/posix_event.ipp:23,
-                 from /usr/include/boost/asio/detail/posix_event.hpp:172,
-                 from /usr/include/boost/asio/detail/event.hpp:25,
-                 from /usr/include/boost/asio/execution/blocking_adaptation.hpp:19,
-                 from /usr/include/boost/asio/execution.hpp:22,
-                 from /usr/include/boost/asio/any_completion_executor.hpp:22,
-                 from /usr/include/boost/asio.hpp:20,
-                 from /sep/extern/crow/include/crow/http_request.h:3,
-                 from /sep/include/api/rate_limit_middleware.h:6:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:56:27: error: ‘ec’ was not declared in this scope
-   56 |             socket_.close(ec);
-      |                           ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_readwrite()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   61 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:62:79: error: ‘ec’ was not declared in this scope
-   62 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_both, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_write()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   67 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:68:79: error: ‘ec’ was not declared in this scope
-   68 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_send, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_read()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   73 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:74:82: error: ‘ec’ was not declared in this scope
-   74 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_receive, ec);
-      |                                                                                  ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::start(F)’:
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: error: ‘error_code’ is not a member of ‘crow::asio’
-   80 |             f(asio::error_code());
-      |                     ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_request.h:16:11: note:   ‘crow::error_code’
-   16 |     using error_code = boost::system::error_code;
-      |           ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-In file included from /sep/extern/crow/include/crow.h:9,
+In file included from /sep/extern/crow/include/crow.h:13,
                  from /sep/include/crow/crow_isolation.h:11,
-                 from /sep/src/api/lock_free_rate_limiter.cpp:4:
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::close()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   55 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: note: suggested alternatives:
-In file included from /usr/include/c++/14/bits/ios_base.h:46,
-                 from /usr/include/c++/14/streambuf:43,
-                 from /usr/include/c++/14/bits/streambuf_iterator.h:35,
-                 from /usr/include/c++/14/iterator:66,
-                 from /sep/extern/nlohmann/json.hpp:28,
-                 from /sep/include/api/types.h:10,
-                 from /sep/include/api/rate_limiter.h:4,
-                 from /sep/include/api/lock_free_rate_limiter.h:6,
-                 from /sep/src/api/lock_free_rate_limiter.cpp:1:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-In file included from /usr/include/boost/system/error_code.hpp:13,
-                 from /usr/include/boost/asio/detail/throw_error.hpp:20,
-                 from /usr/include/boost/asio/detail/impl/posix_event.ipp:23,
-                 from /usr/include/boost/asio/detail/posix_event.hpp:172,
-                 from /usr/include/boost/asio/detail/event.hpp:25,
-                 from /usr/include/boost/asio/execution/blocking_adaptation.hpp:19,
-                 from /usr/include/boost/asio/execution.hpp:22,
-                 from /usr/include/boost/asio/any_completion_executor.hpp:22,
-                 from /usr/include/boost/asio.hpp:20,
-                 from /sep/extern/crow/include/crow/socket_adaptors.h:2:
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:56:27: error: ‘ec’ was not declared in this scope
-   56 |             socket_.close(ec);
-      |                           ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_readwrite()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   61 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:62:79: error: ‘ec’ was not declared in this scope
-   62 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_both, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_write()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   67 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:68:79: error: ‘ec’ was not declared in this scope
-   68 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_send, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_read()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   73 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:74:82: error: ‘ec’ was not declared in this scope
-   74 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_receive, ec);
-      |                                                                                  ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::start(F)’:
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: error: ‘error_code’ is not a member of ‘crow::asio’
-   80 |             f(asio::error_code());
-      |                     ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-In file included from /sep/extern/crow/include/crow.h:13:
-/sep/extern/crow/include/crow/task_timer.h: At global scope:
+                 from /sep/src/api/crow_adapter.cpp:12:
+/sep/extern/crow/include/crow/task_timer.h:115:43: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  115 |             void tick_handler(const asio::error_code& ec)
+      |                                           ^~~~~~~~~~
+In file included from /sep/extern/crow/include/crow.h:13,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/include/api/crow_request.h:8,
+                 from /sep/src/api/rate_limit_middleware.cpp:3:
 /sep/extern/crow/include/crow/task_timer.h:115:43: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
   115 |             void tick_handler(const asio::error_code& ec)
       |                                           ^~~~~~~~~~
@@ -685,6 +479,23 @@ In file included from /sep/extern/crow/include/crow.h:15:
 /sep/extern/crow/include/crow/websocket.h:301:58: note: to match this ‘(’
   301 |                         adaptor_.socket().async_read_some(
       |                                                          ^
+In file included from /sep/extern/crow/include/crow.h:15:
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:303:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  303 |                           [this](const asio::error_code& ec, std::size_t
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:362:29: error: expected ‘{’ before ‘;’ token
+  362 |                           });
+      |                             ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:362:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:301:58: note: to match this ‘(’
+  301 |                         adaptor_.socket().async_read_some(
+      |                                                          ^
+/sep/extern/crow/include/crow/websocket.h:371:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  371 |                           [this](const asio::error_code& ec, std::size_t
+      |                                              ^~~~~~~~~~
 /sep/extern/crow/include/crow/websocket.h:371:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
   371 |                           [this](const asio::error_code& ec, std::size_t
       |                                              ^~~~~~~~~~
@@ -692,8 +503,17 @@ In file included from /sep/extern/crow/include/crow.h:15:
 /sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘{’ before ‘;’ token
   400 |                           });
       |                             ^
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘{’ before ‘;’ token
+  400 |                           });
+      |                             ^
 /sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
 /sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:369:41: note: to match this ‘(’
+  369 |                         asio::async_read(
+      |                                         ^
 /sep/extern/crow/include/crow/websocket.h:369:41: note: to match this ‘(’
   369 |                         asio::async_read(
       |                                         ^
@@ -709,6 +529,30 @@ In file included from /sep/extern/crow/include/crow.h:15:
 /sep/extern/crow/include/crow/websocket.h:405:41: note: to match this ‘(’
   405 |                         asio::async_read(
       |                                         ^
+/sep/extern/crow/include/crow/websocket.h:407:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  407 |                           [this](const asio::error_code& ec, std::size_t
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:435:29: error: expected ‘{’ before ‘;’ token
+  435 |                           });
+      |                             ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:435:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:451:50: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  451 |                               [this](const asio::error_code& ec, std::size_t
+      |                                                  ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h:405:41: note: to match this ‘(’
+  405 |                         asio::async_read(
+      |                                         ^
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:478:33: error: expected ‘{’ before ‘;’ token
+  478 |                               });
+      |                                 ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:478:33: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:449:45: note: to match this ‘(’
+  449 |                             asio::async_read(
+      |                                             ^
 /sep/extern/crow/include/crow/websocket.h:451:50: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
   451 |                               [this](const asio::error_code& ec, std::size_t
       |                                                  ^~~~~~~~~~
@@ -721,6 +565,18 @@ In file included from /sep/extern/crow/include/crow.h:15:
 /sep/extern/crow/include/crow/websocket.h:449:45: note: to match this ‘(’
   449 |                             asio::async_read(
       |                                             ^
+/sep/extern/crow/include/crow/websocket.h:493:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  493 |                           [this](const asio::error_code& ec, std::size_t bytes_transferred) {
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:520:29: error: expected ‘{’ before ‘;’ token
+  520 |                           });
+      |                             ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
+/sep/extern/crow/include/crow/websocket.h:520:29: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:491:58: note: to match this ‘(’
+  491 |                         adaptor_.socket().async_read_some(
+      |                                                          ^
 /sep/extern/crow/include/crow/websocket.h:493:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
   493 |                           [this](const asio::error_code& ec, std::size_t bytes_transferred) {
       |                                              ^~~~~~~~~~
@@ -746,66 +602,19 @@ In file included from /sep/extern/crow/include/crow.h:15:
 /sep/extern/crow/include/crow/websocket.h:643:38: note: to match this ‘(’
   643 |                     asio::async_write(
       |                                      ^
-In file included from /sep/extern/crow/include/crow.h:9,
-                 from /sep/include/crow/crow_isolation.h:11,
-                 from /sep/src/api/crow_adapter.cpp:12:
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::close()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   55 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:55:19: note: suggested alternatives:
-In file included from /usr/include/c++/14/bits/ios_base.h:46,
-                 from /usr/include/c++/14/ios:44,
-                 from /usr/include/c++/14/ostream:40,
-                 from /usr/include/c++/14/iostream:41,
-                 from /sep/extern/crow/include/crow/query_string.h:8,
-                 from /sep/extern/crow/include/crow.h:2:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-In file included from /usr/include/boost/system/error_code.hpp:13,
-                 from /usr/include/boost/asio/detail/throw_error.hpp:20,
-                 from /usr/include/boost/asio/detail/impl/posix_event.ipp:23,
-                 from /usr/include/boost/asio/detail/posix_event.hpp:172,
-                 from /usr/include/boost/asio/detail/event.hpp:25,
-                 from /usr/include/boost/asio/execution/blocking_adaptation.hpp:19,
-                 from /usr/include/boost/asio/execution.hpp:22,
-                 from /usr/include/boost/asio/any_completion_executor.hpp:22,
-                 from /usr/include/boost/asio.hpp:20,
-                 from /sep/extern/crow/include/crow/socket_adaptors.h:2:
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:56:27: error: ‘ec’ was not declared in this scope
-   56 |             socket_.close(ec);
-      |                           ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_readwrite()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   61 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:61:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:62:79: error: ‘ec’ was not declared in this scope
-   62 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_both, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_write()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   67 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:67:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
-make[2]: *** [src/api/CMakeFiles/sep_api.dir/build.make:205: src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_write()’:
+/sep/extern/crow/include/crow/websocket.h:645:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  645 |                       [&, watch](const asio::error_code& ec, std::size_t /*bytes_transferred*/) {
+      |                                              ^~~~~~~~~~
+/sep/extern/crow/include/crow/websocket.h: In lambda function:
+/sep/extern/crow/include/crow/websocket.h:663:25: error: expected ‘{’ before ‘;’ token
+  663 |                       });
+      |                         ^
+/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_write()’:
+/sep/extern/crow/include/crow/websocket.h:663:25: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/websocket.h:643:38: note: to match this ‘(’
+  643 |                     asio::async_write(
+      |                                      ^
 In file included from /sep/extern/crow/include/crow.h:23:
 /sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::start()’:
 /sep/extern/crow/include/crow/http_connection.h:82:47: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
@@ -820,27 +629,10 @@ In file included from /sep/extern/crow/include/crow.h:23:
 /sep/extern/crow/include/crow/http_connection.h:82:27: note: to match this ‘(’
    82 |             adaptor_.start([self](const asio::error_code& ec) {
       |                           ^
-/sep/extern/crow/include/crow/socket_adaptors.h:68:79: error: ‘ec’ was not declared in this scope
-   68 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_send, ec);
-      |                                                                               ^~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::shutdown_read()’:
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: error: ‘error_code’ is not a member of ‘crow::asio’
-   73 |             asio::error_code ec;
-      |                   ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:73:19: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
 /sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_read()’:
 /sep/extern/crow/include/crow/http_connection.h:469:34: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
   469 |               [self](const asio::error_code& ec, std::size_t bytes_transferred) {
       |                                  ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:74:82: error: ‘ec’ was not declared in this scope
-   74 |             socket_.shutdown(asio::socket_base::shutdown_type::shutdown_receive, ec);
-      |                                                                                  ^~
 /sep/extern/crow/include/crow/http_connection.h: In lambda function:
 /sep/extern/crow/include/crow/http_connection.h:504:17: error: expected ‘{’ before ‘;’ token
   504 |               });
@@ -867,17 +659,93 @@ In file included from /sep/extern/crow/include/crow.h:23:
 /sep/extern/crow/include/crow/http_connection.h:543:57: error: ‘crow::asio::error_code’ has not been declared
   543 |             asio::write(adaptor_.socket(), buffers, [&](asio::error_code ec, std::size_t) {
       |                                                         ^~~~
-/sep/extern/crow/include/crow/socket_adaptors.h: In member function ‘void crow::SocketAdaptor::start(F)’:
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: error: ‘error_code’ is not a member of ‘crow::asio’
-   80 |             f(asio::error_code());
-      |                     ^~~~~~~~~~
-/sep/extern/crow/include/crow/socket_adaptors.h:80:21: note: suggested alternatives:
-/usr/include/c++/14/system_error:223:9: note:   ‘std::error_code’
-  223 |   class error_code
-      |         ^~~~~~~~~~
-/usr/include/boost/system/detail/error_code.hpp:64:7: note:   ‘boost::system::error_code’
-   64 | class error_code
-      |       ^~~~~~~~~~
+In file included from /sep/extern/crow/include/crow.h:24:
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::on_tick()’:
+/sep/extern/crow/include/crow/http_server.h:53:55: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+   53 |             tick_timer_.async_wait([this](const asio::error_code& ec) {
+      |                                                       ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_server.h: In lambda function:
+/sep/extern/crow/include/crow/http_server.h:57:15: error: expected ‘{’ before ‘;’ token
+   57 |             });
+      |               ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::on_tick()’:
+/sep/extern/crow/include/crow/http_server.h:57:15: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_server.h:53:35: note: to match this ‘(’
+   53 |             tick_timer_.async_wait([this](const asio::error_code& ec) {
+      |                                   ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
+/sep/extern/crow/include/crow/http_server.h:129:38: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  129 |                   [this](const asio::error_code& ec) {
+      |                                      ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_server.h: In lambda function:
+/sep/extern/crow/include/crow/http_server.h:133:21: error: expected ‘{’ before ‘;’ token
+  133 |                   });
+      |                     ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
+/sep/extern/crow/include/crow/http_server.h:133:21: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_server.h:128:39: note: to match this ‘(’
+  128 |                 tick_timer_.async_wait(
+      |                                       ^
+/sep/extern/crow/include/crow/http_server.h:144:31: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  144 |               [&](const asio::error_code& /*error*/, int /*signal_number*/) {
+      |                               ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_server.h: In lambda function:
+/sep/extern/crow/include/crow/http_server.h:146:17: error: expected ‘{’ before ‘;’ token
+  146 |               });
+      |                 ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
+/sep/extern/crow/include/crow/http_server.h:146:17: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_server.h:143:32: note: to match this ‘(’
+  143 |             signals_.async_wait(
+      |                                ^
+/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::do_accept()’:
+/sep/extern/crow/include/crow/http_server.h:228:47: error: ‘crow::asio::error_code’ has not been declared
+  228 |                   [this, p, &is, service_idx](asio::error_code ec) {
+      |                                               ^~~~
+In file included from /sep/extern/crow/include/crow.h:23:
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::start()’:
+/sep/extern/crow/include/crow/http_connection.h:82:47: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+   82 |             adaptor_.start([self](const asio::error_code& ec) {
+      |                                               ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_connection.h: In lambda function:
+/sep/extern/crow/include/crow/http_connection.h:94:15: error: expected ‘{’ before ‘;’ token
+   94 |             });
+      |               ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::start()’:
+/sep/extern/crow/include/crow/http_connection.h:94:15: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_connection.h:82:27: note: to match this ‘(’
+   82 |             adaptor_.start([self](const asio::error_code& ec) {
+      |                           ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_read()’:
+/sep/extern/crow/include/crow/http_connection.h:469:34: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  469 |               [self](const asio::error_code& ec, std::size_t bytes_transferred) {
+      |                                  ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_connection.h: In lambda function:
+/sep/extern/crow/include/crow/http_connection.h:504:17: error: expected ‘{’ before ‘;’ token
+  504 |               });
+      |                 ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_read()’:
+/sep/extern/crow/include/crow/http_connection.h:504:17: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_connection.h:467:46: note: to match this ‘(’
+  467 |             adaptor_.socket().async_read_some(
+      |                                              ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write()’:
+/sep/extern/crow/include/crow/http_connection.h:512:34: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
+  512 |               [self](const asio::error_code& ec, std::size_t /*bytes_transferred*/) {
+      |                                  ^~~~~~~~~~
+/sep/extern/crow/include/crow/http_connection.h: In lambda function:
+/sep/extern/crow/include/crow/http_connection.h:537:17: error: expected ‘{’ before ‘;’ token
+  537 |               });
+      |                 ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write()’:
+/sep/extern/crow/include/crow/http_connection.h:537:17: error: expected ‘)’ before ‘;’ token
+/sep/extern/crow/include/crow/http_connection.h:510:30: note: to match this ‘(’
+  510 |             asio::async_write(
+      |                              ^
+/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write_sync(std::vector<boost::asio::const_buffer>&)’:
+/sep/extern/crow/include/crow/http_connection.h:543:57: error: ‘crow::asio::error_code’ has not been declared
+  543 |             asio::write(adaptor_.socket(), buffers, [&](asio::error_code ec, std::size_t) {
+      |                                                         ^~~~
 In file included from /sep/extern/crow/include/crow.h:24:
 /sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::on_tick()’:
 /sep/extern/crow/include/crow/http_server.h:53:55: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
@@ -925,7 +793,9 @@ In file included from /usr/include/boost/asio/impl/execution_context.hpp:18,
                  from /usr/include/boost/asio/execution_context.hpp:409,
                  from /usr/include/boost/asio/any_io_executor.hpp:23,
                  from /usr/include/boost/asio/any_completion_handler.hpp:26,
-                 from /usr/include/boost/asio.hpp:21:
+                 from /usr/include/boost/asio.hpp:21,
+                 from /sep/extern/crow/include/crow/socket_adaptors.h:2,
+                 from /sep/extern/crow/include/crow.h:9:
 /usr/include/boost/asio/basic_waitable_timer.hpp: In instantiation of ‘void boost::asio::basic_waitable_timer<Clock, WaitTraits, Executor>::initiate_async_wait::operator()(WaitHandler&&) const [with WaitHandler = std::_Bind<void (crow::detail::task_timer::*(crow::detail::task_timer*, std::_Placeholder<1>))(const int&)>; Clock = std::chrono::_V2::steady_clock; WaitTraits = boost::asio::wait_traits<std::chrono::_V2::steady_clock>; Executor = boost::asio::any_io_executor]’:
 /usr/include/boost/asio/async_result.hpp:482:49:   required from ‘static boost::asio::detail::completion_handler_async_result<CompletionToken, Signatures>::return_type boost::asio::detail::completion_handler_async_result<CompletionToken, Signatures>::initiate(Initiation&&, RawCompletionToken&&, Args&& ...) [with Initiation = boost::asio::basic_waitable_timer<std::chrono::_V2::steady_clock>::initiate_async_wait; RawCompletionToken = std::_Bind<void (crow::detail::task_timer::*(crow::detail::task_timer*, std::_Placeholder<1>))(const int&)>; Args = {}; CompletionToken = std::_Bind<void (crow::detail::task_timer::*(crow::detail::task_timer*, std::_Placeholder<1>))(const int&)>; Signatures = {void(boost::system::error_code)}; return_type = void]’
   482 |     BOOST_ASIO_MOVE_CAST(Initiation)(initiation)(
@@ -956,14 +826,18 @@ In file included from /usr/include/boost/asio/impl/execution_context.hpp:18,
 /usr/include/boost/asio/basic_socket.hpp:1890:7: error: no match for call to ‘(std::_Bind<void (crow::detail::task_timer::*(crow::detail::task_timer*, std::_Placeholder<1>))(const int&)>) (const boost::system::error_code&)’
  1890 |       BOOST_ASIO_CONNECT_HANDLER_CHECK(ConnectHandler, handler) type_check;
       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from /sep/extern/crow/include/crow/app.h:5:
+In file included from /sep/extern/nlohmann/json.hpp:23,
+                 from /sep/include/api/types.h:10,
+                 from /sep/include/api/rate_limiter.h:4,
+                 from /sep/include/api/lock_free_rate_limiter.h:6,
+                 from /sep/src/api/lock_free_rate_limiter.cpp:1:
 /usr/include/c++/14/functional:596:9: note: candidate: ‘template<class ... _Args, class _Result> _Result std::_Bind<_Functor(_Bound_args ...)>::operator()(_Args&& ...) [with _Args = {_Args ...}; _Functor = void (crow::detail::task_timer::*)(const int&); _Bound_args = {crow::detail::task_timer*, std::_Placeholder<1>}]’
   596 |         operator()(_Args&&... __args)
       |         ^~~~~~~~
 /usr/include/c++/14/functional:596:9: note:   template argument deduction/substitution failed:
 In file included from /usr/include/c++/14/bits/char_traits.h:50,
                  from /usr/include/c++/14/string:42,
-                 from /sep/include/api/crow_request_adapter.h:3:
+                 from /sep/include/api/types.h:3:
 /usr/include/c++/14/type_traits: In substitution of ‘template<class _Fn, class ... _Args> using std::__invoke_result_t = typename std::__invoke_result::type [with _Fn = void (crow::detail::task_timer::*&)(const int&); _Args = {crow::detail::task_timer*&, const boost::system::error_code&}]’:
 /usr/include/c++/14/functional:559:8:   required by substitution of ‘template<class _Functor, class ... _Bound_args> template<class _Fn, class _CallArgs, class ... _BArgs> using std::_Bind<_Functor(_Bound_args ...)>::_Res_type_impl = std::__invoke_result_t<_Fn&, decltype (std::_Mu<typename std::remove_cv<_BArgs>::type, std::is_bind_expression<typename std::remove_cv<_BArgs>::type>::value, (std::is_placeholder<typename std::remove_cv<_BArgs>::type>::value > 0)>()(declval<_BArgs&>(), declval<_CallArgs&>()))&& ...> [with _Fn = void (crow::detail::task_timer::*)(const int&); _CallArgs = std::tuple<const boost::system::error_code&>; _BArgs = {crow::detail::task_timer*, std::_Placeholder<1>}; _Functor = void (crow::detail::task_timer::*)(const int&); _Bound_args = {crow::detail::task_timer*, std::_Placeholder<1>}]’
   559 |         using _Res_type_impl
@@ -1185,253 +1059,3 @@ In file included from /usr/include/c++/14/bits/char_traits.h:50,
 /usr/include/c++/14/type_traits:2685:11: error: no type named ‘type’ in ‘struct std::__invoke_result<void (crow::detail::task_timer::* const volatile&)(const int&), crow::detail::task_timer* const volatile&, const boost::system::error_code&>’
  2685 |     using __invoke_result_t = typename __invoke_result<_Fn, _Args...>::type;
       |           ^~~~~~~~~~~~~~~~~
-In file included from /sep/extern/crow/include/crow.h:13,
-                 from /sep/include/crow/crow_isolation.h:11,
-                 from /sep/include/api/crow_request.h:8,
-                 from /sep/src/api/rate_limit_middleware.cpp:3:
-/sep/extern/crow/include/crow/task_timer.h: At global scope:
-/sep/extern/crow/include/crow/task_timer.h:115:43: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  115 |             void tick_handler(const asio::error_code& ec)
-      |                                           ^~~~~~~~~~
-In file included from /sep/extern/crow/include/crow.h:15:
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:303:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  303 |                           [this](const asio::error_code& ec, std::size_t
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:362:29: error: expected ‘{’ before ‘;’ token
-  362 |                           });
-      |                             ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:362:29: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:301:58: note: to match this ‘(’
-  301 |                         adaptor_.socket().async_read_some(
-      |                                                          ^
-/sep/extern/crow/include/crow/websocket.h:371:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  371 |                           [this](const asio::error_code& ec, std::size_t
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘{’ before ‘;’ token
-  400 |                           });
-      |                             ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:369:41: note: to match this ‘(’
-  369 |                         asio::async_read(
-      |                                         ^
-/sep/extern/crow/include/crow/websocket.h:407:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  407 |                           [this](const asio::error_code& ec, std::size_t
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:435:29: error: expected ‘{’ before ‘;’ token
-  435 |                           });
-      |                             ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:435:29: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:405:41: note: to match this ‘(’
-  405 |                         asio::async_read(
-      |                                         ^
-/sep/extern/crow/include/crow/websocket.h:451:50: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  451 |                               [this](const asio::error_code& ec, std::size_t
-      |                                                  ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:478:33: error: expected ‘{’ before ‘;’ token
-  478 |                               });
-      |                                 ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:478:33: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:449:45: note: to match this ‘(’
-  449 |                             asio::async_read(
-      |                                             ^
-/sep/extern/crow/include/crow/websocket.h:493:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  493 |                           [this](const asio::error_code& ec, std::size_t bytes_transferred) {
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:520:29: error: expected ‘{’ before ‘;’ token
-  520 |                           });
-      |                             ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:520:29: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:491:58: note: to match this ‘(’
-  491 |                         adaptor_.socket().async_read_some(
-      |                                                          ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_write()’:
-/sep/extern/crow/include/crow/websocket.h:645:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  645 |                       [&, watch](const asio::error_code& ec, std::size_t /*bytes_transferred*/) {
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:663:25: error: expected ‘{’ before ‘;’ token
-  663 |                       });
-      |                         ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_write()’:
-/sep/extern/crow/include/crow/websocket.h:663:25: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:643:38: note: to match this ‘(’
-  643 |                     asio::async_write(
-      |                                      ^
-In file included from /sep/extern/crow/include/crow.h:13:
-/sep/extern/crow/include/crow/task_timer.h: At global scope:
-/sep/extern/crow/include/crow/task_timer.h:115:43: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  115 |             void tick_handler(const asio::error_code& ec)
-      |                                           ^~~~~~~~~~
-In file included from /sep/extern/crow/include/crow.h:15:
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:303:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  303 |                           [this](const asio::error_code& ec, std::size_t
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:362:29: error: expected ‘{’ before ‘;’ token
-  362 |                           });
-      |                             ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:362:29: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:301:58: note: to match this ‘(’
-  301 |                         adaptor_.socket().async_read_some(
-      |                                                          ^
-/sep/extern/crow/include/crow/websocket.h:371:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  371 |                           [this](const asio::error_code& ec, std::size_t
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘{’ before ‘;’ token
-  400 |                           });
-      |                             ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:400:29: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:369:41: note: to match this ‘(’
-  369 |                         asio::async_read(
-      |                                         ^
-/sep/extern/crow/include/crow/websocket.h:407:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  407 |                           [this](const asio::error_code& ec, std::size_t
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:435:29: error: expected ‘{’ before ‘;’ token
-  435 |                           });
-      |                             ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:435:29: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:405:41: note: to match this ‘(’
-  405 |                         asio::async_read(
-      |                                         ^
-/sep/extern/crow/include/crow/websocket.h:451:50: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  451 |                               [this](const asio::error_code& ec, std::size_t
-      |                                                  ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:478:33: error: expected ‘{’ before ‘;’ token
-  478 |                               });
-      |                                 ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:478:33: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:449:45: note: to match this ‘(’
-  449 |                             asio::async_read(
-      |                                             ^
-/sep/extern/crow/include/crow/websocket.h:493:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  493 |                           [this](const asio::error_code& ec, std::size_t bytes_transferred) {
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:520:29: error: expected ‘{’ before ‘;’ token
-  520 |                           });
-      |                             ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_read()’:
-/sep/extern/crow/include/crow/websocket.h:520:29: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:491:58: note: to match this ‘(’
-  491 |                         adaptor_.socket().async_read_some(
-      |                                                          ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_write()’:
-/sep/extern/crow/include/crow/websocket.h:645:46: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  645 |                       [&, watch](const asio::error_code& ec, std::size_t /*bytes_transferred*/) {
-      |                                              ^~~~~~~~~~
-/sep/extern/crow/include/crow/websocket.h: In lambda function:
-/sep/extern/crow/include/crow/websocket.h:663:25: error: expected ‘{’ before ‘;’ token
-  663 |                       });
-      |                         ^
-/sep/extern/crow/include/crow/websocket.h: In member function ‘void crow::websocket::Connection<Adaptor, Handler>::do_write()’:
-/sep/extern/crow/include/crow/websocket.h:663:25: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/websocket.h:643:38: note: to match this ‘(’
-  643 |                     asio::async_write(
-      |                                      ^
-In file included from /sep/extern/crow/include/crow.h:23:
-/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::start()’:
-/sep/extern/crow/include/crow/http_connection.h:82:47: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-   82 |             adaptor_.start([self](const asio::error_code& ec) {
-      |                                               ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_connection.h: In lambda function:
-/sep/extern/crow/include/crow/http_connection.h:94:15: error: expected ‘{’ before ‘;’ token
-   94 |             });
-      |               ^
-/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::start()’:
-/sep/extern/crow/include/crow/http_connection.h:94:15: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/http_connection.h:82:27: note: to match this ‘(’
-   82 |             adaptor_.start([self](const asio::error_code& ec) {
-      |                           ^
-/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_read()’:
-/sep/extern/crow/include/crow/http_connection.h:469:34: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  469 |               [self](const asio::error_code& ec, std::size_t bytes_transferred) {
-      |                                  ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_connection.h: In lambda function:
-/sep/extern/crow/include/crow/http_connection.h:504:17: error: expected ‘{’ before ‘;’ token
-  504 |               });
-      |                 ^
-/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_read()’:
-/sep/extern/crow/include/crow/http_connection.h:504:17: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/http_connection.h:467:46: note: to match this ‘(’
-  467 |             adaptor_.socket().async_read_some(
-      |                                              ^
-/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write()’:
-/sep/extern/crow/include/crow/http_connection.h:512:34: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  512 |               [self](const asio::error_code& ec, std::size_t /*bytes_transferred*/) {
-      |                                  ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_connection.h: In lambda function:
-/sep/extern/crow/include/crow/http_connection.h:537:17: error: expected ‘{’ before ‘;’ token
-  537 |               });
-      |                 ^
-/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write()’:
-/sep/extern/crow/include/crow/http_connection.h:537:17: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/http_connection.h:510:30: note: to match this ‘(’
-  510 |             asio::async_write(
-      |                              ^
-/sep/extern/crow/include/crow/http_connection.h: In member function ‘void crow::Connection<Adaptor, Handler, Middlewares>::do_write_sync(std::vector<boost::asio::const_buffer>&)’:
-/sep/extern/crow/include/crow/http_connection.h:543:57: error: ‘crow::asio::error_code’ has not been declared
-  543 |             asio::write(adaptor_.socket(), buffers, [&](asio::error_code ec, std::size_t) {
-      |                                                         ^~~~
-In file included from /sep/extern/crow/include/crow.h:24:
-/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::on_tick()’:
-/sep/extern/crow/include/crow/http_server.h:53:55: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-   53 |             tick_timer_.async_wait([this](const asio::error_code& ec) {
-      |                                                       ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_server.h: In lambda function:
-/sep/extern/crow/include/crow/http_server.h:57:15: error: expected ‘{’ before ‘;’ token
-   57 |             });
-      |               ^
-/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::on_tick()’:
-/sep/extern/crow/include/crow/http_server.h:57:15: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/http_server.h:53:35: note: to match this ‘(’
-   53 |             tick_timer_.async_wait([this](const asio::error_code& ec) {
-      |                                   ^
-/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
-/sep/extern/crow/include/crow/http_server.h:129:38: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  129 |                   [this](const asio::error_code& ec) {
-      |                                      ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_server.h: In lambda function:
-/sep/extern/crow/include/crow/http_server.h:133:21: error: expected ‘{’ before ‘;’ token
-  133 |                   });
-      |                     ^
-/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
-/sep/extern/crow/include/crow/http_server.h:133:21: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/http_server.h:128:39: note: to match this ‘(’
-  128 |                 tick_timer_.async_wait(
-      |                                       ^
-/sep/extern/crow/include/crow/http_server.h:144:31: error: ‘error_code’ in namespace ‘crow::asio’ does not name a type
-  144 |               [&](const asio::error_code& /*error*/, int /*signal_number*/) {
-      |                               ^~~~~~~~~~
-/sep/extern/crow/include/crow/http_server.h: In lambda function:
-/sep/extern/crow/include/crow/http_server.h:146:17: error: expected ‘{’ before ‘;’ token
-  146 |               });
-      |                 ^
-/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::run()’:
-/sep/extern/crow/include/crow/http_server.h:146:17: error: expected ‘)’ before ‘;’ token
-/sep/extern/crow/include/crow/http_server.h:143:32: note: to match this ‘(’
-  143 |             signals_.async_wait(
-      |                                ^
-/sep/extern/crow/include/crow/http_server.h: In member function ‘void crow::Server<Handler, Adaptor, Middlewares>::do_accept()’:
-/sep/extern/crow/include/crow/http_server.h:228:47: error: ‘crow::asio::error_code’ has not been declared
-  228 |                   [this, p, &is, service_idx](asio::error_code ec) {
-      |                                               ^~~~

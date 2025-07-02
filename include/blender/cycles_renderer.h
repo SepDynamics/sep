@@ -7,6 +7,12 @@
 #include "core/common.h"
 #include "compat/cycles.h"
 
+// Ensure SEP_HAS_CYCLES has a sensible default if the build system did not
+// define it. This keeps conditional compilation sections well-formed.
+#ifndef SEP_HAS_CYCLES
+#define SEP_HAS_CYCLES 0
+#endif
+
 namespace sep {
 namespace blender {
 namespace ccl {

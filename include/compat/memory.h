@@ -140,5 +140,7 @@ bool memsetDevice(T* ptr, int value, size_t count) {
 #endif
 }
 
+#endif  // !SEP_CUDA_AVAILABLE
+
 }  // namespace cuda
 }  // namespace sep

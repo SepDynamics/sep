@@ -14,6 +14,7 @@ add_library(blender_tests STATIC
     buffer_map_integration.cpp
     shader_reload_integration.cpp
     gpu_context_integration_test.cpp
+    gpu_context_regression.cpp
 )
 
 target_include_directories(blender_tests PRIVATE

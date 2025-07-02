@@ -8,6 +8,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(SEPConfig)
 configure_sep()
 
+# Build stub implementation of the OpenPGL API to satisfy linking against
+# precompiled Cycles libraries when the real OpenPGL dependency is missing.
+add_subdirectory(extern/openpgl_stub)
+
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/include
@@ -73,5 +77,6 @@ target_link_libraries(sep_engine
         glog
         gflags
         embree4
+        openpgl_stub
         ${HTTP_PARSER_LIBRARY}
 )

@@ -85,6 +85,11 @@ double pglSurfaceSamplingDistributionSamplePDF(void *)
   return 1.0; /* Uniform distribution. */
 }
 
+double pglSurfaceSamplingDistributionIncomingRadiancePDF(void *)
+{
+  return 1.0; /* Uniform distribution. */
+}
+
 void pglVolumeSamplingDistributionApplySingleLobeHenyeyGreensteinProduct(void *)
 {
   /* No-op for stub implementation. */

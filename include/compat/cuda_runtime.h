@@ -78,6 +78,12 @@ constexpr unsigned int cudaStreamNonBlocking = 0x01;
 namespace sep {
 namespace cuda {
 
+using ::cudaError_t;
+using ::cudaStream_t;
+using ::cudaEvent_t;
+using ::cudaMemcpyKind;
+
+
 // Function declarations
 cudaError_t cudaSetDevice(int device);
 cudaError_t cudaGetDeviceCount(int* count);

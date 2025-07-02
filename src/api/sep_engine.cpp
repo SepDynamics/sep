@@ -257,12 +257,34 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; 
+        result["success"] = false;
         result["error"]   = "Engine not initialized";
         return result;
     }
+
     impl_->health_metrics.totalRequests++;
 
+    if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
+    {
+        json result;
+        result["success"] = false;
+        result["error"]   = "contexts must be an array";
+        return result;
+    }
+
+    auto [valid, invalid_index] =
+        sep::testbed::validate_contexts_impl(request_data["contexts"]);
+
+    impl_->health_metrics.successfulRequests++;
+
+    json result;
+    result["success"]       = valid;
+    result["context_count"] = request_data["contexts"].size();
+    if (!valid)
+    {
+        result["error"] = std::string("invalid context at index ") +
+                          std::to_string(invalid_index);
+    }
     if (!request_data.contains("contexts") || !request_data["contexts"].is_array()) {
         return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
     }
@@ -400,51 +422,65 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
         result["error"]   = "Engine not initialized";
         return result;
     }
-    if (!request_data.contains("contexts") || !request_data["contexts"].is_array()) {
-        return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
+
+    if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
+    {
+        json result;
+        result["success"] = false;
+        result["error"]   = "contexts must be an array";
+        return result;
     }
 
     std::vector<std::vector<double>> embeddings;
-    for (const auto& c : request_data["contexts"]) {
-        if (!c.is_array()) {
-            return makeErrorResponse(api::ErrorCode::InvalidArgument, "Context must be an array of numbers");
+    for (const auto& ctx : request_data["contexts"])
+    {
+        if (!ctx.contains("content") || !ctx["content"].is_array())
+        {
+            json result;
+            result["success"] = false;
+            result["error"]   = "context missing content";
+            return result;
         }
-        std::vector<double> vec;
-        for (const auto& v : c) {
-            if (!v.is_number()) {
-                return makeErrorResponse(api::ErrorCode::InvalidArgument, "Context contains non-numeric value");
-            }
-            vec.push_back(v.get<double>());
-        }
-        embeddings.push_back(std::move(vec));
+        std::vector<double> emb;
+        emb.reserve(ctx["content"].size());
+        for (const auto& v : ctx["content"])
+            emb.push_back(v.get<double>());
+        embeddings.push_back(std::move(emb));
     }
 
-    std::vector<double> weights;
-    if (request_data.contains("weights")) {
-        if (!request_data["weights"].is_array()) {
-            return makeErrorResponse(api::ErrorCode::InvalidArgument, "Weights must be an array");
-        }
-        for (const auto& w : request_data["weights"]) {
-            if (!w.is_number()) {
-                return makeErrorResponse(api::ErrorCode::InvalidArgument, "Weights contain non-numeric value");
-            }
-            weights.push_back(w.get<double>());
+    size_t dim = embeddings[0].size();
+    for (const auto& e : embeddings)
+    {
+        if (e.size() != dim)
+        {
+            json result;
+            result["success"] = false;
+            result["error"]   = "inconsistent embedding dimensions";
+            return result;
         }
     }
 
-    auto blend = sep::testbed::blend_embeddings(embeddings, weights);
-    if (!blend.success) {
-        return makeErrorResponse(api::ErrorCode::InvalidArgument, blend.error);
+    std::vector<float> weights;
+    if (request_data.contains("weights"))
+    {
+        if (!request_data["weights"].is_array() ||
+            request_data["weights"].size() != embeddings.size())
+        {
+            json result;
+            result["success"] = false;
+            result["error"]   = "weights size mismatch";
+            return result;
+        }
+        for (const auto& w : request_data["weights"])
+            weights.push_back(w.get<float>());
     }
 
-    json blend_result;
-    blend_result["blended_context_id"] = generateId("blend");
-    blend_result["coherence"]          = blend.coherence;
-    blend_result["embedding"]          = blend.blended;
+    auto blend = sep::testbed::blend_contexts_impl(embeddings, weights);
+    blend["blended_context_id"] = generateId("blend");
 
     json result;
     result["success"] = true;
-    result["result"]  = blend_result;
+    result["result"]  = blend;
     return result;
 }
 

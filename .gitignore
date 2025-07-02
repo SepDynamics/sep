@@ -7,6 +7,8 @@ tests/io_curve_svg/
 sep_engine
 extern/*
 !extern/cycles/
+!extern/openpgl_stub/
+!extern/cuew_stub/
 build/
 _build/
 changes.diff

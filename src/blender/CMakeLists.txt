@@ -41,7 +41,6 @@ target_link_libraries(sep_blender
     PRIVATE
         sep_compat
         ${CMAKE_SOURCE_DIR}/libsep_compat.a
-        TBB::tbb
 )
 
 # Enable CUDA support
@@ -122,7 +121,6 @@ if(TARGET cycles_scene)
       ${OSL_LIBRARIES}
       ${OPENSUBDIV_LIBRARIES}
 )
-  )
 else()
   # Fallback to precompiled static libraries
   target_link_libraries(sep_blender PRIVATE
@@ -131,7 +129,6 @@ else()
       ${CMAKE_SOURCE_DIR}/lib/libcycles_util.a
       ${CMAKE_SOURCE_DIR}/lib/libcycles_subd.a
       ${CMAKE_SOURCE_DIR}/lib/libbf_intern_guardedalloc.a
-      TBB::tbb
       CUDA::cudart
       CUDA::cuda_driver
       CUDA::nvrtc

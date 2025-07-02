@@ -6,7 +6,6 @@
 // of the engine.  When spdlog is not available (e.g. CUDA compilation)
 // the isolation headers provide light‑weight stubs.
 
-// Use relative path from project root
 #include "compat/shim.h"
 #include "memory/spdlog_isolation.h"
 #include <sstream>

@@ -1,7 +1,8 @@
 #pragma once
 
-// This is a minimal stub version of socket_adaptors.h for the Crow framework
-// It provides just enough to compile without errors, but doesn't implement full functionality
+// Socket adaptor utilities used by the Crow HTTP server.  The original project
+// provided a stripped down stub to avoid depending on Boost.ASIO.  We now rely
+// directly on Boost.ASIO via the aliases defined in `asio_isolation.h`.
 
 // Define CROW_LIKELY and CROW_UNLIKELY if not already defined
 #ifndef CROW_LIKELY
@@ -20,22 +21,26 @@
 #include "crow/asio_isolation.h"
 
 namespace crow {
-    // Use our stub asio implementation
+    // TCP alias from Boost.ASIO
     using tcp = asio_stub::ip::tcp;
 
     /// A wrapper for the asio::ip::tcp::socket
     struct SocketAdaptor {
         using context = void;
-        SocketAdaptor(asio_stub::io_context& io_context, context*) : socket_() {}
+        explicit SocketAdaptor(asio_stub::io_context& io_context, context*)
+            : socket_(io_context) {}
 
-        asio_stub::io_context& get_io_context() { 
-            static asio_stub::io_context ctx;
-            return ctx;
+        asio_stub::io_context& get_io_context() {
+            return static_cast<asio_stub::io_context&>(
+                socket_.get_executor().context());
         }
 
         tcp::socket& raw_socket() { return socket_; }
         tcp::socket& socket() { return socket_; }
-        tcp::endpoint remote_endpoint() { return socket_.remote_endpoint(); }
+        tcp::endpoint remote_endpoint() {
+            error_code ec;
+            return socket_.remote_endpoint(ec);
+        }
         bool is_open() { return socket_.is_open(); }
 
         error_code close() {
@@ -75,15 +80,15 @@ namespace crow {
         using context = asio_stub::ssl::context;
         using ssl_socket_t = asio_stub::ssl::stream<tcp::socket>;
         
-        SSLAdaptor(asio_stub::io_context& io_context, context* ctx) : 
-            ssl_socket_(new ssl_socket_t(io_context, *ctx)) {}
+        SSLAdaptor(asio_stub::io_context& io_context, context* ctx)
+            : ssl_socket_(new ssl_socket_t(io_context, *ctx)) {}
 
         ssl_socket_t& socket() { return *ssl_socket_; }
-        tcp::socket& raw_socket() { 
-            static tcp::socket socket;
-            return socket;
+        tcp::socket& raw_socket() { return ssl_socket_->next_layer(); }
+        tcp::endpoint remote_endpoint() {
+            error_code ec;
+            return raw_socket().remote_endpoint(ec);
         }
-        tcp::endpoint remote_endpoint() { return raw_socket().remote_endpoint(); }
         bool is_open() { return ssl_socket_ ? raw_socket().is_open() : false; }
 
         error_code close() {
@@ -118,9 +123,8 @@ namespace crow {
             return ec;
         }
 
-        asio_stub::io_context& get_io_context() { 
-            static asio_stub::io_context ctx;
-            return ctx;
+        asio_stub::io_context& get_io_context() {
+            return raw_socket().get_executor().context();
         }
 
         template <typename F>

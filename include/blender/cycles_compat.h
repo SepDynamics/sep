@@ -17,8 +17,8 @@
 #endif
 
 // Include Cycles headers after namespace definitions
-#include "util/defines.h"
-#include "util/types.h"
+#include "device/util/defines.h"
+#include "device/util/types.h"
 #include "scene/scene.h"
 #include "session/session.h"
 

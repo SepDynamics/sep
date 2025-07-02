@@ -9,14 +9,6 @@
 #include "core/types.h"
 #include "quantum/data.hpp"
 
-// If SEP_HAS_CYCLES was not provided by the build system, fall back to the
-// default defined in the header. This allows compilation of stub versions
-// without special build flags.
-#ifndef SEP_HAS_CYCLES
-#define SEP_HAS_CYCLES 0
-#endif
-
-#if SEP_HAS_CYCLES
 // Cycles core includes
 #include "device/device.h"
 #include "scene/camera.h"
@@ -37,38 +29,24 @@
 #include "util/texture.h"
 #include "util/unique_ptr.h"
 #include "util/vector.h"
-#endif
 
 namespace sep {
 namespace blender {
 namespace ccl {
 
-SEPResult CyclesRenderer::isCyclesAvailable() {
-#ifdef SEP_HAS_CYCLES
-    return SEPResult::SUCCESS;
-#else
-    return SEPResult::FEATURE_UNAVAILABLE;
-#endif
-}
-
 SEPResult CyclesRenderer::initialize() {
-    if (isCyclesAvailable() != SEPResult::SUCCESS) {
-        return SEPResult::FEATURE_UNAVAILABLE;
-    }
     try {
-#ifdef SEP_HAS_CYCLES
         ::ccl::DeviceInfo device_info;
         cycles_device_ = ::ccl::Device::create(device_info,
-                                               cycles_stats_,
-                                               cycles_profiler_,
-                                               true);
+                                             cycles_stats_,
+                                             cycles_profiler_,
+                                             true);
         if (!cycles_device_) {
             return SEPResult::INITIALIZATION_FAILED;
         }
         ::ccl::SceneParams scene_params;
         cycles_scene_ = ::ccl::make_unique<::ccl::Scene>(scene_params, cycles_device_.get());
         initialized_ = true;
-#endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
         return SEPResult::INITIALIZATION_FAILED;
@@ -102,7 +80,6 @@ SEPResult CyclesRenderer::createSceneFromPatterns(const std::vector<pattern::Pat
         for (const auto& pattern : patterns_) {
             createGeometryFromPattern(pattern);
         }
-#endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
         return SEPResult::PROCESSING_ERROR;
@@ -120,7 +97,6 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
         return SEPResult::INVALID_ARGUMENT;
     }
     try {
-#ifdef SEP_HAS_CYCLES
         width_ = params.width;
         height_ = params.height;
         if (!cycles_scene_) {
@@ -133,27 +109,27 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
             cam->set_screen_size(params.width, params.height);
             cam->set_fov(45.0f * (M_PI_F / 180.0f));
             cam->set_matrix(::ccl::transform_identity());
-            cam->set_use_perspective(true);
-            cam->set_use_motion(false);
-            cam->set_shuttertime(0.0f);
-            cam->set_rolling_shutter_type(::ccl::Camera::ROLLING_SHUTTER_NONE);
-            cam->set_panorama_type(::ccl::Camera::PANORAMA_NONE);
-            cam->set_use_spherical_stereo(false);
-            cam->set_stereo_eye(::ccl::Camera::STEREO_NONE);
-            cam->set_interocular_distance(0.0f);
-            cam->set_convergence_distance(0.0f);
-            cam->set_use_pole_merge(false);
-            cam->set_pole_merge_angle_from(0.0f);
-            cam->set_pole_merge_angle_to(0.0f);
-            cam->set_sensorwidth(36.0f);
-            cam->set_sensorheight(24.0f);
-            cam->set_nearclip(0.1f);
-            cam->set_farclip(100.0f);
-            cam->set_aperturesize(0.0f);
-            cam->set_blades(0);
-            cam->set_bladesrotation(0.0f);
-            cam->set_focaldistance(10.0f);
-            cam->set_viewplane();
+            cam->set_perspective_motion(true);
+            cam->set_motion(false);
+            cam->shutter_time = 0.0f;
+            cam->rolling_shutter_type = ::ccl::ROLLING_SHUTTER_NONE;
+            cam->type = ::ccl::CAMERA_PERSPECTIVE;
+            cam->use_spherical_stereo = false;
+            cam->stereo_eye = ::ccl::STEREO_NONE;
+            cam->interocular_distance = 0.0f;
+            cam->convergence_distance = 0.0f;
+            cam->use_pole_merge = false;
+            cam->pole_merge_angle_from = 0.0f;
+            cam->pole_merge_angle_to = 0.0f;
+            cam->sensorwidth = 36.0f;
+            cam->sensorheight = 24.0f;
+            cam->nearclip = 0.1f;
+            cam->farclip = 100.0f;
+            cam->aperture_size = 0.0f;
+            cam->blades = 0;
+            cam->blade_rotation = 0.0f;
+            cam->focal_distance = 10.0f;
+            cam->compute_viewplane();
         }
 
         // Configure render settings
@@ -192,7 +168,6 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
         cycles_scene_->params.bvh_type = ::ccl::BVH_TYPE_DYNAMIC;
         cycles_scene_->params.bvh_layout = ::ccl::BVH_LAYOUT_BVH2;
         cycles_scene_->params.use_qbvh = true;
-#endif
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
         return SEPResult::PROCESSING_ERROR;
@@ -200,7 +175,6 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
 }
 
 bool CyclesRenderer::render(const std::string& filepath) {
-#if SEP_HAS_CYCLES
     if (!initialized_ || patterns_.empty() || !cycles_scene_) {
         return false;
     }
@@ -224,15 +198,8 @@ bool CyclesRenderer::render(const std::string& filepath) {
 
     delete session;
     return true;
-#else
-    (void)filepath;
-    (void)initialized_;
-    (void)patterns_;
-    return false;
-#endif
 }
 
-#ifdef SEP_HAS_CYCLES
 void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& pattern) {
     // Create mesh
     ::ccl::Mesh *mesh = new ::ccl::Mesh();
@@ -279,7 +246,6 @@ void CyclesRenderer::convertPatternToMesh(const pattern::PatternData& pattern,
     verts.push_back(::ccl::make_float3(base.x, base.y + scale, base.z));
     triangles.push_back(::ccl::make_int3(0, 1, 2));
 }
-#endif
 
 } // namespace ccl
 } // namespace blender

@@ -7,20 +7,20 @@
 #include <cstdlib>
 #include <functional>
 
-#include "bvh/params.h"
+#include "../bvh/params.h"
 
-#include "device/denoise.h"
-#include "device/memory.h"
+#include "denoise.h"
+#include "memory.h"
 
-#include "util/log.h"
-#include "util/profiling.h"
-#include "util/stats.h"
-#include "util/string.h"
-#include "util/texture.h"
-#include "util/thread.h"
-#include "util/types.h"
-#include "util/unique_ptr.h"
-#include "util/vector.h"
+#include "../util/log.h"
+#include "../util/profiling.h"
+#include "../util/stats.h"
+#include "../util/string.h"
+#include "../util/texture.h"
+#include "../util/thread.h"
+#include "../util/types.h"
+#include "../util/unique_ptr.h"
+#include "../util/vector.h"
 
 CCL_NAMESPACE_BEGIN
 

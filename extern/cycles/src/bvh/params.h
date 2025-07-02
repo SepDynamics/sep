@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include "util/boundbox.h"
-#include "util/vector.h"
+#include "../util/boundbox.h"
+#include "../util/vector.h"
 
-#include "kernel/types.h"
+#include "../kernel/types.h"
 
 CCL_NAMESPACE_BEGIN
 

@@ -2,9 +2,7 @@
 
 #include <cstdio>
 
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#endif
+#include "compat/cuda_runtime.h"
 
 #include "compat/cuda_defs.h"
 

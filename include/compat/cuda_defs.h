@@ -11,19 +11,14 @@
 #define SEP_HD
 #endif
 
-// Include CUDA runtime first if available
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h>
-#endif
+// Always include the compatibility runtime header
+#include "compat/cuda_runtime.h"
 
 #include <cstddef>
 #include <string>
 #include "core/common.h"
 #include "compat/macros.h"
 
-#if !SEP_CUDA_AVAILABLE
-#include "compat/cuda_runtime.h"
-#endif
 
 namespace sep {
 namespace cuda {

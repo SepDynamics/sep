@@ -1,15 +1,10 @@
 #include <memory>
 
 #include "compat/cuda_common.h"
-#if !SEP_CUDA_AVAILABLE
-#include "compat/cuda_runtime.h"
-#endif
 
 #include "compat/stream.h"
 #include "compat/cuda_helpers.h" // for logCudaError
-#if !SEP_CUDA_AVAILABLE
 #include "compat/cuda_impl.h"
-#endif
 
 namespace sep::cuda {
 
@@ -19,29 +14,15 @@ struct Stream::Impl {
 
   void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
   void synchronize() {
-#if SEP_CUDA_AVAILABLE
     if (stream_handle_) cudaStreamSynchronize(stream_handle_);
-#else
-    (void)stream_handle_;
-#endif
   }
   void wait(void* event) {
-#if SEP_CUDA_AVAILABLE
     if (stream_handle_ && event)
       cudaStreamWaitEvent(stream_handle_, static_cast<cudaEvent_t>(event), 0);
-#else
-    (void)stream_handle_;
-    (void)event;
-#endif
   }
   void record(void* event) {
-#if SEP_CUDA_AVAILABLE
     if (stream_handle_ && event)
       cudaEventRecord(static_cast<cudaEvent_t>(event), stream_handle_);
-#else
-    (void)stream_handle_;
-    (void)event;
-#endif
   }
   void* handle() const { return stream_handle_; }
   bool isValid() const { return stream_handle_ != nullptr; }

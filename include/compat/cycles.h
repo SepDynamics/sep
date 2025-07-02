@@ -22,13 +22,11 @@
 #define CCL_NAMESPACE_USING_DIRECTIVE using namespace ccl;
 #endif
 
-// Include real Cycles headers when SEP_HAS_CYCLES is explicitly set to 1
-// AND we're not specifically requesting stub implementations with SEP_USE_CYCLES_STUB
-// These are controlled by CMake and passed to the compiler
-#if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES && (!defined(SEP_USE_CYCLES_STUB) || SEP_USE_CYCLES_STUB == 0)
-// Core Cycles headers - use relative paths for portability
+// Core Cycles headers - only include if SEP_HAS_CYCLES is defined
+#ifdef SEP_HAS_CYCLES
+// Core Cycles headers
+#include "../extern/cycles/src/device/device.h"
 #include "../extern/cycles/src/scene/scene.h"
-#include "../extern/cycles/src/session/session.h"
 #include "../extern/cycles/src/scene/camera.h"
 #include "../extern/cycles/src/scene/mesh.h"
 #include "../extern/cycles/src/scene/shader.h"
@@ -36,7 +34,16 @@
 #include "../extern/cycles/src/scene/background.h"
 #include "../extern/cycles/src/scene/film.h"
 #include "../extern/cycles/src/scene/integrator.h"
+#include "../extern/cycles/src/session/session.h"
 #include "../extern/cycles/src/session/buffers.h"
+
+// Utility headers
+#include "../extern/cycles/src/util/array.h"
+#include "../extern/cycles/src/util/math_base.h"
+#include "../extern/cycles/src/util/param.h"
+#include "../extern/cycles/src/util/string.h"
+#include "../extern/cycles/src/util/vector.h"
+#endif
 
 // No need for stub implementations when using real Cycles
 #else

@@ -230,6 +230,5 @@ cudaError_t launchBlendKernel(float* d_output, const float* d_embeddings, const 
     return sep::cuda::launchKernel("blend_kernel", dim3(grid_size), dim3(block_size), stream, detail::blend_kernel,
                                    d_output, d_embeddings, d_weights, num_contexts, embedding_size);
 }
-#endif
 
 }  // namespace sep::cuda

@@ -37,6 +37,10 @@ target_link_libraries(sep_engine
         sep_quantum
         sep_audio
         sep_blender
+        ${EMBREE_LIBRARIES}
+        ${GLOG_LIBRARIES}
+        ${OIIO_LIBRARIES}
+        ${ZSTD_LIBRARIES}
         ${CURL_LIBRARIES}
         fmt::fmt
         spdlog::spdlog

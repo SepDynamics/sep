@@ -46,8 +46,8 @@ public:
         return result;
     }
 
-    BlendResult blendContexts(const sep::shim::vector<Context>& contexts,
-                              const sep::shim::vector<float>& weights) override {
+    BlendResult blendContexts(const std::vector<Context>& contexts,
+                              const std::vector<float>& weights) override {
         BlendResult result;
         result.success = true;
         result.value = contexts[0];

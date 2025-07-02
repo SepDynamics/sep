@@ -31,7 +31,7 @@ public:
                                  static_cast<float>(probe_indices.size());
 
         // Use QFH to analyze the probe bits for collapse detection
-        ::sep::shim::vector<uint8_t> probe_bits = convertToBits(probe_indices);
+        std::vector<uint8_t> probe_bits = convertToBits(probe_indices);
         QFHResult qfh_result = qfh_processor_.analyze(probe_bits);
 
         // Detect collapse based on rupture ratio from QFH
@@ -67,8 +67,8 @@ private:
     }
 
     // Convert uint32_t values to bit sequences
-    ::sep::shim::vector<uint8_t> convertToBits(const std::vector<uint32_t>& values) {
-        ::sep::shim::vector<uint32_t> shim_values;
+    std::vector<uint8_t> convertToBits(const std::vector<uint32_t>& values) {
+        std::vector<uint32_t> shim_values;
         shim_values.reserve(values.size());
         for (uint32_t v : values) {
             shim_values.push_back(v);

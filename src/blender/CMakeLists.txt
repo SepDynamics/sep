@@ -33,7 +33,7 @@ target_link_libraries(sep_blender
     PUBLIC
         sep_core
         ${OIIO_LIBRARIES}
-        ${GLOG_LIBRARIES}
+        glog
         ${ZSTD_LIBRARIES}
         ${EMBREE_LIBRARIES}
     PRIVATE

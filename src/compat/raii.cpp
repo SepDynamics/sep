@@ -60,6 +60,13 @@ cudaError_t cudaEventRecord(cudaEvent_t /*event*/, cudaStream_t /*stream*/) {
     return cudaSuccess;
 }
 
+cudaError_t cudaEventCreateWithFlags(cudaEvent_t* event, unsigned int /*flags*/) {
+    if (event) {
+        *event = nullptr;
+    }
+    return cudaSuccess;
+}
+
 cudaError_t cudaEventCreate(void** event) {
     if (event) {
         *event = nullptr;

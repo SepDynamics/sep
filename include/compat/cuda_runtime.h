@@ -80,6 +80,7 @@ cudaError_t cudaStreamDestroy(cudaStream_t stream);
 cudaError_t cudaStreamSynchronize(cudaStream_t stream);
 cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags);
 cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream);
+cudaError_t cudaEventCreateWithFlags(cudaEvent_t* event, unsigned int flags);
 cudaError_t cudaEventCreate(cudaEvent_t* event);
 cudaError_t cudaEventDestroy(cudaEvent_t event);
 cudaError_t cudaEventSynchronize(cudaEvent_t event);

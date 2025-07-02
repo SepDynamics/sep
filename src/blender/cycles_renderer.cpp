@@ -44,7 +44,7 @@ namespace blender {
 namespace ccl {
 
 SEPResult CyclesRenderer::isCyclesAvailable() {
-#if SEP_HAS_CYCLES
+#ifdef SEP_HAS_CYCLES
     return SEPResult::SUCCESS;
 #else
     return SEPResult::FEATURE_UNAVAILABLE;
@@ -56,7 +56,7 @@ SEPResult CyclesRenderer::initialize() {
         return SEPResult::FEATURE_UNAVAILABLE;
     }
     try {
-#if SEP_HAS_CYCLES
+#ifdef SEP_HAS_CYCLES
         ::ccl::DeviceInfo device_info;
         cycles_device_ = ::ccl::Device::create(device_info,
                                                cycles_stats_,
@@ -120,7 +120,7 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
         return SEPResult::INVALID_ARGUMENT;
     }
     try {
-#if SEP_HAS_CYCLES
+#ifdef SEP_HAS_CYCLES
         width_ = params.width;
         height_ = params.height;
         if (!cycles_scene_) {
@@ -232,7 +232,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
 #endif
 }
 
-#if SEP_HAS_CYCLES
+#ifdef SEP_HAS_CYCLES
 void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& pattern) {
     // Create mesh
     ::ccl::Mesh *mesh = new ::ccl::Mesh();

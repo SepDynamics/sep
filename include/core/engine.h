@@ -83,7 +83,7 @@ class Engine {
 
   // Managed components
   std::unique_ptr<::sep::audio::AudioCapture> audio_capture_;
-#if SEP_HAS_BLENDER
+#ifdef SEP_HAS_BLENDER
   std::unique_ptr<SEPBlenderBridge> blender_bridge_;
 #endif
 };

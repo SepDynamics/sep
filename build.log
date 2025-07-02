@@ -37,46 +37,46 @@ Running CMake configuration...
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
 [  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 14%] Linking CXX static library ../../lib/libsep_core.a
 [ 14%] Built target sep_core
-[ 17%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 20%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 17%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 17%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cuda_api_stub.cpp.o
 [ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 25%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/cuda_api_stub.cpp.o
+[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
 [ 26%] Linking CXX static library ../../lib/libsep_compat.a
 [ 26%] Built target sep_compat
-[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 34%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 34%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 35%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 40%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 50%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 53%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 32%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 38%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 47%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 49%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 56%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 [ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 In file included from /sep/include/blender/cycles_renderer.h:8,
@@ -92,9 +92,9 @@ make[2]: *** Waiting for unfinished jobs....
 [ 64%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
 [ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
 [ 67%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 68%] Linking CXX static library ../../lib/libsep_audio.a
 make[1]: *** [CMakeFiles/Makefile2:1407: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
 make[1]: *** Waiting for unfinished jobs....
+[ 68%] Linking CXX static library ../../lib/libsep_audio.a
 [ 68%] Built target sep_audio
 [ 70%] Linking CXX static library ../../lib/libsep_memory.a
 [ 70%] Built target sep_memory

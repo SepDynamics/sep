@@ -194,11 +194,11 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
 }
 
 bool CyclesRenderer::render(const std::string& filepath) {
+#if SEP_HAS_CYCLES
     if (!initialized_ || patterns_.empty() || !cycles_scene_) {
         return false;
     }
 
-#if SEP_HAS_CYCLES
     // Initialize session
     ::ccl::SessionParams session_params;
     session_params.background = true;

@@ -78,32 +78,12 @@ private:
 bool checkMemory(size_t required_size);
 
 #if !SEP_CUDA_AVAILABLE
-// Stub implementations when CUDA is not available
-inline void* allocateDeviceMemory(size_t size) {
-    return std::malloc(size);
-}
-
-inline void freeDeviceMemory(void* ptr) {
-    if (ptr)
-        std::free(ptr);
-}
-
-inline void* allocateUnifiedMemory(size_t size, cudaStream_t stream = nullptr) {
-    (void)stream;
-    return std::malloc(size);
-}
-
-inline void freeUnifiedMemory(void* ptr) {
-    if (ptr)
-        std::free(ptr);
-}
-#else
-// Declarations for actual CUDA implementations
+// Declarations for host-only implementations provided in raii.cpp
+#endif
 void* allocateDeviceMemory(size_t size);
 void freeDeviceMemory(void* ptr);
 void* allocateUnifiedMemory(size_t size, cudaStream_t stream = nullptr);
 void freeUnifiedMemory(void* ptr);
-#endif
 
 // Memory copy utilities
 template <typename T>

@@ -30,6 +30,7 @@ target_link_libraries(sep_api
 
 target_include_directories(sep_api
     PUBLIC
+        BEFORE
         ${CMAKE_SOURCE_DIR}/include
 )
 

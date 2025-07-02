@@ -114,8 +114,6 @@ if(SEP_HAS_CYCLES)
       glog
       gflags
       embree4
-      cuew_stub
-      openpgl_stub
   )
 endif()
 

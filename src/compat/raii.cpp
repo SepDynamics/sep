@@ -73,6 +73,13 @@ cudaError_t cudaEventSynchronize(cudaEvent_t /*event*/) {
     return cudaSuccess;
 }
 
+cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t /*start*/, cudaEvent_t /*end*/) {
+    if (ms) {
+        *ms = 0.0f;
+    }
+    return cudaSuccess;
+}
+
 cudaError_t cudaStreamAttachMemAsync(cudaStream_t /*stream*/, void* /*ptr*/,
                                    size_t /*size*/, unsigned int /*flags*/) {
     return cudaSuccess;

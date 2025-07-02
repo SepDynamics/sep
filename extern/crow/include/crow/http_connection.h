@@ -23,6 +23,7 @@ namespace crow
 {
     namespace asio = boost::asio;
     using tcp = asio::ip::tcp;
+    using error_code = boost::system::error_code;
 
 
 #ifdef CROW_ENABLE_DEBUG

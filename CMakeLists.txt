@@ -14,6 +14,10 @@ include_directories(BEFORE ${CMAKE_SOURCE_DIR}/extern/Crow/include)
 # Find required packages
 find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
+find_library(HTTP_PARSER_LIBRARY http_parser)
+if(NOT HTTP_PARSER_LIBRARY)
+    message(FATAL_ERROR "http_parser library not found")
+endif()
 find_package(fmt REQUIRED)
 find_package(spdlog REQUIRED)
 find_path(HTTP_PARSER_INCLUDE_DIR http_parser.h)
@@ -65,4 +69,5 @@ target_link_libraries(sep_engine
         glog
         gflags
         embree4
+        ${HTTP_PARSER_LIBRARY}
 )

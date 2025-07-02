@@ -17,6 +17,7 @@ target_include_directories(api_tests PRIVATE
 
 target_link_libraries(api_tests PRIVATE
     sep_api
+    ${HTTP_PARSER_LIBRARY}
     GTest::GTest
     GTest::Main
 )

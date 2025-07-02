@@ -79,7 +79,7 @@ namespace crow
         void start()
         {
             auto self = this->shared_from_this();
-            adaptor_.start([self](const asio::error_code& ec) {
+            adaptor_.start([self](const boost::system::error_code& ec) {
                 if (!ec)
                 {
                     self->start_deadline();
@@ -466,7 +466,7 @@ namespace crow
             auto self = this->shared_from_this();
             adaptor_.socket().async_read_some(
               asio::buffer(buffer_),
-              [self](const asio::error_code& ec, std::size_t bytes_transferred) {
+              [self](const boost::system::error_code& ec, std::size_t bytes_transferred) {
                   bool error_while_reading = true;
                   if (!ec)
                   {
@@ -509,7 +509,7 @@ namespace crow
             auto self = this->shared_from_this();
             asio::async_write(
               adaptor_.socket(), buffers_,
-              [self](const asio::error_code& ec, std::size_t /*bytes_transferred*/) {
+              [self](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
                   self->res.clear();
                   self->res_body_copy_.clear();                  
                   if (!self->continue_requested)
@@ -540,7 +540,7 @@ namespace crow
         inline void do_write_sync(std::vector<asio::const_buffer>& buffers)
         {
 
-            asio::write(adaptor_.socket(), buffers, [&](asio::error_code ec, std::size_t) {
+            asio::write(adaptor_.socket(), buffers, [&](boost::system::error_code ec, std::size_t) {
                 if (!ec)
                 {
                     return false;

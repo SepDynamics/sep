@@ -44,7 +44,7 @@ cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
                            int kind, void* stream) {
   return ::cudaMemcpyAsync(dst, src, count, static_cast<cudaMemcpyKind>(kind),
-                           static_cast<cudaStream_t>(stream));
+                           reinterpret_cast<cudaStream_t>(stream));
 }
 
 // Implement CUDA kernel launch functions

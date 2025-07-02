@@ -75,6 +75,14 @@ CUDA_UNIFIED_FIX_BEGIN_SCOPE()
 #include <cmath>
 #pragma GCC diagnostic pop
 #endif
+
+// Map standard long double functions to SEP implementations
+#define acosl sep_acosl
+#define asinl sep_asinl
+#define atanl sep_atanl
+#define atan2l sep_atan2l
+#define sqrtl sep_sqrtl
+#define logl sep_logl
 CUDA_UNIFIED_FIX_END_SCOPE()
 
 // Indicate whether CUDA support is available for this compilation unit.
@@ -189,21 +197,60 @@ constexpr int FP_CLASS_NAN = 4;        // NaN values
 extern "C" {
 
 // Define stubs for long double math functions that GCC-14 expects but are missing in CUDA
-inline long double acosl(long double x) {
+SEP_HOST SEP_DEVICE inline long double sep_acosl(long double x) {
+#if defined(__CUDA_ARCH__)
     if (x < -1.0L || x > 1.0L) {
         errno = EDOM;
         return NAN;
     }
-    return static_cast<long double>(acos(static_cast<double>(x)));
+#if defined(__CUDA_LONG_DOUBLE_MATH_FUNCTIONS__)
+    return ::acosl(x);
+#else
+    return static_cast<long double>(::acos(static_cast<double>(x)));
+#endif
+#else
+    return __builtin_acosl(x);
+#endif
 }
-inline long double asinl(long double x) {
-    return asin((double)x);
+
+SEP_HOST SEP_DEVICE inline long double sep_asinl(long double x) {
+#if defined(__CUDA_ARCH__)
+    if (x < -1.0L || x > 1.0L) {
+        errno = EDOM;
+        return NAN;
+    }
+#if defined(__CUDA_LONG_DOUBLE_MATH_FUNCTIONS__)
+    return ::asinl(x);
+#else
+    return static_cast<long double>(::asin(static_cast<double>(x)));
+#endif
+#else
+    return __builtin_asinl(x);
+#endif
 }
-inline long double atanl(long double x) {
-    return atan((double)x);
+
+SEP_HOST SEP_DEVICE inline long double sep_atanl(long double x) {
+#if defined(__CUDA_ARCH__)
+#if defined(__CUDA_LONG_DOUBLE_MATH_FUNCTIONS__)
+    return ::atanl(x);
+#else
+    return static_cast<long double>(::atan(static_cast<double>(x)));
+#endif
+#else
+    return __builtin_atanl(x);
+#endif
 }
-inline long double atan2l(long double y, long double x) {
-    return atan2((double)y, (double)x);
+
+SEP_HOST SEP_DEVICE inline long double sep_atan2l(long double y, long double x) {
+#if defined(__CUDA_ARCH__)
+#if defined(__CUDA_LONG_DOUBLE_MATH_FUNCTIONS__)
+    return ::atan2l(y, x);
+#else
+    return static_cast<long double>(::atan2(static_cast<double>(y), static_cast<double>(x)));
+#endif
+#else
+    return __builtin_atan2l(y, x);
+#endif
 }
 inline long double ceill(long double x) {
     return ceil((double)x);
@@ -232,12 +279,20 @@ inline long double frexpl(long double x, int* exp) {
 inline long double ldexpl(long double x, int exp) {
     return ldexp((double)x, exp);
 }
-inline long double logl(long double x) {
+SEP_HOST SEP_DEVICE inline long double sep_logl(long double x) {
+#if defined(__CUDA_ARCH__)
     if (x <= 0.0L) {
         errno = EDOM;
         return NAN;
     }
-    return log((double)x);
+#if defined(__CUDA_LONG_DOUBLE_MATH_FUNCTIONS__)
+    return ::logl(x);
+#else
+    return static_cast<long double>(::log(static_cast<double>(x)));
+#endif
+#else
+    return __builtin_logl(x);
+#endif
 }
 inline long double log10l(long double x) {
     return log10((double)x);
@@ -257,8 +312,20 @@ inline long double sinl(long double x) {
 inline long double sinhl(long double x) {
     return sinh((double)x);
 }
-inline long double sqrtl(long double x) {
-    return sqrt((double)x);
+SEP_HOST SEP_DEVICE inline long double sep_sqrtl(long double x) {
+#if defined(__CUDA_ARCH__)
+    if (x < 0.0L) {
+        errno = EDOM;
+        return NAN;
+    }
+#if defined(__CUDA_LONG_DOUBLE_MATH_FUNCTIONS__)
+    return ::sqrtl(x);
+#else
+    return static_cast<long double>(::sqrt(static_cast<double>(x)));
+#endif
+#else
+    return __builtin_sqrtl(x);
+#endif
 }
 inline long double tanl(long double x) {
     return tan((double)x);

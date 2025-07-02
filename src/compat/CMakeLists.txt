@@ -30,6 +30,7 @@ add_library(sep_compat STATIC
     cuda_api.cu
     core.cu
     pattern_kernels.cu
+    kernels.cu
     quantum_kernels.cu
     utils.cu
     event.cu
@@ -39,7 +40,7 @@ add_library(sep_compat STATIC
 
 # Set CUDA source file properties
 set_source_files_properties(
-    cuda_api.cu core.cu pattern_kernels.cu quantum_kernels.cu utils.cu event.cu
+    cuda_api.cu core.cu pattern_kernels.cu kernels.cu quantum_kernels.cu utils.cu event.cu
     PROPERTIES
     COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
 )

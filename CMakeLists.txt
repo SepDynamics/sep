@@ -10,8 +10,6 @@ configure_sep()
 
 # Find required packages
 find_package(Threads REQUIRED)
-find_package(CURL REQUIRED)
-find_package(hiredis REQUIRED)
 
 # Add subdirectories
 add_subdirectory(src/core)

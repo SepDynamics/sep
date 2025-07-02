@@ -10,6 +10,7 @@ add_executable(api_tests
     long_double_math_test.cpp
     context_api_test.cpp
     context_ops_test.cpp
+    embedding_model_test.cpp
 )
 
 target_include_directories(api_tests PRIVATE

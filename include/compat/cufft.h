@@ -9,11 +9,21 @@
 #define SEP_CUDA_AVAILABLE 0
 #endif
 
-#if SEP_CUDA_AVAILABLE
-// When CUDA is available, include the real CUDA FFT headers
+#if SEP_CUDA_AVAILABLE && defined(__has_include)
+#if __has_include(<cufft.h>)
 #include <cufft.h>
+#define SEP_HAS_CUFFT 1
 #else
-// When CUDA is not available, define stub types and functions
+#define SEP_HAS_CUFFT 0
+#endif
+#else
+#define SEP_HAS_CUFFT 0
+#endif
+
+#if SEP_HAS_CUFFT
+// When CUDA and cuFFT are available, the real header has been included
+#else
+// Otherwise, define stub types and functions
 
 #ifdef __cplusplus
 namespace sep {
@@ -23,6 +33,10 @@ namespace cuda {
 typedef int cufftResult;
 typedef int cufftHandle;
 typedef int cufftType;
+typedef float cufftReal;
+typedef double cufftDoubleReal;
+struct cufftComplex { float x, y; };
+struct cufftDoubleComplex { double x, y; };
 
 // CUFFT Transform types
 #define CUFFT_R2C 0x2a
@@ -57,6 +71,10 @@ cufftResult cufftExecC2R(cufftHandle plan, void* idata, void* odata);
 using sep::cuda::cufftResult;
 using sep::cuda::cufftHandle;
 using sep::cuda::cufftType;
+using sep::cuda::cufftReal;
+using sep::cuda::cufftDoubleReal;
+using sep::cuda::cufftComplex;
+using sep::cuda::cufftDoubleComplex;
 
 // Define the function prototypes in global namespace
 inline cufftResult cufftPlan1d(cufftHandle* plan, int nx, int type, int batch) {

@@ -5,7 +5,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
-#include "compat/cufft.h"  // provides real CUFFT API or stubs
+#include "compat/cufft.h"
 #ifdef SEP_USE_FFTW
 #    include <fftw3.h>
 #endif
@@ -96,7 +96,7 @@ SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
     SpectralData spectral;
     const size_t N = samples.size();
 
-#if SEP_CUDA_AVAILABLE
+#if SEP_CUDA_AVAILABLE && SEP_HAS_CUFFT
     cufftHandle plan;
     cufftPlan1d(&plan, static_cast<int>(N), CUFFT_R2C, 1);
     std::vector<cufftReal> input(samples.begin(), samples.end());

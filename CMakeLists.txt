@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
+project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
 
 # Add cmake directory to module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -19,11 +19,6 @@ include_directories(BEFORE
 )
 add_compile_definitions(CROW_USE_BOOST)
 
-# Build shim libraries that replace stub implementations with minimal
-# functional versions. These are linked into all targets so that
-# Cycles and other dependencies resolve symbols correctly.
-add_subdirectory(extern/cuew_stub)
-add_subdirectory(extern/openpgl_stub)
 
 # Find required packages
 find_package(Threads REQUIRED)

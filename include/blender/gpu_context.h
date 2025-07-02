@@ -33,7 +33,7 @@ public:
     void clearError() { has_error_ = false; last_error_.clear(); }
 
     // Buffer helpers
-    virtual GpuBufferPtr createBuffer(size_t size, const void* data = nullptr);
+    virtual GPUBuffer createBuffer(size_t size, const void* data = nullptr);
     virtual void deleteBuffer(GPUBuffer* buffer);
     virtual void* mapBuffer(GPUBuffer* buffer);
     virtual void unmapBuffer(GPUBuffer* buffer);

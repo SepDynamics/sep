@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
 #include "audio/pipeline.h"
-#include "compat/shim.h"
-#include <cmath>
 #include <vector>
+#include <cmath>
 
 using namespace sep::audio;
 
@@ -11,8 +10,8 @@ TEST(AudioPipelineTestbed, ExtractsFundamentalFrequency){
     const float freq=1000.0f;
     for(int i=0;i<2048;i++){
         float sample = std::sinf(2.0f*M_PI*freq*(float)i/48000.0f);
-        sep::shim::vector<float> frame{static_cast<size_t>(static_cast<float>(sample))};
-        pipeline.processAudioFrame(sep::shim::to_std_vector(frame));
+        std::vector<float> frame{static_cast<float>(sample)};
+        pipeline.processAudioFrame(frame);
     }
     auto patterns = pipeline.getPatterns();
     ASSERT_FALSE(patterns.empty());

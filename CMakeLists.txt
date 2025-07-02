@@ -8,6 +8,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(SEPConfig)
 configure_sep()
 
+# Make the real Crow headers available to all targets
+include_directories(BEFORE ${CMAKE_SOURCE_DIR}/extern/Crow/include)
+
 # Find required packages
 find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)

@@ -132,7 +132,7 @@ public:
     }
     
     uint32_t count;         // Number of patterns
-    shim::vector<float> data; // Raw pattern data (position, color, scale)
+    std::vector<float> data; // Raw pattern data (position, color, scale)
 };
 
 /**

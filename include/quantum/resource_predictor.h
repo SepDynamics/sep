@@ -13,7 +13,7 @@ struct Context {
   ::sep::shim::string type;
   nlohmann::json content;
   std::vector<nlohmann::json> relationships;
-  ::sep::shim::vector<::sep::shim::string> tags;
+  std::vector<::sep::shim::string> tags;
   nlohmann::json metadata;
   nlohmann::json processorResult;
 };
@@ -27,7 +27,7 @@ struct CheckResult {
 
 struct Batch {
   ::sep::shim::string layer;
-  ::sep::shim::vector<Context> contexts;
+  std::vector<Context> contexts;
 };
 
 struct ResourcePrediction {
@@ -96,7 +96,7 @@ public:
   virtual float calculateResourceEfficiency() const = 0;
 
   // Suggest batch sizes for target throughput
-  virtual ::sep::shim::vector<std::size_t>
+  virtual std::vector<std::size_t>
   suggestBatchSizes(std::size_t target_throughput) const = 0;
 };
 

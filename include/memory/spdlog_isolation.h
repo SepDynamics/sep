@@ -73,11 +73,7 @@ class weak_ptr;
 template<typename T, typename Deleter = void>
 class unique_ptr;
 
-template<typename T>
-class allocator;
 
-template<typename T>
-class vector;
 
 template<typename T>
 class function;
@@ -86,10 +82,7 @@ template<typename T, typename U>
 class pair;
 
 class thread;
-class mutex;
-class recursive_mutex;
-class condition_variable;
-class once_flag;
+
 
 // Chrono namespace for time-related functionality
 namespace chrono {
@@ -118,8 +111,7 @@ typedef duration<int64_t, ratio<1, 1000000>>    microseconds;
 typedef duration<int64_t, ratio<1, 1000000000>> nanoseconds;
 }  // namespace chrono
 
-template<typename T>
-class lock_guard;
+
 template<typename T>
 class unique_lock;
 

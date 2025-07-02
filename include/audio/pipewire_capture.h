@@ -73,6 +73,7 @@ class PipeWireCapture : public AudioCapture {
     // Internal methods
     void cleanup();
     AudioError setupStream();
+};
 #else
 
 class PipeWireCapture : public AudioCapture {

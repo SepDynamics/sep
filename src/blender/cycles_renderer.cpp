@@ -109,65 +109,51 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
             cam->set_screen_size(params.width, params.height);
             cam->set_fov(45.0f * (M_PI_F / 180.0f));
             cam->set_matrix(::ccl::transform_identity());
-            cam->set_perspective_motion(true);
-            cam->set_motion(false);
-            cam->shutter_time = 0.0f;
-            cam->rolling_shutter_type = ::ccl::ROLLING_SHUTTER_NONE;
-            cam->type = ::ccl::CAMERA_PERSPECTIVE;
-            cam->use_spherical_stereo = false;
-            cam->stereo_eye = ::ccl::STEREO_NONE;
-            cam->interocular_distance = 0.0f;
-            cam->convergence_distance = 0.0f;
-            cam->use_pole_merge = false;
-            cam->pole_merge_angle_from = 0.0f;
-            cam->pole_merge_angle_to = 0.0f;
-            cam->sensorwidth = 36.0f;
-            cam->sensorheight = 24.0f;
-            cam->nearclip = 0.1f;
-            cam->farclip = 100.0f;
-            cam->aperture_size = 0.0f;
-            cam->blades = 0;
-            cam->blade_rotation = 0.0f;
-            cam->focal_distance = 10.0f;
-            cam->compute_viewplane();
+            cam->set_use_perspective_motion(true);
+            ::ccl::array<::ccl::Transform> no_motion;
+            cam->set_motion(no_motion);
+            cam->set_shuttertime(0.0f);
+            cam->set_rolling_shutter_type(::ccl::Camera::ROLLING_SHUTTER_NONE);
+            cam->set_camera_type(::ccl::CAMERA_PERSPECTIVE);
+            cam->set_use_spherical_stereo(false);
+            cam->set_stereo_eye(::ccl::Camera::STEREO_NONE);
+            cam->set_interocular_distance(0.0f);
+            cam->set_convergence_distance(0.0f);
+            cam->set_use_pole_merge(false);
+            cam->set_pole_merge_angle_from(0.0f);
+            cam->set_pole_merge_angle_to(0.0f);
+            cam->set_sensorwidth(36.0f);
+            cam->set_sensorheight(24.0f);
+            cam->set_nearclip(0.1f);
+            cam->set_farclip(100.0f);
+            cam->set_aperturesize(0.0f);
+            cam->set_blades(0);
+            cam->set_bladesrotation(0.0f);
+            cam->set_focaldistance(10.0f);
+            cam->compute_auto_viewplane();
         }
 
         // Configure render settings
-        cycles_scene_->params.samples = params.samples;
-        cycles_scene_->params.use_denoising = params.use_denoising;
         cycles_scene_->params.background = true;
-        cycles_scene_->params.threads = 0; // Auto-detect thread count
-        cycles_scene_->params.pixel_size = 1;
-        cycles_scene_->params.progressive = true;
-        cycles_scene_->params.progressive_refine = true;
-        cycles_scene_->params.progressive_update_timeout = 1.0;
-        cycles_scene_->params.tile_size = ::ccl::TileManager::get_tile_size();
-        cycles_scene_->params.start_resolution = 1;
-        cycles_scene_->params.pixel_filter = ::ccl::FILTER_GAUSSIAN;
-        cycles_scene_->params.filter_width = 1.5f;
-        cycles_scene_->params.film_exposure = 1.0f;
-        cycles_scene_->params.film_transparent = false;
-        cycles_scene_->params.film_transparent_glass = false;
-        cycles_scene_->params.film_transparent_roughness = 0.1f;
-        cycles_scene_->params.denoising_radius = 8;
-        cycles_scene_->params.denoising_strength = 0.5f;
-        cycles_scene_->params.denoising_feature_strength = 0.5f;
-        cycles_scene_->params.denoising_relative_pca = false;
-        cycles_scene_->params.denoising_store_passes = false;
-        cycles_scene_->params.denoising_diffuse = true;
-        cycles_scene_->params.denoising_glossy = true;
-        cycles_scene_->params.denoising_transmission = true;
-        cycles_scene_->params.denoising_clean_aux = true;
-        cycles_scene_->params.denoising_prefilter = ::ccl::DENOISER_PREFILTER_FAST;
-        cycles_scene_->params.denoising_use_passes = false;
-        cycles_scene_->params.denoising_start_sample = 0;
-        cycles_scene_->params.denoising_type = ::ccl::DENOISER_NLM;
         cycles_scene_->params.use_bvh_spatial_split = true;
         cycles_scene_->params.use_bvh_unaligned_nodes = true;
         cycles_scene_->params.num_bvh_time_steps = 0;
         cycles_scene_->params.bvh_type = ::ccl::BVH_TYPE_DYNAMIC;
         cycles_scene_->params.bvh_layout = ::ccl::BVH_LAYOUT_BVH2;
-        cycles_scene_->params.use_qbvh = true;
+
+        ::ccl::Integrator *integrator = cycles_scene_->integrator;
+        if (integrator) {
+            integrator->set_aa_samples(static_cast<int>(params.samples));
+            integrator->set_use_denoise(params.use_denoising);
+        }
+
+        ::ccl::Film *film = cycles_scene_->film;
+        if (film) {
+            film->set_exposure(1.0f);
+            film->set_filter_type(::ccl::FILTER_GAUSSIAN);
+            film->set_filter_width(1.5f);
+            film->set_pass_alpha_threshold(0.0f);
+        }
         return SEPResult::SUCCESS;
     } catch (const std::exception& e) {
         return SEPResult::PROCESSING_ERROR;
@@ -183,6 +169,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     ::ccl::SessionParams session_params;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
+    session_params.samples = static_cast<int>(params.samples);
     
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = std::move(cycles_scene_);

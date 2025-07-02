@@ -6,26 +6,8 @@
 #include "compat/cuda_common.h"
 #include <cuda_runtime.h>
 #include <cstdint>
-#if __has_include(<hiredis/hiredis.h>)
-#    include <hiredis/hiredis.h>
-#    define SEP_HAS_HIREDIS 1
-#else
-#    define SEP_HAS_HIREDIS 0
-struct redisContext
-{};
-struct redisReply
-{};
-inline redisContext* redisConnect(const char*, int)
-{
-    return nullptr;
-}
-inline void  redisFree(redisContext*) {}
-inline void  freeReplyObject(void*) {}
-inline void* redisCommand(redisContext*, const char*, ...)
-{
-    return nullptr;
-}
-#endif
+#include <hiredis/hiredis.h>
+#define SEP_HAS_HIREDIS 1
 // Define namespace alias to clarify that Manager is in the logging namespace
 namespace logging = sep::logging; 
 #include "memory/memory_tier_manager.hpp"

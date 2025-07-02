@@ -14,16 +14,10 @@
 #include "audio/capture.h"
 
 #ifndef SEP_HAS_PIPEWIRE
-#  if __has_include(<pipewire/pipewire.h>)
-#    define SEP_HAS_PIPEWIRE 1
-#  else
-#    define SEP_HAS_PIPEWIRE 0
-#  endif
+#define SEP_HAS_PIPEWIRE 1
 #endif
 
-#if SEP_HAS_PIPEWIRE
-#  include <pipewire/stream.h>
-#endif
+#include <pipewire/stream.h>
 
 // Forward declarations to avoid exposing PipeWire types in header
 struct pw_context;
@@ -35,7 +29,6 @@ struct spa_hook;
 namespace sep {
 namespace audio {
 
-#if SEP_HAS_PIPEWIRE
 
 class PipeWireCapture : public AudioCapture {
   public:
@@ -74,18 +67,7 @@ class PipeWireCapture : public AudioCapture {
     void cleanup();
     AudioError setupStream();
 };
-#else
 
-class PipeWireCapture : public AudioCapture {
-  public:
-    AudioError init(const AudioConfig&) override { return AudioError::INIT_FAILED; }
-    AudioError start() override { return AudioError::INIT_FAILED; }
-    AudioError stop() override { return AudioError::NONE; }
-    void setCallback(AudioCallback) override {}
-    AudioMetrics getMetrics() const override { return {}; }
-};
-
-#endif
 
 } // namespace audio
 } // namespace sep

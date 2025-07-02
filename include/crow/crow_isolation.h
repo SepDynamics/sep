@@ -8,7 +8,7 @@
 
 #ifndef __CUDACC__
 
-#include <crow.h>
+#include "crow.h"  // Use bundled Crow to ensure consistent macro definitions
 
 #else
 

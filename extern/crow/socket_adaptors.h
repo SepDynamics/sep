@@ -1,23 +1,13 @@
 #pragma once
 
-#ifdef CROW_USE_BOOST
 #include <boost/asio.hpp>
 #include <boost/asio/version.hpp>
 #ifdef CROW_ENABLE_SSL
 #include <boost/asio/ssl.hpp>
 #endif
-#else
-#ifndef ASIO_STANDALONE
-#define ASIO_STANDALONE
-#endif
-#include <asio.hpp>
-#include "asio/version.hpp"
-#ifdef CROW_ENABLE_SSL
 #include "settings.h"
 #include "asio_isolation.h"
-#endif
 #include <system_error>
-#endif
 #include "logging.h"
 
 // Fix for the conditional expression to avoid the operator '&&' error

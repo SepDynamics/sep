@@ -1,10 +1,7 @@
 #pragma once
 
-#ifndef ASIO_STANDALONE
-#define ASIO_STANDALONE
-#endif
-#include <asio.hpp>
-#include <asio/basic_waitable_timer.hpp>
+#include <boost/asio.hpp>
+#include <boost/asio/basic_waitable_timer.hpp>
 
 #include <chrono>
 #include <functional>

@@ -1,20 +1,9 @@
 #pragma once
 
-#ifdef CROW_USE_BOOST
 #include <boost/asio.hpp>
 #include <boost/asio/version.hpp>
 #ifdef CROW_ENABLE_SSL
 #include <boost/asio/ssl.hpp>
-#endif
-#else
-#ifndef ASIO_STANDALONE
-#define ASIO_STANDALONE
-#endif
-#include <asio.hpp>
-#include <asio/version.hpp>
-#ifdef CROW_ENABLE_SSL
-#include <asio/ssl.hpp>
-#endif
 #endif
 #include "crow/settings.h"
 

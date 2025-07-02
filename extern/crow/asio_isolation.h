@@ -633,13 +633,8 @@ public:
 #    define SEP_ASIO_INCLUDED
 
 // Choose between Boost ASIO and standalone ASIO
-#    ifdef CROW_USE_BOOST
 #        include <boost/asio.hpp>
 namespace asio = boost::asio;
-#    else
-#        include <asio.hpp>
-#        define ASIO_STANDALONE
-#    endif
 
 #    endif // SEP_ASIO_INCLUDED
 #endif

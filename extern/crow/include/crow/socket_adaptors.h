@@ -1,20 +1,18 @@
 #pragma once
-#ifndef ASIO_STANDALONE
-#define ASIO_STANDALONE
-#endif
-#include <asio.hpp>
+#include <boost/asio.hpp>
 #ifdef CROW_ENABLE_SSL
-#include <asio/ssl.hpp>
+#include <boost/asio/ssl.hpp>
 #endif
 #include "crow/settings.h"
-#include <asio/version.hpp>
-#if ASIO_VERSION >= 101300 // 1.13.0
-#define GET_IO_SERVICE(s) ((asio::io_context&)(s).get_executor().context())
+#include <boost/asio/version.hpp>
+#if BOOST_ASIO_VERSION >= 101300 // 1.13.0
+#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s).get_executor().context())
 #else
 #define GET_IO_SERVICE(s) ((s).get_io_service())
 #endif
 namespace crow
 {
+    namespace asio = boost::asio;
     using tcp = asio::ip::tcp;
 
     /// A wrapper for the asio::ip::tcp::socket and asio::ssl::stream

@@ -23,43 +23,54 @@ if(WITH_OPENSUBDIV)
     set(WITH_CYCLES_OPENSUBDIV ${WITH_OPENSUBDIV})
 endif()
 
-# Find CUDA toolkit to provide imported targets and variables
-find_package(CUDAToolkit QUIET)
-if(NOT CUDAToolkit_FOUND OR NOT CUDAToolkit_NVCC_EXECUTABLE)
-    message(FATAL_ERROR "CUDA toolkit not found. Install 'nvidia-cuda-toolkit' or set CUDAToolkit_ROOT")
+if(SEP_HAS_CUDA)
+    # Build full CUDA implementation when the toolkit is available
+    find_package(CUDAToolkit REQUIRED)
+
+    add_library(sep_compat STATIC
+        cuda_api.cu
+        core.cu
+        pattern_kernels.cu
+        kernels.cu
+        quantum_kernels.cu
+        utils.cu
+        event.cu
+        stream.cpp
+        raii.cpp
+    )
+
+    set_source_files_properties(
+        cuda_api.cu core.cu pattern_kernels.cu kernels.cu quantum_kernels.cu utils.cu event.cu
+        PROPERTIES
+        COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
+    )
+
+    set_target_properties(sep_compat PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+        CUDA_RESOLVE_DEVICE_SYMBOLS ON
+        POSITION_INDEPENDENT_CODE ON
+        CUDA_ARCHITECTURES native
+    )
+
+    set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)
+
+    target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=1)
+else()
+    # CPU fallback when CUDA is not available
+    add_library(sep_compat STATIC
+        cuda_api_stub.cpp
+        stream.cpp
+        raii.cpp
+        event.cu
+    )
+
+    # Compile .cu sources with the host compiler
+    set_source_files_properties(event.cu PROPERTIES LANGUAGE CXX)
+
+    set_target_properties(sep_compat PROPERTIES
+        POSITION_INDEPENDENT_CODE ON
+    )
 endif()
-
-add_library(sep_compat STATIC
-    cuda_api.cu
-    core.cu
-    pattern_kernels.cu
-    kernels.cu
-    quantum_kernels.cu
-    utils.cu
-    event.cu
-    stream.cpp
-    raii.cpp
-)
-
-# Set CUDA source file properties
-set_source_files_properties(
-    cuda_api.cu core.cu pattern_kernels.cu kernels.cu quantum_kernels.cu utils.cu event.cu
-    PROPERTIES
-    COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
-)
-
-# Configure CUDA target using custom pipeline
-
-# Configure CUDA properties
-set_target_properties(sep_compat PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    POSITION_INDEPENDENT_CODE ON
-    CUDA_ARCHITECTURES native
-)
-
-# Set CUDA standard
-set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)
 
 # Include directories
 target_include_directories(sep_compat
@@ -75,6 +86,6 @@ target_include_directories(sep_compat
 target_link_libraries(sep_compat
     PUBLIC
         sep_core
-        CUDA::cudart
-        CUDA::cuda_driver
+        $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cudart,>
+        $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cuda_driver,>
 )

@@ -266,26 +266,6 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 
     if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
     {
-        json result;
-        result["success"] = false;
-        result["error"]   = "contexts must be an array";
-        return result;
-    }
-
-    auto [valid, invalid_index] =
-        sep::testbed::validate_contexts_impl(request_data["contexts"]);
-
-    impl_->health_metrics.successfulRequests++;
-
-    json result;
-    result["success"]       = valid;
-    result["context_count"] = request_data["contexts"].size();
-    if (!valid)
-    {
-        result["error"] = std::string("invalid context at index ") +
-                          std::to_string(invalid_index);
-    }
-    if (!request_data.contains("contexts") || !request_data["contexts"].is_array()) {
         return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
     }
 
@@ -294,9 +274,9 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
     impl_->health_metrics.successfulRequests++;
 
     json result;
-    result["success"]       = true;
-    result["valid"]         = report.overall_valid;
-    result["context_count"] = request_data["contexts"].size();
+    result["success"]         = true;
+    result["valid"]           = report.overall_valid;
+    result["context_count"]   = request_data["contexts"].size();
     result["invalid_indices"] = report.invalid_indices;
     return result;
 }
@@ -432,13 +412,17 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
     }
 
     std::vector<std::vector<double>> embeddings;
-    for (const auto& ctx : request_data["contexts"])
+    std::vector<double>           timestamps;
+    for (size_t idx = 0; idx < request_data["contexts"].size(); ++idx)
     {
-        if (!ctx.contains("content") || !ctx["content"].is_array())
+        const auto& ctx = request_data["contexts"][idx];
+        if (!ctx.contains("content") || !ctx["content"].is_array() ||
+            !ctx.contains("metadata") || !ctx["metadata"].is_object() ||
+            !ctx["metadata"].contains("timestamp"))
         {
             json result;
             result["success"] = false;
-            result["error"]   = "context missing content";
+            result["error"]   = std::string("invalid context at index ") + std::to_string(idx);
             return result;
         }
         std::vector<double> emb;
@@ -446,6 +430,7 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
         for (const auto& v : ctx["content"])
             emb.push_back(v.get<double>());
         embeddings.push_back(std::move(emb));
+        timestamps.push_back(ctx["metadata"]["timestamp"].get<double>());
     }
 
     size_t dim = embeddings[0].size();
@@ -460,7 +445,7 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
         }
     }
 
-    std::vector<float> weights;
+    std::vector<double> weights;
     if (request_data.contains("weights"))
     {
         if (!request_data["weights"].is_array() ||
@@ -472,10 +457,42 @@ nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
             return result;
         }
         for (const auto& w : request_data["weights"])
-            weights.push_back(w.get<float>());
+            weights.push_back(w.get<double>());
     }
 
-    auto blend = sep::testbed::blend_contexts_impl(embeddings, weights);
+    // Normalize weights and compute timestamp blend
+    if (weights.empty())
+        weights.assign(embeddings.size(), 1.0 / static_cast<double>(embeddings.size()));
+
+    double sum_w = 0.0;
+    for (double v : weights) sum_w += v;
+    if (sum_w == 0.0)
+    {
+        json result;
+        result["success"] = false;
+        result["error"]   = "weights sum to zero";
+        return result;
+    }
+    for (double& v : weights) v /= sum_w;
+
+    auto blend_report = sep::testbed::blend_embeddings(embeddings, weights);
+    if (!blend_report.success)
+    {
+        json result;
+        result["success"] = false;
+        result["error"]   = blend_report.error;
+        return result;
+    }
+
+    double ts = 0.0;
+    for (size_t i = 0; i < timestamps.size(); ++i)
+        ts += timestamps[i] * weights[i];
+
+    json blend;
+    blend["embedding"] = blend_report.blended;
+    blend["coherence"] = blend_report.coherence;
+    blend["metadata"]  = { {"timestamp", ts} };
+    blend["type"]       = "blended";
     blend["blended_context_id"] = generateId("blend");
 
     json result;

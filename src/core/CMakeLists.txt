@@ -14,7 +14,6 @@ add_library(sep_core
 )
 
 # Link dependencies
-target_link_libraries(sep_core)
 
 # Enable CUDA support when available
 target_compile_definitions(sep_core PRIVATE SEP_HAS_CUDA=1)
@@ -36,6 +35,7 @@ target_include_directories(sep_core
 target_link_libraries(sep_core
     PUBLIC
         Threads::Threads
+        sep_compat
 )
 
 # Export include directories for dependent targets

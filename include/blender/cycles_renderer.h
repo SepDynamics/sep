@@ -39,6 +39,7 @@ private:
     bool initialized_{false};
     int width_{0};
     int height_{0};
+    RenderParams render_params_{};
     std::vector<pattern::PatternData> patterns_;
     ScenePtr cycles_scene_{nullptr};
     ::ccl::Stats cycles_stats_;

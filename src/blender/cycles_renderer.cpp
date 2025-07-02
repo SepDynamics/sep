@@ -72,7 +72,7 @@ SEPResult CyclesRenderer::createSceneFromPatterns(const std::vector<pattern::Pat
         // Create camera
         ::ccl::Camera *cam = cycles_scene_->camera;
         if (!cam) {
-            cam = new ::ccl::Camera();
+            cam = cycles_scene_->create_node<::ccl::Camera>();
             cycles_scene_->camera = cam;
         }
 
@@ -99,6 +99,7 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
     try {
         width_ = params.width;
         height_ = params.height;
+        render_params_ = params;
         if (!cycles_scene_) {
             return SEPResult::NOT_INITIALIZED;
         }
@@ -128,11 +129,10 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
             cam->set_blades(0);
             cam->set_bladesrotation(0.0f);
             cam->set_focaldistance(10.0f);
-            cam->compute_viewplane();
+            cam->compute_auto_viewplane();
         }
 
         // Configure render settings
-        cycles_scene_->params.samples = params.samples;
         cycles_scene_->integrator->set_aa_samples(static_cast<int>(params.samples));
         cycles_scene_->integrator->set_use_denoise(params.use_denoising);
         cycles_scene_->params.background = true;
@@ -168,7 +168,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
     ::ccl::SessionParams session_params;
     session_params.background = true;
     session_params.threads = 0; // Auto-detect thread count
-    session_params.samples = static_cast<int>(params.samples);
+    session_params.samples = static_cast<int>(render_params_.samples);
     
     ::ccl::Session *session = new ::ccl::Session(session_params, cycles_scene_->params);
     session->scene = std::move(cycles_scene_);

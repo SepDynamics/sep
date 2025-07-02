@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <vector>
 #include "compat/shim.h"
 
 #include "blender/base_types.h"
@@ -28,8 +29,8 @@ public:
   virtual ~CompressionStrategy() = default;
 
   // Core compression operations
-  virtual ::sep::shim::vector<uint8_t> compress(const void *data, size_t size) = 0;
-  virtual bool decompress(const ::sep::shim::vector<uint8_t> &compressed, void *output,
+  virtual std::vector<uint8_t> compress(const void *data, size_t size) = 0;
+  virtual bool decompress(const std::vector<uint8_t> &compressed, void *output,
                           size_t outputSize) = 0;
 
   // Compression method selection
@@ -40,22 +41,22 @@ public:
 // Delta encoding implementation
 class DeltaCompression : public CompressionStrategy {
 public:
-  ::sep::shim::vector<uint8_t> compress(const void *data, size_t size) override;
-  bool decompress(const ::sep::shim::vector<uint8_t> &compressed, void *output,
+  std::vector<uint8_t> compress(const void *data, size_t size) override;
+  bool decompress(const std::vector<uint8_t> &compressed, void *output,
                   size_t outputSize) override;
   CompressionMethod selectMethod(const void *data, size_t size) override;
   CompressionStats getStats() const override;
 
 private:
   CompressionStats stats;
-  ::sep::shim::vector<uint8_t> previousBlock;
+  std::vector<uint8_t> previousBlock;
 };
 
 // LZ4 compression implementation
 class LZ4Compression : public CompressionStrategy {
 public:
-  ::sep::shim::vector<uint8_t> compress(const void *data, size_t size) override;
-  bool decompress(const ::sep::shim::vector<uint8_t> &compressed, void *output,
+  std::vector<uint8_t> compress(const void *data, size_t size) override;
+  bool decompress(const std::vector<uint8_t> &compressed, void *output,
                   size_t outputSize) override;
   CompressionMethod selectMethod(const void *data, size_t size) override;
   CompressionStats getStats() const override;
@@ -67,8 +68,8 @@ private:
 // ZSTD compression implementation
 class ZSTDCompression : public CompressionStrategy {
 public:
-  ::sep::shim::vector<uint8_t> compress(const void *data, size_t size) override;
-  bool decompress(const ::sep::shim::vector<uint8_t> &compressed, void *output,
+  std::vector<uint8_t> compress(const void *data, size_t size) override;
+  bool decompress(const std::vector<uint8_t> &compressed, void *output,
                   size_t outputSize) override;
   CompressionMethod selectMethod(const void *data, size_t size) override;
   CompressionStats getStats() const override;
@@ -99,9 +100,9 @@ float calculateNormalizedEntropy(const void *data, size_t size);
 bool hasRepeatingPatterns(const void *data, size_t size);
 
 // Downsample/upsample helpers
-::sep::shim::vector<uint8_t> downsample(const void *data, size_t size,
+std::vector<uint8_t> downsample(const void *data, size_t size,
                                 size_t factor = 4);
-::sep::shim::vector<uint8_t> upsample(const ::sep::shim::vector<uint8_t> &data,
+std::vector<uint8_t> upsample(const std::vector<uint8_t> &data,
                               size_t original_size, size_t factor = 4);
 
 // Estimate compression ratio
@@ -122,13 +123,13 @@ public:
   };
   // Forward declare PatternData to avoid circular dependencies
   static bool
-  compressPatterns(const ::sep::shim::vector<void*> &patterns,
-                   ::sep::shim::vector<uint8_t> &compressed, size_t &compressed_size,
+  compressPatterns(const std::vector<void*> &patterns,
+                   std::vector<uint8_t> &compressed, size_t &compressed_size,
                    Mode mode = Mode::BALANCED);
 
   static bool
   decompressPatterns(const uint8_t *compressed_data, size_t compressed_size,
-                     ::sep::shim::vector<void*> &patterns);
+                     std::vector<void*> &patterns);
   static bool getMetadata(const uint8_t *compressed_data,
                           size_t compressed_size, Metadata &metadata);
 

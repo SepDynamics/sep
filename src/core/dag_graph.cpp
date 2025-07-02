@@ -6,7 +6,7 @@
 namespace sep {
 namespace dag {
 
-uint64_t DagGraph::addNode(const glm::vec3& pattern, float coherence, const ::sep::shim::vector<uint64_t>& parents)
+uint64_t DagGraph::addNode(const glm::vec3& pattern, float coherence, const std::vector<uint64_t>& parents)
 {
     uint64_t id = next_id_++;
     nodes_[id]  = DagNode{id, pattern, coherence, parents};
@@ -16,7 +16,7 @@ uint64_t DagGraph::addNode(const glm::vec3& pattern, float coherence, const ::se
 uint64_t DagGraph::addNodeWithId(uint64_t                           id,
                                  const glm::vec3&                   pattern,
                                  float                              coherence,
-                                 const ::sep::shim::vector<uint64_t>& parents)
+                                 const std::vector<uint64_t>& parents)
 {
     // Update next_id_ if the provided id is higher
     if (id >= next_id_)
@@ -28,7 +28,7 @@ uint64_t DagGraph::addNodeWithId(uint64_t                           id,
     return id;
 }
 
-void DagGraph::updateNodeParents(uint64_t id, const ::sep::shim::vector<uint64_t>& parents)
+void DagGraph::updateNodeParents(uint64_t id, const std::vector<uint64_t>& parents)
 {
     auto it = nodes_.find(id);
     if (it != nodes_.end())
@@ -46,7 +46,7 @@ void DagGraph::updateCoherence(uint64_t id, float coherence)
     }
 }
 
-::sep::shim::vector<uint64_t> DagGraph::getParents(uint64_t id) const
+std::vector<uint64_t> DagGraph::getParents(uint64_t id) const
 {
     auto it = nodes_.find(id);
     if (it != nodes_.end())

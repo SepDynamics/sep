@@ -8,6 +8,7 @@
 #include <mutex>
 #include <thread>
 #include <unordered_map>
+#include <vector>
 #include "compat/shim.h"
 
 #include "blender/base_types.h"
@@ -72,7 +73,7 @@ class BlenderBridge {
     sep::pattern::PatternMetrics metrics;
     PatternStateEnum state;
     PatternState pattern_state;
-    ::sep::shim::vector<PatternData> patterns;
+    std::vector<PatternData> patterns;
     sep::memory::MemoryBlock* memory_block{nullptr};
     bool needs_update;
     bool is_processing;
@@ -130,7 +131,7 @@ class BlenderBridge {
   // Access to objects_ must be guarded by objects_mutex_
   std::unordered_map<sep::pattern::ObjectHandle, ObjectState> objects_;
   // observers_ is modified by multiple threads and protected by observers_mutex_
-  ::sep::shim::vector<std::shared_ptr<sep::pattern::PatternObserver>> observers_;
+  std::vector<std::shared_ptr<sep::pattern::PatternObserver>> observers_;
 
   std::atomic<bool> initialized_{false};
   std::atomic<bool> processing_{false};

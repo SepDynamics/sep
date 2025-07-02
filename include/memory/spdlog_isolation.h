@@ -41,9 +41,8 @@ public:
 // It provides stub implementations for spdlog functionality that can be
 // safely included in CUDA files without causing template instantiation errors
 
-// When spdlog is unavailable or when building for CUDA we provide lightweight
-// fallback types. Otherwise the real spdlog headers are used.
-#if (defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)) || !__has_include(<spdlog/spdlog.h>)
+// Check for CUDA compilation - either via __CUDACC__ or our custom SEP_CUDA_COMPILATION flag
+#if defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)
 // When compiling with CUDA, provide stub implementations
 
 // Include our isolation headers

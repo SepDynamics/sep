@@ -3,7 +3,7 @@
 
 #include "core/types.h"
 #include "core/config.h"
-#include "compat/cuda_runtime.h"
+#include <cuda_runtime.h>
 #include "compat/cufft.h"
 #include "compat/cuda_api.hpp"
 #include "memory/types.h"
@@ -37,7 +37,7 @@ using cufftHandle = cufftHandle_t*;
 #include <unordered_map>
 #include <vector>
 
-#include "compat/cuda_runtime.h"
+#include <cuda_runtime.h>
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/qbsa.h"

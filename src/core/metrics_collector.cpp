@@ -1,11 +1,7 @@
 #include "core/metrics_collector.h"
 #include "compat/cuda_common.h"
 #include "compat/cuda_helpers.h"
-#if SEP_CUDA_AVAILABLE
 #include <cuda_runtime_api.h>
-#else
-#include "compat/cuda_runtime.h"
-#endif
 
 #include <sys/resource.h>
 #include <sys/sysinfo.h>
@@ -35,26 +31,18 @@ class MetricsCollector::Impl {
 
   Impl() : running_(false), latency_window_size_(1000) {
     // Create events for timing
-    #if SEP_CUDA_AVAILABLE
-    CUDA_CHECK(cudaEventCreate(&start_event_));
+        CUDA_CHECK(cudaEventCreate(&start_event_));
     CUDA_CHECK(cudaEventCreate(&stop_event_));
-    #else
-    start_event_ = nullptr;
-    stop_event_ = nullptr;
-    #endif
+    
   }
 
   ~Impl() {
     stopCollection();
     if (start_event_) {
-      #if SEP_CUDA_AVAILABLE
       CUDA_CHECK(cudaEventDestroy(start_event_));
-      #endif
     }
     if (stop_event_) {
-      #if SEP_CUDA_AVAILABLE
       CUDA_CHECK(cudaEventDestroy(stop_event_));
-      #endif
     }
   }
 
@@ -94,25 +82,20 @@ class MetricsCollector::Impl {
 
   void recordKernelStart() {
     if (start_event_) {
-      #if SEP_CUDA_AVAILABLE
       CUDA_CHECK(cudaEventRecord(start_event_, nullptr));
-      #endif
     }
   }
 
   void recordKernelStop() {
     if (stop_event_) {
-      #if SEP_CUDA_AVAILABLE
-      CUDA_CHECK(cudaEventRecord(stop_event_, nullptr));
+            CUDA_CHECK(cudaEventRecord(stop_event_, nullptr));
       CUDA_CHECK(cudaEventSynchronize(stop_event_));
 
       float elapsed_time = 0.0f;
       if (start_event_ && stop_event_) {
         CUDA_CHECK(cudaEventElapsedTime(&elapsed_time, start_event_, stop_event_));
       }
-      #else
-      float elapsed_time = 0.0f;
-      #endif
+      
 
       std::lock_guard<std::mutex> lock(metrics_mutex_);
       current_metrics_.kernel_execution_time = elapsed_time;

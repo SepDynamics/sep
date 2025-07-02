@@ -14,7 +14,7 @@
 #ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
 #define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
 #endif
-#include "compat/cuda_runtime.h"
+#include <cuda_runtime.h>
 #include "compat/cuda_helpers.h"
 
 // Standard library includes - only for host compilation

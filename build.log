@@ -49,26 +49,26 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  2%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  8%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  1%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  5%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 [ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
 [ 16%] Linking CXX static library libsep_embeddings.a
 [ 16%] Built target sep_embeddings
 [ 17%] Linking CXX static library libsep_core.a
 [ 17%] Built target sep_core
-[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 20%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 25%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[ 26%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 26%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
 /sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateUnifiedMemory(std::size_t, cudaStream_t)’:
 /sep/src/compat/raii.cpp:278:15: error: ‘cudaStreamAttachMemAsync’ was not declared in this scope
   278 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);

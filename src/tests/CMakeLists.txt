@@ -1,6 +1,8 @@
 # Set C++ standard
 # Find required packages
-find_package(CUDAToolkit REQUIRED)
+if(SEP_HAS_CUDA)
+    find_package(CUDAToolkit REQUIRED)
+endif()
 find_package(fmt REQUIRED)
 
 # Add test sources
@@ -19,15 +21,15 @@ target_link_libraries(cycles_test PRIVATE
     fmt::fmt
     sep_core
     sep_compat
-    CUDA::cudart
-    CUDA::cuda_driver
+    $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cudart,>
+    $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cuda_driver,>
 )
 
 # Configure include directories
 target_include_directories(cycles_test PRIVATE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src
-    ${CUDAToolkit_INCLUDE_DIRS}
+    $<IF:$<BOOL:${SEP_HAS_CUDA}>,${CUDAToolkit_INCLUDE_DIRS},>
 )
 
 # Add test to CTest

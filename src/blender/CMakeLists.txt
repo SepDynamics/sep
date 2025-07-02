@@ -1,4 +1,6 @@
-find_package(CUDAToolkit REQUIRED)
+if(SEP_HAS_CUDA)
+    find_package(CUDAToolkit REQUIRED)
+endif()
 find_package(TBB REQUIRED)
 find_package(PkgConfig REQUIRED)
 
@@ -25,7 +27,7 @@ target_compile_definitions(sep_blender
     PUBLIC
         SEP_HAS_BLENDER=1
     PRIVATE
-        SEP_HAS_CUDA=1
+        SEP_HAS_CUDA=${SEP_HAS_CUDA}
 )
 
 # Link dependencies

@@ -21,6 +21,7 @@ target_link_libraries(sep_api
         sep_core
     PRIVATE
         ${CURL_LIBRARIES}
+        http_parser
         sep_compat
         sep_blender
         sep_audio

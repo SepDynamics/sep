@@ -7,6 +7,7 @@
 #include "compat/shim.h"
 #include "common.h"
 #include "crow_isolation.h"
+#include <http_parser.h>
 
 // Define HTTP parser constants
 #define HTTP_PARSER_VERSION_MAJOR 2
@@ -14,75 +15,48 @@
 
 namespace crow {
     namespace http_parser_stub {
-        // These are already defined in crow_isolation.h, so we don't need to redefine them
-        // enum class http_errno {...};
-        // enum class http_parser_type {...};
-        // struct http_parser {...};
-        // struct http_parser_settings {...};
+        // Use the real http-parser implementations
+        using ::http_parser;
+        using ::http_parser_settings;
+        using ::http_parser_type;
+        using ::http_parser_url;
+        using ::http_errno;
 
-        // Add any additional HTTP parser functionality needed here
-        
-        // Stub implementation for http_parser_init
         inline void http_parser_init(http_parser* parser, http_parser_type type) {
-            parser->type = static_cast<unsigned int>(type);
-            parser->flags = 0;
-            parser->state = 0;
-            parser->header_state = 0;
-            parser->index = 0;
-            parser->nread = 0;
-            parser->content_length = 0;
-            parser->http_major = 0;
-            parser->http_minor = 0;
-            parser->status_code = 0;
-            parser->method = 0;
-            parser->http_errno = 0;
-            parser->upgrade = 0;
-            parser->data = nullptr;
+            ::http_parser_init(parser, type);
         }
 
-        // Stub implementation for http_parser_execute
-        inline size_t http_parser_execute(http_parser* parser, 
+        inline void http_parser_settings_init(http_parser_settings* settings) {
+            ::http_parser_settings_init(settings);
+        }
+
+        inline size_t http_parser_execute(http_parser* parser,
                                          const http_parser_settings* settings,
                                          const char* data,
                                          size_t len) {
-            return len;
+            return ::http_parser_execute(parser, settings, data, len);
         }
-
-        // Stub implementation for http_parser_url_init
-        struct http_parser_url {
-            unsigned short field_set;
-            unsigned short port;
-            unsigned short field_data[16];
-        };
 
         inline void http_parser_url_init(http_parser_url* u) {
-            u->field_set = 0;
-            u->port = 0;
-            for (int i = 0; i < 16; i++) {
-                u->field_data[i] = 0;
-            }
+            ::http_parser_url_init(u);
         }
 
-        // Stub implementation for http_parser_parse_url
         inline int http_parser_parse_url(const char* buf, size_t buflen,
                                         int is_connect,
                                         http_parser_url* u) {
-            return 0;
+            return ::http_parser_parse_url(buf, buflen, is_connect, u);
         }
 
-        // Stub implementation for http_errno_name
         inline const char* http_errno_name(http_errno err) {
-            return "OK";
+            return ::http_errno_name(err);
         }
 
-        // Stub implementation for http_errno_description
         inline const char* http_errno_description(http_errno err) {
-            return "Success";
+            return ::http_errno_description(err);
         }
 
-        // Stub implementation for http_method_str
         inline const char* http_method_str(unsigned int method) {
-            return "GET";
+            return ::http_method_str(static_cast<http_method>(method));
         }
     }  // namespace http_parser_stub
 }  // namespace crow

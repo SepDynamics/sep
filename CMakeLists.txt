@@ -9,7 +9,11 @@ include(SEPConfig)
 configure_sep()
 
 # Make the real Crow headers available to all targets
-include_directories(BEFORE ${CMAKE_SOURCE_DIR}/extern/Crow/include)
+# Use the bundled Crow headers rather than any system installed copy.
+# The original path used an incorrect case which caused the build to
+# pick up system headers from /usr/local/include leading to missing
+# macro definitions at compile time.
+include_directories(BEFORE ${CMAKE_SOURCE_DIR}/extern/crow/include)
 
 # Find required packages
 find_package(Threads REQUIRED)

@@ -9,7 +9,7 @@
 #include "core/types.h"
 #include "quantum/data.hpp"
 
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
 // Cycles core includes
 #include "device/device.h"
 #include "scene/camera.h"
@@ -37,7 +37,7 @@ namespace blender {
 namespace ccl {
 
 SEPResult CyclesRenderer::isCyclesAvailable() {
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
     return SEPResult::SUCCESS;
 #else
     return SEPResult::FEATURE_UNAVAILABLE;
@@ -49,7 +49,7 @@ SEPResult CyclesRenderer::initialize() {
         return SEPResult::FEATURE_UNAVAILABLE;
     }
     try {
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
         ::ccl::DeviceInfo device_info;
         cycles_device_ = ::ccl::Device::create(device_info,
                                                cycles_stats_,
@@ -76,7 +76,7 @@ SEPResult CyclesRenderer::createSceneFromPatterns(const std::vector<pattern::Pat
         return SEPResult::INVALID_ARGUMENT;
     }
     try {
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
         patterns_ = patterns;
         
         // Create scene if not already created
@@ -114,7 +114,7 @@ SEPResult CyclesRenderer::renderScene(const RenderParams& params) {
         return SEPResult::INVALID_ARGUMENT;
     }
     try {
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
         width_ = params.width;
         height_ = params.height;
         if (!cycles_scene_) {
@@ -198,7 +198,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
         return false;
     }
 
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
     // Initialize session
     ::ccl::SessionParams session_params;
     session_params.background = true;
@@ -224,7 +224,7 @@ bool CyclesRenderer::render(const std::string& filepath) {
 #endif
 }
 
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
 void CyclesRenderer::createGeometryFromPattern(const pattern::PatternData& pattern) {
     // Create mesh
     ::ccl::Mesh *mesh = new ::ccl::Mesh();

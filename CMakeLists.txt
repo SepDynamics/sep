@@ -8,6 +8,20 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(SEPConfig)
 configure_sep()
 
+# Detect CUDA toolkit and expose SEP_HAS_CUDA for conditional builds
+find_package(CUDAToolkit QUIET)
+if(CUDAToolkit_FOUND AND CUDAToolkit_NVCC_EXECUTABLE)
+    set(SEP_HAS_CUDA 1)
+else()
+    set(SEP_HAS_CUDA 0)
+endif()
+message(STATUS "CUDA support: ${SEP_HAS_CUDA}")
+
+add_compile_definitions(SEP_HAS_CUDA=${SEP_HAS_CUDA})
+
+# Disable Blender integration by default to reduce dependencies
+option(SEP_HAS_BLENDER "Build Blender integration" OFF)
+
 # Build stub implementation of the OpenPGL API to satisfy linking against
 # precompiled Cycles libraries when the real OpenPGL dependency is missing.
 add_subdirectory(extern/openpgl_stub)
@@ -48,7 +62,9 @@ add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
-add_subdirectory(src/blender)
+if(SEP_HAS_BLENDER)
+    add_subdirectory(src/blender)
+endif()
 
 # Main executable
 add_executable(sep_engine src/main.cpp)

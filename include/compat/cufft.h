@@ -9,11 +9,21 @@
 #define SEP_CUDA_AVAILABLE 0
 #endif
 
-#if SEP_CUDA_AVAILABLE
-// When CUDA is available, include the real CUDA FFT headers
+#if SEP_CUDA_AVAILABLE && defined(__has_include)
+#if __has_include(<cufft.h>)
 #include <cufft.h>
+#define SEP_HAS_CUFFT 1
 #else
-// When CUDA is not available, define stub types and functions
+#define SEP_HAS_CUFFT 0
+#endif
+#else
+#define SEP_HAS_CUFFT 0
+#endif
+
+#if SEP_HAS_CUFFT
+// When CUDA and cuFFT are available, the real header has been included
+#else
+// Otherwise, define stub types and functions
 
 #ifdef __cplusplus
 namespace sep {

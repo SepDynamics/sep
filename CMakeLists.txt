@@ -36,6 +36,7 @@ find_package(http_parser REQUIRED)
 find_package(spdlog REQUIRED)
 
 # Add subdirectories
+add_subdirectory(extern/openpgl_stub)
 add_subdirectory(src/core)
 add_subdirectory(src/compat)
 add_subdirectory(src/memory)

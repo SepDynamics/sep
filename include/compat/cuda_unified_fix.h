@@ -194,16 +194,39 @@ inline long double acosl(long double x) {
         errno = EDOM;
         return NAN;
     }
-    return static_cast<long double>(acos(static_cast<double>(x)));
+#if defined(__CUDA_ARCH__)
+    // Fallback for device builds lacking acosl
+    long double r = sqrtl(1.0L - x * x);
+    return atan2l(r, x);
+#else
+    return std::acosl(x);
+#endif
 }
 inline long double asinl(long double x) {
-    return asin((double)x);
+    if (x < -1.0L || x > 1.0L) {
+        errno = EDOM;
+        return NAN;
+    }
+#if defined(__CUDA_ARCH__)
+    long double r = sqrtl(1.0L - x * x);
+    return atan2l(x, r);
+#else
+    return std::asinl(x);
+#endif
 }
 inline long double atanl(long double x) {
+#if defined(__CUDA_ARCH__)
     return atan((double)x);
+#else
+    return std::atanl(x);
+#endif
 }
 inline long double atan2l(long double y, long double x) {
+#if defined(__CUDA_ARCH__)
     return atan2((double)y, (double)x);
+#else
+    return std::atan2l(y, x);
+#endif
 }
 inline long double ceill(long double x) {
     return ceil((double)x);

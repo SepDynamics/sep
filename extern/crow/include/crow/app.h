@@ -38,6 +38,7 @@
 
 namespace crow
 {
+    namespace asio = boost::asio;
 #ifdef CROW_ENABLE_SSL
     using ssl_context_t = asio::ssl::context;
 #endif

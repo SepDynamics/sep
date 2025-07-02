@@ -75,6 +75,14 @@ CUDA_UNIFIED_FIX_BEGIN_SCOPE()
 #include <cmath>
 #pragma GCC diagnostic pop
 #endif
+
+// Map standard long double functions to SEP implementations
+#define acosl sep_acosl
+#define asinl sep_asinl
+#define atanl sep_atanl
+#define atan2l sep_atan2l
+#define sqrtl sep_sqrtl
+#define logl sep_logl
 CUDA_UNIFIED_FIX_END_SCOPE()
 
 // Indicate whether CUDA support is available for this compilation unit.

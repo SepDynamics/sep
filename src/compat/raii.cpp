@@ -224,34 +224,57 @@ template class DeviceBufferRAII<double>;
 
 // Implementation of memory management functions
 void* allocateDeviceMemory(std::size_t size) {
-    auto* block = sep::memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED);
-    return block ? block->ptr : nullptr;
+#if SEP_CUDA_AVAILABLE
+    void* ptr = nullptr;
+    cudaError_t err = cudaMalloc(&ptr, size);
+    if (err != cudaSuccess) {
+        logCudaError("cudaMalloc", err);
+        return nullptr;
+    }
+    return ptr;
+#else
+    return ::operator new(size, std::nothrow);
+#endif
 }
 
 void freeDeviceMemory(void* ptr) {
-    if (!ptr)
-        return;
-    auto& mgr = memory::MemoryTierManager::getInstance();
-    auto* blk = mgr.findBlockByPtr(ptr);
-    if (blk)
-        mgr.deallocate(blk);
+#if SEP_CUDA_AVAILABLE
+    if (ptr) {
+        cudaError_t err = cudaFree(ptr);
+        if (err != cudaSuccess)
+            logCudaError("cudaFree", err);
+    }
+#else
+    ::operator delete(ptr);
+#endif
 }
 
 void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
-    auto* blk = memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED);
-    if (blk && stream) {
-        cudaError_t err = cudaStreamAttachMemAsync(stream, blk->ptr, 0, 0);
-        if (err != cudaSuccess) {
-            if (debugAllocEnabled()) {
-                (void)fprintf(stderr, "Failed to attach memory to CUDA stream: %s\n", cudaGetErrorString(err));
-            }
-        }
+#if SEP_CUDA_AVAILABLE
+    void* ptr = nullptr;
+    cudaError_t err = cudaMallocManaged(&ptr, size);
+    if (err != cudaSuccess) {
+        logCudaError("cudaMallocManaged", err);
+        return nullptr;
     }
-    return blk ? blk->ptr : nullptr;
+    if (ptr && stream) {
+        err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
+        if (err != cudaSuccess)
+            logCudaError("cudaStreamAttachMemAsync", err);
+    }
+    return ptr;
+#else
+    (void)stream;
+    return ::operator new(size, std::nothrow);
+#endif
 }
 
 void freeUnifiedMemory(void* ptr) {
+#if SEP_CUDA_AVAILABLE
     freeDeviceMemory(ptr);
+#else
+    ::operator delete(ptr);
+#endif
 }
 
 }  // namespace sep::cuda

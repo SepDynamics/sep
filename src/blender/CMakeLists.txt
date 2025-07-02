@@ -99,27 +99,54 @@ target_include_directories(sep_blender PRIVATE
 )
 
 # Link against Cycles libraries and required dependencies
-target_link_libraries(sep_blender PRIVATE
-    ${CMAKE_SOURCE_DIR}/lib/libcycles_device.a
-    ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel.a
-    ${CMAKE_SOURCE_DIR}/lib/libcycles_util.a
-    ${CMAKE_SOURCE_DIR}/lib/libcycles_subd.a
-    ${CMAKE_SOURCE_DIR}/lib/libbf_intern_guardedalloc.a # For MEM_* functions
-    TBB::tbb  # For parallel execution
-    CUDA::cudart  # For CUDA runtime
-    CUDA::cuda_driver
-    CUDA::nvrtc
-    glog
-    gflags
-    embree4
-    extern_cuew
-    extern_hipew
-    cycles_scene
-    cycles_graph
-    cycles_kernel_osl
-    ${OSL_LIBRARIES}
-    ${OPENSUBDIV_LIBRARIES}
+if(TARGET cycles_scene)
+  # Linking against Cycles built from source
+  target_link_libraries(sep_blender PRIVATE
+      cycles_device
+      cycles_kernel
+      cycles_util
+      cycles_subd
+      bf_intern_guardedalloc
+      TBB::tbb
+      CUDA::cudart
+      CUDA::cuda_driver
+      CUDA::nvrtc
+      glog
+      gflags
+      embree4
+      extern_cuew
+      extern_hipew
+      cycles_scene
+      cycles_graph
+      cycles_kernel_osl
+      ${OSL_LIBRARIES}
+      ${OPENSUBDIV_LIBRARIES}
 )
+  )
+else()
+  # Fallback to precompiled static libraries
+  target_link_libraries(sep_blender PRIVATE
+      ${CMAKE_SOURCE_DIR}/lib/libcycles_device.a
+      ${CMAKE_SOURCE_DIR}/lib/libcycles_kernel.a
+      ${CMAKE_SOURCE_DIR}/lib/libcycles_util.a
+      ${CMAKE_SOURCE_DIR}/lib/libcycles_subd.a
+      ${CMAKE_SOURCE_DIR}/lib/libbf_intern_guardedalloc.a
+      TBB::tbb
+      CUDA::cudart
+      CUDA::cuda_driver
+      CUDA::nvrtc
+      glog
+      gflags
+      embree4
+      extern_cuew
+      extern_hipew
+      cycles_scene
+      cycles_graph
+      cycles_kernel_osl
+      ${OSL_LIBRARIES}
+  )
+endif()
+
 
 
 # Add Blender's include directories for memory allocation functions

@@ -112,7 +112,7 @@ namespace crow
                 if (tasks_.empty()) highest_id_ = 0;
             }
 
-            void tick_handler(const asio::error_code& ec)
+            void tick_handler(const error_code& ec)
             {
                 if (ec) return;
 

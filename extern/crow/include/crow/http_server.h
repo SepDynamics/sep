@@ -20,6 +20,7 @@ namespace crow
 {
     namespace asio = boost::asio;
     using tcp = asio::ip::tcp;
+    using error_code = boost::system::error_code;
 
     template<typename Handler, typename Adaptor = SocketAdaptor, typename... Middlewares>
     class Server
@@ -50,7 +51,7 @@ namespace crow
         {
             tick_function_();
             tick_timer_.expires_after(std::chrono::milliseconds(tick_interval_.count()));
-            tick_timer_.async_wait([this](const asio::error_code& ec) {
+            tick_timer_.async_wait([this](const error_code& ec) {
                 if (ec)
                     return;
                 on_tick();
@@ -126,7 +127,7 @@ namespace crow
             {
                 tick_timer_.expires_after(std::chrono::milliseconds(tick_interval_.count()));
                 tick_timer_.async_wait(
-                  [this](const asio::error_code& ec) {
+                  [this](const error_code& ec) {
                       if (ec)
                           return;
                       on_tick();
@@ -141,7 +142,7 @@ namespace crow
             CROW_LOG_INFO << "Call `app.loglevel(crow::LogLevel::Warning)` to hide Info level logs.";
 
             signals_.async_wait(
-              [&](const asio::error_code& /*error*/, int /*signal_number*/) {
+              [&](const error_code& /*error*/, int /*signal_number*/) {
                   stop();
               });
 
@@ -225,7 +226,7 @@ namespace crow
 
                 acceptor_.async_accept(
                   p->socket(),
-                  [this, p, &is, service_idx](asio::error_code ec) {
+                  [this, p, &is, service_idx](error_code ec) {
                       if (!ec)
                       {
                           is.post(

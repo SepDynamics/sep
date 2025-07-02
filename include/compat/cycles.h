@@ -43,7 +43,6 @@
 #include "util/param.h"
 #include "util/string.h"
 #include "util/vector.h"
-#endif
 
 // No need for stub implementations when using real Cycles
 #else

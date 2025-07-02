@@ -11,7 +11,6 @@
 // Define the actual implementation of the function that will be used
 // This completely replaces the implementation in src/pattern/process.cpp
 namespace sep {
-namespace pattern {
 namespace cuda {
 
 // Host-side implementations
@@ -34,12 +33,11 @@ cudaError_t launch_pattern_processing(PatternData* patterns,
 }
 
 }  // namespace cuda
-}  // namespace pattern
 }  // namespace sep
 
 // Also provide the mangled name version for extra safety
 extern "C" {
-    // This is the mangled name for the launch_pattern_processing function
+    // Old mangled name retained for compatibility
     cudaError_t _ZN3sep7pattern4cuda23launch_pattern_processingEPNS0_11PatternDataEPS2_RKNS0_13PatternConfigEmPKS2_P11CUstream_st(
         sep::pattern::PatternData* patterns,
         sep::pattern::PatternData* results,
@@ -50,8 +48,8 @@ extern "C" {
 
         std::cout << "Mock launch_pattern_processing called via mangled name" << std::endl;
 
-        // Just call our implementation above
-        return sep::pattern::cuda::launch_pattern_processing(
+        // Forward to the current implementation
+        return sep::cuda::launch_pattern_processing(
             patterns, results, config, pattern_count, previous_patterns, stream);
     }
 }

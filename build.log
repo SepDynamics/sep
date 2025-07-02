@@ -49,83 +49,113 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
 [  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[  6%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
 [  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  9%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 12%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
 [ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-In file included from /sep/include/compat/core.h:8,
-                 from /sep/src/core/engine.cpp:10:
-/sep/include/compat/memory.h:80: error: unterminated #else
-   80 | #if !SEP_CUDA_AVAILABLE
-In file included from /sep/src/core/engine.cpp:18:
-/sep/include/compat/cuda_api.hpp:35:6: error: ‘SEPResult’ in namespace ‘sep::cuda::sep’ does not name a type
-   35 | sep::SEPResult sep_cuda_init(int device_id);
-      |      ^~~~~~~~~
-/sep/include/compat/cuda_api.hpp:36:6: error: ‘SEPResult’ in namespace ‘sep::cuda::sep’ does not name a type
-   36 | sep::SEPResult sep_cuda_cleanup(void);
-      |      ^~~~~~~~~
-/sep/include/compat/cuda_api.hpp:38:6: error: ‘SEPResult’ in namespace ‘sep::cuda::sep’ does not name a type
-   38 | sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32_t* expectations,
-      |      ^~~~~~~~~
-/sep/include/compat/cuda_api.hpp:42:6: error: ‘SEPResult’ in namespace ‘sep::cuda::sep’ does not name a type
-   42 | sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chunks,
-      |      ^~~~~~~~~
-In file included from /sep/include/memory/types.h:14,
-                 from /sep/include/core/logging.h:4,
-                 from /sep/src/core/engine.cpp:19:
-/usr/include/c++/14/optional:95:3: error: expected class-name before ‘{’ token
-   95 |   {
-      |   ^
-/usr/include/c++/14/optional:100:17: error: ‘const char* sep::cuda::std::bad_optional_access::what() const’ marked ‘override’, but does not override
-  100 |     const char* what() const noexcept override
-      |                 ^~~~
-/usr/include/c++/14/optional:114:28: error: ‘remove_const_t’ does not name a type
-  114 |       using _Stored_type = remove_const_t<_Tp>;
-      |                            ^~~~~~~~~~~~~~
-/usr/include/c++/14/optional:121:42: error: expected ‘)’ before ‘__tag’
-  121 |         _Optional_payload_base(in_place_t __tag, _Args&&... __args)
-      |                               ~          ^~~~~~
-      |                                          )
-/usr/include/c++/14/optional:128:53: error: expected ‘)’ before ‘<’ token
-  128 |         _Optional_payload_base(std::initializer_list<_Up> __il,
-      |                               ~                     ^
-      |                                                     )
-/usr/include/c++/14/optional:202:37: error: ‘is_trivially_destructible_v’ was not declared in this scope; did you mean ‘std::is_trivially_destructible_v<_Tp>’?
-  202 |       template<typename _Up, bool = is_trivially_destructible_v<_Up>>
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                     std::is_trivially_destructible_v<_Tp>
-In file included from /usr/include/c++/14/bits/char_traits.h:50,
-                 from /usr/include/c++/14/string:42,
-                 from /sep/include/api/types.h:3,
-                 from /sep/src/core/engine.cpp:5:
-/usr/include/c++/14/type_traits:3462:25: note: ‘std::is_trivially_destructible_v<_Tp>’ declared here
- 3462 |   inline constexpr bool is_trivially_destructible_v =
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/14/optional:202:68: error: expected primary-expression before ‘>>’ token
-  202 |       template<typename _Up, bool = is_trivially_destructible_v<_Up>>
-      |                                                                    ^~
-/usr/include/c++/14/optional:202:68: error: expected ‘>’ before ‘>>’ token
-/usr/include/c++/14/optional:209:32: error: expected ‘)’ before ‘,’ token
-  209 |             _Storage(in_place_t, _Args&&... __args)
-      |                     ~          ^
-      |                                )
-/usr/include/c++/14/optional:215:43: error: expected ‘)’ before ‘<’ token
-  215 |             _Storage(std::initializer_list<_Vp> __il, _Args&&... __args)
-      |                     ~                     ^
-      |                                           )
-/usr/include/c++/14/optional:239:32: error: expected ‘)’ before ‘,’ token
-  239 |             _Storage(in_place_t, _Args&&... __args)
-      |                     ~          ^
-      |                                )
-/usr/include/c++/14/optional:245:43: error: expected ‘)’ before ‘<’ token
-  245 |             _Storage(std::initializer_list<_Vp> __il, _Args&&... __args)
-      |                     ~                     ^
-      |                                           )
-/usr/include/c++/14/optional:265:16: error: ‘_Stored_type’ was not declared in this scope
-  265 |       _Storage<_Stored_type> _M_payload;
-      |                ^~~~~~~~~~~~
+[ 15%] Linking CXX static library libsep_core.a
+[ 15%] Built target sep_core
+[ 18%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 19%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 21%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 19%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 24%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 25%] Linking CXX static library libsep_compat.a
+[ 25%] Built target sep_compat
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 30%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 37%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 45%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 45%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 46%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
+[ 60%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
+[ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
+[ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
+[ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
+[ 66%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
+[ 68%] Linking CXX static library libsep_blender.a
+[ 68%] Built target sep_blender
+[ 69%] Linking CXX static library libsep_audio.a
+[ 69%] Built target sep_audio
+[ 72%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 74%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 78%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+In file included from /usr/local/include/crow/http_parser_merged.h:40,
+                 from /usr/local/include/crow.h:3,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/include/crow/app.h:6,
+                 from /sep/include/api/crow_request_adapter.h:5,
+                 from /sep/src/api/crow_request_adapter.cpp:1:
+/sep/include/crow/common.h:4: error: unterminated #else
+    4 | #ifndef __CUDACC__
+In file included from /usr/local/include/crow/http_parser_merged.h:40,
+                 from /usr/local/include/crow.h:3,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/include/crow/http_request.h:7,
+                 from /sep/include/api/auth_middleware.h:6,
+                 from /sep/src/api/auth_middleware.cpp:1:
+/sep/include/crow/common.h:4: error: unterminated #else
+    4 | #ifndef __CUDACC__
+In file included from /usr/local/include/crow/http_parser_merged.h:40,
+                 from /usr/local/include/crow.h:3,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/src/api/crow_adapter.cpp:12:
+/sep/include/crow/common.h:4: error: unterminated #else
+    4 | #ifndef __CUDACC__
+In file included from /usr/local/include/crow/http_parser_merged.h:40,
+                 from /usr/local/include/crow.h:3,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/include/crow/http_request.h:7,
+                 from /sep/include/api/rate_limit_middleware.h:6,
+                 from /sep/src/api/rate_limit_middleware.cpp:2:
+/sep/include/crow/common.h:4: error: unterminated #else
+    4 | #ifndef __CUDACC__
+In file included from /usr/local/include/crow/http_parser_merged.h:40,
+                 from /usr/local/include/crow.h:3,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/src/api/lock_free_rate_limiter.cpp:4:
+/sep/include/crow/common.h:4: error: unterminated #else
+    4 | #ifndef __CUDACC__
+In file included from /usr/local/include/crow/http_parser_merged.h:40,
+                 from /usr/local/include/crow.h:3,
+                 from /sep/include/crow/crow_isolation.h:11,
+                 from /sep/include/crow/http_request.h:7,
+                 from /sep/include/api/rate_limit_middleware.h:6,
+                 from /sep/include/api/server.h:8,
+                 from /sep/include/api/logging_middleware.h:4,
+                 from /sep/src/api/logging_middleware.cpp:1:
+/sep/include/crow/common.h:4: error: unterminated #else
+    4 | #ifndef __CUDACC__

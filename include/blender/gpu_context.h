@@ -13,6 +13,8 @@ struct GPUBuffer {
     bool mapped{false};
 };
 
+struct GpuBufferPtr;
+
 // Minimal implementation of GPU context for pattern_processor.cpp
 class GPUContext {
 public:
@@ -30,21 +32,17 @@ public:
     // Error state helpers
     bool hasError() const { return has_error_; }
     const ::sep::shim::string& getLastError() const { return last_error_; }
-    void clearError() { has_error_ = false; last_error_.clear(); }
+    void clearError() { has_error_ = false; last_error_ = {}; }
 
     // Buffer helpers
-    virtual GPUBuffer createBuffer(size_t size, const void* data = nullptr);
+    virtual GpuBufferPtr createBuffer(size_t size, const void* data = nullptr);
     virtual void deleteBuffer(GPUBuffer* buffer);
     virtual void* mapBuffer(GPUBuffer* buffer);
     virtual void unmapBuffer(GPUBuffer* buffer);
 
     // Simplified shader handling for tests
-    SEPResult loadComputeShader(const ::sep::shim::string& path) {
-        ++shader_revision_;
-        return SEPResult::SUCCESS;
-    }
-
-    SEPResult reloadComputeShaderIfNeeded() { return SEPResult::SUCCESS; }
+    SEPResult loadComputeShader(const ::sep::shim::string& path);
+    SEPResult reloadComputeShaderIfNeeded();
     uint32_t getShaderRevision() const { return shader_revision_; }
 
 private:
@@ -53,6 +51,8 @@ private:
     bool has_error_{false};
     ::sep::shim::string last_error_{};
     uint32_t shader_revision_{0};
+    ::sep::shim::string shader_path_{};
+    long long shader_timestamp_{0};
 };
 
 // RAII wrapper for GPUBuffer that works with the simplified context

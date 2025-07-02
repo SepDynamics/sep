@@ -39,7 +39,7 @@ public:
     virtual void unmapBuffer(GPUBuffer* buffer);
 
     // Simplified shader handling for tests
-    SEPResult loadComputeShader(const ::sep::shim::string& path ) {
+    SEPResult loadComputeShader(const ::sep::shim::string& path) {
         ++shader_revision_;
         return SEPResult::SUCCESS;
     }

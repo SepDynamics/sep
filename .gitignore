@@ -8,6 +8,7 @@ sep_engine
 extern/*
 !extern/cycles/
 !extern/crow/
+!extern/openpgl_stub/
 build/
 _build/
 changes.diff
@@ -115,6 +116,7 @@ compile_commands.json
 build.log
 assets/sep_engine
 blender
+!tests/blender/
 !include/blender/
 !src/blender/
 !tests/blender/

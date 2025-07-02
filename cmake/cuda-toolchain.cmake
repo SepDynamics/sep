@@ -11,7 +11,8 @@ set(CMAKE_CUDA_STANDARD_COMPUTED_DEFAULT "20" CACHE STRING "CUDA standard defaul
 
 #Set CUDA toolkit paths - use absolute paths without quotes
 set(CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES ${CUDA_PATH}/include CACHE STRING "CUDA include dirs" FORCE) 
-set(CUDA_TOOLKIT_ROOT_DIR ${CUDA_PATH} CACHE PATH "CUDA Toolkit location" FORCE) 
+set(CUDA_TOOLKIT_ROOT_DIR ${CUDA_PATH} CACHE PATH "CUDA Toolkit location" FORCE)
+set(CUDAToolkit_LIBRARY_DIR ${CUDA_PATH}/lib64 CACHE PATH "CUDA library directory" FORCE)
 set(CUDA_TOOLKIT_TARGET_DIR ${CUDA_PATH}/targets/x86_64-linux CACHE PATH "CUDA Toolkit target location" FORCE) 
 set(CUDA_INCLUDE_DIRS ${CUDA_PATH}/include CACHE PATH "CUDA Include location" FORCE)
 

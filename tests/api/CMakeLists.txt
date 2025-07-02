@@ -9,6 +9,7 @@ add_executable(api_tests
     health_endpoint_test.cpp
     long_double_math_test.cpp
     context_api_test.cpp
+    context_ops_test.cpp
 )
 
 target_include_directories(api_tests PRIVATE

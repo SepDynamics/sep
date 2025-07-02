@@ -30,7 +30,19 @@ add_subdirectory(memory)
 add_subdirectory(audio)
 add_subdirectory(api)
 add_subdirectory(cuda)
+add_subdirectory(${CMAKE_SOURCE_DIR}/_sep/testbed)
 
 # Configure test discovery
 include(CTest)
 enable_testing()
+
+add_custom_target(run_all_tests
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+    DEPENDS
+        blender_tests
+        quantum_optimizer_tests
+        memory_manager_tests
+        audio_tests
+        api_tests
+        long_double_math_test
+        testbed_tests)

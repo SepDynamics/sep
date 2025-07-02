@@ -285,6 +285,19 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
         result["error"] = std::string("invalid context at index ") +
                           std::to_string(invalid_index);
     }
+    if (!request_data.contains("contexts") || !request_data["contexts"].is_array()) {
+        return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
+    }
+
+    auto report = sep::testbed::validate_contexts(request_data["contexts"]);
+
+    impl_->health_metrics.successfulRequests++;
+
+    json result;
+    result["success"]       = true;
+    result["valid"]         = report.overall_valid;
+    result["context_count"] = request_data["contexts"].size();
+    result["invalid_indices"] = report.invalid_indices;
     return result;
 }
 

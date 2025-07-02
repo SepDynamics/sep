@@ -8,3 +8,24 @@ TEST(PipeWireCaptureTest, MetricsAccess) {
     AudioMetrics metrics = cap.getMetrics();
     EXPECT_EQ(metrics.total_samples, 0u);
 }
+TEST(PipeWireCaptureTest, StartWithoutInit) {
+    PipeWireCapture cap;
+    EXPECT_EQ(cap.start(), AudioError::INIT_FAILED);
+}
+
+TEST(PipeWireCaptureTest, StopWithoutInit) {
+    PipeWireCapture cap;
+    EXPECT_EQ(cap.stop(), AudioError::NONE);
+}
+
+TEST(PipeWireCaptureTest, InitStartStopSequence) {
+    PipeWireCapture cap;
+    AudioConfig cfg{};
+    AudioError err = cap.init(cfg);
+    if (err == AudioError::NONE) {
+        EXPECT_EQ(cap.start(), AudioError::NONE);
+        EXPECT_EQ(cap.stop(), AudioError::NONE);
+    } else {
+        EXPECT_EQ(err, AudioError::INIT_FAILED);
+    }
+}

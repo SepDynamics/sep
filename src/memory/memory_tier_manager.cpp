@@ -9,9 +9,7 @@
 #include "quantum/data.hpp"       // For ::sep::pattern::PatternData
 
 #include "compat/cuda_common.h"
-#if !SEP_CUDA_AVAILABLE
-#include "compat/cuda_runtime.h"
-#endif
+#include <cuda_runtime.h>
 
 #include "compat/cuda_helpers.h"
 #include "memory/logger.hpp"

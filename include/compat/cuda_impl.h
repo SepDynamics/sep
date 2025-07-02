@@ -5,7 +5,7 @@
 #include <stdlib.h>  // For malloc/free
 #include <string.h>  // For strcpy, memcpy, memset
 #include "compat/cuda_defs.h"
-#include "compat/cuda_runtime.h"  // for sep::cuda::cudaMemcpyAsync declaration
+#include <cuda_runtime.h>  // for sep::cuda::cudaMemcpyAsync declaration
 
 #ifndef SEP_HD
 #define SEP_HD __host__ __device__

@@ -12,7 +12,7 @@
 #include "core/common.h"  // defines sep::SEPResult
 #include "compat/cuda_helpers.h"
 #include "compat/shim.h"
-#include "compat/cuda_runtime.h"  // For sep::cuda::cudaMemcpyAsync
+#include <cuda_runtime.h>  // For sep::cuda::cudaMemcpyAsync
 #include "compat/macros.h"  // For SEP_CUDA_AVAILABLE
 #include "crow/asio_isolation.h"
 #include "crow/socket_adaptors.h"

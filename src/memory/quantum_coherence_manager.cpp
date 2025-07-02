@@ -5,10 +5,8 @@
 #include "quantum/quantum_processor_qfh.h"
 #include "compat/cuda.h"
 #include "compat/core.h"
-#include "compat/cuda_helpers.h" 
-#if !SEP_CUDA_AVAILABLE
-#include "compat/cuda_runtime.h"
-#endif
+#include "compat/cuda_helpers.h"
+#include <cuda_runtime.h>
 
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"

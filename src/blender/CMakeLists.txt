@@ -61,7 +61,6 @@ set(BLENDER_USER_CONFIG_DIR "$ENV{HOME}/.config/blender/${BLENDER_VERSION}")
 
 # Set Cycles root directory and enable integration
 set(CYCLES_ROOT ${CMAKE_SOURCE_DIR}/extern/cycles)
-set(SEP_HAS_CYCLES 1)
 
 # Use bundled Cycles headers
 target_include_directories(sep_blender SYSTEM PRIVATE

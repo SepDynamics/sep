@@ -18,11 +18,7 @@
 #include "compat/raii.h"
 #include "compat/cuda_helpers.h"         // For CUDA_CHECK macro
 #include "compat/cuda_common.h"
-#if SEP_CUDA_AVAILABLE
 #include <cuda_runtime.h>
-#else
-#include "compat/cuda_runtime.h"
-#endif
 
 // Simple debug flag check without external logger dependency
 namespace {
@@ -234,7 +230,6 @@ template class DeviceBufferRAII<double>;
 
 // Implementation of memory management functions
 void* allocateDeviceMemory(std::size_t size) {
-#if SEP_CUDA_AVAILABLE
     void* ptr = nullptr;
     cudaError_t err = cudaMalloc(&ptr, size);
     if (err != cudaSuccess) {
@@ -244,28 +239,18 @@ void* allocateDeviceMemory(std::size_t size) {
         return nullptr;
     }
     return ptr;
-#else
-    if (size == 0)
-        return nullptr;
-    return new (std::nothrow) std::uint8_t[size];
-#endif
 }
 
 void freeDeviceMemory(void* ptr) {
     if (!ptr)
         return;
-#if SEP_CUDA_AVAILABLE
     cudaError_t err = cudaFree(ptr);
     if (err != cudaSuccess && debugAllocEnabled()) {
         (void)fprintf(stderr, "cudaFree failed: %s\n", cudaGetErrorString(err));
     }
-#else
-    delete[] static_cast<std::uint8_t*>(ptr);
-#endif
 }
 
 void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
-#if SEP_CUDA_AVAILABLE
     void* ptr = nullptr;
     cudaError_t err = cudaMallocManaged(&ptr, size);
     if (err != cudaSuccess) {
@@ -282,18 +267,10 @@ void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
         return nullptr;
     }
     return ptr;
-#else
-    (void)stream;
-    return allocateDeviceMemory(size);
-#endif
 }
 
 void freeUnifiedMemory(void* ptr) {
-#if SEP_CUDA_AVAILABLE
     freeDeviceMemory(ptr);
-#else
-    freeDeviceMemory(ptr);
-#endif
 }
 
 }  // namespace sep::cuda

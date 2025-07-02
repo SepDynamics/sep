@@ -3,7 +3,7 @@
 #include "compat/macros.h"
 #include <gtest/gtest.h>
 #if SEP_CUDA_AVAILABLE
-#include "compat/cuda_runtime.h"
+#include <cuda_runtime.h>
 #include "compat/cuda_impl.h"
 #endif
 

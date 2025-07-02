@@ -27,17 +27,7 @@ Running CMake configuration...
 -- Using PipeWire at: pipewire-0.3
 -- Using FFTW at: fftw3f
 -- Found Embree: /usr/lib64/libembree4.so
-CMake Warning (dev) at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
-  The package name passed to `find_package_handle_standard_args` (GLOG) does
-  not match the name of the calling package (Glog).  This can lead to
-  problems in calling code that expects `find_package` result variables
-  (e.g., `_FOUND`) to follow a certain pattern.
-Call Stack (most recent call first):
-  extern/cycles/src/cmake/Modules/FindGlog.cmake:194 (find_package_handle_standard_args)
-  src/blender/CMakeLists.txt:8 (find_package)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Found GLOG: /usr/include
+-- Found GLOG: /usr/lib64/libglog.so
 -- Checking for module 'OpenImageIO'
 --   Found OpenImageIO, version 2.5.16.0
 -- Checking for module 'libzstd'
@@ -46,27 +36,33 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  1%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
-[  2%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[  5%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[  4%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  4%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[  7%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[  8%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 10%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 11%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 14%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 [ 16%] Linking CXX static library libsep_embeddings.a
 [ 16%] Built target sep_embeddings
-In file included from /sep/src/core/metrics_collector.cpp:3:
-/sep/src/core/metrics_collector.cpp: In member function ‘void sep::metrics::MetricsCollector::Impl::recordKernelStop()’:
-/sep/src/core/metrics_collector.cpp:95:20: error: ‘cudaEventElapsedTime’ was not declared in this scope
-   95 |         CUDA_CHECK(cudaEventElapsedTime(&elapsed_time, start_event_, stop_event_));
-      |                    ^~~~~~~~~~~~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:23:29: note: in definition of macro ‘CUDA_CHECK’
-   23 |         cudaError_t error = call;                    \
-      |                             ^~~~
-make[2]: *** [src/core/CMakeFiles/sep_core.dir/build.make:163: src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [CMakeFiles/Makefile2:309: src/core/CMakeFiles/sep_core.dir/all] Error 2
+[ 17%] Linking CXX static library libsep_core.a
+[ 17%] Built target sep_core
+[ 22%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 23%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 22%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[ 23%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 25%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 26%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateUnifiedMemory(std::size_t, cudaStream_t)’:
+/sep/src/compat/raii.cpp:270:15: error: ‘cudaStreamAttachMemAsync’ was not declared in this scope
+  270 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:341: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 27%] Linking CXX static library libsep_audio.a
+[ 27%] Built target sep_audio
 make: *** [Makefile:91: all] Error 2

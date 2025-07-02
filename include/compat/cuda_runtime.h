@@ -83,6 +83,7 @@ cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream);
 cudaError_t cudaEventCreate(cudaEvent_t* event);
 cudaError_t cudaEventDestroy(cudaEvent_t event);
 cudaError_t cudaEventSynchronize(cudaEvent_t event);
+cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end);
 cudaError_t cudaMalloc(void** ptr, size_t size);
 cudaError_t cudaFree(void* ptr);
 cudaError_t cudaMallocHost(void** ptr, size_t size);

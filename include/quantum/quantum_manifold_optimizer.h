@@ -61,10 +61,10 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        sep::config::CudaConfig cuda;
-        sep::config::APIConfig api;
-        sep::config::LogConfig log;
-        sep::config::AnalyticsConfig analytics;
+        ::sep::config::CudaConfig cuda;
+        ::sep::config::APIConfig api;
+        ::sep::config::LogConfig log;
+        ::sep::config::AnalyticsConfig analytics;
         float base_resonance_frequency{0.42f};
         float convergence_threshold{0.001f};
         float step_size{0.05f};

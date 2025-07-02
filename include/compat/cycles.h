@@ -23,7 +23,7 @@
 #endif
 
 // Core Cycles headers - only include if SEP_HAS_CYCLES is defined
-#ifdef SEP_HAS_CYCLES
+#if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES
 // Core Cycles headers
 #include "../extern/cycles/src/device/device.h"
 #include "../extern/cycles/src/scene/scene.h"

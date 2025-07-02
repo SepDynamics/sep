@@ -108,6 +108,8 @@ target_link_libraries(sep_blender PRIVATE
     glog
     gflags
     embree4
+    extern_cuew
+    extern_hipew
 )
 
 

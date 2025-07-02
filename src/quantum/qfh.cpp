@@ -1,5 +1,6 @@
 #include "quantum/qfh.h"
 #include <numeric>
+#include <vector>
 
 namespace sep::quantum {
 
@@ -8,8 +9,8 @@ bool QFHEvent::operator==(const QFHEvent& other) const {
            bit_prev == other.bit_prev && bit_curr == other.bit_curr;
 }
 
-::sep::shim::vector<QFHEvent> transform_rich(const ::sep::shim::vector<uint8_t>& bits) {
-    ::sep::shim::vector<QFHEvent> result;
+std::vector<QFHEvent> transform_rich(const std::vector<uint8_t>& bits) {
+    std::vector<QFHEvent> result;
     if (bits.size() < 2) {
         return result;
     }
@@ -31,9 +32,9 @@ bool QFHEvent::operator==(const QFHEvent& other) const {
     return result;
 }
 
-::sep::shim::vector<QFHAggregateEvent> aggregate(const ::sep::shim::vector<QFHEvent>& events) {
+std::vector<QFHAggregateEvent> aggregate(const std::vector<QFHEvent>& events) {
     if (events.empty()) return {};
-    ::sep::shim::vector<QFHAggregateEvent> aggregated;
+    std::vector<QFHAggregateEvent> aggregated;
     aggregated.push_back({events[0].index, events[0].state, 1});
     for (size_t i = 1; i < events.size(); ++i) {
         if (events[i].state == aggregated.back().state) {
@@ -73,7 +74,7 @@ void QFHProcessor::reset() {
 // QFHBasedProcessor implementation
 QFHBasedProcessor::QFHBasedProcessor(const QFHOptions& options) : options_(options) {}
 
-QFHResult QFHBasedProcessor::analyze(const ::sep::shim::vector<uint8_t>& bits) { 
+QFHResult QFHBasedProcessor::analyze(const std::vector<uint8_t>& bits) { 
     QFHResult result;
     result.collapse_threshold = options_.collapse_threshold; 
     
@@ -118,8 +119,8 @@ bool QFHBasedProcessor::detectCollapse(const QFHResult& result) const {
     return result.collapse_detected || result.rupture_ratio >= options_.collapse_threshold;
 }
 
-::sep::shim::vector<uint8_t> QFHBasedProcessor::convertToBits(const ::sep::shim::vector<uint32_t>& values) {
-    ::sep::shim::vector<uint8_t> bits;
+std::vector<uint8_t> QFHBasedProcessor::convertToBits(const std::vector<uint32_t>& values) {
+    std::vector<uint8_t> bits;
     bits.reserve(values.size() * 32);
     
     for (uint32_t value : values) {

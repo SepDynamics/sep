@@ -4,6 +4,7 @@
 #include <glm/vec3.hpp>
 #include <type_traits>
 #include <unordered_map>
+#include <vector>
 #include "compat/shim.h"
 
 namespace sep {
@@ -14,26 +15,26 @@ struct DagNode
     uint64_t              id;
     glm::vec3             pattern;
     float                 coherence;
-    ::sep::shim::vector<uint64_t> parents;
+    std::vector<uint64_t> parents;
 };
 
 class DagGraph
 {
 public:
-    uint64_t addNode(const glm::vec3& pattern, float coherence, const ::sep::shim::vector<uint64_t>& parents);
-    uint64_t addNodeWithId(uint64_t id, const glm::vec3& pattern, float coherence, const ::sep::shim::vector<uint64_t>& parents);
+    uint64_t addNode(const glm::vec3& pattern, float coherence, const std::vector<uint64_t>& parents);
+    uint64_t addNodeWithId(uint64_t id, const glm::vec3& pattern, float coherence, const std::vector<uint64_t>& parents);
     void updateCoherence(uint64_t id, float coherence);
-    void updateNodeParents(uint64_t id, const ::sep::shim::vector<uint64_t>& parents);
-    ::sep::shim::vector<uint64_t> getParents(uint64_t id) const;
+    void updateNodeParents(uint64_t id, const std::vector<uint64_t>& parents);
+    std::vector<uint64_t> getParents(uint64_t id) const;
     void                  removeNode(uint64_t id);
     bool                  hasNode(uint64_t id) const;
 
     // Compatibility overload for integral identifiers that are not uint64_t
     template<typename T>
     typename std::enable_if_t<std::is_integral_v<T> && !std::is_same_v<T, uint64_t>, uint64_t>
-    addNode(T /*pattern_id*/, float coherence, const ::sep::shim::vector<T>& parents)
+    addNode(T /*pattern_id*/, float coherence, const std::vector<T>& parents)
     {
-        ::sep::shim::vector<uint64_t> converted_parents;
+        std::vector<uint64_t> converted_parents;
         converted_parents.reserve(parents.size());
         for (const auto& p : parents)
         {

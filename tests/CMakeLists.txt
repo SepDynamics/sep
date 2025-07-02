@@ -45,4 +45,5 @@ add_custom_target(run_all_tests
         audio_tests
         api_tests
         long_double_math_test
+        cuda_api_tests
         testbed_tests)

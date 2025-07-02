@@ -17,7 +17,7 @@
 
 #include "compat/types.h"
 
-#if SEP_HAS_BLENDER
+#ifdef SEP_HAS_BLENDER
 #include "blender/api.h"
 #include "blender/cycles_renderer.h"
 #endif
@@ -69,7 +69,7 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
     if (pattern_processor_) {
         (void)pattern_processor_->init(nullptr);
     }
-#if SEP_HAS_BLENDER
+#ifdef SEP_HAS_BLENDER
     if (cycles_renderer_) {
         (void)cycles_renderer_->initialize();
     }
@@ -811,7 +811,7 @@ void SEPApiServer::handleSignal(int signal) {
 }
 
 void SEPApiServer::setupBlenderRoutes() {
-#if SEP_HAS_BLENDER
+#ifdef SEP_HAS_BLENDER
     // Pattern processing endpoint
     app_->route_dynamic("/api/v1/patterns/process")
     .methods(::crow::HTTPMethod::POST)([this](const ::crow::request& req) {

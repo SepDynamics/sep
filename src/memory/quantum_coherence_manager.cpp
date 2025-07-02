@@ -12,7 +12,7 @@
 
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
-#if SEP_HAS_BLENDER
+#ifdef SEP_HAS_BLENDER
 #include "blender/bridge.h"
 #endif
 

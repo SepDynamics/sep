@@ -177,21 +177,56 @@ constexpr int FP_CLASS_NAN = 4;        // NaN values
 extern "C" {
 
 // Define stubs for long double math functions that GCC-14 expects but are missing in CUDA
+#if defined(__CUDACC_VER_MAJOR__) && (__CUDACC_VER_MAJOR__ >= 12)
+#  define SEP_HAS_CUDA_LDOUBLE_FUNCS 1
+#else
+#  define SEP_HAS_CUDA_LDOUBLE_FUNCS 0
+#endif
+
 inline long double acosl(long double x) {
     if (x < -1.0L || x > 1.0L) {
         errno = EDOM;
         return NAN;
     }
-    return static_cast<long double>(acos(static_cast<double>(x)));
+#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
+    return ::acosl(x);
+#else
+    long double r = static_cast<long double>(acos(static_cast<double>(x)));
+    long double delta = (cos(r) - x) / sin(r);
+    r += delta;
+    return r;
+#endif
 }
 inline long double asinl(long double x) {
-    return asin((double)x);
+    if (x < -1.0L || x > 1.0L) {
+        errno = EDOM;
+        return NAN;
+    }
+#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
+    return ::asinl(x);
+#else
+    long double r = static_cast<long double>(asin(static_cast<double>(x)));
+    long double delta = (x - sin(r)) / cos(r);
+    r += delta;
+    return r;
+#endif
 }
 inline long double atanl(long double x) {
-    return atan((double)x);
+#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
+    return ::atanl(x);
+#else
+    long double r = static_cast<long double>(atan(static_cast<double>(x)));
+    long double t = tan(r);
+    r -= (t - x) * (1.0L / (1.0L + t * t));
+    return r;
+#endif
 }
 inline long double atan2l(long double y, long double x) {
-    return atan2((double)y, (double)x);
+#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
+    return ::atan2l(y, x);
+#else
+    return static_cast<long double>(atan2(static_cast<double>(y), static_cast<double>(x)));
+#endif
 }
 inline long double ceill(long double x) {
     return ceil((double)x);
@@ -225,7 +260,14 @@ inline long double logl(long double x) {
         errno = EDOM;
         return NAN;
     }
-    return log((double)x);
+#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
+    return ::logl(x);
+#else
+    long double r = static_cast<long double>(log(static_cast<double>(x)));
+    long double exp_r = exp(r);
+    r += (x - exp_r) / exp_r;
+    return r;
+#endif
 }
 inline long double log10l(long double x) {
     return log10((double)x);
@@ -246,7 +288,19 @@ inline long double sinhl(long double x) {
     return sinh((double)x);
 }
 inline long double sqrtl(long double x) {
-    return sqrt((double)x);
+#if defined(__CUDACC__) && SEP_HAS_CUDA_LDOUBLE_FUNCS
+    return ::sqrtl(x);
+#else
+    if (x < 0.0L) {
+        errno = EDOM;
+        return NAN;
+    }
+    long double r = static_cast<long double>(sqrt(static_cast<double>(x)));
+    if (x != 0.0L) {
+        r = 0.5L * (r + x / r);
+    }
+    return r;
+#endif
 }
 inline long double tanl(long double x) {
     return tan((double)x);

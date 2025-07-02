@@ -22,3 +22,15 @@ git submodule update --init extern/cycles
 ```
 
 This ensures the build scripts can locate the Cycles sources.
+
+## Required System Packages
+
+The build relies on the system `http_parser` library and the CUDA toolkit.
+On Ubuntu-based distributions install them with:
+
+```bash
+sudo apt-get install libhttp-parser-dev nvidia-cuda-toolkit
+```
+
+If the CUDA toolkit is installed in a non-standard location set `CUDAToolkit_ROOT`
+so CMake can locate `nvcc`.

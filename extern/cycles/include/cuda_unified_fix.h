@@ -248,7 +248,7 @@ inline long double frexpl(long double x, int* exp) {
 inline long double ldexpl(long double x, int exp) {
     return ldexp((double)x, exp);
 }
-inline long double logl(long double x) {
+SEP_HD inline long double logl(long double x) {
     if (x <= 0.0L) {
         errno = EDOM;
         return NAN;

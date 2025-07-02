@@ -373,13 +373,13 @@ void MemoryTierManager::storeLTMToPersistence(const ::sep::quantum::Pattern& pat
     redis_manager_->storePattern(id, data, "ltm");
 }
 
-::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) {
+std::unique_ptr<::sep::quantum::Pattern> MemoryTierManager::findPattern(std::size_t id) {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) { 
         return nullptr;
     }
     const sep::pattern::PatternData* data = it->second.get();
-    sep::quantum::Pattern* pattern = new sep::quantum::Pattern();
+    auto pattern = std::make_unique<sep::quantum::Pattern>();
     pattern->id = data->id;
     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
     pattern->data.assign(values, values + 4);
@@ -390,13 +390,13 @@ void MemoryTierManager::storeLTMToPersistence(const ::sep::quantum::Pattern& pat
     return pattern;
 }
 
-const ::sep::quantum::Pattern* MemoryTierManager::findPattern(std::size_t id) const {
+std::unique_ptr<::sep::quantum::Pattern> MemoryTierManager::findPattern(std::size_t id) const {
     auto it = pattern_registry_.find(id);
     if (it == pattern_registry_.end()) {
         return nullptr;
     }
     const sep::pattern::PatternData* data = it->second.get();
-    sep::quantum::Pattern* pattern = new sep::quantum::Pattern();
+    auto pattern = std::make_unique<sep::quantum::Pattern>();
     pattern->id = data->id;
     const float values[] = {data->attributes.x, data->attributes.y, data->attributes.z, data->attributes.w};
     pattern->data.assign(values, values + 4);

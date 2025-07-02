@@ -119,8 +119,8 @@ public:
     void calculateRelationshipCoherence();
     void loadLTMFromPersistence();
     void storeLTMToPersistence(const ::sep::quantum::Pattern& pattern, const persistence::PersistentPatternData& data);
-    ::sep::quantum::Pattern* findPattern(std::size_t id);
-    const ::sep::quantum::Pattern* findPattern(std::size_t id) const;
+    std::unique_ptr<::sep::quantum::Pattern> findPattern(std::size_t id);
+    std::unique_ptr<::sep::quantum::Pattern> findPattern(std::size_t id) const;
     void registerPattern(std::size_t id, const ::sep::pattern::PatternData& pattern);
     const ::sep::pattern::PatternData* getPatternData(std::size_t id) const;
     void cleanupExpiredPatterns();

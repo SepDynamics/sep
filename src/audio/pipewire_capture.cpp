@@ -13,6 +13,7 @@
 #include <cmath>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/constants.hpp>
+#include <spa/utils/result.h>
 
 
 // Initialize PipeWire before namespace declarations
@@ -104,8 +105,14 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
     }
 
     // Start the loop before creating context
-    if (pw_thread_loop_start(loop_) < 0) {
-        spdlog::error("Failed to start PipeWire thread loop");
+    int start_err = pw_thread_loop_start(loop_);
+    if (start_err < 0)
+    {
+        spdlog::error("Failed to start PipeWire thread loop: {}", spa_strerror(start_err));
+        if (start_err == -EEXIST)
+        {
+            spdlog::error("Thread loop already running");
+        }
         cleanup();
         return AudioError::INIT_FAILED;
     }
@@ -242,7 +249,8 @@ AudioError PipeWireCapture::setupStream()
     int err = pw_stream_connect(stream_,
                                 PW_DIRECTION_INPUT,
                                 PW_ID_ANY,
-                                static_cast<pw_stream_flags>(PW_STREAM_FLAG_AUTOCONNECT | PW_STREAM_FLAG_RT_PROCESS),
+                                static_cast<pw_stream_flags>(PW_STREAM_FLAG_AUTOCONNECT |
+                                                             PW_STREAM_FLAG_RT_PROCESS),
                                 params,
                                 1);
 
@@ -250,10 +258,12 @@ AudioError PipeWireCapture::setupStream()
 
     if (err < 0)
     {
-        spdlog::error("Failed to connect stream: {}", strerror(-err));
-        spdlog::error("Stream flags: autoconnect={}, rt_process={}",
-                      (err & PW_STREAM_FLAG_AUTOCONNECT),
-                      (err & PW_STREAM_FLAG_RT_PROCESS));
+        spdlog::error("Failed to connect stream: {}", spa_strerror(err));
+        spdlog::error("Source: {} rate: {}", config_.source, config_.rate);
+        if (err == -ENOENT)
+        {
+            spdlog::error("Requested capture device not found");
+        }
         result = AudioError::STREAM_FAILED;
     }
 
@@ -272,7 +282,15 @@ AudioError PipeWireCapture::start()
     int err = pw_thread_loop_start(loop_);
     if (err < 0)
     {
-        spdlog::error("Failed to start PipeWire thread loop: {}", strerror(-err));
+        spdlog::error("Failed to start PipeWire thread loop: {}", spa_strerror(err));
+        if (err == -EEXIST)
+        {
+            spdlog::warn("Thread loop was already running");
+        }
+        else if (err == -EACCES || err == -EPERM)
+        {
+            spdlog::error("Insufficient permissions to start real-time thread");
+        }
         return AudioError::STREAM_FAILED;
     }
 

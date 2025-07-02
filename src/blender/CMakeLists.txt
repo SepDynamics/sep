@@ -1,5 +1,13 @@
 find_package(CUDAToolkit REQUIRED)
 find_package(TBB REQUIRED)
+find_package(PkgConfig REQUIRED)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/extern/cycles/src/cmake/Modules)
+
+find_package(Embree REQUIRED)
+find_package(Glog REQUIRED)
+pkg_check_modules(OIIO REQUIRED OpenImageIO)
+pkg_check_modules(ZSTD REQUIRED libzstd)
 
 add_library(sep_blender STATIC
     compression_utils.cpp
@@ -24,6 +32,10 @@ target_compile_definitions(sep_blender
 target_link_libraries(sep_blender
     PUBLIC
         sep_core
+        ${OIIO_LIBRARIES}
+        ${GLOG_LIBRARIES}
+        ${ZSTD_LIBRARIES}
+        ${EMBREE_LIBRARIES}
     PRIVATE
         sep_compat
         ${CMAKE_SOURCE_DIR}/libsep_compat.a
@@ -58,6 +70,12 @@ set(SEP_HAS_CYCLES 1)
 # Use bundled Cycles headers
 target_include_directories(sep_blender SYSTEM PRIVATE
   ${CYCLES_ROOT}/src
+)
+target_include_directories(sep_blender PUBLIC
+    ${OIIO_INCLUDE_DIRS}
+    ${GLOG_INCLUDE_DIRS}
+    ${EMBREE_INCLUDE_DIRS}
+    ${ZSTD_INCLUDE_DIRS}
 )
 
 # Define Cycles support
@@ -125,3 +143,8 @@ if(SEP_HAS_CYCLES)
       ${CMAKE_SOURCE_DIR}/extern/cycles/src
   )
 endif()
+
+set(OIIO_LIBRARIES ${OIIO_LIBRARIES} PARENT_SCOPE)
+set(GLOG_LIBRARIES ${GLOG_LIBRARIES} PARENT_SCOPE)
+set(ZSTD_LIBRARIES ${ZSTD_LIBRARIES} PARENT_SCOPE)
+set(EMBREE_LIBRARIES ${EMBREE_LIBRARIES} PARENT_SCOPE)

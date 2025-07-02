@@ -1,6 +1,7 @@
 #pragma once
 
 #include "compat/cuda_common.h"
+#include "compat/macros.h"
 
 #include <sstream>
 #include <string>

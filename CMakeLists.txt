@@ -10,6 +10,9 @@ configure_sep()
 
 # Find required packages
 find_package(Threads REQUIRED)
+find_package(CURL REQUIRED)
+find_package(fmt REQUIRED)
+find_package(spdlog REQUIRED)
 
 # Add subdirectories
 add_subdirectory(src/core)

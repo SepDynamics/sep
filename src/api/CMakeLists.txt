@@ -16,6 +16,7 @@ add_library(sep_api STATIC
     server.cpp
 )
 
+
 target_link_libraries(sep_api
     PUBLIC
         sep_core
@@ -34,7 +35,6 @@ target_include_directories(sep_api
 )
 
 # Link external dependencies when available
-target_link_libraries(sep_api PRIVATE ${CURL_LIBRARIES})
 if(HIREDIS_FOUND)
     target_link_libraries(sep_api PRIVATE ${HIREDIS_LIBRARIES})
 endif()

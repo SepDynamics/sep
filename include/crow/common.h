@@ -22,7 +22,8 @@
 #endif
 #endif
 
-namespace crow {
+namespace crow
+ {
     const char cr = '\r';
     const char lf = '\n';
     const sep::shim::string crlf("\r\n");
@@ -144,4 +145,5 @@ namespace crow {
         routing_handle_result() {}
     };
 
-} // namespace crow\n#endif
+} // namespace crow
+#endif

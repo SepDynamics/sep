@@ -2,9 +2,7 @@
 
 #include "compat/raii.h"
 #include "compat/cuda_common.h"
-#include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
-#include "memory/memory_tier.hpp"
 #include <cstddef>
 
 namespace sep {
@@ -80,39 +78,10 @@ private:
 };
 
 namespace cuda {
-
-// Implementation of CUDA memory functions
-inline void* allocateDeviceMemory(std::size_t size) {
-  auto* block = memory::MemoryTierManager::getInstance().allocate(size, ::sep::memory::TierType::UNIFIED);
-  return block ? block->ptr : nullptr;
-}
-
-inline void freeDeviceMemory(void* ptr) {
-  auto& mgr = memory::MemoryTierManager::getInstance();
-  memory::MemoryBlock* block = mgr.findBlockByPtr(ptr);
-  if (block) {
-    mgr.deallocate(block);
-  } else {
-    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
-    if (logger) {
-      logger->error("Attempted to free unknown pointer {}", ptr);
-    }
-  }
-}
-
-inline void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
-  auto* blk = memory::MemoryTierManager::getInstance().allocate(
-      size, ::sep::memory::TierType::UNIFIED);
-  if (blk && stream)
-    cudaStreamAttachMemAsync(stream, blk->ptr);
-  return blk ? blk->ptr : nullptr;
-}
-
-inline void freeUnifiedMemory(void* ptr) {
-  auto& mgr = memory::MemoryTierManager::getInstance();
-  if (auto* blk = mgr.findBlockByPtr(ptr))
-    mgr.deallocate(blk);
-}
-
+// Memory helpers are implemented in the CUDA RAII module.
+void* allocateDeviceMemory(std::size_t size);
+void  freeDeviceMemory(void* ptr);
+void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
+void  freeUnifiedMemory(void* ptr);
 } // namespace cuda
 }  // namespace sep

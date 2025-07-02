@@ -7,13 +7,15 @@
 // Include standard headers first
 #include <cstdint>
 #include <cstdio>
-#include <cstdlib>  // for std::malloc and std::free
+#include <cstdlib>  // for memory allocation
+#if defined(_MSC_VER)
+#include <malloc.h>
+#endif
 #include <iostream>
 #include <utility>
 
 // Include CUDA headers in the correct order
 #include "compat/raii.h"
-#include "memory/memory_tier_manager.hpp" // Include header for interface
 #include "compat/cuda_helpers.h"         // For CUDA_CHECK macro
 #include "compat/cuda_common.h"
 #if SEP_CUDA_AVAILABLE
@@ -224,30 +226,58 @@ template class DeviceBufferRAII<double>;
 
 // Implementation of memory management functions
 void* allocateDeviceMemory(std::size_t size) {
-    auto* block = sep::memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED);
-    return block ? block->ptr : nullptr;
+#if SEP_CUDA_AVAILABLE
+    void* ptr = nullptr;
+    cudaError_t err = cudaMalloc(&ptr, size);
+    if (err != cudaSuccess) {
+        if (debugAllocEnabled())
+            (void)fprintf(stderr, "cudaMalloc failed: %s\n", cudaGetErrorString(err));
+        return nullptr;
+    }
+    return ptr;
+#else
+#if defined(_MSC_VER)
+    return _aligned_malloc(size, 64);
+#else
+    return std::aligned_alloc(64, ((size + 63) / 64) * 64);
+#endif
+#endif
 }
 
 void freeDeviceMemory(void* ptr) {
     if (!ptr)
         return;
-    auto& mgr = memory::MemoryTierManager::getInstance();
-    auto* blk = mgr.findBlockByPtr(ptr);
-    if (blk)
-        mgr.deallocate(blk);
+#if SEP_CUDA_AVAILABLE
+    CUDA_CHECK(cudaFree(ptr));
+#else
+#ifdef _MSC_VER
+    _aligned_free(ptr);
+#else
+    std::free(ptr);
+#endif
+#endif
 }
 
 void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
-    auto* blk = memory::MemoryTierManager::getInstance().allocate(size, sep::memory::TierType::UNIFIED);
-    if (blk && stream) {
-        cudaError_t err = cudaStreamAttachMemAsync(stream, blk->ptr, 0, 0);
-        if (err != cudaSuccess) {
-            if (debugAllocEnabled()) {
-                (void)fprintf(stderr, "Failed to attach memory to CUDA stream: %s\n", cudaGetErrorString(err));
-            }
-        }
+#if SEP_CUDA_AVAILABLE
+    void* ptr = nullptr;
+    cudaError_t err = cudaMallocManaged(&ptr, size);
+    if (err != cudaSuccess) {
+        if (debugAllocEnabled())
+            (void)fprintf(stderr, "cudaMallocManaged failed: %s\n", cudaGetErrorString(err));
+        return nullptr;
     }
-    return blk ? blk->ptr : nullptr;
+    if (stream)
+        cudaStreamAttachMemAsync(stream, ptr);
+    return ptr;
+#else
+    (void)stream;
+#if defined(_MSC_VER)
+    return _aligned_malloc(size, 64);
+#else
+    return std::aligned_alloc(64, ((size + 63) / 64) * 64);
+#endif
+#endif
 }
 
 void freeUnifiedMemory(void* ptr) {

@@ -13,6 +13,12 @@ find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(spdlog REQUIRED)
+find_library(HTTP_PARSER_LIBRARY http_parser)
+if(HTTP_PARSER_LIBRARY)
+    message(STATUS "Found http_parser: ${HTTP_PARSER_LIBRARY}")
+else()
+    message(FATAL_ERROR "http_parser library not found")
+endif()
 
 # Add subdirectories
 add_subdirectory(src/core)

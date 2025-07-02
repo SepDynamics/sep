@@ -8,6 +8,7 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include <algorithm>
 #include <cmath>
+#include <vector>
 #include <glm/glm.hpp>
 
 namespace sep::quantum {
@@ -137,7 +138,7 @@ void QuantumProcessorQFHCommon::analyzePatternBits() {
     options.collapse_threshold = 0.6f;
     QFHBasedProcessor qfh_processor(options);
 
-    ::sep::shim::vector<uint32_t> shim_bits;
+    std::vector<uint32_t> shim_bits;
     shim_bits.reserve(m_pattern_bits.size());
     for (uint32_t v : m_pattern_bits) {
         shim_bits.push_back(v);

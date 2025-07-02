@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <vector>
 #include "compat/shim.h"
 
 #include "core/common.h"
@@ -52,12 +53,12 @@ class Engine {
   void run();
   void shutdown();
 
-  void generate_probes(const ::sep::shim::vector<::sep::PinState> &inputs,
-                       ::sep::shim::vector<std::uint32_t> &indices,
-                       ::sep::shim::vector<std::uint32_t> &expectations,
+  void generate_probes(const std::vector<::sep::PinState> &inputs,
+                       std::vector<std::uint32_t> &indices,
+                       std::vector<std::uint32_t> &expectations,
                        std::uint64_t tick);
 
-  void process_batch(const ::sep::shim::vector<::sep::PinState> &inputs,
+  void process_batch(const std::vector<::sep::PinState> &inputs,
                      std::uint64_t tick,
                      ::sep::quantum::QBSAResult &qbsa_result,
                      ::sep::cuda::QSHResult &qsh_result);
@@ -67,12 +68,12 @@ class Engine {
     std::uint64_t tick{0};
     float coherence{0.0f};
     bool rupture{false};
-    ::sep::shim::vector<std::size_t> parents;
+    std::vector<std::size_t> parents;
   };
 
-  const ::sep::shim::vector<StateNode> &getStateHistory() const noexcept;
+  const std::vector<StateNode> &getStateHistory() const noexcept;
 
-  ::sep::shim::vector<float> getCoherenceHistory() const;
+  std::vector<float> getCoherenceHistory() const;
 
  private:
   static constexpr size_t DEFAULT_SIZE = 1024;

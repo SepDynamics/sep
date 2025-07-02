@@ -6,6 +6,7 @@
 #include "quantum/data.hpp"
 #include "compat/shim.h"
 #include <array>
+#include <vector>
 
 namespace sep {
 namespace blender {
@@ -28,10 +29,10 @@ public:
                              int dimensionality);
 
     // Map coherence history to an overlay layer for debugging.
-    SEPResult applyCoherenceOverlay(const ::sep::shim::vector<float>& history);
+    SEPResult applyCoherenceOverlay(const std::vector<float>& history);
 
 private:
-    std::array<float, 3> projectNDim(const ::sep::shim::vector<float>& coords) const;
+    std::array<float, 3> projectNDim(const std::vector<float>& coords) const;
     SEPResult checkShaderReload();
 
     MeshHandler* handler_;

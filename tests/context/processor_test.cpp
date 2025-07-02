@@ -155,7 +155,7 @@ TEST_F(ContextProcessorTest, SimilarityCalculation) {
 // Test context blending
 TEST_F(ContextProcessorTest, ContextBlending) {
   // Create contexts to blend
-  sep::shim::vector<context::Context> contexts;
+  std::vector<context::Context> contexts;
   std::vector<float> embedding1 = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f};
   std::vector<float> embedding2 = {0.5f, 0.4f, 0.3f, 0.2f, 0.1f};
 
@@ -163,7 +163,7 @@ TEST_F(ContextProcessorTest, ContextBlending) {
   contexts.push_back(createEmbeddingContext(embedding2));
 
   // Equal weights
-  sep::shim::vector<float> weights = {0.5f, 0.5f};
+  std::vector<float> weights = {0.5f, 0.5f};
 
   // Blend contexts
   auto result = processor->blendContexts(contexts, weights);

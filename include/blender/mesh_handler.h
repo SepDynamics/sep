@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <memory>
+#include <vector>
 #include "compat/shim.h"
 
 #include "blender/blender_types.h"
@@ -147,7 +148,7 @@ class MeshHandler {
 
     ~CustomDataLayer() = default;
   };
-  ::sep::shim::vector<CustomDataLayer> custom_layers_;
+  std::vector<CustomDataLayer> custom_layers_;
 
   // Helper methods
   void cleanupCustomData();
@@ -168,9 +169,9 @@ class MeshHandler {
 
   // Pattern processing
   struct PatternState {
-    ::sep::shim::vector<float> weights;
-    ::sep::shim::vector<float> displacements;
-    ::sep::shim::vector<bool> affected_vertices;
+    std::vector<float> weights;
+    std::vector<float> displacements;
+    std::vector<bool> affected_vertices;
     float coherence{0.0f};
 
     PatternState() = default;
@@ -181,8 +182,8 @@ class MeshHandler {
   struct {
     mutable MeshMetrics metrics;
     mutable bool metrics_valid;
-    ::sep::shim::vector<size_t> vertex_map;
-    ::sep::shim::vector<size_t> edge_map;
+    std::vector<size_t> vertex_map;
+    std::vector<size_t> edge_map;
   } cache_;
 
   // Prevent copying

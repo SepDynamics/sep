@@ -1,7 +1,12 @@
 #pragma once
 
+// When not compiling with NVCC, include the real Crow common header directly.
+#ifndef __CUDACC__
+#include <crow/common.h>
+#else
+
 // This is a minimal version of the common.h file from the Crow framework
-// It provides stub implementations for common functionality
+// used during CUDA compilation to avoid heavy template instantiation.
 
 // Include our own headers
 #include "compat/shim.h"
@@ -139,4 +144,4 @@ namespace crow {
         routing_handle_result() {}
     };
 
-} // namespace crow
+} // namespace crow\n#endif

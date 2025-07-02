@@ -7,7 +7,10 @@
 // Include standard headers first
 #include <cstdint>
 #include <cstdio>
-#include <cstdlib>  // for std::malloc and std::free
+#include <cstdlib>  // for memory allocation
+#if defined(_MSC_VER)
+#include <malloc.h>
+#endif
 #include <iostream>
 #include <utility>
 

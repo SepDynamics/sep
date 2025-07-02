@@ -110,6 +110,10 @@ target_link_libraries(sep_blender PRIVATE
     embree4
     extern_cuew
     extern_hipew
+    cycles_scene
+    cycles_graph
+    cycles_kernel_osl
+    ${OSL_LIBRARIES}
 )
 
 

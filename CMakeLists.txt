@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
+project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
 
 # Enable CUDA
 set(CMAKE_CUDA_STANDARD 17)
@@ -36,6 +36,7 @@ find_package(http_parser REQUIRED)
 find_package(spdlog REQUIRED)
 
 # Add subdirectories
+add_subdirectory(extern/openpgl_stub)
 add_subdirectory(src/core)
 add_subdirectory(src/compat)
 add_subdirectory(src/memory)
@@ -44,6 +45,9 @@ add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 add_subdirectory(src/blender)
+add_subdirectory(extern/openpgl_stub)
+add_subdirectory(extern/cycles/third_party/cuew)
+add_subdirectory(extern/cycles/third_party/hipew)
 
 # Main executable
 add_executable(sep_engine src/main.cpp)
@@ -75,4 +79,7 @@ target_link_libraries(sep_engine
         gflags
         embree4
         ${HTTP_PARSER_LIBRARY}
+        openpgl_stub
+        extern_cuew
+        extern_hipew
 )

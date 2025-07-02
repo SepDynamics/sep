@@ -5,7 +5,7 @@ find_package(PkgConfig REQUIRED)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/extern/cycles/src/cmake/Modules)
 
 find_package(Embree REQUIRED)
-find_package(Glog REQUIRED)
+find_package(GLOG REQUIRED)
 pkg_check_modules(OIIO REQUIRED OpenImageIO)
 pkg_check_modules(ZSTD REQUIRED libzstd)
 

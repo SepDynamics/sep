@@ -21,6 +21,7 @@
 
 namespace crow
 {
+    namespace asio = boost::asio;
     using tcp = asio::ip::tcp;
 
 

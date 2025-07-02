@@ -8,6 +8,7 @@
 
 namespace crow
 {
+    namespace asio = boost::asio;
     /// Find and return the value associated with the key. (returns an empty string if nothing is found)
     template<typename T>
     inline const std::string& get_header_value(const T& headers, const std::string& key)

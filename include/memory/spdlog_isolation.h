@@ -5,6 +5,16 @@
 #include <sstream>
 #include <string>
 
+#if defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)
+#  define SEP_SPDLOG_FALLBACK 1
+#elif defined(__has_include)
+#  if __has_include(<spdlog/spdlog.h>)
+#    define SEP_SPDLOG_AVAILABLE 1
+#  else
+#    define SEP_SPDLOG_FALLBACK 1
+#  endif
+#endif
+
 namespace sep {
 namespace spdlog {
 
@@ -41,8 +51,8 @@ public:
 // It provides stub implementations for spdlog functionality that can be
 // safely included in CUDA files without causing template instantiation errors
 
-// Check for CUDA compilation - either via __CUDACC__ or our custom SEP_CUDA_COMPILATION flag
-#if defined(__CUDACC__) || defined(SEP_CUDA_COMPILATION)
+// Fallback implementation when CUDA is used or spdlog headers are unavailable
+#if defined(SEP_SPDLOG_FALLBACK)
 // When compiling with CUDA, provide stub implementations
 
 // Include our isolation headers
@@ -293,7 +303,7 @@ public:
 } // namespace details
 } // namespace spdlog
 
-#else
+#elif defined(SEP_SPDLOG_AVAILABLE)
 #    include <spdlog/spdlog.h>
 #    include <spdlog/details/registry.h>
 #    include <chrono>
@@ -367,4 +377,4 @@ public:
 } // namespace details
 } // namespace spdlog
 } // namespace sep
-#endif // fallback implementation
+#endif // SEP_SPDLOG_FALLBACK

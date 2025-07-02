@@ -13,13 +13,6 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace crow {
-    enum class LogLevel {
-        Debug = 0,
-        Info,
-        Warning,
-        Error,
-        Critical
-    };
 
     class LogHandler {
     public:

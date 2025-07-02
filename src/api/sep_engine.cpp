@@ -23,9 +23,10 @@
 #include "memory/memory_tier_manager.hpp"
 
 #include "core/logging.h" // Include logging header first
-#include "quantum/types.h" // For quantum::Pattern::generation 
+#include "quantum/types.h" // For quantum::Pattern::generation
 #include "compat/math_common.h" // Include math common for sqrt_safe
 #include "../../_sep/testbed/context_algorithms.hpp"
+#include "embeddings/simple_embedding_model.h"
 
 using json = nlohmann::json;
 
@@ -317,30 +318,26 @@ nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; 
+        result["success"] = false;
         result["error"]   = "Engine not initialized";
         return result;
     }
     impl_->health_metrics.totalRequests++;
 
-        std::vector<double> embeddings;
+    if (!request_data.contains("text") || !request_data["text"].is_string()) {
+        return makeErrorResponse(api::ErrorCode::InvalidArgument,
+                                 "Missing text field");
+    }
 
-        // Embedding generation was previously delegated to a Node.js IPC
-        // service from the old testbed. That script has been removed, so we
-        // now use the deterministic fallback vector directly.
+    static sep::embeddings::SimpleEmbeddingModel model;
+    std::vector<double> embeddings = model.compute(request_data["text"].get<std::string>());
 
-        if (embeddings.empty())
-        {
-            // Fallback deterministic vector
-            embeddings = {0.1, 0.2, 0.3, 0.4, 0.5};
-        }
+    impl_->health_metrics.successfulRequests++;
 
-        impl_->health_metrics.successfulRequests++;
-
-        json result;
-        result["success"]    = true; 
-        result["embeddings"] = embeddings;
-        return result;
+    json result;
+    result["success"]    = true;
+    result["embeddings"] = embeddings;
+    return result;
 }
 
 nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data)

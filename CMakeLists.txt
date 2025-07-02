@@ -60,6 +60,7 @@ add_subdirectory(src/core)
 add_subdirectory(src/compat)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
+add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
 add_subdirectory(src/audio)
 if(SEP_HAS_BLENDER)
@@ -81,6 +82,7 @@ target_link_libraries(sep_engine
         sep_compat
         sep_memory
         sep_quantum
+        sep_embeddings
         sep_audio
         sep_blender
         ${EMBREE_LIBRARIES}

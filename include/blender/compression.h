@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "compat/shim.h"
+#include <vector>
 
 #include "blender/base_types.h"
 // Use unified PatternData definitions

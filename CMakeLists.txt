@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
+project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
 
 # Add cmake directory to module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

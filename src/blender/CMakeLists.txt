@@ -36,18 +36,20 @@ if(SEP_HAS_CUDA)
     target_link_libraries(sep_blender PRIVATE CUDA::cudart)
 endif()
 
-# Add Cycles renderer when available
-if(SEP_HAS_CYCLES)
-  target_sources(sep_blender PRIVATE
-    cycles_renderer.cpp
-  )
-  
-  # Ensure Cycles renderer is built with CUDA support
-  set_source_files_properties(cycles_renderer.cpp
-    PROPERTIES
-    COMPILE_FLAGS "-DWITH_CYCLES_DEVICE_CUDA"
-  )
-endif()
+# Always compile the Cycles renderer.  When SEP_HAS_CYCLES is not
+# defined the implementation falls back to stub logic so we still
+# need the translation unit to satisfy symbol references.
+target_sources(sep_blender PRIVATE
+  cycles_renderer.cpp
+)
+
+# When real Cycles support is available compile with the device flag so
+# the CUDA integration paths are enabled.  The flag is harmless when
+# building the stub implementation.
+set_source_files_properties(cycles_renderer.cpp
+  PROPERTIES
+  COMPILE_FLAGS "-DWITH_CYCLES_DEVICE_CUDA"
+)
 
 # Link directly against Blender's Cycles
 set(BLENDER_VERSION "5.0")

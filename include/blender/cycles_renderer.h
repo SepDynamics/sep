@@ -31,7 +31,7 @@ public:
     bool render(const std::string& filepath);
 
 private:
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
     using ScenePtr = std::unique_ptr<::ccl::Scene>;
 #endif
 
@@ -39,14 +39,14 @@ private:
     int width_{0};
     int height_{0};
     std::vector<pattern::PatternData> patterns_;
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
     ScenePtr cycles_scene_{nullptr};
     ::ccl::Stats cycles_stats_;
     ::ccl::Profiler cycles_profiler_;
     std::unique_ptr<::ccl::Device> cycles_device_;
 #endif
 
-#ifdef SEP_HAS_CYCLES
+#if SEP_HAS_CYCLES
     void createGeometryFromPattern(const pattern::PatternData& pattern);
     void convertPatternToMesh(const pattern::PatternData& pattern,
                              std::vector<::ccl::float3>& verts,

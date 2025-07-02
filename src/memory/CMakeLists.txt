@@ -21,7 +21,7 @@ target_link_libraries(sep_memory
 
 # CUDA and Redis are always required
 target_compile_definitions(sep_memory PRIVATE
-    SEP_HAS_CUDA=1
+    SEP_HAS_CUDA=${SEP_HAS_CUDA}
     SEP_HAS_REDIS=1
 )
 

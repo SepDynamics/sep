@@ -8,7 +8,16 @@ add_executable(long_double_math_test
     long_double_math_test.cpp
 )
 
+add_executable(cuda_api_tests
+    processing_api_test.cpp
+)
+
 target_include_directories(long_double_math_test PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
+)
+
+target_include_directories(cuda_api_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src
 )
@@ -18,8 +27,18 @@ target_link_libraries(long_double_math_test PRIVATE
     sep_core
     GTest::GTest
     GTest::Main
-    CUDA::cudart
-    CUDA::cuda_driver
+    $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cudart,>
+    $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cuda_driver,>
+)
+
+target_link_libraries(cuda_api_tests PRIVATE
+    sep_compat
+    sep_core
+    GTest::GTest
+    GTest::Main
+    $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cudart,>
+    $<IF:$<BOOL:${SEP_HAS_CUDA}>,CUDA::cuda_driver,>
 )
 
 add_test(NAME long_double_math_test COMMAND long_double_math_test)
+add_test(NAME cuda_api_tests COMMAND cuda_api_tests)

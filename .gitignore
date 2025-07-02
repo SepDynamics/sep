@@ -7,6 +7,7 @@ tests/io_curve_svg/
 sep_engine
 extern/*
 !extern/cycles/
+!extern/crow/
 build/
 _build/
 changes.diff

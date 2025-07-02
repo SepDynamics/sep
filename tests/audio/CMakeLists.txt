@@ -10,6 +10,7 @@ add_executable(audio_tests
     pipeline_features_test.cpp
     pipeline_test.cpp
     fft_accuracy_test.cpp
+    pipewire_lifecycle_test.cpp
 )
 
 target_include_directories(audio_tests PRIVATE

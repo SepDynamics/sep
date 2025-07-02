@@ -25,6 +25,7 @@
 #include "core/logging.h" // Include logging header first
 #include "quantum/types.h" // For quantum::Pattern::generation 
 #include "compat/math_common.h" // Include math common for sqrt_safe
+#include "../../_sep/testbed/context_algorithms.hpp"
 
 using json = nlohmann::json;
 
@@ -256,22 +257,48 @@ nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
 {
     if (!impl_->initialized) {
         json result;
-        result["success"] = false; 
+        result["success"] = false;
         result["error"]   = "Engine not initialized";
         return result;
     }
+
     impl_->health_metrics.totalRequests++;
 
-        // Mock context validation
-        bool valid = request_data.contains("contexts") && request_data["contexts"].is_array();
-
-        impl_->health_metrics.successfulRequests++;
-
+    if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
+    {
         json result;
-        result["success"]       = true; 
-        result["valid"]         = valid;
-        result["context_count"] = valid ? request_data["contexts"].size() : 0;
+        result["success"] = false;
+        result["error"]   = "contexts must be an array";
         return result;
+    }
+
+    auto [valid, invalid_index] =
+        sep::testbed::validate_contexts_impl(request_data["contexts"]);
+
+    impl_->health_metrics.successfulRequests++;
+
+    json result;
+    result["success"]       = valid;
+    result["context_count"] = request_data["contexts"].size();
+    if (!valid)
+    {
+        result["error"] = std::string("invalid context at index ") +
+                          std::to_string(invalid_index);
+    }
+    if (!request_data.contains("contexts") || !request_data["contexts"].is_array()) {
+        return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
+    }
+
+    auto report = sep::testbed::validate_contexts(request_data["contexts"]);
+
+    impl_->health_metrics.successfulRequests++;
+
+    json result;
+    result["success"]       = true;
+    result["valid"]         = report.overall_valid;
+    result["context_count"] = request_data["contexts"].size();
+    result["invalid_indices"] = report.invalid_indices;
+    return result;
 }
 
 nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
@@ -389,22 +416,72 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
 
 nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
 {
-    (void)request_data;  // Mark parameter as used
     if (!impl_->initialized) {
-        json result; 
-        result["success"] = false; 
+        json result;
+        result["success"] = false;
         result["error"]   = "Engine not initialized";
         return result;
     }
-        // Mock context blending
-        json blend_result;
-        blend_result["blended_context_id"] = generateId("blend");
-        blend_result["coherence"]          = 0.75;
 
+    if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
+    {
         json result;
-        result["success"] = true; 
-        result["result"]  = blend_result;
+        result["success"] = false;
+        result["error"]   = "contexts must be an array";
         return result;
+    }
+
+    std::vector<std::vector<double>> embeddings;
+    for (const auto& ctx : request_data["contexts"])
+    {
+        if (!ctx.contains("content") || !ctx["content"].is_array())
+        {
+            json result;
+            result["success"] = false;
+            result["error"]   = "context missing content";
+            return result;
+        }
+        std::vector<double> emb;
+        emb.reserve(ctx["content"].size());
+        for (const auto& v : ctx["content"])
+            emb.push_back(v.get<double>());
+        embeddings.push_back(std::move(emb));
+    }
+
+    size_t dim = embeddings[0].size();
+    for (const auto& e : embeddings)
+    {
+        if (e.size() != dim)
+        {
+            json result;
+            result["success"] = false;
+            result["error"]   = "inconsistent embedding dimensions";
+            return result;
+        }
+    }
+
+    std::vector<float> weights;
+    if (request_data.contains("weights"))
+    {
+        if (!request_data["weights"].is_array() ||
+            request_data["weights"].size() != embeddings.size())
+        {
+            json result;
+            result["success"] = false;
+            result["error"]   = "weights size mismatch";
+            return result;
+        }
+        for (const auto& w : request_data["weights"])
+            weights.push_back(w.get<float>());
+    }
+
+    auto blend = sep::testbed::blend_contexts_impl(embeddings, weights);
+    blend["blended_context_id"] = generateId("blend");
+
+    json result;
+    result["success"] = true;
+    result["result"]  = blend;
+    return result;
 }
 
 nlohmann::json SepEngine::getHealthStatus()

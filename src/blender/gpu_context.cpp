@@ -1,4 +1,6 @@
 #include "blender/gpu_context.h"
+#include <cstdlib>
+#include <cstring>
 
 #include <cstring>
 #include <new>

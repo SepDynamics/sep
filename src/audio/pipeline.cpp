@@ -96,7 +96,7 @@ SpectralData AudioPipeline::performFFT(const std::vector<float>& samples) {
     SpectralData spectral;
     const size_t N = samples.size();
 
-#if SEP_CUDA_AVAILABLE && SEP_HAS_CUFFT
+#if SEP_CUDA_AVAILABLE && SEP_HAS_CUFFT && defined(cufftReal) && defined(cufftComplex)
     cufftHandle plan;
     cufftPlan1d(&plan, static_cast<int>(N), CUFFT_R2C, 1);
     std::vector<cufftReal> input(samples.begin(), samples.end());

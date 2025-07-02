@@ -36,6 +36,18 @@
 
 namespace sep::cuda {
 
+namespace detail {
+SEP_GLOBAL void qbsa_kernel(const std::uint32_t* d_probe_indices,
+                           const std::uint32_t* d_expectations,
+                           std::uint32_t num_probes, std::uint32_t* d_bitfield,
+                           std::uint32_t* d_corrections,
+                           std::uint32_t* d_correction_count);
+
+SEP_GLOBAL void qsh_kernel(const std::uint64_t* d_chunks, std::uint32_t num_chunks,
+                          std::uint32_t* d_collapse_indices,
+                          std::uint32_t* d_collapse_counts);
+}  // namespace detail
+
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
                            cudaMemcpyKind kind, cudaStream_t stream) {
   return ::cudaMemcpyAsync(dst, src, count, kind, stream);
@@ -52,8 +64,8 @@ cudaError_t launchQBSAKernel(const std::uint32_t *d_probe_indices,
                            const std::uint32_t *d_expectations, std::uint32_t num_probes,
                            std::uint32_t *d_bitfield, std::uint32_t *d_corrections,
                            std::uint32_t *d_correction_count, cudaStream_t stream) {
-  // Launch QBSA kernel implementation
-  if (!d_probe_indices || !d_expectations || !d_bitfield || !d_corrections || !d_correction_count) {
+  if (!d_probe_indices || !d_expectations || !d_bitfield || !d_corrections ||
+      !d_correction_count) {
     return cudaErrorInvalidValue;
   }
   
@@ -76,7 +88,6 @@ cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
                           std::uint32_t *d_collapse_indices,
                           std::uint32_t *d_collapse_counts,
                           cudaStream_t stream) {
-  // Launch QSH kernel implementation
   if (!d_chunks || !d_collapse_indices || !d_collapse_counts) {
     return cudaErrorInvalidValue;
   }

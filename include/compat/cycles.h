@@ -25,24 +25,24 @@
 // Core Cycles headers - only include if SEP_HAS_CYCLES is defined
 #ifdef SEP_HAS_CYCLES
 // Core Cycles headers
-#include "../extern/cycles/src/device/device.h"
-#include "../extern/cycles/src/scene/scene.h"
-#include "../extern/cycles/src/scene/camera.h"
-#include "../extern/cycles/src/scene/mesh.h"
-#include "../extern/cycles/src/scene/shader.h"
-#include "../extern/cycles/src/scene/light.h"
-#include "../extern/cycles/src/scene/background.h"
-#include "../extern/cycles/src/scene/film.h"
-#include "../extern/cycles/src/scene/integrator.h"
-#include "../extern/cycles/src/session/session.h"
-#include "../extern/cycles/src/session/buffers.h"
+#include "device/device.h"
+#include "scene/scene.h"
+#include "scene/camera.h"
+#include "scene/mesh.h"
+#include "scene/shader.h"
+#include "scene/light.h"
+#include "scene/background.h"
+#include "scene/film.h"
+#include "scene/integrator.h"
+#include "session/session.h"
+#include "session/buffers.h"
 
 // Utility headers
-#include "../extern/cycles/src/util/array.h"
-#include "../extern/cycles/src/util/math_base.h"
-#include "../extern/cycles/src/util/param.h"
-#include "../extern/cycles/src/util/string.h"
-#include "../extern/cycles/src/util/vector.h"
+#include "util/array.h"
+#include "util/math_base.h"
+#include "util/param.h"
+#include "util/string.h"
+#include "util/vector.h"
 #endif
 
 // No need for stub implementations when using real Cycles

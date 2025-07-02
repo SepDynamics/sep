@@ -22,7 +22,7 @@ namespace crow {
 namespace asio = boost::asio;
 using error_code = boost::system::error_code;
 #else
-using error_code = std::error_code;
+using error_code = asio::error_code;
 #endif
 namespace detail {
 

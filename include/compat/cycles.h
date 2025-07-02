@@ -22,8 +22,8 @@
 #define CCL_NAMESPACE_USING_DIRECTIVE using namespace ccl;
 #endif
 
-// Core Cycles headers - only include if SEP_HAS_CYCLES is defined
-#ifdef SEP_HAS_CYCLES
+// Core Cycles headers - only include if SEP_HAS_CYCLES is enabled (non-zero)
+#if defined(SEP_HAS_CYCLES) && SEP_HAS_CYCLES
 // Core Cycles headers
 #include "../extern/cycles/src/device/device.h"
 #include "../extern/cycles/src/scene/scene.h"
@@ -43,8 +43,6 @@
 #include "../extern/cycles/src/util/param.h"
 #include "../extern/cycles/src/util/string.h"
 #include "../extern/cycles/src/util/vector.h"
-#endif
-
 // No need for stub implementations when using real Cycles
 #else
 // Using stub implementations either because SEP_HAS_CYCLES is not defined

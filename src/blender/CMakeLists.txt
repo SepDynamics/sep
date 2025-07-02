@@ -36,6 +36,8 @@ target_link_libraries(sep_blender
         ${GLOG_LIBRARIES}
         ${ZSTD_LIBRARIES}
         ${EMBREE_LIBRARIES}
+        cuew_stub
+        openpgl_stub
     PRIVATE
         sep_compat
         ${CMAKE_SOURCE_DIR}/libsep_compat.a

@@ -67,5 +67,5 @@ target_link_libraries(sep_compat
         sep_core
     PRIVATE
         ${CUDA_LIBRARIES}
-        ${CUDAToolkit_LIBRARY_DIR}/libcudart.so
+        ${CUDA_CUDART_LIBRARY}
 )

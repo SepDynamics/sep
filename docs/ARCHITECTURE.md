@@ -15,7 +15,7 @@ graph TB
         end
 
         subgraph "Domain Components"
-            blender[libsep_blender.a<br/>Cycles Integration<br/>└─ cycles_renderer.cpp<br/>└─ mesh_handler.cpp<br/>└─ gpu_context.cpp]
+            blender[sep_blender<br/>Cycles Integration<br/>└─ cycles_renderer.cpp<br/>└─ mesh_handler.cpp<br/>└─ gpu_context.cpp]
             audio[libsep_audio.a<br/>PipeWire Integration<br/>└─ pipewire_capture.cpp<br/>└─ pipeline.cpp]
         end
 
@@ -141,7 +141,7 @@ graph TD
 
     subgraph "Static Libraries (.a)"
         api[libsep_api.a]
-        blender[libsep_blender.a]
+        blender[sep_blender]
         audio[libsep_audio.a]
         quantum[libsep_quantum.a]
         memory[libsep_memory.a]

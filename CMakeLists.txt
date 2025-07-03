@@ -87,6 +87,7 @@ find_package(Alembic REQUIRED)
 
 # Audio support can be disabled
 option(SEP_ENABLE_AUDIO "Enable audio support" ON)
+# Invoke cmake with `-DSEP_ENABLE_AUDIO=OFF` to build without audio capture
 
 # Add subdirectories
 add_subdirectory(src/core)

@@ -6,6 +6,7 @@ This folder contains notes and references for navigating and maintaining the SEP
 - **`ARCHITECTURE.md`** — Mermaid diagrams and descriptions of each engine module.
 - **`GAMEPLAN.md`** — Historical build issues and how they were resolved.
 - **`THESIS.md`** — Background theory behind the project.
+- **`strategy/SCIENTIFIC_VISUALIZATION_MARKET.md`** — Research market framing for the SEP Engine.
 - **`vscodium.md`** — Notes on the development environment setup.
 - **`CONFIG_OPTIONS.md`** — Description of configurable runtime parameters.
 - **`diagrams/include-embeddings.md`** — Header map for the embeddings module.

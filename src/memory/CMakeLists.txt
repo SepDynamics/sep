@@ -14,14 +14,14 @@ find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis REQUIRE
 target_link_libraries(sep_memory
     PUBLIC
         sep_core
-    PRIVATE
-        sep_compat # Link compat once, it handles CUDA internally
+        sep_compat # CUDA utilities required by memory tier
         ${HIREDIS_LIB}
 )
 
 # CUDA and Redis are always required
 target_compile_definitions(sep_memory PRIVATE
     SEP_HAS_CUDA=1
+    SEP_USE_CUDA=1
     SEP_HAS_REDIS=1
 )
 

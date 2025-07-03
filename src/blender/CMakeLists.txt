@@ -20,6 +20,7 @@ add_library(sep_blender STATIC
     blender_integration.cpp
     mesh_handler.cpp
     factory.cpp
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src/app/oiio_output_driver.cpp
 )
 
 # Define required features

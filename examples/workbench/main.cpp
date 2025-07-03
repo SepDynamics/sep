@@ -5,6 +5,8 @@
 #include "blender/cycles_renderer.hpp"
 #include "demo_manager.hpp"
 #include "demos/genesis_pattern.hpp"
+#include "demos/audio_visualizer.hpp"
+#include "demos/memory_garden.hpp"
 
 using namespace sep;
 using namespace sep::workbench;
@@ -82,6 +84,12 @@ void registerDemos() {
     // Register available demos
     demo_manager.registerDemo("genesis", []() {
         return std::make_unique<GenesisPatternDemo>();
+    });
+    demo_manager.registerDemo("audio", []() {
+        return std::make_unique<AudioVisualizerDemo>();
+    });
+    demo_manager.registerDemo("memory", []() {
+        return std::make_unique<MemoryGardenDemo>();
     });
 
     // Start with Genesis Pattern demo

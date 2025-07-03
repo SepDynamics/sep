@@ -33,6 +33,14 @@ Execute the engine from the build directory (`cmake-make`):
 ./sep_engine
 ```
 
+Pass `--disable-audio` to skip initializing audio capture. This is useful on
+systems without working audio devices or when `SEP_ENABLE_AUDIO` was set to
+`OFF` during configuration:
+
+```bash
+./sep_engine --disable-audio
+```
+
 Configuration files are located in `config`. Command‑line flags and environment variables override these defaults.
 
 ### New Configuration Sections
@@ -80,3 +88,14 @@ The script defines variables including `OPENVDB_INCLUDE_DIR`,
 on the system it automatically clones and builds version `v1.13.12.0` under
 `/sep/extern/osl`. After executing it you can build Cycles from `/sep/cycles-build`:
 
+
+## Diagram Sync Worker
+
+The `diagram_sync_worker.py` script verifies that each module directory under `include/` and `src/` has a matching document in `docs/diagrams`.
+Run it from the repository root:
+
+```bash
+python _sep/testbed/diagram_sync_worker.py
+```
+
+Add `--regen` to automatically create placeholder files for missing diagrams.

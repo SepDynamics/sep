@@ -1,6 +1,15 @@
 #include "compat/macros.h"
 #if defined(__CUDACC__)
-#include <cuda_runtime.h> // real CUDA header when available
+#  include <cuda_runtime.h> // real CUDA header when available
+#endif
+
+// Determine if real CUDA support is present at compile time. This mirrors the
+// logic used in other components so the engine can compile cleanly even when
+// CUDA sources are not built with NVCC.
+#if defined(__CUDACC__)
+#  define SEP_ENGINE_HAS_CUDA 1
+#else
+#  define SEP_ENGINE_HAS_CUDA 0
 #endif
 #include "api/types.h"
 #include "compat/core.h"
@@ -34,7 +43,7 @@ namespace logging = sep::logging;
 
 namespace sep {
 namespace core {
-#if defined(__CUDACC__)
+#if SEP_ENGINE_HAS_CUDA
 using namespace ::sep::cuda;
 #endif
 

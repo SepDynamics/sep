@@ -91,19 +91,19 @@ target_link_libraries(sep_engine
 
         # 2. Cycles and its dependencies (order is important here too)
         # Link the main Cycles libs first
-        libcycles_session
-        libcycles_scene
-        libcycles_device
-        libcycles_kernel_osl # The one with the real symbols
-        libcycles_subd
+        cycles_session
+        cycles_scene
+        cycles_device
+        cycles_kernel_osl # The one with the real symbols
+        cycles_subd
         cycles_util
         extern_cuew
         extern_hipew
 
         # Now link the external dependencies that Cycles needs
         OpenImageIO
-        OpenVDB
-        OpenSubdiv
+        bf_intern_openvdb
+        bf_intern_opensubdiv
         ${OSL_LIBRARIES} # Link the real OSL libs, not the stub
         ${TBB_LIBRARIES}
 

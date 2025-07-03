@@ -1,6 +1,6 @@
 #include "compat/macros.h"
-#if SEP_CUDA_AVAILABLE
-#include <cuda_runtime.h> // for sep::cuda::cudaMemcpyAsync
+#if defined(__CUDACC__)
+#include <cuda_runtime.h> // real CUDA header when available
 #endif
 #include "api/types.h"
 #include "compat/core.h"
@@ -34,7 +34,9 @@ namespace logging = sep::logging;
 
 namespace sep {
 namespace core {
+#if defined(__CUDACC__)
 using namespace ::sep::cuda;
+#endif
 
 struct Engine::Impl {
   // CPU fallback buffers

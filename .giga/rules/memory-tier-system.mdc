@@ -1,56 +1,62 @@
 ---
-description: Defines memory tier management, pattern storage/retrieval, and Redis integration for quantum pattern processing
-globs: /sep/src/memory/**,/sep/include/memory/**,/sep/src/quantum/pattern_*.cpp
+description: Specifications for implementing a multi-tiered memory management system with quantum coherence tracking and pattern evolution
+globs: src/memory/**/*,include/memory/**/*,src/quantum/**/*,include/quantum/**/*
 alwaysApply: false
 ---
 
 
 # memory-tier-system
 
-The memory tier system implements a specialized hierarchy for managing quantum patterns and coherence states across multiple storage layers.
+The memory tier system implements a specialized multi-level memory architecture with quantum-aware pattern management:
 
-### Core Components
+### Memory Tier Architecture
+- Three distinct tiers: STM (Short-Term Memory), MTM (Medium-Term Memory), LTM (Long-Term Memory)
+- Each tier maintains patterns based on coherence thresholds:
+  - LTM: > 0.9 coherence
+  - MTM: > 0.6 coherence 
+  - STM: > 0.2 coherence
 
-#### Memory Tier Management (Importance: 95)
-- Three distinct tiers handle pattern evolution:
-  - Short-Term Memory (STM)
-  - Medium-Term Memory (MTM) 
-  - Long-Term Memory (LTM)
-- Located in `/sep/src/memory/memory_tier.cpp`
-- Manages pattern promotion/demotion between tiers based on coherence thresholds
-- Tracks tier fragmentation and pattern counts through `CoherenceResult` structure
+### Pattern Evolution & Migration
+- Patterns evolve through tiers based on:
+  - Quantum coherence scores
+  - Stability metrics
+  - Generation counts
+  - Access frequency
+  - Entanglement density
+- Migration decisions use weighted scoring:
+  - Coherence: 40%
+  - Stability: 30%
+  - Access frequency: 20%
+  - Entanglement density: 10%
 
-#### Pattern Storage Logic (Importance: 90)
-- Implements quantum pattern storage across tiers
-- Utilizes `QuantumState` structures containing:
-  - Evolution rates
-  - Energy levels
-  - Coupling strength values
-- Manages pattern allocation and deallocation based on coherence metrics
-- Located in `/sep/include/memory/quantum_coherence_manager.h`
+### Quantum State Management
+- Maintains quantum coherence through:
+  - Phase correlation tracking
+  - Entanglement graph maintenance
+  - Stability threshold monitoring
+  - Entropy calculation
+- Implements hysteresis to prevent oscillation between tiers
 
-#### Redis Integration Layer (Importance: 85)
-- Provides persistent storage for long-term patterns
-- Located in `/sep/src/memory/redis_manager.cpp`
-- Handles pattern serialization/deserialization
-- Manages distributed pattern storage across nodes
-- Synchronizes coherence states between memory tiers
+### Pattern Relationship Management
+- Tracks pattern relationships using:
+  - Spatial overlap in 4D quantum space
+  - Phase correlation between quantum states
+  - Coherence product weighting
+- Prunes relationships below strength threshold (0.3)
 
-#### Pattern Evolution Bridge (Importance: 80)
-- Located in `/sep/src/quantum/pattern_evolution_bridge.cpp`
-- Facilitates pattern transitions between memory tiers
-- Integrates with `QuantumManifoldOptimizer` for coherence optimization
-- Tracks pattern lifecycle and evolution metrics
+### Redis Integration
+- Persistent storage for LTM patterns
+- Automatic serialization/deserialization of quantum states
+- Bulk operations for pattern loading/storing
+- Pattern relationship persistence
 
-### Key Files
+Key Files:
 ```
-/sep/src/memory/
-  |- memory_tier.cpp
-  |- redis_manager.cpp
-/sep/include/memory/
-  |- quantum_coherence_manager.h
-/sep/src/quantum/
-  |- pattern_evolution_bridge.cpp
+src/memory/memory_tier_manager.cpp
+src/memory/quantum_coherence_manager.cpp
+src/memory/redis_manager.cpp
+include/memory/memory_tier.hpp
+include/memory/quantum_coherence_manager.h
 ```
 
 $END$

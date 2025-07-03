@@ -1,79 +1,62 @@
 ---
-description: Specification for quantum processing algorithms including state analysis, pattern evolution, and coherence calculation
-globs: **/quantum/*.{cpp,h},**/quantum/**/*.{cpp,h},**/include/quantum/*.h
+description: Specification for implementing and documenting quantum algorithm components including QBSA, QFH, pattern evolution, coherence calculation and stability analysis.
+globs: **/quantum/**,**/quantum*.{cpp,h},**/qbsa*.{cpp,h},**/qfh*.{cpp,h}
 alwaysApply: false
 ---
 
 
 # quantum-algorithms
 
-## Core Quantum Processing Components
-
 ### Quantum Binary State Analysis (QBSA)
-- Analyzes quantum bitfields for coherence misalignments
-- Implements pattern detection across quantum states
-- Handles state collapse through recursive uncertainty resolution
+Core algorithm for analyzing quantum bit states and detecting coherence:
+- Analyzes bit patterns to detect quantum state misalignments and collapses
+- Employs derivative cascade processing for state verification 
+- Uses coherence thresholds to determine state stability
+- Tracks correction ratios across bit positions
 
-**File Path:** `/sep/src/quantum/pattern_processor.cpp`
-**Importance Score:** 95
+File: `src/quantum/qbsa.cpp`
 
 ### Quantum Fourier Hierarchy (QFH)
-- Multi-level transform system for analyzing relational data structures
-- Detects coherence ruptures across quantum manifolds
-- Processes quantum state evolution through hierarchical transforms
+Multi-level transform for detecting quantum state changes:
+- Transforms bit vectors into quantum events (NULL_STATE, FLIP, RUPTURE)
+- Aggregates events to detect pattern collapses
+- Uses ratio-based collapse detection with rupture measurements
+- Analyzes frequency domain for quantum interference patterns
 
-**File Path:** `/sep/include/quantum/types.h`
-**Importance Score:** 90
+Files:
+- `src/quantum/qfh.cpp`
+- `src/quantum/qbsa_qfh.cpp`
 
 ### Pattern Evolution System
-- Manages quantum pattern evolution through Hamiltonian-like processes
-- Calculates coupling strengths based on resonance ratios
-- Implements coherence threshold monitoring
+Manages quantum pattern states and transitions:
+- Updates quantum states based on coherence and stability metrics
+- Calculates entanglement between patterns using quantum relationships 
+- Detects quantum collapses through variance analysis
+- Evolves patterns through controlled mutations while maintaining stability
 
-**File Path:** `/sep/src/quantum/pattern_evolution_bridge.cpp`
-**Importance Score:** 85
+Files:
+- `src/quantum/pattern_evolution.cpp`
+- `src/quantum/evolution.cpp`
 
-### Quantum Coherence Management
-- Tracks tier-based fragmentation patterns
-- Monitors coherence states across memory hierarchies
-- Calculates pattern distribution across quantum tiers
+### Coherence Calculation
+Core coherence measurement system:
+- Calculates coherence between quantum states through dot products
+- Determines stability based on historical coherence
+- Manages promotion/demotion between memory tiers based on coherence
+- Tracks pattern relationships using coherence strength
 
-**File Path:** `/sep/include/memory/quantum_coherence_manager.h`
-**Importance Score:** 88
+File: `src/quantum/processor.cpp`
 
-### Quantum Manifold Optimization
-- Optimizes quantum manifolds using specialized processors
-- Integrates with CUDA for parallel quantum computations
-- Manages quantum state evolution rates and coupling strengths
+### Quantum State Management
+Pattern state tracking and analysis:
+- Maintains quantum states across memory tiers (STM/MTM/LTM)
+- Calculates quantum metrics (coherence, stability, entropy)
+- Detects state collapses through variance threshold analysis
+- Manages entanglement relationships between patterns
 
-**File Path:** `/sep/src/quantum/quantum_manifold_optimizer.cpp`
-**Importance Score:** 92
-
-### State Evolution Engine
-- Processes quantum state transitions
-- Manages evolution rates and energy calculations
-- Handles coupling strength adjustments
-
-**File Path:** `/sep/src/quantum/quantum_manifold_optimizer.cpp`
-**Importance Score:** 87
-
-## Integration Components
-
-### Pattern Evolution Bridge
-- Connects quantum pattern processing with manifold optimization
-- Manages state transitions between processing stages
-- Coordinates coherence calculations across system components
-
-**File Path:** `/sep/src/quantum/pattern_evolution_bridge.cpp`
-**Importance Score:** 82
-
-### Quantum Memory Interface
-- Manages quantum state storage across memory tiers
-- Implements coherence-aware memory management
-- Handles pattern persistence and retrieval
-
-**File Path:** `/sep/src/memory/memory_tier.cpp`
-**Importance Score:** 78
+Files:
+- `src/quantum/quantum_processor.cpp`
+- `src/quantum/quantum_processor_qfh.cpp`
 
 $END$
 

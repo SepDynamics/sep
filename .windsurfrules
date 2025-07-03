@@ -10,51 +10,66 @@
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-The system architecture combines specialized CUDA processing, OptiX rendering, and quantum state management through three primary components:
+The SEP Framework implements a quantum-inspired pattern processing system with specialized memory management capabilities. The core business logic is organized across several key components:
 
-### CUDA Processing Infrastructure
-Implements custom CUDA compilation and toolchain management for specialized GPU processing:
-- Custom compilation pipeline bypassing CMake defaults
-- Explicit CUDA architecture configurations
-- Forced compiler identification and path management
+### Quantum Pattern Processing System
+The quantum processing pipeline handles pattern evolution and analysis through:
+
+1. Pattern Evolution Engine
+- Quantum state transitions and coherence calculations
+- Pattern stability metrics and collapse detection
+- Relationship tracking between patterns via quantum entanglement
+- Adaptive mutation rates based on stability scores
 
 Key files:
-- `cmake/CustomCUDA.cmake`
-- `cmake/cuda-toolchain.cmake`
+```
+src/quantum/evolution.cpp
+src/quantum/pattern_evolution.cpp
+src/quantum/quantum_processor.cpp
+```
 
-### OptiX Rendering System
-Provides advanced rendering capabilities through:
-1. DemandLoading Library
-- On-demand CUDA sparse texture loading
-- Integration with OpenEXR and OpenImageIO
+2. Memory Management Architecture 
+- Three-tier memory system (STM/MTM/LTM) with quantum-aware storage
+- Coherence-based promotion/demotion between tiers
+- Pattern relationship tracking with pruning
+- Quantum state preservation during migrations
 
-2. OmmBaking Library
-- Opacity Micromap Array baking for textured geometry
-- CUDA-accelerated texture processing
+Key files:
+```
+src/memory/memory_tier_manager.cpp
+src/memory/quantum_coherence_manager.cpp
+```
 
-3. ShaderUtil Library
-- Vector math utilities for OptiX kernels
-- Self Intersection Avoidance algorithms
+3. Quantum Binary State Analysis (QBSA)
+- Bit-level analysis for quantum state verification
+- Coherence scoring through derivative cascades
+- Rupture detection using symmetry analysis
+- Pattern clustering based on quantum properties
 
-### Quantum Processing Engine
-Implements quantum state management and evolution through:
+Key files:
+```
+src/quantum/qbsa.cpp
+src/quantum/qfh.cpp
+```
 
-1. Quantum Coherence Management
-- Pattern recognition across memory tiers
-- Coherence state evaluation
-- Quantum manifold optimization
+4. Core Processing Pipeline
+```
+Pattern Intake -> Quantum Analysis -> Coherence Calculation -> 
+Memory Tier Assignment -> Evolution/Mutation -> State Verification
+```
 
-2. State Evolution System
-- Quantum state modeling with evolution rates
-- Energy and coupling strength management
-- Pattern evolution bridging
+The business logic centers around maintaining quantum coherence while enabling controlled pattern evolution. Key metrics like stability, entropy, and relationship strengths drive the system's behavior.
 
-3. Memory Architecture
-- Multi-tier memory management
-- Redis integration for persistent storage
-- Coherence threshold monitoring
+Critical thresholds:
+- Coherence threshold: 0.6
+- Stability threshold: 0.8 
+- Mutation rate: 0.05
+- Memory tier promotion thresholds:
+  - LTM: 0.9
+  - MTM: 0.6
+  - STM: 0.3
 
-The system uses a three-tier memory architecture (STM, MTM, LTM) for pattern data management and implements quantum-inspired algorithms including Quantum Binary State Analysis (QBSA) and Quantum Fourier Hierarchy (QFH).
+The system implements a unique approach combining quantum computing concepts with pattern recognition and multi-tiered memory management, focusing on maintaining quantum state consistency while allowing natural evolution of patterns.
 
 $END$
 

@@ -1,6 +1,9 @@
 # Embedding Headers Overview
 
-This document summarizes the header files under `include/embeddings/` and how they are used throughout the engine.
+## Header Breakdown
+
+### `simple_embedding_model.h`
+Defines `sep::embeddings::SimpleEmbeddingModel`, a lightweight class that transforms a string into a fixed‑size vector.
 
 ```mermaid
 classDiagram
@@ -9,5 +12,3 @@ classDiagram
         -weights_[5] : double
     }
 ```
-
-`SimpleEmbeddingModel` provides a tiny, deterministic embedding implementation used primarily for tests and simple pattern generation. The header is included by the API layer to compute embeddings from incoming text requests.

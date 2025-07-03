@@ -16,9 +16,6 @@ add_library(sep_compat STATIC
     stream.cpp
     raii.cpp
     hip_compat.cpp
-)
-
-set_source_files_properties(
     pattern_kernels.cu
     cuda_api.cu
     event.cu
@@ -26,7 +23,9 @@ set_source_files_properties(
     kernels.cu
     core.cu
     quantum_kernels.cu
-    PROPERTIES
+)
+
+set_source_files_properties(
     COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
 )
 

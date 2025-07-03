@@ -1,5 +1,6 @@
 #include "audio/config.h"
 
+#ifdef SEP_HAS_AUDIO
 #include <algorithm>
 #include <cmath>
 #include <spdlog/spdlog.h>
@@ -158,3 +159,4 @@ bool validateAudioConfig(const AudioPipelineConfig& config)
 
 }  // namespace audio
 }  // namespace sep
+#endif // SEP_HAS_AUDIO

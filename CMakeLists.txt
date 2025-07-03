@@ -85,6 +85,9 @@ find_package(embree REQUIRED)
 find_package(OSL REQUIRED)
 find_package(Alembic REQUIRED)
 
+# Audio support can be disabled
+option(SEP_ENABLE_AUDIO "Enable audio support" ON)
+
 # Add subdirectories
 add_subdirectory(src/core)
 add_subdirectory(src/compat)
@@ -92,7 +95,10 @@ add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
-add_subdirectory(src/audio)
+if(SEP_ENABLE_AUDIO)
+    add_subdirectory(src/audio)
+    add_compile_definitions(SEP_HAS_AUDIO=1)
+endif()
 add_subdirectory(src/blender)
 add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)

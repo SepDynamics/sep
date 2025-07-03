@@ -1,5 +1,6 @@
 #pragma once
 
+#ifdef SEP_HAS_AUDIO
 #include <cstdint>
 #include <string>
 
@@ -39,3 +40,4 @@ enum class AudioError {
 
 }  // namespace audio
 }  // namespace sep
+#endif // SEP_HAS_AUDIO

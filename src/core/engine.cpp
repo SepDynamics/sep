@@ -93,6 +93,7 @@ void Engine::run() {
       return;
   }
 
+#ifdef SEP_HAS_AUDIO
   if (audio_capture_) {
     auto result = audio_capture_->start();
     if (result != audio::AudioError::NONE) {
@@ -100,9 +101,11 @@ void Engine::run() {
                     static_cast<int>(result));
     }
   }
+#endif
 }
 
 void Engine::shutdown() {
+#ifdef SEP_HAS_AUDIO
   if (audio_capture_) {
     auto result = audio_capture_->stop();
     if (result != audio::AudioError::NONE) {
@@ -110,6 +113,7 @@ void Engine::shutdown() {
                     static_cast<int>(result));
     }
   }
+#endif
 }
 
 namespace {

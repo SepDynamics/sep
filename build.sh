@@ -1,6 +1,12 @@
 #!/bin/bash
 set -eo pipefail
-clear
+
+# Redirect all output to both console and log file
+exec 1> >(tee "build_log.txt") 2>&1
+
+echo "==== SEP Engine Build Script with FULL Cycles and PipeWire Support ===="
+echo "Setting up build environment with real library paths - NO STUBS!"
+echo "Build started at $(date)"
 
 # Source user-provided library paths if available
 if [ -f "scripts/local_env_paths.sh" ]; then
@@ -8,8 +14,12 @@ if [ -f "scripts/local_env_paths.sh" ]; then
   source scripts/local_env_paths.sh
 fi
 
-echo "==== SEP Engine Build Script with FULL Cycles and PipeWire Support ===="
-echo "Setting up build environment with real library paths - NO STUBS!"
+# Ensure proper user directories exist
+USER_LOCAL_BIN="$HOME/.local/bin"
+USER_LOCAL_LIB="$HOME/.local/lib"
+USER_CONFIG_DIR="$HOME/.config/systemd/user"
+
+mkdir -p "$USER_LOCAL_BIN" "$USER_LOCAL_LIB" "$USER_CONFIG_DIR"
 
 # --- Environment Setup ---
 # Determine repository root dynamically so the script works regardless
@@ -64,9 +74,22 @@ fi
 # --- CMake Configuration ---
 # Clean build directory to ensure a fresh state
 echo "Cleaning build directory..."
-rm -rf "${BUILD_DIR:?}"/*
+
+# Create user-owned build directory
+USER_BUILD_DIR="$HOME/.cache/sep/build"
+mkdir -p "$USER_BUILD_DIR"
+
+# Clean old build files with error handling
+if [ -d "$USER_BUILD_DIR" ]; then
+    find "$USER_BUILD_DIR" -type f -exec rm -f {} + 2>/dev/null || true
+    find "$USER_BUILD_DIR" -type d -empty -delete 2>/dev/null || true
+fi
+
 # Copy cmake modules needed by the project
-cp -r "${SRC_DIR}/cmake" "${BUILD_DIR}"
+cp -r "${SRC_DIR}/cmake" "$USER_BUILD_DIR"
+
+# Update build directory reference
+BUILD_DIR="$USER_BUILD_DIR"
 
 # Setup CMAKE_PREFIX_PATH to help find system libraries
 # This is crucial for dependencies like OpenVDB, Alembic, TBB, etc.
@@ -94,15 +117,87 @@ make -j$(nproc)
 echo "Installing SEP Engine binary..."
 # Example of systemd service management. Use 'sudo' only if necessary.
 if command -v systemctl >/dev/null; then
-    sudo systemctl stop sep-engine || true # Stop if running
-    sudo ln -sf "${BUILD_DIR}/sep_engine" /usr/local/bin/sep_engine
-    sudo systemctl daemon-reload
-    sudo systemctl start sep-engine
-    sudo systemctl status sep-engine --no-pager
+
+    # Setup Blender addon symlinks in user directory
+    BLENDER_ADDON_DIR="$HOME/.local/blender/5.0/scripts/addons/sep_engine/libs"
+    mkdir -p "$BLENDER_ADDON_DIR"
+    rm -f "$BLENDER_ADDON_DIR/libsep_blender.so"
+    ln -sf "${BUILD_DIR}/lib/libsep_blender.so" "$BLENDER_ADDON_DIR/libsep_blender.so"
+
+    # Install binary to user's local bin
+    ln -sf "${BUILD_DIR}/sep_engine" "$USER_LOCAL_BIN/sep_engine"
+
+    # Setup systemd user service with proper permissions
+    SERVICE_FILE="$USER_CONFIG_DIR/sep-engine.service"
+    cat > "$SERVICE_FILE" << EOF
+[Unit]
+Description=SEP Engine Service (User)
+After=network.target pipewire.service
+
+[Service]
+Type=simple
+ExecStart=$USER_LOCAL_BIN/sep_engine --server --port 8080 --host 0.0.0.0 --debug
+Restart=on-failure
+Environment=XDG_RUNTIME_DIR=/run/user/$(id -u)
+Environment=HOME=$HOME
+Environment=USER=$(whoami)
+Environment=LOGNAME=$(whoami)
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+WorkingDirectory=$HOME
+
+[Install]
+WantedBy=default.target
+EOF
+
+    chmod 644 "$SERVICE_FILE"
+
+    # Set proper permissions for binary
+    chmod 755 "$USER_LOCAL_BIN/sep_engine"
+    
+    # Check and setup audio group membership
+    if ! getent group audio >/dev/null; then
+        echo "Error: 'audio' group does not exist. Audio capture will not work."
+        echo "This system may not be properly configured for audio support."
+    elif ! groups | grep -q audio; then
+        echo "Warning: Current user is not in the 'audio' group. Audio capture may not work."
+        echo "To fix this:"
+        echo "1. Run: sudo usermod -aG audio $USER"
+        echo "2. Log out completely (including all terminals)"
+        echo "3. Log back in"
+        echo "4. Verify with: groups | grep audio"
+        
+        # Create audio access file for systemd user service
+        cat > "$USER_CONFIG_DIR/sep-engine-audio.conf" << EOF
+[Service]
+SupplementaryGroups=audio
+EOF
+        chmod 644 "$USER_CONFIG_DIR/sep-engine-audio.conf"
+        
+        # Reload systemd user configuration
+        systemctl --user daemon-reload
+    fi
+
+    # Manage user service
+    systemctl --user stop sep-engine || true
+    systemctl --user daemon-reload
+    systemctl --user enable sep-engine
+    systemctl --user start sep-engine
+    sleep 2 # Wait for service to start
+    systemctl --user status sep-engine --no-pager
+
+    # Start server directly if service fails
+    if ! systemctl --user is-active sep-engine >/dev/null; then
+        echo "Starting server directly since service failed..."
+        "$USER_LOCAL_BIN/sep_engine" --server --port 8080 --host 0.0.0.0 --debug
+    fi
+
 else
     echo "systemctl not found. Manual installation required for sep_engine binary."
     echo "Binary is at: ${BUILD_DIR}/sep_engine"
+    echo "You can manually copy it to $USER_LOCAL_BIN/sep_engine"
 fi
+
+echo "==== Build Complete at $(date) ===="
 
 echo "==== Build Complete ===="
 if [ -f "${BUILD_DIR}/sep_engine" ]; then

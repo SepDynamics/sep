@@ -4,6 +4,7 @@
  * @brief Configuration structures and helpers for the audio pipeline.
  */
 
+#ifdef SEP_HAS_AUDIO
 #include "audio/types.h"
 #include "compat/math_common.h"
 
@@ -72,3 +73,4 @@ bool validateAudioConfig(const AudioPipelineConfig& config);
 
 }  // namespace audio
 }  // namespace sep
+#endif // SEP_HAS_AUDIO

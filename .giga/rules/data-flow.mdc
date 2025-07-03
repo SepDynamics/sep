@@ -1,81 +1,89 @@
 ---
-description: Specification for analyzing data flow between components in quantum computing and CUDA processing systems
-globs: **/*.cu,**/*.cpp,**/quantum/**/*,**/memory/**/*,**/cuda/**/*
+description: Specification for analyzing data flow patterns, transformations and component interactions in quantum processing systems
+globs: src/**/*.{cpp,h,hpp},include/**/*.{h,hpp}
 alwaysApply: false
 ---
 
 
-# data-flow
+# Data-Flow
 
-### Quantum State Processing Pipeline
-**Importance: 95**
+The data flow follows several key patterns:
 
-Data flows through a multi-stage quantum processing pipeline:
-1. Quantum states evolve through the `QuantumState` structure containing:
-   - Evolution rate parameters
-   - Energy levels
-   - Coupling strength metrics
+### Pattern Processing Pipeline
+```
+Input Pattern Data -> 
+  Quantum State Initialization ->
+  Coherence Calculation -> 
+  Pattern Evolution -> 
+  Memory Tier Assignment ->
+  State Update/Storage
+```
 
-2. Pattern transformations occur via `PatternEvolutionBridge` which:
-   - Interfaces with `QuantumManifoldOptimizer`
-   - Processes quantum pattern transitions
-   - Maps patterns to quantum states
-
-File paths:
-- `/sep/include/quantum/types.h`
-- `/sep/src/quantum/pattern_evolution_bridge.cpp`
+Files:
+- src/quantum/pattern_evolution_bridge.cpp
+- src/quantum/quantum_processor.cpp 
+- src/memory/memory_tier_manager.cpp
 
 ### Memory Tier Transitions
-**Importance: 90**
+1. Short-Term Memory (STM):
+- Receives new patterns
+- Coherence threshold: 0.2
+- Temporary storage during initial processing
 
-Data flows through three memory tiers with specific transition patterns:
+2. Medium-Term Memory (MTM): 
+- Patterns promoted from STM
+- Coherence threshold: 0.6
+- Intermediate persistence layer
 
-1. Short-Term Memory (STM) → Medium-Term Memory (MTM):
-   - Pattern recognition triggers
-   - Coherence threshold checks
-   - Fragmentation analysis
+3. Long-Term Memory (LTM):
+- Stable patterns with high coherence
+- Coherence threshold: 0.9
+- Permanent storage with Redis persistence
 
-2. MTM → Long-Term Memory (LTM):
-   - Pattern consolidation
-   - Quantum coherence verification
-   - Redis persistence integration
+Files:
+- src/memory/memory_tier.cpp
+- src/memory/redis_manager.cpp
 
-File paths:
-- `/sep/include/memory/quantum_coherence_manager.h`
-- `/sep/src/memory/memory_tier.cpp`
-- `/sep/src/memory/redis_manager.cpp`
+### Quantum State Transformations
+```
+Raw Pattern ->
+  Quantum State Vector ->
+  Coherence Analysis ->
+  Evolution/Mutation ->
+  State Update
+```
 
-### CUDA Processing Pipeline
-**Importance: 85**
+Key components:
+- Quantum state initialization
+- Coherence calculation and tracking
+- Pattern evolution and mutation
+- State collapse detection
 
-Data flows through specialized CUDA processing stages:
+Files:
+- src/quantum/quantum_processor_qfh.cpp
+- src/quantum/qbsa.cpp
 
-1. Device Memory Operations:
-   - Asynchronous memory transfers
-   - Pattern buffer management
-   - Device property-based optimizations
+### System Interactions
 
-2. Quantum Manifold Processing:
-   - CUDA-accelerated quantum computations
-   - Pattern evolution acceleration
-   - Memory coherence maintenance
+1. API Layer:
+- Receives pattern requests
+- Validates input data
+- Routes to appropriate processor
 
-File paths:
-- `/sep/src/compat/cuda_api.cu`
-- `/sep/src/compat/core.cu`
-- `/sep/src/quantum/quantum_manifold_optimizer.cpp`
+2. Processing Layer:
+- Pattern evolution
+- State management
+- Memory tier transitions
 
-### Metrics Collection Flow
-**Importance: 75**
+3. Storage Layer:  
+- Redis persistence
+- Memory tier management
+- Pattern relationship tracking
 
-System-wide metrics collection pipeline:
-- Pattern processing statistics
-- Memory tier transition metrics
-- Quantum coherence measurements
-- Redis persistence statistics
-
-File path:
-- `/sep/src/core/metrics_collector.cpp`
+Files:
+- src/api/server.cpp
+- src/quantum/processor.cpp
+- src/memory/redis_manager.cpp
 
 $END$
 

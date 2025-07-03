@@ -88,12 +88,13 @@ on the system it automatically clones and builds version `v1.13.12.0` under
 `/sep/extern/osl`. After executing it you can build Cycles from `/sep/cycles-build`:
 
 
-## Diagram Documentation Worker
+## Diagram Sync Worker
 
-Run the helper below whenever module folders change to verify that each one has a matching diagram markdown file.
+The `diagram_sync_worker.py` script verifies that each module directory under `include/` and `src/` has a matching document in `docs/diagrams`.
+Run it from the repository root:
 
 ```bash
-python _sep/testbed/diagram_doc_worker.py
+python _sep/testbed/diagram_sync_worker.py
 ```
 
-Missing or outdated files will be listed in the output so you can update `docs/diagrams` accordingly.
+Add `--regen` to automatically create placeholder files for missing diagrams.

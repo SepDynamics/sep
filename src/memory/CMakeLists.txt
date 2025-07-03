@@ -10,6 +10,11 @@ add_library(sep_memory
 find_library(HIREDIS_LIB NAMES hiredis PATHS /usr/lib64 REQUIRED)
 find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis REQUIRED)
 
+# Add CUDA-specific compile definitions to handle exception specs
+target_compile_definitions(sep_memory PRIVATE
+    SEP_HAS_CUDA=1
+    _GLIBCXX_USE_NOEXCEPT_SPEC=0
+    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
 
 # Link dependencies
 target_link_libraries(sep_memory

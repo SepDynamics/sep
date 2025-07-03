@@ -9,11 +9,8 @@ set(WITH_CYCLES_OPENVDB ON)
 set(WITH_CYCLES_OPENCOLORIO ON)
 set(WITH_CYCLES_OPENSUBDIV ON)
 
-
-add_library(sep_compat STATIC
-    stream.cpp
-    raii.cpp
-    hip_compat.cpp
+# Define CUDA sources
+set(CUDA_SOURCES
     pattern_kernels.cu
     cuda_api.cu
     event.cu
@@ -21,6 +18,26 @@ add_library(sep_compat STATIC
     kernels.cu
     core.cu
     quantum_kernels.cu
+)
+
+# Define C++ sources
+set(CPP_SOURCES
+    stream.cpp
+    raii.cpp
+    hip_compat.cpp
+)
+
+add_library(sep_compat STATIC
+    ${CUDA_SOURCES}
+    ${CPP_SOURCES}
+)
+
+# Ensure CUDA symbols are exported
+set_target_properties(sep_compat PROPERTIES
+    CUDA_VISIBILITY_PRESET "default"
+    C_VISIBILITY_PRESET "default"
+    CXX_VISIBILITY_PRESET "default"
+    VISIBILITY_INLINES_HIDDEN OFF
 )
 
 target_compile_options(sep_compat PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)

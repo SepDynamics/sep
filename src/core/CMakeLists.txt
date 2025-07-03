@@ -13,10 +13,11 @@ add_library(sep_core
     dag_graph.cpp
 )
 
-# Link dependencies
-
-# Enable CUDA support when available
-target_compile_definitions(sep_core PRIVATE SEP_HAS_CUDA=1)
+# Enable CUDA and handle exception specs
+target_compile_definitions(sep_core PRIVATE
+    SEP_HAS_CUDA=1
+    _GLIBCXX_USE_NOEXCEPT_SPEC=0
+    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
 
 # Set library properties
 set_target_properties(sep_core PROPERTIES

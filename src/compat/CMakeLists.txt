@@ -13,20 +13,19 @@ set(WITH_CYCLES_OPENSUBDIV ON)
 find_package(CUDAToolkit REQUIRED)
 
 add_library(sep_compat STATIC
+    stream.cpp
+    raii.cpp
+    hip_compat.cpp
+)
+
+set_source_files_properties(
+    pattern_kernels.cu
+    cuda_api.cu
     event.cu
     utils.cu
     kernels.cu
     core.cu
     quantum_kernels.cu
-    stream.cpp
-    cuda_api.cu
-    raii.cpp
-    pattern_kernels.cu
-    hip_compat.cpp
-)
-
-set_source_files_properties(
-    cuda_api.cu core.cu pattern_kernels.cu kernels.cu quantum_kernels.cu utils.cu event.cu
     PROPERTIES
     COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
 )

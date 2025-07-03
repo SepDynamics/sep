@@ -40,7 +40,7 @@ MemoryTier::MemoryTier(const Config &config)
   } else {
     memory_pool_ = nullptr;
 #if SEP_CUDA_AVAILABLE
-    cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
+    cudaError_t err = sep::cuda::allocateManaged(&memory_pool_, config.size);
     if (err != cudaSuccess) {
       auto logger = sep::logging::Manager::getInstance().getLogger("memory");
       if (logger) {
@@ -95,7 +95,7 @@ MemoryTier::~MemoryTier() {
       std::free(memory_pool_);
     } else {
 #if SEP_CUDA_AVAILABLE
-      cudaFree(memory_pool_);
+      sep::cuda::deallocate(memory_pool_);
 #else
       std::free(memory_pool_);
 #endif
@@ -380,7 +380,7 @@ bool MemoryTier::resize(std::size_t new_size) {
   if (config_.type == TierType::HOST) {
     new_pool = std::malloc(new_size);
   } else {
-    cudaError_t err = cudaMallocManaged(&new_pool, new_size);
+    cudaError_t err = sep::cuda::allocateManaged(&new_pool, new_size);
     if (err != cudaSuccess) {
       if (logger) {
         LOG_ERROR(logger, "Failed to allocate managed memory: {}", err);
@@ -407,7 +407,7 @@ bool MemoryTier::resize(std::size_t new_size) {
         std::free(new_pool);
       else {
 #if SEP_CUDA_AVAILABLE
-        cudaFree(new_pool);
+        sep::cuda::deallocate(new_pool);
 #else
         std::free(new_pool);
 #endif
@@ -444,7 +444,7 @@ bool MemoryTier::resize(std::size_t new_size) {
       std::free(memory_pool_);
     else {
 #if SEP_CUDA_AVAILABLE
-      cudaFree(memory_pool_);
+      sep::cuda::deallocate(memory_pool_);
 #else
       std::free(memory_pool_);
 #endif

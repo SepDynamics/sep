@@ -41,7 +41,7 @@ graph TB
         cycles_kernel[libcycles_kernel.a]
         cycles_scene[libcycles_scene.a]
         cycles_device[libcycles_device.a]
-        cycles_osl[libcycles_osl.a<br/>MISSING!]
+        cycles_osl[libcycles_osl.a]
         osl_exec[liboslexec.so]
         osl_comp[liboslcomp.so]
         osl_query[liboslquery.so]
@@ -96,24 +96,15 @@ graph TB
 
     compat --> cuda_runtime
 
-    %% Critical Missing Links
-    cycles_device -.->|undefined refs| osl_exec
-    cycles_scene -.->|undefined refs| osl_comp
-    cycles_kernel -.->|undefined refs| osl_query
 
     %% Symbol Conflicts
     quantum x--x|multiple defs<br/>manifold::memory<br/>manifold::quantum<br/>manifold::cuda<br/>manifold::api| memory
 
-    %% Missing Implementations
-    api -.->|undefined| createQuantumProcessor[createQuantumProcessor<br/>NOT FOUND]
-    exe -.->|undefined| shutdownLogging[shutdownLogging<br/>NOT FOUND]
 
     %% Styling
-    classDef missing fill:#ff6666,stroke:#ff0000,stroke-width:3px
     classDef conflict fill:#ffaa66,stroke:#ff6600,stroke-width:3px
     classDef critical fill:#66ff66,stroke:#00ff00,stroke-width:2px
     
-    class cycles_osl,createQuantumProcessor,shutdownLogging missing
     class quantum,memory conflict
     class compat,core critical
 ```

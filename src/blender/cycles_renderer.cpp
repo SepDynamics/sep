@@ -2,6 +2,16 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <vector>
+#include <cstring>
+
+// Define Cycles namespace macros
+#define CCL_NAMESPACE_BEGIN namespace ccl {
+#define CCL_NAMESPACE_END }
+
+// Core Cycles includes
+#include "util/system.h"
+#include "util/types.h"
 
 // SEP includes
 #include "blender/cycles_renderer.h"

@@ -15,7 +15,6 @@ add_library(sep_blender STATIC
     compression_utils.cpp
     gpu_context.cpp
     compression.cpp
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src/app/oiio_output_driver.cpp
     api.cpp
     pattern_visualization_pipeline.cpp
     blender_integration.cpp

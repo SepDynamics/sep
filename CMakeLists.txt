@@ -105,6 +105,8 @@ target_link_libraries(sep_engine
         OpenImageIO
         ${OPENVDB_LIBRARIES}
         ${OPENSUBDIV_LIBRARIES}
+        openvdb
+        bf_intern_opensubdiv
         ${OSL_LIBRARIES} # Link the real OSL libs, not the stub
         ${TBB_LIBRARIES}
 

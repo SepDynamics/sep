@@ -341,7 +341,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     if (config_.type == TierType::HOST) {
         new_pool = std::malloc(new_size);
     } else {
-        cudaError_t err = sep_cuda_allocate_managed(&new_pool, new_size);
+        cudaError_t err = sep::cuda::allocateManaged(&new_pool, new_size);
         if (err != cudaSuccess) {
             if (logger) {
                 LOG_ERROR(logger, "Failed to allocate managed memory: {}", err);
@@ -367,7 +367,7 @@ bool MemoryTier::resize(std::size_t new_size) {
             if (config_.type == TierType::HOST)
                 std::free(new_pool);
             else {
-                sep_cuda_deallocate(new_pool);
+                sep::cuda::deallocate(new_pool);
             }
             sep::metrics::allocationFailures().value++;
             return false;

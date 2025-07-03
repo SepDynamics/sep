@@ -45,6 +45,13 @@
 #define CUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING 1
 #endif
 
+// Disable noexcept specifications for CUDA compatibility
+#ifdef __CUDACC__
+#define SEP_NOEXCEPT
+#else
+#define SEP_NOEXCEPT noexcept(true)
+#endif
+
 // Macro scope guards
 #define CUDA_UNIFIED_FIX_PUSH_MACROS()                                                                  \
     _Pragma("push_macro(\"sinpi\")") _Pragma("push_macro(\"cospi\")") _Pragma("push_macro(\"sinpif\")") \
@@ -58,7 +65,17 @@
 
 #define CUDA_UNIFIED_FIX_END_SCOPE() CUDA_UNIFIED_FIX_POP_MACROS()
 
+// Override math functions with CUDA-compatible versions
 #if defined(CUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING) && defined(__CUDACC__)
+extern "C" {
+SEP_HD double sinpi(double x) SEP_NOEXCEPT;
+SEP_HD double cospi(double x) SEP_NOEXCEPT;
+SEP_HD float sinpif(float x) SEP_NOEXCEPT;
+SEP_HD float cospif(float x) SEP_NOEXCEPT;
+SEP_HD void sincospi(double x, double* s, double* c) SEP_NOEXCEPT;
+SEP_HD void sincospif(float x, float* s, float* c) SEP_NOEXCEPT;
+}
+
 #define sinpi __cuda_sinpi
 #define cospi __cuda_cospi
 #define sinpif __cuda_sinpif

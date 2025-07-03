@@ -41,15 +41,26 @@ set(CMAKE_CUDA_HOST_COMPILER /usr/bin/g++-14 CACHE FILEPATH "Host compiler for C
 
 # Set CUDA flags for compiler identification
 set(CMAKE_CUDA_FLAGS_INIT "-D__STRICT_ANSI__ -D_GLIBCXX_USE_CXX11_ABI=1")
-set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -D_GLIBCXX_USE_NOEXCEPT_SPEC=0")
 set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} --allow-unsupported-compiler")
+set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -Xcompiler -fno-gnu-unique")
+set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -Xcompiler -fno-noexcept-type")
 
 # Set CUDA flags for actual compilation
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS_INIT}")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
 
-#Skip compiler checks
-set(CMAKE_CUDA_COMPILER_FORCED TRUE)
+# Set CUDA flags for compiler identification
+set(CMAKE_CUDA_FLAGS_INIT "-D__STRICT_ANSI__ -D_GLIBCXX_USE_CXX11_ABI=1")
+set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -D_GLIBCXX_USE_NOEXCEPT_SPEC=0")
+set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} --allow-unsupported-compiler")
+set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
+
+# Set CUDA flags for actual compilation
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS_INIT}")
+
+# Allow CMake to detect CUDA compiler
+unset(CMAKE_CUDA_COMPILER_FORCED)
+unset(CMAKE_CUDA_COMPILER_WORKS CACHE)
 
 #Explicitly set CUDA libraries - use absolute paths without quotes
 set(CUDA_LIBRARIES 

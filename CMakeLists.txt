@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 
+# Enable POSIX features for popen/pclose
+add_definitions(-D_POSIX_C_SOURCE=200809L)
+add_definitions(-D_GNU_SOURCE)
+
 # Load CUDA toolchain file before project declaration
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
 
@@ -12,12 +16,27 @@ project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
 
-# Enable CUDA unified fix features
-add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1)
-add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1)
+# Set CUDA compiler flags before enabling the language
+set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/include/compat/cuda_unified_fix.h")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__STRICT_ANSI__ -D_GLIBCXX_USE_CXX11_ABI=1")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_GLIBCXX_USE_NOEXCEPT_SPEC=0")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
 
+# Set C++ standard before enabling CUDA
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+# Add global definitions needed for CUDA compatibility
+add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1)
+add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1)
+add_definitions(-D__STRICT_ANSI__)
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
+add_definitions(-D_GLIBCXX_USE_NOEXCEPT_SPEC=0)
+add_definitions(-DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 

@@ -1,5 +1,5 @@
 add_library(sep_quantum STATIC
-        evolution.cpp
+    evolution.cpp
     quantum_processor_qfh.cpp
     qbsa_qfh.cpp
     qbsa.cpp
@@ -34,8 +34,11 @@ target_include_directories(sep_quantum PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
-# Enable CUDA when available for quantum operations
-target_compile_definitions(sep_quantum PRIVATE SEP_HAS_CUDA=1)
+# Enable CUDA and handle exception specs
+target_compile_definitions(sep_quantum PRIVATE
+    SEP_HAS_CUDA=1
+    _GLIBCXX_USE_NOEXCEPT_SPEC=0
+    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
 
 # Set library properties
 set_target_properties(sep_quantum PROPERTIES

@@ -310,7 +310,7 @@ cudaError_t sep_cuda_allocate_managed(void** ptr, size_t size) {
     return sep::cuda::allocateManaged(ptr, size);
 }
 
-cudaError_t sep_cuda_deallocate(void* ptr) {
+cudaError_t sep::cuda::deallocate(void* ptr) {
     return sep::cuda::deallocate(ptr);
 }
 

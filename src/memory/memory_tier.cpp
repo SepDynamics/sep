@@ -35,7 +35,7 @@ namespace sep::memory {
 
 MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nullptr), used_space_(0) {
     // Allocate memory pool based on tier type
-    if (config.type == TierType::HOST) {
+    if (config.type == TierType::HOST || !SEP_CUDA_AVAILABLE) {
         memory_pool_ = std::malloc(config.size);
     } else {
         memory_pool_ = nullptr;
@@ -77,7 +77,7 @@ MemoryTier::MemoryTier(const Config& config, size_t max_patterns, float coherenc
 
 MemoryTier::~MemoryTier() {
     if (memory_pool_) {
-        if (config_.type == TierType::HOST) {
+        if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE) {
             std::free(memory_pool_);
         } else {
             sep_cuda_deallocate(memory_pool_);
@@ -156,6 +156,7 @@ sep::SEPResult MemoryTier::defragment() {
             if (block.offset != current_offset) {
                 // Move memory to new position
                 void* new_location = static_cast<char*>(memory_pool_) + current_offset;
+#if SEP_CUDA_AVAILABLE
                 cudaError_t err = sep_cuda_memcpy_async(new_location, block.ptr, block.size, cudaMemcpyDefault, nullptr);
                 if (err != cudaSuccess) {
                     if (logger) {
@@ -170,6 +171,9 @@ sep::SEPResult MemoryTier::defragment() {
                     }
                     return sep::SEPResult::CUDA_ERROR;
                 }
+#else
+                std::memmove(new_location, block.ptr, block.size);
+#endif
 
                 block.ptr = new_location;
                 block.offset = current_offset;
@@ -264,7 +268,7 @@ bool MemoryTier::moveData(MemoryBlock* dst, const MemoryBlock* src) {
 
     std::size_t size = std::min(dst->size, src->size);
     
-    if (config_.type == TierType::HOST) {
+    if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE) {
         std::memcpy(dst->ptr, src->ptr, size);
     } else {
         cudaError_t err = sep_cuda_memcpy_async(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
@@ -338,7 +342,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     void* new_pool = nullptr;
     auto logger = sep::logging::Manager::getInstance().getLogger("memory");
     
-    if (config_.type == TierType::HOST) {
+    if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE) {
         new_pool = std::malloc(new_size);
     } else {
         cudaError_t err = sep_cuda_allocate_managed(&new_pool, new_size);
@@ -364,7 +368,7 @@ bool MemoryTier::resize(std::size_t new_size) {
         if (!block.allocated)
             continue;
         if (offset + block.size > new_size) {
-            if (config_.type == TierType::HOST)
+            if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE)
                 std::free(new_pool);
             else {
                 sep_cuda_deallocate(new_pool);
@@ -395,7 +399,7 @@ bool MemoryTier::resize(std::size_t new_size) {
         new_blocks.emplace_back(static_cast<char*>(new_pool) + offset, new_size - offset, offset, config_.type);
 
     if (memory_pool_) {
-        if (config_.type == TierType::HOST)
+        if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE)
             std::free(memory_pool_);
         else {
             sep_cuda_deallocate(memory_pool_);

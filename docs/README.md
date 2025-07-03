@@ -87,3 +87,13 @@ The script defines variables including `OPENVDB_INCLUDE_DIR`,
 on the system it automatically clones and builds version `v1.13.12.0` under
 `/sep/extern/osl`. After executing it you can build Cycles from `/sep/cycles-build`:
 
+
+## Diagram Documentation Worker
+
+Run the helper below whenever module folders change to verify that each one has a matching diagram markdown file.
+
+```bash
+python _sep/testbed/diagram_doc_worker.py
+```
+
+Missing or outdated files will be listed in the output so you can update `docs/diagrams` accordingly.

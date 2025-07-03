@@ -1,6 +1,4 @@
-# Embeddings Header Overview
-
-This diagram summarizes the minimal header found in `include/embeddings`. The module currently exposes a single class used to compute simple text embeddings.
+# Embedding Headers Overview
 
 ## Header Breakdown
 
@@ -10,9 +8,7 @@ Defines `sep::embeddings::SimpleEmbeddingModel`, a lightweight class that transf
 ```mermaid
 classDiagram
     class SimpleEmbeddingModel {
-        +compute(text) : std::vector<double>
-        -weights_ : array<double, 5>
+        +compute(text: string) std::vector<double>
+        -weights_[5] : double
     }
 ```
-
-The constructor initializes `weights_` with small constants. `compute` multiplies each character code by the corresponding weight and normalizes the resulting vector.

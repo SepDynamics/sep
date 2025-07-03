@@ -1,5 +1,5 @@
 #include "compat/macros.h"
-#if defined(__CUDACC__)
+#if SEP_HAS_CUDA
 #include <cuda_runtime.h> // real CUDA header when available
 #endif
 #include "api/types.h"
@@ -34,7 +34,7 @@ namespace logging = sep::logging;
 
 namespace sep {
 namespace core {
-#if defined(__CUDACC__)
+#if SEP_HAS_CUDA
 using namespace ::sep::cuda;
 #endif
 

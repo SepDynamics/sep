@@ -127,6 +127,9 @@ if(TARGET cycles_scene)
       ${OSL_LIBRARIES}
       ${OPENVDB_LIBRARIES}
       ${OPENSUBDIV_LIBRARIES}
+      bf_intern_openvdb
+      OpenVDB::openvdb
+      bf_intern_opensubdiv
 )
 else()
   # Fallback to precompiled static libraries
@@ -153,6 +156,9 @@ else()
       ${OSL_LIBRARIES}
       ${OPENVDB_LIBRARIES}
       ${OPENSUBDIV_LIBRARIES}
+      bf_intern_openvdb
+      openvdb
+      bf_intern_opensubdiv
   )
 endif()
 

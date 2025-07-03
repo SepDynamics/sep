@@ -12,8 +12,8 @@
 #include "compat/macros.h"
 
 // Project headers
+#include "core/common.h" // defines sep::SEPResult
 #include "memory/memory_tier.hpp"
-#include "core/common.h"  // defines sep::SEPResult
 
 #ifndef SEP_HAS_EXCEPTIONS
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
@@ -25,422 +25,472 @@
 
 #include "compat/math_common.h"
 #include "core/allocation_metrics.h"
-#include "memory/logger.hpp"
 #include "core/logging.h"
+#include "memory/logger.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 
 namespace sep::memory {
 
-
-MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nullptr), used_space_(0) {
-    // Allocate memory pool based on tier type
-    if (config.type == TierType::HOST) {
-        memory_pool_ = std::malloc(config.size);
-    } else {
-        memory_pool_ = nullptr;
-        cudaError_t err = sep_cuda_allocate_managed(&memory_pool_, config.size);
-        if (err != cudaSuccess) {
-            auto logger = sep::logging::Manager::getInstance().getLogger("memory");
-            if (logger) {
-                logger->error("Failed to allocate managed memory: {}", err);
-            }
-        }
+MemoryTier::MemoryTier(const Config &config)
+    : config_(config), memory_pool_(nullptr), used_space_(0) {
+  // Allocate memory pool based on tier type
+  if (config.type == TierType::HOST) {
+    memory_pool_ = std::malloc(config.size);
+  } else {
+    memory_pool_ = nullptr;
+#if SEP_CUDA_AVAILABLE
+    cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
+    if (err != cudaSuccess) {
+      auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+      if (logger) {
+        logger->error("Failed to allocate managed memory: {}", err);
+      }
     }
-    if (!memory_pool_) {
-#if SEP_HAS_EXCEPTIONS
-        throw std::runtime_error("Failed to allocate memory pool");
 #else
-        auto logger = sep::logging::Manager::getInstance().getLogger("memory");
-        if (logger)
-            LOG_CRITICAL(logger, "Failed to allocate memory pool");
-        sep::metrics::allocationFailures().value++;
-        // leave object in uninitialized state
-        return;
-#endif
+    memory_pool_ = std::malloc(config.size);
+    cudaError_t err = memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
+    if (err != cudaSuccess) {
+      auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+      if (logger) {
+        logger->error("Failed to allocate host memory: {}", err);
+      }
     }
-    blocks_.push_back(MemoryBlock(memory_pool_, config.size, 0, config.type));
+#endif
+  }
+  if (!memory_pool_) {
+#if SEP_HAS_EXCEPTIONS
+    throw std::runtime_error("Failed to allocate memory pool");
+#else
+    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+    if (logger)
+      LOG_CRITICAL(logger, "Failed to allocate memory pool");
+    sep::metrics::allocationFailures().value++;
+    // leave object in uninitialized state
+    return;
+#endif
+  }
+  blocks_.push_back(MemoryBlock(memory_pool_, config.size, 0, config.type));
 }
 
-MemoryTier::MemoryTier(TierType type, size_t max_patterns, float coherence_threshold, int min_generations)
-    : config_{Config{type, 0}}, memory_pool_(nullptr), used_space_(0), m_max_patterns(max_patterns),
-      m_coherence_threshold(coherence_threshold), m_min_generations(min_generations) {}
+MemoryTier::MemoryTier(TierType type, size_t max_patterns,
+                       float coherence_threshold, int min_generations)
+    : config_{Config{type, 0}}, memory_pool_(nullptr), used_space_(0),
+      m_max_patterns(max_patterns), m_coherence_threshold(coherence_threshold),
+      m_min_generations(min_generations) {}
 
-MemoryTier::MemoryTier(const Config& config, size_t max_patterns, float coherence_threshold,
+MemoryTier::MemoryTier(const Config &config, size_t max_patterns,
+                       float coherence_threshold,
                        int min_generations)
-    : MemoryTier(config)  // delegate to base memory constructor
+    : MemoryTier(config) // delegate to base memory constructor
 {
-    m_max_patterns = max_patterns;
-    m_coherence_threshold = coherence_threshold;
-    m_min_generations = min_generations;
+  m_max_patterns = max_patterns;
+  m_coherence_threshold = coherence_threshold;
+  m_min_generations = min_generations;
 }
 
 MemoryTier::~MemoryTier() {
-    if (memory_pool_) {
-        if (config_.type == TierType::HOST) {
-            std::free(memory_pool_);
-        } else {
-            sep_cuda_deallocate(memory_pool_);
-        }
-        memory_pool_ = nullptr;
+  if (memory_pool_) {
+    if (config_.type == TierType::HOST) {
+      std::free(memory_pool_);
+    } else {
+#if SEP_CUDA_AVAILABLE
+      cudaFree(memory_pool_);
+#else
+      std::free(memory_pool_);
+#endif
     }
+    memory_pool_ = nullptr;
+  }
 
-    blocks_.clear();
-    used_space_ = 0;
+  blocks_.clear();
+  used_space_ = 0;
 }
 
-MemoryBlock* MemoryTier::allocate(std::size_t size) {
-    // Find a suitable free block
-    MemoryBlock* block = findFreeBlock(size);
+MemoryBlock *MemoryTier::allocate(std::size_t size) {
+  // Find a suitable free block
+  MemoryBlock *block = findFreeBlock(size);
+  if (!block) {
+    // Try defragmentation if no suitable block found
+    defragment();
+    block = findFreeBlock(size);
     if (!block) {
-        // Try defragmentation if no suitable block found
-        defragment();
-        block = findFreeBlock(size);
-        if (!block) {
-            sep::metrics::allocationFailures().value++;
-            return nullptr;  // Still no suitable block
-        }
+      sep::metrics::allocationFailures().value++;
+      return nullptr; // Still no suitable block
     }
+  }
 
-    // Split block if it's significantly larger than requested
-    if (block->size > size + sizeof(MemoryBlock)) {
-        auto it = std::find_if(blocks_.begin(), blocks_.end(), [&](const MemoryBlock& b) { return &b == block; });
-        if (it != blocks_.end()) {
-            std::size_t index = std::distance(blocks_.begin(), it);
-            MemoryBlock new_block(static_cast<char*>(block->ptr) + size, block->size - size, block->offset + size,
-                                  config_.type);
-            blocks_.insert(std::next(it), new_block);
-            // Reacquire block pointer since insertion may invalidate references
-            block = &blocks_[index];
-            block->size = size;
-        }
+  // Split block if it's significantly larger than requested
+  if (block->size > size + sizeof(MemoryBlock)) {
+    auto it = std::find_if(blocks_.begin(), blocks_.end(),
+                           [&](const MemoryBlock &b) { return &b == block; });
+    if (it != blocks_.end()) {
+      std::size_t index = std::distance(blocks_.begin(), it);
+      MemoryBlock new_block(static_cast<char *>(block->ptr) + size,
+                            block->size - size, block->offset + size,
+                            config_.type);
+      blocks_.insert(std::next(it), new_block);
+      // Reacquire block pointer since insertion may invalidate references
+      block = &blocks_[index];
+      block->size = size;
     }
+  }
 
-    block->allocated = true;
-    block->utilization = static_cast<float>(block->size) / config_.size;
-    block->access_count = 0;
-    block->compression = ::blender::CompressionMethod::None;
-    block->original_size = size;
-    block->coherence = 0.0f;
-    block->last_coherence = 0.0f;
-    block->coherence_trend = 0.0f;
-    block->generation = 0;
-    block->weight = 0.0f;
-    block->wait = 0;
-    block->compression_ratio = 1.0f;
-    used_space_ += block->size;
-    return block;
+  block->allocated = true;
+  block->utilization = static_cast<float>(block->size) / config_.size;
+  block->access_count = 0;
+  block->compression = ::blender::CompressionMethod::None;
+  block->original_size = size;
+  block->coherence = 0.0f;
+  block->last_coherence = 0.0f;
+  block->coherence_trend = 0.0f;
+  block->generation = 0;
+  block->weight = 0.0f;
+  block->wait = 0;
+  block->compression_ratio = 1.0f;
+  used_space_ += block->size;
+  return block;
 }
 
-void MemoryTier::deallocate(MemoryBlock* block) {
-    assert(block && block->allocated);
-    block->allocated = false;
-    block->utilization = 0.0f;
-    used_space_ -= block->size;
-    mergeAdjacentBlocks();
+void MemoryTier::deallocate(MemoryBlock *block) {
+  assert(block && block->allocated);
+  block->allocated = false;
+  block->utilization = 0.0f;
+  used_space_ -= block->size;
+  mergeAdjacentBlocks();
 }
 
 sep::SEPResult MemoryTier::defragment() {
-    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
-    if (logger) {
-        LOG_DEBUG(logger, "Defragmenting tier {}", static_cast<int>(config_.type));
-    }
-    // Sort blocks by offset
-    std::sort(blocks_.begin(), blocks_.end(),
-              [](const MemoryBlock& a, const MemoryBlock& b) { return a.offset < b.offset; });
+  auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+  if (logger) {
+    LOG_DEBUG(logger, "Defragmenting tier {}", static_cast<int>(config_.type));
+  }
+  // Sort blocks by offset
+  std::sort(blocks_.begin(), blocks_.end(),
+            [](const MemoryBlock &a, const MemoryBlock &b) {
+              return a.offset < b.offset;
+            });
 
-    // Compact allocated blocks to the start
-    std::size_t current_offset = 0;
-    for (auto& block : blocks_) {
-        if (block.allocated) {
-            if (block.offset != current_offset) {
-                // Move memory to new position
-                void* new_location = static_cast<char*>(memory_pool_) + current_offset;
-                cudaError_t err = sep_cuda_memcpy_async(new_location, block.ptr, block.size, cudaMemcpyDefault, nullptr);
-                if (err != cudaSuccess) {
-                    if (logger) {
-                        LOG_ERROR(logger, "Defragment memory copy failed: {}", err);
-                    }
-                    return sep::SEPResult::CUDA_ERROR;
-                }
-                err = cudaStreamSynchronize(nullptr);
-                if (err != cudaSuccess) {
-                    if (logger) {
-                        LOG_ERROR(logger, "Defragment stream sync failed: {}", err);
-                    }
-                    return sep::SEPResult::CUDA_ERROR;
-                }
-
-                block.ptr = new_location;
-                block.offset = current_offset;
-            }
-            current_offset += block.size;
-        }
-    }
-
-    // Merge all free space into one block at the end
-    if (current_offset < config_.size && !blocks_.empty()) { // Check if blocks_ is not empty
-        blocks_.erase(
-            std::remove_if(blocks_.begin(), blocks_.end(), [](const MemoryBlock& block) { return !block.allocated; }),
-            blocks_.end());
-
-        blocks_.push_back(MemoryBlock(static_cast<char*>(memory_pool_) + current_offset, config_.size - current_offset,
-                                      current_offset, config_.type));
-    }
-
-    // Reevaluate block placement after defragmentation
-    MemoryTierManager& mgr = MemoryTierManager::getInstance();
-    for (auto& blk : blocks_) { 
-        if (blk.allocated) {
-            blk.utilization = static_cast<float>(blk.size) / config_.size;
-            mgr.updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation, 1.0f);
-        }
-    }
-    mgr.rebuildLookup();
-
-    if (logger) {
-        LOG_INFO(logger, "Tier {} fragmentation now {:.2f}", static_cast<int>(config_.type), calculateFragmentation());
-    }
-    return sep::SEPResult::SUCCESS;
-}
-
-float MemoryTier::calculateFragmentation() const {
-    if (blocks_.empty())
-        return 0.0f;
-
-    // Count number of free blocks and total free space
-    std::size_t free_block_count = 0;
-    std::size_t total_free_space = 0;
-    std::size_t largest_free_block = 0;
-
-    for (const auto& block : blocks_) {
-        if (!block.allocated) {
-            free_block_count++;
-            total_free_space += block.size;
-            largest_free_block = std::max(largest_free_block, block.size);
-        }
-    }
-
-    if (free_block_count <= 1)
-        return 0.0f;  // No fragmentation
-    if (total_free_space == 0)
-        return 0.0f;  // No free space
-
-    // Calculate fragmentation as ratio of largest free block to total free space
-    return 1.0f - (static_cast<float>(largest_free_block) / total_free_space);
-}
-
-float MemoryTier::calculateUtilization() const {
-    return static_cast<float>(used_space_) / config_.size;
-}
-
-std::size_t MemoryTier::getFreeSpace() const {
-    return config_.size - used_space_;
-}
-
-std::size_t MemoryTier::getLargestFreeBlock() const {
-    std::size_t largest = 0;
-    for (const auto& block : blocks_) {
-        if (!block.allocated && block.size > largest) {
-            largest = block.size;
-        }
-    }
-    return largest;
-}
-
-const std::deque<MemoryBlock>& MemoryTier::getBlocks() const {
-    return blocks_;
-}
-
-bool MemoryTier::moveData(MemoryBlock* dst, const MemoryBlock* src) {
-    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
-    
-    if (!dst || !src || !dst->allocated || !src->allocated) {
-        if (logger) {
-            LOG_ERROR(logger, "Invalid blocks for data move");
-        }
-        return false;
-    }
-
-    std::size_t size = std::min(dst->size, src->size);
-    
-    if (config_.type == TierType::HOST) {
-        std::memcpy(dst->ptr, src->ptr, size);
-    } else {
-        cudaError_t err = sep_cuda_memcpy_async(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+  // Compact allocated blocks to the start
+  std::size_t current_offset = 0;
+  for (auto &block : blocks_) {
+    if (block.allocated) {
+      if (block.offset != current_offset) {
+        // Move memory to new position
+        void *new_location = static_cast<char *>(memory_pool_) + current_offset;
+#if SEP_CUDA_AVAILABLE
+        cudaError_t err = cudaMemcpyAsync(new_location, block.ptr, block.size,
+                                          cudaMemcpyDefault, nullptr);
         if (err != cudaSuccess) {
-            if (logger) {
-                LOG_ERROR(logger, "Failed to copy memory: {}", err);
-            }
-            return false;
+          if (logger) {
+            LOG_ERROR(logger, "Defragment memory copy failed: {}", err);
+          }
+          return sep::SEPResult::CUDA_ERROR;
         }
         err = cudaStreamSynchronize(nullptr);
         if (err != cudaSuccess) {
-            if (logger) {
-                LOG_ERROR(logger, "Failed to synchronize stream: {}", err);
-            }
-            return false;
+          if (logger) {
+            LOG_ERROR(logger, "Defragment stream sync failed: {}", err);
+          }
+          return sep::SEPResult::CUDA_ERROR;
         }
+#else
+        std::memmove(new_location, block.ptr, block.size);
+#endif
+
+        block.ptr = new_location;
+        block.offset = current_offset;
+      }
+      current_offset += block.size;
     }
-    return true;
+  }
+
+  // Merge all free space into one block at the end
+  if (current_offset < config_.size &&
+      !blocks_.empty()) { // Check if blocks_ is not empty
+    blocks_.erase(std::remove_if(blocks_.begin(), blocks_.end(),
+                                 [](const MemoryBlock &block) {
+                                   return !block.allocated;
+                                 }),
+                  blocks_.end());
+
+    blocks_.push_back(MemoryBlock(
+        static_cast<char *>(memory_pool_) + current_offset,
+        config_.size - current_offset, current_offset, config_.type));
+  }
+
+  // Reevaluate block placement after defragmentation
+  MemoryTierManager &mgr = MemoryTierManager::getInstance();
+  for (auto &blk : blocks_) {
+    if (blk.allocated) {
+      blk.utilization = static_cast<float>(blk.size) / config_.size;
+      mgr.updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation,
+                             1.0f);
+    }
+  }
+  mgr.rebuildLookup();
+
+  if (logger) {
+    LOG_INFO(logger, "Tier {} fragmentation now {:.2f}",
+             static_cast<int>(config_.type), calculateFragmentation());
+  }
+  return sep::SEPResult::SUCCESS;
 }
 
-MemoryBlock* MemoryTier::findFreeBlock(std::size_t size) {
-    // Best fit strategy
-    MemoryBlock* best_fit = nullptr;
-    std::size_t smallest_sufficient = std::numeric_limits<std::size_t>::max();
+float MemoryTier::calculateFragmentation() const {
+  if (blocks_.empty())
+    return 0.0f;
 
-    for (auto& block : blocks_) {
-        if (!block.allocated && block.size >= size) {
-            if (block.size < smallest_sufficient) {
-                smallest_sufficient = block.size;
-                best_fit = &block;
-            }
-        }
+  // Count number of free blocks and total free space
+  std::size_t free_block_count = 0;
+  std::size_t total_free_space = 0;
+  std::size_t largest_free_block = 0;
+
+  for (const auto &block : blocks_) {
+    if (!block.allocated) {
+      free_block_count++;
+      total_free_space += block.size;
+      largest_free_block = std::max(largest_free_block, block.size);
     }
+  }
 
-    return best_fit;
+  if (free_block_count <= 1)
+    return 0.0f; // No fragmentation
+  if (total_free_space == 0)
+    return 0.0f; // No free space
+
+  // Calculate fragmentation as ratio of largest free block to total free space
+  return 1.0f - (static_cast<float>(largest_free_block) / total_free_space);
 }
 
-void MemoryTier::splitBlock(MemoryBlock* block, std::size_t size) {
-    assert(block && block->size > size);
+float MemoryTier::calculateUtilization() const {
+  return static_cast<float>(used_space_) / config_.size;
+}
 
-    std::size_t remaining_size = block->size - size;
-    block->size = size;
+std::size_t MemoryTier::getFreeSpace() const {
+  return config_.size - used_space_;
+}
 
-    // Create new block for remaining space
-    blocks_.push_back(
-        MemoryBlock(static_cast<char*>(block->ptr) + size, remaining_size, block->offset + size, config_.type));
+std::size_t MemoryTier::getLargestFreeBlock() const {
+  std::size_t largest = 0;
+  for (const auto &block : blocks_) {
+    if (!block.allocated && block.size > largest) {
+      largest = block.size;
+    }
+  }
+  return largest;
+}
+
+const std::deque<MemoryBlock> &MemoryTier::getBlocks() const { return blocks_; }
+
+bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
+  auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+
+  if (!dst || !src || !dst->allocated || !src->allocated) {
+    if (logger) {
+      LOG_ERROR(logger, "Invalid blocks for data move");
+    }
+    return false;
+  }
+
+  std::size_t size = std::min(dst->size, src->size);
+
+  if (config_.type == TierType::HOST) {
+    std::memcpy(dst->ptr, src->ptr, size);
+  } else {
+#if SEP_CUDA_AVAILABLE
+    cudaError_t err =
+        cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+    if (err != cudaSuccess) {
+      if (logger) {
+        LOG_ERROR(logger, "Failed to copy memory: {}", err);
+      }
+      return false;
+    }
+    err = cudaStreamSynchronize(nullptr);
+    if (err != cudaSuccess) {
+      if (logger) {
+        LOG_ERROR(logger, "Failed to synchronize stream: {}", err);
+      }
+      return false;
+    }
+#else
+    std::memcpy(dst->ptr, src->ptr, size);
+#endif
+  }
+  return true;
+}
+
+MemoryBlock *MemoryTier::findFreeBlock(std::size_t size) {
+  // Best fit strategy
+  MemoryBlock *best_fit = nullptr;
+  std::size_t smallest_sufficient = std::numeric_limits<std::size_t>::max();
+
+  for (auto &block : blocks_) {
+    if (!block.allocated && block.size >= size) {
+      if (block.size < smallest_sufficient) {
+        smallest_sufficient = block.size;
+        best_fit = &block;
+      }
+    }
+  }
+
+  return best_fit;
+}
+
+void MemoryTier::splitBlock(MemoryBlock *block, std::size_t size) {
+  assert(block && block->size > size);
+
+  std::size_t remaining_size = block->size - size;
+  block->size = size;
+
+  // Create new block for remaining space
+  blocks_.push_back(MemoryBlock(static_cast<char *>(block->ptr) + size,
+                                remaining_size, block->offset + size,
+                                config_.type));
 }
 
 void MemoryTier::mergeAdjacentBlocks() {
-    // Sort blocks by offset
-    std::sort(blocks_.begin(), blocks_.end(),
-              [](const MemoryBlock& a, const MemoryBlock& b) { return a.offset < b.offset; });
+  // Sort blocks by offset
+  std::sort(blocks_.begin(), blocks_.end(),
+            [](const MemoryBlock &a, const MemoryBlock &b) {
+              return a.offset < b.offset;
+            });
 
-    // Merge adjacent free blocks
-    for (auto it = blocks_.begin(); it != blocks_.end();) {
-        auto next = std::next(it);
-        if (next != blocks_.end() && !it->allocated && !next->allocated) {
-            // Merge blocks
-            it->size += next->size;
-            it = blocks_.erase(next);
-        } else {
-            ++it;
-        }
+  // Merge adjacent free blocks
+  for (auto it = blocks_.begin(); it != blocks_.end();) {
+    auto next = std::next(it);
+    if (next != blocks_.end() && !it->allocated && !next->allocated) {
+      // Merge blocks
+      it->size += next->size;
+      it = blocks_.erase(next);
+    } else {
+      ++it;
     }
+  }
 }
 
 bool MemoryTier::resize(std::size_t new_size) {
-    if (new_size == config_.size)
-        return true;
-
-    void* new_pool = nullptr;
-    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
-    
-    if (config_.type == TierType::HOST) {
-        new_pool = std::malloc(new_size);
-    } else {
-        cudaError_t err = sep_cuda_allocate_managed(&new_pool, new_size);
-        if (err != cudaSuccess) {
-            if (logger) {
-                LOG_ERROR(logger, "Failed to allocate managed memory: {}", err);
-            }
-            sep::metrics::allocationFailures().value++;
-            return false;
-        }
-    }
-    if (!new_pool) {
-        if (logger) {
-            LOG_ERROR(logger, "Failed to allocate memory pool of size {}", new_size);
-        }
-        sep::metrics::allocationFailures().value++;
-        return false;
-    }
-
-    std::deque<MemoryBlock> new_blocks;
-    std::size_t offset = 0;
-    for (auto& block : blocks_) {
-        if (!block.allocated)
-            continue;
-        if (offset + block.size > new_size) {
-            if (config_.type == TierType::HOST)
-                std::free(new_pool);
-            else {
-                sep_cuda_deallocate(new_pool);
-            }
-            sep::metrics::allocationFailures().value++;
-            return false;
-        }
-        std::memcpy(static_cast<char*>(new_pool) + offset, block.ptr, block.size);
-        new_blocks.emplace_back(static_cast<char*>(new_pool) + offset, block.size, offset, config_.type);
-        MemoryBlock& nb = new_blocks.back();
-        nb.allocated = true;
-        nb.utilization = block.utilization;
-        nb.access_count = block.access_count;
-        nb.compression = block.compression;
-        nb.original_size = block.original_size;
-        nb.stability = block.stability;
-        nb.coherence = block.coherence;
-        nb.generation = block.generation;
-        nb.weight = block.weight;
-        nb.wait = block.wait;
-        nb.coherence_trend = block.coherence_trend;
-        nb.last_coherence = block.last_coherence;
-        nb.compression_ratio = block.compression_ratio;
-        offset += block.size;
-    }
-
-    if (offset < new_size)
-        new_blocks.emplace_back(static_cast<char*>(new_pool) + offset, new_size - offset, offset, config_.type);
-
-    if (memory_pool_) {
-        if (config_.type == TierType::HOST)
-            std::free(memory_pool_);
-        else {
-            sep_cuda_deallocate(memory_pool_);
-        }
-    }
-    memory_pool_ = new_pool;
-    config_.size = new_size;
-    blocks_.swap(new_blocks);
-    used_space_ = offset;
+  if (new_size == config_.size)
     return true;
+
+  void *new_pool = nullptr;
+  auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+
+  if (config_.type == TierType::HOST) {
+    new_pool = std::malloc(new_size);
+  } else {
+    cudaError_t err = cudaMallocManaged(&new_pool, new_size);
+    if (err != cudaSuccess) {
+      if (logger) {
+        LOG_ERROR(logger, "Failed to allocate managed memory: {}", err);
+      }
+      sep::metrics::allocationFailures().value++;
+      return false;
+    }
+  }
+  if (!new_pool) {
+    if (logger) {
+      LOG_ERROR(logger, "Failed to allocate memory pool of size {}", new_size);
+    }
+    sep::metrics::allocationFailures().value++;
+    return false;
+  }
+
+  std::deque<MemoryBlock> new_blocks;
+  std::size_t offset = 0;
+  for (auto &block : blocks_) {
+    if (!block.allocated)
+      continue;
+    if (offset + block.size > new_size) {
+      if (config_.type == TierType::HOST)
+        std::free(new_pool);
+      else {
+#if SEP_CUDA_AVAILABLE
+        cudaFree(new_pool);
+#else
+        std::free(new_pool);
+#endif
+      }
+      sep::metrics::allocationFailures().value++;
+      return false;
+    }
+    std::memcpy(static_cast<char *>(new_pool) + offset, block.ptr, block.size);
+    new_blocks.emplace_back(static_cast<char *>(new_pool) + offset, block.size,
+                            offset, config_.type);
+    MemoryBlock &nb = new_blocks.back();
+    nb.allocated = true;
+    nb.utilization = block.utilization;
+    nb.access_count = block.access_count;
+    nb.compression = block.compression;
+    nb.original_size = block.original_size;
+    nb.stability = block.stability;
+    nb.coherence = block.coherence;
+    nb.generation = block.generation;
+    nb.weight = block.weight;
+    nb.wait = block.wait;
+    nb.coherence_trend = block.coherence_trend;
+    nb.last_coherence = block.last_coherence;
+    nb.compression_ratio = block.compression_ratio;
+    offset += block.size;
+  }
+
+  if (offset < new_size)
+    new_blocks.emplace_back(static_cast<char *>(new_pool) + offset,
+                            new_size - offset, offset, config_.type);
+
+  if (memory_pool_) {
+    if (config_.type == TierType::HOST)
+      std::free(memory_pool_);
+    else {
+#if SEP_CUDA_AVAILABLE
+      cudaFree(memory_pool_);
+#else
+      std::free(memory_pool_);
+#endif
+    }
+  }
+  memory_pool_ = new_pool;
+  config_.size = new_size;
+  blocks_.swap(new_blocks);
+  used_space_ = offset;
+  return true;
 }
 
-bool MemoryTier::canAcceptPattern(const ::sep::persistence::PersistentPatternData& pattern) const {
-    if (m_patterns.size() >= m_max_patterns)
-        return false;
-    if (pattern.coherence < m_coherence_threshold)
-        return false;
-    // STM should accept new patterns (generation = 0)
-    // Only MTM and LTM have minimum generation requirements
-    // Check generation count instead of memory_tier and generation
-    if (pattern.generation_count < m_min_generations)
-        return false;
-    return true;
+bool MemoryTier::canAcceptPattern(
+    const ::sep::persistence::PersistentPatternData &pattern) const {
+  if (m_patterns.size() >= m_max_patterns)
+    return false;
+  if (pattern.coherence < m_coherence_threshold)
+    return false;
+  // STM should accept new patterns (generation = 0)
+  // Only MTM and LTM have minimum generation requirements
+  // Check generation count instead of memory_tier and generation
+  if (pattern.generation_count < m_min_generations)
+    return false;
+  return true;
 }
 
-void MemoryTier::addPattern(size_t id, ::sep::persistence::PersistentPatternData pattern) {
-    if (!canAcceptPattern(pattern))
-        return;
-    // PatternData doesn't have id or memory_tier fields
-    // Just store the pattern as is
-    m_patterns[id] = std::move(pattern);
+void MemoryTier::addPattern(size_t id,
+                            ::sep::persistence::PersistentPatternData pattern) {
+  if (!canAcceptPattern(pattern))
+    return;
+  // PatternData doesn't have id or memory_tier fields
+  // Just store the pattern as is
+  m_patterns[id] = std::move(pattern);
 }
 
-void MemoryTier::removePattern(size_t id) {
-    m_patterns.erase(id);
+void MemoryTier::removePattern(size_t id) { m_patterns.erase(id); }
+
+const ::sep::persistence::PersistentPatternData *
+MemoryTier::getPattern(size_t id) const {
+  auto it = m_patterns.find(id);
+  return it == m_patterns.end() ? nullptr : &it->second;
 }
 
-const ::sep::persistence::PersistentPatternData* MemoryTier::getPattern(size_t id) const {
-    auto it = m_patterns.find(id);
-    return it == m_patterns.end() ? nullptr : &it->second;
+::sep::persistence::PersistentPatternData *MemoryTier::getPattern(size_t id) {
+  auto it = m_patterns.find(id);
+  return it == m_patterns.end() ? nullptr : &it->second;
 }
 
-::sep::persistence::PersistentPatternData* MemoryTier::getPattern(size_t id) {
-    auto it = m_patterns.find(id);
-    return it == m_patterns.end() ? nullptr : &it->second;
-}
-
-}  // namespace sep::memory
+} // namespace sep::memory

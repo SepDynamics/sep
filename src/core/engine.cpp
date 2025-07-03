@@ -25,6 +25,7 @@
 #include "audio/factory.h"
 
 #include <cstdint>
+#include <algorithm>
 #include <cstdio>
 #include <exception>
 #include <numeric>

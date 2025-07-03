@@ -23,16 +23,19 @@ add_library(sep_compat STATIC
     quantum_kernels.cu
 )
 
-set_source_files_properties(
-    pattern_kernels.cu cuda_api.cu event.cu utils.cu kernels.cu core.cu quantum_kernels.cu
-    PROPERTIES COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
-)
+target_compile_options(sep_compat PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)
 
 set_target_properties(sep_compat PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     POSITION_INDEPENDENT_CODE ON
     CUDA_ARCHITECTURES "75;70;61;60"
+)
+
+target_link_libraries(sep_compat
+    PUBLIC
+        CUDA::cudart
+        CUDA::cuda_driver
 )
 
 set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)

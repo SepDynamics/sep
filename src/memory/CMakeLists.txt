@@ -10,12 +10,23 @@ add_library(sep_memory
 find_library(HIREDIS_LIB NAMES hiredis PATHS /usr/lib64 REQUIRED)
 find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis REQUIRED)
 
+
 # Link dependencies
 target_link_libraries(sep_memory
     PUBLIC
         sep_core
         sep_compat # CUDA utilities required by memory tier
         ${HIREDIS_LIB}
+        CUDA::cudart
+        CUDA::cuda_driver
+)
+
+# Set CUDA properties
+set_target_properties(sep_memory PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    POSITION_INDEPENDENT_CODE ON
+    CUDA_ARCHITECTURES "75;70;61;60"
 )
 
 # CUDA and Redis are always required

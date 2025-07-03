@@ -1,0 +1,25 @@
+name: Diagram Sync Check
+
+on:
+  push:
+    paths:
+      - 'docs/diagrams/**'
+      - 'include/**'
+      - 'src/**'
+      - '.github/workflows/diagram_sync_check.yml'
+      - 'scripts/check_diagram_files.py'
+  pull_request:
+    paths:
+      - 'docs/diagrams/**'
+      - 'include/**'
+      - 'src/**'
+      - '.github/workflows/diagram_sync_check.yml'
+      - 'scripts/check_diagram_files.py'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run diagram file check
+        run: python3 scripts/check_diagram_files.py

@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
-# Enable CUDA
-enable_language(CUDA)
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
@@ -101,6 +99,7 @@ target_link_libraries(sep_engine
         cycles_kernel_osl # The one with the real symbols
         cycles_subd
         cycles_util
+        extern_sky
         extern_cuew
         extern_hipew
         extern_sky

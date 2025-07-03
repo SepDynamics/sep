@@ -21,6 +21,7 @@ add_library(sep_blender STATIC
     blender_integration.cpp
     mesh_handler.cpp
     factory.cpp
+    oiio_output_driver.cpp
 )
 
 # Define required features
@@ -50,6 +51,7 @@ target_link_libraries(sep_blender PRIVATE CUDA::cudart)
 
 target_sources(sep_blender PRIVATE
     cycles_renderer.cpp
+    oiio_output_driver.cpp
 )
 
 set_source_files_properties(cycles_renderer.cpp

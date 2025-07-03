@@ -103,8 +103,8 @@ target_link_libraries(sep_engine
 
         # Now link the external dependencies that Cycles needs
         OpenImageIO
-        bf_intern_openvdb
-        bf_intern_opensubdiv
+        ${OPENVDB_LIBRARIES}
+        ${OPENSUBDIV_LIBRARIES}
         ${OSL_LIBRARIES} # Link the real OSL libs, not the stub
         ${TBB_LIBRARIES}
 

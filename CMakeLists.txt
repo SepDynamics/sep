@@ -7,7 +7,7 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
+project(sep_engine VERSION 1.0.0 LANGUAGES C CXX CUDA)
 
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
@@ -90,6 +90,10 @@ endif()
 # Main executable
 add_executable(sep_engine src/main.cpp)
 
+set_target_properties(sep_engine PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+)
 target_include_directories(sep_engine
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include

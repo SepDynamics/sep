@@ -2,9 +2,11 @@
 #include <stdexcept>
 
 #include "core/engine.h"
-#include "blender/cycles_renderer.hpp"
+#include "blender/cycles_renderer.h"
 #include "demo_manager.hpp"
 #include "demos/genesis_pattern.hpp"
+#include "demos/audio_visualizer.hpp"
+#include "demos/memory_garden.hpp"
 
 using namespace sep;
 using namespace sep::workbench;
@@ -56,19 +58,8 @@ void initializeRenderer() {
         throw std::runtime_error("Failed to load configuration");
     }
 
-    // Initialize renderer with config settings
+    // Initialize renderer
     g_renderer = std::make_unique<CyclesRenderer>();
-    
-    const auto& window = config.window();
-    g_renderer->setWindowTitle(window.title);
-    g_renderer->setWindowSize(window.width, window.height);
-    g_renderer->setFullscreen(window.fullscreen);
-    g_renderer->setVSync(window.vsync);
-
-    const auto& renderer = config.renderer();
-    g_renderer->setSamples(renderer.cycles.samples);
-    g_renderer->setDenoising(renderer.cycles.denoising);
-    g_renderer->setDevice(renderer.cycles.device);
 
     if (!g_renderer->initialize()) {
         throw std::runtime_error("Failed to initialize Cycles renderer");
@@ -83,6 +74,12 @@ void registerDemos() {
     demo_manager.registerDemo("genesis", []() {
         return std::make_unique<GenesisPatternDemo>();
     });
+    demo_manager.registerDemo("audio", []() {
+        return std::make_unique<AudioVisualizerDemo>();
+    });
+    demo_manager.registerDemo("garden", []() {
+        return std::make_unique<MemoryGardenDemo>();
+    });
 
     // Start with Genesis Pattern demo
     if (!demo_manager.switchToDemo("genesis")) {
@@ -93,32 +90,9 @@ void registerDemos() {
 void mainLoop() {
     auto& demo_manager = DemoManager::getInstance();
     float dt = 1.0f / 60.0f; // Target 60 FPS
-
-    while (true) {
-        // Process window events and input
-        if (g_renderer->shouldClose()) {
-            break;
-        }
-
-        // Handle keyboard input
-        if (g_renderer->hasKeyEvent()) {
-            unsigned char key = g_renderer->getLastKey();
-            demo_manager.handleKeyboard(key);
-        }
-
-        // Handle mouse input
-        if (g_renderer->hasMouseEvent()) {
-            int x, y, button;
-            g_renderer->getLastMouseEvent(x, y, button);
-            demo_manager.handleMouse(x, y, button);
-        }
-
-        // Update and render current demo
+    for (int i = 0; i < 60; ++i) {
         demo_manager.update(dt);
         demo_manager.render();
-
-        // Swap buffers and poll events
-        g_renderer->present();
     }
 }
 

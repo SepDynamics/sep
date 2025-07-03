@@ -1,7 +1,7 @@
 #include "genesis_pattern.hpp"
 #include "core/engine.h"
-#include "blender/cycles_renderer.hpp"
-#include "quantum/pattern_processor.hpp"
+#include "blender/cycles_renderer.h"
+#include "quantum/processor.h"
 #include "memory/quantum_coherence_manager.h"
 
 namespace sep {

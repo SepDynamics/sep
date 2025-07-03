@@ -7,7 +7,8 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
+project(sep_engine VERSION 1.0.0 LANGUAGES C CXX CUDA)
+enable_language(CUDA)
 
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)

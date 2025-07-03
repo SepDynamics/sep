@@ -67,6 +67,7 @@ add_subdirectory(extern/cycles/third_party/hipew)
 # Build Cycles from source when precompiled libraries are not available
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
   message(STATUS "Prebuilt Cycles libraries not found; building from source")
+  set(WITH_CYCLES_DEVICE_HIP OFF CACHE BOOL "Disable HIP device" FORCE)
   add_subdirectory(extern/cycles)
 endif()
 
@@ -98,6 +99,7 @@ target_link_libraries(sep_engine
         cycles_kernel_osl # The one with the real symbols
         cycles_subd
         cycles_util
+        extern_sky
         extern_cuew
         extern_hipew
 

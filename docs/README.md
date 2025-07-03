@@ -8,6 +8,9 @@ This folder contains notes and references for navigating and maintaining the SEP
 - **`THESIS.md`** — Background theory behind the project.
 - **`vscodium.md`** — Notes on the development environment setup.
 - **`CONFIG_OPTIONS.md`** — Description of configurable runtime parameters.
+- **`diagrams/include-embeddings.md`** — Header map for the embeddings module.
+- **`diagrams/src-embeddings.md`** — Implementation flow for embeddings.
+- **`diagrams/include-cycles_src.md`** — Notes on the Cycles source symlink.
 
 Most documentation assumes the code has already been built with CUDA support and that `sep_engine` runs. See below for a refresher on building and running.
 

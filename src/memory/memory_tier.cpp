@@ -310,7 +310,7 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
   } else {
 #if SEP_MEMORY_HAS_CUDA
     cudaError_t err =
-        cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+        sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
     if (err != cudaSuccess) {
       if (logger) {
         LOG_ERROR(logger, "Failed to copy memory: {}", err);
@@ -390,7 +390,7 @@ bool MemoryTier::resize(std::size_t new_size) {
   if (config_.type == TierType::HOST) {
     new_pool = std::malloc(new_size);
   } else {
-    cudaError_t err = cudaMallocManaged(&new_pool, new_size);
+    cudaError_t err = sep::cuda::allocateManaged(&new_pool, new_size);
     if (err != cudaSuccess) {
       if (logger) {
         LOG_ERROR(logger, "Failed to allocate managed memory: {}", err);

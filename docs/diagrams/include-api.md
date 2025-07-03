@@ -10,7 +10,7 @@ The API layer acts as an interface between external clients (HTTP requests or C/
 flowchart TD
     HttpClient[HTTP Client]
     CrowServer[Crow Server]
-    Middleware[Auth/Rate Limit]
+    Middleware[Auth/Rate/Logging]
     SepEngine[SepEngine]
     Processor[Pattern Processor]
     HttpClient -- request --> CrowServer
@@ -89,6 +89,10 @@ Adapters that convert Crow framework requests/responses to the generic `HttpRequ
 ### `crow_request.h`
 Implementation of `IRequest` for Crow, exposing headers, method, URL and body.
 
+### `crow_request_adapter.h`
+Wraps a `crow::request` in the generic `HttpRequest` interface used by the
+middleware chain.
+
 ### `js_integration.h`
 Provides a minimal wrapper (`JSIntegration`) for JavaScript bindings. `processContextCheck` takes JSON strings and returns JSON.
 
@@ -98,8 +102,14 @@ Convenience functions for parsing/serializing JSON strings.
 ### `lock_free_rate_limiter.h`
 Implements `IRateLimiter` with per-client windows and adaptive throttling based on system metrics.
 
+### `logging_middleware.h`
+Middleware that logs each request and response using the engine's logging facilities.
+
 ### `ollama_types.h`
 Structures describing requests/responses for the Ollama client (e.g., embeddings or text generation).
+
+### `ollama_client.h`
+High-level HTTP client that calls an Ollama server using the structures defined above.
 
 ### `rate_limit_middleware.h`
 Crow middleware integrating the rate limiter before the engine processes requests.

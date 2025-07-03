@@ -32,6 +32,14 @@ Execute the engine from the build directory (`cmake-make`):
 ./sep_engine
 ```
 
+Pass `--disable-audio` to skip initializing audio capture. This is useful on
+systems without working audio devices or when `SEP_ENABLE_AUDIO` was set to
+`OFF` during configuration:
+
+```bash
+./sep_engine --disable-audio
+```
+
 Configuration files are located in `config`. Command‑line flags and environment variables override these defaults.
 
 ### New Configuration Sections

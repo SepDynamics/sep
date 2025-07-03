@@ -47,15 +47,15 @@ Running CMake configuration...
 --   Found OpenImageIO, version 2.5.16.0
 -- Checking for module 'libzstd'
 --   Found libzstd, version 1.5.7
--- Configuring done (1.5s)
+-- Configuring done (1.6s)
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  5%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
-[  5%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
 [  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[  5%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
+[  5%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
 [  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[  6%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  6%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
 [  8%] Linking C static library libextern_hipew.a
 [  9%] Linking C static library libextern_cuew.a
 [  9%] Built target extern_hipew
@@ -64,42 +64,42 @@ Building SEP Engine...
 [ 11%] Built target sep_embeddings
 [ 12%] Linking CXX static library libsep_compat.a
 [ 12%] Built target sep_compat
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
 [ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
 [ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
 [ 25%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 26%] Linking CXX static library libsep_core.a
 [ 26%] Built target sep_core
-[ 29%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 29%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 30%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 31%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 27%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 29%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 30%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 37%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 38%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 40%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 41%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 43%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 47%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 48%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 50%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 51%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 43%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 43%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 43%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 44%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 48%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
 [ 52%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
 [ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 56%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 61%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 58%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 [ 62%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 [ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 [ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
@@ -110,24 +110,24 @@ Building SEP Engine...
 [ 70%] Built target sep_blender
 [ 72%] Linking CXX static library libsep_audio.a
 [ 72%] Built target sep_audio
-[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 75%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
 [ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
 [ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
 [ 93%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
 [ 94%] Linking CXX static library libsep_memory.a
+[ 94%] Built target sep_memory
 [ 95%] Linking CXX static library libsep_quantum.a
-[ 95%] Built target sep_memory
 [ 95%] Built target sep_quantum
 [ 97%] Linking CXX static library libsep_api.a
 [ 97%] Built target sep_api
@@ -162,103 +162,11 @@ shader_nodes.cpp:(.text+0x3e3b): undefined reference to `SKY_nishita_skymodel_pr
 /usr/sbin/ld: /sep/lib/libcycles_scene.a(image_sky.cpp.o): in function `tbb::detail::d1::start_for<tbb::detail::d1::blocked_range<unsigned long>, ccl::SkyLoader::load_pixels(ccl::ImageMetaData const&, void*, unsigned long, bool)::$_0, tbb::detail::d1::auto_partitioner const>::execute(tbb::detail::d1::execution_data&)':
 image_sky.cpp:(.text+0x86f): undefined reference to `SKY_nishita_skymodel_precompute_texture'
 /usr/sbin/ld: image_sky.cpp:(.text+0x932): undefined reference to `SKY_nishita_skymodel_precompute_texture'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(mesh_subdivision.cpp.o): in function `ccl::OsdData::~OsdData()':
-mesh_subdivision.cpp:(.text._ZN3ccl7OsdDataD2Ev[_ZN3ccl7OsdDataD2Ev]+0x79): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::~PatchTable()'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text._ZN3ccl7OsdDataD2Ev[_ZN3ccl7OsdDataD2Ev]+0x9e): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefiner::~TopologyRefiner()'
 /usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::support_device(unsigned int)':
 device_impl.cpp:(.text+0x737): undefined reference to `hipGetDevicePropertiesR0600'
 /usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::compile_kernel[abi:cxx11](unsigned int, char const*, char const*)':
 device_impl.cpp:(.text+0x1226): undefined reference to `hipGetDevicePropertiesR0600'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdByte>(ccl::Attribute const&, ccl::Attribute&, int)':
-interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_8SubdByteEEEvRKNS_9AttributeERS3_i[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_8SubdByteEEEvRKNS_9AttributeERS3_i]+0x49): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetNumLocalPoints() const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void OpenSubdiv::v3_6_0::Sdc::Scheme<(OpenSubdiv::v3_6_0::Sdc::SchemeType)1>::ComputeVertexVertexMask<OpenSubdiv::v3_6_0::Vtr::internal::VertexInterface, OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::Mask>(OpenSubdiv::v3_6_0::Vtr::internal::VertexInterface const&, OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::Mask&, OpenSubdiv::v3_6_0::Sdc::Crease::Rule, OpenSubdiv::v3_6_0::Sdc::Crease::Rule) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x240): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::DetermineVertexVertexRule(float, int, float const*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x2e0): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::SHARPNESS_SMOOTH'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x503): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::DetermineVertexVertexRule(float, int, float const*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x5e9): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::SHARPNESS_SMOOTH'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE1EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x7b1): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::ComputeFractionalWeightAtVertex(float, float, int, float const*, float const*) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `OpenSubdiv::v3_6_0::Vtr::internal::VertexInterface::GetChildSharpnessPerEdge(OpenSubdiv::v3_6_0::Sdc::Crease const&, float*) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Vtr8internal15VertexInterface24GetChildSharpnessPerEdgeERKNS0_3Sdc6CreaseEPf[_ZNK10OpenSubdiv6v3_6_03Vtr8internal15VertexInterface24GetChildSharpnessPerEdgeERKNS0_3Sdc6CreaseEPf]+0x16c): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::SubdivideEdgeSharpnessesAroundVertex(int, float const*, float*) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void OpenSubdiv::v3_6_0::Sdc::Scheme<(OpenSubdiv::v3_6_0::Sdc::SchemeType)2>::ComputeVertexVertexMask<OpenSubdiv::v3_6_0::Vtr::internal::VertexInterface, OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::Mask>(OpenSubdiv::v3_6_0::Vtr::internal::VertexInterface const&, OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::Mask&, OpenSubdiv::v3_6_0::Sdc::Crease::Rule, OpenSubdiv::v3_6_0::Sdc::Crease::Rule) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x31f): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::DetermineVertexVertexRule(float, int, float const*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x359): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::SHARPNESS_SMOOTH'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x61b): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::DetermineVertexVertexRule(float, int, float const*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x6aa): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::SHARPNESS_SMOOTH'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_[_ZNK10OpenSubdiv6v3_6_03Sdc6SchemeILNS1_10SchemeTypeE2EE23ComputeVertexVertexMaskINS0_3Vtr8internal15VertexInterfaceENS0_3Far18PrimvarRefinerRealIfE4MaskEEEvRKT_RT0_NS1_6Crease4RuleESJ_]+0x871): undefined reference to `OpenSubdiv::v3_6_0::Sdc::Crease::ComputeFractionalWeightAtVertex(float, float, int, float const*, float const*) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdByte>(ccl::Attribute const&, ccl::Attribute&, int)::{lambda(int, int, int, int const*, ccl::float2 const*, int)#1}::operator()(int, int, int, int const*, ccl::float2 const*, int) const':
-interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_8SubdByteEEEvRKNS_9AttributeERS3_iENKUliiiPKiPKNS_6float2EiE_clEiiiS8_SB_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_8SubdByteEEEvRKNS_9AttributeERS3_iENKUliiiPKiPKNS_6float2EiE_clEiiiS8_SB_i]+0x245): undefined reference to `void OpenSubdiv::v3_6_0::Far::PatchTable::EvaluateBasis<float>(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&, float, float, float*, float*, float*, float*, float*, float*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_8SubdByteEEEvRKNS_9AttributeERS3_iENKUliiiPKiPKNS_6float2EiE_clEiiiS8_SB_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_8SubdByteEEEvRKNS_9AttributeERS3_iENKUliiiPKiPKNS_6float2EiE_clEiiiS8_SB_i]+0x255): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetPatchVertices(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdFloat<float> >(ccl::Attribute const&, ccl::Attribute&, int)':
-interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatIfEEEEvRKNS_9AttributeERS4_i[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatIfEEEEvRKNS_9AttributeERS4_i]+0x4b): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetNumLocalPoints() const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdFloat<float> >(ccl::Attribute const&, ccl::Attribute&, int)::{lambda(int, int, int, int const*, ccl::float2 const*, int)#1}::operator()(int, int, int, int const*, ccl::float2 const*, int) const':
-interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatIfEEEEvRKNS_9AttributeERS4_iENKUliiiPKiPKNS_6float2EiE_clEiiiS9_SC_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatIfEEEEvRKNS_9AttributeERS4_iENKUliiiPKiPKNS_6float2EiE_clEiiiS9_SC_i]+0x245): undefined reference to `void OpenSubdiv::v3_6_0::Far::PatchTable::EvaluateBasis<float>(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&, float, float, float*, float*, float*, float*, float*, float*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatIfEEEEvRKNS_9AttributeERS4_iENKUliiiPKiPKNS_6float2EiE_clEiiiS9_SC_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatIfEEEEvRKNS_9AttributeERS4_iENKUliiiPKiPKNS_6float2EiE_clEiiiS9_SC_i]+0x255): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetPatchVertices(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdFloat<ccl::float2> >(ccl::Attribute const&, ccl::Attribute&, int)':
-interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float2EEEEEvRKNS_9AttributeERS5_i[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float2EEEEEvRKNS_9AttributeERS5_i]+0x4b): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetNumLocalPoints() const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void ccl::SubdAttributeInterpolation::setup_attribute_corner_smooth<ccl::SubdFloat<ccl::float2> >(ccl::Attribute&, int, ccl::vector<char, ccl::GuardedAllocator<char> > const&)':
-interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEE[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEE]+0x40): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefiner::GetNumFVarValuesTotal(int) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEE[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEE]+0x52): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetNumLocalPointsFaceVarying(int) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEE[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEE]+0x6c): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::Level::getNumFVarValues(int) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEE[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEE]+0x17b): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::Level::getNumFVarValues(int) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdFloat<ccl::float2> >(ccl::Attribute const&, ccl::Attribute&, int)::{lambda(int, int, int, int const*, ccl::float2 const*, int)#1}::operator()(int, int, int, int const*, ccl::float2 const*, int) const':
-interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float2EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKS3_iE_clEiiiSA_SC_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float2EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKS3_iE_clEiiiSA_SC_i]+0x245): undefined reference to `void OpenSubdiv::v3_6_0::Far::PatchTable::EvaluateBasis<float>(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&, float, float, float*, float*, float*, float*, float*, float*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float2EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKS3_iE_clEiiiSA_SC_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float2EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKS3_iE_clEiiiSA_SC_i]+0x255): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetPatchVertices(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::interpFVarFromEdges<(OpenSubdiv::v3_6_0::Sdc::SchemeType)1, ccl::OsdValue<ccl::float2>*, ccl::OsdValue<ccl::float2>*>(int, ccl::OsdValue<ccl::float2>* const&, ccl::OsdValue<ccl::float2>*&, int) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x238): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getEdgeFaceValues(int, int, int*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x419): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getEdgeFaceValues(int, int, int*) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::interpFVarFromVerts<(OpenSubdiv::v3_6_0::Sdc::SchemeType)1, ccl::OsdValue<ccl::float2>*, ccl::OsdValue<ccl::float2>*>(int, ccl::OsdValue<ccl::float2>* const&, ccl::OsdValue<ccl::float2>*&, int) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x401): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getVertexEdgeValues(int, int*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x4fc): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getVertexCreaseEndValues(int, unsigned short, int*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE1EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x54d): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarRefinement::getFractionalWeight(int, unsigned short, int, unsigned short) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::interpFVarFromEdges<(OpenSubdiv::v3_6_0::Sdc::SchemeType)2, ccl::OsdValue<ccl::float2>*, ccl::OsdValue<ccl::float2>*>(int, ccl::OsdValue<ccl::float2>* const&, ccl::OsdValue<ccl::float2>*&, int) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x238): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getEdgeFaceValues(int, int, int*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x419): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getEdgeFaceValues(int, int, int*) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::interpFVarFromVerts<(OpenSubdiv::v3_6_0::Sdc::SchemeType)2, ccl::OsdValue<ccl::float2>*, ccl::OsdValue<ccl::float2>*>(int, ccl::OsdValue<ccl::float2>* const&, ccl::OsdValue<ccl::float2>*&, int) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x401): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getVertexEdgeValues(int, int*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x4fc): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getVertexCreaseEndValues(int, unsigned short, int*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE2EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x54d): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarRefinement::getFractionalWeight(int, unsigned short, int, unsigned short) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::interpFVarFromEdges<(OpenSubdiv::v3_6_0::Sdc::SchemeType)0, ccl::OsdValue<ccl::float2>*, ccl::OsdValue<ccl::float2>*>(int, ccl::OsdValue<ccl::float2>* const&, ccl::OsdValue<ccl::float2>*&, int) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE0EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE0EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0xe0): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getEdgeFaceValues(int, int, int*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE0EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromEdgesILNS0_3Sdc10SchemeTypeE0EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x1da): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getEdgeFaceValues(int, int, int*) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void OpenSubdiv::v3_6_0::Far::PrimvarRefinerReal<float>::interpFVarFromVerts<(OpenSubdiv::v3_6_0::Sdc::SchemeType)0, ccl::OsdValue<ccl::float2>*, ccl::OsdValue<ccl::float2>*>(int, ccl::OsdValue<ccl::float2>* const&, ccl::OsdValue<ccl::float2>*&, int) const':
-interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE0EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE0EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x33d): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarLevel::getVertexCreaseEndValues(int, unsigned short, int*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE0EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i[_ZNK10OpenSubdiv6v3_6_03Far18PrimvarRefinerRealIfE19interpFVarFromVertsILNS0_3Sdc10SchemeTypeE0EPN3ccl8OsdValueINS7_6float2EEESB_EEviRKT0_RT1_i]+0x38c): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::FVarRefinement::getFractionalWeight(int, unsigned short, int, unsigned short) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `ccl::SubdAttributeInterpolation::setup_attribute_corner_smooth<ccl::SubdFloat<ccl::float2> >(ccl::Attribute&, int, ccl::vector<char, ccl::GuardedAllocator<char> > const&)::{lambda(int, int, int, int const*, ccl::float2 const*, int)#1}::operator()(int, int, int, int const*, ccl::float2 const*, int) const':
-interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEEENKUliiiPKiPKS3_iE_clEiiiSE_SG_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEEENKUliiiPKiPKS3_iE_clEiiiSE_SG_i]+0x280): undefined reference to `void OpenSubdiv::v3_6_0::Far::PatchTable::EvaluateBasisFaceVarying<float>(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&, float, float, float*, float*, float*, float*, float*, float*, int) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEEENKUliiiPKiPKS3_iE_clEiiiSE_SG_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_corner_smoothINS_9SubdFloatINS_6float2EEEEEvRNS_9AttributeEiRKNS_6vectorIcNS_16GuardedAllocatorIcEEEEENKUliiiPKiPKS3_iE_clEiiiSE_SG_i]+0x295): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetPatchFVarValues(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&, int) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdFloat<ccl::float3> >(ccl::Attribute const&, ccl::Attribute&, int)':
-interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float3EEEEEvRKNS_9AttributeERS5_i[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float3EEEEEvRKNS_9AttributeERS5_i]+0x47): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetNumLocalPoints() const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdFloat<ccl::float3> >(ccl::Attribute const&, ccl::Attribute&, int)::{lambda(int, int, int, int const*, ccl::float2 const*, int)#1}::operator()(int, int, int, int const*, ccl::float2 const*, int) const':
-interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float3EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKNS_6float2EiE_clEiiiSA_SD_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float3EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKNS_6float2EiE_clEiiiSA_SD_i]+0x231): undefined reference to `void OpenSubdiv::v3_6_0::Far::PatchTable::EvaluateBasis<float>(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&, float, float, float*, float*, float*, float*, float*, float*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float3EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKNS_6float2EiE_clEiiiSA_SD_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float3EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKNS_6float2EiE_clEiiiSA_SD_i]+0x241): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetPatchVertices(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `void ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdFloat<ccl::float4> >(ccl::Attribute const&, ccl::Attribute&, int)':
-interpolation.cpp:(.text._ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float4EEEEEvRKNS_9AttributeERS5_i[_ZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float4EEEEEvRKNS_9AttributeERS5_i]+0x48): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetNumLocalPoints() const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(interpolation.cpp.o): in function `ccl::SubdAttributeInterpolation::setup_attribute_vertex_smooth<ccl::SubdFloat<ccl::float4> >(ccl::Attribute const&, ccl::Attribute&, int)::{lambda(int, int, int, int const*, ccl::float2 const*, int)#1}::operator()(int, int, int, int const*, ccl::float2 const*, int) const':
-interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float4EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKNS_6float2EiE_clEiiiSA_SD_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float4EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKNS_6float2EiE_clEiiiSA_SD_i]+0x245): undefined reference to `void OpenSubdiv::v3_6_0::Far::PatchTable::EvaluateBasis<float>(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&, float, float, float*, float*, float*, float*, float*, float*) const'
-/usr/sbin/ld: interpolation.cpp:(.text._ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float4EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKNS_6float2EiE_clEiiiSA_SD_i[_ZZN3ccl26SubdAttributeInterpolation29setup_attribute_vertex_smoothINS_9SubdFloatINS_6float4EEEEEvRKNS_9AttributeERS5_iENKUliiiPKiPKNS_6float2EiE_clEiiiSA_SD_i]+0x255): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetPatchVertices(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(osd.cpp.o): in function `OpenSubdiv::v3_6_0::Far::TopologyRefinerFactory<ccl::OsdMesh>::assignComponentTags(OpenSubdiv::v3_6_0::Far::TopologyRefiner&, ccl::OsdMesh const&)':
-osd.cpp:(.text+0x515): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::Level::findEdge(int, int) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(osd.cpp.o): in function `OpenSubdiv::v3_6_0::Far::TopologyRefinerFactory<ccl::OsdMesh>::assignFaceVaryingTopology(OpenSubdiv::v3_6_0::Far::TopologyRefiner&, ccl::OsdMesh const&)':
-osd.cpp:(.text+0x11eb): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::Level::createFVarChannel(int, OpenSubdiv::v3_6_0::Sdc::Options const&)'
-/usr/sbin/ld: osd.cpp:(.text+0x1233): undefined reference to `OpenSubdiv::v3_6_0::Vtr::internal::Level::getFaceFVarValues(int, int)'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(osd.cpp.o): in function `ccl::OsdData::build(ccl::OsdMesh&)':
-osd.cpp:(.text+0x2498): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefiner::TopologyRefiner(OpenSubdiv::v3_6_0::Sdc::SchemeType, OpenSubdiv::v3_6_0::Sdc::Options)'
-/usr/sbin/ld: osd.cpp:(.text+0x24bb): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefiner::~TopologyRefiner()'
-/usr/sbin/ld: osd.cpp:(.text+0x24e0): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefiner::~TopologyRefiner()'
-/usr/sbin/ld: osd.cpp:(.text+0x2541): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefiner::RefineAdaptive(OpenSubdiv::v3_6_0::Far::TopologyRefiner::AdaptiveOptions, OpenSubdiv::v3_6_0::Vtr::ConstArray<int>)'
-/usr/sbin/ld: osd.cpp:(.text+0x2554): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTableFactory::Create(OpenSubdiv::v3_6_0::Far::TopologyRefiner const&, OpenSubdiv::v3_6_0::Far::PatchTableFactory::Options, OpenSubdiv::v3_6_0::Vtr::ConstArray<int>)'
-/usr/sbin/ld: osd.cpp:(.text+0x2569): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::~PatchTable()'
-/usr/sbin/ld: osd.cpp:(.text+0x258a): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetNumLocalPoints() const'
-/usr/sbin/ld: osd.cpp:(.text+0x2823): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchMap::PatchMap(OpenSubdiv::v3_6_0::Far::PatchTable const&)'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(osd.cpp.o): in function `ccl::OsdPatch::eval(ccl::float3*, ccl::float3*, ccl::float3*, ccl::float3*, float, float) const':
-osd.cpp:(.text+0x2b1f): undefined reference to `void OpenSubdiv::v3_6_0::Far::PatchTable::EvaluateBasis<float>(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&, float, float, float*, float*, float*, float*, float*, float*) const'
-/usr/sbin/ld: osd.cpp:(.text+0x2b2f): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::GetPatchVertices(OpenSubdiv::v3_6_0::Far::PatchTable::PatchHandle const&) const'
-/usr/sbin/ld: /sep/lib/libcycles_subd.a(osd.cpp.o): in function `OpenSubdiv::v3_6_0::Far::TopologyRefinerFactory<ccl::OsdMesh>::populateBaseLevel(OpenSubdiv::v3_6_0::Far::TopologyRefiner&, ccl::OsdMesh const&, OpenSubdiv::v3_6_0::Far::TopologyRefinerFactory<ccl::OsdMesh>::Options)':
-osd.cpp:(.text._ZN10OpenSubdiv6v3_6_03Far22TopologyRefinerFactoryIN3ccl7OsdMeshEE17populateBaseLevelERNS1_15TopologyRefinerERKS4_NS5_7OptionsE[_ZN10OpenSubdiv6v3_6_03Far22TopologyRefinerFactoryIN3ccl7OsdMeshEE17populateBaseLevelERNS1_15TopologyRefinerERKS4_NS5_7OptionsE]+0x15): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefinerFactoryBase::prepareComponentTopologySizing(OpenSubdiv::v3_6_0::Far::TopologyRefiner&)'
-/usr/sbin/ld: osd.cpp:(.text._ZN10OpenSubdiv6v3_6_03Far22TopologyRefinerFactoryIN3ccl7OsdMeshEE17populateBaseLevelERNS1_15TopologyRefinerERKS4_NS5_7OptionsE[_ZN10OpenSubdiv6v3_6_03Far22TopologyRefinerFactoryIN3ccl7OsdMeshEE17populateBaseLevelERNS1_15TopologyRefinerERKS4_NS5_7OptionsE]+0x3b): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefinerFactoryBase::prepareComponentTopologyAssignment(OpenSubdiv::v3_6_0::Far::TopologyRefiner&, bool, void (*)(OpenSubdiv::v3_6_0::Vtr::internal::Level::TopologyError, char const*, void const*), void const*)'
-/usr/sbin/ld: osd.cpp:(.text._ZN10OpenSubdiv6v3_6_03Far22TopologyRefinerFactoryIN3ccl7OsdMeshEE17populateBaseLevelERNS1_15TopologyRefinerERKS4_NS5_7OptionsE[_ZN10OpenSubdiv6v3_6_03Far22TopologyRefinerFactoryIN3ccl7OsdMeshEE17populateBaseLevelERNS1_15TopologyRefinerERKS4_NS5_7OptionsE]+0x52): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefinerFactoryBase::prepareComponentTagsAndSharpness(OpenSubdiv::v3_6_0::Far::TopologyRefiner&)'
-/usr/sbin/ld: osd.cpp:(.text._ZN10OpenSubdiv6v3_6_03Far22TopologyRefinerFactoryIN3ccl7OsdMeshEE17populateBaseLevelERNS1_15TopologyRefinerERKS4_NS5_7OptionsE[_ZN10OpenSubdiv6v3_6_03Far22TopologyRefinerFactoryIN3ccl7OsdMeshEE17populateBaseLevelERNS1_15TopologyRefinerERKS4_NS5_7OptionsE]+0x6d): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefinerFactoryBase::prepareFaceVaryingChannels(OpenSubdiv::v3_6_0::Far::TopologyRefiner&)'
 collect2: error: ld returned 1 exit status
-make[2]: *** [CMakeFiles/sep_engine.dir/build.make:138: sep_engine] Error 1
+make[2]: *** [CMakeFiles/sep_engine.dir/build.make:142: sep_engine] Error 1
 make[1]: *** [CMakeFiles/Makefile2:324: CMakeFiles/sep_engine.dir/all] Error 2
 make: *** [Makefile:91: all] Error 2

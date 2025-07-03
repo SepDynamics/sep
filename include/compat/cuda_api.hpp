@@ -81,7 +81,7 @@ cudaError_t launch_pattern_processing(pattern::PatternData* patterns,
                                     const pattern::PatternConfig& config,
                                     size_t pattern_count,
                                     const pattern::PatternData* previous_patterns,
-                                    void* stream);
+                                    cudaStream_t stream);
 
 } // namespace sep::cuda
 #endif // __cplusplus

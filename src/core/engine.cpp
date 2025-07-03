@@ -17,6 +17,7 @@
 #include "compat/cuda_api.hpp"
 #include "core/logging.h"  // This is actually the logging manager
 #include "memory/memory_tier_manager.hpp"
+#include "quantum/qbsa.h"
 #ifdef SEP_HAS_BLENDER
 #include "blender/pattern_bridge.h"
 #include "blender/types.h" // For SEPBlenderBridge definition
@@ -26,7 +27,8 @@
 
 #include <cstdint> 
 #include <cstdio> 
-#include <exception> 
+#include <exception>
+#include <numeric>
 
 // Define namespace alias for clarity
 namespace logging = sep::logging; 
@@ -217,6 +219,7 @@ void Engine::process_batch(const std::vector<::sep::PinState>& inputs, std::uint
         std::vector<std::uint32_t> expectations;
         generate_probes(inputs, probe_indices, expectations, tick);
 
+#ifdef SEP_USE_CUDA
         // Process QBSA using CUDA
         auto qbsa_status = sep_cuda_process_batch(
             probe_indices.data(),
@@ -244,8 +247,16 @@ void Engine::process_batch(const std::vector<::sep::PinState>& inputs, std::uint
             ::sep::core::ErrorHandler::instance().reportError({qsh_status, "QSH processing failed", "Engine::process_batch"});
             return;
         }
+#else
+        // CPU fallback when CUDA is unavailable
+        sep::quantum::QBSAProcessor cpu_proc;
+        qbsa_result = cpu_proc.analyze(probe_indices, expectations);
+        qbsa_result.collapse_detected =
+            cpu_proc.detectCollapse(qbsa_result, inputs.size());
+#endif
 
         // Update results from device buffers
+#ifdef SEP_USE_CUDA
         qbsa_result.corrections.assign(
             impl_->d_corrections_.begin(),
             impl_->d_corrections_.end());
@@ -253,8 +264,10 @@ void Engine::process_batch(const std::vector<::sep::PinState>& inputs, std::uint
             static_cast<float>(impl_->d_correction_count_[0]) /
             inputs.size();
         qbsa_result.collapse_detected = impl_->d_correction_count_[0] > 0;
+#endif
 
         // Reconstruct nested collapse indices using counts
+#ifdef SEP_USE_CUDA
         qsh_result.collapse_indices.clear();
         qsh_result.collapse_indices.resize(inputs.size());
         for (std::size_t i = 0; i < inputs.size(); ++i) {
@@ -271,6 +284,7 @@ void Engine::process_batch(const std::vector<::sep::PinState>& inputs, std::uint
             qsh_result.collapse_counts.begin(),
             qsh_result.collapse_counts.end(),
             0u);
+#endif
 
         // Update state history
         StateNode node;

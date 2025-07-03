@@ -38,20 +38,45 @@ bool Config::load(const std::filesystem::path& path) {
         auto& genesis = json["demos"]["genesis_pattern"];
         auto& initial = genesis["initial_pattern"];
         auto& viz = genesis["visualization"];
-        genesis_pattern_ = {
+        auto& evo = genesis["evolution"];
+        auto& ctrls = genesis["controls"];
+        auto& save = genesis["save_state"];
+        auto& vs = save["view_settings"];
+        genesis_pattern_.initial_pattern = {
             {
-                {
-                    initial["dimensions"][0].get<int>(),
-                    initial["dimensions"][1].get<int>(),
-                    initial["dimensions"][2].get<int>()
-                },
-                initial["evolution_rate"].get<float>(),
-                initial["coherence_threshold"].get<float>()
+                initial["dimensions"][0].get<int>(),
+                initial["dimensions"][1].get<int>(),
+                initial["dimensions"][2].get<int>()
             },
+            initial["evolution_rate"].get<float>(),
+            initial["coherence_threshold"].get<float>()
+        };
+        genesis_pattern_.visualization = {
+            viz["color_mode"].get<std::string>(),
+            viz["emission_mode"].get<std::string>(),
+            viz["roughness_mode"].get<std::string>(),
+            viz.value("coherence_threshold", 0.1f)
+        };
+        genesis_pattern_.evolution = {
+            evo.value("rate_multiplier", 1.0f),
+            evo.value("rate_step", 1.1f),
+            evo.value("max_rate", 2.0f),
+            evo.value("min_rate", 0.01f),
+            evo.value("iterations_per_frame", 1)
+        };
+        genesis_pattern_.controls = {
+            ctrls.value("rotation_sensitivity", 0.005f),
+            ctrls.value("zoom_sensitivity", 0.01f),
+            ctrls.value("min_zoom", 0.5f),
+            ctrls.value("max_zoom", 5.0f)
+        };
+        genesis_pattern_.save_state = {
+            save.value("evolution_rate", genesis_pattern_.initial_pattern.evolution_rate),
+            save.value("coherence_threshold", genesis_pattern_.initial_pattern.coherence_threshold),
             {
-                viz["color_mode"].get<std::string>(),
-                viz["emission_mode"].get<std::string>(),
-                viz["roughness_mode"].get<std::string>()
+                vs.value("rotation", 0.0f),
+                vs.value("zoom", 1.0f),
+                vs.value("wireframe", false)
             }
         };
 
@@ -143,7 +168,30 @@ bool Config::save(const std::filesystem::path& path) const {
             {"visualization", {
                 {"color_mode", genesis_pattern_.visualization.color_mode},
                 {"emission_mode", genesis_pattern_.visualization.emission_mode},
-                {"roughness_mode", genesis_pattern_.visualization.roughness_mode}
+                {"roughness_mode", genesis_pattern_.visualization.roughness_mode},
+                {"coherence_threshold", genesis_pattern_.visualization.coherence_threshold}
+            }},
+            {"evolution", {
+                {"rate_multiplier", genesis_pattern_.evolution.rate_multiplier},
+                {"rate_step", genesis_pattern_.evolution.rate_step},
+                {"max_rate", genesis_pattern_.evolution.max_rate},
+                {"min_rate", genesis_pattern_.evolution.min_rate},
+                {"iterations_per_frame", genesis_pattern_.evolution.iterations_per_frame}
+            }},
+            {"controls", {
+                {"rotation_sensitivity", genesis_pattern_.controls.rotation_sensitivity},
+                {"zoom_sensitivity", genesis_pattern_.controls.zoom_sensitivity},
+                {"min_zoom", genesis_pattern_.controls.min_zoom},
+                {"max_zoom", genesis_pattern_.controls.max_zoom}
+            }},
+            {"save_state", {
+                {"evolution_rate", genesis_pattern_.save_state.evolution_rate},
+                {"coherence_threshold", genesis_pattern_.save_state.coherence_threshold},
+                {"view_settings", {
+                    {"rotation", genesis_pattern_.save_state.view_settings.rotation},
+                    {"zoom", genesis_pattern_.save_state.view_settings.zoom},
+                    {"wireframe", genesis_pattern_.save_state.view_settings.wireframe}
+                }}
             }}
         };
 

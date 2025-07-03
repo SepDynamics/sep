@@ -25,7 +25,30 @@
       "visualization": {
         "color_mode": "coherence",
         "emission_mode": "stability",
-        "roughness_mode": "energy"
+        "roughness_mode": "energy",
+        "coherence_threshold": 0.1
+      },
+      "evolution": {
+        "rate_multiplier": 1.0,
+        "rate_step": 1.1,
+        "max_rate": 2.0,
+        "min_rate": 0.01,
+        "iterations_per_frame": 1
+      },
+      "controls": {
+        "rotation_sensitivity": 0.005,
+        "zoom_sensitivity": 0.01,
+        "min_zoom": 0.5,
+        "max_zoom": 5.0
+      },
+      "save_state": {
+        "evolution_rate": 0.1,
+        "coherence_threshold": 0.5,
+        "view_settings": {
+          "rotation": 0.0,
+          "zoom": 1.0,
+          "wireframe": false
+        }
       }
     },
     "audio_visualizer": {

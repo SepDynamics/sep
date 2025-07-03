@@ -8,6 +8,12 @@
 namespace sep {
 namespace workbench {
 
+struct ViewSettings {
+    float rotation{0.0f};
+    float zoom{1.0f};
+    bool wireframe{false};
+};
+
 struct WindowConfig {
     std::string title;
     int width;
@@ -29,11 +35,33 @@ struct GenesisPatternConfig {
         float coherence_threshold;
     } initial_pattern;
 
+    struct Evolution {
+        float rate_multiplier{1.0f};
+        float rate_step{1.1f};
+        float max_rate{2.0f};
+        float min_rate{0.01f};
+        int iterations_per_frame{1};
+    } evolution;
+
     struct {
         std::string color_mode;
         std::string emission_mode;
         std::string roughness_mode;
+        float coherence_threshold{0.1f};
     } visualization;
+
+    struct {
+        float rotation_sensitivity{0.005f};
+        float zoom_sensitivity{0.01f};
+        float min_zoom{0.5f};
+        float max_zoom{5.0f};
+    } controls;
+
+    struct {
+        float evolution_rate{0.1f};
+        float coherence_threshold{0.5f};
+        ViewSettings view_settings{};
+    } save_state;
 };
 
 struct AudioVisualizerConfig {

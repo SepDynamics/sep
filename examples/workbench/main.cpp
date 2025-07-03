@@ -5,6 +5,8 @@
 #include "blender/cycles_renderer.hpp"
 #include "demo_manager.hpp"
 #include "demos/genesis_pattern.hpp"
+#include "demos/audio_visualizer.hpp"
+#include "demos/memory_garden.hpp"
 
 using namespace sep;
 using namespace sep::workbench;
@@ -83,6 +85,12 @@ void registerDemos() {
     demo_manager.registerDemo("genesis", []() {
         return std::make_unique<GenesisPatternDemo>();
     });
+    demo_manager.registerDemo("audio", []() {
+        return std::make_unique<AudioVisualizerDemo>();
+    });
+    demo_manager.registerDemo("memory", []() {
+        return std::make_unique<MemoryGardenDemo>();
+    });
 
     // Start with Genesis Pattern demo
     if (!demo_manager.switchToDemo("genesis")) {
@@ -103,7 +111,15 @@ void mainLoop() {
         // Handle keyboard input
         if (g_renderer->hasKeyEvent()) {
             unsigned char key = g_renderer->getLastKey();
-            demo_manager.handleKeyboard(key);
+            if (key == '1') {
+                demo_manager.switchToDemo("genesis");
+            } else if (key == '2') {
+                demo_manager.switchToDemo("audio");
+            } else if (key == '3') {
+                demo_manager.switchToDemo("memory");
+            } else {
+                demo_manager.handleKeyboard(key);
+            }
         }
 
         // Handle mouse input

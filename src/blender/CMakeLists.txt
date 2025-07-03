@@ -153,7 +153,7 @@ else()
       extern_hipew
       ${OSL_LIBRARIES}
       bf_intern_openvdb
-      OpenVDB::openvdb
+      openvdb
       bf_intern_opensubdiv
   )
 endif()

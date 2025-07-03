@@ -125,8 +125,8 @@ if(TARGET cycles_scene)
       extern_cuew
       extern_hipew
       ${OSL_LIBRARIES}
-      bf_intern_openvdb
-      bf_intern_opensubdiv
+      ${OPENVDB_LIBRARIES}
+      ${OPENSUBDIV_LIBRARIES}
 )
 else()
   # Fallback to precompiled static libraries
@@ -151,8 +151,8 @@ else()
       extern_cuew
       extern_hipew
       ${OSL_LIBRARIES}
-      bf_intern_openvdb
-      bf_intern_opensubdiv
+      ${OPENVDB_LIBRARIES}
+      ${OPENSUBDIV_LIBRARIES}
   )
 endif()
 

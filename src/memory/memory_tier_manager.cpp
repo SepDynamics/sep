@@ -237,7 +237,7 @@ sep::SEPResult MemoryTierManager::launch_pattern_processing(sep::pattern::Patter
                                                             size_t pattern_count,
                                                             const sep::pattern::PatternData* previous_patterns,
                                                             void* stream) {
-#ifdef SEP_USE_CUDA
+#if defined(SEP_USE_CUDA) && defined(__CUDACC__)
     cudaStream_t cuda_stream = reinterpret_cast<cudaStream_t>(stream);
     cudaError_t err = sep::cuda::launch_pattern_processing(
         patterns, results, config, pattern_count, previous_patterns, cuda_stream);

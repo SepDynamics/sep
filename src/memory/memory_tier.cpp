@@ -11,6 +11,16 @@
 #include "compat/cuda_common.h"
 #include "compat/macros.h"
 
+// Determine if real CUDA support is present. When building without NVCC the
+// stub headers provide the same symbols but no implementations which causes
+// linker errors.  Use the __CUDACC__ macro as a reliable indicator that the
+// CUDA toolkit is actually available.
+#if defined(__CUDACC__)
+#  define SEP_MEMORY_HAS_CUDA 1
+#else
+#  define SEP_MEMORY_HAS_CUDA 0
+#endif
+
 // Project headers
 #include "core/common.h" // defines sep::SEPResult
 #include "memory/memory_tier.hpp"
@@ -39,7 +49,7 @@ MemoryTier::MemoryTier(const Config &config)
     memory_pool_ = std::malloc(config.size);
   } else {
     memory_pool_ = nullptr;
-#if SEP_CUDA_AVAILABLE
+#if SEP_MEMORY_HAS_CUDA
     cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
     if (err != cudaSuccess) {
       auto logger = sep::logging::Manager::getInstance().getLogger("memory");
@@ -94,7 +104,7 @@ MemoryTier::~MemoryTier() {
     if (config_.type == TierType::HOST) {
       std::free(memory_pool_);
     } else {
-#if SEP_CUDA_AVAILABLE
+#if SEP_MEMORY_HAS_CUDA
       cudaFree(memory_pool_);
 #else
       std::free(memory_pool_);
@@ -178,7 +188,7 @@ sep::SEPResult MemoryTier::defragment() {
       if (block.offset != current_offset) {
         // Move memory to new position
         void *new_location = static_cast<char *>(memory_pool_) + current_offset;
-#if SEP_CUDA_AVAILABLE
+#if SEP_MEMORY_HAS_CUDA
         cudaError_t err = cudaMemcpyAsync(new_location, block.ptr, block.size,
                                           cudaMemcpyDefault, nullptr);
         if (err != cudaSuccess) {
@@ -298,7 +308,7 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
   if (config_.type == TierType::HOST) {
     std::memcpy(dst->ptr, src->ptr, size);
   } else {
-#if SEP_CUDA_AVAILABLE
+#if SEP_MEMORY_HAS_CUDA
     cudaError_t err =
         cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
     if (err != cudaSuccess) {
@@ -406,7 +416,7 @@ bool MemoryTier::resize(std::size_t new_size) {
       if (config_.type == TierType::HOST)
         std::free(new_pool);
       else {
-#if SEP_CUDA_AVAILABLE
+#if SEP_MEMORY_HAS_CUDA
         cudaFree(new_pool);
 #else
         std::free(new_pool);
@@ -443,7 +453,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     if (config_.type == TierType::HOST)
       std::free(memory_pool_);
     else {
-#if SEP_CUDA_AVAILABLE
+#if SEP_MEMORY_HAS_CUDA
       cudaFree(memory_pool_);
 #else
       std::free(memory_pool_);

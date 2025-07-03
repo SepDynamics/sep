@@ -56,7 +56,6 @@ class Manager {
 
 // Global functions
 inline void initializeLogging() { Manager::initialize(); }
-inline void shutdownLogging() { Manager::shutdown(); }
 inline Level levelFromString(const std::string &level) {
   return Manager::getInstance().levelFromString(level);
 }

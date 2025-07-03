@@ -36,6 +36,15 @@
 
 namespace sep::cuda {
 
+// Memory management functions
+cudaError_t allocateManaged(void** ptr, size_t size) {
+    return ::cudaMallocManaged(ptr, size);
+}
+
+cudaError_t deallocate(void* ptr) {
+    return ::cudaFree(ptr);
+}
+
 namespace detail {
 SEP_GLOBAL void qbsa_kernel(const std::uint32_t* d_probe_indices,
                            const std::uint32_t* d_expectations,

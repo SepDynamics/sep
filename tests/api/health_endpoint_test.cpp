@@ -22,7 +22,7 @@ TEST(APIHealthEndpoint, ReturnsOk) {
     auto client = createClient(client_config);
     auto res = client->get("/api/v1/health");
     EXPECT_EQ(res.statusCode, 200);
-    sep::logging::shutdownLogging();
+    sep::logging::Manager::shutdown();
   
 TEST(APIServer, HealthEndpoint) {
     auto port = 12345; // ephemeral for unit test
@@ -76,5 +76,5 @@ TEST(APIHealthEndpoint, ReturnsOk) {
     auto client = createClient(client_config);
     auto res = client->get("/api/v1/health");
     EXPECT_EQ(res.statusCode, 200);
-    sep::logging::shutdownLogging();
+    sep::logging::Manager::shutdown();
 }

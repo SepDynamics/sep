@@ -142,15 +142,15 @@ extern "C" cudaError_t launchProcessPatternKernel(PatternData* patterns, Pattern
 }
 
 cudaError_t ::sep::cuda::launch_pattern_processing(pattern::PatternData* patterns,
-                                                 pattern::PatternData* results,
-                                                 const pattern::PatternConfig& config,
-                                                 size_t pattern_count,
-                                                 const pattern::PatternData* previous_patterns,
-                                                 cudaStream_t stream) {
+                                                  pattern::PatternData* results,
+                                                  const pattern::PatternConfig& config,
+                                                  size_t pattern_count,
+                                                  const pattern::PatternData* previous_patterns,
+                                                  void* stream) {
     dim3 block_size(sep::cuda::constants::get_default_block_size());
     dim3 grid_size((pattern_count + block_size.x - 1) / block_size.x);
 
-    processPatternKernel<<<grid_size, block_size, 0, stream>>>(
+    processPatternKernel<<<grid_size, block_size, 0, reinterpret_cast<cudaStream_t>(stream)>>>(
         patterns, results, config, pattern_count, previous_patterns);
 
     return cudaGetLastError();

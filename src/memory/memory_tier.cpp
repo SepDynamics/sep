@@ -39,7 +39,7 @@ MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nul
         memory_pool_ = std::malloc(config.size);
     } else {
         memory_pool_ = nullptr;
-        cudaError_t err = sep::cuda::allocateManaged(&memory_pool_, config.size);
+        cudaError_t err = sep_cuda_allocate_managed(&memory_pool_, config.size);
         if (err != cudaSuccess) {
             auto logger = sep::logging::Manager::getInstance().getLogger("memory");
             if (logger) {
@@ -80,7 +80,7 @@ MemoryTier::~MemoryTier() {
         if (config_.type == TierType::HOST) {
             std::free(memory_pool_);
         } else {
-            sep::cuda::deallocate(memory_pool_);
+            sep_cuda_deallocate(memory_pool_);
         }
         memory_pool_ = nullptr;
     }
@@ -156,7 +156,7 @@ sep::SEPResult MemoryTier::defragment() {
             if (block.offset != current_offset) {
                 // Move memory to new position
                 void* new_location = static_cast<char*>(memory_pool_) + current_offset;
-                cudaError_t err = sep::cuda::cudaMemcpyAsync(new_location, block.ptr, block.size, cudaMemcpyDefault, nullptr);
+                cudaError_t err = sep_cuda_memcpy_async(new_location, block.ptr, block.size, cudaMemcpyDefault, nullptr);
                 if (err != cudaSuccess) {
                     if (logger) {
                         LOG_ERROR(logger, "Defragment memory copy failed: {}", err);
@@ -267,7 +267,7 @@ bool MemoryTier::moveData(MemoryBlock* dst, const MemoryBlock* src) {
     if (config_.type == TierType::HOST) {
         std::memcpy(dst->ptr, src->ptr, size);
     } else {
-        cudaError_t err = sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+        cudaError_t err = sep_cuda_memcpy_async(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
         if (err != cudaSuccess) {
             if (logger) {
                 LOG_ERROR(logger, "Failed to copy memory: {}", err);
@@ -341,7 +341,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     if (config_.type == TierType::HOST) {
         new_pool = std::malloc(new_size);
     } else {
-        cudaError_t err = sep::cuda::allocateManaged(&new_pool, new_size);
+        cudaError_t err = sep_cuda_allocate_managed(&new_pool, new_size);
         if (err != cudaSuccess) {
             if (logger) {
                 LOG_ERROR(logger, "Failed to allocate managed memory: {}", err);
@@ -367,7 +367,7 @@ bool MemoryTier::resize(std::size_t new_size) {
             if (config_.type == TierType::HOST)
                 std::free(new_pool);
             else {
-                sep::cuda::deallocate(new_pool);
+                sep_cuda_deallocate(new_pool);
             }
             sep::metrics::allocationFailures().value++;
             return false;

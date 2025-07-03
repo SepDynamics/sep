@@ -13,15 +13,15 @@ set(WITH_CYCLES_OPENSUBDIV ON)
 find_package(CUDAToolkit REQUIRED)
 
 add_library(sep_compat STATIC
-    cuda_api.cu
-    core.cu
-    pattern_kernels.cu
-    kernels.cu
-    quantum_kernels.cu
-    utils.cu
     event.cu
+    utils.cu
+    kernels.cu
+    core.cu
+    quantum_kernels.cu
     stream.cpp
+    cuda_api.cu
     raii.cpp
+    pattern_kernels.cu
     hip_compat.cpp
 )
 

@@ -89,8 +89,8 @@ target_link_libraries(sep_engine
         sep_embeddings
         sep_quantum
         sep_memory
+        sep_core   # Foundational library, link before sep_compat
         sep_compat # GPU abstraction, depends on core
-        sep_core   # Foundational library, linked last among SEP libs
 
         # 2. Cycles and its dependencies (order is important here too)
         # Link the main Cycles libs first

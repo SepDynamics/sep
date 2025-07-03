@@ -77,8 +77,3 @@ The script defines variables including `OPENVDB_INCLUDE_DIR`,
 on the system it automatically clones and builds version `v1.13.12.0` under
 `/sep/extern/osl`. After executing it you can build Cycles from `/sep/cycles-build`:
 
-```bash
-cd /sep/cycles-build
-ninja install
-```
-

@@ -79,36 +79,47 @@ target_include_directories(sep_engine
 
 target_link_libraries(sep_engine
     PRIVATE
+        # High-level modules first (they depend on lower-level ones)
         sep_api
-        sep_core
-        sep_compat
-        sep_memory
-        sep_quantum
-        sep_embeddings
-        sep_audio
         sep_blender
-        ${EMBREE_LIBRARIES}
-        ${GLOG_LIBRARIES}
-        ${OIIO_LIBRARIES}
-        ${ZSTD_LIBRARIES}
+        sep_audio
+        sep_embeddings
+        sep_quantum
+        sep_memory
+        sep_compat
+        sep_core
+
+        # External libraries used by our modules
         ${CURL_LIBRARIES}
         http_parser::http_parser
         fmt::fmt
         spdlog::spdlog
-        glog
-        gflags
-        embree4
-        ${HTTP_PARSER_LIBRARY}
+
+        # Cycles components and their direct dependencies
+        ${CYCLES_COMPONENTS}
         extern_cuew
         extern_hipew
+        liboslexec.so
+        liboslcomp.so
+        liboslquery.so
+
+        # External dependencies in correct order
+        ${EMBREE_LIBRARIES}
         ${OpenVDB_LIBRARIES}
         ${OpenPGL_LIBRARIES}
         ${OpenColorIO_LIBRARIES}
-        openvdb
-        OpenColorIO
+        ${OIIO_LIBRARIES}
         Imath
-        tbb
-        embree
-        ${OSL_LIBRARIES}
+        ${TBB_LIBRARIES}
         ${ALEMBIC_LIBRARIES}
+
+        # System libraries
+        ${CMAKE_DL_LIBS}
+        ${Threads_LIBRARIES}
+        ${CUDAToolkit_LIBRARIES}
+        pthread
+        dl
+        rt
+        m
+        z
 )

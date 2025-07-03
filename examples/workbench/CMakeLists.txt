@@ -5,6 +5,8 @@ add_executable(sep_workbench
     main.cpp
     demo_manager.cpp
     demos/genesis_pattern.cpp
+    demos/audio_visualizer.cpp
+    demos/memory_garden.cpp
 )
 
 # Include directories

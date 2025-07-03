@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "core/engine.h"
-#include "blender/cycles_renderer.hpp"
+#include "blender/cycles_renderer.h"
 
 namespace sep {
 namespace workbench {

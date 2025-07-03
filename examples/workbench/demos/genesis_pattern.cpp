@@ -1,8 +1,10 @@
 #include "genesis_pattern.hpp"
 #include "core/engine.h"
-#include "blender/cycles_renderer.hpp"
-#include "quantum/pattern_processor.hpp"
+#include "blender/cycles_renderer.h"
+#include "quantum/processor.h"
+#include "quantum/data.hpp"
 #include "memory/quantum_coherence_manager.h"
+#include <glm/glm.hpp>
 
 namespace sep {
 namespace workbench {
@@ -11,8 +13,8 @@ void GenesisPatternDemo::init() {
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 
-    pattern_processor_ = std::make_unique<PatternProcessor>(engine_);
-    coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+    pattern_processor_ = std::make_unique<sep::pattern::PatternProcessor>();
+    coherence_manager_ = std::make_unique<sep::memory::QuantumCoherenceManager>(sep::memory::QuantumCoherenceManager::Config{});
 
     // Initialize from config
     evolution_rate_ = genesis_config.initial_pattern.evolution_rate;
@@ -25,18 +27,10 @@ void GenesisPatternDemo::initializePatterns() {
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 
-    // Initialize base quantum state patterns
-    QuantumState initial_state;
-    initial_state.evolution_rate = evolution_rate_;
-    initial_state.energy_level = 1.0f;
-    initial_state.coupling_strength = 0.5f;
-    initial_state.dimensions = {
-        genesis_config.initial_pattern.dimensions[0],
-        genesis_config.initial_pattern.dimensions[1],
-        genesis_config.initial_pattern.dimensions[2]
-    };
-
-    pattern_processor_->initializeState(initial_state);
+    pattern::PatternData pattern;
+    pattern.id = "seed";
+    pattern.position = glm::vec4(0.0f);
+    pattern_processor_->addPattern(pattern);
     coherence_manager_->setCoherenceThreshold(coherence_threshold_);
 }
 
@@ -48,48 +42,23 @@ void GenesisPatternDemo::update(float dt) {
 }
 
 void GenesisPatternDemo::evolvePatterns(float dt) {
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
-
-    // Process pattern evolution with configured rate
-    auto result = pattern_processor_->evolvePatterns(dt * evolution_rate_ * genesis_config.evolution.rate_multiplier);
-    
-    // Update coherence metrics
-    coherence_manager_->updateCoherence(result);
-    
-    // Update metrics
-    metrics_.coherence = result.overall_coherence;
-    metrics_.pattern_count = result.pattern_count;
-    metrics_.evolution_rate = evolution_rate_ * genesis_config.evolution.rate_multiplier;
-    metrics_.iterations = genesis_config.evolution.iterations_per_frame;
-    
-    // Trigger visualization update if coherence changes significantly
-    if (result.coherence_delta > genesis_config.visualization.coherence_threshold) {
-        updateVisualization();
-    }
+    (void)dt;
+    pattern_processor_->evolvePatterns();
 }
 
 void GenesisPatternDemo::updateVisualization() {
     if (!renderer_) return;
 
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
-
-    // Update renderer with current pattern state
-    auto pattern_state = pattern_processor_->getCurrentState();
-    
-    // Configure visualization parameters
-    renderer_->setRotation(view_.rotation);
-    renderer_->setZoom(view_.zoom);
-    renderer_->setWireframe(view_.wireframe);
-    
-    // Configure visualization modes from config
-    renderer_->setColorMode(genesis_config.visualization.color_mode);
-    renderer_->setEmissionMode(genesis_config.visualization.emission_mode);
-    renderer_->setRoughnessMode(genesis_config.visualization.roughness_mode);
+    // Update renderer with current patterns
+    const auto& patterns = pattern_processor_->getPatterns();
     
     // Render updated pattern state
-    renderer_->renderPatternState(pattern_state);
+    renderer_->createSceneFromPatterns(patterns);
+    sep::blender::ccl::CyclesRenderer::RenderParams params;
+    params.width = 640;
+    params.height = 480;
+    params.samples = 16;
+    renderer_->renderScene(params);
 }
 
 void GenesisPatternDemo::render() {
@@ -111,9 +80,6 @@ void GenesisPatternDemo::cleanup() {
 }
 
 void GenesisPatternDemo::handleKeyboard(unsigned char key) {
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
-
     switch (key) {
         case ' ':  // Space - toggle auto evolution
             auto_evolve_ = !auto_evolve_;
@@ -122,17 +88,17 @@ void GenesisPatternDemo::handleKeyboard(unsigned char key) {
             view_.wireframe = !view_.wireframe;
             break;
         case '+':  // Increase evolution rate
-            evolution_rate_ *= genesis_config.evolution.rate_step;
-            evolution_rate_ = std::min(evolution_rate_, genesis_config.evolution.max_rate);
+            evolution_rate_ *= rate_step_;
+            evolution_rate_ = std::min(evolution_rate_, max_rate_);
             break;
         case '-':  // Decrease evolution rate
-            evolution_rate_ *= 1.0f / genesis_config.evolution.rate_step;
-            evolution_rate_ = std::max(evolution_rate_, genesis_config.evolution.min_rate);
+            evolution_rate_ *= 1.0f / rate_step_;
+            evolution_rate_ = std::max(evolution_rate_, min_rate_);
             break;
         case 'r':  // Reset view and parameters
             view_.rotation = 0.0f;
             view_.zoom = 1.0f;
-            evolution_rate_ = genesis_config.initial_pattern.evolution_rate;
+            evolution_rate_ = Config::getInstance().genesis_pattern().initial_pattern.evolution_rate;
             break;
         case 'c':  // Cycle color modes
             renderer_->cycleColorMode();
@@ -141,19 +107,15 @@ void GenesisPatternDemo::handleKeyboard(unsigned char key) {
 }
 
 void GenesisPatternDemo::handleMouse(int x, int y, int button) {
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
-
     // Update rotation based on mouse movement
     if (button == 0) {  // Left button
-        view_.rotation += x * genesis_config.controls.rotation_sensitivity;
+        view_.rotation += x * rotation_sensitivity_;
     }
     // Update zoom based on mouse movement
     else if (button == 1) {  // Right button
-        float zoom_delta = y * genesis_config.controls.zoom_sensitivity;
+        float zoom_delta = y * zoom_sensitivity_;
         view_.zoom *= (1.0f + zoom_delta);
-        view_.zoom = std::max(genesis_config.controls.min_zoom,
-                             std::min(view_.zoom, genesis_config.controls.max_zoom));
+        view_.zoom = std::max(min_zoom_, std::min(view_.zoom, max_zoom_));
     }
 }
 

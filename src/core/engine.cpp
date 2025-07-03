@@ -34,7 +34,9 @@ namespace logging = sep::logging;
 
 namespace sep {
 namespace core {
+#if SEP_CUDA_AVAILABLE
 using namespace ::sep::cuda;
+#endif
 
 struct Engine::Impl {
   // CPU fallback buffers

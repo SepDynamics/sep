@@ -1,8 +1,18 @@
 #Custom CUDA toolchain file to bypass CMake's CUDA detection
 
 #Set CUDA compiler and paths - use absolute paths without quotes
-set(CUDA_PATH /usr/local/cuda-12.9) 
+set(CUDA_PATH /usr/local/cuda)
 set(CMAKE_CUDA_COMPILER ${CUDA_PATH}/bin/nvcc)
+
+# Force CUDA settings before project() call
+set(CMAKE_CUDA_ARCHITECTURES "60;61;70;75" CACHE STRING "CUDA architectures" FORCE)
+set(CMAKE_CUDA_COMPILER_WORKS TRUE CACHE INTERNAL "")
+set(CMAKE_CUDA_COMPILER_ID NVIDIA CACHE STRING "CUDA compiler ID" FORCE)
+set(CMAKE_CUDA_COMPILER_VERSION "12.0" CACHE STRING "CUDA version" FORCE)
+set(CMAKE_CUDA_COMPILER_FORCED TRUE CACHE INTERNAL "")
+
+# Skip compiler checks
+set(CMAKE_CUDA_COMPILER_WORKS TRUE)
 
 #Force CUDA compiler ID and version
 set(CMAKE_CUDA_COMPILER_ID "NVIDIA" CACHE STRING "CUDA compiler ID" FORCE) 
@@ -43,10 +53,14 @@ set(CMAKE_CUDA_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "CUDA implici
 #Set CUDA host compiler - use absolute path without quotes
 set(CMAKE_CUDA_HOST_COMPILER /usr/bin/g++-14 CACHE FILEPATH "Host compiler for CUDA" FORCE)
 
-#Set CUDA flags
+# Set CUDA flags for compiler identification
+set(CMAKE_CUDA_FLAGS_INIT "-D__STRICT_ANSI__ -D_GLIBCXX_USE_CXX11_ABI=1")
+set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -D_GLIBCXX_USE_NOEXCEPT_SPEC=0")
+set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} --allow-unsupported-compiler")
+
+# Set CUDA flags for actual compilation
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS_INIT}")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --allow-unsupported-compiler") 
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --pre-include=${CMAKE_SOURCE_DIR}/include/cuda_unified_fix.h")
 
 #Skip compiler checks
 set(CMAKE_CUDA_COMPILER_FORCED TRUE)

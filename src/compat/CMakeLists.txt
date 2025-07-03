@@ -9,8 +9,6 @@ set(WITH_CYCLES_OPENVDB ON)
 set(WITH_CYCLES_OPENCOLORIO ON)
 set(WITH_CYCLES_OPENSUBDIV ON)
 
-# Build full CUDA implementation
-find_package(CUDAToolkit REQUIRED)
 
 add_library(sep_compat STATIC
     stream.cpp
@@ -26,14 +24,15 @@ add_library(sep_compat STATIC
 )
 
 set_source_files_properties(
-    COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
+    pattern_kernels.cu cuda_api.cu event.cu utils.cu kernels.cu core.cu quantum_kernels.cu
+    PROPERTIES COMPILE_FLAGS "${CUDA_NVCC_FLAGS}"
 )
 
 set_target_properties(sep_compat PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     POSITION_INDEPENDENT_CODE ON
-    CUDA_ARCHITECTURES native
+    CUDA_ARCHITECTURES "75;70;61;60"
 )
 
 set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)

@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES C CXX CUDA)
-enable_language(CUDA)
+
+# Load CUDA toolchain file before project declaration
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
+
+# Set C++ standard before project declaration
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
+
+# Add include paths after project declaration
+include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
+
+# Enable CUDA unified fix features
+add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1)
+add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1)
 
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)

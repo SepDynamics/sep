@@ -79,41 +79,48 @@ target_include_directories(sep_engine
 
 target_link_libraries(sep_engine
     PRIVATE
-        # High-level modules first (they depend on lower-level ones)
+        # 1. High-level SEP Engine static libraries
         sep_api
         sep_blender
         sep_audio
         sep_embeddings
         sep_quantum
         sep_memory
-        sep_compat
-        sep_core
+        sep_compat # GPU abstraction, depends on core
+        sep_core   # Foundational library, linked last among SEP libs
 
-        # External libraries used by our modules
+        # 2. Cycles and its dependencies (order is important here too)
+        # Link the main Cycles libs first
+        libcycles_session
+        libcycles_scene
+        libcycles_device
+        libcycles_kernel_osl # The one with the real symbols
+        libcycles_subd
+        cycles_util
+        extern_cuew
+        extern_hipew
+
+        # Now link the external dependencies that Cycles needs
+        OpenImageIO
+        OpenVDB
+        OpenSubdiv
+        ${OSL_LIBRARIES} # Link the real OSL libs, not the stub
+        ${TBB_LIBRARIES}
+
+        # 3. Other direct dependencies
         ${CURL_LIBRARIES}
         http_parser::http_parser
         fmt::fmt
         spdlog::spdlog
+        hiredis
+        pipewire-0.3
 
-        # Cycles components and their direct dependencies
-        ${CYCLES_COMPONENTS}
-        extern_cuew
-        extern_hipew
-        liboslexec.so
-        liboslcomp.so
-        liboslquery.so
-
-        # External dependencies in correct order
+        # 4. System libraries
         ${EMBREE_LIBRARIES}
-        ${OpenVDB_LIBRARIES}
+        Imath
         ${OpenPGL_LIBRARIES}
         ${OpenColorIO_LIBRARIES}
-        ${OIIO_LIBRARIES}
-        Imath
-        ${TBB_LIBRARIES}
         ${ALEMBIC_LIBRARIES}
-
-        # System libraries
         ${CMAKE_DL_LIBS}
         ${Threads_LIBRARIES}
         ${CUDAToolkit_LIBRARIES}

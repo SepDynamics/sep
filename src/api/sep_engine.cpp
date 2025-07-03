@@ -46,7 +46,7 @@ struct SepEngine::Impl
     // PatternEvolution is a static class, no need to instantiate
 
     Impl()
-        : quantum_processor(sep::quantum::createQuantumProcessor({})) // Use factory function
+        : quantum_processor(sep::quantum::createQuantumProcessor({}))
         , memory_manager(sep::memory::MemoryTierManager::getInstance())
         , pattern_processor(std::make_unique<sep::pattern::PatternProcessor>())
     { 

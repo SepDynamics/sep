@@ -47,59 +47,59 @@ Running CMake configuration...
 --   Found OpenImageIO, version 2.5.16.0
 -- Checking for module 'libzstd'
 --   Found libzstd, version 1.5.7
--- Configuring done (1.6s)
+-- Configuring done (1.5s)
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
+[  5%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
 [  4%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
-[  4%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[  4%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
-[  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  6%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  4%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
+[  6%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
 [  8%] Linking C static library libextern_hipew.a
+[  8%] Built target extern_hipew
 [  9%] Linking C static library libextern_cuew.a
-[  9%] Built target extern_hipew
 [  9%] Built target extern_cuew
 [ 11%] Linking CXX static library libsep_embeddings.a
 [ 11%] Built target sep_embeddings
 [ 12%] Linking CXX static library libsep_compat.a
 [ 12%] Built target sep_compat
+[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
 [ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
+[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
+[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
 [ 25%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 26%] Linking CXX static library libsep_core.a
 [ 26%] Built target sep_core
-[ 30%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 31%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 37%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 37%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 30%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 29%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
+[ 30%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 33%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 36%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
+[ 40%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
 [ 40%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 34%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 41%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 37%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 43%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 41%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
 [ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 45%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 47%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 48%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 51%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 52%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 56%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 59%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 61%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 44%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 45%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 52%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 55%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 58%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 [ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
 [ 65%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
@@ -110,21 +110,21 @@ Building SEP Engine...
 [ 70%] Built target sep_blender
 [ 72%] Linking CXX static library libsep_audio.a
 [ 72%] Built target sep_audio
-[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 73%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
 [ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
 [ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 93%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
+[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
+[ 93%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
 [ 94%] Linking CXX static library libsep_memory.a
 [ 94%] Built target sep_memory
 [ 95%] Linking CXX static library libsep_quantum.a
@@ -133,462 +133,19 @@ Building SEP Engine...
 [ 97%] Built target sep_api
 [ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
 [100%] Linking CXX executable sep_engine
-/usr/sbin/ld: warning: libtbb.so.2, needed by /usr/lib64/libopenvdb.so, may conflict with libtbb.so.12
-/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-cycles_renderer.cpp:(.text+0x1c8b): undefined reference to `ccl::Session::Session(ccl::SessionParams const&, ccl::SceneParams const&)'
-/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d2e): undefined reference to `ccl::OIIOOutputDriver::OIIOOutputDriver(OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, OpenImageIO_v2_5::basic_string_view<char, std::char_traits<char> >, std::function<void (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)>)'
-/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d58): undefined reference to `ccl::Session::set_output_driver(std::unique_ptr<ccl::OutputDriver, std::default_delete<ccl::OutputDriver> >)'
-/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d70): undefined reference to `ccl::Session::start()'
-/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d78): undefined reference to `ccl::Session::wait()'
-/usr/sbin/ld: cycles_renderer.cpp:(.text+0x1d80): undefined reference to `ccl::Session::~Session()'
-/usr/sbin/ld: src/blender/libsep_blender.a(cycles_renderer.cpp.o): in function `sep::blender::ccl::CyclesRenderer::render(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [clone .cold]':
-cycles_renderer.cpp:(.text.unlikely+0x276): undefined reference to `ccl::Session::~Session()'
-/usr/sbin/ld: src/memory/libsep_memory.a(memory_tier_manager.cpp.o): in function `sep::memory::MemoryTierManager::launch_pattern_processing(sep::pattern::PatternData*, sep::pattern::PatternData*, sep::pattern::PatternConfig const&, unsigned long, sep::pattern::PatternData const*, void*)':
-memory_tier_manager.cpp:(.text+0xbf9): undefined reference to `sep::cuda::launch_pattern_processing(sep::pattern::PatternData*, sep::pattern::PatternData*, sep::pattern::PatternConfig const&, unsigned long, sep::pattern::PatternData const*, void*)'
-/usr/sbin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::~MemoryTier()':
-memory_tier.cpp:(.text+0x10d0): undefined reference to `sep::cuda::cudaFree(void*)'
-/usr/sbin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::resize(unsigned long)':
-memory_tier.cpp:(.text+0x1626): undefined reference to `sep::cuda::cudaMallocManaged(void**, unsigned long)'
-/usr/sbin/ld: memory_tier.cpp:(.text+0x19e9): undefined reference to `sep::cuda::cudaFree(void*)'
-/usr/sbin/ld: memory_tier.cpp:(.text+0x19f9): undefined reference to `sep::cuda::cudaFree(void*)'
-/usr/sbin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::MemoryTier(sep::memory::MemoryTier::Config const&)':
-memory_tier.cpp:(.text+0x2145): undefined reference to `sep::cuda::cudaMallocManaged(void**, unsigned long)'
-/usr/sbin/ld: src/memory/libsep_memory.a(memory_tier.cpp.o): in function `sep::memory::MemoryTier::defragment()':
-memory_tier.cpp:(.text+0x3e84): undefined reference to `sep::cuda::cudaMemcpy(void*, void const*, unsigned long, int)'
-/usr/sbin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::init(sep::config::APIConfig const&)':
-engine.cpp:(.text+0x41ba): undefined reference to `sep::audio::createAudioCapture()'
-/usr/sbin/ld: src/core/libsep_core.a(engine.cpp.o): in function `sep::core::Engine::process_batch(std::vector<sep::PinState, std::allocator<sep::PinState> > const&, unsigned long, sep::quantum::QBSAResult&, sep::cuda::QSHResult&)':
-engine.cpp:(.text+0x6812): undefined reference to `sep_cuda_process_batch'
-/usr/sbin/ld: engine.cpp:(.text+0x6849): undefined reference to `sep_cuda_process_symmetry'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::Device::build_bvh(ccl::BVH*, ccl::Progress&, bool)':
-device.cpp:(.text+0x5b): undefined reference to `ccl::BVH2::refit(ccl::Progress&)'
-/usr/sbin/ld: device.cpp:(.text+0x70): undefined reference to `ccl::BVH2::build(ccl::Progress&, ccl::Stats*)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(camera.cpp.o): in function `ccl::Camera::update(ccl::Scene*)':
-camera.cpp:(.text+0x6d6): undefined reference to `ccl::transform_from_viewplane(ccl::BoundBox2D&)'
-/usr/sbin/ld: camera.cpp:(.text+0xc08): undefined reference to `ccl::transform_from_viewplane(ccl::BoundBox2D&)'
-/usr/sbin/ld: camera.cpp:(.text+0x4868): undefined reference to `ccl::transform_motion_decompose(ccl::DecomposedTransform*, ccl::Transform const*, unsigned long)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(camera.cpp.o): in function `ccl::Camera::device_update(ccl::Device*, ccl::DeviceScene*, ccl::Scene*)':
-camera.cpp:(.text+0x7cf3): undefined reference to `ccl::util_cdf_invert(int, float, float, ccl::vector<float, ccl::GuardedAllocator<float> > const&, bool, ccl::vector<float, ccl::GuardedAllocator<float> >&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(hair.cpp.o): in function `ccl::Hair::update_shadow_transparency(ccl::Device*, ccl::Scene*, ccl::Progress&)':
-hair.cpp:(.text+0x2748): undefined reference to `ccl::ShaderEval::ShaderEval(ccl::Device*, ccl::Progress&)'
-/usr/sbin/ld: hair.cpp:(.text+0x27c2): undefined reference to `ccl::ShaderEval::eval(ccl::ShaderEvalType, int, int, std::function<int (ccl::device_vector<ccl::KernelShaderEvalInput>&)> const&, std::function<void (ccl::device_vector<float>&)> const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(light.cpp.o): in function `ccl::LightManager::device_update_background(ccl::Device*, ccl::DeviceScene*, ccl::Scene*, ccl::Progress&)':
-light.cpp:(.text+0x48e3): undefined reference to `ccl::ShaderEval::ShaderEval(ccl::Device*, ccl::Progress&)'
-/usr/sbin/ld: light.cpp:(.text+0x49ac): undefined reference to `ccl::ShaderEval::eval(ccl::ShaderEvalType, int, int, std::function<int (ccl::device_vector<ccl::KernelShaderEvalInput>&)> const&, std::function<void (ccl::device_vector<float>&)> const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(light.cpp.o): in function `ccl::LightManager::device_update_ies(ccl::DeviceScene*)':
-light.cpp:(.text+0x723f): undefined reference to `ccl::IESFile::clear()'
-/usr/sbin/ld: light.cpp:(.text+0x72ec): undefined reference to `ccl::IESFile::~IESFile()'
-/usr/sbin/ld: light.cpp:(.text+0x7325): undefined reference to `ccl::IESFile::packed_size()'
-/usr/sbin/ld: light.cpp:(.text+0x73dd): undefined reference to `ccl::IESFile::pack(float*)'
-/usr/sbin/ld: light.cpp:(.text+0x7403): undefined reference to `ccl::IESFile::packed_size()'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(light.cpp.o): in function `ccl::LightManager::add_ies(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-light.cpp:(.text+0x7675): undefined reference to `ccl::IESFile::~IESFile()'
-/usr/sbin/ld: light.cpp:(.text+0x7696): undefined reference to `ccl::IESFile::load(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(light.cpp.o): in function `std::unique_ptr<ccl::LightManager::IESSlot, std::default_delete<ccl::LightManager::IESSlot> >::~unique_ptr()':
-light.cpp:(.text._ZNSt10unique_ptrIN3ccl12LightManager7IESSlotESt14default_deleteIS2_EED2Ev[_ZNSt10unique_ptrIN3ccl12LightManager7IESSlotESt14default_deleteIS2_EED2Ev]+0x13): undefined reference to `ccl::IESFile::~IESFile()'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(mesh.cpp.o): in function `ccl::Mesh::apply_transform(ccl::Transform const&, bool)':
-mesh.cpp:(.text+0x21b6): undefined reference to `ccl::transform_transposed_inverse(ccl::Transform const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(object.cpp.o): in function `ccl::Object::compute_bounds(bool)':
-object.cpp:(.text+0x3fe): undefined reference to `ccl::transform_motion_decompose(ccl::DecomposedTransform*, ccl::Transform const*, unsigned long)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(object.cpp.o): in function `ccl::ObjectManager::device_update_object_transform(ccl::UpdateObjectTransformState*, ccl::Object*, bool, ccl::Scene const*)':
-object.cpp:(.text+0x362e): undefined reference to `ccl::transform_motion_decompose(ccl::DecomposedTransform*, ccl::Transform const*, unsigned long)'
-/usr/sbin/ld: object.cpp:(.text+0x377c): undefined reference to `ccl::util_murmur_hash3(void const*, int, unsigned int)'
-/usr/sbin/ld: object.cpp:(.text+0x3797): undefined reference to `ccl::util_murmur_hash3(void const*, int, unsigned int)'
-/usr/sbin/ld: object.cpp:(.text+0x37a1): undefined reference to `ccl::util_hash_to_float(unsigned int)'
-/usr/sbin/ld: object.cpp:(.text+0x37b0): undefined reference to `ccl::util_hash_to_float(unsigned int)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(object.cpp.o): in function `ccl::ObjectManager::get_cryptomatte_objects[abi:cxx11](ccl::Scene*)':
-object.cpp:(.text+0x5bd5): undefined reference to `ccl::util_murmur_hash3(void const*, int, unsigned int)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(object.cpp.o): in function `ccl::ObjectManager::get_cryptomatte_assets[abi:cxx11](ccl::Scene*)':
-object.cpp:(.text+0x5ec8): undefined reference to `ccl::util_murmur_hash3(void const*, int, unsigned int)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(scene.cpp.o): in function `std::vector<std::unique_ptr<ccl::LightManager::IESSlot, std::default_delete<ccl::LightManager::IESSlot> >, ccl::GuardedAllocator<std::unique_ptr<ccl::LightManager::IESSlot, std::default_delete<ccl::LightManager::IESSlot> > > >::~vector()':
-scene.cpp:(.text._ZNSt6vectorISt10unique_ptrIN3ccl12LightManager7IESSlotESt14default_deleteIS3_EENS1_16GuardedAllocatorIS6_EEED2Ev[_ZNSt6vectorISt10unique_ptrIN3ccl12LightManager7IESSlotESt14default_deleteIS3_EENS1_16GuardedAllocatorIS6_EEED2Ev]+0x3c): undefined reference to `ccl::IESFile::~IESFile()'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(shader.cpp.o): in function `ccl::ShaderManager::device_update_common(ccl::Device*, ccl::DeviceScene*, ccl::Scene*, ccl::Progress&)':
-shader.cpp:(.text+0x2785): undefined reference to `ccl::util_murmur_hash3(void const*, int, unsigned int)'
-/usr/sbin/ld: shader.cpp:(.text+0x27dc): undefined reference to `ccl::util_hash_to_float(unsigned int)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(shader.cpp.o): in function `ccl::ShaderManager::get_cryptomatte_materials[abi:cxx11](ccl::Scene*)':
-shader.cpp:(.text+0x3935): undefined reference to `ccl::util_murmur_hash3(void const*, int, unsigned int)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(shader.cpp.o): in function `ccl::to_scene_linear_transform(std::shared_ptr<OpenColorIO_v2_4::Config const>&, char const*, ccl::Transform&)':
-shader.cpp:(.text+0x3b35): undefined reference to `ccl::transform_transposed_inverse(ccl::Transform const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(shader_nodes.cpp.o): in function `ccl::TextureMapping::compute_transform()':
-shader_nodes.cpp:(.text+0xd06): undefined reference to `ccl::transform_transposed_inverse(ccl::Transform const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(shader_nodes.cpp.o): in function `ccl::SkyTextureNode::get_sun_average_radiance()':
-shader_nodes.cpp:(.text+0x34d9): undefined reference to `SKY_nishita_skymodel_precompute_sun'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(shader_nodes.cpp.o): in function `ccl::SkyTextureNode::compile(ccl::SVMCompiler&)':
-shader_nodes.cpp:(.text+0x38ae): undefined reference to `SKY_nishita_skymodel_precompute_sun'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(shader_nodes.cpp.o): in function `ccl::SkyTextureNode::compile(ccl::OSLCompiler&)':
-shader_nodes.cpp:(.text+0x3e3b): undefined reference to `SKY_nishita_skymodel_precompute_sun'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(film.cpp.o): in function `ccl::Film::device_update(ccl::Device*, ccl::DeviceScene*, ccl::Scene*)':
-film.cpp:(.text+0xd8b): undefined reference to `ccl::util_cdf_invert(int, float, float, ccl::vector<float, ccl::GuardedAllocator<float> > const&, bool, ccl::vector<float, ccl::GuardedAllocator<float> >&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(integrator.cpp.o): in function `ccl::Integrator::get_adaptive_sampling() const':
-integrator.cpp:(.text+0xd73): undefined reference to `ccl::AdaptiveSampling::AdaptiveSampling()'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CPUDevice::build_bvh(ccl::BVH*, ccl::Progress&, bool)':
-device_impl.cpp:(.text+0x17ce): undefined reference to `ccl::BVHEmbree::refit(ccl::Progress&)'
-/usr/sbin/ld: device_impl.cpp:(.text+0x17f6): undefined reference to `ccl::BVHEmbree::build(ccl::Progress&, ccl::Stats*, RTCDeviceTy*, bool)'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_cuda_init()':
-device.cpp:(.text+0x21): undefined reference to `cuewInit'
-/usr/sbin/ld: device.cpp:(.text+0x1db): undefined reference to `cuewCompilerPath'
-/usr/sbin/ld: device.cpp:(.text+0x261): undefined reference to `cuewCompilerPath'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_cuda_info(ccl::vector<ccl::DeviceInfo, ccl::GuardedAllocator<ccl::DeviceInfo> >&)':
-device.cpp:(.text+0x419): undefined reference to `cuewErrorString'
-/usr/sbin/ld: device.cpp:(.text+0x97c): undefined reference to `cuewErrorString'
-/usr/sbin/ld: device.cpp:(.text+0xee2): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_cuda_capabilities[abi:cxx11]()':
-device.cpp:(.text+0x10a1): undefined reference to `cuewErrorString'
-/usr/sbin/ld: device.cpp:(.text+0x1159): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):device_impl.cpp:(.text+0x1ed): more undefined references to `cuewErrorString' follow
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::compile_kernel(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*, char const*, bool)':
-device_impl.cpp:(.text+0x1804): undefined reference to `cuewCompilerPath'
-/usr/sbin/ld: device_impl.cpp:(.text+0x181a): undefined reference to `cuewCompilerVersion'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::load_kernels(unsigned int)':
-device_impl.cpp:(.text+0x28e3): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::free_device(void*)':
-device_impl.cpp:(.text+0x2ecb): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::shared_to_device_pointer(void const*)':
-device_impl.cpp:(.text+0x305d): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::copy_host_to_device(void*, void*, unsigned long)':
-device_impl.cpp:(.text+0x314b): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::CUDADevice::tex_copy_to(ccl::device_texture&)':
-device_impl.cpp:(.text+0x351c): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o):device_impl.cpp:(.text+0x3623): more undefined references to `cuewErrorString' follow
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_hip_init()':
-device.cpp:(.text+0x1f): undefined reference to `hipewInit'
-/usr/sbin/ld: device.cpp:(.text+0x328): undefined reference to `hipewCompilerPath'
-/usr/sbin/ld: device.cpp:(.text+0x3a4): undefined reference to `hipewCompilerPath'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_hip_info(ccl::vector<ccl::DeviceInfo, ccl::GuardedAllocator<ccl::DeviceInfo> >&)':
-device.cpp:(.text+0x507): undefined reference to `hipInit'
-/usr/sbin/ld: device.cpp:(.text+0x529): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device.cpp:(.text+0x55d): undefined reference to `hipGetDeviceCount'
-/usr/sbin/ld: device.cpp:(.text+0x5ad): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: device.cpp:(.text+0x5d8): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device.cpp:(.text+0x60e): undefined reference to `hipDeviceGetName'
-/usr/sbin/ld: device.cpp:(.text+0x8b7): undefined reference to `hipDeviceCanAccessPeer'
-/usr/sbin/ld: device.cpp:(.text+0xf02): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::device_hip_capabilities[abi:cxx11]()':
-device.cpp:(.text+0xfa7): undefined reference to `hipInit'
-/usr/sbin/ld: device.cpp:(.text+0x1014): undefined reference to `hipGetDeviceCount'
-/usr/sbin/ld: device.cpp:(.text+0x109a): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device.cpp:(.text+0x1155): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device.cpp:(.text+0x126d): undefined reference to `hipDeviceGetName'
-/usr/sbin/ld: device.cpp:(.text+0x1436): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: device.cpp:(.text+0x14ab): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: device.cpp:(.text+0x1520): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: device.cpp:(.text+0x1595): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: device.cpp:(.text+0x160a): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o):device.cpp:(.text+0x167f): more undefined references to `hipDeviceGetAttribute' follow
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::HIPDevice(ccl::DeviceInfo const&, ccl::Stats&, ccl::Profiler&, bool)':
-device_impl.cpp:(.text+0x1df): undefined reference to `hipInit'
-/usr/sbin/ld: device_impl.cpp:(.text+0x1ee): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x225): undefined reference to `hipDeviceGet'
-/usr/sbin/ld: device_impl.cpp:(.text+0x23b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x26b): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: device_impl.cpp:(.text+0x286): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x306): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x38b): undefined reference to `hipCtxCreate'
-/usr/sbin/ld: device_impl.cpp:(.text+0x39d): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x42a): undefined reference to `hipRuntimeGetVersion'
-/usr/sbin/ld: device_impl.cpp:(.text+0x43e): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x499): undefined reference to `hipCtxPopCurrent'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::~HIPDevice()':
-device_impl.cpp:(.text+0x577): undefined reference to `hipModuleUnload'
-/usr/sbin/ld: device_impl.cpp:(.text+0x584): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5df): undefined reference to `hipCtxDestroy'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5f3): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::support_device(unsigned int)':
-device_impl.cpp:(.text+0x709): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: device_impl.cpp:(.text+0x737): undefined reference to `hipGetDevicePropertiesR0600'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::check_peer_access(ccl::Device*)':
-device_impl.cpp:(.text+0x803): undefined reference to `hipDeviceCanAccessPeer'
-/usr/sbin/ld: device_impl.cpp:(.text+0x822): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x889): undefined reference to `hipDeviceGetP2PAttribute'
-/usr/sbin/ld: device_impl.cpp:(.text+0x8ad): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x91d): undefined reference to `hipCtxEnablePeerAccess'
-/usr/sbin/ld: device_impl.cpp:(.text+0x934): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x9bf): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::compile_kernel[abi:cxx11](unsigned int, char const*, char const*)':
-device_impl.cpp:(.text+0x11ed): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: device_impl.cpp:(.text+0x1226): undefined reference to `hipGetDevicePropertiesR0600'
-/usr/sbin/ld: device_impl.cpp:(.text+0x19df): undefined reference to `hipewCompilerPath'
-/usr/sbin/ld: device_impl.cpp:(.text+0x19f0): undefined reference to `hipewCompilerVersion'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::load_kernels(unsigned int)':
-device_impl.cpp:(.text+0x2960): undefined reference to `hipModuleLoadData'
-/usr/sbin/ld: device_impl.cpp:(.text+0x297a): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::reserve_local_memory(unsigned int)':
-device_impl.cpp:(.text+0x2b3f): undefined reference to `hipMemGetInfo'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_device_memory_info(unsigned long&, unsigned long&)':
-device_impl.cpp:(.text+0x2e68): undefined reference to `hipMemGetInfo'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::alloc_device(void*&, unsigned long)':
-device_impl.cpp:(.text+0x2eb8): undefined reference to `hipMalloc'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::free_device(void*)':
-device_impl.cpp:(.text+0x2f0b): undefined reference to `hipFree'
-/usr/sbin/ld: device_impl.cpp:(.text+0x2f1b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::shared_alloc(void*&, unsigned long)':
-device_impl.cpp:(.text+0x2fd8): undefined reference to `hipHostMalloc'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::shared_free(void*)':
-device_impl.cpp:(.text+0x3038): undefined reference to `hipHostFree'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::shared_to_device_pointer(void const*)':
-device_impl.cpp:(.text+0x3096): undefined reference to `hipHostGetDevicePointer'
-/usr/sbin/ld: device_impl.cpp:(.text+0x30ad): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::copy_host_to_device(void*, void*, unsigned long)':
-device_impl.cpp:(.text+0x3185): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x319b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::tex_copy_to(ccl::device_texture&)':
-device_impl.cpp:(.text+0x354e): undefined reference to `hipDrvMemcpy3D'
-/usr/sbin/ld: device_impl.cpp:(.text+0x3564): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x3659): undefined reference to `hipDrvMemcpy2DUnaligned'
-/usr/sbin/ld: device_impl.cpp:(.text+0x366b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::tex_free(ccl::device_texture&)':
-device_impl.cpp:(.text+0x39ce): undefined reference to `hipTexObjectDestroy'
-/usr/sbin/ld: device_impl.cpp:(.text+0x39f3): undefined reference to `hipArrayDestroy'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::tex_alloc(ccl::device_texture&)':
-device_impl.cpp:(.text+0x3dcb): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x3f43): undefined reference to `hipArray3DCreate'
-/usr/sbin/ld: device_impl.cpp:(.text+0x3f5d): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x408b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x42c5): undefined reference to `hipDrvMemcpy2DUnaligned'
-/usr/sbin/ld: device_impl.cpp:(.text+0x42db): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x4429): undefined reference to `hipDrvMemcpy3D'
-/usr/sbin/ld: device_impl.cpp:(.text+0x443b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x47ac): undefined reference to `hipTexObjectCreate'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::mem_copy_from(ccl::device_memory&, unsigned long, unsigned long, unsigned long, unsigned long)':
-device_impl.cpp:(.text+0x4da8): undefined reference to `hipMemcpyDtoH'
-/usr/sbin/ld: device_impl.cpp:(.text+0x4dc8): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::mem_zero(ccl::device_memory&)':
-device_impl.cpp:(.text+0x4eec): undefined reference to `hipMemsetD8'
-/usr/sbin/ld: device_impl.cpp:(.text+0x4f2b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::const_copy_to(char const*, void*, unsigned long)':
-device_impl.cpp:(.text+0x50d7): undefined reference to `hipModuleGetGlobal'
-/usr/sbin/ld: device_impl.cpp:(.text+0x50fc): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x55b9): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x55da): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x561a): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5636): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5676): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5697): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x56d7): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x56f8): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5738): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5759): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5799): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x57ba): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x57fa): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x581b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x585b): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x587c): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x58bc): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x58dd): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x591d): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x593e): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x597e): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x599f): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x59df): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5a00): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5a40): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5a61): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5aa1): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5ac2): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5b02): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5b23): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5b63): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5b84): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5bc4): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5be5): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5c25): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5c46): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5c86): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5ca7): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5ce7): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5d08): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5d48): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5d69): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5da9): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5dca): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5e0a): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5e2b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5e6b): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5e8c): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5ecc): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5eed): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5f2d): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5f4e): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5f8e): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5faf): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x5fef): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6010): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6050): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6071): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x60b1): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x60d2): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6112): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6133): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6173): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6194): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x61d4): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x61f5): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6235): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6256): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6296): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x62b7): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x62f7): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6318): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6358): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6379): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x63b9): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x63da): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x641a): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x643b): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x647b): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x649c): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x64dc): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x64fd): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x653d): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x655e): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x659e): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x65bf): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x65ff): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6620): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6660): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6681): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x66c1): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x66e2): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6722): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6743): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x6783): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x67a4): undefined reference to `hipewErrorString'
-/usr/sbin/ld: device_impl.cpp:(.text+0x67e1): undefined reference to `hipMemcpyHtoD'
-/usr/sbin/ld: device_impl.cpp:(.text+0x67fe): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_num_multiprocessors()':
-device_impl.cpp:(.text+0x6c90): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_device_default_attribute(hipDeviceAttribute_t, int)':
-device_impl.cpp:(.text+0x6d07): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_max_num_threads_per_multiprocessor()':
-device_impl.cpp:(.text+0x6d70): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device_impl.cpp.o): in function `ccl::HIPDevice::get_device_attribute(hipDeviceAttribute_t, int*)':
-device_impl.cpp:(.text+0x6de0): undefined reference to `hipDeviceGetAttribute'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(kernel.cpp.o): in function `ccl::HIPDeviceKernels::load(ccl::HIPDevice*)':
-kernel.cpp:(.text+0x150): undefined reference to `hipModuleGetFunction'
-/usr/sbin/ld: kernel.cpp:(.text+0x160): undefined reference to `hipewErrorString'
-/usr/sbin/ld: kernel.cpp:(.text+0x1c5): undefined reference to `hipFuncSetCacheConfig'
-/usr/sbin/ld: kernel.cpp:(.text+0x1d2): undefined reference to `hipewErrorString'
-/usr/sbin/ld: kernel.cpp:(.text+0x243): undefined reference to `hipModuleOccupancyMaxPotentialBlockSize'
-/usr/sbin/ld: kernel.cpp:(.text+0x254): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::HIPDeviceQueue(ccl::HIPDevice*)':
-queue.cpp:(.text+0x3e): undefined reference to `hipStreamCreateWithFlags'
-/usr/sbin/ld: queue.cpp:(.text+0x50): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::~HIPDeviceQueue()':
-queue.cpp:(.text+0x137): undefined reference to `hipStreamDestroy'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::init_execution()':
-queue.cpp:(.text+0x426): undefined reference to `hipDeviceSynchronize'
-/usr/sbin/ld: queue.cpp:(.text+0x433): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::enqueue(ccl::DeviceKernel, int, ccl::DeviceKernelArguments const&)':
-queue.cpp:(.text+0x552): undefined reference to `hipDeviceSynchronize'
-/usr/sbin/ld: queue.cpp:(.text+0x55f): undefined reference to `hipewErrorString'
-/usr/sbin/ld: queue.cpp:(.text+0x62d): undefined reference to `hipModuleLaunchKernel'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::assert_success(hipError_t, char const*)':
-queue.cpp:(.text+0x70c): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::synchronize()':
-queue.cpp:(.text+0x80e): undefined reference to `hipStreamSynchronize'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::zero_to_device(ccl::device_memory&)':
-queue.cpp:(.text+0x8cd): undefined reference to `hipMemsetD8Async'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::copy_to_device(ccl::device_memory&)':
-queue.cpp:(.text+0x99d): undefined reference to `hipMemcpyHtoDAsync'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(queue.cpp.o): in function `ccl::HIPDeviceQueue::copy_from_device(ccl::device_memory&)':
-queue.cpp:(.text+0xa56): undefined reference to `hipMemcpyDtoHAsync'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(util.cpp.o): in function `ccl::HIPContextScope::HIPContextScope(ccl::HIPDevice*)':
-util.cpp:(.text+0x10): undefined reference to `hipCtxPushCurrent'
-/usr/sbin/ld: util.cpp:(.text+0x24): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(util.cpp.o): in function `ccl::HIPContextScope::~HIPContextScope()':
-util.cpp:(.text+0xbb): undefined reference to `hipCtxPopCurrent'
-/usr/sbin/ld: util.cpp:(.text+0xca): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(device.cpp.o): in function `ccl::MultiDevice::build_bvh(ccl::BVH*, ccl::Progress&, bool)':
-device.cpp:(.text._ZN3ccl11MultiDevice9build_bvhEPNS_3BVHERNS_8ProgressEb[_ZN3ccl11MultiDevice9build_bvhEPNS_3BVHERNS_8ProgressEb]+0x367): undefined reference to `ccl::BVH::create(ccl::BVHParams const&, ccl::vector<ccl::Geometry*, ccl::GuardedAllocator<ccl::Geometry*> > const&, ccl::vector<ccl::Object*, ccl::GuardedAllocator<ccl::Object*> > const&, ccl::Device*)'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::CUDADeviceGraphicsInterop::free()':
-graphics_interop.cpp:(.text+0xb5): undefined reference to `cuewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x130): undefined reference to `cuewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x1ab): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::CUDADeviceGraphicsInterop::set_buffer(ccl::GraphicsInteropBuffer&)':
-graphics_interop.cpp:(.text+0x295): undefined reference to `ccl::GraphicsInteropBuffer::is_empty() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x2ae): undefined reference to `ccl::GraphicsInteropBuffer::take_zero()'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x2b9): undefined reference to `ccl::GraphicsInteropBuffer::has_new_handle() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x2d1): undefined reference to `ccl::GraphicsInteropBuffer::get_type() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x2f5): undefined reference to `ccl::GraphicsInteropBuffer::take_handle()'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x34d): undefined reference to `cuewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x3b1): undefined reference to `ccl::GraphicsInteropBuffer::take_handle()'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x3bd): undefined reference to `ccl::GraphicsInteropBuffer::get_size() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x430): undefined reference to `cuewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x45f): undefined reference to `ccl::GraphicsInteropBuffer::get_size() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x470): undefined reference to `ccl::GraphicsInteropBuffer::get_size() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x543): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::CUDADeviceGraphicsInterop::map()':
-graphics_interop.cpp:(.text+0x66d): undefined reference to `cuewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x6e1): undefined reference to `cuewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x78a): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::CUDADeviceGraphicsInterop::unmap()':
-graphics_interop.cpp:(.text+0x8cb): undefined reference to `cuewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::HIPDeviceGraphicsInterop::free()':
-graphics_interop.cpp:(.text+0x98): undefined reference to `hipGraphicsUnregisterResource'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0xa5): undefined reference to `hipewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x113): undefined reference to `hipFree'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x120): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::HIPDeviceGraphicsInterop::set_buffer(ccl::GraphicsInteropBuffer&)':
-graphics_interop.cpp:(.text+0x200): undefined reference to `ccl::GraphicsInteropBuffer::is_empty() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x219): undefined reference to `ccl::GraphicsInteropBuffer::take_zero()'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x224): undefined reference to `ccl::GraphicsInteropBuffer::has_new_handle() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x23c): undefined reference to `ccl::GraphicsInteropBuffer::get_type() const'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x24c): undefined reference to `hipGraphicsGLRegisterBuffer'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x257): undefined reference to `ccl::GraphicsInteropBuffer::take_handle()'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x2ab): undefined reference to `hipewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x2d3): undefined reference to `ccl::GraphicsInteropBuffer::get_size() const'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::HIPDeviceGraphicsInterop::map()':
-graphics_interop.cpp:(.text+0x373): undefined reference to `hipGraphicsMapResources'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x39d): undefined reference to `hipewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x3f7): undefined reference to `hipGraphicsResourceGetMappedPointer'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x411): undefined reference to `hipewErrorString'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x48d): undefined reference to `hipMemsetD8Async'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x4ba): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_device.a(graphics_interop.cpp.o): in function `ccl::HIPDeviceGraphicsInterop::unmap()':
-graphics_interop.cpp:(.text+0x5d4): undefined reference to `hipGraphicsUnmapResources'
-/usr/sbin/ld: graphics_interop.cpp:(.text+0x5fb): undefined reference to `hipewErrorString'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(geometry.cpp.o): in function `ccl::GeometryManager::device_update(ccl::Device*, ccl::DeviceScene*, ccl::Scene*, ccl::Progress&)':
-geometry.cpp:(.text+0x2990): undefined reference to `ccl::BVHParams::best_bvh_layout(ccl::KernelBVHLayout, int)'
-/usr/sbin/ld: geometry.cpp:(.text+0x350d): undefined reference to `ccl::BVHParams::best_bvh_layout(ccl::KernelBVHLayout, int)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(geometry_bvh.cpp.o): in function `ccl::Geometry::compute_bvh(ccl::Device*, ccl::DeviceScene*, ccl::SceneParams*, ccl::Progress*, unsigned long, unsigned long)':
-geometry_bvh.cpp:(.text+0x7c): undefined reference to `ccl::BVHParams::best_bvh_layout(ccl::KernelBVHLayout, int)'
-/usr/sbin/ld: geometry_bvh.cpp:(.text+0x3bf): undefined reference to `ccl::BVH::create(ccl::BVHParams const&, ccl::vector<ccl::Geometry*, ccl::GuardedAllocator<ccl::Geometry*> > const&, ccl::vector<ccl::Object*, ccl::GuardedAllocator<ccl::Object*> > const&, ccl::Device*)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(geometry_bvh.cpp.o): in function `ccl::GeometryManager::device_update_bvh(ccl::Device*, ccl::DeviceScene*, ccl::Scene*, ccl::Progress&)':
-geometry_bvh.cpp:(.text+0x887): undefined reference to `ccl::BVHParams::best_bvh_layout(ccl::KernelBVHLayout, int)'
-/usr/sbin/ld: geometry_bvh.cpp:(.text+0x97b): undefined reference to `ccl::bvh_layout_name(ccl::KernelBVHLayout)'
-/usr/sbin/ld: geometry_bvh.cpp:(.text+0xa11): undefined reference to `ccl::BVH::create(ccl::BVHParams const&, ccl::vector<ccl::Geometry*, ccl::GuardedAllocator<ccl::Geometry*> > const&, ccl::vector<ccl::Object*, ccl::GuardedAllocator<ccl::Object*> > const&, ccl::Device*)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(mesh_displace.cpp.o): in function `ccl::GeometryManager::displace(ccl::Device*, ccl::Scene*, ccl::Mesh*, ccl::Progress&)':
-mesh_displace.cpp:(.text+0x1d7): undefined reference to `ccl::ShaderEval::ShaderEval(ccl::Device*, ccl::Progress&)'
-/usr/sbin/ld: mesh_displace.cpp:(.text+0x257): undefined reference to `ccl::ShaderEval::eval(ccl::ShaderEvalType, int, int, std::function<int (ccl::device_vector<ccl::KernelShaderEvalInput>&)> const&, std::function<void (ccl::device_vector<float>&)> const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(mesh_subdivision.cpp.o): in function `ccl::Mesh::tessellate(ccl::SubdParams&)':
-mesh_subdivision.cpp:(.text+0x73): undefined reference to `ccl::OsdData::build(ccl::OsdMesh&)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0xfb): undefined reference to `vtable for ccl::OsdPatch'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x542): undefined reference to `ccl::DiagSplit::DiagSplit(ccl::SubdParams const&)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x556): undefined reference to `ccl::DiagSplit::split_patches(ccl::Patch const*, unsigned long)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x573): undefined reference to `ccl::SubdAttributeInterpolation::SubdAttributeInterpolation(ccl::Mesh&, ccl::OsdMesh&, ccl::OsdData&)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x59b): undefined reference to `ccl::EdgeDice::EdgeDice(ccl::SubdParams const&, int, int, ccl::SubdAttributeInterpolation&)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x5ad): undefined reference to `ccl::EdgeDice::dice(ccl::DiagSplit const&)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x608): undefined reference to `ccl::DiagSplit::DiagSplit(ccl::SubdParams const&)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x61c): undefined reference to `ccl::DiagSplit::split_patches(ccl::Patch const*, unsigned long)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x639): undefined reference to `ccl::SubdAttributeInterpolation::SubdAttributeInterpolation(ccl::Mesh&, ccl::OsdMesh&, ccl::OsdData&)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x661): undefined reference to `ccl::EdgeDice::EdgeDice(ccl::SubdParams const&, int, int, ccl::SubdAttributeInterpolation&)'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text+0x673): undefined reference to `ccl::EdgeDice::dice(ccl::DiagSplit const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(mesh_subdivision.cpp.o): in function `ccl::OsdData::~OsdData()':
-mesh_subdivision.cpp:(.text._ZN3ccl7OsdDataD2Ev[_ZN3ccl7OsdDataD2Ev]+0x79): undefined reference to `OpenSubdiv::v3_6_0::Far::PatchTable::~PatchTable()'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text._ZN3ccl7OsdDataD2Ev[_ZN3ccl7OsdDataD2Ev]+0x9e): undefined reference to `OpenSubdiv::v3_6_0::Far::TopologyRefiner::~TopologyRefiner()'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(mesh_subdivision.cpp.o): in function `std::vector<ccl::OsdPatch, ccl::GuardedAllocator<ccl::OsdPatch> >::vector(unsigned long, ccl::OsdPatch const&, ccl::GuardedAllocator<ccl::OsdPatch> const&)':
-mesh_subdivision.cpp:(.text._ZNSt6vectorIN3ccl8OsdPatchENS0_16GuardedAllocatorIS1_EEEC2EmRKS1_RKS3_[_ZNSt6vectorIN3ccl8OsdPatchENS0_16GuardedAllocatorIS1_EEEC2EmRKS1_RKS3_]+0xb0): undefined reference to `vtable for ccl::OsdPatch'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text._ZNSt6vectorIN3ccl8OsdPatchENS0_16GuardedAllocatorIS1_EEEC2EmRKS1_RKS3_[_ZNSt6vectorIN3ccl8OsdPatchENS0_16GuardedAllocatorIS1_EEEC2EmRKS1_RKS3_]+0xe3): undefined reference to `vtable for ccl::OsdPatch'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(mesh_subdivision.cpp.o): in function `std::vector<ccl::LinearQuadPatch, ccl::GuardedAllocator<ccl::LinearQuadPatch> >::vector(unsigned long, ccl::GuardedAllocator<ccl::LinearQuadPatch> const&)':
-mesh_subdivision.cpp:(.text._ZNSt6vectorIN3ccl15LinearQuadPatchENS0_16GuardedAllocatorIS1_EEEC2EmRKS3_[_ZNSt6vectorIN3ccl15LinearQuadPatchENS0_16GuardedAllocatorIS1_EEEC2EmRKS3_]+0x88): undefined reference to `vtable for ccl::LinearQuadPatch'
-/usr/sbin/ld: mesh_subdivision.cpp:(.text._ZNSt6vectorIN3ccl15LinearQuadPatchENS0_16GuardedAllocatorIS1_EEEC2EmRKS3_[_ZNSt6vectorIN3ccl15LinearQuadPatchENS0_16GuardedAllocatorIS1_EEEC2EmRKS3_]+0xf0): undefined reference to `vtable for ccl::LinearQuadPatch'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(constant_fold.cpp.o): in function `ccl::ConstantFolder::make_constant(ccl::float3) const':
-constant_fold.cpp:(.text+0x30f): undefined reference to `ccl::operator<<(std::ostream&, ccl::float3 const&)'
-/usr/sbin/ld: /sep/lib/libcycles_scene.a(image_sky.cpp.o): in function `tbb::detail::d1::start_for<tbb::detail::d1::blocked_range<unsigned long>, ccl::SkyLoader::load_pixels(ccl::ImageMetaData const&, void*, unsigned long, bool)::$_0, tbb::detail::d1::auto_partitioner const>::execute(tbb::detail::d1::execution_data&)':
-image_sky.cpp:(.text+0x86f): undefined reference to `SKY_nishita_skymodel_precompute_texture'
-/usr/sbin/ld: image_sky.cpp:(.text+0x932): undefined reference to `SKY_nishita_skymodel_precompute_texture'
+/usr/sbin/ld: cannot find -llibcycles_session: No such file or directory
+/usr/sbin/ld: note to link with /sep/lib/libcycles_session.a use -l:libcycles_session.a or rename it to liblibcycles_session.a
+/usr/sbin/ld: cannot find -llibcycles_scene: No such file or directory
+/usr/sbin/ld: note to link with /sep/lib/libcycles_scene.a use -l:libcycles_scene.a or rename it to liblibcycles_scene.a
+/usr/sbin/ld: cannot find -llibcycles_device: No such file or directory
+/usr/sbin/ld: note to link with /sep/lib/libcycles_device.a use -l:libcycles_device.a or rename it to liblibcycles_device.a
+/usr/sbin/ld: cannot find -llibcycles_kernel_osl: No such file or directory
+/usr/sbin/ld: note to link with /sep/lib/libcycles_kernel_osl.a use -l:libcycles_kernel_osl.a or rename it to liblibcycles_kernel_osl.a
+/usr/sbin/ld: cannot find -llibcycles_subd: No such file or directory
+/usr/sbin/ld: note to link with /sep/lib/libcycles_subd.a use -l:libcycles_subd.a or rename it to liblibcycles_subd.a
+/usr/sbin/ld: cannot find -lOpenVDB: No such file or directory
+/usr/sbin/ld: cannot find -lOpenSubdiv: No such file or directory
 collect2: error: ld returned 1 exit status
-make[2]: *** [CMakeFiles/sep_engine.dir/build.make:145: sep_engine] Error 1
+make[2]: *** [CMakeFiles/sep_engine.dir/build.make:138: sep_engine] Error 1
 make[1]: *** [CMakeFiles/Makefile2:324: CMakeFiles/sep_engine.dir/all] Error 2
 make: *** [Makefile:91: all] Error 2

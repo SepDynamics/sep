@@ -66,49 +66,9 @@ bool Engine::init(const sep::config::APIConfig& config) {
     printf("DEBUG: Engine::init - Initializing audio capture\n");
      fflush(stdout);
 
-    try {
-        audio_capture_ = ::sep::audio::createAudioCapture();
-        if (!audio_capture_) {
-            printf("DEBUG: Engine::init - Failed to create audio capture\n");
-             fflush(stdout);
-        } else {
-            auto err = audio_capture_->init(audio::AudioConfig{});
-            if (err != audio::AudioError::NONE) {
-                printf("DEBUG: Engine::init - Audio capture init failed with error %d\n", static_cast<int>(err));
-                 fflush(stdout);
-                audio_capture_.reset();
-            } else {
-                printf("DEBUG: Engine::init - Audio capture initialized successfully\n");
-                 fflush(stdout);
-            }
-        }
-    } catch (const std::exception& e) {
-        printf("DEBUG: Engine::init - Exception during audio capture init: %s\n", e.what());
-         fflush(stdout);
-    } catch (...) {
-        printf("DEBUG: Engine::init - Unknown exception during audio capture init\n");
-         fflush(stdout);
-    }
-
-#ifdef SEP_HAS_BLENDER
-    printf("DEBUG: Engine::init - Initializing Blender bridge\n");
-     fflush(stdout);
-
-    try {
-        blender_bridge_ = ::sep::compat::createBlenderBridge();
-        printf("DEBUG: Engine::init - Blender bridge created successfully\n");
-         fflush(stdout);
-    } catch (const std::exception& e) {
-        printf("DEBUG: Engine::init - Exception during Blender bridge creation: %s\n", e.what());
-         fflush(stdout);
-    } catch (...) {
-        printf("DEBUG: Engine::init - Unknown exception during Blender bridge creation\n");
-         fflush(stdout);
-    }
-#endif
-
+    // Core initialization only - specialized components are initialized in main
     printf("DEBUG: Engine::init - Setting initialized flag\n");
-     fflush(stdout);
+    fflush(stdout);
 
     impl_->initialized = true;
     return true;

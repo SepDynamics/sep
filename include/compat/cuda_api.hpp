@@ -7,6 +7,10 @@
 
 namespace sep::cuda {
 
+// Memory allocation/deallocation
+cudaError_t allocateManaged(void** ptr, size_t size);
+cudaError_t deallocate(void* ptr);
+
 // Async memory copy operations
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
                            cudaMemcpyKind kind, cudaStream_t stream);

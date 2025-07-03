@@ -7,8 +7,8 @@
 #include <vector>
 
 // External libraries
+#include "compat/cuda_api.hpp"
 #include "compat/cuda_common.h"
-#include <cuda_runtime.h>  // for sep::cuda::cudaMemcpy
 #include "compat/macros.h"
 
 // Project headers
@@ -38,10 +38,14 @@ MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nul
     if (config.type == TierType::HOST) {
         memory_pool_ = std::malloc(config.size);
     } else {
-        cudaError_t err = sep::cuda::cudaMallocManaged(&memory_pool_, config.size);
-        if (err != cudaSuccess)
-            memory_pool_ = nullptr;
-
+        memory_pool_ = nullptr;
+        cudaError_t err = sep::cuda::allocateManaged(&memory_pool_, config.size);
+        if (err != cudaSuccess) {
+            auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+            if (logger) {
+                logger->error("Failed to allocate managed memory: {}", err);
+            }
+        }
     }
     if (!memory_pool_) {
 #if SEP_HAS_EXCEPTIONS
@@ -76,8 +80,7 @@ MemoryTier::~MemoryTier() {
         if (config_.type == TierType::HOST) {
             std::free(memory_pool_);
         } else {
-            sep::cuda::cudaFree(memory_pool_);
-
+            sep::cuda::deallocate(memory_pool_);
         }
         memory_pool_ = nullptr;
     }
@@ -153,10 +156,18 @@ sep::SEPResult MemoryTier::defragment() {
             if (block.offset != current_offset) {
                 // Move memory to new position
                 void* new_location = static_cast<char*>(memory_pool_) + current_offset;
-                cudaError_t err = sep::cuda::cudaMemcpy(new_location, block.ptr, block.size, cudaMemcpyDefault);
+                cudaError_t err = sep::cuda::cudaMemcpyAsync(new_location, block.ptr, block.size, cudaMemcpyDefault, nullptr);
                 if (err != cudaSuccess) {
-                    if (logger)
-                        LOG_ERROR(logger, "Defragment cudaMemcpy failed: {}", sep::cuda::cudaGetErrorString(err));
+                    if (logger) {
+                        LOG_ERROR(logger, "Defragment memory copy failed: {}", err);
+                    }
+                    return sep::SEPResult::CUDA_ERROR;
+                }
+                err = cudaStreamSynchronize(nullptr);
+                if (err != cudaSuccess) {
+                    if (logger) {
+                        LOG_ERROR(logger, "Defragment stream sync failed: {}", err);
+                    }
                     return sep::SEPResult::CUDA_ERROR;
                 }
 
@@ -242,12 +253,35 @@ const std::deque<MemoryBlock>& MemoryTier::getBlocks() const {
 }
 
 bool MemoryTier::moveData(MemoryBlock* dst, const MemoryBlock* src) {
+    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+    
     if (!dst || !src || !dst->allocated || !src->allocated) {
+        if (logger) {
+            LOG_ERROR(logger, "Invalid blocks for data move");
+        }
         return false;
     }
 
     std::size_t size = std::min(dst->size, src->size);
-    std::memcpy(dst->ptr, src->ptr, size);
+    
+    if (config_.type == TierType::HOST) {
+        std::memcpy(dst->ptr, src->ptr, size);
+    } else {
+        cudaError_t err = sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+        if (err != cudaSuccess) {
+            if (logger) {
+                LOG_ERROR(logger, "Failed to copy memory: {}", err);
+            }
+            return false;
+        }
+        err = cudaStreamSynchronize(nullptr);
+        if (err != cudaSuccess) {
+            if (logger) {
+                LOG_ERROR(logger, "Failed to synchronize stream: {}", err);
+            }
+            return false;
+        }
+    }
     return true;
 }
 
@@ -302,15 +336,24 @@ bool MemoryTier::resize(std::size_t new_size) {
         return true;
 
     void* new_pool = nullptr;
+    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+    
     if (config_.type == TierType::HOST) {
         new_pool = std::malloc(new_size);
     } else {
-        cudaError_t err = sep::cuda::cudaMallocManaged(&new_pool, new_size);
-        if (err != cudaSuccess)
-            new_pool = nullptr;
-
+        cudaError_t err = sep::cuda::allocateManaged(&new_pool, new_size);
+        if (err != cudaSuccess) {
+            if (logger) {
+                LOG_ERROR(logger, "Failed to allocate managed memory: {}", err);
+            }
+            sep::metrics::allocationFailures().value++;
+            return false;
+        }
     }
     if (!new_pool) {
+        if (logger) {
+            LOG_ERROR(logger, "Failed to allocate memory pool of size {}", new_size);
+        }
         sep::metrics::allocationFailures().value++;
         return false;
     }
@@ -324,8 +367,7 @@ bool MemoryTier::resize(std::size_t new_size) {
             if (config_.type == TierType::HOST)
                 std::free(new_pool);
             else {
-                sep::cuda::cudaFree(new_pool);
-
+                sep::cuda::deallocate(new_pool);
             }
             sep::metrics::allocationFailures().value++;
             return false;
@@ -356,8 +398,7 @@ bool MemoryTier::resize(std::size_t new_size) {
         if (config_.type == TierType::HOST)
             std::free(memory_pool_);
         else {
-            sep::cuda::cudaFree(memory_pool_);
-
+            sep::cuda::deallocate(memory_pool_);
         }
     }
     memory_pool_ = new_pool;

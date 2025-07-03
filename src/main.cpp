@@ -1,20 +1,26 @@
 #include "core/manager.h"
 #include "core/engine.h"
-#include "core/common.h"  // defines sep::SEPResult
+#include "core/common.h"
 #include "core/logging.h"
-#include <curl/curl.h> // Include curl header 
+#include <curl/curl.h> 
 #include <exception>
 #include <iostream>
 #include <fstream>
 #include <spdlog/spdlog.h>
-#include "api/server.h" // Include server header
-#include "blender/cycles_renderer.h" // Include cycles renderer header
+#include "api/server.h"
+#include "blender/cycles_renderer.h"
 #include "quantum/data.hpp"
 #include <atomic>
 #include <string>
 #include <csignal>
 #include <nlohmann/json.hpp>
-#include "quantum/data.hpp" // For sep::pattern::PatternData
+#include "quantum/data.hpp"
+#include "audio/capture.h"
+#include "audio/config.h"
+#include "audio/factory.h"
+#include "blender/factory.h"
+#include "blender/types.h"
+#include "blender/bridge.h"
 #include <thread>
 #include <chrono>
 
@@ -84,7 +90,7 @@ int main(int argc, char* argv[]) {
       if (result != sep::SEPResult::SUCCESS) {
         spdlog::critical("Failed to initialize Cycles renderer");
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdown();
         return 1;
       }
       
@@ -95,7 +101,7 @@ int main(int argc, char* argv[]) {
       if (!file.is_open()) {
         spdlog::critical("Failed to open scene file: {}", render_file);
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdown();
         return 1;
       }
       
@@ -132,7 +138,7 @@ int main(int argc, char* argv[]) {
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to create scene from patterns");
           curl_global_cleanup();
-          sep::logging::shutdownLogging();
+          sep::logging::Manager::shutdown();
           return 1;
         }
         
@@ -149,28 +155,28 @@ int main(int argc, char* argv[]) {
         if (result != sep::SEPResult::SUCCESS) {
           spdlog::critical("Failed to render scene");
           curl_global_cleanup();
-          sep::logging::shutdownLogging();
+          sep::logging::Manager::shutdown();
           return 1;
         }
         
         spdlog::info("Render completed successfully");
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdown();
         return 0;
       }
       catch (const std::exception& e) {
         spdlog::critical("Error parsing scene file: {}", e.what());
         curl_global_cleanup();
-        sep::logging::shutdownLogging();
+        sep::logging::Manager::shutdown();
         return 1;
       }
       spdlog::error("Cycles mode requested without Cycles support");
       curl_global_cleanup();
-      sep::logging::shutdownLogging();
+      sep::logging::Manager::shutdown();
       return 1;
     }
 
-    // Normal engine initialization and server mode
+    // Initialize core engine first
     sep::core::Engine engine;
     if (!engine.init(config.getAPIConfig())) {
 #if SEP_HAS_EXCEPTIONS
@@ -178,12 +184,39 @@ int main(int argc, char* argv[]) {
 #else
       spdlog::critical("Engine initialization failed");
       curl_global_cleanup();
-      sep::logging::shutdownLogging();
+      sep::logging::Manager::shutdown();
       return 1;
 #endif
     }
+
+    // Initialize audio capture
+    std::unique_ptr<sep::audio::AudioCapture> audio_capture;
+    try {
+      audio_capture = sep::audio::createAudioCapture();
+      if (audio_capture) {
+        auto err = audio_capture->init(sep::audio::AudioConfig{});
+        if (err != sep::audio::AudioError::NONE) {
+          spdlog::error("Audio capture init failed with error {}", static_cast<int>(err));
+          audio_capture.reset();
+        }
+      }
+    } catch (const std::exception& e) {
+      spdlog::error("Exception during audio capture init: {}", e.what());
+    }
+
+#ifdef SEP_HAS_BLENDER
+    // Initialize Blender bridge
+    std::unique_ptr<sep::pattern::BlenderBridge> blender_bridge;
+    try {
+      blender_bridge = sep::blender::createBlenderBridge();
+    } catch (const std::exception& e) {
+      spdlog::error("Exception during Blender bridge creation: {}", e.what());
+    }
+#endif
+
     engine.run();
 
+    // Start API server after all components are initialized
     sep::api::SEPApiServer server(config.getAPIConfig());
     server.run();
     
@@ -205,12 +238,12 @@ int main(int argc, char* argv[]) {
   } catch (const std::exception& e) {
     spdlog::critical("Unhandled exception: {}", e.what());
     curl_global_cleanup();
-    sep::logging::shutdownLogging();
+    sep::logging::Manager::shutdown();
     return 1;
   }
 #endif
 
   curl_global_cleanup();
-  sep::logging::shutdownLogging();
+  sep::logging::Manager::shutdown();
   return 0;
 }

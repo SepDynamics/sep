@@ -94,7 +94,7 @@ protected:
   void TearDown() override {
     g_running = false;
 
-    sep::logging::shutdownLogging();
+    sep::logging::Manager::shutdown();
 
     // Wait for all used ports to be released
     std::lock_guard<std::mutex> lock(ports_mutex_);

@@ -189,20 +189,34 @@ int main(int argc, char* argv[]) {
 #endif
     }
 
-    // Initialize audio capture
+    // Initialize audio capture if enabled
     std::unique_ptr<sep::audio::AudioCapture> audio_capture;
-    try {
-      audio_capture = sep::audio::createAudioCapture();
-      if (audio_capture) {
-        auto err = audio_capture->init(sep::audio::AudioConfig{});
-        if (err != sep::audio::AudioError::NONE) {
-          spdlog::error("Audio capture init failed with error {}", static_cast<int>(err));
-          audio_capture.reset();
-        }
+#ifdef SEP_HAS_AUDIO
+    bool disable_audio = false;
+    for (int i = 1; i < argc; i++) {
+      if (std::string(argv[i]) == "--disable-audio") {
+        disable_audio = true;
+        break;
       }
-    } catch (const std::exception& e) {
-      spdlog::error("Exception during audio capture init: {}", e.what());
     }
+
+    if (!disable_audio) {
+      try {
+        audio_capture = sep::audio::createAudioCapture();
+        if (audio_capture) {
+          auto err = audio_capture->init(sep::audio::AudioConfig{});
+          if (err != sep::audio::AudioError::NONE) {
+            spdlog::error("Audio capture init failed with error {}", static_cast<int>(err));
+            audio_capture.reset();
+          }
+        }
+      } catch (const std::exception& e) {
+        spdlog::error("Exception during audio capture init: {}", e.what());
+      }
+    } else {
+      spdlog::info("Audio capture disabled by command line flag");
+    }
+#endif
 
 #ifdef SEP_HAS_BLENDER
     // Initialize Blender bridge

@@ -11,7 +11,7 @@ find_package(OpenSubdiv REQUIRED)
 pkg_check_modules(OIIO REQUIRED OpenImageIO)
 pkg_check_modules(ZSTD REQUIRED libzstd)
 
-add_library(sep_blender STATIC
+add_library(sep_blender SHARED
     compression_utils.cpp
     gpu_context.cpp
     compression.cpp
@@ -35,18 +35,30 @@ target_compile_definitions(sep_blender
 target_link_libraries(sep_blender
     PUBLIC
         sep_core
+        sep_embeddings
+        sep_quantum
+        sep_memory
         ${OIIO_LIBRARIES}
         glog
         ${ZSTD_LIBRARIES}
         ${EMBREE_LIBRARIES}
     PRIVATE
         sep_compat
-        ${CMAKE_SOURCE_DIR}/libsep_compat.a
 )
 
 # Enable CUDA support
-target_compile_definitions(sep_blender PRIVATE SEP_HAS_CUDA=1)
-target_link_libraries(sep_blender PRIVATE CUDA::cudart)
+target_compile_definitions(sep_blender
+    PRIVATE
+        SEP_HAS_CUDA=1
+        _GLIBCXX_USE_NOEXCEPT_SPEC=0
+        SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
+)
+target_link_libraries(sep_blender
+    PRIVATE
+        CUDA::cudart
+        CUDA::cuda_driver
+        CUDA::nvrtc
+)
 
 target_sources(sep_blender PRIVATE
     cycles_renderer.cpp
@@ -179,6 +191,18 @@ set_target_properties(sep_blender PROPERTIES
     POSITION_INDEPENDENT_CODE ON
     CXX_VISIBILITY_PRESET default
     VISIBILITY_INLINES_HIDDEN OFF
+    PREFIX "lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    CUDA_ARCHITECTURES "75;70;61;60"
+)
+
+# Ensure proper symbol visibility for shared library
+target_compile_options(sep_blender PRIVATE
+    -fvisibility=default
+    -fPIC
 )
 
 # Include directories

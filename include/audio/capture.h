@@ -1,4 +1,6 @@
 #pragma once
+
+#ifdef SEP_HAS_AUDIO
 #include "audio/types.h"
 
 #include <functional>
@@ -39,3 +41,4 @@ class AudioCapture {
 
 }  // namespace audio
 }  // namespace sep
+#endif // SEP_HAS_AUDIO

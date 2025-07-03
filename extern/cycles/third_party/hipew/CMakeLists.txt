@@ -30,4 +30,5 @@ target_include_directories(extern_hipew PUBLIC ${INC} ${INC_SYS})
 set_target_properties(extern_hipew PROPERTIES
     C_STANDARD 11
     C_STANDARD_REQUIRED ON
+    POSITION_INDEPENDENT_CODE ON
 )

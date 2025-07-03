@@ -7,8 +7,7 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(sep_engine VERSION 1.0.0 LANGUAGES C CXX CUDA)
-enable_language(CUDA)
+project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
@@ -109,15 +108,15 @@ target_link_libraries(sep_engine
         sep_embeddings
         sep_quantum
         sep_memory
-        sep_core   # Foundational library, link before sep_compat
-        sep_compat # GPU abstraction, depends on core
+        sep_compat
+        sep_core
 
         # 2. Cycles and its dependencies (order is important here too)
         # Link the main Cycles libs first
         cycles_session
         cycles_scene
         cycles_device
-        cycles_kernel_osl # The one with the real symbols
+        cycles_kernel_osl
         cycles_subd
         cycles_util
         extern_sky

@@ -1,23 +1,18 @@
 #Custom CUDA toolchain file to bypass CMake's CUDA detection
 
-#Set CUDA compiler and paths - use absolute paths without quotes
-set(CUDA_PATH /usr/local/cuda)
-set(CMAKE_CUDA_COMPILER ${CUDA_PATH}/bin/nvcc)
+# Set CUDA paths and compiler
+set(CUDA_PATH "/usr/local/cuda")
+set(CMAKE_CUDA_COMPILER "${CUDA_PATH}/bin/nvcc")
+set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/g++-14")
 
-# Force CUDA settings before project() call
-set(CMAKE_CUDA_ARCHITECTURES "60;61;70;75" CACHE STRING "CUDA architectures" FORCE)
-set(CMAKE_CUDA_COMPILER_WORKS TRUE CACHE INTERNAL "")
-set(CMAKE_CUDA_COMPILER_ID NVIDIA CACHE STRING "CUDA compiler ID" FORCE)
-set(CMAKE_CUDA_COMPILER_VERSION "12.0" CACHE STRING "CUDA version" FORCE)
-set(CMAKE_CUDA_COMPILER_FORCED TRUE CACHE INTERNAL "")
+# Configure CUDA compiler settings
+set(CMAKE_CUDA_ARCHITECTURES "60;61;70;75" CACHE STRING "CUDA architectures")
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
-# Skip compiler checks
-set(CMAKE_CUDA_COMPILER_WORKS TRUE)
-
-#Force CUDA compiler ID and version
-set(CMAKE_CUDA_COMPILER_ID "NVIDIA" CACHE STRING "CUDA compiler ID" FORCE) 
-set(CMAKE_CUDA_COMPILER_VERSION "12.9" CACHE STRING "CUDA compiler version" FORCE) 
-set(CMAKE_CUDA_STANDARD_COMPUTED_DEFAULT "20" CACHE STRING "CUDA standard default" FORCE)
+# Let CMake detect CUDA compiler naturally
+unset(CMAKE_CUDA_COMPILER_FORCED)
+unset(CMAKE_CUDA_COMPILER_WORKS CACHE)
 
 #Set CUDA toolkit paths - use absolute paths without quotes
 set(CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES ${CUDA_PATH}/include CACHE STRING "CUDA include dirs" FORCE) 
@@ -27,25 +22,16 @@ set(CUDA_TOOLKIT_TARGET_DIR ${CUDA_PATH}/targets/x86_64-linux CACHE PATH "CUDA T
 set(CUDA_INCLUDE_DIRS ${CUDA_PATH}/include CACHE PATH "CUDA Include location" FORCE)
 
 #Set CUDA implicit information - critical for link line extraction
-set(CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES ${CUDA_PATH}/include CACHE STRING "CUDA implicit includes" FORCE)
+set(CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES "${CUDA_PATH}/include" CACHE STRING "CUDA implicit includes" FORCE)
 
-set(CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES 
-    ${CUDA_PATH}/lib64 
-    ${CUDA_PATH}/targets/x86_64-linux/lib 
-    ${CUDA_PATH}/targets/x86_64-linux/lib/stubs 
-  CACHE STRING "CUDA implicit link directories" FORCE
-)
+set(CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES "${CUDA_PATH}/lib64;${CUDA_PATH}/targets/x86_64-linux/lib;${CUDA_PATH}/targets/x86_64-linux/lib/stubs" CACHE STRING "CUDA implicit link directories" FORCE)
 
-set(CMAKE_CUDA_IMPLICIT_LINK_LIBRARIES 
-    "cudart"
-    "cudart_static"
-    "cudadevrt"
-    "cuda"
-    "rt"
-    "pthread"
-    "dl" 
-  CACHE STRING "CUDA implicit libraries" FORCE
-)
+set(CMAKE_CUDA_IMPLICIT_LINK_LIBRARIES "cudart;cudart_static;cudadevrt;cuda;rt;pthread;dl" CACHE STRING "CUDA implicit libraries" FORCE)
+
+set(CMAKE_CUDA_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "CUDA implicit framework directories" FORCE)
+
+# Add CUDA runtime library path to rpath
+set(CMAKE_BUILD_RPATH "${CUDA_PATH}/lib64" CACHE STRING "Build rpath" FORCE)
 
 #Set CUDA implicit link information
 set(CMAKE_CUDA_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "CUDA implicit framework directories" FORCE)

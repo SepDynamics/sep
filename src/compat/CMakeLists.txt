@@ -22,6 +22,7 @@ add_library(sep_compat STATIC
     event.cu
     stream.cpp
     raii.cpp
+    hip_compat.cpp
 )
 
 set_source_files_properties(

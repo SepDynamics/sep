@@ -62,6 +62,7 @@ add_subdirectory(src/audio)
 add_subdirectory(src/blender)
 add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)
+add_subdirectory(extern/cycles/third_party/sky)
 
 # Build Cycles from source when precompiled libraries are not available
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")

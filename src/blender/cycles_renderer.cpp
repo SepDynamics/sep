@@ -19,7 +19,7 @@
 #include "session/session.h"
 
 // Cycles utility includes
-#include "app/oiio_output_driver.h"
+#include "blender/oiio_output_driver.h"
 #include "util/array.h"
 #include "util/math_base.h"
 #include "util/param.h"

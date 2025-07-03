@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
-# Enable CUDA
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
@@ -68,6 +67,8 @@ add_subdirectory(extern/cycles/third_party/sky)
 # Build Cycles from source when precompiled libraries are not available
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
   message(STATUS "Prebuilt Cycles libraries not found; building from source")
+  set(WITH_CYCLES_DEVICE_HIP OFF CACHE BOOL "Disable HIP" FORCE)
+  set(WITH_CYCLES_DEVICE_HIPRT OFF CACHE BOOL "Disable HIPRT" FORCE)
   add_subdirectory(extern/cycles)
 endif()
 
@@ -99,6 +100,7 @@ target_link_libraries(sep_engine
         cycles_kernel_osl # The one with the real symbols
         cycles_subd
         cycles_util
+        extern_sky
         extern_cuew
         extern_hipew
         extern_sky

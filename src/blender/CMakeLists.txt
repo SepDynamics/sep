@@ -125,6 +125,8 @@ if(TARGET cycles_scene)
       extern_cuew
       extern_hipew
       ${OSL_LIBRARIES}
+      ${OPENVDB_LIBRARIES}
+      ${OPENSUBDIV_LIBRARIES}
       bf_intern_openvdb
       OpenVDB::openvdb
       bf_intern_opensubdiv
@@ -152,6 +154,8 @@ else()
       extern_cuew
       extern_hipew
       ${OSL_LIBRARIES}
+      ${OPENVDB_LIBRARIES}
+      ${OPENSUBDIV_LIBRARIES}
       bf_intern_openvdb
       openvdb
       bf_intern_opensubdiv

@@ -192,6 +192,12 @@ Each module is built as a self-contained static library, providing a clear and r
 *   **Key Files**: `memory_tier_manager.cpp`, `memory_tier.cpp`, `redis_manager.cpp`.
 *   **Dependencies**: `core`.
 
+### `embeddings` - Text Embedding Utilities
+*   **Purpose**: Supplies lightweight text embeddings for pattern generation and testing.
+*   **Key Files**: `simple_embedding_model.cpp`, `simple_embedding_model.h`.
+*   **Dependencies**: None.
+*   **Diagrams**: [include-embeddings.md](diagrams/include-embeddings.md), [src-embeddings.md](diagrams/src-embeddings.md).
+
 ### `api` - The Public Interface
 *   **Purpose**: Exposes the engine's functionality to the outside world via an HTTP server (Crow) and a stable C-style bridge.
 *   **Key Files**: `server.cpp`, `sep_engine.cpp` (facade), `bridge_c.cpp`, `rate_limit_middleware.cpp`.
@@ -205,6 +211,7 @@ Each module is built as a self-contained static library, providing a clear and r
 *   **Dependencies**: `core`, `quantum`, `memory`.
 *   **Rationale**: Keeping these integrations as separate modules prevents their specific dependencies (e.g., Blender headers, PipeWire) from polluting the core engine build.
 *   **Cycles Integration**: The `cycles_renderer.cpp` provides pattern-driven rendering through Blender's Cycles renderer when `SEP_HAS_CYCLES` is enabled.
+*   **Cycles Source**: Headers are accessed via the `include/cycles_src` symlink. See [include-cycles_src.md](diagrams/include-cycles_src.md) for details.
 
 ## 4. Detailed Interaction and Data Flows
 

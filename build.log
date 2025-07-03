@@ -24,6 +24,7 @@ Running CMake configuration...
 -- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
 -- Found http_parser: /usr/lib64/libhttp_parser.so
 -- Found OpenVDB: /usr/lib64/libopenvdb.so
+-- Found OpenSubdiv: /usr/lib64/libosdGPU.so;/usr/lib64/libosdCPU.so
 -- Found OpenPGL: /usr/lib64/libopenpgl.so
 -- Found OpenColorIO: /usr/lib64/libOpenColorIO.so
 -- Found Imath: /usr/lib64/libImath.so
@@ -42,63 +43,62 @@ Running CMake configuration...
 -- Using FFTW at: fftw3f
 -- Found Embree: /usr/lib64/libembree4.so
 -- Found GLOG: /usr/lib64/libglog.so
--- Found OpenSubdiv: /usr/lib64/libosdGPU.so;/usr/lib64/libosdCPU.so
 -- Checking for module 'OpenImageIO'
 --   Found OpenImageIO, version 2.5.16.0
 -- Checking for module 'libzstd'
 --   Found libzstd, version 1.5.7
--- Configuring done (1.6s)
+-- Configuring done (1.5s)
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/cmake-make
 Building SEP Engine...
-[  4%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
-[  4%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
-[  4%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
+[  5%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
 [  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  6%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  4%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  6%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
 [  8%] Linking C static library libextern_hipew.a
-[  8%] Built target extern_hipew
 [  9%] Linking C static library libextern_cuew.a
+[  9%] Built target extern_hipew
 [  9%] Built target extern_cuew
 [ 11%] Linking CXX static library libsep_embeddings.a
 [ 11%] Built target sep_embeddings
 [ 12%] Linking CXX static library libsep_compat.a
 [ 12%] Built target sep_compat
-[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 13%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
+[ 15%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
+[ 16%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
+[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
+[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
 [ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
+[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
 [ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 25%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
+[ 25%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
 [ 26%] Linking CXX static library libsep_core.a
 [ 26%] Built target sep_core
-[ 29%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 29%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 31%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 34%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 36%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 34%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 37%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 38%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 43%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 44%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 47%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 27%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
+[ 29%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 30%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
+[ 31%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
+[ 33%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+[ 34%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
+[ 36%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 37%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 40%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 41%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
+[ 44%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
+[ 40%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
+[ 45%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
+[ 45%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
 [ 47%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 48%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
 [ 50%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 52%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 59%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 51%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+[ 52%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
+[ 54%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
+[ 56%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
+[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
+[ 59%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
 [ 61%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
 [ 62%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
 [ 63%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
@@ -110,25 +110,25 @@ Building SEP Engine...
 [ 70%] Built target sep_blender
 [ 72%] Linking CXX static library libsep_audio.a
 [ 72%] Built target sep_audio
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
+[ 76%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
+[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
+[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
 [ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 79%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
+[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
+[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
 [ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 86%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
+[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
+[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
 [ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 93%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 94%] Linking CXX static library libsep_memory.a
-[ 95%] Linking CXX static library libsep_quantum.a
+[ 91%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
+[ 93%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
+[ 94%] Linking CXX static library libsep_quantum.a
+[ 94%] Built target sep_quantum
+[ 95%] Linking CXX static library libsep_memory.a
 [ 95%] Built target sep_memory
-[ 95%] Built target sep_quantum
 [ 97%] Linking CXX static library libsep_api.a
 [ 97%] Built target sep_api
 [ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o

@@ -303,5 +303,6 @@ std::vector<float> Engine::getCoherenceHistory() const {
     return history;
 }
 
+
 }  // namespace core
 }  // namespace sep

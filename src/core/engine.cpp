@@ -219,7 +219,7 @@ void Engine::process_batch(const std::vector<::sep::PinState>& inputs, std::uint
         std::vector<std::uint32_t> expectations;
         generate_probes(inputs, probe_indices, expectations, tick);
 
-#ifdef SEP_USE_CUDA
+#if SEP_CUDA_AVAILABLE
         // Process QBSA using CUDA
         auto qbsa_status = sep_cuda_process_batch(
             probe_indices.data(),
@@ -256,7 +256,7 @@ void Engine::process_batch(const std::vector<::sep::PinState>& inputs, std::uint
 #endif
 
         // Update results from device buffers
-#ifdef SEP_USE_CUDA
+#if SEP_CUDA_AVAILABLE
         qbsa_result.corrections.assign(
             impl_->d_corrections_.begin(),
             impl_->d_corrections_.end());
@@ -267,7 +267,7 @@ void Engine::process_batch(const std::vector<::sep::PinState>& inputs, std::uint
 #endif
 
         // Reconstruct nested collapse indices using counts
-#ifdef SEP_USE_CUDA
+#if SEP_CUDA_AVAILABLE
         qsh_result.collapse_indices.clear();
         qsh_result.collapse_indices.resize(inputs.size());
         for (std::size_t i = 0; i < inputs.size(); ++i) {

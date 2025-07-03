@@ -38,6 +38,7 @@ MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nul
     if (config.type == TierType::HOST || !SEP_CUDA_AVAILABLE) {
         memory_pool_ = std::malloc(config.size);
     } else {
+#if defined(SEP_USE_CUDA) && defined(__CUDACC__)
         memory_pool_ = nullptr;
         cudaError_t err = sep_cuda_allocate_managed(&memory_pool_, config.size);
         if (err != cudaSuccess) {
@@ -46,6 +47,10 @@ MemoryTier::MemoryTier(const Config& config) : config_(config), memory_pool_(nul
                 logger->error("Failed to allocate managed memory: {}", err);
             }
         }
+#else
+        // Fallback to host memory when CUDA runtime is unavailable
+        memory_pool_ = std::malloc(config.size);
+#endif
     }
     if (!memory_pool_) {
 #if SEP_HAS_EXCEPTIONS
@@ -80,7 +85,11 @@ MemoryTier::~MemoryTier() {
         if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE) {
             std::free(memory_pool_);
         } else {
+#if defined(SEP_USE_CUDA) && defined(__CUDACC__)
             sep_cuda_deallocate(memory_pool_);
+#else
+            std::free(memory_pool_);
+#endif
         }
         memory_pool_ = nullptr;
     }
@@ -271,6 +280,7 @@ bool MemoryTier::moveData(MemoryBlock* dst, const MemoryBlock* src) {
     if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE) {
         std::memcpy(dst->ptr, src->ptr, size);
     } else {
+#if defined(SEP_USE_CUDA) && defined(__CUDACC__)
         cudaError_t err = sep_cuda_memcpy_async(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
         if (err != cudaSuccess) {
             if (logger) {
@@ -285,6 +295,9 @@ bool MemoryTier::moveData(MemoryBlock* dst, const MemoryBlock* src) {
             }
             return false;
         }
+#else
+        std::memcpy(dst->ptr, src->ptr, size);
+#endif
     }
     return true;
 }
@@ -345,6 +358,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE) {
         new_pool = std::malloc(new_size);
     } else {
+#if defined(SEP_USE_CUDA) && defined(__CUDACC__)
         cudaError_t err = sep_cuda_allocate_managed(&new_pool, new_size);
         if (err != cudaSuccess) {
             if (logger) {
@@ -353,6 +367,9 @@ bool MemoryTier::resize(std::size_t new_size) {
             sep::metrics::allocationFailures().value++;
             return false;
         }
+#else
+        new_pool = std::malloc(new_size);
+#endif
     }
     if (!new_pool) {
         if (logger) {
@@ -402,7 +419,11 @@ bool MemoryTier::resize(std::size_t new_size) {
         if (config_.type == TierType::HOST || !SEP_CUDA_AVAILABLE)
             std::free(memory_pool_);
         else {
+#if defined(SEP_USE_CUDA) && defined(__CUDACC__)
             sep_cuda_deallocate(memory_pool_);
+#else
+            std::free(memory_pool_);
+#endif
         }
     }
     memory_pool_ = new_pool;

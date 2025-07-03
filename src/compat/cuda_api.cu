@@ -68,7 +68,7 @@ cudaError_t launch_pattern_processing(pattern::PatternData* patterns,
                                     const pattern::PatternConfig& config,
                                     size_t pattern_count,
                                     const pattern::PatternData* previous_patterns,
-                                    void* stream) {
+                                    cudaStream_t stream) {
     if (!patterns || !results) {
         return cudaErrorInvalidValue;
     }
@@ -77,8 +77,7 @@ cudaError_t launch_pattern_processing(pattern::PatternData* patterns,
         const uint32_t block_size = constants::get_default_block_size();
         const uint32_t grid_size = (pattern_count + block_size - 1) / block_size;
 
-        detail::pattern_processing_kernel<<<grid_size, block_size, 0,
-            reinterpret_cast<cudaStream_t>(stream)>>>(
+        detail::pattern_processing_kernel<<<grid_size, block_size, 0, stream>>>(
             patterns, results, config, pattern_count, previous_patterns);
 
         return cudaGetLastError();

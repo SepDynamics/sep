@@ -5,8 +5,12 @@
 // that are used throughout the Cycles codebase
 
 #ifdef __cplusplus
-// Include standard headers
+// Include C++ Standard Library headers FIRST
+#include <cmath>
+#include <cstring>
 #include <memory>
+#include <string>
+#include <vector>
 
 // Define CCL namespace macros for compatibility
 #ifndef CCL_NAMESPACE_BEGIN

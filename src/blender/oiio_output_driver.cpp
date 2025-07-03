@@ -1,11 +1,27 @@
+// Define Cycles namespace macros
+#define CCL_NAMESPACE_BEGIN namespace ccl {
+#define CCL_NAMESPACE_END }
+
 #include "blender/oiio_output_driver.h"
 
+// Core Cycles includes
+#include "util/system.h"
+#include "util/types.h"
+
+// Scene includes
 #include "scene/colorspace.h"
 #include "util/image.h"
 #include "util/unique_ptr.h"
 
+// OpenImageIO includes - full definitions first
 #include <OpenImageIO/imagebuf.h>
 #include <OpenImageIO/imagebufalgo.h>
+
+// Standard includes
+#include <vector>
+#include <cstring>
+
+namespace OIIO = OpenImageIO_v2_5;
 
 CCL_NAMESPACE_BEGIN
 

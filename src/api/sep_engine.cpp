@@ -2,6 +2,7 @@
 
 // Standard includes first
 #include <chrono>
+#include <time.h>
 #include <iomanip>
 #include <iostream>
 #include <memory>

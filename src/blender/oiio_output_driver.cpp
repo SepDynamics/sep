@@ -2,8 +2,8 @@
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-#include <string.h> // Added for C string functions
-#include <time.h>   // Added for C time functions
+#include <cstring> // Added for C string functions
+#include <ctime>   // Added for C time functions
 #include "blender/oiio_output_driver.h"
 
 // Core Cycles includes

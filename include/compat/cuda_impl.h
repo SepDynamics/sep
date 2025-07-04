@@ -3,7 +3,7 @@
 #include <stddef.h>  // For size_t
 #include <stdio.h>   // For fprintf
 #include <stdlib.h>  // For malloc/free
-#include <string.h>  // For strcpy, memcpy, memset
+#include <cstring>  // For strcpy, memcpy, memset
 #include "compat/cuda_runtime.h"  // Must come before cuda_defs.h
 #include "compat/cuda_defs.h"
 

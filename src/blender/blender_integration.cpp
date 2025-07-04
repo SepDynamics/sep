@@ -1,5 +1,5 @@
-#include <string.h> // Added for C string functions
-#include <time.h>   // Added for C time functions
+#include <cstring> // Added for C string functions
+#include <ctime>   // Added for C time functions
 #include <cstring> // Keep existing cstring include
 #include <ctime>   // Keep existing ctime include
 #include "blender/pattern_bridge.h"

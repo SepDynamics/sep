@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <unordered_map>

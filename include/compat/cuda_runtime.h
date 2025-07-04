@@ -29,7 +29,7 @@ using sep::cuda::cudaStreamDefault;
 #else // !SEP_ENGINE_HAS_CUDA
 // Basic includes for non-CUDA builds
 #include <stddef.h>
-#include <string.h>
+#include <cstring>
 
 // Basic CUDA types
 namespace sep {

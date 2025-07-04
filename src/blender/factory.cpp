@@ -1,5 +1,5 @@
-#include <string.h> // Added for C string functions
-#include <time.h>   // Added for C time functions
+#include <cstring> // Added for C string functions
+#include <ctime>   // Added for C time functions
 #include "blender/factory.h"
 #include "blender/bridge.h"
 #include "blender/types.h"

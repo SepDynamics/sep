@@ -11,6 +11,8 @@
 #include <atomic>
 #include <thread>
 #include <vector>
+#include <cstring>
+#include <ctime>
 
 // GLM includes
 

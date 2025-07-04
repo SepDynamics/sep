@@ -94,7 +94,7 @@ sep::SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
     return sep::SEPResult::INITIALIZATION_FAILED;
   }
 
-  if (!name || std::strlen(name) == 0) {
+  if (!name || ::strlen(name) == 0) {
     return sep::SEPResult::INVALID_ARGUMENT;
   }
 
@@ -108,7 +108,7 @@ sep::SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
 
   CustomDataLayer layer;
   layer.type = type;
-  std::strncpy(layer.name, name, sizeof(layer.name) - 1);
+  ::strncpy(layer.name, name, sizeof(layer.name) - 1);
   layer.name[sizeof(layer.name) - 1] = '\0';
   size_t vert_count = static_cast<size_t>(mesh_ ? mesh_->totvert : 0);
   if (vert_count == 0)
@@ -117,7 +117,7 @@ sep::SEPResult MeshHandler::addCustomDataLayer(const char* name, int type) {
   layer.active = true;
 
   layer.data = std::make_unique<char[]>(layer.size);
-  std::memset(layer.data.get(), 0, layer.size);
+  ::memset(layer.data.get(), 0, layer.size);
 
   custom_layers_.push_back(layer);
   cache_.metrics_valid = false;
@@ -129,12 +129,12 @@ sep::SEPResult MeshHandler::removeCustomDataLayer(const char* name) {
     return sep::SEPResult::INITIALIZATION_FAILED;
   }
 
-  if (!name || std::strlen(name) == 0) {
+  if (!name || ::strlen(name) == 0) {
     return sep::SEPResult::INVALID_ARGUMENT;
   }
 
   for (auto it = custom_layers_.begin(); it != custom_layers_.end(); ++it) {
-    if (std::strcmp(it->name, name) == 0) {
+    if (::strcmp(it->name, name) == 0) {
       custom_layers_.erase(it);
       cache_.metrics_valid = false;
       return sep::SEPResult::SUCCESS;
@@ -145,12 +145,12 @@ sep::SEPResult MeshHandler::removeCustomDataLayer(const char* name) {
 }
 
 bool MeshHandler::hasCustomDataLayer(const char* name) const {
-  if (!initialized_ || !name || std::strlen(name) == 0) {
+  if (!initialized_ || !name || ::strlen(name) == 0) {
     return false;
   }
 
   for (const auto& layer : custom_layers_) {
-    if (std::strcmp(layer.name, name) == 0) {
+    if (::strcmp(layer.name, name) == 0) {
       return true;
     }
   }
@@ -162,12 +162,12 @@ sep::SEPResult MeshHandler::setUniformFloatLayer(const char* name, float value) 
     return sep::SEPResult::INITIALIZATION_FAILED;
   }
 
-  if (!name || std::strlen(name) == 0) {
+  if (!name || ::strlen(name) == 0) {
     return sep::SEPResult::INVALID_ARGUMENT;
   }
 
   for (auto& layer : custom_layers_) {
-    if (std::strcmp(layer.name, name) == 0) {
+    if (::strcmp(layer.name, name) == 0) {
       float* data = reinterpret_cast<float*>(layer.data.get());
       size_t count = layer.size / sizeof(float);
       for (size_t i = 0; i < count; ++i) {
@@ -343,7 +343,7 @@ void MeshHandler::ensureCustomDataCapacity(size_t vertex_count) {
     if (layer.size != required) {
       layer.data.reset();
       layer.data = std::make_unique<char[]>(required);
-      std::memset(layer.data.get(), 0, required);
+      ::memset(layer.data.get(), 0, required);
       layer.size = required;
     }
   }

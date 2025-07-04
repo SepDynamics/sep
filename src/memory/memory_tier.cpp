@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
+#include <string.h>
 #include <cstring>
 #include <stdexcept>
 #include <vector>
@@ -205,7 +206,7 @@ sep::SEPResult MemoryTier::defragment() {
           return sep::SEPResult::CUDA_ERROR;
         }
 #else
-        std::memmove(new_location, block.ptr, block.size);
+        ::memmove(new_location, block.ptr, block.size);
 #endif
 
         block.ptr = new_location;
@@ -306,7 +307,7 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
   std::size_t size = std::min(dst->size, src->size);
 
   if (config_.type == TierType::HOST) {
-    std::memcpy(dst->ptr, src->ptr, size);
+    ::memcpy(dst->ptr, src->ptr, size);
   } else {
 #if SEP_MEMORY_HAS_CUDA
     cudaError_t err =
@@ -325,7 +326,7 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
       return false;
     }
 #else
-    std::memcpy(dst->ptr, src->ptr, size);
+    ::memcpy(dst->ptr, src->ptr, size);
 #endif
   }
   return true;
@@ -437,7 +438,7 @@ bool MemoryTier::resize(std::size_t new_size) {
       sep::metrics::allocationFailures().value++;
       return false;
     }
-    std::memcpy(static_cast<char *>(new_pool) + offset, block.ptr, block.size);
+    ::memcpy(static_cast<char *>(new_pool) + offset, block.ptr, block.size);
     new_blocks.emplace_back(static_cast<char *>(new_pool) + offset, block.size,
                             offset, config_.type);
     MemoryBlock &nb = new_blocks.back();

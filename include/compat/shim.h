@@ -4,15 +4,28 @@
 // `SEP_NO_STDLIB`.  Default builds rely on the system standard library and
 // should not define this macro.
 
-// Use C headers instead of C++ headers
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdio.h>  // For snprintf
-#include <stddef.h> // For ptrdiff_t
+// Ensure C standard library functions are in the global namespace first
+#include <cstring>  // For memcpy, memset, memcmp, strlen, etc.
+#include <ctime>    // For time, clock, difftime, mktime, etc.
+#include <stdlib.h>  // For malloc, free, getenv, etc.
+#include <stdio.h>   // For snprintf, fprintf, etc.
+#include <stdint.h>  // For uint32_t, uint64_t etc.
+#include <stdbool.h> // For bool type
+#include <stddef.h>  // For size_t, ptrdiff_t
+#include <math.h>    // For math functions
+#include <setjmp.h>  // For __jmp_buf
+
+// Now include C++ headers that depend on C functions being in global namespace
+#include <string>
+#include <cstring>
 #include <cstdlib>
+#include <cstdio>
+#include <cstdint>
+#include <cstddef>
+#include <ctime>
+#include <cmath>
+
+// Additional C++ headers
 #include <functional>
 #include <ostream>
 #include <queue>

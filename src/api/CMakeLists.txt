@@ -35,6 +35,7 @@ target_include_directories(sep_api
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third_party/crow/include>
 )
 
 # Link external dependencies when available

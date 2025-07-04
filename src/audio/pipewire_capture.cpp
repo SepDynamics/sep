@@ -1,11 +1,30 @@
-// Project headers first for types
+#include "audio/pipewire_capture.h"
 #include "audio/types.h"
 #include "audio/capture.h"
 #include "audio/config.h"
-#include "audio/pipewire_capture.h"
 
-// PipeWire headers after our types
-#include "audio/pipewire_includes.h"
+#ifdef SEP_HAS_AUDIO
+
+// PipeWire headers
+extern "C" {
+#include <pipewire/pipewire.h>
+#include <pipewire/context.h>
+#include <pipewire/global.h>
+#include <pipewire/keys.h>
+#include <pipewire/stream.h>
+#include <pipewire/thread-loop.h>
+#include <pipewire/type.h>
+
+// SPA headers
+#include <spa/param/audio/format-utils.h>
+#include <spa/param/props.h>
+#include <spa/support/log.h>
+#include <spa/utils/hook.h>
+#include <spa/utils/type.h>
+}
+
+#include <spdlog/spdlog.h>
+#include <glm/gtc/constants.hpp>
 
 // Additional project headers
 #include "compat/math_common.h"
@@ -21,35 +40,80 @@
 #include <glm/gtc/constants.hpp>
 
 
-// Initialize PipeWire before namespace declarations
-static struct PWInit {
+namespace sep {
+namespace audio {
+
+// Initialize PipeWire before class implementation
+namespace sep {
+namespace audio {
+
+namespace {
+struct PWInit {
     bool ok{false};
-    PWInit()
-    {
+    PWInit() {
         pw_init(nullptr, nullptr);
         ok = true;
     }
-    ~PWInit()
-    {
-        if (ok)
-        {
+    ~PWInit() {
+        if (ok) {
             pw_deinit();
         }
     }
 } pw_init_once;
+}
 
-namespace sep {
-namespace audio {
+PipeWireCapture::PipeWireCapture() : stream_events_{} {}
 
-PipeWireCapture::PipeWireCapture() = default;
-
-static const struct pw_stream_events createStreamEvents()
+static const pw_stream_events createStreamEvents()
 {
-    struct pw_stream_events events = {};
-    events.version                 = PW_VERSION_STREAM_EVENTS;
-    events.state_changed = &PipeWireCapture::streamStateChanged;
-    events.process       = &PipeWireCapture::streamProcess;
+    pw_stream_events events = {};
+    events.version = PW_VERSION_STREAM_EVENTS;
+    events.state_changed = &sep::audio::PipeWireCapture::streamStateChanged;
+    events.process = &sep::audio::PipeWireCapture::streamProcess;
     return events;
+}
+
+void sep::audio::PipeWireCapture::streamProcess(void* data)
+{
+    auto* self = static_cast<PipeWireCapture*>(data);
+    pw_buffer* buf = pw_stream_dequeue_buffer(self->stream_);
+    if (!buf) {
+        return;
+    }
+
+    spa_buffer* spa_buf = buf->buffer;
+    float* samples = static_cast<float*>(spa_buf->datas[0].data);
+    if (!samples) {
+        pw_stream_queue_buffer(self->stream_, buf);
+        return;
+    }
+
+    uint32_t n_samples = spa_buf->datas[0].chunk->size / sizeof(float);
+    float peak = 0.0f;
+    float rms_sum = 0.0f;
+
+    {
+        std::lock_guard<std::mutex> lock(self->mutex_);
+        if (self->running_ && self->callback_) {
+            self->callback_(samples, n_samples);
+        }
+
+        // Update metrics
+        for (uint32_t i = 0; i < n_samples; i++) {
+            float abs_sample = std::fabs(samples[i]);
+            peak = std::max(peak, abs_sample);
+            rms_sum += abs_sample * abs_sample;
+        }
+
+        if (self->running_) {
+            self->metrics_.total_samples += n_samples;
+            self->metrics_.peak_level = peak;
+            self->metrics_.rms_level =
+                sep::math::to_float(math::sqrt_safe(static_cast<double>(rms_sum / n_samples)));
+        }
+    }
+
+    pw_stream_queue_buffer(self->stream_, buf);
 }
 
 void PipeWireCapture::cleanup()
@@ -597,5 +661,7 @@ std::unique_ptr<AudioCapture> AudioCapture::create()
     return std::make_unique<PipeWireCapture>();
 }
 
-}  // namespace audio
-}  // namespace sep
+} // namespace audio
+} // namespace sep
+
+#endif // SEP_HAS_AUDIO

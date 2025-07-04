@@ -1,5 +1,9 @@
 #include "blender/bridge.h"
 #include <string>  // For std::string
+#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
+#include <time.h>   // For time-related functions
+#include <cstring>
+#include <ctime>
 #include "core/error_handler.h"
 #include "core/metrics_collector.h"
 #include <spdlog/spdlog.h>

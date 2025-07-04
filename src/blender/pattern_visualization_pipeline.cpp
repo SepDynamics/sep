@@ -1,11 +1,11 @@
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>   // For time-related functions
-#include <cstring>
-#include <ctime>
+#include <cstring> // For std::memcpy, std::memset, std::memcmp, std::strlen
+#include <ctime>   // For C-style time functions
 #include <string>  // For std::string
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"
 #include "core/common.h"  // defines sep::SEPResult
+#include <algorithm> // For std::min, std::max
+#include <numeric>   // For std::accumulate
 #include <vector>
 #include <algorithm>
 #include <numeric>

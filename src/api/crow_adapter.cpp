@@ -23,6 +23,7 @@
 #include "core/types.h"  // For sep::config::APIConfig
 #include "core/manager.h" // For sep::config::ConfigManager
 #include "memory/memory_tier_manager.hpp"
+#include <cstring> // For memcpy etc.
 
 // Include standard headers
 #include <memory>

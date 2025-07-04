@@ -3,6 +3,7 @@
 #include "core/manager.h"
 #include "memory/types.h"
 #include "memory/redis_manager.h"
+#include <cstring> // For std::memcpy, std::memset (if used implicitly)
 #include "core/manager.h"
 
 #include "quantum/types.h"        // For ::sep::quantum::Pattern

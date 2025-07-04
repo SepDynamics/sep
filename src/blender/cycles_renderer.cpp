@@ -1,13 +1,12 @@
 // Standard includes
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>   // For time-related functions
-#include <cstring>
-#include <ctime>
+#include <cstring> // For std::memcpy, std::memset, std::memcmp, std::strlen etc.
+#include <ctime>   // For C-style time functions
 #include <string>  // For std::string
 #include <cmath>
 #include <memory>
 #include <utility>
 #include <vector>
+#include <algorithm> // For std::max
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {

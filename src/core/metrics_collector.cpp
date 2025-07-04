@@ -5,6 +5,7 @@
 #include <sys/resource.h>
 #include <sys/sysinfo.h>
 #include <unistd.h>
+#include <cstring> // For std::memcpy
 
 #include <algorithm>
 #include <atomic>

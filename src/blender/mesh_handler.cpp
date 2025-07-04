@@ -7,7 +7,7 @@
 #include "core/common.h"  // defines sep::SEPResult
 
 // Standard library includes
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
+#include <cstring> // For std::memcpy, std::memset, std::strlen, std::strcmp
 #include <time.h>   // For time-related functions
 #include <cstring>
 #include <ctime>

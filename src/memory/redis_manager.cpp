@@ -2,6 +2,7 @@
 #include "memory/types.h"
 #include "core/logging.h"
 #include <mutex>
+#include <cstring> // For std::memcpy
 
 #include "compat/cuda_common.h"
 #include <cuda_runtime.h>

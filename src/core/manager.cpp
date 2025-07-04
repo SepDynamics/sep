@@ -4,6 +4,7 @@
 #include "api/json_helpers.h"
 
 #include <fstream>
+#include <cstring> // For std::strlen (used by shim::string)
 #include <ios>
 
 namespace sep {

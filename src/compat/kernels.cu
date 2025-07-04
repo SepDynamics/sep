@@ -1,6 +1,7 @@
 #include "compat/kernels.h"
 #include "compat/constants.h"
 #include "compat/cuda_helpers.h"
+#include <cstring> // For std::memcpy (used implicitly by atomic operations or by the device itself)
 #include "compat/cuda_unified_fix.h"
 
 #ifdef __CUDACC__

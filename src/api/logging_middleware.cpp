@@ -2,6 +2,8 @@
 #include "api/crow_adapter.h"
 #include <atomic>
 
+#include <chrono> // For std::chrono
+
 namespace sep::api {
 
 void LoggingMiddleware::before_handle(crow::request& req, crow::response& res, context& ctx) {

@@ -9,6 +9,7 @@
 
 #if !defined(__CUDACC__)
 #include <cstdlib>
+#include <cstring> // For std::memcpy (when not in __CUDACC__)
 #include <sstream>
 #include <stdexcept>
 #include <sys/sysinfo.h>

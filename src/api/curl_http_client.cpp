@@ -2,6 +2,7 @@
 #include "core/error_handler.h"
 #include <chrono>
 #include <stdexcept>
+#include <cstring> // For std::memcpy
 #include <string>
 
 namespace sep::api {

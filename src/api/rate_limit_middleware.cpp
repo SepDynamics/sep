@@ -3,6 +3,7 @@
 #include "api/crow_request.h"
 #include "api/rate_limiter.h"
 #include "crow/crow_isolation.h"
+#include <memory> // For std::unique_ptr, std::make_unique
 #include <nlohmann/json.hpp>
 
 namespace sep::api {
@@ -13,7 +14,7 @@ RateLimitMiddleware::RateLimitMiddleware() {
 void RateLimitMiddleware::set_config(const sep::config::RateLimitConfig& config) {
     config_ = config;
     if (config_.enabled) {
-        rate_limiter_ = createRateLimiter(config_.rpm);
+        rate_limiter_ = createRateLimiter(config_.rpm); // Use std::unique_ptr from createRateLimiter
     } else {
         rate_limiter_.reset();
     }

@@ -1,8 +1,25 @@
 #!/bin/bash
 set -eo pipefail
 
+# Clear the terminal screen at the start of the script
+clear
+
+# Determine repository root dynamically so the script works regardless
+# of where the project directory is located on disk.
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+
+# Define the output directory and log file path
+OUTPUT_DIR="${REPO_ROOT}/output"
+LOG_FILE="${OUTPUT_DIR}/build_log.txt"
+
+# Create the output directory if it doesn't exist
+mkdir -p "${OUTPUT_DIR}"
+
+# Clean previous output files in the output directory
+rm -rf "${OUTPUT_DIR}/*" || true
+
 # Redirect all output to both console and log file
-exec 1> >(tee "build_log.txt") 2>&1
+exec 1> >(tee "${LOG_FILE}") 2>&1
 
 echo "==== SEP Engine Build Script with FULL Cycles and PipeWire Support ===="
 echo "Setting up build environment with real library paths - NO STUBS!"
@@ -22,9 +39,6 @@ USER_CONFIG_DIR="$HOME/.config/systemd/user"
 mkdir -p "$USER_LOCAL_BIN" "$USER_LOCAL_LIB" "$USER_CONFIG_DIR"
 
 # --- Environment Setup ---
-# Determine repository root dynamically so the script works regardless
-# of where the project directory is located on disk.
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 BUILD_DIR="${REPO_ROOT}/cmake-make"
 COMPILE_COMMANDS="${BUILD_DIR}/compile_commands.json"
 SRC_DIR="${REPO_ROOT}"
@@ -198,6 +212,14 @@ else
 fi
 
 echo "==== Build Complete at $(date) ===="
+
+echo "==== Generating Snapshot from totxt.save ===="
+# IMPORTANT: Replace 'totxt.save' with the actual command to run totxt.save
+# This example assumes 'totxt.save' is an executable or a function/alias available in your shell.
+# If it's a Python script, you might need 'python /path/to/totxt.save.py'
+# If it's a binary, you might need '/path/to/totxt.save'
+# Replace 'snapshot.txt' with the desired filename for the snapshot.
+totxt.save > "${OUTPUT_DIR}/snapshot.txt" 2>&1 || echo "Warning: totxt.save command failed or had output. Check ${OUTPUT_DIR}/snapshot.txt"
 
 echo "==== Build Complete ===="
 if [ -f "${BUILD_DIR}/sep_engine" ]; then

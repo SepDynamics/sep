@@ -16,6 +16,7 @@
 #include <stddef.h>  // For size_t, ptrdiff_t
 #include <math.h>    // For math functions
 #include <setjmp.h>  // For __jmp_buf
+#include <chrono>    // For CLOCK_MONOTONIC and chrono utilities
 
 // Now include C++ headers that depend on C functions being in global namespace
 #include <string>

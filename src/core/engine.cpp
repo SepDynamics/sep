@@ -38,6 +38,7 @@
 #include <cstdint>
 #include <algorithm>
 #include <cstdio>
+#include <cstring>
 #include <exception>
 #include <cstring>  // For std::memcpy, std::memcmp if used in headers
 #include <numeric>

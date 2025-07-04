@@ -33,7 +33,7 @@ typedef unsigned __int64 uint64_t;
 #endif
 #include <assert.h>
 #include <ctype.h>
-#include <string.h>
+#include <cstring>
 #include <limits.h>
 }
 

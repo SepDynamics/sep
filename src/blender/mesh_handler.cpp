@@ -7,8 +7,8 @@
 #include "core/common.h"  // defines sep::SEPResult
 
 // Standard library includes
-#include <string.h> // Added for C string functions
-#include <time.h>   // Added for C time functions
+#include <cstring> // Added for C string functions
+#include <ctime>   // Added for C time functions
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow
 // the library to link without the real Blender environment.

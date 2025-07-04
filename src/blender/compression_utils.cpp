@@ -1,11 +1,14 @@
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
+#include <string>  // Required for std::string
+#include <vector>  // Already included below, but ensuring early availability
+#include <array>   // Already included below, but ensuring early availability
+using namespace std; // For string type and common C functions
 #include "blender/compression.h"
 #include "compat/math_common.h"
 
 // Standard library includes
-#include <array>
-#include <vector>
+
 
 namespace blender {
 namespace compression_utils {

@@ -1,5 +1,5 @@
-#include <cstring>  // For std::memcpy, std::memset, std::strlen, std::strcmp etc.
-#include <ctime>    // For C-style time functions
+#include <string.h>
+#include <time.h>
 #include <string>  // For std::string
 #include "compat/math_common.h"
 

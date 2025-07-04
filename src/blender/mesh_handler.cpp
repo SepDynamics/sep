@@ -7,8 +7,8 @@
 #include "core/common.h"  // defines sep::SEPResult
 
 // Standard library includes
-#include <cstring> // For std::memcpy, std::memset, std::strlen, std::strcmp
-#include <ctime>
+#include <string.h>
+#include <time.h>
 #include <string>  // For std::string
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow

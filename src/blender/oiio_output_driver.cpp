@@ -1,5 +1,5 @@
-#include <cstring> // For std::memcpy, std::memset
-#include <ctime> // For C-style time functions like time, localtime, gmtime if any are used indirectly
+#include <string.h>
+#include <time.h>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {

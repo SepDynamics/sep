@@ -7,6 +7,7 @@
 #include <functional>
 
 #include "util/string.h"
+#include <string>
 
 CCL_NAMESPACE_BEGIN
 
@@ -69,7 +70,7 @@ class scoped_callback_timer {
 
 /* Make human readable string from time, compatible with Blender metadata. */
 
-string time_human_readable_from_seconds(const double seconds);
-double time_human_readable_to_seconds(const string &time_string);
+std::string time_human_readable_from_seconds(const double seconds);
+double time_human_readable_to_seconds(const std::string &time_string);
 
 CCL_NAMESPACE_END

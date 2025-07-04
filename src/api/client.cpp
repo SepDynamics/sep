@@ -1,10 +1,11 @@
 #include "api/client.h"
+#include <cstring> // Ensure C string functions available before curl headers
 #include "curl/curl.h"
 #include <memory>
 #include <string>
+
 #include <stdexcept>
 #include <utility>
-#include <cstring>
 
 
 #include "core/error_handler.h"  // For sep::ErrorCode

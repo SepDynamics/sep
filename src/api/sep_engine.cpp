@@ -11,6 +11,8 @@
 #include <atomic>
 #include <thread>
 #include <vector>
+#include <cstring>  // For std::memcpy, std::memcmp, etc.
+#include <ctime>    // For CLOCK_MONOTONIC on some platforms
 
 // GLM includes
 

@@ -3,6 +3,7 @@
 
 #include "api/types.h"
 #include "api/ollama_types.h"
+#include <cstring> // Ensure mem* functions are available before curl headers
 #include "curl/curl.h"
 #include "core/common.h"
 

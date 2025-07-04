@@ -1,6 +1,7 @@
 #include "quantum/types.h"
 #include "memory/types.h" // Add include for MemoryTierEnum
 #include <nlohmann/json.hpp> 
+#include <cstring>
 
 namespace sep::quantum {
 

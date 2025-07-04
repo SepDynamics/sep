@@ -3,6 +3,7 @@
 
 // Include CUDA headers
 #include "compat/cuda_common.h"
+#include <cstring>
 
 
 #include "compat/raii.h"

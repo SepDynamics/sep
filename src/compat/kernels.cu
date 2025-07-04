@@ -2,6 +2,7 @@
 #include "compat/constants.h"
 #include "compat/cuda_helpers.h"
 #include "compat/cuda_unified_fix.h"
+#include <cstring>
 
 #ifdef __CUDACC__
 #include <cuda_runtime.h>

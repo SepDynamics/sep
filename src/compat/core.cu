@@ -5,6 +5,8 @@
 #include "compat/constants.h"
 #include "compat/raii.h"
 
+#include <cstring>
+
 #include "core/common.h"  // defines sep::SEPResult
 
 #include "compat/cuda_helpers.h"

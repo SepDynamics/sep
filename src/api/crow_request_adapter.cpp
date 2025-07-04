@@ -1,4 +1,5 @@
 #include "api/crow_request_adapter.h"
+#include <string>
 
 namespace sep {
 namespace api {

@@ -24,7 +24,10 @@ extern "C" {
 }
 
 #include <spdlog/spdlog.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <glm/gtc/constants.hpp>
+#include <cstdio>
 
 // Additional project headers
 #include "compat/math_common.h"
@@ -33,11 +36,11 @@ extern "C" {
 #include <new>
 #include <cstddef>
 #include <cstring>
+#include <cstdlib>
+#include <thread>
 #include <memory>
 #include <cfloat>
 #include <cmath>
-#include <spdlog/spdlog.h>
-#include <glm/gtc/constants.hpp>
 
 
 namespace sep {

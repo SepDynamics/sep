@@ -10,6 +10,7 @@
 
 #include "compat/types.h"
 #include "compat/cuda_unified_fix.h"
+#include <cstring>
 #include "compat/cuda_helpers.h"
 #include <cstddef>
 #include <cstdint>

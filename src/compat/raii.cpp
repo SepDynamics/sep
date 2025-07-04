@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>  // for memory allocation
+#include <cstring>  // For std::memcpy, std::memset
 #if defined(_MSC_VER)
 #include <malloc.h>
 #endif

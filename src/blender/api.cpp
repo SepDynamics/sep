@@ -1,7 +1,5 @@
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>   // For time-related functions
-#include <cstring>  // C++ wrappers
-#include <ctime>
+#include <cstring>  // For std::memcpy, std::memset, std::strlen, std::strcmp etc.
+#include <ctime>    // For C-style time functions
 #include <string>  // For std::string
 #include "compat/math_common.h"
 
@@ -135,7 +133,7 @@ sep_process_audio(SEPBlenderBridge* bridge, const float* samples, size_t count, 
     for (size_t i = 0; i < count; ++i)
     {
         float abs_sample = std::fabs(samples[i]);
-        peak             = std::max(peak, abs_sample);
+        peak             = std::max(peak, abs_sample); // Explicitly use std::max
         rms_sum += abs_sample * abs_sample;
     }
 

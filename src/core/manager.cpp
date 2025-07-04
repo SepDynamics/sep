@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <ios>
+#include <cstring>
 
 namespace sep {
 namespace config {

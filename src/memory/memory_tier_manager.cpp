@@ -10,6 +10,7 @@
 
 #include "compat/cuda_common.h"
 #include <cuda_runtime.h>
+#include <cstring>
 
 #include "compat/cuda_helpers.h"
 #include "compat/kernels.cuh"

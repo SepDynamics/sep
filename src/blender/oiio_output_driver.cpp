@@ -2,6 +2,8 @@
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
+#include <string.h> // For memcmp, memcpy, memset
+#include <time.h>   // For C time functions
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
 #include <string> // Required for std::string

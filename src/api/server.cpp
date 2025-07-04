@@ -1,3 +1,19 @@
+// Standard library includes
+#include <chrono>
+#include <csignal>
+#include <cstdio>
+#include <memory>
+#include <string>
+#include <thread>
+
+// Compatibility layer includes
+#include "compat/shim.h"
+
+// Third-party includes
+#include <nlohmann/json.hpp>
+#include <spdlog/spdlog.h>
+
+// Project includes
 #include "core/logging.h"
 #include "memory/memory_tier_manager.hpp"
 #include "crow/crow_isolation.h"
@@ -14,22 +30,12 @@
 #include "quantum/processor.h"
 #include "api/server.h"
 #include "quantum/cycles.h"
-
 #include "compat/types.h"
 
 #ifdef SEP_HAS_BLENDER
 #include "blender/api.h"
 #include "blender/cycles_renderer.h"
 #endif
-
-#include <chrono>
-#include <thread>
-#include <csignal>
-#include <cstdio>
-#include <memory>
-#include <string>
-#include <nlohmann/json.hpp>
-#include <spdlog/spdlog.h>
 
 namespace sep::api {
 
@@ -102,9 +108,18 @@ void SEPApiServer::start() {
 }
 
 bool SEPApiServer::run() {
+  if (!app_) return false;
+
   // Ensure routes are registered just before starting
   setup_routes();
   start();
+
+  // Start server in a new thread
+  server_thread_ = std::make_unique<std::thread>([this]() {
+    running_ = true;
+    app_->run();
+  });
+
   return true;
 }
 
@@ -118,11 +133,15 @@ void SEPApiServer::stop() {
   running_ = false;
 
   if (app_) {
+    // Stop the Crow app first
     app_->stop();
-  }
-
-  if (server_thread_ && server_thread_->joinable()) {
-    server_thread_->join();
+    
+    // Wait for server thread to finish
+    if (server_thread_ && server_thread_->joinable()) {
+      logger_->debug("Waiting for server thread to join...");
+      server_thread_->join();
+      server_thread_.reset();
+    }
   }
 
   logger_->info("SEP API Server stopped");

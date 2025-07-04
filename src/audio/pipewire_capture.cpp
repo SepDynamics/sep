@@ -1,8 +1,8 @@
 #include "audio/pipewire_capture.h"
 #include "audio/types.h"
 #include "audio/capture.h"
-#include <string.h>
-#include <time.h>
+#include <string.h> // For strerror, memcpy, etc.
+#include <time.h>   // For timespec and nanosleep
 #include "audio/config.h"
 
 #ifdef SEP_HAS_AUDIO

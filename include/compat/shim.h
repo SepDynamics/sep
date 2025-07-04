@@ -6,6 +6,7 @@
 
 #include <string.h>  // For memcpy, memset, memcmp, strlen, etc.
 #include <time.h>    // For time, clock, difftime, mktime, etc.
+#include <unistd.h>  // For nanosleep, getpid, etc.
 // Ensure C++ wrappers of the C headers are also available
 #include <cstring>
 #include <ctime>

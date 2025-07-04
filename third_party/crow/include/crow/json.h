@@ -11,6 +11,7 @@
 #endif
 #include <iostream>
 #include <algorithm>
+#include <string.h>
 #include <memory>
 #include <vector>
 #include <cmath>
@@ -749,9 +750,9 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                 }
 
                 const std::size_t len = end_ - start_;
-                const bool has_minus = std::memchr(start_, '-', len) != nullptr;
-                const bool has_e = std::memchr(start_, 'e', len) != nullptr || std::memchr(start_, 'E', len) != nullptr;
-                const bool has_dec_sep = std::memchr(start_, '.', len) != nullptr;
+                const bool has_minus = ::memchr(start_, '-', len) != nullptr;
+                const bool has_e = ::memchr(start_, 'e', len) != nullptr || ::memchr(start_, 'E', len) != nullptr;
+                const bool has_dec_sep = ::memchr(start_, '.', len) != nullptr;
                 if (has_dec_sep || has_e)
                     nt_ = num_type::Floating_point;
                 else if (has_minus)

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "demo_manager.hpp"
-#include "sep_engine_wrapper.h"
 #include <memory>
 #include <vector>
 #include <glm/vec3.hpp>
@@ -9,6 +8,11 @@
 
 namespace sep {
 namespace workbench {
+
+namespace audio {
+class AudioCapture;
+class AudioPipeline;
+}
 
 class AudioVisualizerDemo : public Demo {
 public:
@@ -20,8 +24,8 @@ public:
     void handleMouse(int x, int y, int button) override;
 
 private:
-    std::unique_ptr<sep::audio::AudioCapture> capture_;
-    std::unique_ptr<sep::audio::AudioPipeline> pipeline_;
+    std::unique_ptr<audio::AudioCapture> capture_;
+    std::unique_ptr<audio::AudioPipeline> pipeline_;
     std::vector<glm::vec3> latest_patterns_;
     std::vector<glm::vec3> latest_visual_patterns_;
 

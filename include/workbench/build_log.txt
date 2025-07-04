@@ -1,0 +1,330 @@
+[ 50%] Building CXX object CMakeFiles/sep_workbench.dir/demos/audio_visualizer.cpp.o
+[ 50%] Building CXX object CMakeFiles/sep_workbench.dir/main.cpp.o
+[ 50%] Building CXX object CMakeFiles/sep_workbench.dir/demos/genesis_pattern.cpp.o
+[ 66%] Building CXX object CMakeFiles/sep_workbench.dir/demos/memory_garden.cpp.o
+/sep/examples/workbench/demos/genesis_pattern.cpp:2:10: fatal error: core/engine.h: No such file or directory
+    2 | #include "core/engine.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [CMakeFiles/sep_workbench.dir/build.make:107: CMakeFiles/sep_workbench.dir/demos/genesis_pattern.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/sep/examples/workbench/demos/audio_visualizer.cpp:3:10: fatal error: audio/capture.h: No such file or directory
+    3 | #include <audio/capture.h>
+      |          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [CMakeFiles/sep_workbench.dir/build.make:121: CMakeFiles/sep_workbench.dir/demos/audio_visualizer.cpp.o] Error 1
+/sep/examples/workbench/main.cpp: In function ‘void initializeEngine()’:
+/sep/examples/workbench/main.cpp:39:34: error: incomplete type ‘sep::Config’ used in nested name specifier
+   39 |     const auto& config = Config::getInstance();
+      |                                  ^~~~~~~~~~~
+/sep/examples/workbench/main.cpp:43:13: error: invalid use of incomplete type ‘class sep::Engine’
+   43 |     g_engine->setCudaEnabled(engine_config.cuda_enabled);
+      |             ^~
+In file included from /sep/examples/workbench/demo_manager.hpp:8,
+                 from /sep/examples/workbench/main.cpp:4:
+/sep/examples/workbench/sep_engine_wrapper.h:9:11: note: forward declaration of ‘class sep::Engine’
+    9 |     class Engine;
+      |           ^~~~~~
+/sep/examples/workbench/main.cpp:44:13: error: invalid use of incomplete type ‘class sep::Engine’
+   44 |     g_engine->setMetricsEnabled(engine_config.metrics_enabled);
+      |             ^~
+/sep/examples/workbench/sep_engine_wrapper.h:9:11: note: forward declaration of ‘class sep::Engine’
+    9 |     class Engine;
+      |           ^~~~~~
+/sep/examples/workbench/main.cpp:45:13: error: invalid use of incomplete type ‘class sep::Engine’
+   45 |     g_engine->setLogLevel(engine_config.log_level);
+      |             ^~
+/sep/examples/workbench/sep_engine_wrapper.h:9:11: note: forward declaration of ‘class sep::Engine’
+    9 |     class Engine;
+      |           ^~~~~~
+/sep/examples/workbench/main.cpp:47:18: error: invalid use of incomplete type ‘class sep::Engine’
+   47 |     if (!g_engine->initialize()) {
+      |                  ^~
+/sep/examples/workbench/sep_engine_wrapper.h:9:11: note: forward declaration of ‘class sep::Engine’
+    9 |     class Engine;
+      |           ^~~~~~
+/sep/examples/workbench/main.cpp: In function ‘void initializeRenderer()’:
+/sep/examples/workbench/main.cpp:54:28: error: incomplete type ‘sep::Config’ used in nested name specifier
+   54 |     auto& config = Config::getInstance();
+      |                            ^~~~~~~~~~~
+/sep/examples/workbench/main.cpp:63:15: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   63 |     g_renderer->setWindowTitle(window.title);
+      |               ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:64:15: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   64 |     g_renderer->setWindowSize(window.width, window.height);
+      |               ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:65:15: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   65 |     g_renderer->setFullscreen(window.fullscreen);
+      |               ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:66:15: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   66 |     g_renderer->setVSync(window.vsync);
+      |               ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:69:15: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   69 |     g_renderer->setSamples(renderer.cycles.samples);
+      |               ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:70:15: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   70 |     g_renderer->setDenoising(renderer.cycles.denoising);
+      |               ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:71:15: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   71 |     g_renderer->setDevice(renderer.cycles.device);
+      |               ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:73:20: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   73 |     if (!g_renderer->initialize()) {
+      |                    ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp: In function ‘void mainLoop()’:
+/sep/examples/workbench/main.cpp:105:23: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+  105 |         if (g_renderer->shouldClose()) {
+      |                       ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:110:23: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+  110 |         if (g_renderer->hasKeyEvent()) {
+      |                       ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:111:43: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+  111 |             unsigned char key = g_renderer->getLastKey();
+      |                                           ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:116:23: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+  116 |         if (g_renderer->hasMouseEvent()) {
+      |                       ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:118:23: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+  118 |             g_renderer->getLastMouseEvent(x, y, button);
+      |                       ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:127:19: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+  127 |         g_renderer->present();
+      |                   ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+In file included from /usr/include/c++/14/memory:78,
+                 from /sep/examples/workbench/main.cpp:1:
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::Engine; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::Engine>]’:
+/sep/examples/workbench/main.cpp:42:40:   required from here
+   42 |     g_engine = std::make_unique<Engine>();
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::Engine’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/sep_engine_wrapper.h:9:11: note: forward declaration of ‘class sep::Engine’
+    9 |     class Engine;
+      |           ^~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::CyclesRenderer; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::CyclesRenderer>]’:
+/sep/examples/workbench/main.cpp:60:50:   required from here
+   60 |     g_renderer = std::make_unique<CyclesRenderer>();
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::Engine]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::Engine; _Dp = std::default_delete<sep::Engine>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:42:40:   required from here
+   42 |     g_engine = std::make_unique<Engine>();
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::Engine’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::CyclesRenderer]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::CyclesRenderer; _Dp = std::default_delete<sep::CyclesRenderer>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:60:50:   required from here
+   60 |     g_renderer = std::make_unique<CyclesRenderer>();
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::CyclesRenderer’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::PatternProcessor]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::workbench::PatternProcessor; _Dp = std::default_delete<sep::workbench::PatternProcessor>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/demos/genesis_pattern.hpp:12:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::GenesisPatternDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::GenesisPatternDemo>]’
+   12 | class GenesisPatternDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:84:52:   required from here
+   84 |         return std::make_unique<GenesisPatternDemo>();
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::PatternProcessor’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::QuantumCoherenceManager]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::workbench::QuantumCoherenceManager; _Dp = std::default_delete<sep::workbench::QuantumCoherenceManager>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/demos/genesis_pattern.hpp:12:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::GenesisPatternDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::GenesisPatternDemo>]’
+   12 | class GenesisPatternDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:84:52:   required from here
+   84 |         return std::make_unique<GenesisPatternDemo>();
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::QuantumCoherenceManager’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::audio::AudioCapture]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::workbench::audio::AudioCapture; _Dp = std::default_delete<sep::workbench::audio::AudioCapture>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/demos/audio_visualizer.hpp:17:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::AudioVisualizerDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::AudioVisualizerDemo>]’
+   17 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:87:53:   required from here
+   87 |         return std::make_unique<AudioVisualizerDemo>();
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::audio::AudioCapture’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::audio::AudioPipeline]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::workbench::audio::AudioPipeline; _Dp = std::default_delete<sep::workbench::audio::AudioPipeline>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/demos/audio_visualizer.hpp:17:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::AudioVisualizerDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::AudioVisualizerDemo>]’
+   17 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:87:53:   required from here
+   87 |         return std::make_unique<AudioVisualizerDemo>();
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::audio::AudioPipeline’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::MemoryTierManager]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::MemoryTierManager; _Dp = std::default_delete<sep::MemoryTierManager>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/demos/memory_garden.hpp:10:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::MemoryGardenDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::MemoryGardenDemo>]’
+   10 | class MemoryGardenDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~
+/sep/examples/workbench/main.cpp:90:50:   required from here
+   90 |         return std::make_unique<MemoryGardenDemo>();
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::MemoryTierManager’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+make[2]: *** [CMakeFiles/sep_workbench.dir/build.make:79: CMakeFiles/sep_workbench.dir/main.cpp.o] Error 1
+/sep/examples/workbench/demos/memory_garden.cpp: In member function ‘glm::vec3 sep::workbench::MemoryGardenDemo::calculateNodePosition(float)’:
+/sep/examples/workbench/demos/memory_garden.cpp:50:60: error: ‘pi’ is not a member of ‘glm’; did you mean ‘std::numbers::pi’?
+   50 |     float angle = static_cast<float>(nodes_.size()) * glm::pi<float>() * 0.5f;
+      |                                                            ^~
+In file included from /usr/include/c++/14/bits/max_size_type.h:37,
+                 from /usr/include/c++/14/bits/ranges_base.h:39,
+                 from /usr/include/c++/14/bits/ranges_util.h:34,
+                 from /usr/include/c++/14/tuple:44,
+                 from /usr/include/c++/14/bits/unique_ptr.h:37,
+                 from /usr/include/c++/14/memory:78,
+                 from /sep/examples/workbench/demo_manager.hpp:3,
+                 from /sep/examples/workbench/demos/memory_garden.hpp:3,
+                 from /sep/examples/workbench/demos/memory_garden.cpp:1:
+/usr/include/c++/14/numbers:127:27: note: ‘std::numbers::pi’ declared here
+  127 |   inline constexpr double pi = pi_v<double>;
+      |                           ^~
+/sep/examples/workbench/demos/memory_garden.cpp:50:63: error: expected primary-expression before ‘float’
+   50 |     float angle = static_cast<float>(nodes_.size()) * glm::pi<float>() * 0.5f;
+      |                                                               ^~~~~
+/sep/examples/workbench/demos/memory_garden.cpp: In member function ‘virtual void sep::workbench::MemoryGardenDemo::render()’:
+/sep/examples/workbench/demos/memory_garden.cpp:93:14: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   93 |     renderer_->setColorMode("coherence");
+      |              ^~
+In file included from /sep/examples/workbench/demo_manager.hpp:8:
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/demos/memory_garden.cpp:94:14: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+   94 |     renderer_->setEmissionMode("stability");
+      |              ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/demos/memory_garden.cpp:101:14: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+  101 |     renderer_->renderPatternState(points);
+      |              ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/sep/examples/workbench/demos/memory_garden.cpp:108:22: error: invalid use of incomplete type ‘class sep::CyclesRenderer’
+  108 |             renderer_->renderConnection(start, end, rel.strength * connection_opacity_);
+      |                      ^~
+/sep/examples/workbench/sep_engine_wrapper.h:13:11: note: forward declaration of ‘class sep::CyclesRenderer’
+   13 |     class CyclesRenderer;
+      |           ^~~~~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::MemoryTierManager; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::MemoryTierManager>]’:
+/sep/examples/workbench/demos/memory_garden.cpp:12:58:   required from here
+   12 |     memory_manager_ = std::make_unique<MemoryTierManager>();
+      |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::MemoryTierManager’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/sep_engine_wrapper.h:16:11: note: forward declaration of ‘class sep::MemoryTierManager’
+   16 |     class MemoryTierManager;
+      |           ^~~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::QuantumCoherenceManager; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::QuantumCoherenceManager>]’:
+/sep/examples/workbench/demos/memory_garden.cpp:13:67:   required from here
+   13 |     coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+      |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:1077:30: error: invalid use of incomplete type ‘class sep::QuantumCoherenceManager’
+ 1077 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/sep_engine_wrapper.h:19:11: note: forward declaration of ‘class sep::QuantumCoherenceManager’
+   19 |     class QuantumCoherenceManager;
+      |           ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::MemoryTierManager]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::MemoryTierManager; _Dp = std::default_delete<sep::MemoryTierManager>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/demos/memory_garden.cpp:12:58:   required from here
+   12 |     memory_manager_ = std::make_unique<MemoryTierManager>();
+      |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::MemoryTierManager’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/14/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::QuantumCoherenceManager]’:
+/usr/include/c++/14/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::QuantumCoherenceManager; _Dp = std::default_delete<sep::QuantumCoherenceManager>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/examples/workbench/demos/memory_garden.cpp:13:67:   required from here
+   13 |     coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+      |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/14/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::QuantumCoherenceManager’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+make[2]: *** [CMakeFiles/sep_workbench.dir/build.make:135: CMakeFiles/sep_workbench.dir/demos/memory_garden.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:87: CMakeFiles/sep_workbench.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

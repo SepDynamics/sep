@@ -1,7 +1,6 @@
 #pragma once
 
 #include "demo_manager.hpp"
-#include "sep_engine_wrapper.h"
 #include <memory>
 #include <vector>
 
@@ -29,8 +28,8 @@ private:
         float strength;
     };
 
-    std::unique_ptr<sep::MemoryTierManager> memory_manager_;
-    std::unique_ptr<sep::QuantumCoherenceManager> coherence_manager_;
+    std::unique_ptr<MemoryTierManager> memory_manager_;
+    std::unique_ptr<QuantumCoherenceManager> coherence_manager_;
 
     std::vector<Node> nodes_;
     std::vector<Relationship> relationships_;

@@ -37,7 +37,7 @@ public:
   virtual void setCallback(AudioCallback callback) = 0;
 
   // Get current metrics
-  virtual AudioMetrics getMetrics() const = 0;
+  virtual SEPAudioMetrics getMetrics() const = 0;
 
   // Factory method to create PipeWire implementation
   static std::unique_ptr<AudioCapture> create();

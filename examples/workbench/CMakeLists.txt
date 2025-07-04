@@ -1,45 +1,62 @@
-cmake_minimum_required(VERSION 3.15)
-project(SEPWorkbench CXX)
+# SEP Workbench Example Build Configuration
+cmake_minimum_required(VERSION 3.16)
 
-# Find SEP package
-find_package(sep REQUIRED)
-
-# Workbench executable
+# Add the workbench executable with its source files
 add_executable(sep_workbench
     main.cpp
     demo_manager.cpp
+    config.cpp
     demos/genesis_pattern.cpp
     demos/audio_visualizer.cpp
     demos/memory_garden.cpp
 )
 
-# Include directories
-target_include_directories(sep_workbench PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_INSTALL_PREFIX}/include
-    ${CMAKE_SOURCE_DIR}/extern/imgui
-    ${CMAKE_SOURCE_DIR}/extern/glm
-)
-
-# Link libraries
-target_link_libraries(sep_workbench PRIVATE
-    sep::core
-    sep::quantum
-    sep::memory
-    sep::blender
-    sep::audio
-    sep::compat
-    imgui
-    glm
-)
-
 # Set C++ standard
-set_target_properties(sep_workbench PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED ON
+set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
+
+# Add include directories for the main engine and dependencies
+target_include_directories(sep_workbench PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+    /sep/include
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    /sep/extern/cycles/src
+    /sep/extern/glm
 )
 
-# Install target
-install(TARGETS sep_workbench
-    RUNTIME DESTINATION bin
+# Define preprocessor macros
+target_compile_definitions(sep_workbench PRIVATE
+    GLM_ENABLE_EXPERIMENTAL
+    SEP_WORKBENCH_DEMO
 )
+
+# Add library search paths
+link_directories(
+    /sep/src
+    /sep/src/core
+    /sep/src/quantum
+    /sep/src/memory
+    /sep/src/audio
+    /sep/src/blender
+    /sep/src/compat
+    /sep/build/lib
+    /sep/cmake-make/src/core
+    /sep/cmake-make/src/quantum
+    /sep/cmake-make/src/memory
+    /sep/cmake-make/src/audio
+    /sep/cmake-make/src/blender
+    /sep/cmake-make/src/compat
+)
+
+# Link against the SEP libraries using full paths
+target_link_libraries(sep_workbench PRIVATE
+    # SEP Engine Libraries with full paths
+    /sep/src/core/libsep_core.a
+    /sep/src/quantum/libsep_quantum.a
+    /sep/src/memory/libsep_memory.a
+    /sep/src/audio/libsep_audio.a
+    /sep/src/blender/libsep_blender.a
+    /sep/src/compat/libsep_compat.a
+)
+
+# Add this subdirectory to your root CMakeLists.txt:
+# add_subdirectory(examples/workbench)

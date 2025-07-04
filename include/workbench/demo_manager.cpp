@@ -4,7 +4,7 @@
 namespace sep {
 namespace workbench {
 
-void DemoManager::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+void DemoManager::initialize(Engine* engine, CyclesRenderer* renderer) {
     engine_ = engine;
     renderer_ = renderer;
 }

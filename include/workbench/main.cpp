@@ -1,11 +1,6 @@
 #include <memory>
 #include <stdexcept>
-#include <iostream>
 
-// Include our wrapper header instead of direct includes
-#include "sep_engine_wrapper.h"
-
-// Include demo headers
 #include "demo_manager.hpp"
 #include "demos/genesis_pattern.hpp"
 #include "demos/audio_visualizer.hpp"
@@ -21,7 +16,7 @@ void registerDemos();
 void mainLoop();
 void cleanup();
 
-// Global state - use the same types for both demo and non-demo modes
+// Global state
 std::unique_ptr<Engine> g_engine;
 std::unique_ptr<CyclesRenderer> g_renderer;
 
@@ -41,22 +36,8 @@ int main() {
 }
 
 void initializeEngine() {
-#ifdef SEP_WORKBENCH_DEMO
-    // In demo mode, use simplified initialization
-    g_engine = std::make_unique<Engine>();
-    
-    // Set default values
-    g_engine->setCudaEnabled(false);
-    g_engine->setMetricsEnabled(false);
-    g_engine->setLogLevel(0);
-    
-    if (!g_engine->initialize()) {
-        throw std::runtime_error("Failed to initialize SEP engine");
-    }
-#else
-    // Use the correct ConfigManager class with proper namespace
-    const auto& config_manager = sep::core::config::ConfigManager::getInstance();
-    const auto& engine_config = config_manager.getEngineConfig();
+    const auto& config = Config::getInstance();
+    const auto& engine_config = config.engine();
 
     g_engine = std::make_unique<Engine>();
     g_engine->setCudaEnabled(engine_config.cuda_enabled);
@@ -66,43 +47,25 @@ void initializeEngine() {
     if (!g_engine->initialize()) {
         throw std::runtime_error("Failed to initialize SEP engine");
     }
-#endif
 }
 
 void initializeRenderer() {
-#ifdef SEP_WORKBENCH_DEMO
-    // In demo mode, use simplified initialization
-    g_renderer = std::make_unique<CyclesRenderer>();
-    
-    // Set default values
-    g_renderer->setWindowTitle("SEP Workbench Demo");
-    g_renderer->setWindowSize(1280, 720);
-    g_renderer->setFullscreen(false);
-    g_renderer->setVSync(true);
-    g_renderer->setSamples(64);
-    g_renderer->setDenoising(true);
-    g_renderer->setDevice("CPU");
-    
-    if (!g_renderer->initialize()) {
-        throw std::runtime_error("Failed to initialize Cycles renderer");
-    }
-#else
     // Load configuration
-    auto& config_manager = sep::core::config::ConfigManager::getInstance();
-    if (!config_manager.load("config.json")) {
+    auto& config = Config::getInstance();
+    if (!config.load("config.json")) {
         throw std::runtime_error("Failed to load configuration");
     }
 
     // Initialize renderer with config settings
     g_renderer = std::make_unique<CyclesRenderer>();
     
-    const auto& window = config_manager.getWindowConfig();
+    const auto& window = config.window();
     g_renderer->setWindowTitle(window.title);
     g_renderer->setWindowSize(window.width, window.height);
     g_renderer->setFullscreen(window.fullscreen);
     g_renderer->setVSync(window.vsync);
 
-    const auto& renderer = config_manager.getRendererConfig();
+    const auto& renderer = config.renderer();
     g_renderer->setSamples(renderer.cycles.samples);
     g_renderer->setDenoising(renderer.cycles.denoising);
     g_renderer->setDevice(renderer.cycles.device);
@@ -110,7 +73,6 @@ void initializeRenderer() {
     if (!g_renderer->initialize()) {
         throw std::runtime_error("Failed to initialize Cycles renderer");
     }
-#endif
 }
 
 void registerDemos() {

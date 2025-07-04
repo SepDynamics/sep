@@ -1,29 +1,12 @@
 #include "memory_garden.hpp"
 #include <config.hpp>
 #include <glm/vec3.hpp>
-#include <glm/gtc/constants.hpp>
 
 namespace sep {
 namespace workbench {
 
 void MemoryGardenDemo::init() {
-#ifdef SEP_WORKBENCH_DEMO
-    // Use the full implementation classes from sep_engine_wrapper.h
-    // In demo mode, we need to use sep::MemoryTierManager and sep::QuantumCoherenceManager
-    // since those are the types declared in memory_garden.hpp
-    memory_manager_ = std::unique_ptr<sep::MemoryTierManager>(new sep::MemoryTierManager());
-    coherence_manager_ = std::unique_ptr<sep::QuantumCoherenceManager>(new sep::QuantumCoherenceManager());
-    
-    // Default values for workbench demo
-    stm_radius_ = 10.0f;
-    mtm_radius_ = 20.0f;
-    ltm_radius_ = 30.0f;
-    
-    show_connections_ = true;
-    connection_opacity_ = 0.5f;
-    pattern_scale_ = 1.0f;
-#else
-    const auto& cfg = sep::core::config::ConfigManager::getInstance().getEngineConfig().memory_garden();
+    const auto& cfg = Config::getInstance().memory_garden();
     
     // Initialize memory tier manager
     memory_manager_ = std::make_unique<MemoryTierManager>();
@@ -38,7 +21,6 @@ void MemoryGardenDemo::init() {
     show_connections_ = cfg.visualization.show_connections;
     connection_opacity_ = cfg.visualization.connection_opacity;
     pattern_scale_ = cfg.visualization.pattern_scale;
-#endif
     
     // Create some initial patterns for demonstration
     createInitialPatterns();
@@ -105,30 +87,6 @@ void MemoryGardenDemo::updateRelationships() {
 }
 
 void MemoryGardenDemo::render() {
-#ifdef SEP_WORKBENCH_DEMO
-    // Use the CyclesRenderer implementation from sep_engine_wrapper.h
-    if (renderer_) {
-        // Render tier boundaries
-        renderer_->setColorMode("coherence");
-        renderer_->setEmissionMode("stability");
-        
-        // Render patterns
-        std::vector<glm::vec3> points;
-        for (const auto& node : nodes_) {
-            points.push_back(node.position);
-        }
-        renderer_->renderPatternState(points);
-        
-        // Render relationships
-        if (show_connections_) {
-            for (const auto& rel : relationships_) {
-                const auto& start = nodes_[rel.from].position;
-                const auto& end = nodes_[rel.to].position;
-                renderer_->renderConnection(start, end, rel.strength * connection_opacity_);
-            }
-        }
-    }
-#else
     if (!renderer_) return;
     
     // Render tier boundaries
@@ -150,16 +108,10 @@ void MemoryGardenDemo::render() {
             renderer_->renderConnection(start, end, rel.strength * connection_opacity_);
         }
     }
-#endif
 }
 
 void MemoryGardenDemo::cleanup() {
     nodes_.clear();
-    relationships_.clear();
-    
-    // Clean up memory manager and coherence manager
-    memory_manager_.reset();
-    coherence_manager_.reset();
 }
 
 void MemoryGardenDemo::handleKeyboard(unsigned char key) {

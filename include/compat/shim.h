@@ -7,7 +7,7 @@
 #include <string.h>  // For memcpy, memset, memcmp, strlen, etc.
 #include <time.h>    // For time, clock, difftime, mktime, etc.
 // Ensure C++ wrappers of the C headers are also available
-#include <cstring>
+#include <cstring> // C++ wrapper for memcpy, strcmp, etc.
 #include <ctime>
 #include <stdlib.h>  // For malloc, free, getenv, etc.
 #include <stdio.h>   // For snprintf, fprintf, etc.

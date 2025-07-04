@@ -1,8 +1,8 @@
 #include "audio/pipewire_capture.h"
 #include "audio/types.h"
 #include "audio/capture.h"
-#include <string.h>
-#include <time.h>
+#include <string.h> // Required for strerror, strncpy and similar C string functions
+#include <time.h>   // Required for timespec and CLOCK_MONOTONIC
 #include "audio/config.h"
 
 #ifdef SEP_HAS_AUDIO

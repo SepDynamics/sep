@@ -1,6 +1,7 @@
 #include "api/auth_middleware.h"
 
 #include <string>
+#include <cstring>
 #include <vector>
 
 namespace sep::api {

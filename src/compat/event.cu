@@ -4,6 +4,8 @@
 
 #include "compat/cuda_helpers.h"
 
+#include <cstring>
+
 // GLM isolation layer
 
 #include "compat/core.h"

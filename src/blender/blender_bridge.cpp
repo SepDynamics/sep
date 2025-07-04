@@ -1,9 +1,11 @@
 #include "blender/bridge.h"
 #include <string>  // For std::string
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>   // For time-related functions
-#include <cstring>
-#include <ctime>
+#include <cstring> // For std::memcpy
+#include <ctime>   // For std::time (if needed, but chrono is preferred)
+#include <thread>  // For std::thread
+#include <chrono>  // For std::chrono
+#include <condition_variable> // For std::condition_variable
+#include <mutex> // For std::mutex, std::lock_guard, std::unique_lock
 #include "core/error_handler.h"
 #include "core/metrics_collector.h"
 #include <spdlog/spdlog.h>
@@ -22,6 +24,11 @@ BlenderBridge::~BlenderBridge() {
 }
 
 mutable std::mutex objects_mutex_;
+
+void BlenderBridge::cleanup() {
+    // Perform any necessary cleanup, e.g., deallocating memory.
+    // For now, this is a placeholder.
+}
 
 sep::SEPResult BlenderBridge::init(::sep::GPUContext* ctx) {
     std::lock_guard<std::mutex> lock(objects_mutex_);

@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <ctime>
 #include <cmath>
+#include <chrono>
 
 // Additional C++ headers
 #include <functional>

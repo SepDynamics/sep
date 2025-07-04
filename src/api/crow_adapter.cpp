@@ -14,6 +14,9 @@
 #include "crow/http_request.h"
 #include "crow/http_response.h"
 
+// Ensure C string functions are available for any API headers using them
+#include <cstring>
+
 // Include our API headers
 #include "api/crow_adapter.h"
 #include "api/json_helpers.h"
@@ -23,7 +26,6 @@
 #include "core/types.h"  // For sep::config::APIConfig
 #include "core/manager.h" // For sep::config::ConfigManager
 #include "memory/memory_tier_manager.hpp"
-#include <cstring>
 
 // Include standard headers
 #include <memory>

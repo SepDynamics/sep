@@ -1,12 +1,14 @@
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
+#include <string> // Required for std::string
+
+using namespace std; // For string type and common C functions
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"
 #include "core/common.h"  // defines sep::SEPResult
 #include <vector>
 #include <algorithm>
 #include <numeric>
-#include <vector>
 
 namespace sep {
 namespace blender {

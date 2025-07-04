@@ -9,6 +9,9 @@
 // Standard library includes
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
+#include <string> // Required for std::string
+
+using namespace std; // For string type and common C functions
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow
 // the library to link without the real Blender environment.

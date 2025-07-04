@@ -4,6 +4,8 @@
 
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
+#include <string> // Required for std::string
+using namespace std; // For string type and common C functions
 #include "blender/oiio_output_driver.h"
 
 // Core Cycles includes

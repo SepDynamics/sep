@@ -1,11 +1,12 @@
 // Standard includes
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
+#include <string>  // Required for std::string
+using namespace std; // For string type and common C functions
 #include <cmath>
 #include <memory>
 #include <utility>
 #include <vector>
-#include <cstring>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {

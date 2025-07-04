@@ -1,7 +1,8 @@
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
-#include <cstring> // Keep existing cstring include
-#include <ctime>   // Keep existing ctime include
+#include <string>  // Required for std::string
+
+using namespace std; // For string type
 #include "blender/pattern_bridge.h"
 #include <thread>
 #include <chrono>
@@ -10,7 +11,6 @@
 #include <memory>
 #include <new>
 #include <sstream>
-#include <string>
 #include <utility>
 #include <vector>
 

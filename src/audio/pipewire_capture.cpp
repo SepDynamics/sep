@@ -1,6 +1,8 @@
 #include "audio/pipewire_capture.h"
 #include "audio/types.h"
 #include "audio/capture.h"
+#include <string.h> // For strerror, strncmp, strstr
+#include <time.h>   // For CLOCK_MONOTONIC, nanosleep
 #include "audio/config.h"
 
 #ifdef SEP_HAS_AUDIO

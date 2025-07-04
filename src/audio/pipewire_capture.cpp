@@ -26,6 +26,12 @@ extern "C" {
 #include <spdlog/spdlog.h>
 #include <glm/gtc/constants.hpp>
 
+#include <sys/stat.h> // For stat
+#include <unistd.h>   // For getuid
+#include <cstdio>     // For snprintf
+#include <cstdlib>    // For getenv, setenv, system, popen, pclose
+#include <thread>     // For std::this_thread::sleep_for
+
 // Additional project headers
 #include "compat/math_common.h"
 

@@ -3,6 +3,7 @@
 #include "api/background_cleanup.h"
 #include "crow/crow_isolation.h"
 #include <algorithm> // For std::clamp
+#include <cstring> // For std::memcpy
 #include <chrono>    // For std::chrono
 #include <nlohmann/json.hpp>
 #include <mutex>     // For std::lock_guard, std::mutex, std::unique_lock

@@ -1,10 +1,9 @@
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>   // For time-related functions
-#include <cstring>  // C++ wrappers
-#include <ctime>
+#include <cstring>  // For std::memcpy, std::memset, std::strlen, std::strcmp etc.
+#include <ctime>    // For C-style time functions
 #include <string>  // For std::string
 #include "compat/math_common.h"
 
+// Forward declarations for Blender functions (minimal stubs)
 #include "blender/types.h"
 #include "blender/config.h"
 #include "blender/pattern_bridge.h"

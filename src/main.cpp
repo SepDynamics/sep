@@ -3,6 +3,7 @@
 #include "core/common.h"
 #include "core/logging.h"
 #include <curl/curl.h> 
+#include <cstring> // For std::strcmp
 #include <exception>
 #include <iostream>
 #include <fstream>

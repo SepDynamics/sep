@@ -2,6 +2,7 @@
 #include <chrono>
 #include <csignal>
 #include <cstdio>
+#include <cstring> // For std::memcpy, std::strcmp etc.
 #include <memory>
 #include <string>
 #include <thread>

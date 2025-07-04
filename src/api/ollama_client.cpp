@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <cstring> // For std::memcpy
 #include <stdexcept> // Required for std::runtime_error
 #include <sstream>
 

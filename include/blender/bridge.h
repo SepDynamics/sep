@@ -120,6 +120,7 @@ class BlenderBridge {
   bool isValidHandle(sep::pattern::ObjectHandle handle) const;
   ObjectState* getObjectState(sep::pattern::ObjectHandle handle);
   void cleanupObject(sep::pattern::ObjectHandle handle);
+  void cleanup();
 
   void updateResourceStats();
   float calculateResourceUtilization(sep::pattern::ResourceType type) const;

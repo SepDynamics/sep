@@ -1,9 +1,9 @@
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>   // For time-related functions
-#include <cstring>
-#include <ctime>
+#include <cstring> // For std::memcpy, std::memset, std::memcmp
+#include <ctime>   // For C-style time functions (if needed)
 #include <string>  // For std::string
 #include "blender/compression.h"
+#include <algorithm> // For std::min, std::clamp
+#include <chrono>    // For std::chrono
 
 #include <lz4.h>
 #include <zstd.h>
@@ -19,12 +19,12 @@ namespace blender {
 std::vector<uint8_t> DeltaCompression::compress(const void* data, size_t size) {
   const uint8_t* bytes = static_cast<const uint8_t*>(data);
   std::vector<uint8_t> out(size);
-  auto start = std::chrono::high_resolution_clock::now();
+  auto start = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
 
   if (previousBlock.empty()) {
     out.assign(bytes, bytes + size);
   } else {
-    out.resize(size);
+    out.resize(size); // Resize to current block size
     for (size_t i = 0; i < size; ++i) {
       uint8_t prev = previousBlock[i % previousBlock.size()];
       out[i] = static_cast<uint8_t>(bytes[i] - prev);
@@ -44,7 +44,7 @@ bool DeltaCompression::decompress(const std::vector<uint8_t>& compressed, void* 
                                   size_t outputSize) {
   if (outputSize != compressed.size()) return false;
   uint8_t* out = static_cast<uint8_t*>(output);
-  auto start = std::chrono::high_resolution_clock::now();
+  auto start = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
 
   if (previousBlock.empty()) {
     std::memcpy(out, compressed.data(), outputSize);
@@ -71,12 +71,12 @@ CompressionStats DeltaCompression::getStats() const { return stats; }
 std::vector<uint8_t> LZ4Compression::compress(const void* data, size_t size) { 
   int maxSize = LZ4_compressBound(static_cast<int>(size));
   std::vector<uint8_t> out(maxSize);
-  auto start = std::chrono::high_resolution_clock::now();
+  auto start = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
 
   int compressedSize =
       LZ4_compress_default(reinterpret_cast<const char*>(data), reinterpret_cast<char*>(out.data()),
                            static_cast<int>(size), maxSize);
-  auto end = std::chrono::high_resolution_clock::now();
+  auto end = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   if (compressedSize <= 0) {
     return {};
   }
@@ -91,11 +91,11 @@ std::vector<uint8_t> LZ4Compression::compress(const void* data, size_t size) {
 
 bool LZ4Compression::decompress(const std::vector<uint8_t>& compressed, void* output,
                                 size_t outputSize) {
-  auto start = std::chrono::high_resolution_clock::now();
+  auto start = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   int result = LZ4_decompress_safe(
       reinterpret_cast<const char*>(compressed.data()), reinterpret_cast<char*>(output),
       static_cast<int>(compressed.size()), static_cast<int>(outputSize));
-  auto end = std::chrono::high_resolution_clock::now();
+  auto end = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   stats.decompressionTime = std::chrono::duration<float, std::milli>(end - start).count();
   return result >= 0;
 }
@@ -110,9 +110,9 @@ CompressionStats LZ4Compression::getStats() const { return stats; }
 std::vector<uint8_t> ZSTDCompression::compress(const void* data, size_t size) {
   size_t maxSize = ZSTD_compressBound(size);
   std::vector<uint8_t> out(maxSize);
-  auto start = std::chrono::high_resolution_clock::now();
+  auto start = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   size_t compressedSize = ZSTD_compress(out.data(), maxSize, data, size, 1);
-  auto end = std::chrono::high_resolution_clock::now();
+  auto end = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   if (ZSTD_isError(compressedSize)) {
     return {};
   }
@@ -126,9 +126,9 @@ std::vector<uint8_t> ZSTDCompression::compress(const void* data, size_t size) {
 
 bool ZSTDCompression::decompress(const std::vector<uint8_t>& compressed, void* output,
                                  size_t outputSize) {
-  auto start = std::chrono::high_resolution_clock::now();
+  auto start = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   size_t result = ZSTD_decompress(output, outputSize, compressed.data(), compressed.size());
-  auto end = std::chrono::high_resolution_clock::now();
+  auto end = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   stats.decompressionTime = std::chrono::duration<float, std::milli>(end - start).count();
   return !ZSTD_isError(result);
 }

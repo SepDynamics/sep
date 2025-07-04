@@ -4,6 +4,8 @@
 
 #include "compat/cuda_helpers.h"
 
+#include <cstring> // For memcpy (used by underlying CUDA functions)
+
 // GLM isolation layer
 
 #include "compat/core.h"

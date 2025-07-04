@@ -1,13 +1,11 @@
-#include <string.h> // For memcpy, memset, memcmp, etc.
-#include <time.h>   // For time-related functions
-#include <cstring>
-#include <ctime>
+#include <cstring> // For std::memcpy, std::memset, std::memcmp, std::strlen etc.
+#include <ctime>   // For C-style time functions
 #include <string>  // For std::string
 
 #include "blender/gpu_context.h"
 #include <cstdlib>
-#include <new>
-#include <sys/stat.h>
+#include <new> // For std::nothrow
+#include <sys/stat.h> // For stat
 
 namespace sep {
 

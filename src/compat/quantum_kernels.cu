@@ -11,6 +11,7 @@
 #include "compat/types.h"
 #include "compat/cuda_unified_fix.h"
 #include "compat/cuda_helpers.h"
+#include <cstring> // For std::memcpy (implicitly by pattern data init or internal device usage)
 #include <cstddef>
 #include <cstdint>
 

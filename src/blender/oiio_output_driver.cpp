@@ -4,6 +4,9 @@
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
+
+#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
+#include <time.h>   // For time-related functions
 #include <string>  // For std::string
 #include "blender/oiio_output_driver.h"
 

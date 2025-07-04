@@ -1,18 +1,25 @@
 #pragma once
 
-#ifdef SEP_HAS_AUDIO
-#include "audio/types.h"
-
-#include <functional>
 #include <memory>
-#include <vector>
-
 
 namespace sep {
 namespace audio {
 
+// Forward declarations for non-audio builds
+#ifndef SEP_HAS_AUDIO
 class AudioCapture {
- public:
+public:
+  virtual ~AudioCapture() = default;
+  static std::unique_ptr<AudioCapture> create();
+protected:
+  AudioCapture() = default;
+};
+#else
+#include "audio/types.h"
+#include <functional>
+
+class AudioCapture {
+public:
   using AudioCallback = std::function<void(const float*, size_t)>;
 
   virtual ~AudioCapture() = default;
@@ -35,10 +42,10 @@ class AudioCapture {
   // Factory method to create PipeWire implementation
   static std::unique_ptr<AudioCapture> create();
 
- protected:
+protected:
   AudioCapture() = default;
 };
-
-}  // namespace audio
-}  // namespace sep
 #endif // SEP_HAS_AUDIO
+
+} // namespace audio
+} // namespace sep

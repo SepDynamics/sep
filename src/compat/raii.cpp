@@ -15,10 +15,11 @@
 #include <utility>
 
 // Include CUDA headers in the correct order
-#include "compat/raii.h"
-#include "compat/cuda_helpers.h"         // For CUDA_CHECK macro
-#include "compat/cuda_common.h"
 #include <cuda_runtime.h>
+#include "compat/cuda_runtime.h"  // Must come first to define types
+#include "compat/raii.h"
+#include "compat/cuda_helpers.h"  // For CUDA_CHECK macro
+#include "compat/cuda_common.h"
 
 // Simple debug flag check without external logger dependency
 namespace {

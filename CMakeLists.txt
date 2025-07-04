@@ -137,6 +137,110 @@ target_link_libraries(sep_engine
         sep_compat
         sep_core
 
+        # 2. Cycles and its dependencies
+        cycles_session
+        cycles_scene
+        cycles_device
+        cycles_kernel_osl
+        cycles_subd
+        cycles_util
+        extern_sky
+        extern_cuew
+        extern_hipew
+        extern_sky
+
+        # 3. External dependencies
+        OpenImageIO
+        ${OPENVDB_LIBRARIES}
+        ${OPENSUBDIV_LIBRARIES}
+        openvdb
+        bf_intern_opensubdiv
+        ${OSL_LIBRARIES}
+        ${TBB_LIBRARIES}
+        ${CURL_LIBRARIES}
+        http_parser::http_parser
+        fmt::fmt
+        spdlog::spdlog
+        hiredis
+        pipewire-0.3
+
+        # 4. System libraries
+        ${EMBREE_LIBRARIES}
+        Imath
+        ${OpenPGL_LIBRARIES}
+        ${OpenColorIO_LIBRARIES}
+        ${ALEMBIC_LIBRARIES}
+        ${CMAKE_DL_LIBS}
+        ${Threads_LIBRARIES}
+        ${CUDAToolkit_LIBRARIES}
+        pthread
+        dl
+        rt
+        m
+        z
+)
+
+# Export and install targets
+include(GNUInstallDirs)
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/sep
+    FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+)
+
+# Install libraries
+install(TARGETS
+    sep_core
+    sep_compat
+    sep_memory
+    sep_quantum
+    sep_embeddings
+    sep_audio
+    sep_blender
+    sep_api
+    EXPORT sep-targets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+# Install executable separately
+install(TARGETS sep_engine
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+# Install CMake config files
+install(EXPORT sep-targets
+    NAMESPACE sep::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep
+)
+
+# Generate and install CMake config file
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/sep-config.cmake.in
+    ${CMAKE_BINARY_DIR}/sep-config.cmake
+    @ONLY
+)
+install(FILES
+    ${CMAKE_BINARY_DIR}/sep-config.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep
+)
+
+# Install headers from include directory
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
+    DESTINATION include/sep
+    FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+)
+
+# Set install prefix if not specified
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation prefix" FORCE
+
         # 2. Cycles and its dependencies (order is important here too)
         # Link the main Cycles libs first
         cycles_session
@@ -182,3 +286,4 @@ target_link_libraries(sep_engine
         m
         z
 )
+endif()

@@ -4,8 +4,8 @@
 #include <stdio.h>   // For fprintf
 #include <stdlib.h>  // For malloc/free
 #include <string.h>  // For strcpy, memcpy, memset
+#include "compat/cuda_runtime.h"  // Must come before cuda_defs.h
 #include "compat/cuda_defs.h"
-#include <cuda_runtime.h>  // for sep::cuda::cudaMemcpyAsync declaration
 
 #ifndef SEP_HD
 #define SEP_HD __host__ __device__
@@ -28,21 +28,13 @@ inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
                                       params.stream);
 }
 
+namespace sep {
+namespace cuda {
+
 // Asynchronous memory copy using the helper function
-inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
+inline cudaError_t cudaMemcpyAsyncImpl(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
     return performCudaMemcpyAsync({dst, src, count, kind, stream});
 }
 
-extern "C" {
-// Memory management functions
-cudaError_t cudaMemset(void* devPtr, int value, size_t count);
-cudaError_t cudaMallocManaged(void** ptr, size_t size);
-// Async memset is not available in stub builds; provide simple wrapper
-inline cudaError_t cudaMemsetAsync(void* devPtr, int value, size_t count,
-                                   cudaStream_t /*stream*/) {
-    return cudaMemset(devPtr, value, count);
-}
-
-// Memory copy functions
-cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind);
-} // extern "C"
+} // namespace cuda
+} // namespace sep

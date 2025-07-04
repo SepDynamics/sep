@@ -208,16 +208,22 @@ target_compile_options(sep_blender PRIVATE
 # Include directories
 target_include_directories(sep_blender
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/extern
-        ${CMAKE_SOURCE_DIR}/extern/glm
-        ${CMAKE_SOURCE_DIR}/extern/eigen
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
         ${OSL_INCLUDE_DIRS}
         ${OPENSUBDIV_INCLUDE_DIRS}
+    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/glm>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/eigen>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
 )
-target_include_directories(sep_blender PUBLIC
-    ${CMAKE_SOURCE_DIR}/extern/cycles/src
-)
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/blender/
+        DESTINATION include/sep/blender
+        FILES_MATCHING PATTERN "*.h")
 
 set(OIIO_LIBRARIES ${OIIO_LIBRARIES} PARENT_SCOPE)
 set(GLOG_LIBRARIES ${GLOG_LIBRARIES} PARENT_SCOPE)

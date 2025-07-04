@@ -56,18 +56,17 @@ set_target_properties(sep_memory PROPERTIES
 # Include directories
 target_include_directories(sep_memory
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include/api
-        ${CMAKE_SOURCE_DIR}/include/audio
-        ${CMAKE_SOURCE_DIR}/include/blender
-        ${CMAKE_SOURCE_DIR}/include/compat
-        ${CMAKE_SOURCE_DIR}/include/core
-        ${CMAKE_SOURCE_DIR}/include/crow
-        ${CMAKE_SOURCE_DIR}/include/memory
-        ${CMAKE_SOURCE_DIR}/include/quantum
-        ${CMAKE_SOURCE_DIR}/cycles/src
-        ${CMAKE_SOURCE_DIR}/extern
-        ${CMAKE_SOURCE_DIR}/extern/cycles/src
-        ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
-        ${CMAKE_SOURCE_DIR}/extern/eigen
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/eigen>
 )
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/memory/
+        DESTINATION include/sep/memory
+        FILES_MATCHING PATTERN "*.h")

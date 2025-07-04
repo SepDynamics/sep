@@ -6,10 +6,16 @@ add_library(sep_audio
     factory.cpp
 )
 
-# Required dependencies
+# Check for required dependencies
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
-pkg_check_modules(FFTW REQUIRED fftw3f)
+pkg_check_modules(PIPEWIRE libpipewire-0.3)
+pkg_check_modules(FFTW fftw3f)
+
+if(NOT PIPEWIRE_FOUND OR NOT FFTW_FOUND)
+    message(WARNING "PipeWire or FFTW not found - disabling audio support")
+    set(SEP_ENABLE_AUDIO OFF PARENT_SCOPE)
+    return()
+endif()
 
 message(STATUS "Using PipeWire at: ${PIPEWIRE_LIBRARIES}")
 message(STATUS "Using FFTW at: ${FFTW_LIBRARIES}")
@@ -42,18 +48,12 @@ set(FFTW_LIBRARIES ${FFTW_LIBRARIES} PARENT_SCOPE)
 
 target_include_directories(sep_audio
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include/api
-        ${CMAKE_SOURCE_DIR}/include/audio
-        ${CMAKE_SOURCE_DIR}/include/blender
-        ${CMAKE_SOURCE_DIR}/include/compat
-        ${CMAKE_SOURCE_DIR}/include/core
-        ${CMAKE_SOURCE_DIR}/include/crow
-        ${CMAKE_SOURCE_DIR}/include/memory
-        ${CMAKE_SOURCE_DIR}/include/quantum
-        ${CMAKE_SOURCE_DIR}/cycles/src
-        ${CMAKE_SOURCE_DIR}/extern
-        ${CMAKE_SOURCE_DIR}/extern/cycles/src
-        ${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include
-        ${CMAKE_SOURCE_DIR}/extern/eigen
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/eigen>
 )

@@ -2,9 +2,10 @@
 #define SEP_CUDA_CORE_H
 
 #include <vector>
+#include "compat/cuda_runtime.h"  // Must come first to define CUDA types
+#include "compat/types.h"
 #include "compat/cuda_common.h"
 #include "compat/cuda_helpers.h"
-#include "compat/types.h"
 #include "compat/memory.h"
 #include "compat/stream.h"
 

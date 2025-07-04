@@ -5,8 +5,11 @@
 #include <unordered_map>
 #include <functional>
 
-#include "core/engine.h"
-#include "blender/cycles_renderer.hpp"
+#include <sep/core/engine.h>
+#include <sep/blender/cycles_renderer.h>
+#include <sep/memory/memory_tier_manager.h>
+#include <glm/glm.hpp>
+
 
 namespace sep {
 namespace workbench {
@@ -42,7 +45,7 @@ public:
     void handleKeyboard(unsigned char key);
     void handleMouse(int x, int y, int button);
 
-    const std::string& getCurrentDemo() const { return current_demo_; }
+    const std::string& getCurrentDemo() const { return current_demo_name_; }
 
 private:
     DemoManager() = default;

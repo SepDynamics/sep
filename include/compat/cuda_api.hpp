@@ -3,7 +3,7 @@
 // Include C API definitions first
 #include "api/bridge.h"  // For SEP_API
 #include "core/common.h"  // For sep::SEPResult
-#include <cuda_runtime.h>  // For CUDA types
+#include "compat/cuda_runtime.h"  // For CUDA types
 #include <cstddef>  // For size_t
 #include <cstdint>  // For fixed-width integers
 
@@ -33,13 +33,13 @@ SEP_API sep::SEPResult sep_cuda_process_symmetry(
 );
 
 // Memory management functions
-SEP_API cudaError_t sep_cuda_allocate_managed(void** ptr, size_t size);
-SEP_API cudaError_t sep_cuda_deallocate(void* ptr);
-SEP_API cudaError_t sep_cuda_memcpy_async(
+SEP_API sep::cuda::cudaError_t sep_cuda_allocate_managed(void** ptr, size_t size);
+SEP_API sep::cuda::cudaError_t sep_cuda_deallocate(void* ptr);
+SEP_API sep::cuda::cudaError_t sep_cuda_memcpy_async(
     void* dst,
     const void* src,
     size_t count,
-    cudaMemcpyKind kind,
+    sep::cuda::cudaMemcpyKind kind,
     void* stream
 );
 
@@ -52,6 +52,11 @@ SEP_API cudaError_t sep_cuda_memcpy_async(
 namespace sep::cuda {
 
 // Memory allocation/deallocation
+using cudaError_t = sep::cuda::cudaError_t;
+using cudaMemcpyKind = sep::cuda::cudaMemcpyKind;
+using cudaStream_t = sep::cuda::cudaStream_t;
+
+// Memory management
 cudaError_t allocateManaged(void** ptr, size_t size);
 cudaError_t deallocate(void* ptr);
 
@@ -70,18 +75,18 @@ cudaError_t launchQBSAKernel(const std::uint32_t *d_probe_indices,
                            std::uint32_t *d_correction_count, cudaStream_t stream);
 
 cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
-                           std::uint32_t num_chunks,
-                           std::uint32_t *d_collapse_indices,
-                           std::uint32_t *d_collapse_counts,
-                           cudaStream_t stream);
+                          std::uint32_t num_chunks,
+                          std::uint32_t *d_collapse_indices,
+                          std::uint32_t *d_collapse_counts,
+                          cudaStream_t stream);
 
 // Pattern processing functions
 cudaError_t launch_pattern_processing(pattern::PatternData* patterns,
-                                    pattern::PatternData* results,
-                                    const pattern::PatternConfig& config,
-                                    size_t pattern_count,
-                                    const pattern::PatternData* previous_patterns,
-                                    cudaStream_t stream);
+                                   pattern::PatternData* results,
+                                   const pattern::PatternConfig& config,
+                                   size_t pattern_count,
+                                   const pattern::PatternData* previous_patterns,
+                                   cudaStream_t stream);
 
 } // namespace sep::cuda
 #endif // __cplusplus

@@ -1,5 +1,5 @@
 #include "api/crow_request_adapter.h"
-#include <string> // For std::string
+#include <string>
 
 namespace sep {
 namespace api {

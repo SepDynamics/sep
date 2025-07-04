@@ -1,7 +1,7 @@
 #include <cstring> // For std::memcpy, std::memset, std::memcmp, std::strlen etc.
 #include <ctime>   // For C-style time functions
 #include <string>  // For std::string
-#include <memory> // For std::unique_ptr
+#include <memory>
 #include "blender/factory.h"
 #include "blender/bridge.h"
 #include "blender/types.h"

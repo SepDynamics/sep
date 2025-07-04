@@ -7,6 +7,7 @@
 #include "compat/cuda_common.h"
 #include <cuda_runtime.h>
 #include <cstdint>
+#include <cstring>
 #include <hiredis/hiredis.h>
 #define SEP_HAS_HIREDIS 1
 // Define namespace alias to clarify that Manager is in the logging namespace

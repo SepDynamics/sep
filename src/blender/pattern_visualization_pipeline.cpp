@@ -7,8 +7,8 @@
 #include <algorithm> // For std::min, std::max
 #include <numeric>   // For std::accumulate
 #include <vector>
-#include <algorithm>
-#include <numeric>
+#include <algorithm> // For std::min, std::max
+#include <numeric>   // For std::accumulate
 
 namespace sep {
 namespace blender {

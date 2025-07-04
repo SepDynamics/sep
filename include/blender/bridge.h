@@ -119,6 +119,7 @@ class BlenderBridge {
   bool isInitialized() const { return initialized_; }
   bool isValidHandle(sep::pattern::ObjectHandle handle) const;
   ObjectState* getObjectState(sep::pattern::ObjectHandle handle);
+  void cleanup();
   void cleanupObject(sep::pattern::ObjectHandle handle);
   void cleanup();
 

@@ -3,6 +3,7 @@
 
 // Include CUDA headers
 #include "compat/cuda_common.h"
+#include <cstring>
 
 #include <cstring> // For std::memcpy (if needed implicitly for unified memory)
 

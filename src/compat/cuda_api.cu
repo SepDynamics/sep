@@ -24,6 +24,7 @@
 #include <memory>
 #include <cstring> // For std::memcpy, std::memset, std::strlen, std::strcmp
 #include <mutex>
+#include <cstring>
 #include <utility>
 #endif
 

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <cstring> // For std::strlen (used by shim::string)
 #include <ios>
+#include <cstring>
 
 namespace sep {
 namespace config {

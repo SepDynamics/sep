@@ -8,9 +8,9 @@
 #include <lz4.h>
 #include <zstd.h>
 
-#include <algorithm>
+#include <algorithm> // For std::min, std::clamp
+#include <chrono>    // For std::chrono
 #include <array>
-#include <chrono>
 #include <vector>
 
 namespace blender {
@@ -31,7 +31,7 @@ std::vector<uint8_t> DeltaCompression::compress(const void* data, size_t size) {
     }
   }
 
-  auto end = std::chrono::high_resolution_clock::now();
+  auto end = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   stats.originalSize = size;
   stats.compressedSize = out.size();
   stats.compressionRatio = static_cast<float>(out.size()) / static_cast<float>(size);
@@ -55,7 +55,7 @@ bool DeltaCompression::decompress(const std::vector<uint8_t>& compressed, void* 
     }
   }
 
-  auto end = std::chrono::high_resolution_clock::now();
+  auto end = std::chrono::high_resolution_clock::now(); // Explicitly qualify std::chrono
   stats.decompressionTime = std::chrono::duration<float, std::milli>(end - start).count();
   previousBlock.assign(out, out + outputSize);
   return true;

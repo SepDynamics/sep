@@ -1,6 +1,7 @@
 #include "api/logging_middleware.h"
 #include "api/crow_adapter.h"
 #include <atomic>
+#include <chrono>
 
 #include <chrono> // For std::chrono
 

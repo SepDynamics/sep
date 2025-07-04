@@ -134,7 +134,7 @@ sep_process_audio(SEPBlenderBridge* bridge, const float* samples, size_t count, 
     for (size_t i = 0; i < count; ++i)
     {
         float abs_sample = std::fabs(samples[i]);
-        peak             = std::max(peak, abs_sample);
+        peak             = std::max(peak, abs_sample); // Explicitly use std::max
         rms_sum += abs_sample * abs_sample;
     }
 

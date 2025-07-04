@@ -6,6 +6,10 @@
 #include "blender/mesh_handler.h"
 #include "core/common.h"  // defines sep::SEPResult
 
+// Standard library includes
+#include <string.h> // Added for C string functions
+#include <time.h>   // Added for C time functions
+
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow
 // the library to link without the real Blender environment.
 extern "C" {

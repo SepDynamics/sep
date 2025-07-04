@@ -1,3 +1,5 @@
+#include <string.h> // Added for C string functions
+#include <time.h>   // Added for C time functions
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"
 #include "core/common.h"  // defines sep::SEPResult

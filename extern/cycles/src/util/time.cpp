@@ -66,7 +66,7 @@ void time_sleep(double t)
 
 /* Time in format "hours:minutes:seconds.hundreds" */
 
-string time_human_readable_from_seconds(const double seconds)
+std::string time_human_readable_from_seconds(const double seconds)
 {
   const int h = (((int)seconds) / (60 * 60));
   const int m = (((int)seconds) / 60) % 60;
@@ -79,7 +79,7 @@ string time_human_readable_from_seconds(const double seconds)
   return string_printf("%.2d:%.2d.%.2d", m, s, r);
 }
 
-double time_human_readable_to_seconds(const string &time_string)
+double time_human_readable_to_seconds(const std::string &time_string)
 {
   /* Those are multiplies of a corresponding token surrounded by : in the
    * time string, which denotes how to convert value to seconds.

@@ -1,5 +1,7 @@
-#include <cstring> // For memcpy, memset, memcmp, strlen, etc.
-#include <ctime>   // For time-related functions
+#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
+#include <time.h>   // For time-related functions
+#include <cstring>  // C++ wrappers
+#include <ctime>
 #include <string>  // For std::string
 #include "compat/math_common.h"
 

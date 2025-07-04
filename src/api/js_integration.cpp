@@ -1,7 +1,7 @@
 #include "api/js_integration.h"
 #include "api/bridge.h"
 #include "api/types.h"  // For sep::api::ErrorCode
-
+#include <string> // For std::string
 #include <string>
 
 namespace sep::api {
@@ -34,7 +34,7 @@ std::string JSIntegration::processContextCheck(const std::string& context_json,
     if (ret_code != 0) {
         char error_buffer[1024] = {0};
         sep_bridge_get_last_error(error_buffer, sizeof(error_buffer));
-        return std::string("{\"error\":\"") + error_buffer + "\"}";
+        return std::string("{\"error\":\"") + error_buffer + "\"}"; // Use std::string
     }
 
     // Trim to actual content length

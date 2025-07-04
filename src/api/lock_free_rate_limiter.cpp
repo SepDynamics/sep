@@ -2,7 +2,10 @@
 #include "api/rate_limiter.h" // for factory declaration
 #include "api/background_cleanup.h"
 #include "crow/crow_isolation.h"
+#include <algorithm> // For std::clamp
+#include <chrono>    // For std::chrono
 #include <nlohmann/json.hpp>
+#include <mutex>     // For std::lock_guard, std::mutex, std::unique_lock
 #include <string>
 
 namespace sep::api {
@@ -40,14 +43,14 @@ bool LockFreeRateLimiter::checkRateLimit(const IRequest &req) {
 #ifdef SEP_USE_TBB
   ClientMap::accessor accessor;
   if (clients_.insert(accessor, client_id)) {
-    accessor->second = std::make_unique<ClientData>();
+    accessor->second = std::make_unique<ClientData>(); // Use std::make_unique
   }
   return tryInsertRequest(*(accessor->second), priority, now);
 #else
-  std::unique_lock<std::mutex> lock(clients_mutex_);
+  std::unique_lock<std::mutex> lock(clients_mutex_); // Use std::unique_lock
   auto &ptr = clients_[client_id];
   if (!ptr) {
-    ptr = std::make_unique<ClientData>();
+    ptr = std::make_unique<ClientData>(); // Use std::make_unique
   }
   ClientData &ref = *ptr;
   lock.unlock();
@@ -135,7 +138,7 @@ void LockFreeRateLimiter::cleanup(std::chrono::steady_clock::time_point now) {
     removeExpiredEntries(*it->second, now);
   }
 #else
-  std::lock_guard<std::mutex> lock(clients_mutex_);
+  std::lock_guard<std::mutex> lock(clients_mutex_); // Use std::lock_guard
   for (auto &pair : clients_) {
     removeExpiredEntries(*pair.second, now);
   }
@@ -169,7 +172,7 @@ LockFreeRateLimiter::GetRequestCount(const std::string &client_id) const {
   if (clients_.find(acc, client_id)) {
     return acc->second->request_count.load(std::memory_order_acquire);
   }
-  return 0;
+  return 0; 
 #else
   std::lock_guard<std::mutex> lock(clients_mutex_);
   auto it = clients_.find(client_id);
@@ -271,12 +274,12 @@ float LockFreeRateLimiter::calculateAdaptiveMultiplier() const {
     multiplier *= (LATENCY_THRESHOLD / avg_latency);
   }
 
-  // Clamp the final multiplier
-  return std::clamp(multiplier, MIN_RATE_MULTIPLIER, MAX_RATE_MULTIPLIER);
+  // Clamp the final multiplier using std::clamp
+  return ::std::clamp(multiplier, MIN_RATE_MULTIPLIER, MAX_RATE_MULTIPLIER);
 }
 
 void LockFreeRateLimiter::updateSystemMetrics(const SystemMetrics &metrics) {
-  metrics_.gpu_utilization.store(metrics.gpu_utilization,
+  metrics_.gpu_utilization.store(metrics.gpu_utilization, // Use std::atomic::store
                                  std::memory_order_release);
   metrics_.memory_usage.store(metrics.memory_usage, std::memory_order_release);
   metrics_.error_rate.store(metrics.error_rate, std::memory_order_release);
@@ -284,10 +287,10 @@ void LockFreeRateLimiter::updateSystemMetrics(const SystemMetrics &metrics) {
 }
 
 SystemMetrics LockFreeRateLimiter::getSystemMetrics() const {
-  return SystemMetrics{metrics_.gpu_utilization.load(std::memory_order_acquire),
-                       metrics_.memory_usage.load(std::memory_order_acquire),
-                       metrics_.error_rate.load(std::memory_order_acquire),
-                       metrics_.avg_latency.load(std::memory_order_acquire)};
+  return SystemMetrics{metrics_.gpu_utilization.load(std::memory_order_acquire), // Use std::atomic::load
+                       metrics_.memory_usage.load(std::memory_order_acquire),    // Use std::atomic::load
+                       metrics_.error_rate.load(std::memory_order_acquire),      // Use std::atomic::load
+                       metrics_.avg_latency.load(std::memory_order_acquire)};    // Use std::atomic::load
 }
 
 Priority

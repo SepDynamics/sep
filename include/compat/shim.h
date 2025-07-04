@@ -4,7 +4,7 @@
 // `SEP_NO_STDLIB`.  Default builds rely on the system standard library and
 // should not define this macro.
 
-// Ensure C standard library functions are in the global namespace first
+// Ensure C standard library functions are in the global namespace firstddddd
 #include <cstring>  // For memcpy, memset, memcmp, strlen, etc.
 #include <ctime>    // For time, clock, difftime, mktime, etc.
 #include <stdlib.h>  // For malloc, free, getenv, etc.

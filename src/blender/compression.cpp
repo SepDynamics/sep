@@ -1,3 +1,5 @@
+#include <string.h> // Added for C string functions
+#include <time.h>   // Added for C time functions
 #include "blender/compression.h"
 
 #include <lz4.h>

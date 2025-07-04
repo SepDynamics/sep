@@ -1,4 +1,6 @@
 // Standard includes
+#include <string.h> // Added for C string functions
+#include <time.h>   // Added for C time functions
 #include <cmath>
 #include <memory>
 #include <utility>

@@ -1,12 +1,14 @@
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
+#include <string>  // Required for std::string
+
+using namespace std; // For string type
 #include "compat/math_common.h"
 
 #include "blender/types.h"
 #include "blender/config.h"
 #include "blender/pattern_bridge.h"
 #include <memory>
-#include <string>
 
 using sep::SEPBlenderBridge;
 

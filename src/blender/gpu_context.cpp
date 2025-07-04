@@ -102,7 +102,7 @@ GpuBufferPtr GPUContext::createBuffer(size_t size, const void* data) {
     }
     buf->size = size;
     if (data) {
-        std::memcpy(buf->ptr, data, size);
+        ::memcpy(buf->ptr, data, size);
     }
     buf->mapped = false;
     return GpuBufferPtr(this, buf);

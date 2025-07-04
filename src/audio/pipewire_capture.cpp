@@ -1,7 +1,13 @@
-// Project headers
-#include "audio/pipewire_capture.h"
+// Project headers first for types
+#include "audio/types.h"
+#include "audio/capture.h"
 #include "audio/config.h"
+#include "audio/pipewire_capture.h"
+
+// PipeWire headers after our types
 #include "audio/pipewire_includes.h"
+
+// Additional project headers
 #include "compat/math_common.h"
 
 // Standard library headers
@@ -13,7 +19,6 @@
 #include <cmath>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/constants.hpp>
-#include <spa/utils/result.h>
 
 
 // Initialize PipeWire before namespace declarations

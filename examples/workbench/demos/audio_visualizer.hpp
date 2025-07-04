@@ -1,8 +1,11 @@
 #pragma once
 
-#include "examples/workbench/demo_manager.hpp"
+#include "demo_manager.hpp"
 #include <memory>
 #include <vector>
+#include <glm/vec3.hpp>
+#include <sep/audio/audio_capture.h>
+#include <sep/audio/audio_pipeline.h>
 
 namespace sep {
 namespace workbench {
@@ -25,6 +28,13 @@ private:
     std::unique_ptr<audio::AudioCapture> capture_;
     std::unique_ptr<audio::AudioPipeline> pipeline_;
     std::vector<glm::vec3> latest_patterns_;
+    std::vector<glm::vec3> latest_visual_patterns_;
+
+    struct {
+        float frequency_scale{0.5f};
+        float amplitude_scale{1.0f};
+        float evolution_sensitivity{0.75f};
+    } pattern_mapping_;
 };
 
 } // namespace workbench

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "examples/workbench/demo_manager.hpp"
+#include "demo_manager.hpp"
 #include <memory>
 
 namespace sep {

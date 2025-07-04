@@ -11,8 +11,7 @@
 #define SEP_HD
 #endif
 
-// Always include the compatibility runtime header
-#include "compat/cuda_runtime.h"
+// CUDA runtime is included by cuda_common.h
 
 #include <cstddef>
 #include <string>

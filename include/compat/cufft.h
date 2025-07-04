@@ -4,16 +4,11 @@
 // Include standard headers needed for types
 #include <stddef.h>  // For size_t
 
-// Define SEP_CUDA_AVAILABLE if not already defined
-#ifndef SEP_CUDA_AVAILABLE
-#define SEP_CUDA_AVAILABLE 0
-#endif
+// Include cuda_runtime.h first to ensure CUDA types are defined
+#include "compat/cuda_runtime.h"
 
-#if SEP_CUDA_AVAILABLE
-#  if defined(__has_include_next) && __has_include_next(<cufft.h>)
-#    include_next <cufft.h>
-#    define SEP_HAS_CUFFT 1
-#  elif defined(__has_include) && __has_include(<cufft.h>)
+#if SEP_ENGINE_HAS_CUDA
+#  if defined(__has_include) && __has_include(<cufft.h>)
 #    include <cufft.h>
 #    define SEP_HAS_CUFFT 1
 #  else
@@ -24,17 +19,28 @@
 #endif
 
 #if SEP_HAS_CUFFT
-// When CUDA and cuFFT are available, the real header has been included
+// When real CUDA/cuFFT is available, use those types
+namespace sep {
+namespace cuda {
+using ::cufftResult;
+using ::cufftHandle;
+using ::cufftType;
+using ::cufftReal;
+using ::cufftDoubleReal;
+using ::cufftComplex;
+using ::cufftDoubleComplex;
+} // namespace cuda
+} // namespace sep
+
 #else
 // Otherwise, define stub types and functions
-
-#ifdef __cplusplus
 namespace sep {
 namespace cuda {
 
 // CUFFT Types
 typedef int cufftResult;
-typedef int cufftHandle;
+struct cufftHandle_t;
+typedef cufftHandle_t* cufftHandle;
 typedef int cufftType;
 typedef float cufftReal;
 typedef double cufftDoubleReal;
@@ -42,21 +48,21 @@ struct cufftComplex { float x, y; };
 struct cufftDoubleComplex { double x, y; };
 
 // CUFFT Transform types
-#define CUFFT_R2C 0x2a
-#define CUFFT_C2R 0x2c
-#define CUFFT_C2C 0x29
+constexpr cufftType CUFFT_R2C = 0x2a;
+constexpr cufftType CUFFT_C2R = 0x2c;
+constexpr cufftType CUFFT_C2C = 0x29;
 
 // CUFFT Result codes
-static const cufftResult CUFFT_SUCCESS = 0;
-static const cufftResult CUFFT_INVALID_PLAN = 1;
-static const cufftResult CUFFT_ALLOC_FAILED = 2;
-static const cufftResult CUFFT_INVALID_TYPE = 3;
-static const cufftResult CUFFT_INVALID_VALUE = 4;
-static const cufftResult CUFFT_INTERNAL_ERROR = 5;
-static const cufftResult CUFFT_EXEC_FAILED = 6;
-static const cufftResult CUFFT_SETUP_FAILED = 7;
-static const cufftResult CUFFT_INVALID_SIZE = 8;
-static const cufftResult CUFFT_UNALIGNED_DATA = 9;
+constexpr cufftResult CUFFT_SUCCESS = 0;
+constexpr cufftResult CUFFT_INVALID_PLAN = 1;
+constexpr cufftResult CUFFT_ALLOC_FAILED = 2;
+constexpr cufftResult CUFFT_INVALID_TYPE = 3;
+constexpr cufftResult CUFFT_INVALID_VALUE = 4;
+constexpr cufftResult CUFFT_INTERNAL_ERROR = 5;
+constexpr cufftResult CUFFT_EXEC_FAILED = 6;
+constexpr cufftResult CUFFT_SETUP_FAILED = 7;
+constexpr cufftResult CUFFT_INVALID_SIZE = 8;
+constexpr cufftResult CUFFT_UNALIGNED_DATA = 9;
 
 // Function declarations
 cufftResult cufftPlan1d(cufftHandle* plan, int nx, int type, int batch);
@@ -70,7 +76,8 @@ cufftResult cufftExecC2R(cufftHandle plan, void* idata, void* odata);
 } // namespace cuda
 } // namespace sep
 
-// Make the sep::cuda types available in global namespace for compatibility
+#ifdef __cplusplus
+// Make types available in global scope
 using sep::cuda::cufftResult;
 using sep::cuda::cufftHandle;
 using sep::cuda::cufftType;
@@ -79,36 +86,51 @@ using sep::cuda::cufftDoubleReal;
 using sep::cuda::cufftComplex;
 using sep::cuda::cufftDoubleComplex;
 
-// Define the function prototypes in global namespace
+// Make constants available in global scope
+using sep::cuda::CUFFT_R2C;
+using sep::cuda::CUFFT_C2R;
+using sep::cuda::CUFFT_C2C;
+using sep::cuda::CUFFT_SUCCESS;
+using sep::cuda::CUFFT_INVALID_PLAN;
+using sep::cuda::CUFFT_ALLOC_FAILED;
+using sep::cuda::CUFFT_INVALID_TYPE;
+using sep::cuda::CUFFT_INVALID_VALUE;
+using sep::cuda::CUFFT_INTERNAL_ERROR;
+using sep::cuda::CUFFT_EXEC_FAILED;
+using sep::cuda::CUFFT_SETUP_FAILED;
+using sep::cuda::CUFFT_INVALID_SIZE;
+using sep::cuda::CUFFT_UNALIGNED_DATA;
+
+// Define function implementations in global scope
 inline cufftResult cufftPlan1d(cufftHandle* plan, int nx, int type, int batch) {
-    return sep::cuda::CUFFT_SUCCESS;
+    return sep::cuda::cufftPlan1d(plan, nx, type, batch);
 }
 
 inline cufftResult cufftPlan2d(cufftHandle* plan, int nx, int ny, int type) {
-    return sep::cuda::CUFFT_SUCCESS;
+    return sep::cuda::cufftPlan2d(plan, nx, ny, type);
 }
 
 inline cufftResult cufftPlan3d(cufftHandle* plan, int nx, int ny, int nz, int type) {
-    return sep::cuda::CUFFT_SUCCESS;
+    return sep::cuda::cufftPlan3d(plan, nx, ny, nz, type);
 }
 
 inline cufftResult cufftDestroy(cufftHandle plan) {
-    return sep::cuda::CUFFT_SUCCESS;
+    return sep::cuda::cufftDestroy(plan);
 }
 
 inline cufftResult cufftExecC2C(cufftHandle plan, void* idata, void* odata, int direction) {
-    return sep::cuda::CUFFT_SUCCESS;
+    return sep::cuda::cufftExecC2C(plan, idata, odata, direction);
 }
 
 inline cufftResult cufftExecR2C(cufftHandle plan, void* idata, void* odata) {
-    return sep::cuda::CUFFT_SUCCESS;
+    return sep::cuda::cufftExecR2C(plan, idata, odata);
 }
 
 inline cufftResult cufftExecC2R(cufftHandle plan, void* idata, void* odata) {
-    return sep::cuda::CUFFT_SUCCESS;
+    return sep::cuda::cufftExecC2R(plan, idata, odata);
 }
-
 #endif // __cplusplus
-#endif // !SEP_CUDA_AVAILABLE
+
+#endif // SEP_HAS_CUFFT
 
 #endif // SEP_COMPAT_CUFFT_H

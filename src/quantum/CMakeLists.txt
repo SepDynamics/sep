@@ -17,21 +17,16 @@ add_library(sep_quantum STATIC
 
 target_include_directories(sep_quantum
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/include
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
 )
 
 target_link_libraries(sep_quantum
     PUBLIC
         sep_core
         sep_compat
-)
-
-# Export include directories for dependent targets
-target_include_directories(sep_quantum PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
 )
 
 # Enable CUDA and handle exception specs

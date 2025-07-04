@@ -30,8 +30,10 @@
 #include "blender/pattern_bridge.h"
 #include "blender/types.h" // For SEPBlenderBridge definition
 #endif
+#ifdef SEP_HAS_AUDIO
 #include "audio/capture.h"
 #include "audio/factory.h"
+#endif
 
 #include <cstdint>
 #include <algorithm>
@@ -76,8 +78,10 @@ bool Engine::init(const sep::config::APIConfig &config) {
   impl_->d_collapse_indices_.resize(DEFAULT_SIZE * PAIRS_PER_CHUNK);
   impl_->d_collapse_counts_.resize(DEFAULT_SIZE);
 
+#ifdef SEP_HAS_AUDIO
   printf("DEBUG: Engine::init - Initializing audio capture\n");
   fflush(stdout);
+#endif
 
   // Core initialization only - specialized components are initialized in main
   printf("DEBUG: Engine::init - Setting initialized flag\n");

@@ -1,12 +1,15 @@
 #pragma once
 
 #include <cstddef>
-
-#include "types.h"
 #include <cstdlib>
 #include <cstring>
 
-// Include CUDA runtime only when CUDA is available
+// Include CUDA runtime first to define CUDA types
+#if SEP_CUDA_AVAILABLE
+#include <cuda_runtime.h>
+#endif
+
+#include "types.h"
 #include "compat/macros.h"
 #include "compat/cuda_common.h"
 #if SEP_CUDA_AVAILABLE
@@ -89,7 +92,7 @@ inline void freeDeviceMemory(void* ptr) {
     delete[] static_cast<std::uint8_t*>(ptr);
 }
 
-inline void* allocateUnifiedMemory(size_t size, cudaStream_t stream = nullptr) {
+inline void* allocateUnifiedMemory(size_t size, void* stream = nullptr) {
     (void)stream;
     return allocateDeviceMemory(size);
 }

@@ -28,9 +28,10 @@ set_target_properties(sep_core PROPERTIES
 
 target_include_directories(sep_core
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/include
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
 )
 
 target_link_libraries(sep_core
@@ -39,8 +40,7 @@ target_link_libraries(sep_core
         sep_compat
 )
 
-# Export include directories for dependent targets
-target_include_directories(sep_core PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
+        DESTINATION include/sep/core
+        FILES_MATCHING PATTERN "*.h")

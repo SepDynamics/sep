@@ -31,8 +31,10 @@ target_link_libraries(sep_api
 
 target_include_directories(sep_api
     PUBLIC
-        BEFORE
-        ${CMAKE_SOURCE_DIR}/include
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
 )
 
 # Link external dependencies when available

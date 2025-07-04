@@ -1,8 +1,6 @@
 #include <memory>
 #include <stdexcept>
 
-#include "core/engine.h"
-#include "blender/cycles_renderer.hpp"
 #include "demo_manager.hpp"
 #include "demos/genesis_pattern.hpp"
 #include "demos/audio_visualizer.hpp"

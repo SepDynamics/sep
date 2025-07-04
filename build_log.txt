@@ -1,6 +1,6 @@
 ==== SEP Engine Build Script with FULL Cycles and PipeWire Support ====
 Setting up build environment with real library paths - NO STUBS!
-Build started at Thu Jul  3 01:23:22 PM CDT 2025
+Build started at Thu Jul  3 07:21:11 PM CDT 2025
 Using Cycles root: /sep/extern/cycles
 Checking for PipeWire development headers...
 PipeWire found via pkg-config
@@ -48,18 +48,18 @@ Running CMake configuration...
 --   Found OpenImageIO, version 2.5.16.0
 -- Checking for module 'libzstd'
 --   Found libzstd, version 1.5.7
--- Configuring done (1.6s)
+-- Configuring done (1.7s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/ajn/.cache/sep/build
 Building SEP Engine...
-[  2%] Building CXX object extern/cycles/third_party/sky/CMakeFiles/extern_sky.dir/source/sky_model.cpp.o
-[  2%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  3%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
-[  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[  1%] Building CXX object extern/cycles/third_party/sky/CMakeFiles/extern_sky.dir/source/sky_model.cpp.o
+[  2%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  3%] Building CXX object extern/cycles/third_party/sky/CMakeFiles/extern_sky.dir/source/sky_nishita.cpp.o
+[  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
 [  6%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
-[  7%] Building CXX object extern/cycles/third_party/sky/CMakeFiles/extern_sky.dir/source/sky_nishita.cpp.o
-[  9%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/hip_compat.cpp.o
-[ 10%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
+[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/hip_compat.cpp.o
+[  9%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
+[ 10%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
 [ 11%] Linking C static library libextern_hipew.a
 [ 11%] Built target extern_hipew
 [ 12%] Linking C static library libextern_cuew.a
@@ -68,330 +68,301 @@ Building SEP Engine...
 [ 15%] Linking CXX static library libsep_embeddings.a
 [ 15%] Built target extern_sky
 [ 15%] Built target sep_embeddings
-[ 16%] Linking CXX static library libsep_compat.a
-[ 16%] Built target sep_compat
-[ 18%] Building CXX object src/core/CMakeFiles/sep_core.dir/tracing.cpp.o
-[ 19%] Building CXX object src/core/CMakeFiles/sep_core.dir/allocation_metrics.cpp.o
-[ 20%] Building CXX object src/core/CMakeFiles/sep_core.dir/dag_graph.cpp.o
-[ 22%] Building CXX object src/core/CMakeFiles/sep_core.dir/prometheus_exporter.cpp.o
-[ 23%] Building CXX object src/core/CMakeFiles/sep_core.dir/manager.cpp.o
-[ 24%] Building CXX object src/core/CMakeFiles/sep_core.dir/metrics_collector.cpp.o
-[ 25%] Building CXX object src/core/CMakeFiles/sep_core.dir/engine.cpp.o
-[ 27%] Building CXX object src/core/CMakeFiles/sep_core.dir/error_handler.cpp.o
-[ 28%] Building CXX object src/core/CMakeFiles/sep_core.dir/logging.cpp.o
-[ 29%] Linking CXX static library libsep_core.a
-[ 29%] Built target sep_core
-[ 31%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o
-[ 32%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o
-[ 35%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o
-[ 37%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/config.cpp.o
-[ 37%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o
-[ 38%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o
-[ 40%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
-[ 44%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o
-[ 45%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o
-[ 42%] Building CXX object src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o
-[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o
-[ 42%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o
-[ 49%] Building CXX object src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o
-[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o
-[ 49%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o
-[ 50%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o
-[ 51%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o
-[ 53%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o
-[ 54%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o
-[ 55%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o
-[ 57%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o
-[ 58%] Building CXX object src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o
-[ 59%] Linking CXX static library libsep_audio.a
-[ 59%] Built target sep_audio
-[ 61%] Linking CXX static library libsep_quantum.a
-[ 61%] Built target sep_quantum
-[ 62%] Linking CXX static library libsep_memory.a
-[ 62%] Built target sep_memory
-[ 67%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
-[ 66%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
-[ 68%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
-[ 68%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
-[ 68%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
-[ 70%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
-[ 71%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
-[ 72%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
-[ 74%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
-[ 75%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/oiio_output_driver.cpp.o
-[ 76%] Linking CXX shared library ../../lib/libsep_blender.so
-/usr/bin/ld: warning: type of symbol `cuDriverGetVersion' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGetErrorString' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGetErrorName' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuInit' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGet' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetCount' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetName' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetUuid' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceTotalMem_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetAttribute' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetProperties' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceComputeCapability' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxRetain' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxRelease' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxSetFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxGetState' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDevicePrimaryCtxReset' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxCreate_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxDestroy_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxPushCurrent_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxPopCurrent_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSetCurrent' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetCurrent' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetDevice' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSynchronize' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSetLimit' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetLimit' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetCacheConfig' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSetCacheConfig' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetSharedMemConfig' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxSetSharedMemConfig' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetApiVersion' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxGetStreamPriorityRange' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxAttach' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxDetach' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleLoad' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleLoadData' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleLoadDataEx' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleLoadFatBinary' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleUnload' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleGetFunction' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleGetGlobal_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleGetTexRef' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuModuleGetSurfRef' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkCreate_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkAddData_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkAddFile_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkComplete' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLinkDestroy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemGetInfo_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAlloc_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAllocPitch_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemFree_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemGetAddressRange_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAllocHost_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemFreeHost' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostAlloc' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostGetDevicePointer_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostGetFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAllocManaged' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetByPCIBusId' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetPCIBusId' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcGetEventHandle' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcOpenEventHandle' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcGetMemHandle' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcOpenMemHandle' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuIpcCloseMemHandle' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostRegister_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemHostUnregister' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyPeer' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyHtoD_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoH_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoD_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoA_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAtoD_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyHtoA_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAtoH_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAtoA_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy2D_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy2DUnaligned_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy3D_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy3DPeer' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAsync' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyPeerAsync' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyHtoDAsync_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoHAsync_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyDtoDAsync_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyHtoAAsync_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpyAtoHAsync_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy2DAsync_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy3DAsync_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemcpy3DPeerAsync' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD8_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD16_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD32_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D8_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D16_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D32_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD8Async' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD16Async' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD32Async' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D8Async' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D16Async' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemsetD2D32Async' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArrayCreate_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArrayGetDescriptor_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArrayDestroy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArray3DCreate_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuArray3DGetDescriptor_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMipmappedArrayCreate' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMipmappedArrayGetLevel' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMipmappedArrayDestroy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuPointerGetAttribute' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemPrefetchAsync' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemAdvise' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemRangeGetAttribute' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuMemRangeGetAttributes' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuPointerSetAttribute' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuPointerGetAttributes' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamCreate' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamCreateWithPriority' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamGetPriority' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamGetFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamGetCtx' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWaitEvent' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamAddCallback' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamAttachMemAsync' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamQuery' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamSynchronize' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamDestroy_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventCreate' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventRecord' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventQuery' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventSynchronize' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventDestroy_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuEventElapsedTime' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWaitValue32' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWaitValue64' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWriteValue32' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamWriteValue64' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuStreamBatchMemOp' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncGetAttribute' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetAttribute' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetCacheConfig' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetSharedMemConfig' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchKernel' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchCooperativeKernel' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchCooperativeKernelMultiDevice' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetBlockShape' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuFuncSetSharedSize' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSetSize' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSeti' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSetf' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSetv' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunch' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchGrid' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuLaunchGridAsync' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuParamSetTexRef' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuOccupancyMaxActiveBlocksPerMultiprocessor' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuOccupancyMaxPotentialBlockSize' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuOccupancyMaxPotentialBlockSizeWithFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetArray' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMipmappedArray' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetAddress_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetAddress2D_v3' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetFormat' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetAddressMode' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetFilterMode' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMipmapFilterMode' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMipmapLevelBias' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMipmapLevelClamp' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetMaxAnisotropy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetBorderColor' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefSetFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetAddress_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetArray' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMipmappedArray' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetAddressMode' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetFilterMode' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetFormat' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMipmapFilterMode' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMipmapLevelBias' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMipmapLevelClamp' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetMaxAnisotropy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetBorderColor' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefGetFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefCreate' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexRefDestroy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfRefSetArray' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfRefGetArray' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectCreate' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectDestroy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectGetResourceDesc' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectGetTextureDesc' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuTexObjectGetResourceViewDesc' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfObjectCreate' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfObjectDestroy' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuSurfObjectGetResourceDesc' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceCanAccessPeer' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxEnablePeerAccess' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuCtxDisablePeerAccess' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuDeviceGetP2PAttribute' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsUnregisterResource' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsSubResourceGetMappedArray' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsResourceGetMappedMipmappedArray' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsResourceGetMappedPointer_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsResourceSetMapFlags_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsMapResources' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsUnmapResources' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGetExportTable' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsGLRegisterBuffer' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGraphicsGLRegisterImage' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLGetDevices_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLCtxCreate_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLInit' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLRegisterBufferObject' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLMapBufferObject_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLUnmapBufferObject' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLUnregisterBufferObject' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLSetBufferObjectMapFlags' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLMapBufferObjectAsync_v2' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-/usr/bin/ld: warning: type of symbol `cuGLUnmapBufferObjectAsync' changed from 2 to 1 in ../../extern/cycles/third_party/cuew/libextern_cuew.a(cuew.c.o)
-[ 76%] Built target sep_blender
-[ 77%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge.cpp.o
-[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o
-[ 80%] Building CXX object src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o
-[ 81%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o
-[ 83%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o
-[ 84%] Building CXX object src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o
-[ 85%] Building CXX object src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o
-[ 87%] Building CXX object src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o
-[ 88%] Building CXX object src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o
-[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o
-[ 90%] Building CXX object src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o
-[ 92%] Building CXX object src/api/CMakeFiles/sep_api.dir/client.cpp.o
-[ 93%] Building CXX object src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o
-[ 94%] Building CXX object src/api/CMakeFiles/sep_api.dir/server.cpp.o
-[ 96%] Building CXX object src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o
-[ 97%] Linking CXX static library libsep_api.a
-[ 97%] Built target sep_api
-[ 98%] Building CXX object CMakeFiles/sep_engine.dir/src/main.cpp.o
-[100%] Linking CXX executable sep_engine
-/usr/bin/ld: warning: libtbb.so.2, needed by /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/libOpenImageIO.so, may conflict with libtbb.so.12
-[100%] Built target sep_engine
-Installing SEP Engine binary...
-Warning: The unit file, source configuration file or drop-ins of sep-engine.service changed on disk. Run 'systemctl --user daemon-reload' to reload units.
-● sep-engine.service - SEP Engine Service (User)
-     Loaded: loaded (/home/ajn/.config/systemd/user/sep-engine.service; enabled; preset: disabled)
-    Drop-In: /usr/lib/systemd/user/service.d
-             └─10-timeout-abort.conf
-     Active: active (running) since Thu 2025-07-03 13:25:08 CDT; 2s ago
- Invocation: 39ab50811f27461aa8503cf42361dbc9
-   Main PID: 250381 (sep_engine)
-      Tasks: 3 (limit: 76749)
-     Memory: 60.7M (peak: 63.2M)
-        CPU: 404ms
-     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/sep-engine.service
-             └─250381 /home/ajn/.local/bin/sep_engine --server --port 8080 --host 0.0.0.0 --debug
-
-Jul 03 13:25:08 sep-OS systemd[2134]: Started sep-engine.service - SEP Engine Service (User).
-Jul 03 13:25:08 sep-OS sep_engine[250381]: DEBUG: Engine::init - Initializing audio capture
-Jul 03 13:25:08 sep-OS sep_engine[250381]: DEBUG: Engine::init - Setting initialized flag
-Jul 03 13:25:08 sep-OS sep_engine[250395]: enabled
-Jul 03 13:25:08 sep-OS sep_engine[250397]: enabled
-Jul 03 13:25:08 sep-OS sep_engine[250399]: enabled
-Jul 03 13:25:08 sep-OS sep_engine[250401]: enabled
-Jul 03 13:25:08 sep-OS sep_engine[250403]: active
-Jul 03 13:25:08 sep-OS sep_engine[250404]: active
-==== Build Complete at Thu Jul  3 01:25:10 PM CDT 2025 ====
-==== Build Complete ====
-SEP Engine binary is located at: /home/ajn/.cache/sep/build/sep_engine
-Cycles test executable is at: /home/ajn/.cache/sep/build/src/tests/cycles_test
+In file included from /sep/include/compat/raii.h:10,
+                 from /sep/src/compat/raii.cpp:18:
+/sep/include/compat/cuda_common.h:30:42: error: ‘::cudaError_t’ has not been declared
+   30 | void logCudaError(const char* operation, ::cudaError_t error);
+      |                                          ^~
+/sep/include/compat/cuda_common.h:35:23: error: ‘cudaError_t’ in namespace ‘::’ does not name a type
+   35 | using cudaError_t = ::cudaError_t;
+      |                       ^~~~~~~~~~~
+/sep/include/compat/cuda_common.h:36:24: error: ‘cudaStream_t’ in namespace ‘::’ does not name a type
+   36 | using cudaStream_t = ::cudaStream_t;
+      |                        ^~~~~~~~~~~~
+/sep/include/compat/cuda_common.h:37:23: error: ‘cudaEvent_t’ in namespace ‘::’ does not name a type
+   37 | using cudaEvent_t = ::cudaEvent_t;
+      |                       ^~~~~~~~~~~
+/sep/include/compat/cuda_common.h:38:26: error: ‘cudaMemcpyKind’ in namespace ‘::’ does not name a type
+   38 | using cudaMemcpyKind = ::cudaMemcpyKind;
+      |                          ^~~~~~~~~~~~~~
+/sep/include/compat/raii.h:27:3: error: ‘cudaStream_t’ does not name a type
+   27 |   cudaStream_t get() const { return stream_; }
+      |   ^~~~~~~~~~~~
+/sep/include/compat/raii.h:32:3: error: ‘cudaStream_t’ does not name a type
+   32 |   cudaStream_t stream_{nullptr};
+      |   ^~~~~~~~~~~~
+/sep/include/compat/raii.h: In member function ‘bool sep::cuda::StreamRAII::valid() const’:
+/sep/include/compat/raii.h:28:31: error: ‘stream_’ was not declared in this scope
+   28 |   bool valid() const { return stream_ != nullptr; }
+      |                               ^~~~~~~
+/sep/include/compat/raii.h: At global scope:
+/sep/include/compat/raii.h:46:3: error: ‘cudaEvent_t’ does not name a type
+   46 |   cudaEvent_t get() const { return event_; }
+      |   ^~~~~~~~~~~
+/sep/include/compat/raii.h:51:3: error: ‘cudaEvent_t’ does not name a type
+   51 |   cudaEvent_t event_{nullptr};
+      |   ^~~~~~~~~~~
+/sep/include/compat/raii.h: In member function ‘bool sep::cuda::EventRAII::valid() const’:
+/sep/include/compat/raii.h:47:31: error: ‘event_’ was not declared in this scope
+   47 |   bool valid() const { return event_ != nullptr; }
+      |                               ^~~~~~
+/sep/include/compat/raii.h: At global scope:
+/sep/include/compat/raii.h:81:47: error: ‘cudaStream_t’ has not been declared
+   81 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
+      |                                               ^~~~~~~~~~~~
+/sep/include/compat/raii.h:81:76: error: could not convert ‘nullptr’ from ‘std::nullptr_t’ to ‘int’
+   81 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
+      |                                                                            ^
+      |                                                                            |
+      |                                                                            std::nullptr_t
+In file included from /sep/src/compat/raii.cpp:19:
+/sep/include/compat/cuda_helpers.h:13:58: error: ‘cudaError_t’ has not been declared
+   13 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
+      |                                                          ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
+/sep/include/compat/cuda_helpers.h:14:18: error: ‘cudaSuccess’ was not declared in this scope
+   14 |     if (error != cudaSuccess) {
+      |                  ^~~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:15:73: error: ‘cudaGetErrorString’ was not declared in this scope
+   15 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
+      |                                                                         ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::StreamRAII::StreamRAII(sep::StreamFlags)’:
+/sep/src/compat/raii.cpp:101:74: error: ‘cudaStreamNonBlocking’ was not declared in this scope
+  101 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+      |                                                                          ^~~~~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:101:98: error: ‘cudaStreamDefault’ was not declared in this scope
+  101 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
+      |                                                                                                  ^~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:102:5: error: ‘cudaError_t’ was not declared in this scope
+  102 |     cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
+      |     ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:103:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  103 |     if (err != cudaSuccess) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:103:16: error: ‘cudaSuccess’ was not declared in this scope
+  103 |     if (err != cudaSuccess) {
+      |                ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:104:9: error: ‘stream_’ was not declared in this scope
+  104 |         stream_ = nullptr;
+      |         ^~~~~~~
+/sep/src/compat/raii.cpp:106:73: error: ‘cudaGetErrorString’ was not declared in this scope
+  106 |             (void)fprintf(stderr, "Failed to create CUDA stream: %s\n", cudaGetErrorString(err));
+      |                                                                         ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In destructor ‘sep::cuda::StreamRAII::~StreamRAII()’:
+/sep/src/compat/raii.cpp:114:9: error: ‘stream_’ was not declared in this scope
+  114 |     if (stream_) {
+      |         ^~~~~~~
+/sep/include/compat/cuda_helpers.h:23:9: error: ‘cudaError_t’ was not declared in this scope
+   23 |         cudaError_t error = call;                    \
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:118:9: note: in expansion of macro ‘CUDA_CHECK’
+  118 |         CUDA_CHECK(cudaStreamDestroy(stream_));
+      |         ^~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:24:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
+   24 |         if (error != cudaSuccess) {                  \
+      |             ^~~~~
+/sep/src/compat/raii.cpp:118:9: note: in expansion of macro ‘CUDA_CHECK’
+  118 |         CUDA_CHECK(cudaStreamDestroy(stream_));
+      |         ^~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:24:22: error: ‘cudaSuccess’ was not declared in this scope
+   24 |         if (error != cudaSuccess) {                  \
+      |                      ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:118:9: note: in expansion of macro ‘CUDA_CHECK’
+  118 |         CUDA_CHECK(cudaStreamDestroy(stream_));
+      |         ^~~~~~~~~~
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::StreamRAII::StreamRAII(sep::cuda::StreamRAII&&)’:
+/sep/src/compat/raii.cpp:123:55: error: class ‘sep::cuda::StreamRAII’ does not have any field named ‘stream_’
+  123 | StreamRAII::StreamRAII(StreamRAII&& other) noexcept : stream_(std::exchange(other.stream_, nullptr)) {}
+      |                                                       ^~~~~~~
+/sep/src/compat/raii.cpp:123:83: error: ‘class sep::cuda::StreamRAII’ has no member named ‘stream_’
+  123 | StreamRAII::StreamRAII(StreamRAII&& other) noexcept : stream_(std::exchange(other.stream_, nullptr)) {}
+      |                                                                                   ^~~~~~~
+/sep/src/compat/raii.cpp: In member function ‘sep::cuda::StreamRAII& sep::cuda::StreamRAII::operator=(sep::cuda::StreamRAII&&)’:
+/sep/src/compat/raii.cpp:127:13: error: ‘stream_’ was not declared in this scope
+  127 |         if (stream_) {
+      |             ^~~~~~~
+/sep/include/compat/cuda_helpers.h:23:9: error: ‘cudaError_t’ was not declared in this scope
+   23 |         cudaError_t error = call;                    \
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:128:13: note: in expansion of macro ‘CUDA_CHECK’
+  128 |             CUDA_CHECK(cudaStreamDestroy(stream_));
+      |             ^~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:24:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
+   24 |         if (error != cudaSuccess) {                  \
+      |             ^~~~~
+/sep/src/compat/raii.cpp:128:13: note: in expansion of macro ‘CUDA_CHECK’
+  128 |             CUDA_CHECK(cudaStreamDestroy(stream_));
+      |             ^~~~~~~~~~
+/sep/include/compat/cuda_helpers.h:24:22: error: ‘cudaSuccess’ was not declared in this scope
+   24 |         if (error != cudaSuccess) {                  \
+      |                      ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:128:13: note: in expansion of macro ‘CUDA_CHECK’
+  128 |             CUDA_CHECK(cudaStreamDestroy(stream_));
+      |             ^~~~~~~~~~
+/sep/src/compat/raii.cpp:130:9: error: ‘stream_’ was not declared in this scope
+  130 |         stream_ = std::exchange(other.stream_, nullptr);
+      |         ^~~~~~~
+/sep/src/compat/raii.cpp:130:39: error: ‘class sep::cuda::StreamRAII’ has no member named ‘stream_’
+  130 |         stream_ = std::exchange(other.stream_, nullptr);
+      |                                       ^~~~~~~
+/sep/src/compat/raii.cpp: In member function ‘void sep::cuda::StreamRAII::synchronize() const’:
+/sep/src/compat/raii.cpp:136:9: error: ‘stream_’ was not declared in this scope
+  136 |     if (stream_) {
+      |         ^~~~~~~
+/sep/src/compat/raii.cpp:137:9: error: ‘cudaError_t’ was not declared in this scope
+  137 |         cudaError_t err = cudaStreamSynchronize(stream_);
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:138:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  138 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
+/sep/src/compat/raii.cpp:138:20: error: ‘cudaSuccess’ was not declared in this scope
+  138 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:140:82: error: ‘cudaGetErrorString’ was not declared in this scope
+  140 |                 (void)fprintf(stderr, "Failed to synchronize CUDA stream: %s\n", cudaGetErrorString(err));
+      |                                                                                  ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::EventRAII::EventRAII()’:
+/sep/src/compat/raii.cpp:147:5: error: ‘cudaError_t’ was not declared in this scope
+  147 |     cudaError_t err = cudaEventCreate(&event_);
+      |     ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:148:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  148 |     if (err != cudaSuccess) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:148:16: error: ‘cudaSuccess’ was not declared in this scope
+  148 |     if (err != cudaSuccess) {
+      |                ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:149:9: error: ‘event_’ was not declared in this scope
+  149 |         event_ = nullptr;
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:151:72: error: ‘cudaGetErrorString’ was not declared in this scope
+  151 |             (void)fprintf(stderr, "Failed to create CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                        ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In destructor ‘sep::cuda::EventRAII::~EventRAII()’:
+/sep/src/compat/raii.cpp:159:9: error: ‘event_’ was not declared in this scope
+  159 |     if (event_) {
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:163:9: error: ‘cudaError_t’ was not declared in this scope
+  163 |         cudaError_t err = cudaEventDestroy(event_);
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:164:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  164 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
+/sep/src/compat/raii.cpp:164:20: error: ‘cudaSuccess’ was not declared in this scope
+  164 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:166:77: error: ‘cudaGetErrorString’ was not declared in this scope
+  166 |                 (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                             ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::EventRAII::EventRAII(sep::cuda::EventRAII&&)’:
+/sep/src/compat/raii.cpp:173:52: error: class ‘sep::cuda::EventRAII’ does not have any field named ‘event_’
+  173 | EventRAII::EventRAII(EventRAII&& other) noexcept : event_(std::exchange(other.event_, nullptr)) {}
+      |                                                    ^~~~~~
+/sep/src/compat/raii.cpp:173:79: error: ‘class sep::cuda::EventRAII’ has no member named ‘event_’
+  173 | EventRAII::EventRAII(EventRAII&& other) noexcept : event_(std::exchange(other.event_, nullptr)) {}
+      |                                                                               ^~~~~~
+/sep/src/compat/raii.cpp: In member function ‘sep::cuda::EventRAII& sep::cuda::EventRAII::operator=(sep::cuda::EventRAII&&)’:
+/sep/src/compat/raii.cpp:177:13: error: ‘event_’ was not declared in this scope
+  177 |         if (event_) {
+      |             ^~~~~~
+/sep/src/compat/raii.cpp:178:13: error: ‘cudaError_t’ was not declared in this scope
+  178 |             cudaError_t err = cudaEventDestroy(event_);
+      |             ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:179:17: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  179 |             if (err != cudaSuccess) {
+      |                 ^~~
+      |                 erf
+/sep/src/compat/raii.cpp:179:24: error: ‘cudaSuccess’ was not declared in this scope
+  179 |             if (err != cudaSuccess) {
+      |                        ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:181:81: error: ‘cudaGetErrorString’ was not declared in this scope
+  181 |                     (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                                 ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:185:9: error: ‘event_’ was not declared in this scope
+  185 |         event_ = std::exchange(other.event_, nullptr);
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:185:38: error: ‘class sep::cuda::EventRAII’ has no member named ‘event_’
+  185 |         event_ = std::exchange(other.event_, nullptr);
+      |                                      ^~~~~~
+/sep/src/compat/raii.cpp: In member function ‘void sep::cuda::EventRAII::synchronize() const’:
+/sep/src/compat/raii.cpp:191:9: error: ‘event_’ was not declared in this scope
+  191 |     if (event_) {
+      |         ^~~~~~
+/sep/src/compat/raii.cpp:192:9: error: ‘cudaError_t’ was not declared in this scope
+  192 |         cudaError_t err = cudaEventSynchronize(event_);
+      |         ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:193:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  193 |         if (err != cudaSuccess) {
+      |             ^~~
+      |             erf
+/sep/src/compat/raii.cpp:193:20: error: ‘cudaSuccess’ was not declared in this scope
+  193 |         if (err != cudaSuccess) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:195:81: error: ‘cudaGetErrorString’ was not declared in this scope
+  195 |                 (void)fprintf(stderr, "Failed to synchronize CUDA event: %s\n", cudaGetErrorString(err));
+      |                                                                                 ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateDeviceMemory(std::size_t)’:
+/sep/src/compat/raii.cpp:248:5: error: ‘cudaError_t’ was not declared in this scope
+  248 |     cudaError_t err = cudaMalloc(&ptr, size);
+      |     ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:249:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  249 |     if (err != cudaSuccess) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:249:16: error: ‘cudaSuccess’ was not declared in this scope
+  249 |     if (err != cudaSuccess) {
+      |                ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:251:62: error: ‘cudaGetErrorString’ was not declared in this scope
+  251 |             (void)fprintf(stderr, "cudaMalloc failed: %s\n", cudaGetErrorString(err));
+      |                                                              ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In function ‘void sep::cuda::freeDeviceMemory(void*)’:
+/sep/src/compat/raii.cpp:261:5: error: ‘cudaError_t’ was not declared in this scope
+  261 |     cudaError_t err = cudaFree(ptr);
+      |     ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:262:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  262 |     if (err != cudaSuccess && debugAllocEnabled()) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:262:16: error: ‘cudaSuccess’ was not declared in this scope
+  262 |     if (err != cudaSuccess && debugAllocEnabled()) {
+      |                ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:263:56: error: ‘cudaGetErrorString’ was not declared in this scope
+  263 |         (void)fprintf(stderr, "cudaFree failed: %s\n", cudaGetErrorString(err));
+      |                                                        ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp: At global scope:
+/sep/src/compat/raii.cpp:267:47: error: ‘cudaStream_t’ has not been declared
+  267 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
+      |                                               ^~~~~~~~~~~~
+/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateUnifiedMemory(std::size_t, int)’:
+/sep/src/compat/raii.cpp:269:5: error: ‘cudaError_t’ was not declared in this scope
+  269 |     cudaError_t err = cudaMallocManaged(&ptr, size);
+      |     ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:270:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  270 |     if (err != cudaSuccess) {
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:270:16: error: ‘cudaSuccess’ was not declared in this scope
+  270 |     if (err != cudaSuccess) {
+      |                ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:272:69: error: ‘cudaGetErrorString’ was not declared in this scope
+  272 |             (void)fprintf(stderr, "cudaMallocManaged failed: %s\n", cudaGetErrorString(err));
+      |                                                                     ^~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:277:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  277 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
+      |         ^~~
+      |         erf
+/sep/src/compat/raii.cpp:277:15: error: ‘cudaStreamAttachMemAsync’ was not declared in this scope
+  277 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~
+/sep/src/compat/raii.cpp:278:20: error: ‘cudaSuccess’ was not declared in this scope
+  278 |         if (err != cudaSuccess && debugAllocEnabled()) {
+      |                    ^~~~~~~~~~~
+/sep/src/compat/raii.cpp:279:76: error: ‘cudaGetErrorString’ was not declared in this scope
+  279 |             (void)fprintf(stderr, "cudaStreamAttachMemAsync failed: %s\n", cudaGetErrorString(err));
+      |                                                                            ^~~~~~~~~~~~~~~~~~
+make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:412: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

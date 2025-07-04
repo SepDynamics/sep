@@ -62,11 +62,12 @@ target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=1)
 # Include directories
 target_include_directories(sep_compat
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/include/compat
-        ${CMAKE_SOURCE_DIR}/include/core
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
     PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
         ${CUDA_INCLUDE_DIRS}
-        ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
 
 # Dependencies

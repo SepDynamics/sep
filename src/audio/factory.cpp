@@ -1,4 +1,7 @@
+#include "audio/pipewire_includes.h"
+#include "audio/types.h"
 #include "audio/capture.h"
+#include <memory>
 
 #ifdef SEP_HAS_AUDIO
 #include "audio/pipewire_capture.h"
@@ -7,7 +10,7 @@
 namespace sep {
 namespace audio {
 
-std::unique_ptr<AudioCapture> createAudioCapture() {
+std::unique_ptr<AudioCapture> AudioCapture::create() {
 #ifdef SEP_HAS_AUDIO
     return std::make_unique<PipeWireCapture>();
 #else

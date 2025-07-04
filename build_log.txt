@@ -1,368 +1,1386 @@
-==== SEP Engine Build Script with FULL Cycles and PipeWire Support ====
-Setting up build environment with real library paths - NO STUBS!
-Build started at Thu Jul  3 07:21:11 PM CDT 2025
-Using Cycles root: /sep/extern/cycles
-Checking for PipeWire development headers...
-PipeWire found via pkg-config
-Cleaning build directory...
-Running CMake configuration...
--- The C compiler identification is GNU 14.2.1
--- The CXX compiler identification is GNU 14.2.1
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: /usr/bin/gcc-14 - skipped
--- Detecting C compile features
--- Detecting C compile features - done
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/g++-14 - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Found CUDAToolkit: /usr/local/cuda/targets/x86_64-linux/include (found version "12.9.86")
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE
--- Found CURL: /usr/lib64/libcurl.so (found version "8.11.1")
--- Found http_parser: /usr/lib64/libhttp_parser.so
--- Found OpenVDB: /usr/lib64/libopenvdb.so
--- Found OpenSubdiv: /usr/lib64/libosdGPU.so;/usr/lib64/libosdCPU.so
--- Found OpenPGL: /usr/lib64/libopenpgl.so
--- Found OpenColorIO: /usr/lib64/libOpenColorIO.so
--- Found Imath: /usr/lib64/libImath.so
--- Found TBB: /usr/lib64/libtbb.so
--- Found OpenImageIO: /usr/lib64/libOpenImageIO.so;/usr/lib64/libOpenImageIO_Util.so
--- Found OSL: /usr/lib64/liboslcomp.so;/usr/lib64/liboslexec.so;/usr/lib64/liboslquery.so;/usr/lib64/liboslnoise.so (found version "1.13.12")
--- Found Alembic: /usr/lib64/libAlembic.so
--- Found hiredis: /usr/lib64/libhiredis.so
--- Found hiredis headers: /usr/include/hiredis
--- Found PkgConfig: /usr/bin/pkg-config (found version "2.3.0")
--- Checking for module 'libpipewire-0.3'
---   Found libpipewire-0.3, version 1.4.6
--- Checking for module 'fftw3f'
---   Found fftw3f, version 3.3.10
--- Using PipeWire at: pipewire-0.3
--- Using FFTW at: fftw3f
--- Found Embree: /usr/lib64/libembree4.so
--- Found GLOG: /usr/lib64/libglog.so
--- Checking for module 'OpenImageIO'
---   Found OpenImageIO, version 2.5.16.0
--- Checking for module 'libzstd'
---   Found libzstd, version 1.5.7
--- Configuring done (1.7s)
--- Generating done (0.0s)
--- Build files have been written to: /home/ajn/.cache/sep/build
-Building SEP Engine...
-[  1%] Building CXX object extern/cycles/third_party/sky/CMakeFiles/extern_sky.dir/source/sky_model.cpp.o
-[  2%] Building CXX object src/embeddings/CMakeFiles/sep_embeddings.dir/simple_embedding_model.cpp.o
-[  3%] Building CXX object extern/cycles/third_party/sky/CMakeFiles/extern_sky.dir/source/sky_nishita.cpp.o
-[  5%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/stream.cpp.o
-[  6%] Building C object extern/cycles/third_party/hipew/CMakeFiles/extern_hipew.dir/src/hipew.c.o
-[  7%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/hip_compat.cpp.o
-[  9%] Building CXX object src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o
-[ 10%] Building C object extern/cycles/third_party/cuew/CMakeFiles/extern_cuew.dir/src/cuew.c.o
-[ 11%] Linking C static library libextern_hipew.a
-[ 11%] Built target extern_hipew
-[ 12%] Linking C static library libextern_cuew.a
-[ 12%] Built target extern_cuew
-[ 14%] Linking CXX static library libextern_sky.a
-[ 15%] Linking CXX static library libsep_embeddings.a
-[ 15%] Built target extern_sky
-[ 15%] Built target sep_embeddings
-In file included from /sep/include/compat/raii.h:10,
-                 from /sep/src/compat/raii.cpp:18:
-/sep/include/compat/cuda_common.h:30:42: error: ‘::cudaError_t’ has not been declared
-   30 | void logCudaError(const char* operation, ::cudaError_t error);
-      |                                          ^~
-/sep/include/compat/cuda_common.h:35:23: error: ‘cudaError_t’ in namespace ‘::’ does not name a type
-   35 | using cudaError_t = ::cudaError_t;
-      |                       ^~~~~~~~~~~
-/sep/include/compat/cuda_common.h:36:24: error: ‘cudaStream_t’ in namespace ‘::’ does not name a type
-   36 | using cudaStream_t = ::cudaStream_t;
-      |                        ^~~~~~~~~~~~
-/sep/include/compat/cuda_common.h:37:23: error: ‘cudaEvent_t’ in namespace ‘::’ does not name a type
-   37 | using cudaEvent_t = ::cudaEvent_t;
-      |                       ^~~~~~~~~~~
-/sep/include/compat/cuda_common.h:38:26: error: ‘cudaMemcpyKind’ in namespace ‘::’ does not name a type
-   38 | using cudaMemcpyKind = ::cudaMemcpyKind;
-      |                          ^~~~~~~~~~~~~~
-/sep/include/compat/raii.h:27:3: error: ‘cudaStream_t’ does not name a type
-   27 |   cudaStream_t get() const { return stream_; }
-      |   ^~~~~~~~~~~~
-/sep/include/compat/raii.h:32:3: error: ‘cudaStream_t’ does not name a type
-   32 |   cudaStream_t stream_{nullptr};
-      |   ^~~~~~~~~~~~
-/sep/include/compat/raii.h: In member function ‘bool sep::cuda::StreamRAII::valid() const’:
-/sep/include/compat/raii.h:28:31: error: ‘stream_’ was not declared in this scope
-   28 |   bool valid() const { return stream_ != nullptr; }
-      |                               ^~~~~~~
-/sep/include/compat/raii.h: At global scope:
-/sep/include/compat/raii.h:46:3: error: ‘cudaEvent_t’ does not name a type
-   46 |   cudaEvent_t get() const { return event_; }
-      |   ^~~~~~~~~~~
-/sep/include/compat/raii.h:51:3: error: ‘cudaEvent_t’ does not name a type
-   51 |   cudaEvent_t event_{nullptr};
-      |   ^~~~~~~~~~~
-/sep/include/compat/raii.h: In member function ‘bool sep::cuda::EventRAII::valid() const’:
-/sep/include/compat/raii.h:47:31: error: ‘event_’ was not declared in this scope
-   47 |   bool valid() const { return event_ != nullptr; }
-      |                               ^~~~~~
-/sep/include/compat/raii.h: At global scope:
-/sep/include/compat/raii.h:81:47: error: ‘cudaStream_t’ has not been declared
-   81 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
-      |                                               ^~~~~~~~~~~~
-/sep/include/compat/raii.h:81:76: error: could not convert ‘nullptr’ from ‘std::nullptr_t’ to ‘int’
-   81 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream = nullptr);
-      |                                                                            ^
-      |                                                                            |
-      |                                                                            std::nullptr_t
-In file included from /sep/src/compat/raii.cpp:19:
-/sep/include/compat/cuda_helpers.h:13:58: error: ‘cudaError_t’ has not been declared
-   13 | SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
-      |                                                          ^~~~~~~~~~~
-/sep/include/compat/cuda_helpers.h: In function ‘void sep::cuda::logCudaError(const char*, int)’:
-/sep/include/compat/cuda_helpers.h:14:18: error: ‘cudaSuccess’ was not declared in this scope
-   14 |     if (error != cudaSuccess) {
-      |                  ^~~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:15:73: error: ‘cudaGetErrorString’ was not declared in this scope
-   15 |         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation, cudaGetErrorString(error));
-      |                                                                         ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::StreamRAII::StreamRAII(sep::StreamFlags)’:
-/sep/src/compat/raii.cpp:101:74: error: ‘cudaStreamNonBlocking’ was not declared in this scope
-  101 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
-      |                                                                          ^~~~~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp:101:98: error: ‘cudaStreamDefault’ was not declared in this scope
-  101 |     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? cudaStreamNonBlocking : cudaStreamDefault;
-      |                                                                                                  ^~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp:102:5: error: ‘cudaError_t’ was not declared in this scope
-  102 |     cudaError_t err = cudaStreamCreateWithFlags(&stream_, cuda_flags);
-      |     ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:103:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  103 |     if (err != cudaSuccess) {
-      |         ^~~
-      |         erf
-/sep/src/compat/raii.cpp:103:16: error: ‘cudaSuccess’ was not declared in this scope
-  103 |     if (err != cudaSuccess) {
-      |                ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:104:9: error: ‘stream_’ was not declared in this scope
-  104 |         stream_ = nullptr;
-      |         ^~~~~~~
-/sep/src/compat/raii.cpp:106:73: error: ‘cudaGetErrorString’ was not declared in this scope
-  106 |             (void)fprintf(stderr, "Failed to create CUDA stream: %s\n", cudaGetErrorString(err));
-      |                                                                         ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp: In destructor ‘sep::cuda::StreamRAII::~StreamRAII()’:
-/sep/src/compat/raii.cpp:114:9: error: ‘stream_’ was not declared in this scope
-  114 |     if (stream_) {
-      |         ^~~~~~~
-/sep/include/compat/cuda_helpers.h:23:9: error: ‘cudaError_t’ was not declared in this scope
-   23 |         cudaError_t error = call;                    \
-      |         ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:118:9: note: in expansion of macro ‘CUDA_CHECK’
-  118 |         CUDA_CHECK(cudaStreamDestroy(stream_));
-      |         ^~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:24:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
-   24 |         if (error != cudaSuccess) {                  \
-      |             ^~~~~
-/sep/src/compat/raii.cpp:118:9: note: in expansion of macro ‘CUDA_CHECK’
-  118 |         CUDA_CHECK(cudaStreamDestroy(stream_));
-      |         ^~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:24:22: error: ‘cudaSuccess’ was not declared in this scope
-   24 |         if (error != cudaSuccess) {                  \
-      |                      ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:118:9: note: in expansion of macro ‘CUDA_CHECK’
-  118 |         CUDA_CHECK(cudaStreamDestroy(stream_));
-      |         ^~~~~~~~~~
-/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::StreamRAII::StreamRAII(sep::cuda::StreamRAII&&)’:
-/sep/src/compat/raii.cpp:123:55: error: class ‘sep::cuda::StreamRAII’ does not have any field named ‘stream_’
-  123 | StreamRAII::StreamRAII(StreamRAII&& other) noexcept : stream_(std::exchange(other.stream_, nullptr)) {}
-      |                                                       ^~~~~~~
-/sep/src/compat/raii.cpp:123:83: error: ‘class sep::cuda::StreamRAII’ has no member named ‘stream_’
-  123 | StreamRAII::StreamRAII(StreamRAII&& other) noexcept : stream_(std::exchange(other.stream_, nullptr)) {}
-      |                                                                                   ^~~~~~~
-/sep/src/compat/raii.cpp: In member function ‘sep::cuda::StreamRAII& sep::cuda::StreamRAII::operator=(sep::cuda::StreamRAII&&)’:
-/sep/src/compat/raii.cpp:127:13: error: ‘stream_’ was not declared in this scope
-  127 |         if (stream_) {
-      |             ^~~~~~~
-/sep/include/compat/cuda_helpers.h:23:9: error: ‘cudaError_t’ was not declared in this scope
-   23 |         cudaError_t error = call;                    \
-      |         ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:128:13: note: in expansion of macro ‘CUDA_CHECK’
-  128 |             CUDA_CHECK(cudaStreamDestroy(stream_));
-      |             ^~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:24:13: error: ‘error’ was not declared in this scope; did you mean ‘Error’?
-   24 |         if (error != cudaSuccess) {                  \
-      |             ^~~~~
-/sep/src/compat/raii.cpp:128:13: note: in expansion of macro ‘CUDA_CHECK’
-  128 |             CUDA_CHECK(cudaStreamDestroy(stream_));
-      |             ^~~~~~~~~~
-/sep/include/compat/cuda_helpers.h:24:22: error: ‘cudaSuccess’ was not declared in this scope
-   24 |         if (error != cudaSuccess) {                  \
-      |                      ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:128:13: note: in expansion of macro ‘CUDA_CHECK’
-  128 |             CUDA_CHECK(cudaStreamDestroy(stream_));
-      |             ^~~~~~~~~~
-/sep/src/compat/raii.cpp:130:9: error: ‘stream_’ was not declared in this scope
-  130 |         stream_ = std::exchange(other.stream_, nullptr);
-      |         ^~~~~~~
-/sep/src/compat/raii.cpp:130:39: error: ‘class sep::cuda::StreamRAII’ has no member named ‘stream_’
-  130 |         stream_ = std::exchange(other.stream_, nullptr);
-      |                                       ^~~~~~~
-/sep/src/compat/raii.cpp: In member function ‘void sep::cuda::StreamRAII::synchronize() const’:
-/sep/src/compat/raii.cpp:136:9: error: ‘stream_’ was not declared in this scope
-  136 |     if (stream_) {
-      |         ^~~~~~~
-/sep/src/compat/raii.cpp:137:9: error: ‘cudaError_t’ was not declared in this scope
-  137 |         cudaError_t err = cudaStreamSynchronize(stream_);
-      |         ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:138:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  138 |         if (err != cudaSuccess) {
-      |             ^~~
-      |             erf
-/sep/src/compat/raii.cpp:138:20: error: ‘cudaSuccess’ was not declared in this scope
-  138 |         if (err != cudaSuccess) {
-      |                    ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:140:82: error: ‘cudaGetErrorString’ was not declared in this scope
-  140 |                 (void)fprintf(stderr, "Failed to synchronize CUDA stream: %s\n", cudaGetErrorString(err));
-      |                                                                                  ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::EventRAII::EventRAII()’:
-/sep/src/compat/raii.cpp:147:5: error: ‘cudaError_t’ was not declared in this scope
-  147 |     cudaError_t err = cudaEventCreate(&event_);
-      |     ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:148:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  148 |     if (err != cudaSuccess) {
-      |         ^~~
-      |         erf
-/sep/src/compat/raii.cpp:148:16: error: ‘cudaSuccess’ was not declared in this scope
-  148 |     if (err != cudaSuccess) {
-      |                ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:149:9: error: ‘event_’ was not declared in this scope
-  149 |         event_ = nullptr;
-      |         ^~~~~~
-/sep/src/compat/raii.cpp:151:72: error: ‘cudaGetErrorString’ was not declared in this scope
-  151 |             (void)fprintf(stderr, "Failed to create CUDA event: %s\n", cudaGetErrorString(err));
-      |                                                                        ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp: In destructor ‘sep::cuda::EventRAII::~EventRAII()’:
-/sep/src/compat/raii.cpp:159:9: error: ‘event_’ was not declared in this scope
-  159 |     if (event_) {
-      |         ^~~~~~
-/sep/src/compat/raii.cpp:163:9: error: ‘cudaError_t’ was not declared in this scope
-  163 |         cudaError_t err = cudaEventDestroy(event_);
-      |         ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:164:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  164 |         if (err != cudaSuccess) {
-      |             ^~~
-      |             erf
-/sep/src/compat/raii.cpp:164:20: error: ‘cudaSuccess’ was not declared in this scope
-  164 |         if (err != cudaSuccess) {
-      |                    ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:166:77: error: ‘cudaGetErrorString’ was not declared in this scope
-  166 |                 (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n", cudaGetErrorString(err));
-      |                                                                             ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp: In constructor ‘sep::cuda::EventRAII::EventRAII(sep::cuda::EventRAII&&)’:
-/sep/src/compat/raii.cpp:173:52: error: class ‘sep::cuda::EventRAII’ does not have any field named ‘event_’
-  173 | EventRAII::EventRAII(EventRAII&& other) noexcept : event_(std::exchange(other.event_, nullptr)) {}
-      |                                                    ^~~~~~
-/sep/src/compat/raii.cpp:173:79: error: ‘class sep::cuda::EventRAII’ has no member named ‘event_’
-  173 | EventRAII::EventRAII(EventRAII&& other) noexcept : event_(std::exchange(other.event_, nullptr)) {}
-      |                                                                               ^~~~~~
-/sep/src/compat/raii.cpp: In member function ‘sep::cuda::EventRAII& sep::cuda::EventRAII::operator=(sep::cuda::EventRAII&&)’:
-/sep/src/compat/raii.cpp:177:13: error: ‘event_’ was not declared in this scope
-  177 |         if (event_) {
-      |             ^~~~~~
-/sep/src/compat/raii.cpp:178:13: error: ‘cudaError_t’ was not declared in this scope
-  178 |             cudaError_t err = cudaEventDestroy(event_);
-      |             ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:179:17: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  179 |             if (err != cudaSuccess) {
+[  2%] Built target extern_hipew
+[  6%] Built target extern_cuew
+[  9%] Built target extern_sky
+[ 11%] Built target sep_embeddings
+[ 16%] Built target sep_compat
+[ 29%] Built target sep_core
+[ 36%] Built target sep_audio
+[ 42%] Built target sep_memory
+[ 62%] Built target sep_quantum
+[ 63%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/api.cpp.o
+[ 64%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o
+[ 66%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o
+[ 67%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o
+[ 68%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o
+[ 70%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o
+[ 71%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o
+[ 72%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o
+[ 74%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/oiio_output_driver.cpp.o
+[ 75%] Building CXX object src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o
+In file included from /sep/src/blender/blender_integration.cpp:1:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:80:11: error: no member named 'memchr' in the global namespace
+   80 |   using ::memchr;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:81:11: error: no member named 'memcmp' in the global namespace
+   81 |   using ::memcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:82:11: error: no member named 'memcpy' in the global namespace
+   82 |   using ::memcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:83:11: error: no member named 'memmove' in the global namespace
+   83 |   using ::memmove;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:84:11: error: no member named 'memset' in the global namespace
+   84 |   using ::memset;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:85:11: error: no member named 'strcat' in the global namespace
+   85 |   using ::strcat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:86:11: error: no member named 'strcmp' in the global namespace
+   86 |   using ::strcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:87:11: error: no member named 'strcoll' in the global namespace
+   87 |   using ::strcoll;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:88:11: error: no member named 'strcpy' in the global namespace
+   88 |   using ::strcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:89:11: error: no member named 'strcspn' in the global namespace
+   89 |   using ::strcspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:90:11: error: no member named 'strerror' in the global namespace
+   90 |   using ::strerror;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:91:11: error: no member named 'strlen' in the global namespace
+   91 |   using ::strlen;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:92:11: error: no member named 'strncat' in the global namespace
+   92 |   using ::strncat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:93:11: error: no member named 'strncmp' in the global namespace
+   93 |   using ::strncmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:94:11: error: no member named 'strncpy' in the global namespace
+   94 |   using ::strncpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:95:11: error: no member named 'strspn' in the global namespace
+   95 |   using ::strspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:97:11: error: no member named 'strtok' in the global namespace
+   97 |   using ::strtok;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:99:11: error: no member named 'strxfrm' in the global namespace
+   99 |   using ::strxfrm;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:100:11: error: no member named 'strchr' in the global namespace
+  100 |   using ::strchr;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+In file included from /sep/src/blender/api.cpp:1:
+In file included from /sep/include/compat/math_common.h:12:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:80:11: error: no member named 'memchr' in the global namespace
+   80 |   using ::memchr;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:81:11: error: no member named 'memcmp' in the global namespace
+   81 |   using ::memcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:82:11: error: no member named 'memcpy' in the global namespace
+   82 |   using ::memcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:83:11: error: no member named 'memmove' in the global namespace
+   83 |   using ::memmove;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:84:11: error: no member named 'memset' in the global namespace
+   84 |   using ::memset;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:85:11: error: no member named 'strcat' in the global namespace
+   85 |   using ::strcat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:86:11: error: no member named 'strcmp' in the global namespace
+   86 |   using ::strcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:87:11: error: no member named 'strcoll' in the global namespace; did you mean 'strtoll'?
+   87 |   using ::strcoll;
+      |         ~~^
+/usr/include/stdlib.h:238:38: note: 'strtoll' declared here
+  238 | extern long long int __REDIRECT_NTH (strtoll, (const char *__restrict __nptr,
+      |                                      ^
+In file included from /sep/src/blender/api.cpp:1:
+In file included from /sep/include/compat/math_common.h:12:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:88:11: error: no member named 'strcpy' in the global namespace
+   88 |   using ::strcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:89:11: error: no member named 'strcspn' in the global namespace
+   89 |   using ::strcspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:90:11: error: no member named 'strerror' in the global namespace
+   90 |   using ::strerror;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:91:11: error: no member named 'strlen' in the global namespace
+   91 |   using ::strlen;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:92:11: error: no member named 'strncat' in the global namespace
+   92 |   using ::strncat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:93:11: error: no member named 'strncmp' in the global namespace
+   93 |   using ::strncmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:94:11: error: no member named 'strncpy' in the global namespace
+   94 |   using ::strncpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:95:11: error: no member named 'strspn' in the global namespace
+   95 |   using ::strspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:97:11: error: no member named 'strtok' in the global namespace
+   97 |   using ::strtok;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:99:11: error: no member named 'strxfrm' in the global namespace
+   99 |   using ::strxfrm;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:100:11: error: no member named 'strchr' in the global namespace
+  100 |   using ::strchr;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+In file included from /sep/src/blender/gpu_context.cpp:1:
+In file included from /sep/include/blender/gpu_context.h:4:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:80:11: error: no member named 'memchr' in the global namespace; did you mean 'wmemchr'?
+   80 |   using ::memchr;
+      |         ~~^
+/usr/include/wchar.h:278:17: note: 'wmemchr' declared here
+  278 | extern wchar_t *wmemchr (const wchar_t *__s, wchar_t __c, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/gpu_context.cpp:1:
+In file included from /sep/include/blender/gpu_context.h:4:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:81:11: error: no member named 'memcmp' in the global namespace; did you mean 'wmemcmp'?
+   81 |   using ::memcmp;
+      |         ~~^
+/usr/include/wchar.h:283:12: note: 'wmemcmp' declared here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |            ^
+In file included from /sep/src/blender/gpu_context.cpp:1:
+In file included from /sep/include/blender/gpu_context.h:4:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:82:11: error: no member named 'memcpy' in the global namespace; did you mean 'wmemcpy'?
+   82 |   using ::memcpy;
+      |         ~~^
+/usr/include/wchar.h:287:17: note: 'wmemcpy' declared here
+  287 | extern wchar_t *wmemcpy (wchar_t *__restrict __s1,
+      |                 ^
+In file included from /sep/src/blender/gpu_context.cpp:1:
+In file included from /sep/include/blender/gpu_context.h:4:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:83:11: error: no member named 'memmove' in the global namespace; did you mean 'wmemmove'?
+   83 |   using ::memmove;
+      |         ~~^
+/usr/include/wchar.h:292:17: note: 'wmemmove' declared here
+  292 | extern wchar_t *wmemmove (wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/gpu_context.cpp:1:
+In file included from /sep/include/blender/gpu_context.h:4:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:84:11: error: no member named 'memset' in the global namespace; did you mean 'wmemset'?
+   84 |   using ::memset;
+      |         ~~^
+/usr/include/wchar.h:296:17: note: 'wmemset' declared here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                 ^
+In file included from /sep/src/blender/gpu_context.cpp:1:
+In file included from /sep/include/blender/gpu_context.h:4:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:85:11: error: no member named 'strcat' in the global namespace
+   85 |   using ::strcat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:86:11: error: no member named 'strcmp' in the global namespace
+   86 |   using ::strcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:87:11: error: no member named 'strcoll' in the global namespace; did you mean 'strtoll'?
+   87 |   using ::strcoll;
+      |         ~~^
+/usr/include/stdlib.h:238:38: note: 'strtoll' declared here
+  238 | extern long long int __REDIRECT_NTH (strtoll, (const char *__restrict __nptr,
+      |                                      ^
+In file included from /sep/src/blender/gpu_context.cpp:1:
+In file included from /sep/include/blender/gpu_context.h:4:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:88:11: error: no member named 'strcpy' in the global namespace
+   88 |   using ::strcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:89:11: error: no member named 'strcspn' in the global namespace
+   89 |   using ::strcspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:90:11: error: no member named 'strerror' in the global namespace
+   90 |   using ::strerror;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:91:11: error: no member named 'strlen' in the global namespace; did you mean 'mbrlen'?
+   91 |   using ::strlen;
+      |         ~~^
+/usr/include/wchar.h:354:8: note: 'mbrlen' declared here
+  354 | __NTH (mbrlen (const char *__restrict __s, size_t __n,
+      |        ^
+In file included from /sep/src/blender/gpu_context.cpp:1:
+In file included from /sep/include/blender/gpu_context.h:4:
+In file included from /sep/include/compat/shim.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:92:11: error: no member named 'strncat' in the global namespace
+   92 |   using ::strncat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:93:11: error: no member named 'strncmp' in the global namespace
+   93 |   using ::strncmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:94:11: error: no member named 'strncpy' in the global namespace
+   94 |   using ::strncpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:95:11: error: no member named 'strspn' in the global namespace
+   95 |   using ::strspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:97:11: error: no member named 'strtok' in the global namespace
+   97 |   using ::strtok;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:99:11: error: no member named 'strxfrm' in the global namespace
+   99 |   using ::strxfrm;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:100:11: error: no member named 'strchr' in the global namespace
+  100 |   using ::strchr;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+In file included from /sep/src/blender/compression.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:80:11: error: no member named 'memchr' in the global namespace; did you mean 'wmemchr'?
+   80 |   using ::memchr;
+      |         ~~^
+/usr/include/wchar.h:278:17: note: 'wmemchr' declared here
+  278 | extern wchar_t *wmemchr (const wchar_t *__s, wchar_t __c, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/compression.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:81:11: error: no member named 'memcmp' in the global namespace; did you mean 'wmemcmp'?
+   81 |   using ::memcmp;
+      |         ~~^
+/usr/include/wchar.h:283:12: note: 'wmemcmp' declared here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |            ^
+In file included from /sep/src/blender/compression.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:82:11: error: no member named 'memcpy' in the global namespace; did you mean 'wmemcpy'?
+   82 |   using ::memcpy;
+      |         ~~^
+/usr/include/wchar.h:287:17: note: 'wmemcpy' declared here
+  287 | extern wchar_t *wmemcpy (wchar_t *__restrict __s1,
+      |                 ^
+In file included from /sep/src/blender/compression.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:83:11: error: no member named 'memmove' in the global namespace; did you mean 'wmemmove'?
+   83 |   using ::memmove;
+      |         ~~^
+/usr/include/wchar.h:292:17: note: 'wmemmove' declared here
+  292 | extern wchar_t *wmemmove (wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/compression.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:84:11: error: no member named 'memset' in the global namespace; did you mean 'wmemset'?
+   84 |   using ::memset;
+      |         ~~^
+/usr/include/wchar.h:296:17: note: 'wmemset' declared here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                 ^
+In file included from /sep/src/blender/compression.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:85:11: error: no member named 'strcat' in the global namespace
+   85 |   using ::strcat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:86:11: error: no member named 'strcmp' in the global namespace
+   86 |   using ::strcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:87:11: error: no member named 'strcoll' in the global namespace
+   87 |   using ::strcoll;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:88:11: error: no member named 'strcpy' in the global namespace
+   88 |   using ::strcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:89:11: error: no member named 'strcspn' in the global namespace
+   89 |   using ::strcspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:90:11: error: no member named 'strerror' in the global namespace
+   90 |   using ::strerror;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:91:11: error: no member named 'strlen' in the global namespace; did you mean 'mbrlen'?
+   91 |   using ::strlen;
+      |         ~~^
+/usr/include/wchar.h:354:8: note: 'mbrlen' declared here
+  354 | __NTH (mbrlen (const char *__restrict __s, size_t __n,
+      |        ^
+In file included from /sep/src/blender/compression.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:92:11: error: no member named 'strncat' in the global namespace
+   92 |   using ::strncat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:93:11: error: no member named 'strncmp' in the global namespace
+   93 |   using ::strncmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:94:11: error: no member named 'strncpy' in the global namespace
+   94 |   using ::strncpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:95:11: error: no member named 'strspn' in the global namespace
+   95 |   using ::strspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:97:11: error: no member named 'strtok' in the global namespace
+   97 |   using ::strtok;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:99:11: error: no member named 'strxfrm' in the global namespace
+   99 |   using ::strxfrm;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:100:11: error: no member named 'strchr' in the global namespace
+  100 |   using ::strchr;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+In file included from /sep/src/blender/cycles_renderer.cpp:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:80:11: error: no member named 'memchr' in the global namespace; did you mean 'wmemchr'?
+   80 |   using ::memchr;
+      |         ~~^
+/usr/include/wchar.h:278:17: note: 'wmemchr' declared here
+  278 | extern wchar_t *wmemchr (const wchar_t *__s, wchar_t __c, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/cycles_renderer.cpp:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:81:11: error: no member named 'memcmp' in the global namespace; did you mean 'wmemcmp'?
+   81 |   using ::memcmp;
+      |         ~~^
+/usr/include/wchar.h:283:12: note: 'wmemcmp' declared here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |            ^
+In file included from /sep/src/blender/cycles_renderer.cpp:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:82:11: error: no member named 'memcpy' in the global namespace; did you mean 'wmemcpy'?
+   82 |   using ::memcpy;
+      |         ~~^
+/usr/include/wchar.h:287:17: note: 'wmemcpy' declared here
+  287 | extern wchar_t *wmemcpy (wchar_t *__restrict __s1,
+      |                 ^
+In file included from /sep/src/blender/cycles_renderer.cpp:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:83:11: error: no member named 'memmove' in the global namespace; did you mean 'wmemmove'?
+   83 |   using ::memmove;
+      |         ~~^
+/usr/include/wchar.h:292:17: note: 'wmemmove' declared here
+  292 | extern wchar_t *wmemmove (wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/cycles_renderer.cpp:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:84:11: error: no member named 'memset' in the global namespace; did you mean 'wmemset'?
+   84 |   using ::memset;
+      |         ~~^
+/usr/include/wchar.h:296:17: note: 'wmemset' declared here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                 ^
+In file included from /sep/src/blender/cycles_renderer.cpp:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:85:11: error: no member named 'strcat' in the global namespace
+   85 |   using ::strcat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:86:11: error: no member named 'strcmp' in the global namespace
+   86 |   using ::strcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:87:11: error: no member named 'strcoll' in the global namespace; did you mean 'strtoll'?
+   87 |   using ::strcoll;
+      |         ~~^
+/usr/include/stdlib.h:238:38: note: 'strtoll' declared here
+  238 | extern long long int __REDIRECT_NTH (strtoll, (const char *__restrict __nptr,
+      |                                      ^
+In file included from /sep/src/blender/cycles_renderer.cpp:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:88:11: error: no member named 'strcpy' in the global namespace
+   88 |   using ::strcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:89:11: error: no member named 'strcspn' in the global namespace
+   89 |   using ::strcspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:90:11: error: no member named 'strerror' in the global namespace
+   90 |   using ::strerror;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:91:11: error: no member named 'strlen' in the global namespace; did you mean 'mbrlen'?
+   91 |   using ::strlen;
+      |         ~~^
+/usr/include/wchar.h:354:8: note: 'mbrlen' declared here
+  354 | __NTH (mbrlen (const char *__restrict __s, size_t __n,
+      |        ^
+In file included from /sep/src/blender/cycles_renderer.cpp:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:92:11: error: no member named 'strncat' in the global namespace
+   92 |   using ::strncat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:93:11: error: no member named 'strncmp' in the global namespace
+   93 |   using ::strncmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:94:11: error: no member named 'strncpy' in the global namespace
+   94 |   using ::strncpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:95:11: error: no member named 'strspn' in the global namespace
+   95 |   using ::strspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:97:11: error: no member named 'strtok' in the global namespace
+   97 |   using ::strtok;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:99:11: error: no member named 'strxfrm' in the global namespace
+   99 |   using ::strxfrm;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:100:11: error: no member named 'strchr' in the global namespace
+  100 |   using ::strchr;
+      |         ~~^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:13:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ostream:42:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ostream.h:43:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ios:46:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ios_base.h:41:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+/sep/extern/cycles/src/util/time.h:11:1: error: unknown type name 'CCL_NAMESPACE_BEGIN'
+   11 | CCL_NAMESPACE_BEGIN
+      | ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+/sep/extern/cycles/src/util/time.h:72:1: error: unknown type name 'string'; did you mean 'std::string'?
+   72 | string time_human_readable_from_seconds(const double seconds);
+      | ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/stringfwd.h:79:33: note: 'std::string' declared here
+   79 |   typedef basic_string<char>    string;
+      |                                 ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:13:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ostream:42:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ostream.h:43:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ios:46:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ios_base.h:41:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+/sep/extern/cycles/src/util/time.h:73:45: error: unknown type name 'string'; did you mean 'std::string'?
+   73 | double time_human_readable_to_seconds(const string &time_string);
+      |                                             ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/stringfwd.h:79:33: note: 'std::string' declared here
+   79 |   typedef basic_string<char>    string;
+      |                                 ^
+In file included from /sep/src/blender/factory.cpp:1:
+In file included from /sep/include/blender/factory.h:2:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:80:11: error: no member named 'memchr' in the global namespace; did you mean 'wmemchr'?
+   80 |   using ::memchr;
+      |         ~~^
+/usr/include/wchar.h:278:17: note: 'wmemchr' declared here
+  278 | extern wchar_t *wmemchr (const wchar_t *__s, wchar_t __c, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:13:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ostream:42:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ostream.h:43:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ios:46:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ios_base.h:41:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+/sep/extern/cycles/src/util/time.h:75:1: error: unknown type name 'CCL_NAMESPACE_END'
+   75 | CCL_NAMESPACE_END
+      | ^
+In file included from /sep/src/blender/factory.cpp:1:
+In file included from /sep/include/blender/factory.h:2:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:81:11: error: no member named 'memcmp' in the global namespace; did you mean 'wmemcmp'?
+   81 |   using ::memcmp;
+      |         ~~^
+/usr/include/wchar.h:283:12: note: 'wmemcmp' declared here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |            ^
+In file included from /sep/src/blender/factory.cpp:1:
+In file included from /sep/include/blender/factory.h:2:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:82:11: error: no member named 'memcpy' in the global namespace; did you mean 'wmemcpy'?
+   82 |   using ::memcpy;
+      |         ~~^
+/usr/include/wchar.h:287:17: note: 'wmemcpy' declared here
+  287 | extern wchar_t *wmemcpy (wchar_t *__restrict __s1,
+      |                 ^
+In file included from /sep/src/blender/compression_utils.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:80:11: error: no member named 'memchr' in the global namespace; did you mean 'wmemchr'?
+   80 |   using ::memchr;
+      |         ~~^
+/usr/include/wchar.h:278:17: note: 'wmemchr' declared here
+  278 | extern wchar_t *wmemchr (const wchar_t *__s, wchar_t __c, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/factory.cpp:1:
+In file included from /sep/include/blender/factory.h:2:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:83:11: error: no member named 'memmove' in the global namespace; did you mean 'wmemmove'?
+   83 |   using ::memmove;
+      |         ~~^
+/usr/include/wchar.h:292:17: note: 'wmemmove' declared here
+  292 | extern wchar_t *wmemmove (wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |                 ^
+In file included from /sep/src/blender/compression_utils.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:81:11: error: no member named 'memcmp' in the global namespace; did you mean 'wmemcmp'?
+   81 |   using ::memcmp;
+      |         ~~^
+/usr/include/wchar.h:283:12: note: 'wmemcmp' declared here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |            ^
+In file included from /sep/src/blender/factory.cpp:1:
+In file included from /sep/include/blender/factory.h:2:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:84:11: error: no member named 'memset' in the global namespace; did you mean 'wmemset'?
+   84 |   using ::memset;
+      |         ~~^
+/usr/include/wchar.h:296:17: note: 'wmemset' declared here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                 ^
+In file included from /sep/src/blender/factory.cpp:1:
+In file included from /sep/include/blender/factory.h:2:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:85:11: error: no member named 'strcat' in the global namespace
+   85 |   using ::strcat;
+      |         ~~^
+In file included from /sep/src/blender/compression_utils.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:82:11: error: no member named 'memcpy' in the global namespace; did you mean 'wmemcpy'?
+   82 |   using ::memcpy;
+      |         ~~^
+/usr/include/wchar.h:287:17: note: 'wmemcpy' declared here
+  287 | extern wchar_t *wmemcpy (wchar_t *__restrict __s1,
+      |                 ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:86:11: error: no member named 'strcmp' in the global namespace
+   86 |   using ::strcmp;
+      |         ~~^
+In file included from /sep/src/blender/compression_utils.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:83:11: error: no member named 'memmove' in the global namespace; did you mean 'wmemmove'?
+   83 |   using ::memmove;
+      |         ~~^
+/usr/include/wchar.h:292:17: note: 'wmemmove' declared here
+  292 | extern wchar_t *wmemmove (wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |                 ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:87:11: error: no member named 'strcoll' in the global namespace
+   87 |   using ::strcoll;
+      |         ~~^
+In file included from /sep/src/blender/compression_utils.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:84:11: error: no member named 'memset' in the global namespace; did you mean 'wmemset'?
+   84 |   using ::memset;
+      |         ~~^
+/usr/include/wchar.h:296:17: note: 'wmemset' declared here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                 ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:88:11: error: no member named 'strcpy' in the global namespace
+   88 |   using ::strcpy;
+      |         ~~^
+In file included from /sep/src/blender/compression_utils.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:85:11: error: no member named 'strcat' in the global namespace
+   85 |   using ::strcat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:89:11: error: no member named 'strcspn' in the global namespace
+   89 |   using ::strcspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:86:11: error: no member named 'strcmp' in the global namespace
+   86 |   using ::strcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:90:11: error: no member named 'strerror' in the global namespace
+   90 |   using ::strerror;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:87:11: error: no member named 'strcoll' in the global namespace
+   87 |   using ::strcoll;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:91:11: error: no member named 'strlen' in the global namespace; did you mean 'mbrlen'?
+   91 |   using ::strlen;
+      |         ~~^
+/usr/include/wchar.h:354:8: note: 'mbrlen' declared here
+  354 | __NTH (mbrlen (const char *__restrict __s, size_t __n,
+      |        ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:88:11: error: no member named 'strcpy' in the global namespace
+   88 |   using ::strcpy;
+      |         ~~^
+In file included from /sep/src/blender/factory.cpp:1:
+In file included from /sep/include/blender/factory.h:2:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:92:11: error: no member named 'strncat' in the global namespace
+   92 |   using ::strncat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:89:11: error: no member named 'strcspn' in the global namespace
+   89 |   using ::strcspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:93:11: error: no member named 'strncmp' in the global namespace
+   93 |   using ::strncmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:90:11: error: no member named 'strerror' in the global namespace
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:94:11: error: no member named 'strncpy' in the global namespace
+   90 |   u   94 |   using s:i:nstgr n:c:psyt;r
+e      r| r        ~~^o
+r;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:95:11: error: no member named 'strspn' in the global namespace
+   95 |   using ::strspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:91:11: error: no member named 'strlen' in the global namespace; did you mean 'mbrlen'?
+   91 |   using ::strlen;
+      |         ~~^
+/usr/include/wchar.h:354:8: note: 'mbrlen' declared here
+  354 | __NTH (mbrlen (const char *__restrict __s, size_t __n,
+      |        ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:97:11: error: no member named 'strtok' in the global namespace
+   97 |   using ::strtok;
+      |         ~~^
+In file included from /sep/src/blender/compression_utils.cpp:1:
+In file included from /sep/include/blender/compression.h:4:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/memory:82:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr.h:53:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/shared_ptr_base.h:61:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+In file included from /sep/extern/cycles/src/util/time.h:9:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:92:11: error: no member named 'strncat' in the global namespace
+   92 |   using ::strncat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:99:11: error: no member named 'strxfrm' in the global namespace
+   99 |   using ::strxfrm;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:93:11: error: no member named 'strncmp' in the global namespace
+   93 |   using ::strncmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:100:11: error: no member named 'strchr' in the global namespace
+  100 |   using ::strchr;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:94:11: error: no member named 'strncpy' in the global namespace
+   94 |   using ::strncpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:95:11: error: no member named 'strspn' in the global namespace
+   95 |   using ::strspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:97:11: error: no member named 'strtok' in the global namespace
+   97 |   using ::strtok;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:99:11: error: no member named 'strxfrm' in the global namespace
+   99 |   using ::strxfrm;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:100:11: error: no member named 'strchr' in the global namespace
+  100 |   using ::strchr;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:13:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ostream:42:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ostream.h:43:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ios:46:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ios_base.h:41:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+/sep/extern/cycles/src/util/time.h:11:1: error: unknown type name 'CCL_NAMESPACE_BEGIN'
+   11 | CCL_NAMESPACE_BEGIN
+      | ^
+/sep/extern/cycles/src/util/time.h:72:1: error: unknown type name 'string'; did you mean 'std::string'?
+   72 | string time_human_readable_from_seconds(const double seconds);
+      | ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/stringfwd.h:79:33: note: 'std::string' declared here
+   79 |   typedef basic_string<char>    string;
+      |                                 ^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:13:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ostream:42:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ostream.h:43:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ios:46:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ios_base.h:41:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+/sep/extern/cycles/src/util/time.h:73:45: error: unknown type name 'string'; did you mean 'std::string'?
+   73 | double time_human_readable_to_seconds(const string &time_string);
+      |                                             ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/stringfwd.h:79:33: note: 'std::string' declared here
+   79 |   typedef basic_string<char>    string;
+      |                                 ^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:13:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ostream:42:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ostream.h:43:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ios:46:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/ios_base.h:41:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ext/atomicity.h:37:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr.h:157:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux/bits/gthr-default.h:35:
+In file included from /usr/include/pthread.h:23:
+/sep/extern/cycles/src/util/time.h:75:1: error: unknown type name 'CCL_NAMESPACE_END'
+   75 | CCL_NAMESPACE_END
+      | ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+In file included from /usr/include/OpenImageIO/detail/fmt/format.h:41:
+/usr/include/OpenImageIO/detail/fmt/base.h:471:61: error: use of undeclared identifier 'memcmp'
+  471 |   if (!is_constant_evaluated() && sizeof(Char) == 1) return memcmp(s1, s2, n);
+      |                                                             ^
+/usr/include/OpenImageIO/detail/fmt/base.h:591:17: note: in instantiation of function template specialization 'fmt::detail::compare<char>' requested here
+  591 |         detail::compare(data_, other.data_, min_of(size_, other.size_));
+      |                 ^
+/usr/include/OpenImageIO/detail/fmt/base.h:598:16: note: in instantiation of member function 'fmt::basic_string_view<char>::compare' requested here
+  598 |     return lhs.compare(rhs) == 0;
+      |                ^
+/usr/include/OpenImageIO/detail/fmt/base.h:2614:35: note: in instantiation of member function 'fmt::operator==' requested here
+ 2614 |       if (named_args.data[i].name == name) return named_args.data[i].id;
+      |                                   ^
+/usr/include/OpenImageIO/detail/fmt/base.h:2657:18: note: in instantiation of function template specialization 'fmt::basic_format_args<fmt::context>::get_id<char>' requested here
+ 2657 |     return args_.get_id(name);
+      |                  ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:254:8: error: no member named 'memcpy' in namespace 'std'; did you mean 'wmemcpy'?
+  254 |   std::memcpy(static_cast<void*>(&to), &from, sizeof(to));
+      |   ~~~~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cwchar:203:11: note: 'wmemcpy' declared here
+  203 |   using ::wmemcpy;
+      |           ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:528:8: error: no member named 'memset' in namespace 'std'; did you mean 'wmemset'?
+  528 |   std::memset(out, value, to_unsigned(count));
+      |   ~~~~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cwchar:205:11: note: 'wmemset' declared here
+  205 |   using ::wmemset;
+      |           ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:1161:10: error: use of undeclared identifier 'memcmp'; did you mean 'wmemcmp'?
+ 1161 |   return memcmp(lhs, rhs, 2) == 0;
+      |          ^
+/usr/include/wchar.h:283:12: note: 'wmemcmp' declared here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |            ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:1161:17: error: cannot initialize a parameter of type 'const wchar_t *' with an lvalue of type 'const char *'
+ 1161 |   return memcmp(lhs, rhs, 2) == 0;
       |                 ^~~
-      |                 erf
-/sep/src/compat/raii.cpp:179:24: error: ‘cudaSuccess’ was not declared in this scope
-  179 |             if (err != cudaSuccess) {
-      |                        ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:181:81: error: ‘cudaGetErrorString’ was not declared in this scope
-  181 |                     (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n", cudaGetErrorString(err));
-      |                                                                                 ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp:185:9: error: ‘event_’ was not declared in this scope
-  185 |         event_ = std::exchange(other.event_, nullptr);
-      |         ^~~~~~
-/sep/src/compat/raii.cpp:185:38: error: ‘class sep::cuda::EventRAII’ has no member named ‘event_’
-  185 |         event_ = std::exchange(other.event_, nullptr);
-      |                                      ^~~~~~
-/sep/src/compat/raii.cpp: In member function ‘void sep::cuda::EventRAII::synchronize() const’:
-/sep/src/compat/raii.cpp:191:9: error: ‘event_’ was not declared in this scope
-  191 |     if (event_) {
-      |         ^~~~~~
-/sep/src/compat/raii.cpp:192:9: error: ‘cudaError_t’ was not declared in this scope
-  192 |         cudaError_t err = cudaEventSynchronize(event_);
-      |         ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:193:13: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  193 |         if (err != cudaSuccess) {
-      |             ^~~
-      |             erf
-/sep/src/compat/raii.cpp:193:20: error: ‘cudaSuccess’ was not declared in this scope
-  193 |         if (err != cudaSuccess) {
-      |                    ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:195:81: error: ‘cudaGetErrorString’ was not declared in this scope
-  195 |                 (void)fprintf(stderr, "Failed to synchronize CUDA event: %s\n", cudaGetErrorString(err));
-      |                                                                                 ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateDeviceMemory(std::size_t)’:
-/sep/src/compat/raii.cpp:248:5: error: ‘cudaError_t’ was not declared in this scope
-  248 |     cudaError_t err = cudaMalloc(&ptr, size);
-      |     ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:249:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  249 |     if (err != cudaSuccess) {
-      |         ^~~
-      |         erf
-/sep/src/compat/raii.cpp:249:16: error: ‘cudaSuccess’ was not declared in this scope
-  249 |     if (err != cudaSuccess) {
-      |                ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:251:62: error: ‘cudaGetErrorString’ was not declared in this scope
-  251 |             (void)fprintf(stderr, "cudaMalloc failed: %s\n", cudaGetErrorString(err));
-      |                                                              ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp: In function ‘void sep::cuda::freeDeviceMemory(void*)’:
-/sep/src/compat/raii.cpp:261:5: error: ‘cudaError_t’ was not declared in this scope
-  261 |     cudaError_t err = cudaFree(ptr);
-      |     ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:262:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  262 |     if (err != cudaSuccess && debugAllocEnabled()) {
-      |         ^~~
-      |         erf
-/sep/src/compat/raii.cpp:262:16: error: ‘cudaSuccess’ was not declared in this scope
-  262 |     if (err != cudaSuccess && debugAllocEnabled()) {
-      |                ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:263:56: error: ‘cudaGetErrorString’ was not declared in this scope
-  263 |         (void)fprintf(stderr, "cudaFree failed: %s\n", cudaGetErrorString(err));
-      |                                                        ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp: At global scope:
-/sep/src/compat/raii.cpp:267:47: error: ‘cudaStream_t’ has not been declared
-  267 | void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
-      |                                               ^~~~~~~~~~~~
-/sep/src/compat/raii.cpp: In function ‘void* sep::cuda::allocateUnifiedMemory(std::size_t, int)’:
-/sep/src/compat/raii.cpp:269:5: error: ‘cudaError_t’ was not declared in this scope
-  269 |     cudaError_t err = cudaMallocManaged(&ptr, size);
-      |     ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:270:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  270 |     if (err != cudaSuccess) {
-      |         ^~~
-      |         erf
-/sep/src/compat/raii.cpp:270:16: error: ‘cudaSuccess’ was not declared in this scope
-  270 |     if (err != cudaSuccess) {
-      |                ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:272:69: error: ‘cudaGetErrorString’ was not declared in this scope
-  272 |             (void)fprintf(stderr, "cudaMallocManaged failed: %s\n", cudaGetErrorString(err));
-      |                                                                     ^~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp:277:9: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
-  277 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
-      |         ^~~
-      |         erf
-/sep/src/compat/raii.cpp:277:15: error: ‘cudaStreamAttachMemAsync’ was not declared in this scope
-  277 |         err = cudaStreamAttachMemAsync(stream, ptr, 0, 0);
-      |               ^~~~~~~~~~~~~~~~~~~~~~~~
-/sep/src/compat/raii.cpp:278:20: error: ‘cudaSuccess’ was not declared in this scope
-  278 |         if (err != cudaSuccess && debugAllocEnabled()) {
-      |                    ^~~~~~~~~~~
-/sep/src/compat/raii.cpp:279:76: error: ‘cudaGetErrorString’ was not declared in this scope
-  279 |             (void)fprintf(stderr, "cudaStreamAttachMemAsync failed: %s\n", cudaGetErrorString(err));
-      |                                                                            ^~~~~~~~~~~~~~~~~~
-make[2]: *** [src/compat/CMakeFiles/sep_compat.dir/build.make:93: src/compat/CMakeFiles/sep_compat.dir/raii.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:412: src/compat/CMakeFiles/sep_compat.dir/all] Error 2
-make: *** [Makefile:136: all] Error 2
+/usr/include/wchar.h:283:36: note: passing argument to parameter '__s1' here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |                                    ^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+In file included from /usr/include/OpenImageIO/detail/fmt/format.h:41:
+/usr/include/OpenImageIO/detail/fmt/base.h:471:61: error: use of undeclared identifier 'memcmp'
+  471 |   if (!is_constant_evaluated() && sizeof(Char) == 1) return memcmp(s1, s2, n);
+      |                                                             ^
+/usr/include/OpenImageIO/detail/fmt/base.h:591:17: note: in instantiation of function template specialization 'fmt::detail::compare<char>' requested here
+  591 |         detail::compare(data_, other.data_, min_of(size_, other.size_));
+      |                 ^
+/usr/include/OpenImageIO/detail/fmt/base.h:598:16: note: in instantiation of member function 'fmt::basic_string_view<char>::compare' requested here
+  598 |     return lhs.compare(rhs) == 0;
+      |                ^
+/usr/include/OpenImageIO/detail/fmt/base.h:2614:35: note: in instantiation of member function 'fmt::operator==' requested here
+ 2614 |       if (named_args.data[i].name == name) return named_args.data[i].id;
+      |                                   ^
+/usr/include/OpenImageIO/detail/fmt/base.h:2657:18: note: in instantiation of function template specialization 'fmt::basic_format_args<fmt::context>::get_id<char>' requested here
+ 2657 |     return args_.get_id(name);
+      |                  ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:2730:5: error: use of undeclared identifier 'memset'; did you mean 'wmemset'?
+ 2730 |     memset(bigits_.data(), 0, to_unsigned(exp_difference) * sizeof(bigit));
+      |     ^
+/usr/include/wchar.h:296:17: note: 'wmemset' declared here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                 ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:2730:12: error: cannot initialize a parameter of type 'wchar_t *' with an rvalue of type 'unsigned int *'
+ 2730 |     memset(bigits_.data(), 0, to_unsigned(exp_difference) * sizeof(bigit));
+      |            ^~~~~~~~~~~~~~
+/usr/include/wchar.h:296:35: note: passing argument to parameter '__s' here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                                   ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+In file included from /usr/include/OpenImageIO/detail/fmt/format.h:4226:
+In file included from /usr/include/OpenImageIO/detail/fmt/format-inl.h:26:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/locale:45:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/locale_facets_nonio.h:41:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:66:11: error: no member named 'clock' in the global namespace
+   66 |   using ::clock;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:67:11: error: no member named 'difftime' in the global namespace
+   67 |   using ::difftime;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:68:11: error: no member named 'mktime' in the global namespace; did you mean 'mktemp'?
+   68 |   using ::mktime;
+      |         ~~^
+/usr/include/stdlib.h:814:14: note: 'mktemp' declared here
+  814 | extern char *mktemp (char *__template) __THROW __nonnull ((1));
+      |              ^
+In file included from /sep/src/blender/pattern_visualization_pipeline.cpp:1:
+In file included from /sep/include/blender/pattern_visualization_pipeline.h:3:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+In file included from /usr/include/OpenImageIO/detail/fmt/format.h:4226:
+In file included from /usr/include/OpenImageIO/detail/fmt/format-inl.h:26:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/locale:45:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/locale_facets_nonio.h:41:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:69:11: error: no member named 'time' in the global namespace
+   69 |   using ::time;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:70:11: error: no member named 'asctime' in the global namespace
+   70 |   using ::asctime;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:71:11: error: no member named 'ctime' in the global namespace
+   71 |   using ::ctime;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:72:11: error: no member named 'gmtime' in the global namespace
+   72 |   using ::gmtime;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:73:11: error: no member named 'localtime' in the global namespace
+   73 |   using ::localtime;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:254:8: error: no member named 'memcpy' in namespace 'std'; did you mean 'wmemcpy'?
+  254 |   std::memcpy(static_cast<void*>(&to), &from, sizeof(to));
+      |   ~~~~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cwchar:203:11: note: 'wmemcpy' declared here
+  203 |   using ::wmemcpy;
+      |           ^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:528:8: error: no member named 'memset' in namespace 'std'; did you mean 'wmemset'?
+  528 |   std::memset(out, value, to_unsigned(count));
+      |   ~~~~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cwchar:205:11: note: 'wmemset' declared here
+  205 |   using ::wmemset;
+      |           ^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:1161:10: error: use of undeclared identifier 'memcmp'; did you mean 'wmemcmp'?
+ 1161 |   return memcmp(lhs, rhs, 2) == 0;
+      |          ^
+/usr/include/wchar.h:283:12: note: 'wmemcmp' declared here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |            ^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:1161:17: error: cannot initialize a parameter of type 'const wchar_t *' with an lvalue of type 'const char *'
+ 1161 |   return memcmp(lhs, rhs, 2) == 0;
+      |                 ^~~
+/usr/include/wchar.h:283:36: note: passing argument to parameter '__s1' here
+  283 | extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
+      |                                    ^
+In file included from /sep/src/blender/oiio_output_driver.cpp:5:
+In file included from /sep/include/blender/oiio_output_driver.h:4:
+In file included from /sep/extern/cycles/src/session/output_driver.h:8:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:80:11: error: no member named 'memchr' in the global namespace
+   80 |   using ::memchr;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:81:11: error: no member named 'memcmp' in the global namespace
+   81 |   using ::memcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:82:11: error: no member named 'memcpy' in the global namespace
+   82 |   using ::memcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:83:11: error: no member named 'memmove' in the global namespace; did you mean 'remove'?
+   83 |   using ::memmove;
+      |         ~~^
+/usr/include/stdio.h:158:12: note: 'remove' declared here
+  158 | extern int remove (const char *__filename) __THROW;
+      |            ^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:2730:5: error: use of undeclared identifier 'memset'; did you mean 'wmemset'?
+ 2730 |     memset(bigits_.data(), 0, to_unsigned(exp_difference) * sizeof(bigit));
+      |     ^
+/usr/include/wchar.h:296:17: note: 'wmemset' declared here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                 ^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+/usr/include/OpenImageIO/detail/fmt/format.h:2730:12: error: cannot initialize a parameter of type 'wchar_t *' with an rvalue of type 'unsigned int *'
+ 2730 |     memset(bigits_.data(), 0, to_unsigned(exp_difference) * sizeof(bigit));
+      |            ^~~~~~~~~~~~~~
+/usr/include/wchar.h:296:35: note: passing argument to parameter '__s' here
+  296 | extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __THROW;
+      |                                   ^
+In file included from /sep/src/blender/oiio_output_driver.cpp:5:
+In file included from /sep/include/blender/oiio_output_driver.h:4:
+In file included from /sep/extern/cycles/src/session/output_driver.h:8:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:84:11: error: no member named 'memset' in the global namespace
+   84 |   using ::memset;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:85:11: error: no member named 'strcat' in the global namespace
+   85 |   using ::strcat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:86:11: error: no member named 'strcmp' in the global namespace
+   86 |   using ::strcmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:87:11: error: no member named 'strcoll' in the global namespace; did you mean 'strtoll'?
+   87 |   using ::strcoll;
+      |         ~~^
+/usr/include/stdlib.h:238:38: note: 'strtoll' declared here
+  238 | extern long long int __REDIRECT_NTH (strtoll, (const char *__restrict __nptr,
+      |                                      ^
+In file included from /sep/src/blender/oiio_output_driver.cpp:5:
+In file included from /sep/include/blender/oiio_output_driver.h:4:
+In file included from /sep/extern/cycles/src/session/output_driver.h:8:
+In file included from /sep/extern/cycles/src/util/string.h:7:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:88:11: error: no member named 'strcpy' in the global namespace
+   88 |   using ::strcpy;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:89:11: error: no member named 'strcspn' in the global namespace
+   89 |   using ::strcspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:90:11: error: no member named 'strerror' in the global namespace
+   90 |   using ::strerror;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:91:11: error: no member named 'strlen' in the global namespace
+   91 |   using ::strlen;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:92:11: error: no member named 'strncat' in the global namespace
+   92 |   using ::strncat;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:93:11: error: no member named 'strncmp' in the global namespace
+   93 |   using ::strncmp;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:94:11: error: no member named 'strncpy' in the global namespace
+   94 |   using ::strncpy;
+      |         ~~^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+In file included from /usr/include/OpenImageIO/detail/fmt/format.h:4226:
+In file included from /usr/include/OpenImageIO/detail/fmt/format-inl.h:26:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/locale:45:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/locale_facets_nonio.h:41:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:66:11: error: no member named 'clock' in the global namespace
+   66 |   using ::clock;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:95:11: error: no member named 'strspn' in the global namespace
+   95 |   using ::strspn;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:97:11: error: no member named 'strtok' in the global namespace
+   97 |   using ::strtok;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:67:11: error: no member named 'difftime' in the global namespace
+   67 |   using ::difftime;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:68:11: error: no member named 'mktime' in the global namespace; did you mean 'mktemp'?
+   68 |   using ::mktime;
+      |         ~~^
+/usr/include/stdlib.h:814:14: note: 'mktemp' declared here
+  814 | extern char *mktemp (char *__template) __THROW __nonnull ((1));
+      |              ^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:99:11: error: no member named 'strxfrm' in the global namespace
+   99 |   using ::strxfrm;
+      |         ~~^
+In file included from /sep/src/blender/mesh_handler.cpp:6:
+In file included from /sep/include/blender/mesh_handler.h:3:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:48:
+In file included from /sep/extern/cycles/src/util/string.h:13:
+In file included from /usr/include/OpenImageIO/string_view.h:20:
+In file included from /usr/include/OpenImageIO/detail/fmt.h:66:
+In file included from /usr/include/OpenImageIO/detail/fmt/format.h:4226:
+In file included from /usr/include/OpenImageIO/detail/fmt/format-inl.h:26:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/locale:45:
+In file included from /usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/bits/locale_facets_nonio.h:41:
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:69:11: error: no member named 'time' in the global namespace
+   69 |   using ::time;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/cstring:100:11: error: no member named 'strchr' in the global namespace
+  100 |   using ::strchr;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:70:11: error: no member named 'asctime' in the global namespace
+   70 |   using ::asctime;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:71:11: error: no member named 'ctime' in the global namespace
+   71 |   using ::ctime;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:72:11: error: no member named 'gmtime' in the global namespace
+   72 |   using ::gmtime;
+      |         ~~^
+/usr/bin/../lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/ctime:73:11: error: no member named 'localtime' in the global namespace
+   73 |   using ::localtime;
+      |         ~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:93: src/blender/CMakeFiles/sep_blender.dir/gpu_context.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+20 errors generated.
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:191: src/blender/CMakeFiles/sep_blender.dir/oiio_output_driver.cpp.o] Error 1
+20 errors generated.
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:149: src/blender/CMakeFiles/sep_blender.dir/blender_integration.cpp.o] Error 1
+20 errors generated.
+20 errors generated.
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:135: src/blender/CMakeFiles/sep_blender.dir/pattern_visualization_pipeline.cpp.o] Error 1
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:121: src/blender/CMakeFiles/sep_blender.dir/api.cpp.o] Error 1
+20 errors generated.
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:107: src/blender/CMakeFiles/sep_blender.dir/compression.cpp.o] Error 1
+20 errors generated.
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:205: src/blender/CMakeFiles/sep_blender.dir/cycles_renderer.cpp.o] Error 1
+20 errors generated.
+20 errors generated.
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:79: src/blender/CMakeFiles/sep_blender.dir/compression_utils.cpp.o] Error 1
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:163: src/blender/CMakeFiles/sep_blender.dir/mesh_handler.cpp.o] Error 1
+20 errors generated.
+make[2]: *** [src/blender/CMakeFiles/sep_blender.dir/build.make:177: src/blender/CMakeFiles/sep_blender.dir/factory.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:614: src/blender/CMakeFiles/sep_blender.dir/all] Error 2
+make: *** [Makefile:156: all] Error 2

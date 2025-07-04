@@ -1,3 +1,5 @@
+#include <cstring>
+#include <ctime>
 #include "blender/pattern_bridge.h"
 #include <thread>
 #include <chrono>

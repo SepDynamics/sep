@@ -80,6 +80,10 @@ set(CYCLES_ROOT ${CMAKE_SOURCE_DIR}/extern/cycles)
 # Use bundled Cycles headers
 target_include_directories(sep_blender SYSTEM PRIVATE
   ${CYCLES_ROOT}/src
+  ${CYCLES_ROOT}/src/device
+  ${CYCLES_ROOT}/src/scene
+  ${CYCLES_ROOT}/src/session
+  ${CYCLES_ROOT}/src/util
 )
 target_include_directories(sep_blender PUBLIC
     ${OIIO_INCLUDE_DIRS}
@@ -90,19 +94,14 @@ target_include_directories(sep_blender PUBLIC
     ${OPENSUBDIV_INCLUDE_DIRS}
 )
 
-# Define Cycles support
+# Define Cycles support and namespace
 target_compile_definitions(sep_blender
   PUBLIC
     SEP_HAS_CYCLES=1
+    "CCL_NAMESPACE_BEGIN=namespace ccl {"
+    "CCL_NAMESPACE_END=}"
   PRIVATE
     WITH_CYCLES_DEVICE_CUDA
-)
-
-target_compile_definitions(sep_blender
-    PUBLIC
-        SEP_HAS_CYCLES=1
-    PRIVATE
-        WITH_CYCLES_DEVICE_CUDA
 )
 
 # Use bundled dependencies

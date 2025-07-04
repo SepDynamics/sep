@@ -1,23 +1,16 @@
 #pragma once
 
-// Provide ASIO types without pulling in heavy headers when not needed. This
-// project relies on the standalone version of ASIO so we include the standard
-// headers and alias the namespace used throughout the code base.
+// Prevent ASIO namespace collision by not using the global namespace
+#ifndef ASIO_STANDALONE
+#define ASIO_STANDALONE
+#endif
 
 #include <asio.hpp>
-#include <asio/ssl.hpp>
 
-// Alias the ASIO namespace so existing code using `asio_stub` or `asio`
-// continues to compile regardless of whether Boost or standalone ASIO is used.
-namespace crow_asio_stub = ::asio;
-namespace asio = ::asio;
-
+namespace sep {
 namespace crow {
-// Alias the stub namespace inside crow as before
-namespace asio_stub = ::crow_asio_stub;
-// Provide a direct alias matching the upstream library expectations
-// so headers can refer to `crow::asio::...` types without pulling in
-// Boost. This maps directly to the standalone Asio namespace.
+namespace asio_detail {
 using namespace ::asio;
-using error_code = ::asio::error_code;
+} // namespace asio_detail
 } // namespace crow
+} // namespace sep

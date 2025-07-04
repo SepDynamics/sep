@@ -1,10 +1,7 @@
 // Standard includes
-#include <string.h> // For memcmp, memcpy, memset
-#include <time.h>   // For C time functions
-#include <cstring> // Added for C string functions
-#include <ctime>   // Added for C time functions
-#include <string>  // Required for std::string
-using namespace std; // For string type and common C functions
+#include <cstring> // For memcpy, memset, memcmp, strlen, etc.
+#include <ctime>   // For time-related functions
+#include <string>  // For std::string
 #include <cmath>
 #include <memory>
 #include <utility>

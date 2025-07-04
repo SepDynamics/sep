@@ -1,5 +1,7 @@
-#include <cstring> // For memcpy, memset, memcmp, etc.
-#include <ctime>   // For time-related functions
+#include <string.h> // For memcpy, memset, memcmp, etc.
+#include <time.h>   // For time-related functions
+#include <cstring>
+#include <ctime>
 #include <string>  // For std::string
 
 #include "blender/gpu_context.h"

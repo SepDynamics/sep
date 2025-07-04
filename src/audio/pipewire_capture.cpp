@@ -1,6 +1,8 @@
 #include "audio/pipewire_capture.h"
 #include "audio/types.h"
 #include "audio/capture.h"
+#include <string.h>
+#include <time.h>
 #include "audio/config.h"
 
 #ifdef SEP_HAS_AUDIO

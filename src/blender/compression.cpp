@@ -1,10 +1,6 @@
-#include <string.h> // For memcmp, memcpy, memset
-#include <time.h>   // For C time functions
-#include <cstring> // Added for C string functions
-#include <ctime>   // Added for C time functions
-#include <string>  // Required for std::string
-
-using namespace std; // For string type
+#include <cstring> // For memcpy, memset, memcmp, strlen, etc.
+#include <ctime>   // For time-related functions
+#include <string>  // For std::string
 #include "blender/compression.h"
 
 #include <lz4.h>
@@ -49,7 +45,7 @@ bool DeltaCompression::decompress(const std::vector<uint8_t>& compressed, void* 
   auto start = std::chrono::high_resolution_clock::now();
 
   if (previousBlock.empty()) {
-    ::memcpy(out, compressed.data(), outputSize);
+    std::memcpy(out, compressed.data(), outputSize);
   } else {
     for (size_t i = 0; i < outputSize; ++i) {
       uint8_t prev = previousBlock[i % previousBlock.size()];
@@ -187,7 +183,7 @@ std::vector<uint8_t> downsample(const void* data, size_t size, size_t factor) {
   size_t out_size = (size + factor - 1) / factor;
   std::vector<uint8_t> result(out_size);
   if (out_size > 0) {
-    ::memset(result.data(), 0, out_size);
+    std::memset(result.data(), 0, out_size);
   }
   for (size_t i = 0; i < out_size; ++i) {
     size_t begin = i * factor;

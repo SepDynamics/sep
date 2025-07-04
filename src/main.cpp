@@ -1,8 +1,8 @@
 #include "core/manager.h"
 #include "core/engine.h"
 #include "core/common.h"
-#include <time.h>
-#include <unistd.h>
+#include <time.h>   // Defines struct tm and clock constants
+#include <unistd.h> // Provides POSIX functions like nanosleep
 #include "core/logging.h"
 #include <curl/curl.h> 
 #include <cstring>

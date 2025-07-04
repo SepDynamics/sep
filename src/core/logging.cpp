@@ -9,6 +9,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <cstring> // For std::strlen
 #include <spdlog/spdlog.h>
+#include <cstring>
 
 namespace sep::logging {
 

@@ -3,7 +3,7 @@
 #include "compat/cuda_common.h"
 
 #include "compat/stream.h"
-#include <cstring> // For std::memcpy
+#include <cstring>
 #include "compat/cuda_helpers.h" // for logCudaError
 #include "compat/cuda_impl.h"
 

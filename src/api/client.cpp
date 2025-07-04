@@ -4,7 +4,7 @@
 #include <string>
 #include <stdexcept>
 #include <utility>
-#include <cstring> // For std::memcpy
+#include <cstring>
 
 
 #include "core/error_handler.h"  // For sep::ErrorCode

@@ -2,7 +2,7 @@
 
 #ifdef SEP_HAS_AUDIO
 #include <algorithm>
-#include <cstring> // For std::memset etc.
+#include <cstring>
 #include <cmath>
 #include <spdlog/spdlog.h>
 

@@ -1,11 +1,11 @@
-#include <string.h> // For snprintf, memset
+#include <string.h> // For snprintf (used below), memset (not used directly here but good for C-style functions)
 #include <cstring>
 #include <cstdio>
 #include <memory>
 #include <mutex>
-#include <string> // For std::string
-#include <algorithm> // For std::min
-#include <cstdlib> // For getenv, system
+#include <string>
+#include <algorithm>
+#include <cstdlib>
 #include <nlohmann/json.hpp>
 
 #include "api/bridge.h"
@@ -19,8 +19,6 @@
 #include "compat/macros.h"  // For SEP_CUDA_AVAILABLE
 #include "crow/asio_isolation.h"
 #include "crow/socket_adaptors.h"
-#include <unordered_map>
-#include <vector>
 
 
 extern "C" {

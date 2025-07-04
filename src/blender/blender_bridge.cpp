@@ -30,6 +30,11 @@ void BlenderBridge::cleanup() {
 
 mutable std::mutex objects_mutex_;
 
+void BlenderBridge::cleanup() {
+    // Perform any necessary cleanup, e.g., deallocating memory.
+    // For now, this is a placeholder.
+}
+
 sep::SEPResult BlenderBridge::init(::sep::GPUContext* ctx) {
     std::lock_guard<std::mutex> lock(objects_mutex_);
     

@@ -2,8 +2,8 @@
 #include <ctime>   // For C-style time functions
 #include <string>  // For std::string
 #include "blender/pattern_bridge.h"
-#include <mutex> // For std::mutex, std::lock_guard
-#include <condition_variable> // For std::condition_variable
+#include <mutex>
+#include <condition_variable>
 #include <thread>
 #include <chrono>
 

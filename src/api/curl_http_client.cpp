@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <cstring> // For std::memcpy
 #include <string>
+#include <cstring>
 
 namespace sep::api {
 

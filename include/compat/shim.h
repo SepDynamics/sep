@@ -45,11 +45,11 @@ namespace shim {
     string() : data_(nullptr), size_(0), capacity_(0) {}
     string(const char* s) : data_(nullptr), size_(0), capacity_(0) {
       if (s) {
-        size_ = strlen(s);
+        size_ = ::strlen(s);
         capacity_ = size_ + 1;
         data_ = static_cast<char*>(malloc(capacity_));
         if (data_) {
-          memcpy(data_, s, size_ + 1);
+          ::memcpy(data_, s, size_ + 1);
         } else {
           data_ = nullptr;
           size_ = capacity_ = 0;
@@ -67,7 +67,7 @@ namespace shim {
         capacity_ = size_ + 1;
         data_ = static_cast<char*>(malloc(capacity_));
         if (data_) {
-          memcpy(data_, other.data_, size_ + 1);
+          ::memcpy(data_, other.data_, size_ + 1);
         } else {
           size_ = capacity_ = 0;
         }
@@ -83,7 +83,7 @@ namespace shim {
           capacity_ = size_ + 1;
           data_ = static_cast<char*>(malloc(capacity_));
           if (data_) {
-            memcpy(data_, other.data_, size_ + 1);
+            ::memcpy(data_, other.data_, size_ + 1);
           } else {
             size_ = capacity_ = 0;
           }
@@ -96,11 +96,11 @@ namespace shim {
       data_ = nullptr;
       size_ = capacity_ = 0;
       if (s) {
-        size_ = strlen(s);
+        size_ = ::strlen(s);
         capacity_ = size_ + 1;
         data_ = static_cast<char*>(malloc(capacity_));
         if (data_) {
-          memcpy(data_, s, size_ + 1);
+          ::memcpy(data_, s, size_ + 1);
         } else {
           size_ = capacity_ = 0;
         }
@@ -157,7 +157,7 @@ namespace shim {
     // Comparison operators
     bool operator==(const char* s) const {
       if (!s) return size_ == 0;
-      return strcmp(c_str(), s) == 0;
+      return ::strcmp(c_str(), s) == 0;
     }
     bool operator!=(const char* s) const { return !(*this == s); }
     
@@ -179,7 +179,7 @@ namespace shim {
                         size_ - pos : count;
         char* temp = static_cast<char*>(malloc(rcount + 1));
         if (temp) {
-            memcpy(temp, data_ + pos, rcount);
+            ::memcpy(temp, data_ + pos, rcount);
             temp[rcount] = '\0';
             string result(temp);
             free(temp);
@@ -191,7 +191,7 @@ namespace shim {
     // Append operations
     string& append(const char* s) {
         if (s) {
-            size_t slen = strlen(s);
+            size_t slen = ::strlen(s);
             if (size_ + slen + 1 > capacity_) {
                 size_t new_cap = (size_ + slen + 1) * 2;
                 char* new_data = static_cast<char*>(realloc(data_, new_cap));
@@ -202,7 +202,7 @@ namespace shim {
                     return *this; // Failed to allocate
                 }
             }
-            memcpy(data_ + size_, s, slen + 1);
+            ::memcpy(data_ + size_, s, slen + 1);
             size_ += slen;
         }
         return *this;
@@ -221,7 +221,7 @@ namespace shim {
         if (size_ != other.size_) return false;
         if (!data_ && !other.data_) return true;
         if (!data_ || !other.data_) return false;
-        return memcmp(data_, other.data_, size_) == 0;
+        return ::memcmp(data_, other.data_, size_) == 0;
     }
 
     bool operator!=(const string& other) const {
@@ -231,7 +231,7 @@ namespace shim {
     bool operator<(const string& other) const {
         size_t min_size = (size_ < other.size_) ? size_ : other.size_;
         if (data_ && other.data_) {
-            int cmp = memcmp(data_, other.data_, min_size);
+            int cmp = ::memcmp(data_, other.data_, min_size);
             if (cmp != 0) return cmp < 0;
         }
         return size_ < other.size_;

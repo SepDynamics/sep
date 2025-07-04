@@ -39,6 +39,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <exception>
+#include <cstring>  // For std::memcpy, std::memcmp if used in headers
 #include <numeric>
 
 // Define namespace alias for clarity

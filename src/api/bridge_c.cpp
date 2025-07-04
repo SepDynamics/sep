@@ -1,3 +1,4 @@
+#include <string.h>
 #include <cstring>
 #include <cstdio>
 #include <memory>
@@ -18,6 +19,7 @@
 #include "crow/socket_adaptors.h"
 #include <ios>
 #include <nlohmann/json.hpp>
+#include <string.h>
 #include <cstring>
 #include <cstdio>  // Required for snprintf
 #include <memory>

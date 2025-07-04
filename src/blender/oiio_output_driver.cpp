@@ -2,8 +2,10 @@
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-#include <cstring> // For memcpy, memset, memcmp, strlen, etc.
-#include <ctime>   // For time-related functions
+#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
+#include <time.h>   // For time-related functions
+#include <cstring>
+#include <ctime>
 #include <string>  // For std::string
 #include "blender/oiio_output_driver.h"
 

@@ -2,6 +2,7 @@
 #include "api/bridge.h"
 #include "api/types.h"  // For sep::api::ErrorCode
 #include <string> // For std::string
+#include <cstring>
 #include <string>
 
 namespace sep::api {

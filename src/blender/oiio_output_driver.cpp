@@ -1,13 +1,11 @@
-#include <cstring> // For memcpy, memset, memcmp, strlen, etc.
-#include <ctime>   // For time-related functions
+#include <cstring> // For std::memcpy, std::memset
+#include <ctime> // For C-style time functions like time, localtime, gmtime if any are used indirectly
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>   // For time-related functions
-#include <string>  // For std::string
+#include <string> // For std::string
 #include "blender/oiio_output_driver.h"
 
 // Core Cycles includes

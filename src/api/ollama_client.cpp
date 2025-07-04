@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <cstring>
 #include <stdexcept> // Required for std::runtime_error
 #include <sstream>
 

@@ -1,9 +1,8 @@
-#include <string.h> // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>   // For time-related functions
-#include <cstring>
-#include <ctime>
+#include <cstring> // For std::memcpy, std::memset, std::memcmp, std::strlen etc.
+#include <ctime>   // For C-style time functions
 #include <string>  // For std::string
 #include <vector>  // Already included below, but ensuring early availability
+#include <cmath> // For std::log2
 #include <array>   // Already included below, but ensuring early availability
 #include "blender/compression.h"
 #include "compat/math_common.h"

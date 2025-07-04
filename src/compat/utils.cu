@@ -1,6 +1,8 @@
 #include "compat/cuda_common.h"
 #include "compat/cuda_unified_fix.h"
 
+#include <cstring>
+
 // GLM isolation layer
 #ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
 #define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1

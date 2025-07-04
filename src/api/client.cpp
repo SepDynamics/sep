@@ -4,6 +4,7 @@
 #include <string>
 #include <stdexcept>
 #include <utility>
+#include <cstring>
 
 
 #include "core/error_handler.h"  // For sep::ErrorCode

@@ -1,7 +1,5 @@
 #include "blender/bridge.h"
-#include <string> // Required for std::string
-
-using namespace std; // For string type
+#include <string>  // For std::string
 #include "core/error_handler.h"
 #include "core/metrics_collector.h"
 #include <spdlog/spdlog.h>

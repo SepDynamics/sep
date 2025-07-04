@@ -1,10 +1,6 @@
-#include <string.h> // For memcmp, memcpy, memset
-#include <time.h>   // For C time functions
-#include <cstring> // Added for C string functions
-#include <ctime>   // Added for C time functions
-#include <string> // Required for std::string
-
-using namespace std; // For string type
+#include <cstring> // For memcpy, memset, memcmp, strlen, etc.
+#include <ctime>   // For time-related functions
+#include <string>  // For std::string
 #include "blender/factory.h"
 #include "blender/bridge.h"
 #include "blender/types.h"

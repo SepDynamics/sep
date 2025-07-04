@@ -1,5 +1,8 @@
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
+#include <string>  // Required for std::string
+
+using namespace std; // For string type
 #include "blender/compression.h"
 
 #include <lz4.h>
@@ -9,7 +12,6 @@
 #include <array>
 #include <chrono>
 #include <vector>
-#include <cstring>
 
 namespace blender {
 

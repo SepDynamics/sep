@@ -1,8 +1,10 @@
 #include <cstring> // Added for C string functions
 #include <ctime>   // Added for C time functions
+#include <string> // Required for std::string
+
+using namespace std; // For string type
 #include "blender/gpu_context.h"
 #include <cstdlib>
-#include <cstring>
 #include <new>
 #include <sys/stat.h>
 

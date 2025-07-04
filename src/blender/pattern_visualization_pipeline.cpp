@@ -1,5 +1,5 @@
-#include <cstring> // For std::memcpy, std::memset, std::memcmp, std::strlen
-#include <ctime>   // For C-style time functions
+#include <string.h>
+#include <time.h>
 #include <string>  // For std::string
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"

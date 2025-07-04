@@ -1,10 +1,7 @@
-#include <string.h> // For memcmp, memcpy, memset
-#include <time.h>   // For C time functions
-#include <cstring> // Added for C string functions
-#include <ctime>   // Added for C time functions
-#include <string> // Required for std::string
+#include <cstring> // For memcpy, memset, memcmp, etc.
+#include <ctime>   // For time-related functions
+#include <string>  // For std::string
 
-using namespace std; // For string type
 #include "blender/gpu_context.h"
 #include <cstdlib>
 #include <new>
@@ -102,7 +99,7 @@ GpuBufferPtr GPUContext::createBuffer(size_t size, const void* data) {
     }
     buf->size = size;
     if (data) {
-        ::memcpy(buf->ptr, data, size);
+        std::memcpy(buf->ptr, data, size);
     }
     buf->mapped = false;
     return GpuBufferPtr(this, buf);

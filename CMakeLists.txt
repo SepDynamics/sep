@@ -117,6 +117,7 @@ endif()
 
 # Include JSON processor build
 include(examples/json_processor_build.cmake)
+include(examples/cosmo_sim_build.cmake)
 add_subdirectory(examples/workbench)
 
 # Main executable

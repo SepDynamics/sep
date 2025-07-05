@@ -18,10 +18,9 @@ set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 # Add include directories for the main engine and dependencies
 target_include_directories(sep_workbench PUBLIC
     ${PROJECT_SOURCE_DIR}/include
-    /sep/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-    /sep/extern/cycles/src
-    /sep/extern/glm
+    ${PROJECT_SOURCE_DIR}/extern/cycles/src
+    ${PROJECT_SOURCE_DIR}/extern/glm
 )
 
 # Define preprocessor macros

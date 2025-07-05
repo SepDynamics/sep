@@ -14,10 +14,6 @@
 #include <unistd.h>
 
 #include "blender/pattern_bridge.h"
-
-#include "blender/pattern_bridge.h"
-
-#include "blender/pattern_bridge.h"
 #include "quantum/processor.h"
 #include "quantum/data.hpp"
 #include "blender/pattern_observer.h"

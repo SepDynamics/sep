@@ -1,15 +1,11 @@
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
+#include "blender_pch.h"
 #include <unistd.h>
-#include <algorithm>
 #include <chrono>
 #include <numeric>
 #include <vector>
 
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"
-#include "core/common.h"  // defines sep::SEPResult
 
 namespace sep {
 namespace blender {

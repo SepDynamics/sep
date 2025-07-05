@@ -211,13 +211,33 @@ target_link_libraries(sep_engine_cli PRIVATE
 )
 
 
+# Additional executable using the same engine core
+add_executable(sep_engine src/server_main.cpp)
+
 set_target_properties(sep_server PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+)
+set_target_properties(sep_engine PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
 )
 target_include_directories(sep_server
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
+)
+target_include_directories(sep_engine
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}/include
+)
+
+# Minimal CLI executable for testing core engine logic
+add_executable(sep_engine_cli src/main.cpp)
+target_link_libraries(sep_engine_cli PRIVATE
+    sep_core
+    sep_memory
+    sep_quantum
+    sep_compat
 )
 
 target_link_libraries(sep_server
@@ -312,7 +332,7 @@ install(TARGETS
 )
 
 # Install executable separately
-install(TARGETS sep_server
+install(TARGETS sep_server sep_engine
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 

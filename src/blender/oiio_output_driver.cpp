@@ -1,7 +1,6 @@
 #include "blender_pch.h"
 
 #include <unistd.h>
-#include <vector>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
@@ -15,7 +14,6 @@
 #include "util/image.h"
 #include "util/unique_ptr.h"
 #ifdef WITH_OCIO
-#  include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 #endif
 #include <OpenImageIO/imagebuf.h>

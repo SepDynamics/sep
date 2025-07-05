@@ -1,3 +1,4 @@
+#include "blender_pch.h"
 /**
  * @file mesh_handler.cpp
  * @brief Default MeshHandler implementation used when Blender APIs are absent.

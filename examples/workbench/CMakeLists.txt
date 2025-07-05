@@ -10,6 +10,7 @@ add_executable(sep_workbench
     demos/audio_visualizer.cpp
     demos/memory_garden.cpp
     demos/annealing_demo.cpp
+    demos/drug_optimizer.cpp
 )
 
 # Set C++ standard

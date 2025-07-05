@@ -82,6 +82,13 @@ struct DrugDiscoveryConfig {
     float mutation_rate;
 };
 
+struct FlockingConfig {
+    int agent_count;
+    float neighbor_radius;
+    float separation_distance;
+    float max_speed;
+};
+
 struct RendererConfig {
     struct {
         int samples;

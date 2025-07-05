@@ -49,6 +49,7 @@ intern/
 source/
 release/
 *.cmake
+!examples/neuro_sim_build.cmake
 !cmake/SEPConfig.cmake
 !extern/cycles/src/cmake/**
 !extern/cycles/src/cmake/*.cmake

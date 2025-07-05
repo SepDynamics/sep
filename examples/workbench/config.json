@@ -60,5 +60,9 @@
       "denoising": true,
       "device": "gpu"
     }
+  },
+  "optimizer": {
+    "iterations": 100,
+    "mutation_rate": 0.1
   }
 }

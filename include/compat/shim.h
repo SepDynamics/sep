@@ -12,7 +12,6 @@
 #include <time.h>    // For time, clock, difftime, mktime, etc.
 #include <unistd.h>  // For nanosleep, getpid, etc.
 // Ensure C++ wrappers of the C headers are also available
-#include <ctime>
 #include <stdlib.h>  // For malloc, free, getenv, etc.
 #include <stdio.h>   // For snprintf, fprintf, etc.
 #include <stdint.h>  // For uint32_t, uint64_t etc.
@@ -27,7 +26,6 @@
 #include <cstdio>
 #include <cstdint>
 #include <cstddef>
-#include <ctime>
 #include <cmath>
 #include <chrono>
 
@@ -37,8 +35,6 @@
 #include <queue>
 #include <vector>
 #include <mutex>
-#include <cstring>
-#include <cstdlib>
 
 namespace sep {
 namespace shim {

@@ -171,6 +171,21 @@ add_executable(annealing_sim examples/annealing_sim.cpp)
 target_include_directories(annealing_sim PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(annealing_sim PRIVATE sep_quantum sep_core sep_memory sep_compat)
 
+# Standalone physics explorer example
+add_executable(physics_explorer examples/physics_explorer.cpp)
+target_include_directories(physics_explorer PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/extern/glm
+)
+set_target_properties(physics_explorer PROPERTIES CXX_STANDARD 17)
+target_link_libraries(physics_explorer PRIVATE
+    sep_core
+    sep_quantum
+    sep_memory
+    sep_compat
+    fmt::fmt
+)
+
 # Main executable
 add_executable(sep_server src/server_main.cpp)
 

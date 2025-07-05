@@ -90,6 +90,14 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        // Annealing demo config
+        auto& anneal = json["demos"]["annealing"];
+        annealing_ = {
+            anneal["particle_count"].get<int>(),
+            anneal["initial_temperature"].get<float>(),
+            anneal["cooling_rate"].get<float>()
+        };
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -174,6 +182,12 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"connection_opacity", memory_garden_.visualization.connection_opacity},
                 {"pattern_scale", memory_garden_.visualization.pattern_scale}
             }}
+        };
+
+        json["demos"]["annealing"] = {
+            {"particle_count", annealing_.particle_count},
+            {"initial_temperature", annealing_.initial_temperature},
+            {"cooling_rate", annealing_.cooling_rate}
         };
 
         // Renderer config

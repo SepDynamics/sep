@@ -171,6 +171,18 @@ struct FlockingConfig {
     float max_speed;
 };
 
+struct DigitalPhysicsConfig {
+    struct {
+        int width;
+        int height;
+    } grid;
+
+    struct {
+        std::vector<int> birth;
+        std::vector<int> survival;
+    } rules;
+};
+
 struct RendererConfig {
     struct {
         int samples;

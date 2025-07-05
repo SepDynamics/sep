@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <filesystem>
+#include <vector>
 
 namespace sep {
 namespace workbench {
@@ -126,6 +127,18 @@ struct FlockingConfig {
     int agent_count;
     float neighbor_radius;
     float max_speed;
+};
+
+struct DigitalPhysicsConfig {
+    struct {
+        int width;
+        int height;
+    } grid;
+
+    struct {
+        std::vector<int> birth;
+        std::vector<int> survival;
+    } rules;
 };
 
 struct RendererConfig {

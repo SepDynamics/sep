@@ -149,6 +149,23 @@ target_link_libraries(flocking_sim PRIVATE
     sep_core
     sep_compat)
 
+# Physics explorer example
+add_executable(physics_explorer examples/physics_explorer.cpp)
+set_target_properties(physics_explorer PROPERTIES CXX_STANDARD 17)
+target_include_directories(physics_explorer PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/extern/glm
+    ${CMAKE_SOURCE_DIR}/examples
+)
+target_link_libraries(physics_explorer PRIVATE
+    sep_core
+    sep_quantum
+    sep_memory
+    sep_audio
+    sep_compat
+    sep_api
+)
+
 # Main executable
 add_executable(sep_server src/server_main.cpp)
 

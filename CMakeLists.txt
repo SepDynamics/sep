@@ -245,7 +245,6 @@ target_link_libraries(sep_engine_cli PRIVATE
 add_executable(sep_engine src/server_main.cpp)
 
 # A minimal CLI to test the core engine logic
-add_executable(sep_engine_cli src/main.cpp)
 target_include_directories(sep_engine_cli
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
@@ -276,7 +275,6 @@ target_include_directories(sep_engine
 )
 
 # Minimal CLI executable for testing core engine logic
-add_executable(sep_engine_cli src/main.cpp)
 target_link_libraries(sep_engine_cli PRIVATE
     sep_core
     sep_memory
@@ -340,7 +338,6 @@ target_link_libraries(sep_server
 )
 
 # ---- Minimal CLI executable ----
-add_executable(sep_engine_cli src/main.cpp)
 target_link_libraries(sep_engine_cli PRIVATE
     sep_core
     sep_memory

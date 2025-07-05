@@ -205,7 +205,7 @@ sep::SEPResult MemoryTier::defragment() {
           return sep::SEPResult::CUDA_ERROR;
         }
 #else
-        ::memmove(new_location, block.ptr, block.size);
+        std::memmove(new_location, block.ptr, block.size);
 #endif
 
         block.ptr = new_location;

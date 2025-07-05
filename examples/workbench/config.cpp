@@ -267,6 +267,12 @@ bool Config::save(const std::filesystem::path &path) const {
             {"timestep", cosmo_.timestep}
         };
 
+        // Cosmo demo config
+        json["demos"]["cosmo"] = {
+            {"box_size", cosmo_.box_size},
+            {"time_step", cosmo_.time_step}
+        };
+
         // Renderer config
         json["renderer"] = {
             {"cycles", {

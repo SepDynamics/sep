@@ -1,5 +1,10 @@
+#include <string.h>
 #include <cstring> // For std::memcpy, std::memset, std::memcmp
 #include <ctime>   // For C-style time functions (if needed)
+#include <time.h>
+#include <unistd.h>
+#include <cstdlib>
+
 #include <string>  // For std::string
 #include "blender/compression.h"
 #include <algorithm> // For std::min, std::clamp

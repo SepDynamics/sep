@@ -1,9 +1,11 @@
-#include <cstring>
-#include <ctime>
 #include <string.h>
 #include <cstring>
-#include <time.h>
 #include <ctime>
+#include <time.h>
+#include <unistd.h>
+#include <cstdlib>
+
+#include <string>  // For std::string
 #include <string>  // For std::string
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"

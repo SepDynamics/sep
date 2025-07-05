@@ -8,8 +8,7 @@
 #include <chrono>  // For std::chrono
 #include <condition_variable> // For std::condition_variable
 #include <mutex> // For std::mutex, std::lock_guard, std::unique_lock
-#include <time.h>
-#include <unistd.h>
+
 #include "core/error_handler.h"
 #include "core/metrics_collector.h"
 #include <spdlog/spdlog.h>

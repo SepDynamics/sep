@@ -55,6 +55,7 @@ add_executable(sep_workbench
     demos/audio_visualizer.cpp
     demos/memory_garden.cpp
     demos/cosmo_demo.cpp
+    demos/cosmo_sim.cpp
 )
 
 # Include directories

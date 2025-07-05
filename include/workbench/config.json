@@ -53,14 +53,9 @@
         "pattern_scale": 1.0
       }
     },
-    "cosmo": {
+    "cosmo_sim": {
       "box_size": 50.0,
       "time_step": 0.01
-    }
-    ,
-    "cosmo": {
-      "box_size": 100.0,
-      "timestep": 0.01
     }
   },
   "renderer": {

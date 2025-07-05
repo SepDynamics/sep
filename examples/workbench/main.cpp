@@ -12,6 +12,7 @@
 #include "demos/genesis_pattern.hpp"
 #include "demos/memory_garden.hpp"
 #include "demos/annealing_demo.hpp"
+#include "demos/cosmo_sim.hpp"
 
 using namespace sep;
 using namespace sep::workbench;
@@ -130,6 +131,9 @@ void registerDemos() {
     });
     demo_manager.registerDemo("annealing", []() {
         return std::make_unique<AnnealingDemo>();
+    });
+    demo_manager.registerDemo("cosmo_sim", []() {
+        return std::make_unique<CosmoSim>();
     });
 
   // Start with Genesis Pattern demo

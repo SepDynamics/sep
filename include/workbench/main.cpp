@@ -6,6 +6,7 @@
 #include "demos/audio_visualizer.hpp"
 #include "demos/memory_garden.hpp"
 #include "demos/cosmo_demo.hpp"
+#include "demos/cosmo_sim.hpp"
 
 using namespace sep;
 using namespace sep::workbench;
@@ -92,6 +93,9 @@ void registerDemos() {
     });
     demo_manager.registerDemo("cosmo", []() {
         return std::make_unique<CosmoDemo>();
+    });
+    demo_manager.registerDemo("cosmo_sim", []() {
+        return std::make_unique<CosmoSim>();
     });
 
     // Start with Genesis Pattern demo

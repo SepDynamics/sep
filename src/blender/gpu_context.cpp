@@ -1,4 +1,5 @@
 #include <string.h>
+#include <cstring>  // For std::memcpy
 #include <time.h>
 #include <string>  // For std::string
 #include <sys/stat.h> // For stat

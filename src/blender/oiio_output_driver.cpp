@@ -1,4 +1,5 @@
 #include <string.h>
+#include <cstring>
 #include <time.h>
 
 // Define Cycles namespace macros

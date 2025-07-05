@@ -11,6 +11,10 @@ find_package(OpenSubdiv REQUIRED)
 pkg_check_modules(OIIO REQUIRED OpenImageIO)
 pkg_check_modules(ZSTD REQUIRED libzstd)
 
+# Ensure consistent C++ standard across modules
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 add_library(sep_blender SHARED
     compression_utils.cpp
     gpu_context.cpp

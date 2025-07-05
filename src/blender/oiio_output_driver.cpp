@@ -20,6 +20,10 @@
 // OpenImageIO includes - full definitions first
 #include <OpenImageIO/imagebuf.h>
 #include <OpenImageIO/imagebufalgo.h>
+#ifdef WITH_OCIO
+#  include <OpenColorIO/OpenColorIO.h>
+namespace OCIO = OCIO_NAMESPACE;
+#endif
 
 // Standard includes
 #include <vector>
@@ -65,6 +69,28 @@ void OIIOOutputDriver::write_render_tile(const Tile &tile)
     return;
   }
 
+#ifdef WITH_OCIO
+  bool applied_view_transform = false;
+  try {
+    OCIO::ConstConfigRcPtr config = OCIO::GetCurrentConfig();
+    if (config) {
+      const char *display = config->getDefaultDisplay();
+      const char *view = config->getDefaultView(display);
+      OCIO::ConstProcessorRcPtr processor = config->getProcessor(
+          OCIO::ROLE_SCENE_LINEAR, display, view, OCIO::TRANSFORM_DIR_FORWARD);
+      if (processor) {
+        OCIO::ConstCPUProcessorRcPtr cpu = processor->getDefaultCPUProcessor();
+        OCIO::PackedImageDesc desc(pixels.data(), width, height, 4);
+        cpu->apply(desc);
+        applied_view_transform = true;
+      }
+    }
+  }
+  catch (const OCIO::Exception &e) {
+    log_(string_printf("OCIO error: %s", e.what()));
+  }
+#endif
+
   /* Manipulate offset and stride to convert from bottom-up to top-down convention. */
   OIIO::ImageBuf image_buffer(spec,
                               pixels.data() + (height - 1) * width * 4,
@@ -72,14 +98,23 @@ void OIIOOutputDriver::write_render_tile(const Tile &tile)
                               -width * 4 * sizeof(float),
                               AutoStride);
 
-  /* Apply gamma correction for (some) non-linear file formats.
-   * TODO: use OpenColorIO view transform if available. */
+  /* Apply view transform when possible, or simple gamma correction as fallback. */
+#ifdef WITH_OCIO
+  if (!applied_view_transform &&
+      ColorSpaceManager::detect_known_colorspace(
+          u_colorspace_auto, "", image_output->format_name(), true) == u_colorspace_srgb)
+  {
+    const float g = 1.0f / 2.2f;
+    OIIO::ImageBufAlgo::pow(image_buffer, image_buffer, {g, g, g, 1.0f});
+  }
+#else
   if (ColorSpaceManager::detect_known_colorspace(
           u_colorspace_auto, "", image_output->format_name(), true) == u_colorspace_srgb)
   {
     const float g = 1.0f / 2.2f;
     OIIO::ImageBufAlgo::pow(image_buffer, image_buffer, {g, g, g, 1.0f});
   }
+#endif
 
   /* Write to disk and close */
   image_buffer.set_write_format(TypeDesc::FLOAT);

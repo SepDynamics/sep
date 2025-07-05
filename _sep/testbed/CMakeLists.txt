@@ -8,6 +8,7 @@ add_library(testbed_tests STATIC
     core_error_handler_test.cpp
     audio_pipeline_test.cpp
     api_makejsonresponse_test.cpp
+    neuro_spike_test.cpp
 )
 add_subdirectory(embeddings)
 

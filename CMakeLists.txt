@@ -117,6 +117,24 @@ endif()
 
 # Include JSON processor build
 include(examples/json_processor_build.cmake)
+add_executable(flocking_sim examples/flocking_sim.cpp)
+set_target_properties(flocking_sim PROPERTIES CXX_STANDARD 17)
+target_include_directories(flocking_sim PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/extern/cycles/src
+    ${PROJECT_SOURCE_DIR}/extern/glm
+)
+target_compile_definitions(flocking_sim PRIVATE
+    SEP_HAS_CYCLES
+)
+target_link_libraries(flocking_sim PRIVATE
+    sep_core
+    sep_api
+    sep_quantum
+    sep_memory
+    sep_audio
+    sep_compat
+)
 add_subdirectory(examples/workbench)
 
 # Main executable

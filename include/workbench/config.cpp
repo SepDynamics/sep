@@ -90,6 +90,15 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        // Flocking demo config
+        auto& flock = json["demos"]["flocking"];
+        flocking_ = {
+            flock["agent_count"].get<int>(),
+            flock["neighbor_radius"].get<float>(),
+            flock["separation_distance"].get<float>(),
+            flock["max_speed"].get<float>()
+        };
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -174,6 +183,14 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"connection_opacity", memory_garden_.visualization.connection_opacity},
                 {"pattern_scale", memory_garden_.visualization.pattern_scale}
             }}
+        };
+
+        // Flocking demo config
+        json["demos"]["flocking"] = {
+            {"agent_count", flocking_.agent_count},
+            {"neighbor_radius", flocking_.neighbor_radius},
+            {"separation_distance", flocking_.separation_distance},
+            {"max_speed", flocking_.max_speed}
         };
 
         // Renderer config

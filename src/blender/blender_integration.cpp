@@ -15,6 +15,8 @@
 
 #include "blender/pattern_bridge.h"
 
+#include "blender/pattern_bridge.h"
+
 #include "quantum/processor.h"  // Ensure PatternProcessor is complete
 #include "quantum/data.hpp"      // For PatternData/PatternConfig
 

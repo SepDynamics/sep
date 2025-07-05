@@ -52,6 +52,11 @@
         "connection_opacity": 0.5,
         "pattern_scale": 1.0
       }
+    },
+    "neural": {
+      "neuron_count": 10,
+      "threshold": 1.0,
+      "decay": 0.1
     }
   },
   "renderer": {

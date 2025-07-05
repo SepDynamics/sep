@@ -90,6 +90,14 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        // Neural demo config
+        auto& neural = json["demos"]["neural"];
+        neural_ = {
+            neural["neuron_count"].get<int>(),
+            neural["threshold"].get<float>(),
+            neural["decay"].get<float>()
+        };
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -174,6 +182,13 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"connection_opacity", memory_garden_.visualization.connection_opacity},
                 {"pattern_scale", memory_garden_.visualization.pattern_scale}
             }}
+        };
+
+        // Neural demo config
+        json["demos"]["neural"] = {
+            {"neuron_count", neural_.neuron_count},
+            {"threshold", neural_.threshold},
+            {"decay", neural_.decay}
         };
 
         // Renderer config

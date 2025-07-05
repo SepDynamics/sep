@@ -48,15 +48,14 @@ link_directories(
     /sep/cmake-make/src/compat
 )
 
-# Link against the SEP libraries using full paths
+# Link against the SEP libraries via CMake targets
 target_link_libraries(sep_workbench PRIVATE
-    # SEP Engine Libraries with full paths
-    /sep/src/core/libsep_core.a
-    /sep/src/quantum/libsep_quantum.a
-    /sep/src/memory/libsep_memory.a
-    /sep/src/audio/libsep_audio.a
-    /sep/src/blender/libsep_blender.a
-    /sep/src/compat/libsep_compat.a
+    sep_core
+    sep_quantum
+    sep_memory
+    sep_audio
+    sep_blender
+    sep_compat
 )
 
 # Add this subdirectory to your root CMakeLists.txt:

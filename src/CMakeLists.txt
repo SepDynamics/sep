@@ -7,7 +7,7 @@ set(SEP_INCLUDE_DIRS
 )
 
 # Main executable
-add_executable(sep_main main.cpp)
+add_executable(sep_main server_main.cpp)
 target_include_directories(sep_main PRIVATE ${SEP_INCLUDE_DIRS})
 
 # Add component subdirectories

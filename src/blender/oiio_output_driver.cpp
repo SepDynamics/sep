@@ -1,8 +1,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <vector>
 #include <unistd.h>
+#include <vector>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {

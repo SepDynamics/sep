@@ -1,8 +1,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <memory>
 #include <string>
+#include <memory>
 #include <unistd.h>
 
 #include "compat/math_common.h"

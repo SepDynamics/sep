@@ -1,4 +1,5 @@
 #include <string.h>
+#include <cstring> // For std::memcpy if needed
 #include <time.h>
 
 // Define Cycles namespace macros

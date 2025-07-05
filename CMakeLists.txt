@@ -198,6 +198,16 @@ target_link_libraries(drug_optimizer PRIVATE
     sep_compat
 )
 
+# Simple drug optimizer example
+add_executable(drug_optimizer examples/drug_optimizer.cpp)
+target_include_directories(drug_optimizer PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(drug_optimizer PRIVATE
+    sep_quantum
+    sep_memory
+    sep_compat
+    sep_core
+)
+
 # Main executable
 add_executable(sep_server src/server_main.cpp)
 # A minimal CLI to test the core engine logic

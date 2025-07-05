@@ -103,6 +103,16 @@ struct DrugDiscoveryConfig {
     float mutation_rate;
 };
 
+struct DigitalPhysicsConfig {
+    struct {
+        int width;
+        int height;
+    } grid;
+    struct {
+        std::string rule;
+    } rules;
+};
+
 struct RendererConfig {
     struct {
         int samples;

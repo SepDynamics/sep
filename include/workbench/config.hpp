@@ -141,6 +141,12 @@ struct DigitalPhysicsConfig {
     } rules;
 };
 
+struct FlockingConfig {
+    int agent_count;
+    float neighbor_radius;
+    float max_speed;
+};
+
 struct RendererConfig {
     struct {
         int samples;

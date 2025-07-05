@@ -189,6 +189,15 @@ struct FlockingConfig {
     float max_speed;
 };
 
+struct FlockingConfig {
+    int agent_count;
+    float cohesion_weight;
+    float separation_weight;
+    float alignment_weight;
+    float neighbor_radius;
+    float max_speed;
+};
+
 struct RendererConfig {
     struct {
         int samples;

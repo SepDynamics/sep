@@ -119,6 +119,20 @@ endif()
 include(examples/json_processor_build.cmake)
 add_subdirectory(examples/workbench)
 
+# Simple flocking simulation example
+add_executable(flocking_sim examples/flocking_sim.cpp)
+target_include_directories(flocking_sim PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/extern/glm
+    ${CMAKE_SOURCE_DIR}/examples
+)
+target_link_libraries(flocking_sim PRIVATE
+    sep_quantum
+    sep_memory
+    sep_core
+    sep_compat
+)
+
 # Main executable
 add_executable(sep_server src/server_main.cpp)
 

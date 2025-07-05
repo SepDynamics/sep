@@ -115,9 +115,8 @@ if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
   add_subdirectory(extern/cycles)
 endif()
 
-# Include JSON processor build
-include(examples/json_processor_build.cmake)
-add_subdirectory(examples/workbench)
+# Include examples
+add_subdirectory(examples)
 
 # Main executable
 add_executable(sep_server src/server_main.cpp)

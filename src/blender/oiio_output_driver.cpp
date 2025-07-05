@@ -1,9 +1,8 @@
-#include <string.h>
-#include <cstring> // For std::memcpy if needed
-#include <ctime>
-#include <time.h>
-#include <unistd.h>
 #include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <vector>
+#include <unistd.h>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
@@ -32,9 +31,6 @@ namespace OCIO = OCIO_NAMESPACE;
 #  include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 #endif
-
-// Standard includes
-#include <vector>
 
 namespace OIIO = OpenImageIO_v2_5;
 

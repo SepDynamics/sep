@@ -119,6 +119,18 @@ endif()
 include(examples/json_processor_build.cmake)
 add_subdirectory(examples/workbench)
 
+# Standalone drug optimization example
+add_executable(drug_optimizer examples/drug_optimizer.cpp)
+target_include_directories(drug_optimizer PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+)
+target_link_libraries(drug_optimizer PRIVATE
+    sep_quantum
+    sep_core
+    sep_memory
+    sep_compat
+)
+
 # Main executable
 add_executable(sep_server src/server_main.cpp)
 

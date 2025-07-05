@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Enable POSIX features for popen/pclose
-add_definitions(-D_POSIX_C_SOURCE=200809L)
+add_compile_definitions(_POSIX_C_SOURCE=200809L)
 add_definitions(-D_GNU_SOURCE)
 
 # Load CUDA toolchain file before project declaration

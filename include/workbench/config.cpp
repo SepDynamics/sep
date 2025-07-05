@@ -90,6 +90,14 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        // Flocking config
+        auto& flock = json["demos"]["flocking"];
+        flocking_ = {
+            flock["cohesion_weight"].get<float>(),
+            flock["separation_weight"].get<float>(),
+            flock["alignment_weight"].get<float>()
+        };
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -174,6 +182,12 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"connection_opacity", memory_garden_.visualization.connection_opacity},
                 {"pattern_scale", memory_garden_.visualization.pattern_scale}
             }}
+        };
+
+        json["demos"]["flocking"] = {
+            {"cohesion_weight", flocking_.cohesion_weight},
+            {"separation_weight", flocking_.separation_weight},
+            {"alignment_weight", flocking_.alignment_weight}
         };
 
         // Renderer config

@@ -52,6 +52,11 @@
         "connection_opacity": 0.5,
         "pattern_scale": 1.0
       }
+    },
+    "flocking": {
+      "cohesion_weight": 1.0,
+      "separation_weight": 1.5,
+      "alignment_weight": 1.0
     }
   },
   "renderer": {

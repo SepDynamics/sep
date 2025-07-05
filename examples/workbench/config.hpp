@@ -220,6 +220,11 @@ struct NeuralConfig {
     float input_strength;
 };
 
+struct CosmoConfig {
+    float box_size;
+    float timestep;
+};
+
 struct RendererConfig {
   struct {
     int samples;

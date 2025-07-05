@@ -255,6 +255,12 @@ bool Config::save(const std::filesystem::path &path) const {
             {"particle_count", annealing_.particle_count}
         };
 
+        // Cosmo demo config
+        json["demos"]["cosmo"] = {
+            {"box_size", cosmo_.box_size},
+            {"timestep", cosmo_.timestep}
+        };
+
         // Renderer config
         json["renderer"] = {
             {"cycles", {

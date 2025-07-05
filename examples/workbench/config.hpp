@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <filesystem>
+#include <vector>
 
 namespace sep {
 namespace workbench {
@@ -65,6 +66,18 @@ struct MemoryGardenConfig {
     } visualization;
 };
 
+struct DigitalPhysicsConfig {
+    struct {
+        int width;
+        int height;
+    } grid;
+
+    struct {
+        std::vector<int> birth;
+        std::vector<int> survival;
+    } rules;
+};
+
 struct RendererConfig {
     struct {
         int samples;
@@ -88,6 +101,7 @@ public:
     const GenesisPatternConfig& genesis_pattern() const { return genesis_pattern_; }
     const AudioVisualizerConfig& audio_visualizer() const { return audio_visualizer_; }
     const MemoryGardenConfig& memory_garden() const { return memory_garden_; }
+    const DigitalPhysicsConfig& digital_physics() const { return digital_physics_; }
     const RendererConfig& renderer() const { return renderer_; }
 
 private:
@@ -98,8 +112,9 @@ private:
     GenesisPatternConfig genesis_pattern_;
     AudioVisualizerConfig audio_visualizer_;
     MemoryGardenConfig memory_garden_;
+    DigitalPhysicsConfig digital_physics_;
     RendererConfig renderer_;
-};
+}; 
 
 } // namespace workbench
 } // namespace sep

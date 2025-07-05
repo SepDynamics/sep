@@ -52,6 +52,11 @@
         "connection_opacity": 0.5,
         "pattern_scale": 1.0
       }
+    },
+    "annealing": {
+      "initial_temperature": 1.0,
+      "cooling_rate": 0.99,
+      "particle_count": 10
     }
   },
   "renderer": {

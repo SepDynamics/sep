@@ -52,6 +52,12 @@
         "connection_opacity": 0.5,
         "pattern_scale": 1.0
       }
+    },
+    "flocking": {
+      "agent_count": 50,
+      "neighbor_radius": 5.0,
+      "separation_distance": 1.0,
+      "max_speed": 2.0
     }
   },
   "renderer": {

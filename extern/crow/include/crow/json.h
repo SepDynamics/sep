@@ -4,6 +4,7 @@
 //#define CROW_JSON_USE_MAP
 
 #include <string>
+#include <cstring>
 #ifdef CROW_JSON_USE_MAP
 #include <map>
 #else

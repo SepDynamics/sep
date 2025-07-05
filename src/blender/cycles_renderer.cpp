@@ -1,33 +1,22 @@
-// Standard includes
-#include <string.h>
-#include <cstring> // For std::memcpy, std::memset, std::memcmp, std::strlen etc.
-#include <ctime>   // For C-style time functions
-#include <time.h>
-#include <unistd.h>
+#include <cstring>
+#include <ctime>
 #include <cstdlib>
-
-#include <string>  // For std::string
+#include <string>
 #include <cmath>
 #include <memory>
 #include <utility>
 #include <vector>
-#include <algorithm> // For std::max
+#include <algorithm>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-// Core Cycles includes
 #include "util/system.h"
 #include "util/types.h"
-
-// SEP includes
-#include "blender/cycles_renderer.h"
-#include "core/error_handler.h"
-#include "core/types.h"
-#include "quantum/data.hpp"
-
-// Cycles core includes
 #include "device/device.h"
 #include "scene/camera.h"
 #include "scene/image.h"
@@ -35,9 +24,6 @@
 #include "scene/scene.h"
 #include "session/output_driver.h"
 #include "session/session.h"
-
-// Cycles utility includes
-#include "blender/oiio_output_driver.h"
 #include "util/array.h"
 #include "util/math_base.h"
 #include "util/param.h"
@@ -47,6 +33,13 @@
 #include "util/texture.h"
 #include "util/unique_ptr.h"
 #include "util/vector.h"
+
+// Project includes
+#include "blender/cycles_renderer.h"
+#include "blender/oiio_output_driver.h"
+#include "core/error_handler.h"
+#include "core/types.h"
+#include "quantum/data.hpp"
 
 namespace sep {
 namespace blender {

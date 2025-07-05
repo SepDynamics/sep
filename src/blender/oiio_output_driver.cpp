@@ -1,40 +1,31 @@
-#include <string.h>
-#include <cstring> // For std::memcpy if needed
+#include <cstring>
 #include <ctime>
+#include <vector>
+#include <cstdlib>
+#include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <cstdlib>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-#include "blender/oiio_output_driver.h"
 
-// Core Cycles includes
+// Third-party includes
 #include "util/system.h"
 #include "util/types.h"
-
-// Scene includes
 #include "scene/colorspace.h"
 #include "util/image.h"
 #include "util/unique_ptr.h"
-
 #ifdef WITH_OCIO
 #  include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 #endif
-
-// OpenImageIO includes - full definitions first
 #include <OpenImageIO/imagebuf.h>
 #include <OpenImageIO/imagebufalgo.h>
-#ifdef WITH_OCIO
-#  include <OpenColorIO/OpenColorIO.h>
-namespace OCIO = OCIO_NAMESPACE;
-#endif
 
-// Standard includes
-#include <vector>
+// Project includes
+#include "blender/oiio_output_driver.h"
 
 namespace OIIO = OpenImageIO_v2_5;
 

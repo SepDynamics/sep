@@ -1,22 +1,19 @@
+#include <cstring>
+#include <ctime>
+#include <cstdlib>
+#include <string>
+#include <algorithm>
+#include <chrono>
+#include <array>
+#include <vector>
 #include <string.h>
-#include <cstring> // For std::memcpy, std::memset, std::memcmp
-#include <ctime>   // For C-style time functions (if needed)
 #include <time.h>
 #include <unistd.h>
-#include <cstdlib>
-
-#include <string>  // For std::string
-#include "blender/compression.h"
-#include <algorithm> // For std::min, std::clamp
-#include <chrono>    // For std::chrono
 
 #include <lz4.h>
 #include <zstd.h>
 
-#include <algorithm> // For std::min, std::clamp
-#include <chrono>    // For std::chrono
-#include <array>
-#include <vector>
+#include "blender/compression.h"
 
 namespace blender {
 

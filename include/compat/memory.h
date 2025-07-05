@@ -115,7 +115,7 @@ bool copyToDevice(T* dst, const T* src, size_t count, Stream* stream  = nullptr)
     return error == cudaSuccess;
 #else
     (void)stream;
-    ::memcpy(dst, src, count * sizeof(T));
+    std::memcpy(dst, src, count * sizeof(T));
     return true;
 #endif
 }
@@ -127,7 +127,7 @@ bool copyToHost(T* dst, const T* src, size_t count, Stream* stream  = nullptr) {
     return error == cudaSuccess;
 #else
     (void)stream;
-    ::memcpy(dst, src, count * sizeof(T));
+    std::memcpy(dst, src, count * sizeof(T));
     return true;
 #endif
 }

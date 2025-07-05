@@ -119,6 +119,19 @@ struct AnnealingConfig {
     float cooling_rate;
 };
 
+struct DigitalPhysicsConfig {
+    struct {
+        int width;
+        int height;
+    } grid;
+
+    struct {
+        int birth;
+        int survive_min;
+        int survive_max;
+    } rules;
+};
+
 struct RendererConfig {
     struct {
         int samples;

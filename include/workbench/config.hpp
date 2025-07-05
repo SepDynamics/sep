@@ -77,6 +77,11 @@ struct FlockingConfig {
     float max_speed;
 };
 
+struct DrugDiscoveryConfig {
+    int iterations;
+    float mutation_rate;
+};
+
 struct RendererConfig {
     struct {
         int samples;

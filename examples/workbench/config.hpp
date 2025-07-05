@@ -98,6 +98,11 @@ struct NeuralDemoConfig {
     } neuron;
 };
 
+struct DrugDiscoveryConfig {
+    int iterations;
+    float mutation_rate;
+};
+
 struct RendererConfig {
     struct {
         int samples;

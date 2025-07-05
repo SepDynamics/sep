@@ -117,6 +117,8 @@ endif()
 
 # Include JSON processor build
 include(examples/json_processor_build.cmake)
+# Build the annealing simulation example
+include(examples/annealing_sim_build.cmake)
 add_subdirectory(examples/workbench)
 
 # Main executable

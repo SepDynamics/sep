@@ -57,6 +57,11 @@
       "initial_temperature": 1.0,
       "cooling_rate": 0.99,
       "particle_count": 10
+    },
+    "cosmo_sim": {
+      "box_size": 50.0,
+      "time_step": 0.01,
+      "particle_count": 100
     }
   },
   "renderer": {

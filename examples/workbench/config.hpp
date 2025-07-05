@@ -65,6 +65,12 @@ struct MemoryGardenConfig {
     } visualization;
 };
 
+struct FlockingConfig {
+    int agent_count;
+    float neighbor_radius;
+    float max_speed;
+};
+
 struct RendererConfig {
     struct {
         int samples;
@@ -88,6 +94,7 @@ public:
     const GenesisPatternConfig& genesis_pattern() const { return genesis_pattern_; }
     const AudioVisualizerConfig& audio_visualizer() const { return audio_visualizer_; }
     const MemoryGardenConfig& memory_garden() const { return memory_garden_; }
+    const FlockingConfig& flocking() const { return flocking_; }
     const RendererConfig& renderer() const { return renderer_; }
 
 private:
@@ -98,6 +105,7 @@ private:
     GenesisPatternConfig genesis_pattern_;
     AudioVisualizerConfig audio_visualizer_;
     MemoryGardenConfig memory_garden_;
+    FlockingConfig flocking_;
     RendererConfig renderer_;
 };
 

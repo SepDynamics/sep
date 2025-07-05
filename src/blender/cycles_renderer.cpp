@@ -1,8 +1,12 @@
-#include "blender_pch.h"
-
+// Standard library headers
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 #include <algorithm>
+#include <cmath>
+#include <memory>
+#include <string>
 #include <utility>
-#include <vector>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {

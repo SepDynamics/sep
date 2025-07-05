@@ -3,10 +3,11 @@
 #include "core/engine.h"
 #include "quantum/processor.h"
 #include "quantum/types.h"
-#include "core/manager.h"
+#include "config/config_manager.h"
 
 int main() {
     std::cout << "--- SEP Engine Core Test ---" << std::endl;
+
     try {
         sep::config::ConfigManager::getInstance().initialize(0, nullptr);
         auto& engine = sep::core::Engine::instance();

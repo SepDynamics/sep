@@ -21,7 +21,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// 4. Your Own Project's Core Headers
+// 4. Project Core Headers
 #include "core/common.h"
 #include "quantum/types.h"
 #include "memory/types.h"

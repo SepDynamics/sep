@@ -1,5 +1,9 @@
-#include "blender_pch.h"
-
+// 1. C Standard Library Headers
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <string>
+#include <new>
 #include <sys/stat.h>
 #include <unistd.h>
 

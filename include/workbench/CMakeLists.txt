@@ -54,6 +54,7 @@ add_executable(sep_workbench
     demos/genesis_pattern.cpp
     demos/audio_visualizer.cpp
     demos/memory_garden.cpp
+    demos/neural_demo.cpp
 )
 
 # Include directories

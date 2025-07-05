@@ -8,6 +8,7 @@
 // `SEP_NO_STDLIB`.  Default builds rely on the system standard library and
 // should not define this macro.
 
+// C headers
 #include <string.h>  // For memcpy, memset, memcmp, strlen, etc.
 #include <time.h>    // For time, clock, difftime, mktime, etc.
 #include <unistd.h>  // For nanosleep, getpid, etc.

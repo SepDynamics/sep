@@ -17,6 +17,11 @@
 #include "util/image.h"
 #include "util/unique_ptr.h"
 
+#ifdef WITH_OCIO
+#  include <OpenColorIO/OpenColorIO.h>
+namespace OCIO = OCIO_NAMESPACE;
+#endif
+
 // OpenImageIO includes - full definitions first
 #include <OpenImageIO/imagebuf.h>
 #include <OpenImageIO/imagebufalgo.h>
@@ -72,9 +77,28 @@ void OIIOOutputDriver::write_render_tile(const Tile &tile)
                               -width * 4 * sizeof(float),
                               AutoStride);
 
-  /* Apply gamma correction for (some) non-linear file formats.
-   * TODO: use OpenColorIO view transform if available. */
-  if (ColorSpaceManager::detect_known_colorspace(
+  bool applied_view_transform = false;
+#ifdef WITH_OCIO
+  try {
+    OCIO::ConstConfigRcPtr config = OCIO::GetCurrentConfig();
+    if (config) {
+      OCIO::ConstProcessorRcPtr processor = config->getProcessor("scene_linear", "sRGB");
+      if (processor) {
+        OCIO::ConstCPUProcessorRcPtr cpu_processor = processor->getDefaultCPUProcessor();
+        OCIO::PackedImageDesc desc(pixels.data(), width, height, 4);
+        cpu_processor->apply(desc);
+        applied_view_transform = true;
+      }
+    }
+  }
+  catch (const OCIO::Exception &e) {
+    log_(string_printf("OpenColorIO error: %s", e.what()));
+  }
+#endif
+
+  /* Apply gamma correction for (some) non-linear file formats if no OCIO. */
+  if (!applied_view_transform &&
+      ColorSpaceManager::detect_known_colorspace(
           u_colorspace_auto, "", image_output->format_name(), true) == u_colorspace_srgb)
   {
     const float g = 1.0f / 2.2f;

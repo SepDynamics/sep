@@ -65,6 +65,11 @@ struct MemoryGardenConfig {
     } visualization;
 };
 
+struct DrugDiscoveryConfig {
+    int iterations;
+    float mutation_rate;
+};
+
 struct RendererConfig {
     struct {
         int samples;
@@ -88,6 +93,7 @@ public:
     const GenesisPatternConfig& genesis_pattern() const { return genesis_pattern_; }
     const AudioVisualizerConfig& audio_visualizer() const { return audio_visualizer_; }
     const MemoryGardenConfig& memory_garden() const { return memory_garden_; }
+    const DrugDiscoveryConfig& drug_discovery() const { return drug_discovery_; }
     const RendererConfig& renderer() const { return renderer_; }
 
 private:
@@ -98,6 +104,7 @@ private:
     GenesisPatternConfig genesis_pattern_;
     AudioVisualizerConfig audio_visualizer_;
     MemoryGardenConfig memory_garden_;
+    DrugDiscoveryConfig drug_discovery_;
     RendererConfig renderer_;
 };
 

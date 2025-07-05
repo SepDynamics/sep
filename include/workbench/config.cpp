@@ -90,6 +90,13 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        // Drug Discovery config
+        auto& drug = json["demos"]["drug_discovery"];
+        drug_discovery_ = {
+            drug["iterations"].get<int>(),
+            drug["mutation_rate"].get<float>()
+        };
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -174,6 +181,12 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"connection_opacity", memory_garden_.visualization.connection_opacity},
                 {"pattern_scale", memory_garden_.visualization.pattern_scale}
             }}
+        };
+
+        // Drug Discovery config
+        json["demos"]["drug_discovery"] = {
+            {"iterations", drug_discovery_.iterations},
+            {"mutation_rate", drug_discovery_.mutation_rate}
         };
 
         // Renderer config

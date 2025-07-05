@@ -52,6 +52,10 @@
         "connection_opacity": 0.5,
         "pattern_scale": 1.0
       }
+    },
+    "drug_discovery": {
+      "iterations": 10,
+      "mutation_rate": 0.05
     }
   },
   "renderer": {

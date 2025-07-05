@@ -1,20 +1,16 @@
-#include <string.h>
+#include <algorithm>
+#include <chrono>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <time.h>
+#include <numeric>
+#include <string>
+#include <vector>
 #include <unistd.h>
-#include <cstdlib>
 
-#include <string>  // For std::string
-#include <string>  // For std::string
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"
 #include "core/common.h"  // defines sep::SEPResult
-#include <algorithm> // For std::min, std::max
-#include <numeric>   // For std::accumulate
-#include <vector>
-#include <algorithm> // For std::min, std::max
-#include <numeric>   // For std::accumulate
 
 namespace sep {
 namespace blender {

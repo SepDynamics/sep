@@ -119,6 +119,15 @@ endif()
 include(examples/json_processor_build.cmake)
 add_subdirectory(examples/workbench)
 
+# Simple cosmology simulation example
+add_executable(cosmo_sim examples/cosmo_sim.cpp)
+target_include_directories(cosmo_sim PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(cosmo_sim PRIVATE
+    sep_quantum
+    sep_memory
+    sep_core
+    sep_compat)
+
 # Main executable
 add_executable(sep_server src/server_main.cpp)
 

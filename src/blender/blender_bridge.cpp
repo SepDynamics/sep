@@ -2,6 +2,8 @@
 #include <string>  // For std::string
 #include <cstring> // For std::memcpy
 #include <ctime>   // For std::time (if needed, but chrono is preferred)
+#include <time.h>
+#include <unistd.h>
 #include <thread>  // For std::thread
 #include <chrono>  // For std::chrono
 #include <condition_variable> // For std::condition_variable

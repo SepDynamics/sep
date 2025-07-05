@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <cstring> // For std::memcpy, std::strcmp etc.
 #include <cstring>
+#include <time.h>
+#include <unistd.h>
 #include <memory>
 #include <string>
 #include <thread>

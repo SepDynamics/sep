@@ -211,6 +211,13 @@ struct NeuralDemoConfig {
     float connection_weight;
 };
 
+struct NeuralConfig {
+    int neuron_count;
+    float threshold;
+    float decay;
+    float input_strength;
+};
+
 struct RendererConfig {
     struct {
         int samples;

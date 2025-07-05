@@ -122,7 +122,14 @@ add_subdirectory(examples/workbench)
 # Main executable
 add_executable(sep_server src/server_main.cpp)
 
+# Additional executable using the same engine core
+add_executable(sep_engine src/server_main.cpp)
+
 set_target_properties(sep_server PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+)
+set_target_properties(sep_engine PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
 )
@@ -130,8 +137,76 @@ target_include_directories(sep_server
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
 )
+target_include_directories(sep_engine
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}/include
+)
+
+# Minimal CLI executable for testing core engine logic
+add_executable(sep_engine_cli src/main.cpp)
+target_link_libraries(sep_engine_cli PRIVATE
+    sep_core
+    sep_memory
+    sep_quantum
+    sep_compat
+)
 
 target_link_libraries(sep_server
+    PRIVATE
+        # 1. High-level SEP Engine static libraries
+        sep_api
+        sep_blender
+        sep_audio
+        sep_embeddings
+        sep_quantum
+        sep_memory
+        sep_compat
+        sep_core
+
+        # 2. Cycles and its dependencies
+        cycles_session
+        cycles_scene
+        cycles_device
+        cycles_kernel_osl
+        cycles_subd
+        cycles_util
+        extern_sky
+        extern_cuew
+        extern_hipew
+        extern_sky
+
+        # 3. External dependencies
+        OpenImageIO
+        ${OPENVDB_LIBRARIES}
+        ${OPENSUBDIV_LIBRARIES}
+        openvdb
+        bf_intern_opensubdiv
+        ${OSL_LIBRARIES}
+        ${TBB_LIBRARIES}
+        ${CURL_LIBRARIES}
+        http_parser::http_parser
+        fmt::fmt
+        spdlog::spdlog
+        hiredis
+        pipewire-0.3
+
+        # 4. System libraries
+        ${EMBREE_LIBRARIES}
+        Imath
+        ${OpenPGL_LIBRARIES}
+        ${OpenColorIO_LIBRARIES}
+        ${ALEMBIC_LIBRARIES}
+        ${CMAKE_DL_LIBS}
+        ${Threads_LIBRARIES}
+        ${CUDAToolkit_LIBRARIES}
+        pthread
+        dl
+        rt
+        m
+        z
+)
+
+target_link_libraries(sep_engine
     PRIVATE
         # 1. High-level SEP Engine static libraries
         sep_api
@@ -214,7 +289,7 @@ install(TARGETS
 )
 
 # Install executable separately
-install(TARGETS sep_server
+install(TARGETS sep_server sep_engine
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 

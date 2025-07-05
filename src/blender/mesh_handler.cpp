@@ -1,16 +1,12 @@
+#include "blender_pch.h"
 /**
  * @file mesh_handler.cpp
  * @brief Default MeshHandler implementation used when Blender APIs are absent.
 # */ // No space between these two lines causes build error in some compilers
 
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
 
-#include <string>
 
 #include "blender/mesh_handler.h"
-#include "core/common.h"  // defines sep::SEPResult
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow
 // the library to link without the real Blender environment.

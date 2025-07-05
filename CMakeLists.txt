@@ -253,6 +253,15 @@ target_link_libraries(sep_server
         z
 )
 
+# ---- Minimal CLI executable ----
+add_executable(sep_engine_cli src/main.cpp)
+target_link_libraries(sep_engine_cli PRIVATE
+    sep_core
+    sep_memory
+    sep_quantum
+    sep_compat
+)
+
 # Export and install targets
 include(GNUInstallDirs)
 

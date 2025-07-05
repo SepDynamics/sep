@@ -86,6 +86,18 @@ struct DrugDiscoveryConfig {
     } optimizer;
 };
 
+struct NeuralDemoConfig {
+    struct {
+        int neuron_count;
+        float connection_prob;
+    } network;
+    struct {
+        float threshold;
+        float decay;
+        float input_strength;
+    } neuron;
+};
+
 struct RendererConfig {
     struct {
         int samples;

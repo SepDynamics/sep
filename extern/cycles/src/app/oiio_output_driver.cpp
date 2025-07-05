@@ -11,6 +11,10 @@
 
 #include <OpenImageIO/imagebuf.h>
 #include <OpenImageIO/imagebufalgo.h>
+#ifdef WITH_OCIO
+#  include <OpenColorIO/OpenColorIO.h>
+namespace OCIO = OCIO_NAMESPACE;
+#endif
 
 CCL_NAMESPACE_BEGIN
 
@@ -53,6 +57,27 @@ void OIIOOutputDriver::write_render_tile(const Tile &tile)
     return;
   }
 
+#ifdef WITH_OCIO
+  bool ocio_applied = false;
+  try {
+    OCIO::ConstConfigRcPtr config = OCIO::GetCurrentConfig();
+    if (config) {
+      const char *display = config->getDefaultDisplay();
+      const char *view = config->getDefaultView(display);
+      OCIO::ConstProcessorRcPtr processor = config->getProcessor("scene_linear", display, view);
+      if (processor) {
+        OCIO::ConstCPUProcessorRcPtr cpu_processor = processor->getDefaultCPUProcessor();
+        OCIO::PackedImageDesc desc(pixels.data(), width, height, 4);
+        cpu_processor->apply(desc);
+        ocio_applied = true;
+      }
+    }
+  }
+  catch (const OCIO::Exception &exception) {
+    log_(string_printf("OpenColorIO error: %s", exception.what()));
+  }
+#endif
+
   /* Manipulate offset and stride to convert from bottom-up to top-down convention. */
   OIIO::ImageBuf image_buffer(spec,
                               pixels.data() + (height - 1) * width * 4,
@@ -61,7 +86,10 @@ void OIIOOutputDriver::write_render_tile(const Tile &tile)
                               AutoStride);
 
   /* Apply gamma correction for (some) non-linear file formats.
-   * TODO: use OpenColorIO view transform if available. */
+   * Use OpenColorIO if available, fall back to a fixed gamma curve. */
+#ifdef WITH_OCIO
+  if (!ocio_applied)
+#endif
   if (ColorSpaceManager::detect_known_colorspace(
           u_colorspace_auto, "", image_output->format_name(), true) == u_colorspace_srgb)
   {

@@ -7,17 +7,9 @@
 #include <cstring>
 #include <time.h>
 #include <ctime>
+#include <string>  // For std::string
 #include "blender/mesh_handler.h"
 #include "core/common.h"  // defines sep::SEPResult
-
-// Standard library includes
-#include <cstring>
-#include <ctime>
-#include <string.h>
-#include <cstring>
-#include <time.h>
-#include <ctime>
-#include <string>  // For std::string
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow
 // the library to link without the real Blender environment.

@@ -1,10 +1,5 @@
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <string>
-#include <memory>
+#include "blender_pch.h"
 #include <unistd.h>
-
 #include "compat/math_common.h"
 
 // Forward declarations for Blender functions (minimal stubs)

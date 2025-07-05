@@ -1,15 +1,7 @@
-// 1. C Standard Library Headers
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <string>
+#include "blender_pch.h"
 #include <new>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#include <new>
-#include <string>
-
 #include "blender/gpu_context.h"
 
 namespace sep {

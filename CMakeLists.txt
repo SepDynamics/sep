@@ -121,6 +121,16 @@ add_subdirectory(examples/workbench)
 
 # Main executable
 add_executable(sep_server src/server_main.cpp)
+# A minimal CLI to test the core engine logic
+add_executable(sep_engine_cli src/main.cpp)
+target_include_directories(sep_engine_cli PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(sep_engine_cli PRIVATE
+    sep_core
+    sep_memory
+    sep_quantum
+    sep_compat
+)
+
 
 set_target_properties(sep_server PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON

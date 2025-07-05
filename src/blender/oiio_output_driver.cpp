@@ -1,16 +1,5 @@
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
+#include "blender_pch.h"
 #include <unistd.h>
-#include <vector>
-
-#include <vector>
-
-#include <vector>
-
-#include <vector>
-
-// Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 

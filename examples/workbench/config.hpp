@@ -7,6 +7,7 @@
 #include <memory>
 #include <filesystem>
 #include <array>
+#include <vector>
 
 namespace sep {
 namespace workbench {
@@ -72,6 +73,11 @@ struct AnnealingConfig {
     float initial_temperature;
     float cooling_rate;
     int particle_count;
+};
+
+struct AnnealingSimConfig {
+    std::vector<float> temperature_schedule;
+    int particle_count{0};
 };
 
 struct DrugDiscoveryConfig {
@@ -264,6 +270,7 @@ public:
     const AudioVisualizerConfig& audio_visualizer() const { return audio_visualizer_; }
     const MemoryGardenConfig& memory_garden() const { return memory_garden_; }
     const AnnealingConfig& annealing() const { return annealing_; }
+    const AnnealingSimConfig& annealing_sim() const { return annealing_sim_; }
     const RendererConfig& renderer() const { return renderer_; }
     const OptimizerConfig& optimizer() const { return optimizer_; }
 
@@ -276,6 +283,7 @@ private:
     AudioVisualizerConfig audio_visualizer_;
     MemoryGardenConfig memory_garden_;
     AnnealingConfig annealing_;
+    AnnealingSimConfig annealing_sim_;
     RendererConfig renderer_;
     OptimizerConfig optimizer_;
 };

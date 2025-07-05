@@ -8,6 +8,7 @@
 // Include demo headers
 #include "demo_manager.hpp"
 #include "demos/annealing_demo.hpp"
+#include "demos/annealing_sim.hpp"
 #include "demos/audio_visualizer.hpp"
 #include "demos/genesis_pattern.hpp"
 #include "demos/memory_garden.hpp"
@@ -130,6 +131,9 @@ void registerDemos() {
     });
     demo_manager.registerDemo("annealing", []() {
         return std::make_unique<AnnealingDemo>();
+    });
+    demo_manager.registerDemo("annealing_sim", []() {
+        return std::make_unique<AnnealingSimDemo>();
     });
 
   // Start with Genesis Pattern demo

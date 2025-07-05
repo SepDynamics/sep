@@ -98,6 +98,14 @@ bool Config::load(const std::filesystem::path& path) {
             anneal["particle_count"].get<int>()
         };
 
+        if (json["demos"].contains("annealing_sim")) {
+            auto& sim = json["demos"]["annealing_sim"];
+            annealing_sim_.particle_count = sim["particle_count"].get<int>();
+            for (auto& t : sim["temperature_schedule"]) {
+                annealing_sim_.temperature_schedule.push_back(t.get<float>());
+            }
+        }
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -178,6 +186,14 @@ bool Config::load(const std::filesystem::path& path) {
                   anneal["initial_temperature"].get<float>(),
                   anneal["cooling_rate"].get<float>()};
 
+    if (json["demos"].contains("annealing_sim")) {
+        auto &sim = json["demos"]["annealing_sim"];
+        annealing_sim_.particle_count = sim["particle_count"].get<int>();
+        for (auto &t : sim["temperature_schedule"]) {
+            annealing_sim_.temperature_schedule.push_back(t.get<float>());
+        }
+    }
+
     // Renderer config
     auto &renderer = json["renderer"];
     auto &cycles = renderer["cycles"];
@@ -253,6 +269,11 @@ bool Config::save(const std::filesystem::path &path) const {
             {"initial_temperature", annealing_.initial_temperature},
             {"cooling_rate", annealing_.cooling_rate},
             {"particle_count", annealing_.particle_count}
+        };
+
+        json["demos"]["annealing_sim"] = {
+            {"temperature_schedule", annealing_sim_.temperature_schedule},
+            {"particle_count", annealing_sim_.particle_count}
         };
 
         // Cosmo demo config

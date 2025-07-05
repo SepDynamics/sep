@@ -57,6 +57,10 @@
       "initial_temperature": 1.0,
       "cooling_rate": 0.99,
       "particle_count": 10
+    },
+    "annealing_sim": {
+      "temperature_schedule": [1.0, 0.8, 0.6, 0.4],
+      "particle_count": 20
     }
   },
   "renderer": {

@@ -284,22 +284,6 @@ else
   MISSING_PACKAGES="$MISSING_PACKAGES boost-devel"
 fi
 
-# If missing packages, suggest installation
-if [ ! -z "$MISSING_PACKAGES" ]; then
-  echo ""
-  echo "The following development packages are missing and need to be installed:"
-  echo "$MISSING_PACKAGES"
-  echo ""
-  echo "You can install them using:"
-  echo "sudo dnf install $MISSING_PACKAGES"
-  echo ""
-  read -p "Do you want to continue anyway? (y/n) " -n 1 -r
-  echo ""
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "Build aborted. Please install the required packages and try again."
-    exit 1
-  fi
-fi
 
 # Add these to CMAKE_ARGS
 export CMAKE_ARGS="${CMAKE_ARGS} -DPYTHON_ROOT_DIR=${PYTHON_ROOT_DIR}"

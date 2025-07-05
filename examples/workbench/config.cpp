@@ -90,6 +90,22 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        // Neural Demo config
+        auto& neural = json["demos"]["neural_demo"];
+        auto& net = neural["network"];
+        auto& neu = neural["neuron"];
+        neural_demo_ = {
+            {
+                net["neuron_count"].get<int>(),
+                net["connection_prob"].get<float>()
+            },
+            {
+                neu["threshold"].get<float>(),
+                neu["decay"].get<float>(),
+                neu["input_strength"].get<float>()
+            }
+        };
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -173,6 +189,18 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"show_connections", memory_garden_.visualization.show_connections},
                 {"connection_opacity", memory_garden_.visualization.connection_opacity},
                 {"pattern_scale", memory_garden_.visualization.pattern_scale}
+            }}
+        };
+
+        json["demos"]["neural_demo"] = {
+            {"network", {
+                {"neuron_count", neural_demo_.network.neuron_count},
+                {"connection_prob", neural_demo_.network.connection_prob}
+            }},
+            {"neuron", {
+                {"threshold", neural_demo_.neuron.threshold},
+                {"decay", neural_demo_.neuron.decay},
+                {"input_strength", neural_demo_.neuron.input_strength}
             }}
         };
 

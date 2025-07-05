@@ -65,6 +65,18 @@ struct MemoryGardenConfig {
     } visualization;
 };
 
+struct NeuralDemoConfig {
+    struct {
+        int neuron_count;
+        float connection_prob;
+    } network;
+    struct {
+        float threshold;
+        float decay;
+        float input_strength;
+    } neuron;
+};
+
 struct RendererConfig {
     struct {
         int samples;
@@ -88,6 +100,7 @@ public:
     const GenesisPatternConfig& genesis_pattern() const { return genesis_pattern_; }
     const AudioVisualizerConfig& audio_visualizer() const { return audio_visualizer_; }
     const MemoryGardenConfig& memory_garden() const { return memory_garden_; }
+    const NeuralDemoConfig& neural_demo() const { return neural_demo_; }
     const RendererConfig& renderer() const { return renderer_; }
 
 private:
@@ -98,6 +111,7 @@ private:
     GenesisPatternConfig genesis_pattern_;
     AudioVisualizerConfig audio_visualizer_;
     MemoryGardenConfig memory_garden_;
+    NeuralDemoConfig neural_demo_;
     RendererConfig renderer_;
 };
 

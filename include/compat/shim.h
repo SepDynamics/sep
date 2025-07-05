@@ -1,13 +1,21 @@
 #pragma once
 
+// Enable POSIX and GNU extensions required across the code base. This must be
+// defined before any system headers are included so the declarations for
+// functions such as ::nanosleep and constants like CLOCK_MONOTONIC are
+// available.
+#define _GNU_SOURCE
+
 // When compiling without the standard library the build system defines
 // `SEP_NO_STDLIB`.  Default builds rely on the system standard library and
 // should not define this macro.
 
+// C headers
 #include <string.h>  // For memcpy, memset, memcmp, strlen, etc.
 #include <time.h>    // For time, clock, difftime, mktime, etc.
 #include <unistd.h>  // For nanosleep, getpid, etc.
 // Ensure C++ wrappers of the C headers are also available
+#include <cstring>
 #include <ctime>
 #include <stdlib.h>  // For malloc, free, getenv, etc.
 #include <stdio.h>   // For snprintf, fprintf, etc.

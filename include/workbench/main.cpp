@@ -5,6 +5,7 @@
 #include "demos/genesis_pattern.hpp"
 #include "demos/audio_visualizer.hpp"
 #include "demos/memory_garden.hpp"
+#include "demos/flocking_demo.hpp"
 
 using namespace sep;
 using namespace sep::workbench;
@@ -88,6 +89,9 @@ void registerDemos() {
     });
     demo_manager.registerDemo("memory", []() {
         return std::make_unique<MemoryGardenDemo>();
+    });
+    demo_manager.registerDemo("flocking", []() {
+        return std::make_unique<FlockingDemo>();
     });
 
     // Start with Genesis Pattern demo

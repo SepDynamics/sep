@@ -108,6 +108,9 @@ logs/
 Thumbs.db
 .Trash-1000/
 
+# Generated files
+.embeddings/
+
 CMakeCache.txt
 build.ninja
 compile_commands.json

@@ -62,7 +62,13 @@ struct MemoryGardenConfig {
         bool show_connections;
         float connection_opacity;
         float pattern_scale;
-    } visualization;
+} visualization;
+};
+
+struct AnnealingConfig {
+    int particle_count;
+    float initial_temperature;
+    float cooling_rate;
 };
 
 struct RendererConfig {
@@ -88,6 +94,7 @@ public:
     const GenesisPatternConfig& genesis_pattern() const { return genesis_pattern_; }
     const AudioVisualizerConfig& audio_visualizer() const { return audio_visualizer_; }
     const MemoryGardenConfig& memory_garden() const { return memory_garden_; }
+    const AnnealingConfig& annealing() const { return annealing_; }
     const RendererConfig& renderer() const { return renderer_; }
 
 private:
@@ -98,6 +105,7 @@ private:
     GenesisPatternConfig genesis_pattern_;
     AudioVisualizerConfig audio_visualizer_;
     MemoryGardenConfig memory_garden_;
+    AnnealingConfig annealing_;
     RendererConfig renderer_;
 };
 

@@ -1,5 +1,9 @@
 #pragma once
 
+#define _GNU_SOURCE // For POSIX functions like nanosleep, CLOCK_MONOTONIC
+#include <cstring>  // For memcpy, memset, strcmp, strlen, etc.
+#include <ctime>    // For time_t, tm struct, mktime, localtime, gmtime, etc.
+
 // When compiling without the standard library the build system defines
 // `SEP_NO_STDLIB`.  Default builds rely on the system standard library and
 // should not define this macro.

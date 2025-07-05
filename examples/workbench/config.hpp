@@ -198,6 +198,12 @@ struct FlockingConfig {
     float max_speed;
 };
 
+struct NeuralConfig {
+    int neuron_count;
+    float threshold;
+    float decay;
+};
+
 struct RendererConfig {
     struct {
         int samples;

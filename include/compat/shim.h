@@ -1,5 +1,14 @@
 #pragma once
 
+// Enable GNU extensions for POSIX functions such as nanosleep and
+// CLOCK_MONOTONIC which are used across the project.
+#define _GNU_SOURCE
+
+// Standard C/C++ headers required throughout the compatibility layer.
+#include <cstring>   // memcpy, memset, strcmp, strlen, etc.
+#include <ctime>     // time_t, tm, mktime, localtime, gmtime, etc.
+#include <cstdlib>   // malloc, free, abs, etc.
+
 // When compiling without the standard library the build system defines
 // `SEP_NO_STDLIB`.  Default builds rely on the system standard library and
 // should not define this macro.

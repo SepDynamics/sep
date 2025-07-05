@@ -187,6 +187,8 @@ target_include_directories(sep_blender PRIVATE
 
 # Set library properties
 set_target_properties(sep_blender PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
     POSITION_INDEPENDENT_CODE ON
     CXX_VISIBILITY_PRESET default
     VISIBILITY_INLINES_HIDDEN OFF

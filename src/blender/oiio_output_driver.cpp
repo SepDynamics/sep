@@ -1,6 +1,7 @@
 #include <string.h>
 #include <cstring> // For std::memcpy if needed
 #include <time.h>
+#include <cstring>  // For std::memcpy if needed
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {

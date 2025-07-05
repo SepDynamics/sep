@@ -1,5 +1,7 @@
 #include <string.h>
+#include <cstring>
 #include <time.h>
+#include <ctime>
 #include <string>  // For std::string
 #include "compat/math_common.h"
 

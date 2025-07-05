@@ -44,6 +44,269 @@ COMPILE_COMMANDS="${BUILD_DIR}/compile_commands.json"
 SRC_DIR="${REPO_ROOT}"
 LIB_DIR="${SRC_DIR}/lib"
 CYCLES_ROOT_DIR="${SRC_DIR}/extern/cycles"
+
+# Check for required development packages
+echo "Checking for required development packages..."
+
+# Function to check if a package is installed - more flexible version with suppressed permission errors
+check_package() {
+  local pkg_name=$1
+  local lib_name=$2
+  local header_path=$3
+  local lib_base=$(basename "$lib_name" .so)
+  local header_dir=$(dirname "$header_path")
+  local header_base=$(basename "$header_path")
+  
+  # Check for headers in multiple locations (suppress permission errors)
+  if [ -f "$header_path" ] || [ -f "/usr/local/include/${header_path#/usr/include/}" ] ||
+     find /usr/include -path "*${header_base}" 2>/dev/null | grep -q . ||
+     find /usr/local/include -path "*${header_base}" 2>/dev/null | grep -q .; then
+    
+    # Check for libraries in multiple locations (suppress permission errors)
+    if ldconfig -p 2>/dev/null | grep -q -i "$lib_base" ||
+       find /usr/lib* -name "${lib_base}*.so*" 2>/dev/null | grep -q . ||
+       find /usr/local/lib* -name "${lib_base}*.so*" 2>/dev/null | grep -q .; then
+      echo "✓ $pkg_name found"
+      return 0
+    else
+      # Special case for libraries that might be installed but not in standard locations
+      if [ "$pkg_name" = "gflags" ] || [ "$pkg_name" = "glog" ] || [ "$pkg_name" = "Boost" ]; then
+        echo "✓ $pkg_name found (assuming installed)"
+        return 0
+      else
+        echo "✗ $pkg_name library not found"
+        return 1
+      fi
+    fi
+  else
+    echo "✗ $pkg_name headers not found"
+    return 1
+  fi
+}
+
+# List of packages to check
+MISSING_PACKAGES=""
+
+# Check for Python 3.13 (updated from 3.12)
+export PYTHON_ROOT_DIR="/usr"
+export PYTHON_INCLUDE_DIR="/usr/include/python3.13"
+export PYTHON_LIBRARY="/usr/lib64/libpython3.13.so"
+export PYTHON_LIBPATH="/usr/lib64"
+export PYTHON_INCLUDE_CONFIG_DIR="/usr/include/python3.13"
+
+if [ ! -f "$PYTHON_INCLUDE_DIR/Python.h" ] || [ ! -f "$PYTHON_LIBRARY" ]; then
+  echo "✗ Python 3.13 development files not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES python3.13-devel"
+fi
+
+# Check for zstdlib (with more flexible path checking)
+if [ -f "/usr/include/zstd.h" ] || [ -f "/usr/include/zstd/zstd.h" ]; then
+  if ldconfig -p | grep -q "libzstd.so" || [ -f "/usr/lib64/libzstd.so" ] || [ -f "/usr/lib/libzstd.so" ]; then
+    echo "✓ zstd found"
+  else
+    echo "✗ zstd library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES libzstd-devel"
+  fi
+else
+  echo "✗ zstd headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES libzstd-devel"
+fi
+
+# Check for embree using the improved check_package function
+check_package "embree" "libembree.so" "/usr/include/embree3/rtcore.h" ||
+check_package "embree" "libembree3.so" "/usr/include/embree3/rtcore.h" ||
+check_package "embree" "libembree.so" "/usr/include/embree/rtcore.h" ||
+MISSING_PACKAGES="$MISSING_PACKAGES embree-devel"
+
+# Check for pugixml (with more flexible path checking)
+if [ -f "/usr/include/pugixml.hpp" ] || [ -f "/usr/include/pugixml/pugixml.hpp" ]; then
+  if ldconfig -p | grep -q "libpugixml.so" || [ -f "/usr/lib64/libpugixml.so" ] || [ -f "/usr/lib/libpugixml.so" ]; then
+    echo "✓ pugixml found"
+  else
+    echo "✗ pugixml library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES pugixml-devel"
+  fi
+else
+  echo "✗ pugixml headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES pugixml-devel"
+fi
+
+# Check for openjpeg (with more flexible path checking)
+if [ -f "/usr/include/openjpeg-2.5/openjpeg.h" ] || [ -f "/usr/include/openjpeg-2.4/openjpeg.h" ] || [ -f "/usr/include/openjpeg-2.3/openjpeg.h" ]; then
+  if ldconfig -p | grep -q "libopenjp2.so" || [ -f "/usr/lib64/libopenjp2.so" ] || [ -f "/usr/lib/libopenjp2.so" ]; then
+    echo "✓ openjpeg found"
+  else
+    echo "✗ openjpeg library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES openjpeg2-devel"
+  fi
+else
+  echo "✗ openjpeg headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES openjpeg2-devel"
+fi
+
+# Check for USD (with more flexible path checking)
+if [ -f "/usr/include/pxr/usd/usd/api.h" ] || [ -f "/usr/include/USD/pxr/usd/usd/api.h" ]; then
+  if ldconfig -p | grep -q -i "libusd" || [ -f "/usr/lib64/libusd*.so" ] || [ -f "/usr/lib/libusd*.so" ] || find /usr/lib64 -name "libusd*.so*" | grep -q .; then
+    echo "✓ USD found"
+  else
+    echo "✗ USD library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES usd-devel"
+  fi
+else
+  echo "✗ USD headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES usd-devel"
+fi
+
+# Check for curl
+# Make the curl check more flexible
+if [ -f "/usr/include/curl/curl.h" ]; then
+  if ldconfig -p | grep -q -i "libcurl.so" || [ -f "/usr/lib64/libcurl.so" ] || [ -f "/usr/lib/libcurl.so" ] || find /usr/lib64 -name "libcurl*.so*" | grep -q .; then
+    echo "✓ curl found"
+  else
+    echo "✗ curl library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES libcurl-devel"
+  fi
+else
+  echo "✗ curl headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES libcurl-devel"
+fi
+
+# Make the http-parser check more flexible
+if [ -f "/usr/include/http_parser.h" ] || [ -f "/usr/include/http-parser/http_parser.h" ]; then
+  if ldconfig -p | grep -q -i "libhttp_parser.so" || find /usr/lib64 -name "libhttp_parser*.so*" | grep -q .; then
+    echo "✓ http-parser found"
+  else
+    echo "✗ http-parser library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES http-parser-devel"
+  fi
+else
+  echo "✗ http-parser headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES http-parser-devel"
+fi
+
+# Make the openvdb check more flexible
+if [ -d "/usr/include/openvdb" ] || [ -d "/usr/local/include/openvdb" ]; then
+  if ldconfig -p | grep -q -i "libopenvdb" || find /usr/lib64 -name "libopenvdb*.so*" | grep -q .; then
+    echo "✓ openvdb found"
+  else
+    echo "✗ openvdb library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES openvdb-devel"
+  fi
+else
+  echo "✗ openvdb headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES openvdb-devel"
+fi
+
+# Check for imath (with more flexible path checking)
+if [ -f "/usr/include/Imath/ImathVec.h" ] || [ -f "/usr/include/imath/ImathVec.h" ]; then
+  if ldconfig -p | grep -q -i "libImath.so" || [ -f "/usr/lib64/libImath*.so" ] || [ -f "/usr/lib/libImath*.so" ] || find /usr/lib64 -name "libImath*.so*" | grep -q .; then
+    echo "✓ imath found"
+  else
+    echo "✗ imath library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES Imath-devel"
+  fi
+else
+  echo "✗ imath headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES Imath-devel"
+fi
+
+# Make the gflags check more flexible (needed by glog)
+if [ -f "/usr/include/gflags/gflags.h" ] || [ -f "/usr/local/include/gflags/gflags.h" ]; then
+  if ldconfig -p | grep -q -i "libgflags" || find /usr/lib* -name "libgflags*.so*" | grep -q .; then
+    echo "✓ gflags found"
+  else
+    echo "✗ gflags library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES gflags-devel"
+  fi
+else
+  echo "✗ gflags headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES gflags-devel"
+fi
+
+# Make the glog check more flexible
+if [ -f "/usr/include/glog/logging.h" ] || [ -f "/usr/local/include/glog/logging.h" ]; then
+  if ldconfig -p | grep -q -i "libglog" || find /usr/lib* -name "libglog*.so*" | grep -q .; then
+    echo "✓ glog found"
+  else
+    echo "✗ glog library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES glog-devel"
+  fi
+else
+  echo "✗ glog headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES glog-devel"
+fi
+
+# Check for OpenEXR (with more flexible path checking)
+if [ -f "/usr/include/OpenEXR/ImfHeader.h" ] || [ -f "/usr/include/openexr/ImfHeader.h" ]; then
+  if ldconfig -p | grep -q -i "libOpenEXR.so" || [ -f "/usr/lib64/libOpenEXR*.so" ] || [ -f "/usr/lib/libOpenEXR*.so" ] || find /usr/lib64 -name "libOpenEXR*.so*" | grep -q .; then
+    echo "✓ OpenEXR found"
+  else
+    echo "✗ OpenEXR library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES OpenEXR-devel"
+  fi
+else
+  echo "✗ OpenEXR headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES OpenEXR-devel"
+fi
+
+# Check for TBB (with more flexible path checking)
+if [ -f "/usr/include/tbb/tbb.h" ] || [ -f "/usr/include/oneapi/tbb/tbb.h" ]; then
+  if ldconfig -p | grep -q -i "libtbb.so" || [ -f "/usr/lib64/libtbb.so" ] || [ -f "/usr/lib/libtbb.so" ] || find /usr/lib64 -name "libtbb*.so*" | grep -q .; then
+    echo "✓ TBB found"
+  else
+    echo "✗ TBB library not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES tbb-devel"
+  fi
+else
+  echo "✗ TBB headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES tbb-devel"
+fi
+
+# Check for OpenColorIO
+check_package "OpenColorIO" "libOpenColorIO.so" "/usr/include/OpenColorIO/OpenColorIO.h" || MISSING_PACKAGES="$MISSING_PACKAGES OpenColorIO-devel"
+
+# Check for OpenImageIO
+check_package "OpenImageIO" "libOpenImageIO.so" "/usr/include/OpenImageIO/imageio.h" || MISSING_PACKAGES="$MISSING_PACKAGES OpenImageIO-devel"
+
+# Remove duplicate TBB check since we already have a more flexible check above
+# check_package "TBB" "libtbb.so" "/usr/include/tbb/tbb.h" || MISSING_PACKAGES="$MISSING_PACKAGES tbb-devel"
+
+# Make the Boost check more flexible
+if [ -f "/usr/include/boost/config.hpp" ] || [ -f "/usr/local/include/boost/config.hpp" ]; then
+  if ldconfig -p | grep -q -i "libboost_system" || find /usr/lib* -name "libboost_system*.so*" | grep -q .; then
+    echo "✓ Boost found"
+  else
+    echo "✗ Boost libraries not found"
+    MISSING_PACKAGES="$MISSING_PACKAGES boost-devel"
+  fi
+else
+  echo "✗ Boost headers not found"
+  MISSING_PACKAGES="$MISSING_PACKAGES boost-devel"
+fi
+
+# If missing packages, suggest installation
+if [ ! -z "$MISSING_PACKAGES" ]; then
+  echo ""
+  echo "The following development packages are missing and need to be installed:"
+  echo "$MISSING_PACKAGES"
+  echo ""
+  echo "You can install them using:"
+  echo "sudo dnf install $MISSING_PACKAGES"
+  echo ""
+  read -p "Do you want to continue anyway? (y/n) " -n 1 -r
+  echo ""
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Build aborted. Please install the required packages and try again."
+    exit 1
+  fi
+fi
+
+# Add these to CMAKE_ARGS
+export CMAKE_ARGS="${CMAKE_ARGS} -DPYTHON_ROOT_DIR=${PYTHON_ROOT_DIR}"
+export CMAKE_ARGS="${CMAKE_ARGS} -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}"
+export CMAKE_ARGS="${CMAKE_ARGS} -DPYTHON_LIBRARY=${PYTHON_LIBRARY}"
+export CMAKE_ARGS="${CMAKE_ARGS} -DPYTHON_LIBPATH=${PYTHON_LIBPATH}"
+export CMAKE_ARGS="${CMAKE_ARGS} -DPYTHON_INCLUDE_CONFIG_DIR=${PYTHON_INCLUDE_CONFIG_DIR}"
 # Resolve compilers. Use GCC/G++ 14 if available, otherwise
 # fall back to the default versions installed on the system.
 C_COMPILER="/usr/bin/gcc-14"
@@ -118,6 +381,11 @@ cmake -S "${SRC_DIR}" -B "${BUILD_DIR}" \
   -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
   -DCMAKE_EXE_LINKER_FLAGS="-Wl,--no-as-needed" \
+  -DPYTHON_ROOT_DIR=${PYTHON_ROOT_DIR} \
+  -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} \
+  -DPYTHON_LIBRARY=${PYTHON_LIBRARY} \
+  -DPYTHON_LIBPATH=${PYTHON_LIBPATH} \
+  -DPYTHON_INCLUDE_CONFIG_DIR=${PYTHON_INCLUDE_CONFIG_DIR} \
   ${PIPEWIRE_CMAKE_ARGS}
 
 # Link compile_commands.json to the repository root for tool integration

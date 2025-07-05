@@ -134,7 +134,7 @@ if(TARGET cycles_scene)
       CUDA::nvrtc
       glog
       gflags
-      embree4
+      
       extern_cuew
       extern_hipew
       ${OSL_LIBRARIES}
@@ -163,7 +163,7 @@ else()
       CUDA::nvrtc
       glog
       gflags
-      embree4
+      embree
       extern_cuew
       extern_hipew
       ${OSL_LIBRARIES}

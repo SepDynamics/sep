@@ -62,7 +62,12 @@ struct MemoryGardenConfig {
         bool show_connections;
         float connection_opacity;
         float pattern_scale;
-    } visualization;
+} visualization;
+};
+
+struct CosmoDemoConfig {
+    float box_size;
+    float time_step;
 };
 
 struct FlockingConfig {

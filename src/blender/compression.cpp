@@ -1,7 +1,8 @@
-#include <array>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+
+#include <array>
 #include <string>
 #include <vector>
 #include <chrono>

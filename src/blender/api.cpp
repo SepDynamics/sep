@@ -1,3 +1,5 @@
+#include <cstring>
+#include <ctime>
 #include <string.h>
 #include <time.h>
 #include <string>  // For std::string

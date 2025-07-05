@@ -1,6 +1,7 @@
 #include "core/manager.h"
 #include "core/engine.h"
 #include "core/common.h"
+#include <ctime>
 #include <time.h>   // For std::tm, nanosleep
 #include <unistd.h> // For POSIX-specific APIs
 #include "core/logging.h"

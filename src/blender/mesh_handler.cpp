@@ -7,6 +7,8 @@
 #include "core/common.h"  // defines sep::SEPResult
 
 // Standard library includes
+#include <cstring>
+#include <ctime>
 #include <string.h>
 #include <time.h>
 #include <string>  // For std::string

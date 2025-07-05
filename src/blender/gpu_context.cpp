@@ -1,5 +1,6 @@
 #include <string.h>
 #include <cstring>  // For std::memcpy
+#include <ctime>
 #include <time.h>
 #include <cstring>  // For std::memcpy
 #include <string>   // For std::string

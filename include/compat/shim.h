@@ -54,7 +54,7 @@ namespace shim {
       if (s) {
         size_ = strlen(s);
         capacity_ = size_ + 1;
-        data_ = static_cast<char*>(std::malloc(capacity_));
+        data_ = static_cast<char*>(malloc(capacity_));
         if (data_) {
           memcpy(data_, s, size_ + 1);
         } else {
@@ -72,7 +72,7 @@ namespace shim {
       if (other.data_) {
         size_ = other.size_;
         capacity_ = size_ + 1;
-        data_ = static_cast<char*>(std::malloc(capacity_));
+        data_ = static_cast<char*>(malloc(capacity_));
         if (data_) {
           memcpy(data_, other.data_, size_ + 1);
         } else {
@@ -82,13 +82,13 @@ namespace shim {
     }
     string& operator=(const string& other) {
       if (this != &other) {
-        if (data_) std::free(data_);
+        if (data_) free(data_);
         data_ = nullptr;
         size_ = capacity_ = 0;
         if (other.data_) {
           size_ = other.size_;
           capacity_ = size_ + 1;
-          data_ = static_cast<char*>(std::malloc(capacity_));
+          data_ = static_cast<char*>(malloc(capacity_));
           if (data_) {
             memcpy(data_, other.data_, size_ + 1);
           } else {
@@ -99,13 +99,13 @@ namespace shim {
       return *this;
     }
     string& operator=(const char* s) {
-      if (data_) std::free(data_);
+      if (data_) free(data_);
       data_ = nullptr;
       size_ = capacity_ = 0;
       if (s) {
         size_ = strlen(s);
         capacity_ = size_ + 1;
-        data_ = static_cast<char*>(std::malloc(capacity_));
+        data_ = static_cast<char*>(malloc(capacity_));
         if (data_) {
           memcpy(data_, s, size_ + 1);
         } else {
@@ -128,7 +128,7 @@ namespace shim {
     operator std::string() const { return std::string(c_str()); }
     ~string() {
       if (data_) {
-        std::free(data_);
+        free(data_);
         data_ = nullptr;
       }
     }
@@ -184,12 +184,12 @@ namespace shim {
         if (pos >= size_) return string();
         size_t rcount = (count == npos || pos + count > size_) ?
                         size_ - pos : count;
-        char* temp = static_cast<char*>(std::malloc(rcount + 1));
+        char* temp = static_cast<char*>(malloc(rcount + 1));
         if (temp) {
             memcpy(temp, data_ + pos, rcount);
             temp[rcount] = '\0';
             string result(temp);
-            std::free(temp);
+            free(temp);
             return result;
         }
         return string();
@@ -201,7 +201,7 @@ namespace shim {
             size_t slen = strlen(s);
             if (size_ + slen + 1 > capacity_) {
                 size_t new_cap = (size_ + slen + 1) * 2;
-                char* new_data = static_cast<char*>(std::realloc(data_, new_cap));
+                char* new_data = static_cast<char*>(realloc(data_, new_cap));
                 if (new_data) {
                     data_ = new_data;
                     capacity_ = new_cap;
@@ -425,7 +425,7 @@ namespace shim {
   // Memory management - minimal implementations
   inline void* aligned_alloc(size_t alignment, size_t size) {
     (void)alignment;  // alignment parameter unused in fallback implementation
-    return std::malloc(size); // Not properly aligned but simple fallback
+    return malloc(size); // Not properly aligned but simple fallback
   }
   
   // Smart pointer helpers were previously defined here when the standard

@@ -141,6 +141,12 @@ struct FlockingConfig {
     float max_speed;
 };
 
+struct FlockingConfig {
+    float cohesion_weight;
+    float separation_weight;
+    float alignment_weight;
+};
+
 struct RendererConfig {
     struct {
         int samples;

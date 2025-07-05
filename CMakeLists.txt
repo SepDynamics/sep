@@ -136,6 +136,9 @@ target_link_libraries(flocking_sim PRIVATE
     sep_compat
 )
 add_subdirectory(examples/workbench)
+add_executable(physics_explorer examples/physics_explorer.cpp)
+target_include_directories(physics_explorer PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(physics_explorer PRIVATE sep_quantum sep_core sep_compat sep_memory)
 
 # Simple flocking simulation example
 add_executable(flocking_sim examples/flocking_sim.cpp)

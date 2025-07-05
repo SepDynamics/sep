@@ -65,6 +65,8 @@ namespace evolution {
     std::vector<Pattern> createRandomPopulation(size_t size);
     void applySpike(Pattern& neuron, float input, float decay, float threshold);
     void hebbianUpdate(const Pattern& pre, Pattern& post, float rate);
+    void applyGravity(Pattern& pattern, const glm::vec3& center, float strength);
+    void randomPerturbation(Pattern& pattern, float amplitude);
 }
 
 } // namespace sep::quantum

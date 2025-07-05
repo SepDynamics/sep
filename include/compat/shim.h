@@ -1,41 +1,60 @@
 #pragma once
 
-#define _GNU_SOURCE // For POSIX functions like nanosleep, CLOCK_MONOTONIC
-#include <cstring>  // For memcpy, memset, strcmp, strlen, etc.
-#include <ctime>    // For time_t, tm struct, mktime, localtime, gmtime, etc.
+// IMPORTANT: _GNU_SOURCE is now assumed to be defined by the build system
+// (e.g., via CMake's compile definitions like -D_GNU_SOURCE).
+// Defining it here would cause a redefinition warning.
 
-// When compiling without the standard library the build system defines
-// `SEP_NO_STDLIB`.  Default builds rely on the system standard library and
-// should not define this macro.
+// --- C Standard Library Headers (.h versions for global namespace visibility) ---
+// These headers make C functions available in the global namespace (::).
+// This is often necessary for C++ <c...> wrappers that use 'using ::func_name;' directives.
+#include <string.h>   // For C-style string manipulation (memcpy, memset, strlen, strcmp, etc.)
+#include <time.h>     // For C-style time functions (time, clock, tm, mktime, localtime, gmtime, timespec_get)
+                      // Also includes CLOCK_MONOTONIC when _GNU_SOURCE is defined elsewhere.
+#include <unistd.h>   // For POSIX functions (nanosleep, getpid, etc.)
+#include <stdlib.h>   // For general utilities (malloc, free, getenv, atoi, etc.)
+#include <stdio.h>    // For input/output (snprintf, fprintf, etc.)
+#include <stdint.h>   // For fixed-width integer types (uint32_t, uint64_t)
+#include <stdbool.h>  // For C-style boolean type (bool)
+#include <stddef.h>   // For size_t, ptrdiff_t
+#include <math.h>     // For C-style mathematical functions (sin, cos, sqrt, exp, etc.)
+#include <setjmp.h>   // For non-local jumps (__jmp_buf)
 
-// C headers
-#include <string.h>  // For memcpy, memset, memcmp, strlen, etc.
-#include <time.h>    // For time, clock, difftime, mktime, etc.
-#include <unistd.h>  // For nanosleep, getpid, etc.
-// Ensure C++ wrappers of the C headers are also available
-#include <stdlib.h>  // For malloc, free, getenv, etc.
-#include <stdio.h>   // For snprintf, fprintf, etc.
-#include <stdint.h>  // For uint32_t, uint64_t etc.
-#include <stdbool.h> // For bool type
-#include <stddef.h>  // For size_t, ptrdiff_t
-#include <math.h>    // For math functions
-#include <setjmp.h>  // For __jmp_buf
-#include <chrono>    // For CLOCK_MONOTONIC and chrono utilities
 
-// Now include C++ headers that depend on C functions being in global namespace
-#include <string>
-#include <cstdio>
-#include <cstdint>
-#include <cstddef>
-#include <cmath>
-#include <chrono>
+// --- C++ Standard Library Headers (Preferred C++ style, may depend on .h versions) ---
+// These provide C-compatible functions within the std:: namespace.
+// Including the .h versions first often helps resolve conflicts or missing declarations.
+#include <cstring>    // C++ wrapper for <string.h>
+#include <ctime>      // C++ wrapper for <time.h>
+#include <cstdlib>    // C++ wrapper for <stdlib.h>
+#include <cstdio>     // C++ wrapper for <stdio.h>
+#include <cmath>      // C++ wrapper for <math.h>
+#include <cstdint>    // C++ wrapper for <stdint.h>
+#include <cstddef>    // C++ wrapper for <stddef.h>
 
-// Additional C++ headers
-#include <functional>
-#include <ostream>
-#include <queue>
-#include <vector>
-#include <mutex>
+// --- Core C++ Language Support Headers ---
+// These are fundamental C++ headers.
+#include <string>     // For std::string
+#include <vector>     // For std::vector
+#include <memory>     // For std::unique_ptr, std::shared_ptr, std::allocator
+#include <mutex>      // For std::mutex, std::lock_guard
+#include <condition_variable> // For std::condition_variable
+#include <thread>     // For std::thread, std::this_thread
+#include <chrono>     // For std::chrono time points, durations, clocks
+#include <atomic>     // For std::atomic types
+#include <functional> // For std::function
+#include <ostream>    // For std::ostream
+#include <queue>      // For std::queue (from audio/pipeline.cpp)
+
+// --- Additional common C++ headers you might need, depending on full usage ---
+#include <algorithm>  // For std::min, std::max, std::clamp, std::sort, std::find, std::remove_if, std::transform etc.
+#include <limits>     // For std::numeric_limits
+#include <optional>   // For std::optional
+#include <stdexcept>  // For standard exception types (e.g., std::runtime_error, std::invalid_argument)
+#include <map>        // For std::map
+#include <unordered_map> // For std::unordered_map
+#include <sstream>    // For std::stringstream
+#include <fstream>    // For std::ifstream, std::ofstream
+#include <utility>    // For std::move, std::exchange, std::pair
 
 namespace sep {
 namespace shim {

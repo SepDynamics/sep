@@ -7,6 +7,7 @@
 
 #include <string>    // For std::string
 #include <sys/stat.h> // For stat
+#include <new>
 
 #include "blender/gpu_context.h"
 #include <new>

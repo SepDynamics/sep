@@ -1,8 +1,14 @@
+#include <string.h>
+#include <cstring>
+#include <ctime>
+#include <time.h>
+#include <unistd.h>
+#include <cstdlib>
+
 #include "quantum/pattern_evolution.h"
 #include "quantum/data.hpp"  // For PatternData/PatternConfig
 #include "quantum/types.h"
 #include <nlohmann/json.hpp>
-#include <cstring> // For std::memcpy
 #include "api/sep_engine.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"

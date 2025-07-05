@@ -1,13 +1,16 @@
-#include "blender/bridge.h"
-#include <string>  // For std::string
+#include <string.h>
 #include <cstring> // For std::memcpy
-#include <ctime>   // For std::time (if needed, but chrono is preferred)
+#include <ctime>   // For std::time
 #include <time.h>   // For CLOCK_MONOTONIC, timespec
 #include <unistd.h> // For nanosleep
+
+#include <string>  // For std::string
 #include <thread>  // For std::thread
 #include <chrono>  // For std::chrono
 #include <condition_variable> // For std::condition_variable
 #include <mutex> // For std::mutex, std::lock_guard, std::unique_lock
+
+#include "blender/bridge.h"
 
 #include "core/error_handler.h"
 #include "core/metrics_collector.h"

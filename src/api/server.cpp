@@ -1,17 +1,17 @@
+#include <string.h>
+#include <cstring> // For std::memcpy, std::strcmp etc.
+#include <ctime>
+#include <time.h>   // For CLOCK_MONOTONIC
+#include <unistd.h> // For nanosleep
+#include <cstdlib>
+
 // Standard library includes
 #include <chrono>
 #include <csignal>
 #include <cstdio>
-#include <cstring> // For std::memcpy, std::strcmp etc.
-#include <cstring>
-#include <ctime>
-#include <time.h>   // For CLOCK_MONOTONIC
-#include <ctime>
-#include <unistd.h> // For nanosleep
 #include <memory>
 #include <string>
 #include <thread>
-#include <ctime>
 
 // Compatibility layer includes
 #include "compat/shim.h"

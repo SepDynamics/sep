@@ -1,3 +1,10 @@
+#include <string.h>
+#include <cstring>
+#include <ctime>
+#include <time.h>
+#include <unistd.h>
+#include <cstdlib>
+
 #include "core/manager.h"
 #include "core/env_keys.h"
 #include "compat/shim.h"

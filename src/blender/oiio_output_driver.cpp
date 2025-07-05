@@ -1,11 +1,11 @@
 #include <string.h>
+#include <string> // For std::string
 #include <time.h>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-#include <string> // For std::string
 #include "blender/oiio_output_driver.h"
 
 // Core Cycles includes

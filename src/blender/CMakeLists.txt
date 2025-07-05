@@ -23,6 +23,9 @@ add_library(sep_blender SHARED
     oiio_output_driver.cpp
 )
 
+# Require C++17 for this target
+target_compile_features(sep_blender PUBLIC cxx_std_17)
+
 # Define required features
 target_compile_definitions(sep_blender
     PUBLIC

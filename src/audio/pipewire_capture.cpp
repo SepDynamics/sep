@@ -2,7 +2,9 @@
 #include "audio/types.h"
 #include "audio/capture.h"
 #include <string.h> // For strerror, memcpy, etc.
+#include <cstring>
 #include <time.h>   // For timespec and nanosleep
+#include <ctime>
 #include "audio/config.h"
 
 #ifdef SEP_HAS_AUDIO

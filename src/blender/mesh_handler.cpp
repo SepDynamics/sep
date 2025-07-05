@@ -8,7 +8,9 @@
 
 // Standard library includes
 #include <string.h>
+#include <cstring>
 #include <time.h>
+#include <ctime>
 #include <string>  // For std::string
 
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow

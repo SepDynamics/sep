@@ -2,6 +2,7 @@
 #include "core/engine.h"
 #include "core/common.h"
 #include <time.h>   // For std::tm, nanosleep
+#include <ctime>
 #include <unistd.h> // For POSIX-specific APIs
 #include "core/logging.h"
 #include <curl/curl.h> 

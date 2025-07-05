@@ -18,10 +18,9 @@ set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 # Add include directories for the main engine and dependencies
 target_include_directories(sep_workbench PUBLIC
     ${PROJECT_SOURCE_DIR}/include
-    /sep/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-    /sep/extern/cycles/src
-    /sep/extern/glm
+    ${PROJECT_SOURCE_DIR}/extern/cycles/src
+    ${PROJECT_SOURCE_DIR}/extern/glm
 )
 
 # Define preprocessor macros
@@ -31,32 +30,14 @@ target_compile_definitions(sep_workbench PRIVATE
 )
 
 # Add library search paths
-link_directories(
-    /sep/src
-    /sep/src/core
-    /sep/src/quantum
-    /sep/src/memory
-    /sep/src/audio
-    /sep/src/blender
-    /sep/src/compat
-    /sep/build/lib
-    /sep/cmake-make/src/core
-    /sep/cmake-make/src/quantum
-    /sep/cmake-make/src/memory
-    /sep/cmake-make/src/audio
-    /sep/cmake-make/src/blender
-    /sep/cmake-make/src/compat
-)
-
-# Link against the SEP libraries using full paths
+# Link against SEP targets
 target_link_libraries(sep_workbench PRIVATE
-    # SEP Engine Libraries with full paths
-    /sep/src/core/libsep_core.a
-    /sep/src/quantum/libsep_quantum.a
-    /sep/src/memory/libsep_memory.a
-    /sep/src/audio/libsep_audio.a
-    /sep/src/blender/libsep_blender.a
-    /sep/src/compat/libsep_compat.a
+    sep_core
+    sep_quantum
+    sep_memory
+    sep_audio
+    sep_blender
+    sep_compat
 )
 
 # Add this subdirectory to your root CMakeLists.txt:

@@ -1,11 +1,12 @@
-#include <array>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+
+#include <algorithm>
+#include <array>
+#include <chrono>
 #include <string>
 #include <vector>
-#include <chrono>
-#include <algorithm>
 #include <unistd.h>
 
 #include <lz4.h>

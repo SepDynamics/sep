@@ -118,19 +118,22 @@ endif()
 # Include JSON processor build
 include(examples/json_processor_build.cmake)
 
-# Main executable
-add_executable(sep_engine src/main.cpp)
+# Build the interactive workbench example
+add_subdirectory(examples/workbench)
 
-set_target_properties(sep_engine PROPERTIES
+# Main server executable
+add_executable(sep_server src/server_main.cpp)
+
+set_target_properties(sep_server PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
 )
-target_include_directories(sep_engine
+target_include_directories(sep_server
     PUBLIC
         ${CMAKE_SOURCE_DIR}/include
 )
 
-target_link_libraries(sep_engine
+target_link_libraries(sep_server
     PRIVATE
         # 1. High-level SEP Engine static libraries
         sep_api
@@ -213,7 +216,7 @@ install(TARGETS
 )
 
 # Install executable separately
-install(TARGETS sep_engine
+install(TARGETS sep_server
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 

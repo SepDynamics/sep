@@ -1,24 +1,29 @@
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <csignal>
+
+#include <atomic>
+#include <exception>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <time.h>   // For std::tm, nanosleep
+#include <unistd.h> // For POSIX-specific APIs
+
+#include <curl/curl.h>
+#include <spdlog/spdlog.h>
+#include <nlohmann/json.hpp>
+
+#include <thread>
+#include <chrono>
+
 #include "core/manager.h"
 #include "core/engine.h"
 #include "core/common.h"
-#include <ctime>
-#include <time.h>   // For std::tm, nanosleep
-#include <ctime>
-#include <unistd.h> // For POSIX-specific APIs
 #include "core/logging.h"
-#include <curl/curl.h> 
-#include <cstring>
-#include <exception>
-#include <iostream>
-#include <fstream>
-#include <spdlog/spdlog.h>
 #include "api/server.h"
 #include "blender/cycles_renderer.h"
-#include "quantum/data.hpp"
-#include <atomic>
-#include <string>
-#include <csignal>
-#include <nlohmann/json.hpp>
 #include "quantum/data.hpp"
 #include "audio/capture.h"
 #include "audio/config.h"
@@ -26,8 +31,6 @@
 #include "blender/factory.h"
 #include "blender/types.h"
 #include "blender/bridge.h"
-#include <thread>
-#include <chrono>
 
 #ifndef SEP_HAS_EXCEPTIONS
 #    if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)

@@ -52,6 +52,15 @@
         "connection_opacity": 0.5,
         "pattern_scale": 1.0
       }
+    },
+    "digital_physics": {
+      "grid": {
+        "width": 50,
+        "height": 50
+      },
+      "rules": {
+        "rule": "B3/S23"
+      }
     }
   },
   "renderer": {

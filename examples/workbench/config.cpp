@@ -90,6 +90,15 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        // Digital Physics config
+        auto& dp = json["demos"]["digital_physics"];
+        auto& grid = dp["grid"];
+        auto& rules = dp["rules"];
+        digital_physics_ = {
+            { grid["width"].get<int>(), grid["height"].get<int>() },
+            { rules["birth"].get<std::vector<int>>(), rules["survive"].get<std::vector<int>>() }
+        };
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -173,6 +182,18 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"show_connections", memory_garden_.visualization.show_connections},
                 {"connection_opacity", memory_garden_.visualization.connection_opacity},
                 {"pattern_scale", memory_garden_.visualization.pattern_scale}
+            }}
+        };
+
+        // Digital Physics config
+        json["demos"]["digital_physics"] = {
+            {"grid", {
+                {"width", digital_physics_.grid.width},
+                {"height", digital_physics_.grid.height}
+            }},
+            {"rules", {
+                {"birth", digital_physics_.rules.birth},
+                {"survive", digital_physics_.rules.survive}
             }}
         };
 

@@ -8,7 +8,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <unistd.h>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {

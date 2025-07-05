@@ -21,7 +21,7 @@ add_subdirectory(quantum)
 add_subdirectory(embeddings)
 
 # Link dependencies
-target_link_libraries(sep_main PRIVATE
+target_link_libraries(sep_server PRIVATE
     sep_api
     sep_audio
     sep_compat
@@ -33,7 +33,7 @@ target_link_libraries(sep_main PRIVATE
     fmt::fmt
 )
 
-target_link_libraries(sep_main PRIVATE
+target_link_libraries(sep_server PRIVATE
     CUDA::cudart
     CUDA::cuda_driver
 )

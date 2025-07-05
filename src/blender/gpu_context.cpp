@@ -6,6 +6,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <new>
+#include <string>
+
 #include "blender/gpu_context.h"
 
 namespace sep {

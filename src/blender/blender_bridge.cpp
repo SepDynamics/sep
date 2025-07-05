@@ -5,7 +5,6 @@
 #include <mutex>
 #include <string>
 #include <thread>
-#include <unistd.h>
 
 #include <spdlog/spdlog.h>
 

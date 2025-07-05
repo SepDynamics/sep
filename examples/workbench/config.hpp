@@ -1,104 +1,116 @@
 #pragma once
 
+#include <filesystem>
+#include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
-#include <memory>
-#include <filesystem>
 
 namespace sep {
 namespace workbench {
 
 struct WindowConfig {
-    std::string title;
-    int width;
-    int height;
-    bool fullscreen;
-    bool vsync;
+  std::string title;
+  int width;
+  int height;
+  bool fullscreen;
+  bool vsync;
 };
 
 struct EngineConfig {
-    bool cuda_enabled;
-    bool metrics_enabled;
-    std::string log_level;
+  bool cuda_enabled;
+  bool metrics_enabled;
+  std::string log_level;
 };
 
 struct GenesisPatternConfig {
-    struct {
-        std::array<int, 3> dimensions;
-        float evolution_rate;
-        float coherence_threshold;
-    } initial_pattern;
+  struct {
+    std::array<int, 3> dimensions;
+    float evolution_rate;
+    float coherence_threshold;
+  } initial_pattern;
 
-    struct {
-        std::string color_mode;
-        std::string emission_mode;
-        std::string roughness_mode;
-    } visualization;
+  struct {
+    std::string color_mode;
+    std::string emission_mode;
+    std::string roughness_mode;
+  } visualization;
 };
 
 struct AudioVisualizerConfig {
-    struct {
-        std::string device;
-        int sample_rate;
-        int buffer_size;
-        int fft_size;
-    } input;
+  struct {
+    std::string device;
+    int sample_rate;
+    int buffer_size;
+    int fft_size;
+  } input;
 
-    struct {
-        float frequency_scale;
-        float amplitude_scale;
-        float evolution_sensitivity;
-    } pattern_mapping;
+  struct {
+    float frequency_scale;
+    float amplitude_scale;
+    float evolution_sensitivity;
+  } pattern_mapping;
 };
 
 struct MemoryGardenConfig {
-    struct {
-        float stm_radius;
-        float mtm_radius;
-        float ltm_radius;
-    } layout;
+  struct {
+    float stm_radius;
+    float mtm_radius;
+    float ltm_radius;
+  } layout;
 
-    struct {
-        bool show_connections;
-        float connection_opacity;
-        float pattern_scale;
-    } visualization;
+  struct {
+    bool show_connections;
+    float connection_opacity;
+    float pattern_scale;
+  } visualization;
+};
+
+struct AnnealingConfig {
+  int particle_count;
+  float initial_temperature;
+  float cooling_rate;
 };
 
 struct RendererConfig {
-    struct {
-        int samples;
-        bool denoising;
-        std::string device;
-    } cycles;
+  struct {
+    int samples;
+    bool denoising;
+    std::string device;
+  } cycles;
 };
 
 class Config {
 public:
-    static Config& getInstance() {
-        static Config instance;
-        return instance;
-    }
+  static Config &getInstance() {
+    static Config instance;
+    return instance;
+  }
 
-    bool load(const std::filesystem::path& path);
-    bool save(const std::filesystem::path& path) const;
+  bool load(const std::filesystem::path &path);
+  bool save(const std::filesystem::path &path) const;
 
-    const WindowConfig& window() const { return window_; }
-    const EngineConfig& engine() const { return engine_; }
-    const GenesisPatternConfig& genesis_pattern() const { return genesis_pattern_; }
-    const AudioVisualizerConfig& audio_visualizer() const { return audio_visualizer_; }
-    const MemoryGardenConfig& memory_garden() const { return memory_garden_; }
-    const RendererConfig& renderer() const { return renderer_; }
+  const WindowConfig &window() const { return window_; }
+  const EngineConfig &engine() const { return engine_; }
+  const GenesisPatternConfig &genesis_pattern() const {
+    return genesis_pattern_;
+  }
+  const AudioVisualizerConfig &audio_visualizer() const {
+    return audio_visualizer_;
+  }
+  const MemoryGardenConfig &memory_garden() const { return memory_garden_; }
+  const AnnealingConfig &annealing() const { return annealing_; }
+  const RendererConfig &renderer() const { return renderer_; }
 
 private:
-    Config() = default;
-    
-    WindowConfig window_;
-    EngineConfig engine_;
-    GenesisPatternConfig genesis_pattern_;
-    AudioVisualizerConfig audio_visualizer_;
-    MemoryGardenConfig memory_garden_;
-    RendererConfig renderer_;
+  Config() = default;
+
+  WindowConfig window_;
+  EngineConfig engine_;
+  GenesisPatternConfig genesis_pattern_;
+  AudioVisualizerConfig audio_visualizer_;
+  MemoryGardenConfig memory_garden_;
+  AnnealingConfig annealing_;
+  RendererConfig renderer_;
 };
 
 } // namespace workbench

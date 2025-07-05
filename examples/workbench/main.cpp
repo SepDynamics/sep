@@ -13,6 +13,7 @@
 #include "demos/genesis_pattern.hpp"
 #include "demos/memory_garden.hpp"
 #include "demos/annealing_demo.hpp"
+#include "demos/drug_optimizer.hpp"
 
 using namespace sep;
 using namespace sep::workbench;

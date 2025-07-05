@@ -119,6 +119,11 @@ endif()
 include(examples/json_processor_build.cmake)
 add_subdirectory(examples/workbench)
 
+# Simple annealing simulation example
+add_executable(annealing_sim examples/annealing_sim.cpp)
+target_include_directories(annealing_sim PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(annealing_sim PRIVATE sep_quantum sep_core sep_memory sep_compat)
+
 # Main executable
 add_executable(sep_server src/server_main.cpp)
 

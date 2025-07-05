@@ -8,7 +8,6 @@
 #include <time.h>    // For time, clock, difftime, mktime, etc.
 #include <unistd.h>  // For nanosleep, getpid, etc.
 // Ensure C++ wrappers of the C headers are also available
-#include <cstring> // C++ wrapper for memcpy, strcmp, etc.
 #include <ctime>
 #include <stdlib.h>  // For malloc, free, getenv, etc.
 #include <stdio.h>   // For snprintf, fprintf, etc.
@@ -21,8 +20,6 @@
 
 // Now include C++ headers that depend on C functions being in global namespace
 #include <string>
-#include <cstring>
-#include <cstdlib>
 #include <cstdio>
 #include <cstdint>
 #include <cstddef>

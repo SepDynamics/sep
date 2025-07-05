@@ -9,6 +9,8 @@
 #include <memory>
 #include <string>
 #include <thread>
+#include <time.h>
+#include <unistd.h>
 
 // Compatibility layer includes
 #include "compat/shim.h"

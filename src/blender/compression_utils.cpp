@@ -1,11 +1,12 @@
-#include <array>
-#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <unistd.h>
+
+#include <array>
+#include <cmath>
 #include <string>
 #include <vector>
-#include <unistd.h>
 
 #include "blender/compression.h"
 #include "compat/math_common.h"

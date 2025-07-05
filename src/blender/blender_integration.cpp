@@ -1,8 +1,11 @@
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <unistd.h>
+
 #include <algorithm>
 #include <chrono>
 #include <condition_variable>
-#include <cstring>
-#include <ctime>
 #include <memory>
 #include <new>
 #include <sstream>
@@ -10,12 +13,6 @@
 #include <thread>
 #include <utility>
 #include <vector>
-#include <cstdlib>
-#include <unistd.h>
-
-#include "blender/pattern_bridge.h"
-
-#include "blender/pattern_bridge.h"
 
 #include "blender/pattern_bridge.h"
 #include "quantum/processor.h"

@@ -1,12 +1,13 @@
-#include <algorithm>
-#include <chrono>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <unistd.h>
+
+#include <algorithm>
+#include <chrono>
 #include <numeric>
 #include <string>
 #include <vector>
-#include <unistd.h>
 
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"

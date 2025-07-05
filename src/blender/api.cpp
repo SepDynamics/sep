@@ -1,9 +1,10 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <unistd.h>
+
 #include <memory>
 #include <string>
-#include <unistd.h>
 
 #include "compat/math_common.h"
 

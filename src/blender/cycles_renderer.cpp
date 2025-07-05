@@ -1,14 +1,15 @@
 // Standard library headers
-#include <algorithm>
-#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <unistd.h>
+
+#include <algorithm>
+#include <cmath>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-#include <unistd.h>
 
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {

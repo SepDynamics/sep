@@ -14,17 +14,8 @@
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-// Core Cycles includes
 #include "util/system.h"
 #include "util/types.h"
-
-// SEP includes
-#include "blender/cycles_renderer.h"
-#include "core/error_handler.h"
-#include "core/types.h"
-#include "quantum/data.hpp"
-
-// Cycles core includes
 #include "device/device.h"
 #include "scene/camera.h"
 #include "scene/image.h"
@@ -32,9 +23,6 @@
 #include "scene/scene.h"
 #include "session/output_driver.h"
 #include "session/session.h"
-
-// Cycles utility includes
-#include "blender/oiio_output_driver.h"
 #include "util/array.h"
 #include "util/math_base.h"
 #include "util/param.h"
@@ -44,6 +32,13 @@
 #include "util/texture.h"
 #include "util/unique_ptr.h"
 #include "util/vector.h"
+
+// Project includes
+#include "blender/cycles_renderer.h"
+#include "blender/oiio_output_driver.h"
+#include "core/error_handler.h"
+#include "core/types.h"
+#include "quantum/data.hpp"
 
 namespace sep {
 namespace blender {

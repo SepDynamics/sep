@@ -8,29 +8,19 @@
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-#include "blender/oiio_output_driver.h"
 
-// Core Cycles includes
+// Third-party includes
 #include "util/system.h"
 #include "util/types.h"
-
-// Scene includes
 #include "scene/colorspace.h"
 #include "util/image.h"
 #include "util/unique_ptr.h"
-
 #ifdef WITH_OCIO
 #  include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 #endif
-
-// OpenImageIO includes - full definitions first
 #include <OpenImageIO/imagebuf.h>
 #include <OpenImageIO/imagebufalgo.h>
-#ifdef WITH_OCIO
-#  include <OpenColorIO/OpenColorIO.h>
-namespace OCIO = OCIO_NAMESPACE;
-#endif
 
 namespace OIIO = OpenImageIO_v2_5;
 

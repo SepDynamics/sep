@@ -1,18 +1,21 @@
-#include <string.h>
 #include <cstring>
 #include <ctime>
+#include <cmath>
+#include <vector>
+#include <string>
+#include <memory>
+
+#include <string.h>
 #include <time.h>
 #include <unistd.h>
 #include <cstdlib>
 
-#include <string>  // For std::string
 #include "compat/math_common.h"
 
 // Forward declarations for Blender functions (minimal stubs)
 #include "blender/types.h"
 #include "blender/config.h"
 #include "blender/pattern_bridge.h"
-#include <memory>
 
 using sep::SEPBlenderBridge;
 

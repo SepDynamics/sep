@@ -1,14 +1,18 @@
-#include <string.h>
-#include <cstring> // For std::memcpy
-#include <ctime>   // For std::time
-#include <time.h>   // For CLOCK_MONOTONIC, timespec
-#include <unistd.h> // For nanosleep
+#include <cstring>
+#include <ctime>
+#include <cmath>
+#include <vector>
+#include <string>
+#include <memory>
 
-#include <string>  // For std::string
-#include <thread>  // For std::thread
-#include <chrono>  // For std::chrono
-#include <condition_variable> // For std::condition_variable
-#include <mutex> // For std::mutex, std::lock_guard, std::unique_lock
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+
+#include <thread>
+#include <chrono>
+#include <condition_variable>
+#include <mutex>
 
 #include "blender/bridge.h"
 

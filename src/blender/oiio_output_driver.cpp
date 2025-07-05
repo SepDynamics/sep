@@ -1,6 +1,11 @@
-#include <string.h>
-#include <cstring> // For std::memcpy if needed
+#include <cstring>
 #include <ctime>
+#include <cmath>
+#include <vector>
+#include <string>
+#include <memory>
+
+#include <string.h>
 #include <time.h>
 #include <unistd.h>
 #include <cstdlib>

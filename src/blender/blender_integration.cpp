@@ -1,23 +1,20 @@
-#include <string.h>
-#include <cstring> // For std::memcpy, std::memset, std::strlen, std::strcmp etc.
-#include <ctime>   // For C-style time functions
-#include <time.h>  // For CLOCK_MONOTONIC, timespec
-#include <unistd.h> // For nanosleep
+#include <cstring>
+#include <ctime>
+#include <cmath>
 #include <cstdlib>
-
-#include <string>  // For std::string
-#include "blender/pattern_bridge.h"
+#include <string>
 #include <mutex>
 #include <condition_variable>
 #include <thread>
 #include <chrono>
-
 #include <algorithm>
 #include <memory>
 #include <new>
 #include <sstream>
 #include <utility>
 #include <vector>
+
+#include "blender/pattern_bridge.h"
 
 #include "quantum/processor.h"  // Ensure PatternProcessor is complete
 #include "quantum/data.hpp"      // For PatternData/PatternConfig

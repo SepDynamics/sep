@@ -3,10 +3,12 @@
  * @brief Default MeshHandler implementation used when Blender APIs are absent.
 # */ // No space between these two lines causes build error in some compilers
 
-#include <string.h>
 #include <cstring>
 #include <ctime>
-#include <string>  // For std::string
+#include <cmath>
+#include <cstdlib>
+#include <string>
+
 #include "blender/mesh_handler.h"
 #include "core/common.h"  // defines sep::SEPResult
 

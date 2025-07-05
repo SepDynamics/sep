@@ -1,11 +1,9 @@
-#include <string.h>
 #include <cstring>
 #include <ctime>
-#include <time.h>
-#include <unistd.h>
+#include <cmath>
 #include <cstdlib>
+#include <string>
 
-#include <string>  // For std::string
 #include "compat/math_common.h"
 
 // Forward declarations for Blender functions (minimal stubs)

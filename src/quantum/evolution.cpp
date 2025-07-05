@@ -385,6 +385,21 @@ std::vector<Pattern> createRandomPopulation(size_t size) {
     return population;
 }
 
+void applySpike(Pattern& neuron, float input, float decay, float threshold) {
+    float& c = neuron.quantum_state.coherence;
+    c += input;
+    c -= decay * c;
+    if (c >= threshold) {
+        c = 1.0f;
+    }
+    c = glm::clamp(c, 0.0f, 1.0f);
+}
+
+void hebbianUpdate(const Pattern& pre, Pattern& post, float rate) {
+    float delta = rate * pre.quantum_state.coherence * post.quantum_state.coherence;
+    post.quantum_state.stability = glm::clamp(post.quantum_state.stability + delta, 0.0f, 1.0f);
+}
+
 } // namespace evolution
 
 } // namespace sep::quantum

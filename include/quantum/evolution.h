@@ -63,6 +63,8 @@ namespace evolution {
     float stabilityFitness(const Pattern& pattern);
     float complexityFitness(const Pattern& pattern);
     std::vector<Pattern> createRandomPopulation(size_t size);
+    void applySpike(Pattern& neuron, float input, float decay, float threshold);
+    void hebbianUpdate(const Pattern& pre, Pattern& post, float rate);
 }
 
 } // namespace sep::quantum

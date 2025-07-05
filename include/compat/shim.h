@@ -1,5 +1,17 @@
 #pragma once
 
+// Enable POSIX and GNU extensions when available.  This must be defined before
+// any system headers are included so that the proper declarations are exposed
+// on platforms that require feature-test macros.
+#define _GNU_SOURCE // For POSIX functions like nanosleep and CLOCK_MONOTONIC
+
+// Standard headers providing C-style memory and time utilities that are widely
+// used throughout the project.  Including them here ensures they are available
+// everywhere shim.h is included.
+#include <cstring>
+#include <ctime>
+#include <cstdlib>
+
 // When compiling without the standard library the build system defines
 // `SEP_NO_STDLIB`.  Default builds rely on the system standard library and
 // should not define this macro.
@@ -8,7 +20,6 @@
 #include <time.h>    // For time, clock, difftime, mktime, etc.
 #include <unistd.h>  // For nanosleep, getpid, etc.
 // Ensure C++ wrappers of the C headers are also available
-#include <ctime>
 #include <stdlib.h>  // For malloc, free, getenv, etc.
 #include <stdio.h>   // For snprintf, fprintf, etc.
 #include <stdint.h>  // For uint32_t, uint64_t etc.
@@ -23,7 +34,6 @@
 #include <cstdio>
 #include <cstdint>
 #include <cstddef>
-#include <ctime>
 #include <cmath>
 #include <chrono>
 
@@ -33,8 +43,6 @@
 #include <queue>
 #include <vector>
 #include <mutex>
-#include <cstring>
-#include <cstdlib>
 
 namespace sep {
 namespace shim {

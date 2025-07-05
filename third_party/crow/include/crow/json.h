@@ -12,6 +12,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string.h>
+#include <cstring>
 #include <memory>
 #include <vector>
 #include <cmath>

@@ -10,6 +10,7 @@
 #    include <unordered_map>
 #endif
 #include "compat/shim.h"
+#include <cstring>
 #include <algorithm>
 #include <cfloat>
 #include <cmath>

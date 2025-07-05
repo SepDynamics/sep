@@ -1,8 +1,10 @@
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+
 #include <algorithm>
 #include <chrono>
 #include <condition_variable>
-#include <cstring>
-#include <ctime>
 #include <memory>
 #include <new>
 #include <sstream>
@@ -10,25 +12,18 @@
 #include <thread>
 #include <utility>
 #include <vector>
-#include <cstdlib>
 #include <unistd.h>
 
 #include "blender/pattern_bridge.h"
-
-#include "blender/pattern_bridge.h"
-
-#include "blender/pattern_bridge.h"
+#include "blender/pattern_observer.h"
 #include "quantum/processor.h"
 #include "quantum/data.hpp"
-#include "blender/pattern_observer.h"
 #include "quantum/types.h"
 #include "memory/types.h"
-
-using ::sep::memory::MemoryTierEnum;
 #include "core/common.h"  // For sep::SEPResult
-
 #include "memory/memory_tier_manager.hpp"
 
+using ::sep::memory::MemoryTierEnum;
 namespace sep {
 namespace pattern {
 // Use the core SEPResult enum instead of the pattern-specific one

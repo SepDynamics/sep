@@ -1,62 +1,56 @@
 ---
-description: Specification for implementing and documenting quantum algorithm components including QBSA, QFH, pattern evolution, coherence calculation and stability analysis.
-globs: **/quantum/**,**/quantum*.{cpp,h},**/qbsa*.{cpp,h},**/qfh*.{cpp,h}
+description: Handles quantum-inspired pattern processing and coherence analysis algorithms, focused on pattern evolution and stability calculation.
+globs: src/quantum/**,src/api/**,include/quantum/**,include/memory/**
 alwaysApply: false
 ---
 
 
 # quantum-algorithms
 
-### Quantum Binary State Analysis (QBSA)
-Core algorithm for analyzing quantum bit states and detecting coherence:
-- Analyzes bit patterns to detect quantum state misalignments and collapses
-- Employs derivative cascade processing for state verification 
-- Uses coherence thresholds to determine state stability
-- Tracks correction ratios across bit positions
+The quantum algorithms implementation centers around three core components:
 
-File: `src/quantum/qbsa.cpp`
+1. Quantum Binary State Analysis (QBSA):
+- Analyzes quantum bit sequences for coherence and stability
+- Detects pattern collapses using correction ratio thresholds 
+- Implements probe-based quantum measurements
+- Located in `src/quantum/qbsa.cpp` and `src/quantum/qbsa_qfh.cpp`
 
-### Quantum Fourier Hierarchy (QFH)
-Multi-level transform for detecting quantum state changes:
-- Transforms bit vectors into quantum events (NULL_STATE, FLIP, RUPTURE)
-- Aggregates events to detect pattern collapses
-- Uses ratio-based collapse detection with rupture measurements
-- Analyzes frequency domain for quantum interference patterns
+2. Quantum Fourier Hierarchy (QFH):
+- Multi-level quantum transform for detecting coherence "ruptures"
+- Tracks quantum state transitions (NULL_STATE, FLIP, RUPTURE)
+- Computes aggregate quantum event sequences
+- Located in `src/quantum/qfh.cpp` and `src/quantum/quantum_processor_qfh.cpp`
 
-Files:
-- `src/quantum/qfh.cpp`
-- `src/quantum/qbsa_qfh.cpp`
+3. Pattern Evolution System:
+- Manages quantum pattern coherence through three memory tiers (STM, MTM, LTM)
+- Key thresholds:
+  - Promotion: STM->MTM (0.7), MTM->LTM (0.9)
+  - Demotion: Below 0.3
+  - Generation requirements: STM->MTM (5), MTM->LTM (100)
+- Calculates pattern stability based on:
+  - Historical coherence values
+  - Generation count
+  - Access frequency 
+  - Relationship strength
+- Located in `src/quantum/evolution.cpp`
 
-### Pattern Evolution System
-Manages quantum pattern states and transitions:
-- Updates quantum states based on coherence and stability metrics
-- Calculates entanglement between patterns using quantum relationships 
-- Detects quantum collapses through variance analysis
-- Evolves patterns through controlled mutations while maintaining stability
+The pattern processing pipeline:
+1. Input patterns undergo QBSA to determine quantum state
+2. QFH analysis detects coherence ruptures
+3. Pattern evolution tracks stability across memory tiers
+4. Coherence and relationship strengths determine pattern placement
 
-Files:
-- `src/quantum/pattern_evolution.cpp`
-- `src/quantum/evolution.cpp`
+Coherence calculation incorporates:
+- Quantum phase relationships
+- Pattern position in manifold space 
+- Historical stability trends
+- Entanglement density between patterns
 
-### Coherence Calculation
-Core coherence measurement system:
-- Calculates coherence between quantum states through dot products
-- Determines stability based on historical coherence
-- Manages promotion/demotion between memory tiers based on coherence
-- Tracks pattern relationships using coherence strength
-
-File: `src/quantum/processor.cpp`
-
-### Quantum State Management
-Pattern state tracking and analysis:
-- Maintains quantum states across memory tiers (STM/MTM/LTM)
-- Calculates quantum metrics (coherence, stability, entropy)
-- Detects state collapses through variance threshold analysis
-- Manages entanglement relationships between patterns
-
-Files:
-- `src/quantum/quantum_processor.cpp`
-- `src/quantum/quantum_processor_qfh.cpp`
+Memory tier promotion requires:
+- Meeting coherence thresholds
+- Sufficient generation count
+- Stable quantum state (no recent ruptures)
+- Strong pattern relationships
 
 $END$
 

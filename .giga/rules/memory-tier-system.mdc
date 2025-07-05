@@ -1,63 +1,79 @@
 ---
-description: Specifications for implementing a multi-tiered memory management system with quantum coherence tracking and pattern evolution
-globs: src/memory/**/*,include/memory/**/*,src/quantum/**/*,include/quantum/**/*
+description: Specification for the memory tier management system, including storage, retrieval, and promotion/demotion logic
+globs: src/memory/*,include/memory/*,src/api/server.cpp,src/quantum/*
 alwaysApply: false
 ---
 
 
 # memory-tier-system
 
-The memory tier system implements a specialized multi-level memory architecture with quantum-aware pattern management:
-
 ### Memory Tier Architecture
-- Three distinct tiers: STM (Short-Term Memory), MTM (Medium-Term Memory), LTM (Long-Term Memory)
-- Each tier maintains patterns based on coherence thresholds:
-  - LTM: > 0.9 coherence
-  - MTM: > 0.6 coherence 
-  - STM: > 0.2 coherence
 
-### Pattern Evolution & Migration
-- Patterns evolve through tiers based on:
-  - Quantum coherence scores
-  - Stability metrics
-  - Generation counts
-  - Access frequency
-  - Entanglement density
-- Migration decisions use weighted scoring:
-  - Coherence: 40%
-  - Stability: 30%
-  - Access frequency: 20%
-  - Entanglement density: 10%
+The memory tier system implements a three-level hierarchical storage:
 
-### Quantum State Management
-- Maintains quantum coherence through:
-  - Phase correlation tracking
-  - Entanglement graph maintenance
-  - Stability threshold monitoring
-  - Entropy calculation
-- Implements hysteresis to prevent oscillation between tiers
+1. Short-Term Memory (STM):
+- Temporary pattern storage with lowest coherence threshold (0.2)
+- Fast access but limited capacity
+- Pattern data expires quickly without sufficient coherence
 
-### Pattern Relationship Management
-- Tracks pattern relationships using:
-  - Spatial overlap in 4D quantum space
-  - Phase correlation between quantum states
-  - Coherence product weighting
-- Prunes relationships below strength threshold (0.3)
+2. Medium-Term Memory (MTM):
+- Intermediate storage with moderate coherence threshold (0.5)
+- Balanced access speed and capacity
+- Patterns promoted from STM that maintain stable coherence
+
+3. Long-Term Memory (LTM): 
+- Persistent storage with highest coherence threshold (0.8)
+- Redis-backed for persistence
+- Only highly stable and coherent patterns
+
+### Tier Management Logic
+
+1. Pattern Promotion:
+- STM -> MTM requires:
+  - Coherence > 0.5
+  - Min 5 generations
+  - Stability > 0.3
+- MTM -> LTM requires:
+  - Coherence > 0.8
+  - Min 100 generations
+  - Stability > 0.7
+
+2. Pattern Demotion:
+- Triggered when:
+  - Coherence drops below tier threshold
+  - Stability falls below 0.3
+  - Memory pressure exceeds 0.8
+
+3. Block Allocation:
+- Dynamic block sizing based on pattern complexity
+- Defragmentation when free space < 20%
+- Block merging for adjacent free spaces
 
 ### Redis Integration
-- Persistent storage for LTM patterns
-- Automatic serialization/deserialization of quantum states
-- Bulk operations for pattern loading/storing
-- Pattern relationship persistence
 
-Key Files:
-```
-src/memory/memory_tier_manager.cpp
-src/memory/quantum_coherence_manager.cpp
-src/memory/redis_manager.cpp
-include/memory/memory_tier.hpp
-include/memory/quantum_coherence_manager.h
-```
+The LTM tier integrates with Redis:
+- Pattern data serialized as hashes
+- Relationship graphs stored as sorted sets
+- Automatic pruning of expired patterns
+- Bulk operations for efficiency
+
+### Pattern Relationships
+
+- Tracked across all memory tiers
+- Strength based on:
+  - Coherence product
+  - Spatial proximity
+  - Generation overlap
+- Used for:
+  - Co-location decisions
+  - Promotion timing
+  - Relationship-based retrieval
+
+File paths:
+- src/memory/memory_tier_manager.cpp
+- src/memory/redis_manager.cpp
+- include/memory/memory_tier.hpp
+- include/memory/quantum_coherence_manager.h
 
 $END$
 

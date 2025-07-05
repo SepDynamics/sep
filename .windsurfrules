@@ -10,66 +10,43 @@
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-The SEP Framework implements a quantum-inspired pattern processing system with specialized memory management capabilities. The core business logic is organized across several key components:
+The SEP engine implements a quantum-inspired pattern processing system with three core components:
 
-### Quantum Pattern Processing System
-The quantum processing pipeline handles pattern evolution and analysis through:
-
-1. Pattern Evolution Engine
-- Quantum state transitions and coherence calculations
-- Pattern stability metrics and collapse detection
-- Relationship tracking between patterns via quantum entanglement
-- Adaptive mutation rates based on stability scores
+## Quantum Pattern Processing
+- Pattern evolution through quantum manifolds with coherence modulation
+- Quantum binary state analysis (QBSA) for pattern stability detection 
+- Pattern mutation based on quantum fourier hierarchy (QFH)
+- Coherence-based validation using stability thresholds
 
 Key files:
-```
-src/quantum/evolution.cpp
-src/quantum/pattern_evolution.cpp
-src/quantum/quantum_processor.cpp
-```
+- src/quantum/quantum_processor.cpp
+- src/quantum/pattern_evolution.cpp
+- include/quantum/qbsa.h
 
-2. Memory Management Architecture 
-- Three-tier memory system (STM/MTM/LTM) with quantum-aware storage
+## Memory Management 
+- Three-tier memory hierarchy (STM/MTM/LTM)
 - Coherence-based promotion/demotion between tiers
-- Pattern relationship tracking with pruning
-- Quantum state preservation during migrations
+- Pattern relationship tracking through quantum entanglement
+- Redis-based persistence for long-term memory
 
 Key files:
-```
-src/memory/memory_tier_manager.cpp
-src/memory/quantum_coherence_manager.cpp
-```
+- src/memory/memory_tier_manager.cpp
+- src/memory/quantum_coherence_manager.cpp
+- include/memory/types.h
 
-3. Quantum Binary State Analysis (QBSA)
-- Bit-level analysis for quantum state verification
-- Coherence scoring through derivative cascades
-- Rupture detection using symmetry analysis
-- Pattern clustering based on quantum properties
+## API Integration
+- Pattern processing API with coherence validation
+- Memory tier status reporting and management
+- Quantum state evolution control interface
+- Integration with Blender for pattern visualization
+- Audio pipeline for pattern generation from sound
 
 Key files:
-```
-src/quantum/qbsa.cpp
-src/quantum/qfh.cpp
-```
+- src/api/server.cpp
+- src/api/bridge.cpp
+- include/api/sep_engine.h
 
-4. Core Processing Pipeline
-```
-Pattern Intake -> Quantum Analysis -> Coherence Calculation -> 
-Memory Tier Assignment -> Evolution/Mutation -> State Verification
-```
-
-The business logic centers around maintaining quantum coherence while enabling controlled pattern evolution. Key metrics like stability, entropy, and relationship strengths drive the system's behavior.
-
-Critical thresholds:
-- Coherence threshold: 0.6
-- Stability threshold: 0.8 
-- Mutation rate: 0.05
-- Memory tier promotion thresholds:
-  - LTM: 0.9
-  - MTM: 0.6
-  - STM: 0.3
-
-The system implements a unique approach combining quantum computing concepts with pattern recognition and multi-tiered memory management, focusing on maintaining quantum state consistency while allowing natural evolution of patterns.
+The system operates on quantum-inspired principles where patterns evolve through stability states based on coherence metrics. Memory management uses a hierarchical approach with promotion/demotion based on pattern stability and relationships. The API layer provides interfaces for pattern processing, visualization and audio integration.
 
 $END$
 

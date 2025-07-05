@@ -1,89 +1,69 @@
 ---
-description: Specification for analyzing data flow patterns, transformations and component interactions in quantum processing systems
-globs: src/**/*.{cpp,h,hpp},include/**/*.{h,hpp}
+description: Specifies rules for analyzing data flow between components, quantum states, and memory tiers
+globs: src/api/**,src/quantum/**,src/memory/**,src/core/**,include/**
 alwaysApply: false
 ---
 
 
-# Data-Flow
+# Data Flow
 
-The data flow follows several key patterns:
+## Core Data Flow Patterns
 
 ### Pattern Processing Pipeline
-```
-Input Pattern Data -> 
-  Quantum State Initialization ->
-  Coherence Calculation -> 
-  Pattern Evolution -> 
-  Memory Tier Assignment ->
-  State Update/Storage
-```
-
-Files:
-- src/quantum/pattern_evolution_bridge.cpp
-- src/quantum/quantum_processor.cpp 
-- src/memory/memory_tier_manager.cpp
+- **Input:** Raw pattern data from API or file
+- **Processing Stages:**
+  1. Pattern extraction and validation 
+  2. Quantum manifold transformation
+  3. Coherence calculation
+  4. Stability analysis 
+  5. Pattern evolution
+  6. Results aggregation with metadata
 
 ### Memory Tier Transitions
-1. Short-Term Memory (STM):
-- Receives new patterns
-- Coherence threshold: 0.2
-- Temporary storage during initial processing
-
-2. Medium-Term Memory (MTM): 
-- Patterns promoted from STM
-- Coherence threshold: 0.6
-- Intermediate persistence layer
-
-3. Long-Term Memory (LTM):
-- Stable patterns with high coherence
-- Coherence threshold: 0.9
-- Permanent storage with Redis persistence
-
-Files:
-- src/memory/memory_tier.cpp
-- src/memory/redis_manager.cpp
+- **Tier Flow:**
+  1. Short-Term Memory (STM)
+     - Initial pattern storage
+     - Coherence threshold: 0.2
+  2. Medium-Term Memory (MTM) 
+     - Patterns meeting STM coherence requirements
+     - Coherence threshold: 0.5
+  3. Long-Term Memory (LTM)
+     - Stable patterns with high coherence
+     - Coherence threshold: 0.8
 
 ### Quantum State Transformations
-```
-Raw Pattern ->
-  Quantum State Vector ->
-  Coherence Analysis ->
-  Evolution/Mutation ->
-  State Update
-```
-
-Key components:
-- Quantum state initialization
-- Coherence calculation and tracking
-- Pattern evolution and mutation
-- State collapse detection
-
-Files:
-- src/quantum/quantum_processor_qfh.cpp
-- src/quantum/qbsa.cpp
+- **State Flow:**
+  1. Initial state creation
+  2. Coherence modulation
+  3. Stability evaluation
+  4. State collapse detection
+  5. Phase correlation tracking
+  6. Entanglement density computation
 
 ### System Interactions
+- **API Layer:**
+  - Pattern input validation
+  - Response modulation based on coherence
+  - Memory tier state queries
+  - Pattern relationship tracking
 
-1. API Layer:
-- Receives pattern requests
-- Validates input data
-- Routes to appropriate processor
+- **Memory Management:**
+  - Pattern promotion/demotion between tiers
+  - Coherence-based placement
+  - Entanglement relationship updates
+  - Redis persistence for LTM patterns
 
-2. Processing Layer:
-- Pattern evolution
-- State management
-- Memory tier transitions
+- **Quantum Processing:**
+  - Pattern-to-quantum state conversion
+  - Quantum binary state analysis (QBSA)
+  - Quantum field hierarchy (QFH) processing
+  - Collapse detection and handling
 
-3. Storage Layer:  
-- Redis persistence
-- Memory tier management
-- Pattern relationship tracking
-
-Files:
-- src/api/server.cpp
-- src/quantum/processor.cpp
-- src/memory/redis_manager.cpp
+Relevant File Paths:
+- `src/quantum/quantum_processor.cpp`
+- `src/memory/memory_tier_manager.cpp`
+- `src/api/server.cpp`
+- `src/quantum/pattern_evolution.cpp`
 
 $END$
 

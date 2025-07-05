@@ -400,6 +400,18 @@ void hebbianUpdate(const Pattern& pre, Pattern& post, float rate) {
     post.quantum_state.stability = glm::clamp(post.quantum_state.stability + delta, 0.0f, 1.0f);
 }
 
+void applyGravity(Pattern& pattern, const glm::vec3& center, float strength) {
+    glm::vec3 pos = glm::vec3(pattern.position);
+    glm::vec3 dir = center - pos;
+    pattern.position += glm::vec4(dir * strength, 0.0f);
+}
+
+void randomPerturbation(Pattern& pattern, float amplitude) {
+    static uint64_t noise_state = 0;
+    auto rnd = [&]() { return deterministicNoise(noise_state) * 2.0f - 1.0f; };
+    pattern.position += glm::vec4(rnd() * amplitude, rnd() * amplitude, rnd() * amplitude, 0.0f);
+}
+
 } // namespace evolution
 
 } // namespace sep::quantum

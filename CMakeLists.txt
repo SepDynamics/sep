@@ -118,6 +118,9 @@ endif()
 # Include JSON processor build
 include(examples/json_processor_build.cmake)
 add_subdirectory(examples/workbench)
+add_executable(physics_explorer examples/physics_explorer.cpp)
+target_include_directories(physics_explorer PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(physics_explorer PRIVATE sep_quantum sep_core sep_compat sep_memory)
 
 # Main executable
 add_executable(sep_server src/server_main.cpp)

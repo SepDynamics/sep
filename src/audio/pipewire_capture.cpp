@@ -1,12 +1,11 @@
+#include <string.h> // For strerror, memcpy, etc.
+#include <cstring>
+#include <ctime>
+#include <time.h>   // For timespec and nanosleep
+#include <unistd.h>
 #include "audio/pipewire_capture.h"
 #include "audio/types.h"
 #include "audio/capture.h"
-#include <cstring>
-#include <ctime>
-#include <string.h> // For strerror, memcpy, etc.
-#include <cstring>
-#include <time.h>   // For timespec and nanosleep
-#include <ctime>
 #include "audio/config.h"
 
 #ifdef SEP_HAS_AUDIO

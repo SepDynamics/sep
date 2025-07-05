@@ -69,11 +69,11 @@ namespace shim {
     string() : data_(nullptr), size_(0), capacity_(0) {}
     string(const char* s) : data_(nullptr), size_(0), capacity_(0) {
       if (s) {
-        size_ = strlen(s);
+        size_ = std::strlen(s);
         capacity_ = size_ + 1;
-        data_ = static_cast<char*>(malloc(capacity_));
+        data_ = static_cast<char*>(std::malloc(capacity_));
         if (data_) {
-          memcpy(data_, s, size_ + 1);
+          std::memcpy(data_, s, size_ + 1);
         } else {
           data_ = nullptr;
           size_ = capacity_ = 0;
@@ -89,9 +89,9 @@ namespace shim {
       if (other.data_) {
         size_ = other.size_;
         capacity_ = size_ + 1;
-        data_ = static_cast<char*>(malloc(capacity_));
+        data_ = static_cast<char*>(std::malloc(capacity_));
         if (data_) {
-          memcpy(data_, other.data_, size_ + 1);
+          std::memcpy(data_, other.data_, size_ + 1);
         } else {
           size_ = capacity_ = 0;
         }
@@ -105,9 +105,9 @@ namespace shim {
         if (other.data_) {
           size_ = other.size_;
           capacity_ = size_ + 1;
-          data_ = static_cast<char*>(malloc(capacity_));
+          data_ = static_cast<char*>(std::malloc(capacity_));
           if (data_) {
-            memcpy(data_, other.data_, size_ + 1);
+            std::memcpy(data_, other.data_, size_ + 1);
           } else {
             size_ = capacity_ = 0;
           }
@@ -120,11 +120,11 @@ namespace shim {
       data_ = nullptr;
       size_ = capacity_ = 0;
       if (s) {
-        size_ = strlen(s);
+        size_ = std::strlen(s);
         capacity_ = size_ + 1;
-        data_ = static_cast<char*>(malloc(capacity_));
+        data_ = static_cast<char*>(std::malloc(capacity_));
         if (data_) {
-          memcpy(data_, s, size_ + 1);
+          std::memcpy(data_, s, size_ + 1);
         } else {
           size_ = capacity_ = 0;
         }
@@ -181,7 +181,7 @@ namespace shim {
     // Comparison operators
     bool operator==(const char* s) const {
       if (!s) return size_ == 0;
-      return strcmp(c_str(), s) == 0;
+      return std::strcmp(c_str(), s) == 0;
     }
     bool operator!=(const char* s) const { return !(*this == s); }
     
@@ -201,9 +201,9 @@ namespace shim {
         if (pos >= size_) return string();
         size_t rcount = (count == npos || pos + count > size_) ?
                         size_ - pos : count;
-        char* temp = static_cast<char*>(malloc(rcount + 1));
+        char* temp = static_cast<char*>(std::malloc(rcount + 1));
         if (temp) {
-            memcpy(temp, data_ + pos, rcount);
+            std::memcpy(temp, data_ + pos, rcount);
             temp[rcount] = '\0';
             string result(temp);
             free(temp);
@@ -218,7 +218,7 @@ namespace shim {
             size_t slen = strlen(s);
             if (size_ + slen + 1 > capacity_) {
                 size_t new_cap = (size_ + slen + 1) * 2;
-                char* new_data = static_cast<char*>(realloc(data_, new_cap));
+                char* new_data = static_cast<char*>(std::realloc(data_, new_cap));
                 if (new_data) {
                     data_ = new_data;
                     capacity_ = new_cap;
@@ -226,7 +226,7 @@ namespace shim {
                     return *this; // Failed to allocate
                 }
             }
-            memcpy(data_ + size_, s, slen + 1);
+            std::memcpy(data_ + size_, s, slen + 1);
             size_ += slen;
         }
         return *this;
@@ -245,7 +245,7 @@ namespace shim {
         if (size_ != other.size_) return false;
         if (!data_ && !other.data_) return true;
         if (!data_ || !other.data_) return false;
-        return memcmp(data_, other.data_, size_) == 0;
+        return std::memcmp(data_, other.data_, size_) == 0;
     }
 
     bool operator!=(const string& other) const {
@@ -255,7 +255,7 @@ namespace shim {
     bool operator<(const string& other) const {
         size_t min_size = (size_ < other.size_) ? size_ : other.size_;
         if (data_ && other.data_) {
-            int cmp = memcmp(data_, other.data_, min_size);
+            int cmp = std::memcmp(data_, other.data_, min_size);
             if (cmp != 0) return cmp < 0;
         }
         return size_ < other.size_;
@@ -442,7 +442,7 @@ namespace shim {
   // Memory management - minimal implementations
   inline void* aligned_alloc(size_t alignment, size_t size) {
     (void)alignment;  // alignment parameter unused in fallback implementation
-    return malloc(size); // Not properly aligned but simple fallback
+    return std::malloc(size); // Not properly aligned but simple fallback
   }
   
   // Smart pointer helpers were previously defined here when the standard

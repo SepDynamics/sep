@@ -107,10 +107,10 @@ class MeshHandler {
 
     CustomDataLayer(const CustomDataLayer& other)
         : type(other.type), data(nullptr), size(other.size), active(other.active) {
-      memcpy(name, other.name, sizeof(name));
+      std::memcpy(name, other.name, sizeof(name));
       if (other.data && other.size > 0) {
         data = std::make_unique<char[]>(other.size);
-        memcpy(data.get(), other.data.get(), other.size);
+        std::memcpy(data.get(), other.data.get(), other.size);
       }
     }
 
@@ -120,10 +120,10 @@ class MeshHandler {
         type = other.type;
         size = other.size;
         active = other.active;
-        memcpy(name, other.name, sizeof(name));
+        std::memcpy(name, other.name, sizeof(name));
         if (other.data && other.size > 0) {
           data = std::make_unique<char[]>(other.size);
-          memcpy(data.get(), other.data.get(), other.size);
+          std::memcpy(data.get(), other.data.get(), other.size);
         }
       }
       return *this;
@@ -131,7 +131,7 @@ class MeshHandler {
 
     CustomDataLayer(CustomDataLayer&& other) noexcept
         : type(other.type), data(std::move(other.data)), size(other.size), active(other.active) {
-      memcpy(name, other.name, sizeof(name));
+      std::memcpy(name, other.name, sizeof(name));
       other.data.reset();
     }
 
@@ -142,7 +142,7 @@ class MeshHandler {
         data = std::move(other.data);
         size = other.size;
         active = other.active;
-        memcpy(name, other.name, sizeof(name));
+        std::memcpy(name, other.name, sizeof(name));
       }
       return *this;
     }

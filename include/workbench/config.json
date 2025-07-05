@@ -53,6 +53,11 @@
         "pattern_scale": 1.0
       }
     }
+    ,
+    "cosmo": {
+      "box_size": 100.0,
+      "timestep": 0.01
+    }
   },
   "renderer": {
     "cycles": {

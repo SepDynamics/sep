@@ -218,6 +218,13 @@ namespace sep {
             
             const GenesisPatternConfig& genesis_pattern() const { return *this; }
         };
+
+        struct CosmoConfig {
+            float box_size{100.0f};
+            float timestep{0.01f};
+
+            const CosmoConfig& cosmo() const { return *this; }
+        };
         
         struct EngineConfig {
             bool cuda_enabled{false};
@@ -225,10 +232,12 @@ namespace sep {
             int log_level{0};
             
             GenesisPatternConfig genesis_pattern_config;
+            CosmoConfig cosmo_config;
             
             const GenesisPatternConfig& genesis_pattern() const {
                 return genesis_pattern_config;
             }
+            const CosmoConfig& cosmo() const { return cosmo_config; }
         };
         
         struct WindowConfig {

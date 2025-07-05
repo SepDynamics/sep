@@ -90,6 +90,13 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        // Cosmo demo config
+        auto& cosmo = json["demos"]["cosmo"];
+        cosmo_ = {
+            cosmo["box_size"].get<float>(),
+            cosmo["timestep"].get<float>()
+        };
+
         // Renderer config
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
@@ -174,6 +181,12 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"connection_opacity", memory_garden_.visualization.connection_opacity},
                 {"pattern_scale", memory_garden_.visualization.pattern_scale}
             }}
+        };
+
+        // Cosmo demo config
+        json["demos"]["cosmo"] = {
+            {"box_size", cosmo_.box_size},
+            {"timestep", cosmo_.timestep}
         };
 
         // Renderer config

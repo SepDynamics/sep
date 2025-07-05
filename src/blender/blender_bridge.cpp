@@ -1,11 +1,9 @@
-#include <cstring>
-#include <ctime>
+#include "blender_pch.h"
+
 #include <chrono>
 #include <condition_variable>
 #include <mutex>
-#include <string>
 #include <thread>
-
 #include <spdlog/spdlog.h>
 
 #include "blender/bridge.h"

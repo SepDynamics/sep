@@ -1,13 +1,14 @@
-#include <string.h>
-#include <cstring>  // For std::memcpy
-#include <ctime>
-#include <time.h>
-#include <ctime>
-#include <string>   // For std::string
+#include <string.h>  // C string functions
+#include <cstring>   // std::memcpy, etc.
+#include <ctime>     // std::tm and friends
+#include <time.h>    // CLOCK_MONOTONIC
+#include <unistd.h>  // nanosleep
+#include <cstdlib>   // std::malloc, std::free
+
+#include <string>    // For std::string
 #include <sys/stat.h> // For stat
 
 #include "blender/gpu_context.h"
-#include <cstdlib>
 #include <new>
 
 namespace sep {

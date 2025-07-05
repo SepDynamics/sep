@@ -53,6 +53,7 @@ release/
 !extern/cycles/src/cmake/**
 !extern/cycles/src/cmake/*.cmake
 !extern/cycles/cmake/cuda-toolchain.cmake
+!examples/json_processor_build.cmake
 externals/
 boost/
 !third_party/

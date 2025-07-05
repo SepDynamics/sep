@@ -225,6 +225,11 @@ struct CosmoConfig {
     float timestep;
 };
 
+struct CosmoConfig {
+    float box_size;
+    float timestep;
+};
+
 struct RendererConfig {
   struct {
     int samples;

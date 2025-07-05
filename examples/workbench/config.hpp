@@ -79,6 +79,13 @@ struct DrugDiscoveryConfig {
     } optimizer;
 };
 
+struct DrugDiscoveryConfig {
+    struct {
+        int iterations;
+        float mutation_rate;
+    } optimizer;
+};
+
 struct RendererConfig {
     struct {
         int samples;

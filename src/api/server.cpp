@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <cstring> // For std::memcpy, std::strcmp etc.
 #include <cstring>
+#include <time.h>   // For CLOCK_MONOTONIC
+#include <unistd.h> // For nanosleep
 #include <memory>
 #include <string>
 #include <thread>

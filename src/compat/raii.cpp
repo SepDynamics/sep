@@ -9,6 +9,8 @@
 #include <cstdio>
 #include <cstdlib>  // for memory allocation
 #include <cstring>  // For std::memcpy, std::memset
+#include <time.h>   // For CLOCK_MONOTONIC
+#include <unistd.h> // For nanosleep
 #if defined(_MSC_VER)
 #include <malloc.h>
 #endif

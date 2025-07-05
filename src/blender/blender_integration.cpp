@@ -1,5 +1,7 @@
 #include <cstring> // For std::memcpy, std::memset, std::strlen, std::strcmp etc.
 #include <ctime>   // For C-style time functions
+#include <time.h>  // For CLOCK_MONOTONIC, timespec
+#include <unistd.h> // For nanosleep
 #include <string>  // For std::string
 #include "blender/pattern_bridge.h"
 #include <mutex>

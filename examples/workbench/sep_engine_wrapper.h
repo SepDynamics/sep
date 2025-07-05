@@ -6,6 +6,8 @@
 #include <functional>
 #include <glm/vec3.hpp>
 #include <glm/gtc/constants.hpp> // For glm::pi
+#include <glm/geometric.hpp>
+#include <cmath>
 #include <array>
 
 #ifndef SEP_WORKBENCH_DEMO

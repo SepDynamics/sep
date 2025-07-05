@@ -52,6 +52,14 @@
         "connection_opacity": 0.5,
         "pattern_scale": 1.0
       }
+    },
+    "digital_physics": {
+      "grid_size": [16, 16],
+      "rules": {
+        "birth": 3,
+        "survive_min": 2,
+        "survive_max": 3
+      }
     }
   },
   "renderer": {

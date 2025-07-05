@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <filesystem>
+#include <array>
 
 namespace sep {
 namespace workbench {
@@ -79,6 +80,11 @@ struct RendererConfig {
     } cycles;
 };
 
+struct OptimizerConfig {
+    int iterations;
+    float mutation_rate;
+};
+
 class Config {
 public:
     static Config& getInstance() {
@@ -96,6 +102,7 @@ public:
     const MemoryGardenConfig& memory_garden() const { return memory_garden_; }
     const AnnealingConfig& annealing() const { return annealing_; }
     const RendererConfig& renderer() const { return renderer_; }
+    const OptimizerConfig& optimizer() const { return optimizer_; }
 
 private:
     Config() = default;
@@ -107,6 +114,7 @@ private:
     MemoryGardenConfig memory_garden_;
     AnnealingConfig annealing_;
     RendererConfig renderer_;
+    OptimizerConfig optimizer_;
 };
 
 } // namespace workbench

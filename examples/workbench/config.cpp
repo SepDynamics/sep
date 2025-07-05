@@ -109,6 +109,12 @@ bool Config::load(const std::filesystem::path& path) {
             }
         };
 
+        auto& optimizer = json["optimizer"];
+        optimizer_ = {
+            optimizer["iterations"].get<int>(),
+            optimizer["mutation_rate"].get<float>()
+        };
+
         return true;
     }
     catch (const std::exception& e) {
@@ -197,6 +203,11 @@ bool Config::save(const std::filesystem::path& path) const {
                 {"denoising", renderer_.cycles.denoising},
                 {"device", renderer_.cycles.device}
             }}
+        };
+
+        json["optimizer"] = {
+            {"iterations", optimizer_.iterations},
+            {"mutation_rate", optimizer_.mutation_rate}
         };
 
         std::ofstream file(path);

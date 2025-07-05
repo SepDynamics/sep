@@ -118,6 +118,9 @@ compile_commands.json
 .ninja_log
 !CMakeLists.txt
 build.log
+examples/workbench/sep_workbench
+examples/build_log.txt
+include/workbench/build_log.txt
 assets/sep_engine
 blender
 !tests/blender/

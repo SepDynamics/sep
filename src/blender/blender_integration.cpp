@@ -16,15 +16,12 @@
 #include "blender/pattern_bridge.h"
 #include "quantum/processor.h"
 #include "quantum/data.hpp"
-#include "blender/pattern_observer.h"
 #include "quantum/types.h"
 #include "memory/types.h"
-
-using ::sep::memory::MemoryTierEnum;
 #include "core/common.h"  // For sep::SEPResult
-
 #include "memory/memory_tier_manager.hpp"
 
+using ::sep::memory::MemoryTierEnum;
 namespace sep {
 namespace pattern {
 // Use the core SEPResult enum instead of the pattern-specific one

@@ -6,6 +6,8 @@
 
 #include <vector>
 
+#include <vector>
+
 // Define Cycles namespace macros
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }

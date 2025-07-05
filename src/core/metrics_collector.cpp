@@ -1,15 +1,20 @@
+#include <string.h>
+#include <cstring>
+#include <ctime>
+#include <time.h>
+#include <unistd.h>
+#include <cstdlib>
+
 #include "core/metrics_collector.h"
 #include "compat/cuda_common.h"
 #include "compat/cuda_helpers.h"
 
 #include <sys/resource.h>
 #include <sys/sysinfo.h>
-#include <unistd.h>
 #include <cstring> // For std::memcpy
 
 #include <algorithm>
 #include <atomic>
-#include <cstring>
 #include <deque>
 #include <iostream>
 #include <memory>

@@ -1,3 +1,10 @@
+#include <string.h>
+#include <cstring>
+#include <ctime>
+#include <time.h>
+#include <unistd.h>
+#include <cstdlib>
+
 #include "compat/macros.h"
 #if defined(__CUDACC__)
 #  include <cuda_runtime.h> // real CUDA header when available

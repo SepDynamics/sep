@@ -63,6 +63,10 @@ namespace evolution {
     float stabilityFitness(const Pattern& pattern);
     float complexityFitness(const Pattern& pattern);
     std::vector<Pattern> createRandomPopulation(size_t size);
+    void applySpikingLearning(std::vector<pattern::PatternData>& neurons,
+                              dag::DagGraph& graph,
+                              float threshold,
+                              float decay);
 }
 
 } // namespace sep::quantum

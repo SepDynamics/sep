@@ -385,6 +385,40 @@ std::vector<Pattern> createRandomPopulation(size_t size) {
     return population;
 }
 
+void applySpikingLearning(std::vector<pattern::PatternData>& neurons,
+                          dag::DagGraph& graph,
+                          float threshold,
+                          float decay) {
+    if(neurons.empty()) return;
+    std::vector<float> spikes(neurons.size(), 0.0f);
+
+    for(size_t i=0;i<neurons.size();++i) {
+        float potential = neurons[i].coherence;
+        auto parents = graph.getParents(i + 1);
+        for(auto p : parents) {
+            if(p == 0 || p-1 >= neurons.size()) continue;
+            if(neurons[p-1].coherence >= threshold)
+                potential += 1.0f;
+        }
+
+        potential -= decay * potential;
+        if(potential >= threshold) {
+            potential = 0.f;
+            for(size_t j=0;j<neurons.size();++j) {
+                auto ps = graph.getParents(j + 1);
+                if(std::find(ps.begin(), ps.end(), i + 1) != ps.end()) {
+                    spikes[j] += 1.0f;
+                }
+            }
+        }
+        neurons[i].coherence = potential;
+    }
+
+    for(size_t i=0;i<neurons.size();++i) {
+        neurons[i].coherence = std::clamp(neurons[i].coherence + spikes[i], 0.f, 10.f);
+    }
+}
+
 } // namespace evolution
 
 } // namespace sep::quantum

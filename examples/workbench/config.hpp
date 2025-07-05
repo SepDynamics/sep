@@ -113,6 +113,12 @@ struct DigitalPhysicsConfig {
     } rules;
 };
 
+struct AnnealingConfig {
+    int particle_count;
+    float initial_temperature;
+    float cooling_rate;
+};
+
 struct RendererConfig {
     struct {
         int samples;

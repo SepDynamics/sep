@@ -26,4 +26,20 @@ target_link_libraries(json_processor
 )
 
 # Build the workbench demo
+# Simple neuron network simulation example
+add_executable(neuro_sim neuro_sim.cpp)
+
+target_include_directories(neuro_sim
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(neuro_sim
+    PRIVATE
+        sep_core
+        sep_quantum
+        sep_compat
+)
+ 
 add_subdirectory(workbench)

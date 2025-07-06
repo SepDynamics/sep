@@ -145,20 +145,17 @@ target_include_directories(sep_engine PRIVATE
 )
 target_link_libraries(sep_engine PRIVATE
     sep_api
+    $<$<BOOL:${SEP_WITH_CYCLES}>:sep_blender>
+    $<$<BOOL:${SEP_WITH_AUDIO}>:sep_audio>
+    sep_quantum
+    sep_memory
+    sep_compat
+    sep_core
     Threads::Threads
+    ${CURL_LIBRARIES}
     ${CMAKE_DL_LIBS}
+    $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
 )
-
-if(SEP_WITH_CYCLES)
-    target_link_libraries(sep_engine PRIVATE sep_blender)
-endif()
-if(SEP_WITH_AUDIO)
-    target_link_libraries(sep_engine PRIVATE sep_audio)
-endif()
-
-if(TARGET CUDA::cudart)
-    target_link_libraries(sep_engine PRIVATE CUDA::cudart)
-endif()
 
 # Export and install targets
 include(GNUInstallDirs)

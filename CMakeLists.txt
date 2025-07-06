@@ -143,6 +143,14 @@ target_include_directories(sep_engine PRIVATE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
+
+# Configure server_main.cpp to conditionally include Cycles code
+target_compile_definitions(sep_engine PRIVATE
+    SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
+    SEP_HAS_BLENDER=${SEP_HAS_BLENDER}
+    SEP_HAS_AUDIO=${SEP_HAS_AUDIO}
+)
+
 target_link_libraries(sep_engine PRIVATE
     # High-level modules
     sep_api
@@ -156,12 +164,18 @@ target_link_libraries(sep_engine PRIVATE
     ${CURL_LIBRARIES}
     ${CMAKE_DL_LIBS}
     $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
-    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_kernel>
-    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_scene>
-    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_device>
-    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_util>
-    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_kernel_osl>
 )
+
+# Only link Cycles libraries if they exist and SEP_WITH_CYCLES is enabled
+if(SEP_WITH_CYCLES AND EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
+    target_link_libraries(sep_engine PRIVATE
+        cycles_kernel
+        cycles_scene
+        cycles_device
+        cycles_util
+        cycles_kernel_osl
+    )
+endif()
 
 # Export and install targets
 include(GNUInstallDirs)

@@ -1,3 +1,4 @@
+#ifdef SEP_HAS_CYCLES
 namespace ccl {
 class Profiler {
 public:
@@ -14,3 +15,4 @@ public:
     bool active() const { return false; }
 };
 }
+#endif // SEP_HAS_CYCLES

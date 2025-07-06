@@ -58,8 +58,13 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
       metrics_(),
       server_metrics_(),
       metrics_mutex_(),
-      ollama_client_(nullptr),
-      cycles_renderer_(renderer) {
+      ollama_client_(nullptr)
+#ifdef SEP_HAS_CYCLES
+      , cycles_renderer_(renderer)
+#else
+      , cycles_renderer_(nullptr)
+#endif
+{
     instance_ = this;
 
     // Initialize the Crow app with middlewares

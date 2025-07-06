@@ -5,6 +5,10 @@ add_executable(sep_workbench
     config.cpp
     demo_manager.cpp
     demos/genesis_pattern.cpp
+    demos/audio_visualizer.cpp
+    demos/memory_garden.cpp
+    demos/cosmo_demo.cpp
+    demos/cosmo_sim.cpp
 )
 
 set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
@@ -26,8 +30,6 @@ target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO)
 
 target_link_libraries(sep_workbench PRIVATE
     sep_api
-    sep_blender
-    sep_audio
     sep_quantum
     sep_memory
     sep_compat
@@ -35,3 +37,13 @@ target_link_libraries(sep_workbench PRIVATE
     Threads::Threads
     ${CMAKE_DL_LIBS}
 )
+
+# Only link against blender if enabled
+if(SEP_ENABLE_BLENDER)
+    target_link_libraries(sep_workbench PRIVATE sep_blender)
+endif()
+
+# Only link against audio if enabled
+if(SEP_ENABLE_AUDIO)
+    target_link_libraries(sep_workbench PRIVATE sep_audio)
+endif()

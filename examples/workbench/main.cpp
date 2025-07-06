@@ -45,7 +45,13 @@ void initializeEngine() {
     g_engine = std::make_unique<Engine>();
     g_engine->setCudaEnabled(engine_config.cuda_enabled);
     g_engine->setMetricsEnabled(engine_config.metrics_enabled);
-    g_engine->setLogLevel(engine_config.log_level);
+    // Convert string log level to int
+    int log_level = 0;
+    if (engine_config.log_level == "debug") log_level = 0;
+    else if (engine_config.log_level == "info") log_level = 1;
+    else if (engine_config.log_level == "warning") log_level = 2;
+    else if (engine_config.log_level == "error") log_level = 3;
+    g_engine->setLogLevel(log_level);
 
     if (!g_engine->initialize()) {
         throw std::runtime_error("Failed to initialize SEP engine");
@@ -62,13 +68,13 @@ void initializeRenderer() {
     // Initialize renderer with config settings
     g_renderer = std::make_unique<CyclesRenderer>();
     
-    const auto& window = config_manager.getWindowConfig();
+    const auto& window = config.window();
     g_renderer->setWindowTitle(window.title);
     g_renderer->setWindowSize(window.width, window.height);
     g_renderer->setFullscreen(window.fullscreen);
     g_renderer->setVSync(window.vsync);
 
-    const auto& renderer_cfg = config_manager.getRendererConfig();
+    const auto& renderer_cfg = config.renderer();
     g_renderer->setSamples(renderer_cfg.cycles.samples);
     g_renderer->setDenoising(renderer_cfg.cycles.denoising);
     g_renderer->setDevice(renderer_cfg.cycles.device);

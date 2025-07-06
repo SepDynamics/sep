@@ -28,7 +28,9 @@ template <typename... Middlewares>
 class Crow;
 }  // namespace crow
 namespace sep {
+#ifdef SEP_HAS_CYCLES
 namespace blender { namespace ccl { class CyclesRenderer; } }
+#endif
 }  // namespace sep
 namespace sep::api {
 class CrowRequest;
@@ -61,10 +63,15 @@ class SEPApiServer : public Server {
   /**
    * @brief Construct a new SEPApiServer
    * @param config The API configuration
-   * @param renderer Optional Cycles renderer
+   * @param renderer Optional Cycles renderer (only when SEP_HAS_CYCLES is defined)
    */
+#ifdef SEP_HAS_CYCLES
   explicit SEPApiServer(const ::sep::config::APIConfig &config,
                         blender::ccl::CyclesRenderer *renderer);
+#else
+  explicit SEPApiServer(const ::sep::config::APIConfig &config,
+                        void *renderer = nullptr);
+#endif
 
   /**
    * @brief Destructor
@@ -218,7 +225,11 @@ class SEPApiServer : public Server {
   // Clients
   std::unique_ptr<ollama::OllamaClient> ollama_client_;
 
+#ifdef SEP_HAS_CYCLES
   sep::blender::ccl::CyclesRenderer* cycles_renderer_;
-}; 
+#else
+  void* cycles_renderer_; // Placeholder when Cycles is disabled
+#endif
+};
 
 }  // namespace sep::api

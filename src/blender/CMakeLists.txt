@@ -10,12 +10,12 @@ find_package(TBB REQUIRED)
 # Add other find_package() calls here for Embree, OpenVDB etc. as needed
 
 
-add_library(sep_blender STATIC
+# Define source files
+set(BLENDER_SOURCES
     api.cpp
     blender_integration.cpp
     compression.cpp
     compression_utils.cpp
-    cycles_renderer.cpp
     profiler_stub.cpp
     factory.cpp
     gpu_context.cpp
@@ -23,13 +23,23 @@ add_library(sep_blender STATIC
     pattern_visualization_pipeline.cpp
 )
 
+# Add Cycles-specific files only when SEP_HAS_CYCLES is enabled
+if(SEP_HAS_CYCLES)
+    list(APPEND BLENDER_SOURCES
+        cycles_renderer.cpp
+    )
+endif()
+
+add_library(sep_blender STATIC ${BLENDER_SOURCES})
+
 target_precompile_headers(sep_blender PRIVATE blender_pch.h)
 
 # Define compile definitions in one place
 target_compile_definitions(sep_blender PRIVATE
-    SEP_HAS_BLENDER=1
-    SEP_HAS_CYCLES=1
-    SEP_HAS_CUDA=1
+    SEP_HAS_BLENDER=${SEP_HAS_BLENDER}
+    SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
+    SEP_HAS_CUDA=${SEP_HAS_CUDA}
+    SEP_HAS_AUDIO=${SEP_HAS_AUDIO}
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
     WITH_CYCLES_DEVICE_CUDA
     "CCL_NAMESPACE_BEGIN=namespace ccl {"
@@ -45,15 +55,21 @@ target_link_libraries(sep_blender PUBLIC
     ${OpenImageIO_LIBRARIES}
     ${OSL_LIBRARIES}
     ${TBB_LIBRARIES}
-    cycles_device
-    cycles_kernel
-    cycles_scene
-    cycles_util
     CUDA::cudart
     CUDA::cuda_driver
     ${CMAKE_DL_LIBS}
     Threads::Threads
 )
+
+# Only link Cycles libraries when SEP_HAS_CYCLES is enabled
+if(SEP_HAS_CYCLES)
+    target_link_libraries(sep_blender PUBLIC
+        cycles_device
+        cycles_kernel
+        cycles_scene
+        cycles_util
+    )
+endif()
 
 # Include directories
 target_include_directories(sep_blender

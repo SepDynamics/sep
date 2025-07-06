@@ -7,7 +7,7 @@
 			"type": "shell",
 			"command": "make",
 			"options": {
-				"cwd": "${workspaceFolder}/cmake-make"
+				"cwd": "${workspaceFolder}/build-ajn"
 			},
 			"group": "build",
 			"presentation": {
@@ -28,7 +28,7 @@
 			"command": "cmake",
 			"args": [
 				"-B",
-				"cmake-make",
+				"build-ajn",
 				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
 				"-DCMAKE_BUILD_TYPE=Release",
 				"-DSEP_HAS_CUDA=1",
@@ -57,7 +57,7 @@
 				"-j${env:nproc}"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/cmake-make"
+				"cwd": "${workspaceFolder}/build-ajn"
 			},
 			"group": {
 				"kind": "build",
@@ -82,7 +82,7 @@
 			"command": "rm",
 			"args": [
 				"-rf",
-				"cmake-make"
+				"build-ajn"
 			],
 			"group": "build",
 			"presentation": {
@@ -105,7 +105,7 @@
 		{
 			"label": "SEP: Run Engine",
 			"type": "shell",
-			"command": "${workspaceFolder}/cmake-make/bin/sep_engine",
+			"command": "${workspaceFolder}/build-ajn/bin/sep_engine",
 			"args": [
 				"--config",
 				"${workspaceFolder}/config/default.json"
@@ -120,7 +120,7 @@
 		{
 			"label": "SEP: Run Tests",
 			"type": "shell",
-			"command": "${workspaceFolder}/cmake-make/bin/sep_tests",
+			"command": "${workspaceFolder}/build-ajn/bin/sep_tests",
 			"args": [
 				"--gtest_color=yes"
 			],
@@ -147,7 +147,7 @@
 			"command": "bash",
 			"args": [
 				"-c",
-				"cd ${workspaceFolder} && CodeChecker analyze ${workspaceFolder}/cmake-make/compile_commands.json -o ${workspaceFolder}/.codechecker/reports --analyzers clangsa clang-tidy"
+				"cd ${workspaceFolder} && CodeChecker analyze ${workspaceFolder}/build-ajn/compile_commands.json -o ${workspaceFolder}/.codechecker/reports --analyzers clangsa clang-tidy"
 			],
 			"group": "none",
 			"presentation": {
@@ -178,6 +178,38 @@
 			},
 			"problemMatcher": []
 		},
+		{
+			"label": "SEP: Build with CodeChecker",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"mkdir -p ${workspaceFolder}/.codechecker && CodeChecker log -b \"make -j$(nproc)\" -o ${workspaceFolder}/.codechecker/compile_commands.json && CodeChecker analyze ${workspaceFolder}/.codechecker/compile_commands.json -o ${workspaceFolder}/.codechecker/reports --analyzers clangsa clang-tidy && CodeChecker parse ${workspaceFolder}/.codechecker/reports -e html -o ${workspaceFolder}/.codechecker/html"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/build-ajn"
+			},
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated"
+			},
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"relative",
+					"${workspaceFolder}"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|note):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
 		// ===== MCP Server Tasks =====
 		{
 			"label": "MCP: Start Code Analyzer",
@@ -192,7 +224,7 @@
 					"OLLAMA_URL": "http://localhost:11434",
 					"OLLAMA_MODEL": "mxbai-embed-large",
 					"WORKSPACE_DIR": "${workspaceFolder}",
-					"SEP_BUILD_DIR": "${workspaceFolder}/cmake-make",
+					"SEP_BUILD_DIR": "${workspaceFolder}/build-ajn",
 					"SEP_CONFIG_FILE": "${workspaceFolder}/config/default.json"
 				}
 			},
@@ -220,7 +252,7 @@
 			"command": "cmake",
 			"args": [
 				"-B",
-				"cmake-make",
+				"build-ajn",
 				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
 				"-DCMAKE_BUILD_TYPE=Release",
 				"-DSEP_HAS_CYCLES=1",

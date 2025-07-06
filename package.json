@@ -4,6 +4,7 @@
 	"description": "SEP Engine API client",
 	"main": "sep_client.js",
 	"type": "module",
+	"packageManager": "pnpm@10.11.0",
 	"dependencies": {
 		"node-fetch": "^3.3.0"
 	}

@@ -7,14 +7,11 @@
 #include "core/common.h"
 #include "compat/cycles.h"
 
-// Ensure SEP_HAS_CYCLES has a sensible default if the build system did not
-// define it. This keeps conditional compilation sections well-formed.
-
 namespace sep {
 namespace blender {
 namespace ccl {
 
-
+#ifdef SEP_HAS_CYCLES
 class CyclesRenderer {
 public:
     struct RenderParams {
@@ -48,9 +45,13 @@ private:
 
     void createGeometryFromPattern(const pattern::PatternData& pattern);
     void convertPatternToMesh(const pattern::PatternData& pattern,
-                             std::vector<::ccl::float3>& verts,
-                             std::vector<::ccl::int3>& triangles);
+                              std::vector<::ccl::float3>& verts,
+                              std::vector<::ccl::int3>& triangles);
 };
+#else
+// Forward declaration for when SEP_HAS_CYCLES is disabled
+class CyclesRenderer;
+#endif // SEP_HAS_CYCLES
 
 } // namespace ccl
 } // namespace blender

@@ -1,5 +1,6 @@
 #include "cosmo_sim.hpp"
 #include <cstdlib>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtx/norm.hpp>
 

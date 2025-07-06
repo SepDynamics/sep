@@ -18,16 +18,16 @@ QuantumConfig quantum{
   .qfh_hierarchy_depth = 5
 };
 
-// CUDA acceleration parameters
-::sep::config::CudaConfig cuda{
+// CUDA acceleration parameters used for the testbed
+CudaTuningConfig cuda{
   .warp_tile_size = 16,
   .coherence_block_size = 256,
   .similarity_grid_dim = 32,
   .enable_phase_modulation = true
 };
 
-// API coherence modulation
-::sep::config::APIConfig api{
+// API coherence modulation parameters
+APICoherenceConfig api{
   .base_coherence = 0.5f,
   .context_weight = 0.3f,
   .state_weight = 0.7f,

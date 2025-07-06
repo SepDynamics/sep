@@ -104,15 +104,17 @@ nlohmann::json SepEngine::initialize(const sep::config::APIConfig& /*config*/)
 {
     if (impl_->initialized) {
         json result;
-        result["success"] = false; 
+        result["success"] = false;
         result["error"] = "Engine already initialized";
         return result;
     }
-        json result;
-        result["success"] = true; 
-        result["message"] = "SEP Engine initialized successfully";
-        return result;
 
+    impl_->initialized = true;
+
+    json result;
+    result["success"] = true;
+    result["message"] = "SEP Engine initialized successfully";
+    return result;
 }
 
 nlohmann::json SepEngine::shutdown()

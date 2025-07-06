@@ -1,50 +1,40 @@
+#include "core/manager.h"
 #include "blender/cycles_renderer.h"
 #include "quantum/processor.h"
-#include "core/manager.h"
+#include "demos/genesis_pattern.hpp"
 #include <iostream>
 #include <thread>
 #include <chrono>
 
 int main() {
-    // 1. Initialization
+    // Initialize configuration and engine
     sep::config::ConfigManager::getInstance().initialize(0, nullptr);
-    auto q_processor = sep::quantum::createProcessor({});
+    auto& engine = sep::core::Engine::getInstance();
+    engine.init(sep::config::ConfigManager::getInstance().getAPIConfig());
 
-    // Use the CyclesRenderer from the blender module
+    // Initialize renderer
     sep::blender::ccl::CyclesRenderer renderer;
     if (renderer.initialize() != sep::SEPResult::SUCCESS) {
-        std::cerr << "Failed to initialize Cycles renderer." << std::endl;
+        std::cerr << "FATAL: Could not initialize Cycles renderer." << std::endl;
         return 1;
     }
 
-    // 2. Create the Genesis Pattern from your checklist
-    sep::quantum::Pattern p;
-    p.id = "genesis_pattern";
-    p.quantum_state.coherence = 0.1f;
-    p.quantum_state.stability = 0.1f;
-    q_processor->addPattern(p);
+    // Setup demo
+    auto genesis_demo = std::make_unique<sep::workbench::GenesisPatternDemo>();
+    genesis_demo->init(engine, &renderer);
 
-    // 3. Main Simulation & Render Loop
+    std::cout << "Workbench is running. Close the window to exit." << std::endl;
+
+    // Main loop
     while (!renderer.shouldClose()) {
-        q_processor->processAll();
-        auto updated = q_processor->getPattern(p.id);
-
-        std::vector<sep::pattern::PatternData> vis_data;
-        sep::pattern::PatternData d;
-        d.position = updated.position;
-        d.coherence = updated.quantum_state.coherence;
-        d.stability = updated.quantum_state.stability;
-        d.entropy = updated.quantum_state.entropy;
-        vis_data.push_back(d);
-
-        renderer.createSceneFromPatterns(vis_data);
-        sep::blender::ccl::CyclesRenderer::RenderParams params;
-        renderer.renderScene(params);
+        genesis_demo->update(0.016f);
+        genesis_demo->render();
         renderer.present();
-
-        // Sleep to not peg the CPU
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 
+    genesis_demo->cleanup();
+    engine.shutdown();
+    std::cout << "Workbench shut down cleanly." << std::endl;
     return 0;
 }

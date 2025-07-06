@@ -61,16 +61,16 @@ void initializeRenderer() {
     // Initialize renderer with config settings
     g_renderer = std::make_unique<CyclesRenderer>();
     
-    const auto& window = config.window();
+    const auto& window = config_manager.getWindowConfig();
     g_renderer->setWindowTitle(window.title);
     g_renderer->setWindowSize(window.width, window.height);
     g_renderer->setFullscreen(window.fullscreen);
     g_renderer->setVSync(window.vsync);
 
-    const auto& renderer = config.renderer();
-    g_renderer->setSamples(renderer.cycles.samples);
-    g_renderer->setDenoising(renderer.cycles.denoising);
-    g_renderer->setDevice(renderer.cycles.device);
+    const auto& renderer_cfg = config_manager.getRendererConfig();
+    g_renderer->setSamples(renderer_cfg.cycles.samples);
+    g_renderer->setDenoising(renderer_cfg.cycles.denoising);
+    g_renderer->setDevice(renderer_cfg.cycles.device);
 
     if (!g_renderer->initialize()) {
         throw std::runtime_error("Failed to initialize Cycles renderer");

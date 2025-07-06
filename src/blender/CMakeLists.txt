@@ -60,7 +60,11 @@ target_include_directories(sep_blender PUBLIC
     $<INSTALL_INTERFACE:include>
     ${OpenImageIO_INCLUDE_DIRS}
     ${OSL_INCLUDE_DIRS}
-    PRIVATE
+)
+
+# Explicitly add the Cycles source directory. This avoids any
+# relative path issues when building the precompiled headers.
+target_include_directories(sep_blender PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
 )
 

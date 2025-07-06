@@ -16,18 +16,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Options to control optional modules
-option(SEP_ENABLE_BLENDER "Enable Blender/Cycles Integration" ON)
-option(SEP_ENABLE_AUDIO "Enable PipeWire Audio Integration" ON)
+option(SEP_WITH_CYCLES "Enable Blender Cycles integration" ON)
+option(SEP_WITH_AUDIO "Enable PipeWire audio integration" ON)
 
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
 
 # Optional modules
-option(SEP_ENABLE_BLENDER "Enable Blender/Cycles Integration" ON)
-option(SEP_ENABLE_AUDIO "Enable PipeWire Audio Integration" ON)
-
 set(SEP_HAS_BLENDER 0)
-if(SEP_ENABLE_BLENDER)
+if(SEP_WITH_CYCLES)
     set(SEP_HAS_BLENDER 1)
 endif()
 
@@ -70,7 +67,7 @@ find_package(CUDAToolkit REQUIRED)
 set(SEP_HAS_CUDA 1)
 add_compile_definitions(SEP_HAS_CUDA=1)
 
-if(SEP_ENABLE_BLENDER)
+if(SEP_WITH_CYCLES)
     set(SEP_HAS_BLENDER 1)
     add_compile_definitions(SEP_HAS_BLENDER=1)
 else()
@@ -111,11 +108,11 @@ add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
-if(SEP_ENABLE_AUDIO)
+if(SEP_WITH_AUDIO)
     add_subdirectory(src/audio)
     add_compile_definitions(SEP_HAS_AUDIO=1)
 endif()
-if(SEP_ENABLE_BLENDER)
+if(SEP_WITH_CYCLES)
     add_subdirectory(src/blender)
 endif()
 add_subdirectory(extern/cycles/third_party/cuew)

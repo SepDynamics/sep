@@ -16,7 +16,6 @@ add_library(sep_core
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_core PRIVATE
     SEP_HAS_CUDA=1
-    _GLIBCXX_USE_NOEXCEPT_SPEC=0
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
 
 # Set library properties

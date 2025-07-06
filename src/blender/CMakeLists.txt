@@ -41,11 +41,9 @@ target_link_libraries(sep_blender PUBLIC
     sep_memory
     sep_quantum
     sep_compat
-    OpenImageIO::OpenImageIO
-    OSL::oslcomp
-    OSL::oslexec
-    OSL::oslquery
-    TBB::tbb
+    ${OpenImageIO_LIBRARIES}
+    ${OSL_LIBRARIES}
+    ${TBB_LIBRARIES}
     cycles_device
     cycles_kernel
     cycles_scene

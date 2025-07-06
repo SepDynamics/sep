@@ -16,6 +16,7 @@ add_library(sep_blender STATIC
     compression.cpp
     compression_utils.cpp
     cycles_renderer.cpp
+    profiler_stub.cpp
     factory.cpp
     gpu_context.cpp
     mesh_handler.cpp

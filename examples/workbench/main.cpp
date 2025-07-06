@@ -38,7 +38,7 @@ int main() {
 }
 
 void initializeEngine() {
-    const auto& config = Config::getInstance();
+    const auto& config = workbench::Config::getInstance();
     const auto& engine_config = config.engine();
 
     g_engine = std::make_unique<Engine>();
@@ -53,7 +53,7 @@ void initializeEngine() {
 
 void initializeRenderer() {
     // Load configuration
-    auto& config = Config::getInstance();
+    auto& config = workbench::Config::getInstance();
     if (!config.load("config.json")) {
         throw std::runtime_error("Failed to load configuration");
     }

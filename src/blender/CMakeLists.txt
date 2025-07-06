@@ -9,6 +9,7 @@ find_package(OSL REQUIRED)
 find_package(TBB REQUIRED)
 # Add other find_package() calls here for Embree, OpenVDB etc. as needed
 
+
 add_library(sep_blender STATIC
     api.cpp
     blender_integration.cpp

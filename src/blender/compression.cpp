@@ -1,8 +1,6 @@
 #include "blender_pch.h"
 #include <unistd.h>
 
-#include <lz4.h>
-#include <zstd.h>
 
 #include "blender/compression.h"
 

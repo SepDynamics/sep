@@ -28,6 +28,8 @@ add_library(sep_blender SHARED
 )
 target_precompile_headers(sep_blender PRIVATE blender_pch.h)
 
+target_precompile_headers(sep_blender PRIVATE blender_pch.h)
+
 # Require C++17 for this target
 target_compile_features(sep_blender PUBLIC cxx_std_17)
 

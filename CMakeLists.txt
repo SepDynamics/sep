@@ -107,7 +107,7 @@ add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)
 add_subdirectory(extern/cycles/third_party/sky)
 
-# Build Cycles from source when precompiled libraries are not available
+# Build Cycles from source when prebuilt libraries are not available
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
   message(STATUS "Prebuilt Cycles libraries not found; building from source")
   set(WITH_CYCLES_DEVICE_HIP OFF CACHE BOOL "Disable HIP" FORCE)
@@ -115,118 +115,8 @@ if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
   add_subdirectory(extern/cycles)
 endif()
 
-# Include JSON processor build
-include(examples/json_processor_build.cmake)
-add_executable(flocking_sim examples/flocking_sim.cpp)
-set_target_properties(flocking_sim PROPERTIES CXX_STANDARD 17)
-target_include_directories(flocking_sim PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/extern/cycles/src
-    ${PROJECT_SOURCE_DIR}/extern/glm
-)
-target_compile_definitions(flocking_sim PRIVATE
-    SEP_HAS_CYCLES
-)
-target_link_libraries(flocking_sim PRIVATE
-    sep_core
-    sep_api
-    sep_quantum
-    sep_memory
-    sep_audio
-    sep_compat
-)
+# Consolidated examples are built in a single workbench target
 add_subdirectory(examples/workbench)
-add_executable(physics_explorer examples/physics_explorer.cpp)
-target_include_directories(physics_explorer PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(physics_explorer PRIVATE sep_quantum sep_core sep_compat sep_memory)
-
-# Simple flocking simulation example
-add_executable(flocking_sim examples/flocking_sim.cpp)
-target_include_directories(flocking_sim PRIVATE ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(flocking_sim PRIVATE
-    sep_quantum
-    sep_memory
-    sep_core
-    sep_compat)
-
-# Physics explorer example
-add_executable(physics_explorer examples/physics_explorer.cpp)
-set_target_properties(physics_explorer PROPERTIES CXX_STANDARD 17)
-target_include_directories(physics_explorer PUBLIC
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/extern/glm
-    ${CMAKE_SOURCE_DIR}/examples
-)
-target_link_libraries(physics_explorer PRIVATE
-    sep_core
-    sep_quantum
-    sep_memory
-    sep_audio
-    sep_compat
-    sep_api
-)
-
-# Simple annealing simulation example
-add_executable(annealing_sim examples/annealing_sim.cpp)
-target_include_directories(annealing_sim PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(annealing_sim PRIVATE sep_quantum sep_core sep_memory sep_compat)
-
-# Standalone physics explorer example
-add_executable(physics_explorer examples/physics_explorer.cpp)
-target_include_directories(physics_explorer PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/extern/glm
-)
-set_target_properties(physics_explorer PROPERTIES CXX_STANDARD 17)
-target_link_libraries(physics_explorer PRIVATE
-    sep_core
-    sep_quantum
-    sep_memory
-    sep_compat
-    fmt::fmt
-)
-
-# Standalone drug optimization example
-add_executable(drug_optimizer examples/drug_optimizer.cpp)
-target_include_directories(drug_optimizer PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
-)
-target_link_libraries(drug_optimizer PRIVATE
-    sep_quantum
-    sep_core
-    sep_memory
-    sep_compat
-)
-
-# Simple drug optimizer example
-add_executable(drug_optimizer examples/drug_optimizer.cpp)
-target_include_directories(drug_optimizer PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(drug_optimizer PRIVATE
-    sep_quantum
-    sep_memory
-    sep_compat
-    sep_core
-)
-
-# Simple cosmology simulation example
-add_executable(cosmo_sim examples/cosmo_sim.cpp)
-target_include_directories(cosmo_sim PRIVATE ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(cosmo_sim PRIVATE
-    sep_quantum
-    sep_memory
-    sep_core
-    sep_compat)
-
-# Simple cosmology simulation example
-add_executable(cosmo_sim examples/cosmo_sim.cpp)
-target_include_directories(cosmo_sim PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
-)
-target_link_libraries(cosmo_sim PRIVATE
-    sep_quantum
-    sep_core
-    sep_compat
-)
 
 # Main executable
 add_executable(sep_server src/server_main.cpp)

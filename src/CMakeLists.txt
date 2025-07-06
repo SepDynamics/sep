@@ -36,7 +36,14 @@ target_link_libraries(sep_engine PRIVATE
     ${CMAKE_DL_LIBS}
 )
 if(SEP_WITH_CYCLES)
-    target_link_libraries(sep_engine PRIVATE sep_blender)
+    target_link_libraries(sep_engine PRIVATE
+        sep_blender
+        cycles_kernel
+        cycles_scene
+        cycles_device
+        cycles_util
+        cycles_osl
+    )
 endif()
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)

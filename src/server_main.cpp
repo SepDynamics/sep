@@ -8,6 +8,7 @@
 #include "core/manager.h"
 #include "core/logging.h"
 #include "api/server.h"
+#include "blender/cycles_renderer.h"
 
 static std::atomic<bool> g_keep_running{true};
 
@@ -26,7 +27,10 @@ int main(int argc, char* argv[]) {
     auto& config = sep::config::ConfigManager::getInstance();
     config.initialize(argc, argv);
 
-    sep::api::SEPApiServer server(config.getAPIConfig());
+    auto renderer = std::make_unique<sep::blender::ccl::CyclesRenderer>();
+    renderer->initialize();
+
+    sep::api::SEPApiServer server(config.getAPIConfig(), renderer.get());
     server.run();
 
     while (g_keep_running.load()) {

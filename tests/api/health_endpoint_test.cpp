@@ -29,7 +29,7 @@ TEST(APIServer, HealthEndpoint) {
     auto cfg = sep::config::APIConfig{};
     cfg.port = port;
 
-    SEPApiServer server(cfg);
+    SEPApiServer server(cfg, nullptr);
     server.setup_routes();
     auto resp = server.makeJsonResponse(200, "ok");
     EXPECT_EQ(resp->getCode(), 200);
@@ -43,7 +43,7 @@ class HealthServerTest : public ::testing::Test {};
 
 TEST_F(HealthServerTest, HealthEndpointReturnsOk) {
     uint16_t port = 23765; // fixed port for test
-    SEPApiServer server(createConfig(port));
+    SEPApiServer server(createConfig(port), nullptr);
     std::thread server_thread([&](){ server.run(); });
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 

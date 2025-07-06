@@ -55,7 +55,8 @@ namespace sep::api {
 
 // Static instance for signal handling
 SEPApiServer* SEPApiServer::instance_ = nullptr;
-SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
+SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
+                           blender::ccl::CyclesRenderer* renderer)
     : config_(config),
       logger_(nullptr),
       app_(nullptr),
@@ -66,7 +67,7 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
       metrics_mutex_(),
       ollama_client_(nullptr),
       pattern_processor_(std::make_unique<sep::pattern::PatternProcessor>()),
-      cycles_renderer_(std::make_unique<sep::blender::ccl::CyclesRenderer>()) {
+      cycles_renderer_(renderer) {
     instance_ = this;
 
     // Initialize the Crow app with middlewares
@@ -82,9 +83,7 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config)
         (void)pattern_processor_->init(nullptr);
     }
 #ifdef SEP_HAS_BLENDER
-    if (cycles_renderer_) {
-        (void)cycles_renderer_->initialize();
-    }
+    // Renderer is provided by the caller and may already be initialized
 #endif
 }
 
@@ -948,7 +947,7 @@ void SEPApiServer::setupBlenderRoutes() {
             auto cycles_config = json["cycles_config"];
 
             // Use persistent Cycles renderer
-            auto* renderer = cycles_renderer_.get();
+            auto* renderer = cycles_renderer_;
             if (!renderer) {
                 ::crow::response res;
                 res.body = "Cycles renderer unavailable";

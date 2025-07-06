@@ -20,6 +20,7 @@ target_include_directories(api_tests PRIVATE
 
 target_link_libraries(api_tests PRIVATE
     sep_api
+    sep_blender
     ${HTTP_PARSER_LIBRARY}
     GTest::GTest
     GTest::Main

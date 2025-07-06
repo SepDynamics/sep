@@ -21,6 +21,7 @@ target_link_libraries(testbed_tests PRIVATE
     sep_core
     sep_audio
     sep_api
+    sep_blender
     GTest::GTest
     GTest::Main
 )

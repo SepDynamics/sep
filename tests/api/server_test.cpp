@@ -1,6 +1,7 @@
 #include "api/client.h"
 #include "api/server.h"
 #include "api/types.h"
+#include "blender/cycles_renderer.h"
 #include "compat/types.h"
 #ifdef BOOST_ASIO_DISABLE_RTTI
 #include "crow/asio_isolation.h"
@@ -163,7 +164,8 @@ protected:
   public:
     ServerGuard(uint16_t port) : port_(port) {
       config_ = createConfig(port);
-      server_ = std::make_unique<SEPApiServer>(config_);
+      renderer_ = std::make_unique<sep::blender::ccl::CyclesRenderer>();
+      server_ = std::make_unique<SEPApiServer>(config_, renderer_.get());
       running_ = std::make_shared<std::atomic<bool>>(true);
 
       // Start server in a separate thread
@@ -184,7 +186,8 @@ protected:
 
     ServerGuard(const sep::config::APIConfig &config)
         : port_(config.port), config_(config) {
-      server_ = std::make_unique<SEPApiServer>(config_);
+      renderer_ = std::make_unique<sep::blender::ccl::CyclesRenderer>();
+      server_ = std::make_unique<SEPApiServer>(config_, renderer_.get());
       running_ = std::make_shared<std::atomic<bool>>(true);
 
       // Start server in a separate thread
@@ -255,6 +258,7 @@ protected:
     uint16_t port_;
     sep::config::APIConfig config_;
     std::unique_ptr<SEPApiServer> server_;
+    std::unique_ptr<sep::blender::ccl::CyclesRenderer> renderer_;
     // running_ flag uses seq_cst semantics
     std::shared_ptr<std::atomic<bool>> running_;
     std::thread server_thread_;

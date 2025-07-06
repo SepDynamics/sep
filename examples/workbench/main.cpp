@@ -239,7 +239,9 @@ int main(int argc, char* argv[]) {
     engine.run();
 
     // Start API server after all components are initialized
-    sep::api::SEPApiServer server(config.getAPIConfig());
+    auto renderer = std::make_unique<sep::blender::ccl::CyclesRenderer>();
+    renderer->initialize();
+    sep::api::SEPApiServer server(config.getAPIConfig(), renderer.get());
     server.run();
     
     if (server_mode) {

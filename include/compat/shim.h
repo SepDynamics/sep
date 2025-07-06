@@ -215,7 +215,7 @@ namespace shim {
     // Append operations
     string& append(const char* s) {
         if (s) {
-            size_t slen = strlen(s);
+            size_t slen = std::strlen(s);
             if (size_ + slen + 1 > capacity_) {
                 size_t new_cap = (size_ + slen + 1) * 2;
                 char* new_data = static_cast<char*>(std::realloc(data_, new_cap));

@@ -1,6 +1,7 @@
 #include "api/client.h"
 #include "api/server.h"
 #include "api/types.h"
+#include "blender/cycles_renderer.h"
 #include <gtest/gtest.h>
 #include <chrono>
 #include <thread>

@@ -1,5 +1,6 @@
 #include "api/server.h"
 #include "config/api_config.h"
+#include "blender/cycles_renderer.h"
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 

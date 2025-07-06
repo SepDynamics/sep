@@ -1,6 +1,7 @@
 #include "api/client.h"
 #include "api/server.h"
 #include "api/types.h"
+#include "blender/cycles_renderer.h"
 #include "compat/types.h"
 #ifdef BOOST_ASIO_DISABLE_RTTI
 #include "crow/asio_isolation.h"
@@ -255,6 +256,7 @@ protected:
     uint16_t port_;
     sep::config::APIConfig config_;
     std::unique_ptr<SEPApiServer> server_;
+    std::unique_ptr<sep::blender::ccl::CyclesRenderer> renderer_;
     // running_ flag uses seq_cst semantics
     std::shared_ptr<std::atomic<bool>> running_;
     std::thread server_thread_;

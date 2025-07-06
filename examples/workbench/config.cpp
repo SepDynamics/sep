@@ -92,9 +92,8 @@ bool Config::load(const std::filesystem::path& path) {
         if (json["demos"].contains("annealing_sim")) {
             auto& sim = json["demos"]["annealing_sim"];
             annealing_sim_.particle_count = sim["particle_count"].get<int>();
-            for (auto& t : sim["temperature_schedule"]) {
+            for (auto& t : sim["temperature_schedule"])
                 annealing_sim_.temperature_schedule.push_back(t.get<float>());
-            }
         }
 
         auto& renderer = json["renderer"];

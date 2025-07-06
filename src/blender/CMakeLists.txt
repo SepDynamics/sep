@@ -128,7 +128,7 @@ link_directories(${CMAKE_SOURCE_DIR}/lib)
 # Link against Cycles libraries and required dependencies
 if(TARGET cycles_scene)
   # Linking against Cycles built from source
-  target_link_libraries(sep_blender PRIVATE
+  target_link_libraries(sep_blender PUBLIC
       cycles_device
       cycles_kernel
       cycles_util
@@ -155,10 +155,10 @@ if(TARGET cycles_scene)
       bf_intern_openvdb
       OpenVDB::openvdb
       bf_intern_opensubdiv
-)
+  )
 else()
   # Fallback to precompiled static libraries
-  target_link_libraries(sep_blender PRIVATE
+  target_link_libraries(sep_blender PUBLIC
       cycles_device
       cycles_kernel
       cycles_util

@@ -38,6 +38,9 @@
 #include "api/server.h"
 #include "quantum/cycles.h"
 #include "compat/types.h"
+#ifdef SEP_HAS_CYCLES
+#include "blender/cycles_renderer.h"
+#endif
 
 namespace sep::api {
 

@@ -27,6 +27,7 @@ target_link_libraries(sep_api
         sep_compat
         sep_embeddings
         http_parser::http_parser
+        $<$<BOOL:${SEP_WITH_CYCLES}>:sep_blender>
 )
 
 target_include_directories(sep_api

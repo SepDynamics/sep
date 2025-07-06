@@ -137,7 +137,7 @@ add_subdirectory(examples/workbench)
 
 # Main executable
 # Minimal CLI to test the core engine logic
-add_executable(sep_engine src/api/server.cpp)
+add_executable(sep_engine src/server_main.cpp)
 set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
 target_include_directories(sep_engine PRIVATE
     ${CMAKE_SOURCE_DIR}/include

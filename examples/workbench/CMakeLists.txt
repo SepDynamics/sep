@@ -2,24 +2,9 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Add the workbench executable with its source files
+# Build the full-featured server/visualizer
 add_executable(sep_workbench
     main.cpp
-    demo_manager.cpp
-    config.cpp
-    # Demo sources
-    demos/genesis_pattern.cpp
-    demos/audio_visualizer.cpp
-    demos/memory_garden.cpp
-    demos/annealing_demo.cpp
-    demos/drug_optimizer.cpp
-    demos/drug_discovery_demo.cpp
-    demos/digital_physics_demo.cpp
-    demos/flocking_demo.cpp
-    demos/cosmo_demo.cpp
-    demos/cosmo_sim.cpp
-    demos/annealing_sim.cpp
-    demos/neural_demo.cpp
-    demos/neuro_sim.cpp
 )
 
 # Set C++ standard

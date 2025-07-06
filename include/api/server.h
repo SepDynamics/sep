@@ -62,8 +62,10 @@ class SEPApiServer : public Server {
   /**
    * @brief Construct a new SEPApiServer
    * @param config The API configuration
+   * @param renderer Optional Cycles renderer
    */
-  explicit SEPApiServer(const ::sep::config::APIConfig &config);
+  explicit SEPApiServer(const ::sep::config::APIConfig &config,
+                        blender::ccl::CyclesRenderer *renderer);
 
   /**
    * @brief Destructor
@@ -223,7 +225,7 @@ class SEPApiServer : public Server {
 
   // Persistent processors for Blender routes
   std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor_;
-  std::unique_ptr<sep::blender::ccl::CyclesRenderer> cycles_renderer_;
+  sep::blender::ccl::CyclesRenderer* cycles_renderer_;
 };
 
 }  // namespace sep::api

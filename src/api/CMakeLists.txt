@@ -24,7 +24,6 @@ target_link_libraries(sep_api
         ${CURL_LIBRARIES}
         sep_compat
         sep_embeddings
-        sep_blender
         sep_audio
         http_parser::http_parser
 )

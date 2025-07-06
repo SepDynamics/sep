@@ -13,7 +13,7 @@ target_include_directories(sep_engine_cli PRIVATE ${SEP_INCLUDE_DIRS})
 # Add component subdirectories
 add_subdirectory(api)
 add_subdirectory(audio)
-# add_subdirectory(blender) # Temporarily disabled to isolate build issues
+add_subdirectory(blender)
 add_subdirectory(compat)
 add_subdirectory(core)
 add_subdirectory(memory)

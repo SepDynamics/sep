@@ -4,13 +4,13 @@
 // These provide fundamental functions (memcpy, strlen, etc.) in the
 // global namespace. Using the <c...> variants ensures proper namespace
 // pollution avoidance with modern compilers.
-#include <cassert>
+#include <cstring>
+#include <cstdlib>
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include <ctime>
+#include <cassert>
 
 // 2. Core C++ Standard Library Headers
 #include <string>

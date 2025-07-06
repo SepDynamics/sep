@@ -15,6 +15,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
+# Options to control optional modules
+option(SEP_ENABLE_BLENDER "Enable Blender/Cycles Integration" ON)
+option(SEP_ENABLE_AUDIO "Enable PipeWire Audio Integration" ON)
+
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
 
@@ -57,9 +61,13 @@ find_package(CUDAToolkit REQUIRED)
 set(SEP_HAS_CUDA 1)
 add_compile_definitions(SEP_HAS_CUDA=1)
 
-# Blender integration is always built
-# Blender integration is disabled for the console workbench
-set(SEP_HAS_BLENDER 0)
+if(SEP_ENABLE_BLENDER)
+    set(SEP_HAS_BLENDER 1)
+    add_compile_definitions(SEP_HAS_BLENDER=1)
+else()
+    set(SEP_HAS_BLENDER 0)
+    add_compile_definitions(SEP_HAS_BLENDER=0)
+endif()
 
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
@@ -86,10 +94,6 @@ find_package(embree REQUIRED)
 find_package(OSL REQUIRED)
 find_package(Alembic REQUIRED)
 
-# Audio support can be disabled
-option(SEP_ENABLE_AUDIO "Enable audio support" ON)
-# Invoke cmake with `-DSEP_ENABLE_AUDIO=OFF` to build without audio capture
-
 # Add subdirectories
 add_subdirectory(src/core)
 add_subdirectory(src/compat)
@@ -102,7 +106,9 @@ if(SEP_ENABLE_AUDIO)
     add_subdirectory(src/audio)
     add_compile_definitions(SEP_HAS_AUDIO=1)
 endif()
-add_subdirectory(src/blender)
+if(SEP_ENABLE_BLENDER)
+    add_subdirectory(src/blender)
+endif()
 add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)
 add_subdirectory(extern/cycles/third_party/sky)

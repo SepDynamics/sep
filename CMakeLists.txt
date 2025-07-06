@@ -132,7 +132,10 @@ target_link_libraries(sep_engine_cli PRIVATE
 
 # Full server executable using API server
 add_executable(sep_engine_server src/api/server_main.cpp)
-target_include_directories(sep_engine_server PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(sep_engine_server PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src
+)
 target_link_libraries(sep_engine_server PRIVATE
     sep_api
     sep_blender

@@ -20,6 +20,7 @@ project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 # without the heavyweight integrations.
 option(SEP_WITH_CYCLES "Enable Blender Cycles integration" OFF)
 option(SEP_WITH_AUDIO "Enable PipeWire audio integration" ON)
+option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" OFF)
 
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
@@ -145,8 +146,8 @@ target_include_directories(sep_engine PRIVATE
 
 # Configure server_main.cpp to conditionally include Cycles code
 target_compile_definitions(sep_engine PRIVATE
-    SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
-    SEP_HAS_BLENDER=${SEP_HAS_BLENDER}
+    SEP_HAS_CYCLES=0
+    SEP_HAS_BLENDER=0
     SEP_HAS_AUDIO=${SEP_HAS_AUDIO}
 )
 

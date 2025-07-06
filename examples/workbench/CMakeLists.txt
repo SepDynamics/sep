@@ -18,7 +18,11 @@ set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 # `sep_engine_wrapper.h`.  This avoids pulling in the full engine
 # dependencies and provides stubbed renderer/engine behaviour that
 # matches the workbench examples.
-target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO=1)
+if(SEP_WORKBENCH_DEMO)
+    target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO=1)
+else()
+    target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO=0)
+endif()
 
 target_include_directories(sep_workbench PRIVATE
     ${PROJECT_SOURCE_DIR}/examples/workbench
@@ -26,7 +30,6 @@ target_include_directories(sep_workbench PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/cycles/src>
 )
 
-target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO)
 
 target_link_libraries(sep_workbench PRIVATE
     sep_api

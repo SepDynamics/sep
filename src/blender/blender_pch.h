@@ -3,6 +3,15 @@
 // 1. ABSOLUTELY FIRST: Core C/C++ Standard Library Headers
 // These provide the fundamental functions (memcpy, strlen, time, etc.)
 // that other libraries expect to be available in the global namespace.
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <math.h>
+
 #include <cstring>
 #include <ctime>
 #include <cmath>

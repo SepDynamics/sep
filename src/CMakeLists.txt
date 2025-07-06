@@ -38,6 +38,13 @@ if(SEP_WITH_CYCLES)
     target_link_libraries(sep_engine PRIVATE sep_blender)
 endif()
 
+if(SEP_WITH_CYCLES)
+    target_link_libraries(sep_engine PRIVATE sep_blender)
+endif()
+if(SEP_WITH_AUDIO)
+    target_link_libraries(sep_engine PRIVATE sep_audio)
+endif()
+
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)
 endif()

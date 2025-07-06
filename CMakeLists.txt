@@ -149,6 +149,13 @@ target_link_libraries(sep_engine PRIVATE
     ${CMAKE_DL_LIBS}
 )
 
+if(SEP_WITH_CYCLES)
+    target_link_libraries(sep_engine PRIVATE sep_blender)
+endif()
+if(SEP_WITH_AUDIO)
+    target_link_libraries(sep_engine PRIVATE sep_audio)
+endif()
+
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)
 endif()
@@ -172,13 +179,20 @@ install(TARGETS
     sep_memory
     sep_quantum
     sep_embeddings
-    sep_audio
     sep_api
     EXPORT sep-targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
+
+if(TARGET sep_audio)
+    install(TARGETS sep_audio
+        EXPORT sep-targets
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+endif()
 
 # Install executable separately
 

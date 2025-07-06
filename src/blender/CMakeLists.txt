@@ -155,7 +155,7 @@ if(TARGET cycles_scene)
       bf_intern_openvdb
       OpenVDB::openvdb
       bf_intern_opensubdiv
-)
+  )
 else()
   # Fallback to precompiled static libraries
   target_link_libraries(sep_blender PUBLIC

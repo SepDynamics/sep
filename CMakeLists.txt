@@ -103,7 +103,7 @@ if(SEP_ENABLE_AUDIO)
     add_subdirectory(src/audio)
     add_compile_definitions(SEP_HAS_AUDIO=1)
 endif()
-# add_subdirectory(src/blender) # Temporarily disabled to isolate build issues
+add_subdirectory(src/blender)
 add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)
 add_subdirectory(extern/cycles/third_party/sky)

@@ -19,6 +19,7 @@ target_compile_definitions(sep_memory PRIVATE
 # Link dependencies
 target_link_libraries(sep_memory
     PUBLIC
+        sep_manifold
         sep_core
         sep_compat # CUDA utilities required by memory tier
         ${HIREDIS_LIB}

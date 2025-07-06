@@ -22,7 +22,6 @@
 
 // Project includes
 #include "core/logging.h"
-#include "memory/memory_tier_manager.hpp"
 #include "crow/crow_isolation.h"
 #include "api/crow_request.h"
 #include "api/json_helpers.h"
@@ -34,9 +33,7 @@
 #include "api/request_interface.h"
 #include "api/sep_engine.h"
 #include "quantum/types.h"
-#include "quantum/processor.h"
 #include "api/server.h"
-#include "quantum/cycles.h"
 #include "compat/types.h"
 
 namespace sep::api {
@@ -62,7 +59,6 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
       server_metrics_(),
       metrics_mutex_(),
       ollama_client_(nullptr),
-      pattern_processor_(std::make_unique<sep::pattern::PatternProcessor>()),
       cycles_renderer_(renderer) {
     instance_ = this;
 
@@ -75,9 +71,6 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
     // Initialize Ollama client
     ollama_client_ = std::make_unique<ollama::OllamaClient>(config_.ollama);
 
-    if (pattern_processor_) {
-        (void)pattern_processor_->init(nullptr);
-    }
 #ifdef SEP_HAS_BLENDER
     // Renderer lifetime managed externally
 #endif
@@ -830,191 +823,4 @@ void SEPApiServer::handleSignal(int signal) {
   }
 }
 
-// Blender-specific routes are disabled in the headless API build
-void SEPApiServer::setupBlenderRoutes() {
-#ifdef SEP_HAS_BLENDER
-    // Pattern processing endpoint
-    app_->route_dynamic("/api/v1/patterns/process")
-    .methods(::crow::HTTPMethod::POST)([this](const ::crow::request& req) {
-        try {
-            auto json = nlohmann::json::parse(std::string(req.body));
-            if (!json.is_object()) {
-                ::crow::response res;
-                res.code = HTTP_BAD_REQUEST;
-                res.write("Invalid JSON format");
-                return res;
-            }
-
-            // Extract mesh data
-            auto mesh = json["mesh"];
-            auto config = json["config"];
-            
-            // Configure processing
-            sep::quantum::ProcessingConfig proc_config;
-            proc_config.max_patterns = config.value("max_patterns", 10000);
-            proc_config.mutation_rate = config.value("mutation_rate", 0.01f);
-            proc_config.ltm_coherence_threshold = config.value("ltm_threshold", 0.9f);
-            proc_config.mtm_coherence_threshold = config.value("mtm_threshold", 0.6f);
-            proc_config.stability_threshold = config.value("stability", 0.8f);
-            proc_config.enable_cuda = config.value("enable_cuda", false);
-            
-            // Use persistent pattern processor
-            auto* processor = pattern_processor_.get();
-            if (!processor) {
-                ::crow::response res;
-                res.body = "Pattern processor unavailable";
-                res.code = 500;
-                return res;
-            }
-
-            // Process vertices through quantum manifold
-            std::vector<sep::pattern::PatternData> patterns;
-            for (const auto& v : mesh["vertices"]) {
-                sep::pattern::PatternData pattern;
-                pattern.position = glm::vec4(
-                    v[0].get<float>(),
-                    v[1].get<float>(),
-                    v[2].get<float>(),
-                    1.0f
-                );
-                pattern.attributes = glm::vec4(0.0f);
-                patterns.push_back(pattern);
-            }
-
-            // Add patterns to processor
-            for (const auto& pattern : patterns) {
-                if (processor->addPattern(pattern) != sep::SEPResult::SUCCESS) {
-                    ::crow::response res;
-                    res.body = "Failed to add pattern to processor";
-                    res.code = 500;
-                    return res;
-                }
-            }
-
-            // Process patterns
-            const auto& results = processor->process();
-
-            // Prepare response JSON
-            nlohmann::json response;
-            response["success"] = true;
-
-            // Processed patterns
-            nlohmann::json processed_patterns = nlohmann::json::array();
-            for (const auto& pattern : results) {
-                nlohmann::json processed;
-                nlohmann::json attr_array = nlohmann::json::array();
-                attr_array.push_back(pattern.attributes.x);
-                attr_array.push_back(pattern.attributes.y);
-                attr_array.push_back(pattern.attributes.z);
-                attr_array.push_back(pattern.attributes.w);
-                processed["attributes"] = attr_array;
-                processed["metrics"] = {
-                    {"coherence", pattern.coherence},
-                    {"stability", pattern.stability},
-                    {"entropy", pattern.entropy}
-                };
-                processed_patterns.push_back(processed);
-            }
-            response["processed_patterns"] = processed_patterns;
-
-            // Return success response
-            ::crow::response res;
-            res.body = response.dump();
-            res.code = 200;
-            return res;
-
-        } catch (const std::exception& e) {
-            ::crow::response res;
-            res.body = std::string("Error processing request: ") + e.what();
-            res.code = 500;
-            return res;
-        }
-    });
-
-    // Cycles evolution endpoint
-    app_->route_dynamic("/api/v1/cycles/evolve")
-    .methods(::crow::HTTPMethod::POST)([this](const ::crow::request& req) {
-        try {
-            auto json = nlohmann::json::parse(std::string(req.body));
-            
-            // Get parameters
-            std::string object_name = json["object_name"].get<std::string>();
-            int iterations = json["iterations"].get<int>();
-            auto pattern_state = json["pattern_state"];
-            auto cycles_config = json["cycles_config"];
-
-            // Use persistent Cycles renderer
-            auto* renderer = cycles_renderer_;
-            if (!renderer) {
-                ::crow::response res;
-                res.body = "Cycles renderer unavailable";
-                res.code = 500;
-                return res;
-            }
-            renderer->initialize();
-
-            // Build pattern data from state
-            sep::pattern::PatternData pattern;
-            pattern.coherence = pattern_state.value("coherence", 0.5f);
-            pattern.stability = pattern_state.value("stability", 0.5f);
-            pattern.entropy = pattern_state.value("entropy", 0.5f);
-
-            std::vector<sep::pattern::PatternData> patterns{pattern};
-
-            if (renderer->createSceneFromPatterns(patterns) != sep::SEPResult::SUCCESS) {
-                ::crow::response res;
-                res.body = "Failed to create scene";
-                res.code = 500;
-                return res;
-            }
-
-            sep::blender::ccl::CyclesRenderer::RenderParams params;
-            params.width = cycles_config.value("width", 640);
-            params.height = cycles_config.value("height", 480);
-            params.samples = cycles_config.value("samples", 32);
-            params.output_format = cycles_config.value("output", std::string("render.ppm"));
-
-            if (renderer->renderScene(params) != sep::SEPResult::SUCCESS) {
-                ::crow::response res;
-                res.body = "Render failed";
-                res.code = 500;
-                return res;
-            }
-
-            nlohmann::json response;
-            response["success"] = true;
-            
-            ::crow::response res;
-            res.body = response.dump();
-            res.code = 200;
-            return res;
-            
-        } catch (const std::exception& e) {
-            ::crow::response res;
-            res.body = std::string("Error processing request: ") + e.what();
-            res.code = 500;
-            return res;
-        }
-    });
-    
-    // Health check endpoint
-    app_->route_dynamic("/health")
-    .methods(::crow::HTTPMethod::GET)
-    ([](const ::crow::request&) {
-        nlohmann::json response = {
-            {"status", "running"},
-            {"engine_initialized", sep::api::SepEngine::getInstance().getHealthStatus()["initialized"]},
-            {"quantum_processor_ready", true},
-            {"cycles_available", true}, // Cycles support determined at build time
-            {"timestamp", std::time(nullptr)}
-        };
-        
-        ::crow::response res;
-        res.body = response.dump();
-        res.code = 200;
-        return res;
-    });
-}
-
-} // end namespace sep::api
-#endif  // SEP_HAS_BLENDER
+}  // namespace sep::api

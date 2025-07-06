@@ -35,6 +35,9 @@ target_link_libraries(sep_engine PRIVATE
     Threads::Threads
     ${CMAKE_DL_LIBS}
 )
+if(SEP_WITH_CYCLES)
+    target_link_libraries(sep_engine PRIVATE sep_blender)
+endif()
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)
 endif()

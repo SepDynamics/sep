@@ -3,6 +3,9 @@
 #include "core/logging.h"
 #include <iostream>
 #include <memory>
+#ifdef SEP_HAS_CYCLES
+#include "blender/cycles_renderer.h"
+#endif
 
 int main(int argc, char** argv) {
     sep::logging::Manager::initialize();
@@ -16,7 +19,16 @@ int main(int argc, char** argv) {
 
     logger->info("Configuration loaded. API will run on port {}.", api_cfg.port);
 
-    sep::api::SEPApiServer server(api_cfg, nullptr);
+    std::unique_ptr<sep::blender::ccl::CyclesRenderer> renderer = nullptr;
+#ifdef SEP_HAS_CYCLES
+    renderer = std::make_unique<sep::blender::ccl::CyclesRenderer>();
+    if (renderer->initialize() != sep::SEPResult::SUCCESS) {
+        logger->critical("Failed to initialize Cycles Renderer!");
+        return 1;
+    }
+#endif
+
+    sep::api::SEPApiServer server(api_cfg, renderer.get());
     logger->info("Server object created.");
 
     if (!server.run()) {

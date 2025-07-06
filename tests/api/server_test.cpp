@@ -163,7 +163,7 @@ protected:
   public:
     ServerGuard(uint16_t port) : port_(port) {
       config_ = createConfig(port);
-      server_ = std::make_unique<SEPApiServer>(config_);
+      server_ = std::make_unique<SEPApiServer>(config_, nullptr);
       running_ = std::make_shared<std::atomic<bool>>(true);
 
       // Start server in a separate thread
@@ -184,7 +184,7 @@ protected:
 
     ServerGuard(const sep::config::APIConfig &config)
         : port_(config.port), config_(config) {
-      server_ = std::make_unique<SEPApiServer>(config_);
+      server_ = std::make_unique<SEPApiServer>(config_, nullptr);
       running_ = std::make_shared<std::atomic<bool>>(true);
 
       // Start server in a separate thread

@@ -6,6 +6,9 @@
 #endif
 #include <iostream>
 #include <memory>
+#ifdef SEP_HAS_CYCLES
+#include "blender/cycles_renderer.h"
+#endif
 
 int main(int argc, char** argv) {
     sep::logging::Manager::initialize();

@@ -22,7 +22,6 @@
 
 // Project includes
 #include "core/logging.h"
-#include "memory/memory_tier_manager.hpp"
 #include "crow/crow_isolation.h"
 #include "api/crow_request.h"
 #include "api/json_helpers.h"
@@ -34,9 +33,7 @@
 #include "api/request_interface.h"
 #include "api/sep_engine.h"
 #include "quantum/types.h"
-#include "quantum/processor.h"
 #include "api/server.h"
-#include "quantum/cycles.h"
 #include "compat/types.h"
 
 namespace sep::api {
@@ -62,7 +59,6 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
       server_metrics_(),
       metrics_mutex_(),
       ollama_client_(nullptr),
-      pattern_processor_(std::make_unique<sep::pattern::PatternProcessor>()),
       cycles_renderer_(renderer) {
     instance_ = this;
 
@@ -75,9 +71,6 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
     // Initialize Ollama client
     ollama_client_ = std::make_unique<ollama::OllamaClient>(config_.ollama);
 
-    if (pattern_processor_) {
-        (void)pattern_processor_->init(nullptr);
-    }
 #ifdef SEP_HAS_BLENDER
     // Renderer lifetime managed externally
 #endif

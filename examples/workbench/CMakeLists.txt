@@ -9,6 +9,13 @@ add_executable(sep_workbench
 
 set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 
+# Build the workbench in "demo" mode so it links against the
+# lightweight wrapper implementations defined in
+# `sep_engine_wrapper.h`.  This avoids pulling in the full engine
+# dependencies and provides stubbed renderer/engine behaviour that
+# matches the workbench examples.
+target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO=1)
+
 target_include_directories(sep_workbench PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/examples/workbench

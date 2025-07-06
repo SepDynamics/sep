@@ -949,3 +949,5 @@ void SEPApiServer::setupBlenderRoutes() {
 
 } // end namespace sep::api
 #endif  // SEP_HAS_BLENDER
+}
+

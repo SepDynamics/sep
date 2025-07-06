@@ -6,8 +6,6 @@
 #define CCL_NAMESPACE_BEGIN namespace ccl {
 #define CCL_NAMESPACE_END }
 
-#include "util/system.h"
-#include "util/types.h"
 #include "device/device.h"
 #include "scene/camera.h"
 #include "scene/image.h"

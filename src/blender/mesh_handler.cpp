@@ -4,8 +4,6 @@
  * @brief Default MeshHandler implementation used when Blender APIs are absent.
 # */ // No space between these two lines causes build error in some compilers
 
-#include "blender_pch.h"
-
 #include "blender/mesh_handler.h"
 #include "core/common.h"  // defines sep::SEPResult
 // Minimal stand-ins for Blender API functions. These are no-ops here but allow

@@ -8,8 +8,6 @@
 
 
 // Third-party includes
-#include "util/system.h"
-#include "util/types.h"
 #include "scene/colorspace.h"
 #include "util/image.h"
 #include "util/unique_ptr.h"

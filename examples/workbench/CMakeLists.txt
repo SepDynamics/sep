@@ -11,6 +11,7 @@ set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 
 target_include_directories(sep_workbench PRIVATE
     ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/examples/workbench
 )
 
 target_link_libraries(sep_workbench PRIVATE

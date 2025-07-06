@@ -26,24 +26,26 @@
 #endif
 
 // Core Cycles headers - using device-relative paths
-#include "device/device.h"
-#include "scene/scene.h"
-#include "scene/camera.h"
-#include "scene/mesh.h"
-#include "scene/shader.h"
-#include "scene/light.h"
-#include "scene/background.h"
-#include "scene/film.h"
-#include "scene/integrator.h"
-#include "session/session.h"
-#include "session/buffers.h"
+#ifdef SEP_HAS_CYCLES
+  #include "device/device.h"
+  #include "scene/scene.h"
+  #include "scene/camera.h"
+  #include "scene/mesh.h"
+  #include "scene/shader.h"
+  #include "scene/light.h"
+  #include "scene/background.h"
+  #include "scene/film.h"
+  #include "scene/integrator.h"
+  #include "session/session.h"
+  #include "session/buffers.h"
 
-// Utility headers - using device-relative paths
-#include "util/array.h"
-#include "util/math_base.h"
-#include "util/param.h"
-#include "util/string.h"
-#include "util/vector.h"
+  // Utility headers - using device-relative paths
+  #include "util/array.h"
+  #include "util/math_base.h"
+  #include "util/param.h"
+  #include "util/string.h"
+  #include "util/vector.h"
+#endif // SEP_HAS_CYCLES
 
 // OpenVDB types needed for compilation
 namespace openvdb {

@@ -87,13 +87,6 @@ struct DrugDiscoveryConfig {
     } optimizer;
 };
 
-struct DrugDiscoveryConfig {
-    struct {
-        int iterations;
-        float mutation_rate;
-    } optimizer;
-};
-
 struct NeuralDemoConfig {
     struct {
         int neuron_count;
@@ -106,11 +99,6 @@ struct NeuralDemoConfig {
     } neuron;
 };
 
-struct DrugDiscoveryConfig {
-    int iterations;
-    float mutation_rate;
-};
-
 struct DigitalPhysicsConfig {
     struct {
         int width;
@@ -121,60 +109,11 @@ struct DigitalPhysicsConfig {
     } rules;
 };
 
-struct AnnealingConfig {
-    int particle_count;
-    float initial_temperature;
-    float cooling_rate;
-};
-
-struct DigitalPhysicsConfig {
-    struct {
-        int width;
-        int height;
-    } grid;
-
-    struct {
-        int birth;
-        int survive_min;
-        int survive_max;
-    } rules;
-};
-
 struct FlockingConfig {
     int agent_count;
     float cohesion_weight;
     float separation_weight;
     float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    int agent_count;
     float neighbor_radius;
     float max_speed;
 };
@@ -191,49 +130,11 @@ struct DigitalPhysicsConfig {
     } rules;
 };
 
-struct FlockingConfig {
-    int agent_count;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct NeuralConfig {
-    int neuron_count;
-    float threshold;
-    float decay;
-};
-
-struct NeuralDemoConfig {
-    int neuron_count;
-    float threshold;
-    float decay;
-    float connection_weight;
-};
-
 struct NeuralConfig {
     int neuron_count;
     float threshold;
     float decay;
     float input_strength;
-};
-
-struct CosmoConfig {
-    float box_size;
-    float timestep;
-};
-
-struct CosmoConfig {
-    float box_size;
-    float timestep;
 };
 
 struct CosmoConfig {

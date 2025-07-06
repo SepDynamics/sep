@@ -815,11 +815,12 @@ void SEPApiServer::initClients() {
   }
 #endif
 }
-
 void SEPApiServer::handleSignal(int signal) {
   if (instance_) {
-    instance_->logger_->info("Received signal {}, shutting down", signal); 
+    instance_->logger_->info("Received signal {}, shutting down", signal);
     instance_->stop();
   }
 }
+
+} // namespace sep::api
 

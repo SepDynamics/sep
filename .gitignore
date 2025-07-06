@@ -133,3 +133,4 @@ blender
 !src/blender/cycles_renderer.cpp
 !sep_engine/
 !examples/json_processor_build.cmake
+package-lock.json

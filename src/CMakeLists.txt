@@ -17,7 +17,7 @@ add_subdirectory(embeddings)
 
 # --- CORRECTED EXECUTABLE TARGET ---
 add_executable(sep_engine
-    server_main.cpp
+    api/server.cpp
 )
 
 set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)

@@ -1,6 +1,7 @@
 #include "api/client.h"
 #include "api/server.h"
 #include "api/types.h"
+#include "blender/cycles_renderer.h"
 #include <gtest/gtest.h>
 #include <chrono>
 #include <thread>
@@ -29,7 +30,9 @@ TEST(APIServer, HealthEndpoint) {
     auto cfg = sep::config::APIConfig{};
     cfg.port = port;
 
-    SEPApiServer server(cfg);
+    auto renderer = std::make_unique<sep::blender::ccl::CyclesRenderer>();
+    renderer->initialize();
+    SEPApiServer server(cfg, renderer.get());
     server.setup_routes();
     auto resp = server.makeJsonResponse(200, "ok");
     EXPECT_EQ(resp->getCode(), 200);
@@ -43,7 +46,9 @@ class HealthServerTest : public ::testing::Test {};
 
 TEST_F(HealthServerTest, HealthEndpointReturnsOk) {
     uint16_t port = 23765; // fixed port for test
-    SEPApiServer server(createConfig(port));
+    auto renderer2 = std::make_unique<sep::blender::ccl::CyclesRenderer>();
+    renderer2->initialize();
+    SEPApiServer server(createConfig(port), renderer2.get());
     std::thread server_thread([&](){ server.run(); });
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 

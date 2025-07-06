@@ -15,10 +15,18 @@ if(SEP_WITH_CYCLES)
 endif()
 add_subdirectory(compat)
 add_subdirectory(core)
+add_subdirectory(compat)
 add_subdirectory(manifold)
 add_subdirectory(memory)
 add_subdirectory(quantum)
 add_subdirectory(embeddings)
+add_subdirectory(api)
+if(SEP_WITH_CYCLES)
+    add_subdirectory(blender)
+endif()
+if(SEP_WITH_AUDIO)
+    add_subdirectory(audio)
+endif()
 
 # --- CORRECTED EXECUTABLE TARGET ---
 add_executable(sep_engine

@@ -1,6 +1,7 @@
 #include "api/server.h"
 #include "core/manager.h"
 #include "core/logging.h"
+#include "api/sep_engine.h"
 #include <iostream>
 #include <memory>
 
@@ -14,6 +15,13 @@ int main(int argc, char** argv) {
     const auto& api_cfg = cfg_manager.getAPIConfig();
     logger->info("Configuration loaded. API will run on port {}.", api_cfg.port);
 
+    // Initialize core engine explicitly to control singleton order
+    auto& engine = sep::api::SepEngine::getInstance();
+    auto init_result = engine.initialize(api_cfg);
+    if (!init_result.value("success", false)) {
+        logger->error("Engine initialization failed: {}", init_result.dump());
+    }
+
     // The headless API server does not require a renderer
     sep::api::SEPApiServer server(api_cfg, nullptr);
 
@@ -25,6 +33,7 @@ int main(int argc, char** argv) {
     }
     logger->info("Server is running. Waiting for shutdown signal...");
     server.waitForShutdown();
+    engine.shutdown();
     logger->info("SEP Engine shutting down cleanly.");
     return 0;
 }

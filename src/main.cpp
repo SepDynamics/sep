@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include "core/engine.h"
 #include "quantum/processor.h"
 #include "quantum/types.h"
@@ -39,6 +41,18 @@ int main() {
         std::cout << "  Coherence: " << final_pattern.quantum_state.coherence << std::endl;
         std::cout << "  Stability: " << final_pattern.quantum_state.stability << std::endl;
         std::cout << "-------------------------" << std::endl;
+
+        std::cout << "\n--- EVOLUTION LOOP ---" << std::endl;
+        for (int i = 0; i < 50; ++i) {
+            q_processor->processPattern(p.id);
+            sep::quantum::Pattern current_pattern = q_processor->getPattern(p.id);
+            printf("Step %02d -> Coherence: %f, Stability: %f\n",
+                   i + 1,
+                   current_pattern.quantum_state.coherence,
+                   current_pattern.quantum_state.stability);
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        }
+        std::cout << "----------------------" << std::endl;
     } catch (const std::exception& e) {
         std::cerr << "An error occurred: " << e.what() << std::endl;
         return 1;

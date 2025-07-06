@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <ctime>
+#include <time.h>
 #include <glm/vec3.hpp>
 #include <glm/gtx/norm.hpp>
 
@@ -16,7 +18,7 @@ int main() {
     constexpr float dt = 0.05f;
 
     std::vector<sep::pattern::PatternData> agents(kAgentCount);
-    std::default_random_engine rng(static_cast<unsigned>(time(nullptr)));
+    std::default_random_engine rng(static_cast<unsigned>(std::time(nullptr)));
     std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
     for (int i = 0; i < kAgentCount; ++i) {

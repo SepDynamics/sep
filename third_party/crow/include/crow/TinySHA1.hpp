@@ -56,8 +56,8 @@ namespace sha1
         virtual ~SHA1() {}
         SHA1(const SHA1& s) { *this = s; }
         const SHA1& operator = (const SHA1& s) {
-            memcpy(m_digest, s.m_digest, 5 * sizeof(uint32_t));
-            memcpy(m_block, s.m_block, 64);
+            std::memcpy(m_digest, s.m_digest, 5 * sizeof(uint32_t));
+            std::memcpy(m_block, s.m_block, 64);
             m_blockByteIndex = s.m_blockByteIndex;
             m_byteCount = s.m_byteCount;
             return *this;
@@ -119,7 +119,7 @@ namespace sha1
             processByte( static_cast<unsigned char>((bitCount>>8 ) & 0xFF));
             processByte( static_cast<unsigned char>((bitCount)     & 0xFF));
 
-            memcpy(digest, m_digest, 5 * sizeof(uint32_t));
+            std::memcpy(digest, m_digest, 5 * sizeof(uint32_t));
             return digest;
         }
         const uint8_t* getDigestBytes(digest8_t digest) {

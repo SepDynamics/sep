@@ -8,6 +8,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <thread>
+#include <cstring>
 
 #include "api/bridge.hpp"
 #include "context/mock_processor.hpp"

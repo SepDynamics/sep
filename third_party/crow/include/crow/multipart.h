@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <cstring>
 
 #include "crow/http_request.h"
 #include "crow/returnable.h"
@@ -165,7 +166,7 @@ namespace crow
                 size_t found = header.find(boundary_text);
                 if (found != std::string::npos)
                 {
-                    std::string to_return(header.substr(found + strlen(boundary_text)));
+                    std::string to_return(header.substr(found + std::strlen(boundary_text)));
                     if (to_return[0] == '\"')
                     {
                         to_return = to_return.substr(1, to_return.length() - 2);

@@ -175,7 +175,7 @@ inline char * qs_k2v(const char * key, char * const * qs_kv, size_t qs_kv_size, 
     size_t i;
     size_t key_len, skip;
 
-    key_len = strlen(key);
+    key_len = std::strlen(key);
 
 #ifdef _qsSORTING
 // TODO: binary search for key in the sorted qs_kv
@@ -205,7 +205,7 @@ inline std::unique_ptr<std::pair<std::string, std::string>> qs_dict_name2kv(cons
     size_t i;
     size_t name_len, skip_to_eq, skip_to_brace_open, skip_to_brace_close;
 
-    name_len = strlen(dict_name);
+    name_len = std::strlen(dict_name);
 
 #ifdef _qsSORTING
 // TODO: binary search for key in the sorted qs_kv
@@ -252,7 +252,7 @@ inline char * qs_scanvalue(const char * key, const char * qs, char * val, size_t
     if ( (tmp = strchr(qs, '?')) != NULL )
         qs = tmp + 1;
 
-    key_len = strlen(key);
+    key_len = std::strlen(key);
     while(qs[0] != '#' && qs[0] != '\0')
     {
         if ( qs_strncmp(key, qs, key_len) == 0 )

@@ -1930,7 +1930,7 @@ inline void
   http_parser_init(http_parser* parser)
 {
   void *data = parser->data; /* preserve application data */
-  memset(parser, 0, sizeof(*parser));
+  std::memset(parser, 0, sizeof(*parser));
   parser->data = data;
   parser->state = s_start_req;
   parser->http_errno = CHPE_OK;

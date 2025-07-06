@@ -2,13 +2,15 @@
 #include "sep_engine_wrapper.h"
 #include <glm/gtx/norm.hpp>
 #include <glm/gtc/random.hpp>
+#include <ctime>
+#include <time.h>
 
 namespace sep {
 namespace workbench {
 
 void FlockingDemo::init() {
     agents_.clear();
-    std::default_random_engine rng(static_cast<unsigned>(time(nullptr)));
+    std::default_random_engine rng(static_cast<unsigned>(std::time(nullptr)));
     std::uniform_real_distribution<float> pos(-10.f, 10.f);
     std::uniform_real_distribution<float> vel(-1.f, 1.f);
 

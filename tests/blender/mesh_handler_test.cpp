@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cmath>
 #include <memory>
+#include <cstring>
 #include "quantum/data.hpp"
 #include "quantum/types.h"
 #include "blender/mesh_handler.h"

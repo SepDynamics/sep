@@ -8,6 +8,7 @@
 #include <thread>
 #include <type_traits>
 #include <regex>
+#include <cstring>
 
 #include "catch2/catch_all.hpp"
 #include "crow.h"
@@ -222,7 +223,7 @@ TEST_CASE("InvalidPathRouting")
     catch (std::exception& e)
     {
         auto expected_exception_text = "Internal error: Routes must start with a '/'";
-        CHECK(strcmp(expected_exception_text, e.what()) == 0);
+        CHECK(std::strcmp(expected_exception_text, e.what()) == 0);
     }
 } // InvalidPathRouting
 

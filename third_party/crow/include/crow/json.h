@@ -1263,7 +1263,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
         inline rvalue load(const char* data, size_t size)
         {
             char* s = new char[size + 1];
-            memcpy(s, data, size);
+            std::memcpy(s, data, size);
             s[size] = 0;
             auto ret = load_nocopy_internal(s, size);
             if (ret)
@@ -1275,7 +1275,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
 
         inline rvalue load(const char* data)
         {
-            return load(data, strlen(data));
+            return load(data, std::strlen(data));
         }
 
         inline rvalue load(const std::string& str)

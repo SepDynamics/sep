@@ -1,72 +1,69 @@
 #pragma once
 
+#include <array>
 #include <filesystem>
-#include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
-#include <memory>
-#include <filesystem>
-#include <array>
 #include <vector>
 
 namespace sep {
 namespace workbench {
 
 struct WindowConfig {
-  std::string title;
-  int width;
-  int height;
-  bool fullscreen;
-  bool vsync;
+    std::string title;
+    int width;
+    int height;
+    bool fullscreen;
+    bool vsync;
 };
 
 struct EngineConfig {
-  bool cuda_enabled;
-  bool metrics_enabled;
-  std::string log_level;
+    bool cuda_enabled;
+    bool metrics_enabled;
+    std::string log_level;
 };
 
 struct GenesisPatternConfig {
-  struct {
-    std::array<int, 3> dimensions;
-    float evolution_rate;
-    float coherence_threshold;
-  } initial_pattern;
+    struct InitialPattern {
+        std::array<int,3> dimensions;
+        float evolution_rate;
+        float coherence_threshold;
+    } initial_pattern;
 
-  struct {
-    std::string color_mode;
-    std::string emission_mode;
-    std::string roughness_mode;
-  } visualization;
+    struct Visualization {
+        std::string color_mode;
+        std::string emission_mode;
+        std::string roughness_mode;
+    } visualization;
 };
 
 struct AudioVisualizerConfig {
-  struct {
-    std::string device;
-    int sample_rate;
-    int buffer_size;
-    int fft_size;
-  } input;
+    struct Input {
+        std::string device;
+        int sample_rate;
+        int buffer_size;
+        int fft_size;
+    } input;
 
-  struct {
-    float frequency_scale;
-    float amplitude_scale;
-    float evolution_sensitivity;
-  } pattern_mapping;
+    struct PatternMapping {
+        float frequency_scale;
+        float amplitude_scale;
+        float evolution_sensitivity;
+    } pattern_mapping;
 };
 
 struct MemoryGardenConfig {
-  struct {
-    float stm_radius;
-    float mtm_radius;
-    float ltm_radius;
-  } layout;
+    struct Layout {
+        float stm_radius;
+        float mtm_radius;
+        float ltm_radius;
+    } layout;
 
-    struct {
+    struct Visualization {
         bool show_connections;
         float connection_opacity;
         float pattern_scale;
-} visualization;
+    } visualization;
 };
 
 struct AnnealingConfig {
@@ -143,11 +140,11 @@ struct CosmoConfig {
 };
 
 struct RendererConfig {
-  struct {
-    int samples;
-    bool denoising;
-    std::string device;
-  } cycles;
+    struct Cycles {
+        int samples;
+        bool denoising;
+        std::string device;
+    } cycles;
 };
 
 struct OptimizerConfig {
@@ -157,13 +154,13 @@ struct OptimizerConfig {
 
 class Config {
 public:
-  static Config &getInstance() {
-    static Config instance;
-    return instance;
-  }
+    static Config& getInstance() {
+        static Config instance;
+        return instance;
+    }
 
-  bool load(const std::filesystem::path &path);
-  bool save(const std::filesystem::path &path) const;
+    bool load(const std::filesystem::path& path);
+    bool save(const std::filesystem::path& path) const;
 
     const WindowConfig& window() const { return window_; }
     const EngineConfig& engine() const { return engine_; }
@@ -177,16 +174,16 @@ public:
 
 private:
     Config() = default;
-    
-    WindowConfig window_;
-    EngineConfig engine_;
-    GenesisPatternConfig genesis_pattern_;
-    AudioVisualizerConfig audio_visualizer_;
-    MemoryGardenConfig memory_garden_;
-    AnnealingConfig annealing_;
-    AnnealingSimConfig annealing_sim_;
-    RendererConfig renderer_;
-    OptimizerConfig optimizer_;
+
+    WindowConfig window_{};
+    EngineConfig engine_{};
+    GenesisPatternConfig genesis_pattern_{};
+    AudioVisualizerConfig audio_visualizer_{};
+    MemoryGardenConfig memory_garden_{};
+    AnnealingConfig annealing_{};
+    AnnealingSimConfig annealing_sim_{};
+    RendererConfig renderer_{};
+    OptimizerConfig optimizer_{};
 };
 
 } // namespace workbench

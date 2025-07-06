@@ -17,18 +17,18 @@ bool Config::load(const std::filesystem::path& path) {
 
         auto& window = json["window"];
         window_ = {
-            window["title"].get<std::string>(),
-            window["width"].get<int>(),
-            window["height"].get<int>(),
-            window["fullscreen"].get<bool>(),
-            window["vsync"].get<bool>()
+            window.value("title", std::string{"SEP"}),
+            window.value("width", 800),
+            window.value("height", 600),
+            window.value("fullscreen", false),
+            window.value("vsync", true)
         };
 
         auto& engine = json["engine"];
         engine_ = {
-            engine["cuda_enabled"].get<bool>(),
-            engine["metrics_enabled"].get<bool>(),
-            engine["log_level"].get<std::string>()
+            engine.value("cuda_enabled", false),
+            engine.value("metrics_enabled", false),
+            engine.value("log_level", std::string{"info"})
         };
 
         auto& genesis = json["demos"]["genesis_pattern"];
@@ -53,33 +53,25 @@ bool Config::load(const std::filesystem::path& path) {
         auto& input = audio["input"];
         auto& mapping = audio["pattern_mapping"];
         audio_visualizer_ = {
-            {
-                input["device"].get<std::string>(),
-                input["sample_rate"].get<int>(),
-                input["buffer_size"].get<int>(),
-                input["fft_size"].get<int>()
-            },
-            {
-                mapping["frequency_scale"].get<float>(),
-                mapping["amplitude_scale"].get<float>(),
-                mapping["evolution_sensitivity"].get<float>()
-            }
+            { input["device"].get<std::string>(),
+              input["sample_rate"].get<int>(),
+              input["buffer_size"].get<int>(),
+              input["fft_size"].get<int>() },
+            { mapping["frequency_scale"].get<float>(),
+              mapping["amplitude_scale"].get<float>(),
+              mapping["evolution_sensitivity"].get<float>() }
         };
 
         auto& garden = json["demos"]["memory_garden"];
         auto& layout = garden["layout"];
-        auto& garden_viz = garden["visualization"];
+        auto& viz_g = garden["visualization"];
         memory_garden_ = {
-            {
-                layout["stm_radius"].get<float>(),
-                layout["mtm_radius"].get<float>(),
-                layout["ltm_radius"].get<float>()
-            },
-            {
-                garden_viz["show_connections"].get<bool>(),
-                garden_viz["connection_opacity"].get<float>(),
-                garden_viz["pattern_scale"].get<float>()
-            }
+            { layout["stm_radius"].get<float>(),
+              layout["mtm_radius"].get<float>(),
+              layout["ltm_radius"].get<float>() },
+            { viz_g["show_connections"].get<bool>(),
+              viz_g["connection_opacity"].get<float>(),
+              viz_g["pattern_scale"].get<float>() }
         };
 
         auto& anneal = json["demos"]["annealing"];
@@ -105,10 +97,8 @@ bool Config::load(const std::filesystem::path& path) {
         };
 
         auto& optimizer = json["optimizer"];
-        optimizer_ = {
-            optimizer["iterations"].get<int>(),
-            optimizer["mutation_rate"].get<float>()
-        };
+        optimizer_ = { optimizer["iterations"].get<int>(),
+                       optimizer["mutation_rate"].get<float>() };
 
         return true;
     } catch (const std::exception& e) {

@@ -1,22 +1,23 @@
 #pragma once
 
-// 1. ABSOLUTELY FIRST: Core C/C++ Standard Library Headers
-// These provide the fundamental functions (memcpy, strlen, time, etc.)
-// that other libraries expect to be available in the global namespace.
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <stddef.h>
-#include <math.h>
-
+// ---------------------------------------------------------------------------
+// 1. ABSOLUTELY FIRST: C Standard Library Headers
+// These must come before any third-party includes to avoid namespace pollution.
+// ---------------------------------------------------------------------------
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <cmath>
-#include <vector>
+#include <unistd.h>
+
+// ---------------------------------------------------------------------------
+// 2. Core C++ Standard Library Headers
+// ---------------------------------------------------------------------------
 #include <string>
+#include <vector>
 #include <memory>
 #include <algorithm>
 #include <stdexcept>

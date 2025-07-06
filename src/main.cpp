@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <thread>
+#include <chrono>
 #include "core/engine.h"
 #include "quantum/processor.h"
 #include "quantum/types.h"
@@ -27,15 +29,22 @@ int main() {
         std::cout << "  Coherence: " << p.quantum_state.coherence << std::endl;
         std::cout << "  Stability: " << p.quantum_state.stability << std::endl;
 
-        std::cout << "\nEvolving pattern..." << std::endl;
-        for (int i = 0; i < 10; ++i) {
+        std::cout << "\n--- EVOLUTION LOOP ---" << std::endl;
+        for (int i = 0; i < 50; ++i) {
             q_processor->processPattern(p.id);
+            sep::quantum::Pattern current_pattern = q_processor->getPattern(p.id);
+            printf("Step %02d -> Coherence: %f, Stability: %f\n",
+                   i + 1,
+                   current_pattern.quantum_state.coherence,
+                   current_pattern.quantum_state.stability);
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
+        std::cout << "----------------------" << std::endl;
 
         sep::quantum::Pattern final_pattern = q_processor->getPattern(p.id);
 
         std::cout << "\n--- MEANINGFUL RESULT ---" << std::endl;
-        std::cout << "Final Pattern State after 10 evolutions:" << std::endl;
+        std::cout << "Final Pattern State after 50 evolutions:" << std::endl;
         std::cout << "  Coherence: " << final_pattern.quantum_state.coherence << std::endl;
         std::cout << "  Stability: " << final_pattern.quantum_state.stability << std::endl;
         std::cout << "-------------------------" << std::endl;

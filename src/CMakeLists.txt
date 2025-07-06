@@ -19,11 +19,9 @@ if(SEP_WITH_CYCLES)
     add_subdirectory(blender)
 endif()
 
-# --- CORRECTED EXECUTABLE TARGET ---
 add_executable(sep_engine
     main.cpp
 )
-
 set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
 
 target_include_directories(sep_engine PRIVATE ${SEP_INCLUDE_DIRS})

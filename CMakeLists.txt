@@ -60,7 +60,8 @@ set(SEP_HAS_CUDA 1)
 add_compile_definitions(SEP_HAS_CUDA=1)
 
 # Blender integration is always built
-set(SEP_HAS_BLENDER 1)
+# Blender integration is disabled for the console workbench
+set(SEP_HAS_BLENDER 0)
 
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
@@ -102,7 +103,7 @@ if(SEP_ENABLE_AUDIO)
     add_subdirectory(src/audio)
     add_compile_definitions(SEP_HAS_AUDIO=1)
 endif()
-add_subdirectory(src/blender)
+# add_subdirectory(src/blender) # Temporarily disabled to isolate build issues
 add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)
 add_subdirectory(extern/cycles/third_party/sky)
@@ -148,7 +149,6 @@ install(TARGETS
     sep_quantum
     sep_embeddings
     sep_audio
-    sep_blender
     sep_api
     EXPORT sep-targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

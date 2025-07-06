@@ -7,8 +7,8 @@ set(SEP_INCLUDE_DIRS
 )
 
 # Main executable
-add_executable(sep_main server_main.cpp)
-target_include_directories(sep_main PRIVATE ${SEP_INCLUDE_DIRS})
+add_executable(sep_engine_cli main.cpp)
+target_include_directories(sep_engine_cli PRIVATE ${SEP_INCLUDE_DIRS})
 
 # Add component subdirectories
 add_subdirectory(api)
@@ -21,19 +21,7 @@ add_subdirectory(quantum)
 add_subdirectory(embeddings)
 
 # Link dependencies
-target_link_libraries(sep_server PRIVATE
-    sep_api
-    sep_audio
-    sep_compat
+target_link_libraries(sep_engine_cli PRIVATE
     sep_core
-    sep_memory
     sep_quantum
-    sep_blender
-    ${PIPEWIRE_LIBRARIES}
-    fmt::fmt
-)
-
-target_link_libraries(sep_server PRIVATE
-    CUDA::cudart
-    CUDA::cuda_driver
 )

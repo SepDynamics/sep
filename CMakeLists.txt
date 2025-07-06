@@ -156,6 +156,11 @@ target_link_libraries(sep_engine PRIVATE
     ${CURL_LIBRARIES}
     ${CMAKE_DL_LIBS}
     $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
+    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_kernel>
+    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_scene>
+    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_device>
+    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_util>
+    $<$<BOOL:${SEP_WITH_CYCLES}>:cycles_kernel_osl>
 )
 
 # Export and install targets

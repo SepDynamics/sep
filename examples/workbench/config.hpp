@@ -96,16 +96,6 @@ struct NeuralDemoConfig {
     } neuron;
 };
 
-struct DigitalPhysicsConfig {
-    struct {
-        int width;
-        int height;
-    } grid;
-    struct {
-        std::string rule;
-    } rules;
-};
-
 struct FlockingConfig {
     int agent_count;
     float cohesion_weight;

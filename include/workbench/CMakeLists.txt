@@ -14,7 +14,6 @@ set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/include/compat/cuda_unified_fix.h")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__STRICT_ANSI__ -D_GLIBCXX_USE_CXX11_ABI=1")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_GLIBCXX_USE_NOEXCEPT_SPEC=0")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
 
 # Add global definitions needed for CUDA compatibility
@@ -22,7 +21,6 @@ add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1)
 add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1)
 add_definitions(-D__STRICT_ANSI__)
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
-add_definitions(-D_GLIBCXX_USE_NOEXCEPT_SPEC=0)
 add_definitions(-DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
 
 # Add custom module paths

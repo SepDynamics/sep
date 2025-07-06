@@ -22,6 +22,15 @@ option(SEP_ENABLE_AUDIO "Enable PipeWire Audio Integration" ON)
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
 
+# Optional modules
+option(SEP_ENABLE_BLENDER "Enable Blender/Cycles Integration" ON)
+option(SEP_ENABLE_AUDIO "Enable PipeWire Audio Integration" ON)
+
+set(SEP_HAS_BLENDER 0)
+if(SEP_ENABLE_BLENDER)
+    set(SEP_HAS_BLENDER 1)
+endif()
+
 # Set CUDA compiler flags before enabling the language
 set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")

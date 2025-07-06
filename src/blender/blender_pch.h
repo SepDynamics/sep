@@ -1,13 +1,15 @@
 #pragma once
 
-// 1. Core C/C++ Standard Libraries
-#include <cstring> // For memcpy, memset, etc.
-#include <ctime>   // For time_t, etc.
-#include <cstdlib>
-#include <cmath>   // For math functions
+// 1. ABSOLUTE FIRST: Core C/C++ Standard Libraries
+//    These must be included before any third-party or project headers
+//    to ensure the standard symbols are properly placed in the std namespace.
+#include <cstring>   // For memcpy, memset, strcmp, strlen
+#include <ctime>     // For time_t, clock_gettime, etc.
+#include <cmath>     // For math functions
 #include <vector>
 #include <string>
 #include <memory>
+#include <cstdlib>
 #include <algorithm>
 #include <numeric>
 #include <iostream>

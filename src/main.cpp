@@ -2,6 +2,7 @@
 #include "core/manager.h"
 #include "core/logging.h"
 #include "blender/cycles_renderer.h"
+#include <iostream>
 #include <memory>
 #include <iostream>
 

@@ -17,6 +17,7 @@
 #include <signal.h>
 #include <spdlog/spdlog.h>
 #include "logging/manager.h"
+#include "blender/cycles_renderer.h"
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <thread>
@@ -255,6 +256,7 @@ protected:
   private:
     uint16_t port_;
     sep::config::APIConfig config_;
+    std::unique_ptr<sep::blender::ccl::CyclesRenderer> renderer_;
     std::unique_ptr<SEPApiServer> server_;
     std::unique_ptr<sep::blender::ccl::CyclesRenderer> renderer_;
     // running_ flag uses seq_cst semantics

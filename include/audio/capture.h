@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "audio/types.h"
 
 namespace sep {
 namespace audio {
@@ -15,7 +16,6 @@ protected:
   AudioCapture() = default;
 };
 #else
-#include "audio/types.h"
 #include <functional>
 
 class AudioCapture {

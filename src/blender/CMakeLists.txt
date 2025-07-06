@@ -62,6 +62,7 @@ target_include_directories(sep_blender PUBLIC
     ${OSL_INCLUDE_DIRS}
     PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
 
 # Properties for building a shared library

@@ -29,7 +29,7 @@
 
 // 5. Cycles Headers (Essential ones)
 #include "scene/scene.h"
-#include "session/scene.h"
+#include "session/session.h"
 #include "session/output_driver.h"
 #include "util/math.h"
 #include "util/system.h"

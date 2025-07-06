@@ -6,15 +6,19 @@ set(SEP_INCLUDE_DIRS
 )
 
 # Add component subdirectories
-add_subdirectory(api)
-add_subdirectory(audio)
-add_subdirectory(blender)
-add_subdirectory(compat)
 add_subdirectory(core)
+add_subdirectory(compat)
 add_subdirectory(manifold)
 add_subdirectory(memory)
 add_subdirectory(quantum)
 add_subdirectory(embeddings)
+add_subdirectory(api)
+if(SEP_WITH_CYCLES)
+    add_subdirectory(blender)
+endif()
+if(SEP_WITH_AUDIO)
+    add_subdirectory(audio)
+endif()
 
 # --- CORRECTED EXECUTABLE TARGET ---
 add_executable(sep_engine
@@ -27,10 +31,12 @@ target_include_directories(sep_engine PRIVATE ${SEP_INCLUDE_DIRS})
 
 target_link_libraries(sep_engine PRIVATE
     sep_api
-    sep_blender
     Threads::Threads
     ${CMAKE_DL_LIBS}
 )
+if(SEP_WITH_CYCLES)
+    target_link_libraries(sep_engine PRIVATE sep_blender)
+endif()
 
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)

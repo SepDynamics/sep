@@ -831,9 +831,7 @@ void SEPApiServer::handleSignal(int signal) {
 }
 
 // Blender-specific routes are disabled in the headless API build
-#if 0
 void SEPApiServer::setupBlenderRoutes() {
-#if 0 // Blender routes disabled
 #ifdef SEP_HAS_BLENDER
     // Pattern processing endpoint
     app_->route_dynamic("/api/v1/patterns/process")
@@ -1015,10 +1013,8 @@ void SEPApiServer::setupBlenderRoutes() {
         res.body = response.dump();
         res.code = 200;
         return res;
-        
-#endif  // SEP_HAS_BLENDER
+    });
 }
-#endif
-
 
 } // end namespace sep::api
+#endif  // SEP_HAS_BLENDER

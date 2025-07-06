@@ -2,6 +2,7 @@
 #include <stdexcept>
 
 #include "demo_manager.hpp"
+#include "config.hpp"
 #include "demos/genesis_pattern.hpp"
 #include "demos/audio_visualizer.hpp"
 #include "demos/memory_garden.hpp"

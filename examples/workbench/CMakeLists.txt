@@ -15,6 +15,8 @@ target_include_directories(sep_workbench PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/cycles/src>
 )
 
+target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO)
+
 target_link_libraries(sep_workbench PRIVATE
     sep_api
     sep_blender

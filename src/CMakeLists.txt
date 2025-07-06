@@ -26,26 +26,8 @@ target_include_directories(sep_engine PRIVATE ${SEP_INCLUDE_DIRS})
 
 target_link_libraries(sep_engine PRIVATE
     sep_api
-    sep_blender
-    sep_audio
-    sep_quantum
-    sep_memory
-    sep_embeddings
-    sep_compat
-    sep_core
     Threads::Threads
-    ${CURL_LIBRARIES}
-    http_parser::http_parser
-    hiredis
-    pipewire-0.3
-    fftw3f
-    cycles_scene
-    cycles_device
-    cycles_kernel
-    cycles_osl
-    glog
-    TBB::tbb
-    pthread dl rt m z
+    ${CMAKE_DL_LIBS}
 )
 
 if(TARGET CUDA::cudart)

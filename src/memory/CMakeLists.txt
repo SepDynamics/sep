@@ -14,7 +14,6 @@ find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis REQUIRE
 # Add CUDA-specific compile definitions to handle exception specs
 target_compile_definitions(sep_memory PRIVATE
     SEP_HAS_CUDA=1
-    _GLIBCXX_USE_NOEXCEPT_SPEC=0
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
 
 # Link dependencies

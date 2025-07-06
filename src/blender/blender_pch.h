@@ -1,9 +1,12 @@
 #pragma once
 
 // 1. Core C/C++ Standard Libraries
-#include <cstdlib>
 #include <cstring> // For memcpy, memset, etc.
 #include <ctime>   // For time_t, etc.
+#include <cstdlib>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
 #include <cmath>   // For math functions
 #include <vector>
 #include <string>

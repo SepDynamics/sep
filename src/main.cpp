@@ -10,7 +10,7 @@ int main() {
 
     try {
         sep::config::ConfigManager::getInstance().initialize(0, nullptr);
-        auto& engine = sep::core::Engine::instance();
+        sep::core::Engine engine;
         engine.init({});
 
         auto q_processor = sep::quantum::createProcessor({});

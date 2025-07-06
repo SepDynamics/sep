@@ -25,8 +25,9 @@
 #include "api/server.h"
 #include "blender/cycles_renderer.h"
 #include "quantum/data.hpp"
+#include "audio/types.h"   // Defines AudioError
+#include "audio/config.h"  // Defines AudioConfig
 #include "audio/capture.h"
-#include "audio/config.h"
 #include "audio/factory.h"
 #include "blender/factory.h"
 #include "blender/types.h"

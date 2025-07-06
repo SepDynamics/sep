@@ -31,7 +31,10 @@ target_link_libraries(sep_engine_cli PRIVATE
 # Full server executable
 add_executable(sep_engine_server
     server_main.cpp)
-target_include_directories(sep_engine_server PRIVATE ${SEP_INCLUDE_DIRS})
+target_include_directories(sep_engine_server PRIVATE
+    ${SEP_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src
+)
 target_link_libraries(sep_engine_server PRIVATE
     sep_api
     sep_blender
@@ -44,7 +47,10 @@ target_link_libraries(sep_engine_server PRIVATE
 
 # Full server executable
 add_executable(sep_engine_server api/server_main.cpp)
-target_include_directories(sep_engine_server PRIVATE ${SEP_INCLUDE_DIRS})
+target_include_directories(sep_engine_server PRIVATE
+    ${SEP_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src
+)
 target_link_libraries(sep_engine_server PRIVATE
     sep_api
     sep_blender

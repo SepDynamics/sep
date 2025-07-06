@@ -1,5 +1,6 @@
 #include "drug_discovery_demo.hpp"
 #include <config.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/norm.hpp>
 #include <cstdlib>
 

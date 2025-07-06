@@ -6,7 +6,7 @@ namespace sep {
 namespace workbench {
 
 void NeuralDemo::init() {
-    const auto& cfg = sep::core::config::ConfigManager::getInstance().getEngineConfig().neural_demo();
+    const auto& cfg = sep::workbench::Config::getInstance().neural_demo();
 
     decay_ = cfg.neuron.decay;
     input_strength_ = cfg.neuron.input_strength;

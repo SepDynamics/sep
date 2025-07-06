@@ -100,6 +100,51 @@ bool Config::load(const std::filesystem::path& path) {
         optimizer_ = { optimizer["iterations"].get<int>(),
                        optimizer["mutation_rate"].get<float>() };
 
+        // Load drug discovery demo config
+        if (json["demos"].contains("drug_discovery")) {
+            auto& drug = json["demos"]["drug_discovery"];
+            drug_discovery_.optimizer.iterations = drug["optimizer"]["iterations"].get<int>();
+            drug_discovery_.optimizer.mutation_rate = drug["optimizer"]["mutation_rate"].get<float>();
+        }
+
+        // Load flocking demo config
+        if (json["demos"].contains("flocking")) {
+            auto& flock = json["demos"]["flocking"];
+            flocking_.agent_count = flock["agent_count"].get<int>();
+            flocking_.cohesion_weight = flock["cohesion_weight"].get<float>();
+            flocking_.separation_weight = flock["separation_weight"].get<float>();
+            flocking_.alignment_weight = flock["alignment_weight"].get<float>();
+            flocking_.neighbor_radius = flock["neighbor_radius"].get<float>();
+            flocking_.max_speed = flock["max_speed"].get<float>();
+        }
+
+        // Load neural demo config
+        if (json["demos"].contains("neural_demo")) {
+            auto& neural = json["demos"]["neural_demo"];
+            neural_demo_.network.neuron_count = neural["network"]["neuron_count"].get<int>();
+            neural_demo_.network.connection_prob = neural["network"]["connection_prob"].get<float>();
+            neural_demo_.neuron.threshold = neural["neuron"]["threshold"].get<float>();
+            neural_demo_.neuron.decay = neural["neuron"]["decay"].get<float>();
+            neural_demo_.neuron.input_strength = neural["neuron"]["input_strength"].get<float>();
+        }
+
+        // Load digital physics demo config
+        if (json["demos"].contains("digital_physics")) {
+            auto& physics = json["demos"]["digital_physics"];
+            digital_physics_.grid.width = physics["grid"]["width"].get<int>();
+            digital_physics_.grid.height = physics["grid"]["height"].get<int>();
+            
+            if (physics["rules"].contains("birth")) {
+                for (auto& b : physics["rules"]["birth"])
+                    digital_physics_.rules.birth.push_back(b.get<int>());
+            }
+            
+            if (physics["rules"].contains("survival")) {
+                for (auto& s : physics["rules"]["survival"])
+                    digital_physics_.rules.survival.push_back(s.get<int>());
+            }
+        }
+
         return true;
     } catch (const std::exception& e) {
         spdlog::error("Failed to parse config file: {}", e.what());
@@ -181,6 +226,49 @@ bool Config::save(const std::filesystem::path& path) const {
         json["optimizer"] = {
             {"iterations", optimizer_.iterations},
             {"mutation_rate", optimizer_.mutation_rate}};
+
+        // Save drug discovery demo config
+        json["demos"]["drug_discovery"] = {
+            {"optimizer", {
+                {"iterations", drug_discovery_.optimizer.iterations},
+                {"mutation_rate", drug_discovery_.optimizer.mutation_rate}
+            }}
+        };
+
+        // Save flocking demo config
+        json["demos"]["flocking"] = {
+            {"agent_count", flocking_.agent_count},
+            {"cohesion_weight", flocking_.cohesion_weight},
+            {"separation_weight", flocking_.separation_weight},
+            {"alignment_weight", flocking_.alignment_weight},
+            {"neighbor_radius", flocking_.neighbor_radius},
+            {"max_speed", flocking_.max_speed}
+        };
+
+        // Save neural demo config
+        json["demos"]["neural_demo"] = {
+            {"network", {
+                {"neuron_count", neural_demo_.network.neuron_count},
+                {"connection_prob", neural_demo_.network.connection_prob}
+            }},
+            {"neuron", {
+                {"threshold", neural_demo_.neuron.threshold},
+                {"decay", neural_demo_.neuron.decay},
+                {"input_strength", neural_demo_.neuron.input_strength}
+            }}
+        };
+
+        // Save digital physics demo config
+        json["demos"]["digital_physics"] = {
+            {"grid", {
+                {"width", digital_physics_.grid.width},
+                {"height", digital_physics_.grid.height}
+            }},
+            {"rules", {
+                {"birth", digital_physics_.rules.birth},
+                {"survival", digital_physics_.rules.survival}
+            }}
+        };
 
         std::ofstream file(path);
         if (!file.is_open()) {

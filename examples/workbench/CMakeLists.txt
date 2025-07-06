@@ -9,6 +9,11 @@ add_executable(sep_workbench
     demos/memory_garden.cpp
     demos/cosmo_demo.cpp
     demos/cosmo_sim.cpp
+    demos/drug_discovery_demo.cpp
+    demos/flocking_demo.cpp
+    demos/neural_demo.cpp
+    demos/digital_physics_demo.cpp
+    demos/annealing_demo.cpp
 )
 
 set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)

@@ -1,5 +1,6 @@
 #include "flocking_demo.hpp"
 #include "sep_engine_wrapper.h"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/norm.hpp>
 #include <glm/gtc/random.hpp>
 #include <ctime>

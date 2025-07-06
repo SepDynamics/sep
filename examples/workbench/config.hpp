@@ -161,6 +161,10 @@ public:
     const AnnealingSimConfig& annealing_sim() const { return annealing_sim_; }
     const RendererConfig& renderer() const { return renderer_; }
     const OptimizerConfig& optimizer() const { return optimizer_; }
+    const DrugDiscoveryConfig& drug_discovery() const { return drug_discovery_; }
+    const FlockingConfig& flocking() const { return flocking_; }
+    const NeuralDemoConfig& neural_demo() const { return neural_demo_; }
+    const DigitalPhysicsConfig& digital_physics() const { return digital_physics_; }
 
 private:
     Config() = default;
@@ -174,6 +178,10 @@ private:
     AnnealingSimConfig annealing_sim_{};
     RendererConfig renderer_{};
     OptimizerConfig optimizer_{};
+    DrugDiscoveryConfig drug_discovery_{};
+    FlockingConfig flocking_{};
+    NeuralDemoConfig neural_demo_{};
+    DigitalPhysicsConfig digital_physics_{};
 };
 
 } // namespace workbench

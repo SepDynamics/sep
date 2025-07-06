@@ -3,6 +3,7 @@
 #include "demo_manager.hpp"
 #include <vector>
 #include <string>
+#include <quantum/data.hpp>
 
 namespace sep {
 namespace workbench {

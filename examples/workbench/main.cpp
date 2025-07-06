@@ -8,6 +8,11 @@
 #include "demos/memory_garden.hpp"
 #include "demos/cosmo_demo.hpp"
 #include "demos/cosmo_sim.hpp"
+#include "demos/drug_discovery_demo.hpp"
+#include "demos/flocking_demo.hpp"
+#include "demos/neural_demo.hpp"
+#include "demos/digital_physics_demo.hpp"
+#include "demos/annealing_demo.hpp"
 
 using namespace sep;
 using namespace sep::workbench;
@@ -103,6 +108,21 @@ void registerDemos() {
     });
     demo_manager.registerDemo("cosmo_sim", []() {
         return std::make_unique<CosmoSim>();
+    });
+    demo_manager.registerDemo("drug_discovery", []() {
+        return std::make_unique<DrugDiscoveryDemo>();
+    });
+    demo_manager.registerDemo("flocking", []() {
+        return std::make_unique<FlockingDemo>();
+    });
+    demo_manager.registerDemo("neural", []() {
+        return std::make_unique<NeuralDemo>();
+    });
+    demo_manager.registerDemo("digital_physics", []() {
+        return std::make_unique<DigitalPhysicsDemo>();
+    });
+    demo_manager.registerDemo("annealing", []() {
+        return std::make_unique<AnnealingDemo>();
     });
 
     // Start with Genesis Pattern demo

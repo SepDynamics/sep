@@ -30,6 +30,7 @@ add_subdirectory(memory)
 add_subdirectory(audio)
 add_subdirectory(api)
 add_subdirectory(cuda)
+add_subdirectory(workbench)
 add_subdirectory(${CMAKE_SOURCE_DIR}/_sep/testbed)
 
 # Configure test discovery
@@ -46,4 +47,5 @@ add_custom_target(run_all_tests
         api_tests
         long_double_math_test
         cuda_api_tests
+        workbench_demo_tests
         testbed_tests)

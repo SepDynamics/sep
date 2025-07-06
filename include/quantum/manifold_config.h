@@ -1,6 +1,6 @@
 #pragma once
 
-#include "quantum/quantum_manifold_optimizer.h"
+#include "core/types.h"
 
 namespace sep::quantum::manifold {
     extern ::sep::config::MemoryThresholdConfig memory;

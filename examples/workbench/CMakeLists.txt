@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.16)
 # Build the full-featured server/visualizer
 add_executable(sep_workbench
     main.cpp
+    config.cpp
+    demo_manager.cpp
+    demos/genesis_pattern.cpp
+    # other demo files
 )
 
 set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)

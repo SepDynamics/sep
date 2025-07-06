@@ -20,7 +20,7 @@ if(SEP_WITH_CYCLES)
 endif()
 
 add_executable(sep_engine
-    main.cpp
+    server_main.cpp
 )
 set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
 
@@ -31,12 +31,6 @@ target_link_libraries(sep_engine PRIVATE
     Threads::Threads
     ${CMAKE_DL_LIBS}
 )
-if(SEP_WITH_CYCLES)
-    target_link_libraries(sep_engine PRIVATE sep_blender)
-endif()
-if(SEP_WITH_AUDIO)
-    target_link_libraries(sep_engine PRIVATE sep_audio)
-endif()
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)
 endif()

@@ -6,6 +6,7 @@
 #include <functional>
 
 #include "sep_engine_wrapper.h"
+#include "core/engine.h"
 #include <glm/glm.hpp>
 
 

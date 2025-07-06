@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "audio/types.h"
 
 namespace sep {
 namespace audio {

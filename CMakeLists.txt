@@ -144,9 +144,8 @@ target_include_directories(sep_engine PRIVATE
     ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
 target_link_libraries(sep_engine PRIVATE
+    # High-level modules
     sep_api
-    Threads::Threads
-    ${CMAKE_DL_LIBS}
 )
 
 if(SEP_WITH_CYCLES)
@@ -155,6 +154,20 @@ endif()
 if(SEP_WITH_AUDIO)
     target_link_libraries(sep_engine PRIVATE sep_audio)
 endif()
+
+target_link_libraries(sep_engine PRIVATE
+    # Domain logic
+    sep_quantum
+    sep_memory
+
+    # Low-level backend & foundation
+    sep_compat
+    sep_core
+
+    Threads::Threads
+    ${CURL_LIBRARIES}
+    ${CMAKE_DL_LIBS}
+)
 
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)

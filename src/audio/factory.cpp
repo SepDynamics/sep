@@ -18,5 +18,10 @@ std::unique_ptr<AudioCapture> AudioCapture::create() {
 #endif
 }
 
+// Standalone factory function used by executables
+std::unique_ptr<AudioCapture> createAudioCapture() {
+    return AudioCapture::create();
+}
+
 } // namespace audio
 } // namespace sep

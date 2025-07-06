@@ -6,35 +6,46 @@
 #include <chrono>
 
 int main() {
+    // 1. Initialization
     sep::config::ConfigManager::getInstance().initialize(0, nullptr);
     auto q_processor = sep::quantum::createProcessor({});
 
+    // Use the CyclesRenderer from the blender module
     sep::blender::ccl::CyclesRenderer renderer;
     if (renderer.initialize() != sep::SEPResult::SUCCESS) {
         std::cerr << "Failed to initialize Cycles renderer." << std::endl;
         return 1;
     }
 
+    // 2. Create the Genesis Pattern from your checklist
     sep::quantum::Pattern p;
     p.id = "genesis_pattern";
     p.quantum_state.coherence = 0.1f;
     p.quantum_state.stability = 0.1f;
     q_processor->addPattern(p);
 
+    // 3. Main Simulation & Render Loop
     while (!renderer.shouldClose()) {
-        q_processor->processPattern(p.id);
-        auto updated = q_processor->getPattern(p.id);
+        // Evolve the system
+        q_processor->processAll();
+        auto updated_pattern = q_processor->getPattern(p.id);
 
-        std::vector<sep::pattern::PatternData> data;
+        // Prepare data for visualization
+        std::vector<sep::pattern::PatternData> vis_data;
         sep::pattern::PatternData d;
-        d.position = glm::vec4(0,0,0,1);
-        d.coherence = updated.quantum_state.coherence;
-        data.push_back(d);
+        d.position = updated_pattern.position;
+        d.coherence = updated_pattern.quantum_state.coherence;
+        d.stability = updated_pattern.quantum_state.stability;
+        d.entropy = updated_pattern.quantum_state.entropy;
+        vis_data.push_back(d);
 
-        renderer.createSceneFromPatterns(data);
-        renderer.renderScene({});
+        // Render the current state
+        renderer.createSceneFromPatterns(vis_data);
+        sep::blender::ccl::CyclesRenderer::RenderParams params;
+        renderer.renderScene(params);
         renderer.present();
 
+        // Sleep to not peg the CPU
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 

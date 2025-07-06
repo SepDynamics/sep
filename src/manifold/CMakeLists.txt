@@ -1,8 +1,6 @@
-add_library(sep_manifold STATIC
-    manifold_definitions.cpp
-)
+add_library(sep_manifold INTERFACE)
 
-target_include_directories(sep_manifold PUBLIC
+target_include_directories(sep_manifold INTERFACE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )

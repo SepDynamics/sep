@@ -7,8 +7,12 @@ set(SEP_INCLUDE_DIRS
 
 # Add component subdirectories
 add_subdirectory(api)
-add_subdirectory(audio)
-add_subdirectory(blender)
+if(SEP_WITH_AUDIO)
+    add_subdirectory(audio)
+endif()
+if(SEP_WITH_CYCLES)
+    add_subdirectory(blender)
+endif()
 add_subdirectory(compat)
 add_subdirectory(core)
 add_subdirectory(manifold)
@@ -27,10 +31,12 @@ target_include_directories(sep_engine PRIVATE ${SEP_INCLUDE_DIRS})
 
 target_link_libraries(sep_engine PRIVATE
     sep_api
-    sep_blender
     Threads::Threads
     ${CMAKE_DL_LIBS}
 )
+if(SEP_WITH_CYCLES)
+    target_link_libraries(sep_engine PRIVATE sep_blender)
+endif()
 
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)

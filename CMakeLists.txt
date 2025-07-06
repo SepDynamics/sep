@@ -13,22 +13,24 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
-# Options to control optional modules
-option(SEP_ENABLE_BLENDER "Enable Blender/Cycles Integration" ON)
-option(SEP_ENABLE_AUDIO "Enable PipeWire Audio Integration" ON)
+# Options to control optional modules. These allow building a minimal engine
+# without the heavyweight integrations.
+option(SEP_WITH_CYCLES "Enable Blender Cycles integration" ON)
+option(SEP_WITH_AUDIO "Enable PipeWire audio integration" ON)
 
 # Add include paths after project declaration
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
 
-# Optional modules
-option(SEP_ENABLE_BLENDER "Enable Blender/Cycles Integration" ON)
-option(SEP_ENABLE_AUDIO "Enable PipeWire Audio Integration" ON)
+# Backwards compatibility variables
+set(SEP_ENABLE_BLENDER ${SEP_WITH_CYCLES})
+set(SEP_ENABLE_AUDIO ${SEP_WITH_AUDIO})
 
-set(SEP_HAS_BLENDER 0)
-if(SEP_ENABLE_BLENDER)
-    set(SEP_HAS_BLENDER 1)
+set(SEP_HAS_CYCLES 0)
+if(SEP_WITH_CYCLES)
+    set(SEP_HAS_CYCLES 1)
 endif()
 
 # Set CUDA compiler flags before enabling the language
@@ -70,11 +72,11 @@ find_package(CUDAToolkit REQUIRED)
 set(SEP_HAS_CUDA 1)
 add_compile_definitions(SEP_HAS_CUDA=1)
 
-if(SEP_ENABLE_BLENDER)
-    set(SEP_HAS_BLENDER 1)
+if(SEP_WITH_CYCLES)
+    add_compile_definitions(SEP_HAS_CYCLES=1)
     add_compile_definitions(SEP_HAS_BLENDER=1)
 else()
-    set(SEP_HAS_BLENDER 0)
+    add_compile_definitions(SEP_HAS_CYCLES=0)
     add_compile_definitions(SEP_HAS_BLENDER=0)
 endif()
 
@@ -111,11 +113,11 @@ add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
-if(SEP_ENABLE_AUDIO)
+if(SEP_WITH_AUDIO)
     add_subdirectory(src/audio)
     add_compile_definitions(SEP_HAS_AUDIO=1)
 endif()
-if(SEP_ENABLE_BLENDER)
+if(SEP_WITH_CYCLES)
     add_subdirectory(src/blender)
 endif()
 add_subdirectory(extern/cycles/third_party/cuew)

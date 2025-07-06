@@ -55,13 +55,14 @@ target_link_libraries(sep_blender PUBLIC
 )
 
 # Include directories
-target_include_directories(sep_blender PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    ${OpenImageIO_INCLUDE_DIRS}
-    ${OSL_INCLUDE_DIRS}
+target_include_directories(sep_blender
     PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+        ${OpenImageIO_INCLUDE_DIRS}
+        ${OSL_INCLUDE_DIRS}
 )
 
 # Properties for building a shared library

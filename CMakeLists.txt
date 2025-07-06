@@ -147,7 +147,7 @@ target_link_libraries(sep_engine PRIVATE
     cycles_kernel
     cycles_osl
     glog
-    TBB::tbb
+    ${TBB_LIBRARIES}
     pthread dl rt m z
 )
 

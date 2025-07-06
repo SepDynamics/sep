@@ -2,6 +2,7 @@ add_library(sep_memory
   STATIC 
     memory_tier.cpp
     memory_tier_manager.cpp
+    memory_tier_manager_serialization.cpp
     redis_manager.cpp
     quantum_coherence_manager.cpp
 )

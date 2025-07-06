@@ -121,7 +121,7 @@ add_subdirectory(examples/workbench)
 
 # Main executable
 # Minimal CLI to test the core engine logic
-add_executable(sep_engine src/server_main.cpp)
+add_executable(sep_engine src/api/server.cpp)
 set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
 target_include_directories(sep_engine PRIVATE
     ${CMAKE_SOURCE_DIR}/include
@@ -129,26 +129,8 @@ target_include_directories(sep_engine PRIVATE
 )
 target_link_libraries(sep_engine PRIVATE
     sep_api
-    sep_blender
-    sep_audio
-    sep_quantum
-    sep_memory
-    sep_embeddings
-    sep_compat
-    sep_core
     Threads::Threads
-    ${CURL_LIBRARIES}
-    http_parser::http_parser
-    hiredis
-    pipewire-0.3
-    fftw3f
-    cycles_scene
-    cycles_device
-    cycles_kernel
-    cycles_osl
-    glog
-    ${TBB_LIBRARIES}
-    pthread dl rt m z
+    ${CMAKE_DL_LIBS}
 )
 
 if(TARGET CUDA::cudart)

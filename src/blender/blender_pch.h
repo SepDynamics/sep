@@ -1,3 +1,4 @@
+#include <string.h>
 #pragma once
 
 // 1. ABSOLUTELY FIRST: C Standard Library Headers

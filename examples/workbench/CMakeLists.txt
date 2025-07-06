@@ -10,10 +10,14 @@ add_executable(sep_workbench
 set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 
 target_include_directories(sep_workbench PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/examples/workbench
+    ${PROJECT_SOURCE_DIR}/include
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/cycles/src>
 )
+
+# Build the workbench in demo mode so it does not depend on the
+# full engine implementations.
+target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO)
 
 target_link_libraries(sep_workbench PRIVATE
     sep_api

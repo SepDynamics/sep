@@ -87,9 +87,10 @@ SEP can optionally render through Blender's Cycles engine. Building it requires
 a number of external packages such as OpenVDB, OpenImageIO, OpenEXR/Imath,
 OpenSubdiv and OpenImageDenoise. The helper script
 `scripts/setup_cycles_env.sh` exports all required environment variables, builds
-OpenVDB and then configures Cycles with CMake. Run this script after installing
-the dependencies and whenever you start a new shell that doesn't have those
-variables set.
+OpenVDB and then configures Cycles with CMake. **Run this script in every new
+terminal session** before configuring the project so CMake can locate the Cycles
+headers and libraries. Failing to source it will lead to missing header errors
+during compilation.
 
 ```bash
 source scripts/setup_cycles_env.sh

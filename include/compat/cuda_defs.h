@@ -5,10 +5,12 @@
 #define SEP_HOST __host__
 #define SEP_DEVICE __device__
 #define SEP_HD __host__ __device__
+#define SEP_CUDA_EXPORT __host__
 #else
 #define SEP_HOST
 #define SEP_DEVICE
 #define SEP_HD
+#define SEP_CUDA_EXPORT
 #endif
 
 // CUDA runtime is included by cuda_common.h

@@ -74,8 +74,9 @@ CudaCore& CudaCore::instance() {
     return instance;
 }
 
+// Direct implementation of initialize method
 Error CudaCore::initialize(int device_id) {
-  if (initialized_) {
+  if (is_initialized()) {
     return {Status::Success, "", "", sep::SEPResult::SUCCESS};
   }
 
@@ -313,3 +314,10 @@ Error CudaCore::launchBlend(DeviceMemory<float>& output, const DeviceMemory<floa
 }
 
 }  // namespace sep::cuda
+
+// Add C-style wrapper function for CudaCore::initialize
+extern "C" {
+    sep::cuda::Error cuda_core_initialize(int device_id) {
+        return sep::cuda::CudaCore::instance().initialize(device_id);
+    }
+}

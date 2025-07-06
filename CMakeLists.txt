@@ -116,7 +116,7 @@ add_subdirectory(src/embeddings)
 add_subdirectory(src/api)
 if(SEP_WITH_AUDIO)
     add_subdirectory(src/audio)
-    add_compile_definitions(SEP_HAS_AUDIO=1)
+    set(SEP_HAS_AUDIO 1)
 endif()
 if(SEP_WITH_CYCLES)
     add_subdirectory(src/blender)
@@ -153,15 +153,17 @@ target_compile_definitions(sep_engine PRIVATE
 
 target_link_libraries(sep_engine PRIVATE
     sep_api
+    sep_compat
     $<$<BOOL:${SEP_WITH_AUDIO}>:sep_audio>
     sep_quantum
     sep_memory
-    sep_compat
     sep_core
     Threads::Threads
     ${CURL_LIBRARIES}
     ${CMAKE_DL_LIBS}
     $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
+    CUDA::cudart
+    CUDA::cuda_driver
 )
 
 # Only link Cycles libraries if they exist and SEP_WITH_CYCLES is enabled

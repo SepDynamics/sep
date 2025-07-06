@@ -20,11 +20,11 @@ add_library(sep_api STATIC
 target_link_libraries(sep_api
     PUBLIC
         sep_core
+        sep_compat
         sep_quantum
         sep_memory
     PRIVATE
         ${CURL_LIBRARIES}
-        sep_compat
         sep_embeddings
         http_parser::http_parser
         $<$<BOOL:${SEP_WITH_CYCLES}>:sep_blender>

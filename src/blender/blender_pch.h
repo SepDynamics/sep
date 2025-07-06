@@ -1,36 +1,27 @@
 #pragma once
 
-// 1. ABSOLUTE FIRST: Core C/C++ Standard Libraries
-#include <cstring>   // For memcpy, memset, strcmp, strlen
-#include <ctime>     // For time_t, clock_gettime, etc.
-#include <cmath>     // For math functions
+// 1. ABSOLUTELY FIRST: Core C/C++ Standard Library Headers
+// These provide the fundamental functions (memcpy, strlen, time, etc.)
+#include <cstring>
+#include <ctime>
+#include <cmath>
 #include <vector>
 #include <string>
 #include <memory>
-
-// Additional standard utilities
-#include <cstdlib>
 #include <algorithm>
-#include <numeric>
-#include <iostream>
 #include <stdexcept>
-#include <array>
-#include <functional>
-#include <mutex>
-#include <condition_variable>
-#include <thread>
-#include <chrono>
 
-// 2. Heavy Third-Party Libraries
-#include <OpenImageIO/imageio.h>
+// 2. Heavy Third-Party Libraries (Alphabetical)
+// These often include their own complex set of headers.
 #include <OpenColorIO/OpenColorIO.h>
-#include <spdlog/spdlog.h>
-#include <lz4.h>
-#include <zstd.h>
+#include <OpenImageIO/imageio.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <lz4.h>
+#include <spdlog/spdlog.h>
+#include <zstd.h>
 
-// 3. Cycles Headers (commonly used)
+// 3. Cycles Headers (Essential ones)
 #include "util/system.h"
 #include "util/types.h"
 #include "util/math.h"

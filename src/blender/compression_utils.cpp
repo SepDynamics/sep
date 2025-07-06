@@ -1,8 +1,6 @@
 #include "blender_pch.h"
 #include <unistd.h>
-#include <array>
-#include <cmath>
-#include <vector>
+
 
 #include "blender/compression.h"
 #include "compat/math_common.h"

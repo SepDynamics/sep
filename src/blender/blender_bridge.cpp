@@ -1,10 +1,5 @@
 #include "blender_pch.h"
 
-#include <chrono>
-#include <condition_variable>
-#include <mutex>
-#include <thread>
-#include <spdlog/spdlog.h>
 
 #include "blender/bridge.h"
 #include "core/error_handler.h"

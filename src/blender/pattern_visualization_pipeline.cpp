@@ -1,8 +1,6 @@
 #include "blender_pch.h"
 #include <unistd.h>
-#include <chrono>
-#include <numeric>
-#include <vector>
+
 
 #include "blender/pattern_visualization_pipeline.h"
 #include "compat/shim.h"

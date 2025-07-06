@@ -29,6 +29,7 @@ set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 target_include_directories(sep_workbench PUBLIC
     ${PROJECT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
 
 # Define preprocessor macros

@@ -14,6 +14,7 @@ int main(int argc, char** argv) {
     auto& cfg_manager = sep::config::ConfigManager::getInstance();
     cfg_manager.initialize(argc, argv);
     const auto& api_cfg = cfg_manager.getAPIConfig();
+    logger->info("Configuration loaded. API will run on port {}.", api_cfg.port);
 
     logger->info("Configuration loaded. API will run on port {}.", api_cfg.port);
 

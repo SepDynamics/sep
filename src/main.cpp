@@ -3,7 +3,7 @@
 #include "core/engine.h"
 #include "quantum/processor.h"
 #include "quantum/types.h"
-#include "config/config_manager.h"
+#include "core/manager.h"
 
 int main() {
     std::cout << "--- SEP Engine Core Test ---" << std::endl;

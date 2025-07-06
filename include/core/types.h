@@ -77,6 +77,11 @@ struct APIConfig
     ::sep::ollama::OllamaConfig          ollama;
     std::map<std::string, std::string> extra_settings;
 
+    float      base_coherence{1.0f};
+    float      context_weight{0.0f};
+    float      state_weight{1.0f};
+    std::uint32_t superposition_states{1};
+
     struct ResponseModulationConfig
     {
         bool   enabled{true};
@@ -93,6 +98,10 @@ struct CudaConfig
     std::size_t batch_size{1024};
     float       gpu_memory_limit{0.9f};
     bool        enable_profiling{false};
+    std::uint32_t warp_tile_size{32};
+    std::uint32_t coherence_block_size{256};
+    std::uint32_t similarity_grid_dim{32};
+    bool          enable_phase_modulation{false};
 };
 
 struct LogConfig
@@ -266,6 +275,10 @@ inline void to_json(nlohmann::json& j, const APIConfig& c)
                        {"logging", c.logging},
                        {"ollama", {{"host", c.ollama.host}, {"model", c.ollama.model}}},
                        {"extra_settings", c.extra_settings},
+                       {"base_coherence", c.base_coherence},
+                       {"context_weight", c.context_weight},
+                       {"state_weight", c.state_weight},
+                       {"superposition_states", c.superposition_states},
                        {"response_modulation",
                         {{"enabled", c.response_modulation.enabled},
                          {"coherence_threshold", c.response_modulation.coherence_threshold},
@@ -299,6 +312,10 @@ inline void from_json(const nlohmann::json& j, APIConfig& c)
     {
         c.extra_settings = j["extra_settings"].get<std::map<std::string, std::string>>();
     }
+    c.base_coherence       = j.value("base_coherence", 1.0f);
+    c.context_weight       = j.value("context_weight", 0.0f);
+    c.state_weight         = j.value("state_weight", 1.0f);
+    c.superposition_states = j.value("superposition_states", static_cast<uint32_t>(1));
     if (j.contains("response_modulation"))
     {
         const auto& rm                               = j["response_modulation"];

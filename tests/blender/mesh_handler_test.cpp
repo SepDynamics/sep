@@ -1,6 +1,7 @@
 #include "blender/mesh_handler.h"
 
 #include <gtest/gtest.h>
+#include <cstring>
 #include <cmath>
 #include <memory>
 #include "quantum/data.hpp"
@@ -29,7 +30,7 @@ class MeshHandlerTest : public ::testing::Test {
     float vertices[8][3] = {{-1, -1, -1}, {1, -1, -1}, {1, 1, -1}, {-1, 1, -1},
                             {-1, -1, 1},  {1, -1, 1},  {1, 1, 1},  {-1, 1, 1}};
     for (int i = 0; i < 8; ++i) {
-      memcpy(mesh_->mvert[i].co, vertices[i], sizeof(float) * 3);
+      std::memcpy(mesh_->mvert[i].co, vertices[i], sizeof(float) * 3);
     }
 
     // Initialize cube edges

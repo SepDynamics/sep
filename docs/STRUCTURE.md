@@ -15,6 +15,7 @@ This file describes the key directories and files in the project. It serves as a
 | `cmake` | CMake modules and helper scripts used during the build process. |
 | `config` | Default configuration files. |
 | `scripts` | Utility scripts for development and CI tasks. |
+| `dossier` | Templates for the case study and technical brief portfolio documents. |
 
 ## Build Outputs
 

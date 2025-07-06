@@ -18,7 +18,7 @@ project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Options to control optional modules. These allow building a minimal engine
 # without the heavyweight integrations.
-option(SEP_WITH_CYCLES "Enable Blender Cycles integration" ON)
+option(SEP_WITH_CYCLES "Enable Blender Cycles integration" OFF)
 option(SEP_WITH_AUDIO "Enable PipeWire audio integration" ON)
 
 # Add include paths after project declaration

@@ -2,6 +2,8 @@
 
 #include "demo_manager.hpp"
 #include <memory>
+#include "quantum/processor.h"
+#include "memory/quantum_coherence_manager.h"
 
 namespace sep {
 namespace workbench {

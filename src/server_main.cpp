@@ -1,10 +1,8 @@
 #include "api/server.h"
 #include "core/manager.h"
 #include "core/logging.h"
-#include "blender/cycles_renderer.h"
 #include <iostream>
 #include <memory>
-#include <iostream>
 
 int main(int argc, char** argv) {
     sep::logging::Manager::initialize();
@@ -18,10 +16,7 @@ int main(int argc, char** argv) {
 
     logger->info("Configuration loaded. API will run on port {}.", api_cfg.port);
 
-    auto renderer = std::make_unique<sep::blender::ccl::CyclesRenderer>();
-    renderer->initialize();
-
-    sep::api::SEPApiServer server(api_cfg, renderer.get());
+    sep::api::SEPApiServer server(api_cfg, nullptr);
     logger->info("Server object created.");
 
     if (!server.run()) {

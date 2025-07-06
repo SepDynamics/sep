@@ -38,10 +38,6 @@
 #include "api/server.h"
 #include "quantum/cycles.h"
 #include "compat/types.h"
-#ifdef SEP_HAS_BLENDER
-#include "blender/cycles_renderer.h"
-#include "blender/api.h"
-#endif
 
 namespace sep::api {
 
@@ -834,6 +830,8 @@ void SEPApiServer::handleSignal(int signal) {
   }
 }
 
+// Blender-specific routes are disabled in the headless API build
+#if 0
 void SEPApiServer::setupBlenderRoutes() {
 #ifdef SEP_HAS_BLENDER
     // Pattern processing endpoint
@@ -1017,10 +1015,9 @@ void SEPApiServer::setupBlenderRoutes() {
         res.code = 200;
         return res;
         
-    });
 #endif  // SEP_HAS_BLENDER
-
 }
+#endif
 
 
 } // end namespace sep::api

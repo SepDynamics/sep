@@ -24,6 +24,14 @@ cmake ..
 make -j$(nproc)
 ```
 
+Pass `-DSEP_ENABLE_BLENDER=OFF` or `-DSEP_ENABLE_AUDIO=OFF` to quickly build the
+core engine without optional modules:
+
+```bash
+cmake .. -DSEP_ENABLE_BLENDER=OFF -DSEP_ENABLE_AUDIO=OFF
+make -j$(nproc)
+```
+
 The resulting executable lives in `cmake-make/sep_engine`. Additional static libraries for each module are produced in the same directory.
 
 ## Running the Engine
@@ -82,6 +90,12 @@ OpenSubdiv and OpenImageDenoise. The helper script
 OpenVDB and then configures Cycles with CMake. Run this script after installing
 the dependencies and whenever you start a new shell that doesn't have those
 variables set.
+
+```bash
+source scripts/setup_cycles_env.sh
+```
+
+After sourcing, configure with `-DSEP_ENABLE_BLENDER=ON` to build the renderer.
 
 The script defines variables including `OPENVDB_INCLUDE_DIR`,
 `OPENVDB_LIBRARY`, `OPENIMAGEIO_INCLUDE_DIR`, `OPENIMAGEIO_LIBRARY`,

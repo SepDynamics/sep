@@ -6,21 +6,25 @@
 #include <chrono>
 
 int main() {
+    // 1. Initialization
     sep::config::ConfigManager::getInstance().initialize(0, nullptr);
     auto q_processor = sep::quantum::createProcessor({});
 
+    // Use the CyclesRenderer from the blender module
     sep::blender::ccl::CyclesRenderer renderer;
     if (renderer.initialize() != sep::SEPResult::SUCCESS) {
         std::cerr << "Failed to initialize Cycles renderer." << std::endl;
         return 1;
     }
 
+    // 2. Create the Genesis Pattern from your checklist
     sep::quantum::Pattern p;
     p.id = "genesis_pattern";
     p.quantum_state.coherence = 0.1f;
     p.quantum_state.stability = 0.1f;
     q_processor->addPattern(p);
 
+    // 3. Main Simulation & Render Loop
     while (!renderer.shouldClose()) {
         q_processor->processAll();
         auto updated = q_processor->getPattern(p.id);
@@ -38,6 +42,7 @@ int main() {
         renderer.renderScene(params);
         renderer.present();
 
+        // Sleep to not peg the CPU
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 

@@ -1,4 +1,3 @@
-#include <string.h>
 #pragma once
 
 // 1. ABSOLUTELY FIRST: C Standard Library Headers
@@ -6,11 +5,11 @@
 // global namespace. Using the <c...> variants ensures proper namespace
 // pollution avoidance with modern compilers.
 #include <cstring>
+#include <ctime>
 #include <cstdlib>
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
-#include <ctime>
 #include <cassert>
 
 // 2. Core C++ Standard Library Headers

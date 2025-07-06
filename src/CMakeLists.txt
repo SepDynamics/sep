@@ -34,6 +34,11 @@ target_link_libraries(sep_engine PRIVATE
     sep_compat
     Threads::Threads
     ${CMAKE_DL_LIBS}
+
+    cycles_kernel
+    cycles_scene
+    cycles_device
+    cycles_util
 )
 if(SEP_WITH_CYCLES)
     target_link_libraries(sep_engine PRIVATE sep_blender)

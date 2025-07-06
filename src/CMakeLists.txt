@@ -55,7 +55,6 @@ target_link_libraries(sep_engine_server PRIVATE
     sep_api
     sep_blender
     sep_audio
-    sep_embeddings
     sep_core
     sep_memory
     sep_quantum

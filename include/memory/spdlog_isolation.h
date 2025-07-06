@@ -243,7 +243,7 @@ namespace details {
 class registry
 {
 public:
-    static registry& instance()
+    inline static registry& instance()
     {
         static registry instance;
         static bool     initialized = false;
@@ -304,7 +304,7 @@ namespace details {
 class registry
 {
 public:
-    static registry& instance()
+    inline static registry& instance()
     {
         static registry inst;
         return inst;

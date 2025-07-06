@@ -7,17 +7,10 @@ namespace sep {
 namespace workbench {
 
 void AnnealingDemo::init() {
-#ifndef SEP_WORKBENCH_DEMO
-    const auto& cfg = sep::core::config::ConfigManager::getInstance().getEngineConfig();
-    temperature_ = cfg.genesis_pattern().initial_pattern.evolution_rate; // placeholder
-    cooling_rate_ = 0.99f;
-    int count = 10;
-#else
-    // Default parameters for demo mode
+    // Use hardcoded values for all demos to avoid configuration issues
     temperature_ = 1.0f;
     cooling_rate_ = 0.99f;
     int count = 10;
-#endif
     particles_.resize(count);
     for (auto& p : particles_) {
         p.position = glm::vec3(static_cast<float>(std::rand()) / RAND_MAX,

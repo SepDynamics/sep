@@ -144,6 +144,7 @@ target_include_directories(sep_engine PRIVATE
     ${CMAKE_SOURCE_DIR}/extern/cycles/src
 )
 target_link_libraries(sep_engine PRIVATE
+    # High-level modules
     sep_api
     $<$<BOOL:${SEP_WITH_CYCLES}>:sep_blender>
     $<$<BOOL:${SEP_WITH_AUDIO}>:sep_audio>

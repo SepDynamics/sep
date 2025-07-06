@@ -18,5 +18,9 @@ std::unique_ptr<AudioCapture> AudioCapture::create() {
 #endif
 }
 
+std::unique_ptr<AudioCapture> createAudioCapture() {
+    return AudioCapture::create();
+}
+
 } // namespace audio
 } // namespace sep

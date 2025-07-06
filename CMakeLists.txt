@@ -130,6 +130,19 @@ target_link_libraries(sep_engine_cli PRIVATE
     sep_compat
 )
 
+# Full server executable using API server
+add_executable(sep_engine_server src/api/server_main.cpp)
+target_include_directories(sep_engine_server PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(sep_engine_server PRIVATE
+    sep_api
+    sep_blender
+    sep_audio
+    sep_core
+    sep_memory
+    sep_quantum
+    sep_compat
+)
+
 # Export and install targets
 include(GNUInstallDirs)
 

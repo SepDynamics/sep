@@ -38,8 +38,11 @@ int main() {
 }
 
 void initializeEngine() {
-    const auto& config = Config::getInstance();
-    const auto& engine_config = config.engine();
+    // Pull configuration through the unified manager to avoid relying on the
+    // stub `Config` type provided for demo mode. This mirrors the logic used in
+    // the original workbench entry point under `_sep/testbed`.
+    const auto& config_manager = sep::core::config::ConfigManager::getInstance();
+    const auto& engine_config = config_manager.getEngineConfig();
 
     g_engine = std::make_unique<Engine>();
     g_engine->setCudaEnabled(engine_config.cuda_enabled);
@@ -52,25 +55,26 @@ void initializeEngine() {
 }
 
 void initializeRenderer() {
-    // Load configuration
-    auto& config = Config::getInstance();
-    if (!config.load("config.json")) {
+    // Load configuration through the shared ConfigManager. This keeps behaviour
+    // consistent between demo and full builds.
+    auto& config_manager = sep::core::config::ConfigManager::getInstance();
+    if (!config_manager.load("config.json")) {
         throw std::runtime_error("Failed to load configuration");
     }
 
     // Initialize renderer with config settings
     g_renderer = std::make_unique<CyclesRenderer>();
     
-    const auto& window = config.window();
+    const auto& window = config_manager.getWindowConfig();
     g_renderer->setWindowTitle(window.title);
     g_renderer->setWindowSize(window.width, window.height);
     g_renderer->setFullscreen(window.fullscreen);
     g_renderer->setVSync(window.vsync);
 
-    const auto& renderer = config.renderer();
-    g_renderer->setSamples(renderer.cycles.samples);
-    g_renderer->setDenoising(renderer.cycles.denoising);
-    g_renderer->setDevice(renderer.cycles.device);
+    const auto& renderer_cfg = config_manager.getRendererConfig();
+    g_renderer->setSamples(renderer_cfg.cycles.samples);
+    g_renderer->setDenoising(renderer_cfg.cycles.denoising);
+    g_renderer->setDevice(renderer_cfg.cycles.device);
 
     if (!g_renderer->initialize()) {
         throw std::runtime_error("Failed to initialize Cycles renderer");

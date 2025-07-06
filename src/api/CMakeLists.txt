@@ -20,6 +20,8 @@ add_library(sep_api STATIC
 target_link_libraries(sep_api
     PUBLIC
         sep_core
+        sep_quantum
+        sep_memory
     PRIVATE
         ${CURL_LIBRARIES}
         sep_compat

@@ -26,6 +26,7 @@ target_include_directories(sep_engine PRIVATE ${SEP_INCLUDE_DIRS})
 
 target_link_libraries(sep_engine PRIVATE
     sep_api
+    sep_blender
     Threads::Threads
     ${CMAKE_DL_LIBS}
 )

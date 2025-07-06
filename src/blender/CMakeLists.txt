@@ -9,7 +9,7 @@ find_package(OSL REQUIRED)
 find_package(TBB REQUIRED)
 # Add other find_package() calls here for Embree, OpenVDB etc. as needed
 
-add_library(sep_blender SHARED
+add_library(sep_blender STATIC
     api.cpp
     blender_integration.cpp
     compression.cpp
@@ -18,7 +18,6 @@ add_library(sep_blender SHARED
     factory.cpp
     gpu_context.cpp
     mesh_handler.cpp
-    oiio_output_driver.cpp
     pattern_visualization_pipeline.cpp
 )
 

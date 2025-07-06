@@ -13,6 +13,7 @@ add_library(sep_quantum STATIC
     pattern_evolution.cpp
     processor.cpp
     quantum_manifold_optimizer.cpp
+    manifold_config.cpp
 )
 
 target_include_directories(sep_quantum

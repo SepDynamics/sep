@@ -23,7 +23,6 @@
 
 // Project includes
 #include "blender/cycles_renderer.h"
-#include "blender/oiio_output_driver.h"
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"

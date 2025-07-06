@@ -7,6 +7,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <thread>
+#include <cstring>
 
 #include "api/bridge.hpp"
 #include "context/mock_processor.hpp"
@@ -135,7 +136,7 @@ TEST_F(BridgeTest, ErrorBufferHandling) {
   detail::setLastError("Long error message for testing buffer handling");
   char small_buffer[5];
   sep_bridge_get_last_error(small_buffer, sizeof(small_buffer));
-  EXPECT_EQ(strlen(small_buffer), 4);  // 4 chars + null terminator
+  EXPECT_EQ(std::strlen(small_buffer), 4);  // 4 chars + null terminator
 }
 
 // Configuration Tests

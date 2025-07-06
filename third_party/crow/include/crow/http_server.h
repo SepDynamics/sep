@@ -11,6 +11,8 @@
 #include <future>
 #include <memory>
 #include <vector>
+#include <ctime>
+#include <time.h>
 
 #include "crow/version.h"
 #include "crow/http_connection.h"
@@ -133,7 +135,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
 
                         std::string date_str;
                         auto update_date_str = [&] {
-                            auto last_time_t = time(0);
+                            auto last_time_t = std::time(0);
                             tm my_tm;
 
 #if defined(_MSC_VER) || defined(__MINGW32__)

@@ -5,27 +5,18 @@ set(SEP_INCLUDE_DIRS
     ${PIPEWIRE_INCLUDE_DIRS}
 )
 
-# Add component subdirectories
-add_subdirectory(api)
-if(SEP_WITH_AUDIO)
-    add_subdirectory(audio)
-endif()
-if(SEP_WITH_CYCLES)
-    add_subdirectory(blender)
-endif()
-add_subdirectory(compat)
+# Add component subdirectories in a consistent order
 add_subdirectory(core)
 add_subdirectory(compat)
-add_subdirectory(manifold)
+add_subdirectory(embeddings)
 add_subdirectory(memory)
 add_subdirectory(quantum)
-add_subdirectory(embeddings)
 add_subdirectory(api)
-if(SEP_WITH_CYCLES)
-    add_subdirectory(blender)
-endif()
 if(SEP_WITH_AUDIO)
     add_subdirectory(audio)
+endif()
+if(SEP_WITH_CYCLES)
+    add_subdirectory(blender)
 endif()
 
 # --- CORRECTED EXECUTABLE TARGET ---
@@ -45,18 +36,9 @@ target_link_libraries(sep_engine PRIVATE
 if(SEP_WITH_CYCLES)
     target_link_libraries(sep_engine PRIVATE sep_blender)
 endif()
-
-if(SEP_WITH_CYCLES)
-    target_link_libraries(sep_engine PRIVATE sep_blender)
-endif()
 if(SEP_WITH_AUDIO)
     target_link_libraries(sep_engine PRIVATE sep_audio)
 endif()
-
 if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)
-endif()
-
-if(SEP_WITH_CYCLES)
-    target_link_libraries(sep_engine PRIVATE sep_blender)
 endif()

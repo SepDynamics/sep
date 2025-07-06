@@ -9,7 +9,7 @@
 
 int main(int argc, char** argv) {
     sep::logging::Manager::initialize();
-    auto logger = sep::logging::Manager::getLogger("main");
+    auto logger = sep::logging::Manager::getInstance().getLogger("main");
     logger->info("SEP Engine starting up...");
 
     auto& cfg_manager = sep::config::ConfigManager::getInstance();

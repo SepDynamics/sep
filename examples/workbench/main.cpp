@@ -3,6 +3,7 @@
 #include "quantum/processor.h"
 #include "demos/genesis_pattern.hpp"
 #include <iostream>
+#include <memory>
 #include <thread>
 #include <chrono>
 

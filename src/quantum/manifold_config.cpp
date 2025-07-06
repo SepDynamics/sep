@@ -1,4 +1,5 @@
 #include "quantum/quantum_manifold_optimizer.h"
+#include "quantum/manifold_config.h"
 
 namespace sep::quantum::manifold {
 

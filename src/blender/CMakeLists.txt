@@ -58,7 +58,6 @@ target_link_libraries(sep_blender
 target_compile_definitions(sep_blender
     PRIVATE
         SEP_HAS_CUDA=1
-        _GLIBCXX_USE_NOEXCEPT_SPEC=0
         SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
 )
 target_link_libraries(sep_blender

@@ -177,9 +177,11 @@ class SEPApiServer : public Server {
   void setup_routes();
 
   /**
-   * @brief Setup Blender-specific routes
+   * @brief Setup Blender-specific routes (disabled in headless build)
    */
+#if 0
   void setupBlenderRoutes();
+#endif
 
   /**
    * @brief Setup signal handlers

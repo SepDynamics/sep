@@ -834,6 +834,8 @@ void SEPApiServer::handleSignal(int signal) {
   }
 }
 
+// Blender-specific routes are disabled in the headless build
+#if 0
 void SEPApiServer::setupBlenderRoutes() {
 #ifdef SEP_HAS_BLENDER
     // Pattern processing endpoint
@@ -1018,9 +1020,10 @@ void SEPApiServer::setupBlenderRoutes() {
         return res;
         
     });
-#endif  // SEP_HAS_BLENDER
 
+#endif  // SEP_HAS_BLENDER
 }
+#endif // 0
 
 
 } // end namespace sep::api

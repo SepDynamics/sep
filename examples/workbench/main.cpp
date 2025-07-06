@@ -22,17 +22,20 @@ int main() {
     q_processor->addPattern(p);
 
     while (!renderer.shouldClose()) {
-        q_processor->processPattern(p.id);
+        q_processor->processAll();
         auto updated = q_processor->getPattern(p.id);
 
-        std::vector<sep::pattern::PatternData> data;
+        std::vector<sep::pattern::PatternData> vis_data;
         sep::pattern::PatternData d;
-        d.position = glm::vec4(0,0,0,1);
+        d.position = updated.position;
         d.coherence = updated.quantum_state.coherence;
-        data.push_back(d);
+        d.stability = updated.quantum_state.stability;
+        d.entropy = updated.quantum_state.entropy;
+        vis_data.push_back(d);
 
-        renderer.createSceneFromPatterns(data);
-        renderer.renderScene({});
+        renderer.createSceneFromPatterns(vis_data);
+        sep::blender::ccl::CyclesRenderer::RenderParams params;
+        renderer.renderScene(params);
         renderer.present();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(16));

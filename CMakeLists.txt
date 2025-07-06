@@ -93,6 +93,7 @@ option(SEP_ENABLE_AUDIO "Enable audio support" ON)
 # Add subdirectories
 add_subdirectory(src/core)
 add_subdirectory(src/compat)
+add_subdirectory(src/manifold)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 add_subdirectory(src/embeddings)
@@ -150,6 +151,7 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
 install(TARGETS
     sep_core
     sep_compat
+    sep_manifold
     sep_memory
     sep_quantum
     sep_embeddings

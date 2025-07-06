@@ -8,8 +8,6 @@
 namespace sep {
 namespace workbench {
 
-class PatternProcessor;
-class QuantumCoherenceManager;
 
 class GenesisPatternDemo : public Demo {
 public:

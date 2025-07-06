@@ -945,7 +945,7 @@ void SEPApiServer::setupBlenderRoutes() {
         res.code = 200;
         return res;
     });
+#endif  // SEP_HAS_BLENDER
 }
 
 } // end namespace sep::api
-#endif  // SEP_HAS_BLENDER

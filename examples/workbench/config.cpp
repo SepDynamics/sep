@@ -36,11 +36,9 @@ bool Config::load(const std::filesystem::path& path) {
         auto& viz = genesis["visualization"];
         genesis_pattern_ = {
             {
-                {
-                    initial["dimensions"][0].get<int>(),
-                    initial["dimensions"][1].get<int>(),
-                    initial["dimensions"][2].get<int>()
-                },
+                { initial["dimensions"][0].get<int>(),
+                  initial["dimensions"][1].get<int>(),
+                  initial["dimensions"][2].get<int>() },
                 initial["evolution_rate"].get<float>(),
                 initial["coherence_threshold"].get<float>()
             },
@@ -102,11 +100,9 @@ bool Config::load(const std::filesystem::path& path) {
         auto& renderer = json["renderer"];
         auto& cycles = renderer["cycles"];
         renderer_ = {
-            {
-                cycles["samples"].get<int>(),
-                cycles["denoising"].get<bool>(),
-                cycles["device"].get<std::string>()
-            }
+            { cycles["samples"].get<int>(),
+              cycles["denoising"].get<bool>(),
+              cycles["device"].get<std::string>() }
         };
 
         auto& optimizer = json["optimizer"];

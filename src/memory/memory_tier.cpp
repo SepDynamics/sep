@@ -347,23 +347,18 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
     std::memcpy(dst->ptr, src->ptr, size);
   } else {
 #if SEP_MEMORY_HAS_CUDA
-        cudaError_t err =
-            sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
-        if (err == cudaSuccess) {
-            err = cudaStreamSynchronize(nullptr);
-        }
-        if (err != cudaSuccess) {
-            if (logger) {
-                LOG_ERROR(logger, "Failed to copy memory via CUDA: {}", err);
-                LOG_INFO(logger, "Falling back to CPU memcpy");
-            }
-            std::memcpy(dst->ptr, src->ptr, size);
-        }
-#else
-        std::memcpy(dst->ptr, src->ptr, size);
-#endif
+    cudaError_t err = sep::cuda::cudaMemcpyAsync(
+        dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+    if (err == cudaSuccess) {
+      err = cudaStreamSynchronize(nullptr);
+    } else {
+      if (logger) {
+        LOG_ERROR(logger, "Failed to copy memory via CUDA: {}", err);
+        LOG_INFO(logger, "Falling back to CPU memcpy");
+      }
+      std::memcpy(dst->ptr, src->ptr, size);
+      err = cudaSuccess; // treat as success for subsequent checks
     }
-    err = cudaStreamSynchronize(nullptr);
     if (err != cudaSuccess) {
       if (logger) {
         LOG_ERROR(logger, "Failed to synchronize stream: {}", err);

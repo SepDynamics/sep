@@ -258,8 +258,12 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
     }
     printf("DEBUG: Successfully allocated block in destination tier\n");
 
-    // Copy block properties
-    *out_block = *block;
+    // Copy block metadata but preserve the newly allocated pointer
+    void* new_ptr = out_block->ptr;      // pointer assigned by allocate()
+    std::size_t new_offset = out_block->offset;
+    *out_block = *block;                 // copy metrics and size
+    out_block->ptr = new_ptr;            // restore destination pointer
+    out_block->offset = new_offset;
     out_block->tier = target_tier;
     
     // Calculate new utilization based on destination tier size

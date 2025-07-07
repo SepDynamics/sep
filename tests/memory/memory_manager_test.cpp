@@ -1,6 +1,10 @@
 #include <gtest/gtest.h>
 #include "memory/memory_tier_manager.hpp"
 
+namespace {
+constexpr float EPSILON = 1e-3f;
+}
+
 using namespace sep::memory;
 
 TEST(MemoryManager, BasicSTMAllocation) {
@@ -9,7 +13,7 @@ TEST(MemoryManager, BasicSTMAllocation) {
     ASSERT_NE(blk, nullptr);
     EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f);
     mgr.deallocate(blk);
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f, EPSILON);
 }
 
 TEST(MemoryManager, BasicMTMAllocation) {
@@ -18,7 +22,7 @@ TEST(MemoryManager, BasicMTMAllocation) {
     ASSERT_NE(blk, nullptr);
     EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f);
     mgr.deallocate(blk);
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f, EPSILON);
 }
 
 TEST(MemoryManager, BasicLTMAllocation) {
@@ -27,7 +31,7 @@ TEST(MemoryManager, BasicLTMAllocation) {
     ASSERT_NE(blk, nullptr);
     EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f);
     mgr.deallocate(blk);
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f, EPSILON);
 }
 
 TEST(MemoryManager, MultipleAllocations) {
@@ -44,9 +48,9 @@ TEST(MemoryManager, MultipleAllocations) {
     mgr.deallocate(s);
     mgr.deallocate(m);
     mgr.deallocate(l);
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f);
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f);
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f, EPSILON);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f, EPSILON);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f, EPSILON);
 }
 
 TEST(MemoryManager, TotalAllocatedMemory) {

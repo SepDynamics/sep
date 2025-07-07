@@ -422,21 +422,25 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
 
 MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
                                              int generation_count) {
-    // LTM Check
+    // LTM Check. If thresholds indicate promotion to LTM we return the tier
+    // directly. The allocation step will handle defragmentation or resizing
+    // if necessary, so we no longer gate promotion on free space.
     if (coherence >= config_.promote_mtm_to_ltm &&
-    stability >= config_.promote_mtm_to_ltm && // Use same threshold for stability as a heuristic
-    generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
-    MemoryTier* ltm = getTier(MemoryTierEnum::LTM);
-    if (ltm && ltm->getFreeSpace() > 0) return ltm;
+        stability >= config_.promote_mtm_to_ltm && // stability heuristic
+        generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
+        MemoryTier* ltm = getTier(MemoryTierEnum::LTM);
+        if (ltm)
+            return ltm;
     }
 
 
     // MTM Check
     if (coherence >= config_.promote_stm_to_mtm &&
-        stability >= config_.promote_stm_to_mtm && // Use same threshold for stability as a heuristic
+        stability >= config_.promote_stm_to_mtm &&
         generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
         MemoryTier* mtm = getTier(MemoryTierEnum::MTM);
-        if (mtm && mtm->getFreeSpace() > 0) return mtm;
+        if (mtm)
+            return mtm;
     }
 
     // Default to STM or find first available

@@ -188,7 +188,7 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   // allocated in a tier. Integer arithmetic in MemoryTier coupled with
   // floating point division can yield values like 0.000244 instead of 0.0.
   // Treat anything close to zero as zero for stability.
-  if (std::fabs(util) < 1e-3f)
+  if (std::fabs(util) < kUtilizationEpsilon)
     return 0.0f;
 
   // Utilization should never be negative, but guard against underflow just in
@@ -233,7 +233,7 @@ float MemoryTierManager::getTotalUtilization() const {
   if (total_size == 0)
     return 0.0f;
   float util = static_cast<float>(used) / static_cast<float>(total_size);
-  return std::fabs(util) < 1e-3f ? 0.0f : util;
+  return std::fabs(util) < kUtilizationEpsilon ? 0.0f : util;
 }
 
 float MemoryTierManager::getTotalFragmentation() const {

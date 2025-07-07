@@ -232,7 +232,8 @@ float MemoryTierManager::getTotalUtilization() const {
   }
   if (total_size == 0)
     return 0.0f;
-  return static_cast<float>(used) / static_cast<float>(total_size);
+  float util = static_cast<float>(used) / static_cast<float>(total_size);
+  return std::fabs(util) < 1e-3f ? 0.0f : util;
 }
 
 float MemoryTierManager::getTotalFragmentation() const {

@@ -297,27 +297,43 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
                                                    float stability,
                                                    uint32_t generation,
                                                    float context_score) {
-  if (!block || !block->allocated) return block;
-    block->coherence = coherence;
-    block->stability = stability;
-    block->generation = generation;
-    block->weight = context_score;
-    MemoryTier* current_tier_ptr = getTier(block->tier);
-    if (!current_tier_ptr) return block; // Should not happen
-    MemoryTier* target_tier_ptr = determineTier(coherence, stability, generation);
-    if (!target_tier_ptr || target_tier_ptr == current_tier_ptr) {
-        return block; // No move needed
-    }
-
-    MemoryBlock* new_block = nullptr;
-    SEPResult result = promoteToTier(block, target_tier_ptr->getType(), new_block);
-
-    if (result == SEPResult::SUCCESS) {
-        return new_block;
-    }
-
-    // If migration failed, return the original block.
+  if (!block || !block->allocated)
     return block;
+
+  block->coherence = coherence;
+  block->stability = stability;
+  block->generation = generation;
+  block->weight = context_score;
+
+  MemoryTier *current_tier_ptr = getTier(block->tier);
+  if (!current_tier_ptr)
+    return block; // Should not happen
+
+  MemoryTier *target_tier_ptr = current_tier_ptr;
+
+  if (coherence < config_.demote_threshold ||
+      stability < config_.demote_threshold) {
+    if (block->tier == MemoryTierEnum::LTM)
+      target_tier_ptr = getTier(MemoryTierEnum::MTM);
+    else if (block->tier == MemoryTierEnum::MTM)
+      target_tier_ptr = getTier(MemoryTierEnum::STM);
+  } else {
+    MemoryTier *suggested = determineTier(coherence, stability, generation);
+    if (suggested)
+      target_tier_ptr = suggested;
+  }
+
+  if (!target_tier_ptr || target_tier_ptr == current_tier_ptr)
+    return block; // No move needed
+
+  MemoryBlock *new_block = nullptr;
+  SEPResult result = promoteToTier(block, target_tier_ptr->getType(), new_block);
+
+  if (result == SEPResult::SUCCESS)
+    return new_block;
+
+  // If migration failed, return the original block.
+  return block;
 
 }
 

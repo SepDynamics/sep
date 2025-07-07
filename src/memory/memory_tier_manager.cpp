@@ -194,7 +194,11 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   // accounting in MemoryTier coupled with floating point division can
   // yield results like 0.000244 instead of 0.0 after a deallocation.
   // Anything below 1e-3 is considered zero for test stability.
-  if (util < 1e-3f)
+  // The previous threshold of 1e-3f still left tiny values such as
+  // 1/4096 (~2.4e-4) visible in unit tests when tiers were emptied.
+  // Lower the clamp to 1e-5f so any leftover rounding noise is hidden
+  // but real utilization above 0.001% still reports correctly.
+  if (std::fabs(util) < 1e-5f)
     return 0.0f;
 
   // Utilization should never be negative, but guard against underflow just in

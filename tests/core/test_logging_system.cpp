@@ -85,7 +85,7 @@ protected:
   }
 };
 
-TEST_F(LoggingSystemTest, BasicLogging) {
+TEST_F(LoggingSystemTest, $1) {
   std::stringstream ss;
   auto logger = createMemoryLogger("basic", ss);
 
@@ -96,7 +96,7 @@ TEST_F(LoggingSystemTest, BasicLogging) {
   EXPECT_TRUE(output.find("[INFO]") != std::string::npos);
 }
 
-TEST_F(LoggingSystemTest, LogLevelFiltering) {
+TEST_F(LoggingSystemTest, $1) {
   std::stringstream ss;
   auto logger = createMemoryLogger("level_filter", ss);
 
@@ -111,7 +111,7 @@ TEST_F(LoggingSystemTest, LogLevelFiltering) {
   EXPECT_TRUE(output.find("Error message") != std::string::npos);
 }
 
-TEST_F(LoggingSystemTest, FileLogging) {
+TEST_F(LoggingSystemTest, $1) {
   const std::string logFile = "test_logs/test.log";
   logging::LoggerConfig cfg;
   cfg.name = "file_logger";
@@ -131,7 +131,7 @@ TEST_F(LoggingSystemTest, FileLogging) {
   EXPECT_TRUE(output.find("File test message") != std::string::npos);
 }
 
-TEST_F(LoggingSystemTest, ThreadSafety) {
+TEST_F(LoggingSystemTest, $1) {
   std::stringstream ss;
   auto logger = createMemoryLogger("thread_safe", ss);
 
@@ -162,7 +162,7 @@ TEST_F(LoggingSystemTest, ThreadSafety) {
   EXPECT_EQ(messageCount, numThreads * messagesPerThread);
 }
 
-TEST_F(LoggingSystemTest, LogRotation) {
+TEST_F(LoggingSystemTest, $1) {
   const std::string logFile = "test_logs/rotating.log";
   logging::LoggerConfig cfg;
   cfg.name = "rotation_logger";
@@ -182,7 +182,7 @@ TEST_F(LoggingSystemTest, LogRotation) {
   EXPECT_TRUE(std::filesystem::exists(logFile + ".1"));
 }
 
-TEST_F(LoggingSystemTest, Formatting) {
+TEST_F(LoggingSystemTest, $1) {
   std::stringstream ss;
   auto logger = createMemoryLogger("formatting", ss);
 
@@ -192,7 +192,7 @@ TEST_F(LoggingSystemTest, Formatting) {
   EXPECT_TRUE(output.find("Test message with 42") != std::string::npos);
 }
 
-TEST_F(LoggingSystemTest, ContextualLogging) {
+TEST_F(LoggingSystemTest, $1) {
   std::stringstream ss;
   auto logger = createMemoryLogger("contextual", ss);
 
@@ -202,7 +202,7 @@ TEST_F(LoggingSystemTest, ContextualLogging) {
   EXPECT_TRUE(output.find("[Module1]") != std::string::npos);
 }
 
-TEST_F(LoggingSystemTest, MutationAnalysis) {
+TEST_F(LoggingSystemTest, $1) {
   auto results = runMutationAnalysis();
 
   for (const auto &result : results) {

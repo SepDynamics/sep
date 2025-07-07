@@ -207,40 +207,104 @@ MemoryTier& MemoryTierManager::getLTM() {
 sep::SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
         return sep::SEPResult::INVALID_ARGUMENT;
+    
     MemoryTierEnum next = block->tier == MemoryTierEnum::STM
-                                      ? MemoryTierEnum::MTM
-                                      : MemoryTierEnum::LTM;
+                                       ? MemoryTierEnum::MTM
+                                       : MemoryTierEnum::LTM;
     MemoryTier* dst = getTier(next);
     if (!dst)
         return sep::SEPResult::INVALID_ARGUMENT;
+        
     out_block = dst->allocate(block->size);
     if (!out_block)
         return sep::SEPResult::ALLOCATION_FAILED;
-    dst->moveData(out_block, block);  // block is already a pointer
-    lookup_map_[out_block->ptr] = out_block;
-    getTier(block->tier)->deallocate(block);
-    lookup_map_.erase(block->ptr);
+        
+    // Copy all block properties
+    out_block->coherence = block->coherence;
+    out_block->stability = block->stability;
+    out_block->generation = block->generation;
+    out_block->weight = block->weight;
     out_block->tier = next;
+    out_block->utilization = block->utilization;
+    out_block->access_count = block->access_count;
+    out_block->compression = block->compression;
+    out_block->original_size = block->original_size;
+    out_block->coherence_trend = block->coherence_trend;
+    out_block->last_coherence = block->last_coherence;
+    out_block->compression_ratio = block->compression_ratio;
+    out_block->wait = block->wait;
+    
+    // Get source tier and validate
+    MemoryTier* src_tier = getTier(block->tier);
+    if (!src_tier) {
+        dst->deallocate(out_block);
+        return sep::SEPResult::INVALID_ARGUMENT;
+    }
+
+    // Move data between tiers
+    if (!dst->moveData(out_block, block)) {
+        dst->deallocate(out_block);
+        return sep::SEPResult::MEMORY_ERROR;
+    }
+    
+    // Update tracking in correct order
+    auto old_ptr = block->ptr;
+    lookup_map_.erase(old_ptr); // Remove old entry first
+    src_tier->deallocate(block);
+    lookup_map_[out_block->ptr] = out_block; // Add new entry after
+    
     return sep::SEPResult::SUCCESS;
 }
 
 sep::SEPResult MemoryTierManager::demoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
         return sep::SEPResult::INVALID_ARGUMENT;
+        
     MemoryTierEnum next = block->tier == MemoryTierEnum::LTM
-                                      ? MemoryTierEnum::MTM
-                                      : MemoryTierEnum::STM;
+                                       ? MemoryTierEnum::MTM
+                                       : MemoryTierEnum::STM;
     MemoryTier* dst = getTier(next);
     if (!dst)
         return sep::SEPResult::INVALID_ARGUMENT;
+        
     out_block = dst->allocate(block->size);
     if (!out_block)
-        return sep::SEPResult::ALLOCATION_FAILED;
-    dst->moveData(out_block, block);  // block is already a pointer
-    lookup_map_[out_block->ptr] = out_block;
-    getTier(block->tier)->deallocate(block);
-    lookup_map_.erase(block->ptr);
+        return sep::SEPResult::MEMORY_ERROR;
+        
+    // Copy all block properties and data
+    out_block->coherence = block->coherence;
+    out_block->stability = block->stability;
+    out_block->generation = block->generation;
+    out_block->weight = block->weight;
     out_block->tier = next;
+    out_block->utilization = block->utilization;
+    out_block->access_count = block->access_count;
+    out_block->compression = block->compression;
+    out_block->original_size = block->original_size;
+    out_block->coherence_trend = block->coherence_trend;
+    out_block->last_coherence = block->last_coherence;
+    out_block->compression_ratio = block->compression_ratio;
+    out_block->wait = block->wait;
+    
+    // Get source tier and validate
+    MemoryTier* src_tier = getTier(block->tier);
+    if (!src_tier) {
+        dst->deallocate(out_block);
+        return sep::SEPResult::INVALID_ARGUMENT;
+    }
+
+    // Move data between tiers
+    if (!dst->moveData(out_block, block)) {
+        dst->deallocate(out_block);
+        return sep::SEPResult::MEMORY_ERROR;
+    }
+    
+    // Update tracking in correct order
+    auto old_ptr = block->ptr;
+    lookup_map_.erase(old_ptr); // Remove old entry first
+    src_tier->deallocate(block);
+    lookup_map_[out_block->ptr] = out_block; // Add new entry after
+    
     return sep::SEPResult::SUCCESS;
 }
 
@@ -269,21 +333,60 @@ sep::SEPResult MemoryTierManager::launch_pattern_processing(sep::pattern::Patter
 }
 
 void MemoryTierManager::updateBlockMetrics(MemoryBlock* block, float coherence, float stability,
-                                         std::uint32_t generation, float context_score) {
-    if (!block)
+                                           std::uint32_t generation, float context_score) {
+    if (!block || !block->allocated)
         return;
+
+    // Save all block properties before update
+    float orig_coherence = block->coherence;
+    float orig_stability = block->stability;
+    uint32_t orig_generation = block->generation;
+    float orig_weight = block->weight;
+    uint64_t orig_wait = block->wait;
+    float orig_utilization = block->utilization;
+    uint32_t orig_access_count = block->access_count;
+    
+    // Update metrics
     block->coherence = coherence;
-    block->stability = stability;  // Using stability parameter
+    block->stability = stability;
     block->generation = generation;
     block->weight = context_score;
 
     MemoryTier* target = determineTier(coherence, stability, static_cast<int>(generation));
+    if (!target) {
+        // If no tier available, try to defragment current tier
+        MemoryTier* current = getTier(block->tier);
+        if (current) {
+            current->defragment();
+            target = determineTier(coherence, stability, static_cast<int>(generation));
+        }
+    }
+
     if (target && target->getType() != block->tier) {
         MemoryBlock* out = nullptr;
-        if (static_cast<int>(target->getType()) > static_cast<int>(block->tier))
-            promoteBlock(block, out);
-        else
-            demoteBlock(block, out);
+        sep::SEPResult result;
+        
+        // Preserve properties during transition
+        if (static_cast<int>(target->getType()) > static_cast<int>(block->tier)) {
+            result = promoteBlock(block, out);
+        } else {
+            result = demoteBlock(block, out);
+        }
+            
+        if (result == sep::SEPResult::SUCCESS && out) {
+            // Restore preserved properties
+            out->weight = orig_weight;
+            out->wait = orig_wait;
+            out->utilization = orig_utilization;
+            out->access_count = orig_access_count;
+            
+            // Update new metrics
+            out->coherence = coherence;
+            out->stability = stability;
+            out->generation = generation;
+            
+            // Lookup map already updated in promote/demote
+        }
     }
 }
 
@@ -294,11 +397,43 @@ MemoryBlock* MemoryTierManager::findBlockByPtr(void* ptr) {
 
 MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, int generation_count) {
     auto cfg = sep::config::ConfigManager::getInstance().getMemoryConfig();
-    if (coherence >= cfg.promote_mtm_to_ltm && generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen))
-        return ltm_.get();
-    if (coherence >= cfg.promote_stm_to_mtm && generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen))
-        return mtm_.get();
-    return stm_.get();
+    
+    // Check LTM promotion criteria
+    if (coherence >= 0.8f && // LTM threshold from rules
+        stability >= 0.7f &&
+        generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
+        auto ltm = ltm_.get();
+        if (ltm && ltm->getFreeSpace() > 0) {
+            return ltm;
+        }
+    }
+    
+    // Check MTM promotion criteria
+    if (coherence >= 0.5f && // MTM threshold from rules
+        stability >= 0.3f &&
+        generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
+        auto mtm = mtm_.get();
+        if (mtm && mtm->getFreeSpace() > 0) {
+            return mtm;
+        }
+    }
+    
+    auto stm = stm_.get();
+    if (stm && stm->getFreeSpace() > 0) {
+        return stm;
+    }
+    
+    // If no tier has space, try to defragment each tier
+    if (ltm_ && ltm_->getFreeSpace() == 0) ltm_->defragment();
+    if (mtm_ && mtm_->getFreeSpace() == 0) mtm_->defragment();
+    if (stm_ && stm_->getFreeSpace() == 0) stm_->defragment();
+    
+    // Return first tier with space, starting from highest priority
+    if (ltm_ && ltm_->getFreeSpace() > 0) return ltm_.get();
+    if (mtm_ && mtm_->getFreeSpace() > 0) return mtm_.get();
+    if (stm_ && stm_->getFreeSpace() > 0) return stm_.get();
+    
+    return nullptr;  // No space available in any tier
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type) {

@@ -147,7 +147,7 @@ MemoryBlock *MemoryTier::allocate(std::size_t size) {
   }
 
   block->allocated = true;
-  block->utilization = static_cast<float>(block->size) / config_.size;
+  block->utilization = static_cast<float>(size) / config_.size;  // Use requested size
   block->access_count = 0;
   block->compression = ::blender::CompressionMethod::None;
   block->original_size = size;
@@ -155,19 +155,39 @@ MemoryBlock *MemoryTier::allocate(std::size_t size) {
   block->last_coherence = 0.0f;
   block->coherence_trend = 0.0f;
   block->generation = 0;
-  block->weight = 0.0f;
+  block->weight = 1.0f;  // Initialize with default weight of 1
   block->wait = 0;
   block->compression_ratio = 1.0f;
+  block->stability = 0.0f;
   used_space_ += block->size;
   return block;
 }
 
 void MemoryTier::deallocate(MemoryBlock *block) {
-  assert(block && block->allocated);
-  block->allocated = false;
-  block->utilization = 0.0f;
-  used_space_ -= block->size;
-  mergeAdjacentBlocks();
+    if (!block || !block->allocated) {
+        return;
+    }
+    
+    // Save properties before deallocating
+    float coherence = block->coherence;
+    float stability = block->stability;
+    uint32_t generation = block->generation;
+    float weight = block->weight;
+    uint64_t wait = block->wait;
+    
+    // Update block state
+    block->allocated = false;
+    block->utilization = 0.0f;
+    used_space_ -= block->size;
+    
+    // Preserve properties for potential promotion/demotion
+    block->coherence = coherence;
+    block->stability = stability;
+    block->generation = generation;
+    block->weight = weight;
+    block->wait = wait;
+    
+    mergeAdjacentBlocks();
 }
 
 sep::SEPResult MemoryTier::defragment() {
@@ -274,7 +294,9 @@ float MemoryTier::calculateFragmentation() const {
 }
 
 float MemoryTier::calculateUtilization() const {
-  return static_cast<float>(used_space_) / config_.size;
+   if (config_.size == 0) return 0.0f;
+   float util = static_cast<float>(used_space_) / static_cast<float>(config_.size);
+   return util > 1.0f ? 1.0f : util;  // Cap at 100%
 }
 
 std::size_t MemoryTier::getFreeSpace() const {
@@ -294,41 +316,58 @@ std::size_t MemoryTier::getLargestFreeBlock() const {
 const std::deque<MemoryBlock> &MemoryTier::getBlocks() const { return blocks_; }
 
 bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
-  auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
 
-  if (!dst || !src || !dst->allocated || !src->allocated) {
-    if (logger) {
-      LOG_ERROR(logger, "Invalid blocks for data move");
+    if (!dst || !src || !dst->allocated || !src->allocated) {
+        if (logger) {
+            LOG_ERROR(logger, "Invalid blocks for data move");
+        }
+        return false;
     }
-    return false;
-  }
 
-  std::size_t size = std::min(dst->size, src->size);
+    std::size_t size = std::min(dst->size, src->size);
 
-  if (config_.type == MemoryTierEnum::HOST) {
-    std::memcpy(dst->ptr, src->ptr, size);
-  } else {
+    // Copy block properties before moving data
+    dst->coherence = src->coherence;
+    dst->stability = src->stability;
+    dst->generation = src->generation;
+    dst->weight = src->weight;
+    dst->wait = src->wait;
+    dst->utilization = static_cast<float>(size) / dst->size;
+    dst->access_count = src->access_count;
+    dst->compression = src->compression;
+    dst->original_size = src->original_size;
+    dst->coherence_trend = src->coherence_trend;
+    dst->last_coherence = src->last_coherence;
+    dst->compression_ratio = src->compression_ratio;
+
+    if (config_.type == MemoryTierEnum::HOST) {
+        std::memcpy(dst->ptr, src->ptr, size);
+    } else {
 #if SEP_MEMORY_HAS_CUDA
-    cudaError_t err =
-        sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
-    if (err != cudaSuccess) {
-      if (logger) {
-        LOG_ERROR(logger, "Failed to copy memory: {}", err);
-      }
-      return false;
-    }
-    err = cudaStreamSynchronize(nullptr);
-    if (err != cudaSuccess) {
-      if (logger) {
-        LOG_ERROR(logger, "Failed to synchronize stream: {}", err);
-      }
-      return false;
-    }
+        cudaError_t err =
+            sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+        if (err != cudaSuccess) {
+            if (logger) {
+                LOG_ERROR(logger, "Failed to copy memory: {}", err);
+            }
+            return false;
+        }
+        err = cudaStreamSynchronize(nullptr);
+        if (err != cudaSuccess) {
+            if (logger) {
+                LOG_ERROR(logger, "Failed to synchronize stream: {}", err);
+            }
+            return false;
+        }
 #else
-    std::memcpy(dst->ptr, src->ptr, size);
+        std::memcpy(dst->ptr, src->ptr, size);
 #endif
-  }
-  return true;
+    }
+
+    // No need to update used_space_ here since it's already tracked in allocate/deallocate
+    
+    return true;
 }
 
 MemoryBlock *MemoryTier::findFreeBlock(std::size_t size) {

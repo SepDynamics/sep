@@ -251,6 +251,39 @@ void MemoryTierManager::optimizeTiers() {
   if (ltm_) ltm_->defragment();
 }
 
+// Convenience helpers used in tests
+SEPResult MemoryTierManager::promoteBlock(MemoryBlock *block,
+                                          MemoryBlock *&out_block) {
+  if (!block || !block->allocated)
+    return SEPResult::INVALID_ARGUMENT;
+
+  MemoryTierEnum target = block->tier;
+  if (block->tier == MemoryTierEnum::STM)
+    target = MemoryTierEnum::MTM;
+  else if (block->tier == MemoryTierEnum::MTM)
+    target = MemoryTierEnum::LTM;
+  else
+    return SEPResult::INVALID_ARGUMENT;
+
+  return promoteToTier(block, target, out_block);
+}
+
+SEPResult MemoryTierManager::demoteBlock(MemoryBlock *block,
+                                         MemoryBlock *&out_block) {
+  if (!block || !block->allocated)
+    return SEPResult::INVALID_ARGUMENT;
+
+  MemoryTierEnum target;
+  if (block->tier == MemoryTierEnum::LTM)
+    target = MemoryTierEnum::MTM;
+  else if (block->tier == MemoryTierEnum::MTM)
+    target = MemoryTierEnum::STM;
+  else
+    return SEPResult::INVALID_ARGUMENT;
+
+  return promoteToTier(block, target, out_block);
+}
+
 // --- Promotion and Demotion Logic ---
 SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
                                           MemoryTierEnum target_tier,
@@ -360,8 +393,8 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
     return new_block ? new_block : block;
   }
 
-  // If migration failed, return the original block.
-  return block;
+  // Explicit failure path for callers expecting nullptr on failure
+  return nullptr;
 
 }
 

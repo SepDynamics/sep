@@ -9,6 +9,7 @@
 #include <mutex>
 #include <string>
 #include <cstring>
+#include <cmath>
 
 namespace sep {
 namespace memory {

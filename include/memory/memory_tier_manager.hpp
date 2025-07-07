@@ -65,6 +65,8 @@ public:
 
     // Singleton access
     static MemoryTierManager& getInstance();
+    /** Reset the singleton instance for tests */
+    static void resetForTesting();
 
     MemoryTierManager();
     explicit MemoryTierManager(const Config& cfg);

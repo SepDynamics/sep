@@ -117,6 +117,11 @@ void MemoryTierManager::shutdown() {
   pattern_relationships_.clear();
 }
 
+void MemoryTierManager::resetForTesting(const Config& cfg) {
+  shutdown();
+  init(cfg);
+}
+
 // --- Core Memory Operations ---
 MemoryBlock* MemoryTierManager::allocate(std::size_t size, MemoryTierEnum tier) {
   MemoryTier* t = getTier(tier);

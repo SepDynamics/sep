@@ -132,6 +132,7 @@ void MemoryTierManager::shutdown() {
 void MemoryTierManager::resetForTesting(const Config& cfg) {
   shutdown();
   init(cfg);
+  rebuildLookup();
 }
 
 // --- Core Memory Operations ---

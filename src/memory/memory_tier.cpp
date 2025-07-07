@@ -184,7 +184,10 @@ void MemoryTier::deallocate(MemoryBlock *block) {
   // Update block state
   block->allocated = false;
   block->utilization = 0.0f;
-  used_space_ -= block->size;
+  if (used_space_ >= block->size)
+    used_space_ -= block->size;
+  else
+    used_space_ = 0;
 
   // Preserve properties for potential promotion/demotion
   block->coherence = coherence;

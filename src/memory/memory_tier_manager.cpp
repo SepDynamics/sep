@@ -446,11 +446,9 @@ MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
     // directly. The allocation step will handle defragmentation or resizing
     // if necessary, so we no longer gate promotion on free space.
     if (coherence >= config_.promote_mtm_to_ltm &&
-        stability >= config_.promote_mtm_to_ltm && // stability heuristic
+        stability >= config_.promote_mtm_to_ltm &&
         generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
-        MemoryTier* ltm = getTier(MemoryTierEnum::LTM);
-        if (ltm)
-            return ltm;
+        return getTier(MemoryTierEnum::LTM);
     }
 
 
@@ -458,23 +456,17 @@ MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
     if (coherence >= config_.promote_stm_to_mtm &&
         stability >= config_.promote_stm_to_mtm &&
         generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
-        MemoryTier* mtm = getTier(MemoryTierEnum::MTM);
-        if (mtm)
-            return mtm;
+        return getTier(MemoryTierEnum::MTM);
     }
 
     // Default to STM or find first available
-    MemoryTier* stm = getTier(MemoryTierEnum::STM);
-    if (stm && stm->getFreeSpace() > 0) return stm;
+    if (MemoryTier* stm = getTier(MemoryTierEnum::STM))
+        return stm;
 
-    // Fallback if target tier is full
-    MemoryTier* mtm = getTier(MemoryTierEnum::MTM);
-    if (mtm && mtm->getFreeSpace() > 0) return mtm;
+    if (MemoryTier* mtm = getTier(MemoryTierEnum::MTM))
+        return mtm;
 
-    MemoryTier* ltm = getTier(MemoryTierEnum::LTM);
-    if (ltm && ltm->getFreeSpace() > 0) return ltm;
-
-    return nullptr; // No space available
+    return getTier(MemoryTierEnum::LTM);
 }
 
 void MemoryTierManager::rebuildLookup() {

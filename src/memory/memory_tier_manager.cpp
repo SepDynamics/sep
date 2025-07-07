@@ -36,8 +36,6 @@ std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 std::once_flag MemoryTierManager::once_flag_;
 
 // --- Singleton Implementation ---
-std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
-std::once_flag MemoryTierManager::once_flag_;
 
 MemoryTierManager &MemoryTierManager::getInstance() {
   std::call_once(once_flag_, []() {
@@ -130,7 +128,7 @@ MemoryBlock* MemoryTierManager::allocate(std::size_t size, MemoryTierEnum tier) 
     return nullptr;
   MemoryBlock* blk = t->allocate(size);
   if (blk) {
-    std::lock_guardstd::mutex lock(lookup_mutex_);
+    std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_[blk->ptr] = blk;
     }
     return blk;
@@ -138,9 +136,9 @@ MemoryBlock* MemoryTierManager::allocate(std::size_t size, MemoryTierEnum tier) 
 void MemoryTierManager::deallocate(MemoryBlock* block) {
   if (!block) return;
   {
-    std::lock_guard<std::mutex> lock(lookup_mutex_);
+    std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(block->ptr);
-    }
+  }
     if (MemoryTier* t = getTier(block->tier)) {
       t->deallocate(block);
     }
@@ -230,7 +228,7 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
 
     // Update lookup maps in correct order to maintain consistency
     {
-        std::lock_guard<std::mutex> lock(lookup_mutex_);
+        std::lock_guard<std::mutex> lock(lookup_mutex);
         lookup_map_.erase(block->ptr);
         src_tier->deallocate(block);
         lookup_map_[out_block->ptr] = out_block;
@@ -305,23 +303,23 @@ MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
 // --- Pattern and Relationship Management ---
 void MemoryTierManager::registerPattern(
     std::size_t id, const sep::pattern::PatternData &pattern) {
-  std::lock_guard<std::mutex> lock(registry_mutex_);
+  std::lock_guard<std::mutex> lock(registry_mutex);
   pattern_registry_[id] = std::make_unique<sep::pattern::PatternData>(pattern);
 }
 
 const sep::pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
-  std::lock_guard<std::mutex> lock(registry_mutex_);
+  std::lock_guard<std::mutex> lock(registry_mutex);
   auto it = pattern_registry_.find(id);
   return it == pattern_registry_.end() ? nullptr : it->second.get();
 }
 
 void MemoryTierManager::removePattern(std::size_t id) {
-  std::lock_guardstd::mutex lock(registry_mutex_);
+  std::lock_guard<std::mutex> lock(registry_mutex);
   pattern_registry_.erase(id);
 
 
   // Also remove relationships associated with this pattern
-  std::lock_guard<std::mutex> rel_lock(relationships_mutex_);
+  std::lock_guard<std::mutex> rel_lock(relationships_mutex);
   pattern_relationships_.erase(id);
   for (auto& pair : pattern_relationships_) {
     pair.second.erase(id);
@@ -331,13 +329,13 @@ void MemoryTierManager::removePattern(std::size_t id) {
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            float strength) {
-  std::lock_guard<std::mutex> lock(relationships_mutex_);
+  std::lock_guard<std::mutex> lock(relationships_mutex);
   pattern_relationships_[id_a][id_b] = strength;
   pattern_relationships_[id_b][id_a] = strength;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {
-  std::lock_guard<std::mutex> lock(relationships_mutex_);
+  std::lock_guard<std::mutex> lock(relationships_mutex);
   for (auto& [id, relations] : pattern_relationships_) {
     for (auto it = relations.begin(); it != relations.end(); ) {
       if (it->second < config_.demote_threshold) { // Reuse demote threshold
@@ -350,8 +348,8 @@ void MemoryTierManager::pruneWeakRelationships() {
 }
 
 void MemoryTierManager::calculateRelationshipCoherence() {
-  std::lock_guard<std::mutex> reg_lock(registry_mutex_);
-  std::lock_guard<std::mutex> rel_lock(relationships_mutex_);
+  std::lock_guard<std::mutex> reg_lock(registry_mutex);
+  std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
     if (pattern_relationships_.count(id)) {

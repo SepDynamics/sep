@@ -30,6 +30,7 @@ TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
 TEST(MemoryTierManagerTest, PromotionAndDemotion) {
     const float EPSILON = 0.001f;
     MemoryTierManager mgr;
+    mgr.resetForTesting();
     
     // Initial allocation in MTM
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
@@ -67,6 +68,7 @@ TEST(MemoryTierManagerTest, PromotionAndDemotion) {
 TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     const float EPSILON = 0.001f;
     MemoryTierManager mgr;
+    mgr.resetForTesting();
     
     // Initial allocation in MTM
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
@@ -106,6 +108,7 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
 TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     const float EPSILON = 0.001f;
     MemoryTierManager mgr;
+    mgr.resetForTesting();
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
 

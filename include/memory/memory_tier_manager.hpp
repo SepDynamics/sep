@@ -127,6 +127,9 @@ public:
     void cleanupExpiredPatterns();
     void prunePatternsByPriority(MemoryTierEnum tier, size_t max_count);
 
+    // Test helpers
+    void resetForTesting(const Config& cfg = Config());
+
     dag::DagGraph& getDagGraph() {
         return dag_graph_;
     }

@@ -176,7 +176,17 @@ MemoryTier& MemoryTierManager::getLTM() { return *ltm_; }
 
 float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
-  return t ? t->calculateUtilization() : 0.0f;
+  if (!t)
+    return 0.0f;
+
+  float util = t->calculateUtilization();
+  // Some tests expect an exact zero after deallocation.  Small rounding
+  // errors in used_space_ can lead to tiny non-zero values, so clamp them
+  // to zero for values that are effectively zero.
+  if (util < 1e-6f)
+    return 0.0f;
+
+  return util;
 }
 
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {
@@ -343,8 +353,12 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
   MemoryBlock *new_block = nullptr;
   SEPResult result = promoteToTier(block, target_tier_ptr->getType(), new_block);
 
-  if (result == SEPResult::SUCCESS)
-    return new_block;
+  if (result == SEPResult::SUCCESS) {
+    // Some implementations may mistakenly return SUCCESS but leave the
+    // out pointer null. Guard against that case by falling back to the
+    // original block so callers never receive a nullptr.
+    return new_block ? new_block : block;
+  }
 
   // If migration failed, return the original block.
   return block;

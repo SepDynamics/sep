@@ -182,27 +182,14 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (!t)
     return 0.0f;
 
-  // When a tier has no allocated blocks its free space equals its total size.
-  // Checking this first avoids floating point rounding artifacts that can
-  // appear when calculating utilization after deallocations or promotions.
-  if (t->getFreeSpace() == t->getSize())
-    return 0.0f;
-
+  // Recalculate utilization directly from the tier. Some implementations
+  // track used space separately which can drift slightly after complex block
+  // moves.  By always querying the tier we avoid stale values that lead to
+  // small non-zero results like 0.000244 even when no blocks remain.
   float util = t->calculateUtilization();
-  // [2024-04-25] Guard against rounding artifacts that may appear after a
-  // block is deallocated. Unit tests expect an exact zero when no memory is
-  // allocated in a tier. Integer arithmetic in MemoryTier coupled with
-  // floating point division can yield values like 0.000244 instead of 0.0.
-  // Treat anything close to zero as zero for stability.
-  if (std::fabs(util) <= kUtilizationEpsilon)
-    return 0.0f;
 
-  // Utilization should never be negative, but guard against underflow just in
-  // case erroneous arithmetic slips through.
-  if (util < 0.0f)
-    return 0.0f;
-
-  return util;
+  // Treat extremely small values as zero to keep unit tests stable.
+  return std::fabs(util) <= kUtilizationEpsilon ? 0.0f : util;
 }
 
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {
@@ -453,39 +440,29 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
 
 MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
                                              int generation_count) {
-    // LTM Check. If thresholds indicate promotion to LTM we return the tier
-    // directly. The allocation step will handle defragmentation or resizing
-    // if necessary, so we no longer gate promotion on free space.
-    if (coherence >= config_.promote_mtm_to_ltm &&
-        stability >= config_.promote_mtm_to_ltm &&
-        generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
-        return getTier(MemoryTierEnum::LTM);
-    }
+  // Check for LTM promotion first.  We no longer gate promotion on available
+  // space; the allocation step will handle defragmentation or resizing if
+  // needed.
+  if (coherence >= config_.promote_mtm_to_ltm &&
+      stability >= config_.promote_mtm_to_ltm &&
+      generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
+    return getTier(MemoryTierEnum::LTM);
+  }
 
-  // MTM Check
+  // Otherwise see if the block qualifies for MTM.
   if (coherence >= config_.promote_stm_to_mtm &&
       stability >= config_.promote_stm_to_mtm &&
       generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
-    MemoryTier *mtm = getTier(MemoryTierEnum::MTM);
-    if (mtm)
+    if (MemoryTier *mtm = getTier(MemoryTierEnum::MTM))
       return mtm;
   }
 
-    // MTM Check
-    if (coherence >= config_.promote_stm_to_mtm &&
-        stability >= config_.promote_stm_to_mtm &&
-        generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
-        return getTier(MemoryTierEnum::MTM);
-    }
-
-    // Default to STM or find first available
-    if (MemoryTier* stm = getTier(MemoryTierEnum::STM))
-        return stm;
-
-    if (MemoryTier* mtm = getTier(MemoryTierEnum::MTM))
-        return mtm;
-
-    return getTier(MemoryTierEnum::LTM);
+  // Fallback to STM if available, otherwise the first initialized tier.
+  if (MemoryTier *stm = getTier(MemoryTierEnum::STM))
+    return stm;
+  if (MemoryTier *mtm = getTier(MemoryTierEnum::MTM))
+    return mtm;
+  return getTier(MemoryTierEnum::LTM);
 }
 
 void MemoryTierManager::rebuildLookup() {

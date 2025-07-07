@@ -35,6 +35,15 @@ std::mutex relationships_mutex;
 std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 std::once_flag MemoryTierManager::once_flag_;
 
+void MemoryTierManager::resetForTesting() {
+    if (instance_) {
+        instance_->shutdown();
+        instance_.reset();
+    }
+    once_flag_ = std::once_flag{};
+}
+
+
 // --- Singleton Implementation ---
 
 MemoryTierManager &MemoryTierManager::getInstance() {

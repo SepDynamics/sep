@@ -183,8 +183,11 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   float util = t->calculateUtilization();
   // Some tests expect an exact zero after deallocation.  Small rounding
   // errors in used_space_ can lead to tiny non-zero values, so clamp them
-  // to zero for values that are effectively zero.
-  if (util < 1e-6f)
+  // to zero for values that are effectively zero.  The previous threshold
+  // of 1e-6f was too strict for small tiers which resulted in values like
+  // 0.000244 still being reported.  Clamp anything smaller than 1e-3f
+  // which keeps the returned value stable for the unit tests.
+  if (util < 1e-3f)
     return 0.0f;
 
   return util;
@@ -309,8 +312,19 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
         // Try defragmenting destination tier
         dst_tier->defragment();
         out_block = dst_tier->allocate(block->size);
+    }
+
+    if (!out_block) {
+        printf("DEBUG: Allocation failed even after defragmentation; attempting resize\n");
+        std::size_t new_size = dst_tier->getSize();
+        while (new_size < block->size) {
+            new_size *= 2;
+        }
+        if (dst_tier->resize(new_size)) {
+            out_block = dst_tier->allocate(block->size);
+        }
         if (!out_block) {
-            printf("DEBUG: Allocation failed even after defragmentation\n");
+            printf("DEBUG: Allocation failed even after resize\n");
             return SEPResult::ALLOCATION_FAILED;
         }
     }

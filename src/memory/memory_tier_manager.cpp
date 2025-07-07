@@ -182,6 +182,12 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (!t)
     return 0.0f;
 
+  // When a tier has no allocated blocks its free space equals its total size.
+  // Checking this first avoids floating point rounding artifacts that can
+  // appear when calculating utilization after deallocations or promotions.
+  if (t->getFreeSpace() == t->getSize())
+    return 0.0f;
+
   float util = t->calculateUtilization();
   // [2024-04-25] Guard against rounding artifacts that may appear after a
   // block is deallocated. Unit tests expect an exact zero when no memory is

@@ -3,10 +3,13 @@
 # Install script for SEP Engine project dependencies
 # Enhanced with error checking and logging for build troubleshooting
 
-set -e  # Exit on any error
+set -euo pipefail  # Exit on error, unset variables, or pipeline failures
+
+# Determine workspace based on script location for portability
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_DIR="${SCRIPT_DIR}"
 
 # Directory setup
-WORKSPACE_DIR="/workspace/sep"
 BUILD_DIR="$WORKSPACE_DIR/build"
 LOG_DIR="$WORKSPACE_DIR/logs"
 OPEN_SUBDIV_LOG="$LOG_DIR/opensubdiv_build.log"
@@ -15,10 +18,17 @@ USD_LOG="$LOG_DIR/usd_build.log"
 # Create log directory
 mkdir -p "$LOG_DIR"
 
+# Use sudo if not running as root
+if [[ $EUID -ne 0 ]]; then
+    SUDO="sudo"
+else
+    SUDO=""
+fi
+
 echo "Starting SEP Engine dependency installation..."
 
 # Update package list
-sudo apt-get update -y
+$SUDO DEBIAN_FRONTEND=noninteractive apt-get update -y
 
 # List of required packages
 REQUIRED_PACKAGES=(
@@ -34,31 +44,37 @@ REQUIRED_PACKAGES=(
 
 # Install required packages
 echo "Installing required packages..."
-sudo apt-get install -y "${REQUIRED_PACKAGES[@]}" 2>&1 | tee "$LOG_DIR/packages_install.log"
+$SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y "${REQUIRED_PACKAGES[@]}" 2>&1 | tee "$LOG_DIR/packages_install.log"
 
 # Install Python 3.13 from deadsnakes PPA
-echo "Installing Python 3.13..."
-sudo add-apt-repository ppa:deadsnakes/ppa -y
-sudo apt-get update -y
-sudo apt-get install -y python3.13 python3.13-dev 2>&1 | tee -a "$LOG_DIR/packages_install.log"
+echo "Checking for Python 3.13..."
+if apt-cache show python3.13 &>/dev/null; then
+    $SUDO add-apt-repository ppa:deadsnakes/ppa -y
+    $SUDO DEBIAN_FRONTEND=noninteractive apt-get update -y
+    $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y python3.13 python3.13-dev 2>&1 | tee -a "$LOG_DIR/packages_install.log"
+else
+    echo "python3.13 not available, installing default python3..."
+    $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-dev 2>&1 | tee -a "$LOG_DIR/packages_install.log"
+fi
 
 # Check and install GCC-14 if available, otherwise use default
 if apt-cache show gcc-14 &>/dev/null; then
     echo "Installing GCC-14..."
-    sudo apt-get install -y gcc-14 g++-14
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
+    $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y gcc-14 g++-14
+    $SUDO update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100
+    $SUDO update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
 else
     echo "GCC-14 not found, using default GCC version..."
 fi
 
 # Function to check build success
 check_build_success() {
-    local log_file=$1
-    local lib_path=$2
-    local lib_name=$3
+    local exit_code=$1
+    local log_file=$2
+    local lib_path=$3
+    local lib_name=$4
 
-    if [ $? -ne 0 ]; then
+    if [ $exit_code -ne 0 ]; then
         echo "Error: Failed to build $lib_name. Check $log_file for details."
         exit 1
     fi
@@ -76,20 +92,24 @@ if ! dpkg -l | grep -q libopensubdiv-dev; then
     echo "libopensubdiv-dev not found, building from source..."
     mkdir -p "$BUILD_DIR/opensubdiv"
     cd "$BUILD_DIR/opensubdiv"
-    
-    git clone https://github.com/PixarAnimationStudios/OpenSubdiv.git . || {
-        echo "Failed to clone OpenSubdiv repository."
-        exit 1
-    }
+
+    if [ ! -d .git ]; then
+        git clone https://github.com/PixarAnimationStudios/OpenSubdiv.git . || {
+            echo "Failed to clone OpenSubdiv repository."
+            exit 1
+        }
+    else
+        git pull
+    fi
     
     mkdir -p build && cd build
     cmake -DNO_EXAMPLES=ON -DNO_TUTORIALS=ON -DNO_REGRESSION=ON \
           -DTBB_DIR=/usr/lib/x86_64-linux-gnu/cmake/TBB \
           .. > "$OPEN_SUBDIV_LOG" 2>&1
-    make -j$(nproc) >> "$OPEN_SUBDIV_LOG" 2>&1
-    sudo make install >> "$OPEN_SUBDIV_LOG" 2>&1
-    
-    check_build_success "$OPEN_SUBDIV_LOG" "/usr/local/lib/libosdCPU.so" "OpenSubdiv"
+    make -j"$(nproc)" >> "$OPEN_SUBDIV_LOG" 2>&1
+    $SUDO make install >> "$OPEN_SUBDIV_LOG" 2>&1
+
+    check_build_success $? "$OPEN_SUBDIV_LOG" "/usr/local/lib/libosdCPU.so" "OpenSubdiv"
 fi
 
 # Build USD from source if not found
@@ -97,24 +117,28 @@ if ! dpkg -l | grep -q libusd-dev; then
     echo "libusd-dev not found, building from source..."
     mkdir -p "$BUILD_DIR/usd"
     cd "$BUILD_DIR/usd"
-    
-    git clone https://github.com/PixarAnimationStudios/USD.git . || {
-        echo "Failed to clone USD repository."
-        exit 1
-    }
+
+    if [ ! -d .git ]; then
+        git clone https://github.com/PixarAnimationStudios/USD.git . || {
+            echo "Failed to clone USD repository."
+            exit 1
+        }
+    else
+        git pull
+    fi
     
     mkdir -p build && cd build
     cmake -DPXR_BUILD_TESTS=OFF -DPXR_BUILD_EXAMPLES=OFF \
           -DTBB_DIR=/usr/lib/x86_64-linux-gnu/cmake/TBB \
           .. > "$USD_LOG" 2>&1
-    make -j$(nproc) >> "$USD_LOG" 2>&1
-    sudo make install >> "$USD_LOG" 2>&1
-    
-    check_build_success "$USD_LOG" "/usr/local/lib/libusd.so" "USD"
+    make -j"$(nproc)" >> "$USD_LOG" 2>&1
+    $SUDO make install >> "$USD_LOG" 2>&1
+
+    check_build_success $? "$USD_LOG" "/usr/local/lib/libusd.so" "USD"
 fi
 
 # Update library cache
-sudo ldconfig
+$SUDO ldconfig
 
 echo "Dependency installation completed successfully."
 echo "Next steps:"

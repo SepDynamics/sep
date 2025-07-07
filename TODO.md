@@ -1,15 +1,4 @@
-[2025-07-07] Verified memory tier manager tests pass after rounding clamp.
-im trying to get these tests to pass via maaking the codebase work.
-
-[2024-04-25] Added clamping for tiny utilization values in
-MemoryTierManager::getTierUtilization so that tests expecting exact zero
-no longer fail due to floating point rounding.
-
-
-help me bring this to functional   
-
-
-cd /sep/sep_build/build &&  cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-14 -B . -S .. && make memory_manager_tests && ./memory_manager_tests
+ cd /sep/sep_build/build &&  cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-14 -B . -S .. && make memory_manager_tests && ./memory_manager_tests
 -- Configuring done (0.0s)
 -- Generating done (0.0s)
 -- Build files have been written to: /sep/sep_build/build
@@ -91,13 +80,6 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 [  FAILED  ] MemoryTierManagerTest.DefragmentationTriggersPromotionDemotion
 [  FAILED  ] MemoryTierManagerTest.OptimizeBlocksPromotionDemotion
 
- 3 FAILED TESTS
-╭─ajn@sep-OS /sep/sep_build/build ‹master› 
-╰─$ git merge -X ours cb8b06e8fd8dbf55b0bea24b0c2e68029b18fa10                     1 ↵
-Auto-merging src/memory/memory_tier_manager.cpp
-hint: Waiting for your editor to close the file... error: cannot run vim: No such file or directory
-error: unable to start editor 'vim'
-Not committing merge; use 'git commit' to complete the merge.
 
 [{
 	"resource": "/sep/include/memory/memory_tier_manager.hpp",
@@ -1029,9 +1011,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "No member named 'MemoryTierEnum' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 40,
+	"startLineNumber": 41,
 	"startColumn": 14,
-	"endLineNumber": 40,
+	"endLineNumber": 41,
 	"endColumn": 28
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1040,9 +1022,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 42,
+	"startLineNumber": 43,
 	"startColumn": 1,
-	"endLineNumber": 42,
+	"endLineNumber": 43,
 	"endColumn": 11
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1051,9 +1033,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Unknown type name 'Config'",
 	"source": "clang",
-	"startLineNumber": 42,
+	"startLineNumber": 43,
 	"startColumn": 30,
-	"endLineNumber": 42,
+	"endLineNumber": 43,
 	"endColumn": 36
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1062,9 +1044,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 88,
+	"startLineNumber": 89,
 	"startColumn": 1,
-	"endLineNumber": 88,
+	"endLineNumber": 89,
 	"endColumn": 11
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1073,9 +1055,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Unknown type name 'MemoryTierEnum'",
 	"source": "clang",
-	"startLineNumber": 88,
+	"startLineNumber": 89,
 	"startColumn": 24,
-	"endLineNumber": 88,
+	"endLineNumber": 89,
 	"endColumn": 38
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1084,9 +1066,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 94,
+	"startLineNumber": 95,
 	"startColumn": 1,
-	"endLineNumber": 94,
+	"endLineNumber": 95,
 	"endColumn": 11
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1095,9 +1077,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Unknown type name 'Config'",
 	"source": "clang",
-	"startLineNumber": 94,
+	"startLineNumber": 95,
 	"startColumn": 30,
-	"endLineNumber": 94,
+	"endLineNumber": 95,
 	"endColumn": 36
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1106,9 +1088,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 104,
+	"startLineNumber": 105,
 	"startColumn": 1,
-	"endLineNumber": 104,
+	"endLineNumber": 105,
 	"endColumn": 11
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1117,9 +1099,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Unknown type name 'MemoryBlock'",
 	"source": "clang",
-	"startLineNumber": 122,
+	"startLineNumber": 123,
 	"startColumn": 1,
-	"endLineNumber": 122,
+	"endLineNumber": 123,
 	"endColumn": 12
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1128,9 +1110,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 122,
+	"startLineNumber": 123,
 	"startColumn": 14,
-	"endLineNumber": 122,
+	"endLineNumber": 123,
 	"endColumn": 24
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1139,9 +1121,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 171,
+	"startLineNumber": 172,
 	"startColumn": 6,
-	"endLineNumber": 171,
+	"endLineNumber": 172,
 	"endColumn": 16
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1150,9 +1132,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Unknown type name 'MemoryBlock'",
 	"source": "clang",
-	"startLineNumber": 171,
+	"startLineNumber": 172,
 	"startColumn": 29,
-	"endLineNumber": 171,
+	"endLineNumber": 172,
 	"endColumn": 40
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1161,9 +1143,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "No type named 'SEPResult' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 198,
+	"startLineNumber": 199,
 	"startColumn": 6,
-	"endLineNumber": 198,
+	"endLineNumber": 199,
 	"endColumn": 15
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1172,9 +1154,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 198,
+	"startLineNumber": 199,
 	"startColumn": 16,
-	"endLineNumber": 198,
+	"endLineNumber": 199,
 	"endColumn": 26
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1183,9 +1165,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 275,
+	"startLineNumber": 276,
 	"startColumn": 7,
-	"endLineNumber": 275,
+	"endLineNumber": 276,
 	"endColumn": 17
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1194,9 +1176,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 301,
+	"startLineNumber": 302,
 	"startColumn": 7,
-	"endLineNumber": 301,
+	"endLineNumber": 302,
 	"endColumn": 17
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1205,9 +1187,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 321,
+	"startLineNumber": 324,
 	"startColumn": 13,
-	"endLineNumber": 321,
+	"endLineNumber": 324,
 	"endColumn": 23
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1216,9 +1198,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 325,
+	"startLineNumber": 328,
 	"startColumn": 13,
-	"endLineNumber": 325,
+	"endLineNumber": 328,
 	"endColumn": 23
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1227,9 +1209,9 @@ Not committing merge; use 'git commit' to complete the merge.
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryBlock'",
 	"source": "clang",
-	"startLineNumber": 335,
+	"startLineNumber": 338,
 	"startColumn": 18,
-	"endLineNumber": 335,
+	"endLineNumber": 338,
 	"endColumn": 29
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1382,6 +1364,28 @@ Not committing merge; use 'git commit' to complete the merge.
 	"startColumn": 1,
 	"endLineNumber": 21,
 	"endColumn": 18,
+	"tags": [
+		1
+	]
+},{
+	"resource": "/sep/src/memory/memory_tier.cpp",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "unused-includes",
+		"target": {
+			"$mid": 1,
+			"path": "/guides/include-cleaner",
+			"scheme": "https",
+			"authority": "clangd.llvm.org"
+		}
+	},
+	"severity": 4,
+	"message": "Included header cmath is not used directly (fixes available)",
+	"source": "clangd",
+	"startLineNumber": 22,
+	"startColumn": 1,
+	"endLineNumber": 22,
+	"endColumn": 17,
 	"tags": [
 		1
 	]
@@ -1616,6 +1620,246 @@ Not committing merge; use 'git commit' to complete the merge.
 	"startColumn": 39,
 	"endLineNumber": 51,
 	"endColumn": 53
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "fatal_too_many_errors",
+	"severity": 8,
+	"message": "Too many errors emitted, stopping now",
+	"source": "clang",
+	"startLineNumber": 1,
+	"startColumn": 1,
+	"endLineNumber": 1,
+	"endColumn": 1
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "no_member_template",
+	"severity": 8,
+	"message": "No template named 'less' in namespace 'std' (fix available)",
+	"source": "clang",
+	"startLineNumber": 103,
+	"startColumn": 67,
+	"endLineNumber": 103,
+	"endColumn": 71
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "no_member_template",
+	"severity": 8,
+	"message": "No template named 'allocator' in namespace 'std' (fix available)",
+	"source": "clang",
+	"startLineNumber": 104,
+	"startColumn": 29,
+	"endLineNumber": 104,
+	"endColumn": 38
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "no_member_template_suggest",
+	"severity": 8,
+	"message": "No template named 'binary_function' in namespace 'std'; did you mean 'is_function'? (fixes available)",
+	"source": "clang",
+	"startLineNumber": 137,
+	"startColumn": 21,
+	"endLineNumber": 137,
+	"endColumn": 36,
+	"relatedInformation": [
+		{
+			"startLineNumber": 661,
+			"startColumn": 12,
+			"endLineNumber": 661,
+			"endColumn": 23,
+			"message": "'is_function' declared here",
+			"resource": "/usr/include/c++/15/type_traits"
+		}
+	]
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "template_arg_list_different_arity",
+	"severity": 8,
+	"message": "Too many template arguments for class template 'is_function'",
+	"source": "clang",
+	"startLineNumber": 137,
+	"startColumn": 21,
+	"endLineNumber": 137,
+	"endColumn": 36,
+	"relatedInformation": [
+		{
+			"startLineNumber": 661,
+			"startColumn": 12,
+			"endLineNumber": 661,
+			"endColumn": 23,
+			"message": "Template is declared here",
+			"resource": "/usr/include/c++/15/type_traits"
+		}
+	]
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "typename_nested_not_found",
+	"severity": 8,
+	"message": "No type named '__alloc_traits' in namespace '__gnu_cxx'",
+	"source": "clang",
+	"startLineNumber": 154,
+	"startColumn": 15,
+	"endLineNumber": 154,
+	"endColumn": 49
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_member_name_or_semi",
+	"severity": 8,
+	"message": "Expected member name or ';' after declaration specifiers",
+	"source": "clang",
+	"startLineNumber": 154,
+	"startColumn": 49,
+	"endLineNumber": 154,
+	"endColumn": 50
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "undeclared_var_use",
+	"severity": 8,
+	"message": "Use of undeclared identifier '_Select1st'",
+	"source": "clang",
+	"startLineNumber": 157,
+	"startColumn": 46,
+	"endLineNumber": 157,
+	"endColumn": 56
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "no_member_template",
+	"severity": 8,
+	"message": "No template named '__alloc_traits' in namespace '__gnu_cxx'",
+	"source": "clang",
+	"startLineNumber": 163,
+	"startColumn": 26,
+	"endLineNumber": 163,
+	"endColumn": 40
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "undeclared_var_use",
+	"severity": 8,
+	"message": "Use of undeclared identifier '_Pair_alloc_type'",
+	"source": "clang",
+	"startLineNumber": 163,
+	"startColumn": 41,
+	"endLineNumber": 163,
+	"endColumn": 57
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Alloc_traits' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 175,
+	"startColumn": 24,
+	"endLineNumber": 175,
+	"endColumn": 37
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Alloc_traits' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 176,
+	"startColumn": 24,
+	"endLineNumber": 176,
+	"endColumn": 37
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Alloc_traits' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 177,
+	"startColumn": 24,
+	"endLineNumber": 177,
+	"endColumn": 37
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Alloc_traits' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 178,
+	"startColumn": 24,
+	"endLineNumber": 178,
+	"endColumn": 37
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 179,
+	"startColumn": 24,
+	"endLineNumber": 179,
+	"endColumn": 33
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 180,
+	"startColumn": 24,
+	"endLineNumber": 180,
+	"endColumn": 33
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 181,
+	"startColumn": 24,
+	"endLineNumber": 181,
+	"endColumn": 33
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 182,
+	"startColumn": 24,
+	"endLineNumber": 182,
+	"endColumn": 33
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 183,
+	"startColumn": 24,
+	"endLineNumber": 183,
+	"endColumn": 33
+},{
+	"resource": "/usr/include/c++/15/bits/stl_map.h",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": "expected_class_or_namespace",
+	"severity": 8,
+	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
+	"source": "clang",
+	"startLineNumber": 184,
+	"startColumn": 24,
+	"endLineNumber": 184,
+	"endColumn": 33
 },{
 	"resource": "/usr/include/c++/15/bits/stl_vector.h",
 	"owner": "_generated_diagnostic_collection_name_#1",

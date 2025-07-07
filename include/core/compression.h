@@ -40,7 +40,8 @@ class CompressionFactory {
 public:
     static std::unique_ptr<CompressionStrategy> create(CompressionMethod method);
     static CompressionMethod analyzeData(const void* data, size_t size);
-    static float estimateCompressionRatio(const void* data, size_t size, CompressionMethod method);
+    static float estimateCompressionRatio(const void* data, size_t size,
+                                          CompressionMethod method);
 };
 
 // Compression utility functions

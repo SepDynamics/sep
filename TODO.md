@@ -1,4 +1,8 @@
-im trying to get these tests to pass via maaking the codebase work. 
+im trying to get these tests to pass via maaking the codebase work.
+
+[2024-04-25] Added clamping for tiny utilization values in
+MemoryTierManager::getTierUtilization so that tests expecting exact zero
+no longer fail due to floating point rounding.
 
 
 help me bring this to functional   

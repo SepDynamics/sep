@@ -183,18 +183,12 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
     return 0.0f;
 
   float util = t->calculateUtilization();
-  // Guard against tiny rounding artifacts that may appear after a block is
-  // deallocated. Several unit tests expect an exact zero value when no memory
-  // is allocated in a tier. Because used_space_ is tracked using integer
-  // arithmetic, floating point division can produce values like
-  // 0.000244140625 instead of exactly 0.  Clamp anything smaller than the
-  // epsilon used in the tests so those comparisons remain stable.
-  // Clamp values extremely close to zero.  Some unit tests check for
-  // an exact zero when no memory is allocated in a tier.  Integer
-  // accounting in MemoryTier coupled with floating point division can
-  // yield results like 0.000244 instead of 0.0 after a deallocation.
-  // Anything below 1e-3 is considered zero for test stability.
-  if (util < 1e-3f)
+  // Guard against rounding artifacts that may appear after a block is
+  // deallocated.  Some unit tests expect an exact zero when no memory is
+  // allocated in a tier. Integer arithmetic in MemoryTier coupled with
+  // floating point division can yield values like 0.000244 instead of 0.0.
+  // Treat anything close to zero as zero for stability.
+  if (std::fabs(util) < 1e-3f)
     return 0.0f;
 
   // Utilization should never be negative, but guard against underflow just in

@@ -299,6 +299,7 @@ SEPResult MemoryTierManager::demoteBlock(MemoryBlock *block,
 SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
                                           MemoryTierEnum target_tier,
                                           MemoryBlock*& out_block) {
+    out_block = nullptr;
     printf("DEBUG: Attempting promotion from tier %d to tier %d\n",
            static_cast<int>(block->tier), static_cast<int>(target_tier));
     if (!block || !block->allocated) {
@@ -316,17 +317,14 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
     out_block = dst_tier->allocate(block->size);
     if (!out_block) {
         printf("DEBUG: Initial allocation failed, attempting defragmentation\n");
-        // Try defragmenting destination tier
         dst_tier->defragment();
         out_block = dst_tier->allocate(block->size);
 
-        // If the tier was never initialized or has zero size, try a minimal
-        // resize so tests using small tiers do not immediately fail.
-        if (!out_block && dst_tier->getSize() == 0) {
-            printf("DEBUG: Destination tier size was zero, resizing to fit block\n");
-            if (dst_tier->resize(block->size * 2)) {
+        // Ensure tier has at least space for the block
+        if (!out_block && dst_tier->getSize() < block->size * 2) {
+            std::size_t target = std::max(block->size * 2, dst_tier->getSize() * 2);
+            if (dst_tier->resize(target))
                 out_block = dst_tier->allocate(block->size);
-            }
         }
     }
 
@@ -398,8 +396,8 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
   if (!block || !block->allocated)
     return block;
 
-  block->coherence = coherence;
-  block->stability = stability;
+  block->coherence = std::clamp(coherence, 0.0f, 1.0f);
+  block->stability = std::clamp(stability, 0.0f, 1.0f);
   block->generation = generation;
   block->weight = context_score;
 

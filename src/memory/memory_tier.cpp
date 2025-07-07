@@ -343,7 +343,15 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
   dst->last_coherence = src->last_coherence;
   dst->compression_ratio = src->compression_ratio;
 
-  if (config_.type == MemoryTierEnum::HOST) {
+#if SEP_MEMORY_HAS_CUDA
+  cudaError_t err =
+      sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault,
+                                 nullptr);
+  if (err != cudaSuccess) {
+    if (logger) {
+      LOG_ERROR(logger, "Failed to copy memory via CUDA: {}", err);
+      LOG_INFO(logger, "Falling back to CPU memcpy");
+    }
     std::memcpy(dst->ptr, src->ptr, size);
   } else {
 #if SEP_MEMORY_HAS_CUDA
@@ -365,10 +373,11 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
       }
       return false;
     }
-#else
-    std::memcpy(dst->ptr, src->ptr, size);
-#endif
   }
+#else
+  std::memcpy(dst->ptr, src->ptr, size);
+#endif
+  (void)logger; // suppress unused variable warning when CUDA is disabled
 
   // No need to update used_space_ here since it's already tracked in
   // allocate/deallocate

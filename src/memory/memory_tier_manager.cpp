@@ -9,6 +9,7 @@
 #include <mutex>
 #include <string>
 #include <cstring>
+#include <cmath>
 
 namespace sep {
 namespace memory {
@@ -181,13 +182,12 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
     return 0.0f;
 
   float util = t->calculateUtilization();
-  // Some tests expect an exact zero after deallocation.  Small rounding
-  // errors in used_space_ can lead to tiny non-zero values, so clamp them
-  // to zero for values that are effectively zero.
-  // Clamp very small values to zero so tests relying on exact zeros do not
-  // fail due to minor rounding errors.  The chosen threshold matches the
-  // epsilon used in unit tests.
-  if (util < 1e-3f)
+
+  // Some tests expect an exact zero after deallocation. Occasionally
+  // floating point rounding may yield a tiny positive or negative value
+  // even when the tier is completely free. Clamp values near zero so
+  // callers get a stable result.
+  if (std::fabs(util) < 1e-3f)
     return 0.0f;
 
   return util;

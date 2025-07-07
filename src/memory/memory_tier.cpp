@@ -343,18 +343,15 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
 #if SEP_MEMORY_HAS_CUDA
         cudaError_t err =
             sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
-        if (err != cudaSuccess) {
-            if (logger) {
-                LOG_ERROR(logger, "Failed to copy memory: {}", err);
-            }
-            return false;
+        if (err == cudaSuccess) {
+            err = cudaStreamSynchronize(nullptr);
         }
-        err = cudaStreamSynchronize(nullptr);
         if (err != cudaSuccess) {
             if (logger) {
-                LOG_ERROR(logger, "Failed to synchronize stream: {}", err);
+                LOG_ERROR(logger, "Failed to copy memory via CUDA: {}", err);
+                LOG_INFO(logger, "Falling back to CPU memcpy");
             }
-            return false;
+            std::memcpy(dst->ptr, src->ptr, size);
         }
 #else
         std::memcpy(dst->ptr, src->ptr, size);

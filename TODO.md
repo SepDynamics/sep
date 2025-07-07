@@ -4,6 +4,9 @@ im trying to get these tests to pass via maaking the codebase work.
 MemoryTierManager::getTierUtilization so that tests expecting exact zero
 no longer fail due to floating point rounding.
 
+[2025-07-07] Extended clamping logic to MemoryTier::calculateUtilization to
+ensure stable metrics after deallocation.
+
 
 help me bring this to functional   
 

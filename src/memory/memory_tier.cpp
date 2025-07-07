@@ -51,6 +51,11 @@ MemoryTier::MemoryTier(const Config &config)
       auto logger = sep::logging::Manager::getInstance().getLogger("memory");
       if (logger) {
         logger->error("Failed to allocate managed memory: {}", err);
+        logger->info("Falling back to host allocation");
+      }
+      memory_pool_ = std::malloc(config.size);
+      if (!memory_pool_ && logger) {
+        logger->error("Host allocation fallback failed");
       }
     }
 #else

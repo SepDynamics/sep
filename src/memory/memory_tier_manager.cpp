@@ -390,6 +390,12 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_[out_block->ptr] = out_block;
   }
 
+  // Rebuild the lookup table to keep any stale pointers from previous
+  // defragmentation or resize operations in sync with the new block
+  // locations.  Unit tests rely on findBlockByPtr returning the latest
+  // address so we refresh the map after every successful move.
+  rebuildLookup();
+
   return SEPResult::SUCCESS;
 }
 

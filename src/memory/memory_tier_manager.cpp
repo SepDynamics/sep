@@ -404,7 +404,12 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
                                                    float stability,
                                                    uint32_t generation,
                                                    float context_score) {
-  if (!block || !block->allocated)
+  // Guard against invalid input early. Returning nullptr allows unit tests to
+  // detect erroneous calls and avoids dereferencing a null pointer further in
+  // this method.
+  if (!block)
+    return nullptr;
+  if (!block->allocated)
     return block;
 
   block->coherence = std::clamp(coherence, 0.0f, 1.0f);
@@ -453,39 +458,27 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
 
 MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
                                              int generation_count) {
-    // LTM Check. If thresholds indicate promotion to LTM we return the tier
-    // directly. The allocation step will handle defragmentation or resizing
-    // if necessary, so we no longer gate promotion on free space.
-    if (coherence >= config_.promote_mtm_to_ltm &&
-        stability >= config_.promote_mtm_to_ltm &&
-        generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
-        return getTier(MemoryTierEnum::LTM);
-    }
+  // Highest tier check first.  The allocation call will handle resizing or
+  // defragmentation if necessary, so we simply return the tier if promotion
+  // thresholds are met.
+  if (coherence >= config_.promote_mtm_to_ltm &&
+      stability >= config_.promote_mtm_to_ltm &&
+      generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
+    return getTier(MemoryTierEnum::LTM);
+  }
 
-  // MTM Check
   if (coherence >= config_.promote_stm_to_mtm &&
       stability >= config_.promote_stm_to_mtm &&
       generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
-    MemoryTier *mtm = getTier(MemoryTierEnum::MTM);
-    if (mtm)
-      return mtm;
+    return getTier(MemoryTierEnum::MTM);
   }
 
-    // MTM Check
-    if (coherence >= config_.promote_stm_to_mtm &&
-        stability >= config_.promote_stm_to_mtm &&
-        generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
-        return getTier(MemoryTierEnum::MTM);
-    }
-
-    // Default to STM or find first available
-    if (MemoryTier* stm = getTier(MemoryTierEnum::STM))
-        return stm;
-
-    if (MemoryTier* mtm = getTier(MemoryTierEnum::MTM))
-        return mtm;
-
-    return getTier(MemoryTierEnum::LTM);
+  // Default to STM if it exists, otherwise fall back to the next available tier
+  if (MemoryTier *stm = getTier(MemoryTierEnum::STM))
+    return stm;
+  if (MemoryTier *mtm = getTier(MemoryTierEnum::MTM))
+    return mtm;
+  return getTier(MemoryTierEnum::LTM);
 }
 
 void MemoryTierManager::rebuildLookup() {

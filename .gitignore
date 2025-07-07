@@ -12,6 +12,7 @@ extern/*
 build/
 _build/
 sep_build/
+sep-build/
 changes.diff
 out/
 examples/train_data_2021_to_2025.json

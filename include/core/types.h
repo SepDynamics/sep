@@ -1,3 +1,4 @@
+
 #ifndef SEP_CONFIG_TYPES_H
 #define SEP_CONFIG_TYPES_H
 
@@ -33,6 +34,18 @@ enum class MemoryTierEnum {
     DEVICE = 101, // Device memory (GPU)
     UNIFIED = 102 // Unified memory (accessible by both CPU and GPU)
 };
+
+// Standard C headers
+#include <cstddef>
+#include <cstdint>
+
+// Standard C++ headers
+#include <map>
+#include <nlohmann/json.hpp>
+#include <string>
+#include <vector>
+
+namespace sep {
 
 namespace config {
 

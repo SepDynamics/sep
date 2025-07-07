@@ -1,3 +1,19 @@
+
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/quantum/
+        DESTINATION include/sep/quantum
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/quantum/
+        DESTINATION include/sep/quantum/internal
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+
 add_library(sep_quantum STATIC
     evolution.cpp
     quantum_processor_qfh.cpp

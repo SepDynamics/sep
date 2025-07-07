@@ -1,29 +1,30 @@
-// Standard library headers
-#include <algorithm> // For std::min, std::max, std::sort, std::remove_if
+#include "core/types.h"
+#include "core/common.h"
+#include "core/allocation_metrics.h"
+#include "core/logging.h"
+#include "memory/memory_tier.hpp"
+#include "memory/types.h"
+#include "memory/logger.hpp"
+#include "memory/memory_tier_manager.hpp"
+#include "compat/cuda.h"
+#include "compat/macros.h"
+#include "compat/math_common.h"
+
+// Standard headers
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
 #include <stdexcept>
 #include <vector>
 
-// External libraries
-#include "compat/cuda_api.hpp"
-#include "compat/cuda_common.h"
-#include "compat/macros.h"
-
-// Determine if real CUDA support is present. When building without NVCC the
-// stub headers provide the same symbols but no implementations which causes
-// linker errors.  Use the __CUDACC__ macro as a reliable indicator that the
-// CUDA toolkit is actually available.
+// CUDA support check
 #if defined(__CUDACC__)
 #  define SEP_MEMORY_HAS_CUDA 1
 #else
 #  define SEP_MEMORY_HAS_CUDA 0
 #endif
-
-// Project headers
-#include "core/common.h" // defines sep::SEPResult
-#include "memory/memory_tier.hpp"
 
 #ifndef SEP_HAS_EXCEPTIONS
 #if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
@@ -32,13 +33,6 @@
 #define SEP_HAS_EXCEPTIONS 0
 #endif
 #endif
-
-#include "compat/math_common.h"
-#include "core/allocation_metrics.h"
-#include "core/logging.h"
-#include "memory/logger.hpp"
-#include "memory/memory_tier_manager.hpp"
-#include "memory/types.h"
 
 namespace sep::memory {
 
@@ -149,7 +143,7 @@ MemoryBlock *MemoryTier::allocate(std::size_t size) {
   }
 
   block->allocated = true;
-  block->utilization = static_cast<float>(size) / config_.size;  // Use requested size
+  block->utilization = block->allocated ? (static_cast<float>(size) / static_cast<float>(config_.size)) : 0.0f;  // Use floating point division
   block->access_count = 0;
   block->compression = ::blender::CompressionMethod::None;
   block->original_size = size;
@@ -296,7 +290,7 @@ float MemoryTier::calculateFragmentation() const {
 }
 
 float MemoryTier::calculateUtilization() const {
-   if (config_.size == 0) return 0.0f;
+   if (config_.size == 0 || used_space_ == 0) return 0.0f;
    float util = static_cast<float>(used_space_) / static_cast<float>(config_.size);
    return util > 1.0f ? 1.0f : util;  // Cap at 100%
 }
@@ -335,7 +329,7 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
     dst->generation = src->generation;
     dst->weight = src->weight;
     dst->wait = src->wait;
-    dst->utilization = static_cast<float>(size) / dst->size;
+    dst->utilization = static_cast<float>(size) / dst->size;  // Use block size for utilization
     dst->access_count = src->access_count;
     dst->compression = src->compression;
     dst->original_size = src->original_size;
@@ -368,7 +362,6 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
     }
 
     // No need to update used_space_ here since it's already tracked in allocate/deallocate
-    
     return true;
 }
 
@@ -557,3 +550,4 @@ MemoryTier::getPattern(size_t id) const {
 }
 
 } // namespace sep::memory
+

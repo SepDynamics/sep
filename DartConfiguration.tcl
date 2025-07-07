@@ -14,7 +14,7 @@ CostDataFile:
 Site: sep-OS
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
-BuildName: Linux-clang++
+BuildName: Linux-g++-14
 
 # Subprojects
 LabelsForSubprojects: 
@@ -63,8 +63,8 @@ UpdateOptions:
 UpdateType: 
 
 # Compiler info
-Compiler: /usr/bin/clang++
-CompilerVersion: 20.1.7
+Compiler: /usr/bin/g++-14
+CompilerVersion: 14.2.1
 
 # Dynamic analysis (MemCheck)
 PurifyCommand: 

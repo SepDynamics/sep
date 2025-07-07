@@ -19,19 +19,6 @@ add_executable(memory_manager_tests
     redis_manager_test.cpp
 )
 
-target_include_directories(memory_manager_tests PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/include/api
-    ${CMAKE_SOURCE_DIR}/include/audio
-    ${CMAKE_SOURCE_DIR}/include/blender
-    ${CMAKE_SOURCE_DIR}/include/compat
-    ${CMAKE_SOURCE_DIR}/include/core
-    ${CMAKE_SOURCE_DIR}/include/crow
-    ${CMAKE_SOURCE_DIR}/include/memory
-    ${CMAKE_SOURCE_DIR}/include/quantum
-    ${CMAKE_SOURCE_DIR}/src
-)
-
 target_link_libraries(memory_manager_tests PRIVATE
     sep_memory
     sep_manifold
@@ -40,6 +27,31 @@ target_link_libraries(memory_manager_tests PRIVATE
     GTest::GTest
     GTest::Main
     hiredis
+    CUDA::cudart
+    CUDA::cuda_driver
+    Threads::Threads
+)
+
+target_compile_definitions(memory_manager_tests PRIVATE
+    SEP_HAS_CUDA=1
+    SEP_USE_CUDA=1
+    SEP_HAS_REDIS=1
+    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
+)
+
+# Include directories are inherited from linked targets
+target_include_directories(memory_manager_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/memory
+    ${CMAKE_SOURCE_DIR}/include/core
+    ${CMAKE_SOURCE_DIR}/include/compat
+)
+
+target_compile_definitions(memory_manager_tests PRIVATE
+    SEP_HAS_CUDA=1
+    SEP_USE_CUDA=1
+    SEP_HAS_REDIS=1
 )
 
 add_test(NAME memory_manager_tests COMMAND memory_manager_tests)

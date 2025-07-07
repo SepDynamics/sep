@@ -9,6 +9,22 @@ set(WITH_CYCLES_OPENVDB ON)
 set(WITH_CYCLES_OPENCOLORIO ON)
 set(WITH_CYCLES_OPENSUBDIV ON)
 
+
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/compat/
+        DESTINATION include/sep/compat
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/compat/
+        DESTINATION include/sep/compat/internal
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+
 # Define CUDA sources
 set(CUDA_SOURCES
     pattern_kernels.cu

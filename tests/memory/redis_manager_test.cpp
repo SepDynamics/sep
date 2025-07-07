@@ -15,8 +15,85 @@ protected:
         redis_manager.reset();
     }
 
+    // Helper to access private Impl methods for testing
+    class TestableRedisManager : public RedisManager {
+    public:
+        TestableRedisManager(const std::string& host, int port) : RedisManager(host, port) {}
+        
+        std::string getPatternKey(std::uint64_t id, const std::string& tier) const {
+            return impl_->getPatternKey(id, tier);
+        }
+        
+        std::string getTierPatternsKey(const std::string& tier) const {
+            return impl_->getTierPatternsKey(tier);
+        }
+        
+        std::string normalizeTier(const std::string& tier) const {
+            return impl_->normalizeTier(tier);
+        }
+    };
+
     std::shared_ptr<IRedisManager> redis_manager;
 };
+
+TEST_F(RedisManagerTest, NormalizeTier) {
+    auto testable = std::make_shared<TestableRedisManager>("localhost", 6379);
+    
+    // Test case normalization
+    EXPECT_EQ(testable->normalizeTier("stm"), "STM");
+    EXPECT_EQ(testable->normalizeTier("STM"), "STM");
+    EXPECT_EQ(testable->normalizeTier("StM"), "STM");
+    
+    // Test mtm/ltm normalization
+    EXPECT_EQ(testable->normalizeTier("mtm"), "MTM");
+    EXPECT_EQ(testable->normalizeTier("ltm"), "LTM");
+}
+
+TEST_F(RedisManagerTest, KeyFormatConsistency) {
+    auto testable = std::make_shared<TestableRedisManager>("localhost", 6379);
+    
+    // Test pattern key format
+    std::string pattern_key = testable->getPatternKey(123, "STM");
+    EXPECT_EQ(pattern_key, "pattern:STM:123");
+    
+    // Test tier patterns key format
+    std::string tier_key = testable->getTierPatternsKey("STM");
+    EXPECT_EQ(tier_key, "STM:patterns");
+}
+
+TEST_F(RedisManagerTest, InvalidTierHandling) {
+    PersistentPatternData data{};
+    data.coherence = 0.8f;
+    
+    // Store with invalid tier should still work due to normalization
+    redis_manager->storePattern(1, data, "invalid");
+    
+    // Load should return empty since tier is normalized
+    auto loaded = redis_manager->loadPattern(1, "invalid");
+    EXPECT_FALSE(loaded.has_value());
+    
+    // Pattern IDs should be empty for invalid tier
+    auto ids = redis_manager->getPatternIds("invalid");
+    EXPECT_TRUE(ids.empty());
+}
+
+TEST_F(RedisManagerTest, ConnectionFailureHandling) {
+    // Create manager with invalid connection
+    auto failed_manager = createRedisManager("nonexistent", 1234);
+    
+    // Should return false for connection status
+    EXPECT_FALSE(failed_manager->isConnected());
+    
+    PersistentPatternData data{};
+    
+    // Operations should fail gracefully
+    failed_manager->storePattern(1, data, "STM");
+    auto loaded = failed_manager->loadPattern(1, "STM");
+    EXPECT_FALSE(loaded.has_value());
+    
+    auto ids = failed_manager->getPatternIds("STM");
+    EXPECT_TRUE(ids.empty());
+}
 
 TEST_F(RedisManagerTest, StoreAndLoadPattern) {
     PersistentPatternData data{};

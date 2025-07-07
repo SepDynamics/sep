@@ -1,3 +1,19 @@
+
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/tests/
+        DESTINATION include/sep/tests
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
+        DESTINATION include/sep/tests/internal
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+
 # Set C++ standard
 # Find required packages
 find_package(CUDAToolkit REQUIRED)

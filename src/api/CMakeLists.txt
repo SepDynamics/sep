@@ -1,3 +1,19 @@
+
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/api/
+        DESTINATION include/sep/api
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/api/
+        DESTINATION include/sep/api/internal
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+
 add_library(sep_api STATIC
     crow_error.cpp
     lock_free_rate_limiter.cpp

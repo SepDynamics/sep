@@ -10,6 +10,21 @@ find_package(TBB REQUIRED)
 # Add other find_package() calls here for Embree, OpenVDB etc. as needed
 
 
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/blender/
+        DESTINATION include/sep/blender
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/blender/
+        DESTINATION include/sep/blender/internal
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+        
 # Define source files
 set(BLENDER_SOURCES
     api.cpp

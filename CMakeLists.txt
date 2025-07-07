@@ -22,8 +22,18 @@ option(SEP_WITH_CYCLES "Enable Blender Cycles integration" OFF)
 option(SEP_WITH_AUDIO "Enable PipeWire audio integration" ON)
 option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" OFF)
 
+# Configure include paths
+set(SEP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+set(SEP_SRC_DIR ${CMAKE_SOURCE_DIR}/src)
+
 # Add include paths after project declaration
-include_directories(BEFORE ${CMAKE_SOURCE_DIR}/include)
+include_directories(BEFORE
+    ${SEP_INCLUDE_DIR}
+    ${SEP_SRC_DIR}
+)
+
+# Ensure core headers are available
+add_subdirectory(src/core BEFORE src/memory)
 
 # Backwards compatibility variables
 set(SEP_ENABLE_BLENDER ${SEP_WITH_CYCLES})

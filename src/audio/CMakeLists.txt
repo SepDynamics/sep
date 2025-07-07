@@ -1,3 +1,19 @@
+
+
+# Install headers
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/audio/
+        DESTINATION include/sep/audio
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/audio/
+        DESTINATION include/sep/audio/internal
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+
 add_library(sep_audio
   STATIC
     config.cpp

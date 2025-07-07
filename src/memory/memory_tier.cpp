@@ -19,6 +19,7 @@
 #include <limits>
 #include <stdexcept>
 #include <vector>
+#include <cmath>
 
 // CUDA support check
 #if defined(__CUDACC__)
@@ -313,7 +314,9 @@ float MemoryTier::calculateUtilization() const {
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(config_.size);
-  if (util < 1e-3f)
+  // Clamp tiny rounding artifacts to zero so tests comparing against
+  // exact 0.0f remain stable after deallocations.
+  if (std::fabs(util) < 1e-3f)
     return 0.0f;
   return util > 1.0f ? 1.0f : util; // Cap at 100%
 }

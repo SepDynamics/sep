@@ -34,12 +34,9 @@ set_target_properties(sep_memory PROPERTIES
 target_link_libraries(sep_memory
     PUBLIC
         sep_core
-        sep_manifold
         sep_compat
     PRIVATE
         ${HIREDIS_LIB}
-        CUDA::cudart
-        CUDA::cuda_driver
         Threads::Threads
 )
 
@@ -51,10 +48,6 @@ target_include_directories(sep_memory
     PRIVATE
         ${HIREDIS_INCLUDE_DIR}
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/blender/lib/linux_x64/osl/include>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/eigen>
 )
 
 # Add compile definitions

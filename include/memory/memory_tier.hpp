@@ -1,23 +1,29 @@
 #pragma once
 
+#pragma once
+
+// C++ Standard Library
 #include <chrono>
 #include <cstddef>
 #include <deque>
-#include <glm/vec3.hpp>
 #include <unordered_map>
 #include <vector>
 
-#include "blender/compression.h"
-#include "core/common.h"
-#include "compat/math_common.h"
-#include "memory/types.h"
-#include "quantum/types.h"
+// Third-party headers
+#include <glm/vec3.hpp>
+
+// Project headers
+#include "../compat/shim.h"
+#include "../core/common.h"
+#include "../core/types.h"
+#include "types.h"
 
 namespace sep {
-
 namespace memory {
 
+using ::sep::CompressionMethod;
 using ::sep::MemoryTierEnum;
+using ::sep::SEPResult;
 
 // Memory tier types
 enum class TierType {
@@ -48,7 +54,7 @@ struct MemoryBlock {
     std::uint64_t              wait{0};
     std::uint32_t              generation{0};
     MemoryTierEnum            tier{MemoryTierEnum::STM};
-    ::blender::CompressionMethod compression{::blender::CompressionMethod::None};
+    CompressionMethod compression{CompressionMethod::None};
     float                      utilization{0.0f};
     float                      stability{0.0f};
     float                      coherence{0.0f};
@@ -63,9 +69,7 @@ struct MemoryBlock {
         : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
-
-namespace shim = ::sep::shim;
-using ::sep::SEPResult;
+using PersistentPatternData = ::sep::memory::persistence::PersistentPatternData;
 
 class MemoryTier {
 public:
@@ -108,12 +112,12 @@ public:
     }
 
     // Pattern management methods
-    bool canAcceptPattern(const ::sep::persistence::PersistentPatternData& pattern) const;
-    void addPattern(size_t id, ::sep::persistence::PersistentPatternData pattern);
+    bool canAcceptPattern(const PersistentPatternData& pattern) const;
+    void addPattern(size_t id, PersistentPatternData pattern);
     void removePattern(size_t id);
-    const ::sep::persistence::PersistentPatternData* getPattern(size_t id) const;
-    ::sep::persistence::PersistentPatternData* getPattern(size_t id);
-    const std::unordered_map<size_t, ::sep::persistence::PersistentPatternData>& getPatterns() const {
+    const PersistentPatternData* getPattern(size_t id) const;
+    PersistentPatternData* getPattern(size_t id);
+    const std::unordered_map<size_t, PersistentPatternData>& getPatterns() const {
         return m_patterns;
     }
 
@@ -131,7 +135,7 @@ private:
     size_t m_max_patterns{0};
     float m_coherence_threshold{0.0f};
     int m_min_generations{0};
-    std::unordered_map<size_t, ::sep::persistence::PersistentPatternData> m_patterns;
+    std::unordered_map<size_t, PersistentPatternData> m_patterns;
 };
 
 }  // namespace memory

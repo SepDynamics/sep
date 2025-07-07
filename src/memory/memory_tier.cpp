@@ -316,7 +316,7 @@ float MemoryTier::calculateUtilization() const {
   float util = static_cast<float>(used) / static_cast<float>(config_.size);
   // Clamp tiny rounding artifacts to zero so tests comparing against
   // exact 0.0f remain stable after deallocations.
-  if (std::fabs(util) < 1e-3f)
+  if (std::fabs(util) < kUtilizationEpsilon)
     return 0.0f;
   return util > 1.0f ? 1.0f : util; // Cap at 100%
 }

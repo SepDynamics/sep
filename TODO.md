@@ -1,4 +1,7 @@
-im trying to get these tests to pass via maaking the codebase work.
+im trying to get these tests to pass via making the codebase work.
+Resolved rounding issues in utilization metrics by introducing a
+shared `kUtilizationEpsilon` constant used across the memory tier
+implementation and manager.
 
 [2024-04-25] Added clamping for tiny utilization values in
 MemoryTierManager::getTierUtilization so that tests expecting exact zero

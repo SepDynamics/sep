@@ -63,6 +63,7 @@ public:
               enable_compression(true), stm_to_mtm_min_gen(5), mtm_to_ltm_min_gen(100) {}
     };
 
+
     // Singleton access
     static MemoryTierManager& getInstance();
     /** Reset the singleton instance for tests */

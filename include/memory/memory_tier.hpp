@@ -23,6 +23,9 @@ using ::sep::CompressionMethod;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
 
+// Small epsilon used when comparing utilization metrics.
+inline constexpr float kUtilizationEpsilon = 1e-3f;
+
 // Memory tier types
 enum class TierType {
     HOST = 0,   // Host memory (CPU)

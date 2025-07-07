@@ -24,7 +24,8 @@ sudo apt-get update -y
 REQUIRED_PACKAGES=(
     build-essential cmake git
     libglu1-mesa-dev libpcre3-dev
-    python3.13-dev libtbb-dev libboost-all-dev
+    libtbb-dev libxrandr-dev libglfw3-dev  # For OpenSubdiv's TBB and GLFW/Xrandr needs
+    libboost-all-dev
     libopencolorio-dev libopenimageio-dev
     libembree-dev libpugixml-dev libopenjp2-7-dev
     libcurl4-openssl-dev libhttp-parser-dev
@@ -35,13 +36,11 @@ REQUIRED_PACKAGES=(
 echo "Installing required packages..."
 sudo apt-get install -y "${REQUIRED_PACKAGES[@]}" 2>&1 | tee "$LOG_DIR/packages_install.log"
 
-# Check for Python 3.13 (not in noble by default)
-if ! dpkg -l | grep -q python3.13-dev; then
-    echo "Adding deadsnakes PPA for Python 3.13..."
-    sudo add-apt-repository ppa:deadsnakes/ppa -y
-    sudo apt-get update -y
-    sudo apt-get install -y python3.13-dev
-fi
+# Install Python 3.13 from deadsnakes PPA
+echo "Installing Python 3.13..."
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt-get update -y
+sudo apt-get install -y python3.13 python3.13-dev 2>&1 | tee -a "$LOG_DIR/packages_install.log"
 
 # Check and install GCC-14 if available, otherwise use default
 if apt-cache show gcc-14 &>/dev/null; then
@@ -84,7 +83,9 @@ if ! dpkg -l | grep -q libopensubdiv-dev; then
     }
     
     mkdir -p build && cd build
-    cmake -DNO_EXAMPLES=ON -DNO_TUTORIALS=ON -DNO_REGRESSION=ON .. > "$OPEN_SUBDIV_LOG 2>&1"
+    cmake -DNO_EXAMPLES=ON -DNO_TUTORIALS=ON -DNO_REGRESSION=ON \
+          -DTBB_DIR=/usr/lib/x86_64-linux-gnu/cmake/TBB \
+          .. > "$OPEN_SUBDIV_LOG" 2>&1
     make -j$(nproc) >> "$OPEN_SUBDIV_LOG" 2>&1
     sudo make install >> "$OPEN_SUBDIV_LOG" 2>&1
     
@@ -103,7 +104,9 @@ if ! dpkg -l | grep -q libusd-dev; then
     }
     
     mkdir -p build && cd build
-    cmake -DPXR_BUILD_TESTS=OFF -DPXR_BUILD_EXAMPLES=OFF .. > "$USD_LOG" 2>&1
+    cmake -DPXR_BUILD_TESTS=OFF -DPXR_BUILD_EXAMPLES=OFF \
+          -DTBB_DIR=/usr/lib/x86_64-linux-gnu/cmake/TBB \
+          .. > "$USD_LOG" 2>&1
     make -j$(nproc) >> "$USD_LOG" 2>&1
     sudo make install >> "$USD_LOG" 2>&1
     
@@ -116,7 +119,5 @@ sudo ldconfig
 echo "Dependency installation completed successfully."
 echo "Next steps:"
 echo "1. Check $LOG_DIR for build logs if issues persist."
-echo "2. Review CMakeLists.txt line 36 for 'add_subdirectory' syntax errors."
-echo "3. Run 'cmake .' and 'make' in your build directory."
-
-exit 0
+echo "2. Navigate to your project build directory and run 'cmake .. && make'."
+echo "3. Use Codex to assist with implementation fixes, focusing on test suite and demo workbench."

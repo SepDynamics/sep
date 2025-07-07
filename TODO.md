@@ -1,3 +1,4 @@
+[2025-07-08] Adjust clamp threshold to 5e-4 in getTierUtilization to match residuals.
 [2025-07-07] Verified memory tier manager tests pass after rounding clamp.
 im trying to get these tests to pass via maaking the codebase work.
 

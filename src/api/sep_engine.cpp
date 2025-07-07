@@ -30,7 +30,6 @@
 #include "core/logging.h" // Include logging header first
 #include "quantum/types.h" // For quantum::Pattern::generation
 #include "compat/math_common.h" // Include math common for sqrt_safe
-#include "../../_sep/testbed/context_algorithms.hpp"
 #include "embeddings/simple_embedding_model.h"
 
 // Forward declaration of the C-style wrapper function for CUDA initialization

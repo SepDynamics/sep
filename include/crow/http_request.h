@@ -5,4 +5,4 @@
 
 // Include the isolation header which pulls in the real Crow request
 #include "crow_isolation.h"
-#include "../../extern/crow/include/crow/http_request.h"
+#include "extern/crow/include/crow/http_request.h"

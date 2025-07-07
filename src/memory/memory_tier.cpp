@@ -42,6 +42,8 @@
 
 namespace sep::memory {
 
+using ::sep::MemoryTierEnum;
+
 MemoryTier::MemoryTier(const Config &config)
     : config_(config), memory_pool_(nullptr), used_space_(0) {
   // Allocate memory pool based on tier type

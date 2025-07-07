@@ -1,4 +1,4 @@
-#include "sep/logging/manager.hpp"
+#include "logging/manager.h"
 
 namespace sep::logging {
 

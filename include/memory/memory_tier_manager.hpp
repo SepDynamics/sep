@@ -41,6 +41,8 @@ class IRedisManager;
 
 namespace memory {
 
+using ::sep::MemoryTierEnum;
+
 
 class MemoryTierManager {
 public:

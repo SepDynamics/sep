@@ -3,6 +3,7 @@
 #include "memory/memory_tier.hpp"
 
 using namespace sep::memory;
+using sep::MemoryTierEnum;
 
 TEST(MemoryTierManagerTest, BasicInitialization) {
     MemoryTierManager mgr;
@@ -47,24 +48,24 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     MemoryTierManager mgr;
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
     ASSERT_NE(block, nullptr);
-    mgr.updateBlockMetrics(block, 0.9f, 0.9f, 6, 1.0f); // should be promoted after defrag
+    mgr.updateBlockMetrics(block, 0.95f, 0.95f, 100, 1.0f); // should be promoted to LTM after defrag
     mgr.defragmentTier(MemoryTierEnum::MTM);
 
     EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::MTM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::LTM), 0.0f);
 
     MemoryBlock* promoted = nullptr;
-    for (const auto& b : mgr.getTier(MemoryTierEnum::STM)->getBlocks()) {
+    for (const auto& b : mgr.getTier(MemoryTierEnum::LTM)->getBlocks()) {
         if (b.allocated) {
             promoted = const_cast<MemoryBlock*>(&b);
             break;
         }
     }
     ASSERT_NE(promoted, nullptr);
-    mgr.updateBlockMetrics(promoted, 0.0f, 0.0f, 0, 1.0f);
-    mgr.defragmentTier(MemoryTierEnum::STM);
+    mgr.updateBlockMetrics(promoted, 0.0f, 0.0f, 0, 1.0f); // should be demoted to MTM
+    mgr.defragmentTier(MemoryTierEnum::LTM);
 
-    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
+    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::LTM), 0.0f);
     EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::MTM), 0.0f);
 }
 

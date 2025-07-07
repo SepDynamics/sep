@@ -54,6 +54,10 @@ private:
         std::vector<persistence::PersistentPatternData> bulkLoad(const std::vector<std::uint64_t>& ids, const std::string& tier);
 
     private:
+        std::string getPatternKey(std::uint64_t id, const std::string& tier) const;
+        std::string getTierPatternsKey(const std::string& tier) const;
+        std::string normalizeTier(const std::string& tier) const;
+
         struct redisContext* context_;
         bool connected_;
         std::mutex mutex_;

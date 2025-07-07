@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/include/sep",
+                "${workspaceFolder}/include/memory",
+                "${workspaceFolder}/include/core",
+                "${workspaceFolder}/include/quantum",
+                "${workspaceFolder}/include/compat",
+                "${workspaceFolder}/extern"
+            ],
+            "forcedInclude": [
+                "${workspaceFolder}/include/memory/memory_tier_manager.hpp"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

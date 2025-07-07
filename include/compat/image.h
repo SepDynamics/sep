@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include "../compat/memory.h"
+#include "compat/memory.h"
 
-#include "../scene/colorspace.h"
+#include "scene/colorspace.h"
 
-#include "../util/string.h"
-#include "../util/thread.h"
-#include "../util/transform.h"
-#include "../util/unique_ptr.h"
-#include "../util/vector.h"
+#include "util/string.h"
+#include "util/thread.h"
+#include "util/transform.h"
+#include "util/unique_ptr.h"
+#include "util/vector.h"
 
 CCL_NAMESPACE_BEGIN;
 

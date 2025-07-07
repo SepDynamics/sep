@@ -4,6 +4,8 @@ endif()
 
 find_package(GTest REQUIRED)
 
+find_package(hiredis REQUIRED)
+
 add_executable(memory_manager_tests
     memory_headers_test.cpp
     memory_manager_test.cpp
@@ -14,6 +16,7 @@ add_executable(memory_manager_tests
     promotion_regression_test.cpp
     pattern_init_test.cpp
     pattern_promotion_test.cpp
+    redis_manager_test.cpp
 )
 
 target_include_directories(memory_manager_tests PRIVATE
@@ -36,6 +39,7 @@ target_link_libraries(memory_manager_tests PRIVATE
     sep_core
     GTest::GTest
     GTest::Main
+    hiredis
 )
 
 add_test(NAME memory_manager_tests COMMAND memory_manager_tests)

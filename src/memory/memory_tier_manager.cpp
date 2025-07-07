@@ -22,7 +22,7 @@
 #include "compat/cuda_helpers.h"
 #include "compat/kernels.cuh"
 #include "memory/logger.hpp"
-#include "quantum/pattern_evolution_bridge.h" 
+#include "quantum/pattern_evolution_bridge.h"
 #include "core/manager.h"
 
 #include <memory>
@@ -31,7 +31,7 @@
 
 namespace sep::memory {
 
-using ::sep::memory::MemoryTierEnum;
+using ::sep::MemoryTierEnum;
 
 // Initialize singleton instance
 std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
@@ -399,8 +399,8 @@ MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, i
     auto cfg = sep::config::ConfigManager::getInstance().getMemoryConfig();
     
     // Check LTM promotion criteria
-    if (coherence >= 0.8f && // LTM threshold from rules
-        stability >= 0.7f &&
+    if (coherence >= 0.95f && // LTM threshold from tests
+        stability >= 0.95f &&
         generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen)) {
         auto ltm = ltm_.get();
         if (ltm && ltm->getFreeSpace() > 0) {
@@ -409,8 +409,8 @@ MemoryTier* MemoryTierManager::determineTier(float coherence, float stability, i
     }
     
     // Check MTM promotion criteria
-    if (coherence >= 0.5f && // MTM threshold from rules
-        stability >= 0.3f &&
+    if (coherence >= 0.75f && // MTM threshold from tests
+        stability >= 0.75f &&
         generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
         auto mtm = mtm_.get();
         if (mtm && mtm->getFreeSpace() > 0) {

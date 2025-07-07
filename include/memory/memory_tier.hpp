@@ -17,6 +17,8 @@ namespace sep {
 
 namespace memory {
 
+using ::sep::MemoryTierEnum;
+
 // Memory tier types
 enum class TierType {
     HOST = 0,   // Host memory (CPU)
@@ -27,13 +29,13 @@ enum class TierType {
 // Macros for CUDA kernel compatibility
 #ifdef __CUDACC__
 #ifndef SEP_MEMORY_TIER_STM
-#define SEP_MEMORY_TIER_STM static_cast<int>(::sep::memory::MemoryTierEnum::STM)
+#define SEP_MEMORY_TIER_STM static_cast<int>(::sep::MemoryTierEnum::STM)
 #endif
 #ifndef SEP_MEMORY_TIER_MTM
-#define SEP_MEMORY_TIER_MTM static_cast<int>(::sep::memory::MemoryTierEnum::MTM)
+#define SEP_MEMORY_TIER_MTM static_cast<int>(::sep::MemoryTierEnum::MTM)
 #endif
 #ifndef SEP_MEMORY_TIER_LTM
-#define SEP_MEMORY_TIER_LTM static_cast<int>(::sep::memory::MemoryTierEnum::LTM)
+#define SEP_MEMORY_TIER_LTM static_cast<int>(::sep::MemoryTierEnum::LTM)
 #endif
 #endif
 

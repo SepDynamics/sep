@@ -33,7 +33,12 @@ include_directories(BEFORE
 )
 
 # Ensure core headers are available
-add_subdirectory(src/core BEFORE src/memory)
+# Build the core subsystem first so that memory and other components can
+# link against it. The previous invocation attempted to use the unsupported
+# `BEFORE` argument to `add_subdirectory`, which caused configuration errors
+# with newer versions of CMake. We simply add the directories in the
+# required order instead.
+add_subdirectory(src/core)
 
 # Backwards compatibility variables
 set(SEP_ENABLE_BLENDER ${SEP_WITH_CYCLES})
@@ -78,10 +83,14 @@ link_directories(${CMAKE_SOURCE_DIR}/lib)
 include(SEPConfig)
 configure_sep()
 
-# CUDA is a hard requirement for the project
-find_package(CUDAToolkit REQUIRED)
-set(SEP_HAS_CUDA 1)
-add_compile_definitions(SEP_HAS_CUDA=1)
+# CUDA is optional for many unit tests. Allow disabling via SEP_HAS_CUDA
+option(SEP_HAS_CUDA "Enable CUDA support" ON)
+if(SEP_HAS_CUDA)
+    find_package(CUDAToolkit REQUIRED)
+    add_compile_definitions(SEP_HAS_CUDA=1)
+else()
+    add_compile_definitions(SEP_HAS_CUDA=0)
+endif()
 
 if(SEP_WITH_CYCLES)
     add_compile_definitions(SEP_HAS_CYCLES=1)

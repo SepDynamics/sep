@@ -36,8 +36,6 @@ std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 std::once_flag MemoryTierManager::once_flag_;
 
 // --- Singleton Implementation ---
-std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
-std::once_flag MemoryTierManager::once_flag_;
 
 MemoryTierManager &MemoryTierManager::getInstance() {
   std::call_once(once_flag_, []() {
@@ -107,10 +105,7 @@ void MemoryTierManager::init(const Config& config) {
            mtm_->calculateUtilization(),
            ltm_->calculateUtilization());
 
-    if (config_.use_redis) {
-        redis_manager_ =
-            persistence::createRedisManager(config_.redis_host, config_.redis_port);
-    }
+    // Redis manager is optional in this minimal build
 }
 
 void MemoryTierManager::shutdown() {
@@ -120,7 +115,6 @@ void MemoryTierManager::shutdown() {
   lookup_map_.clear();
   pattern_registry_.clear();
   pattern_relationships_.clear();
-  redis_manager_.reset();
 }
 
 // --- Core Memory Operations ---
@@ -130,7 +124,7 @@ MemoryBlock* MemoryTierManager::allocate(std::size_t size, MemoryTierEnum tier) 
     return nullptr;
   MemoryBlock* blk = t->allocate(size);
   if (blk) {
-    std::lock_guardstd::mutex lock(lookup_mutex_);
+    std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_[blk->ptr] = blk;
     }
     return blk;
@@ -138,7 +132,7 @@ MemoryBlock* MemoryTierManager::allocate(std::size_t size, MemoryTierEnum tier) 
 void MemoryTierManager::deallocate(MemoryBlock* block) {
   if (!block) return;
   {
-    std::lock_guard<std::mutex> lock(lookup_mutex_);
+    std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(block->ptr);
     }
     if (MemoryTier* t = getTier(block->tier)) {
@@ -162,6 +156,10 @@ MemoryTier* MemoryTierManager::getTier(MemoryTierEnum tier) {
   }
 }
 
+MemoryTier& MemoryTierManager::getSTM() { return *stm_; }
+MemoryTier& MemoryTierManager::getMTM() { return *mtm_; }
+MemoryTier& MemoryTierManager::getLTM() { return *ltm_; }
+
 float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
   return t ? t->calculateUtilization() : 0.0f;
@@ -170,6 +168,57 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {
   const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
   return t ? t->calculateFragmentation() : 0.0f;
+}
+
+std::size_t MemoryTierManager::getTotalAllocated() const {
+  std::size_t total = 0;
+  if (stm_)
+    total += stm_->getSize() - stm_->getFreeSpace();
+  if (mtm_)
+    total += mtm_->getSize() - mtm_->getFreeSpace();
+  if (ltm_)
+    total += ltm_->getSize() - ltm_->getFreeSpace();
+  return total;
+}
+
+float MemoryTierManager::getTotalUtilization() const {
+  std::size_t total_size = 0;
+  std::size_t used = 0;
+  if (stm_) {
+    total_size += stm_->getSize();
+    used += stm_->getSize() - stm_->getFreeSpace();
+  }
+  if (mtm_) {
+    total_size += mtm_->getSize();
+    used += mtm_->getSize() - mtm_->getFreeSpace();
+  }
+  if (ltm_) {
+    total_size += ltm_->getSize();
+    used += ltm_->getSize() - ltm_->getFreeSpace();
+  }
+  if (total_size == 0)
+    return 0.0f;
+  return static_cast<float>(used) / static_cast<float>(total_size);
+}
+
+float MemoryTierManager::getTotalFragmentation() const {
+  float total = 0.0f;
+  int count = 0;
+  if (stm_) {
+    total += stm_->calculateFragmentation();
+    ++count;
+  }
+  if (mtm_) {
+    total += mtm_->calculateFragmentation();
+    ++count;
+  }
+  if (ltm_) {
+    total += ltm_->calculateFragmentation();
+    ++count;
+  }
+  if (count == 0)
+    return 0.0f;
+  return total / count;
 }
 
 void MemoryTierManager::optimizeTiers() {
@@ -230,7 +279,7 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
 
     // Update lookup maps in correct order to maintain consistency
     {
-        std::lock_guard<std::mutex> lock(lookup_mutex_);
+        std::lock_guard<std::mutex> lock(lookup_mutex);
         lookup_map_.erase(block->ptr);
         src_tier->deallocate(block);
         lookup_map_[out_block->ptr] = out_block;
@@ -299,29 +348,44 @@ MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
     if (ltm && ltm->getFreeSpace() > 0) return ltm;
 
     return nullptr; // No space available
+}
 
+void MemoryTierManager::rebuildLookup() {
+    std::lock_guard<std::mutex> lock(lookup_mutex);
+    lookup_map_.clear();
+    auto add_blocks = [this](MemoryTier* tier) {
+        if (!tier) return;
+        const auto& blocks = tier->getBlocks();
+        for (const auto& blk : blocks) {
+            if (blk.allocated)
+                lookup_map_[blk.ptr] = const_cast<MemoryBlock*>(&blk);
+        }
+    };
+    add_blocks(stm_.get());
+    add_blocks(mtm_.get());
+    add_blocks(ltm_.get());
 }
 
 // --- Pattern and Relationship Management ---
 void MemoryTierManager::registerPattern(
     std::size_t id, const sep::pattern::PatternData &pattern) {
-  std::lock_guard<std::mutex> lock(registry_mutex_);
+  std::lock_guard<std::mutex> lock(registry_mutex);
   pattern_registry_[id] = std::make_unique<sep::pattern::PatternData>(pattern);
 }
 
 const sep::pattern::PatternData* MemoryTierManager::getPatternData(std::size_t id) const {
-  std::lock_guard<std::mutex> lock(registry_mutex_);
+  std::lock_guard<std::mutex> lock(registry_mutex);
   auto it = pattern_registry_.find(id);
   return it == pattern_registry_.end() ? nullptr : it->second.get();
 }
 
 void MemoryTierManager::removePattern(std::size_t id) {
-  std::lock_guardstd::mutex lock(registry_mutex_);
+  std::lock_guard<std::mutex> lock(registry_mutex);
   pattern_registry_.erase(id);
 
 
   // Also remove relationships associated with this pattern
-  std::lock_guard<std::mutex> rel_lock(relationships_mutex_);
+  std::lock_guard<std::mutex> rel_lock(relationships_mutex);
   pattern_relationships_.erase(id);
   for (auto& pair : pattern_relationships_) {
     pair.second.erase(id);
@@ -331,13 +395,13 @@ void MemoryTierManager::removePattern(std::size_t id) {
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            float strength) {
-  std::lock_guard<std::mutex> lock(relationships_mutex_);
+  std::lock_guard<std::mutex> lock(relationships_mutex);
   pattern_relationships_[id_a][id_b] = strength;
   pattern_relationships_[id_b][id_a] = strength;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {
-  std::lock_guard<std::mutex> lock(relationships_mutex_);
+  std::lock_guard<std::mutex> lock(relationships_mutex);
   for (auto& [id, relations] : pattern_relationships_) {
     for (auto it = relations.begin(); it != relations.end(); ) {
       if (it->second < config_.demote_threshold) { // Reuse demote threshold
@@ -350,8 +414,8 @@ void MemoryTierManager::pruneWeakRelationships() {
 }
 
 void MemoryTierManager::calculateRelationshipCoherence() {
-  std::lock_guard<std::mutex> reg_lock(registry_mutex_);
-  std::lock_guard<std::mutex> rel_lock(relationships_mutex_);
+  std::lock_guard<std::mutex> reg_lock(registry_mutex);
+  std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
     if (pattern_relationships_.count(id)) {

@@ -35,9 +35,7 @@ namespace core {
 class SystemHooks;
 }
 
-namespace persistence {
-class IRedisManager;
-}
+
 
 namespace memory {
 
@@ -145,7 +143,6 @@ private:
 private:
     dag::DagGraph dag_graph_;
     std::unordered_map<std::size_t, uint64_t> pattern_dag_map_;
-    std::unique_ptr<persistence::IRedisManager> redis_manager_;
     core::SystemHooks* hooks_{nullptr};
 
     std::unordered_map<std::size_t, std::unique_ptr<::sep::pattern::PatternData>> pattern_registry_;

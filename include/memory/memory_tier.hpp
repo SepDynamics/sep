@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 // C++ Standard Library
 #include <chrono>
 #include <cstddef>

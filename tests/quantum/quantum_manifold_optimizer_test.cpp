@@ -1,7 +1,8 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include <gtest/gtest.h>
 
-using namespace sep::quantum;
+using namespace sep::quantum::manifold;
+using sep::quantum::Pattern;
 
 TEST(QuantumManifoldOptimizerTest, OptimizeReturnsInput) {
     QuantumManifoldOptimizer optimizer;

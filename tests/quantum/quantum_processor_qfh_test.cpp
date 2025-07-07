@@ -5,9 +5,9 @@ using namespace sep::quantum;
 
 TEST(QuantumProcessorQFHTest, DetermineMemoryTier) {
     QuantumProcessorQFH proc;
-    EXPECT_EQ(proc.determineMemoryTier(0.95f, 0.9f, 150), sep::memory::TierType::LTM);
-    EXPECT_EQ(proc.determineMemoryTier(0.75f, 0.5f, 10), sep::memory::TierType::MTM);
-    EXPECT_EQ(proc.determineMemoryTier(0.2f, 0.1f, 1), sep::memory::TierType::STM);
+    EXPECT_EQ(proc.determineMemoryTier(0.95f, 0.9f, 150), sep::memory::MemoryTierEnum::LTM);
+    EXPECT_EQ(proc.determineMemoryTier(0.75f, 0.5f, 10), sep::memory::MemoryTierEnum::MTM);
+    EXPECT_EQ(proc.determineMemoryTier(0.2f, 0.1f, 1), sep::memory::MemoryTierEnum::STM);
 }
 
 TEST(QuantumProcessorQFHTest, MutationRateInRange) {

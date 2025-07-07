@@ -1,14 +1,9 @@
-#include <string.h> // For strerror, memcpy, etc.
-#include <cstring>
-#include <ctime>
-#include <time.h>   // For timespec and nanosleep
-#include <unistd.h>
-#include <cstdlib>
-
+// Project headers
 #include "audio/pipewire_capture.h"
 #include "audio/types.h"
 #include "audio/capture.h"
 #include "audio/config.h"
+#include "compat/math_common.h"
 
 #ifdef SEP_HAS_AUDIO
 
@@ -30,40 +25,35 @@ extern "C" {
 #include <spa/utils/type.h>
 }
 
+// Third-party headers
 #include <spdlog/spdlog.h>
+#include <glm/gtc/constants.hpp>
+
+// System headers
 #include <sys/stat.h>
 #include <unistd.h>
-#include <glm/gtc/constants.hpp>
-#include <cstdio>
-
-#include <sys/stat.h> // For stat
-#include <unistd.h>   // For getuid
-#include <cstdio>     // For snprintf
-#include <cstdlib>    // For getenv, setenv, system, popen, pclose
-#include <thread>     // For std::this_thread::sleep_for
-
-// Additional project headers
-#include "compat/math_common.h"
 
 // Standard library headers
-#include <new>
-#include <cstddef>
-#include <cstring>
-#include <cstdlib>
-#include <thread>
-#include <memory>
-#include <cfloat>
 #include <cmath>
-
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <memory>
+#include <new>
+#include <thread>
 
 namespace sep {
 namespace audio {
 
-// Initialize PipeWire before class implementation
-namespace sep {
-namespace audio {
+using namespace std; // Add this to fix namespace issues
+
+
+sep::audio::PipeWireCapture::PipeWireCapture() : stream_events_{} {}
 
 namespace {
+
 struct PWInit {
     bool ok{false};
     PWInit() {
@@ -76,9 +66,6 @@ struct PWInit {
         }
     }
 } pw_init_once;
-}
-
-PipeWireCapture::PipeWireCapture() : stream_events_{} {}
 
 static const pw_stream_events createStreamEvents()
 {
@@ -89,50 +76,95 @@ static const pw_stream_events createStreamEvents()
     return events;
 }
 
-void sep::audio::PipeWireCapture::streamProcess(void* data)
+} // anonymous namespace
+
+
+AudioError PipeWireCapture::setupStream()
 {
-    auto* self = static_cast<PipeWireCapture*>(data);
-    pw_buffer* buf = pw_stream_dequeue_buffer(self->stream_);
-    if (!buf) {
-        return;
-    }
+    static const struct pw_stream_events events = createStreamEvents();
 
-    spa_buffer* spa_buf = buf->buffer;
-    float* samples = static_cast<float*>(spa_buf->datas[0].data);
-    if (!samples) {
-        pw_stream_queue_buffer(self->stream_, buf);
-        return;
-    }
+    // Create stream for capturing audio
+    stream_ = pw_stream_new(core_,
+                           config_.description.c_str(),
+                           pw_properties_new(PW_KEY_MEDIA_TYPE,
+                                           "Audio",
+                                           PW_KEY_MEDIA_CLASS,
+                                           "Stream/Input/Audio",
+                                           PW_KEY_MEDIA_CATEGORY,
+                                           "Capture",
+                                           PW_KEY_MEDIA_ROLE,
+                                           "Communication",
+                                           PW_KEY_APP_NAME,
+                                           "SEP Audio",
+                                           PW_KEY_NODE_NAME,
+                                           "SEP_Audio_Input",
+                                           PW_KEY_NODE_DESCRIPTION,
+                                           "SEP Audio Input",
+                                           PW_KEY_NODE_LATENCY,
+                                           "1024/48000",
+                                           PW_KEY_NODE_RATE,
+                                           "1/48000",
+                                           PW_KEY_STREAM_CAPTURE_SINK,
+                                           "true",
+                                           PW_KEY_STREAM_MONITOR,
+                                           "true",
+                                           PW_KEY_STREAM_DONT_REMIX,
+                                           "true",
+                                           nullptr));
 
-    uint32_t n_samples = spa_buf->datas[0].chunk->size / sizeof(float);
-    float peak = 0.0f;
-    float rms_sum = 0.0f;
-
+    if (!stream_)
     {
-        std::lock_guard<std::mutex> lock(self->mutex_);
-        if (self->running_ && self->callback_) {
-            self->callback_(samples, n_samples);
-        }
-
-        // Update metrics
-        for (uint32_t i = 0; i < n_samples; i++) {
-            float abs_sample = std::fabs(samples[i]);
-            peak = std::max(peak, abs_sample);
-            rms_sum += abs_sample * abs_sample;
-        }
-
-        if (self->running_) {
-            self->metrics_.total_samples += n_samples;
-            self->metrics_.peak_level = peak;
-            self->metrics_.rms_level =
-                sep::math::to_float(math::sqrt_safe(static_cast<double>(rms_sum / n_samples)));
-        }
+        spdlog::error("Failed to create PipeWire stream");
+        return AudioError::STREAM_FAILED;
     }
 
-    pw_stream_queue_buffer(self->stream_, buf);
+    // Register stream events
+    stream_listener_ = std::make_unique<spa_hook>();
+    if (!stream_listener_)
+    {
+        spdlog::error("Failed to allocate stream listener");
+        return AudioError::STREAM_FAILED;
+    }
+    pw_stream_add_listener(stream_, stream_listener_.get(), &events, this);
+
+    // Stream parameters
+    spa_audio_info_raw info = {};
+    info.format             = SPA_AUDIO_FORMAT_F32;
+    info.rate               = config_.rate;
+    info.channels           = 2;                     // Stereo input
+    info.position[0]        = SPA_AUDIO_CHANNEL_FL;  // Front Left
+    info.position[1]        = SPA_AUDIO_CHANNEL_FR;  // Front Right
+
+    const struct spa_pod*  params[1];
+    uint8_t                buffer[1024];
+    struct spa_pod_builder b = SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
+
+    params[0] = spa_format_audio_raw_build(&b, SPA_PARAM_EnumFormat, &info);
+
+    // Connect stream
+    int err = pw_stream_connect(stream_,
+                               PW_DIRECTION_INPUT,
+                               PW_ID_ANY,
+                               static_cast<pw_stream_flags>(PW_STREAM_FLAG_AUTOCONNECT |
+                                                          PW_STREAM_FLAG_RT_PROCESS),
+                               params,
+                               1);
+
+    if (err < 0)
+    {
+        spdlog::error("Failed to connect stream: {}", spa_strerror(err));
+        spdlog::error("Source: {} rate: {}", config_.source, config_.rate);
+        if (err == -ENOENT)
+        {
+            spdlog::error("Requested capture device not found");
+        }
+        return AudioError::STREAM_FAILED;
+    }
+
+    return AudioError::NONE;
 }
 
-void PipeWireCapture::cleanup()
+void sep::audio::PipeWireCapture::cleanup()
 {
     if (stream_)
     {
@@ -169,7 +201,7 @@ PipeWireCapture::~PipeWireCapture()
 // Updated src/audio/pipewire_capture.cpp segment
 // Replace the init method with this improved version
 
-AudioError PipeWireCapture::init(const AudioConfig& config)
+AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
 {
     std::lock_guard<std::mutex> lock(mutex_);
     config_ = config;
@@ -388,89 +420,12 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
         return AudioError::INIT_FAILED;
     }
 
-    // Setup stream while holding the lock
-    static const struct pw_stream_events events = createStreamEvents();
-
-    // Create stream for capturing audio
-    stream_ = pw_stream_new(core_,
-                           config_.description.c_str(),
-                           pw_properties_new(PW_KEY_MEDIA_TYPE,
-                                              "Audio",
-                                              PW_KEY_MEDIA_CLASS,
-                                              "Stream/Input/Audio",
-                                              PW_KEY_MEDIA_CATEGORY,
-                                              "Capture",
-                                              PW_KEY_MEDIA_ROLE,
-                                              "Communication",
-                                              PW_KEY_APP_NAME,
-                                              "SEP Audio",
-                                              PW_KEY_NODE_NAME,
-                                              "SEP_Audio_Input",
-                                              PW_KEY_NODE_DESCRIPTION,
-                                              "SEP Audio Input",
-                                              PW_KEY_NODE_LATENCY,
-                                              "1024/48000",
-                                              PW_KEY_NODE_RATE,
-                                              "1/48000",
-                                              PW_KEY_STREAM_CAPTURE_SINK,
-                                              "true",
-                                              PW_KEY_STREAM_MONITOR,
-                                              "true",
-                                              PW_KEY_STREAM_DONT_REMIX,
-                                              "true",
-                                              nullptr));
-
-    if (!stream_)
-    {
-        spdlog::error("Failed to create PipeWire stream");
-        return AudioError::STREAM_FAILED;
-    }
-
-    // Register stream events
-    stream_listener_ = std::make_unique<spa_hook>();
-    if (!stream_listener_)
-    {
-        spdlog::error("Failed to allocate stream listener");
+    // Setup the stream
+    AudioError err = setupStream();
+    if (err != AudioError::NONE) {
         pw_thread_loop_unlock(loop_);
         cleanup();
-        return AudioError::STREAM_FAILED;
-    }
-    pw_stream_add_listener(stream_, stream_listener_.get(), &events, this);
-
-    // Stream parameters
-    spa_audio_info_raw info = {};
-    info.format             = SPA_AUDIO_FORMAT_F32;
-    info.rate               = config_.rate;
-    info.channels           = 2;                     // Stereo input
-    info.position[0]        = SPA_AUDIO_CHANNEL_FL;  // Front Left
-    info.position[1]        = SPA_AUDIO_CHANNEL_FR;  // Front Right
-
-    const struct spa_pod*  params[1];
-    uint8_t                buffer[1024];
-    struct spa_pod_builder b = SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
-
-    params[0] = spa_format_audio_raw_build(&b, SPA_PARAM_EnumFormat, &info);
-
-    // Connect stream
-    int err = pw_stream_connect(stream_,
-                               PW_DIRECTION_INPUT,
-                               PW_ID_ANY,
-                               static_cast<pw_stream_flags>(PW_STREAM_FLAG_AUTOCONNECT |
-                                                          PW_STREAM_FLAG_RT_PROCESS),
-                               params,
-                               1);
-
-    if (err < 0)
-    {
-        spdlog::error("Failed to connect stream: {}", spa_strerror(err));
-        spdlog::error("Source: {} rate: {}", config_.source, config_.rate);
-        if (err == -ENOENT)
-        {
-            spdlog::error("Requested capture device not found");
-        }
-        pw_thread_loop_unlock(loop_);
-        cleanup();
-        return AudioError::STREAM_FAILED;
+        return err;
     }
 
     pw_thread_loop_unlock(loop_);
@@ -478,7 +433,7 @@ AudioError PipeWireCapture::init(const AudioConfig& config)
     return AudioError::NONE;
 }
 
-AudioError PipeWireCapture::start()
+AudioError sep::audio::PipeWireCapture::start()
 {
     std::lock_guard<std::mutex> lock(mutex_);
 
@@ -506,7 +461,7 @@ AudioError PipeWireCapture::start()
     return AudioError::NONE;
 }
 
-AudioError PipeWireCapture::stop()
+AudioError sep::audio::PipeWireCapture::stop()
 {
     std::lock_guard<std::mutex> lock(mutex_);
     running_ = false;
@@ -518,19 +473,26 @@ AudioError PipeWireCapture::stop()
     return AudioError::NONE;
 }
 
-void PipeWireCapture::setCallback(AudioCallback callback)
+void sep::audio::PipeWireCapture::setCallback(AudioCapture::AudioCallback callback)
 {
     std::lock_guard<std::mutex> lock(mutex_);
     callback_ = std::move(callback);
 }
 
-AudioMetrics PipeWireCapture::getMetrics() const
+AudioMetrics sep::audio::PipeWireCapture::getMetrics() const
 {
-    std::lock_guard<std::mutex> lock(mutex_); 
-    return metrics_;
+    std::lock_guard<std::mutex> lock(mutex_);
+    AudioMetrics metrics;
+    metrics.peak_level = metrics_.peak_level;
+    metrics.rms_level = metrics_.rms_level;
+    metrics.total_samples = metrics_.total_samples;
+    metrics.dropped_samples = metrics_.dropped_samples;
+    metrics.xruns = metrics_.xruns;
+    metrics.latency_ms = metrics_.latency;
+    return metrics;
 }
 
-void PipeWireCapture::streamStateChanged(void* data,
+void sep::audio::PipeWireCapture::streamStateChanged(void* data,
                                        enum pw_stream_state old_state,
                                        enum pw_stream_state new_state,
                                        const char* error)
@@ -603,29 +565,32 @@ void PipeWireCapture::streamProcess(void* data)
 
     struct pw_buffer* buf = pw_stream_dequeue_buffer(self->stream_);
     if (!buf) {
-        spdlog::debug("No buffer available");
+        std::lock_guard<std::mutex> lock(self->mutex_);
+        self->metrics_.xruns++;
+        spdlog::warn("Buffer underflow detected");
         return;
     }
 
     struct spa_buffer* spa_buf = buf->buffer;
     float* samples = static_cast<float*>(spa_buf->datas[0].data);
     if (!samples) {
-        spdlog::warn("Received empty buffer");
         pw_stream_queue_buffer(self->stream_, buf);
+        std::lock_guard<std::mutex> lock(self->mutex_);
+        self->metrics_.xruns++;
+        spdlog::warn("Empty buffer received");
         return;
     }
 
     uint32_t n_samples = spa_buf->datas[0].chunk->size / sizeof(float);
-    
-    static uint64_t total_processed = 0;
-    total_processed += n_samples;
-    
-    if (total_processed % (self->config_.rate * 10) == 0) {  // Log every 10 seconds
-        spdlog::info("Audio processing stats: {} samples processed ({:.1f} seconds)",
-                    total_processed,
-                    static_cast<float>(total_processed) / self->config_.rate);
+    if (n_samples > self->config_.buffer_frames) {
+        std::lock_guard<std::mutex> lock(self->mutex_);
+        self->metrics_.dropped_samples += (n_samples - self->config_.buffer_frames);
+        self->metrics_.xruns++;
+        spdlog::warn("Buffer overflow: {} samples (max: {})",
+                    n_samples, self->config_.buffer_frames);
+        n_samples = self->config_.buffer_frames;
     }
-
+    
     // Process audio data
     if (callback) {
         callback(samples, n_samples);
@@ -660,11 +625,14 @@ void PipeWireCapture::streamProcess(void* data)
         if (self->running_) {  // Check again under lock
             self->metrics_.total_samples += n_samples;
             self->metrics_.peak_level = peak;
-            self->metrics_.rms_level =
-                sep::math::to_float(math::sqrt_safe(static_cast<double>(rms_sum / n_samples)));
+            self->metrics_.rms_level = sep::math::to_float(sep::math::sqrt_safe(static_cast<double>(rms_sum / n_samples)));
+            self->metrics_.latency_ms = static_cast<float>(n_samples) / self->config_.rate * 1000.0f;
             
-            if (peak > 0.8f) {  // Log high audio levels
-                spdlog::info("High audio level detected: {:.2f}", peak);
+            // Check for audio clipping
+            if (peak > 1.0f) {
+                self->metrics_.dropped_samples++;
+                self->metrics_.xruns++;
+                spdlog::warn("Audio clipping detected: {:.2f}", peak);
             }
         }
     }
@@ -672,9 +640,9 @@ void PipeWireCapture::streamProcess(void* data)
     pw_stream_queue_buffer(self->stream_, buf);
 }
 
-std::unique_ptr<AudioCapture> AudioCapture::create()
+std::unique_ptr<sep::audio::AudioCapture> sep::audio::AudioCapture::create()
 {
-    return std::make_unique<PipeWireCapture>();
+    return std::make_unique<sep::audio::PipeWireCapture>();
 }
 
 } // namespace audio

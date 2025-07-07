@@ -16,7 +16,7 @@ struct spa_pod_builder;
 namespace sep {
 namespace audio {
 
-class PipeWireCapture final : public AudioCapture {
+class SEP_AUDIO_API PipeWireCapture final : public AudioCapture {
 public:
     PipeWireCapture();
     ~PipeWireCapture() override;
@@ -50,7 +50,7 @@ private:
     AudioCallback callback_{nullptr};
     std::atomic<bool> running_{false};
     mutable std::mutex mutex_;
-    AudioMetrics metrics_;
+    AudioMetrics metrics_{};
 };
 
 } // namespace audio

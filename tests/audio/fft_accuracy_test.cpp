@@ -2,6 +2,8 @@
 #include "audio/pipeline.h"
 #include <glm/gtc/constants.hpp>
 
+#ifdef SEP_HAS_AUDIO
+
 using namespace sep::audio;
 
 TEST(AudioPipelineFFT, AccurateSineFrequency) {
@@ -12,8 +14,11 @@ TEST(AudioPipelineFFT, AccurateSineFrequency) {
         float sample = std::sin(2.0f * glm::pi<float>() * freq * i / sample_rate);
         pipeline.processAudioFrame(std::vector<float>{sample});
     }
+    
     auto patterns = pipeline.getPatterns();
     ASSERT_FALSE(patterns.empty());
     float fundamental = patterns.front().x * (sample_rate / 2.0f);
     EXPECT_NEAR(fundamental, freq, 1.0f);
 }
+
+#endif // SEP_HAS_AUDIO

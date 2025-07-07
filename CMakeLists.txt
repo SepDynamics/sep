@@ -125,6 +125,9 @@ add_subdirectory(extern/cycles/third_party/cuew)
 add_subdirectory(extern/cycles/third_party/hipew)
 add_subdirectory(extern/cycles/third_party/sky)
 
+# Add tests directory
+add_subdirectory(tests)
+
 # Build Cycles from source when prebuilt libraries are not available
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
   message(STATUS "Prebuilt Cycles libraries not found; building from source")

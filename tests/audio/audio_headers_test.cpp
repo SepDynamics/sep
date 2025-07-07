@@ -2,6 +2,8 @@
 #include "audio/config.h"
 #include "audio/pipewire_capture.h"
 
+#ifdef SEP_HAS_AUDIO
+
 TEST(AudioHeaders, Compile)
 {
     sep::audio::PipeWireCapture cap;
@@ -10,3 +12,5 @@ TEST(AudioHeaders, Compile)
     (void)cfg;
     SUCCEED();
 }
+
+#endif // SEP_HAS_AUDIO

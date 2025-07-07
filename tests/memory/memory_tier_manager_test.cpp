@@ -1,36 +1,36 @@
 #include <gtest/gtest.h>
-#include "memory/memory_tier_manager.h"
+#include "memory/memory_tier_manager.hpp"
 #include "memory/memory_tier.hpp"
 
 using namespace sep::memory;
 
 TEST(MemoryTierManagerTest, BasicInitialization) {
     MemoryTierManager mgr;
-    EXPECT_NE(nullptr, mgr.getTier(sep::memory::TierType::STM));
-    EXPECT_NE(nullptr, mgr.getTier(sep::memory::TierType::MTM));
-    EXPECT_NE(nullptr, mgr.getTier(sep::memory::TierType::LTM));
+    EXPECT_NE(nullptr, mgr.getTier(MemoryTierEnum::STM));
+    EXPECT_NE(nullptr, mgr.getTier(MemoryTierEnum::MTM));
+    EXPECT_NE(nullptr, mgr.getTier(MemoryTierEnum::LTM));
 }
 
 TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
     MemoryTierManager mgr;
-    MemoryBlock* block = mgr.allocate(1024, sep::memory::TierType::STM);
+    MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
-    EXPECT_GT(mgr.getTierUtilization(sep::memory::TierType::STM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
     mgr.deallocate(block);
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::STM), 0.0f);
+    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
 }
 
 TEST(MemoryTierManagerTest, PromotionAndDemotion) {
     MemoryTierManager mgr;
-    MemoryBlock* block = mgr.allocate(1024, sep::memory::TierType::MTM);
+    MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
     ASSERT_NE(block, nullptr);
     mgr.updateBlockMetrics(block, 0.9f, 0.9f, 6, 1.0f); // trigger promotion
 
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::MTM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(sep::memory::TierType::LTM), 0.0f);
+    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::MTM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::LTM), 0.0f);
 
     MemoryBlock* promoted = nullptr;
-    for (const auto& b : mgr.getTier(sep::memory::TierType::LTM)->getBlocks()) {
+    for (const auto& b : mgr.getTier(MemoryTierEnum::LTM)->getBlocks()) {
         if (b.allocated) {
             promoted = const_cast<MemoryBlock*>(&b);
             break;
@@ -39,22 +39,22 @@ TEST(MemoryTierManagerTest, PromotionAndDemotion) {
     ASSERT_NE(promoted, nullptr);
     mgr.updateBlockMetrics(promoted, 0.0f, 0.0f, 0, 1.0f); // trigger demotion
 
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::LTM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(sep::memory::TierType::MTM), 0.0f);
+    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::LTM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::MTM), 0.0f);
 }
 
 TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     MemoryTierManager mgr;
-    MemoryBlock* block = mgr.allocate(1024, sep::memory::TierType::MTM);
+    MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
     ASSERT_NE(block, nullptr);
     mgr.updateBlockMetrics(block, 0.9f, 0.9f, 6, 1.0f); // should be promoted after defrag
-    mgr.defragmentTier(sep::memory::TierType::MTM);
+    mgr.defragmentTier(MemoryTierEnum::MTM);
 
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::MTM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(sep::memory::TierType::STM), 0.0f);
+    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::MTM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
 
     MemoryBlock* promoted = nullptr;
-    for (const auto& b : mgr.getTier(sep::memory::TierType::STM)->getBlocks()) {
+    for (const auto& b : mgr.getTier(MemoryTierEnum::STM)->getBlocks()) {
         if (b.allocated) {
             promoted = const_cast<MemoryBlock*>(&b);
             break;
@@ -62,27 +62,27 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     }
     ASSERT_NE(promoted, nullptr);
     mgr.updateBlockMetrics(promoted, 0.0f, 0.0f, 0, 1.0f);
-    mgr.defragmentTier(sep::memory::TierType::STM);
+    mgr.defragmentTier(MemoryTierEnum::STM);
 
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::STM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(sep::memory::TierType::MTM), 0.0f);
+    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::MTM), 0.0f);
 }
 
 
 
 TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     MemoryTierManager mgr;
-    MemoryBlock* block = mgr.allocate(1024, sep::memory::TierType::MTM);
+    MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
     ASSERT_NE(block, nullptr);
 
     mgr.updateBlockMetrics(block, 0.9f, 0.9f, 6, 1.0f); // expect promotion
     mgr.optimizeBlocks();
 
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::MTM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(sep::memory::TierType::STM), 0.0f);
+    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::MTM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
 
     MemoryBlock* promoted = nullptr;
-    for (const auto& b : mgr.getTier(sep::memory::TierType::STM)->getBlocks()) {
+    for (const auto& b : mgr.getTier(MemoryTierEnum::STM)->getBlocks()) {
         if (b.allocated) {
             promoted = const_cast<MemoryBlock*>(&b);
             break;
@@ -92,8 +92,8 @@ TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     mgr.updateBlockMetrics(promoted, 0.0f, 0.0f, 0, 1.0f); // expect demotion
     mgr.optimizeBlocks();
 
-    EXPECT_EQ(mgr.getTierUtilization(sep::memory::TierType::STM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(sep::memory::TierType::MTM), 0.0f);
+    EXPECT_EQ(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::MTM), 0.0f);
 }
 
 TEST(MemoryTierManagerTest, AllocationNearDefragmentBoundary) {
@@ -106,21 +106,21 @@ TEST(MemoryTierManagerTest, AllocationNearDefragmentBoundary) {
 
     MemoryTierManager mgr(cfg);
 
-    MemoryBlock* block1 = mgr.allocate(2048, sep::memory::TierType::STM);
+    MemoryBlock* block1 = mgr.allocate(2048, MemoryTierEnum::STM);
     ASSERT_NE(block1, nullptr);
-    MemoryBlock* block2 = mgr.allocate(1024, sep::memory::TierType::STM);
+    MemoryBlock* block2 = mgr.allocate(1024, MemoryTierEnum::STM);
     ASSERT_NE(block2, nullptr);
-    MemoryBlock* block3 = mgr.allocate(512, sep::memory::TierType::STM);
+    MemoryBlock* block3 = mgr.allocate(512, MemoryTierEnum::STM);
     ASSERT_NE(block3, nullptr);
 
     mgr.deallocate(block2);
 
-    MemoryBlock* block4 = mgr.allocate(1536, sep::memory::TierType::STM);
+    MemoryBlock* block4 = mgr.allocate(1536, MemoryTierEnum::STM);
     ASSERT_NE(block4, nullptr);
 
     EXPECT_TRUE(block1->allocated);
     bool found = false;
-    for (auto& b : mgr.getTier(sep::memory::TierType::STM)->getBlocks()) {
+    for (auto& b : mgr.getTier(MemoryTierEnum::STM)->getBlocks()) {
         if (&b == block1) {
             found = true;
             break;
@@ -142,19 +142,19 @@ TEST(MemoryTierManagerTest, AutoDefragmentationThreshold) {
 
     MemoryTierManager mgr(cfg);
 
-    MemoryBlock* b1 = mgr.allocate(1024, sep::memory::TierType::STM);
+    MemoryBlock* b1 = mgr.allocate(1024, MemoryTierEnum::STM);
     ASSERT_NE(b1, nullptr);
-    MemoryBlock* b2 = mgr.allocate(1024, sep::memory::TierType::STM);
+    MemoryBlock* b2 = mgr.allocate(1024, MemoryTierEnum::STM);
     ASSERT_NE(b2, nullptr);
 
     mgr.deallocate(b1);
 
-    float frag_before = mgr.getTierFragmentation(sep::memory::TierType::STM);
+    float frag_before = mgr.getTierFragmentation(MemoryTierEnum::STM);
     EXPECT_GT(frag_before, cfg.fragmentation_threshold);
 
     mgr.optimizeTiers();
 
-    float frag_after = mgr.getTierFragmentation(sep::memory::TierType::STM);
+    float frag_after = mgr.getTierFragmentation(MemoryTierEnum::STM);
     EXPECT_LT(frag_after, frag_before);
 
     mgr.deallocate(b2);
@@ -162,9 +162,9 @@ TEST(MemoryTierManagerTest, AutoDefragmentationThreshold) {
 
 TEST(MemoryTierManagerTest, TotalMetrics) {
     MemoryTierManager mgr;
-    MemoryBlock* a = mgr.allocate(128, sep::memory::TierType::STM);
-    MemoryBlock* b = mgr.allocate(128, sep::memory::TierType::MTM);
-    MemoryBlock* c = mgr.allocate(128, sep::memory::TierType::LTM);
+    MemoryBlock* a = mgr.allocate(128, MemoryTierEnum::STM);
+    MemoryBlock* b = mgr.allocate(128, MemoryTierEnum::MTM);
+    MemoryBlock* c = mgr.allocate(128, MemoryTierEnum::LTM);
 
     float util = mgr.getTotalUtilization();
     EXPECT_GT(util, 0.0f);
@@ -224,7 +224,7 @@ TEST(MemoryTierManagerTest, PrunePatternsByPriority) {
         pat.memory_tier = sep::memory::MemoryTierEnum::LTM;
         mgr.registerPattern(i, pat);
     }
-    mgr.prunePatternsByPriority(sep::memory::TierType::LTM, 2);
+    mgr.prunePatternsByPriority(MemoryTierEnum::LTM, 2);
     size_t remaining = 0;
     for (size_t i = 0; i < 5; ++i) {
         if (mgr.getLTM().getPattern(i))

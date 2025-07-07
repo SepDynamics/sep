@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "audio/pipewire_capture.h"
 
+#ifdef SEP_HAS_AUDIO
+
 using namespace sep::audio;
 
 TEST(PipeWireCaptureLifecycle, StartBeforeInitFails) {
@@ -23,3 +25,5 @@ TEST(PipeWireCaptureLifecycle, CallbackSettable) {
     EXPECT_FALSE(called);
     EXPECT_EQ(cap.getMetrics().total_samples, 0u);
 }
+
+#endif // SEP_HAS_AUDIO

@@ -110,5 +110,22 @@
         "OLLAMA_MODEL": "mxbai-embed-large"
     },
     "codechecker.log.arguments": "",
-    "makefile.makePath": ""
+    "makefile.makePath": "",
+    "makefile.makefilePath": "Makefile",
+    "makefile.buildLog": "output/build_log.txt",
+    "makefile.compileCommandsPath": ".codechecker/compile_commands.json",
+    "makefile.configurationCachePath": "CMakeCache.txt",
+    "makefile.buildBeforeLaunch": false,
+    "makefile.excludeCompilerNames": [
+        "gcc",
+        "g++"
+    ],
+    "makefile.makeDirectory": "build",
+    "editor.defaultFormatter": "codechecker.codechecker",
+    "editor.defaultFoldingRangeProvider": "codechecker.codechecker",
+    "notebook.defaultFormatter": "codechecker.codechecker",
+    "[makefile]": {
+        "editor.defaultFoldingRangeProvider": "codechecker.codechecker",
+        "editor.defaultFormatter": "codechecker.codechecker"
+    }
 }

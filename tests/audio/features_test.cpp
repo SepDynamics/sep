@@ -3,6 +3,8 @@
 #include <vector>
 #include <cmath>
 
+#ifdef SEP_HAS_AUDIO
+
 using namespace sep::audio;
 
 TEST(AudioPipelineTestbed, ExtractsFundamentalFrequency){
@@ -13,9 +15,11 @@ TEST(AudioPipelineTestbed, ExtractsFundamentalFrequency){
         std::vector<float> frame{static_cast<float>(sample)};
         pipeline.processAudioFrame(frame);
     }
+    
     auto patterns = pipeline.getPatterns();
     ASSERT_FALSE(patterns.empty());
     float expected = freq/(48000.0f/2.0f);
     EXPECT_NEAR(patterns[0].x, expected, 0.05f);
-
 }
+
+#endif // SEP_HAS_AUDIO

@@ -18,7 +18,9 @@ protected:
 #else
 #include <functional>
 
-class AudioCapture {
+#include "audio/export.h"
+
+class SEP_AUDIO_API AudioCapture {
 public:
   using AudioCallback = std::function<void(const float*, size_t)>;
 
@@ -37,7 +39,7 @@ public:
   virtual void setCallback(AudioCallback callback) = 0;
 
   // Get current metrics
-  virtual SEPAudioMetrics getMetrics() const = 0;
+  virtual AudioMetrics getMetrics() const = 0;
 
   // Factory method to create PipeWire implementation
   static std::unique_ptr<AudioCapture> create();

@@ -24,7 +24,9 @@ struct SpectralData {
     float spectral_centroid;
 };
 
-class AudioPipeline {
+#include "audio/export.h"
+
+class SEP_AUDIO_API AudioPipeline {
  public:
   AudioPipeline(size_t sample_rate = 44100, size_t channels = 2);
 

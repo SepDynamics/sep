@@ -45,7 +45,7 @@ struct MemoryBlock {
     std::size_t                access_count{0};
     std::uint64_t              wait{0};
     std::uint32_t              generation{0};
-    TierType                   tier{TierType::HOST};
+    MemoryTierEnum            tier{MemoryTierEnum::STM};
     ::blender::CompressionMethod compression{::blender::CompressionMethod::None};
     float                      utilization{0.0f};
     float                      stability{0.0f};
@@ -57,7 +57,7 @@ struct MemoryBlock {
     bool                       allocated{false};
 
     MemoryBlock() = default;
-    MemoryBlock(void* p, std::size_t s, std::size_t off, TierType t)
+    MemoryBlock(void* p, std::size_t s, std::size_t off, MemoryTierEnum t)
         : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
@@ -68,14 +68,14 @@ using ::sep::SEPResult;
 class MemoryTier {
 public:
     struct Config {
-        TierType type{TierType::HOST};
+        MemoryTierEnum type{MemoryTierEnum::STM};
         std::size_t size{0};
     };
 
     explicit MemoryTier(const Config& config);
 
     // Pattern management constructor
-    MemoryTier(TierType type, size_t max_patterns, float coherence_threshold, int min_generations);
+    MemoryTier(MemoryTierEnum type, size_t max_patterns, float coherence_threshold, int min_generations);
 
     // Combined constructor for memory pool and pattern management
     MemoryTier(const Config& config, size_t max_patterns, float coherence_threshold, int min_generations);
@@ -98,7 +98,7 @@ public:
     bool resize(std::size_t new_size);
 
     // Expose configuration for manager-level optimizations
-    TierType getType() const {
+    MemoryTierEnum getType() const {
         return config_.type;
     }
     std::size_t getSize() const {

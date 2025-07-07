@@ -22,7 +22,14 @@ namespace sep {
 
 namespace memory {
 
-enum class MemoryTierEnum { STM, MTM, LTM };
+enum class MemoryTierEnum {
+    // Logical memory tiers
+    STM, MTM, LTM,
+    // Physical memory locations
+    HOST = 100,   // Host memory (CPU)
+    DEVICE = 101, // Device memory (GPU)
+    UNIFIED = 102 // Unified memory (accessible by both CPU and GPU)
+};
 
 } // namespace memory
 

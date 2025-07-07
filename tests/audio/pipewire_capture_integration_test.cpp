@@ -3,6 +3,8 @@
 #include <chrono>
 #include <thread>
 
+#ifdef SEP_HAS_AUDIO
+
 using namespace sep::audio;
 
 TEST(PipeWireCaptureIntegration, MetricsIncrease)
@@ -13,6 +15,7 @@ TEST(PipeWireCaptureIntegration, MetricsIncrease)
     if (initErr != AudioError::NONE) {
         GTEST_SKIP() << "PipeWire unavailable";
     }
+    
     ASSERT_EQ(cap.start(), AudioError::NONE);
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
     auto metrics = cap.getMetrics();
@@ -21,3 +24,5 @@ TEST(PipeWireCaptureIntegration, MetricsIncrease)
     EXPECT_GT(metrics.rms_level, 0.0f);
     EXPECT_EQ(cap.stop(), AudioError::NONE);
 }
+
+#endif // SEP_HAS_AUDIO

@@ -75,17 +75,17 @@ public:
     void shutdown();
 
     // Memory block allocation and management
-    MemoryBlock* allocate(std::size_t size, TierType tier);
+    MemoryBlock* allocate(std::size_t size, MemoryTierEnum tier);
     void deallocate(MemoryBlock* block);
     MemoryBlock* findBlockByPtr(void* ptr);
 
     // Tier management
-    MemoryTier* getTier(TierType tier);
-    float getTierUtilization(TierType tier) const;
-    float getTierFragmentation(TierType tier) const;
+    MemoryTier* getTier(MemoryTierEnum tier);
+    float getTierUtilization(MemoryTierEnum tier) const;
+    float getTierFragmentation(MemoryTierEnum tier) const;
     float getTotalUtilization() const;
     float getTotalFragmentation() const;
-    void defragmentTier(TierType tier);
+    void defragmentTier(MemoryTierEnum tier);
     void optimizeBlocks();
     void optimizeTiers();
 
@@ -124,7 +124,7 @@ public:
     void registerPattern(std::size_t id, const ::sep::pattern::PatternData& pattern);
     const ::sep::pattern::PatternData* getPatternData(std::size_t id) const;
     void cleanupExpiredPatterns();
-    void prunePatternsByPriority(TierType tier, size_t max_count);
+    void prunePatternsByPriority(MemoryTierEnum tier, size_t max_count);
 
     dag::DagGraph& getDagGraph() {
         return dag_graph_;
@@ -149,7 +149,7 @@ private:
     std::unordered_map<std::size_t, std::unique_ptr<::sep::pattern::PatternData>> pattern_registry_;
     std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>> pattern_relationships_;
 
-    SEPResult promoteToTier(MemoryBlock* block, MemoryTier tier, MemoryBlock*& out_block);
+    SEPResult promoteToTier(MemoryBlock* block, MemoryTierEnum tier, MemoryBlock*& out_block);
     SEPResult compressBlock(MemoryBlock* block);
 
     // Pattern tier transition helpers

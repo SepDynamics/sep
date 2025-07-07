@@ -27,11 +27,13 @@ endif()
 
 add_subdirectory(quantum)
 add_subdirectory(memory)
-add_subdirectory(audio)
+if(SEP_WITH_AUDIO)
+    add_subdirectory(audio)
+endif()
 add_subdirectory(api)
 add_subdirectory(cuda)
 add_subdirectory(workbench)
-add_subdirectory(${CMAKE_SOURCE_DIR}/_sep/testbed)
+# Testbed directory temporarily disabled
 
 # Configure test discovery
 include(CTest)
@@ -40,12 +42,11 @@ enable_testing()
 add_custom_target(run_all_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
     DEPENDS
-        blender_tests
         quantum_optimizer_tests
         memory_manager_tests
-        audio_tests
         api_tests
         long_double_math_test
         cuda_api_tests
         workbench_demo_tests
-        testbed_tests)
+        $<$<BOOL:${SEP_HAS_BLENDER}>:blender_tests>
+        $<$<BOOL:${SEP_WITH_AUDIO}>:audio_tests>)

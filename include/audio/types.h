@@ -3,11 +3,12 @@
 #ifdef SEP_HAS_AUDIO
 #include <cstdint>
 #include <string>
+#include "audio/export.h"
 
 namespace sep {
 namespace audio {
 
-struct AudioConfig {
+struct SEP_AUDIO_API AudioConfig {
   std::string source = "alsa_input.usb-TC-Helicon_GoXLR-00.HiFi__Headset__source";
   std::string description = "GoXLR Chat Mic";
   uint32_t rate = 16000;
@@ -18,7 +19,7 @@ struct AudioConfig {
   bool rt_process = true;
 };
 
-struct AudioMetrics {
+struct SEP_AUDIO_API AudioMetrics {
   uint64_t total_samples = 0;
   uint64_t dropped_samples = 0;
   float peak_level = 0.0f;
@@ -27,7 +28,7 @@ struct AudioMetrics {
   float latency_ms = 0.0f;
 };
 
-enum class AudioError {
+enum SEP_AUDIO_API AudioError {
   NONE,
   INIT_FAILED,
   STREAM_FAILED,

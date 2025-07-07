@@ -38,6 +38,11 @@ std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 
 // Config implementation moved to header
 
+MemoryTierManager::MemoryTierManager() {
+    Config cfg{};  // Uses default values from Config constructor
+    init(cfg);
+}
+
 std::once_flag MemoryTierManager::once_flag_;
 
 MemoryTierManager& MemoryTierManager::getInstance() {
@@ -77,9 +82,9 @@ MemoryTierManager::~MemoryTierManager() {
 
 void MemoryTierManager::init(const Config& config) {
     config_ = config;
-    MemoryTier::Config scfg{static_cast<TierType>(sep::memory::MemoryTierEnum::STM), config.stm_size};
-    MemoryTier::Config mcfg{static_cast<TierType>(sep::memory::MemoryTierEnum::MTM), config.mtm_size};
-    MemoryTier::Config lcfg{static_cast<TierType>(sep::memory::MemoryTierEnum::LTM), config.ltm_size};
+    MemoryTier::Config scfg{MemoryTierEnum::STM, config.stm_size};
+    MemoryTier::Config mcfg{MemoryTierEnum::MTM, config.mtm_size};
+    MemoryTier::Config lcfg{MemoryTierEnum::LTM, config.ltm_size};
     stm_ = std::make_unique<MemoryTier>(scfg);
     mtm_ = std::make_unique<MemoryTier>(mcfg);
     ltm_ = std::make_unique<MemoryTier>(lcfg);
@@ -95,7 +100,7 @@ void MemoryTierManager::shutdown() {
     redis_manager_.reset();
 }
 
-MemoryBlock* MemoryTierManager::allocate(std::size_t size, TierType tier) {
+MemoryBlock* MemoryTierManager::allocate(std::size_t size, MemoryTierEnum tier) {
     MemoryTier* t = getTier(tier);
     if (!t)
         return nullptr;
@@ -113,40 +118,40 @@ void MemoryTierManager::deallocate(MemoryBlock* block) {
         t->deallocate(block);
 }
 
-MemoryTier* MemoryTierManager::getTier(TierType tier) {
+MemoryTier* MemoryTierManager::getTier(MemoryTierEnum tier) {
     switch (tier) {
-        case static_cast<TierType>(sep::memory::MemoryTierEnum::STM):
+        case MemoryTierEnum::STM:
             return stm_.get();
-        case static_cast<TierType>(sep::memory::MemoryTierEnum::MTM):
+        case MemoryTierEnum::MTM:
             return mtm_.get();
-        case static_cast<TierType>(sep::memory::MemoryTierEnum::LTM):
+        case MemoryTierEnum::LTM:
             return ltm_.get();
         default:
             return nullptr;
     }
 }
 
-float MemoryTierManager::getTierUtilization(TierType tier) const {
+float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
     const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
     return t ? t->calculateUtilization() : 0.0f;
 }
 
-float MemoryTierManager::getTierFragmentation(TierType tier) const {
+float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {
     const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
     return t ? t->calculateFragmentation() : 0.0f;
 }
 
 float MemoryTierManager::getTotalUtilization() const {
-    float stm_util = getTierUtilization(static_cast<TierType>(sep::memory::MemoryTierEnum::STM));
-    float mtm_util = getTierUtilization(static_cast<TierType>(sep::memory::MemoryTierEnum::MTM));
-    float ltm_util = getTierUtilization(static_cast<TierType>(sep::memory::MemoryTierEnum::LTM));
+    float stm_util = getTierUtilization(MemoryTierEnum::STM);
+    float mtm_util = getTierUtilization(MemoryTierEnum::MTM);
+    float ltm_util = getTierUtilization(MemoryTierEnum::LTM);
     return (stm_util + mtm_util + ltm_util) / 3.0f;
 }
 
 float MemoryTierManager::getTotalFragmentation() const {
-    float stm_frag = getTierFragmentation(static_cast<TierType>(sep::memory::MemoryTierEnum::STM));
-    float mtm_frag = getTierFragmentation(static_cast<TierType>(sep::memory::MemoryTierEnum::MTM));
-    float ltm_frag = getTierFragmentation(static_cast<TierType>(sep::memory::MemoryTierEnum::LTM));
+    float stm_frag = getTierFragmentation(MemoryTierEnum::STM);
+    float mtm_frag = getTierFragmentation(MemoryTierEnum::MTM);
+    float ltm_frag = getTierFragmentation(MemoryTierEnum::LTM);
     return (stm_frag + mtm_frag + ltm_frag) / 3.0f;
 }
 
@@ -174,7 +179,7 @@ void MemoryTierManager::rebuildLookup() {
     rebuild(ltm_.get());
 }
 
-void MemoryTierManager::defragmentTier(TierType tier) {
+void MemoryTierManager::defragmentTier(MemoryTierEnum tier) {
     if (MemoryTier* t = getTier(tier))
         t->defragment();
 }
@@ -202,9 +207,9 @@ MemoryTier& MemoryTierManager::getLTM() {
 sep::SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
         return sep::SEPResult::INVALID_ARGUMENT;
-    TierType next = block->tier == static_cast<TierType>(MemoryTierEnum::STM)
-                                     ? static_cast<TierType>(MemoryTierEnum::MTM)
-                                     : static_cast<TierType>(MemoryTierEnum::LTM);
+    MemoryTierEnum next = block->tier == MemoryTierEnum::STM
+                                      ? MemoryTierEnum::MTM
+                                      : MemoryTierEnum::LTM;
     MemoryTier* dst = getTier(next);
     if (!dst)
         return sep::SEPResult::INVALID_ARGUMENT;
@@ -222,9 +227,9 @@ sep::SEPResult MemoryTierManager::promoteBlock(MemoryBlock* block, MemoryBlock*&
 sep::SEPResult MemoryTierManager::demoteBlock(MemoryBlock* block, MemoryBlock*& out_block) {
     if (!block)
         return sep::SEPResult::INVALID_ARGUMENT;
-    TierType next = block->tier == static_cast<TierType>(MemoryTierEnum::LTM)
-                                     ? static_cast<TierType>(MemoryTierEnum::MTM)
-                                     : static_cast<TierType>(MemoryTierEnum::STM);
+    MemoryTierEnum next = block->tier == MemoryTierEnum::LTM
+                                      ? MemoryTierEnum::MTM
+                                      : MemoryTierEnum::STM;
     MemoryTier* dst = getTier(next);
     if (!dst)
         return sep::SEPResult::INVALID_ARGUMENT;
@@ -307,7 +312,7 @@ void MemoryTierManager::removePattern(std::size_t id) {
     if (it == pattern_registry_.end())
         return;
     const sep::pattern::PatternData* p = it->second.get();
-    if (MemoryTier* t = getTier(static_cast<TierType>(p->memory_tier)))
+    if (MemoryTier* t = getTier(static_cast<MemoryTierEnum>(p->memory_tier)))
         t->removePattern(id);
     pattern_registry_.erase(it);
     pattern_relationships_.erase(id);
@@ -425,7 +430,7 @@ void MemoryTierManager::cleanupExpiredPatterns() {
         removePattern(id);
 }
 
-void MemoryTierManager::prunePatternsByPriority(TierType tier, size_t max_count) {
+void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier, size_t max_count) {
     MemoryTier* t = getTier(tier);
     if (!t)
         return;

@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
+#ifdef SEP_HAS_AUDIO
+
 using namespace sep::audio;
 
 TEST(AudioPipelineTest, SineWaveFeatureExtraction) {
@@ -22,3 +24,5 @@ TEST(AudioPipelineTest, SineWaveFeatureExtraction) {
     float fundamental = p.x * (sample_rate / 2.0f);
     EXPECT_NEAR(fundamental, frequency, 10.0f); // Allow some tolerance due to simplified FFT
 }
+
+#endif // SEP_HAS_AUDIO

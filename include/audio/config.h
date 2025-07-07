@@ -45,7 +45,9 @@ struct AudioPipelineConfig {
 };
 
 // Audio pattern coherence calculator
-class AudioCoherenceEngine {
+#include "audio/export.h"
+
+class SEP_AUDIO_API AudioCoherenceEngine {
 public:
     // Calculate pattern coherence score (0.0-1.0)
     static float calculateCoherence(const float* pSamples, uint32_t count, float sample_rate);

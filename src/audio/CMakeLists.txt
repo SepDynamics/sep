@@ -34,12 +34,20 @@ target_link_libraries(sep_audio
         sep_core
 )
 
-# Ensure symbols are exported
+# Configure symbol visibility
 set_target_properties(sep_audio PROPERTIES
     POSITION_INDEPENDENT_CODE ON
     VISIBILITY_INLINES_HIDDEN ON
-    C_VISIBILITY_PRESET default
-    CXX_VISIBILITY_PRESET default
+    C_VISIBILITY_PRESET hidden
+    CXX_VISIBILITY_PRESET hidden
+)
+
+# Define export macro for proper symbol visibility
+target_compile_definitions(sep_audio
+    PRIVATE
+        SEP_AUDIO_EXPORTS
+    PUBLIC
+        SEP_HAS_AUDIO=1
 )
 
 # Propagate to parent scope for main executable linking

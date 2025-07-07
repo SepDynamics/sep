@@ -45,7 +45,7 @@ namespace sep::memory {
 MemoryTier::MemoryTier(const Config &config)
     : config_(config), memory_pool_(nullptr), used_space_(0) {
   // Allocate memory pool based on tier type
-  if (config.type == TierType::HOST) {
+  if (config.type == MemoryTierEnum::HOST) {
     memory_pool_ = std::malloc(config.size);
   } else {
     memory_pool_ = nullptr;
@@ -83,7 +83,7 @@ MemoryTier::MemoryTier(const Config &config)
   blocks_.push_back(MemoryBlock(memory_pool_, config.size, 0, config.type));
 }
 
-MemoryTier::MemoryTier(TierType type, size_t max_patterns,
+MemoryTier::MemoryTier(MemoryTierEnum type, size_t max_patterns,
                        float coherence_threshold, int min_generations)
     : config_{Config{type, 0}}, memory_pool_(nullptr), used_space_(0),
       m_max_patterns(max_patterns), m_coherence_threshold(coherence_threshold),
@@ -101,7 +101,7 @@ MemoryTier::MemoryTier(const Config &config, size_t max_patterns,
 
 MemoryTier::~MemoryTier() {
   if (memory_pool_) {
-    if (config_.type == TierType::HOST) {
+    if (config_.type == MemoryTierEnum::HOST) {
       std::free(memory_pool_);
     } else {
 #if SEP_MEMORY_HAS_CUDA
@@ -305,7 +305,7 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
 
   std::size_t size = std::min(dst->size, src->size);
 
-  if (config_.type == TierType::HOST) {
+  if (config_.type == MemoryTierEnum::HOST) {
     std::memcpy(dst->ptr, src->ptr, size);
   } else {
 #if SEP_MEMORY_HAS_CUDA
@@ -387,7 +387,7 @@ bool MemoryTier::resize(std::size_t new_size) {
   void *new_pool = nullptr;
   auto logger = sep::logging::Manager::getInstance().getLogger("memory");
 
-  if (config_.type == TierType::HOST) {
+  if (config_.type == MemoryTierEnum::HOST) {
     new_pool = std::malloc(new_size);
   } else {
 #if SEP_MEMORY_HAS_CUDA
@@ -425,7 +425,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     if (!block.allocated)
       continue;
     if (offset + block.size > new_size) {
-      if (config_.type == TierType::HOST)
+      if (config_.type == MemoryTierEnum::HOST)
         std::free(new_pool);
       else {
 #if SEP_MEMORY_HAS_CUDA
@@ -462,7 +462,7 @@ bool MemoryTier::resize(std::size_t new_size) {
                             new_size - offset, offset, config_.type);
 
   if (memory_pool_) {
-    if (config_.type == TierType::HOST)
+    if (config_.type == MemoryTierEnum::HOST)
       std::free(memory_pool_);
     else {
 #if SEP_MEMORY_HAS_CUDA

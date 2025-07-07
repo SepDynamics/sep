@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "audio/pipeline.h"
 
+#ifdef SEP_HAS_AUDIO
+
 using namespace sep::audio;
 
 TEST(AudioPipelineTest, GeneratesPatterns) {
@@ -11,3 +13,5 @@ TEST(AudioPipelineTest, GeneratesPatterns) {
     auto patterns = pipeline.getPatterns();
     EXPECT_FALSE(patterns.empty());
 }
+
+#endif // SEP_HAS_AUDIO

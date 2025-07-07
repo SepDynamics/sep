@@ -30,6 +30,7 @@ target_include_directories(quantum_optimizer_tests
 target_link_libraries(quantum_optimizer_tests
     PRIVATE
         sep_quantum
+        sep_api
         GTest::GTest
         GTest::Main
 )

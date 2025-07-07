@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "audio/pipewire_capture.h"
 
+#ifdef SEP_HAS_AUDIO
+
 using namespace sep::audio;
 
 TEST(PipeWireCaptureTest, MetricsAccess) {
@@ -8,6 +10,7 @@ TEST(PipeWireCaptureTest, MetricsAccess) {
     AudioMetrics metrics = cap.getMetrics();
     EXPECT_EQ(metrics.total_samples, 0u);
 }
+
 TEST(PipeWireCaptureTest, StartWithoutInit) {
     PipeWireCapture cap;
     EXPECT_EQ(cap.start(), AudioError::INIT_FAILED);
@@ -29,3 +32,5 @@ TEST(PipeWireCaptureTest, InitStartStopSequence) {
         EXPECT_EQ(err, AudioError::INIT_FAILED);
     }
 }
+
+#endif // SEP_HAS_AUDIO

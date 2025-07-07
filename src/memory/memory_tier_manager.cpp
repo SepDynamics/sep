@@ -332,8 +332,11 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
     if (!out_block) {
         printf("DEBUG: Allocation failed even after defragmentation; attempting resize\n");
         std::size_t new_size = dst_tier->getSize();
+        // Avoid infinite loops when the tier size is initially zero
+        if (new_size == 0)
+            new_size = block->size * 2;
         while (new_size < block->size) {
-            new_size *= 2;
+            new_size = new_size == 0 ? block->size : new_size * 2;
         }
         if (dst_tier->resize(new_size)) {
             out_block = dst_tier->allocate(block->size);

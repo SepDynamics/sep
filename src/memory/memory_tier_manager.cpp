@@ -41,7 +41,9 @@ void MemoryTierManager::resetForTesting() {
         instance_->shutdown();
         instance_.reset();
     }
-    once_flag_ = std::once_flag{};
+    // std::once_flag does not support assignment, so reconstruct it
+    // in-place to reset the call-once state for subsequent tests.
+    new (&once_flag_) std::once_flag();
 }
 
 

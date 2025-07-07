@@ -1,3 +1,4 @@
+[2025-07-07] Verified memory tier manager tests pass after rounding clamp.
 im trying to get these tests to pass via maaking the codebase work.
 
 [2024-04-25] Added clamping for tiny utilization values in

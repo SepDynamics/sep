@@ -194,7 +194,7 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   // accounting in MemoryTier coupled with floating point division can
   // yield results like 0.000244 instead of 0.0 after a deallocation.
   // Anything below 1e-3 is considered zero for test stability.
-  if (util < 1e-3f)
+  if (std::fabs(util) < 1e-3f)
     return 0.0f;
 
   // Utilization should never be negative, but guard against underflow just in
@@ -338,8 +338,11 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
     if (!out_block) {
         printf("DEBUG: Allocation failed even after defragmentation; attempting resize\n");
         std::size_t new_size = dst_tier->getSize();
+        // Avoid infinite loops when the tier size is initially zero
+        if (new_size == 0)
+            new_size = block->size * 2;
         while (new_size < block->size) {
-            new_size *= 2;
+            new_size = new_size == 0 ? block->size : new_size * 2;
         }
         if (dst_tier->resize(new_size)) {
             out_block = dst_tier->allocate(block->size);

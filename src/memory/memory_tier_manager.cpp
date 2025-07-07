@@ -466,17 +466,8 @@ MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
   if (coherence >= config_.promote_stm_to_mtm &&
       stability >= config_.promote_stm_to_mtm &&
       generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
-    MemoryTier *mtm = getTier(MemoryTierEnum::MTM);
-    if (mtm)
-      return mtm;
+    return getTier(MemoryTierEnum::MTM);
   }
-
-    // MTM Check
-    if (coherence >= config_.promote_stm_to_mtm &&
-        stability >= config_.promote_stm_to_mtm &&
-        generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen)) {
-        return getTier(MemoryTierEnum::MTM);
-    }
 
     // Default to STM or find first available
     if (MemoryTier* stm = getTier(MemoryTierEnum::STM))

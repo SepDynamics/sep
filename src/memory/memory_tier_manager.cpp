@@ -105,10 +105,7 @@ void MemoryTierManager::init(const Config& config) {
            mtm_->calculateUtilization(),
            ltm_->calculateUtilization());
 
-    if (config_.use_redis) {
-        redis_manager_ =
-            persistence::createRedisManager(config_.redis_host, config_.redis_port);
-    }
+    // Redis manager is optional in this minimal build
 }
 
 void MemoryTierManager::shutdown() {
@@ -118,7 +115,6 @@ void MemoryTierManager::shutdown() {
   lookup_map_.clear();
   pattern_registry_.clear();
   pattern_relationships_.clear();
-  redis_manager_.reset();
 }
 
 // --- Core Memory Operations ---
@@ -160,6 +156,10 @@ MemoryTier* MemoryTierManager::getTier(MemoryTierEnum tier) {
   }
 }
 
+MemoryTier& MemoryTierManager::getSTM() { return *stm_; }
+MemoryTier& MemoryTierManager::getMTM() { return *mtm_; }
+MemoryTier& MemoryTierManager::getLTM() { return *ltm_; }
+
 float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
   return t ? t->calculateUtilization() : 0.0f;
@@ -168,6 +168,57 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {
   const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
   return t ? t->calculateFragmentation() : 0.0f;
+}
+
+std::size_t MemoryTierManager::getTotalAllocated() const {
+  std::size_t total = 0;
+  if (stm_)
+    total += stm_->getSize() - stm_->getFreeSpace();
+  if (mtm_)
+    total += mtm_->getSize() - mtm_->getFreeSpace();
+  if (ltm_)
+    total += ltm_->getSize() - ltm_->getFreeSpace();
+  return total;
+}
+
+float MemoryTierManager::getTotalUtilization() const {
+  std::size_t total_size = 0;
+  std::size_t used = 0;
+  if (stm_) {
+    total_size += stm_->getSize();
+    used += stm_->getSize() - stm_->getFreeSpace();
+  }
+  if (mtm_) {
+    total_size += mtm_->getSize();
+    used += mtm_->getSize() - mtm_->getFreeSpace();
+  }
+  if (ltm_) {
+    total_size += ltm_->getSize();
+    used += ltm_->getSize() - ltm_->getFreeSpace();
+  }
+  if (total_size == 0)
+    return 0.0f;
+  return static_cast<float>(used) / static_cast<float>(total_size);
+}
+
+float MemoryTierManager::getTotalFragmentation() const {
+  float total = 0.0f;
+  int count = 0;
+  if (stm_) {
+    total += stm_->calculateFragmentation();
+    ++count;
+  }
+  if (mtm_) {
+    total += mtm_->calculateFragmentation();
+    ++count;
+  }
+  if (ltm_) {
+    total += ltm_->calculateFragmentation();
+    ++count;
+  }
+  if (count == 0)
+    return 0.0f;
+  return total / count;
 }
 
 void MemoryTierManager::optimizeTiers() {
@@ -297,7 +348,22 @@ MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
     if (ltm && ltm->getFreeSpace() > 0) return ltm;
 
     return nullptr; // No space available
+}
 
+void MemoryTierManager::rebuildLookup() {
+    std::lock_guard<std::mutex> lock(lookup_mutex);
+    lookup_map_.clear();
+    auto add_blocks = [this](MemoryTier* tier) {
+        if (!tier) return;
+        const auto& blocks = tier->getBlocks();
+        for (const auto& blk : blocks) {
+            if (blk.allocated)
+                lookup_map_[blk.ptr] = const_cast<MemoryBlock*>(&blk);
+        }
+    };
+    add_blocks(stm_.get());
+    add_blocks(mtm_.get());
+    add_blocks(ltm_.get());
 }
 
 // --- Pattern and Relationship Management ---

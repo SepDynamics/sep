@@ -182,12 +182,14 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (!t)
     return 0.0f;
 
-  // Directly recompute utilization from the tier's blocks each time.  Using the
-  // cached free space value proved unreliable when blocks move between tiers,
-  // occasionally leaving a small non-zero remainder that caused equality based
-  // unit tests to fail.  calculateUtilization() iterates over the current block
-  // list ensuring an accurate value even if internal counters become
-  // temporarily inconsistent.
+  // If the tier reports all memory free, avoid redundant calculations and
+  // return zero immediately. This guards against residual rounding artifacts
+  // that sometimes appear after block moves or defragmentation.
+  if (t->getFreeSpace() == t->getSize())
+    return 0.0f;
+
+  // Recompute utilization from the current block list to prevent stale values
+  // when internal counters drift after complex promotions.
   float util = t->calculateUtilization();
 
   // Guard against rounding artifacts that may appear after a block is

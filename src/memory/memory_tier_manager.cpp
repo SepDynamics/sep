@@ -8,6 +8,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <cstring>
 
 namespace sep {
 namespace memory {
@@ -331,12 +332,12 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block,
     // Move data between tiers
     printf("DEBUG: Attempting to move data between tiers\n");
     if (!dst_tier->moveData(out_block, block)) {
-        printf("DEBUG: Data move failed\n");
-        dst_tier->deallocate(out_block);
-        out_block = nullptr;
-        return SEPResult::MEMORY_ERROR;
+        printf("DEBUG: Data move failed, falling back to host memcpy\n");
+        std::memcpy(out_block->ptr, block->ptr,
+                    std::min(out_block->size, block->size));
+    } else {
+        printf("DEBUG: Data move successful\n");
     }
-    printf("DEBUG: Data move successful\n");
 
     // Update lookup maps in correct order to maintain consistency
     {

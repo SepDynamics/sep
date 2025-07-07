@@ -302,6 +302,8 @@ float MemoryTier::calculateUtilization() const {
     return 0.0f;
   float util =
       static_cast<float>(used_space_) / static_cast<float>(config_.size);
+  if (util < 1e-4f)
+    return 0.0f;
   return util > 1.0f ? 1.0f : util; // Cap at 100%
 }
 

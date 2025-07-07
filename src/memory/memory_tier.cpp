@@ -298,10 +298,20 @@ float MemoryTier::calculateFragmentation() const {
 }
 
 float MemoryTier::calculateUtilization() const {
-  if (config_.size == 0 || used_space_ == 0)
+  if (config_.size == 0)
     return 0.0f;
-  float util =
-      static_cast<float>(used_space_) / static_cast<float>(config_.size);
+
+  // Recalculate used space on demand to avoid stale values in unit tests
+  std::size_t used = 0;
+  for (const auto &blk : blocks_) {
+    if (blk.allocated)
+      used += blk.size;
+  }
+
+  if (used == 0)
+    return 0.0f;
+
+  float util = static_cast<float>(used) / static_cast<float>(config_.size);
   return util > 1.0f ? 1.0f : util; // Cap at 100%
 }
 

@@ -13,13 +13,13 @@
 // Standard headers
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <limits>
 #include <stdexcept>
 #include <vector>
-#include <cmath>
 
 // CUDA support check
 #if defined(__CUDACC__)
@@ -314,10 +314,14 @@ float MemoryTier::calculateUtilization() const {
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(config_.size);
-  // Clamp tiny rounding artifacts to zero so tests comparing against
-  // exact 0.0f remain stable after deallocations.
-  if (std::fabs(util) < kUtilizationEpsilon)
+
+  // Guard against residual rounding errors that may appear when the used
+  // space is very small compared to the tier size.  Unit tests expect an
+  // exact zero value when nothing is allocated, so anything extremely close
+  // to zero should be treated as zero.
+  if (std::fabs(util) <= kUtilizationEpsilon)
     return 0.0f;
+
   return util > 1.0f ? 1.0f : util; // Cap at 100%
 }
 
@@ -365,8 +369,8 @@ bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
   dst->compression_ratio = src->compression_ratio;
 
 #if SEP_MEMORY_HAS_CUDA
-  cudaError_t err = sep::cuda::cudaMemcpyAsync(
-      dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+  cudaError_t err = sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size,
+                                               cudaMemcpyDefault, nullptr);
   if (err != cudaSuccess) {
     if (logger) {
       LOG_ERROR(logger, "Failed to copy memory via CUDA: {}", err);

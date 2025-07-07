@@ -97,178 +97,6 @@ Auto-merging src/memory/memory_tier_manager.cpp
 hint: Waiting for your editor to close the file... error: cannot run vim: No such file or directory
 error: unable to start editor 'vim'
 Not committing merge; use 'git commit' to complete the merge.
-╭─ajn@sep-OS /sep/sep_build/build ‹master●› 
-╰─$ cd /sep/sep_build/build &&  cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-14 -B . -S .. && make memory_manager_tests && ./memory_manager_tests
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /sep/sep_build/build
-[ 62%] Built target sep_core
-[ 87%] Built target sep_memory
-[100%] Built target memory_manager_tests
-Running main() from /builddir/build/BUILD/gtest-1.15.2-build/googletest-1.15.2/googletest/src/gtest_main.cc
-[==========] Running 11 tests from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 11 tests from MemoryTierManagerTest
-[ RUN      ] MemoryTierManagerTest.BasicInitialization
-[       OK ] MemoryTierManagerTest.BasicInitialization (0 ms)
-[ RUN      ] MemoryTierManagerTest.AllocationAndDeallocation
-[       OK ] MemoryTierManagerTest.AllocationAndDeallocation (0 ms)
-[ RUN      ] MemoryTierManagerTest.PromotionAndDemotion
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:29: Failure
-Expected equality of these values:
-  mgr.getTierUtilization(MemoryTierEnum::MTM)
-    Which is: 0.000244140625
-  0.0f
-    Which is: 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:30: Failure
-Expected: (mgr.getTierUtilization(MemoryTierEnum::LTM)) > (0.0f), actual: 0 vs 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:39: Failure
-Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
-
-[  FAILED  ] MemoryTierManagerTest.PromotionAndDemotion (0 ms)
-[ RUN      ] MemoryTierManagerTest.DefragmentationTriggersPromotionDemotion
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:53: Failure
-Expected equality of these values:
-  mgr.getTierUtilization(MemoryTierEnum::MTM)
-    Which is: 0.000244140625
-  0.0f
-    Which is: 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:54: Failure
-Expected: (mgr.getTierUtilization(MemoryTierEnum::STM)) > (0.0f), actual: 0 vs 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:63: Failure
-Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
-
-[  FAILED  ] MemoryTierManagerTest.DefragmentationTriggersPromotionDemotion (0 ms)
-[ RUN      ] MemoryTierManagerTest.OptimizeBlocksPromotionDemotion
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:81: Failure
-Expected equality of these values:
-  mgr.getTierUtilization(MemoryTierEnum::MTM)
-    Which is: 0.000244140625
-  0.0f
-    Which is: 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:82: Failure
-Expected: (mgr.getTierUtilization(MemoryTierEnum::STM)) > (0.0f), actual: 0 vs 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:91: Failure
-Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
-
-[  FAILED  ] MemoryTierManagerTest.OptimizeBlocksPromotionDemotion (0 ms)
-[ RUN      ] MemoryTierManagerTest.AllocationNearDefragmentBoundary
-[       OK ] MemoryTierManagerTest.AllocationNearDefragmentBoundary (0 ms)
-[ RUN      ] MemoryTierManagerTest.AutoDefragmentationThreshold
-[       OK ] MemoryTierManagerTest.AutoDefragmentationThreshold (0 ms)
-[ RUN      ] MemoryTierManagerTest.TotalMetrics
-[       OK ] MemoryTierManagerTest.TotalMetrics (0 ms)
-[ RUN      ] MemoryTierManagerTest.CalculateRelationshipCoherence
-[       OK ] MemoryTierManagerTest.CalculateRelationshipCoherence (0 ms)
-[ RUN      ] MemoryTierManagerTest.CleanupExpiredPatterns
-[       OK ] MemoryTierManagerTest.CleanupExpiredPatterns (0 ms)
-[ RUN      ] MemoryTierManagerTest.PrunePatternsByPriority
-[       OK ] MemoryTierManagerTest.PrunePatternsByPriority (0 ms)
-[----------] 11 tests from MemoryTierManagerTest (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 11 tests from 1 test suite ran. (0 ms total)
-[  PASSED  ] 8 tests.
-[  FAILED  ] 3 tests, listed below:
-[  FAILED  ] MemoryTierManagerTest.PromotionAndDemotion
-[  FAILED  ] MemoryTierManagerTest.DefragmentationTriggersPromotionDemotion
-[  FAILED  ] MemoryTierManagerTest.OptimizeBlocksPromotionDemotion
-
- 3 FAILED TESTS
-╭─ajn@sep-OS /sep/sep_build/build ‹master●› 
-╰─$ git merge -X ours cacc9f0f6966c675297fb64add6db8721937482a                     1 ↵
-Auto-merging src/memory/memory_tier_manager.cpp
-hint: Waiting for your editor to close the file... error: cannot run vim: No such file or directory
-error: unable to start editor 'vim'
-Not committing merge; use 'git commit' to complete the merge.
-╭─ajn@sep-OS /sep/sep_build/build ‹master●› 
-╰─$ cd /sep/sep_build/build &&  cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-14 -B . -S .. && make memory_manager_tests && ./memory_manager_tests
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /sep/sep_build/build
-[ 62%] Built target sep_core
-[ 87%] Built target sep_memory
-[100%] Built target memory_manager_tests
-Running main() from /builddir/build/BUILD/gtest-1.15.2-build/googletest-1.15.2/googletest/src/gtest_main.cc
-[==========] Running 11 tests from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 11 tests from MemoryTierManagerTest
-[ RUN      ] MemoryTierManagerTest.BasicInitialization
-[       OK ] MemoryTierManagerTest.BasicInitialization (0 ms)
-[ RUN      ] MemoryTierManagerTest.AllocationAndDeallocation
-[       OK ] MemoryTierManagerTest.AllocationAndDeallocation (0 ms)
-[ RUN      ] MemoryTierManagerTest.PromotionAndDemotion
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:29: Failure
-Expected equality of these values:
-  mgr.getTierUtilization(MemoryTierEnum::MTM)
-    Which is: 0.000244140625
-  0.0f
-    Which is: 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:30: Failure
-Expected: (mgr.getTierUtilization(MemoryTierEnum::LTM)) > (0.0f), actual: 0 vs 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:39: Failure
-Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
-
-[  FAILED  ] MemoryTierManagerTest.PromotionAndDemotion (0 ms)
-[ RUN      ] MemoryTierManagerTest.DefragmentationTriggersPromotionDemotion
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:53: Failure
-Expected equality of these values:
-  mgr.getTierUtilization(MemoryTierEnum::MTM)
-    Which is: 0.000244140625
-  0.0f
-    Which is: 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:54: Failure
-Expected: (mgr.getTierUtilization(MemoryTierEnum::STM)) > (0.0f), actual: 0 vs 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:63: Failure
-Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
-
-[  FAILED  ] MemoryTierManagerTest.DefragmentationTriggersPromotionDemotion (0 ms)
-[ RUN      ] MemoryTierManagerTest.OptimizeBlocksPromotionDemotion
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:81: Failure
-Expected equality of these values:
-  mgr.getTierUtilization(MemoryTierEnum::MTM)
-    Which is: 0.000244140625
-  0.0f
-    Which is: 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:82: Failure
-Expected: (mgr.getTierUtilization(MemoryTierEnum::STM)) > (0.0f), actual: 0 vs 0
-
-/sep/sep_build/tests/memory/memory_tier_manager_test.cpp:91: Failure
-Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
-
-[  FAILED  ] MemoryTierManagerTest.OptimizeBlocksPromotionDemotion (0 ms)
-[ RUN      ] MemoryTierManagerTest.AllocationNearDefragmentBoundary
-[       OK ] MemoryTierManagerTest.AllocationNearDefragmentBoundary (0 ms)
-[ RUN      ] MemoryTierManagerTest.AutoDefragmentationThreshold
-[       OK ] MemoryTierManagerTest.AutoDefragmentationThreshold (0 ms)
-[ RUN      ] MemoryTierManagerTest.TotalMetrics
-[       OK ] MemoryTierManagerTest.TotalMetrics (0 ms)
-[ RUN      ] MemoryTierManagerTest.CalculateRelationshipCoherence
-[       OK ] MemoryTierManagerTest.CalculateRelationshipCoherence (0 ms)
-[ RUN      ] MemoryTierManagerTest.CleanupExpiredPatterns
-[       OK ] MemoryTierManagerTest.CleanupExpiredPatterns (0 ms)
-[ RUN      ] MemoryTierManagerTest.PrunePatternsByPriority
-[       OK ] MemoryTierManagerTest.PrunePatternsByPriority (0 ms)
-[----------] 11 tests from MemoryTierManagerTest (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 11 tests from 1 test suite ran. (0 ms total)
-[  PASSED  ] 8 tests.
-[  FAILED  ] 3 tests, listed below:
-[  FAILED  ] MemoryTierManagerTest.PromotionAndDemotion
-[  FAILED  ] MemoryTierManagerTest.DefragmentationTriggersPromotionDemotion
-[  FAILED  ] MemoryTierManagerTest.OptimizeBlocksPromotionDemotion
 
 [{
 	"resource": "/sep/include/memory/memory_tier_manager.hpp",
@@ -606,9 +434,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No type named 'PersistentPatternData' in namespace 'sep::memory::persistence'",
 	"source": "clang",
-	"startLineNumber": 72,
+	"startLineNumber": 70,
 	"startColumn": 59,
-	"endLineNumber": 72,
+	"endLineNumber": 70,
 	"endColumn": 80
 },{
 	"resource": "/sep/include/memory/memory_tier.hpp",
@@ -617,9 +445,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'PersistentPatternData'",
 	"source": "clang",
-	"startLineNumber": 115,
+	"startLineNumber": 113,
 	"startColumn": 33,
-	"endLineNumber": 115,
+	"endLineNumber": 113,
 	"endColumn": 54
 },{
 	"resource": "/sep/include/memory/memory_tier.hpp",
@@ -628,9 +456,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'PersistentPatternData'",
 	"source": "clang",
-	"startLineNumber": 116,
+	"startLineNumber": 114,
 	"startColumn": 32,
-	"endLineNumber": 116,
+	"endLineNumber": 114,
 	"endColumn": 53
 },{
 	"resource": "/sep/include/memory/memory_tier.hpp",
@@ -639,9 +467,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'PersistentPatternData'",
 	"source": "clang",
-	"startLineNumber": 118,
+	"startLineNumber": 116,
 	"startColumn": 11,
-	"endLineNumber": 118,
+	"endLineNumber": 116,
 	"endColumn": 32
 },{
 	"resource": "/sep/include/memory/memory_tier.hpp",
@@ -650,9 +478,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'PersistentPatternData'",
 	"source": "clang",
-	"startLineNumber": 119,
+	"startLineNumber": 117,
 	"startColumn": 5,
-	"endLineNumber": 119,
+	"endLineNumber": 117,
 	"endColumn": 26
 },{
 	"resource": "/sep/include/memory/memory_tier.hpp",
@@ -661,9 +489,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'PersistentPatternData'",
 	"source": "clang",
-	"startLineNumber": 120,
+	"startLineNumber": 118,
 	"startColumn": 38,
-	"endLineNumber": 120,
+	"endLineNumber": 118,
 	"endColumn": 59
 },{
 	"resource": "/sep/include/memory/memory_tier.hpp",
@@ -672,9 +500,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'PersistentPatternData'",
 	"source": "clang",
-	"startLineNumber": 138,
+	"startLineNumber": 136,
 	"startColumn": 32,
-	"endLineNumber": 138,
+	"endLineNumber": 136,
 	"endColumn": 53
 },{
 	"resource": "/sep/include/memory/memory_tier.hpp",
@@ -691,9 +519,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 4,
 	"message": "Included header chrono is not used directly (fixes available)",
 	"source": "clangd",
-	"startLineNumber": 6,
+	"startLineNumber": 4,
 	"startColumn": 1,
-	"endLineNumber": 6,
+	"endLineNumber": 4,
 	"endColumn": 18,
 	"tags": [
 		1
@@ -713,9 +541,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 4,
 	"message": "Included header unordered_map is not used directly (fixes available)",
 	"source": "clangd",
-	"startLineNumber": 9,
+	"startLineNumber": 7,
 	"startColumn": 1,
-	"endLineNumber": 9,
+	"endLineNumber": 7,
 	"endColumn": 25,
 	"tags": [
 		1
@@ -735,9 +563,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 4,
 	"message": "Included header vector is not used directly (fixes available)",
 	"source": "clangd",
-	"startLineNumber": 10,
+	"startLineNumber": 8,
 	"startColumn": 1,
-	"endLineNumber": 10,
+	"endLineNumber": 8,
 	"endColumn": 18,
 	"tags": [
 		1
@@ -757,9 +585,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 4,
 	"message": "Included header shim.h is not used directly (fixes available)",
 	"source": "clangd",
-	"startLineNumber": 16,
+	"startLineNumber": 14,
 	"startColumn": 1,
-	"endLineNumber": 16,
+	"endLineNumber": 14,
 	"endColumn": 28,
 	"tags": [
 		1
@@ -837,9 +665,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 22,
+	"startLineNumber": 23,
 	"startColumn": 16,
-	"endLineNumber": 22,
+	"endLineNumber": 23,
 	"endColumn": 33
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -848,9 +676,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No member named 'core' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 23,
+	"startLineNumber": 24,
 	"startColumn": 14,
-	"endLineNumber": 23,
+	"endLineNumber": 24,
 	"endColumn": 18
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -859,9 +687,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No member named 'MemoryTierEnum' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 24,
+	"startLineNumber": 25,
 	"startColumn": 14,
-	"endLineNumber": 24,
+	"endLineNumber": 25,
 	"endColumn": 28
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -870,9 +698,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No member named 'pattern' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 25,
+	"startLineNumber": 26,
 	"startColumn": 14,
-	"endLineNumber": 25,
+	"endLineNumber": 26,
 	"endColumn": 21
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -881,9 +709,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No member named 'persistence' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 26,
+	"startLineNumber": 27,
 	"startColumn": 14,
-	"endLineNumber": 26,
+	"endLineNumber": 27,
 	"endColumn": 25
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -892,9 +720,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No member named 'quantum' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 27,
+	"startLineNumber": 28,
 	"startColumn": 14,
-	"endLineNumber": 27,
+	"endLineNumber": 28,
 	"endColumn": 21
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -903,9 +731,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 37,
+	"startLineNumber": 38,
 	"startColumn": 17,
-	"endLineNumber": 37,
+	"endLineNumber": 38,
 	"endColumn": 34
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -914,9 +742,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 37,
+	"startLineNumber": 38,
 	"startColumn": 36,
-	"endLineNumber": 37,
+	"endLineNumber": 38,
 	"endColumn": 53
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -925,9 +753,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 38,
+	"startLineNumber": 39,
 	"startColumn": 16,
-	"endLineNumber": 38,
+	"endLineNumber": 39,
 	"endColumn": 33
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -936,9 +764,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 40,
+	"startLineNumber": 41,
 	"startColumn": 6,
-	"endLineNumber": 40,
+	"endLineNumber": 41,
 	"endColumn": 23
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -947,9 +775,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 51,
+	"startLineNumber": 52,
 	"startColumn": 1,
-	"endLineNumber": 51,
+	"endLineNumber": 52,
 	"endColumn": 18
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -958,9 +786,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 51,
+	"startLineNumber": 52,
 	"startColumn": 20,
-	"endLineNumber": 51,
+	"endLineNumber": 52,
 	"endColumn": 37
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -969,9 +797,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 73,
+	"startLineNumber": 74,
 	"startColumn": 1,
-	"endLineNumber": 73,
+	"endLineNumber": 74,
 	"endColumn": 18
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -980,9 +808,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 78,
+	"startLineNumber": 79,
 	"startColumn": 1,
-	"endLineNumber": 78,
+	"endLineNumber": 79,
 	"endColumn": 18
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -991,9 +819,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'Config'",
 	"source": "clang",
-	"startLineNumber": 78,
+	"startLineNumber": 79,
 	"startColumn": 44,
-	"endLineNumber": 78,
+	"endLineNumber": 79,
 	"endColumn": 50
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -1002,9 +830,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 82,
+	"startLineNumber": 83,
 	"startColumn": 1,
-	"endLineNumber": 82,
+	"endLineNumber": 83,
 	"endColumn": 18
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -1013,9 +841,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No member named 'config' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 83,
+	"startLineNumber": 84,
 	"startColumn": 16,
-	"endLineNumber": 83,
+	"endLineNumber": 84,
 	"endColumn": 22
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -1024,9 +852,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 95,
+	"startLineNumber": 96,
 	"startColumn": 1,
-	"endLineNumber": 95,
+	"endLineNumber": 96,
 	"endColumn": 18
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -1035,9 +863,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTierManager'",
 	"source": "clang",
-	"startLineNumber": 99,
+	"startLineNumber": 100,
 	"startColumn": 6,
-	"endLineNumber": 99,
+	"endLineNumber": 100,
 	"endColumn": 23
 },{
 	"resource": "/sep/src/memory/memory_tier_manager.cpp",
@@ -1150,6 +978,28 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 		1
 	]
 },{
+	"resource": "/sep/src/memory/memory_tier_manager.cpp",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "unused-includes",
+		"target": {
+			"$mid": 1,
+			"path": "/guides/include-cleaner",
+			"scheme": "https",
+			"authority": "clangd.llvm.org"
+		}
+	},
+	"severity": 4,
+	"message": "Included header cstdio is not used directly (fixes available)",
+	"source": "clangd",
+	"startLineNumber": 13,
+	"startColumn": 1,
+	"endLineNumber": 13,
+	"endColumn": 18,
+	"tags": [
+		1
+	]
+},{
 	"resource": "/sep/src/memory/memory_tier.cpp",
 	"owner": "_generated_diagnostic_collection_name_#1",
 	"code": "fatal_too_many_errors",
@@ -1178,9 +1028,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No member named 'MemoryTierEnum' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 39,
+	"startLineNumber": 40,
 	"startColumn": 14,
-	"endLineNumber": 39,
+	"endLineNumber": 40,
 	"endColumn": 28
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1189,9 +1039,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 41,
+	"startLineNumber": 42,
 	"startColumn": 1,
-	"endLineNumber": 41,
+	"endLineNumber": 42,
 	"endColumn": 11
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1200,9 +1050,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'Config'",
 	"source": "clang",
-	"startLineNumber": 41,
+	"startLineNumber": 42,
 	"startColumn": 30,
-	"endLineNumber": 41,
+	"endLineNumber": 42,
 	"endColumn": 36
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1211,9 +1061,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 87,
+	"startLineNumber": 88,
 	"startColumn": 1,
-	"endLineNumber": 87,
+	"endLineNumber": 88,
 	"endColumn": 11
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1222,9 +1072,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'MemoryTierEnum'",
 	"source": "clang",
-	"startLineNumber": 87,
+	"startLineNumber": 88,
 	"startColumn": 24,
-	"endLineNumber": 87,
+	"endLineNumber": 88,
 	"endColumn": 38
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1233,9 +1083,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 93,
+	"startLineNumber": 94,
 	"startColumn": 1,
-	"endLineNumber": 93,
+	"endLineNumber": 94,
 	"endColumn": 11
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1244,9 +1094,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'Config'",
 	"source": "clang",
-	"startLineNumber": 93,
+	"startLineNumber": 94,
 	"startColumn": 30,
-	"endLineNumber": 93,
+	"endLineNumber": 94,
 	"endColumn": 36
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1255,9 +1105,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 103,
+	"startLineNumber": 104,
 	"startColumn": 1,
-	"endLineNumber": 103,
+	"endLineNumber": 104,
 	"endColumn": 11
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1266,9 +1116,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'MemoryBlock'",
 	"source": "clang",
-	"startLineNumber": 121,
+	"startLineNumber": 122,
 	"startColumn": 1,
-	"endLineNumber": 121,
+	"endLineNumber": 122,
 	"endColumn": 12
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1277,9 +1127,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 121,
+	"startLineNumber": 122,
 	"startColumn": 14,
-	"endLineNumber": 121,
+	"endLineNumber": 122,
 	"endColumn": 24
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1288,9 +1138,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 170,
+	"startLineNumber": 171,
 	"startColumn": 6,
-	"endLineNumber": 170,
+	"endLineNumber": 171,
 	"endColumn": 16
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1299,9 +1149,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Unknown type name 'MemoryBlock'",
 	"source": "clang",
-	"startLineNumber": 170,
+	"startLineNumber": 171,
 	"startColumn": 29,
-	"endLineNumber": 170,
+	"endLineNumber": 171,
 	"endColumn": 40
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1310,9 +1160,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "No type named 'SEPResult' in namespace 'sep'",
 	"source": "clang",
-	"startLineNumber": 197,
+	"startLineNumber": 198,
 	"startColumn": 6,
-	"endLineNumber": 197,
+	"endLineNumber": 198,
 	"endColumn": 15
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1321,9 +1171,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 197,
+	"startLineNumber": 198,
 	"startColumn": 16,
-	"endLineNumber": 197,
+	"endLineNumber": 198,
 	"endColumn": 26
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1332,9 +1182,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 274,
+	"startLineNumber": 275,
 	"startColumn": 7,
-	"endLineNumber": 274,
+	"endLineNumber": 275,
 	"endColumn": 17
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1343,9 +1193,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 300,
+	"startLineNumber": 301,
 	"startColumn": 7,
-	"endLineNumber": 300,
+	"endLineNumber": 301,
 	"endColumn": 17
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1354,9 +1204,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 308,
+	"startLineNumber": 321,
 	"startColumn": 13,
-	"endLineNumber": 308,
+	"endLineNumber": 321,
 	"endColumn": 23
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1365,9 +1215,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryTier'",
 	"source": "clang",
-	"startLineNumber": 312,
+	"startLineNumber": 325,
 	"startColumn": 13,
-	"endLineNumber": 312,
+	"endLineNumber": 325,
 	"endColumn": 23
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1376,9 +1226,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 8,
 	"message": "Use of undeclared identifier 'MemoryBlock'",
 	"source": "clang",
-	"startLineNumber": 322,
+	"startLineNumber": 335,
 	"startColumn": 18,
-	"endLineNumber": 322,
+	"endLineNumber": 335,
 	"endColumn": 29
 },{
 	"resource": "/sep/src/memory/memory_tier.cpp",
@@ -1481,11 +1331,33 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 		}
 	},
 	"severity": 4,
-	"message": "Included header stdexcept is not used directly (fixes available)",
+	"message": "Included header limits is not used directly (fixes available)",
 	"source": "clangd",
 	"startLineNumber": 19,
 	"startColumn": 1,
 	"endLineNumber": 19,
+	"endColumn": 18,
+	"tags": [
+		1
+	]
+},{
+	"resource": "/sep/src/memory/memory_tier.cpp",
+	"owner": "_generated_diagnostic_collection_name_#1",
+	"code": {
+		"value": "unused-includes",
+		"target": {
+			"$mid": 1,
+			"path": "/guides/include-cleaner",
+			"scheme": "https",
+			"authority": "clangd.llvm.org"
+		}
+	},
+	"severity": 4,
+	"message": "Included header stdexcept is not used directly (fixes available)",
+	"source": "clangd",
+	"startLineNumber": 20,
+	"startColumn": 1,
+	"endLineNumber": 20,
 	"endColumn": 21,
 	"tags": [
 		1
@@ -1505,9 +1377,9 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"severity": 4,
 	"message": "Included header vector is not used directly (fixes available)",
 	"source": "clangd",
-	"startLineNumber": 20,
+	"startLineNumber": 21,
 	"startColumn": 1,
-	"endLineNumber": 20,
+	"endLineNumber": 21,
 	"endColumn": 18,
 	"tags": [
 		1
@@ -1743,246 +1615,6 @@ Expected: (promoted) != (nullptr), actual: NULL vs (nullptr)
 	"startColumn": 39,
 	"endLineNumber": 51,
 	"endColumn": 53
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "fatal_too_many_errors",
-	"severity": 8,
-	"message": "Too many errors emitted, stopping now",
-	"source": "clang",
-	"startLineNumber": 1,
-	"startColumn": 1,
-	"endLineNumber": 1,
-	"endColumn": 1
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "no_member_template",
-	"severity": 8,
-	"message": "No template named 'less' in namespace 'std' (fix available)",
-	"source": "clang",
-	"startLineNumber": 103,
-	"startColumn": 67,
-	"endLineNumber": 103,
-	"endColumn": 71
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "no_member_template",
-	"severity": 8,
-	"message": "No template named 'allocator' in namespace 'std' (fix available)",
-	"source": "clang",
-	"startLineNumber": 104,
-	"startColumn": 29,
-	"endLineNumber": 104,
-	"endColumn": 38
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "no_member_template_suggest",
-	"severity": 8,
-	"message": "No template named 'binary_function' in namespace 'std'; did you mean 'is_function'? (fixes available)",
-	"source": "clang",
-	"startLineNumber": 137,
-	"startColumn": 21,
-	"endLineNumber": 137,
-	"endColumn": 36,
-	"relatedInformation": [
-		{
-			"startLineNumber": 661,
-			"startColumn": 12,
-			"endLineNumber": 661,
-			"endColumn": 23,
-			"message": "'is_function' declared here",
-			"resource": "/usr/include/c++/15/type_traits"
-		}
-	]
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "template_arg_list_different_arity",
-	"severity": 8,
-	"message": "Too many template arguments for class template 'is_function'",
-	"source": "clang",
-	"startLineNumber": 137,
-	"startColumn": 21,
-	"endLineNumber": 137,
-	"endColumn": 36,
-	"relatedInformation": [
-		{
-			"startLineNumber": 661,
-			"startColumn": 12,
-			"endLineNumber": 661,
-			"endColumn": 23,
-			"message": "Template is declared here",
-			"resource": "/usr/include/c++/15/type_traits"
-		}
-	]
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "typename_nested_not_found",
-	"severity": 8,
-	"message": "No type named '__alloc_traits' in namespace '__gnu_cxx'",
-	"source": "clang",
-	"startLineNumber": 154,
-	"startColumn": 15,
-	"endLineNumber": 154,
-	"endColumn": 49
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_member_name_or_semi",
-	"severity": 8,
-	"message": "Expected member name or ';' after declaration specifiers",
-	"source": "clang",
-	"startLineNumber": 154,
-	"startColumn": 49,
-	"endLineNumber": 154,
-	"endColumn": 50
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "undeclared_var_use",
-	"severity": 8,
-	"message": "Use of undeclared identifier '_Select1st'",
-	"source": "clang",
-	"startLineNumber": 157,
-	"startColumn": 46,
-	"endLineNumber": 157,
-	"endColumn": 56
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "no_member_template",
-	"severity": 8,
-	"message": "No template named '__alloc_traits' in namespace '__gnu_cxx'",
-	"source": "clang",
-	"startLineNumber": 163,
-	"startColumn": 26,
-	"endLineNumber": 163,
-	"endColumn": 40
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "undeclared_var_use",
-	"severity": 8,
-	"message": "Use of undeclared identifier '_Pair_alloc_type'",
-	"source": "clang",
-	"startLineNumber": 163,
-	"startColumn": 41,
-	"endLineNumber": 163,
-	"endColumn": 57
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Alloc_traits' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 175,
-	"startColumn": 24,
-	"endLineNumber": 175,
-	"endColumn": 37
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Alloc_traits' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 176,
-	"startColumn": 24,
-	"endLineNumber": 176,
-	"endColumn": 37
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Alloc_traits' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 177,
-	"startColumn": 24,
-	"endLineNumber": 177,
-	"endColumn": 37
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Alloc_traits' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 178,
-	"startColumn": 24,
-	"endLineNumber": 178,
-	"endColumn": 37
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 179,
-	"startColumn": 24,
-	"endLineNumber": 179,
-	"endColumn": 33
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 180,
-	"startColumn": 24,
-	"endLineNumber": 180,
-	"endColumn": 33
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 181,
-	"startColumn": 24,
-	"endLineNumber": 181,
-	"endColumn": 33
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 182,
-	"startColumn": 24,
-	"endLineNumber": 182,
-	"endColumn": 33
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 183,
-	"startColumn": 24,
-	"endLineNumber": 183,
-	"endColumn": 33
-},{
-	"resource": "/usr/include/c++/15/bits/stl_map.h",
-	"owner": "_generated_diagnostic_collection_name_#1",
-	"code": "expected_class_or_namespace",
-	"severity": 8,
-	"message": "'std::map::_Rep_type' (aka 'int') is not a class, namespace, or enumeration",
-	"source": "clang",
-	"startLineNumber": 184,
-	"startColumn": 24,
-	"endLineNumber": 184,
-	"endColumn": 33
 },{
 	"resource": "/usr/include/c++/15/bits/stl_vector.h",
 	"owner": "_generated_diagnostic_collection_name_#1",

@@ -103,7 +103,8 @@ public:
     SEPResult promoteBlock(MemoryBlock* block, MemoryBlock*& out_block);
     SEPResult demoteBlock(MemoryBlock* block, MemoryBlock*& out_block);
     MemoryTier* determineTier(float coherence, float stability, int generation_count);
-    void updateBlockMetrics(MemoryBlock* block, float coherence, float stability, std::uint32_t generation, float context_score);
+    MemoryBlock* updateBlockMetrics(MemoryBlock* block, float coherence, float stability,
+                                    std::uint32_t generation, float context_score);
     void rebuildLookup();
 
     // Pattern management

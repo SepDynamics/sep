@@ -183,8 +183,8 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
     return 0.0f;
 
   float util = t->calculateUtilization();
-  // Guard against rounding artifacts that may appear after a block is
-  // deallocated.  Some unit tests expect an exact zero when no memory is
+  // [2024-04-25] Guard against rounding artifacts that may appear after a
+  // block is deallocated. Unit tests expect an exact zero when no memory is
   // allocated in a tier. Integer arithmetic in MemoryTier coupled with
   // floating point division can yield values like 0.000244 instead of 0.0.
   // Treat anything close to zero as zero for stability.

@@ -16,9 +16,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <deque>
+#include <limits>
 #include <stdexcept>
 #include <vector>
-#include <limits>
 
 // CUDA support check
 #if defined(__CUDACC__)

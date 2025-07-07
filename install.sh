@@ -3,10 +3,10 @@
 # Install script for SEP Engine project dependencies
 # Enhanced with error checking and logging for build troubleshooting
 
-set -e  # Exit on any error
+set -euo pipefail  # Exit on error, undefined var, or pipeline failure
 
 # Directory setup
-WORKSPACE_DIR="/workspace/sep"
+WORKSPACE_DIR="$(dirname "$(realpath "$0")")"
 BUILD_DIR="$WORKSPACE_DIR/build"
 LOG_DIR="$WORKSPACE_DIR/logs"
 OPEN_SUBDIV_LOG="$LOG_DIR/opensubdiv_build.log"
@@ -14,6 +14,7 @@ USD_LOG="$LOG_DIR/usd_build.log"
 
 # Create log directory
 mkdir -p "$LOG_DIR"
+cd "$WORKSPACE_DIR"
 
 echo "Starting SEP Engine dependency installation..."
 
@@ -24,7 +25,7 @@ sudo apt-get update -y
 REQUIRED_PACKAGES=(
     build-essential cmake git
     libglu1-mesa-dev libpcre3-dev
-    libtbb-dev libxrandr-dev libglfw3-dev  # For OpenSubdiv's TBB and GLFW/Xrandr needs
+    libtbb-dev libxrandr-dev libglfw3-dev
     libboost-all-dev
     libopencolorio-dev libopenimageio-dev
     libembree-dev libpugixml-dev libopenjp2-7-dev
@@ -54,11 +55,12 @@ fi
 
 # Function to check build success
 check_build_success() {
-    local log_file=$1
-    local lib_path=$2
-    local lib_name=$3
+    local exit_code=$1
+    local log_file=$2
+    local lib_path=$3
+    local lib_name=$4
 
-    if [ $? -ne 0 ]; then
+    if [ "$exit_code" -ne 0 ]; then
         echo "Error: Failed to build $lib_name. Check $log_file for details."
         exit 1
     fi
@@ -86,10 +88,11 @@ if ! dpkg -l | grep -q libopensubdiv-dev; then
     cmake -DNO_EXAMPLES=ON -DNO_TUTORIALS=ON -DNO_REGRESSION=ON \
           -DTBB_DIR=/usr/lib/x86_64-linux-gnu/cmake/TBB \
           .. > "$OPEN_SUBDIV_LOG" 2>&1
-    make -j$(nproc) >> "$OPEN_SUBDIV_LOG" 2>&1
-    sudo make install >> "$OPEN_SUBDIV_LOG" 2>&1
-    
-    check_build_success "$OPEN_SUBDIV_LOG" "/usr/local/lib/libosdCPU.so" "OpenSubdiv"
+    make -j"$(nproc)" >> "$OPEN_SUBDIV_LOG" 2>&1
+    sudo bash -c "make install >> '$OPEN_SUBDIV_LOG' 2>&1"
+    build_status=$?
+
+    check_build_success $build_status "$OPEN_SUBDIV_LOG" "/usr/local/lib/libosdCPU.so" "OpenSubdiv"
 fi
 
 # Build USD from source if not found
@@ -107,10 +110,11 @@ if ! dpkg -l | grep -q libusd-dev; then
     cmake -DPXR_BUILD_TESTS=OFF -DPXR_BUILD_EXAMPLES=OFF \
           -DTBB_DIR=/usr/lib/x86_64-linux-gnu/cmake/TBB \
           .. > "$USD_LOG" 2>&1
-    make -j$(nproc) >> "$USD_LOG" 2>&1
-    sudo make install >> "$USD_LOG" 2>&1
-    
-    check_build_success "$USD_LOG" "/usr/local/lib/libusd.so" "USD"
+    make -j"$(nproc)" >> "$USD_LOG" 2>&1
+    sudo bash -c "make install >> '$USD_LOG' 2>&1"
+    build_status=$?
+
+    check_build_success $build_status "$USD_LOG" "/usr/local/lib/libusd.so" "USD"
 fi
 
 # Update library cache

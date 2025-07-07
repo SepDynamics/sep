@@ -23,6 +23,8 @@ using ::sep::CompressionMethod;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
 
+inline constexpr float UTILIZATION_EPSILON = 1e-3f;
+
 // Memory tier types
 enum class TierType {
     HOST = 0,   // Host memory (CPU)

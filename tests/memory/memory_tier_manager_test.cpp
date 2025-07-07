@@ -22,13 +22,13 @@ TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
     ASSERT_NE(block, nullptr);
     EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
     mgr.deallocate(block);
-    const float EPSILON = 0.001f;
+    const float EPSILON = UTILIZATION_EPSILON;
     EXPECT_LT(mgr.getTierUtilization(MemoryTierEnum::STM), EPSILON)
         << "Expected STM utilization near 0, got: " << mgr.getTierUtilization(MemoryTierEnum::STM);
 }
 
 TEST(MemoryTierManagerTest, PromotionAndDemotion) {
-    const float EPSILON = 0.001f;
+    const float EPSILON = UTILIZATION_EPSILON;
     MemoryTierManager mgr;
     mgr.resetForTesting();
     
@@ -66,7 +66,7 @@ TEST(MemoryTierManagerTest, PromotionAndDemotion) {
 }
 
 TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
-    const float EPSILON = 0.001f;
+    const float EPSILON = UTILIZATION_EPSILON;
     MemoryTierManager mgr;
     mgr.resetForTesting();
     
@@ -106,7 +106,7 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
 
 
 TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
-    const float EPSILON = 0.001f;
+    const float EPSILON = UTILIZATION_EPSILON;
     MemoryTierManager mgr;
     mgr.resetForTesting();
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::STM);

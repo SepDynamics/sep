@@ -10,6 +10,7 @@
 #include <string>
 #include <cstring>
 #include <cmath>
+#include <cstdio>
 
 namespace sep {
 namespace memory {

@@ -18,6 +18,7 @@
 #include <deque>
 #include <stdexcept>
 #include <vector>
+#include <limits>
 
 // CUDA support check
 #if defined(__CUDACC__)

@@ -13,7 +13,7 @@ namespace sep {
 namespace core {
 
 // Default compression implementation using simple RLE
-class DefaultCompressor : public Compressor {
+class DefaultCompressor : public CompressionStrategy {
 public:
     std::vector<uint8_t> compress(const void* data, size_t size) override {
         const uint8_t* bytes = static_cast<const uint8_t*>(data);
@@ -57,13 +57,29 @@ public:
 };
 
 // Factory method implementation
-std::unique_ptr<Compressor> createCompressor(CompressionType type) {
-    switch (type) {
-        case CompressionType::Default:
-            return std::make_unique<DefaultCompressor>();
+std::unique_ptr<CompressionStrategy>
+CompressionFactory::create(CompressionMethod method) {
+    switch (method) {
+        case CompressionMethod::DeltaEncoding:
+        case CompressionMethod::LZ4:
+        case CompressionMethod::ZSTD:
+        case CompressionMethod::None:
         default:
-            throw std::invalid_argument("Unsupported compression type");
+            // Only a simple RLE compressor is implemented in this minimal build
+            return std::make_unique<DefaultCompressor>();
     }
+}
+
+CompressionMethod CompressionFactory::analyzeData(const void* /*data*/,
+                                                  size_t /*size*/) {
+    // Minimal heuristic: always return None
+    return CompressionMethod::None;
+}
+
+float CompressionFactory::estimateCompressionRatio(const void* /*data*/,
+                                                   size_t /*size*/,
+                                                   CompressionMethod /*method*/) {
+    return 1.0f;
 }
 
 // Utility functions implementation

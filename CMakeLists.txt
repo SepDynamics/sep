@@ -32,8 +32,10 @@ include_directories(BEFORE
     ${SEP_SRC_DIR}
 )
 
-# Ensure core headers are available
-add_subdirectory(src/core BEFORE src/memory)
+# Ensure core headers are available. The BEFORE keyword was used incorrectly
+# here and caused CMake configuration errors. Simply add the core subdirectory
+# first so that targets are available to later modules.
+add_subdirectory(src/core)
 
 # Backwards compatibility variables
 set(SEP_ENABLE_BLENDER ${SEP_WITH_CYCLES})

@@ -37,6 +37,7 @@ set(SEP_SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 include_directories(BEFORE
     ${SEP_INCLUDE_DIR}
     ${SEP_SRC_DIR}
+    ${CMAKE_SOURCE_DIR}/third_party/glm
 )
 
 # Ensure core headers are available
@@ -110,6 +111,7 @@ endif()
 include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/extern/crow/include
+    ${CMAKE_SOURCE_DIR}/third_party/glm
 )
 add_compile_definitions(CROW_USE_BOOST)
 

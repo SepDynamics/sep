@@ -92,6 +92,7 @@ target_include_directories(sep_compat
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third_party/glm>
         ${CUDA_INCLUDE_DIRS}
 )
 

@@ -25,8 +25,15 @@ add_executable(cuda_api_tests
 add_executable(increment_kernel_test
     increment_kernel_test.cpp
 )
+
+# Use consistent include paths for the CUDA test so headers from the
+# testbed and the main source tree are always resolved correctly.  The
+# previous configuration only added the project root and the CUDA testbed
+# directory which caused missing header errors on some systems.
 target_include_directories(increment_kernel_test PRIVATE
-    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/_sep/testbed
     ${CMAKE_SOURCE_DIR}/_sep/testbed/cuda
 )
 
@@ -42,11 +49,6 @@ target_include_directories(cuda_api_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/_sep/testbed
 )
 
-target_include_directories(increment_kernel_test PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/_sep/testbed/cuda
-)
 
 target_link_libraries(long_double_math_test PRIVATE
     sep_compat

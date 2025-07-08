@@ -104,6 +104,7 @@ configure_sep()
 # CUDA is optional for many unit tests. Allow disabling via SEP_HAS_CUDA
 option(SEP_HAS_CUDA "Enable CUDA support" ON)
 if(SEP_HAS_CUDA)
+    enable_language(CUDA)
     find_package(CUDAToolkit REQUIRED)
     add_compile_definitions(SEP_HAS_CUDA=1)
 else()

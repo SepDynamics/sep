@@ -1,18 +1,12 @@
 #pragma once
 #include <cstdint>
 
+#include "persistent_pattern_data.hpp"
+
 namespace sep {
 namespace memory { namespace persistence {
 
-struct PersistentPatternData {
-    float coherence{0.0f};
-    float stability{0.0f};
-    std::uint32_t generation_count{0};
-};
+using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 } } // namespace memory::persistence
-
-namespace persistence {
-using PersistentPatternData = ::sep::memory::persistence::PersistentPatternData;
-} // namespace persistence
 } // namespace sep

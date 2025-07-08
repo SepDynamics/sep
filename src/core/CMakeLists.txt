@@ -6,6 +6,7 @@ add_library(sep_core STATIC
     error_handler.cpp
     metrics_collector.cpp
     logging.cpp
+    manager.cpp
 )
 
 if(SEP_BUILD_ENGINE)
@@ -53,6 +54,8 @@ target_link_libraries(sep_core
     PUBLIC
         Threads::Threads
         sep_compat
+        fmt::fmt
+        spdlog::spdlog
 )
 
 # Install headers from include directory

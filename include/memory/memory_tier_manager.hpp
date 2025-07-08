@@ -19,6 +19,7 @@
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
 #include "persistence/pattern_data.hpp"
+#endif
 
 // Standard library includes
 #include <cstddef>

@@ -1,0 +1,29 @@
+name: Duplicate Type Scan
+
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'examples/**'
+      - 'tests/**'
+      - '_sep/testbed/**'
+      - '.github/workflows/duplicate_type_scan.yml'
+      - 'scripts/duplicate_type_scan.py'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'examples/**'
+      - 'tests/**'
+      - '_sep/testbed/**'
+      - '.github/workflows/duplicate_type_scan.yml'
+      - 'scripts/duplicate_type_scan.py'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run duplicate type scan
+        run: python3 scripts/duplicate_type_scan.py

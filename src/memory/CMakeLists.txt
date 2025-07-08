@@ -12,20 +12,24 @@ find_library(HIREDIS_LIB NAMES hiredis PATHS /usr/lib64 REQUIRED)
 find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis REQUIRED)
 
 # Add CUDA-specific compile definitions to handle exception specs
-target_compile_definitions(sep_memory PRIVATE
-    SEP_HAS_CUDA=1
-    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
+if(SEP_HAS_CUDA)
+  target_compile_definitions(sep_memory PRIVATE
+      SEP_HAS_CUDA=1
+      SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
+  find_package(CUDA REQUIRED)
+  set_target_properties(sep_memory PROPERTIES
+      CUDA_SEPARABLE_COMPILATION ON
+      CUDA_RESOLVE_DEVICE_SYMBOLS ON
+      CUDA_ARCHITECTURES "75;70;61;60")
+else()
+  target_compile_definitions(sep_memory PRIVATE
+      SEP_HAS_CUDA=0)
+endif()
 
-# Configure dependencies
-find_package(CUDA REQUIRED)
 find_package(Threads REQUIRED)
 
-# Set CUDA properties
 set_target_properties(sep_memory PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
     POSITION_INDEPENDENT_CODE ON
-    CUDA_ARCHITECTURES "75;70;61;60"
     CXX_VISIBILITY_PRESET default
     VISIBILITY_INLINES_HIDDEN OFF
 )
@@ -53,9 +57,9 @@ target_include_directories(sep_memory
 # Add compile definitions
 target_compile_definitions(sep_memory
     PUBLIC
-        SEP_HAS_CUDA=1
+        SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
     PRIVATE
-        SEP_USE_CUDA=1
+        SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
         SEP_HAS_REDIS=1
 )
 

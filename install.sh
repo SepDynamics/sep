@@ -2,6 +2,24 @@
 # SEP Engine dependency installer
 set -euo pipefail
 
+# Optional argument parsing
+USE_CUDA=1
+for arg in "$@"; do
+  case "$arg" in
+    --no-cuda)
+      USE_CUDA=0
+      shift
+      ;;
+  esac
+done
+
+if [ "$USE_CUDA" -eq 0 ]; then
+  echo "CUDA support disabled via --no-cuda"
+  export SEP_HAS_CUDA=0
+else
+  export SEP_HAS_CUDA=1
+fi
+
 WS_DIR="$(cd "$(dirname "$0")" && pwd)"
 LOG_DIR="$WS_DIR/logs"
 BUILD_DIR="$WS_DIR/build/deps"
@@ -13,6 +31,7 @@ PACKAGES=(
   libboost-all-dev libopencolorio-dev libopenimageio-dev
   libembree-dev libpugixml-dev libopenjp2-7-dev
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
+  libfmt-dev
 )
 
 echo "Updating package lists..."

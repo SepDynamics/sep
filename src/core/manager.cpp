@@ -7,7 +7,7 @@ struct ConfigManager::Impl {
     QuantumThresholdConfig quantum_cfg{};
 };
 
-ConfigManager::ConfigManager() = default;
+ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
 ConfigManager::~ConfigManager() = default;
 
 void ConfigManager::initialize(int, char**) {}
@@ -80,3 +80,4 @@ void ConfigManager::resetToDefaults() {
 }
 
 } // namespace sep::config
+

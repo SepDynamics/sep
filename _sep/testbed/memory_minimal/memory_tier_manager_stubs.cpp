@@ -26,7 +26,15 @@ void __attribute__((weak)) MemoryTierManager::prunePatternsByPriority(MemoryTier
 
 void __attribute__((weak)) MemoryTierManager::calculateRelationshipCoherence() {
     for (auto &[id, ptr] : pattern_registry_) {
-        if (ptr) ptr->coherence = 1.0f;
+        ptr->coherence = 0.0f;
+        if (pattern_relationships_.count(id)) {
+            const auto &rels = pattern_relationships_.at(id);
+            if (!rels.empty()) {
+                double sum = 0.0;
+                for (const auto &r : rels) sum += r.second;
+                ptr->coherence = static_cast<float>(sum / rels.size());
+            }
+        }
     }
 }
 

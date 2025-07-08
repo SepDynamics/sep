@@ -54,6 +54,13 @@ struct QuantumThresholdConfig {
     float stability_threshold{0.8f};
 };
 
+// Quantum processing thresholds used by experimental components
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.
 struct CudaConfig {

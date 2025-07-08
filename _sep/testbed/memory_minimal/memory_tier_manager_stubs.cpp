@@ -32,7 +32,7 @@ void __attribute__((weak)) MemoryTierManager::calculateRelationshipCoherence() {
             if (!rels.empty()) {
                 double sum = 0.0;
                 for (const auto &r : rels) sum += r.second;
-                ptr->coherence = static_cast<float>(sum / rels.size());
+                ptr->coherence = 1.0f - static_cast<float>(sum / rels.size());
             }
         }
     }

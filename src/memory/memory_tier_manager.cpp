@@ -661,13 +661,14 @@ void MemoryTierManager::calculateRelationshipCoherence() {
       const auto &rels = pattern_relationships_.at(id);
       if (!rels.empty()) {
         double sum = 0.0;
-        for (const auto &r : rels) {
+        for (const auto &r : rels)
           sum += r.second;
         }
         float avg = static_cast<float>(sum / rels.size());
         pattern_ptr->coherence = avg;
       }
     }
+    pattern_ptr->coherence = coherence;
   }
 }
 

@@ -143,6 +143,9 @@ MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr) {
   auto it = lookup_map_.find(ptr);
   if (it != lookup_map_.end())
     return it->second;
+  auto lit = legacy_lookup_map_.find(ptr);
+  if (lit != legacy_lookup_map_.end())
+    return lit->second;
   return nullptr;
 }
 
@@ -398,19 +401,12 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_.erase(old_ptr);
     src_tier->deallocate(block);
     lookup_map_[out_block->ptr] = out_block;
-    lookup_map_[block->ptr] = out_block; // allow lookups using old pointer
+    legacy_lookup_map_[old_ptr] = out_block;
   }
 
   // Refresh the lookup table so callers can resolve blocks after the move.
   rebuildLookup();
 
-  {
-    std::lock_guard<std::mutex> lock(lookup_mutex);
-    // Preserve the old pointer as an alias so callers using stale addresses
-    // can still resolve the promoted block via findBlockByPtr.
-    lookup_map_[old_ptr] = out_block;
-    lookup_map_[block->ptr] = out_block;
-  }
 
   return SEPResult::SUCCESS;
 }
@@ -496,6 +492,7 @@ MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
 void MemoryTierManager::rebuildLookup() {
   std::lock_guard<std::mutex> lock(lookup_mutex);
   lookup_map_.clear();
+  legacy_lookup_map_.clear();
   auto add_blocks = [this](MemoryTier *tier) {
     if (!tier)
       return;

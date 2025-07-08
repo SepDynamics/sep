@@ -193,3 +193,8 @@ make memory_manager_tests
 
 This mirrors the configuration used by `build_no_cuda.sh` while giving
 you direct control over the build location.
+When running the unit tests you may observe tiny non-zero utilization values such
+as `0.000244` after promotion or defragmentation. The test suite treats any value
+below 1% as effectively zero by comparing against `kUtilizationEpsilon`. If you
+see failures around these checks ensure you are using the latest test sources or
+increase the epsilon accordingly.

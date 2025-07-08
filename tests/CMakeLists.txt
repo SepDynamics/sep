@@ -1,5 +1,8 @@
 # Common test configuration
 # Configure test output directory
+include(CTest)
+enable_testing()
+
 set(TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/tests)
 file(MAKE_DIRECTORY ${TEST_OUTPUT_DIR})
 
@@ -36,8 +39,6 @@ add_subdirectory(workbench)
 # Testbed directory temporarily disabled
 
 # Configure test discovery
-include(CTest)
-enable_testing()
 
 add_custom_target(run_all_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure

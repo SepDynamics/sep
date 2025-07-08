@@ -31,7 +31,10 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 // Increase the epsilon slightly so that tiny residual values after tier
 // defragmentation or promotion don't trip equality checks in unit tests.
 // Values below roughly 2% will now be clamped to zero.
-inline constexpr float kUtilizationEpsilon = 2e-2f;
+// Use a slightly more forgiving threshold so residual rounding
+// errors after promotions or defragmentation don't cause tests to
+// report non-zero utilization. Values below ~0.5% are clamped to zero.
+inline constexpr float kUtilizationEpsilon = 5e-3f;
 
 // Memory tier types
 enum class TierType {

@@ -282,6 +282,29 @@ TEST(MemoryTierManagerTest, CalculateRelationshipCoherence) {
     EXPECT_FLOAT_EQ(pb->coherence, 0.0f);
 }
 
+TEST(MemoryTierManagerTest, UtilizationResetsAfterPromotionDemotion) {
+    MemoryTierManager mgr;
+    MemoryTierManager::Config cfg;
+    cfg.stm_size = 4096;
+    cfg.mtm_size = 4096;
+    cfg.ltm_size = 8192;
+    mgr.resetForTesting(cfg);
+
+    MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
+    ASSERT_NE(block, nullptr);
+
+    MemoryBlock* promoted = mgr.updateBlockMetrics(block, 0.9f, 0.9f, 100, 1.0f);
+    ASSERT_NE(promoted, nullptr);
+
+    MemoryBlock* demoted = mgr.updateBlockMetrics(promoted, 0.0f, 0.0f, 0, 1.0f);
+    ASSERT_NE(demoted, nullptr);
+
+    mgr.deallocate(demoted);
+
+    EXPECT_LT(mgr.getTierUtilization(MemoryTierEnum::MTM), kUtilizationEpsilon);
+    EXPECT_LT(mgr.getTierUtilization(MemoryTierEnum::LTM), kUtilizationEpsilon);
+}
+
 #if 0
 TEST(MemoryTierManagerTest, CleanupExpiredPatterns) {
     MemoryTierManager mgr;

@@ -10,6 +10,11 @@ using ::sep::memory::MemoryTierManager;
 using ::sep::memory::MemoryBlock;
 using ::sep::MemoryTierEnum;
 
+// Tests occasionally see a tiny non-zero utilization value after tiers are
+// resized or defragmented.  This threshold allows the checks below to treat
+// anything under roughly 0.1% as zero without masking legitimate usage.
+static constexpr float kTestEpsilon = 1e-3f;
+
 TEST(MemoryTierManagerTest, BasicInitialization) {
     MemoryTierManager mgr;
     EXPECT_NE(nullptr, mgr.getTier(MemoryTierEnum::STM));
@@ -34,7 +39,7 @@ TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
     // the test while avoiding false negatives caused by a residual
     // utilization value like 0.000244.
     EXPECT_LT(mgr.getTierUtilization(::sep::memory::MemoryTierEnum::STM),
-              kUtilizationEpsilon)
+              kTestEpsilon)
         << "Expected STM utilization near 0, got: " << mgr.getTierUtilization(::sep::memory::MemoryTierEnum::STM);
 }
 
@@ -54,7 +59,7 @@ TEST(MemoryTierManagerTest, PromotionAndDemotion) {
     float mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     float ltm_util = mgr.getTierUtilization(MemoryTierEnum::LTM);
     EXPECT_GT(mtm_util, 0.0f) << "Expected non-zero MTM utilization after allocation";
-    EXPECT_NEAR(ltm_util, 0.0f, kUtilizationEpsilon)
+    EXPECT_NEAR(ltm_util, 0.0f, kTestEpsilon)
         << "Expected near-zero LTM utilization initially";
     
     // Trigger promotion to LTM
@@ -65,7 +70,7 @@ TEST(MemoryTierManagerTest, PromotionAndDemotion) {
     // Verify promotion
     mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     ltm_util = mgr.getTierUtilization(MemoryTierEnum::LTM);
-    EXPECT_NEAR(mtm_util, 0.0f, kUtilizationEpsilon)
+    EXPECT_NEAR(mtm_util, 0.0f, kTestEpsilon)
         << "Expected near-zero MTM utilization after promotion";
     EXPECT_GT(ltm_util, 0.0f) << "Expected non-zero LTM utilization after promotion";
 
@@ -78,7 +83,7 @@ TEST(MemoryTierManagerTest, PromotionAndDemotion) {
     mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     ltm_util = mgr.getTierUtilization(MemoryTierEnum::LTM);
     EXPECT_GT(mtm_util, 0.0f) << "Expected non-zero MTM utilization after demotion";
-    EXPECT_NEAR(ltm_util, 0.0f, kUtilizationEpsilon)
+    EXPECT_NEAR(ltm_util, 0.0f, kTestEpsilon)
         << "Expected near-zero LTM utilization after demotion";
 }
 
@@ -98,7 +103,7 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     float mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     float ltm_util = mgr.getTierUtilization(MemoryTierEnum::LTM);
     EXPECT_GT(mtm_util, 0.0f) << "Expected non-zero MTM utilization after allocation";
-    EXPECT_NEAR(ltm_util, 0.0f, kUtilizationEpsilon)
+    EXPECT_NEAR(ltm_util, 0.0f, kTestEpsilon)
         << "Expected near-zero LTM utilization initially";
     
     // Trigger promotion to LTM
@@ -109,7 +114,7 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     // Verify promotion
     mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     ltm_util = mgr.getTierUtilization(MemoryTierEnum::LTM);
-    EXPECT_NEAR(mtm_util, 0.0f, kUtilizationEpsilon)
+    EXPECT_NEAR(mtm_util, 0.0f, kTestEpsilon)
         << "Expected near-zero MTM utilization after promotion";
     EXPECT_GT(ltm_util, 0.0f) << "Expected non-zero LTM utilization after promotion";
 
@@ -122,7 +127,7 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     ltm_util = mgr.getTierUtilization(MemoryTierEnum::LTM);
     EXPECT_GT(mtm_util, 0.0f) << "Expected non-zero MTM utilization after demotion";
-    EXPECT_NEAR(ltm_util, 0.0f, kUtilizationEpsilon)
+    EXPECT_NEAR(ltm_util, 0.0f, kTestEpsilon)
         << "Expected near-zero LTM utilization after demotion";
 }
 
@@ -146,7 +151,7 @@ TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     // Verify promotion
     float stm_util = mgr.getTierUtilization(MemoryTierEnum::STM);
     float mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
-    EXPECT_NEAR(stm_util, 0.0f, kUtilizationEpsilon)
+    EXPECT_NEAR(stm_util, 0.0f, kTestEpsilon)
         << "Expected near-zero STM utilization after promotion";
     EXPECT_GT(mtm_util, 0.0f) << "Expected non-zero MTM utilization after promotion";
     
@@ -159,7 +164,7 @@ TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     stm_util = mgr.getTierUtilization(MemoryTierEnum::STM);
     mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     EXPECT_GT(stm_util, 0.0f) << "Expected non-zero STM utilization after demotion";
-    EXPECT_NEAR(mtm_util, 0.0f, kUtilizationEpsilon)
+    EXPECT_NEAR(mtm_util, 0.0f, kTestEpsilon)
         << "Expected near-zero MTM utilization after demotion"
         << "; MTM util=" << mtm_util << ", STM util=" << stm_util;
 }
@@ -301,8 +306,8 @@ TEST(MemoryTierManagerTest, UtilizationResetsAfterPromotionDemotion) {
 
     mgr.deallocate(demoted);
 
-    EXPECT_LT(mgr.getTierUtilization(MemoryTierEnum::MTM), kUtilizationEpsilon);
-    EXPECT_LT(mgr.getTierUtilization(MemoryTierEnum::LTM), kUtilizationEpsilon);
+    EXPECT_LT(mgr.getTierUtilization(MemoryTierEnum::MTM), kTestEpsilon);
+    EXPECT_LT(mgr.getTierUtilization(MemoryTierEnum::LTM), kTestEpsilon);
 }
 
 #if 0

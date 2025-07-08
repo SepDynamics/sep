@@ -326,7 +326,10 @@ float MemoryTier::calculateUtilization() const {
   if (used == 0)
     return 0.0f;
 
-  float util = static_cast<float>(used) / static_cast<float>(config_.size);
+  // Use double precision to minimize rounding error when the tier size is
+  // large compared to the amount of used memory. The result is converted back
+  // to float for consistency with the rest of the API.
+  double util = static_cast<double>(used) / static_cast<double>(config_.size);
 
   // Guard against residual rounding errors that may appear when the used
   // space is very small compared to the tier size.  Unit tests expect an
@@ -335,7 +338,7 @@ float MemoryTier::calculateUtilization() const {
   if (std::fabs(util) <= kUtilizationEpsilon)
     return 0.0f;
 
-  return util > 1.0f ? 1.0f : util; // Cap at 100%
+  return static_cast<float>(util > 1.0 ? 1.0 : util); // Cap at 100%
 }
 
 std::size_t MemoryTier::getFreeSpace() const {

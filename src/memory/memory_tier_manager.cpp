@@ -638,6 +638,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
     pattern_ptr->coherence = coherence;
   }
 }
+#endif // SEP_TESTBED_STUBS
 
 
 void MemoryTierManager::calculateRelationshipCoherence() {

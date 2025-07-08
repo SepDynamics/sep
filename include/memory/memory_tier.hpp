@@ -28,10 +28,11 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 // Small epsilon for utilization metrics. Keeps a 1 KiB allocation visible in a
 // 1 MiB tier while clamping rounding noise after promotions or defragmentation.
-// Increase the epsilon slightly so that tiny residual values after tier
-// defragmentation or promotion don't trip equality checks in unit tests.
-// Values below roughly 1% will now be clamped to zero.
-inline constexpr float kUtilizationEpsilon = 1e-2f;
+// Tests occasionally observed utilization values around 0.000244 after complex
+// promotion or defragmentation cycles, even when tiers were logically empty.
+// Lower the epsilon so anything under 0.1% is treated as zero to keep these
+// residuals from causing spurious test failures across platforms.
+inline constexpr float kUtilizationEpsilon = 1e-3f;
 
 // Memory tier types
 enum class TierType {

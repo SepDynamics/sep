@@ -2,6 +2,8 @@ if(NOT BUILD_TESTING)
     return()
 endif()
 
+set(SEP_HAS_REDIS 0)
+
 find_package(GTest REQUIRED)
 
 # Hiredis support is optional for unit tests. The upstream CMake
@@ -51,6 +53,7 @@ target_compile_definitions(memory_manager_tests PRIVATE
     SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
     SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
     SEP_HAS_REDIS=${SEP_HAS_REDIS}
+    SEP_NO_REDIS
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
 )
 
@@ -67,6 +70,7 @@ target_compile_definitions(memory_manager_tests PRIVATE
     SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
     SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
     SEP_HAS_REDIS=${SEP_HAS_REDIS}
+    SEP_NO_REDIS
 )
 
 add_test(NAME memory_manager_tests COMMAND memory_manager_tests)

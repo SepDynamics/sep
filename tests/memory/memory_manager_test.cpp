@@ -10,27 +10,27 @@ TEST(MemoryManager, BasicSTMAllocation) {
     sep::memory::MemoryTierManager mgr;
     sep::memory::MemoryBlock* blk = mgr.allocate(128, sep::memory::MemoryTierEnum::STM);
     ASSERT_NE(blk, nullptr);
-    EXPECT_GT(mgr.getTierUtilization(mem::MemoryTierEnum::STM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f);
     mgr.deallocate(blk);
-    EXPECT_NEAR(mgr.getTierUtilization(mem::MemoryTierEnum::STM), 0.0f, EPSILON);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f, EPSILON);
 }
 
 TEST(MemoryManager, BasicMTMAllocation) {
     sep::memory::MemoryTierManager mgr;
     sep::memory::MemoryBlock* blk = mgr.allocate(256, sep::memory::MemoryTierEnum::MTM);
     ASSERT_NE(blk, nullptr);
-    EXPECT_GT(mgr.getTierUtilization(mem::MemoryTierEnum::MTM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f);
     mgr.deallocate(blk);
-    EXPECT_NEAR(mgr.getTierUtilization(mem::MemoryTierEnum::MTM), 0.0f, EPSILON);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f, EPSILON);
 }
 
 TEST(MemoryManager, BasicLTMAllocation) {
     sep::memory::MemoryTierManager mgr;
     sep::memory::MemoryBlock* blk = mgr.allocate(512, sep::memory::MemoryTierEnum::LTM);
     ASSERT_NE(blk, nullptr);
-    EXPECT_GT(mgr.getTierUtilization(mem::MemoryTierEnum::LTM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f);
     mgr.deallocate(blk);
-    EXPECT_NEAR(mgr.getTierUtilization(mem::MemoryTierEnum::LTM), 0.0f, EPSILON);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f, EPSILON);
 }
 
 TEST(MemoryManager, MultipleAllocations) {
@@ -41,15 +41,15 @@ TEST(MemoryManager, MultipleAllocations) {
     ASSERT_NE(s, nullptr);
     ASSERT_NE(m, nullptr);
     ASSERT_NE(l, nullptr);
-    EXPECT_GT(mgr.getTierUtilization(mem::MemoryTierEnum::STM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(mem::MemoryTierEnum::MTM), 0.0f);
-    EXPECT_GT(mgr.getTierUtilization(mem::MemoryTierEnum::LTM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f);
     mgr.deallocate(s);
     mgr.deallocate(m);
     mgr.deallocate(l);
-    EXPECT_NEAR(mgr.getTierUtilization(mem::MemoryTierEnum::STM), 0.0f, EPSILON);
-    EXPECT_NEAR(mgr.getTierUtilization(mem::MemoryTierEnum::MTM), 0.0f, EPSILON);
-    EXPECT_NEAR(mgr.getTierUtilization(mem::MemoryTierEnum::LTM), 0.0f, EPSILON);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f, EPSILON);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f, EPSILON);
+    EXPECT_NEAR(mgr.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f, EPSILON);
 }
 
 TEST(MemoryManager, TotalAllocatedMemory) {

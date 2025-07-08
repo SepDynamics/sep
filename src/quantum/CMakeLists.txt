@@ -28,6 +28,7 @@ add_library(sep_quantum STATIC
     pattern_processor_interface.cpp
     pattern_evolution.cpp
     processor.cpp
+    manifold_config.cpp
     quantum_manifold_optimizer.cpp
 )
 

@@ -64,7 +64,7 @@ check_package() {
     
     # Check for libraries in multiple locations (suppress permission errors)
     if ldconfig -p 2>/dev/null | grep -q -i "$lib_base" ||
-       find /usr/lib* -name "${lib_base}*.so*" 2>/dev/null | grep -q . ||
+       find /usr/lib* /usr/lib/x86_64-linux-gnu -name "${lib_base}*.so*" 2>/dev/null | grep -q . ||
        find /usr/local/lib* -name "${lib_base}*.so*" 2>/dev/null | grep -q .; then
       echo "✓ $pkg_name found"
       return 0
@@ -307,18 +307,26 @@ fi
 # Create build directory
 mkdir -p "${BUILD_DIR}"
 
-# Create symbolic link for Cycles if it exists in the primary location
-if [ ! -L "${CYCLES_ROOT_DIR}" ] && [ -d "${SRC_DIR}/cycles" ]; then
-  echo "Found Cycles at ${SRC_DIR}/cycles, creating symlink..."
-  mkdir -p "$(dirname "${CYCLES_ROOT_DIR}")"
-  ln -sf "${SRC_DIR}/cycles" "${CYCLES_ROOT_DIR}"
-fi
+# Optionally disable Cycles integration
+if [ "${SKIP_CYCLES:-0}" != "1" ]; then
+  # Create symbolic link for Cycles if it exists in the primary location
+  if [ ! -L "${CYCLES_ROOT_DIR}" ] && [ -d "${SRC_DIR}/cycles" ]; then
+    echo "Found Cycles at ${SRC_DIR}/cycles, creating symlink..."
+    mkdir -p "$(dirname "${CYCLES_ROOT_DIR}")"
+    ln -sf "${SRC_DIR}/cycles" "${CYCLES_ROOT_DIR}"
+  fi
 
-if [ ! -d "${CYCLES_ROOT_DIR}" ]; then
-  echo "Error: Cycles directory not found at ${SRC_DIR}/cycles or ${CYCLES_ROOT_DIR}."
-  exit 1
+  if [ ! -d "${CYCLES_ROOT_DIR}" ]; then
+    echo "Warning: Cycles directory not found. Building without Cycles support."
+    export CMAKE_ARGS="${CMAKE_ARGS} -DSEP_WITH_CYCLES=OFF"
+    SKIP_CYCLES=1
+  else
+    echo "Using Cycles root: ${CYCLES_ROOT_DIR}"
+  fi
+else
+  echo "Skipping Cycles checks by request"
+  export CMAKE_ARGS="${CMAKE_ARGS} -DSEP_WITH_CYCLES=OFF"
 fi
-echo "Using Cycles root: ${CYCLES_ROOT_DIR}"
 
 # --- Dependency Detection ---
 # Check for PipeWire using pkg-config (most reliable method)

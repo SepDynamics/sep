@@ -619,7 +619,6 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     }
   }
 }
-#endif // !SEP_TESTBED_STUBS
 
 void MemoryTierManager::pruneWeakRelationships() {
   std::lock_guard<std::mutex> lock(relationships_mutex);
@@ -648,47 +647,14 @@ void MemoryTierManager::calculateRelationshipCoherence() {
           sum += r.second;
         }
         float avg = static_cast<float>(sum / rels.size());
-        pattern_ptr->coherence = 1.0f - avg;
+        pattern_ptr->coherence = avg;
+      } else {
+        pattern_ptr->coherence = 0.0f;
       }
     }
   }
 }
-#endif
-
-
-
-void MemoryTierManager::cleanupExpiredPatterns() {
-  std::lock_guard<std::mutex> lock(registry_mutex);
-  for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
-    if (it->second->coherence < config_.demote_threshold) {
-      it = pattern_registry_.erase(it);
-    } else {
-      ++it;
-    }
-  }
-}
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                               size_t max_count) {
-  MemoryTier *t = getTier(tier);
-  if (!t)
-    return;
-  const auto &patterns = t->getPatterns();
-  if (patterns.size() <= max_count)
-    return;
-  std::vector<std::pair<size_t, float>> sorted;
-  sorted.reserve(patterns.size());
-  for (const auto &[id, pat] : patterns) {
-    sorted.emplace_back(id, pat.coherence);
-  }
-  std::sort(sorted.begin(), sorted.end(),
-            [](const auto &a, const auto &b) { return a.second > b.second; });
-  for (size_t i = max_count; i < sorted.size(); ++i) {
-    t->removePattern(sorted[i].first);
-    removePattern(sorted[i].first);
-  }
-}
-#endif // SEP_TESTBED_STUBS
+#endif // !SEP_TESTBED_STUBS
 
 } // namespace memory
 } // namespace sep

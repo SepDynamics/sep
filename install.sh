@@ -2,6 +2,9 @@
 # SEP Engine dependency installer
 set -euo pipefail
 
+# Pinned Python version used for all installs
+PYTHON_VERSION="3.13.*"
+
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
 sudo apt-get update
@@ -71,7 +74,9 @@ if ! command -v python3.13 >/dev/null; then
   echo "Installing Python 3.13..."
   sudo add-apt-repository ppa:deadsnakes/ppa -y
   sudo apt-get update -y
-  sudo apt-get install -y python3.13 python3.13-dev | tee -a "$LOG_DIR/apt.log"
+  # Explicitly install the pinned version
+  sudo apt-get install -y "python3.13=${PYTHON_VERSION}" \
+    "python3.13-dev=${PYTHON_VERSION}" | tee -a "$LOG_DIR/apt.log"
 fi
 
 # Install GCC 14 if available

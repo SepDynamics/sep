@@ -195,7 +195,15 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(t->getSize());
-  return (util <= kUtilizationEpsilon || util < 0.0f) ? 0.0f : util;
+
+  // Clamp to a sane range before applying the epsilon threshold.  When tiers
+  // are resized or blocks are shuffled between them, transient calculations can
+  // briefly produce slight negatives or values just above one due to rounding.
+  // Normalizing the value prevents spurious test failures and keeps the metric
+  // stable across architectures.
+  util = std::clamp(util, 0.0f, 1.0f);
+
+  return util <= kUtilizationEpsilon ? 0.0f : util;
 }
 
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {

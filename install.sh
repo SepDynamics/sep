@@ -36,7 +36,8 @@ PACKAGES=(
   libembree-dev libpugixml-dev libopenjp2-7-dev
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
   libfmt-dev pkg-config
-  libspdlog-dev libgtest-dev libgmock-dev libhiredis-dev libglm-dev nlohmann-json3-dev
+  libspdlog-dev libgtest-dev libgmock-dev libgflags-dev libgoogle-glog-dev \
+  libhiredis-dev libglm-dev nlohmann-json3-dev
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
   valgrind

@@ -51,6 +51,9 @@ target_link_libraries(memory_minimal_tests PRIVATE
     sep_memory
     sep_core
 )
+if(spdlog_FOUND)
+    target_link_libraries(memory_minimal_tests PRIVATE spdlog::spdlog)
+endif()
 
 target_compile_definitions(memory_minimal_tests PRIVATE
     SEP_MEMORY_MINIMAL

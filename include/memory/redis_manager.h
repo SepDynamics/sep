@@ -1,7 +1,7 @@
 #pragma once
 
 #include "memory/types.h"
-#include "persistence/pattern_data.hpp"
+#include "persistence/persistent_pattern_data.hpp"
 
 #ifndef SEP_NO_REDIS
 #  include <hiredis/hiredis.h>
@@ -63,7 +63,12 @@ private:
         std::string getTierPatternsKey(const std::string& tier) const;
         std::string normalizeTier(const std::string& tier) const;
 
-        struct redisContext* context_;
+#if SEP_HAS_HIREDIS
+        using RedisContextPtr = ::redisContext*;
+#else
+        using RedisContextPtr = void*;
+#endif
+        RedisContextPtr context_{};
         bool connected_;
         std::mutex mutex_;
     };

@@ -1,40 +1,60 @@
 #pragma once
 
-#include "demo_manager.hpp"
-#include "sep_engine_wrapper.h"
+#include <array>
 #include <memory>
 #include <random>
 #include <vector>
 
-namespace sep {
-namespace workbench {
+#include "demo_manager.hpp"
+#include "../sep_engine_wrapper.h"
 
-class NeuroSimDemo : public Demo {
-public:
-    void init() override;
-    void update(float dt) override;
-    void render() override;
-    void cleanup() override;
-    void handleKeyboard(unsigned char key) override;
-    void handleMouse(int x, int y, int button) override;
+namespace sep
+{
+    namespace workbench
+    {
 
-private:
-    struct Neuron {
-        quantum::Pattern pattern;
-        float potential{0.f};
-        uint64_t node_id{0};
-    };
+        class NeuroSimDemo : public Demo
+        {
+        public:
+            NeuroSimDemo() : rd_{}, seed_{rd_()}, rng_{seed_} {}
 
-    std::unique_ptr<memory::MemoryTierManager> memory_manager_;
-    std::vector<Neuron> neurons_;
-    std::mt19937 rng_{std::random_device{}()};
+            void init() override;
+            void update(float dt) override;
+            void render() override;
+            void cleanup() override;
+            void handleKeyboard(unsigned char key) override;
+            void handleMouse(int x, int y, int button) override;
 
-    float threshold_{1.f};
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    float learning_rate_{0.05f};
-    float connection_prob_{0.2f};
-};
+        private:
+            struct Neuron
+            {
+#ifdef SEP_WORKBENCH_DEMO
+                sep::Pattern pattern;  // In demo mode, Pattern is directly in sep namespace
+#else
+                sep::quantum::Pattern pattern;  // In non-demo mode, Pattern is in quantum namespace
+#endif
+                float potential{0.f};
+                uint64_t node_id{0};
+            };
 
-} // namespace workbench
-} // namespace sep
+            // Memory manager type depends on demo mode
+#ifdef SEP_WORKBENCH_DEMO
+            std::unique_ptr<sep::MemoryTierManager> memory_manager_;  // In demo mode
+#else
+            std::unique_ptr<sep::memory::MemoryTierManager> memory_manager_;  // In non-demo mode
+#endif
+
+            std::vector<Neuron> neurons_;
+            std::random_device rd_;
+            std::seed_seq seed_;
+            std::mt19937 rng_;
+
+            float threshold_{1.f};
+            float decay_{0.1f};
+            float input_strength_{0.5f};
+            float learning_rate_{0.05f};
+            float connection_prob_{0.2f};
+        };
+
+    }  // namespace workbench
+}  // namespace sep

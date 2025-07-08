@@ -30,9 +30,12 @@ def install_package(package_name):
         print(f"Error installing {package_name}: {e}")
         return False
 
-def run_script(script_path, with_cuda=False):
+def run_script(script_path, with_cuda=False, env_overrides=None):
     env = os.environ.copy()
     env["INSTALL_CUDA"] = "1" if with_cuda else "0"
+    if env_overrides:
+        if env_overrides.get("minimal"):
+            env["INSTALL_MINIMAL"] = "1"
     try:
         subprocess.check_call(["bash", script_path], env=env)
         return True
@@ -47,6 +50,7 @@ packages = ["requests", "numpy"]
 def main():
     parser = argparse.ArgumentParser(description="Install SEP Engine dependencies")
     parser.add_argument("--with-cuda", action="store_true", help="Install CUDA toolkit")
+    parser.add_argument("--minimal", action="store_true", help="Install only packages required for running unit tests")
     args = parser.parse_args()
 
     if install_pip():
@@ -54,7 +58,11 @@ def main():
             install_package(package)
 
     script = os.path.join(os.path.dirname(__file__), "scripts", "install_dependencies.sh")
-    if not run_script(script, with_cuda=args.with_cuda):
+    env = {
+        "with_cuda": args.with_cuda,
+        "minimal": args.minimal,
+    }
+    if not run_script(script, with_cuda=args.with_cuda, env_overrides=env):
         sys.exit(1)
 
     print("\nDependency installation complete. You can now try enabling the SEP Engine addon.")

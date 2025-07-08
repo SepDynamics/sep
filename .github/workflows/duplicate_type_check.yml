@@ -1,0 +1,29 @@
+name: Duplicate Type Check
+
+on:
+  push:
+    paths:
+      - 'include/**'
+      - 'src/**'
+      - 'examples/**'
+      - 'tests/**'
+      - '_sep/testbed/**'
+      - 'scripts/check_duplicate_types.py'
+      - '.github/workflows/duplicate_type_check.yml'
+  pull_request:
+    paths:
+      - 'include/**'
+      - 'src/**'
+      - 'examples/**'
+      - 'tests/**'
+      - '_sep/testbed/**'
+      - 'scripts/check_duplicate_types.py'
+      - '.github/workflows/duplicate_type_check.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run duplicate type check
+        run: python3 scripts/check_duplicate_types.py

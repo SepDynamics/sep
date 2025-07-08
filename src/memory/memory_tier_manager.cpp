@@ -639,18 +639,6 @@ void MemoryTierManager::calculateRelationshipCoherence() {
   }
 }
 
-void MemoryTierManager::pruneWeakRelationships() {
-  std::lock_guard<std::mutex> lock(relationships_mutex);
-  for (auto &[id, relations] : pattern_relationships_) {
-    for (auto it = relations.begin(); it != relations.end();) {
-      if (it->second < config_.demote_threshold) { // Reuse demote threshold
-        it = relations.erase(it);
-      } else {
-        ++it;
-      }
-    }
-  }
-}
 
 void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> reg_lock(registry_mutex);

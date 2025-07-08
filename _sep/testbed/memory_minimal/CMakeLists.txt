@@ -11,6 +11,8 @@ add_executable(memory_minimal_tests
 )
 
 find_package(GTest REQUIRED)
+find_package(fmt REQUIRED)
+find_package(spdlog)
 find_package(Threads REQUIRED)
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../src)
@@ -18,24 +20,25 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../src)
 set(MEMORY_SRC
     ${SRC_DIR}/memory/memory_tier.cpp
     ${SRC_DIR}/memory/memory_tier_manager.cpp
-    ${SRC_DIR}/core/allocation_metrics.cpp
     ${SRC_DIR}/core/logging.cpp
-    ${SRC_DIR}/core/metrics_collector.cpp
-    ${SRC_DIR}/core/prometheus_exporter.cpp
-    ${SRC_DIR}/core/tracing.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/memory_tier_manager_stubs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/allocation_metrics_stub.cpp
 )
 
 target_sources(memory_minimal_tests PRIVATE ${MEMORY_SRC})
 target_compile_definitions(memory_minimal_tests PRIVATE SEP_MINIMAL=1)
+target_compile_definitions(memory_minimal_tests PRIVATE SEP_TESTBED_STUBS)
 
 target_include_directories(memory_minimal_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
 )
 
 target_link_libraries(memory_minimal_tests PRIVATE
-    sep_core
     GTest::GTest
     GTest::Main
+    fmt::fmt
+    spdlog::spdlog
+    Threads::Threads
 )
 
 target_compile_definitions(memory_minimal_tests PRIVATE SEP_MEMORY_MINIMAL)

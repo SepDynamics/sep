@@ -38,7 +38,7 @@ using ::sep::SEPResult;
 // as zero when reporting utilization metrics.
 // Allow slightly higher tolerance so tiny residuals after promotions do
 // not cause test failures.
-inline constexpr float kUtilizationEpsilon = 1e-3f;
+inline constexpr float kUtilizationEpsilon = 1e-6f;
 
 // Memory tier types
 enum class TierType {

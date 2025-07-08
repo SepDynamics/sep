@@ -75,9 +75,6 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.enable_compression = mc.enable_compression;
 #endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
-#else
-    instance_ = std::make_unique<MemoryTierManager>();
-#endif
   });
   return *instance_;
 }
@@ -580,6 +577,7 @@ void MemoryTierManager::pruneWeakRelationships() {
   }
 }
 
+#ifndef SEP_TESTBED_STUBS
 void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> reg_lock(registry_mutex);
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
@@ -597,6 +595,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
     }
   }
 }
+#endif
 
 } // namespace memory
 } // namespace sep

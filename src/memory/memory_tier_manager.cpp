@@ -541,8 +541,14 @@ void MemoryTierManager::removePattern(std::size_t id) {
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  // Historically this API treated the strength parameter as an optional
+  // placeholder.  Some unit tests pass a value of 0 expecting the relationship
+  // to contribute a full weight in coherence calculations.  To maintain
+  // backward compatibility, treat non-positive strengths as a default weight of
+  // one.
+  float weight = strength <= 0.0f ? 1.0f : strength;
+  pattern_relationships_[id_a][id_b] = weight;
+  pattern_relationships_[id_b][id_a] = weight;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {

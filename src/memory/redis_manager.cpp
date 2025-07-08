@@ -14,8 +14,9 @@
 #include <cuda_runtime.h>
 #include <cstdint>
 #include <cstring>
-#include <hiredis/hiredis.h>
-#define SEP_HAS_HIREDIS 1
+#if SEP_HAS_HIREDIS
+#  include <hiredis/hiredis.h>
+#endif
 // Define namespace alias to clarify that Manager is in the logging namespace
 namespace logging = sep::logging; 
 #include "memory/memory_tier_manager.hpp"

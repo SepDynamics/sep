@@ -1,15 +1,13 @@
 #include "genesis_pattern.hpp"
-#include "sep_engine_wrapper.h"
-#include "core/manager.h"
 
 namespace sep {
 namespace workbench {
 
 void GenesisPatternDemo::init() {
-    const auto& config_mgr = sep::core::config::ConfigManager::getInstance();
+    const auto& config_mgr = ConfigManager::getInstance();
     const auto& genesis_config = config_mgr.getEngineConfig().genesis_pattern();
 
-    pattern_processor_ = std::make_unique<PatternProcessor>(engine_);
+    pattern_processor_ = std::make_unique<PatternProcessor>();
     coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
 
     // Initialize from config
@@ -20,7 +18,7 @@ void GenesisPatternDemo::init() {
 }
 
 void GenesisPatternDemo::initializePatterns() {
-    const auto& config_mgr = sep::core::config::ConfigManager::getInstance();
+    const auto& config_mgr = ConfigManager::getInstance();
     const auto& genesis_config = config_mgr.getEngineConfig().genesis_pattern();
 
     // Initialize base quantum state patterns
@@ -46,7 +44,7 @@ void GenesisPatternDemo::update(float dt) {
 }
 
 void GenesisPatternDemo::evolvePatterns(float dt) {
-    const auto& config_mgr = sep::core::config::ConfigManager::getInstance();
+    const auto& config_mgr = ConfigManager::getInstance();
     const auto& genesis_config = config_mgr.getEngineConfig().genesis_pattern();
 
     // Process pattern evolution with configured rate
@@ -70,7 +68,7 @@ void GenesisPatternDemo::evolvePatterns(float dt) {
 void GenesisPatternDemo::updateVisualization() {
     if (!renderer_) return;
 
-    const auto& config_mgr = sep::core::config::ConfigManager::getInstance();
+    const auto& config_mgr = ConfigManager::getInstance();
     const auto& genesis_config = config_mgr.getEngineConfig().genesis_pattern();
 
     // Update renderer with current pattern state
@@ -102,7 +100,7 @@ void GenesisPatternDemo::cleanup() {
            evolution_rate_, coherence_threshold_, view_.rotation, view_.zoom);
 #else
     // Save current state to config if needed
-    const auto& config_mgr = sep::core::config::ConfigManager::getInstance();
+    const auto& config_mgr = ConfigManager::getInstance();
     auto& genesis_config = config_mgr.getEngineConfig().genesis_pattern();
     genesis_config.save_state.evolution_rate = evolution_rate_;
     genesis_config.save_state.coherence_threshold = coherence_threshold_;
@@ -116,7 +114,7 @@ void GenesisPatternDemo::cleanup() {
 }
 
 void GenesisPatternDemo::handleKeyboard(unsigned char key) {
-    const auto& config_mgr = sep::core::config::ConfigManager::getInstance();
+    const auto& config_mgr = ConfigManager::getInstance();
     const auto& genesis_config = config_mgr.getEngineConfig().genesis_pattern();
 
     switch (key) {
@@ -146,7 +144,7 @@ void GenesisPatternDemo::handleKeyboard(unsigned char key) {
 }
 
 void GenesisPatternDemo::handleMouse(int x, int y, int button) {
-    const auto& config_mgr = sep::core::config::ConfigManager::getInstance();
+    const auto& config_mgr = ConfigManager::getInstance();
     const auto& genesis_config = config_mgr.getEngineConfig().genesis_pattern();
 
     // Update rotation based on mouse movement

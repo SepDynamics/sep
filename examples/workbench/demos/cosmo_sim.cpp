@@ -14,7 +14,7 @@ void CosmoSim::init() {
     particle_count_ = 100;
 #else
     // When integrated with full engine config, load cosmo_sim settings
-    const auto& cfg = getConfigManager().getEngineConfig().cosmo();
+    const auto& cfg = ConfigManager::getInstance().getEngineConfig().cosmo();
     box_size_ = cfg.box_size;
     time_step_ = cfg.time_step;
 #endif

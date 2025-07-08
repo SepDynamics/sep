@@ -58,7 +58,7 @@ void initializeEngine() {
   }
 #else
   // Use the correct ConfigManager class with proper namespace
-  const auto &config_manager = sep::core::config::ConfigManager::getInstance();
+  const auto &config_manager = ConfigManager::getInstance();
   const auto &engine_config = config_manager.getEngineConfig();
 
   g_engine = std::make_unique<Engine>();
@@ -91,7 +91,7 @@ void initializeRenderer() {
   }
 #else
   // Load configuration
-  auto &config_manager = sep::core::config::ConfigManager::getInstance();
+  auto &config_manager = ConfigManager::getInstance();
   if (!config_manager.load("config.json")) {
     throw std::runtime_error("Failed to load configuration");
   }

@@ -6,6 +6,8 @@
 #include "sep_engine_wrapper.h"
 #include "demo_manager.hpp"
 #include "config.hpp"
+
+// Include demo headers after wrapper to ensure they use mock types
 #include "demos/genesis_pattern.hpp"
 #include "demos/audio_visualizer.hpp"
 #include "demos/memory_garden.hpp"
@@ -16,6 +18,18 @@
 #include "demos/neural_demo.hpp"
 #include "demos/digital_physics_demo.hpp"
 #include "demos/annealing_demo.hpp"
+
+using sep::workbench::Demo;
+using sep::workbench::GenesisPatternDemo;
+using sep::workbench::AudioVisualizerDemo;
+using sep::workbench::MemoryGardenDemo;
+using sep::workbench::CosmoDemo;
+using sep::workbench::CosmoSim;
+using sep::workbench::DrugDiscoveryDemo;
+using sep::workbench::FlockingDemo;
+using sep::workbench::NeuralDemo;
+using sep::workbench::DigitalPhysicsDemo;
+using sep::workbench::AnnealingDemo;
 
 using namespace sep;
 using namespace sep::workbench;
@@ -96,36 +110,56 @@ void registerDemos() {
     auto& demo_manager = DemoManager::getInstance();
     demo_manager.initialize(g_engine.get(), g_renderer.get());
 
-    // Register available demos
-    demo_manager.registerDemo("genesis", []() {
-        return std::make_unique<GenesisPatternDemo>();
+    // Register available demos with engine and renderer access
+    demo_manager.registerDemo("genesis", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<GenesisPatternDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("audio", []() {
-        return std::make_unique<AudioVisualizerDemo>();
+    demo_manager.registerDemo("audio", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<AudioVisualizerDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("memory", []() {
-        return std::make_unique<MemoryGardenDemo>();
+    demo_manager.registerDemo("memory", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<MemoryGardenDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("cosmo", []() {
-        return std::make_unique<CosmoDemo>();
+    demo_manager.registerDemo("cosmo", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<CosmoDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("cosmo_sim", []() {
-        return std::make_unique<CosmoSim>();
+    demo_manager.registerDemo("cosmo_sim", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<CosmoSim>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("drug_discovery", []() {
-        return std::make_unique<DrugDiscoveryDemo>();
+    demo_manager.registerDemo("drug_discovery", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<DrugDiscoveryDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("flocking", []() {
-        return std::make_unique<FlockingDemo>();
+    demo_manager.registerDemo("flocking", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<FlockingDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("neural", []() {
-        return std::make_unique<NeuralDemo>();
+    demo_manager.registerDemo("neural", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<NeuralDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("digital_physics", []() {
-        return std::make_unique<DigitalPhysicsDemo>();
+    demo_manager.registerDemo("digital_physics", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<DigitalPhysicsDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
-    demo_manager.registerDemo("annealing", []() {
-        return std::make_unique<AnnealingDemo>();
+    demo_manager.registerDemo("annealing", [eng=g_engine.get(), rend=g_renderer.get()]() {
+        auto demo = std::make_unique<AnnealingDemo>();
+        demo->initialize(eng, rend);
+        return demo;
     });
 
     // Start with Genesis Pattern demo
@@ -231,3 +265,4 @@ void cleanup() {
     g_renderer.reset();
     g_engine.reset();
 }
+

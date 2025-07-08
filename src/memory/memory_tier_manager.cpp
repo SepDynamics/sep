@@ -1,14 +1,8 @@
 #include "memory/memory_tier_manager.hpp"
 #include "core/common.h"
 #include "core/types.h"
-#ifndef SEP_MINIMAL
-#include "core/manager.h"
-#endif
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
-#ifndef SEP_MEMORY_MINIMAL
-#include "core/manager.h" // for ConfigManager
-#endif
 
 namespace sep { namespace config { class ConfigManager; } }
 

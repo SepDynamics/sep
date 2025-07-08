@@ -1,9 +1,11 @@
 #pragma once
 
-#include "demo_manager.hpp"
+#include "../demo_manager.hpp"
 #include <memory>
-#include "quantum/processor.h"
-#include "memory/quantum_coherence_manager.h"
+#include "../sep_engine_wrapper.h"
+
+using sep::workbench::PatternProcessor;
+using sep::workbench::QuantumCoherenceManager;
 
 namespace sep {
 namespace workbench {
@@ -11,6 +13,9 @@ namespace workbench {
 
 class GenesisPatternDemo : public Demo {
 public:
+    GenesisPatternDemo() = default;
+    ~GenesisPatternDemo() override = default;
+
     void init() override;
     void update(float dt) override;
     void render() override;

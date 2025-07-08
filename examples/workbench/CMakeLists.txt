@@ -1,19 +1,23 @@
 cmake_minimum_required(VERSION 3.16)
 
 add_executable(sep_workbench
-    main.cpp
-    config.cpp
     demo_manager.cpp
-    demos/genesis_pattern.cpp
     demos/audio_visualizer.cpp
     demos/memory_garden.cpp
-    demos/cosmo_demo.cpp
-    demos/cosmo_sim.cpp
-    demos/drug_discovery_demo.cpp
-    demos/flocking_demo.cpp
-    demos/neural_demo.cpp
-    demos/digital_physics_demo.cpp
     demos/annealing_demo.cpp
+    demos/drug_discovery_demo.cpp
+    demos/neural_demo.cpp
+    demos/cosmo_demo.cpp
+    demos/digital_physics_demo.cpp
+    demos/drug_optimizer.cpp
+    demos/annealing_sim.cpp
+    demos/cosmo_sim.cpp
+    demos/neuro_sim.cpp
+    demos/flocking_demo.cpp
+    demos/genesis_pattern.cpp
+    legacy_main.cpp
+    main.cpp
+    config.cpp
 )
 
 set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
@@ -31,6 +35,7 @@ endif()
 
 target_include_directories(sep_workbench PRIVATE
     ${PROJECT_SOURCE_DIR}/examples/workbench
+    ${PROJECT_SOURCE_DIR}/examples/workbench/demos
     ${PROJECT_SOURCE_DIR}/include
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/cycles/src>
 )

@@ -1,5 +1,5 @@
 #include "neuro_sim.hpp"
-#include <config.hpp>
+#include "../sep_engine_wrapper.h"
 #include <algorithm>
 #include <glm/glm.hpp>
 #include "quantum/evolution.h"
@@ -15,7 +15,7 @@ void NeuroSimDemo::init() {
     input_strength_ = 0.5f;
     connection_prob_ = 0.2f;
 #else
-    const auto& cfg = sep::core::config::ConfigManager::getInstance().getEngineConfig().neural_demo();
+    const auto& cfg = cConfigManager::getInstance().getEngineConfig().neural_demo();
     std::size_t neuron_count = cfg.network.neuron_count;
     threshold_ = cfg.neuron.threshold;
     decay_ = cfg.neuron.decay;

@@ -1,5 +1,5 @@
 #include "cosmo_demo.hpp"
-#include <config.hpp>
+#include "../sep_engine_wrapper.h"
 #include <cstdlib>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>

@@ -138,7 +138,6 @@ void MemoryTierManager::deallocate(MemoryBlock *block) {
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(block->ptr);
-    legacy_lookup_map_.erase(block->ptr);
   }
   if (MemoryTier *t = getTier(block->tier)) {
     t->deallocate(block);
@@ -155,8 +154,7 @@ MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr) {
   auto it = lookup_map_.find(ptr);
   if (it != lookup_map_.end())
     return it->second;
-  auto it2 = legacy_lookup_map_.find(ptr);
-  return it2 != legacy_lookup_map_.end() ? it2->second : nullptr;
+  return nullptr;
 }
 
 // --- Tier Management & Metrics ---
@@ -415,25 +413,15 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_[block->ptr] = out_block;
     lookup_map_[out_block->ptr] = out_block;
     lookup_map_[block->ptr] = out_block; // allow lookups using old pointer
-    legacy_lookup_map_[block->ptr] = out_block;
   }
 
   // Refresh the lookup table so callers can resolve blocks after the move.
   rebuildLookup();
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
-    lookup_map_[old_ptr] = out_block;
-  }
-
-  {
-    std::lock_guard<std::mutex> lock(lookup_mutex);
-    lookup_map_[old_ptr] = out_block;
-  }
-
-  {
-    std::lock_guard<std::mutex> lock(lookup_mutex);
     // Preserve the old pointer as an alias so callers using stale addresses
     // can still resolve the promoted block via findBlockByPtr.
+    lookup_map_[old_ptr] = out_block;
     lookup_map_[block->ptr] = out_block;
   }
 
@@ -569,55 +557,6 @@ void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
   pattern_relationships_[id_b][id_a] = static_cast<float>(strength);
 }
 
-void MemoryTierManager::cleanupExpiredPatterns() {
-  std::lock_guard<std::mutex> reg_lock(registry_mutex);
-  for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
-    if (it->second->coherence < config_.demote_threshold) {
-      std::size_t id = it->first;
-      it = pattern_registry_.erase(it);
-      std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-      pattern_relationships_.erase(id);
-      for (auto &pair : pattern_relationships_) {
-        pair.second.erase(id);
-      }
-    } else {
-      ++it;
-    }
-  }
-}
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                                size_t max_count) {
-  MemoryTier *t = getTier(tier);
-  if (!t)
-    return;
-
-  auto &patterns = const_cast<std::unordered_map<size_t, PersistentPatternData> &>(
-      t->getPatterns());
-
-  if (patterns.size() <= max_count)
-    return;
-
-  std::vector<std::pair<size_t, float>> ranked;
-  ranked.reserve(patterns.size());
-  for (const auto &[id, pdata] : patterns)
-    ranked.emplace_back(id, pdata.coherence);
-
-  std::sort(ranked.begin(), ranked.end(),
-            [](const auto &a, const auto &b) { return a.second > b.second; });
-
-  for (size_t i = max_count; i < ranked.size(); ++i) {
-    size_t id = ranked[i].first;
-    t->removePattern(id);
-    std::lock_guard<std::mutex> reg_lock(registry_mutex);
-    pattern_registry_.erase(id);
-    std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-    pattern_relationships_.erase(id);
-    for (auto &pair : pattern_relationships_) {
-      pair.second.erase(id);
-    }
-  }
-}
 
 void MemoryTierManager::pruneWeakRelationships() {
   std::lock_guard<std::mutex> lock(relationships_mutex);
@@ -647,21 +586,13 @@ void MemoryTierManager::calculateRelationshipCoherence() {
           sum += r.second;
         }
         float avg = static_cast<float>(sum / rels.size());
-        pattern_ptr->coherence = 1.0f - avg;
+        pattern_ptr->coherence = avg;
       }
     }
   }
 }
 #endif
 
-void MemoryTierManager::cleanupExpiredPatterns() {
-  // Stub implementation for minimal build
-}
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                                size_t max_count) {
-  // Stub implementation for minimal build
-}
 
 void MemoryTierManager::cleanupExpiredPatterns() {
   std::lock_guard<std::mutex> lock(registry_mutex);

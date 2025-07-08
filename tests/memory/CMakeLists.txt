@@ -32,6 +32,8 @@ set(TEST_SOURCES
     pattern_promotion_test.cpp
 )
 
+add_executable(memory_manager_tests ${TEST_SOURCES})
+
 if(SEP_HAS_REDIS)
     target_sources(memory_manager_tests PRIVATE redis_manager_test.cpp)
 endif()

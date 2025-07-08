@@ -1,10 +1,20 @@
-add_library(sep_memory
-  STATIC
+set(SEP_MEMORY_SOURCES
     memory_tier.cpp
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
-    redis_manager.cpp
 )
+
+set(SEP_HAS_REDIS 0)
+set(HIREDIS_FOUND FALSE)
+
+if(HIREDIS_FOUND)
+    list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
+    set(SEP_HAS_REDIS 1)
+else()
+    add_compile_definitions(SEP_NO_REDIS)
+endif()
+
+add_library(sep_memory STATIC ${SEP_MEMORY_SOURCES})
 
 if(SEP_BUILD_QUANTUM)
   target_sources(sep_memory PRIVATE quantum_coherence_manager.cpp)

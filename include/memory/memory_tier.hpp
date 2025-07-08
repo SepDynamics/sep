@@ -15,6 +15,7 @@
 #include "../core/common.h"
 #include "../core/types.h"
 #include "types.h"
+#include "persistence/pattern_data.hpp"
 
 namespace sep {
 namespace memory {

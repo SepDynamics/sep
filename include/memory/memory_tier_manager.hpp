@@ -17,6 +17,7 @@
 #include "quantum/types.h"
 #include "quantum/data.hpp"
 #include "memory/redis_manager.h"
+#include "persistence/pattern_data.hpp"
 
 // Standard library includes
 #include <cstddef>

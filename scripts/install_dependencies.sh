@@ -17,30 +17,52 @@ if command -v apt-get >/dev/null 2>&1; then
     PM="apt-get"
     UPDATE_CMD="$SUDO apt-get update -y"
     INSTALL_CMD="$SUDO apt-get install -y"
-    PKGS=(
-        build-essential cmake git
-        libspdlog-dev libfmt-dev libglm-dev libboost-all-dev
-        libasio-dev libssl-dev libcurl4-openssl-dev libhttp-parser-dev
-        liblz4-dev libzstd-dev libgflags-dev libgoogle-glog-dev
-        libembree-dev libpugixml-dev libopenjp2-7-dev libopenvdb-dev
-        libimath-dev libtbb-dev libopenexr-dev libopencolorio-dev
-        libopenimageio-dev libpipewire-0.3-dev libbenchmark-dev
-        libgtest-dev libomp-dev nlohmann-json3-dev pkg-config
-    )
+    if [ "$INSTALL_MINIMAL" = "1" ]; then
+        PKGS=(
+            build-essential cmake git
+            libspdlog-dev libfmt-dev libglm-dev
+            libgflags-dev libgoogle-glog-dev
+            liblz4-dev libzstd-dev
+            libtbb-dev libbenchmark-dev
+            libgtest-dev libomp-dev nlohmann-json3-dev pkg-config
+        )
+    else
+        PKGS=(
+            build-essential cmake git
+            libspdlog-dev libfmt-dev libglm-dev libboost-all-dev
+            libasio-dev libssl-dev libcurl4-openssl-dev libhttp-parser-dev
+            liblz4-dev libzstd-dev libgflags-dev libgoogle-glog-dev
+            libembree-dev libpugixml-dev libopenjp2-7-dev libopenvdb-dev
+            libimath-dev libtbb-dev libopenexr-dev libopencolorio-dev
+            libopenimageio-dev libpipewire-0.3-dev libbenchmark-dev
+            libgtest-dev libomp-dev nlohmann-json3-dev pkg-config
+        )
+    fi
 elif command -v dnf >/dev/null 2>&1; then
     PM="dnf"
     UPDATE_CMD="$SUDO dnf -y update"
     INSTALL_CMD="$SUDO dnf -y install"
-    PKGS=(
-        gcc gcc-c++ make cmake git
-        spdlog-devel fmt-devel glm-devel boost-devel
-        asio-devel openssl-devel libcurl-devel http-parser-devel
-        lz4-devel zstd-devel gflags-devel glog-devel
-        embree-devel pugixml-devel openjpeg2-devel openvdb-devel
-        imath-devel tbb-devel openexr-devel OpenColorIO-devel
-        OpenImageIO-devel pipewire-devel benchmark-devel
-        gtest-devel libomp-devel nlohmann-json-devel pkgconfig
-    )
+    if [ "$INSTALL_MINIMAL" = "1" ]; then
+        PKGS=(
+            gcc gcc-c++ make cmake git
+            spdlog-devel fmt-devel glm-devel
+            gflags-devel glog-devel
+            lz4-devel zstd-devel
+            tbb-devel benchmark-devel
+            gtest-devel libomp-devel nlohmann-json-devel pkgconfig
+        )
+    else
+        PKGS=(
+            gcc gcc-c++ make cmake git
+            spdlog-devel fmt-devel glm-devel boost-devel
+            asio-devel openssl-devel libcurl-devel http-parser-devel
+            lz4-devel zstd-devel gflags-devel glog-devel
+            embree-devel pugixml-devel openjpeg2-devel openvdb-devel
+            imath-devel tbb-devel openexr-devel OpenColorIO-devel
+            OpenImageIO-devel pipewire-devel benchmark-devel
+            gtest-devel libomp-devel nlohmann-json-devel pkgconfig
+        )
+    fi
 else
     echo "Error: supported package manager not found (apt-get or dnf)" >&2
     exit 1

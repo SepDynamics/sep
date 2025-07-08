@@ -192,13 +192,15 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   // worthwhile tradeoff for unit tests where determinism matters most.
   float util = t->calculateUtilization();
 
-  // Normalize very small values to zero so tests remain stable across
-  // platforms and rounding modes. Clamp the result to the valid [0,1]
-  // range to avoid tiny negative values that can appear after
-  // defragmentation or resizing operations.
-  if (std::fabs(util) <= kUtilizationEpsilon ||
+  // Clamp extremely small utilization values to zero.  On some
+  // platforms rounding errors during tier transitions can leave a few
+  // stray bytes accounted as used which results in values like
+  // 0.000244 for a 4 KiB tier.  Treat anything below the epsilon as
+  // empty so unit tests remain deterministic.
+  if (util <= kUtilizationEpsilon ||
       util <= (1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()))))
     return 0.0f;
+
   return std::clamp(util, 0.0f, 1.0f);
 }
 

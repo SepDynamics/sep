@@ -54,24 +54,7 @@ std::once_flag MemoryTierManager::once_flag_;
 
 MemoryTierManager &MemoryTierManager::getInstance() {
   std::call_once(once_flag_, []() {
-#ifdef SEP_MEMORY_MINIMAL
     Config cfg{};
-#else
-    const auto &mc =
-        ::sep::config::ConfigManager::getInstance().getMemoryConfig();
-    Config cfg{};
-    cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
-    cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
-    cfg.demote_threshold = mc.demote_threshold;
-    cfg.fragmentation_threshold = mc.fragmentation_threshold;
-    cfg.stm_to_mtm_min_gen = mc.stm_to_mtm_min_gen;
-    cfg.mtm_to_ltm_min_gen = mc.mtm_to_ltm_min_gen;
-    cfg.stm_size = mc.stm_size;
-    cfg.mtm_size = mc.mtm_size;
-    cfg.ltm_size = mc.ltm_size;
-    cfg.use_unified_memory = mc.use_unified_memory;
-    cfg.enable_compression = mc.enable_compression;
-#endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
   });
   return *instance_;

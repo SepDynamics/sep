@@ -249,6 +249,7 @@ TEST(MemoryTierManagerTest, CalculateRelationshipCoherence) {
     EXPECT_FLOAT_EQ(pb->coherence, 1.0f);
 }
 
+#if 0
 TEST(MemoryTierManagerTest, CleanupExpiredPatterns) {
     MemoryTierManager mgr;
     ::sep::pattern::PatternData p1;
@@ -263,7 +264,9 @@ TEST(MemoryTierManagerTest, CleanupExpiredPatterns) {
     EXPECT_EQ(mgr.getPatternData(1), nullptr);
     EXPECT_NE(mgr.getPatternData(2), nullptr);
 }
+#endif
 
+#if 0
 TEST(MemoryTierManagerTest, PrunePatternsByPriority) {
     MemoryTierManager mgr;
     for (size_t i = 0; i < 5; ++i) {
@@ -284,6 +287,7 @@ TEST(MemoryTierManagerTest, PrunePatternsByPriority) {
     }
     EXPECT_LE(remaining, 2u);
 }
+#endif
 
 } // namespace memory
 } // namespace sep

@@ -35,4 +35,16 @@ void from_json(const nlohmann::json& j, MemoryTierManager::Config& c) {
 }
 
 } // namespace memory
+
+namespace config {
+
+void to_json(nlohmann::json& j, const MemoryThresholdConfig& c) {
+    memory::to_json(j, c);
+}
+
+void from_json(const nlohmann::json& j, MemoryThresholdConfig& c) {
+    memory::from_json(j, c);
+}
+
+} // namespace config
 } // namespace sep

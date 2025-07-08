@@ -20,6 +20,7 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../src)
 
 set(MEMORY_SRC
     ${SRC_DIR}/memory/memory_tier.cpp
+    ${SRC_DIR}/memory/memory_tier_manager.cpp
     ${SRC_DIR}/core/logging.cpp
     ${SRC_DIR}/memory/memory_tier_manager_serialization.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_tier_manager_stubs.cpp
@@ -30,6 +31,7 @@ target_sources(memory_minimal_tests PRIVATE ${MEMORY_SRC})
 target_compile_definitions(memory_minimal_tests PRIVATE SEP_MINIMAL=1)
 target_compile_definitions(memory_minimal_tests PRIVATE SEP_TESTBED_STUBS)
 target_compile_definitions(memory_minimal_tests PRIVATE SEP_NO_REDIS)
+target_compile_definitions(memory_minimal_tests PRIVATE SEP_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 
 target_include_directories(memory_minimal_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../include

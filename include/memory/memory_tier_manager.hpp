@@ -158,4 +158,12 @@ void to_json(nlohmann::json &j, const MemoryTierManager::Config &c);
 void from_json(const nlohmann::json &j, MemoryTierManager::Config &c);
 
 } // namespace memory
+
+namespace config {
+
+void to_json(nlohmann::json &j, const MemoryThresholdConfig &c);
+
+void from_json(const nlohmann::json &j, MemoryThresholdConfig &c);
+
+} // namespace config
 } // namespace sep

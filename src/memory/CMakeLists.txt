@@ -3,6 +3,7 @@ add_library(sep_memory
     memory_tier.cpp
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
+    redis_manager.cpp
 )
 
 if(SEP_BUILD_QUANTUM)
@@ -42,6 +43,7 @@ target_link_libraries(sep_memory
     PUBLIC
         sep_core
         sep_compat
+        fmt::fmt
     PRIVATE
         Threads::Threads
 )

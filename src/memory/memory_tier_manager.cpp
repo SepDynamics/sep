@@ -78,9 +78,6 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.enable_compression = mc.enable_compression;
 #endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
-#else
-    instance_ = std::make_unique<MemoryTierManager>();
-#endif
   });
   return *instance_;
 }
@@ -564,10 +561,60 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                           uint8_t strength) {
+                                           float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
   pattern_relationships_[id_a][id_b] = strength;
   pattern_relationships_[id_b][id_a] = strength;
+}
+
+void MemoryTierManager::cleanupExpiredPatterns() {
+  std::lock_guard<std::mutex> reg_lock(registry_mutex);
+  for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
+    if (it->second->coherence < config_.demote_threshold) {
+      std::size_t id = it->first;
+      it = pattern_registry_.erase(it);
+      std::lock_guard<std::mutex> rel_lock(relationships_mutex);
+      pattern_relationships_.erase(id);
+      for (auto &pair : pattern_relationships_) {
+        pair.second.erase(id);
+      }
+    } else {
+      ++it;
+    }
+  }
+}
+
+void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
+                                                size_t max_count) {
+  MemoryTier *t = getTier(tier);
+  if (!t)
+    return;
+
+  auto &patterns = const_cast<std::unordered_map<size_t, PersistentPatternData> &>(
+      t->getPatterns());
+
+  if (patterns.size() <= max_count)
+    return;
+
+  std::vector<std::pair<size_t, float>> ranked;
+  ranked.reserve(patterns.size());
+  for (const auto &[id, pdata] : patterns)
+    ranked.emplace_back(id, pdata.coherence);
+
+  std::sort(ranked.begin(), ranked.end(),
+            [](const auto &a, const auto &b) { return a.second > b.second; });
+
+  for (size_t i = max_count; i < ranked.size(); ++i) {
+    size_t id = ranked[i].first;
+    t->removePattern(id);
+    std::lock_guard<std::mutex> reg_lock(registry_mutex);
+    pattern_registry_.erase(id);
+    std::lock_guard<std::mutex> rel_lock(relationships_mutex);
+    pattern_relationships_.erase(id);
+    for (auto &pair : pattern_relationships_) {
+      pair.second.erase(id);
+    }
+  }
 }
 
 void MemoryTierManager::pruneWeakRelationships() {

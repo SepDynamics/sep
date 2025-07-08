@@ -161,3 +161,15 @@ void from_json(const nlohmann::json &j, MemoryThresholdConfig &c);
 } // namespace config
 
 } // namespace sep
+
+namespace sep {
+namespace config {
+
+// Serialization helpers for MemoryThresholdConfig. These wrappers
+// enable ADL-based conversion when using the alias
+// MemoryTierManager::Config.
+void to_json(nlohmann::json &j, const MemoryThresholdConfig &c);
+void from_json(const nlohmann::json &j, MemoryThresholdConfig &c);
+
+} // namespace config
+} // namespace sep

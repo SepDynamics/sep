@@ -33,7 +33,8 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_core PRIVATE
     SEP_HAS_CUDA=1
-    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
+    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
+    SEP_NO_REDIS)
 
 # Set library properties
 set_target_properties(sep_core PROPERTIES

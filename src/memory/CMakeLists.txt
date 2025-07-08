@@ -31,7 +31,7 @@ endif()
 # Find hiredis for Redis persistence support
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(HIREDIS hiredis)
-if(HIREDIS_FOUND)
+if(HIREDIS_FOUND AND NOT SEP_MEMORY_MINIMAL)
   set(SEP_HAS_REDIS 1)
   target_sources(sep_memory PRIVATE redis_manager.cpp)
   target_link_libraries(sep_memory PRIVATE ${HIREDIS_LIBRARIES})

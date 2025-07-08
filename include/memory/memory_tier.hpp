@@ -3,10 +3,10 @@
 // C++ Standard Library
 #include <chrono>
 #include <cstddef>
+#include <cstdint>
 #include <deque>
 #include <unordered_map>
 #include <vector>
-#include <cstdint>
 
 // Third-party headers
 #include <glm/vec3.hpp>
@@ -15,8 +15,8 @@
 #include "../compat/shim.h"
 #include "../core/common.h"
 #include "../core/types.h"
-#include "types.h"
 #include "persistence/persistent_pattern_data.hpp"
+#include "types.h"
 
 namespace sep {
 namespace memory {
@@ -39,13 +39,13 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 // as zero when reporting utilization metrics.
 // Allow slightly higher tolerance so tiny residuals after promotions do
 // not cause test failures.
-inline constexpr float kUtilizationEpsilon = 1e-3f;
+inline constexpr float kUtilizationEpsilon = 1e-6f;
 
 // Memory tier types
 enum class TierType {
-    HOST = 0,   // Host memory (CPU)
-    DEVICE = 1, // Device memory (GPU)
-    UNIFIED = 2 // Unified memory (accessible by both CPU and GPU)
+  HOST = 0,   // Host memory (CPU)
+  DEVICE = 1, // Device memory (GPU)
+  UNIFIED = 2 // Unified memory (accessible by both CPU and GPU)
 };
 
 // Macros for CUDA kernel compatibility
@@ -62,97 +62,98 @@ enum class TierType {
 #endif
 
 struct MemoryBlock {
-    void*                      ptr{nullptr};
-    std::size_t                size{0};
-    std::size_t                offset{0};
-    std::size_t                original_size{0};
-    std::size_t                access_count{0};
-    std::uint64_t              wait{0};
-    std::uint32_t              generation{0};
-    MemoryTierEnum            tier{MemoryTierEnum::STM};
-    CompressionMethod compression{CompressionMethod::None};
-    float                      utilization{0.0f};
-    float                      stability{0.0f};
-    float                      coherence{0.0f};
-    float                      weight{0.0f};
-    float                      coherence_trend{0.0f};
-    float                      last_coherence{0.0f};
-    float                      compression_ratio{1.0f};
-    bool                       allocated{false};
+  void *ptr{nullptr};
+  std::size_t size{0};
+  std::size_t offset{0};
+  std::size_t original_size{0};
+  std::size_t access_count{0};
+  std::uint64_t wait{0};
+  std::uint32_t generation{0};
+  MemoryTierEnum tier{MemoryTierEnum::STM};
+  CompressionMethod compression{CompressionMethod::None};
+  float utilization{0.0f};
+  float stability{0.0f};
+  float coherence{0.0f};
+  float weight{0.0f};
+  float coherence_trend{0.0f};
+  float last_coherence{0.0f};
+  float compression_ratio{1.0f};
+  bool allocated{false};
 
-    MemoryBlock() = default;
-    MemoryBlock(void* p, std::size_t s, std::size_t off, MemoryTierEnum t)
-        : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
+  MemoryBlock() = default;
+  MemoryBlock(void *p, std::size_t s, std::size_t off, MemoryTierEnum t)
+      : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
 using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 class MemoryTier {
 public:
-    struct Config {
-        MemoryTierEnum type{MemoryTierEnum::STM};
-        std::size_t size{0};
-    };
+  struct Config {
+    MemoryTierEnum type{MemoryTierEnum::STM};
+    std::size_t size{0};
+  };
 
-    explicit MemoryTier(const Config& config);
+  explicit MemoryTier(const Config &config);
 
-    // Pattern management constructor
-    MemoryTier(MemoryTierEnum type, size_t max_patterns, float coherence_threshold, int min_generations);
+  // Pattern management constructor
+  MemoryTier(MemoryTierEnum type, size_t max_patterns,
+             float coherence_threshold, int min_generations);
 
-    // Combined constructor for memory pool and pattern management
-    MemoryTier(const Config& config, size_t max_patterns, float coherence_threshold, int min_generations);
+  // Combined constructor for memory pool and pattern management
+  MemoryTier(const Config &config, size_t max_patterns,
+             float coherence_threshold, int min_generations);
 
-    ~MemoryTier();
+  ~MemoryTier();
 
-    // Memory block management methods
-    MemoryBlock* allocate(std::size_t size);
-    void deallocate(MemoryBlock* block);
-    ::sep::SEPResult defragment();
+  // Memory block management methods
+  MemoryBlock *allocate(std::size_t size);
+  void deallocate(MemoryBlock *block);
+  ::sep::SEPResult defragment();
 
-    float calculateFragmentation() const;
-    float calculateUtilization() const;
-    std::size_t getFreeSpace() const;
-    std::size_t getLargestFreeBlock() const;
-    const std::deque<MemoryBlock>& getBlocks() const;
-    bool moveData(MemoryBlock* dst, const MemoryBlock* src);
+  float calculateFragmentation() const;
+  float calculateUtilization() const;
+  std::size_t getFreeSpace() const;
+  std::size_t getLargestFreeBlock() const;
+  const std::deque<MemoryBlock> &getBlocks() const;
+  bool moveData(MemoryBlock *dst, const MemoryBlock *src);
 
-    // Resize the underlying memory pool, returns true on success
-    bool resize(std::size_t new_size);
+  // Resize the underlying memory pool, returns true on success
+  bool resize(std::size_t new_size);
 
-    // Expose configuration for manager-level optimizations
-    MemoryTierEnum getType() const {
-        return config_.type;
-    }
-    std::size_t getSize() const {
-        return config_.size;
-    }
+  // Expose configuration for manager-level optimizations
+  MemoryTierEnum getType() const { return config_.type; }
+  std::size_t getSize() const { return config_.size; }
 
-    // Pattern management methods
-    bool canAcceptPattern(const ::sep::persistence::PersistentPatternData& pattern) const;
-    void addPattern(size_t id, ::sep::persistence::PersistentPatternData pattern);
-    void removePattern(size_t id);
-    const ::sep::persistence::PersistentPatternData* getPattern(size_t id) const;
-    ::sep::persistence::PersistentPatternData* getPattern(size_t id);
-    const std::unordered_map<size_t, ::sep::persistence::PersistentPatternData>& getPatterns() const {
-        return m_patterns;
-    }
+  // Pattern management methods
+  bool canAcceptPattern(
+      const ::sep::persistence::PersistentPatternData &pattern) const;
+  void addPattern(size_t id, ::sep::persistence::PersistentPatternData pattern);
+  void removePattern(size_t id);
+  const ::sep::persistence::PersistentPatternData *getPattern(size_t id) const;
+  ::sep::persistence::PersistentPatternData *getPattern(size_t id);
+  const std::unordered_map<size_t, ::sep::persistence::PersistentPatternData> &
+  getPatterns() const {
+    return m_patterns;
+  }
 
 private:
-    MemoryBlock* findFreeBlock(std::size_t size);
-    void splitBlock(MemoryBlock* block, std::size_t size);
-    void mergeAdjacentBlocks();
+  MemoryBlock *findFreeBlock(std::size_t size);
+  void splitBlock(MemoryBlock *block, std::size_t size);
+  void mergeAdjacentBlocks();
 
-    Config config_;
-    void* memory_pool_{nullptr};
-    std::deque<MemoryBlock> blocks_;
-    std::size_t used_space_{0};
+  Config config_;
+  void *memory_pool_{nullptr};
+  std::deque<MemoryBlock> blocks_;
+  std::size_t used_space_{0};
 
-    // Pattern management members
-    size_t m_max_patterns{0};
-    float m_coherence_threshold{0.0f};
-    int m_min_generations{0};
-    std::unordered_map<size_t, ::sep::persistence::PersistentPatternData> m_patterns;
+  // Pattern management members
+  size_t m_max_patterns{0};
+  float m_coherence_threshold{0.0f};
+  int m_min_generations{0};
+  std::unordered_map<size_t, ::sep::persistence::PersistentPatternData>
+      m_patterns;
 };
 
-}  // namespace memory
-}  // namespace sep
+} // namespace memory
+} // namespace sep

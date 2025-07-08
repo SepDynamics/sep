@@ -14,9 +14,9 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
-#include <new>
 #include <memory>
 #include <mutex>
+#include <new>
 #include <string>
 
 namespace sep {
@@ -71,9 +71,6 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.enable_compression = mc.enable_compression;
 #endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
-#else
-    instance_ = std::make_unique<MemoryTierManager>();
-#endif
   });
   return *instance_;
 }
@@ -419,18 +416,21 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
   }
 
   // Update lookup maps in correct order to maintain consistency
+  void *old_ptr = block->ptr;
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
-    lookup_map_.erase(block->ptr);
+    lookup_map_.erase(old_ptr);
     src_tier->deallocate(block);
     lookup_map_[out_block->ptr] = out_block;
   }
 
-  // Rebuild the lookup table to keep any stale pointers from previous
-  // defragmentation or resize operations in sync with the new block
-  // locations.  Unit tests rely on findBlockByPtr returning the latest
-  // address so we refresh the map after every successful move.
+  // Refresh the lookup table so callers can resolve blocks after the move.
   rebuildLookup();
+
+  {
+    std::lock_guard<std::mutex> lock(lookup_mutex);
+    lookup_map_[old_ptr] = out_block;
+  }
 
   return SEPResult::SUCCESS;
 }
@@ -534,7 +534,8 @@ void MemoryTierManager::rebuildLookup() {
 void MemoryTierManager::registerPattern(
     std::size_t id, const ::sep::pattern::PatternData &pattern) {
   std::lock_guard<std::mutex> lock(registry_mutex);
-  pattern_registry_[id] = std::make_unique<::sep::pattern::PatternData>(pattern);
+  pattern_registry_[id] =
+      std::make_unique<::sep::pattern::PatternData>(pattern);
 }
 
 const ::sep::pattern::PatternData *
@@ -557,10 +558,10 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                           uint8_t strength) {
+                                           float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  pattern_relationships_[id_a][id_b] = strength;
+  pattern_relationships_[id_b][id_a] = strength;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {
@@ -588,7 +589,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         for (const auto &r : rels) {
           sum += r.second;
         }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+        pattern_ptr->coherence = 1.0f - static_cast<float>(sum / rels.size());
       }
     }
   }

@@ -348,7 +348,10 @@ float MemoryTier::calculateUtilization() const {
   if (std::fabs(util) <= kUtilizationEpsilon)
     return 0.0f;
 
-  return util > 1.0f ? 1.0f : util; // Cap at 100%
+  // Clamp the value to the valid [0,1] range just like the tier manager's
+  // helper to avoid any slight overshoot when used_space_ temporarily exceeds
+  // the configured size during resizing operations.
+  return std::clamp(util, 0.0f, 1.0f);
 }
 
 std::size_t MemoryTier::getFreeSpace() const {

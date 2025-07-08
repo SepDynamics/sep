@@ -11,10 +11,15 @@ sudo apt-get update
 
 # Optional argument parsing
 USE_CUDA=1
+MINIMAL=0
 for arg in "$@"; do
   case "$arg" in
     --no-cuda)
       USE_CUDA=0
+      shift
+      ;;
+    --minimal)
+      MINIMAL=1
       shift
       ;;
   esac
@@ -32,20 +37,29 @@ LOG_DIR="$WS_DIR/logs"
 BUILD_DIR="$WS_DIR/build/deps"
 mkdir -p "$LOG_DIR" "$BUILD_DIR"
 
-PACKAGES=(
+BASE_PACKAGES=(
   build-essential cmake git
   libglu1-mesa-dev libpcre3-dev libtbb-dev libxrandr-dev libglfw3-dev
-  libboost-all-dev libopencolorio-dev libopenimageio-dev
-  libembree-dev libpugixml-dev libopenjp2-7-dev
-  libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
+  libboost-all-dev
+  libpugixml-dev libopenjp2-7-dev
+  libcurl4-openssl-dev libhttp-parser-dev
   libfmt-dev pkg-config
   libspdlog-dev libgtest-dev libgmock-dev libhiredis-dev libglm-dev nlohmann-json3-dev
   libgflags-dev libgoogle-glog-dev
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
-  libgflags-dev libgoogle-glog-dev
   valgrind
 )
+EXTRA_PACKAGES=(
+  libopencolorio-dev libopenimageio-dev
+  libembree-dev libopenvdb-dev
+)
+
+if [ "$MINIMAL" -eq 1 ]; then
+  PACKAGES=("${BASE_PACKAGES[@]}")
+else
+  PACKAGES=("${BASE_PACKAGES[@]}" "${EXTRA_PACKAGES[@]}")
+fi
 
 echo "Updating package lists..."
 sudo apt-get update -y

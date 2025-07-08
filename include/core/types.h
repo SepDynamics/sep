@@ -43,6 +43,16 @@ struct MemoryThresholdConfig {
     bool enable_compression{true};
 };
 
+// Threshold values controlling pattern migration between quantum memory tiers.
+// These defaults mirror those used in unit tests and the sample configuration
+// file so the minimal build can compile without pulling in the full quantum
+// configuration subsystem.
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.

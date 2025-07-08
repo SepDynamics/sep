@@ -16,7 +16,6 @@ endif()
 add_executable(long_double_math_test
     long_double_math_test.cpp
 )
-set_source_files_properties(long_double_math_test.cpp PROPERTIES LANGUAGE CUDA)
 
 add_executable(cuda_api_tests
     processing_api_test.cpp

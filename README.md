@@ -149,3 +149,13 @@ cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-14 -B . -S ..
 make memory_manager_tests
 ./memory_manager_tests
 ```
+
+If CMake reports missing libraries such as **gflags**, **glog** or
+**Boost**, run the minimal setup script and use the helper build
+wrapper. This installs the required dependencies and builds only the
+unit test targets:
+
+```bash
+./install.sh --minimal
+./build_no_cuda.sh
+```

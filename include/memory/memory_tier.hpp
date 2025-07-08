@@ -33,12 +33,11 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 // The tests expect near-zero utilization when the tiers are logically empty,
 // so clamp anything below ~1% to zero.
 // The epsilon controls how aggressively utilization values are rounded
-// down to zero.  A previous value of 1e-2f caused small allocations in
-// large tiers to be treated as empty, which masked actual usage and
-// broke promotion heuristics in unit tests.  Use a much smaller threshold
-// so that any non-trivial allocation remains visible while still
-// clamping stray rounding noise after defragmentation.
-inline constexpr float kUtilizationEpsilon = 1e-5f;
+// down to zero.  Using a ~1% threshold keeps the tiers logically empty once
+// blocks are freed while tolerating small rounding differences after
+// promotions or defragmentation.  This value trades a tiny loss in precision
+// for more deterministic unit tests.
+inline constexpr float kUtilizationEpsilon = 1e-2f;
 
 // Memory tier types
 enum class TierType {

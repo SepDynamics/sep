@@ -194,6 +194,15 @@ void MemoryTier::deallocate(MemoryBlock *block) {
   block->wait = wait;
 
   mergeAdjacentBlocks();
+
+  // Recompute used space after merging to avoid tiny residual values that can
+  // accumulate when tiers are resized or defragmented.  Unit tests rely on
+  // exact zero utilization when all blocks have been freed.
+  used_space_ = 0;
+  for (const auto &blk : blocks_) {
+    if (blk.allocated)
+      used_space_ += blk.size;
+  }
 }
 
 ::sep::SEPResult MemoryTier::defragment() {

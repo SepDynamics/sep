@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { STM, MTM, LTM, HOST, DEVICE, UNIFIED } from './memory_tiers.js';
 
 export default class SepClient {
   constructor(config = {}) {
@@ -32,7 +33,7 @@ export default class SepClient {
     return this.retryRequest(() => fetch(url, options));
   }
 
-  async getMemoryState(tier) {
+  async getMemoryState(tier = STM) {
     const url = `${this.baseUrl}/api/memory/${tier}`;
     return this.retryRequest(() => fetch(url));
   }

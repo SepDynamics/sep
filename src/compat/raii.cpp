@@ -247,6 +247,7 @@ template class DeviceBufferRAII<std::uint32_t>;
 template class DeviceBufferRAII<std::uint64_t>;
 template class DeviceBufferRAII<float>;
 template class DeviceBufferRAII<double>;
+template class DeviceBufferRAII<int>;
 
 // Implementation of memory management functions
 void* allocateDeviceMemory(std::size_t size) {

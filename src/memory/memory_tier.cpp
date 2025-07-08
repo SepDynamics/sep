@@ -217,7 +217,12 @@ void MemoryTier::deallocate(MemoryBlock *block) {
     if (blk.allocated)
       used_space_ += blk.size;
   }
-  if (used_space_ <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
+  float ratio = config_.size > 0
+                    ? static_cast<float>(used_space_) /
+                          static_cast<float>(config_.size)
+                    : 0.0f;
+  if (ratio <= kUtilizationEpsilon ||
+      ratio <= (1.0f / static_cast<float>(std::max<std::size_t>(1, config_.size))))
     used_space_ = 0;
 }
 
@@ -351,8 +356,12 @@ float MemoryTier::calculateUtilization() const {
   // promotions or defragmentation can leave a few bytes marked as used even
   // though the tier is effectively empty.  Clamping here avoids spurious
   // non-zero utilization in unit tests.
-  if (used == 0 ||
-      used <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
+  if (used == 0)
+    return 0.0f;
+
+  float ratio = static_cast<float>(used) / static_cast<float>(config_.size);
+  if (ratio <= kUtilizationEpsilon ||
+      ratio <= (1.0f / static_cast<float>(std::max<std::size_t>(1, config_.size))))
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(config_.size);
@@ -496,7 +505,12 @@ void MemoryTier::mergeAdjacentBlocks() {
       used_space_ += blk.size;
     }
   }
-  if (used_space_ <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
+  float ratio = config_.size > 0
+                    ? static_cast<float>(used_space_) /
+                          static_cast<float>(config_.size)
+                    : 0.0f;
+  if (ratio <= kUtilizationEpsilon ||
+      ratio <= (1.0f / static_cast<float>(std::max<std::size_t>(1, config_.size))))
     used_space_ = 0;
 }
 

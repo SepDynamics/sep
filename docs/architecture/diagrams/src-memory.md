@@ -45,6 +45,9 @@ The core module supplies:
 - `dag::DagGraph` for tracking relationships between patterns.
 - Logging via `logging::Manager`.
 - Allocation metrics and error handling utilities.
+- Utilization metrics use a small epsilon (~1%) so that tiny rounding
+  errors after tier defragmentation don't appear as lingering usage in
+  tests.
 
 ## File Locations
 

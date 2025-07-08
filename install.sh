@@ -33,6 +33,8 @@ PACKAGES=(
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
   libfmt-dev
   libspdlog-dev libgtest-dev libhiredis-dev
+  libpipewire-0.3-dev libfftw3-dev libopenexr-dev
+  valgrind
 )
 
 echo "Updating package lists..."
@@ -87,6 +89,7 @@ if ! dpkg -s libusd-dev >/dev/null 2>&1; then
 fi
 
 echo "All dependencies installed. See $LOG_DIR for logs."
+echo "Some optional packages like OSL and Alembic may need to be built manually if not available via apt."
 
 # Optional build and test step when invoked with --run-tests
 if [[ "${1:-}" == "--run-tests" ]]; then

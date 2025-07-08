@@ -2,17 +2,17 @@
     "files.autoSave": "onFocusChange",
     "files.autoSaveDelay": 10,
     // CodeChecker Integration
-    "codechecker.backend.compilationDatabasePath": "${workspaceFolder}/build-ajn/compile_commands.json",
+    "codechecker.backend.compilationDatabasePath": "${workspaceFolder}/build/compile_commands.json",
     "codechecker.backend.serverUrl": "http://localhost:8001",
     "codechecker.backend.productName": "sep-engine",
     "codechecker.backend.outputFolder": "${workspaceFolder}/.codechecker",
     "codechecker.analyze.arguments": "--ctu --enable=all",
-    "codechecker.analyze.threadCount": 4,
+    "codechecker.analyze.threadCount": 8,
     "codechecker.log.buildCommand": "make -j$(nproc)",
     "codechecker.log.skipFile": "${workspaceFolder}/.codechecker/skip_list.txt",
     // SEP Engine Project Settings
     "sep.workspace.root": "/sep",
-    "sep.build.directory": "build-ajn",
+    "sep.build.directory": "build",
     "sep.build.type": "Release",
     "sep.cycles.enabled": false, // Set to true when Cycles is properly integrated
     // MCP Integration
@@ -30,32 +30,23 @@
         }
     },
     // C++ Configuration
+    "C_Cpp.intelliSenseEngine": "disabled", // Use clangd for IntelliSense
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "C_Cpp.default.compileCommands": "compile_commands.json",
-    "C_Cpp.default.includePath": [
-        "${workspaceFolder}/include",
-        "${workspaceFolder}/include/sep",
-        "${workspaceFolder}/extern/cycles/src",
-        "/usr/lib/include"
-    ],
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
     // Clangd Configuration
     "clangd.arguments": [
-        "--compile-commands-dir=${workspaceFolder}/build-ajn",
         "--header-insertion=iwyu",
         "--completion-style=detailed",
         "--function-arg-placeholders",
+        "--compile-commands-dir=${workspaceFolder}/build",
         "--fallback-style=llvm",
         "-j=8"
     ],
     // CMake Configuration
     "cmake.configureOnOpen": false,
-    "cmake.buildDirectory": "${workspaceFolder}/build-ajn",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
     "cmake.configureArgs": [
-        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-        "-DCMAKE_BUILD_TYPE=Release",
-        "-DSEP_HAS_BLENDER=1",
-        "-DSEP_HAS_CYCLES=1",
-        "-DSEP_HAS_CUDA=1"
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
     ],
     // File Associations
     "files.associations": {
@@ -68,7 +59,7 @@
     "files.exclude": {
         "out": false,
         "dist": false,
-        "build-ajn/CMakeFiles": true,
+        "build/CMakeFiles": true,
         "cycles-build": true,
         "cycles-install": true,
         "**/.git": true,
@@ -77,7 +68,7 @@
     "search.exclude": {
         "out": true,
         "dist": true,
-        "build-ajn": true,
+        "build": true,
         "cycles-build": true,
         "**/node_modules": true,
         "**/bower_components": true,
@@ -85,13 +76,16 @@
     },
     // Editor Settings for SEP Project
     "editor.formatOnSave": true,
+    "editor.defaultFormatter": "xaver.clang-format",
     "[cpp]": {
         "editor.tabSize": 4,
-        "editor.insertSpaces": true
+        "editor.insertSpaces": true,
+        "editor.defaultFormatter": "xaver.clang-format"
     },
     "[cuda-cpp]": {
         "editor.tabSize": 4,
-        "editor.insertSpaces": true
+        "editor.insertSpaces": true,
+        "editor.defaultFormatter": "xaver.clang-format"
     },
     // TypeScript Settings
     "typescript.tsc.autoDetect": "off",
@@ -103,8 +97,7 @@
     // Terminal Settings for Development
     "terminal.integrated.env.linux": {
         "SEP_WORKSPACE": "${workspaceFolder}",
-        "SEP_BUILD_DIR": "${workspaceFolder}/build-ajn",
-        "SEP_CONFIG_FILE": "${workspaceFolder}/config/default.json",
+        "SEP_BUILD_DIR": "${workspaceFolder}/build",
         "CODECHECKER_PORT": "8001",
         "OLLAMA_URL": "http://localhost:11434",
         "OLLAMA_MODEL": "mxbai-embed-large"
@@ -113,19 +106,12 @@
     "makefile.makePath": "",
     "makefile.makefilePath": "Makefile",
     "makefile.buildLog": "output/build_log.txt",
-    "makefile.compileCommandsPath": ".codechecker/compile_commands.json",
+    "makefile.compileCommandsPath": "${workspaceFolder}/build/compile_commands.json",
     "makefile.configurationCachePath": "CMakeCache.txt",
     "makefile.buildBeforeLaunch": false,
     "makefile.excludeCompilerNames": [
         "gcc",
         "g++"
     ],
-    "makefile.makeDirectory": "build",
-    "editor.defaultFormatter": "codechecker.codechecker",
-    "editor.defaultFoldingRangeProvider": "codechecker.codechecker",
-    "notebook.defaultFormatter": "codechecker.codechecker",
-    "[makefile]": {
-        "editor.defaultFoldingRangeProvider": "codechecker.codechecker",
-        "editor.defaultFormatter": "codechecker.codechecker"
-    }
+    "makefile.makeDirectory": "build"
 }

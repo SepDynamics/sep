@@ -154,6 +154,11 @@ void MemoryTierManager::deallocate(MemoryBlock *block) {
   if (MemoryTier *t = getTier(block->tier)) {
     t->deallocate(block);
   }
+  // Keep the lookup table consistent when a block is freed. Certain unit tests
+  // expect findBlockByPtr to always reflect the latest state after promotion or
+  // demotion cycles. Rebuilding the map here avoids stale entries when tiers
+  // have been defragmented or resized.
+  rebuildLookup();
 }
 
 MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr) {

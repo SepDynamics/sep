@@ -25,6 +25,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# Configure test discovery
+include(CTest)
+enable_testing()
+
 # Add test subdirectories
 if(SEP_HAS_BLENDER)
 add_subdirectory(blender)
@@ -39,10 +43,6 @@ add_subdirectory(api)
 add_subdirectory(cuda)
 add_subdirectory(workbench)
 # Testbed directory temporarily disabled
-
-# Configure test discovery
-include(CTest)
-enable_testing()
 
 add_custom_target(run_all_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure

@@ -182,28 +182,18 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (!t)
     return 0.0f;
 
-  // Fast path for empty tiers. Checking the free space avoids iterating over
-  // the block list and ensures an exact zero result when nothing is allocated.
-  if (t->getFreeSpace() == t->getSize())
-    return 0.0f;
+  // Recompute the metric directly from the tier rather than relying on
+  // cached free-space bookkeeping.  During complex promotion or
+  // defragmentation sequences the internal counters may temporarily drift,
+  // which in turn produces tiny non-zero values when the tier should be
+  // considered empty.  calculateUtilization() walks the block list and
+  // yields a consistent result at the expense of a little extra work -- a
+  // worthwhile tradeoff for unit tests where determinism matters most.
+  float util = t->calculateUtilization();
 
-  // Derive utilization from the tracked free space instead of walking the
-  // block list.  This prevents stale metadata from influencing the result
-  // after complex operations like promotion or defragmentation.
-  std::size_t used = t->getSize() - t->getFreeSpace();
-  if (used == 0)
-    return 0.0f;
-
-  float util = static_cast<float>(used) / static_cast<float>(t->getSize());
-
-  // Clamp to a sane range before applying the epsilon threshold.  When tiers
-  // are resized or blocks are shuffled between them, transient calculations can
-  // briefly produce slight negatives or values just above one due to rounding.
-  // Normalizing the value prevents spurious test failures and keeps the metric
-  // stable across architectures.
-  util = std::clamp(util, 0.0f, 1.0f);
-
-  return util <= kUtilizationEpsilon ? 0.0f : util;
+  // Normalize very small values to zero so tests remain stable across
+  // platforms and rounding modes.
+  return std::fabs(util) <= kUtilizationEpsilon ? 0.0f : util;
 }
 
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {

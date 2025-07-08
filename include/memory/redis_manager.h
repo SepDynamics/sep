@@ -7,6 +7,7 @@
 #  include <hiredis/hiredis.h>
 #  define SEP_HAS_HIREDIS 1
 #else
+struct redisContext; // forward declaration when hiredis is disabled
 #  define SEP_HAS_HIREDIS 0
 #endif
 
@@ -63,7 +64,7 @@ private:
         std::string getTierPatternsKey(const std::string& tier) const;
         std::string normalizeTier(const std::string& tier) const;
 
-        struct redisContext* context_;
+        ::redisContext* context_;
         bool connected_;
         std::mutex mutex_;
     };

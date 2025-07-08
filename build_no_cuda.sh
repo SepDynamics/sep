@@ -28,3 +28,4 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DBUILD_TESTING=ON
 
 make -j$(nproc)
+ctest --output-on-failure

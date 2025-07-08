@@ -65,6 +65,7 @@ endif()
 target_compile_definitions(sep_memory
     PUBLIC
         SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
+        $<$<BOOL:${SEP_MEMORY_MINIMAL}>:SEP_MEMORY_MINIMAL>
     PRIVATE
         SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
         SEP_HAS_REDIS=${SEP_HAS_REDIS}

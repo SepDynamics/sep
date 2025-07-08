@@ -4,6 +4,8 @@
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
 
+namespace sep { namespace config { class ConfigManager; } }
+
 #include <algorithm>
 #include <cmath>
 #include <cstdio>

@@ -24,6 +24,7 @@ namespace memory {
 using ::sep::CompressionMethod;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
+using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 // Small epsilon used when comparing utilization metrics.  The value is tuned
 // so that allocations of a single kilobyte in a default 1MB tier are still

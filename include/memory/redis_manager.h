@@ -63,7 +63,11 @@ private:
         std::string getTierPatternsKey(const std::string& tier) const;
         std::string normalizeTier(const std::string& tier) const;
 
-        struct redisContext* context_;
+#ifdef SEP_NO_REDIS
+        void* context_;
+#else
+        struct ::redisContext* context_;
+#endif
         bool connected_;
         std::mutex mutex_;
     };

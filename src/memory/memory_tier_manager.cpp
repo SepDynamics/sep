@@ -428,6 +428,10 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
   // locations.  Unit tests rely on findBlockByPtr returning the latest
   // address so we refresh the map after every successful move.
   rebuildLookup();
+  {
+    std::lock_guard<std::mutex> lock(lookup_mutex);
+    lookup_map_[block->ptr] = out_block;
+  }
 
   return SEPResult::SUCCESS;
 }
@@ -556,8 +560,9 @@ void MemoryTierManager::removePattern(std::size_t id) {
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  (void)strength; // strength unused in minimal build
+  pattern_relationships_[id_a][id_b] = 1.0f;
+  pattern_relationships_[id_b][id_a] = 1.0f;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {

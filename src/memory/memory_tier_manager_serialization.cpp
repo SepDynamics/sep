@@ -2,9 +2,9 @@
 #include <nlohmann/json.hpp>
 
 namespace sep {
-namespace memory {
+namespace config {
 
-void to_json(nlohmann::json& j, const MemoryTierManager::Config& c) {
+void to_json(nlohmann::json& j, const MemoryThresholdConfig& c) {
     j = nlohmann::json{
         {"stm_size", c.stm_size},
         {"mtm_size", c.mtm_size},
@@ -20,7 +20,7 @@ void to_json(nlohmann::json& j, const MemoryTierManager::Config& c) {
     };
 }
 
-void from_json(const nlohmann::json& j, MemoryTierManager::Config& c) {
+void from_json(const nlohmann::json& j, MemoryThresholdConfig& c) {
     c.stm_size = j.value("stm_size", static_cast<std::size_t>(1 << 20));
     c.mtm_size = j.value("mtm_size", static_cast<std::size_t>(4 << 20));
     c.ltm_size = j.value("ltm_size", static_cast<std::size_t>(16 << 20));
@@ -32,6 +32,18 @@ void from_json(const nlohmann::json& j, MemoryTierManager::Config& c) {
     c.enable_compression = j.value("enable_compression", true);
     c.stm_to_mtm_min_gen = j.value("stm_to_mtm_min_gen", 5u);
     c.mtm_to_ltm_min_gen = j.value("mtm_to_ltm_min_gen", 100u);
+}
+
+} // namespace config
+
+namespace memory {
+
+void to_json(nlohmann::json& j, const MemoryTierManager::Config& c) {
+    config::to_json(j, static_cast<const config::MemoryThresholdConfig&>(c));
+}
+
+void from_json(const nlohmann::json& j, MemoryTierManager::Config& c) {
+    config::from_json(j, static_cast<config::MemoryThresholdConfig&>(c));
 }
 
 } // namespace memory

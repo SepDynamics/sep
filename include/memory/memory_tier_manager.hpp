@@ -153,8 +153,19 @@ private:
   bool checkTierDemotion(const ::sep::pattern::PatternData &pattern) const;
 };
 
-void to_json(nlohmann::json &j, const MemoryTierManager::Config &c);
+// JSON serialization helpers.  The underlying configuration type lives in the
+// ::sep::config namespace.  Provide overloads in both the config and memory
+// namespaces so ADL works regardless of whether callers use the alias
+// MemoryTierManager::Config or the raw config::MemoryThresholdConfig type.
+} // namespace memory
 
+namespace config {
+void to_json(nlohmann::json &j, const MemoryThresholdConfig &c);
+void from_json(const nlohmann::json &j, MemoryThresholdConfig &c);
+} // namespace config
+
+namespace memory {
+void to_json(nlohmann::json &j, const MemoryTierManager::Config &c);
 void from_json(const nlohmann::json &j, MemoryTierManager::Config &c);
 
 } // namespace memory

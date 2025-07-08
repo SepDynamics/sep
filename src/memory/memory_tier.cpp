@@ -323,8 +323,7 @@ float MemoryTier::calculateUtilization() const {
       used += blk.size;
   }
 
-  if (used == 0 ||
-      used <= static_cast<std::size_t>(config_.size * kUtilizationEpsilon))
+  if (used == 0)
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(config_.size);

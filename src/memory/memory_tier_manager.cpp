@@ -71,9 +71,6 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.enable_compression = mc.enable_compression;
 #endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
-#else
-    instance_ = std::make_unique<MemoryTierManager>();
-#endif
   });
   return *instance_;
 }
@@ -419,9 +416,10 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
   }
 
   // Update lookup maps in correct order to maintain consistency
+  void* old_ptr = block->ptr;
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
-    lookup_map_.erase(block->ptr);
+    lookup_map_.erase(old_ptr);
     src_tier->deallocate(block);
     lookup_map_[out_block->ptr] = out_block;
   }
@@ -431,6 +429,10 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
   // locations.  Unit tests rely on findBlockByPtr returning the latest
   // address so we refresh the map after every successful move.
   rebuildLookup();
+  {
+    std::lock_guard<std::mutex> lock(lookup_mutex);
+    lookup_map_[old_ptr] = out_block;
+  }
 
   return SEPResult::SUCCESS;
 }
@@ -557,10 +559,10 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                           uint8_t strength) {
+                                           float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  pattern_relationships_[id_a][id_b] = strength;
+  pattern_relationships_[id_b][id_a] = strength;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {
@@ -581,6 +583,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
+    pattern_ptr->coherence = 1.0f;
     if (pattern_relationships_.count(id)) {
       const auto &rels = pattern_relationships_.at(id);
       if (!rels.empty()) {
@@ -588,7 +591,8 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         for (const auto &r : rels) {
           sum += r.second;
         }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+        float avg = static_cast<float>(sum / rels.size());
+        pattern_ptr->coherence = 1.0f - avg;
       }
     }
   }

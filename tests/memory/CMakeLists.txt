@@ -4,6 +4,12 @@ endif()
 
 find_package(GTest REQUIRED)
 
+# The unit tests run without Redis. Disable the dependency and
+# ensure headers guarded by SEP_NO_REDIS are excluded during
+# compilation.
+set(SEP_HAS_REDIS 0)
+add_compile_definitions(SEP_NO_REDIS)
+
 # Hiredis support is optional for unit tests. The upstream CMake
 # configuration shipped with some distributions triggers errors
 # when no version is specified.  Since the Redis integration isn't

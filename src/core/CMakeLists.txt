@@ -9,6 +9,12 @@ add_library(sep_core STATIC
     logging.cpp
 )
 
+# The core library does not require Redis for these tests. Explicitly
+# disable Redis support so headers guarded by SEP_NO_REDIS do not
+# trigger missing include errors when building in minimal mode.
+set(SEP_HAS_REDIS 0)
+add_compile_definitions(SEP_NO_REDIS)
+
 if(SEP_BUILD_ENGINE)
     target_sources(sep_core PRIVATE engine.cpp)
 endif()
@@ -31,8 +37,9 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
 
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_core PRIVATE
-    SEP_HAS_CUDA=1
-    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
+    SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
+    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
+    SEP_HAS_REDIS=${SEP_HAS_REDIS})
 
 # Set library properties
 set_target_properties(sep_core PROPERTIES

@@ -4,7 +4,7 @@ endif()
 
 find_package(GTest REQUIRED)
 
-find_package(Hiredis REQUIRED CONFIG)
+find_package(Hiredis 1.0 REQUIRED CONFIG)
 
 add_executable(memory_manager_tests
     memory_headers_test.cpp
@@ -26,9 +26,7 @@ target_link_libraries(memory_manager_tests PRIVATE
     sep_core
     GTest::GTest
     GTest::Main
-    Hiredis::Hiredis
-    CUDA::cudart
-    CUDA::cuda_driver
+    ${HIREDIS_LIBRARIES}
     Threads::Threads
 )
 if(SEP_HAS_CUDA)
@@ -49,6 +47,7 @@ target_include_directories(memory_manager_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/include/memory
     ${CMAKE_SOURCE_DIR}/include/core
     ${CMAKE_SOURCE_DIR}/include/compat
+    ${HIREDIS_INCLUDE_DIRS}
 )
 
 target_compile_definitions(memory_manager_tests PRIVATE

@@ -2,6 +2,7 @@
 #define SEP_LOGGING_MANAGER_H
 
 #include "memory/types.h"
+#include "core/logging_types.h"
 #include "core/tracing.h"
 #include <spdlog/spdlog.h>
 #include <memory>

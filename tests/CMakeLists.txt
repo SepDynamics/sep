@@ -1,5 +1,8 @@
 # Common test configuration
 # Configure test output directory
+include(CTest)
+enable_testing()
+
 set(TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/tests)
 file(MAKE_DIRECTORY ${TEST_OUTPUT_DIR})
 

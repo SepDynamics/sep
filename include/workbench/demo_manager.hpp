@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <functional>
 
-#include "sep_engine_wrapper.h"
 #include <glm/glm.hpp>
 
 

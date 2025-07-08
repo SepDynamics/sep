@@ -6,12 +6,6 @@
 // compiling with NVCC we simply include the real Crow headers.  Otherwise we
 // provide lightweight stub definitions that avoid heavy template instantiation.
 
-#ifndef __CUDACC__
-
-#include "crow.h"  // Use bundled Crow to ensure consistent macro definitions
-
-#else
-
 // Include our own headers when building with CUDA
 #include "compat/shim.h"
 #include "common.h"

@@ -12,7 +12,7 @@ void NeuralDemo::init() {
     decay_ = 0.1f;
     weight_ = 0.5f;
 #else
-    const auto& cfg = sep::core::config::ConfigManager::getInstance().getEngineConfig().neural();
+    const auto& cfg = ConfigManager::getInstance().getEngineConfig().neural();
     int count = cfg.neuron_count;
     threshold_ = cfg.threshold;
     decay_ = cfg.decay;

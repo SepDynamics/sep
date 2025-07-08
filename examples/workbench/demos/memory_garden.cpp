@@ -1,5 +1,5 @@
 #include "memory_garden.hpp"
-#include <config.hpp>
+#include "../sep_engine_wrapper.h"
 #include <glm/vec3.hpp>
 #include <glm/gtc/constants.hpp>
 
@@ -23,7 +23,7 @@ void MemoryGardenDemo::init() {
     connection_opacity_ = 0.5f;
     pattern_scale_ = 1.0f;
 #else
-    const auto& cfg = sep::core::config::ConfigManager::getInstance().getEngineConfig().memory_garden();
+    const auto& cfg = ConfigManager::getInstance().getEngineConfig().memory_garden();
     
     // Initialize memory tier manager
     memory_manager_ = std::make_unique<MemoryTierManager>();

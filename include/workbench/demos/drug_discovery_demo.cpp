@@ -12,7 +12,7 @@ void DrugDiscoveryDemo::init() {
     iterations_ = 10;
     mutation_rate_ = 0.05f;
 #else
-    const auto& cfg = sep::core::config::ConfigManager::getInstance().getEngineConfig().drug_discovery();
+    const auto& cfg = ConfigManager::getInstance().getEngineConfig().drug_discovery();
     iterations_ = cfg.iterations;
     mutation_rate_ = cfg.mutation_rate;
 #endif

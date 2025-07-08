@@ -2,14 +2,10 @@
 
 #ifdef CROW_DISABLE_RTTI
 #include "crow/crow_isolation.h"
-#else
-#include "crow/http_request.h"
-#include "crow/http_response.h"
 #endif
 
 #include "api/rate_limiter.h"
 #include "api/types.h"
-#include "core/types.h"  // Include for RateLimitConfig
 
 namespace sep::api {
 

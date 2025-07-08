@@ -1,6 +1,6 @@
 #pragma once
 
-#include "demo_manager.hpp"
+#include "../demo_manager.hpp"
 #include <vector>
 #include <quantum/data.hpp>
 #include <glm/vec3.hpp>

@@ -1,5 +1,5 @@
 #include "audio_visualizer.hpp"
-#include <config.hpp>
+#include "../config.hpp"
 #ifndef SEP_WORKBENCH_DEMO
 // Only include real implementation headers when not in demo mode
 #include <audio/capture.h>
@@ -36,7 +36,7 @@ void AudioVisualizerDemo::init() {
     latest_patterns_.push_back(glm::vec3(0.7f, 0.3f, 0.6f));
     latest_patterns_.push_back(glm::vec3(0.3f, 0.7f, 0.4f));
 #else
-    const auto& cfg = sep::core::config::ConfigManager::getInstance().getEngineConfig().audio_visualizer();
+    const auto& cfg = ConfigManager::getInstance().getEngineConfig().audio_visualizer();
     pipeline_ = std::make_unique<AudioPipeline>(cfg.input.sample_rate);
     capture_ = AudioCapture::create();
 
@@ -79,7 +79,7 @@ void AudioVisualizerDemo::update(float dt) {
         pattern = glm::clamp(pattern, glm::vec3(0.0f), glm::vec3(1.0f));
     }
 #else
-    const auto& cfg = sep::config::ConfigManager::getInstance().getEngineConfig().audio_visualizer();
+    const auto& cfg = ConfigManager::getInstance().getEngineConfig().audio_visualizer();
     
     // Map audio patterns to visual patterns using config parameters
     std::vector<glm::vec3> visual_patterns;

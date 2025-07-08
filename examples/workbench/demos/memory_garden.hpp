@@ -1,7 +1,6 @@
 #pragma once
 
-#include "demo_manager.hpp"
-#include "sep_engine_wrapper.h"
+#include "../demo_manager.hpp"
 #include <memory>
 #include <vector>
 

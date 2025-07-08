@@ -1,9 +1,8 @@
 #pragma once
 
-#include "demo_manager.hpp"
+#include "../demo_manager.hpp"
 #include <vector>
 #include <glm/vec3.hpp>
-#include <random>
 #include <quantum/data.hpp>
 
 namespace sep {

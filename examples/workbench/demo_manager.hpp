@@ -5,9 +5,14 @@
 #include <unordered_map>
 #include <functional>
 
+#define SEP_WORKBENCH_DEMO
 #include "sep_engine_wrapper.h"
-#include "core/engine.h"
 #include <glm/glm.hpp>
+
+// In demo mode, use the mock types from sep_engine_wrapper.h
+using Engine = sep::Engine;
+using CyclesRenderer = sep::CyclesRenderer;
+using ConfigManager = sep::core::config::ConfigManager;
 
 
 namespace sep {
@@ -16,6 +21,14 @@ namespace workbench {
 class Demo {
 public:
     virtual ~Demo() = default;
+    
+    // Initialize with engine and renderer
+    void initialize(Engine* engine, CyclesRenderer* renderer) {
+        engine_ = engine;
+        renderer_ = renderer;
+        init();
+    }
+    
     virtual void init() = 0;
     virtual void update(float dt) = 0;
     virtual void render() = 0;
@@ -24,12 +37,12 @@ public:
     virtual void handleMouse(int x, int y, int button) = 0;
 
 protected:
-    sep::Engine* engine_{nullptr};
-    sep::CyclesRenderer* renderer_{nullptr};
+    Engine* engine_{nullptr};
+    CyclesRenderer* renderer_{nullptr};
     
     // Add access to the config manager
-    sep::core::config::ConfigManager& getConfigManager() {
-        return sep::core::config::ConfigManager::getInstance();
+    ConfigManager& getConfigManager() {
+        return ConfigManager::getInstance();
     }
 };
 
@@ -40,7 +53,7 @@ public:
         return instance;
     }
 
-    void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer);
+    void initialize(Engine* engine, CyclesRenderer* renderer);
     void registerDemo(const std::string& name, std::function<std::unique_ptr<Demo>()> factory);
     bool switchToDemo(const std::string& name);
     void update(float dt);
@@ -54,8 +67,8 @@ public:
 private:
     DemoManager() = default;
 
-    sep::Engine* engine_{nullptr};
-    sep::CyclesRenderer* renderer_{nullptr};
+    Engine* engine_{nullptr};
+    CyclesRenderer* renderer_{nullptr};
     std::unordered_map<std::string, std::function<std::unique_ptr<Demo>()>> demo_factories_;
     std::unique_ptr<Demo> current_demo_;
     std::string current_demo_name_;

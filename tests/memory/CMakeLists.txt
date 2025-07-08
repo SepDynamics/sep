@@ -19,7 +19,8 @@ if(FALSE)
     find_package(Hiredis CONFIG)
 endif()
 
-add_executable(memory_manager_tests
+
+set(TEST_SOURCES
     memory_headers_test.cpp
     memory_manager_test.cpp
     memory_manager_smoke_test.cpp

@@ -3,21 +3,19 @@ if(NOT BUILD_TESTING)
 endif()
 
 if(NOT SEP_HAS_CUDA)
+    message(STATUS "CUDA disabled; skipping CUDA tests")
     return()
 endif()
 
 find_package(GTest REQUIRED)
 
-if(NOT SEP_HAS_CUDA)
-    message(STATUS "CUDA disabled; skipping CUDA tests")
-    return()
-endif()
-
 add_executable(long_double_math_test
     long_double_math_test.cpp
 )
 
-set_source_files_properties(long_double_math_test.cpp PROPERTIES LANGUAGE CXX)
+if(SEP_HAS_CUDA)
+    set_source_files_properties(long_double_math_test.cpp PROPERTIES LANGUAGE CUDA)
+endif()
 
 add_executable(cuda_api_tests
     processing_api_test.cpp

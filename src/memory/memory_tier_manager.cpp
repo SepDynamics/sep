@@ -364,6 +364,7 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
   out_block->ptr = new_ptr; // restore destination pointer
   out_block->offset = new_offset;
   out_block->tier = target_tier;
+  out_block->allocated = true; // ensure allocation state is retained
 
   // Calculate new utilization based on destination tier size
   size_t total_size = dst_tier->getSize();
@@ -441,17 +442,13 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
   SEPResult result =
       promoteToTier(block, target_tier_ptr->getType(), new_block);
 
-  if (result == SEPResult::SUCCESS) {
-    // Some implementations may mistakenly return SUCCESS but leave the
-    // out pointer null. Guard against that case by falling back to the
-    // original block so callers never receive a nullptr.
-    return new_block ? new_block : block;
-  }
+  if (result == SEPResult::SUCCESS && new_block)
+    return new_block;
 
-  // If promotion fails, keep the original block so callers retain a valid
-  // pointer. This mirrors the semantics of allocation APIs that return the
-  // input on failure rather than a nullptr which could lead to unexpected
-  // crashes in tests.
+  // If promotion failed or returned a null pointer, preserve the original
+  // block so callers always receive a valid reference.  This mirrors the
+  // semantics of typical allocation APIs which return the input on failure
+  // rather than a nullptr.
   return block;
 }
 

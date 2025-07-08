@@ -31,7 +31,7 @@ using Config = MemoryTierManager::Config;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
 using ::sep::pattern::PatternData;
-using ::sep::memory::persistence::PersistentPatternData;
+using ::sep::persistence::PersistentPatternData;
 using ::sep::quantum::Pattern;
 
 // Mutex declarations
@@ -78,9 +78,6 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.enable_compression = mc.enable_compression;
 #endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
-#else
-    instance_ = std::make_unique<MemoryTierManager>();
-#endif
   });
   return *instance_;
 }
@@ -564,7 +561,7 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                           uint8_t strength) {
+                                           float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
   pattern_relationships_[id_a][id_b] = strength;
   pattern_relationships_[id_b][id_a] = strength;

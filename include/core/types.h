@@ -43,12 +43,6 @@ struct MemoryThresholdConfig {
     bool enable_compression{true};
 };
 
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
-};
-
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.
 struct CudaConfig {
@@ -90,13 +84,6 @@ struct LogConfig {
 // Basic analytics configuration used by quantum components
 struct AnalyticsConfig {
     bool enable{false};
-};
-
-// Coherence thresholds used by quantum components
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
 };
 
 // Aggregate system configuration stub. Only the pieces used by tests

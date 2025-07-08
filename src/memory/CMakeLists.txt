@@ -3,8 +3,13 @@ add_library(sep_memory
     memory_tier.cpp
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
-    redis_manager.cpp
 )
+
+if(SEP_HAS_REDIS)
+  target_sources(sep_memory PRIVATE redis_manager.cpp)
+else()
+  target_sources(sep_memory PRIVATE redis_manager_stub.cpp)
+endif()
 
 if(SEP_BUILD_QUANTUM)
   target_sources(sep_memory PRIVATE quantum_coherence_manager.cpp)

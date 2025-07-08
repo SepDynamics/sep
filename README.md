@@ -179,3 +179,12 @@ make memory_manager_tests
 
 This mirrors the configuration used by `build_no_cuda.sh` while giving
 you direct control over the build location.
+
+To quickly verify that the memory manager works correctly, run the helper script:
+
+```bash
+./scripts/run_memory_tests.sh
+```
+
+This compiles the minimal configuration and executes the `memory_manager_tests`
+target. A zero exit status indicates all tests pass.

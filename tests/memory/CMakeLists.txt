@@ -13,7 +13,8 @@ if(FALSE)
     find_package(Hiredis CONFIG)
 endif()
 
-add_executable(memory_manager_tests
+
+set(TEST_SOURCES
     memory_headers_test.cpp
     memory_manager_test.cpp
     memory_manager_smoke_test.cpp
@@ -22,9 +23,12 @@ add_executable(memory_manager_tests
     memory_threshold_test.cpp
     promotion_regression_test.cpp
     pattern_init_test.cpp
-    pattern_promotion_test.cpp
-    redis_manager_test.cpp
-)
+    pattern_promotion_test.cpp)
+if(SEP_HAS_REDIS)
+    list(APPEND TEST_SOURCES redis_manager_test.cpp)
+endif()
+
+add_executable(memory_manager_tests ${TEST_SOURCES})
 
 target_link_libraries(memory_manager_tests PRIVATE
     sep_memory

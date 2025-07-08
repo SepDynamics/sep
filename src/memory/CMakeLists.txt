@@ -42,6 +42,8 @@ target_link_libraries(sep_memory
     PUBLIC
         sep_core
         sep_compat
+        fmt::fmt
+        spdlog::spdlog
     PRIVATE
         Threads::Threads
 )

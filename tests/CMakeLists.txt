@@ -45,7 +45,6 @@ endif()
 add_subdirectory(api)
 add_subdirectory(cuda)
 add_subdirectory(workbench)
-add_subdirectory(${CMAKE_SOURCE_DIR}/_sep/testbed ${CMAKE_CURRENT_BINARY_DIR}/_sep_testbed)
 
 add_custom_target(run_all_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure

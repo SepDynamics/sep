@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <cmath>
+#include <cuda_runtime.h>
 #include "compat/cuda_unified_fix.h"
 
 __global__ void device_acosl(long double* out, long double x) {

@@ -75,6 +75,13 @@ struct LogConfig {
     std::string dir{"logs"};
 };
 
+// Quantum memory/coherence thresholds used by quantum processing components
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 // Basic analytics configuration used by quantum components
 struct AnalyticsConfig {
     bool enable{false};

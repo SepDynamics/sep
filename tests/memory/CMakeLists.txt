@@ -25,6 +25,10 @@ add_executable(memory_manager_tests
     pattern_promotion_test.cpp
 )
 
+if(SEP_HAS_REDIS)
+    target_sources(memory_manager_tests PRIVATE redis_manager_test.cpp)
+endif()
+
 target_link_libraries(memory_manager_tests PRIVATE
     sep_memory
     sep_manifold

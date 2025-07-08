@@ -85,6 +85,13 @@ struct AnalyticsConfig {
     bool enable{false};
 };
 
+// Coherence thresholds used by quantum components
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 // Aggregate system configuration stub. Only the pieces used by tests
 // are represented here.
 struct SystemConfig {

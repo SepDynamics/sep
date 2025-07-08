@@ -48,8 +48,6 @@ target_link_libraries(memory_minimal_tests PRIVATE
     fmt::fmt
     spdlog::spdlog_header_only
     Threads::Threads
-    sep_memory
-    sep_core
 )
 if(spdlog_FOUND)
     target_link_libraries(memory_minimal_tests PRIVATE spdlog::spdlog)
@@ -57,7 +55,6 @@ endif()
 
 target_compile_definitions(memory_minimal_tests PRIVATE
     SEP_MEMORY_MINIMAL
-    SPDLOG_HEADER_ONLY
 )
 
 add_test(NAME memory_minimal_tests COMMAND memory_minimal_tests)

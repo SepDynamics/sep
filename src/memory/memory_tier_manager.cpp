@@ -272,6 +272,30 @@ void MemoryTierManager::optimizeTiers() {
     ltm_->defragment();
 }
 
+void MemoryTierManager::defragmentTier(MemoryTierEnum tier) {
+  if (MemoryTier *t = getTier(tier)) {
+    t->defragment();
+  }
+}
+
+void MemoryTierManager::optimizeBlocks() {
+  auto process_tier = [this](MemoryTier *tier) {
+    if (!tier)
+      return;
+    auto &blocks = const_cast<std::deque<MemoryBlock> &>(tier->getBlocks());
+    for (auto &blk : blocks) {
+      if (blk.allocated) {
+        updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation,
+                           blk.weight);
+      }
+    }
+  };
+
+  process_tier(stm_.get());
+  process_tier(mtm_.get());
+  process_tier(ltm_.get());
+}
+
 // Convenience helpers used in tests
 SEPResult MemoryTierManager::promoteBlock(MemoryBlock *block,
                                           MemoryBlock *&out_block) {

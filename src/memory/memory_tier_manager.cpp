@@ -143,6 +143,9 @@ MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr) {
   auto it = lookup_map_.find(ptr);
   if (it != lookup_map_.end())
     return it->second;
+  auto lit = legacy_lookup_map_.find(ptr);
+  if (lit != legacy_lookup_map_.end())
+    return lit->second;
   return nullptr;
 }
 
@@ -494,6 +497,7 @@ MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
 void MemoryTierManager::rebuildLookup() {
   std::lock_guard<std::mutex> lock(lookup_mutex);
   lookup_map_.clear();
+  legacy_lookup_map_.clear();
   auto add_blocks = [this](MemoryTier *tier) {
     if (!tier)
       return;

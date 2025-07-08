@@ -30,3 +30,4 @@ target_link_libraries(testbed_tests PRIVATE
 add_test(NAME testbed_tests COMMAND testbed_tests)
 
 add_subdirectory(cuda)
+add_subdirectory(memory_minimal)

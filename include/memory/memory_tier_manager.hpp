@@ -74,7 +74,7 @@ public:
 
     MemoryTierManager();
     explicit MemoryTierManager(const Config& cfg);
-    explicit MemoryTierManager(const sep::config::MemoryThresholdConfig& cfg);
+    explicit MemoryTierManager(const ::sep::config::MemoryThresholdConfig& cfg);
     ~MemoryTierManager();
 
     void init(const Config& config);
@@ -113,12 +113,12 @@ public:
 
     // Pattern management
 
-    SEPResult launch_pattern_processing(sep::pattern::PatternData* patterns,
-                                      sep::pattern::PatternData* results,
-                                      const sep::pattern::PatternConfig& config,
-                                      size_t pattern_count,
-                                      const sep::pattern::PatternData* previous_patterns,
-                                      void* stream);
+    SEPResult launch_pattern_processing(::sep::pattern::PatternData* patterns,
+                                        ::sep::pattern::PatternData* results,
+                                        const ::sep::pattern::PatternConfig& config,
+                                        size_t pattern_count,
+                                        const ::sep::pattern::PatternData* previous_patterns,
+                                        void* stream);
                                       
     void updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type);
     void removePattern(std::size_t id);

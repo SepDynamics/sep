@@ -1,53 +1,40 @@
 #!/usr/bin/env bash
 set -e
 
-# Default to skipping CUDA unless INSTALL_CUDA is explicitly set
+# Unless overridden, install the full dependency set.
+: "${INSTALL_MINIMAL:=0}"
 : "${INSTALL_CUDA:=0}"
 
-# Update package lists
-sudo apt-get update
+# Base packages required for building and running unit tests
+BASE_PACKAGES=(
+    build-essential cmake git
+    libspdlog-dev libfmt-dev libglm-dev
+    libboost-all-dev libasio-dev libssl-dev
+    libcurl4-openssl-dev libhttp-parser-dev
+    liblz4-dev libzstd-dev
+    libgflags-dev libgoogle-glog-dev
+    libpugixml-dev libopenjp2-7-dev
+    libimath-dev libtbb-dev libopenexr-dev
+    libpipewire-0.3-dev libbenchmark-dev
+    libgtest-dev libomp-dev
+    nlohmann-json3-dev pkg-config
+)
 
-# Install system packages
-sudo apt-get install -y \
-    build-essential \
-    cmake \
-    libspdlog-dev \
-    libfmt-dev \
-    libglm-dev \
-    libboost-all-dev \
-    libasio-dev \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    libhttp-parser-dev \
-    liblz4-dev \
-    libzstd-dev \
-    libgflags-dev \
-    libgoogle-glog-dev \
-    libembree-dev \
-    libpugixml-dev \
-    libopenjp2-7-dev \
-    libopenvdb-dev \
-    libimath-dev \
-    libtbb-dev \
-    libopenexr-dev \
-    libopencolorio-dev \
-    libopenimageio-dev \
-    libpipewire-0.3-dev \
-    libbenchmark-dev \
-    libgtest-dev \
-    libomp-dev \
-    libgflags-dev \
-    libgoogle-glog-dev \
-    libopenvdb-dev \
-    libopenexr-dev \
-    libopencolorio-dev \
-    libopenimageio-dev \
-    libembree-dev \
-    libpugixml-dev \
-    libopenjp2-7-dev \
-    libtbb-dev \
-    nlohmann-json3-dev \
-    pkg-config
+# Additional heavy libraries used by rendering integrations
+FULL_PACKAGES=(
+    libembree-dev libopenvdb-dev
+    libopencolorio-dev libopenimageio-dev
+)
+
+# Choose package list based on INSTALL_MINIMAL flag
+if [ "${INSTALL_MINIMAL}" = "1" ]; then
+    PACKAGES=("${BASE_PACKAGES[@]}")
+else
+    PACKAGES=("${BASE_PACKAGES[@]}" "${FULL_PACKAGES[@]}")
+fi
+
+sudo apt-get update
+sudo apt-get install -y "${PACKAGES[@]}"
 
 # Optional: CUDA toolkit for GPU builds
 if [ "${INSTALL_CUDA:-}" = "1" ]; then

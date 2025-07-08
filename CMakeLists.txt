@@ -16,6 +16,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
+# Enable testing at the top-level so subdirectories can register tests
+include(CTest)
+enable_testing()
+
 # Options to control optional modules. These allow building a minimal engine
 # without the heavyweight integrations.
 option(SEP_WITH_CYCLES "Enable Blender Cycles integration" OFF)

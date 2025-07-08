@@ -31,4 +31,4 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DBUILD_TESTING=ON
 
 make memory_manager_tests -j$(nproc)
-ctest --output-on-failure
+./tests/memory/memory_manager_tests

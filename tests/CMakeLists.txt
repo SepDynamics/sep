@@ -7,6 +7,11 @@ file(MAKE_DIRECTORY ${TEST_OUTPUT_DIR})
 set(SEP_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
 file(MAKE_DIRECTORY ${SEP_TEST_DATA_DIR})
 
+# Enable test framework before adding subdirectories so that
+# add_test() calls are registered correctly.
+include(CTest)
+enable_testing()
+
 # Common test compile definitions
 add_compile_definitions(
     SEP_TEST_DATA_DIR="${SEP_TEST_DATA_DIR}"

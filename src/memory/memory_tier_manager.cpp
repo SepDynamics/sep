@@ -195,9 +195,14 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   // Normalize very small values to zero so tests remain stable across
   // platforms and rounding modes. Clamp the result to the valid [0,1]
   // range to avoid tiny negative values that can appear after
-  // defragmentation or resizing operations.
+  // defragmentation or resizing operations.  Treat any utilization that
+  // is within one byte of the tier size as effectively zero.  This
+  // guards against rounding errors when a tier briefly reports a single
+  // byte in use after promotions or defragmentation cycles.
+  float byte_threshold =
+      1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()));
   if (std::fabs(util) <= kUtilizationEpsilon ||
-      util <= (1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()))))
+      util <= byte_threshold + kUtilizationEpsilon)
     return 0.0f;
   return std::clamp(util, 0.0f, 1.0f);
 }

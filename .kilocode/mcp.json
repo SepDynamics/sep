@@ -1,24 +1,3 @@
 {
-  "mcpServers": {
-    "sep-integrated-mcp": {
-      "command": "node",
-      "args": [
-        "/home/ajn/.local/share/Kilo-Code/MCP/sep-integrated-mcp/build/index.js"
-      ],
-      "env": {
-        "SEP_ENGINE_PATH": "${workspaceFolder}",
-        "SEP_CONFIG_FILE": "${workspaceFolder}/config/default.json",
-        "REDIS_URL": "redis://localhost:6379"
-      },
-      "disabled": false,
-      "alwaysAllow": [
-        "process_context",
-        "analyze_patterns",
-        "store_pattern",
-        "retrieve_pattern"
-      ],
-      "timeout": 300,
-      "description": "SEP Engine integrated MCP server with quantum pattern processing"
-    }
-  }
+  "mcpServers": {}
 }

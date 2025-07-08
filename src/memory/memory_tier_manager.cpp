@@ -1,6 +1,7 @@
 #include "memory/memory_tier_manager.hpp"
 #include "core/common.h"
 #include "core/types.h"
+#include "core/manager.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
 

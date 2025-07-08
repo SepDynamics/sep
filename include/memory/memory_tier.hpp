@@ -17,6 +17,7 @@
 #include "../core/types.h"
 #include "types.h"
 #include "persistence/pattern_data.hpp"
+#include "persistence/persistent_pattern_data.hpp"
 
 namespace sep {
 namespace memory {
@@ -82,9 +83,6 @@ struct MemoryBlock {
         : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
-#include "persistence/persistent_pattern_data.hpp"
-
-using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 class MemoryTier {
 public:
@@ -127,12 +125,12 @@ public:
     }
 
     // Pattern management methods
-    bool canAcceptPattern(const PersistentPatternData& pattern) const;
-    void addPattern(size_t id, PersistentPatternData pattern);
+    bool canAcceptPattern(const ::sep::persistence::PersistentPatternData& pattern) const;
+    void addPattern(size_t id, ::sep::persistence::PersistentPatternData pattern);
     void removePattern(size_t id);
-    const PersistentPatternData* getPattern(size_t id) const;
-    PersistentPatternData* getPattern(size_t id);
-    const std::unordered_map<size_t, PersistentPatternData>& getPatterns() const {
+    const ::sep::persistence::PersistentPatternData* getPattern(size_t id) const;
+    ::sep::persistence::PersistentPatternData* getPattern(size_t id);
+    const std::unordered_map<size_t, ::sep::persistence::PersistentPatternData>& getPatterns() const {
         return m_patterns;
     }
 
@@ -150,7 +148,7 @@ private:
     size_t m_max_patterns{0};
     float m_coherence_threshold{0.0f};
     int m_min_generations{0};
-    std::unordered_map<size_t, PersistentPatternData> m_patterns;
+    std::unordered_map<size_t, ::sep::persistence::PersistentPatternData> m_patterns;
 };
 
 }  // namespace memory

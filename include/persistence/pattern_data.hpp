@@ -12,7 +12,4 @@ struct PersistentPatternData {
 
 } } // namespace memory::persistence
 
-namespace persistence {
-using PersistentPatternData = ::sep::memory::persistence::PersistentPatternData;
-} // namespace persistence
 } // namespace sep

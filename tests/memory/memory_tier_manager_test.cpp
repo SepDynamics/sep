@@ -35,7 +35,7 @@ TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
 TEST(MemoryTierManagerTest, PromotionAndDemotion) {
     const float EPSILON = 0.01f;
     MemoryTierManager mgr;
-    mgr.resetForTesting();
+    mgr.resetForTesting({});
     
     // Initial allocation in MTM
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
@@ -73,7 +73,7 @@ TEST(MemoryTierManagerTest, PromotionAndDemotion) {
 TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     const float EPSILON = 0.01f;
     MemoryTierManager mgr;
-    mgr.resetForTesting();
+    mgr.resetForTesting({});
     
     // Initial allocation in MTM
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
@@ -113,7 +113,7 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
 TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     const float EPSILON = 0.01f;
     MemoryTierManager mgr;
-    mgr.resetForTesting();
+    mgr.resetForTesting({});
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
 
@@ -137,8 +137,9 @@ TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     stm_util = mgr.getTierUtilization(MemoryTierEnum::STM);
     mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     EXPECT_GT(stm_util, 0.0f) << "Expected non-zero STM utilization after demotion";
-    EXPECT_NEAR(mtm_util, 0.0f, EPSILON) << "Expected near-zero MTM utilization after demotion";
-        << "Expected block to be in either MTM (util=" << mtm_util
+    EXPECT_NEAR(mtm_util, 0.0f, EPSILON)
+        << "Expected near-zero MTM utilization after demotion"
+        << " Expected block to be in either MTM (util=" << mtm_util
         << ") or STM (util=" << stm_util << ")";
 }
 
@@ -266,7 +267,7 @@ TEST(MemoryTierManagerTest, CleanupExpiredPatterns) {
 TEST(MemoryTierManagerTest, PrunePatternsByPriority) {
     MemoryTierManager mgr;
     for (size_t i = 0; i < 5; ++i) {
-        sep::persistence::PatternData pdata;
+        sep::persistence::PersistentPatternData pdata;
         pdata.coherence = static_cast<float>(i) / 5.0f;
         mgr.getLTM().addPattern(i, pdata);
         sep::pattern::PatternData pat;

@@ -1,6 +1,7 @@
 #include "memory/redis_manager.h"
 #include "memory/types.h"
 #include <gtest/gtest.h>
+#include <algorithm>
 
 using namespace sep::persistence;
 using namespace sep::memory;

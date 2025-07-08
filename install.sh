@@ -35,10 +35,9 @@ PACKAGES=(
   libboost-all-dev libopencolorio-dev libopenimageio-dev
   libembree-dev libpugixml-dev libopenjp2-7-dev
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
-  libfmt-dev
-  libspdlog-dev libgtest-dev libhiredis-dev libglm-dev nlohmann-json3-dev
+  libfmt-dev pkg-config
+  libspdlog-dev libgtest-dev libgmock-dev libhiredis-dev libglm-dev nlohmann-json3-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
-  libglm-dev nlohmann-json3-dev
   valgrind
 )
 

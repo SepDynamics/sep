@@ -3,6 +3,7 @@
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
+#include "core/manager.h"
 
 #include <algorithm>
 #include <cmath>
@@ -25,7 +26,7 @@ using Config = MemoryTierManager::Config;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
 using ::sep::pattern::PatternData;
-using ::sep::memory::persistence::PersistentPatternData;
+using ::sep::persistence::PersistentPatternData;
 using ::sep::quantum::Pattern;
 
 // Mutex declarations

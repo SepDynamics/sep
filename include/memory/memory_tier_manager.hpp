@@ -13,13 +13,14 @@
 #include "core/dag_graph.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
-#include "../persistence/pattern_data.hpp"
+#include "../persistence/persistent_pattern_data.hpp"
 #include "compat/shim.h"
 #include "quantum/types.h"
 #include "quantum/data.hpp"
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
-#include "persistence/pattern_data.hpp"
+#include "persistence/persistent_pattern_data.hpp"
+#endif
 
 // Standard library includes
 #include <cstddef>
@@ -120,7 +121,7 @@ public:
                                         const ::sep::pattern::PatternData* previous_patterns,
                                         void* stream);
                                       
-    void updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type);
+    void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);
     void removePattern(std::size_t id);
     void pruneWeakRelationships();
     void calculateRelationshipCoherence();

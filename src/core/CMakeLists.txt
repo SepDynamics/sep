@@ -2,6 +2,7 @@ add_library(sep_core STATIC
     tracing.cpp
     allocation_metrics.cpp
     dag_graph.cpp
+    config_manager_stub.cpp
     prometheus_exporter.cpp
     error_handler.cpp
     metrics_collector.cpp
@@ -53,6 +54,7 @@ target_link_libraries(sep_core
     PUBLIC
         Threads::Threads
         sep_compat
+        fmt::fmt
 )
 
 # Install headers from include directory

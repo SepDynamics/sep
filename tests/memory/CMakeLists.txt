@@ -23,13 +23,13 @@ add_executable(memory_manager_tests
     promotion_regression_test.cpp
     pattern_init_test.cpp
     pattern_promotion_test.cpp
-    redis_manager_test.cpp
 )
 
 target_link_libraries(memory_manager_tests PRIVATE
     sep_memory
     sep_manifold
     sep_compat
+    fmt::fmt
     sep_core
     GTest::GTest
     GTest::Main

@@ -39,7 +39,9 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 // as zero when reporting utilization metrics.
 // Allow slightly higher tolerance so tiny residuals after promotions do
 // not cause test failures.
-inline constexpr float kUtilizationEpsilon = 1e-3f;
+// Lower the epsilon so small allocations in unit tests still register
+// as non-zero utilization when tiers are large.
+inline constexpr float kUtilizationEpsilon = 1e-6f;
 
 // Memory tier types
 enum class TierType {

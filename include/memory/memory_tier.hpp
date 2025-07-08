@@ -16,7 +16,7 @@
 #include "../core/common.h"
 #include "../core/types.h"
 #include "types.h"
-#include "persistence/pattern_data.hpp"
+#include "persistence/persistent_pattern_data.hpp"
 
 namespace sep {
 namespace memory {
@@ -24,6 +24,7 @@ namespace memory {
 using ::sep::CompressionMethod;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
+using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 // Small epsilon used when comparing utilization metrics.  The value is tuned
 // so that allocations of a single kilobyte in a default 1MB tier are still
@@ -82,9 +83,6 @@ struct MemoryBlock {
         : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
-#include "persistence/persistent_pattern_data.hpp"
-
-using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 class MemoryTier {
 public:

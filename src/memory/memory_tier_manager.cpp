@@ -3,6 +3,9 @@
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
+#ifndef SEP_MEMORY_MINIMAL
+#include "core/manager.h" // for ConfigManager
+#endif
 
 #include <algorithm>
 #include <cmath>

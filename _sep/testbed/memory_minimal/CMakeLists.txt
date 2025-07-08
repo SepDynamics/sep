@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(memory_minimal_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../tests/memory/memory_tier_manager_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cross_language_memory_tier_test.cpp
 )
 
 find_package(GTest REQUIRED)
@@ -19,7 +20,6 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../src)
 
 set(MEMORY_SRC
     ${SRC_DIR}/memory/memory_tier.cpp
-    ${SRC_DIR}/memory/memory_tier_manager.cpp
     ${SRC_DIR}/core/logging.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_tier_manager_stubs.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/allocation_metrics_stub.cpp

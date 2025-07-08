@@ -10,7 +10,11 @@
 #include "core/manager.h" // for ConfigManager
 #endif
 
-namespace sep { namespace config { class ConfigManager; } }
+namespace sep {
+namespace config {
+class ConfigManager;
+}
+} // namespace sep
 
 #include <algorithm>
 #include <cmath>
@@ -67,8 +71,6 @@ MemoryTierManager::MemoryTierManager() {
 }
 
 MemoryTierManager::MemoryTierManager(const Config &cfg) { init(cfg); }
-
-
 
 MemoryTierManager::~MemoryTierManager() { shutdown(); }
 
@@ -169,6 +171,14 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (!t)
     return 0.0f;
 
+  // Fast path when the tier is completely empty. This avoids returning tiny
+  // rounding artifacts that can appear after complex promotion or
+  // defragmentation sequences. Using the free space metric keeps the check
+  // inexpensive while still covering edge cases where used_space_ may briefly
+  // drift from the actual block list state.
+  if (t->getFreeSpace() == t->getSize())
+    return 0.0f;
+
   // Recompute the metric directly from the tier rather than relying on
   // cached free-space bookkeeping.  During complex promotion or
   // defragmentation sequences the internal counters may temporarily drift,
@@ -214,9 +224,14 @@ float MemoryTierManager::getTotalUtilization() const {
     total_size += ltm_->getSize();
     used += ltm_->getSize() - ltm_->getFreeSpace();
   }
-  if (total_size == 0)
+  if (total_size == 0 || used == 0)
     return 0.0f;
+
   float util = static_cast<float>(used) / static_cast<float>(total_size);
+
+  // Clamp extremely small results to zero for consistency with
+  // getTierUtilization(). This helps keep unit tests deterministic across
+  // different architectures and rounding modes.
   return std::fabs(util) <= kUtilizationEpsilon ? 0.0f : util;
 }
 
@@ -392,7 +407,7 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
   }
 
   // Update lookup maps in correct order to maintain consistency
-  void* old_ptr = block->ptr;
+  void *old_ptr = block->ptr;
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(old_ptr);
@@ -568,8 +583,9 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
   if (!t)
     return;
 
-  auto &patterns = const_cast<std::unordered_map<size_t, PersistentPatternData> &>(
-      t->getPatterns());
+  auto &patterns =
+      const_cast<std::unordered_map<size_t, PersistentPatternData> &>(
+          t->getPatterns());
 
   if (patterns.size() <= max_count)
     return;

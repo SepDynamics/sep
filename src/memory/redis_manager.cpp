@@ -15,7 +15,6 @@
 #include <cstdint>
 #include <cstring>
 #include <hiredis/hiredis.h>
-#define SEP_HAS_HIREDIS 1
 // Define namespace alias to clarify that Manager is in the logging namespace
 namespace logging = sep::logging; 
 #include "memory/memory_tier_manager.hpp"

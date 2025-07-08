@@ -490,7 +490,7 @@ AudioMetrics sep::audio::PipeWireCapture::getMetrics() const
     metrics.total_samples = metrics_.total_samples;
     metrics.dropped_samples = metrics_.dropped_samples;
     metrics.xruns = metrics_.xruns;
-    metrics.latency_ms = metrics_.latency;
+    metrics.latency_ms = metrics_.latency_ms;
     return metrics;
 }
 

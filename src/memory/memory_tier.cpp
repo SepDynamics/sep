@@ -42,32 +42,44 @@ using ::sep::MemoryTierEnum;
 
 MemoryTier::MemoryTier(const Config &config)
     : config_(config), memory_pool_(nullptr), used_space_(0) {
-  // Allocate memory pool based on tier type
-  if (config.type == MemoryTierEnum::HOST) {
+  // Allocate memory pool based on tier type. Logical tiers (STM/MTM/LTM)
+  // should use host memory by default so tests behave deterministically even
+  // when CUDA support is enabled. Only the physical DEVICE or UNIFIED tiers
+  // require GPU-managed allocations.
+  bool use_cuda = (config.type == MemoryTierEnum::DEVICE ||
+                   config.type == MemoryTierEnum::UNIFIED);
+
+  if (!use_cuda) {
     memory_pool_ = std::malloc(config.size);
+#if SEP_MEMORY_HAS_CUDA
+    cudaError_t err = memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
+    if (err != cudaSuccess) {
+      auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
+      if (logger)
+        logger->error("Failed to allocate host memory: {}", err);
+    }
+#endif
   } else {
     memory_pool_ = nullptr;
 #if SEP_MEMORY_HAS_CUDA
     cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
     if (err != cudaSuccess) {
-        auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
+      auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
       if (logger) {
         logger->error("Failed to allocate managed memory: {}", err);
         logger->info("Falling back to host allocation");
       }
       memory_pool_ = std::malloc(config.size);
-      if (!memory_pool_ && logger) {
+      if (!memory_pool_ && logger)
         logger->error("Host allocation fallback failed");
-      }
     }
 #else
     memory_pool_ = std::malloc(config.size);
     cudaError_t err = memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
     if (err != cudaSuccess) {
-        auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
-      if (logger) {
+      auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
+      if (logger)
         logger->error("Failed to allocate host memory: {}", err);
-      }
     }
 #endif
   }
@@ -104,7 +116,9 @@ MemoryTier::MemoryTier(const Config &config, size_t max_patterns,
 
 MemoryTier::~MemoryTier() {
   if (memory_pool_) {
-    if (config_.type == MemoryTierEnum::HOST) {
+    bool use_cuda = (config_.type == MemoryTierEnum::DEVICE ||
+                     config_.type == MemoryTierEnum::UNIFIED);
+    if (!use_cuda) {
       std::free(memory_pool_);
     } else {
 #if SEP_MEMORY_HAS_CUDA

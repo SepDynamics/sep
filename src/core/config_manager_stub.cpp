@@ -5,7 +5,9 @@ namespace sep::config {
 class ConfigManager::Impl {
 public:
     MemoryThresholdConfig mem_cfg{};
+#if SEP_BUILD_QUANTUM
     QuantumThresholdConfig quantum_cfg{};
+#endif
 };
 
 ConfigManager::ConfigManager() : impl_(std::make_unique<Impl>()) {}
@@ -34,17 +36,23 @@ const LogConfig &ConfigManager::getLogConfig() const {
 const MemoryThresholdConfig &ConfigManager::getMemoryConfig() const {
     return impl_->mem_cfg;
 }
+#if SEP_BUILD_QUANTUM
 const QuantumThresholdConfig &ConfigManager::getQuantumConfig() const {
     return impl_->quantum_cfg;
 }
+#endif
 void ConfigManager::updateAPIConfig(const APIConfig &) {}
 void ConfigManager::updateCudaConfig(const CudaConfig &) {}
 void ConfigManager::updateLogConfig(const LogConfig &) {}
 void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig &cfg) { impl_->mem_cfg = cfg; }
+#if SEP_BUILD_QUANTUM
 void ConfigManager::updateQuantumConfig(const QuantumThresholdConfig &cfg) { impl_->quantum_cfg = cfg; }
+#endif
 void ConfigManager::resetToDefaults() {
     impl_->mem_cfg = MemoryThresholdConfig{};
+#if SEP_BUILD_QUANTUM
     impl_->quantum_cfg = QuantumThresholdConfig{};
+#endif
 }
 
 } // namespace sep::config

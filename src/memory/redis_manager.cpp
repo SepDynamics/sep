@@ -5,6 +5,10 @@
 #include <unistd.h>
 #include <cstdlib>
 
+#ifdef SEP_NO_REDIS
+#undef SEP_NO_REDIS
+#endif
+#define SEP_HAS_HIREDIS 1
 #include "memory/redis_manager.h"
 #include "memory/types.h"
 #include "core/logging.h"

@@ -639,7 +639,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
-    pattern_ptr->coherence = 1.0f;
+    pattern_ptr->coherence = 0.0f;
     if (pattern_relationships_.count(id)) {
       const auto &rels = pattern_relationships_.at(id);
       if (!rels.empty()) {
@@ -648,13 +648,11 @@ void MemoryTierManager::calculateRelationshipCoherence() {
           sum += r.second;
         }
         float avg = static_cast<float>(sum / rels.size());
-        pattern_ptr->coherence = 1.0f - avg;
+        pattern_ptr->coherence = avg;
       }
     }
   }
 }
-#endif
-
 
 
 void MemoryTierManager::cleanupExpiredPatterns() {
@@ -688,7 +686,6 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     removePattern(sorted[i].first);
   }
 }
-#endif // SEP_TESTBED_STUBS
 
 } // namespace memory
 } // namespace sep

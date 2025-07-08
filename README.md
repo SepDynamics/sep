@@ -193,3 +193,17 @@ make memory_manager_tests
 
 This mirrors the configuration used by `build_no_cuda.sh` while giving
 you direct control over the build location.
+
+Running `memory_manager_tests` should report all tests passing. In
+particular the `MemoryTierManagerTest` suite verifies promotion and
+demotion across STM/MTM/LTM tiers:
+
+```
+[----------] 1 test from MemoryTierManagerPromotion
+[ RUN      ] MemoryTierManagerPromotion.PromoteDemote
+[       OK ] MemoryTierManagerPromotion.PromoteDemote (0 ms)
+[----------] 1 test from MemoryTierManagerPromotion (0 ms total)
+
+[==========] 24 tests from 9 test suites ran. (0 ms total)
+[  PASSED  ] 24 tests.
+```

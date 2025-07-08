@@ -76,36 +76,6 @@ if apt-cache show gcc-14 >/dev/null 2>&1; then
   sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
 fi
 
-build_opensubdiv() {
-  local src="$BUILD_DIR/opensubdiv"
-  git clone --depth 1 https://github.com/PixarAnimationStudios/OpenSubdiv.git "$src"
-  cmake -S "$src" -B "$src/build" -DNO_EXAMPLES=ON -DNO_TUTORIALS=ON -DNO_REGRESSION=ON \
-    >"$LOG_DIR/opensubdiv.log" 2>&1
-  cmake --build "$src/build" -j"$(nproc)" >>"$LOG_DIR/opensubdiv.log" 2>&1
-  sudo cmake --install "$src/build" >>"$LOG_DIR/opensubdiv.log" 2>&1
-}
-
-build_usd() {
-  local src="$BUILD_DIR/usd"
-  git clone --depth 1 https://github.com/PixarAnimationStudios/USD.git "$src"
-  cmake -S "$src" -B "$src/build" -DPXR_BUILD_TESTS=OFF -DPXR_BUILD_EXAMPLES=OFF \
-    >"$LOG_DIR/usd.log" 2>&1
-  cmake --build "$src/build" -j"$(nproc)" >>"$LOG_DIR/usd.log" 2>&1
-  sudo cmake --install "$src/build" >>"$LOG_DIR/usd.log" 2>&1
-}
-
-if ! dpkg -s libopensubdiv-dev >/dev/null 2>&1; then
-  echo "libopensubdiv-dev not found, building from source..."
-  build_opensubdiv
-  sudo ldconfig
-fi
-
-if ! dpkg -s libusd-dev >/dev/null 2>&1; then
-  echo "libusd-dev not found, building from source..."
-  build_usd
-  sudo ldconfig
-fi
-
 echo "All dependencies installed. See $LOG_DIR for logs."
 echo "Some optional packages like OSL and Alembic may need to be built manually if not available via apt."
 

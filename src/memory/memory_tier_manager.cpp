@@ -17,6 +17,9 @@
 #include <string>
 
 namespace sep {
+namespace config {
+class ConfigManager;
+} // namespace config
 namespace memory {
 
 // Forward declarations
@@ -561,7 +564,7 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                           float strength) {
+                                           uint8_t strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
   pattern_relationships_[id_a][id_b] = strength;
   pattern_relationships_[id_b][id_a] = strength;

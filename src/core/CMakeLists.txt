@@ -9,6 +9,8 @@ set(SEP_CORE_SOURCES
     logging.cpp
 )
 
+add_library(sep_core STATIC ${SEP_CORE_SOURCES})
+
 # The core library does not require Redis for these tests. Explicitly
 # disable Redis support so headers guarded by SEP_NO_REDIS do not
 # trigger missing include errors when building in minimal mode.

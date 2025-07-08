@@ -21,6 +21,7 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../src)
 set(MEMORY_SRC
     ${SRC_DIR}/memory/memory_tier.cpp
     ${SRC_DIR}/core/logging.cpp
+    ${SRC_DIR}/memory/memory_tier_manager_serialization.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_tier_manager_stubs.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/allocation_metrics_stub.cpp
 )

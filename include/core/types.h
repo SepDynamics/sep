@@ -52,30 +52,6 @@ struct QuantumThresholdConfig {
     float stability_threshold{0.8f};
 };
 
-// Quantum processing thresholds used by experimental components
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
-};
-
-// Minimal quantum processing thresholds used by tests. The real engine
-// defines a richer configuration, but the memory manager tests only
-// require a handful of fields. Provide a lightweight struct here so the
-// stub configuration manager can compile without pulling in the full
-// quantum stack.
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
-};
-
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
-};
-
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.
 struct CudaConfig {
@@ -108,13 +84,6 @@ struct LogConfig {
     std::string level{"info"};
     std::string file{};
     std::string dir{"logs"};
-};
-
-// Quantum memory/coherence thresholds used by quantum processing components
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
 };
 
 // Basic analytics configuration used by quantum components

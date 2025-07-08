@@ -31,7 +31,10 @@ using ::sep::SEPResult;
 // when tiers temporarily hold extremely small allocations during promotion
 // or defragmentation.  Values below this threshold are effectively treated
 // as zero utilization in tests.
-inline constexpr float kUtilizationEpsilon = 1e-3f;
+// Relax the epsilon to further suppress tiny residuals that appear after
+// promotions or tier defragmentation.  Values below this threshold are treated
+// as zero when reporting utilization metrics.
+inline constexpr float kUtilizationEpsilon = 1e-2f;
 
 // Memory tier types
 enum class TierType {

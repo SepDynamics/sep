@@ -136,3 +136,4 @@ blender
 !sep_engine/
 !examples/json_processor_build.cmake
 package-lock.json
+third_party/glm/

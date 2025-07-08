@@ -8,10 +8,10 @@ constexpr float EPSILON = 1e-3f;
 }
 
 TEST(MemoryManagerSmokeTest, AllocateAndFree) {
-    mem::MemoryTierManager manager;
-    mem::MemoryBlock* block = manager.allocate(64, mem::MemoryTierEnum::STM);
+    sep::memory::MemoryTierManager manager;
+    sep::memory::MemoryBlock* block = manager.allocate(64, sep::memory::MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
-    EXPECT_GT(manager.getTierUtilization(mem::MemoryTierEnum::STM), 0.0f);
+    EXPECT_GT(manager.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f);
     manager.deallocate(block);
-    EXPECT_NEAR(manager.getTierUtilization(mem::MemoryTierEnum::STM), 0.0f, EPSILON);
+    EXPECT_NEAR(manager.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f, EPSILON);
 }

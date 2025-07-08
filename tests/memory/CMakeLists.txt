@@ -23,8 +23,11 @@ add_executable(memory_manager_tests
     promotion_regression_test.cpp
     pattern_init_test.cpp
     pattern_promotion_test.cpp
-    redis_manager_test.cpp
 )
+
+if(SEP_HAS_REDIS)
+    target_sources(memory_manager_tests PRIVATE redis_manager_test.cpp)
+endif()
 
 target_link_libraries(memory_manager_tests PRIVATE
     sep_memory

@@ -24,8 +24,10 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DSEP_WITH_OSL=OFF \
   -DSEP_WITH_ALEMBIC=OFF \
   -DSEP_HAS_CUDA=0 \
+  -DSEP_NO_REDIS=ON \
   -DSEP_ENABLE_AUDIO=OFF \
   -DSEP_WORKBENCH_DEMO=OFF \
   -DBUILD_TESTING=ON
 
 make memory_manager_tests -j$(nproc)
+ctest --output-on-failure

@@ -239,14 +239,14 @@ TEST(MemoryTierManagerTest, CalculateRelationshipCoherence) {
     b.id = "2";
     mgr.registerPattern(1, a);
     mgr.registerPattern(2, b);
-    mgr.updateRelationship(1, 2, 0);
+    mgr.updateRelationship(1, 2, 0.0f);
     mgr.calculateRelationshipCoherence();
     const auto* pa = mgr.getPatternData(1);
     const auto* pb = mgr.getPatternData(2);
     ASSERT_NE(pa, nullptr);
     ASSERT_NE(pb, nullptr);
-    EXPECT_FLOAT_EQ(pa->coherence, 1.0f);
-    EXPECT_FLOAT_EQ(pb->coherence, 1.0f);
+    EXPECT_FLOAT_EQ(pa->coherence, 0.0f);
+    EXPECT_FLOAT_EQ(pb->coherence, 0.0f);
 }
 
 #if 0

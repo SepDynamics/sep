@@ -634,7 +634,6 @@ void MemoryTierManager::pruneWeakRelationships() {
   }
 }
 
-#ifndef SEP_TESTBED_STUBS
 void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> reg_lock(registry_mutex);
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);

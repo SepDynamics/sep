@@ -653,7 +653,6 @@ void MemoryTierManager::calculateRelationshipCoherence() {
     }
   }
 }
-#endif
 
 
 
@@ -688,7 +687,6 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     removePattern(sorted[i].first);
   }
 }
-#endif // SEP_TESTBED_STUBS
 
 } // namespace memory
 } // namespace sep

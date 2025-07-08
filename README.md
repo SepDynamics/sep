@@ -162,6 +162,12 @@ unit test targets:
 ./install.sh --minimal
 ./build_no_cuda.sh
 ```
+If you prefer installing the development headers manually, install the
+packages via `apt` first and then configure the build:
+
+```bash
+sudo apt-get install libgflags-dev libgoogle-glog-dev libboost-dev
+```
 
 The script configures the project with optional dependencies disabled and
 executes the `memory_manager_tests` target automatically.

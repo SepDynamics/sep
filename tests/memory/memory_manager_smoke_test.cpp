@@ -1,17 +1,17 @@
 #include <gtest/gtest.h>
 #include "memory/memory_tier_manager.hpp"
 
-using namespace sep;
+namespace mem = sep::memory;
 
 namespace {
 constexpr float EPSILON = 1e-3f;
 }
 
 TEST(MemoryManagerSmokeTest, AllocateAndFree) {
-    memory::MemoryTierManager manager;
-    memory::MemoryBlock* block = manager.allocate(64, memory::MemoryTierEnum::STM);
+    mem::MemoryTierManager manager;
+    mem::MemoryBlock* block = manager.allocate(64, mem::MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
-    EXPECT_GT(manager.getTierUtilization(memory::MemoryTierEnum::STM), 0.0f);
+    EXPECT_GT(manager.getTierUtilization(mem::MemoryTierEnum::STM), 0.0f);
     manager.deallocate(block);
-    EXPECT_NEAR(manager.getTierUtilization(memory::MemoryTierEnum::STM), 0.0f, EPSILON);
+    EXPECT_NEAR(manager.getTierUtilization(mem::MemoryTierEnum::STM), 0.0f, EPSILON);
 }

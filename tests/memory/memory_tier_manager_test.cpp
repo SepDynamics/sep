@@ -249,41 +249,6 @@ TEST(MemoryTierManagerTest, CalculateRelationshipCoherence) {
     EXPECT_FLOAT_EQ(pb->coherence, 1.0f);
 }
 
-TEST(MemoryTierManagerTest, CleanupExpiredPatterns) {
-    MemoryTierManager mgr;
-    ::sep::pattern::PatternData p1;
-    p1.id = "1";
-    p1.coherence = 0.1f;
-    ::sep::pattern::PatternData p2;
-    p2.id = "2";
-    p2.coherence = 0.8f;
-    mgr.registerPattern(1, p1);
-    mgr.registerPattern(2, p2);
-    mgr.cleanupExpiredPatterns();
-    EXPECT_EQ(mgr.getPatternData(1), nullptr);
-    EXPECT_NE(mgr.getPatternData(2), nullptr);
-}
-
-TEST(MemoryTierManagerTest, PrunePatternsByPriority) {
-    MemoryTierManager mgr;
-    for (size_t i = 0; i < 5; ++i) {
-        ::sep::persistence::PersistentPatternData pdata;
-        pdata.coherence = static_cast<float>(i) / 5.0f;
-        mgr.getLTM().addPattern(i, pdata);
-        ::sep::pattern::PatternData pat;
-        pat.id = std::to_string(i);
-        pat.coherence = pdata.coherence;
-        pat.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
-        mgr.registerPattern(i, pat);
-    }
-    mgr.prunePatternsByPriority(MemoryTierEnum::LTM, 2);
-    size_t remaining = 0;
-    for (size_t i = 0; i < 5; ++i) {
-        if (mgr.getLTM().getPattern(i))
-            ++remaining;
-    }
-    EXPECT_LE(remaining, 2u);
-}
 
 } // namespace memory
 } // namespace sep

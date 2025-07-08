@@ -2,6 +2,7 @@
 #include "memory/memory_tier_manager.hpp"
 #include "memory/memory_tier_manager_serialization.hpp"
 #include <fstream>
+#include <filesystem>
 #include <nlohmann/json.hpp>
 #include <filesystem>
 

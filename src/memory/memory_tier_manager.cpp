@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
+#include <new>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -22,7 +23,7 @@ struct MemoryBlock;
 // Using declarations
 using Config = MemoryTierManager::Config;
 using ::sep::MemoryTierEnum;
-using ::sep::core::SEPResult;
+using ::sep::SEPResult;
 using ::sep::pattern::PatternData;
 using ::sep::persistence::PersistentPatternData;
 using ::sep::quantum::Pattern;
@@ -43,7 +44,9 @@ void MemoryTierManager::resetForTesting() {
     instance_->shutdown();
     instance_.reset();
   }
-  once_flag_ = std::once_flag{};
+  // std::once_flag is neither copyable nor assignable. Use placement new
+  // to reset it to the default constructed state for subsequent tests.
+  new (&once_flag_) std::once_flag();
 }
 
 // --- Singleton Implementation ---

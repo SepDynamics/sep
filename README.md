@@ -156,7 +156,16 @@ Add `--no-cuda` if you do not need CUDA support. Use `--minimal` to install only
 If CMake reports missing libraries such as **gflags**, **glog** or
 **Boost**, run the minimal setup script and use the helper build
 wrapper. This installs the required dependencies and builds only the
-unit test targets:
+unit test targets. As an alternative you can install these packages
+manually using your system package manager. For Debian-based
+distributions run:
+
+```bash
+sudo apt-get update
+sudo apt-get install libgflags-dev libgoogle-glog-dev libboost-dev
+```
+
+After the dependencies are available you can rebuild using:
 
 ```bash
 ./install.sh --minimal

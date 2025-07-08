@@ -27,7 +27,10 @@ using ::sep::SEPResult;
 // so that allocations of a single kilobyte in a default 1MB tier are still
 // reported as non-zero while tiny rounding artifacts after promotions or
 // defragmentation are clamped to zero.
-inline constexpr float kUtilizationEpsilon = 5e-4f;
+// A slightly larger epsilon avoids lingering non-zero utilization values
+// (e.g. 0.000244) that appear during tier promotions and internal
+// defragmentation when the used space is effectively zero.
+inline constexpr float kUtilizationEpsilon = 1e-3f;
 
 // Memory tier types
 enum class TierType {

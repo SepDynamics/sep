@@ -30,7 +30,7 @@ TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
     mgr.deallocate(block);
     // Allow a slightly larger epsilon for utilization checks.  The promotion
     // and demotion logic can leave tiny rounding differences when tiers are
-    // resized during the test run.  Using a 1% threshold keeps the intent of
+    // resized during the test run.  Using a 0.1% threshold keeps the intent of
     // the test while avoiding false negatives caused by a residual
     // utilization value like 0.000244.
     EXPECT_LT(mgr.getTierUtilization(::sep::memory::MemoryTierEnum::STM),

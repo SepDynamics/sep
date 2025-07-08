@@ -30,9 +30,10 @@ def install_package(package_name):
         print(f"Error installing {package_name}: {e}")
         return False
 
-def run_script(script_path, install_cuda=False):
+def run_script(script_path, install_cuda=False, install_cycles=False):
     env = os.environ.copy()
     env["INSTALL_CUDA"] = "1" if install_cuda else "0"
+    env["SKIP_CYCLES"] = "0" if install_cycles else "1"
     try:
         subprocess.check_call(["bash", script_path], env=env)
         return True
@@ -46,9 +47,13 @@ packages = ["requests", "numpy"]
 # Install pip if needed
 def main():
     parser = argparse.ArgumentParser(description="Install SEP Engine dependencies")
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("--with-cuda", action="store_true", help="Install CUDA toolkit")
-    group.add_argument("--no-cuda", action="store_true", help="Skip CUDA installation (default)")
+    cuda_group = parser.add_mutually_exclusive_group()
+    cuda_group.add_argument("--with-cuda", action="store_true", help="Install CUDA toolkit")
+    cuda_group.add_argument("--no-cuda", action="store_true", help="Skip CUDA installation (default)")
+
+    cycles_group = parser.add_mutually_exclusive_group()
+    cycles_group.add_argument("--with-cycles", action="store_true", help="Install Cycles renderer")
+    cycles_group.add_argument("--no-cycles", action="store_true", help="Skip Cycles setup (default)")
     args = parser.parse_args()
 
     if install_pip():
@@ -57,7 +62,8 @@ def main():
 
     script = os.path.join(os.path.dirname(__file__), "scripts", "install_dependencies.sh")
     install_cuda = args.with_cuda and not args.no_cuda
-    if not run_script(script, install_cuda=install_cuda):
+    install_cycles = args.with_cycles and not args.no_cycles
+    if not run_script(script, install_cuda=install_cuda, install_cycles=install_cycles):
         sys.exit(1)
 
     print("\nDependency installation complete. You can now try enabling the SEP Engine addon.")

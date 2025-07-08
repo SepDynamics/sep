@@ -33,6 +33,9 @@ PACKAGES=(
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
   libfmt-dev
   libspdlog-dev libgtest-dev libhiredis-dev
+  libopenexr-dev libimath-dev
+  libpipewire-0.3-dev libfftw3-dev
+  gdb valgrind redis-server
 )
 
 echo "Updating package lists..."

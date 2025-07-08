@@ -188,8 +188,8 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (t->getFreeSpace() == t->getSize())
     return 0.0f;
 
-  // Recompute utilization from the current block list to prevent stale values
-  // when internal counters drift after complex promotions.
+  // Recompute utilization from the current block list to guard against stale
+  // counters which may lag behind after promotions or defragmentation.
   float util = t->calculateUtilization();
 
   // Guard against rounding artifacts that may appear when used space is

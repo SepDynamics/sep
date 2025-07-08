@@ -9,6 +9,14 @@ set(SEP_CORE_SOURCES
     logging.cpp
 )
 
+# Manager functionality is excluded when building the testbed stubs
+if(NOT SEP_TESTBED_STUBS)
+    list(APPEND SEP_CORE_SOURCES manager.cpp)
+endif()
+
+# Create the static core library
+add_library(sep_core STATIC ${SEP_CORE_SOURCES})
+
 # The core library does not require Redis for these tests. Explicitly
 # disable Redis support so headers guarded by SEP_NO_REDIS do not
 # trigger missing include errors when building in minimal mode.

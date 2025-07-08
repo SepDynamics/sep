@@ -68,10 +68,7 @@ MemoryTierManager::MemoryTierManager() {
 
 MemoryTierManager::MemoryTierManager(const Config &cfg) { init(cfg); }
 
-MemoryTierManager::MemoryTierManager(
-    const ::sep::config::MemoryThresholdConfig &mc) {
-  init(mc);
-}
+
 
 MemoryTierManager::~MemoryTierManager() { shutdown(); }
 
@@ -130,7 +127,6 @@ void MemoryTierManager::deallocate(MemoryBlock *block) {
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(block->ptr);
-    legacy_lookup_map_.erase(block->ptr);
   }
   if (MemoryTier *t = getTier(block->tier)) {
     t->deallocate(block);
@@ -147,8 +143,7 @@ MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr) {
   auto it = lookup_map_.find(ptr);
   if (it != lookup_map_.end())
     return it->second;
-  auto it2 = legacy_lookup_map_.find(ptr);
-  return it2 != legacy_lookup_map_.end() ? it2->second : nullptr;
+  return nullptr;
 }
 
 // --- Tier Management & Metrics ---
@@ -402,30 +397,18 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(old_ptr);
     src_tier->deallocate(block);
-    // Preserve mapping from the original pointer so tests that hold on to the
-    // old address can still resolve the promoted block.
-    lookup_map_[block->ptr] = out_block;
     lookup_map_[out_block->ptr] = out_block;
     lookup_map_[block->ptr] = out_block; // allow lookups using old pointer
-    legacy_lookup_map_[block->ptr] = out_block;
   }
 
   // Refresh the lookup table so callers can resolve blocks after the move.
   rebuildLookup();
-  {
-    std::lock_guard<std::mutex> lock(lookup_mutex);
-    lookup_map_[old_ptr] = out_block;
-  }
-
-  {
-    std::lock_guard<std::mutex> lock(lookup_mutex);
-    lookup_map_[old_ptr] = out_block;
-  }
 
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     // Preserve the old pointer as an alias so callers using stale addresses
     // can still resolve the promoted block via findBlockByPtr.
+    lookup_map_[old_ptr] = out_block;
     lookup_map_[block->ptr] = out_block;
   }
 
@@ -611,42 +594,19 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     }
   }
 }
-#else // SEP_TESTBED_STUBS
 
-void MemoryTierManager::cleanupExpiredPatterns() {
-  std::lock_guard<std::mutex> lock(registry_mutex);
-  for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
-    if (it->second->coherence < config_.demote_threshold) {
-      it = pattern_registry_.erase(it);
-    } else {
-      ++it;
+void MemoryTierManager::pruneWeakRelationships() {
+  std::lock_guard<std::mutex> lock(relationships_mutex);
+  for (auto &[id, relations] : pattern_relationships_) {
+    for (auto it = relations.begin(); it != relations.end();) {
+      if (it->second < config_.demote_threshold) { // Reuse demote threshold
+        it = relations.erase(it);
+      } else {
+        ++it;
+      }
     }
   }
 }
-#endif // SEP_TESTBED_STUBS
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                               size_t max_count) {
-  MemoryTier *t = getTier(tier);
-  if (!t)
-    return;
-  const auto &patterns = t->getPatterns();
-  if (patterns.size() <= max_count)
-    return;
-  std::vector<std::pair<size_t, float>> sorted;
-  sorted.reserve(patterns.size());
-  for (const auto &[id, pat] : patterns) {
-    sorted.emplace_back(id, pat.coherence);
-  }
-  std::sort(sorted.begin(), sorted.end(),
-            [](const auto &a, const auto &b) { return a.second > b.second; });
-  for (size_t i = max_count; i < sorted.size(); ++i) {
-    t->removePattern(sorted[i].first);
-    removePattern(sorted[i].first);
-  }
-}
-#endif // SEP_TESTBED_STUBS
-
 
 void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> reg_lock(registry_mutex);
@@ -658,23 +618,13 @@ void MemoryTierManager::calculateRelationshipCoherence() {
       const auto &rels = pattern_relationships_.at(id);
       if (!rels.empty()) {
         double sum = 0.0;
-        for (const auto &r : rels) {
+        for (const auto &r : rels)
           sum += r.second;
-        pattern_ptr->coherence =
-            1.0f - static_cast<float>(sum / rels.size());
+        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
       }
-      pattern_ptr->coherence = static_cast<float>(sum / rel_it->second.size());
     }
   }
 }
 #endif // SEP_TESTBED_STUBS
-
-#endif // SEP_TESTBED_STUBS
-
-#endif // SEP_TESTBED_STUBS
-
-#endif // SEP_TESTBED_STUBS
-
 } // namespace memory
 } // namespace sep
-

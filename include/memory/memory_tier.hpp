@@ -23,8 +23,11 @@ using ::sep::CompressionMethod;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
 
-// Small epsilon used when comparing utilization metrics.
-inline constexpr float kUtilizationEpsilon = 1e-3f;
+// Small epsilon used when comparing utilization metrics.  The value is tuned
+// so that allocations of a single kilobyte in a default 1MB tier are still
+// reported as non-zero while tiny rounding artifacts after promotions or
+// defragmentation are clamped to zero.
+inline constexpr float kUtilizationEpsilon = 5e-4f;
 
 // Memory tier types
 enum class TierType {

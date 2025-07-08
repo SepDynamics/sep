@@ -31,53 +31,16 @@ const LogConfig& ConfigManager::getLogConfig() const {
     static LogConfig cfg{};
     return cfg;
 }
-const MemoryThresholdConfig& ConfigManager::getMemoryConfig() const {
-    return impl_->mem_cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    return impl_->quantum_cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
+const MemoryThresholdConfig& ConfigManager::getMemoryConfig() const { return impl_->mem_cfg; }
+const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const { return impl_->quantum_cfg; }
 void ConfigManager::updateAPIConfig(const APIConfig&) {}
 void ConfigManager::updateCudaConfig(const CudaConfig&) {}
 void ConfigManager::updateLogConfig(const LogConfig&) {}
-void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig& cfg) {
-    impl_->mem_cfg = cfg;
-}
-void ConfigManager::updateQuantumConfig(const QuantumThresholdConfig& cfg) {
-    impl_->quantum_cfg = cfg;
-}
+void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig& cfg) { impl_->mem_cfg = cfg; }
+void ConfigManager::updateQuantumConfig(const QuantumThresholdConfig& cfg) { impl_->quantum_cfg = cfg; }
 void ConfigManager::resetToDefaults() {
     impl_->mem_cfg = MemoryThresholdConfig{};
     impl_->quantum_cfg = QuantumThresholdConfig{};
 }
 
 } // namespace sep::config
-

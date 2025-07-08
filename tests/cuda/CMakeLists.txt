@@ -2,6 +2,10 @@ if(NOT BUILD_TESTING)
     return()
 endif()
 
+if(NOT SEP_HAS_CUDA)
+    return()
+endif()
+
 find_package(GTest REQUIRED)
 
 if(NOT SEP_HAS_CUDA)

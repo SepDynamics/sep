@@ -32,6 +32,7 @@ PACKAGES=(
   libembree-dev libpugixml-dev libopenjp2-7-dev
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
   libfmt-dev
+  libspdlog-dev libgtest-dev libhiredis-dev
 )
 
 echo "Updating package lists..."

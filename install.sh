@@ -39,6 +39,7 @@ PACKAGES=(
   libspdlog-dev libgtest-dev libgmock-dev libhiredis-dev libglm-dev nlohmann-json3-dev
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
+  libgflags-dev libgoogle-glog-dev
   valgrind
 )
 

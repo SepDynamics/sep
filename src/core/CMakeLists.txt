@@ -5,13 +5,8 @@ add_library(sep_core
     dag_graph.cpp
     prometheus_exporter.cpp
     error_handler.cpp
-    manager.cpp
     metrics_collector.cpp
-    engine.cpp
     logging.cpp
-    error_handler.cpp
-    compression.cpp
-    dag_graph.cpp
 )
 
 

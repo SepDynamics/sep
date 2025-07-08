@@ -155,7 +155,7 @@ MemoryBlock *MemoryTier::allocate(std::size_t size) {
           ? (static_cast<float>(size) / static_cast<float>(config_.size))
           : 0.0f; // Use floating point division
   block->access_count = 0;
-  block->compression = ::blender::CompressionMethod::None;
+  block->compression = ::sep::CompressionMethod::None;
   block->original_size = size;
   block->coherence = 0.0f;
   block->last_coherence = 0.0f;
@@ -567,7 +567,7 @@ bool MemoryTier::resize(std::size_t new_size) {
 }
 
 bool MemoryTier::canAcceptPattern(
-    const ::sep::persistence::PersistentPatternData &pattern) const {
+    const ::sep::memory::persistence::PersistentPatternData &pattern) const {
   if (m_patterns.size() >= m_max_patterns)
     return false;
   if (pattern.coherence < m_coherence_threshold)
@@ -581,7 +581,7 @@ bool MemoryTier::canAcceptPattern(
 }
 
 void MemoryTier::addPattern(size_t id,
-                            ::sep::persistence::PersistentPatternData pattern) {
+                            ::sep::memory::persistence::PersistentPatternData pattern) {
   if (!canAcceptPattern(pattern))
     return;
   // PatternData doesn't have id or memory_tier fields
@@ -591,13 +591,13 @@ void MemoryTier::addPattern(size_t id,
 
 void MemoryTier::removePattern(size_t id) { m_patterns.erase(id); }
 
-const ::sep::persistence::PersistentPatternData *
+const ::sep::memory::persistence::PersistentPatternData *
 MemoryTier::getPattern(size_t id) const {
   auto it = m_patterns.find(id);
   return it == m_patterns.end() ? nullptr : &it->second;
 }
 
-::sep::persistence::PersistentPatternData *MemoryTier::getPattern(size_t id) {
+::sep::memory::persistence::PersistentPatternData *MemoryTier::getPattern(size_t id) {
   auto it = m_patterns.find(id);
   return it == m_patterns.end() ? nullptr : &it->second;
 }

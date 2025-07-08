@@ -24,7 +24,7 @@ using Config = MemoryTierManager::Config;
 using ::sep::MemoryTierEnum;
 using ::sep::core::SEPResult;
 using ::sep::pattern::PatternData;
-using ::sep::persistence::PersistentPatternData;
+using ::sep::memory::persistence::PersistentPatternData;
 using ::sep::quantum::Pattern;
 
 // Mutex declarations

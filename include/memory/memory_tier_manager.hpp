@@ -16,7 +16,9 @@
 #include "compat/shim.h"
 #include "quantum/types.h"
 #include "quantum/data.hpp"
+#ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
+#endif
 
 // Standard library includes
 #include <cstddef>

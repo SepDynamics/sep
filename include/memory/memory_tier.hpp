@@ -6,6 +6,7 @@
 #include <deque>
 #include <unordered_map>
 #include <vector>
+#include <cstdint>
 
 // Third-party headers
 #include <glm/vec3.hpp>
@@ -79,6 +80,16 @@ struct MemoryBlock {
     MemoryBlock(void* p, std::size_t s, std::size_t off, MemoryTierEnum t)
         : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
+
+#ifndef SEP_PERSISTENT_PATTERN_DATA_DEFINED
+namespace persistence {
+struct PersistentPatternData {
+    float coherence{0.0f};
+    std::uint32_t generation_count{0};
+};
+}
+#define SEP_PERSISTENT_PATTERN_DATA_DEFINED
+#endif
 
 using PersistentPatternData = ::sep::memory::persistence::PersistentPatternData;
 

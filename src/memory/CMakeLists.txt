@@ -3,22 +3,12 @@ add_library(sep_memory
     memory_tier.cpp
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
-    redis_manager.cpp
-    quantum_coherence_manager.cpp
 )
 
 # Find required Redis library
-find_library(HIREDIS_LIB NAMES hiredis PATHS /usr/lib64)
-find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis)
-if(HIREDIS_LIB AND HIREDIS_INCLUDE_DIR)
-  set(SEP_HAS_REDIS 1)
-  set(HIREDIS_FOUND TRUE)
-else()
-  set(SEP_HAS_REDIS 0)
-  set(HIREDIS_FOUND FALSE)
-  message(WARNING "hiredis not found, Redis persistence disabled")
-  add_compile_definitions(SEP_NO_REDIS)
-endif()
+set(SEP_HAS_REDIS 0)
+set(HIREDIS_FOUND FALSE)
+add_compile_definitions(SEP_NO_REDIS)
 
 # Add CUDA-specific compile definitions to handle exception specs
 if(SEP_HAS_CUDA)

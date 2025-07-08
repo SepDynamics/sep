@@ -16,9 +16,12 @@ add_executable(memory_minimal_tests
 find_package(GTest REQUIRED)
 find_package(fmt REQUIRED)
 find_package(spdlog)
+# Always build the minimal testbed against the header-only
+# variant of spdlog.  This avoids link errors when the full
+# library is unavailable and keeps the build self-contained.
+add_compile_definitions(SPDLOG_HEADER_ONLY)
 if(spdlog_FOUND)
     message(STATUS "Using header-only spdlog for testbed")
-    add_compile_definitions(SPDLOG_HEADER_ONLY)
 endif()
 find_package(Threads REQUIRED)
 

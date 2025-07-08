@@ -5,6 +5,10 @@
 #include <unistd.h>
 #include <cstdlib>
 
+#ifdef SEP_NO_REDIS
+#undef SEP_NO_REDIS
+#endif
+#define SEP_HAS_HIREDIS 1
 #include "memory/redis_manager.h"
 #include "memory/types.h"
 #include "core/logging.h"
@@ -15,7 +19,6 @@
 #include <cstdint>
 #include <cstring>
 #include <hiredis/hiredis.h>
-#define SEP_HAS_HIREDIS 1
 // Define namespace alias to clarify that Manager is in the logging namespace
 namespace logging = sep::logging; 
 #include "memory/memory_tier_manager.hpp"

@@ -138,6 +138,7 @@ void MemoryTierManager::deallocate(MemoryBlock *block) {
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(block->ptr);
+    legacy_lookup_map_.erase(block->ptr);
   }
   if (MemoryTier *t = getTier(block->tier)) {
     t->deallocate(block);
@@ -152,7 +153,10 @@ void MemoryTierManager::deallocate(MemoryBlock *block) {
 MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr) {
   std::lock_guard<std::mutex> lock(lookup_mutex);
   auto it = lookup_map_.find(ptr);
-  return it != lookup_map_.end() ? it->second : nullptr;
+  if (it != lookup_map_.end())
+    return it->second;
+  auto it2 = legacy_lookup_map_.find(ptr);
+  return it2 != legacy_lookup_map_.end() ? it2->second : nullptr;
 }
 
 // --- Tier Management & Metrics ---
@@ -407,6 +411,8 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_.erase(old_ptr);
     src_tier->deallocate(block);
     lookup_map_[out_block->ptr] = out_block;
+    lookup_map_[block->ptr] = out_block; // allow lookups using old pointer
+    legacy_lookup_map_[block->ptr] = out_block;
   }
 
   // Refresh the lookup table so callers can resolve blocks after the move.

@@ -31,6 +31,9 @@ target_link_libraries(memory_manager_tests PRIVATE
     CUDA::cuda_driver
     Threads::Threads
 )
+if(SEP_HAS_CUDA)
+    target_link_libraries(memory_manager_tests PRIVATE CUDA::cudart CUDA::cuda_driver)
+endif()
 
 target_compile_definitions(memory_manager_tests PRIVATE
     SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>

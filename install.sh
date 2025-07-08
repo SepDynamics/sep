@@ -86,4 +86,14 @@ if ! dpkg -s libusd-dev >/dev/null 2>&1; then
 fi
 
 echo "All dependencies installed. See $LOG_DIR for logs."
-  
+
+# Optional build and test step when invoked with --run-tests
+if [[ "${1:-}" == "--run-tests" ]]; then
+  echo "Building project without CUDA for validation..."
+  if ./build_no_cuda.sh > "$LOG_DIR/build.log" 2>&1; then
+    echo "Running memory manager tests..."
+    (cd cmake-nocuda && ctest --output-on-failure -R memory_manager_tests >> "$LOG_DIR/test.log" 2>&1)
+  else
+    echo "Build failed. Check $LOG_DIR/build.log for details." >&2
+  fi
+fi

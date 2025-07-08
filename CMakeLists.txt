@@ -208,8 +208,7 @@ target_link_libraries(sep_engine PRIVATE
     ${CURL_LIBRARIES}
     ${CMAKE_DL_LIBS}
     $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
-    CUDA::cudart
-    CUDA::cuda_driver
+    $<$<TARGET_EXISTS:CUDA::cuda_driver>:CUDA::cuda_driver>
 )
 
 # Only link Cycles libraries if they exist and SEP_WITH_CYCLES is enabled

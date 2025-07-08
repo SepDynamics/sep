@@ -23,3 +23,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run diagram file check
         run: python3 scripts/check_diagram_files.py
+      - name: Scan for duplicate type definitions
+        run: python3 scripts/scan_duplicate_types.py

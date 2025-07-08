@@ -75,16 +75,6 @@ struct APIConfig {
     std::size_t max_batch_size{1024};
 };
 
-// Minimal quantum processing thresholds used by tests. The real engine
-// defines a richer configuration, but the memory manager tests only
-// require a handful of fields. Provide a lightweight struct here so the
-// stub configuration manager can compile without pulling in the full
-// quantum stack.
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
-};
 
 // Logging configuration placeholder
 struct LogConfig {

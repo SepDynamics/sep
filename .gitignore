@@ -137,3 +137,4 @@ blender
 !examples/json_processor_build.cmake
 package-lock.json
 third_party/glm/
+cmake-nocuda/

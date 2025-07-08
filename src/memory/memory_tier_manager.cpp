@@ -611,40 +611,7 @@ void MemoryTierManager::pruneWeakRelationships() {
   std::lock_guard<std::mutex> lock(relationships_mutex);
   for (auto &[id, relations] : pattern_relationships_) {
     for (auto it = relations.begin(); it != relations.end();) {
-      if (it->second < config_.demote_threshold) { // Reuse demote threshold
-        it = relations.erase(it);
-      } else {
-        ++it;
-      }
-    }
-  }
-}
-
-void MemoryTierManager::calculateRelationshipCoherence() {
-  std::lock_guard<std::mutex> reg_lock(registry_mutex);
-  std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-
-  for (auto &[id, pattern_ptr] : pattern_registry_) {
-    if (pattern_relationships_.count(id)) {
-      const auto &rels = pattern_relationships_.at(id);
-      if (!rels.empty()) {
-        double sum = 0.0;
-        for (const auto &r : rels) {
-          sum += r.second;
-        }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
-      }
-      coherence = static_cast<float>(sum / it->second.size());
-    }
-    pattern_ptr->coherence = coherence;
-  }
-}
-
-void MemoryTierManager::pruneWeakRelationships() {
-  std::lock_guard<std::mutex> lock(relationships_mutex);
-  for (auto &[id, relations] : pattern_relationships_) {
-    for (auto it = relations.begin(); it != relations.end();) {
-      if (it->second < config_.demote_threshold) { // Reuse demote threshold
+      if (it->second < config_.demote_threshold) {
         it = relations.erase(it);
       } else {
         ++it;
@@ -659,18 +626,17 @@ void MemoryTierManager::calculateRelationshipCoherence() {
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
     pattern_ptr->coherence = 0.0f;
-    if (pattern_relationships_.count(id)) {
-      const auto &rels = pattern_relationships_.at(id);
+    auto rel_it = pattern_relationships_.find(id);
+    if (rel_it != pattern_relationships_.end()) {
+      const auto &rels = rel_it->second;
       if (!rels.empty()) {
         double sum = 0.0;
-        for (const auto &r : rels)
+        for (const auto &r : rels) {
           sum += r.second;
         }
-        float avg = static_cast<float>(sum / rels.size());
-        pattern_ptr->coherence = avg;
+        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
       }
     }
-    pattern_ptr->coherence = coherence;
   }
 }
 

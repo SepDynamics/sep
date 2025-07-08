@@ -5,6 +5,7 @@
 #include <functional>
 #endif
 #include "audio/types.h"
+#include "audio/export.h"
 
 namespace sep {
 namespace audio {

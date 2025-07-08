@@ -75,17 +75,3 @@ if apt-cache show gcc-14 >/dev/null 2>&1; then
   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100
   sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
 fi
-
-echo "All dependencies installed. See $LOG_DIR for logs."
-echo "Some optional packages like OSL and Alembic may need to be built manually if not available via apt."
-
-# Optional build and test step when invoked with --run-tests
-if [[ "${1:-}" == "--run-tests" ]]; then
-  echo "Building project without CUDA for validation..."
-  if ./build_no_cuda.sh > "$LOG_DIR/build.log" 2>&1; then
-    echo "Running memory manager tests..."
-    (cd cmake-nocuda && ctest --output-on-failure -R memory_manager_tests >> "$LOG_DIR/test.log" 2>&1)
-  else
-    echo "Build failed. Check $LOG_DIR/build.log for details." >&2
-  fi
-fi

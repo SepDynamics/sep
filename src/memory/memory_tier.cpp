@@ -217,6 +217,8 @@ void MemoryTier::deallocate(MemoryBlock *block) {
     if (blk.allocated)
       used_space_ += blk.size;
   }
+  if (used_space_ <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
+    used_space_ = 0;
 }
 
 ::sep::SEPResult MemoryTier::defragment() {
@@ -494,6 +496,8 @@ void MemoryTier::mergeAdjacentBlocks() {
       used_space_ += blk.size;
     }
   }
+  if (used_space_ <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
+    used_space_ = 0;
 }
 
 bool MemoryTier::resize(std::size_t new_size) {

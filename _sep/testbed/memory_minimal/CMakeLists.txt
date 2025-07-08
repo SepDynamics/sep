@@ -8,7 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(memory_minimal_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../tests/memory/memory_tier_manager_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../cross_language_memory_tier_test.cpp
+    # Cross-language test relies on Node.js round-trip. It is
+    # disabled in the minimal build to avoid extra dependencies.
+    # ${CMAKE_CURRENT_SOURCE_DIR}/../cross_language_memory_tier_test.cpp
 )
 
 find_package(GTest REQUIRED)
@@ -20,6 +22,7 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../src)
 
 set(MEMORY_SRC
     ${SRC_DIR}/memory/memory_tier.cpp
+    ${SRC_DIR}/memory/memory_tier_manager.cpp
     ${SRC_DIR}/core/logging.cpp
     ${SRC_DIR}/memory/memory_tier_manager_serialization.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/memory_tier_manager_stubs.cpp

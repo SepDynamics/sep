@@ -43,6 +43,24 @@ sudo apt-get update -y
 echo "Installing base packages..."
 sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 
+# Build and install GoogleTest as the packaged version only ships sources
+if [ -d /usr/src/googletest ]; then
+  echo "Building GoogleTest..."
+  sudo cmake /usr/src/googletest -B /usr/src/googletest/build \
+    >> "$LOG_DIR/gtest.log" 2>&1
+  sudo cmake --build /usr/src/googletest/build --target install \
+    >> "$LOG_DIR/gtest.log" 2>&1
+  sudo ldconfig
+fi
+
+# Fetch header-only dependencies if missing
+if [ ! -d "third_party/crow" ]; then
+  git clone https://github.com/CrowCpp/crow.git third_party/crow
+fi
+if [ ! -d "third_party/glm" ]; then
+  git clone https://github.com/g-truc/glm.git third_party/glm
+fi
+
 # Install Python 3.13 from deadsnakes if not present
 if ! command -v python3.13 >/dev/null; then
   echo "Installing Python 3.13..."

@@ -128,3 +128,20 @@ systemctl --user status pipewire
 Audio initialization will fail if PipeWire is not active.
 
 This project represents an attempt to construct a first-principles, computationally-grounded theory of everything. It is a work in progress, but it offers a robust and testable foundation for exploring the deepest questions about our reality.
+
+## Installing Build Dependencies
+
+Run `install.sh` to fetch compiler toolchains and third-party libraries. The script also installs helpful debugging tools like **valgrind** and **gdb**.
+
+```bash
+./install.sh
+```
+
+Add `--no-cuda` if you do not need CUDA support. Once installed, compile and execute the memory manager tests to validate the setup:
+
+```bash
+cd sep_build/build
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-14 -B . -S ..
+make memory_manager_tests
+./memory_manager_tests
+```

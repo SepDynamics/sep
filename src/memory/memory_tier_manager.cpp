@@ -16,9 +16,9 @@ namespace sep { namespace config { class ConfigManager; } }
 #include <cmath>
 #include <cstdio>
 #include <cstring>
-#include <new>
 #include <memory>
 #include <mutex>
+#include <new>
 #include <string>
 
 namespace sep {
@@ -409,11 +409,13 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_[out_block->ptr] = out_block;
   }
 
-  // Rebuild the lookup table to keep any stale pointers from previous
-  // defragmentation or resize operations in sync with the new block
-  // locations.  Unit tests rely on findBlockByPtr returning the latest
-  // address so we refresh the map after every successful move.
+  // Refresh the lookup table so callers can resolve blocks after the move.
   rebuildLookup();
+  {
+    std::lock_guard<std::mutex> lock(lookup_mutex);
+    lookup_map_[old_ptr] = out_block;
+  }
+
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_[old_ptr] = out_block;
@@ -521,7 +523,8 @@ void MemoryTierManager::rebuildLookup() {
 void MemoryTierManager::registerPattern(
     std::size_t id, const ::sep::pattern::PatternData &pattern) {
   std::lock_guard<std::mutex> lock(registry_mutex);
-  pattern_registry_[id] = std::make_unique<::sep::pattern::PatternData>(pattern);
+  pattern_registry_[id] =
+      std::make_unique<::sep::pattern::PatternData>(pattern);
 }
 
 const ::sep::pattern::PatternData *

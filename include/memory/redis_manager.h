@@ -2,8 +2,12 @@
 
 #include "memory/types.h"
 
-#include <hiredis/hiredis.h>
-#define SEP_HAS_HIREDIS 1
+#ifndef SEP_NO_REDIS
+#  include <hiredis/hiredis.h>
+#  define SEP_HAS_HIREDIS 1
+#else
+#  define SEP_HAS_HIREDIS 0
+#endif
 
 #include <memory>
 #include <optional>

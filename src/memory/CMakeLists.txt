@@ -8,8 +8,17 @@ add_library(sep_memory
 )
 
 # Find required Redis library
-find_library(HIREDIS_LIB NAMES hiredis PATHS /usr/lib64 REQUIRED)
-find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis REQUIRED)
+find_library(HIREDIS_LIB NAMES hiredis PATHS /usr/lib64)
+find_path(HIREDIS_INCLUDE_DIR NAMES hiredis.h PATHS /usr/include/hiredis)
+if(HIREDIS_LIB AND HIREDIS_INCLUDE_DIR)
+  set(SEP_HAS_REDIS 1)
+  set(HIREDIS_FOUND TRUE)
+else()
+  set(SEP_HAS_REDIS 0)
+  set(HIREDIS_FOUND FALSE)
+  message(WARNING "hiredis not found, Redis persistence disabled")
+  add_compile_definitions(SEP_NO_REDIS)
+endif()
 
 # Add CUDA-specific compile definitions to handle exception specs
 if(SEP_HAS_CUDA)
@@ -40,9 +49,11 @@ target_link_libraries(sep_memory
         sep_core
         sep_compat
     PRIVATE
-        ${HIREDIS_LIB}
         Threads::Threads
 )
+if(HIREDIS_FOUND)
+    target_link_libraries(sep_memory PRIVATE ${HIREDIS_LIB})
+endif()
 
 # Configure include directories
 target_include_directories(sep_memory
@@ -50,9 +61,11 @@ target_include_directories(sep_memory
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
-        ${HIREDIS_INCLUDE_DIR}
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
 )
+if(HIREDIS_FOUND)
+    target_include_directories(sep_memory PRIVATE ${HIREDIS_INCLUDE_DIR})
+endif()
 
 # Add compile definitions
 target_compile_definitions(sep_memory
@@ -60,11 +73,13 @@ target_compile_definitions(sep_memory
         SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
     PRIVATE
         SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
-        SEP_HAS_REDIS=1
+        SEP_HAS_REDIS=${SEP_HAS_REDIS}
 )
 
-message(STATUS "Found hiredis: ${HIREDIS_LIB}")
-message(STATUS "Found hiredis headers: ${HIREDIS_INCLUDE_DIR}")
+if(HIREDIS_FOUND)
+    message(STATUS "Found hiredis: ${HIREDIS_LIB}")
+    message(STATUS "Found hiredis headers: ${HIREDIS_INCLUDE_DIR}")
+endif()
 
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/memory/

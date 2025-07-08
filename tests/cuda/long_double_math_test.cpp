@@ -12,13 +12,13 @@ __global__ void device_atan2l(long double* out, long double y, long double x) {
 
 TEST(LongDoubleMathHost, AcoslAccuracy) {
     long double v = 0.5L;
-    long double expected = std::acosl(v);
+    long double expected = ::acosl(v);
     EXPECT_NEAR(static_cast<double>(acosl(v)), static_cast<double>(expected), 1e-9);
 }
 
 TEST(LongDoubleMathHost, Atan2lAccuracy) {
     long double y = 0.5L, x = -0.3L;
-    long double expected = std::atan2l(y, x);
+    long double expected = ::atan2l(y, x);
     EXPECT_NEAR(static_cast<double>(atan2l(y, x)), static_cast<double>(expected), 1e-9);
 }
 
@@ -30,7 +30,7 @@ TEST(LongDoubleMathDevice, AcoslAccuracy) {
     long double h_val;
     ASSERT_EQ(cudaMemcpy(&h_val, d_out, sizeof(long double), cudaMemcpyDeviceToHost), cudaSuccess);
     cudaFree(d_out);
-    long double expected = std::acosl(0.5L);
+    long double expected = ::acosl(0.5L);
     EXPECT_NEAR(static_cast<double>(h_val), static_cast<double>(expected), 1e-9);
 }
 
@@ -42,7 +42,7 @@ TEST(LongDoubleMathDevice, Atan2lAccuracy) {
     long double h_val;
     ASSERT_EQ(cudaMemcpy(&h_val, d_out, sizeof(long double), cudaMemcpyDeviceToHost), cudaSuccess);
     cudaFree(d_out);
-    long double expected = std::atan2l(0.5L, -0.3L);
+    long double expected = ::atan2l(0.5L, -0.3L);
     EXPECT_NEAR(static_cast<double>(h_val), static_cast<double>(expected), 1e-9);
 }
 

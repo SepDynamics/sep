@@ -24,6 +24,9 @@ add_executable(cuda_api_tests
 add_executable(increment_kernel_test
     increment_kernel_test.cpp
 )
+target_include_directories(increment_kernel_test PRIVATE
+    ${CMAKE_SOURCE_DIR}/_sep/testbed/cuda
+)
 
 target_include_directories(long_double_math_test PRIVATE
     ${CMAKE_SOURCE_DIR}/include

@@ -70,6 +70,12 @@ else
     exit 1
 fi
 
+if [ "$INSTALL_MINIMAL" = "1" ]; then
+    PKGS=("${BASE_PKGS[@]}")
+else
+    PKGS=("${BASE_PKGS[@]}" "${EXTRA_PKGS[@]}")
+fi
+
 # Update package lists
 echo "Updating package lists using $PM..."
 $UPDATE_CMD

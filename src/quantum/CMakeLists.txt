@@ -51,7 +51,8 @@ target_link_libraries(sep_quantum
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_quantum PRIVATE
     SEP_HAS_CUDA=1
-    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
+    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
+    SEP_BUILD_QUANTUM=1)
 
 # Set library properties
 set_target_properties(sep_quantum PROPERTIES

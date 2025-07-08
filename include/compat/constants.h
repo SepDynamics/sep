@@ -16,6 +16,9 @@ inline constexpr std::uint32_t get_default_block_size() {
 }
 inline constexpr std::uint32_t BITFIELD_WORDS = 64;
 inline constexpr std::uint32_t SYMMETRY_PAIRS = 32;
+inline constexpr std::uint32_t MAX_BLOCK_SIZE = 1024;
+inline constexpr std::uint32_t DEFAULT_BLOCK_SIZE = PATTERN_BLOCK_SIZE;
+inline constexpr std::uint32_t WARP_SIZE = 32;
 } // namespace constants
 } // namespace cuda
 } // namespace sep

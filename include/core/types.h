@@ -43,6 +43,15 @@ struct MemoryThresholdConfig {
     bool enable_compression{true};
 };
 
+// Simplified thresholds guiding quantum coherence tuning used by tests.
+// These values mirror the defaults from manifold_config.h so that the
+// ConfigManager stub compiles without pulling in additional headers.
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.

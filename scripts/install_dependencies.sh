@@ -4,6 +4,8 @@ set -euo pipefail
 # Unless overridden, install the full dependency set.
 : "${INSTALL_MINIMAL:=0}"
 : "${INSTALL_CUDA:=0}"
+# Allow a reduced package set for headless builds
+: "${INSTALL_MINIMAL:=0}"
 
 # Use sudo if not running as root
 if [ "$(id -u)" -ne 0 ]; then

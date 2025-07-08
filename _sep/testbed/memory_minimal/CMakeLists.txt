@@ -44,13 +44,10 @@ target_link_libraries(memory_minimal_tests PRIVATE
     fmt::fmt
     spdlog::spdlog
     Threads::Threads
-    sep_memory
-    sep_core
 )
 
 target_compile_definitions(memory_minimal_tests PRIVATE
     SEP_MEMORY_MINIMAL
-    SPDLOG_HEADER_ONLY
 )
 
 add_test(NAME memory_minimal_tests COMMAND memory_minimal_tests)

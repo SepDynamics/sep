@@ -605,6 +605,7 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     }
   }
 }
+#endif // !SEP_TESTBED_STUBS
 
 void MemoryTierManager::pruneWeakRelationships() {
   std::lock_guard<std::mutex> lock(relationships_mutex);
@@ -624,27 +625,6 @@ void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
-    if (pattern_relationships_.count(id)) {
-      const auto &rels = pattern_relationships_.at(id);
-      if (!rels.empty()) {
-        double sum = 0.0;
-        for (const auto &r : rels) {
-          sum += r.second;
-        }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
-      }
-      coherence = static_cast<float>(sum / it->second.size());
-    }
-    pattern_ptr->coherence = coherence;
-  }
-}
-
-
-void MemoryTierManager::calculateRelationshipCoherence() {
-  std::lock_guard<std::mutex> reg_lock(registry_mutex);
-  std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-
-  for (auto &[id, pattern_ptr] : pattern_registry_) {
     pattern_ptr->coherence = 0.0f;
     if (pattern_relationships_.count(id)) {
       const auto &rels = pattern_relationships_.at(id);
@@ -652,7 +632,10 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         double sum = 0.0;
         for (const auto &r : rels)
           sum += r.second;
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+        float avg = static_cast<float>(sum / rels.size());
+        // Coherence is inverted so stronger relationships yield lower
+        // coherence scores. A strength of 0 results in maximum coherence of 1.
+        pattern_ptr->coherence = 1.0f - avg;
       }
     }
   }

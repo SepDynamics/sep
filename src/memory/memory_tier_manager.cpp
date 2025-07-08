@@ -153,6 +153,7 @@ void MemoryTierManager::deallocate(MemoryBlock *block) {
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(block->ptr);
+    legacy_lookup_map_.erase(block->ptr);
   }
   if (MemoryTier *t = getTier(block->tier)) {
     t->deallocate(block);
@@ -167,7 +168,10 @@ void MemoryTierManager::deallocate(MemoryBlock *block) {
 MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr) {
   std::lock_guard<std::mutex> lock(lookup_mutex);
   auto it = lookup_map_.find(ptr);
-  return it != lookup_map_.end() ? it->second : nullptr;
+  if (it != lookup_map_.end())
+    return it->second;
+  auto it2 = legacy_lookup_map_.find(ptr);
+  return it2 != legacy_lookup_map_.end() ? it2->second : nullptr;
 }
 
 // --- Tier Management & Metrics ---
@@ -421,6 +425,8 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_.erase(block->ptr);
     src_tier->deallocate(block);
     lookup_map_[out_block->ptr] = out_block;
+    lookup_map_[block->ptr] = out_block; // allow lookups using old pointer
+    legacy_lookup_map_[block->ptr] = out_block;
   }
 
   // Rebuild the lookup table to keep any stale pointers from previous
@@ -556,8 +562,8 @@ void MemoryTierManager::removePattern(std::size_t id) {
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  pattern_relationships_[id_a][id_b] = strength;
+  pattern_relationships_[id_b][id_a] = strength;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {
@@ -585,7 +591,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         for (const auto &r : rels) {
           sum += r.second;
         }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+        pattern_ptr->coherence = 1.0f - static_cast<float>(sum / rels.size());
       }
     }
   }

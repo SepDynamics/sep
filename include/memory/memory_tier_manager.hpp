@@ -19,7 +19,7 @@
 #include "quantum/data.hpp"
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
-#include "persistence/pattern_data.hpp"
+#include "persistence/persistent_pattern_data.hpp"
 #endif // SEP_NO_REDIS
 
 // Standard library includes
@@ -148,6 +148,7 @@ private:
     std::unique_ptr<MemoryTier> mtm_;
     std::unique_ptr<MemoryTier> ltm_;
     std::unordered_map<void*, MemoryBlock*> lookup_map_;
+    std::unordered_map<void*, MemoryBlock*> legacy_lookup_map_;
 
 private:
     dag::DagGraph dag_graph_;

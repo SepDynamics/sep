@@ -8,6 +8,7 @@
 #  define SEP_HAS_HIREDIS 1
 #else
 #  define SEP_HAS_HIREDIS 0
+   struct redisContext;
 #endif
 
 #include <memory>
@@ -63,7 +64,7 @@ private:
         std::string getTierPatternsKey(const std::string& tier) const;
         std::string normalizeTier(const std::string& tier) const;
 
-        struct redisContext* context_;
+        ::redisContext* context_;
         bool connected_;
         std::mutex mutex_;
     };

@@ -10,14 +10,16 @@ set(MEMORY_SRC
 )
 
 target_sources(memory_minimal_tests PRIVATE ${MEMORY_SRC})
+target_compile_definitions(memory_minimal_tests PRIVATE SEP_MINIMAL=1)
 
 target_include_directories(memory_minimal_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
 )
 
 target_link_libraries(memory_minimal_tests PRIVATE
-    GTest::GTest
-    GTest::Main
+    gtest
+    gtest_main
+    pthread
 )
 
 add_test(NAME memory_minimal_tests COMMAND memory_minimal_tests)

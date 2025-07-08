@@ -35,7 +35,7 @@ target_link_libraries(memory_manager_tests PRIVATE
     GTest::Main
     Threads::Threads
 )
-if(HIREDIS_FOUND)
+if(TARGET Hiredis::Hiredis)
     target_link_libraries(memory_manager_tests PRIVATE Hiredis::Hiredis)
 endif()
 if(SEP_HAS_CUDA)

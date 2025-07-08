@@ -273,8 +273,8 @@ sep::SEPResult MemoryTier::defragment() {
     // The block may have been moved to another tier in a previous iteration, so
     // ensure it is still allocated before attempting to update its metrics.
     if (blk && blk->allocated) {
-      mgr.updateBlockMetrics(blk, blk->coherence, blk->stability, blk->generation,
-                             1.0f);
+      mgr.updateBlockMetrics(blk, blk->coherence, blk->stability,
+                             blk->generation, 1.0f);
     }
   }
   mgr.rebuildLookup();
@@ -323,7 +323,8 @@ float MemoryTier::calculateUtilization() const {
       used += blk.size;
   }
 
-  if (used == 0)
+  if (used == 0 ||
+      used <= static_cast<std::size_t>(config_.size * kUtilizationEpsilon))
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(config_.size);

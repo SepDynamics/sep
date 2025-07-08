@@ -1,6 +1,9 @@
 #include "memory/memory_tier_manager.hpp"
 #include "core/common.h"
 #include "core/types.h"
+#ifndef SEP_MINIMAL
+#include "core/manager.h"
+#endif
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
 
@@ -72,6 +75,9 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.enable_compression = mc.enable_compression;
 #endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
+#else
+    instance_ = std::make_unique<MemoryTierManager>();
+#endif
   });
   return *instance_;
 }

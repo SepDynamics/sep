@@ -26,6 +26,7 @@ set(MEMORY_SRC
 )
 
 target_sources(memory_minimal_tests PRIVATE ${MEMORY_SRC})
+target_compile_definitions(memory_minimal_tests PRIVATE SEP_MINIMAL=1)
 
 target_include_directories(memory_minimal_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../include

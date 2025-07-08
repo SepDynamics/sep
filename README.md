@@ -165,3 +165,9 @@ unit test targets:
 ./install.sh --minimal
 ./build_no_cuda.sh
 ```
+
+Running `./build_no_cuda.sh` sets up a minimal build directory and
+invokes the `memory_manager_tests` binary automatically.  This helper
+is ideal for development environments without CUDA libraries and helps
+verify that the memory tiers behave correctly before enabling optional
+features.

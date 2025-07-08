@@ -187,12 +187,18 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (t->getFreeSpace() == t->getSize())
     return 0.0f;
 
+  // When only a few bytes remain allocated, rounding can produce a
+  // non-zero utilization even though logically the tier is empty.
+  // Guard against this by explicitly comparing the used space
+  // against a scaled epsilon threshold before computing the final
+  // utilization.
+  std::size_t used = t->getSize() - t->getFreeSpace();
+  if (used == 0 ||
+      used <= static_cast<std::size_t>(t->getSize() * kUtilizationEpsilon))
+    return 0.0f;
   // Derive utilization from the tracked free space instead of walking the
   // block list.  This prevents stale metadata from influencing the result
   // after complex operations like promotion or defragmentation.
-  std::size_t used = t->getSize() - t->getFreeSpace();
-  if (used == 0)
-    return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(t->getSize());
 

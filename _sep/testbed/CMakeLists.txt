@@ -10,6 +10,7 @@ add_library(testbed_tests STATIC
     audio_factory_test.cpp
     api_makejsonresponse_test.cpp
     neuro_spike_test.cpp
+    cross_language_memory_tier_test.cpp
 )
 add_subdirectory(embeddings)
 

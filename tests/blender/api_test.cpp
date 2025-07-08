@@ -111,7 +111,7 @@ TEST_F(APITest, ProcessAudioTest) {
 TEST_F(APITest, SyncMemoryTest) {
   ASSERT_EQ(sep::SEPResult::SUCCESS, sep_blender_init(gpu_ctx_, nullptr, &bridge_));
   EXPECT_EQ(sep::SEPResult::SUCCESS,
-            sep_sync_memory(bridge_, sep::memory::MemoryTierEnum::STM, true));
+            sep_sync_memory(bridge_, ::sep::memory::MemoryTierEnum::STM, true));
 }
 
 TEST_F(APITest, GetMetricsTest) {

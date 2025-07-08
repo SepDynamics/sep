@@ -79,19 +79,19 @@ TEST_F(PatternEvolutionTest, ProcessPatternsMemoryTiers) {
   // STM pattern
   input[0].coherence = 0.1f;
   input[0].stability = 0.1f;
-  input[0].memory_tier = sep::memory::MemoryTierEnum::STM;
+  input[0].memory_tier = ::sep::memory::MemoryTierEnum::STM;
 
   // MTM pattern
   input[1].coherence = 0.6f;
   input[1].stability = 0.4f;
   input[1].generation = 10;
-  input[1].memory_tier = sep::memory::MemoryTierEnum::MTM;
+  input[1].memory_tier = ::sep::memory::MemoryTierEnum::MTM;
 
   // LTM pattern
   input[2].coherence = 0.9f;
   input[2].stability = 0.8f;
   input[2].generation = 150;
-  input[2].memory_tier = sep::memory::MemoryTierEnum::LTM;
+  input[2].memory_tier = ::sep::memory::MemoryTierEnum::LTM;
 
   auto result = PatternEvolution::processPatterns(input, config, output);
   EXPECT_EQ(result, pattern::PatternResult::SUCCESS);

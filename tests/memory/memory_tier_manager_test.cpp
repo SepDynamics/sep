@@ -19,9 +19,9 @@ TEST(MemoryTierManagerTest, BasicInitialization) {
 
 TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
     MemoryTierManager mgr;
-    MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::STM);
+    MemoryBlock* block = mgr.allocate(1024, ::sep::memory::MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
-    EXPECT_GT(mgr.getTierUtilization(MemoryTierEnum::STM), 0.0f);
+    EXPECT_GT(mgr.getTierUtilization(::sep::memory::MemoryTierEnum::STM), 0.0f);
     mgr.deallocate(block);
     // Allow a slightly larger epsilon for utilization checks.  The promotion
     // and demotion logic can leave tiny rounding differences when tiers are
@@ -29,8 +29,8 @@ TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
     // the test while avoiding false negatives caused by a residual
     // utilization value like 0.000244.
     const float EPSILON = 0.01f;
-    EXPECT_LT(mgr.getTierUtilization(MemoryTierEnum::STM), EPSILON)
-        << "Expected STM utilization near 0, got: " << mgr.getTierUtilization(MemoryTierEnum::STM);
+    EXPECT_LT(mgr.getTierUtilization(::sep::memory::MemoryTierEnum::STM), EPSILON)
+        << "Expected STM utilization near 0, got: " << mgr.getTierUtilization(::sep::memory::MemoryTierEnum::STM);
 }
 
 TEST(MemoryTierManagerTest, PromotionAndDemotion) {

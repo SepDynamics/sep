@@ -182,24 +182,20 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (!t)
     return 0.0f;
 
-  // If the tier is completely free, avoid further work. This is a fast
-  // path used heavily in unit tests and prevents tiny rounding artifacts
-  // from bubbling up after internal defragmentation or resizing.
+  // Fast path for empty tiers. Checking the free space avoids iterating over
+  // the block list and ensures an exact zero result when nothing is allocated.
   if (t->getFreeSpace() == t->getSize())
     return 0.0f;
 
-  // Recompute utilization from the current block list to guard against stale
-  // counters which may lag behind after promotions or defragmentation.
-  float util = t->calculateUtilization();
-
-  // Guard against rounding artifacts that may appear when used space is
-  // extremely small compared to the tier size.  Tests expect an exact zero
-  // when no memory is allocated in a tier, so anything close to zero should be
-  // reported as zero.
-  if (std::fabs(util) <= kUtilizationEpsilon || util < 0.0f)
+  // Derive utilization from the tracked free space instead of walking the
+  // block list.  This prevents stale metadata from influencing the result
+  // after complex operations like promotion or defragmentation.
+  std::size_t used = t->getSize() - t->getFreeSpace();
+  if (used == 0)
     return 0.0f;
 
-  return util;
+  float util = static_cast<float>(used) / static_cast<float>(t->getSize());
+  return (util <= kUtilizationEpsilon || util < 0.0f) ? 0.0f : util;
 }
 
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {

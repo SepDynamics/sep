@@ -14,6 +14,9 @@ add_executable(memory_minimal_tests
 find_package(GTest REQUIRED)
 find_package(fmt REQUIRED)
 find_package(spdlog)
+if(NOT spdlog_FOUND)
+    add_compile_definitions(SEP_SPDLOG_FALLBACK)
+endif()
 find_package(Threads REQUIRED)
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../src)
@@ -40,9 +43,11 @@ target_link_libraries(memory_minimal_tests PRIVATE
     GTest::GTest
     GTest::Main
     fmt::fmt
-    spdlog::spdlog
     Threads::Threads
 )
+if(spdlog_FOUND)
+    target_link_libraries(memory_minimal_tests PRIVATE spdlog::spdlog)
+endif()
 
 target_compile_definitions(memory_minimal_tests PRIVATE SEP_MEMORY_MINIMAL)
 

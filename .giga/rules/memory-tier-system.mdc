@@ -1,79 +1,68 @@
 ---
-description: Specification for the memory tier management system, including storage, retrieval, and promotion/demotion logic
-globs: src/memory/*,include/memory/*,src/api/server.cpp,src/quantum/*
+description: Rules and documentation for managing data across three memory tiers (STM, MTM, LTM) with quantum coherence-based migration.
+globs: src/memory/**,include/memory/**,src/quantum/processor*.cpp
 alwaysApply: false
 ---
 
 
 # memory-tier-system
 
-### Memory Tier Architecture
+The memory tier system implements a three-level pattern storage architecture with coherence-based promotion and demotion rules.
 
-The memory tier system implements a three-level hierarchical storage:
+## Memory Tier Architecture
 
-1. Short-Term Memory (STM):
-- Temporary pattern storage with lowest coherence threshold (0.2)
-- Fast access but limited capacity
-- Pattern data expires quickly without sufficient coherence
+Three distinct memory tiers with specialized roles:
 
-2. Medium-Term Memory (MTM):
-- Intermediate storage with moderate coherence threshold (0.5)
-- Balanced access speed and capacity
-- Patterns promoted from STM that maintain stable coherence
+1. Short-Term Memory (STM)
+- Entry point for new patterns
+- Highest volatility, shortest retention
+- Rapid pattern acceptance with minimal coherence requirements
+- Quick demotion of unstable patterns
 
-3. Long-Term Memory (LTM): 
-- Persistent storage with highest coherence threshold (0.8)
-- Redis-backed for persistence
-- Only highly stable and coherent patterns
+2. Medium-Term Memory (MTM) 
+- Intermediate stability requirements
+- Patterns require 0.7 coherence and 5+ generations for promotion from STM
+- Higher coherence threshold (0.85) for LTM promotion consideration
 
-### Tier Management Logic
+3. Long-Term Memory (LTM)
+- Most stable patterns
+- Requires 0.9 coherence and 100+ generations
+- Lowest demotion rate
+- Patterns persist across sessions
 
-1. Pattern Promotion:
-- STM -> MTM requires:
-  - Coherence > 0.5
-  - Min 5 generations
-  - Stability > 0.3
-- MTM -> LTM requires:
-  - Coherence > 0.8
-  - Min 100 generations
-  - Stability > 0.7
+## Migration Rules
 
-2. Pattern Demotion:
-- Triggered when:
-  - Coherence drops below tier threshold
-  - Stability falls below 0.3
-  - Memory pressure exceeds 0.8
+Pattern Promotion Requirements:
+```
+STM -> MTM:
+- Coherence > 0.7
+- Stability > 0.7
+- Generation count > 5
+- Context score > 0.5
 
-3. Block Allocation:
-- Dynamic block sizing based on pattern complexity
-- Defragmentation when free space < 20%
-- Block merging for adjacent free spaces
+MTM -> LTM:  
+- Coherence > 0.9
+- Stability > 0.85
+- Generation count > 100
+- Context score > 0.8
+```
 
-### Redis Integration
+Pattern Demotion Triggers:
+- Coherence drops below 0.3
+- Stability falls under 0.4
+- No access in configurable timeframe
+- Memory pressure above 80%
 
-The LTM tier integrates with Redis:
-- Pattern data serialized as hashes
-- Relationship graphs stored as sorted sets
-- Automatic pruning of expired patterns
-- Bulk operations for efficiency
+## Key Files
 
-### Pattern Relationships
-
-- Tracked across all memory tiers
-- Strength based on:
-  - Coherence product
-  - Spatial proximity
-  - Generation overlap
-- Used for:
-  - Co-location decisions
-  - Promotion timing
-  - Relationship-based retrieval
-
-File paths:
+Core Implementation:
 - src/memory/memory_tier_manager.cpp
-- src/memory/redis_manager.cpp
-- include/memory/memory_tier.hpp
-- include/memory/quantum_coherence_manager.h
+- include/memory/memory_tier.hpp 
+- src/quantum/processor_qfh.cpp
+
+Pattern Storage:
+- src/memory/memory.cu
+- include/memory/redis_manager.h
 
 $END$
 

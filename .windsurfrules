@@ -10,43 +10,66 @@
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-The SEP engine implements a quantum-inspired pattern processing system with three core components:
+The SEP Engine implements a quantum-inspired pattern processing system with three core components:
+
+## Memory Management Architecture
+A three-tier memory system handles pattern storage and evolution:
+
+1. Short-Term Memory (STM)
+- Temporary pattern storage
+- Initial coherence validation
+- Quick pattern access and modification
+
+2. Medium-Term Memory (MTM) 
+- Patterns promoted from STM based on coherence (>0.7)
+- Pattern relationship tracking
+- Stability assessment
+
+3. Long-Term Memory (LTM)
+- Stable patterns with high coherence (>0.9)
+- Deep pattern relationships
+- Historical evolution tracking
+
+Key files:
+- src/memory/memory_tier_manager.cpp
+- include/memory/types.h
 
 ## Quantum Pattern Processing
-- Pattern evolution through quantum manifolds with coherence modulation
-- Quantum binary state analysis (QBSA) for pattern stability detection 
-- Pattern mutation based on quantum fourier hierarchy (QFH)
-- Coherence-based validation using stability thresholds
+The pattern processing pipeline implements:
+
+1. Quantum Binary State Analysis (QBSA)
+- Pattern coherence calculation
+- State transition detection
+- Collapse identification
+
+2. Quantum Field Harmonics (QFH)
+- Pattern evolution through quantum manifolds
+- Stability assessment
+- Relationship strength calculation
 
 Key files:
 - src/quantum/quantum_processor.cpp
 - src/quantum/pattern_evolution.cpp
-- include/quantum/qbsa.h
 
-## Memory Management 
-- Three-tier memory hierarchy (STM/MTM/LTM)
-- Coherence-based promotion/demotion between tiers
-- Pattern relationship tracking through quantum entanglement
-- Redis-based persistence for long-term memory
+## Pattern Evolution System
+Manages pattern lifecycles through:
 
-Key files:
-- src/memory/memory_tier_manager.cpp
-- src/memory/quantum_coherence_manager.cpp
-- include/memory/types.h
+1. Evolution Engine
+- Pattern mutation based on coherence
+- Relationship formation and pruning
+- Generation tracking
+- Memory tier transitions
 
-## API Integration
-- Pattern processing API with coherence validation
-- Memory tier status reporting and management
-- Quantum state evolution control interface
-- Integration with Blender for pattern visualization
-- Audio pipeline for pattern generation from sound
+2. Coherence Management
+- Coherence score calculation
+- Stability metrics
+- Pattern relationship strength assessment
 
 Key files:
-- src/api/server.cpp
-- src/api/bridge.cpp
-- include/api/sep_engine.h
+- src/quantum/evolution.cpp
+- src/quantum/quantum_manifold_optimizer.cpp
 
-The system operates on quantum-inspired principles where patterns evolve through stability states based on coherence metrics. Memory management uses a hierarchical approach with promotion/demotion based on pattern stability and relationships. The API layer provides interfaces for pattern processing, visualization and audio integration.
+The system integrates these components to process quantum patterns, manage their evolution through memory tiers, and maintain coherence-based relationships between patterns.
 
 $END$
 

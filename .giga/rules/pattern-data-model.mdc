@@ -1,68 +1,70 @@
 ---
-description: Specifies the core pattern data structures, relationships, coherence metrics and processing logic for quantum pattern evolution
-globs: 
+description: Specification for pattern data models, relationships, coherence metrics, and quantum processing evolution
+globs: src/memory/**/*.md,src/quantum/**/*.cpp,include/quantum/**/*.h,src/api/*.cpp
 alwaysApply: false
 ---
 
 
 # pattern-data-model
 
-## Core Pattern Data Structures
+## Pattern Data Structures
 
-### Pattern
-- Unique identifier
-- Quantum state vector (position, phase, amplitude)
-- Coherence value (0.0-1.0) indicating pattern stability
+Pattern data consists of:
+- 3D vectors (position, orientation) representing quantum states
+- Coherence value [0.0-1.0] indicating pattern stability
 - Generation count tracking evolutionary history
-- Pattern relationships with coherence thresholds
-- Memory tier assignment (STM/MTM/LTM)
+- Relationships to other patterns via DAG structure 
 
-### Pattern Evolution Pipeline
-- Initial pattern extraction from input data
-- Quantum state preparation with configurable parameters
-- Coherence calculation through quantum dot product
-- Stability assessment based on historical coherence
-- Relationship graph maintenance with coherence thresholds
-- Pattern promotion/demotion between memory tiers
+## Memory Tier System
 
-### Memory Tier Management 
-- Short-Term Memory (STM): Coherence >= 0.2
-- Medium-Term Memory (MTM): Coherence >= 0.5
-- Long-Term Memory (LTM): Coherence >= 0.8
-- Promotion requires sustained coherence above threshold
-- Demotion triggered by coherence drops below 0.3
-- Memory pressure triggers cleanup of low coherence patterns
+Patterns exist in a three-tier memory architecture:
+- Short-Term Memory (STM): New patterns, coherence >= 0.2
+- Medium-Term Memory (MTM): Stable patterns, coherence >= 0.5
+- Long-Term Memory (LTM): Highly stable patterns, coherence >= 0.8
 
-### Pattern Processing
-- Quantum Binary State Analysis (QBSA) for pattern matching
-- Quantum Fourier Hierarchy (QFH) for state transitions
-- Pattern mutation based on:
-  - Current coherence level
-  - Relationship network topology  
-  - Historical stability metrics
-  - Memory tier assignments
-
-### Pattern Relationships
-- Bidirectional links between related patterns
-- Coherence-based relationship strength (0.0-1.0)
-- Relationship pruning below 0.3 coherence
-- Automatic relationship formation above 0.7 coherence
-- Graph structure maintenance for pattern evolution
-
-### Coherence Metrics
-- Base coherence from quantum state overlap
-- Stability factor from historical coherence
-- Generation bonus for evolved patterns
-- Access frequency multiplier
-- Memory tier weighting
-- Relationship network density
-
-File Paths:
-- src/quantum/pattern_evolution.cpp 
+Key files:
+- src/memory/dothis.md
 - src/quantum/quantum_processor.cpp
-- src/memory/quantum_coherence_manager.cpp
-- include/quantum/pattern.h
-- include/memory/memory_tier.hpp
+
+## Coherence Metrics
+
+Pattern coherence calculation:
+- Base coherence from spatial position/orientation
+- Stability multiplier based on generation count
+- Context score from related pattern coherence
+- Time-based decay rate of 0.02 per cycle
+
+Coherence thresholds:
+- Below 0.2: Pattern considered unstable
+- 0.2-0.5: STM stability range
+- 0.5-0.8: MTM stability range 
+- Above 0.8: LTM stability achieved
+
+## Pattern Evolution
+
+Evolution mechanics:
+- Mutation rate inversely proportional to stability
+- Parent-child relationships tracked in DAG
+- Coherence inheritance through quantum entanglement
+- Phase correlation calculations for related patterns
+
+Key components:
+- src/quantum/evolution.cpp
+- include/quantum/pattern_evolution.h
+
+## Pattern Relationships
+
+Relationship types:
+- Direct parent-child through evolution
+- Spatial proximity in quantum manifold
+- Coherence similarity (within 0.1 threshold)
+- Entanglement strength above 0.6
+
+Managed through:
+- Directed acyclic graph (DAG) structure
+- Relationship pruning below coherence threshold
+- Automatic relationship formation based on proximity
+- Hierarchical organization in memory tiers
 
 $END$
 

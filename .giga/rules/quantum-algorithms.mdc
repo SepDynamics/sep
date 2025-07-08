@@ -1,56 +1,67 @@
 ---
-description: Handles quantum-inspired pattern processing and coherence analysis algorithms, focused on pattern evolution and stability calculation.
-globs: src/quantum/**,src/api/**,include/quantum/**,include/memory/**
+description: Documents core quantum algorithms including QBSA, QFH and pattern evolution for quantum state processing
+globs: src/quantum/**,include/quantum/**,src/memory/**
 alwaysApply: false
 ---
 
 
 # quantum-algorithms
 
-The quantum algorithms implementation centers around three core components:
+## Core Algorithm Components
 
-1. Quantum Binary State Analysis (QBSA):
-- Analyzes quantum bit sequences for coherence and stability
-- Detects pattern collapses using correction ratio thresholds 
-- Implements probe-based quantum measurements
-- Located in `src/quantum/qbsa.cpp` and `src/quantum/qbsa_qfh.cpp`
+### Quantum Binary State Analysis (QBSA)
+- Analyzes quantum bit sequences to detect state transitions and collapses
+- Implements correction ratio calculations to determine system stability
+- Processes probe indices against expectations to identify mismatches
+- Located in: src/quantum/qbsa.cpp, src/quantum/qbsa_qfh.cpp
 
-2. Quantum Fourier Hierarchy (QFH):
-- Multi-level quantum transform for detecting coherence "ruptures"
-- Tracks quantum state transitions (NULL_STATE, FLIP, RUPTURE)
-- Computes aggregate quantum event sequences
-- Located in `src/quantum/qfh.cpp` and `src/quantum/quantum_processor_qfh.cpp`
+### Quantum Fourier Hierarchy (QFH)
+- Processes quantum bit sequences to detect state transitions
+- Defines three quantum states: NULL_STATE, FLIP, and RUPTURE 
+- Calculates rupture and flip ratios for stability determination
+- Located in: src/quantum/qfh.cpp
 
-3. Pattern Evolution System:
-- Manages quantum pattern coherence through three memory tiers (STM, MTM, LTM)
-- Key thresholds:
-  - Promotion: STM->MTM (0.7), MTM->LTM (0.9)
-  - Demotion: Below 0.3
-  - Generation requirements: STM->MTM (5), MTM->LTM (100)
-- Calculates pattern stability based on:
-  - Historical coherence values
-  - Generation count
-  - Access frequency 
-  - Relationship strength
-- Located in `src/quantum/evolution.cpp`
+### Pattern Evolution Engine
+- Evolves quantum patterns through coherence and stability calculations
+- Manages state transitions between memory tiers based on quantum metrics
+- Implements mutation mechanics with quantum noise incorporation
+- Located in: src/quantum/evolution.cpp
 
-The pattern processing pipeline:
-1. Input patterns undergo QBSA to determine quantum state
-2. QFH analysis detects coherence ruptures
-3. Pattern evolution tracks stability across memory tiers
-4. Coherence and relationship strengths determine pattern placement
+### Quantum Manifold Optimizer
+- Optimizes pattern positions within quantum manifold space
+- Calculates coherence through Riemannian metric analysis
+- Implements gradient descent on manifold surface
+- Located in: src/quantum/quantum_manifold_optimizer.cpp
 
-Coherence calculation incorporates:
-- Quantum phase relationships
-- Pattern position in manifold space 
-- Historical stability trends
-- Entanglement density between patterns
+## Memory Integration
 
-Memory tier promotion requires:
-- Meeting coherence thresholds
-- Sufficient generation count
-- Stable quantum state (no recent ruptures)
-- Strong pattern relationships
+### Quantum Coherence Manager
+- Tracks coherence across memory tiers using decay rates
+- Manages pattern migration based on coherence thresholds:
+  - LTM: 0.8f
+  - MTM: 0.5f
+  - STM: 0.2f
+- Located in: src/memory/quantum_coherence_manager.cpp
+
+### Pattern Processing Pipeline
+- Handles quantum pattern state evolution
+- Maintains coherence history and stability metrics
+- Implements pattern collapse detection based on variance analysis
+- Located in: src/quantum/pattern_processor.cpp
+
+## Key Business Rules
+
+### State Transitions
+- Coherence thresholds determine memory tier placement
+- Pattern stability affects promotion/demotion between tiers
+- Quantum collapse triggers pattern regeneration
+- Rupture detection initiates state correction
+
+### Pattern Evolution
+- Mutation rates adapt based on stability metrics
+- Coherence decay applies to unstable patterns
+- Entanglement strength determines pattern relationships
+- Phase correlations influence evolution direction
 
 $END$
 

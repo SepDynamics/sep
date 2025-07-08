@@ -1,69 +1,48 @@
 ---
-description: Specifies rules for analyzing data flow between components, quantum states, and memory tiers
-globs: src/api/**,src/quantum/**,src/memory/**,src/core/**,include/**
+description: Documents how data flows between components including pattern processing, memory tiers, and quantum transformations
+globs: src/**/*.cpp,src/**/*.hpp,include/**/*.h,examples/**/*.cpp
 alwaysApply: false
 ---
 
 
-# Data Flow
+# data-flow
 
-## Core Data Flow Patterns
+## Core Pattern Processing Pipeline
 
-### Pattern Processing Pipeline
-- **Input:** Raw pattern data from API or file
-- **Processing Stages:**
-  1. Pattern extraction and validation 
-  2. Quantum manifold transformation
-  3. Coherence calculation
-  4. Stability analysis 
-  5. Pattern evolution
-  6. Results aggregation with metadata
+### Pattern Ingestion Flow
+File: src/api/server.cpp
+- Raw patterns enter through /api/v1/pattern endpoint
+- Patterns undergo coherence validation
+- Valid patterns enter memory tier system based on coherence scores
 
-### Memory Tier Transitions
-- **Tier Flow:**
-  1. Short-Term Memory (STM)
-     - Initial pattern storage
-     - Coherence threshold: 0.2
-  2. Medium-Term Memory (MTM) 
-     - Patterns meeting STM coherence requirements
-     - Coherence threshold: 0.5
-  3. Long-Term Memory (LTM)
-     - Stable patterns with high coherence
-     - Coherence threshold: 0.8
+### Memory Tier Transitions 
+Files: src/memory/memory_tier_manager.cpp, src/memory/memory_tier.cpp
+- Patterns flow between three memory tiers (STM -> MTM -> LTM)
+- Promotion criteria:
+  - STM -> MTM: coherence > 0.7, stability > 0.7, generation > 5
+  - MTM -> LTM: coherence > 0.9, stability > 0.85, generation > 100
+- Demotion occurs when coherence drops below 0.3
 
 ### Quantum State Transformations
-- **State Flow:**
-  1. Initial state creation
-  2. Coherence modulation
-  3. Stability evaluation
-  4. State collapse detection
-  5. Phase correlation tracking
-  6. Entanglement density computation
+File: src/quantum/processor.cpp
+- Quantum patterns undergo state evolution through QFH processor
+- Coherence changes trigger pattern migrations between tiers
+- State collapse detection prompts pattern demotion
+- Entanglement detection influences pattern relationships
 
-### System Interactions
-- **API Layer:**
-  - Pattern input validation
-  - Response modulation based on coherence
-  - Memory tier state queries
-  - Pattern relationship tracking
+### System Integration Points
+Files: src/api/sep_engine.cpp, src/api/bridge.cpp
+- Pattern data flows from API layer to quantum processor
+- Memory tier state synchronizes with persistence layer
+- Pattern relationships propagate through quantum bridge
+- Context blending occurs at API integration boundary
 
-- **Memory Management:**
-  - Pattern promotion/demotion between tiers
-  - Coherence-based placement
-  - Entanglement relationship updates
-  - Redis persistence for LTM patterns
-
-- **Quantum Processing:**
-  - Pattern-to-quantum state conversion
-  - Quantum binary state analysis (QBSA)
-  - Quantum field hierarchy (QFH) processing
-  - Collapse detection and handling
-
-Relevant File Paths:
-- `src/quantum/quantum_processor.cpp`
-- `src/memory/memory_tier_manager.cpp`
-- `src/api/server.cpp`
-- `src/quantum/pattern_evolution.cpp`
+### Pattern Evolution Pipeline
+Files: src/quantum/evolution.cpp, src/quantum/pattern_evolution.cpp
+- Patterns evolve through quantum manifold transformations
+- Evolution results trigger memory tier transitions
+- Pattern stability influences evolution pathways
+- Parent-child relationships form based on evolution results
 
 $END$
 

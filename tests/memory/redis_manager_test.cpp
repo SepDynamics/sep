@@ -129,8 +129,8 @@ TEST_F(RedisManagerTest, GetPatternIds) {
     // Get IDs should work with any case
     auto ids = redis_manager->getPatternIds("stm");
     EXPECT_EQ(ids.size(), 2);
-    EXPECT_TRUE(std::find(ids.begin(), ids.end(), 1) != ids.end());
-    EXPECT_TRUE(std::find(ids.begin(), ids.end(), 2) != ids.end());
+    EXPECT_TRUE(std::find(ids.begin(), ids.end(), 1ULL) != ids.end());
+    EXPECT_TRUE(std::find(ids.begin(), ids.end(), 2ULL) != ids.end());
 }
 
 TEST_F(RedisManagerTest, RemovePattern) {

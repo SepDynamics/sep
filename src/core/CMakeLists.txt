@@ -53,6 +53,7 @@ target_link_libraries(sep_core
     PUBLIC
         Threads::Threads
         sep_compat
+        fmt::fmt
 )
 
 # Install headers from include directory

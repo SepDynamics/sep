@@ -3,6 +3,7 @@ tests/compositor_cpu/
 tests/cycles/
 tests/sequence_editing/
 Testing/
+tests/**/*_tests
 tests/io_curve_svg/
 sep_engine
 extern/*

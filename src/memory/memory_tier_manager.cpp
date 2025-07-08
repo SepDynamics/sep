@@ -624,27 +624,6 @@ void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
-    if (pattern_relationships_.count(id)) {
-      const auto &rels = pattern_relationships_.at(id);
-      if (!rels.empty()) {
-        double sum = 0.0;
-        for (const auto &r : rels) {
-          sum += r.second;
-        }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
-      }
-      coherence = static_cast<float>(sum / it->second.size());
-    }
-    pattern_ptr->coherence = coherence;
-  }
-}
-
-
-void MemoryTierManager::calculateRelationshipCoherence() {
-  std::lock_guard<std::mutex> reg_lock(registry_mutex);
-  std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-
-  for (auto &[id, pattern_ptr] : pattern_registry_) {
     pattern_ptr->coherence = 0.0f;
     if (pattern_relationships_.count(id)) {
       const auto &rels = pattern_relationships_.at(id);
@@ -657,6 +636,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
     }
   }
 }
+#endif // SEP_TESTBED_STUBS
 
 } // namespace memory
 } // namespace sep

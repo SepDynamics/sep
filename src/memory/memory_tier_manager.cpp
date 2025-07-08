@@ -628,6 +628,7 @@ void MemoryTierManager::cleanupExpiredPatterns() {
     }
   }
 }
+#endif // SEP_TESTBED_STUBS
 
 void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
                                                size_t max_count) {
@@ -676,3 +677,4 @@ void MemoryTierManager::calculateRelationshipCoherence() {
 
 } // namespace memory
 } // namespace sep
+

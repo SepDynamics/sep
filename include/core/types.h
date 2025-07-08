@@ -45,6 +45,15 @@ struct MemoryThresholdConfig {
   bool enable_compression{true};
 };
 
+// Thresholds used by the quantum processing components. The minimal
+// definition provided here is sufficient for unit tests that link
+// against the stubbed ConfigManager implementation.
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.
 struct CudaConfig {

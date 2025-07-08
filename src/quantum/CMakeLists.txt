@@ -21,6 +21,7 @@ add_library(sep_quantum STATIC
     qbsa.cpp
     qfh.cpp
     quantum_processor_qfh_common.cpp
+    manifold_config.cpp
     types_serialization.cpp
     pattern_processor.cpp
     pattern_evolution_bridge.cpp

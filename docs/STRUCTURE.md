@@ -27,4 +27,11 @@ The default build directory is `build`. After compilation you'll find the `sep_e
 2. `include` headers – look here when integrating the engine with other projects.
 3. `docs/ARCHITECTURE.md` – high level component breakdown.
 
+## Unified Configuration
+
+Most demos and engine modules share a common set of configuration structures
+under `include/workbench`. Examples in `examples/workbench` use the same
+definitions. When adding new options prefer extending these shared structs
+instead of creating local variants.
+
 Keep this file handy as a quick guide when navigating the repository.

@@ -188,8 +188,12 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   float util = t->calculateUtilization();
 
   // Normalize very small values to zero so tests remain stable across
-  // platforms and rounding modes.
-  return std::fabs(util) <= kUtilizationEpsilon ? 0.0f : util;
+  // platforms and rounding modes. Clamp the result to the valid [0,1]
+  // range to avoid tiny negative values that can appear after
+  // defragmentation or resizing operations.
+  if (std::fabs(util) <= kUtilizationEpsilon)
+    return 0.0f;
+  return std::clamp(util, 0.0f, 1.0f);
 }
 
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {
@@ -226,7 +230,10 @@ float MemoryTierManager::getTotalUtilization() const {
   if (total_size == 0)
     return 0.0f;
   float util = static_cast<float>(used) / static_cast<float>(total_size);
-  return std::fabs(util) <= kUtilizationEpsilon ? 0.0f : util;
+
+  if (std::fabs(util) <= kUtilizationEpsilon)
+    return 0.0f;
+  return std::clamp(util, 0.0f, 1.0f);
 }
 
 float MemoryTierManager::getTotalFragmentation() const {

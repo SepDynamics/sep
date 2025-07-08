@@ -3,7 +3,6 @@ add_library(sep_memory
     memory_tier.cpp
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
-    redis_manager.cpp
 )
 
 if(SEP_BUILD_QUANTUM)

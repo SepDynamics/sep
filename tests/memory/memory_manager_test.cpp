@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "memory/memory_tier_manager.hpp"
 
+namespace mem = sep::memory;
 namespace {
 constexpr float EPSILON = 1e-3f;
 }

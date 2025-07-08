@@ -2,6 +2,8 @@
 #include "memory/memory_tier_manager.hpp"
 #include "memory/memory_tier.hpp"
 
+namespace mem = sep::memory;
+
 static sep::memory::MemoryBlock* findAllocated(sep::memory::MemoryTier& tier) {
     for (const auto& b : tier.getBlocks()) {
         if (b.allocated) return const_cast<sep::memory::MemoryBlock*>(&b);

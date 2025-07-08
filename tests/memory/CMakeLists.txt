@@ -32,6 +32,11 @@ set(TEST_SOURCES
     pattern_promotion_test.cpp
 )
 
+# Define the test executable from the aggregated sources. Previous
+# merges accidentally dropped this declaration which caused the build
+# to fail when linking libraries against a non-existent target.
+add_executable(memory_manager_tests ${TEST_SOURCES})
+
 if(SEP_HAS_REDIS)
     target_sources(memory_manager_tests PRIVATE redis_manager_test.cpp)
 endif()

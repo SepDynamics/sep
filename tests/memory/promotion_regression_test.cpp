@@ -2,22 +2,20 @@
 #include "memory/memory_tier_manager.hpp"
 #include "memory/memory_tier.hpp"
 
-using namespace sep::memory;
-
-static MemoryBlock* findAllocated(MemoryTier& tier) {
+static sep::memory::MemoryBlock* findAllocated(sep::memory::MemoryTier& tier) {
     for (const auto& b : tier.getBlocks()) {
-        if (b.allocated) return const_cast<MemoryBlock*>(&b);
+        if (b.allocated) return const_cast<sep::memory::MemoryBlock*>(&b);
     }
     return nullptr;
 }
 
 TEST(MemoryPromotionRegression, StablePromotionDemotion) {
-    MemoryTierManager mgr;
-    MemoryBlock* block = mgr.allocate(256, sep::memory::MemoryTierEnum::STM);
+    sep::memory::MemoryTierManager mgr;
+    sep::memory::MemoryBlock* block = mgr.allocate(256, sep::memory::MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
 
     mgr.updateBlockMetrics(block, 0.8f, 0.8f, 6, 1.0f); // promote to MTM
-    MemoryBlock* promoted = findAllocated(mgr.getMTM());
+    sep::memory::MemoryBlock* promoted = findAllocated(mgr.getMTM());
     ASSERT_NE(promoted, nullptr);
     float weight = promoted->weight;
     uint64_t wait = promoted->wait;
@@ -28,7 +26,7 @@ TEST(MemoryPromotionRegression, StablePromotionDemotion) {
     EXPECT_EQ(wait, promoted->wait);
 
     mgr.updateBlockMetrics(promoted, 0.1f, 0.1f, 6, 1.0f); // demote to STM
-    MemoryBlock* demoted = findAllocated(mgr.getSTM());
+    sep::memory::MemoryBlock* demoted = findAllocated(mgr.getSTM());
     ASSERT_NE(demoted, nullptr);
     weight = demoted->weight;
     wait = demoted->wait;

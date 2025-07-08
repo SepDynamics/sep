@@ -43,6 +43,47 @@ struct MemoryThresholdConfig {
     bool enable_compression{true};
 };
 
+// Minimal CUDA configuration used by unit tests. These fields are
+// sufficient for the parts of the engine compiled in this repository.
+struct CudaConfig {
+    bool use_gpu{true};
+    std::size_t max_memory_mb{8192};
+    std::size_t batch_size{1024};
+    float gpu_memory_limit{0.9f};
+    bool enable_profiling{false};
+};
+
+// API server configuration. Only a subset of fields is required for
+// compiling the memory manager tests.
+struct APIConfig {
+    std::size_t max_connections{1000};
+    std::size_t timeout_ms{5000};
+    std::string host{"127.0.0.1"};
+    uint16_t port{8080};
+    std::size_t threads{4};
+    std::size_t keep_alive_timeout_ms{15000};
+    std::string log_level{"info"};
+    bool enable_metrics{true};
+    std::size_t max_batch_size{1024};
+};
+
+// Logging configuration placeholder
+struct LogConfig {
+    std::string level{"info"};
+    std::string file{};
+    std::string dir{"logs"};
+};
+
+// Basic analytics configuration used by quantum components
+struct AnalyticsConfig {
+    bool enable{false};
+};
+
+// Aggregate system configuration stub. Only the pieces used by tests
+// are represented here.
+struct SystemConfig {
+};
+
 } // namespace config
 
 enum class PatternStateEnum {

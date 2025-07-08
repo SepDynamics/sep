@@ -28,6 +28,8 @@ option(SEP_WITH_OSL "Enable OpenShadingLanguage support" ON)
 option(SEP_WITH_ALEMBIC "Enable Alembic support" ON)
 option(SEP_WITH_AUDIO "Enable PipeWire audio integration" ON)
 option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" OFF)
+option(SEP_BUILD_ENGINE "Build the main engine component" ON)
+option(SEP_BUILD_QUANTUM "Build quantum processing components" OFF)
 
 # Configure include paths
 set(SEP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)

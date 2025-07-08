@@ -22,6 +22,8 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DSEP_WITH_ALEMBIC=OFF \
   -DSEP_HAS_CUDA=0 \
   -DSEP_ENABLE_AUDIO=OFF \
-  -DSEP_WORKBENCH_DEMO=OFF
+  -DSEP_WORKBENCH_DEMO=OFF \
+  -DSEP_BUILD_ENGINE=OFF \
+  -DBUILD_TESTING=ON
 
-make -j$(nproc)
+make memory_manager_tests -j$(nproc)

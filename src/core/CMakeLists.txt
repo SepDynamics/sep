@@ -1,17 +1,19 @@
-add_library(sep_core
-  STATIC
+add_library(sep_core STATIC
     tracing.cpp
     allocation_metrics.cpp
     dag_graph.cpp
     prometheus_exporter.cpp
     error_handler.cpp
     metrics_collector.cpp
-    engine.cpp
     logging.cpp
     error_handler.cpp
     compression.cpp
     dag_graph.cpp
 )
+
+if(SEP_BUILD_ENGINE)
+    target_sources(sep_core PRIVATE engine.cpp)
+endif()
 
 
 

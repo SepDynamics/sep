@@ -7,9 +7,6 @@ add_library(sep_core
     error_handler.cpp
     metrics_collector.cpp
     logging.cpp
-    error_handler.cpp
-    compression.cpp
-    dag_graph.cpp
 )
 
 

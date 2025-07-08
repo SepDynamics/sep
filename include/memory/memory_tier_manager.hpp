@@ -16,6 +16,7 @@
 #include "compat/shim.h"
 #include "quantum/types.h"
 #include "quantum/data.hpp"
+#ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
 #include "persistence/pattern_data.hpp"
 

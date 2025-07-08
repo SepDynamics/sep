@@ -6,6 +6,7 @@
 #include <deque>
 #include <unordered_map>
 #include <vector>
+#include <cstdint>
 
 // Third-party headers
 #include <glm/vec3.hpp>

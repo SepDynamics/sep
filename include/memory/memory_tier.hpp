@@ -15,6 +15,7 @@
 #include "../core/common.h"
 #include "../core/types.h"
 #include "types.h"
+#include "../persistence/pattern_data.hpp"
 
 namespace sep {
 namespace memory {
@@ -80,7 +81,7 @@ struct MemoryBlock {
         : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
-using PersistentPatternData = ::sep::memory::persistence::PersistentPatternData;
+using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 class MemoryTier {
 public:

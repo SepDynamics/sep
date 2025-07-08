@@ -13,6 +13,7 @@
 #include "core/dag_graph.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
+#include "../persistence/pattern_data.hpp"
 #include "compat/shim.h"
 #include "quantum/types.h"
 #include "quantum/data.hpp"

@@ -54,6 +54,10 @@ public:
         
         return outPos == outputSize;
     }
+
+    CompressionMethod getMethod() const override { return CompressionMethod::None; }
+
+    CompressionStats getStats() const override { return {}; }
 };
 
 // Factory method implementation

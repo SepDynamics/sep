@@ -109,6 +109,10 @@ else()
     add_compile_definitions(SEP_HAS_BLENDER=0)
 endif()
 
+# Redis is disabled in the minimal build
+add_compile_definitions(SEP_NO_REDIS)
+add_compile_definitions(SEP_HAS_REDIS=0)
+
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/include

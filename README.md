@@ -165,3 +165,17 @@ unit test targets:
 
 The script configures the project with optional dependencies disabled and
 executes the `memory_manager_tests` target automatically.
+
+If you prefer to invoke CMake manually, create a build directory and
+disable the heavyweight modules:
+
+```bash
+mkdir build && cd build
+cmake -DSEP_WITH_CYCLES=OFF -DSEP_WITH_AUDIO=OFF -DSEP_WITH_OPENSUBDIV=OFF \
+      -DSEP_MINIMAL=ON -DSEP_HAS_CUDA=OFF ..
+make memory_manager_tests
+./tests/memory/memory_manager_tests
+```
+
+This mirrors the configuration used by `build_no_cuda.sh` while giving
+you direct control over the build location.

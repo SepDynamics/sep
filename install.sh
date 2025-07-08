@@ -54,16 +54,6 @@ FULL_PACKAGES=(
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
 )
-EXTRA_PACKAGES=(
-  libopencolorio-dev libopenimageio-dev
-  libembree-dev libopenvdb-dev
-)
-
-if [ "$MINIMAL" -eq 1 ]; then
-  PACKAGES=("${BASE_PACKAGES[@]}")
-else
-  PACKAGES=("${BASE_PACKAGES[@]}" "${EXTRA_PACKAGES[@]}")
-fi
 
 if [ "$USE_MINIMAL" -eq 1 ]; then
   PACKAGES=("${MIN_PACKAGES[@]}")

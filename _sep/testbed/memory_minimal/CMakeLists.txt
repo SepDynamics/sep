@@ -16,6 +16,10 @@ add_executable(memory_minimal_tests
 find_package(GTest REQUIRED)
 find_package(fmt REQUIRED)
 find_package(spdlog)
+if(spdlog_FOUND)
+    message(STATUS "Using header-only spdlog for testbed")
+    add_compile_definitions(SPDLOG_HEADER_ONLY)
+endif()
 find_package(Threads REQUIRED)
 
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../src)
@@ -42,7 +46,7 @@ target_link_libraries(memory_minimal_tests PRIVATE
     GTest::GTest
     GTest::Main
     fmt::fmt
-    spdlog::spdlog
+    spdlog::spdlog_header_only
     Threads::Threads
     sep_memory
     sep_core

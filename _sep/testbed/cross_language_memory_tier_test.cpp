@@ -12,15 +12,15 @@ TEST(CrossLanguage, MemoryTierConfigRoundTrip) {
     cfg.ltm_size = 4096;
 
     nlohmann::json j = cfg;
-    std::ofstream out("_sep/testbed/config_out.json");
+    std::ofstream out("../_sep/testbed/config_out.json");
     ASSERT_TRUE(out.is_open());
     out << j.dump();
     out.close();
 
-    int ret = std::system("node _sep/testbed/cross_language_memory.cjs _sep/testbed/config_out.json _sep/testbed/config_back.json");
+    int ret = std::system("node ../_sep/testbed/cross_language_memory.cjs ../_sep/testbed/config_out.json ../_sep/testbed/config_back.json");
     ASSERT_EQ(ret, 0);
 
-    std::ifstream in("_sep/testbed/config_back.json");
+    std::ifstream in("../_sep/testbed/config_back.json");
     ASSERT_TRUE(in.is_open());
     nlohmann::json j2;
     in >> j2;

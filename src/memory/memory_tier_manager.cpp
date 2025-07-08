@@ -423,11 +423,16 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_[out_block->ptr] = out_block;
   }
 
-  // Rebuild the lookup table to keep any stale pointers from previous
-  // defragmentation or resize operations in sync with the new block
-  // locations.  Unit tests rely on findBlockByPtr returning the latest
-  // address so we refresh the map after every successful move.
+  // Rebuild lookup first so all active blocks are registered with their
+  // current addresses.
   rebuildLookup();
+
+  {
+    std::lock_guard<std::mutex> lock(lookup_mutex);
+    // Preserve the old pointer as an alias so callers using stale addresses
+    // can still resolve the promoted block via findBlockByPtr.
+    lookup_map_[block->ptr] = out_block;
+  }
 
   return SEPResult::SUCCESS;
 }
@@ -556,8 +561,9 @@ void MemoryTierManager::removePattern(std::size_t id) {
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  float s = strength <= 0.0f ? 1.0f : strength;
+  pattern_relationships_[id_a][id_b] = s;
+  pattern_relationships_[id_b][id_a] = s;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {

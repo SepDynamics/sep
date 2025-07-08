@@ -19,7 +19,6 @@
 #include "quantum/data.hpp"
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
-#include "persistence/pattern_data.hpp"
 #endif // SEP_NO_REDIS
 
 // Standard library includes

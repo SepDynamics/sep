@@ -10,7 +10,11 @@
 #include "core/manager.h" // for ConfigManager
 #endif
 
-namespace sep { namespace config { class ConfigManager; } }
+namespace sep {
+namespace config {
+class ConfigManager;
+}
+} // namespace sep
 
 #include <algorithm>
 #include <cmath>
@@ -67,8 +71,6 @@ MemoryTierManager::MemoryTierManager() {
 }
 
 MemoryTierManager::MemoryTierManager(const Config &cfg) { init(cfg); }
-
-
 
 MemoryTierManager::~MemoryTierManager() { shutdown(); }
 
@@ -197,7 +199,8 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   // range to avoid tiny negative values that can appear after
   // defragmentation or resizing operations.
   if (std::fabs(util) <= kUtilizationEpsilon ||
-      util <= (1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()))))
+      util <=
+          (1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()))))
     return 0.0f;
   return std::clamp(util, 0.0f, 1.0f);
 }
@@ -269,6 +272,9 @@ void MemoryTierManager::optimizeTiers() {
     mtm_->defragment();
   if (ltm_)
     ltm_->defragment();
+  // Each tier rebuilds the lookup table internally. Avoid an additional
+  // rebuild here so callers holding stale MemoryBlock pointers can still
+  // resolve the moved blocks via findBlockByPtr() after optimization.
 }
 
 void MemoryTierManager::defragmentTier(MemoryTierEnum tier) {
@@ -418,7 +424,7 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
   }
 
   // Update lookup maps in correct order to maintain consistency
-  void* old_ptr = block->ptr;
+  void *old_ptr = block->ptr;
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(old_ptr);
@@ -602,8 +608,9 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
   if (!t)
     return;
 
-  auto &patterns = const_cast<std::unordered_map<size_t, PersistentPatternData> &>(
-      t->getPatterns());
+  auto &patterns =
+      const_cast<std::unordered_map<size_t, PersistentPatternData> &>(
+          t->getPatterns());
 
   if (patterns.size() <= max_count)
     return;

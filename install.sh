@@ -67,3 +67,4 @@ if ! dpkg -s libusd-dev >/dev/null 2>&1; then
 fi
 
 echo "All dependencies installed. See $LOG_DIR for logs."
+  

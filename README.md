@@ -162,3 +162,6 @@ unit test targets:
 ./install.sh --minimal
 ./build_no_cuda.sh
 ```
+
+The script configures the project with optional dependencies disabled and
+executes the `memory_manager_tests` target automatically.

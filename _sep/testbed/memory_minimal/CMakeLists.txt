@@ -51,9 +51,13 @@ target_link_libraries(memory_minimal_tests PRIVATE
     sep_memory
     sep_core
 )
-if(spdlog_FOUND)
-    target_link_libraries(memory_minimal_tests PRIVATE spdlog::spdlog)
-endif()
+
+# When spdlog is available we use the header-only interface to avoid
+# linking against the compiled library. Linking against spdlog::spdlog
+# pulls in additional compile definitions like SPDLOG_COMPILED_LIB which
+# conflict with SPDLOG_HEADER_ONLY and lead to missing symbol errors when
+# building the minimal testbed. The header-only target provides all
+# required functionality for these tests without external dependencies.
 
 target_compile_definitions(memory_minimal_tests PRIVATE
     SEP_MEMORY_MINIMAL

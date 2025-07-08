@@ -639,56 +639,18 @@ void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
-    pattern_ptr->coherence = 1.0f;
-    if (pattern_relationships_.count(id)) {
-      const auto &rels = pattern_relationships_.at(id);
-      if (!rels.empty()) {
-        double sum = 0.0;
-        for (const auto &r : rels) {
-          sum += r.second;
-        }
-        float avg = static_cast<float>(sum / rels.size());
-        pattern_ptr->coherence = 1.0f - avg;
-      }
+    auto it = pattern_relationships_.find(id);
+    if (it == pattern_relationships_.end() || it->second.empty()) {
+      pattern_ptr->coherence = 0.0f;
+      continue;
     }
-  }
-}
-#endif
-
-
-
-void MemoryTierManager::cleanupExpiredPatterns() {
-  std::lock_guard<std::mutex> lock(registry_mutex);
-  for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
-    if (it->second->coherence < config_.demote_threshold) {
-      it = pattern_registry_.erase(it);
-    } else {
-      ++it;
+    double sum = 0.0;
+    for (const auto &rel : it->second) {
+      sum += rel.second;
     }
+    pattern_ptr->coherence =
+        static_cast<float>(sum / static_cast<double>(it->second.size()));
   }
 }
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                               size_t max_count) {
-  MemoryTier *t = getTier(tier);
-  if (!t)
-    return;
-  const auto &patterns = t->getPatterns();
-  if (patterns.size() <= max_count)
-    return;
-  std::vector<std::pair<size_t, float>> sorted;
-  sorted.reserve(patterns.size());
-  for (const auto &[id, pat] : patterns) {
-    sorted.emplace_back(id, pat.coherence);
-  }
-  std::sort(sorted.begin(), sorted.end(),
-            [](const auto &a, const auto &b) { return a.second > b.second; });
-  for (size_t i = max_count; i < sorted.size(); ++i) {
-    t->removePattern(sorted[i].first);
-    removePattern(sorted[i].first);
-  }
-}
-#endif // SEP_TESTBED_STUBS
-
 } // namespace memory
 } // namespace sep

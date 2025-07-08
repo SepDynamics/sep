@@ -2,7 +2,10 @@
 
 namespace sep::config {
 
-struct ConfigManager::Impl {};
+struct ConfigManager::Impl {
+    MemoryThresholdConfig mem_cfg{};
+    QuantumThresholdConfig quantum_cfg{};
+};
 
 ConfigManager::ConfigManager() = default;
 ConfigManager::~ConfigManager() = default;
@@ -29,13 +32,16 @@ const LogConfig& ConfigManager::getLogConfig() const {
     return cfg;
 }
 const MemoryThresholdConfig& ConfigManager::getMemoryConfig() const {
-    static MemoryThresholdConfig cfg{};
-    return cfg;
+    return impl_->mem_cfg;
+}
+const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
+    return impl_->quantum_cfg;
 }
 void ConfigManager::updateAPIConfig(const APIConfig&) {}
 void ConfigManager::updateCudaConfig(const CudaConfig&) {}
 void ConfigManager::updateLogConfig(const LogConfig&) {}
 void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig&) {}
+void ConfigManager::updateQuantumConfig(const QuantumThresholdConfig&) {}
 void ConfigManager::resetToDefaults() {}
 
 } // namespace sep::config

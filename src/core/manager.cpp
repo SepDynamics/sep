@@ -36,10 +36,6 @@ const LogConfig& ConfigManager::getLogConfig() const {
 const MemoryThresholdConfig& ConfigManager::getMemoryConfig() const {
     return impl_->mem_cfg;
 }
-#if SEP_BUILD_QUANTUM
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    return impl_->quantum_cfg;
-}
 void ConfigManager::updateAPIConfig(const APIConfig&) {}
 void ConfigManager::updateCudaConfig(const CudaConfig&) {}
 void ConfigManager::updateLogConfig(const LogConfig&) {}

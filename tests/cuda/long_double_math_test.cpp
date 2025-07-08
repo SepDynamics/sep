@@ -25,7 +25,7 @@ TEST(LongDoubleMathHost, Atan2lAccuracy) {
 
 TEST(LongDoubleMathDevice, AcoslAccuracy) {
     long double* d_out;
-    ASSERT_EQ(cudaMalloc(&d_out, sizeof(long double)), cudaSuccess);
+    ASSERT_EQ(cudaMalloc(reinterpret_cast<void**>(&d_out), sizeof(long double)), cudaSuccess);
     device_acosl<<<1,1>>>(d_out, 0.5L);
     ASSERT_EQ(cudaDeviceSynchronize(), cudaSuccess);
     long double h_val;
@@ -37,7 +37,7 @@ TEST(LongDoubleMathDevice, AcoslAccuracy) {
 
 TEST(LongDoubleMathDevice, Atan2lAccuracy) {
     long double* d_out;
-    ASSERT_EQ(cudaMalloc(&d_out, sizeof(long double)), cudaSuccess);
+    ASSERT_EQ(cudaMalloc(reinterpret_cast<void**>(&d_out), sizeof(long double)), cudaSuccess);
     device_atan2l<<<1,1>>>(d_out, 0.5L, -0.3L);
     ASSERT_EQ(cudaDeviceSynchronize(), cudaSuccess);
     long double h_val;

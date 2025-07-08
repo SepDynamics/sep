@@ -616,67 +616,22 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     }
   }
 }
-#else // SEP_TESTBED_STUBS
-
-void MemoryTierManager::cleanupExpiredPatterns() {
-  std::lock_guard<std::mutex> lock(registry_mutex);
-  for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
-    if (it->second->coherence < config_.demote_threshold) {
-      it = pattern_registry_.erase(it);
-    } else {
-      ++it;
-    }
-  }
-}
-#endif // SEP_TESTBED_STUBS
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                               size_t max_count) {
-  MemoryTier *t = getTier(tier);
-  if (!t)
-    return;
-  const auto &patterns = t->getPatterns();
-  if (patterns.size() <= max_count)
-    return;
-  std::vector<std::pair<size_t, float>> sorted;
-  sorted.reserve(patterns.size());
-  for (const auto &[id, pat] : patterns) {
-    sorted.emplace_back(id, pat.coherence);
-  }
-  std::sort(sorted.begin(), sorted.end(),
-            [](const auto &a, const auto &b) { return a.second > b.second; });
-  for (size_t i = max_count; i < sorted.size(); ++i) {
-    t->removePattern(sorted[i].first);
-    removePattern(sorted[i].first);
-  }
-}
-#endif // SEP_TESTBED_STUBS
-
-
 void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> reg_lock(registry_mutex);
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
     pattern_ptr->coherence = 0.0f;
-    if (pattern_relationships_.count(id)) {
-      const auto &rels = pattern_relationships_.at(id);
-      if (!rels.empty()) {
-        double sum = 0.0;
-        for (const auto &r : rels) {
-          sum += r.second;
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+    auto rel_it = pattern_relationships_.find(id);
+    if (rel_it != pattern_relationships_.end() && !rel_it->second.empty()) {
+      double sum = 0.0;
+      for (const auto &r : rel_it->second) {
+        sum += r.second;
       }
       pattern_ptr->coherence = static_cast<float>(sum / rel_it->second.size());
     }
   }
 }
-#endif // SEP_TESTBED_STUBS
-
-#endif // SEP_TESTBED_STUBS
-
-#endif // SEP_TESTBED_STUBS
-
 #endif // SEP_TESTBED_STUBS
 
 } // namespace memory

@@ -43,6 +43,15 @@ struct MemoryThresholdConfig {
     bool enable_compression{true};
 };
 
+// Configuration thresholds for quantum pattern promotion and stability.
+// These values govern when patterns are moved between memory tiers based on
+// coherence and stability metrics.
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.

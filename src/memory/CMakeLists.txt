@@ -1,9 +1,13 @@
 add_library(sep_memory
-  STATIC 
+  STATIC
     memory_tier.cpp
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
 )
+
+if(SEP_BUILD_QUANTUM)
+  target_sources(sep_memory PRIVATE quantum_coherence_manager.cpp)
+endif()
 
 # Find required Redis library
 set(SEP_HAS_REDIS 0)

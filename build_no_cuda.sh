@@ -27,4 +27,4 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DSEP_WORKBENCH_DEMO=OFF \
   -DBUILD_TESTING=ON
 
-make -j$(nproc)
+make memory_manager_tests -j$(nproc)

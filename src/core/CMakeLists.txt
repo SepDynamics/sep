@@ -1,5 +1,4 @@
-add_library(sep_core
-  STATIC
+add_library(sep_core STATIC
     tracing.cpp
     allocation_metrics.cpp
     dag_graph.cpp
@@ -8,6 +7,10 @@ add_library(sep_core
     metrics_collector.cpp
     logging.cpp
 )
+
+if(SEP_BUILD_ENGINE)
+    target_sources(sep_core PRIVATE engine.cpp)
+endif()
 
 
 

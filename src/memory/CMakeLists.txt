@@ -10,10 +10,18 @@ if(SEP_BUILD_QUANTUM)
   target_sources(sep_memory PRIVATE quantum_coherence_manager.cpp)
 endif()
 
-# Find required Redis library
-set(SEP_HAS_REDIS 0)
-set(HIREDIS_FOUND FALSE)
-add_compile_definitions(SEP_NO_REDIS)
+# Find hiredis for Redis persistence support
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(HIREDIS hiredis)
+if(HIREDIS_FOUND)
+  set(SEP_HAS_REDIS 1)
+  target_sources(sep_memory PRIVATE redis_manager.cpp)
+  target_link_libraries(sep_memory PRIVATE ${HIREDIS_LIBRARIES})
+  target_include_directories(sep_memory PRIVATE ${HIREDIS_INCLUDE_DIRS})
+else()
+  set(SEP_HAS_REDIS 0)
+  add_compile_definitions(SEP_NO_REDIS)
+endif()
 
 # Add CUDA-specific compile definitions to handle exception specs
 if(SEP_HAS_CUDA)

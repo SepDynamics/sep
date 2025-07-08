@@ -133,6 +133,10 @@ This project represents an attempt to construct a first-principles, computationa
 
 Run `install.sh` to fetch compiler toolchains and third-party libraries. The script also installs helpful debugging tools like **valgrind** and **gdb**.
 
+Additional development libraries used by the build system include
+`libgflags-dev` and `libgoogle-glog-dev` (or `libglog-dev` on some
+distributions). These are now installed automatically by `install.sh`.
+
 ```bash
 ./install.sh
 ```

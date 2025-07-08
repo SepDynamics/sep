@@ -18,7 +18,7 @@ add_executable(long_double_math_test
 )
 set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/long_double_math_test.cpp PROPERTIES LANGUAGE CUDA)
 
-set_source_files_properties(long_double_math_test.cpp PROPERTIES LANGUAGE CXX)
+set_source_files_properties(long_double_math_test.cpp PROPERTIES LANGUAGE CUDA)
 
 add_executable(cuda_api_tests
     processing_api_test.cpp
@@ -28,6 +28,7 @@ add_executable(increment_kernel_test
     increment_kernel_test.cpp
 )
 target_include_directories(increment_kernel_test PRIVATE
+    ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/_sep/testbed/cuda
 )
 

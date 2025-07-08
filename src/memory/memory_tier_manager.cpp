@@ -182,20 +182,18 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (!t)
     return 0.0f;
 
-  // If the tier reports all memory free, avoid redundant calculations and
-  // return zero immediately. This guards against residual rounding artifacts
-  // that sometimes appear after block moves or defragmentation.
+  // Short circuit when the tier reports all memory free to avoid unnecessary
+  // recalculation and potential rounding artifacts.
   if (t->getFreeSpace() == t->getSize())
     return 0.0f;
 
-  // Recompute utilization from the current block list to prevent stale values
-  // when internal counters drift after complex promotions.
+  // Calculate utilization on demand using the current block list to prevent
+  // stale values from lingering after promotions or defragmentation.
   float util = t->calculateUtilization();
 
-  // Guard against rounding artifacts that may appear after a block is
-  // deallocated.  Unit tests expect an exact zero when no memory is allocated in
-  // a tier, so anything close to zero should be reported as zero.
-  if (std::fabs(util) <= kUtilizationEpsilon || util < 0.0f)
+  // Treat extremely small values or negatives as zero so unit tests don't fail
+  // due to residual floating point error.
+  if (util < 0.0f || std::fabs(util) <= kUtilizationEpsilon)
     return 0.0f;
 
   return util;

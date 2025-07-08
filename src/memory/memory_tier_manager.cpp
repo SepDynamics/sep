@@ -10,7 +10,11 @@
 #include "core/manager.h" // for ConfigManager
 #endif
 
-namespace sep { namespace config { class ConfigManager; } }
+namespace sep {
+namespace config {
+class ConfigManager;
+}
+} // namespace sep
 
 #include <algorithm>
 #include <cmath>
@@ -403,7 +407,7 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
   }
 
   // Update lookup maps in correct order to maintain consistency
-  void* old_ptr = block->ptr;
+  void *old_ptr = block->ptr;
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(old_ptr);
@@ -579,8 +583,9 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
   if (!t)
     return;
 
-  auto &patterns = const_cast<std::unordered_map<size_t, PersistentPatternData> &>(
-      t->getPatterns());
+  auto &patterns =
+      const_cast<std::unordered_map<size_t, PersistentPatternData> &>(
+          t->getPatterns());
 
   if (patterns.size() <= max_count)
     return;
@@ -654,6 +659,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
           sum += r.second;
         pattern_ptr->coherence = static_cast<float>(sum / rels.size());
       }
+      pattern_ptr->coherence = static_cast<float>(sum / rel_it->second.size());
     }
   }
 }

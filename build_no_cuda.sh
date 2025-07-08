@@ -9,8 +9,8 @@ mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
 cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
-  -DCMAKE_C_COMPILER=/usr/bin/gcc \
-  -DCMAKE_CXX_COMPILER=/usr/bin/g++ \
+  -DCMAKE_C_COMPILER=/usr/bin/gcc-14 \
+  -DCMAKE_CXX_COMPILER=/usr/bin/g++-14 \
   -DSEP_WITH_CYCLES=OFF \
   -DSEP_WITH_AUDIO=OFF \
   -DSEP_WITH_OPENSUBDIV=OFF \
@@ -22,6 +22,7 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DSEP_WITH_ALEMBIC=OFF \
   -DSEP_HAS_CUDA=0 \
   -DSEP_ENABLE_AUDIO=OFF \
-  -DSEP_WORKBENCH_DEMO=OFF
+  -DSEP_WORKBENCH_DEMO=OFF \
+  -DBUILD_TESTING=ON
 
 make -j$(nproc)

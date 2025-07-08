@@ -119,6 +119,10 @@ public:
   std::size_t getLargestFreeBlock() const;
   const std::deque<MemoryBlock> &getBlocks() const;
   bool moveData(MemoryBlock *dst, const MemoryBlock *src);
+  // Expose used space for deterministic unit tests. This allows callers like
+  // MemoryTierManager to clamp tiny residual values without relying on
+  // floating-point comparisons.
+  std::size_t getUsedSpace() const { return used_space_; }
 
   // Resize the underlying memory pool, returns true on success
   bool resize(std::size_t new_size);

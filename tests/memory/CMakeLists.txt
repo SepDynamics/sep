@@ -4,7 +4,9 @@ endif()
 
 find_package(GTest REQUIRED)
 
-find_package(Hiredis CONFIG)
+if(SEP_HAS_REDIS)
+  find_package(Hiredis CONFIG)
+endif()
 
 add_executable(memory_manager_tests
     memory_headers_test.cpp

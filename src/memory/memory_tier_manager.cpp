@@ -410,6 +410,9 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(old_ptr);
     src_tier->deallocate(block);
+    // Preserve mapping from the original pointer so tests that hold on to the
+    // old address can still resolve the promoted block.
+    lookup_map_[block->ptr] = out_block;
     lookup_map_[out_block->ptr] = out_block;
     lookup_map_[block->ptr] = out_block; // allow lookups using old pointer
     legacy_lookup_map_[block->ptr] = out_block;

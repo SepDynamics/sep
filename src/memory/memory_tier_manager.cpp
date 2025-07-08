@@ -556,8 +556,8 @@ void MemoryTierManager::removePattern(std::size_t id) {
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  pattern_relationships_[id_a][id_b] = strength;
+  pattern_relationships_[id_b][id_a] = strength;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {
@@ -585,7 +585,8 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         for (const auto &r : rels) {
           sum += r.second;
         }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+        float avg = static_cast<float>(sum / rels.size());
+        pattern_ptr->coherence = 1.0f - avg;
       }
     }
   }

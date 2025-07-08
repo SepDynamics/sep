@@ -4,6 +4,12 @@ endif()
 
 find_package(GTest REQUIRED)
 
+# Disable Redis integration for unit tests by default. This avoids
+# build failures on systems without hiredis installed while keeping
+# the memory subsystem functional.
+set(SEP_HAS_REDIS 0)
+add_compile_definitions(SEP_NO_REDIS)
+
 # Hiredis support is optional for unit tests. The upstream CMake
 # configuration shipped with some distributions triggers errors
 # when no version is specified.  Since the Redis integration isn't

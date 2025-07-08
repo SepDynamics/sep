@@ -672,5 +672,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
 }
 #endif // SEP_TESTBED_STUBS
 
+#endif // SEP_TESTBED_STUBS
+
 } // namespace memory
 } // namespace sep

@@ -4,6 +4,11 @@ endif()
 
 find_package(GTest REQUIRED)
 
+if(NOT SEP_HAS_CUDA)
+    message(STATUS "CUDA disabled; skipping CUDA tests")
+    return()
+endif()
+
 add_executable(long_double_math_test
     long_double_math_test.cpp
 )

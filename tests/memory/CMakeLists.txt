@@ -4,7 +4,7 @@ endif()
 
 find_package(GTest REQUIRED)
 
-find_package(Hiredis REQUIRED CONFIG)
+find_package(Hiredis CONFIG)
 
 add_executable(memory_manager_tests
     memory_headers_test.cpp
@@ -26,19 +26,20 @@ target_link_libraries(memory_manager_tests PRIVATE
     sep_core
     GTest::GTest
     GTest::Main
-    Hiredis::Hiredis
-    CUDA::cudart
-    CUDA::cuda_driver
     Threads::Threads
 )
+if(HIREDIS_FOUND)
+    target_link_libraries(memory_manager_tests PRIVATE Hiredis::Hiredis)
+endif()
 if(SEP_HAS_CUDA)
+    find_package(CUDA REQUIRED)
     target_link_libraries(memory_manager_tests PRIVATE CUDA::cudart CUDA::cuda_driver)
 endif()
 
 target_compile_definitions(memory_manager_tests PRIVATE
     SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
     SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
-    SEP_HAS_REDIS=1
+    SEP_HAS_REDIS=${SEP_HAS_REDIS}
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
 )
 
@@ -54,7 +55,7 @@ target_include_directories(memory_manager_tests PRIVATE
 target_compile_definitions(memory_manager_tests PRIVATE
     SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
     SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
-    SEP_HAS_REDIS=1
+    SEP_HAS_REDIS=${SEP_HAS_REDIS}
 )
 
 add_test(NAME memory_manager_tests COMMAND memory_manager_tests)

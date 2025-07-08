@@ -121,7 +121,7 @@ public:
                                         const ::sep::pattern::PatternData* previous_patterns,
                                         void* stream);
                                       
-    void updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type);
+    void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);
     void removePattern(std::size_t id);
     void pruneWeakRelationships();
     void calculateRelationshipCoherence();

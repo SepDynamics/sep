@@ -13,5 +13,5 @@ TEST(PatternEvolution, MemoryTierAssignment) {
     sep::pattern::PatternConfig cfg{};
     ASSERT_EQ(PatternEvolution::processPatterns({in}, cfg, out), sep::pattern::PatternResult::SUCCESS);
     ASSERT_EQ(out.size(), 1u);
-    EXPECT_EQ(out[0].memory_tier, sep::memory::MemoryTierEnum::LTM);
+    EXPECT_EQ(out[0].memory_tier, ::sep::memory::MemoryTierEnum::LTM);
 }

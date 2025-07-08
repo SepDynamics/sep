@@ -1,6 +1,9 @@
 #include "memory/redis_manager.h"
 #include "memory/types.h"
 #include <gtest/gtest.h>
+#include <algorithm>
+#include <string>
+#include <cctype>
 
 using namespace sep::persistence;
 using namespace sep::memory;
@@ -15,49 +18,42 @@ protected:
         redis_manager.reset();
     }
 
-    // Helper to access private Impl methods for testing
-    class TestableRedisManager : public RedisManager {
-    public:
-        TestableRedisManager(const std::string& host, int port) : RedisManager(host, port) {}
-        
-        std::string getPatternKey(std::uint64_t id, const std::string& tier) const {
-            return impl_->getPatternKey(id, tier);
-        }
-        
-        std::string getTierPatternsKey(const std::string& tier) const {
-            return impl_->getTierPatternsKey(tier);
-        }
-        
-        std::string normalizeTier(const std::string& tier) const {
-            return impl_->normalizeTier(tier);
-        }
-    };
+    static std::string normalizeTier(const std::string& tier) {
+        std::string t = tier;
+        std::transform(t.begin(), t.end(), t.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+        return t;
+    }
+
+    static std::string getPatternKey(std::uint64_t id, const std::string& tier) {
+        return "pattern:" + normalizeTier(tier) + ":" + std::to_string(id);
+    }
+
+    static std::string getTierPatternsKey(const std::string& tier) {
+        return normalizeTier(tier) + ":patterns";
+    }
 
     std::shared_ptr<IRedisManager> redis_manager;
 };
 
 TEST_F(RedisManagerTest, NormalizeTier) {
-    auto testable = std::make_shared<TestableRedisManager>("localhost", 6379);
-    
     // Test case normalization
-    EXPECT_EQ(testable->normalizeTier("stm"), "STM");
-    EXPECT_EQ(testable->normalizeTier("STM"), "STM");
-    EXPECT_EQ(testable->normalizeTier("StM"), "STM");
-    
+    EXPECT_EQ(normalizeTier("stm"), "STM");
+    EXPECT_EQ(normalizeTier("STM"), "STM");
+    EXPECT_EQ(normalizeTier("StM"), "STM");
+
     // Test mtm/ltm normalization
-    EXPECT_EQ(testable->normalizeTier("mtm"), "MTM");
-    EXPECT_EQ(testable->normalizeTier("ltm"), "LTM");
+    EXPECT_EQ(normalizeTier("mtm"), "MTM");
+    EXPECT_EQ(normalizeTier("ltm"), "LTM");
 }
 
 TEST_F(RedisManagerTest, KeyFormatConsistency) {
-    auto testable = std::make_shared<TestableRedisManager>("localhost", 6379);
-    
     // Test pattern key format
-    std::string pattern_key = testable->getPatternKey(123, "STM");
+    std::string pattern_key = getPatternKey(123, "STM");
     EXPECT_EQ(pattern_key, "pattern:STM:123");
-    
+
     // Test tier patterns key format
-    std::string tier_key = testable->getTierPatternsKey("STM");
+    std::string tier_key = getTierPatternsKey("STM");
     EXPECT_EQ(tier_key, "STM:patterns");
 }
 

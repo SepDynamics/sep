@@ -10,6 +10,8 @@
 #include "core/manager.h" // for ConfigManager
 #endif
 
+namespace sep { namespace config { class ConfigManager; } }
+
 #include <algorithm>
 #include <cmath>
 #include <cstdio>

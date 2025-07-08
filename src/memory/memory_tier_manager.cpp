@@ -56,9 +56,7 @@ void MemoryTierManager::resetForTesting() {
 
 MemoryTierManager &MemoryTierManager::getInstance() {
   std::call_once(once_flag_, []() {
-#ifdef SEP_MEMORY_MINIMAL
-    Config cfg{};
-#else
+#ifndef SEP_MINIMAL
     const auto &mc =
         ::sep::config::ConfigManager::getInstance().getMemoryConfig();
     Config cfg{};
@@ -73,7 +71,6 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.ltm_size = mc.ltm_size;
     cfg.use_unified_memory = mc.use_unified_memory;
     cfg.enable_compression = mc.enable_compression;
-#endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
 #else
     instance_ = std::make_unique<MemoryTierManager>();

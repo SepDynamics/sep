@@ -9,8 +9,10 @@ mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
 cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DBUILD_TESTING=ON \
   -DCMAKE_C_COMPILER=/usr/bin/gcc \
-  -DCMAKE_CXX_COMPILER=/usr/bin/g++ \
+  -DCMAKE_CXX_COMPILER=/usr/bin/g++-14 \
   -DSEP_WITH_CYCLES=OFF \
   -DSEP_WITH_AUDIO=OFF \
   -DSEP_WITH_OPENSUBDIV=OFF \

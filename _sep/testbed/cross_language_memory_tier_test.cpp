@@ -2,6 +2,7 @@
 #include "memory/memory_tier_manager.hpp"
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <filesystem>
 
 using namespace sep::memory;
 
@@ -11,16 +12,21 @@ TEST(CrossLanguage, MemoryTierConfigRoundTrip) {
     cfg.mtm_size = 2048;
     cfg.ltm_size = 4096;
 
+    namespace fs = std::filesystem;
+
     nlohmann::json j = cfg;
-    std::ofstream out("../_sep/testbed/config_out.json");
+    fs::path test_dir = fs::path(__FILE__).parent_path();
+    std::ofstream out(test_dir / "config_out.json");
     ASSERT_TRUE(out.is_open());
     out << j.dump();
     out.close();
 
-    int ret = std::system("node ../_sep/testbed/cross_language_memory.cjs ../_sep/testbed/config_out.json ../_sep/testbed/config_back.json");
+    int ret = std::system(("node " + (test_dir / "cross_language_memory.cjs").string() +
+                          " " + (test_dir / "config_out.json").string() +
+                          " " + (test_dir / "config_back.json").string()).c_str());
     ASSERT_EQ(ret, 0);
 
-    std::ifstream in("../_sep/testbed/config_back.json");
+    std::ifstream in(test_dir / "config_back.json");
     ASSERT_TRUE(in.is_open());
     nlohmann::json j2;
     in >> j2;

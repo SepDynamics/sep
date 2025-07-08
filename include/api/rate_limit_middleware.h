@@ -22,14 +22,14 @@ public:
 
     RateLimitMiddleware();
     // Added set_config method
-    void set_config(const sep::config::RateLimitConfig& config);
+    void set_config(const sep::api::RateLimitConfig& config);
 
     void before_handle(::crow::request& req, ::crow::response& res, context& ctx);
     void after_handle(::crow::request& req, ::crow::response& res, context& ctx);
 
 private:
     std::unique_ptr<IRateLimiter> rate_limiter_;
-    sep::config::RateLimitConfig  config_;  // Store the config here
+    sep::api::RateLimitConfig  config_;  // Store the config here
 };
 
 }  // namespace sep::api

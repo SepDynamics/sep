@@ -1,6 +1,9 @@
+#define SEP_WORKBENCH_DEMO
 #include <memory>
 #include <stdexcept>
+#include <cstdio>
 
+#include "sep_engine_wrapper.h"
 #include "demo_manager.hpp"
 #include "config.hpp"
 #include "demos/genesis_pattern.hpp"
@@ -144,7 +147,66 @@ void mainLoop() {
         // Handle keyboard input
         if (g_renderer->hasKeyEvent()) {
             unsigned char key = g_renderer->getLastKey();
-            demo_manager.handleKeyboard(key);
+            
+            // Demo switcher - intercept number keys
+            bool demo_switched = false;
+            switch (key) {
+                case '1':
+                    demo_switched = demo_manager.switchToDemo("genesis");
+                    break;
+                case '2':
+                    demo_switched = demo_manager.switchToDemo("audio");
+                    break;
+                case '3':
+                    demo_switched = demo_manager.switchToDemo("memory");
+                    break;
+                case '4':
+                    demo_switched = demo_manager.switchToDemo("cosmo");
+                    break;
+                case '5':
+                    demo_switched = demo_manager.switchToDemo("cosmo_sim");
+                    break;
+                case '6':
+                    demo_switched = demo_manager.switchToDemo("drug_discovery");
+                    break;
+                case '7':
+                    demo_switched = demo_manager.switchToDemo("flocking");
+                    break;
+                case '8':
+                    demo_switched = demo_manager.switchToDemo("neural");
+                    break;
+                case '9':
+                    demo_switched = demo_manager.switchToDemo("digital_physics");
+                    break;
+                case '0':
+                    demo_switched = demo_manager.switchToDemo("annealing");
+                    break;
+                case 'h':
+                case 'H':
+                    // Print help
+                    printf("\n=== Demo Switcher ===\n");
+                    printf("1 - Genesis Pattern\n");
+                    printf("2 - Audio Visualizer\n");
+                    printf("3 - Memory Garden\n");
+                    printf("4 - Cosmo Demo\n");
+                    printf("5 - Cosmo Sim\n");
+                    printf("6 - Drug Discovery\n");
+                    printf("7 - Flocking\n");
+                    printf("8 - Neural\n");
+                    printf("9 - Digital Physics\n");
+                    printf("0 - Annealing\n");
+                    printf("H - Show this help\n");
+                    printf("Current demo: %s\n", demo_manager.getCurrentDemo().c_str());
+                    printf("===================\n\n");
+                    break;
+            }
+            
+            // If no demo switch happened, pass key to current demo
+            if (!demo_switched && key != 'h' && key != 'H') {
+                demo_manager.handleKeyboard(key);
+            } else if (demo_switched) {
+                printf("Switched to %s demo\n", demo_manager.getCurrentDemo().c_str());
+            }
         }
 
         // Handle mouse input

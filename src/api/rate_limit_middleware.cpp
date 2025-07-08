@@ -8,10 +8,10 @@
 
 namespace sep::api {
 RateLimitMiddleware::RateLimitMiddleware() {
-    set_config(sep::config::RateLimitConfig{});
+    set_config(sep::api::RateLimitConfig{});
 }
 
-void RateLimitMiddleware::set_config(const sep::config::RateLimitConfig& config) {
+void RateLimitMiddleware::set_config(const sep::api::RateLimitConfig& config) {
     config_ = config;
     if (config_.enabled) {
         rate_limiter_ = createRateLimiter(config_.rpm); // Use std::unique_ptr from createRateLimiter

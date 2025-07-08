@@ -3,7 +3,6 @@ set(SEP_MEMORY_SOURCES
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
 )
-
 if(NOT SEP_MEMORY_MINIMAL)
   list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
 endif()
@@ -20,6 +19,8 @@ if(HIREDIS_FOUND)
 else()
     add_compile_definitions(SEP_NO_REDIS)
 endif()
+
+add_library(sep_memory STATIC ${SEP_MEMORY_SOURCES})
 
 if(SEP_BUILD_QUANTUM)
   target_sources(sep_memory PRIVATE quantum_coherence_manager.cpp)

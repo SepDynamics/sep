@@ -57,7 +57,6 @@ target_include_directories(memory_manager_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/include/memory
     ${CMAKE_SOURCE_DIR}/include/core
     ${CMAKE_SOURCE_DIR}/include/compat
-    ${HIREDIS_INCLUDE_DIRS}
 )
 
 target_compile_definitions(memory_manager_tests PRIVATE

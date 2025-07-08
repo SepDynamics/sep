@@ -660,7 +660,8 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         double sum = 0.0;
         for (const auto &r : rels) {
           sum += r.second;
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+        pattern_ptr->coherence =
+            1.0f - static_cast<float>(sum / rels.size());
       }
       pattern_ptr->coherence = static_cast<float>(sum / rel_it->second.size());
     }

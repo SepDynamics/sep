@@ -79,3 +79,6 @@ if apt-cache show gcc-14 >/dev/null 2>&1; then
   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100
   sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
 fi
+
+mkdir -p /sep
+mount --bind /workspace/sep /sep 

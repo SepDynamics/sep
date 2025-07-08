@@ -16,6 +16,7 @@ endif()
 add_executable(long_double_math_test
     long_double_math_test.cpp
 )
+set_source_files_properties(long_double_math_test.cpp PROPERTIES LANGUAGE CUDA)
 
 add_executable(cuda_api_tests
     processing_api_test.cpp
@@ -23,6 +24,9 @@ add_executable(cuda_api_tests
 
 add_executable(increment_kernel_test
     increment_kernel_test.cpp
+)
+target_include_directories(increment_kernel_test PRIVATE
+    ${CMAKE_SOURCE_DIR}/_sep/testbed/cuda
 )
 
 target_include_directories(long_double_math_test PRIVATE

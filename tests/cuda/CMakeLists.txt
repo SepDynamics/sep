@@ -38,6 +38,7 @@ target_include_directories(cuda_api_tests PRIVATE
 target_include_directories(increment_kernel_test PRIVATE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/_sep
 )
 
 target_link_libraries(long_double_math_test PRIVATE

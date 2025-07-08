@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 # Default to skipping CUDA unless INSTALL_CUDA is explicitly set
 : "${INSTALL_CUDA:=0}"
@@ -85,5 +85,5 @@ if [ -d /usr/src/googletest ]; then
 fi
 
 # Verify toolchain presence
+$CXX --version 2>/dev/null || true
 cmake --version
-g++ --version

@@ -38,7 +38,6 @@ include_directories(BEFORE
 # `BEFORE` argument to `add_subdirectory`, which caused configuration errors
 # with newer versions of CMake. We simply add the directories in the
 # required order instead.
-add_subdirectory(src/core)
 
 # Backwards compatibility variables
 set(SEP_ENABLE_BLENDER ${SEP_WITH_CYCLES})
@@ -115,15 +114,21 @@ find_package(fmt REQUIRED)
 find_package(http_parser REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(OpenVDB REQUIRED)
-find_package(OpenSubdiv REQUIRED)
-find_package(OpenPGL REQUIRED)
+if(SEP_WITH_CYCLES)
+    find_package(OpenSubdiv REQUIRED)
+    find_package(OpenPGL REQUIRED)
+endif()
 find_package(OpenColorIO REQUIRED)
 find_package(Imath REQUIRED)
 find_package(TBB REQUIRED)
 find_package(OpenImageIO REQUIRED)
 find_package(embree REQUIRED)
-find_package(OSL REQUIRED)
-find_package(Alembic REQUIRED)
+if(SEP_WITH_CYCLES)
+    find_package(OSL REQUIRED)
+endif()
+if(SEP_WITH_CYCLES)
+    find_package(Alembic REQUIRED)
+endif()
 
 # Add subdirectories
 add_subdirectory(src/core)
@@ -140,15 +145,17 @@ endif()
 if(SEP_WITH_CYCLES)
     add_subdirectory(src/blender)
 endif()
-add_subdirectory(extern/cycles/third_party/cuew)
-add_subdirectory(extern/cycles/third_party/hipew)
-add_subdirectory(extern/cycles/third_party/sky)
+if(SEP_WITH_CYCLES)
+    add_subdirectory(extern/cycles/third_party/cuew)
+    add_subdirectory(extern/cycles/third_party/hipew)
+    add_subdirectory(extern/cycles/third_party/sky)
+endif()
 
 # Add tests directory
 add_subdirectory(tests)
 
 # Build Cycles from source when prebuilt libraries are not available
-if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
+if(SEP_WITH_CYCLES AND NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
   message(STATUS "Prebuilt Cycles libraries not found; building from source")
   set(WITH_CYCLES_DEVICE_HIP OFF CACHE BOOL "Disable HIP" FORCE)
   set(WITH_CYCLES_DEVICE_HIPRT OFF CACHE BOOL "Disable HIPRT" FORCE)
@@ -184,8 +191,7 @@ target_link_libraries(sep_engine PRIVATE
     ${CURL_LIBRARIES}
     ${CMAKE_DL_LIBS}
     $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
-    CUDA::cudart
-    CUDA::cuda_driver
+    $<$<TARGET_EXISTS:CUDA::cuda_driver>:CUDA::cuda_driver>
 )
 
 # Only link Cycles libraries if they exist and SEP_WITH_CYCLES is enabled

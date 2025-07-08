@@ -68,15 +68,21 @@ set_target_properties(sep_compat PROPERTIES
     CUDA_ARCHITECTURES "75;70;61;60"
 )
 
-target_link_libraries(sep_compat
-    PUBLIC
-        CUDA::cudart
-        CUDA::cuda_driver
-)
+if(SEP_HAS_CUDA)
+    target_link_libraries(sep_compat
+        PUBLIC
+            CUDA::cudart
+            CUDA::cuda_driver
+    )
+endif()
 
 set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)
 
-target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=1)
+if(SEP_HAS_CUDA)
+    target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=1)
+else()
+    target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=0)
+endif()
 
 # Include directories
 target_include_directories(sep_compat
@@ -93,6 +99,7 @@ target_include_directories(sep_compat
 target_link_libraries(sep_compat
     PUBLIC
         sep_core
-        CUDA::cudart
-        CUDA::cuda_driver
 )
+if(SEP_HAS_CUDA)
+    target_link_libraries(sep_compat PUBLIC CUDA::cudart CUDA::cuda_driver)
+endif()

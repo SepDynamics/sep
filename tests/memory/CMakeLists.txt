@@ -27,17 +27,25 @@ target_link_libraries(memory_manager_tests PRIVATE
     GTest::GTest
     GTest::Main
     hiredis
-    CUDA::cudart
-    CUDA::cuda_driver
     Threads::Threads
 )
+if(SEP_HAS_CUDA)
+    target_link_libraries(memory_manager_tests PRIVATE CUDA::cudart CUDA::cuda_driver)
+endif()
 
-target_compile_definitions(memory_manager_tests PRIVATE
-    SEP_HAS_CUDA=1
-    SEP_USE_CUDA=1
-    SEP_HAS_REDIS=1
-    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
-)
+if(SEP_HAS_CUDA)
+    target_compile_definitions(memory_manager_tests PRIVATE
+        SEP_HAS_CUDA=1
+        SEP_USE_CUDA=1
+        SEP_HAS_REDIS=1
+        SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
+    )
+else()
+    target_compile_definitions(memory_manager_tests PRIVATE
+        SEP_HAS_CUDA=0
+        SEP_HAS_REDIS=1
+    )
+endif()
 
 # Include directories are inherited from linked targets
 target_include_directories(memory_manager_tests PRIVATE
@@ -48,10 +56,17 @@ target_include_directories(memory_manager_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/include/compat
 )
 
-target_compile_definitions(memory_manager_tests PRIVATE
-    SEP_HAS_CUDA=1
-    SEP_USE_CUDA=1
-    SEP_HAS_REDIS=1
-)
+if(SEP_HAS_CUDA)
+    target_compile_definitions(memory_manager_tests PRIVATE
+        SEP_HAS_CUDA=1
+        SEP_USE_CUDA=1
+        SEP_HAS_REDIS=1
+    )
+else()
+    target_compile_definitions(memory_manager_tests PRIVATE
+        SEP_HAS_CUDA=0
+        SEP_HAS_REDIS=1
+    )
+endif()
 
 add_test(NAME memory_manager_tests COMMAND memory_manager_tests)

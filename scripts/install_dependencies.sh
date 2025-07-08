@@ -17,30 +17,52 @@ if command -v apt-get >/dev/null 2>&1; then
     PM="apt-get"
     UPDATE_CMD="$SUDO apt-get update -y"
     INSTALL_CMD="$SUDO apt-get install -y"
-    PKGS=(
+    MIN_PKGS=(
         build-essential cmake git
-        libspdlog-dev libfmt-dev libglm-dev libboost-all-dev
+        libspdlog-dev libfmt-dev
+        libgflags-dev libgoogle-glog-dev
+        libbenchmark-dev libgtest-dev
+        nlohmann-json3-dev pkg-config
+    )
+    FULL_PKGS=(
+        "${MIN_PKGS[@]}"
+        libglm-dev libboost-all-dev
         libasio-dev libssl-dev libcurl4-openssl-dev libhttp-parser-dev
-        liblz4-dev libzstd-dev libgflags-dev libgoogle-glog-dev
+        liblz4-dev libzstd-dev
         libembree-dev libpugixml-dev libopenjp2-7-dev libopenvdb-dev
         libimath-dev libtbb-dev libopenexr-dev libopencolorio-dev
-        libopenimageio-dev libpipewire-0.3-dev libbenchmark-dev
-        libgtest-dev libomp-dev nlohmann-json3-dev pkg-config
+        libopenimageio-dev libpipewire-0.3-dev libomp-dev
     )
+    if [ "${INSTALL_MINIMAL}" = "1" ]; then
+        PKGS=("${MIN_PKGS[@]}")
+    else
+        PKGS=("${FULL_PKGS[@]}")
+    fi
 elif command -v dnf >/dev/null 2>&1; then
     PM="dnf"
     UPDATE_CMD="$SUDO dnf -y update"
     INSTALL_CMD="$SUDO dnf -y install"
-    PKGS=(
+    MIN_PKGS=(
         gcc gcc-c++ make cmake git
-        spdlog-devel fmt-devel glm-devel boost-devel
+        spdlog-devel fmt-devel
+        gflags-devel glog-devel
+        benchmark-devel gtest-devel
+        nlohmann-json-devel pkgconfig
+    )
+    FULL_PKGS=(
+        "${MIN_PKGS[@]}"
+        glm-devel boost-devel
         asio-devel openssl-devel libcurl-devel http-parser-devel
-        lz4-devel zstd-devel gflags-devel glog-devel
+        lz4-devel zstd-devel
         embree-devel pugixml-devel openjpeg2-devel openvdb-devel
         imath-devel tbb-devel openexr-devel OpenColorIO-devel
-        OpenImageIO-devel pipewire-devel benchmark-devel
-        gtest-devel libomp-devel nlohmann-json-devel pkgconfig
+        OpenImageIO-devel pipewire-devel libomp-devel
     )
+    if [ "${INSTALL_MINIMAL}" = "1" ]; then
+        PKGS=("${MIN_PKGS[@]}")
+    else
+        PKGS=("${FULL_PKGS[@]}")
+    fi
 else
     echo "Error: supported package manager not found (apt-get or dnf)" >&2
     exit 1

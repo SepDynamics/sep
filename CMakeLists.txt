@@ -204,7 +204,6 @@ if(SEP_WITH_CYCLES)
 endif()
 
 # Consolidated examples are built in a single workbench target
-add_subdirectory(examples/workbench)
 
 # Main executable
 # Entry point wiring together optional modules

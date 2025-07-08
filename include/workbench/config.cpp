@@ -94,8 +94,11 @@ bool Config::load(const std::filesystem::path& path) {
         auto& flock = json["demos"]["flocking"];
         flocking_ = {
             flock["agent_count"].get<int>(),
+            flock.value("cohesion_weight", 1.0f),
+            flock.value("separation_weight", 1.0f),
+            flock.value("alignment_weight", 1.0f),
             flock["neighbor_radius"].get<float>(),
-            flock["separation_distance"].get<float>(),
+            flock.value("separation_distance", 0.0f),
             flock["max_speed"].get<float>()
         };
 
@@ -188,6 +191,9 @@ bool Config::save(const std::filesystem::path& path) const {
         // Flocking demo config
         json["demos"]["flocking"] = {
             {"agent_count", flocking_.agent_count},
+            {"cohesion_weight", flocking_.cohesion_weight},
+            {"separation_weight", flocking_.separation_weight},
+            {"alignment_weight", flocking_.alignment_weight},
             {"neighbor_radius", flocking_.neighbor_radius},
             {"separation_distance", flocking_.separation_distance},
             {"max_speed", flocking_.max_speed}

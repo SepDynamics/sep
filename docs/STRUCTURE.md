@@ -27,4 +27,11 @@ The default build directory is `build`. After compilation you'll find the `sep_e
 2. `include` headers – look here when integrating the engine with other projects.
 3. `docs/ARCHITECTURE.md` – high level component breakdown.
 
+### Configuration Types
+
+Common configuration structures like `FlockingConfig` and
+`MemoryThresholdConfig` are defined once under `include/` and reused by the
+examples and engine code. When adding new demos prefer extending these shared
+definitions rather than introducing ad-hoc structs.
+
 Keep this file handy as a quick guide when navigating the repository.

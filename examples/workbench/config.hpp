@@ -97,12 +97,13 @@ struct NeuralDemoConfig {
 };
 
 struct FlockingConfig {
-    int agent_count;
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
+    int agent_count{0};
+    float cohesion_weight{1.0f};
+    float separation_weight{1.0f};
+    float alignment_weight{1.0f};
+    float neighbor_radius{0.0f};
+    float separation_distance{0.0f};
+    float max_speed{0.0f};
 };
 
 struct DigitalPhysicsConfig {

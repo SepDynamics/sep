@@ -68,18 +68,6 @@ MemoryTierManager::MemoryTierManager() {
 
 MemoryTierManager::MemoryTierManager(const Config &cfg) { init(cfg); }
 
-MemoryTierManager::MemoryTierManager(
-    const ::sep::config::MemoryThresholdConfig &mc) {
-  Config cfg{};
-  cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
-  cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
-  cfg.demote_threshold = mc.demote_threshold;
-  cfg.fragmentation_threshold = mc.fragmentation_threshold;
-  cfg.stm_to_mtm_min_gen = mc.stm_to_mtm_min_gen;
-  cfg.mtm_to_ltm_min_gen = mc.mtm_to_ltm_min_gen;
-  // Note: sizes are missing from MemoryThresholdConfig, using defaults
-  init(cfg);
-}
 
 MemoryTierManager::~MemoryTierManager() { shutdown(); }
 
@@ -624,39 +612,6 @@ void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
-    if (pattern_relationships_.count(id)) {
-      const auto &rels = pattern_relationships_.at(id);
-      if (!rels.empty()) {
-        double sum = 0.0;
-        for (const auto &r : rels) {
-          sum += r.second;
-        }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
-      }
-      coherence = static_cast<float>(sum / it->second.size());
-    }
-    pattern_ptr->coherence = coherence;
-  }
-}
-
-void MemoryTierManager::pruneWeakRelationships() {
-  std::lock_guard<std::mutex> lock(relationships_mutex);
-  for (auto &[id, relations] : pattern_relationships_) {
-    for (auto it = relations.begin(); it != relations.end();) {
-      if (it->second < config_.demote_threshold) { // Reuse demote threshold
-        it = relations.erase(it);
-      } else {
-        ++it;
-      }
-    }
-  }
-}
-
-void MemoryTierManager::calculateRelationshipCoherence() {
-  std::lock_guard<std::mutex> reg_lock(registry_mutex);
-  std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-
-  for (auto &[id, pattern_ptr] : pattern_registry_) {
     pattern_ptr->coherence = 0.0f;
     if (pattern_relationships_.count(id)) {
       const auto &rels = pattern_relationships_.at(id);
@@ -664,14 +619,14 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         double sum = 0.0;
         for (const auto &r : rels)
           sum += r.second;
-        }
         float avg = static_cast<float>(sum / rels.size());
         pattern_ptr->coherence = avg;
       }
     }
-    pattern_ptr->coherence = coherence;
   }
 }
+
+#endif // SEP_TESTBED_STUBS
 
 } // namespace memory
 } // namespace sep

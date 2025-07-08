@@ -3,6 +3,7 @@ set(SEP_MEMORY_SOURCES
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
 )
+
 if(NOT SEP_MEMORY_MINIMAL)
   list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
 endif()

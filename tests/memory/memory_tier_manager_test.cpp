@@ -19,6 +19,11 @@ TEST(MemoryTierManagerTest, BasicInitialization) {
 
 TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
     MemoryTierManager mgr;
+    MemoryTierManager::Config cfg;
+    cfg.stm_size = 4096;
+    cfg.mtm_size = 4096;
+    cfg.ltm_size = 8192;
+    mgr.resetForTesting(cfg);
     MemoryBlock* block = mgr.allocate(1024, ::sep::memory::MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
     EXPECT_GT(mgr.getTierUtilization(::sep::memory::MemoryTierEnum::STM), 0.0f);
@@ -36,7 +41,11 @@ TEST(MemoryTierManagerTest, AllocationAndDeallocation) {
 TEST(MemoryTierManagerTest, PromotionAndDemotion) {
     const float EPSILON = 0.01f;
     MemoryTierManager mgr;
-    mgr.resetForTesting(MemoryTierManager::Config{});
+    MemoryTierManager::Config cfg;
+    cfg.stm_size = 4096;
+    cfg.mtm_size = 4096;
+    cfg.ltm_size = 8192;
+    mgr.resetForTesting(cfg);
     
     // Initial allocation in MTM
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
@@ -74,7 +83,11 @@ TEST(MemoryTierManagerTest, PromotionAndDemotion) {
 TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
     const float EPSILON = 0.01f;
     MemoryTierManager mgr;
-    mgr.resetForTesting(MemoryTierManager::Config{});
+    MemoryTierManager::Config cfg;
+    cfg.stm_size = 4096;
+    cfg.mtm_size = 4096;
+    cfg.ltm_size = 8192;
+    mgr.resetForTesting(cfg);
     
     // Initial allocation in MTM
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::MTM);
@@ -114,7 +127,11 @@ TEST(MemoryTierManagerTest, DefragmentationTriggersPromotionDemotion) {
 TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     const float EPSILON = 0.01f;
     MemoryTierManager mgr;
-    mgr.resetForTesting(MemoryTierManager::Config{});
+    MemoryTierManager::Config cfg;
+    cfg.stm_size = 4096;
+    cfg.mtm_size = 4096;
+    cfg.ltm_size = 8192;
+    mgr.resetForTesting(cfg);
     MemoryBlock* block = mgr.allocate(1024, MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
 
@@ -214,6 +231,11 @@ TEST(MemoryTierManagerTest, AutoDefragmentationThreshold) {
 
 TEST(MemoryTierManagerTest, TotalMetrics) {
     MemoryTierManager mgr;
+    MemoryTierManager::Config cfg;
+    cfg.stm_size = 4096;
+    cfg.mtm_size = 4096;
+    cfg.ltm_size = 8192;
+    mgr.resetForTesting(cfg);
     MemoryBlock* a = mgr.allocate(128, MemoryTierEnum::STM);
     MemoryBlock* b = mgr.allocate(128, MemoryTierEnum::MTM);
     MemoryBlock* c = mgr.allocate(128, MemoryTierEnum::LTM);
@@ -233,6 +255,11 @@ TEST(MemoryTierManagerTest, TotalMetrics) {
 
 TEST(MemoryTierManagerTest, CalculateRelationshipCoherence) {
     MemoryTierManager mgr;
+    MemoryTierManager::Config cfg;
+    cfg.stm_size = 4096;
+    cfg.mtm_size = 4096;
+    cfg.ltm_size = 8192;
+    mgr.resetForTesting(cfg);
     ::sep::pattern::PatternData a;
     a.id = "1";
     ::sep::pattern::PatternData b;

@@ -9,6 +9,9 @@ constexpr float EPSILON = 1e-3f;
 
 TEST(MemoryManagerSmokeTest, AllocateAndFree) {
     sep::memory::MemoryTierManager manager;
+    sep::memory::MemoryTierManager::Config cfg;
+    cfg.stm_size = 2048;
+    manager.resetForTesting(cfg);
     sep::memory::MemoryBlock* block = manager.allocate(64, sep::memory::MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
     EXPECT_GT(manager.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f);

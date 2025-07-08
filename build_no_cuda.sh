@@ -38,4 +38,4 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DSEP_WORKBENCH_DEMO=OFF \
   -DBUILD_TESTING=ON
 make memory_manager_tests -j$(nproc)
-./memory_manager_tests
+./tests/memory/memory_manager_tests

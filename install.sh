@@ -44,6 +44,7 @@ PACKAGES=(
   liblz4-dev libzstd-dev
   libgflags-dev libgoogle-glog-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
+  libgflags-dev libgoogle-glog-dev
   valgrind
 )
 

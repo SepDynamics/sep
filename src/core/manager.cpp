@@ -37,26 +37,6 @@ const MemoryThresholdConfig& ConfigManager::getMemoryConfig() const {
 const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
     return impl_->quantum_cfg;
 }
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
-const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const {
-    static QuantumThresholdConfig cfg{};
-    return cfg;
-}
 void ConfigManager::updateAPIConfig(const APIConfig&) {}
 void ConfigManager::updateCudaConfig(const CudaConfig&) {}
 void ConfigManager::updateLogConfig(const LogConfig&) {}

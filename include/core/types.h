@@ -59,13 +59,6 @@ struct CudaConfig {
     bool enable_profiling{false};
 };
 
-// Minimal quantum configuration required for memory tier tests.
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
-};
-
 // API server configuration. Only a subset of fields is required for
 // compiling the memory manager tests.
 struct APIConfig {
@@ -90,13 +83,6 @@ struct LogConfig {
 // Basic analytics configuration used by quantum components
 struct AnalyticsConfig {
     bool enable{false};
-};
-
-// Coherence thresholds used by quantum components
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
 };
 
 // Aggregate system configuration stub. Only the pieces used by tests

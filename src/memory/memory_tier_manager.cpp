@@ -553,6 +553,7 @@ void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
   pattern_relationships_[id_b][id_a] = static_cast<float>(strength);
 }
 
+#ifndef SEP_TESTBED_STUBS
 void MemoryTierManager::cleanupExpiredPatterns() {
   std::lock_guard<std::mutex> reg_lock(registry_mutex);
   for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
@@ -602,6 +603,7 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     }
   }
 }
+#endif // !SEP_TESTBED_STUBS
 
 void MemoryTierManager::pruneWeakRelationships() {
   std::lock_guard<std::mutex> lock(relationships_mutex);
@@ -638,15 +640,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
 }
 #endif
 
-void MemoryTierManager::cleanupExpiredPatterns() {
-  // Stub implementation for minimal build
-}
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                                size_t max_count) {
-  // Stub implementation for minimal build
-}
-
+#ifdef SEP_TESTBED_STUBS
 void MemoryTierManager::cleanupExpiredPatterns() {
   std::lock_guard<std::mutex> lock(registry_mutex);
   for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
@@ -678,6 +672,7 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     removePattern(sorted[i].first);
   }
 }
+#endif // SEP_TESTBED_STUBS
 
 } // namespace memory
 } // namespace sep

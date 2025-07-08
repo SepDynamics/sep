@@ -332,7 +332,12 @@ float MemoryTier::calculateUtilization() const {
       used += blk.size;
   }
 
-  if (used == 0)
+  // Treat extremely small usage values as zero.  Byte-level rounding during
+  // promotions or defragmentation can leave a few bytes marked as used even
+  // though the tier is effectively empty.  Clamping here avoids spurious
+  // non-zero utilization in unit tests.
+  if (used == 0 ||
+      used <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(config_.size);

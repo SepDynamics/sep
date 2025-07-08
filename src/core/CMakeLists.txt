@@ -1,4 +1,4 @@
-add_library(sep_core STATIC
+set(SEP_CORE_SOURCES
     tracing.cpp
     allocation_metrics.cpp
     dag_graph.cpp
@@ -6,9 +6,13 @@ add_library(sep_core STATIC
     prometheus_exporter.cpp
     error_handler.cpp
     metrics_collector.cpp
-    logging.cpp
-    manager.cpp
-)
+    logging.cpp)
+
+if(NOT SEP_TESTBED_STUBS)
+    list(APPEND SEP_CORE_SOURCES manager.cpp)
+endif()
+
+add_library(sep_core STATIC ${SEP_CORE_SOURCES})
 
 # The core library does not require Redis for these tests. Explicitly
 # disable Redis support so headers guarded by SEP_NO_REDIS do not
@@ -38,9 +42,12 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
 
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_core PRIVATE
-    SEP_HAS_CUDA=1
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
-    SEP_NO_REDIS)
+    SEP_NO_REDIS
+    $<$<BOOL:${SEP_HAS_CUDA}>:SEP_HAS_CUDA=1>
+    $<$<NOT:$<BOOL:${SEP_HAS_CUDA}>>:SEP_HAS_CUDA=0>
+    $<$<BOOL:${SEP_BUILD_QUANTUM}>:SEP_BUILD_QUANTUM=1>
+    $<$<NOT:$<BOOL:${SEP_BUILD_QUANTUM}>>:SEP_BUILD_QUANTUM=0>)
 
 # Set library properties
 set_target_properties(sep_core PROPERTIES

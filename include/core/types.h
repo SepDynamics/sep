@@ -43,6 +43,17 @@ struct MemoryThresholdConfig {
     bool enable_compression{true};
 };
 
+// Minimal quantum processing thresholds used by tests. The real engine
+// defines a richer configuration, but the memory manager tests only
+// require a handful of fields. Provide a lightweight struct here so the
+// stub configuration manager can compile without pulling in the full
+// quantum stack.
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.
 struct CudaConfig {

@@ -48,6 +48,7 @@ target_include_directories(sep_core
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third_party/glm>
 )
 
 target_link_libraries(sep_core

@@ -38,6 +38,7 @@ PACKAGES=(
   libfmt-dev
   libspdlog-dev libgtest-dev libhiredis-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
+  libglm-dev nlohmann-json3-dev
   valgrind
 )
 
@@ -81,5 +82,4 @@ if apt-cache show gcc-14 >/dev/null 2>&1; then
 fi
 
 sudo ln -sf /workspace/sep /sep
-
 cd /sep

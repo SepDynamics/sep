@@ -106,6 +106,11 @@ void MemoryTierManager::shutdown() {
 void MemoryTierManager::resetForTesting(const Config &cfg) {
   shutdown();
   init(cfg);
+  // Ensure the lookup table reflects the freshly-initialized tiers so tests
+  // start from a completely clean state.  Without this step, stale entries
+  // from a previous configuration could linger when the tiers are resized,
+  // leading to inconsistent utilization metrics across runs.
+  rebuildLookup();
 }
 
 // --- Core Memory Operations ---

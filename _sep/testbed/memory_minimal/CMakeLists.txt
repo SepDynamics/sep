@@ -44,6 +44,9 @@ target_link_libraries(memory_minimal_tests PRIVATE
     Threads::Threads
 )
 
-target_compile_definitions(memory_minimal_tests PRIVATE SEP_MEMORY_MINIMAL)
+target_compile_definitions(memory_minimal_tests PRIVATE
+    SEP_MEMORY_MINIMAL
+    SPDLOG_HEADER_ONLY
+)
 
 add_test(NAME memory_minimal_tests COMMAND memory_minimal_tests)

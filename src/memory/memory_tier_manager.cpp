@@ -634,7 +634,9 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         }
         pattern_ptr->coherence = static_cast<float>(sum / rels.size());
       }
+      coherence = static_cast<float>(sum / it->second.size());
     }
+    pattern_ptr->coherence = coherence;
   }
 }
 

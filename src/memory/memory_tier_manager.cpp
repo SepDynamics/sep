@@ -31,7 +31,7 @@ using Config = MemoryTierManager::Config;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
 using ::sep::pattern::PatternData;
-using ::sep::memory::persistence::PersistentPatternData;
+using ::sep::persistence::PersistentPatternData;
 using ::sep::quantum::Pattern;
 
 // Mutex declarations
@@ -44,16 +44,6 @@ std::mutex relationships_mutex;
 // Static member initialization
 std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 std::once_flag MemoryTierManager::once_flag_;
-
-void MemoryTierManager::resetForTesting() {
-  if (instance_) {
-    instance_->shutdown();
-    instance_.reset();
-  }
-  // std::once_flag is neither copyable nor assignable. Use placement new
-  // to reset it to the default constructed state for subsequent tests.
-  new (&once_flag_) std::once_flag();
-}
 
 // --- Singleton Implementation ---
 
@@ -566,8 +556,8 @@ void MemoryTierManager::removePattern(std::size_t id) {
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            uint8_t strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = strength;
-  pattern_relationships_[id_b][id_a] = strength;
+  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
+  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
 }
 
 void MemoryTierManager::pruneWeakRelationships() {

@@ -3,6 +3,7 @@
 
 namespace {
 constexpr float EPSILON = 1e-3f;
+namespace mem = sep::memory;
 }
 
 

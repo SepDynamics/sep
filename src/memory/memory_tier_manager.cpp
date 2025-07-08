@@ -71,9 +71,6 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.enable_compression = mc.enable_compression;
 #endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
-#else
-    instance_ = std::make_unique<MemoryTierManager>();
-#endif
   });
   return *instance_;
 }
@@ -557,10 +554,11 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                           uint8_t strength) {
+                                           float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  float value = strength <= 0.0f ? 1.0f : strength;
+  pattern_relationships_[id_a][id_b] = value;
+  pattern_relationships_[id_b][id_a] = value;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {

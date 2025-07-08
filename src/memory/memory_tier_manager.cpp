@@ -196,8 +196,11 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   // platforms and rounding modes. Clamp the result to the valid [0,1]
   // range to avoid tiny negative values that can appear after
   // defragmentation or resizing operations.
-  if (std::fabs(util) <= kUtilizationEpsilon ||
-      util <= (1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()))))
+  constexpr float kSizeEpsilon = 1e-6f;
+  float size_threshold =
+      (1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()))) +
+      kSizeEpsilon;
+  if (std::fabs(util) <= kUtilizationEpsilon || util <= size_threshold)
     return 0.0f;
   return std::clamp(util, 0.0f, 1.0f);
 }

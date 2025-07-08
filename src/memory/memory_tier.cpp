@@ -255,12 +255,25 @@ sep::SEPResult MemoryTier::defragment() {
         config_.size - current_offset, current_offset, config_.type));
   }
 
-  // Reevaluate block placement after defragmentation
+  // Reevaluate block placement after defragmentation. Updating the blocks while
+  // iterating over the container can invalidate references, so we build a list
+  // of pointers first and then process them after the compaction step.
   MemoryTierManager &mgr = MemoryTierManager::getInstance();
+  std::vector<MemoryBlock *> active_blocks;
   for (auto &blk : blocks_) {
     if (blk.allocated) {
       blk.utilization = static_cast<float>(blk.size) / config_.size;
-      mgr.updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation,
+      active_blocks.push_back(&blk);
+    }
+  }
+  // Refresh the lookup table before invoking any promotion logic so that
+  // updateBlockMetrics operates on up-to-date addresses.
+  mgr.rebuildLookup();
+  for (MemoryBlock *blk : active_blocks) {
+    // The block may have been moved to another tier in a previous iteration, so
+    // ensure it is still allocated before attempting to update its metrics.
+    if (blk && blk->allocated) {
+      mgr.updateBlockMetrics(blk, blk->coherence, blk->stability, blk->generation,
                              1.0f);
     }
   }

@@ -141,11 +141,14 @@ distributions). These are now installed automatically by `install.sh`.
 ./install.sh
 ```
 
-Add `--no-cuda` if you do not need CUDA support. Use `--minimal` to install only the packages required for unit tests (skipping heavy rendering dependencies). Once installed, compile and execute the memory manager tests to validate the setup:
+Add `--no-cuda` if you do not need CUDA support. Use `--minimal` to install only
+the packages required for unit tests (skipping heavy rendering dependencies).
+After installation you can build and run the memory manager tests in a minimal
+configuration using the helper script:
 
 ```bash
-cd sep_build/build
-cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-14 -B . -S ..
-make memory_manager_tests
-./memory_manager_tests
+./build_no_cuda.sh
 ```
+
+The script configures the project with optional dependencies disabled and
+executes the `memory_manager_tests` target automatically.

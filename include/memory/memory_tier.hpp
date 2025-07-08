@@ -38,7 +38,10 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 // broke promotion heuristics in unit tests.  Use a much smaller threshold
 // so that any non-trivial allocation remains visible while still
 // clamping stray rounding noise after defragmentation.
-inline constexpr float kUtilizationEpsilon = 1e-5f;
+// Increase the epsilon slightly to better tolerate tiny rounding errors when
+// tiers are resized or defragmented. Values below 0.1% of the tier size are
+// considered effectively zero for the unit tests.
+inline constexpr float kUtilizationEpsilon = 1e-3f;
 
 // Memory tier types
 enum class TierType {

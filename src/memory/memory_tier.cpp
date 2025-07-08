@@ -217,7 +217,9 @@ void MemoryTier::deallocate(MemoryBlock *block) {
     if (blk.allocated)
       used_space_ += blk.size;
   }
-  if (used_space_ <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
+  const float noise_threshold =
+      std::max(1.0f, kUtilizationEpsilon * static_cast<float>(config_.size));
+  if (static_cast<float>(used_space_) <= noise_threshold)
     used_space_ = 0;
 }
 
@@ -351,8 +353,9 @@ float MemoryTier::calculateUtilization() const {
   // promotions or defragmentation can leave a few bytes marked as used even
   // though the tier is effectively empty.  Clamping here avoids spurious
   // non-zero utilization in unit tests.
-  if (used == 0 ||
-      used <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
+  const float noise_threshold =
+      std::max(1.0f, kUtilizationEpsilon * static_cast<float>(config_.size));
+  if (used == 0 || static_cast<float>(used) <= noise_threshold)
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(config_.size);
@@ -496,7 +499,9 @@ void MemoryTier::mergeAdjacentBlocks() {
       used_space_ += blk.size;
     }
   }
-  if (used_space_ <= static_cast<std::size_t>(kUtilizationEpsilon * config_.size))
+  const float noise_threshold =
+      std::max(1.0f, kUtilizationEpsilon * static_cast<float>(config_.size));
+  if (static_cast<float>(used_space_) <= noise_threshold)
     used_space_ = 0;
 }
 

@@ -137,7 +137,7 @@ TEST(MemoryTierManagerTest, OptimizeBlocksPromotionDemotion) {
     stm_util = mgr.getTierUtilization(MemoryTierEnum::STM);
     mtm_util = mgr.getTierUtilization(MemoryTierEnum::MTM);
     EXPECT_GT(stm_util, 0.0f) << "Expected non-zero STM utilization after demotion";
-    EXPECT_NEAR(mtm_util, 0.0f, EPSILON) << "Expected near-zero MTM utilization after demotion";
+    EXPECT_NEAR(mtm_util, 0.0f, EPSILON)
         << "Expected block to be in either MTM (util=" << mtm_util
         << ") or STM (util=" << stm_util << ")";
 }
@@ -266,7 +266,7 @@ TEST(MemoryTierManagerTest, CleanupExpiredPatterns) {
 TEST(MemoryTierManagerTest, PrunePatternsByPriority) {
     MemoryTierManager mgr;
     for (size_t i = 0; i < 5; ++i) {
-        sep::persistence::PatternData pdata;
+        ::sep::persistence::PersistentPatternData pdata;
         pdata.coherence = static_cast<float>(i) / 5.0f;
         mgr.getLTM().addPattern(i, pdata);
         sep::pattern::PatternData pat;

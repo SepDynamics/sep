@@ -16,7 +16,7 @@
 #include "../core/common.h"
 #include "../core/types.h"
 #include "types.h"
-#include "persistence/pattern_data.hpp"
+#include "persistence/persistent_pattern_data.hpp"
 
 namespace sep {
 namespace memory {
@@ -82,8 +82,6 @@ struct MemoryBlock {
         : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
-#include "persistence/persistent_pattern_data.hpp"
-
 using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 class MemoryTier {
@@ -106,7 +104,7 @@ public:
     // Memory block management methods
     MemoryBlock* allocate(std::size_t size);
     void deallocate(MemoryBlock* block);
-    SEPResult defragment();
+    ::sep::SEPResult defragment();
 
     float calculateFragmentation() const;
     float calculateUtilization() const;

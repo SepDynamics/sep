@@ -1,6 +1,7 @@
 #include "memory/memory_tier_manager.hpp"
 #include "core/common.h"
 #include "core/types.h"
+#include "core/manager.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
 
@@ -25,7 +26,7 @@ using Config = MemoryTierManager::Config;
 using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
 using ::sep::pattern::PatternData;
-using ::sep::memory::persistence::PersistentPatternData;
+using ::sep::persistence::PersistentPatternData;
 using ::sep::quantum::Pattern;
 
 // Mutex declarations
@@ -39,22 +40,12 @@ std::mutex relationships_mutex;
 std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
 std::once_flag MemoryTierManager::once_flag_;
 
-void MemoryTierManager::resetForTesting() {
-  if (instance_) {
-    instance_->shutdown();
-    instance_.reset();
-  }
-  // std::once_flag is neither copyable nor assignable. Use placement new
-  // to reset it to the default constructed state for subsequent tests.
-  new (&once_flag_) std::once_flag();
-}
-
 // --- Singleton Implementation ---
 
 MemoryTierManager &MemoryTierManager::getInstance() {
   std::call_once(once_flag_, []() {
     const auto &mc =
-        sep::config::ConfigManager::getInstance().getMemoryConfig();
+        ::sep::config::ConfigManager::getInstance().getMemoryConfig();
     Config cfg{};
     cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
     cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
@@ -81,7 +72,7 @@ MemoryTierManager::MemoryTierManager() {
 MemoryTierManager::MemoryTierManager(const Config &cfg) { init(cfg); }
 
 MemoryTierManager::MemoryTierManager(
-    const sep::config::MemoryThresholdConfig &mc) {
+    const ::sep::config::MemoryThresholdConfig &mc) {
   Config cfg{};
   cfg.promote_stm_to_mtm = mc.promote_stm_to_mtm;
   cfg.promote_mtm_to_ltm = mc.promote_mtm_to_ltm;
@@ -521,12 +512,12 @@ void MemoryTierManager::rebuildLookup() {
 
 // --- Pattern and Relationship Management ---
 void MemoryTierManager::registerPattern(
-    std::size_t id, const sep::pattern::PatternData &pattern) {
+    std::size_t id, const ::sep::pattern::PatternData &pattern) {
   std::lock_guard<std::mutex> lock(registry_mutex);
-  pattern_registry_[id] = std::make_unique<sep::pattern::PatternData>(pattern);
+  pattern_registry_[id] = std::make_unique<::sep::pattern::PatternData>(pattern);
 }
 
-const sep::pattern::PatternData *
+const ::sep::pattern::PatternData *
 MemoryTierManager::getPatternData(std::size_t id) const {
   std::lock_guard<std::mutex> lock(registry_mutex);
   auto it = pattern_registry_.find(id);
@@ -546,10 +537,10 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                           float strength) {
+                                           uint8_t type) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = strength;
-  pattern_relationships_[id_b][id_a] = strength;
+  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
+  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
 }
 
 void MemoryTierManager::pruneWeakRelationships() {

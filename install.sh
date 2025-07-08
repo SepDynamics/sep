@@ -38,6 +38,7 @@ PACKAGES=(
   libfmt-dev
   libspdlog-dev libgtest-dev libhiredis-dev libglm-dev nlohmann-json3-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
+  liblz4-dev libzstd-dev
   libglm-dev nlohmann-json3-dev
   valgrind
 )

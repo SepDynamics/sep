@@ -50,7 +50,7 @@ MemoryTier::MemoryTier(const Config &config)
 #if SEP_MEMORY_HAS_CUDA
     cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
     if (err != cudaSuccess) {
-      auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+      auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
       if (logger) {
         logger->error("Failed to allocate managed memory: {}", err);
         logger->info("Falling back to host allocation");
@@ -64,7 +64,7 @@ MemoryTier::MemoryTier(const Config &config)
     memory_pool_ = std::malloc(config.size);
     cudaError_t err = memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
     if (err != cudaSuccess) {
-      auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+      auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
       if (logger) {
         logger->error("Failed to allocate host memory: {}", err);
       }
@@ -75,10 +75,10 @@ MemoryTier::MemoryTier(const Config &config)
 #if SEP_HAS_EXCEPTIONS
     throw std::runtime_error("Failed to allocate memory pool");
 #else
-    auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+    auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
     if (logger)
       LOG_CRITICAL(logger, "Failed to allocate memory pool");
-    sep::metrics::allocationFailures().value++;
+    ::sep::metrics::allocationFailures().value++;
     // leave object in uninitialized state
     return;
 #endif
@@ -128,7 +128,7 @@ MemoryBlock *MemoryTier::allocate(std::size_t size) {
     defragment();
     block = findFreeBlock(size);
     if (!block) {
-      sep::metrics::allocationFailures().value++;
+      ::sep::metrics::allocationFailures().value++;
       return nullptr; // Still no suitable block
     }
   }
@@ -196,8 +196,8 @@ void MemoryTier::deallocate(MemoryBlock *block) {
   mergeAdjacentBlocks();
 }
 
-sep::SEPResult MemoryTier::defragment() {
-  auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+::sep::SEPResult MemoryTier::defragment() {
+  auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
   if (logger) {
     LOG_DEBUG(logger, "Defragmenting tier {}", static_cast<int>(config_.type));
   }
@@ -221,14 +221,14 @@ sep::SEPResult MemoryTier::defragment() {
           if (logger) {
             LOG_ERROR(logger, "Defragment memory copy failed: {}", err);
           }
-          return sep::SEPResult::CUDA_ERROR;
+          return ::sep::SEPResult::CUDA_ERROR;
         }
         err = cudaStreamSynchronize(nullptr);
         if (err != cudaSuccess) {
           if (logger) {
             LOG_ERROR(logger, "Defragment stream sync failed: {}", err);
           }
-          return sep::SEPResult::CUDA_ERROR;
+          return ::sep::SEPResult::CUDA_ERROR;
         }
 #else
         std::memmove(new_location, block.ptr, block.size);
@@ -283,7 +283,7 @@ sep::SEPResult MemoryTier::defragment() {
     LOG_INFO(logger, "Tier {} fragmentation now {:.2f}",
              static_cast<int>(config_.type), calculateFragmentation());
   }
-  return sep::SEPResult::SUCCESS;
+  return ::sep::SEPResult::SUCCESS;
 }
 
 float MemoryTier::calculateFragmentation() const {
@@ -356,7 +356,7 @@ std::size_t MemoryTier::getLargestFreeBlock() const {
 const std::deque<MemoryBlock> &MemoryTier::getBlocks() const { return blocks_; }
 
 bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src) {
-  auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+  auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
 
   if (!dst || !src || !dst->allocated || !src->allocated) {
     if (logger) {
@@ -472,7 +472,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     return true;
 
   void *new_pool = nullptr;
-  auto logger = sep::logging::Manager::getInstance().getLogger("memory");
+  auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
 
   if (config_.type == MemoryTierEnum::HOST) {
     new_pool = std::malloc(new_size);
@@ -483,7 +483,7 @@ bool MemoryTier::resize(std::size_t new_size) {
       if (logger) {
         LOG_ERROR(logger, "Failed to allocate managed memory: {}", err);
       }
-      sep::metrics::allocationFailures().value++;
+      ::sep::metrics::allocationFailures().value++;
       return false;
     }
 #else
@@ -493,7 +493,7 @@ bool MemoryTier::resize(std::size_t new_size) {
       if (logger) {
         LOG_ERROR(logger, "Failed to allocate host memory: {}", err);
       }
-      sep::metrics::allocationFailures().value++;
+      ::sep::metrics::allocationFailures().value++;
       return false;
     }
 #endif
@@ -502,7 +502,7 @@ bool MemoryTier::resize(std::size_t new_size) {
     if (logger) {
       LOG_ERROR(logger, "Failed to allocate memory pool of size {}", new_size);
     }
-    sep::metrics::allocationFailures().value++;
+    ::sep::metrics::allocationFailures().value++;
     return false;
   }
 
@@ -521,7 +521,7 @@ bool MemoryTier::resize(std::size_t new_size) {
         std::free(new_pool);
 #endif
       }
-      sep::metrics::allocationFailures().value++;
+      ::sep::metrics::allocationFailures().value++;
       return false;
     }
     std::memcpy(static_cast<char *>(new_pool) + offset, block.ptr, block.size);
@@ -567,7 +567,7 @@ bool MemoryTier::resize(std::size_t new_size) {
 }
 
 bool MemoryTier::canAcceptPattern(
-    const ::sep::memory::persistence::PersistentPatternData &pattern) const {
+    const ::sep::persistence::PersistentPatternData &pattern) const {
   if (m_patterns.size() >= m_max_patterns)
     return false;
   if (pattern.coherence < m_coherence_threshold)
@@ -581,7 +581,7 @@ bool MemoryTier::canAcceptPattern(
 }
 
 void MemoryTier::addPattern(size_t id,
-                            ::sep::memory::persistence::PersistentPatternData pattern) {
+                            ::sep::persistence::PersistentPatternData pattern) {
   if (!canAcceptPattern(pattern))
     return;
   // PatternData doesn't have id or memory_tier fields
@@ -591,13 +591,13 @@ void MemoryTier::addPattern(size_t id,
 
 void MemoryTier::removePattern(size_t id) { m_patterns.erase(id); }
 
-const ::sep::memory::persistence::PersistentPatternData *
+const ::sep::persistence::PersistentPatternData *
 MemoryTier::getPattern(size_t id) const {
   auto it = m_patterns.find(id);
   return it == m_patterns.end() ? nullptr : &it->second;
 }
 
-::sep::memory::persistence::PersistentPatternData *MemoryTier::getPattern(size_t id) {
+::sep::persistence::PersistentPatternData *MemoryTier::getPattern(size_t id) {
   auto it = m_patterns.find(id);
   return it == m_patterns.end() ? nullptr : &it->second;
 }

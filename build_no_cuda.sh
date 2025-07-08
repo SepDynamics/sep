@@ -8,11 +8,18 @@ BUILD_DIR="${REPO_ROOT}/cmake-nocuda"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
+if command -v g++-14 >/dev/null 2>&1; then
+  CXX_COMPILER=$(command -v g++-14)
+else
+  echo "g++-14 not found; falling back to g++" >&2
+  CXX_COMPILER=$(command -v g++)
+fi
+
 cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DCMAKE_BUILD_TYPE=Debug \
   -DBUILD_TESTING=ON \
   -DCMAKE_C_COMPILER=/usr/bin/gcc \
-  -DCMAKE_CXX_COMPILER=/usr/bin/g++-14 \
+  -DCMAKE_CXX_COMPILER="${CXX_COMPILER}" \
   -DSEP_WITH_CYCLES=OFF \
   -DSEP_WITH_AUDIO=OFF \
   -DSEP_WITH_OPENSUBDIV=OFF \
@@ -30,6 +37,6 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
   -DSEP_ENABLE_AUDIO=OFF \
   -DSEP_WORKBENCH_DEMO=OFF \
   -DBUILD_TESTING=ON
-
 make memory_manager_tests -j$(nproc)
 ./tests/memory/memory_manager_tests
+

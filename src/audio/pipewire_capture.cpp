@@ -23,9 +23,12 @@ extern "C" {
 #include <spa/support/log.h>
 #include <spa/utils/hook.h>
 #include <spa/utils/type.h>
+#include <spa/utils/result.h>
 }
 
 // Third-party headers
+#include <vector>
+#include <functional>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/constants.hpp>
 
@@ -43,11 +46,10 @@ extern "C" {
 #include <memory>
 #include <new>
 #include <thread>
+#include <chrono>
 
 namespace sep {
 namespace audio {
-
-using namespace std; // Add this to fix namespace issues
 
 
 sep::audio::PipeWireCapture::PipeWireCapture() : stream_events_{} {}

@@ -398,7 +398,6 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_.erase(old_ptr);
     src_tier->deallocate(block);
     lookup_map_[out_block->ptr] = out_block;
-    lookup_map_[block->ptr] = out_block; // allow lookups using old pointer
   }
 
   // Refresh the lookup table so callers can resolve blocks after the move.

@@ -326,11 +326,10 @@ float MemoryTier::calculateUtilization() const {
     return 0.0f;
 
   // Recalculate used space on demand to avoid stale values in unit tests
-  std::size_t used = 0;
-  for (const auto &blk : blocks_) {
-    if (blk.allocated)
-      used += blk.size;
-  }
+  // used_space_ is maintained during allocate/deallocate so scanning the
+  // block list on every call is unnecessary. Recompute only if needed for
+  // deterministic unit tests.
+  std::size_t used = used_space_;
 
   // Treat extremely small usage values as zero.  Byte-level rounding during
   // promotions or defragmentation can leave a few bytes marked as used even

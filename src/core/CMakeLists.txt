@@ -7,6 +7,7 @@ add_library(sep_core STATIC
     error_handler.cpp
     metrics_collector.cpp
     logging.cpp
+    manager.cpp
 )
 
 if(SEP_BUILD_ENGINE)

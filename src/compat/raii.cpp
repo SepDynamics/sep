@@ -245,6 +245,7 @@ DeviceBufferRAII<T>& DeviceBufferRAII<T>::operator=(DeviceBufferRAII&& other) no
 // Explicit template instantiations for common types
 template class DeviceBufferRAII<std::uint32_t>;
 template class DeviceBufferRAII<std::uint64_t>;
+template class DeviceBufferRAII<int>;
 template class DeviceBufferRAII<float>;
 template class DeviceBufferRAII<double>;
 

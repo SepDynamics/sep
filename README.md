@@ -141,6 +141,12 @@ distributions). These are now installed automatically by `install.sh`.
 ./install.sh
 ```
 
+Alternatively you can invoke the Python wrapper which exposes the same options:
+
+```bash
+python install_dependencies.py --minimal --no-cuda
+```
+
 Add `--no-cuda` if you do not need CUDA support. Use `--minimal` to install only the packages required for unit tests (skipping heavy rendering dependencies). Once installed, compile and execute the memory manager tests to validate the setup:
 
 ```bash

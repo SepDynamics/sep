@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 #include <cmath>
 #include "compat/cuda_unified_fix.h"
+#include "compat/macros.h"
 
-__global__ void device_acosl(long double* out, long double x) {
+SEP_GLOBAL void device_acosl(long double* out, long double x) {
     out[0] = acosl(x);
 }
-
-__global__ void device_atan2l(long double* out, long double y, long double x) {
+SEP_GLOBAL void device_atan2l(long double* out, long double y, long double x) {
     out[0] = atan2l(y, x);
 }
 

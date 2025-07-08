@@ -197,8 +197,9 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   // stray bytes accounted as used which results in values like
   // 0.000244 for a 4 KiB tier.  Treat anything below the epsilon as
   // empty so unit tests remain deterministic.
-  if (util <= kUtilizationEpsilon ||
-      util <= (1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()))))
+  const float inverse_size =
+      1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()));
+  if (util <= kUtilizationEpsilon || util <= inverse_size + kUtilizationEpsilon)
     return 0.0f;
 
   return std::clamp(util, 0.0f, 1.0f);

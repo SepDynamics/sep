@@ -10,6 +10,12 @@ add_library(sep_core STATIC
     manager.cpp
 )
 
+# The core library does not require Redis for these tests. Explicitly
+# disable Redis support so headers guarded by SEP_NO_REDIS do not
+# trigger missing include errors when building in minimal mode.
+set(SEP_HAS_REDIS 0)
+add_compile_definitions(SEP_NO_REDIS)
+
 if(SEP_BUILD_ENGINE)
     target_sources(sep_core PRIVATE engine.cpp)
 endif()

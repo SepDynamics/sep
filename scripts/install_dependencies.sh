@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Default to skipping CUDA unless INSTALL_CUDA is explicitly set
+# Unless overridden, install the full dependency set.
+: "${INSTALL_MINIMAL:=0}"
 : "${INSTALL_CUDA:=0}"
 
 # Use sudo if not running as root

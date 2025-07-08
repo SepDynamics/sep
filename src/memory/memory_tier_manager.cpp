@@ -654,14 +654,7 @@ void MemoryTierManager::calculateRelationshipCoherence() {
 }
 #endif
 
-void MemoryTierManager::cleanupExpiredPatterns() {
-  // Stub implementation for minimal build
-}
 
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                                size_t max_count) {
-  // Stub implementation for minimal build
-}
 
 void MemoryTierManager::cleanupExpiredPatterns() {
   std::lock_guard<std::mutex> lock(registry_mutex);

@@ -37,8 +37,11 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 // large tiers to be treated as empty, which masked actual usage and
 // broke promotion heuristics in unit tests.  Use a much smaller threshold
 // so that any non-trivial allocation remains visible while still
-// clamping stray rounding noise after defragmentation.
-inline constexpr float kUtilizationEpsilon = 1e-5f;
+// clamping stray rounding noise after defragmentation.  In practice
+// extremely small utilization values like 0.000244 can still appear
+// on some platforms due to page sized allocations, so relax the
+// threshold slightly to 1e-3f.
+inline constexpr float kUtilizationEpsilon = 1e-3f;
 
 // Memory tier types
 enum class TierType {

@@ -20,6 +20,7 @@
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
 #include "persistence/pattern_data.hpp"
+#endif
 
 // Standard library includes
 #include <cstddef>
@@ -74,7 +75,7 @@ public:
 
     MemoryTierManager();
     explicit MemoryTierManager(const Config& cfg);
-    explicit MemoryTierManager(const sep::config::MemoryThresholdConfig& cfg);
+    explicit MemoryTierManager(const ::sep::config::MemoryThresholdConfig& cfg);
     ~MemoryTierManager();
 
     void init(const Config& config);
@@ -113,14 +114,14 @@ public:
 
     // Pattern management
 
-    SEPResult launch_pattern_processing(sep::pattern::PatternData* patterns,
-                                      sep::pattern::PatternData* results,
-                                      const sep::pattern::PatternConfig& config,
+    SEPResult launch_pattern_processing(::sep::pattern::PatternData* patterns,
+                                      ::sep::pattern::PatternData* results,
+                                      const ::sep::pattern::PatternConfig& config,
                                       size_t pattern_count,
-                                      const sep::pattern::PatternData* previous_patterns,
+                                      const ::sep::pattern::PatternData* previous_patterns,
                                       void* stream);
                                       
-    void updateRelationship(std::size_t id_a, std::size_t id_b, uint8_t type);
+    void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);
     void removePattern(std::size_t id);
     void pruneWeakRelationships();
     void calculateRelationshipCoherence();

@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#ifdef SEP_HAS_AUDIO
+#include <functional>
+#endif
 #include "audio/types.h"
 
 namespace sep {
@@ -16,8 +19,6 @@ protected:
   AudioCapture() = default;
 };
 #else
-#include <functional>
-
 #include "audio/export.h"
 
 class SEP_AUDIO_API AudioCapture {

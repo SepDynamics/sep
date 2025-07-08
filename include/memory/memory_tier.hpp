@@ -26,19 +26,8 @@ using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
 using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
-// Small epsilon used when comparing utilization metrics.  The value is tuned
-// so that allocations of a single kilobyte in a default 1MB tier are still
-// reported as non-zero while tiny rounding artifacts after promotions or
-// defragmentation are clamped to zero.
-// Increase epsilon slightly to better absorb rounding artifacts that occur
-// when tiers temporarily hold extremely small allocations during promotion
-// or defragmentation.  Values below this threshold are effectively treated
-// as zero utilization in tests.
-// Relax the epsilon to further suppress tiny residuals that appear after
-// promotions or tier defragmentation.  Values below this threshold are treated
-// as zero when reporting utilization metrics.
-// Allow slightly higher tolerance so tiny residuals after promotions do
-// not cause test failures.
+// Small epsilon for utilization metrics. Keeps a 1 KiB allocation visible in a
+// 1 MiB tier while clamping rounding noise after promotions or defragmentation.
 inline constexpr float kUtilizationEpsilon = 1e-6f;
 
 // Memory tier types

@@ -80,7 +80,9 @@ struct MemoryBlock {
         : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
-using PersistentPatternData = ::sep::memory::persistence::PersistentPatternData;
+#include "persistence/persistent_pattern_data.hpp"
+
+using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 class MemoryTier {
 public:

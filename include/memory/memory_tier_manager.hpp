@@ -122,7 +122,7 @@ public:
     void pruneWeakRelationships();
     void calculateRelationshipCoherence();
     void loadLTMFromPersistence();
-    void storeLTMToPersistence(const ::sep::quantum::Pattern& pattern, const persistence::PersistentPatternData& data);
+    void storeLTMToPersistence(const ::sep::quantum::Pattern& pattern, const ::sep::persistence::PersistentPatternData& data);
     std::unique_ptr<::sep::quantum::Pattern> findPattern(std::size_t id);
     std::unique_ptr<::sep::quantum::Pattern> findPattern(std::size_t id) const;
     void registerPattern(std::size_t id, const ::sep::pattern::PatternData& pattern);

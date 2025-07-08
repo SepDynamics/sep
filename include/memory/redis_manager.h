@@ -1,6 +1,7 @@
 #pragma once
 
 #include "memory/types.h"
+#include "persistence/persistent_pattern_data.hpp"
 
 #ifndef SEP_NO_REDIS
 #  include <hiredis/hiredis.h>

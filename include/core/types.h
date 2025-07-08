@@ -10,6 +10,9 @@
 #include <string>
 #include <vector>
 
+// Third-party
+#include <nlohmann/json.hpp>
+
 namespace sep {
 
 // Memory tier types that are used across multiple modules
@@ -42,6 +45,10 @@ struct MemoryThresholdConfig {
     bool use_unified_memory{true};
     bool enable_compression{true};
 };
+
+// JSON serialization helpers
+void to_json(nlohmann::json& j, const MemoryThresholdConfig& c);
+void from_json(const nlohmann::json& j, MemoryThresholdConfig& c);
 
 struct QuantumThresholdConfig {
     float ltm_coherence_threshold{0.9f};

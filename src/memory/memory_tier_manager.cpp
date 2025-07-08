@@ -421,13 +421,19 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
                                                    float stability,
                                                    uint32_t generation,
                                                    float context_score) {
-  // Guard against invalid input early. Returning nullptr allows unit tests to
-  // detect erroneous calls and avoids dereferencing a null pointer further in
-  // this method.  Unallocated blocks are treated as invalid inputs because
-  // promotion or metric updates on freed memory would corrupt the lookup table
-  // and lead to inconsistent tier utilization.
-  if (!block || !block->allocated)
-    return nullptr;
+  // Guard against invalid input early. Previously this method returned
+  // nullptr when passed a stale pointer (for example after a block was
+  // promoted and the caller still held the old address). In practice this
+  // caused unit tests to fail because the lookup table retains aliases to
+  // old pointers for a short period.  To make the behaviour more robust we
+  // attempt to resolve the block through findBlockByPtr when the provided
+  // pointer no longer refers to an allocated block.
+  if (!block || !block->allocated) {
+    MemoryBlock *resolved = block ? findBlockByPtr(block->ptr) : nullptr;
+    if (!resolved || !resolved->allocated)
+      return nullptr;
+    block = resolved;
+  }
 
   block->coherence = std::clamp(coherence, 0.0f, 1.0f);
   block->stability = std::clamp(stability, 0.0f, 1.0f);

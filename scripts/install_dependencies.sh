@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# Default to skipping CUDA unless INSTALL_CUDA is explicitly set
+: "${INSTALL_CUDA:=0}"
+
 # Update package lists
 sudo apt-get update
 
@@ -18,6 +21,17 @@ sudo apt-get install -y \
     libhttp-parser-dev \
     liblz4-dev \
     libzstd-dev \
+    libgflags-dev \
+    libgoogle-glog-dev \
+    libembree-dev \
+    libpugixml-dev \
+    libopenjp2-7-dev \
+    libopenvdb-dev \
+    libimath-dev \
+    libtbb-dev \
+    libopenexr-dev \
+    libopencolorio-dev \
+    libopenimageio-dev \
     libpipewire-0.3-dev \
     libbenchmark-dev \
     libgtest-dev \

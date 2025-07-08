@@ -32,6 +32,11 @@ set(TEST_SOURCES
     pattern_promotion_test.cpp
 )
 
+# Define the test executable.  Some earlier revisions relied on a
+# prebuilt binary which required CUDA.  Reintroduce the explicit target
+# so the tests can be compiled in minimal environments without CUDA.
+add_executable(memory_manager_tests ${TEST_SOURCES})
+
 if(SEP_HAS_REDIS)
     target_sources(memory_manager_tests PRIVATE redis_manager_test.cpp)
 endif()

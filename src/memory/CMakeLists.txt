@@ -23,8 +23,6 @@ else()
     add_compile_definitions(SEP_NO_REDIS)
 endif()
 
-add_library(sep_memory STATIC ${SEP_MEMORY_SOURCES})
-
 if(SEP_BUILD_QUANTUM)
   target_sources(sep_memory PRIVATE quantum_coherence_manager.cpp)
 endif()

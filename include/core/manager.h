@@ -44,14 +44,18 @@ public:
   const CudaConfig &getCudaConfig() const;
   const LogConfig &getLogConfig() const;
   const MemoryThresholdConfig &getMemoryConfig() const;
+#if SEP_BUILD_QUANTUM
   const QuantumThresholdConfig &getQuantumConfig() const;
+#endif
 
   // Update specific components
   void updateAPIConfig(const APIConfig &config);
   void updateCudaConfig(const CudaConfig &config);
   void updateLogConfig(const LogConfig &config);
   void updateMemoryConfig(const MemoryThresholdConfig &config);
+#if SEP_BUILD_QUANTUM
   void updateQuantumConfig(const QuantumThresholdConfig &config);
+#endif
 
   // Reset configuration to defaults
   void resetToDefaults();

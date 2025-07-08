@@ -4,50 +4,61 @@ set -e
 # Default to skipping CUDA unless INSTALL_CUDA is explicitly set
 : "${INSTALL_CUDA:=0}"
 
-# Update package lists
-sudo apt-get update
+# Detect package manager (apt or dnf) for broader distro support
+detect_pm() {
+    if command -v apt-get >/dev/null; then
+        echo "apt"
+    elif command -v dnf >/dev/null; then
+        echo "dnf"
+    else
+        echo "unsupported"
+    fi
+}
 
-# Install system packages
-sudo apt-get install -y \
-    build-essential \
-    cmake \
-    libspdlog-dev \
-    libfmt-dev \
-    libglm-dev \
-    libboost-all-dev \
-    libasio-dev \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    libhttp-parser-dev \
-    liblz4-dev \
-    libzstd-dev \
-    libgflags-dev \
-    libgoogle-glog-dev \
-    libembree-dev \
-    libpugixml-dev \
-    libopenjp2-7-dev \
-    libopenvdb-dev \
-    libimath-dev \
-    libtbb-dev \
-    libopenexr-dev \
-    libopencolorio-dev \
-    libopenimageio-dev \
-    libpipewire-0.3-dev \
-    libbenchmark-dev \
-    libgtest-dev \
-    libomp-dev \
-    libgflags-dev \
-    libgoogle-glog-dev \
-    libopenvdb-dev \
-    libopenexr-dev \
-    libopencolorio-dev \
-    libopenimageio-dev \
-    libembree-dev \
-    libpugixml-dev \
-    libopenjp2-7-dev \
-    libtbb-dev \
-    nlohmann-json3-dev \
+PM=$(detect_pm)
+if [ "$PM" = "unsupported" ]; then
+    echo "Unsupported package manager. Install dependencies manually." >&2
+    exit 1
+fi
+
+PKGS=(
+    build-essential
+    cmake
+    libspdlog-dev
+    libfmt-dev
+    libglm-dev
+    libboost-all-dev
+    libasio-dev
+    libssl-dev
+    libcurl4-openssl-dev
+    libhttp-parser-dev
+    liblz4-dev
+    libzstd-dev
+    libgflags-dev
+    libgoogle-glog-dev
+    libembree-dev
+    libpugixml-dev
+    libopenjp2-7-dev
+    libopenvdb-dev
+    libimath-dev
+    libtbb-dev
+    libopenexr-dev
+    libopencolorio-dev
+    libopenimageio-dev
+    libpipewire-0.3-dev
+    libbenchmark-dev
+    libgtest-dev
+    libomp-dev
+    nlohmann-json3-dev
     pkg-config
+)
+
+if [ "$PM" = "apt" ]; then
+    sudo apt-get update
+    sudo apt-get install -y "${PKGS[@]}"
+elif [ "$PM" = "dnf" ]; then
+    sudo dnf -y install "${PKGS[@]}"
+fi
 
 # Optional: CUDA toolkit for GPU builds
 if [ "${INSTALL_CUDA:-}" = "1" ]; then

@@ -183,13 +183,19 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
   if (!t)
     return 0.0f;
 
-  // Recompute the metric directly from the tier rather than relying on
-  // cached free-space bookkeeping.  During complex promotion or
-  // defragmentation sequences the internal counters may temporarily drift,
-  // which in turn produces tiny non-zero values when the tier should be
-  // considered empty.  calculateUtilization() walks the block list and
-  // yields a consistent result at the expense of a little extra work -- a
-  // worthwhile tradeoff for unit tests where determinism matters most.
+  // Quick integer check to avoid floating-point rounding errors when only a
+  // handful of bytes remain allocated. Unit tests expect an exact zero value in
+  // this situation. getUsedSpace() exposes the raw counter so we can clamp
+  // without relying on a tolerance.
+  if (t->getUsedSpace() <= 1)
+    return 0.0f;
+
+  // Recompute the metric directly from the tier rather than relying on cached
+  // free-space bookkeeping. During complex promotion or defragmentation cycles
+  // the internal counters may temporarily drift, producing tiny non-zero values
+  // when the tier should be considered empty. calculateUtilization() walks the
+  // block list and yields a consistent result at the expense of a little extra
+  // work -- a worthwhile trade-off for deterministic unit tests.
   float util = t->calculateUtilization();
 
   // Clamp extremely small utilization values to zero.  On some

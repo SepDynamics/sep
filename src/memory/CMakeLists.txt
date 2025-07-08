@@ -1,10 +1,16 @@
-add_library(sep_memory
-  STATIC
+set(MEMORY_SRC
     memory_tier.cpp
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
-    redis_manager.cpp
 )
+if(NOT SEP_MEMORY_MINIMAL)
+  list(APPEND MEMORY_SRC redis_manager.cpp)
+endif()
+if(SEP_TESTBED_STUBS)
+  list(APPEND MEMORY_SRC ${CMAKE_SOURCE_DIR}/_sep/testbed/memory_minimal/memory_tier_manager_stubs.cpp)
+endif()
+
+add_library(sep_memory STATIC ${MEMORY_SRC})
 
 if(SEP_BUILD_QUANTUM)
   target_sources(sep_memory PRIVATE quantum_coherence_manager.cpp)

@@ -1,3 +1,4 @@
+import argparse
 import subprocess
 import sys
 import os
@@ -29,18 +30,36 @@ def install_package(package_name):
         print(f"Error installing {package_name}: {e}")
         return False
 
-# Required packages
-packages = [
-    "requests",
-    "numpy"
-]
+def run_script(script_path, with_cuda=False):
+    env = os.environ.copy()
+    env["INSTALL_CUDA"] = "1" if with_cuda else "0"
+    try:
+        subprocess.check_call(["bash", script_path], env=env)
+        return True
+    except Exception as e:
+        print(f"Error running {script_path}: {e}")
+        return False
+
+# Required Python packages
+packages = ["requests", "numpy"]
 
 # Install pip if needed
-if install_pip():
-    # Install required packages
-    for package in packages:
-        install_package(package)
+def main():
+    parser = argparse.ArgumentParser(description="Install SEP Engine dependencies")
+    parser.add_argument("--with-cuda", action="store_true", help="Install CUDA toolkit")
+    args = parser.parse_args()
 
-print("\nDependency installation complete. You can now try enabling the SEP Engine addon.")
-print("Python executable path:", sys.executable)
-print("Python version:", sys.version)
+    if install_pip():
+        for package in packages:
+            install_package(package)
+
+    script = os.path.join(os.path.dirname(__file__), "scripts", "install_dependencies.sh")
+    if not run_script(script, with_cuda=args.with_cuda):
+        sys.exit(1)
+
+    print("\nDependency installation complete. You can now try enabling the SEP Engine addon.")
+    print("Python executable path:", sys.executable)
+    print("Python version:", sys.version)
+
+if __name__ == "__main__":
+    main()

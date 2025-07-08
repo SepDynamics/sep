@@ -23,13 +23,14 @@ TEST(LongDoubleMathHost, Atan2lAccuracy) {
     EXPECT_NEAR(static_cast<double>(atan2l(y, x)), static_cast<double>(expected), 1e-9);
 }
 
+#if SEP_ENGINE_HAS_CUDA
 TEST(LongDoubleMathDevice, AcoslAccuracy) {
     long double* d_out;
-    ASSERT_EQ(cudaMalloc(&d_out, sizeof(long double)), cudaSuccess);
+    ASSERT_EQ(cudaMalloc(reinterpret_cast<void**>(&d_out), sizeof(long double)), cudaSuccess);
     device_acosl<<<1,1>>>(d_out, 0.5L);
     ASSERT_EQ(cudaDeviceSynchronize(), cudaSuccess);
     long double h_val;
-    ASSERT_EQ(cudaMemcpy(&h_val, d_out, sizeof(long double), cudaMemcpyDeviceToHost), cudaSuccess);
+    ASSERT_EQ(cudaMemcpy(&h_val, d_out, sizeof(long double), sep::cuda::cudaMemcpyDeviceToHost), cudaSuccess);
     cudaFree(d_out);
     long double expected = ::acosl(0.5L);
     EXPECT_NEAR(static_cast<double>(h_val), static_cast<double>(expected), 1e-9);
@@ -37,15 +38,16 @@ TEST(LongDoubleMathDevice, AcoslAccuracy) {
 
 TEST(LongDoubleMathDevice, Atan2lAccuracy) {
     long double* d_out;
-    ASSERT_EQ(cudaMalloc(&d_out, sizeof(long double)), cudaSuccess);
+    ASSERT_EQ(cudaMalloc(reinterpret_cast<void**>(&d_out), sizeof(long double)), cudaSuccess);
     device_atan2l<<<1,1>>>(d_out, 0.5L, -0.3L);
     ASSERT_EQ(cudaDeviceSynchronize(), cudaSuccess);
     long double h_val;
-    ASSERT_EQ(cudaMemcpy(&h_val, d_out, sizeof(long double), cudaMemcpyDeviceToHost), cudaSuccess);
+    ASSERT_EQ(cudaMemcpy(&h_val, d_out, sizeof(long double), sep::cuda::cudaMemcpyDeviceToHost), cudaSuccess);
     cudaFree(d_out);
     long double expected = ::atan2l(0.5L, -0.3L);
     EXPECT_NEAR(static_cast<double>(h_val), static_cast<double>(expected), 1e-9);
 }
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

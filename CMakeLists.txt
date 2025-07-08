@@ -175,6 +175,7 @@ add_subdirectory(src/manifold)
 add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 add_subdirectory(src/embeddings)
+add_subdirectory(src/utils)
 add_subdirectory(src/api)
 if(SEP_WITH_AUDIO)
     add_subdirectory(src/audio)
@@ -226,6 +227,7 @@ target_link_libraries(sep_engine PRIVATE
     $<$<BOOL:${SEP_WITH_AUDIO}>:sep_audio>
     sep_quantum
     sep_memory
+    sep_utils
     sep_core
     Threads::Threads
     ${CURL_LIBRARIES}

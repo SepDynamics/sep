@@ -11,6 +11,7 @@ add_subdirectory(compat)
 add_subdirectory(embeddings)
 add_subdirectory(memory)
 add_subdirectory(quantum)
+add_subdirectory(utils)
 add_subdirectory(api)
 if(SEP_WITH_AUDIO)
     add_subdirectory(audio)
@@ -30,6 +31,7 @@ target_link_libraries(sep_engine PRIVATE
     sep_api
     sep_quantum
     sep_memory
+    sep_utils
     sep_core
     sep_compat
     Threads::Threads

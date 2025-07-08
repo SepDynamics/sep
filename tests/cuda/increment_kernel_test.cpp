@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "compat/raii.h"
-#include "_sep/testbed/cuda/increment_kernel.hpp"
+#include "increment_kernel.hpp"
 
 TEST(TestbedCudaKernel, IncrementKernel) {
     const unsigned int n = 32;

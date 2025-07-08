@@ -49,9 +49,7 @@ target_link_libraries(memory_minimal_tests PRIVATE
     spdlog::spdlog_header_only
     Threads::Threads
 )
-if(spdlog_FOUND)
-    target_link_libraries(memory_minimal_tests PRIVATE spdlog::spdlog)
-endif()
+# Using header-only spdlog; no additional library needed
 
 target_compile_definitions(memory_minimal_tests PRIVATE
     SEP_MEMORY_MINIMAL

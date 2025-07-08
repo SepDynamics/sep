@@ -44,12 +44,14 @@ public:
   const CudaConfig &getCudaConfig() const;
   const LogConfig &getLogConfig() const;
   const MemoryThresholdConfig &getMemoryConfig() const;
+  const QuantumThresholdConfig &getQuantumConfig() const;
 
   // Update specific components
   void updateAPIConfig(const APIConfig &config);
   void updateCudaConfig(const CudaConfig &config);
   void updateLogConfig(const LogConfig &config);
   void updateMemoryConfig(const MemoryThresholdConfig &config);
+  void updateQuantumConfig(const QuantumThresholdConfig &config);
 
   // Reset configuration to defaults
   void resetToDefaults();

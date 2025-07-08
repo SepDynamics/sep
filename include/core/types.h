@@ -43,12 +43,6 @@ struct MemoryThresholdConfig {
     bool enable_compression{true};
 };
 
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
-};
-
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.
 struct CudaConfig {
@@ -57,13 +51,6 @@ struct CudaConfig {
     std::size_t batch_size{1024};
     float gpu_memory_limit{0.9f};
     bool enable_profiling{false};
-};
-
-// Minimal quantum configuration required for memory tier tests.
-struct QuantumThresholdConfig {
-    float ltm_coherence_threshold{0.9f};
-    float mtm_coherence_threshold{0.6f};
-    float stability_threshold{0.8f};
 };
 
 // API server configuration. Only a subset of fields is required for

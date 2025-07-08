@@ -621,21 +621,19 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         for (const auto &r : rels) {
           sum += r.second;
         }
-        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+        if (std::fabs(sum) <= std::numeric_limits<double>::epsilon()) {
+          pattern_ptr->coherence = 1.0f;
+        } else {
+          pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+        }
       }
     }
   }
 }
 #endif
 
-void MemoryTierManager::cleanupExpiredPatterns() {
-  // Stub implementation for minimal build
-}
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                                size_t max_count) {
-  // Stub implementation for minimal build
-}
+// Stubs for minimal build are no longer required; full implementations above
+// handle cleanup and pruning even when Redis is disabled.
 
 } // namespace memory
 } // namespace sep

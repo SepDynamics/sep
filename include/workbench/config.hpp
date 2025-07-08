@@ -73,8 +73,10 @@ struct CosmoDemoConfig {
 
 struct FlockingConfig {
     int agent_count;
+    float cohesion_weight;
+    float separation_weight;
+    float alignment_weight;
     float neighbor_radius;
-    float separation_distance;
     float max_speed;
 };
 
@@ -83,78 +85,6 @@ struct DrugDiscoveryConfig {
     float mutation_rate;
 };
 
-struct FlockingConfig {
-    int agent_count;
-    float neighbor_radius;
-    float separation_distance;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct DigitalPhysicsConfig {
-    struct {
-        int width;
-        int height;
-    } grid;
-
-    struct {
-        std::vector<int> birth;
-        std::vector<int> survival;
-    } rules;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float neighbor_radius;
-    float max_speed;
-};
-
-struct FlockingConfig {
-    int agent_count;
-    float cohesion_weight;
-    float separation_weight;
-    float alignment_weight;
-    float neighbor_radius;
-    float max_speed;
-};
 
 struct NeuralDemoConfig {
     int neuron_count;

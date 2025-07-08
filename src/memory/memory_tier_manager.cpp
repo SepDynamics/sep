@@ -427,6 +427,7 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     std::lock_guard<std::mutex> lock(lookup_mutex);
     // Preserve the old pointer as an alias so callers using stale addresses
     // can still resolve the promoted block via findBlockByPtr.
+    lookup_map_[old_ptr] = out_block;
     lookup_map_[block->ptr] = out_block;
   }
 

@@ -33,9 +33,9 @@ target_include_directories(memory_minimal_tests PRIVATE
 )
 
 target_link_libraries(memory_minimal_tests PRIVATE
-    sep_core
     GTest::GTest
     GTest::Main
+    Threads::Threads
 )
 
 target_compile_definitions(memory_minimal_tests PRIVATE SEP_MEMORY_MINIMAL)

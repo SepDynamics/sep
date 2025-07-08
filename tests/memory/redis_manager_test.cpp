@@ -2,13 +2,11 @@
 #include "memory/types.h"
 #include <gtest/gtest.h>
 
-using namespace sep::persistence;
-using namespace sep::memory;
 
 class RedisManagerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        redis_manager = createRedisManager("localhost", 6379);
+        redis_manager = sep::persistence::createRedisManager("localhost", 6379);
     }
 
     void TearDown() override {
@@ -33,7 +31,7 @@ protected:
         }
     };
 
-    std::shared_ptr<IRedisManager> redis_manager;
+    std::shared_ptr<sep::persistence::IRedisManager> redis_manager;
 };
 
 TEST_F(RedisManagerTest, NormalizeTier) {
@@ -62,7 +60,7 @@ TEST_F(RedisManagerTest, KeyFormatConsistency) {
 }
 
 TEST_F(RedisManagerTest, InvalidTierHandling) {
-    PersistentPatternData data{};
+    sep::persistence::PersistentPatternData data{};
     data.coherence = 0.8f;
     
     // Store with invalid tier should still work due to normalization
@@ -79,12 +77,12 @@ TEST_F(RedisManagerTest, InvalidTierHandling) {
 
 TEST_F(RedisManagerTest, ConnectionFailureHandling) {
     // Create manager with invalid connection
-    auto failed_manager = createRedisManager("nonexistent", 1234);
+    auto failed_manager = sep::persistence::createRedisManager("nonexistent", 1234);
     
     // Should return false for connection status
     EXPECT_FALSE(failed_manager->isConnected());
     
-    PersistentPatternData data{};
+    sep::persistence::PersistentPatternData data{};
     
     // Operations should fail gracefully
     failed_manager->storePattern(1, data, "STM");
@@ -96,7 +94,7 @@ TEST_F(RedisManagerTest, ConnectionFailureHandling) {
 }
 
 TEST_F(RedisManagerTest, StoreAndLoadPattern) {
-    PersistentPatternData data{};
+    sep::persistence::PersistentPatternData data{};
     data.coherence = 0.8f;
     data.stability = 0.9f;
     data.generation_count = 42;
@@ -118,7 +116,7 @@ TEST_F(RedisManagerTest, StoreAndLoadPattern) {
 }
 
 TEST_F(RedisManagerTest, GetPatternIds) {
-    PersistentPatternData data{};
+    sep::persistence::PersistentPatternData data{};
     
     // Store patterns in mixed case tiers
     redis_manager->storePattern(1, data, "STM");
@@ -132,7 +130,7 @@ TEST_F(RedisManagerTest, GetPatternIds) {
 }
 
 TEST_F(RedisManagerTest, RemovePattern) {
-    PersistentPatternData data{};
+    sep::persistence::PersistentPatternData data{};
     
     redis_manager->storePattern(1, data, "STM");
     redis_manager->removePattern(1, "stm"); // Different case
@@ -142,8 +140,8 @@ TEST_F(RedisManagerTest, RemovePattern) {
 }
 
 TEST_F(RedisManagerTest, BulkOperations) {
-    std::vector<std::pair<std::uint64_t, PersistentPatternData>> patterns;
-    PersistentPatternData data{};
+    std::vector<std::pair<std::uint64_t, sep::persistence::PersistentPatternData>> patterns;
+    sep::persistence::PersistentPatternData data{};
     data.coherence = 0.8f;
     patterns.push_back({1, data});
     patterns.push_back({2, data});

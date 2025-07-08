@@ -17,15 +17,21 @@ add_executable(long_double_math_test
     long_double_math_test.cpp
 )
 
+# These tests use CUDA stubs when the full toolkit isn't available. Avoid
+# defining SEP_USE_CUDA so macros like SEP_GLOBAL expand to no-ops.
+target_compile_definitions(long_double_math_test PRIVATE SEP_USE_CUDA=0)
+
 set_source_files_properties(long_double_math_test.cpp PROPERTIES LANGUAGE CXX)
 
 add_executable(cuda_api_tests
     processing_api_test.cpp
 )
+target_compile_definitions(cuda_api_tests PRIVATE SEP_USE_CUDA=0)
 
 add_executable(increment_kernel_test
     increment_kernel_test.cpp
 )
+target_compile_definitions(increment_kernel_test PRIVATE SEP_USE_CUDA=0)
 target_include_directories(increment_kernel_test PRIVATE
     ${CMAKE_SOURCE_DIR}/_sep/testbed/cuda
 )

@@ -4,7 +4,17 @@ endif()
 
 find_package(GTest REQUIRED)
 
-find_package(Hiredis CONFIG)
+# Redis is optional for the memory manager tests.  The system
+# provided config package fails when no version is specified, so
+# simply try to locate hiredis manually and fall back to a stub
+# when not available.
+find_path(HIREDIS_INCLUDE_DIR hiredis/hiredis.h)
+find_library(HIREDIS_LIB hiredis)
+if(HIREDIS_INCLUDE_DIR AND HIREDIS_LIB)
+    set(HIREDIS_FOUND TRUE)
+else()
+    set(HIREDIS_FOUND FALSE)
+endif()
 
 add_executable(memory_manager_tests
     memory_headers_test.cpp
@@ -29,7 +39,8 @@ target_link_libraries(memory_manager_tests PRIVATE
     Threads::Threads
 )
 if(HIREDIS_FOUND)
-    target_link_libraries(memory_manager_tests PRIVATE Hiredis::Hiredis)
+    target_link_libraries(memory_manager_tests PRIVATE ${HIREDIS_LIB})
+    target_include_directories(memory_manager_tests PRIVATE ${HIREDIS_INCLUDE_DIR})
 endif()
 if(SEP_HAS_CUDA)
     find_package(CUDA REQUIRED)
@@ -50,7 +61,6 @@ target_include_directories(memory_manager_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/include/memory
     ${CMAKE_SOURCE_DIR}/include/core
     ${CMAKE_SOURCE_DIR}/include/compat
-    ${HIREDIS_INCLUDE_DIRS}
 )
 
 target_compile_definitions(memory_manager_tests PRIVATE

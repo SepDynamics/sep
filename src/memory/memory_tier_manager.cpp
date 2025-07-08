@@ -195,7 +195,9 @@ float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
     return 0.0f;
 
   float util = static_cast<float>(used) / static_cast<float>(t->getSize());
-  return (util <= kUtilizationEpsilon || util < 0.0f) ? 0.0f : util;
+  if (util <= kUtilizationEpsilon || util < 0.0f)
+    return 0.0f;
+  return util;
 }
 
 float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const {
@@ -441,18 +443,12 @@ MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block,
   SEPResult result =
       promoteToTier(block, target_tier_ptr->getType(), new_block);
 
-  if (result == SEPResult::SUCCESS) {
-    // Some implementations may mistakenly return SUCCESS but leave the
-    // out pointer null. Guard against that case by falling back to the
-    // original block so callers never receive a nullptr.
-    return new_block ? new_block : block;
-  }
+  if (result == SEPResult::SUCCESS && new_block)
+    return new_block;
 
-  // If promotion fails, keep the original block so callers retain a valid
-  // pointer. This mirrors the semantics of allocation APIs that return the
-  // input on failure rather than a nullptr which could lead to unexpected
-  // crashes in tests.
-  return block;
+  // Signal failure explicitly by returning nullptr so that tests can
+  // detect when a promotion or demotion did not occur as expected.
+  return nullptr;
 }
 
 MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,

@@ -7,6 +7,8 @@ namespace {
 constexpr float EPSILON = 1e-3f;
 }
 
+namespace mem = sep::memory;
+
 
 TEST(MemoryManager, BasicSTMAllocation) {
     sep::memory::MemoryTierManager mgr;

@@ -16,7 +16,7 @@ endif()
 add_executable(long_double_math_test
     long_double_math_test.cpp
 )
-set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/long_double_math_test.cpp PROPERTIES LANGUAGE CUDA)
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/long_double_math_test.cpp PROPERTIES LANGUAGE CXX)
 
 set_source_files_properties(long_double_math_test.cpp PROPERTIES LANGUAGE CUDA)
 

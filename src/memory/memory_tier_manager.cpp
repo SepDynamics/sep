@@ -138,7 +138,6 @@ void MemoryTierManager::deallocate(MemoryBlock *block) {
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_.erase(block->ptr);
-    legacy_lookup_map_.erase(block->ptr);
   }
   if (MemoryTier *t = getTier(block->tier)) {
     t->deallocate(block);
@@ -155,8 +154,7 @@ MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr) {
   auto it = lookup_map_.find(ptr);
   if (it != lookup_map_.end())
     return it->second;
-  auto it2 = legacy_lookup_map_.find(ptr);
-  return it2 != legacy_lookup_map_.end() ? it2->second : nullptr;
+  return nullptr;
 }
 
 // --- Tier Management & Metrics ---
@@ -415,16 +413,10 @@ SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
     lookup_map_[block->ptr] = out_block;
     lookup_map_[out_block->ptr] = out_block;
     lookup_map_[block->ptr] = out_block; // allow lookups using old pointer
-    legacy_lookup_map_[block->ptr] = out_block;
   }
 
   // Refresh the lookup table so callers can resolve blocks after the move.
   rebuildLookup();
-  {
-    std::lock_guard<std::mutex> lock(lookup_mutex);
-    lookup_map_[old_ptr] = out_block;
-  }
-
   {
     std::lock_guard<std::mutex> lock(lookup_mutex);
     lookup_map_[old_ptr] = out_block;
@@ -632,13 +624,11 @@ void MemoryTierManager::pruneWeakRelationships() {
   }
 }
 
-#ifndef SEP_TESTBED_STUBS
 void MemoryTierManager::calculateRelationshipCoherence() {
   std::lock_guard<std::mutex> reg_lock(registry_mutex);
   std::lock_guard<std::mutex> rel_lock(relationships_mutex);
 
   for (auto &[id, pattern_ptr] : pattern_registry_) {
-    pattern_ptr->coherence = 1.0f;
     if (pattern_relationships_.count(id)) {
       const auto &rels = pattern_relationships_.at(id);
       if (!rels.empty()) {
@@ -646,54 +636,14 @@ void MemoryTierManager::calculateRelationshipCoherence() {
         for (const auto &r : rels) {
           sum += r.second;
         }
-        float avg = static_cast<float>(sum / rels.size());
-        pattern_ptr->coherence = 1.0f - avg;
+        pattern_ptr->coherence = static_cast<float>(sum / rels.size());
+      } else {
+        pattern_ptr->coherence = 0.0f;
       }
-    }
-  }
-}
-#endif
-
-void MemoryTierManager::cleanupExpiredPatterns() {
-  // Stub implementation for minimal build
-}
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                                size_t max_count) {
-  // Stub implementation for minimal build
-}
-
-void MemoryTierManager::cleanupExpiredPatterns() {
-  std::lock_guard<std::mutex> lock(registry_mutex);
-  for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
-    if (it->second->coherence < config_.demote_threshold) {
-      it = pattern_registry_.erase(it);
     } else {
-      ++it;
+      pattern_ptr->coherence = 0.0f;
     }
   }
 }
-
-void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
-                                               size_t max_count) {
-  MemoryTier *t = getTier(tier);
-  if (!t)
-    return;
-  const auto &patterns = t->getPatterns();
-  if (patterns.size() <= max_count)
-    return;
-  std::vector<std::pair<size_t, float>> sorted;
-  sorted.reserve(patterns.size());
-  for (const auto &[id, pat] : patterns) {
-    sorted.emplace_back(id, pat.coherence);
-  }
-  std::sort(sorted.begin(), sorted.end(),
-            [](const auto &a, const auto &b) { return a.second > b.second; });
-  for (size_t i = max_count; i < sorted.size(); ++i) {
-    t->removePattern(sorted[i].first);
-    removePattern(sorted[i].first);
-  }
-}
-
 } // namespace memory
 } // namespace sep

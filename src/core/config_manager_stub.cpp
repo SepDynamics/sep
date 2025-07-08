@@ -33,10 +33,16 @@ const LogConfig &ConfigManager::getLogConfig() const {
 const MemoryThresholdConfig &ConfigManager::getMemoryConfig() const {
     return impl_->mem_cfg;
 }
+
+const QuantumThresholdConfig &ConfigManager::getQuantumConfig() const {
+    static QuantumThresholdConfig cfg{};
+    return cfg;
+}
 void ConfigManager::updateAPIConfig(const APIConfig &) {}
 void ConfigManager::updateCudaConfig(const CudaConfig &) {}
 void ConfigManager::updateLogConfig(const LogConfig &) {}
 void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig &cfg) { impl_->mem_cfg = cfg; }
+void ConfigManager::updateQuantumConfig(const QuantumThresholdConfig &) {}
 void ConfigManager::resetToDefaults() { impl_->mem_cfg = MemoryThresholdConfig{}; }
 
 } // namespace sep::config

@@ -7,7 +7,6 @@ add_library(sep_core STATIC
     error_handler.cpp
     metrics_collector.cpp
     logging.cpp
-    manager.cpp
 )
 
 # The core library does not require Redis for these tests. Explicitly

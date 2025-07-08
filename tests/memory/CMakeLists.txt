@@ -32,6 +32,12 @@ set(TEST_SOURCES
     pattern_promotion_test.cpp
 )
 
+# The executable was accidentally dropped in a previous merge which
+# caused configuration failures when linking test sources.  Reintroduce
+# the target declaration so the subsequent target_link_libraries calls
+# operate on a valid target.
+add_executable(memory_manager_tests ${TEST_SOURCES})
+
 if(SEP_HAS_REDIS)
     target_sources(memory_manager_tests PRIVATE redis_manager_test.cpp)
 endif()

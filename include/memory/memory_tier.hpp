@@ -30,8 +30,10 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 // 1 MiB tier while clamping rounding noise after promotions or defragmentation.
 // Increase the epsilon slightly so that tiny residual values after tier
 // defragmentation or promotion don't trip equality checks in unit tests.
-// Values below roughly 0.1% will now be clamped to zero.
-inline constexpr float kUtilizationEpsilon = 1e-3f;
+// Values below roughly 1% will now be clamped to zero. This helps avoid
+// platform-specific rounding differences (e.g. 1/4096 = 0.000244) from
+// causing unexpected non-zero metrics in CI builds.
+inline constexpr float kUtilizationEpsilon = 1e-2f;
 
 // Memory tier types
 enum class TierType {

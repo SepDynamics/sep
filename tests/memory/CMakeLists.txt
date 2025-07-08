@@ -4,7 +4,11 @@ endif()
 
 find_package(GTest REQUIRED)
 
-find_package(Hiredis CONFIG)
+# Redis is optional for the unit tests.  Some environments may not
+# provide a complete CMake configuration for hiredis which would
+# otherwise cause configuration to fail.  Search for the package but
+# continue silently if it is not available.
+find_package(Hiredis 1.0 CONFIG QUIET)
 
 add_executable(memory_manager_tests
     memory_headers_test.cpp
@@ -28,7 +32,7 @@ target_link_libraries(memory_manager_tests PRIVATE
     GTest::Main
     Threads::Threads
 )
-if(HIREDIS_FOUND)
+if(TARGET Hiredis::Hiredis)
     target_link_libraries(memory_manager_tests PRIVATE Hiredis::Hiredis)
 endif()
 if(SEP_HAS_CUDA)

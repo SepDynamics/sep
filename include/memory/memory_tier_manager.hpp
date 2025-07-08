@@ -147,6 +147,11 @@ private:
   std::unique_ptr<MemoryTier> mtm_;
   std::unique_ptr<MemoryTier> ltm_;
   std::unordered_map<void *, MemoryBlock *> lookup_map_;
+  // Legacy pointer lookup table used during tier transitions. When blocks
+  // move between tiers the old pointer remains valid for a short period so
+  // tests can resolve both the new and previous addresses. This map stores
+  // those temporary associations until the next rebuild.
+  std::unordered_map<void *, MemoryBlock *> legacy_lookup_map_;
 
 private:
   dag::DagGraph dag_graph_;

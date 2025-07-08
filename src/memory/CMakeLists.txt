@@ -3,6 +3,9 @@ set(SEP_MEMORY_SOURCES
     memory_tier_manager.cpp
     memory_tier_manager_serialization.cpp
 )
+
+# Optional components are appended directly to the same source list so the
+# library is created exactly once below.
 if(NOT SEP_MEMORY_MINIMAL)
   list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
 endif()

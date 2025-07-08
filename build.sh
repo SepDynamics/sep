@@ -272,7 +272,9 @@ check_package "OpenImageIO" "libOpenImageIO.so" "/usr/include/OpenImageIO/imagei
 # check_package "TBB" "libtbb.so" "/usr/include/tbb/tbb.h" || MISSING_PACKAGES="$MISSING_PACKAGES tbb-devel"
 
 # Make the Boost check more flexible
-if [ -f "/usr/include/boost/config.hpp" ] || [ -f "/usr/local/include/boost/config.hpp" ]; then
+if command -v pkg-config >/dev/null && pkg-config --exists boost; then
+  echo "✓ Boost found via pkg-config"
+elif [ -f "/usr/include/boost/config.hpp" ] || [ -f "/usr/local/include/boost/config.hpp" ]; then
   if ldconfig -p | grep -q -i "libboost_system" || find /usr/lib* -name "libboost_system*.so*" | grep -q .; then
     echo "✓ Boost found"
   else
@@ -280,7 +282,7 @@ if [ -f "/usr/include/boost/config.hpp" ] || [ -f "/usr/local/include/boost/conf
     MISSING_PACKAGES="$MISSING_PACKAGES boost-devel"
   fi
 else
-  echo "✗ Boost headers not found"
+  echo "✗ Boost not found - install libboost-all-dev or boost-devel"
   MISSING_PACKAGES="$MISSING_PACKAGES boost-devel"
 fi
 

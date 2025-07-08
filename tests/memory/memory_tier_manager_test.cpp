@@ -245,8 +245,10 @@ TEST(MemoryTierManagerTest, CalculateRelationshipCoherence) {
     const auto* pb = mgr.getPatternData(2);
     ASSERT_NE(pa, nullptr);
     ASSERT_NE(pb, nullptr);
-    EXPECT_FLOAT_EQ(pa->coherence, 1.0f);
-    EXPECT_FLOAT_EQ(pb->coherence, 1.0f);
+    // With a single relationship of strength 0, the expected coherence
+    // for both patterns is 0.
+    EXPECT_FLOAT_EQ(pa->coherence, 0.0f);
+    EXPECT_FLOAT_EQ(pb->coherence, 0.0f);
 }
 
 #if 0

@@ -2,6 +2,8 @@ if(NOT BUILD_TESTING)
     return()
 endif()
 
+set(SEP_HAS_REDIS 0)
+
 find_package(GTest REQUIRED)
 
 # The unit tests run without Redis. Disable the dependency and

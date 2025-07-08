@@ -292,6 +292,10 @@ void MemoryTierManager::optimizeBlocks() {
   process_tier(stm_.get());
   process_tier(mtm_.get());
   process_tier(ltm_.get());
+
+  // Rebuild lookup tables after potential tier changes so subsequent
+  // calls to findBlockByPtr reflect the updated block locations.
+  rebuildLookup();
 }
 
 // Convenience helpers used in tests

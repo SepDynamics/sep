@@ -605,7 +605,6 @@ void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
     }
   }
 }
-#endif // !SEP_TESTBED_STUBS
 
 void MemoryTierManager::pruneWeakRelationships() {
   std::lock_guard<std::mutex> lock(relationships_mutex);

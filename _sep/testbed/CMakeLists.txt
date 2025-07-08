@@ -29,5 +29,22 @@ target_link_libraries(testbed_tests PRIVATE
 
 add_test(NAME testbed_tests COMMAND testbed_tests)
 
-add_subdirectory(cuda)
+if(SEP_HAS_CUDA)
+    add_subdirectory(cuda)
+endif()
 add_subdirectory(memory_minimal)
+
+add_executable(pattern_data_interop_test
+    pattern_data_interop_test.cpp
+)
+
+target_include_directories(pattern_data_interop_test PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+)
+
+target_link_libraries(pattern_data_interop_test PRIVATE
+    GTest::GTest
+    GTest::Main
+)
+
+add_test(NAME pattern_data_interop_test COMMAND pattern_data_interop_test)

@@ -45,7 +45,7 @@ endif()
 add_subdirectory(api)
 add_subdirectory(cuda)
 add_subdirectory(workbench)
-# Testbed directory temporarily disabled
+add_subdirectory(${CMAKE_SOURCE_DIR}/_sep/testbed ${CMAKE_CURRENT_BINARY_DIR}/_sep_testbed)
 
 add_custom_target(run_all_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
@@ -57,4 +57,5 @@ add_custom_target(run_all_tests
         cuda_api_tests
         workbench_demo_tests
         $<$<BOOL:${SEP_HAS_BLENDER}>:blender_tests>
-        $<$<BOOL:${SEP_WITH_AUDIO}>:audio_tests>)
+        $<$<BOOL:${SEP_WITH_AUDIO}>:audio_tests>
+        pattern_data_interop_test)

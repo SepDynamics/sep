@@ -47,7 +47,7 @@ extern "C" {
 namespace sep {
 namespace audio {
 
-using namespace std; // Add this to fix namespace issues
+
 
 
 sep::audio::PipeWireCapture::PipeWireCapture() : stream_events_{} {}

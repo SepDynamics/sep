@@ -541,8 +541,8 @@ void MemoryTierManager::removePattern(std::size_t id) {
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
                                            float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  pattern_relationships_[id_a][id_b] = 1.0f;
+  pattern_relationships_[id_b][id_a] = 1.0f;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {

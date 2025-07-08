@@ -21,7 +21,7 @@ TEST(MemoryPromotionRegression, StablePromotionDemotion) {
     uint64_t wait = promoted->wait;
 
     mgr.updateBlockMetrics(promoted, 0.8f, 0.8f, 6, 1.0f); // should remain MTM
-    EXPECT_EQ(promoted->tier, mem::MemoryTierEnum::MTM);
+    EXPECT_EQ(promoted->tier, sep::memory::MemoryTierEnum::MTM);
     EXPECT_FLOAT_EQ(weight, promoted->weight);
     EXPECT_EQ(wait, promoted->wait);
 
@@ -31,7 +31,7 @@ TEST(MemoryPromotionRegression, StablePromotionDemotion) {
     weight = demoted->weight;
     wait = demoted->wait;
     mgr.updateBlockMetrics(demoted, 0.1f, 0.1f, 6, 1.0f); // remain STM
-    EXPECT_EQ(demoted->tier, mem::MemoryTierEnum::STM);
+    EXPECT_EQ(demoted->tier, sep::memory::MemoryTierEnum::STM);
     EXPECT_FLOAT_EQ(weight, demoted->weight);
     EXPECT_EQ(wait, demoted->wait);
 }

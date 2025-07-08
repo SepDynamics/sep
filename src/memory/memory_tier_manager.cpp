@@ -91,6 +91,12 @@ void MemoryTierManager::init(const Config &config) {
          stm_->calculateUtilization(), mtm_->calculateUtilization(),
          ltm_->calculateUtilization());
 
+  // Ensure the lookup table accurately reflects the fresh tiers so that unit
+  // tests querying by pointer see a consistent initial state.  This also clears
+  // any stale entries that might remain from a previous configuration when
+  // init() is called after shutdown().
+  rebuildLookup();
+
   // Redis manager is optional in this minimal build
 }
 

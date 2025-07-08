@@ -4,13 +4,12 @@ set(SEP_MEMORY_SOURCES
     memory_tier_manager_serialization.cpp
 )
 if(NOT SEP_MEMORY_MINIMAL)
-  list(APPEND MEMORY_SRC redis_manager.cpp)
+  list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
 endif()
 if(SEP_TESTBED_STUBS)
-  list(APPEND MEMORY_SRC ${CMAKE_SOURCE_DIR}/_sep/testbed/memory_minimal/memory_tier_manager_stubs.cpp)
+  list(APPEND SEP_MEMORY_SOURCES
+    ${CMAKE_SOURCE_DIR}/_sep/testbed/memory_minimal/memory_tier_manager_stubs.cpp)
 endif()
-
-add_library(sep_memory STATIC ${MEMORY_SRC})
 
 set(SEP_HAS_REDIS 0)
 set(HIREDIS_FOUND FALSE)

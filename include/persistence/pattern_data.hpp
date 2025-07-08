@@ -1,18 +1,17 @@
 #pragma once
-#include <cstdint>
+
+// Legacy wrapper that aliases the canonical PersistentPatternData definition.
+// Keeping this header ensures older includes continue to compile while
+// avoiding duplicate struct definitions across namespaces.
+
+#include "persistent_pattern_data.hpp"
 
 namespace sep {
 namespace memory { namespace persistence {
-
-struct PersistentPatternData {
-    float coherence{0.0f};
-    float stability{0.0f};
-    std::uint32_t generation_count{0};
-};
-
+using ::sep::persistence::PersistentPatternData;
 } } // namespace memory::persistence
 
 namespace persistence {
-using PersistentPatternData = ::sep::memory::persistence::PersistentPatternData;
+using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 } // namespace persistence
 } // namespace sep

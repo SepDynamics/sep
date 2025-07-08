@@ -54,6 +54,7 @@ MemoryTierManager &MemoryTierManager::getInstance() {
   std::call_once(once_flag_, []() {
 #ifdef SEP_MEMORY_MINIMAL
     Config cfg{};
+    instance_ = std::make_unique<MemoryTierManager>(cfg);
 #else
     const auto &mc =
         ::sep::config::ConfigManager::getInstance().getMemoryConfig();
@@ -69,10 +70,7 @@ MemoryTierManager &MemoryTierManager::getInstance() {
     cfg.ltm_size = mc.ltm_size;
     cfg.use_unified_memory = mc.use_unified_memory;
     cfg.enable_compression = mc.enable_compression;
-#endif
     instance_ = std::make_unique<MemoryTierManager>(cfg);
-#else
-    instance_ = std::make_unique<MemoryTierManager>();
 #endif
   });
   return *instance_;
@@ -557,10 +555,10 @@ void MemoryTierManager::removePattern(std::size_t id) {
 }
 
 void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                           uint8_t strength) {
+                                           float strength) {
   std::lock_guard<std::mutex> lock(relationships_mutex);
-  pattern_relationships_[id_a][id_b] = static_cast<float>(type);
-  pattern_relationships_[id_b][id_a] = static_cast<float>(type);
+  pattern_relationships_[id_a][id_b] = strength;
+  pattern_relationships_[id_b][id_a] = strength;
 }
 
 void MemoryTierManager::pruneWeakRelationships() {
@@ -573,6 +571,40 @@ void MemoryTierManager::pruneWeakRelationships() {
         ++it;
       }
     }
+  }
+}
+
+void MemoryTierManager::cleanupExpiredPatterns() {
+  std::lock_guard<std::mutex> reg_lock(registry_mutex);
+  for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();) {
+    if (it->second->coherence < config_.demote_threshold) {
+      std::size_t id = it->first;
+      it = pattern_registry_.erase(it);
+      removePattern(id);
+    } else {
+      ++it;
+    }
+  }
+}
+
+void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier,
+                                                size_t max_count) {
+  MemoryTier* t = getTier(tier);
+  if (!t)
+    return;
+  auto& patterns = t->getPatterns();
+  if (patterns.size() <= max_count)
+    return;
+
+  std::vector<std::pair<size_t, float>> entries;
+  entries.reserve(patterns.size());
+  for (const auto& p : patterns) {
+    entries.emplace_back(p.first, p.second.coherence);
+  }
+  std::sort(entries.begin(), entries.end(),
+            [](auto& a, auto& b) { return a.second > b.second; });
+  for (size_t i = max_count; i < entries.size(); ++i) {
+    t->removePattern(entries[i].first);
   }
 }
 

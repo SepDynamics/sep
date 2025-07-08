@@ -15,12 +15,25 @@ sudo apt-get install -y \
     libasio-dev \
     libssl-dev \
     libcurl4-openssl-dev \
+    libhttp-parser-dev \
     liblz4-dev \
     libzstd-dev \
     libpipewire-0.3-dev \
     libbenchmark-dev \
     libgtest-dev \
-    libomp-dev
+    libomp-dev \
+    libgflags-dev \
+    libgoogle-glog-dev \
+    libopenvdb-dev \
+    libopenexr-dev \
+    libopencolorio-dev \
+    libopenimageio-dev \
+    libembree-dev \
+    libpugixml-dev \
+    libopenjp2-7-dev \
+    libtbb-dev \
+    nlohmann-json3-dev \
+    pkg-config
 
 # Optional: CUDA toolkit for GPU builds
 if [ "${INSTALL_CUDA:-}" = "1" ]; then

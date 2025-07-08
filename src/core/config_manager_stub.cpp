@@ -38,7 +38,8 @@ const MemoryThresholdConfig &ConfigManager::getMemoryConfig() const {
 }
 #if SEP_BUILD_QUANTUM
 const QuantumThresholdConfig &ConfigManager::getQuantumConfig() const {
-    return impl_->quantum_cfg;
+    static QuantumThresholdConfig cfg{};
+    return cfg;
 }
 #endif
 void ConfigManager::updateAPIConfig(const APIConfig &) {}

@@ -43,6 +43,17 @@ struct MemoryThresholdConfig {
     bool enable_compression{true};
 };
 
+// Minimal quantum memory thresholds used by the unit tests. The full
+// engine defines a richer configuration, but the memory tier manager
+// only relies on a few coherence/stability values. Providing a small
+// stub here avoids build failures when the quantum module is not
+// present.
+struct QuantumThresholdConfig {
+    float ltm_coherence_threshold{0.9f};
+    float mtm_coherence_threshold{0.6f};
+    float stability_threshold{0.8f};
+};
+
 
 // Minimal CUDA configuration used by unit tests. These fields are
 // sufficient for the parts of the engine compiled in this repository.

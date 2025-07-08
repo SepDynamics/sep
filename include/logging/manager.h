@@ -1,0 +1,6 @@
+#ifndef SEP_LOGGING_MANAGER_COMPAT_H
+#define SEP_LOGGING_MANAGER_COMPAT_H
+
+#include "core/logging.h"
+
+#endif // SEP_LOGGING_MANAGER_COMPAT_H

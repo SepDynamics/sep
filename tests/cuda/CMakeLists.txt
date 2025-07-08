@@ -4,6 +4,13 @@ endif()
 
 find_package(GTest REQUIRED)
 
+# Skip CUDA-specific tests when CUDA support is disabled.  This prevents
+# build failures in environments without CUDA.
+if(NOT SEP_HAS_CUDA)
+    message(STATUS "Skipping CUDA tests because SEP_HAS_CUDA=OFF")
+    return()
+endif()
+
 add_executable(long_double_math_test
     long_double_math_test.cpp
 )

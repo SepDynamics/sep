@@ -13,6 +13,7 @@ add_subdirectory(core)
 add_subdirectory(compat)
 add_subdirectory(embeddings)
 add_subdirectory(memory)
+add_subdirectory(manifold)
 add_subdirectory(quantum)
 add_subdirectory(utils)
 add_subdirectory(api)
@@ -44,49 +45,50 @@ if(TARGET CUDA::cudart)
     target_link_libraries(sep_engine PRIVATE CUDA::cudart)
 endif()
 
-# Add the workbench executable
-add_executable(sep_workbench
-    main.cpp
-    window.cpp
-    demo_manager.cpp
-    config.cpp
-)
+# Add the workbench executable if enabled
+if(SEP_BUILD_WORKBENCH)
+    add_executable(sep_workbench
+        main.cpp
+        window.cpp
+        demo_manager.cpp
+        config.cpp
+    )
 
-# Add all demo files
-file(GLOB DEMO_SOURCES demos/*.cpp)
-target_sources(sep_workbench PRIVATE ${DEMO_SOURCES})
+    # Add all demo files
+    file(GLOB DEMO_SOURCES demos/*.cpp)
+    target_sources(sep_workbench PRIVATE ${DEMO_SOURCES})
 
-set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
+    set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 
-target_include_directories(sep_workbench PRIVATE
-    ${SEP_INCLUDE_DIRS}
-    ${GLFW_INCLUDE_DIRS}
-    ${GLEW_INCLUDE_DIRS}
-)
+    target_include_directories(sep_workbench PRIVATE
+        ${SEP_INCLUDE_DIRS}
+        ${GLFW_INCLUDE_DIRS}
+        ${GLEW_INCLUDE_DIRS}
+    )
 
-# Link against all required libraries
-target_link_libraries(sep_workbench PRIVATE
-    sep_api
-    sep_quantum
-    sep_memory
-    sep_utils
-    sep_core
-    sep_compat
-    glfw
-    GLEW
-    OpenGL::GL
-    Threads::Threads
-    ${CMAKE_DL_LIBS}
-)
+    # Link against all required libraries
+    target_link_libraries(sep_workbench PRIVATE
+        sep_api
+        sep_quantum
+        sep_memory
+        sep_utils
+        sep_core
+        sep_compat
+        glfw
+        OpenGL::GL
+        Threads::Threads
+        ${CMAKE_DL_LIBS}
+    )
 
-if(SEP_WITH_AUDIO)
-    target_link_libraries(sep_workbench PRIVATE sep_audio)
-endif()
+    if(SEP_WITH_AUDIO)
+        target_link_libraries(sep_workbench PRIVATE sep_audio)
+    endif()
 
-if(SEP_WITH_CYCLES)
-    target_link_libraries(sep_workbench PRIVATE sep_blender)
-endif()
+    if(SEP_WITH_CYCLES)
+        target_link_libraries(sep_workbench PRIVATE sep_blender)
+    endif()
 
-if(TARGET CUDA::cudart)
-    target_link_libraries(sep_workbench PRIVATE CUDA::cudart)
+    if(TARGET CUDA::cudart)
+        target_link_libraries(sep_workbench PRIVATE CUDA::cudart)
+    endif()
 endif()

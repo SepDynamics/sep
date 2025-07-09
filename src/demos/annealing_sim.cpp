@@ -7,10 +7,10 @@ namespace sep {
 namespace workbench {
 
 void AnnealingSimDemo::init() {
-    const auto& cfg = getConfigManager().annealing_sim();
-    temperature_schedule_ = cfg.temperature_schedule;
+    // Hardcoded config values as a temporary workaround
+    temperature_schedule_ = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f};
     if (temperature_schedule_.empty()) temperature_schedule_.push_back(1.0f);
-    particles_.resize(static_cast<std::size_t>(cfg.particle_count));
+    particles_.resize(100); // Default particle count
     for (auto& p : particles_) {
         p.position = glm::linearRand(glm::vec3(-1.f), glm::vec3(1.f));
         p.velocity = glm::vec3(0.f);

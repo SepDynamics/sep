@@ -40,7 +40,7 @@ class SystemHooks;
 
 namespace memory {
 
-    using sep::memory::MemoryTierEnum;
+    using ::sep::memory::MemoryTierEnum;
 
     class MemoryTierManager
     {

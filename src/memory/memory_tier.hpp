@@ -23,7 +23,7 @@ namespace memory {
 
 using ::sep::CompressionMethod;
 using ::sep::SEPResult;
-using sep::memory::MemoryTierEnum;
+using ::sep::memory::MemoryTierEnum;
 using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 // Small epsilon for utilization metrics. Keeps a 1 KiB allocation visible in a

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "demo_manager.hpp"
+#include "pattern_processor.hpp"
 #include <memory>
 #include <vector>
 #include <glm/vec3.hpp>

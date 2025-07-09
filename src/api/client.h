@@ -117,7 +117,7 @@ namespace ollama {
 
 class OllamaClient {
 public:
-    explicit OllamaClient(const sep::config::OllamaConfig &config);
+    explicit OllamaClient(const ::sep::config::OllamaConfig &config);
     ~OllamaClient();
 
     // Prevent copying

@@ -35,6 +35,7 @@ option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" ON)
 option(SEP_BUILD_ENGINE "Build the main engine component" ON)
 option(SEP_BUILD_QUANTUM "Build quantum processing components" ON)
 option(SEP_BUILD_TESTS "Build test components" ON)
+option(SEP_BUILD_WORKBENCH "Build the interactive sep_workbench visualization" ON)
 
 if(SEP_MINIMAL)
     add_compile_definitions(SEP_MINIMAL=1)
@@ -138,6 +139,9 @@ find_package(fmt REQUIRED)
 find_package(http_parser REQUIRED)
 find_package(glm REQUIRED)
 find_package(spdlog)
+find_package(OpenGL REQUIRED)
+find_package(GLFW REQUIRED)
+find_package(GLEW REQUIRED)
 if(spdlog_FOUND)
     message(STATUS "Using system spdlog")
 else()
@@ -169,22 +173,8 @@ if(SEP_WITH_ALEMBIC)
     find_package(Alembic REQUIRED)
 endif()
 
-# Add subdirectories
-add_subdirectory(src/core)
-add_subdirectory(src/compat)
-add_subdirectory(src/manifold)
-add_subdirectory(src/memory)
-add_subdirectory(src/quantum)
-add_subdirectory(src/embeddings)
-add_subdirectory(src/utils)
-add_subdirectory(src/api)
-if(SEP_WITH_AUDIO)
-    add_subdirectory(src/audio)
-    set(SEP_HAS_AUDIO 1)
-endif()
-if(SEP_WITH_CYCLES)
-    add_subdirectory(src/blender)
-endif()
+# Add the src directory which contains all module subdirectories and workbench
+add_subdirectory(src)
 if(SEP_WITH_CYCLES)
     add_subdirectory(extern/cycles/third_party/cuew)
     add_subdirectory(extern/cycles/third_party/hipew)
@@ -204,34 +194,7 @@ endif()
 
 # Consolidated examples are built in a single workbench target
 
-# Main executable - DISABLED FOR BUILD DEBUGGING
-# Entry point wiring together optional modules
-add_executable(sep_engine src/server_main.cpp)
-set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
-target_include_directories(sep_engine PRIVATE
-    ${CMAKE_SOURCE_DIR}/src
-)
-# Configure server_main.cpp to conditionally include Cycles code
-# target_compile_definitions(sep_engine PRIVATE
-#     SEP_HAS_CYCLES=0
-#     SEP_HAS_BLENDER=0
-#     SEP_HAS_AUDIO=${SEP_HAS_AUDIO}
-# )
-#
-target_link_libraries(sep_engine PRIVATE
-    sep_api
-    sep_compat
-    $<$<BOOL:${SEP_WITH_AUDIO}>:sep_audio>
-    sep_quantum
-    sep_memory
-    sep_utils
-    sep_core
-    Threads::Threads
-    ${CURL_LIBRARIES}
-    ${CMAKE_DL_LIBS}
-    $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
-    $<$<TARGET_EXISTS:CUDA::cuda_driver>:CUDA::cuda_driver>
-)
+# Main executable is defined in src/CMakeLists.txt
 
 # Only link Cycles libraries if they exist and SEP_WITH_CYCLES is enabled
 
@@ -251,10 +214,10 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
 install(TARGETS
     sep_core
     sep_compat
-    sep_manifold
     sep_memory
     sep_quantum
     sep_embeddings
+    sep_manifold
     EXPORT sep-targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

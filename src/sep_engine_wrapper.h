@@ -103,9 +103,9 @@ namespace sep
     public:
         bool initialize() override { return true; }
         void shutdown() override {}
-        void setCudaEnabled(bool enabled) override {}
-        void setMetricsEnabled(bool enabled) override {}
-        void setLogLevel(int level) override {}
+        void setCudaEnabled(bool enabled) override { (void)enabled; }
+        void setMetricsEnabled(bool enabled) override { (void)enabled; }
+        void setLogLevel(int level) override { (void)level; }
     };
 
     class DemoCyclesRenderer final : public CyclesRenderer
@@ -116,22 +116,22 @@ namespace sep
         void present() override {}
         bool shouldClose() override { return false; }
 
-        void setWindowTitle(const std::string& title) override {}
-        void setWindowSize(int width, int height) override {}
-        void setFullscreen(bool fullscreen) override {}
-        void setVSync(bool vsync) override {}
-        void setSamples(int samples) override {}
-        void setDenoising(bool denoising) override {}
-        void setDevice(const std::string& device) override {}
+        void setWindowTitle(const std::string& title) override { (void)title; }
+        void setWindowSize(int width, int height) override { (void)width; (void)height; }
+        void setFullscreen(bool fullscreen) override { (void)fullscreen; }
+        void setVSync(bool vsync) override { (void)vsync; }
+        void setSamples(int samples) override { (void)samples; }
+        void setDenoising(bool denoising) override { (void)denoising; }
+        void setDevice(const std::string& device) override { (void)device; }
 
         bool hasKeyEvent() override { return false; }
         unsigned char getLastKey() override { return 0; }
         bool hasMouseEvent() override { return false; }
         void getLastMouseEvent(int& x, int& y, int& button) override { x = y = button = 0; }
 
-        void setColorMode(const std::string& mode) override {}
-        void setEmissionMode(const std::string& mode) override {}
-        void renderPatternState(const std::vector<glm::vec3>& patterns) override {}
+        void setColorMode(const std::string& mode) override { (void)mode; }
+        void setEmissionMode(const std::string& mode) override { (void)mode; }
+        void renderPatternState(const std::vector<glm::vec3>& patterns) override { (void)patterns; }
     };
 
     // Factory functions
@@ -150,6 +150,7 @@ namespace sep
     {
         inline void applySpike(Pattern& pattern, float input, float decay, float threshold)
         {
+            (void)threshold;
             pattern.quantum_state.coherence =
                 std::min(1.0f, pattern.quantum_state.coherence + input - decay);
         }

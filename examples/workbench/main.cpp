@@ -1,25 +1,54 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "window.h"
+#include "demos/demo_manager.hpp"
+#include "demos/genesis_pattern.hpp"
+#include "demos/annealing_demo.hpp"
+#include "demos/cosmo_demo.hpp"
+#include "demos/flocking_demo.hpp"
+#include "demos/neural_demo.hpp"
+#include "demos/drug_discovery_demo.hpp"
+#include "demos/digital_physics_demo.hpp"
+#include "demos/memory_garden.hpp"
 
 int main() {
-    if (!glfwInit()) {
-        return -1;
-    }
+    auto& manager = sep::workbench::DemoManager::instance();
 
-    sep::workbench::Window window(800, 600, "SEP Example");
-    window.makeContextCurrent();
+    manager.registerDemo("genesis", []() {
+        return std::make_unique<sep::workbench::GenesisPatternDemo>();
+    });
 
-    glewExperimental = GL_TRUE;
-    if (glewInit() != GLEW_OK) {
-        return -1;
-    }
+    manager.registerDemo("annealing", []() {
+        return std::make_unique<sep::workbench::AnnealingDemo>();
+    });
 
-    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
-    while (!window.shouldClose()) {
-        glfwPollEvents();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        window.swapBuffers();
-    }
+    manager.registerDemo("cosmos", []() {
+        return std::make_unique<sep::workbench::CosmoDemo>();
+    });
+
+    manager.registerDemo("flocking", []() {
+        return std::make_unique<sep::workbench::FlockingDemo>();
+    });
+
+    manager.registerDemo("neural", []() {
+        return std::make_unique<sep::workbench::NeuralDemo>();
+    });
+
+    manager.registerDemo("drug_discovery", []() {
+        return std::make_unique<sep::workbench::DrugDiscoveryDemo>();
+    });
+
+    manager.registerDemo("digital_physics", []() {
+        return std::make_unique<sep::workbench::DigitalPhysicsDemo>();
+    });
+
+    manager.registerDemo("memory_garden", []() {
+        return std::make_unique<sep::workbench::MemoryGardenDemo>();
+    });
+
+    manager.switchToDemo("genesis");
+
+    // Placeholder for the application loop
+    // In the real application this would call manager.update(dt) and manager.render()
     return 0;
 }

@@ -7,7 +7,6 @@ Based on all the files I've examined, I now have a good understanding of how the
    - Visualizes these patterns
 
 2. In demo mode (SEP_WORKBENCH_DEMO):
-   - The AudioCapture and AudioPipeline classes are simplified mock implementations
    - AudioCapture has a setCallback method that takes a function to process audio data
    - AudioPipeline has a processAudioFrame method that takes audio samples and a getPatterns method that returns pattern vectors
 

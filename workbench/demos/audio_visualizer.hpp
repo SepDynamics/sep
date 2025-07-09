@@ -1,14 +1,18 @@
 #pragma once
 
-#include <glm/vec3.hpp>
+#include "demo_manager.hpp"
 #include <memory>
 #include <vector>
-
-#include "demo_manager.hpp"
+#include <glm/vec3.hpp>
 // Using wrapper header instead of direct includes
 
 namespace sep {
 namespace workbench {
+
+namespace audio {
+class AudioCapture;
+class AudioPipeline;
+}
 
 class AudioVisualizerDemo : public Demo {
 public:
@@ -20,8 +24,8 @@ public:
     void handleMouse(int x, int y, int button) override;
 
 private:
-    std::unique_ptr<sep::audio::AudioCapture> capture_;
-    std::unique_ptr<sep::audio::AudioPipeline> pipeline_;
+    std::unique_ptr<audio::AudioCapture> capture_;
+    std::unique_ptr<audio::AudioPipeline> pipeline_;
     std::vector<glm::vec3> latest_patterns_;
     std::vector<glm::vec3> latest_visual_patterns_;
 

@@ -1,223 +1,93 @@
-### **Outline: Fixing the Goddamn Memory Manager**
 
-This isn't about features. This is about making the foundation solid so you can build the valuable shit on top of it.
+### **New Plan: From Zero to Visuals**
 
-#### **Phase 1: Diagnose the Core Problem**
+This plan ignores the old `TODO.md` and focuses on getting a result, step-by-step.
 
-The test output tells us two things:
-1.  **Utilization is wrong:** When a tier should be empty (`0.0f`), it's reporting a tiny value (`0.000244140625`). This is likely a floating-point precision error or a bookkeeping bug in `deallocate`.
-2.  **Promotion is failing:** The `promoteBlock` and `demoteBlock` operations are returning `nullptr` because the destination tier is failing to allocate space for the incoming block.
+#### **Phase 1: Get a Goddamn Window on the Screen (The "It's Alive!" Phase)**
 
-These are connected. The promotion fails, so the source block is never deallocated, leaving the original tier with that tiny residual utilization.
+Forget the engine, forget ImGui, forget everything else. The first step is to prove you can draw a triangle.
 
-#### **Phase 2: The Fix - A Step-by-Step Takedown**
+1.  **Create a Minimal `workbench/main.cpp`:**
+    *   Create a dead-simple `main` function.
+    *   Include `<iostream>` and print "Workbench starting..."
 
-We'll attack this methodically. Open these two files, you'll be working in them:
--   `src/memory/memory_tier_manager.cpp`
--   `src/memory/memory_tier.cpp`
+2.  **Integrate a Windowing Library (GLFW):**
+    *   Your report says you've already cloned GLFW into `extern/`. Good.
+    *   **Create a `Window` class** (`src/workbench/window.h` and `.cpp`). This wrapper will handle creating a GLFW window and an OpenGL context. It should have methods like `init()`, `shouldClose()`, `swapBuffers()`, `pollEvents()`.
 
-**Step 1: Fix the Utilization Calculation (The `0.000244...` bug)**
+3.  **Update `workbench/CMakeLists.txt`:**
+    *   Make sure it finds and links GLFW and OpenGL.
+    *   Make sure it builds the `sep_workbench` executable from `main.cpp` and `window.cpp`.
 
-The root cause is that `used_space_` isn't getting reset to a perfect zero. We'll make the calculation more robust and clamp small values.
+4.  **Make the Window Do Something:**
+    *   In your new `main.cpp`, create an instance of your `Window`.
+    *   Create a main loop: `while (!window.shouldClose()) { ... }`.
+    *   Inside the loop, clear the screen to a color (`glClearColor`, `glClear`).
+    *   Call `window.swapBuffers()` and `window.pollEvents()`.
+    *   **Goal:** Compile and run `sep_workbench`. A colored, empty window should appear. If you get this, Phase 1 is a success.
 
-1.  **In `src/memory/memory_tier_manager.cpp`**, find `getTierUtilization`. Replace it with this more robust version that checks the raw `used_space_` and clamps tiny floating point values to zero.
+#### **Phase 2: Add a User Interface (The "Control Panel" Phase)**
 
-    ```cpp
-    // In MemoryTierManager::getTierUtilization
-    float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const {
-        const MemoryTier* t = const_cast<MemoryTierManager*>(this)->getTier(tier);
-        if (!t) return 0.0f;
+Now that you have a canvas, you need knobs and dials.
 
-        // If the raw used space is effectively zero, return 0.0f to avoid float precision issues.
-        if (t->getUsedSpace() <= 1) {
-            return 0.0f;
-        }
+1.  **Integrate ImGui:**
+    *   You've also cloned ImGui into `extern/`.
+    *   Update `workbench/CMakeLists.txt` to include the ImGui source files (`imgui.cpp`, `imgui_draw.cpp`, etc.) and the GLFW/OpenGL3 backends.
+    *   Make sure `sep_workbench` links against these new sources.
 
-        float util = t->calculateUtilization();
+2.  **Create a `UIManager` Class:**
+    *   This class will wrap all ImGui setup and rendering logic.
+    *   Methods: `init(window_handle)`, `beginFrame()`, `render()`, `shutdown()`.
 
-        // Clamp very small values to zero. This handles rounding errors.
-        if (util <= kUtilizationEpsilon) {
-            return 0.0f;
-        }
+3.  **Hook ImGui into the Main Loop:**
+    *   In `main.cpp`, after creating the `Window`, create and `init` the `UIManager`.
+    *   In the main loop, call `uiManager.beginFrame()` before your `glClear`.
+    *   After clearing the screen, create a simple test window: `ImGui::Begin("Controls"); ImGui::Text("Hello, World"); ImGui::End();`
+    *   Before `swapBuffers`, call `uiManager.render()`.
+    *   **Goal:** Compile and run. Your window should now have a basic ImGui panel inside it.
 
-        return std::clamp(util, 0.0f, 1.0f);
-    }
-    ```
+#### **Phase 3: Connect the Fucking Engine (The "Heart Transplant" Phase)**
 
-2.  **In `src/memory/memory_tier.cpp`**, find `calculateUtilization` and make sure it's also robust against floating point weirdness.
+The window and UI are running. Now, let's give them something to control.
 
-    ```cpp
-    // In MemoryTier::calculateUtilization
-    float MemoryTier::calculateUtilization() const {
-        if (config_.size == 0) return 0.0f;
+1.  **Link the Core Libraries:**
+    *   Update `workbench/CMakeLists.txt` to `target_link_libraries` against `sep_core`, `sep_memory`, and `sep_quantum`.
 
-        // Recalculate directly from blocks for accuracy in tests
-        std::size_t current_used_space = 0;
-        for (const auto& block : blocks_) {
-            if (block.allocated) {
-                current_used_space += block.size;
-            }
-        }
+2.  **Instantiate and Run the Engine:**
+    *   In `main.cpp`, create an instance of your main engine class (`sep::api::SepEngine` or whatever you use to manage the subsystems).
+    *   Initialize the engine.
+    *   Create a simple struct or class to hold the state of your "Genesis Pattern" demo (e.g., a `std::vector<sep::quantum::Pattern>`).
 
-        if (current_used_space == 0) return 0.0f;
+3.  **Create an Engine "Tick":**
+    *   In your ImGui panel, add a button: `if (ImGui::Button("Tick Engine")) { ... }`.
+    *   When clicked, call a core function from your engine (e.g., `processAll()` or `evolvePatterns()`).
+    *   Take the resulting patterns and store them in your demo state struct.
+    *   In another ImGui window, display some basic metrics from the result: number of patterns, average coherence, etc.
+    *   **Goal:** Prove that clicking a UI button can trigger a computation in your C++ engine and display the result in the UI.
 
-        float util = static_cast<float>(current_used_space) / static_cast<float>(config_.size);
-        
-        // Final check for floating point noise near zero
-        return (util < kUtilizationEpsilon) ? 0.0f : util;
-    }
-    ```
+#### **Phase 4: Implement the Visualization (The "Payoff" Phase)**
 
-**Step 2: Fix Block Promotion (The `nullptr` bug)**
+This is where you translate the logic from your Python prototypes into C++ and OpenGL.
 
-This is the main event. Promotion fails because the destination tier doesn't have space. We need to make the `promoteToTier` function more aggressive about *making* space.
+1.  **Create a `Renderer` Class:**
+    *   This class (`src/workbench/renderer.h` and `.cpp`) will manage OpenGL shaders, VBOs, and VAOs.
+    *   Methods: `init()`, `render(const std::vector<Pattern>& patterns, Camera& camera)`.
 
-1.  **In `src/memory/memory_tier_manager.cpp`**, replace your existing `promoteToTier` function with this one. It's smarter about resizing and defragmenting.
+2.  **Re-implement Python Logic in C++:**
+    *   Look at `plottingprime-v2.py`. It has a function `generate_full_path` that maps numbers to 3D coordinates.
+    *   Create a C++ function that does the same thing: it takes a `sep::quantum::Pattern` and returns a `glm::vec3` representing its position in your visualization space. The logic should be the same as your Python script (prime factors determining coordinates).
 
-    ```cpp
-    // In MemoryTierManager::promoteToTier
-    SEPResult MemoryTierManager::promoteToTier(MemoryBlock* block, MemoryTierEnum target_tier, MemoryBlock*& out_block) {
-        out_block = nullptr;
-        if (!block || !block->allocated) {
-            return SEPResult::INVALID_ARGUMENT;
-        }
+3.  **Render the Data:**
+    *   In your main loop, after the engine "tick", pass the resulting vector of patterns to a new `updateGeometry` method in your `Renderer`.
+    *   `updateGeometry` will iterate through the patterns, calculate the `glm::vec3` for each, and update a VBO with these coordinates.
+    *   In the `Renderer::render` method, bind your shader, bind the VAO, and call `glDrawArrays` to draw the points.
+    *   **Goal:** You should see a static point cloud on the screen representing the initial state of your patterns.
 
-        MemoryTier* src_tier = getTier(block->tier);
-        MemoryTier* dst_tier = getTier(target_tier);
-        if (!src_tier || !dst_tier) {
-            return SEPResult::INVALID_ARGUMENT;
-        }
+4.  **Make it Interactive and Animated:**
+    *   Add a simple camera class to handle pan/zoom/rotate.
+    *   Hook up mouse input from your `Window` class to the camera.
+    *   Pass the camera's view and projection matrices to your renderer's shader as uniforms.
+    *   Change the "Tick Engine" button to a checkbox for "Auto-Evolve". When checked, call the engine tick function every frame in the main loop.
+    *   **Final Goal:** You should now have a real-time, interactive 3D visualization of your SEP engine's state, driven by the logic you prototyped in Python, all running in a native C++ application.
 
-        // Attempt to allocate in the destination tier.
-        out_block = dst_tier->allocate(block->size);
-
-        // If allocation fails, try to make space.
-        if (!out_block) {
-            // First, try defragmenting the destination tier.
-            dst_tier->defragment();
-            out_block = dst_tier->allocate(block->size);
-        }
-
-        // If it still fails, the tier is genuinely full. Resize it.
-        if (!out_block) {
-            std::size_t required_size = dst_tier->getSize() + block->size;
-            // Grow by 2x or what's needed, whichever is larger, to avoid frequent reallocations.
-            std::size_t new_size = std::max(required_size, dst_tier->getSize() * 2);
-            if (dst_tier->resize(new_size)) {
-                out_block = dst_tier->allocate(block->size);
-            }
-        }
-        
-        // If we still don't have a block after all that, we're out of memory.
-        if (!out_block) {
-            return SEPResult::ALLOCATION_FAILED;
-        }
-
-        // We have a block! Now, move the data and metadata.
-        if (dst_tier->moveData(out_block, block)) {
-            // Deallocate the original block *after* a successful move.
-            src_tier->deallocate(block);
-        } else {
-            // If the move fails, we need to clean up the allocated block in the destination.
-            dst_tier->deallocate(out_block);
-            out_block = nullptr;
-            return SEPResult::PROCESSING_ERROR;
-        }
-
-        // The pointers have changed. Rebuild the lookup map to stay consistent.
-        rebuildLookup();
-
-        return SEPResult::SUCCESS;
-    }
-    ```
-
-**Step 3: Fix Defragmentation Logic**
-
-Your `defragment` function calls `updateBlockMetrics`, which can trigger *another* promotion. This can cause chaos. We need to simplify it to *only* defragment and compact memory. The manager will handle re-evaluating blocks afterwards.
-
-1.  **In `src/memory/memory_tier.cpp`**, replace your `defragment` function with this simplified version.
-
-    ```cpp
-    // In MemoryTier::defragment
-    ::sep::SEPResult MemoryTier::defragment() {
-        std::vector<MemoryBlock*> allocated_blocks;
-        for (auto& block : blocks_) {
-            if (block.allocated) {
-                allocated_blocks.push_back(&block);
-            }
-        }
-
-        // Sort by pointer address to maintain relative order during compaction.
-        std::sort(allocated_blocks.begin(), allocated_blocks.end(), 
-                  [](const MemoryBlock* a, const MemoryBlock* b){ return a->ptr < b->ptr; });
-        
-        std::size_t current_offset = 0;
-        for (MemoryBlock* block : allocated_blocks) {
-            void* new_location = static_cast<char*>(memory_pool_) + current_offset;
-            if (block->ptr != new_location) {
-                std::memmove(new_location, block->ptr, block->size);
-                block->ptr = new_location;
-                block->offset = current_offset;
-            }
-            current_offset += block->size;
-        }
-
-        // Rebuild the block list: one giant free block after all allocated ones.
-        blocks_.erase(std::remove_if(blocks_.begin(), blocks_.end(), [](const MemoryBlock& b) { return !b.allocated; }), blocks_.end());
-        if (current_offset < config_.size) {
-            blocks_.emplace_back(static_cast<char*>(memory_pool_) + current_offset, config_.size - current_offset, current_offset, config_.type);
-        }
-
-        // IMPORTANT: Let the MemoryTierManager handle the logic of re-evaluating blocks.
-        // This function should ONLY defragment.
-
-        return ::sep::SEPResult::SUCCESS;
-    }
-    ```
-
-2.  **In `src/memory/memory_tier_manager.cpp`**, find `optimizeBlocks` and make sure it calls `rebuildLookup` at the end to keep pointers consistent.
-
-    ```cpp
-    // In MemoryTierManager::optimizeBlocks
-    void MemoryTierManager::optimizeBlocks() {
-      // ... (existing loop to call updateBlockMetrics)
-      auto process_tier = [this](MemoryTier *tier) {
-          if (!tier) return;
-          // Create a copy of pointers to avoid iterator invalidation
-          std::vector<MemoryBlock*> blocks_to_process;
-          for(auto& blk : tier->getBlocks()) {
-              if (blk.allocated) {
-                  blocks_to_process.push_back(&blk);
-              }
-          }
-          for (auto* blk_ptr : blocks_to_process) {
-              // The block might have been moved, so resolve it again
-              MemoryBlock* current_block = findBlockByPtr(blk_ptr->ptr);
-              if (current_block && current_block->allocated) {
-                  updateBlockMetrics(current_block, current_block->coherence, current_block->stability,
-                                     current_block->generation, current_block->weight);
-              }
-          }
-      };
-
-      process_tier(stm_.get());
-      process_tier(mtm_.get());
-      process_tier(ltm_.get());
-      
-      // FINALLY, rebuild the lookup map to reflect all changes.
-      rebuildLookup();
-    }
-    ```
-
-#### **Phase 3: Rebuild and Verify**
-
-Now, run the build and test command again. These fixes directly target the logic that was causing your tests to fail.
-
-```bash
-cd /sep/sep_build/build
-cmake ..
-make memory_manager_tests
-./memory_manager_tests
-```
-
-This should clear the `PromotionAndDemotion`, `DefragmentationTriggersPromotionDemotion`, and `OptimizeBlocksPromotionDemotion` failures. Once that foundation is solid, you can start building the valuable shit on top of it without fighting the memory manager. Let me know what the output is.
+---

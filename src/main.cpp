@@ -1,266 +1,205 @@
-#define SEP_WORKBENCH_DEMO
-#include <cstdio>
-#include <memory>
-#include <stdexcept>
-
-#include "config.hpp"
+#include "window.h"
 #include "demo_manager.hpp"
-#include "demos/annealing_demo.hpp"
-#include "demos/audio_visualizer.hpp"
-#include "demos/cosmo_demo.hpp"
-#include "demos/cosmo_sim.hpp"
-#include "demos/digital_physics_demo.hpp"
-#include "demos/drug_discovery_demo.hpp"
-#include "demos/flocking_demo.hpp"
 #include "demos/genesis_pattern.hpp"
-#include "demos/memory_garden.hpp"
+#include "demos/annealing_demo.hpp"
+#include "demos/cosmo_demo.hpp"
+#include "demos/flocking_demo.hpp"
 #include "demos/neural_demo.hpp"
+#include "demos/drug_discovery_demo.hpp"
+#include "demos/digital_physics_demo.hpp"
+#include "demos/memory_garden.hpp"
 #include "sep_engine_wrapper.h"
+#include "config.hpp"
 
-using sep::workbench::Demo;
-using sep::workbench::GenesisPatternDemo;
-using sep::workbench::AudioVisualizerDemo;
-using sep::workbench::MemoryGardenDemo;
-using sep::workbench::CosmoDemo;
-using sep::workbench::CosmoSim;
-using sep::workbench::DrugDiscoveryDemo;
-using sep::workbench::FlockingDemo;
-using sep::workbench::NeuralDemo;
-using sep::workbench::DigitalPhysicsDemo;
-using sep::workbench::AnnealingDemo;
+#include <memory>
+#include <iostream>
+#include <chrono>
+#include <thread>
 
-using namespace sep;
-using namespace sep::workbench;
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-// Forward declarations
-void initializeEngine();
-void initializeRenderer();
-void registerDemos();
-void mainLoop();
-void cleanup();
+// Callback function prototypes
+void error_callback(int error, const char* description);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 
-// Global state
-std::unique_ptr<Engine> g_engine;
-std::unique_ptr<CyclesRenderer> g_renderer;
+// Global references for callbacks
+sep::workbench::DemoManager* g_demo_manager = nullptr;
+int g_mouse_x = 0;
+int g_mouse_y = 0;
+int g_mouse_button = -1;
 
-int main() {
-    try {
-        initializeEngine();
-        initializeRenderer();
-        registerDemos();
-        mainLoop();
-        cleanup();
-        return 0;
+int main(int argc, char* argv[]) {
+    // 1. Initialize GLFW
+    if (!glfwInit()) {
+        std::cerr << "Failed to initialize GLFW" << std::endl;
+        return -1;
     }
-    catch (const std::exception& e) {
-        fprintf(stderr, "Fatal error: %s\n", e.what());
-        return 1;
-    }
-}
-
-void initializeEngine() {
-    const auto& config = workbench::Config::getInstance();
-    const auto& engine_config = config.engine();
-
-    g_engine = std::make_unique<Engine>();
-    g_engine->setCudaEnabled(engine_config.cuda_enabled);
-    g_engine->setMetricsEnabled(engine_config.metrics_enabled);
-    // Convert string log level to int
-    int log_level = 0;
-    if (engine_config.log_level == "debug") log_level = 0;
-    else if (engine_config.log_level == "info") log_level = 1;
-    else if (engine_config.log_level == "warning") log_level = 2;
-    else if (engine_config.log_level == "error") log_level = 3;
-    g_engine->setLogLevel(log_level);
-
-    if (!g_engine->initialize()) {
-        throw std::runtime_error("Failed to initialize SEP engine");
-    }
-}
-
-void initializeRenderer() {
-    // Load configuration
-    auto& config = workbench::Config::getInstance();
-    if (!config.load("config.json")) {
-        throw std::runtime_error("Failed to load configuration");
-    }
-
-    // Initialize renderer with config settings
-    g_renderer = std::make_unique<CyclesRenderer>();
     
-    const auto& window = config.window();
-    g_renderer->setWindowTitle(window.title);
-    g_renderer->setWindowSize(window.width, window.height);
-    g_renderer->setFullscreen(window.fullscreen);
-    g_renderer->setVSync(window.vsync);
-
-    const auto& renderer_cfg = config.renderer();
-    g_renderer->setSamples(renderer_cfg.cycles.samples);
-    g_renderer->setDenoising(renderer_cfg.cycles.denoising);
-    g_renderer->setDevice(renderer_cfg.cycles.device);
-
-    if (!g_renderer->initialize()) {
-        throw std::runtime_error("Failed to initialize Cycles renderer");
+    glfwSetErrorCallback(error_callback);
+    
+    // Set up OpenGL context
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    
+    // 2. Create Window
+    auto window = std::make_unique<sep::workbench::Window>(1280, 720, "SEP Workbench");
+    if (!window->initialize()) {
+        std::cerr << "Failed to initialize window" << std::endl;
+        glfwTerminate();
+        return -1;
     }
-}
-
-void registerDemos() {
-    auto& demo_manager = DemoManager::getInstance();
-    demo_manager.initialize(g_engine.get(), g_renderer.get());
-
-    // Register available demos with engine and renderer access
-    demo_manager.registerDemo("genesis", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<GenesisPatternDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("audio", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<AudioVisualizerDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("memory", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<MemoryGardenDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("cosmo", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<CosmoDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("cosmo_sim", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<CosmoSim>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("drug_discovery", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<DrugDiscoveryDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("flocking", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<FlockingDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("neural", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<NeuralDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("digital_physics", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<DigitalPhysicsDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-    demo_manager.registerDemo("annealing", [eng=g_engine.get(), rend=g_renderer.get()]() {
-        auto demo = std::make_unique<AnnealingDemo>();
-        demo->initialize(eng, rend);
-        return demo;
-    });
-
-    // Start with Genesis Pattern demo
-    if (!demo_manager.switchToDemo("genesis")) {
-        throw std::runtime_error("Failed to start Genesis Pattern demo");
+    
+    window->makeContextCurrent();
+    
+    // Initialize GLEW
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK) {
+        std::cerr << "Failed to initialize GLEW" << std::endl;
+        return -1;
     }
-}
-
-void mainLoop() {
-    auto& demo_manager = DemoManager::getInstance();
-    float dt = 1.0f / 60.0f; // Target 60 FPS
-
-    while (true) {
-        // Process window events and input
-        if (g_renderer->shouldClose()) {
-            break;
-        }
-
-        // Handle keyboard input
-        if (g_renderer->hasKeyEvent()) {
-            unsigned char key = g_renderer->getLastKey();
-            
-            // Demo switcher - intercept number keys
-            bool demo_switched = false;
-            switch (key) {
-                case '1':
-                    demo_switched = demo_manager.switchToDemo("genesis");
-                    break;
-                case '2':
-                    demo_switched = demo_manager.switchToDemo("audio");
-                    break;
-                case '3':
-                    demo_switched = demo_manager.switchToDemo("memory");
-                    break;
-                case '4':
-                    demo_switched = demo_manager.switchToDemo("cosmo");
-                    break;
-                case '5':
-                    demo_switched = demo_manager.switchToDemo("cosmo_sim");
-                    break;
-                case '6':
-                    demo_switched = demo_manager.switchToDemo("drug_discovery");
-                    break;
-                case '7':
-                    demo_switched = demo_manager.switchToDemo("flocking");
-                    break;
-                case '8':
-                    demo_switched = demo_manager.switchToDemo("neural");
-                    break;
-                case '9':
-                    demo_switched = demo_manager.switchToDemo("digital_physics");
-                    break;
-                case '0':
-                    demo_switched = demo_manager.switchToDemo("annealing");
-                    break;
-                case 'h':
-                case 'H':
-                    // Print help
-                    printf("\n=== Demo Switcher ===\n");
-                    printf("1 - Genesis Pattern\n");
-                    printf("2 - Audio Visualizer\n");
-                    printf("3 - Memory Garden\n");
-                    printf("4 - Cosmo Demo\n");
-                    printf("5 - Cosmo Sim\n");
-                    printf("6 - Drug Discovery\n");
-                    printf("7 - Flocking\n");
-                    printf("8 - Neural\n");
-                    printf("9 - Digital Physics\n");
-                    printf("0 - Annealing\n");
-                    printf("H - Show this help\n");
-                    printf("Current demo: %s\n", demo_manager.getCurrentDemo().c_str());
-                    printf("===================\n\n");
-                    break;
-            }
-            
-            // If no demo switch happened, pass key to current demo
-            if (!demo_switched && key != 'h' && key != 'H') {
-                demo_manager.handleKeyboard(key);
-            } else if (demo_switched) {
-                printf("Switched to %s demo\n", demo_manager.getCurrentDemo().c_str());
-            }
-        }
-
-        // Handle mouse input
-        if (g_renderer->hasMouseEvent()) {
-            int x, y, button;
-            g_renderer->getLastMouseEvent(x, y, button);
-            demo_manager.handleMouse(x, y, button);
-        }
-
-        // Update and render current demo
+    
+    // 3. Initialize the SEP Engine
+    sep::config::EngineConfig engine_config;
+    engine_config.memory_limit_mb = 1024;
+    engine_config.use_gpu = true;
+    engine_config.log_level = "info";
+    
+    auto engine = std::make_unique<sep::EngineWrapper>(engine_config);
+    if (!engine->initialize()) {
+        std::cerr << "Failed to initialize SEP Engine" << std::endl;
+        return -1;
+    }
+    
+    // Initialize renderer
+    sep::CyclesRenderer* renderer = nullptr;
+    #ifdef SEP_HAS_CYCLES
+    renderer = new sep::CyclesRenderer();
+    #endif
+    
+    // 4. Initialize the DemoManager
+    sep::workbench::DemoManager demo_manager;
+    demo_manager.initialize(engine.get(), renderer);
+    g_demo_manager = &demo_manager;
+    
+    // Set up input callbacks
+    GLFWwindow* glfw_window = window->getGLFWWindow();
+    glfwSetKeyCallback(glfw_window, key_callback);
+    glfwSetMouseButtonCallback(glfw_window, mouse_button_callback);
+    glfwSetCursorPosCallback(glfw_window, cursor_position_callback);
+    
+    // 5. Register all demo classes
+    demo_manager.registerDemo("genesis", []() {
+        return std::make_unique<sep::workbench::GenesisPatternDemo>();
+    });
+    
+    demo_manager.registerDemo("annealing", []() {
+        return std::make_unique<sep::workbench::AnnealingDemo>();
+    });
+    
+    demo_manager.registerDemo("cosmos", []() {
+        return std::make_unique<sep::workbench::CosmoDemo>();
+    });
+    
+    demo_manager.registerDemo("flocking", []() {
+        return std::make_unique<sep::workbench::FlockingDemo>();
+    });
+    
+    demo_manager.registerDemo("neural", []() {
+        return std::make_unique<sep::workbench::NeuralDemo>();
+    });
+    
+    demo_manager.registerDemo("drug_discovery", []() {
+        return std::make_unique<sep::workbench::DrugDiscoveryDemo>();
+    });
+    
+    demo_manager.registerDemo("digital_physics", []() {
+        return std::make_unique<sep::workbench::DigitalPhysicsDemo>();
+    });
+    
+    demo_manager.registerDemo("memory_garden", []() {
+        return std::make_unique<sep::workbench::MemoryGardenDemo>();
+    });
+    
+    // Start with Genesis Pattern demo by default
+    demo_manager.switchToDemo("genesis");
+    
+    // 6. Set up the main application loop
+    double last_time = glfwGetTime();
+    
+    while (!window->shouldClose()) {
+        // Calculate delta time
+        double current_time = glfwGetTime();
+        float dt = static_cast<float>(current_time - last_time);
+        last_time = current_time;
+        
+        // Begin frame
+        window->beginFrame();
+        
+        // 7. Update and render the current demo
         demo_manager.update(dt);
         demo_manager.render();
+        
+        // End frame
+        window->endFrame();
+        
+        // Poll events
+        window->pollEvents();
+        
+        // Cap framerate to ~60 FPS
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    }
+    
+    // Clean up
+    demo_manager.cleanup();
+    window->cleanup();
+    
+    if (renderer) {
+        delete renderer;
+    }
+    
+    glfwTerminate();
+    return 0;
+}
 
-        // Swap buffers and poll events
-        g_renderer->present();
+// Callback implementations
+void error_callback(int error, const char* description) {
+    std::cerr << "GLFW Error " << error << ": " << description << std::endl;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+        if (key == GLFW_KEY_ESCAPE) {
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+            return;
+        }
+        
+        if (g_demo_manager) {
+            g_demo_manager->handleKeyboard(static_cast<unsigned char>(key));
+        }
     }
 }
 
-void cleanup() {
-    auto& demo_manager = DemoManager::getInstance();
-    demo_manager.cleanup();
-    g_renderer.reset();
-    g_engine.reset();
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    if (action == GLFW_PRESS) {
+        g_mouse_button = button;
+        
+        if (g_demo_manager) {
+            g_demo_manager->handleMouse(g_mouse_x, g_mouse_y, button);
+        }
+    } else if (action == GLFW_RELEASE) {
+        g_mouse_button = -1;
+    }
 }
 
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
+    g_mouse_x = static_cast<int>(xpos);
+    g_mouse_y = static_cast<int>(ypos);
+    
+    if (g_mouse_button >= 0 && g_demo_manager) {
+        g_demo_manager->handleMouse(g_mouse_x, g_mouse_y, g_mouse_button);
+    }
+}

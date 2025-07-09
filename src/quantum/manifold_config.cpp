@@ -39,7 +39,19 @@ namespace sep::quantum::manifold {
     .keep_alive_timeout_ms = 15000,
     .log_level = "info",
     .enable_metrics = true,
-    .max_batch_size = 1024
+    .max_batch_size = 1024,
+    .response_modulation = {
+        .enabled = true,
+        .coherence_threshold = 0.7f,
+        .simplify_low_coherence = true,
+        .max_detail_level = 3
+    },
+    .ollama = {
+        .host = "localhost",
+        .port = 11434,
+        .model = "llama2",
+        .enabled = false
+    }
 };
 
 } // namespace sep::quantum::manifold

@@ -41,7 +41,7 @@ namespace crow {
         tcp::socket& raw_socket() { return socket_; }
         tcp::socket& socket() { return socket_; }
         tcp::endpoint remote_endpoint() {
-            asio::error_code ec;
+            asio_stub::error_code ec;
             return socket_.remote_endpoint(ec);
         }
         bool is_open() { return socket_.is_open(); }
@@ -51,10 +51,10 @@ namespace crow {
             error_t ec = 0;
             if (!is_open()) {
                 // Use a simple integer error code since error_t is an integer
-                ec = ENOTCONN;
+                ec = asio_stub::error::not_connected;
                 return ec;
             }
-            asio::error_code asio_ec;
+            asio_stub::error_code asio_ec;
             socket_.close(asio_ec);
             ec = asio_ec ? asio_ec.value() : 0;
             return ec;

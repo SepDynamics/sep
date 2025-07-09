@@ -1,11 +1,8 @@
 #pragma once
 
-#ifdef CROW_DISABLE_RTTI
-#include "crow/crow_isolation.h"
-#endif
-
 #include "api/rate_limiter.h"
 #include "api/types.h"
+#include "crow/crow_isolation.h"
 
 namespace sep::api {
 

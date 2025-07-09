@@ -1,28 +1,30 @@
 #pragma once
 
-// Math constants are already defined in crow.h
-#ifdef CROW_DISABLE_RTTI
-#include "crow/crow_isolation.h"
-#endif
-
-#include "api/rate_limit_middleware.h"
-#include "api/types.h"
-#include "api/auth_middleware.h"
-#include "api/ollama_client.h"
-#include "core/types.h"
+// Standard includes
 #include <atomic>
 #include <memory>
 #include <mutex>
 #include <string>
-
-#include <nlohmann/json.hpp>
 #include <thread>
+
+// Third-party includes
+#include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
-// Forward declarations for Crow request/response and application
+// API includes
+#include "api/auth_middleware.h"
+#include "api/ollama_client.h"
+#include "api/rate_limit_middleware.h"
+#include "api/types.h"
+#include "core/types.h"
+
+// External forward declarations
 namespace crow {
+    // Forward declare only what we need in the header
     struct request;
     struct response;
+    
+    // Forward declare the template class
     template <typename... Middlewares>
     class Crow;
 }  // namespace crow

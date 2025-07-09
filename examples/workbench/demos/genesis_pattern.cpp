@@ -3,6 +3,7 @@
 #include "blender/cycles_renderer.hpp"
 #include "quantum/pattern_processor.hpp"
 #include "memory/quantum_coherence_manager.h"
+#include "config.hpp"
 
 namespace sep {
 namespace workbench {

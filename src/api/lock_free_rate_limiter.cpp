@@ -31,16 +31,18 @@ LockFreeRateLimiter::LockFreeRateLimiter(unsigned int requests_per_minute)
 
 LockFreeRateLimiter::~LockFreeRateLimiter() = default;
 
-bool LockFreeRateLimiter::checkRateLimit(const IRequest &req) {
-  if (!enabled_) {
-    return true;
-  }
+bool LockFreeRateLimiter::checkRateLimit(const request &req)
+{
+    if (!enabled_)
+    {
+        return true;
+    }
 
-  const auto now = std::chrono::steady_clock::now();
-  const auto client_id = getClientId(req);
-  const auto priority = getPriorityFromRequest(req);
+    const auto now = std::chrono::steady_clock::now();
+    const auto client_id = getClientId(req);
+    const auto priority = getPriorityFromRequest(req);
 
-  // Get or create client data
+    // Get or create client data
 #ifdef SEP_USE_TBB
   ClientMap::accessor accessor;
   if (clients_.insert(accessor, client_id)) {
@@ -53,59 +55,60 @@ bool LockFreeRateLimiter::checkRateLimit(const IRequest &req) {
   if (!ptr) {
     ptr = std::make_unique<ClientData>(); // Use std::make_unique
   }
-  ClientData &ref = *ptr;
+  ClientData &std::ref = *ptr;
   lock.unlock();
-  return tryInsertRequest(ref, priority, now);
+  return tryInsertRequest(std::ref, priority, now);
 #endif
 }
 
-bool LockFreeRateLimiter::tryInsertRequest(
-    ClientData &client, Priority priority,
-    std::chrono::steady_clock::time_point now) {
-  auto &window = client.window;
-  const auto effective_limit = getAdjustedLimit(priority);
+bool LockFreeRateLimiter::tryInsertRequest(ClientData &client, sep::api::Priority priority,
+                                           std::chrono::steady_clock::time_point now)
+{
+    auto &window = client.window;
+    const auto effective_limit = getAdjustedLimit(priority);
 
-  // Try to insert the request
-  size_t current_size = window.tail.load(std::memory_order_acquire) -
-                        window.head.load(std::memory_order_acquire);
+    // Try to insert the request
+    size_t current_size =
+        window.tail.load(std::memory_order_acquire) - window.head.load(std::memory_order_acquire);
 
-  if (current_size >= effective_limit) {
-    // Remove expired entries before rejecting
-    removeExpiredEntries(client, now);
+    if (current_size >= effective_limit)
+    {
+        // Remove expired entries before rejecting
+        removeExpiredEntries(client, now);
 
-    // Recheck after cleanup
-    current_size = window.tail.load(std::memory_order_acquire) -
-                   window.head.load(std::memory_order_acquire);
-    if (current_size >= effective_limit) {
-      return false;
+        // Recheck after cleanup
+        current_size = window.tail.load(std::memory_order_acquire) -
+                       window.head.load(std::memory_order_acquire);
+        if (current_size >= effective_limit)
+        {
+            return false;
+        }
     }
-  }
 
-  // Insert new request
-  size_t tail = window.tail.load(std::memory_order_relaxed);
-  size_t new_tail = (tail + 1) % WINDOW_SIZE;
+    // Insert new request
+    size_t tail = window.tail.load(std::memory_order_relaxed);
+    size_t new_tail = (tail + 1) % WINDOW_SIZE;
 
-  // Check for buffer wrap-around
-  if (new_tail == window.head.load(std::memory_order_acquire)) {
-    removeExpiredEntries(client, now);
-    tail = window.tail.load(std::memory_order_relaxed);
-    new_tail = (tail + 1) % WINDOW_SIZE;
-  }
+    // Check for buffer wrap-around
+    if (new_tail == window.head.load(std::memory_order_acquire))
+    {
+        removeExpiredEntries(client, now);
+        tail = window.tail.load(std::memory_order_relaxed);
+        new_tail = (tail + 1) % WINDOW_SIZE;
+    }
 
-  // Store request
-  auto &entry = window.entries[tail];
-  entry.timestamp.store(std::chrono::duration_cast<std::chrono::milliseconds>(
-                            now.time_since_epoch())
-                            .count(),
-                        std::memory_order_release);
-  entry.priority.store(static_cast<uint8_t>(priority),
-                       std::memory_order_release);
-  entry.count.store(1, std::memory_order_release);
+    // Store request
+    auto &entry = window.entries[tail];
+    entry.timestamp.store(
+        std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count(),
+        std::memory_order_release);
+    entry.priority.store(static_cast<uint8_t>(priority), std::memory_order_release);
+    entry.count.store(1, std::memory_order_release);
 
-  window.tail.store(new_tail, std::memory_order_release);
-  client.request_count.fetch_add(1, std::memory_order_relaxed);
+    window.tail.store(new_tail, std::memory_order_release);
+    client.request_count.fetch_add(1, std::memory_order_relaxed);
 
-  return true;
+    return true;
 }
 
 void LockFreeRateLimiter::removeExpiredEntries(
@@ -135,8 +138,9 @@ void LockFreeRateLimiter::removeExpiredEntries(
 void LockFreeRateLimiter::cleanup(std::chrono::steady_clock::time_point now) {
   // Cleanup is now handled by background thread
 #ifdef SEP_USE_TBB
-  for (auto it = clients_.begin(); it != clients_.end(); ++it) {
-    removeExpiredEntries(*it->second, now);
+  for (auto it = clients_.begin(); it != client_id.end(); ++it)
+  {
+      removeExpiredEntries(*it->second, now);
   }
 #else
   std::lock_guard<std::mutex> lock(clients_mutex_); // Use std::lock_guard
@@ -158,12 +162,13 @@ void LockFreeRateLimiter::setEnabled(bool enabled) {
   enabled_.store(enabled, std::memory_order_release);
 }
 
-void LockFreeRateLimiter::setPriorityQuota(Priority priority,
-                                           float multiplier) {
-  if (priority >= Priority::LOW && priority <= Priority::CRITICAL) {
-    priority_configs_[static_cast<size_t>(priority)].multiplier.store(
-        multiplier, std::memory_order_release);
-  }
+void LockFreeRateLimiter::setPriorityQuota(sep::api::Priority priority, float multiplier)
+{
+    if (priority >= Priority::LOW && priority <= Priority::CRITICAL)
+    {
+        priority_configs_[static_cast<size_t>(priority)].multiplier.store(
+            multiplier, std::memory_order_release);
+    }
 }
 
 unsigned int
@@ -176,9 +181,10 @@ LockFreeRateLimiter::GetRequestCount(const std::string &client_id) const {
   return 0; 
 #else
   std::lock_guard<std::mutex> lock(clients_mutex_);
-  auto it = clients_.find(client_id);
-  if (it != clients_.end()) {
-    return it->second->request_count.load(std::memory_order_acquire);
+  auto it = client_id.find(client_id);
+  if (it != client_id.end())
+  {
+      return it->second->request_count.load(std::memory_order_acquire);
   }
   return 0;
 #endif
@@ -210,38 +216,40 @@ unsigned int LockFreeRateLimiter::GetWindowSize(const std::string &client_id,
   return 0;
 #else
   std::lock_guard<std::mutex> lock(clients_mutex_);
-  auto it = clients_.find(client_id);
-  if (it != clients_.end()) {
-    const auto &window = it->second->window;
-    size_t count = 0;
-    const size_t head = window.head.load(std::memory_order_acquire);
-    const size_t tail = window.tail.load(std::memory_order_acquire);
-    size_t current = head;
-    while (current != tail) {
-      const auto &entry = window.entries[current];
-      if (entry.priority.load(std::memory_order_acquire) ==
-          static_cast<uint8_t>(priority)) {
-        count += entry.count.load(std::memory_order_acquire);
+  auto it = client_id.find(client_id);
+  if (it != client_id.end())
+  {
+      const auto &window = it->second->window;
+      size_t count = 0;
+      const size_t head = window.head.load(std::memory_order_acquire);
+      const size_t tail = window.tail.load(std::memory_order_acquire);
+      size_t current = head;
+      while (current != tail)
+      {
+          const auto &entry = window.entries[current];
+          if (entry.priority.load(std::memory_order_acquire) == static_cast<uint8_t>(priority))
+          {
+              count += entry.count.load(std::memory_order_acquire);
+          }
+          current = (current + 1) % WINDOW_SIZE;
       }
-      current = (current + 1) % WINDOW_SIZE;
-    }
-    return count;
+      return count;
   }
   return 0;
 #endif
 }
 
-unsigned int LockFreeRateLimiter::getAdjustedLimit(Priority priority) const {
-  if (priority >= Priority::LOW && priority <= Priority::CRITICAL) {
-    const float base_multiplier =
-        priority_configs_[static_cast<size_t>(priority)].multiplier.load(
-            std::memory_order_acquire);
-    const float adaptive_mult =
-        adaptive_multiplier_.load(std::memory_order_acquire);
-    return static_cast<unsigned int>(max_requests_ * base_multiplier *
-                                     adaptive_mult);
-  }
-  return max_requests_;
+unsigned int LockFreeRateLimiter::getAdjustedLimit(sep::api::Priority priority) const
+{
+    if (priority >= Priority::LOW && priority <= Priority::CRITICAL)
+    {
+        const float base_multiplier =
+            priority_configs_[static_cast<size_t>(priority)].multiplier.load(
+                std::memory_order_acquire);
+        const float adaptive_mult = adaptive_multiplier_.load(std::memory_order_acquire);
+        return static_cast<unsigned int>(max_requests_ * base_multiplier * adaptive_mult);
+    }
+    return max_requests_;
 }
 
 float LockFreeRateLimiter::calculateAdaptiveMultiplier() const {
@@ -306,26 +314,27 @@ LockFreeRateLimiter::getPriorityFromRequest(const IRequest &req) const {
   return Priority::NORMAL;
 }
 
-std::string LockFreeRateLimiter::getClientId(const IRequest &req) const {
-  auto clientId = req.get_header_value("X-Client-ID");
-  return clientId.empty() ? req.get_remote_ip() : clientId;
+std::string LockFreeRateLimiter::getClientId(const request &req) const
+{
+    auto clientId = req.get_header_value("X-Client-ID");
+    return clientId.empty() ? req.get_remote_ip() : clientId;
 }
 
-std::unique_ptr<IRateLimiter>
-createLockFreeRateLimiter(unsigned int requests_per_minute) {
-  return std::make_unique<LockFreeRateLimiter>(requests_per_minute);
+std::unique_ptr<sep::api::IRateLimiter> createLockFreeRateLimiter(unsigned int requests_per_minute)
+{
+    return std::make_unique<sep::api::createLockFreeRateLimiter>(requests_per_minute);
 }
 
 // Wrapper factory that currently returns the lock-free implementation.
 // This indirection allows swapping implementations without touching callers.
-std::unique_ptr<IRateLimiter> createRateLimiter(
-    unsigned int requests_per_minute) {
-  // Factory helper that allows the rest of the codebase to request a
-  // new rate limiter instance without needing to know about the concrete
-  // implementation type. Currently we simply forward to
-  // `createLockFreeRateLimiter`, which constructs `LockFreeRateLimiter`.
-  // Additional implementations can be swapped in here as needed.
-  return createLockFreeRateLimiter(requests_per_minute);
+std::unique_ptr<sep::api::IRateLimiter> createRateLimiter(unsigned int requests_per_minute)
+{
+    // Factory helper that allows the rest of the codebase to request a
+    // new rate limiter instance without needing to know about the concrete
+    // implementation type. Currently we simply forward to
+    // `createLockFreeRateLimiter`, which constructs `LockFreeRateLimiter`.
+    // Additional implementations can be swapped in here as needed.
+    return createLockFreeRateLimiter(requests_per_minute);
 }
 
 } // namespace sep::api

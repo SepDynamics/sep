@@ -201,22 +201,17 @@ namespace sep
             }
 
             float util = t->calculateUtilization();
-
+    
             // Clamp very small values to zero. This handles rounding errors.
             if (util <= kUtilizationEpsilon)
             {
                 return 0.0f;
             }
-
+    
             return std::clamp(util, 0.0f, 1.0f);
         }
-        1.0f / static_cast<float>(std::max<std::size_t>(1, t->getSize()));
-        if (util <= kUtilizationEpsilon || util <= inverse_size + kUtilizationEpsilon) return 0.0f;
-
-        return std::clamp(util, 0.0f, 1.0f);
-    }
-
-    float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const
+    
+        float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const
     {
         const MemoryTier *t = const_cast<MemoryTierManager *>(this)->getTier(tier);
         return t ? t->calculateFragmentation() : 0.0f;

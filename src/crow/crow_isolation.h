@@ -42,16 +42,30 @@ extern const char* last_error;
 #    endif
 #endif
 
+// HTTP Method enum definition
+enum class HTTPMethod {
+    DELETE,
+    GET,
+    HEAD,
+    POST,
+    PUT,
+    CONNECT,
+    OPTIONS,
+    TRACE,
+    PATCH,
+    PURGE
+};
+
 // Crow namespace with stub implementations
 namespace crow {
     // Stub implementation for request
     class request {
     public:
-        HTTPMethod  method;
-        sep::shim::string url;
-        sep::shim::string body;
+        HTTPMethod method;
+        std::string url;
+        std::string body;
 
-        const char* get_header_value(const sep::shim::string& key) const {
+        const char* get_header_value(const std::string& key) const {
             return "";
         }
         
@@ -192,7 +206,6 @@ namespace crow {
 
     }  // namespace http_parser_stub
 
-#endif  // CROW_ISOLATION_H
 #ifdef __CUDACC__
 }  // namespace crow
 #endif

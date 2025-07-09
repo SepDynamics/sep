@@ -39,7 +39,7 @@ USER_CONFIG_DIR="$HOME/.config/systemd/user"
 mkdir -p "$USER_LOCAL_BIN" "$USER_LOCAL_LIB" "$USER_CONFIG_DIR"
 
 # --- Environment Setup ---
-BUILD_DIR="${REPO_ROOT}/cmake-make"
+BUILD_DIR="${REPO_ROOT}/build"
 COMPILE_COMMANDS="${BUILD_DIR}/compile_commands.json"
 SRC_DIR="${REPO_ROOT}"
 LIB_DIR="${SRC_DIR}/lib"
@@ -451,21 +451,7 @@ EOF
         
         # Reload systemd user configuration
         systemctl --user daemon-reload
-    fi
-
-    # Manage user service
-    systemctl --user stop sep-engine || true
-    systemctl --user daemon-reload
-    systemctl --user enable sep-engine
-    systemctl --user start sep-engine
-    sleep 2 # Wait for service to start
-    systemctl --user status sep-engine --no-pager
-
-    # Start server directly if service fails
-    if ! systemctl --user is-active sep-engine >/dev/null; then
-        echo "Starting server directly since service failed..."
-        "$USER_LOCAL_BIN/sep_engine" --server --port 8080 --host 0.0.0.0 --debug
-    fi
+    fiDF
 
 else
     echo "systemctl not found. Manual installation required for sep_engine binary."

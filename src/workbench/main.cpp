@@ -1,144 +1,195 @@
+#include <chrono>
+#include <iostream>
 #include <memory>
-#include <stdexcept>
+#include <string>
+#include <thread>
+#include <vector>
 
-#include "demo_manager.hpp"
-#include "demos/genesis_pattern.hpp"
-#include "demos/audio_visualizer.hpp"
-#include "demos/memory_garden.hpp"
-#include "demos/cosmo_demo.hpp"
-#include "demos/cosmo_sim.hpp"
+// Use our mock types for development
+#include "window.h"
+#include "ui_manager.h"
+#include "renderer.h"
 
-using namespace sep;
-using namespace sep::workbench;
+// Our workbench components
+#include "renderer.h"
+#include "ui_manager.h"
+#include "window.h"
 
-// Forward declarations
-void initializeEngine();
-void initializeRenderer();
-void registerDemos();
-void mainLoop();
-void cleanup();
+// Forward declarations for the demo system
+class Demo;
+class GenesisPatternDemo;
 
-// Global state
-std::unique_ptr<Engine> g_engine;
-std::unique_ptr<CyclesRenderer> g_renderer;
+// Base Demo class
+class Demo
+{
+public:
+    virtual ~Demo() = default;
+    virtual bool init() = 0;
+    virtual void update(float deltaTime) = 0;
+    virtual void render() = 0;
+};
 
-int main() {
-    try {
-        initializeEngine();
-        initializeRenderer();
-        registerDemos();
-        mainLoop();
-        cleanup();
-        return 0;
+// Genesis Pattern Demo implementation
+class GenesisPatternDemo : public Demo
+{
+public:
+    GenesisPatternDemo() = default;
+    ~GenesisPatternDemo() override = default;
+
+    bool init() override
+    {
+        std::cout << "Initializing Genesis Pattern Demo..." << std::endl;
+
+        // Initialize memory manager
+        auto& memory_mgr = sep::memory::MemoryTierManager::getInstance();
+        sep::memory::MemoryTierManager::Config memory_config;
+        memory_mgr.init(memory_config);
+
+        // Initialize pattern processor with a default config
+        sep::quantum::ProcessingConfig config;
+        pattern_processor_ = sep::quantum::createProcessor(config);
+
+        if (!pattern_processor_)
+        {
+            std::cerr << "Failed to create Pattern Processor!" << std::endl;
+            return false;
+        }
+
+        auto result = pattern_processor_->init(nullptr);
+        if (result != sep::SEPResult::SUCCESS)
+        {
+            std::cerr << "Failed to initialize Pattern Processor!" << std::endl;
+            return false;
+        }
+
+        // Create some initial patterns
+        for (int i = 0; i < 5; i++)
+        {
+            sep::quantum::Pattern pattern;
+            pattern.id = "pattern_" + std::to_string(i);
+            pattern.quantum_state.coherence = 0.5f;
+            pattern.quantum_state.stability = 0.5f;
+            pattern.quantum_state.generation = 1;
+            pattern_processor_->addPattern(pattern);
+        }
+
+        // Initialize renderer
+        renderer_ = std::make_unique<Renderer>();
+        renderer_->init(window_->getWidth(), window_->getHeight());
+
+        // Initialize UI
+        ui_manager_ = std::make_unique<UIManager>();
+        ui_manager_->init(*window_);
+
+        std::cout << "Genesis Pattern Demo initialized successfully." << std::endl;
+        return true;
     }
-    catch (const std::exception& e) {
-        fprintf(stderr, "Fatal error: %s\n", e.what());
+
+    void update(float deltaTime) override
+    {
+        // Poll events
+        window_->pollEvents();
+
+        // Process all patterns
+        auto result = pattern_processor_->processAll();
+
+        // Evolve patterns if auto-evolve is enabled
+        if (auto_evolve_)
+        {
+            auto patterns = pattern_processor_->getPatterns();
+            if (!patterns.empty())
+            {
+                auto& pattern = patterns[0];
+                pattern_processor_->evolvePattern(pattern.id);
+            }
+        }
+
+        // Start ImGui frame
+        ui_manager_->beginFrame();
+
+        // Show UI windows
+        ui_manager_->showPatternControls(evolution_rate_, auto_evolve_);
+
+        // Calculate average coherence for metrics display
+        auto patterns = pattern_processor_->getPatterns();
+        float avg_coherence = 0.0f;
+        for (const auto& pattern : patterns)
+        {
+            avg_coherence += pattern.quantum_state.coherence;
+        }
+        avg_coherence = patterns.empty() ? 0.0f : avg_coherence / patterns.size();
+
+        ui_manager_->showPatternMetrics(patterns.size(), avg_coherence);
+
+        // End ImGui frame
+        ui_manager_->endFrame();
+    }
+
+    void render() override
+    {
+        // Get the current patterns to render
+        auto patterns = pattern_processor_->getPatterns();
+
+        // Render the patterns
+        renderer_->render(patterns);
+
+        // Render ImGui
+        ui_manager_->render();
+
+        // Swap buffers
+        window_->swapBuffers();
+    }
+
+    void setWindow(std::shared_ptr<Window> window) { window_ = window; }
+
+private:
+    std::unique_ptr<sep::quantum::Processor> pattern_processor_;
+    std::unique_ptr<Renderer> renderer_;
+    std::unique_ptr<UIManager> ui_manager_;
+    std::shared_ptr<Window> window_;
+
+    // Demo parameters
+    float evolution_rate_ = 1.0f;
+    bool auto_evolve_ = true;
+};
+
+int main(int argc, char** argv)
+{
+    std::cout << "SEP Workbench Demo" << std::endl;
+    std::cout << "=================" << std::endl;
+
+    // Create the window
+    auto window = std::make_shared<Window>(1280, 720, "SEP Workbench");
+
+    // Create the demo
+    auto demo = std::make_unique<GenesisPatternDemo>();
+
+    // Set the window for the demo
+    static_cast<GenesisPatternDemo*>(demo.get())->setWindow(window);
+
+    // Initialize
+    if (!demo->init())
+    {
+        std::cerr << "Failed to initialize demo!" << std::endl;
         return 1;
     }
-}
 
-void initializeEngine() {
-    const auto& config = Config::getInstance();
-    const auto& engine_config = config.engine();
+    // Main loop
+    bool running = true;
+    float deltaTime = 0.016f;  // ~60 FPS
 
-    g_engine = std::make_unique<Engine>();
-    g_engine->setCudaEnabled(engine_config.cuda_enabled);
-    g_engine->setMetricsEnabled(engine_config.metrics_enabled);
-    g_engine->setLogLevel(engine_config.log_level);
+    while (!window->shouldClose())
+    {
+        // Update
+        demo->update(deltaTime);
 
-    if (!g_engine->initialize()) {
-        throw std::runtime_error("Failed to initialize SEP engine");
-    }
-}
+        // Render
+        demo->render();
 
-void initializeRenderer() {
-    // Load configuration
-    auto& config = Config::getInstance();
-    if (!config.load("config.json")) {
-        throw std::runtime_error("Failed to load configuration");
+        // Sleep to cap the frame rate
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 
-    // Initialize renderer with config settings
-    g_renderer = std::make_unique<CyclesRenderer>();
-    
-    const auto& window = config.window();
-    g_renderer->setWindowTitle(window.title);
-    g_renderer->setWindowSize(window.width, window.height);
-    g_renderer->setFullscreen(window.fullscreen);
-    g_renderer->setVSync(window.vsync);
-
-    const auto& renderer = config.renderer();
-    g_renderer->setSamples(renderer.cycles.samples);
-    g_renderer->setDenoising(renderer.cycles.denoising);
-    g_renderer->setDevice(renderer.cycles.device);
-
-    if (!g_renderer->initialize()) {
-        throw std::runtime_error("Failed to initialize Cycles renderer");
-    }
-}
-
-void registerDemos() {
-    auto& demo_manager = DemoManager::getInstance();
-    demo_manager.initialize(g_engine.get(), g_renderer.get());
-
-    // Register available demos
-    demo_manager.registerDemo("genesis", []() {
-        return std::make_unique<GenesisPatternDemo>();
-    });
-    demo_manager.registerDemo("audio", []() {
-        return std::make_unique<AudioVisualizerDemo>();
-    });
-    demo_manager.registerDemo("memory", []() {
-        return std::make_unique<MemoryGardenDemo>();
-    });
-    demo_manager.registerDemo("cosmo", []() {
-        return std::make_unique<CosmoDemo>();
-    });
-    demo_manager.registerDemo("cosmo_sim", []() {
-        return std::make_unique<CosmoSim>();
-    });
-
-    // Start with Genesis Pattern demo
-    if (!demo_manager.switchToDemo("genesis")) {
-        throw std::runtime_error("Failed to start Genesis Pattern demo");
-    }
-}
-
-void mainLoop() {
-    auto& demo_manager = DemoManager::getInstance();
-    float dt = 1.0f / 60.0f; // Target 60 FPS
-
-    while (true) {
-        // Process window events and input
-        if (g_renderer->shouldClose()) {
-            break;
-        }
-
-        // Handle keyboard input
-        if (g_renderer->hasKeyEvent()) {
-            unsigned char key = g_renderer->getLastKey();
-            demo_manager.handleKeyboard(key);
-        }
-
-        // Handle mouse input
-        if (g_renderer->hasMouseEvent()) {
-            int x, y, button;
-            g_renderer->getLastMouseEvent(x, y, button);
-            demo_manager.handleMouse(x, y, button);
-        }
-
-        // Update and render current demo
-        demo_manager.update(dt);
-        demo_manager.render();
-
-        // Swap buffers and poll events
-        g_renderer->present();
-    }
-}
-
-void cleanup() {
-    auto& demo_manager = DemoManager::getInstance();
-    demo_manager.cleanup();
-    g_renderer.reset();
-    g_engine.reset();
+    std::cout << "Demo completed successfully." << std::endl;
+    return 0;
 }

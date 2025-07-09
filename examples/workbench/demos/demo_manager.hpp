@@ -1,5 +1,6 @@
 #pragma once
 
+#include "sep_engine_wrapper.h"
 #include <functional>
 #include <memory>
 #include <string>
@@ -11,30 +12,47 @@ namespace workbench {
 class Demo {
 public:
     virtual ~Demo() = default;
-    virtual void on_load() = 0;
-    virtual void on_unload() = 0;
+
+    virtual void on_load() = 0;   // Called when the demo becomes active
+    virtual void on_unload() = 0; // Called when the demo is switched out
     virtual void on_update(float dt) = 0;
     virtual void on_render() = 0;
     virtual void on_key_press(int key) = 0;
+
+    void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+        engine_ = engine;
+        renderer_ = renderer;
+        on_load();
+    }
+
+protected:
+    sep::Engine* engine_{nullptr};
+    sep::CyclesRenderer* renderer_{nullptr};
 };
 
 class DemoManager {
 public:
-    static DemoManager& instance();
+    static DemoManager& getInstance() {
+        static DemoManager instance;
+        return instance;
+    }
 
-    void registerDemo(const std::string& key,
+    void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer);
+    void registerDemo(const std::string& name,
                       std::function<std::unique_ptr<Demo>()> factory);
-
-    bool switchToDemo(const std::string& key);
+    bool switchToDemo(const std::string& name);
     void update(float dt);
     void render();
+    void cleanup();
 
 private:
     DemoManager() = default;
 
-    std::unordered_map<std::string, std::function<std::unique_ptr<Demo>()>> factories_;
-    std::unique_ptr<Demo> active_demo_;
-    std::string active_key_;
+    sep::Engine* engine_{nullptr};
+    sep::CyclesRenderer* renderer_{nullptr};
+    std::unordered_map<std::string, std::function<std::unique_ptr<Demo>()>> demo_factories_;
+    std::unique_ptr<Demo> current_demo_;
+    std::string current_demo_name_;
 };
 
 } // namespace workbench

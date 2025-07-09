@@ -1,47 +1,55 @@
 #include "demo_manager.hpp"
+#include <utility>
 
 namespace sep {
 namespace workbench {
 
-DemoManager& DemoManager::instance() {
-    static DemoManager inst;
-    return inst;
+void DemoManager::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+    engine_ = engine;
+    renderer_ = renderer;
 }
 
-void DemoManager::registerDemo(const std::string& key,
+void DemoManager::registerDemo(const std::string& name,
                                std::function<std::unique_ptr<Demo>()> factory) {
-    factories_[key] = std::move(factory);
+    demo_factories_[name] = std::move(factory);
 }
 
-bool DemoManager::switchToDemo(const std::string& key) {
-    auto it = factories_.find(key);
-    if (it == factories_.end()) {
+bool DemoManager::switchToDemo(const std::string& name) {
+    auto it = demo_factories_.find(name);
+    if (it == demo_factories_.end()) {
         return false;
     }
 
-    if (active_demo_) {
-        active_demo_->on_unload();
+    if (current_demo_) {
+        current_demo_->on_unload();
+        current_demo_.reset();
     }
 
-    active_demo_ = it->second();
-    active_key_ = key;
-
-    if (active_demo_) {
-        active_demo_->on_load();
+    current_demo_ = it->second();
+    if (current_demo_) {
+        current_demo_->initialize(engine_, renderer_);
+        current_demo_name_ = name;
         return true;
     }
     return false;
 }
 
 void DemoManager::update(float dt) {
-    if (active_demo_) {
-        active_demo_->on_update(dt);
+    if (current_demo_) {
+        current_demo_->on_update(dt);
     }
 }
 
 void DemoManager::render() {
-    if (active_demo_) {
-        active_demo_->on_render();
+    if (current_demo_) {
+        current_demo_->on_render();
+    }
+}
+
+void DemoManager::cleanup() {
+    if (current_demo_) {
+        current_demo_->on_unload();
+        current_demo_.reset();
     }
 }
 

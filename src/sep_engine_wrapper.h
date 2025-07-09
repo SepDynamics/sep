@@ -15,13 +15,15 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
+#include "memory/types.h"
+
 namespace sep
 {
 
     // Forward declarations for both modes
     struct Pattern;
     struct QuantumState;
-    enum class MemoryTierEnum;
+    using memory::MemoryTierEnum;
 
     // Base class definitions that are common to both modes
     class Engine
@@ -85,14 +87,6 @@ namespace sep
         float dimensions[3]{1.0f, 1.0f, 1.0f};
     };
 
-    // Memory tier enum
-    enum class MemoryTierEnum
-    {
-        STM,
-        MTM,
-        LTM
-    };
-
     // Pattern structure
     struct Pattern
     {
@@ -124,7 +118,11 @@ namespace sep
         bool shouldClose() override { return false; }
 
         void setWindowTitle(const std::string& title) override { (void)title; }
-        void setWindowSize(int width, int height) override { (void)width; (void)height; }
+        void setWindowSize(int width, int height) override
+        {
+            (void)width;
+            (void)height;
+        }
         void setFullscreen(bool fullscreen) override { (void)fullscreen; }
         void setVSync(bool vsync) override { (void)vsync; }
         void setSamples(int samples) override { (void)samples; }

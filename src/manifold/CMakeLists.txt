@@ -2,7 +2,7 @@ add_library(sep_manifold INTERFACE)
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/manifold/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/manifold/
         DESTINATION include/sep/manifold
         FILES_MATCHING
         PATTERN "*.h"
@@ -15,6 +15,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/manifold/
         PATTERN "*.hpp")
 
 target_include_directories(sep_manifold INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>
 )

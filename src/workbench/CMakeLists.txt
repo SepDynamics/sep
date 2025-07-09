@@ -1,6 +1,6 @@
 # Set directories for better readability
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/extern/imgui)
-set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
 # Find required packages
@@ -84,7 +84,7 @@ target_compile_definitions(sep_workbench PRIVATE
 
 # Make sure we can find the engine header paths
 target_include_directories(sep_workbench PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}
-    ${CMAKE_BINARY_DIR}/include
+    ${CMAKE_BINARY_DIR}/src
 )

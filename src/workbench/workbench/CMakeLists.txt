@@ -25,13 +25,6 @@ set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 # Build the workbench in "demo" mode so it links against the
 # lightweight wrapper implementations defined in
 # `sep_engine_wrapper.h`.  This avoids pulling in the full engine
-# dependencies and provides stubbed renderer/engine behaviour that
-# matches the workbench examples.
-if(SEP_WORKBENCH_DEMO)
-    target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO=1)
-else()
-    target_compile_definitions(sep_workbench PRIVATE SEP_WORKBENCH_DEMO=0)
-endif()
 
 # Set C++ standard and compiler flags
 set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
@@ -52,7 +45,7 @@ endif()
 target_include_directories(sep_workbench SYSTEM PRIVATE
     ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES}
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/extern/glm
     /usr/include
     /usr/local/include
@@ -68,7 +61,7 @@ target_include_directories(sep_workbench PRIVATE
 # Additional includes for non-demo mode
 if(NOT SEP_WORKBENCH_DEMO)
     target_include_directories(sep_workbench PRIVATE
-        ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/src
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/cycles/src>
     )
 endif()

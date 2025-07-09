@@ -12,7 +12,7 @@ find_package(TBB REQUIRED)
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/blender/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/blender/
         DESTINATION include/sep/blender
         FILES_MATCHING
         PATTERN "*.h"
@@ -91,7 +91,7 @@ target_include_directories(sep_blender
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
         ${OpenImageIO_INCLUDE_DIRS}
         ${OSL_INCLUDE_DIRS}

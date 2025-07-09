@@ -1,7 +1,7 @@
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/tests/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
         DESTINATION include/sep/tests
         FILES_MATCHING
         PATTERN "*.h"
@@ -41,7 +41,7 @@ target_link_libraries(cycles_test PRIVATE
 
 # Configure include directories
 target_include_directories(cycles_test PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     ${CUDAToolkit_INCLUDE_DIRS}
 )

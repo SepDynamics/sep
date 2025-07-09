@@ -41,7 +41,7 @@ if(SEP_MINIMAL)
 endif()
 
 # Configure include paths
-set(SEP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+set(SEP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src)
 set(SEP_SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
 # Add include paths after project declaration
@@ -70,7 +70,7 @@ endif()
 # Set CUDA compiler flags before enabling the language
 set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/include/compat/cuda_unified_fix.h")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/src/compat/cuda_unified_fix.h")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__STRICT_ANSI__ -D_GLIBCXX_USE_CXX11_ABI=1")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
 
@@ -120,7 +120,7 @@ endif()
 
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
-    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/extern/crow/include
 )
 add_compile_definitions(CROW_USE_BOOST)
@@ -205,7 +205,7 @@ endif()
 add_executable(sep_engine src/server_main.cpp)
 set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
 target_include_directories(sep_engine PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
 )
 
 # Configure server_main.cpp to conditionally include Cycles code
@@ -237,7 +237,7 @@ target_link_libraries(sep_engine PRIVATE
 include(GNUInstallDirs)
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/sep
     FILES_MATCHING
     PATTERN "*.h"
@@ -287,7 +287,7 @@ install(FILES
 )
 
 # Install headers from include directory
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
     DESTINATION include/sep
     FILES_MATCHING
     PATTERN "*.h"

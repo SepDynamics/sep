@@ -12,7 +12,7 @@ set(WITH_CYCLES_OPENSUBDIV ON)
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/compat/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/compat/
         DESTINATION include/sep/compat
         FILES_MATCHING
         PATTERN "*.h"
@@ -87,7 +87,7 @@ endif()
 # Include directories
 target_include_directories(sep_compat
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>

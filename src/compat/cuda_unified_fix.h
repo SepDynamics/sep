@@ -185,11 +185,6 @@ constexpr int FP_CLASS_NAN = 4;        // NaN values
 
 #ifdef __cplusplus
 extern "C" {
-
-// Define stubs for long double math functions that GCC-14 expects but are missing in CUDA
-// When CUDA provides native long double support we call the device version
-// otherwise we fall back to a high precision refinement of the double variant.
-
 #if defined(__CUDACC_VER_MAJOR__) && (__CUDACC_VER_MAJOR__ >= 12)
 #  define SEP_HAS_CUDA_LDOUBLE_FUNCS 1
 #else

@@ -172,15 +172,16 @@ add_subdirectory(src/memory)
 add_subdirectory(src/quantum)
 add_subdirectory(src/embeddings)
 add_subdirectory(src/utils)
-add_subdirectory(src/api)
+# DISABLED FOR DEBUGGING BUILD ISSUES
+# add_subdirectory(src/api)
 # add_subdirectory(src/demos)
-if(SEP_WITH_AUDIO)
-    add_subdirectory(src/audio)
-    set(SEP_HAS_AUDIO 1)
-endif()
-if(SEP_WITH_CYCLES)
-    add_subdirectory(src/blender)
-endif()
+# if(SEP_WITH_AUDIO)
+#     add_subdirectory(src/audio)
+#     set(SEP_HAS_AUDIO 1)
+# endif()
+# if(SEP_WITH_CYCLES)
+#     add_subdirectory(src/blender)
+# endif()
 if(SEP_WITH_CYCLES)
     add_subdirectory(extern/cycles/third_party/cuew)
     add_subdirectory(extern/cycles/third_party/hipew)
@@ -200,35 +201,35 @@ endif()
 
 # Consolidated examples are built in a single workbench target
 
-# Main executable
-# Entry point wiring together optional modules
-add_executable(sep_engine src/server_main.cpp)
-set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
-target_include_directories(sep_engine PRIVATE
-    ${CMAKE_SOURCE_DIR}/src
-)
-
-# Configure server_main.cpp to conditionally include Cycles code
-target_compile_definitions(sep_engine PRIVATE
-    SEP_HAS_CYCLES=0
-    SEP_HAS_BLENDER=0
-    SEP_HAS_AUDIO=${SEP_HAS_AUDIO}
-)
-
-target_link_libraries(sep_engine PRIVATE
-    sep_api
-    sep_compat
-    $<$<BOOL:${SEP_WITH_AUDIO}>:sep_audio>
-    sep_quantum
-    sep_memory
-    sep_utils
-    sep_core
-    Threads::Threads
-    ${CURL_LIBRARIES}
-    ${CMAKE_DL_LIBS}
-    $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
-    $<$<TARGET_EXISTS:CUDA::cuda_driver>:CUDA::cuda_driver>
-)
+# Main executable - DISABLED FOR BUILD DEBUGGING
+# # Entry point wiring together optional modules
+# add_executable(sep_engine src/server_main.cpp)
+# set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
+# target_include_directories(sep_engine PRIVATE
+#     ${CMAKE_SOURCE_DIR}/src
+# )
+#
+# # Configure server_main.cpp to conditionally include Cycles code
+# target_compile_definitions(sep_engine PRIVATE
+#     SEP_HAS_CYCLES=0
+#     SEP_HAS_BLENDER=0
+#     SEP_HAS_AUDIO=${SEP_HAS_AUDIO}
+# )
+#
+# target_link_libraries(sep_engine PRIVATE
+#     sep_api
+#     sep_compat
+#     $<$<BOOL:${SEP_WITH_AUDIO}>:sep_audio>
+#     sep_quantum
+#     sep_memory
+#     sep_utils
+#     sep_core
+#     Threads::Threads
+#     ${CURL_LIBRARIES}
+#     ${CMAKE_DL_LIBS}
+#     $<$<TARGET_EXISTS:CUDA::cudart>:CUDA::cudart>
+#     $<$<TARGET_EXISTS:CUDA::cuda_driver>:CUDA::cuda_driver>
+# )
 
 # Only link Cycles libraries if they exist and SEP_WITH_CYCLES is enabled
 
@@ -252,7 +253,6 @@ install(TARGETS
     sep_memory
     sep_quantum
     sep_embeddings
-    sep_api
     EXPORT sep-targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

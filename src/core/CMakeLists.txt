@@ -64,7 +64,9 @@ target_include_directories(sep_core
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/core>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/compat>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/utils>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third_party/glm>
 )
 

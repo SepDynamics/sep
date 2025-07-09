@@ -5,7 +5,6 @@
 #endif
 
 #include "../sep_engine_wrapper.h"
-
 #include <functional>
 #include <memory>
 #include <string>

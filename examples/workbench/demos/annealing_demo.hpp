@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../demo_manager.hpp"
-#include <vector>
 #include <glm/vec3.hpp>
+#include <vector>
+
+#include "demo_manager.hpp"
 
 namespace sep {
 namespace workbench {

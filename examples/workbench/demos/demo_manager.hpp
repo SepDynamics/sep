@@ -4,11 +4,12 @@
 #define SEP_WORKBENCH_DEMO 1
 #endif
 
-#include "../sep_engine_wrapper.h"
 #include <functional>
 #include <memory>
 #include <string>
 #include <unordered_map>
+
+#include "sep_engine_wrapper.h"
 
 namespace sep
 {

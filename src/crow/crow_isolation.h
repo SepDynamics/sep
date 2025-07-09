@@ -11,19 +11,17 @@
 // Forward declare the crow namespace and required classes
 // This makes ::crow references work
 #ifdef __cplusplus
-namespace std
-{
-    class string
-    {
-    public:
-        string() {}
-        string(const char* s) {}
-        const char* c_str() const { return ""; }
-    };
-}  // namespace std
-
 namespace crow
 {
+    // Define a simple string class for isolation
+    class crow_string
+    {
+    public:
+        crow_string() {}
+        crow_string(const char* /* s */) {}
+        const char* c_str() const { return ""; }
+    };
+
     enum class HTTPMethod
     {
         DELETE,
@@ -39,26 +37,28 @@ namespace crow
     };
 
     // Required method_name function
-    inline const char* method_name(HTTPMethod method)
+    inline const char* method_name(HTTPMethod /* method */)
     {
-        static const char* method_names[] = {"DELETE",  "GET",     "HEAD",  "POST",  "PUT",
-                                             "CONNECT", "OPTIONS", "TRACE", "PATCH", "PURGE"};
-        return method_names[static_cast<int>(method)];
+        static const char* empty = "";
+        return empty;
     }
 
     // Stub for request class
     class request {
     public:
         HTTPMethod method;
-        std::string url;
-        std::string body;
+        crow_string url;
+        crow_string body;
 
         request() : method(HTTPMethod::GET) {}
 
-        const char* get_header_value(const std::string& key) const {
+        const char* get_header_value(const crow_string& /* key */) const
+        {
             static const char* empty = "";
             return empty;
         }
+
+        const char* get_remote_ip() const { return "127.0.0.1"; }
     };
 
     // Stub for response class
@@ -66,14 +66,14 @@ namespace crow
     public:
         int code;
         int status;
-        std::string body;
+        crow_string body;
 
         response() : code(200), status(200) {}
         explicit response(int c) : code(c), status(c) {}
 
-        void set_header(const std::string& key, const std::string& value) {}
-        void add_header(const std::string& key, const std::string& value) {}
-        void write(const std::string& data) {}
+        void set_header(const crow_string& /* key */, const crow_string& /* value */) {}
+        void add_header(const crow_string& /* key */, const crow_string& /* value */) {}
+        void write(const crow_string& /* data */) {}
         void end() {}
     };
 

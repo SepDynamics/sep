@@ -15,6 +15,8 @@
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
 #include "persistence/persistent_pattern_data.hpp"
+#include "quantum/data.hpp"
+#include "quantum/types.h"
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
 #endif // SEP_NO_REDIS
@@ -83,8 +85,11 @@ public:
   MemoryTier *determineTier(float coherence, float stability,
                             int generation_count);
   MemoryBlock *updateBlockProperties(MemoryBlock *block, float promotion_score,
-                                    float priority_score, std::uint32_t age = 0,
-                                    float weight = 0.0f);
+                                     float priority_score, std::uint32_t age = 0,
+                                     float weight = 0.0f);
+  MemoryBlock *updateBlockMetrics(MemoryBlock *block, float coherence,
+                                  float stability, uint32_t generation,
+                                  float context_score);
   void rebuildLookup();
 
   // Pattern management
@@ -108,6 +113,15 @@ public:
   const void* getRegisteredData(std::size_t id) const;
   void cleanupExpiredData();
   void pruneDataByPriority(MemoryTierEnum tier, size_t max_count);
+
+  // Pattern management
+  void registerPattern(std::size_t id, const ::sep::pattern::PatternData& pattern);
+  const ::sep::pattern::PatternData* getPatternData(std::size_t id) const;
+  void removePattern(std::size_t id);
+  void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);
+  void cleanupExpiredPatterns();
+  void prunePatternsByPriority(MemoryTierEnum tier, size_t max_count);
+  void calculateRelationshipCoherence();
 
   // Test helpers
   void resetForTesting(const Config &cfg = Config());
@@ -141,6 +155,12 @@ private:
       data_registry_;
   std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>>
       data_relationships_;
+      
+  // Pattern specific registries
+  std::unordered_map<std::size_t, std::unique_ptr<::sep::pattern::PatternData>>
+      pattern_registry_;
+  std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>>
+      pattern_relationships_;
 
   SEPResult promoteToTier(MemoryBlock *block, MemoryTierEnum tier,
                            MemoryBlock *&out_block);

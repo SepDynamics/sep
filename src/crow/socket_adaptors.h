@@ -32,54 +32,64 @@ namespace crow {
     struct SocketAdaptor {
         using context = void;
         explicit SocketAdaptor(asio_stub::io_context& io_context, context*)
-            : socket_(io_context) {}
+            : socket_(io_context), io_(io_context) {}
 
         asio_stub::io_context& get_io_context() {
-            return static_cast<asio_stub::io_context&>(
-                socket_.get_executor().context());
+            return io_;
         }
-
-        asio::io_context& get_io_context() { return *io_ctx_; }
 
         tcp::socket& raw_socket() { return socket_; }
         tcp::socket& socket() { return socket_; }
         tcp::endpoint remote_endpoint() {
-            error_code ec;
+            asio::error_code ec;
             return socket_.remote_endpoint(ec);
         }
         bool is_open() { return socket_.is_open(); }
 
-        error_code close() {
-            error_code ec;
+        error_t close()
+        {
+            error_t ec = 0;
             if (!is_open()) {
-                ec = make_error_code(asio_stub::error::not_connected);
+                // Use a simple integer error code since error_t is an integer
+                ec = ENOTCONN;
                 return ec;
             }
-            socket_.close(ec);
+            asio::error_code asio_ec;
+            socket_.close(asio_ec);
+            ec = asio_ec ? asio_ec.value() : 0;
             return ec;
         }
 
-        error_code shutdown_readwrite() {
-            error_code ec;
-            socket_.shutdown(tcp::socket::shutdown_both, ec);
+        error_t shutdown_readwrite()
+        {
+            error_t ec = 0;
+            asio::error_code asio_ec;
+            socket_.shutdown(tcp::socket::shutdown_both, asio_ec);
+            ec = asio_ec ? asio_ec.value() : 0;
             return ec;
         }
 
-        error_code shutdown_write() {
-            error_code ec;
-            socket_.shutdown(tcp::socket::shutdown_send, ec);
+        error_t shutdown_write()
+        {
+            error_t ec = 0;
+            asio::error_code asio_ec;
+            socket_.shutdown(tcp::socket::shutdown_send, asio_ec);
+            ec = asio_ec ? asio_ec.value() : 0;
             return ec;
         }
 
-        error_code shutdown_read() {
-            error_code ec;
-            socket_.shutdown(tcp::socket::shutdown_receive, ec);
+        error_t shutdown_read()
+        {
+            error_t ec = 0;
+            asio::error_code asio_ec;
+            socket_.shutdown(tcp::socket::shutdown_receive, asio_ec);
+            ec = asio_ec ? asio_ec.value() : 0;
             return ec;
         }
 
         template <typename F>
         void start(F f) {
-            f(error_code{});
+            f(error_t{});
         }
 
         tcp::socket socket_;
@@ -97,13 +107,14 @@ namespace crow {
         ssl_socket_t& socket() { return *ssl_socket_; }
         tcp::socket& raw_socket() { return ssl_socket_->next_layer(); }
         tcp::endpoint remote_endpoint() {
-            error_code ec;
+            error_t ec;
             return raw_socket().remote_endpoint(ec);
         }
         bool is_open() { return ssl_socket_ ? raw_socket().is_open() : false; }
 
-        error_code close() {
-            error_code ec;
+        error_t close()
+        {
+            error_t ec;
             if (!is_open()) {
                 ec = asio::error::not_connected;
             } else {
@@ -112,24 +123,27 @@ namespace crow {
             return ec;
         }
 
-        error_code shutdown_readwrite() {
-            error_code ec;
+        error_t shutdown_readwrite()
+        {
+            error_t ec;
             if (is_open()) {
                 raw_socket().shutdown(tcp::socket::shutdown_both, ec);
             }
             return ec;
         }
 
-        error_code shutdown_write() {
-            error_code ec;
+        error_t shutdown_write()
+        {
+            error_t ec;
             if (is_open()) {
                 raw_socket().shutdown(tcp::socket::shutdown_send, ec);
             }
             return ec;
         }
 
-        error_code shutdown_read() {
-            error_code ec;
+        error_t shutdown_read()
+        {
+            error_t ec;
             if (is_open()) {
                 raw_socket().shutdown(tcp::socket::shutdown_receive, ec);
             }
@@ -142,7 +156,8 @@ namespace crow {
 
         template <typename F>
         void start(F f) {
-            ssl_socket_->async_handshake(asio_stub::ssl::stream_base::server, [f](const error_code& ec) { f(ec); });
+            ssl_socket_->async_handshake(asio_stub::ssl::stream_base::server,
+                                         [f](const error_t& ec) { f(ec); });
         }
 
         std::unique_ptr<ssl_socket_t> ssl_socket_;

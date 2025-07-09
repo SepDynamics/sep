@@ -31,7 +31,7 @@ LockFreeRateLimiter::LockFreeRateLimiter(unsigned int requests_per_minute)
 
 LockFreeRateLimiter::~LockFreeRateLimiter() = default;
 
-bool LockFreeRateLimiter::checkRateLimit(const request &req)
+bool LockFreeRateLimiter::checkRateLimit(const IRequest &req)
 {
     if (!enabled_)
     {
@@ -55,9 +55,9 @@ bool LockFreeRateLimiter::checkRateLimit(const request &req)
   if (!ptr) {
     ptr = std::make_unique<ClientData>(); // Use std::make_unique
   }
-  ClientData &std::ref = *ptr;
+  ClientData &client_data = *ptr;
   lock.unlock();
-  return tryInsertRequest(std::ref, priority, now);
+  return tryInsertRequest(client_data, priority, now);
 #endif
 }
 
@@ -181,8 +181,8 @@ LockFreeRateLimiter::GetRequestCount(const std::string &client_id) const {
   return 0; 
 #else
   std::lock_guard<std::mutex> lock(clients_mutex_);
-  auto it = client_id.find(client_id);
-  if (it != client_id.end())
+  auto it = clients_.find(client_id);
+  if (it != clients_.end())
   {
       return it->second->request_count.load(std::memory_order_acquire);
   }
@@ -216,8 +216,8 @@ unsigned int LockFreeRateLimiter::GetWindowSize(const std::string &client_id,
   return 0;
 #else
   std::lock_guard<std::mutex> lock(clients_mutex_);
-  auto it = client_id.find(client_id);
-  if (it != client_id.end())
+  auto it = clients_.find(client_id);
+  if (it != clients_.end())
   {
       const auto &window = it->second->window;
       size_t count = 0;
@@ -314,15 +314,15 @@ LockFreeRateLimiter::getPriorityFromRequest(const IRequest &req) const {
   return Priority::NORMAL;
 }
 
-std::string LockFreeRateLimiter::getClientId(const request &req) const
+std::string LockFreeRateLimiter::getClientId(const IRequest &req) const
 {
     auto clientId = req.get_header_value("X-Client-ID");
     return clientId.empty() ? req.get_remote_ip() : clientId;
 }
-
-std::unique_ptr<sep::api::IRateLimiter> createLockFreeRateLimiter(unsigned int requests_per_minute)
+std::unique_ptr<sep::api::IRateLimiter>
+createLockFreeRateLimiter(unsigned int requests_per_minute)
 {
-    return std::make_unique<sep::api::createLockFreeRateLimiter>(requests_per_minute);
+    return std::make_unique<LockFreeRateLimiter>(requests_per_minute);
 }
 
 // Wrapper factory that currently returns the lock-free implementation.

@@ -42,16 +42,12 @@ endif()
 # Add CUDA-specific compile definitions to handle exception specs
 if(SEP_HAS_CUDA)
   target_compile_definitions(sep_memory PRIVATE
-      SEP_HAS_CUDA=1
       SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
   find_package(CUDA REQUIRED)
   set_target_properties(sep_memory PROPERTIES
       CUDA_SEPARABLE_COMPILATION ON
       CUDA_RESOLVE_DEVICE_SYMBOLS ON
       CUDA_ARCHITECTURES "75;70;61;60")
-else()
-  target_compile_definitions(sep_memory PRIVATE
-      SEP_HAS_CUDA=0)
 endif()
 
 find_package(Threads REQUIRED)
@@ -91,10 +87,8 @@ endif()
 # Add compile definitions
 target_compile_definitions(sep_memory
     PUBLIC
-        SEP_HAS_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
         $<$<BOOL:${SEP_MEMORY_MINIMAL}>:SEP_MEMORY_MINIMAL>
     PRIVATE
-        SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
         SEP_HAS_REDIS=${SEP_HAS_REDIS}
 )
 

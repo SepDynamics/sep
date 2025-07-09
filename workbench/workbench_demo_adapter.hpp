@@ -5,6 +5,7 @@
 #include <vector>
 
 // Include full class definitions instead of forward declarations
+#include "quantum_pattern.hpp"  // Include the Pattern definition
 #include "renderer.h"
 #include "ui_manager.h"
 #include "window.h"
@@ -47,7 +48,7 @@ namespace sep
             Window* window_;
             Renderer* renderer_;
             UIManager* uiManager_;
-            std::vector<quantum::Pattern> patterns_;
+            std::vector<workbench::Pattern> patterns_;
 
             bool auto_evolve_ = true;
             float evolution_rate_ = 0.2f;

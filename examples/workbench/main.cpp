@@ -1,54 +1,67 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "window.h"
 #include "demos/demo_manager.hpp"
 #include "demos/genesis_pattern.hpp"
-#include "demos/annealing_demo.hpp"
-#include "demos/cosmo_demo.hpp"
-#include "demos/flocking_demo.hpp"
-#include "demos/neural_demo.hpp"
-#include "demos/drug_discovery_demo.hpp"
 #include "demos/digital_physics_demo.hpp"
 #include "demos/memory_garden.hpp"
+#include "demos/audio_visualizer.hpp"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+
+#include <chrono>
+#include <thread>
 
 int main() {
-    auto& manager = sep::workbench::DemoManager::instance();
+    sep::workbench::Window window(1280, 720, "SEP Workbench");
+    window.makeContextCurrent();
 
-    manager.registerDemo("genesis", []() {
-        return std::make_unique<sep::workbench::GenesisPatternDemo>();
-    });
+    if (glewInit() != GLEW_OK) {
+        return -1;
+    }
 
-    manager.registerDemo("annealing", []() {
-        return std::make_unique<sep::workbench::AnnealingDemo>();
-    });
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(window.getHandle(), true);
+    ImGui_ImplOpenGL3_Init();
 
-    manager.registerDemo("cosmos", []() {
-        return std::make_unique<sep::workbench::CosmoDemo>();
-    });
-
-    manager.registerDemo("flocking", []() {
-        return std::make_unique<sep::workbench::FlockingDemo>();
-    });
-
-    manager.registerDemo("neural", []() {
-        return std::make_unique<sep::workbench::NeuralDemo>();
-    });
-
-    manager.registerDemo("drug_discovery", []() {
-        return std::make_unique<sep::workbench::DrugDiscoveryDemo>();
-    });
-
-    manager.registerDemo("digital_physics", []() {
-        return std::make_unique<sep::workbench::DigitalPhysicsDemo>();
-    });
-
-    manager.registerDemo("memory_garden", []() {
-        return std::make_unique<sep::workbench::MemoryGardenDemo>();
-    });
-
+    auto &manager = sep::workbench::DemoManager::getInstance();
+    manager.registerDemo("genesis", []{ return std::make_unique<sep::workbench::GenesisPatternDemo>(); });
+    manager.registerDemo("digital", []{ return std::make_unique<sep::workbench::DigitalPhysicsDemo>(); });
+    manager.registerDemo("memory", []{ return std::make_unique<sep::workbench::MemoryGardenDemo>(); });
+    manager.registerDemo("audio", []{ return std::make_unique<sep::workbench::AudioVisualizerDemo>(); });
     manager.switchToDemo("genesis");
 
-    // Placeholder for the application loop
-    // In the real application this would call manager.update(dt) and manager.render()
-    return 0;
+    while (!window.shouldClose()) {
+        glfwPollEvents();
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        glClearColor(0,0,0,1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        ImGui::Begin("Demos");
+        if (ImGui::Button("Genesis")) manager.switchToDemo("genesis");
+        if (ImGui::Button("Digital")) manager.switchToDemo("digital");
+        if (ImGui::Button("Memory")) manager.switchToDemo("memory");
+        if (ImGui::Button("Audio")) manager.switchToDemo("audio");
+        ImGui::End();
+
+        manager.update(0.016f);
+        manager.render();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        window.swapBuffers();
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }

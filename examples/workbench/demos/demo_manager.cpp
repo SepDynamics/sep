@@ -1,4 +1,5 @@
 #include "demo_manager.hpp"
+#include <stdexcept>
 #include <utility>
 
 namespace sep {
@@ -9,8 +10,7 @@ void DemoManager::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer)
     renderer_ = renderer;
 }
 
-void DemoManager::registerDemo(const std::string& name,
-                               std::function<std::unique_ptr<Demo>()> factory) {
+void DemoManager::registerDemo(const std::string& name, std::function<std::unique_ptr<Demo>()> factory) {
     demo_factories_[name] = std::move(factory);
 }
 
@@ -22,34 +22,40 @@ bool DemoManager::switchToDemo(const std::string& name) {
 
     if (current_demo_) {
         current_demo_->on_unload();
-        current_demo_.reset();
     }
 
     current_demo_ = it->second();
+    current_demo_name_ = name;
+
     if (current_demo_) {
-        current_demo_->initialize(engine_, renderer_);
-        current_demo_name_ = name;
+        current_demo_->on_load();
         return true;
     }
     return false;
 }
 
-void DemoManager::update(float dt) {
+void DemoManager::on_update(float dt) {
     if (current_demo_) {
         current_demo_->on_update(dt);
     }
 }
 
-void DemoManager::render() {
+void DemoManager::on_render() {
     if (current_demo_) {
         current_demo_->on_render();
     }
 }
 
-void DemoManager::cleanup() {
+void DemoManager::on_unload() {
     if (current_demo_) {
         current_demo_->on_unload();
         current_demo_.reset();
+    }
+}
+
+void DemoManager::on_key(int key) {
+    if (current_demo_) {
+        current_demo_->on_key_press(key);
     }
 }
 

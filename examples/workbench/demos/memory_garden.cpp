@@ -1,6 +1,8 @@
 #include "memory_garden.hpp"
 #include <config.hpp>
 #include <glm/vec3.hpp>
+#include "memory/memory_tier_manager.hpp"
+#include "memory/quantum_coherence_manager.h"
 
 namespace sep {
 namespace workbench {

@@ -102,10 +102,7 @@ namespace sep::memory
             return;
 #endif
         }
-        // Create the initial free block
         blocks_.push_back(MemoryBlock(memory_pool_, config.size, 0, config.type));
-        // Explicitly mark it as unallocated to ensure used_space_ stays 0
-        blocks_.back().allocated = false;
     }
 
     MemoryTier::MemoryTier(MemoryTierEnum type, size_t max_patterns, float coherence_threshold,
@@ -391,8 +388,8 @@ namespace sep::memory
 
         float util = static_cast<float>(current_used_space) / static_cast<float>(config_.size);
 
-        // FIX: Clamp tiny floating point values to zero to pass strict tests.
-        return (util < 1e-6f) ? 0.0f : util;
+        // Final check for floating point noise near zero
+        return (util < kUtilizationEpsilon) ? 0.0f : util;
     }
 
     std::size_t MemoryTier::getFreeSpace() const { return config_.size - used_space_; }

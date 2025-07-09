@@ -48,7 +48,7 @@ set(SEP_SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 include_directories(BEFORE
     ${SEP_INCLUDE_DIR}
     ${SEP_SRC_DIR}
-    $<BUILD_INTERFACE:/usr/include>
+    $<BUILD_INTERFACE:/usr/src>
 )
 
 # Ensure core headers are available
@@ -121,7 +121,7 @@ endif()
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/extern/crow/include
+    ${CMAKE_SOURCE_DIR}/extern/crow/src
 )
 add_compile_definitions(CROW_USE_BOOST)
 
@@ -173,7 +173,7 @@ add_subdirectory(src/quantum)
 add_subdirectory(src/embeddings)
 add_subdirectory(src/utils)
 add_subdirectory(src/api)
-add_subdirectory(src/workbench)
+# add_subdirectory(src/demos)
 if(SEP_WITH_AUDIO)
     add_subdirectory(src/audio)
     set(SEP_HAS_AUDIO 1)

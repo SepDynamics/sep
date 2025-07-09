@@ -1,7 +1,7 @@
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/quantum/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/quantum/
         DESTINATION include/sep/quantum
         FILES_MATCHING
         PATTERN "*.h"
@@ -35,7 +35,7 @@ add_library(sep_quantum STATIC
 
 target_include_directories(sep_quantum
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>

@@ -4,7 +4,7 @@ echo "Building SEP workbench demos..."
 
 # Set base directories
 SEP_ROOT="/sep"
-SEP_INCLUDE="$SEP_ROOT/include"
+SEP_INCLUDE="$SEP_ROOT/src"
 SEP_SRC="$SEP_ROOT/src"
 SEP_BUILD="$SEP_ROOT/sep-build"
 
@@ -25,7 +25,7 @@ g++ -std=c++17 -o build/sep_demo \
     workbench_demo_adapter.cpp \
     demo_selection.cpp \
     demos/*.cpp \
-    -I/usr/include \
+    -I/usr/src \
     -I$SEP_INCLUDE \
     -I$SEP_SRC \
     -I$SEP_BUILD/src \
@@ -45,7 +45,7 @@ fi
 # Also build the simple pattern demo for reference
 g++ -std=c++17 -o build/sep_workbench \
     pattern_main.cpp window.cpp renderer.cpp ui_manager.cpp \
-    -I/usr/include \
+    -I/usr/src \
     -I$SEP_INCLUDE \
     -I$SEP_SRC \
     -I$SEP_BUILD/src \

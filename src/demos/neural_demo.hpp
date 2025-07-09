@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../demo_manager.hpp"
+#include "demo_manager.hpp"
+#include "sep_engine_wrapper.h"
 #include <vector>
-#include <glm/vec3.hpp>
 
 namespace sep {
 namespace workbench {
 
-class CosmoDemo : public Demo {
+class NeuralDemo : public Demo {
 public:
     void init() override;
     void update(float dt) override;
@@ -17,19 +17,16 @@ public:
     void handleMouse(int x, int y, int button) override;
 
 private:
-    struct Particle {
-        glm::vec3 position;
-        glm::vec3 velocity;
-        float mass;
+    struct Neuron {
+        uint64_t id;
+        float potential{0.f};
     };
 
-    std::vector<Particle> particles_;
-
-    float box_size_{50.0f};
-    float time_step_{0.01f};
-
-    void initParticles();
-    void integrate(float dt);
+    std::vector<Neuron> neurons_;
+    dag::DagGraph graph_;
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float weight_{0.5f};
 };
 
 } // namespace workbench

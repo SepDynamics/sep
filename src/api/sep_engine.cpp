@@ -617,6 +617,7 @@ nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
         api_config["rate_limit"] = rate_limit_config;
 
         json quantum_config;
+        quantum_config["processor_type"] = "mock";
         quantum_config["max_qubits"]     = 32;
 
         json memory_config;

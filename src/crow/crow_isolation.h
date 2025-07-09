@@ -7,10 +7,9 @@
 // provide lightweight stub definitions that avoid heavy template instantiation.
 
 // Include our own headers when building with CUDA
-#include <http_parser.h>
-
-#include "common.h"
 #include "compat/shim.h"
+#include "common.h"
+#include <http_parser.h>
 
 // Define CROW_LIKELY and CROW_UNLIKELY if not already defined
 #ifndef CROW_LIKELY
@@ -23,49 +22,48 @@
 #endif
 #endif
 
-namespace crow
-{
+namespace crow {
 #if !defined(__cpp_exceptions) && !defined(__EXCEPTIONS) && !defined(_CPPUNWIND)
-    extern const char* last_error;
+extern const char* last_error;
 #endif
 }  // namespace crow
 
 #ifndef CROW_RAISE
-#if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
-#define CROW_RAISE(msg) throw std::runtime_error(msg)
-#else
-#define CROW_RAISE(msg)                                                                            \
-    do                                                                                             \
-    {                                                                                              \
-        crow::last_error = msg;                                                                    \
-        std::abort();                                                                              \
-    } while (0)
-#endif
+#    if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
+#        define CROW_RAISE(msg) throw std::runtime_error(msg)
+#    else
+#        define CROW_RAISE(msg)         \
+             do                          \
+             {                           \
+                 crow::last_error = msg; \
+                 std::abort();           \
+             }                           \
+             while (0)
+#    endif
 #endif
 
 // Crow namespace with stub implementations
-namespace crow
-{
+namespace crow {
     // Stub implementation for request
-    class request
-    {
+    class request {
     public:
-        HTTPMethod method;
+        HTTPMethod  method;
         sep::shim::string url;
         sep::shim::string body;
 
-        const char* get_header_value(const sep::shim::string& key) const { return ""; }
-
+        const char* get_header_value(const sep::shim::string& key) const {
+            return "";
+        }
+        
         // Default constructor - IMPORTANT: Use HTTPMethod::GET (uppercase) to match original Crow
         request() : method(HTTPMethod::GET) {}
     };
 
     // Stub implementation for response
-    class response
-    {
+    class response {
     public:
-        int code{200};
-        int status{200};
+        int         code{200};
+        int         status{200};
         sep::shim::string body;
 
         response() = default;
@@ -73,43 +71,42 @@ namespace crow
 
         void set_header(const sep::shim::string& key, const sep::shim::string& value) {}
         void add_header(const sep::shim::string& key, const sep::shim::string& value) {}
-        void write(const sep::shim::string& data) { body = data; }
+        void write(const sep::shim::string& data) {
+            body = data;
+        }
         void end() {}
     };
 
     // Stub implementation for websocket
-    namespace websocket
-    {
-        enum class connection_state
-        {
+    namespace websocket {
+        enum class connection_state {
             open,
             closing,
             closed
         };
 
-        class connection
-        {
+        class connection {
         public:
             void send_text(const sep::shim::string& text) {}
             void send_binary(const sep::shim::string& data) {}
             void close(const sep::shim::string& msg = "") {}
 
-            connection_state get_state() const { return connection_state::closed; }
+            connection_state get_state() const {
+                return connection_state::closed;
+            }
         };
     }  // namespace websocket
 
     // Stub implementation for middleware context
-    template <typename Adaptor, typename Handler, typename... Middlewares>
-    class context
-    {
+    template<typename Adaptor, typename Handler, typename... Middlewares>
+    class context {
     public:
-        request req;
+        request  req;
         response res;
     };
 
     // Non-templated base class for Crow app to avoid template issues
-    class CrowBase
-    {
+    class CrowBase {
     public:
         CrowBase() {}
 
@@ -125,80 +122,77 @@ namespace crow
     };
 
     // Forward declaration of the templated Crow class
-    template <typename... Middlewares>
+    template<typename... Middlewares>
     class Crow;
-
+    
     // Forward declaration of the templated crow class (lowercase for backward compatibility)
-    template <typename... Middlewares>
+    template<typename... Middlewares>
     class crow;
-
+    
     // Templated Crow app that inherits from the non-templated base
-    template <typename... Middlewares>
-    class Crow : public CrowBase
-    {
+    template<typename... Middlewares>
+    class Crow : public CrowBase {
     public:
         Crow() : CrowBase() {}
 
-        template <typename T>
-        T& get_middleware()
-        {
+        template<typename T>
+        T& get_middleware() {
             // Stub implementation that returns a default-constructed T
             static T middleware;
             return middleware;
         }
 
-        template <typename Adaptor>
-        void handle_upgrade(const request& req, response& res, Adaptor&& adaptor)
-        {
-        }
+        template<typename Adaptor>
+        void handle_upgrade(const request& req,
+                            response& res,
+                            Adaptor&& adaptor) {}
     };
-
+    
     // Lowercase version with same implementation for backward compatibility
-    template <typename... Middlewares>
-    class crow : public CrowBase
-    {
+    template<typename... Middlewares>
+    class crow : public CrowBase {
     public:
         crow() : CrowBase() {}
 
-        template <typename T>
-        T& get_middleware()
-        {
+        template<typename T>
+        T& get_middleware() {
             // Stub implementation that returns a default-constructed T
             static T middleware;
             return middleware;
         }
 
-        template <typename Adaptor>
-        void handle_upgrade(const request& req, response& res, Adaptor&& adaptor)
-        {
-        }
+        template<typename Adaptor>
+        void handle_upgrade(const request& req,
+                            response& res,
+                            Adaptor&& adaptor) {}
     };
 
     // Stub implementation for Crow app (alias)
-    template <typename... Middlewares>
+    template<typename... Middlewares>
     using app = Crow<Middlewares...>;
 
     using simpleApp = crow<>;
 
-// Minimal replacements for Crow convenience macros
-#define CROW_ROUTE(app, url) app.route(url)
-#define CROW_BP_ROUTE(bp, url) bp.route(url)
-#define CROW_WEBSOCKET_ROUTE(app, url) app.route(url).websocket(&app)
-#define CROW_MIDDLEWARES(app, ...) .middlewares(__VA_ARGS__)
-#define CROW_CATCHALL_ROUTE(app) app.catchall_route()
-#define CROW_BP_CATCHALL_ROUTE(bp) bp.catchall_rule()
+    // Minimal replacements for Crow convenience macros
+    #define CROW_ROUTE(app, url) app.route(url)
+    #define CROW_BP_ROUTE(bp, url) bp.route(url)
+    #define CROW_WEBSOCKET_ROUTE(app, url) app.route(url).websocket(&app)
+    #define CROW_MIDDLEWARES(app, ...) .middlewares(__VA_ARGS__)
+    #define CROW_CATCHALL_ROUTE(app) app.catchall_route()
+    #define CROW_BP_CATCHALL_ROUTE(bp) bp.catchall_rule()
 
     // HTTP parser stubs are replaced with the real http-parser library
-    namespace http_parser_stub
-    {
-        using ::http_errno;
+    namespace http_parser_stub {
         using ::http_parser;
         using ::http_parser_settings;
         using ::http_parser_type;
         using ::http_parser_url;
+        using ::http_errno;
+
 
     }  // namespace http_parser_stub
 
+#endif  // CROW_ISOLATION_H
 #ifdef __CUDACC__
 }  // namespace crow
 #endif

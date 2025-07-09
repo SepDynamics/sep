@@ -1,7 +1,7 @@
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/audio/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/audio/
         DESTINATION include/sep/audio
         FILES_MATCHING
         PATTERN "*.h"
@@ -72,7 +72,7 @@ set(FFTW_LIBRARIES ${FFTW_LIBRARIES} PARENT_SCOPE)
 
 target_include_directories(sep_audio
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>

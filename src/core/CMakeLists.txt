@@ -2,15 +2,26 @@ set(SEP_CORE_SOURCES
     tracing.cpp
     allocation_metrics.cpp
     dag_graph.cpp
-    manager.cpp
+    config_manager_stub.cpp
     prometheus_exporter.cpp
     error_handler.cpp
     metrics_collector.cpp
     logging.cpp
 )
 
+# Manager functionality is excluded when building the testbed stubs
+if(NOT SEP_TESTBED_STUBS)
+    list(APPEND SEP_CORE_SOURCES manager.cpp)
+endif()
+
 # Create the static core library
 add_library(sep_core STATIC ${SEP_CORE_SOURCES})
+
+# The core library does not require Redis for these tests. Explicitly
+# disable Redis support so headers guarded by SEP_NO_REDIS do not
+# trigger missing include errors when building in minimal mode.
+set(SEP_HAS_REDIS 0)
+add_compile_definitions(SEP_NO_REDIS)
 
 if(SEP_BUILD_ENGINE)
     target_sources(sep_core PRIVATE engine.cpp)
@@ -19,7 +30,7 @@ endif()
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/core/
         DESTINATION include/sep/core
         FILES_MATCHING
         PATTERN "*.h"
@@ -50,7 +61,7 @@ set_target_properties(sep_core PROPERTIES
 
 target_include_directories(sep_core
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
@@ -65,12 +76,12 @@ target_link_libraries(sep_core
 )
 
 # Install headers from include directory
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/core/
         DESTINATION include/sep/core
         FILES_MATCHING PATTERN "*.h")
 
 # Install compat headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/compat/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/compat/
         DESTINATION include/sep/compat
         FILES_MATCHING PATTERN "*.h")
 

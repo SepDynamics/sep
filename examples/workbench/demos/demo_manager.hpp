@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../src/sep_engine_wrapper.h"
+#include "sep_engine_wrapper.h"
 #include <functional>
 #include <memory>
 #include <string>
@@ -57,4 +57,3 @@ private:
 
 } // namespace workbench
 } // namespace sep
-

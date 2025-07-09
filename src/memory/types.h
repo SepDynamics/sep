@@ -5,7 +5,6 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
-#include "../core/types.h"
 
 namespace sep {
 namespace memory {

@@ -8,7 +8,7 @@ namespace sep {
 namespace memory {
   enum class MemoryTierEnum : int;
 }
-using sep::memory::MemoryTierEnum;
+using ::sep::memory::MemoryTierEnum;
 namespace pattern {
   class BlenderBridge;
 }

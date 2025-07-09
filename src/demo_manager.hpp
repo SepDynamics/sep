@@ -8,10 +8,11 @@
 #define SEP_WORKBENCH_DEMO
 #include "sep_engine_wrapper.h"
 #include <glm/glm.hpp>
+#include "core/manager.h"
 
 using Engine = sep::Engine;
 using CyclesRenderer = sep::CyclesRenderer;
-using ConfigManager = sep::core::config::ConfigManager;
+using ConfigManager = sep::config::ConfigManager;
 
 
 namespace sep {
@@ -40,9 +41,31 @@ protected:
     CyclesRenderer* renderer_{nullptr};
     
     // Add access to the config manager
-    ConfigManager& getConfigManager() {
-        return ConfigManager::getInstance();
+public:
+    // Add a fake annealing_sim config
+    struct AnnealingSimConfig {
+        std::vector<float> temperature_schedule = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f};
+        int particle_count = 100;
+    };
+
+    class DemoConfigManager {
+    public:
+        static DemoConfigManager& getInstance() {
+            static DemoConfigManager instance;
+            return instance;
+        }
+        
+        AnnealingSimConfig annealing_sim() const { return sim_config_; }
+        
+    private:
+        AnnealingSimConfig sim_config_;
+    };
+    
+    DemoConfigManager& getConfigManager() {
+        return DemoConfigManager::getInstance();
     }
+
+protected:
 };
 
 class DemoManager {

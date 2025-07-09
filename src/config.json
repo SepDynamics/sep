@@ -14,11 +14,7 @@
   "demos": {
     "genesis_pattern": {
       "initial_pattern": {
-        "dimensions": [
-          3,
-          3,
-          3
-        ],
+        "dimensions": [3, 3, 3],
         "evolution_rate": 0.1,
         "coherence_threshold": 0.5
       },
@@ -61,6 +57,42 @@
     "annealing_sim": {
       "temperature_schedule": [1.0, 0.8, 0.6, 0.4],
       "particle_count": 20
+    },
+    "drug_discovery": {
+      "optimizer": {
+        "iterations": 100,
+        "mutation_rate": 0.1
+      }
+    },
+    "flocking": {
+      "agent_count": 50,
+      "cohesion_weight": 1.0,
+      "separation_weight": 1.5,
+      "alignment_weight": 1.0,
+      "neighbor_radius": 5.0,
+      "separation_distance": 2.0,
+      "max_speed": 2.0
+    },
+    "neural_demo": {
+      "network": {
+        "neuron_count": 100,
+        "connection_prob": 0.3
+      },
+      "neuron": {
+        "threshold": 0.5,
+        "decay": 0.9,
+        "input_strength": 1.0
+      }
+    },
+    "digital_physics": {
+      "grid": {
+        "width": 100,
+        "height": 100
+      },
+      "rules": {
+        "birth": [3],
+        "survival": [2, 3]
+      }
     }
   },
   "renderer": {
@@ -73,5 +105,14 @@
   "optimizer": {
     "iterations": 100,
     "mutation_rate": 0.1
+  },
+  "cosmo": {
+    "box_size": 100.0,
+    "time_step": 0.01
+  },
+  "cosmo_sim": {
+    "particle_count": 1000,
+    "simulation_speed": 1.0,
+    "gravity_constant": 6.67430e-11
   }
 }

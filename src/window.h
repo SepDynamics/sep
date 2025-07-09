@@ -33,9 +33,9 @@ namespace sep
             GLFWwindow* getGLFWWindow() { return window; }
 
         private:
-            std::string title;
             int width;
             int height;
+            std::string title;
             GLFWwindow* window;
         };
 

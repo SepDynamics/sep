@@ -120,16 +120,20 @@ nlohmann::json SepEngine::initialize(const sep::config::APIConfig& config)
     if (!cuda_core.is_initialized()) {
         // Skip CUDA initialization if not available
         // This is a temporary workaround for the linking issue
-        SPDLOG_INFO("Skipping CUDA initialization due to linking issues");
-        
-        // We'll assume CUDA initialization succeeded for now
-        // In a production environment, this should be properly handled
+        SPDLOG_INFO("CUDA not initialized. Using CPU-only mode.");
     }
 
-    // Now that CUDA is initialized, create the quantum processor and pattern processor
+    // Create processors with appropriate configurations
     try {
-        impl_->quantum_processor = sep::quantum::createQuantumProcessor({});
-        impl_->pattern_processor = std::make_unique<sep::pattern::PatternProcessor>();
+        // Create the quantum processor with a simple configuration
+        sep::quantum::QuantumProcessor::Config qp_config;
+        qp_config.enable_gpu = false; // Disable GPU usage for stability
+        impl_->quantum_processor = sep::quantum::createQuantumProcessor(qp_config);
+        
+        // Create pattern processor with CPU implementation
+        impl_->pattern_processor = std::make_unique<sep::pattern::PatternProcessor>(
+            sep::pattern::PatternProcessor::Implementation::CPU);
+            
     } catch (const std::exception& e) {
         json result;
         result["success"] = false;

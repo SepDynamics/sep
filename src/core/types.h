@@ -13,16 +13,9 @@
 // Third-party
 #include <nlohmann/json.hpp>
 
-// Forward declaration of the memory tier enum
-// (Canonical definition is in memory/types.h)
+#include "memory/types.h"
 
 namespace sep {
-    // Forward declaration of memory tier enum
-    // (Canonical definition is in memory/types.h)
-    namespace memory
-    {
-        enum class MemoryTierEnum : int;
-    }
 
 namespace config {
 

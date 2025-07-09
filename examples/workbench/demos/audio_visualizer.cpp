@@ -15,9 +15,9 @@ void AudioVisualizerDemo::on_load() {
     capture_ = AudioCapture::create();
 
     AudioConfig acfg;
-    acfg.device = cfg.input.device;
-    acfg.sample_rate = cfg.input.sample_rate;
-    acfg.buffer_size = cfg.input.buffer_size;
+    acfg.source = cfg.input.device;
+    acfg.rate = cfg.input.sample_rate;
+    acfg.buffer_frames = cfg.input.buffer_size;
     acfg.channels = 2;
 
     capture_->setCallback([this](const float* data, size_t len) {
@@ -30,6 +30,7 @@ void AudioVisualizerDemo::on_load() {
 }
 
 void AudioVisualizerDemo::on_update(float dt) {
+    (void)dt; // Unused parameter
     const auto& cfg = Config::getInstance().audio_visualizer();
     
     // Map audio patterns to visual patterns using config parameters
@@ -49,7 +50,7 @@ void AudioVisualizerDemo::on_update(float dt) {
     if (renderer_) {
         renderer_->setColorMode("frequency");  // Color based on frequency
         renderer_->setEmissionMode("amplitude");  // Emission based on amplitude
-        renderer_->setRoughnessMode("evolution");  // Surface detail based on evolution
+        renderer_->setRoughnessMode(1);  // Surface detail based on evolution (using mode 1)
     }
 
     latest_visual_patterns_ = std::move(visual_patterns);
@@ -70,7 +71,7 @@ void AudioVisualizerDemo::on_unload() {
     capture_.reset();
 }
 
-void AudioVisualizerDemo::on_key_press(unsigned char key) {
+void AudioVisualizerDemo::on_key_press(int key) {
     const float SCALE_STEP = 0.1f;
     
     switch (key) {

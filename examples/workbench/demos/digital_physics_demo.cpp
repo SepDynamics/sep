@@ -72,7 +72,7 @@ void DigitalPhysicsDemo::on_unload() {
     grid_.clear();
 }
 
-void DigitalPhysicsDemo::on_key_press(unsigned char key) {
+void DigitalPhysicsDemo::on_key_press(int key) {
     if (key == 'r') {
         for (auto& cell : grid_) {
             cell.attributes.x = static_cast<float>(std::rand() % 2);

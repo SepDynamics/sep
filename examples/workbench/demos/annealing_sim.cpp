@@ -66,7 +66,8 @@ void AnnealingSimDemo::on_unload() {
     coherence_mgr_.reset();
 }
 
-void AnnealingSimDemo::on_key_press(unsigned char key) {
+void AnnealingSimDemo::on_key_press(int key)
+{
     if (key == 'p') paused_ = !paused_;
 }
 

@@ -51,8 +51,8 @@ int main() {
         if (ImGui::Button("Audio")) manager.switchToDemo("audio");
         ImGui::End();
 
-        manager.update(0.016f);
-        manager.render();
+        manager.on_update(0.016f);
+        manager.on_render();
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

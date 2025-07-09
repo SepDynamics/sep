@@ -15,7 +15,7 @@ public:
     void on_update(float dt) override;
     void on_render() override;
     void on_unload() override;
-    void on_key_press(unsigned char key) override;
+    void on_key_press(int key) override;
     void on_mouse(int x, int y, int button);
 
 private:
@@ -30,8 +30,8 @@ private:
         float strength;
     };
 
-    std::unique_ptr<MemoryTierManager> memory_manager_;
-    std::unique_ptr<QuantumCoherenceManager> coherence_manager_;
+    std::unique_ptr<sep::memory::MemoryTierManager> memory_manager_;
+    std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_manager_;
 
     std::vector<Node> nodes_;
     std::vector<Relationship> relationships_;

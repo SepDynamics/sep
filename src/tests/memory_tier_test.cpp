@@ -1,13 +1,14 @@
-#include "../memory/memory_tier_manager.hpp"
-#include "../memory/memory_tier.hpp"
-#include "../core/types.h"
-#include "../compat/shim.h"
-
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+
+#include "compat/shim.h"
+#include "core/types.h"
+#include "memory/memory_tier.hpp"
+#include "memory/memory_tier_manager.hpp"
 
 using namespace sep::memory;
 using sep::SEPResult;

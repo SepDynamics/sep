@@ -288,11 +288,14 @@ bool ImGui_ImplOpenGL3_InitLoader()
 {
     // Initialize our loader
 #ifdef IMGUI_IMPL_OPENGL_LOADER_IMGL3W
-    if (glGetIntegerv == nullptr && imgl3wInit() != 0)
+    if (imgl3wInit() != 0)
     {
         fprintf(stderr, "Failed to initialize OpenGL loader!\n");
         return false;
     }
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+    // When using GLEW, OpenGL functions are always available via direct linking
+    // No need to check or initialize anything
 #endif
     return true;
 }

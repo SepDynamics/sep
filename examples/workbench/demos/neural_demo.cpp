@@ -84,7 +84,9 @@ void NeuralDemo::on_unload() {
     graph_ = dag::DagGraph();
 }
 
-void NeuralDemo::on_key_press(unsigned char) {}
+void NeuralDemo::on_key_press(int key) {
+    (void)key;
+}
 void NeuralDemo::on_mouse(int, int, int) {}
 
 } // namespace workbench

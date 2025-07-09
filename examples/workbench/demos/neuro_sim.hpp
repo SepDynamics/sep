@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "demo_manager.hpp"
-#include "../sep_engine_wrapper.h"
+#include "sep_engine_wrapper.h"
 
 namespace sep
 {
@@ -22,7 +22,7 @@ namespace sep
             void on_update(float dt) override;
             void on_render() override;
             void on_unload() override;
-            void on_key_press(unsigned char key) override;
+            void on_key_press(int key) override;
             void on_mouse(int x, int y, int button);
 
         private:

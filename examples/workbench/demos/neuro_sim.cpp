@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
-#include "../sep_engine_wrapper.h"
 #include "quantum/evolution.h"
+#include "sep_engine_wrapper.h"
 
 using sep::core::config::ConfigManager;
 using sep::memory::MemoryTierEnum;
@@ -105,7 +105,7 @@ namespace sep
             memory_manager_.reset();
         }
 
-        void NeuroSimDemo::on_key_press(unsigned char) {}
+        void NeuroSimDemo::on_key_press(int) {}
         void NeuroSimDemo::on_mouse(int, int, int) {}
 
     }  // namespace workbench

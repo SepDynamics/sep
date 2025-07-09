@@ -98,7 +98,8 @@ void CosmoSim::on_unload() {
     bodies_.clear();
 }
 
-void CosmoSim::on_key_press(unsigned char key) {
+void CosmoSim::on_key_press(int key)
+{
     if (key == 'r') {
         initBodies();
     }

@@ -25,13 +25,10 @@ namespace sep
             virtual void on_update(float dt) = 0;
             virtual void on_render() = 0;
             virtual void on_key_press(int key) = 0;
+            virtual void on_mouse(int x, int y, int button) = 0;
 
-            void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer)
-            {
-                engine_ = engine;
-                renderer_ = renderer;
-                on_load();
-            }
+            void initialize(sep::Engine* engine,
+                            sep::CyclesRenderer* renderer);  // Declaration only
 
         protected:
             sep::Engine* engine_{nullptr};
@@ -47,18 +44,9 @@ namespace sep
                 return instance;
             }
 
-            void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer)
-            {
-                engine_ = engine;
-                renderer_ = renderer;
-            }
-
+            void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer);
             void registerDemo(const std::string& name,
-                              std::function<std::unique_ptr<Demo>()> factory)
-            {
-                demo_factories_[name] = std::move(factory);
-            }
-
+                              std::function<std::unique_ptr<Demo>()> factory);
             bool switchToDemo(const std::string& name);
             void on_update(float dt);
             void on_render();

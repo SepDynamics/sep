@@ -1,9 +1,10 @@
 #pragma once
 
-// Lightweight wrapper utilities for Crow applications.  When building without
-// CUDA the real Crow headers are included by crow_isolation.h.
+// Lightweight wrapper utilities for Crow applications.
+// Use our isolation shim instead of trying to include the real Crow headers
 
-#include "crow_isolation.h"
+// Include our isolation shim which defines all necessary types
+#include "crow/crow_isolation.h"
 
 namespace crow {
 

@@ -6,10 +6,6 @@
  * SEP Engine API via HTTP endpoints using the Crow web framework.
  */
 
-// CROW_DISABLE_RTTI is defined globally via CMake
-
-// First include our fixed isolation headers to avoid conflicts
-#include "crow/crow_isolation.h"
 #include "crow/common.h"
 #include "crow/http_request.h"
 #include "crow/http_response.h"
@@ -42,11 +38,11 @@ CrowRequestAdapter::CrowRequestAdapter(::crow::request &req) : req_(req) {
     method_str_ = ::crow::method_name(req.method);
 }
 
-std::string CrowRequestAdapter::url() const { return std::string(req_.url); }
+std::string CrowRequestAdapter::url() const { return std::string(req_.url.c_str()); }
 
 std::string CrowRequestAdapter::method() const { return method_str_; }
 
-std::string CrowRequestAdapter::body() const { return std::string(req_.body); }
+std::string CrowRequestAdapter::body() const { return std::string(req_.body.c_str()); }
 
 CrowResponseAdapter::CrowResponseAdapter(::crow::response &res) : res_(res) {}
 
@@ -54,11 +50,11 @@ void CrowResponseAdapter::setCode(int code) { res_.code = code; }
 
 int CrowResponseAdapter::getCode() const { return res_.code; }
 
-void CrowResponseAdapter::setBody(const std::string &body) { res_.body = body; }
+void CrowResponseAdapter::setBody(const std::string &body) { res_.body = body.c_str(); }
 
 void CrowResponseAdapter::end() { res_.end(); }
 
-std::string CrowResponseAdapter::getBody() const { return std::string(res_.body); }
+std::string CrowResponseAdapter::getBody() const { return std::string(res_.body.c_str()); }
 
 std::unique_ptr<HttpResponse> makeResponse(::crow::response &res) {
     return std::make_unique<CrowResponseAdapter>(res);

@@ -67,6 +67,23 @@ struct CudaConfig {
     bool enable_profiling{false};
 };
 
+// Response modulation config for API responses
+struct ResponseModulationConfig
+{
+    bool enabled{true};
+    float coherence_threshold{0.7f};
+    bool simplify_low_coherence{true};
+    int max_detail_level{3};
+};
+
+// Ollama configuration settings
+struct OllamaConfig
+{
+    std::string host{"localhost"};
+    uint16_t port{11434};
+    std::string model{"llama2"};
+    bool enabled{false};
+};
 
 // API server configuration. Only a subset of fields is required for
 // compiling the memory manager tests.
@@ -80,6 +97,10 @@ struct APIConfig {
     std::string log_level{"info"};
     bool enable_metrics{true};
     std::size_t max_batch_size{1024};
+
+    // Added missing configuration objects
+    ResponseModulationConfig response_modulation;
+    OllamaConfig ollama;
 };
 
 

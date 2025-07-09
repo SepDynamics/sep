@@ -1,14 +1,7 @@
 #pragma once
 
-// Handle ASIO/Crow includes based on RTTI availability
-#ifndef CROW_DISABLE_RTTI
-// Use real headers in non-CUDA mode
-#include "crow/http_request.h"
-#include "crow/http_response.h"
-#else
-// Use isolation headers in CUDA mode
+// Include only crow_isolation.h instead of direct http header files
 #include "crow/crow_isolation.h"
-#endif
 #include <vector>
 #include <string>
 
@@ -45,8 +38,7 @@ void AuthMiddleware::before_handle(::crow::request& req, ::crow::response& res, 
     return;
   }
 
-  // Use the global crow::status enum explicitly to avoid accidental
-  // lookup of a similarly named namespace under sep::crow
+  // Use the crow::status enum directly
   res.code = static_cast<int>(::crow::status::UNAUTHORIZED);
   res.body = "{\"error\":\"unauthorized\"}";
   res.end();

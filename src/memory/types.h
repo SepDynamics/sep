@@ -28,7 +28,7 @@ namespace memory {
         class IRedisManager;
 }
 
-// Convert MemoryTierEnum to string representation
+// Convert sep::memory::MemoryTierEnum to string representation
 inline std::string memoryTierToString(MemoryTierEnum tier) {
     switch (tier) {
         case MemoryTierEnum::STM: return "stm";
@@ -41,7 +41,7 @@ inline std::string memoryTierToString(MemoryTierEnum tier) {
     }
 }
 
-// Convert string to MemoryTierEnum
+// Convert string to sep::memory::MemoryTierEnum
 inline MemoryTierEnum stringToMemoryTier(const std::string& tier) {
     if (tier == "stm") return MemoryTierEnum::STM;
     if (tier == "mtm") return MemoryTierEnum::MTM;

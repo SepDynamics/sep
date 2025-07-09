@@ -3,12 +3,12 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
-#include "../sep_engine_wrapper.h"
+#include "sep_engine_wrapper.h"
 #include "quantum/evolution.h"
 
 #ifdef SEP_WORKBENCH_DEMO
 // In demo mode, types are defined directly in sep namespace
-using sep::MemoryTierEnum;               // MemoryTierEnum is directly in sep namespace
+using sep::memory::MemoryTierEnum;               // sep::memory::MemoryTierEnum is directly in sep namespace
 using sep::MemoryTierManager;            // MemoryTierManager is directly in sep namespace
 using sep::Pattern;                      // Pattern is directly in sep namespace
 using sep::core::config::ConfigManager;  // This stays in core::config
@@ -53,7 +53,7 @@ namespace sep
                 n.pattern.id = std::to_string(i);
                 n.pattern.coherence = 0.f;
                 n.pattern.stability = 0.5f;
-                n.pattern.memory_tier = MemoryTierEnum::STM;
+                n.pattern.memory_tier = sep::memory::MemoryTierEnum::STM;
                 n.pattern.position = glm::vec4(static_cast<float>(i), 0.f, 0.f, 1.f);
                 memory_manager_->registerPattern(i, n.pattern);
                 n.node_id = dag.addNode(glm::vec3(n.pattern.position), n.pattern.coherence, {});
@@ -99,7 +99,7 @@ namespace sep
                 auto tier = memory_manager_->determineTier(n.pattern.quantum_state.coherence,
                                                            n.pattern.quantum_state.stability,
                                                            n.pattern.quantum_state.generation);
-                n.pattern.memory_tier = static_cast<MemoryTierEnum>(tier->getType());
+                n.pattern.memory_tier = static_cast<sep::memory::MemoryTierEnum>(tier->getType());
                 dag.updateCoherence(n.node_id, n.pattern.quantum_state.coherence);
                 memory_manager_->registerPattern(std::stoull(n.pattern.id), n.pattern);
             }

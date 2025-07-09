@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
     #endif
     
     // 4. Initialize the DemoManager
-    sep::workbench::DemoManager demo_manager;
+    auto& demo_manager = sep::workbench::DemoManager::getInstance();
     demo_manager.initialize(engine.get(), renderer);
     g_demo_manager = &demo_manager;
     

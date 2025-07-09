@@ -1,6 +1,8 @@
 #pragma once
 
 #include "demo_manager.hpp"
+#include "memory/memory_tier_manager.hpp"
+#include "memory/quantum_coherence_manager.h"
 #include <memory>
 #include <vector>
 

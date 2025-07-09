@@ -21,7 +21,7 @@ namespace sep
     // Forward declarations for both modes
     struct Pattern;
     struct QuantumState;
-    enum class MemoryTierEnum;
+    namespace memory { enum class MemoryTierEnum; }
 
     // Base class definitions that are common to both modes
     class Engine
@@ -78,13 +78,7 @@ namespace sep
         float dimensions[3]{1.0f, 1.0f, 1.0f};
     };
 
-    // Memory tier enum
-    enum class MemoryTierEnum
-    {
-        STM,
-        MTM,
-        LTM
-    };
+    using sep::memory::MemoryTierEnum;
 
     // Pattern structure
     struct Pattern
@@ -92,7 +86,7 @@ namespace sep
         std::string id;
         float coherence{0.0f};
         float stability{0.5f};
-        MemoryTierEnum memory_tier{MemoryTierEnum::STM};
+        sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
         glm::vec3 position{0.0f, 0.0f, 0.0f};
         QuantumState quantum_state;
     };

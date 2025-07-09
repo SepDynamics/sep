@@ -4,7 +4,7 @@
 #define SEP_WORKBENCH_DEMO 1
 #endif
 
-#include "../sep_engine_wrapper.h"
+#include "sep_engine_wrapper.h"
 
 #include <functional>
 #include <memory>

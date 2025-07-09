@@ -122,7 +122,7 @@ public:
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
             const auto& data = pair.second;
-            memory::MemoryTierEnum target_tier = determineOptimalTier(data);
+            memory::sep::memory::MemoryTierEnum target_tier = determineOptimalTier(data);
 
             if (target_tier != data.current_tier) {
                 TierMigration migration;
@@ -761,11 +761,11 @@ uint64_t QuantumCoherenceManager::getGlobalTick() const {
     return impl_->getGlobalTick();
 }
 
-uint32_t QuantumCoherenceManager::getPatternCountByTier(MemoryTierEnum tier) const {
+uint32_t QuantumCoherenceManager::getPatternCountByTier(sep::memory::MemoryTierEnum tier) const {
     return impl_->getPatternCountByTier(tier);
 }
 
-float QuantumCoherenceManager::getTierFragmentation(MemoryTierEnum tier) const {
+float QuantumCoherenceManager::getTierFragmentation(sep::memory::MemoryTierEnum tier) const {
     return impl_->getTierFragmentation(tier);
 }
 

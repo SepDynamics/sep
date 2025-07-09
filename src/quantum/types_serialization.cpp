@@ -1,5 +1,5 @@
 #include "quantum/types.h"
-#include "memory/types.h" // Add include for MemoryTierEnum
+#include "memory/types.h" // Add include for sep::memory::MemoryTierEnum
 #include <nlohmann/json.hpp> 
 #include <cstring>
 

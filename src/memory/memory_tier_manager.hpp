@@ -58,17 +58,17 @@ namespace memory {
         void shutdown();
 
         // Memory block allocation and management
-        MemoryBlock *allocate(std::size_t size, MemoryTierEnum tier);
+        MemoryBlock *allocate(std::size_t size, sep::memory::MemoryTierEnum tier);
         void deallocate(MemoryBlock *block);
         MemoryBlock *findBlockByPtr(void *ptr);
 
         // Tier management
-        MemoryTier *getTier(MemoryTierEnum tier);
-        float getTierUtilization(MemoryTierEnum tier) const;
-        float getTierFragmentation(MemoryTierEnum tier) const;
+        MemoryTier *getTier(sep::memory::MemoryTierEnum tier);
+        float getTierUtilization(sep::memory::MemoryTierEnum tier) const;
+        float getTierFragmentation(sep::memory::MemoryTierEnum tier) const;
         float getTotalUtilization() const;
         float getTotalFragmentation() const;
-        void defragmentTier(MemoryTierEnum tier);
+        void defragmentTier(sep::memory::MemoryTierEnum tier);
         void optimizeBlocks();
         void optimizeTiers();
 
@@ -109,7 +109,7 @@ namespace memory {
         void registerGenericData(std::size_t id, const void *data);
         const void *getRegisteredData(std::size_t id) const;
         void cleanupExpiredData();
-        void pruneDataByPriority(MemoryTierEnum tier, size_t max_count);
+        void pruneDataByPriority(sep::memory::MemoryTierEnum tier, size_t max_count);
 
         // Pattern management
         void registerPattern(std::size_t id, const ::sep::pattern::PatternData &pattern);
@@ -117,7 +117,7 @@ namespace memory {
         void removePattern(std::size_t id);
         void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);
         void cleanupExpiredPatterns();
-        void prunePatternsByPriority(MemoryTierEnum tier, size_t max_count);
+        void prunePatternsByPriority(sep::memory::MemoryTierEnum tier, size_t max_count);
         void calculateRelationshipCoherence();
 
         // Test helpers
@@ -158,7 +158,7 @@ namespace memory {
         std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>>
             pattern_relationships_;
 
-        SEPResult promoteToTier(MemoryBlock *block, MemoryTierEnum tier, MemoryBlock *&out_block);
+        SEPResult promoteToTier(MemoryBlock *block, sep::memory::MemoryTierEnum tier, MemoryBlock *&out_block);
         SEPResult compressBlock(MemoryBlock *block);
 
         // Generic data scoring methods for tier transition

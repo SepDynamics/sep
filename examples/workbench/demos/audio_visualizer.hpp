@@ -1,18 +1,15 @@
 #pragma once
 
 #include "demo_manager.hpp"
+#include "audio/capture.h"
+#include "audio/pipeline.h"
 #include <memory>
 #include <vector>
 #include <glm/vec3.hpp>
-// Using wrapper header instead of direct includes
 
 namespace sep {
 namespace workbench {
 
-namespace audio {
-class AudioCapture;
-class AudioPipeline;
-}
 
 class AudioVisualizerDemo : public Demo {
 public:

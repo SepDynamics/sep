@@ -71,7 +71,7 @@ struct MemoryBlock {
   std::size_t access_count{0};
   std::uint64_t wait{0};
   std::uint32_t generation{0};
-  MemoryTierEnum tier{MemoryTierEnum::STM};
+  sep::memory::MemoryTierEnum tier{sep::memory::MemoryTierEnum::STM};
   CompressionMethod compression{CompressionMethod::None};
   float utilization{0.0f};
   float stability{0.0f};
@@ -86,7 +86,7 @@ struct MemoryBlock {
   bool allocated{false};
 
   MemoryBlock() = default;
-  MemoryBlock(void *p, std::size_t s, std::size_t off, MemoryTierEnum t)
+  MemoryBlock(void *p, std::size_t s, std::size_t off, sep::memory::MemoryTierEnum t)
       : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
@@ -95,14 +95,14 @@ using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 class MemoryTier {
 public:
   struct Config {
-    MemoryTierEnum type{MemoryTierEnum::STM};
+    sep::memory::MemoryTierEnum type{sep::memory::MemoryTierEnum::STM};
     std::size_t size{0};
   };
 
   explicit MemoryTier(const Config &config);
 
   // Pattern management constructor
-  MemoryTier(MemoryTierEnum type, size_t max_patterns,
+  MemoryTier(sep::memory::MemoryTierEnum type, size_t max_patterns,
              float coherence_threshold, int min_generations);
 
   // Combined constructor for memory pool and pattern management
@@ -131,7 +131,7 @@ public:
   bool resize(std::size_t new_size);
 
   // Expose configuration for manager-level optimizations
-  MemoryTierEnum getType() const { return config_.type; }
+  sep::memory::MemoryTierEnum getType() const { return config_.type; }
   std::size_t getSize() const { return config_.size; }
 
   // Pattern management methods

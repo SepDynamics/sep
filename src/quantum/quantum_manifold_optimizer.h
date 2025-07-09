@@ -60,7 +60,7 @@ using ::sep::quantum::QuantumProcessorQFH;
 class QuantumManifoldOptimizer {
 public:
     struct Config {
-        MemoryTierEnum tier{MemoryTierEnum::STM};
+        sep::memory::MemoryTierEnum tier{sep::memory::MemoryTierEnum::STM};
         ::sep::config::CudaConfig cuda;
         ::sep::config::APIConfig api;
         ::sep::config::LogConfig log;
@@ -138,7 +138,7 @@ class PerformanceAnalyzer;
 
 struct SemanticConfig {
   int embedding_dimensions = 512;
-  MemoryTierEnum tier = MemoryTierEnum::STM;
+  sep::memory::MemoryTierEnum tier = sep::memory::MemoryTierEnum::STM;
   int hierarchy_levels = 4;
   double interference_threshold = 0.1;
   bool enable_multimodal_fusion = true;
@@ -164,7 +164,7 @@ public:
   void predictiveMigration(int pattern_id, double time_horizon_ms);
 
   // Intelligent tier promotion decisions
-  MemoryTierEnum recommendTier(const QuantumPattern &pattern) const;
+  sep::memory::MemoryTierEnum recommendTier(const QuantumPattern &pattern) const;
 
 private:
   ManifoldConfig config_;

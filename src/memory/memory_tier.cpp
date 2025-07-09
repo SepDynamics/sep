@@ -50,7 +50,7 @@ namespace sep::memory
         // when CUDA support is enabled. Only the physical DEVICE or UNIFIED tiers
         // require GPU-managed allocations.
         bool use_cuda =
-            (config.type == MemoryTierEnum::DEVICE || config.type == MemoryTierEnum::UNIFIED);
+            (config.type == sep::memory::MemoryTierEnum::DEVICE || config.type == sep::memory::MemoryTierEnum::UNIFIED);
 
         if (!use_cuda)
         {
@@ -105,7 +105,7 @@ namespace sep::memory
         blocks_.push_back(MemoryBlock(memory_pool_, config.size, 0, config.type));
     }
 
-    MemoryTier::MemoryTier(MemoryTierEnum type, size_t max_patterns, float coherence_threshold,
+    MemoryTier::MemoryTier(sep::memory::MemoryTierEnum type, size_t max_patterns, float coherence_threshold,
                            int min_generations)
         : config_{Config{type, 0}},
           memory_pool_(nullptr),
@@ -130,7 +130,7 @@ namespace sep::memory
         if (memory_pool_)
         {
             bool use_cuda =
-                (config_.type == MemoryTierEnum::DEVICE || config_.type == MemoryTierEnum::UNIFIED);
+                (config_.type == sep::memory::MemoryTierEnum::DEVICE || config_.type == sep::memory::MemoryTierEnum::UNIFIED);
             if (!use_cuda)
             {
                 std::free(memory_pool_);
@@ -574,7 +574,7 @@ namespace sep::memory
         void *new_pool = nullptr;
         auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
 
-        if (config_.type == MemoryTierEnum::HOST)
+        if (config_.type == sep::memory::MemoryTierEnum::HOST)
         {
             new_pool = std::malloc(new_size);
         }
@@ -622,7 +622,7 @@ namespace sep::memory
             if (!block.allocated) continue;
             if (offset + block.size > new_size)
             {
-                if (config_.type == MemoryTierEnum::HOST)
+                if (config_.type == sep::memory::MemoryTierEnum::HOST)
                     std::free(new_pool);
                 else
                 {
@@ -661,7 +661,7 @@ namespace sep::memory
 
         if (memory_pool_)
         {
-            if (config_.type == MemoryTierEnum::HOST)
+            if (config_.type == sep::memory::MemoryTierEnum::HOST)
                 std::free(memory_pool_);
             else
             {

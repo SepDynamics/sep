@@ -118,7 +118,7 @@ public:
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
             const auto& data = pair.second;
-            memory::MemoryTierEnum target_tier = determineOptimalTier(data);
+            memory::sep::memory::MemoryTierEnum target_tier = determineOptimalTier(data);
 
             if (target_tier != data.current_tier) {
                 TierMigration migration;

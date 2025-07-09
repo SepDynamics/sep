@@ -22,7 +22,7 @@ int main() {
             p.position = glm::vec4(static_cast<float>(x), static_cast<float>(y), 0.0f, 1.0f);
             p.coherence = 0.5f;
             p.stability = 0.5f;
-            p.memory_tier = memory::MemoryTierEnum::STM;
+            p.memory_tier = memory::sep::memory::MemoryTierEnum::STM;
             patterns.push_back(p);
         }
     }
@@ -38,7 +38,7 @@ int main() {
                 p.coherence = std::min(1.0f, p.coherence + 0.05f);
                 p.stability = std::min(1.0f, p.stability + 0.05f);
                 if (p.coherence > 0.9f && p.stability > 0.9f) {
-                    p.memory_tier = memory::MemoryTierEnum::LTM;
+                    p.memory_tier = memory::sep::memory::MemoryTierEnum::LTM;
                 }
             }
         }
@@ -46,7 +46,7 @@ int main() {
 
     std::cout << "Stable LTM patterns:\n";
     for (const auto &p : patterns) {
-        if (p.memory_tier == memory::MemoryTierEnum::LTM) {
+        if (p.memory_tier == memory::sep::memory::MemoryTierEnum::LTM) {
             std::cout << p.id << " at (" << p.position.x << ", " << p.position.y << ", " << p.position.z << ")\n";
         }
     }

@@ -2,12 +2,12 @@
 
 #include "demo_manager.hpp"
 #include <vector>
-#include <algorithm>
+#include <glm/vec3.hpp>
 
 namespace sep {
 namespace workbench {
 
-class DigitalPhysicsDemo : public Demo {
+class AnnealingDemo : public Demo {
 public:
     void init() override;
     void update(float dt) override;
@@ -17,13 +17,15 @@ public:
     void handleMouse(int x, int y, int button) override;
 
 private:
-    std::size_t width_{0};
-    std::size_t height_{0};
-    std::vector<sep::pattern::PatternData> grid_;
-    std::vector<int> birth_rules_;
-    std::vector<int> survival_rules_;
+    struct Particle {
+        glm::vec3 position{0.0f};
+        glm::vec3 velocity{0.0f};
+    };
 
-    std::size_t index(std::size_t x, std::size_t y) const { return y * width_ + x; }
+    std::vector<Particle> particles_;
+    float temperature_{1.0f};
+    float cooling_rate_{0.99f};
+    bool paused_{false};
 };
 
 } // namespace workbench

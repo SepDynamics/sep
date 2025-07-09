@@ -60,7 +60,7 @@ release/
 !examples/json_processor_build.cmake
 externals/
 boost/
-!third_party/
+third_party/
 !src/
 !include/
 tbb/

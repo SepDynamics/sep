@@ -1,12 +1,15 @@
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include "window.h"
 #include "demos/demo_manager.hpp"
-#include "../../src/demos/genesis_pattern.hpp"
-#include "../../src/demos/annealing_demo.hpp"
-#include "../../src/demos/cosmo_demo.hpp"
-#include "../../src/demos/flocking_demo.hpp"
-#include "../../src/demos/neural_demo.hpp"
-#include "../../src/demos/drug_discovery_demo.hpp"
-#include "../../src/demos/digital_physics_demo.hpp"
-#include "../../src/demos/memory_garden.hpp"
+#include "demos/genesis_pattern.hpp"
+#include "demos/annealing_demo.hpp"
+#include "demos/cosmo_demo.hpp"
+#include "demos/flocking_demo.hpp"
+#include "demos/neural_demo.hpp"
+#include "demos/drug_discovery_demo.hpp"
+#include "demos/digital_physics_demo.hpp"
+#include "demos/memory_garden.hpp"
 
 int main() {
     auto& manager = sep::workbench::DemoManager::instance();

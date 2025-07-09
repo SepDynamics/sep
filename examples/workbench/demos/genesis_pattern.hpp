@@ -1,9 +1,10 @@
 #pragma once
 
-#include "demo_manager.hpp"
-#include "demos/pattern_processor.hpp"
-#include "memory/quantum_coherence_manager.h"
 #include <memory>
+
+#include "demo_manager.hpp"
+#include "memory/quantum_coherence_manager.h"
+#include "pattern_processor.hpp"
 
 namespace sep {
 namespace workbench {

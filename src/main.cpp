@@ -1,23 +1,23 @@
-#include "window.h"
-#include "demo_manager.hpp"
-#include "demos/genesis_pattern.hpp"
-#include "demos/annealing_demo.hpp"
-#include "demos/cosmo_demo.hpp"
-#include "demos/flocking_demo.hpp"
-#include "demos/neural_demo.hpp"
-#include "demos/drug_discovery_demo.hpp"
-#include "demos/digital_physics_demo.hpp"
-#include "demos/memory_garden.hpp"
-#include "sep_engine_wrapper.h"
-#include "config.hpp"
-
-#include <memory>
-#include <iostream>
-#include <chrono>
-#include <thread>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#include <chrono>
+#include <iostream>
+#include <memory>
+#include <thread>
+
+#include "annealing_demo.hpp"
+#include "config.hpp"
+#include "demos/cosmo_demo.hpp"
+#include "demos/demo_manager.hpp"
+#include "demos/digital_physics_demo.hpp"
+#include "demos/drug_discovery_demo.hpp"
+#include "demos/flocking_demo.hpp"
+#include "demos/genesis_pattern.hpp"
+#include "demos/memory_garden.hpp"
+#include "demos/neural_demo.hpp"
+#include "sep_engine_wrapper.h"
+#include "window.h"
 
 // Callback function prototypes
 void error_callback(int error, const char* description);

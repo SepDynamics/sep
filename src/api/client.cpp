@@ -142,16 +142,18 @@ APIResponse Client::sendWithRetry(const APIRequest &request) {
   return response;
 }
 
-void Client::updateMetrics(const APIRequest &request,
-                           const APIResponse &response) {
-  std::lock_guard<std::mutex> lock(impl_->mutex);
-  impl_->metrics.totalRequests++;
-  impl_->metrics.lastResponseTime = response.responseTime;
+void Client::updateMetrics(const APIRequest &request, const APIResponse &response)
+{
+    (void)request;  // Silence unused parameter warning
+    std::lock_guard<std::mutex> lock(impl_->mutex);
+    impl_->metrics.totalRequests++;
+    impl_->metrics.lastResponseTime = response.responseTime;
 
-  if (response.success) {
-    impl_->metrics.successfulRequests++;
-    impl_->metrics.lastSuccessTime = std::chrono::system_clock::now();
-  } else {
+    if (response.success)
+    {
+        impl_->metrics.successfulRequests++;
+        impl_->metrics.lastSuccessTime = std::chrono::system_clock::now();
+    } else {
     if (response.statusCode == 429) {
       impl_->metrics.rateLimitedCount++;
     }

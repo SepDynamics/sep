@@ -13,17 +13,16 @@
 // Third-party
 #include <nlohmann/json.hpp>
 
-namespace sep {
+// Forward declaration of the memory tier enum
+// (Canonical definition is in memory/types.h)
 
-// Memory tier types that are used across multiple modules
-enum class MemoryTierEnum {
-    // Logical memory tiers
-    STM, MTM, LTM,
-    // Physical memory locations 
-    HOST = 100,   // Host memory (CPU)
-    DEVICE = 101, // Device memory (GPU) 
-    UNIFIED = 102 // Unified memory (accessible by both CPU and GPU)
-};
+namespace sep {
+    // Forward declaration of memory tier enum
+    // (Canonical definition is in memory/types.h)
+    namespace memory
+    {
+        enum class MemoryTierEnum : int;
+    }
 
 namespace config {
 
@@ -32,6 +31,7 @@ constexpr const char* DEFAULT_LOG_LEVEL = "info";
 constexpr const char* DEFAULT_LOG_FILE  = "sep.log";
 constexpr const char* DEFAULT_LOG_DIR   = "logs";
 
+// Use fully qualified names for memory tier enums (canonical definition in memory/types.h)
 struct MemoryThresholdConfig {
     float promote_stm_to_mtm{0.7f};
     float promote_mtm_to_ltm{0.9f};
@@ -85,6 +85,18 @@ struct OllamaConfig
     bool enabled{false};
 };
 
+struct RateLimitConfig
+{
+    int requests_per_minute = 60;
+    bool enabled = true;
+};
+
+struct AuthConfig
+{
+    bool enabled = false;
+    std::vector<std::string> tokens;
+};
+
 // API server configuration. Only a subset of fields is required for
 // compiling the memory manager tests.
 struct APIConfig {
@@ -101,6 +113,8 @@ struct APIConfig {
     // Added missing configuration objects
     ResponseModulationConfig response_modulation;
     OllamaConfig ollama;
+    AuthConfig cors;
+    RateLimitConfig rate_limit;
 };
 
 

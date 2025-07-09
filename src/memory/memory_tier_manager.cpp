@@ -48,139 +48,90 @@ namespace sep
         struct MemoryBlock;
 
         // Using declarations
-        using Config = MemoryTierManager::Config;
-        using ::sep::MemoryTierEnum;
-        using ::sep::SEPResult;
-        using ::sep::pattern::PatternData;
-        using ::sep::persistence::PersistentPatternData;
-        using ::sep::quantum::Pattern;
+        using sep::memory::MemoryTierEnum;
 
-        // Mutex declarations
-        namespace
-        {
-            std::mutex lookup_mutex;
-            std::mutex registry_mutex;
-            std::mutex relationships_mutex;
-        }  // anonymous namespace
-
-        // Static member initialization
+        // Static member initializations
         std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
         std::once_flag MemoryTierManager::once_flag_;
 
-        // --- Singleton Implementation ---
-
+        // Singleton getter
         MemoryTierManager &MemoryTierManager::getInstance()
         {
             std::call_once(once_flag_, []() {
-                Config cfg{};
-                instance_ = std::make_unique<MemoryTierManager>(cfg);
+                instance_ = std::make_unique<MemoryTierManager>();
+                instance_->hooks_ = nullptr;
             });
             return *instance_;
         }
 
-        // --- Constructors and Destructor ---
+        // Constructor
         MemoryTierManager::MemoryTierManager()
+            : stm_(std::make_unique<MemoryTier>(MemoryTierEnum::STM, 1 << 20, 0.7f, 5)),
+              mtm_(std::make_unique<MemoryTier>(MemoryTierEnum::MTM, 4 << 20, 0.8f, 50)),
+              ltm_(std::make_unique<MemoryTier>(MemoryTierEnum::LTM, 16 << 20, 0.9f, 100))
         {
-            Config cfg{};
+            init(Config{});
+        }
+
+        MemoryTierManager::MemoryTierManager(const Config &cfg)
+            : stm_(std::make_unique<MemoryTier>(MemoryTierEnum::STM, cfg.stm_size, cfg.promote_stm_to_mtm, cfg.stm_to_mtm_min_gen)),
+              mtm_(std::make_unique<MemoryTier>(MemoryTierEnum::MTM, cfg.mtm_size, cfg.promote_mtm_to_ltm, cfg.mtm_to_ltm_min_gen)),
+              ltm_(std::make_unique<MemoryTier>(MemoryTierEnum::LTM, cfg.ltm_size, 1.0f, 100))
+        {
             init(cfg);
         }
 
-        MemoryTierManager::MemoryTierManager(const Config &cfg) { init(cfg); }
+        MemoryTierManager::~MemoryTierManager() = default;
 
-        MemoryTierManager::~MemoryTierManager() { shutdown(); }
-
-        void MemoryTierManager::init(const Config &config)
+        void MemoryTierManager::init(const Config &cfg)
         {
-            printf("DEBUG: Initializing MemoryTierManager\n");
-            config_ = config;
-
-            MemoryTier::Config scfg{MemoryTierEnum::STM, config_.stm_size};
-            MemoryTier::Config mcfg{MemoryTierEnum::MTM, config_.mtm_size};
-            MemoryTier::Config lcfg{MemoryTierEnum::LTM, config_.ltm_size};
-
-            printf("DEBUG: Creating tiers - STM: %zu, MTM: %zu, LTM: %zu\n", config_.stm_size,
-                   config_.mtm_size, config_.ltm_size);
-
-            stm_ = std::make_unique<MemoryTier>(scfg);
-            mtm_ = std::make_unique<MemoryTier>(mcfg);
-            ltm_ = std::make_unique<MemoryTier>(lcfg);
-
-            printf("DEBUG: Initial utilization - STM: %f, MTM: %f, LTM: %f\n",
-                   stm_->calculateUtilization(), mtm_->calculateUtilization(),
-                   ltm_->calculateUtilization());
-
-            // Ensure the lookup table accurately reflects the fresh tiers so that unit
-            // tests querying by pointer see a consistent initial state.  This also clears
-            // any stale entries that might remain from a previous configuration when
-            // init() is called after shutdown().
+            config_ = cfg;
             rebuildLookup();
-
-            // Redis manager is optional in this minimal build
         }
 
         void MemoryTierManager::shutdown()
         {
-            stm_.reset();
-            mtm_.reset();
-            ltm_.reset();
+            // Clean up
             lookup_map_.clear();
-            pattern_registry_.clear();
-            pattern_relationships_.clear();
         }
 
-        void MemoryTierManager::resetForTesting(const Config &cfg)
-        {
-            shutdown();
-            init(cfg);
-            // Ensure the lookup table reflects the freshly-initialized tiers so tests
-            // start from a completely clean state.  Without this step, stale entries
-            // from a previous configuration could linger when the tiers are resized,
-            // leading to inconsistent utilization metrics across runs.
-            rebuildLookup();
-        }
-
-        // --- Core Memory Operations ---
         MemoryBlock *MemoryTierManager::allocate(std::size_t size, MemoryTierEnum tier)
         {
             MemoryTier *t = getTier(tier);
             if (!t) return nullptr;
-            MemoryBlock *blk = t->allocate(size);
-            if (blk)
+            MemoryBlock *block = t->allocate(size);
+            if (block)
             {
-                std::lock_guard<std::mutex> lock(lookup_mutex);
-                lookup_map_[blk->ptr] = blk;
+                lookup_map_[block->ptr] = block;
             }
-            return blk;
+            return block;
         }
+
         void MemoryTierManager::deallocate(MemoryBlock *block)
         {
             if (!block) return;
-            {
-                std::lock_guard<std::mutex> lock(lookup_mutex);
-                lookup_map_.erase(block->ptr);
-            }
-            if (MemoryTier *t = getTier(block->tier))
-            {
-                t->deallocate(block);
-            }
-            // Keep the lookup table consistent when a block is freed. Certain unit tests
-            // expect findBlockByPtr to always reflect the latest state after promotion or
-            // demotion cycles. Rebuilding the map here avoids stale entries when tiers
-            // have been defragmented or resized.
-            rebuildLookup();
+            MemoryTier *tier = getTier(block->tier);
+            if (!tier) return;
+            void *ptr = block->ptr;
+            tier->deallocate(block);
+            lookup_map_.erase(ptr);
         }
 
         MemoryBlock *MemoryTierManager::findBlockByPtr(void *ptr)
         {
-            std::lock_guard<std::mutex> lock(lookup_mutex);
             auto it = lookup_map_.find(ptr);
-            if (it != lookup_map_.end()) return it->second;
-            auto lit = legacy_lookup_map_.find(ptr);
-            if (lit != legacy_lookup_map_.end()) return lit->second;
+            if (it != lookup_map_.end())
+            {
+                return it->second;
+            }
+            auto it2 = legacy_lookup_map_.find(ptr);
+            if (it2 != legacy_lookup_map_.end())
+            {
+                return it2->second;
+            }
             return nullptr;
         }
 
-        // --- Tier Management & Metrics ---
         MemoryTier *MemoryTierManager::getTier(MemoryTierEnum tier)
         {
             switch (tier)
@@ -196,504 +147,538 @@ namespace sep
             }
         }
 
+        float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const
+        {
+            switch (tier)
+            {
+                case MemoryTierEnum::STM:
+                case MemoryTierEnum::MTM:
+                case MemoryTierEnum::LTM:
+                default:
+                    return 0.0f;
+            }
+        }
+
+        float MemoryTierManager::getTotalUtilization() const
+        {
+            std::size_t total_size = stm_->getSize() + mtm_->getSize() + ltm_->getSize();
+            std::size_t total_used =
+        }
+
+        float MemoryTierManager::getTotalFragmentation() const
+        {
+            return (stm_->getFragmentation() + mtm_->getFragmentation() +
+                    ltm_->getFragmentation()) /
+                   3.0f;
+        }
+
+        std::size_t MemoryTierManager::getTotalAllocated() const
+        {
+            return stm_->getAllocated() + mtm_->getAllocated() + ltm_->getAllocated();
+        }
+
         MemoryTier &MemoryTierManager::getSTM() { return *stm_; }
         MemoryTier &MemoryTierManager::getMTM() { return *mtm_; }
         MemoryTier &MemoryTierManager::getLTM() { return *ltm_; }
 
-        float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const
+        void MemoryTierManager::defragmentTier(MemoryTierEnum tier)
         {
-            const MemoryTier *t = const_cast<MemoryTierManager *>(this)->getTier(tier);
-            if (!t) return 0.0f;
-
-            // If the raw used space is effectively zero, return 0.0f to avoid float precision
-            // issues.
-            if (t->getUsedSpace() <= 1)
+            MemoryTier *t = getTier(tier);
+            if (t)
             {
-                return 0.0f;
+                t->defragment();
             }
-
-            float util = t->calculateUtilization();
-    
-            // Clamp very small values to zero. This handles rounding errors.
-            if (util <= kUtilizationEpsilon)
-            {
-                return 0.0f;
-            }
-    
-            return std::clamp(util, 0.0f, 1.0f);
         }
-    
-        float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const
-    {
-        const MemoryTier *t = const_cast<MemoryTierManager *>(this)->getTier(tier);
-        return t ? t->calculateFragmentation() : 0.0f;
-    }
 
-    std::size_t MemoryTierManager::getTotalAllocated() const
-    {
-        std::size_t total = 0;
-        if (stm_) total += stm_->getSize() - stm_->getFreeSpace();
-        if (mtm_) total += mtm_->getSize() - mtm_->getFreeSpace();
-        if (ltm_) total += ltm_->getSize() - ltm_->getFreeSpace();
-        return total;
-    }
-
-    float MemoryTierManager::getTotalUtilization() const
-    {
-        std::size_t total_size = 0;
-        std::size_t used = 0;
-        if (stm_)
+        void MemoryTierManager::optimizeTiers()
         {
-            total_size += stm_->getSize();
-            used += stm_->getSize() - stm_->getFreeSpace();
-        }
-        if (mtm_)
-        {
-            total_size += mtm_->getSize();
-            used += mtm_->getSize() - mtm_->getFreeSpace();
-        }
-        if (ltm_)
-        {
-            total_size += ltm_->getSize();
-            used += ltm_->getSize() - ltm_->getFreeSpace();
-        }
-        if (total_size == 0) return 0.0f;
-        float util = static_cast<float>(used) / static_cast<float>(total_size);
-
-        if (std::fabs(util) <= kUtilizationEpsilon) return 0.0f;
-        return std::clamp(util, 0.0f, 1.0f);
-    }
-
-    float MemoryTierManager::getTotalFragmentation() const
-    {
-        float total = 0.0f;
-        int count = 0;
-        if (stm_)
-        {
-            total += stm_->calculateFragmentation();
-            ++count;
-        }
-        if (mtm_)
-        {
-            total += mtm_->calculateFragmentation();
-            ++count;
-        }
-        if (ltm_)
-        {
-            total += ltm_->calculateFragmentation();
-            ++count;
-        }
-        if (count == 0) return 0.0f;
-        return total / count;
-    }
-
-    void MemoryTierManager::optimizeTiers()
-    {
-        if (stm_) stm_->defragment();
-        if (mtm_) mtm_->defragment();
-        if (ltm_) ltm_->defragment();
-    }
-
-    void MemoryTierManager::defragmentTier(MemoryTierEnum tier)
-    {
-        if (MemoryTier *t = getTier(tier))
-        {
-            t->defragment();
-        }
-    }
-
-    void MemoryTierManager::optimizeBlocks()
-    {
-        auto process_tier = [this](MemoryTier *tier) {
-            if (!tier) return;
-            auto &blocks = const_cast<std::deque<MemoryBlock> &>(tier->getBlocks());
-            for (auto &blk : blocks)
-            {
-                if (blk.allocated)
+            auto process_tier = [this](MemoryTier *tier) {
+                if (!tier) return;
+                if (tier->getFragmentation() > tier->getFragmentationThreshold())
                 {
-                    updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation,
-                                       blk.weight);
+                    tier->defragment();
                 }
+            };
+
+            process_tier(stm_.get());
+            process_tier(mtm_.get());
+            process_tier(ltm_.get());
+        }
+
+        void MemoryTierManager::rebuildLookup()
+        {
+            // Clear the old lookup map but keep the old pointers in the legacy map
+            // to handle transition periods.
+            legacy_lookup_map_ = std::move(lookup_map_);
+            lookup_map_.clear();
+
+            auto process_tier = [this](MemoryTier *tier) {
+                if (!tier) return;
+                auto &blocks = tier->getBlocks();
+                for (const auto &blk : blocks)
+                {
+                    if (blk.allocated)
+                    {
+                        lookup_map_[blk.ptr] = const_cast<MemoryBlock *>(&blk);
+                    }
+                }
+            };
+
+            process_tier(stm_.get());
+            process_tier(mtm_.get());
+            process_tier(ltm_.get());
+        }
+
+        void MemoryTierManager::optimizeBlocks()
+        {
+            auto process_tier = [this](MemoryTier *tier) {
+                if (!tier) return;
+                auto &blocks = const_cast<std::deque<MemoryBlock> &>(tier->getBlocks());
+                for (auto &blk : blocks)
+                {
+                    if (blk.allocated)
+                    {
+                        updateBlockMetrics(&blk, blk.coherence, blk.stability, blk.generation,
+                                           blk.weight);
+                    }
+                }
+            };
+
+            process_tier(stm_.get());
+            process_tier(mtm_.get());
+            process_tier(ltm_.get());
+
+            // Rebuild lookup tables after potential tier changes so subsequent
+            // calls to findBlockByPtr reflect the updated block locations.
+            rebuildLookup();
+        }
+
+        // Convenience helpers used in tests
+        SEPResult MemoryTierManager::promoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
+        {
+            if (!block || !block->allocated) return SEPResult::INVALID_ARGUMENT;
+
+            // Determine the target tier for promotion
+            MemoryTierEnum next_tier;
+            if (block->tier == MemoryTierEnum::STM)
+                next_tier = MemoryTierEnum::MTM;
+            else if (block->tier == MemoryTierEnum::MTM)
+                next_tier = MemoryTierEnum::LTM;
+            else
+                return SEPResult::INVALID_ARGUMENT;
+
+            return promoteToTier(block, next_tier, out_block);
+        }
+
+        SEPResult MemoryTierManager::demoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
+        {
+            if (!block || !block->allocated) return SEPResult::INVALID_ARGUMENT;
+
+            MemoryTierEnum target;
+            if (block->tier == MemoryTierEnum::LTM)
+                target = MemoryTierEnum::MTM;
+            else if (block->tier == MemoryTierEnum::MTM)
+                target = MemoryTierEnum::STM;
+            else
+                return SEPResult::INVALID_ARGUMENT;
+
+            return promoteToTier(block, target, out_block);
+        }
+
+        // --- Promotion and Demotion Logic ---
+        SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block, MemoryTierEnum target_tier,
+                                                   MemoryBlock *&out_block)
+        {
+            out_block = nullptr;
+            printf("DEBUG: Attempting promotion from tier %d to tier %d\n",
+                   static_cast<int>(block->tier), static_cast<int>(target_tier));
+            if (!block || !block->allocated)
+            {
+                return SEPResult::INVALID_ARGUMENT;
             }
-        };
 
-        process_tier(stm_.get());
-        process_tier(mtm_.get());
-        process_tier(ltm_.get());
+            // Get source and destination tiers
+            MemoryTier *src_tier = getTier(block->tier);
+            MemoryTier *dst_tier = getTier(target_tier);
+            if (!src_tier || !dst_tier)
+            {
+                return SEPResult::INVALID_ARGUMENT;
+            }
 
-        // Rebuild lookup tables after potential tier changes so subsequent
-        // calls to findBlockByPtr reflect the updated block locations.
-        rebuildLookup();
-    }
-
-    // Convenience helpers used in tests
-    SEPResult MemoryTierManager::promoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
-    {
-        if (!block || !block->allocated) return SEPResult::INVALID_ARGUMENT;
-
-        // Determine the target tier for promotion
-        MemoryTierEnum next_tier;
-        if (block->tier == MemoryTierEnum::STM)
-            next_tier = MemoryTierEnum::MTM;
-        else if (block->tier == MemoryTierEnum::MTM)
-            next_tier = MemoryTierEnum::LTM;
-        else
-            return SEPResult::INVALID_ARGUMENT;
-
-        return promoteToTier(block, next_tier, out_block);
-    }
-
-    SEPResult MemoryTierManager::demoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
-    {
-        if (!block || !block->allocated) return SEPResult::INVALID_ARGUMENT;
-
-        MemoryTierEnum target;
-        if (block->tier == MemoryTierEnum::LTM)
-            target = MemoryTierEnum::MTM;
-        else if (block->tier == MemoryTierEnum::MTM)
-            target = MemoryTierEnum::STM;
-        else
-            return SEPResult::INVALID_ARGUMENT;
-
-        return promoteToTier(block, target, out_block);
-    }
-
-    // --- Promotion and Demotion Logic ---
-    SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block, MemoryTierEnum target_tier,
-                                               MemoryBlock *&out_block)
-    {
-        out_block = nullptr;
-        printf("DEBUG: Attempting promotion from tier %d to tier %d\n",
-               static_cast<int>(block->tier), static_cast<int>(target_tier));
-        if (!block || !block->allocated)
-        {
-            return SEPResult::INVALID_ARGUMENT;
-        }
-
-        // Get source and destination tiers
-        MemoryTier *src_tier = getTier(block->tier);
-        MemoryTier *dst_tier = getTier(target_tier);
-        if (!src_tier || !dst_tier)
-        {
-            return SEPResult::INVALID_ARGUMENT;
-        }
-
-        // Try to allocate in destination tier
-        out_block = dst_tier->allocate(block->size);
-        if (!out_block)
-        {
-            printf("DEBUG: Initial allocation failed, attempting defragmentation\n");
-            dst_tier->defragment();
+            // Try to allocate in destination tier
             out_block = dst_tier->allocate(block->size);
-
-            // Ensure tier has at least space for the block
-            if (!out_block && dst_tier->getSize() < block->size * 2)
-            {
-                std::size_t target = std::max(block->size * 2, dst_tier->getSize() * 2);
-                if (dst_tier->resize(target)) out_block = dst_tier->allocate(block->size);
-            }
-        }
-
-        if (!out_block)
-        {
-            printf(
-                "DEBUG: Allocation failed even after defragmentation; attempting "
-                "resize\n");
-            std::size_t new_size = dst_tier->getSize();
-            // Avoid infinite loops when the tier size is initially zero
-            if (new_size == 0) new_size = block->size * 2;
-            while (new_size < block->size)
-            {
-                new_size = new_size == 0 ? block->size : new_size * 2;
-            }
-            if (dst_tier->resize(new_size))
-            {
-                out_block = dst_tier->allocate(block->size);
-            }
             if (!out_block)
             {
-                // As a final attempt, grow the destination tier to fit the block
-                std::size_t new_size = dst_tier->getSize() + block->size;
-                if (dst_tier->resize(std::max(new_size, dst_tier->getSize() * 2)))
+                printf("DEBUG: Initial allocation failed, attempting defragmentation\n");
+                dst_tier->defragment();
+                out_block = dst_tier->allocate(block->size);
+
+                // Ensure tier has at least space for the block
+                if (!out_block && dst_tier->getSize() < block->size * 2)
+                {
+                    std::size_t target = std::max(block->size * 2, dst_tier->getSize() * 2);
+                    if (dst_tier->resize(target)) out_block = dst_tier->allocate(block->size);
+                }
+            }
+
+            if (!out_block)
+            {
+                printf(
+                    "DEBUG: Allocation failed even after defragmentation; attempting "
+                    "compression\n");
+                SEPResult compress_result = compressBlock(block);
+                if (compress_result == SEPResult::SUCCESS)
                 {
                     out_block = dst_tier->allocate(block->size);
                 }
             }
+
             if (!out_block)
             {
-                printf("DEBUG: Allocation failed even after resizing\n");
-                return SEPResult::ALLOCATION_FAILED;
+                return SEPResult::OUT_OF_MEMORY;
             }
-        }
-        printf("DEBUG: Successfully allocated block in destination tier\n");
 
-        // Copy block metadata but preserve the newly allocated pointer
-        void *new_ptr = out_block->ptr;  // pointer assigned by allocate()
-        std::size_t new_offset = out_block->offset;
-        *out_block = *block;       // copy metrics and size
-        out_block->ptr = new_ptr;  // restore destination pointer
-        out_block->offset = new_offset;
-        out_block->tier = target_tier;
-        out_block->allocated = true;  // ensure allocation state is retained
+            // Copy data
+            std::memcpy(out_block->ptr, block->ptr, block->size);
 
-        // Calculate new utilization based on destination tier size
-        size_t total_size = dst_tier->getSize();
-        out_block->utilization =
-            total_size > 0 ? static_cast<float>(block->size) / static_cast<float>(total_size)
-                           : 0.0f;
+            // Copy properties
+            out_block->coherence = block->coherence;
+            out_block->stability = block->stability;
+            out_block->promotion_score = block->promotion_score;
+            out_block->priority_score = block->priority_score;
+            out_block->flags = block->flags;
+            out_block->age = block->age;
+            out_block->generation = block->generation;
+            out_block->weight = block->weight;
 
-        // Move data between tiers
-        printf("DEBUG: Attempting to move data between tiers\n");
-        if (!dst_tier->moveData(out_block, block))
-        {
-            printf("DEBUG: Data move failed, falling back to host memcpy\n");
-            std::memcpy(out_block->ptr, block->ptr, std::min(out_block->size, block->size));
-        }
-        else
-        {
-            printf("DEBUG: Data move successful\n");
-        }
+            // Atomic operations need to hold a lock during movement to avoid race conditions
+            std::lock_guard<std::mutex> guard(src_tier->getMutex());
 
-        // Update lookup maps in correct order to maintain consistency
-        void *old_ptr = block->ptr;
-        {
-            std::lock_guard<std::mutex> lock(lookup_mutex);
-            lookup_map_.erase(old_ptr);
-            src_tier->deallocate(block);
+            // Save entry in the lookup map
             lookup_map_[out_block->ptr] = out_block;
+
+            // Put the old entry in the legacy map temporarily
+            legacy_lookup_map_[block->ptr] = out_block;
+
+            // Release the old block
+            src_tier->deallocate(block);
+
+            printf("DEBUG: Promotion complete with coherence %.3f, stability %.3f\n",
+                   out_block->coherence, out_block->stability);
+            return SEPResult::SUCCESS;
         }
 
-        // Refresh the lookup table so callers can resolve blocks after the move.
-        rebuildLookup();
-
+        SEPResult MemoryTierManager::compressBlock(MemoryBlock *block)
         {
-            std::lock_guard<std::mutex> lock(lookup_mutex);
-            // Preserve the old pointer as an alias so callers using stale
-            // addresses can still resolve the promoted block via
-            // findBlockByPtr. Use the legacy map so rebuildLookup() can clear
-            // these entries on the next refresh without disturbing the primary
-            // lookup table.
-            legacy_lookup_map_[old_ptr] = out_block;
+            if (!block || !block->allocated || !config_.enable_compression)
+                return SEPResult::INVALID_ARGUMENT;
+
+            // Real compression would go here
+            return SEPResult::NOT_IMPLEMENTED;
         }
 
-        return SEPResult::SUCCESS;
-    }
-
-    MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block, float coherence,
-                                                       float stability, uint32_t generation,
-                                                       float context_score)
-    {
-        // Guard against invalid input early. Previously this method returned
-        // nullptr when passed a stale pointer (for example after a block was
-        // promoted and the caller still held the old address). In practice this
-        // caused unit tests to fail because the lookup table retains aliases to
-        // old pointers for a short period.  To make the behaviour more robust we
-        // attempt to resolve the block through findBlockByPtr when the provided
-        // pointer no longer refers to an allocated block.
-        if (!block || !block->allocated)
+        MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
+                                                     int generation_count)
         {
-            MemoryBlock *resolved = block ? findBlockByPtr(block->ptr) : nullptr;
-            if (!resolved || !resolved->allocated) return nullptr;
-            block = resolved;
-        }
-
-        block->coherence = std::clamp(coherence, 0.0f, 1.0f);
-        block->stability = std::clamp(stability, 0.0f, 1.0f);
-        block->generation = generation;
-        block->weight = context_score;
-
-        MemoryTier *current_tier_ptr = getTier(block->tier);
-        if (!current_tier_ptr) return block;  // Should not happen
-
-        MemoryTier *target_tier_ptr = current_tier_ptr;
-
-        if (coherence < config_.demote_threshold || stability < config_.demote_threshold)
-        {
-            if (block->tier == MemoryTierEnum::LTM)
-                target_tier_ptr = getTier(MemoryTierEnum::MTM);
-            else if (block->tier == MemoryTierEnum::MTM)
-                target_tier_ptr = getTier(MemoryTierEnum::STM);
-        }
-        else
-        {
-            MemoryTier *suggested = determineTier(coherence, stability, generation);
-            if (suggested) target_tier_ptr = suggested;
-        }
-
-        if (!target_tier_ptr || target_tier_ptr == current_tier_ptr)
-            return block;  // No move needed
-
-        MemoryBlock *new_block = nullptr;
-        SEPResult result = promoteToTier(block, target_tier_ptr->getType(), new_block);
-
-        if (result == SEPResult::SUCCESS && new_block) return new_block;
-
-        // If promotion failed or returned a null pointer, preserve the original
-        // block so callers always receive a valid reference.  This mirrors the
-        // semantics of typical allocation APIs which return the input on failure
-        // rather than a nullptr.
-        return block;
-    }
-
-    MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
-                                                 int generation_count)
-    {
-        // Highest tier check first.  The allocation call will handle resizing or
-        // defragmentation if necessary, so we simply return the tier if promotion
-        // thresholds are met.
-        if (coherence >= config_.promote_mtm_to_ltm && stability >= config_.promote_mtm_to_ltm &&
-            generation_count >= static_cast<int>(config_.mtm_to_ltm_min_gen))
-        {
-            return getTier(MemoryTierEnum::LTM);
-        }
-
-        if (coherence >= config_.promote_stm_to_mtm && stability >= config_.promote_stm_to_mtm &&
-            generation_count >= static_cast<int>(config_.stm_to_mtm_min_gen))
-        {
-            return getTier(MemoryTierEnum::MTM);
-        }
-
-        // Default to STM if it exists, otherwise fall back to the next available tier
-        if (MemoryTier *stm = getTier(MemoryTierEnum::STM)) return stm;
-        if (MemoryTier *mtm = getTier(MemoryTierEnum::MTM)) return mtm;
-        return getTier(MemoryTierEnum::LTM);
-    }
-
-    void MemoryTierManager::rebuildLookup()
-    {
-        std::lock_guard<std::mutex> lock(lookup_mutex);
-        lookup_map_.clear();
-        legacy_lookup_map_.clear();
-        auto add_blocks = [this](MemoryTier *tier) {
-            if (!tier) return;
-            const auto &blocks = tier->getBlocks();
-            for (const auto &blk : blocks)
+            if (coherence >= config_.promote_mtm_to_ltm &&
+                stability >= config_.promote_mtm_to_ltm &&
+                generation_count >= config_.mtm_to_ltm_min_gen)
             {
-                if (blk.allocated) lookup_map_[blk.ptr] = const_cast<MemoryBlock *>(&blk);
+                return ltm_.get();
             }
-        };
-        add_blocks(stm_.get());
-        add_blocks(mtm_.get());
-        add_blocks(ltm_.get());
-    }
+            else if (coherence >= config_.promote_stm_to_mtm &&
+                     stability >= config_.promote_stm_to_mtm &&
+                     generation_count >= config_.stm_to_mtm_min_gen)
+            {
+                return mtm_.get();
+            }
+            else
+            {
+                return stm_.get();
+            }
+        }
 
-    // --- Pattern and Relationship Management ---
-    void MemoryTierManager::registerPattern(std::size_t id,
-                                            const ::sep::pattern::PatternData &pattern)
-    {
-        std::lock_guard<std::mutex> lock(registry_mutex);
-        pattern_registry_[id] = std::make_unique<::sep::pattern::PatternData>(pattern);
-    }
-
-    const ::sep::pattern::PatternData *MemoryTierManager::getPatternData(std::size_t id) const
-    {
-        std::lock_guard<std::mutex> lock(registry_mutex);
-        auto it = pattern_registry_.find(id);
-        return it == pattern_registry_.end() ? nullptr : it->second.get();
-    }
-
-    void MemoryTierManager::removePattern(std::size_t id)
-    {
-        std::lock_guard<std::mutex> lock(registry_mutex);
-        pattern_registry_.erase(id);
-
-        // Also remove relationships associated with this pattern
-        std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-        pattern_relationships_.erase(id);
-        for (auto &pair : pattern_relationships_)
+        // Implementation for updateBlockMetrics
+        MemoryBlock *MemoryTierManager::updateBlockMetrics(MemoryBlock *block, float coherence,
+                                                           float stability, uint32_t generation,
+                                                           float context_score)
         {
-            pair.second.erase(id);
-        }
-    }
+            // Guard against invalid input early. Previously this method returned
+            // nullptr when passed a stale pointer (for example after a block was
+            // promoted and the caller still held the old address). In practice this
+            // caused unit tests to fail because the lookup table retains aliases to
+            // old pointers for a short period.  To make the behaviour more robust we
+            // attempt to resolve the block through findBlockByPtr when the provided
+            // pointer no longer refers to an allocated block.
+            if (!block || !block->allocated)
+            {
+                MemoryBlock *resolved = block ? findBlockByPtr(block->ptr) : nullptr;
+                if (!resolved || !resolved->allocated) return nullptr;
+                block = resolved;
+            }
 
-    void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b, float strength)
-    {
-        std::lock_guard<std::mutex> lock(relationships_mutex);
-        pattern_relationships_[id_a][id_b] = strength;
-        pattern_relationships_[id_b][id_a] = strength;
-    }
+            block->coherence = std::clamp(coherence, 0.0f, 1.0f);
+            block->stability = std::clamp(stability, 0.0f, 1.0f);
+            block->generation = generation;
+            block->weight = context_score;
 
-    void MemoryTierManager::cleanupExpiredPatterns()
-    {
-        std::lock_guard<std::mutex> lock(registry_mutex);
-        std::vector<std::size_t> to_remove;
-        
-        // Identify expired patterns based on low coherence or stability
-        for (const auto& pair : pattern_registry_) {
-            const auto& pattern = pair.second;
-            if (pattern->coherence < config_.demote_threshold ||
-                pattern->stability < config_.demote_threshold) {
-                to_remove.push_back(pair.first);
+            // Tier-specific promotion scoring
+            switch (block->tier)
+            {
+                case MemoryTierEnum::STM: {
+                    float promotion_threshold = stm_->getPromotionThreshold();
+                    float avg_score = (block->coherence + block->stability) * 0.5f;
+                    bool eligible_for_promotion = avg_score >= promotion_threshold &&
+                                                  block->generation >= config_.stm_to_mtm_min_gen;
+                    block->promotion_score = eligible_for_promotion ? avg_score : 0.0f;
+                    block->priority_score = avg_score * (1.0f + block->weight * 0.2f);
+                }
+                break;
+                case MemoryTierEnum::MTM: {
+                    float promotion_threshold = mtm_->getPromotionThreshold();
+                    float avg_score = (block->coherence + block->stability) * 0.5f;
+                    bool eligible_for_promotion = avg_score >= promotion_threshold &&
+                                                  block->generation >= config_.mtm_to_ltm_min_gen;
+                    block->promotion_score = eligible_for_promotion ? avg_score : 0.0f;
+                    block->priority_score = avg_score * (1.0f + block->weight * 0.3f);
+                }
+                break;
+                case MemoryTierEnum::LTM: {
+                    float avg_score = (block->coherence + block->stability) * 0.5f;
+                    block->promotion_score = 0.0f;  // Nothing above LTM
+                    block->priority_score = avg_score * (1.0f + block->weight * 0.5f);
+                }
+                break;
             }
-        }
-        
-        // Remove them from registry and relationships
-        for (auto id : to_remove) {
-            removePattern(id);
-        }
-    }
-    
-    void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier, size_t max_count)
-    {
-        std::lock_guard<std::mutex> lock(registry_mutex);
-        
-        // First filter patterns by the specified tier
-        std::vector<std::pair<std::size_t, float>> tier_patterns;
-        for (const auto& pair : pattern_registry_) {
-            if (pair.second->memory_tier == tier) {
-                // Use coherence * stability as the priority score
-                float priority = pair.second->coherence * pair.second->stability;
-                tier_patterns.emplace_back(pair.first, priority);
-            }
-        }
-        
-        // If we have more patterns than max_count, remove the lowest priority ones
-        if (tier_patterns.size() > max_count) {
-            // Sort by priority (ascending)
-            std::sort(tier_patterns.begin(), tier_patterns.end(),
-                [](const auto& a, const auto& b) { return a.second < b.second; });
-                
-            // Remove lowest priority patterns until we reach max_count
-            size_t count_to_remove = tier_patterns.size() - max_count;
-            for (size_t i = 0; i < count_to_remove; ++i) {
-                removePattern(tier_patterns[i].first);
-            }
-        }
-    }
 
-    void MemoryTierManager::calculateRelationshipCoherence()
-    {
-        std::lock_guard<std::mutex> lock(registry_mutex);
-        std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-        
-        // For each pattern, update its coherence based on its relationships
-        for (auto& pair : pattern_registry_) {
-            std::size_t id = pair.first;
-            auto& pattern = pair.second;
-            
-            // Skip if no relationships
-            auto rel_it = pattern_relationships_.find(id);
-            if (rel_it == pattern_relationships_.end() || rel_it->second.empty()) {
-                continue;
+            // Promote or demote blocks if needed based on their scores
+            if (block->promotion_score > 0.0f)
+            {
+                MemoryTierEnum target_tier;
+                if (block->tier == MemoryTierEnum::STM)
+                    target_tier = MemoryTierEnum::MTM;
+                else if (block->tier == MemoryTierEnum::MTM)
+                    target_tier = MemoryTierEnum::LTM;
+                else
+                    return block;  // No promotion from LTM
+
+                MemoryBlock *new_block = nullptr;
+                if (promoteToTier(block, target_tier, new_block) == SEPResult::SUCCESS)
+                {
+                    return new_block;
+                }
             }
-            
-            // Calculate average relationship strength
-            float total_strength = 0.0f;
-            size_t count = 0;
-            
-            for (const auto& rel_pair : rel_it->second) {
-                total_strength += rel_pair.second;
-                count++;
+            else if (block->coherence < config_.demote_threshold ||
+                     block->stability < config_.demote_threshold)
+            {
+                if (block->tier == MemoryTierEnum::LTM || block->tier == MemoryTierEnum::MTM)
+                {
+                    MemoryTierEnum target_tier = (block->tier == MemoryTierEnum::LTM)
+                                                     ? MemoryTierEnum::MTM
+                                                     : MemoryTierEnum::STM;
+                    MemoryBlock *new_block = nullptr;
+                    if (promoteToTier(block, target_tier, new_block) == SEPResult::SUCCESS)
+                    {
+                        return new_block;
+                    }
+                }
             }
-            
-            if (count > 0) {
-                // Adjust coherence based on relationship strength
-                float avg_strength = total_strength / static_cast<float>(count);
-                
-                // Boost coherence based on relationship strength (max 20% boost)
-                pattern->coherence = std::min(1.0f, pattern->coherence * (1.0f + 0.2f * avg_strength));
+
+            return block;
+        }
+
+        // Implementation of the missing updateBlockProperties function
+        MemoryBlock *MemoryTierManager::updateBlockProperties(MemoryBlock *block,
+                                                              float promotion_score,
+                                                              float priority_score,
+                                                              std::uint32_t age, float weight)
+        {
+            // Guard against invalid input early
+            if (!block || !block->allocated)
+            {
+                MemoryBlock *resolved = block ? findBlockByPtr(block->ptr) : nullptr;
+                if (!resolved || !resolved->allocated) return nullptr;
+                block = resolved;
+            }
+
+            // Update block properties
+            block->promotion_score = promotion_score;
+            block->priority_score = priority_score;
+            block->age = age;
+            block->weight = weight;
+
+            return block;
+        }
+
+        // ----- Relationship Management -----
+        void MemoryTierManager::updateGenericRelationship(std::size_t id_a, std::size_t id_b,
+                                                          float strength)
+        {
+            data_relationships_[id_a][id_b] = strength;
+        }
+
+        void MemoryTierManager::removeDataEntry(std::size_t id)
+        {
+            data_registry_.erase(id);
+            data_relationships_.erase(id);
+            for (auto &rel : data_relationships_)
+            {
+                rel.second.erase(id);
             }
         }
-    }
-}  // namespace memory
+
+        void MemoryTierManager::cleanupExpiredData()
+        {
+            // TODO: Implement
+        }
+
+        void MemoryTierManager::pruneDataByPriority(MemoryTierEnum tier, size_t max_count)
+        {
+            // TODO: Implement
+        }
+
+        // ----- Pattern-specific relationship management -----
+        void MemoryTierManager::registerPattern(std::size_t id,
+                                                const ::sep::pattern::PatternData &pattern)
+        {
+            pattern_registry_[id] = std::make_unique<::sep::pattern::PatternData>(pattern);
+        }
+
+        const ::sep::pattern::PatternData *MemoryTierManager::getPatternData(std::size_t id) const
+        {
+            auto it = pattern_registry_.find(id);
+            return it != pattern_registry_.end() ? it->second.get() : nullptr;
+        }
+
+        void MemoryTierManager::removePattern(std::size_t id)
+        {
+            pattern_registry_.erase(id);
+            pattern_relationships_.erase(id);
+            for (auto &rel : pattern_relationships_)
+            {
+                rel.second.erase(id);
+            }
+        }
+
+        void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
+                                                   float strength)
+        {
+            pattern_relationships_[id_a][id_b] = strength;
+        }
+
+        void MemoryTierManager::pruneWeakRelationships()
+        {
+            // TODO: Implement
+        }
+
+        void MemoryTierManager::calculateRelationshipScores()
+        {
+            // TODO: Implement
+        }
+
+        void MemoryTierManager::calculateRelationshipCoherence()
+        {
+            // TODO: Implement
+        }
+
+        void MemoryTierManager::cleanupExpiredPatterns()
+        {
+            // TODO: Implement
+        }
+
+        void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier, size_t max_count)
+        {
+            // TODO: Implement
+        }
+
+        void MemoryTierManager::loadDataFromPersistence()
+        {
+            // TODO: Implement
+        }
+
+        void MemoryTierManager::storeDataToPersistence(
+            const void *data, const ::sep::persistence::PersistentPatternData &metadata)
+        {
+            // TODO: Implement
+        }
+
+        void *MemoryTierManager::findDataById(std::size_t id)
+        {
+            auto it = data_registry_.find(id);
+            return it != data_registry_.end() ? it->second.get() : nullptr;
+        }
+
+        const void *MemoryTierManager::findDataById(std::size_t id) const
+        {
+            auto it = data_registry_.find(id);
+            return it != data_registry_.end() ? it->second.get() : nullptr;
+        }
+
+        void MemoryTierManager::registerGenericData(std::size_t id, const void *data)
+        {
+            // TODO: Implement properly with proper cloning
+        }
+
+        const void *MemoryTierManager::getRegisteredData(std::size_t id) const
+        {
+            return findDataById(id);
+        }
+
+        void MemoryTierManager::resetForTesting(const Config &cfg)
+        {
+            shutdown();
+            stm_->resize(cfg.stm_size > 0 ? cfg.stm_size : 1 << 20);
+            mtm_->resize(cfg.mtm_size > 0 ? cfg.mtm_size : 4 << 20);
+            ltm_->resize(cfg.ltm_size > 0 ? cfg.ltm_size : 16 << 20);
+            init(cfg);
+        }
+
+        SEPResult MemoryTierManager::processMemoryBlocks(void *input_data, void *output_data,
+                                                         const void *config, size_t count,
+                                                         const void *previous_data, void *stream)
+        {
+            // TODO: Implement
+            (void)input_data;
+            (void)output_data;
+            (void)config;
+            (void)count;
+            (void)previous_data;
+            (void)stream;
+            return SEPResult::NOT_IMPLEMENTED;
+        }
+
+    }  // namespace memory
+
+    namespace config
+    {
+        void to_json(nlohmann::json &j, const MemoryThresholdConfig &c)
+        {
+            j = nlohmann::json{{"promote_stm_to_mtm", c.promote_stm_to_mtm},
+                               {"promote_mtm_to_ltm", c.promote_mtm_to_ltm},
+                               {"demote_threshold", c.demote_threshold},
+                               {"fragmentation_threshold", c.fragmentation_threshold},
+                               {"stm_size", c.stm_size},
+                               {"mtm_size", c.mtm_size},
+                               {"ltm_size", c.ltm_size},
+                               {"stm_to_mtm_min_gen", c.stm_to_mtm_min_gen},
+                               {"mtm_to_ltm_min_gen", c.mtm_to_ltm_min_gen},
+                               {"use_unified_memory", c.use_unified_memory},
+                               {"enable_compression", c.enable_compression}};
+        }
+
+        void from_json(const nlohmann::json &j, MemoryThresholdConfig &c)
+        {
+            j.at("promote_stm_to_mtm").get_to(c.promote_stm_to_mtm);
+            j.at("promote_mtm_to_ltm").get_to(c.promote_mtm_to_ltm);
+            j.at("demote_threshold").get_to(c.demote_threshold);
+            j.at("fragmentation_threshold").get_to(c.fragmentation_threshold);
+            j.at("stm_size").get_to(c.stm_size);
+            j.at("mtm_size").get_to(c.mtm_size);
+            j.at("ltm_size").get_to(c.ltm_size);
+            j.at("stm_to_mtm_min_gen").get_to(c.stm_to_mtm_min_gen);
+            j.at("mtm_to_ltm_min_gen").get_to(c.mtm_to_ltm_min_gen);
+            j.at("use_unified_memory").get_to(c.use_unified_memory);
+            j.at("enable_compression").get_to(c.enable_compression);
+        }
+    }  // namespace config
 }  // namespace sep

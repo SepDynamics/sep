@@ -1,20 +1,21 @@
 #ifndef SEP_API_CLIENT_H
 #define SEP_API_CLIENT_H
 
-#include "api/types.h"
-#include "api/ollama_types.h"
-#include <cstring> // Ensure mem* functions are available before curl headers
-#include "curl/curl.h"
-#include "core/common.h"
-
-#include <nlohmann/json.hpp>
+#include <chrono>
 #include <condition_variable>
+#include <cstring>  // Ensure mem* functions are available before curl headers
 #include <functional>
 #include <map>
 #include <memory>
 #include <mutex>
-#include <chrono>
+#include <nlohmann/json.hpp>
 #include <string>
+
+#include "api/ollama_types.h"
+#include "api/types.h"
+#include "core/common.h"
+#include "core/types.h"
+#include "curl/curl.h"
 
 namespace sep {
 namespace api {
@@ -116,26 +117,24 @@ namespace ollama {
 
 class OllamaClient {
 public:
-  explicit OllamaClient(const sep::ollama::OllamaConfig &config);
-  ~OllamaClient();
+    explicit OllamaClient(const sep::config::OllamaConfig &config);
+    ~OllamaClient();
 
-  // Prevent copying
-  OllamaClient(const OllamaClient &) = delete;
-  OllamaClient &operator=(const OllamaClient &) = delete;
+    // Prevent copying
+    OllamaClient(const OllamaClient &) = delete;
+    OllamaClient &operator=(const OllamaClient &) = delete;
 
-  // Allow moving
-  OllamaClient(OllamaClient &&) noexcept;
-  OllamaClient &operator=(OllamaClient &&) noexcept;
+    // Allow moving
+    OllamaClient(OllamaClient &&) noexcept;
+    OllamaClient &operator=(OllamaClient &&) noexcept;
 
-  // API methods
-  SEPResult post(const std::string &endpoint, const nlohmann::json &payload,
-                 std::string &response_out);
-  SEPResult get(const std::string &endpoint, std::string &response_out);
-  sep::ollama::GenerateResponse
-  generate(const sep::ollama::GenerateRequest &request);
-  
-  sep::ollama::EmbeddingResponse
-  getEmbedding(const sep::ollama::EmbeddingRequest &request);
+    // API methods
+    SEPResult post(const std::string &endpoint, const nlohmann::json &payload,
+                   std::string &response_out);
+    SEPResult get(const std::string &endpoint, std::string &response_out);
+    sep::ollama::GenerateResponse generate(const sep::ollama::GenerateRequest &request);
+
+    sep::ollama::EmbeddingResponse getEmbedding(const sep::ollama::EmbeddingRequest &request);
 
 private:
   struct Impl;

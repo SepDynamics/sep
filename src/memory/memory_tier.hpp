@@ -22,8 +22,8 @@ namespace sep {
 namespace memory {
 
 using ::sep::CompressionMethod;
-using ::sep::MemoryTierEnum;
 using ::sep::SEPResult;
+using sep::memory::MemoryTierEnum;
 using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
 // Small epsilon for utilization metrics. Keeps a 1 KiB allocation visible in a
@@ -53,13 +53,13 @@ enum class TierType {
 // Macros for CUDA kernel compatibility
 #ifdef __CUDACC__
 #ifndef SEP_MEMORY_TIER_STM
-#define SEP_MEMORY_TIER_STM static_cast<int>(::sep::MemoryTierEnum::STM)
+#define SEP_MEMORY_TIER_STM static_cast<int>(::sep::memory::MemoryTierEnum::STM)
 #endif
 #ifndef SEP_MEMORY_TIER_MTM
-#define SEP_MEMORY_TIER_MTM static_cast<int>(::sep::MemoryTierEnum::MTM)
+#define SEP_MEMORY_TIER_MTM static_cast<int>(::sep::memory::MemoryTierEnum::MTM)
 #endif
 #ifndef SEP_MEMORY_TIER_LTM
-#define SEP_MEMORY_TIER_LTM static_cast<int>(::sep::MemoryTierEnum::LTM)
+#define SEP_MEMORY_TIER_LTM static_cast<int>(::sep::memory::MemoryTierEnum::LTM)
 #endif
 #endif
 
@@ -80,6 +80,9 @@ struct MemoryBlock {
   float coherence_trend{0.0f};
   float last_coherence{0.0f};
   float compression_ratio{1.0f};
+  float promotion_score{0.0f};
+  float priority_score{0.0f};
+  std::uint32_t age{0};
   bool allocated{false};
 
   MemoryBlock() = default;

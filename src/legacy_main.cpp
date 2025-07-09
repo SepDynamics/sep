@@ -6,12 +6,12 @@
 #include "sep_engine_wrapper.h"
 
 // Include demo headers
+#include "annealing_demo.hpp"
+#include "audio_visualizer.hpp"
 #include "demo_manager.hpp"
-#include "demos/annealing_demo.hpp"
-#include "demos/audio_visualizer.hpp"
-#include "demos/drug_optimizer.hpp"
-#include "demos/genesis_pattern.hpp"
-#include "demos/memory_garden.hpp"
+#include "drug_optimizer.hpp"
+#include "genesis_pattern.hpp"
+#include "memory_garden.hpp"
 
 using namespace sep;
 using namespace sep::workbench;

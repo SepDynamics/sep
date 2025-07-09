@@ -1,9 +1,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "audio_visualizer.hpp"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include "demos/audio_visualizer.hpp"
 #include "demos/demo_manager.hpp"
 #include "demos/digital_physics_demo.hpp"
 #include "demos/genesis_pattern.hpp"

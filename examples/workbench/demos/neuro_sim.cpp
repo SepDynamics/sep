@@ -3,10 +3,11 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
+#include "memory/memory_tier_manager.hpp"
 #include "quantum/evolution.h"
 #include "sep_engine_wrapper.h"
 
-using sep::core::config::ConfigManager;
+using sep::config::ConfigManager;
 using sep::memory::MemoryTierEnum;
 using sep::memory::MemoryTierManager;
 using sep::quantum::evolution;

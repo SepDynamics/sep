@@ -1,32 +1,36 @@
 #pragma once
 
-#include "demo_manager.hpp"
-#include <quantum/data.hpp>
-#include <vector>
 #include <glm/vec3.hpp>
+#include <vector>
 
-namespace sep {
-namespace workbench {
+#include "demo_manager.hpp"
+#include "quantum/data.hpp"
 
-class CosmoSim : public Demo {
-public:
-    void init() override;
-    void update(float dt) override;
-    void render() override;
-    void cleanup() override;
-    void handleKeyboard(unsigned char key) override;
-    void handleMouse(int x, int y, int button) override;
+namespace sep
+{
+    namespace workbench
+    {
 
-private:
-    std::vector<sep::pattern::PatternData> bodies_;
-    float box_size_{50.0f};
-    float time_step_{0.01f};
-    float G_{1.0f};
+        class CosmoSim : public Demo
+        {
+        public:
+            void init() override;
+            void update(float dt) override;
+            void render() override;
+            void cleanup() override;
+            void handleKeyboard(unsigned char key) override;
+            void handleMouse(int x, int y, int button) override;
 
-    void initBodies();
-    void integrate(float dt);
-    void updateCoherence();
-};
+        private:
+            std::vector<sep::pattern::PatternData> bodies_;
+            float box_size_{50.0f};
+            float time_step_{0.01f};
+            float G_{1.0f};
 
-} // namespace workbench
-} // namespace sep
+            void initBodies();
+            void integrate(float dt);
+            void updateCoherence();
+        };
+
+    }  // namespace workbench
+}  // namespace sep

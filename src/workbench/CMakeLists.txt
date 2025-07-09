@@ -1,138 +1,90 @@
-cmake_minimum_required(VERSION 3.15)
-
-# Load CUDA toolchain file before project declaration
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
-set(SEP_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/sep-targets.cmake)
-# Set C++ standard before project declaration
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-project(SEPWorkbench CXX)
-
-# Set CUDA compiler flags
-set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/include/compat/cuda_unified_fix.h")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__STRICT_ANSI__ -D_GLIBCXX_USE_CXX11_ABI=1")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
-
-# Add global definitions needed for CUDA compatibility
-add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1)
-add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1)
-add_definitions(-D__STRICT_ANSI__)
-add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
-add_definitions(-DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
-
-# Add custom module paths
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-# Use Cycles' custom CMake modules for dependencies like OSL and Alembic
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/extern/cycles/src/cmake/Modules")
-
+# Set directories for better readability
+set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/extern/imgui)
+set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
 # Find required packages
-find_package(fmt REQUIRED)
-find_package(CURL REQUIRED)
-find_package(OpenVDB REQUIRED)
-find_package(OpenSubdiv REQUIRED)
-find_package(OpenPGL REQUIRED)
-find_package(OpenColorIO REQUIRED)
-find_package(Imath REQUIRED)
-find_package(TBB REQUIRED)
-find_package(OpenImageIO REQUIRED)
-find_package(embree REQUIRED)
-find_package(OSL REQUIRED)
-find_package(Alembic REQUIRED)
-find_package(Threads REQUIRED)
-find_package(CUDAToolkit REQUIRED)
+find_package(OpenGL REQUIRED)
 
-# Workbench executable
-add_executable(sep_workbench
-    main.cpp
+# Use GLFW from the subdirectory we added
+set(GLFW_LIBRARIES glfw)
+
+# ImGui source files
+set(IMGUI_SRC
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_demo.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+# Workbench source files
+set(WORKBENCH_SRC
+    demo_main.cpp
     demo_manager.cpp
-    demos/genesis_pattern.cpp
-    demos/audio_visualizer.cpp
-    demos/memory_garden.cpp
-    demos/cosmo_demo.cpp
-    demos/cosmo_sim.cpp
+    demo_selection.cpp
+    window.cpp
+    ui_manager.cpp
+    renderer.cpp
+    sep_engine_wrapper.cpp
+    workbench_demo_adapter.cpp
+    config.cpp
 )
 
-# Include directories
+# Demo source files
+file(GLOB DEMO_SRC
+    "${CMAKE_CURRENT_SOURCE_DIR}/demos/*.cpp"
+)
+
+# Add demo files to workbench source
+list(APPEND WORKBENCH_SRC ${DEMO_SRC})
+
+# Create the executable (only once!)
+add_executable(sep_workbench ${WORKBENCH_SRC})
+
+# Set include directories
 target_include_directories(sep_workbench PRIVATE
+    ${INCLUDE_DIR}
+    ${SRC_DIR}
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends
+    ${OPENGL_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_SOURCE_DIR}/extern/imgui
-    ${CMAKE_SOURCE_DIR}/extern/glm
 )
 
-# Add preprocessor definitions
-target_compile_definitions(sep_workbench PRIVATE
-    SEP_INCLUDE_DIR="${CMAKE_SOURCE_DIR}/include"
-    SEP_HAS_AUDIO=1
-    SEP_HAS_BLENDER=1
-)
-
-# Add preprocessor definitions
-target_compile_definitions(sep_workbench PRIVATE
-    SEP_INCLUDE_DIR="${CMAKE_SOURCE_DIR}/include"
+# Set compiler features
+set_target_properties(sep_workbench PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
 )
 
 # Link libraries
 target_link_libraries(sep_workbench PRIVATE
-    # 1. SEP Engine libraries
-    sep_core
+    # SEP Engine Libraries
     sep_quantum
     sep_memory
-    sep_blender
-    sep_audio
     sep_compat
-
-    # 2. Cycles and its dependencies
-    cycles_session
+    sep_core
     
-    cycles_device
-    cycles_kernel_osl
-    cycles_subd
-    cycles_util
-    extern_sky
-    extern_cuew
-    extern_hipew
-
-    # 3. External dependencies
-    OpenImageIO
-    ${OPENVDB_LIBRARIES}
-    ${OPENSUBDIV_LIBRARIES}
-    openvdb
-    bf_intern_opensubdiv
-    ${OSL_LIBRARIES}
-    ${TBB_LIBRARIES}
-    ${IMATH_LIBRARIES}
-    ${CUDAToolkit_LIBRARIES}
-
-    # 4. System libraries
-    ${EMBREE_LIBRARIES}
-    Imath
-    ${OpenPGL_LIBRARIES}
-    ${OpenColorIO_LIBRARIES}
-    ${ALEMBIC_LIBRARIES}
-    ${CMAKE_DL_LIBS}
-    ${Threads_LIBRARIES}
-    ${CUDAToolkit_LIBRARIES}
-    pthread
+    # External Dependencies
+    ${GLFW_LIBRARIES}
+    ${OPENGL_LIBRARIES}
     dl
-    rt
-    m
-    z
+    pthread
 )
 
-# Set C++ standard
-set_target_properties(sep_workbench PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED ON
+# Add compile definitions
+target_compile_definitions(sep_workbench PRIVATE
+    GL_SILENCE_DEPRECATION
+    SEP_WORKBENCH=1
+    GLM_ENABLE_EXPERIMENTAL
 )
 
-# Install target
-install(TARGETS sep_workbench
-    RUNTIME DESTINATION bin
+# Make sure we can find the engine header paths
+target_include_directories(sep_workbench PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_BINARY_DIR}/include
 )

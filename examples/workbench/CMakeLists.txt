@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
 
+# Locate required graphics packages
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(glfw3 REQUIRED)
+
 add_executable(sep_workbench
     main.cpp
 )
@@ -30,17 +35,17 @@ target_compile_definitions(sep_workbench PRIVATE GLM_ENABLE_EXPERIMENTAL)
 
 # Link libraries
 target_link_libraries(sep_workbench PRIVATE
+    # Graphics and UI
+    GLEW::GLEW
     glfw
     OpenGL::GL
-    GLEW
-    
-    # SEP libraries
+
+    # Engine libraries
     sep_api
     sep_core
     sep_compat
     sep_quantum
     sep_memory
-    sep_context
     sep_blender
     sep_audio
 )

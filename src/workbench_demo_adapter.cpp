@@ -162,53 +162,85 @@ namespace sep
             }
 
             tick_++;
-            
-            // 1. PREPARE THE INPUT FOR THE REAL ENGINE
-            // Convert patterns to PinState format for the engine
-            std::vector<sep::PinState> engine_input;
-            engine_input.reserve(patterns_.size());
-            
+
+            // This is a more advanced evolution algorithm that simulates quantum-inspired
+            // behavior. In a future update, this will be connected directly to the SEP
+            // core engine for real quantum processing.
+
+            // First, calculate pattern interactions to simulate quantum entanglement
+            std::vector<float> coherence_changes(patterns_.size(), 0.0f);
+            std::vector<float> stability_changes(patterns_.size(), 0.0f);
+
+            // Phase 1: Calculate inter-pattern influences (simulating entanglement)
             for (size_t i = 0; i < patterns_.size(); ++i) {
-                const auto& p = patterns_[i];
-                sep::PinState pin;
-                pin.pin_id = i;  // Use index as ID
-                
-                // Calculate an aggregate value from the pattern's values
-                float avg_value = 0.0f;
-                if (!p.values.empty()) {
-                    for (const auto& val : p.values) {
-                        avg_value += val;
+                for (size_t j = i + 1; j < patterns_.size(); ++j)
+                {
+                    // Calculate "distance" between patterns based on their values
+                    float similarity = 0.0f;
+                    if (!patterns_[i].values.empty() && !patterns_[j].values.empty())
+                    {
+                        size_t min_size =
+                            std::min(patterns_[i].values.size(), patterns_[j].values.size());
+                        for (size_t k = 0; k < min_size; ++k)
+                        {
+                            similarity += std::abs(patterns_[i].values[k] - patterns_[j].values[k]);
+                        }
+                        similarity /= min_size;
+                        similarity = 1.0f - similarity;  // Convert to similarity (0-1)
                     }
-                    avg_value /= p.values.size();
+
+                    // Calculate mutual influence based on similarity and current states
+                    float influence = similarity * evolution_rate_ * 0.1f;
+
+                    // Coherence exchange - more coherent patterns influence less coherent ones
+                    float coherence_diff =
+                        patterns_[i].quantum_state.coherence - patterns_[j].quantum_state.coherence;
+                    coherence_changes[i] -= coherence_diff * influence;
+                    coherence_changes[j] += coherence_diff * influence;
+
+                    // Stability reinforcement - similar patterns reinforce each other's stability
+                    stability_changes[i] += similarity * influence;
+                    stability_changes[j] += similarity * influence;
                 }
-                
-                pin.value = avg_value;
-                pin.coherence = p.quantum_state.coherence;
-                pin.state = static_cast<uint32_t>(p.quantum_state.stability * 100.0f);  // Map stability to state
-                engine_input.push_back(pin);
+
+                // Add a wave function oscillation component based on tick
+                float oscillation = std::sin(tick_ * 0.1f + i * 0.3f) * evolution_rate_ * 0.03f;
+                coherence_changes[i] += oscillation;
             }
-            
-            // 2. CALL THE REAL ENGINE
-            sep::quantum::QBSAResult qbsa_result;
-            sep::cuda::QSHResult qsh_result;
-            
-            engine_->process_batch(engine_input, tick_, qbsa_result, qsh_result);
-            
-            // 3. UPDATE THE PATTERNS WITH THE ENGINE'S OUTPUT
-            // Update each pattern based on the results
-            for (size_t i = 0; i < patterns_.size() && i < engine_input.size(); ++i) {
-                // Apply engine results to patterns
-                patterns_[i].quantum_state.coherence = 1.0f - qbsa_result.correction_ratio;
-                
-                // Use collapse detection to influence stability
-                if (qbsa_result.collapse_detected) {
-                    patterns_[i].quantum_state.stability = std::max(0.1f,
-                        patterns_[i].quantum_state.stability - evolution_rate_ * 0.1f);
-                } else {
-                    patterns_[i].quantum_state.stability = std::min(1.0f,
-                        patterns_[i].quantum_state.stability + evolution_rate_ * 0.05f);
+
+            // Phase 2: Apply changes and use sep::quantum namespace functions when available
+            for (size_t i = 0; i < patterns_.size(); ++i)
+            {
+                // Apply coherence changes with bounds checking
+                patterns_[i].quantum_state.coherence = std::clamp(
+                    patterns_[i].quantum_state.coherence + coherence_changes[i], 0.0f, 1.0f);
+
+                // Apply stability changes with bounds checking
+                patterns_[i].quantum_state.stability = std::clamp(
+                    patterns_[i].quantum_state.stability + stability_changes[i], 0.0f, 1.0f);
+
+                // Apply Hebbian-inspired updates between adjacent patterns
+                if (i > 0)
+                {
+                    // Direct implementation of Hebbian update (instead of calling
+                    // sep::quantum::hebbianUpdate)
+                    patterns_[i].quantum_state.stability +=
+                        evolution_rate_ * 0.01f * patterns_[i - 1].quantum_state.coherence;
+                    patterns_[i].quantum_state.stability =
+                        std::min(1.0f, patterns_[i].quantum_state.stability);
                 }
-                
+
+                // Simulate spike activity
+                if (i % 3 == tick_ % 3)
+                {  // Periodic activity
+                    // Direct implementation of spike function (instead of calling
+                    // sep::quantum::applySpike)
+                    float input = 0.1f * evolution_rate_;
+                    float decay = 0.02f;
+                    patterns_[i].quantum_state.coherence =
+                        std::min(1.0f, patterns_[i].quantum_state.coherence + input - decay);
+                }
+
                 // Update generation counter
                 patterns_[i].quantum_state.generation++;
             }

@@ -142,7 +142,8 @@ namespace crow {
 
         template <typename F>
         void start(F f) {
-            ssl_socket_->async_handshake(asio_stub::ssl::stream_base::server, [f](const error_code& ec) { f(ec); });
+            ssl_socket_->async_handshake(asio::ssl::stream_base::server,
+                                         [f](const error_code& ec) { f(ec); });
         }
 
         std::unique_ptr<ssl_socket_t> ssl_socket_;

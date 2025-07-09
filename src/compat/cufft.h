@@ -33,7 +33,6 @@ using ::cufftDoubleComplex;
 } // namespace sep
 
 #else
-// Otherwise, define stub types and functions
 namespace sep {
 namespace cuda {
 

@@ -1,6 +1,6 @@
 # Configure include paths for all targets
 set(SEP_INCLUDE_DIRS
-    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/extern/pipewire/spa/include
     ${PIPEWIRE_INCLUDE_DIRS}
 )

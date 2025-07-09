@@ -15,14 +15,14 @@ unset(CMAKE_CUDA_COMPILER_FORCED)
 unset(CMAKE_CUDA_COMPILER_WORKS CACHE)
 
 #Set CUDA toolkit paths - use absolute paths without quotes
-set(CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES ${CUDA_PATH}/include CACHE STRING "CUDA include dirs" FORCE) 
+set(CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES ${CUDA_PATH}/src CACHE STRING "CUDA include dirs" FORCE) 
 set(CUDA_TOOLKIT_ROOT_DIR ${CUDA_PATH} CACHE PATH "CUDA Toolkit location" FORCE)
 set(CUDAToolkit_LIBRARY_DIR ${CUDA_PATH}/lib64 CACHE PATH "CUDA library directory" FORCE)
 set(CUDA_TOOLKIT_TARGET_DIR ${CUDA_PATH}/targets/x86_64-linux CACHE PATH "CUDA Toolkit target location" FORCE) 
-set(CUDA_INCLUDE_DIRS ${CUDA_PATH}/include CACHE PATH "CUDA Include location" FORCE)
+set(CUDA_INCLUDE_DIRS ${CUDA_PATH}/src CACHE PATH "CUDA Include location" FORCE)
 
 #Set CUDA implicit information - critical for link line extraction
-set(CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES "${CUDA_PATH}/include" CACHE STRING "CUDA implicit includes" FORCE)
+set(CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES "${CUDA_PATH}/src" CACHE STRING "CUDA implicit includes" FORCE)
 
 set(CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES "${CUDA_PATH}/lib64;${CUDA_PATH}/targets/x86_64-linux/lib;${CUDA_PATH}/targets/x86_64-linux/lib/stubs" CACHE STRING "CUDA implicit link directories" FORCE)
 

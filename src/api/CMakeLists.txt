@@ -1,7 +1,7 @@
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/api/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/api/
         DESTINATION include/sep/api
         FILES_MATCHING
         PATTERN "*.h"
@@ -48,7 +48,7 @@ target_link_libraries(sep_api
 
 target_include_directories(sep_api
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>

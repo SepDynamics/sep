@@ -2,17 +2,12 @@ set(SEP_CORE_SOURCES
     tracing.cpp
     allocation_metrics.cpp
     dag_graph.cpp
-    config_manager_stub.cpp
+    manager.cpp
     prometheus_exporter.cpp
     error_handler.cpp
     metrics_collector.cpp
     logging.cpp
 )
-
-# Manager functionality is excluded when building the testbed stubs
-if(NOT SEP_TESTBED_STUBS)
-    list(APPEND SEP_CORE_SOURCES manager.cpp)
-endif()
 
 # Create the static core library
 add_library(sep_core STATIC ${SEP_CORE_SOURCES})
@@ -24,7 +19,7 @@ endif()
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/core/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
         DESTINATION include/sep/core
         FILES_MATCHING
         PATTERN "*.h"
@@ -55,7 +50,7 @@ set_target_properties(sep_core PROPERTIES
 
 target_include_directories(sep_core
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
@@ -70,12 +65,12 @@ target_link_libraries(sep_core
 )
 
 # Install headers from include directory
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/core/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
         DESTINATION include/sep/core
         FILES_MATCHING PATTERN "*.h")
 
 # Install compat headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/compat/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/compat/
         DESTINATION include/sep/compat
         FILES_MATCHING PATTERN "*.h")
 

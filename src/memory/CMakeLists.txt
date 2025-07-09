@@ -6,9 +6,6 @@ set(SEP_MEMORY_SOURCES
 if(NOT SEP_MEMORY_MINIMAL)
   list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
 endif()
-if(SEP_TESTBED_STUBS)
-  list(APPEND SEP_MEMORY_SOURCES ${CMAKE_SOURCE_DIR}/_sep/testbed/memory_minimal/memory_tier_manager_stubs.cpp)
-endif()
 
 if(HIREDIS_FOUND)
     list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
@@ -74,7 +71,7 @@ endif()
 # Configure include directories
 target_include_directories(sep_memory
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
@@ -98,7 +95,7 @@ if(HIREDIS_FOUND)
 endif()
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/memory/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/memory/
         DESTINATION include/sep/memory
         FILES_MATCHING
         PATTERN "*.h"

@@ -1,9 +1,10 @@
 #pragma once
+
+#include <fstream>
+#include <ios>
+#include <sstream>
 #include <string>
 #include <unordered_map>
-#include <ios>
-#include <fstream>
-#include <sstream>
 // S_ISREG is not defined for windows
 // This defines it like suggested in https://stackoverflow.com/a/62371749
 #if defined(_MSC_VER)
@@ -322,4 +323,4 @@ namespace crow
         std::function<bool()> is_alive_helper_;
         static_file_info file_info;
     };
-} // namespace crow
+}  // namespace crow

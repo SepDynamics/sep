@@ -1,23 +1,21 @@
 #define SEP_WORKBENCH_DEMO
+#include <cstdio>
 #include <memory>
 #include <stdexcept>
-#include <cstdio>
 
-#include "sep_engine_wrapper.h"
-#include "demo_manager.hpp"
 #include "config.hpp"
-
-// Include demo headers after wrapper to ensure they use mock types
-#include "demos/genesis_pattern.hpp"
+#include "demo_manager.hpp"
+#include "demos/annealing_demo.hpp"
 #include "demos/audio_visualizer.hpp"
-#include "demos/memory_garden.hpp"
 #include "demos/cosmo_demo.hpp"
 #include "demos/cosmo_sim.hpp"
+#include "demos/digital_physics_demo.hpp"
 #include "demos/drug_discovery_demo.hpp"
 #include "demos/flocking_demo.hpp"
+#include "demos/genesis_pattern.hpp"
+#include "demos/memory_garden.hpp"
 #include "demos/neural_demo.hpp"
-#include "demos/digital_physics_demo.hpp"
-#include "demos/annealing_demo.hpp"
+#include "sep_engine_wrapper.h"
 
 using sep::workbench::Demo;
 using sep::workbench::GenesisPatternDemo;

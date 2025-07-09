@@ -1,0 +1,68 @@
+{
+  "window": {
+    "title": "SEP Workbench",
+    "width": 1280,
+    "height": 720,
+    "fullscreen": false,
+    "vsync": true
+  },
+  "engine": {
+    "cuda_enabled": true,
+    "metrics_enabled": true,
+    "log_level": "info"
+  },
+  "demos": {
+    "genesis_pattern": {
+      "initial_pattern": {
+        "dimensions": [
+          3,
+          3,
+          3
+        ],
+        "evolution_rate": 0.1,
+        "coherence_threshold": 0.5
+      },
+      "visualization": {
+        "color_mode": "coherence",
+        "emission_mode": "stability",
+        "roughness_mode": "energy"
+      }
+    },
+    "audio_visualizer": {
+      "input": {
+        "device": "default",
+        "sample_rate": 44100,
+        "buffer_size": 1024,
+        "fft_size": 2048
+      },
+      "pattern_mapping": {
+        "frequency_scale": 0.5,
+        "amplitude_scale": 1.0,
+        "evolution_sensitivity": 0.75
+      }
+    },
+    "memory_garden": {
+      "layout": {
+        "stm_radius": 10.0,
+        "mtm_radius": 20.0,
+        "ltm_radius": 30.0
+      },
+      "visualization": {
+        "show_connections": true,
+        "connection_opacity": 0.5,
+        "pattern_scale": 1.0
+      }
+    },
+    "cosmo_sim": {
+      "box_size": 50.0,
+      "time_step": 0.01
+    }
+  },
+  "renderer": {
+    "cycles": {
+      "samples": 64,
+      "denoising": true,
+      "device": "gpu"
+    }
+  }
+}

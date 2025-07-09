@@ -1,0 +1,1551 @@
+Building SEP workbench demos...
+In file included from renderer.h:4,
+                 from demo_main.cpp:7:
+/usr/include/GL/glew.h:85:2: error: #error gl.h included before glew.h
+   85 | #error gl.h included before glew.h
+      |  ^~~~~
+/usr/include/GL/glew.h:97:2: error: #error glext.h included before glew.h
+   97 | #error glext.h included before glew.h
+      |  ^~~~~
+In file included from demo_main.cpp:11:
+core/engine.h:1: error: unterminated #ifndef
+    1 | #ifndef SEP_CORE_ENGINE_H
+/usr/include/GL/glew.h:21141:28: error: conflicting declaration ‘typedef void (* PFNGLFRAGMENTLIGHTMODELFVSGIXPROC)(GLenum, GLfloat*)’
+21141 | typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELFVSGIXPROC) (GLenum pname, GLfloat* params);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/GL/gl.h:2050,
+                 from /usr/include/GLFW/glfw3.h:241,
+                 from demo_main.cpp:5:
+/usr/include/GL/glext.h:12376:25: note: previous declaration as ‘typedef void (* PFNGLFRAGMENTLIGHTMODELFVSGIXPROC)(GLenum, const GLfloat*)’
+12376 | typedef void (APIENTRYP PFNGLFRAGMENTLIGHTMODELFVSGIXPROC) (GLenum pname, const GLfloat *params);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/GL/glew.h:21143:28: error: conflicting declaration ‘typedef void (* PFNGLFRAGMENTLIGHTMODELIVSGIXPROC)(GLenum, GLint*)’
+21143 | typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELIVSGIXPROC) (GLenum pname, GLint* params);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/GL/glext.h:12378:25: note: previous declaration as ‘typedef void (* PFNGLFRAGMENTLIGHTMODELIVSGIXPROC)(GLenum, const GLint*)’
+12378 | typedef void (APIENTRYP PFNGLFRAGMENTLIGHTMODELIVSGIXPROC) (GLenum pname, const GLint *params);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/GL/glew.h:21145:28: error: conflicting declaration ‘typedef void (* PFNGLFRAGMENTLIGHTFVSGIXPROC)(GLenum, GLenum, GLfloat*)’
+21145 | typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTFVSGIXPROC) (GLenum light, GLenum pname, GLfloat* params);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/GL/glext.h:12372:25: note: previous declaration as ‘typedef void (* PFNGLFRAGMENTLIGHTFVSGIXPROC)(GLenum, GLenum, const GLfloat*)’
+12372 | typedef void (APIENTRYP PFNGLFRAGMENTLIGHTFVSGIXPROC) (GLenum light, GLenum pname, const GLfloat *params);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/GL/glew.h:21147:28: error: conflicting declaration ‘typedef void (* PFNGLFRAGMENTLIGHTIVSGIXPROC)(GLenum, GLenum, GLint*)’
+21147 | typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTIVSGIXPROC) (GLenum light, GLenum pname, GLint* params);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/GL/glext.h:12374:25: note: previous declaration as ‘typedef void (* PFNGLFRAGMENTLIGHTIVSGIXPROC)(GLenum, GLenum, const GLint*)’
+12374 | typedef void (APIENTRYP PFNGLFRAGMENTLIGHTIVSGIXPROC) (GLenum light, GLenum pname, const GLint *params);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/GL/glew.h:22288:17: error: ‘PFNGLCLIENTACTIVETEXTUREPROC’ does not name a type; did you mean ‘PFNGLCLIENTACTIVETEXTUREARBPROC’?
+22288 | GLEW_FUN_EXPORT PFNGLCLIENTACTIVETEXTUREPROC __glewClientActiveTexture;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCLIENTACTIVETEXTUREARBPROC
+/usr/include/GL/glew.h:22296:17: error: ‘PFNGLLOADTRANSPOSEMATRIXDPROC’ does not name a type; did you mean ‘PFNGLLOADTRANSPOSEMATRIXDARBPROC’?
+22296 | GLEW_FUN_EXPORT PFNGLLOADTRANSPOSEMATRIXDPROC __glewLoadTransposeMatrixd;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLLOADTRANSPOSEMATRIXDARBPROC
+/usr/include/GL/glew.h:22297:17: error: ‘PFNGLLOADTRANSPOSEMATRIXFPROC’ does not name a type; did you mean ‘PFNGLLOADTRANSPOSEMATRIXFARBPROC’?
+22297 | GLEW_FUN_EXPORT PFNGLLOADTRANSPOSEMATRIXFPROC __glewLoadTransposeMatrixf;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLLOADTRANSPOSEMATRIXFARBPROC
+/usr/include/GL/glew.h:22298:17: error: ‘PFNGLMULTTRANSPOSEMATRIXDPROC’ does not name a type; did you mean ‘PFNGLMULTTRANSPOSEMATRIXDARBPROC’?
+22298 | GLEW_FUN_EXPORT PFNGLMULTTRANSPOSEMATRIXDPROC __glewMultTransposeMatrixd;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTTRANSPOSEMATRIXDARBPROC
+/usr/include/GL/glew.h:22299:17: error: ‘PFNGLMULTTRANSPOSEMATRIXFPROC’ does not name a type; did you mean ‘PFNGLMULTTRANSPOSEMATRIXFARBPROC’?
+22299 | GLEW_FUN_EXPORT PFNGLMULTTRANSPOSEMATRIXFPROC __glewMultTransposeMatrixf;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTTRANSPOSEMATRIXFARBPROC
+/usr/include/GL/glew.h:22300:17: error: ‘PFNGLMULTITEXCOORD1DPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22300 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1DPROC __glewMultiTexCoord1d;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22301:17: error: ‘PFNGLMULTITEXCOORD1DVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD1HNVPROC’?
+22301 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1DVPROC __glewMultiTexCoord1dv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD1HNVPROC
+/usr/include/GL/glew.h:22302:17: error: ‘PFNGLMULTITEXCOORD1FPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22302 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1FPROC __glewMultiTexCoord1f;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22303:17: error: ‘PFNGLMULTITEXCOORD1FVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD1HNVPROC’?
+22303 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1FVPROC __glewMultiTexCoord1fv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD1HNVPROC
+/usr/include/GL/glew.h:22304:17: error: ‘PFNGLMULTITEXCOORD1IPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORDP1UIPROC’?
+22304 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1IPROC __glewMultiTexCoord1i;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORDP1UIPROC
+/usr/include/GL/glew.h:22305:17: error: ‘PFNGLMULTITEXCOORD1IVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORDP1UIVPROC’?
+22305 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1IVPROC __glewMultiTexCoord1iv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORDP1UIVPROC
+/usr/include/GL/glew.h:22306:17: error: ‘PFNGLMULTITEXCOORD1SPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22306 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1SPROC __glewMultiTexCoord1s;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22307:17: error: ‘PFNGLMULTITEXCOORD1SVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD1HNVPROC’?
+22307 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1SVPROC __glewMultiTexCoord1sv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD1HNVPROC
+/usr/include/GL/glew.h:22308:17: error: ‘PFNGLMULTITEXCOORD2DPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22308 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2DPROC __glewMultiTexCoord2d;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22309:17: error: ‘PFNGLMULTITEXCOORD2DVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD2HNVPROC’?
+22309 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2DVPROC __glewMultiTexCoord2dv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD2HNVPROC
+/usr/include/GL/glew.h:22310:17: error: ‘PFNGLMULTITEXCOORD2FPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22310 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2FPROC __glewMultiTexCoord2f;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22311:17: error: ‘PFNGLMULTITEXCOORD2FVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD2HNVPROC’?
+22311 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2FVPROC __glewMultiTexCoord2fv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD2HNVPROC
+/usr/include/GL/glew.h:22312:17: error: ‘PFNGLMULTITEXCOORD2IPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORDP2UIPROC’?
+22312 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2IPROC __glewMultiTexCoord2i;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORDP2UIPROC
+/usr/include/GL/glew.h:22313:17: error: ‘PFNGLMULTITEXCOORD2IVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORDP2UIVPROC’?
+22313 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2IVPROC __glewMultiTexCoord2iv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORDP2UIVPROC
+/usr/include/GL/glew.h:22314:17: error: ‘PFNGLMULTITEXCOORD2SPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22314 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2SPROC __glewMultiTexCoord2s;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22315:17: error: ‘PFNGLMULTITEXCOORD2SVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD2HNVPROC’?
+22315 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2SVPROC __glewMultiTexCoord2sv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD2HNVPROC
+/usr/include/GL/glew.h:22316:17: error: ‘PFNGLMULTITEXCOORD3DPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22316 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3DPROC __glewMultiTexCoord3d;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22317:17: error: ‘PFNGLMULTITEXCOORD3DVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD3HNVPROC’?
+22317 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3DVPROC __glewMultiTexCoord3dv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD3HNVPROC
+/usr/include/GL/glew.h:22318:17: error: ‘PFNGLMULTITEXCOORD3FPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22318 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3FPROC __glewMultiTexCoord3f;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22319:17: error: ‘PFNGLMULTITEXCOORD3FVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD3HNVPROC’?
+22319 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3FVPROC __glewMultiTexCoord3fv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD3HNVPROC
+/usr/include/GL/glew.h:22320:17: error: ‘PFNGLMULTITEXCOORD3IPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORDP3UIPROC’?
+22320 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3IPROC __glewMultiTexCoord3i;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORDP3UIPROC
+/usr/include/GL/glew.h:22321:17: error: ‘PFNGLMULTITEXCOORD3IVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORDP3UIVPROC’?
+22321 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3IVPROC __glewMultiTexCoord3iv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORDP3UIVPROC
+/usr/include/GL/glew.h:22322:17: error: ‘PFNGLMULTITEXCOORD3SPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22322 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3SPROC __glewMultiTexCoord3s;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22323:17: error: ‘PFNGLMULTITEXCOORD3SVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD3HNVPROC’?
+22323 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3SVPROC __glewMultiTexCoord3sv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD3HNVPROC
+/usr/include/GL/glew.h:22324:17: error: ‘PFNGLMULTITEXCOORD4DPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22324 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD4DPROC __glewMultiTexCoord4d;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22325:17: error: ‘PFNGLMULTITEXCOORD4DVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22325 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD4DVPROC __glewMultiTexCoord4dv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22326:17: error: ‘PFNGLMULTITEXCOORD4FPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22326 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD4FPROC __glewMultiTexCoord4f;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22327:17: error: ‘PFNGLMULTITEXCOORD4FVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22327 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD4FVPROC __glewMultiTexCoord4fv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22328:17: error: ‘PFNGLMULTITEXCOORD4IPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22328 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD4IPROC __glewMultiTexCoord4i;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22329:17: error: ‘PFNGLMULTITEXCOORD4IVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORDP4UIVPROC’?
+22329 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD4IVPROC __glewMultiTexCoord4iv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORDP4UIVPROC
+/usr/include/GL/glew.h:22330:17: error: ‘PFNGLMULTITEXCOORD4SPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22330 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD4SPROC __glewMultiTexCoord4s;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22331:17: error: ‘PFNGLMULTITEXCOORD4SVPROC’ does not name a type; did you mean ‘PFNGLMULTITEXCOORD4XPROC’?
+22331 | GLEW_FUN_EXPORT PFNGLMULTITEXCOORD4SVPROC __glewMultiTexCoord4sv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLMULTITEXCOORD4XPROC
+/usr/include/GL/glew.h:22988:17: error: ‘PFNGLCOLORSUBTABLEPROC’ does not name a type; did you mean ‘PFNGLCOLORSUBTABLEEXTPROC’?
+22988 | GLEW_FUN_EXPORT PFNGLCOLORSUBTABLEPROC __glewColorSubTable;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCOLORSUBTABLEEXTPROC
+/usr/include/GL/glew.h:22989:17: error: ‘PFNGLCOLORTABLEPROC’ does not name a type; did you mean ‘PFNGLCOLORTABLESGIPROC’?
+22989 | GLEW_FUN_EXPORT PFNGLCOLORTABLEPROC __glewColorTable;
+      |                 ^~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCOLORTABLESGIPROC
+/usr/include/GL/glew.h:22990:17: error: ‘PFNGLCOLORTABLEPARAMETERFVPROC’ does not name a type; did you mean ‘PFNGLCOLORTABLEPARAMETERFVSGIPROC’?
+22990 | GLEW_FUN_EXPORT PFNGLCOLORTABLEPARAMETERFVPROC __glewColorTableParameterfv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCOLORTABLEPARAMETERFVSGIPROC
+/usr/include/GL/glew.h:22991:17: error: ‘PFNGLCOLORTABLEPARAMETERIVPROC’ does not name a type; did you mean ‘PFNGLCOLORTABLEPARAMETERIVSGIPROC’?
+22991 | GLEW_FUN_EXPORT PFNGLCOLORTABLEPARAMETERIVPROC __glewColorTableParameteriv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCOLORTABLEPARAMETERIVSGIPROC
+/usr/include/GL/glew.h:22992:17: error: ‘PFNGLCONVOLUTIONFILTER1DPROC’ does not name a type; did you mean ‘PFNGLCONVOLUTIONFILTER1DEXTPROC’?
+22992 | GLEW_FUN_EXPORT PFNGLCONVOLUTIONFILTER1DPROC __glewConvolutionFilter1D;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCONVOLUTIONFILTER1DEXTPROC
+/usr/include/GL/glew.h:22993:17: error: ‘PFNGLCONVOLUTIONFILTER2DPROC’ does not name a type; did you mean ‘PFNGLCONVOLUTIONFILTER2DEXTPROC’?
+22993 | GLEW_FUN_EXPORT PFNGLCONVOLUTIONFILTER2DPROC __glewConvolutionFilter2D;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCONVOLUTIONFILTER2DEXTPROC
+/usr/include/GL/glew.h:22994:17: error: ‘PFNGLCONVOLUTIONPARAMETERFPROC’ does not name a type; did you mean ‘PFNGLCONVOLUTIONPARAMETERFEXTPROC’?
+22994 | GLEW_FUN_EXPORT PFNGLCONVOLUTIONPARAMETERFPROC __glewConvolutionParameterf;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCONVOLUTIONPARAMETERFEXTPROC
+/usr/include/GL/glew.h:22995:17: error: ‘PFNGLCONVOLUTIONPARAMETERFVPROC’ does not name a type; did you mean ‘PFNGLCONVOLUTIONPARAMETERFVEXTPROC’?
+22995 | GLEW_FUN_EXPORT PFNGLCONVOLUTIONPARAMETERFVPROC __glewConvolutionParameterfv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCONVOLUTIONPARAMETERFVEXTPROC
+/usr/include/GL/glew.h:22996:17: error: ‘PFNGLCONVOLUTIONPARAMETERIPROC’ does not name a type; did you mean ‘PFNGLCONVOLUTIONPARAMETERIEXTPROC’?
+22996 | GLEW_FUN_EXPORT PFNGLCONVOLUTIONPARAMETERIPROC __glewConvolutionParameteri;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCONVOLUTIONPARAMETERIEXTPROC
+/usr/include/GL/glew.h:22997:17: error: ‘PFNGLCONVOLUTIONPARAMETERIVPROC’ does not name a type; did you mean ‘PFNGLCONVOLUTIONPARAMETERIVEXTPROC’?
+22997 | GLEW_FUN_EXPORT PFNGLCONVOLUTIONPARAMETERIVPROC __glewConvolutionParameteriv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCONVOLUTIONPARAMETERIVEXTPROC
+/usr/include/GL/glew.h:22998:17: error: ‘PFNGLCOPYCOLORSUBTABLEPROC’ does not name a type; did you mean ‘PFNGLCOPYCOLORSUBTABLEEXTPROC’?
+22998 | GLEW_FUN_EXPORT PFNGLCOPYCOLORSUBTABLEPROC __glewCopyColorSubTable;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCOPYCOLORSUBTABLEEXTPROC
+/usr/include/GL/glew.h:22999:17: error: ‘PFNGLCOPYCOLORTABLEPROC’ does not name a type; did you mean ‘PFNGLCOPYCOLORTABLESGIPROC’?
+22999 | GLEW_FUN_EXPORT PFNGLCOPYCOLORTABLEPROC __glewCopyColorTable;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCOPYCOLORTABLESGIPROC
+/usr/include/GL/glew.h:23000:17: error: ‘PFNGLCOPYCONVOLUTIONFILTER1DPROC’ does not name a type; did you mean ‘PFNGLCOPYCONVOLUTIONFILTER1DEXTPROC’?
+23000 | GLEW_FUN_EXPORT PFNGLCOPYCONVOLUTIONFILTER1DPROC __glewCopyConvolutionFilter1D;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCOPYCONVOLUTIONFILTER1DEXTPROC
+/usr/include/GL/glew.h:23001:17: error: ‘PFNGLCOPYCONVOLUTIONFILTER2DPROC’ does not name a type; did you mean ‘PFNGLCOPYCONVOLUTIONFILTER2DEXTPROC’?
+23001 | GLEW_FUN_EXPORT PFNGLCOPYCONVOLUTIONFILTER2DPROC __glewCopyConvolutionFilter2D;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLCOPYCONVOLUTIONFILTER2DEXTPROC
+/usr/include/GL/glew.h:23002:17: error: ‘PFNGLGETCOLORTABLEPROC’ does not name a type; did you mean ‘PFNGLGETNCOLORTABLEPROC’?
+23002 | GLEW_FUN_EXPORT PFNGLGETCOLORTABLEPROC __glewGetColorTable;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETNCOLORTABLEPROC
+/usr/include/GL/glew.h:23003:17: error: ‘PFNGLGETCOLORTABLEPARAMETERFVPROC’ does not name a type; did you mean ‘PFNGLGETCOLORTABLEPARAMETERFVSGIPROC’?
+23003 | GLEW_FUN_EXPORT PFNGLGETCOLORTABLEPARAMETERFVPROC __glewGetColorTableParameterfv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETCOLORTABLEPARAMETERFVSGIPROC
+/usr/include/GL/glew.h:23004:17: error: ‘PFNGLGETCOLORTABLEPARAMETERIVPROC’ does not name a type; did you mean ‘PFNGLGETCOLORTABLEPARAMETERIVSGIPROC’?
+23004 | GLEW_FUN_EXPORT PFNGLGETCOLORTABLEPARAMETERIVPROC __glewGetColorTableParameteriv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETCOLORTABLEPARAMETERIVSGIPROC
+/usr/include/GL/glew.h:23005:17: error: ‘PFNGLGETCONVOLUTIONFILTERPROC’ does not name a type; did you mean ‘PFNGLGETNCONVOLUTIONFILTERPROC’?
+23005 | GLEW_FUN_EXPORT PFNGLGETCONVOLUTIONFILTERPROC __glewGetConvolutionFilter;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETNCONVOLUTIONFILTERPROC
+/usr/include/GL/glew.h:23006:17: error: ‘PFNGLGETCONVOLUTIONPARAMETERFVPROC’ does not name a type; did you mean ‘PFNGLGETCONVOLUTIONPARAMETERFVEXTPROC’?
+23006 | GLEW_FUN_EXPORT PFNGLGETCONVOLUTIONPARAMETERFVPROC __glewGetConvolutionParameterfv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETCONVOLUTIONPARAMETERFVEXTPROC
+/usr/include/GL/glew.h:23007:17: error: ‘PFNGLGETCONVOLUTIONPARAMETERIVPROC’ does not name a type; did you mean ‘PFNGLGETCONVOLUTIONPARAMETERIVEXTPROC’?
+23007 | GLEW_FUN_EXPORT PFNGLGETCONVOLUTIONPARAMETERIVPROC __glewGetConvolutionParameteriv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETCONVOLUTIONPARAMETERIVEXTPROC
+/usr/include/GL/glew.h:23008:17: error: ‘PFNGLGETHISTOGRAMPROC’ does not name a type; did you mean ‘PFNGLGETNHISTOGRAMPROC’?
+23008 | GLEW_FUN_EXPORT PFNGLGETHISTOGRAMPROC __glewGetHistogram;
+      |                 ^~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETNHISTOGRAMPROC
+/usr/include/GL/glew.h:23009:17: error: ‘PFNGLGETHISTOGRAMPARAMETERFVPROC’ does not name a type; did you mean ‘PFNGLGETHISTOGRAMPARAMETERFVEXTPROC’?
+23009 | GLEW_FUN_EXPORT PFNGLGETHISTOGRAMPARAMETERFVPROC __glewGetHistogramParameterfv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETHISTOGRAMPARAMETERFVEXTPROC
+/usr/include/GL/glew.h:23010:17: error: ‘PFNGLGETHISTOGRAMPARAMETERIVPROC’ does not name a type; did you mean ‘PFNGLGETHISTOGRAMPARAMETERIVEXTPROC’?
+23010 | GLEW_FUN_EXPORT PFNGLGETHISTOGRAMPARAMETERIVPROC __glewGetHistogramParameteriv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETHISTOGRAMPARAMETERIVEXTPROC
+/usr/include/GL/glew.h:23011:17: error: ‘PFNGLGETMINMAXPROC’ does not name a type; did you mean ‘PFNGLGETNMINMAXPROC’?
+23011 | GLEW_FUN_EXPORT PFNGLGETMINMAXPROC __glewGetMinmax;
+      |                 ^~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETNMINMAXPROC
+/usr/include/GL/glew.h:23012:17: error: ‘PFNGLGETMINMAXPARAMETERFVPROC’ does not name a type; did you mean ‘PFNGLGETMINMAXPARAMETERFVEXTPROC’?
+23012 | GLEW_FUN_EXPORT PFNGLGETMINMAXPARAMETERFVPROC __glewGetMinmaxParameterfv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETMINMAXPARAMETERFVEXTPROC
+/usr/include/GL/glew.h:23013:17: error: ‘PFNGLGETMINMAXPARAMETERIVPROC’ does not name a type; did you mean ‘PFNGLGETMINMAXPARAMETERIVEXTPROC’?
+23013 | GLEW_FUN_EXPORT PFNGLGETMINMAXPARAMETERIVPROC __glewGetMinmaxParameteriv;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETMINMAXPARAMETERIVEXTPROC
+/usr/include/GL/glew.h:23014:17: error: ‘PFNGLGETSEPARABLEFILTERPROC’ does not name a type; did you mean ‘PFNGLGETNSEPARABLEFILTERPROC’?
+23014 | GLEW_FUN_EXPORT PFNGLGETSEPARABLEFILTERPROC __glewGetSeparableFilter;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLGETNSEPARABLEFILTERPROC
+/usr/include/GL/glew.h:23015:17: error: ‘PFNGLHISTOGRAMPROC’ does not name a type; did you mean ‘PFNGLISPROGRAMPROC’?
+23015 | GLEW_FUN_EXPORT PFNGLHISTOGRAMPROC __glewHistogram;
+      |                 ^~~~~~~~~~~~~~~~~~
+      |                 PFNGLISPROGRAMPROC
+/usr/include/GL/glew.h:23016:17: error: ‘PFNGLMINMAXPROC’ does not name a type; did you mean ‘PFNGLMINMAXEXTPROC’?
+23016 | GLEW_FUN_EXPORT PFNGLMINMAXPROC __glewMinmax;
+      |                 ^~~~~~~~~~~~~~~
+      |                 PFNGLMINMAXEXTPROC
+/usr/include/GL/glew.h:23017:17: error: ‘PFNGLRESETHISTOGRAMPROC’ does not name a type; did you mean ‘PFNGLRESETHISTOGRAMEXTPROC’?
+23017 | GLEW_FUN_EXPORT PFNGLRESETHISTOGRAMPROC __glewResetHistogram;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLRESETHISTOGRAMEXTPROC
+/usr/include/GL/glew.h:23018:17: error: ‘PFNGLRESETMINMAXPROC’ does not name a type; did you mean ‘PFNGLRESETMINMAXEXTPROC’?
+23018 | GLEW_FUN_EXPORT PFNGLRESETMINMAXPROC __glewResetMinmax;
+      |                 ^~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLRESETMINMAXEXTPROC
+/usr/include/GL/glew.h:23019:17: error: ‘PFNGLSEPARABLEFILTER2DPROC’ does not name a type; did you mean ‘PFNGLSEPARABLEFILTER2DEXTPROC’?
+23019 | GLEW_FUN_EXPORT PFNGLSEPARABLEFILTER2DPROC __glewSeparableFilter2D;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLSEPARABLEFILTER2DEXTPROC
+/usr/include/GL/glew.h:25152:17: error: ‘PFNGLNAMEDFRAMEBUFFERTEXTUREMULTIVIEWOVRPROC’ does not name a type; did you mean ‘PFNGLFRAMEBUFFERTEXTUREMULTIVIEWOVRPROC’?
+25152 | GLEW_FUN_EXPORT PFNGLNAMEDFRAMEBUFFERTEXTUREMULTIVIEWOVRPROC __glewNamedFramebufferTextureMultiviewOVR;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 PFNGLFRAMEBUFFERTEXTUREMULTIVIEWOVRPROC
+In file included from /sep/include/blender/types.h:3,
+                 from core/engine.h:8:
+/sep/include/core/common.h:9:12: error: multiple definition of ‘enum class sep::SEPResult’
+    9 | enum class SEPResult : int32_t {
+      |            ^~~~~~~~~
+In file included from renderer.h:9:
+mock_types.h:12:16: note: previous definition here
+   12 |     enum class SEPResult
+      |                ^~~~~~~~~
+/sep/include/core/common.h: In function ‘const char* sep::to_string(SEPResult)’:
+/sep/include/core/common.h:62:25: error: ‘UNKNOWN_ERROR’ is not a member of ‘sep::SEPResult’
+   62 |         case SEPResult::UNKNOWN_ERROR: return "UNKNOWN_ERROR";
+      |                         ^~~~~~~~~~~~~
+/sep/include/core/common.h:63:25: error: ‘INVALID_ARGUMENT’ is not a member of ‘sep::SEPResult’
+   63 |         case SEPResult::INVALID_ARGUMENT: return "INVALID_ARGUMENT";
+      |                         ^~~~~~~~~~~~~~~~
+/sep/include/core/common.h:64:25: error: ‘OUT_OF_MEMORY’ is not a member of ‘sep::SEPResult’
+   64 |         case SEPResult::OUT_OF_MEMORY: return "OUT_OF_MEMORY";
+      |                         ^~~~~~~~~~~~~
+/sep/include/core/common.h:65:25: error: ‘FILE_NOT_FOUND’ is not a member of ‘sep::SEPResult’
+   65 |         case SEPResult::FILE_NOT_FOUND: return "FILE_NOT_FOUND";
+      |                         ^~~~~~~~~~~~~~
+/sep/include/core/common.h:66:25: error: ‘PERMISSION_DENIED’ is not a member of ‘sep::SEPResult’
+   66 |         case SEPResult::PERMISSION_DENIED: return "PERMISSION_DENIED";
+      |                         ^~~~~~~~~~~~~~~~~
+/sep/include/core/common.h:67:25: error: ‘NETWORK_ERROR’ is not a member of ‘sep::SEPResult’
+   67 |         case SEPResult::NETWORK_ERROR: return "NETWORK_ERROR";
+      |                         ^~~~~~~~~~~~~
+/sep/include/core/common.h:68:25: error: ‘PROCESSING_ERROR’ is not a member of ‘sep::SEPResult’
+   68 |         case SEPResult::PROCESSING_ERROR: return "PROCESSING_ERROR";
+      |                         ^~~~~~~~~~~~~~~~
+/sep/include/core/common.h:69:25: error: ‘TIMEOUT’ is not a member of ‘sep::SEPResult’
+   69 |         case SEPResult::TIMEOUT: return "TIMEOUT";
+      |                         ^~~~~~~
+/sep/include/core/common.h:70:25: error: ‘NOT_IMPLEMENTED’ is not a member of ‘sep::SEPResult’
+   70 |         case SEPResult::NOT_IMPLEMENTED: return "NOT_IMPLEMENTED";
+      |                         ^~~~~~~~~~~~~~~
+/sep/include/core/common.h:71:25: error: ‘ALREADY_EXISTS’ is not a member of ‘sep::SEPResult’
+   71 |         case SEPResult::ALREADY_EXISTS: return "ALREADY_EXISTS";
+      |                         ^~~~~~~~~~~~~~
+/sep/include/core/common.h:72:25: error: ‘NOT_FOUND’ is not a member of ‘sep::SEPResult’
+   72 |         case SEPResult::NOT_FOUND: return "NOT_FOUND";
+      |                         ^~~~~~~~~
+/sep/include/core/common.h:73:25: error: ‘INVALID_STATE’ is not a member of ‘sep::SEPResult’
+   73 |         case SEPResult::INVALID_STATE: return "INVALID_STATE";
+      |                         ^~~~~~~~~~~~~
+/sep/include/core/common.h:74:25: error: ‘BUFFER_TOO_SMALL’ is not a member of ‘sep::SEPResult’
+   74 |         case SEPResult::BUFFER_TOO_SMALL: return "BUFFER_TOO_SMALL";
+      |                         ^~~~~~~~~~~~~~~~
+/sep/include/core/common.h:75:25: error: ‘OPERATION_CANCELLED’ is not a member of ‘sep::SEPResult’
+   75 |         case SEPResult::OPERATION_CANCELLED: return "OPERATION_CANCELLED";
+      |                         ^~~~~~~~~~~~~~~~~~~
+/sep/include/core/common.h:76:25: error: ‘RESOURCE_BUSY’ is not a member of ‘sep::SEPResult’
+   76 |         case SEPResult::RESOURCE_BUSY: return "RESOURCE_BUSY";
+      |                         ^~~~~~~~~~~~~
+/sep/include/core/common.h:77:25: error: ‘INITIALIZATION_FAILED’ is not a member of ‘sep::SEPResult’
+   77 |         case SEPResult::INITIALIZATION_FAILED: return "INITIALIZATION_FAILED";
+      |                         ^~~~~~~~~~~~~~~~~~~~~
+/sep/include/core/common.h:78:25: error: ‘COMPILATION_FAILED’ is not a member of ‘sep::SEPResult’
+   78 |         case SEPResult::COMPILATION_FAILED: return "COMPILATION_FAILED";
+      |                         ^~~~~~~~~~~~~~~~~~
+/sep/include/core/common.h:79:25: error: ‘PATTERN_MATCH_FAILED’ is not a member of ‘sep::SEPResult’
+   79 |         case SEPResult::PATTERN_MATCH_FAILED: return "PATTERN_MATCH_FAILED";
+      |                         ^~~~~~~~~~~~~~~~~~~~
+/sep/include/core/common.h:80:25: error: ‘GPU_ERROR’ is not a member of ‘sep::SEPResult’
+   80 |         case SEPResult::GPU_ERROR: return "GPU_ERROR";
+      |                         ^~~~~~~~~
+/sep/include/core/common.h:81:25: error: ‘CUDA_ERROR’ is not a member of ‘sep::SEPResult’
+   81 |         case SEPResult::CUDA_ERROR: return "CUDA_ERROR";
+      |                         ^~~~~~~~~~
+/sep/include/core/common.h:82:25: error: ‘MEMORY_ERROR’ is not a member of ‘sep::SEPResult’
+   82 |         case SEPResult::MEMORY_ERROR: return "MEMORY_ERROR";
+      |                         ^~~~~~~~~~~~
+/sep/include/core/common.h:83:25: error: ‘ALLOCATION_FAILED’ is not a member of ‘sep::SEPResult’
+   83 |         case SEPResult::ALLOCATION_FAILED: return "ALLOCATION_FAILED";
+      |                         ^~~~~~~~~~~~~~~~~
+/sep/include/core/common.h:84:25: error: ‘FEATURE_UNAVAILABLE’ is not a member of ‘sep::SEPResult’
+   84 |         case SEPResult::FEATURE_UNAVAILABLE: return "FEATURE_UNAVAILABLE";
+      |                         ^~~~~~~~~~~~~~~~~~~
+/sep/include/core/common.h:85:25: error: ‘NOT_INITIALIZED’ is not a member of ‘sep::SEPResult’
+   85 |         case SEPResult::NOT_INITIALIZED: return "NOT_INITIALIZED";
+      |                         ^~~~~~~~~~~~~~~
+/sep/include/core/common.h:86:25: error: ‘INVALID_DEVICE’ is not a member of ‘sep::SEPResult’
+   86 |         case SEPResult::INVALID_DEVICE: return "INVALID_DEVICE";
+      |                         ^~~~~~~~~~~~~~
+/sep/include/blender/types.h: In function ‘const char* sep_result_to_string(sep::SEPResult)’:
+/sep/include/blender/types.h:23:26: error: ‘INVALID_ARGUMENT’ is not a member of ‘sep::SEPResult’
+   23 |     case sep::SEPResult::INVALID_ARGUMENT:
+      |                          ^~~~~~~~~~~~~~~~
+/sep/include/blender/types.h:25:26: error: ‘INVALID_STATE’ is not a member of ‘sep::SEPResult’
+   25 |     case sep::SEPResult::INVALID_STATE:
+      |                          ^~~~~~~~~~~~~
+/sep/include/blender/types.h:27:26: error: ‘INITIALIZATION_FAILED’ is not a member of ‘sep::SEPResult’
+   27 |     case sep::SEPResult::INITIALIZATION_FAILED:
+      |                          ^~~~~~~~~~~~~~~~~~~~~
+/sep/include/blender/types.h:29:26: error: ‘ALREADY_EXISTS’ is not a member of ‘sep::SEPResult’
+   29 |     case sep::SEPResult::ALREADY_EXISTS:
+      |                          ^~~~~~~~~~~~~~
+/sep/include/blender/types.h:31:26: error: ‘UNKNOWN_ERROR’ is not a member of ‘sep::SEPResult’
+   31 |     case sep::SEPResult::UNKNOWN_ERROR:
+      |                          ^~~~~~~~~~~~~
+/sep/include/blender/types.h:33:26: error: ‘MEMORY_ERROR’ is not a member of ‘sep::SEPResult’
+   33 |     case sep::SEPResult::MEMORY_ERROR:
+      |                          ^~~~~~~~~~~~
+/sep/include/blender/types.h:35:26: error: ‘OUT_OF_MEMORY’ is not a member of ‘sep::SEPResult’
+   35 |     case sep::SEPResult::OUT_OF_MEMORY:
+      |                          ^~~~~~~~~~~~~
+/sep/include/blender/types.h:37:26: error: ‘ALLOCATION_FAILED’ is not a member of ‘sep::SEPResult’
+   37 |     case sep::SEPResult::ALLOCATION_FAILED:
+      |                          ^~~~~~~~~~~~~~~~~
+/sep/include/blender/types.h:39:26: error: ‘PROCESSING_ERROR’ is not a member of ‘sep::SEPResult’
+   39 |     case sep::SEPResult::PROCESSING_ERROR:
+      |                          ^~~~~~~~~~~~~~~~
+/sep/include/blender/types.h:41:26: error: ‘NOT_FOUND’ is not a member of ‘sep::SEPResult’
+   41 |     case sep::SEPResult::NOT_FOUND:
+      |                          ^~~~~~~~~
+/sep/include/blender/types.h:43:26: error: ‘PATTERN_MATCH_FAILED’ is not a member of ‘sep::SEPResult’
+   43 |     case sep::SEPResult::PATTERN_MATCH_FAILED:
+      |                          ^~~~~~~~~~~~~~~~~~~~
+/sep/include/blender/types.h:45:26: error: ‘CUDA_ERROR’ is not a member of ‘sep::SEPResult’
+   45 |     case sep::SEPResult::CUDA_ERROR:
+      |                          ^~~~~~~~~~
+/sep/include/blender/types.h:47:26: error: ‘FILE_NOT_FOUND’ is not a member of ‘sep::SEPResult’
+   47 |     case sep::SEPResult::FILE_NOT_FOUND:
+      |                          ^~~~~~~~~~~~~~
+demo_main.cpp: In function ‘int main(int, char**)’:
+demo_main.cpp:37:52: error: ‘getInstance’ is not a member of ‘sep::core::Engine’
+   37 |     sep::core::Engine& engine = sep::core::Engine::getInstance();
+      |                                                    ^~~~~~~~~~~
+demo_main.cpp:38:16: error: no matching function for call to ‘sep::core::Engine::init()’
+   38 |     engine.init();
+      |     ~~~~~~~~~~~^~
+demo_main.cpp:38:16: note: there is 1 candidate
+core/engine.h:58:18: note: candidate 1: ‘bool sep::core::Engine::init(const sep::config::APIConfig&)’
+   58 |             bool init(const ::sep::config::APIConfig &config);
+      |                  ^~~~
+core/engine.h:58:18: note: candidate expects 1 argument, 0 provided
+demo_main.cpp:52:61: error: no matching function for call to ‘sep::workbench::Window::Window(const char [14], int, int)’
+   52 |     sep::workbench::Window window("SEP Workbench", 1280, 720);
+      |                                                             ^
+demo_main.cpp:52:61: note: there are 2 candidates
+In file included from demo_main.cpp:6:
+window.h:15:13: note: candidate 1: ‘sep::workbench::Window::Window(int, int, const std::string&)’
+   15 |             Window(int width, int height, const std::string& title);
+      |             ^~~~~~
+window.h:15:62: note: no known conversion for argument 3 from ‘int’ to ‘const std::string&’ {aka ‘const std::__cxx11::basic_string<char>&’}
+   15 |             Window(int width, int height, const std::string& title);
+      |                                           ~~~~~~~~~~~~~~~~~~~^~~~~
+window.h:11:15: note: candidate 2: ‘sep::workbench::Window::Window(const sep::workbench::Window&)’
+   11 |         class Window
+      |               ^~~~~~
+window.h:11:15: note: candidate expects 1 argument, 3 provided
+demo_main.cpp:62:21: error: ‘UIManager’ is not a member of ‘sep::workbench’; did you mean ‘DemoManager’?
+   62 |     sep::workbench::UIManager ui_manager;
+      |                     ^~~~~~~~~
+      |                     DemoManager
+demo_main.cpp:63:5: error: ‘ui_manager’ was not declared in this scope; did you mean ‘UIManager’?
+   63 |     ui_manager.initialize();
+      |     ^~~~~~~~~~
+      |     UIManager
+demo_main.cpp:66:21: error: ‘Renderer’ is not a member of ‘sep::workbench’; did you mean ‘Renderer’?
+   66 |     sep::workbench::Renderer renderer(1280, 720);
+      |                     ^~~~~~~~
+renderer.h:11:7: note: ‘Renderer’ declared here
+   11 | class Renderer
+      |       ^~~~~~~~
+demo_main.cpp:67:5: error: ‘renderer’ was not declared in this scope; did you mean ‘Renderer’?
+   67 |     renderer.initialize();
+      |     ^~~~~~~~
+      |     Renderer
+In file included from /sep/include/workbench/demos/genesis_pattern.hpp:3,
+                 from demo_selection.cpp:5:
+/sep/sep-build/src/demo_manager.hpp:14:7: error: redefinition of ‘class sep::workbench::Demo’
+   14 | class Demo {
+      |       ^~~~
+In file included from demo_selection.cpp:4:
+demo_manager.hpp:24:15: note: previous definition of ‘class sep::workbench::Demo’
+   24 |         class Demo
+      |               ^~~~
+/sep/sep-build/src/demo_manager.hpp:29:7: error: redefinition of ‘class sep::workbench::DemoManager’
+   29 | class DemoManager {
+      |       ^~~~~~~~~~~
+demo_manager.hpp:36:15: note: previous definition of ‘class sep::workbench::DemoManager’
+   36 |         class DemoManager
+      |               ^~~~~~~~~~~
+In file included from demo_selection.cpp:6:
+/sep/include/workbench/demos/neural_demo.hpp:26:5: error: ‘dag’ does not name a type
+   26 |     dag::DagGraph graph_;
+      |     ^~~
+In file included from demo_selection.cpp:7:
+/sep/include/workbench/demos/memory_garden.hpp:31:21: error: ‘MemoryTierManager’ was not declared in this scope; did you mean ‘sep::memory::MemoryTierManager’?
+   31 |     std::unique_ptr<MemoryTierManager> memory_manager_;
+      |                     ^~~~~~~~~~~~~~~~~
+      |                     sep::memory::MemoryTierManager
+In file included from ./sep_engine_wrapper.h:7,
+                 from /sep/include/workbench/demos/neural_demo.hpp:4:
+./mock_types.h:20:15: note: ‘sep::memory::MemoryTierManager’ declared here
+   20 |         class MemoryTierManager
+      |               ^~~~~~~~~~~~~~~~~
+/sep/include/workbench/demos/memory_garden.hpp:31:38: error: template argument 1 is invalid
+   31 |     std::unique_ptr<MemoryTierManager> memory_manager_;
+      |                                      ^
+/sep/include/workbench/demos/memory_garden.hpp:31:38: error: template argument 2 is invalid
+In file included from /sep/include/quantum/data.hpp:5,
+                 from /sep/include/workbench/demos/flocking_demo.hpp:6,
+                 from demo_selection.cpp:8:
+/sep/include/quantum/types.h:37:8: error: redefinition of ‘struct sep::quantum::Pattern’
+   37 | struct Pattern {
+      |        ^~~~~~~
+./mock_types.h:46:16: note: previous definition of ‘struct sep::quantum::Pattern’
+   46 |         struct Pattern
+      |                ^~~~~~~
+/sep/include/quantum/types.h:50:8: error: redefinition of ‘struct sep::quantum::ProcessingConfig’
+   50 | struct ProcessingConfig {
+      |        ^~~~~~~~~~~~~~~~
+./mock_types.h:76:16: note: previous definition of ‘struct sep::quantum::ProcessingConfig’
+   76 |         struct ProcessingConfig
+      |                ^~~~~~~~~~~~~~~~
+demo_selection.cpp: In function ‘void sep::workbench::registerDemos()’:
+demo_selection.cpp:47:53: error: ‘MemoryGarden’ was not declared in this scope; did you mean ‘MemoryGardenDemo’?
+   47 |     manager.registerDemo("memory", std::make_unique<MemoryGarden>());
+      |                                                     ^~~~~~~~~~~~
+      |                                                     MemoryGardenDemo
+demo_selection.cpp:47:66: error: no matching function for call to ‘make_unique<<expression error> >()’
+   47 |     manager.registerDemo("memory", std::make_unique<MemoryGarden>());
+      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+demo_selection.cpp:47:66: note: there are 3 candidates
+In file included from /usr/include/c++/15/memory:80,
+                 from demo_manager.hpp:3:
+/usr/include/c++/15/bits/unique_ptr.h:1084:5: note: candidate 1: ‘template<class _Tp, class ... _Args> std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...)’
+ 1084 |     make_unique(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1084:5: note: template argument deduction/substitution failed:
+demo_selection.cpp:47:66: error: template argument 1 is invalid
+   47 |     manager.registerDemo("memory", std::make_unique<MemoryGarden>());
+      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:1099:5: note: candidate 2: ‘template<class _Tp> std::__detail::__unique_ptr_array_t<_Tp> std::make_unique(size_t)’
+ 1099 |     make_unique(size_t __num)
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1099:5: note: candidate expects 1 argument, 0 provided
+/usr/include/c++/15/bits/unique_ptr.h:1109:5: note: candidate 3: ‘template<class _Tp, class ... _Args> std::__detail::__invalid_make_unique_t<_Tp> std::make_unique(_Args&& ...)’ (deleted)
+ 1109 |     make_unique(_Args&&...) = delete;
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1109:5: note: template argument deduction/substitution failed:
+demo_selection.cpp:47:66: error: template argument 1 is invalid
+   47 |     manager.registerDemo("memory", std::make_unique<MemoryGarden>());
+      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::PatternProcessor]’:
+/usr/include/c++/15/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::workbench::PatternProcessor; _Dp = std::default_delete<sep::workbench::PatternProcessor>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/include/workbench/demos/genesis_pattern.hpp:12:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::GenesisPatternDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::GenesisPatternDemo>]’
+   12 | class GenesisPatternDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~
+demo_selection.cpp:39:73:   required from here
+   39 |     manager.registerDemo("genesis", std::make_unique<GenesisPatternDemo>());
+      |                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::PatternProcessor’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::QuantumCoherenceManager]’:
+/usr/include/c++/15/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::workbench::QuantumCoherenceManager; _Dp = std::default_delete<sep::workbench::QuantumCoherenceManager>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/include/workbench/demos/genesis_pattern.hpp:12:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::GenesisPatternDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::GenesisPatternDemo>]’
+   12 | class GenesisPatternDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~
+demo_selection.cpp:39:73:   required from here
+   39 |     manager.registerDemo("genesis", std::make_unique<GenesisPatternDemo>());
+      |                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::QuantumCoherenceManager’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::audio::AudioCapture]’:
+/usr/include/c++/15/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::workbench::audio::AudioCapture; _Dp = std::default_delete<sep::workbench::audio::AudioCapture>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/include/workbench/demos/audio_visualizer.hpp:17:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::AudioVisualizerDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::AudioVisualizerDemo>]’
+   17 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+demo_selection.cpp:71:72:   required from here
+   71 |     manager.registerDemo("audio", std::make_unique<AudioVisualizerDemo>());
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::audio::AudioCapture’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::audio::AudioPipeline]’:
+/usr/include/c++/15/bits/unique_ptr.h:399:17:   required from ‘std::unique_ptr<_Tp, _Dp>::~unique_ptr() [with _Tp = sep::workbench::audio::AudioPipeline; _Dp = std::default_delete<sep::workbench::audio::AudioPipeline>]’
+  399 |           get_deleter()(std::move(__ptr));
+      |           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/sep/include/workbench/demos/audio_visualizer.hpp:17:7:   required from ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = sep::workbench::AudioVisualizerDemo; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<sep::workbench::AudioVisualizerDemo>]’
+   17 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+demo_selection.cpp:71:72:   required from here
+   71 |     manager.registerDemo("audio", std::make_unique<AudioVisualizerDemo>());
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::audio::AudioPipeline’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+In file included from demos/audio_visualizer.hpp:3,
+                 from demos/audio_visualizer.cpp:1:
+/sep/sep-build/src/demo_manager.hpp:25:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   25 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:26:5: error: ‘CyclesRenderer’ does not name a type
+   26 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:36:21: error: ‘Engine’ has not been declared; did you mean ‘inline’?
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                     ^~~~~~
+      |                     inline
+/sep/sep-build/src/demo_manager.hpp:36:37: error: ‘CyclesRenderer’ has not been declared
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                                     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:50:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   50 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:51:5: error: ‘CyclesRenderer’ does not name a type
+   51 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+In file included from demos/audio_visualizer.cpp:7:
+demos/../../config.hpp:108:8: error: redefinition of ‘struct sep::workbench::CosmoConfig’
+  108 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+demos/../../config.hpp:103:8: note: previous definition of ‘struct sep::workbench::CosmoConfig’
+  103 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+demos/audio_visualizer.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::init()’:
+demos/audio_visualizer.cpp:19:78: error: no match for ‘operator=’ (operand types are ‘std::unique_ptr<sep::workbench::audio::AudioPipeline>’ and ‘std::__detail::__unique_ptr_t<sep::audio::AudioPipeline>’)
+   19 |             pipeline_ = std::make_unique<AudioPipeline>(cfg.input.sample_rate);
+      |                                                                              ^
+demos/audio_visualizer.cpp:19:78: note: there are 3 candidates
+In file included from /usr/include/c++/15/memory:80,
+                 from /sep/sep-build/src/demo_manager.hpp:3:
+/usr/include/c++/15/bits/unique_ptr.h:425:9: note: candidate 1: ‘template<class _Up, class _Ep> typename std::enable_if<std::__and_<std::__and_<std::is_convertible<typename std::unique_ptr<_Up, _Ep>::pointer, typename std::__uniq_ptr_impl<_Tp, _Dp>::pointer>, std::__not_<std::is_array<_Up> > >, std::is_assignable<_T2&, _U2&&> >::value, std::unique_ptr<_Tp, _Dp>&>::type std::unique_ptr<_Tp, _Dp>::operator=(std::unique_ptr<_Up, _Ep>&&) [with _Ep = _Up; _Tp = sep::workbench::audio::AudioPipeline; _Dp = std::default_delete<sep::workbench::audio::AudioPipeline>]’
+  425 |         operator=(unique_ptr<_Up, _Ep>&& __u) noexcept
+      |         ^~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:425:9: note: template argument deduction/substitution failed:
+/usr/include/c++/15/bits/unique_ptr.h: In substitution of ‘template<class _Up, class _Ep> typename std::enable_if<std::__and_<std::__and_<std::is_convertible<typename std::unique_ptr<_Tp, _Dp>::pointer, sep::workbench::audio::AudioPipeline*>, std::__not_<std::is_array<_Tp> > >, std::is_assignable<std::default_delete<sep::workbench::audio::AudioPipeline>&, _U2&&> >::value, std::unique_ptr<sep::workbench::audio::AudioPipeline>&>::type std::unique_ptr<sep::workbench::audio::AudioPipeline>::operator=(std::unique_ptr<_Tp, _Dp>&&) [with _Up = sep::audio::AudioPipeline; _Ep = std::default_delete<sep::audio::AudioPipeline>]’:
+demos/audio_visualizer.cpp:19:78:   required from here
+   19 |             pipeline_ = std::make_unique<AudioPipeline>(cfg.input.sample_rate);
+      |                                                                              ^
+/usr/include/c++/15/bits/unique_ptr.h:425:9: error: no type named ‘type’ in ‘struct std::enable_if<false, std::unique_ptr<sep::workbench::audio::AudioPipeline>&>’
+  425 |         operator=(unique_ptr<_Up, _Ep>&& __u) noexcept
+      |         ^~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:409:19: note: candidate 2: ‘std::unique_ptr<_Tp, _Dp>& std::unique_ptr<_Tp, _Dp>::operator=(std::unique_ptr<_Tp, _Dp>&&) [with _Tp = sep::workbench::audio::AudioPipeline; _Dp = std::default_delete<sep::workbench::audio::AudioPipeline>]’
+  409 |       unique_ptr& operator=(unique_ptr&&) = default;
+      |                   ^~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:409:29: note: no known conversion for argument 1 from ‘std::__detail::__unique_ptr_t<sep::audio::AudioPipeline>’ to ‘std::unique_ptr<sep::workbench::audio::AudioPipeline>&&’
+  409 |       unique_ptr& operator=(unique_ptr&&) = default;
+      |                             ^~~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:435:7: note: candidate 3: ‘std::unique_ptr<_Tp, _Dp>& std::unique_ptr<_Tp, _Dp>::operator=(std::nullptr_t) [with _Tp = sep::workbench::audio::AudioPipeline; _Dp = std::default_delete<sep::workbench::audio::AudioPipeline>; std::nullptr_t = std::nullptr_t]’
+  435 |       operator=(nullptr_t) noexcept
+      |       ^~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:435:17: note: no known conversion for argument 1 from ‘std::__detail::__unique_ptr_t<sep::audio::AudioPipeline>’ to ‘std::nullptr_t’
+  435 |       operator=(nullptr_t) noexcept
+      |                 ^~~~~~~~~
+demos/audio_visualizer.cpp:20:45: error: no match for ‘operator=’ (operand types are ‘std::unique_ptr<sep::workbench::audio::AudioCapture>’ and ‘std::unique_ptr<sep::audio::AudioCapture>’)
+   20 |             capture_ = AudioCapture::create();
+      |                                             ^
+demos/audio_visualizer.cpp:20:45: note: there are 3 candidates
+/usr/include/c++/15/bits/unique_ptr.h:425:9: note: candidate 1: ‘template<class _Up, class _Ep> typename std::enable_if<std::__and_<std::__and_<std::is_convertible<typename std::unique_ptr<_Up, _Ep>::pointer, typename std::__uniq_ptr_impl<_Tp, _Dp>::pointer>, std::__not_<std::is_array<_Up> > >, std::is_assignable<_T2&, _U2&&> >::value, std::unique_ptr<_Tp, _Dp>&>::type std::unique_ptr<_Tp, _Dp>::operator=(std::unique_ptr<_Up, _Ep>&&) [with _Ep = _Up; _Tp = sep::workbench::audio::AudioCapture; _Dp = std::default_delete<sep::workbench::audio::AudioCapture>]’
+  425 |         operator=(unique_ptr<_Up, _Ep>&& __u) noexcept
+      |         ^~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:425:9: note: template argument deduction/substitution failed:
+/usr/include/c++/15/bits/unique_ptr.h: In substitution of ‘template<class _Up, class _Ep> typename std::enable_if<std::__and_<std::__and_<std::is_convertible<typename std::unique_ptr<_Tp, _Dp>::pointer, sep::workbench::audio::AudioCapture*>, std::__not_<std::is_array<_Tp> > >, std::is_assignable<std::default_delete<sep::workbench::audio::AudioCapture>&, _U2&&> >::value, std::unique_ptr<sep::workbench::audio::AudioCapture>&>::type std::unique_ptr<sep::workbench::audio::AudioCapture>::operator=(std::unique_ptr<_Tp, _Dp>&&) [with _Up = sep::audio::AudioCapture; _Ep = std::default_delete<sep::audio::AudioCapture>]’:
+demos/audio_visualizer.cpp:20:45:   required from here
+   20 |             capture_ = AudioCapture::create();
+      |                                             ^
+/usr/include/c++/15/bits/unique_ptr.h:425:9: error: no type named ‘type’ in ‘struct std::enable_if<false, std::unique_ptr<sep::workbench::audio::AudioCapture>&>’
+  425 |         operator=(unique_ptr<_Up, _Ep>&& __u) noexcept
+      |         ^~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:409:19: note: candidate 2: ‘std::unique_ptr<_Tp, _Dp>& std::unique_ptr<_Tp, _Dp>::operator=(std::unique_ptr<_Tp, _Dp>&&) [with _Tp = sep::workbench::audio::AudioCapture; _Dp = std::default_delete<sep::workbench::audio::AudioCapture>]’
+  409 |       unique_ptr& operator=(unique_ptr&&) = default;
+      |                   ^~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:409:29: note: no known conversion for argument 1 from ‘std::unique_ptr<sep::audio::AudioCapture>’ to ‘std::unique_ptr<sep::workbench::audio::AudioCapture>&&’
+  409 |       unique_ptr& operator=(unique_ptr&&) = default;
+      |                             ^~~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:435:7: note: candidate 3: ‘std::unique_ptr<_Tp, _Dp>& std::unique_ptr<_Tp, _Dp>::operator=(std::nullptr_t) [with _Tp = sep::workbench::audio::AudioCapture; _Dp = std::default_delete<sep::workbench::audio::AudioCapture>; std::nullptr_t = std::nullptr_t]’
+  435 |       operator=(nullptr_t) noexcept
+      |       ^~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:435:17: note: no known conversion for argument 1 from ‘std::unique_ptr<sep::audio::AudioCapture>’ to ‘std::nullptr_t’
+  435 |       operator=(nullptr_t) noexcept
+      |                 ^~~~~~~~~
+demos/audio_visualizer.cpp:22:13: error: ‘AudioConfig’ was not declared in this scope
+   22 |             AudioConfig acfg;
+      |             ^~~~~~~~~~~
+demos/audio_visualizer.cpp:23:13: error: ‘acfg’ was not declared in this scope; did you mean ‘cfg’?
+   23 |             acfg.device = cfg.input.device;
+      |             ^~~~
+      |             cfg
+demos/audio_visualizer.cpp:28:21: error: invalid use of incomplete type ‘class sep::workbench::audio::AudioCapture’
+   28 |             capture_->setCallback([this](const float* data, size_t len) {
+      |                     ^~
+demos/audio_visualizer.hpp:13:7: note: forward declaration of ‘class sep::workbench::audio::AudioCapture’
+   13 | class AudioCapture;
+      |       ^~~~~~~~~~~~
+demos/audio_visualizer.cpp: In lambda function:
+demos/audio_visualizer.cpp:30:26: error: invalid use of incomplete type ‘class sep::workbench::audio::AudioPipeline’
+   30 |                 pipeline_->processAudioFrame(samples);
+      |                          ^~
+demos/audio_visualizer.hpp:14:7: note: forward declaration of ‘class sep::workbench::audio::AudioPipeline’
+   14 | class AudioPipeline;
+      |       ^~~~~~~~~~~~~
+demos/audio_visualizer.cpp:31:45: error: invalid use of incomplete type ‘class sep::workbench::audio::AudioPipeline’
+   31 |                 latest_patterns_ = pipeline_->getPatterns();
+      |                                             ^~
+demos/audio_visualizer.hpp:14:7: note: forward declaration of ‘class sep::workbench::audio::AudioPipeline’
+   14 | class AudioPipeline;
+      |       ^~~~~~~~~~~~~
+demos/audio_visualizer.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::init()’:
+demos/audio_visualizer.cpp:33:21: error: invalid use of incomplete type ‘class sep::workbench::audio::AudioCapture’
+   33 |             capture_->init(acfg);
+      |                     ^~
+demos/audio_visualizer.hpp:13:7: note: forward declaration of ‘class sep::workbench::audio::AudioCapture’
+   13 | class AudioCapture;
+      |       ^~~~~~~~~~~~
+demos/audio_visualizer.cpp:34:21: error: invalid use of incomplete type ‘class sep::workbench::audio::AudioCapture’
+   34 |             capture_->start();
+      |                     ^~
+demos/audio_visualizer.hpp:13:7: note: forward declaration of ‘class sep::workbench::audio::AudioCapture’
+   13 | class AudioCapture;
+      |       ^~~~~~~~~~~~
+demos/audio_visualizer.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::update(float)’:
+demos/audio_visualizer.cpp:56:17: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   56 |             if (renderer_)
+      |                 ^~~~~~~~~
+      |                 render
+demos/audio_visualizer.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::render()’:
+demos/audio_visualizer.cpp:68:18: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   68 |             if (!renderer_) return;
+      |                  ^~~~~~~~~
+      |                  render
+demos/audio_visualizer.cpp:71:13: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   71 |             renderer_->renderPatternState(latest_visual_patterns_);
+      |             ^~~~~~~~~
+      |             render
+demos/audio_visualizer.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::cleanup()’:
+demos/audio_visualizer.cpp:78:25: error: invalid use of incomplete type ‘class sep::workbench::audio::AudioCapture’
+   78 |                 capture_->stop();
+      |                         ^~
+demos/audio_visualizer.hpp:13:7: note: forward declaration of ‘class sep::workbench::audio::AudioCapture’
+   13 | class AudioCapture;
+      |       ^~~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::audio::AudioPipeline]’:
+/usr/include/c++/15/bits/unique_ptr.h:205:16:   required from ‘void std::__uniq_ptr_impl<_Tp, _Dp>::reset(pointer) [with _Tp = sep::workbench::audio::AudioPipeline; _Dp = std::default_delete<sep::workbench::audio::AudioPipeline>; pointer = sep::workbench::audio::AudioPipeline*]’
+  205 |           _M_deleter()(__old_p);
+      |           ~~~~~~~~~~~~^~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:512:12:   required from ‘void std::unique_ptr<_Tp, _Dp>::reset(pointer) [with _Tp = sep::workbench::audio::AudioPipeline; _Dp = std::default_delete<sep::workbench::audio::AudioPipeline>; pointer = sep::workbench::audio::AudioPipeline*]’
+  512 |         _M_t.reset(std::move(__p));
+      |         ~~~~~~~~~~^~~~~~~~~~~~~~~~
+demos/audio_visualizer.cpp:80:28:   required from here
+   80 |             pipeline_.reset();
+      |             ~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::audio::AudioPipeline’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h: In instantiation of ‘void std::default_delete<_Tp>::operator()(_Tp*) const [with _Tp = sep::workbench::audio::AudioCapture]’:
+/usr/include/c++/15/bits/unique_ptr.h:205:16:   required from ‘void std::__uniq_ptr_impl<_Tp, _Dp>::reset(pointer) [with _Tp = sep::workbench::audio::AudioCapture; _Dp = std::default_delete<sep::workbench::audio::AudioCapture>; pointer = sep::workbench::audio::AudioCapture*]’
+  205 |           _M_deleter()(__old_p);
+      |           ~~~~~~~~~~~~^~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:512:12:   required from ‘void std::unique_ptr<_Tp, _Dp>::reset(pointer) [with _Tp = sep::workbench::audio::AudioCapture; _Dp = std::default_delete<sep::workbench::audio::AudioCapture>; pointer = sep::workbench::audio::AudioCapture*]’
+  512 |         _M_t.reset(std::move(__p));
+      |         ~~~~~~~~~~^~~~~~~~~~~~~~~~
+demos/audio_visualizer.cpp:81:27:   required from here
+   81 |             capture_.reset();
+      |             ~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:91:23: error: invalid application of ‘sizeof’ to incomplete type ‘sep::workbench::audio::AudioCapture’
+   91 |         static_assert(sizeof(_Tp)>0,
+      |                       ^~~~~~~~~~~
+In file included from demos/cosmo_demo.hpp:3,
+                 from demos/cosmo_demo.cpp:1:
+/sep/sep-build/src/demo_manager.hpp:25:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   25 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:26:5: error: ‘CyclesRenderer’ does not name a type
+   26 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:36:21: error: ‘Engine’ has not been declared; did you mean ‘inline’?
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                     ^~~~~~
+      |                     inline
+/sep/sep-build/src/demo_manager.hpp:36:37: error: ‘CyclesRenderer’ has not been declared
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                                     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:50:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   50 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:51:5: error: ‘CyclesRenderer’ does not name a type
+   51 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+In file included from demos/cosmo_demo.cpp:2:
+/sep/sep-build/src/config.hpp:108:8: error: redefinition of ‘struct sep::workbench::CosmoConfig’
+  108 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+/sep/sep-build/src/config.hpp:103:8: note: previous definition of ‘struct sep::workbench::CosmoConfig’
+  103 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+demos/cosmo_demo.cpp: In member function ‘virtual void sep::workbench::CosmoDemo::init()’:
+demos/cosmo_demo.cpp:10:45: error: ‘class sep::workbench::Config’ has no member named ‘cosmo’
+   10 |     const auto& cfg = Config::getInstance().cosmo();
+      |                                             ^~~~~
+demos/cosmo_demo.cpp: In member function ‘virtual void sep::workbench::CosmoDemo::render()’:
+demos/cosmo_demo.cpp:62:10: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   62 |     if (!renderer_) return;
+      |          ^~~~~~~~~
+      |          render
+demos/cosmo_demo.cpp:68:5: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   68 |     renderer_->renderPatternState(points);
+      |     ^~~~~~~~~
+      |     render
+In file included from /usr/include/glm/gtx/norm.hpp:19,
+                 from demos/cosmo_sim.cpp:3:
+/usr/include/glm/gtx/quaternion.hpp:24:9: error: #error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   24 | #       error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+In file included from /usr/include/glm/gtx/norm.hpp:20:
+/usr/include/glm/gtx/component_wise.hpp:22:9: error: #error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   22 | #       error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+/usr/include/glm/gtx/norm.hpp:23:9: error: #error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   23 | #       error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+In file included from demos/cosmo_sim.hpp:6,
+                 from demos/cosmo_sim.cpp:1:
+/sep/sep-build/src/demo_manager.hpp:25:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   25 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:26:5: error: ‘CyclesRenderer’ does not name a type
+   26 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:36:21: error: ‘Engine’ has not been declared; did you mean ‘inline’?
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                     ^~~~~~
+      |                     inline
+/sep/sep-build/src/demo_manager.hpp:36:37: error: ‘CyclesRenderer’ has not been declared
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                                     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:50:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   50 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:51:5: error: ‘CyclesRenderer’ does not name a type
+   51 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+In file included from demos/cosmo_sim.cpp:2:
+/sep/sep-build/src/config.hpp:108:8: error: redefinition of ‘struct sep::workbench::CosmoConfig’
+  108 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+/sep/sep-build/src/config.hpp:103:8: note: previous definition of ‘struct sep::workbench::CosmoConfig’
+  103 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+demos/cosmo_sim.cpp: In member function ‘virtual void sep::workbench::CosmoSim::init()’:
+demos/cosmo_sim.cpp:14:23: error: ‘getConfigManager’ was not declared in this scope
+   14 |     const auto& cfg = getConfigManager().getEngineConfig().cosmo();
+      |                       ^~~~~~~~~~~~~~~~
+demos/cosmo_sim.cpp: In member function ‘virtual void sep::workbench::CosmoSim::render()’:
+demos/cosmo_sim.cpp:86:10: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   86 |     if (!renderer_) return;
+      |          ^~~~~~~~~
+      |          render
+demos/cosmo_sim.cpp:87:5: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   87 |     renderer_->setColorMode("temperature");
+      |     ^~~~~~~~~
+      |     render
+In file included from demos/digital_physics_demo.hpp:3,
+                 from demos/digital_physics_demo.cpp:1:
+/sep/sep-build/src/demo_manager.hpp:25:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   25 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:26:5: error: ‘CyclesRenderer’ does not name a type
+   26 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:36:21: error: ‘Engine’ has not been declared; did you mean ‘inline’?
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                     ^~~~~~
+      |                     inline
+/sep/sep-build/src/demo_manager.hpp:36:37: error: ‘CyclesRenderer’ has not been declared
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                                     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:50:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   50 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:51:5: error: ‘CyclesRenderer’ does not name a type
+   51 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+demos/digital_physics_demo.hpp:22:22: error: ‘pattern’ is not a member of ‘sep’
+   22 |     std::vector<sep::pattern::PatternData> grid_;
+      |                      ^~~~~~~
+demos/digital_physics_demo.hpp:22:42: error: template argument 1 is invalid
+   22 |     std::vector<sep::pattern::PatternData> grid_;
+      |                                          ^
+demos/digital_physics_demo.hpp:22:42: error: template argument 2 is invalid
+In file included from demos/digital_physics_demo.cpp:2:
+/sep/sep-build/src/config.hpp:108:8: error: redefinition of ‘struct sep::workbench::CosmoConfig’
+  108 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+/sep/sep-build/src/config.hpp:103:8: note: previous definition of ‘struct sep::workbench::CosmoConfig’
+  103 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+demos/digital_physics_demo.cpp: In member function ‘virtual void sep::workbench::DigitalPhysicsDemo::init()’:
+demos/digital_physics_demo.cpp:10:45: error: ‘class sep::workbench::Config’ has no member named ‘digital_physics’
+   10 |     const auto& cfg = Config::getInstance().digital_physics();
+      |                                             ^~~~~~~~~~~~~~~
+demos/digital_physics_demo.cpp:16:11: error: request for member ‘resize’ in ‘((sep::workbench::DigitalPhysicsDemo*)this)->sep::workbench::DigitalPhysicsDemo::grid_’, which is of non-class type ‘int’
+   16 |     grid_.resize(width_ * height_);
+      |           ^~~~~~
+demos/digital_physics_demo.cpp:19:31: error: invalid types ‘int[std::size_t {aka long unsigned int}]’ for array subscript
+   19 |             auto& cell = grid_[index(x, y)];
+      |                               ^
+demos/digital_physics_demo.cpp: In member function ‘virtual void sep::workbench::DigitalPhysicsDemo::update(float)’:
+demos/digital_physics_demo.cpp:27:17: error: ‘pattern’ was not declared in this scope
+   27 |     std::vector<pattern::PatternData> next = grid_;
+      |                 ^~~~~~~
+demos/digital_physics_demo.cpp:27:37: error: template argument 1 is invalid
+   27 |     std::vector<pattern::PatternData> next = grid_;
+      |                                     ^
+demos/digital_physics_demo.cpp:27:37: error: template argument 2 is invalid
+demos/digital_physics_demo.cpp: In lambda function:
+demos/digital_physics_demo.cpp:34:21: error: invalid types ‘int[std::size_t {aka long unsigned int}]’ for array subscript
+   34 |         return grid_[index(static_cast<std::size_t>(x), static_cast<std::size_t>(y))].attributes.x > 0.5f;
+      |                     ^
+demos/digital_physics_demo.cpp: In member function ‘virtual void sep::workbench::DigitalPhysicsDemo::update(float)’:
+demos/digital_physics_demo.cpp:45:33: error: invalid types ‘int[std::size_t {aka long unsigned int}]’ for array subscript
+   45 |             bool current = grid_[index(x, y)].attributes.x > 0.5f;
+      |                                 ^
+demos/digital_physics_demo.cpp:52:17: error: invalid types ‘int[std::size_t {aka long unsigned int}]’ for array subscript
+   52 |             next[index(x, y)].attributes.x = next_state ? 1.0f : 0.0f;
+      |                 ^
+demos/digital_physics_demo.cpp:56:11: error: request for member ‘swap’ in ‘((sep::workbench::DigitalPhysicsDemo*)this)->sep::workbench::DigitalPhysicsDemo::grid_’, which is of non-class type ‘int’
+   56 |     grid_.swap(next);
+      |           ^~~~
+demos/digital_physics_demo.cpp: In member function ‘virtual void sep::workbench::DigitalPhysicsDemo::render()’:
+demos/digital_physics_demo.cpp:60:10: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   60 |     if (!renderer_) return;
+      |          ^~~~~~~~~
+      |          render
+demos/digital_physics_demo.cpp:63:29: error: ‘begin’ was not declared in this scope
+   63 |     for (const auto& cell : grid_) {
+      |                             ^~~~~
+demos/digital_physics_demo.cpp:63:29: note: suggested alternatives:
+In file included from /usr/local/include/nlohmann/detail/conversions/from_json.hpp:21,
+                 from /usr/local/include/nlohmann/adl_serializer.hpp:14,
+                 from /usr/local/include/nlohmann/json.hpp:34,
+                 from /sep/sep-build/src/config.hpp:3:
+/usr/include/c++/15/valarray:1240:5: note:   ‘std::begin’
+ 1240 |     begin(const valarray<_Tp>& __va) noexcept
+      |     ^~~~~
+In file included from /usr/include/c++/15/filesystem:55,
+                 from /usr/local/include/nlohmann/detail/meta/std_fs.hpp:22,
+                 from /usr/local/include/nlohmann/detail/conversions/from_json.hpp:27:
+/usr/include/c++/15/bits/fs_dir.h:608:3: note:   ‘std::filesystem::__cxx11::begin’
+  608 |   begin(recursive_directory_iterator __iter) noexcept
+      |   ^~~~~
+demos/digital_physics_demo.cpp:63:29: error: ‘end’ was not declared in this scope
+   63 |     for (const auto& cell : grid_) {
+      |                             ^~~~~
+demos/digital_physics_demo.cpp:63:29: note: suggested alternatives:
+/usr/include/c++/15/valarray:1267:5: note:   ‘std::end’
+ 1267 |     end(const valarray<_Tp>& __va) noexcept
+      |     ^~~
+/usr/include/c++/15/bits/fs_dir.h:613:3: note:   ‘std::filesystem::__cxx11::end’
+  613 |   end(recursive_directory_iterator) noexcept
+      |   ^~~
+demos/digital_physics_demo.cpp:68:5: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   68 |     renderer_->renderPatternState(points);
+      |     ^~~~~~~~~
+      |     render
+demos/digital_physics_demo.cpp: In member function ‘virtual void sep::workbench::DigitalPhysicsDemo::cleanup()’:
+demos/digital_physics_demo.cpp:72:11: error: request for member ‘clear’ in ‘((sep::workbench::DigitalPhysicsDemo*)this)->sep::workbench::DigitalPhysicsDemo::grid_’, which is of non-class type ‘int’
+   72 |     grid_.clear();
+      |           ^~~~~
+demos/digital_physics_demo.cpp: In member function ‘virtual void sep::workbench::DigitalPhysicsDemo::handleKeyboard(unsigned char)’:
+demos/digital_physics_demo.cpp:77:27: error: ‘begin’ was not declared in this scope
+   77 |         for (auto& cell : grid_) {
+      |                           ^~~~~
+demos/digital_physics_demo.cpp:77:27: note: suggested alternatives:
+/usr/include/c++/15/valarray:1240:5: note:   ‘std::begin’
+ 1240 |     begin(const valarray<_Tp>& __va) noexcept
+      |     ^~~~~
+/usr/include/c++/15/bits/fs_dir.h:608:3: note:   ‘std::filesystem::__cxx11::begin’
+  608 |   begin(recursive_directory_iterator __iter) noexcept
+      |   ^~~~~
+demos/digital_physics_demo.cpp:77:27: error: ‘end’ was not declared in this scope
+   77 |         for (auto& cell : grid_) {
+      |                           ^~~~~
+demos/digital_physics_demo.cpp:77:27: note: suggested alternatives:
+/usr/include/c++/15/valarray:1267:5: note:   ‘std::end’
+ 1267 |     end(const valarray<_Tp>& __va) noexcept
+      |     ^~~
+/usr/include/c++/15/bits/fs_dir.h:613:3: note:   ‘std::filesystem::__cxx11::end’
+  613 |   end(recursive_directory_iterator) noexcept
+      |   ^~~
+In file included from demos/drug_discovery_demo.cpp:2:
+/sep/sep-build/src/config.hpp:108:8: error: redefinition of ‘struct sep::workbench::CosmoConfig’
+  108 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+/sep/sep-build/src/config.hpp:103:8: note: previous definition of ‘struct sep::workbench::CosmoConfig’
+  103 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+demos/drug_discovery_demo.cpp: In member function ‘virtual void sep::workbench::DrugDiscoveryDemo::init()’:
+demos/drug_discovery_demo.cpp:15:23: error: ‘ConfigManager’ has not been declared
+   15 |     const auto& cfg = ConfigManager::getInstance().getEngineConfig().drug_discovery();
+      |                       ^~~~~~~~~~~~~
+demos/drug_discovery_demo.cpp: In member function ‘virtual void sep::workbench::DrugDiscoveryDemo::render()’:
+demos/drug_discovery_demo.cpp:64:10: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   64 |     if (!renderer_) return;
+      |          ^~~~~~~~~
+      |          render
+demos/drug_discovery_demo.cpp:69:5: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   69 |     renderer_->renderPatternState(points);
+      |     ^~~~~~~~~
+      |     render
+demos/flocking_demo.cpp: In member function ‘virtual void sep::workbench::FlockingDemo::init()’:
+demos/flocking_demo.cpp:14:23: error: ‘getConfigManager’ was not declared in this scope
+   14 |     const auto& cfg = getConfigManager().getEngineConfig().flocking();
+      |                       ^~~~~~~~~~~~~~~~
+demos/flocking_demo.cpp: In member function ‘virtual void sep::workbench::FlockingDemo::render()’:
+demos/flocking_demo.cpp:62:10: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   62 |     if (!renderer_) return;
+      |          ^~~~~~~~~
+      |          render
+demos/flocking_demo.cpp:68:5: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   68 |     renderer_->renderPatternState(points);
+      |     ^~~~~~~~~
+      |     render
+In file included from /usr/include/glm/detail/type_vec4.hpp:507,
+                 from /usr/include/glm/ext/vector_bool4.hpp:5,
+                 from /usr/include/glm/vec4.hpp:5,
+                 from /usr/include/glm/glm.hpp:119,
+                 from /sep/include/quantum/types.h:5,
+                 from demos/../../quantum/data.hpp:5,
+                 from demos/flocking_demo.hpp:6,
+                 from demos/flocking_demo.cpp:1:
+/usr/include/glm/detail/type_vec4.inl: In instantiation of ‘constexpr glm::vec<4, T, Q>& glm::vec<4, T, Q>::operator+=(U) [with U = glm::vec<3, float, glm::packed_highp>; T = float; glm::qualifier Q = glm::packed_highp]’:
+demos/flocking_demo.cpp:53:65:   required from here
+   53 |         agent.velocity += (cohesion + alignment + separation) * 0.01f;
+      |                                                                 ^~~~~
+/usr/include/glm/detail/type_vec4.inl:543:107: error: no matching function for call to ‘glm::vec<4, float, glm::packed_highp>::vec(glm::vec<3, float, glm::packed_highp>&)’
+  543 |                 return (*this = detail::compute_vec4_add<T, Q, detail::is_aligned<Q>::value>::call(*this, vec<4, T, Q>(scalar)));
+      |                                                                                                           ^~~~~~~~~~~~~~~~~~~~
+/usr/include/glm/detail/type_vec4.inl:543:107: note: there are 39 candidates
+/usr/include/glm/detail/type_vec4.hpp:203:44: note: candidate 1: ‘template<class U, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<4, U, P>&) [with glm::qualifier P = U; T = float; glm::qualifier Q = glm::packed_highp]’
+  203 |                 GLM_CTOR_DECL GLM_EXPLICIT vec(vec<4, U, P> const& v);
+      |                                            ^~~
+/usr/include/glm/detail/type_vec4.hpp:203:44: note: template argument deduction/substitution failed:
+/usr/include/glm/detail/type_vec4.inl:543:107: note:   template argument ‘3’ does not match ‘4’
+  543 |                 return (*this = detail::compute_vec4_add<T, Q, detail::is_aligned<Q>::value>::call(*this, vec<4, T, Q>(scalar)));
+      |                                                                                                           ^~~~~~~~~~~~~~~~~~~~
+/usr/include/glm/detail/type_vec4.hpp:199:31: note: candidate 2: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<2, A, P>&, const glm::vec<2, B, P>&) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
+  199 |                 GLM_CTOR_DECL vec(vec<2, A, P> const& _xy, vec<2, B, P> const& _zw);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:199:31: note: candidate expects 2 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:196:31: note: candidate 3: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, A, P>&, const glm::vec<3, B, P>&) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
+  196 |                 GLM_CTOR_DECL vec(vec<1, A, P> const& _x, vec<3, B, P> const& _yzw);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:196:31: note: candidate expects 2 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:193:31: note: candidate 4: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(A, const glm::vec<3, B, P>&) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
+  193 |                 GLM_CTOR_DECL vec(A _x, vec<3, B, P> const& _yzw);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:193:31: note: candidate expects 2 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:190:31: note: candidate 5: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<3, A, P>&, const glm::vec<1, B, P>&) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
+  190 |                 GLM_CTOR_DECL vec(vec<3, A, P> const& _xyz, vec<1, B, P> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:190:31: note: candidate expects 2 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:187:31: note: candidate 6: ‘template<class A, class B, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<3, A, P>&, B) [with B = A; glm::qualifier P = B; T = float; glm::qualifier Q = glm::packed_highp]’
+  187 |                 GLM_CTOR_DECL vec(vec<3, A, P> const& _xyz, B _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:187:31: note: candidate expects 2 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:184:31: note: candidate 7: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, A, P>&, const glm::vec<1, B, P>&, const glm::vec<2, C, P>&) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  184 |                 GLM_CTOR_DECL vec(vec<1, A, P> const& _x, vec<1, B, P> const& _y, vec<2, C, P> const& _zw);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:184:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:181:31: note: candidate 8: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(A, const glm::vec<1, B, P>&, const glm::vec<2, C, P>&) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  181 |                 GLM_CTOR_DECL vec(A _x, vec<1, B, P> const& _y, vec<2, C, P> const& _zw);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:181:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:178:31: note: candidate 9: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, A, P>&, B, const glm::vec<2, C, P>&) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  178 |                 GLM_CTOR_DECL vec(vec<1, A, P> const& _x, B _y, vec<2, C, P> const& _zw);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:178:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:175:31: note: candidate 10: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(A, B, const glm::vec<2, C, P>&) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  175 |                 GLM_CTOR_DECL vec(A _x, B _y, vec<2, C, P> const& _zw);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:175:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:172:31: note: candidate 11: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, A, P>&, const glm::vec<2, B, P>&, const glm::vec<1, C, P>&) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  172 |                 GLM_CTOR_DECL vec(vec<1, A, P> const& _x, vec<2, B, P> const& _yz, vec<1, C, P> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:172:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:169:31: note: candidate 12: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(A, const glm::vec<2, B, P>&, const glm::vec<1, C, P>&) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  169 |                 GLM_CTOR_DECL vec(A _x, vec<2, B, P> const& _yz, vec<1, C, P> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:169:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:166:31: note: candidate 13: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, A, P>&, const glm::vec<2, B, P>&, C) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  166 |                 GLM_CTOR_DECL vec(vec<1, A, P> const& _x, vec<2, B, P> const& _yz, C _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:166:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:163:31: note: candidate 14: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(A, const glm::vec<2, B, P>&, C) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  163 |                 GLM_CTOR_DECL vec(A _x, vec<2, B, P> const& _yz, C _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:163:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:160:31: note: candidate 15: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<2, A, P>&, const glm::vec<1, B, P>&, const glm::vec<1, C, P>&) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  160 |                 GLM_CTOR_DECL vec(vec<2, A, P> const& _xy, vec<1, B, P> const& _z, vec<1, C, P> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:160:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:157:31: note: candidate 16: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<2, A, P>&, B, const glm::vec<1, C, P>&) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  157 |                 GLM_CTOR_DECL vec(vec<2, A, P> const& _xy, B _z, vec<1, C, P> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:157:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:154:31: note: candidate 17: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<2, A, P>&, const glm::vec<1, B, P>&, C) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  154 |                 GLM_CTOR_DECL vec(vec<2, A, P> const& _xy, vec<1, B, P> const& _z, C _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:154:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:151:31: note: candidate 18: ‘template<class A, class B, class C, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<2, A, P>&, B, C) [with B = A; C = B; glm::qualifier P = C; T = float; glm::qualifier Q = glm::packed_highp]’
+  151 |                 GLM_CTOR_DECL vec(vec<2, A, P> const& _xy, B _z, C _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:151:31: note: candidate expects 3 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:145:31: note: candidate 19: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, X, Q>&, const glm::vec<1, Y, Q>&, const glm::vec<1, Z, Q>&, const glm::vec<1, W, Q>&) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  145 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, vec<1, Y, Q> const& _y, vec<1, Z, Q> const& _z, vec<1, W, Q> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:145:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:143:31: note: candidate 20: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(X, const glm::vec<1, Y, Q>&, const glm::vec<1, Z, Q>&, const glm::vec<1, W, Q>&) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  143 |                 GLM_CTOR_DECL vec(X _x, vec<1, Y, Q> const& _y, vec<1, Z, Q> const& _z, vec<1, W, Q> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:143:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:141:31: note: candidate 21: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, X, Q>&, Y, const glm::vec<1, Z, Q>&, const glm::vec<1, W, Q>&) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  141 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, Y _y, vec<1, Z, Q> const& _z, vec<1, W, Q> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:141:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:139:31: note: candidate 22: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(X, Y, const glm::vec<1, Z, Q>&, const glm::vec<1, W, Q>&) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  139 |                 GLM_CTOR_DECL vec(X _x, Y _y, vec<1, Z, Q> const& _z, vec<1, W, Q> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:139:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:137:31: note: candidate 23: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, X, Q>&, const glm::vec<1, Y, Q>&, Z, const glm::vec<1, W, Q>&) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  137 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, vec<1, Y, Q> const& _y, Z _z, vec<1, W, Q> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:137:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:135:31: note: candidate 24: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(X, const glm::vec<1, Y, Q>&, Z, const glm::vec<1, W, Q>&) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  135 |                 GLM_CTOR_DECL vec(X _x, vec<1, Y, Q> const& _y, Z _z, vec<1, W, Q> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:135:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:133:31: note: candidate 25: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, X, Q>&, Y, Z, const glm::vec<1, W, Q>&) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  133 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, Y _y, Z _z, vec<1, W, Q> const& _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:133:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:131:31: note: candidate 26: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, X, Q>&, const glm::vec<1, Y, Q>&, const glm::vec<1, Z, Q>&, W) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  131 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, vec<1, Y, Q> const& _y, vec<1, Z, Q> const& _z, W _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:131:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:129:31: note: candidate 27: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(X, const glm::vec<1, Y, Q>&, const glm::vec<1, Z, Q>&, W) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  129 |                 GLM_CTOR_DECL vec(X _x, vec<1, Y, Q> const& _y, vec<1, Z, Q> const& _z, W _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:129:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:127:31: note: candidate 28: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, X, Q>&, Y, const glm::vec<1, Z, Q>&, W) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  127 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, Y _y, vec<1, Z, Q> const& _z, W _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:127:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:125:31: note: candidate 29: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(X, Y, const glm::vec<1, Z, Q>&, W) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  125 |                 GLM_CTOR_DECL vec(X _x, Y _y, vec<1, Z, Q> const& _z, W _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:125:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:123:31: note: candidate 30: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, X, Q>&, const glm::vec<1, Y, Q>&, Z, W) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  123 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, vec<1, Y, Q> const& _y, Z _z, W _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:123:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:121:31: note: candidate 31: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(X, const glm::vec<1, Y, Q>&, Z, W) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  121 |                 GLM_CTOR_DECL vec(X _x, vec<1, Y, Q> const& _y, Z _z, W _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:121:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:119:31: note: candidate 32: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, X, Q>&, Y, Z, W) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  119 |                 GLM_CTOR_DECL vec(vec<1, X, Q> const& _x, Y _y, Z _z, W _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:119:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:117:31: note: candidate 33: ‘template<class X, class Y, class Z, class W> constexpr glm::vec<4, T, Q>::vec(X, Y, Z, W) [with Y = X; Z = Y; W = Z; T = float; glm::qualifier Q = glm::packed_highp]’
+  117 |                 GLM_CTOR_DECL vec(X _x, Y _y, Z _z, W _w);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:117:31: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.hpp:113:40: note: candidate 34: ‘template<class U, glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<1, U, P>&) [with glm::qualifier P = U; T = float; glm::qualifier Q = glm::packed_highp]’
+  113 |                 GLM_CTOR_DECL explicit vec(vec<1, U, P> const& v);
+      |                                        ^~~
+/usr/include/glm/detail/type_vec4.hpp:113:40: note: template argument deduction/substitution failed:
+/usr/include/glm/detail/type_vec4.inl:543:107: note:   template argument ‘3’ does not match ‘1’
+  543 |                 return (*this = detail::compute_vec4_add<T, Q, detail::is_aligned<Q>::value>::call(*this, vec<4, T, Q>(scalar)));
+      |                                                                                                           ^~~~~~~~~~~~~~~~~~~~
+/usr/include/glm/detail/type_vec4.hpp:103:31: note: candidate 35: ‘template<glm::qualifier P> constexpr glm::vec<4, T, Q>::vec(const glm::vec<4, T, P>&) [with glm::qualifier P = P; T = float; glm::qualifier Q = glm::packed_highp]’
+  103 |                 GLM_CTOR_DECL vec(vec<4, T, P> const& v);
+      |                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:103:31: note: template argument deduction/substitution failed:
+/usr/include/glm/detail/type_vec4.inl:543:107: note:   template argument ‘3’ does not match ‘4’
+  543 |                 return (*this = detail::compute_vec4_add<T, Q, detail::is_aligned<Q>::value>::call(*this, vec<4, T, Q>(scalar)));
+      |                                                                                                           ^~~~~~~~~~~~~~~~~~~~
+/usr/include/glm/detail/type_vec4.inl:162:42: note: candidate 36: ‘constexpr glm::vec<4, T, Q>::vec(T, T, T, T) [with T = float; glm::qualifier Q = glm::packed_highp]’
+  162 |         GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q>::vec(T _x, T _y, T _z, T _w)
+      |                                          ^~~~~~~~~~~~
+/usr/include/glm/detail/type_vec4.inl:162:42: note: candidate expects 4 arguments, 1 provided
+/usr/include/glm/detail/type_vec4.inl:157:42: note: candidate 37: ‘constexpr glm::vec<4, T, Q>::vec(T) [with T = float; glm::qualifier Q = glm::packed_highp]’
+  157 |         GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q>::vec(T scalar)
+      |                                          ^~~~~~~~~~~~
+/usr/include/glm/detail/type_vec4.inl:157:62: note: no known conversion for argument 1 from ‘glm::vec<3, float, glm::packed_highp>’ to ‘float’
+  157 |         GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q>::vec(T scalar)
+      |                                                            ~~^~~~~~
+/usr/include/glm/detail/type_vec4.hpp:101:55: note: candidate 38: ‘constexpr glm::vec<4, T, Q>::vec(const glm::vec<4, T, Q>&) [with T = float; glm::qualifier Q = glm::packed_highp]’
+  101 |                 GLM_DEFAULTED_FUNC_DECL GLM_CONSTEXPR vec(vec<4, T, Q> const& v) GLM_DEFAULT;
+      |                                                       ^~~
+/usr/include/glm/detail/type_vec4.hpp:101:79: note: no known conversion for argument 1 from ‘glm::vec<3, float, glm::packed_highp>’ to ‘const glm::vec<4, float, glm::packed_highp>&’
+  101 |                 GLM_DEFAULTED_FUNC_DECL GLM_CONSTEXPR vec(vec<4, T, Q> const& v) GLM_DEFAULT;
+      |                                                           ~~~~~~~~~~~~~~~~~~~~^
+/usr/include/glm/detail/type_vec4.hpp:100:63: note: candidate 39: ‘glm::vec<4, T, Q>::vec() [with T = float; glm::qualifier Q = glm::packed_highp]’
+  100 |                 GLM_DEFAULTED_DEFAULT_CTOR_DECL GLM_CONSTEXPR vec() GLM_DEFAULT_CTOR;
+      |                                                               ^~~
+/usr/include/glm/detail/type_vec4.hpp:100:63: note: candidate expects 0 arguments, 1 provided
+In file included from demos/genesis_pattern.cpp:4:
+/sep/include/core/engine.h:1: error: unterminated #ifndef
+    1 | #ifndef SEP_CORE_ENGINE_H
+In file included from /sep/include/quantum/pattern_processor.hpp:6,
+                 from demos/genesis_pattern.cpp:6:
+/sep/include/core/engine.h:1: error: unterminated #ifndef
+    1 | #ifndef SEP_CORE_ENGINE_H
+In file included from demos/genesis_pattern.hpp:3,
+                 from demos/genesis_pattern.cpp:1:
+/sep/sep-build/src/demo_manager.hpp:25:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   25 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:26:5: error: ‘CyclesRenderer’ does not name a type
+   26 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:36:21: error: ‘Engine’ has not been declared; did you mean ‘inline’?
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                     ^~~~~~
+      |                     inline
+/sep/sep-build/src/demo_manager.hpp:36:37: error: ‘CyclesRenderer’ has not been declared
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                                     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:50:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   50 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:51:5: error: ‘CyclesRenderer’ does not name a type
+   51 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+In file included from /sep/include/memory/quantum_coherence_manager.h:3,
+                 from demos/genesis_pattern.cpp:5:
+/sep/include/memory/types.h:13:14: error: ‘enum class sep::MemoryTierEnum’ conflicts with a previous declaration
+   13 | using ::sep::MemoryTierEnum;
+      |              ^~~~~~~~~~~~~~
+In file included from /sep/include/core/engine.h:8:
+/sep/include/blender/types.h:10:31: note: previous declaration ‘enum class sep::memory::MemoryTierEnum’
+   10 |   enum class MemoryTierEnum : int;
+      |                               ^~~
+/sep/include/memory/types.h: In function ‘std::string sep::memory::memoryTierToString(MemoryTierEnum)’:
+/sep/include/memory/types.h:23:30: error: ‘STM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   23 |         case MemoryTierEnum::STM: return "stm";
+      |                              ^~~
+/sep/include/memory/types.h:24:30: error: ‘MTM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   24 |         case MemoryTierEnum::MTM: return "mtm";
+      |                              ^~~
+/sep/include/memory/types.h:25:30: error: ‘LTM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   25 |         case MemoryTierEnum::LTM: return "ltm";
+      |                              ^~~
+/sep/include/memory/types.h:26:30: error: ‘HOST’ is not a member of ‘sep::memory::MemoryTierEnum’
+   26 |         case MemoryTierEnum::HOST: return "host";
+      |                              ^~~~
+/sep/include/memory/types.h:27:30: error: ‘DEVICE’ is not a member of ‘sep::memory::MemoryTierEnum’
+   27 |         case MemoryTierEnum::DEVICE: return "device";
+      |                              ^~~~~~
+/sep/include/memory/types.h:28:30: error: ‘UNIFIED’ is not a member of ‘sep::memory::MemoryTierEnum’
+   28 |         case MemoryTierEnum::UNIFIED: return "unified";
+      |                              ^~~~~~~
+/sep/include/memory/types.h: In function ‘sep::memory::MemoryTierEnum sep::memory::stringToMemoryTier(const std::string&)’:
+/sep/include/memory/types.h:35:47: error: ‘STM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   35 |     if (tier == "stm") return MemoryTierEnum::STM;
+      |                                               ^~~
+/sep/include/memory/types.h:36:47: error: ‘MTM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   36 |     if (tier == "mtm") return MemoryTierEnum::MTM;
+      |                                               ^~~
+/sep/include/memory/types.h:37:47: error: ‘LTM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   37 |     if (tier == "ltm") return MemoryTierEnum::LTM;
+      |                                               ^~~
+/sep/include/memory/types.h:38:48: error: ‘HOST’ is not a member of ‘sep::memory::MemoryTierEnum’
+   38 |     if (tier == "host") return MemoryTierEnum::HOST;
+      |                                                ^~~~
+/sep/include/memory/types.h:39:50: error: ‘DEVICE’ is not a member of ‘sep::memory::MemoryTierEnum’
+   39 |     if (tier == "device") return MemoryTierEnum::DEVICE;
+      |                                                  ^~~~~~
+/sep/include/memory/types.h:40:51: error: ‘UNIFIED’ is not a member of ‘sep::memory::MemoryTierEnum’
+   40 |     if (tier == "unified") return MemoryTierEnum::UNIFIED;
+      |                                                   ^~~~~~~
+In file included from /sep/include/memory/quantum_coherence_manager.h:4:
+/sep/include/quantum/types.h: At global scope:
+/sep/include/quantum/types.h:26:74: error: ‘STM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   26 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
+      |                                                                          ^~~
+/sep/include/quantum/types.h:26:77: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::memory::MemoryTierEnum’ in initialization
+   26 |     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
+      |                                                                             ^
+/sep/include/memory/quantum_coherence_manager.h:47:80: error: ‘STM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   47 |         ::sep::memory::MemoryTierEnum from_tier{::sep::memory::MemoryTierEnum::STM};
+      |                                                                                ^~~
+/sep/include/memory/quantum_coherence_manager.h:47:83: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::memory::MemoryTierEnum’ in initialization
+   47 |         ::sep::memory::MemoryTierEnum from_tier{::sep::memory::MemoryTierEnum::STM};
+      |                                                                                   ^
+/sep/include/memory/quantum_coherence_manager.h:48:78: error: ‘STM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   48 |         ::sep::memory::MemoryTierEnum to_tier{::sep::memory::MemoryTierEnum::STM};
+      |                                                                              ^~~
+/sep/include/memory/quantum_coherence_manager.h:48:81: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::memory::MemoryTierEnum’ in initialization
+   48 |         ::sep::memory::MemoryTierEnum to_tier{::sep::memory::MemoryTierEnum::STM};
+      |                                                                                 ^
+/sep/include/memory/quantum_coherence_manager.h:91:83: error: ‘STM’ is not a member of ‘sep::memory::MemoryTierEnum’
+   91 |         ::sep::memory::MemoryTierEnum current_tier{::sep::memory::MemoryTierEnum::STM};
+      |                                                                                   ^~~
+/sep/include/memory/quantum_coherence_manager.h:91:86: error: cannot convert ‘<brace-enclosed initializer list>’ to ‘sep::memory::MemoryTierEnum’ in initialization
+   91 |         ::sep::memory::MemoryTierEnum current_tier{::sep::memory::MemoryTierEnum::STM};
+      |                                                                                      ^
+demos/genesis_pattern.cpp:8:1: error: expected unqualified-id before ‘namespace’
+    8 | namespace sep
+      | ^~~~~~~~~
+demos/genesis_pattern.cpp:177:2: error: expected ‘}’ at end of input
+  177 | }  // namespace sep
+      |  ^
+/sep/include/quantum/pattern_processor.hpp:22:9: note: to match this ‘{’
+   22 |         {
+      |         ^
+demos/genesis_pattern.cpp:177:2: error: expected unqualified-id at end of input
+  177 | }  // namespace sep
+      |  ^
+demos/genesis_pattern.cpp:177:2: error: expected ‘}’ at end of input
+/sep/include/quantum/pattern_processor.hpp:11:5: note: to match this ‘{’
+   11 |     {
+      |     ^
+demos/genesis_pattern.cpp:177:2: error: expected ‘}’ at end of input
+  177 | }  // namespace sep
+      |  ^
+/sep/include/quantum/pattern_processor.hpp:9:1: note: to match this ‘{’
+    9 | {
+      | ^
+In file included from demos/memory_garden.hpp:3,
+                 from demos/memory_garden.cpp:1:
+/sep/sep-build/src/demo_manager.hpp:25:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   25 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:26:5: error: ‘CyclesRenderer’ does not name a type
+   26 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:36:21: error: ‘Engine’ has not been declared; did you mean ‘inline’?
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                     ^~~~~~
+      |                     inline
+/sep/sep-build/src/demo_manager.hpp:36:37: error: ‘CyclesRenderer’ has not been declared
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                                     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:50:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   50 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:51:5: error: ‘CyclesRenderer’ does not name a type
+   51 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+demos/memory_garden.hpp:31:21: error: ‘MemoryTierManager’ was not declared in this scope
+   31 |     std::unique_ptr<MemoryTierManager> memory_manager_;
+      |                     ^~~~~~~~~~~~~~~~~
+demos/memory_garden.hpp:31:38: error: template argument 1 is invalid
+   31 |     std::unique_ptr<MemoryTierManager> memory_manager_;
+      |                                      ^
+demos/memory_garden.hpp:31:38: error: template argument 2 is invalid
+demos/memory_garden.hpp:32:21: error: ‘QuantumCoherenceManager’ was not declared in this scope
+   32 |     std::unique_ptr<QuantumCoherenceManager> coherence_manager_;
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+demos/memory_garden.hpp:32:44: error: template argument 1 is invalid
+   32 |     std::unique_ptr<QuantumCoherenceManager> coherence_manager_;
+      |                                            ^
+demos/memory_garden.hpp:32:44: error: template argument 2 is invalid
+In file included from demos/memory_garden.cpp:3:
+/sep/sep-build/src/config.hpp:108:8: error: redefinition of ‘struct sep::workbench::CosmoConfig’
+  108 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+/sep/sep-build/src/config.hpp:103:8: note: previous definition of ‘struct sep::workbench::CosmoConfig’
+  103 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+demos/memory_garden.cpp: In member function ‘virtual void sep::workbench::MemoryGardenDemo::init()’:
+demos/memory_garden.cpp:16:48: error: ‘MemoryTierManager’ was not declared in this scope; did you mean ‘memory_manager_’?
+   16 |             memory_manager_ = std::make_unique<MemoryTierManager>();
+      |                                                ^~~~~~~~~~~~~~~~~
+      |                                                memory_manager_
+demos/memory_garden.cpp:16:66: error: no matching function for call to ‘make_unique<<expression error> >()’
+   16 |             memory_manager_ = std::make_unique<MemoryTierManager>();
+      |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+demos/memory_garden.cpp:16:66: note: there are 3 candidates
+In file included from /usr/include/c++/15/memory:80,
+                 from /sep/sep-build/src/demo_manager.hpp:3:
+/usr/include/c++/15/bits/unique_ptr.h:1084:5: note: candidate 1: ‘template<class _Tp, class ... _Args> std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...)’
+ 1084 |     make_unique(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1084:5: note: template argument deduction/substitution failed:
+demos/memory_garden.cpp:16:66: error: template argument 1 is invalid
+   16 |             memory_manager_ = std::make_unique<MemoryTierManager>();
+      |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:1099:5: note: candidate 2: ‘template<class _Tp> std::__detail::__unique_ptr_array_t<_Tp> std::make_unique(size_t)’
+ 1099 |     make_unique(size_t __num)
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1099:5: note: candidate expects 1 argument, 0 provided
+/usr/include/c++/15/bits/unique_ptr.h:1109:5: note: candidate 3: ‘template<class _Tp, class ... _Args> std::__detail::__invalid_make_unique_t<_Tp> std::make_unique(_Args&& ...)’ (deleted)
+ 1109 |     make_unique(_Args&&...) = delete;
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1109:5: note: template argument deduction/substitution failed:
+demos/memory_garden.cpp:16:66: error: template argument 1 is invalid
+   16 |             memory_manager_ = std::make_unique<MemoryTierManager>();
+      |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+demos/memory_garden.cpp:17:51: error: ‘QuantumCoherenceManager’ was not declared in this scope
+   17 |             coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+demos/memory_garden.cpp:17:75: error: no matching function for call to ‘make_unique<<expression error> >()’
+   17 |             coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+demos/memory_garden.cpp:17:75: note: there are 3 candidates
+/usr/include/c++/15/bits/unique_ptr.h:1084:5: note: candidate 1: ‘template<class _Tp, class ... _Args> std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...)’
+ 1084 |     make_unique(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1084:5: note: template argument deduction/substitution failed:
+demos/memory_garden.cpp:17:75: error: template argument 1 is invalid
+   17 |             coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/usr/include/c++/15/bits/unique_ptr.h:1099:5: note: candidate 2: ‘template<class _Tp> std::__detail::__unique_ptr_array_t<_Tp> std::make_unique(size_t)’
+ 1099 |     make_unique(size_t __num)
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1099:5: note: candidate expects 1 argument, 0 provided
+/usr/include/c++/15/bits/unique_ptr.h:1109:5: note: candidate 3: ‘template<class _Tp, class ... _Args> std::__detail::__invalid_make_unique_t<_Tp> std::make_unique(_Args&& ...)’ (deleted)
+ 1109 |     make_unique(_Args&&...) = delete;
+      |     ^~~~~~~~~~~
+/usr/include/c++/15/bits/unique_ptr.h:1109:5: note: template argument deduction/substitution failed:
+demos/memory_garden.cpp:17:75: error: template argument 1 is invalid
+   17 |             coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+demos/memory_garden.cpp: In member function ‘glm::vec3 sep::workbench::MemoryGardenDemo::calculateNodePosition(float)’:
+demos/memory_garden.cpp:62:68: error: ‘pi’ is not a member of ‘glm’
+   62 |             float angle = static_cast<float>(nodes_.size()) * glm::pi<float>() * 0.5f;
+      |                                                                    ^~
+demos/memory_garden.cpp:62:71: error: expected primary-expression before ‘float’
+   62 |             float angle = static_cast<float>(nodes_.size()) * glm::pi<float>() * 0.5f;
+      |                                                                       ^~~~~
+demos/memory_garden.cpp: In member function ‘virtual void sep::workbench::MemoryGardenDemo::render()’:
+demos/memory_garden.cpp:105:18: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+  105 |             if (!renderer_) return;
+      |                  ^~~~~~~~~
+      |                  render
+demos/memory_garden.cpp:108:13: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+  108 |             renderer_->setColorMode("coherence");
+      |             ^~~~~~~~~
+      |             render
+In file included from demos/neural_demo.hpp:5,
+                 from demos/neural_demo.cpp:1:
+/sep/sep-build/src/demo_manager.hpp:25:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   25 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:26:5: error: ‘CyclesRenderer’ does not name a type
+   26 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:36:21: error: ‘Engine’ has not been declared; did you mean ‘inline’?
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                     ^~~~~~
+      |                     inline
+/sep/sep-build/src/demo_manager.hpp:36:37: error: ‘CyclesRenderer’ has not been declared
+   36 |     void initialize(Engine* engine, CyclesRenderer* renderer);
+      |                                     ^~~~~~~~~~~~~~
+/sep/sep-build/src/demo_manager.hpp:50:5: error: ‘Engine’ does not name a type; did you mean ‘inline’?
+   50 |     Engine* engine_{nullptr};
+      |     ^~~~~~
+      |     inline
+/sep/sep-build/src/demo_manager.hpp:51:5: error: ‘CyclesRenderer’ does not name a type
+   51 |     CyclesRenderer* renderer_{nullptr};
+      |     ^~~~~~~~~~~~~~
+demos/neural_demo.hpp:31:13: error: ‘dag’ does not name a type
+   31 |             dag::DagGraph graph_;
+      |             ^~~
+In file included from demos/neural_demo.cpp:2:
+/sep/sep-build/src/config.hpp:108:8: error: redefinition of ‘struct sep::workbench::CosmoConfig’
+  108 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+/sep/sep-build/src/config.hpp:103:8: note: previous definition of ‘struct sep::workbench::CosmoConfig’
+  103 | struct CosmoConfig {
+      |        ^~~~~~~~~~~
+demos/neural_demo.cpp: In member function ‘virtual void sep::workbench::NeuralDemo::init()’:
+demos/neural_demo.cpp:15:23: error: ‘ConfigManager’ has not been declared
+   15 |     const auto& cfg = ConfigManager::getInstance().getEngineConfig().neural();
+      |                       ^~~~~~~~~~~~~
+demos/neural_demo.cpp:23:5: error: ‘graph_’ was not declared in this scope; did you mean ‘isgraph_l’?
+   23 |     graph_ = dag::DagGraph();
+      |     ^~~~~~
+      |     isgraph_l
+demos/neural_demo.cpp:23:14: error: ‘dag’ has not been declared
+   23 |     graph_ = dag::DagGraph();
+      |              ^~~
+demos/neural_demo.cpp: In member function ‘virtual void sep::workbench::NeuralDemo::update(float)’:
+demos/neural_demo.cpp:36:24: error: ‘graph_’ was not declared in this scope; did you mean ‘isgraph_l’?
+   36 |         auto parents = graph_.getParents(neurons_[i].id);
+      |                        ^~~~~~
+      |                        isgraph_l
+demos/neural_demo.cpp:52:32: error: ‘graph_’ was not declared in this scope; did you mean ‘isgraph_l’?
+   52 |                 auto parents = graph_.getParents(neurons_[j].id);
+      |                                ^~~~~~
+      |                                isgraph_l
+demos/neural_demo.cpp:58:9: error: ‘graph_’ was not declared in this scope; did you mean ‘isgraph_l’?
+   58 |         graph_.updateCoherence(n.id, n.potential / threshold_);
+      |         ^~~~~~
+      |         isgraph_l
+demos/neural_demo.cpp: In member function ‘virtual void sep::workbench::NeuralDemo::render()’:
+demos/neural_demo.cpp:72:10: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   72 |     if (!renderer_) return;
+      |          ^~~~~~~~~
+      |          render
+demos/neural_demo.cpp:78:5: error: ‘renderer_’ was not declared in this scope; did you mean ‘render’?
+   78 |     renderer_->renderPatternState(points);
+      |     ^~~~~~~~~
+      |     render
+demos/neural_demo.cpp: In member function ‘virtual void sep::workbench::NeuralDemo::cleanup()’:
+demos/neural_demo.cpp:84:5: error: ‘graph_’ was not declared in this scope; did you mean ‘isgraph_l’?
+   84 |     graph_ = dag::DagGraph();
+      |     ^~~~~~
+      |     isgraph_l
+demos/neural_demo.cpp:84:14: error: ‘dag’ has not been declared
+   84 |     graph_ = dag::DagGraph();
+      |              ^~~
+Demo build failed!

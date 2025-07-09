@@ -9,7 +9,6 @@
 #include "sep_engine_wrapper.h"
 #include <glm/glm.hpp>
 
-// In demo mode, use the mock types from sep_engine_wrapper.h
 using Engine = sep::Engine;
 using CyclesRenderer = sep::CyclesRenderer;
 using ConfigManager = sep::core::config::ConfigManager;

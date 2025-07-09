@@ -12,6 +12,7 @@ add_custom_target(crow_fixed_headers SOURCES
     asio_isolation.h
     common.h
     crow_isolation.h
+    http_parser_fixed.h
     http_request.h
     http_response.h
     logging.h

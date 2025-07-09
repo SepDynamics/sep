@@ -1,90 +1,88 @@
-# Set directories for better readability
-set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/extern/imgui)
-set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src)
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
+cmake_minimum_required(VERSION 3.16)
 
-# Find required packages
-find_package(OpenGL REQUIRED)
-
-# Use GLFW from the subdirectory we added
-set(GLFW_LIBRARIES glfw)
-
-# ImGui source files
-set(IMGUI_SRC
-    ${IMGUI_DIR}/imgui.cpp
-    ${IMGUI_DIR}/imgui_demo.cpp
-    ${IMGUI_DIR}/imgui_draw.cpp
-    ${IMGUI_DIR}/imgui_tables.cpp
-    ${IMGUI_DIR}/imgui_widgets.cpp
-    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
-    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
-)
-
-# Workbench source files
-set(WORKBENCH_SRC
-    demo_main.cpp
+add_executable(sep_workbench
     demo_manager.cpp
-    demo_selection.cpp
-    window.cpp
-    ui_manager.cpp
-    renderer.cpp
-    sep_engine_wrapper.cpp
-    workbench_demo_adapter.cpp
+    demos/audio_visualizer.cpp
+    demos/memory_garden.cpp
+    demos/annealing_demo.cpp
+    demos/drug_discovery_demo.cpp
+    demos/neural_demo.cpp
+    demos/cosmo_demo.cpp
+    demos/digital_physics_demo.cpp
+    demos/drug_optimizer.cpp
+    demos/annealing_sim.cpp
+    demos/cosmo_sim.cpp
+    demos/neuro_sim.cpp
+    demos/flocking_demo.cpp
+    demos/genesis_pattern.cpp
+    legacy_main.cpp
+    main.cpp
     config.cpp
 )
 
-# Demo source files
-file(GLOB DEMO_SRC
-    "${CMAKE_CURRENT_SOURCE_DIR}/demos/*.cpp"
-)
+set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 
-# Add demo files to workbench source
-list(APPEND WORKBENCH_SRC ${DEMO_SRC})
+# Build the workbench in "demo" mode so it links against the
+# lightweight wrapper implementations defined in
+# `sep_engine_wrapper.h`.  This avoids pulling in the full engine
 
-# Create the executable (only once!)
-add_executable(sep_workbench ${WORKBENCH_SRC})
+# Set C++ standard and compiler flags
+set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
+target_compile_features(sep_workbench PRIVATE cxx_std_17)
 
-# Set include directories
-target_include_directories(sep_workbench PRIVATE
-    ${INCLUDE_DIR}
-    ${SRC_DIR}
-    ${IMGUI_DIR}
-    ${IMGUI_DIR}/backends
-    ${OPENGL_INCLUDE_DIR}
+# Add compiler-specific flags
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(sep_workbench PRIVATE
+        -isystem /usr/src/c++/v1
+        -isystem /usr/local/src
+        -isystem /usr/src
+    )
+elseif(MSVC)
+    target_compile_options(sep_workbench PRIVATE /EHsc)
+endif()
+
+# Add system include paths
+target_include_directories(sep_workbench SYSTEM PRIVATE
+    ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES}
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/extern/glm
+    /usr/src
+    /usr/local/src
+    /usr/local/src
 )
 
-# Set compiler features
-set_target_properties(sep_workbench PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
+# Common includes for both modes
+target_include_directories(sep_workbench PRIVATE
+    ${PROJECT_SOURCE_DIR}/examples/workbench
+    ${PROJECT_SOURCE_DIR}/extern/glm
 )
 
-# Link libraries
+# Additional includes for non-demo mode
+if(NOT SEP_WORKBENCH_DEMO)
+    target_include_directories(sep_workbench PRIVATE
+        ${PROJECT_SOURCE_DIR}/src
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/cycles/src>
+    )
+endif()
+
+
 target_link_libraries(sep_workbench PRIVATE
-    # SEP Engine Libraries
+    sep_api
     sep_quantum
     sep_memory
     sep_compat
     sep_core
-    
-    # External Dependencies
-    ${GLFW_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    dl
-    pthread
+    Threads::Threads
+    ${CMAKE_DL_LIBS}
 )
 
-# Add compile definitions
-target_compile_definitions(sep_workbench PRIVATE
-    GL_SILENCE_DEPRECATION
-    SEP_WORKBENCH=1
-    GLM_ENABLE_EXPERIMENTAL
-)
+# Only link against blender if enabled
+if(SEP_ENABLE_BLENDER)
+    target_link_libraries(sep_workbench PRIVATE sep_blender)
+endif()
 
-# Make sure we can find the engine header paths
-target_include_directories(sep_workbench PRIVATE
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_BINARY_DIR}/src
-)
+# Only link against audio if enabled
+if(SEP_ENABLE_AUDIO)
+    target_link_libraries(sep_workbench PRIVATE sep_audio)
+endif()

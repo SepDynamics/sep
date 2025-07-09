@@ -5,7 +5,7 @@ add_library(sep_embeddings STATIC
 
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/embeddings/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/embeddings/
         DESTINATION include/sep/embeddings
         FILES_MATCHING
         PATTERN "*.h"
@@ -20,7 +20,7 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/embeddings/
 
 target_include_directories(sep_embeddings
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>

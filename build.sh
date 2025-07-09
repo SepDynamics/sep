@@ -58,9 +58,9 @@ check_package() {
   local header_base=$(basename "$header_path")
   
   # Check for headers in multiple locations (suppress permission errors)
-  if [ -f "$header_path" ] || [ -f "/usr/local/include/${header_path#/usr/include/}" ] ||
-     find /usr/include -path "*${header_base}" 2>/dev/null | grep -q . ||
-     find /usr/local/include -path "*${header_base}" 2>/dev/null | grep -q .; then
+  if [ -f "$header_path" ] || [ -f "/usr/local/src/${header_path#/usr/src/}" ] ||
+     find /usr/src -path "*${header_base}" 2>/dev/null | grep -q . ||
+     find /usr/local/src -path "*${header_base}" 2>/dev/null | grep -q .; then
     
     # Check for libraries in multiple locations (suppress permission errors)
     if ldconfig -p 2>/dev/null | grep -q -i "$lib_base" ||
@@ -89,10 +89,10 @@ MISSING_PACKAGES=""
 
 # Check for Python 3.13 (updated from 3.12)
 export PYTHON_ROOT_DIR="/usr"
-export PYTHON_INCLUDE_DIR="/usr/include/python3.13"
+export PYTHON_INCLUDE_DIR="/usr/src/python3.13"
 export PYTHON_LIBRARY="/usr/lib64/libpython3.13.so"
 export PYTHON_LIBPATH="/usr/lib64"
-export PYTHON_INCLUDE_CONFIG_DIR="/usr/include/python3.13"
+export PYTHON_INCLUDE_CONFIG_DIR="/usr/src/python3.13"
 
 if [ ! -f "$PYTHON_INCLUDE_DIR/Python.h" ] || [ ! -f "$PYTHON_LIBRARY" ]; then
   echo "✗ Python 3.13 development files not found"
@@ -100,7 +100,7 @@ if [ ! -f "$PYTHON_INCLUDE_DIR/Python.h" ] || [ ! -f "$PYTHON_LIBRARY" ]; then
 fi
 
 # Check for zstdlib (with more flexible path checking)
-if [ -f "/usr/include/zstd.h" ] || [ -f "/usr/include/zstd/zstd.h" ]; then
+if [ -f "/usr/src/zstd.h" ] || [ -f "/usr/src/zstd/zstd.h" ]; then
   if ldconfig -p | grep -q "libzstd.so" || [ -f "/usr/lib64/libzstd.so" ] || [ -f "/usr/lib/libzstd.so" ]; then
     echo "✓ zstd found"
   else
@@ -113,13 +113,13 @@ else
 fi
 
 # Check for embree using the improved check_package function
-check_package "embree" "libembree.so" "/usr/include/embree3/rtcore.h" ||
-check_package "embree" "libembree3.so" "/usr/include/embree3/rtcore.h" ||
-check_package "embree" "libembree.so" "/usr/include/embree/rtcore.h" ||
+check_package "embree" "libembree.so" "/usr/src/embree3/rtcore.h" ||
+check_package "embree" "libembree3.so" "/usr/src/embree3/rtcore.h" ||
+check_package "embree" "libembree.so" "/usr/src/embree/rtcore.h" ||
 MISSING_PACKAGES="$MISSING_PACKAGES embree-devel"
 
 # Check for pugixml (with more flexible path checking)
-if [ -f "/usr/include/pugixml.hpp" ] || [ -f "/usr/include/pugixml/pugixml.hpp" ]; then
+if [ -f "/usr/src/pugixml.hpp" ] || [ -f "/usr/src/pugixml/pugixml.hpp" ]; then
   if ldconfig -p | grep -q "libpugixml.so" || [ -f "/usr/lib64/libpugixml.so" ] || [ -f "/usr/lib/libpugixml.so" ]; then
     echo "✓ pugixml found"
   else
@@ -132,7 +132,7 @@ else
 fi
 
 # Check for openjpeg (with more flexible path checking)
-if [ -f "/usr/include/openjpeg-2.5/openjpeg.h" ] || [ -f "/usr/include/openjpeg-2.4/openjpeg.h" ] || [ -f "/usr/include/openjpeg-2.3/openjpeg.h" ]; then
+if [ -f "/usr/src/openjpeg-2.5/openjpeg.h" ] || [ -f "/usr/src/openjpeg-2.4/openjpeg.h" ] || [ -f "/usr/src/openjpeg-2.3/openjpeg.h" ]; then
   if ldconfig -p | grep -q "libopenjp2.so" || [ -f "/usr/lib64/libopenjp2.so" ] || [ -f "/usr/lib/libopenjp2.so" ]; then
     echo "✓ openjpeg found"
   else
@@ -145,7 +145,7 @@ else
 fi
 
 # Check for USD (with more flexible path checking)
-if [ -f "/usr/include/pxr/usd/usd/api.h" ] || [ -f "/usr/include/USD/pxr/usd/usd/api.h" ]; then
+if [ -f "/usr/src/pxr/usd/usd/api.h" ] || [ -f "/usr/src/USD/pxr/usd/usd/api.h" ]; then
   if ldconfig -p | grep -q -i "libusd" || [ -f "/usr/lib64/libusd*.so" ] || [ -f "/usr/lib/libusd*.so" ] || find /usr/lib64 -name "libusd*.so*" | grep -q .; then
     echo "✓ USD found"
   else
@@ -159,7 +159,7 @@ fi
 
 # Check for curl
 # Make the curl check more flexible
-if [ -f "/usr/include/curl/curl.h" ]; then
+if [ -f "/usr/src/curl/curl.h" ]; then
   if ldconfig -p | grep -q -i "libcurl.so" || [ -f "/usr/lib64/libcurl.so" ] || [ -f "/usr/lib/libcurl.so" ] || find /usr/lib64 -name "libcurl*.so*" | grep -q .; then
     echo "✓ curl found"
   else
@@ -172,7 +172,7 @@ else
 fi
 
 # Make the http-parser check more flexible
-if [ -f "/usr/include/http_parser.h" ] || [ -f "/usr/include/http-parser/http_parser.h" ]; then
+if [ -f "/usr/src/http_parser.h" ] || [ -f "/usr/src/http-parser/http_parser.h" ]; then
   if ldconfig -p | grep -q -i "libhttp_parser.so" || find /usr/lib64 -name "libhttp_parser*.so*" | grep -q .; then
     echo "✓ http-parser found"
   else
@@ -185,7 +185,7 @@ else
 fi
 
 # Make the openvdb check more flexible
-if [ -d "/usr/include/openvdb" ] || [ -d "/usr/local/include/openvdb" ]; then
+if [ -d "/usr/src/openvdb" ] || [ -d "/usr/local/src/openvdb" ]; then
   if ldconfig -p | grep -q -i "libopenvdb" || find /usr/lib64 -name "libopenvdb*.so*" | grep -q .; then
     echo "✓ openvdb found"
   else
@@ -198,7 +198,7 @@ else
 fi
 
 # Check for imath (with more flexible path checking)
-if [ -f "/usr/include/Imath/ImathVec.h" ] || [ -f "/usr/include/imath/ImathVec.h" ]; then
+if [ -f "/usr/src/Imath/ImathVec.h" ] || [ -f "/usr/src/imath/ImathVec.h" ]; then
   if ldconfig -p | grep -q -i "libImath.so" || [ -f "/usr/lib64/libImath*.so" ] || [ -f "/usr/lib/libImath*.so" ] || find /usr/lib64 -name "libImath*.so*" | grep -q .; then
     echo "✓ imath found"
   else
@@ -211,7 +211,7 @@ else
 fi
 
 # Make the gflags check more flexible (needed by glog)
-if [ -f "/usr/include/gflags/gflags.h" ] || [ -f "/usr/local/include/gflags/gflags.h" ]; then
+if [ -f "/usr/src/gflags/gflags.h" ] || [ -f "/usr/local/src/gflags/gflags.h" ]; then
   if ldconfig -p | grep -q -i "libgflags" || find /usr/lib* -name "libgflags*.so*" | grep -q .; then
     echo "✓ gflags found"
   else
@@ -224,7 +224,7 @@ else
 fi
 
 # Make the glog check more flexible
-if [ -f "/usr/include/glog/logging.h" ] || [ -f "/usr/local/include/glog/logging.h" ]; then
+if [ -f "/usr/src/glog/logging.h" ] || [ -f "/usr/local/src/glog/logging.h" ]; then
   if ldconfig -p | grep -q -i "libglog" || find /usr/lib* -name "libglog*.so*" | grep -q .; then
     echo "✓ glog found"
   else
@@ -237,7 +237,7 @@ else
 fi
 
 # Check for OpenEXR (with more flexible path checking)
-if [ -f "/usr/include/OpenEXR/ImfHeader.h" ] || [ -f "/usr/include/openexr/ImfHeader.h" ]; then
+if [ -f "/usr/src/OpenEXR/ImfHeader.h" ] || [ -f "/usr/src/openexr/ImfHeader.h" ]; then
   if ldconfig -p | grep -q -i "libOpenEXR.so" || [ -f "/usr/lib64/libOpenEXR*.so" ] || [ -f "/usr/lib/libOpenEXR*.so" ] || find /usr/lib64 -name "libOpenEXR*.so*" | grep -q .; then
     echo "✓ OpenEXR found"
   else
@@ -250,7 +250,7 @@ else
 fi
 
 # Check for TBB (with more flexible path checking)
-if [ -f "/usr/include/tbb/tbb.h" ] || [ -f "/usr/include/oneapi/tbb/tbb.h" ]; then
+if [ -f "/usr/src/tbb/tbb.h" ] || [ -f "/usr/src/oneapi/tbb/tbb.h" ]; then
   if ldconfig -p | grep -q -i "libtbb.so" || [ -f "/usr/lib64/libtbb.so" ] || [ -f "/usr/lib/libtbb.so" ] || find /usr/lib64 -name "libtbb*.so*" | grep -q .; then
     echo "✓ TBB found"
   else
@@ -263,18 +263,18 @@ else
 fi
 
 # Check for OpenColorIO
-check_package "OpenColorIO" "libOpenColorIO.so" "/usr/include/OpenColorIO/OpenColorIO.h" || MISSING_PACKAGES="$MISSING_PACKAGES OpenColorIO-devel"
+check_package "OpenColorIO" "libOpenColorIO.so" "/usr/src/OpenColorIO/OpenColorIO.h" || MISSING_PACKAGES="$MISSING_PACKAGES OpenColorIO-devel"
 
 # Check for OpenImageIO
-check_package "OpenImageIO" "libOpenImageIO.so" "/usr/include/OpenImageIO/imageio.h" || MISSING_PACKAGES="$MISSING_PACKAGES OpenImageIO-devel"
+check_package "OpenImageIO" "libOpenImageIO.so" "/usr/src/OpenImageIO/imageio.h" || MISSING_PACKAGES="$MISSING_PACKAGES OpenImageIO-devel"
 
 # Remove duplicate TBB check since we already have a more flexible check above
-# check_package "TBB" "libtbb.so" "/usr/include/tbb/tbb.h" || MISSING_PACKAGES="$MISSING_PACKAGES tbb-devel"
+# check_package "TBB" "libtbb.so" "/usr/src/tbb/tbb.h" || MISSING_PACKAGES="$MISSING_PACKAGES tbb-devel"
 
 # Make the Boost check more flexible
 if command -v pkg-config >/dev/null && pkg-config --exists boost; then
   echo "✓ Boost found via pkg-config"
-elif [ -f "/usr/include/boost/config.hpp" ] || [ -f "/usr/local/include/boost/config.hpp" ]; then
+elif [ -f "/usr/src/boost/config.hpp" ] || [ -f "/usr/local/src/boost/config.hpp" ]; then
   if ldconfig -p | grep -q -i "libboost_system" || find /usr/lib* -name "libboost_system*.so*" | grep -q .; then
     echo "✓ Boost found"
   else

@@ -1,15 +1,20 @@
 #pragma once
 
-#include "../demo_manager.hpp"
+#include "demo_manager.hpp"
+#include "sep_engine_wrapper.h"
 #include <vector>
-#include <random>
-#include <core/dag_graph.h>
 #include <glm/vec3.hpp>
 
 namespace sep {
 namespace workbench {
 
-class NeuralDemo : public Demo {
+struct Pose {
+    glm::vec3 position{0.0f};
+    glm::vec3 orientation{0.0f};
+    float binding_affinity{0.0f};
+};
+
+class DrugDiscoveryDemo : public Demo {
 public:
     void init() override;
     void update(float dt) override;
@@ -19,18 +24,13 @@ public:
     void handleMouse(int x, int y, int button) override;
 
 private:
-    struct Neuron {
-        uint64_t id{0};
-        float potential{0.f};
-        float threshold{1.f};
-    };
+    void optimizePoses();
 
-    dag::DagGraph graph_;
-    std::vector<Neuron> neurons_;
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    std::mt19937 rng_{std::random_device{}()};
+    std::vector<Pose> poses_;
+    int iterations_{10};
+    float mutation_rate_{0.05f};
 };
 
 } // namespace workbench
 } // namespace sep
+

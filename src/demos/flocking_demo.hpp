@@ -1,19 +1,14 @@
 #pragma once
 
-#include "../demo_manager.hpp"
-#include <glm/vec3.hpp>
+#include "demo_manager.hpp"
 #include <vector>
+#include <glm/vec3.hpp>
+#include <quantum/data.hpp>
 
 namespace sep {
 namespace workbench {
 
-struct Pose {
-    glm::vec3 position{0.0f};
-    glm::vec3 orientation{0.0f};
-    float binding_affinity{0.0f};
-};
-
-class DrugDiscoveryDemo : public Demo {
+class FlockingDemo : public Demo {
 public:
     void init() override;
     void update(float dt) override;
@@ -23,9 +18,9 @@ public:
     void handleMouse(int x, int y, int button) override;
 
 private:
-    std::vector<Pose> candidate_poses_;
-    int optimizer_iterations_{100};
-    float mutation_rate_{0.1f};
+    std::vector<pattern::PatternData> agents_;
+    float max_speed_{2.0f};
+    float neighbor_radius_{5.0f};
 };
 
 } // namespace workbench

@@ -1,13 +1,13 @@
 #pragma once
 
 #include "demo_manager.hpp"
+#include "demos/pattern_processor.hpp"
+#include "memory/quantum_coherence_manager.h"
 #include <memory>
 
 namespace sep {
 namespace workbench {
 
-class PatternProcessor;
-class QuantumCoherenceManager;
 
 class GenesisPatternDemo : public Demo {
 public:

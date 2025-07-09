@@ -15,8 +15,6 @@
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
 #include "persistence/persistent_pattern_data.hpp"
-#include "quantum/data.hpp"
-#include "quantum/types.h"
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
 #endif // SEP_NO_REDIS
@@ -84,34 +82,32 @@ public:
   SEPResult demoteBlock(MemoryBlock *block, MemoryBlock *&out_block);
   MemoryTier *determineTier(float coherence, float stability,
                             int generation_count);
-  MemoryBlock *updateBlockMetrics(MemoryBlock *block, float coherence,
-                                  float stability, std::uint32_t generation,
-                                  float context_score);
+  MemoryBlock *updateBlockProperties(MemoryBlock *block, float promotion_score,
+                                    float priority_score, std::uint32_t age = 0,
+                                    float weight = 0.0f);
   void rebuildLookup();
 
   // Pattern management
 
-  SEPResult launch_pattern_processing(
-      ::sep::pattern::PatternData *patterns,
-      ::sep::pattern::PatternData *results,
-      const ::sep::pattern::PatternConfig &config, size_t pattern_count,
-      const ::sep::pattern::PatternData *previous_patterns, void *stream);
+  SEPResult processMemoryBlocks(
+      void *input_data, void *output_data,
+      const void *config, size_t count,
+      const void *previous_data, void *stream);
 
-  void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);
-  void removePattern(std::size_t id);
+  // Generic relationship management functions
+  void updateGenericRelationship(std::size_t id_a, std::size_t id_b, float strength);
+  void removeDataEntry(std::size_t id);
   void pruneWeakRelationships();
-  void calculateRelationshipCoherence();
-  void loadLTMFromPersistence();
-  void
-  storeLTMToPersistence(const ::sep::quantum::Pattern &pattern,
-                        const ::sep::persistence::PersistentPatternData &data);
-  std::unique_ptr<::sep::quantum::Pattern> findPattern(std::size_t id);
-  std::unique_ptr<::sep::quantum::Pattern> findPattern(std::size_t id) const;
-  void registerPattern(std::size_t id,
-                       const ::sep::pattern::PatternData &pattern);
-  const ::sep::pattern::PatternData *getPatternData(std::size_t id) const;
-  void cleanupExpiredPatterns();
-  void prunePatternsByPriority(MemoryTierEnum tier, size_t max_count);
+  void calculateRelationshipScores();
+  void loadDataFromPersistence();
+  void storeDataToPersistence(const void *data,
+                             const ::sep::persistence::PersistentPatternData &metadata);
+  void* findDataById(std::size_t id);
+  const void* findDataById(std::size_t id) const;
+  void registerGenericData(std::size_t id, const void *data);
+  const void* getRegisteredData(std::size_t id) const;
+  void cleanupExpiredData();
+  void pruneDataByPriority(MemoryTierEnum tier, size_t max_count);
 
   // Test helpers
   void resetForTesting(const Config &cfg = Config());
@@ -140,19 +136,19 @@ private:
   std::unordered_map<std::size_t, uint64_t> pattern_dag_map_;
   core::SystemHooks *hooks_{nullptr};
 
-  std::unordered_map<std::size_t, std::unique_ptr<::sep::pattern::PatternData>>
-      pattern_registry_;
+  // Generic data registry using void* to avoid quantum/pattern dependencies
+  std::unordered_map<std::size_t, std::unique_ptr<void, std::function<void(void*)>>>
+      data_registry_;
   std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>>
-      pattern_relationships_;
+      data_relationships_;
 
   SEPResult promoteToTier(MemoryBlock *block, MemoryTierEnum tier,
-                          MemoryBlock *&out_block);
+                           MemoryBlock *&out_block);
   SEPResult compressBlock(MemoryBlock *block);
 
-  // Pattern tier transition helpers
-  bool checkTierPromotion(const ::sep::pattern::PatternData &pattern,
-                          MemoryTier target_tier) const;
-  bool checkTierDemotion(const ::sep::pattern::PatternData &pattern) const;
+  // Generic data scoring methods for tier transition
+  bool checkScoreForPromotion(float score, MemoryTier *target_tier) const;
+  bool checkScoreForDemotion(float score) const;
 };
 
 } // namespace memory

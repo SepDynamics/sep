@@ -19,13 +19,12 @@
 #include <thread>
 #include <spdlog/spdlog.h>
 
-
 // Forward declarations for Crow request/response and application
 namespace crow {
-class request;
-class response;
-template <typename... Middlewares>
-class Crow;
+    struct request;
+    struct response;
+    template <typename... Middlewares>
+    class Crow;
 }  // namespace crow
 namespace sep {
 #ifdef SEP_HAS_CYCLES

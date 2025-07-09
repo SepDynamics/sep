@@ -23,7 +23,7 @@ struct QuantumState {
     float mutation_rate{0.0f};
     int generation{0};
     int mutation_count{0};
-    sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
+    ::sep::memory::MemoryTierEnum memory_tier{::sep::memory::MemoryTierEnum::STM};
     float access_frequency{0.0f};
     Status state{Status::SUPERPOSITION};
 };

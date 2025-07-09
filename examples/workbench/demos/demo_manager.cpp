@@ -1,5 +1,6 @@
 #include "demo_manager.hpp"
 #include <stdexcept>
+#include <utility>
 
 namespace sep {
 namespace workbench {
@@ -58,4 +59,5 @@ void DemoManager::on_key(int key) {
     }
 }
 
-} // namespace workbench} // namespace sep
+} // namespace workbench
+} // namespace sep

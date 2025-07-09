@@ -1,85 +1,106 @@
-Alright, let's get this sorted. I can see why you're frustrated—you've got a complex system with a lot of moving parts, and when something breaks, it can feel like a cascade failure. The test output and static analysis report are actually giving us a pretty clear roadmap.
-
-Let's cut through the bullshit. Your core problem is in the memory management logic, and the static analysis report is screaming about a bunch of header and namespace issues that are making it impossible to debug effectively.
-
-Here is a fucking step-by-step outline to get this hooked up right. Follow this, and you'll get it working.
+### Guiding Philosophy:
+**STOP fighting the symptoms (test failures). START fixing the diseases (architecture, includes, build logic).**
 
 ---
 
-## The "Get This Fucking Thing To Work" To-Do List
+## The To-Do List: Your Path Out of This Hell
 
-We'll tackle this in three phases:
-1.  **Triage & Compile:** First, we make it build cleanly. You can't test what you can't compile.
-2.  **Fix the Logic:** Then, we fix the failing tests that point to the core logic errors in your memory manager.
-3.  **Clean Up the Noise:** Finally, we silence the non-critical warnings so you can focus on what matters.
+### **Phase 1: Fix the Goddamn Architecture (Stop the Bleeding)**
 
----
+Your biggest problem is a circular dependency between `quantum` and `memory`, which the architecture diagram even calls out as a symbol conflict. This is non-negotiable. You have to kill it. Low-level modules should NOT know about high-level concepts.
 
-### **Phase 1: Triage & Get a Clean Compile (Critical Errors)**
+1.  **Break the `memory` -> `quantum` Dependency:**
+    *   **Goal:** `libsep_memory.a` should know NOTHING about "coherence," "stability," or `PatternData`. It's a glorified `malloc`. It manages generic blocks of bytes.
+    *   **Action:**
+        *   Go into `src/memory/memory_tier_manager.cpp` and `memory_tier.hpp`.
+        *   **DELETE** every `#include` that points to a `quantum` header.
+        *   Find the function `MemoryTierManager::updateBlockMetrics`. It currently takes `coherence`, `stability`, etc. This is the source of your circular dependency.
+        *   **CHANGE** it to something generic. Instead of quantum-specific terms, use a generic "score" or "weight".
+            ```cpp
+            // In memory_tier_manager.hpp
+            // OLD:
+            // MemoryBlock* updateBlockMetrics(MemoryBlock* block, float coherence, float stability, ...);
+            
+            // NEW:
+            MemoryBlock* updateBlockProperties(MemoryBlock* block, float promotion_score, float priority_score);
+            ```
+        *   The logic that *calculates* coherence and stability and *decides* whether to promote a block (e.g., `if (coherence > 0.7f)`) belongs in a **higher-level manager**, probably inside your `core` `engine.cpp` or the `api` `sep_engine.cpp`. That higher-level class can depend on both `quantum` and `memory` and orchestrate the two.
+        *   **Result:** `libsep_memory.a` now has zero knowledge of `libsep_quantum.a`. The dependency is one-way: `quantum` -> `memory`.
 
-Your static analysis is full of critical errors. These aren't suggestions; they are build-breakers. We fix these first.
+### **Phase 2: Fix the Fucking Type Definitions (Single Source of Truth)**
 
-#### ✅ **To-Do #1: Fix Header Includes and Namespaces**
+Your static analysis report is screaming about `unknown type name 'MemoryTierEnum'` and duplicated members in `QuantumState`. This is classic header chaos.
 
-The report is riddled with `file not found`, `unknown type name`, and `no member named...` errors. This happens when your include paths are wrong or your namespaces are a mess after refactoring.
+1.  **Consolidate Core Types:**
+    *   **Goal:** Create one header file that is the absolute source of truth for all fundamental, shared types.
+    *   **Action:**
+        *   In your `core` library, use `include/core/types.h`. This is its new home.
+        *   **MOVE** the definitions of these critical types into `core/types.h`:
+            *   `enum class SEPResult`
+            *   `enum class MemoryTierEnum`
+            *   `struct QuantumState`
+            *   `struct PatternData`
+            *   `struct PatternConfig`
+        *   **FIX** the `QuantumState` struct definition while you're there. The static analyzer says you have duplicate members (`evolution_rate`, etc.). Clean it up. Make one canonical definition.
+        *   **HUNT AND DESTROY:** Go through every other header file in your entire project (`api`, `memory`, `quantum`, etc.). Delete their local, duplicated definitions of these types and replace them with a single `#include "core/types.h"`.
 
-*   **Action:** Go through these files and fix the includes and namespaces.
-    *   **`memory/memory_tier_manager.cpp`:** The report shows it can't find `memory/memory_tier_manager.h`. Your `CMakeLists.txt` in `src/memory` is probably missing the right `target_include_directories`. Make sure it includes `$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>`.
-    *   **`quantum/types.h`:** You have `duplicate member` errors for `evolution_rate`, `energy`, and `coupling_strength`. You've defined them twice. Delete the duplicates.
-    *   **`quantum/types.h` and `quantum/data.hpp`:** You have an `unknown type name 'MemoryTierEnum'`. This is a classic namespace issue. The type is in `sep::memory::MemoryTierEnum`. Fix it by using the fully qualified name: `::sep::memory::MemoryTierEnum`.
-    *   **`blender/bridge.h`:** It can't find `memory/memory_tier_manager.h`. This is another include path issue. Your `sep_blender` target needs the `memory` module's include path.
-    *   **`api/sep_engine.cpp`:** Can't find `memory/memory_tier_manager.hpp`. Your `sep_api` target needs to link against `sep_memory` and include its directories. The architecture diagram confirms this dependency.
+### **Phase 3: Fix the Fucking Build (Tame CMake and Headers)**
 
-#### ✅ **To-Do #2: Resolve `class` vs. `struct` Mismatches**
+The build log shows you're dying on `crow` header issues. Your `crow_isolation.h` shim is a brittle hack that has clearly broken. Let's do this the right way.
 
-*   **Problem:** The report shows `class 'request' was previously declared as a struct`. This happens when you forward-declare something as a `class` and then define it as a `struct` (or vice-versa).
-*   **Action:**
-    1.  Go to `/sep/include/api/server.h`.
-    2.  You probably have `class request;` somewhere. The actual definition in Crow is a `struct`. Make your forward declaration `struct request;` to match. Do the same for `response`.
+1.  **Isolate External Dependencies:**
+    *   **Goal:** Only the `api` module should know about `crow`. It should never "leak" into other parts of the build.
+    *   **Action:**
+        *   Open `src/api/CMakeLists.txt`.
+        *   Find `target_include_directories(sep_api ...)`
+        *   Make sure the `crow` include path is listed under the `PRIVATE` section, NOT `PUBLIC`. This prevents it from propagating to targets that link `sep_api`.
+        *   **DELETE** `crow_isolation.h`. It's a landmine. We're not doing that anymore.
+        *   Ensure that only `*.cpp` files inside `src/api/` include `crow.h` or `crow/app.h`. If any `*.h` file in `include/api/` has a Crow include, you're doing it wrong. Use forward declarations and PIMPL idiom if you have to.
 
----
+### **Phase 4: Fix the Fucking Tests (Finally, the Symptoms)**
 
-### **Phase 2: Fix the Runtime Test Failures (Logic Errors)**
+Your tests are failing because allocations/promotions are returning `nullptr`. This means the destination tier is full or can't find a free block.
 
-Once the code compiles, we can trust the test failures. They are all pointing to the same area: `MemoryTierManager`'s promotion logic.
+1.  **Debug Memory Allocation Failure:**
+    *   **Goal:** Figure out why `allocate()` is failing in the tests.
+    *   **Action:**
+        *   **Add Logging:** Go into `src/memory/memory_tier.cpp`. In `allocate()`, add `printf` or `spdlog` statements.
+            ```cpp
+            MemoryBlock* MemoryTier::allocate(std::size_t size) {
+                printf("TIER %d: Attempting to allocate %zu bytes.\n", (int)config_.type, size);
+                // ... existing logic ...
+                if (!block) {
+                    printf("TIER %d: No free block found for size %zu. Fragmentation: %f\n", 
+                           (int)config_.type, size, calculateFragmentation());
+                    defragment();
+                    block = findFreeBlock(size);
+                    if (!block) {
+                        printf("TIER %d: Allocation FAILED even after defrag.\n", (int)config_.type);
+                        return nullptr;
+                    }
+                }
+                printf("TIER %d: Allocation SUCCEEDED.\n", (int)config_.type);
+                // ... rest of the function ...
+            }
+            ```
+        *   **Run the tests again.** Watch the logs. My bet is the test tiers (1KB, 2KB) are filling up instantly, and your defragment/resize logic isn't getting triggered or isn't working as expected. Your tests need to account for this or your `promoteToTier` logic needs to be more robust (e.g., resize the destination tier if allocation fails).
 
-#### ✅ **To-Do #3: Debug `promoteToTier()` Returning `nullptr`**
+2.  **Fix Floating-Point Bullshit:**
+    *   **Goal:** Make the utilization tests pass.
+    *   **Action:** Never use `EXPECT_EQ` for floats.
+        *   In `memory_tier_manager_test.cpp`, change `EXPECT_EQ(mgr.getTierUtilization(...), 0.0f)` to `EXPECT_NEAR(mgr.getTierUtilization(...), 0.0f, 1e-6)`. This allows for tiny floating-point inaccuracies.
+        *   Better yet, in `MemoryTier::deallocate`, when you merge blocks and recalculate `used_space_`, if `used_space_` is very small (e.g., less than a few bytes), just clamp it to `0`. This ensures a fully deallocated tier has exactly `0.0f` utilization.
 
-*   **Problem:** The test `MemoryTierManagerTest.PromotionAndDemotion` fails with `Expected: (promoted) != (nullptr), actual: NULL`. This is the root cause. Your promotion function is failing and returning `nullptr`.
-*   **Analysis:** Looking at `memory/memory_tier.cpp`, the `promoteToTier` function fails if `dst_tier->allocate(block->size)` returns `nullptr`. This means either the destination tier is full, or the logic for finding a free block is busted.
-*   **Action:**
-    1.  **Check Allocation Logic:** In `MemoryTier::findFreeBlock`, add logging to see what `block->size` and `size` are. It's likely not finding a contiguous block big enough.
-    2.  **Check Defragmentation:** Your `defragment()` logic is supposed to be the fallback. The test failure suggests it's not working correctly or not being triggered properly. Your test output shows utilization is a tiny non-zero number when it should be zero. This suggests small, un-merged free blocks are left over, fragmenting the tier.
-    3.  **Fix Utilization Calculation:** The test fails with `Expected equality of these values: mgr.getTierUtilization(MemoryTierEnum::MTM)` being `0.000244...` vs `0.0f`. This means after a "promotion," the source tier isn't fully empty. The `deallocate` function in `memory_tier.cpp` is probably not updating `used_space_` correctly or floating-point errors are accumulating.
-        *   **Hotfix:** In `MemoryTier::calculateUtilization()`, add a check: `if (util < kUtilizationEpsilon) return 0.0f;`. This will fix the test assertion but the underlying bug is likely in `deallocate` or `mergeAdjacentBlocks`.
+### **Phase 5: Clean Up Your Shit**
 
----
+You have hundreds of warnings. They are noise that hides real problems.
 
-### **Phase 3: Clean Up the Noise (Code Hygiene)**
-
-Now, let's silence the non-critical warnings so you can see real issues in the future.
-
-#### ✅ **To-Do #4: Suppress External Library Warnings**
-
-*   **Problem:** The report is full of warnings from `/usr/include/` and `extern/`. You don't want to fix system or third-party library code.
-*   **Action:** In your root `CMakeLists.txt`, when you specify include directories for external libraries, use the `SYSTEM` keyword. This tells the compiler to treat them as system headers and suppress warnings.
-    *   **Example:**
+1.  **Enable Strict Compiler Flags:**
+    *   **Goal:** Stop ignoring warnings.
+    *   **Action:** In your root `CMakeLists.txt`, add:
         ```cmake
-        # Change this:
-        # target_include_directories(sep_engine PRIVATE extern/crow/include)
-        
-        # To this:
-        target_include_directories(sep_engine SYSTEM PRIVATE extern/crow/include)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            add_compile_options(-Wall -Wextra -Werror)
+        endif()
         ```
-    *   Do this for `pipewire`, `crow`, `asio`, `glm`, etc.
-
-#### ✅ **To-Do #5: Fix Widespread `unused parameter` and `deadcode` Warnings**
-
-*   **Problem:** You have hundreds of `unused parameter` and `deadcode.DeadStores` warnings. They're noisy and hide real bugs.
-*   **Action:**
-    1.  For unused parameters in function definitions, either remove the variable name (e.g., `void func(int /* a */)`) or use `[[maybe_unused]]` (e.g., `void func([[maybe_unused]] int a)`).
-    2.  For "Value stored... is never read" (`deadcode`), just delete the line where the variable is assigned. It's useless code.
-
----
-
-Start with Phase 1. Don't even think about the tests until it compiles without a single `CRITICAL` error. Then move to Phase 2 and focus entirely on `memory_tier_manager.cpp` and `memory_tier.cpp`. You've got this. Break it down, tackle one problem at a time, and you'll get it running.
+    *   This will force you to fix all the `unused parameter` and `reorder-ctor` warnings. It's tedious, but it will make your code infinitely cleaner and more stable. Use `(void)param;` or `[[maybe_unused]]` for unused parameters.

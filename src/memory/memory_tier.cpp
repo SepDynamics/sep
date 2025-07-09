@@ -152,18 +152,42 @@ namespace sep::memory
 
     MemoryBlock *MemoryTier::allocate(std::size_t size)
     {
+        auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
+        if (logger)
+        {
+            LOG_DEBUG(logger, "TIER {}: Attempting to allocate {} bytes.",
+                     static_cast<int>(config_.type), size);
+        }
+        
         // Find a suitable free block
         MemoryBlock *block = findFreeBlock(size);
         if (!block)
         {
+            if (logger)
+            {
+                LOG_DEBUG(logger, "TIER {}: No free block found for size {}. Fragmentation: {:.4f}",
+                         static_cast<int>(config_.type), size, calculateFragmentation());
+            }
+            
             // Try defragmentation if no suitable block found
             defragment();
             block = findFreeBlock(size);
             if (!block)
             {
+                if (logger)
+                {
+                    LOG_ERROR(logger, "TIER {}: Allocation FAILED even after defrag.",
+                             static_cast<int>(config_.type));
+                }
                 ::sep::metrics::allocationFailures().value++;
                 return nullptr;  // Still no suitable block
             }
+        }
+        
+        if (logger)
+        {
+            LOG_DEBUG(logger, "TIER {}: Allocation SUCCEEDED.",
+                     static_cast<int>(config_.type));
         }
 
         // Split block if it's significantly larger than requested
@@ -331,7 +355,7 @@ namespace sep::memory
             // ensure it is still allocated before attempting to update its metrics.
             if (blk && blk->allocated)
             {
-                mgr.updateBlockMetrics(blk, blk->coherence, blk->stability, blk->generation, 1.0f);
+                mgr.updateBlockProperties(blk, blk->coherence, blk->stability, blk->generation, blk->weight);
             }
         }
         mgr.rebuildLookup();

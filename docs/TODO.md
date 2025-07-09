@@ -1,144 +1,148 @@
-**Verification:**
+### **High-Level Goal**
 
-*   **Execute `ninja clean`** to ensure a fresh build.
-*   **Run `cd /sep/build && export CC=gcc-14 CXX=g++-14 && cmake .. -G Ninja -DSEP_BUILD_TESTS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON` 
-*   **Execute `cd /sep && ninja -j$(nproc) 2>&1 | tee /sep/output/build_log.txt`
-*   **CRITICAL CHECK:** Ensure zero `FAILED:` lines in the build log.
-*   **SECONDARY CHECK:** Review `report.md` for any remaining critical/high severity defects related to these fixes. Expected warnings (from PipeWire headers etc.) can be deferred.
+Create a standalone executable named `sep_workbench` that opens a window and allows interactively running and switching between all the engine's demos.
 
 ---
 
-### **Technical Checklist: Build Unblockage & Core Schema Alignment**
+## **Phase 1: Foundation & Compilation Fixes**
 
-**Phase:** Emergency Build Fix
-**Target:** Compile-time Stability
+**Objective:** Get a minimal `sep_workbench` executable to compile and link successfully. This phase addresses the errors found in the `build_log.txt`.
 
-1.  **Refactor `MemoryTierEnum` Canonical Definition:**
-    *   **Action:** Move the *entire* `enum class MemoryTierEnum : int { ... };` definition from `src/core/types.h` to `src/memory/types.h`, placing it directly within `namespace sep::memory { ... }`.
-    *   **Action:** In `src/core/types.h`, add `#include "memory/types.h"` and ensure all references within `src/core/types.h` (e.g., `MemoryThresholdConfig` members) now use the fully qualified name `::sep::memory::MemoryTierEnum`.
-    *   **Action:** In `src/blender/types.h`, `src/memory/memory_tier.hpp`, `src/memory/memory_tier_manager.hpp`, `src/quantum/processor.h`, `src/memory/quantum_coherence_manager.h`, `src/quantum/quantum_coherence_manager.cpp`, and `src/quantum/quantum_processor_qfh.h` (and any other affected headers/source files), update existing `using ::sep::MemoryTierEnum;` to `using sep::memory::MemoryTierEnum;` and ensure direct uses of `MemoryTierEnum` are replaced with `sep::memory::MemoryTierEnum` or an appropriate local `using` alias, referencing the canonical definition.
+*   **Task 1.1: Set up the Workbench Executable**
+    *   Create a new directory: `examples/workbench`.
+    *   Move the demo source files (`src/demos/*.cpp`, `src/demos/*.hpp`) into `examples/workbench/demos/`.
+    *   Create a new `examples/workbench/CMakeLists.txt` file.
+    *   Define a new executable target `sep_workbench` in this new `CMakeLists.txt`. This target should compile a new `main.cpp` and all the demo files.
+    *   In the root `CMakeLists.txt`, add `add_subdirectory(examples/workbench)`.
 
-2.  **Align `APIConfig` Structure in `core/types.h`:**
-    *   **Action:** Within `src/core/types.h`, add the following nested struct definitions and member declarations to `struct APIConfig`:
-        ```cpp
-        // Add these struct definitions within namespace sep::config { ... }
-        struct RateLimitConfig {
-            int requests_per_minute = 60;
-            bool enabled = true;
-        };
+*   **Task 1.2: Fix Namespace and Include Errors**
+    *   **File:** `examples/workbench/demos/digital_physics_demo.hpp`
+        *   **Problem:** `sep::pattern` is not a valid namespace for `PatternData`.
+        *   **Action:** Include the correct header `quantum/data.hpp` and change `std::vector<sep::pattern::PatternData> grid_;` to use the correct type. Based on `quantum/data.hpp`, the type is `sep::pattern::PatternData`. The error is likely a missing include. Ensure `#include "quantum/data.hpp"` is present.
+    *   **File:** `examples/workbench/demos/memory_garden.hpp`
+        *   **Problem:** `MemoryTierManager` and `QuantumCoherenceManager` are not declared.
+        *   **Action:** Add the necessary includes:
+            ```cpp
+            #include "memory/memory_tier_manager.hpp"
+            #include "memory/quantum_coherence_manager.h"
+            ```
+    *   **File:** `examples/workbench/demos/audio_visualizer.hpp`
+        *   **Problem:** Incomplete types for `AudioCapture` and `AudioPipeline`.
+        *   **Action:** Replace the local forward declarations in the `workbench` namespace with includes for the real engine components:
+            ```cpp
+            #include "audio/capture.h"
+            #include "audio/pipeline.h"
+            ```
+        *   This will also resolve the `std::unique_ptr` assignment errors, as the types will now match.
 
-        struct AuthConfig {
-            bool enabled = false;
-            std::vector<std::string> tokens;
-        };
-
-        struct ResponseModulationConfig {
-            bool enabled{true};
-            float coherence_threshold{0.7f};
-            bool simplify_low_coherence{true};
-            int max_detail_level{3};
-        };
-
-        struct OllamaConfig { // This one might already be here, verify
-            bool enabled{false};
-            std::string host{"http://127.0.0.1:11434"};
-            std::string model{"llama2"};
-            std::size_t batch_size{1};
-            std::size_t context_window{512};
-            // Nested GPUConfig if used inside OllamaConfig, define that too
-            struct GPUConfig {
-                bool enabled{false};
-                float memory_fraction{0.0f};
-            } gpu{};
-        };
-
-        // Add these members to struct APIConfig { ... }
-        // (Ensure proper positioning, usually at the end)
-        AuthConfig cors; // Assuming 'cors' maps to AuthConfig structure
-        RateLimitConfig rate_limit;
-        ResponseModulationConfig response_modulation; // This one is already in snapshot code
-        OllamaConfig ollama; // This one is already in snapshot code
+*   **Task 1.3: Fix GLM Experimental Extension Errors**
+    *   **Problem:** Demos like `cosmo_sim.cpp` use GLM features that require an explicit opt-in.
+    *   **Action:** In `examples/workbench/CMakeLists.txt`, add a compile definition for the `sep_workbench` target:
+        ```cmake
+        target_compile_definitions(sep_workbench PRIVATE GLM_ENABLE_EXPERIMENTAL)
         ```
-    *   **Rationale:** The `APIConfig` in `core/types.h` is the definitive source for system configuration. Any fields accessed by the API or engine initialization should be explicitly defined there to avoid circular dependencies with `api/types.h`.
 
-3.  **Correct `ollama::OllamaClient` Constructor Signature:**
-    *   **File:** `src/api/client.h`
-    *   **Action:** Modify the `OllamaClient` constructor declaration to directly accept the `OllamaConfig` type defined in `sep::config` namespace:
-        *   **Change:** `explicit OllamaClient(const sep::ollama::OllamaConfig &config);`
-        *   **To:** `explicit OllamaClient(const sep::config::OllamaConfig &config);`
+*   **Task 1.4: Resolve Ambiguous Type `MemoryTierEnum`**
+    *   **Problem:** `MemoryTierEnum` is defined or used in multiple headers, causing ambiguity.
+    *   **Action:** Throughout the codebase (especially in `blender` and `memory` headers/sources), change all usages of `MemoryTierEnum` to the fully qualified name `sep::memory::MemoryTierEnum`.
 
-4.  **Mitigate Missing `sep::testbed` Functions:**
-    *   **File:** `src/api/sep_engine.cpp`
-    *   **Action:** Locate and comment out or provide dummy/mock implementations for the calls to `sep::testbed::validate_contexts` and `sep::testbed::blend_embeddings`.
-        *   **Example for `validateContexts` block:**
-            ```cpp
-            // auto report = sep::testbed::validate_contexts(request_data["contexts"]);
-            // Replace with dummy success response for compilation:
-            nlohmann::json report_dummy;
-            report_dummy["overall_valid"] = true;
-            report_dummy["invalid_indices"] = nlohmann::json::array();
-            nlohmann::json result_final;
-            result_final["success"]         = true;
-            result_final["valid"]           = report_dummy["overall_valid"];
-            result_final["context_count"]   = request_data["contexts"].size();
-            result_final["invalid_indices"] = report_dummy["invalid_indices"];
-            return result_final;
-            ```
-        *   **Example for `blendContexts` block:**
-            ```cpp
-            // auto blend_report = sep::testbed::blend_embeddings(embeddings, weights);
-            // Replace with dummy success response for compilation:
-            nlohmann::json blend_report_dummy;
-            blend_report_dummy["success"] = true;
-            blend_report_dummy["blended"] = {0.0, 0.0, 0.0}; // Example dummy blended embedding
-            blend_report_dummy["coherence"] = 0.7; // Example dummy coherence
+*   **Task 1.5: Fix `DemoManager` Singleton Access**
+    *   **Problem:** The `DemoManager` has a private constructor, but `main.cpp` tries to instantiate it directly.
+    *   **Action:** Modify `main.cpp` to access the `DemoManager` via its `getInstance()` static method.
+        ```cpp
+        // Change this:
+        // sep::workbench::DemoManager demo_manager;
+        // To this:
+        auto& demo_manager = sep::workbench::DemoManager::getInstance();
+        ```
 
-            double ts = 0.0;
-            // ... (original timestamp blending logic for 'ts' if desired)
-            
-            nlohmann::json blend_final;
-            blend_final["embedding"] = blend_report_dummy["blended"];
-            blend_final["coherence"] = blend_report_dummy["coherence"];
-            blend_final["metadata"]  = { {"timestamp", ts} };
-            blend_final["type"]       = "blended";
-            blend_final["blended_context_id"] = generateId("blend");
+## **Phase 2: Window and Application Loop**
 
-            nlohmann::json result_final;
-            result_final["success"] = true;
-            result_final["result"]  = blend_final;
-            return result_final;
-            ```
-    *   **Rationale:** These are external dependencies not correctly integrated for the core `sep_engine` target. Bypassing them allows the core compilation to proceed. A future task should involve proper integration or removal if not truly needed at runtime.
+**Objective:** Create the main application entry point and get a window to open.
 
-5.  **Silence `unused-parameter` Warnings:**
-    *   **Files:** `src/api/client.cpp`, `src/api/server.cpp`, `src/api/sep_engine.cpp`.
-    *   **Action:** For every parameter explicitly identified as unused by the compiler (`[-Werror=unused-parameter]`), add a `(void)parameter_name;` cast at the beginning of the function body.
-        *   **Example from `src/api/client.cpp:145:46`:**
-            ```cpp
-            void Client::updateMetrics(const APIRequest &request, const APIResponse &response) {
-                (void)request; // Silence unused parameter warning
-                std::lock_guard<std::mutex> lock(impl_->mutex);
-                // ... rest of the function ...
-            }
-            ```
-        *   **Example from `src/api/server.cpp:205:84` and `266:50`:**
-            ```cpp
-            void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& response_body, int64_t duration) {
-                (void)response_body; // Silence unused parameter warning
-                // ... rest of the function ...
-            }
-            // And for the crow::request overload:
-            void SEPApiServer::logRequest(const ::crow::request &req, int status_code, const std::string &response_body, int64_t duration_ms) {
-                (void)response_body; // Silence unused parameter warning
-                // ... rest of the function ...
-            }
-            ```
-        *   **Example from `src/api/sep_engine.cpp:108:68`:**
-            ```cpp
-            nlohmann::json SepEngine::initialize(const sep::config::APIConfig& config) {
-                (void)config; // Silence unused parameter warning
-                if (impl_->initialized) {
-                    // ... rest of the function ...
-                }
-            }
-            ```
+*   **Task 2.1: Create the Main Entry Point**
+    *   Create `examples/workbench/main.cpp`.
+    *   This file will contain the `main()` function.
+
+*   **Task 2.2: Implement Window Creation**
+    *   In `examples/workbench/main.cpp`, use the existing `sep::workbench::Window` class (`src/window.h`, `src/window.cpp`) to create and manage the main application window.
+    *   Initialize GLFW and GLEW.
+
+*   **Task 2.3: Create the Main Loop**
+    *   Implement a standard `while (!window.shouldClose())` loop.
+    *   Inside the loop, call `glfwPollEvents()`, clear the screen (`glClear`), and swap buffers (`window.swapBuffers()`).
+    *   This will give you a blank window that can be closed.
+
+## **Phase 3: Demo Management Framework**
+
+**Objective:** Implement the core logic to load, run, and switch between demos.
+
+*   **Task 3.1: Refine the `Demo` Base Class**
+    *   **File:** `examples/workbench/demos/demo_manager.hpp`
+    *   **Action:** Solidify the `Demo` abstract base class. It should have the following pure virtual methods:
+        ```cpp
+        class Demo {
+        public:
+            virtual ~Demo() = default;
+            virtual void on_load() = 0;      // Called when the demo becomes active
+            virtual void on_unload() = 0;    // Called when the demo is switched out
+            virtual void on_update(float dt) = 0;
+            virtual void on_render() = 0;
+            virtual void on_key_press(int key) = 0; // For keyboard input
+        };
+        ```
+
+*   **Task 3.2: Implement the `DemoManager`**
+    *   **File:** `examples/workbench/demos/demo_manager.cpp`
+    *   **Action:** Implement the logic for `registerDemo`, `switchToDemo`, and `update`/`render` methods. `switchToDemo` should call `on_unload()` on the old demo and `on_load()` on the new one. The main loop will call `on_update` and `on_render` on the currently active demo.
+
+*   **Task 3.3: Register Demos**
+    *   **File:** `examples/workbench/main.cpp`
+    *   **Action:** After initializing the `DemoManager`, call `registerDemo` for each demo you want to include. Use a unique string key (e.g., "genesis_pattern") and a lambda that creates an instance of the demo class.
+
+## **Phase 4: UI Integration (Dear ImGui)**
+
+**Objective:** Add a UI overlay for controls and metrics.
+
+*   **Task 4.1: Add Dear ImGui Dependency**
+    *   Add the Dear ImGui source files to your `third_party` directory.
+    *   Update `examples/workbench/CMakeLists.txt` to compile and link the ImGui sources and its GLFW/OpenGL3 backends.
+
+*   **Task 4.2: Integrate ImGui into the Main Loop**
+    *   In `main.cpp`, initialize ImGui after the GLFW window is created.
+    *   In the main loop, call `ImGui_ImplOpenGL3_NewFrame()`, `ImGui_ImplGlfw_NewFrame()`, and `ImGui::NewFrame()` at the beginning.
+    *   After rendering the demo, call `ImGui::Render()` and `ImGui_ImplOpenGL3_RenderDrawData()`.
+
+*   **Task 4.3: Create the Main UI Panel**
+    *   In the main loop, create an ImGui window (`ImGui::Begin()`).
+    *   Inside this window, add buttons for each registered demo. When a button is clicked, call `DemoManager::getInstance().switchToDemo("demo_name")`.
+    *   Add a section to display real-time metrics (FPS, memory usage, etc.).
+
+## **Phase 5: Port and Implement Demos**
+
+**Objective:** Adapt each existing demo to the new framework. For each demo:
+
+*   **Task 5.1: Create Demo Class**
+    *   Create a new class (e.g., `GenesisPatternDemo`) that inherits from `sep::workbench::Demo`.
+    *   Move the logic from the old `demos/*.cpp` file into the new class's methods (`on_load`, `on_update`, `on_render`, etc.).
+
+*   **Task 5.2: The "Genesis Pattern" Demo**
+    *   **Action:** Implement `GenesisPatternDemo`.
+    *   `on_load()`: Initialize the patterns and quantum state.
+    *   `on_update(dt)`: Run the evolution logic.
+    *   `on_render()`: Get the pattern data and pass it to the main `Renderer` to be drawn.
+    *   Use ImGui to add sliders for `evolution_rate` and toggles for `auto_evolve`.
+
+*   **Task 5.3: The "Audio-Visual Synthesizer" Demo**
+    *   **Action:** Implement `AudioVisualizerDemo`.
+    *   `on_load()`: Initialize the `sep::audio::AudioCapture` and `sep::audio::AudioPipeline` components.
+    *   `on_update(dt)`: Process the audio data from the pipeline into visual patterns.
+    *   `on_render()`: Render the visual patterns.
+
+*   **Task 5.4: The "Memory Garden" Demo**
+    *   **Action:** Implement `MemoryGardenDemo`.
+    *   `on_load()`: Create initial patterns in different memory tiers (STM, MTM, LTM).
+    *   `on_render()`: Visualize the three tiers as distinct spatial regions. Render patterns within their respective regions. Draw lines between related patterns.
+
+*   **Task 5.5: Port Remaining Demos**
+    *   **Action:** Repeat the process for all other demos (`Annealing`, `Flocking`, `Neural`, etc.), creating a dedicated class for each and registering it with the `DemoManager`.

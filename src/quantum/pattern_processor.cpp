@@ -43,7 +43,6 @@ public:
             evolved_state.generation++;
 
             // Determine memory tier based on coherence and stability
-            ::sep::memory::MemoryTierEnum previous_tier = evolved_state.memory_tier;
             if (evolved_state.coherence >= pattern::LTM_COHERENCE_THRESHOLD &&
                 evolved_state.stability >= sep::quantum::STABILITY_THRESHOLD) {
                 evolved_state.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
@@ -103,16 +102,17 @@ private:
 };
 }
 
-std::unique_ptr<PatternQuantumProcessorImpl> createPatternQuantumProcessor(
-    const ProcessingConfig& config)
-{
-    QuantumProcessor::Config qp_cfg{};
-    qp_cfg.max_qubits = config.max_patterns;
-    qp_cfg.decoherence_rate = config.mutation_rate;
-    qp_cfg.measurement_threshold = config.ltm_coherence_threshold;
-    qp_cfg.enable_gpu = config.enable_cuda;
-    return std::make_unique<PatternQuantumProcessorImpl>(qp_cfg);
-}
+// Function commented out to fix "defined but not used" error
+// std::unique_ptr<PatternQuantumProcessorImpl> createPatternQuantumProcessor(
+//     const ProcessingConfig& config)
+// {
+//     QuantumProcessor::Config qp_cfg{};
+//     qp_cfg.max_qubits = config.max_patterns;
+//     qp_cfg.decoherence_rate = config.mutation_rate;
+//     qp_cfg.measurement_threshold = config.ltm_coherence_threshold;
+//     qp_cfg.enable_gpu = config.enable_cuda;
+//     return std::make_unique<PatternQuantumProcessorImpl>(qp_cfg);
+// }
 
 } // namespace sep::quantum
 

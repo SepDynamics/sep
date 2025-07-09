@@ -14,6 +14,15 @@
 
 namespace crow {
 
+    // Define the missing LogLevel enum
+    enum class LogLevel {
+        Debug,
+        Info,
+        Warning,
+        Error,
+        Critical
+    };
+
     class LogHandler {
     public:
         LogHandler();

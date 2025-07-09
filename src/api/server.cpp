@@ -202,8 +202,9 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
   return error_response.dump();
 }
 
-void SEPApiServer::logRequest(const HttpRequest& req, int code, [[maybe_unused]] const std::string& response_body,
-                               int64_t duration) {
+void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& response_body,
+                              int64_t duration)
+{
     if (!logger_) return;
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 
@@ -262,7 +263,8 @@ nlohmann::json SEPApiServer::handleCrowError(const std::string& message,
 }
 
 void SEPApiServer::logRequest(const ::crow::request& req, int status_code,
-                               [[maybe_unused]] const std::string& response_body, int64_t duration_ms) {
+                              const std::string& response_body, int64_t duration_ms)
+{
     if (!logger_) return;
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 

@@ -117,14 +117,12 @@ public:
     std::vector<TierMigration> optimizeMemoryLayout() {
         std::vector<TierMigration> migrations;
         
-        // Analyze coherence distribution across tiers
-        auto tier_analysis = analyzeTierCoherence();
+        analyzeTierCoherence();
         
-        // Identify patterns that should migrate
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
             const auto& data = pair.second;
-            ::sep::memory::MemoryTierEnum target_tier = determineOptimalTier(data);
+            memory::MemoryTierEnum target_tier = determineOptimalTier(data);
 
             if (target_tier != data.current_tier) {
                 TierMigration migration;
@@ -132,7 +130,7 @@ public:
                 migration.from_tier = data.current_tier;
                 migration.to_tier = target_tier;
                 migration.coherence = data.coherence;
-                migration.reason = determineMigrationReason(data, target_tier);
+                migration.reason = determineMigrationReason(data);
                 migrations.push_back(migration);
             }
         }
@@ -468,7 +466,7 @@ private:
                     migration.from_tier = current_tier;
                     migration.to_tier = target_tier;
                     migration.coherence = data.coherence;
-                    migration.reason = determineMigrationReason(data, target_tier);
+                    migration.reason = determineMigrationReason(data);
                     
                     migrations.push_back(migration);
                     
@@ -545,8 +543,7 @@ private:
         }
     }
     
-    MigrationReason determineMigrationReason(const QuantumCoherenceManager::PatternCoherenceData& data,
-                                            sep::memory::MemoryTierEnum tier_analysis) const {
+    MigrationReason determineMigrationReason(const QuantumCoherenceManager::PatternCoherenceData& data) const {
         if (data.coherence > 0.9f) return MigrationReason::HighCoherence;
         if (data.stability > 0.9f) return MigrationReason::HighStability;
         if (data.access_count > global_tick_ / 10) return MigrationReason::FrequentAccess;

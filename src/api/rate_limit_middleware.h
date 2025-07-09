@@ -20,8 +20,12 @@ public:
     // Added set_config method
     void set_config(const sep::api::RateLimitConfig& config);
 
-    void before_handle(::crow::request& req, ::crow::response& res, context& ctx);
-    void after_handle(::crow::request& req, ::crow::response& res, context& ctx);
+    // Use forward declarations to avoid direct dependency on crow types
+    template<typename Req, typename Res, typename Ctx>
+    void before_handle(Req& req, Res& res, Ctx& ctx);
+    
+    template<typename Req, typename Res, typename Ctx>
+    void after_handle(Req& req, Res& res, Ctx& ctx);
 
 private:
     std::unique_ptr<IRateLimiter> rate_limiter_;

@@ -687,7 +687,8 @@ namespace sep::memory
         // STM should accept new patterns (generation = 0)
         // Only MTM and LTM have minimum generation requirements
         // Check generation count instead of memory_tier and generation
-        if (pattern.generation_count < m_min_generations) return false;
+        // Handle negative m_min_generations by defaulting to 0, then properly cast to uint32_t to avoid sign comparison warning
+        if (pattern.generation_count < static_cast<uint32_t>(m_min_generations < 0 ? 0 : m_min_generations)) return false;
         return true;
     }
 

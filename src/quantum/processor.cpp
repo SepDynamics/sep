@@ -229,15 +229,18 @@ public:
 
     void removeWeakPatterns() {
         std::lock_guard<std::mutex> lock(mutex_);
-        patterns_.erase(std::remove_if(patterns_.begin(), patterns_.end(),
-            [this](const Pattern& p) {
+        patterns_.erase(
+            std::remove_if(patterns_.begin(), patterns_.end(),
+                           [](const Pattern& p) {  // Removed 'this' capture since it's not used
 #if SEP_BUILD_QUANTUM
-                auto qcfg = sep::config::ConfigManager::getInstance().getQuantumConfig();
+                               auto qcfg =
+                                   sep::config::ConfigManager::getInstance().getQuantumConfig();
 #else
                 sep::config::QuantumThresholdConfig qcfg{};
 #endif
-                return p.quantum_state.coherence < qcfg.mtm_coherence_threshold / 2;
-            }), patterns_.end());
+                               return p.quantum_state.coherence < qcfg.mtm_coherence_threshold / 2;
+                           }),
+            patterns_.end());
         rebuildPatternMap();
     }
 
@@ -283,6 +286,10 @@ public:
                 case ::sep::memory::MemoryTierEnum::STM: stm_count++; break;
                 case ::sep::memory::MemoryTierEnum::MTM: mtm_count++; break;
                 case ::sep::memory::MemoryTierEnum::LTM: ltm_count++; break;
+                case ::sep::memory::MemoryTierEnum::UNIFIED:
+                case ::sep::memory::MemoryTierEnum::HOST:
+                case ::sep::memory::MemoryTierEnum::DEVICE:
+                    break;
             }
         }
         status += "  STM patterns: " + std::to_string(stm_count) + "\n";

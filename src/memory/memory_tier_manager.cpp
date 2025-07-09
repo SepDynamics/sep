@@ -4,6 +4,18 @@
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/types.h"
+#include "quantum/data.hpp"
+#include "quantum/pattern.h"
+#include "quantum/types.h"
+
+namespace sep {
+namespace pattern {
+    struct PatternData;
+}
+namespace quantum {
+    struct Pattern;
+}
+}
 
 namespace sep
 {
@@ -319,15 +331,16 @@ namespace sep
     {
         if (!block || !block->allocated) return SEPResult::INVALID_ARGUMENT;
 
-        MemoryTierEnum target = block->tier;
+        // Determine the target tier for promotion
+        MemoryTierEnum next_tier;
         if (block->tier == MemoryTierEnum::STM)
-            target = MemoryTierEnum::MTM;
+            next_tier = MemoryTierEnum::MTM;
         else if (block->tier == MemoryTierEnum::MTM)
-            target = MemoryTierEnum::LTM;
+            next_tier = MemoryTierEnum::LTM;
         else
             return SEPResult::INVALID_ARGUMENT;
 
-        return promoteToTier(block, target, out_block);
+        return promoteToTier(block, next_tier, out_block);
     }
 
     SEPResult MemoryTierManager::demoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
@@ -596,105 +609,91 @@ namespace sep
     void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b, float strength)
     {
         std::lock_guard<std::mutex> lock(relationships_mutex);
-        pattern_relationships_[id_a][id_b] = static_cast<float>(strength);
-        pattern_relationships_[id_b][id_a] = static_cast<float>(strength);
+        pattern_relationships_[id_a][id_b] = strength;
+        pattern_relationships_[id_b][id_a] = strength;
     }
 
-#ifndef SEP_TESTBED_STUBS
     void MemoryTierManager::cleanupExpiredPatterns()
     {
-        std::lock_guard<std::mutex> reg_lock(registry_mutex);
-        for (auto it = pattern_registry_.begin(); it != pattern_registry_.end();)
-        {
-            if (it->second->coherence < config_.demote_threshold)
-            {
-                std::size_t id = it->first;
-                it = pattern_registry_.erase(it);
-                std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-                pattern_relationships_.erase(id);
-                for (auto &pair : pattern_relationships_)
-                {
-                    pair.second.erase(id);
-                }
-            }
-            else
-            {
-                ++it;
+        std::lock_guard<std::mutex> lock(registry_mutex);
+        std::vector<std::size_t> to_remove;
+        
+        // Identify expired patterns based on low coherence or stability
+        for (const auto& pair : pattern_registry_) {
+            const auto& pattern = pair.second;
+            if (pattern->coherence < config_.demote_threshold ||
+                pattern->stability < config_.demote_threshold) {
+                to_remove.push_back(pair.first);
             }
         }
+        
+        // Remove them from registry and relationships
+        for (auto id : to_remove) {
+            removePattern(id);
+        }
     }
-
+    
     void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier, size_t max_count)
     {
-        MemoryTier *t = getTier(tier);
-        if (!t) return;
-
-        auto &patterns =
-            const_cast<std::unordered_map<size_t, PersistentPatternData> &>(t->getPatterns());
-
-        if (patterns.size() <= max_count) return;
-
-        std::vector<std::pair<size_t, float>> ranked;
-        ranked.reserve(patterns.size());
-        for (const auto &[id, pdata] : patterns) ranked.emplace_back(id, pdata.coherence);
-
-        std::sort(ranked.begin(), ranked.end(),
-                  [](const auto &a, const auto &b) { return a.second > b.second; });
-
-        for (size_t i = max_count; i < ranked.size(); ++i)
-        {
-            size_t id = ranked[i].first;
-            t->removePattern(id);
-            std::lock_guard<std::mutex> reg_lock(registry_mutex);
-            pattern_registry_.erase(id);
-            std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-            pattern_relationships_.erase(id);
-            for (auto &pair : pattern_relationships_)
-            {
-                pair.second.erase(id);
+        std::lock_guard<std::mutex> lock(registry_mutex);
+        
+        // First filter patterns by the specified tier
+        std::vector<std::pair<std::size_t, float>> tier_patterns;
+        for (const auto& pair : pattern_registry_) {
+            if (pair.second->memory_tier == tier) {
+                // Use coherence * stability as the priority score
+                float priority = pair.second->coherence * pair.second->stability;
+                tier_patterns.emplace_back(pair.first, priority);
             }
         }
-    }
-
-    void MemoryTierManager::pruneWeakRelationships()
-    {
-        std::lock_guard<std::mutex> lock(relationships_mutex);
-        for (auto &[id, relations] : pattern_relationships_)
-        {
-            for (auto it = relations.begin(); it != relations.end();)
-            {
-                if (it->second < config_.demote_threshold)
-                {  // Reuse demote threshold
-                    it = relations.erase(it);
-                }
-                else
-                {
-                    ++it;
-                }
+        
+        // If we have more patterns than max_count, remove the lowest priority ones
+        if (tier_patterns.size() > max_count) {
+            // Sort by priority (ascending)
+            std::sort(tier_patterns.begin(), tier_patterns.end(),
+                [](const auto& a, const auto& b) { return a.second < b.second; });
+                
+            // Remove lowest priority patterns until we reach max_count
+            size_t count_to_remove = tier_patterns.size() - max_count;
+            for (size_t i = 0; i < count_to_remove; ++i) {
+                removePattern(tier_patterns[i].first);
             }
         }
     }
 
     void MemoryTierManager::calculateRelationshipCoherence()
     {
-        std::lock_guard<std::mutex> reg_lock(registry_mutex);
+        std::lock_guard<std::mutex> lock(registry_mutex);
         std::lock_guard<std::mutex> rel_lock(relationships_mutex);
-
-        for (auto &[id, pattern_ptr] : pattern_registry_)
-        {
-            pattern_ptr->coherence = 0.0f;
-            if (pattern_relationships_.count(id))
-            {
-                const auto &rels = pattern_relationships_.at(id);
-                if (!rels.empty())
-                {
-                    double sum = 0.0;
-                    for (const auto &r : rels) sum += r.second;
-                    pattern_ptr->coherence = static_cast<float>(sum / rels.size());
-                }
+        
+        // For each pattern, update its coherence based on its relationships
+        for (auto& pair : pattern_registry_) {
+            std::size_t id = pair.first;
+            auto& pattern = pair.second;
+            
+            // Skip if no relationships
+            auto rel_it = pattern_relationships_.find(id);
+            if (rel_it == pattern_relationships_.end() || rel_it->second.empty()) {
+                continue;
+            }
+            
+            // Calculate average relationship strength
+            float total_strength = 0.0f;
+            size_t count = 0;
+            
+            for (const auto& rel_pair : rel_it->second) {
+                total_strength += rel_pair.second;
+                count++;
+            }
+            
+            if (count > 0) {
+                // Adjust coherence based on relationship strength
+                float avg_strength = total_strength / static_cast<float>(count);
+                
+                // Boost coherence based on relationship strength (max 20% boost)
+                pattern->coherence = std::min(1.0f, pattern->coherence * (1.0f + 0.2f * avg_strength));
             }
         }
     }
-#endif  // SEP_TESTBED_STUBS
 }  // namespace memory
 }  // namespace sep

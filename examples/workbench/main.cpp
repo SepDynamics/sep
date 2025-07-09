@@ -1,42 +1,51 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "demos/demo_manager.hpp"
+#include "../../src/demos/genesis_pattern.hpp"
+#include "../../src/demos/annealing_demo.hpp"
+#include "../../src/demos/cosmo_demo.hpp"
+#include "../../src/demos/flocking_demo.hpp"
+#include "../../src/demos/neural_demo.hpp"
+#include "../../src/demos/drug_discovery_demo.hpp"
+#include "../../src/demos/digital_physics_demo.hpp"
+#include "../../src/demos/memory_garden.hpp"
 
-#include "../../src/window.h"
+int main() {
+    auto& manager = sep::workbench::DemoManager::instance();
 
-int main()
-{
-    // Initialize GLFW
-    if (!glfwInit())
-    {
-        return -1;
-    }
+    manager.registerDemo("genesis", []() {
+        return std::make_unique<sep::workbench::GenesisPatternDemo>();
+    });
 
-    // Create window using sep::workbench::Window
-    sep::workbench::Window window(1280, 720, "SEP Workbench");
-    if (!window.getGLFWWindow())
-    {
-        glfwTerminate();
-        return -1;
-    }
-    window.makeContextCurrent();
+    manager.registerDemo("annealing", []() {
+        return std::make_unique<sep::workbench::AnnealingDemo>();
+    });
 
-    // Initialize GLEW after making context current
-    glewExperimental = GL_TRUE;
-    if (glewInit() != GLEW_OK)
-    {
-        glfwTerminate();
-        return -1;
-    }
+    manager.registerDemo("cosmos", []() {
+        return std::make_unique<sep::workbench::CosmoDemo>();
+    });
 
-    // Main loop
-    while (!window.shouldClose())
-    {
-        glfwPollEvents();
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        window.swapBuffers();
-    }
+    manager.registerDemo("flocking", []() {
+        return std::make_unique<sep::workbench::FlockingDemo>();
+    });
 
-    glfwTerminate();
+    manager.registerDemo("neural", []() {
+        return std::make_unique<sep::workbench::NeuralDemo>();
+    });
+
+    manager.registerDemo("drug_discovery", []() {
+        return std::make_unique<sep::workbench::DrugDiscoveryDemo>();
+    });
+
+    manager.registerDemo("digital_physics", []() {
+        return std::make_unique<sep::workbench::DigitalPhysicsDemo>();
+    });
+
+    manager.registerDemo("memory_garden", []() {
+        return std::make_unique<sep::workbench::MemoryGardenDemo>();
+    });
+
+    manager.switchToDemo("genesis");
+
+    // Placeholder for the application loop
+    // In the real application this would call manager.update(dt) and manager.render()
     return 0;
 }

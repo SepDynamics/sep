@@ -10,7 +10,6 @@
 #include <vector>
 
 using namespace sep::memory;
-using sep::MemoryTierEnum;
 using sep::SEPResult;
 
 class MemoryTierManagerTest : public ::testing::Test {
@@ -46,9 +45,9 @@ TEST_F(MemoryTierManagerTest, BasicAllocationAndDeallocation) {
     auto& manager = MemoryTierManager::getInstance();
     
     // Allocate a block in STM
-    MemoryBlock* block = manager.allocate(128, MemoryTierEnum::STM);
+    MemoryBlock* block = manager.allocate(128, sep::memory::MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
-    EXPECT_EQ(block->tier, MemoryTierEnum::STM);
+    EXPECT_EQ(block->tier, sep::memory::MemoryTierEnum::STM);
     EXPECT_EQ(block->size, 128);
     EXPECT_TRUE(block->allocated);
     
@@ -72,7 +71,7 @@ TEST_F(MemoryTierManagerTest, BlockPromotion) {
     auto& manager = MemoryTierManager::getInstance();
     
     // Allocate a block in STM
-    MemoryBlock* block = manager.allocate(256, MemoryTierEnum::STM);
+    MemoryBlock* block = manager.allocate(256, sep::memory::MemoryTierEnum::STM);
     ASSERT_NE(block, nullptr);
     
     // Initialize with test data
@@ -84,7 +83,7 @@ TEST_F(MemoryTierManagerTest, BlockPromotion) {
     // Update metrics to trigger promotion
     MemoryBlock* promoted = manager.updateBlockMetrics(block, 0.8f, 0.8f, 10, 1.0f);
     ASSERT_NE(promoted, nullptr);
-    EXPECT_EQ(promoted->tier, MemoryTierEnum::MTM);
+    EXPECT_EQ(promoted->tier, sep::memory::MemoryTierEnum::MTM);
     
     // Verify data was copied correctly
     uint8_t* promoted_data = static_cast<uint8_t*>(promoted->ptr);
@@ -99,7 +98,7 @@ TEST_F(MemoryTierManagerTest, BlockDemotion) {
     auto& manager = MemoryTierManager::getInstance();
     
     // Allocate a block in MTM
-    MemoryBlock* block = manager.allocate(256, MemoryTierEnum::MTM);
+    MemoryBlock* block = manager.allocate(256, sep::memory::MemoryTierEnum::MTM);
     ASSERT_NE(block, nullptr);
     
     // Initialize with test data
@@ -111,7 +110,7 @@ TEST_F(MemoryTierManagerTest, BlockDemotion) {
     // Update metrics to trigger demotion
     MemoryBlock* demoted = manager.updateBlockMetrics(block, 0.2f, 0.2f, 5, 0.5f);
     ASSERT_NE(demoted, nullptr);
-    EXPECT_EQ(demoted->tier, MemoryTierEnum::STM);
+    EXPECT_EQ(demoted->tier, sep::memory::MemoryTierEnum::STM);
     
     // Verify data was copied correctly
     uint8_t* demoted_data = static_cast<uint8_t*>(demoted->ptr);
@@ -126,9 +125,9 @@ TEST_F(MemoryTierManagerTest, TierUtilization) {
     auto& manager = MemoryTierManager::getInstance();
     
     // Initially tiers should be empty
-    EXPECT_NEAR(manager.getTierUtilization(MemoryTierEnum::STM), 0.0f, 0.001f);
-    EXPECT_NEAR(manager.getTierUtilization(MemoryTierEnum::MTM), 0.0f, 0.001f);
-    EXPECT_NEAR(manager.getTierUtilization(MemoryTierEnum::LTM), 0.0f, 0.001f);
+    EXPECT_NEAR(manager.getTierUtilization(sep::memory::MemoryTierEnum::STM), 0.0f, 0.001f);
+    EXPECT_NEAR(manager.getTierUtilization(sep::memory::MemoryTierEnum::MTM), 0.0f, 0.001f);
+    EXPECT_NEAR(manager.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f, 0.001f);
     
     // Allocate blocks to fill about 50% of STM
     std::vector<MemoryBlock*> blocks;
@@ -136,14 +135,14 @@ TEST_F(MemoryTierManagerTest, TierUtilization) {
     size_t target = manager.getSTM().getSize() / 2;
     
     while (allocated < target) {
-        MemoryBlock* block = manager.allocate(64, MemoryTierEnum::STM);
+        MemoryBlock* block = manager.allocate(64, sep::memory::MemoryTierEnum::STM);
         if (!block) break;
         blocks.push_back(block);
         allocated += 64;
     }
     
     // Check utilization is around 50% for STM
-    float util = manager.getTierUtilization(MemoryTierEnum::STM);
+    float util = manager.getTierUtilization(sep::memory::MemoryTierEnum::STM);
     EXPECT_GE(util, 0.4f);
     EXPECT_LE(util, 0.6f);
     

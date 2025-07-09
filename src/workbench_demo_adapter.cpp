@@ -1,9 +1,9 @@
 #include "workbench_demo_adapter.hpp"
 
 #include "renderer.h"
+#include "sep_engine_wrapper.h"
 #include "ui_manager.h"
 #include "window.h"
-// These includes are necessary to fix the incomplete type errors
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -13,12 +13,23 @@ namespace sep
     namespace workbench
     {
         GenesisPatternAdapter::GenesisPatternAdapter(Window* window, Renderer* renderer,
-                                                     UIManager* uiManager)
-            : window_(window), renderer_(renderer), uiManager_(uiManager)
-        {
-            // Seed the random number generator
-            std::srand(static_cast<unsigned int>(std::time(nullptr)));
-        }
+                                                              UIManager* uiManager)
+                     : window_(window), renderer_(renderer), uiManager_(uiManager), tick_(0)
+                 {
+                     // Initialize the SEP engine
+                     engine_ = createEngine();
+                    if (engine_)
+                    {
+                        engine_->initialize();
+                        engine_->setCudaEnabled(true);
+                        engine_->setMetricsEnabled(true);
+                        std::cout << "SEP Engine initialized successfully." << std::endl;
+                    }
+                    else
+                    {
+                        std::cerr << "Failed to create SEP Engine!" << std::endl;
+                    }
+                }
 
         GenesisPatternAdapter::~GenesisPatternAdapter() = default;
 
@@ -127,16 +138,18 @@ namespace sep
                 // Set unique IDs for the patterns
                 patterns_.back().id = "Pattern_" + std::to_string(i);
 
-                // Initialize with random values
+                // Initialize with deterministic values instead of random ones
                 patterns_.back().values.resize(16);
-                for (auto& val : patterns_.back().values)
+                for (int j = 0; j < 16; j++)
                 {
-                    val = ((float)rand() / RAND_MAX);
+                    // Use a deterministic pattern based on indices
+                    float val = (float)((i + j) % 10) / 10.0f;
+                    patterns_.back().values[j] = val;
                 }
 
-                // Initialize quantum state
+                // Initialize quantum state with deterministic values
                 patterns_.back().quantum_state.coherence = 0.5f;
-                patterns_.back().quantum_state.stability = ((float)rand() / RAND_MAX);
+                patterns_.back().quantum_state.stability = 0.5f + (float)(i % 5) / 10.0f;
             }
 
             std::cout << "Generated " << count << " patterns" << std::endl;
@@ -144,29 +157,60 @@ namespace sep
 
         void GenesisPatternAdapter::evolvePatterns(float dt)
         {
-            for (auto& pattern : patterns_)
-            {
-                // Evolve each pattern
-                pattern.evolve(evolution_rate_);
+            if (!engine_ || patterns_.empty()) {
+                return;
             }
 
-            // Occasionally add a new pattern (1% chance each evolution step)
-            if (rand() % 100 < 1 && patterns_.size() < 200)
+            tick_++;
+            
+            // Evolve patterns using more interesting deterministic rules
+            for (auto& pattern : patterns_)
             {
+                // Calculate input based on the pattern's values
+                float input = 0.0f;
+                if (!pattern.values.empty()) {
+                    for (const auto& val : pattern.values) {
+                        input += val;
+                    }
+                    input /= pattern.values.size(); // Average of all values
+                }
+                
+                // Update coherence using a wave-like function
+                float coherence_change = std::sin(tick_ * 0.1f + input) * evolution_rate_ * 0.05f;
+                pattern.quantum_state.coherence = std::clamp(
+                    pattern.quantum_state.coherence + coherence_change,
+                    0.0f, 1.0f);
+                
+                // Update stability based on coherence - higher coherence leads to more stability
+                if (pattern.quantum_state.coherence > 0.6f) {
+                    pattern.quantum_state.stability = std::min(1.0f,
+                        pattern.quantum_state.stability + evolution_rate_ * 0.01f);
+                } else {
+                    pattern.quantum_state.stability = std::max(0.1f,
+                        pattern.quantum_state.stability - evolution_rate_ * 0.005f);
+                }
+                
+                // Update generation counter
+                pattern.quantum_state.generation++;
+            }
+
+            // Occasionally add a new pattern (every 10 ticks if under limit)
+            if (tick_ % 10 == 0 && patterns_.size() < 200) {
                 patterns_.emplace_back();
+                
                 // Set unique ID for the new pattern
                 patterns_.back().id = "Pattern_" + std::to_string(patterns_.size() - 1);
 
-                // Initialize with random values
+                // Initialize with deterministic values
                 patterns_.back().values.resize(16);
-                for (auto& val : patterns_.back().values)
-                {
-                    val = ((float)rand() / RAND_MAX);
+                for (int j = 0; j < 16; j++) {
+                    float val = (float)((patterns_.size() + j) % 10) / 10.0f;
+                    patterns_.back().values[j] = val;
                 }
 
-                // Initialize quantum state
+                // Initialize quantum state with deterministic values
                 patterns_.back().quantum_state.coherence = 0.5f;
-                patterns_.back().quantum_state.stability = ((float)rand() / RAND_MAX);
+                patterns_.back().quantum_state.stability = 0.5f;
 
                 std::cout << "Added new pattern, total: " << patterns_.size() << std::endl;
             }
@@ -181,3 +225,4 @@ namespace sep
         }
     }  // namespace workbench
 }  // namespace sep
+

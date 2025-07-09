@@ -7,6 +7,7 @@
 // Include full class definitions instead of forward declarations
 #include "quantum_pattern.hpp"  // Include the Pattern definition
 #include "renderer.h"
+#include "sep_engine_wrapper.h"
 #include "ui_manager.h"
 #include "window.h"
 
@@ -49,11 +50,13 @@ namespace sep
             Renderer* renderer_;
             UIManager* uiManager_;
             std::vector<workbench::Pattern> patterns_;
+            std::unique_ptr<sep::Engine> engine_;
 
             bool auto_evolve_ = true;
             float evolution_rate_ = 0.2f;
             float coherence_threshold_ = 0.5f;
             float timeSinceLastEvolution_ = 0.0f;
+            uint64_t tick_ = 0;
         };
 
         // Factory function to create our demo adapter

@@ -1,33 +1,33 @@
-#include "api/client.h"
-#include "api/types.h"
-#include "api/ollama_types.h"
-#include "core/common.h"  // defines sep::SEPResult
-
 #include <chrono>
-#include <fstream>
 #include <cstring>
-#include <stdexcept> // Required for std::runtime_error
+#include <fstream>
 #include <sstream>
+#include <stdexcept>
+
+#include "api/client.h"
+#include "api/ollama_types.h"
+#include "api/types.h"
+#include "core/common.h"
 
 namespace sep {
 namespace ollama {
 
 struct OllamaClient::Impl {
-  OllamaConfig config;
-  sep::api::Client client;
+    sep::config::OllamaConfig config;
+    sep::api::Client client;
 
-  Impl(const OllamaConfig &cfg)
-      : config(cfg),
- client(sep::api::ClientConfig{cfg.host, 
-                            std::chrono::milliseconds(5000),
-                            3,
-                            true,
-                            {}},
-               std::make_unique<sep::api::CurlHttpClient>()) {}
+    Impl(const sep::config::OllamaConfig &cfg)
+        : config(cfg),
+          client(sep::api::ClientConfig{cfg.host, std::chrono::milliseconds(5000), 3, true, {}},
+                 std::make_unique<sep::api::CurlHttpClient>())
+    {
+    }
 };
 
-OllamaClient::OllamaClient(const OllamaConfig &cfg)
-    : impl_(std::make_unique<Impl>(cfg)) {}
+OllamaClient::OllamaClient(const sep::config::OllamaConfig &cfg)
+    : impl_(std::make_unique<Impl>(cfg))
+{
+}
 
 OllamaClient::~OllamaClient() = default;
 OllamaClient::OllamaClient(OllamaClient &&) noexcept = default;

@@ -10,11 +10,23 @@
 namespace sep {
 namespace memory {
 
-using ::sep::MemoryTierEnum;
+    // Memory tier types that are used across multiple modules
+    enum class MemoryTierEnum : int
+    {
+        // Logical memory tiers
+        STM,
+        MTM,
+        LTM,
+        // Physical memory locations
+        HOST = 100,    // Host memory (CPU)
+        DEVICE = 101,  // Device memory (GPU)
+        UNIFIED = 102  // Unified memory (accessible by both CPU and GPU)
+    };
 
-// Forward declarations
-namespace persistence {
-class IRedisManager;
+    // Forward declarations
+    namespace persistence
+    {
+        class IRedisManager;
 }
 
 // Convert MemoryTierEnum to string representation

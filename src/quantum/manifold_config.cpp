@@ -51,6 +51,14 @@ namespace sep::quantum::manifold {
         .port = 11434,
         .model = "llama2",
         .enabled = false
+    },
+    .cors = {
+        .enabled = false,
+        .tokens = {}
+    },
+    .rate_limit = {
+        .requests_per_minute = 60,
+        .enabled = true
     }
 };
 

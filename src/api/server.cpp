@@ -203,8 +203,9 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
 }
 
 void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& response_body,
-                              int64_t duration)
+                               int64_t duration)
 {
+    (void)response_body; // Silence unused parameter warning
     if (!logger_) return;
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 
@@ -263,8 +264,9 @@ nlohmann::json SEPApiServer::handleCrowError(const std::string& message,
 }
 
 void SEPApiServer::logRequest(const ::crow::request& req, int status_code,
-                              const std::string& response_body, int64_t duration_ms)
+                               const std::string& response_body, int64_t duration_ms)
 {
+    (void)response_body; // Silence unused parameter warning
     if (!logger_) return;
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 
@@ -334,13 +336,8 @@ void SEPApiServer::setup_middleware() {
   // Configure auth middleware
   auto& auth_mw = app_->get_middleware<AuthMiddleware>();
   // Set auth tokens if configured
-  if (!config_.extra_settings.empty()) {
-    auto tokens_it = config_.extra_settings.find("auth_tokens");
-    if (tokens_it != config_.extra_settings.end()) {
-      // Parse and set tokens - simplified implementation
-      std::vector<std::string> tokens = {tokens_it->second};
-      auth_mw.set_tokens(tokens);
-    }
+  if (config_.cors.enabled && !config_.cors.tokens.empty()) {
+    auth_mw.set_tokens(config_.cors.tokens);
   }
 }
 

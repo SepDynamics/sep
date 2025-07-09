@@ -163,18 +163,22 @@ namespace sep
         {
             std::size_t total_size = stm_->getSize() + mtm_->getSize() + ltm_->getSize();
             std::size_t total_used =
+                stm_->getUsedSpace() + mtm_->getUsedSpace() + ltm_->getUsedSpace();
+
+            return total_size > 0 ? static_cast<float>(total_used) / static_cast<float>(total_size)
+                                  : 0.0f;
         }
 
         float MemoryTierManager::getTotalFragmentation() const
         {
-            return (stm_->getFragmentation() + mtm_->getFragmentation() +
-                    ltm_->getFragmentation()) /
+            return (stm_->calculateFragmentation() + mtm_->calculateFragmentation() +
+                    ltm_->calculateFragmentation()) /
                    3.0f;
         }
 
         std::size_t MemoryTierManager::getTotalAllocated() const
         {
-            return stm_->getAllocated() + mtm_->getAllocated() + ltm_->getAllocated();
+            return stm_->getUsedSpace() + mtm_->getUsedSpace() + ltm_->getUsedSpace();
         }
 
         MemoryTier &MemoryTierManager::getSTM() { return *stm_; }
@@ -192,9 +196,9 @@ namespace sep
 
         void MemoryTierManager::optimizeTiers()
         {
-            auto process_tier = [this](MemoryTier *tier) {
+            auto process_tier = [](MemoryTier *tier) {
                 if (!tier) return;
-                if (tier->getFragmentation() > tier->getFragmentationThreshold())
+                if (tier->calculateFragmentation() > 0.3f)
                 {
                     tier->defragment();
                 }
@@ -346,13 +350,9 @@ namespace sep
             out_block->stability = block->stability;
             out_block->promotion_score = block->promotion_score;
             out_block->priority_score = block->priority_score;
-            out_block->flags = block->flags;
             out_block->age = block->age;
             out_block->generation = block->generation;
             out_block->weight = block->weight;
-
-            // Atomic operations need to hold a lock during movement to avoid race conditions
-            std::lock_guard<std::mutex> guard(src_tier->getMutex());
 
             // Save entry in the lookup map
             lookup_map_[out_block->ptr] = out_block;
@@ -382,13 +382,13 @@ namespace sep
         {
             if (coherence >= config_.promote_mtm_to_ltm &&
                 stability >= config_.promote_mtm_to_ltm &&
-                generation_count >= config_.mtm_to_ltm_min_gen)
+                static_cast<uint32_t>(generation_count) >= config_.mtm_to_ltm_min_gen)
             {
                 return ltm_.get();
             }
             else if (coherence >= config_.promote_stm_to_mtm &&
                      stability >= config_.promote_stm_to_mtm &&
-                     generation_count >= config_.stm_to_mtm_min_gen)
+                     static_cast<uint32_t>(generation_count) >= config_.stm_to_mtm_min_gen)
             {
                 return mtm_.get();
             }
@@ -426,7 +426,7 @@ namespace sep
             switch (block->tier)
             {
                 case MemoryTierEnum::STM: {
-                    float promotion_threshold = stm_->getPromotionThreshold();
+                    float promotion_threshold = config_.promote_stm_to_mtm;
                     float avg_score = (block->coherence + block->stability) * 0.5f;
                     bool eligible_for_promotion = avg_score >= promotion_threshold &&
                                                   block->generation >= config_.stm_to_mtm_min_gen;
@@ -435,7 +435,7 @@ namespace sep
                 }
                 break;
                 case MemoryTierEnum::MTM: {
-                    float promotion_threshold = mtm_->getPromotionThreshold();
+                    float promotion_threshold = config_.promote_mtm_to_ltm;
                     float avg_score = (block->coherence + block->stability) * 0.5f;
                     bool eligible_for_promotion = avg_score >= promotion_threshold &&
                                                   block->generation >= config_.mtm_to_ltm_min_gen;
@@ -447,6 +447,13 @@ namespace sep
                     float avg_score = (block->coherence + block->stability) * 0.5f;
                     block->promotion_score = 0.0f;  // Nothing above LTM
                     block->priority_score = avg_score * (1.0f + block->weight * 0.5f);
+                }
+                break;
+                default: {
+                    // Handle HOST, DEVICE, UNIFIED or any other memory type
+                    float avg_score = (block->coherence + block->stability) * 0.5f;
+                    block->promotion_score = 0.0f;
+                    block->priority_score = avg_score;
                 }
                 break;
             }
@@ -532,7 +539,8 @@ namespace sep
             // TODO: Implement
         }
 
-        void MemoryTierManager::pruneDataByPriority(MemoryTierEnum tier, size_t max_count)
+        void MemoryTierManager::pruneDataByPriority([[maybe_unused]] MemoryTierEnum tier,
+                                                    [[maybe_unused]] size_t max_count)
         {
             // TODO: Implement
         }
@@ -586,7 +594,8 @@ namespace sep
             // TODO: Implement
         }
 
-        void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier, size_t max_count)
+        void MemoryTierManager::prunePatternsByPriority([[maybe_unused]] MemoryTierEnum tier,
+                                                        [[maybe_unused]] size_t max_count)
         {
             // TODO: Implement
         }
@@ -597,7 +606,8 @@ namespace sep
         }
 
         void MemoryTierManager::storeDataToPersistence(
-            const void *data, const ::sep::persistence::PersistentPatternData &metadata)
+            [[maybe_unused]] const void *data,
+            [[maybe_unused]] const ::sep::persistence::PersistentPatternData &metadata)
         {
             // TODO: Implement
         }
@@ -614,7 +624,8 @@ namespace sep
             return it != data_registry_.end() ? it->second.get() : nullptr;
         }
 
-        void MemoryTierManager::registerGenericData(std::size_t id, const void *data)
+        void MemoryTierManager::registerGenericData([[maybe_unused]] std::size_t id,
+                                                    [[maybe_unused]] const void *data)
         {
             // TODO: Implement properly with proper cloning
         }

@@ -163,35 +163,54 @@ namespace sep
 
             tick_++;
             
-            // Evolve patterns using more interesting deterministic rules
-            for (auto& pattern : patterns_)
-            {
-                // Calculate input based on the pattern's values
-                float input = 0.0f;
-                if (!pattern.values.empty()) {
-                    for (const auto& val : pattern.values) {
-                        input += val;
+            // 1. PREPARE THE INPUT FOR THE REAL ENGINE
+            // Convert patterns to PinState format for the engine
+            std::vector<sep::PinState> engine_input;
+            engine_input.reserve(patterns_.size());
+            
+            for (size_t i = 0; i < patterns_.size(); ++i) {
+                const auto& p = patterns_[i];
+                sep::PinState pin;
+                pin.pin_id = i;  // Use index as ID
+                
+                // Calculate an aggregate value from the pattern's values
+                float avg_value = 0.0f;
+                if (!p.values.empty()) {
+                    for (const auto& val : p.values) {
+                        avg_value += val;
                     }
-                    input /= pattern.values.size(); // Average of all values
+                    avg_value /= p.values.size();
                 }
                 
-                // Update coherence using a wave-like function
-                float coherence_change = std::sin(tick_ * 0.1f + input) * evolution_rate_ * 0.05f;
-                pattern.quantum_state.coherence = std::clamp(
-                    pattern.quantum_state.coherence + coherence_change,
-                    0.0f, 1.0f);
+                pin.value = avg_value;
+                pin.coherence = p.quantum_state.coherence;
+                pin.state = static_cast<uint32_t>(p.quantum_state.stability * 100.0f);  // Map stability to state
+                engine_input.push_back(pin);
+            }
+            
+            // 2. CALL THE REAL ENGINE
+            sep::quantum::QBSAResult qbsa_result;
+            sep::cuda::QSHResult qsh_result;
+            
+            engine_->process_batch(engine_input, tick_, qbsa_result, qsh_result);
+            
+            // 3. UPDATE THE PATTERNS WITH THE ENGINE'S OUTPUT
+            // Update each pattern based on the results
+            for (size_t i = 0; i < patterns_.size() && i < engine_input.size(); ++i) {
+                // Apply engine results to patterns
+                patterns_[i].quantum_state.coherence = 1.0f - qbsa_result.correction_ratio;
                 
-                // Update stability based on coherence - higher coherence leads to more stability
-                if (pattern.quantum_state.coherence > 0.6f) {
-                    pattern.quantum_state.stability = std::min(1.0f,
-                        pattern.quantum_state.stability + evolution_rate_ * 0.01f);
+                // Use collapse detection to influence stability
+                if (qbsa_result.collapse_detected) {
+                    patterns_[i].quantum_state.stability = std::max(0.1f,
+                        patterns_[i].quantum_state.stability - evolution_rate_ * 0.1f);
                 } else {
-                    pattern.quantum_state.stability = std::max(0.1f,
-                        pattern.quantum_state.stability - evolution_rate_ * 0.005f);
+                    patterns_[i].quantum_state.stability = std::min(1.0f,
+                        patterns_[i].quantum_state.stability + evolution_rate_ * 0.05f);
                 }
                 
                 // Update generation counter
-                pattern.quantum_state.generation++;
+                patterns_[i].quantum_state.generation++;
             }
 
             // Occasionally add a new pattern (every 10 ticks if under limit)

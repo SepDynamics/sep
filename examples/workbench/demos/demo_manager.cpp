@@ -1,9 +1,13 @@
 #include "demo_manager.hpp"
-#include <stdexcept>
-#include <utility>
 
 namespace sep {
 namespace workbench {
+
+    void Demo::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
+        engine_ = engine;
+        renderer_ = renderer;
+    }
 
 void DemoManager::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
     engine_ = engine;
@@ -26,12 +30,10 @@ bool DemoManager::switchToDemo(const std::string& name) {
 
     current_demo_ = it->second();
     current_demo_name_ = name;
+    current_demo_->initialize(engine_, renderer_);
+    current_demo_->on_load();
 
-    if (current_demo_) {
-        current_demo_->on_load();
-        return true;
-    }
-    return false;
+    return true;
 }
 
 void DemoManager::on_update(float dt) {

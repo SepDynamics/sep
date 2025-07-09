@@ -61,7 +61,14 @@ namespace sep
 
         virtual void setColorMode(const std::string& mode) = 0;
         virtual void setEmissionMode(const std::string& mode) = 0;
+        virtual void setRotation(float rotation) = 0;
+        virtual void setZoom(float zoom) = 0;
+        virtual void setWireframe(bool wireframe) = 0;
+        virtual void setRoughnessMode(int mode) = 0;
+        virtual void cycleColorMode() = 0;
         virtual void renderPatternState(const std::vector<glm::vec3>& patterns) = 0;
+        virtual void renderConnection(const glm::vec3& start, const glm::vec3& end,
+                                      float strength) = 0;
     };
 
 #ifdef SEP_DEMO_MODE
@@ -131,7 +138,19 @@ namespace sep
 
         void setColorMode(const std::string& mode) override { (void)mode; }
         void setEmissionMode(const std::string& mode) override { (void)mode; }
+        // Add missing implementations of virtual methods
+        void setRotation(float rotation) override { (void)rotation; }
+        void setZoom(float zoom) override { (void)zoom; }
+        void setWireframe(bool wireframe) override { (void)wireframe; }
+        void setRoughnessMode(int mode) override { (void)mode; }
+        void cycleColorMode() override {}
         void renderPatternState(const std::vector<glm::vec3>& patterns) override { (void)patterns; }
+        void renderConnection(const glm::vec3& start, const glm::vec3& end, float strength) override
+        {
+            (void)start;
+            (void)end;
+            (void)strength;
+        }
     };
 
     // Factory functions

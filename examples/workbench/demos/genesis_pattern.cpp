@@ -110,7 +110,7 @@ void GenesisPatternDemo::on_unload() {
     renderer_.reset();
 }
 
-void GenesisPatternDemo::on_key_press(unsigned char key) {
+void GenesisPatternDemo::on_key_press(int key) {
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 

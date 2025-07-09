@@ -74,7 +74,7 @@ void DrugDiscoveryDemo::on_unload() {
     poses_.clear();
 }
 
-void DrugDiscoveryDemo::on_key_press(unsigned char) {}
+void DrugDiscoveryDemo::on_key_press(int key) { (void)key; }
 void DrugDiscoveryDemo::on_mouse(int, int, int) {}
 
 } // namespace workbench

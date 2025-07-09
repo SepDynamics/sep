@@ -114,7 +114,8 @@ void MemoryGardenDemo::on_unload() {
     nodes_.clear();
 }
 
-void MemoryGardenDemo::on_key_press(unsigned char key) {
+void MemoryGardenDemo::on_key_press(int key)
+{
     switch (key) {
         case 'n':  // New pattern
             {

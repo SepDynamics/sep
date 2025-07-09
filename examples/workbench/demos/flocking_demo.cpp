@@ -50,9 +50,13 @@ void FlockingDemo::on_update(float dt) {
             cohesion = cohesion / static_cast<float>(neighbors) - glm::vec3(agent.position);
             alignment = alignment / static_cast<float>(neighbors) - glm::vec3(agent.velocity);
         }
-        agent.velocity += (cohesion + alignment + separation) * 0.01f;
-        if (glm::length(glm::vec3(agent.velocity)) > max_speed_) {
-            agent.velocity = glm::vec4(glm::normalize(glm::vec3(agent.velocity)) * max_speed_, 0.f);
+        // Convert the vec3 sum to vec4 before adding it to agent.velocity
+        glm::vec4 force = glm::vec4(cohesion + alignment + separation, 0.0f) * 0.01f;
+        agent.velocity += force;
+        float velocity_magnitude = glm::length(glm::vec3(agent.velocity));
+        if (velocity_magnitude > max_speed_) {
+            glm::vec3 normalized_velocity = glm::normalize(glm::vec3(agent.velocity)) * max_speed_;
+            agent.velocity = glm::vec4(normalized_velocity, agent.velocity.w);
         }
         agent.position += glm::vec4(glm::vec3(agent.velocity) * dt, 0.f);
     }
@@ -72,7 +76,7 @@ void FlockingDemo::on_unload() {
     agents_.clear();
 }
 
-void FlockingDemo::on_key_press(unsigned char) {}
+void FlockingDemo::on_key_press(int key) { (void)key; }
 void FlockingDemo::on_mouse(int, int, int) {}
 
 } // namespace workbench

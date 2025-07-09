@@ -53,7 +53,7 @@ void DrugOptimizerDemo::on_unload() {
     poses_.clear();
 }
 
-void DrugOptimizerDemo::on_key_press(unsigned char) {}
+void DrugOptimizerDemo::on_key_press(int key) { (void)key; }
 void DrugOptimizerDemo::on_mouse(int, int, int) {}
 
 } // namespace workbench

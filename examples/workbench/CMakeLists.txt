@@ -32,4 +32,15 @@ target_compile_definitions(sep_workbench PRIVATE GLM_ENABLE_EXPERIMENTAL)
 target_link_libraries(sep_workbench PRIVATE
     glfw
     OpenGL::GL
+    GLEW
+    
+    # SEP libraries
+    sep_api
+    sep_core
+    sep_compat
+    sep_quantum
+    sep_memory
+    sep_context
+    sep_blender
+    sep_audio
 )

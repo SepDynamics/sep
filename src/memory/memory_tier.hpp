@@ -12,9 +12,9 @@
 #include <glm/vec3.hpp>
 
 // Project headers
-#include "../compat/shim.h"
-#include "../core/common.h"
-#include "../core/types.h"
+#include "compat/shim.h"
+#include "core/common.h"
+#include "core/types.h"
 #include "persistence/persistent_pattern_data.hpp"
 #include "types.h"
 

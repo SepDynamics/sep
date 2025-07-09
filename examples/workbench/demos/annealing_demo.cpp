@@ -57,7 +57,7 @@ void AnnealingDemo::on_unload() {
     particles_.clear();
 }
 
-void AnnealingDemo::on_key_press(unsigned char key) {
+void AnnealingDemo::on_key_press(int key) {
     if (key == 'p') {
         paused_ = !paused_;
     }

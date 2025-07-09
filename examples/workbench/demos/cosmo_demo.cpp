@@ -72,7 +72,8 @@ void CosmoDemo::on_unload() {
     particles_.clear();
 }
 
-void CosmoDemo::on_key_press(unsigned char key) {
+void CosmoDemo::on_key_press(int key)
+{
     if (key == 'r') {
         initParticles();
     }

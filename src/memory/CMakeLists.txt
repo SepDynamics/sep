@@ -10,14 +10,9 @@ if(SEP_TESTBED_STUBS)
   list(APPEND SEP_MEMORY_SOURCES ${CMAKE_SOURCE_DIR}/_sep/testbed/memory_minimal/memory_tier_manager_stubs.cpp)
 endif()
 
-set(SEP_HAS_REDIS 0)
-set(HIREDIS_FOUND FALSE)
-
 if(HIREDIS_FOUND)
     list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
     set(SEP_HAS_REDIS 1)
-else()
-    add_compile_definitions(SEP_NO_REDIS)
 endif()
 
 add_library(sep_memory STATIC ${SEP_MEMORY_SOURCES})
@@ -95,7 +90,6 @@ target_compile_definitions(sep_memory
         $<$<BOOL:${SEP_MEMORY_MINIMAL}>:SEP_MEMORY_MINIMAL>
     PRIVATE
         SEP_USE_CUDA=$<IF:$<BOOL:${SEP_HAS_CUDA}>,1,0>
-        SEP_HAS_REDIS=${SEP_HAS_REDIS}
 )
 
 if(HIREDIS_FOUND)

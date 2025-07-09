@@ -3,7 +3,7 @@
 #include <cmath>
 #include <iostream>
 
-void Renderer::init(int width, int height)
+void sep::workbench::Renderer::init(int width, int height)
 {
     this->width = width;
     this->height = height;
@@ -41,7 +41,7 @@ void Renderer::init(int width, int height)
     }
 }
 
-void Renderer::setupShaders()
+void sep::workbench::Renderer::setupShaders()
 {
     // Simple shader setup for now
     std::cout << "Setting up shaders..." << std::endl;
@@ -51,7 +51,7 @@ void Renderer::setupShaders()
     shaderProgram = 1;  // Dummy value to indicate initialization
 }
 
-void Renderer::render()
+void sep::workbench::Renderer::render()
 {
     if (!useOpenGL)
     {
@@ -84,7 +84,7 @@ void Renderer::render()
     }
 }
 
-void Renderer::render(const std::vector<sep::quantum::Pattern>& patterns)
+void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>& patterns)
 {
     if (!useOpenGL)
     {
@@ -171,14 +171,14 @@ void Renderer::render(const std::vector<sep::quantum::Pattern>& patterns)
 }
 
 // Fix the non-const version of render to match the header file
-void Renderer::render(std::vector<sep::quantum::Pattern>& patterns)
+void sep::workbench::Renderer::render(std::vector<sep::workbench::Pattern>& patterns)
 {
     // Simple implementation to visualize patterns
     std::cout << "Patterns: " << patterns.size()
               << " | Avg Coherence: " << calculateAvgCoherence(patterns) << std::endl;
 }
 
-float Renderer::calculateAvgCoherence(const std::vector<sep::quantum::Pattern>& patterns)
+float sep::workbench::Renderer::calculateAvgCoherence(const std::vector<sep::workbench::Pattern>& patterns)
 {
     if (patterns.empty()) return 0.0f;
 

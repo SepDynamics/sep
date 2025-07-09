@@ -1,4 +1,5 @@
 #include "sep_engine_wrapper.h"
+#include "quantum_pattern.hpp"
 
 #include <iostream>
 

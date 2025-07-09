@@ -1,4 +1,4 @@
-#include "../audio_visualizer.hpp"
+#include "audio_visualizer.hpp"
 
 #include <glm/vec3.hpp>
 

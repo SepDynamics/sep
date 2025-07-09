@@ -4,11 +4,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <vector>
 #include <cmath>
+#include <iostream>
+#include <vector>
 
 // Include our Pattern definition
-#include "workbench/pattern.hpp"
+#include "pattern.hpp"
 
 namespace sep {
 namespace workbench {
@@ -24,11 +25,11 @@ public:
 
     // Just render a blank screen for Phase 1
     void render();
-    void render(std::vector<quantum::Pattern>& patterns);
-    float calculateAvgCoherence(const std::vector<quantum::Pattern>& patterns);
+    void render(std::vector<Pattern>& patterns);
+    float calculateAvgCoherence(const std::vector<Pattern>& patterns);
 
     // Render patterns (implementation for main.cpp)
-    void render(const std::vector<quantum::Pattern>& patterns);
+    void render(const std::vector<Pattern>& patterns);
 
 private:
     // Setup shader program
@@ -48,3 +49,6 @@ private:
     // Flag to determine if OpenGL rendering should be used
     bool useOpenGL = true;
 };
+
+}  // namespace workbench
+}  // namespace sep

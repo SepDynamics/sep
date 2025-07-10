@@ -31,7 +31,7 @@ target_include_directories(sep_workbench PRIVATE
 )
 
 # Enable GLM experimental features
-target_compile_definitions(sep_workbench PRIVATE GLM_ENABLE_EXPERIMENTAL)
+target_compile_definitions(sep_workbench PRIVATE GLM_ENABLE_EXPERIMENTAL SEP_WORKBENCH_DEMO)
 
 # Link libraries
 target_link_libraries(sep_workbench PRIVATE

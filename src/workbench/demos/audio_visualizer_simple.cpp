@@ -13,7 +13,10 @@ namespace audio {
         // Return a stub implementation for now
         class StubAudioCapture : public AudioCapture {
         public:
-            bool init(const AudioConfig& config) override { return true; }
+            bool init(const AudioConfig& config) override {
+                (void)config;
+                return true;
+            }
             bool start() override { return true; }
             void stop() override {}
         };
@@ -29,6 +32,7 @@ namespace audio {
             StubAudioPipeline(int size) : spectrum_size_(size) {}
             
             void processSamples(const std::vector<float>& samples) override {
+                (void)samples;
                 // Generate random visual patterns for demonstration
                 patterns_.clear();
                 patterns_.reserve(spectrum_size_);
@@ -56,7 +60,7 @@ namespace audio {
 }
 
 // AudioVisualizerDemo implementation
-void AudioVisualizerDemo::init() {
+void AudioVisualizerDemo::on_load() {
     std::cout << "Initializing Audio Visualizer Demo..." << std::endl;
     
     // Get configuration
@@ -82,7 +86,7 @@ void AudioVisualizerDemo::init() {
     std::cout << "Audio Visualizer Demo initialized successfully." << std::endl;
 }
 
-void AudioVisualizerDemo::update(float dt) {
+void AudioVisualizerDemo::on_update(float dt) {
     // Simulate audio processing (in a real implementation, this would use actual audio data)
     std::vector<float> dummy_samples(1024);
     for (size_t i = 0; i < dummy_samples.size(); i++) {
@@ -104,7 +108,7 @@ void AudioVisualizerDemo::update(float dt) {
     }
 }
 
-void AudioVisualizerDemo::render() {
+void AudioVisualizerDemo::on_render() {
     // Render patterns
     if (renderer_) {
         // Special visualization modes for audio would go here
@@ -125,7 +129,7 @@ void AudioVisualizerDemo::render() {
     }
 }
 
-void AudioVisualizerDemo::cleanup() {
+void AudioVisualizerDemo::on_unload() {
     if (capture_) {
         capture_->stop();
     }
@@ -133,7 +137,7 @@ void AudioVisualizerDemo::cleanup() {
     latest_patterns_.clear();
 }
 
-void AudioVisualizerDemo::handleKeyboard(unsigned char key) {
+void AudioVisualizerDemo::on_key_press(int key) {
     // Handle keyboard input for audio visualizer
     switch (key) {
         case '1':
@@ -145,7 +149,7 @@ void AudioVisualizerDemo::handleKeyboard(unsigned char key) {
     }
 }
 
-void AudioVisualizerDemo::handleMouse(int x, int y, int button) {
+void AudioVisualizerDemo::on_mouse(int x, int y, int button) {
     // Not used in this demo
 }
 

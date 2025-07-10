@@ -7,17 +7,16 @@
 #include "memory/types.h"
 
 using namespace sep;
-using namespace sep::pattern;
 using namespace sep::quantum;
 
 int main() {
     const int grid = 10;
-    std::vector<PatternData> patterns;
+    std::vector<pattern::PatternData> patterns;
     patterns.reserve(grid * grid);
 
     for (int x = 0; x < grid; ++x) {
         for (int y = 0; y < grid; ++y) {
-            PatternData p;
+            pattern::PatternData p;
             p.id = "p_" + std::to_string(x) + "_" + std::to_string(y);
             p.position = glm::vec4(static_cast<float>(x), static_cast<float>(y), 0.0f, 1.0f);
             p.coherence = 0.5f;
@@ -31,8 +30,17 @@ int main() {
 
     for (int step = 0; step < 50; ++step) {
         for (auto &p : patterns) {
-            evolution::applyGravity(p, center, 0.02f);
-            evolution::randomPerturbation(p, 0.01f);
+            quantum::Pattern q;
+            q.id = p.id;
+            q.position = p.position;
+            q.momentum = glm::vec3(0.0f);
+            q.quantum_state.generation = p.generation;
+            q.quantum_state.state = quantum::QuantumState::Status::SUPERPOSITION;
+
+            evolution::applyGravity(q, center, 0.02f);
+            evolution::randomPerturbation(q, 0.01f);
+
+            p.position = q.position;
 
             if (glm::length(glm::vec3(p.position) - center) < 0.5f) {
                 p.coherence = std::min(1.0f, p.coherence + 0.05f);

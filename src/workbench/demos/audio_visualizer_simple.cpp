@@ -127,7 +127,9 @@ void AudioVisualizerDemo::render() {
 
 void AudioVisualizerDemo::cleanup() {
     if (capture_) {
+#ifdef SEP_HAS_AUDIO
         capture_->stop();
+#endif
     }
     
     latest_patterns_.clear();

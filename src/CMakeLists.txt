@@ -24,25 +24,30 @@ if(SEP_WITH_CYCLES)
     add_subdirectory(blender)
 endif()
 
-add_executable(sep_engine
-    server_main.cpp
+# Build workbench library and executable
+add_subdirectory(workbench)
+
+add_executable(sep_workbench
+    workbench_main.cpp
 )
-set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
+set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 
-target_include_directories(sep_engine PRIVATE ${SEP_INCLUDE_DIRS})
+target_include_directories(sep_workbench PRIVATE ${SEP_INCLUDE_DIRS})
 
-target_link_libraries(sep_engine PRIVATE
+target_link_libraries(sep_workbench PRIVATE
+    sep_workbench_lib
     sep_api
     sep_quantum
     sep_memory
     sep_utils
     sep_core
     sep_compat
+    GLEW::GLEW
+    glfw
+    OpenGL::GL
     Threads::Threads
     ${CMAKE_DL_LIBS}
 )
 if(TARGET CUDA::cudart)
-    target_link_libraries(sep_engine PRIVATE CUDA::cudart)
+    target_link_libraries(sep_workbench PRIVATE CUDA::cudart)
 endif()
-
-# Add the workbench executable if enabled

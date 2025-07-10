@@ -18,14 +18,10 @@ declare module '@modelcontextprotocol/sdk/server/mcp.js' {
   }
 }
 
-import { z } from 'zod';
-
-export const MonitorPatternsSchema = z.object({
-  contextId: z.string(),
-  duration: z.number().optional()
-});
-
-export type MonitorPatternsParams = z.infer<typeof MonitorPatternsSchema>;
+export interface MonitorPatternsParams {
+  contextId: string;
+  duration?: number;
+}
 
 export interface GetInsightsParams {
   contextId: string;
@@ -72,11 +68,6 @@ export interface ProcessPatternsParams {
 export interface StorePatternsParams {
   patterns: Pattern[];
   contextId: string;
-}
-
-export interface AdaptiveBotEvents {
-  error: (error: Error | unknown) => void;
-  disconnect: () => void;
 }
 
 export interface AdaptiveBotEvents {

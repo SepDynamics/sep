@@ -2,8 +2,8 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { EventEmitter } from 'events';
 import { z } from 'zod';
-import { RedisService } from './services/redis.js';
-import { SepService } from './services/sep.js';
+import { RedisService } from './src/services/redis.js';
+import { SepService } from './src/services/sep.js';
 
 export class CoordinatedHelper extends EventEmitter {
   private mcp: McpServer;

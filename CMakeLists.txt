@@ -142,8 +142,10 @@ find_package(glm REQUIRED)
 find_package(spdlog)
 find_package(OpenGL REQUIRED)
 if(SEP_BUILD_WORKBENCH)
-    find_package(GLFW REQUIRED)
-    find_package(GLEW REQUIRED)
+    # GLFW package is typically exported as glfw3 on many systems
+    find_package(glfw3 REQUIRED)
+    find_package(PkgConfig)
+    pkg_search_module(GLEW REQUIRED glew)
 endif()
 if(spdlog_FOUND)
     message(STATUS "Using system spdlog")
@@ -187,6 +189,9 @@ endif()
 if(SEP_WITH_ALEMBIC)
     find_package(Alembic REQUIRED)
 endif()
+
+# Build ImGui library from third_party sources
+add_subdirectory(third_party/imgui)
 
 # Add the src directory which contains all module subdirectories and workbench
 add_subdirectory(src)

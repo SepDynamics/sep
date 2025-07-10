@@ -1,0 +1,20 @@
+{
+  "name": "experimental-coordinated-helper",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.0",
+    "axios": "^1.9.0",
+    "redis": "^4.6.7",
+    "zod": "^3.25.48"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.2",
+    "@types/node": "^20.17.57"
+  }
+}

@@ -121,29 +121,25 @@ In file included from /sep/src/workbench/demos/audio_visualizer.hpp:8:
   127 |     if (window_) {
       |         ^~~~~~~
       |         Window
-/sep/src/workbench/demos/audio_visualizer_simple.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::on_unload()’:
-/sep/src/workbench/demos/audio_visualizer_simple.cpp:134:19: error: ‘class sep::audio::AudioCapture’ has no member named ‘stop’
-  134 |         capture_->stop();
-      |                   ^~~~
 /sep/src/workbench/demos/audio_visualizer_simple.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::on_mouse(int, int, int)’:
-/sep/src/workbench/demos/audio_visualizer_simple.cpp:152:40: error: unused parameter ‘x’ [-Werror=unused-parameter]
-  152 | void AudioVisualizerDemo::on_mouse(int x, int y, int button) {
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:154:40: error: unused parameter ‘x’ [-Werror=unused-parameter]
+  154 | void AudioVisualizerDemo::on_mouse(int x, int y, int button) {
       |                                    ~~~~^
-/sep/src/workbench/demos/audio_visualizer_simple.cpp:152:47: error: unused parameter ‘y’ [-Werror=unused-parameter]
-  152 | void AudioVisualizerDemo::on_mouse(int x, int y, int button) {
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:154:47: error: unused parameter ‘y’ [-Werror=unused-parameter]
+  154 | void AudioVisualizerDemo::on_mouse(int x, int y, int button) {
       |                                           ~~~~^
-/sep/src/workbench/demos/audio_visualizer_simple.cpp:152:54: error: unused parameter ‘button’ [-Werror=unused-parameter]
-  152 | void AudioVisualizerDemo::on_mouse(int x, int y, int button) {
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:154:54: error: unused parameter ‘button’ [-Werror=unused-parameter]
+  154 | void AudioVisualizerDemo::on_mouse(int x, int y, int button) {
       |                                                  ~~~~^~~~~~
 /sep/src/workbench/demos/audio_visualizer_simple.cpp: In function ‘std::unique_ptr<sep::workbench::Demo> sep::workbench::createAudioVisualizerDemo(Window*, Renderer*, UIManager*)’:
-/sep/src/workbench/demos/audio_visualizer_simple.cpp:157:57: error: unused parameter ‘window’ [-Werror=unused-parameter]
-  157 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:159:57: error: unused parameter ‘window’ [-Werror=unused-parameter]
+  159 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
       |                                                 ~~~~~~~~^~~~~~
-/sep/src/workbench/demos/audio_visualizer_simple.cpp:157:75: error: unused parameter ‘renderer’ [-Werror=unused-parameter]
-  157 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:159:75: error: unused parameter ‘renderer’ [-Werror=unused-parameter]
+  159 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
       |                                                                 ~~~~~~~~~~^~~~~~~~
-/sep/src/workbench/demos/audio_visualizer_simple.cpp:157:96: error: unused parameter ‘uiManager’ [-Werror=unused-parameter]
-  157 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:159:96: error: unused parameter ‘uiManager’ [-Werror=unused-parameter]
+  159 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
       |                                                                                     ~~~~~~~~~~~^~~~~~~~~
 cc1plus: all warnings being treated as errors
 [3/6] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o -c /sep/src/workbench/demos/audio_visualizer.cpp
@@ -166,45 +162,44 @@ FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cp
 /sep/src/workbench/demos/audio_visualizer.cpp:29:15: error: ‘class sep::audio::AudioCapture’ has no member named ‘start’
    29 |     capture_->start();
       |               ^~~~~
-/sep/src/workbench/demos/audio_visualizer.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::on_unload()’:
-/sep/src/workbench/demos/audio_visualizer.cpp:68:19: error: ‘class sep::audio::AudioCapture’ has no member named ‘stop’
-   68 |         capture_->stop();
-      |                   ^~~~
 [4/6] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -c /sep/src/workbench/demos/physics_explorer_simple.cpp
 FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o 
 /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -c /sep/src/workbench/demos/physics_explorer_simple.cpp
 /sep/src/workbench/demos/physics_explorer_simple.cpp: In function ‘int main()’:
-/sep/src/workbench/demos/physics_explorer_simple.cpp:23:15: error: ‘struct sep::quantum::Pattern’ has no member named ‘coherence’
-   23 |             p.coherence = 0.5f;
+/sep/src/workbench/demos/physics_explorer_simple.cpp:22:15: error: ‘struct sep::quantum::Pattern’ has no member named ‘coherence’
+   22 |             p.coherence = 0.5f;
       |               ^~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:24:15: error: ‘struct sep::quantum::Pattern’ has no member named ‘stability’
-   24 |             p.stability = 0.5f;
+/sep/src/workbench/demos/physics_explorer_simple.cpp:23:15: error: ‘struct sep::quantum::Pattern’ has no member named ‘stability’
+   23 |             p.stability = 0.5f;
       |               ^~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:25:15: error: ‘struct sep::quantum::Pattern’ has no member named ‘memory_tier’
-   25 |             p.memory_tier = memory::MemoryTierEnum::STM;
+/sep/src/workbench/demos/physics_explorer_simple.cpp:24:15: error: ‘struct sep::quantum::Pattern’ has no member named ‘memory_tier’
+   24 |             p.memory_tier = memory::MemoryTierEnum::STM;
       |               ^~~~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:38:19: error: ‘struct sep::quantum::Pattern’ has no member named ‘coherence’
-   38 |                 p.coherence = std::min(1.0f, p.coherence + 0.05f);
+/sep/src/workbench/demos/physics_explorer_simple.cpp:37:44: error: ‘struct sep::quantum::Pattern’ has no member named ‘generation’
+   37 |             q.quantum_state.generation = p.generation;
+      |                                            ^~~~~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:46:19: error: ‘struct sep::quantum::Pattern’ has no member named ‘coherence’
+   46 |                 p.coherence = std::min(1.0f, p.coherence + 0.05f);
       |                   ^~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:38:48: error: ‘struct sep::quantum::Pattern’ has no member named ‘coherence’
-   38 |                 p.coherence = std::min(1.0f, p.coherence + 0.05f);
+/sep/src/workbench/demos/physics_explorer_simple.cpp:46:48: error: ‘struct sep::quantum::Pattern’ has no member named ‘coherence’
+   46 |                 p.coherence = std::min(1.0f, p.coherence + 0.05f);
       |                                                ^~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:39:19: error: ‘struct sep::quantum::Pattern’ has no member named ‘stability’
-   39 |                 p.stability = std::min(1.0f, p.stability + 0.05f);
+/sep/src/workbench/demos/physics_explorer_simple.cpp:47:19: error: ‘struct sep::quantum::Pattern’ has no member named ‘stability’
+   47 |                 p.stability = std::min(1.0f, p.stability + 0.05f);
       |                   ^~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:39:48: error: ‘struct sep::quantum::Pattern’ has no member named ‘stability’
-   39 |                 p.stability = std::min(1.0f, p.stability + 0.05f);
+/sep/src/workbench/demos/physics_explorer_simple.cpp:47:48: error: ‘struct sep::quantum::Pattern’ has no member named ‘stability’
+   47 |                 p.stability = std::min(1.0f, p.stability + 0.05f);
       |                                                ^~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:40:23: error: ‘struct sep::quantum::Pattern’ has no member named ‘coherence’
-   40 |                 if (p.coherence > 0.9f && p.stability > 0.9f) {
+/sep/src/workbench/demos/physics_explorer_simple.cpp:48:23: error: ‘struct sep::quantum::Pattern’ has no member named ‘coherence’
+   48 |                 if (p.coherence > 0.9f && p.stability > 0.9f) {
       |                       ^~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:40:45: error: ‘struct sep::quantum::Pattern’ has no member named ‘stability’
-   40 |                 if (p.coherence > 0.9f && p.stability > 0.9f) {
+/sep/src/workbench/demos/physics_explorer_simple.cpp:48:45: error: ‘struct sep::quantum::Pattern’ has no member named ‘stability’
+   48 |                 if (p.coherence > 0.9f && p.stability > 0.9f) {
       |                                             ^~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:41:23: error: ‘struct sep::quantum::Pattern’ has no member named ‘memory_tier’
-   41 |                     p.memory_tier = memory::MemoryTierEnum::LTM;
+/sep/src/workbench/demos/physics_explorer_simple.cpp:49:23: error: ‘struct sep::quantum::Pattern’ has no member named ‘memory_tier’
+   49 |                     p.memory_tier = memory::MemoryTierEnum::LTM;
       |                       ^~~~~~~~~~~
-/sep/src/workbench/demos/physics_explorer_simple.cpp:49:15: error: ‘const struct sep::quantum::Pattern’ has no member named ‘memory_tier’
-   49 |         if (p.memory_tier == memory::MemoryTierEnum::LTM) {
+/sep/src/workbench/demos/physics_explorer_simple.cpp:57:15: error: ‘const struct sep::quantum::Pattern’ has no member named ‘memory_tier’
+   57 |         if (p.memory_tier == memory::MemoryTierEnum::LTM) {
       |               ^~~~~~~~~~~
 ninja: build stopped: subcommand failed.

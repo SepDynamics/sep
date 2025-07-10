@@ -1,10 +1,12 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+
+#include "../../workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/quantum_coherence_manager.h"
-#include <memory>
-#include <vector>
 
 namespace sep {
 namespace workbench {

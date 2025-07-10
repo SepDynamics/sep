@@ -1,9 +1,11 @@
 #pragma once
 
+#include <vector>
+
+#include "../../workbench_demo_adapter.hpp"
+#include "core/dag_graph.h"
 #include "demo_manager.hpp"
 #include "sep_engine_wrapper.h"
-#include "core/dag_graph.h"
-#include <vector>
 
 namespace sep {
 namespace workbench {

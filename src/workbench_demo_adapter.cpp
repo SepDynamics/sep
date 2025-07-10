@@ -33,7 +33,7 @@ namespace sep
 
         GenesisPatternAdapter::~GenesisPatternAdapter() = default;
 
-        void GenesisPatternAdapter::init()
+        void GenesisPatternAdapter::on_load()
         {
             std::cout << "Initializing Genesis Pattern Demo..." << std::endl;
 
@@ -43,7 +43,7 @@ namespace sep
             std::cout << "Genesis Pattern Demo initialized successfully." << std::endl;
         }
 
-        void GenesisPatternAdapter::update(float dt)
+        void GenesisPatternAdapter::on_update(float dt)
         {
             // Poll window events
             if (window_)
@@ -81,7 +81,7 @@ namespace sep
             }
         }
 
-        void GenesisPatternAdapter::render()
+        void GenesisPatternAdapter::on_render()
         {
             // Render the patterns
             if (renderer_)
@@ -102,9 +102,9 @@ namespace sep
             }
         }
 
-        void GenesisPatternAdapter::cleanup() { patterns_.clear(); }
+        void GenesisPatternAdapter::on_unload() { patterns_.clear(); }
 
-        void GenesisPatternAdapter::handleKeyboard(unsigned char key)
+        void GenesisPatternAdapter::on_key_press(int key)
         {
             switch (key)
             {
@@ -122,7 +122,8 @@ namespace sep
             }
         }
 
-        void GenesisPatternAdapter::handleMouse(int x, int y, int button)
+        void GenesisPatternAdapter::on_mouse([[maybe_unused]] int x, [[maybe_unused]] int y,
+                                             [[maybe_unused]] int button)
         {
             // Not used in this simple demo
         }
@@ -155,7 +156,7 @@ namespace sep
             std::cout << "Generated " << count << " patterns" << std::endl;
         }
 
-        void GenesisPatternAdapter::evolvePatterns(float dt)
+        void GenesisPatternAdapter::evolvePatterns([[maybe_unused]] float dt)
         {
             if (!engine_ || patterns_.empty()) {
                 return;

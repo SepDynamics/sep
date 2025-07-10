@@ -1,7 +1,10 @@
 #include "drug_discovery_demo.hpp"
+
 #include <config.hpp>
-#include <glm/glm.hpp>
 #include <cstdlib>
+#include <glm/glm.hpp>
+
+#include "../../workbench_demo_adapter.hpp"
 
 namespace sep {
 namespace workbench {

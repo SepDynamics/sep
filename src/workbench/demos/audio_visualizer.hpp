@@ -1,11 +1,13 @@
 #pragma once
 
-#include "demo_manager.hpp"
+#include <glm/vec3.hpp>
 #include <memory>
 #include <vector>
-#include <glm/vec3.hpp>
+
+#include "../../workbench_demo_adapter.hpp"
 #include "audio/capture.h"
 #include "audio/pipeline.h"
+#include "demo_manager.hpp"
 
 namespace sep {
 namespace workbench {

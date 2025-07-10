@@ -1,11 +1,13 @@
 #pragma once
 
-#include "demo_manager.hpp"
-#include <quantum/processor.h>
-#include <memory/quantum_coherence_manager.h>
+#include <glm/vec3.hpp>
 #include <memory>
 #include <vector>
-#include <glm/vec3.hpp>
+
+#include "../../workbench_demo_adapter.hpp"
+#include "demo_manager.hpp"
+#include "memory/quantum_coherence_manager.h"
+#include "quantum/processor.h"
 
 namespace sep {
 namespace workbench {

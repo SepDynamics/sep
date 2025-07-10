@@ -1,10 +1,11 @@
+#include <glm/glm.hpp>
 #include <iostream>
 #include <vector>
-#include <glm/glm.hpp>
 
+#include "../../workbench_demo_adapter.hpp"
+#include "memory/types.h"
 #include "quantum/data.hpp"
 #include "quantum/evolution.h"
-#include "memory/types.h"
 
 using namespace sep;
 using namespace sep::quantum;

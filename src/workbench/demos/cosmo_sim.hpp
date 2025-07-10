@@ -1,9 +1,11 @@
 #pragma once
 
-#include "demo_manager.hpp"
-#include <quantum/data.hpp>
-#include <vector>
 #include <glm/vec3.hpp>
+#include <vector>
+
+#include "../../workbench_demo_adapter.hpp"
+#include "demo_manager.hpp"
+#include "quantum/data.hpp"
 
 namespace sep {
 namespace workbench {
@@ -15,7 +17,7 @@ public:
     void on_render() override;
     void on_unload() override;
     void on_key_press(int key) override;
-    void on_mouse(int x, int y, int button);
+    void on_mouse(int x, int y, int button = 0) override;
 
 private:
     std::vector<sep::pattern::PatternData> bodies_;

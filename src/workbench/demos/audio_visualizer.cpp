@@ -1,8 +1,11 @@
 #include "audio_visualizer.hpp"
-#include <config.hpp>
-#include <audio/capture.h>
-#include <audio/pipeline.h>
+
 #include <glm/vec3.hpp>
+
+#include "../../workbench_demo_adapter.hpp"
+#include "audio/capture.h"
+#include "audio/pipeline.h"
+#include "config.hpp"
 
 namespace sep {
 namespace workbench {

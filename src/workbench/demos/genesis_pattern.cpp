@@ -1,10 +1,12 @@
 #include "genesis_pattern.hpp"
-#include "core/engine.h"
+
+#include "../../workbench_demo_adapter.hpp"
 #include "blender/cycles_renderer.hpp"
-#include <quantum/quantum_processor.h>
-#include <memory/quantum_coherence_manager.h>
-#include <quantum/types.h>
 #include "config.hpp"
+#include "core/engine.h"
+#include "memory/quantum_coherence_manager.h"
+#include "quantum/quantum_processor.h"
+#include "quantum/types.h"
 
 namespace sep {
 namespace workbench {

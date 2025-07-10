@@ -1,7 +1,9 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
+
+#include "../../workbench_demo_adapter.hpp"
 
 namespace sep {
 class Engine;

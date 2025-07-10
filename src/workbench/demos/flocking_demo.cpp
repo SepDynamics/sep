@@ -1,6 +1,9 @@
 #include "flocking_demo.hpp"
+
 #include <cstdlib>
 #include <glm/glm.hpp>
+
+#include "../../workbench_demo_adapter.hpp"
 
 namespace sep {
 namespace workbench {

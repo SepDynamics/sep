@@ -1,9 +1,11 @@
 #pragma once
 
+#include <glm/vec3.hpp>
+#include <vector>
+
+#include "../../workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
 #include "sep_engine_wrapper.h"
-#include <vector>
-#include <glm/vec3.hpp>
 
 namespace sep {
 namespace workbench {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "workbench_demo_adapter.hpp"
+#include "../../workbench_demo_adapter.hpp"
 #include <memory>
 #include <vector>
 #include <glm/glm.hpp>

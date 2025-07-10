@@ -1,7 +1,10 @@
 #include "digital_physics_demo.hpp"
-#include "config.hpp"
-#include <glm/vec3.hpp>
+
 #include <cstdlib>
+#include <glm/vec3.hpp>
+
+#include "../../workbench_demo_adapter.hpp"
+#include "config.hpp"
 
 namespace sep {
 namespace workbench {

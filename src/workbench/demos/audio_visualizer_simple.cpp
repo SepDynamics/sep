@@ -1,8 +1,10 @@
-#include "audio_visualizer.hpp"
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include <algorithm>
+
+#include "../../workbench_demo_adapter.hpp"
+#include "audio_visualizer.hpp"
 #include "config.hpp"
 
 namespace sep {

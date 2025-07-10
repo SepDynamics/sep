@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-// Include full class definitions instead of forward declarations
-#include "quantum_pattern.hpp"
+// Include workbench pattern type
+#include "pattern.hpp"
 #include "renderer.h"
 #include "sep_engine_wrapper.h"
 #include "ui_manager.h"

@@ -1,4 +1,5 @@
 #include "drug_optimizer.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/norm.hpp>
 #include <cstdlib>
 

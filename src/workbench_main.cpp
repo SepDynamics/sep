@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "imgui/backends/imgui_impl_opengl3.h"
 #include "core/logging.h"  // For our logger
 #include "imgui.h"
 

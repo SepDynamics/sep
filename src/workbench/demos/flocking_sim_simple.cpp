@@ -3,6 +3,7 @@
 #include <random>
 #include <ctime>
 #include <time.h>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/vec3.hpp>
 #include <glm/gtx/norm.hpp>
 

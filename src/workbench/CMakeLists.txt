@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.16)
 file(GLOB_RECURSE WB_SOURCES
     "demos/*.cpp"
     "renderer.cpp"
+    "${CMAKE_SOURCE_DIR}/third_party/imgui/*.cpp"
+    "${CMAKE_SOURCE_DIR}/third_party/imgui/backends/imgui_impl_glfw.cpp"
+    "${CMAKE_SOURCE_DIR}/third_party/imgui/backends/imgui_impl_opengl3.cpp"
 )
 
 # ImGui sources are compiled directly into the workbench library
@@ -18,7 +21,7 @@ set(IMGUI_SOURCES
 add_library(sep_workbench_lib STATIC ${WB_SOURCES} ${IMGUI_SOURCES})
 
 # Public include directories for consumers
- target_include_directories(sep_workbench_lib PUBLIC
+target_include_directories(sep_workbench_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/third_party/imgui

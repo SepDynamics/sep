@@ -63,7 +63,7 @@ protected:
   ConfigManager();
 
 private:
-  class Impl;
+  struct Impl;
   std::unique_ptr<Impl> impl_;
   mutable std::mutex mutex_;
 };

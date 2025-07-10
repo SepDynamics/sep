@@ -188,7 +188,6 @@ endif()
 
 # Add the src directory which contains all module subdirectories and workbench
 add_subdirectory(src)
-add_subdirectory(examples/workbench)
 if(SEP_WITH_CYCLES)
     add_subdirectory(extern/cycles/third_party/cuew)
     add_subdirectory(extern/cycles/third_party/hipew)

@@ -8,7 +8,7 @@
 #include "api/types.h" // For ErrorCode
 // Forward declarations
 namespace sep {
-namespace context {
+namespace quantum {
 class Processor;
 }
 }

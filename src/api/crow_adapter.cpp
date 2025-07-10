@@ -34,7 +34,8 @@ namespace sep::api {
 // Crow request/response adapters
 // -----------------------------
 
-CrowRequestAdapter::CrowRequestAdapter(::crow::request &req) : req_(req) {
+CrowRequestAdapter::CrowRequestAdapter(crow::request &req) : req_(req)
+{
     method_str_ = crow::method_name(req.method);
 }
 
@@ -44,7 +45,7 @@ std::string CrowRequestAdapter::method() const { return method_str_; }
 
 std::string CrowRequestAdapter::body() const { return std::string(req_.body.c_str()); }
 
-CrowResponseAdapter::CrowResponseAdapter(::crow::response &res) : res_(res) {}
+CrowResponseAdapter::CrowResponseAdapter(crow::response &res) : res_(res) {}
 
 void CrowResponseAdapter::setCode(int code) { res_.code = code; }
 
@@ -56,11 +57,13 @@ void CrowResponseAdapter::end() { res_.end(); }
 
 std::string CrowResponseAdapter::getBody() const { return std::string(res_.body.c_str()); }
 
-std::unique_ptr<HttpResponse> makeResponse(::crow::response &res) {
+std::unique_ptr<HttpResponse> makeResponse(crow::response &res)
+{
     return std::make_unique<CrowResponseAdapter>(res);
 }
 
-std::unique_ptr<HttpRequest> makeRequest(::crow::request &req) {
+std::unique_ptr<HttpRequest> makeRequest(crow::request &req)
+{
     return std::make_unique<CrowRequestAdapter>(req);
 }
 

@@ -58,7 +58,7 @@ private:
  */
 class CrowResponseAdapter {
 public:
-    explicit CrowResponseAdapter(::crow::response& res) : res_(res) {}
+    explicit CrowResponseAdapter(crow::response& res) : res_(res) {}
 
     void set_code(int code) { res_.code = code; }
     int get_code() const { return res_.code; }

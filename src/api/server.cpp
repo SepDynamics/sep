@@ -288,7 +288,7 @@ void SEPApiServer::logRequest(const crow::request& req, int status_code,
 
   metrics_.lastResponseTime = std::chrono::milliseconds(duration_ms);
 
-  std::string method_name = std::string(::crow::method_name(req.method));
+  std::string method_name = std::string(crow::method_name(req.method));
   std::string url = std::string(req.url);
 
   logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
@@ -383,7 +383,7 @@ void SEPApiServer::setup_routes() {
 
   // Process patterns endpoint
   app_->route_dynamic("/api/v1/pattern/evolve")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+      .methods(crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
           auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -434,7 +434,7 @@ void SEPApiServer::setup_routes() {
 
   // Process batch endpoint
   app_->route_dynamic("/api/v1/memory/query")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+      .methods(crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
           auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -483,7 +483,7 @@ void SEPApiServer::setup_routes() {
 
   // Pattern history endpoint
   app_->route_dynamic("/api/v1/patterns/history")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+      .methods(crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
           auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -532,7 +532,7 @@ void SEPApiServer::setup_routes() {
 
   // Validate contexts endpoint
   app_->route_dynamic("/api/v1/context/process")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+      .methods(crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
           auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -581,7 +581,7 @@ void SEPApiServer::setup_routes() {
 
   // Extract embeddings endpoint
   app_->route_dynamic("/api/v1/embeddings/extract")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+      .methods(crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
           auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -630,7 +630,7 @@ void SEPApiServer::setup_routes() {
 
   // Analyze patterns endpoint
   app_->route_dynamic("/api/v1/pattern/analyze")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+      .methods(crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
           auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -679,7 +679,7 @@ void SEPApiServer::setup_routes() {
 
   // Context relationships endpoint
   app_->route_dynamic("/api/v1/context/relationships")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+      .methods(crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
           auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
@@ -728,7 +728,7 @@ void SEPApiServer::setup_routes() {
 
   // Memory metrics endpoint
   app_->route_dynamic("/api/v1/metrics/memory")
-      .methods(::crow::HTTPMethod::GET)([this, &engine](const crow::request& req) {
+      .methods(crow::HTTPMethod::GET)([this, &engine](const crow::request& req) {
           auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS

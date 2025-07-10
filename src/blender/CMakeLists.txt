@@ -12,12 +12,21 @@ find_package(TBB REQUIRED)
 # Find Alembic
 find_package(Alembic REQUIRED)
 message(STATUS "Alembic include dir: ${ALEMBIC_INCLUDE_DIR}")
-message(STATUS "Alembic libraries: ${ALEMBIC_LIBRARIES}")
+message(STATUS "Alembic libraries: ${Alembic_LIBRARIES}")
 
 # Find OpenPGL
 find_package(OpenPGL REQUIRED)
 message(STATUS "OpenPGL include dir: ${OPENPGL_INCLUDE_DIR}")
-message(STATUS "OpenPGL libraries: ${OPENPGL_LIBRARIES}")
+message(STATUS "OpenPGL libraries: ${OpenPGL_LIBRARIES}")
+
+# Check for system-specific Alembic and OpenPGL paths
+if(EXISTS "/usr/lib64/libAlembic.so")
+  message(STATUS "Found system Alembic library at /usr/lib64/libAlembic.so")
+endif()
+
+if(EXISTS "/usr/lib64/libopenpgl.so")
+  message(STATUS "Found system OpenPGL library at /usr/lib64/libopenpgl.so")
+endif()
 
 
 # Install headers
@@ -79,14 +88,29 @@ target_link_libraries(sep_blender PUBLIC
     ${OpenImageIO_LIBRARIES}
     ${OSL_LIBRARIES}
     ${TBB_LIBRARIES}
-    ${Alembic_LIBRARIES}
-    ${OpenPGL_LIBRARIES}
-    /usr/lib64/libAlembic.so
-    /usr/lib64/libopenpgl.so
+    
+    # Use IMPORTED targets if available, otherwise use direct linking
+    $<$<TARGET_EXISTS:Alembic::Abc>:Alembic::Abc>
+    $<$<TARGET_EXISTS:Alembic::AbcGeom>:Alembic::AbcGeom>
+    $<$<TARGET_EXISTS:Alembic::AbcCoreAbstract>:Alembic::AbcCoreAbstract>
+    $<$<TARGET_EXISTS:Alembic::AbcCoreFactory>:Alembic::AbcCoreFactory>
+    $<$<TARGET_EXISTS:OpenPGL::openpgl>:OpenPGL::openpgl>
+    
+    # Direct linking as fallback
+    $<$<NOT:$<TARGET_EXISTS:Alembic::Abc>>:-Wl,--whole-archive -lAlembic -Wl,--no-whole-archive>
+    $<$<NOT:$<TARGET_EXISTS:OpenPGL::openpgl>>:-Wl,--whole-archive -lopenpgl -Wl,--no-whole-archive>
+    
+    # Other dependencies
     CUDA::cudart
     CUDA::cuda_driver
     ${CMAKE_DL_LIBS}
     Threads::Threads
+)
+
+# Add rpath for the shared libraries
+set_target_properties(sep_blender PROPERTIES
+    INSTALL_RPATH "/usr/lib64"
+    BUILD_WITH_INSTALL_RPATH TRUE
 )
 
 # Only link Cycles libraries when SEP_HAS_CYCLES is enabled

@@ -51,7 +51,9 @@ if(SEP_HAS_CUDA)
 endif()
 
 find_package(Threads REQUIRED)
-find_package(TBB REQUIRED)
+if(SEP_USE_TBB)
+    find_package(TBB REQUIRED)
+endif()
 
 set_target_properties(sep_memory PROPERTIES
     POSITION_INDEPENDENT_CODE ON
@@ -68,8 +70,11 @@ target_link_libraries(sep_memory
     PRIVATE
         fmt::fmt
         Threads::Threads
-        TBB::tbb
+        $<$<BOOL:${SEP_USE_TBB}>:TBB::tbb>
 )
+if(SEP_USE_TBB)
+    target_compile_definitions(sep_memory PRIVATE SEP_USE_TBB)
+endif()
 if(HIREDIS_FOUND)
     target_link_libraries(sep_memory PRIVATE ${HIREDIS_LIB})
 endif()

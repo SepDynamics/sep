@@ -7,6 +7,11 @@
 namespace sep {
 namespace workbench {
 
+struct CosmoConfig {
+    float box_size = 100.0f;
+    float time_step = 0.01f;
+};
+
 struct GenesisPatternConfig {
     struct InitialPattern {
         float evolution_rate = 0.1f;
@@ -57,10 +62,14 @@ public:
 
     GenesisPatternConfig& genesis_pattern() { return genesis_pattern_; }
     const GenesisPatternConfig& genesis_pattern() const { return genesis_pattern_; }
+    
+    CosmoConfig& cosmo() { return cosmo_; }
+    const CosmoConfig& cosmo() const { return cosmo_; }
 
 private:
     Config() = default;
     GenesisPatternConfig genesis_pattern_;
+    CosmoConfig cosmo_;
 };
 
 } // namespace workbench

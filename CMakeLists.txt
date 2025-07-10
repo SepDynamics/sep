@@ -184,9 +184,13 @@ endif()
 if(SEP_WITH_OSL)
     find_package(OSL REQUIRED)
 endif()
+
 if(SEP_WITH_ALEMBIC)
     find_package(Alembic REQUIRED)
 endif()
+
+# Build ImGui from the bundled third_party source
+add_subdirectory(third_party/imgui)
 
 # Add the src directory which contains all module subdirectories and workbench
 add_subdirectory(src)

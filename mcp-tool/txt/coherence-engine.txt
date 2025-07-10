@@ -1,0 +1,742 @@
+import { promises as fs } from 'fs';
+import { join } from 'path';
+import { createHash } from 'crypto';
+
+/**
+ * CoherenceEngine - Core component for quantum-inspired pattern analysis
+ * Implements amplitude coherence analysis, pattern stability calculations,
+ * and quantum bit symmetry detection algorithms
+ */
+export default class CoherenceEngine {
+    constructor(thresholds) {
+        this.thresholds = thresholds || {
+            minimum: 0.1,
+            mtmPromotion: 0.7,
+            ltmPromotion: 0.9,
+            demotion: 0.3,
+            relationshipMinimum: 0.6
+        };
+        
+        this.recentCoherenceScores = [];
+        this.coherenceTrend = {
+            lastUpdate: Date.now(),
+            averages: [],
+            thresholdChanges: []
+        };
+        
+        this.patternRegistry = new Map();
+        this.stateTransitions = [];
+        this.qbsaParameters = {
+            symmetryWeight: 0.4,
+            stabilityWeight: 0.35,
+            entropyWeight: 0.25,
+            mutationFactor: 0.05
+        };
+    }
+    
+    /**
+     * Initialize the coherence engine
+     */
+    async initialize() {
+        try {
+            console.log('Initializing CoherenceEngine with QBSA parameters');
+            // Load previously seen patterns if available
+            await this.loadPatternRegistry();
+            return true;
+        } catch (error) {
+            console.error('Error initializing CoherenceEngine:', error);
+            return false;
+        }
+    }
+    
+    /**
+     * Update the thresholds used for coherence calculations
+     * @param {Object} newThresholds - New thresholds to use
+     */
+    updateThresholds(newThresholds) {
+        const oldThresholds = { ...this.thresholds };
+        this.thresholds = { ...this.thresholds, ...newThresholds };
+        
+        // Track threshold changes for monitoring
+        this.coherenceTrend.thresholdChanges.push({
+            timestamp: new Date().toISOString(),
+            old: oldThresholds,
+            new: this.thresholds,
+            reason: 'Manual update or adaptation'
+        });
+        
+        console.log('Coherence thresholds updated:', this.thresholds);
+    }
+    
+    /**
+     * Analyze patterns in the provided context and extract coherence scores
+     * @param {Object} contextResult - The context to analyze
+     * @returns {Object} - Analysis results with coherence scores and patterns
+     */
+    async analyzePatterns(contextResult) {
+        try {
+            // Real implementation would use more sophisticated pattern analysis
+            // This is a simplified version that demonstrates the concept
+            
+            const input = contextResult?.content || contextResult || {};
+            const text = typeof input === 'string' ? input : JSON.stringify(input);
+            
+            // Extract patterns from input using QBSA (Quantum Bit State Analysis)
+            const patterns = this.extractPatterns(text);
+            
+            // Calculate coherence score using amplitude coherence analysis
+            const coherenceScore = this.calculateCoherence(patterns, text);
+            
+            // Store coherence score for trend analysis
+            this.recentCoherenceScores.push({
+                timestamp: Date.now(),
+                score: coherenceScore
+            });
+            
+            // Keep only recent scores (last 50)
+            if (this.recentCoherenceScores.length > 50) {
+                this.recentCoherenceScores.shift();
+            }
+            
+            // Generate potential interpretations (quantum states)
+            const potentialStates = this.generatePotentialStates(patterns, coherenceScore);
+            
+            return {
+                coherence: coherenceScore,
+                patterns,
+                potentialStates,
+                message: this.generateMessageFromPatterns(patterns),
+                suggestedNextSteps: this.generateSuggestions(patterns, coherenceScore)
+            };
+        } catch (error) {
+            console.error('Error in pattern analysis:', error);
+            return {
+                coherence: this.thresholds.minimum,
+                patterns: [],
+                potentialStates: [],
+                message: "I couldn't analyze patterns effectively.",
+                error: error.message
+            };
+        }
+    }
+    
+    /**
+     * Extract patterns from text using QBSA-inspired techniques
+     * @param {string} text - The text to analyze
+     * @returns {Array} - Extracted patterns
+     */
+    extractPatterns(text) {
+        const patterns = [];
+        
+        // Simple pattern extraction by tokenizing and finding n-grams
+        // A real implementation would use more sophisticated NLP techniques
+        
+        // Word frequency analysis
+        const words = text.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(w => w.length > 0);
+        const wordFreq = {};
+        
+        words.forEach(word => {
+            wordFreq[word] = (wordFreq[word] || 0) + 1;
+        });
+        
+        // Find important words based on frequency
+        const importantWords = Object.entries(wordFreq)
+            .filter(([word, freq]) => freq > 1 && word.length > 3)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10)
+            .map(([word]) => word);
+        
+        // Create n-grams (2-3 words)
+        for (let i = 0; i < words.length - 1; i++) {
+            if (importantWords.includes(words[i]) || importantWords.includes(words[i+1])) {
+                const bigram = `${words[i]} ${words[i+1]}`;
+                
+                // Calculate pattern stability using QBSA-inspired algorithm
+                const stability = this.calculatePatternStability(bigram, words);
+                
+                patterns.push({
+                    type: 'bigram',
+                    content: bigram,
+                    frequency: this.countOccurrences(text, bigram),
+                    stability,
+                    entropy: this.calculatePatternEntropy(bigram),
+                    symmetry: this.detectSymmetry(bigram)
+                });
+            }
+        }
+        
+        // Detect entities (simplified)
+        const entityRegex = /([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)/g;
+        const entities = text.match(entityRegex) || [];
+        
+        entities.forEach(entity => {
+            if (entity.length > 3) {
+                patterns.push({
+                    type: 'entity',
+                    content: entity,
+                    frequency: this.countOccurrences(text, entity),
+                    stability: this.calculatePatternStability(entity, words),
+                    symmetry: this.detectSymmetry(entity)
+                });
+            }
+        });
+        
+        // Update pattern registry with new observations
+        patterns.forEach(pattern => {
+            const patternKey = `${pattern.type}:${pattern.content}`;
+            if (this.patternRegistry.has(patternKey)) {
+                const existing = this.patternRegistry.get(patternKey);
+                existing.observations += 1;
+                existing.lastSeen = Date.now();
+                
+                // Update stability with new observation (slow change)
+                existing.stability = 0.9 * existing.stability + 0.1 * pattern.stability;
+                
+                this.patternRegistry.set(patternKey, existing);
+            } else {
+                this.patternRegistry.set(patternKey, {
+                    ...pattern,
+                    observations: 1,
+                    firstSeen: Date.now(),
+                    lastSeen: Date.now()
+                });
+            }
+        });
+        
+        return patterns;
+    }
+    
+    /**
+     * Calculate coherence score for the extracted patterns
+     * @param {Array} patterns - The extracted patterns
+     * @param {string} text - Original text for context
+     * @returns {number} - Coherence score between 0-1
+     */
+    calculateCoherence(patterns, text) {
+        if (!patterns || patterns.length === 0) {
+            return this.thresholds.minimum;
+        }
+        
+        // Base coherence on multiple factors
+        
+        // 1. Pattern quality - average of stability and symmetry
+        const patternQuality = patterns.reduce((sum, p) => {
+            return sum + (
+                (p.stability * 0.6) +
+                (p.symmetry * 0.4)
+            );
+        }, 0) / patterns.length;
+        
+        // 2. Pattern coverage - how much of the text is covered by patterns
+        const uniquePatternContent = new Set(patterns.map(p => p.content));
+        const patternWords = Array.from(uniquePatternContent).join(' ').split(' ');
+        const uniquePatternWords = new Set(patternWords);
+        const textWords = text.split(' ');
+        const coverage = Math.min(1, uniquePatternWords.size / (textWords.length * 0.7));
+        
+        // 3. Pattern relationships - how well patterns relate to each other
+        const relationshipScore = this.calculatePatternRelationships(patterns);
+        
+        // Combine scores with weights
+        const coherence = (
+            (patternQuality * 0.5) + 
+            (coverage * 0.3) + 
+            (relationshipScore * 0.2)
+        );
+        
+        // Ensure the score is between minimum threshold and 1
+        return Math.max(this.thresholds.minimum, Math.min(1, coherence));
+    }
+    
+    /**
+     * Calculate stability score for a pattern
+     * @param {string} pattern - The pattern to analyze
+     * @param {Array} words - All words in the text
+     * @returns {number} - Stability score between 0-1
+     */
+    calculatePatternStability(pattern, words) {
+        // For previously observed patterns, use the stored stability
+        const patternKey = `bigram:${pattern}`;
+        if (this.patternRegistry.has(patternKey)) {
+            return this.patternRegistry.get(patternKey).stability;
+        }
+        
+        // For new patterns, calculate initial stability
+        // Based on frequency, length, and surrounding context
+        const patternWords = pattern.split(' ');
+        const patternLength = patternWords.length;
+        
+        // Longer patterns are generally more stable
+        const lengthFactor = Math.min(1, patternLength / 4);
+        
+        // Check surrounding words for context stability
+        const contextStability = this.calculateContextStability(patternWords, words);
+        
+        // Simply combine length and context factors
+        return (lengthFactor * 0.4) + (contextStability * 0.6);
+    }
+    
+    /**
+     * Calculate context stability for a pattern
+     * @param {Array} patternWords - Words in the pattern
+     * @param {Array} allWords - All words in the text
+     * @returns {number} - Context stability score between 0-1
+     */
+    calculateContextStability(patternWords, allWords) {
+        let contextScore = 0;
+        
+        for (let i = 0; i < allWords.length - patternWords.length; i++) {
+            let match = true;
+            for (let j = 0; j < patternWords.length; j++) {
+                if (allWords[i + j].toLowerCase() !== patternWords[j].toLowerCase()) {
+                    match = false;
+                    break;
+                }
+            }
+            
+            if (match) {
+                // Check words before and after the pattern
+                const hasBefore = i > 0;
+                const hasAfter = i + patternWords.length < allWords.length;
+                
+                if (hasBefore && hasAfter) {
+                    contextScore += 1;
+                } else if (hasBefore || hasAfter) {
+                    contextScore += 0.5;
+                }
+            }
+        }
+        
+        // Normalize score between 0-1
+        return Math.min(1, contextScore / 3);
+    }
+    
+    
+    /**
+     * Detect symmetry in a pattern
+     * @param {string} pattern - The pattern to analyze
+     * @returns {number} - Symmetry score between 0-1
+     */
+    detectSymmetry(pattern) {
+        // A simplified approach to symmetry detection
+        // Real implementation would use more sophisticated techniques
+        
+        // Check for character-level palindromes
+        const chars = pattern.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const reversed = chars.split('').reverse().join('');
+        
+        // Calculate similarity between original and reversed
+        let matchCount = 0;
+        for (let i = 0; i < chars.length; i++) {
+            if (chars[i] === reversed[i]) {
+                matchCount++;
+            }
+        }
+        
+        // Perfect palindrome would be 1.0
+        const palindromeScore = chars.length > 0 ? matchCount / chars.length : 0;
+        
+        // Check for repeating patterns
+        const words = pattern.split(' ');
+        let repetitionScore = 0;
+        
+        if (words.length > 1) {
+            const uniqueWords = new Set(words);
+            repetitionScore = 1 - (uniqueWords.size / words.length);
+        }
+        
+        // Check for balanced structures (e.g., matching open/close patterns)
+        const openChars = ['(', '[', '{', '<'];
+        const closeChars = [')', ']', '}', '>'];
+        let openCount = 0;
+        let closeCount = 0;
+        let properlyNested = true;
+        
+        for (const char of pattern) {
+            if (openChars.includes(char)) {
+                openCount++;
+            } else if (closeChars.includes(char)) {
+                closeCount++;
+                if (closeCount > openCount) {
+                    properlyNested = false;
+                }
+            }
+        }
+        
+        const balanceScore = (openCount === 0 && closeCount === 0) ? 
+            0 : (properlyNested && openCount === closeCount) ? 1 : 0;
+        
+        // Combine symmetry scores
+        return (palindromeScore * 0.4) + (repetitionScore * 0.3) + (balanceScore * 0.3);
+    }
+    
+    /**
+     * Calculate relationship strength between patterns
+     * @param {Array} patterns - The patterns to analyze
+     * @returns {number} - Relationship score between 0-1
+     */
+    calculatePatternRelationships(patterns) {
+        if (patterns.length <= 1) {
+            return 0;
+        }
+        
+        // Build a simple relationship graph
+        const relationships = [];
+        
+        for (let i = 0; i < patterns.length; i++) {
+            for (let j = i + 1; j < patterns.length; j++) {
+                const patternA = patterns[i];
+                const patternB = patterns[j];
+                
+                // Calculate relationship strength based on shared words
+                const wordsA = patternA.content.toLowerCase().split(' ');
+                const wordsB = patternB.content.toLowerCase().split(' ');
+                
+                const uniqueWordsA = new Set(wordsA);
+                const uniqueWordsB = new Set(wordsB);
+                
+                let sharedCount = 0;
+                uniqueWordsA.forEach(word => {
+                    if (uniqueWordsB.has(word)) {
+                        sharedCount++;
+                    }
+                });
+                
+                const totalUniqueWords = new Set([...uniqueWordsA, ...uniqueWordsB]).size;
+                const jaccard = totalUniqueWords > 0 ? sharedCount / totalUniqueWords : 0;
+                
+                // Only count relationships above the minimum threshold
+                if (jaccard >= this.thresholds.relationshipMinimum) {
+                    relationships.push({
+                        patternA: patternA.content,
+                        patternB: patternB.content,
+                        strength: jaccard
+                    });
+                }
+            }
+        }
+        
+        // Calculate overall relationship score
+        if (relationships.length === 0) {
+            return 0;
+        }
+        
+        const avgStrength = relationships.reduce((sum, rel) => sum + rel.strength, 0) / relationships.length;
+        const coverageRatio = Math.min(1, (2 * relationships.length) / (patterns.length * (patterns.length - 1)));
+        
+        return avgStrength * coverageRatio;
+    }
+    
+    /**
+     * Generate potential quantum states (interpretations)
+     * @param {Array} patterns - The patterns to use
+     * @param {number} baseCoherence - The base coherence score
+     * @returns {Array} - Potential interpretation states
+     */
+    generatePotentialStates(patterns, baseCoherence) {
+        // Generate multiple potential interpretations
+        const states = [];
+        
+        // Group patterns by type
+        const patternsByType = {};
+        patterns.forEach(pattern => {
+            patternsByType[pattern.type] = patternsByType[pattern.type] || [];
+            patternsByType[pattern.type].push(pattern);
+        });
+        
+        // Generate state based on all patterns
+        states.push({
+            id: this.generateStateId('all'),
+            coherence: baseCoherence,
+            position: this.calculateManifoldPosition(patterns),
+            patterns: patterns,
+            interpretation: 'Complete pattern analysis',
+            confidence: 0.9
+        });
+        
+        // Generate state for each pattern type if there are enough patterns
+        Object.entries(patternsByType).forEach(([type, typePatterns]) => {
+            if (typePatterns.length >= 2) {
+                // Calculate coherence for this subset of patterns
+                const typeCoherence = this.calculateCoherence(typePatterns, 
+                    typePatterns.map(p => p.content).join(' '));
+                
+                states.push({
+                    id: this.generateStateId(type),
+                    coherence: typeCoherence,
+                    position: this.calculateManifoldPosition(typePatterns),
+                    patterns: typePatterns,
+                    interpretation: `Analysis focused on ${type} patterns`,
+                    confidence: 0.7
+                });
+            }
+        });
+        
+        // Generate state based on highest stability patterns
+        if (patterns.length >= 3) {
+            const stablePatterns = [...patterns]
+                .sort((a, b) => b.stability - a.stability)
+                .slice(0, Math.ceil(patterns.length / 2));
+            
+            const stableCoherence = this.calculateCoherence(stablePatterns,
+                stablePatterns.map(p => p.content).join(' '));
+            
+            states.push({
+                id: this.generateStateId('stable'),
+                coherence: stableCoherence,
+                position: this.calculateManifoldPosition(stablePatterns),
+                patterns: stablePatterns,
+                interpretation: 'Analysis focused on most stable patterns',
+                confidence: 0.8
+            });
+        }
+        
+        return states;
+    }
+    
+    /**
+     * Calculate position in the computational manifold
+     * @param {Array} patterns - The patterns to position
+     * @returns {Object} - Coordinates in the manifold
+     */
+    calculateManifoldPosition(patterns) {
+        // A simple approach to calculate position in a conceptual manifold
+        if (!patterns || patterns.length === 0) {
+            return { x: 0, y: 0, z: 0 };
+        }
+        
+        // Average pattern features to determine position
+        const avgStability = patterns.reduce((sum, p) => sum + (p.stability || 0), 0) / patterns.length;
+        const avgSymmetry = patterns.reduce((sum, p) => sum + (p.symmetry || 0), 0) / patterns.length;
+        const avgEntropy = patterns.reduce((sum, p) => sum + (p.entropy || 0), 0) / patterns.length;
+        
+        // Convert to manifold coordinates (simplified 3D representation)
+        // In a real implementation, this would use dimensionality reduction on more features
+        return {
+            x: avgStability * 2 - 1,          // -1 to 1 range
+            y: avgSymmetry * 2 - 1,           // -1 to 1 range
+            z: (1 - avgEntropy) * 2 - 1       // -1 to 1 range (inverse entropy)
+        };
+    }
+    
+    /**
+     * Generate a response message based on patterns
+     * @param {Array} patterns - The patterns to use
+     * @returns {string} - Generated message
+     */
+    generateMessageFromPatterns(patterns) {
+        if (!patterns || patterns.length === 0) {
+            return "I processed your input but couldn't identify clear patterns.";
+        }
+        
+        // Sort patterns by stability
+        const sortedPatterns = [...patterns].sort((a, b) => b.stability - a.stability);
+        const topPatterns = sortedPatterns.slice(0, 3);
+        
+        // Generate message based on pattern types
+        const patternTypes = new Set(topPatterns.map(p => p.type));
+        
+        if (patternTypes.has('entity')) {
+            const entities = topPatterns.filter(p => p.type === 'entity').map(p => p.content);
+            return `I identified key entities: ${entities.join(', ')}.`;
+        } else if (patternTypes.has('bigram')) {
+            const concepts = topPatterns.filter(p => p.type === 'bigram').map(p => p.content);
+            return `I recognized important concepts: ${concepts.join(', ')}.`;
+        } else {
+            return `I processed your input and found ${patterns.length} patterns with an average stability of ${(patterns.reduce((sum, p) => sum + p.stability, 0) / patterns.length).toFixed(2)}.`;
+        }
+    }
+    
+    /**
+     * Generate suggestions based on patterns
+     * @param {Array} patterns - The patterns to use
+     * @param {number} coherence - The overall coherence score
+     * @returns {Array} - Suggested next steps
+     */
+    generateSuggestions(patterns, coherence) {
+        const suggestions = [];
+        
+        if (coherence < this.thresholds.mtmPromotion) {
+            suggestions.push("Provide more detailed information to improve pattern recognition");
+        }
+        
+        if (patterns.length > 0) {
+            const topPattern = patterns.sort((a, b) => b.stability - a.stability)[0];
+            suggestions.push(`Explore more about "${topPattern.content}"`);
+        }
+        
+        if (coherence >= this.thresholds.mtmPromotion) {
+            suggestions.push("Proceed with current understanding");
+        }
+        
+        return suggestions;
+    }
+    
+    /**
+     * Analyze patterns across all memory tiers
+     * @returns {Object} - Analysis results
+     */
+    async analyzePatternsAcrossTiers() {
+        // In a real implementation, this would analyze patterns across memory tiers
+        // For this example, we'll return some mock data
+        
+        return {
+            evolved: [
+                {
+                    id: 'pattern1',
+                    generations: 5,
+                    stabilityTrend: 'increasing',
+                    currentCoherence: 0.85
+                },
+                {
+                    id: 'pattern2',
+                    generations: 3,
+                    stabilityTrend: 'stable',
+                    currentCoherence: 0.72
+                }
+            ],
+            recommendations: {
+                thresholdAdjustments: {
+                    mtmPromotion: this.thresholds.mtmPromotion > 0.75 ? -0.02 : 0.01,
+                    ltmPromotion: 0.0
+                }
+            }
+        };
+    }
+    
+    /**
+     * Get the recent average coherence score
+     * @returns {number} - Average coherence score
+     */
+    getRecentCoherenceAverage() {
+        if (this.recentCoherenceScores.length === 0) {
+            return this.thresholds.minimum;
+        }
+        
+        const recentScores = this.recentCoherenceScores
+            .slice(-10) // Last 10 scores
+            .map(item => item.score);
+            
+        return recentScores.reduce((sum, score) => sum + score, 0) / recentScores.length;
+    }
+    
+    /**
+     * Get trend information about coherence scores
+     * @returns {Object} - Trend information
+     */
+    getCoherenceTrend() {
+        // Update trend if it's been a while
+        const now = Date.now();
+        if (now - this.coherenceTrend.lastUpdate > 3600000) { // 1 hour
+            this.updateCoherenceTrend();
+        }
+        
+        return {
+            averages: this.coherenceTrend.averages,
+            thresholdChanges: this.coherenceTrend.thresholdChanges
+        };
+    }
+    
+    /**
+     * Update coherence trend data
+     */
+    updateCoherenceTrend() {
+        const now = Date.now();
+        
+        // Calculate hourly average
+        const hourScores = this.recentCoherenceScores.filter(
+            item => now - item.timestamp < 3600000 // Last hour
+        );
+        
+        if (hourScores.length > 0) {
+            const hourlyAvg = hourScores.reduce((sum, item) => sum + item.score, 0) / hourScores.length;
+            
+            this.coherenceTrend.averages.push({
+                timestamp: new Date().toISOString(),
+                timeframe: 'hour',
+                average: hourlyAvg
+            });
+            
+            // Keep only recent trends (last 24)
+            if (this.coherenceTrend.averages.length > 24) {
+                this.coherenceTrend.averages.shift();
+            }
+        }
+        
+        this.coherenceTrend.lastUpdate = now;
+    }
+    
+    /**
+     * Get information about threshold changes
+     * @returns {Array} - Recent threshold changes
+     */
+    getThresholdChanges() {
+        return this.coherenceTrend.thresholdChanges.slice(-5); // Last 5 changes
+    }
+    
+    /**
+     * Generate a deterministic ID for a quantum state
+     * @param {string} type - Type of state
+     * @returns {string} - Generated ID
+     */
+    generateStateId(type) {
+        // Use a hash function to generate ID based on type and time
+        const hash = createHash('sha256');
+        hash.update(`${type}:${Date.now()}`);
+        return hash.digest('hex').substring(0, 10);
+    }
+    
+    /**
+     * Count occurrences of a substring in text
+     * @param {string} text - The text to search in
+     * @param {string} substring - The substring to search for
+     * @returns {number} - Number of occurrences
+     */
+    countOccurrences(text, substring) {
+        const regex = new RegExp(substring.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        const matches = text.match(regex);
+        return matches ? matches.length : 0;
+    }
+    
+    /**
+     * Load pattern registry from persistent storage
+     */
+    async loadPatternRegistry() {
+        try {
+            // In a real implementation, this would load from a database or file
+            // For this example, we'll create some initial patterns
+            const initialPatterns = [
+                {
+                    type: 'entity',
+                    content: 'Quantum Computing',
+                    stability: 0.85,
+                    entropy: 0.4,
+                    symmetry: 0.6,
+                    observations: 5,
+                    firstSeen: Date.now() - 86400000, // 1 day ago
+                    lastSeen: Date.now()
+                },
+                {
+                    type: 'bigram',
+                    content: 'pattern recognition',
+                    stability: 0.9,
+                    entropy: 0.3,
+                    symmetry: 0.7,
+                    observations: 10,
+                    firstSeen: Date.now() - 172800000, // 2 days ago
+                    lastSeen: Date.now()
+                }
+            ];
+            
+            // Load initial patterns into registry
+            initialPatterns.forEach(pattern => {
+                const patternKey = `${pattern.type}:${pattern.content}`;
+                this.patternRegistry.set(patternKey, pattern);
+            });
+            
+            console.log(`Loaded ${this.patternRegistry.size} patterns into registry`);
+        } catch (error) {
+            console.error('Error loading pattern registry:', error);
+        }
+    }
+}

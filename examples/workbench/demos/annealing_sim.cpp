@@ -16,8 +16,8 @@ void AnnealingSimDemo::on_load() {
         p.velocity = glm::vec3(0.f);
         p.color = glm::vec3(1.f);
     }
-    processor_ = std::make_unique<sep::pattern::PatternProcessor>(engine_);
-    coherence_mgr_ = std::make_unique<sep::memory::QuantumCoherenceManager>();
+    processor_ = std::make_unique<sep::pattern::PatternProcessor>();
+    coherence_mgr_ = std::make_unique<sep::memory::QuantumCoherenceManager>(sep::memory::QuantumCoherenceManager::Config{});
 }
 
 void AnnealingSimDemo::on_update(float dt) {
@@ -40,12 +40,20 @@ void AnnealingSimDemo::on_update(float dt) {
         p.position += p.velocity * dt;
     }
     for (const auto& p : particles_) {
-        std::vector<float> data = {p.position.x, p.position.y, p.position.z};
-        processor_->processPattern(data);
+        sep::pattern::PatternData pattern;
+        pattern.data = {p.position.x, p.position.y, p.position.z};
+        processor_->addPattern(pattern);
     }
-    auto result = processor_->evolvePatterns(dt);
-    coherence_mgr_->updateCoherence(result);
-    float coherence = coherence_mgr_->getAverageCoherence();
+    processor_->evolvePatterns();
+    const auto& patterns = processor_->getPatterns();
+    std::vector<sep::quantum::Pattern> quantum_patterns;
+    for (const auto& p : patterns) {
+        sep::quantum::Pattern qp;
+        qp.data = p.data;
+        quantum_patterns.push_back(qp);
+    }
+    auto result = coherence_mgr_->updateCoherence(quantum_patterns);
+    float coherence = result.global_coherence;
     glm::vec3 bright(1.f, 1.f, 0.2f);
     glm::vec3 dark(0.2f, 0.2f, 0.5f);
     glm::vec3 col = glm::mix(dark, bright, coherence);

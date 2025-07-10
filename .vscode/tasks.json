@@ -1,429 +1,409 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		// ===== Core Build Tasks =====
-		{
-			"label": "Auto Build",
-			"type": "shell",
-			"command": "make",
-			"options": {
-				"cwd": "${workspaceFolder}/build-ajn"
-			},
-			"group": "build",
-			"presentation": {
-				"reveal": "silent",
-				"panel": "shared"
-			},
-			"runOptions": {
-				"runOn": "folderOpen"
-			},
-			"problemMatcher": [
-				"$nvcc",
-				"$gcc"
-			]
-		},
-		{
-			"label": "Configure",
-			"type": "shell",
-			"command": "cmake",
-			"args": [
-				"-B",
-				"build-ajn",
-				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-				"-DCMAKE_BUILD_TYPE=Release",
-				"-DSEP_HAS_CUDA=1",
-				"-DSEP_HAS_BLENDER=1",
-				"-DSEP_HAS_CYCLES=1"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"group": "build",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": [
-				"$nvcc",
-				"$gcc"
-			]
-		},
-		{
-			"label": "Build",
-			"type": "shell",
-			"command": "make",
-			"args": [
-				"-j${env:nproc}"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}/build-ajn"
-			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"dependsOn": [
-				"Configure"
-			],
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": [
-				"$nvcc",
-				"$gcc"
-			]
-		},
-		{
-			"label": "Clean",
-			"type": "shell",
-			"command": "rm",
-			"args": [
-				"-rf",
-				"build-ajn"
-			],
-			"group": "build",
-			"presentation": {
-				"echo": true,
-				"reveal": "silent",
-				"panel": "shared"
-			}
-		},
-		{
-			"label": "Rebuild",
-			"dependsOrder": "sequence",
-			"dependsOn": [
-				"Clean",
-				"Configure",
-				"Build"
-			],
-			"group": "build"
-		},
-		// ===== SEP Engine Tasks =====
-		{
-			"label": "SEP: Run Engine",
-			"type": "shell",
-			"command": "${workspaceFolder}/build-ajn/bin/sep_engine",
-			"args": [
-				"--config",
-				"${workspaceFolder}/config/default.json"
-			],
-			"group": "test",
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "SEP: Run Tests",
-			"type": "shell",
-			"command": "${workspaceFolder}/build-ajn/bin/sep_tests",
-			"args": [
-				"--gtest_color=yes"
-			],
-			"group": "test",
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated"
-			},
-			"problemMatcher": {
-				"owner": "gtest",
-				"pattern": {
-					"regexp": "^(.*):(\\d+):\\s+(\\w+):\\s+(.*)$",
-					"file": 1,
-					"line": 2,
-					"severity": 3,
-					"message": 4
-				}
-			}
-		},
-		// ===== Code Analysis Tasks =====
-		{
-			"label": "SEP: Run CodeChecker Analysis",
-			"type": "shell",
-			"command": "bash",
-			"args": [
-				"-c",
-				"cd ${workspaceFolder} && CodeChecker analyze ${workspaceFolder}/build-ajn/compile_commands.json -o ${workspaceFolder}/.codechecker/reports --analyzers clangsa clang-tidy"
-			],
-			"group": "none",
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "SEP: Store CodeChecker Results",
-			"type": "shell",
-			"command": "CodeChecker",
-			"args": [
-				"store",
-				"${workspaceFolder}/.codechecker/reports",
-				"--name",
-				"sep-engine",
-				"--url",
-				"http://localhost:8001/Default"
-			],
-			"group": "none",
-			"dependsOn": [
-				"SEP: Run CodeChecker Analysis"
-			],
-			"presentation": {
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "SEP: Build with CodeChecker",
-			"type": "shell",
-			"command": "bash",
-			"args": [
-				"-c",
-				"mkdir -p ${workspaceFolder}/.codechecker && CodeChecker log -b \"make -j$(nproc)\" -o ${workspaceFolder}/.codechecker/compile_commands.json && CodeChecker analyze ${workspaceFolder}/.codechecker/compile_commands.json -o ${workspaceFolder}/.codechecker/reports --analyzers clangsa clang-tidy && CodeChecker parse ${workspaceFolder}/.codechecker/reports -e html -o ${workspaceFolder}/.codechecker/html"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}/build-ajn"
-			},
-			"group": "build",
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated"
-			},
-			"problemMatcher": {
-				"owner": "cpp",
-				"fileLocation": [
-					"relative",
-					"${workspaceFolder}"
-				],
-				"pattern": {
-					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|note):\\s+(.*)$",
-					"file": 1,
-					"line": 2,
-					"column": 3,
-					"severity": 4,
-					"message": 5
-				}
-			}
-		},
-		// ===== MCP Server Tasks =====
-		{
-			"label": "MCP: Start Code Analyzer",
-			"type": "shell",
-			"command": "node",
-			"args": [
-				"/home/ajn/.local/share/Kilo-Code/MCP/code-analyzer/build/index.js"
-			],
-			"options": {
-				"env": {
-					"CODECHECKER_PORT": "8001",
-					"OLLAMA_URL": "http://localhost:11434",
-					"OLLAMA_MODEL": "mxbai-embed-large",
-					"WORKSPACE_DIR": "${workspaceFolder}",
-					"SEP_BUILD_DIR": "${workspaceFolder}/build-ajn",
-					"SEP_CONFIG_FILE": "${workspaceFolder}/config/default.json"
-				}
-			},
-			"isBackground": true,
-			"problemMatcher": {
-				"pattern": {
-					"regexp": "^$"
-				},
-				"background": {
-					"activeOnStart": true,
-					"beginsPattern": "MCP server starting",
-					"endsPattern": "MCP server ready"
-				}
-			},
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated",
-				"group": "mcp"
-			}
-		},
-		// ===== Cycles Integration Tasks =====
-		{
-			"label": "Cycles: Configure Build",
-			"type": "shell",
-			"command": "cmake",
-			"args": [
-				"-B",
-				"build-ajn",
-				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-				"-DCMAKE_BUILD_TYPE=Release",
-				"-DSEP_HAS_CYCLES=1",
-				"-DSEP_HAS_BLENDER=1"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"group": "build",
-			"presentation": {
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": [
-				"$nvcc",
-				"$gcc",
-				"$nvcc",
-				"$tsc-watch"
-			]
-		},
-		{
-			"label": "Cycles: Build External",
-			"type": "shell",
-			"command": "bash",
-			"args": [
-				"-c",
-				"cd ${workspaceFolder} && ./sep-build.sh"
-			],
-			"group": "build",
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated"
-			},
-			"problemMatcher": []
-		},
-		// ===== Watch Tasks (for extension development) =====
-		{
-			"label": "watch",
-			"dependsOn": [
-				"watch:webview",
-				"watch:bundle",
-				"watch:tsc"
-			],
-			"presentation": {
-				"reveal": "never"
-			},
-			"group": {
-				"kind": "build",
-				"isDefault": false
-			},
-			"runOptions": {
-				"runOn": "folderOpen"
-			}
-		},
-		{
-			"label": "watch:webview",
-			"type": "shell",
-			"command": "pnpm --filter @roo-code/vscode-webview dev --host",
-			"group": "build",
-			"problemMatcher": {
-				"owner": "vite",
-				"pattern": {
-					"regexp": "^$"
-				},
-				"background": {
-					"activeOnStart": true,
-					"beginsPattern": ".*VITE.*",
-					"endsPattern": ".*Local:.*"
-				}
-			},
-			"isBackground": true,
-			"presentation": {
-				"group": "watch",
-				"reveal": "always"
-			}
-		},
-		{
-			"label": "watch:bundle",
-			"type": "shell",
-			"command": "npx turbo watch:bundle",
-			"group": "build",
-			"problemMatcher": {
-				"owner": "esbuild",
-				"pattern": {
-					"regexp": "^$"
-				},
-				"background": {
-					"activeOnStart": true,
-					"beginsPattern": "esbuild-problem-matcher#onStart",
-					"endsPattern": "esbuild-problem-matcher#onEnd"
-				}
-			},
-			"isBackground": true,
-			"presentation": {
-				"group": "watch",
-				"reveal": "always"
-			}
-		},
-		{
-			"label": "watch:tsc",
-			"type": "shell",
-			"command": "npx turbo watch:tsc",
-			"group": "build",
-			"problemMatcher": "$tsc-watch",
-			"isBackground": true,
-			"presentation": {
-				"group": "watch",
-				"reveal": "always"
-			}
-		},
-		// ===== Vite Server Management =====
-		{
-			"label": "UI: Start Kilo-Code Webview",
-			"type": "shell",
-			"command": "cd ${workspaceFolder}/extern/Kilo-Code/webview-ui && PORT=5175 INSTANCE_ID=\"kilo_code\" pnpm dev",
-			"group": "none",
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated",
-				"group": "webview"
-			},
-			"problemMatcher": {
-				"pattern": {
-					"regexp": "^$"
-				},
-				"background": {
-					"activeOnStart": true,
-					"beginsPattern": ".*VITE.*",
-					"endsPattern": ".*Local:.*"
-				}
-			},
-			"isBackground": true
-		},
-		{
-			"label": "UI: Restart Vite Server",
-			"type": "shell",
-			"command": "${workspaceFolder}/scripts/restart-vite.sh",
-			"args": [
-				"${input:viteInstanceId}"
-			],
-			"group": "none",
-			"presentation": {
-				"reveal": "always",
-				"panel": "dedicated",
-				"group": "webview"
-			},
-			"problemMatcher": [
-				"$gcc",
-				"$nvcc",
-				"$tsc-watch"
-			]
-		}
-	],
-	"inputs": [
-		{
-			"id": "viteInstanceId",
-			"type": "pickString",
-			"description": "Select the Vite instance to restart",
-			"options": [
-				"blender-kilocode",
-				"api-viewer",
-				"dashboard",
-				"kilo_code"
-			],
-			"default": "blender-kilocode"
-		},
-		// ===== Compound Tasks =====
-		{
-			"id": "Build & Run SEP Engine",
-			"type": "promptString",
-			"description": "Enter the name of the scene to run"
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    // ===== Core Build Tasks =====
+    {
+      "label": "Auto Build",
+      "type": "shell",
+      "command": "make",
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": [
+        "$nvcc",
+        "$gcc"
+      ]
+    },
+    {
+      "label": "Configure",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-B",
+        "build",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DSEP_HAS_CUDA=1",
+        "-DSEP_HAS_BLENDER=1",
+        "-DSEP_HAS_CYCLES=1"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$nvcc",
+        "$gcc"
+      ]
+    },
+    {
+      "label": "Build",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "-j${env:nproc}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": [
+        "Configure"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$nvcc",
+        "$gcc"
+      ]
+    },
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-rf",
+        "build"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Rebuild",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Clean",
+        "Configure",
+        "Build"
+      ],
+      "group": "build"
+    },
+    // ===== SEP Engine Tasks =====
+    {
+      "label": "SEP: Run Engine",
+      "type": "shell",
+      "command": "${workspaceFolder}/build/bin/sep_engine",
+      "args": [
+        "--config",
+        "${workspaceFolder}/config/default.json"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "SEP: Run Tests",
+      "type": "shell",
+      "command": "${workspaceFolder}/build/bin/sep_tests",
+      "args": [
+        "--gtest_color=yes"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": {
+        "owner": "gtest",
+        "pattern": {
+          "regexp": "^(.*):(\\d+):\\s+(\\w+):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "severity": 3,
+          "message": 4
+        }
+      }
+    },
+    // ===== Code Analysis Tasks =====
+    {
+      "label": "SEP: Run CodeChecker Analysis",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "cd ${workspaceFolder} && CodeChecker analyze ${workspaceFolder}/build/compile_commands.json -o ${workspaceFolder}/.codechecker/reports --analyzers clangsa clang-tidy"
+      ],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "SEP: Store CodeChecker Results",
+      "type": "shell",
+      "command": "CodeChecker",
+      "args": [
+        "store",
+        "${workspaceFolder}/.codechecker/reports",
+        "--name",
+        "sep-engine",
+        "--url",
+        "http://localhost:8001/Default"
+      ],
+      "group": "none",
+      "dependsOn": [
+        "SEP: Run CodeChecker Analysis"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "SEP: Build with CodeChecker",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "mkdir -p ${workspaceFolder}/.codechecker && CodeChecker log -b \"make -j$(nproc)\" -o ${workspaceFolder}/.codechecker/compile_commands.json && CodeChecker analyze ${workspaceFolder}/.codechecker/compile_commands.json -o ${workspaceFolder}/.codechecker/reports --analyzers clangsa clang-tidy && CodeChecker parse ${workspaceFolder}/.codechecker/reports -e html -o ${workspaceFolder}/.codechecker/html"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": {
+        "owner": "cpp",
+        "fileLocation": [
+          "relative",
+          "${workspaceFolder}"
+        ],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|note):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    },
+    // ===== MCP Server Tasks =====
+    {
+      "label": "MCP: Start Code Analyzer",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "/home/ajn/.local/share/Kilo-Code/MCP/code-analyzer/build/index.js"
+      ],
+      "options": {
+        "env": {
+          "CODECHECKER_PORT": "8001",
+          "OLLAMA_URL": "http://localhost:11434",
+          "OLLAMA_MODEL": "mxbai-embed-large",
+          "WORKSPACE_DIR": "${workspaceFolder}",
+          "SEP_BUILD_DIR": "${workspaceFolder}/build",
+          "SEP_CONFIG_FILE": "${workspaceFolder}/config/default.json"
+        }
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "MCP server starting",
+          "endsPattern": "MCP server ready"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "mcp"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "MCP: Start Adaptive Bot",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "/home/ajn/.local/share/Kilo-Code/MCP/adaptive-bot/build/index.js"
+      ],
+      "options": {
+        "env": {
+          "REDIS_URL": "redis://localhost:6379",
+          "SEP_ENGINE_URL": "http://localhost:8080"
+        }
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Adaptive Bot MCP server running",
+          "endsPattern": ".*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "mcp"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    // ===== Watch Tasks =====
+    {
+      "label": "watch",
+      "dependsOn": [
+        "watch:webview",
+        "watch:bundle",
+        "watch:tsc"
+      ],
+      "presentation": {
+        "reveal": "never"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "watch:webview",
+      "type": "shell",
+      "command": "pnpm --filter @roo-code/vscode-webview dev --host",
+      "options": {
+        "cwd": "${workspaceFolder}/extern/Kilo-Code"
+      },
+      "group": "build",
+      "problemMatcher": {
+        "owner": "vite",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*VITE.*",
+          "endsPattern": ".*Local:.*"
+        }
+      },
+      "isBackground": true,
+      "presentation": {
+        "group": "watch",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "watch:bundle",
+      "type": "shell",
+      "command": "npx turbo watch:bundle",
+      "options": {
+        "cwd": "${workspaceFolder}/extern/Kilo-Code"
+      },
+      "group": "build",
+      "problemMatcher": {
+        "owner": "esbuild",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "esbuild-problem-matcher#onStart",
+          "endsPattern": "esbuild-problem-matcher#onEnd"
+        }
+      },
+      "isBackground": true,
+      "presentation": {
+        "group": "watch",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "watch:tsc",
+      "type": "shell",
+      "command": "npx turbo watch:tsc",
+      "options": {
+        "cwd": "${workspaceFolder}/extern/Kilo-Code"
+      },
+      "group": "build",
+      "problemMatcher": "$tsc-watch",
+      "isBackground": true,
+      "presentation": {
+        "group": "watch",
+        "reveal": "always"
+      }
+    },
+    // ===== UI Tasks =====
+    {
+      "label": "UI: Start Kilo-Code Webview",
+      "type": "shell",
+      "command": "cd ${workspaceFolder}/extern/Kilo-Code/webview-ui && PORT=5175 INSTANCE_ID=\"kilo_code\" pnpm dev",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "webview"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*VITE.*",
+          "endsPattern": ".*Local:.*"
+        }
+      },
+      "isBackground": true,
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "viteInstanceId",
+      "type": "pickString",
+      "description": "Select the Vite instance to restart",
+      "options": [
+        "blender-kilocode",
+        "api-viewer",
+        "dashboard",
+        "kilo_code"
+      ],
+      "default": "blender-kilocode"
+    }
+  ]
 }

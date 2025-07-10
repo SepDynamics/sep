@@ -552,6 +552,30 @@ namespace sep
             pattern_registry_[id] = std::make_unique<::sep::pattern::PatternData>(pattern);
         }
 
+        void MemoryTierManager::registerPattern(std::size_t id,
+                                                const ::sep::quantum::Pattern &pattern)
+        {
+            auto patternData = std::make_unique<::sep::pattern::PatternData>();
+            patternData->id = pattern.id;
+            patternData->generation = pattern.quantum_state.generation;
+            patternData->position = pattern.position;
+            patternData->velocity = glm::vec4(pattern.momentum, 0.0f); // Convert vec3 to vec4
+            patternData->attributes = glm::vec4(0.0f); // Default attributes
+            patternData->amplitude = std::complex<float>(0.0f, 0.0f); // Default amplitude
+            patternData->state = pattern.quantum_state.state;
+            patternData->phase = pattern.quantum_state.phase;
+            patternData->coherence = pattern.quantum_state.coherence;
+            patternData->stability = pattern.quantum_state.stability;
+            patternData->entropy = pattern.quantum_state.entropy;
+            patternData->mutation_rate = pattern.quantum_state.mutation_rate;
+            patternData->mutation_count = pattern.quantum_state.mutation_count;
+            patternData->memory_tier = pattern.quantum_state.memory_tier;
+            patternData->relationships = pattern.relationships;
+            patternData->data = pattern.data;
+            
+            pattern_registry_[id] = std::move(patternData);
+        }
+
         const ::sep::pattern::PatternData *MemoryTierManager::getPatternData(std::size_t id) const
         {
             auto it = pattern_registry_.find(id);

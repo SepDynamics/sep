@@ -28,21 +28,12 @@ namespace sep
         private:
             struct Neuron
             {
-#ifdef SEP_WORKBENCH_DEMO
-                sep::Pattern pattern;  // In demo mode, Pattern is directly in sep namespace
-#else
-                sep::quantum::Pattern pattern;  // In non-demo mode, Pattern is in quantum namespace
-#endif
+                sep::quantum::Pattern pattern;
                 float potential{0.f};
                 uint64_t node_id{0};
             };
 
-            // Memory manager type depends on demo mode
-#ifdef SEP_WORKBENCH_DEMO
-            std::unique_ptr<sep::MemoryTierManager> memory_manager_;
-#else
-            sep::memory::MemoryTierManager* memory_manager_ = nullptr;
-#endif
+            std::unique_ptr<sep::memory::MemoryTierManager> memory_manager_;
 
             std::vector<Neuron> neurons_;
             std::random_device rd_;

@@ -108,7 +108,7 @@ void GenesisPatternDemo::on_unload() {
     // Release resources
     pattern_processor_.reset();
     coherence_manager_.reset();
-    renderer_.reset();
+    renderer_ = nullptr;
 }
 
 void GenesisPatternDemo::on_key_press(int key) {

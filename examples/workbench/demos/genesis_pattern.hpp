@@ -4,7 +4,7 @@
 
 #include "demo_manager.hpp"
 #include "memory/quantum_coherence_manager.h"
-#include "pattern_processor.hpp"
+#include <quantum/processor.h>
 
 namespace sep {
 namespace workbench {
@@ -37,8 +37,8 @@ private:
         std::size_t iterations{0};
     } metrics_;
 
-    std::unique_ptr<PatternProcessor> pattern_processor_;
-    std::unique_ptr<QuantumCoherenceManager> coherence_manager_;
+    std::unique_ptr<sep::quantum::Processor> pattern_processor_;
+    std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_manager_;
 
     bool auto_evolve_{true};
     float evolution_rate_{0.1f};

@@ -1,8 +1,9 @@
 #include "genesis_pattern.hpp"
 #include "core/engine.h"
 #include "blender/cycles_renderer.hpp"
-#include "quantum/pattern_processor.hpp"
-#include "memory/quantum_coherence_manager.h"
+#include <quantum/quantum_processor.h>
+#include <memory/quantum_coherence_manager.h>
+#include <quantum/types.h>
 #include "config.hpp"
 
 namespace sep {
@@ -12,8 +13,9 @@ void GenesisPatternDemo::on_load() {
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 
-    pattern_processor_ = std::make_unique<PatternProcessor>(engine_);
-    coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+    pattern_processor_ = sep::quantum::createProcessor();
+    sep::memory::QuantumCoherenceManager::Config cm_cfg{};
+    coherence_manager_ = sep::memory::createQuantumCoherenceManager(cm_cfg);
 
     // Initialize from config
     evolution_rate_ = genesis_config.initial_pattern.evolution_rate;
@@ -26,19 +28,15 @@ void GenesisPatternDemo::initializePatterns() {
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 
-    // Initialize base quantum state patterns
-    QuantumState initial_state;
-    initial_state.evolution_rate = evolution_rate_;
-    initial_state.energy_level = 1.0f;
-    initial_state.coupling_strength = 0.5f;
-    initial_state.dimensions = {
-        genesis_config.initial_pattern.dimensions[0],
-        genesis_config.initial_pattern.dimensions[1],
-        genesis_config.initial_pattern.dimensions[2]
-    };
+    // Initialize base quantum pattern
+    sep::quantum::Pattern pattern;
+    pattern.id = "seed";
+    pattern.position = glm::vec4(0.0f);
+    pattern.quantum_state.evolution_rate = evolution_rate_;
+    pattern.quantum_state.energy = 1.0f;
+    pattern.quantum_state.coupling_strength = 0.5f;
 
-    pattern_processor_->initializeState(initial_state);
-    coherence_manager_->setCoherenceThreshold(coherence_threshold_);
+    pattern_processor_->addPattern(pattern);
 }
 
 void GenesisPatternDemo::on_update(float dt) {
@@ -52,20 +50,21 @@ void GenesisPatternDemo::evolvePatterns(float dt) {
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 
-    // Process pattern evolution with configured rate
-    auto result = pattern_processor_->evolvePatterns(dt * evolution_rate_ * genesis_config.evolution.rate_multiplier);
-    
-    // Update coherence metrics
-    coherence_manager_->updateCoherence(result);
-    
+    // Evolve all patterns in the processor
+    auto batch = pattern_processor_->processAll();
+
+    // Retrieve updated patterns and compute coherence metrics
+    auto patterns = pattern_processor_->getPatterns();
+    auto coherence = coherence_manager_->updateCoherence(patterns);
+
     // Update metrics
-    metrics_.coherence = result.overall_coherence;
-    metrics_.pattern_count = result.pattern_count;
+    metrics_.coherence = coherence.global_coherence;
+    metrics_.pattern_count = patterns.size();
     metrics_.evolution_rate = evolution_rate_ * genesis_config.evolution.rate_multiplier;
-    metrics_.iterations = genesis_config.evolution.iterations_per_frame;
-    
-    // Trigger visualization update if coherence changes significantly
-    if (result.coherence_delta > genesis_config.visualization.coherence_threshold) {
+    metrics_.iterations += 1;
+
+    // Trigger visualization update when significant migrations occur
+    if (coherence.total_migrations > 0) {
         updateVisualization();
     }
 }
@@ -76,8 +75,11 @@ void GenesisPatternDemo::updateVisualization() {
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 
-    // Update renderer with current pattern state
-    auto pattern_state = pattern_processor_->getCurrentState();
+    // Convert processor patterns to positions for the renderer
+    std::vector<glm::vec3> pattern_state;
+    for (const auto& p : pattern_processor_->getPatterns()) {
+        pattern_state.push_back(glm::vec3(p.position));
+    }
     
     // Configure visualization parameters
     renderer_->setRotation(view_.rotation);
@@ -158,4 +160,5 @@ void GenesisPatternDemo::on_mouse(int x, int y, int button) {
     }
 }
 
-} // namespace workbench} // namespace sep
+} // namespace workbench
+} // namespace sep

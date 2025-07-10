@@ -163,15 +163,12 @@ if(SEP_WITH_OCIO)
 endif()
 find_package(Imath REQUIRED)
 
-# Set TBB_ROOT to prefer the newer TBB 12.x version
+# Set TBB_ROOT to prefer the newer TBB 12.x version only when a valid path exists
 if(NOT DEFINED ENV{TBB_ROOT})
-  # Check for the most recent TBB version (12.x)
   if(EXISTS "/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
     set(ENV{TBB_ROOT} "/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
-    message(STATUS "Setting TBB_ROOT to /home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
   elseif(EXISTS "/home/ajn/Documents/AVarietyOShit/BUILTASF/oneTBB-2021.9.0/build/gnu_12.3_cxx11_64_release")
     set(ENV{TBB_ROOT} "/home/ajn/Documents/AVarietyOShit/BUILTASF/oneTBB-2021.9.0/build/gnu_12.3_cxx11_64_release")
-    message(STATUS "Setting TBB_ROOT to /home/ajn/Documents/AVarietyOShit/BUILTASF/oneTBB-2021.9.0/build/gnu_12.3_cxx11_64_release")
   endif()
 endif()
 if(SEP_USE_TBB)

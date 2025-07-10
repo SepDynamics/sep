@@ -55,18 +55,12 @@ int main(int /* argc */, char * /* argv */[])
     // Disable window decoration if libdecor is causing issues
     // glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
-    // Try creating window with decorations disabled to avoid libdecor issues
-    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-    
-    std::cout << "Creating GLFW window..." << std::endl;
     GLFWwindow* window = glfwCreateWindow(1280, 720, "SEP Workbench", nullptr, nullptr);
     if (!window)
     {
-        std::cerr << "Failed to create GLFW window!" << std::endl;
         glfwTerminate();
         return -1;
     }
-    std::cout << "GLFW window created successfully." << std::endl;
 
     glfwMakeContextCurrent(window);
     if (glewInit() != GLEW_OK)

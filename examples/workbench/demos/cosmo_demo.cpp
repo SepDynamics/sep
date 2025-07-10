@@ -1,5 +1,4 @@
 #include "cosmo_demo.hpp"
-#include "config.hpp"
 #include <cstdlib>
 #include <glm/glm.hpp>
 
@@ -7,9 +6,6 @@ namespace sep {
 namespace workbench {
 
 void CosmoDemo::on_load() {
-    const auto& cfg = Config::getInstance().cosmo();
-    box_size_ = cfg.box_size;
-    time_step_ = cfg.time_step;
     initParticles();
 }
 

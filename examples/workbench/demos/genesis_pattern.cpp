@@ -24,10 +24,8 @@ void GenesisPatternDemo::on_load() {
     initializePatterns();
 }
 
-void GenesisPatternDemo::initializePatterns() {
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
-
+void GenesisPatternDemo::initializePatterns()
+{
     // Initialize base quantum pattern
     sep::quantum::Pattern pattern;
     pattern.id = "seed";
@@ -46,10 +44,8 @@ void GenesisPatternDemo::on_update(float dt) {
     updateVisualization();
 }
 
-void GenesisPatternDemo::evolvePatterns(float dt) {
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
-
+void GenesisPatternDemo::evolvePatterns(float)
+{
     // Evolve all patterns in the processor
     auto batch = pattern_processor_->processAll();
 
@@ -100,13 +96,6 @@ void GenesisPatternDemo::on_render() {
 }
 
 void GenesisPatternDemo::on_unload() {
-    // Save current state to config if needed
-    const auto& config = Config::getInstance();
-    auto& genesis_config = config.genesis_pattern();
-    genesis_config.save_state.evolution_rate = evolution_rate_;
-    genesis_config.save_state.coherence_threshold = coherence_threshold_;
-    genesis_config.save_state.view_settings = view_;
-    
     // Release resources
     pattern_processor_.reset();
     coherence_manager_.reset();
@@ -124,14 +113,6 @@ void GenesisPatternDemo::on_key_press(int key) {
         case 'w':  // Toggle wireframe
             view_.wireframe = !view_.wireframe;
             break;
-        case '+':  // Increase evolution rate
-            evolution_rate_ *= genesis_config.evolution.rate_step;
-            evolution_rate_ = std::min(evolution_rate_, genesis_config.evolution.max_rate);
-            break;
-        case '-':  // Decrease evolution rate
-            evolution_rate_ *= 1.0f / genesis_config.evolution.rate_step;
-            evolution_rate_ = std::max(evolution_rate_, genesis_config.evolution.min_rate);
-            break;
         case 'r':  // Reset view and parameters
             view_.rotation = 0.0f;
             view_.zoom = 1.0f;
@@ -143,22 +124,7 @@ void GenesisPatternDemo::on_key_press(int key) {
     }
 }
 
-void GenesisPatternDemo::on_mouse(int x, int y, int button) {
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
-
-    // Update rotation based on mouse movement
-    if (button == 0) {  // Left button
-        view_.rotation += x * genesis_config.controls.rotation_sensitivity;
-    }
-    // Update zoom based on mouse movement
-    else if (button == 1) {  // Right button
-        float zoom_delta = y * genesis_config.controls.zoom_sensitivity;
-        view_.zoom *= (1.0f + zoom_delta);
-        view_.zoom = std::max(genesis_config.controls.min_zoom,
-                             std::min(view_.zoom, genesis_config.controls.max_zoom));
-    }
-}
+void GenesisPatternDemo::on_mouse(int, int, int button) { (void)button; }
 
 } // namespace workbench
 } // namespace sep

@@ -36,7 +36,7 @@ option(SEP_BUILD_ENGINE "Build the main engine component" ON)
 option(SEP_BUILD_QUANTUM "Build quantum processing components" ON)
 option(SEP_BUILD_TESTS "Build test components" ON)
 option(SEP_BUILD_WORKBENCH "Build the interactive sep_workbench visualization" ON)
-option(SEP_USE_TBB "Enable TBB parallel features" OFF)
+option(SEP_USE_TBB "Enable TBB parallel features" ON)
 
 if(SEP_MINIMAL)
     add_compile_definitions(SEP_MINIMAL=1)

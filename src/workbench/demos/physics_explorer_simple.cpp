@@ -19,9 +19,9 @@ int main() {
             Pattern p;
             p.id = "p_" + std::to_string(x) + "_" + std::to_string(y);
             p.position = glm::vec4(static_cast<float>(x), static_cast<float>(y), 0.0f, 1.0f);
-            p.coherence = 0.5f;
-            p.stability = 0.5f;
-            p.memory_tier = memory::MemoryTierEnum::STM;
+            p.quantum_state.coherence = 0.5f;
+            p.quantum_state.stability = 0.5f;
+            p.quantum_state.memory_tier = memory::MemoryTierEnum::STM;
             patterns.push_back(p);
         }
     }
@@ -34,7 +34,7 @@ int main() {
             q.id = p.id;
             q.position = p.position;
             q.momentum = glm::vec3(0.0f);
-            q.quantum_state.generation = p.generation;
+            q.quantum_state.generation = p.quantum_state.generation;
             q.quantum_state.state = quantum::QuantumState::Status::SUPERPOSITION;
 
             evolution::applyGravity(q, center, 0.02f);
@@ -43,10 +43,10 @@ int main() {
             p.position = q.position;
 
             if (glm::length(glm::vec3(p.position) - center) < 0.5f) {
-                p.coherence = std::min(1.0f, p.coherence + 0.05f);
-                p.stability = std::min(1.0f, p.stability + 0.05f);
-                if (p.coherence > 0.9f && p.stability > 0.9f) {
-                    p.memory_tier = memory::MemoryTierEnum::LTM;
+                p.quantum_state.coherence = std::min(1.0f, p.quantum_state.coherence + 0.05f);
+                p.quantum_state.stability = std::min(1.0f, p.quantum_state.stability + 0.05f);
+                if (p.quantum_state.coherence > 0.9f && p.quantum_state.stability > 0.9f) {
+                    p.quantum_state.memory_tier = memory::MemoryTierEnum::LTM;
                 }
             }
         }
@@ -54,7 +54,7 @@ int main() {
 
     std::cout << "Stable LTM patterns:\n";
     for (const auto &p : patterns) {
-        if (p.memory_tier == memory::MemoryTierEnum::LTM) {
+        if (p.quantum_state.memory_tier == memory::MemoryTierEnum::LTM) {
             std::cout << p.id << " at (" << p.position.x << ", " << p.position.y << ", " << p.position.z << ")\n";
         }
     }

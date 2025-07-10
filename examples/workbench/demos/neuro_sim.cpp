@@ -3,15 +3,13 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
-#include "memory/memory_tier_manager.hpp"
 #include "quantum/evolution.h"
 #include "memory/memory_tier_manager.hpp"
 #include "sep_engine_wrapper.h"
+#include <config.hpp>
 
-using sep::config::ConfigManager;
 using sep::memory::MemoryTierEnum;
 using sep::memory::MemoryTierManager;
-using sep::quantum::evolution;
 using sep::quantum::Pattern;
 
 namespace sep
@@ -21,13 +19,13 @@ namespace sep
 
         void NeuroSimDemo::on_load()
         {
-            const auto& cfg = ConfigManager::getInstance().getEngineConfig().neural_demo();
+            const auto& cfg = sep::workbench::Config::getInstance().neural_demo();
             std::size_t neuron_count = cfg.network.neuron_count;
             threshold_ = cfg.neuron.threshold;
             decay_ = cfg.neuron.decay;
             input_strength_ = cfg.neuron.input_strength;
             connection_prob_ = cfg.network.connection_prob;
-            memory_manager_ = std::make_unique<MemoryTierManager>();
+            memory_manager_ = std::make_unique<sep::memory::MemoryTierManager>();
             auto& dag = memory_manager_->getDagGraph();
 
             neurons_.resize(neuron_count);
@@ -64,7 +62,7 @@ namespace sep
             auto& dag = memory_manager_->getDagGraph();
             for (auto& n : neurons_)
             {
-                evolution::applySpike(n.pattern, input_strength_ * dt, decay_ * dt, threshold_);
+                sep::quantum::evolution::applySpike(n.pattern, input_strength_ * dt, decay_ * dt, threshold_);
                 if (n.pattern.quantum_state.coherence >= 1.0f)
                 {
                     for (auto& tgt : neurons_)
@@ -74,7 +72,7 @@ namespace sep
                         {
                             tgt.pattern.quantum_state.coherence =
                                 glm::clamp(tgt.pattern.quantum_state.coherence + 0.5f, 0.f, 1.f);
-                            evolution::hebbianUpdate(n.pattern, tgt.pattern, learning_rate_);
+                            sep::quantum::evolution::hebbianUpdate(n.pattern, tgt.pattern, learning_rate_);
                         }
                     }
                     n.pattern.quantum_state.coherence = 0.f;

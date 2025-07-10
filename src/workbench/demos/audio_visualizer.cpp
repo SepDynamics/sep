@@ -65,7 +65,9 @@ void AudioVisualizerDemo::on_render() {
 
 void AudioVisualizerDemo::on_unload() {
     if (capture_) {
+#ifdef SEP_HAS_AUDIO
         capture_->stop();
+#endif
     }
     pipeline_.reset();
     capture_.reset();

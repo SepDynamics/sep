@@ -60,7 +60,7 @@ void GenesisPatternDemo::evolvePatterns(float dt) {
     // Update metrics
     metrics_.coherence = coherence.global_coherence;
     metrics_.pattern_count = patterns.size();
-    metrics_.evolution_rate = evolution_rate_ * genesis_config.evolution.rate_multiplier;
+    metrics_.evolution_rate = evolution_rate_;
     metrics_.iterations += 1;
 
     // Trigger visualization update when significant migrations occur
@@ -89,7 +89,7 @@ void GenesisPatternDemo::updateVisualization() {
     // Configure visualization modes from config
     renderer_->setColorMode(genesis_config.visualization.color_mode);
     renderer_->setEmissionMode(genesis_config.visualization.emission_mode);
-    renderer_->setRoughnessMode(genesis_config.visualization.roughness_mode);
+    renderer_->setRoughnessMode(0);
     
     // Render updated pattern state
     renderer_->renderPatternState(pattern_state);

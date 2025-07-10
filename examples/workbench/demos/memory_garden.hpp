@@ -30,7 +30,7 @@ private:
         float strength;
     };
 
-    std::unique_ptr<sep::memory::MemoryTierManager> memory_manager_;
+    sep::memory::MemoryTierManager* memory_manager_ = nullptr;
     std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_manager_;
 
     std::vector<Node> nodes_;

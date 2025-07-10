@@ -91,7 +91,7 @@ namespace crow {
 }
 
 // Define logging macros - use non-template version to avoid template argument issues
-#define CROW_LOG_ERROR ::crow::Logger(::crow::LogLevel::Error)
-#define CROW_LOG_WARNING ::crow::Logger(::crow::LogLevel::Warning)
-#define CROW_LOG_INFO ::crow::Logger(::crow::LogLevel::Info)
-#define CROW_LOG_DEBUG ::crow::Logger(::crow::LogLevel::Debug)
+#define CROW_LOG_ERROR crow::Logger(::crow::LogLevel::Error)
+#define CROW_LOG_WARNING crow::Logger(::crow::LogLevel::Warning)
+#define CROW_LOG_INFO crow::Logger(::crow::LogLevel::Info)
+#define CROW_LOG_DEBUG crow::Logger(::crow::LogLevel::Debug)

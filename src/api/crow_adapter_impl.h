@@ -23,9 +23,10 @@ namespace api {
  */
 class CrowRequestAdapter {
 public:
-    explicit CrowRequestAdapter(const ::crow::request& req) : req_(req) {
+    explicit CrowRequestAdapter(const crow::request& req) : req_(req)
+    {
         // Get method as string for consistent interface
-        method_str_ = ::crow::method_name(req.method);
+        method_str_ = crow::method_name(req.method);
     }
 
     std::string url() const { return req_.url; }
@@ -47,7 +48,7 @@ public:
     }
 
 private:
-    const ::crow::request& req_;
+    const crow::request& req_;
     std::string method_str_;
 };
 
@@ -68,7 +69,7 @@ public:
     }
 
 private:
-    ::crow::response& res_;
+    crow::response& res_;
 };
 
 } // namespace api

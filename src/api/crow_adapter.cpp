@@ -35,7 +35,7 @@ namespace sep::api {
 // -----------------------------
 
 CrowRequestAdapter::CrowRequestAdapter(::crow::request &req) : req_(req) {
-    method_str_ = ::crow::method_name(req.method);
+    method_str_ = crow::method_name(req.method);
 }
 
 std::string CrowRequestAdapter::url() const { return std::string(req_.url.c_str()); }

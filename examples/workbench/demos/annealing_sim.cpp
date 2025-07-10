@@ -16,8 +16,8 @@ void AnnealingSimDemo::on_load() {
         p.velocity = glm::vec3(0.f);
         p.color = glm::vec3(1.f);
     }
-    processor_ = std::make_unique<PatternProcessor>(engine_);
-    coherence_mgr_ = std::make_unique<QuantumCoherenceManager>();
+    processor_ = std::make_unique<sep::pattern::PatternProcessor>(engine_);
+    coherence_mgr_ = std::make_unique<sep::memory::QuantumCoherenceManager>();
 }
 
 void AnnealingSimDemo::on_update(float dt) {

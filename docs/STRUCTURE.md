@@ -30,7 +30,7 @@ The default build directory is `build`. After compilation you'll find the `sep_e
 ## Unified Configuration
 
 Most demos and engine modules share a common set of configuration structures
-under `include/workbench`. Examples in `examples/workbench` use the same
+under `include/workbench`. The interactive workbench in `src/workbench` uses the same
 definitions. When adding new options prefer extending these shared structs
 instead of creating local variants.
 

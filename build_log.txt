@@ -1,3 +1,108 @@
-[1/3] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -DSEP_USE_TBB -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/include -I/sep/src/api/SYSTEM -I/sep/third_party/crow/include -I/sep/extern/cycles/src -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o -MF src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o.d -o src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o -c /sep/src/api/lock_free_rate_limiter.cpp
-[2/3] : && /usr/bin/cmake -E rm -f src/api/libsep_api.a && /usr/bin/ar qc src/api/libsep_api.a  src/api/CMakeFiles/sep_api.dir/crow_error.cpp.o src/api/CMakeFiles/sep_api.dir/lock_free_rate_limiter.cpp.o src/api/CMakeFiles/sep_api.dir/js_integration.cpp.o src/api/CMakeFiles/sep_api.dir/rate_limit_middleware.cpp.o src/api/CMakeFiles/sep_api.dir/logging_middleware.cpp.o src/api/CMakeFiles/sep_api.dir/bridge.cpp.o src/api/CMakeFiles/sep_api.dir/crow_adapter.cpp.o src/api/CMakeFiles/sep_api.dir/crow_request_adapter.cpp.o src/api/CMakeFiles/sep_api.dir/curl_http_client.cpp.o src/api/CMakeFiles/sep_api.dir/auth_middleware.cpp.o src/api/CMakeFiles/sep_api.dir/client.cpp.o src/api/CMakeFiles/sep_api.dir/ollama_client.cpp.o src/api/CMakeFiles/sep_api.dir/sep_engine.cpp.o src/api/CMakeFiles/sep_api.dir/bridge_c.cpp.o src/api/CMakeFiles/sep_api.dir/server.cpp.o src/api/CMakeFiles/sep_api.dir/__/sep_engine_factory.cpp.o && /usr/bin/ranlib src/api/libsep_api.a && :
-[3/3] : && /usr/bin/g++-14 -O3 -DNDEBUG -Wl,--dependency-file=src/CMakeFiles/sep_workbench.dir/link.d src/CMakeFiles/sep_workbench.dir/workbench_main.cpp.o -o src/sep_workbench -L/sep/lib -Wl,-rpath,/usr/local/cuda/lib64:/sep/lib:/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb/lib64:/usr/local/cuda-12.9/targets/x86_64-linux/lib  src/workbench/libsep_workbench_lib.a  src/api/libsep_api.a  src/quantum/libsep_quantum.a  src/memory/libsep_memory.a  src/core/libsep_core.a  src/compat/libsep_compat.a  third_party/imgui/libimgui.a  -lGLEW  -lGL  -lX11  -lGLU  -lOpenGL  third_party/imgui/libimgui.a  -ldl  src/quantum/libsep_quantum.a  /home/ajn/Documents/AVarietyOShit/BUILTASF/tbb/lib64/libtbb.so  src/core/libsep_core.a  src/compat/libsep_compat.a  src/core/libsep_core.a  src/compat/libsep_compat.a  /usr/local/lib64/libfmt.a  /usr/local/cuda-12.9/targets/x86_64-linux/lib/libcudart.so  /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so  /usr/lib64/librt.a  /usr/lib64/libcurl.so  src/embeddings/libsep_embeddings.a  /usr/lib64/libhttp_parser.so  -lhiredis  /usr/lib64/libglfw.so.3.4  /usr/lib64/libGLX.so  /usr/lib64/libOpenGL.so  -ldl && :
+[1/5] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -DSEP_USE_TBB -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -c /sep/src/workbench/demos/cosmo_sim.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -DSEP_USE_TBB -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -c /sep/src/workbench/demos/cosmo_sim.cpp
+In file included from /usr/include/glm/gtx/norm.hpp:19,
+                 from /sep/src/workbench/demos/cosmo_sim.cpp:5:
+/usr/include/glm/gtx/quaternion.hpp:24:9: error: #error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   24 | #       error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+In file included from /usr/include/glm/gtx/norm.hpp:20:
+/usr/include/glm/gtx/component_wise.hpp:22:9: error: #error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   22 | #       error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+/usr/include/glm/gtx/norm.hpp:23:9: error: #error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   23 | #       error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+[2/5] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -DSEP_USE_TBB -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -c /sep/src/workbench/demos/physics_explorer_simple.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -DSEP_USE_TBB -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -c /sep/src/workbench/demos/physics_explorer_simple.cpp
+/sep/src/workbench/demos/physics_explorer_simple.cpp: In function ‘int main()’:
+/sep/src/workbench/demos/physics_explorer_simple.cpp:15:24: error: template argument 1 is invalid
+   15 |     std::vector<Pattern> patterns;
+      |                        ^
+/sep/src/workbench/demos/physics_explorer_simple.cpp:15:24: error: template argument 2 is invalid
+/sep/src/workbench/demos/physics_explorer_simple.cpp:16:14: error: request for member ‘reserve’ in ‘patterns’, which is of non-class type ‘int’
+   16 |     patterns.reserve(grid * grid);
+      |              ^~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:20:13: error: reference to ‘Pattern’ is ambiguous
+   20 |             Pattern p;
+      |             ^~~~~~~
+In file included from /sep/src/quantum/data.hpp:5,
+                 from /sep/src/workbench/demos/physics_explorer_simple.cpp:7:
+/sep/src/quantum/types.h:37:8: note: candidates are: ‘struct sep::quantum::Pattern’
+   37 | struct Pattern {
+      |        ^~~~~~~
+In file included from /sep/src/workbench/demos/../../workbench_demo_adapter.hpp:9,
+                 from /sep/src/workbench/demos/physics_explorer_simple.cpp:5:
+/sep/src/workbench/demos/../../sep_engine_wrapper.h:24:12: note:                 ‘struct sep::Pattern’
+   24 |     struct Pattern;
+      |            ^~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:21:13: error: ‘p’ was not declared in this scope
+   21 |             p.id = "p_" + std::to_string(x) + "_" + std::to_string(y);
+      |             ^
+/sep/src/workbench/demos/physics_explorer_simple.cpp:26:22: error: request for member ‘push_back’ in ‘patterns’, which is of non-class type ‘int’
+   26 |             patterns.push_back(p);
+      |                      ^~~~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:33:24: error: ‘begin’ was not declared in this scope
+   33 |         for (auto &p : patterns) {
+      |                        ^~~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:33:24: note: suggested alternatives:
+In file included from /usr/local/include/nlohmann/detail/conversions/from_json.hpp:21,
+                 from /usr/local/include/nlohmann/adl_serializer.hpp:14,
+                 from /usr/local/include/nlohmann/json.hpp:34,
+                 from /sep/src/quantum/types.h:8:
+/usr/include/c++/14/valarray:1238:5: note:   ‘std::begin’
+ 1238 |     begin(const valarray<_Tp>& __va) noexcept
+      |     ^~~~~
+In file included from /usr/include/c++/14/filesystem:53,
+                 from /usr/local/include/nlohmann/detail/meta/std_fs.hpp:22,
+                 from /usr/local/include/nlohmann/detail/conversions/from_json.hpp:27:
+/usr/include/c++/14/bits/fs_dir.h:608:3: note:   ‘std::filesystem::__cxx11::begin’
+  608 |   begin(recursive_directory_iterator __iter) noexcept
+      |   ^~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:33:24: error: ‘end’ was not declared in this scope
+   33 |         for (auto &p : patterns) {
+      |                        ^~~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:33:24: note: suggested alternatives:
+/usr/include/c++/14/valarray:1265:5: note:   ‘std::end’
+ 1265 |     end(const valarray<_Tp>& __va) noexcept
+      |     ^~~
+/usr/include/c++/14/bits/fs_dir.h:613:3: note:   ‘std::filesystem::__cxx11::end’
+  613 |   end(recursive_directory_iterator) noexcept
+      |   ^~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:57:26: error: ‘begin’ was not declared in this scope
+   57 |     for (const auto &p : patterns) {
+      |                          ^~~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:57:26: note: suggested alternatives:
+/usr/include/c++/14/valarray:1238:5: note:   ‘std::begin’
+ 1238 |     begin(const valarray<_Tp>& __va) noexcept
+      |     ^~~~~
+/usr/include/c++/14/bits/fs_dir.h:608:3: note:   ‘std::filesystem::__cxx11::begin’
+  608 |   begin(recursive_directory_iterator __iter) noexcept
+      |   ^~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:57:26: error: ‘end’ was not declared in this scope
+   57 |     for (const auto &p : patterns) {
+      |                          ^~~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:57:26: note: suggested alternatives:
+/usr/include/c++/14/valarray:1265:5: note:   ‘std::end’
+ 1265 |     end(const valarray<_Tp>& __va) noexcept
+      |     ^~~
+/usr/include/c++/14/bits/fs_dir.h:613:3: note:   ‘std::filesystem::__cxx11::end’
+  613 |   end(recursive_directory_iterator) noexcept
+      |   ^~~
+[3/5] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -DSEP_USE_TBB -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -c /sep/src/workbench/demos/drug_optimizer.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -DSEP_USE_TBB -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/third_party/imgui -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -c /sep/src/workbench/demos/drug_optimizer.cpp
+In file included from /usr/include/glm/gtx/norm.hpp:19,
+                 from /sep/src/workbench/demos/drug_optimizer.cpp:4:
+/usr/include/glm/gtx/quaternion.hpp:24:9: error: #error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   24 | #       error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+In file included from /usr/include/glm/gtx/norm.hpp:20:
+/usr/include/glm/gtx/component_wise.hpp:22:9: error: #error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   22 | #       error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+/usr/include/glm/gtx/norm.hpp:23:9: error: #error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   23 | #       error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+ninja: build stopped: subcommand failed.

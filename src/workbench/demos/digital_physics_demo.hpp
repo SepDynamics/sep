@@ -1,9 +1,11 @@
 #pragma once
 
+#include <algorithm>
+#include <vector>
+
+#include "../../workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
 #include "quantum/data.hpp"
-#include <vector>
-#include <algorithm>
 
 namespace sep {
 namespace workbench {

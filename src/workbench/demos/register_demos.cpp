@@ -1,13 +1,14 @@
-#include "workbench/demos/demo_manager.hpp"
-#include "workbench/demos/genesis_pattern.hpp"
-#include "workbench/demos/neural_demo.hpp"
-#include "workbench/demos/memory_garden.hpp"
-#include "workbench/demos/flocking_demo.hpp"
+#include "../../workbench_demo_adapter.hpp"
+#include "workbench/demos/audio_visualizer.hpp"
 #include "workbench/demos/cosmo_demo.hpp"
 #include "workbench/demos/cosmo_sim.hpp"
+#include "workbench/demos/demo_manager.hpp"
 #include "workbench/demos/digital_physics_demo.hpp"
 #include "workbench/demos/drug_discovery_demo.hpp"
-#include "workbench/demos/audio_visualizer.hpp"
+#include "workbench/demos/flocking_demo.hpp"
+#include "workbench/demos/genesis_pattern.hpp"
+#include "workbench/demos/memory_garden.hpp"
+#include "workbench/demos/neural_demo.hpp"
 
 namespace sep
 {

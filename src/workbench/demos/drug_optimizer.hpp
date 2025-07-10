@@ -1,9 +1,11 @@
 #pragma once
 
-#include "demo_manager.hpp"
-#include "quantum/quantum_manifold_optimizer.h"
 #include <glm/vec3.hpp>
 #include <vector>
+
+#include "../../workbench_demo_adapter.hpp"
+#include "demo_manager.hpp"
+#include "quantum/quantum_manifold_optimizer.h"
 
 namespace sep {
 namespace workbench {

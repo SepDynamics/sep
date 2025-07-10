@@ -1,5 +1,7 @@
 #include "demo_manager.hpp"
 
+#include "../../workbench_demo_adapter.hpp"
+
 namespace sep {
 namespace workbench {
 

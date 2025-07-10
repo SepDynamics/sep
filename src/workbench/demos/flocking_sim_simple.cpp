@@ -9,9 +9,10 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/norm.hpp>
 
-#include "quantum/quantum_processor.h"
+#include "../../workbench_demo_adapter.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/data.hpp"
+#include "quantum/quantum_processor.h"
 
 int main() {
     constexpr int kAgentCount = 32;

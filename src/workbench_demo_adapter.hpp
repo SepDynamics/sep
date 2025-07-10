@@ -5,11 +5,11 @@
 #include <vector>
 
 // Include workbench pattern type
-#include "pattern.hpp"
 #include "renderer.h"
 #include "sep_engine_wrapper.h"
 #include "ui_manager.h"
 #include "window.h"
+#include "workbench/pattern.hpp"  // Use explicit path to avoid ambiguity
 
 namespace sep
 {

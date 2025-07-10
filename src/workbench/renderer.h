@@ -18,10 +18,13 @@ class Renderer
 {
 public:
     Renderer() = default;
-    ~Renderer() = default;
+    ~Renderer();
 
     // Initialize the renderer with the given width and height
     void init(int width, int height);
+
+    // Cleanup OpenGL resources
+    void cleanup();
 
     // Just render a blank screen for Phase 1
     void render();
@@ -30,10 +33,31 @@ public:
 
     // Render patterns (implementation for main.cpp)
     void render(const std::vector<Pattern>& patterns);
+    
+    // Mouse interaction handling
+    bool isPointInStartButton(double x, double y) const;
+    void handleMouseClick(double x, double y);
+    
+    // Check if the START button was clicked
+    static bool wasStartButtonClicked();
+    static void resetStartButtonClicked();
+    
+    // Set the demo manager for interaction
+    void setDemoManager(void* manager) { demoManager = manager; }
+    
+private:
+    // Static variable to track if START button was clicked
+    static bool startButtonClicked;
 
 private:
     // Setup shader program
     void setupShaders();
+    
+    // 3D shape rendering helpers
+    void renderSphere(int latitudes, int longitudes);
+    void renderCube();
+    void renderTetrahedron();
+    void renderOctahedron();
 
     // Shader program ID
     GLuint shaderProgram = 0;
@@ -48,6 +72,9 @@ private:
 
     // Flag to determine if OpenGL rendering should be used
     bool useOpenGL = true;
+    
+    // Pointer to the demo manager for callbacks
+    void* demoManager = nullptr;
 };
 
 }  // namespace workbench

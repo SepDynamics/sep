@@ -9,8 +9,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "../../workbench_demo_adapter.hpp"
 #include "sep_engine_wrapper.h"
-#include "workbench_demo_adapter.hpp"
 
 namespace sep
 {

@@ -5,6 +5,7 @@
 #include <random>
 #include <vector>
 
+#include "../../workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/types.h"

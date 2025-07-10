@@ -1,7 +1,10 @@
 #include "drug_optimizer.hpp"
-#include "compat/glm_config.h"
-#include <glm/gtx/norm.hpp>
+
 #include <cstdlib>
+#include <glm/gtx/norm.hpp>
+
+#include "../../workbench_demo_adapter.hpp"
+#include "compat/glm_config.h"
 
 namespace sep {
 namespace workbench {

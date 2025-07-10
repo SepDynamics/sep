@@ -1,3 +1,120 @@
 {
-  "mcpServers": {}
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "env": {
+        "DEFAULT_MINIMUM_TOKENS": ""
+      },
+      "alwaysAllow": [
+        "get-library-docs",
+        "resolve-library-id"
+      ],
+      "disabledTools": [
+        "resolve-library-id",
+        "get-library-docs"
+      ],
+      "timeout": 15
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/sep"
+      ],
+      "alwaysAllow": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "list_directory_with_sizes",
+        "directory_tree",
+        "move_file",
+        "list_allowed_directories",
+        "get_file_info",
+        "search_files"
+      ],
+      "disabledTools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "list_directory_with_sizes",
+        "directory_tree",
+        "move_file",
+        "search_files",
+        "get_file_info",
+        "list_allowed_directories"
+      ],
+      "timeout": 15
+    },
+    "sequentialthinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "alwaysAllow": [
+        "sequentialthinking"
+      ],
+      "disabledTools": [
+        "sequentialthinking"
+      ],
+      "timeout": 15
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "disabledTools": [
+        "add_observations",
+        "create_relations",
+        "create_entities",
+        "delete_entities",
+        "delete_observations",
+        "delete_relations",
+        "read_graph",
+        "search_nodes",
+        "open_nodes"
+      ],
+      "alwaysAllow": [
+        "create_entities",
+        "create_relations",
+        "add_observations",
+        "delete_observations",
+        "delete_entities",
+        "delete_relations",
+        "read_graph",
+        "search_nodes",
+        "open_nodes"
+      ],
+      "timeout": 15
+    },
+    "redis": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-redis",
+        "--url",
+        "redis://localhost:6379"
+      ]
+    },
+    "codegen": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/codegen-sh/codegen-sdk.git#egg=codegen-mcp-server&subdirectory=codegen-examples/examples/codegen-mcp-server",
+        "codegen-mcp-server"
+      ]
+    }
+  }
 }

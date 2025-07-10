@@ -16,7 +16,6 @@ sep_build/
 sep-build/
 changes.diff
 out/
-examples/train_data_2021_to_2025.json
 dist/
 bin/
 output/
@@ -52,12 +51,10 @@ intern/
 source/
 release/
 *.cmake
-!examples/neuro_sim_build.cmake
 !cmake/SEPConfig.cmake
 !extern/cycles/src/cmake/**
 !extern/cycles/src/cmake/*.cmake
 !extern/cycles/cmake/cuda-toolchain.cmake
-!examples/json_processor_build.cmake
 externals/
 boost/
 !third_party/
@@ -123,8 +120,7 @@ compile_commands.json
 .ninja_log
 !CMakeLists.txt
 build.log
-examples/workbench/sep_workbench
-examples/build_log.txt
+src/workbench/sep_workbench
 include/workbench/build_log.txt
 assets/sep_engine
 blender
@@ -135,7 +131,6 @@ blender
 !include/blender/cycles_renderer.h
 !src/blender/cycles_renderer.cpp
 !sep_engine/
-!examples/json_processor_build.cmake
 package-lock.json
 third_party/glm/
 cmake-nocuda/

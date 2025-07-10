@@ -6,6 +6,8 @@
 #include <vector>
 
 #include "demo_manager.hpp"
+#include "memory/memory_tier_manager.hpp"
+#include "quantum/types.h"
 #include "sep_engine_wrapper.h"
 
 namespace sep
@@ -23,12 +25,12 @@ namespace sep
             void on_render() override;
             void on_unload() override;
             void on_key_press(int key) override;
-            void on_mouse(int x, int y, int button);
+            void on_mouse(int x, int y, int button) override;
 
         private:
             struct Neuron
             {
-                Pattern pattern;
+                sep::quantum::Pattern pattern;
                 float potential{0.f};
                 uint64_t node_id{0};
             };

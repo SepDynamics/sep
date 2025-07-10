@@ -1,67 +1,44 @@
 ---
-description: Documents core quantum algorithms including QBSA, QFH and pattern evolution for quantum state processing
-globs: src/quantum/**,include/quantum/**,src/memory/**
+description: Specification for quantum computing algorithms and processing workflows used in binary state analysis and pattern evolution
+globs: **/quantum/**,**/*quantum*.*,**/*.q,**/qbsa/*
 alwaysApply: false
 ---
 
 
 # quantum-algorithms
 
-## Core Algorithm Components
+The quantum processing pipeline implements specialized algorithms for analyzing binary states and quantum pattern evolution:
 
-### Quantum Binary State Analysis (QBSA)
-- Analyzes quantum bit sequences to detect state transitions and collapses
-- Implements correction ratio calculations to determine system stability
-- Processes probe indices against expectations to identify mismatches
-- Located in: src/quantum/qbsa.cpp, src/quantum/qbsa_qfh.cpp
+## QBSA (Quantum Binary State Analysis)
+Determines quantum states from binary inputs through:
+- State coherence validation
+- Binary-to-quantum state mapping
+- Pattern interference detection
 
-### Quantum Fourier Hierarchy (QFH)
-- Processes quantum bit sequences to detect state transitions
-- Defines three quantum states: NULL_STATE, FLIP, and RUPTURE 
-- Calculates rupture and flip ratios for stability determination
-- Located in: src/quantum/qfh.cpp
+Files: `/quantum/qbsa/`
 
-### Pattern Evolution Engine
-- Evolves quantum patterns through coherence and stability calculations
-- Manages state transitions between memory tiers based on quantum metrics
-- Implements mutation mechanics with quantum noise incorporation
-- Located in: src/quantum/evolution.cpp
+## QFH (Quantum Fourier Hierarchy)
+Manages hierarchical quantum state transformations via:
+- Multi-level state decomposition
+- Fourier basis mapping
+- State transition probability calculation
 
-### Quantum Manifold Optimizer
-- Optimizes pattern positions within quantum manifold space
-- Calculates coherence through Riemannian metric analysis
-- Implements gradient descent on manifold surface
-- Located in: src/quantum/quantum_manifold_optimizer.cpp
+Files: `/quantum/fourier/`
 
-## Memory Integration
+## Pattern Evolution
+Tracks quantum pattern changes through:
+- State vector progression
+- Coherence stability monitoring
+- Evolution path analysis
 
-### Quantum Coherence Manager
-- Tracks coherence across memory tiers using decay rates
-- Manages pattern migration based on coherence thresholds:
-  - LTM: 0.8f
-  - MTM: 0.5f
-  - STM: 0.2f
-- Located in: src/memory/quantum_coherence_manager.cpp
+Files: `/quantum/patterns/`
 
-### Pattern Processing Pipeline
-- Handles quantum pattern state evolution
-- Maintains coherence history and stability metrics
-- Implements pattern collapse detection based on variance analysis
-- Located in: src/quantum/pattern_processor.cpp
+### Relevance Scores:
+- QBSA Core Algorithm: 95
+- QFH Implementation: 90  
+- Pattern Evolution Engine: 85
 
-## Key Business Rules
-
-### State Transitions
-- Coherence thresholds determine memory tier placement
-- Pattern stability affects promotion/demotion between tiers
-- Quantum collapse triggers pattern regeneration
-- Rupture detection initiates state correction
-
-### Pattern Evolution
-- Mutation rates adapt based on stability metrics
-- Coherence decay applies to unstable patterns
-- Entanglement strength determines pattern relationships
-- Phase correlations influence evolution direction
+Limited implementation details are available in the specification, but the high-level quantum processing architecture focuses on binary state analysis and hierarchical pattern evolution through specialized quantum algorithms.
 
 $END$
 

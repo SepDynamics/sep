@@ -33,12 +33,13 @@ namespace sep
             {
                 auto& n = neurons_[i];
                 n.pattern.id = std::to_string(i);
-                n.pattern.coherence = 0.f;
-                n.pattern.stability = 0.5f;
-                n.pattern.memory_tier = sep::memory::MemoryTierEnum::STM;
+                n.pattern.quantum_state.coherence = 0.f;
+                n.pattern.quantum_state.stability = 0.5f;
+                n.pattern.quantum_state.memory_tier = sep::memory::MemoryTierEnum::STM;
                 n.pattern.position = glm::vec4(static_cast<float>(i), 0.f, 0.f, 1.f);
                 memory_manager_->registerPattern(i, n.pattern);
-                n.node_id = dag.addNode(glm::vec3(n.pattern.position), n.pattern.coherence, {});
+                n.node_id = dag.addNode(glm::vec3(n.pattern.position),
+                                        n.pattern.quantum_state.coherence, {});
             }
 
             std::uniform_real_distribution<float> dist(0.f, 1.f);
@@ -81,7 +82,7 @@ namespace sep
                 auto tier = memory_manager_->determineTier(n.pattern.quantum_state.coherence,
                                                            n.pattern.quantum_state.stability,
                                                            n.pattern.quantum_state.generation);
-                n.pattern.memory_tier = static_cast<sep::memory::MemoryTierEnum>(tier->getType());
+                n.pattern.quantum_state.memory_tier = static_cast<sep::memory::MemoryTierEnum>(tier->getType());
                 dag.updateCoherence(n.node_id, n.pattern.quantum_state.coherence);
                 memory_manager_->registerPattern(std::stoull(n.pattern.id), n.pattern);
             }

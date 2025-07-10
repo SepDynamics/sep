@@ -113,6 +113,7 @@ namespace memory {
 
         // Pattern management
         void registerPattern(std::size_t id, const ::sep::pattern::PatternData &pattern);
+        void registerPattern(std::size_t id, const ::sep::quantum::Pattern &pattern);
         const ::sep::pattern::PatternData *getPatternData(std::size_t id) const;
         void removePattern(std::size_t id);
         void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);

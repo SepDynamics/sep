@@ -9,6 +9,15 @@ find_package(OSL REQUIRED)
 find_package(TBB REQUIRED)
 # Add other find_package() calls here for Embree, OpenVDB etc. as needed
 
+# Find Alembic
+find_package(Alembic REQUIRED)
+message(STATUS "Alembic include dir: ${ALEMBIC_INCLUDE_DIR}")
+message(STATUS "Alembic libraries: ${ALEMBIC_LIBRARIES}")
+
+# Find OpenPGL
+find_package(OpenPGL REQUIRED)
+message(STATUS "OpenPGL include dir: ${OPENPGL_INCLUDE_DIR}")
+message(STATUS "OpenPGL libraries: ${OPENPGL_LIBRARIES}")
 
 
 # Install headers
@@ -45,7 +54,7 @@ if(SEP_HAS_CYCLES)
     )
 endif()
 
-add_library(sep_blender STATIC ${BLENDER_SOURCES})
+add_library(sep_blender SHARED ${BLENDER_SOURCES})
 
 target_precompile_headers(sep_blender PRIVATE blender_pch.h)
 
@@ -70,6 +79,10 @@ target_link_libraries(sep_blender PUBLIC
     ${OpenImageIO_LIBRARIES}
     ${OSL_LIBRARIES}
     ${TBB_LIBRARIES}
+    ${Alembic_LIBRARIES}
+    ${OpenPGL_LIBRARIES}
+    /usr/lib64/libAlembic.so
+    /usr/lib64/libopenpgl.so
     CUDA::cudart
     CUDA::cuda_driver
     ${CMAKE_DL_LIBS}
@@ -95,6 +108,8 @@ target_include_directories(sep_blender
         $<INSTALL_INTERFACE:include>
         ${OpenImageIO_INCLUDE_DIRS}
         ${OSL_INCLUDE_DIRS}
+        ${Alembic_INCLUDE_DIRS}
+        ${OpenPGL_INCLUDE_DIRS}
 )
 
 # Properties for building a shared library

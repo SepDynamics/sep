@@ -1,48 +1,32 @@
 ---
-description: Documents how data flows between components including pattern processing, memory tiers, and quantum transformations
-globs: src/**/*.cpp,src/**/*.hpp,include/**/*.h,examples/**/*.cpp
+description: Data flow analysis for error processing system handling file group transformations
+globs: **/processing/*.{ts,js},**/state/*.{ts,js},**/memory/*.{ts,js}
 alwaysApply: false
 ---
 
 
 # data-flow
 
-## Core Pattern Processing Pipeline
+## Processing Pipeline
+Files move through an error handling pipeline for group 0, with 317 files requiring processing. Flow occurs in stages:
 
-### Pattern Ingestion Flow
-File: src/api/server.cpp
-- Raw patterns enter through /api/v1/pattern endpoint
-- Patterns undergo coherence validation
-- Valid patterns enter memory tier system based on coherence scores
+Error Detection -> Group Assignment -> Processing
 
-### Memory Tier Transitions 
-Files: src/memory/memory_tier_manager.cpp, src/memory/memory_tier.cpp
-- Patterns flow between three memory tiers (STM -> MTM -> LTM)
-- Promotion criteria:
-  - STM -> MTM: coherence > 0.7, stability > 0.7, generation > 5
-  - MTM -> LTM: coherence > 0.9, stability > 0.85, generation > 100
-- Demotion occurs when coherence drops below 0.3
+## Error States
+Main dataflow moves through error state transitions:
+1. Initial file group classification
+2. Error state validation
+3. Group 0 processing handling
 
-### Quantum State Transformations
-File: src/quantum/processor.cpp
-- Quantum patterns undergo state evolution through QFH processor
-- Coherence changes trigger pattern migrations between tiers
-- State collapse detection prompts pattern demotion
-- Entanglement detection influences pattern relationships
+## Component Communication 
+Limited information suggests a single directional flow:
 
-### System Integration Points
-Files: src/api/sep_engine.cpp, src/api/bridge.cpp
-- Pattern data flows from API layer to quantum processor
-- Memory tier state synchronizes with persistence layer
-- Pattern relationships propagate through quantum bridge
-- Context blending occurs at API integration boundary
+Source Files -> Group 0 Classifier -> Error Processor
 
-### Pattern Evolution Pipeline
-Files: src/quantum/evolution.cpp, src/quantum/pattern_evolution.cpp
-- Patterns evolve through quantum manifold transformations
-- Evolution results trigger memory tier transitions
-- Pattern stability influences evolution pathways
-- Parent-child relationships form based on evolution results
+Importance Score: 65
+- Error handling represents important but non-core business logic
+- Group-based file processing indicates structured workflow
+- System appears to be supporting infrastructure rather than primary business logic
 
 $END$
 

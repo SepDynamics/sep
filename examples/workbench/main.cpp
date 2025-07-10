@@ -1,6 +1,8 @@
 // System includes
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cstdlib>
+#include <iostream>
 
 // ImGui includes
 #include "imgui.h"
@@ -18,19 +20,53 @@
 #include "demos/memory_garden.hpp"
 #include "audio_visualizer.hpp"
 
-int main()
+// Error callback for GLFW
+static void error_callback(int error, const char* description)
 {
+    std::cerr << "GLFW Error " << error << ": " << description << std::endl;
+}
+
+int main(int /* argc */, char * /* argv */[])
+{
+    // Set environment variables for display
+    setenv("DISPLAY", ":0", 0);  // Only set if not already set
+    
+    // Force libdecor to use the xdg-shell backend instead of GTK
+    setenv("LIBDECOR_PLUGIN", "xdg-shell", 1);
+    
+    // Set GLFW error callback
+    glfwSetErrorCallback(error_callback);
+    
+    std::cout << "Initializing GLFW..." << std::endl;
     if (!glfwInit())
     {
+        std::cerr << "Failed to initialize GLFW!" << std::endl;
         return -1;
     }
+    std::cout << "GLFW initialized successfully." << std::endl;
+    
+    // Configure GLFW window hints
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+    glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
+    
+    // Disable window decoration if libdecor is causing issues
+    // glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
+    // Try creating window with decorations disabled to avoid libdecor issues
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+    
+    std::cout << "Creating GLFW window..." << std::endl;
     GLFWwindow* window = glfwCreateWindow(1280, 720, "SEP Workbench", nullptr, nullptr);
     if (!window)
     {
+        std::cerr << "Failed to create GLFW window!" << std::endl;
         glfwTerminate();
         return -1;
     }
+    std::cout << "GLFW window created successfully." << std::endl;
 
     glfwMakeContextCurrent(window);
     if (glewInit() != GLEW_OK)

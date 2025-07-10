@@ -12,12 +12,12 @@ using namespace sep::quantum;
 
 int main() {
     const int grid = 10;
-    std::vector<PatternData> patterns;
+    std::vector<Pattern> patterns;
     patterns.reserve(grid * grid);
 
     for (int x = 0; x < grid; ++x) {
         for (int y = 0; y < grid; ++y) {
-            PatternData p;
+            Pattern p;
             p.id = "p_" + std::to_string(x) + "_" + std::to_string(y);
             p.position = glm::vec4(static_cast<float>(x), static_cast<float>(y), 0.0f, 1.0f);
             p.coherence = 0.5f;

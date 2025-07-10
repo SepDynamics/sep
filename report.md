@@ -1,25 +1,1743 @@
-Found no defects in hip_compat.cpp
-Found no defects in tracing.cpp
-Found no defects in prometheus_exporter.cpp
-Found no defects in simple_embedding_model.cpp
-[CRITICAL] /sep/src/workbench_main.cpp:6:10: 'backends/imgui_impl_glfw.h' file not found [clang-diagnostic-error]
-#include "backends/imgui_impl_glfw.h"
-         ^
-  Report hash: 597b6b2df006854b59915f486eb67eef
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:291:22: both sides of operator are equivalent [misc-redundant-expression]
+    if (imgl3wInit() != 0)
+                     ^
+  Report hash: 1fd9e19ec8550f6690de84a271ba9584
   Steps:
-    1, workbench_main.cpp:6:10: 'backends/imgui_impl_glfw.h' file not found
+    1, imgui_impl_opengl3.cpp:291:22: both sides of operator are equivalent
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:293:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
+        ^
+  Report hash: 83b3da2e853dc256cc67ebcfc76b63a0
+  Steps:
+    1, imgui_impl_opengl3.cpp:293:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:293:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:791:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to compile %s! With GLSL: %s\n", desc, bd->GlslVersionString);
+        ^
+  Report hash: 8b7f5770122a7b0e2a1d587185885aff
+  Steps:
+    1, imgui_impl_opengl3.cpp:791:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:791:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:797:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "%s\n", buf.begin());
+        ^
+  Report hash: 608b151e6695cac6c5330fe36deebb51
+  Steps:
+    1, imgui_impl_opengl3.cpp:797:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:797:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:810:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to link %s! With GLSL %s\n", desc, bd->GlslVersionString);
+        ^
+  Report hash: 0bba233dca8fba0bd47d6dfe9bcac7a3
+  Steps:
+    1, imgui_impl_opengl3.cpp:810:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:810:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:816:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "%s\n", buf.begin());
+        ^
+  Report hash: 608b151e6695cac6c5330fe36deebb51
+  Steps:
+    1, imgui_impl_opengl3.cpp:816:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:816:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:840:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    sscanf(bd->GlslVersionString, "#version %d", &glsl_version);
+    ^
+  Report hash: 73a9d793e988515f34c977d6ea4c8148
+  Steps:
+    1, imgui_impl_opengl3.cpp:840:5: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:840:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+Found 7 defect(s) in imgui_impl_opengl3.cpp
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:1540:101: 'ImGuiKey_I' is confusable with 'ImGuiKey_1' [misc-confusable-identifiers]
+    ImGuiKey_A, ImGuiKey_B, ImGuiKey_C, ImGuiKey_D, ImGuiKey_E, ImGuiKey_F, ImGuiKey_G, ImGuiKey_H, ImGuiKey_I, ImGuiKey_J,
+                                                                                                    ^
+  Report hash: 70b9c123374c63eb6c7d4c02420b48dd
+  Steps:
+    1, imgui.h:1539:17: other declaration found here
+    2, imgui.h:1540:101: 'ImGuiKey_I' is confusable with 'ImGuiKey_1'
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:1541:53: 'ImGuiKey_O' is confusable with 'ImGuiKey_0' [misc-confusable-identifiers]
+    ImGuiKey_K, ImGuiKey_L, ImGuiKey_M, ImGuiKey_N, ImGuiKey_O, ImGuiKey_P, ImGuiKey_Q, ImGuiKey_R, ImGuiKey_S, ImGuiKey_T,
+                                                    ^
+  Report hash: 7851b021d302e264139edace21e1c4bf
+  Steps:
+    1, imgui.h:1539:5: other declaration found here
+    2, imgui.h:1541:53: 'ImGuiKey_O' is confusable with 'ImGuiKey_0'
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2196:25: swap functions should be marked noexcept [performance-noexcept-swap]
+    inline void         swap(ImVector<T>& rhs)              { int rhs_size = rhs.Size; rhs.Size = Size; Size = rhs_size; int rhs_cap = rhs.Capacity; rhs.Capacity = Capacity; Capacity = rhs_cap; T* rhs_data = rhs.Data; rhs.Data = Data; Data = rhs_data; }
+                        ^
+  Report hash: 27ca48338ec824e0ccd2209f617d2d35
+  Notes:
+    1, imgui.h:2196:62: noexcept  (fixit)
+  Steps:
+    1, imgui.h:2196:25: swap functions should be marked noexcept
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:3152:36: undefined behavior, destination object type 'ImDrawListSplitter' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline ImDrawListSplitter()  { memset(this, 0, sizeof(*this)); }
+                                   ^
+  Report hash: 958c429996f593e719df4255f31c9f9a
+  Steps:
+    1, imgui.h:3152:36: undefined behavior, destination object type 'ImDrawListSplitter' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:3282:106: comparing object representation of type 'ImVec2' which does not have a unique object representation; consider comparing the members of the object manually [bugprone-suspicious-memory-comparison]
+    inline    void  PathLineToMergeDuplicate(const ImVec2& pos)                 { if (_Path.Size == 0 || memcmp(&_Path.Data[_Path.Size - 1], &pos, 8) != 0) _Path.push_back(pos); }
+                                                                                                         ^
+  Report hash: 8e0b66bdb779b430dff839695c36a923
+  Steps:
+    1, imgui.h:3282:106: comparing object representation of type 'ImVec2' which does not have a unique object representation; consider comparing the members of the object manually
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:3445:27: undefined behavior, destination object type 'ImTextureData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImTextureData()     { memset(this, 0, sizeof(*this)); TexID = ImTextureID_Invalid; }
+                          ^
+  Report hash: d139e047736f142f882de8d021ec7f17
+  Steps:
+    1, imgui.h:3445:27: undefined behavior, destination object type 'ImTextureData' is not TriviallyCopyable
+
+Found 6 defect(s) in imgui.h
+
+[LOW] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:443:8: 1st argument 'imgui_key' (passed to 'key') looks like it might be swapped with the 2nd, 'keycode' (passed to 'native_keycode') [readability-suspicious-call-argument]
+    io.SetKeyEventNativeData(imgui_key, keycode, scancode); // To support legacy indexing (<1.87 user code)
+       ^
+  Report hash: 3d7d16867bb799c9b0371c7da434b385
+  Steps:
+    1, imgui.h:2472:21: in the call to 'SetKeyEventNativeData', declared here
+    2, imgui_impl_glfw.cpp:443:8: 1st argument 'imgui_key' (passed to 'key') looks like it might be swapped with the 2nd, 'keycode' (passed to 'native_keycode')
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:624:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    snprintf(bd->BackendPlatformName, sizeof(bd->BackendPlatformName), "imgui_impl_glfw (%d)", GLFW_VERSION_COMBINED);
+    ^
+  Report hash: ffb6a65c33ac411fecbbf3b41f511891
+  Steps:
+    1, imgui_impl_glfw.cpp:624:5: cast the expression to void to silence this warning
+    2, imgui_impl_glfw.cpp:624:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:927:35: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+        current_time = bd->Time + 0.00001f;
+                                  ^
+  Report hash: 096582b1e101453666f9311c1c2f6ab8
+  Steps:
+    1, imgui_impl_glfw.cpp:927:35: implicit conversion increases floating-point precision: 'float' to 'double'
+
+Found 3 defect(s) in imgui_impl_glfw.cpp
+
+Found no defects in tracing.cpp
+Found no defects in hip_compat.cpp
+Found no defects in prometheus_exporter.cpp
+[HIGH] /sep/third_party/imgui/imgui.h:2202:151: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'? [bugprone-sizeof-expression]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                      ^
+  Report hash: e898e1f28026d15227a9f7903d5a9624
+  Steps:
+    1, imgui.h:2140:61: expanded from macro 'IM_ALLOC'
+    2, imgui.h:2202:151: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'?
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: do not use 'memcpy' to cast between pointers [bugprone-bitwise-pointer-cast]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 44790e4abe78d7bf277d78278d2e7948
+  Steps:
+    1, imgui.h:2202:175: do not use 'memcpy' to cast between pointers
+
+[HIGH] /sep/third_party/imgui/imgui.h:2202:213: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'? [bugprone-sizeof-expression]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                                                                    ^
+  Report hash: c4cbff7e4be72f41e5f67e258a425529
+  Steps:
+    1, imgui.h:2202:213: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'?
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2206:120: do not use 'memcpy' to cast between pointers [bugprone-bitwise-pointer-cast]
+    inline void         push_back(const T& v)               { if (Size == Capacity) reserve(_grow_capacity(Size + 1)); memcpy(&Data[Size], &v, sizeof(v)); Size++; }
+                                                                                                                       ^
+  Report hash: bdf20f6e8f4705e3d9b245cf46376f68
+  Steps:
+    1, imgui.h:2206:120: do not use 'memcpy' to cast between pointers
+
+[HIGH] /sep/third_party/imgui/imgui.h:2206:144: suspicious usage of 'sizeof()' on an expression of pointer type [bugprone-sizeof-expression]
+    inline void         push_back(const T& v)               { if (Size == Capacity) reserve(_grow_capacity(Size + 1)); memcpy(&Data[Size], &v, sizeof(v)); Size++; }
+                                                                                                                                               ^
+  Report hash: 28aa8a63a6f8b40d2320dc1287819531
+  Steps:
+    1, imgui.h:2206:144: suspicious usage of 'sizeof()' on an expression of pointer type
+
+Found 5 defect(s) in imgui.h
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:767:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    snprintf(node->Name, IM_ARRAYSIZE(node->Name), "%s", name);
+    ^
+  Report hash: 8cf1442196be101febbd6dfb08d4d46d
+  Steps:
+    1, imgui_demo.cpp:767:5: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:767:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:795:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        snprintf(name_buf, IM_ARRAYSIZE(name_buf), "%s %d", root_names[idx_L0 / root_items_multiplier], idx_L0 % root_items_multiplier);
+        ^
+  Report hash: ddcece7cdd891655b3a30c5c2d611c31
+  Steps:
+    1, imgui_demo.cpp:795:9: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:795:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:800:13: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+            snprintf(name_buf, IM_ARRAYSIZE(name_buf), "Child %d", idx_L1);
+            ^
+  Report hash: 2b4648a5b25cf6b1767082c4d20335f0
+  Steps:
+    1, imgui_demo.cpp:800:13: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:800:13: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:805:17: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                snprintf(name_buf, IM_ARRAYSIZE(name_buf), "Sub-child %d", 0);
+                ^
+  Report hash: b967325331077b70ab6a159ca46f4882
+  Steps:
+    1, imgui_demo.cpp:805:17: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:805:17: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2011:13: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+            sprintf(overlay, "avg %f", average);
+            ^
+  Report hash: 0a640894b7a1807bfed1bb5ba7bc55ea
+  Steps:
+    1, imgui_demo.cpp:2011:13: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2011:13: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2060:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        sprintf(buf, "%d/%d", (int)(progress_saturated * 1753), 1753);
+        ^
+  Report hash: 667e36a07ce1ce0fce0027ad9093f710
+  Steps:
+    1, imgui_demo.cpp:2060:9: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2060:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2325:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(label, "Item %d", i);
+                    ^
+  Report hash: bf0db10b21e938e2f5be2f1db79bd42d
+  Steps:
+    1, imgui_demo.cpp:2325:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2325:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2337:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(label, "Item %d", i);
+                    ^
+  Report hash: bf0db10b21e938e2f5be2f1db79bd42d
+  Steps:
+    1, imgui_demo.cpp:2337:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2337:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2398:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(name, "(%.1f,%.1f)", alignment.x, alignment.y);
+                    ^
+  Report hash: 8453f749bf9244bcc2d2b0f9d1714aae
+  Steps:
+    1, imgui_demo.cpp:2398:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2398:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2658:17: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                sprintf(buf, "Object %d", n);
+                ^
+  Report hash: 68a830ff39fb4a82106f1211105eb579
+  Steps:
+    1, imgui_demo.cpp:2658:17: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2658:17: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2675:17: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                sprintf(buf, "Object %d", n);
+                ^
+  Report hash: 68a830ff39fb4a82106f1211105eb579
+  Steps:
+    1, imgui_demo.cpp:2675:17: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2675:17: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2716:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(label, "Object %05d: %s", n, ExampleNames[n % IM_ARRAYSIZE(ExampleNames)]);
+                    ^
+  Report hash: 39fea1491db7bd149115f0d3438ba060
+  Steps:
+    1, imgui_demo.cpp:2716:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2716:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2756:25: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                        sprintf(label, "Object %05d: %s", n, ExampleNames[n % IM_ARRAYSIZE(ExampleNames)]);
+                        ^
+  Report hash: 2508104661a01d9efe6fbed23cbae9c6
+  Steps:
+    1, imgui_demo.cpp:2756:25: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2756:25: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2818:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(label, "Object %05u: %s", item_id, ExampleNames[item_id % IM_ARRAYSIZE(ExampleNames)]);
+                    ^
+  Report hash: 8bed36ca6316d5a7bca5a568c4ade177
+  Steps:
+    1, imgui_demo.cpp:2818:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2818:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2883:25: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                        sprintf(label, "Object %05d: %s", n, ExampleNames[n % IM_ARRAYSIZE(ExampleNames)]);
+                        ^
+  Report hash: 2508104661a01d9efe6fbed23cbae9c6
+  Steps:
+    1, imgui_demo.cpp:2883:25: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2883:25: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2924:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(label, "Item %d", n);
+                    ^
+  Report hash: 5fd48bcdc27dd6c2c615a2f59e3e015e
+  Steps:
+    1, imgui_demo.cpp:2924:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2924:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:2967:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(label, "Object %05d: %s", n, ExampleNames[n % IM_ARRAYSIZE(ExampleNames)]);
+                    ^
+  Report hash: 39fea1491db7bd149115f0d3438ba060
+  Steps:
+    1, imgui_demo.cpp:2967:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:2967:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:3257:25: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                        sprintf(label, "Object %05d: %s", item_id, item_category);
+                        ^
+  Report hash: 48653b3a2a4801e1d1c22fe680fc0fb6
+  Steps:
+    1, imgui_demo.cpp:3257:25: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:3257:25: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:3331:29: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                            sprintf(label, "Delete %d item(s)###DeleteSelected", selection.Size);
+                            ^
+  Report hash: 26d81ed649620b3e6b638d07e3f8bde8
+  Steps:
+    1, imgui_demo.cpp:3331:29: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:3331:29: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:3509:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    snprintf(name, IM_ARRAYSIZE(name), "%04d", active_tabs[n]);
+                    ^
+  Report hash: 432cf234728226f29d715da1286511f5
+  Steps:
+    1, imgui_demo.cpp:3509:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:3509:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[HIGH] /sep/third_party/imgui/imgui_demo.cpp:3578:57: loop induction expression should not have floating-point type [cert-flp30-c]
+            for (float scaling = 0.5f; scaling <= 4.0f; scaling += 0.5f)
+                                                        ^
+  Report hash: 8c200f3c051a124afea0fb8c5fd7f759
+  Steps:
+    1, imgui_demo.cpp:3578:57: loop induction expression should not have floating-point type
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:4338:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(buf, "%03d", i);
+                    ^
+  Report hash: 438cb4403792995aeeb0a61133122f7f
+  Steps:
+    1, imgui_demo.cpp:4338:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:4338:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:4920:17: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                sprintf(num_buf, "%d", n);
+                ^
+  Report hash: 8048106088a44e3e70f724641c167c25
+  Steps:
+    1, imgui_demo.cpp:4920:17: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:4920:17: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:5102:13: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+            switch (n)
+            ^
+  Report hash: f9036715a8e69e832160370bb6ca9f0c
+  Steps:
+    1, imgui_demo.cpp:5102:13: switching on non-enum value without default case may not cover all cases
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:5351:13: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+            sprintf(buf, "Button: %s###Button", name); // ### operator override ID ignoring the preceding label
+            ^
+  Report hash: 7641cf20964e6effceb486f26a2e0ea6
+  Steps:
+    1, imgui_demo.cpp:5351:13: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:5351:13: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:5790:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(buf, "Hello %d,%d", column, row);
+                    ^
+  Report hash: 1b31f0e3ed9ffeab604fdea68e61c08d
+  Steps:
+    1, imgui_demo.cpp:5790:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:5790:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:6032:25: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                        sprintf(buf, "Hello %d,%d", column, row);
+                        ^
+  Report hash: b9a293ae1163679e63b19b99fb90bb22
+  Steps:
+    1, imgui_demo.cpp:6032:25: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:6032:25: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:6180:17: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                sprintf(label, "Hello %d,%d", column, row);
+                ^
+  Report hash: 0bfedbc5ff118e4e00a9840df9b891fa
+  Steps:
+    1, imgui_demo.cpp:6180:17: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:6180:17: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:6181:17: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+                switch (contents_type)
+                ^
+  Report hash: d8f6334efc5711d6f0b5329bf7e33a1a
+  Steps:
+    1, imgui_demo.cpp:6181:17: switching on non-enum value without default case may not cover all cases
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:6389:41: result of integer division used in a floating point context; possible loss of precision [bugprone-integer-division]
+            float indent_step = (float)((int)TEXT_BASE_WIDTH / 2);
+                                        ^
+  Report hash: 22fc50d95b028244654fbf803e000490
+  Steps:
+    1, imgui_demo.cpp:6389:41: result of integer division used in a floating point context; possible loss of precision
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:6889:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(buf, "Cell %d,%d", column, row);
+                    ^
+  Report hash: a6f8bbb924da3238f35b3343c580afe4
+  Steps:
+    1, imgui_demo.cpp:6889:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:6889:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:7095:13: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+            sprintf(buf, "Synced Table %d", n);
+            ^
+  Report hash: 88743ba10bc11ffba590e1d5f8cf74f2
+  Steps:
+    1, imgui_demo.cpp:7095:13: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:7095:13: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:7439:21: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                    sprintf(label, "%04d", item->ID);
+                    ^
+  Report hash: ad1ed963639c1e97e2cff68dac4d658a
+  Steps:
+    1, imgui_demo.cpp:7439:21: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:7439:21: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:7451:29: 2nd argument 'item_is_selected' (passed to 'selected') looks like it might be swapped with the 3rd, 'selectable_flags' (passed to 'flags') [readability-suspicious-call-argument]
+                        if (ImGui::Selectable(label, item_is_selected, selectable_flags, ImVec2(0, row_min_height)))
+                            ^
+  Report hash: af2fba63bb912f00ca4a91eb6b3d2d92
+  Steps:
+    1, imgui.h:753:29: in the call to 'Selectable', declared here
+    2, imgui_demo.cpp:7451:29: 2nd argument 'item_is_selected' (passed to 'selected') looks like it might be swapped with the 3rd, 'selectable_flags' (passed to 'flags')
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:7551:13: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+            sprintf(label, "Item %d", n);
+            ^
+  Report hash: d624d9a0f08361b41c0fdeb9cb720de0
+  Steps:
+    1, imgui_demo.cpp:7551:13: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:7551:13: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:7573:13: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+            sprintf(label, "%04d", i);
+            ^
+  Report hash: 657220173e48d88beb3fcc97375e9b50
+  Steps:
+    1, imgui_demo.cpp:7573:13: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:7573:13: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:7949:17: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                sprintf(label, "Mouse cursor %d: %s", i, mouse_cursors_names[i]);
+                ^
+  Report hash: 7df0f7226b56ea505593ace92f7f184f
+  Steps:
+    1, imgui_demo.cpp:7949:17: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:7949:17: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:8228:9: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+        switch (style_idx)
+        ^
+  Report hash: 2d5e1a92cf1605696b269ef31d0211ff
+  Steps:
+    1, imgui_demo.cpp:8228:9: switching on non-enum value without default case may not cover all cases
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:8422:50: comparing object representation of type 'ImVec4' which does not have a unique object representation; consider comparing the members of the object manually [bugprone-suspicious-memory-comparison]
+                    if (!output_only_modified || memcmp(&col, &ref->Colors[i], sizeof(ImVec4)) != 0)
+                                                 ^
+  Report hash: 15539c6c98abd5071a7737b19e121dd6
+  Steps:
+    1, imgui_demo.cpp:8422:50: comparing object representation of type 'ImVec4' which does not have a unique object representation; consider comparing the members of the object manually
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:8459:21: comparing object representation of type 'ImVec4' which does not have a unique object representation; consider comparing the members of the object manually [bugprone-suspicious-memory-comparison]
+                if (memcmp(&style.Colors[i], &ref->Colors[i], sizeof(ImVec4)) != 0)
+                    ^
+  Report hash: 9a9beb4519c47670f4c638303b2a0528
+  Steps:
+    1, imgui_demo.cpp:8459:21: comparing object representation of type 'ImVec4' which does not have a unique object representation; consider comparing the members of the object manually
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:8787:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
+        ^
+  Report hash: 881cbcd2b1ff40c1bbc8a5a2149597ba
+  Steps:
+    1, imgui_demo.cpp:8787:9: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:8787:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:8986:9: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+        switch (data->EventFlag)
+        ^
+  Report hash: 64633745c5be42f5ad49a0263ffe5d34
+  Steps:
+    1, imgui_demo.cpp:8986:9: switching on non-enum value without default case may not cover all cases
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:9282:17: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                sprintf(label, "MyObject %d", i);
+                ^
+  Report hash: a3bf270f97b7941fe218e22fd32715e5
+  Steps:
+    1, imgui_demo.cpp:9282:17: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:9282:17: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:9386:25: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+                        switch (field_desc.DataType)
+                        ^
+  Report hash: 83588cae0811bfe4cd4e33c9f7eb7f65
+  Steps:
+    1, imgui_demo.cpp:9386:25: switching on non-enum value without default case may not cover all cases
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:9507:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (test_type)
+    ^
+  Report hash: b95db4c102f1ef11ce9c6ca381e46487
+  Steps:
+    1, imgui_demo.cpp:9507:5: switching on non-enum value without default case may not cover all cases
+
+[HIGH] /sep/third_party/imgui/imgui_demo.cpp:9587:45: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+            data->DesiredSize = ImVec2((int)(data->DesiredSize.x / step + 0.5f) * step, (int)(data->DesiredSize.y / step + 0.5f) * step);
+                                            ^
+  Report hash: ff61ffc5067294e9d7a7e20b68bdffb6
+  Steps:
+    1, imgui_demo.cpp:9587:45: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_demo.cpp:9587:94: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+            data->DesiredSize = ImVec2((int)(data->DesiredSize.x / step + 0.5f) * step, (int)(data->DesiredSize.y / step + 0.5f) * step);
+                                                                                             ^
+  Report hash: 36fee1a4868d642794ae2412a4f3be34
+  Steps:
+    1, imgui_demo.cpp:9587:94: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:9782:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    sprintf(buf, "Animated title %c %d###AnimatedTitle", "|/-\\"[(int)(ImGui::GetTime() / 0.25f) & 3], ImGui::GetFrameCount());
+    ^
+  Report hash: 6a96f898b85f901a669e6c849991b6fc
+  Steps:
+    1, imgui_demo.cpp:9782:5: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:9782:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:9833:28: 4th argument 'col_b' (passed to 'col_upr_right') looks like it might be swapped with the 6th, 'col_a' (passed to 'col_bot_left') [readability-suspicious-call-argument]
+                draw_list->AddRectFilledMultiColor(p0, p1, col_a, col_b, col_b, col_a);
+                           ^
+  Report hash: 2a8bc20fa253273bb015c3ea55bc545a
+  Steps:
+    1, imgui.h:3246:21: in the call to 'AddRectFilledMultiColor', declared here
+    2, imgui_demo.cpp:9833:28: 4th argument 'col_b' (passed to 'col_upr_right') looks like it might be swapped with the 6th, 'col_a' (passed to 'col_bot_left')
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:9841:28: 4th argument 'col_b' (passed to 'col_upr_right') looks like it might be swapped with the 6th, 'col_a' (passed to 'col_bot_left') [readability-suspicious-call-argument]
+                draw_list->AddRectFilledMultiColor(p0, p1, col_a, col_b, col_b, col_a);
+                           ^
+  Report hash: 2a8bc20fa253273bb015c3ea55bc545a
+  Steps:
+    1, imgui.h:3246:21: in the call to 'AddRectFilledMultiColor', declared here
+    2, imgui_demo.cpp:9841:28: 4th argument 'col_b' (passed to 'col_upr_right') looks like it might be swapped with the 6th, 'col_a' (passed to 'col_bot_left')
+
+[HIGH] /sep/third_party/imgui/imgui_demo.cpp:10030:80: loop induction expression should not have floating-point type [cert-flp30-c]
+                for (float x = fmodf(scrolling.x, GRID_STEP); x < canvas_sz.x; x += GRID_STEP)
+                                                                               ^
+  Report hash: d1809b44becde0549814c05636329034
+  Steps:
+    1, imgui_demo.cpp:10030:80: loop induction expression should not have floating-point type
+
+[HIGH] /sep/third_party/imgui/imgui_demo.cpp:10032:80: loop induction expression should not have floating-point type [cert-flp30-c]
+                for (float y = fmodf(scrolling.y, GRID_STEP); y < canvas_sz.y; y += GRID_STEP)
+                                                                               ^
+  Report hash: 2bcbdadc94f23784ad8c443615b514c3
+  Steps:
+    1, imgui_demo.cpp:10032:80: loop induction expression should not have floating-point type
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10120:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        snprintf(Name, sizeof(Name), "%s", name);
+        ^
+  Report hash: aab04aa04224162d8fa2215aaf147c95
+  Steps:
+    1, imgui_demo.cpp:10120:9: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:10120:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10150:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        snprintf(out_buf, out_buf_size, "%s###doc%d", doc->Name, doc->UID);
+        ^
+  Report hash: a42589043ace1eba8f43303889bc8f78
+  Steps:
+    1, imgui_demo.cpp:10150:9: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:10150:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10194:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        sprintf(buf, "Save %s", doc->Name);
+        ^
+  Report hash: bd18423055a6d50aaf6150a47c5dee8a
+  Steps:
+    1, imgui_demo.cpp:10194:9: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:10194:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10746:33: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+                                sprintf(label, "%d", item_data->ID);
+                                ^
+  Report hash: c94608a5c391694a7246c007fefb1fcf
+  Steps:
+    1, imgui_demo.cpp:10746:33: cast the expression to void to silence this warning
+    2, imgui_demo.cpp:10746:33: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10797:61: result of integer division used in a floating point context; possible loss of precision [bugprone-integer-division]
+                    float hovered_item_rel_pos_y = ((float)(hovered_item_idx / LayoutColumnCount) + fmodf(hovered_item_ny, 1.0f)) * LayoutItemStep.y;
+                                                            ^
+  Report hash: a9ee23d8e95fcdbada27245d33e9f552
+  Steps:
+    1, imgui_demo.cpp:10797:61: result of integer division used in a floating point context; possible loss of precision
+
+Found 57 defect(s) in imgui_demo.cpp
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2200:182: undefined behavior, destination object type 'ImGuiTableTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
+                                                                                                                                                                                     ^
+  Report hash: cbb629e9182726f23d7b6cf44cbbe8bc
+  Steps:
+    1, imgui.h:2200:182: undefined behavior, destination object type 'ImGuiTableTempData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2200:182: undefined behavior, source object type 'const ImGuiTableTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
+                                                                                                                                                                                     ^
+  Report hash: 6ad7ab7a22e3e0f75cbf262263d58faa
+  Steps:
+    1, imgui.h:2200:182: undefined behavior, source object type 'const ImGuiTableTempData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 65c2bee04162edbee8865cc5f3565ce2
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, destination object type 'ImGuiOldColumns' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 7faea03a3dfaf77746b14b20b83a148a
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, destination object type 'ImGuiOldColumns' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, destination object type 'ImGuiTable' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 115eba8c98264706a536ca485f35b6fd
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, destination object type 'ImGuiTable' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, destination object type 'ImGuiTableTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 54f710404b91eb36528ee7487a28f949
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, destination object type 'ImGuiTableTempData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 0855f2b0919c2df74e4712b79a462856
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, source object type 'ImGuiOldColumns' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 023e9ddc89e70c001d7c20aa3edc3507
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, source object type 'ImGuiOldColumns' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, source object type 'ImGuiTable' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: efac64bf752d4e9d14e6045bd0807768
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, source object type 'ImGuiTable' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, source object type 'ImGuiTableTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 4050838120481949c5f4623a1cb7d156
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, source object type 'ImGuiTableTempData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2206:120: undefined behavior, destination object type 'ImGuiOldColumns' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         push_back(const T& v)               { if (Size == Capacity) reserve(_grow_capacity(Size + 1)); memcpy(&Data[Size], &v, sizeof(v)); Size++; }
+                                                                                                                       ^
+  Report hash: 0a869379fd4f338b6c3673f6ea4338b4
+  Steps:
+    1, imgui.h:2206:120: undefined behavior, destination object type 'ImGuiOldColumns' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2206:120: undefined behavior, source object type 'const ImGuiOldColumns' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         push_back(const T& v)               { if (Size == Capacity) reserve(_grow_capacity(Size + 1)); memcpy(&Data[Size], &v, sizeof(v)); Size++; }
+                                                                                                                       ^
+  Report hash: 265df02b8342b4dc182b0445c44eae7a
+  Steps:
+    1, imgui.h:2206:120: undefined behavior, source object type 'const ImGuiOldColumns' is not TriviallyCopyable
+
+Found 12 defect(s) in imgui.h
+
+[HIGH] /sep/third_party/imgui/imgui_internal.h:506:104: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+static inline float  ImRound64(float f)                                         { return (float)(ImS64)(f + 0.5f); }
+                                                                                                       ^
+  Report hash: 3abdb70a341b25866ef65c0b4b4132a4
+  Steps:
+    1, imgui_internal.h:506:104: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:784:13: swap functions should be marked noexcept [performance-noexcept-swap]
+    void    swap(ImChunkStream<T>& rhs) { rhs.Buf.swap(Buf); }
+            ^
+  Report hash: 68e75b85f01dfd3b8a3c6bc1055cb55a
+  Notes:
+    1, imgui_internal.h:784:42: noexcept  (fixit)
+  Steps:
+    1, imgui_internal.h:784:13: swap functions should be marked noexcept
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:869:47: undefined behavior, destination object type 'ImDrawDataBuilder' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImDrawDataBuilder()                     { memset(this, 0, sizeof(*this)); }
+                                              ^
+  Report hash: 35bbd1422043f05f7c001ae79fa7a9d5
+  Steps:
+    1, imgui_internal.h:869:47: undefined behavior, destination object type 'ImDrawDataBuilder' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:1191:43: undefined behavior, destination object type 'ImGuiInputTextDeactivatedState' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImGuiInputTextDeactivatedState()    { memset(this, 0, sizeof(*this)); }
+                                          ^
+  Report hash: f663a197bc3f96f776d4737ba8ad5138
+  Steps:
+    1, imgui_internal.h:1191:43: undefined behavior, destination object type 'ImGuiInputTextDeactivatedState' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:1639:39: undefined behavior, destination object type 'ImGuiListClipperData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImGuiListClipperData()          { memset(this, 0, sizeof(*this)); }
+                                      ^
+  Report hash: 9569001114065355c6a411c6e95f62d1
+  Steps:
+    1, imgui_internal.h:1639:39: undefined behavior, destination object type 'ImGuiListClipperData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:1830:27: undefined behavior, destination object type 'ImGuiOldColumns' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImGuiOldColumns()   { memset(this, 0, sizeof(*this)); }
+                          ^
+  Report hash: 885e0c6243705cadde4a61e82124971d
+  Steps:
+    1, imgui_internal.h:1830:27: undefined behavior, destination object type 'ImGuiOldColumns' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:2114:31: undefined behavior, destination object type 'ImGuiIDStackTool' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImGuiIDStackTool()      { memset(this, 0, sizeof(*this)); CopyToClipboardLastTime = -FLT_MAX; }
+                              ^
+  Report hash: 3a94fe78b3afeb2298a8eb3e3c57eb69
+  Steps:
+    1, imgui_internal.h:2114:31: undefined behavior, destination object type 'ImGuiIDStackTool' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:3008:35: undefined behavior, destination object type 'ImGuiTable' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImGuiTable()                { memset(this, 0, sizeof(*this)); LastFrameActive = -1; }
+                                  ^
+  Report hash: bd9506bce86e061d5b0df21e52ab57f5
+  Steps:
+    1, imgui_internal.h:3008:35: undefined behavior, destination object type 'ImGuiTable' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:3036:35: undefined behavior, destination object type 'ImGuiTableTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImGuiTableTempData()        { memset(this, 0, sizeof(*this)); LastTimeActive = -1.0f; }
+                                  ^
+  Report hash: 4567dd7fe2858af2733775391952e1a5
+  Steps:
+    1, imgui_internal.h:3036:35: undefined behavior, destination object type 'ImGuiTableTempData' is not TriviallyCopyable
+
+[HIGH] /sep/third_party/imgui/imgui_internal.h:3135:69: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    inline float            GetRoundedFontSize(float size) { return IM_ROUND(size); }
+                                                                    ^
+  Report hash: c6a690f7acf5f4edfab9e31a9cbcce82
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_internal.h:3135:69: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:3806:35: undefined behavior, destination object type 'ImFontAtlasBuilder' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    ImFontAtlasBuilder()        { memset(this, 0, sizeof(*this)); FrameCount = -1; RectsIndexFreeListStart = -1; PackIdMouseCursors = PackIdLinesTexData = -1; }
+                                  ^
+  Report hash: 413f38c4616afa6e02a7bf4bf312dc4c
+  Steps:
+    1, imgui_internal.h:3806:35: undefined behavior, destination object type 'ImFontAtlasBuilder' is not TriviallyCopyable
+
+Found 11 defect(s) in imgui_internal.h
+
+[MEDIUM] /sep/third_party/imgui/imgui_tables.cpp:2739:21: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+                    memcpy(dst_tmp++, channel, sizeof(ImDrawChannel));
+                    ^
+  Report hash: f8858bd646c048dbd706287839e7f2ae
+  Steps:
+    1, imgui_tables.cpp:2739:21: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_tables.cpp:2739:21: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+                    memcpy(dst_tmp++, channel, sizeof(ImDrawChannel));
+                    ^
+  Report hash: 2c1939040edebbb218632151807a51d0
+  Steps:
+    1, imgui_tables.cpp:2739:21: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_tables.cpp:2745:17: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+                memcpy(dst_tmp++, &splitter->_Channels[table->Bg2DrawChannelUnfrozen], sizeof(ImDrawChannel));
+                ^
+  Report hash: 834d24310bbf4729f9aa1abb3f62c6e2
+  Steps:
+    1, imgui_tables.cpp:2745:17: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_tables.cpp:2745:17: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+                memcpy(dst_tmp++, &splitter->_Channels[table->Bg2DrawChannelUnfrozen], sizeof(ImDrawChannel));
+                ^
+  Report hash: 9a1b48593fef4a26b7ee50749549a28f
+  Steps:
+    1, imgui_tables.cpp:2745:17: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_tables.cpp:2754:13: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+            memcpy(dst_tmp++, channel, sizeof(ImDrawChannel));
+            ^
+  Report hash: aeddc36522ee7114811772936a2f6335
+  Steps:
+    1, imgui_tables.cpp:2754:13: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_tables.cpp:2754:13: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+            memcpy(dst_tmp++, channel, sizeof(ImDrawChannel));
+            ^
+  Report hash: 034ac5858d220af58a32e177e7d16738
+  Steps:
+    1, imgui_tables.cpp:2754:13: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_tables.cpp:2758:9: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+        memcpy(splitter->_Channels.Data + LEADING_DRAW_CHANNELS, g.DrawChannelsTempMergeBuffer.Data, (splitter->_Count - LEADING_DRAW_CHANNELS) * sizeof(ImDrawChannel));
+        ^
+  Report hash: 7edb0fdafb5be89bcbfcf54b87ce6828
+  Steps:
+    1, imgui_tables.cpp:2758:9: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_tables.cpp:2758:9: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+        memcpy(splitter->_Channels.Data + LEADING_DRAW_CHANNELS, g.DrawChannelsTempMergeBuffer.Data, (splitter->_Count - LEADING_DRAW_CHANNELS) * sizeof(ImDrawChannel));
+        ^
+  Report hash: 2aba33edfe0ef654ff13d3f9a9007047
+  Steps:
+    1, imgui_tables.cpp:2758:9: undefined behavior, source object type 'ImDrawChannel' is not TriviallyCopyable
+
+[HIGH] /sep/third_party/imgui/imgui_tables.cpp:4383:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        float clip_x1 = IM_ROUND(window->Pos.x + GetColumnOffset(n));
+                        ^
+  Report hash: a3e2f6e3d0fb0c19fa43faf9626db6b9
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_tables.cpp:4383:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_tables.cpp:4384:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        float clip_x2 = IM_ROUND(window->Pos.x + GetColumnOffset(n + 1) - 1.0f);
+                        ^
+  Report hash: 98c60114174ce3b4a0906d51080cf5c6
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_tables.cpp:4384:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+Found 10 defect(s) in imgui_tables.cpp
+
+Found no defects in error_handler.cpp
+[CRITICAL] /sep/src/workbench_main.cpp:6:10: 'imgui/backends/imgui_impl_glfw.h' file not found [clang-diagnostic-error]
+#include "imgui/backends/imgui_impl_glfw.h"
+         ^
+  Report hash: e4b457746709221609bf629581fafbe4
+  Steps:
+    1, workbench_main.cpp:6:10: 'imgui/backends/imgui_impl_glfw.h' file not found
 
 Found 1 defect(s) in workbench_main.cpp
 
+Found no defects in simple_embedding_model.cpp
 Found no defects in metrics_collector.cpp
-Found no defects in error_handler.cpp
 Found no defects in dag_graph.cpp
+[HIGH] /sep/third_party/imgui/imgui.h:2209:210: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'? [bugprone-sizeof-expression]
+    inline T*           erase(const T* it)                  { IM_ASSERT(it >= Data && it < Data + Size); const ptrdiff_t off = it - Data; memmove(Data + off, Data + off + 1, ((size_t)Size - (size_t)off - 1) * sizeof(T)); Size--; return Data + off; }
+                                                                                                                                                                                                                 ^
+  Report hash: ddec814a12f2a601c995122243fe52d1
+  Steps:
+    1, imgui.h:2209:210: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'?
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2211:166: do not use 'memcpy' to cast between pointers [bugprone-bitwise-pointer-cast]
+    inline T*           erase_unsorted(const T* it)         { IM_ASSERT(it >= Data && it < Data + Size);  const ptrdiff_t off = it - Data; if (it < Data + Size - 1) memcpy(Data + off, Data + Size - 1, sizeof(T)); Size--; return Data + off; }
+                                                                                                                                                                     ^
+  Report hash: f68f74183f1e446c761c8e5c604a1732
+  Steps:
+    1, imgui.h:2211:166: do not use 'memcpy' to cast between pointers
+
+[HIGH] /sep/third_party/imgui/imgui.h:2211:202: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'? [bugprone-sizeof-expression]
+    inline T*           erase_unsorted(const T* it)         { IM_ASSERT(it >= Data && it < Data + Size);  const ptrdiff_t off = it - Data; if (it < Data + Size - 1) memcpy(Data + off, Data + Size - 1, sizeof(T)); Size--; return Data + off; }
+                                                                                                                                                                                                         ^
+  Report hash: 84f3d180a864b2a7873f49a4a0bea331
+  Steps:
+    1, imgui.h:2211:202: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'?
+
+Found 3 defect(s) in imgui.h
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:386:5: undefined behavior, destination object type 'ImDrawListSharedData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: 80e78e6aea3098d1d4d9fc3fb6dd4f48
+  Steps:
+    1, imgui_draw.cpp:386:5: undefined behavior, destination object type 'ImDrawListSharedData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:418:5: undefined behavior, destination object type 'ImDrawList' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: 79b4f5d629bde730e61718cfa7a30c88
+  Steps:
+    1, imgui_draw.cpp:418:5: undefined behavior, destination object type 'ImDrawList' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:576:37: comparing object representation of type 'ImVec4' which does not have a unique object representation; consider comparing the members of the object manually [bugprone-suspicious-memory-comparison]
+    if (curr_cmd->ElemCount != 0 && memcmp(&curr_cmd->ClipRect, &_CmdHeader.ClipRect, sizeof(ImVec4)) != 0)
+                                    ^
+  Report hash: f7be47344ca5996f7c340b6a0648ff84
+  Steps:
+    1, imgui_draw.cpp:576:37: comparing object representation of type 'ImVec4' which does not have a unique object representation; consider comparing the members of the object manually
+
+[LOW] /sep/third_party/imgui/imgui_draw.cpp:1738:5: 3rd argument 'uv_min' (passed to 'uv_a') looks like it might be swapped with the 4th, 'uv_max' (passed to 'uv_c') [readability-suspicious-call-argument]
+    PrimRectUV(p_min, p_max, uv_min, uv_max, col);
+    ^
+  Report hash: cc20a6b3bb3331019e4a8452a595f50a
+  Steps:
+    1, imgui_draw.cpp:757:18: in the call to 'PrimRectUV', declared here
+    2, imgui_draw.cpp:1738:5: 3rd argument 'uv_min' (passed to 'uv_a') looks like it might be swapped with the 4th, 'uv_max' (passed to 'uv_c')
+
+[LOW] /sep/third_party/imgui/imgui_draw.cpp:1780:5: 6th argument 'uv_min' (passed to 'uv_a') looks like it might be swapped with the 7th, 'uv_max' (passed to 'uv_b') [readability-suspicious-call-argument]
+    ImGui::ShadeVertsLinearUV(this, vert_start_idx, vert_end_idx, p_min, p_max, uv_min, uv_max, true);
+    ^
+  Report hash: fa78858c85d81c659c60a066ee7474bb
+  Steps:
+    1, imgui_internal.h:3614:29: in the call to 'ShadeVertsLinearUV', declared here
+    2, imgui_draw.cpp:1780:5: 6th argument 'uv_min' (passed to 'uv_a') looks like it might be swapped with the 7th, 'uv_max' (passed to 'uv_b')
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2108:13: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+            memset(&_Channels[i], 0, sizeof(_Channels[i]));  // Current channel is a copy of CmdBuffer/IdxBuffer, don't destruct again
+            ^
+  Report hash: 171f09d91c728c7439034846a40e928e
+  Steps:
+    1, imgui_draw.cpp:2108:13: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2132:5: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(&_Channels[0], 0, sizeof(ImDrawChannel));
+    ^
+  Report hash: a9a766f532b993dd87734cbf0195aecf
+  Steps:
+    1, imgui_draw.cpp:2132:5: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2225:5: undefined behavior, destination object type 'ImVector<ImDrawCmd>' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memcpy(&_Channels.Data[_Current]._CmdBuffer, &draw_list->CmdBuffer, sizeof(draw_list->CmdBuffer));
+    ^
+  Report hash: 106f6382e7c499e18b99f74f4dc32926
+  Steps:
+    1, imgui_draw.cpp:2225:5: undefined behavior, destination object type 'ImVector<ImDrawCmd>' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2225:5: undefined behavior, source object type 'ImVector<ImDrawCmd>' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memcpy(&_Channels.Data[_Current]._CmdBuffer, &draw_list->CmdBuffer, sizeof(draw_list->CmdBuffer));
+    ^
+  Report hash: 309631f7cb2aacda0acead5b7bcf4d01
+  Steps:
+    1, imgui_draw.cpp:2225:5: undefined behavior, source object type 'ImVector<ImDrawCmd>' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2226:5: undefined behavior, destination object type 'ImVector<ImDrawIdx>' (aka 'ImVector<unsigned short>') is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memcpy(&_Channels.Data[_Current]._IdxBuffer, &draw_list->IdxBuffer, sizeof(draw_list->IdxBuffer));
+    ^
+  Report hash: dbe1accd12e4cffac55ae15cc804f662
+  Steps:
+    1, imgui_draw.cpp:2226:5: undefined behavior, destination object type 'ImVector<ImDrawIdx>' (aka 'ImVector<unsigned short>') is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2226:5: undefined behavior, source object type 'ImVector<ImDrawIdx>' (aka 'ImVector<unsigned short>') is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memcpy(&_Channels.Data[_Current]._IdxBuffer, &draw_list->IdxBuffer, sizeof(draw_list->IdxBuffer));
+    ^
+  Report hash: 84cb962aa00ce859d8587a17c7c7d279
+  Steps:
+    1, imgui_draw.cpp:2226:5: undefined behavior, source object type 'ImVector<ImDrawIdx>' (aka 'ImVector<unsigned short>') is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2228:5: undefined behavior, destination object type 'ImVector<ImDrawCmd>' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memcpy(&draw_list->CmdBuffer, &_Channels.Data[idx]._CmdBuffer, sizeof(draw_list->CmdBuffer));
+    ^
+  Report hash: 79c91616181767d5bda352dc91115968
+  Steps:
+    1, imgui_draw.cpp:2228:5: undefined behavior, destination object type 'ImVector<ImDrawCmd>' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2228:5: undefined behavior, source object type 'ImVector<ImDrawCmd>' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memcpy(&draw_list->CmdBuffer, &_Channels.Data[idx]._CmdBuffer, sizeof(draw_list->CmdBuffer));
+    ^
+  Report hash: 581445ac51cbb4a864108f9433a2be82
+  Steps:
+    1, imgui_draw.cpp:2228:5: undefined behavior, source object type 'ImVector<ImDrawCmd>' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2229:5: undefined behavior, destination object type 'ImVector<ImDrawIdx>' (aka 'ImVector<unsigned short>') is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memcpy(&draw_list->IdxBuffer, &_Channels.Data[idx]._IdxBuffer, sizeof(draw_list->IdxBuffer));
+    ^
+  Report hash: 6ebefbec6f573aa1bf37dd55b2de644f
+  Steps:
+    1, imgui_draw.cpp:2229:5: undefined behavior, destination object type 'ImVector<ImDrawIdx>' (aka 'ImVector<unsigned short>') is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2229:5: undefined behavior, source object type 'ImVector<ImDrawIdx>' (aka 'ImVector<unsigned short>') is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memcpy(&draw_list->IdxBuffer, &_Channels.Data[idx]._IdxBuffer, sizeof(draw_list->IdxBuffer));
+    ^
+  Report hash: 14c5faca8fdea09fdca61a03c0763b14
+  Steps:
+    1, imgui_draw.cpp:2229:5: undefined behavior, source object type 'ImVector<ImDrawIdx>' (aka 'ImVector<unsigned short>') is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2626:5: undefined behavior, destination object type 'ImFontAtlas' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: 0b54c4b1ad31d011a824268d0e64efe0
+  Steps:
+    1, imgui_draw.cpp:2626:5: undefined behavior, destination object type 'ImFontAtlas' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2768:13: undefined behavior, destination object type 'ImFontBaked' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+            memcpy(p_dst, p_src, sizeof(ImFontBaked));
+            ^
+  Report hash: 16fab7d55e6358ecdaff4e988f12e439
+  Steps:
+    1, imgui_draw.cpp:2768:13: undefined behavior, destination object type 'ImFontBaked' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:2768:13: undefined behavior, source object type 'ImFontBaked' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+            memcpy(p_dst, p_src, sizeof(ImFontBaked));
+            ^
+  Report hash: 0c51e18e9e8dc1317189fbaa0499afa0
+  Steps:
+    1, imgui_draw.cpp:2768:13: undefined behavior, source object type 'ImFontBaked' is not TriviallyCopyable
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:3694:64: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        glyph.AdvanceX = space_glyph ? space_glyph->AdvanceX : IM_ROUND(baked->Size * 0.40f);
+                                                               ^
+  Report hash: c88b5b0349dd38b6fb370e97b298c33a
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_draw.cpp:3694:64: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:4697:26: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+            font_off_x = IM_ROUND(font_off_x);
+                         ^
+  Report hash: 2edecd16aefb09bf7b19ec807b7acfd9
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_draw.cpp:4697:26: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:4699:26: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+            font_off_y = IM_ROUND(font_off_y);
+                         ^
+  Report hash: 337601de55e32c4a04d0114c4d985c8f
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_draw.cpp:4699:26: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:4701:63: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        font_off_y += stbtt__oversample_shift(oversample_v) + IM_ROUND(baked->Ascent);
+                                                              ^
+  Report hash: b2518709e8f830b2e94e23113aec59dc
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_draw.cpp:4701:63: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5057:5: undefined behavior, destination object type 'ImFontBaked' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: b42f9b5902575f409ca4ec05c8ed8d2e
+  Steps:
+    1, imgui_draw.cpp:5057:5: undefined behavior, destination object type 'ImFontBaked' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5074:5: undefined behavior, destination object type 'ImFont' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: 2c16b0171d1e305e3825db0da2d29fec
+  Steps:
+    1, imgui_draw.cpp:5074:5: undefined behavior, destination object type 'ImFont' is not TriviallyCopyable
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:5144:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+            advance_x = IM_ROUND(advance_x);
+                        ^
+  Report hash: 7533fc62282f213056f08c43b83b4dbd
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_draw.cpp:5144:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:5176:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+            advance_x = IM_ROUND(advance_x);
+                        ^
+  Report hash: 7533fc62282f213056f08c43b83b4dbd
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_draw.cpp:5176:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5387:40: 'signed char' to 'unsigned int' conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
+        unsigned int c = (unsigned int)*s;
+                                       ^
+  Report hash: 5c042b21fe3588a78209e56d671904bf
+  Steps:
+    1, imgui_draw.cpp:5387:40: 'signed char' to 'unsigned int' conversion; consider casting to 'unsigned char' first.
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5501:40: 'signed char' to 'unsigned int' conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
+        unsigned int c = (unsigned int)*s;
+                                       ^
+  Report hash: 5c042b21fe3588a78209e56d671904bf
+  Steps:
+    1, imgui_draw.cpp:5501:40: 'signed char' to 'unsigned int' conversion; consider casting to 'unsigned char' first.
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5678:40: 'signed char' to 'unsigned int' conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
+        unsigned int c = (unsigned int)*s;
+                                       ^
+  Report hash: 5c042b21fe3588a78209e56d671904bf
+  Steps:
+    1, imgui_draw.cpp:5678:40: 'signed char' to 'unsigned int' conversion; consider casting to 'unsigned char' first.
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:5972:59: loop induction expression should not have floating-point type [cert-flp30-c]
+        for (float y = p_min.y + grid_off.y; y < p_max.y; y += grid_step, yi++)
+                                                          ^
+  Report hash: 4e4a4de626abe9fabc545bb00fa7cfc2
+  Steps:
+    1, imgui_draw.cpp:5972:14: floating-point type loop induction variable
+    2, imgui_draw.cpp:5972:59: loop induction expression should not have floating-point type
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:5977:86: loop induction expression should not have floating-point type [cert-flp30-c]
+            for (float x = p_min.x + grid_off.x + (yi & 1) * grid_step; x < p_max.x; x += grid_step * 2.0f)
+                                                                                     ^
+  Report hash: 5d7b8bed5b6a4f9f54cbc65993c60dcd
+  Steps:
+    1, imgui_draw.cpp:5977:86: loop induction expression should not have floating-point type
+
+Found 31 defect(s) in imgui_draw.cpp
+
+[MEDIUM] /sep/third_party/imgui/imgui_internal.h:728:195: undefined behavior, source object type 'const ImFontBaked' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline T*           push_back(const T& v)       { int i = Size; IM_ASSERT(i >= 0); if (Size == Capacity) reserve(Capacity + BLOCK_SIZE); void* ptr = &Blocks[i / BLOCK_SIZE][i % BLOCK_SIZE]; memcpy(ptr, &v, sizeof(v)); Size++; return (T*)ptr; }
+                                                                                                                                                                                                  ^
+  Report hash: 5cd253eb7302dbf71017d28dbd79ad82
+  Steps:
+    1, imgui_internal.h:728:195: undefined behavior, source object type 'const ImFontBaked' is not TriviallyCopyable
+
+Found 1 defect(s) in imgui_internal.h
+
+[HIGH] /sep/third_party/imgui/imstb_rectpack.h:297:4: suspicious usage of 'sizeof()' on an expression of pointer type [bugprone-sizeof-expression]
+   STBRP__NOTUSED(c);
+   ^
+  Report hash: c6a17477e63a6b112e90414d651e9672
+  Steps:
+    1, imstb_rectpack.h:224:34: expanded from macro 'STBRP__NOTUSED'
+    2, imstb_rectpack.h:297:4: suspicious usage of 'sizeof()' on an expression of pointer type
+
+Found 1 defect(s) in imstb_rectpack.h
+
+[MEDIUM] /sep/third_party/imgui/imstb_truetype.h:1318:11: comparison between 'signed char' and 'unsigned char' [bugprone-signed-char-misuse]
+      if (stbtt_tag(data+loc+0, tag))
+          ^
+  Report hash: 4b276a12dfbe90871eba1455b8034a6d
+  Steps:
+    1, imstb_truetype.h:1297:36: expanded from macro 'stbtt_tag'
+    2, imstb_truetype.h:1296:90: expanded from macro 'stbtt_tag4'
+    3, imstb_truetype.h:1318:11: comparison between 'signed char' and 'unsigned char'
+
+[LOW] /sep/third_party/imgui/imstb_truetype.h:1477:7: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+      switch(ttUSHORT(data+encoding_record)) {
+      ^
+  Report hash: d29c34ab999c89cd76201164058c0bc9
+  Steps:
+    1, imstb_truetype.h:1477:7: switching on non-enum value without default case may not cover all cases
+
+[LOW] /sep/third_party/imgui/imstb_truetype.h:1479:13: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+            switch (ttUSHORT(data+encoding_record+2)) {
+            ^
+  Report hash: 24b114500016b596f8214b805919f6e7
+  Steps:
+    1, imstb_truetype.h:1479:13: switching on non-enum value without default case may not cover all cases
+
+[LOW] /sep/third_party/imgui/imstb_truetype.h:3659:10: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+         switch (vertices[i].type) {
+         ^
+  Report hash: c3e6244c72d67d75c1fb2ff300a2a48e
+  Steps:
+    1, imstb_truetype.h:3659:10: switching on non-enum value without default case may not cover all cases
+
+Found 4 defect(s) in imstb_truetype.h
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:1497:5: undefined behavior, destination object type 'ImGuiIO' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: ff9906a2b61cd9aad1a59dd003c77b78
+  Steps:
+    1, imgui.cpp:1497:5: undefined behavior, destination object type 'ImGuiIO' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:1911:5: undefined behavior, destination object type 'ImGuiPlatformIO' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: 3bd286e581773c73c557025f1a63b38e
+  Steps:
+    1, imgui.cpp:1911:5: undefined behavior, destination object type 'ImGuiPlatformIO' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:2476:15: 'signed char' to 'int' conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
+    int len = lengths[*(const unsigned char*)in_text >> 3];
+              ^
+  Report hash: 97c14c6fc0950226d56ac80b2b160c3c
+  Steps:
+    1, imgui.cpp:2476:15: 'signed char' to 'int' conversion; consider casting to 'unsigned char' first.
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:2692:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    out  = ((ImU32)IM_F32_TO_INT8_SAT(in.x)) << IM_COL32_R_SHIFT;
+                   ^
+  Report hash: 616e86b4f9af84e1c633632a70573f0c
+  Steps:
+    1, imgui_internal.h:276:41: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui.cpp:2692:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:2693:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    out |= ((ImU32)IM_F32_TO_INT8_SAT(in.y)) << IM_COL32_G_SHIFT;
+                   ^
+  Report hash: 25624bccc5c02f725cab5bbf5d072d7d
+  Steps:
+    1, imgui_internal.h:276:41: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui.cpp:2693:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:2694:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    out |= ((ImU32)IM_F32_TO_INT8_SAT(in.z)) << IM_COL32_B_SHIFT;
+                   ^
+  Report hash: ff2392644827a432f4bd3fd40c450d73
+  Steps:
+    1, imgui_internal.h:276:41: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui.cpp:2694:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:2695:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    out |= ((ImU32)IM_F32_TO_INT8_SAT(in.w)) << IM_COL32_A_SHIFT;
+                   ^
+  Report hash: 64eb9dd370083d2f9810f80207b22d35
+  Steps:
+    1, imgui_internal.h:276:41: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui.cpp:2695:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:3125:39: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        const int row_increase = (int)((off_y / line_height) + 0.5f);
+                                      ^
+  Report hash: 4dba003a2db13e55f571f91a0a59c61c
+  Steps:
+    1, imgui.cpp:3125:39: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:3133:5: undefined behavior, destination object type 'ImGuiListClipper' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: 8f6896f73d91baa9b0c8d23bab82f68a
+  Steps:
+    1, imgui.cpp:3133:5: undefined behavior, destination object type 'ImGuiListClipper' is not TriviallyCopyable
+
+[LOW] /sep/third_party/imgui/imgui.cpp:3603:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (idx)
+    ^
+  Report hash: 39b2f7bed8a3f8c49b5d1a8723f4dee6
+  Steps:
+    1, imgui.cpp:3603:5: switching on non-enum value without default case may not cover all cases
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:4406:5: undefined behavior, destination object type 'ImGuiWindow' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: 3201b7caa90f0d5858b9582ad681a4c4
+  Steps:
+    1, imgui.cpp:4406:5: undefined behavior, destination object type 'ImGuiWindow' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:5557:36: decrementing and referencing a variable in a complex condition can cause unintended side-effects due to C++'s order of evaluation, consider moving the modification outside of the condition to avoid misunderstandings [bugprone-inc-dec-in-conditions]
+    if (g.DebugLocateFrames > 0 && --g.DebugLocateFrames == 0)
+                                   ^
+  Report hash: dd761e9d6cbd7a4ee32beb8f253b2547
+  Steps:
+    1, imgui.cpp:5557:11: variable is referenced here
+    2, imgui.cpp:5557:36: decrementing and referencing a variable in a complex condition can cause unintended side-effects due to C++'s order of evaluation, consider moving the modification outside of the condition to avoid misunderstandings
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:5562:44: decrementing and referencing a variable in a complex condition can cause unintended side-effects due to C++'s order of evaluation, consider moving the modification outside of the condition to avoid misunderstandings [bugprone-inc-dec-in-conditions]
+    if (g.DebugLogAutoDisableFrames > 0 && --g.DebugLogAutoDisableFrames == 0)
+                                           ^
+  Report hash: 8a6c0002f7071628c5afd9be43769ba6
+  Steps:
+    1, imgui.cpp:5562:11: variable is referenced here
+    2, imgui.cpp:5562:44: decrementing and referencing a variable in a complex condition can cause unintended side-effects due to C++'s order of evaluation, consider moving the modification outside of the condition to avoid misunderstandings
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:5658:9: do not use 'memcpy' to cast between pointers [bugprone-bitwise-pointer-cast]
+        memcpy(builder->Layers[0]->Data + n, layer->Data, layer->Size * sizeof(ImDrawList*));
+        ^
+  Report hash: 6ad28e532f9db2fe95ed1bac9f33c5b0
+  Steps:
+    1, imgui.cpp:5658:9: do not use 'memcpy' to cast between pointers
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:5813:55: comparing object representation of type 'ImGuiPlatformImeData' which does not have a unique object representation; consider comparing the members of the object manually [bugprone-suspicious-memory-comparison]
+    if (g.PlatformIO.Platform_SetImeDataFn != NULL && memcmp(ime_data, &g.PlatformImeDataPrev, sizeof(ImGuiPlatformImeData)) != 0)
+                                                      ^
+  Report hash: e62f510ab46f157fc9a1062c626e3a84
+  Steps:
+    1, imgui.cpp:5813:55: comparing object representation of type 'ImGuiPlatformImeData' which does not have a unique object representation; consider comparing the members of the object manually
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:6818:67: comparing object representation of type 'ImRect' which does not have a unique object representation; consider comparing the members of the object manually [bugprone-suspicious-memory-comparison]
+            if ((window->Flags & ImGuiWindowFlags_ChildWindow) && memcmp(&g.WindowResizeBorderExpectedRect, &border_rect, sizeof(ImRect)) != 0)
+                                                                  ^
+  Report hash: 9b940f6f38f78911d33cf6db6cfebe44
+  Steps:
+    1, imgui.cpp:6818:67: comparing object representation of type 'ImRect' which does not have a unique object representation; consider comparing the members of the object manually
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:6952:30: 'signed char' to 'const int' conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
+        const int border_n = (window->ResizeBorderHeld != -1) ? window->ResizeBorderHeld : window->ResizeBorderHovered;
+                             ^
+  Report hash: 31745aba97c8248994c0f816ff6a8833
+  Steps:
+    1, imgui.cpp:6952:30: 'signed char' to 'const int' conversion; consider casting to 'unsigned char' first.
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:7003:57: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+                bg_col = (bg_col & ~IM_COL32_A_MASK) | (IM_F32_TO_INT8_SAT(alpha) << IM_COL32_A_SHIFT);
+                                                        ^
+  Report hash: 1d7be2429e1c305ff23b1265271382c3
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui.cpp:7003:57: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:7040:44: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+                const float border_inner = IM_ROUND(window_border_size * 0.5f);
+                                           ^
+  Report hash: 870584eb6998ee2d6e6c512fb6a19756
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui.cpp:7040:44: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:13108:52: decrementing and referencing a variable in a complex condition can cause unintended side-effects due to C++'s order of evaluation, consider moving the modification outside of the condition to avoid misunderstandings [bugprone-inc-dec-in-conditions]
+        if (can_stop && g.NavTabbingCounter > 0 && --g.NavTabbingCounter == 0)
+                                                   ^
+  Report hash: 4b20c24cfa7a7f1e20e4ff182ad792ef
+  Steps:
+    1, imgui.cpp:13108:27: variable is referenced here
+    2, imgui.cpp:13108:52: decrementing and referencing a variable in a complex condition can cause unintended side-effects due to C++'s order of evaluation, consider moving the modification outside of the condition to avoid misunderstandings
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:13508:36: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        const float scroll_speed = IM_ROUND(window->FontRefSize * 100 * io.DeltaTime); // We need round the scrolling speed because sub-pixel scroll isn't reliably supported.
+                                   ^
+  Report hash: 594cefffd98d08e4cbd6d9c5a672804c
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui.cpp:13508:36: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:14928:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fflush(g.LogFile);
+        ^
+  Report hash: 55a44c55e6dd46dc1664221f6276b510
+  Steps:
+    1, imgui.cpp:14928:9: cast the expression to void to silence this warning
+    2, imgui.cpp:14928:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/imgui.cpp:17047:94: result of integer division used in a floating point context; possible loss of precision [bugprone-integer-division]
+            ImVec2 cell_p1(base_pos.x + (n % 16) * (cell_size + cell_spacing), base_pos.y + (n / 16) * (cell_size + cell_spacing));
+                                                                                             ^
+  Report hash: 02ad007e7b33486f093b3e641f4d01fd
+  Steps:
+    1, imgui.cpp:17047:94: result of integer division used in a floating point context; possible loss of precision
+
+Found 23 defect(s) in imgui.cpp
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2200:182: undefined behavior, destination object type 'ImGuiListClipperData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
+                                                                                                                                                                                     ^
+  Report hash: f9e8376525e64a257ecb1d77f77739ec
+  Steps:
+    1, imgui.h:2200:182: undefined behavior, destination object type 'ImGuiListClipperData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2200:182: undefined behavior, source object type 'const ImGuiListClipperData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
+                                                                                                                                                                                     ^
+  Report hash: 427be8b53ea6afce9f1133ea91340eb7
+  Steps:
+    1, imgui.h:2200:182: undefined behavior, source object type 'const ImGuiListClipperData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, destination object type 'ImGuiListClipperData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: b92fe339d82a0b13893e840625fb1205
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, destination object type 'ImGuiListClipperData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, source object type 'ImGuiListClipperData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 4d5f7ed0d7fd762189aecd599d0ade48
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, source object type 'ImGuiListClipperData' is not TriviallyCopyable
+
+[HIGH] /sep/third_party/imgui/imgui.h:2212:285: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'? [bugprone-sizeof-expression]
+    inline T*           insert(const T* it, const T& v)     { IM_ASSERT(it >= Data && it <= Data + Size); const ptrdiff_t off = it - Data; if (Size == Capacity) reserve(_grow_capacity(Size + 1)); if (off < (int)Size) memmove(Data + off + 1, Data + off, ((size_t)Size - (size_t)off) * sizeof(T)); memcpy(&Data[off], &v, sizeof(v)); Size++; return Data + off; }
+                                                                                                                                                                                                                                                                                            ^
+  Report hash: de36bd1d94661ddf987835bf7ad72767
+  Steps:
+    1, imgui.h:2212:285: suspicious usage of 'sizeof(A*)' on pointer-to-aggregate type; did you mean 'sizeof(A)'?
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2212:297: do not use 'memcpy' to cast between pointers [bugprone-bitwise-pointer-cast]
+    inline T*           insert(const T* it, const T& v)     { IM_ASSERT(it >= Data && it <= Data + Size); const ptrdiff_t off = it - Data; if (Size == Capacity) reserve(_grow_capacity(Size + 1)); if (off < (int)Size) memmove(Data + off + 1, Data + off, ((size_t)Size - (size_t)off) * sizeof(T)); memcpy(&Data[off], &v, sizeof(v)); Size++; return Data + off; }
+                                                                                                                                                                                                                                                                                                        ^
+  Report hash: 8105bc9b388bd61ee30e4f7db6e88df1
+  Steps:
+    1, imgui.h:2212:297: do not use 'memcpy' to cast between pointers
+
+[HIGH] /sep/third_party/imgui/imgui.h:2212:320: suspicious usage of 'sizeof()' on an expression of pointer type [bugprone-sizeof-expression]
+    inline T*           insert(const T* it, const T& v)     { IM_ASSERT(it >= Data && it <= Data + Size); const ptrdiff_t off = it - Data; if (Size == Capacity) reserve(_grow_capacity(Size + 1)); if (off < (int)Size) memmove(Data + off + 1, Data + off, ((size_t)Size - (size_t)off) * sizeof(T)); memcpy(&Data[off], &v, sizeof(v)); Size++; return Data + off; }
+                                                                                                                                                                                                                                                                                                                               ^
+  Report hash: 1a95024e0688f3af9d543515fcce9dda
+  Steps:
+    1, imgui.h:2212:320: suspicious usage of 'sizeof()' on an expression of pointer type
+
+Found 7 defect(s) in imgui.h
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2200:182: undefined behavior, destination object type 'ImGuiMultiSelectTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
+                                                                                                                                                                                     ^
+  Report hash: 990ea84dff5227204ded463d5437c109
+  Steps:
+    1, imgui.h:2200:182: undefined behavior, destination object type 'ImGuiMultiSelectTempData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2200:182: undefined behavior, source object type 'const ImGuiMultiSelectTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
+                                                                                                                                                                                     ^
+  Report hash: 7f9963d1043cbb801681ba18efbf49f7
+  Steps:
+    1, imgui.h:2200:182: undefined behavior, source object type 'const ImGuiMultiSelectTempData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, destination object type 'ImGuiMultiSelectTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 689dbe320c6ae8f919247244fda18154
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, destination object type 'ImGuiMultiSelectTempData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, destination object type 'ImGuiTabBar' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: b101e1e3925ef0135611b15b858aab4d
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, destination object type 'ImGuiTabBar' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, source object type 'ImGuiMultiSelectTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: b7aca790634a5c222a572cc3de853b3f
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, source object type 'ImGuiMultiSelectTempData' is not TriviallyCopyable
+
+[MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, source object type 'ImGuiTabBar' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
+                                                                                                                                                                              ^
+  Report hash: 51484adbdf25c1bad95fb690cc32689b
+  Steps:
+    1, imgui.h:2202:175: undefined behavior, source object type 'ImGuiTabBar' is not TriviallyCopyable
+
+Found 6 defect(s) in imgui.h
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:963:31: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    const float border_size = IM_ROUND(window->WindowBorderSize * 0.5f);
+                              ^
+  Report hash: a40f12c72e92982324e0a90702b90bd0
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:963:31: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:964:75: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    const float border_top = (window->Flags & ImGuiWindowFlags_MenuBar) ? IM_ROUND(g.Style.FrameBorderSize * 0.5f) : 0.0f;
+                                                                          ^
+  Report hash: 987f978ab182c84dd877858c0bbfe4ad
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:964:75: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:1353:16: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    center.x = IM_ROUND(center.x);
+               ^
+  Report hash: 7a24090542cffda61aff66704facc13f
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:1353:16: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:1354:16: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    center.y = IM_ROUND(center.y);
+               ^
+  Report hash: 37ca535eb352d45c409222c85f21068b
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:1354:16: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[LOW] /sep/third_party/imgui/imgui_widgets.cpp:2280:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (data_type)
+    ^
+  Report hash: bf7a9dfb2e04500521b4f17572d688b4
+  Steps:
+    1, imgui_widgets.cpp:2280:5: switching on non-enum value without default case may not cover all cases
+
+[LOW] /sep/third_party/imgui/imgui_widgets.cpp:2388:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (data_type)
+    ^
+  Report hash: bf7a9dfb2e04500521b4f17572d688b4
+  Steps:
+    1, imgui_widgets.cpp:2388:5: switching on non-enum value without default case may not cover all cases
+
+[LOW] /sep/third_party/imgui/imgui_widgets.cpp:2417:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (data_type)
+    ^
+  Report hash: bf7a9dfb2e04500521b4f17572d688b4
+  Steps:
+    1, imgui_widgets.cpp:2417:5: switching on non-enum value without default case may not cover all cases
+
+[LOW] /sep/third_party/imgui/imgui_widgets.cpp:2644:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (data_type)
+    ^
+  Report hash: bf7a9dfb2e04500521b4f17572d688b4
+  Steps:
+    1, imgui_widgets.cpp:2644:5: switching on non-enum value without default case may not cover all cases
+
+[MEDIUM] /sep/third_party/imgui/imgui_widgets.cpp:2646:53: 'signed char' to 'ImS32' (aka 'int') conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
+    case ImGuiDataType_S8:     { ImS32 v32 = (ImS32)*(ImS8*)p_v;  bool r = DragBehaviorT<ImS32, ImS32, float>(ImGuiDataType_S32, &v32, v_speed, p_min ? *(const ImS8*) p_min : IM_S8_MIN,  p_max ? *(const ImS8*)p_max  : IM_S8_MAX,  format, flags); if (r) *(ImS8*)p_v = (ImS8)v32; return r; }
+                                                    ^
+  Report hash: 91ac714ad1b1f58379c414076e31434b
+  Steps:
+    1, imgui_widgets.cpp:2646:53: 'signed char' to 'ImS32' (aka 'int') conversion; consider casting to 'unsigned char' first.
+
+[LOW] /sep/third_party/imgui/imgui_widgets.cpp:3236:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (data_type)
+    ^
+  Report hash: bf7a9dfb2e04500521b4f17572d688b4
+  Steps:
+    1, imgui_widgets.cpp:3236:5: switching on non-enum value without default case may not cover all cases
+
+[MEDIUM] /sep/third_party/imgui/imgui_widgets.cpp:3238:50: 'signed char' to 'ImS32' (aka 'int') conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
+    case ImGuiDataType_S8:  { ImS32 v32 = (ImS32)*(ImS8*)p_v;  bool r = SliderBehaviorT<ImS32, ImS32, float>(bb, id, ImGuiDataType_S32, &v32, *(const ImS8*)p_min,  *(const ImS8*)p_max,  format, flags, out_grab_bb); if (r) *(ImS8*)p_v  = (ImS8)v32;  return r; }
+                                                 ^
+  Report hash: 5a0240f77d08c8cdad4e53be80511f4c
+  Steps:
+    1, imgui_widgets.cpp:3238:50: 'signed char' to 'ImS32' (aka 'int') conversion; consider casting to 'unsigned char' first.
+
+[MEDIUM] /sep/third_party/imgui/imgui_widgets.cpp:3973:40: 'signed char' to 'unsigned int' conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
+        unsigned int c = (unsigned int)*s;
+                                       ^
+  Report hash: a2ca698c951019ff47bec5bf3f86f056
+  Steps:
+    1, imgui_widgets.cpp:3973:40: 'signed char' to 'unsigned int' conversion; consider casting to 'unsigned char' first.
+
+[MEDIUM] /sep/third_party/imgui/imgui_widgets.cpp:4214:5: undefined behavior, destination object type 'ImGuiInputTextState' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: ed3ee89bf181c7002b16f62ad4704b85
+  Steps:
+    1, imgui_widgets.cpp:4214:5: undefined behavior, destination object type 'ImGuiInputTextState' is not TriviallyCopyable
+
+[LOW] /sep/third_party/imgui/imgui_widgets.cpp:4475:42: 3rd argument 'delete_len' (passed to 'insert_len') looks like it might be swapped with the 4th, 'insert_len' (passed to 'delete_len') [readability-suspicious-call-argument]
+        if (IMSTB_TEXTEDIT_CHARTYPE* p = stb_text_createundo(&state->Stb->undostate, first_diff, delete_len, insert_len))
+                                         ^
+  Report hash: 1d34c09d649fc68b1f7eecce70493073
+  Steps:
+    1, imstb_textedit.h:1244:33: in the call to 'stb_text_createundo', declared here
+    2, imgui_widgets.cpp:4475:42: 3rd argument 'delete_len' (passed to 'insert_len') looks like it might be swapped with the 4th, 'insert_len' (passed to 'delete_len')
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:5827:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    ImU32 alpha8 = IM_F32_TO_INT8_SAT(alpha);
+                   ^
+  Report hash: c58d587d51eccb8bcb6c31d2b834f142
+  Steps:
+    1, imgui_internal.h:276:41: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:5827:20: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6103:30: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    const int style_alpha8 = IM_F32_TO_INT8_SAT(style.Alpha);
+                             ^
+  Report hash: 2539b912ffb8591b37420812099dc75e
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6103:30: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6163:35: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        sv_cursor_pos.x = ImClamp(IM_ROUND(picker_pos.x + ImSaturate(S)     * sv_picker_size), picker_pos.x + 2, picker_pos.x + sv_picker_size - 2); // Sneakily prevent the circle to stick out too much
+                                  ^
+  Report hash: 2e8b96938f1aca7dfac5166427cdd698
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:6163:35: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6164:35: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        sv_cursor_pos.y = ImClamp(IM_ROUND(picker_pos.y + ImSaturate(1 - V) * sv_picker_size), picker_pos.y + 2, picker_pos.y + sv_picker_size - 2);
+                                  ^
+  Report hash: d161aa0eb85e4701cf6925f9c7ff0f4d
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:6164:35: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6169:29: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        float bar0_line_y = IM_ROUND(picker_pos.y + H * sv_picker_size);
+                            ^
+  Report hash: 99bebd8c01fc91d10c0953620e01f840
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:6169:29: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6188:29: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        float bar1_line_y = IM_ROUND(picker_pos.y + (1.0f - alpha) * sv_picker_size);
+                            ^
+  Report hash: 8b4f38d3b3f70c70a5fb86a0d3c7a892
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:6188:29: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6248:23: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        float mid_x = IM_ROUND((bb_inner.Min.x + bb_inner.Max.x) * 0.5f);
+                      ^
+  Report hash: dd70eb030583a69437bf979b57395c5c
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:6248:23: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6329:14: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    int cr = IM_F32_TO_INT8_SAT(col[0]), cg = IM_F32_TO_INT8_SAT(col[1]), cb = IM_F32_TO_INT8_SAT(col[2]), ca = (flags & ImGuiColorEditFlags_NoAlpha) ? 255 : IM_F32_TO_INT8_SAT(col[3]);
+             ^
+  Report hash: 17be65877fb4710558b7da071257a495
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6329:14: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6329:47: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    int cr = IM_F32_TO_INT8_SAT(col[0]), cg = IM_F32_TO_INT8_SAT(col[1]), cb = IM_F32_TO_INT8_SAT(col[2]), ca = (flags & ImGuiColorEditFlags_NoAlpha) ? 255 : IM_F32_TO_INT8_SAT(col[3]);
+                                              ^
+  Report hash: d5025a0624c98f23c98dfc2a88b1512c
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6329:47: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6329:80: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    int cr = IM_F32_TO_INT8_SAT(col[0]), cg = IM_F32_TO_INT8_SAT(col[1]), cb = IM_F32_TO_INT8_SAT(col[2]), ca = (flags & ImGuiColorEditFlags_NoAlpha) ? 255 : IM_F32_TO_INT8_SAT(col[3]);
+                                                                               ^
+  Report hash: 5b8465e325e4fba5caa3257c2165b6f9
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6329:80: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6329:159: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    int cr = IM_F32_TO_INT8_SAT(col[0]), cg = IM_F32_TO_INT8_SAT(col[1]), cb = IM_F32_TO_INT8_SAT(col[2]), ca = (flags & ImGuiColorEditFlags_NoAlpha) ? 255 : IM_F32_TO_INT8_SAT(col[3]);
+                                                                                                                                                              ^
+  Report hash: c9e7f847be07710c6e70fa25fef7a9e4
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6329:159: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6379:18: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        int cr = IM_F32_TO_INT8_SAT(col[0]), cg = IM_F32_TO_INT8_SAT(col[1]), cb = IM_F32_TO_INT8_SAT(col[2]), ca = (flags & ImGuiColorEditFlags_NoAlpha) ? 255 : IM_F32_TO_INT8_SAT(col[3]);
+                 ^
+  Report hash: 276f5d5d6310141495eaec1c95507cc6
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6379:18: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6379:51: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        int cr = IM_F32_TO_INT8_SAT(col[0]), cg = IM_F32_TO_INT8_SAT(col[1]), cb = IM_F32_TO_INT8_SAT(col[2]), ca = (flags & ImGuiColorEditFlags_NoAlpha) ? 255 : IM_F32_TO_INT8_SAT(col[3]);
+                                                  ^
+  Report hash: a91809eab8691fa6eff87905d94bc3e2
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6379:51: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6379:84: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        int cr = IM_F32_TO_INT8_SAT(col[0]), cg = IM_F32_TO_INT8_SAT(col[1]), cb = IM_F32_TO_INT8_SAT(col[2]), ca = (flags & ImGuiColorEditFlags_NoAlpha) ? 255 : IM_F32_TO_INT8_SAT(col[3]);
+                                                                                   ^
+  Report hash: e44b49892ffe277ea40f4f5b5a022ba3
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6379:84: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:6379:163: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+        int cr = IM_F32_TO_INT8_SAT(col[0]), cg = IM_F32_TO_INT8_SAT(col[1]), cb = IM_F32_TO_INT8_SAT(col[2]), ca = (flags & ImGuiColorEditFlags_NoAlpha) ? 255 : IM_F32_TO_INT8_SAT(col[3]);
+                                                                                                                                                                  ^
+  Report hash: 94b3b7d51cd043eb315e0f4879333662
+  Steps:
+    1, imgui_internal.h:276:47: expanded from macro 'IM_F32_TO_INT8_SAT'
+    2, imgui_widgets.cpp:6379:163: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[LOW] /sep/third_party/imgui/imgui_widgets.cpp:7084:9: dubious check of 'bool *' against 'nullptr', did you mean to dereference it? [bugprone-bool-pointer-implicit-conversion]
+    if (p_visible)
+        ^
+  Report hash: ac166570feb2debe8ac1ad0ffe7de530
+  Notes:
+    1, imgui_widgets.cpp:7084:9: * (fixit)
+  Steps:
+    1, imgui_widgets.cpp:7084:9: dubious check of 'bool *' against 'nullptr', did you mean to dereference it?
+
+[MEDIUM] /sep/third_party/imgui/imgui_widgets.cpp:7418:40: incrementing and referencing a variable in a complex condition can cause unintended side-effects due to C++'s order of evaluation, consider moving the modification outside of the condition to avoid misunderstandings [bugprone-inc-dec-in-conditions]
+    while (s1 < s1_end && ImToUpper(*s1++) == ImToUpper(*s2++))
+                                       ^
+  Report hash: 124bb41d64dc2a953262dd7eccdb7128
+  Steps:
+    1, imgui_widgets.cpp:7418:12: variable is referenced here
+    2, imgui_widgets.cpp:7418:40: incrementing and referencing a variable in a complex condition can cause unintended side-effects due to C++'s order of evaluation, consider moving the modification outside of the condition to avoid misunderstandings
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:8643:37: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+            const int v1_idx = (int)(t0 * item_count + 0.5f);
+                                    ^
+  Report hash: 83ebc931af28bf1edd9de5bbdd26d129
+  Steps:
+    1, imgui_widgets.cpp:8643:37: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:8829:22: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    ImRect clip_rect(IM_ROUND(bar_rect.Min.x + window->WindowBorderSize * 0.5f), IM_ROUND(bar_rect.Min.y + border_top), IM_ROUND(ImMax(bar_rect.Min.x, bar_rect.Max.x - ImMax(window->WindowRounding, window->WindowBorderSize * 0.5f))), IM_ROUND(bar_rect.Max.y));
+                     ^
+  Report hash: 4c86ea81e5c705bd5edce109ec8eae35
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:8829:22: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:8829:82: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    ImRect clip_rect(IM_ROUND(bar_rect.Min.x + window->WindowBorderSize * 0.5f), IM_ROUND(bar_rect.Min.y + border_top), IM_ROUND(ImMax(bar_rect.Min.x, bar_rect.Max.x - ImMax(window->WindowRounding, window->WindowBorderSize * 0.5f))), IM_ROUND(bar_rect.Max.y));
+                                                                                 ^
+  Report hash: c04c39d2117fad5ed8a1c98d20e6f3e7
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:8829:82: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:8829:121: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    ImRect clip_rect(IM_ROUND(bar_rect.Min.x + window->WindowBorderSize * 0.5f), IM_ROUND(bar_rect.Min.y + border_top), IM_ROUND(ImMax(bar_rect.Min.x, bar_rect.Max.x - ImMax(window->WindowRounding, window->WindowBorderSize * 0.5f))), IM_ROUND(bar_rect.Max.y));
+                                                                                                                        ^
+  Report hash: 3cce5d1eceb5591334d597f00a9c53db
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:8829:121: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:8829:235: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead [bugprone-incorrect-roundings]
+    ImRect clip_rect(IM_ROUND(bar_rect.Min.x + window->WindowBorderSize * 0.5f), IM_ROUND(bar_rect.Min.y + border_top), IM_ROUND(ImMax(bar_rect.Min.x, bar_rect.Max.x - ImMax(window->WindowRounding, window->WindowBorderSize * 0.5f))), IM_ROUND(bar_rect.Max.y));
+                                                                                                                                                                                                                                          ^
+  Report hash: 2eaaa1af3b86ab6f68bbc3c1ba82f366
+  Steps:
+    1, imgui_internal.h:278:54: expanded from macro 'IM_ROUND'
+    2, imgui_widgets.cpp:8829:235: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
+
+[LOW] /sep/third_party/imgui/imgui_widgets.cpp:9066:19: 2nd argument 'menu_is_open' (passed to 'selected') looks like it might be swapped with the 3rd, 'selectable_flags' (passed to 'flags') [readability-suspicious-call-argument]
+        pressed = Selectable("", menu_is_open, selectable_flags, ImVec2(w, label_size.y));
+                  ^
+  Report hash: cb093e27d0deb7e5e82179876cc46267
+  Steps:
+    1, imgui_widgets.cpp:7116:13: in the call to 'Selectable', declared here
+    2, imgui_widgets.cpp:9066:19: 2nd argument 'menu_is_open' (passed to 'selected') looks like it might be swapped with the 3rd, 'selectable_flags' (passed to 'flags')
+
+[MEDIUM] /sep/third_party/imgui/imgui_widgets.cpp:9379:5: undefined behavior, destination object type 'ImGuiTabBar' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
+    memset(this, 0, sizeof(*this));
+    ^
+  Report hash: 8af15ddce26e2973d81a0fcff858ee53
+  Steps:
+    1, imgui_widgets.cpp:9379:5: undefined behavior, destination object type 'ImGuiTabBar' is not TriviallyCopyable
+
+Found 38 defect(s) in imgui_widgets.cpp
+
 Found no defects in qbsa.cpp
 Found no defects in stream.cpp
 Found no defects in allocation_metrics.cpp
 Found no defects in qbsa_qfh.cpp
-Found no defects in qfh.cpp
-Found no defects in manager.cpp
 [MEDIUM] /sep/src/core/config_manager_stub.cpp:5:1: 'Impl' defined as a class here but previously declared as a struct; this is valid, but may result in linker errors under the Microsoft C++ ABI [clang-diagnostic-mismatched-tags]
 class ConfigManager::Impl {
 ^
@@ -30,7 +1748,11 @@ class ConfigManager::Impl {
 
 Found 1 defect(s) in config_manager_stub.cpp
 
+Found no defects in manager.cpp
+Found no defects in qfh.cpp
 Found no defects in logging.cpp
+Found no defects in raii.cpp
+Found no defects in manifold_config.cpp
 Found no defects in memory_tier_manager_serialization.cpp
 [MEDIUM] /sep/src/memory/memory_tier_manager.cpp:367:31: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
                    out_block->coherence, out_block->stability);
@@ -57,7 +1779,6 @@ Found no defects in memory_tier_manager_serialization.cpp
 Found 2 defect(s) in memory_tier_manager.cpp
 
 Found no defects in quantum_processor_qfh.cpp
-Found no defects in raii.cpp
 [MEDIUM] /sep/src/quantum/evolution.cpp:127:52: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
         state.phase += (nextFloat() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
                                                    ^
@@ -82,9 +1803,7 @@ Found no defects in raii.cpp
 Found 3 defect(s) in evolution.cpp
 
 Found no defects in crow_error.cpp
-Found no defects in manifold_config.cpp
 Found no defects in types_serialization.cpp
-Found no defects in redis_manager.cpp
 [LOW] /sep/src/memory/types.h:28:15: no definition found for 'IRedisManager', but a definition with the same name 'IRedisManager' found in another namespace 'sep::persistence' [bugprone-forward-declaration-namespace]
         class IRedisManager;
               ^
@@ -95,16 +1814,7 @@ Found no defects in redis_manager.cpp
 
 Found 1 defect(s) in types.h
 
-[MEDIUM] /sep/src/memory/memory_tier.cpp:700:26: std::move of the variable 'pattern' of the trivially-copyable type '::sep::persistence::PersistentPatternData' has no effect; remove std::move() [performance-move-const-arg]
-        m_patterns[id] = std::move(pattern);
-                         ^
-  Report hash: db3b6b6749836b7ff0214ba208ff5162
-  Steps:
-    1, memory_tier.cpp:700:26: std::move of the variable 'pattern' of the trivially-copyable type '::sep::persistence::PersistentPatternData' has no effect; remove std::move()
-
-Found 1 defect(s) in memory_tier.cpp
-
-Found no defects in js_integration.cpp
+Found no defects in quantum_processor_qfh_common.cpp
 [MEDIUM] /sep/src/compat/memory.h:112:63: unused parameter 'stream' [clang-diagnostic-unused-parameter]
 bool copyToDevice(T* dst, const T* src, size_t count, Stream* stream  = nullptr) {
                                                               ^
@@ -131,18 +1841,29 @@ Found 2 defect(s) in memory.h
 
 Found 1 defect(s) in engine.cpp
 
-Found no defects in dataset_loader.cpp
-Found no defects in quantum_processor_qfh_common.cpp
-Found no defects in lock_free_rate_limiter.cpp
 Found no defects in pattern_processor.cpp
-Found no defects in pattern_evolution_bridge.cpp
-Found no defects in pattern_evolution.cpp
-Found no defects in quantum_processor.cpp
-Found no defects in rate_limit_middleware.cpp
-Found no defects in auth_middleware.cpp
+Found no defects in redis_manager.cpp
+Found no defects in dataset_loader.cpp
+[MEDIUM] /sep/src/memory/memory_tier.cpp:700:26: std::move of the variable 'pattern' of the trivially-copyable type '::sep::persistence::PersistentPatternData' has no effect; remove std::move() [performance-move-const-arg]
+        m_patterns[id] = std::move(pattern);
+                         ^
+  Report hash: db3b6b6749836b7ff0214ba208ff5162
+  Steps:
+    1, memory_tier.cpp:700:26: std::move of the variable 'pattern' of the trivially-copyable type '::sep::persistence::PersistentPatternData' has no effect; remove std::move()
+
+Found 1 defect(s) in memory_tier.cpp
+
 Found no defects in processor.cpp
+Found no defects in quantum_processor.cpp
+Found no defects in pattern_evolution.cpp
+Found no defects in auth_middleware.cpp
+Found no defects in js_integration.cpp
+Found no defects in rate_limit_middleware.cpp
+Found no defects in pattern_evolution_bridge.cpp
+Found no defects in lock_free_rate_limiter.cpp
+Found no defects in crow_request_adapter.cpp
 Found no defects in quantum_manifold_optimizer.cpp
-Found no defects in logging_middleware.cpp
+Found no defects in quantum_coherence_manager.cpp
 Found no defects in factory.cpp
 [LOW] /usr/include/pipewire-0.3/pipewire/control.h:25:10: circular header file dependency detected while including 'impl.h', please check the include path [misc-header-include-cycle]
 #include <pipewire/impl.h>
@@ -801,8 +2522,8 @@ Found 3 defect(s) in string.h
 
 Found 5 defect(s) in type.h
 
-Found no defects in quantum_coherence_manager.cpp
-Found no defects in crow_request_adapter.cpp
+Found no defects in curl_http_client.cpp
+Found no defects in bridge.cpp
 [MEDIUM] /sep/src/workbench/demos/annealing_demo.cpp:32:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double') [clang-diagnostic-double-promotion]
             float invDist6 = 1.0f / std::pow(dist, 6);
                              ^
@@ -812,14 +2533,13 @@ Found no defects in crow_request_adapter.cpp
 
 Found 1 defect(s) in annealing_demo.cpp
 
-Found no defects in bridge.cpp
-Found no defects in curl_http_client.cpp
+Found no defects in pattern_processor_interface.cpp
 Found no defects in client.cpp
 Found no defects in ollama_client.cpp
+Found no defects in logging_middleware.cpp
 Found no defects in pipeline.cpp
-Found no defects in pattern_processor_interface.cpp
-Found no defects in cosmo_demo.cpp
 Found no defects in demo_manager.cpp
+Found no defects in cosmo_demo.cpp
 [CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:12:21: unknown type name 'AudioCapture'; did you mean '::sep::audio::AudioCapture'? [clang-diagnostic-error]
     std::unique_ptr<AudioCapture> AudioCapture::create() {
                     ^
@@ -858,151 +2578,116 @@ Found no defects in demo_manager.cpp
     2, audio_visualizer_simple.cpp:14:41: unknown class name 'AudioCapture'; did you mean '::sep::audio::AudioCapture'?
 
 [CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:16:29: unknown type name 'AudioConfig' [clang-diagnostic-error]
-            bool init(const AudioConfig& config) override { return true; }
+            bool init(const AudioConfig& config) override {
                             ^
-  Report hash: 9adb42ca8e158aa15907e271872cbfa9
+  Report hash: e006c0e1497287593e7e9946af062a04
   Steps:
     1, audio_visualizer_simple.cpp:16:29: unknown type name 'AudioConfig'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:17:26: only virtual member functions can be marked 'override' [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:20:26: only virtual member functions can be marked 'override' [clang-diagnostic-error]
             bool start() override { return true; }
                          ^
   Report hash: 6e961558c38d2313377252097c909f0e
   Steps:
-    1, audio_visualizer_simple.cpp:17:26: only virtual member functions can be marked 'override'
+    1, audio_visualizer_simple.cpp:20:26: only virtual member functions can be marked 'override'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:18:25: only virtual member functions can be marked 'override' [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:21:25: only virtual member functions can be marked 'override' [clang-diagnostic-error]
             void stop() override {}
                         ^
   Report hash: f2a315955ca453da398e4e65f5e64f35
   Steps:
-    1, audio_visualizer_simple.cpp:18:25: only virtual member functions can be marked 'override'
+    1, audio_visualizer_simple.cpp:21:25: only virtual member functions can be marked 'override'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:25:21: unknown type name 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'? [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:28:21: unknown type name 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'? [clang-diagnostic-error]
     std::unique_ptr<AudioPipeline> AudioPipeline::create(int spectrum_size) {
                     ^
   Report hash: 098281f4df7bb87383cf582968ac0b83
   Notes:
-    1, audio_visualizer_simple.cpp:25:21: ::sep::audio::AudioPipeline (fixit)
+    1, audio_visualizer_simple.cpp:28:21: ::sep::audio::AudioPipeline (fixit)
   Steps:
     1, pipeline.h:29:21: '::sep::audio::AudioPipeline' declared here
-    2, audio_visualizer_simple.cpp:25:21: unknown type name 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'?
+    2, audio_visualizer_simple.cpp:28:21: unknown type name 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'?
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:25:36: use of undeclared identifier 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'? [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:28:36: use of undeclared identifier 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'? [clang-diagnostic-error]
     std::unique_ptr<AudioPipeline> AudioPipeline::create(int spectrum_size) {
                                    ^
   Report hash: 8d10812104459be18e010018fa91e180
   Notes:
-    1, audio_visualizer_simple.cpp:25:36: ::sep::audio::AudioPipeline (fixit)
+    1, audio_visualizer_simple.cpp:28:36: ::sep::audio::AudioPipeline (fixit)
   Steps:
     1, pipeline.h:29:21: '::sep::audio::AudioPipeline' declared here
-    2, audio_visualizer_simple.cpp:25:36: use of undeclared identifier 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'?
+    2, audio_visualizer_simple.cpp:28:36: use of undeclared identifier 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'?
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:25:51: cannot define or redeclare 'create' here because namespace 'audio' does not enclose namespace 'AudioPipeline' [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:28:51: cannot define or redeclare 'create' here because namespace 'audio' does not enclose namespace 'AudioPipeline' [clang-diagnostic-error]
     std::unique_ptr<AudioPipeline> AudioPipeline::create(int spectrum_size) {
                                                   ^
   Report hash: 1eb3a9a17d56577891bf106b7f9685c5
   Steps:
-    1, audio_visualizer_simple.cpp:25:51: cannot define or redeclare 'create' here because namespace 'audio' does not enclose namespace 'AudioPipeline'
+    1, audio_visualizer_simple.cpp:28:51: cannot define or redeclare 'create' here because namespace 'audio' does not enclose namespace 'AudioPipeline'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:27:42: unknown class name 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'? [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:30:42: unknown class name 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'? [clang-diagnostic-error]
         class StubAudioPipeline : public AudioPipeline {
                                          ^
   Report hash: f5bf4759598d831a81b42eb2e8340a62
   Notes:
-    1, audio_visualizer_simple.cpp:27:42: ::sep::audio::AudioPipeline (fixit)
+    1, audio_visualizer_simple.cpp:30:42: ::sep::audio::AudioPipeline (fixit)
   Steps:
     1, pipeline.h:29:21: '::sep::audio::AudioPipeline' declared here
-    2, audio_visualizer_simple.cpp:27:42: unknown class name 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'?
+    2, audio_visualizer_simple.cpp:30:42: unknown class name 'AudioPipeline'; did you mean '::sep::audio::AudioPipeline'?
 
-[MEDIUM] /sep/src/workbench/demos/audio_visualizer_simple.cpp:31:59: unused parameter 'samples' [clang-diagnostic-unused-parameter]
-            void processSamples(const std::vector<float>& samples) override {
-                                                          ^
-  Report hash: b69a620494a229b4b1ace8cfcdcb6042
-  Steps:
-    1, audio_visualizer_simple.cpp:31:59: unused parameter 'samples'
-
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:31:68: only virtual member functions can be marked 'override' [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:34:68: only virtual member functions can be marked 'override' [clang-diagnostic-error]
             void processSamples(const std::vector<float>& samples) override {
                                                                    ^
   Report hash: 3f7c8e25dc37afb2d7a21de3e95f1db1
   Steps:
-    1, audio_visualizer_simple.cpp:31:68: only virtual member functions can be marked 'override'
+    1, audio_visualizer_simple.cpp:34:68: only virtual member functions can be marked 'override'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:45:62: only virtual member functions can be marked 'override' [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:49:62: only virtual member functions can be marked 'override' [clang-diagnostic-error]
             std::vector<glm::vec3> getVisualPatterns() const override {
                                                              ^
   Report hash: d6b9ae430936877a002f79c1b745fdf0
   Steps:
-    1, audio_visualizer_simple.cpp:45:62: only virtual member functions can be marked 'override'
+    1, audio_visualizer_simple.cpp:49:62: only virtual member functions can be marked 'override'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:54:52: use of undeclared identifier 'spectrum_size' [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:58:52: use of undeclared identifier 'spectrum_size' [clang-diagnostic-error]
         return std::make_unique<StubAudioPipeline>(spectrum_size);
                                                    ^
   Report hash: 863af1fbd5cc97ee775cd4e9e1ce101f
   Steps:
-    1, audio_visualizer_simple.cpp:54:52: use of undeclared identifier 'spectrum_size'
+    1, audio_visualizer_simple.cpp:58:52: use of undeclared identifier 'spectrum_size'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:59:27: out-of-line definition of 'init' does not match any declaration in 'sep::workbench::AudioVisualizerDemo' [clang-diagnostic-error]
-void AudioVisualizerDemo::init() {
-                          ^
-  Report hash: dddb709a09070072fd0d98c85c360385
-  Steps:
-    1, audio_visualizer.hpp:13:7: AudioVisualizerDemo defined here
-    2, audio_visualizer_simple.cpp:59:27: out-of-line definition of 'init' does not match any declaration in 'sep::workbench::AudioVisualizerDemo'
-
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:63:23: use of undeclared identifier 'Config' [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:67:23: use of undeclared identifier 'Config' [clang-diagnostic-error]
     const auto& cfg = Config::getInstance().audio_visualizer();
                       ^
   Report hash: a553ef91c1f695fb59cda9c0bb15f16a
   Steps:
-    1, audio_visualizer_simple.cpp:63:23: use of undeclared identifier 'Config'
+    1, audio_visualizer_simple.cpp:67:23: use of undeclared identifier 'Config'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:66:23: no member named 'AudioCapture' in namespace 'sep::workbench::audio' [clang-diagnostic-error]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:70:23: no member named 'AudioCapture' in namespace 'sep::workbench::audio' [clang-diagnostic-error]
     capture_ = audio::AudioCapture::create();
                       ^
   Report hash: e4e320885754bc47a204eed1f420fff4
   Steps:
-    1, audio_visualizer_simple.cpp:66:23: no member named 'AudioCapture' in namespace 'sep::workbench::audio'
+    1, audio_visualizer_simple.cpp:70:23: no member named 'AudioCapture' in namespace 'sep::workbench::audio'
 
-[LOW] /sep/src/workbench/demos/audio_visualizer_simple.cpp:138:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+[CRITICAL] /sep/src/workbench/demos/audio_visualizer_simple.cpp:73:24: use of undeclared identifier 'acfg'; did you mean 'cfg'? [clang-diagnostic-error]
+    audio::AudioConfig acfg;
+                       ^
+  Report hash: 23c720a8643718e7a7f31bc06ca6b9b1
+  Notes:
+    1, audio_visualizer_simple.cpp:73:24: cfg (fixit)
+  Steps:
+    1, audio_visualizer_simple.cpp:67:17: 'cfg' declared here
+    2, audio_visualizer_simple.cpp:73:24: use of undeclared identifier 'acfg'; did you mean 'cfg'?
+
+[LOW] /sep/src/workbench/demos/audio_visualizer_simple.cpp:144:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
     switch (key) {
     ^
   Report hash: 660425c6524ea691df39414a470ea58d
   Steps:
-    1, audio_visualizer_simple.cpp:138:5: switching on non-enum value without default case may not cover all cases
+    1, audio_visualizer_simple.cpp:144:5: switching on non-enum value without default case may not cover all cases
 
-Found 19 defect(s) in audio_visualizer_simple.cpp
-
-Found no defects in crow_adapter.cpp
-[LOW] /sep/src/crow/common.h:5:10: direct self-inclusion of header file 'common.h' [misc-header-include-cycle]
-#include <crow/common.h>
-         ^
-  Report hash: 4d05be001d84b3afeb8864f287a93dcd
-  Steps:
-    1, common.h:5:10: direct self-inclusion of header file 'common.h'
-
-Found 1 defect(s) in common.h
-
-[MEDIUM] /sep/src/crow/http_response.h:10:5: struct 'response' was previously declared as a class; this is valid, but may result in linker errors under the Microsoft C++ ABI [clang-diagnostic-mismatched-tags]
-    struct response;
-    ^
-  Report hash: 66dd6ae82c650fb3018a7c958a82ca37
-  Steps:
-    1, crow_isolation.h:91:11: previous use is here
-    2, http_response.h:10:5: did you mean class here?
-    3, http_response.h:10:5: struct 'response' was previously declared as a class; this is valid, but may result in linker errors under the Microsoft C++ ABI
-
-Found 1 defect(s) in http_response.h
-
-[MEDIUM] /sep/src/workbench/demos/annealing_sim.cpp:32:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double') [clang-diagnostic-double-promotion]
-            float invDist6 = 1.0f / std::pow(dist, 6);
-                             ^
-  Report hash: b184919ceaf7e8ac15a99df24654ffac
-  Steps:
-    1, annealing_sim.cpp:32:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double')
-
-Found 1 defect(s) in annealing_sim.cpp
+Found 18 defect(s) in audio_visualizer_simple.cpp
 
 [MEDIUM] /sep/src/audio/config.cpp:52:31: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
     float quantum_coherence = 1.0f / (1.0f + sep::math::exp_safe(-5.0f * (static_cast<double>(base_coherence) - 0.5f)));
@@ -1034,6 +2719,27 @@ Found 1 defect(s) in annealing_sim.cpp
 
 Found 4 defect(s) in config.cpp
 
+Found no defects in crow_adapter.cpp
+[LOW] /sep/src/crow/common.h:5:10: direct self-inclusion of header file 'common.h' [misc-header-include-cycle]
+#include <crow/common.h>
+         ^
+  Report hash: 4d05be001d84b3afeb8864f287a93dcd
+  Steps:
+    1, common.h:5:10: direct self-inclusion of header file 'common.h'
+
+Found 1 defect(s) in common.h
+
+[MEDIUM] /sep/src/crow/http_response.h:10:5: struct 'response' was previously declared as a class; this is valid, but may result in linker errors under the Microsoft C++ ABI [clang-diagnostic-mismatched-tags]
+    struct response;
+    ^
+  Report hash: 66dd6ae82c650fb3018a7c958a82ca37
+  Steps:
+    1, crow_isolation.h:91:11: previous use is here
+    2, http_response.h:10:5: did you mean class here?
+    3, http_response.h:10:5: struct 'response' was previously declared as a class; this is valid, but may result in linker errors under the Microsoft C++ ABI
+
+Found 1 defect(s) in http_response.h
+
 [CRITICAL] /sep/src/workbench/demos/audio_visualizer.cpp:17:5: unknown type name 'AudioConfig' [clang-diagnostic-error]
     AudioConfig acfg;
     ^
@@ -1062,77 +2768,27 @@ Found 4 defect(s) in config.cpp
   Steps:
     1, audio_visualizer.cpp:29:15: no member named 'start' in 'sep::audio::AudioCapture'
 
-[CRITICAL] /sep/src/workbench/demos/audio_visualizer.cpp:68:19: no member named 'stop' in 'sep::audio::AudioCapture' [clang-diagnostic-error]
-        capture_->stop();
-                  ^
-  Report hash: 531108cce6bdb3931dea64cc57aaa554
-  Steps:
-    1, audio_visualizer.cpp:68:19: no member named 'stop' in 'sep::audio::AudioCapture'
-
-[LOW] /sep/src/workbench/demos/audio_visualizer.cpp:77:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+[LOW] /sep/src/workbench/demos/audio_visualizer.cpp:79:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
     switch (key) {
     ^
   Report hash: f1b9a1ded2e0ee7c6494d7541f1eab45
   Steps:
-    1, audio_visualizer.cpp:77:5: switching on non-enum value without default case may not cover all cases
+    1, audio_visualizer.cpp:79:5: switching on non-enum value without default case may not cover all cases
 
-Found 6 defect(s) in audio_visualizer.cpp
+Found 5 defect(s) in audio_visualizer.cpp
 
-[MEDIUM] /sep/src/audio/pipewire_capture.cpp:223:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-        snprintf(runtime_path, sizeof(runtime_path), "/run/user/%d", uid);
-        ^
-  Report hash: 0e308df13dda55c08b2861ff936dfe97
+[MEDIUM] /sep/src/workbench/demos/annealing_sim.cpp:32:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double') [clang-diagnostic-double-promotion]
+            float invDist6 = 1.0f / std::pow(dist, 6);
+                             ^
+  Report hash: b184919ceaf7e8ac15a99df24654ffac
   Steps:
-    1, pipewire_capture.cpp:223:9: cast the expression to void to silence this warning
-    2, pipewire_capture.cpp:223:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+    1, annealing_sim.cpp:32:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double')
 
-Found 1 defect(s) in pipewire_capture.cpp
-
-[MEDIUM] /sep/src/audio/pipewire_capture.h:45:21: private field 'pod_builder_' is not used [clang-diagnostic-unused-private-field]
-    spa_pod_builder pod_builder_{};
-                    ^
-  Report hash: d0182a6fb517cfc232d08869a1078af4
-  Steps:
-    1, pipewire_capture.h:45:21: private field 'pod_builder_' is not used
-
-[MEDIUM] /sep/src/audio/pipewire_capture.h:46:22: private field 'stream_events_' is not used [clang-diagnostic-unused-private-field]
-    pw_stream_events stream_events_{};
-                     ^
-  Report hash: 98f83c942ea1f2cf984aa08ddd1e2213
-  Steps:
-    1, pipewire_capture.h:46:22: private field 'stream_events_' is not used
-
-Found 2 defect(s) in pipewire_capture.h
+Found 1 defect(s) in annealing_sim.cpp
 
 Found no defects in drug_discovery_demo.cpp
+Found no defects in cosmo_sim.cpp
 Found no defects in digital_physics_demo.cpp
-[CRITICAL] /usr/include/glm/gtx/component_wise.hpp:22:3: "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it." [clang-diagnostic-error]
-#  error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
-   ^
-  Report hash: 32e2eb68d64f82ca226b68432af56ac9
-  Steps:
-    1, component_wise.hpp:22:3: "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
-
-Found 1 defect(s) in component_wise.hpp
-
-[CRITICAL] /usr/include/glm/gtx/norm.hpp:23:3: "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it." [clang-diagnostic-error]
-#  error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
-   ^
-  Report hash: 54764508c4ad9a126f0e619d23fbba85
-  Steps:
-    1, norm.hpp:23:3: "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
-
-Found 1 defect(s) in norm.hpp
-
-[CRITICAL] /usr/include/glm/gtx/quaternion.hpp:24:3: "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it." [clang-diagnostic-error]
-#  error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
-   ^
-  Report hash: d07bae92a561ccc2889f82f484daae87
-  Steps:
-    1, quaternion.hpp:24:3: "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
-
-Found 1 defect(s) in quaternion.hpp
-
 [LOW] /sep/src/workbench/renderer.cpp:28:9: 2nd argument 'width' (passed to 'right') looks like it might be swapped with the 4th, 'height' (passed to 'top') [readability-suspicious-call-argument]
         glOrtho(0.0, width, 0.0, height, -1.0, 1.0);
         ^
@@ -1215,6 +2871,32 @@ Found 9 defect(s) in renderer.cpp
 
 Found 2 defect(s) in renderer.h
 
+[MEDIUM] /sep/src/audio/pipewire_capture.cpp:223:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        snprintf(runtime_path, sizeof(runtime_path), "/run/user/%d", uid);
+        ^
+  Report hash: 0e308df13dda55c08b2861ff936dfe97
+  Steps:
+    1, pipewire_capture.cpp:223:9: cast the expression to void to silence this warning
+    2, pipewire_capture.cpp:223:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+Found 1 defect(s) in pipewire_capture.cpp
+
+[MEDIUM] /sep/src/audio/pipewire_capture.h:45:21: private field 'pod_builder_' is not used [clang-diagnostic-unused-private-field]
+    spa_pod_builder pod_builder_{};
+                    ^
+  Report hash: d0182a6fb517cfc232d08869a1078af4
+  Steps:
+    1, pipewire_capture.h:45:21: private field 'pod_builder_' is not used
+
+[MEDIUM] /sep/src/audio/pipewire_capture.h:46:22: private field 'stream_events_' is not used [clang-diagnostic-unused-private-field]
+    pw_stream_events stream_events_{};
+                     ^
+  Report hash: 98f83c942ea1f2cf984aa08ddd1e2213
+  Steps:
+    1, pipewire_capture.h:46:22: private field 'stream_events_' is not used
+
+Found 2 defect(s) in pipewire_capture.h
+
 [MEDIUM] /sep/src/api/server.cpp:778:53: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
   if (coherence_score < config_.response_modulation.coherence_threshold) {
                                                     ^
@@ -1241,6 +2923,7 @@ Found 2 defect(s) in server.cpp
 Found 1 defect(s) in server.h
 
 Found no defects in flocking_demo.cpp
+Found no defects in flocking_sim_simple.cpp
 [LOW] /sep/src/workbench/demos/genesis_pattern.cpp:109:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
     switch (key) {
     ^
@@ -1251,7 +2934,6 @@ Found no defects in flocking_demo.cpp
 Found 1 defect(s) in genesis_pattern.cpp
 
 Found no defects in sep_engine.cpp
-Found no defects in neuro_sim.cpp
 Found no defects in neural_demo.cpp
 [LOW] /sep/src/workbench/demos/memory_garden.cpp:111:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
     switch (key) {
@@ -1262,23 +2944,93 @@ Found no defects in neural_demo.cpp
 
 Found 1 defect(s) in memory_garden.cpp
 
-[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:34:37: non-const lvalue reference to type 'Pattern' cannot bind to a value of unrelated type 'sep::pattern::PatternData' [clang-diagnostic-error]
-            evolution::applyGravity(p, center, 0.02f);
-                                    ^
-  Report hash: 4d9a93012d70ed8decc9d76cce07180a
+Found no defects in drug_optimizer.cpp
+Found no defects in neuro_sim.cpp
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:22:15: no member named 'coherence' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+            p.coherence = 0.5f;
+              ^
+  Report hash: d171b1992f5c0232d97165f41b5097bc
   Steps:
-    1, evolution.h:68:32: passing argument to parameter 'pattern' here
-    2, physics_explorer_simple.cpp:34:37: non-const lvalue reference to type 'Pattern' cannot bind to a value of unrelated type 'sep::pattern::PatternData'
+    1, physics_explorer_simple.cpp:22:15: no member named 'coherence' in 'sep::quantum::Pattern'
 
-[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:35:43: non-const lvalue reference to type 'Pattern' cannot bind to a value of unrelated type 'sep::pattern::PatternData' [clang-diagnostic-error]
-            evolution::randomPerturbation(p, 0.01f);
-                                          ^
-  Report hash: 5f64a09138465017a4e635e5f6932d44
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:23:15: no member named 'stability' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+            p.stability = 0.5f;
+              ^
+  Report hash: ecf80c3864b771bb7eed93a8728d75df
   Steps:
-    1, evolution.h:69:38: passing argument to parameter 'pattern' here
-    2, physics_explorer_simple.cpp:35:43: non-const lvalue reference to type 'Pattern' cannot bind to a value of unrelated type 'sep::pattern::PatternData'
+    1, physics_explorer_simple.cpp:23:15: no member named 'stability' in 'sep::quantum::Pattern'
 
-Found 2 defect(s) in physics_explorer_simple.cpp
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:24:15: no member named 'memory_tier' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+            p.memory_tier = memory::MemoryTierEnum::STM;
+              ^
+  Report hash: 62ce5c0ce7f37cf4adce31dca5eab16e
+  Steps:
+    1, physics_explorer_simple.cpp:24:15: no member named 'memory_tier' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:37:44: no member named 'generation' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+            q.quantum_state.generation = p.generation;
+                                           ^
+  Report hash: baf9000c78b5bdc61a02e2ab518311ec
+  Steps:
+    1, physics_explorer_simple.cpp:37:44: no member named 'generation' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:46:19: no member named 'coherence' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+                p.coherence = std::min(1.0f, p.coherence + 0.05f);
+                  ^
+  Report hash: 2a6e974d43b56751b55790b91280c1fb
+  Steps:
+    1, physics_explorer_simple.cpp:46:19: no member named 'coherence' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:46:48: no member named 'coherence' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+                p.coherence = std::min(1.0f, p.coherence + 0.05f);
+                                               ^
+  Report hash: 5064b69d4dde9528659817cc14021aaa
+  Steps:
+    1, physics_explorer_simple.cpp:46:48: no member named 'coherence' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:47:19: no member named 'stability' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+                p.stability = std::min(1.0f, p.stability + 0.05f);
+                  ^
+  Report hash: e74fbe2868cf0dd8332463233be4bcc3
+  Steps:
+    1, physics_explorer_simple.cpp:47:19: no member named 'stability' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:47:48: no member named 'stability' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+                p.stability = std::min(1.0f, p.stability + 0.05f);
+                                               ^
+  Report hash: c1474dd431cd0bc350d190804d39c514
+  Steps:
+    1, physics_explorer_simple.cpp:47:48: no member named 'stability' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:48:23: no member named 'coherence' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+                if (p.coherence > 0.9f && p.stability > 0.9f) {
+                      ^
+  Report hash: 252a9093e4371d44e2c7f1d67e6cdaf5
+  Steps:
+    1, physics_explorer_simple.cpp:48:23: no member named 'coherence' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:48:45: no member named 'stability' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+                if (p.coherence > 0.9f && p.stability > 0.9f) {
+                                            ^
+  Report hash: 0f02636bab34cdf8b2f32a02f9887821
+  Steps:
+    1, physics_explorer_simple.cpp:48:45: no member named 'stability' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:49:23: no member named 'memory_tier' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+                    p.memory_tier = memory::MemoryTierEnum::LTM;
+                      ^
+  Report hash: a4f1d2d5844d00a14fd16231e1d52b5c
+  Steps:
+    1, physics_explorer_simple.cpp:49:23: no member named 'memory_tier' in 'sep::quantum::Pattern'
+
+[CRITICAL] /sep/src/workbench/demos/physics_explorer_simple.cpp:57:15: no member named 'memory_tier' in 'sep::quantum::Pattern' [clang-diagnostic-error]
+        if (p.memory_tier == memory::MemoryTierEnum::LTM) {
+              ^
+  Report hash: 668d15569faa549589b64b62ea137ee3
+  Steps:
+    1, physics_explorer_simple.cpp:57:15: no member named 'memory_tier' in 'sep::quantum::Pattern'
+
+Found 12 defect(s) in physics_explorer_simple.cpp
 
 Found no defects in bridge_c.cpp
 [MEDIUM] /sep/src/crow/socket_adaptors.h:58:13: the value returned by this function should not be disregarded; neglecting it may lead to errors [bugprone-unused-return-value]
@@ -1362,6 +3114,38 @@ Found 8 defect(s) in socket_adaptors.h
 
 Found 3 defect(s) in bitfield.inl
 
+[LOW] /sep/third_party/imgui/imgui_internal.h:401:91: Although the value stored to 'c' is used in the enclosing expression, the value is never actually read from 'c' [deadcode.DeadStores]
+static inline char      ImToUpper(char c)               { return (c >= 'a' && c <= 'z') ? c &= ~32 : c; }
+                                                                                          ^
+  Report hash: 3687e255075f6001ae92b283985d0c27
+  Steps:
+    1, imgui_internal.h:401:91: Although the value stored to 'c' is used in the enclosing expression, the value is never actually read from 'c'
+
+Found 1 defect(s) in imgui_internal.h
+
+[LOW] /sep/third_party/imgui/imgui_tables.cpp:1637:5: Value stored to 'flags' is never read [deadcode.DeadStores]
+    flags = column->Flags;
+    ^
+  Report hash: 2e89b1b05fcaf3a79ee4d16bd8ba7235
+  Steps:
+    1, imgui_tables.cpp:1637:5: Value stored to 'flags' is never read
+
+[LOW] /sep/third_party/imgui/imgui_tables.cpp:3578:9: Value stored to 'want_separator' is never read [deadcode.DeadStores]
+        want_separator = true;
+        ^
+  Report hash: 9b5c370ee9145f7f256a07573439e6da
+  Steps:
+    1, imgui_tables.cpp:3578:9: Value stored to 'want_separator' is never read
+
+[LOW] /sep/third_party/imgui/imgui_tables.cpp:3877:67: Value stored to 'line' is never read [deadcode.DeadStores]
+        if (sscanf(line, "Sort=%d%c%n", &n, &c, &r) == 2)       { line = ImStrSkipBlank(line + r); column->SortOrder = (ImGuiTableColumnIdx)n; column->SortDirection = (c == '^') ? ImGuiSortDirection_Descending : ImGuiSortDirection_Ascending; settings->SaveFlags |= ImGuiTableFlags_Sortable; }
+                                                                  ^
+  Report hash: be97a1940a27f64e5f5fb27f1459da94
+  Steps:
+    1, imgui_tables.cpp:3877:67: Value stored to 'line' is never read
+
+Found 3 defect(s) in imgui_tables.cpp
+
 [HIGH] /usr/lib/clang/20/include/cetintrin.h:49:10: 1st function call argument is an uninitialized value [core.CallAndMessage]
   return __builtin_ia32_rdsspd(t);
          ^
@@ -1379,6 +3163,209 @@ Found 3 defect(s) in bitfield.inl
     2, cetintrin.h:62:10: 1st function call argument is an uninitialized value
 
 Found 2 defect(s) in cetintrin.h
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:3578:13: Variable 'scaling' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+            for (float scaling = 0.5f; scaling <= 4.0f; scaling += 0.5f)
+            ^
+  Report hash: ddb0c13d5b577cdbdef0eeeb0e867a4a
+  Steps:
+    1, imgui_demo.cpp:3578:13: Variable 'scaling' with floating point type 'float' should not be used as a loop counter
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:9938:13: Value stored to 'x' is never read [deadcode.DeadStores]
+            x += sz + spacing;
+            ^
+  Report hash: 468f3717dfe4bf78244be42353e714b8
+  Steps:
+    1, imgui_demo.cpp:9938:13: Value stored to 'x' is never read
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10030:17: Variable 'x' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+                for (float x = fmodf(scrolling.x, GRID_STEP); x < canvas_sz.x; x += GRID_STEP)
+                ^
+  Report hash: 6e6d6a6e8af07293f2c03fd769390474
+  Steps:
+    1, imgui_demo.cpp:10030:17: Variable 'x' with floating point type 'float' should not be used as a loop counter
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10032:17: Variable 'y' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+                for (float y = fmodf(scrolling.y, GRID_STEP); y < canvas_sz.y; y += GRID_STEP)
+                ^
+  Report hash: a2bd14bc3bae356a7886e5d6c590c701
+  Steps:
+    1, imgui_demo.cpp:10032:17: Variable 'y' with floating point type 'float' should not be used as a loop counter
+
+[HIGH] /sep/third_party/imgui/imgui_demo.cpp:10558:29: Dereference of null pointer (loaded from variable 'p_open') [core.NullDereference]
+                    *p_open = false;
+                            ^
+  Report hash: 31b167574b883c4d3b4fab6881aea1de
+  Macro expansions:
+    1, imgui_demo.cpp:10813:5: Macro 'IMGUI_DEMO_MARKER("Examples/Assets Browser")' expanded to 'do {if (GImGuiDemoMarkerCallback !=__null )GImGuiDemoMarkerCallback ("/sep/third_party/imgui/imgui_demo.cpp",10813,"Examples/Assets Browser",GImGuiDemoMarkerCallbackUserData );}while (0)'
+  Steps:
+     1, imgui_demo.cpp:10813:5: Assuming the condition is false
+     2, imgui_demo.cpp:10815:52: Passing value via 2nd parameter 'p_open'
+     3, imgui_demo.cpp:10815:5: Calling 'ExampleAssetsBrowser::Draw'
+     4, imgui_demo.cpp:10538:5: Entered call from 'ShowExampleAppAssetsBrowser'
+     5, imgui_demo.cpp:10541:13: Assuming the condition is false
+     6, imgui_demo.cpp:10548:13: Assuming the condition is true
+     7, imgui_demo.cpp:10550:17: Assuming the condition is true
+     8, imgui_demo.cpp:10552:21: Assuming the condition is false
+     9, imgui_demo.cpp:10554:21: Assuming the condition is false
+    10, imgui_demo.cpp:10557:59: Assuming 'p_open' is equal to NULL
+    11, imgui_demo.cpp:10557:21: Assuming the condition is true
+    12, imgui_demo.cpp:10558:29: Dereference of null pointer (loaded from variable 'p_open')
+
+Found 5 defect(s) in imgui_demo.cpp
+
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:1720:5: Called C++ object pointer is null [core.CallAndMessage]
+    font->RenderText(this, font_size, pos, col, clip_rect, text_begin, text_end, wrap_width, cpu_fine_clip_rect != NULL);
+    ^
+  Report hash: d07e7244950fbacca37f9760aa4638a1
+  Steps:
+     1, imgui_draw.cpp:1725:5: Calling 'ImDrawList::AddText'
+     2, imgui_draw.cpp:1696:1: Entered call from 'ImDrawList::AddText'
+     3, imgui_draw.cpp:1698:9: Assuming the condition is false
+     4, imgui_draw.cpp:1702:9: Assuming 'text_begin' is not equal to 'text_end'
+     5, imgui_draw.cpp:1702:35: Assuming the condition is false
+     6, imgui_draw.cpp:1707:9: Assuming pointer value is null
+     7, imgui_draw.cpp:1707:9: Assuming 'font' is equal to NULL
+     8, imgui_draw.cpp:1708:9: Null pointer value stored to 'font'
+     9, imgui_draw.cpp:1709:9: Assuming the condition is false
+    10, imgui_draw.cpp:1720:5: Called C++ object pointer is null
+
+[LOW] /sep/third_party/imgui/imgui_draw.cpp:1942:25: Value stored to 'temp' during its initialization is never read [deadcode.DeadStores]
+    ImTriangulatorNode* temp = _Nodes;
+                        ^
+  Report hash: 5c3a00dde3746998b6d30d67580d06ef
+  Steps:
+    1, imgui_draw.cpp:1942:25: Value stored to 'temp' during its initialization is never read
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5972:9: Variable 'y' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+        for (float y = p_min.y + grid_off.y; y < p_max.y; y += grid_step, yi++)
+        ^
+  Report hash: 0c8f6da39e8d79a495f79fe71358edb4
+  Steps:
+    1, imgui_draw.cpp:5972:9: Variable 'y' with floating point type 'float' should not be used as a loop counter
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5977:13: Variable 'x' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+            for (float x = p_min.x + grid_off.x + (yi & 1) * grid_step; x < p_max.x; x += grid_step * 2.0f)
+            ^
+  Report hash: 00240d8ee7538c2174986ae5b7b6aca2
+  Steps:
+    1, imgui_draw.cpp:5977:13: Variable 'x' with floating point type 'float' should not be used as a loop counter
+
+Found 4 defect(s) in imgui_draw.cpp
+
+[LOW] /sep/third_party/imgui/imstb_truetype.h:3158:36: Although the value stored to 'xb' is used in the enclosing expression, the value is never actually read from 'xb' [deadcode.DeadStores]
+                  t = x0, x0 = xb, xb = t;
+                                   ^
+  Report hash: 0ecd8410f3027f30a72f6b83d0658905
+  Steps:
+    1, imstb_truetype.h:3158:36: Although the value stored to 'xb' is used in the enclosing expression, the value is never actually read from 'xb'
+
+Found 1 defect(s) in imstb_truetype.h
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:2322:51: The right operand of '^' is a garbage value [core.UndefinedBinaryOperatorResult]
+        crc = (crc >> 8) ^ crc32_lut[(crc & 0xFF) ^ *data++];
+                                                  ^
+  Report hash: 9068fb096a31b143c73a71d390bfcfe0
+  Steps:
+     1, imgui.cpp:16075:9: Assuming field 'ShowDebugLog' is false
+     2, imgui.cpp:16077:9: Assuming field 'ShowIDStackTool' is false
+     3, imgui.cpp:16080:9: Assuming the condition is false
+     4, imgui.cpp:16080:58: Assuming field 'BeginCount' is <= 1
+     5, imgui.cpp:16091:9: Assuming the condition is false
+     6, imgui.cpp:16108:9: Assuming field 'ShowWindowsRectsType' is >= 0
+     7, imgui.cpp:16110:9: Assuming field 'ShowTablesRectsType' is >= 0
+     8, imgui.cpp:16155:9: Assuming the condition is false
+     9, imgui.cpp:16261:9: Assuming the condition is false
+    10, imgui.cpp:16285:35: Assuming '__begin1' is equal to '__end1'
+    11, imgui.cpp:16285:35: Loop body skipped when range is empty
+    12, imgui.cpp:16287:9: Assuming the condition is false
+    13, imgui.cpp:16298:9: Assuming the condition is true
+    14, imgui.cpp:16301:13: Assuming the condition is false
+    15, imgui.cpp:16308:39: Assuming '__begin2' is not equal to '__end2'
+    16, imgui.cpp:16308:39: Entering loop body
+    17, imgui.cpp:16309:13: Calling 'DebugNodeViewport'
+    18, imgui.cpp:17135:1: Entered call from 'ShowMetricsWindow'
+    19, imgui.cpp:17140:9: Calling 'IsItemHovered'
+    20, imgui.cpp:4651:1: Entered call from 'DebugNodeViewport'
+    21, imgui.cpp:4657:9: Assuming field 'NavHighlightItemUnderNav' is false
+    22, imgui.cpp:4671:13: Assuming the condition is false
+    23, imgui.cpp:4683:13: Assuming 'window' is equal to field 'HoveredWindow'
+    24, imgui.cpp:4690:17: Assuming field 'ActiveId' is equal to 0
+    25, imgui.cpp:4700:13: Assuming the condition is false
+    26, imgui.cpp:4706:13: Assuming 'id' is not equal to field 'MoveId'
+    27, imgui.cpp:4710:13: Assuming the condition is false
+    28, imgui.cpp:4719:9: Assuming the condition is true
+    29, imgui.cpp:4721:35: Assuming field 'ID' is equal to 0
+    30, imgui.cpp:4721:81: Calling 'ImGuiWindow::GetIDFromPos'
+    31, imgui.cpp:8932:1: Entered call from 'IsItemHovered'
+    32, imgui.cpp:8936:18: Calling 'ImHashData'
+    33, imgui.cpp:2314:1: Entered call from 'ImGuiWindow::GetIDFromPos'
+    34, imgui.cpp:2321:12: Entering loop body
+    35, imgui.cpp:2321:5: Looping back to the head of the loop
+    36, imgui.cpp:2321:12: Entering loop body
+    37, imgui.cpp:2322:51: The right operand of '^' is a garbage value
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:7308:36: Dereference of null pointer [core.NullDereference]
+        popup_ref.ParentNavLayer = parent_window_in_stack->DC.NavLayerCurrent;
+                                   ^
+  Report hash: 552ac222b47250a6bab8c8fc7471fd7a
+  Macro expansions:
+    1, imgui.cpp:7213:5: Macro 'IM_ASSERT(name != NULL && name[0] != '\0')' expanded to '(static_cast <bool >(name !=__null &&name [0]!='\0')?void (0):__assert_fail ("name != __null && name[0] != '\\0'",__builtin_FILE (),__builtin_LINE (),__extension__ __PRETTY_FUNCTION__ ))'
+    2, imgui.cpp:7214:5: Macro 'IM_ASSERT(g.WithinFrameScope)' expanded to '(static_cast <bool >(g .WithinFrameScope )?void (0):__assert_fail ("g.WithinFrameScope",__builtin_FILE (),__builtin_LINE (),__extension__ __PRETTY_FUNCTION__ ))'
+    3, imgui.cpp:7215:5: Macro 'IM_ASSERT(g.FrameCountEnded != g.FrameCount)' expanded to '(static_cast <bool >(g .FrameCountEnded !=g .FrameCount )?void (0):__assert_fail ("g.FrameCountEnded != g.FrameCount",__builtin_FILE (),__builtin_LINE (),__extension__ __PRETTY_FUNCTION__ ))'
+    4, imgui.cpp:7266:5: Macro 'IM_ASSERT(parent_window != NULL || !(flags & ImGuiWindowFlags_ChildWindow))' expanded to '(static_cast <bool >(parent_window !=__null ||!(flags &ImGuiWindowFlags_ChildWindow ))?void (0):__assert_fail ("parent_window != __null || !(flags & ImGuiWindowFlags_ChildWindow)",__builtin_FILE (),__builtin_LINE (),__extension__ __PRETTY_FUNCTION__ ))'
+  Steps:
+     1, imgui.cpp:7213:5: Assuming the condition is true
+     2, imgui.cpp:7213:5: Assuming the condition is true
+     3, imgui.cpp:7214:5: Assuming field 'WithinFrameScope' is true
+     4, imgui.cpp:7215:5: Assuming field 'FrameCountEnded' is not equal to field 'FrameCount'
+     5, imgui.cpp:7219:39: Assuming 'window' is not equal to NULL
+     6, imgui.cpp:7224:9: Assuming field 'DebugBreakInWindow' is not equal to field 'ID'
+     7, imgui.cpp:7228:9: Assuming the condition is false
+     8, imgui.cpp:7232:44: Assuming 'current_frame' is equal to field 'LastFrameActive'
+     9, imgui.cpp:7233:33: Assuming field 'Size' is not equal to 0
+    10, imgui.cpp:7236:43: Assuming the condition is false
+    11, imgui.cpp:7237:9: Assuming the condition is false
+    12, imgui.cpp:7264:43: Assuming the condition is true
+    13, imgui.cpp:7264:5: 'parent_window_in_stack' initialized to a null pointer value
+    14, imgui.cpp:7266:5: Assuming the condition is true
+    15, imgui.cpp:7269:9: Assuming field 'Size' is not equal to 0
+    16, imgui.cpp:7278:50: Assuming the condition is false
+    17, imgui.cpp:7282:9: Assuming the condition is false
+    18, imgui.cpp:7300:20: Assuming the condition is false
+    19, imgui.cpp:7304:9: Assuming the condition is true
+    20, imgui.cpp:7308:36: Dereference of null pointer
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:13650:9: Forming reference to null pointer [core.NonNullParamChecker]
+        g.NavScoringNoClipRect = window->InnerRect;
+        ^
+  Report hash: 4941fc669696c7edb8e52db3a231b0ab
+  Steps:
+    1, imgui.cpp:13613:5: 'window' initialized here
+    2, imgui.cpp:13614:37: Assuming the condition is false
+    3, imgui.cpp:13615:38: Assuming the condition is false
+    4, imgui.cpp:13617:9: Assuming field 'NavMoveForwardToNextFrame' is false
+    5, imgui.cpp:13631:13: Assuming 'window' is null
+    6, imgui.cpp:13648:9: Assuming the condition is true
+    7, imgui.cpp:13650:9: Forming reference to null pointer
+
+[HIGH] /sep/third_party/imgui/imgui.cpp:14120:13: Array access (via field 'NavLastIds') results in a null pointer dereference [core.NullDereference]
+        if (apply_focus_window->NavLastIds[0] == 0)
+            ^
+  Report hash: 414571462893f93b50a2840ffff8af19
+  Steps:
+    1, imgui.cpp:14113:9: Assuming field 'NavWindow' is equal to NULL
+    2, imgui.cpp:14119:9: Null pointer value stored to 'apply_focus_window'
+    3, imgui.cpp:14120:13: Array access (via field 'NavLastIds') results in a null pointer dereference
+
+[LOW] /sep/third_party/imgui/imgui.cpp:17108:5: Value stored to 'p' is never read [deadcode.DeadStores]
+    p += ImFormatString(p, buf_end - p, (tab_bar->Tabs.Size > 3) ? " ... }" : " } ");
+    ^
+  Report hash: f85499f464062e82422271df8e6ef884
+  Steps:
+    1, imgui.cpp:17108:5: Value stored to 'p' is never read
+
+Found 5 defect(s) in imgui.cpp
 
 [HIGH] /usr/include/spa-0.2/spa/pod/parser.h:496:8: Access to field 'type' results in a dereference of a null pointer (loaded from variable 'pod') [core.NullDereference]
       if (pod->type == SPA_TYPE_Choice && *format != 'V')
@@ -1401,6 +3388,39 @@ Found 2 defect(s) in cetintrin.h
     12, parser.h:496:8: Access to field 'type' results in a dereference of a null pointer (loaded from variable 'pod')
 
 Found 1 defect(s) in parser.h
+
+[HIGH] /sep/third_party/imgui/imgui_widgets.cpp:8294:16: Dereference of null pointer [core.NullDereference]
+        while (it->val_i == 0 && it < it_end)
+               ^
+  Report hash: 58eb83e208071bd835922f5735855403
+  Macro expansions:
+    1, imgui_widgets.cpp:8292:5: Macro 'IM_ASSERT(it >= _Storage.Data.Data && it <= it_end)' expanded to '(static_cast <bool >(it >=_Storage .Data .Data &&it <=it_end )?void (0):__assert_fail ("it >= _Storage.Data.Data && it <= it_end",__builtin_FILE (),__builtin_LINE (),__extension__ __PRETTY_FUNCTION__ ))'
+  Steps:
+    1, imgui_widgets.cpp:8288:9: Assuming field 'PreserveOrder' is true
+    2, imgui_widgets.cpp:8288:26: Assuming 'it' is equal to NULL
+    3, imgui_widgets.cpp:8288:40: Assuming 'it_end' is equal to NULL
+    4, imgui_widgets.cpp:8291:9: Null pointer value stored to 'it'
+    5, imgui_widgets.cpp:8294:16: Dereference of null pointer
+
+Found 1 defect(s) in imgui_widgets.cpp
+
+[HIGH] /sep/third_party/imgui/imstb_textedit.h:988:33: The left operand of '==' is a garbage value [core.UndefinedBinaryOperatorResult]
+            if (find.prev_first == find.first_char)
+                                ^
+  Report hash: ba8fdbff9ad4feede8253e5429c983f3
+  Steps:
+     1, imstb_textedit.h:982:10: Calling 'stb_textedit_find_charpos'
+     2, imstb_textedit.h:550:1: Entered call from 'stb_textedit_key'
+     3, imstb_textedit.h:557:8: Assuming 'n' is equal to 'z'
+     4, imstb_textedit.h:557:18: Assuming 'single_line' is not equal to 0
+     5, imstb_textedit.h:565:7: Returning without writing to 'find->prev_first'
+     6, imstb_textedit.h:982:10: Returning from 'stb_textedit_find_charpos'
+     7, imstb_textedit.h:984:22: Assuming 'j' is < 'row_count'
+     8, imstb_textedit.h:984:22: Entering loop body
+     9, imstb_textedit.h:985:32: Assuming field 'has_preferred_x' is 0
+    10, imstb_textedit.h:988:33: The left operand of '==' is a garbage value
+
+Found 1 defect(s) in imstb_textedit.h
 
 [LOW] /sep/src/audio/pipewire_capture.cpp:320:13: Call to blocking function 'fgets' inside of critical section [unix.BlockInCriticalSection]
         if (fgets(service_status, sizeof(service_status), fp) != nullptr) {
@@ -1574,10 +3594,10 @@ Found 1 defect(s) in signal_set_service.ipp
 ----------------------------
 Severity | Number of reports
 ----------------------------
-CRITICAL |                28
-MEDIUM   |                96
-LOW      |                36
-HIGH     |                 5
+MEDIUM   |               244
+LOW      |                68
+HIGH     |                70
+CRITICAL |                34
 ----------------------------
 ----=================----
 
@@ -1585,25 +3605,39 @@ HIGH     |                 5
 -------------------------------------------------------------------------
 Checker name                               | Severity | Number of reports
 -------------------------------------------------------------------------
-clang-diagnostic-error                     | CRITICAL |                28
+misc-redundant-expression                  | MEDIUM   |                 1
+cert-err33-c                               | MEDIUM   |                60
+misc-confusable-identifiers                | MEDIUM   |                 2
+performance-noexcept-swap                  | MEDIUM   |                 2
+bugprone-undefined-memory-manipulation     | MEDIUM   |                64
+bugprone-suspicious-memory-comparison      | MEDIUM   |                 6
+readability-suspicious-call-argument       | LOW      |                 9
+clang-diagnostic-double-promotion          | MEDIUM   |                15
+bugprone-sizeof-expression                 | HIGH     |                10
+bugprone-bitwise-pointer-cast              | MEDIUM   |                 5
+cert-flp30-c                               | HIGH     |                 5
+bugprone-switch-missing-default-case       | LOW      |                23
+bugprone-integer-division                  | MEDIUM   |                11
+bugprone-incorrect-roundings               | HIGH     |                44
+clang-diagnostic-error                     | CRITICAL |                34
+bugprone-signed-char-misuse                | MEDIUM   |                 9
+bugprone-inc-dec-in-conditions             | MEDIUM   |                 4
+bugprone-bool-pointer-implicit-conversion  | LOW      |                 1
 clang-diagnostic-mismatched-tags           | MEDIUM   |                 2
-clang-diagnostic-double-promotion          | MEDIUM   |                14
 bugprone-forward-declaration-namespace     | LOW      |                 1
+clang-diagnostic-unused-parameter          | MEDIUM   |                 2
 performance-move-const-arg                 | MEDIUM   |                 1
-clang-diagnostic-unused-parameter          | MEDIUM   |                 3
-cert-err33-c                               | MEDIUM   |                13
 misc-header-include-cycle                  | LOW      |                18
 clang-diagnostic-reserved-identifier       | MEDIUM   |                42
-bugprone-switch-missing-default-case       | LOW      |                 8
-bugprone-sizeof-expression                 | HIGH     |                 2
 clang-diagnostic-reserved-macro-identifier | MEDIUM   |                 4
 clang-diagnostic-unused-private-field      | MEDIUM   |                 5
-readability-suspicious-call-argument       | LOW      |                 1
-bugprone-integer-division                  | MEDIUM   |                 8
 bugprone-unused-return-value               | MEDIUM   |                 4
-deadcode.DeadStores                        | LOW      |                 3
-core.CallAndMessage                        | HIGH     |                 2
-core.NullDereference                       | HIGH     |                 1
+deadcode.DeadStores                        | LOW      |                11
+core.CallAndMessage                        | HIGH     |                 3
+security.FloatLoopCounter                  | MEDIUM   |                 5
+core.NullDereference                       | HIGH     |                 5
+core.UndefinedBinaryOperatorResult         | HIGH     |                 2
+core.NonNullParamChecker                   | HIGH     |                 1
 unix.BlockInCriticalSection                | LOW      |                 5
 -------------------------------------------------------------------------
 ----=================----
@@ -1612,14 +3646,25 @@ unix.BlockInCriticalSection                | LOW      |                 5
 -----------------------------------------------
 File name                   | Number of reports
 -----------------------------------------------
+imgui_impl_opengl3.cpp      |                 7
+imgui.h                     |                39
+imgui_impl_glfw.cpp         |                 3
+imgui_demo.cpp              |                62
+imgui_internal.h            |                13
+imgui_tables.cpp            |                13
 workbench_main.cpp          |                 1
+imgui_draw.cpp              |                35
+imstb_rectpack.h            |                 1
+imstb_truetype.h            |                 5
+imgui.cpp                   |                28
+imgui_widgets.cpp           |                39
 config_manager_stub.cpp     |                 1
 memory_tier_manager.cpp     |                 2
 evolution.cpp               |                 3
 types.h                     |                 1
-memory_tier.cpp             |                 1
 memory.h                    |                 2
 engine.cpp                  |                 1
+memory_tier.cpp             |                 1
 control.h                   |                 1
 core.h                      |                 3
 impl-client.h               |                 2
@@ -1648,27 +3693,25 @@ json-core.h                 |                30
 string.h                    |                 3
 type.h                      |                 5
 annealing_demo.cpp          |                 1
-audio_visualizer_simple.cpp |                19
+audio_visualizer_simple.cpp |                18
+config.cpp                  |                 4
 common.h                    |                 1
 http_response.h             |                 1
+audio_visualizer.cpp        |                 5
 annealing_sim.cpp           |                 1
-config.cpp                  |                 4
-audio_visualizer.cpp        |                 6
-pipewire_capture.cpp        |                 4
-pipewire_capture.h          |                 2
-component_wise.hpp          |                 1
-quaternion.hpp              |                 1
-norm.hpp                    |                 1
 renderer.cpp                |                 9
 renderer.h                  |                 2
+pipewire_capture.cpp        |                 4
+pipewire_capture.h          |                 2
 server.cpp                  |                 2
 server.h                    |                 1
 genesis_pattern.cpp         |                 1
 memory_garden.cpp           |                 1
-physics_explorer_simple.cpp |                 2
+physics_explorer_simple.cpp |                12
 socket_adaptors.h           |                 8
 bitfield.inl                |                 3
 cetintrin.h                 |                 2
+imstb_textedit.h            |                 1
 signal_set_service.ipp      |                 1
 signal_set_service.ipp      |                 1
 -----------------------------------------------
@@ -1676,7 +3719,7 @@ signal_set_service.ipp      |                 1
 
 ----======== Summary ========----
 -----------------------------------------------
-Number of processed analyzer result files | 158
-Number of analyzer reports                | 165
+Number of processed analyzer result files | 178
+Number of analyzer reports                | 416
 -----------------------------------------------
 ----=================----

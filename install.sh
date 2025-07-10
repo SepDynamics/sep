@@ -54,7 +54,7 @@ FULL_PACKAGES=(
   libboost-all-dev libopencolorio-dev libopenimageio-dev
   libembree-dev libpugixml-dev libopenjp2-7-dev
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
-  libhiredis-dev libglm-dev
+  libhiredis-dev libglm-dev libglfw3 libglfw3-dev
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
 )

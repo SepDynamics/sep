@@ -135,11 +135,12 @@ Run `install.sh` to fetch compiler toolchains and third-party libraries. The scr
 
 Additional development libraries used by the build system include
 `libgflags-dev`, `libgoogle-glog-dev` (or `libglog-dev` on some
-distributions) and the Boost headers.  These packages are installed
-automatically by `install.sh`.  If you prefer a manual setup run:
+distributions), the Boost headers, and the standalone Asio headers
+provided by `libasio-dev`.  These packages are installed automatically
+by `install.sh`.  If you prefer a manual setup run:
 
 ```bash
-sudo apt-get update && sudo apt-get install libgflags-dev libgoogle-glog-dev libboost-dev
+sudo apt-get update && sudo apt-get install libgflags-dev libgoogle-glog-dev libboost-dev libasio-dev
 ```
 
 ```bash

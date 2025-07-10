@@ -1,8 +1,8 @@
 #include "genesis_pattern.hpp"
 #include "core/engine.h"
 #include "blender/cycles_renderer.hpp"
-#include "quantum/pattern_processor.hpp"
-#include "memory/quantum_coherence_manager.h"
+#include <quantum/processor.h>
+#include <memory/quantum_coherence_manager.h>
 #include "config.hpp"
 
 namespace sep {
@@ -12,8 +12,8 @@ void GenesisPatternDemo::on_load() {
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 
-    pattern_processor_ = std::make_unique<PatternProcessor>(engine_);
-    coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
+    pattern_processor_ = std::make_unique<sep::pattern::PatternProcessor>(engine_);
+    coherence_manager_ = std::make_unique<sep::memory::QuantumCoherenceManager>();
 
     // Initialize from config
     evolution_rate_ = genesis_config.initial_pattern.evolution_rate;

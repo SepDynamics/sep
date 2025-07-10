@@ -16,24 +16,6 @@ namespace sep
     namespace workbench
     {
 
-        class Demo
-        {
-        public:
-            virtual ~Demo() = default;
-            virtual void on_load() = 0;
-            virtual void on_unload() = 0;
-            virtual void on_update(float dt) = 0;
-            virtual void on_render() = 0;
-            virtual void on_key_press(int key) = 0;
-            virtual void on_mouse(int x, int y, int button) = 0;
-
-            void initialize(sep::Engine* engine,
-                            sep::CyclesRenderer* renderer);  // Declaration only
-
-        protected:
-            sep::Engine* engine_{nullptr};
-            sep::CyclesRenderer* renderer_{nullptr};
-        };
 
         class DemoManager
         {

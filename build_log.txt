@@ -1,0 +1,229 @@
+[1/9] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/extern/pipewire/spa/src -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/CMakeFiles/sep_workbench.dir/workbench_main.cpp.o -MF src/CMakeFiles/sep_workbench.dir/workbench_main.cpp.o.d -o src/CMakeFiles/sep_workbench.dir/workbench_main.cpp.o -c /sep/src/workbench_main.cpp
+FAILED: src/CMakeFiles/sep_workbench.dir/workbench_main.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/extern/pipewire/spa/src -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/CMakeFiles/sep_workbench.dir/workbench_main.cpp.o -MF src/CMakeFiles/sep_workbench.dir/workbench_main.cpp.o.d -o src/CMakeFiles/sep_workbench.dir/workbench_main.cpp.o -c /sep/src/workbench_main.cpp
+/sep/src/workbench_main.cpp:6:10: fatal error: backends/imgui_impl_glfw.h: No such file or directory
+    6 | #include "backends/imgui_impl_glfw.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+[2/9] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer_simple.cpp.o -c /sep/src/workbench/demos/audio_visualizer_simple.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer_simple.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer_simple.cpp.o -c /sep/src/workbench/demos/audio_visualizer_simple.cpp
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:12:21: error: ‘AudioCapture’ was not declared in this scope; did you mean ‘sep::audio::AudioCapture’?
+   12 |     std::unique_ptr<AudioCapture> AudioCapture::create() {
+      |                     ^~~~~~~~~~~~
+      |                     sep::audio::AudioCapture
+In file included from /sep/src/workbench/demos/audio_visualizer.hpp:7,
+                 from /sep/src/workbench/demos/audio_visualizer_simple.cpp:1:
+/sep/src/audio/capture.h:15:7: note: ‘sep::audio::AudioCapture’ declared here
+   15 | class AudioCapture {
+      |       ^~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:12:33: error: template argument 1 is invalid
+   12 |     std::unique_ptr<AudioCapture> AudioCapture::create() {
+      |                                 ^
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:12:33: error: template argument 2 is invalid
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:12:35: error: ‘AudioCapture’ has not been declared
+   12 |     std::unique_ptr<AudioCapture> AudioCapture::create() {
+      |                                   ^~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: In function ‘int sep::workbench::audio::create()’:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:14:54: error: expected class-name before ‘{’ token
+   14 |         class StubAudioCapture : public AudioCapture {
+      |                                                      ^
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:16:29: error: ‘AudioConfig’ does not name a type
+   16 |             bool init(const AudioConfig& config) override { return true; }
+      |                             ^~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:16:18: error: ‘bool sep::workbench::audio::create()::StubAudioCapture::init(const int&)’ marked ‘override’, but does not override
+   16 |             bool init(const AudioConfig& config) override { return true; }
+      |                  ^~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:17:18: error: ‘bool sep::workbench::audio::create()::StubAudioCapture::start()’ marked ‘override’, but does not override
+   17 |             bool start() override { return true; }
+      |                  ^~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:18:18: error: ‘void sep::workbench::audio::create()::StubAudioCapture::stop()’ marked ‘override’, but does not override
+   18 |             void stop() override {}
+      |                  ^~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: In member function ‘bool sep::workbench::audio::create()::StubAudioCapture::init(const int&)’:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:16:42: error: unused parameter ‘config’ [-Werror=unused-parameter]
+   16 |             bool init(const AudioConfig& config) override { return true; }
+      |                       ~~~~~~~~~~~~~~~~~~~^~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: In function ‘int sep::workbench::audio::create()’:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:21:50: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::workbench::audio::create()::StubAudioCapture>’ to ‘int’ in return
+   21 |         return std::make_unique<StubAudioCapture>();
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+      |                                                  |
+      |                                                  std::__detail::__unique_ptr_t<sep::workbench::audio::create()::StubAudioCapture>
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: At global scope:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:25:21: error: ‘AudioPipeline’ was not declared in this scope; did you mean ‘sep::audio::AudioPipeline’?
+   25 |     std::unique_ptr<AudioPipeline> AudioPipeline::create(int spectrum_size) {
+      |                     ^~~~~~~~~~~~~
+      |                     sep::audio::AudioPipeline
+In file included from /sep/src/workbench/demos/audio_visualizer.hpp:8:
+/sep/src/audio/pipeline.h:29:21: note: ‘sep::audio::AudioPipeline’ declared here
+   29 | class SEP_AUDIO_API AudioPipeline {
+      |                     ^~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:25:34: error: template argument 1 is invalid
+   25 |     std::unique_ptr<AudioPipeline> AudioPipeline::create(int spectrum_size) {
+      |                                  ^
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:25:34: error: template argument 2 is invalid
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:25:36: error: ‘AudioPipeline’ has not been declared
+   25 |     std::unique_ptr<AudioPipeline> AudioPipeline::create(int spectrum_size) {
+      |                                    ^~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: In function ‘int sep::workbench::audio::create(int)’:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:27:56: error: expected class-name before ‘{’ token
+   27 |         class StubAudioPipeline : public AudioPipeline {
+      |                                                        ^
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:31:18: error: ‘void sep::workbench::audio::create(int)::StubAudioPipeline::processSamples(const std::vector<float>&)’ marked ‘override’, but does not override
+   31 |             void processSamples(const std::vector<float>& samples) override {
+      |                  ^~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:45:36: error: ‘std::vector<glm::vec<3, float, glm::packed_highp> > sep::workbench::audio::create(int)::StubAudioPipeline::getVisualPatterns() const’ marked ‘override’, but does not override
+   45 |             std::vector<glm::vec3> getVisualPatterns() const override {
+      |                                    ^~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: In member function ‘void sep::workbench::audio::create(int)::StubAudioPipeline::processSamples(const std::vector<float>&)’:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:31:59: error: unused parameter ‘samples’ [-Werror=unused-parameter]
+   31 |             void processSamples(const std::vector<float>& samples) override {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: In function ‘int sep::workbench::audio::create(int)’:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:54:51: error: cannot convert ‘std::__detail::__unique_ptr_t<sep::workbench::audio::create(int)::StubAudioPipeline>’ to ‘int’ in return
+   54 |         return std::make_unique<StubAudioPipeline>(spectrum_size);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+      |                                                   |
+      |                                                   std::__detail::__unique_ptr_t<sep::workbench::audio::create(int)::StubAudioPipeline>
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: At global scope:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:59:6: error: no declaration matches ‘void sep::workbench::AudioVisualizerDemo::init()’
+   59 | void AudioVisualizerDemo::init() {
+      |      ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:59:6: note: no functions named ‘void sep::workbench::AudioVisualizerDemo::init()’
+/sep/src/workbench/demos/audio_visualizer.hpp:13:7: note: ‘class sep::workbench::AudioVisualizerDemo’ defined here
+   13 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:85:6: error: no declaration matches ‘void sep::workbench::AudioVisualizerDemo::update(float)’
+   85 | void AudioVisualizerDemo::update(float dt) {
+      |      ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:85:6: note: no functions named ‘void sep::workbench::AudioVisualizerDemo::update(float)’
+/sep/src/workbench/demos/audio_visualizer.hpp:13:7: note: ‘class sep::workbench::AudioVisualizerDemo’ defined here
+   13 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:107:6: error: no declaration matches ‘void sep::workbench::AudioVisualizerDemo::render()’
+  107 | void AudioVisualizerDemo::render() {
+      |      ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:107:6: note: no functions named ‘void sep::workbench::AudioVisualizerDemo::render()’
+/sep/src/workbench/demos/audio_visualizer.hpp:13:7: note: ‘class sep::workbench::AudioVisualizerDemo’ defined here
+   13 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:128:6: error: no declaration matches ‘void sep::workbench::AudioVisualizerDemo::cleanup()’
+  128 | void AudioVisualizerDemo::cleanup() {
+      |      ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:128:6: note: no functions named ‘void sep::workbench::AudioVisualizerDemo::cleanup()’
+/sep/src/workbench/demos/audio_visualizer.hpp:13:7: note: ‘class sep::workbench::AudioVisualizerDemo’ defined here
+   13 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:136:6: error: no declaration matches ‘void sep::workbench::AudioVisualizerDemo::handleKeyboard(unsigned char)’
+  136 | void AudioVisualizerDemo::handleKeyboard(unsigned char key) {
+      |      ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:136:6: note: no functions named ‘void sep::workbench::AudioVisualizerDemo::handleKeyboard(unsigned char)’
+/sep/src/workbench/demos/audio_visualizer.hpp:13:7: note: ‘class sep::workbench::AudioVisualizerDemo’ defined here
+   13 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:148:6: error: no declaration matches ‘void sep::workbench::AudioVisualizerDemo::handleMouse(int, int, int)’
+  148 | void AudioVisualizerDemo::handleMouse(int x, int y, int button) {
+      |      ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:148:6: note: no functions named ‘void sep::workbench::AudioVisualizerDemo::handleMouse(int, int, int)’
+/sep/src/workbench/demos/audio_visualizer.hpp:13:7: note: ‘class sep::workbench::AudioVisualizerDemo’ defined here
+   13 | class AudioVisualizerDemo : public Demo {
+      |       ^~~~~~~~~~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp: In function ‘std::unique_ptr<sep::workbench::Demo> sep::workbench::createAudioVisualizerDemo(Window*, Renderer*, UIManager*)’:
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:153:57: error: unused parameter ‘window’ [-Werror=unused-parameter]
+  153 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
+      |                                                 ~~~~~~~~^~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:153:75: error: unused parameter ‘renderer’ [-Werror=unused-parameter]
+  153 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
+      |                                                                 ~~~~~~~~~~^~~~~~~~
+/sep/src/workbench/demos/audio_visualizer_simple.cpp:153:96: error: unused parameter ‘uiManager’ [-Werror=unused-parameter]
+  153 | std::unique_ptr<Demo> createAudioVisualizerDemo(Window* window, Renderer* renderer, UIManager* uiManager) {
+      |                                                                                     ~~~~~~~~~~~^~~~~~~~~
+cc1plus: all warnings being treated as errors
+[3/9] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o -c /sep/src/workbench/demos/audio_visualizer.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o -c /sep/src/workbench/demos/audio_visualizer.cpp
+/sep/src/workbench/demos/audio_visualizer.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::on_load()’:
+/sep/src/workbench/demos/audio_visualizer.cpp:17:5: error: ‘AudioConfig’ was not declared in this scope
+   17 |     AudioConfig acfg;
+      |     ^~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer.cpp:18:5: error: ‘acfg’ was not declared in this scope; did you mean ‘cfg’?
+   18 |     acfg.source = cfg.input.device;
+      |     ^~~~
+      |     cfg
+/sep/src/workbench/demos/audio_visualizer.cpp:23:15: error: ‘class sep::audio::AudioCapture’ has no member named ‘setCallback’
+   23 |     capture_->setCallback([this](const float* data, size_t len) {
+      |               ^~~~~~~~~~~
+/sep/src/workbench/demos/audio_visualizer.cpp:28:15: error: ‘class sep::audio::AudioCapture’ has no member named ‘init’
+   28 |     capture_->init(acfg);
+      |               ^~~~
+/sep/src/workbench/demos/audio_visualizer.cpp:29:15: error: ‘class sep::audio::AudioCapture’ has no member named ‘start’
+   29 |     capture_->start();
+      |               ^~~~~
+/sep/src/workbench/demos/audio_visualizer.cpp: In member function ‘virtual void sep::workbench::AudioVisualizerDemo::on_unload()’:
+/sep/src/workbench/demos/audio_visualizer.cpp:68:19: error: ‘class sep::audio::AudioCapture’ has no member named ‘stop’
+   68 |         capture_->stop();
+      |                   ^~~~
+[4/9] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -c /sep/src/workbench/demos/cosmo_sim.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -c /sep/src/workbench/demos/cosmo_sim.cpp
+In file included from /usr/include/glm/gtx/norm.hpp:19,
+                 from /sep/src/workbench/demos/cosmo_sim.cpp:3:
+/usr/include/glm/gtx/quaternion.hpp:24:9: error: #error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   24 | #       error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+In file included from /usr/include/glm/gtx/norm.hpp:20:
+/usr/include/glm/gtx/component_wise.hpp:22:9: error: #error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   22 | #       error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+/usr/include/glm/gtx/norm.hpp:23:9: error: #error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   23 | #       error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+[5/9] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/flocking_sim_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/flocking_sim_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/flocking_sim_simple.cpp.o -c /sep/src/workbench/demos/flocking_sim_simple.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/flocking_sim_simple.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/flocking_sim_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/flocking_sim_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/flocking_sim_simple.cpp.o -c /sep/src/workbench/demos/flocking_sim_simple.cpp
+In file included from /usr/include/glm/gtx/norm.hpp:19,
+                 from /sep/src/workbench/demos/flocking_sim_simple.cpp:7:
+/usr/include/glm/gtx/quaternion.hpp:24:9: error: #error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   24 | #       error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+In file included from /usr/include/glm/gtx/norm.hpp:20:
+/usr/include/glm/gtx/component_wise.hpp:22:9: error: #error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   22 | #       error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+/usr/include/glm/gtx/norm.hpp:23:9: error: #error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   23 | #       error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+[6/9] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -c /sep/src/workbench/demos/physics_explorer_simple.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/physics_explorer_simple.cpp.o -c /sep/src/workbench/demos/physics_explorer_simple.cpp
+/sep/src/workbench/demos/physics_explorer_simple.cpp: In function ‘int main()’:
+/sep/src/workbench/demos/physics_explorer_simple.cpp:34:37: error: invalid initialization of reference of type ‘sep::quantum::Pattern&’ from expression of type ‘sep::pattern::PatternData’
+   34 |             evolution::applyGravity(p, center, 0.02f);
+      |                                     ^
+In file included from /sep/src/workbench/demos/physics_explorer_simple.cpp:6:
+/sep/src/quantum/evolution.h:68:32: note: in passing argument 1 of ‘void sep::quantum::evolution::applyGravity(sep::quantum::Pattern&, const glm::vec3&, float)’
+   68 |     void applyGravity(Pattern& pattern, const glm::vec3& center, float strength);
+      |                       ~~~~~~~~~^~~~~~~
+/sep/src/workbench/demos/physics_explorer_simple.cpp:35:43: error: invalid initialization of reference of type ‘sep::quantum::Pattern&’ from expression of type ‘sep::pattern::PatternData’
+   35 |             evolution::randomPerturbation(p, 0.01f);
+      |                                           ^
+/sep/src/quantum/evolution.h:69:38: note: in passing argument 1 of ‘void sep::quantum::evolution::randomPerturbation(sep::quantum::Pattern&, float)’
+   69 |     void randomPerturbation(Pattern& pattern, float amplitude);
+      |                             ~~~~~~~~~^~~~~~~
+[7/9] /usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -c /sep/src/workbench/demos/drug_optimizer.cpp
+FAILED: src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o 
+/usr/bin/g++-14 -DCROW_USE_BOOST -DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1 -DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1 -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1 -DSEP_HAS_BLENDER=0 -DSEP_HAS_CUDA=1 -DSEP_HAS_CYCLES=0 -DSEP_USE_CUDA=1 -D_GLIBCXX_USE_CXX11_ABI=1 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D__STRICT_ANSI__ -I/sep/extern/crow/src -I/sep/src -I/usr/src -I/sep/src/workbench -I/sep/include -isystem /usr/local/cuda/targets/x86_64-linux/include -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -Werror -MD -MT src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -MF src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o.d -o src/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -c /sep/src/workbench/demos/drug_optimizer.cpp
+In file included from /usr/include/glm/gtx/norm.hpp:19,
+                 from /sep/src/workbench/demos/drug_optimizer.cpp:2:
+/usr/include/glm/gtx/quaternion.hpp:24:9: error: #error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   24 | #       error "GLM: GLM_GTX_quaternion is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+In file included from /usr/include/glm/gtx/norm.hpp:20:
+/usr/include/glm/gtx/component_wise.hpp:22:9: error: #error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   22 | #       error "GLM: GLM_GTX_component_wise is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+/usr/include/glm/gtx/norm.hpp:23:9: error: #error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+   23 | #       error "GLM: GLM_GTX_norm is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+      |         ^~~~~
+ninja: build stopped: subcommand failed.

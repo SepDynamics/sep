@@ -3,6 +3,8 @@
 #include <random>
 #include <ctime>
 #include <time.h>
+
+#include "compat/glm_config.h"
 #include <glm/vec3.hpp>
 #include <glm/gtx/norm.hpp>
 

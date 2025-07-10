@@ -60,6 +60,7 @@ if(SEP_BUILD_WORKBENCH)
         GLEW::GLEW
         glfw
         OpenGL::GL
+        imgui
         Threads::Threads
         ${CMAKE_DL_LIBS}
     )

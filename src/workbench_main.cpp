@@ -3,10 +3,51 @@
 
 #include <iostream>
 
-#include "imgui/backends/imgui_impl_glfw.h"
-#include "imgui/backends/imgui_impl_opengl3.h"
-#include "core/logging.h"  // For our logger
+#include "core/logging.h"             // For our logger
+#include "cycles_renderer_adapter.h"  // Cycles renderer
 #include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include "sep_engine_wrapper.h"              // SEP Engine wrapper
+#include "workbench/demos/demo_manager.hpp"  // Demo manager
+
+// Forward declaration for demo registration function
+namespace sep
+{
+    namespace workbench
+    {
+        void registerDemos();
+    }
+}  // namespace sep
+
+// Key callback function for GLFW
+void key_callback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
+{
+    if (action == GLFW_PRESS)
+    {
+        auto& demoManager = sep::workbench::DemoManager::getInstance();
+
+        // Handle demo selection keys (1-9)
+        if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9)
+        {
+            const std::map<int, std::string> keyToDemoMap = {
+                {GLFW_KEY_1, "genesis"},  {GLFW_KEY_2, "neural"}, {GLFW_KEY_3, "memory"},
+                {GLFW_KEY_4, "flocking"}, {GLFW_KEY_5, "cosmo"},  {GLFW_KEY_6, "cosmo_sim"},
+                {GLFW_KEY_7, "physics"},  {GLFW_KEY_8, "drug"},   {GLFW_KEY_9, "audio"}};
+
+            auto it = keyToDemoMap.find(key);
+            if (it != keyToDemoMap.end())
+            {
+                demoManager.switchToDemo(it->second);
+            }
+        }
+        else
+        {
+            // Pass other keys to the current demo
+            demoManager.on_key(key);
+        }
+    }
+}
 
 int main()
 {
@@ -16,25 +57,107 @@ int main()
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return -1;
     }
+
+    // First try with compatibility profile
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     GLFWwindow* window = glfwCreateWindow(1280, 720, "SEP Workbench", nullptr, nullptr);
+
+    // If that fails, try with no specific profile (more compatible)
     if (!window)
     {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
+        std::cout << "Failed to create window with compatibility profile, trying fallback..."
+                  << std::endl;
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+        window = glfwCreateWindow(1280, 720, "SEP Workbench (Fallback)", nullptr, nullptr);
+
+        // If that still fails, try with even more basic settings
+        if (!window)
+        {
+            std::cout << "Failed with default hints, trying minimal configuration..." << std::endl;
+            glfwDefaultWindowHints();
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+            window = glfwCreateWindow(1280, 720, "SEP Workbench (Legacy)", nullptr, nullptr);
+
+            if (!window)
+            {
+                std::cerr << "Failed to create GLFW window with all configurations" << std::endl;
+                glfwTerminate();
+                return -1;
+            }
+        }
     }
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);  // Enable vsync
 
-    // 2. Initialize GLEW
-    if (glewInit() != GLEW_OK)
+    // Set key callback
+    glfwSetKeyCallback(window, key_callback);
+
+    // 2. Initialize GLEW with better error handling and fallback
+    bool useGlew = true;
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
     {
-        std::cerr << "Failed to initialize GLEW" << std::endl;
-        return -1;
+        std::cerr << "Standard GLEW initialization failed: " << glewGetErrorString(err)
+                  << std::endl;
+
+        // Try with experimental flag
+        std::cout << "Trying GLEW with experimental flag..." << std::endl;
+        glewExperimental = GL_TRUE;
+        err = glewInit();
+
+        if (err != GLEW_OK)
+        {
+            std::cerr << "GLEW initialization failed even with experimental flag: "
+                      << glewGetErrorString(err) << std::endl;
+            useGlew = false;
+
+            // Try to get some diagnostic information anyway
+            std::cerr << "Attempting to get OpenGL information..." << std::endl;
+            try
+            {
+                if (glGetString(GL_VERSION))
+                {
+                    std::cerr << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+                }
+                if (glGetString(GL_VENDOR))
+                {
+                    std::cerr << "OpenGL Vendor: " << glGetString(GL_VENDOR) << std::endl;
+                }
+                if (glGetString(GL_RENDERER))
+                {
+                    std::cerr << "OpenGL Renderer: " << glGetString(GL_RENDERER) << std::endl;
+                }
+            }
+            catch (...)
+            {
+                std::cerr << "Could not retrieve OpenGL information" << std::endl;
+            }
+
+            std::cout << "Continuing with fallback rendering mode..." << std::endl;
+        }
+        else
+        {
+            // Clear any error that might have been generated by glewInit
+            glGetError();
+        }
+    }
+
+    if (useGlew)
+    {
+        // Print OpenGL information for debugging
+        std::cout << "GLEW initialization successful!" << std::endl;
+        std::cout << "GLEW Version: " << glewGetString(GLEW_VERSION) << std::endl;
+        std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+        std::cout << "OpenGL Vendor: " << glGetString(GL_VENDOR) << std::endl;
+        std::cout << "OpenGL Renderer: " << glGetString(GL_RENDERER) << std::endl;
+        std::cout << "OpenGL Shading Language Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
+                  << std::endl;
     }
 
     // 3. Initialize SEP Core Logger (from our previous test)
@@ -44,17 +167,56 @@ int main()
     auto logger = sep::logging::Manager::getInstance().createLogger("workbench", log_config);
     logger->info("Workbench shell initialized.");
 
-    // 4. Initialize ImGui
+    // 3.5 Initialize SEP Engine and Demo Manager
+    std::unique_ptr<sep::Engine> engine = sep::createEngine();
+    std::unique_ptr<sep::CyclesRenderer> renderer = sep::createRenderer();
+
+    engine->initialize();
+    renderer->initialize();
+
+    // Initialize the demo manager
+    auto& demoManager = sep::workbench::DemoManager::getInstance();
+    demoManager.initialize(engine.get(), renderer.get());
+
+    // Register available demos
+    sep::workbench::registerDemos();
+    logger->info("Demos registered and ready.");
+
+    // 4. Initialize ImGui with fallback support
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init();
+
+    // Use a simpler OpenGL version string if GLEW failed
+    if (useGlew)
+    {
+        ImGui_ImplOpenGL3_Init();
+    }
+    else
+    {
+        // Use a more basic OpenGL version for the shader
+        ImGui_ImplOpenGL3_Init("#version 120");
+        std::cout << "Using fallback ImGui rendering with basic OpenGL shaders" << std::endl;
+    }
 
     // 5. Main Loop
+    float lastFrameTime = static_cast<float>(glfwGetTime());
+
+    // Start with the first demo
+    demoManager.switchToDemo("genesis");
+
     while (!glfwWindowShouldClose(window))
     {
+        // Calculate delta time
+        float currentTime = static_cast<float>(glfwGetTime());
+        float deltaTime = currentTime - lastFrameTime;
+        lastFrameTime = currentTime;
+
         glfwPollEvents();
+
+        // Update the current demo
+        demoManager.on_update(deltaTime);
 
         // Start the ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -65,24 +227,127 @@ int main()
         ImGui::Begin("SEP Workbench");
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
                     1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        ImGui::Text("Demos will be listed here.");
+
+        // Display current demo
+        auto& demoManager = sep::workbench::DemoManager::getInstance();
+        ImGui::Text("Current Demo: %s", demoManager.getCurrentDemo().c_str());
+
+        // Display available demos
+        ImGui::Separator();
+        ImGui::Text("Available Demos (Press key to select):");
+        ImGui::Columns(2, "demos");
+        ImGui::Text("Key");
+        ImGui::NextColumn();
+        ImGui::Text("Demo");
+        ImGui::NextColumn();
+        ImGui::Separator();
+
+        // List all demos with their keyboard shortcuts
+        ImGui::Text("1");
+        ImGui::NextColumn();
+        ImGui::Text("Genesis Pattern Demo");
+        ImGui::NextColumn();
+
+        ImGui::Text("2");
+        ImGui::NextColumn();
+        ImGui::Text("Neural Demo");
+        ImGui::NextColumn();
+
+        ImGui::Text("3");
+        ImGui::NextColumn();
+        ImGui::Text("Memory Garden Demo");
+        ImGui::NextColumn();
+
+        ImGui::Text("4");
+        ImGui::NextColumn();
+        ImGui::Text("Flocking Demo");
+        ImGui::NextColumn();
+
+        ImGui::Text("5");
+        ImGui::NextColumn();
+        ImGui::Text("Cosmo Demo");
+        ImGui::NextColumn();
+
+        ImGui::Text("6");
+        ImGui::NextColumn();
+        ImGui::Text("Cosmo Sim Demo");
+        ImGui::NextColumn();
+
+        ImGui::Text("7");
+        ImGui::NextColumn();
+        ImGui::Text("Digital Physics Demo");
+        ImGui::NextColumn();
+
+        ImGui::Text("8");
+        ImGui::NextColumn();
+        ImGui::Text("Drug Discovery Demo");
+        ImGui::NextColumn();
+
+        ImGui::Text("9");
+        ImGui::NextColumn();
+        ImGui::Text("Audio Visualizer Demo");
+        ImGui::NextColumn();
+
+        ImGui::Columns(1);
         ImGui::End();
 
         // --- Rendering ---
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
 
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        if (useGlew)
+        {
+            // Normal rendering with GLEW
+            glViewport(0, 0, display_w, display_h);
+            glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // Render the current demo
+            demoManager.on_render();
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        }
+        else
+        {
+            // Fallback rendering without GLEW
+            // Just render ImGui with minimal OpenGL calls
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // Render the current demo (simplified for fallback mode)
+            demoManager.on_render();
+
+            ImGui::Render();
+
+            // Minimal rendering of ImGui data without advanced OpenGL features
+            ImDrawData* draw_data = ImGui::GetDrawData();
+            if (draw_data && draw_data->Valid)
+            {
+                // Just log that we're in fallback mode
+                static bool first_frame = true;
+                if (first_frame)
+                {
+                    std::cout << "Rendering in fallback mode (frame: " << ImGui::GetFrameCount()
+                              << ")" << std::endl;
+                    first_frame = false;
+                }
+            }
+        }
 
         glfwSwapBuffers(window);
     }
 
     // 6. Cleanup
     logger->info("Shutting down workbench shell.");
+
+    // Unload the current demo
+    demoManager.on_unload();
+
+    // Cleanup engine and renderer
+    engine->shutdown();
+
+    // Cleanup ImGui and GLFW
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

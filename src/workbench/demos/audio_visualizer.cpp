@@ -11,6 +11,8 @@ using namespace sep::audio;
 
 void AudioVisualizerDemo::on_load() {
     const auto& cfg = Config::getInstance().audio_visualizer();
+
+#ifdef SEP_HAS_AUDIO
     pipeline_ = std::make_unique<AudioPipeline>(cfg.input.sample_rate);
     capture_ = AudioCapture::create();
 
@@ -27,12 +29,48 @@ void AudioVisualizerDemo::on_load() {
     });
     capture_->init(acfg);
     capture_->start();
+#else
+    // Generate some initial patterns for visualization
+    latest_patterns_.clear();
+
+    // Use FFT size from config if available, otherwise default to 128
+    int spectrum_size = cfg.input.fft_size > 0 ? cfg.input.fft_size : 128;
+
+    for (int i = 0; i < spectrum_size; i++)
+    {
+        float x = (float)i / spectrum_size * 2.0f - 1.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+        latest_patterns_.push_back(glm::vec3(x, y, z));
+    }
+
+    // Initialize pattern mapping from config
+    pattern_mapping_.frequency_scale = cfg.pattern_mapping.frequency_scale;
+    pattern_mapping_.amplitude_scale = cfg.pattern_mapping.amplitude_scale;
+    pattern_mapping_.evolution_sensitivity = cfg.pattern_mapping.evolution_sensitivity;
+#endif
 }
 
 void AudioVisualizerDemo::on_update(float dt) {
     (void)dt; // Unused parameter
     const auto& cfg = Config::getInstance().audio_visualizer();
-    
+
+#ifndef SEP_HAS_AUDIO
+    // In non-audio builds, generate random patterns
+    const int spectrum_size = cfg.input.fft_size > 0 ? cfg.input.fft_size : 128;
+    latest_patterns_.clear();
+    latest_patterns_.reserve(spectrum_size);
+
+    for (int i = 0; i < spectrum_size; i++)
+    {
+        float x = (float)i / spectrum_size * 2.0f - 1.0f;
+        // Generate some random movement
+        float y = (rand() % 1000) / 1000.0f * 0.5f * cfg.pattern_mapping.amplitude_scale;
+        float z = 0.0f;
+        latest_patterns_.push_back(glm::vec3(x, y, z));
+    }
+#endif
+
     // Map audio patterns to visual patterns using config parameters
     std::vector<glm::vec3> visual_patterns;
     for (const auto& pattern : latest_patterns_) {
@@ -64,13 +102,16 @@ void AudioVisualizerDemo::on_render() {
 }
 
 void AudioVisualizerDemo::on_unload() {
-    if (capture_) {
 #ifdef SEP_HAS_AUDIO
+    if (capture_) {
         capture_->stop();
-#endif
     }
     pipeline_.reset();
     capture_.reset();
+#else
+    latest_patterns_.clear();
+    latest_visual_patterns_.clear();
+#endif
 }
 
 void AudioVisualizerDemo::on_key_press(int key) {

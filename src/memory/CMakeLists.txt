@@ -12,6 +12,7 @@ endif()
 
 set(SEP_HAS_REDIS 0)
 set(HIREDIS_FOUND FALSE)
+find_package(TBB REQUIRED)
 
 if(HIREDIS_FOUND)
     list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
@@ -51,9 +52,6 @@ if(SEP_HAS_CUDA)
 endif()
 
 find_package(Threads REQUIRED)
-if(SEP_USE_TBB)
-    find_package(TBB REQUIRED)
-endif()
 
 set_target_properties(sep_memory PROPERTIES
     POSITION_INDEPENDENT_CODE ON
@@ -67,10 +65,11 @@ target_link_libraries(sep_memory
         sep_core
         sep_compat
         fmt::fmt
+        $<$<BOOL:${SEP_BUILD_QUANTUM}>:sep_quantum>
     PRIVATE
         fmt::fmt
         Threads::Threads
-        $<$<BOOL:${SEP_USE_TBB}>:TBB::tbb>
+        TBB::tbb
 )
 if(SEP_USE_TBB)
     target_compile_definitions(sep_memory PRIVATE SEP_USE_TBB)

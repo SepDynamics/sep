@@ -1,19 +1,17 @@
 #pragma once
 
-#ifdef SEP_USE_TBB
 #include <tbb/concurrent_hash_map.h>
-#else
-#include "api/rate_limiter.h"
-#endif
 
 #include <array>
 #include <atomic>
 #include <chrono>
 #include <memory>
 #include <mutex>
+#include <string>
 #include <thread>
 #include <unordered_map>
-#include <string>
+
+#include "api/rate_limiter.h"
 
 namespace sep::api {
 
@@ -131,18 +129,9 @@ private:
   };
 
   // Client management container
-#ifdef SEP_USE_TBB
   using ClientMap =
       tbb::concurrent_hash_map<std::string, std::unique_ptr<ClientData>>;
   ClientMap clients_;
-#else
-  using ClientMap =
-      std::unordered_map<std::string, std::unique_ptr<ClientData>>;
-  ClientMap clients_;
-  mutable std::mutex clients_mutex_;
-#endif
-
-  // Background cleanup
   std::unique_ptr<BackgroundCleanup> background_cleanup_;
 };
 

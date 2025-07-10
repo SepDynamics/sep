@@ -34,31 +34,31 @@ namespace sep::api {
 // Adapter for crow::request to HttpRequest
 class CrowRequestAdapter : public HttpRequest {
 public:
-  explicit CrowRequestAdapter(::crow::request &req);
-  std::string url() const override;
-  std::string method() const override;
-  std::string body() const override;
+    explicit CrowRequestAdapter(crow::request &req);
+    std::string url() const override;
+    std::string method() const override;
+    std::string body() const override;
 
- private:
-     crow::request &req_;
-     std::string method_str_;
+private:
+    crow::request &req_;
+    std::string method_str_;
 };
 
 // Adapter for crow::response to HttpResponse
 class CrowResponseAdapter : public HttpResponse {
 public:
-  explicit CrowResponseAdapter(::crow::response &res);
-  void setCode(int code) override;
-  int getCode() const override;
-  void setBody(const std::string &body) override;
-  void end() override;
-  std::string getBody() const override;
+    explicit CrowResponseAdapter(crow::response &res);
+    void setCode(int code) override;
+    int getCode() const override;
+    void setBody(const std::string &body) override;
+    void end() override;
+    std::string getBody() const override;
 
- private:
-     crow::response &res_;
+private:
+    crow::response &res_;
 };
 
-std::unique_ptr<HttpResponse> makeResponse(::crow::response &res);
-std::unique_ptr<HttpRequest> makeRequest(::crow::request &req);
+std::unique_ptr<HttpResponse> makeResponse(crow::response &res);
+std::unique_ptr<HttpRequest> makeRequest(crow::request &req);
 
 }  // namespace sep::api

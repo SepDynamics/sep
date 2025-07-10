@@ -7,7 +7,7 @@
 
 namespace sep::api {
 
-    void LoggingMiddleware::before_handle(::crow::request& req, crow::response& res, context& ctx)
+    void LoggingMiddleware::before_handle(crow::request& req, crow::response& res, context& ctx)
     {
         (void)req;
         if (!isReady())
@@ -21,7 +21,7 @@ namespace sep::api {
         std::atomic_thread_fence(std::memory_order_release);
     }
 
-    void LoggingMiddleware::after_handle(::crow::request& req, crow::response& res, context& ctx)
+    void LoggingMiddleware::after_handle(crow::request& req, crow::response& res, context& ctx)
     {
         if (!isReady())
         {

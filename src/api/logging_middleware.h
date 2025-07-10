@@ -15,8 +15,8 @@ public:
 
   LoggingMiddleware(sep::api::Server* server) : server_(server) {}
 
-  void before_handle(::crow::request& req, crow::response& res, context& ctx);
-  void after_handle(::crow::request& req, crow::response& res, context& ctx);
+  void before_handle(crow::request& req, crow::response& res, context& ctx);
+  void after_handle(crow::request& req, crow::response& res, context& ctx);
 
   bool isReady() const { return server_ != nullptr; }
 

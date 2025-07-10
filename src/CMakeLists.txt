@@ -53,11 +53,12 @@ if(SEP_BUILD_WORKBENCH)
         workbench_main.cpp
     )
     set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
-    target_include_directories(sep_workbench PRIVATE ${SEP_INCLUDE_DIRS})
+    target_include_directories(sep_workbench PRIVATE ${SEP_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
     target_link_libraries(sep_workbench PRIVATE
         sep_workbench_lib
         sep_api sep_quantum sep_memory sep_core sep_compat
-        GLEW::GLEW
+        imgui
+        ${GLEW_LIBRARIES}
         glfw
         OpenGL::GL
         Threads::Threads

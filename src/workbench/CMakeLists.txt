@@ -6,6 +6,10 @@ file(GLOB_RECURSE WB_SOURCES
     "renderer.cpp"
 )
 
+if(NOT SEP_WITH_AUDIO)
+    list(FILTER WB_SOURCES EXCLUDE REGEX "audio_visualizer")
+endif()
+
 add_library(sep_workbench_lib STATIC ${WB_SOURCES})
 
 # Public include directories for consumers

@@ -2,6 +2,10 @@
 # SEP Engine dependency installer
 set -euo pipefail
 
+sudo ln -sf /workspace/sep /sep
+cd /sep
+
+
 # Pinned Python version used for all installs
 PYTHON_VERSION="3.13.*"
 
@@ -102,5 +106,3 @@ if apt-cache show gcc-14 >/dev/null 2>&1; then
   sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
 fi
 
-sudo ln -sf /workspace/sep /sep
-cd /sep

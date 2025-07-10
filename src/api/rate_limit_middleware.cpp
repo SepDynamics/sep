@@ -52,10 +52,10 @@ void RateLimitMiddleware::after_handle(Req&, Res&, Ctx&)
 
 // Explicit template instantiations for crow types
 template void
-RateLimitMiddleware::before_handle<::crow::request, ::crow::response, RateLimitMiddleware::context>(
-    ::crow::request&, ::crow::response&, RateLimitMiddleware::context&);
+RateLimitMiddleware::before_handle<crow::request, crow::response, RateLimitMiddleware::context>(
+    crow::request&, crow::response&, RateLimitMiddleware::context&);
 template void
-RateLimitMiddleware::after_handle<::crow::request, ::crow::response, RateLimitMiddleware::context>(
-    ::crow::request&, ::crow::response&, RateLimitMiddleware::context&);
+RateLimitMiddleware::after_handle<crow::request, crow::response, RateLimitMiddleware::context>(
+    crow::request&, crow::response&, RateLimitMiddleware::context&);
 
 }  // namespace sep::api

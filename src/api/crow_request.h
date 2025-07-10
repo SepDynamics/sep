@@ -14,7 +14,7 @@ namespace sep::api {
 class CrowRequest : public IRequest
 {
 public:
-    CrowRequest(const ::crow::request& req) : req_(req), body_(req.body.c_str())
+    CrowRequest(const crow::request& req) : req_(req), body_(req.body.c_str())
     {
         // In Crow isolation shim, we populate headers with empty values
         // In the real implementation, these would be populated from the actual request
@@ -24,11 +24,8 @@ public:
         headers_["accept"] = "";
     }
 
-    std::string method() const override
-    {
-        return ::crow::method_name(req_.method);
-    }
-    
+    std::string method() const override { return crow::method_name(req_.method); }
+
     std::string url() const override
     {
         // Convert crow_string to std::string by using c_str()
@@ -66,7 +63,7 @@ public:
     }
 
 private:
-    const ::crow::request& req_;
+    const crow::request& req_;
     std::string body_;
     std::unordered_map<std::string, std::string> headers_;
 };

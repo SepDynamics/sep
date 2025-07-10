@@ -22,7 +22,8 @@ struct routing_params
 #ifdef __cplusplus
 namespace crow
 {
-    // Use std::string directly instead of crow_string
+    // Use std::string directly
+    using string = std::string;
     using crow_string = std::string;
 
     enum class HTTPMethod

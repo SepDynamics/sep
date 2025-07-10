@@ -40,8 +40,8 @@ public:
   std::string body() const override;
 
  private:
-  ::crow::request &req_;
-  std::string method_str_;
+     crow::request &req_;
+     std::string method_str_;
 };
 
 // Adapter for crow::response to HttpResponse
@@ -55,7 +55,7 @@ public:
   std::string getBody() const override;
 
  private:
-  ::crow::response &res_;
+     crow::response &res_;
 };
 
 std::unique_ptr<HttpResponse> makeResponse(::crow::response &res);

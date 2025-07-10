@@ -68,7 +68,7 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
     instance_ = this;
 
     // Initialize the Crow app with middlewares
-    app_ = std::make_unique<::crow::Crow<RateLimitMiddleware, AuthMiddleware>>();
+    app_ = std::make_unique<crow::Crow<RateLimitMiddleware, AuthMiddleware>>();
 
     // Initialize logger
     setup_logging();
@@ -234,12 +234,12 @@ std::string SEPApiServer::getErrorResponse(const std::string& message, int statu
   return handleError(message, status);
 }
 
-
-::crow::response SEPApiServer::makeCrowJsonResponse(int status_code, const nlohmann::json& data) {
-  ::crow::response res(status_code);
-  res.set_header("Content-Type", "application/json");
-  res.body = data.dump();
-  return res;
+crow::response SEPApiServer::makeCrowJsonResponse(int status_code, const nlohmann::json& data)
+{
+    crow::response res(status_code);
+    res.set_header("Content-Type", "application/json");
+    res.body = data.dump();
+    return res;
 }
 
 nlohmann::json SEPApiServer::handleCrowError(const std::string& message,
@@ -263,8 +263,8 @@ nlohmann::json SEPApiServer::handleCrowError(const std::string& message,
   return error_json;
 }
 
-void SEPApiServer::logRequest(const ::crow::request& req, int status_code,
-                               const std::string& response_body, int64_t duration_ms)
+void SEPApiServer::logRequest(const crow::request& req, int status_code,
+                              const std::string& response_body, int64_t duration_ms)
 {
     (void)response_body; // Silence unused parameter warning
     if (!logger_) return;
@@ -348,391 +348,419 @@ void SEPApiServer::setup_routes() {
 
   // Health check endpoint
   app_->route_dynamic("/api/v1/health")
-      .methods(::crow::HTTPMethod::GET)([this, &engine](const ::crow::request& req) {
-    auto start_time = std::chrono::steady_clock::now();
+      .methods(crow::HTTPMethod::GET)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
+
+#if SEP_HAS_EXCEPTIONS
+          try
+          {
+#endif
+              auto health_data = engine.getHealthStatus();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
+
+              logRequest(req, HTTP_OK, health_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, health_data);
 
     #if SEP_HAS_EXCEPTIONS
-    try {
+          }
+          catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
+
+              auto error_crow = handleCrowError("Health check failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
 #endif
-      auto health_data = engine.getHealthStatus();
-      auto end_time = std::chrono::steady_clock::now();
-      auto duration =
-          std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-      logRequest(req, HTTP_OK, health_data.dump(), duration);
-      return makeCrowJsonResponse(HTTP_OK, health_data);
-
-    #if SEP_HAS_EXCEPTIONS
-    } catch (const std::exception& e) {
-      
-      auto end_time = std::chrono::steady_clock::now();
-      auto duration =
-          std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-      auto error_crow =
-          handleCrowError("Health check failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
-      logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-      return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-    }
-#endif
-  });
+      });
 
   // Process patterns endpoint
   app_->route_dynamic("/api/v1/pattern/evolve")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
-        auto start_time = std::chrono::steady_clock::now();
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
-        try {
+          try
+          {
 #endif
-          // Parse request body
-          nlohmann::json request_data = parse_json(std::string(req.body));
+              // Parse request body
+              nlohmann::json request_data = parse_json(std::string(req.body));
 
-          // Process patterns through SEP engine
-          auto result = engine.processPatterns(request_data);
-          auto response_data = applyCoherenceModulation(result);
+              // Process patterns through SEP engine
+              auto result = engine.processPatterns(request_data);
+              auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+              logRequest(req, HTTP_OK, response_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response_data);
 
         #if SEP_HAS_EXCEPTIONS
-        } catch (const nlohmann::json::parse_error& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          auto error_crow =
-              handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
-          logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-        } catch (const std::exception& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-          auto error_crow = handleCrowError("Pattern processing failed: " + std::string(e.what()),
-                                            HTTP_INTERNAL_ERROR);
-          logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-        }
+              auto error_crow = handleCrowError(
+                  "Pattern processing failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
         #endif
       });
 
   // Process batch endpoint
   app_->route_dynamic("/api/v1/memory/query")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
-        auto start_time = std::chrono::steady_clock::now();
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
-        try {
+          try
+          {
           
 #endif
-          nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.processBatch(request_data);
-          auto response_data = applyCoherenceModulation(result);
+              nlohmann::json request_data = parse_json(std::string(req.body));
+              auto result = engine.processBatch(request_data);
+              auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+              logRequest(req, HTTP_OK, response_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response_data);
 
         #if SEP_HAS_EXCEPTIONS
-        } catch (const nlohmann::json::parse_error& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          auto error_crow =
-              handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
-          logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-        } catch (const std::exception& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-          auto error_crow = handleCrowError("Batch processing failed: " + std::string(e.what()),
-                                            HTTP_INTERNAL_ERROR);
-          logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-        }
+              auto error_crow = handleCrowError("Batch processing failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
         #endif
       });
 
   // Pattern history endpoint
   app_->route_dynamic("/api/v1/patterns/history")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
-        auto start_time = std::chrono::steady_clock::now();
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
-        try {
+          try
+          {
           
 #endif
-          nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.getPatternHistory(request_data);
-          auto response_data = applyCoherenceModulation(result);
+              nlohmann::json request_data = parse_json(std::string(req.body));
+              auto result = engine.getPatternHistory(request_data);
+              auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+              logRequest(req, HTTP_OK, response_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response_data);
 
         #if SEP_HAS_EXCEPTIONS
-        } catch (const nlohmann::json::parse_error& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          auto error_crow =
-              handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
-          logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-        } catch (const std::exception& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-          auto error_crow = handleCrowError("Pattern history failed: " + std::string(e.what()),
-                                            HTTP_INTERNAL_ERROR);
-          logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-        }
+              auto error_crow = handleCrowError("Pattern history failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
         #endif
       });
 
   // Validate contexts endpoint
   app_->route_dynamic("/api/v1/context/process")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
-        auto start_time = std::chrono::steady_clock::now();
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
-        try {
+          try
+          {
           
 #endif
-          nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.validateContexts(request_data);
-          auto response_data = applyCoherenceModulation(result);
+              nlohmann::json request_data = parse_json(std::string(req.body));
+              auto result = engine.validateContexts(request_data);
+              auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+              logRequest(req, HTTP_OK, response_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response_data);
 
         #if SEP_HAS_EXCEPTIONS
-        } catch (const nlohmann::json::parse_error& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          auto error_crow =
-              handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
-          logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-        } catch (const std::exception& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-          auto error_crow = handleCrowError("Context validation failed: " + std::string(e.what()),
-                                            HTTP_INTERNAL_ERROR);
-          logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-        }
+              auto error_crow = handleCrowError(
+                  "Context validation failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
         #endif
       });
 
   // Extract embeddings endpoint
   app_->route_dynamic("/api/v1/embeddings/extract")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
-        auto start_time = std::chrono::steady_clock::now();
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
-        try {
+          try
+          {
           
 #endif
-          nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.extractEmbeddings(request_data);
-          auto response_data = applyCoherenceModulation(result);
+              nlohmann::json request_data = parse_json(std::string(req.body));
+              auto result = engine.extractEmbeddings(request_data);
+              auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+              logRequest(req, HTTP_OK, response_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response_data);
 
         #if SEP_HAS_EXCEPTIONS
-        } catch (const nlohmann::json::parse_error& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          auto error_crow =
-              handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
-          logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-        } catch (const std::exception& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-          auto error_crow = handleCrowError("Embedding extraction failed: " + std::string(e.what()),
-                                            HTTP_INTERNAL_ERROR);
-          logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-        }
+              auto error_crow = handleCrowError(
+                  "Embedding extraction failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
         #endif
       });
 
   // Analyze patterns endpoint
   app_->route_dynamic("/api/v1/pattern/analyze")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
-        auto start_time = std::chrono::steady_clock::now();
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
-        try {
+          try
+          {
           
 #endif
-          nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.calculateSimilarity(request_data);
-          auto response_data = applyCoherenceModulation(result);
+              nlohmann::json request_data = parse_json(std::string(req.body));
+              auto result = engine.calculateSimilarity(request_data);
+              auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+              logRequest(req, HTTP_OK, response_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response_data);
 
         #if SEP_HAS_EXCEPTIONS
-        } catch (const nlohmann::json::parse_error& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          auto error_crow =
-              handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
-          logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-        } catch (const std::exception& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-          auto error_crow = handleCrowError(
-              "Similarity calculation failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
-          logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-        }
+              auto error_crow = handleCrowError(
+                  "Similarity calculation failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
         #endif
       });
 
   // Context relationships endpoint
   app_->route_dynamic("/api/v1/context/relationships")
-      .methods(::crow::HTTPMethod::POST)([this, &engine](const ::crow::request& req) {
-        auto start_time = std::chrono::steady_clock::now();
+      .methods(::crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
-        try {
+          try
+          {
           
 #endif
-          nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.blendContexts(request_data);
-          auto response_data = applyCoherenceModulation(result);
+              nlohmann::json request_data = parse_json(std::string(req.body));
+              auto result = engine.blendContexts(request_data);
+              auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+              logRequest(req, HTTP_OK, response_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response_data);
 
         #if SEP_HAS_EXCEPTIONS
-        } catch (const nlohmann::json::parse_error& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          auto error_crow =
-              handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
-          logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-        } catch (const std::exception& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-          auto error_crow = handleCrowError("Context blending failed: " + std::string(e.what()),
-                                            HTTP_INTERNAL_ERROR);
-          logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-        }
+              auto error_crow = handleCrowError("Context blending failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
         #endif
       });
 
   // Memory metrics endpoint
   app_->route_dynamic("/api/v1/metrics/memory")
-      .methods(::crow::HTTPMethod::GET)([this, &engine](const ::crow::request& req) {
-        auto start_time = std::chrono::steady_clock::now();
+      .methods(::crow::HTTPMethod::GET)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
 
 #if SEP_HAS_EXCEPTIONS
-        try {
+          try
+          {
           
 #endif
-          auto result = engine.getMemoryMetrics();
-          auto response_data = applyCoherenceModulation(result);
+              auto result = engine.getMemoryMetrics();
+              auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+              logRequest(req, HTTP_OK, response_data.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response_data);
 
         #if SEP_HAS_EXCEPTIONS
-        } catch (const std::exception& e) {
-          
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
 
-          auto error_crow = handleCrowError("Memory metrics failed: " + std::string(e.what()),
-                                            HTTP_INTERNAL_ERROR);
+              auto error_crow = handleCrowError("Memory metrics failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
 
-          logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
-          return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
-        }
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
         #endif
       });
 

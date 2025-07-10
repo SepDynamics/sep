@@ -21,8 +21,8 @@
 // External forward declarations
 namespace crow {
     // Forward declare only what we need in the header
-    struct request;
-    struct response;
+    class request;
+    class response;
     
     // Forward declare the template class
     template <typename... Middlewares>
@@ -133,7 +133,7 @@ class SEPApiServer : public Server {
    * @param data JSON data
    * @return Crow response
    */
-  ::crow::response makeCrowJsonResponse(int status_code, const nlohmann::json &data);
+  crow::response makeCrowJsonResponse(int status_code, const nlohmann::json &data);
 
   /**
    * @brief Modulate response detail based on coherence metrics (extract coherence from JSON)
@@ -165,7 +165,7 @@ class SEPApiServer : public Server {
    * @param response_body Response body
    * @param duration_ms Request duration in milliseconds
    */
-  void logRequest(const ::crow::request &req, int status_code, const std::string &response_body,
+  void logRequest(const crow::request &req, int status_code, const std::string &response_body,
                   int64_t duration_ms);
 
   /**

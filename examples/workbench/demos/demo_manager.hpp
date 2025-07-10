@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include "sep_engine_wrapper.h"
+#include "workbench_demo_adapter.hpp"
 
 namespace sep
 {

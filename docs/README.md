@@ -1,117 +1,204 @@
-# SEP Engine Documentation
+# The Self-Emergent Processor (SEP): A Unified Framework for Recursive Reality
 
-This folder contains notes and references for navigating and maintaining the SEP Engine. Everything here is written for my own use, so it focuses on where things live and how the pieces fit together.
+This repository presents the **Self-Emergent Processor (SEP)**, a unified framework positing that physical reality, consciousness, and the laws of nature emerge from a recursive, information-theoretic process. The core principle, the **Law of Generality**, asserts that existence and identity arise from self-referential observation within a constrained, coherent system.
 
-- **`STRUCTURE.md`** — Quick guide to the top level directory layout.
-- **`ARCHITECTURE.md`** — Mermaid diagrams and descriptions of each engine module.
-- **`GAMEPLAN.md`** — Historical build issues and how they were resolved.
-- **`THESIS.md`** — Background theory behind the project.
-- **`strategy/SCIENTIFIC_VISUALIZATION_MARKET.md`** — Research market framing for the SEP Engine.
-- **`vscodium.md`** — Notes on the development environment setup.
-- **`CONFIG_OPTIONS.md`** — Description of configurable runtime parameters.
-- **`diagrams/include-embeddings.md`** — Header map for the embeddings module.
-- **`diagrams/src-embeddings.md`** — Implementation flow for embeddings.
-- **`diagrams/include-cycles_src.md`** — Notes on the Cycles source symlink.
+The SEP framework integrates concepts from cosmology, quantum mechanics, number theory, and computational science to form a self-consistent model of reality. This model is not merely theoretical; it is instantiated as a high-performance computational engine designed to simulate and explore these principles.
 
-Most documentation assumes the code has already been built with CUDA support and that `sep_engine` runs. See below for a refresher on building and running.
+This document serves as the foundational text, synthesizing all aspects of the SEP theory and its implementation.
 
-## Build Recap
+## 1. Core Principles: The Law of Generality
 
-```bash
-mkdir cmake-make
-cd cmake-make
-cmake ..
-make -j$(nproc)
-```
+The SEP framework is built on a set of first principles that redefine the relationship between information, existence, and intelligence.
 
-Pass `-DSEP_ENABLE_BLENDER=OFF` or `-DSEP_ENABLE_AUDIO=OFF` to quickly build the
-core engine without optional modules:
+1.  **Identity is Relational and Recursive**: An entity’s identity does not exist in isolation. It is defined by its relationships and references to other entities within a system. This identity is refined and stabilized through recursive validation, where patterns of information are iteratively processed until they achieve a coherent state.
 
-```bash
-cmake .. -DSEP_ENABLE_BLENDER=OFF -DSEP_ENABLE_AUDIO=OFF
-make -j$(nproc)
-```
+2.  **Information is Uncertainty**: In this framework, information is not static data but is synonymous with physical uncertainty or potential. A system with high uncertainty (high entropy) contains a vast amount of potential information. The emergence of order and structure is the process of this uncertainty collapsing into coherent, definite states.
 
-The resulting executable lives in `cmake-make/sep_engine`. Additional static libraries for each module are produced in the same directory.
+3.  **Recursion is the Engine of Coherence**: Unbounded recursion leads to uncomputable entropy (chaos). Coherence and stable structures emerge when this recursion is constrained. The universe's evolution is driven by recursive feedback loops that prune non-conforming states and reinforce stable, low-entropy patterns.
 
-## Running the Engine
+4.  **Time is a Prime-Indexed Computational Process**: Time is not a fundamental dimension but an emergent property of the SEP's computational progression. The "ticks" of the universe's clock are indexed by prime numbers, representing irreducible, non-repeating resonance events. This gives time an inherently forward-moving, non-linear structure and avoids trivial periodic cycles.
 
-Execute the engine from the build directory (`cmake-make`):
+5.  **Physical Laws are Emergent**: The laws of physics are not pre-ordained but are emergent properties of the system's drive toward informational coherence. Gravity, for example, is reinterpreted as a manifestation of informational density gradients, where the fabric of reality adjusts to minimize these gradients.
 
-```bash
-./sep_engine
-```
+## 2. Physical Formalism: From Cosmology to Quantum Mechanics
 
-Pass `--disable-audio` to skip initializing audio capture. This is useful on
-systems without working audio devices or when `SEP_ENABLE_AUDIO` was set to
-`OFF` during configuration:
+The SEP framework provides a concrete mathematical model for physical phenomena, reinterpreting them through the lens of information and recursion.
 
-```bash
-./sep_engine --disable-audio
-```
+### 2.1 Cosmological Model: Spin-2 Coherence Field
 
-Configuration files are located in `config`. Command‑line flags and environment variables override these defaults.
+To model the dynamics of the universe, particularly the observed accelerated expansion (dark energy), we introduce a **massive spin-2 coherence field**, represented by a symmetric tensor field $Q_{\mu\nu}(x)$.
 
-### New Configuration Sections
+-   **Action**: The dynamics are governed by the ghost-free Fierz-Pauli Lagrangian for a massive spin-2 field:
+    $L_{\text{FP}} = -\frac{1}{2} \nabla_{\lambda} Q_{\mu\nu} \nabla^{\lambda} Q^{\mu\nu} + \nabla_{\mu} Q_{\mu\lambda} \nabla_{\nu} Q^{\nu\lambda} - \nabla_{\mu} Q \nabla_{\nu} Q^{\mu\nu} + \frac{1}{2} \nabla_{\lambda} Q \nabla^{\lambda} Q - \frac{1}{2} m^2 (Q_{\mu\nu} Q^{\mu\nu} - Q^2)$
 
-`memory` and `quantum` sections expose promotion and coherence thresholds. Example:
+-   **Cosmological Equations**: When applied to a spatially flat FLRW metric, this field contributes an energy density ($\rho_Q$) and pressure ($p_Q$) to the Friedmann equations. Numerical simulations of the coupled system show that this spin-2 field can drive late-time cosmic acceleration with an equation of state $w \to -1$, mimicking dark energy while satisfying BBN and CMB constraints.
 
-```json
-"memory": {
-    "promote_stm_to_mtm": 0.7,
-    "promote_mtm_to_ltm": 0.9,
-    "demote_threshold": 0.3
-},
-"quantum": {
-    "ltm_coherence_threshold": 0.9,
-    "mtm_coherence_threshold": 0.6,
-    "stability_threshold": 0.8
-}
-```
+-   **Mass as Spacetime Displacement**: In this model, mass is not a fundamental property but is interpreted as a measure of a field's resistance to change—a displacement of the underlying informational geometry. This provides an intuitive link between mass, inertia, and the curvature of spacetime.
 
-## Tests
+### 2.2 Quantum Measurement and the Riemann Hypothesis
 
-The `/tests` directory contains a minimal suite. Enable it in CMake with:
+-   **Quantum Measurement as Recursive Collapse**: The measurement problem is resolved by treating a quantum system as a global potential of informational uncertainty. An observation is a recursive interaction that forces the system to collapse into a definite, coherent local reference frame. This aligns with the principles of decoherence and relational quantum mechanics.
 
-```bash
-cmake .. -DSEP_BUILD_TESTS=ON
-make -j$(nproc)
-ctest
-```
+-   **Prime Resonance and the Riemann Hypothesis**: The framework posits that the non-trivial zeros of the Riemann zeta function ($\zeta(s)$) correspond to the stable, resonant energy states of the informational manifold. The hypothesis that all such zeros lie on the critical line **Re(s) = 1/2** is interpreted as a fundamental condition for maximal informational coherence and stability. The half-value (1/2) represents the perfect balance point in the complex domain between chaos and order.
 
-Refer to `STRUCTURE.md` whenever you need a reminder of where things are.
+## 3. Computational Implementation: The SEP Engine
 
-## Building Cycles
+The SEP framework is realized in a C++ computational engine designed for high-performance simulation of these principles.
 
-SEP can optionally render through Blender's Cycles engine. Building it requires
-a number of external packages such as OpenVDB, OpenImageIO, OpenEXR/Imath,
-OpenSubdiv and OpenImageDenoise. The helper script
-`scripts/setup_cycles_env.sh` exports all required environment variables, builds
-OpenVDB and then configures Cycles with CMake. **Run this script in every new
-terminal session** before configuring the project so CMake can locate the Cycles
-headers and libraries. Failing to source it will lead to missing header errors
-during compilation.
+### 3.1 Architecture
 
-```bash
-source scripts/setup_cycles_env.sh
-```
+The engine is built on a modular, multi-tiered architecture with clear component boundaries:
+-   **`core`**: The foundational layer providing configuration, metrics, logging, and the core DAG for tracking pattern lineage.
+-   **`compat`**: A compatibility layer providing the CUDA backend and shims for GPU acceleration.
+-   **`quantum`**: The algorithmic core, containing the quantum-inspired algorithms for pattern evolution, including **Quantum Binary State Analysis (QBSA)** and the **Quantum Fourier Hierarchy (QFH)**.
+-   **`memory`**: A three-tiered memory manager (STM, MTM, LTM) for efficient handling of pattern data, with optional Redis persistence.
+-   **`api`**, **`blender`**, **`audio`**: Interfaces for external interaction, including an HTTP API server, a Blender integration for 3D visualization, and an audio processing pipeline.
 
-After sourcing, configure with `-DSEP_ENABLE_BLENDER=ON` to build the renderer.
+For a full breakdown, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
-The script defines variables including `OPENVDB_INCLUDE_DIR`,
-`OPENVDB_LIBRARY`, `OPENIMAGEIO_INCLUDE_DIR`, `OPENIMAGEIO_LIBRARY`,
-`OPENEXR_INCLUDE_DIR` and others. When no OpenShadingLanguage headers are found
-on the system it automatically clones and builds version `v1.13.12.0` under
-`/sep/extern/osl`. After executing it you can build Cycles from `/sep/cycles-build`:
+### 3.2 Quantum-Inspired Algorithms
 
+The engine uses novel algorithms to simulate the emergence of coherence:
+-   **Quantum Binary State Analysis (QBSA)**: Analyzes bitfields to detect misalignments and identify states requiring correction, guiding the system toward coherence.
+-   **Quantum Fourier Hierarchy (QFH)**: A multi-level transform that analyzes the relational structure of data to detect "ruptures" in coherence, signaling a state collapse.
+-   **Pattern Evolution**: Patterns evolve through a Hamiltonian-like process, where coupling strength is determined by resonance ratios, and stability is iteratively refined.
 
-## Diagram Sync Worker
+## 4. Applications and Future Directions
 
-The `diagram_sync_worker.py` script verifies that each module directory under `include/` and `src/` has a matching document in `docs/diagrams`.
-Run it from the repository root:
+The SEP framework is not just a model of physics but a scalable engine for general intelligence.
+
+### 4.1 Unifying Physics and Solving Foundational Problems
+By reframing physical laws as emergent informational processes, SEP offers a path toward unifying General Relativity and Quantum Mechanics. Its principles can be applied to long-standing problems in mathematics and computer science:
+-   **P vs NP**: The framework suggests that NP problems can be solved in polynomial time (P) if a system can efficiently explore a sufficient number of parallel informational paths, a capability inherent in the SEP's quantum-inspired design.
+-   **Navier-Stokes Existence and Smoothness**: The model's interpretation of fluid dynamics as the macroscopic behavior of a continuous, recursively smoothing field suggests that solutions must remain smooth and avoid finite-time singularities due to the inherent deflective nature of pairwise interactions.
+
+### 4.2 Roadmap
+The future development of the SEP Engine is focused on enhancing its capabilities as a self-organizing intelligence. The complete `sep_engine` is testable via the instructions in [GAMEPLAN.md](GAMEPLAN.md).
+1.  **Adaptive Reference Engine**: Develop real-time learning modules that allow the engine to refine its internal references and relationships dynamically.
+2.  **LLM Integration**: Create a continuous feedback loop with a Large Language Model (LLM) to enable interactive refinement and querying of the SEP's knowledge structure.
+3.  **Blender and Audio Integration**: Expand the creative and analytical potential by processing 3D mesh data and real-time audio streams, translating them into evolving quantum patterns.
+4.  **Quantum Hardware Migration**: Design a path to migrate the SEP algorithms to physical quantum hardware to leverage true quantum entanglement and superposition.
+
+## 5. Repository Structure
+
+.
+├── include/ # Public headers for all engine modules
+├── src/ # Source code for all modules (api, core, quantum, etc.)
+├── assets/ # Test data and shaders
+├── third_party/ # External libraries (Crow, nlohmann, etc.)
+├── extern/ # External submodules (e.g., Blender Cycles)
+├── tests/ # Unit and integration tests
+├── ARCHITECTURE.md # Detailed system architecture
+├── GAMEPLAN.md # Guide for testing and exploring the engine
+├── CYCLES_INTEGRATION.md # Steps for integrating Blender Cycles
+├── THESIS.md # The full theoretical thesis behind the framework
+└── README.md # This document
+
+### Runtime Dependencies
+
+The audio module uses PipeWire for real-time capture and analysis. A running
+PipeWire daemon and the `libpipewire-0.3` package are required at runtime. On
+Debian-based systems install it via:
 
 ```bash
-python _sep/testbed/diagram_sync_worker.py
+sudo apt install libpipewire-0.3-dev libfftw3-dev
 ```
 
-Add `--regen` to automatically create placeholder files for missing diagrams.
+Make sure the service is active (`systemctl --user status pipewire`) before
+executing `sep_engine` or the audio tests.
+
+---
+
+## PipeWire Runtime Dependencies
+
+The audio module uses PipeWire for capturing realtime audio. Make sure the
+`libpipewire-0.3` libraries and the PipeWire daemon are available on your
+system. On Debian-based distributions install them with:
+
+```bash
+sudo apt-get install pipewire pipewire-audio-client-libraries
+```
+
+After installation, confirm the daemon is running:
+
+```bash
+systemctl --user status pipewire
+```
+
+Audio initialization will fail if PipeWire is not active.
+
+This project represents an attempt to construct a first-principles, computationally-grounded theory of everything. It is a work in progress, but it offers a robust and testable foundation for exploring the deepest questions about our reality.
+
+## Installing Build Dependencies
+
+Run `install.sh` to fetch compiler toolchains and third-party libraries. The script also installs helpful debugging tools like **valgrind** and **gdb**.
+
+Additional development libraries used by the build system include
+`libgflags-dev`, `libgoogle-glog-dev` (or `libglog-dev` on some
+distributions) and the Boost headers.  These packages are installed
+automatically by `install.sh`.  If you prefer a manual setup run:
+
+```bash
+sudo apt-get update && sudo apt-get install libgflags-dev libgoogle-glog-dev libboost-dev
+```
+
+```bash
+./install.sh
+```
+
+Alternatively you can invoke the Python wrapper which exposes the same options:
+
+```bash
+python install_dependencies.py --minimal --no-cuda
+```
+
+Add `--no-cuda` if you do not need CUDA support. Use `--minimal` to install only the packages required for unit tests (skipping heavy rendering dependencies). Once installed, compile and execute the memory manager tests to validate the setup:
+
+```bash
+./build_no_cuda.sh
+```
+
+If CMake reports missing libraries such as **gflags**, **glog** or
+**Boost**, run the minimal setup script and use the helper build
+wrapper. This installs the required dependencies and builds only the
+unit test targets. As an alternative you can install these packages
+manually using your system package manager. For Debian-based
+distributions run:
+
+```bash
+sudo apt-get update
+sudo apt-get install libgflags-dev libgoogle-glog-dev libboost-dev
+```
+
+After the dependencies are available you can rebuild using:
+
+```bash
+./install.sh --minimal
+./build_no_cuda.sh
+```
+
+The script configures the project with optional dependencies disabled and
+executes the `memory_manager_tests` target automatically.
+
+If you prefer to invoke CMake manually, create a build directory and
+disable the heavyweight modules:
+
+```bash
+mkdir build && cd build
+cmake -DSEP_WITH_CYCLES=OFF -DSEP_WITH_AUDIO=OFF -DSEP_WITH_OPENSUBDIV=OFF \
+      -DSEP_MINIMAL=ON -DSEP_HAS_CUDA=OFF ..
+make memory_manager_tests
+./tests/memory/memory_manager_tests
+```
+
+This mirrors the configuration used by `build_no_cuda.sh` while giving
+you direct control over the build location.
+
+To quickly verify that the memory manager works correctly, run the helper script:
+
+```bash
+./scripts/run_memory_tests.sh
+```
+
+This compiles the minimal configuration and executes the `memory_manager_tests`
+target. A zero exit status indicates all tests pass.

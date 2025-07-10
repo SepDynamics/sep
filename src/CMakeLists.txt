@@ -46,19 +46,21 @@ endif()
 # endif()
 
 # Add the workbench executable if enabled
-add_subdirectory(workbench)
+if(SEP_BUILD_WORKBENCH)
+    add_subdirectory(workbench)
 
-add_executable(sep_workbench
-    workbench_main.cpp
-)
-set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
-target_include_directories(sep_workbench PRIVATE ${SEP_INCLUDE_DIRS})
-target_link_libraries(sep_workbench PRIVATE
-    sep_workbench_lib
-    sep_api sep_quantum sep_memory sep_core sep_compat
-    GLEW::GLEW
-    glfw
-    OpenGL::GL
-    Threads::Threads
-    ${CMAKE_DL_LIBS}
-)
+    add_executable(sep_workbench
+        workbench_main.cpp
+    )
+    set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
+    target_include_directories(sep_workbench PRIVATE ${SEP_INCLUDE_DIRS})
+    target_link_libraries(sep_workbench PRIVATE
+        sep_workbench_lib
+        sep_api sep_quantum sep_memory sep_core sep_compat
+        GLEW::GLEW
+        glfw
+        OpenGL::GL
+        Threads::Threads
+        ${CMAKE_DL_LIBS}
+    )
+endif()

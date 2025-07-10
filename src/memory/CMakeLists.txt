@@ -52,6 +52,15 @@ endif()
 
 find_package(Threads REQUIRED)
 find_package(TBB REQUIRED)
+set(TBB_LINK_TARGET "")
+if(TARGET TBB::tbb)
+    set(TBB_LINK_TARGET TBB::tbb)
+elseif(TBB_LIBRARY)
+    message(WARNING "TBB::tbb target not found; linking using TBB_LIBRARY")
+    add_library(TBB::tbb UNKNOWN IMPORTED)
+    set_target_properties(TBB::tbb PROPERTIES IMPORTED_LOCATION "${TBB_LIBRARY}")
+    set(TBB_LINK_TARGET TBB::tbb)
+endif()
 
 set_target_properties(sep_memory PROPERTIES
     POSITION_INDEPENDENT_CODE ON
@@ -68,7 +77,7 @@ target_link_libraries(sep_memory
     PRIVATE
         fmt::fmt
         Threads::Threads
-        TBB::tbb
+        ${TBB_LINK_TARGET}
 )
 if(HIREDIS_FOUND)
     target_link_libraries(sep_memory PRIVATE ${HIREDIS_LIB})

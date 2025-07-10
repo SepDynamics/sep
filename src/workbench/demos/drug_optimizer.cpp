@@ -1,4 +1,5 @@
 #include "drug_optimizer.hpp"
+#include "compat/glm_config.h"
 #include <glm/gtx/norm.hpp>
 #include <cstdlib>
 

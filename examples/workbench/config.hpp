@@ -7,10 +7,6 @@
 namespace sep {
 namespace workbench {
 
-struct CosmoConfig {
-    float box_size = 100.0f;
-    float time_step = 0.01f;
-};
 
 struct GenesisPatternConfig {
     struct InitialPattern {
@@ -55,6 +51,11 @@ struct GenesisPatternConfig {
 
 class Config {
 public:
+    struct CosmoConfig {
+        float box_size = 100.0f;
+        float time_step = 0.01f;
+    };
+
     static Config& getInstance() {
         static Config instance;
         return instance;

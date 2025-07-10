@@ -7,7 +7,6 @@
 #include "memory/types.h"
 
 using namespace sep;
-using namespace sep::pattern;
 using namespace sep::quantum;
 
 int main() {
@@ -31,8 +30,17 @@ int main() {
 
     for (int step = 0; step < 50; ++step) {
         for (auto &p : patterns) {
-            evolution::applyGravity(p, center, 0.02f);
-            evolution::randomPerturbation(p, 0.01f);
+            quantum::Pattern q;
+            q.id = p.id;
+            q.position = p.position;
+            q.momentum = glm::vec3(0.0f);
+            q.quantum_state.generation = p.generation;
+            q.quantum_state.state = quantum::QuantumState::Status::SUPERPOSITION;
+
+            evolution::applyGravity(q, center, 0.02f);
+            evolution::randomPerturbation(q, 0.01f);
+
+            p.position = q.position;
 
             if (glm::length(glm::vec3(p.position) - center) < 0.5f) {
                 p.coherence = std::min(1.0f, p.coherence + 0.05f);

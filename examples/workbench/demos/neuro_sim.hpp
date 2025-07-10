@@ -39,9 +39,9 @@ namespace sep
 
             // Memory manager type depends on demo mode
 #ifdef SEP_WORKBENCH_DEMO
-            std::unique_ptr<sep::MemoryTierManager> memory_manager_;  // In demo mode
+            std::unique_ptr<sep::MemoryTierManager> memory_manager_;
 #else
-            std::unique_ptr<sep::memory::MemoryTierManager> memory_manager_;  // In non-demo mode
+            sep::memory::MemoryTierManager* memory_manager_ = nullptr;
 #endif
 
             std::vector<Neuron> neurons_;

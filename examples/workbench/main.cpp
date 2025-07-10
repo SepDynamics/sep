@@ -1,14 +1,22 @@
+// System includes
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "audio_visualizer.hpp"
+// ImGui includes
+#include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+
+// SEP Engine includes (need to be first due to Pattern definition)
+#include "sep_engine_wrapper.h"
+#include "cycles_renderer_adapter.h"
+
+// Demo manager and demos
 #include "demos/demo_manager.hpp"
 #include "demos/digital_physics_demo.hpp"
 #include "demos/genesis_pattern.hpp"
 #include "demos/memory_garden.hpp"
-#include "imgui.h"
+#include "audio_visualizer.hpp"
 
 int main()
 {
@@ -39,7 +47,17 @@ int main()
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init();
 
+    // Create our SEP engine and renderer
+    auto engine = sep::createEngine();
+    auto renderer = std::make_unique<sep::workbench::Renderer>();
+    renderer->init(1280, 720);
+    
+    // Create the adapter to make our Renderer work with the CyclesRenderer interface
+    auto cycles_adapter = std::make_unique<sep::workbench::CyclesRendererAdapter>(renderer.get());
+    
+    // Initialize the demo manager
     auto& manager = sep::workbench::DemoManager::getInstance();
+    manager.initialize(engine.get(), cycles_adapter.get());
     manager.registerDemo("genesis",
                          [] { return std::make_unique<sep::workbench::GenesisPatternDemo>(); });
     manager.registerDemo("digital",

@@ -20,12 +20,20 @@ namespace sep
         {
         public:
             virtual ~Demo() = default;
+            void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+                engine_ = engine;
+                renderer_ = renderer;
+            }
             virtual void on_load() = 0;
             virtual void on_unload() = 0;
             virtual void on_update(float dt) = 0;
             virtual void on_render() = 0;
             virtual void on_key_press(int key) = 0;
             virtual void on_mouse(int x, int y, int button) = 0;
+        
+        protected:
+            sep::Engine* engine_ = nullptr;
+            sep::CyclesRenderer* renderer_ = nullptr;
         };
 
         // Adapter class to connect our GenesisPatternDemo to the demo system

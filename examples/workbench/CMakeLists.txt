@@ -36,7 +36,7 @@ target_compile_definitions(sep_workbench PRIVATE GLM_ENABLE_EXPERIMENTAL)
 # Link libraries
 target_link_libraries(sep_workbench PRIVATE
     # Graphics and UI
-    ${GLEW_LIBRARIES}
+    GLEW::GLEW
     glfw
     OpenGL::GL
 

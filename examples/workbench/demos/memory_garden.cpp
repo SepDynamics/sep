@@ -1,6 +1,8 @@
 #include "memory_garden.hpp"
+
 #include <config.hpp>
 #include <glm/vec3.hpp>
+
 #include "memory/memory_tier_manager.hpp"
 #include "memory/quantum_coherence_manager.h"
 
@@ -9,11 +11,11 @@ namespace workbench {
 
 void MemoryGardenDemo::on_load() {
     const auto& cfg = Config::getInstance().memory_garden();
-    
-    // Initialize memory tier manager
-    memory_manager_ = std::make_unique<MemoryTierManager>();
-    coherence_manager_ = std::make_unique<QuantumCoherenceManager>();
-    
+
+    memory_manager_ = &sep::memory::MemoryTierManager::getInstance();
+    sep::memory::QuantumCoherenceManager::Config qc_cfg;  // Or load from workbench config
+    coherence_manager_ = std::make_unique<sep::memory::QuantumCoherenceManager>(qc_cfg);
+
     // Configure tier radii
     stm_radius_ = cfg.layout.stm_radius;
     mtm_radius_ = cfg.layout.mtm_radius;
@@ -90,25 +92,13 @@ void MemoryGardenDemo::updateRelationships() {
 
 void MemoryGardenDemo::on_render() {
     if (!renderer_) return;
-    
+
     // Render tier boundaries
-    renderer_->setColorMode("coherence");
-    renderer_->setEmissionMode("stability");
-    
+
     // Render patterns
     std::vector<glm::vec3> points;
     for (const auto& node : nodes_) {
         points.push_back(node.position);
-    }
-    renderer_->renderPatternState(points);
-    
-    // Render relationships
-    if (show_connections_) {
-        for (const auto& rel : relationships_) {
-            const auto& start = nodes_[rel.from].position;
-            const auto& end = nodes_[rel.to].position;
-            renderer_->renderConnection(start, end, rel.strength * connection_opacity_);
-        }
     }
 }
 

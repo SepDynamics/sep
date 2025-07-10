@@ -2,12 +2,17 @@
 
 #include <string>
 #include <vector>
-#include "pattern.hpp" // For workbench::Pattern 
+#include <glm/glm.hpp>
+#include "pattern.hpp" // For workbench::Pattern
+
+// Define a sentinel to avoid including this file when the real Pattern is already defined
+#ifndef SEP_QUANTUM_PATTERN_ALREADY_DEFINED
+#define SEP_QUANTUM_PATTERN_ALREADY_DEFINED
 
 namespace sep {
 namespace quantum {
 
-// Implementation of the quantum::Pattern class to fix the incomplete type errors
+// Simplified Pattern implementation for workbench compatibility
 class Pattern {
 public:
     struct QuantumState {
@@ -18,6 +23,16 @@ public:
 
     std::string id;
     QuantumState quantum_state;
+    
+    // Compatibility with quantum/types.h Pattern structure
+    glm::vec4 position;
+    std::vector<float> data;
+};
+
+} // namespace quantum
+} // namespace sep
+
+#endif // SEP_QUANTUM_PATTERN_ALREADY_DEFINED
     std::vector<float> values;
 
     // Conversion from workbench::Pattern

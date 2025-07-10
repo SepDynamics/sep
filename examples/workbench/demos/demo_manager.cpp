@@ -3,12 +3,6 @@
 namespace sep {
 namespace workbench {
 
-    void Demo::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer)
-    {
-        engine_ = engine;
-        renderer_ = renderer;
-    }
-
 void DemoManager::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
     engine_ = engine;
     renderer_ = renderer;

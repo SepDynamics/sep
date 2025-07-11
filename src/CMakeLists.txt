@@ -55,12 +55,28 @@ if(SEP_BUILD_WORKBENCH)
     target_link_libraries(sep_workbench PRIVATE
         sep_workbench_lib
         sep_api sep_quantum sep_memory sep_core sep_compat
+        sep_audio
+        libsep_blender.so
         imgui
         ${GLEW_LIBRARIES}
         glfw
         OpenGL::GL
-        imgui
         Threads::Threads
         ${CMAKE_DL_LIBS}
+        ${PIPEWIRE_LIBRARIES}
+        ${FFTW_LIBRARIES}
+        
+        # Cycles/Blender transitive dependencies
+        cycles_device
+        cycles_kernel
+        cycles_scene
+        cycles_util
+        ${OSL_LIBRARIES}
+        ${TBB_LIBRARIES}
+        ${OpenImageIO_LIBRARIES}
+        ${Alembic_LIBRARIES}
+        ${OpenPGL_LIBRARIES}
+        ${CURL_LIBRARIES}
+        -lhiredis
     )
 endif()

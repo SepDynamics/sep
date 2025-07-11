@@ -8,9 +8,12 @@
 namespace sep {
 namespace workbench {
 
-void CosmoDemo::on_load() {
-    initParticles();
-}
+    void CosmoDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
+        engine_ = engine;
+        renderer_ = renderer;
+        initParticles();
+    }
 
 void CosmoDemo::initParticles() {
     particles_.clear();
@@ -76,6 +79,18 @@ void CosmoDemo::on_key_press(int key)
     if (key == 'r') {
         initParticles();
     }
+}
+
+void CosmoDemo::on_ui_render()
+{
+    ImGui::Begin("Cosmo Demo Controls");
+    ImGui::SliderFloat("Box Size", &box_size_, 10.0f, 100.0f);
+    ImGui::SliderFloat("Time Step", &time_step_, 0.001f, 0.05f);
+    if (ImGui::Button("Reset Particles"))
+    {
+        initParticles();
+    }
+    ImGui::End();
 }
 
 void CosmoDemo::on_mouse(int, int, int) {}

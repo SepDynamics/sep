@@ -9,22 +9,25 @@
 namespace sep {
 namespace workbench {
 
-void DigitalPhysicsDemo::on_load() {
-    const auto& cfg = Config::getInstance().digital_physics();
-    width_ = static_cast<std::size_t>(cfg.grid.width);
-    height_ = static_cast<std::size_t>(cfg.grid.height);
-    birth_rules_ = cfg.rules.birth;
-    survival_rules_ = cfg.rules.survival;
+    void DigitalPhysicsDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
+        const auto& cfg = Config::getInstance().digital_physics();
+        width_ = static_cast<std::size_t>(cfg.grid.width);
+        height_ = static_cast<std::size_t>(cfg.grid.height);
+        birth_rules_ = cfg.rules.birth;
+        survival_rules_ = cfg.rules.survival;
 
-    grid_.resize(width_ * height_);
-    for (std::size_t y = 0; y < height_; ++y) {
-        for (std::size_t x = 0; x < width_; ++x) {
-            auto& cell = grid_[index(x, y)];
-            cell.position = glm::vec4(static_cast<float>(x), 0.f, static_cast<float>(y), 1.f);
-            cell.attributes.x = static_cast<float>(std::rand() % 2);
+        grid_.resize(width_ * height_);
+        for (std::size_t y = 0; y < height_; ++y)
+        {
+            for (std::size_t x = 0; x < width_; ++x)
+            {
+                auto& cell = grid_[index(x, y)];
+                cell.position = glm::vec4(static_cast<float>(x), 0.f, static_cast<float>(y), 1.f);
+                cell.attributes.x = static_cast<float>(std::rand() % 2);
+            }
         }
     }
-}
 
 void DigitalPhysicsDemo::on_update(float) {
     std::vector<pattern::PatternData> next = grid_;
@@ -71,8 +74,17 @@ void DigitalPhysicsDemo::on_render() {
     renderer_->renderPatternState(points);
 }
 
-void DigitalPhysicsDemo::on_unload() {
-    grid_.clear();
+void DigitalPhysicsDemo::on_unload() { grid_.clear(); }
+
+void DigitalPhysicsDemo::on_ui_render()
+{
+    ImGui::Begin("Neural Simulation Controls");
+    ImGui::SliderFloat("Threshold", &threshold_, 0.1f, 2.0f);
+    ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
+    ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
+    ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
+    ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+    ImGui::End();
 }
 
 void DigitalPhysicsDemo::on_key_press(int key) {

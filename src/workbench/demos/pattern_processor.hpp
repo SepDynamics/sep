@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../../workbench_demo_adapter.hpp"
+#include "imgui.h"
 
 namespace sep {
 class Engine;

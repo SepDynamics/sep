@@ -9,7 +9,8 @@
 namespace sep {
 namespace workbench {
 
-void DrugDiscoveryDemo::on_load() {
+    void DrugDiscoveryDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
 #ifdef SEP_WORKBENCH_DEMO
     // Default parameters for demo mode
     iterations_ = 10;
@@ -28,7 +29,7 @@ void DrugDiscoveryDemo::on_load() {
         p.binding_affinity = 0.0f;
         poses_.push_back(p);
     }
-}
+    }
 
 void DrugDiscoveryDemo::optimizePoses() {
     for (int it = 0; it < iterations_; ++it) {
@@ -73,8 +74,17 @@ void DrugDiscoveryDemo::on_render() {
 #endif
 }
 
-void DrugDiscoveryDemo::on_unload() {
-    poses_.clear();
+void DrugDiscoveryDemo::on_unload() { poses_.clear(); }
+
+void DrugDiscoveryDemo::on_ui_render()
+{
+    ImGui::Begin("Neural Simulation Controls");
+    ImGui::SliderFloat("Threshold", &threshold_, 0.1f, 2.0f);
+    ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
+    ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
+    ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
+    ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+    ImGui::End();
 }
 
 void DrugDiscoveryDemo::on_key_press(int key) { (void)key; }

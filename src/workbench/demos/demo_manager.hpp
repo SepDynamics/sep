@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include "../../workbench_demo_adapter.hpp"
+#include "imgui.h"
 #include "sep_engine_wrapper.h"
 
 namespace sep
@@ -33,6 +34,7 @@ namespace sep
             bool switchToDemo(const std::string& name);
             void on_update(float dt);
             void on_render();
+            void on_ui_render();
             void on_unload();
             void on_key(int key);
 

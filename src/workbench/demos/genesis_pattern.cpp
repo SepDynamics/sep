@@ -7,11 +7,15 @@
 #include "memory/quantum_coherence_manager.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
+#include "imgui.h"
 
 namespace sep {
 namespace workbench {
 
-void GenesisPatternDemo::on_load() {
+void GenesisPatternDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+    engine_ = engine;
+    renderer_ = renderer;
+    
     const auto& config = Config::getInstance();
     const auto& genesis_config = config.genesis_pattern();
 
@@ -95,6 +99,34 @@ void GenesisPatternDemo::updateVisualization() {
 
 void GenesisPatternDemo::on_render() {
     // Additional rendering handled by Cycles renderer
+}
+
+void GenesisPatternDemo::on_ui_render() {
+    // Draw ImGui controls for the demo
+    ImGui::Begin("Genesis Pattern Controls");
+    
+    ImGui::Text("Pattern Count: %zu", metrics_.pattern_count);
+    ImGui::Text("Global Coherence: %.3f", metrics_.coherence);
+    ImGui::Text("Iterations: %zu", metrics_.iterations);
+    
+    ImGui::Separator();
+    
+    ImGui::Checkbox("Auto Evolve", &auto_evolve_);
+    ImGui::SliderFloat("Evolution Rate", &evolution_rate_, 0.01f, 1.0f);
+    ImGui::SliderFloat("Coherence Threshold", &coherence_threshold_, 0.1f, 0.9f);
+    
+    ImGui::Separator();
+    
+    ImGui::Checkbox("Wireframe", &view_.wireframe);
+    ImGui::SliderFloat("Rotation", &view_.rotation, 0.0f, 360.0f);
+    ImGui::SliderFloat("Zoom", &view_.zoom, 0.1f, 5.0f);
+    
+    if (ImGui::Button("Reset View")) {
+        view_.rotation = 0.0f;
+        view_.zoom = 1.0f;
+    }
+    
+    ImGui::End();
 }
 
 void GenesisPatternDemo::on_unload() {

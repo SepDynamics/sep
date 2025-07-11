@@ -33,7 +33,7 @@ namespace sep
 
         GenesisPatternAdapter::~GenesisPatternAdapter() = default;
 
-        void GenesisPatternAdapter::on_load()
+        void GenesisPatternAdapter::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
         {
             std::cout << "Initializing Genesis Pattern Demo..." << std::endl;
 

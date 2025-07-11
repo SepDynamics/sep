@@ -9,19 +9,23 @@
 namespace sep {
 namespace workbench {
 
-void AnnealingDemo::on_load() {
-    // Use hardcoded values for all demos to avoid configuration issues
-    temperature_ = 1.0f;
-    cooling_rate_ = 0.99f;
-    int count = 10;
-    particles_.resize(count);
-    for (auto& p : particles_) {
-        p.position = glm::vec3(static_cast<float>(std::rand()) / RAND_MAX,
-                               static_cast<float>(std::rand()) / RAND_MAX,
-                               static_cast<float>(std::rand()) / RAND_MAX);
-        p.velocity = glm::vec3(0.0f);
+    void AnnealingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
+        engine_ = engine;
+        renderer_ = renderer;
+        // Use hardcoded values for all demos to avoid configuration issues
+        temperature_ = 1.0f;
+        cooling_rate_ = 0.99f;
+        int count = 10;
+        particles_.resize(count);
+        for (auto& p : particles_)
+        {
+            p.position = glm::vec3(static_cast<float>(std::rand()) / RAND_MAX,
+                                   static_cast<float>(std::rand()) / RAND_MAX,
+                                   static_cast<float>(std::rand()) / RAND_MAX);
+            p.velocity = glm::vec3(0.0f);
+        }
     }
-}
 
 void AnnealingDemo::on_update(float dt) {
     if (paused_) return;
@@ -64,6 +68,15 @@ void AnnealingDemo::on_key_press(int key) {
     if (key == 'p') {
         paused_ = !paused_;
     }
+}
+
+void AnnealingDemo::on_ui_render()
+{
+    ImGui::Begin("Annealing Demo Controls");
+    ImGui::SliderFloat("Temperature", &temperature_, 0.01f, 2.0f);
+    ImGui::SliderFloat("Cooling Rate", &cooling_rate_, 0.9f, 0.999f);
+    ImGui::Checkbox("Paused", &paused_);
+    ImGui::End();
 }
 
 void AnnealingDemo::on_mouse(int, int, int) {}

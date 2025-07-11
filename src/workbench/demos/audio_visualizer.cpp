@@ -12,7 +12,9 @@ namespace workbench {
 
 using namespace sep::audio;
 
-void AudioVisualizerDemo::on_load() {
+void AudioVisualizerDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+    engine_ = engine;
+    renderer_ = renderer;
     const auto& cfg = Config::getInstance().audio_visualizer();
 
 #ifdef SEP_HAS_AUDIO
@@ -147,6 +149,57 @@ void AudioVisualizerDemo::on_key_press(int key) {
             break;
     }
 }
+void AudioVisualizerDemo::on_ui_render() {
+    ImGui::Begin("Audio Visualizer Controls");
+    
+    // Pattern mapping controls
+    ImGui::Text("Pattern Mapping Parameters");
+    ImGui::SliderFloat("Frequency Scale", &pattern_mapping_.frequency_scale, 0.1f, 2.0f);
+    ImGui::SliderFloat("Amplitude Scale", &pattern_mapping_.amplitude_scale, 0.1f, 2.0f);
+    ImGui::SliderFloat("Evolution Sensitivity", &pattern_mapping_.evolution_sensitivity, 0.1f, 1.0f);
+    
+    if (ImGui::Button("Reset to Defaults")) {
+        pattern_mapping_.frequency_scale = 0.5f;
+        pattern_mapping_.amplitude_scale = 1.0f;
+        pattern_mapping_.evolution_sensitivity = 0.75f;
+    }
+    
+    // Display pattern statistics
+    ImGui::Separator();
+    ImGui::Text("Pattern Statistics");
+    ImGui::Text("Number of patterns: %zu", latest_patterns_.size());
+    
+    // Audio status
+#ifdef SEP_HAS_AUDIO
+    ImGui::Separator();
+    ImGui::Text("Audio Capture Status: %s", capture_ ? "Available" : "Not Available");
+    
+    if (capture_) {
+        if (ImGui::Button("Toggle Audio Capture")) {
+            static bool is_running = false;
+            if (is_running) {
+                capture_->stop();
+                is_running = false;
+            } else {
+                capture_->start();
+                is_running = true;
+            }
+        }
+        
+        // Display audio metrics if available
+        auto metrics = capture_->getMetrics();
+        ImGui::Text("Peak Level: %.2f", metrics.peak_level);
+        ImGui::Text("RMS Level: %.2f", metrics.rms_level);
+        ImGui::Text("Latency: %.1f ms", metrics.latency_ms);
+        ImGui::Text("Xruns: %d", metrics.xruns);
+        ImGui::Text("Total Samples: %lu", metrics.total_samples);
+        ImGui::Text("Dropped Samples: %lu", metrics.dropped_samples);
+    }
+#endif
+
+    ImGui::End();
+}
+
 void AudioVisualizerDemo::on_mouse(int, int, int) {}
 
 } // namespace workbench

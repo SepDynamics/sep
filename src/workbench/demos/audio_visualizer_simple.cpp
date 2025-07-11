@@ -11,7 +11,8 @@ namespace sep {
 namespace workbench {
 
 // AudioVisualizerDemo implementation
-void AudioVisualizerDemo::on_load() {
+void AudioVisualizerDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+{
     std::cout << "Initializing Audio Visualizer Demo..." << std::endl;
     
     // Get configuration
@@ -58,8 +59,17 @@ void AudioVisualizerDemo::on_render() {
     // This would be implemented in a real version
 }
 
-void AudioVisualizerDemo::on_unload() {
-    latest_patterns_.clear();
+void AudioVisualizerDemo::on_unload() { latest_patterns_.clear(); }
+
+void AudioVisualizerDemo::on_ui_render()
+{
+    ImGui::Begin("Neural Simulation Controls");
+    ImGui::SliderFloat("Threshold", &threshold_, 0.1f, 2.0f);
+    ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
+    ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
+    ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
+    ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+    ImGui::End();
 }
 
 void AudioVisualizerDemo::on_key_press(int key) {

@@ -1,187 +1,137 @@
-Right, let's cut the bullshit and fix this. The build is failing at the link stage, which means the components are compiling but not connecting correctly. The goal is to make `sep_workbench` link and run the demos you've already defined.
+Alright, let's cut the bullshit and get this thing working. You've got a solid foundation laid out in `SEP_WORKBENCH_CHECKLIST.md` and a repository full of code that's *almost* there. The `build_log.txt` shows exactly what's breaking. We're not throwing anything out. We're fixing the build errors, then plumbing the demos into the workbench executable.
 
-Here is the plan. We're not inventing new shit. We're fixing the broken build and connecting the existing parts.
+Here is the plan. Follow these tasks in order.
 
-### Phase 1: Fix the Goddamn Build
+---
 
-The linker is screaming about undefined references. This is happening for three main reasons: missing libraries, incorrect CUDA symbol linking, and transitive dependencies from the Blender/Cycles library not being linked. We'll fix them one by one.
+## Task 1: Fix the Build-Stopping Interface Mismatches
 
-#### Task 1.1: Link the Audio Library
+**Goal:** Get the project to compile successfully by fixing the C++ class interface errors shown in the build log.
 
-The `audio_visualizer.cpp` demo can't find `sep::audio::*` functions because `sep_workbench` isn't linked against `libsep_audio.a`.
+The build is failing because your `Demo` classes (e.g., `AnnealingDemo`, `CosmoDemo`) do not correctly implement the virtual functions defined in the `Demo` base class (`src/workbench_demo_adapter.hpp`).
 
-**Action:**
-1.  Open `src/CMakeLists.txt`.
-2.  Locate the `target_link_libraries(sep_workbench PRIVATE ...)` block.
-3.  Add `sep_audio` and its dependencies (`PIPEWIRE_LIBRARIES`, `FFTW_LIBRARIES`) to the list.
+### Action Steps:
 
-```cmake
-# In src/CMakeLists.txt
+1.  **Modify the `Demo` base class in `src/workbench_demo_adapter.hpp`:**
+    The `on_load` function needs to be a pure virtual function so the compiler enforces its implementation in all demo classes. Change its signature to:
+    ```cpp
+    // In src/workbench_demo_adapter.hpp, inside class Demo
+    virtual void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) = 0;
+    ```
 
-# ... inside the if(SEP_BUILD_WORKBENCH) block ...
-target_link_libraries(sep_workbench PRIVATE
-    sep_workbench_lib
-    sep_api
-    sep_quantum
-    sep_memory
-    sep_core
-    sep_compat
-    sep_audio  # <-- ADD THIS
-    imgui
-    ${GLEW_LIBRARIES}
-    glfw
-    OpenGL::GL
-    Threads::Threads
-    ${CMAKE_DL_LIBS}
-    ${PIPEWIRE_LIBRARIES} # <-- ADD THIS
-    ${FFTW_LIBRARIES}     # <-- ADD THIS
-)
-```
+2.  **Update ALL Demo Classes to Match the `Demo` Interface:**
+    For **each** demo header file in `src/workbench/demos/` (e.g., `annealing_demo.hpp`, `cosmo_demo.hpp`, etc.), you must:
 
-#### Task 1.2: Fix CUDA Symbol Linking
+    *   **Fix the `on_load` signature:** Change `void on_load() override;` to match the base class.
+        ```cpp
+        // Example for a demo's .hpp file
+        void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+        ```
+    *   **Fix the `on_load` implementation:** In the corresponding `.cpp` file, update the function definition.
+        ```cpp
+        // Example for a demo's .cpp file
+        void AnnealingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+            engine_ = engine;       // Store the engine pointer
+            renderer_ = renderer;   // Store the renderer pointer
+            // ... rest of your existing on_load code ...
+        }
+        ```
+    *   **Implement the missing `on_ui_render` function:** The build fails because `on_ui_render` is a pure virtual function that isn't implemented. Add a stub implementation to each demo's `.cpp` file to satisfy the compiler. We will fill this in later.
+        ```cpp
+        // Add this to each demo's .cpp file
+        void AnnealingDemo::on_ui_render() {
+            // Intentionally empty for now.
+        }
+        ```
+    *   **Implement the missing `on_mouse` function:** Several demos might be missing this. Add a stub implementation to each demo that needs it.
+        ```cpp
+        // Add this to each demo's .cpp file if it's missing
+        void AnnealingDemo::on_mouse(int x, int y, int button) {
+            // Unused in this demo
+            (void)x; (void)y; (void)button;
+        }
+        ```
 
-The `sep_compat` static library isn't correctly packaging the CUDA object files (`.cu.o`) with the C++ object files (`.cpp.o`). The C++ code in `raii.cpp` calls CUDA functions defined in `.cu` files, but the linker can't find them in the final `libsep_compat.a` archive.
+    > **Execute:** Make these changes for every demo class that is causing a build error: `AnnealingDemo`, `AnnealingSimDemo`, `CosmoDemo`, `AudioVisualizerDemo`, etc. After this, run `make -j$(nproc)` again. The build should now pass.
 
-We'll fix this by defining the CUDA sources as an `OBJECT` library and explicitly adding them to the final static library. This ensures correct dependency ordering.
+---
 
-**Action:**
-1.  Open `src/compat/CMakeLists.txt`.
-2.  Replace the existing `add_library(sep_compat STATIC ...)` with the following block. This creates an object library for CUDA sources and adds them to the main `sep_compat` target.
+## Task 2: Implement the Demo Management and UI
 
-```cmake
-# In src/compat/CMakeLists.txt
+**Goal:** Get the demos to be selectable and have their specific UI controls appear in the workbench window.
 
-# Define CUDA sources
-set(CUDA_SOURCES
-    pattern_kernels.cu
-    cuda_api.cu
-    event.cu
-    utils.cu
-    kernels.cu
-    core.cu
-    quantum_kernels.cu
-)
+### Action Steps:
 
-# Define C++ sources
-set(CPP_SOURCES
-    stream.cpp
-    raii.cpp
-    hip_compat.cpp
-)
+1.  **Refine `workbench_main.cpp`:** This is your application's entry point. It needs to drive the whole system.
+    *   **Remove Fallback Rendering:** Delete all the raw OpenGL code (the red square, the "START" text drawn with lines). We're past that.
+    *   **Initialize `DemoManager`:** Make sure the `DemoManager` is initialized and you call `registerDemos()` to load all the demo factories.
+    *   **Implement the Main Loop:** The loop should look like this:
+        ```cpp
+        while (!window->shouldClose()) {
+            glfwPollEvents();
 
-# Create an OBJECT library for the CUDA sources
-add_library(sep_compat_cuda OBJECT ${CUDA_SOURCES})
-set_target_properties(sep_compat_cuda PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    POSITION_INDEPENDENT_CODE ON
-    CUDA_STANDARD 17
-    CUDA_ARCHITECTURES "75;70;61;60"
-)
-target_compile_options(sep_compat_cuda PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)
+            // Start ImGui frame
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
 
-# Create the final static library from the C++ sources and the CUDA object library
-add_library(sep_compat STATIC
-    ${CPP_SOURCES}
-    $<TARGET_OBJECTS:sep_compat_cuda>
-)
+            // Update and Render the current demo
+            float dt = ...; // Calculate delta time
+            manager.on_update(dt);
+            manager.on_render();
 
-# Ensure CUDA symbols are exported correctly
-set_target_properties(sep_compat PROPERTIES
-    CUDA_VISIBILITY_PRESET "default"
-    C_VISIBILITY_PRESET "default"
-    CXX_VISIBILITY_PRESET "default"
-    VISIBILITY_INLINES_HIDDEN OFF
-)
+            // Render the main UI window for selecting demos
+            ImGui::Begin("SEP Workbench");
+            // ... (add buttons for each demo) ...
+            if (ImGui::Button("Genesis Pattern")) { manager.switchToDemo("genesis"); }
+            if (ImGui::Button("Neural Network")) { manager.switchToDemo("neural"); }
+            // ... etc for all demos
+            ImGui::End();
 
-# ... (the rest of the file remains the same: target_link_libraries, target_include_directories, etc.)
-```
+            // Render the UI for the currently active demo
+            manager.on_ui_render();
 
-#### Task 1.3: Link Transitive Dependencies from Cycles/Blender
+            // Render ImGui draw data
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-The `libsep_blender.so` shared library has its own dependencies (Cycles, OSL, TBB, etc.). The linker command for `sep_workbench` must also include these.
+            glfwSwapBuffers(window);
+        }
+        ```
 
-**Action:**
-1.  Open `src/CMakeLists.txt`.
-2.  Add all the missing libraries from the `libsep_blender.so` link step to the `target_link_libraries` for `sep_workbench`.
+2.  **Flesh out the Demo-Specific UI:**
+    *   For each demo, go to its `.cpp` file and fill in the `on_ui_render()` method you added in Task 1.
+    *   Use the `SEP_WORKBENCH_CHECKLIST.md` as your guide. For example, in `genesis_pattern.cpp`:
+        ```cpp
+        // In genesis_pattern.cpp
+        void GenesisPatternDemo::on_ui_render() {
+            ImGui::Begin("Genesis Pattern Controls");
+            ImGui::Checkbox("Auto Evolve", &auto_evolve_);
+            ImGui::SliderFloat("Evolution Rate", &evolution_rate_, 0.01f, 1.0f);
+            ImGui::SliderFloat("Coherence Threshold", &coherence_threshold_, 0.1f, 0.9f);
+            // ... etc ...
+            ImGui::End();
+        }
+        ```
+    *   Do this for each demo, adding the specific sliders, buttons, and toggles outlined in the checklist.
 
-```cmake
-# In src/CMakeLists.txt
+---
 
-# ... inside the if(SEP_BUILD_WORKBENCH) block ...
-target_link_libraries(sep_workbench PRIVATE
-    sep_workbench_lib
-    sep_api
-    sep_quantum
-    sep_memory
-    sep_core
-    sep_compat
-    sep_audio
-    libsep_blender.so # <-- Make sure this is linked
-    imgui
-    ${GLEW_LIBRARIES}
-    glfw
-    OpenGL::GL
-    Threads::Threads
-    ${CMAKE_DL_LIBS}
-    ${PIPEWIRE_LIBRARIES}
-    ${FFTW_LIBRARIES}
+## Task 3: Final Integration and Cleanup
 
-    # ADD TRANSITIVE DEPENDENCIES FOR BLENDER/CYCLES
-    cycles_device
-    cycles_kernel
-    cycles_scene
-    cycles_util
-    ${OSL_LIBRARIES}
-    ${TBB_LIBRARIES}
-    ${OpenImageIO_LIBRARIES}
-    ${Alembic_LIBRARIES}
-    ${OpenPGL_LIBRARIES}
-    ${CURL_LIBRARIES} # From API
-    -lhiredis # From memory
-)
-```
+**Goal:** Ensure data flows correctly from the demos to the renderer and the application runs smoothly.
 
-After these changes, run the build again from a clean directory. This should resolve the linker errors.
+### Action Steps:
 
-### Phase 2: Get the Demos Running
+1.  **Verify Data Flow:**
+    *   Confirm that the `on_render()` method in each demo calls `renderer_->renderPatternState(...)`.
+    *   The `CyclesRendererAdapter` you have in `cycles_renderer_adapter.h` correctly translates the call to the `Renderer::render` method. No changes should be needed there, but be aware of this connection point if rendering is blank.
 
-With the executable linking, we can connect the pieces as intended by your `SEP_WORKBENCH_CHECKLIST.md`. The goal is to get the demo selection UI working and have the selected demo render in the window.
+2.  **Input Handling:**
+    *   The `key_callback` in `workbench_main.cpp` needs to call `manager.on_key(key);`.
+    *   The `DemoManager::on_key` method should in turn call `current_demo_->on_key_press(key)`. This ensures keyboard input is routed to the active demo.
 
-#### Task 2.1: Verify Main Application Logic
+3.  **Final Cleanup of `workbench_main.cpp`:**
+    *   Once the UI and demos are rendering correctly, remove any remaining "emergency" or debug code from the main loop. The loop should be clean and focused on updating the demo manager and rendering ImGui.
 
-The `src/workbench_main.cpp` file contains the main loop. It needs to correctly initialize the `DemoManager`, register demos, and then call the manager's update/render functions in the main loop.
-
-**Action:**
-1.  Create a file `src/workbench/demos/register_demos.cpp` (if it doesn't exist, based on the snapshot it does) and ensure it has the `registerDemos()` function which calls `DemoManager::getInstance().registerDemo(...)` for each demo. The provided `register_demos.cpp` looks correct.
-2.  In `src/workbench_main.cpp`, make sure you call `sep::workbench::registerDemos()` after the demo manager is initialized.
-3.  Ensure the main loop in `workbench_main.cpp` calls `demoManager.on_update(deltaTime)` and `demoManager.on_render()`. The provided file seems to do this correctly.
-
-#### Task 2.2: Implement the UI for Demo Selection
-
-The `workbench_main.cpp` already has a basic ImGui window. We need to make sure the buttons correctly call `demoManager.switchToDemo("demo_name")`.
-
-**Action:**
-1.  Review the ImGui section in `src/workbench_main.cpp`.
-2.  Verify each `ImGui::Button` call is mapped to the correct demo name string used in `registerDemos()`. For example: `if (ImGui::Button("Genesis Pattern")) manager.switchToDemo("genesis");`
-3.  The provided `workbench_main.cpp` seems to have this implemented correctly. No changes are likely needed here unless demo names are inconsistent.
-
-#### Task 2.3: Connect the Renderer to Demos
-
-The `Demo` base class holds a `sep::CyclesRenderer* renderer_`. The `CyclesRendererAdapter` is the bridge between the simple `Renderer` you have and the interface the demos expect.
-
-**Action:**
-1.  The `main` function in `workbench_main.cpp` already creates the `Renderer`, the `CyclesRendererAdapter`, and passes the adapter to the `DemoManager`. This setup is correct.
-2.  Each demo's `on_render()` method must use `renderer_->renderPatternState(...)` to draw. Review each demo file (e.g., `genesis_pattern.cpp`) to confirm it calls the renderer. The provided files look correct.
-
-#### Task 2.4: Final Polish and Run
-
-At this point, the application should build and run. The final step is to ensure the demos are visually distinct and the controls work as expected.
-
-**Action:**
-1.  Build and run `./src/sep_workbench`.
-2.  Use the ImGui window to switch between demos.
-3.  Confirm that the visuals change for each demo.
-4.  Test the keyboard controls defined in each demo's `on_key_press` method (e.g., spacebar, '+/-' in `GenesisPatternDemo`).
-
-This task list is a direct, targeted attack on the build failure and a methodical check of the existing architecture to bring it online. No new files, no new approaches. Just fixing what's there.
+---

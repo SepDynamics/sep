@@ -20,9 +20,13 @@ project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 include(CTest)
 enable_testing()
 
-# Options to control optional modules. These allow building a minimal engine
-# without the heavyweight integrations.
-option(SEP_WITH_CYCLES "Enable Blender Cycles integration" OFF)
+# Required components - these are no longer optional
+set(SEP_WITH_CYCLES ON CACHE BOOL "Blender Cycles integration (required)" FORCE)
+set(SEP_WITH_BLENDER ON CACHE BOOL "Blender integration (required)" FORCE)
+set(SEP_HAS_CUDA ON CACHE BOOL "CUDA support (required)" FORCE)
+set(SEP_WITH_AUDIO ON CACHE BOOL "PipeWire audio integration (required)" FORCE)
+
+# Options to control optional modules
 option(SEP_WITH_OPENSUBDIV "Enable OpenSubdiv support" ON)
 option(SEP_WITH_OPENPGL "Enable OpenPGL support" ON)
 option(SEP_WITH_OCIO "Enable OpenColorIO support" ON)
@@ -30,7 +34,6 @@ option(SEP_WITH_OPENIMAGEIO "Enable OpenImageIO support" ON)
 option(SEP_WITH_EMBREE "Enable Embree support" ON)
 option(SEP_WITH_OSL "Enable OpenShadingLanguage support" ON)
 option(SEP_WITH_ALEMBIC "Enable Alembic support" ON)
-option(SEP_WITH_AUDIO "Enable PipeWire audio integration" ON)
 option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" ON)
 option(SEP_BUILD_ENGINE "Build the main engine component" ON)
 option(SEP_BUILD_QUANTUM "Build quantum processing components" ON)
@@ -60,14 +63,12 @@ include_directories(BEFORE
 # with newer versions of CMake. We simply add the directories in the
 # required order instead.
 
-# Backwards compatibility variables
-set(SEP_ENABLE_BLENDER ${SEP_WITH_CYCLES})
-set(SEP_ENABLE_AUDIO ${SEP_WITH_AUDIO})
+# Backwards compatibility variables - always enabled now
+set(SEP_ENABLE_BLENDER ON)
+set(SEP_ENABLE_AUDIO ON)
 
-set(SEP_HAS_CYCLES 0)
-if(SEP_WITH_CYCLES)
-    set(SEP_HAS_CYCLES 1)
-endif()
+# Cycles is now a required component
+set(SEP_HAS_CYCLES 1)
 
 # Set CUDA compiler flags before enabling the language
 set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
@@ -108,22 +109,14 @@ endif()
 include(SEPConfig)
 configure_sep()
 
-# CUDA is optional for many unit tests. Allow disabling via SEP_HAS_CUDA
-option(SEP_HAS_CUDA "Enable CUDA support" ON)
-if(SEP_HAS_CUDA)
-    find_package(CUDAToolkit REQUIRED)
-    add_compile_definitions(SEP_HAS_CUDA=1)
-else()
-    add_compile_definitions(SEP_HAS_CUDA=0)
-endif()
+# CUDA is now a required component
+find_package(CUDAToolkit REQUIRED)
+add_compile_definitions(SEP_HAS_CUDA=1)
 
-if(SEP_WITH_CYCLES)
-    add_compile_definitions(SEP_HAS_CYCLES=1)
-    add_compile_definitions(SEP_HAS_BLENDER=1)
-else()
-    add_compile_definitions(SEP_HAS_CYCLES=0)
-    add_compile_definitions(SEP_HAS_BLENDER=0)
-endif()
+# Cycles, Blender, and Audio are now required components
+add_compile_definitions(SEP_HAS_CYCLES=1)
+add_compile_definitions(SEP_HAS_BLENDER=1)
+add_compile_definitions(SEP_HAS_AUDIO=1)
 
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
@@ -196,21 +189,18 @@ add_subdirectory(third_party/imgui)
 
 # Add the src directory which contains all module subdirectories and workbench
 add_subdirectory(src)
-if(SEP_WITH_CYCLES)
-    add_subdirectory(extern/cycles/third_party/cuew)
-    add_subdirectory(extern/cycles/third_party/hipew)
-    add_subdirectory(extern/cycles/third_party/sky)
-endif()
+# Always add Cycles dependencies
+add_subdirectory(extern/cycles/third_party/cuew)
+add_subdirectory(extern/cycles/third_party/hipew)
+add_subdirectory(extern/cycles/third_party/sky)
 
 
 # Build Cycles from source when prebuilt libraries are not available
-if(SEP_WITH_CYCLES)
-  if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
-    message(STATUS "Prebuilt Cycles libraries not found; building from source")
-    set(WITH_CYCLES_DEVICE_HIP OFF CACHE BOOL "Disable HIP" FORCE)
-    set(WITH_CYCLES_DEVICE_HIPRT OFF CACHE BOOL "Disable HIPRT" FORCE)
-    add_subdirectory(extern/cycles)
-  endif()
+if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
+  message(STATUS "Prebuilt Cycles libraries not found; building from source")
+  set(WITH_CYCLES_DEVICE_HIP OFF CACHE BOOL "Disable HIP" FORCE)
+  set(WITH_CYCLES_DEVICE_HIPRT OFF CACHE BOOL "Disable HIPRT" FORCE)
+  add_subdirectory(extern/cycles)
 endif()
 
 # Consolidated examples are built in a single workbench target

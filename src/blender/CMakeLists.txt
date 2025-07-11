@@ -56,12 +56,10 @@ set(BLENDER_SOURCES
     pattern_visualization_pipeline.cpp
 )
 
-# Add Cycles-specific files only when SEP_HAS_CYCLES is enabled
-if(SEP_HAS_CYCLES)
-    list(APPEND BLENDER_SOURCES
-        cycles_renderer.cpp
-    )
-endif()
+# Cycles is now a required component
+list(APPEND BLENDER_SOURCES
+    cycles_renderer.cpp
+)
 
 add_library(sep_blender SHARED ${BLENDER_SOURCES})
 
@@ -69,8 +67,6 @@ target_precompile_headers(sep_blender PRIVATE blender_pch.h)
 
 # Define compile definitions in one place
 target_compile_definitions(sep_blender PRIVATE
-    SEP_HAS_BLENDER=${SEP_HAS_BLENDER}
-    SEP_HAS_CYCLES=${SEP_HAS_CYCLES}
     SEP_HAS_CUDA=${SEP_HAS_CUDA}
     SEP_HAS_AUDIO=${SEP_HAS_AUDIO}
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
@@ -113,15 +109,12 @@ set_target_properties(sep_blender PROPERTIES
     BUILD_WITH_INSTALL_RPATH TRUE
 )
 
-# Only link Cycles libraries when SEP_HAS_CYCLES is enabled
-if(SEP_HAS_CYCLES)
-    target_link_libraries(sep_blender PUBLIC
-        cycles_device
-        cycles_kernel
-        cycles_scene
-        cycles_util
-    )
-endif()
+target_link_libraries(sep_blender PUBLIC
+    cycles_device
+    cycles_kernel
+    cycles_scene
+    cycles_util
+)
 
 # Include directories
 target_include_directories(sep_blender

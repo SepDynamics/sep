@@ -22,16 +22,12 @@ add_library(sep_audio
     factory.cpp
 )
 
-# Check for required dependencies
+# Check for required dependencies - audio is now required
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(PIPEWIRE libpipewire-0.3)
-pkg_check_modules(FFTW fftw3f)
+pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
+pkg_check_modules(FFTW REQUIRED fftw3f)
 
-if(NOT PIPEWIRE_FOUND OR NOT FFTW_FOUND)
-    message(WARNING "PipeWire or FFTW not found - disabling audio support")
-    set(SEP_ENABLE_AUDIO OFF PARENT_SCOPE)
-    return()
-endif()
+# No conditional check - these are now required dependencies
 
 message(STATUS "Using PipeWire at: ${PIPEWIRE_LIBRARIES}")
 message(STATUS "Using FFTW at: ${FFTW_LIBRARIES}")

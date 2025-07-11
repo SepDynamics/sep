@@ -18,37 +18,33 @@
 #else
 #  define SEP_ENGINE_HAS_CUDA 0
 #endif
+#include <algorithm>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
+#include <cstring>  // For std::memcpy, std::memcmp if used in headers
+#include <exception>
+#include <numeric>
+#include <vector>
+
 #include "api/types.h"
+#include "audio/capture.h"
+#include "audio/factory.h"
+#include "blender/pattern_bridge.h"
+#include "blender/types.h"  // For SEPBlenderBridge definition
 #include "compat/core.h"
 #include "compat/cuda_api.hpp"
 #include "compat/cuda_common.h"
 #include "compat/memory.h"
 #include "compat/shim.h"
 #include "compat/stream.h"
-#include "core/common.h" // defines sep::SEPResult
+#include "core/common.h"  // defines sep::SEPResult
 #include "core/engine.h"
 #include "core/error_handler.h"
-#include "core/logging.h" // This is actually the logging manager
+#include "core/logging.h"  // This is actually the logging manager
 #include "core/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/qbsa.h"
-#include <vector>
-#ifdef SEP_HAS_BLENDER
-#include "blender/pattern_bridge.h"
-#include "blender/types.h" // For SEPBlenderBridge definition
-#endif
-#ifdef SEP_HAS_AUDIO
-#include "audio/capture.h"
-#include "audio/factory.h"
-#endif
-
-#include <cstdint>
-#include <algorithm>
-#include <cstdio>
-#include <cstring>
-#include <exception>
-#include <cstring>  // For std::memcpy, std::memcmp if used in headers
-#include <numeric>
 
 // Define namespace alias for clarity
 namespace logging = sep::logging;

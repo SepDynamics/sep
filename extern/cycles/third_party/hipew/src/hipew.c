@@ -583,7 +583,6 @@ const char *hipewCompilerPath(void) {
 
 int hipewCompilerVersion(void) {
   const char *path = hipewCompilerPath();
-  const char *marker = "Hip compilation tools, release ";
   FILE *pipe;
   char buf[128];
   char output[65536] = "\0";

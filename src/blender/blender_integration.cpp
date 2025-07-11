@@ -11,9 +11,7 @@ namespace sep {
 namespace pattern {
 // Use the core SEPResult enum instead of the pattern-specific one
 // Constructor implementation - Initialize members in the correct order
-BlenderBridge::BlenderBridge()
-    : thread_running_(false),
-      gpu_context_(nullptr)
+BlenderBridge::BlenderBridge() : gpu_context_(nullptr), thread_running_(false)
 {
     // Initialize the bridge
 }
@@ -202,7 +200,7 @@ sep::SEPResult BlenderBridge::allocatePatternMemory(BlenderBridge::ObjectState& 
 {
     std::size_t bytes  = state.config.max_patterns * sizeof(sep::pattern::PatternData);
     auto&       mgr    = sep::memory::MemoryTierManager::getInstance();
-    state.memory_block = mgr.allocate(bytes, sep::memory::TierType::DEVICE);
+    state.memory_block = mgr.allocate(bytes, sep::memory::MemoryTierEnum::DEVICE);
     if (!state.memory_block)
     {
         return sep::SEPResult::ALLOCATION_FAILED;
@@ -237,17 +235,17 @@ sep::SEPResult BlenderBridge::syncMemory(::sep::memory::MemoryTierEnum tier, boo
     switch (tier)
     {
         case ::sep::memory::MemoryTierEnum::STM:
-            manager.defragmentTier(sep::memory::TierType::HOST);
+            manager.defragmentTier(sep::memory::MemoryTierEnum::HOST);
             break;
         case ::sep::memory::MemoryTierEnum::MTM:
-            manager.defragmentTier(sep::memory::TierType::DEVICE);
+            manager.defragmentTier(sep::memory::MemoryTierEnum::DEVICE);
             if (force)
             {
-                manager.defragmentTier(sep::memory::TierType::HOST);
+                manager.defragmentTier(sep::memory::MemoryTierEnum::HOST);
             }
             break;
         case ::sep::memory::MemoryTierEnum::LTM:
-            manager.defragmentTier(sep::memory::TierType::UNIFIED);
+            manager.defragmentTier(sep::memory::MemoryTierEnum::UNIFIED);
             break;
         default:
             return sep::SEPResult::INVALID_STATE;
@@ -341,11 +339,11 @@ void BlenderBridge::updateResourceStats()
     auto& manager = sep::memory::MemoryTierManager::getInstance();
 
     float stm_util = manager.getTierUtilization(
-        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::STM));
+        static_cast<sep::memory::MemoryTierEnum>(::sep::memory::MemoryTierEnum::STM));
     float mtm_util = manager.getTierUtilization(
-        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::MTM));
+        static_cast<sep::memory::MemoryTierEnum>(::sep::memory::MemoryTierEnum::MTM));
     float ltm_util = manager.getTierUtilization(
-        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::LTM));
+        static_cast<sep::memory::MemoryTierEnum>(::sep::memory::MemoryTierEnum::LTM));
 
     if (stm_util > 0.9f)
         notifyResourceWarning(ResourceType::HOST_MEMORY, stm_util);

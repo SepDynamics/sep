@@ -67,18 +67,27 @@ namespace openvdb {
     
     namespace math {
         class Mat4f {
+        private:
+            float data[16] = {0.0f};  // 4x4 matrix stored in row-major order
+
         public:
             Mat4f() {}
-            float operator()(int row, int col) const { return 0.0f; }
-            float operator[](int i) const { return 0.0f; }
-            float& operator[](int i) { static float dummy = 0.0f; return dummy; }
+
+            // Access element at row, col
+            float operator()(int row, int col) const { return data[row * 4 + col]; }
+
+            // Access element by linear index
+            float operator[](int i) const { return data[i]; }
+
+            // Access element by linear index (mutable)
+            float& operator[](int i) { return data[i]; }
         };
         
         class CoordBBox {
         public:
             CoordBBox() {}
-            CoordBBox(const Coord& min, const Coord& max) {}
-            CoordBBox& operator=(const CoordBBox& other) { return *this; }
+            CoordBBox(const Coord& min, const Coord& max) { (void)min; (void)max; }
+            CoordBBox& operator=(const CoordBBox& other) { (void)other; return *this; }
             bool empty() const { return true; }
             Coord dim() const { return Coord(); }
             Coord min() const { return Coord(); }

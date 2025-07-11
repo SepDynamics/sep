@@ -1,0 +1,45 @@
+{
+  "name": "sep-engine",
+  "version": "1.0.0",
+  "description": "SEP Engine - A high-performance C++ framework for quantum-inspired pattern analysis and evolution",
+  "private": true,
+  "packageManager": "npm@9.6.0",
+  "workspaces": [
+    "mcp-tool",
+    "webview-ui"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "clean": "npm run clean --workspaces",
+    "dev": "npm run dev --workspaces --if-present",
+    "watch-tsc": "npm run watch-tsc --workspaces --if-present",
+    "watch-bundle": "npm run watch-bundle --workspaces --if-present",
+    "codebase-search": "node mcp-tool/start_codebase_search.js",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/sep-engine.git"
+  },
+  "keywords": [
+    "quantum",
+    "pattern-analysis",
+    "c++",
+    "typescript",
+    "mcp"
+  ],
+  "author": "SEP Engine Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "redis": "^5.6.0"
+  }
+}

@@ -1,30 +1,29 @@
 #include "quantum/coherence_manager.h"
+
+#include <cuda_runtime.h>
+#include <tbb/concurrent_hash_map.h>
+#include <tbb/parallel_for.h>
+
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <cmath>
+#include <glm/vec4.hpp>
+#include <memory>
+#include <numeric>
+#include <string>
+#include <vector>
+
+#include "blender/bridge.h"
+#include "compat/core.h"
+#include "compat/cuda.h"
+#include "compat/cuda_helpers.h"
+#include "core/logging.h"
+#include "memory/memory_tier_manager.hpp"
+#include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "compat/cuda.h"
-#include "compat/core.h"
-#include "compat/cuda_helpers.h"
-#include <cuda_runtime.h>
-
-#include "memory/memory_tier_manager.hpp"
-#include "memory/types.h"
-#ifdef SEP_HAS_BLENDER
-#include "blender/bridge.h"
-#endif
-
-#include "core/logging.h" 
-#include <tbb/parallel_for.h>
-#include <tbb/concurrent_hash_map.h>
-#include <algorithm>
-#include <atomic>
-#include <numeric>
-#include <cmath>
-#include <array>
-#include <memory>
-#include <string>
-#include <vector>
-#include <glm/vec4.hpp>
 
 namespace sep::quantum {
 

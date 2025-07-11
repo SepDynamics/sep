@@ -1,7 +1,5 @@
 #pragma once
 
-#ifdef SEP_HAS_BLENDER
-
 #include <atomic>
 #include <condition_variable>
 #include <memory>
@@ -24,15 +22,15 @@
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
 
-
 namespace sep {
 namespace pattern {
 
-struct PatternLimits {
-    static constexpr size_t MAX_PATTERNS = 10000;
-    static constexpr float MIN_COHERENCE_VALUE = 0.0f;
-    static constexpr float MAX_COHERENCE = 1.0f;
-};
+    struct PatternLimits
+    {
+        static constexpr size_t MAX_PATTERNS = 10000;
+        static constexpr float MIN_COHERENCE_VALUE = 0.0f;
+        static constexpr float MAX_COHERENCE = 1.0f;
+    };
 
 // Forward declarations
 class PatternObserver;
@@ -171,7 +169,3 @@ class BlenderBridge {
 
 }  // namespace pattern
 }  // namespace sep
-#endif // SEP_HAS_BLENDER
-#ifndef SEP_HAS_BLENDER
-namespace sep { namespace pattern { class BlenderBridge {}; } }
-#endif

@@ -74,11 +74,8 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     
-    // Initialize renderer
-    sep::CyclesRenderer* renderer = nullptr;
-    #ifdef SEP_HAS_CYCLES
-    renderer = new sep::CyclesRenderer();
-    #endif
+    // Initialize renderer - always use Cycles
+    sep::CyclesRenderer* renderer = new sep::CyclesRenderer();
     
     // 4. Initialize the DemoManager
     sep::workbench::DemoManager demo_manager;

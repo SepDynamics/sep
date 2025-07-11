@@ -17,12 +17,10 @@ add_subdirectory(manifold)
 add_subdirectory(quantum)
 add_subdirectory(utils)
 add_subdirectory(api)
-if(SEP_WITH_AUDIO)
-    add_subdirectory(audio)
-endif()
-if(SEP_WITH_CYCLES)
-    add_subdirectory(blender)
-endif()
+# Audio is now a required component
+add_subdirectory(audio)
+# Cycles/Blender is now a required component
+add_subdirectory(blender)
 
 # add_executable(sep_engine
 #     server_main.cpp

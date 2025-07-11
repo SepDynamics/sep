@@ -1,3 +1,6 @@
+// Define GLM_ENABLE_EXPERIMENTAL before including any GLM headers
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/glm.hpp>
 #include <iostream>
 #include <vector>
@@ -7,8 +10,11 @@
 #include "quantum/data.hpp"
 #include "quantum/evolution.h"
 
-using namespace sep;
-using namespace sep::quantum;
+// Use specific types instead of namespace imports to avoid ambiguity
+using sep::memory::MemoryTierEnum;
+using sep::quantum::Pattern;
+using sep::quantum::evolution::applyGravity;
+using sep::quantum::evolution::randomPerturbation;
 
 int main() {
     const int grid = 10;
@@ -22,7 +28,7 @@ int main() {
             p.position = glm::vec4(static_cast<float>(x), static_cast<float>(y), 0.0f, 1.0f);
             p.quantum_state.coherence = 0.5f;
             p.quantum_state.stability = 0.5f;
-            p.quantum_state.memory_tier = memory::MemoryTierEnum::STM;
+            p.quantum_state.memory_tier = MemoryTierEnum::STM;
             patterns.push_back(p);
         }
     }
@@ -31,15 +37,15 @@ int main() {
 
     for (int step = 0; step < 50; ++step) {
         for (auto &p : patterns) {
-            quantum::Pattern q;
+            Pattern q;
             q.id = p.id;
             q.position = p.position;
             q.momentum = glm::vec3(0.0f);
             q.quantum_state.generation = p.quantum_state.generation;
-            q.quantum_state.state = quantum::QuantumState::Status::SUPERPOSITION;
+            q.quantum_state.state = sep::quantum::QuantumState::Status::SUPERPOSITION;
 
-            evolution::applyGravity(q, center, 0.02f);
-            evolution::randomPerturbation(q, 0.01f);
+            applyGravity(q, center, 0.02f);
+            randomPerturbation(q, 0.01f);
 
             p.position = q.position;
 
@@ -47,7 +53,7 @@ int main() {
                 p.quantum_state.coherence = std::min(1.0f, p.quantum_state.coherence + 0.05f);
                 p.quantum_state.stability = std::min(1.0f, p.quantum_state.stability + 0.05f);
                 if (p.quantum_state.coherence > 0.9f && p.quantum_state.stability > 0.9f) {
-                    p.quantum_state.memory_tier = memory::MemoryTierEnum::LTM;
+                    p.quantum_state.memory_tier = MemoryTierEnum::LTM;
                 }
             }
         }
@@ -55,7 +61,7 @@ int main() {
 
     std::cout << "Stable LTM patterns:\n";
     for (const auto &p : patterns) {
-        if (p.quantum_state.memory_tier == memory::MemoryTierEnum::LTM) {
+        if (p.quantum_state.memory_tier == MemoryTierEnum::LTM) {
             std::cout << p.id << " at (" << p.position.x << ", " << p.position.y << ", " << p.position.z << ")\n";
         }
     }

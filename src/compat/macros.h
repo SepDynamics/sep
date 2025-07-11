@@ -16,19 +16,24 @@
 #endif
 
 // -----------------------------------------------------------------------------
-// Cycles renderer availability
+// spdlog availability
 // -----------------------------------------------------------------------------
-// Default to disabled when not explicitly specified. This avoids undefined macro
-// errors when building without Cycles integration.
+#ifndef SEP_HAS_SPDLOG
+#define SEP_HAS_SPDLOG 1
+#endif
+
+// -----------------------------------------------------------------------------
+// Cycles renderer availability - always enabled
+// -----------------------------------------------------------------------------
 #ifndef SEP_HAS_CYCLES
 #define SEP_HAS_CYCLES 1
 #endif
 
 // -----------------------------------------------------------------------------
-// spdlog availability
+// Audio integration availability - always enabled
 // -----------------------------------------------------------------------------
-#ifndef SEP_HAS_SPDLOG
-#define SEP_HAS_SPDLOG 1
+#ifndef SEP_HAS_AUDIO
+#define SEP_HAS_AUDIO 1
 #endif
 
 // Backwards compatibility for legacy macros used across the code base.

@@ -58,12 +58,8 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
       metrics_(),
       server_metrics_(),
       metrics_mutex_(),
-      ollama_client_(nullptr)
-#ifdef SEP_HAS_CYCLES
-      , cycles_renderer_(renderer)
-#else
-      , cycles_renderer_(nullptr)
-#endif
+      ollama_client_(nullptr),
+      cycles_renderer_(renderer)
 {
     instance_ = this;
 
@@ -75,10 +71,6 @@ SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
 
     // Initialize Ollama client
     ollama_client_ = std::make_unique<ollama::OllamaClient>(config_.ollama);
-
-#ifdef SEP_HAS_BLENDER
-    // Renderer lifetime managed externally
-#endif
 }
 
 SEPApiServer::~SEPApiServer() {

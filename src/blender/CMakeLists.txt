@@ -49,7 +49,6 @@ set(BLENDER_SOURCES
     blender_integration.cpp
     compression.cpp
     compression_utils.cpp
-    profiler_stub.cpp
     factory.cpp
     gpu_context.cpp
     mesh_handler.cpp
@@ -67,8 +66,6 @@ target_precompile_headers(sep_blender PRIVATE blender_pch.h)
 
 # Define compile definitions in one place
 target_compile_definitions(sep_blender PRIVATE
-    SEP_HAS_CUDA=${SEP_HAS_CUDA}
-    SEP_HAS_AUDIO=${SEP_HAS_AUDIO}
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
     WITH_CYCLES_DEVICE_CUDA
     "CCL_NAMESPACE_BEGIN=namespace ccl {"

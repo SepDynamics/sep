@@ -173,10 +173,8 @@ bool CyclesRenderer::render(const std::string& filepath) {
     auto session = std::make_unique<::ccl::Session>(session_params, cycles_scene_->params);
     session->scene = std::move(cycles_scene_);
 
-    session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
-        filepath.c_str(), "Combined", [](const ::ccl::string &msg) {
-        (void)msg;
-    }));
+    session->set_output_driver(::ccl::make_unique<::ccl::OutputDriver>(
+        filepath.c_str(), "Combined", [](const ::ccl::string& msg) { (void)msg; }));
 
     // Start render
     session->start();

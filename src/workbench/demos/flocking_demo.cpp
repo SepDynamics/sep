@@ -8,7 +8,8 @@
 namespace sep {
 namespace workbench {
 
-void FlockingDemo::on_load() {
+    void FlockingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
 #ifdef SEP_WORKBENCH_DEMO
     std::size_t agent_count = 50;
     max_speed_ = 2.0f;
@@ -30,7 +31,7 @@ void FlockingDemo::on_load() {
         a.position = glm::vec4(px, py, pz, 0.f);
         a.velocity = glm::vec4(vx, vy, vz, 0.f);
     }
-}
+    }
 
 void FlockingDemo::on_update(float dt) {
     for (auto& agent : agents_) {

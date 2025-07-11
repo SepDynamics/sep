@@ -10,26 +10,27 @@
 namespace sep {
 namespace workbench {
 
-void MemoryGardenDemo::on_load() {
-    const auto& cfg = Config::getInstance().memory_garden();
+    void MemoryGardenDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
+        const auto& cfg = Config::getInstance().memory_garden();
 
-    memory_manager_ = &sep::memory::MemoryTierManager::getInstance();
-    sep::memory::QuantumCoherenceManager::Config qc_cfg;  // Or load from workbench config
-    coherence_manager_ = std::make_unique<sep::memory::QuantumCoherenceManager>(qc_cfg);
+        memory_manager_ = &sep::memory::MemoryTierManager::getInstance();
+        sep::memory::QuantumCoherenceManager::Config qc_cfg;  // Or load from workbench config
+        coherence_manager_ = std::make_unique<sep::memory::QuantumCoherenceManager>(qc_cfg);
 
-    // Configure tier radii
-    stm_radius_ = cfg.layout.stm_radius;
-    mtm_radius_ = cfg.layout.mtm_radius;
-    ltm_radius_ = cfg.layout.ltm_radius;
-    
-    // Initialize visualization settings
-    show_connections_ = cfg.visualization.show_connections;
-    connection_opacity_ = cfg.visualization.connection_opacity;
-    pattern_scale_ = cfg.visualization.pattern_scale;
-    
-    // Create some initial patterns for demonstration
-    createInitialPatterns();
-}
+        // Configure tier radii
+        stm_radius_ = cfg.layout.stm_radius;
+        mtm_radius_ = cfg.layout.mtm_radius;
+        ltm_radius_ = cfg.layout.ltm_radius;
+
+        // Initialize visualization settings
+        show_connections_ = cfg.visualization.show_connections;
+        connection_opacity_ = cfg.visualization.connection_opacity;
+        pattern_scale_ = cfg.visualization.pattern_scale;
+
+        // Create some initial patterns for demonstration
+        createInitialPatterns();
+    }
 
 void MemoryGardenDemo::createInitialPatterns() {
     // Create patterns with varying coherence levels
@@ -103,8 +104,17 @@ void MemoryGardenDemo::on_render() {
     }
 }
 
-void MemoryGardenDemo::on_unload() {
-    nodes_.clear();
+void MemoryGardenDemo::on_unload() { nodes_.clear(); }
+
+void MemoryGardenDemo::on_ui_render()
+{
+    ImGui::Begin("Neural Simulation Controls");
+    ImGui::SliderFloat("Threshold", &threshold_, 0.1f, 2.0f);
+    ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
+    ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
+    ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
+    ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+    ImGui::End();
 }
 
 void MemoryGardenDemo::on_key_press(int key)

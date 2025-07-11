@@ -8,7 +8,8 @@
 namespace sep {
 namespace workbench {
 
-void NeuralDemo::on_load() {
+    void NeuralDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
 #ifdef SEP_WORKBENCH_DEMO
     int count = 3;
     threshold_ = 1.0f;
@@ -31,7 +32,7 @@ void NeuralDemo::on_load() {
             graph_.updateNodeParents(neurons_[i].id, {neurons_[i-1].id});
         }
     }
-}
+    }
 
 void NeuralDemo::on_update(float dt) {
     std::vector<float> inputs(neurons_.size(), 0.f);
@@ -85,6 +86,17 @@ void NeuralDemo::on_render() {
 void NeuralDemo::on_unload() {
     neurons_.clear();
     graph_ = dag::DagGraph();
+}
+
+void NeuralDemo::on_ui_render()
+{
+    ImGui::Begin("Neural Simulation Controls");
+    ImGui::SliderFloat("Threshold", &threshold_, 0.1f, 2.0f);
+    ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
+    ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
+    ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
+    ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+    ImGui::End();
 }
 
 void NeuralDemo::on_key_press(int key) {

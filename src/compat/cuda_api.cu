@@ -38,6 +38,51 @@
 
 namespace sep::cuda {
 
+// CUDA API wrapper functions
+cudaError_t cudaStreamCreateWithFlags(cudaStream_t* pStream, unsigned int flags) {
+    return ::cudaStreamCreateWithFlags(pStream, flags);
+}
+
+cudaError_t cudaStreamDestroy(cudaStream_t stream) {
+    return ::cudaStreamDestroy(stream);
+}
+
+cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
+    return ::cudaStreamSynchronize(stream);
+}
+
+cudaError_t cudaEventCreate(cudaEvent_t* event) {
+    return ::cudaEventCreate(event);
+}
+
+cudaError_t cudaEventDestroy(cudaEvent_t event) {
+    return ::cudaEventDestroy(event);
+}
+
+cudaError_t cudaEventSynchronize(cudaEvent_t event) {
+    return ::cudaEventSynchronize(event);
+}
+
+cudaError_t cudaMalloc(void** devPtr, size_t size) {
+    return ::cudaMalloc(devPtr, size);
+}
+
+cudaError_t cudaFree(void* devPtr) {
+    return ::cudaFree(devPtr);
+}
+
+cudaError_t cudaMallocManaged(void** devPtr, size_t size, unsigned int flags) {
+    return ::cudaMallocManaged(devPtr, size, flags);
+}
+
+cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
+    return ::cudaStreamAttachMemAsync(stream, devPtr, length, flags);
+}
+
+const char* cudaGetErrorString(cudaError_t error) {
+    return ::cudaGetErrorString(error);
+}
+
 // Memory management functions
 cudaError_t allocateManaged(void** ptr, size_t size) {
     return ::cudaMallocManaged(ptr, size);
@@ -200,8 +245,8 @@ sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const 
     }
 
     // Get constants
-    const uint32_t bitfield_words = constants::get_bitfield_words();
-    const uint32_t max_block_size = constants::get_max_block_size();
+    const uint32_t bitfield_words = sep::cuda::constants::BITFIELD_WORDS;
+    const uint32_t max_block_size = sep::cuda::constants::MAX_BLOCK_SIZE;
     
     // Pre-calculate all sizes
     const size_t probe_size = num_probes * sizeof(std::uint32_t);
@@ -265,7 +310,7 @@ sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint3
     }
 
     // Get constants
-    const uint32_t symmetry_pairs = constants::get_symmetry_pairs();
+    const uint32_t symmetry_pairs = sep::cuda::constants::SYMMETRY_PAIRS;
 
     // Pre-calculate sizes
     const size_t chunks_size = num_chunks * sizeof(std::uint64_t);

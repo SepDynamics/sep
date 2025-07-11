@@ -9,19 +9,22 @@
 namespace sep {
 namespace workbench {
 
-void AnnealingSimDemo::on_load() {
-    // Hardcoded config values as a temporary workaround
-    temperature_schedule_ = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f};
-    if (temperature_schedule_.empty()) temperature_schedule_.push_back(1.0f);
-    particles_.resize(100); // Default particle count
-    for (auto& p : particles_) {
-        p.position = glm::linearRand(glm::vec3(-1.f), glm::vec3(1.f));
-        p.velocity = glm::vec3(0.f);
-        p.color = glm::vec3(1.f);
+    void AnnealingSimDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    {
+        // Hardcoded config values as a temporary workaround
+        temperature_schedule_ = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f};
+        if (temperature_schedule_.empty()) temperature_schedule_.push_back(1.0f);
+        particles_.resize(100);  // Default particle count
+        for (auto& p : particles_)
+        {
+            p.position = glm::linearRand(glm::vec3(-1.f), glm::vec3(1.f));
+            p.velocity = glm::vec3(0.f);
+            p.color = glm::vec3(1.f);
+        }
+        processor_ = std::make_unique<sep::pattern::PatternProcessor>();
+        coherence_mgr_ = std::make_unique<sep::memory::QuantumCoherenceManager>(
+            sep::memory::QuantumCoherenceManager::Config{});
     }
-    processor_ = std::make_unique<sep::pattern::PatternProcessor>();
-    coherence_mgr_ = std::make_unique<sep::memory::QuantumCoherenceManager>(sep::memory::QuantumCoherenceManager::Config{});
-}
 
 void AnnealingSimDemo::on_update(float dt) {
     if (paused_ || particles_.empty()) return;
@@ -75,6 +78,17 @@ void AnnealingSimDemo::on_unload() {
     particles_.clear();
     processor_.reset();
     coherence_mgr_.reset();
+}
+
+void AnnealingSimDemo::on_ui_render()
+{
+    ImGui::Begin("Neural Simulation Controls");
+    ImGui::SliderFloat("Threshold", &threshold_, 0.1f, 2.0f);
+    ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
+    ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
+    ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
+    ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+    ImGui::End();
 }
 
 void AnnealingSimDemo::on_key_press(int key)

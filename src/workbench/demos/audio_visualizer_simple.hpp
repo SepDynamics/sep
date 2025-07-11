@@ -45,7 +45,8 @@ private:
 // Audio visualizer demo implementation
 class AudioVisualizerDemo : public Demo {
 public:
-    void on_load() override;
+    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
     void on_unload() override;

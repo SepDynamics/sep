@@ -23,11 +23,10 @@ bool DemoManager::switchToDemo(const std::string& name) {
     if (current_demo_) {
         current_demo_->on_unload();
     }
-
+    
     current_demo_ = it->second();
     current_demo_name_ = name;
-    current_demo_->initialize(engine_, renderer_);
-    current_demo_->on_load();
+    current_demo_->on_load(engine_, renderer_);
 
     return true;
 }
@@ -41,6 +40,12 @@ void DemoManager::on_update(float dt) {
 void DemoManager::on_render() {
     if (current_demo_) {
         current_demo_->on_render();
+    }
+}
+
+void DemoManager::on_ui_render() {
+    if (current_demo_) {
+        current_demo_->on_ui_render();
     }
 }
 

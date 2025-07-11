@@ -20,14 +20,11 @@ namespace sep
         {
         public:
             virtual ~Demo() = default;
-            void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
-                engine_ = engine;
-                renderer_ = renderer;
-            }
-            virtual void on_load() = 0;
+            virtual void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) = 0;
             virtual void on_unload() = 0;
             virtual void on_update(float dt) = 0;
             virtual void on_render() = 0;
+            virtual void on_ui_render() = 0; // For ImGui controls
             virtual void on_key_press(int key) = 0;
             virtual void on_mouse(int x, int y, int button) = 0;
         
@@ -43,9 +40,10 @@ namespace sep
             GenesisPatternAdapter(Window* window, Renderer* renderer, UIManager* uiManager);
             ~GenesisPatternAdapter() override;
 
-            void on_load() override;
+            void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
             void on_update(float dt) override;
             void on_render() override;
+            void on_ui_render() override;
             void on_unload() override;
             void on_key_press(int key) override;
             void on_mouse(int x, int y, int button) override;

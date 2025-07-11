@@ -18,7 +18,7 @@ namespace sep
     namespace workbench
     {
 
-        void NeuroSimDemo::on_load()
+        void NeuroSimDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
         {
             const auto& cfg = sep::workbench::Config::getInstance().neural_demo();
             std::size_t neuron_count = cfg.network.neuron_count;
@@ -107,6 +107,17 @@ namespace sep
             memory_manager_.reset();
         }
 
+        void NeuroSimDemo::on_ui_render()
+        {
+            ImGui::Begin("Neural Simulation Controls");
+            ImGui::SliderFloat("Threshold", &threshold_, 0.1f, 2.0f);
+            ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
+            ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
+            ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
+            ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+            ImGui::End();
+        }
+        
         void NeuroSimDemo::on_key_press(int) {}
         void NeuroSimDemo::on_mouse(int, int, int) {}
 

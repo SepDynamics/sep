@@ -55,18 +55,22 @@ set_target_properties(sep_compat_cuda PROPERTIES
 )
 target_compile_options(sep_compat_cuda PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)
 
-# Create the final static library from the C++ sources and the CUDA object library
-add_library(sep_compat STATIC
+# Combine all sources into a single SHARED library
+add_library(sep_compat SHARED
     ${CPP_SOURCES}
-    $<TARGET_OBJECTS:sep_compat_cuda>
+    ${CUDA_SOURCES}
 )
 
-# Ensure CUDA symbols are exported correctly
+# Set properties for the shared library
 set_target_properties(sep_compat PROPERTIES
-    CUDA_VISIBILITY_PRESET "default"
-    C_VISIBILITY_PRESET "default"
-    CXX_VISIBILITY_PRESET "default"
-    VISIBILITY_INLINES_HIDDEN OFF
+    POSITION_INDEPENDENT_CODE ON
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    CUDA_STANDARD 17
+    CXX_STANDARD 17
+    CUDA_ARCHITECTURES "75" # Keep it simple for now, add others back later
+    C_VISIBILITY_PRESET default
+    CXX_VISIBILITY_PRESET default
 )
 
 if(SEP_HAS_CUDA)
@@ -98,10 +102,4 @@ target_include_directories(sep_compat
 )
 
 # Dependencies
-target_link_libraries(sep_compat
-    PUBLIC
-        sep_core
-)
-if(SEP_HAS_CUDA)
-    target_link_libraries(sep_compat PUBLIC CUDA::cudart CUDA::cuda_driver)
-endif()
+target_link_libraries(sep_compat PUBLIC CUDA::cudart CUDA::cuda_driver)

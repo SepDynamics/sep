@@ -5,6 +5,7 @@
 
 #include "../../workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
+#include "imgui.h"
 #include "quantum/data.hpp"
 
 namespace sep {
@@ -12,7 +13,8 @@ namespace workbench {
 
 class CosmoSim : public Demo {
 public:
-    void on_load() override;
+    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
     void on_unload() override;

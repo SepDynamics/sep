@@ -7,6 +7,7 @@
 
 #include "../../workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
+#include "imgui.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/types.h"
 #include "sep_engine_wrapper.h"
@@ -21,7 +22,8 @@ namespace sep
         public:
             NeuroSimDemo() : rd_{}, seed_{rd_()}, rng_{seed_} {}
 
-            void on_load() override;
+            void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+            void on_ui_render() override;
             void on_update(float dt) override;
             void on_render() override;
             void on_unload() override;

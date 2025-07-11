@@ -23,6 +23,7 @@
 
 // Project includes
 #include "blender/cycles_renderer.h"
+#include "blender/file_driver.h"
 #include "core/error_handler.h"
 #include "core/types.h"
 #include "quantum/data.hpp"
@@ -173,8 +174,9 @@ bool CyclesRenderer::render(const std::string& filepath) {
     auto session = std::make_unique<::ccl::Session>(session_params, cycles_scene_->params);
     session->scene = std::move(cycles_scene_);
 
-    session->set_output_driver(::ccl::make_unique<::ccl::OutputDriver>(
-        filepath.c_str(), "Combined", [](const ::ccl::string& msg) { (void)msg; }));
+    // Use our concrete FileDriver implementation instead of the abstract OutputDriver
+    session->set_output_driver(::ccl::make_unique<FileDriver>(
+        filepath.c_str(), "Combined"));
 
     // Start render
     session->start();

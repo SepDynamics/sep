@@ -43,29 +43,30 @@ set(CPP_SOURCES
     hip_compat.cpp
 )
 
+# Create an OBJECT library for the CUDA sources
+add_library(sep_compat_cuda OBJECT ${CUDA_SOURCES})
+set_target_properties(sep_compat_cuda PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    POSITION_INDEPENDENT_CODE ON
+    LINKER_LANGUAGE CXX
+    CUDA_STANDARD 17
+    CUDA_ARCHITECTURES "75;70;61;60"
+)
+target_compile_options(sep_compat_cuda PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)
+
+# Create the final static library from the C++ sources and the CUDA object library
 add_library(sep_compat STATIC
-    ${CUDA_SOURCES}
     ${CPP_SOURCES}
+    $<TARGET_OBJECTS:sep_compat_cuda>
 )
 
-# Ensure CUDA symbols are exported
+# Ensure CUDA symbols are exported correctly
 set_target_properties(sep_compat PROPERTIES
     CUDA_VISIBILITY_PRESET "default"
     C_VISIBILITY_PRESET "default"
     CXX_VISIBILITY_PRESET "default"
     VISIBILITY_INLINES_HIDDEN OFF
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    POSITION_INDEPENDENT_CODE ON
-)
-
-target_compile_options(sep_compat PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)
-
-set_target_properties(sep_compat PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    POSITION_INDEPENDENT_CODE ON
-    CUDA_ARCHITECTURES "75;70;61;60"
 )
 
 if(SEP_HAS_CUDA)

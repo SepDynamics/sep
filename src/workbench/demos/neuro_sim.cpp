@@ -1,5 +1,7 @@
 #include "neuro_sim.hpp"
 
+#include "core/types.h"
+
 #include <algorithm>
 #include <glm/glm.hpp>
 
@@ -10,7 +12,7 @@
 
 using sep::memory::MemoryTierEnum;
 using sep::memory::MemoryTierManager;
-using sep::quantum::Pattern;
+using sep::Pattern;
 
 namespace sep
 {

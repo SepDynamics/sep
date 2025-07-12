@@ -121,9 +121,9 @@ class CoherenceManager {
     explicit CoherenceManager(const Config& config);
     ~CoherenceManager();
 
-    CoherenceResult updateCoherence(const std::vector<sep::quantum::Pattern>& patterns);
+    CoherenceResult updateCoherence(const std::vector<sep::Pattern>& patterns);
     std::vector<TierMigration> optimizeMemoryLayout();
-    EntanglementGraph computeEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns);
+    EntanglementGraph computeEntanglementGraph(const std::vector<sep::Pattern>& patterns);
     void applyCoherenceDecay(float decay_factor);
     CoherenceSnapshot createSnapshot() const;
     bool restoreFromSnapshot(const CoherenceSnapshot& snapshot);

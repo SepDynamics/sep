@@ -9,6 +9,9 @@
 using ::sep::memory::MemoryTierEnum;
 namespace sep {
 namespace pattern {
+static bool isValidConfig(const sep::pattern::PatternConfig& c) {
+    return c.max_patterns > 0;
+}
 // Use the core SEPResult enum instead of the pattern-specific one
 // Constructor implementation - Initialize members in the correct order
 BlenderBridge::BlenderBridge() : gpu_context_(nullptr), thread_running_(false)

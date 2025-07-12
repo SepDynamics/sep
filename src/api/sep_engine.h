@@ -52,7 +52,7 @@ public:
      * @param config API configuration data
      * @return JSON response with initialization results
      */
-    nlohmann::json initialize(const config::APIConfig& config);
+    nlohmann::json initialize(const sep::config::APIConfig& config);
 
     /**
      * @brief Shutdown the SEP Engine
@@ -135,7 +135,7 @@ public:
     nlohmann::json getHealthStatus();
 
     static nlohmann::json getMemoryMetrics();
-    static nlohmann::json getConfig(const config::APIConfig& config);
+    static nlohmann::json getConfig(const sep::config::APIConfig& config);
     static nlohmann::json makeErrorResponse(ErrorCode code, const std::string& message);
     static bool
     validateFields(const nlohmann::json& data, const std::vector<std::string>& fields, nlohmann::json& error);

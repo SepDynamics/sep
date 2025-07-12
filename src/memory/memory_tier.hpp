@@ -96,6 +96,11 @@ public:
   struct Config {
     MemoryTierEnum type{MemoryTierEnum::STM};
     std::size_t size{0};
+    std::size_t max_patterns{0};
+    float promote_stm_to_mtm{0.7f};
+    float promote_mtm_to_ltm{0.9f};
+    float demote_threshold{0.3f};
+    bool enable_compression{false};
   };
 
   explicit MemoryTier(const Config &config);

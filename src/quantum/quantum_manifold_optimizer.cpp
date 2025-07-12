@@ -11,16 +11,17 @@
 
 namespace sep::quantum::manifold {
 
-QuantumManifoldOptimizer::Config QuantumManifoldOptimizer::createManifoldConfig(
-    const ::sep::PatternEvolutionBridge::Config& cfg) {
-    Config mc{};
-    mc.convergence_threshold = cfg.convergence_threshold;
-    mc.step_size = cfg.evolution_step_size;
-    mc.neighborhood_radius = cfg.interaction_radius;
-    mc.target_coherence = cfg.target_coherence;
-    mc.target_stability = cfg.target_stability;
-    return mc;
-}
+    QuantumManifoldOptimizer::Config QuantumManifoldOptimizer::createManifoldConfig(
+        const PatternEvolutionBridge::Config& cfg)
+    {
+        Config mc{};
+        mc.convergence_threshold = cfg.convergence_threshold;
+        mc.step_size = cfg.evolution_step_size;
+        mc.neighborhood_radius = cfg.interaction_radius;
+        mc.target_coherence = cfg.target_coherence;
+        mc.target_stability = cfg.target_stability;
+        return mc;
+    }
 
 QuantumManifoldOptimizer::QuantumManifoldOptimizer()
     : QuantumManifoldOptimizer(Config{}) {}

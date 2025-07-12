@@ -51,7 +51,7 @@ namespace sep::api
         std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor;
         sep::memory::MemoryTierManager& memory_manager;
         std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor;
-        sep::config::APIConfig config;
+        sep::config::CudaConfig config;
 
         // PatternEvolution is a static class, no need to instantiate
 
@@ -104,56 +104,6 @@ namespace sep::api
         std::ostringstream oss;
         oss << prefix << "_" << std::setfill('0') << std::setw(8) << id;
         return oss.str();
-    }
-
-    nlohmann::json SepEngine::initialize(const sep::config::APIConfig& config)
-    {
-        impl_->config = config;
-        sep::logging::Level lvl = sep::logging::levelFromString(config.log_level);
-        sep::logging::Manager::getInstance().setGlobalLevel(lvl);
-        if (impl_->initialized)
-        {
-            json result;
-            result["success"] = false;
-            result["error"] = "Engine already initialized";
-            return result;
-        }
-
-        // Initialize CUDA first before creating any CUDA-dependent components
-        auto& cuda_core = sep::cuda::CudaCore::instance();
-        if (!cuda_core.is_initialized())
-        {
-            // Skip CUDA initialization if not available
-            // This is a temporary workaround for the linking issue
-            SPDLOG_INFO("CUDA not initialized. Using CPU-only mode.");
-        }
-
-        // Create processors with appropriate configurations
-        try
-        {
-            // Create the quantum processor with a simple configuration
-            sep::quantum::QuantumProcessor::Config qp_config;
-            qp_config.enable_gpu = false;  // Disable GPU usage for stability
-            impl_->quantum_processor = sep::quantum::createQuantumProcessor(qp_config);
-
-            // Create pattern processor with CPU implementation
-            impl_->pattern_processor = std::make_unique<sep::pattern::PatternProcessor>(
-                sep::pattern::PatternProcessor::Implementation::CPU);
-        }
-        catch (const std::exception& e)
-        {
-            json result;
-            result["success"] = false;
-            result["error"] = std::string("Failed to create processors: ") + e.what();
-            return result;
-        }
-
-        impl_->initialized = true;
-
-        json result;
-        result["success"] = true;
-        result["message"] = "SEP Engine initialized successfully";
-        return result;
     }
 
     nlohmann::json SepEngine::shutdown()
@@ -624,28 +574,6 @@ namespace sep::api
         json result;
         result["success"] = true;
         result["memory_tiers"] = memory_tiers;
-        return result;
-    }
-
-    nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
-    {
-        auto& engine = SepEngine::getInstance();
-        if (!engine.impl_->initialized)
-        {
-            json result;
-            result["success"] = false;
-            result["error"] = "Engine not initialized";
-            return result;
-        }
-        json cfg;
-        cfg["port"] = config.port;
-        cfg["threads"] = config.threads;
-        cfg["log_level"] = config.log_level;
-        cfg["enable_metrics"] = config.enable_metrics;
-
-        json result;
-        result["success"] = true;
-        result["config"] = cfg;
         return result;
     }
 

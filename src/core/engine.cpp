@@ -67,22 +67,23 @@ struct Engine::Impl {
   std::vector<std::uint32_t> d_collapse_indices_;
   std::vector<std::uint32_t> d_collapse_counts_;
   std::vector<StateNode> state_history_;
-  ::sep::config::APIConfig config;
+  ::sep::config::CudaConfig config;
   bool initialized{false};
 };
 
 Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
 
-bool Engine::init(const sep::config::APIConfig &config) {
-  impl_->config = config;
-  impl_->d_bitfield_.resize(DEFAULT_SIZE);
-  impl_->d_probe_indices_.resize(DEFAULT_SIZE);
-  impl_->d_expectations_.resize(DEFAULT_SIZE);
-  impl_->d_corrections_.resize(DEFAULT_SIZE);
-  impl_->d_correction_count_.resize(1);
-  impl_->d_chunks_.resize(DEFAULT_SIZE);
-  impl_->d_collapse_indices_.resize(DEFAULT_SIZE * PAIRS_PER_CHUNK);
-  impl_->d_collapse_counts_.resize(DEFAULT_SIZE);
+bool Engine::init(const sep::config::CudaConfig &config)
+{
+    impl_->config = config;
+    impl_->d_bitfield_.resize(DEFAULT_SIZE);
+    impl_->d_probe_indices_.resize(DEFAULT_SIZE);
+    impl_->d_expectations_.resize(DEFAULT_SIZE);
+    impl_->d_corrections_.resize(DEFAULT_SIZE);
+    impl_->d_correction_count_.resize(1);
+    impl_->d_chunks_.resize(DEFAULT_SIZE);
+    impl_->d_collapse_indices_.resize(DEFAULT_SIZE * PAIRS_PER_CHUNK);
+    impl_->d_collapse_counts_.resize(DEFAULT_SIZE);
 
 #ifdef SEP_HAS_AUDIO
   printf("DEBUG: Engine::init - Initializing audio capture\n");

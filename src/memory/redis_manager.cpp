@@ -33,10 +33,6 @@ namespace logging = sep::logging;
 
 namespace sep::persistence {
 
-std::string RedisManager::Impl::normalizeTier(const std::string& tier) const {
-    return sep::memory::memoryTierToString(sep::memory::stringToMemoryTier(tier));
-}
-
 std::string RedisManager::Impl::getPatternKey(std::uint64_t id, const std::string& tier) const {
     std::stringstream key;
     key << "pattern:" << normalizeTier(tier) << ":" << id;

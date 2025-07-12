@@ -160,6 +160,5 @@ namespace sep
                 float min_coherence{PatternLimits::MIN_COHERENCE_VALUE};
             } thresholds_;
         };
-    };
 }  // namespace pattern
 }  // namespace sep

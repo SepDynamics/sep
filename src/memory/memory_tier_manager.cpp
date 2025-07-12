@@ -608,15 +608,6 @@ MemoryTierManager &MemoryTierManager::getInstance()
             return findDataById(id);
         }
 
-        void MemoryTierManager::resetForTesting(const Config &cfg)
-        {
-            shutdown();
-            stm_->resize(cfg.stm_size > 0 ? cfg.stm_size : 1 << 20);
-            mtm_->resize(cfg.mtm_size > 0 ? cfg.mtm_size : 4 << 20);
-            ltm_->resize(cfg.ltm_size > 0 ? cfg.ltm_size : 16 << 20);
-            init(cfg);
-        }
-
         SEPResult MemoryTierManager::processMemoryBlocks(void *input_data, void *output_data,
                                                          const void *config, size_t count,
                                                          const void *previous_data, void *stream)
@@ -635,7 +626,7 @@ MemoryTierManager &MemoryTierManager::getInstance()
 
     namespace config
     {
-        void to_json(nlohmann::json &j, const MemoryThresholdConfig &c)
+        void to_json(nlohmann::json &j, const workbench::MemoryThresholdConfig &c)
         {
             j = nlohmann::json{{"promote_stm_to_mtm", c.promote_stm_to_mtm},
                                {"promote_mtm_to_ltm", c.promote_mtm_to_ltm},
@@ -650,7 +641,7 @@ MemoryTierManager &MemoryTierManager::getInstance()
                                {"enable_compression", c.enable_compression}};
         }
 
-        void from_json(const nlohmann::json &j, MemoryThresholdConfig &c)
+        void from_json(const nlohmann::json &j, workbench::MemoryThresholdConfig &c)
         {
             j.at("promote_stm_to_mtm").get_to(c.promote_stm_to_mtm);
             j.at("promote_mtm_to_ltm").get_to(c.promote_mtm_to_ltm);

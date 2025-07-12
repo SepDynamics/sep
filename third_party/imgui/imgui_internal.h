@@ -679,13 +679,13 @@ struct ImSpan
 template<int CHUNKS>
 struct ImSpanAllocator
 {
-    char*   BasePtr;
-    int     CurrOff;
-    int     CurrIdx;
-    int     Offsets[CHUNKS];
-    int     Sizes[CHUNKS];
+    char*   BasePtr = nullptr;
+    int     CurrOff = 0;
+    int     CurrIdx = 0;
+    int     Offsets[CHUNKS]{};
+    int     Sizes[CHUNKS]{};
 
-    ImSpanAllocator()                               { memset(this, 0, sizeof(*this)); }
+    ImSpanAllocator() = default;
     inline void  Reserve(int n, size_t sz, int a=4) { IM_ASSERT(n == CurrIdx && n < CHUNKS); CurrOff = IM_MEMALIGN(CurrOff, a); Offsets[n] = CurrOff; Sizes[n] = (int)sz; CurrIdx++; CurrOff += (int)sz; }
     inline int   GetArenaSizeInBytes()              { return CurrOff; }
     inline void  SetArenaBasePtr(void* base_ptr)    { BasePtr = (char*)base_ptr; }
@@ -1434,16 +1434,16 @@ enum ImGuiPopupPositionPolicy
 // Storage for popup stacks (g.OpenPopupStack and g.BeginPopupStack)
 struct ImGuiPopupData
 {
-    ImGuiID             PopupId;        // Set on OpenPopup()
-    ImGuiWindow*        Window;         // Resolved on BeginPopup() - may stay unresolved if user never calls OpenPopup()
-    ImGuiWindow*        RestoreNavWindow;// Set on OpenPopup(), a NavWindow that will be restored on popup close
-    int                 ParentNavLayer; // Resolved on BeginPopup(). Actually a ImGuiNavLayer type (declared down below), initialized to -1 which is not part of an enum, but serves well-enough as "not any of layers" value
-    int                 OpenFrameCount; // Set on OpenPopup()
-    ImGuiID             OpenParentId;   // Set on OpenPopup(), we need this to differentiate multiple menu sets from each others (e.g. inside menu bar vs loose menu items)
-    ImVec2              OpenPopupPos;   // Set on OpenPopup(), preferred popup position (typically == OpenMousePos when using mouse)
-    ImVec2              OpenMousePos;   // Set on OpenPopup(), copy of mouse position at the time of opening popup
+    ImGuiID             PopupId{0};        // Set on OpenPopup()
+    ImGuiWindow*        Window{nullptr};   // Resolved on BeginPopup() - may stay unresolved if user never calls OpenPopup()
+    ImGuiWindow*        RestoreNavWindow{nullptr}; // Set on OpenPopup(), a NavWindow that will be restored on popup close
+    int                 ParentNavLayer{-1}; // Resolved on BeginPopup(). Actually a ImGuiNavLayer type (declared down below)
+    int                 OpenFrameCount{-1}; // Set on OpenPopup()
+    ImGuiID             OpenParentId{0};   // Set on OpenPopup(), we need this to differentiate multiple menu sets from each others (e.g. inside menu bar vs loose menu items)
+    ImVec2              OpenPopupPos{};    // Set on OpenPopup(), preferred popup position (typically == OpenMousePos when using mouse)
+    ImVec2              OpenMousePos{};    // Set on OpenPopup(), copy of mouse position at the time of opening popup
 
-    ImGuiPopupData()    { memset(this, 0, sizeof(*this)); ParentNavLayer = OpenFrameCount = -1; }
+    ImGuiPopupData() = default;
 };
 
 //-----------------------------------------------------------------------------
@@ -1630,13 +1630,13 @@ struct ImGuiListClipperRange
 // Temporary clipper data, buffers shared/reused between instances
 struct ImGuiListClipperData
 {
-    ImGuiListClipper*               ListClipper;
-    float                           LossynessOffset;
-    int                             StepNo;
-    int                             ItemsFrozen;
-    ImVector<ImGuiListClipperRange> Ranges;
+    ImGuiListClipper*               ListClipper = nullptr;
+    float                           LossynessOffset = 0.0f;
+    int                             StepNo = 0;
+    int                             ItemsFrozen = 0;
+    ImVector<ImGuiListClipperRange> Ranges{};
 
-    ImGuiListClipperData()          { memset(this, 0, sizeof(*this)); }
+    ImGuiListClipperData() = default;
     void                            Reset(ImGuiListClipper* clipper) { ListClipper = clipper; StepNo = ItemsFrozen = 0; Ranges.resize(0); }
 };
 

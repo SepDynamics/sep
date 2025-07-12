@@ -1906,10 +1906,19 @@ void ImGuiIO::AddFocusEvent(bool focused)
 }
 
 ImGuiPlatformIO::ImGuiPlatformIO()
+    : Platform_GetClipboardTextFn{nullptr},
+      Platform_SetClipboardTextFn{nullptr},
+      Platform_ClipboardUserData{nullptr},
+      Platform_OpenInShellFn{nullptr},
+      Platform_OpenInShellUserData{nullptr},
+      Platform_SetImeDataFn{nullptr},
+      Platform_ImeUserData{nullptr},
+      Platform_LocaleDecimalPoint{'.'},
+      Renderer_TextureMaxWidth{0},
+      Renderer_TextureMaxHeight{0},
+      Renderer_RenderState{nullptr},
+      Textures{}
 {
-    // Most fields are initialized with zero
-    memset(this, 0, sizeof(*this));
-    Platform_LocaleDecimalPoint = '.';
 }
 
 //-----------------------------------------------------------------------------

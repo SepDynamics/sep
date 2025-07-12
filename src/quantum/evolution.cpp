@@ -21,6 +21,11 @@ inline float deterministicNoise(uint64_t& state) {
 }
 }
 
+// helper comparator for shim::string vs std::string
+bool operator==(const std::string& lhs, const sep::shim::string& rhs) {
+    return lhs == rhs.c_str();
+}
+
 namespace sep::quantum {
 
 class EvolutionEngine::EvolutionEngineImpl {

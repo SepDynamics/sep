@@ -119,7 +119,16 @@ class Client {
 std::shared_ptr<Client> createClient(const ClientConfig &config);
 
 } // namespace api
-namespace ollama { 
+
+namespace config {
+
+struct OllamaConfig {
+    std::string host{"localhost"};
+    int port{11434};
+};
+
+} // namespace config
+namespace ollama {
 
 class OllamaClient {
 public:

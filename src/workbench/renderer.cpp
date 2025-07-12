@@ -222,7 +222,7 @@ void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>
             glUseProgram(shaderProgram);
             glBindVertexArray(vao);
             float spacing = 1.5f;
-            int perRow = std::sqrt(patterns.size()) + 1;
+            int perRow = static_cast<int>(std::sqrt(patterns.size())) + 1;
             float startX = -((perRow - 1) * spacing) / 2.0f;
             float startZ = -((perRow - 1) * spacing) / 2.0f;
             for (size_t i = 0; i < patterns.size() && i < 100; ++i)
@@ -250,6 +250,7 @@ void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>
     {
         useOpenGL = false;
     }
+}
 // Helper method to render a sphere
 void sep::workbench::Renderer::renderSphere(int latitudes, int longitudes, const glm::vec3& pos,
                                             float scale, const glm::vec4& color)
@@ -316,7 +317,7 @@ sep::workbench::Renderer::~Renderer()
 {
     // Call cleanup to release OpenGL resources
     cleanup();
-}
+};
 
 void sep::workbench::Renderer::cleanup()
 {

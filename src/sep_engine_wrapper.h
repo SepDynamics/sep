@@ -16,6 +16,7 @@
 #include <glm/gtc/constants.hpp>
 
 #include "memory/types.h"
+#include "core/types.h"
 
 namespace sep
 {
@@ -87,16 +88,8 @@ namespace sep
         float dimensions[3]{1.0f, 1.0f, 1.0f};
     };
 
-    // Pattern structure
-    struct Pattern
-    {
-        std::string id;
-        float coherence{0.0f};
-        float stability{0.5f};
-        MemoryTierEnum memory_tier{MemoryTierEnum::STM};
-        glm::vec3 position{0.0f, 0.0f, 0.0f};
-        QuantumState quantum_state;
-    };
+    // Use canonical Pattern definition
+    using Pattern = ::sep::Pattern;
 
     // Demo implementations
     class DemoEngine final : public Engine

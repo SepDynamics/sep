@@ -17,8 +17,8 @@ These errors are causing the build to fail. They all seem related to a few root 
 The most common error is that types like `Pattern`, `ProcessingResult`, and `PatternConfig` are not found or are being looked for in the wrong namespace. This is the root cause of most build failures.
 
 *   **Action:**
-    *   **`Pattern` Type:** The compiler suggests `sep::Pattern` instead of `sep::quantum::Pattern`. This indicates `sep::Pattern` (likely defined in `/sep/src/core/types.h`) is the canonical type.
-        *   Go through all files that failed to compile due to this error (e.g., `evolution.h`, `processor.h`, `quantum_processor.cpp`, `engine.cpp`) and change `sep::quantum::Pattern` to `sep::Pattern`.
+    *   **`Pattern` Type:** The compiler suggests `sep::Pattern` instead of `sep::Pattern`. This indicates `sep::Pattern` (likely defined in `/sep/src/core/types.h`) is the canonical type.
+        *   Go through all files that failed to compile due to this error (e.g., `evolution.h`, `processor.h`, `quantum_processor.cpp`, `engine.cpp`) and change `sep::Pattern` to `sep::Pattern`.
         *   Add `#include "core/types.h"` where necessary to make `sep::Pattern` available.
     *   **`ProcessingResult` & `BatchProcessingResult`:** These types are not found.
         *   Locate their definition (likely in `core/types.h` or a new `quantum/types.h`).

@@ -46,7 +46,7 @@ sep::SEPResult MeshHandler::update(const sep::pattern::PatternData& pattern_data
     return sep::SEPResult::INVALID_ARGUMENT;
   }
 
-  pattern_state_.coherence = pattern_data.coherence;
+  pattern_state_.coherence = pattern_data.quantum_state.coherence;
 
   sep::SEPResult res = updateVertices(pattern_data);
   if (res != sep::SEPResult::SUCCESS) {
@@ -262,7 +262,8 @@ sep::SEPResult MeshHandler::notifyDepsgraph() {
 bool MeshHandler::validateMesh() const { return initialized_ && mesh_ != nullptr; }
 
 bool MeshHandler::validatePattern(const sep::pattern::PatternData& pattern_data) const {
-  return pattern_data.coherence >= 0.0f && pattern_data.coherence <= 1.0f;
+  return pattern_data.quantum_state.coherence >= 0.0f &&
+         pattern_data.quantum_state.coherence <= 1.0f;
 }
 
 void MeshHandler::cleanupCustomData() { custom_layers_.clear(); }

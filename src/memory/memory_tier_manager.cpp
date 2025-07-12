@@ -6,12 +6,6 @@
 #include "quantum/processor.h"
 #include "quantum/pattern_processor.hpp"
 
-namespace sep {
-    namespace config
-    {
-        class ConfigManager;
-    }
-
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
@@ -21,21 +15,11 @@ namespace sep {
 #include <new>
 #include <string>
 
-namespace sep
-{
-    namespace config
-    {
-        class ConfigManager;
-    }  // namespace config
-    namespace memory
-    {
+namespace sep {
+namespace memory {
 
-        // Forward declarations
-        class MemoryTier;
-        struct MemoryBlock;
-
-        // Static member initializations
-        std::unique_ptr<MemoryTierManager>::sep::memory::MemoryTierManager::instance_;
+// Static member initializations
+std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
         std::once_flag MemoryTierManager::once_flag_;
 
         // Singleton getter

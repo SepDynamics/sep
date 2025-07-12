@@ -31,7 +31,7 @@ void from_json(const nlohmann::json& j, QuantumState& state) {
     state.state = static_cast<QuantumState::Status>(j.value("state", 0));
 }
 
-void to_json(nlohmann::json& j, const sep::quantum::PatternRelationship& rel) {
+void to_json(nlohmann::json& j, const sep::PatternRelationship& rel) {
     j = nlohmann::json{
         {"targetId", rel.targetId},
         {"strength", rel.strength},
@@ -39,7 +39,7 @@ void to_json(nlohmann::json& j, const sep::quantum::PatternRelationship& rel) {
     };
 }
 
-void from_json(const nlohmann::json& j, sep::quantum::PatternRelationship& rel) {
+void from_json(const nlohmann::json& j, sep::PatternRelationship& rel) {
     j.at("targetId").get_to(rel.targetId);
     j.at("strength").get_to(rel.strength);
     rel.type = static_cast<RelationshipType>(j.value("type", 0)); 

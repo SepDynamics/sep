@@ -50,7 +50,5 @@ namespace sep
 
             sep::Engine* engine_{nullptr};
 
-    sep::Engine* engine_{nullptr};
-
     }  // namespace workbench
 }  // namespace sep

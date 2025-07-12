@@ -39,6 +39,7 @@ class SystemHooks;
 namespace memory {
 
     using ::sep::memory::MemoryTierEnum;
+    using sep::persistence::PersistentPatternData;
 
     class MemoryTierManager
     {
@@ -101,7 +102,7 @@ namespace memory {
         void calculateRelationshipScores();
         void loadDataFromPersistence();
         void storeDataToPersistence(const void *data,
-                                    const ::sep::persistence::PersistentPatternData &metadata);
+                                    const sep::persistence::PersistentPatternData &metadata);
         void *findDataById(std::size_t id);
         const void *findDataById(std::size_t id) const;
         void registerGenericData(std::size_t id, const void *data);

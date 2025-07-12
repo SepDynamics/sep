@@ -11,6 +11,7 @@
 
 // Define namespace alias for clarity
 namespace logging = sep::logging;
+namespace cfg = sep::config;  // for CudaConfig
 
 
 namespace sep::pattern {

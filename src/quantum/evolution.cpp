@@ -52,7 +52,7 @@ inline float deterministicNoise(uint64_t& state)
             std::vector<std::pair<std::string, float>> fitness_scores;
             for (const auto& pattern : patterns)
             {
-                fitness_scores.push_back({pattern.id, calculateFitness(pattern)});
+                fitness_scores.push_back(std::make_pair(pattern.id, calculateFitness(pattern)));
             }
             std::sort(fitness_scores.begin(), fitness_scores.end(),
                       [](const auto& a, const auto& b) { return a.second > b.second; });
@@ -169,7 +169,7 @@ inline float deterministicNoise(uint64_t& state)
             std::vector<std::pair<std::string, float>> fitness_scores;
             for (const auto& pattern : patterns)
             {
-                fitness_scores.push_back({pattern.id, calculateFitness(pattern)});
+                fitness_scores.push_back(std::make_pair(pattern.id, calculateFitness(pattern)));
             }
             std::sort(fitness_scores.begin(), fitness_scores.end(),
                       [](const auto& a, const auto& b) { return a.second > b.second; });
@@ -195,7 +195,7 @@ inline float deterministicNoise(uint64_t& state)
                 for (size_t i = 0; i < tournament_size; ++i)
                 {
                     size_t idx = nextIndex(patterns.size());
-                    tournament.push_back({patterns[idx].id, calculateFitness(patterns[idx])});
+                    tournament.push_back(std::make_pair(patterns[idx].id, calculateFitness(patterns[idx])));
                 }
                 auto winner = std::max_element(
                     tournament.begin(), tournament.end(),
@@ -461,64 +461,7 @@ inline float deterministicNoise(uint64_t& state)
             return child;
         }
 
-        float coherenceFitness(const Pattern& pattern) { return pattern.quantum_state.coherence; }
-        float stabilityFitness(const Pattern& pattern) { return pattern.quantum_state.stability; }
-        float complexityFitness(const Pattern& pattern)
-        {
-            float complexity = pattern.quantum_state.entropy;
-            return 1.0f - std::abs(complexity - 0.5f) * 2.0f;
-        }
-
-sep::quantum::BatchProcessingResult EvolutionEngine::evolve(const EvolutionParams& params) { return impl_->evolve(params); }
-sep::quantum::BatchProcessingResult EvolutionEngine::evolveGeneration() { return impl_->evolveGeneration(); }
-Pattern EvolutionEngine::crossover(const Pattern& parent1, const Pattern& parent2) { return impl_->crossover(parent1, parent2); }
-Pattern EvolutionEngine::mutate(const Pattern& pattern) { return impl_->mutate(pattern); }
-std::vector<std::string> EvolutionEngine::selectElite(size_t count) { return impl_->selectElite(count); }
-std::vector<std::string> EvolutionEngine::tournamentSelection(size_t tournament_size, size_t num_winners) {
-    return impl_->tournamentSelection(tournament_size, num_winners);
-}
-std::vector<std::string> EvolutionEngine::rouletteWheelSelection(size_t count) { return impl_->rouletteWheelSelection(count); }
-float EvolutionEngine::calculateFitness(const Pattern& pattern) const { return impl_->calculateFitness(pattern); }
-float EvolutionEngine::calculateDiversity(const std::vector<Pattern>& patterns) const { return impl_->calculateDiversity(patterns); }
-void EvolutionEngine::setParams(const EvolutionParams& params) { impl_->setParams(params); }
-EvolutionEngine::EvolutionParams EvolutionEngine::getParams() const { return impl_->getParams(); }
-EvolutionEngine::EvolutionStats EvolutionEngine::getStats() const { return impl_->getStats(); }
-std::vector<EvolutionEngine::EvolutionStats> EvolutionEngine::getHistory() const { return impl_->getHistory(); }
-
-        void applySpike(Pattern& neuron, float input, float decay, float threshold)
-        {
-            float& c = neuron.quantum_state.coherence;
-            c += input;
-            c -= decay * c;
-            if (c >= threshold)
-            {
-                c = 1.0f;
-            }
-            c = glm::clamp(c, 0.0f, 1.0f);
-        }
-
-        void hebbianUpdate(const Pattern& pre, Pattern& post, float rate)
-        {
-            float delta = rate * pre.quantum_state.coherence * post.quantum_state.coherence;
-            post.quantum_state.stability =
-                glm::clamp(post.quantum_state.stability + delta, 0.0f, 1.0f);
-        }
-
-        void applyGravity(Pattern& pattern, const glm::vec3& center, float strength)
-        {
-            glm::vec3 pos = glm::vec3(pattern.position);
-            glm::vec3 dir = center - pos;
-            pattern.position += glm::vec4(dir * strength, 0.0f);
-        }
-
-        void randomPerturbation(Pattern& pattern, float amplitude)
-        {
-            static uint64_t noise_state = 0;
-            auto rnd = [&]() { return deterministicNoise(noise_state) * 2.0f - 1.0f; };
-            pattern.position +=
-                glm::vec4(rnd() * amplitude, rnd() * amplitude, rnd() * amplitude, 0.0f);
-        }
-
     }  // namespace evolution
 
 }  // namespace sep::quantum
+

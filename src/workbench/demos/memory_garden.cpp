@@ -2,7 +2,7 @@
 
 #include <glm/vec3.hpp>
 
-#include "../../workbench_demo_adapter.hpp"
+#include "workbench_demo_adapter.hpp"
 #include "config.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/quantum_coherence_manager.h"

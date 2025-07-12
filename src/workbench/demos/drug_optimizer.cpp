@@ -5,7 +5,7 @@
 #include "compat/glm_config.h"
 #include <glm/gtx/norm.hpp>
 
-#include "../../workbench_demo_adapter.hpp"
+#include "workbench_demo_adapter.hpp"
 
 // Use namespace alias to avoid ambiguity
 namespace sq = sep::quantum;

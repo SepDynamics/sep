@@ -1,7 +1,6 @@
 #ifndef SEP_CONFIG_MANAGER_H
 #define SEP_CONFIG_MANAGER_H
 
-#include "types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "core/types.h"
 #include <memory>

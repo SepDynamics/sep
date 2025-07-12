@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <glm/glm.hpp>
 
-#include "../../workbench_demo_adapter.hpp"
+#include "workbench_demo_adapter.hpp"
 
 namespace sep
 {

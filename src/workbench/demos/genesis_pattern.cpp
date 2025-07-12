@@ -1,6 +1,6 @@
 #include "genesis_pattern.hpp"
 
-#include "../../workbench_demo_adapter.hpp"
+#include "workbench_demo_adapter.hpp"
 #include "blender/cycles_renderer.hpp"
 #include "config.hpp"
 #include "core/engine.h"

@@ -3,7 +3,7 @@
 // Forward declarations and includes
 #include "macros.h"
 
-#include "types.h"
+#include "core/types.h"
 #include <cstddef>
 #include <memory>
 #include <string>

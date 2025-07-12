@@ -134,6 +134,7 @@ Index of this file:
 #include <ctype.h>          // toupper
 #include <limits.h>         // INT_MIN, INT_MAX
 #include <math.h>           // sqrtf, powf, cosf, sinf, floorf, ceilf
+#include <cmath>
 #include <stdio.h>          // vsnprintf, sscanf, printf
 #include <stdlib.h>         // NULL, malloc, free, atoi
 #include <stdint.h>         // intptr_t
@@ -9584,7 +9585,8 @@ static void ShowExampleAppConstrainedResize(bool* p_open)
         static void Step(ImGuiSizeCallbackData* data)
         {
             float step = *(float*)data->UserData;
-            data->DesiredSize = ImVec2((int)(data->DesiredSize.x / step + 0.5f) * step, (int)(data->DesiredSize.y / step + 0.5f) * step);
+            data->DesiredSize = ImVec2(static_cast<int>(std::lroundf(data->DesiredSize.x / step)) * step,
+                                       static_cast<int>(std::lroundf(data->DesiredSize.y / step)) * step);
         }
     };
 
@@ -9795,7 +9797,8 @@ static void PathConcaveShape(ImDrawList* draw_list, float x, float y, float sz)
 {
     const ImVec2 pos_norms[] = { { 0.0f, 0.0f }, { 0.3f, 0.0f }, { 0.3f, 0.7f }, { 0.7f, 0.7f }, { 0.7f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
     for (const ImVec2& p : pos_norms)
-        draw_list->PathLineTo(ImVec2(x + 0.5f + (int)(sz * p.x), y + 0.5f + (int)(sz * p.y)));
+        draw_list->PathLineTo(ImVec2(x + 0.5f + static_cast<int>(std::lroundf(sz * p.x)),
+                                     y + 0.5f + static_cast<int>(std::lroundf(sz * p.y))));
 }
 
 // Demonstrate using the low-level ImDrawList to draw custom shapes.
@@ -10555,7 +10558,8 @@ struct ExampleAssetsBrowser
                     ClearItems();
                 ImGui::Separator();
                 if (ImGui::MenuItem("Close", NULL, false, p_open != NULL))
-                    *p_open = false;
+                    if (p_open)
+                        *p_open = false;
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Edit"))

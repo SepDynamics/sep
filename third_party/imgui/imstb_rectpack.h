@@ -553,7 +553,7 @@ STBRP_DEF int stbrp_pack_rects(stbrp_context *context, stbrp_rect *rects, int nu
    }
 
    // sort according to heuristic
-   STBRP_SORT(rects, num_rects, sizeof(rects[0]), rect_height_compare);
+   STBRP_SORT(rects, num_rects, sizeof(*rects), rect_height_compare);
 
    for (i=0; i < num_rects; ++i) {
       if (rects[i].w == 0 || rects[i].h == 0) {
@@ -570,7 +570,7 @@ STBRP_DEF int stbrp_pack_rects(stbrp_context *context, stbrp_rect *rects, int nu
    }
 
    // unsort
-   STBRP_SORT(rects, num_rects, sizeof(rects[0]), rect_original_order);
+   STBRP_SORT(rects, num_rects, sizeof(*rects), rect_original_order);
 
    // set was_packed flags and all_rects_packed status
    for (i=0; i < num_rects; ++i) {

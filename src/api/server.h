@@ -64,60 +64,58 @@ class SEPApiServer : public Server {
    * @param config The API configuration
    * @param renderer Cycles renderer
    */
-  explicit SEPApiServer(const ::sep::config::APIConfig &config,
-                         blender::ccl::CyclesRenderer *renderer);
+     explicit SEPApiServer(const AuthConfig &config, blender::ccl::CyclesRenderer *renderer);
 
-  /**
-   * @brief Destructor
-   */
-  ~SEPApiServer() override;
+     /**
+      * @brief Destructor
+      */
+     ~SEPApiServer() override;
 
-  // Delete copy constructor and assignment operator
-  SEPApiServer(const SEPApiServer &) = delete;
-  SEPApiServer &operator=(const SEPApiServer &) = delete;
+     // Delete copy constructor and assignment operator
+     SEPApiServer(const SEPApiServer &) = delete;
+     SEPApiServer &operator=(const SEPApiServer &) = delete;
 
-  /**
-   * @brief Start the server
-   */
-  void start();
+     /**
+      * @brief Start the server
+      */
+     void start();
 
-  /**
-   * @brief Register routes and start the server
-   */
-  bool run();
+     /**
+      * @brief Register routes and start the server
+      */
+     bool run();
 
-  /**
-   * @brief Stop the server
-   */
-  void stop();
+     /**
+      * @brief Stop the server
+      */
+     void stop();
 
-  /**
-   * @brief Wait for server shutdown
-   */
-  void waitForShutdown();
+     /**
+      * @brief Wait for server shutdown
+      */
+     void waitForShutdown();
 
-  /**
-   * @brief Update server configuration
-   * @param new_config The new configuration
-   */
-  void updateConfig(const ::sep::config::APIConfig &new_config);
+     /**
+      * @brief Update server configuration
+      * @param new_config The new configuration
+      */
+     void updateConfig(const AuthConfig &new_config);
 
-  // Server interface implementation
-  std::mutex &getMetricsMutex() override;
-  ServerMetrics &getModifiableMetrics() override;
-  std::unique_ptr<HttpResponse> makeJsonResponse(int code,
-                                                           const std::string &message) override;
-  std::string handleError(const std::string &message, int code) override;
-  void logRequest(const HttpRequest &req, int code, const std::string &body,
-                  int64_t duration) override;
+     // Server interface implementation
+     std::mutex &getMetricsMutex() override;
+     ServerMetrics &getModifiableMetrics() override;
+     std::unique_ptr<HttpResponse> makeJsonResponse(int code, const std::string &message) override;
+     std::string handleError(const std::string &message, int code) override;
+     void logRequest(const HttpRequest &req, int code, const std::string &body,
+                     int64_t duration) override;
 
-  /**
-   * @brief Get error response string
-   * @param message Error message
-   * @param status HTTP status code
-   * @return JSON error response string
-   */
-  std::string getErrorResponse(const std::string &message, int status);
+     /**
+      * @brief Get error response string
+      * @param message Error message
+      * @param status HTTP status code
+      * @return JSON error response string
+      */
+     std::string getErrorResponse(const std::string &message, int status);
 
  private:
   /**
@@ -197,7 +195,7 @@ class SEPApiServer : public Server {
   static SEPApiServer *instance_;
 
   // Configuration
-  ::sep::config::APIConfig config_;
+  AuthConfig config_;
 
   // Logging
   std::shared_ptr<spdlog::logger> logger_;

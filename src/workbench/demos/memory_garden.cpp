@@ -12,7 +12,7 @@ namespace workbench {
     void MemoryGardenDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
     {
         (void)engine;
-        (void)renderer;
+        renderer_ = renderer;
         const auto& cfg = Config::getInstance().memory_garden();
 
         memory_manager_ = &sep::memory::MemoryTierManager::getInstance();

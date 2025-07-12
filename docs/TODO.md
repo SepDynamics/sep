@@ -1,258 +1,165 @@
-## **Phase 1: Fix the Goddamn Build**
+Here is the no-bullshit task list to get the SEP Workbench fully operational. The primary blocker is a series of linker errors caused by a misconfigured build system. We will fix that first, then systematically implement the demo functionality as outlined in your checklist.
 
-The build is failing because of `-Werror`, which treats every warning as a fatal error. We're not disabling it. We're fixing the code so it compiles cleanly. The errors are all in the `src/workbench/demos/` directory.
-
-### **Task 1.1: Fix Undeclared Member Variables in Demos**
-
-Multiple demo `.cpp` files use member variables for UI controls that are never declared in their corresponding header files. Add the missing private member variables to the class definitions in the `.hpp` files.
-
-**1. File: `src/workbench/demos/annealing_sim.hpp`**
-Add these private members to the `AnnealingSimDemo` class:
-```cpp
-private:
-    // ... existing members ...
-    float threshold_{1.0f};
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    float learning_rate_{0.05f};
-    float connection_prob_{0.2f};
-```
-
-**2. File: `src/workbench/demos/audio_visualizer_simple.hpp`**
-Add these private members to the `AudioVisualizerDemo` class:
-```cpp
-private:
-    // ... existing members ...
-    float threshold_{1.0f};
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    float learning_rate_{0.05f};
-    float connection_prob_{0.2f};
-```
-
-**3. File: `src/workbench/demos/cosmo_sim.hpp`**
-Add these private members to the `CosmoSim` class:
-```cpp
-private:
-    // ... existing members ...
-    float threshold_{1.0f};
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    float learning_rate_{0.05f};
-    float connection_prob_{0.2f};
-```
-
-**4. File: `src/workbench/demos/digital_physics_demo.hpp`**
-Add these private members to the `DigitalPhysicsDemo` class:
-```cpp
-private:
-    // ... existing members ...
-    float threshold_{1.0f};
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    float learning_rate_{0.05f};
-    float connection_prob_{0.2f};
-```
-
-**5. File: `src/workbench/demos/drug_discovery_demo.hpp`**
-Add these private members to the `DrugDiscoveryDemo` class:
-```cpp
-private:
-    // ... existing members ...
-    float threshold_{1.0f};
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    float learning_rate_{0.05f};
-    float connection_prob_{0.2f};
-```
-
-**6. File: `src/workbench/demos/drug_optimizer.hpp`**
-Add these private members to the `DrugOptimizerDemo` class:
-```cpp
-private:
-    // ... existing members ...
-    float threshold_{1.0f};
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    float learning_rate_{0.05f};
-    float connection_prob_{0.2f};
-```
-
-**7. File: `src/workbench/demos/memory_garden.hpp`**
-Add these private members to the `MemoryGardenDemo` class:
-```cpp
-private:
-    // ... existing members ...
-    float threshold_{1.0f};
-    float decay_{0.1f};
-    float input_strength_{0.5f};
-    float connection_opacity_{0.5f}; // Fix the typo from connection_prob_
-```
-*Note: In `memory_garden.cpp`, the variable used is `connection_prob_`, but the class member seems intended to be `connection_opacity_`. I've used `connection_opacity_`. Fix the `.cpp` file to use `connection_opacity_` to match the checklist's intent.*
-
-**8. File: `src/workbench/demos/neural_demo.hpp`**
-Add these private members to the `NeuralDemo` class:
-```cpp
-private:
-    // ... existing members ...
-    float input_strength_{0.5f};
-    float learning_rate_{0.05f};
-    float connection_prob_{0.2f};
-```
-
-### **Task 1.2: Fix Unused Parameter Warnings**
-
-The compiler is flagging unused `engine` and `renderer` pointers in the `on_load` methods. Silence these warnings by explicitly marking the parameters as unused.
-
-Modify the `on_load` function in each of the following files:
-- `src/workbench/demos/annealing_sim.cpp`
-- `src/workbench/demos/audio_visualizer_simple.cpp`
-- `src/workbench/demos/cosmo_sim.cpp`
-- `src/workbench/demos/digital_physics_demo.cpp`
-- `src/workbench/demos/drug_discovery_demo.cpp`
-- `src/workbench/demos/drug_optimizer.cpp`
-- `src/workbench/demos/flocking_demo.cpp`
-- `src/workbench/demos/memory_garden.cpp`
-- `src/workbench/demos/neural_demo.cpp`
-- `src/workbench/demos/neuro_sim.cpp`
-
-**Example Change (apply to all listed files):**
-
-**Original:**
-```cpp
-void SomeDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
-    // ...
-}
-```
-
-**Corrected:**
-```cpp
-void SomeDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
-    (void)engine;   // Mark as unused
-    (void)renderer; // Mark as unused
-    // ... rest of the function
-}
-```
-*Note: For the demos that actually use `engine` or `renderer` (like `GenesisPatternDemo`), you don't need to add this. Only add it for the ones failing in the build log.*
+No new approaches. No new files unless absolutely necessary. We are fixing this build.
 
 ---
 
-## **Phase 2: Wire Up the Workbench Application**
+## **Phase 1: Fix the Linker Errors & Build System**
 
-With the build errors fixed, we need to ensure `workbench_main.cpp` correctly initializes the system and runs the demo loop. The checklist is your guide.
+This phase is critical. The build is failing at the final link stage for the `sep_workbench` executable. The `build_log.txt` shows hundreds of `undefined reference` errors. We will resolve these by correcting the CMake configuration.
 
-### **Task 2.1: Consolidate the Main Entry Point**
+### **Task 1.1: Consolidate and Correct Library Linking in `src/CMakeLists.txt`**
 
-Your `src/` directory contains `main.cpp` and `workbench_main.cpp`. The build log shows `workbench_main.cpp` is being used for the `sep_workbench` target. **Delete `src/main.cpp`** to avoid confusion. `src/workbench_main.cpp` is now the single entry point.
+The current link command for `sep_workbench` is a mess of duplicated libraries and incorrect dependencies. This is the root cause of the build failure.
 
-### **Task 2.2: Structure the Main Loop**
+*   **File to Edit:** `src/CMakeLists.txt`
+*   **Action:** Replace the entire `add_executable(sep_workbench ...)` block with a clean, correct version. The goal is to ensure that all static libraries (`.a`) are linked *before* the shared libraries (`.so`) they depend on, and that all transitive dependencies from Cycles/Blender are properly included.
 
-Review `src/workbench_main.cpp`. It's a mess of fallback code. Gut the main `while` loop and replace it with a clean, focused loop that follows the checklist's intent.
+```cmake
+# --- START REPLACEMENT BLOCK for src/CMakeLists.txt ---
 
-**Replace the entire `while (!glfwWindowShouldClose(window))` loop in `src/workbench_main.cpp` with this:**
+if(SEP_BUILD_WORKBENCH)
+    add_executable(sep_workbench workbench_main.cpp)
+    set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
 
-```cpp
-// 9. Main Loop
-float lastFrameTime = static_cast<float>(glfwGetTime());
+    target_include_directories(sep_workbench PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/third_party/imgui
+        ${CMAKE_SOURCE_DIR}/third_party/imgui/backends
+        ${GLEW_INCLUDE_DIRS}
+    )
 
-while (!glfwWindowShouldClose(window)) {
-    // Poll and handle events
-    glfwPollEvents();
+    # Link all libraries in the correct order.
+    # Static libraries first, then the shared libraries they need.
+    target_link_libraries(sep_workbench PRIVATE
+        # --- SEP Static Libraries ---
+        sep_workbench_lib
+        sep_api
+        sep_quantum
+        sep_memory
+        sep_core
+        sep_audio
+        sep_embeddings
+        imgui
 
-    // Calculate delta time
-    float currentTime = static_cast<float>(glfwGetTime());
-    float deltaTime = currentTime - lastFrameTime;
-    lastFrameTime = currentTime;
+        # --- Blender/Cycles and its Dependencies ---
+        # Link the shared library we built
+        sep_blender
 
-    // Start the ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+        # Transitive dependencies required by sep_blender
+        cycles_device
+        cycles_kernel
+        cycles_scene
+        cycles_util
+        ${OSL_LIBRARIES}
+        ${TBB_LIBRARIES}
+        ${OpenImageIO_LIBRARIES}
+        ${Alembic_LIBRARIES}
+        ${OpenPGL_LIBRARIES}
 
-    // Clear the screen
-    glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        # --- System & Other Dependencies ---
+        sep_compat # Must be linked as a shared lib if it provides CUDA symbols
+        ${CURL_LIBRARIES}
+        -lhiredis
+        http_parser::http_parser
+        ${GLEW_LIBRARIES}
+        glfw
+        OpenGL::GL
+        ${CMAKE_DL_LIBS}
+        Threads::Threads
+        ${PIPEWIRE_LIBRARIES}
+        ${FFTW_LIBRARIES}
+    )
+endif()
 
-    // --- Main UI and Demo Controls ---
-    ImGui::Begin("SEP Workbench Controls");
-    ImGui::Text("Current Demo: %s", manager.getCurrentDemo().c_str());
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::Separator();
-    
-    // Demo selection buttons
-    if (ImGui::Button("Genesis Pattern (1)")) manager.switchToDemo("genesis");
-    if (ImGui::Button("Audio Visualizer (2)")) manager.switchToDemo("audio");
-    if (ImGui::Button("Memory Garden (3)")) manager.switchToDemo("memory");
-    if (ImGui::Button("Flocking Sim (4)")) manager.switchToDemo("flocking");
-    if (ImGui::Button("Cosmology Sim (5)")) manager.switchToDemo("cosmo_sim");
-    if (ImGui::Button("Neural Network (6)")) manager.switchToDemo("neural");
-    // Add buttons for other demos as needed...
-    
-    ImGui::End();
-
-    // --- Update and Render Current Demo ---
-    if (manager.getCurrentDemo() != "") {
-        manager.on_update(deltaTime);
-        manager.on_render();      // This calls the demo's on_render()
-        manager.on_ui_render();   // This calls the demo's ImGui code
-    }
-
-    // Render ImGui
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    // Swap buffers
-    glfwSwapBuffers(window);
-}
+# --- END REPLACEMENT BLOCK ---
 ```
 
-### **Task 2.3: Verify Demo Registration**
+### **Task 1.2: Fix `sep_compat` and `sep_blender` Library Definitions**
 
-Make sure that `src/workbench_main.cpp` calls the function to register the demos before the main loop starts. Add this line after the demo manager is initialized:
+The `build_log.txt` shows that `libsep_blender.so` is missing symbols it expects from other libraries, and `sep_compat` has its own issues. This is a dependency definition problem.
 
-```cpp
-// In main() of workbench_main.cpp
-auto& manager = sep::workbench::DemoManager::getInstance();
-manager.initialize(engine.get(), cycles_adapter.get());
+1.  **File to Edit:** `src/compat/CMakeLists.txt`
+    *   **Problem:** It's being built as a `SHARED` library but doesn't link its dependencies correctly.
+    *   **Action:** Change `add_library(sep_compat SHARED ...)` to `add_library(sep_compat STATIC ...)`. The compatibility layer should be a static library that gets compiled into the final executable. This resolves the `undefined reference to sep::cuda::*` errors.
 
-// Add this call:
-sep::workbench::registerDemos(); 
+2.  **File to Edit:** `src/blender/CMakeLists.txt`
+    *   **Problem:** It's being built as a `SHARED` library (`libsep_blender.so`) but fails to correctly link its own dependencies, causing the main executable link to fail.
+    *   **Action:** Ensure the `target_link_libraries` for `sep_blender` is correct and includes all Cycles components. **The fix in Task 1.1 should resolve this by linking everything correctly at the final executable stage, but double-check this file if issues persist.**
 
-manager.switchToDemo("genesis"); // Start with a default demo
-```
+### **Task 1.3: Address TBB Version Conflict**
 
-The function `registerDemos()` is defined in `src/workbench/demos/register_demos.cpp`. This will populate the `DemoManager` with all the demo classes.
+*   **Problem:** The log shows `warning: libtbb.so.2 ... may conflict with libtbb.so.12`. This is because the system's OpenImageIO is built against an older TBB than the one you're likely providing for Cycles.
+*   **Action:** This is an environment issue. The cleanest fix is to rebuild the dependencies (like OpenImageIO) against the same version of TBB that Cycles uses. A quicker, dirtier fix is to use an `LD_PRELOAD` trick at runtime, but this is not recommended. **For now, focus on getting it to link. If it crashes at runtime, this is the cause.**
 
 ---
 
-## **Phase 3: Compile, Run, and Verify**
+## **Phase 2: Implement the Workbench UI and Demo Management**
 
-Now, put it all together.
+With the build fixed, we can make the application functional. This aligns with your `SEP_WORKBENCH_CHECKLIST.md`.
 
-### **Task 3.1: Build the Executable**
+### **Task 2.1: Finalize the Demo Manager**
 
-Navigate to your build directory and run the build command. It should now compile without errors.
+*   **Files to Edit:** `src/workbench/demos/demo_manager.cpp`, `src/workbench_main.cpp`.
+*   **Action:**
+    1.  In `workbench_main.cpp`, ensure `registerDemos()` is called. It already is.
+    2.  Ensure `manager.switchToDemo("genesis")` is called to load the first demo. It already is.
+    3.  Implement the key callback (`key_callback` in `workbench_main.cpp`) to call `manager.switchToDemo()` based on the key pressed (1-9). Map keys to the demo names registered in `registerDemos`.
 
-```bash
-cd cmake-make
-cmake .. -DSEP_BUILD_WORKBENCH=ON
-make -j$(nproc)
-```
+### **Task 2.2: Implement the Main UI**
 
-The executable will be `cmake-make/sep_workbench`.
+*   **Files to Edit:** `src/workbench_main.cpp` and `src/workbench/demos/demo_manager.cpp`.
+*   **Action:**
+    1.  In the main loop of `workbench_main.cpp`, create an ImGui window that lists the available demos and allows switching. This window should call `manager.switchToDemo()`.
+    2.  The current active demo's `on_ui_render()` method must be called from the main loop. This is where demo-specific controls will live.
 
-### **Task 3.2: Run the Workbench**
+---
 
-Execute it from the build directory.
+## **Phase 3: Activate and Verify Individual Demos**
 
-```bash
-./sep_workbench
-```
+Work through each demo, connecting its logic to the renderer and UI.
 
-**Expected Outcome:**
-1.  A window titled "SEP Workbench" appears.
-2.  The window has a dark background.
-3.  An ImGui window titled "SEP Workbench Controls" is visible.
-4.  The "Genesis Pattern" demo should be running by default, rendering something in the window.
-5.  Clicking the other buttons in the ImGui window should switch to the corresponding demos, and they should each render their respective visualizations.
-6.  Each demo's specific ImGui control window should appear when it is active.
+### **Task 3.1: "Genesis Pattern" Demo**
+
+*   **Files to Edit:** `src/workbench/demos/genesis_pattern.cpp`, `src/workbench/demos/genesis_pattern.hpp`.
+*   **Action:**
+    1.  In `on_load`, initialize the pattern processor and create the seed pattern.
+    2.  In `on_update`, call the evolution logic.
+    3.  In `on_render`, get the pattern data and pass it to `renderer_->renderPatternState()`. The renderer adapter should handle the visualization.
+    4.  In `on_ui_render`, implement the ImGui controls (sliders, toggles) defined in `SEP_WORKBENCH_CHECKLIST.md`.
+
+### **Task 3.2: "Audio-Visual Synthesizer" Demo**
+
+*   **Files to Edit:** `src/workbench/demos/audio_visualizer.cpp`, `src/workbench/demos/audio_visualizer.hpp`.
+*   **Action:**
+    1.  In `on_load`, initialize the `sep::audio::AudioCapture` and `AudioPipeline`.
+    2.  In the audio callback, convert the FFT data into pattern vectors for the engine.
+    3.  In `on_render`, map the spectral data to visual properties (color, etc.) and render the patterns.
+    4.  In `on_ui_render`, add controls for audio input and sensitivity.
+
+### **Task 3.3: "Memory Garden" Demo**
+
+*   **Files to Edit:** `src/workbench/demos/memory_garden.cpp`, `src/workbench/demos/memory_garden.hpp`.
+*   **Action:**
+    1.  In `on_update`, query the `MemoryTierManager` for patterns in STM, MTM, and LTM.
+    2.  In `on_render`, implement the 3D visualization. Map each pattern's position based on its tier (e.g., STM in an outer sphere, LTM in a central core).
+    3.  Render lines between related patterns by querying the DAG.
+    4.  In `on_ui_render`, add UI elements to inspect pattern details and view memory stats.
+
+---
+
+## **Phase 4: Static Analysis Cleanup**
+
+The build is working, demos are running. Now, clean up the code rot.
+
+### **Task 4.1: Address High-Priority Defects**
+
+*   **File to Review:** `report.md`
+*   **Action:**
+    1.  Focus on **HIGH** and **MEDIUM** severity issues within your own source files (e.g., in `src/workbench/renderer.cpp`, `src/core/engine.cpp`).
+    2.  Ignore defects in `third_party/` and system headers unless they are causing demonstrable problems. Many are false positives or stylistic issues.
+    3.  Fix the `bugprone-integer-division` issues in `renderer.cpp` by ensuring floating-point division (e.g., `width / 2.0f`).
+    4.  Fix any legitimate `[cert-err33-c]` warnings by checking the return values of functions like `snprintf`.
+
+Execute this plan sequentially. Phase 1 is the gatekeeper for all other progress. Once the linker is satisfied, the rest is implementation.

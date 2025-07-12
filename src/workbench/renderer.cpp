@@ -222,7 +222,7 @@ void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>
             glUseProgram(shaderProgram);
             glBindVertexArray(vao);
             float spacing = 1.5f;
-            int perRow = static_cast<int>(std::sqrt(patterns.size())) + 1;
+            int perRow = static_cast<int>(std::sqrt(patterns.size()));
             float startX = -((perRow - 1) * spacing) / 2.0f;
             float startZ = -((perRow - 1) * spacing) / 2.0f;
             for (size_t i = 0; i < patterns.size() && i < 100; ++i)
@@ -236,7 +236,8 @@ void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>
                 float s = 1.0f;
                 glm::vec4 c(1.0f);
                 glUniform4f(colorLoc, c.r, c.g, c.b, c.a);
-                if (p.quantum_state.memory_tier == sep::memory::MemoryTierEnum::SHORT_TERM)
+                if (p.quantum_state.memory_tier ==
+                    sep::memory::MemoryTierEnum::SHORT_TERM_MEMORY)
                     renderSphere(8, 8, pos, s, c);
                 else
                     renderCube(pos, s, c);

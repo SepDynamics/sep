@@ -1,5 +1,7 @@
 #include "quantum/evolution.h"
 #include "quantum/processor.h"
+#include "core/types.h"                // for sep::Pattern definitions
+#include "quantum/pattern_processor.hpp" // for pattern utilities
 #include <algorithm>
 #include <numeric>
 #include <stdexcept>

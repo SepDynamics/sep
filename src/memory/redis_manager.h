@@ -2,14 +2,7 @@
 
 #include "memory/persistent_pattern_data.hpp"
 #include "memory/types.h"
-
-#ifndef SEP_NO_REDIS
-#  include <hiredis/hiredis.h>
-#  define SEP_HAS_HIREDIS 1
-#else
-#  define SEP_HAS_HIREDIS 0
-   struct redisContext;
-#endif
+#include <hiredis/hiredis.h>
 
 #include <memory>
 #include <optional>

@@ -1,11 +1,11 @@
 #pragma once
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
-#include "core/types.h"
-#include "core/types.h"
-#include "core/common.h"
+
 #include "compat/cycles.h"
+#include "core/common.h"
+#include "core/types.h"
 
 namespace sep {
 namespace blender {

@@ -3,26 +3,23 @@
 #include "compat/shim.h"
 
 // Assuming these are the correct paths and necessary includes from the original bridge.h
-#include "blender/base_types.h"
-#include "blender/blender_types.h"  // If still needed
-#include "blender/gpu_context.h"           // For GPUContext
-#include <vector>
-#include "blender/pattern_common.h"  // For ObjectState (assuming)
-#include "blender/bridge.h"
-#include "core/types.h"
-#include "core/types.h"
-#include "blender/pattern_observer.h"   // For PatternObserver
-#include "blender/types.h"              // For Object, SEPResult, etc.
-#include "memory/memory_tier.hpp"   // Provides MemoryTier
-#include "memory/memory_tier_manager.hpp"  // For MemoryTierManager
-
 #include <atomic>
 #include <map>
 #include <memory>
-#include <vector>
 #include <mutex>
 #include <thread>
+#include <vector>
 
+#include "blender/base_types.h"
+#include "blender/blender_types.h"  // If still needed
+#include "blender/bridge.h"
+#include "blender/gpu_context.h"       // For GPUContext
+#include "blender/pattern_common.h"    // For ObjectState (assuming)
+#include "blender/pattern_observer.h"  // For PatternObserver
+#include "blender/types.h"             // For Object, SEPResult, etc.
+#include "core/types.h"
+#include "memory/memory_tier.hpp"          // Provides MemoryTier
+#include "memory/memory_tier_manager.hpp"  // For MemoryTierManager
 
 // Forward declaration for PatternProcessor
 

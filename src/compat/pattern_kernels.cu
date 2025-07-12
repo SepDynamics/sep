@@ -1,11 +1,7 @@
-#include "core/types.h"
 #include "compat/cuda_common.h"
-
+#include "compat/cuda_helpers.h"
 #include "compat/cuda_unified_fix.h"
 #include "core/types.h"
-#include "core/types.h"
-
-#include "compat/cuda_helpers.h"
 #ifdef __CUDACC__
 #include <device_launch_parameters.h>
 

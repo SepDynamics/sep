@@ -39,4 +39,4 @@
 #include "compat/shim.h"
 #include "core/common.h"
 #include "memory/types.h"
-#include "quantum/types.h"
+#include "core/types.h"

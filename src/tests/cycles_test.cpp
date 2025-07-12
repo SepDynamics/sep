@@ -1,5 +1,5 @@
 #include "blender/cycles_renderer.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
 #include "core/common.h"
 
 #include <iostream>

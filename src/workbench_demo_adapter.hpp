@@ -9,7 +9,7 @@
 #include "sep_engine_wrapper.h"
 #include "ui_manager.h"
 #include "window.h"
-#include "workbench/pattern.hpp"  // Use explicit path to avoid ambiguity
+#include "core/types.h"  // Use explicit path to avoid ambiguity
 
 namespace sep
 {

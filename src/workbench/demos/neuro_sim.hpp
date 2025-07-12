@@ -9,7 +9,8 @@
 #include "demo_manager.hpp"
 #include "imgui.h"
 #include "memory/memory_tier_manager.hpp"
-#include "quantum/types.h"
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "sep_engine_wrapper.h"
 
 namespace sep

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "quantum/types.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
+#include "core/types.h"
 #include <nlohmann/json.hpp>
 #include <vector>
 #include <string>

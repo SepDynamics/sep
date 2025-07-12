@@ -7,7 +7,8 @@
 
 #include "../../workbench_demo_adapter.hpp"
 #include "memory/types.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "quantum/evolution.h"
 
 // Use specific types instead of namespace imports to avoid ambiguity

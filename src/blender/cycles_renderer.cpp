@@ -26,7 +26,7 @@
 #include "blender/file_driver.h"
 #include "core/error_handler.h"
 #include "core/types.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
 
 namespace sep {
 namespace blender {

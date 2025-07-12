@@ -3,7 +3,7 @@
 
 #include "blender/pattern_bridge.h"
 #include "quantum/processor.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
 #include "memory/memory_tier_manager.hpp"
 
 using ::sep::memory::MemoryTierEnum;

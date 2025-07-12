@@ -15,6 +15,7 @@
 
 
 using ::sep::memory::MemoryTierEnum;
+using ::sep::workbench::CudaConfig;
 #include "core/logging.h" 
 #include <tbb/parallel_for.h>
 #include <tbb/concurrent_hash_map.h>

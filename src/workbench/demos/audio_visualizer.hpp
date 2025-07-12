@@ -31,6 +31,8 @@ private:
     std::unique_ptr<audio::AudioPipeline> pipeline_;
     std::vector<glm::vec3> latest_patterns_;
     std::vector<glm::vec3> latest_visual_patterns_;
+    sep::Engine* engine_{nullptr};
+    sep::CyclesRenderer* renderer_{nullptr};
 
     struct {
         float frequency_scale{0.5f};

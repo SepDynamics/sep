@@ -26,6 +26,7 @@
 #include "compat/math_common.h"  // Include math common for sqrt_safe
 #include "compat/types.h"
 #include "core/logging.h"  // Include logging header first
+#include "core/config.h"   // For sep::config::APIConfig
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor.h"
 #include "core/types.h"  // For quantum::Pattern::generation

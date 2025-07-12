@@ -35,6 +35,7 @@ private:
 
     std::vector<MoleculePose> poses_;
     sep::quantum::manifold::QuantumManifoldOptimizer optimizer_{};
+    sep::CyclesRenderer* renderer_{nullptr};
     float threshold_{1.0f};
     float decay_{0.1f};
     float input_strength_{0.5f};

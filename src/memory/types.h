@@ -18,6 +18,7 @@ namespace memory {
     {
         // Logical memory tiers
         STM,
+        SHORT_TERM = STM,
         MTM,
         LTM,
         // Physical memory locations
@@ -32,6 +33,7 @@ namespace memory {
 inline std::string memoryTierToString(MemoryTierEnum tier) {
     switch (tier) {
         case MemoryTierEnum::STM: return "stm";
+        case MemoryTierEnum::SHORT_TERM: return "stm";
         case MemoryTierEnum::MTM: return "mtm";
         case MemoryTierEnum::LTM: return "ltm";
         case MemoryTierEnum::HOST: return "host";

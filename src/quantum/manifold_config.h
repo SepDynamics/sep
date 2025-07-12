@@ -4,10 +4,10 @@
 
 namespace sep::quantum::manifold {
 // Default configuration values used across the engine.
-extern ::sep::config::MemoryThresholdConfig memory;
-extern ::sep::config::QuantumThresholdConfig quantum;
-extern ::sep::config::CudaConfig cuda;
-extern ::sep::config::APIConfig api;
+extern ::sep::workbench::MemoryThresholdConfig memory;
+extern ::sep::workbench::QuantumThresholdConfig quantum;
+extern ::sep::workbench::CudaConfig cuda;
+extern ::sep::workbench::APIConfig api;
 }
 
 

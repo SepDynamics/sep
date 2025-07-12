@@ -30,22 +30,4 @@ namespace sep::quantum::manifold {
     .enable_profiling = false
 };
 
-::sep::workbench::LogConfig api{
-    .max_connections = 1000,
-    .timeout_ms = 5000,
-    .host = "127.0.0.1",
-    .port = 8080,
-    .threads = 4,
-    .keep_alive_timeout_ms = 15000,
-    .log_level = "info",
-    .enable_metrics = true,
-    .max_batch_size = 1024,
-    .response_modulation = {.enabled = true,
-                            .coherence_threshold = 0.7f,
-                            .simplify_low_coherence = true,
-                            .max_detail_level = 3},
-    .ollama = {.host = "localhost", .port = 11434, .model = "llama2", .enabled = false},
-    .cors = {.enabled = false, .tokens = {}},
-    .rate_limit = {.requests_per_minute = 60, .enabled = true}};
-
 } // namespace sep::quantum::manifold

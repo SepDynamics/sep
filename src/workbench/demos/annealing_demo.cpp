@@ -12,8 +12,6 @@ namespace workbench {
     {
         (void)renderer;
         (void)engine;
-
-        engine_ = engine;
         renderer_ = renderer;
         // Use hardcoded values for all demos to avoid configuration issues
         temperature_ = 1.0f;

@@ -15,18 +15,11 @@ namespace workbench {
 void GenesisPatternDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
     engine_ = engine;
     renderer_ = renderer;
-    
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
 
     pattern_processor_ = sep::quantum::createProcessor();
     sep::memory::QuantumCoherenceManager::Config cm_cfg{};
     coherence_manager_ = sep::memory::createQuantumCoherenceManager(cm_cfg);
 
-    // Initialize from config
-    evolution_rate_ = genesis_config.initial_pattern.evolution_rate;
-    coherence_threshold_ = genesis_config.initial_pattern.coherence_threshold;
-    
     initializePatterns();
 }
 
@@ -36,18 +29,10 @@ void GenesisPatternDemo::initializePatterns()
     sep::Pattern pattern;
     pattern.id = "seed";
     pattern.position = glm::vec4(0.0f);
-    pattern.quantum_state.evolution_rate = evolution_rate_;
     pattern.quantum_state.energy = 1.0f;
     pattern.quantum_state.coupling_strength = 0.5f;
 
     pattern_processor_->addPattern(pattern);
-}
-
-void GenesisPatternDemo::on_update(float dt) {
-    if (auto_evolve_) {
-        evolvePatterns(dt);
-    }
-    updateVisualization();
 }
 
 void GenesisPatternDemo::evolvePatterns(float)
@@ -62,7 +47,6 @@ void GenesisPatternDemo::evolvePatterns(float)
     // Update metrics
     metrics_.coherence = coherence.global_coherence;
     metrics_.pattern_count = patterns.size();
-    metrics_.evolution_rate = evolution_rate_;
     metrics_.iterations += 1;
 
     // Trigger visualization update when significant migrations occur
@@ -110,13 +94,7 @@ void GenesisPatternDemo::on_ui_render() {
     ImGui::Text("Iterations: %zu", metrics_.iterations);
     
     ImGui::Separator();
-    
-    ImGui::Checkbox("Auto Evolve", &auto_evolve_);
-    ImGui::SliderFloat("Evolution Rate", &evolution_rate_, 0.01f, 1.0f);
-    ImGui::SliderFloat("Coherence Threshold", &coherence_threshold_, 0.1f, 0.9f);
-    
-    ImGui::Separator();
-    
+
     ImGui::Checkbox("Wireframe", &view_.wireframe);
     ImGui::SliderFloat("Rotation", &view_.rotation, 0.0f, 360.0f);
     ImGui::SliderFloat("Zoom", &view_.zoom, 0.1f, 5.0f);
@@ -136,13 +114,10 @@ void GenesisPatternDemo::on_unload() {
     renderer_ = nullptr;
 }
 
-void GenesisPatternDemo::on_key_press(int key) {
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
-
+void GenesisPatternDemo::on_key_press(int key)
+{
     switch (key) {
         case ' ':  // Space - toggle auto evolution
-            auto_evolve_ = !auto_evolve_;
             break;
         case 'w':  // Toggle wireframe
             view_.wireframe = !view_.wireframe;
@@ -150,7 +125,6 @@ void GenesisPatternDemo::on_key_press(int key) {
         case 'r':  // Reset view and parameters
             view_.rotation = 0.0f;
             view_.zoom = 1.0f;
-            evolution_rate_ = genesis_config.initial_pattern.evolution_rate;
             break;
         case 'c':  // Cycle color modes
             renderer_->cycleColorMode();

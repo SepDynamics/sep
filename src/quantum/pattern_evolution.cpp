@@ -107,46 +107,6 @@ std::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getP
     return patterns;
 }
 
-sep::pattern::PatternResult sep::quantum::mcp::PatternEvolution::processPatterns(const std::vector<sep::pattern::PatternData>& input,
-                                                              const ::sep::pattern::PatternConfig& config,
-                                                              std::vector<sep::pattern::PatternData>& output)
-{
-    if (!pattern::isValidConfig(config))
-    {
-        return pattern::PatternResult::INVALID_ARGUMENT;
-    }
-
-    if (input.empty())
-    {
-        output.clear();
-        return pattern::PatternResult::SUCCESS;
-    }
-
-    output.resize(input.size());
-
-    ::sep::quantum::QuantumProcessorQFH tier_helper;
-
-    for (std::size_t i = 0; i < input.size(); ++i)
-    {
-        output[i] = input[i];
-        output[i].generation++;
-        output[i].quantum_state.coherence =
-            std::clamp(input[i].quantum_state.coherence * (1.0f + config.update_threshold), 0.0f, 1.0f);
-        output[i].quantum_state.stability =
-            std::clamp(input[i].quantum_state.stability * (1.0f - config.update_threshold / 2.0f), 0.0f, 1.0f);
-        output[i].quantum_state.entropy =
-            std::clamp(input[i].quantum_state.entropy + 0.01f, 0.0f, 1.0f);
-        output[i].quantum_state.mutation_count += config.enable_mutations ? 1u : 0u;
-        output[i].memory_tier = tier_helper.determineMemoryTier(
-            output[i].quantum_state.coherence,
-            output[i].quantum_state.stability,
-            output[i].generation);
-        output[i].id = shim::string(api::SepEngine::generateId("pat").c_str());
-    }
-
-    return pattern::PatternResult::SUCCESS;
-}
-
 float sep::quantum::mcp::PatternEvolution::calculateRelationshipStrength(const sep::pattern::PatternData& pattern1,
                                                                         const sep::pattern::PatternData& pattern2)
 {

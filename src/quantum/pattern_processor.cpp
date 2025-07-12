@@ -160,9 +160,4 @@ PatternData CPUPatternProcessor::mutatePattern(const PatternData& parent) {
     return PatternProcessor::mutatePattern(parent);
 }
 
-bool isValidConfig(const PatternConfig& c)
-{
-    return c.max_patterns > 0 && c.batch_size > 0;
-}
-
 } // namespace sep::pattern

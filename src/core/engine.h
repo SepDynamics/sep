@@ -42,7 +42,7 @@ class Engine {
   Engine() noexcept(false);
   ~Engine();
 
-  bool init(const sep::config::APIConfig &config);
+  bool init(const sep::config::CudaConfig &config);
 
   // Delete copy operations
   Engine(const Engine &) = delete;

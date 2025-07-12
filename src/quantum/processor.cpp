@@ -213,12 +213,8 @@ public:
 
     void demotePatterns() {
         std::lock_guard<std::mutex> lock(mutex_);
-        for (auto& pattern : patterns_) {
-#if SEP_BUILD_QUANTUM
-            auto qcfg = sep::config::ConfigManager::getInstance().updateQuantumConfig();
-#else
-            sep::config::QuantumThresholdConfig qcfg{};
-#endif
+        for (auto& pattern : patterns_)
+        {
             if (pattern.quantum_state.coherence < qcfg.mtm_coherence_threshold) {
                 pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
             } else if (pattern.quantum_state.coherence < qcfg.ltm_coherence_threshold) {
@@ -232,12 +228,6 @@ public:
         patterns_.erase(
             std::remove_if(patterns_.begin(), patterns_.end(),
                            [](const Pattern& p) {  // Removed 'this' capture since it's not used
-#if SEP_BUILD_QUANTUM
-                               auto qcfg =
-                                   sep::config::ConfigManager::getInstance().updateQuantumConfig();
-#else
-                sep::config::QuantumThresholdConfig qcfg{};
-#endif
                                return p.quantum_state.coherence < qcfg.mtm_coherence_threshold / 2;
                            }),
             patterns_.end());
@@ -334,11 +324,6 @@ private:
 
     void updateMemoryTier(Pattern& pattern) {
         auto& state = pattern.quantum_state;
-#if SEP_BUILD_QUANTUM
-        auto qcfg = sep::config::ConfigManager::getInstance().updateQuantumConfig();
-#else
-        sep::config::QuantumThresholdConfig qcfg{};
-#endif
         if (state.coherence >= qcfg.ltm_coherence_threshold && state.stability >= qcfg.stability_threshold) {
             state.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
         } else if (state.coherence >= qcfg.mtm_coherence_threshold) {
@@ -426,23 +411,14 @@ void Processor::updateConfig(const ProcessingConfig& config) { impl_->updateConf
 
 std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config) {
     ProcessingConfig cfg = config;
-#if SEP_BUILD_QUANTUM
-    const auto& qcfg = sep::config::ConfigManager::getInstance().updateQuantumConfig();
-#else
-    sep::config::QuantumThresholdConfig qcfg{};
-#endif
     cfg.ltm_coherence_threshold = qcfg.ltm_coherence_threshold;
     cfg.mtm_coherence_threshold = qcfg.mtm_coherence_threshold;
     cfg.stability_threshold = qcfg.stability_threshold;
     return std::make_unique<Processor>(cfg);
 }
 
-std::unique_ptr<Processor> createProcessor() {
-#if SEP_BUILD_QUANTUM
-    const auto& cfg = sep::config::ConfigManager::getInstance().updateQuantumConfig();
-#else
-    sep::config::QuantumThresholdConfig cfg{};
-#endif
+std::unique_ptr<Processor> createProcessor()
+{
     ProcessingConfig pc;
     pc.ltm_coherence_threshold = cfg.ltm_coherence_threshold;
     pc.mtm_coherence_threshold = cfg.mtm_coherence_threshold;

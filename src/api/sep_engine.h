@@ -55,7 +55,7 @@ namespace sep::api
          * @param config API configuration data
          * @return JSON response with initialization results
          */
-        nlohmann::json initialize(const sep::config::APIConfig& config);
+        nlohmann::json initialize(const AuthConfig& config);
 
         /**
          * @brief Shutdown the SEP Engine
@@ -140,7 +140,7 @@ namespace sep::api
         /**
          * @brief Convert API configuration to JSON
          */
-        nlohmann::json getConfig(const sep::config::APIConfig& config);
+        nlohmann::json getConfig(const AuthConfig& config);
 
         static nlohmann::json getMemoryMetrics();
         static nlohmann::json makeErrorResponse(ErrorCode code, const std::string& message);

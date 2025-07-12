@@ -135,7 +135,6 @@ namespace sep
 
         bool BlenderBridge::isValidHandle(ObjectHandle handle) const
         {
-            std::lock_guard<std::mutex> lock(objects_mutex_);
             return objects_.find(handle) != objects_.end();
         }
 
@@ -172,7 +171,6 @@ namespace sep
                 return SEPResult::ALLOCATION_FAILED;
             }
             state.patterns.resize(state.config.max_patterns);
-            state.memory_usage.host_memory = bytes;
             return SEPResult::SUCCESS;
         }
 
@@ -185,7 +183,6 @@ namespace sep
                 state.memory_block = nullptr;
             }
             state.patterns.clear();
-            state.memory_usage.host_memory = 0;
             return SEPResult::SUCCESS;
         }
 
@@ -299,7 +296,6 @@ namespace sep
             for (const auto& p : state.patterns)
             {
                 coh += p.coherence;
-                ent = std::max(ent, p.entropy);
             }
             state.metrics.avg_coherence = count ? coh / count : 0.0f;
             state.metrics.peak_entropy = ent;

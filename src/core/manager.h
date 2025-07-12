@@ -33,8 +33,8 @@ public:
   bool loadFromCommandLine(int argc, char *argv[]);
 
   // Access individual config sections
-  const APIConfig &getAPIConfig() const;
-  void updateAPIConfig(const APIConfig &config);
+  const CudaConfig &getAPIConfig() const;
+  void updateAPIConfig(const CudaConfig &config);
 
   void updateCudaConfig(const sep::config::CudaConfig &config);
   void updateLogConfig(const workbench::LogConfig &config);

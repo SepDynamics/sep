@@ -13,6 +13,7 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
 # Set C++ standard before project declaration
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 

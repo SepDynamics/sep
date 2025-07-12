@@ -1,5 +1,7 @@
 #include "neuro_sim.hpp"
 
+#include "core/types.h"
+
 #include <algorithm>
 #include <glm/glm.hpp>
 

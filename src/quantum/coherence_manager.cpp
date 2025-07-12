@@ -1,4 +1,5 @@
 #include "quantum/coherence_manager.h"
+#include "core/types.h"
 
 #include <cuda_runtime.h>
 #include <tbb/concurrent_hash_map.h>

@@ -1,5 +1,7 @@
 #include "annealing_sim.hpp"
 
+#include "core/types.h"
+
 #include <cmath>
 #include <glm/gtc/random.hpp>
 

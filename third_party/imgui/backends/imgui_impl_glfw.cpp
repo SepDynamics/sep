@@ -629,7 +629,7 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
 
     bd->Context = ImGui::GetCurrentContext();
     bd->Window = window;
-    bd->Time = 0.0;
+    bd->Time = 0.0f;
     ImGui_ImplGlfw_ContextMap_Add(window, bd->Context);
 
     ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();

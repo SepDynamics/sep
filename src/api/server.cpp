@@ -38,18 +38,9 @@
 
 namespace sep::api {
 
-#ifndef SEP_HAS_EXCEPTIONS
-#    if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
-#        define SEP_HAS_EXCEPTIONS 1
-#    else
-#        define SEP_HAS_EXCEPTIONS 0
-#    endif
-#endif
-
 // Static instance for signal handling
 SEPApiServer* SEPApiServer::instance_ = nullptr;
-SEPApiServer::SEPApiServer(const ::sep::config::APIConfig& config,
-                           blender::ccl::CyclesRenderer* renderer)
+SEPApiServer::SEPApiServer(const AuthConfig& config, blender::ccl::CyclesRenderer* renderer)
     : config_(config),
       logger_(nullptr),
       app_(nullptr),

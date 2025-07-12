@@ -1,5 +1,6 @@
 #include "core/types.h"
 #include "memory/types.h" // Add include for MemoryTierEnum
+#include "quantum/pattern.h"   // for QuantumPattern and related
 #include <nlohmann/json.hpp> 
 #include <cstring>
 

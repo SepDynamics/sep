@@ -13,8 +13,8 @@
 #include "core/dag_graph.h"
 #include "core/types.h"
 #include "memory/memory_tier.hpp"
+#include "memory/persistent_pattern_data.hpp"
 #include "memory/types.h"
-#include "persistence/persistent_pattern_data.hpp"
 #include "quantum/data.hpp"
 #include "quantum/types.h"
 #ifndef SEP_NO_REDIS

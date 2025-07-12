@@ -137,8 +137,8 @@ find_package(OpenGL REQUIRED)
 if(SEP_BUILD_WORKBENCH)
     # GLFW package is typically exported as glfw3 on many systems
     find_package(glfw3 REQUIRED)
-    find_package(PkgConfig)
-    pkg_search_module(GLEW REQUIRED glew)
+    # Use our custom FindGLEW.cmake module
+    find_package(GLEW REQUIRED)
 endif()
 if(spdlog_FOUND)
     message(STATUS "Using system spdlog")
@@ -227,8 +227,7 @@ install(TARGETS
     sep_compat
     sep_memory
     sep_quantum
-    sep_embeddings
-    sep_manifold
+        
     EXPORT sep-targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

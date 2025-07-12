@@ -22,6 +22,9 @@ find_package(fmt REQUIRED)
 # Add test sources
 set(CYCLES_TEST_SOURCES
     cycles_test.cpp
+    memory_tier_test.cpp
+    simple_embedding_model.cpp
+    dataset_loader.cpp
 )
 
 set(MEMORY_TEST_SOURCES

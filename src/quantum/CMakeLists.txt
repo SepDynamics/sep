@@ -43,7 +43,6 @@ target_include_directories(sep_quantum
 
 target_link_libraries(sep_quantum
     PUBLIC
-        sep_manifold
         sep_core
         sep_compat
 )

@@ -21,16 +21,15 @@
 
 // Project includes
 #include "api/types.h"
+#include "compat/core.h"         // For CudaCore
+#include "compat/cuda_defs.h"    // For Status enum
+#include "compat/math_common.h"  // Include math common for sqrt_safe
 #include "compat/types.h"
-#include "compat/core.h"       // For CudaCore
-#include "compat/cuda_defs.h"  // For Status enum
-#include "quantum/quantum_processor.h"
+#include "core/logging.h"  // Include logging header first
 #include "memory/memory_tier_manager.hpp"
-
-#include "core/logging.h" // Include logging header first
-#include "quantum/types.h" // For quantum::Pattern::generation
-#include "compat/math_common.h" // Include math common for sqrt_safe
-#include "embeddings/simple_embedding_model.h"
+#include "quantum/quantum_processor.h"
+#include "quantum/types.h"  // For quantum::Pattern::generation
+#include "tests/simple_embedding_model.h"
 
 // Forward declaration of the wrapper function for CUDA initialization
 sep::cuda::Error cuda_core_initialize(int device_id);

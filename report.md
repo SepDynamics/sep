@@ -3,11 +3,15 @@ Found no defects in prometheus_exporter.cpp
 Found no defects in imgui_impl_glfw.cpp
 Found no defects in hip_compat.cpp
 Found no defects in imgui_impl_opengl3.cpp
-Found no defects in simple_embedding_model.cpp
 Found no defects in error_handler.cpp
+Found no defects in simple_embedding_model.cpp
 Found no defects in dag_graph.cpp
 Found no defects in metrics_collector.cpp
 Found no defects in allocation_metrics.cpp
+Found no defects in config_manager_stub.cpp
+Found no defects in manager.cpp
+Found no defects in stream.cpp
+Found no defects in qbsa.cpp
 Found no defects in raii.cpp
 [LOW] /usr/include/glm/gtc/bitfield.inl:343:15: Although the value stored to 'x' is used in the enclosing expression, the value is never actually read from 'x' [deadcode.DeadStores]
     uint16 REG2(x >>= 1);
@@ -32,66 +36,10 @@ Found no defects in raii.cpp
 
 Found 3 defect(s) in bitfield.inl
 
-Found no defects in stream.cpp
-Found no defects in manager.cpp
-Found no defects in qbsa.cpp
-Found no defects in memory_tier_manager_serialization.cpp
-Found no defects in config_manager_stub.cpp
 Found no defects in qbsa_qfh.cpp
 Found no defects in qfh.cpp
+Found no defects in memory_tier_manager_serialization.cpp
 Found no defects in memory_tier_manager.cpp
-Found no defects in quantum_processor_qfh.cpp
-[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:3578:13: Variable 'scaling' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
-            for (float scaling = 0.5f; scaling <= 4.0f; scaling += 0.5f)
-            ^
-  Report hash: ddb0c13d5b577cdbdef0eeeb0e867a4a
-  Steps:
-    1, imgui_demo.cpp:3578:13: Variable 'scaling' with floating point type 'float' should not be used as a loop counter
-
-[LOW] /sep/third_party/imgui/imgui_demo.cpp:9938:13: Value stored to 'x' is never read [deadcode.DeadStores]
-            x += sz + spacing;
-            ^
-  Report hash: 468f3717dfe4bf78244be42353e714b8
-  Steps:
-    1, imgui_demo.cpp:9938:13: Value stored to 'x' is never read
-
-[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10030:17: Variable 'x' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
-                for (float x = fmodf(scrolling.x, GRID_STEP); x < canvas_sz.x; x += GRID_STEP)
-                ^
-  Report hash: 6e6d6a6e8af07293f2c03fd769390474
-  Steps:
-    1, imgui_demo.cpp:10030:17: Variable 'x' with floating point type 'float' should not be used as a loop counter
-
-[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10032:17: Variable 'y' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
-                for (float y = fmodf(scrolling.y, GRID_STEP); y < canvas_sz.y; y += GRID_STEP)
-                ^
-  Report hash: a2bd14bc3bae356a7886e5d6c590c701
-  Steps:
-    1, imgui_demo.cpp:10032:17: Variable 'y' with floating point type 'float' should not be used as a loop counter
-
-[HIGH] /sep/third_party/imgui/imgui_demo.cpp:10558:29: Dereference of null pointer (loaded from variable 'p_open') [core.NullDereference]
-                    *p_open = false;
-                            ^
-  Report hash: 31b167574b883c4d3b4fab6881aea1de
-  Macro expansions:
-    1, imgui_demo.cpp:10813:5: Macro 'IMGUI_DEMO_MARKER("Examples/Assets Browser")' expanded to 'do {if (GImGuiDemoMarkerCallback !=__null )GImGuiDemoMarkerCallback ("/sep/third_party/imgui/imgui_demo.cpp",10813,"Examples/Assets Browser",GImGuiDemoMarkerCallbackUserData );}while (0)'
-  Steps:
-     1, imgui_demo.cpp:10813:5: Assuming the condition is false
-     2, imgui_demo.cpp:10815:52: Passing value via 2nd parameter 'p_open'
-     3, imgui_demo.cpp:10815:5: Calling 'ExampleAssetsBrowser::Draw'
-     4, imgui_demo.cpp:10538:5: Entered call from 'ShowExampleAppAssetsBrowser'
-     5, imgui_demo.cpp:10541:13: Assuming the condition is false
-     6, imgui_demo.cpp:10548:13: Assuming the condition is true
-     7, imgui_demo.cpp:10550:17: Assuming the condition is true
-     8, imgui_demo.cpp:10552:21: Assuming the condition is false
-     9, imgui_demo.cpp:10554:21: Assuming the condition is false
-    10, imgui_demo.cpp:10557:59: Assuming 'p_open' is equal to NULL
-    11, imgui_demo.cpp:10557:21: Assuming the condition is true
-    12, imgui_demo.cpp:10558:29: Dereference of null pointer (loaded from variable 'p_open')
-
-Found 5 defect(s) in imgui_demo.cpp
-
-Found no defects in manifold_config.cpp
 [LOW] /sep/third_party/imgui/imgui_internal.h:401:91: Although the value stored to 'c' is used in the enclosing expression, the value is never actually read from 'c' [deadcode.DeadStores]
 static inline char      ImToUpper(char c)               { return (c >= 'a' && c <= 'z') ? c &= ~32 : c; }
                                                                                           ^
@@ -142,26 +90,127 @@ Found 3 defect(s) in imgui_tables.cpp
 
 Found 2 defect(s) in cetintrin.h
 
-Found no defects in types_serialization.cpp
-Found no defects in pattern_processor.cpp
+Found no defects in quantum_processor_qfh.cpp
+Found no defects in manifold_config.cpp
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:3578:13: Variable 'scaling' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+            for (float scaling = 0.5f; scaling <= 4.0f; scaling += 0.5f)
+            ^
+  Report hash: ddb0c13d5b577cdbdef0eeeb0e867a4a
+  Steps:
+    1, imgui_demo.cpp:3578:13: Variable 'scaling' with floating point type 'float' should not be used as a loop counter
+
+[LOW] /sep/third_party/imgui/imgui_demo.cpp:9938:13: Value stored to 'x' is never read [deadcode.DeadStores]
+            x += sz + spacing;
+            ^
+  Report hash: 468f3717dfe4bf78244be42353e714b8
+  Steps:
+    1, imgui_demo.cpp:9938:13: Value stored to 'x' is never read
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10030:17: Variable 'x' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+                for (float x = fmodf(scrolling.x, GRID_STEP); x < canvas_sz.x; x += GRID_STEP)
+                ^
+  Report hash: 6e6d6a6e8af07293f2c03fd769390474
+  Steps:
+    1, imgui_demo.cpp:10030:17: Variable 'x' with floating point type 'float' should not be used as a loop counter
+
+[MEDIUM] /sep/third_party/imgui/imgui_demo.cpp:10032:17: Variable 'y' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+                for (float y = fmodf(scrolling.y, GRID_STEP); y < canvas_sz.y; y += GRID_STEP)
+                ^
+  Report hash: a2bd14bc3bae356a7886e5d6c590c701
+  Steps:
+    1, imgui_demo.cpp:10032:17: Variable 'y' with floating point type 'float' should not be used as a loop counter
+
+[HIGH] /sep/third_party/imgui/imgui_demo.cpp:10558:29: Dereference of null pointer (loaded from variable 'p_open') [core.NullDereference]
+                    *p_open = false;
+                            ^
+  Report hash: 31b167574b883c4d3b4fab6881aea1de
+  Macro expansions:
+    1, imgui_demo.cpp:10813:5: Macro 'IMGUI_DEMO_MARKER("Examples/Assets Browser")' expanded to 'do {if (GImGuiDemoMarkerCallback !=__null )GImGuiDemoMarkerCallback ("/sep/third_party/imgui/imgui_demo.cpp",10813,"Examples/Assets Browser",GImGuiDemoMarkerCallbackUserData );}while (0)'
+  Steps:
+     1, imgui_demo.cpp:10813:5: Assuming the condition is false
+     2, imgui_demo.cpp:10815:52: Passing value via 2nd parameter 'p_open'
+     3, imgui_demo.cpp:10815:5: Calling 'ExampleAssetsBrowser::Draw'
+     4, imgui_demo.cpp:10538:5: Entered call from 'ShowExampleAppAssetsBrowser'
+     5, imgui_demo.cpp:10541:13: Assuming the condition is false
+     6, imgui_demo.cpp:10548:13: Assuming the condition is true
+     7, imgui_demo.cpp:10550:17: Assuming the condition is true
+     8, imgui_demo.cpp:10552:21: Assuming the condition is false
+     9, imgui_demo.cpp:10554:21: Assuming the condition is false
+    10, imgui_demo.cpp:10557:59: Assuming 'p_open' is equal to NULL
+    11, imgui_demo.cpp:10557:21: Assuming the condition is true
+    12, imgui_demo.cpp:10558:29: Dereference of null pointer (loaded from variable 'p_open')
+
+Found 5 defect(s) in imgui_demo.cpp
+
 Found no defects in quantum_processor_qfh_common.cpp
-Found no defects in crow_error.cpp
+Found no defects in types_serialization.cpp
 Found no defects in evolution.cpp
-Found no defects in pattern_evolution_bridge.cpp
+Found no defects in crow_error.cpp
+Found no defects in pattern_processor.cpp
 Found no defects in quantum_processor.cpp
+Found no defects in pattern_evolution_bridge.cpp
 Found no defects in pattern_evolution.cpp
-Found no defects in processor.cpp
 Found no defects in js_integration.cpp
-Found no defects in quantum_manifold_optimizer.cpp
 Found no defects in rate_limit_middleware.cpp
+Found no defects in processor.cpp
+Found no defects in quantum_manifold_optimizer.cpp
 Found no defects in auth_middleware.cpp
-Found no defects in dataset_loader.cpp
-Found no defects in crow_request_adapter.cpp
 Found no defects in lock_free_rate_limiter.cpp
+Found no defects in dataset_loader.cpp
 Found no defects in bridge.cpp
 Found no defects in curl_http_client.cpp
+Found no defects in crow_request_adapter.cpp
 Found no defects in sep_engine_factory.cpp
 Found no defects in client.cpp
+[HIGH] /sep/third_party/imgui/imgui_draw.cpp:1720:5: Called C++ object pointer is null [core.CallAndMessage]
+    font->RenderText(this, font_size, pos, col, clip_rect, text_begin, text_end, wrap_width, cpu_fine_clip_rect != NULL);
+    ^
+  Report hash: d07e7244950fbacca37f9760aa4638a1
+  Steps:
+     1, imgui_draw.cpp:1725:5: Calling 'ImDrawList::AddText'
+     2, imgui_draw.cpp:1696:1: Entered call from 'ImDrawList::AddText'
+     3, imgui_draw.cpp:1698:9: Assuming the condition is false
+     4, imgui_draw.cpp:1702:9: Assuming 'text_begin' is not equal to 'text_end'
+     5, imgui_draw.cpp:1702:35: Assuming the condition is false
+     6, imgui_draw.cpp:1707:9: Assuming pointer value is null
+     7, imgui_draw.cpp:1707:9: Assuming 'font' is equal to NULL
+     8, imgui_draw.cpp:1708:9: Null pointer value stored to 'font'
+     9, imgui_draw.cpp:1709:9: Assuming the condition is false
+    10, imgui_draw.cpp:1720:5: Called C++ object pointer is null
+
+[LOW] /sep/third_party/imgui/imgui_draw.cpp:1942:25: Value stored to 'temp' during its initialization is never read [deadcode.DeadStores]
+    ImTriangulatorNode* temp = _Nodes;
+                        ^
+  Report hash: 5c3a00dde3746998b6d30d67580d06ef
+  Steps:
+    1, imgui_draw.cpp:1942:25: Value stored to 'temp' during its initialization is never read
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5972:9: Variable 'y' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+        for (float y = p_min.y + grid_off.y; y < p_max.y; y += grid_step, yi++)
+        ^
+  Report hash: 0c8f6da39e8d79a495f79fe71358edb4
+  Steps:
+    1, imgui_draw.cpp:5972:9: Variable 'y' with floating point type 'float' should not be used as a loop counter
+
+[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5977:13: Variable 'x' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
+            for (float x = p_min.x + grid_off.x + (yi & 1) * grid_step; x < p_max.x; x += grid_step * 2.0f)
+            ^
+  Report hash: 00240d8ee7538c2174986ae5b7b6aca2
+  Steps:
+    1, imgui_draw.cpp:5977:13: Variable 'x' with floating point type 'float' should not be used as a loop counter
+
+Found 4 defect(s) in imgui_draw.cpp
+
+[LOW] /sep/third_party/imgui/imstb_truetype.h:3158:36: Although the value stored to 'xb' is used in the enclosing expression, the value is never actually read from 'xb' [deadcode.DeadStores]
+                  t = x0, x0 = xb, xb = t;
+                                   ^
+  Report hash: 0ecd8410f3027f30a72f6b83d0658905
+  Steps:
+    1, imstb_truetype.h:3158:36: Although the value stored to 'xb' is used in the enclosing expression, the value is never actually read from 'xb'
+
+Found 1 defect(s) in imstb_truetype.h
+
+Found no defects in pipeline.cpp
 [HIGH] /sep/third_party/imgui/imgui.cpp:2322:51: The right operand of '^' is a garbage value [core.UndefinedBinaryOperatorResult]
         crc = (crc >> 8) ^ crc32_lut[(crc & 0xFF) ^ *data++];
                                                   ^
@@ -267,57 +316,31 @@ Found no defects in client.cpp
 
 Found 5 defect(s) in imgui.cpp
 
-Found no defects in pipeline.cpp
-[HIGH] /sep/third_party/imgui/imgui_draw.cpp:1720:5: Called C++ object pointer is null [core.CallAndMessage]
-    font->RenderText(this, font_size, pos, col, clip_rect, text_begin, text_end, wrap_width, cpu_fine_clip_rect != NULL);
-    ^
-  Report hash: d07e7244950fbacca37f9760aa4638a1
-  Steps:
-     1, imgui_draw.cpp:1725:5: Calling 'ImDrawList::AddText'
-     2, imgui_draw.cpp:1696:1: Entered call from 'ImDrawList::AddText'
-     3, imgui_draw.cpp:1698:9: Assuming the condition is false
-     4, imgui_draw.cpp:1702:9: Assuming 'text_begin' is not equal to 'text_end'
-     5, imgui_draw.cpp:1702:35: Assuming the condition is false
-     6, imgui_draw.cpp:1707:9: Assuming pointer value is null
-     7, imgui_draw.cpp:1707:9: Assuming 'font' is equal to NULL
-     8, imgui_draw.cpp:1708:9: Null pointer value stored to 'font'
-     9, imgui_draw.cpp:1709:9: Assuming the condition is false
-    10, imgui_draw.cpp:1720:5: Called C++ object pointer is null
-
-[LOW] /sep/third_party/imgui/imgui_draw.cpp:1942:25: Value stored to 'temp' during its initialization is never read [deadcode.DeadStores]
-    ImTriangulatorNode* temp = _Nodes;
-                        ^
-  Report hash: 5c3a00dde3746998b6d30d67580d06ef
-  Steps:
-    1, imgui_draw.cpp:1942:25: Value stored to 'temp' during its initialization is never read
-
-[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5972:9: Variable 'y' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
-        for (float y = p_min.y + grid_off.y; y < p_max.y; y += grid_step, yi++)
-        ^
-  Report hash: 0c8f6da39e8d79a495f79fe71358edb4
-  Steps:
-    1, imgui_draw.cpp:5972:9: Variable 'y' with floating point type 'float' should not be used as a loop counter
-
-[MEDIUM] /sep/third_party/imgui/imgui_draw.cpp:5977:13: Variable 'x' with floating point type 'float' should not be used as a loop counter [security.FloatLoopCounter]
-            for (float x = p_min.x + grid_off.x + (yi & 1) * grid_step; x < p_max.x; x += grid_step * 2.0f)
-            ^
-  Report hash: 00240d8ee7538c2174986ae5b7b6aca2
-  Steps:
-    1, imgui_draw.cpp:5977:13: Variable 'x' with floating point type 'float' should not be used as a loop counter
-
-Found 4 defect(s) in imgui_draw.cpp
-
-[LOW] /sep/third_party/imgui/imstb_truetype.h:3158:36: Although the value stored to 'xb' is used in the enclosing expression, the value is never actually read from 'xb' [deadcode.DeadStores]
-                  t = x0, x0 = xb, xb = t;
-                                   ^
-  Report hash: 0ecd8410f3027f30a72f6b83d0658905
-  Steps:
-    1, imstb_truetype.h:3158:36: Although the value stored to 'xb' is used in the enclosing expression, the value is never actually read from 'xb'
-
-Found 1 defect(s) in imstb_truetype.h
-
-Found no defects in ollama_client.cpp
 Found no defects in cmake_pch.hxx.cxx
+Found no defects in ollama_client.cpp
+Found no defects in factory.cpp
+[HIGH] /usr/include/spa-0.2/spa/pod/parser.h:496:8: Access to field 'type' results in a dereference of a null pointer (loaded from variable 'pod') [core.NullDereference]
+      if (pod->type == SPA_TYPE_Choice && *format != 'V')
+          ^
+  Report hash: 6396cb440c40f5db85f1a9ee33c1714c
+  Macro expansions:
+    1, parser.h:454:1: Macro 'SPA_API_POD_PARSER' expanded to 'static inline '
+  Steps:
+     1, parser.h:513:8: Calling 'spa_pod_parser_getv'
+     2, parser.h:454:1: Entered call from 'spa_pod_parser_get'
+     3, parser.h:457:26: Assuming 'f' is non-null
+     4, parser.h:466:12: Assuming 'ftype' is equal to SPA_TYPE_Object
+     5, parser.h:470:8: Assuming 'key' is not equal to 0
+     6, parser.h:475:10: Assuming 'prop' is null
+     7, parser.h:475:4: Null pointer value stored to 'pod'
+     8, parser.h:478:7: Assuming the condition is false
+     9, parser.h:484:20: Assuming the condition is false
+    10, parser.h:484:8: Assuming 'optional' is false
+    11, parser.h:487:7: Assuming the condition is false
+    12, parser.h:496:8: Access to field 'type' results in a dereference of a null pointer (loaded from variable 'pod')
+
+Found 1 defect(s) in parser.h
+
 [HIGH] /sep/third_party/imgui/imgui_widgets.cpp:8294:16: Dereference of null pointer [core.NullDereference]
         while (it->val_i == 0 && it < it_end)
                ^
@@ -351,57 +374,36 @@ Found 1 defect(s) in imgui_widgets.cpp
 
 Found 1 defect(s) in imstb_textedit.h
 
-Found no defects in factory.cpp
-[HIGH] /usr/include/spa-0.2/spa/pod/parser.h:496:8: Access to field 'type' results in a dereference of a null pointer (loaded from variable 'pod') [core.NullDereference]
-      if (pod->type == SPA_TYPE_Choice && *format != 'V')
-          ^
-  Report hash: 6396cb440c40f5db85f1a9ee33c1714c
-  Macro expansions:
-    1, parser.h:454:1: Macro 'SPA_API_POD_PARSER' expanded to 'static inline '
-  Steps:
-     1, parser.h:513:8: Calling 'spa_pod_parser_getv'
-     2, parser.h:454:1: Entered call from 'spa_pod_parser_get'
-     3, parser.h:457:26: Assuming 'f' is non-null
-     4, parser.h:466:12: Assuming 'ftype' is equal to SPA_TYPE_Object
-     5, parser.h:470:8: Assuming 'key' is not equal to 0
-     6, parser.h:475:10: Assuming 'prop' is null
-     7, parser.h:475:4: Null pointer value stored to 'pod'
-     8, parser.h:478:7: Assuming the condition is false
-     9, parser.h:484:20: Assuming the condition is false
-    10, parser.h:484:8: Assuming 'optional' is false
-    11, parser.h:487:7: Assuming the condition is false
-    12, parser.h:496:8: Access to field 'type' results in a dereference of a null pointer (loaded from variable 'pod')
-
-Found 1 defect(s) in parser.h
-
 Found no defects in workbench_main.cpp
 Found no defects in logging.cpp
-Found no defects in engine.cpp
 Found no defects in memory_tier.cpp
+Found no defects in engine.cpp
 Found no defects in quantum_coherence_manager.cpp
-Found no defects in redis_manager.cpp
 Found no defects in pattern_processor_interface.cpp
-Found no defects in annealing_demo.cpp
-Found no defects in cosmo_demo.cpp
-Found no defects in annealing_sim.cpp
+Found no defects in redis_manager.cpp
 Found no defects in logging_middleware.cpp
+Found no defects in annealing_demo.cpp
+Found no defects in annealing_sim.cpp
 Found no defects in audio_visualizer.cpp
 Found no defects in audio_visualizer_simple.cpp
+Found no defects in cosmo_demo.cpp
 Found no defects in demo_manager.cpp
-Found no defects in cosmo_sim.cpp
 Found no defects in config.cpp
+Found no defects in cosmo_sim.cpp
 Found no defects in digital_physics_demo.cpp
-Found no defects in drug_discovery_demo.cpp
 Found no defects in crow_adapter.cpp
 Found no defects in drug_optimizer.cpp
+Found no defects in drug_discovery_demo.cpp
+Found no defects in sep_engine.cpp
 Found no defects in flocking_demo.cpp
 Found no defects in flocking_sim_simple.cpp
-Found no defects in sep_engine.cpp
 Found no defects in genesis_pattern.cpp
 Found no defects in memory_garden.cpp
-Found no defects in renderer.cpp
 Found no defects in neural_demo.cpp
-Found no defects in register_demos.cpp
+Found no defects in api.cpp
+Found no defects in neuro_sim.cpp
+Found no defects in renderer.cpp
+Found no defects in physics_explorer_simple.cpp
 [MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:950:26: Potential buffer overflow. Replace with 'sizeof(command) - strlen(command) - 1' or use a safer 'strlcat' API [unix.cstring.BadSizeArg]
   strncat(command, path, sizeof(command) - 1);
                          ^
@@ -411,26 +413,20 @@ Found no defects in register_demos.cpp
 
 Found 1 defect(s) in cuew.c
 
-Found no defects in physics_explorer_simple.cpp
-[LOW] /sep/extern/cycles/third_party/hipew/src/hipew.c:586:15: Value stored to 'marker' during its initialization is never read [deadcode.DeadStores]
-  const char *marker = "Hip compilation tools, release ";
-              ^
-  Report hash: 2f5f4c805476aa012556426e2a1efcca
-  Steps:
-    1, hipew.c:586:15: Value stored to 'marker' during its initialization is never read
-
-[MEDIUM] /sep/extern/cycles/third_party/hipew/src/hipew.c:598:26: Potential buffer overflow. Replace with 'sizeof(command) - strlen(command) - 1' or use a safer 'strlcat' API [unix.cstring.BadSizeArg]
+[MEDIUM] /sep/extern/cycles/third_party/hipew/src/hipew.c:597:26: Potential buffer overflow. Replace with 'sizeof(command) - strlen(command) - 1' or use a safer 'strlcat' API [unix.cstring.BadSizeArg]
   strncat(command, path, sizeof(command) - 1);
                          ^
   Report hash: efa2deebb96beaa86992533d067b3a8d
   Steps:
-    1, hipew.c:598:26: Potential buffer overflow. Replace with 'sizeof(command) - strlen(command) - 1' or use a safer 'strlcat' API
+    1, hipew.c:597:26: Potential buffer overflow. Replace with 'sizeof(command) - strlen(command) - 1' or use a safer 'strlcat' API
 
-Found 2 defect(s) in hipew.c
+Found 1 defect(s) in hipew.c
 
-Found no defects in neuro_sim.cpp
+Found no defects in register_demos.cpp
 Found no defects in sky_model.cpp
+Found no defects in compression.cpp
 Found no defects in sky_nishita.cpp
+Found no defects in blender_integration.cpp
 [MEDIUM] /sep/third_party/imgui/imgui.h:1540:101: 'ImGuiKey_I' is confusable with 'ImGuiKey_1' [misc-confusable-identifiers]
     ImGuiKey_A, ImGuiKey_B, ImGuiKey_C, ImGuiKey_D, ImGuiKey_E, ImGuiKey_F, ImGuiKey_G, ImGuiKey_H, ImGuiKey_I, ImGuiKey_J,
                                                                                                     ^
@@ -1272,6 +1268,89 @@ static inline float  ImRound64(float f)                                         
 
 Found 11 defect(s) in imgui_internal.h
 
+[LOW] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:443:8: 1st argument 'imgui_key' (passed to 'key') looks like it might be swapped with the 2nd, 'keycode' (passed to 'native_keycode') [readability-suspicious-call-argument]
+    io.SetKeyEventNativeData(imgui_key, keycode, scancode); // To support legacy indexing (<1.87 user code)
+       ^
+  Report hash: 3d7d16867bb799c9b0371c7da434b385
+  Steps:
+    1, imgui.h:2472:21: in the call to 'SetKeyEventNativeData', declared here
+    2, imgui_impl_glfw.cpp:443:8: 1st argument 'imgui_key' (passed to 'key') looks like it might be swapped with the 2nd, 'keycode' (passed to 'native_keycode')
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:624:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    snprintf(bd->BackendPlatformName, sizeof(bd->BackendPlatformName), "imgui_impl_glfw (%d)", GLFW_VERSION_COMBINED);
+    ^
+  Report hash: ffb6a65c33ac411fecbbf3b41f511891
+  Steps:
+    1, imgui_impl_glfw.cpp:624:5: cast the expression to void to silence this warning
+    2, imgui_impl_glfw.cpp:624:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:927:35: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+        current_time = bd->Time + 0.00001f;
+                                  ^
+  Report hash: 096582b1e101453666f9311c1c2f6ab8
+  Steps:
+    1, imgui_impl_glfw.cpp:927:35: implicit conversion increases floating-point precision: 'float' to 'double'
+
+Found 3 defect(s) in imgui_impl_glfw.cpp
+
+Found no defects in compression_utils.cpp
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:291:22: both sides of operator are equivalent [misc-redundant-expression]
+    if (imgl3wInit() != 0)
+                     ^
+  Report hash: 1fd9e19ec8550f6690de84a271ba9584
+  Steps:
+    1, imgui_impl_opengl3.cpp:291:22: both sides of operator are equivalent
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:293:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
+        ^
+  Report hash: 83b3da2e853dc256cc67ebcfc76b63a0
+  Steps:
+    1, imgui_impl_opengl3.cpp:293:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:293:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:791:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to compile %s! With GLSL: %s\n", desc, bd->GlslVersionString);
+        ^
+  Report hash: 8b7f5770122a7b0e2a1d587185885aff
+  Steps:
+    1, imgui_impl_opengl3.cpp:791:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:791:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:797:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "%s\n", buf.begin());
+        ^
+  Report hash: 608b151e6695cac6c5330fe36deebb51
+  Steps:
+    1, imgui_impl_opengl3.cpp:797:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:797:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:810:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to link %s! With GLSL %s\n", desc, bd->GlslVersionString);
+        ^
+  Report hash: 0bba233dca8fba0bd47d6dfe9bcac7a3
+  Steps:
+    1, imgui_impl_opengl3.cpp:810:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:810:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:816:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+        fprintf(stderr, "%s\n", buf.begin());
+        ^
+  Report hash: 608b151e6695cac6c5330fe36deebb51
+  Steps:
+    1, imgui_impl_opengl3.cpp:816:9: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:816:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:840:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    sscanf(bd->GlslVersionString, "#version %d", &glsl_version);
+    ^
+  Report hash: 73a9d793e988515f34c977d6ea4c8148
+  Steps:
+    1, imgui_impl_opengl3.cpp:840:5: cast the expression to void to silence this warning
+    2, imgui_impl_opengl3.cpp:840:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+Found 7 defect(s) in imgui_impl_opengl3.cpp
+
 [MEDIUM] /sep/third_party/imgui/imgui.h:2202:175: undefined behavior, destination object type 'ImDrawChannel' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
     inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(T)); if (Data) { memcpy(new_data, Data, (size_t)Size * sizeof(T)); IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
                                                                                                                                                                               ^
@@ -1581,31 +1660,6 @@ Found 1 defect(s) in imstb_rectpack.h
 
 Found 4 defect(s) in imstb_truetype.h
 
-[LOW] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:443:8: 1st argument 'imgui_key' (passed to 'key') looks like it might be swapped with the 2nd, 'keycode' (passed to 'native_keycode') [readability-suspicious-call-argument]
-    io.SetKeyEventNativeData(imgui_key, keycode, scancode); // To support legacy indexing (<1.87 user code)
-       ^
-  Report hash: 3d7d16867bb799c9b0371c7da434b385
-  Steps:
-    1, imgui.h:2472:21: in the call to 'SetKeyEventNativeData', declared here
-    2, imgui_impl_glfw.cpp:443:8: 1st argument 'imgui_key' (passed to 'key') looks like it might be swapped with the 2nd, 'keycode' (passed to 'native_keycode')
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:624:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-    snprintf(bd->BackendPlatformName, sizeof(bd->BackendPlatformName), "imgui_impl_glfw (%d)", GLFW_VERSION_COMBINED);
-    ^
-  Report hash: ffb6a65c33ac411fecbbf3b41f511891
-  Steps:
-    1, imgui_impl_glfw.cpp:624:5: cast the expression to void to silence this warning
-    2, imgui_impl_glfw.cpp:624:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_glfw.cpp:927:35: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-        current_time = bd->Time + 0.00001f;
-                                  ^
-  Report hash: 096582b1e101453666f9311c1c2f6ab8
-  Steps:
-    1, imgui_impl_glfw.cpp:927:35: implicit conversion increases floating-point precision: 'float' to 'double'
-
-Found 3 defect(s) in imgui_impl_glfw.cpp
-
 [MEDIUM] /sep/third_party/imgui/imgui.h:2200:182: undefined behavior, destination object type 'ImGuiTableTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
     inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
                                                                                                                                                                                      ^
@@ -1751,63 +1805,6 @@ Found 10 defect(s) in imgui.h
     2, imgui_tables.cpp:4384:25: casting (double + 0.5) to integer leads to incorrect rounding; consider using lround (#include <cmath>) instead
 
 Found 10 defect(s) in imgui_tables.cpp
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:291:22: both sides of operator are equivalent [misc-redundant-expression]
-    if (imgl3wInit() != 0)
-                     ^
-  Report hash: 1fd9e19ec8550f6690de84a271ba9584
-  Steps:
-    1, imgui_impl_opengl3.cpp:291:22: both sides of operator are equivalent
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:293:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
-        ^
-  Report hash: 83b3da2e853dc256cc67ebcfc76b63a0
-  Steps:
-    1, imgui_impl_opengl3.cpp:293:9: cast the expression to void to silence this warning
-    2, imgui_impl_opengl3.cpp:293:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:791:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-        fprintf(stderr, "ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to compile %s! With GLSL: %s\n", desc, bd->GlslVersionString);
-        ^
-  Report hash: 8b7f5770122a7b0e2a1d587185885aff
-  Steps:
-    1, imgui_impl_opengl3.cpp:791:9: cast the expression to void to silence this warning
-    2, imgui_impl_opengl3.cpp:791:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:797:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-        fprintf(stderr, "%s\n", buf.begin());
-        ^
-  Report hash: 608b151e6695cac6c5330fe36deebb51
-  Steps:
-    1, imgui_impl_opengl3.cpp:797:9: cast the expression to void to silence this warning
-    2, imgui_impl_opengl3.cpp:797:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:810:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-        fprintf(stderr, "ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to link %s! With GLSL %s\n", desc, bd->GlslVersionString);
-        ^
-  Report hash: 0bba233dca8fba0bd47d6dfe9bcac7a3
-  Steps:
-    1, imgui_impl_opengl3.cpp:810:9: cast the expression to void to silence this warning
-    2, imgui_impl_opengl3.cpp:810:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:816:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-        fprintf(stderr, "%s\n", buf.begin());
-        ^
-  Report hash: 608b151e6695cac6c5330fe36deebb51
-  Steps:
-    1, imgui_impl_opengl3.cpp:816:9: cast the expression to void to silence this warning
-    2, imgui_impl_opengl3.cpp:816:9: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-[MEDIUM] /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp:840:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-    sscanf(bd->GlslVersionString, "#version %d", &glsl_version);
-    ^
-  Report hash: 73a9d793e988515f34c977d6ea4c8148
-  Steps:
-    1, imgui_impl_opengl3.cpp:840:5: cast the expression to void to silence this warning
-    2, imgui_impl_opengl3.cpp:840:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-Found 7 defect(s) in imgui_impl_opengl3.cpp
 
 [MEDIUM] /sep/third_party/imgui/imgui.h:2200:182: undefined behavior, destination object type 'ImGuiMultiSelectTempData' is not TriviallyCopyable [bugprone-undefined-memory-manipulation]
     inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) memcpy(&Data[n], &v, sizeof(v)); Size = new_size; }
@@ -2149,43 +2146,6 @@ Found 6 defect(s) in imgui.h
 
 Found 38 defect(s) in imgui_widgets.cpp
 
-Found no defects in compression_utils.cpp
-Found no defects in api.cpp
-Found no defects in compression.cpp
-[LOW] /sep/src/sep_engine_wrapper.h:24:12: no definition found for 'Pattern', but a definition with the same name 'Pattern' found in another namespace 'sep::workbench' [bugprone-forward-declaration-namespace]
-    struct Pattern;
-           ^
-  Report hash: 8fd89ed7ef03fa39831a248e4b15a029
-  Steps:
-    1, pattern.hpp:13:8: a definition of 'Pattern' is found here
-    2, sep_engine_wrapper.h:24:12: no definition found for 'Pattern', but a definition with the same name 'Pattern' found in another namespace 'sep::workbench'
-
-Found 1 defect(s) in sep_engine_wrapper.h
-
-[MEDIUM] /sep/src/workbench_main.cpp:229:29: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-                    1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-                            ^
-  Report hash: 1524651e4d75aed58f3b8d06533ba36a
-  Notes:
-    1, workbench_main.cpp:229:9: ~~~~~ (fixit)
-    2, workbench_main.cpp:229:21: 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate); (fixit)
-    3, workbench_main.cpp:229:21: ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~ (fixit)
-  Steps:
-    1, workbench_main.cpp:229:29: implicit conversion increases floating-point precision: 'float' to 'double'
-
-[MEDIUM] /sep/src/workbench_main.cpp:229:72: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-                    1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-                                                                       ^
-  Report hash: f170c7cf085694fde678a0b62362ec54
-  Notes:
-    1, workbench_main.cpp:229:9: ~~~~~ (fixit)
-    2, workbench_main.cpp:229:21: 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate); (fixit)
-    3, workbench_main.cpp:229:57: ~~~~~~~~~~~~~~~^~~~~~~~~ (fixit)
-  Steps:
-    1, workbench_main.cpp:229:72: implicit conversion increases floating-point precision: 'float' to 'double'
-
-Found 2 defect(s) in workbench_main.cpp
-
 [MEDIUM] /sep/src/core/config_manager_stub.cpp:5:1: 'Impl' defined as a class here but previously declared as a struct; this is valid, but may result in linker errors under the Microsoft C++ ABI [clang-diagnostic-mismatched-tags]
 class ConfigManager::Impl {
 ^
@@ -2196,54 +2156,41 @@ class ConfigManager::Impl {
 
 Found 1 defect(s) in config_manager_stub.cpp
 
-[MEDIUM] /sep/src/memory/memory_tier_manager.cpp:367:31: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-                   out_block->coherence, out_block->stability);
-                              ^
-  Report hash: 37e385ab7388829d43ef552db7143b61
+[LOW] /sep/src/sep_engine_wrapper.h:24:12: no definition found for 'Pattern', but a definition with the same name 'Pattern' found in another namespace 'sep::workbench' [bugprone-forward-declaration-namespace]
+    struct Pattern;
+           ^
+  Report hash: 8fd89ed7ef03fa39831a248e4b15a029
+  Steps:
+    1, pattern.hpp:13:8: a definition of 'Pattern' is found here
+    2, sep_engine_wrapper.h:24:12: no definition found for 'Pattern', but a definition with the same name 'Pattern' found in another namespace 'sep::workbench'
+
+Found 1 defect(s) in sep_engine_wrapper.h
+
+[MEDIUM] /sep/src/workbench_main.cpp:179:29: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+                    1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+                            ^
+  Report hash: 1524651e4d75aed58f3b8d06533ba36a
   Notes:
-    1, memory_tier_manager.cpp:367:13: ~~~~~~ (fixit)
-    2, memory_tier_manager.cpp:367:20: out_block->coherence, out_block->stability); (fixit)
-    3, memory_tier_manager.cpp:367:20: ~~~~~~~~~~~^~~~~~~~~ (fixit)
+    1, workbench_main.cpp:179:9: ~~~~~ (fixit)
+    2, workbench_main.cpp:179:21: 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate); (fixit)
+    3, workbench_main.cpp:179:21: ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~ (fixit)
   Steps:
-    1, memory_tier_manager.cpp:367:31: implicit conversion increases floating-point precision: 'float' to 'double'
+    1, workbench_main.cpp:179:29: implicit conversion increases floating-point precision: 'float' to 'double'
 
-[MEDIUM] /sep/src/memory/memory_tier_manager.cpp:367:53: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-                   out_block->coherence, out_block->stability);
-                                                    ^
-  Report hash: 9506b31759ee71ddc2d04f59ed8c691e
+[MEDIUM] /sep/src/workbench_main.cpp:179:72: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+                    1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+                                                                       ^
+  Report hash: f170c7cf085694fde678a0b62362ec54
   Notes:
-    1, memory_tier_manager.cpp:367:13: ~~~~~~ (fixit)
-    2, memory_tier_manager.cpp:367:20: out_block->coherence, out_block->stability); (fixit)
-    3, memory_tier_manager.cpp:367:42: ~~~~~~~~~~~^~~~~~~~~ (fixit)
+    1, workbench_main.cpp:179:9: ~~~~~ (fixit)
+    2, workbench_main.cpp:179:21: 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate); (fixit)
+    3, workbench_main.cpp:179:57: ~~~~~~~~~~~~~~~^~~~~~~~~ (fixit)
   Steps:
-    1, memory_tier_manager.cpp:367:53: implicit conversion increases floating-point precision: 'float' to 'double'
+    1, workbench_main.cpp:179:72: implicit conversion increases floating-point precision: 'float' to 'double'
 
-Found 2 defect(s) in memory_tier_manager.cpp
+Found 2 defect(s) in workbench_main.cpp
 
-Found no defects in factory.cpp
-[MEDIUM] /sep/src/quantum/evolution.cpp:127:52: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-        state.phase += (nextFloat() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
-                                                   ^
-  Report hash: c5677e825a782969782849e7a3b87e33
-  Steps:
-    1, evolution.cpp:127:52: implicit conversion increases floating-point precision: 'float' to 'double'
-
-[MEDIUM] /sep/src/quantum/evolution.cpp:324:42: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-    state.phase += (rnd() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
-                                         ^
-  Report hash: cad84b4fd50cd0e5a22044d2f4918545
-  Steps:
-    1, evolution.cpp:324:42: implicit conversion increases floating-point precision: 'float' to 'double'
-
-[MEDIUM] /sep/src/quantum/evolution.cpp:376:45: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-        pattern.quantum_state.phase = rnd() * 2.0f * M_PI; // Initialize phase
-                                            ^
-  Report hash: 686c468a0c599aae810685813b0a5284
-  Steps:
-    1, evolution.cpp:376:45: implicit conversion increases floating-point precision: 'float' to 'double'
-
-Found 3 defect(s) in evolution.cpp
-
+Found no defects in server.cpp
 [MEDIUM] /sep/src/compat/memory.h:112:63: unused parameter 'stream' [clang-diagnostic-unused-parameter]
 bool copyToDevice(T* dst, const T* src, size_t count, Stream* stream  = nullptr) {
                                                               ^
@@ -2278,26 +2225,53 @@ Found 2 defect(s) in memory.h
 
 Found 2 defect(s) in engine.cpp
 
-[MEDIUM] /sep/src/memory/memory_tier.cpp:700:26: std::move of the variable 'pattern' of the trivially-copyable type '::sep::persistence::PersistentPatternData' has no effect; remove std::move() [performance-move-const-arg]
-        m_patterns[id] = std::move(pattern);
-                         ^
-  Report hash: db3b6b6749836b7ff0214ba208ff5162
+[MEDIUM] /sep/src/memory/memory_tier_manager.cpp:367:31: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+                   out_block->coherence, out_block->stability);
+                              ^
+  Report hash: 37e385ab7388829d43ef552db7143b61
+  Notes:
+    1, memory_tier_manager.cpp:367:13: ~~~~~~ (fixit)
+    2, memory_tier_manager.cpp:367:20: out_block->coherence, out_block->stability); (fixit)
+    3, memory_tier_manager.cpp:367:20: ~~~~~~~~~~~^~~~~~~~~ (fixit)
   Steps:
-    1, memory_tier.cpp:700:26: std::move of the variable 'pattern' of the trivially-copyable type '::sep::persistence::PersistentPatternData' has no effect; remove std::move()
+    1, memory_tier_manager.cpp:367:31: implicit conversion increases floating-point precision: 'float' to 'double'
 
-Found 1 defect(s) in memory_tier.cpp
-
-[LOW] /sep/src/memory/types.h:28:15: no definition found for 'IRedisManager', but a definition with the same name 'IRedisManager' found in another namespace 'sep::persistence' [bugprone-forward-declaration-namespace]
-        class IRedisManager;
-              ^
-  Report hash: bb6220cfbb10b287bf51f1bcfb170272
+[MEDIUM] /sep/src/memory/memory_tier_manager.cpp:367:53: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+                   out_block->coherence, out_block->stability);
+                                                    ^
+  Report hash: 9506b31759ee71ddc2d04f59ed8c691e
+  Notes:
+    1, memory_tier_manager.cpp:367:13: ~~~~~~ (fixit)
+    2, memory_tier_manager.cpp:367:20: out_block->coherence, out_block->stability); (fixit)
+    3, memory_tier_manager.cpp:367:42: ~~~~~~~~~~~^~~~~~~~~ (fixit)
   Steps:
-    1, redis_manager.h:23:7: a definition of 'IRedisManager' is found here
-    2, types.h:28:15: no definition found for 'IRedisManager', but a definition with the same name 'IRedisManager' found in another namespace 'sep::persistence'
+    1, memory_tier_manager.cpp:367:53: implicit conversion increases floating-point precision: 'float' to 'double'
 
-Found 1 defect(s) in types.h
+Found 2 defect(s) in memory_tier_manager.cpp
 
-Found no defects in server.cpp
+[MEDIUM] /sep/src/quantum/evolution.cpp:127:52: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+        state.phase += (nextFloat() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
+                                                   ^
+  Report hash: c5677e825a782969782849e7a3b87e33
+  Steps:
+    1, evolution.cpp:127:52: implicit conversion increases floating-point precision: 'float' to 'double'
+
+[MEDIUM] /sep/src/quantum/evolution.cpp:324:42: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+    state.phase += (rnd() * 2.0f - 1.0f) * sigma * M_PI; // Add phase mutation
+                                         ^
+  Report hash: cad84b4fd50cd0e5a22044d2f4918545
+  Steps:
+    1, evolution.cpp:324:42: implicit conversion increases floating-point precision: 'float' to 'double'
+
+[MEDIUM] /sep/src/quantum/evolution.cpp:376:45: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+        pattern.quantum_state.phase = rnd() * 2.0f * M_PI; // Initialize phase
+                                            ^
+  Report hash: 686c468a0c599aae810685813b0a5284
+  Steps:
+    1, evolution.cpp:376:45: implicit conversion increases floating-point precision: 'float' to 'double'
+
+Found 3 defect(s) in evolution.cpp
+
 [LOW] /sep/src/audio/pipewire_capture.cpp:320:13: Call to blocking function 'fgets' inside of critical section [unix.BlockInCriticalSection]
         if (fgets(service_status, sizeof(service_status), fp) != nullptr) {
             ^
@@ -2393,6 +2367,26 @@ Found no defects in server.cpp
 
 Found 3 defect(s) in pipewire_capture.cpp
 
+[LOW] /sep/src/memory/types.h:28:15: no definition found for 'IRedisManager', but a definition with the same name 'IRedisManager' found in another namespace 'sep::persistence' [bugprone-forward-declaration-namespace]
+        class IRedisManager;
+              ^
+  Report hash: bb6220cfbb10b287bf51f1bcfb170272
+  Steps:
+    1, redis_manager.h:23:7: a definition of 'IRedisManager' is found here
+    2, types.h:28:15: no definition found for 'IRedisManager', but a definition with the same name 'IRedisManager' found in another namespace 'sep::persistence'
+
+Found 1 defect(s) in types.h
+
+[MEDIUM] /sep/src/memory/memory_tier.cpp:700:26: std::move of the variable 'pattern' of the trivially-copyable type '::sep::persistence::PersistentPatternData' has no effect; remove std::move() [performance-move-const-arg]
+        m_patterns[id] = std::move(pattern);
+                         ^
+  Report hash: db3b6b6749836b7ff0214ba208ff5162
+  Steps:
+    1, memory_tier.cpp:700:26: std::move of the variable 'pattern' of the trivially-copyable type '::sep::persistence::PersistentPatternData' has no effect; remove std::move()
+
+Found 1 defect(s) in memory_tier.cpp
+
+Found no defects in factory.cpp
 [LOW] /usr/include/pipewire-0.3/pipewire/control.h:25:10: circular header file dependency detected while including 'impl.h', please check the include path [misc-header-include-cycle]
 #include <pipewire/impl.h>
          ^
@@ -3100,6 +3094,31 @@ Found 1 defect(s) in http_response.h
 
 Found 4 defect(s) in config.cpp
 
+[MEDIUM] /sep/src/api/server.cpp:770:53: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+  if (coherence_score < config_.response_modulation.coherence_threshold) {
+                                                    ^
+  Report hash: 9d1543cea2f85bd11b627de29ba7cef4
+  Steps:
+    1, server.cpp:770:53: implicit conversion increases floating-point precision: 'float' to 'double'
+
+[MEDIUM] /sep/src/api/server.cpp:796:66: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+    {"simplified", coherence_score < config_.response_modulation.coherence_threshold}
+                                                                 ^
+  Report hash: 540e3e8a871eca2a472d3d3394c2a008
+  Steps:
+    1, server.cpp:796:66: implicit conversion increases floating-point precision: 'float' to 'double'
+
+Found 2 defect(s) in server.cpp
+
+[MEDIUM] /sep/src/api/server.h:222:38: private field 'cycles_renderer_' is not used [clang-diagnostic-unused-private-field]
+  sep::blender::ccl::CyclesRenderer* cycles_renderer_;
+                                     ^
+  Report hash: 3a19fccf9675b2d499ff0269f54d5087
+  Steps:
+    1, server.h:222:38: private field 'cycles_renderer_' is not used
+
+Found 1 defect(s) in server.h
+
 [MEDIUM] /sep/src/audio/pipewire_capture.cpp:223:9: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
         snprintf(runtime_path, sizeof(runtime_path), "/run/user/%d", uid);
         ^
@@ -3126,30 +3145,14 @@ Found 1 defect(s) in pipewire_capture.cpp
 
 Found 2 defect(s) in pipewire_capture.h
 
-[MEDIUM] /sep/src/api/server.cpp:770:53: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-  if (coherence_score < config_.response_modulation.coherence_threshold) {
-                                                    ^
-  Report hash: 9d1543cea2f85bd11b627de29ba7cef4
+[MEDIUM] /sep/src/workbench/demos/annealing_demo.cpp:42:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double') [clang-diagnostic-double-promotion]
+            float invDist6 = 1.0f / std::pow(dist, 6);
+                             ^
+  Report hash: 145ff45a1fe785c34fd9d4a7e29bef4c
   Steps:
-    1, server.cpp:770:53: implicit conversion increases floating-point precision: 'float' to 'double'
+    1, annealing_demo.cpp:42:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double')
 
-[MEDIUM] /sep/src/api/server.cpp:796:66: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
-    {"simplified", coherence_score < config_.response_modulation.coherence_threshold}
-                                                                 ^
-  Report hash: 540e3e8a871eca2a472d3d3394c2a008
-  Steps:
-    1, server.cpp:796:66: implicit conversion increases floating-point precision: 'float' to 'double'
-
-Found 2 defect(s) in server.cpp
-
-[MEDIUM] /sep/src/api/server.h:222:38: private field 'cycles_renderer_' is not used [clang-diagnostic-unused-private-field]
-  sep::blender::ccl::CyclesRenderer* cycles_renderer_;
-                                     ^
-  Report hash: 3a19fccf9675b2d499ff0269f54d5087
-  Steps:
-    1, server.h:222:38: private field 'cycles_renderer_' is not used
-
-Found 1 defect(s) in server.h
+Found 1 defect(s) in annealing_demo.cpp
 
 Found no defects in bridge_c.cpp
 [MEDIUM] /sep/src/crow/socket_adaptors.h:58:13: the value returned by this function should not be disregarded; neglecting it may lead to errors [bugprone-unused-return-value]
@@ -3210,120 +3213,72 @@ Found no defects in bridge_c.cpp
 
 Found 8 defect(s) in socket_adaptors.h
 
-[MEDIUM] /sep/src/blender/blender_integration.cpp:15:7: field 'thread_running_' will be initialized after field 'gpu_context_' [clang-diagnostic-reorder-ctor]
-    : thread_running_(false),
-      ^
-  Report hash: dfc6c665bd56d3f5e87cab3824f381f6
-  Notes:
-    1, blender_integration.cpp:15:7: gpu_context_(nullptr) (fixit)
-    2, blender_integration.cpp:15:7: gpu_context_(nullptr) (fixit)
-    3, blender_integration.cpp:15:7: ~~~~~~~~~~~~~~~~~~~~~ (fixit)
-    4, blender_integration.cpp:15:7: thread_running_(false) (fixit)
-  Steps:
-    1, blender_integration.cpp:15:7: field 'thread_running_' will be initialized after field 'gpu_context_'
-
-[CRITICAL] /sep/src/blender/blender_integration.cpp:205:46: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType' [clang-diagnostic-error]
-    state.memory_block = mgr.allocate(bytes, sep::memory::TierType::DEVICE);
-                                             ^
-  Report hash: ca692c7ea1847855267c0cf197e73718
-  Steps:
-    1, memory_tier_manager.hpp:61:64: passing argument to parameter 'tier' here
-    2, blender_integration.cpp:205:46: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType'
-
-[CRITICAL] /sep/src/blender/blender_integration.cpp:240:36: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType' [clang-diagnostic-error]
-            manager.defragmentTier(sep::memory::TierType::HOST);
-                                   ^
-  Report hash: db40fb13a544803910bfe060a3ba207c
-  Steps:
-    1, memory_tier_manager.hpp:71:44: passing argument to parameter 'tier' here
-    2, blender_integration.cpp:240:36: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType'
-
-[CRITICAL] /sep/src/blender/blender_integration.cpp:243:36: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType' [clang-diagnostic-error]
-            manager.defragmentTier(sep::memory::TierType::DEVICE);
-                                   ^
-  Report hash: 36c713a993b6cbac61b612f4cb2f1e04
-  Steps:
-    1, memory_tier_manager.hpp:71:44: passing argument to parameter 'tier' here
-    2, blender_integration.cpp:243:36: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType'
-
-[CRITICAL] /sep/src/blender/blender_integration.cpp:246:40: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType' [clang-diagnostic-error]
-                manager.defragmentTier(sep::memory::TierType::HOST);
-                                       ^
-  Report hash: e19d3175852d17ae57e941fc6c565810
-  Steps:
-    1, memory_tier_manager.hpp:71:44: passing argument to parameter 'tier' here
-    2, blender_integration.cpp:246:40: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType'
-
-[CRITICAL] /sep/src/blender/blender_integration.cpp:250:36: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType' [clang-diagnostic-error]
-            manager.defragmentTier(sep::memory::TierType::UNIFIED);
-                                   ^
-  Report hash: c0ec481f8f985e3cd69550715b4425f1
-  Steps:
-    1, memory_tier_manager.hpp:71:44: passing argument to parameter 'tier' here
-    2, blender_integration.cpp:250:36: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType'
-
-[CRITICAL] /sep/src/blender/blender_integration.cpp:344:9: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType' [clang-diagnostic-error]
-        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::STM));
-        ^
-  Report hash: 32051aa4ae37636810a969ae97c0abc5
-  Steps:
-    1, memory_tier_manager.hpp:67:49: passing argument to parameter 'tier' here
-    2, blender_integration.cpp:344:9: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType'
-
-[CRITICAL] /sep/src/blender/blender_integration.cpp:346:9: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType' [clang-diagnostic-error]
-        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::MTM));
-        ^
-  Report hash: d912ad235616df62b5175c2ae1accd6c
-  Steps:
-    1, memory_tier_manager.hpp:67:49: passing argument to parameter 'tier' here
-    2, blender_integration.cpp:346:9: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType'
-
-[CRITICAL] /sep/src/blender/blender_integration.cpp:348:9: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType' [clang-diagnostic-error]
-        static_cast<sep::memory::TierType>(::sep::memory::MemoryTierEnum::LTM));
-        ^
-  Report hash: 5c417fb01448459e431684e91cc2061f
-  Steps:
-    1, memory_tier_manager.hpp:67:49: passing argument to parameter 'tier' here
-    2, blender_integration.cpp:348:9: cannot initialize a parameter of type 'MemoryTierEnum' with an rvalue of type 'sep::memory::TierType'
-
-Found 9 defect(s) in blender_integration.cpp
-
-[MEDIUM] /sep/src/workbench/demos/annealing_demo.cpp:35:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double') [clang-diagnostic-double-promotion]
-            float invDist6 = 1.0f / std::pow(dist, 6);
-                             ^
-  Report hash: 145ff45a1fe785c34fd9d4a7e29bef4c
-  Steps:
-    1, annealing_demo.cpp:35:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double')
-
-Found 1 defect(s) in annealing_demo.cpp
-
-[LOW] /sep/src/workbench/demos/audio_visualizer.cpp:123:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+[LOW] /sep/src/workbench/demos/audio_visualizer.cpp:125:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
     switch (key) {
     ^
   Report hash: f1b9a1ded2e0ee7c6494d7541f1eab45
   Steps:
-    1, audio_visualizer.cpp:123:5: switching on non-enum value without default case may not cover all cases
+    1, audio_visualizer.cpp:125:5: switching on non-enum value without default case may not cover all cases
 
-Found 1 defect(s) in audio_visualizer.cpp
+[MEDIUM] /sep/src/workbench/demos/audio_visualizer.cpp:191:49: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+        ImGui::Text("Peak Level: %.2f", metrics.peak_level);
+                                                ^
+  Report hash: be95577f9221d769cefcb3e2d892781d
+  Steps:
+    1, audio_visualizer.cpp:191:49: implicit conversion increases floating-point precision: 'float' to 'double'
 
-[CRITICAL] /sep/src/blender/profiler_stub.cpp:3:11: redefinition of 'Profiler' [clang-diagnostic-error]
-    class Profiler
+[MEDIUM] /sep/src/workbench/demos/audio_visualizer.cpp:192:48: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+        ImGui::Text("RMS Level: %.2f", metrics.rms_level);
+                                               ^
+  Report hash: e5552fc9e2a5c8d923693ac1bc8d0f74
+  Steps:
+    1, audio_visualizer.cpp:192:48: implicit conversion increases floating-point precision: 'float' to 'double'
+
+[MEDIUM] /sep/src/workbench/demos/audio_visualizer.cpp:193:49: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+        ImGui::Text("Latency: %.1f ms", metrics.latency_ms);
+                                                ^
+  Report hash: 770175534cc586c63f6e818df9e8ab0f
+  Steps:
+    1, audio_visualizer.cpp:193:49: implicit conversion increases floating-point precision: 'float' to 'double'
+
+Found 4 defect(s) in audio_visualizer.cpp
+
+[MEDIUM] /sep/src/workbench/demos/audio_visualizer.hpp:39:11: private field 'threshold_' is not used [clang-diagnostic-unused-private-field]
+    float threshold_{0.5f};
           ^
-  Report hash: 521e021a86dd469d1c3b257d413ff17f
+  Report hash: 1918dc27a25722adf00ab35c35c3eb70
   Steps:
-    1, profiling.h:71:7: previous definition is here
-    2, profiler_stub.cpp:3:11: redefinition of 'Profiler'
+    1, audio_visualizer.hpp:39:11: private field 'threshold_' is not used
 
-Found 1 defect(s) in profiler_stub.cpp
-
-[LOW] /sep/src/workbench/demos/audio_visualizer_simple.cpp:67:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
-    switch (key) {
-    ^
-  Report hash: 660425c6524ea691df39414a470ea58d
+[MEDIUM] /sep/src/workbench/demos/audio_visualizer.hpp:40:11: private field 'decay_' is not used [clang-diagnostic-unused-private-field]
+    float decay_{0.1f};
+          ^
+  Report hash: 3e45763c4591d267d4646b864c3574bb
   Steps:
-    1, audio_visualizer_simple.cpp:67:5: switching on non-enum value without default case may not cover all cases
+    1, audio_visualizer.hpp:40:11: private field 'decay_' is not used
 
-Found 1 defect(s) in audio_visualizer_simple.cpp
+[MEDIUM] /sep/src/workbench/demos/audio_visualizer.hpp:41:11: private field 'input_strength_' is not used [clang-diagnostic-unused-private-field]
+    float input_strength_{0.5f};
+          ^
+  Report hash: 0be438527845fdfdf5eb956002221bfb
+  Steps:
+    1, audio_visualizer.hpp:41:11: private field 'input_strength_' is not used
+
+[MEDIUM] /sep/src/workbench/demos/audio_visualizer.hpp:42:11: private field 'learning_rate_' is not used [clang-diagnostic-unused-private-field]
+    float learning_rate_{0.05f};
+          ^
+  Report hash: 2ce8f8626b0291f524d169d2862220f6
+  Steps:
+    1, audio_visualizer.hpp:42:11: private field 'learning_rate_' is not used
+
+[MEDIUM] /sep/src/workbench/demos/audio_visualizer.hpp:43:11: private field 'connection_prob_' is not used [clang-diagnostic-unused-private-field]
+    float connection_prob_{0.3f};
+          ^
+  Report hash: fcdce57d970fd38c7ec3eef6fb6d8755
+  Steps:
+    1, audio_visualizer.hpp:43:11: private field 'connection_prob_' is not used
+
+Found 5 defect(s) in audio_visualizer.hpp
 
 [LOW] /sep/src/sep_engine_wrapper.h:24:12: no definition found for 'Pattern', but a definition with the same name 'Pattern' found in another namespace 'sep::quantum' [bugprone-forward-declaration-namespace]
     struct Pattern;
@@ -3343,17 +3298,25 @@ Found 1 defect(s) in audio_visualizer_simple.cpp
 
 Found 2 defect(s) in sep_engine_wrapper.h
 
-[MEDIUM] /sep/src/workbench/demos/annealing_sim.cpp:35:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double') [clang-diagnostic-double-promotion]
+[MEDIUM] /sep/src/workbench/demos/annealing_sim.cpp:42:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double') [clang-diagnostic-double-promotion]
             float invDist6 = 1.0f / std::pow(dist, 6);
                              ^
   Report hash: b184919ceaf7e8ac15a99df24654ffac
   Steps:
-    1, annealing_sim.cpp:35:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double')
+    1, annealing_sim.cpp:42:30: implicit conversion increases floating-point precision: 'float' to 'typename __gnu_cxx::__promote_2<float, int>::__type' (aka 'double')
 
 Found 1 defect(s) in annealing_sim.cpp
 
 Found no defects in gpu_context.cpp
-Found no defects in pattern_visualization_pipeline.cpp
+[LOW] /sep/src/workbench/demos/audio_visualizer_simple.cpp:79:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (key) {
+    ^
+  Report hash: 660425c6524ea691df39414a470ea58d
+  Steps:
+    1, audio_visualizer_simple.cpp:79:5: switching on non-enum value without default case may not cover all cases
+
+Found 1 defect(s) in audio_visualizer_simple.cpp
+
 [MEDIUM] /sep/src/blender/mesh_handler.cpp:303:21: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
       area += 0.5 * std::sqrt(cx * cx + cy * cy + cz * cz);
                     ^
@@ -3370,6 +3333,7 @@ Found no defects in pattern_visualization_pipeline.cpp
 
 Found 2 defect(s) in mesh_handler.cpp
 
+Found no defects in pattern_visualization_pipeline.cpp
 [MEDIUM] /sep/extern/cycles/src/util/hash.h:555:15: 'signed char' to 'uint' (aka 'unsigned int') conversion; consider casting to 'unsigned char' first. [bugprone-signed-char-misuse]
   while ((c = *str++)) {
               ^
@@ -3379,65 +3343,136 @@ Found 2 defect(s) in mesh_handler.cpp
 
 Found 1 defect(s) in hash.h
 
-[CRITICAL] /sep/src/blender/cycles_renderer.cpp:176:58: no member named 'OIIOOutputDriver' in namespace 'ccl' [clang-diagnostic-error]
-    session->set_output_driver(::ccl::make_unique<::ccl::OIIOOutputDriver>(
-                                                         ^
-  Report hash: 3756fc51c40580f4925d959a9301d48f
+Found no defects in cycles_renderer.cpp
+[MEDIUM] /sep/extern/cycles/third_party/cuew/include/cuew.h:18:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __CUEW_H__
+        ^
+  Report hash: c6e928458ea56789038346ec8ae900f7
   Steps:
-    1, cycles_renderer.cpp:176:58: no member named 'OIIOOutputDriver' in namespace 'ccl'
+    1, cuew.h:18:9: macro name is a reserved identifier
 
-Found 1 defect(s) in cycles_renderer.cpp
-
-[MEDIUM] /sep/src/compat/cycles.h:72:34: unused parameter 'row' [clang-diagnostic-unused-parameter]
-            float operator()(int row, int col) const { return 0.0f; }
-                                 ^
-  Report hash: fff28953586f6f45c8151653cb8615ab
+[MEDIUM] /sep/extern/cycles/third_party/cuew/include/cuew.h:746:16: tagged union has more data members (5) than tags (4)! [bugprone-tagged-union-member-count]
+typedef struct CUDA_RESOURCE_DESC_st {
+               ^
+  Report hash: 533268e39606365a47e52419ce8f314c
   Steps:
-    1, cycles.h:72:34: unused parameter 'row'
+    1, cuew.h:746:16: tagged union has more data members (5) than tags (4)!
 
-[MEDIUM] /sep/src/compat/cycles.h:72:43: unused parameter 'col' [clang-diagnostic-unused-parameter]
-            float operator()(int row, int col) const { return 0.0f; }
-                                          ^
-  Report hash: 38220157262a42481c215ecb43bf31f3
+[MEDIUM] /sep/extern/cycles/third_party/cuew/include/cuew.h:887:16: identifier '_nvrtcProgram' is reserved because it starts with '_' at global scope [clang-diagnostic-reserved-identifier]
+typedef struct _nvrtcProgram *nvrtcProgram;
+               ^
+  Report hash: 86196a030ae58f454fdfda55c452f317
   Steps:
-    1, cycles.h:72:43: unused parameter 'col'
+    1, cuew.h:887:16: identifier '_nvrtcProgram' is reserved because it starts with '_' at global scope
 
-[MEDIUM] /sep/src/compat/cycles.h:73:34: unused parameter 'i' [clang-diagnostic-unused-parameter]
-            float operator[](int i) const { return 0.0f; }
-                                 ^
-  Report hash: 9a788d8abf35ab6cf7290cd9f8d778b3
+Found 3 defect(s) in cuew.h
+
+[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:54:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define _LIBRARY_FIND_CHECKED(lib, name) \
+        ^
+  Report hash: 5b2a9015a33d574455355fe916d4031a
   Steps:
-    1, cycles.h:73:34: unused parameter 'i'
+    1, cuew.c:54:9: macro name is a reserved identifier
 
-[MEDIUM] /sep/src/compat/cycles.h:74:35: unused parameter 'i' [clang-diagnostic-unused-parameter]
-            float& operator[](int i) { static float dummy = 0.0f; return dummy; }
-                                  ^
-  Report hash: 9f5bf18f51d222e486fe2c7261c8d98d
+[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:58:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define _LIBRARY_FIND(lib, name) name = (t##name *)dynamic_library_find(lib, #name);
+        ^
+  Report hash: 4a062cc68dcad4ed60e180c68f01a17b
   Steps:
-    1, cycles.h:74:35: unused parameter 'i'
+    1, cuew.c:58:9: macro name is a reserved identifier
 
-[MEDIUM] /sep/src/compat/cycles.h:80:36: unused parameter 'min' [clang-diagnostic-unused-parameter]
-            CoordBBox(const Coord& min, const Coord& max) {}
-                                   ^
-  Report hash: 3491c10f7ed201f307451e8ee2806396
+[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:954:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    fprintf(stderr, "CUDA: failed to run compiler to retrieve version");
+    ^
+  Report hash: 6636e2f8d2d66ea89793722bb04133d6
   Steps:
-    1, cycles.h:80:36: unused parameter 'min'
+    1, cuew.c:954:5: cast the expression to void to silence this warning
+    2, cuew.c:954:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
 
-[MEDIUM] /sep/src/compat/cycles.h:80:54: unused parameter 'max' [clang-diagnostic-unused-parameter]
-            CoordBBox(const Coord& min, const Coord& max) {}
-                                                     ^
-  Report hash: 09194db40cec448620d014aeae2dbad2
+[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:969:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    fprintf(stderr, "CUDA: failed to find version number in:\n\n%s\n", output);
+    ^
+  Report hash: 52604579757b76cf0fa48d3c0ff13861
   Steps:
-    1, cycles.h:80:54: unused parameter 'max'
+    1, cuew.c:969:5: cast the expression to void to silence this warning
+    2, cuew.c:969:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
 
-[MEDIUM] /sep/src/compat/cycles.h:81:51: unused parameter 'other' [clang-diagnostic-unused-parameter]
-            CoordBBox& operator=(const CoordBBox& other) { return *this; }
-                                                  ^
-  Report hash: a926832fcc449c8a7c6123cd96f5f78f
+[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:975:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    fprintf(stderr, "CUDA: failed to parse version number from:\n\n%s\n", output);
+    ^
+  Report hash: 3b2a13ea564bcc889222fc435d140025
   Steps:
-    1, cycles.h:81:51: unused parameter 'other'
+    1, cuew.c:975:5: cast the expression to void to silence this warning
+    2, cuew.c:975:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
 
-Found 7 defect(s) in cycles.h
+Found 5 defect(s) in cuew.c
+
+[LOW] /sep/src/workbench/demos/memory_garden.cpp:128:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (key) {
+    ^
+  Report hash: dd35e159c90e9e1cd5eb82d4b5050f2e
+  Steps:
+    1, memory_garden.cpp:128:5: switching on non-enum value without default case may not cover all cases
+
+Found 1 defect(s) in memory_garden.cpp
+
+[MEDIUM] /sep/src/workbench/demos/memory_garden.hpp:56:11: private field 'connection_prob_' is not used [clang-diagnostic-unused-private-field]
+    float connection_prob_{0.3f};
+          ^
+  Report hash: add4a2ecfd4eda7637d400a0a56aff7e
+  Steps:
+    1, memory_garden.hpp:56:11: private field 'connection_prob_' is not used
+
+Found 1 defect(s) in memory_garden.hpp
+
+[MEDIUM] /sep/src/workbench/demos/genesis_pattern.cpp:109:52: implicit conversion increases floating-point precision: 'float' to 'double' [clang-diagnostic-double-promotion]
+    ImGui::Text("Global Coherence: %.3f", metrics_.coherence);
+                                                   ^
+  Report hash: 4fbf1f09e1231d4a3caaf4c676ae255b
+  Steps:
+    1, genesis_pattern.cpp:109:52: implicit conversion increases floating-point precision: 'float' to 'double'
+
+[LOW] /sep/src/workbench/demos/genesis_pattern.cpp:143:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
+    switch (key) {
+    ^
+  Report hash: b7476eb6b59fa98c05113c44f2363ec8
+  Steps:
+    1, genesis_pattern.cpp:143:5: switching on non-enum value without default case may not cover all cases
+
+Found 2 defect(s) in genesis_pattern.cpp
+
+[MEDIUM] /sep/extern/cycles/third_party/hipew/include/hipew.h:18:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
+#define __HIPEW_H__
+        ^
+  Report hash: c3d3a7918a29df56462f3ad13608f2a3
+  Steps:
+    1, hipew.h:18:9: macro name is a reserved identifier
+
+[MEDIUM] /sep/extern/cycles/third_party/hipew/include/hipew.h:901:16: tagged union has more data members (5) than tags (4)! [bugprone-tagged-union-member-count]
+typedef struct HIP_RESOURCE_DESC_st {
+               ^
+  Report hash: 2a1c571fb0bfb5fd3ea214f39cc23a26
+  Steps:
+    1, hipew.h:901:16: tagged union has more data members (5) than tags (4)!
+
+[MEDIUM] /sep/extern/cycles/third_party/hipew/include/hipew.h:1108:16: identifier '_hiprtcProgram' is reserved because it starts with '_' at global scope [clang-diagnostic-reserved-identifier]
+typedef struct _hiprtcProgram* hiprtcProgram;
+               ^
+  Report hash: 76e4d9748fa6556e7be3030d4a53f960
+  Steps:
+    1, hipew.h:1108:16: identifier '_hiprtcProgram' is reserved because it starts with '_' at global scope
+
+Found 3 defect(s) in hipew.h
+
+[MEDIUM] /sep/extern/cycles/third_party/hipew/src/hipew.c:601:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
+    fprintf(stderr, "HIP: failed to run compiler to retrieve version");
+    ^
+  Report hash: 1774487f2781d9b104d9c8f80bf0a781
+  Steps:
+    1, hipew.c:601:5: cast the expression to void to silence this warning
+    2, hipew.c:601:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
+
+Found 1 defect(s) in hipew.c
 
 [MEDIUM] /sep/src/workbench/renderer.cpp:240:24: result of integer division used in a floating point context; possible loss of precision [bugprone-integer-division]
             glVertex2f(width / 2 - 150, height / 2 - 150);
@@ -4343,109 +4378,6 @@ Found 7 defect(s) in cycles.h
 
 Found 125 defect(s) in renderer.cpp
 
-[MEDIUM] /sep/extern/cycles/third_party/cuew/include/cuew.h:18:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __CUEW_H__
-        ^
-  Report hash: c6e928458ea56789038346ec8ae900f7
-  Steps:
-    1, cuew.h:18:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/extern/cycles/third_party/cuew/include/cuew.h:746:16: tagged union has more data members (5) than tags (4)! [bugprone-tagged-union-member-count]
-typedef struct CUDA_RESOURCE_DESC_st {
-               ^
-  Report hash: 533268e39606365a47e52419ce8f314c
-  Steps:
-    1, cuew.h:746:16: tagged union has more data members (5) than tags (4)!
-
-[MEDIUM] /sep/extern/cycles/third_party/cuew/include/cuew.h:887:16: identifier '_nvrtcProgram' is reserved because it starts with '_' at global scope [clang-diagnostic-reserved-identifier]
-typedef struct _nvrtcProgram *nvrtcProgram;
-               ^
-  Report hash: 86196a030ae58f454fdfda55c452f317
-  Steps:
-    1, cuew.h:887:16: identifier '_nvrtcProgram' is reserved because it starts with '_' at global scope
-
-Found 3 defect(s) in cuew.h
-
-[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:54:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define _LIBRARY_FIND_CHECKED(lib, name) \
-        ^
-  Report hash: 5b2a9015a33d574455355fe916d4031a
-  Steps:
-    1, cuew.c:54:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:58:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define _LIBRARY_FIND(lib, name) name = (t##name *)dynamic_library_find(lib, #name);
-        ^
-  Report hash: 4a062cc68dcad4ed60e180c68f01a17b
-  Steps:
-    1, cuew.c:58:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:954:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-    fprintf(stderr, "CUDA: failed to run compiler to retrieve version");
-    ^
-  Report hash: 6636e2f8d2d66ea89793722bb04133d6
-  Steps:
-    1, cuew.c:954:5: cast the expression to void to silence this warning
-    2, cuew.c:954:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:969:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-    fprintf(stderr, "CUDA: failed to find version number in:\n\n%s\n", output);
-    ^
-  Report hash: 52604579757b76cf0fa48d3c0ff13861
-  Steps:
-    1, cuew.c:969:5: cast the expression to void to silence this warning
-    2, cuew.c:969:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-[MEDIUM] /sep/extern/cycles/third_party/cuew/src/cuew.c:975:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-    fprintf(stderr, "CUDA: failed to parse version number from:\n\n%s\n", output);
-    ^
-  Report hash: 3b2a13ea564bcc889222fc435d140025
-  Steps:
-    1, cuew.c:975:5: cast the expression to void to silence this warning
-    2, cuew.c:975:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-Found 5 defect(s) in cuew.c
-
-[MEDIUM] /sep/extern/cycles/third_party/hipew/include/hipew.h:18:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
-#define __HIPEW_H__
-        ^
-  Report hash: c3d3a7918a29df56462f3ad13608f2a3
-  Steps:
-    1, hipew.h:18:9: macro name is a reserved identifier
-
-[MEDIUM] /sep/extern/cycles/third_party/hipew/include/hipew.h:901:16: tagged union has more data members (5) than tags (4)! [bugprone-tagged-union-member-count]
-typedef struct HIP_RESOURCE_DESC_st {
-               ^
-  Report hash: 2a1c571fb0bfb5fd3ea214f39cc23a26
-  Steps:
-    1, hipew.h:901:16: tagged union has more data members (5) than tags (4)!
-
-[MEDIUM] /sep/extern/cycles/third_party/hipew/include/hipew.h:1108:16: identifier '_hiprtcProgram' is reserved because it starts with '_' at global scope [clang-diagnostic-reserved-identifier]
-typedef struct _hiprtcProgram* hiprtcProgram;
-               ^
-  Report hash: 76e4d9748fa6556e7be3030d4a53f960
-  Steps:
-    1, hipew.h:1108:16: identifier '_hiprtcProgram' is reserved because it starts with '_' at global scope
-
-Found 3 defect(s) in hipew.h
-
-[MEDIUM] /sep/extern/cycles/third_party/hipew/src/hipew.c:586:15: unused variable 'marker' [clang-diagnostic-unused-variable]
-  const char *marker = "Hip compilation tools, release ";
-              ^
-  Report hash: fc262f9b47c060e35231df3d823971b1
-  Steps:
-    1, hipew.c:586:15: unused variable 'marker'
-
-[MEDIUM] /sep/extern/cycles/third_party/hipew/src/hipew.c:602:5: the value returned by this function should not be disregarded; neglecting it may lead to errors [cert-err33-c]
-    fprintf(stderr, "HIP: failed to run compiler to retrieve version");
-    ^
-  Report hash: 1774487f2781d9b104d9c8f80bf0a781
-  Steps:
-    1, hipew.c:602:5: cast the expression to void to silence this warning
-    2, hipew.c:602:5: the value returned by this function should not be disregarded; neglecting it may lead to errors
-
-Found 2 defect(s) in hipew.c
-
 [MEDIUM] /sep/extern/cycles/third_party/sky/include/sky_model.h:302:9: macro name is a reserved identifier [clang-diagnostic-reserved-macro-identifier]
 #define __SKY_MODEL_H__
         ^
@@ -4472,24 +4404,6 @@ static const float step_lambda = (max_wavelength - min_wavelength) / (num_wavele
     1, sky_nishita.cpp:34:34: result of integer division used in a floating point context; possible loss of precision
 
 Found 1 defect(s) in sky_nishita.cpp
-
-[LOW] /sep/src/workbench/demos/memory_garden.cpp:112:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
-    switch (key) {
-    ^
-  Report hash: dd35e159c90e9e1cd5eb82d4b5050f2e
-  Steps:
-    1, memory_garden.cpp:112:5: switching on non-enum value without default case may not cover all cases
-
-Found 1 defect(s) in memory_garden.cpp
-
-[LOW] /sep/src/workbench/demos/genesis_pattern.cpp:111:5: switching on non-enum value without default case may not cover all cases [bugprone-switch-missing-default-case]
-    switch (key) {
-    ^
-  Report hash: b7476eb6b59fa98c05113c44f2363ec8
-  Steps:
-    1, genesis_pattern.cpp:111:5: switching on non-enum value without default case may not cover all cases
-
-Found 1 defect(s) in genesis_pattern.cpp
 
 [LOW] /usr/include/asio/detail/impl/signal_set_service.ipp:145:12: Call to blocking function 'read' inside of critical section [unix.BlockInCriticalSection]
     while (::read(fd, &signal_number, sizeof(int)) == sizeof(int))
@@ -4568,10 +4482,9 @@ Found 1 defect(s) in signal_set_service.ipp
 ----------------------------
 Severity | Number of reports
 ----------------------------
-LOW      |                71
-MEDIUM   |               391
+LOW      |                70
 HIGH     |                70
-CRITICAL |                10
+MEDIUM   |               392
 ----------------------------
 ----=================----
 
@@ -4579,10 +4492,10 @@ CRITICAL |                10
 -------------------------------------------------------------------------
 Checker name                               | Severity | Number of reports
 -------------------------------------------------------------------------
-deadcode.DeadStores                        | LOW      |                12
+deadcode.DeadStores                        | LOW      |                11
+core.CallAndMessage                        | HIGH     |                 3
 security.FloatLoopCounter                  | MEDIUM   |                 5
 core.NullDereference                       | HIGH     |                 5
-core.CallAndMessage                        | HIGH     |                 3
 core.UndefinedBinaryOperatorResult         | HIGH     |                 2
 core.NonNullParamChecker                   | HIGH     |                 1
 unix.cstring.BadSizeArg                    | MEDIUM   |                 2
@@ -4600,24 +4513,21 @@ readability-suspicious-call-argument       | LOW      |                 8
 bugprone-incorrect-roundings               | HIGH     |                44
 bugprone-signed-char-misuse                | MEDIUM   |                10
 bugprone-inc-dec-in-conditions             | MEDIUM   |                 4
-clang-diagnostic-double-promotion          | MEDIUM   |                51
+clang-diagnostic-double-promotion          | MEDIUM   |                55
 misc-redundant-expression                  | MEDIUM   |                 1
 bugprone-bool-pointer-implicit-conversion  | LOW      |                 1
-bugprone-forward-declaration-namespace     | LOW      |                 4
 clang-diagnostic-mismatched-tags           | MEDIUM   |                 2
-clang-diagnostic-unused-parameter          | MEDIUM   |                 9
-performance-move-const-arg                 | MEDIUM   |                 1
+bugprone-forward-declaration-namespace     | LOW      |                 4
+clang-diagnostic-unused-parameter          | MEDIUM   |                 2
 unix.BlockInCriticalSection                | LOW      |                 5
+performance-move-const-arg                 | MEDIUM   |                 1
 misc-header-include-cycle                  | LOW      |                18
 clang-diagnostic-reserved-identifier       | MEDIUM   |                44
 clang-diagnostic-reserved-macro-identifier | MEDIUM   |                10
-clang-diagnostic-unused-private-field      | MEDIUM   |                 3
+clang-diagnostic-unused-private-field      | MEDIUM   |                 9
 bugprone-unused-return-value               | MEDIUM   |                 4
-clang-diagnostic-reorder-ctor              | MEDIUM   |                 1
-clang-diagnostic-error                     | CRITICAL |                10
-clang-diagnostic-float-conversion          | MEDIUM   |                 1
 bugprone-tagged-union-member-count         | MEDIUM   |                 2
-clang-diagnostic-unused-variable           | MEDIUM   |                 1
+clang-diagnostic-float-conversion          | MEDIUM   |                 1
 -------------------------------------------------------------------------
 ----=================----
 
@@ -4626,32 +4536,32 @@ clang-diagnostic-unused-variable           | MEDIUM   |                 1
 File name                   | Number of reports
 -----------------------------------------------
 bitfield.inl                |                 3
-imgui_demo.cpp              |                62
 cetintrin.h                 |                 2
 imgui_internal.h            |                13
 imgui_tables.cpp            |                13
-imgui.cpp                   |                28
+imgui_demo.cpp              |                62
 imstb_truetype.h            |                 5
 imgui_draw.cpp              |                35
+imgui.cpp                   |                28
+parser.h                    |                 2
 imstb_textedit.h            |                 1
 imgui_widgets.cpp           |                39
-parser.h                    |                 2
 cuew.c                      |                 6
-hipew.c                     |                 4
+hipew.c                     |                 2
 imgui.h                     |                39
-imstb_rectpack.h            |                 1
 imgui_impl_glfw.cpp         |                 3
 imgui_impl_opengl3.cpp      |                 7
+imstb_rectpack.h            |                 1
+config_manager_stub.cpp     |                 1
 sep_engine_wrapper.h        |                 3
 workbench_main.cpp          |                 2
-config_manager_stub.cpp     |                 1
-memory_tier_manager.cpp     |                 2
-evolution.cpp               |                 3
 memory.h                    |                 2
 engine.cpp                  |                 2
-memory_tier.cpp             |                 1
-types.h                     |                 1
+memory_tier_manager.cpp     |                 2
+evolution.cpp               |                 3
 pipewire_capture.cpp        |                 4
+types.h                     |                 1
+memory_tier.cpp             |                 1
 control.h                   |                 1
 core.h                      |                 3
 impl-client.h               |                 2
@@ -4681,28 +4591,26 @@ type.h                      |                 5
 common.h                    |                 1
 http_response.h             |                 1
 config.cpp                  |                 4
-pipewire_capture.h          |                 2
 server.cpp                  |                 2
 server.h                    |                 1
-socket_adaptors.h           |                 8
-blender_integration.cpp     |                 9
+pipewire_capture.h          |                 2
 annealing_demo.cpp          |                 1
-audio_visualizer.cpp        |                 1
-profiler_stub.cpp           |                 1
-audio_visualizer_simple.cpp |                 1
+socket_adaptors.h           |                 8
+audio_visualizer.cpp        |                 4
+audio_visualizer.hpp        |                 5
 annealing_sim.cpp           |                 1
+audio_visualizer_simple.cpp |                 1
 mesh_handler.cpp            |                 2
 hash.h                      |                 1
-cycles_renderer.cpp         |                 1
-cycles.h                    |                 7
-renderer.cpp                |               125
 cuew.h                      |                 3
+memory_garden.cpp           |                 1
+memory_garden.hpp           |                 1
+genesis_pattern.cpp         |                 2
 hipew.h                     |                 3
+renderer.cpp                |               125
 sky_model.h                 |                 1
 sky_float3.h                |                 1
 sky_nishita.cpp             |                 1
-memory_garden.cpp           |                 1
-genesis_pattern.cpp         |                 1
 signal_set_service.ipp      |                 1
 signal_set_service.ipp      |                 1
 -----------------------------------------------
@@ -4710,7 +4618,7 @@ signal_set_service.ipp      |                 1
 
 ----======== Summary ========----
 -----------------------------------------------
-Number of processed analyzer result files | 223
-Number of analyzer reports                | 542
+Number of processed analyzer result files | 214
+Number of analyzer reports                | 532
 -----------------------------------------------
 ----=================----

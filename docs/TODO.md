@@ -1,137 +1,258 @@
-Alright, let's cut the bullshit and get this thing working. You've got a solid foundation laid out in `SEP_WORKBENCH_CHECKLIST.md` and a repository full of code that's *almost* there. The `build_log.txt` shows exactly what's breaking. We're not throwing anything out. We're fixing the build errors, then plumbing the demos into the workbench executable.
+## **Phase 1: Fix the Goddamn Build**
 
-Here is the plan. Follow these tasks in order.
+The build is failing because of `-Werror`, which treats every warning as a fatal error. We're not disabling it. We're fixing the code so it compiles cleanly. The errors are all in the `src/workbench/demos/` directory.
+
+### **Task 1.1: Fix Undeclared Member Variables in Demos**
+
+Multiple demo `.cpp` files use member variables for UI controls that are never declared in their corresponding header files. Add the missing private member variables to the class definitions in the `.hpp` files.
+
+**1. File: `src/workbench/demos/annealing_sim.hpp`**
+Add these private members to the `AnnealingSimDemo` class:
+```cpp
+private:
+    // ... existing members ...
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
+```
+
+**2. File: `src/workbench/demos/audio_visualizer_simple.hpp`**
+Add these private members to the `AudioVisualizerDemo` class:
+```cpp
+private:
+    // ... existing members ...
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
+```
+
+**3. File: `src/workbench/demos/cosmo_sim.hpp`**
+Add these private members to the `CosmoSim` class:
+```cpp
+private:
+    // ... existing members ...
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
+```
+
+**4. File: `src/workbench/demos/digital_physics_demo.hpp`**
+Add these private members to the `DigitalPhysicsDemo` class:
+```cpp
+private:
+    // ... existing members ...
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
+```
+
+**5. File: `src/workbench/demos/drug_discovery_demo.hpp`**
+Add these private members to the `DrugDiscoveryDemo` class:
+```cpp
+private:
+    // ... existing members ...
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
+```
+
+**6. File: `src/workbench/demos/drug_optimizer.hpp`**
+Add these private members to the `DrugOptimizerDemo` class:
+```cpp
+private:
+    // ... existing members ...
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
+```
+
+**7. File: `src/workbench/demos/memory_garden.hpp`**
+Add these private members to the `MemoryGardenDemo` class:
+```cpp
+private:
+    // ... existing members ...
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float connection_opacity_{0.5f}; // Fix the typo from connection_prob_
+```
+*Note: In `memory_garden.cpp`, the variable used is `connection_prob_`, but the class member seems intended to be `connection_opacity_`. I've used `connection_opacity_`. Fix the `.cpp` file to use `connection_opacity_` to match the checklist's intent.*
+
+**8. File: `src/workbench/demos/neural_demo.hpp`**
+Add these private members to the `NeuralDemo` class:
+```cpp
+private:
+    // ... existing members ...
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
+```
+
+### **Task 1.2: Fix Unused Parameter Warnings**
+
+The compiler is flagging unused `engine` and `renderer` pointers in the `on_load` methods. Silence these warnings by explicitly marking the parameters as unused.
+
+Modify the `on_load` function in each of the following files:
+- `src/workbench/demos/annealing_sim.cpp`
+- `src/workbench/demos/audio_visualizer_simple.cpp`
+- `src/workbench/demos/cosmo_sim.cpp`
+- `src/workbench/demos/digital_physics_demo.cpp`
+- `src/workbench/demos/drug_discovery_demo.cpp`
+- `src/workbench/demos/drug_optimizer.cpp`
+- `src/workbench/demos/flocking_demo.cpp`
+- `src/workbench/demos/memory_garden.cpp`
+- `src/workbench/demos/neural_demo.cpp`
+- `src/workbench/demos/neuro_sim.cpp`
+
+**Example Change (apply to all listed files):**
+
+**Original:**
+```cpp
+void SomeDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+    // ...
+}
+```
+
+**Corrected:**
+```cpp
+void SomeDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+    (void)engine;   // Mark as unused
+    (void)renderer; // Mark as unused
+    // ... rest of the function
+}
+```
+*Note: For the demos that actually use `engine` or `renderer` (like `GenesisPatternDemo`), you don't need to add this. Only add it for the ones failing in the build log.*
 
 ---
 
-## Task 1: Fix the Build-Stopping Interface Mismatches
+## **Phase 2: Wire Up the Workbench Application**
 
-**Goal:** Get the project to compile successfully by fixing the C++ class interface errors shown in the build log.
+With the build errors fixed, we need to ensure `workbench_main.cpp` correctly initializes the system and runs the demo loop. The checklist is your guide.
 
-The build is failing because your `Demo` classes (e.g., `AnnealingDemo`, `CosmoDemo`) do not correctly implement the virtual functions defined in the `Demo` base class (`src/workbench_demo_adapter.hpp`).
+### **Task 2.1: Consolidate the Main Entry Point**
 
-### Action Steps:
+Your `src/` directory contains `main.cpp` and `workbench_main.cpp`. The build log shows `workbench_main.cpp` is being used for the `sep_workbench` target. **Delete `src/main.cpp`** to avoid confusion. `src/workbench_main.cpp` is now the single entry point.
 
-1.  **Modify the `Demo` base class in `src/workbench_demo_adapter.hpp`:**
-    The `on_load` function needs to be a pure virtual function so the compiler enforces its implementation in all demo classes. Change its signature to:
-    ```cpp
-    // In src/workbench_demo_adapter.hpp, inside class Demo
-    virtual void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) = 0;
-    ```
+### **Task 2.2: Structure the Main Loop**
 
-2.  **Update ALL Demo Classes to Match the `Demo` Interface:**
-    For **each** demo header file in `src/workbench/demos/` (e.g., `annealing_demo.hpp`, `cosmo_demo.hpp`, etc.), you must:
+Review `src/workbench_main.cpp`. It's a mess of fallback code. Gut the main `while` loop and replace it with a clean, focused loop that follows the checklist's intent.
 
-    *   **Fix the `on_load` signature:** Change `void on_load() override;` to match the base class.
-        ```cpp
-        // Example for a demo's .hpp file
-        void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
-        ```
-    *   **Fix the `on_load` implementation:** In the corresponding `.cpp` file, update the function definition.
-        ```cpp
-        // Example for a demo's .cpp file
-        void AnnealingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
-            engine_ = engine;       // Store the engine pointer
-            renderer_ = renderer;   // Store the renderer pointer
-            // ... rest of your existing on_load code ...
-        }
-        ```
-    *   **Implement the missing `on_ui_render` function:** The build fails because `on_ui_render` is a pure virtual function that isn't implemented. Add a stub implementation to each demo's `.cpp` file to satisfy the compiler. We will fill this in later.
-        ```cpp
-        // Add this to each demo's .cpp file
-        void AnnealingDemo::on_ui_render() {
-            // Intentionally empty for now.
-        }
-        ```
-    *   **Implement the missing `on_mouse` function:** Several demos might be missing this. Add a stub implementation to each demo that needs it.
-        ```cpp
-        // Add this to each demo's .cpp file if it's missing
-        void AnnealingDemo::on_mouse(int x, int y, int button) {
-            // Unused in this demo
-            (void)x; (void)y; (void)button;
-        }
-        ```
+**Replace the entire `while (!glfwWindowShouldClose(window))` loop in `src/workbench_main.cpp` with this:**
 
-    > **Execute:** Make these changes for every demo class that is causing a build error: `AnnealingDemo`, `AnnealingSimDemo`, `CosmoDemo`, `AudioVisualizerDemo`, etc. After this, run `make -j$(nproc)` again. The build should now pass.
+```cpp
+// 9. Main Loop
+float lastFrameTime = static_cast<float>(glfwGetTime());
 
----
+while (!glfwWindowShouldClose(window)) {
+    // Poll and handle events
+    glfwPollEvents();
 
-## Task 2: Implement the Demo Management and UI
+    // Calculate delta time
+    float currentTime = static_cast<float>(glfwGetTime());
+    float deltaTime = currentTime - lastFrameTime;
+    lastFrameTime = currentTime;
 
-**Goal:** Get the demos to be selectable and have their specific UI controls appear in the workbench window.
+    // Start the ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 
-### Action Steps:
+    // Clear the screen
+    glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-1.  **Refine `workbench_main.cpp`:** This is your application's entry point. It needs to drive the whole system.
-    *   **Remove Fallback Rendering:** Delete all the raw OpenGL code (the red square, the "START" text drawn with lines). We're past that.
-    *   **Initialize `DemoManager`:** Make sure the `DemoManager` is initialized and you call `registerDemos()` to load all the demo factories.
-    *   **Implement the Main Loop:** The loop should look like this:
-        ```cpp
-        while (!window->shouldClose()) {
-            glfwPollEvents();
+    // --- Main UI and Demo Controls ---
+    ImGui::Begin("SEP Workbench Controls");
+    ImGui::Text("Current Demo: %s", manager.getCurrentDemo().c_str());
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Separator();
+    
+    // Demo selection buttons
+    if (ImGui::Button("Genesis Pattern (1)")) manager.switchToDemo("genesis");
+    if (ImGui::Button("Audio Visualizer (2)")) manager.switchToDemo("audio");
+    if (ImGui::Button("Memory Garden (3)")) manager.switchToDemo("memory");
+    if (ImGui::Button("Flocking Sim (4)")) manager.switchToDemo("flocking");
+    if (ImGui::Button("Cosmology Sim (5)")) manager.switchToDemo("cosmo_sim");
+    if (ImGui::Button("Neural Network (6)")) manager.switchToDemo("neural");
+    // Add buttons for other demos as needed...
+    
+    ImGui::End();
 
-            // Start ImGui frame
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
+    // --- Update and Render Current Demo ---
+    if (manager.getCurrentDemo() != "") {
+        manager.on_update(deltaTime);
+        manager.on_render();      // This calls the demo's on_render()
+        manager.on_ui_render();   // This calls the demo's ImGui code
+    }
 
-            // Update and Render the current demo
-            float dt = ...; // Calculate delta time
-            manager.on_update(dt);
-            manager.on_render();
+    // Render ImGui
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-            // Render the main UI window for selecting demos
-            ImGui::Begin("SEP Workbench");
-            // ... (add buttons for each demo) ...
-            if (ImGui::Button("Genesis Pattern")) { manager.switchToDemo("genesis"); }
-            if (ImGui::Button("Neural Network")) { manager.switchToDemo("neural"); }
-            // ... etc for all demos
-            ImGui::End();
+    // Swap buffers
+    glfwSwapBuffers(window);
+}
+```
 
-            // Render the UI for the currently active demo
-            manager.on_ui_render();
+### **Task 2.3: Verify Demo Registration**
 
-            // Render ImGui draw data
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+Make sure that `src/workbench_main.cpp` calls the function to register the demos before the main loop starts. Add this line after the demo manager is initialized:
 
-            glfwSwapBuffers(window);
-        }
-        ```
+```cpp
+// In main() of workbench_main.cpp
+auto& manager = sep::workbench::DemoManager::getInstance();
+manager.initialize(engine.get(), cycles_adapter.get());
 
-2.  **Flesh out the Demo-Specific UI:**
-    *   For each demo, go to its `.cpp` file and fill in the `on_ui_render()` method you added in Task 1.
-    *   Use the `SEP_WORKBENCH_CHECKLIST.md` as your guide. For example, in `genesis_pattern.cpp`:
-        ```cpp
-        // In genesis_pattern.cpp
-        void GenesisPatternDemo::on_ui_render() {
-            ImGui::Begin("Genesis Pattern Controls");
-            ImGui::Checkbox("Auto Evolve", &auto_evolve_);
-            ImGui::SliderFloat("Evolution Rate", &evolution_rate_, 0.01f, 1.0f);
-            ImGui::SliderFloat("Coherence Threshold", &coherence_threshold_, 0.1f, 0.9f);
-            // ... etc ...
-            ImGui::End();
-        }
-        ```
-    *   Do this for each demo, adding the specific sliders, buttons, and toggles outlined in the checklist.
+// Add this call:
+sep::workbench::registerDemos(); 
+
+manager.switchToDemo("genesis"); // Start with a default demo
+```
+
+The function `registerDemos()` is defined in `src/workbench/demos/register_demos.cpp`. This will populate the `DemoManager` with all the demo classes.
 
 ---
 
-## Task 3: Final Integration and Cleanup
+## **Phase 3: Compile, Run, and Verify**
 
-**Goal:** Ensure data flows correctly from the demos to the renderer and the application runs smoothly.
+Now, put it all together.
 
-### Action Steps:
+### **Task 3.1: Build the Executable**
 
-1.  **Verify Data Flow:**
-    *   Confirm that the `on_render()` method in each demo calls `renderer_->renderPatternState(...)`.
-    *   The `CyclesRendererAdapter` you have in `cycles_renderer_adapter.h` correctly translates the call to the `Renderer::render` method. No changes should be needed there, but be aware of this connection point if rendering is blank.
+Navigate to your build directory and run the build command. It should now compile without errors.
 
-2.  **Input Handling:**
-    *   The `key_callback` in `workbench_main.cpp` needs to call `manager.on_key(key);`.
-    *   The `DemoManager::on_key` method should in turn call `current_demo_->on_key_press(key)`. This ensures keyboard input is routed to the active demo.
+```bash
+cd cmake-make
+cmake .. -DSEP_BUILD_WORKBENCH=ON
+make -j$(nproc)
+```
 
-3.  **Final Cleanup of `workbench_main.cpp`:**
-    *   Once the UI and demos are rendering correctly, remove any remaining "emergency" or debug code from the main loop. The loop should be clean and focused on updating the demo manager and rendering ImGui.
+The executable will be `cmake-make/sep_workbench`.
 
----
+### **Task 3.2: Run the Workbench**
+
+Execute it from the build directory.
+
+```bash
+./sep_workbench
+```
+
+**Expected Outcome:**
+1.  A window titled "SEP Workbench" appears.
+2.  The window has a dark background.
+3.  An ImGui window titled "SEP Workbench Controls" is visible.
+4.  The "Genesis Pattern" demo should be running by default, rendering something in the window.
+5.  Clicking the other buttons in the ImGui window should switch to the corresponding demos, and they should each render their respective visualizations.
+6.  Each demo's specific ImGui control window should appear when it is active.

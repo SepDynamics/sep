@@ -8,8 +8,11 @@
 namespace sep {
 namespace workbench {
 
-    void FlockingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void FlockingDemo::on_load(sep::Engine* engine,
+                                                       sep::CyclesRenderer* renderer)
     {
+        (void)engine;
+        (void)renderer;
 #ifdef SEP_WORKBENCH_DEMO
     std::size_t agent_count = 50;
     max_speed_ = 2.0f;
@@ -78,6 +81,14 @@ void FlockingDemo::on_render() {
 
 void FlockingDemo::on_unload() {
     agents_.clear();
+}
+
+void FlockingDemo::on_ui_render() {
+    ImGui::Begin("Flocking Demo Controls");
+    ImGui::SliderFloat("Max Speed", &max_speed_, 0.1f, 5.0f);
+    ImGui::SliderFloat("Neighbor Radius", &neighbor_radius_, 1.0f, 20.0f);
+    ImGui::Text("Agents: %zu", agents_.size());
+    ImGui::End();
 }
 
 void FlockingDemo::on_key_press(int key) { (void)key; }

@@ -11,6 +11,8 @@ namespace workbench {
 
     void DigitalPhysicsDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
     {
+        (void)engine;
+        (void)renderer;
         const auto& cfg = Config::getInstance().digital_physics();
         width_ = static_cast<std::size_t>(cfg.grid.width);
         height_ = static_cast<std::size_t>(cfg.grid.height);

@@ -17,6 +17,8 @@ namespace workbench {
 
     void DrugOptimizerDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
     {
+        (void)engine;
+        (void)renderer;
         poses_.resize(5);
         for (auto& p : poses_)
         {

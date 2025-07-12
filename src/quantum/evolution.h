@@ -10,7 +10,17 @@ namespace sep::quantum {
 
 struct BatchProcessingResult {
     bool success{false};
-    std::string message{};
+    sep::Pattern pattern{};
+    std::string error_message{};
+};
+
+struct EvolutionParams {
+    size_t elite_count{2};
+    size_t tournament_size{3};
+    float coherence_weight{0.5f};
+    float stability_weight{0.4f};
+    float diversity_bonus{0.1f};
+    float pressure{1.0f};
 };
 
 class Processor;
@@ -26,14 +36,6 @@ public:
         float diversity{0.0f};
     };
 
-    struct EvolutionParams {
-        size_t elite_count{2};
-        size_t tournament_size{3};
-        float coherence_weight{0.5f};
-        float stability_weight{0.4f};
-        float diversity_bonus{0.1f};
-        float pressure{1.0f};
-    };
 
     explicit EvolutionEngine(Processor* processor);
 

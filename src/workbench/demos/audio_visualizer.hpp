@@ -29,6 +29,8 @@ public:
 private:
     std::unique_ptr<audio::AudioCapture> capture_;
     std::unique_ptr<audio::AudioPipeline> pipeline_;
+    sep::Engine* engine_{nullptr};
+    sep::CyclesRenderer* renderer_{nullptr};
     std::vector<glm::vec3> latest_patterns_;
     std::vector<glm::vec3> latest_visual_patterns_;
 

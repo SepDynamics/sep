@@ -60,7 +60,7 @@ list(APPEND BLENDER_SOURCES
     cycles_renderer.cpp
 )
 
-add_library(sep_blender SHARED ${BLENDER_SOURCES})
+add_library(sep_blender STATIC ${BLENDER_SOURCES})
 
 target_precompile_headers(sep_blender PRIVATE blender_pch.h)
 
@@ -126,11 +126,9 @@ target_include_directories(sep_blender
         ${OpenPGL_INCLUDE_DIRS}
 )
 
-# Properties for building a shared library
+# Properties for building a static library
 set_target_properties(sep_blender PROPERTIES
     POSITION_INDEPENDENT_CODE ON
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )

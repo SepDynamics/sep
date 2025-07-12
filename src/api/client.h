@@ -18,6 +18,12 @@
 #include "curl/curl.h"
 
 namespace sep {
+namespace config {
+struct OllamaConfig {
+    std::string host{"localhost"};
+    int port{11434};
+};
+}
 namespace api {
 
 // Forward declare

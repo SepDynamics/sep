@@ -89,7 +89,7 @@ namespace pattern {
 namespace workbench {
     using Pattern = sep::Pattern;
 }
-// Note: The original sep::quantum::Pattern is now sep::Pattern
+// Note: The original sep::Pattern is now sep::Pattern
 
 // --- Configuration Structs ---
 namespace config {

@@ -4,23 +4,6 @@
 #include "core/types.h"
 #include "quantum/pattern.h"
 
-namespace sep {
-namespace pattern {
-    struct PatternData;
-}
-namespace quantum {
-    struct Pattern;
-}
-}
-
-namespace sep
-{
-    namespace config
-    {
-        class ConfigManager;
-    }
-}
-
 #include <algorithm>
 #include <cmath>
 #include <cstdio>

@@ -1,4 +1,5 @@
 #pragma once
+#include "workbench/demos/demo_base.hpp"
 
 #include <array>
 #include <memory>
@@ -33,7 +34,7 @@ namespace sep
         private:
             struct Neuron
             {
-                sep::quantum::Pattern pattern;
+                sep::Pattern pattern;
                 float potential{0.f};
                 uint64_t node_id{0};
             };

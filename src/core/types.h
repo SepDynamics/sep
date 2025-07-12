@@ -77,6 +77,10 @@ struct Pattern {
     float entropy{0.0f};
     int mutation_count{0};
     quantum::QuantumState quantum_state{};
+    float coherence{0.0f};
+    float stability{0.0f};
+    float entropy{0.0f};
+    int mutation_count{0};
     std::vector<quantum::PatternRelationship> relationships;
     std::vector<float> data;
     std::vector<float> values;

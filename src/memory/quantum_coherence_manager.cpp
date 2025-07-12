@@ -12,7 +12,7 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "core/types.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
+
 
 using ::sep::memory::MemoryTierEnum;
 #include "core/logging.h" 
@@ -73,7 +73,7 @@ public:
         }
     }
     
-    CoherenceResult updateCoherence(const std::vector<sep::quantum::Pattern>& patterns) {
+    CoherenceResult updateCoherence(const std::vector<sep::Pattern>& patterns) {
         CoherenceResult result;
         global_tick_++;
         
@@ -143,7 +143,7 @@ public:
         return migrations;
     }
     
-    EntanglementGraph computeEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns) {
+    EntanglementGraph computeEntanglementGraph(const std::vector<sep::Pattern>& patterns) {
         EntanglementGraph graph;
         graph.nodes.reserve(patterns.size());
         
@@ -294,7 +294,7 @@ private:
         }
     }
     
-    void updatePatternCoherence(const sep::quantum::Pattern& pattern) {
+    void updatePatternCoherence(const sep::Pattern& pattern) {
         CoherenceMap::accessor accessor;
         
         if (coherence_map_.find(accessor, pattern.id)) {
@@ -397,7 +397,7 @@ private:
             static_cast<float>(total_entanglements) / (pattern_count * (pattern_count - 1)) : 0.0f;
     }
     
-    std::vector<CoherenceAnomaly> detectCoherenceAnomalies(const std::vector<sep::quantum::Pattern>& patterns) {
+    std::vector<CoherenceAnomaly> detectCoherenceAnomalies(const std::vector<sep::Pattern>& patterns) {
         std::vector<CoherenceAnomaly> anomalies;
         
         // Statistical anomaly detection
@@ -479,7 +479,7 @@ private:
         return migrations;
     }
     
-    void updateEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns) {
+    void updateEntanglementGraph(const std::vector<sep::Pattern>& patterns) {
         // Clear existing entanglements
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             auto& pair = *it;
@@ -612,7 +612,7 @@ private:
         return (count > 0) ? variance / count : 0.0f;
     }
     
-    float computeEntanglement(const sep::quantum::Pattern& p1, const sep::quantum::Pattern& p2) const {
+    float computeEntanglement(const sep::Pattern& p1, const sep::Pattern& p2) const {
         // Quantum entanglement measure based on state overlap
         float spatial_overlap = std::exp(-glm::length(p1.position - p2.position));
         float phase_correlation = std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
@@ -621,7 +621,7 @@ private:
         return coherence_product * spatial_overlap * std::abs(phase_correlation);
     }
     
-    float computePhaseCorrelation(const sep::quantum::Pattern& p1, const sep::quantum::Pattern& p2) const {
+    float computePhaseCorrelation(const sep::Pattern& p1, const sep::Pattern& p2) const {
         return std::cos(p1.quantum_state.phase - p2.quantum_state.phase);
     }
     
@@ -726,7 +726,7 @@ QuantumCoherenceManager::QuantumCoherenceManager(const Config& config)
 QuantumCoherenceManager::~QuantumCoherenceManager() = default;
 
 QuantumCoherenceManager::CoherenceResult 
-QuantumCoherenceManager::updateCoherence(const std::vector<sep::quantum::Pattern>& patterns) {
+QuantumCoherenceManager::updateCoherence(const std::vector<sep::Pattern>& patterns) {
     return impl_->updateCoherence(patterns);
 }
 
@@ -736,7 +736,7 @@ QuantumCoherenceManager::optimizeMemoryLayout() {
 }
 
 QuantumCoherenceManager::EntanglementGraph 
-QuantumCoherenceManager::computeEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns) {
+QuantumCoherenceManager::computeEntanglementGraph(const std::vector<sep::Pattern>& patterns) {
     return impl_->computeEntanglementGraph(patterns);
 }
 

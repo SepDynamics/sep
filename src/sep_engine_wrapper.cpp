@@ -1,6 +1,6 @@
 #include "sep_engine_wrapper.h"
 #include "core/types.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
+
 
 #include <iostream>
 
@@ -18,7 +18,7 @@ namespace sep
 
             void initialize() { std::cout << "Engine initialized" << std::endl; }
 
-            void processPatterns(const std::vector<quantum::Pattern>& patterns)
+            void processPatterns(const std::vector<Pattern>& patterns)
             {
                 std::cout << "Processing " << patterns.size() << " patterns" << std::endl;
             }
@@ -52,7 +52,7 @@ namespace sep
         return true;
     }
 
-    void SepEngineWrapper::processPatterns(const std::vector<quantum::Pattern>& patterns)
+    void SepEngineWrapper::processPatterns(const std::vector<Pattern>& patterns)
     {
         if (engine_ && initialized_)
         {

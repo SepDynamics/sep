@@ -1,5 +1,6 @@
 #pragma once
 
+#include "workbench/demos/demo_base.hpp"
 #include <glm/vec3.hpp>
 #include <memory>
 #include <vector>

@@ -100,6 +100,7 @@ namespace sep
         glm::vec4 velocity{0.0f};
         glm::vec4 attributes{0.0f};
         std::complex<float> amplitude{0.0f};
+        float coherence{0.0f};
         quantum::QuantumState quantum_state{};
         std::vector<quantum::PatternRelationship> relationships;
         std::vector<float> data;

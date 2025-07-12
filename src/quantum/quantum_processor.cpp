@@ -1,6 +1,7 @@
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "compat/math_common.h"
+#include "core/types.h"
 #include "quantum/qbsa_qfh.h"
 #include <glm/glm.hpp>
 #include <vector>

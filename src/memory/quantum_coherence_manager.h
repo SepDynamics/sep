@@ -2,7 +2,7 @@
 
 #include "memory/types.h"
 #include "core/types.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
+
 #include <glm/vec4.hpp>
 #include <glm/glm.hpp>
 #include <array>
@@ -121,9 +121,9 @@ class QuantumCoherenceManager {
     explicit QuantumCoherenceManager(const Config& config);
     ~QuantumCoherenceManager();
 
-    CoherenceResult updateCoherence(const std::vector<sep::quantum::Pattern>& patterns);
+    CoherenceResult updateCoherence(const std::vector<sep::Pattern>& patterns);
     std::vector<TierMigration> optimizeMemoryLayout();
-    EntanglementGraph computeEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns);
+    EntanglementGraph computeEntanglementGraph(const std::vector<sep::Pattern>& patterns);
     void applyCoherenceDecay(float decay_factor);
     CoherenceSnapshot createSnapshot() const;
     bool restoreFromSnapshot(const CoherenceSnapshot& snapshot);

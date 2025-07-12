@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "core/types.h"
+#include "quantum/processor.h"
 
 namespace sep::quantum {
 
@@ -15,7 +16,15 @@ struct BatchProcessingResult {
     Pattern pattern{};
 };
 
-class Processor;
+
+struct EvolutionParams {
+    size_t elite_count{5};
+    size_t tournament_size{3};
+    float coherence_weight{1.0f};
+    float stability_weight{1.0f};
+    float diversity_bonus{0.1f};
+    float pressure{1.0f};
+};
 
 class EvolutionEngine {
 public:
@@ -31,7 +40,7 @@ public:
 
     explicit EvolutionEngine(Processor* processor);
 
-    BatchProcessingResult evolve(const EvolutionStats& params);
+    BatchProcessingResult evolve(const EvolutionParams& params);
     BatchProcessingResult evolveGeneration();
 
     Pattern crossover(const Pattern& parent1, const Pattern& parent2);
@@ -45,8 +54,8 @@ public:
     float calculateFitness(const Pattern& pattern) const;
     float calculateDiversity(const std::vector<Pattern>& patterns) const;
 
-    void setParams(const EvolutionStats& params);
-    EvolutionStats getParams() const;
+    void setParams(const EvolutionParams& params);
+    EvolutionParams getParams() const;
     EvolutionStats getStats() const;
     std::vector<EvolutionStats> getHistory() const;
 
@@ -69,7 +78,7 @@ void applyGravity(Pattern& pattern, const glm::vec3& center, float strength);
 void randomPerturbation(Pattern& pattern, float amplitude);
 } // namespace evolution
 
-BatchProcessingResult evolve(const EvolutionEngine::EvolutionStats& params);
+BatchProcessingResult evolve(const EvolutionEngine::EvolutionParams& params);
 BatchProcessingResult evolveGeneration();
 
 } // namespace sep::quantum

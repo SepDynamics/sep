@@ -55,10 +55,10 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
     }
     
     // Set metadata properties
-    pattern.coherence = coherence;
-    pattern.stability = stability;
-    pattern.entropy = entropy;
-    pattern.mutation_rate = mutation_rate;
+    pattern.quantum_state.coherence = coherence;
+    pattern.quantum_state.stability = stability;
+    pattern.quantum_state.entropy = entropy;
+    pattern.quantum_state.mutation_rate = mutation_rate;
     
     // Set generation count
     pattern.generation = config.value("generation", 0) + 1;
@@ -68,7 +68,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
     {
         for (const auto& rel_json : config["relationships"])
         {
-            ::sep::quantum::PatternRelationship rel;
+            ::sep::PatternRelationship rel;
             
             std::string target_id = rel_json.value("target", "");
             if (!target_id.empty())
@@ -97,7 +97,7 @@ std::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getP
         {
             p.id = shim::string(api::SepEngine::generateId("pat").c_str());
         }
-        if (p.coherence >= min_coherence && p.stability >= min_stability)
+        if (p.quantum_state.coherence >= min_coherence && p.quantum_state.stability >= min_stability)
         {
             patterns.push_back(p);
         }
@@ -129,13 +129,13 @@ sep::pattern::PatternResult sep::quantum::mcp::PatternEvolution::processPatterns
     {
         output[i] = input[i];
         output[i].generation++;
-        output[i].coherence = std::clamp(input[i].coherence * (1.0f + config.update_threshold), 0.0f, 1.0f);
-        output[i].stability = std::clamp(input[i].stability * (1.0f - config.update_threshold / 2.0f), 0.0f, 1.0f);
-        output[i].entropy = std::clamp(input[i].entropy + 0.01f, 0.0f, 1.0f);
-        output[i].mutation_count += config.enable_mutations ? 1u : 0u;
-        output[i].memory_tier = tier_helper.determineMemoryTier(output[i].coherence,
-                                                                output[i].stability,
-                                                                output[i].generation);
+        output[i].quantum_state.coherence = std::clamp(input[i].quantum_state.coherence * (1.0f + config.update_threshold), 0.0f, 1.0f);
+        output[i].quantum_state.stability = std::clamp(input[i].quantum_state.stability * (1.0f - config.update_threshold / 2.0f), 0.0f, 1.0f);
+        output[i].quantum_state.entropy = std::clamp(input[i].quantum_state.entropy + 0.01f, 0.0f, 1.0f);
+        output[i].quantum_state.mutation_count += config.enable_mutations ? 1u : 0u;
+        output[i].quantum_state.memory_tier = tier_helper.determineMemoryTier(output[i].quantum_state.coherence,
+                                                                              output[i].quantum_state.stability,
+                                                                              output[i].generation);
         output[i].id = shim::string(api::SepEngine::generateId("pat").c_str());
     }
 
@@ -151,9 +151,9 @@ float sep::quantum::mcp::PatternEvolution::calculateRelationshipStrength(const s
     float data_similarity = 1.0f / (1.0f + distance);
     
     // Calculate metadata similarity
-    float coherence_diff = std::abs(pattern1.coherence - pattern2.coherence);
-    float stability_diff = std::abs(pattern1.stability - pattern2.stability);
-    float entropy_diff = std::abs(pattern1.entropy - pattern2.entropy);
+    float coherence_diff = std::abs(pattern1.quantum_state.coherence - pattern2.quantum_state.coherence);
+    float stability_diff = std::abs(pattern1.quantum_state.stability - pattern2.quantum_state.stability);
+    float entropy_diff = std::abs(pattern1.quantum_state.entropy - pattern2.quantum_state.entropy);
     
     float metadata_similarity = 1.0f - (coherence_diff + stability_diff + entropy_diff) / 3.0f;
     
@@ -176,10 +176,10 @@ nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::pattern::P
     };
     
     // Export metadata
-    j["coherence"] = pattern.coherence;
-    j["stability"] = pattern.stability;
-    j["entropy"] = pattern.entropy;
-    j["mutation_rate"] = pattern.mutation_rate;
+    j["coherence"] = pattern.quantum_state.coherence;
+    j["stability"] = pattern.quantum_state.stability;
+    j["entropy"] = pattern.quantum_state.entropy;
+    j["mutation_rate"] = pattern.quantum_state.mutation_rate;
     
     // Export relationships
     if (!pattern.relationships.empty())
@@ -223,17 +223,17 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nl
     }
     
     // Import metadata
-    p.coherence = j.value("coherence", 0.0f);
-    p.stability = j.value("stability", 0.0f);
-    p.entropy = j.value("entropy", 0.0f);
-    p.mutation_rate = j.value("mutation_rate", 0.0f);
+    p.quantum_state.coherence = j.value("coherence", 0.0f);
+    p.quantum_state.stability = j.value("stability", 0.0f);
+    p.quantum_state.entropy = j.value("entropy", 0.0f);
+    p.quantum_state.mutation_rate = j.value("mutation_rate", 0.0f);
     
     // Import relationships
     if (j.contains("relationships") && j["relationships"].is_array())
     {
         for (const auto& rel_json : j["relationships"])
         {
-            ::sep::quantum::PatternRelationship rel;
+            ::sep::PatternRelationship rel;
             
             if (rel_json.contains("target") && rel_json["target"].is_string())
             {

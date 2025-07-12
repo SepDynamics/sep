@@ -2009,7 +2009,7 @@ static void DemoWindowWidgetsPlotting()
                 average += values[n];
             average /= (float)IM_ARRAYSIZE(values);
             char overlay[32];
-            sprintf(overlay, "avg %f", average);
+            (void)sprintf(overlay, "avg %f", average);
             ImGui::PlotLines("Lines", values, IM_ARRAYSIZE(values), values_offset, overlay, -1.0f, 1.0f, ImVec2(0, 80.0f));
         }
 
@@ -2058,7 +2058,7 @@ static void DemoWindowWidgetsProgressBars()
 
         float progress_saturated = IM_CLAMP(progress, 0.0f, 1.0f);
         char buf[32];
-        sprintf(buf, "%d/%d", (int)(progress_saturated * 1753), 1753);
+        (void)sprintf(buf, "%d/%d", (int)(progress_saturated * 1753), 1753);
         ImGui::ProgressBar(progress, ImVec2(0.f, 0.f), buf);
 
         // Pass an animated negative value, e.g. -1.0f * (float)ImGui::GetTime() is the recommended value.
@@ -2323,7 +2323,7 @@ static void DemoWindowWidgetsSelectables()
                 for (int i = 0; i < 10; i++)
                 {
                     char label[32];
-                    sprintf(label, "Item %d", i);
+                    (void)sprintf(label, "Item %d", i);
                     ImGui::TableNextColumn();
                     ImGui::Selectable(label, &selected[i]); // FIXME-TABLE: Selection overlap
                 }
@@ -2335,7 +2335,7 @@ static void DemoWindowWidgetsSelectables()
                 for (int i = 0; i < 10; i++)
                 {
                     char label[32];
-                    sprintf(label, "Item %d", i);
+                    (void)sprintf(label, "Item %d", i);
                     ImGui::TableNextRow();
                     ImGui::TableNextColumn();
                     ImGui::Selectable(label, &selected[i], ImGuiSelectableFlags_SpanAllColumns);
@@ -2396,7 +2396,7 @@ static void DemoWindowWidgetsSelectables()
                 {
                     ImVec2 alignment = ImVec2((float)x / 2.0f, (float)y / 2.0f);
                     char name[32];
-                    sprintf(name, "(%.1f,%.1f)", alignment.x, alignment.y);
+                    (void)sprintf(name, "(%.1f,%.1f)", alignment.x, alignment.y);
                     if (x > 0) ImGui::SameLine();
                     ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, alignment);
                     ImGui::Selectable(name, &selected[3 * y + x], ImGuiSelectableFlags_None, ImVec2(80, 80));
@@ -3576,8 +3576,9 @@ static void DemoWindowWidgetsText()
             ImGui::PopFont();
 
             ImGui::SeparatorText("");
-            for (float scaling = 0.5f; scaling <= 4.0f; scaling += 0.5f)
+            for (int i = 1; i <= 8; ++i)
             {
+                float scaling = i * 0.5f;
                 ImGui::PushFont(NULL, style.FontSizeBase * scaling);
                 ImGui::Text("FontSize = %.2f (== style.FontSizeBase * %.2f * global_scale)", ImGui::GetFontSize(), scaling);
                 ImGui::PopFont();
@@ -5119,6 +5120,8 @@ static void DemoWindowLayout()
                 draw_list->AddRectFilled(p0, p1, IM_COL32(90, 90, 120, 255));
                 draw_list->AddText(ImGui::GetFont(), ImGui::GetFontSize(), text_pos, IM_COL32_WHITE, text_str, NULL, 0.0f, &clip_rect);
                 break;
+            default:
+                break;
             }
         }
 
@@ -6187,6 +6190,7 @@ static void DemoWindowTables()
                 case CT_Button:     ImGui::Button(label); break;
                 case CT_FillButton: ImGui::Button(label, ImVec2(-FLT_MIN, 0.0f)); break;
                 case CT_InputText:  ImGui::SetNextItemWidth(-FLT_MIN); ImGui::InputText("##", text_buf, IM_ARRAYSIZE(text_buf)); break;
+                default: break;
                 }
                 ImGui::PopID();
             }
@@ -8231,6 +8235,7 @@ bool ImGui::ShowStyleSelector(const char* label)
         case 0: ImGui::StyleColorsDark(); break;
         case 1: ImGui::StyleColorsLight(); break;
         case 2: ImGui::StyleColorsClassic(); break;
+        default: break;
         }
         return true;
     }
@@ -8420,7 +8425,7 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
                 {
                     const ImVec4& col = style.Colors[i];
                     const char* name = GetStyleColorName(i);
-                    if (!output_only_modified || memcmp(&col, &ref->Colors[i], sizeof(ImVec4)) != 0)
+                    if (!output_only_modified || (col.x != ref->Colors[i].x || col.y != ref->Colors[i].y || col.z != ref->Colors[i].z || col.w != ref->Colors[i].w))
                         LogText("colors[ImGuiCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);" IM_NEWLINE,
                             name, 23 - (int)strlen(name), "", col.x, col.y, col.z, col.w);
                 }
@@ -8457,7 +8462,7 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
                 SameLine();
 #endif
                 ColorEdit4("##color", (float*)&style.Colors[i], ImGuiColorEditFlags_AlphaBar | alpha_flags);
-                if (memcmp(&style.Colors[i], &ref->Colors[i], sizeof(ImVec4)) != 0)
+                if (style.Colors[i].x != ref->Colors[i].x || style.Colors[i].y != ref->Colors[i].y || style.Colors[i].z != ref->Colors[i].z || style.Colors[i].w != ref->Colors[i].w)
                 {
                     // Tips: in a real user application, you may want to merge and use an icon font into the main font,
                     // so instead of "Save"/"Revert" you'd use icons!
@@ -10030,10 +10035,16 @@ static void ShowExampleAppCustomRendering(bool* p_open)
             if (opt_enable_grid)
             {
                 const float GRID_STEP = 64.0f;
-                for (float x = fmodf(scrolling.x, GRID_STEP); x < canvas_sz.x; x += GRID_STEP)
+                for (int xi = (int)fmodf(scrolling.x, GRID_STEP); xi < (int)canvas_sz.x; xi += (int)GRID_STEP)
+                {
+                    float x = (float)xi;
                     draw_list->AddLine(ImVec2(canvas_p0.x + x, canvas_p0.y), ImVec2(canvas_p0.x + x, canvas_p1.y), IM_COL32(200, 200, 200, 40));
-                for (float y = fmodf(scrolling.y, GRID_STEP); y < canvas_sz.y; y += GRID_STEP)
+                }
+                for (int yi = (int)fmodf(scrolling.y, GRID_STEP); yi < (int)canvas_sz.y; yi += (int)GRID_STEP)
+                {
+                    float y = (float)yi;
                     draw_list->AddLine(ImVec2(canvas_p0.x, canvas_p0.y + y), ImVec2(canvas_p1.x, canvas_p0.y + y), IM_COL32(200, 200, 200, 40));
+                }
             }
             for (int n = 0; n < points.Size; n += 2)
                 draw_list->AddLine(ImVec2(origin.x + points[n].x, origin.y + points[n].y), ImVec2(origin.x + points[n + 1].x, origin.y + points[n + 1].y), IM_COL32(255, 255, 0, 255), 2.0f);

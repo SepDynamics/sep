@@ -26,7 +26,6 @@ struct OllamaConfig {
 }
 namespace api {
 
-        // Forward declare
         class IHttpClient;
 
         struct ClientConfig

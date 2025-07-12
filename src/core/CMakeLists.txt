@@ -2,7 +2,6 @@ set(SEP_CORE_SOURCES
     tracing.cpp
     allocation_metrics.cpp
     dag_graph.cpp
-    config_manager_stub.cpp
     prometheus_exporter.cpp
     error_handler.cpp
     metrics_collector.cpp

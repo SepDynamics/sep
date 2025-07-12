@@ -3,9 +3,8 @@
 #include "compat/math_common.h"
 
 // Forward declarations for Blender functions (minimal stubs)
-#include "blender/types.h"
-#include "blender/sep::pattern::PatternConfig.h"
 #include "blender/pattern_bridge.h"
+#include "blender/types.h"
 
 using sep::SEPBlenderBridge;
 

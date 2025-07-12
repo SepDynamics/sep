@@ -41,6 +41,7 @@ private:
     float input_strength_{0.5f};
     float learning_rate_{0.05f};
     float connection_prob_{0.2f};
+    sep::CyclesRenderer* renderer_{nullptr};
 };
 
 } // namespace workbench

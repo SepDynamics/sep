@@ -36,6 +36,8 @@ private:
     float learning_rate_{0.05f};
     float connection_prob_{0.2f};
 
+    sep::CyclesRenderer* renderer_{nullptr};
+
     std::size_t index(std::size_t x, std::size_t y) const { return y * width_ + x; }
 };
 

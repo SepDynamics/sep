@@ -92,7 +92,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
         }
       }
 
-      sep::quantum::BatchProcessingResult process_result;
+      sep::BatchProcessingResult process_result;
       process_result.success = true;
       process_result.error_code = 0;
       

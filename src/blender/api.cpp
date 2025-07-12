@@ -32,7 +32,7 @@ bool validateMesh(Object* obj, Mesh* mesh)
 }
 }  // namespace
 
-extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPConfig* sep::pattern::PatternConfig, SEPBlenderBridge** bridge_out)
+extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const sep::pattern::PatternConfig& config, SEPBlenderBridge** bridge_out)
 {
     if (!gpu_ctx || !bridge_out)
     { 
@@ -40,8 +40,6 @@ extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPCo
         return sep::SEPResult::INITIALIZATION_FAILED; 
     }
 
-    // Use sep::pattern::PatternConfig parameter to avoid unused warning
-    (void)sep::pattern::PatternConfig;
 
     auto bridge_ptr = std::make_unique<sep::SEPBlenderBridge>();
     if (!bridge_ptr)
@@ -75,13 +73,13 @@ sep_register_mesh(SEPBlenderBridge* bridge, Object* bl_object, Mesh* bl_mesh, se
         return sep::SEPResult::NOT_FOUND;
     }
 
-    sep::pattern::PatternConfig sep::pattern::PatternConfig{};
-    sep::pattern::PatternConfig.update_threshold = 0.1f;
-    sep::pattern::PatternConfig.enable_mutations = true;
-    sep::pattern::PatternConfig.max_patterns     = 1000;
-    sep::pattern::PatternConfig.batch_size       = 64;
+    sep::pattern::PatternConfig config{};
+    config.update_threshold = 0.1f;
+    config.enable_mutations = true;
+    config.max_patterns     = 1000;
+    config.batch_size       = 64;
 
-    auto result = bridge->impl->registerObject(bl_object, sep::pattern::PatternConfig, handle_out);
+    auto result = bridge->impl->registerObject(bl_object, config, handle_out);
     return static_cast<sep::SEPResult>(static_cast<int32_t>(result));
 }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SEP Engine dependency installer
 set -euo pipefail
-
+exit
 sudo ln -sf /workspace/sep /sep
 cd /sep
 

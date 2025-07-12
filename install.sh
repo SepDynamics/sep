@@ -1,22 +1,22 @@
-#!/usr/bin/env bash
-# SEP Engine dependency installer
+#!/ usr / bin / env bash
+#SEP Engine dependency installer
 set -euo pipefail
 
 sudo ln -sf /workspace/sep /sep
 cd /sep
 
-
-# Pinned Python version used for all installs
+#Pinned Python version used for all installs
 PYTHON_VERSION="3.13.*"
 
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
 sudo apt-get update
 
-# Optional argument parsing
+#Optional argument parsing
 USE_CUDA=1
 USE_MINIMAL=0
-for arg in "$@"; do
+for arg in "$@";
+do
   case "$arg" in
     --no-cuda)
       USE_CUDA=0
@@ -56,6 +56,7 @@ FULL_PACKAGES=(
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
   libglew-dev
   libhiredis-dev libglm-dev libglfw3 libglfw3-dev
+  libglew-dev
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
   libglew-dev
@@ -73,7 +74,7 @@ sudo apt-get update -y
 echo "Installing base packages..."
 sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 
-# Build and install GoogleTest as the packaged version only ships sources
+#Build and install GoogleTest as the packaged version only ships sources
 if [ -d /usr/src/googletest ]; then
   echo "Building GoogleTest..."
   sudo cmake /usr/src/googletest -B /usr/src/googletest/build \
@@ -83,28 +84,34 @@ if [ -d /usr/src/googletest ]; then
   sudo ldconfig
 fi
 
-# Fetch header-only dependencies if missing
+#Fetch header - only dependencies if missing
 if [ ! -d "third_party/crow" ]; then
   git clone https://github.com/CrowCpp/crow.git third_party/crow
-fi
-if [ ! -d "third_party/glm" ]; then
-  git clone https://github.com/g-truc/glm.git third_party/glm
-fi
+      fi if[!-d "third_party/glm"];
+  then git clone https :  // github.com/g-truc/glm.git third_party/glm
+                          fi
 
-# Install Python 3.13 from deadsnakes if not present
-if ! command -v python3.13 >/dev/null; then
-  echo "Installing Python 3.13..."
-  sudo add-apt-repository ppa:deadsnakes/ppa -y
-  sudo apt-get update -y
-  # Explicitly install the pinned version
-  sudo apt-get install -y "python3.13=${PYTHON_VERSION}" \
-    "python3.13-dev=${PYTHON_VERSION}" | tee -a "$LOG_DIR/apt.log"
-fi
+#Install Python 3.13 from deadsnakes if not present
+                          if !command -
+                          v python3.13 >
+      / dev / null;
+  then echo "Installing Python 3.13..." sudo add - apt - repository ppa : deadsnakes / ppa -
+          y sudo apt - get update -
+          y
+#Explicitly install the pinned version
+              sudo apt -
+          get install -
+          y
+          "python3.13=${PYTHON_VERSION}"
+          "python3.13-dev=${PYTHON_VERSION}" |
+      tee -
+              a "$LOG_DIR/apt.log" fi
 
-# Install GCC 14 if available
-if apt-cache show gcc-14 >/dev/null 2>&1; then
-  sudo apt-get install -y gcc-14 g++-14 | tee -a "$LOG_DIR/apt.log"
-  sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100
-  sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
-fi
-
+#Install GCC 14 if available
+              if apt -
+              cache show gcc - 14 >
+          / dev / null 2 > &1;
+  then sudo apt - get install - y gcc - 14 g++ - 14 |
+      tee - a "$LOG_DIR/apt.log" sudo update -
+          alternatives-- install / usr / bin / gcc gcc / usr / bin / gcc - 14 100 sudo update -
+          alternatives-- install / usr / bin / g++ g++ / usr / bin / g++ - 14 100 fi

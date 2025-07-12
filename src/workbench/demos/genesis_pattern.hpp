@@ -48,7 +48,6 @@ private:
     sep::CyclesRenderer* renderer_{nullptr};
 
     sep::Engine* engine_{nullptr};
-    sep::CyclesRenderer* renderer_{nullptr};
 
     bool auto_evolve_{true};
     float evolution_rate_{0.1f};

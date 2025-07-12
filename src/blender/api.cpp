@@ -32,7 +32,7 @@ bool validateMesh(Object* obj, Mesh* mesh)
 }
 }  // namespace
 
-extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPConfig* sep::pattern::PatternConfig, SEPBlenderBridge** bridge_out)
+extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const sep::pattern::PatternConfig& config, SEPBlenderBridge** bridge_out)
 {
     if (!gpu_ctx || !bridge_out)
     { 
@@ -75,13 +75,13 @@ sep_register_mesh(SEPBlenderBridge* bridge, Object* bl_object, Mesh* bl_mesh, se
         return sep::SEPResult::NOT_FOUND;
     }
 
-    sep::pattern::PatternConfig sep::pattern::PatternConfig{};
-    sep::pattern::PatternConfig.update_threshold = 0.1f;
-    sep::pattern::PatternConfig.enable_mutations = true;
-    sep::pattern::PatternConfig.max_patterns     = 1000;
-    sep::pattern::PatternConfig.batch_size       = 64;
+    sep::pattern::PatternConfig cfg{};
+    cfg.update_threshold = 0.1f;
+    cfg.enable_mutations = true;
+    cfg.max_patterns     = 1000;
+    cfg.batch_size       = 64;
 
-    auto result = bridge->impl->registerObject(bl_object, sep::pattern::PatternConfig, handle_out);
+    auto result = bridge->impl->registerObject(bl_object, cfg, handle_out);
     return static_cast<sep::SEPResult>(static_cast<int32_t>(result));
 }
 

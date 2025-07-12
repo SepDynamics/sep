@@ -93,13 +93,13 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
       }
 
         sep::BatchProcessingResult process_result;
-      process_result.success = true;
-      process_result.error_code = 0;
-      
-      if (!process_result.success) {
-        sep::api::bridge::detail::setLastError(process_result.error_message.c_str());
-        return sep::SEPResult::PROCESSING_ERROR;
-      }
+        process_result.success = true;
+
+        if (!process_result.success)
+        {
+            sep::api::bridge::detail::setLastError(process_result.error_message.c_str());
+            return sep::SEPResult::PROCESSING_ERROR;
+        }
 
       nlohmann::json result_json;
       result_json["success"] = true;

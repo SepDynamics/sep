@@ -51,10 +51,12 @@ sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
     // No initialization needed on PatternProcessor
 
     // Start processing thread
-    startProcessingThread();
+startProcessingThread();
 
     return sep::SEPResult::SUCCESS;
 }
+
+bool isValidConfig(const sep::pattern::PatternConfig& c) { return c.max_patterns > 0; }
 
 sep::SEPResult BlenderBridge::registerObject(Object* obj, const sep::pattern::PatternConfig& config, ObjectHandle* handle_out)
 {

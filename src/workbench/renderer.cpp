@@ -1,7 +1,7 @@
 #include "renderer.h"
 
-#include <glm/glm.hpp>
 #include <cmath>
+#include <glm/glm.hpp>
 #include <iostream>
 
 // Initialize static member variable

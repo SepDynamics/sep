@@ -23,12 +23,39 @@
 
 // Forward declaration for PatternProcessor
 
-namespace sep {
-namespace pattern {
+namespace sep
+{
+    namespace pattern
+    {
 
+        // Forward declare if necessary, or include the full definition
+        class PatternProcessor;
 
-// Forward declare if necessary, or include the full definition
-class PatternProcessor;
+        // ObjectState structure definition
+        struct ObjectState
+        {
+            Object* object = nullptr;
+            sep::pattern::PatternConfig config;
+            sep::pattern::PatternStateEnum state = sep::pattern::PatternStateEnum::UNINITIALIZED;
+            bool needs_update = false;
+            bool is_processing = false;
+            sep::pattern::PatternMetrics metrics;
+            struct
+            {
+                size_t host_memory = 0;
+                size_t device_memory = 0;
+                size_t shared_memory = 0;
+            } memory_usage;
+            struct
+            {
+                float processing_time = 0.0f;
+                uint32_t pattern_count = 0;
+                uint32_t update_count = 0;
+                float coherence_score = 0.0f;
+            } stats;
+            std::vector<::sep::pattern::PatternData> patterns;
+            sep::memory::MemoryBlock* memory_block = nullptr;
+        };
 
 // ObjectState structure definition
 struct ObjectState {

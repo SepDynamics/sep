@@ -55,10 +55,10 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
     }
     
     // Set metadata properties
-    pattern.coherence = coherence;
-    pattern.stability = stability;
-    pattern.entropy = entropy;
-    pattern.mutation_rate = mutation_rate;
+    pattern.quantum_state.coherence = coherence;
+    pattern.quantum_state.stability = stability;
+    pattern.quantum_state.entropy = entropy;
+    pattern.quantum_state.mutation_rate = mutation_rate;
     
     // Set generation count
     pattern.generation = config.value("generation", 0) + 1;
@@ -68,7 +68,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
     {
         for (const auto& rel_json : config["relationships"])
         {
-            ::sep::quantum::PatternRelationship rel;
+            ::sep::PatternRelationship rel;
             
             std::string target_id = rel_json.value("target", "");
             if (!target_id.empty())
@@ -176,10 +176,10 @@ nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::pattern::P
     };
     
     // Export metadata
-    j["coherence"] = pattern.coherence;
-    j["stability"] = pattern.stability;
-    j["entropy"] = pattern.entropy;
-    j["mutation_rate"] = pattern.mutation_rate;
+    j["coherence"] = pattern.quantum_state.coherence;
+    j["stability"] = pattern.quantum_state.stability;
+    j["entropy"] = pattern.quantum_state.entropy;
+    j["mutation_rate"] = pattern.quantum_state.mutation_rate;
     
     // Export relationships
     if (!pattern.relationships.empty())
@@ -233,7 +233,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nl
     {
         for (const auto& rel_json : j["relationships"])
         {
-            ::sep::quantum::PatternRelationship rel;
+            ::sep::PatternRelationship rel;
             
             if (rel_json.contains("target") && rel_json["target"].is_string())
             {

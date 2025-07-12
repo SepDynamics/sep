@@ -5,6 +5,7 @@
 
 #include "demo_manager.hpp"
 #include "imgui.h"
+#include "workbench/demos/demo_base.hpp"
 
 namespace sep {
 namespace workbench {

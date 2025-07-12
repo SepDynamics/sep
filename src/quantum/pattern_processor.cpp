@@ -22,7 +22,7 @@ public:
         : quantum_processor_(createQuantumProcessor(config)) {}
 
     sep::quantum::ProcessingResult processPattern(
-        const sep::quantum::Pattern& pattern) {
+        const sep::Pattern& pattern) {
         sep::quantum::ProcessingResult result;
         result.pattern = pattern;
         result.pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
@@ -65,7 +65,7 @@ public:
     }
 
     std::vector<sep::quantum::ProcessingResult> processBatch(
-        const std::vector<sep::quantum::Pattern>& patterns) {
+        const std::vector<sep::Pattern>& patterns) {
         std::vector<sep::quantum::ProcessingResult> results;
         results.reserve(patterns.size());
         

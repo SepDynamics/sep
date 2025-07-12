@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "demo_manager.hpp"
+#include "workbench/demos/demo_base.hpp"
 #include "imgui.h"
 #include "memory/quantum_coherence_manager.h"
 #include "quantum/processor.h"

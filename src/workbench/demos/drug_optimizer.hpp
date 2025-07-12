@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "demo_manager.hpp"
+#include "workbench/demos/demo_base.hpp"
 #include "imgui.h"
 #include "quantum/quantum_manifold_optimizer.h"
 

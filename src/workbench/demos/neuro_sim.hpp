@@ -7,6 +7,7 @@
 
 #include "core/types.h"
 #include "demo_manager.hpp"
+#include "workbench/demos/demo_base.hpp"
 #include "imgui.h"
 #include "memory/memory_tier_manager.hpp"
 namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
@@ -33,7 +34,7 @@ namespace sep
         private:
             struct Neuron
             {
-                sep::quantum::Pattern pattern;
+                sep::Pattern pattern;
                 float potential{0.f};
                 uint64_t node_id{0};
             };

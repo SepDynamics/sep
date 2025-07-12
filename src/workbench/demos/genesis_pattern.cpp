@@ -33,7 +33,7 @@ void GenesisPatternDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* rende
 void GenesisPatternDemo::initializePatterns()
 {
     // Initialize base quantum pattern
-    sep::quantum::Pattern pattern;
+    sep::Pattern pattern;
     pattern.id = "seed";
     pattern.position = glm::vec4(0.0f);
     pattern.quantum_state.evolution_rate = evolution_rate_;

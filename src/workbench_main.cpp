@@ -99,6 +99,10 @@ int main()
         std::cout << "Failed to create window with compatibility profile, trying fallback..."
                   << std::endl;
         glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
         window = glfwCreateWindow(1280, 720, "SEP Workbench (Fallback)", nullptr, nullptr);
 

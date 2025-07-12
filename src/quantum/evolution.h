@@ -10,6 +10,11 @@ namespace sep::quantum {
 
 class Processor;
 
+struct BatchProcessingResult {
+    bool success{false};
+    std::string message{};
+};
+
 class EvolutionEngine {
 public:
     struct EvolutionStats {
@@ -32,8 +37,8 @@ public:
 
     explicit EvolutionEngine(Processor* processor);
 
-    BatchProcessingResult evolve(const EvolutionParams& params);
-    BatchProcessingResult evolveGeneration();
+    sep::quantum::BatchProcessingResult evolve(const EvolutionParams& params);
+    sep::quantum::BatchProcessingResult evolveGeneration();
 
     Pattern crossover(const Pattern& parent1, const Pattern& parent2);
     Pattern mutate(const Pattern& pattern);

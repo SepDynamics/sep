@@ -32,6 +32,13 @@ namespace pattern {
         static constexpr float MAX_COHERENCE = 1.0f;
     };
 
+    struct PatternConfig {
+        float update_threshold{0.0f};
+        bool enable_mutations{false};
+        int max_patterns{0};
+        int batch_size{0};
+    };
+
 // Forward declarations
 class PatternObserver;
 
@@ -71,7 +78,7 @@ class BlenderBridge {
     sep::pattern::PatternMetrics metrics;
     PatternStateEnum state;
     PatternState pattern_state;
-    std::vector<PatternData> patterns;
+    std::vector<sep::pattern::PatternData> patterns;
     sep::memory::MemoryBlock* memory_block{nullptr};
     bool needs_update;
     bool is_processing;

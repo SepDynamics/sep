@@ -16,6 +16,11 @@ inline float deterministicNoise(uint64_t& state) {
 }
 }
 
+// helper comparator for shim::string vs std::string
+bool operator==(const std::string& lhs, const sep::shim::string& rhs) {
+    return lhs == rhs.c_str();
+}
+
 namespace sep::quantum {
 
 class EvolutionEngine::EvolutionEngineImpl {
@@ -297,8 +302,8 @@ private:
 
 EvolutionEngine::EvolutionEngine(Processor* processor) : impl_(std::make_unique<EvolutionEngineImpl>(processor)) {}
 
-BatchProcessingResult EvolutionEngine::evolve(const EvolutionParams& params) { return impl_->evolve(params); }
-BatchProcessingResult EvolutionEngine::evolveGeneration() { return impl_->evolveGeneration(); }
+sep::quantum::BatchProcessingResult EvolutionEngine::evolve(const EvolutionParams& params) { return impl_->evolve(params); }
+sep::quantum::BatchProcessingResult EvolutionEngine::evolveGeneration() { return impl_->evolveGeneration(); }
 Pattern EvolutionEngine::crossover(const Pattern& parent1, const Pattern& parent2) { return impl_->crossover(parent1, parent2); }
 Pattern EvolutionEngine::mutate(const Pattern& pattern) { return impl_->mutate(pattern); }
 std::vector<std::string> EvolutionEngine::selectElite(size_t count) { return impl_->selectElite(count); }

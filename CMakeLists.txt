@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 # Enable POSIX features for popen/pclose
 add_compile_definitions(_POSIX_C_SOURCE=200809L)
 add_definitions(-D_GNU_SOURCE)
+add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 # Also propagate POSIX feature macros to all targets
 add_compile_definitions(_POSIX_C_SOURCE=200809L)
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)

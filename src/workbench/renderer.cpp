@@ -233,10 +233,10 @@ void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>
                 glm::vec3 pos(p.position.x != 0.0f ? p.position.x : (startX + col * spacing),
                               p.position.y != 0.0f ? p.position.y : 0.0f,
                               p.position.z != 0.0f ? p.position.z : (startZ + row * spacing));
-                float s = p.scale > 0.0f ? p.scale : 1.0f;
-                glm::vec4 c(p.color, 1.0f);
+                float s = 1.0f;
+                glm::vec4 c(1.0f);
                 glUniform4f(colorLoc, c.r, c.g, c.b, c.a);
-                if (p.memory_tier == 0)
+                if (p.quantum_state.memory_tier == 0)
                     renderSphere(8, 8, pos, s, c);
                 else
                     renderCube(pos, s, c);

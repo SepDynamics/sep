@@ -1,7 +1,7 @@
 
 #include "quantum/quantum_processor.h"
 #include "core/types.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
+
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h" 
 #include "compat/math_common.h"

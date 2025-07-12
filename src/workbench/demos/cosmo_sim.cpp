@@ -3,9 +3,8 @@
 #include <config.hpp>
 #include <cstdlib>
 // Include glm_config.h before any GLM headers to ensure GLM_ENABLE_EXPERIMENTAL is defined
-#include <glm/gtx/norm.hpp>
-
 #include "compat/glm_config.h"
+#include <glm/gtx/norm.hpp>
 
 namespace sep
 {

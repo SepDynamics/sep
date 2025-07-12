@@ -250,7 +250,6 @@ void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>
     {
         useOpenGL = false;
     }
-}
 // Helper method to render a sphere
 void sep::workbench::Renderer::renderSphere(int latitudes, int longitudes, const glm::vec3& pos,
                                             float scale, const glm::vec4& color)

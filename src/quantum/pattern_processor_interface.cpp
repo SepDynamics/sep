@@ -1,4 +1,4 @@
-#include "quantum/types.h"
+#include "core/types.h"
 #include "quantum/processor.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"

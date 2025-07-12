@@ -4,7 +4,7 @@
 #include "memory/types.h"
 #include "quantum/qbsa.h"
 #include "quantum/qfh.h"
-#include "quantum/types.h"
+#include "core/types.h"
 #include <cstdint>
 #include <glm/glm.hpp>
 #include <memory>

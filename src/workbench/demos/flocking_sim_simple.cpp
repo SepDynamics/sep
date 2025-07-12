@@ -11,7 +11,7 @@
 
 #include "../../workbench_demo_adapter.hpp"
 #include "memory/memory_tier_manager.hpp"
-#include "quantum/data.hpp"
+#include "core/types.h"
 #include "quantum/quantum_processor.h"
 
 int main() {

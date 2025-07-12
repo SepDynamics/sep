@@ -1,6 +1,6 @@
 #pragma once
 
-#include "quantum/types.h"
+#include "core/types.h"
 #include <complex>
 #include <vector>
 #include <string>

@@ -47,7 +47,7 @@ SEP_API sep::cuda::cudaError_t sep_cuda_memcpy_async(
 }
 
 // C++ specific includes and definitions
-#include "quantum/data.hpp"
+#include "core/types.h"
 
 namespace sep::cuda {
 

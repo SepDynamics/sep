@@ -1,5 +1,5 @@
 #include "quantum/quantum_processor_qfh.h"
-#include "quantum/types.h"
+#include "core/types.h"
 #include "memory/types.h"  // For MemoryTierEnum
 #include "quantum/processor.h"
 

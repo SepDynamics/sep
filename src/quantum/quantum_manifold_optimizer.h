@@ -2,13 +2,15 @@
 #pragma once
 
 #include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "core/config.h"
 #include <cuda_runtime.h>
 #include "compat/cufft.h"
 #include "compat/cuda_api.hpp"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
-#include "quantum/types.h"
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 
 // Forward declarations
 namespace sep::cuda {
@@ -43,7 +45,8 @@ using cufftHandle = cufftHandle_t*;
 #include "quantum/qbsa.h"
 #include "quantum/qfh.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "quantum/types.h"
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "quantum/pattern.h"
 
 namespace sep::quantum { class PatternEvolutionBridge; }

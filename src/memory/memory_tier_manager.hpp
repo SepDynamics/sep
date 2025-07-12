@@ -12,11 +12,10 @@
 #include "core/common.h"
 #include "core/dag_graph.h"
 #include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "memory/memory_tier.hpp"
 #include "memory/persistent_pattern_data.hpp"
 #include "memory/types.h"
-#include "quantum/data.hpp"
-#include "quantum/types.h"
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
 #endif // SEP_NO_REDIS

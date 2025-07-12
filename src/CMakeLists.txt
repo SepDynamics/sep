@@ -60,24 +60,22 @@ if(SEP_BUILD_WORKBENCH)
         ${GLEW_INCLUDE_DIRS}
     )
 
-    # Link all libraries in the correct order.
-    # Static libraries first, then the shared libraries they need.
     target_link_libraries(sep_workbench PRIVATE
-        # --- SEP Static Libraries ---
+        # --- Workbench & Application Logic ---
         sep_workbench_lib
-        sep_api
-        sep_quantum
-        sep_memory
-        sep_core
-        sep_audio
-        sep_embeddings
         imgui
 
-        # --- Blender/Cycles and its Dependencies ---
-        # Link the shared library we built
+        # --- SEP Static Libraries (High-level to Low-level) ---
+        sep_api
         sep_blender
+        sep_audio
+        sep_quantum
+        sep_memory
+        sep_embeddings
+        sep_core
+        sep_compat
 
-        # Transitive dependencies required by sep_blender
+        # --- Cycles and its Dependencies ---
         cycles_device
         cycles_kernel
         cycles_scene
@@ -88,17 +86,18 @@ if(SEP_BUILD_WORKBENCH)
         ${Alembic_LIBRARIES}
         ${OpenPGL_LIBRARIES}
 
-        # --- System & Other Dependencies ---
-        sep_compat # Must be linked as a shared lib if it provides CUDA symbols
+        # --- System & Core External Dependencies ---
         ${CURL_LIBRARIES}
-        -lhiredis
+        hiredis
         http_parser::http_parser
         ${GLEW_LIBRARIES}
         glfw
         OpenGL::GL
-        ${CMAKE_DL_LIBS}
         Threads::Threads
         ${PIPEWIRE_LIBRARIES}
         ${FFTW_LIBRARIES}
+        CUDA::cudart
+        CUDA::cuda_driver
+        ${CMAKE_DL_LIBS}
     )
 endif()

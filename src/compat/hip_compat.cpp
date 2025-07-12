@@ -5,9 +5,26 @@
 
 // Forward declarations for HIP functions
 extern "C" {
+    // Stub implementation for HIP functions - not needed for NVIDIA GPUs
     hipError_t hipGetDevicePropertiesR0600(sep::cuda::cudaDeviceProp* prop, int device)
     {
-        return hipGetDeviceProperties(prop, device);
+        // Return success but don't actually do anything
+        // This is a stub since we're using NVIDIA GPUs, not AMD
+        (void)prop;  // Suppress unused parameter warning
+        (void)device;  // Suppress unused parameter warning
+        return hipSuccess;  // Defined as cudaSuccess in hip_runtime_wrapper.h
+    }
+}
+
+// Stub implementation for HIP functions that are not needed for NVIDIA GPUs
+extern "C" {
+    hipError_t hipHostMalloc(void** ptr, size_t size, unsigned int flags)
+    {
+        // Just use regular malloc as a fallback
+        // This is a stub since we're using NVIDIA GPUs, not AMD
+        (void)flags;  // Suppress unused parameter warning
+        *ptr = malloc(size);
+        return *ptr ? hipSuccess : static_cast<hipError_t>(1); // Return success if malloc succeeded
     }
 }
 
@@ -84,10 +101,9 @@ namespace sep
 
         cudaError_t cudaMallocManaged(void** devPtr, size_t size, unsigned int flags)
         {
-            // HIP doesn't have direct managed memory equivalent
-            // Use hipHostMalloc as a fallback with similar behavior
-            (void)flags; // Suppress unused parameter warning
-            return hipHostMalloc(devPtr, size, hipHostMallocMapped);
+            // Use CUDA's managed memory directly since we're on NVIDIA hardware
+            // This replaces the HIP-based implementation
+            return cuda_wrapper::MallocManaged(devPtr, size, flags);
         }
 
         // Error handling

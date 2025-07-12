@@ -1,19 +1,5 @@
 #include "memory/memory_tier_manager.hpp"
 
-#include "core/common.h"
-#include "core/types.h"
-#include "quantum/pattern.h"
-#include "quantum/processor.h"
-#include "quantum/pattern_processor.hpp"
-
-namespace sep {
-    namespace config
-    {
-        class ConfigManager;
-    }
-#include "quantum/processor.h"
-#include "quantum/pattern_processor.hpp"
-
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
@@ -23,22 +9,33 @@ namespace sep {
 #include <new>
 #include <string>
 
+#include "core/common.h"
+#include "core/types.h"
+#include "quantum/pattern.h"
+#include "quantum/pattern_processor.hpp"
+#include "quantum/processor.h"
+
 namespace sep {
+    namespace config
+    {
+        class ConfigManager;
+    }
+
 namespace memory {
 
 // Static member initializations
 std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
-        std::once_flag MemoryTierManager::once_flag_;
+std::once_flag MemoryTierManager::once_flag_;
 
-        // Singleton getter
-        MemoryTierManager &MemoryTierManager::getInstance()
-        {
-            std::call_once(once_flag_, []() {
-                instance_ = std::make_unique<MemoryTierManager>();
-                instance_->hooks_ = nullptr;
-            });
-            return *instance_;
-        }
+// Singleton getter
+MemoryTierManager &MemoryTierManager::getInstance()
+{
+    std::call_once(once_flag_, []() {
+        instance_ = std::make_unique<::sep::memory::MemoryTierManager>();
+        instance_->hooks_ = nullptr;
+    });
+    return *instance_;
+}
 
         // Constructor
         MemoryTierManager::MemoryTierManager()
@@ -64,12 +61,6 @@ std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
         }
 
         MemoryTierManager::~MemoryTierManager() = default;
-
-        void MemoryTierManager::init(const Config &cfg)
-        {
-            config_ = cfg;
-            rebuildLookup();
-        }
 
         void MemoryTierManager::shutdown()
         {

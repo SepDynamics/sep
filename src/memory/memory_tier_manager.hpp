@@ -43,7 +43,7 @@ namespace memory {
     class MemoryTierManager
     {
     public:
-        using Config = ::sep::config::MemoryThresholdConfig;
+        using Config = workbench::MemoryThresholdConfig;
 
         // Singleton access
         static MemoryTierManager &getInstance();
@@ -119,7 +119,7 @@ namespace memory {
         void calculateRelationshipCoherence();
 
         // Test helpers
-        void resetForTesting(const Config &cfg = Config());
+        void resetForTesting(const MemoryTier::Config &cfg = MemoryTier::Config());
 
         dag::DagGraph &getDagGraph() { return dag_graph_; }
 
@@ -127,7 +127,7 @@ namespace memory {
         static std::unique_ptr<MemoryTierManager> instance_;
         static std::once_flag once_flag_;
 
-        Config config_;
+        MemoryTier::Config config_;
         std::unique_ptr<MemoryTier> stm_;
         std::unique_ptr<MemoryTier> mtm_;
         std::unique_ptr<MemoryTier> ltm_;
@@ -167,8 +167,8 @@ namespace memory {
 } // namespace memory
 
 namespace config {
-void to_json(nlohmann::json &j, const MemoryThresholdConfig &c);
-void from_json(const nlohmann::json &j, MemoryThresholdConfig &c);
+    void to_json(nlohmann::json &j, const workbench::MemoryThresholdConfig &c);
+    void from_json(const nlohmann::json &j, workbench::MemoryThresholdConfig &c);
 } // namespace config
 
 } // namespace sep

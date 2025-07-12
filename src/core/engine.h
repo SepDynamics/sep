@@ -50,7 +50,6 @@ class Engine {
   Engine &operator=(Engine &&) noexcept = default;
 
   // Explicit initialization and lifecycle management
-  bool init(const ::sep::config::APIConfig& config);
   void run();
   void shutdown();
 

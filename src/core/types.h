@@ -121,41 +121,6 @@ namespace sep
     namespace workbench
     {
         using Pattern = sep::Pattern;
-    }
-    // Note: The original sep::Pattern is now sep::Pattern
-
-// This is the SINGLE canonical definition of a Pattern.
-struct Pattern {
-    shim::string id;
-    int generation{0};
-    glm::vec4 position{0.0f};
-    glm::vec4 velocity{0.0f};
-    glm::vec4 attributes{0.0f};
-    std::complex<float> amplitude{0.0f};
-    std::vector<float> values;
-    float coherence{0.0f};
-    float stability{0.0f};
-    float entropy{0.0f};
-    int mutation_count{0};
-    quantum::QuantumState quantum_state{};
-    float coherence{0.0f};
-    float stability{0.0f};
-    float entropy{0.0f};
-    int mutation_count{0};
-    std::vector<quantum::PatternRelationship> relationships;
-    std::vector<float> data;
-    std::vector<float> values;
-    std::vector<std::string> parent_ids;
-    uint64_t timestamp{0};
-    uint64_t last_accessed{0};
-    uint64_t last_modified{0};
-    glm::vec3 momentum{0.0f};
-    float coherence{0.0f};
-    float stability{0.0f};
-    float entropy{0.0f};
-    int mutation_count{0};
-};
-
         struct CudaConfig
         {
             bool use_gpu{true};
@@ -194,7 +159,6 @@ struct Pattern {
 
         struct SystemConfig
         {
-            APIConfig api{};
             CudaConfig cuda{};
             LogConfig log{};
             MemoryThresholdConfig memory{};

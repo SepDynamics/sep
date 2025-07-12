@@ -1,19 +1,20 @@
 #include "api/sep_engine.h"
 
 // Standard includes first
-#include <chrono>
 #include <time.h>
+
+#include <atomic>
+#include <chrono>
+#include <cstring>
+#include <ctime>
 #include <iomanip>
 #include <iostream>
 #include <memory>
-#include <string>
 #include <sstream>
 #include <stdexcept>
-#include <atomic>
+#include <string>
 #include <thread>
 #include <vector>
-#include <cstring>
-#include <ctime>
 
 // GLM includes
 
@@ -25,12 +26,11 @@
 #include "compat/cuda_defs.h"    // For Status enum
 #include "compat/math_common.h"  // Include math common for sqrt_safe
 #include "compat/types.h"
-#include "core/logging.h"  // Include logging header first
 #include "core/config.h"   // For sep::config::APIConfig
+#include "core/logging.h"  // Include logging header first
+#include "core/types.h"    // For quantum::Pattern::generation
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor.h"
-#include "core/types.h"  // For quantum::Pattern::generation
-
 #include "tests/simple_embedding_model.h"
 
 // Forward declaration of the wrapper function for CUDA initialization
@@ -38,120 +38,126 @@ sep::cuda::Error cuda_core_initialize(int device_id);
 
 using json = nlohmann::json;
 
-namespace sep::api {
-
-// Implementation details struct
-struct SepEngine::Impl
-
+namespace sep::api
 {
-    bool          initialized = false;
-    HealthMetrics health_metrics;
-    // Using forward declaration instead of direct dependency
-    std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor;
-    sep::memory::MemoryTierManager&                 memory_manager;
-    std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor; 
-    
-    // PatternEvolution is a static class, no need to instantiate
 
-    Impl()
-        : memory_manager(sep::memory::MemoryTierManager::getInstance())
+    // Implementation details struct
+    struct SepEngine::Impl
+
     {
-        // Defer quantum processor creation until after CUDA is initialized
-        // It will be created in the initialize method
-        
-        // MemoryTierManager uses singleton pattern; store reference for convenience
-        health_metrics.startTime           = std::chrono::steady_clock::now();
-        health_metrics.lastRequestTime     = std::chrono::steady_clock::now();
-        health_metrics.lastSuccessTime     = std::chrono::system_clock::now();
-        health_metrics.lastErrorTime       = std::chrono::system_clock::now();
-        health_metrics.totalRequests       = 0;
-        health_metrics.successfulRequests  = 0;
-        health_metrics.failedRequests      = 0;
-        health_metrics.timeoutRequests     = 0;
-        health_metrics.rateLimitedCount    = 0;
-        health_metrics.averageResponseTime = 0.0;
-        health_metrics.allocatedMemory     = 0;
-        health_metrics.peakMemoryUsage    = 0;
-        health_metrics.memoryFragmentation = 0.0;
-        health_metrics.lastResponseTime    = std::chrono::milliseconds{0};
-        health_metrics.lastErrorCode       = 0;
+        bool initialized = false;
+        HealthMetrics health_metrics;
+        // Using forward declaration instead of direct dependency
+        std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor;
+        sep::memory::MemoryTierManager& memory_manager;
+        std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor;
+        sep::config::APIConfig config;
+
+        // PatternEvolution is a static class, no need to instantiate
+
+        Impl() : memory_manager(sep::memory::MemoryTierManager::getInstance())
+        {
+            // Defer quantum processor creation until after CUDA is initialized
+            // It will be created in the initialize method
+
+            // MemoryTierManager uses singleton pattern; store reference for convenience
+            health_metrics.startTime = std::chrono::steady_clock::now();
+            health_metrics.lastRequestTime = std::chrono::steady_clock::now();
+            health_metrics.lastSuccessTime = std::chrono::system_clock::now();
+            health_metrics.lastErrorTime = std::chrono::system_clock::now();
+            health_metrics.totalRequests = 0;
+            health_metrics.successfulRequests = 0;
+            health_metrics.failedRequests = 0;
+            health_metrics.timeoutRequests = 0;
+            health_metrics.rateLimitedCount = 0;
+            health_metrics.averageResponseTime = 0.0;
+            health_metrics.allocatedMemory = 0;
+            health_metrics.peakMemoryUsage = 0;
+            health_metrics.memoryFragmentation = 0.0;
+            health_metrics.lastResponseTime = std::chrono::milliseconds{0};
+            health_metrics.lastErrorCode = 0;
+        }
+    };
+
+    // Static member definitions
+    // id_counter_ uses default sequential consistency
+    std::atomic<uint64_t> SepEngine::id_counter_{1};
+
+    // Singleton instance
+    SepEngine& SepEngine::getInstance()
+    {
+        static SepEngine instance;
+        return instance;
     }
- 
-};
 
-// Static member definitions
-// id_counter_ uses default sequential consistency
-std::atomic<uint64_t> SepEngine::id_counter_{1};
+    // Private constructor
+    SepEngine::SepEngine() : impl_(std::make_unique<Impl>()) {}
 
-// Singleton instance
-SepEngine& SepEngine::getInstance()
-{
-    static SepEngine instance;
-    return instance;
-}
+    // Private destructor
+    SepEngine::~SepEngine() = default;
 
-// Private constructor
-SepEngine::SepEngine() : impl_(std::make_unique<Impl>()) {}
+    // Generate deterministic ID
+    std::string SepEngine::generateId(const std::string& prefix)
+    {
+        // fetch_add uses seq_cst semantics
+        uint64_t id = id_counter_.fetch_add(1);
+        std::ostringstream oss;
+        oss << prefix << "_" << std::setfill('0') << std::setw(8) << id;
+        return oss.str();
+    }
 
-// Private destructor
-SepEngine::~SepEngine() = default;
+    nlohmann::json SepEngine::initialize(const sep::config::APIConfig& config)
+    {
+        impl_->config = config;
+        sep::logging::Level lvl = sep::logging::levelFromString(config.log_level);
+        sep::logging::Manager::getInstance().setGlobalLevel(lvl);
+        if (impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine already initialized";
+            return result;
+        }
 
-// Generate deterministic ID
-std::string SepEngine::generateId(const std::string& prefix)
-{
-    // fetch_add uses seq_cst semantics
-    uint64_t           id = id_counter_.fetch_add(1);
-    std::ostringstream oss;
-    oss << prefix << "_" << std::setfill('0') << std::setw(8) << id;
-    return oss.str();
-}
+        // Initialize CUDA first before creating any CUDA-dependent components
+        auto& cuda_core = sep::cuda::CudaCore::instance();
+        if (!cuda_core.is_initialized())
+        {
+            // Skip CUDA initialization if not available
+            // This is a temporary workaround for the linking issue
+            SPDLOG_INFO("CUDA not initialized. Using CPU-only mode.");
+        }
 
-nlohmann::json SepEngine::initialize(const sep::config::APIConfig& config)
-{
-    (void)config;  // Silence unused parameter warning
-    if (impl_->initialized) {
+        // Create processors with appropriate configurations
+        try
+        {
+            // Create the quantum processor with a simple configuration
+            sep::quantum::QuantumProcessor::Config qp_config;
+            qp_config.enable_gpu = false;  // Disable GPU usage for stability
+            impl_->quantum_processor = sep::quantum::createQuantumProcessor(qp_config);
+
+            // Create pattern processor with CPU implementation
+            impl_->pattern_processor = std::make_unique<sep::pattern::PatternProcessor>(
+                sep::pattern::PatternProcessor::Implementation::CPU);
+        }
+        catch (const std::exception& e)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = std::string("Failed to create processors: ") + e.what();
+            return result;
+        }
+
+        impl_->initialized = true;
+
         json result;
-        result["success"] = false;
-        result["error"] = "Engine already initialized";
+        result["success"] = true;
+        result["message"] = "SEP Engine initialized successfully";
         return result;
     }
 
-    // Initialize CUDA first before creating any CUDA-dependent components
-    auto& cuda_core = sep::cuda::CudaCore::instance();
-    if (!cuda_core.is_initialized()) {
-        // Skip CUDA initialization if not available
-        // This is a temporary workaround for the linking issue
-        SPDLOG_INFO("CUDA not initialized. Using CPU-only mode.");
-    }
-
-    // Create processors with appropriate configurations
-    try {
-        // Create the quantum processor with a simple configuration
-        sep::quantum::QuantumProcessor::Config qp_config;
-        qp_config.enable_gpu = false; // Disable GPU usage for stability
-        impl_->quantum_processor = sep::quantum::createQuantumProcessor(qp_config);
-        
-        // Create pattern processor with CPU implementation
-        impl_->pattern_processor = std::make_unique<sep::pattern::PatternProcessor>(
-            sep::pattern::PatternProcessor::Implementation::CPU);
-            
-    } catch (const std::exception& e) {
-        json result;
-        result["success"] = false;
-        result["error"] = std::string("Failed to create processors: ") + e.what();
-        return result;
-    }
-
-    impl_->initialized = true;
-
-    json result;
-    result["success"] = true;
-    result["message"] = "SEP Engine initialized successfully";
-    return result;
-}
-
-nlohmann::json SepEngine::shutdown()
-{
+    nlohmann::json SepEngine::shutdown()
+    {
         // Clean up components in reverse initialization order
         impl_->pattern_processor.reset();
         impl_->quantum_processor.reset();
@@ -161,17 +167,18 @@ nlohmann::json SepEngine::shutdown()
         result["success"] = true;
         result["message"] = "SEP Engine shutdown successfully";
         return result;
-}
-
-nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
-{
-    if (!impl_->initialized) {
-        json result;
-        result["success"] = false; 
-        result["error"]   = "Engine not initialized";
-        return result;
     }
-    impl_->health_metrics.totalRequests++;
+
+    nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
+    {
+        if (!impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
+        }
+        impl_->health_metrics.totalRequests++;
         impl_->health_metrics.lastRequestTime = std::chrono::steady_clock::now();
 
         // Validate required fields
@@ -186,19 +193,21 @@ nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
         if (!pattern_data.is_array() || pattern_data.size() != 3)
         {
             (void)fprintf(stderr, "%s\n", "Invalid pattern data format");
-            return makeErrorResponse(api::ErrorCode::InvalidArgument, "Invalid pattern data format");
+            return makeErrorResponse(api::ErrorCode::InvalidArgument,
+                                     "Invalid pattern data format");
         }
-        glm::vec3 pattern{pattern_data[0].get<float>(), pattern_data[1].get<float>(), pattern_data[2].get<float>()};
+        glm::vec3 pattern{pattern_data[0].get<float>(), pattern_data[1].get<float>(),
+                          pattern_data[2].get<float>()};
 
         // Generate pattern ID first
         std::string pattern_id = generateId("pat");
-        size_t      numeric_id = std::stoull(pattern_id.substr(4));
+        size_t numeric_id = std::stoull(pattern_id.substr(4));
 
         // Process through quantum processor
         // Process pattern with proper error handling
         float coherence = 0.0f;
         float stability = 0.0f;
-        
+
         bool process_success = impl_->quantum_processor->processPattern(pattern, numeric_id);
         if (!process_success)
         {
@@ -208,56 +217,55 @@ nlohmann::json SepEngine::processPatterns(const nlohmann::json& request_data)
 
         coherence = impl_->quantum_processor->calculateCoherence(pattern, pattern);
         stability = impl_->quantum_processor->calculateStability(coherence, 0.0f, 0.0f, 1.0f);
-        
+
         // Check for quantum collapse and stability using coherence values
         bool is_collapsed = impl_->quantum_processor->isCollapsed(coherence);
-        bool is_stable    = impl_->quantum_processor->isStable(coherence);
+        bool is_stable = impl_->quantum_processor->isStable(coherence);
 
         impl_->health_metrics.successfulRequests++;
         impl_->health_metrics.lastSuccessTime = std::chrono::system_clock::now();
 
         json result;
-        result["success"]      = true;
-        result["pattern_id"]   = pattern_id;
-        result["coherence"]    = coherence;
-        result["stability"]    = stability;
+        result["success"] = true;
+        result["pattern_id"] = pattern_id;
+        result["coherence"] = coherence;
+        result["stability"] = stability;
         result["is_collapsed"] = is_collapsed;
-        result["is_stable"]    = is_stable;
-        return result;
-
-}
-
-nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
-{
-    if (!impl_->initialized) {
-        json result;
-        result["success"] = false; 
-        result["error"]   = "Engine not initialized";
+        result["is_stable"] = is_stable;
         return result;
     }
-    impl_->health_metrics.totalRequests++;
+
+    nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
+    {
+        if (!impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
+        }
+        impl_->health_metrics.totalRequests++;
         impl_->health_metrics.lastRequestTime = std::chrono::steady_clock::now();
 
         if (!request_data.contains("patterns") || !request_data["patterns"].is_array())
         {
             json result;
             result["success"] = false;
-            result["error"]   = "Missing patterns array";
+            result["error"] = "Missing patterns array";
             return result;
         }
 
         std::string batch_id = generateId("batch");
-        json        results  = json::array();
+        json results = json::array();
 
         for (const auto& p : request_data["patterns"])
         {
-            if (!p.is_array() || p.size() != 3)
-                continue;
+            if (!p.is_array() || p.size() != 3) continue;
             glm::vec3 pattern{p[0].get<float>(), p[1].get<float>(), p[2].get<float>()};
 
             // Generate ID first
-            std::string id         = generateId("pat");
-            size_t      numeric_id = std::stoull(id.substr(4));
+            std::string id = generateId("pat");
+            size_t numeric_id = std::stoull(id.substr(4));
 
             // Process pattern with numeric ID
             bool process_success = impl_->quantum_processor->processPattern(pattern, numeric_id);
@@ -266,19 +274,21 @@ nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
             if (process_success)
             {
                 float coherence = impl_->quantum_processor->calculateCoherence(pattern, pattern);
-                
-                float stability = impl_->quantum_processor->calculateStability(coherence, 0.0f, 1.0f, 1.0f); // Use dummy values for history, generation, access_frequency
- 
+
+                float stability = impl_->quantum_processor->calculateStability(
+                    coherence, 0.0f, 1.0f,
+                    1.0f);  // Use dummy values for history, generation, access_frequency
+
                 // Check states using coherence values
                 bool collapsed = impl_->quantum_processor->isCollapsed(coherence);
-                bool stable    = impl_->quantum_processor->isStable(coherence);
+                bool stable = impl_->quantum_processor->isStable(coherence);
 
                 json entry;
-                entry["pattern_id"]   = id;
-                entry["coherence"]    = coherence;
-                entry["stability"]    = stability;
+                entry["pattern_id"] = id;
+                entry["coherence"] = coherence;
+                entry["stability"] = stability;
                 entry["is_collapsed"] = collapsed;
-                entry["is_stable"]    = stable;
+                entry["is_stable"] = stable;
                 results.push_back(entry);
             }
         }
@@ -287,117 +297,123 @@ nlohmann::json SepEngine::processBatch(const nlohmann::json& request_data)
         impl_->health_metrics.lastSuccessTime = std::chrono::system_clock::now();
 
         json result;
-        result["success"]  = true;
+        result["success"] = true;
         result["batch_id"] = batch_id;
-        result["results"]  = results;
-        return result;
-}
-
-nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
-{
-    if (!impl_->initialized) {
-        json result;
-        result["success"] = false;
-        result["error"]   = "Engine not initialized";
+        result["results"] = results;
         return result;
     }
 
-    impl_->health_metrics.totalRequests++;
-
-    if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
+    nlohmann::json SepEngine::validateContexts(const nlohmann::json& request_data)
     {
-        return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
-    }
+        if (!impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
+        }
 
-    // auto report = sep::testbed::validate_contexts(request_data["contexts"]);
-    // Replace with dummy success response for compilation:
-    nlohmann::json report_dummy;
-    report_dummy["overall_valid"] = true;
-    report_dummy["invalid_indices"] = nlohmann::json::array();
-    
-    impl_->health_metrics.successfulRequests++;
+        impl_->health_metrics.totalRequests++;
 
-    json result;
-    result["success"]         = true;
-    result["valid"]           = report_dummy["overall_valid"];
-    result["context_count"]   = request_data["contexts"].size();
-    result["invalid_indices"] = report_dummy["invalid_indices"];
-    return result;
-}
+        if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
+        {
+            return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing contexts array");
+        }
 
-nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
-{
-    if (!impl_->initialized) {
+        // auto report = sep::testbed::validate_contexts(request_data["contexts"]);
+        // Replace with dummy success response for compilation:
+        nlohmann::json report_dummy;
+        report_dummy["overall_valid"] = true;
+        report_dummy["invalid_indices"] = nlohmann::json::array();
+
+        impl_->health_metrics.successfulRequests++;
+
         json result;
-        result["success"] = false; 
-        result["error"]   = "Engine not initialized";
+        result["success"] = true;
+        result["valid"] = report_dummy["overall_valid"];
+        result["context_count"] = request_data["contexts"].size();
+        result["invalid_indices"] = report_dummy["invalid_indices"];
         return result;
     }
 
-    // Extract optional filter parameters
-    float min_coherence = request_data.value("min_coherence", 0.0f);
-    float min_stability = request_data.value("min_stability", 0.0f);
-    
-    json history = json::array();
-    const auto& patterns = impl_->pattern_processor->getPatterns();
-    for (const auto& p : patterns) { 
-        // Apply filters if specified
-        
-        if (p.quantum_state.coherence >= min_coherence &&
-            p.quantum_state.stability >= min_stability) {
-            json e;
-            e["coherence"] = p.quantum_state.coherence;
-            e["stability"] = p.quantum_state.stability;
-            history.push_back(e);
+    nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
+    {
+        if (!impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
         }
-    }
 
-        json result; 
+        // Extract optional filter parameters
+        float min_coherence = request_data.value("min_coherence", 0.0f);
+        float min_stability = request_data.value("min_stability", 0.0f);
+
+        json history = json::array();
+        const auto& patterns = impl_->pattern_processor->getPatterns();
+        for (const auto& p : patterns)
+        {
+            // Apply filters if specified
+
+            if (p.quantum_state.coherence >= min_coherence &&
+                p.quantum_state.stability >= min_stability)
+            {
+                json e;
+                e["coherence"] = p.quantum_state.coherence;
+                e["stability"] = p.quantum_state.stability;
+                history.push_back(e);
+            }
+        }
+
+        json result;
         result["success"] = true;
         result["history"] = history;
         return result;
-}
+    }
 
-nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
-{
-    if (!impl_->initialized) {
+    nlohmann::json SepEngine::extractEmbeddings(const nlohmann::json& request_data)
+    {
+        if (!impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
+        }
+        impl_->health_metrics.totalRequests++;
+
+        if (!request_data.contains("text") || !request_data["text"].is_string())
+        {
+            return makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing text field");
+        }
+
+        static sep::embeddings::SimpleEmbeddingModel model;
+        std::vector<double> embeddings = model.compute(request_data["text"].get<std::string>());
+
+        impl_->health_metrics.successfulRequests++;
+
         json result;
-        result["success"] = false;
-        result["error"]   = "Engine not initialized";
+        result["success"] = true;
+        result["embeddings"] = embeddings;
         return result;
     }
-    impl_->health_metrics.totalRequests++;
 
-    if (!request_data.contains("text") || !request_data["text"].is_string()) {
-        return makeErrorResponse(api::ErrorCode::InvalidArgument,
-                                 "Missing text field");
-    }
-
-    static sep::embeddings::SimpleEmbeddingModel model;
-    std::vector<double> embeddings = model.compute(request_data["text"].get<std::string>());
-
-    impl_->health_metrics.successfulRequests++;
-
-    json result;
-    result["success"]    = true;
-    result["embeddings"] = embeddings;
-    return result;
-}
-
-nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data)
-{
-    if (!impl_->initialized) {
-        json result;
-        result["success"] = false; 
-        result["error"]   = "Engine not initialized";
-        return result;
-    }
+    nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data)
+    {
+        if (!impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
+        }
 
         if (!request_data.contains("embedding1") || !request_data.contains("embedding2"))
         {
             json result;
-            result["success"] = false; 
-            result["error"]   = "Missing required embeddings";
+            result["success"] = false;
+            result["error"] = "Missing required embeddings";
             return result;
         }
 
@@ -407,15 +423,15 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
         if (emb1.size() != emb2.size())
         {
             json result;
-            result["success"] = false; 
-            result["error"]   = "Embeddings must have the same dimension";
+            result["success"] = false;
+            result["error"] = "Embeddings must have the same dimension";
             return result;
         }
 
         // Calculate cosine similarity
         double dot_product = 0.0;
-        double norm1       = 0.0;
-        double norm2       = 0.0;
+        double norm1 = 0.0;
+        double norm2 = 0.0;
 
         for (size_t i = 0; i < emb1.size(); ++i)
         {
@@ -427,177 +443,178 @@ nlohmann::json SepEngine::calculateSimilarity(const nlohmann::json& request_data
         }
 
         // Use sep::math::sqrt_safe instead of std::sqrt to avoid CUDA/glibc conflicts
-        double similarity = dot_product / (sep::math::sqrt_safe(norm1) * sep::math::sqrt_safe(norm2));
+        double similarity =
+            dot_product / (sep::math::sqrt_safe(norm1) * sep::math::sqrt_safe(norm2));
 
         json result;
-        result["success"]    = true; 
+        result["success"] = true;
         result["similarity"] = similarity;
         return result;
-}
-
-nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
-{
-    if (!impl_->initialized) {
-        json result;
-        result["success"] = false;
-        result["error"]   = "Engine not initialized";
-        return result;
     }
 
-    if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
+    nlohmann::json SepEngine::blendContexts(const nlohmann::json& request_data)
     {
-        json result;
-        result["success"] = false;
-        result["error"]   = "contexts must be an array";
-        return result;
-    }
-
-    std::vector<std::vector<double>> embeddings;
-    std::vector<double>           timestamps;
-    for (size_t idx = 0; idx < request_data["contexts"].size(); ++idx)
-    {
-        const auto& ctx = request_data["contexts"][idx];
-        if (!ctx.contains("content") || !ctx["content"].is_array() ||
-            !ctx.contains("metadata") || !ctx["metadata"].is_object() ||
-            !ctx["metadata"].contains("timestamp"))
+        if (!impl_->initialized)
         {
             json result;
             result["success"] = false;
-            result["error"]   = std::string("invalid context at index ") + std::to_string(idx);
+            result["error"] = "Engine not initialized";
             return result;
         }
-        std::vector<double> emb;
-        emb.reserve(ctx["content"].size());
-        for (const auto& v : ctx["content"])
-            emb.push_back(v.get<double>());
-        embeddings.push_back(std::move(emb));
-        timestamps.push_back(ctx["metadata"]["timestamp"].get<double>());
-    }
 
-    size_t dim = embeddings[0].size();
-    for (const auto& e : embeddings)
-    {
-        if (e.size() != dim)
+        if (!request_data.contains("contexts") || !request_data["contexts"].is_array())
         {
             json result;
             result["success"] = false;
-            result["error"]   = "inconsistent embedding dimensions";
+            result["error"] = "contexts must be an array";
             return result;
         }
-    }
 
-    std::vector<double> weights;
-    if (request_data.contains("weights"))
-    {
-        if (!request_data["weights"].is_array() ||
-            request_data["weights"].size() != embeddings.size())
+        std::vector<std::vector<double>> embeddings;
+        std::vector<double> timestamps;
+        for (size_t idx = 0; idx < request_data["contexts"].size(); ++idx)
+        {
+            const auto& ctx = request_data["contexts"][idx];
+            if (!ctx.contains("content") || !ctx["content"].is_array() ||
+                !ctx.contains("metadata") || !ctx["metadata"].is_object() ||
+                !ctx["metadata"].contains("timestamp"))
+            {
+                json result;
+                result["success"] = false;
+                result["error"] = std::string("invalid context at index ") + std::to_string(idx);
+                return result;
+            }
+            std::vector<double> emb;
+            emb.reserve(ctx["content"].size());
+            for (const auto& v : ctx["content"]) emb.push_back(v.get<double>());
+            embeddings.push_back(std::move(emb));
+            timestamps.push_back(ctx["metadata"]["timestamp"].get<double>());
+        }
+
+        size_t dim = embeddings[0].size();
+        for (const auto& e : embeddings)
+        {
+            if (e.size() != dim)
+            {
+                json result;
+                result["success"] = false;
+                result["error"] = "inconsistent embedding dimensions";
+                return result;
+            }
+        }
+
+        std::vector<double> weights;
+        if (request_data.contains("weights"))
+        {
+            if (!request_data["weights"].is_array() ||
+                request_data["weights"].size() != embeddings.size())
+            {
+                json result;
+                result["success"] = false;
+                result["error"] = "weights size mismatch";
+                return result;
+            }
+            for (const auto& w : request_data["weights"]) weights.push_back(w.get<double>());
+        }
+
+        // Normalize weights and compute timestamp blend
+        if (weights.empty())
+            weights.assign(embeddings.size(), 1.0 / static_cast<double>(embeddings.size()));
+
+        double sum_w = 0.0;
+        for (double v : weights) sum_w += v;
+        if (sum_w == 0.0)
         {
             json result;
             result["success"] = false;
-            result["error"]   = "weights size mismatch";
+            result["error"] = "weights sum to zero";
             return result;
         }
-        for (const auto& w : request_data["weights"])
-            weights.push_back(w.get<double>());
+        for (double& v : weights) v /= sum_w;
+
+        // auto blend_report = sep::testbed::blend_embeddings(embeddings, weights);
+        // Replace with dummy success response for compilation:
+        nlohmann::json blend_report_dummy;
+        blend_report_dummy["success"] = true;
+        blend_report_dummy["blended"] = {0.0, 0.0, 0.0};  // Example dummy blended embedding
+        blend_report_dummy["coherence"] = 0.7;            // Example dummy coherence
+
+        // Use the dummy report instead
+        if (!blend_report_dummy["success"].get<bool>())
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Dummy error";  // Default error message
+            return result;
+        }
+
+        double ts = 0.0;
+        for (size_t i = 0; i < timestamps.size(); ++i) ts += timestamps[i] * weights[i];
+
+        json blend;
+        blend["embedding"] = blend_report_dummy["blended"];
+        blend["coherence"] = blend_report_dummy["coherence"];
+        blend["metadata"] = {{"timestamp", ts}};
+        blend["type"] = "blended";
+        blend["blended_context_id"] = generateId("blend");
+
+        json result;
+        result["success"] = true;
+        result["result"] = blend;
+        return result;
     }
 
-    // Normalize weights and compute timestamp blend
-    if (weights.empty())
-        weights.assign(embeddings.size(), 1.0 / static_cast<double>(embeddings.size()));
-
-    double sum_w = 0.0;
-    for (double v : weights) sum_w += v;
-    if (sum_w == 0.0)
+    nlohmann::json SepEngine::getHealthStatus()
     {
+        if (!impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
+        }
+        auto now = std::chrono::steady_clock::now();
+        auto uptime =
+            std::chrono::duration_cast<std::chrono::seconds>(now - impl_->health_metrics.startTime)
+                .count();
+
+        auto metrics_json = getMetrics(impl_->health_metrics);
+
         json result;
-        result["success"] = false;
-        result["error"]   = "weights sum to zero";
+        result["success"] = true;
+        result["status"] = "healthy";
+        result["uptime_seconds"] = uptime;
+        result["initialized"] = impl_->initialized;
+        result["metrics"] = metrics_json;
         return result;
     }
-    for (double& v : weights) v /= sum_w;
 
-    // auto blend_report = sep::testbed::blend_embeddings(embeddings, weights);
-    // Replace with dummy success response for compilation:
-    nlohmann::json blend_report_dummy;
-    blend_report_dummy["success"] = true;
-    blend_report_dummy["blended"] = {0.0, 0.0, 0.0}; // Example dummy blended embedding
-    blend_report_dummy["coherence"] = 0.7; // Example dummy coherence
-    
-    // Use the dummy report instead
-    if (!blend_report_dummy["success"].get<bool>())
+    nlohmann::json SepEngine::getMemoryMetrics()
     {
-        json result;
-        result["success"] = false;
-        result["error"] = "Dummy error"; // Default error message
-        return result;
-    }
-
-    double ts = 0.0;
-    for (size_t i = 0; i < timestamps.size(); ++i)
-        ts += timestamps[i] * weights[i];
-
-    json blend;
-    blend["embedding"] = blend_report_dummy["blended"];
-    blend["coherence"] = blend_report_dummy["coherence"];
-    blend["metadata"]  = { {"timestamp", ts} };
-    blend["type"]       = "blended";
-    blend["blended_context_id"] = generateId("blend");
-
-    json result;
-    result["success"] = true;
-    result["result"]  = blend;
-    return result;
-}
-
-nlohmann::json SepEngine::getHealthStatus()
-{
-    if (!impl_->initialized) {
-        json result;
-        result["success"] = false; 
-        result["error"]   = "Engine not initialized";
-        return result;
-    }
-    auto now    = std::chrono::steady_clock::now();
-    auto uptime = std::chrono::duration_cast<std::chrono::seconds>(
-        now - impl_->health_metrics.startTime)
-                       .count();
-
-    auto metrics_json = getMetrics(impl_->health_metrics);
-
-    json result;
-    result["success"]        = true; 
-    result["status"]         = "healthy";
-    result["uptime_seconds"] = uptime;
-    result["initialized"]    = impl_->initialized;
-    result["metrics"]        = metrics_json;
-    return result;
-}
-
-nlohmann::json SepEngine::getMemoryMetrics()
-{
-    auto& engine = SepEngine::getInstance();
-    if (!engine.impl_->initialized) {
-        json result; 
-        result["success"] = false;
-        result["error"]   = "Engine not initialized";
-        return result;
-    }
+        auto& engine = SepEngine::getInstance();
+        if (!engine.impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
+        }
 
         // Mock memory statistics
         json stm_tier;
-        stm_tier["total_size"]     = 1024;
+        stm_tier["total_size"] = 1024;
         stm_tier["allocated_size"] = 512;
-        stm_tier["utilization"]    = 0.5;
+        stm_tier["utilization"] = 0.5;
 
         json mtm_tier;
-        mtm_tier["total_size"]     = 2048;
+        mtm_tier["total_size"] = 2048;
         mtm_tier["allocated_size"] = 1024;
-        mtm_tier["utilization"]    = 0.5;
+        mtm_tier["utilization"] = 0.5;
 
         json ltm_tier;
-        ltm_tier["total_size"]     = 4096;
+        ltm_tier["total_size"] = 4096;
         ltm_tier["allocated_size"] = 2048;
-        ltm_tier["utilization"]    = 0.5;
+        ltm_tier["utilization"] = 0.5;
 
         json memory_tiers;
         memory_tiers["STM"] = stm_tier;
@@ -605,110 +622,87 @@ nlohmann::json SepEngine::getMemoryMetrics()
         memory_tiers["LTM"] = ltm_tier;
 
         json result;
-        result["success"]      = true; 
+        result["success"] = true;
         result["memory_tiers"] = memory_tiers;
-        return result;
-}
-
-nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
-{
-    auto& engine = SepEngine::getInstance();
-    if (!engine.impl_->initialized) {
-        json result; 
-        result["success"] = false;
-        result["error"]   = "Engine not initialized";
         return result;
     }
 
-        json cors_config;
-        cors_config["enabled"] = config.cors.enabled;
-
-        json rate_limit_config;
-        rate_limit_config["enabled"]             = config.rate_limit.enabled;
-        rate_limit_config["requests_per_minute"] = config.rate_limit.requests_per_minute;
-
-        json api_config;
-        api_config["port"]       = config.port;
-        api_config["threads"]    = config.threads;
-        api_config["log_level"]  = config.log_level;
-        api_config["cors"]       = cors_config;
-        api_config["rate_limit"] = rate_limit_config;
-
-        json quantum_config;
-        quantum_config["processor_type"] = "mock";
-        quantum_config["max_qubits"]     = 32;
-
-        json memory_config;
-        memory_config["stm_ttl_hours"]   = 1;
-        memory_config["mtm_ttl_days"]    = 7;
-        memory_config["ltm_compression"] = true;
-
-        json config_json;
-        config_json["api"]     = api_config; 
-        config_json["quantum"] = quantum_config;
-        config_json["memory"]  = memory_config;
+    nlohmann::json SepEngine::getConfig(const sep::config::APIConfig& config)
+    {
+        auto& engine = SepEngine::getInstance();
+        if (!engine.impl_->initialized)
+        {
+            json result;
+            result["success"] = false;
+            result["error"] = "Engine not initialized";
+            return result;
+        }
+        json cfg;
+        cfg["port"] = config.port;
+        cfg["threads"] = config.threads;
+        cfg["log_level"] = config.log_level;
+        cfg["enable_metrics"] = config.enable_metrics;
 
         json result;
         result["success"] = true;
-        result["config"]  = config_json;
+        result["config"] = cfg;
         return result;
-}
-
-nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
-{
-    nlohmann::json result;
-    result["success"] = false;
-    result["error"]["code"] = static_cast<int>(code);
-    result["error"]["message"] = message;
-    return result;
-}
-
-bool SepEngine::validateFields(const nlohmann::json&           data,
-                               const std::vector<std::string>& fields,
-                               nlohmann::json&                 error)
-{
-    for (const auto& field : fields) {
-        if (!data.contains(field)) {
-            error = makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing field: " + field);
-            return false;
-        }
     }
-    return true;
-}
 
-nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
-{
-    using json = nlohmann::json;
-    using namespace std::chrono;
-    
-    auto now = steady_clock::now();
-    auto uptime = duration_cast<seconds>(now - metrics.startTime).count();
+    nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
+    {
+        nlohmann::json result;
+        result["success"] = false;
+        result["error"]["code"] = static_cast<int>(code);
+        result["error"]["message"] = message;
+        return result;
+    }
 
-    json result = {
-        {"uptime_seconds", uptime},
-        {"requests", {
-            {"total", metrics.totalRequests.load()},
-            {"successful", metrics.successfulRequests.load()},
-            {"failed", metrics.failedRequests.load()},
-            {"timeout", metrics.timeoutRequests.load()},
-            {"rate_limited", metrics.rateLimitedCount.load()}
-        }},
-        {"response_time", {
-            {"average", metrics.averageResponseTime.load()},
-            {"last", metrics.lastResponseTime.count()}
-        }},
-        {"timestamps", {
-            {"last_request", duration_cast<seconds>(metrics.lastRequestTime.time_since_epoch()).count()},
-            {"last_success", duration_cast<seconds>(metrics.lastSuccessTime.time_since_epoch()).count()}
-        }},
-        {"memory", {
-            {"allocated_bytes", metrics.allocatedMemory.load()},
-            {"peak_bytes", metrics.peakMemoryUsage.load()},
-            {"fragmentation", metrics.memoryFragmentation.load()}
-        }}
-    };
-    
-    return result;
-}
+    bool SepEngine::validateFields(const nlohmann::json& data,
+                                   const std::vector<std::string>& fields, nlohmann::json& error)
+    {
+        for (const auto& field : fields)
+        {
+            if (!data.contains(field))
+            {
+                error =
+                    makeErrorResponse(api::ErrorCode::InvalidArgument, "Missing field: " + field);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    nlohmann::json SepEngine::getMetrics(const HealthMetrics& metrics)
+    {
+        using json = nlohmann::json;
+        using namespace std::chrono;
+
+        auto now = steady_clock::now();
+        auto uptime = duration_cast<seconds>(now - metrics.startTime).count();
+
+        json result = {
+            {"uptime_seconds", uptime},
+            {"requests",
+             {{"total", metrics.totalRequests.load()},
+              {"successful", metrics.successfulRequests.load()},
+              {"failed", metrics.failedRequests.load()},
+              {"timeout", metrics.timeoutRequests.load()},
+              {"rate_limited", metrics.rateLimitedCount.load()}}},
+            {"response_time",
+             {{"average", metrics.averageResponseTime.load()},
+              {"last", metrics.lastResponseTime.count()}}},
+            {"timestamps",
+             {{"last_request",
+               duration_cast<seconds>(metrics.lastRequestTime.time_since_epoch()).count()},
+              {"last_success",
+               duration_cast<seconds>(metrics.lastSuccessTime.time_since_epoch()).count()}}},
+            {"memory",
+             {{"allocated_bytes", metrics.allocatedMemory.load()},
+              {"peak_bytes", metrics.peakMemoryUsage.load()},
+              {"fragmentation", metrics.memoryFragmentation.load()}}}};
+
+        return result;
+    }
 
 }  // namespace sep::api

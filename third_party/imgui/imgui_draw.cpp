@@ -3078,7 +3078,7 @@ ImFont* ImFontAtlas::AddFont(const ImFontConfig* font_cfg_in)
 // Default font TTF is compressed with stb_compress then base85 encoded (see misc/fonts/binary_to_compressed_c.cpp for encoder)
 static unsigned int stb_decompress_length(const unsigned char* input);
 static unsigned int stb_decompress(unsigned char* output, const unsigned char* input, unsigned int length);
-static unsigned int Decode85Byte(char c)                                    { return c >= '\\' ? c-36 : c-35; }
+static unsigned int Decode85Byte(unsigned char c)                             { return c >= '\\' ? c-36u : c-35u; }
 static void         Decode85(const unsigned char* src, unsigned char* dst)
 {
     while (*src)
@@ -3769,7 +3769,9 @@ void ImFontAtlasBakedDiscardFontGlyph(ImFontAtlas* atlas, ImFont* font, ImFontBa
 ImFontBaked* ImFontAtlasBakedAdd(ImFontAtlas* atlas, ImFont* font, float font_size, float font_rasterizer_density, ImGuiID baked_id)
 {
     IMGUI_DEBUG_LOG_FONT("[font] Created baked %.2fpx\n", font_size);
-    ImFontBaked* baked = atlas->Builder->BakedPool.push_back(ImFontBaked{});
+    atlas->Builder->BakedPool.resize(atlas->Builder->BakedPool.Size + 1);
+    ImFontBaked* baked = &atlas->Builder->BakedPool[atlas->Builder->BakedPool.Size - 1];
+    IM_PLACEMENT_NEW(baked) ImFontBaked();
     baked->Size = font_size;
     baked->RasterizerDensity = font_rasterizer_density;
     baked->BakedId = baked_id;

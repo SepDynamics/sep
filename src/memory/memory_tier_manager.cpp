@@ -5,20 +5,9 @@
 #include "quantum/pattern.h"
 
 namespace sep {
-namespace pattern {
-    struct PatternData;
+namespace config {
+    class ConfigManager;
 }
-namespace quantum {
-    struct Pattern;
-}
-}
-
-namespace sep
-{
-    namespace config
-    {
-        class ConfigManager;
-    }
 }
 
 #include <algorithm>

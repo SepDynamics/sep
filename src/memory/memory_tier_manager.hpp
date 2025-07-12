@@ -12,7 +12,6 @@
 #include "core/common.h"
 #include "core/dag_graph.h"
 #include "core/types.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "memory/memory_tier.hpp"
 #include "memory/persistent_pattern_data.hpp"
 #include "memory/types.h"
@@ -112,7 +111,6 @@ namespace memory {
 
         // Pattern management
         void registerPattern(std::size_t id, const ::sep::pattern::PatternData &pattern);
-        void registerPattern(std::size_t id, const ::sep::quantum::Pattern &pattern);
         const ::sep::pattern::PatternData *getPatternData(std::size_t id) const;
         void removePattern(std::size_t id);
         void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);

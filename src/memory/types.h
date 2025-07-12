@@ -19,6 +19,7 @@ namespace memory {
         // Logical memory tiers
         STM,
         SHORT_TERM = STM,
+        SHORT_TERM_MEMORY = SHORT_TERM,
         MTM,
         LTM,
         // Physical memory locations

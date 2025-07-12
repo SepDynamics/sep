@@ -580,7 +580,7 @@ MemoryTierManager &MemoryTierManager::getInstance()
 
         void MemoryTierManager::storeDataToPersistence(
             [[maybe_unused]] const void *data,
-            [[maybe_unused]] const ::sep::persistence::PersistentPatternData &metadata)
+            [[maybe_unused]] const sep::persistence::PersistentPatternData &metadata)
         {
             // TODO: Implement
         }

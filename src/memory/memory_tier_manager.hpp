@@ -100,8 +100,9 @@ namespace memory {
         void pruneWeakRelationships();
         void calculateRelationshipScores();
         void loadDataFromPersistence();
-        void storeDataToPersistence(const void *data,
-                                    const ::sep::persistence::PersistentPatternData &metadata);
+        void storeDataToPersistence(
+            const void *data,
+            const sep::persistence::PersistentPatternData &metadata);
         void *findDataById(std::size_t id);
         const void *findDataById(std::size_t id) const;
         void registerGenericData(std::size_t id, const void *data);

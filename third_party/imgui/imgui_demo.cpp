@@ -764,7 +764,7 @@ static const ExampleMemberInfo ExampleTreeNodeMemberInfos[]
 static ExampleTreeNode* ExampleTree_CreateNode(const char* name, int uid, ExampleTreeNode* parent)
 {
     ExampleTreeNode* node = IM_NEW(ExampleTreeNode);
-    snprintf(node->Name, IM_ARRAYSIZE(node->Name), "%s", name);
+    (void)snprintf(node->Name, IM_ARRAYSIZE(node->Name), "%s", name);
     node->UID = uid;
     node->Parent = parent;
     node->IndexInParent = parent ? (unsigned short)parent->Childs.Size : 0;
@@ -792,17 +792,17 @@ static ExampleTreeNode* ExampleTree_CreateDemoTree()
     const int root_items_multiplier = 2;
     for (int idx_L0 = 0; idx_L0 < IM_ARRAYSIZE(root_names) * root_items_multiplier; idx_L0++)
     {
-        snprintf(name_buf, IM_ARRAYSIZE(name_buf), "%s %d", root_names[idx_L0 / root_items_multiplier], idx_L0 % root_items_multiplier);
+        (void)snprintf(name_buf, IM_ARRAYSIZE(name_buf), "%s %d", root_names[idx_L0 / root_items_multiplier], idx_L0 % root_items_multiplier);
         ExampleTreeNode* node_L1 = ExampleTree_CreateNode(name_buf, ++uid, node_L0);
         const int number_of_childs = (int)strlen(node_L1->Name);
         for (int idx_L1 = 0; idx_L1 < number_of_childs; idx_L1++)
         {
-            snprintf(name_buf, IM_ARRAYSIZE(name_buf), "Child %d", idx_L1);
+            (void)snprintf(name_buf, IM_ARRAYSIZE(name_buf), "Child %d", idx_L1);
             ExampleTreeNode* node_L2 = ExampleTree_CreateNode(name_buf, ++uid, node_L1);
             node_L2->HasData = true;
             if (idx_L1 == 0)
             {
-                snprintf(name_buf, IM_ARRAYSIZE(name_buf), "Sub-child %d", 0);
+                (void)snprintf(name_buf, IM_ARRAYSIZE(name_buf), "Sub-child %d", 0);
                 ExampleTreeNode* node_L3 = ExampleTree_CreateNode(name_buf, ++uid, node_L2);
                 node_L3->HasData = true;
             }
@@ -3506,7 +3506,7 @@ static void DemoWindowWidgetsTabs()
                 {
                     bool open = true;
                     char name[16];
-                    snprintf(name, IM_ARRAYSIZE(name), "%04d", active_tabs[n]);
+                    (void)snprintf(name, IM_ARRAYSIZE(name), "%04d", active_tabs[n]);
                     if (ImGui::BeginTabItem(name, &open, ImGuiTabItemFlags_None))
                     {
                         ImGui::Text("This is the %s tab!", name);
@@ -8784,7 +8784,7 @@ struct ExampleAppConsole
         char buf[1024];
         va_list args;
         va_start(args, fmt);
-        vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
+        (void)vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
         buf[IM_ARRAYSIZE(buf)-1] = 0;
         va_end(args);
         Items.push_back(Strdup(buf));
@@ -10117,7 +10117,7 @@ struct MyDocument
     MyDocument(int uid, const char* name, bool open = true, const ImVec4& color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f))
     {
         UID = uid;
-        snprintf(Name, sizeof(Name), "%s", name);
+        (void)snprintf(Name, sizeof(Name), "%s", name);
         Open = OpenPrev = open;
         Dirty = false;
         Color = color;
@@ -10147,7 +10147,7 @@ struct ExampleAppDocuments
     // As we allow to change document name, we append a never-changing document ID so tabs are stable
     void GetTabName(MyDocument* doc, char* out_buf, size_t out_buf_size)
     {
-        snprintf(out_buf, out_buf_size, "%s###doc%d", doc->Name, doc->UID);
+        (void)snprintf(out_buf, out_buf_size, "%s###doc%d", doc->Name, doc->UID);
     }
 
     // Display placeholder contents for the Document

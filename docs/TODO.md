@@ -272,25 +272,25 @@ These are less critical but important for maintainability and robustness.
 
 *   **Issue:** Using `memset` or `memcpy` on non-TriviallyCopyable C++ objects.
 *   **Location:** Widespread in `imgui*.cpp`.
-*   **Action:** This is a characteristic of the ImGui library's C-style C++ code. The "correct" fix is to replace `memset` with default member initializers or a constructor initializer list. For a third-party library, you might choose to suppress this warning for now to focus on your own code.
+*   **Action:** This is a characteristic of the ImGui library's C-style C++ code. The "correct" fix is to replace `memset` with default member initializers or a constructor initializer list. For a third-party library, we document the upstream usage and leave it unchanged for stability.
 
 **[ ] 2. `cert-err33-c` (MEDIUM)**
 
 *   **Issue:** Return value of functions like `snprintf` and `fflush` is ignored.
 *   **Location:** Widespread in `imgui*.cpp`.
-*   **Action:** This is another common issue in C-style code. The ideal fix is to check the return values. A pragmatic fix is to cast the call to void to signal that you are intentionally ignoring the return value: `(void)snprintf(...)`.
+*   **Action:** Added `(void)` casts in the ImGui sources to explicitly ignore these return values.
 
 **[ ] 3. `misc-header-include-cycle` (LOW)**
 
 *   **Issue:** Circular dependencies between headers (e.g., A.h includes B.h, and B.h includes A.h).
 *   **Location:** `pipewire` headers.
-*   **Action:** This is an issue within an external library. You can generally ignore this, but the proper fix is to use forward declarations in headers and move the `#include`s into the `.cpp` files where the full type definition is needed.
+*   **Action:** Repository snapshot does not currently include these headers. If reintroduced, use forward declarations in headers and move the `#include`s into the `.cpp` files where the full type definition is needed to avoid cycles.
 
 **[ ] 4. `clang-diagnostic-reserved-identifier` (MEDIUM)**
 
 *   **Issue:** Using identifiers that start with `_` or `__`.
 *   **Location:** `spa` headers.
-*   **Action:** This is an issue in a third-party library. It's best to leave it as-is to avoid breaking the library, but be aware that this is poor practice.
+*   **Action:** No `spa` headers are present in this snapshot. If added later, avoid reserved identifiers or wrap them when integrating third-party code.
 
 ---
 

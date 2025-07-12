@@ -15,6 +15,10 @@ bool operator==(const std::string& lhs, const sep::shim::string& rhs)
 {
     return lhs == rhs.c_str();
 }
+bool operator==(const sep::shim::string& lhs, const std::string& rhs)
+{
+    return lhs == rhs.c_str();
+}
 
 namespace
 {
@@ -82,7 +86,7 @@ inline float deterministicNoise(uint64_t& state)
                 }
                 else if (!parent_ids.empty())
                 {
-                    BatchProcessingResult result = processor_->mutatePattern(parent_ids[0]);
+                    ProcessingResult result = processor_->mutatePattern(parent_ids[0]);
                     if (result.success)
                     {
                         next_generation_ids.push_back(result.pattern.id);

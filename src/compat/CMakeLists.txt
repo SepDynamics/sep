@@ -9,7 +9,25 @@ set(WITH_CYCLES_OPENVDB ON)
 set(WITH_CYCLES_OPENCOLORIO ON)
 set(WITH_CYCLES_OPENSUBDIV ON)
 
-
+# Check if HIP repository exists in extern directory
+if(EXISTS "${CMAKE_SOURCE_DIR}/extern/hip")
+    set(HIP_FOUND TRUE)
+    set(HIP_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/extern/hip/include")
+    message(STATUS "Using local HIP repository in extern/hip")
+    add_compile_definitions(SEP_HAS_HIP=1)
+    add_compile_definitions(__HIP_PLATFORM_NVIDIA__=1)
+else()
+    # Try to find system HIP package
+    find_package(HIP QUIET)
+    if(HIP_FOUND)
+        message(STATUS "HIP found: ${HIP_VERSION}")
+        add_compile_definitions(SEP_HAS_HIP=1)
+        add_compile_definitions(__HIP_PLATFORM_NVIDIA__=1)
+    else()
+        message(STATUS "HIP not found, using CUDA only")
+        add_compile_definitions(SEP_HAS_HIP=0)
+    endif()
+endif()
 
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/compat/
@@ -40,7 +58,9 @@ set(CUDA_SOURCES
 set(CPP_SOURCES
     stream.cpp
     raii.cpp
+    hip_impl.cpp
     hip_compat.cpp
+    cuda_impl.cpp
 )
 
 # Create an OBJECT library for the CUDA sources
@@ -53,10 +73,9 @@ set_target_properties(sep_compat_cuda PROPERTIES
     CUDA_STANDARD 17
     CUDA_ARCHITECTURES "75;70;61;60"
 )
-target_compile_options(sep_compat_cuda PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)
+target_compile_options(sep_compat_cuda PRIVATE COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)
 
-# Combine all sources into a single SHARED library
-add_library(sep_compat SHARED
+add_library(sep_compat STATIC
     ${CPP_SOURCES}
     ${CUDA_SOURCES}
 )
@@ -79,6 +98,15 @@ if(SEP_HAS_CUDA)
             CUDA::cudart
             CUDA::cuda_driver
     )
+endif()
+
+if(HIP_FOUND)
+    target_include_directories(sep_compat PRIVATE ${HIP_INCLUDE_DIRS})
+    if(EXISTS "${HIP_INCLUDE_DIRS}/hip/hip_runtime.h")
+        message(STATUS "HIP runtime header found at ${HIP_INCLUDE_DIRS}/hip/hip_runtime.h")
+    else()
+        message(STATUS "HIP runtime header NOT found at ${HIP_INCLUDE_DIRS}/hip/hip_runtime.h")
+    endif()
 endif()
 
 set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)

@@ -51,23 +51,33 @@ if(SEP_BUILD_WORKBENCH)
         workbench_main.cpp
     )
     set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
-    target_include_directories(sep_workbench PRIVATE ${SEP_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
+    
+    target_include_directories(sep_workbench PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/third_party/imgui
+        ${CMAKE_SOURCE_DIR}/third_party/imgui/backends
+        ${GLEW_INCLUDE_DIRS}
+    )
+
+    # Link all libraries in the correct order.
+    # Static libraries first, then the shared libraries they need.
     target_link_libraries(sep_workbench PRIVATE
+        # --- SEP Static Libraries ---
         sep_workbench_lib
-        sep_api sep_quantum sep_memory sep_core
-        sep_compat
+        sep_api
+        sep_quantum
+        sep_memory
+        sep_core
         sep_audio
-        libsep_blender.so
+        sep_embeddings
         imgui
-        ${GLEW_LIBRARIES}
-        glfw
-        OpenGL::GL
-        Threads::Threads
-        ${CMAKE_DL_LIBS}
-        ${PIPEWIRE_LIBRARIES}
-        ${FFTW_LIBRARIES}
-        
-        # Cycles/Blender transitive dependencies
+
+        # --- Blender/Cycles and its Dependencies ---
+        # Link the shared library we built
+        sep_blender
+
+        # Transitive dependencies required by sep_blender
         cycles_device
         cycles_kernel
         cycles_scene
@@ -77,7 +87,18 @@ if(SEP_BUILD_WORKBENCH)
         ${OpenImageIO_LIBRARIES}
         ${Alembic_LIBRARIES}
         ${OpenPGL_LIBRARIES}
+
+        # --- System & Other Dependencies ---
+        sep_compat # Must be linked as a shared lib if it provides CUDA symbols
         ${CURL_LIBRARIES}
         -lhiredis
+        http_parser::http_parser
+        ${GLEW_LIBRARIES}
+        glfw
+        OpenGL::GL
+        ${CMAKE_DL_LIBS}
+        Threads::Threads
+        ${PIPEWIRE_LIBRARIES}
+        ${FFTW_LIBRARIES}
     )
 endif()

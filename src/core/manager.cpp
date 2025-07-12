@@ -15,6 +15,7 @@ namespace sep::config
 #if SEP_BUILD_QUANTUM
         QuantumThresholdConfig quantum_cfg{};
 #endif
+        APIConfig api_cfg{};
         bool loaded{false};
     };
 
@@ -78,8 +79,8 @@ namespace sep::config
     bool ConfigManager::loadFromCommandLine(int, char**) { return false; }
     const APIConfig& ConfigManager::getAPIConfig() const
     {
-        static APIConfig cfg{};
-        return cfg;
+        std::lock_guard<std::mutex> lock(mutex_);
+        return impl_->api_cfg;
     }
     const CudaConfig& ConfigManager::getCudaConfig() const
     {
@@ -101,7 +102,11 @@ namespace sep::config
         return cfg;
 #endif
     }
-    void ConfigManager::updateAPIConfig(const APIConfig&) {}
+    void ConfigManager::updateAPIConfig(const APIConfig& cfg)
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        impl_->api_cfg = cfg;
+    }
     void ConfigManager::updateCudaConfig(const CudaConfig&) {}
     void ConfigManager::updateLogConfig(const LogConfig&) {}
     void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig& cfg)

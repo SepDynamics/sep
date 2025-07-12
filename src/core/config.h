@@ -23,5 +23,12 @@ constexpr size_t DEFAULT_MEMORY_POOL_SIZE = 1024 * 1024 * 1024;  // 1GB
 constexpr size_t MIN_ALLOCATION_SIZE = 256;                       // 256B
 constexpr size_t MAX_ALLOCATION_SIZE = 1024 * 1024 * 1024;       // 1GB
 
+struct APIConfig {
+    uint16_t port{8080};
+    uint32_t threads{4};
+    std::string log_level{"info"};
+    bool enable_metrics{true};
+};
+
 }  // namespace config
 }  // namespace sep

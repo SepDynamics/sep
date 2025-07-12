@@ -84,6 +84,10 @@ struct Pattern {
     uint64_t last_accessed{0};
     uint64_t last_modified{0};
     glm::vec3 momentum{0.0f};
+    float coherence{0.0f};
+    float stability{0.0f};
+    float entropy{0.0f};
+    int mutation_count{0};
 };
 
 // --- Aliases for Backwards Compatibility ---

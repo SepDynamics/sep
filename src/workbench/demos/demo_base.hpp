@@ -1,6 +1,10 @@
-#include "workbench/demos/demo_base.hpp"
 #pragma once
-#include "sep_engine_wrapper.h" // For Engine and CyclesRenderer
+
+// Forward declarations instead of including the full header
+namespace sep {
+    class Engine;
+    class CyclesRenderer;
+}
 
 namespace sep::workbench {
     class Demo {

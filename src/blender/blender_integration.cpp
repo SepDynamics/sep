@@ -56,7 +56,7 @@ sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::registerObject(Object* obj, const PatternConfig& config, ObjectHandle* handle_out)
+sep::SEPResult BlenderBridge::registerObject(Object* obj, const sep::pattern::PatternConfig& config, ObjectHandle* handle_out)
 {
     if (!thread_running_.load())
     {

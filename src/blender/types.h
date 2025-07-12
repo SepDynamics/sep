@@ -5,6 +5,7 @@
 #include "blender/config.h"
 #include "core/common.h"
 #include "memory/types.h"
+#include "blender/pattern_common.h"
 
 namespace sep
 {
@@ -55,6 +56,7 @@ namespace sep
         std::shared_ptr<pattern::BlenderBridge> impl;
         SEPAudioMetrics audio_metrics{};
         SEPPatternMetrics pattern_metrics{};
+        blender::PatternBuffer pattern_buffer{};
     };
 }  // namespace sep
 

@@ -1,7 +1,7 @@
 #ifndef SEP_QUANTUM_EVOLUTION_H
 #define SEP_QUANTUM_EVOLUTION_H
 
-#include "quantum/types.h"
+#include "core/types.h"
 #include <memory>
 #include <vector>
 #include <memory>

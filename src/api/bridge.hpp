@@ -4,7 +4,7 @@
 #include "api/types.h"
 #include "core/common.h"
 #include "quantum/processor.h"
-#include "quantum/types.h"
+#include "core/types.h"
 #include "quantum/resource_predictor.h" // Provides context types
 #include <nlohmann/json.hpp>
 #include <string>

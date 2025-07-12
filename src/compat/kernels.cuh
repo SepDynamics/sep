@@ -19,8 +19,8 @@
 
 // Other project headers
 #include "compat/constants.h"
-#include "quantum/types.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
+#include "core/types.h"
 
 #ifndef __CUDACC__
 #include "compat/cuda_impl.h"

@@ -13,7 +13,7 @@
 #include "blender/blender_types.h"
 #include "blender/gpu_context.h"
 #include "blender/pattern_common.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
 #include "quantum/processor.h"
 
 #include "blender/config.h"

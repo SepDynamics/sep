@@ -11,7 +11,8 @@
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "quantum/types.h"
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 
 using ::sep::memory::MemoryTierEnum;
 #include "core/logging.h" 

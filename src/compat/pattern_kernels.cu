@@ -2,8 +2,8 @@
 #include "compat/cuda_common.h"
 
 #include "compat/cuda_unified_fix.h"
-#include "quantum/types.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
+#include "core/types.h"
 
 #include "compat/cuda_helpers.h"
 #ifdef __CUDACC__

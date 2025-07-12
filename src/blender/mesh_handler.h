@@ -8,7 +8,7 @@
 
 #include "blender/blender_types.h"
 #include "blender/pattern_common.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
 
 #include "blender/types.h"
 #include "core/common.h"  // for sep::SEPResult

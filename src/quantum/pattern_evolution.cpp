@@ -6,8 +6,10 @@
 #include <cstdlib>
 
 #include "quantum/pattern_evolution.h"
-#include "quantum/data.hpp"  // For PatternData/PatternConfig
-#include "quantum/types.h"
+#include "core/types.h"  // For PatternData/PatternConfig
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include <nlohmann/json.hpp>
 #include "api/sep_engine.h"
 #include "quantum/pattern_evolution_bridge.h"

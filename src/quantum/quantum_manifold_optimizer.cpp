@@ -11,7 +11,7 @@
 namespace sep::quantum::manifold {
 
 QuantumManifoldOptimizer::Config QuantumManifoldOptimizer::createManifoldConfig(
-    const ::sep::quantum::PatternEvolutionBridge::Config& cfg) {
+    const ::sep::PatternEvolutionBridge::Config& cfg) {
     Config mc{};
     mc.convergence_threshold = cfg.convergence_threshold;
     mc.step_size = cfg.evolution_step_size;

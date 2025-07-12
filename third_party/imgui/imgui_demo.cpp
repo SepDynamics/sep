@@ -2009,7 +2009,7 @@ static void DemoWindowWidgetsPlotting()
                 average += values[n];
             average /= (float)IM_ARRAYSIZE(values);
             char overlay[32];
-            sprintf(overlay, "avg %f", average);
+            (void)sprintf(overlay, "avg %f", average);
             ImGui::PlotLines("Lines", values, IM_ARRAYSIZE(values), values_offset, overlay, -1.0f, 1.0f, ImVec2(0, 80.0f));
         }
 
@@ -3576,8 +3576,9 @@ static void DemoWindowWidgetsText()
             ImGui::PopFont();
 
             ImGui::SeparatorText("");
-            for (float scaling = 0.5f; scaling <= 4.0f; scaling += 0.5f)
+            for (int i = 1; i <= 8; ++i)
             {
+                float scaling = 0.5f * i;
                 ImGui::PushFont(NULL, style.FontSizeBase * scaling);
                 ImGui::Text("FontSize = %.2f (== style.FontSizeBase * %.2f * global_scale)", ImGui::GetFontSize(), scaling);
                 ImGui::PopFont();
@@ -5118,6 +5119,8 @@ static void DemoWindowLayout()
                 ImVec4 clip_rect(p0.x, p0.y, p1.x, p1.y); // AddText() takes a ImVec4* here so let's convert.
                 draw_list->AddRectFilled(p0, p1, IM_COL32(90, 90, 120, 255));
                 draw_list->AddText(ImGui::GetFont(), ImGui::GetFontSize(), text_pos, IM_COL32_WHITE, text_str, NULL, 0.0f, &clip_rect);
+                break;
+            default:
                 break;
             }
         }
@@ -10030,10 +10033,16 @@ static void ShowExampleAppCustomRendering(bool* p_open)
             if (opt_enable_grid)
             {
                 const float GRID_STEP = 64.0f;
-                for (float x = fmodf(scrolling.x, GRID_STEP); x < canvas_sz.x; x += GRID_STEP)
+                for (int xi = 0; (float)xi * GRID_STEP < canvas_sz.x; ++xi)
+                {
+                    float x = fmodf(scrolling.x, GRID_STEP) + xi * GRID_STEP;
                     draw_list->AddLine(ImVec2(canvas_p0.x + x, canvas_p0.y), ImVec2(canvas_p0.x + x, canvas_p1.y), IM_COL32(200, 200, 200, 40));
-                for (float y = fmodf(scrolling.y, GRID_STEP); y < canvas_sz.y; y += GRID_STEP)
+                }
+                for (int yi = 0; (float)yi * GRID_STEP < canvas_sz.y; ++yi)
+                {
+                    float y = fmodf(scrolling.y, GRID_STEP) + yi * GRID_STEP;
                     draw_list->AddLine(ImVec2(canvas_p0.x, canvas_p0.y + y), ImVec2(canvas_p1.x, canvas_p0.y + y), IM_COL32(200, 200, 200, 40));
+                }
             }
             for (int n = 0; n < points.Size; n += 2)
                 draw_list->AddLine(ImVec2(origin.x + points[n].x, origin.y + points[n].y), ImVec2(origin.x + points[n + 1].x, origin.y + points[n + 1].y), IM_COL32(255, 255, 0, 255), 2.0f);

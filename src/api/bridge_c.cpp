@@ -216,7 +216,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
                     }
                 }
 
-                (void)std::snprintf(result_buffer, sizeof(result_buffer), "%s", result_str.c_str());
+                (void)std::snprintf(result_buffer, buffer_size, "%s", result_str.c_str());
                 return sep::SEPResult::SUCCESS;
             }
             {
@@ -229,18 +229,18 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
             return sep::SEPResult::SUCCESS;
         }
 
-        SEP_API sep::SEPResult sep_bridge_set_config(const char *key, const char *value);
+        SEP_API sep::SEPResult sep_bridge_set_config(const char *key, const char *value)
         try
         {
             std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-                const char* k = key;
-                const char* v = value;
-                if (!k || !v)
-                {
-                    sep::api::bridge::detail::setLastError("Invalid parameters");
-                    return sep::SEPResult::UNKNOWN_ERROR;
-                }
-                std::string ks = k;
+            const char* k = key;
+            const char* v = value;
+            if (!k || !v)
+            {
+                sep::api::bridge::detail::setLastError("Invalid parameters");
+                return sep::SEPResult::UNKNOWN_ERROR;
+            }
+            std::string ks = k;
                 auto &cm = sep::config::ConfigManager::getInstance();
                 auto cfg = cm.getAPIConfig();
                 try
@@ -330,7 +330,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
                     sep::api::bridge::detail::setLastError("Config key not found");
                     return sep::SEPResult::INVALID_ARGUMENT;
                 }
-                (void)std::snprintf(buffer, sizeof(buffer), "%s", val.c_str());
+                (void)std::snprintf(buffer, buffer_size, "%s", val.c_str());
                 sep::api::bridge::detail::setLastError("");
                 return sep::SEPResult::SUCCESS;
             }

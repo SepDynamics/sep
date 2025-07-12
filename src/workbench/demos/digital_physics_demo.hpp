@@ -22,7 +22,7 @@ public:
     void on_render() override;
     void on_unload() override;
     void on_key_press(int key) override;
-    void on_mouse(int x, int y, int button) override;
+    void on_mouse(int x, int y, int button);
 
 private:
     std::size_t width_{0};
@@ -35,6 +35,8 @@ private:
     float input_strength_{0.5f};
     float learning_rate_{0.05f};
     float connection_prob_{0.2f};
+
+    sep::CyclesRenderer* renderer_{nullptr};
 
     std::size_t index(std::size_t x, std::size_t y) const { return y * width_ + x; }
 };

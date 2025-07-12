@@ -6,6 +6,14 @@
 #include "quantum/processor.h"
 #include "quantum/pattern_processor.hpp"
 
+namespace sep {
+    namespace config
+    {
+        class ConfigManager;
+    }
+#include "quantum/processor.h"
+#include "quantum/pattern_processor.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdio>

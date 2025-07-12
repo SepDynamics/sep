@@ -1,8 +1,9 @@
+#include <glm/vec3.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
-#include "utils/dataset_loader.h"
-#include <glm/vec3.hpp>
+
+#include "tests/dataset_loader.h"
 
 // Include SEP engine headers
 #include "sep_engine_wrapper.h"

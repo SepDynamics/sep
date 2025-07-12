@@ -13,13 +13,9 @@ add_subdirectory(core)
 add_subdirectory(compat)
 add_subdirectory(embeddings)
 add_subdirectory(memory)
-add_subdirectory(manifold)
 add_subdirectory(quantum)
-add_subdirectory(utils)
 add_subdirectory(api)
-# Audio is now a required component
 add_subdirectory(audio)
-# Cycles/Blender is now a required component
 add_subdirectory(blender)
 
 # add_executable(sep_engine
@@ -90,7 +86,7 @@ if(SEP_BUILD_WORKBENCH)
         ${CURL_LIBRARIES}
         hiredis
         http_parser::http_parser
-        ${GLEW_LIBRARIES}
+        GLEW::glew
         glfw
         OpenGL::GL
         Threads::Threads

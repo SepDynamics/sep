@@ -75,6 +75,18 @@ namespace core { class SystemHooks; }
 
 class ProcessorImpl;
 
+struct ProcessingResult {
+    bool success{false};
+    Pattern pattern{};
+    std::string error_message{};
+};
+
+struct BatchProcessingResult {
+    bool success{false};
+    std::vector<ProcessingResult> results{};
+    std::string error_message{};
+};
+
 // Processor is thread-safe. All mutations of internal state are
 // guarded by an internal mutex within the implementation.
 class Processor {

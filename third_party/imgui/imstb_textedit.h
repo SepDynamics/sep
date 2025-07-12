@@ -431,7 +431,7 @@ static int stb_text_locate_coord(IMSTB_TEXTEDIT_STRING *str, float x, float y)
 {
    StbTexteditRow r;
    int n = STB_TEXTEDIT_STRINGLEN(str);
-   float base_y = 0, prev_x;
+   float base_y = 0, prev_x = 0;
    int i=0, k;
 
    r.x0 = r.x1 = 0;

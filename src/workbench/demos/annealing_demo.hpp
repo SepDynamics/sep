@@ -21,7 +21,7 @@ public:
     void on_ui_render() override;
     void on_unload() override;
     void on_key_press(int key) override;
-    void on_mouse(int x, int y, int button) override;
+    void on_mouse(int x, int y, int button);
 
 private:
     struct Particle {

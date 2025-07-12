@@ -147,14 +147,6 @@ void SEPApiServer::waitForShutdown() {
   }
 }
 
-void SEPApiServer::updateConfig(const ::sep::config::APIConfig& new_config) {
-  std::lock_guard<std::mutex> lock(metrics_mutex_);
-  config_ = new_config;
-  if (logger_)
-    logger_->info("Configuration updated");
-}
-
-
 std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const std::string& message) {
   // This is a simplified implementation
   class SimpleHttpResponse : public HttpResponse {

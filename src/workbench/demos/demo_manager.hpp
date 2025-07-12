@@ -1,9 +1,5 @@
 #pragma once
 
-#ifndef SEP_WORKBENCH_DEMO
-#define SEP_WORKBENCH_DEMO 1
-#endif
-
 #include <functional>
 #include <memory>
 #include <string>
@@ -17,7 +13,6 @@ namespace sep
 {
     namespace workbench
     {
-
 
         class DemoManager
         {

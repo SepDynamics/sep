@@ -3576,8 +3576,9 @@ static void DemoWindowWidgetsText()
             ImGui::PopFont();
 
             ImGui::SeparatorText("");
-            for (float scaling = 0.5f; scaling <= 4.0f; scaling += 0.5f)
+            for (int i = 1; i <= 8; ++i)
             {
+                float scaling = i * 0.5f;
                 ImGui::PushFont(NULL, style.FontSizeBase * scaling);
                 ImGui::Text("FontSize = %.2f (== style.FontSizeBase * %.2f * global_scale)", ImGui::GetFontSize(), scaling);
                 ImGui::PopFont();
@@ -8420,7 +8421,9 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
                 {
                     const ImVec4& col = style.Colors[i];
                     const char* name = GetStyleColorName(i);
-                    if (!output_only_modified || memcmp(&col, &ref->Colors[i], sizeof(ImVec4)) != 0)
+                    if (!output_only_modified ||
+                        col.x != ref->Colors[i].x || col.y != ref->Colors[i].y ||
+                        col.z != ref->Colors[i].z || col.w != ref->Colors[i].w)
                         LogText("colors[ImGuiCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);" IM_NEWLINE,
                             name, 23 - (int)strlen(name), "", col.x, col.y, col.z, col.w);
                 }
@@ -8457,7 +8460,10 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
                 SameLine();
 #endif
                 ColorEdit4("##color", (float*)&style.Colors[i], ImGuiColorEditFlags_AlphaBar | alpha_flags);
-                if (memcmp(&style.Colors[i], &ref->Colors[i], sizeof(ImVec4)) != 0)
+                if (style.Colors[i].x != ref->Colors[i].x ||
+                    style.Colors[i].y != ref->Colors[i].y ||
+                    style.Colors[i].z != ref->Colors[i].z ||
+                    style.Colors[i].w != ref->Colors[i].w)
                 {
                     // Tips: in a real user application, you may want to merge and use an icon font into the main font,
                     // so instead of "Save"/"Revert" you'd use icons!
@@ -10030,10 +10036,16 @@ static void ShowExampleAppCustomRendering(bool* p_open)
             if (opt_enable_grid)
             {
                 const float GRID_STEP = 64.0f;
-                for (float x = fmodf(scrolling.x, GRID_STEP); x < canvas_sz.x; x += GRID_STEP)
+                for (int xi = static_cast<int>(fmodf(scrolling.x, GRID_STEP)); xi < canvas_sz.x; xi += static_cast<int>(GRID_STEP))
+                {
+                    float x = static_cast<float>(xi);
                     draw_list->AddLine(ImVec2(canvas_p0.x + x, canvas_p0.y), ImVec2(canvas_p0.x + x, canvas_p1.y), IM_COL32(200, 200, 200, 40));
-                for (float y = fmodf(scrolling.y, GRID_STEP); y < canvas_sz.y; y += GRID_STEP)
+                }
+                for (int yi = static_cast<int>(fmodf(scrolling.y, GRID_STEP)); yi < canvas_sz.y; yi += static_cast<int>(GRID_STEP))
+                {
+                    float y = static_cast<float>(yi);
                     draw_list->AddLine(ImVec2(canvas_p0.x, canvas_p0.y + y), ImVec2(canvas_p1.x, canvas_p0.y + y), IM_COL32(200, 200, 200, 40));
+                }
             }
             for (int n = 0; n < points.Size; n += 2)
                 draw_list->AddLine(ImVec2(origin.x + points[n].x, origin.y + points[n].y), ImVec2(origin.x + points[n + 1].x, origin.y + points[n + 1].y), IM_COL32(255, 255, 0, 255), 2.0f);

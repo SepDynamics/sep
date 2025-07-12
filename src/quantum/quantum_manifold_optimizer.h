@@ -95,7 +95,7 @@ public:
     explicit QuantumManifoldOptimizer(const Config& config);
 
     static Config createManifoldConfig(
-        const ::sep::quantum::PatternEvolutionBridge::Config& cfg);
+        const ::sep::PatternEvolutionBridge::Config& cfg);
 
     OptimizationResult optimize(const QuantumState& initial_state,
                                 const OptimizationTarget& target);

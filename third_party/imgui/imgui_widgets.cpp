@@ -4210,9 +4210,25 @@ static void stb_textedit_replace(ImGuiInputTextState* str, STB_TexteditState* st
 
 // We added an extra indirection where 'Stb' is heap-allocated, in order facilitate the work of bindings generators.
 ImGuiInputTextState::ImGuiInputTextState()
+    : Ctx{nullptr},
+      Stb{IM_NEW(ImStbTexteditState)},
+      Flags{0},
+      ID{0},
+      TextLen{0},
+      TextSrc{nullptr},
+      TextA{},
+      TextToRevertTo{},
+      CallbackTextBackup{},
+      BufCapacity{0},
+      Scroll{0.0f, 0.0f},
+      CursorAnim{0.0f},
+      CursorFollow{false},
+      SelectedAllMouseLock{false},
+      Edited{false},
+      WantReloadUserBuf{false},
+      ReloadSelectionStart{0},
+      ReloadSelectionEnd{0}
 {
-    memset(this, 0, sizeof(*this));
-    Stb = IM_NEW(ImStbTexteditState);
     memset(Stb, 0, sizeof(*Stb));
 }
 
@@ -4253,8 +4269,20 @@ void ImGuiInputTextState::ReloadUserBufAndKeepSelection()   { WantReloadUserBuf 
 void ImGuiInputTextState::ReloadUserBufAndMoveToEnd()       { WantReloadUserBuf = true; ReloadSelectionStart = ReloadSelectionEnd = INT_MAX; }
 
 ImGuiInputTextCallbackData::ImGuiInputTextCallbackData()
+    : Ctx{nullptr},
+      EventFlag{ImGuiInputTextFlags_None},
+      Flags{0},
+      UserData{nullptr},
+      EventChar{0},
+      EventKey{ImGuiKey_None},
+      Buf{nullptr},
+      BufTextLen{0},
+      BufSize{0},
+      BufDirty{false},
+      CursorPos{0},
+      SelectionStart{0},
+      SelectionEnd{0}
 {
-    memset(this, 0, sizeof(*this));
 }
 
 // Public API to manipulate UTF-8 text from within a callback.
@@ -9360,7 +9388,7 @@ struct ImGuiTabBarSection
     float               Width;                  // Sum of width of tabs in this section (after shrinking down)
     float               Spacing;                // Horizontal spacing at the end of the section.
 
-    ImGuiTabBarSection() { memset(this, 0, sizeof(*this)); }
+    ImGuiTabBarSection() : TabCount{0}, Width{0.0f}, Spacing{0.0f} {}
 };
 
 namespace ImGui

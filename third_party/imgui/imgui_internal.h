@@ -726,7 +726,17 @@ struct ImStableVector
     }
     inline T&           operator[](int i)           { IM_ASSERT(i >= 0 && i < Size); return Blocks[i / BLOCK_SIZE][i % BLOCK_SIZE]; }
     inline const T&     operator[](int i) const     { IM_ASSERT(i >= 0 && i < Size); return Blocks[i / BLOCK_SIZE][i % BLOCK_SIZE]; }
-    inline T*           push_back(const T& v)       { int i = Size; IM_ASSERT(i >= 0); if (Size == Capacity) reserve(Capacity + BLOCK_SIZE); void* ptr = &Blocks[i / BLOCK_SIZE][i % BLOCK_SIZE]; memcpy(ptr, &v, sizeof(v)); Size++; return (T*)ptr; }
+    inline T*           push_back(const T& v)
+    {
+        int i = Size;
+        IM_ASSERT(i >= 0);
+        if (Size == Capacity)
+            reserve(Capacity + BLOCK_SIZE);
+        void* ptr = &Blocks[i / BLOCK_SIZE][i % BLOCK_SIZE];
+        new (ptr) T(v);
+        Size++;
+        return (T*)ptr;
+    }
 };
 
 // Helper: ImPool<>
@@ -867,7 +877,7 @@ struct ImDrawDataBuilder
     ImVector<ImDrawList*>*  Layers[2];      // Pointers to global layers for: regular, tooltip. LayersP[0] is owned by DrawData.
     ImVector<ImDrawList*>   LayerData1;
 
-    ImDrawDataBuilder()                     { memset(this, 0, sizeof(*this)); }
+    ImDrawDataBuilder() = default;
 };
 
 struct ImFontStackData
@@ -1144,7 +1154,7 @@ struct IMGUI_API ImGuiComboPreviewData
     float           BackupPrevLineTextBaseOffset;
     ImGuiLayoutType BackupLayout;
 
-    ImGuiComboPreviewData() { memset(this, 0, sizeof(*this)); }
+    ImGuiComboPreviewData() = default;
 };
 
 // Stacked storage data for BeginGroup()/EndGroup()
@@ -1177,7 +1187,7 @@ struct IMGUI_API ImGuiMenuColumns
     ImU16       OffsetMark;
     ImU16       Widths[4];          // Width of:   Icon, Label, Shortcut, Mark  (accumulators for current frame)
 
-    ImGuiMenuColumns() { memset(this, 0, sizeof(*this)); }
+    ImGuiMenuColumns() = default;
     void        Update(float spacing, bool window_reappearing);
     float       DeclColumns(float w_icon, float w_label, float w_shortcut, float w_mark);
     void        CalcNextTotalWidth(bool update_offsets);
@@ -1189,7 +1199,7 @@ struct IMGUI_API ImGuiInputTextDeactivatedState
     ImGuiID            ID;              // widget id owning the text state (which just got deactivated)
     ImVector<char>     TextA;           // text buffer
 
-    ImGuiInputTextDeactivatedState()    { memset(this, 0, sizeof(*this)); }
+    ImGuiInputTextDeactivatedState() = default;
     void    ClearFreeMemory()           { ID = 0; TextA.clear(); }
 };
 
@@ -1303,7 +1313,7 @@ struct ImGuiNextWindowData
     ImVec2                      MenuBarOffsetMinVal;    // (Always on) This is not exposed publicly, so we don't clear it and it doesn't have a corresponding flag (could we? for consistency?)
     ImGuiWindowRefreshFlags     RefreshFlagsVal;
 
-    ImGuiNextWindowData()       { memset(this, 0, sizeof(*this)); }
+    ImGuiNextWindowData() = default;
     inline void ClearFlags()    { HasFlags = ImGuiNextWindowDataFlags_None; }
 };
 
@@ -1383,7 +1393,7 @@ struct IMGUI_API ImGuiErrorRecoveryState
     short   SizeOfBeginPopupStack;
     short   SizeOfDisabledStack;
 
-    ImGuiErrorRecoveryState() { memset(this, 0, sizeof(*this)); }
+    ImGuiErrorRecoveryState() = default;
 };
 
 // Data saved for each window pushed into the stack
@@ -1771,7 +1781,7 @@ struct IMGUI_API ImGuiTypingSelectState
     float           LastRequestTime = 0.0f;
     bool            SingleCharModeLock = false; // After a certain single char repeat count we lock into SingleCharMode. Two benefits: 1) buffer never fill, 2) we can provide an immediate SingleChar mode without timer elapsing.
 
-    ImGuiTypingSelectState() { memset(this, 0, sizeof(*this)); }
+    ImGuiTypingSelectState() = default;
     void            Clear()  { SearchBuffer[0] = 0; SingleCharModeLock = false; } // We preserve remaining data for easier debugging
 };
 
@@ -1807,7 +1817,7 @@ struct ImGuiOldColumnData
     ImGuiOldColumnFlags Flags;                  // Not exposed
     ImRect              ClipRect;
 
-    ImGuiOldColumnData() { memset(this, 0, sizeof(*this)); }
+    ImGuiOldColumnData() = default;
 };
 
 struct ImGuiOldColumns
@@ -1828,7 +1838,7 @@ struct ImGuiOldColumns
     ImVector<ImGuiOldColumnData> Columns;
     ImDrawListSplitter  Splitter;
 
-    ImGuiOldColumns()   { memset(this, 0, sizeof(*this)); }
+    ImGuiOldColumns() = default;
 };
 
 //-----------------------------------------------------------------------------
@@ -1856,7 +1866,7 @@ struct ImGuiBoxSelectState
     ImRect                  BoxSelectRectPrev;  // Selection rectangle in absolute coordinates (derived every frame from BoxSelectStartPosRel and MousePos)
     ImRect                  BoxSelectRectCurr;
 
-    ImGuiBoxSelectState()   { memset(this, 0, sizeof(*this)); }
+    ImGuiBoxSelectState() = default;
 };
 
 //-----------------------------------------------------------------------------

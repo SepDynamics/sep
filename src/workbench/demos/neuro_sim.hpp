@@ -10,6 +10,7 @@
 
 #include "core/types.h"
 #include "demo_manager.hpp"
+#include "workbench/demos/demo_base.hpp"
 #include "imgui.h"
 #include "memory/memory_tier_manager.hpp"
 

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "demo_manager.hpp"
+#include "workbench/demos/demo_base.hpp"
 #include "imgui.h"
 #include "sep_engine_wrapper.h"
 

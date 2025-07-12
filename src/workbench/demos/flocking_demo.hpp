@@ -8,6 +8,7 @@
 
 #include "core/types.h"
 #include "demo_manager.hpp"
+#include "workbench/demos/demo_base.hpp"
 #include "imgui.h"
 
 namespace sep {

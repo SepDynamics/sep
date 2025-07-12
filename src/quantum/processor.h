@@ -21,6 +21,19 @@ constexpr float COHERENCE_THRESHOLD = 0.7f;
 constexpr float DEMOTION_THRESHOLD = 0.3f;
 } // namespace quantum
 
+// Result objects returned by Processor operations
+struct ProcessingResult {
+    bool success{false};
+    Pattern pattern{};
+    std::string error_message{};
+};
+
+struct BatchProcessingResult {
+    bool success{false};
+    std::vector<ProcessingResult> results{};
+    std::string error_message{};
+};
+
 namespace pattern {
 
 // Base pattern processor class

@@ -56,6 +56,10 @@ sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)
     return sep::SEPResult::SUCCESS;
 }
 
+bool isValidConfig(const sep::pattern::PatternConfig& c) {
+    return c.max_patterns > 0;
+}
+
 sep::SEPResult BlenderBridge::registerObject(Object* obj, const sep::pattern::PatternConfig& config, ObjectHandle* handle_out)
 {
     if (!thread_running_.load())

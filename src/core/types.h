@@ -71,9 +71,14 @@ struct Pattern {
     glm::vec4 velocity{0.0f};
     glm::vec4 attributes{0.0f};
     std::complex<float> amplitude{0.0f};
+    float coherence{0.0f};
+    float stability{0.0f};
+    float entropy{0.0f};
+    int mutation_count{0};
     quantum::QuantumState quantum_state{};
     std::vector<quantum::PatternRelationship> relationships;
     std::vector<float> data;
+    std::vector<float> values;
     std::vector<std::string> parent_ids;
     uint64_t timestamp{0};
     uint64_t last_accessed{0};

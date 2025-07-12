@@ -34,7 +34,7 @@ class PatternProcessor;
 struct ObjectState {
     Object* object = nullptr;
     sep::pattern::PatternConfig config;
-    PatternStateEnum state = PatternStateEnum::UNINITIALIZED;
+    sep::pattern::PatternStateEnum state = sep::pattern::PatternStateEnum::UNINITIALIZED;
     bool needs_update = false;
     bool is_processing = false;
     sep::pattern::PatternMetrics metrics;

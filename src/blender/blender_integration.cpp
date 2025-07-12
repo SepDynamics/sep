@@ -7,6 +7,10 @@
 #include "memory/memory_tier_manager.hpp"
 
 using ::sep::memory::MemoryTierEnum;
+
+static bool isValidConfig(const sep::pattern::PatternConfig& c) {
+    return c.max_patterns > 0;
+}
 namespace sep {
 namespace pattern {
 // Use the core SEPResult enum instead of the pattern-specific one

@@ -57,6 +57,7 @@ FULL_PACKAGES=(
   libhiredis-dev libglm-dev libglfw3 libglfw3-dev
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
+  libglew-dev
 )
 
 if [ "$USE_MINIMAL" -eq 1 ]; then

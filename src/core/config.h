@@ -25,10 +25,12 @@ constexpr size_t MAX_ALLOCATION_SIZE = 1024 * 1024 * 1024;       // 1GB
 
 struct APIConfig {
     /* members */
+    std::string host{"0.0.0.0"};
     uint16_t port{8080};
     uint32_t threads{4};
     std::string log_level{"info"};
     bool enable_metrics{true};
+    size_t keep_alive_timeout_ms{0};
 };
 
 }  // namespace config

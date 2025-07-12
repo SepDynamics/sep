@@ -236,7 +236,7 @@ void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>
                 float s = 1.0f;
                 glm::vec4 c(1.0f);
                 glUniform4f(colorLoc, c.r, c.g, c.b, c.a);
-                if (p.quantum_state.memory_tier == 0)
+                if (p.quantum_state.memory_tier == sep::memory::MemoryTierEnum::SHORT_TERM)
                     renderSphere(8, 8, pos, s, c);
                 else
                     renderCube(pos, s, c);
@@ -252,7 +252,6 @@ void sep::workbench::Renderer::render(const std::vector<sep::workbench::Pattern>
     }
 }
 // Helper method to render a sphere
-}
 void sep::workbench::Renderer::renderSphere(int latitudes, int longitudes, const glm::vec3& pos,
                                             float scale, const glm::vec4& color)
 {

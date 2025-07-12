@@ -947,8 +947,8 @@ int cuewCompilerVersion(void)
 
   /* get --version output */
   strcat(command, "\"");
-  strncat(command, path, sizeof(command) - 1);
-  strncat(command, "\" --version", sizeof(command) - strlen(path) - 1);
+  strncat(command, path, sizeof(command) - strlen(command) - 1);
+  strncat(command, "\" --version", sizeof(command) - strlen(command) - 1);
   pipe = popen(command, "r");
   if (!pipe) {
     fprintf(stderr, "CUDA: failed to run compiler to retrieve version");

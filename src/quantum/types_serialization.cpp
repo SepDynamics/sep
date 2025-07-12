@@ -1,7 +1,12 @@
 #include "core/types.h"
 #include "memory/types.h" // Add include for MemoryTierEnum
+#include <vector>
 #include <nlohmann/json.hpp> 
 #include <cstring>
+
+namespace sep {
+using PatternRelationship = quantum::PatternRelationship;
+}
 
 namespace sep::quantum {
 

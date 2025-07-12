@@ -12,6 +12,8 @@ namespace workbench {
 
     void MemoryGardenDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
     {
+        (void)engine;
+        (void)renderer;
         const auto& cfg = Config::getInstance().memory_garden();
 
         memory_manager_ = &sep::memory::MemoryTierManager::getInstance();
@@ -27,6 +29,10 @@ namespace workbench {
         show_connections_ = cfg.visualization.show_connections;
         connection_opacity_ = cfg.visualization.connection_opacity;
         pattern_scale_ = cfg.visualization.pattern_scale;
+        
+        // Initialize UI control variables
+        learning_rate_ = 0.05f;
+        input_strength_ = 0.5f;
 
         // Create some initial patterns for demonstration
         createInitialPatterns();
@@ -113,7 +119,7 @@ void MemoryGardenDemo::on_ui_render()
     ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
     ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
     ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
-    ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+    ImGui::SliderFloat("Connection Opacity", &connection_opacity_, 0.1f, 0.5f);
     ImGui::End();
 }
 

@@ -10,6 +10,8 @@ namespace workbench {
 
     void NeuralDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
     {
+        (void)engine;
+        (void)renderer;
 #ifdef SEP_WORKBENCH_DEMO
     int count = 3;
     threshold_ = 1.0f;

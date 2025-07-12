@@ -49,6 +49,11 @@ private:
     bool show_connections_{true};
     float connection_opacity_{0.5f};
     float pattern_scale_{1.0f};
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.3f};
 
 private:
     void createInitialPatterns();
@@ -57,4 +62,4 @@ private:
 };
 
 } // namespace workbench
-} // namespace sep
+}  // namespace sep

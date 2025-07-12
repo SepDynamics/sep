@@ -27,9 +27,14 @@ private:
     std::vector<sep::pattern::PatternData> grid_;
     std::vector<int> birth_rules_;
     std::vector<int> survival_rules_;
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
 
     std::size_t index(std::size_t x, std::size_t y) const { return y * width_ + x; }
 };
 
 } // namespace workbench
-} // namespace sep
+}  // namespace sep

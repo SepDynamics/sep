@@ -11,6 +11,9 @@ namespace workbench {
 
     void AnnealingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
     {
+        (void)renderer;
+        (void)engine;
+
         engine_ = engine;
         renderer_ = renderer;
         // Use hardcoded values for all demos to avoid configuration issues

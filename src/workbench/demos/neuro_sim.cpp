@@ -20,6 +20,8 @@ namespace sep
 
         void NeuroSimDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
         {
+            (void)engine;
+            (void)renderer;
             const auto& cfg = sep::workbench::Config::getInstance().neural_demo();
             std::size_t neuron_count = cfg.network.neuron_count;
             threshold_ = cfg.neuron.threshold;

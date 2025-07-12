@@ -26,6 +26,11 @@ private:
     float box_size_{50.0f};
     float time_step_{0.01f};
     float G_{1.0f};
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
 
     void initBodies();
     void integrate(float dt);
@@ -33,4 +38,4 @@ private:
 };
 
 } // namespace workbench
-} // namespace sep
+}  // namespace sep

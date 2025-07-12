@@ -12,8 +12,6 @@
 namespace sep {
 namespace workbench {
 
-
-
 class AnnealingSimDemo : public Demo {
 public:
     void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
@@ -37,7 +35,12 @@ private:
     std::vector<float> temperature_schedule_;
     std::size_t current_step_{0};
     bool paused_{false};
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
 };
 
 } // namespace workbench
-} // namespace sep
+}  // namespace sep

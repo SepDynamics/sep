@@ -11,8 +11,11 @@
 namespace sep {
 namespace workbench {
 
-    void CosmoSim::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void CosmoSim::on_load(sep::Engine* engine,
+                                                   sep::CyclesRenderer* renderer)
     {
+        (void)engine;
+        (void)renderer;
 #ifdef SEP_WORKBENCH_DEMO
     box_size_ = 50.0f;
     time_step_ = 0.01f;

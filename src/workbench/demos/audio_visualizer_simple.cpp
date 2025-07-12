@@ -13,6 +13,8 @@ namespace workbench {
 // AudioVisualizerDemo implementation
 void AudioVisualizerDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
 {
+    (void)engine;
+    (void)renderer;
     std::cout << "Initializing Audio Visualizer Demo..." << std::endl;
     
     // Get configuration

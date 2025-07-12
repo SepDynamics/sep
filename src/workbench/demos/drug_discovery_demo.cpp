@@ -11,6 +11,8 @@ namespace workbench {
 
     void DrugDiscoveryDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
     {
+        (void)engine;
+        (void)renderer;
 #ifdef SEP_WORKBENCH_DEMO
     // Default parameters for demo mode
     iterations_ = 10;

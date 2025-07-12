@@ -32,7 +32,12 @@ private:
 
     std::vector<MoleculePose> poses_;
     sep::quantum::manifold::QuantumManifoldOptimizer optimizer_{};
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.2f};
 };
 
 } // namespace workbench
-} // namespace sep
+}  // namespace sep

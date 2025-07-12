@@ -10,6 +10,7 @@
 #include "core/common.h"
 
 #include "core/types.h"
+#include "core/config.h"
 #include "blender/types.h"  // SEPBlenderBridge definition
 #include "compat/types.h"  // for QSHResult
 #include "quantum/qbsa.h"
@@ -40,6 +41,8 @@ class Engine {
  public:
   Engine() noexcept(false);
   ~Engine();
+
+  bool init(const ::sep::config::APIConfig &config);
 
   // Delete copy operations
   Engine(const Engine &) = delete;

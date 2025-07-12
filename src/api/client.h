@@ -20,8 +20,8 @@
 namespace sep {
 namespace config {
 struct OllamaConfig {
-    std::string host;
-    int port;
+    std::string host{"localhost"};
+    int port{11434};
 };
 }
 namespace api {
@@ -125,14 +125,6 @@ namespace api {
 
 } // namespace api
 
-namespace config {
-
-struct OllamaConfig {
-    std::string host{"localhost"};
-    int port{11434};
-};
-
-} // namespace config
 namespace ollama {
 
         class OllamaClient

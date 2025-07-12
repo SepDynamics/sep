@@ -132,6 +132,7 @@ namespace sep
 
         struct LogConfig
         {
+            int max_connections{0};
             std::string log_level{"info"};
         };
 

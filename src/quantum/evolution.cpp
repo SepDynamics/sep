@@ -28,7 +28,7 @@ inline float deterministicNoise(uint64_t& state)
     class EvolutionEngine::EvolutionEngineImpl
     {
     public:
-        explicit EvolutionEngineImpl(Processor* processor)
+        explicit EvolutionEngineImpl(sep::quantum::Processor* processor)
             : processor_(processor), generation_number_(0), noise_state_(0), current_stats_()
         {
             if (!processor)
@@ -348,7 +348,7 @@ inline float deterministicNoise(uint64_t& state)
             return static_cast<size_t>(nextFloat() * static_cast<float>(max));
         }
 
-        Processor* processor_;
+        sep::quantum::Processor* processor_;
         EvolutionParams params_;
         size_t generation_number_;
         uint64_t noise_state_;
@@ -356,7 +356,7 @@ inline float deterministicNoise(uint64_t& state)
         std::vector<EvolutionStats> stats_history_;
     };
 
-    EvolutionEngine::EvolutionEngine(Processor* processor)
+    EvolutionEngine::EvolutionEngine(sep::quantum::Processor* processor)
         : impl_(std::make_unique<EvolutionEngineImpl>(processor))
     {
     }

@@ -56,8 +56,9 @@ int main()
     putenv((char*)"LIBDECOR_BACKEND=cairo");
     // Disable GTK decorations completely as a fallback
     putenv((char*)"LIBDECOR_NOT_GTK=1");
-    // Force X11 backend if Wayland is causing issues
-    // Uncomment if needed: putenv((char*)"GLFW_PLATFORM=x11");
+    // Force X11 backend to avoid Wayland compatibility issues with OpenGL
+    putenv((char*)"GDK_BACKEND=x11");
+    putenv((char*)"GLFW_PLATFORM=x11");
 
     // 1. Initialize GLFW and Create a Window
     // Set error callback to get more detailed error messages
@@ -124,29 +125,42 @@ int main()
     // Set key callback
     glfwSetKeyCallback(window, key_callback);
 
-    // 2. Initialize GLEW with error handling
-    std::cout << "Initializing GLEW with fallback handling..." << std::endl;
+    // 2. Initialize GLEW with comprehensive error handling
+    std::cout << "Initializing GLEW with enhanced error handling..." << std::endl;
+    
+    // CRITICAL: Check for an OpenGL context *before* GLEW
+    if (glGetString(GL_VERSION) == NULL) {
+        std::cerr << "CRITICAL ERROR: No OpenGL context found before glewInit()!" << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    }
     
     // Check OpenGL version directly
     const GLubyte* version = glGetString(GL_VERSION);
     if (version)
     {
-        std::cout << "OpenGL Version: " << version << std::endl;
+        std::cout << "OpenGL Context OK. Version: " << version << std::endl;
     }
     else
     {
-        std::cout << "Failed to get OpenGL version" << std::endl;
+        std::cerr << "WARNING: Failed to get OpenGL version string, but context exists" << std::endl;
     }
     
     // Set GLEW to use modern OpenGL
     glewExperimental = GL_TRUE;
     
     // Initialize GLEW with error handling
+    std::cout << "Calling glewInit()..." << std::endl;
     GLenum err = glewInit();
     if (err != GLEW_OK)
     {
-        std::cerr << "GLEW initialization warning: " << glewGetErrorString(err) << std::endl;
+        std::cerr << "GLEW initialization error: " << glewGetErrorString(err) << std::endl;
         std::cerr << "Continuing with limited functionality..." << std::endl;
+        
+        // Print additional diagnostic information
+        std::cerr << "OpenGL vendor: " << (glGetString(GL_VENDOR) ? (const char*)glGetString(GL_VENDOR) : "Unknown") << std::endl;
+        std::cerr << "OpenGL renderer: " << (glGetString(GL_RENDERER) ? (const char*)glGetString(GL_RENDERER) : "Unknown") << std::endl;
     }
     else
     {
@@ -200,9 +214,15 @@ int main()
 
     std::cout << "ImGui initialized successfully" << std::endl;
 
-    // 8. Skip loading demos for now since they depend on GLEW
-    std::cout << "Skipping demo initialization to avoid GLEW dependency..." << std::endl;
-    // demoManager.switchToDemo("genesis");
+    // 8. Initialize the default demo
+    std::cout << "Initializing default demo..." << std::endl;
+    try {
+        demoManager.switchToDemo("genesis");
+        std::cout << "Default demo loaded successfully" << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Error loading default demo: " << e.what() << std::endl;
+        std::cerr << "Continuing with UI only mode" << std::endl;
+    }
 
     // 9. Main Loop
 

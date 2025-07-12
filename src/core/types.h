@@ -14,8 +14,64 @@
 #include <nlohmann/json.hpp>
 
 #include "memory/types.h"
+#include <vector>
+#include <string>
+#include <glm/glm.hpp>
 
 namespace sep {
+
+// Forward declarations
+namespace quantum {
+    struct QuantumState {
+        enum class Status { SUPERPOSITION, COHERENT, COLLAPSED };
+        float coherence{0.0f};
+        Status status{Status::SUPERPOSITION};
+        float stability{0.5f};
+        float probability{0.0f};
+        int generation{0};
+    };
+
+    struct PatternRelationship {
+        std::string targetId;
+        float strength{0.0f};
+        float entanglement{0.0f};
+    };
+}
+
+/**
+ * @brief Unified Pattern structure for use across all modules
+ *
+ * This is the canonical Pattern definition used throughout the codebase.
+ * Originally from src/quantum/types.h, now centralized in core/types.h
+ * per architectural guidelines.
+ */
+struct Pattern {
+    std::string id;
+    glm::vec4 position;
+    glm::vec3 momentum{0.0f};
+    quantum::QuantumState quantum_state;
+    std::vector<quantum::PatternRelationship> relationships;
+    std::vector<float> data;
+    std::vector<std::string> parent_ids;
+    uint64_t timestamp;
+    uint64_t last_accessed;
+    uint64_t last_modified;
+};
+
+// PatternData is an alias for Pattern to support existing code
+namespace pattern {
+    using PatternData = Pattern;
+}
+
+namespace quantum {
+    // Keep a using declaration for backwards compatibility
+    using Pattern = sep::Pattern;
+}
+
+namespace workbench {
+    // Keep a using declaration for backwards compatibility
+    using Pattern = sep::Pattern;
+}
 
 namespace config {
 

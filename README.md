@@ -6,6 +6,7 @@ This repository contains the SEP Engine, a high-performance C++ framework for qu
 
 - **C++ Components**: The core SEP Engine is written in C++ and built using CMake
 - **JavaScript/TypeScript Components**: Supporting tools written in TypeScript/JavaScript
+- **API Server**: Built as a separate executable (`sep_api_server`)
 
 ## Build System
 
@@ -87,3 +88,4 @@ The codebase search tool is available as an MCP server that can be used with com
 - **SEP Engine**: Core C++ engine for pattern analysis
 - **MCP Tool**: TypeScript tool for Model Context Protocol integration
 - **Codebase Search**: Semantic search tool for the codebase
+- **API Server**: Headless HTTP server built from `src/api_main.cpp`.

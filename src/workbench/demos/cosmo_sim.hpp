@@ -22,7 +22,7 @@ public:
     void on_render() override;
     void on_unload() override;
     void on_key_press(int key) override;
-    void on_mouse(int x, int y, int button = 0) override;
+    void on_mouse(int x, int y, int button = 0);
 
 private:
     std::vector<sep::pattern::PatternData> bodies_;
@@ -34,6 +34,9 @@ private:
     float input_strength_{0.5f};
     float learning_rate_{0.05f};
     float connection_prob_{0.2f};
+
+    sep::Engine* engine_{nullptr};
+    sep::CyclesRenderer* renderer_{nullptr};
 
     void initBodies();
     void integrate(float dt);

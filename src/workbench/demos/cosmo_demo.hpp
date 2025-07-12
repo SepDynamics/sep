@@ -21,7 +21,7 @@ public:
     void on_ui_render() override;
     void on_unload() override;
     void on_key_press(int key) override;
-    void on_mouse(int x, int y, int button) override;
+    void on_mouse(int x, int y, int button);
 
 private:
     struct Particle {
@@ -34,6 +34,9 @@ private:
 
     float box_size_{50.0f};
     float time_step_{0.01f};
+
+    sep::Engine* engine_{nullptr};
+    sep::CyclesRenderer* renderer_{nullptr};
 
     void initParticles();
     void integrate(float dt);

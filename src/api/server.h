@@ -64,7 +64,7 @@ class SEPApiServer : public Server {
    * @param config The API configuration
    * @param renderer Cycles renderer
    */
-     explicit SEPApiServer(const AuthConfig &config, blender::ccl::CyclesRenderer *renderer);
+    explicit SEPApiServer(const AuthConfig &config, sep::blender::ccl::CyclesRenderer *renderer);
 
      /**
       * @brief Destructor

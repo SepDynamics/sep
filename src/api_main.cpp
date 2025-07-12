@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
         renderer->initialize();
     }
 
-    sep::api::SEPApiServer server(apiConfig, renderer.get());
+    sep::api::SEPApiServer server(apiConfig, static_cast<blender::ccl::CyclesRenderer*>(renderer.get()));
     if (!server.run()) {
         std::cerr << "Failed to start API server" << std::endl;
         return 1;

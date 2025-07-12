@@ -18,6 +18,10 @@ BlenderBridge::BlenderBridge() : gpu_context_(nullptr), thread_running_(false)
 
 BlenderBridge::~BlenderBridge() = default;
 
+bool isValidConfig(const sep::pattern::PatternConfig& c) {
+    return c.max_patterns > 0;
+}
+
 
 std::unique_ptr<BlenderBridge> BlenderBridge::create()
 {

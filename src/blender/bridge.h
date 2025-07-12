@@ -35,43 +35,6 @@ struct PatternConfig {
     int max_patterns{0};
     int batch_size{0};
 };
-
-    struct PatternConfig {
-        float update_threshold{0.f};
-        bool enable_mutations{false};
-        int max_patterns{0};
-        int batch_size{0};
-    };
-
-    struct PatternConfig {
-        float update_threshold{0.0f};
-        bool enable_mutations{false};
-        int max_patterns{0};
-        int batch_size{0};
-    };
-
-    struct PatternConfig {
-        float update_threshold{0.0f};
-        bool enable_mutations{false};
-        int max_patterns{0};
-        int batch_size{0};
-    };
-
-        struct PatternConfig
-        {
-            float update_threshold{0.0f};
-            bool enable_mutations{false};
-            int max_patterns{0};
-            int batch_size{0};
-        };
-
-        struct PatternLimits
-        {
-            static constexpr size_t MAX_PATTERNS = 10000;
-            static constexpr float MIN_COHERENCE_VALUE = 0.0f;
-            static constexpr float MAX_COHERENCE = 1.0f;
-        };
-
         // Forward declarations
         class PatternObserver;
 
@@ -115,19 +78,6 @@ struct PatternConfig {
             void removeObserver(std::shared_ptr<PatternObserver> observer);
             static std::unique_ptr<BlenderBridge> create();
 
-        private:
-            struct ObjectState
-            {
-                Object* object;
-                sep::pattern::PatternConfig config;
-                sep::pattern::PatternMetrics metrics;
-                PatternStateEnum state;
-                PatternState pattern_state;
-                std::vector<PatternData> patterns;
-                sep::memory::MemoryBlock* memory_block{nullptr};
-                bool needs_update;
-                bool is_processing;
-
   void startProcessingThread();
   void stopProcessingThread();
   void processingThreadMain();
@@ -149,70 +99,52 @@ struct PatternConfig {
   sep::SEPResult promotePatterns(sep::pattern::ObjectHandle handle,
                               ::sep::memory::MemoryTierEnum target_tier);  // Changed to global SEPResult
   sep::SEPResult syncPatternData(sep::pattern::ObjectHandle handle,
-                              bool force);  // Changed to global SEPResult
+                                 bool force);  // Changed to global SEPResult
+  bool isInitialized() const { return initialized_; }
+  bool isValidHandle(sep::pattern::ObjectHandle handle) const;
+  ObjectState* getObjectState(sep::pattern::ObjectHandle handle);
+  void cleanup();
+  void cleanupObject(sep::pattern::ObjectHandle handle);
 
-            sep::SEPResult processObjectPatterns(
-                sep::pattern::ObjectHandle handle,
-                ObjectState& state);                                  // Changed to global SEPResult
-            sep::SEPResult updatePatternMetrics(ObjectState& state);  // Changed to global SEPResult
-            sep::SEPResult validatePatternCoherence(
-                const ObjectState& state);         // Changed to global SEPResult
-            sep::SEPResult checkResourceLimits();  // Changed to global SEPResult
+  void updateResourceStats();
+  float calculateResourceUtilization(sep::pattern::ResourceType type) const;
+  bool checkResourceThresholds();
 
-            sep::SEPResult allocatePatternMemory(
-                ObjectState& state);                               // Changed to global SEPResult
-            sep::SEPResult freePatternMemory(ObjectState& state);  // Changed to global SEPResult
-            sep::SEPResult promotePatterns(
-                sep::pattern::ObjectHandle handle,
-                ::sep::memory::MemoryTierEnum target_tier);  // Changed to global SEPResult
-            sep::SEPResult syncPatternData(sep::pattern::ObjectHandle handle,
-                                           bool force);  // Changed to global SEPResult
+  sep::GPUContext* gpu_context_;  // Changed to sep::GPUContext
+  std::unique_ptr<sep::pattern::PatternProcessor>
+      pattern_processor_;  // Base pattern processor from processor.h
 
-            bool isInitialized() const { return initialized_; }
-            bool isValidHandle(sep::pattern::ObjectHandle handle) const;
-            ObjectState* getObjectState(sep::pattern::ObjectHandle handle);
-            void cleanup();
-            void cleanupObject(sep::pattern::ObjectHandle handle);
+  // Access to objects_ must be guarded by objects_mutex_
+  std::unordered_map<sep::pattern::ObjectHandle, ObjectState> objects_;
+  // observers_ is modified by multiple threads and protected by observers_mutex_
+  std::vector<std::shared_ptr<sep::pattern::PatternObserver>> observers_;
 
-            void updateResourceStats();
-            float calculateResourceUtilization(sep::pattern::ResourceType type) const;
-            bool checkResourceThresholds();
+  std::atomic<bool> initialized_{false};
+  std::atomic<bool> processing_{false};
+  std::atomic<sep::pattern::ObjectHandle> next_handle_{1};
 
-            sep::GPUContext* gpu_context_;  // Changed to sep::GPUContext
-            std::unique_ptr<sep::pattern::PatternProcessor>
-                pattern_processor_;  // Base pattern processor from processor.h
+  // Mutexes guarding access to shared maps and observer lists
+  mutable std::mutex objects_mutex_;
+  // guards observers_ list
+  mutable std::mutex observers_mutex_;
+  std::mutex processing_mutex_;
+  std::condition_variable processing_cv_;
 
-            // Access to objects_ must be guarded by objects_mutex_
-            std::unordered_map<sep::pattern::ObjectHandle, ObjectState> objects_;
-            // observers_ is modified by multiple threads and protected by observers_mutex_
-            std::vector<std::shared_ptr<sep::pattern::PatternObserver>> observers_;
+  std::thread processing_thread_;
+  std::atomic<bool> thread_running_{false};
 
-            std::atomic<bool> initialized_{false};
-            std::atomic<bool> processing_{false};
-            std::atomic<sep::pattern::ObjectHandle> next_handle_{1};
-
-            // Mutexes guarding access to shared maps and observer lists
-            mutable std::mutex objects_mutex_;
-            // guards observers_ list
-            mutable std::mutex observers_mutex_;
-            std::mutex processing_mutex_;
-            std::condition_variable processing_cv_;
-
-            std::thread processing_thread_;
-            std::atomic<bool> thread_running_{false};
-
-            struct
-            {
-                std::atomic<size_t> total_patterns{0};
-                std::atomic<size_t> active_patterns{0};
-                std::atomic<uint64_t> updates_processed{0};
-                std::atomic<float> avg_process_time{0.0f};
-                std::atomic<size_t> memory_used{0};
-                std::atomic<float> gpu_utilization{0.0f};
-                std::atomic<size_t> pattern_mutations{0};
-                std::atomic<float> avg_coherence{0.0f};
-                std::atomic<float> peak_entropy{0.0f};
-            } stats_;
+  struct
+  {
+      std::atomic<size_t> total_patterns{0};
+      std::atomic<size_t> active_patterns{0};
+      std::atomic<uint64_t> updates_processed{0};
+      std::atomic<float> avg_process_time{0.0f};
+      std::atomic<size_t> memory_used{0};
+      std::atomic<float> gpu_utilization{0.0f};
+      std::atomic<size_t> pattern_mutations{0};
+      std::atomic<float> avg_coherence{0.0f};
+      std::atomic<float> peak_entropy{0.0f};
+  } stats_;
 
             struct
             {
@@ -223,6 +155,6 @@ struct PatternConfig {
                 float min_coherence{PatternLimits::MIN_COHERENCE_VALUE};
             } thresholds_;
         };
-
-    }  // namespace pattern
+        };
+}  // namespace pattern
 }  // namespace sep

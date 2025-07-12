@@ -21,36 +21,20 @@ public:
   ConfigManager(const ConfigManager &) = delete;
   ConfigManager &operator=(const ConfigManager &) = delete;
 
-  // Initialize configuration. Sources are merged in the following order:
-  // defaults < file < environment < command line.
   void initialize(int argc, char *argv[]);
 
   // Configuration access
-  const SystemConfig &getConfig() const;
-  void setConfig(const SystemConfig &config);
+  const workbench::SystemConfig &getConfig() const;
+  void setConfig(const workbench::SystemConfig &config);
 
-  // Load configuration
-  // Order of precedence:
-  //   1. Defaults compiled into the application or loaded from file.
-  //   2. Environment variables overriding defaults.
-  //   3. Command line arguments overriding both.
   bool loadFromFile(const sep::shim::string &filename);
   bool loadFromEnvironment();
   bool loadFromCommandLine(int argc, char *argv[]);
 
-  // Component-specific access
-  const APIConfig &getAPIConfig() const;
-  const CudaConfig &getCudaConfig() const;
-  const LogConfig &getLogConfig() const;
-  const MemoryThresholdConfig &getMemoryConfig() const;
-  const QuantumThresholdConfig &getQuantumConfig() const;
-
-  // Update specific components
-  void updateAPIConfig(const APIConfig &config);
-  void updateCudaConfig(const CudaConfig &config);
-  void updateLogConfig(const LogConfig &config);
-  void updateMemoryConfig(const MemoryThresholdConfig &config);
-  void updateQuantumConfig(const QuantumThresholdConfig &config);
+  void updateCudaConfig(const workbench::CudaConfig &config);
+  void updateLogConfig(const workbench::LogConfig &config);
+  void updateMemoryConfig(const workbench::MemoryThresholdConfig &config);
+  void updateQuantumConfig(const workbench::QuantumThresholdConfig &config);
 
   // Reset configuration to defaults
   void resetToDefaults();

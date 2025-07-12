@@ -342,10 +342,11 @@ nlohmann::json SepEngine::getPatternHistory(const nlohmann::json& request_data)
     for (const auto& p : patterns) { 
         // Apply filters if specified
         
-        if (p.coherence >= min_coherence && p.stability >= min_stability) {
+        if (p.quantum_state.coherence >= min_coherence &&
+            p.quantum_state.stability >= min_stability) {
             json e;
-            e["coherence"] = p.coherence;
-            e["stability"] = p.stability;
+            e["coherence"] = p.quantum_state.coherence;
+            e["stability"] = p.quantum_state.stability;
             history.push_back(e);
         }
     }

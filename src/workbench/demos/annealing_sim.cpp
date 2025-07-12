@@ -55,9 +55,9 @@ void AnnealingSimDemo::on_update(float dt) {
     }
     processor_->evolvePatterns();
     const auto& patterns = processor_->getPatterns();
-    std::vector<sep::quantum::Pattern> quantum_patterns;
+    std::vector<sep::Pattern> quantum_patterns;
     for (const auto& p : patterns) {
-        sep::quantum::Pattern qp;
+        sep::Pattern qp;
         qp.data = p.data;
         quantum_patterns.push_back(qp);
     }

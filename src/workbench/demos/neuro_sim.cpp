@@ -10,7 +10,7 @@
 
 using sep::memory::MemoryTierEnum;
 using sep::memory::MemoryTierManager;
-using sep::quantum::Pattern;
+using sep::Pattern;
 
 namespace sep
 {

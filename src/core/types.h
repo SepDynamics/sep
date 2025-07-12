@@ -71,6 +71,11 @@ struct Pattern {
     glm::vec4 velocity{0.0f};
     glm::vec4 attributes{0.0f};
     std::complex<float> amplitude{0.0f};
+    std::vector<float> values;
+    float coherence{0.0f};
+    float stability{0.0f};
+    float entropy{0.0f};
+    int mutation_count{0};
     quantum::QuantumState quantum_state{};
     float coherence{0.0f};
     float stability{0.0f};

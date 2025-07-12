@@ -3,6 +3,8 @@
 
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <cstdlib>
+#include "core/env_keys.h"
 
 #include "memory/memory_tier_manager_serialization.hpp"
 
@@ -81,6 +83,22 @@ namespace sep::config
     const APIConfig& ConfigManager::getAPIConfig() const
     {
         std::lock_guard<std::mutex> lock(mutex_);
+
+        const char* port = std::getenv(env_keys::ENV_API_PORT);
+        if (port) impl_->api_cfg.port = static_cast<uint16_t>(std::atoi(port));
+
+        const char* threads = std::getenv(env_keys::ENV_API_THREADS);
+        if (threads) impl_->api_cfg.threads = static_cast<uint32_t>(std::atoi(threads));
+
+        const char* metrics = std::getenv(env_keys::ENV_API_ENABLE_METRICS);
+        if (metrics) {
+            std::string val{metrics};
+            impl_->api_cfg.enable_metrics = !(val == "0" || val == "false" || val == "False");
+        }
+
+        const char* log_level = std::getenv(env_keys::ENV_LOG_LEVEL);
+        if (log_level) impl_->api_cfg.log_level = log_level;
+
         return impl_->api_cfg;
     }
     const CudaConfig& ConfigManager::getCudaConfig() const

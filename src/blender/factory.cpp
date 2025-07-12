@@ -8,8 +8,13 @@
 namespace sep {
 namespace blender {
 
-std::unique_ptr<pattern::BlenderBridge> createBlenderBridge() {
-    return pattern::BlenderBridge::create();
+std::unique_ptr<SEPBlenderBridge> createBlenderBridge() {
+    auto bridge = std::make_unique<SEPBlenderBridge>();
+    if (!bridge) {
+        return nullptr;
+    }
+    bridge->impl = pattern::BlenderBridge::create();
+    return bridge;
 }
 
 } // namespace blender

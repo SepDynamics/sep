@@ -35,7 +35,6 @@ private:
     float learning_rate_{0.05f};
     float connection_prob_{0.2f};
 
-    sep::Engine* engine_{nullptr};
     sep::CyclesRenderer* renderer_{nullptr};
 
     void initBodies();

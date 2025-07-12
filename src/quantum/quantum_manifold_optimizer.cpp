@@ -44,7 +44,10 @@ QuantumManifoldOptimizer::optimize(const QuantumState& initial_state,
     float step = config_.step_size;
     float current_coherence = initial_coherence;
     
-    for (int iter = 0; iter < 100 && current_coherence < target.target_coherence; ++iter) {
+    for (int iter = 0; iter < 100; ++iter) {
+        if (current_coherence >= target.target_coherence) {
+            break;
+        }
         // Sample tangent space for descent directions
         auto tangent_vectors = sampleTangentSpace(position, 8);
         

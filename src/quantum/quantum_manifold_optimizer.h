@@ -64,7 +64,7 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        workbench::CudaConfig cuda;
+        sep::config::CudaConfig cuda;
         workbench::LogConfig log;
         workbench::AnalyticsConfig analytics;
         float base_resonance_frequency{0.42f};
@@ -147,7 +147,7 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    workbench::CudaConfig cuda;
+    sep::config::CudaConfig cuda;
     workbench::LogConfig log;
     workbench::AnalyticsConfig analytics;
 };
@@ -212,7 +212,7 @@ private:
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
 class CUDAQuantumKernel {
 public:
-    explicit CUDAQuantumKernel(const workbench::CudaConfig &config);
+    explicit CUDAQuantumKernel(const sep::config::CudaConfig &config);
     ~CUDAQuantumKernel();
 
   // Warp-level primitive operations
@@ -231,7 +231,7 @@ public:
 private:
     cudaStream_t stream_;
     cufftHandle fft_plan_;
-    workbench::CudaConfig config_;
+    sep::config::CudaConfig config_;
 
     void* d_workspace_;
     size_t workspace_size_;

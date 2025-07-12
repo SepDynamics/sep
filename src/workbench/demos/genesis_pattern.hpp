@@ -45,6 +45,7 @@ private:
 
     std::unique_ptr<sep::quantum::Processor> pattern_processor_;
     std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_manager_;
+    sep::CyclesRenderer* renderer_{nullptr};
 
     sep::Engine* engine_{nullptr};
     sep::CyclesRenderer* renderer_{nullptr};

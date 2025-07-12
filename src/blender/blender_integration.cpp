@@ -21,8 +21,12 @@ BlenderBridge::~BlenderBridge() = default;
 
 std::unique_ptr<BlenderBridge> BlenderBridge::create()
 {
-    return std::unique_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge()); 
-} 
+    return std::unique_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge());
+}
+
+bool isValidConfig(const sep::pattern::PatternConfig& c) {
+    return c.max_patterns > 0;
+}
 
 
 sep::SEPResult BlenderBridge::init(sep::GPUContext* ctx)

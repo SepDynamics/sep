@@ -28,6 +28,7 @@ private:
     std::vector<pattern::PatternData> agents_;
     float max_speed_{2.0f};
     float neighbor_radius_{5.0f};
+    sep::CyclesRenderer* renderer_{nullptr};
 };
 
 } // namespace workbench

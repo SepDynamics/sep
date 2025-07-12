@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <vector>
 #include <nlohmann/json.hpp>
+#include "api/ollama_types.h"
 
 namespace sep::api {
 
@@ -144,6 +145,7 @@ struct ResponseModulationConfig {
 struct AuthConfig {
     bool enabled = false;
     std::vector<std::string> tokens;
+    ollama::OllamaConfig ollama;
     uint16_t port{8080};
     std::string log_level{"info"};
     CORSConfig cors;

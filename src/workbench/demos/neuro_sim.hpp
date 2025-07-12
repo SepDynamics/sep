@@ -5,7 +5,7 @@
 #include <random>
 #include <vector>
 
-#include "../../workbench_demo_adapter.hpp"
+#include "workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
 #include "imgui.h"
 #include "memory/memory_tier_manager.hpp"

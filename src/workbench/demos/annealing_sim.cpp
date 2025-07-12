@@ -3,7 +3,7 @@
 #include <cmath>
 #include <glm/gtc/random.hpp>
 
-#include "../../workbench_demo_adapter.hpp"
+#include "workbench_demo_adapter.hpp"
 #include "sep_engine_wrapper.h"
 
 namespace sep {

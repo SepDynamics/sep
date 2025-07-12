@@ -1,4 +1,4 @@
-#include "../../workbench_demo_adapter.hpp"
+#include "workbench_demo_adapter.hpp"
 #include "workbench/demos/audio_visualizer.hpp"
 #include "workbench/demos/cosmo_demo.hpp"
 #include "workbench/demos/cosmo_sim.hpp"

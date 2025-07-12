@@ -2,7 +2,7 @@
 #define SEP_CUDA_KERNELS_H
 
 #include "constants.h"
-#include "types.h"
+#include "core/types.h"
 #include <cstdint>
 
 #ifdef __CUDACC__

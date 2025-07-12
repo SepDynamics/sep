@@ -1,7 +1,7 @@
 #ifndef SEP_CONTEXT_RESOURCE_PREDICTOR_H
 #define SEP_CONTEXT_RESOURCE_PREDICTOR_H
 
-#include "types.h"
+#include "core/types.h"
 #include "compat/shim.h"
 #include <cstddef>
 #include <vector>

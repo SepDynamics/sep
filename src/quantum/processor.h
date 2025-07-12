@@ -2,13 +2,10 @@
 #define SEP_QUANTUM_PROCESSOR_H
 #pragma once
 
-#include "types.h"
 #include "core/common.h"
 #include "core/system_hooks.h"
-// Removed duplicate include of core/types.h
 #include "quantum/gpu_context.h"
 #include "core/types.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "memory/types.h"
 #include <memory>
 #include <vector>

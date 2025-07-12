@@ -1,5 +1,4 @@
 #include "core/types.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "memory/types.h" // Add include for MemoryTierEnum
 #include <nlohmann/json.hpp> 
 #include <cstring>
@@ -46,7 +45,7 @@ void from_json(const nlohmann::json& j, sep::quantum::PatternRelationship& rel) 
     rel.type = static_cast<RelationshipType>(j.value("type", 0)); 
 }
 
-void to_json(nlohmann::json& j, const Pattern& pattern) {
+void to_json(nlohmann::json& j, const sep::Pattern& pattern) {
     j = nlohmann::json{
         {"id", pattern.id},
         {"position", {pattern.position.x, pattern.position.y, pattern.position.z, pattern.position.w}},
@@ -61,7 +60,7 @@ void to_json(nlohmann::json& j, const Pattern& pattern) {
     };
 }
 
-void from_json(const nlohmann::json& j, Pattern& pattern) {
+void from_json(const nlohmann::json& j, sep::Pattern& pattern) {
     j.at("id").get_to(pattern.id);
     auto pos = j.at("position").get<std::vector<float>>();
     pattern.position = glm::vec4(pos[0], pos[1], pos[2], pos[3]);

@@ -21,6 +21,22 @@ constexpr float COHERENCE_THRESHOLD = 0.7f;
 constexpr float DEMOTION_THRESHOLD = 0.3f;
 } // namespace quantum
 
+// Result structures used by the Processor API.  These were referenced in the
+// implementation but never defined in the original header which caused build
+// errors for any translation unit including only this header.  They live in the
+// `sep::quantum` namespace alongside the processor types.
+struct ProcessingResult {
+    bool success{false};
+    sep::Pattern pattern{};
+    std::string error_message{};
+};
+
+struct BatchProcessingResult {
+    bool success{false};
+    std::vector<ProcessingResult> results{};
+    std::string error_message{};
+};
+
 namespace pattern {
 
 // Base pattern processor class

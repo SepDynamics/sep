@@ -85,6 +85,7 @@ struct Pattern {
 // Modules that used different names can use these type aliases.
 namespace pattern {
     using PatternData = sep::Pattern;
+    using PatternRelationship = sep::quantum::PatternRelationship;
 }
 namespace workbench {
     using Pattern = sep::Pattern;

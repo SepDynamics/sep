@@ -13,7 +13,7 @@ namespace sep
         void FlockingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
         {
             (void)engine;
-            (void)renderer;
+            renderer_ = renderer;
             const auto& cfg = Config::getInstance().flocking();
             std::size_t agent_count = cfg.agent_count;
             max_speed_ = cfg.max_speed;

@@ -12,7 +12,7 @@ namespace sep
         void NeuralDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
         {
             (void)engine;
-            (void)renderer;
+            renderer_ = renderer;
             const auto& cfg = Config::getInstance().neural_demo();
             int count = cfg.network.neuron_count;
             threshold_ = cfg.neuron.threshold;

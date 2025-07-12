@@ -24,6 +24,7 @@ public:
     void on_mouse(int x, int y, int button);
 
 private:
+    sep::CyclesRenderer* renderer_{nullptr};
     struct Particle {
         glm::vec3 position{0.0f};
         glm::vec3 velocity{0.0f};

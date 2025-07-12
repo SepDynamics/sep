@@ -12,7 +12,7 @@ namespace sep
         void DrugDiscoveryDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
         {
             (void)engine;
-            (void)renderer;
+            renderer_ = renderer;
             const auto& cfg = Config::getInstance().drug_discovery();
             iterations_ = cfg.optimizer.iterations;
             mutation_rate_ = cfg.optimizer.mutation_rate;

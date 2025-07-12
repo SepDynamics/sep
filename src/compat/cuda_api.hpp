@@ -81,12 +81,10 @@ cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
                           cudaStream_t stream);
 
 // Pattern processing functions
-cudaError_t launch_pattern_processing(pattern::PatternData* patterns,
-                                   pattern::PatternData* results,
-                                   const pattern::PatternConfig& config,
-                                   size_t pattern_count,
-                                   const pattern::PatternData* previous_patterns,
-                                   cudaStream_t stream);
+cudaError_t launch_pattern_processing(pattern::PatternData* patterns, pattern::PatternData* results,
+                                      size_t pattern_count,
+                                      const pattern::PatternData* previous_patterns,
+                                      cudaStream_t stream);
 
 } // namespace sep::cuda
 #endif // __cplusplus

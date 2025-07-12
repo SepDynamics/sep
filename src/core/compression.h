@@ -5,15 +5,9 @@
 #include <memory>
 #include <vector>
 
-namespace sep::core {
+#include "core/types.h"
 
-// Basic compression method enumeration
-enum class CompressionMethod {
-    None,
-    DeltaEncoding,
-    LZ4,
-    ZSTD
-};
+namespace sep::core {
 
 // Compression statistics
 struct CompressionStats {

@@ -8,13 +8,14 @@
 #include <iostream>
 #include <vector>
 
-// Include our Pattern definition
-#include "pattern.hpp"
+// Include canonical Pattern definition
+#include "core/types.h"
 
 namespace sep
 {
     namespace workbench
     {
+        using Pattern = ::sep::Pattern;
 
         class Renderer
         {

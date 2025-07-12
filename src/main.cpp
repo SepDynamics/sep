@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <cmath>
 #include <memory>
 #include <thread>
 
@@ -193,8 +194,8 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 }
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
-    g_mouse_x = static_cast<int>(xpos);
-    g_mouse_y = static_cast<int>(ypos);
+    g_mouse_x = static_cast<int>(std::lround(xpos));
+    g_mouse_y = static_cast<int>(std::lround(ypos));
     
     if (g_mouse_button >= 0 && g_demo_manager) {
         g_demo_manager->handleMouse(g_mouse_x, g_mouse_y, g_mouse_button);

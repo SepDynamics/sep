@@ -120,7 +120,8 @@ void SEPApiServer::stop() {
     return;
   }
 
-  logger_->info("Stopping SEP API Server");
+  if (logger_)
+    logger_->info("Stopping SEP API Server");
   running_ = false;
 
   if (app_) {
@@ -129,13 +130,15 @@ void SEPApiServer::stop() {
     
     // Wait for server thread to finish
     if (server_thread_ && server_thread_->joinable()) {
-      logger_->debug("Waiting for server thread to join...");
+      if (logger_)
+        logger_->debug("Waiting for server thread to join...");
       server_thread_->join();
       server_thread_.reset();
     }
   }
 
-  logger_->info("SEP API Server stopped");
+  if (logger_)
+    logger_->info("SEP API Server stopped");
 }
 
 void SEPApiServer::waitForShutdown() {
@@ -147,7 +150,8 @@ void SEPApiServer::waitForShutdown() {
 void SEPApiServer::updateConfig(const ::sep::config::APIConfig& new_config) {
   std::lock_guard<std::mutex> lock(metrics_mutex_);
   config_ = new_config;
-  logger_->info("Configuration updated");
+  if (logger_)
+    logger_->info("Configuration updated");
 }
 
 
@@ -184,7 +188,8 @@ std::string SEPApiServer::handleError(const std::string& message, int code) {
                                     std::chrono::system_clock::now().time_since_epoch())
                                     .count();
 
-  logger_->error("API Error [{}]: {}", code, message);
+  if (logger_)
+    logger_->error("API Error [{}]: {}", code, message);
 
   std::lock_guard<std::mutex> lock(metrics_mutex_);
   metrics_.failedRequests++;
@@ -218,8 +223,9 @@ void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::strin
 
   metrics_.lastResponseTime = std::chrono::milliseconds(duration);
 
-  logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
-                req.method(), req.url(), code, duration);
+  if (logger_)
+    logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
+                  req.method(), req.url(), code, duration);
 }
 
 std::string SEPApiServer::getErrorResponse(const std::string& message, int status) {
@@ -245,7 +251,8 @@ nlohmann::json SEPApiServer::handleCrowError(const std::string& message,
            std::chrono::system_clock::now().time_since_epoch())
            .count()}};
 
-  logger_->error("API Error [{}]: {}", status_code, message);
+  if (logger_)
+    logger_->error("API Error [{}]: {}", status_code, message);
 
   std::lock_guard<std::mutex> lock(metrics_mutex_);
   metrics_.failedRequests++;
@@ -283,8 +290,9 @@ void SEPApiServer::logRequest(const crow::request& req, int status_code,
   std::string method_name = std::string(crow::method_name(req.method));
   std::string url = std::string(req.url);
 
-  logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
-                method_name, url, status_code, duration_ms);
+  if (logger_)
+    logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
+                  method_name, url, status_code, duration_ms);
 }
 
 void SEPApiServer::setup_logging() {

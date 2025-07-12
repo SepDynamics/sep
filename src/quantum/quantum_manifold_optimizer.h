@@ -64,10 +64,9 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        ::sep::config::CudaConfig cuda;
-        ::sep::config::APIConfig api;
-        ::sep::config::LogConfig log;
-        ::sep::config::AnalyticsConfig analytics;
+        workbench::CudaConfig cuda;
+        workbench::LogConfig log;
+        workbench::AnalyticsConfig analytics;
         float base_resonance_frequency{0.42f};
         float convergence_threshold{0.001f};
         float step_size{0.05f};
@@ -94,8 +93,7 @@ public:
     QuantumManifoldOptimizer();
     explicit QuantumManifoldOptimizer(const Config& config);
 
-    static Config createManifoldConfig(
-        const ::sep::PatternEvolutionBridge::Config& cfg);
+    static Config createManifoldConfig(const PatternEvolutionBridge::Config &cfg);
 
     OptimizationResult optimize(const QuantumState& initial_state,
                                 const OptimizationTarget& target);
@@ -149,10 +147,9 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    sep::config::CudaConfig cuda;
-    sep::config::APIConfig api;
-    sep::config::LogConfig log;
-    sep::config::AnalyticsConfig analytics;
+    workbench::CudaConfig cuda;
+    workbench::LogConfig log;
+    workbench::AnalyticsConfig analytics;
 };
 
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
@@ -215,7 +212,7 @@ private:
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
 class CUDAQuantumKernel {
 public:
-    explicit CUDAQuantumKernel(const sep::config::CudaConfig& config);
+    explicit CUDAQuantumKernel(const workbench::CudaConfig &config);
     ~CUDAQuantumKernel();
 
   // Warp-level primitive operations
@@ -234,8 +231,8 @@ public:
 private:
     cudaStream_t stream_;
     cufftHandle fft_plan_;
-    sep::config::CudaConfig config_;
-    
+    workbench::CudaConfig config_;
+
     void* d_workspace_;
     size_t workspace_size_;
 };
@@ -243,14 +240,15 @@ private:
 // 4. API COHERENCE MODULATION
 class APICoherenceModulator {
 public:
-    explicit APICoherenceModulator(const sep::config::APIConfig& config);
+    explicit APICoherenceModulator(const workbench::LogConfig &config);
 
-  // Dynamic response coherence synthesis
-  struct CoherenceResponse {
-    double final_coherence;
-    std::vector<double> superposition_weights;
-    std::string modulation_strategy;
-  };
+    // Dynamic response coherence synthesis
+    struct CoherenceResponse
+    {
+        double final_coherence;
+        std::vector<double> superposition_weights;
+        std::string modulation_strategy;
+    };
 
   CoherenceResponse synthesizeResponse(
       const std::string &client_context,
@@ -262,7 +260,7 @@ public:
                                   const std::vector<double> &weights);
 
 private:
-    sep::config::APIConfig config_;
+    workbench::LogConfig config_;
     std::unordered_map<std::string, double> context_coherence_map_;
     
     std::vector<double> extractCoherenceFactors(const std::string& context,
@@ -311,15 +309,16 @@ private:
 // 6. REAL-TIME PERFORMANCE ANALYTICS
 class PerformanceAnalyzer {
 public:
-  explicit PerformanceAnalyzer(const sep::config::AnalyticsConfig &config);
+    explicit PerformanceAnalyzer(const workbench::AnalyticsConfig &config);
 
-  // Quantum state space analysis
-  struct StateSpaceAnalysis {
-    std::vector<std::vector<double>> state_trajectories;
-    std::vector<double> lyapunov_exponents;
-    double entropy_rate;
-    std::vector<int> anomaly_indices;
-  };
+    // Quantum state space analysis
+    struct StateSpaceAnalysis
+    {
+        std::vector<std::vector<double>> state_trajectories;
+        std::vector<double> lyapunov_exponents;
+        double entropy_rate;
+        std::vector<int> anomaly_indices;
+    };
 
   StateSpaceAnalysis
   analyzeStateSpace(const std::vector<QuantumPattern> &pattern_history);
@@ -346,13 +345,12 @@ public:
                         const std::vector<double> &performance_metrics);
 
 private:
-  sep::config::AnalyticsConfig config_;
-  std::vector<double> performance_history_;
-  std::mutex history_mutex_;
+    workbench::AnalyticsConfig config_;
+    std::vector<double> performance_history_;
+    std::mutex history_mutex_;
 
-  double
-  calculateLyapunovExponent(const std::vector<std::vector<double>> &trajectory);
-  double calculateEntropyRate(const std::vector<QuantumPattern> &patterns);
+    double calculateLyapunovExponent(const std::vector<std::vector<double>> &trajectory);
+    double calculateEntropyRate(const std::vector<QuantumPattern> &patterns);
 };
 
 // COMPREHENSIVE VALIDATION FRAMEWORK

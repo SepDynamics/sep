@@ -52,7 +52,7 @@ extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const sep::
     bridge_ptr->pattern_metrics = SEPPatternMetrics{};
 
     auto result = bridge_ptr->impl->init(gpu_ctx);
-    s if (static_cast<int32_t>(result) != static_cast<int32_t>(sep::SEPResult::SUCCESS))
+    if (static_cast<int32_t>(result) != static_cast<int32_t>(sep::SEPResult::SUCCESS))
     {
         // bridge_ptr goes out of scope and cleans up
         return static_cast<sep::SEPResult>(static_cast<int32_t>(result));

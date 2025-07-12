@@ -27,22 +27,6 @@ namespace memory {
         UNIFIED = 102  // Unified memory (accessible by both CPU and GPU)
     };
 
-    // Forward declaration moved to global sep::persistence namespace
-
-// Convert MemoryTierEnum to string representation
-inline std::string memoryTierToString(MemoryTierEnum tier) {
-    switch (tier) {
-        case MemoryTierEnum::STM: return "stm";
-        case MemoryTierEnum::SHORT_TERM: return "stm";
-        case MemoryTierEnum::MTM: return "mtm";
-        case MemoryTierEnum::LTM: return "ltm";
-        case MemoryTierEnum::HOST: return "host";
-        case MemoryTierEnum::DEVICE: return "device";
-        case MemoryTierEnum::UNIFIED: return "unified";
-        default: return "unknown";
-    }
-}
-
 // Convert string to MemoryTierEnum
 inline MemoryTierEnum stringToMemoryTier(const std::string& tier) {
     if (tier == "stm") return MemoryTierEnum::STM;

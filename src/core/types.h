@@ -134,6 +134,7 @@ namespace sep
         struct LogConfig
         {
             int max_connections{0};
+            uint32_t timeout_ms{0};
             std::string log_level{"info"};
         };
 
@@ -171,6 +172,11 @@ namespace sep
         {
             // Fields for analytics go here
         };
+    }  // namespace workbench
+
+    namespace config
+    {
+        using CudaConfig = workbench::CudaConfig;
     }  // namespace config
 
     namespace quantum

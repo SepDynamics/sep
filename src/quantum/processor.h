@@ -28,10 +28,8 @@ struct ProcessingResult {
     std::string error_message{};
 };
 
-struct BatchProcessingResult {
-    bool success{false};
+struct BatchProcessingResult : public ProcessingResult {
     std::vector<ProcessingResult> results{};
-    std::string error_message{};
 };
 
 namespace pattern {

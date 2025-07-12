@@ -101,9 +101,9 @@ namespace sep::config
 
         return impl_->api_cfg;
     }
-    const CudaConfig& ConfigManager::getCudaConfig() const
+    const sep::config::CudaConfig& ConfigManager::getCudaConfig() const
     {
-        static CudaConfig cfg{};
+        static sep::config::CudaConfig cfg{};
         return cfg;
     }
     const LogConfig& ConfigManager::getLogConfig() const
@@ -126,7 +126,7 @@ namespace sep::config
         std::lock_guard<std::mutex> lock(mutex_);
         impl_->api_cfg = cfg;
     }
-    void ConfigManager::updateCudaConfig(const CudaConfig&) {}
+    void ConfigManager::updateCudaConfig(const sep::config::CudaConfig&) {}
     void ConfigManager::updateLogConfig(const LogConfig&) {}
     void ConfigManager::updateMemoryConfig(const workbench::MemoryThresholdConfig& cfg)
     {

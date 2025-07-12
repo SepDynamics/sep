@@ -5,7 +5,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "workbench_demo_adapter.hpp"
 #include "imgui.h"
 #include "sep_engine_wrapper.h"
 

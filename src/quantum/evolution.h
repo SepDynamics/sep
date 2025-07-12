@@ -78,7 +78,7 @@ void applyGravity(Pattern& pattern, const glm::vec3& center, float strength);
 void randomPerturbation(Pattern& pattern, float amplitude);
 } // namespace evolution
 
-BatchProcessingResult evolve(const EvolutionEngine::EvolutionParams& params);
+BatchProcessingResult evolve(const EvolutionParams& params);
 BatchProcessingResult evolveGeneration();
 
 } // namespace sep::quantum

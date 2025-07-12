@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     const auto& apiConfig = configMgr.getAPIConfig();
 
     // Create minimal renderer implementation
-    std::unique_ptr<sep::blender::ccl::CyclesRenderer> renderer = sep::createRenderer();
+    std::unique_ptr<sep::CyclesRenderer> renderer = sep::createRenderer();
     if (renderer) {
         renderer.get()->initialize();
     }

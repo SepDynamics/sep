@@ -23,7 +23,7 @@ namespace memory {
 using ::sep::CompressionMethod;
 using ::sep::SEPResult;
 using ::sep::memory::MemoryTierEnum;
-using PersistentPatternData = ::sep::persistence::PersistentPatternData;
+using PersistentPatternData = sep::persistence::PersistentPatternData;
 
 // Small epsilon for utilization metrics. Keeps a 1 KiB allocation visible in a
 // 1 MiB tier while clamping rounding noise after promotions or defragmentation.
@@ -89,7 +89,7 @@ struct MemoryBlock {
       : ptr(p), size(s), offset(off), original_size(s), tier(t) {}
 };
 
-using PersistentPatternData = ::sep::persistence::PersistentPatternData;
+using PersistentPatternData = sep::persistence::PersistentPatternData;
 
 class MemoryTier {
 public:
@@ -142,12 +142,12 @@ public:
 
   // Pattern management methods
   bool canAcceptPattern(
-      const ::sep::persistence::PersistentPatternData &pattern) const;
-  void addPattern(size_t id, ::sep::persistence::PersistentPatternData pattern);
+      const sep::persistence::PersistentPatternData &pattern) const;
+  void addPattern(size_t id, sep::persistence::PersistentPatternData pattern);
   void removePattern(size_t id);
-  const ::sep::persistence::PersistentPatternData *getPattern(size_t id) const;
-  ::sep::persistence::PersistentPatternData *getPattern(size_t id);
-  const std::unordered_map<size_t, ::sep::persistence::PersistentPatternData> &
+  const sep::persistence::PersistentPatternData *getPattern(size_t id) const;
+  sep::persistence::PersistentPatternData *getPattern(size_t id);
+  const std::unordered_map<size_t, sep::persistence::PersistentPatternData> &
   getPatterns() const {
     return m_patterns;
   }
@@ -166,7 +166,7 @@ private:
   size_t m_max_patterns{0};
   float m_coherence_threshold{0.0f};
   int m_min_generations{0};
-  std::unordered_map<size_t, ::sep::persistence::PersistentPatternData>
+  std::unordered_map<size_t, sep::persistence::PersistentPatternData>
       m_patterns;
 };
 

@@ -31,7 +31,7 @@ namespace sep
                 return instance;
             }
 
-            SEPResult init(const Config& config) { return SEPResult::SUCCESS; }
+            sep::SEPResult init(const Config& config) { return sep::SEPResult::SUCCESS; }
         };
     }  // namespace memory
 
@@ -83,27 +83,27 @@ namespace sep
         {
         public:
             virtual ~Processor() = default;
-            virtual SEPResult init(void* userData) { return SEPResult::SUCCESS; }
-            virtual SEPResult processAll() { return SEPResult::SUCCESS; }
+            virtual sep::SEPResult init(void* userData) { return sep::SEPResult::SUCCESS; }
+            virtual sep::SEPResult processAll() { return sep::SEPResult::SUCCESS; }
 
             // Add missing methods needed by main.cpp
-            virtual SEPResult addPattern(const Pattern& pattern)
+            virtual sep::SEPResult addPattern(const Pattern& pattern)
             {
                 patterns.push_back(pattern);
-                return SEPResult::SUCCESS;
+                return sep::SEPResult::SUCCESS;
             }
 
-            virtual SEPResult evolvePattern(const std::string& id)
+            virtual sep::SEPResult evolvePattern(const std::string& id)
             {
                 for (auto& pattern : patterns)
                 {
                     if (pattern.id == id)
                     {
                         pattern.evolve(1.0f);
-                        return SEPResult::SUCCESS;
+                        return sep::SEPResult::SUCCESS;
                     }
                 }
-                return SEPResult::ERROR;
+                return sep::SEPResult::ERROR;
             }
 
             virtual std::vector<Pattern> getPatterns() { return patterns; }

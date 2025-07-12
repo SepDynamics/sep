@@ -5820,7 +5820,13 @@ void ImGui::EndFrame()
 
     // Notify Platform/OS when our Input Method Editor cursor has moved (e.g. CJK inputs using Microsoft IME)
     ImGuiPlatformImeData* ime_data = &g.PlatformImeData;
-    if (g.PlatformIO.Platform_SetImeDataFn != NULL && memcmp(ime_data, &g.PlatformImeDataPrev, sizeof(ImGuiPlatformImeData)) != 0)
+    if (g.PlatformIO.Platform_SetImeDataFn != NULL &&
+        (ime_data->WantVisible != g.PlatformImeDataPrev.WantVisible ||
+         ime_data->WantTextInput != g.PlatformImeDataPrev.WantTextInput ||
+         ime_data->InputPos.x != g.PlatformImeDataPrev.InputPos.x ||
+         ime_data->InputPos.y != g.PlatformImeDataPrev.InputPos.y ||
+         ime_data->InputLineHeight != g.PlatformImeDataPrev.InputLineHeight ||
+         ime_data->ViewportId != g.PlatformImeDataPrev.ViewportId))
     {
         IMGUI_DEBUG_LOG_IO("[io] Calling Platform_SetImeDataFn(): WantVisible: %d, InputPos (%.2f,%.2f)\n", ime_data->WantVisible, ime_data->InputPos.x, ime_data->InputPos.y);
         IM_ASSERT(ime_data->ViewportId == IMGUI_VIEWPORT_DEFAULT_ID); // master branch

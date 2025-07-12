@@ -1,4 +1,5 @@
-#include "quantum/types.h"
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "memory/types.h" // Add include for MemoryTierEnum
 #include <nlohmann/json.hpp> 
 #include <cstring>

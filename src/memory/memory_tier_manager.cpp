@@ -2,11 +2,8 @@
 
 #include "core/common.h"
 #include "core/types.h"
-#include "memory/memory_tier.hpp"
-#include "memory/types.h"
-#include "quantum/data.hpp"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "quantum/pattern.h"
-#include "quantum/types.h"
 
 namespace sep {
 namespace pattern {

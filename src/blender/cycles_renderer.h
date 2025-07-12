@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "quantum/data.hpp"
+#include "core/types.h"
 #include "core/types.h"
 #include "core/common.h"
 #include "compat/cycles.h"

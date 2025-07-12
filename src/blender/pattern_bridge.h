@@ -9,7 +9,7 @@
 #include <vector>
 #include "blender/pattern_common.h"  // For ObjectState (assuming)
 #include "blender/bridge.h"
-#include "quantum/data.hpp"
+#include "core/types.h"
 #include "core/types.h"
 #include "blender/pattern_observer.h"   // For PatternObserver
 #include "blender/types.h"              // For Object, SEPResult, etc.

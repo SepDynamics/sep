@@ -28,7 +28,8 @@
 #include "core/logging.h"  // Include logging header first
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor.h"
-#include "quantum/types.h"  // For quantum::Pattern::generation
+#include "core/types.h"  // For quantum::Pattern::generation
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "tests/simple_embedding_model.h"
 
 // Forward declaration of the wrapper function for CUDA initialization

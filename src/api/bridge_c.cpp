@@ -13,7 +13,7 @@
 #include <nlohmann/json.hpp>
 
 #include "api/bridge.h"
-#include "quantum/types.h"
+#include "core/types.h"
 #include "api/bridge_internal.hpp"
 #include "core/manager.h"
 #include "core/common.h"  // defines sep::SEPResult

@@ -5,6 +5,8 @@
 
 #include "tests/dataset_loader.h"
 
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 // Include SEP engine headers
 #include "sep_engine_wrapper.h"
 #include "quantum/quantum_processor_qfh.h"

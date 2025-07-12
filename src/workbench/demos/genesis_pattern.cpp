@@ -6,7 +6,8 @@
 #include "core/engine.h"
 #include "memory/quantum_coherence_manager.h"
 #include "quantum/quantum_processor.h"
-#include "quantum/types.h"
+#include "core/types.h"
+namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "imgui.h"
 
 namespace sep {

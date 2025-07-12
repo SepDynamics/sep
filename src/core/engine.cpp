@@ -40,6 +40,7 @@
 #include "compat/stream.h"
 #include "core/common.h"  // defines sep::SEPResult
 #include "core/engine.h"
+#include "core/config.h"
 #include "core/error_handler.h"
 #include "core/logging.h"  // This is actually the logging manager
 #include "core/types.h"

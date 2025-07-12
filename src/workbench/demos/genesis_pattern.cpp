@@ -1,12 +1,11 @@
 #include "genesis_pattern.hpp"
 
-#include "../../workbench_demo_adapter.hpp"
 #include "blender/cycles_renderer.hpp"
 #include "config.hpp"
 #include "core/engine.h"
+#include "core/types.h"
 #include "memory/quantum_coherence_manager.h"
 #include "quantum/quantum_processor.h"
-#include "core/types.h"
 namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
 #include "imgui.h"
 

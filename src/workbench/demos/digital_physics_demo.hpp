@@ -3,10 +3,9 @@
 #include <algorithm>
 #include <vector>
 
-#include "../../workbench_demo_adapter.hpp"
+#include "core/types.h"
 #include "demo_manager.hpp"
 #include "imgui.h"
-#include "core/types.h"
 
 namespace sep {
 namespace workbench {

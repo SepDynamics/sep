@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 
-#include "../../workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
 #include "memory/quantum_coherence_manager.h"
 #include "quantum/processor.h"

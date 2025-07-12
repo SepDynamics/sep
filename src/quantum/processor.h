@@ -2,7 +2,6 @@
 #define SEP_QUANTUM_PROCESSOR_H
 #pragma once
 
-#include "types.h"
 #include "core/common.h"
 #include "core/system_hooks.h"
 // Removed duplicate include of core/types.h

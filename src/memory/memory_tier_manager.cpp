@@ -3,6 +3,8 @@
 #include "core/common.h"
 #include "core/types.h"
 #include "quantum/pattern.h"
+#include "quantum/processor.h"
+#include "quantum/pattern_processor.hpp"
 
 namespace sep {
 

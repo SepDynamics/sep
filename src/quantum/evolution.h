@@ -10,7 +10,9 @@ namespace sep::quantum {
 
 struct BatchProcessingResult {
     bool success{false};
+    Pattern pattern{};
     std::string message{};
+    std::string error_message{};
 };
 
 class Processor;

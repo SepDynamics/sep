@@ -3,6 +3,7 @@
 
 #include "memory/memory_tier_manager.hpp"
 #include "core/types.h"
+#include "core/config.h"
 #include <memory>
 #include <mutex>
 #include <string>
@@ -30,6 +31,9 @@ public:
   bool loadFromFile(const sep::shim::string &filename);
   bool loadFromEnvironment();
   bool loadFromCommandLine(int argc, char *argv[]);
+
+  const APIConfig &getAPIConfig() const;
+  void updateAPIConfig(const APIConfig &config);
 
   void updateCudaConfig(const workbench::CudaConfig &config);
   void updateLogConfig(const workbench::LogConfig &config);

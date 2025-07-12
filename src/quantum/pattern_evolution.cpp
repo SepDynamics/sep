@@ -68,7 +68,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
     {
         for (const auto& rel_json : config["relationships"])
         {
-            ::sep::PatternRelationship rel;
+            sep::pattern::PatternRelationship rel;
             
             std::string target_id = rel_json.value("target", "");
             if (!target_id.empty())
@@ -238,7 +238,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nl
     {
         for (const auto& rel_json : j["relationships"])
         {
-            ::sep::PatternRelationship rel;
+            sep::pattern::PatternRelationship rel;
             
             if (rel_json.contains("target") && rel_json["target"].is_string())
             {

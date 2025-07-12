@@ -8,36 +8,22 @@
 #include <numeric>
 #include <stdexcept>
 
-// Convenience comparator for mixed string types
-bool operator==(const std::string& lhs, const sep::shim::string& rhs) {
-    return lhs == rhs.c_str();
-}
-
-namespace {
-inline float deterministicNoise(uint64_t& state) {
-    state = state * 1664525u + 1013904223u;
-    return static_cast<float>(state & 0xFFFFFFFFu) / static_cast<float>(0xFFFFFFFFu);
-}
-}
-
-// helper comparator for shim::string vs std::string
-bool operator==(const std::string& lhs, const sep::shim::string& rhs) {
-    return lhs == rhs.c_str();
-}
-
 namespace sep::quantum {
+
+// Convenience comparator for mixed string types
+bool operator==(const std::string& lhs, const sep::shim::string& rhs)
+{
+    return lhs == rhs.c_str();
+}
 
 namespace
 {
-    inline float deterministicNoise(uint64_t& state)
-    {
-        state = state * 1664525u + 1013904223u;
-        return static_cast<float>(state & 0xFFFFFFFFu) / static_cast<float>(0xFFFFFFFFu);
-    }
-}  // namespace
-
-namespace sep::quantum
+inline float deterministicNoise(uint64_t& state)
 {
+    state = state * 1664525u + 1013904223u;
+    return static_cast<float>(state & 0xFFFFFFFFu) / static_cast<float>(0xFFFFFFFFu);
+}
+} // namespace
 
     class EvolutionEngine::EvolutionEngineImpl
     {

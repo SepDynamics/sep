@@ -2,7 +2,7 @@
 
 namespace sep::quantum::manifold {
 
-::sep::config::MemoryThresholdConfig memory{
+::sep::workbench::MemoryThresholdConfig memory{
     .promote_stm_to_mtm = 0.7f,
     .promote_mtm_to_ltm = 0.9f,
     .demote_threshold = 0.3f,
@@ -16,13 +16,13 @@ namespace sep::quantum::manifold {
     .enable_compression = true
 };
 
-::sep::config::QuantumThresholdConfig quantum{
+::sep::workbench::QuantumThresholdConfig quantum{
     .ltm_coherence_threshold = 0.9f,
     .mtm_coherence_threshold = 0.6f,
     .stability_threshold = 0.8f
 };
 
-::sep::config::CudaConfig cuda{
+::sep::workbench::CudaConfig cuda{
     .use_gpu = true,
     .max_memory_mb = 8192,
     .batch_size = 1024,
@@ -30,7 +30,7 @@ namespace sep::quantum::manifold {
     .enable_profiling = false
 };
 
-::sep::config::APIConfig api{
+::sep::workbench::APIConfig api{
     .max_connections = 1000,
     .timeout_ms = 5000,
     .host = "127.0.0.1",

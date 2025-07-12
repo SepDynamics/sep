@@ -2,10 +2,6 @@
 # SEP Engine dependency installer
 set -euo pipefail
 
-sudo ln -sf /workspace/sep /sep
-cd /sep
-
-
 # Pinned Python version used for all installs
 PYTHON_VERSION="3.13.*"
 
@@ -54,7 +50,7 @@ FULL_PACKAGES=(
   libboost-all-dev libopencolorio-dev libopenimageio-dev
   libembree-dev libpugixml-dev libopenjp2-7-dev
   libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
-  libhiredis-dev libglm-dev libglfw3 libglfw3-dev
+  libhiredis-dev libglm-dev
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev
 )
@@ -106,3 +102,5 @@ if apt-cache show gcc-14 >/dev/null 2>&1; then
   sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
 fi
 
+sudo ln -sf /workspace/sep /sep
+cd /sep

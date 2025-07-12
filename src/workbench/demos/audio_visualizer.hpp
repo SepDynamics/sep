@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 
-#include "../../workbench_demo_adapter.hpp"
 #include "audio/capture.h"
 #include "audio/pipeline.h"
 #include "demo_manager.hpp"

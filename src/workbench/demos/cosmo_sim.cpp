@@ -5,7 +5,6 @@
 // Include glm_config.h before any GLM headers to ensure GLM_ENABLE_EXPERIMENTAL is defined
 #include <glm/gtx/norm.hpp>
 
-#include "../../workbench_demo_adapter.hpp"
 #include "compat/glm_config.h"
 
 namespace sep

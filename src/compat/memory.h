@@ -9,7 +9,6 @@
 #include <cuda_runtime.h>
 #endif
 
-#include "types.h"
 #include "compat/macros.h"
 #include "compat/cuda_common.h"
 #if SEP_CUDA_AVAILABLE

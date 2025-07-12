@@ -1,9 +1,9 @@
 #ifndef SEP_CUDA_KERNELS_H
 #define SEP_CUDA_KERNELS_H
 
-#include "constants.h"
-#include "types.h"
 #include <cstdint>
+
+#include "constants.h"
 
 #ifdef __CUDACC__
 #include <cuda_runtime.h>

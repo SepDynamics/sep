@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
-#include "../../workbench_demo_adapter.hpp"
 #include "config.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/evolution.h"

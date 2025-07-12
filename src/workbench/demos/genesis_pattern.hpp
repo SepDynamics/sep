@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include "../../workbench_demo_adapter.hpp"
 #include "demo_manager.hpp"
 #include "imgui.h"
 #include "memory/quantum_coherence_manager.h"

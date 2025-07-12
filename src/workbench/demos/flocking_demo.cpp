@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <glm/glm.hpp>
 
-#include "../../workbench_demo_adapter.hpp"
 #include "config.hpp"
 
 namespace sep

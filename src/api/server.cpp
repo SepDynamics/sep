@@ -59,9 +59,6 @@ SEPApiServer::SEPApiServer(const AuthConfig& config, blender::ccl::CyclesRendere
 
     // Initialize logger
     setup_logging();
-
-    // Initialize Ollama client
-    ollama_client_ = std::make_unique<ollama::OllamaClient>(config_.ollama);
 }
 
 SEPApiServer::~SEPApiServer() {
@@ -757,38 +754,13 @@ nlohmann::json SEPApiServer::applyCoherenceModulation(const nlohmann::json& resp
 
   nlohmann::json modulated_response = response;
 
-  // Apply coherence-based response modulation
-  if (coherence_score < config_.response_modulation.coherence_threshold) {
-    if (config_.response_modulation.simplify_low_coherence) {
-      // Simplify response for low coherence
-      if (modulated_response.contains("details") && modulated_response["details"].is_array()) {
-        auto& details = modulated_response["details"];
-        if (details.size() > static_cast<size_t>(config_.response_modulation.max_detail_level)) {
-          details = nlohmann::json::array();
-          for (size_t i = 0; i < static_cast<size_t>(config_.response_modulation.max_detail_level); ++i) {
-            if (i < response["details"].size()) {
-              details.push_back(response["details"][i]);
-            }
-          }
-        }
-      }
-
-      // Add coherence warning for low scores
-      modulated_response["coherence_warning"] = "Response simplified due to low coherence score";
-      modulated_response["coherence_score"] = coherence_score;
-    }
-  }
-
   // Add coherence metadata
   modulated_response["modulation"] = {
-    {"applied", true},
-    {"coherence_score", coherence_score},
-    {"threshold", config_.response_modulation.coherence_threshold},
-    {"simplified", coherence_score < config_.response_modulation.coherence_threshold}
+      {"applied", true},
+      {"coherence_score", coherence_score},
   };
 
-  logger_->debug("Applied coherence modulation: score={}, threshold={}",
-                 coherence_score, config_.response_modulation.coherence_threshold);
+  logger_->debug("Applied coherence modulation: score={}, threshold={}");
 
   return modulated_response;
 }
@@ -817,19 +789,6 @@ void SEPApiServer::setup_signal_handlers() {
   (void)std::signal(SIGTERM, handleSignal);
 }
 
-void SEPApiServer::initClients() {
-#if SEP_HAS_EXCEPTIONS
-  try {
-#endif
-    // Initialize Ollama client if configured
-    ollama_client_ = std::make_unique<ollama::OllamaClient>(config_.ollama);
-    logger_->info("Ollama client initialized");
-#if SEP_HAS_EXCEPTIONS
-  } catch (const std::exception& e) {
-    logger_->warn("Failed to initialize Ollama client: {}", e.what());
-  }
-#endif
-}
 void SEPApiServer::handleSignal(int signal) {
   if (instance_) {
     instance_->logger_->info("Received signal {}, shutting down", signal);

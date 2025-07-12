@@ -281,20 +281,24 @@ public:
         status += "  Max patterns: " + std::to_string(config_.max_patterns) + "\n";
         status += "  GPU enabled: " + std::string(config_.enable_cuda ? "Yes" : "No") + "\n";
         size_t stm_count = 0, mtm_count = 0, ltm_count = 0;
+        size_t host_count = 0, device_count = 0, unified_count = 0;
         for (const auto& pattern : patterns_) {
             switch (pattern.quantum_state.memory_tier) {
                 case ::sep::memory::MemoryTierEnum::STM: stm_count++; break;
                 case ::sep::memory::MemoryTierEnum::MTM: mtm_count++; break;
                 case ::sep::memory::MemoryTierEnum::LTM: ltm_count++; break;
-                case ::sep::memory::MemoryTierEnum::UNIFIED:
-                case ::sep::memory::MemoryTierEnum::HOST:
-                case ::sep::memory::MemoryTierEnum::DEVICE:
-                    break;
+                case ::sep::memory::MemoryTierEnum::HOST: host_count++; break;
+                case ::sep::memory::MemoryTierEnum::DEVICE: device_count++; break;
+                case ::sep::memory::MemoryTierEnum::UNIFIED: unified_count++; break;
+                default: break;
             }
         }
         status += "  STM patterns: " + std::to_string(stm_count) + "\n";
         status += "  MTM patterns: " + std::to_string(mtm_count) + "\n";
         status += "  LTM patterns: " + std::to_string(ltm_count) + "\n";
+        status += "  HOST patterns: " + std::to_string(host_count) + "\n";
+        status += "  DEVICE patterns: " + std::to_string(device_count) + "\n";
+        status += "  UNIFIED patterns: " + std::to_string(unified_count) + "\n";
         return status;
     }
 

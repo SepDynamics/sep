@@ -216,7 +216,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
                     }
                 }
 
-                (void)std::snprintf(result_buffer, buffer_size, "%s", result_str.c_str());
+                (void)std::snprintf(result_buffer, sizeof(result_buffer), "%s", result_str.c_str());
                 return sep::SEPResult::SUCCESS;
             }
             {
@@ -233,42 +233,42 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
         try
         {
             std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-                std::string k;
-                std::string v;
-                if (!key || !value)
+                const char* k = key;
+                const char* v = value;
+                if (!k || !v)
                 {
                     sep::api::bridge::detail::setLastError("Invalid parameters");
                     return sep::SEPResult::UNKNOWN_ERROR;
                 }
-                k = key;
+                std::string ks = k;
                 auto &cm = sep::config::ConfigManager::getInstance();
                 auto cfg = cm.getAPIConfig();
                 try
                 {
-                    if (k == "api.host")
+                    if (ks == "api.host")
                     {
-                        cfg.host = value;
+                        cfg.host = v;
                     }
-                    else if (k == "api.port")
+                    else if (ks == "api.port")
                     {
-                        cfg.port = static_cast<uint16_t>(std::stoi(value));
+                        cfg.port = static_cast<uint16_t>(std::stoi(v));
                     }
-                    else if (k == "api.threads")
+                    else if (ks == "api.threads")
                     {
-                        cfg.threads = static_cast<uint32_t>(std::stoul(value));
+                        cfg.threads = static_cast<uint32_t>(std::stoul(v));
                     }
-                    else if (k == "api.log_level")
+                    else if (ks == "api.log_level")
                     {
-                        cfg.log_level = value;
+                        cfg.log_level = v;
                     }
-                    else if (k == "api.enable_metrics")
+                    else if (ks == "api.enable_metrics")
                     {
-                        v = value;
-                        cfg.enable_metrics = (v == "1" || v == "true");
+                        std::string vs = v;
+                        cfg.enable_metrics = (vs == "1" || vs == "true");
                     }
-                    else if (k == "api.keep_alive_timeout_ms")
+                    else if (ks == "api.keep_alive_timeout_ms")
                     {
-                        cfg.keep_alive_timeout_ms = static_cast<size_t>(std::stoul(value));
+                        cfg.keep_alive_timeout_ms = static_cast<size_t>(std::stoul(v));
                     }
                     else
                     {
@@ -330,7 +330,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
                     sep::api::bridge::detail::setLastError("Config key not found");
                     return sep::SEPResult::INVALID_ARGUMENT;
                 }
-                (void)std::snprintf(buffer, buffer_size, "%s", val.c_str());
+                (void)std::snprintf(buffer, sizeof(buffer), "%s", val.c_str());
                 sep::api::bridge::detail::setLastError("");
                 return sep::SEPResult::SUCCESS;
             }

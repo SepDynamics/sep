@@ -14,7 +14,7 @@ int main(int argc, char** argv)
     // Create minimal renderer implementation
     std::unique_ptr<sep::blender::ccl::CyclesRenderer> renderer = sep::createRenderer();
     if (renderer) {
-        renderer->initialize();
+        renderer.get()->initialize();
     }
 
     sep::api::SEPApiServer server(apiConfig, renderer.get());

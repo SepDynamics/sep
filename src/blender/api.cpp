@@ -29,7 +29,8 @@ namespace
     }
 }  // namespace
 
-extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const sep::pattern::PatternConfig& config, SEPBlenderBridge** bridge_out)
+extern "C" sep::SEPResult sep_blender_init(sep::GPUContext* gpu_ctx, const SEPConfig* config,
+                                           SEPBlenderBridge** bridge_out)
 {
     if (!gpu_ctx || !bridge_out)
     {

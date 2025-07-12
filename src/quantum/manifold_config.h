@@ -7,7 +7,7 @@ namespace sep::quantum::manifold {
 extern ::sep::workbench::MemoryThresholdConfig memory;
 extern ::sep::workbench::QuantumThresholdConfig quantum;
 extern ::sep::workbench::CudaConfig cuda;
-extern ::sep::workbench::APIConfig api;
+extern ::sep::workbench::LogConfig api;
 }
 
 

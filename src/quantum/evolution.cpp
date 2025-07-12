@@ -82,7 +82,7 @@ inline float deterministicNoise(uint64_t& state)
                 }
                 else if (!parent_ids.empty())
                 {
-                    ProcessingResult result = processor_->mutatePattern(parent_ids[0]);
+                    BatchProcessingResult result = processor_->mutatePattern(parent_ids[0]);
                     if (result.success)
                     {
                         next_generation_ids.push_back(result.pattern.id);

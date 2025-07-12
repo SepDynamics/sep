@@ -9360,7 +9360,7 @@ struct ImGuiTabBarSection
     float               Width;                  // Sum of width of tabs in this section (after shrinking down)
     float               Spacing;                // Horizontal spacing at the end of the section.
 
-    ImGuiTabBarSection() { memset(this, 0, sizeof(*this)); }
+    ImGuiTabBarSection() : TabCount{0}, Width{0.0f}, Spacing{0.0f} {}
 };
 
 namespace ImGui

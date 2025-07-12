@@ -170,6 +170,11 @@ namespace sep
         {
             // Fields for analytics go here
         };
+    }  // namespace workbench
+
+    namespace config
+    {
+        using CudaConfig = workbench::CudaConfig;
     }  // namespace config
 
     namespace quantum

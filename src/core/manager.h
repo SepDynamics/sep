@@ -35,7 +35,7 @@ public:
   // Access individual config sections
   const APIConfig &getAPIConfig() const;
 
-  void updateCudaConfig(const workbench::CudaConfig &config);
+  void updateCudaConfig(const sep::config::CudaConfig &config);
   void updateLogConfig(const workbench::LogConfig &config);
   void updateMemoryConfig(const workbench::MemoryThresholdConfig &config);
   void updateQuantumConfig(const workbench::QuantumThresholdConfig &config);

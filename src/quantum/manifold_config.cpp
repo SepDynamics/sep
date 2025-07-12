@@ -22,7 +22,7 @@ namespace sep::quantum::manifold {
     .stability_threshold = 0.8f
 };
 
-::sep::workbench::CudaConfig cuda{
+::sep::config::CudaConfig cuda{
     .use_gpu = true,
     .max_memory_mb = 8192,
     .batch_size = 1024,

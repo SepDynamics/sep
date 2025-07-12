@@ -28,18 +28,10 @@ public:
         float diversity{0.0f};
     };
 
-    struct EvolutionParams {
-        size_t elite_count{2};
-        size_t tournament_size{3};
-        float coherence_weight{0.5f};
-        float stability_weight{0.4f};
-        float diversity_bonus{0.1f};
-        float pressure{1.0f};
-    };
 
     explicit EvolutionEngine(Processor* processor);
 
-    BatchProcessingResult evolve(const EvolutionParams& params);
+    BatchProcessingResult evolve(const EvolutionStats& params);
     BatchProcessingResult evolveGeneration();
 
     Pattern crossover(const Pattern& parent1, const Pattern& parent2);
@@ -53,8 +45,8 @@ public:
     float calculateFitness(const Pattern& pattern) const;
     float calculateDiversity(const std::vector<Pattern>& patterns) const;
 
-    void setParams(const EvolutionParams& params);
-    EvolutionParams getParams() const;
+    void setParams(const EvolutionStats& params);
+    EvolutionStats getParams() const;
     EvolutionStats getStats() const;
     std::vector<EvolutionStats> getHistory() const;
 
@@ -77,7 +69,7 @@ void applyGravity(Pattern& pattern, const glm::vec3& center, float strength);
 void randomPerturbation(Pattern& pattern, float amplitude);
 } // namespace evolution
 
-BatchProcessingResult evolve(const EvolutionParams& params);
+BatchProcessingResult evolve(const EvolutionEngine::EvolutionStats& params);
 BatchProcessingResult evolveGeneration();
 
 } // namespace sep::quantum

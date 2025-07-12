@@ -23,7 +23,7 @@ public:
     void on_ui_render() override;
     void on_unload() override;
     void on_key_press(int key) override;
-    void on_mouse(int x, int y, int button) override;
+    void on_mouse(int x, int y, int button);
 
 private:
     void initializePatterns();
@@ -45,6 +45,8 @@ private:
 
     std::unique_ptr<sep::quantum::Processor> pattern_processor_;
     std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_manager_;
+
+    sep::CyclesRenderer* renderer_{nullptr};
 
     bool auto_evolve_{true};
     float evolution_rate_{0.1f};

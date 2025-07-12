@@ -334,7 +334,6 @@ private:
 
     void updateMemoryTier(Pattern& pattern) {
         auto& state = pattern.quantum_state;
-        ::sep::memory::MemoryTierEnum previous_tier = state.memory_tier;
 #if SEP_BUILD_QUANTUM
         auto qcfg = sep::config::ConfigManager::getInstance().getQuantumConfig();
 #else
@@ -347,8 +346,11 @@ private:
         } else {
             state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
         }
-        if (state.memory_tier != previous_tier) {
+        // Reset access frequency whenever the tier changes
+        static ::sep::memory::MemoryTierEnum last_tier = ::sep::memory::MemoryTierEnum::STM;
+        if (state.memory_tier != last_tier) {
             state.access_frequency = 1.0f;
+            last_tier = state.memory_tier;
         }
     }
 

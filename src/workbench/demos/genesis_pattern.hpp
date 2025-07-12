@@ -49,6 +49,7 @@ namespace sep
             sep::CyclesRenderer* renderer_{nullptr};
 
             sep::Engine* engine_{nullptr};
+        };
 
     }  // namespace workbench
 }  // namespace sep

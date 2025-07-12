@@ -42,7 +42,7 @@ class Engine {
   Engine() noexcept(false);
   ~Engine();
 
-  bool init(const ::sep::config::APIConfig &config);
+  bool init(const sep::config::APIConfig &config);
 
   // Delete copy operations
   Engine(const Engine &) = delete;
@@ -63,8 +63,8 @@ class Engine {
 
   void process_batch(const std::vector<::sep::PinState> &inputs,
                      std::uint64_t tick,
-                      ::sep::quantum::QBSAResult &qbsa_result,
-                      ::sep::cuda::QSHResult &qsh_result);
+                      sep::quantum::QBSAResult &qbsa_result,
+                      sep::cuda::QSHResult &qsh_result);
 
   // DAG accessors
   struct StateNode {

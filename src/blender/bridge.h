@@ -100,6 +100,7 @@ struct PatternConfig {
                               ::sep::memory::MemoryTierEnum target_tier);  // Changed to global SEPResult
   sep::SEPResult syncPatternData(sep::pattern::ObjectHandle handle,
                                  bool force);  // Changed to global SEPResult
+  sep::SEPResult syncMemory(::sep::memory::MemoryTierEnum tier, bool force);
   bool isInitialized() const { return initialized_; }
   bool isValidHandle(sep::pattern::ObjectHandle handle) const;
   ObjectState* getObjectState(sep::pattern::ObjectHandle handle);

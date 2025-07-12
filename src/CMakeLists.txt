@@ -97,3 +97,21 @@ if(SEP_BUILD_WORKBENCH)
         ${CMAKE_DL_LIBS}
     )
 endif()
+
+add_executable(sep_api_server
+    api_main.cpp
+)
+set_target_properties(sep_api_server PROPERTIES CXX_STANDARD 17)
+
+target_include_directories(sep_api_server PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
+)
+
+target_link_libraries(sep_api_server PRIVATE
+    sep_api
+    sep_blender
+    sep_core
+    sep_compat
+    Threads::Threads
+)

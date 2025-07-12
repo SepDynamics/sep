@@ -9,15 +9,16 @@
 
 namespace sep::quantum {
 
-struct BatchProcessingResult {
-    bool success{false};
+struct BatchProcessingResult : public ProcessingResult {
     std::string message{};
-    std::string error_message{};
-    Pattern pattern{};
+    std::vector<ProcessingResult> results{};
 };
 
 
 struct EvolutionParams {
+    float mutation_rate{0.1f};
+    float crossover_rate{0.7f};
+    uint32_t generations{100};
     size_t elite_count{5};
     size_t tournament_size{3};
     float coherence_weight{1.0f};
@@ -38,7 +39,7 @@ public:
     };
 
 
-    explicit EvolutionEngine(Processor* processor);
+    explicit EvolutionEngine(sep::quantum::Processor* processor);
 
     BatchProcessingResult evolve(const EvolutionParams& params);
     BatchProcessingResult evolveGeneration();

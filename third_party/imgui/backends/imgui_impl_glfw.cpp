@@ -621,7 +621,7 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
 
     // Setup backend capabilities flags
     ImGui_ImplGlfw_Data* bd = IM_NEW(ImGui_ImplGlfw_Data)();
-    snprintf(bd->BackendPlatformName, sizeof(bd->BackendPlatformName), "imgui_impl_glfw (%d)", GLFW_VERSION_COMBINED);
+    (void)snprintf(bd->BackendPlatformName, sizeof(bd->BackendPlatformName), "imgui_impl_glfw (%d)", GLFW_VERSION_COMBINED);
     io.BackendPlatformUserData = (void*)bd;
     io.BackendPlatformName = bd->BackendPlatformName;
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)

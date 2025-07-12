@@ -14934,7 +14934,7 @@ void ImGui::LogFinish()
     {
     case ImGuiLogFlags_OutputTTY:
 #ifndef IMGUI_DISABLE_TTY_FUNCTIONS
-        fflush(g.LogFile);
+        (void)fflush(g.LogFile);
 #endif
         break;
     case ImGuiLogFlags_OutputFile:

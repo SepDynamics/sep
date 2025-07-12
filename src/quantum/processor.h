@@ -73,6 +73,19 @@ protected:
 namespace quantum {
 namespace core { class SystemHooks; }
 
+struct ProcessingResult {
+    bool success{false};
+    Pattern pattern{};
+    std::string error_message{};
+};
+
+struct BatchProcessingResult {
+    bool success{false};
+    int error_code{0};
+    std::string error_message{};
+    std::vector<ProcessingResult> results;
+};
+
 class ProcessorImpl;
 
 // Processor is thread-safe. All mutations of internal state are

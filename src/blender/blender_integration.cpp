@@ -118,6 +118,10 @@ sep::SEPResult BlenderBridge::registerObject(Object* obj, const sep::pattern::Pa
     }
 }
 
+bool isValidConfig(const sep::pattern::PatternConfig& c) {
+    return c.max_patterns > 0;
+}
+
 void BlenderBridge::addObserver(std::shared_ptr<PatternObserver> observer)
 {
     if (!observer)

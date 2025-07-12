@@ -1,4 +1,5 @@
 #include "quantum/quantum_manifold_optimizer.h"
+#include "core/types.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include <numeric>
@@ -11,7 +12,7 @@
 namespace sep::quantum::manifold {
 
 QuantumManifoldOptimizer::Config QuantumManifoldOptimizer::createManifoldConfig(
-    const ::sep::quantum::PatternEvolutionBridge::Config& cfg) {
+    const ::sep::PatternEvolutionBridge::Config& cfg) {
     Config mc{};
     mc.convergence_threshold = cfg.convergence_threshold;
     mc.step_size = cfg.evolution_step_size;

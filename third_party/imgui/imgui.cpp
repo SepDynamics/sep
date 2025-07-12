@@ -5820,7 +5820,13 @@ void ImGui::EndFrame()
 
     // Notify Platform/OS when our Input Method Editor cursor has moved (e.g. CJK inputs using Microsoft IME)
     ImGuiPlatformImeData* ime_data = &g.PlatformImeData;
-    if (g.PlatformIO.Platform_SetImeDataFn != NULL && memcmp(ime_data, &g.PlatformImeDataPrev, sizeof(ImGuiPlatformImeData)) != 0)
+    if (g.PlatformIO.Platform_SetImeDataFn != NULL &&
+        (ime_data->WantVisible != g.PlatformImeDataPrev.WantVisible ||
+         ime_data->WantTextInput != g.PlatformImeDataPrev.WantTextInput ||
+         ime_data->InputPos.x != g.PlatformImeDataPrev.InputPos.x ||
+         ime_data->InputPos.y != g.PlatformImeDataPrev.InputPos.y ||
+         ime_data->InputLineHeight != g.PlatformImeDataPrev.InputLineHeight ||
+         ime_data->ViewportId != g.PlatformImeDataPrev.ViewportId))
     {
         IMGUI_DEBUG_LOG_IO("[io] Calling Platform_SetImeDataFn(): WantVisible: %d, InputPos (%.2f,%.2f)\n", ime_data->WantVisible, ime_data->InputPos.x, ime_data->InputPos.y);
         IM_ASSERT(ime_data->ViewportId == IMGUI_VIEWPORT_DEFAULT_ID); // master branch
@@ -6825,7 +6831,11 @@ static int ImGui::UpdateWindowManualResize(ImGuiWindow* window, const ImVec2& si
                 g.WindowResizeBorderExpectedRect = border_rect;
                 g.WindowResizeRelativeMode = false;
             }
-            if ((window->Flags & ImGuiWindowFlags_ChildWindow) && memcmp(&g.WindowResizeBorderExpectedRect, &border_rect, sizeof(ImRect)) != 0)
+            if ((window->Flags & ImGuiWindowFlags_ChildWindow) &&
+                (g.WindowResizeBorderExpectedRect.Min.x != border_rect.Min.x ||
+                 g.WindowResizeBorderExpectedRect.Min.y != border_rect.Min.y ||
+                 g.WindowResizeBorderExpectedRect.Max.x != border_rect.Max.x ||
+                 g.WindowResizeBorderExpectedRect.Max.y != border_rect.Max.y))
                 g.WindowResizeRelativeMode = true;
 
             const ImVec2 border_curr = (window->Pos + ImMin(def.SegmentN1, def.SegmentN2) * window->Size);

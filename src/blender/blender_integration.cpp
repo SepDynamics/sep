@@ -8,14 +8,12 @@
 
 using ::sep::memory::MemoryTierEnum;
 
-static bool isValidConfig(const sep::pattern::PatternConfig& c) {
-    return c.max_patterns > 0;
+namespace {
+bool isValidConfig(const sep::pattern::PatternConfig& c) { return c.max_patterns > 0; }
 }
+
 namespace sep {
 namespace pattern {
-static bool isValidConfig(const sep::pattern::PatternConfig& c) {
-    return c.max_patterns > 0;
-}
 // Use the core SEPResult enum instead of the pattern-specific one
 // Constructor implementation - Initialize members in the correct order
 BlenderBridge::BlenderBridge() : gpu_context_(nullptr), thread_running_(false)
@@ -25,18 +23,10 @@ BlenderBridge::BlenderBridge() : gpu_context_(nullptr), thread_running_(false)
 
 BlenderBridge::~BlenderBridge() = default;
 
-bool isValidConfig(const sep::pattern::PatternConfig& c) {
-    return c.max_patterns > 0;
-}
-
 
 std::unique_ptr<BlenderBridge> BlenderBridge::create()
 {
     return std::unique_ptr<BlenderBridge>(new (std::nothrow) BlenderBridge());
-}
-
-bool isValidConfig(const sep::pattern::PatternConfig& c) {
-    return c.max_patterns > 0;
 }
 
 
@@ -70,8 +60,6 @@ startProcessingThread();
 
     return sep::SEPResult::SUCCESS;
 }
-
-bool isValidConfig(const sep::pattern::PatternConfig& c) { return c.max_patterns > 0; }
 
 sep::SEPResult BlenderBridge::registerObject(Object* obj, const sep::pattern::PatternConfig& config, ObjectHandle* handle_out)
 {
@@ -294,10 +282,6 @@ sep::SEPResult BlenderBridge::registerObject(Object* obj, const sep::pattern::Pa
     }
 }
 
-bool isValidConfig(const sep::pattern::PatternConfig& c) {
-    return c.max_patterns > 0;
-}
-
 void BlenderBridge::addObserver(std::shared_ptr<PatternObserver> observer)
 {
     if (!observer)
@@ -403,55 +387,7 @@ sep::SEPResult BlenderBridge::freePatternMemory(BlenderBridge::ObjectState& stat
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult BlenderBridge::syncMemory(::sep::memory::MemoryTierEnum tier, bool force)
-{
-    if (!thread_running_.load())
-    {
-        return sep::SEPResult::INITIALIZATION_FAILED;
-    }
 
-    auto& manager = sep::memory::MemoryTierManager::getInstance();
-
-    switch (tier)
-    {
-        case ::sep::memory::MemoryTierEnum::STM:
-            manager.defragmentTier(sep::memory::MemoryTierEnum::HOST);
-            break;
-        case ::sep::memory::MemoryTierEnum::MTM:
-            manager.defragmentTier(sep::memory::MemoryTierEnum::DEVICE);
-            if (force)
-            {
-                freePatternMemory(it->second);
-                objects_.erase(it);
-            }
-        }
-
-        sep::SEPResult BlenderBridge::allocatePatternMemory(BlenderBridge::ObjectState& state)
-        {
-            std::size_t bytes = state.config.max_patterns * sizeof(sep::pattern::PatternData);
-            auto& mgr = sep::memory::MemoryTierManager::getInstance();
-            state.memory_block = mgr.allocate(bytes, sep::memory::MemoryTierEnum::DEVICE);
-            if (!state.memory_block)
-            {
-                return sep::SEPResult::ALLOCATION_FAILED;
-            }
-            state.patterns.resize(state.config.max_patterns);
-            state.memory_usage.host_memory = bytes;
-            return sep::SEPResult::SUCCESS;
-        }
-
-        sep::SEPResult BlenderBridge::freePatternMemory(BlenderBridge::ObjectState& state)
-        {
-            auto& mgr = sep::memory::MemoryTierManager::getInstance();
-            if (state.memory_block)
-            {
-                mgr.deallocate(state.memory_block);
-                state.memory_block = nullptr;
-            }
-            state.patterns.clear();
-            state.memory_usage.host_memory = 0;
-            return sep::SEPResult::SUCCESS;
-        }
 
         sep::SEPResult BlenderBridge::syncMemory(::sep::memory::MemoryTierEnum tier, bool force)
         {

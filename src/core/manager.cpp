@@ -11,7 +11,7 @@ namespace sep::config
 
     struct ConfigManager::Impl
     {
-        MemoryThresholdConfig mem_cfg{};
+        workbench::MemoryThresholdConfig mem_cfg{};
 #if SEP_BUILD_QUANTUM
         QuantumThresholdConfig quantum_cfg{};
 #endif
@@ -55,7 +55,8 @@ namespace sep::config
             nlohmann::json j;
             file >> j;
             std::lock_guard<std::mutex> lock(mutex_);
-            if (j.contains("memory")) impl_->mem_cfg = j.at("memory").get<MemoryThresholdConfig>();
+            if (j.contains("memory"))
+                impl_->mem_cfg = j.at("memory").get<workbench::MemoryThresholdConfig>();
 #if SEP_BUILD_QUANTUM
             if (j.contains("quantum"))
             {
@@ -92,7 +93,7 @@ namespace sep::config
         static LogConfig cfg{};
         return cfg;
     }
-    const MemoryThresholdConfig& ConfigManager::getMemoryConfig() const { return impl_->mem_cfg; }
+    const workbench::MemoryThresholdConfig& ConfigManager::getMemoryConfig() const { return impl_->mem_cfg; }
     const QuantumThresholdConfig& ConfigManager::getQuantumConfig() const
     {
 #if SEP_BUILD_QUANTUM
@@ -109,7 +110,7 @@ namespace sep::config
     }
     void ConfigManager::updateCudaConfig(const CudaConfig&) {}
     void ConfigManager::updateLogConfig(const LogConfig&) {}
-    void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig& cfg)
+    void ConfigManager::updateMemoryConfig(const workbench::MemoryThresholdConfig& cfg)
     {
         impl_->mem_cfg = cfg;
     }
@@ -123,7 +124,7 @@ namespace sep::config
     }
     void ConfigManager::resetToDefaults()
     {
-        impl_->mem_cfg = MemoryThresholdConfig{};
+        impl_->mem_cfg = workbench::MemoryThresholdConfig{};
 #if SEP_BUILD_QUANTUM
         impl_->quantum_cfg = QuantumThresholdConfig{};
 #endif

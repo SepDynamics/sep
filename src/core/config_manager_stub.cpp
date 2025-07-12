@@ -1,4 +1,6 @@
 #include "core/manager.h"
+#include "core/types.h"
+#include "core/config.h"
 
 namespace sep::config {
 

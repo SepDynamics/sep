@@ -12,12 +12,12 @@ int main(int argc, char** argv)
     const auto& apiConfig = configMgr.getAPIConfig();
 
     // Create minimal renderer implementation
-    std::unique_ptr<blender::ccl::CyclesRenderer> renderer = sep::createRenderer();
+    std::unique_ptr<sep::blender::ccl::CyclesRenderer> renderer = sep::createRenderer();
     if (renderer) {
         renderer->initialize();
     }
 
-    sep::api::SEPApiServer server(apiConfig, static_cast<blender::ccl::CyclesRenderer*>(renderer.get()));
+    sep::api::SEPApiServer server(apiConfig, static_cast<sep::blender::ccl::CyclesRenderer*>(renderer.get()));
     if (!server.run()) {
         std::cerr << "Failed to start API server" << std::endl;
         return 1;

@@ -7,6 +7,10 @@
 #include <vector>
 
 namespace sep {
+namespace persistence {
+class IRedisManager;
+} // namespace persistence
+
 namespace memory {
 
     // Memory tier types that are used across multiple modules
@@ -22,11 +26,7 @@ namespace memory {
         UNIFIED = 102  // Unified memory (accessible by both CPU and GPU)
     };
 
-    // Forward declarations
-    namespace persistence
-    {
-        class IRedisManager;
-}
+    // Forward declaration moved to global sep::persistence namespace
 
 // Convert MemoryTierEnum to string representation
 inline std::string memoryTierToString(MemoryTierEnum tier) {

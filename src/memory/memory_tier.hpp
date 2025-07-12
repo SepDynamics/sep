@@ -100,9 +100,9 @@ public:
     float promote_stm_to_mtm{0.7f};
     float promote_mtm_to_ltm{0.9f};
     float demote_threshold{0.3f};
-    bool enable_compression{false};
     uint32_t stm_to_mtm_min_gen{};
     uint32_t mtm_to_ltm_min_gen{};
+    bool enable_compression{false};
   };
 
   explicit MemoryTier(const Config &config);

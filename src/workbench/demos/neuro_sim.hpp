@@ -2,6 +2,7 @@
 #pragma once
 #include "workbench/demos/demo_base.hpp"
 
+#include "workbench/demos/demo_base.hpp"
 #include <array>
 #include <memory>
 #include <random>
@@ -11,7 +12,7 @@
 #include "demo_manager.hpp"
 #include "imgui.h"
 #include "memory/memory_tier_manager.hpp"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
+
 #include "sep_engine_wrapper.h"
 
 namespace sep

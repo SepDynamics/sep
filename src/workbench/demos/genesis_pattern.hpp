@@ -2,6 +2,7 @@
 #pragma once
 #include "workbench/demos/demo_base.hpp"
 
+#include "workbench/demos/demo_base.hpp"
 #include <memory>
 
 #include "demo_manager.hpp"

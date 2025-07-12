@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/types.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
+
 #include "memory/types.h"
 #include <glm/vec4.hpp>
 #include <glm/glm.hpp>

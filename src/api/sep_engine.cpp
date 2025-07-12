@@ -29,7 +29,7 @@
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor.h"
 #include "core/types.h"  // For quantum::Pattern::generation
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
+
 #include "tests/simple_embedding_model.h"
 
 // Forward declaration of the wrapper function for CUDA initialization

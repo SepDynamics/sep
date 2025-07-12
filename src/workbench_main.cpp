@@ -229,13 +229,19 @@ int main()
     }
 
     // 9. Main Loop
+    double last_time = glfwGetTime();
 
     while (!glfwWindowShouldClose(window))
     {
-        // Poll events
+        double current_time = glfwGetTime();
+        float dt = static_cast<float>(current_time - last_time);
+        last_time = current_time;
+
         glfwPollEvents();
 
-        // Start the ImGui frame
+        demoManager.on_update(dt);
+        renderer->render();
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -349,7 +355,6 @@ int main()
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        // Swap buffers
         glfwSwapBuffers(window);
     }
 

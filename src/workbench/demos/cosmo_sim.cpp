@@ -13,8 +13,8 @@ namespace sep
 
         void CosmoSim::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
         {
-            (void)engine;
             engine_ = engine;
+            ;
             renderer_ = renderer;
             const auto& cfg = Config::getInstance().cosmo();
             box_size_ = cfg.box_size;

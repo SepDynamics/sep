@@ -29,7 +29,7 @@ namespace sep
         class PatternProcessor
         {
         public:
-            PatternProcessor(sep::Engine& engine) : engine_(engine) {}
+            PatternProcessor(core::Engine& engine) : engine_(engine) {}
             ~PatternProcessor() = default;
 
             void initializeState(const QuantumState& state);
@@ -37,7 +37,7 @@ namespace sep
             void* getCurrentState() const;
 
         private:
-            sep::Engine& engine_;
+            core::Engine& engine_;
             QuantumState current_state_;
             void* pattern_state_ = nullptr;
         };

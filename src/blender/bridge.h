@@ -39,27 +39,6 @@ struct PatternConfig {
     int batch_size{0};
 };
 
-    struct PatternConfig {
-        float update_threshold{0.0f};
-        bool enable_mutations{false};
-        int max_patterns{0};
-        int batch_size{0};
-    };
-
-    struct PatternConfig {
-        float update_threshold{0.0f};
-        bool enable_mutations{false};
-        int max_patterns{0};
-        int batch_size{0};
-    };
-
-    struct PatternConfig {
-        float update_threshold{0.0f};
-        bool enable_mutations{false};
-        int max_patterns{0};
-        int batch_size{0};
-    };
-
 // Forward declarations
 class PatternObserver;
 
@@ -134,7 +113,6 @@ class BlenderBridge {
   sep::SEPResult updatePatternMetrics(ObjectState& state);            // Changed to global SEPResult
   sep::SEPResult validatePatternCoherence(const ObjectState& state);  // Changed to global SEPResult
   sep::SEPResult checkResourceLimits();                               // Changed to global SEPResult
-
   sep::SEPResult allocatePatternMemory(ObjectState& state);  // Changed to global SEPResult
   sep::SEPResult freePatternMemory(ObjectState& state);      // Changed to global SEPResult
   sep::SEPResult promotePatterns(sep::pattern::ObjectHandle handle,

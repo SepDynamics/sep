@@ -77,22 +77,13 @@ struct Pattern {
     float entropy{0.0f};
     int mutation_count{0};
     quantum::QuantumState quantum_state{};
-    float coherence{0.0f};
-    float stability{0.0f};
-    float entropy{0.0f};
-    int mutation_count{0};
     std::vector<quantum::PatternRelationship> relationships;
     std::vector<float> data;
-    std::vector<float> values;
     std::vector<std::string> parent_ids;
     uint64_t timestamp{0};
     uint64_t last_accessed{0};
     uint64_t last_modified{0};
     glm::vec3 momentum{0.0f};
-    float coherence{0.0f};
-    float stability{0.0f};
-    float entropy{0.0f};
-    int mutation_count{0};
 };
 
 // --- Aliases for Backwards Compatibility ---

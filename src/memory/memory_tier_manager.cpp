@@ -34,11 +34,8 @@ namespace sep
         class MemoryTier;
         struct MemoryBlock;
 
-        // Using declarations
-        using MemoryTierEnum;
-
         // Static member initializations
-        std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;
+        std::unique_ptr<MemoryTierManager>::sep::memory::MemoryTierManager::instance_;
         std::once_flag MemoryTierManager::once_flag_;
 
         // Singleton getter
@@ -53,17 +50,23 @@ namespace sep
 
         // Constructor
         MemoryTierManager::MemoryTierManager()
-            : stm_(std::make_unique<MemoryTier>(MemoryTierEnum::STM, 1 << 20, 0.7f, 5)),
-              mtm_(std::make_unique<MemoryTier>(MemoryTierEnum::MTM, 4 << 20, 0.8f, 50)),
-              ltm_(std::make_unique<MemoryTier>(MemoryTierEnum::LTM, 16 << 20, 0.9f, 100))
+            : stm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::STM, 1 << 20, 0.7f,
+                                                5)),
+              mtm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::MTM, 4 << 20, 0.8f,
+                                                50)),
+              ltm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::LTM, 16 << 20, 0.9f,
+                                                100))
         {
             init(Config{});
         }
 
         MemoryTierManager::MemoryTierManager(const Config &cfg)
-            : stm_(std::make_unique<MemoryTier>(MemoryTierEnum::STM, cfg.stm_size, cfg.promote_stm_to_mtm, cfg.stm_to_mtm_min_gen)),
-              mtm_(std::make_unique<MemoryTier>(MemoryTierEnum::MTM, cfg.mtm_size, cfg.promote_mtm_to_ltm, cfg.mtm_to_ltm_min_gen)),
-              ltm_(std::make_unique<MemoryTier>(MemoryTierEnum::LTM, cfg.ltm_size, 1.0f, 100))
+            : stm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::STM, cfg.stm_size,
+                                                cfg.promote_stm_to_mtm, cfg.stm_to_mtm_min_gen)),
+              mtm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::MTM, cfg.mtm_size,
+                                                cfg.promote_mtm_to_ltm, cfg.mtm_to_ltm_min_gen)),
+              ltm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::LTM, cfg.ltm_size,
+                                                1.0f, 100))
         {
             init(cfg);
         }

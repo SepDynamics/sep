@@ -1,4 +1,5 @@
 #include "memory/memory_tier_manager.hpp"
+#include "persistence/persistent_pattern_data.hpp"
 #include <nlohmann/json.hpp>
 
 namespace sep {

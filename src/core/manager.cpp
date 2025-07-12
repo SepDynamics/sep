@@ -1,4 +1,5 @@
 #include "core/manager.h"
+#include "core/config.h"
 
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -34,7 +35,16 @@ namespace sep::config
         static SystemConfig cfg{};
         return cfg;
     }
-    void ConfigManager::setConfig(const SystemConfig&) {}
+    void ConfigManager::setConfig(const SystemConfig& cfg)
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        impl_->mem_cfg = cfg.memory;
+#if SEP_BUILD_QUANTUM
+        impl_->quantum_cfg = cfg.quantum;
+#else
+        (void)cfg;
+#endif
+    }
     bool ConfigManager::loadFromFile(const sep::shim::string& filename)
     {
         try

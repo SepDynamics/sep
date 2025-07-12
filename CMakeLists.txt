@@ -5,6 +5,7 @@ add_compile_definitions(_POSIX_C_SOURCE=200809L)
 add_definitions(-D_GNU_SOURCE)
 # Also propagate POSIX feature macros to all targets
 add_compile_definitions(_POSIX_C_SOURCE=200809L)
+add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
 # Load CUDA toolchain file before project declaration
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)

@@ -6825,7 +6825,11 @@ static int ImGui::UpdateWindowManualResize(ImGuiWindow* window, const ImVec2& si
                 g.WindowResizeBorderExpectedRect = border_rect;
                 g.WindowResizeRelativeMode = false;
             }
-            if ((window->Flags & ImGuiWindowFlags_ChildWindow) && memcmp(&g.WindowResizeBorderExpectedRect, &border_rect, sizeof(ImRect)) != 0)
+            if ((window->Flags & ImGuiWindowFlags_ChildWindow) &&
+                (g.WindowResizeBorderExpectedRect.Min.x != border_rect.Min.x ||
+                 g.WindowResizeBorderExpectedRect.Min.y != border_rect.Min.y ||
+                 g.WindowResizeBorderExpectedRect.Max.x != border_rect.Max.x ||
+                 g.WindowResizeBorderExpectedRect.Max.y != border_rect.Max.y))
                 g.WindowResizeRelativeMode = true;
 
             const ImVec2 border_curr = (window->Pos + ImMin(def.SegmentN1, def.SegmentN2) * window->Size);

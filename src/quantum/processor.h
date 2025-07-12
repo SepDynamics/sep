@@ -15,18 +15,6 @@ namespace sep {
 
 // Constants for pattern processing
 namespace quantum {
-
-struct ProcessingResult {
-    bool success{false};
-    Pattern pattern{};
-    std::string error_message{};
-};
-
-struct BatchProcessingResult {
-    bool success{false};
-    std::vector<ProcessingResult> results{};
-    std::string error_message{};
-};
 constexpr float MIN_COHERENCE = 0.1f;
 constexpr float STABILITY_THRESHOLD = 0.85f;
 constexpr float COHERENCE_THRESHOLD = 0.7f;
@@ -96,17 +84,6 @@ protected:
 } // namespace pattern
 
 namespace quantum {
-struct ProcessingResult {
-    bool success{false};
-    ::sep::Pattern pattern{};
-    std::string error_message{};
-};
-
-struct BatchProcessingResult {
-    bool success{false};
-    std::vector<ProcessingResult> results{};
-    std::string error_message{};
-};
 namespace core { class SystemHooks; }
 
 class ProcessorImpl;

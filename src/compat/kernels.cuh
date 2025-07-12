@@ -20,7 +20,6 @@
 // Other project headers
 #include "compat/constants.h"
 #include "core/types.h"
-#include "core/types.h"
 
 #ifndef __CUDACC__
 #include "compat/cuda_impl.h"

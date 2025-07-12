@@ -1,8 +1,14 @@
 #pragma once
 
 #include "core/types.h"
-#include "core/types.h"
 #include <nlohmann/json.hpp>
+
+// Forward declaration of PatternConfig
+namespace sep {
+namespace pattern {
+struct PatternConfig {};
+}
+}
 #include <vector>
 #include <string>
 

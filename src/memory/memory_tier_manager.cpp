@@ -3,18 +3,14 @@
 #include "core/common.h"
 #include "core/types.h"
 #include "quantum/pattern.h"
-#include "quantum/processor.h"            // for sep::quantum types
-#include "quantum/pattern_processor.hpp"  // for sep::pattern utilities
+#include "quantum/processor.h"
+#include "quantum/pattern_processor.hpp"
 
 namespace sep {
-
-namespace sep
-{
     namespace config
     {
         class ConfigManager;
     }
-}
 
 #include <algorithm>
 #include <cmath>
@@ -39,7 +35,7 @@ namespace sep
         struct MemoryBlock;
 
         // Using declarations
-        using sep::memory::MemoryTierEnum;
+        using MemoryTierEnum;
 
         // Static member initializations
         std::unique_ptr<MemoryTierManager> MemoryTierManager::instance_;

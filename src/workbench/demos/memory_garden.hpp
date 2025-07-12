@@ -58,6 +58,8 @@ private:
     float learning_rate_{0.05f};
     float connection_prob_{0.3f};
 
+    sep::CyclesRenderer* renderer_{nullptr};
+
 private:
     void createInitialPatterns();
     void updateRelationships();

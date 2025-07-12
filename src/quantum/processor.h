@@ -71,6 +71,17 @@ protected:
 } // namespace pattern
 
 namespace quantum {
+struct ProcessingResult {
+    bool success{false};
+    Pattern pattern{};
+    std::string error_message{};
+};
+
+struct BatchProcessingResult {
+    bool success{false};
+    std::vector<ProcessingResult> results{};
+    std::string error_message{};
+};
 namespace core { class SystemHooks; }
 
 class ProcessorImpl;

@@ -593,9 +593,7 @@ int hipewCompilerVersion(void) {
   }
 
   /* get --version output */
-  strcat(command, "\"");
-  strncat(command, path, sizeof(command) - 1);
-  strncat(command, "\" --version", sizeof(command) - strlen(path) - 1);
+  snprintf(command, sizeof(command), "\"%s\" --version", path);
   pipe = popen(command, "r");
   if (!pipe) {
     fprintf(stderr, "HIP: failed to run compiler to retrieve version");

@@ -57,6 +57,7 @@ Index of this file:
 #include <stdio.h>      // FILE*, sscanf
 #include <stdlib.h>     // NULL, malloc, free, qsort, atoi, atof
 #include <math.h>       // sqrtf, fabsf, fmodf, powf, floorf, ceilf, cosf, sinf
+#include <cmath>
 #include <limits.h>     // INT_MIN, INT_MAX
 
 // Enable SSE intrinsics if available
@@ -272,10 +273,10 @@ extern IMGUI_API ImGuiContext* GImGui;  // Current implicit context pointer
 #define IM_TABSIZE                      (4)
 #endif
 #define IM_MEMALIGN(_OFF,_ALIGN)        (((_OFF) + ((_ALIGN) - 1)) & ~((_ALIGN) - 1))           // Memory align e.g. IM_ALIGN(0,4)=0, IM_ALIGN(1,4)=4, IM_ALIGN(4,4)=4, IM_ALIGN(5,4)=8
-#define IM_F32_TO_INT8_UNBOUND(_VAL)    ((int)((_VAL) * 255.0f + ((_VAL)>=0 ? 0.5f : -0.5f)))   // Unsaturated, for display purpose
-#define IM_F32_TO_INT8_SAT(_VAL)        ((int)(ImSaturate(_VAL) * 255.0f + 0.5f))               // Saturated, always output 0..255
+#define IM_F32_TO_INT8_UNBOUND(_VAL)    (static_cast<int>(std::lroundf((_VAL) * 255.0f)))   // Unsaturated, for display purpose
+#define IM_F32_TO_INT8_SAT(_VAL)        (static_cast<int>(std::lroundf(ImSaturate(_VAL) * 255.0f)))               // Saturated, always output 0..255
 #define IM_TRUNC(_VAL)                  ((float)(int)(_VAL))                                    // ImTrunc() is not inlined in MSVC debug builds
-#define IM_ROUND(_VAL)                  ((float)(int)((_VAL) + 0.5f))                           //
+#define IM_ROUND(_VAL)                  (static_cast<float>(std::lroundf(_VAL)))
 #define IM_STRINGIFY_HELPER(_X)         #_X
 #define IM_STRINGIFY(_X)                IM_STRINGIFY_HELPER(_X)                                 // Preprocessor idiom to stringify e.g. an integer.
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS

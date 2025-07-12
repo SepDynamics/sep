@@ -39,6 +39,13 @@ struct PatternConfig {
     int batch_size{0};
 };
 
+    struct PatternConfig {
+        float update_threshold{0.0f};
+        bool enable_mutations{false};
+        int max_patterns{0};
+        int batch_size{0};
+    };
+
 // Forward declarations
 class PatternObserver;
 
@@ -76,9 +83,9 @@ class BlenderBridge {
     Object* object;
     sep::pattern::PatternConfig config;
     sep::pattern::PatternMetrics metrics;
-    PatternStateEnum state;
-    PatternState pattern_state;
-    std::vector<PatternData> patterns;
+    sep::pattern::PatternStateEnum state;
+    sep::pattern::PatternState pattern_state;
+    std::vector<sep::pattern::PatternData> patterns;
     sep::memory::MemoryBlock* memory_block{nullptr};
     bool needs_update;
     bool is_processing;
@@ -103,8 +110,8 @@ class BlenderBridge {
   void notifyObservers(sep::pattern::ObjectHandle handle,
                        const sep::pattern::PatternMetrics& metrics);
   void notifyStateChange(sep::pattern::ObjectHandle handle,
-                         PatternStateEnum old_state,
-                         PatternStateEnum new_state);
+                         sep::pattern::PatternStateEnum old_state,
+                         sep::pattern::PatternStateEnum new_state);
   void notifyError(sep::SEPResult error, const char* message);  // Changed to global SEPResult
   void notifyResourceWarning(sep::pattern::ResourceType type, float utilization);
 

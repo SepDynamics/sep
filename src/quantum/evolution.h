@@ -15,6 +15,11 @@ struct BatchProcessingResult {
 
 class Processor;
 
+struct BatchProcessingResult {
+    bool success{false};
+    std::string message{};
+};
+
 class EvolutionEngine {
 public:
     struct EvolutionStats {

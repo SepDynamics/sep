@@ -21,9 +21,9 @@ public:
     explicit PatternQuantumProcessorImpl(const QuantumProcessor::Config& config)
         : quantum_processor_(createQuantumProcessor(config)) {}
 
-    sep::quantum::ProcessingResult processPattern(
+    sep::ProcessingResult processPattern(
         const sep::Pattern& pattern) {
-        sep::quantum::ProcessingResult result;
+        sep::ProcessingResult result;
         result.pattern = pattern;
         result.pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
         result.success = false;
@@ -64,9 +64,9 @@ public:
         return result;
     }
 
-    std::vector<sep::quantum::ProcessingResult> processBatch(
+    std::vector<sep::ProcessingResult> processBatch(
         const std::vector<sep::Pattern>& patterns) {
-        std::vector<sep::quantum::ProcessingResult> results;
+        std::vector<sep::ProcessingResult> results;
         results.reserve(patterns.size());
         
         for (const auto& pattern : patterns) {
@@ -158,6 +158,11 @@ void CPUPatternProcessor::evolvePatterns() {
 
 PatternData CPUPatternProcessor::mutatePattern(const PatternData& parent) {
     return PatternProcessor::mutatePattern(parent);
+}
+
+bool isValidConfig(const PatternConfig& c)
+{
+    return c.max_patterns > 0 && c.batch_size > 0;
 }
 
 } // namespace sep::pattern

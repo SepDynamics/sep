@@ -7,7 +7,6 @@
 
 // Use namespace alias to avoid ambiguity
 namespace sq = sep::quantum;
-using sq::Pattern;
 using sep::pattern::PatternData;
 
 namespace sep {
@@ -16,7 +15,7 @@ namespace workbench {
     void DrugOptimizerDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
     {
         (void)engine;
-        (void)renderer;
+        renderer_ = renderer;
         poses_.resize(5);
         for (auto& p : poses_)
         {

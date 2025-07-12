@@ -233,12 +233,14 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
         try
         {
             std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+                std::string k;
+                std::string v;
                 if (!key || !value)
                 {
                     sep::api::bridge::detail::setLastError("Invalid parameters");
                     return sep::SEPResult::UNKNOWN_ERROR;
                 }
-                std::string k = key;
+                k = key;
                 auto &cm = sep::config::ConfigManager::getInstance();
                 auto cfg = cm.getAPIConfig();
                 try
@@ -261,7 +263,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
                     }
                     else if (k == "api.enable_metrics")
                     {
-                        sep::shim::string v = value;
+                        v = value;
                         cfg.enable_metrics = (v == "1" || v == "true");
                     }
                     else if (k == "api.keep_alive_timeout_ms")
@@ -324,11 +326,11 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
                 }
                 else
                 {
-                    asio::buffer[0] = '\0';
+                    buffer[0] = '\0';
                     sep::api::bridge::detail::setLastError("Config key not found");
                     return sep::SEPResult::INVALID_ARGUMENT;
                 }
-                (void)std::snprintf(asio::buffer, buffer_size, "%s", val.c_str());
+                (void)std::snprintf(buffer, buffer_size, "%s", val.c_str());
                 sep::api::bridge::detail::setLastError("");
                 return sep::SEPResult::SUCCESS;
             }

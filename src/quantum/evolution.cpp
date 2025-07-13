@@ -10,12 +10,12 @@
 
 namespace sep::quantum {
 
-// Convenience comparator for mixed string types
-bool operator==(const std::string& lhs, const sep::shim::string& rhs)
+// Convenience comparator for mixed string types - defined in global namespace for wider visibility
+inline bool operator==(const std::string& lhs, const sep::shim::string& rhs)
 {
     return lhs == rhs.c_str();
 }
-bool operator==(const sep::shim::string& lhs, const std::string& rhs) { return lhs == rhs.c_str(); }
+inline bool operator==(const sep::shim::string& lhs, const std::string& rhs) { return lhs.c_str() == rhs; }
 
 namespace
 {
@@ -93,7 +93,7 @@ inline float deterministicNoise(uint64_t& state)
 
             for (const auto& pattern : patterns)
             {
-                if (std::find(next_generation_ids.begin(), next_generation_ids.end(), pattern.id) ==
+                if (std::find(next_generation_ids.begin(), next_generation_ids.end(), std::string(pattern.id.c_str())) ==
                     next_generation_ids.end())
                 {
                     processor_->removePattern(pattern.id);

@@ -1634,7 +1634,6 @@ void ImGui::TableSetupColumn(const char* label, ImGuiTableColumnFlags flags, flo
 
     TableSetupColumnFlags(table, column, flags);
     column->UserID = user_id;
-    flags = column->Flags;
 
     // Initialize defaults
     column->InitStretchWeightOrWidth = init_width_or_weight;

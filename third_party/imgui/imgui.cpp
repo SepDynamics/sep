@@ -2482,7 +2482,7 @@ int ImTextCharFromUtf8(unsigned int* out_char, const char* in_text, const char* 
     static const uint32_t mins[] = { 0x400000, 0, 0x80, 0x800, 0x10000 };
     static const int shiftc[] = { 0, 18, 12, 6, 0 };
     static const int shifte[] = { 0, 6, 4, 2, 0 };
-    int len = lengths[*(const unsigned char*)in_text >> 3];
+    int len = lengths[*reinterpret_cast<const unsigned char*>(in_text) >> 3];
     int wanted = len + (len ? 0 : 1);
 
     if (in_text_end == NULL)
@@ -3137,9 +3137,14 @@ static void ImGuiListClipper_SeekCursorAndSetupPrevLine(float pos_y, float line_
     }
 }
 
-ImGuiListClipper::ImGuiListClipper()
+ImGuiListClipper::ImGuiListClipper() :
+    DisplayStart(0),
+    DisplayEnd(0),
+    ItemsCount(0),
+    ItemsHeight(0.0f),
+    StartPosY(0.0f),
+    TempData(NULL)
 {
-    memset(this, 0, sizeof(*this));
 }
 
 ImGuiListClipper::~ImGuiListClipper()
@@ -13664,7 +13669,7 @@ void ImGui::NavUpdateCreateMoveRequest()
     float scoring_rect_offset_y = 0.0f;
     if (window && g.NavMoveDir == ImGuiDir_None && nav_keyboard_active)
         scoring_rect_offset_y = NavUpdatePageUpPageDown();
-    if (scoring_rect_offset_y != 0.0f)
+    if (scoring_rect_offset_y != 0.0f && window != NULL)
     {
         g.NavScoringNoClipRect = window->InnerRect;
         g.NavScoringNoClipRect.TranslateY(scoring_rect_offset_y);
@@ -14149,7 +14154,7 @@ static void ImGui::NavUpdateWindowingApplyFocus(ImGuiWindow* apply_focus_window)
         // FIXME-NAV: This should be done in NavInit.. or in FocusWindow... However in both of those cases,
         // we won't have a guarantee that windows has been visible before and therefore NavLayersActiveMask*
         // won't be valid.
-        if (apply_focus_window->DC.NavLayersActiveMaskNext == (1 << ImGuiNavLayer_Menu))
+        if (apply_focus_window && apply_focus_window->DC.NavLayersActiveMaskNext == (1 << ImGuiNavLayer_Menu))
             g.NavLayer = ImGuiNavLayer_Menu;
     }
     g.NavWindowingTarget = NULL;

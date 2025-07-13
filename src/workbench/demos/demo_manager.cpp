@@ -67,5 +67,14 @@ void DemoManager::on_key(int key) {
 
 std::string DemoManager::getCurrentDemo() const { return current_demo_name_; }
 
+std::vector<std::string> DemoManager::getRegisteredDemos() const
+{
+    std::vector<std::string> names;
+    names.reserve(demo_factories_.size());
+    for (const auto& pair : demo_factories_)
+        names.push_back(pair.first);
+    return names;
+}
+
 }  // namespace workbench
 }  // namespace sep

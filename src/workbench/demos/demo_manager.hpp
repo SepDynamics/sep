@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "sep_engine_wrapper.h"
 #include "workbench/demos/demo_base.hpp"
@@ -27,6 +28,7 @@ namespace sep
             void on_unload();
             void on_key(int key);
             std::string getCurrentDemo() const;
+            std::vector<std::string> getRegisteredDemos() const;
 
         private:
             DemoManager() = default;  // Singleton

@@ -18,26 +18,26 @@ add_subdirectory(api)
 add_subdirectory(audio)
 add_subdirectory(blender)
 
-# add_executable(sep_engine
-#     server_main.cpp
-# )
-# set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
-#
-# target_include_directories(sep_engine PRIVATE ${SEP_INCLUDE_DIRS})
-#
-# target_link_libraries(sep_engine PRIVATE
-#     sep_api
-#     sep_quantum
-#     sep_memory
-#     sep_utils
-#     sep_core
-#     sep_compat
-#     Threads::Threads
-#     ${CMAKE_DL_LIBS}
-# )
-# if(TARGET CUDA::cudart)
-#     target_link_libraries(sep_engine PRIVATE CUDA::cudart)
-# endif()
+
+
+add_executable(sep_api_server
+    api_main.cpp
+)
+set_target_properties(sep_api_server PROPERTIES CXX_STANDARD 17)
+
+target_include_directories(sep_api_server PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
+)
+
+target_link_libraries(sep_api_server PRIVATE
+    sep_api
+    sep_blender
+    sep_core
+    sep_compat
+    Threads::Threads
+)
+
 
 # Add the workbench executable if enabled
 if(SEP_BUILD_WORKBENCH)
@@ -53,7 +53,6 @@ if(SEP_BUILD_WORKBENCH)
         ${CMAKE_SOURCE_DIR}/src
         ${CMAKE_SOURCE_DIR}/third_party/imgui
         ${CMAKE_SOURCE_DIR}/third_party/imgui/backends
-        ${GLEW_INCLUDE_DIRS}
     )
 
     target_link_libraries(sep_workbench PRIVATE
@@ -86,7 +85,7 @@ if(SEP_BUILD_WORKBENCH)
         ${CURL_LIBRARIES}
         hiredis
         http_parser::http_parser
-        GLEW::glew
+        glad
         glfw
         OpenGL::GL
         Threads::Threads
@@ -97,21 +96,3 @@ if(SEP_BUILD_WORKBENCH)
         ${CMAKE_DL_LIBS}
     )
 endif()
-
-add_executable(sep_api_server
-    api_main.cpp
-)
-set_target_properties(sep_api_server PROPERTIES CXX_STANDARD 17)
-
-target_include_directories(sep_api_server PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/src
-)
-
-target_link_libraries(sep_api_server PRIVATE
-    sep_api
-    sep_blender
-    sep_core
-    sep_compat
-    Threads::Threads
-)

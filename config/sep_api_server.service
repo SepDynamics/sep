@@ -1,0 +1,13 @@
+[Unit]
+Description=SEP API Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/usr/local/share/sep
+ExecStart=/usr/local/bin/sep_api_server
+Environment=NODE_ENV=production
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

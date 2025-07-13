@@ -123,7 +123,11 @@ int main(int argc, char* argv[]) {
     });
     
     // Start with Genesis Pattern demo by default
-    demo_manager.switchToDemo("genesis");
+    try {
+        demo_manager.switchToDemo("genesis");
+    } catch (const std::exception& e) {
+        std::cerr << "Demo switch error: " << e.what() << std::endl;
+    }
     
     // 6. Set up the main application loop
     double last_time = glfwGetTime();

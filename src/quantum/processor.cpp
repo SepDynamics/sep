@@ -29,10 +29,13 @@ namespace sep::quantum {
 
 using sep::memory::MemoryTierEnum;
 
+// Global quantum threshold configuration
+sep::workbench::QuantumThresholdConfig qcfg = config::ConfigManager::getInstance().getQuantumThresholdConfig();
+
 class ProcessorImpl {
 public:
     explicit ProcessorImpl(const ProcessingConfig& config)
-        : config_(config), initialized_(false), gpu_context_(nullptr), hooks_(nullptr) {}
+        : config_(config), initialized_(false), gpu_context_(nullptr), hooks_(nullptr), params_() {}
 
     sep::SEPResult init(GPUContext* gpu_context) {
         std::lock_guard<std::mutex> lock(mutex_);
@@ -408,23 +411,6 @@ float Processor::calculateCoherence(const std::string& pattern_id1, const std::s
 std::string Processor::getStatus() const { return impl_->getStatus(); }
 ProcessingConfig Processor::getConfig() const { return impl_->getConfig(); }
 void Processor::updateConfig(const ProcessingConfig& config) { impl_->updateConfig(config); }
-
-std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config) {
-    ProcessingConfig cfg = config;
-    cfg.ltm_coherence_threshold = qcfg.ltm_coherence_threshold;
-    cfg.mtm_coherence_threshold = qcfg.mtm_coherence_threshold;
-    cfg.stability_threshold = qcfg.stability_threshold;
-    return std::make_unique<Processor>(cfg);
-}
-
-std::unique_ptr<Processor> createProcessor()
-{
-    ProcessingConfig pc;
-    pc.ltm_coherence_threshold = cfg.ltm_coherence_threshold;
-    pc.mtm_coherence_threshold = cfg.mtm_coherence_threshold;
-    pc.stability_threshold = cfg.stability_threshold;
-    return std::make_unique<Processor>(pc);
-}
 
 std::unique_ptr<Processor> createCPUProcessor(const ProcessingConfig& config) {
     ProcessingConfig cpu_config = config;

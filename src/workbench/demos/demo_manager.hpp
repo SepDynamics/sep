@@ -39,8 +39,6 @@ namespace sep
 
             sep::Engine* engine_{nullptr};
             sep::CyclesRenderer* renderer_{nullptr};
-            std::unordered_map<std::string, std::function<std::unique_ptr<Demo>()>> demo_factories_;
-            std::unique_ptr<Demo> current_demo_;
             std::string current_demo_name_;
         };
 

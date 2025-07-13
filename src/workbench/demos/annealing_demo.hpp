@@ -1,14 +1,11 @@
-#include "workbench/demos/demo_base.hpp"
 #pragma once
-#include "workbench/demos/demo_base.hpp"
 
-#include "workbench/demos/demo_base.hpp"
 #include <glm/vec3.hpp>
 #include <vector>
 
+#include "demo_base.hpp"
 #include "demo_manager.hpp"
 #include "imgui.h"
-#include "workbench/demos/demo_base.hpp"
 
 namespace sep {
 namespace workbench {

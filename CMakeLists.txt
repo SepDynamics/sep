@@ -44,6 +44,7 @@ option(SEP_BUILD_QUANTUM "Build quantum processing components" ON)
 option(SEP_BUILD_TESTS "Build test components" ON)
 option(SEP_BUILD_WORKBENCH "Build the interactive sep_workbench visualization" ON)
 option(SEP_USE_TBB "Enable TBB parallel features" ON)
+option(SEP_HAS_EXCEPTIONS "Enable C++ exceptions" ON)
 
 if(SEP_MINIMAL)
     add_compile_definitions(SEP_MINIMAL=1)
@@ -112,6 +113,10 @@ endif()
 # Include unified configuration module
 include(SEPConfig)
 configure_sep()
+
+if(NOT SEP_HAS_EXCEPTIONS)
+    add_compile_options(-fno-exceptions)
+endif()
 
 # CUDA is now a required component
 find_package(CUDAToolkit REQUIRED)

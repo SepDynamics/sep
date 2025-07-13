@@ -160,6 +160,8 @@ void GenesisPatternDemo::on_key_press(int key)
         case 'c':  // Cycle color modes
             renderer_->cycleColorMode();
             break;
+        default:  // Ignore unrecognized keys
+            break;
     }
 }
 

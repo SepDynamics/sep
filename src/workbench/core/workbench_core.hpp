@@ -14,7 +14,14 @@ class ServiceConnector;
 class DemoOrchestrator;
 class LandingPage;
 class Renderer;
-namespace sep { class Engine; class CyclesRenderer; }
+
+// External classes from sep namespace (not in sep::workbench)
+}
+namespace sep {
+    class Engine;
+    class CyclesRenderer;
+}
+namespace sep::workbench {
 
 enum class ApplicationState {
     INITIALIZING,
@@ -115,6 +122,11 @@ private:
     
     void handleStateTransition();
     void updateMetrics(float delta_time);
+    
+    // Rendering functions
+    void renderLoadingScreen();
+    void renderErrorRecovery();
+    void renderStatusBar();
     
     // State handlers
     void handleInitializing();

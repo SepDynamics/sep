@@ -1,207 +1,59 @@
 
-#include <glad/glad.h>
-
-#include <chrono>
-#include <cmath>
+#include "workbench/core/workbench_core.hpp"
 #include <iostream>
-#include <memory>
-#include <thread>
+#include <exception>
+#include <csignal>
 
-#include "workbench/demos/annealing_demo.hpp"
-#include "workbench/demos/cosmo_demo.hpp"
-#include "workbench/demos/demo_manager.hpp"
-#include "workbench/demos/digital_physics_demo.hpp"
-#include "workbench/demos/drug_discovery_demo.hpp"
-#include "workbench/demos/flocking_demo.hpp"
-#include "workbench/demos/genesis_pattern.hpp"
-#include "workbench/demos/memory_garden.hpp"
-#include "workbench/demos/neural_demo.hpp"
-#include "sep_engine_wrapper.h"
-#include "window.h"
-#include "workbench/config.hpp"
+// Global workbench instance for signal handling
+static sep::workbench::WorkbenchCore* g_workbench = nullptr;
 
-// Callback function prototypes
-void error_callback(int error, const char* description);
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+// Signal handler for graceful shutdown
+void signalHandler(int signal) {
+    std::cout << "\n[Main] Received signal " << signal << ", shutting down gracefully..." << std::endl;
+    if (g_workbench) {
+        g_workbench->shutdown();
+    }
+    exit(0);
+}
 
-// Global references for callbacks
-sep::workbench::DemoManager* g_demo_manager = nullptr;
-int g_mouse_x = 0;
-int g_mouse_y = 0;
-int g_mouse_button = -1;
-
-int main(int argc, char* argv[]) {
-    // 1. Initialize GLFW
-    if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return -1;
-    }
+int main(int, char**) {
+    // Install signal handlers
+    std::signal(SIGINT, signalHandler);
+    std::signal(SIGTERM, signalHandler);
     
-    glfwSetErrorCallback(error_callback);
+    std::cout << "=====================================\n";
+    std::cout << "   SEP Workbench - Demo Suite v0.1   \n";
+    std::cout << "=====================================\n\n";
     
-    // Set up OpenGL context
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    
-    // 2. Create Window
-    auto window = std::make_unique<sep::workbench::Window>(1280, 720, "SEP Workbench");
-    if (!window->initialize()) {
-        std::cerr << "Failed to initialize window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    
-    window->makeContextCurrent();
-    
-    // Initialize GLEW
-    glewExperimental = GL_TRUE;
-    if (glewInit() != GLEW_OK) {
-        std::cerr << "Failed to initialize GLEW" << std::endl;
-        return -1;
-    }
-    
-    // 3. Initialize the SEP Engine
-    sep::config::EngineConfig engine_config;
-    engine_config.memory_limit_mb = 1024;
-    engine_config.use_gpu = true;
-    engine_config.log_level = "info";
-    
-    auto engine = std::make_unique<sep::EngineWrapper>(engine_config);
-    if (!engine->initialize()) {
-        std::cerr << "Failed to initialize SEP Engine" << std::endl;
-        return -1;
-    }
-    
-    // Initialize renderer - always use Cycles
-    sep::CyclesRenderer* renderer = new sep::CyclesRenderer();
-    
-    // 4. Initialize the DemoManager
-    sep::workbench::DemoManager demo_manager;
-    demo_manager.initialize(engine.get(), renderer);
-    g_demo_manager = &demo_manager;
-    
-    // Set up input callbacks
-    GLFWwindow* glfw_window = window->getGLFWWindow();
-    glfwSetKeyCallback(glfw_window, key_callback);
-    glfwSetMouseButtonCallback(glfw_window, mouse_button_callback);
-    glfwSetCursorPosCallback(glfw_window, cursor_position_callback);
-    
-    // 5. Register all demo classes
-    demo_manager.registerDemo("genesis", []() {
-        return std::make_unique<sep::workbench::GenesisPatternDemo>();
-    });
-    
-    demo_manager.registerDemo("annealing", []() {
-        return std::make_unique<sep::workbench::AnnealingDemo>();
-    });
-    
-    demo_manager.registerDemo("cosmos", []() {
-        return std::make_unique<sep::workbench::CosmoDemo>();
-    });
-    
-    demo_manager.registerDemo("flocking", []() {
-        return std::make_unique<sep::workbench::FlockingDemo>();
-    });
-    
-    demo_manager.registerDemo("neural", []() {
-        return std::make_unique<sep::workbench::NeuralDemo>();
-    });
-    
-    demo_manager.registerDemo("drug_discovery", []() {
-        return std::make_unique<sep::workbench::DrugDiscoveryDemo>();
-    });
-    
-    demo_manager.registerDemo("digital_physics", []() {
-        return std::make_unique<sep::workbench::DigitalPhysicsDemo>();
-    });
-    
-    demo_manager.registerDemo("memory_garden", []() {
-        return std::make_unique<sep::workbench::MemoryGardenDemo>();
-    });
-    
-    // Start with Genesis Pattern demo by default
     try {
-        demo_manager.switchToDemo("genesis");
+        // Create workbench core
+        auto workbench = std::make_unique<sep::workbench::WorkbenchCore>();
+        g_workbench = workbench.get();
+        
+        // Initialize
+        std::cout << "[Main] Initializing workbench..." << std::endl;
+        if (!workbench->initialize()) {
+            std::cerr << "[Main] Failed to initialize workbench: "
+                      << workbench->getLastError() << std::endl;
+            return 1;
+        }
+        
+        // Run main loop
+        std::cout << "[Main] Starting main loop..." << std::endl;
+        workbench->run();
+        
+        // Cleanup
+        std::cout << "[Main] Shutting down..." << std::endl;
+        workbench->shutdown();
+        
+        std::cout << "[Main] Goodbye!" << std::endl;
+        return 0;
+        
     } catch (const std::exception& e) {
-        std::cerr << "Demo switch error: " << e.what() << std::endl;
-    }
-    
-    // 6. Set up the main application loop
-    double last_time = glfwGetTime();
-    
-    while (!window->shouldClose()) {
-        // Calculate delta time
-        double current_time = glfwGetTime();
-        float dt = static_cast<float>(current_time - last_time);
-        last_time = current_time;
-        
-        // Begin frame
-        window->beginFrame();
-        
-        // 7. Update and render the current demo
-        demo_manager.update(dt);
-        demo_manager.render();
-        
-        // End frame
-        window->endFrame();
-        
-        // Poll events
-        window->pollEvents();
-        
-        // Cap framerate to ~60 FPS
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
-    }
-    
-    // Clean up
-    demo_manager.cleanup();
-    window->cleanup();
-    
-    if (renderer) {
-        delete renderer;
-    }
-    
-    glfwTerminate();
-    return 0;
-}
-
-// Callback implementations
-void error_callback(int error, const char* description) {
-    std::cerr << "GLFW Error " << error << ": " << description << std::endl;
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
-        if (key == GLFW_KEY_ESCAPE) {
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-            return;
-        }
-        
-        if (g_demo_manager) {
-            g_demo_manager->handleKeyboard(static_cast<unsigned char>(key));
-        }
-    }
-}
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    if (action == GLFW_PRESS) {
-        g_mouse_button = button;
-        
-        if (g_demo_manager) {
-            g_demo_manager->handleMouse(g_mouse_x, g_mouse_y, button);
-        }
-    } else if (action == GLFW_RELEASE) {
-        g_mouse_button = -1;
-    }
-}
-
-void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
-    g_mouse_x = static_cast<int>(std::lround(xpos));
-    g_mouse_y = static_cast<int>(std::lround(ypos));
-    
-    if (g_mouse_button >= 0 && g_demo_manager) {
-        g_demo_manager->handleMouse(g_mouse_x, g_mouse_y, g_mouse_button);
+        std::cerr << "[Main] Fatal error: " << e.what() << std::endl;
+        return 1;
+    } catch (...) {
+        std::cerr << "[Main] Unknown fatal error" << std::endl;
+        return 1;
     }
 }

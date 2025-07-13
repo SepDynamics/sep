@@ -1,9 +1,11 @@
 #include "demo_orchestrator.hpp"
-#include "demo_base.hpp"
-#include "demo_manager.hpp"
-#include "sep_engine_wrapper.h"
+#include "../demos/demo_base.hpp"
+#include "../demos/demo_manager.hpp"
+#include "../sep_engine_wrapper.h"
 #include <iostream>
 #include <chrono>
+#include <GLFW/glfw3.h>
+#include <imgui.h>
 
 namespace sep::workbench {
 
@@ -214,7 +216,7 @@ void DemoOrchestrator::renderProfilingOverlay() {
         
         ImGui::Separator();
         
-        ImGui::Text("Frames: %llu", metrics_.frame_count);
+        ImGui::Text("Frames: %lu", metrics_.frame_count);
         ImGui::Text("Memory: %.2f MB", metrics_.memory_usage / (1024.0f * 1024.0f));
         
         if (!metrics_.last_error.empty()) {
@@ -250,7 +252,7 @@ void DemoOrchestrator::resetDemo() {
     }
 }
 
-void DemoOrchestrator::handleKeyPress(int key, int scancode, int action, int mods) {
+void DemoOrchestrator::handleKeyPress(int key, int /*scancode*/, int action, int mods) {
     if (current_state_ != DemoState::RUNNING) {
         return;
     }
@@ -280,7 +282,7 @@ void DemoOrchestrator::handleKeyPress(int key, int scancode, int action, int mod
     manager.on_key(key);
 }
 
-void DemoOrchestrator::handleMouseButton(int button, int action, int mods, double x, double y) {
+void DemoOrchestrator::handleMouseButton(int /*button*/, int /*action*/, int /*mods*/, double /*x*/, double /*y*/) {
     if (current_state_ != DemoState::RUNNING) {
         return;
     }
@@ -289,7 +291,7 @@ void DemoOrchestrator::handleMouseButton(int button, int action, int mods, doubl
     // For now, DemoManager handles it differently
 }
 
-void DemoOrchestrator::handleMouseMove(double x, double y) {
+void DemoOrchestrator::handleMouseMove(double /*x*/, double /*y*/) {
     if (current_state_ != DemoState::RUNNING) {
         return;
     }
@@ -297,7 +299,7 @@ void DemoOrchestrator::handleMouseMove(double x, double y) {
     // Mouse move handling
 }
 
-void DemoOrchestrator::handleScroll(double x_offset, double y_offset) {
+void DemoOrchestrator::handleScroll(double /*x_offset*/, double /*y_offset*/) {
     if (current_state_ != DemoState::RUNNING) {
         return;
     }
@@ -314,7 +316,7 @@ void DemoOrchestrator::setState(DemoState new_state) {
     }
 }
 
-void DemoOrchestrator::updateMetrics(float delta_time) {
+void DemoOrchestrator::updateMetrics(float /*delta_time*/) {
     metrics_.frame_count++;
     metrics_.last_update = std::chrono::steady_clock::now();
     
@@ -352,7 +354,7 @@ void DemoOrchestrator::handleDemoError(const std::string& error) {
     }
 }
 
-void DemoOrchestrator::profileUpdate(float delta_time) {
+void DemoOrchestrator::profileUpdate(float /*delta_time*/) {
     // Additional profiling logic
 }
 

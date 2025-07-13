@@ -7,6 +7,15 @@
 
 namespace sep::workbench {
 
+// Helper functions for ImVec2 operations
+inline ImVec2 operator+(const ImVec2& a, const ImVec2& b) {
+    return ImVec2(a.x + b.x, a.y + b.y);
+}
+
+inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) {
+    return ImVec2(a.x - b.x, a.y - b.y);
+}
+
 LandingPage::LandingPage(WorkbenchCore* core) : core_(core) {
     initializeDemoData();
     last_update_ = std::chrono::steady_clock::now();
@@ -75,7 +84,6 @@ void LandingPage::render() {
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(viewport->Pos);
     ImGui::SetNextWindowSize(viewport->Size);
-    ImGui::SetNextWindowViewport(viewport->ID);
     
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | 
                                    ImGuiWindowFlags_NoMove |
@@ -232,7 +240,6 @@ void LandingPage::renderDemoGrid() {
     
     float window_width = ImGui::GetWindowWidth();
     float card_width = config_.thumbnail_size;
-    float card_height = config_.thumbnail_size * 1.5f;
     float padding = 20.0f;
     
     int cards_per_row = static_cast<int>((window_width - padding) / (card_width + padding));
@@ -530,7 +537,7 @@ ImVec4 LandingPage::getCategoryColor(const std::string& category) const {
     return ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
 }
 
-float LandingPage::getCardAnimation(const std::string& demo_id) const {
+float LandingPage::getCardAnimation(const std::string& /*demo_id*/) const {
     // Simple hover-based animation
     return 0.0f; // Could implement per-card animation state
 }

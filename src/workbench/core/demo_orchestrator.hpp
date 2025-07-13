@@ -125,6 +125,8 @@ private:
     void handleDemoError(const std::string& error);
     void profileUpdate(float delta_time);
     void profileRender();
+    void renderProfilingOverlay();
+    static const char* getDemoStateName(DemoState state);
     
     // Demo factory registration
     static void registerDemoFactories();

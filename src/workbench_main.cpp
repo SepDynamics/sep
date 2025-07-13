@@ -4,15 +4,15 @@
 #include <iostream>
 #include <memory>  // For std::unique_ptr
 
+#include "../sep_engine_wrapper.h"
 #include "core/logging.h"
 #include "cycles_renderer_adapter.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "renderer.h"
-#include "sep_engine_wrapper.h"
 #include "workbench/config.hpp"
 #include "workbench/demos/demo_manager.hpp"
+#include "workbench/renderer.h"
 
 // Forward declaration for demo registration
 namespace sep

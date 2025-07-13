@@ -2,15 +2,15 @@
 #include "service_connector.hpp"
 #include "demo_orchestrator.hpp"
 #include "landing_page.hpp"
-#include "renderer.h"
-#include "sep_engine_wrapper.h"
+
+// Include non-OpenGL headers
 #include "core/engine.h"
-#include "blender/cycles_renderer.hpp"
+#include "../sep_engine_wrapper.h"
 
 #include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#include <glad/glad.h>
+// Use correct paths for ImGui implementation files
+#include "../../third_party/imgui/backends/imgui_impl_glfw.h"
+#include "../../third_party/imgui/backends/imgui_impl_opengl3.h"
 #include <iostream>
 #include <thread>
 #include <chrono>

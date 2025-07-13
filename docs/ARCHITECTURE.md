@@ -119,9 +119,9 @@ This document provides a comprehensive overview of the engine's architecture, fr
 
 The architecture is guided by these principles:
 
-1.  **Clear Component Boundaries**: Each module has a distinct responsibility and a well-defined public interface located in `/include/sep`.
+1.  **Clear Component Boundaries**: Each module has a distinct responsibility and a well-defined public interface located under `/src/sep`.
 2.  **Unidirectional Dependencies**: High-level modules (like `api`) can depend on low-level modules (like `core`), but not the other way around. This prevents circular dependencies and promotes a clean build process.
-3.  **Standard Project Layout**: The project follows a standard layout (`src`, `include`, `tests`, `third_party`, `assets`) for better tooling integration and developer onboarding.
+3.  **Standard Project Layout**: The project follows a standard layout (`src`, `tests`, `third_party`, `assets`) for better tooling integration and developer onboarding.
 4.  **Consolidation of Core Logic**: Cross-cutting concerns like logging, metrics, error handling, configuration, and the Directed Acyclic Graph (DAG) are unified into a single, foundational `core` library.
 5.  **Isolate External Dependencies**: Third-party libraries (e.g., Crow, nlohmann, hiredis) are kept separate from the engine's source code and are linked appropriately during the build process.
 
@@ -196,7 +196,7 @@ Each module is built as a self-contained static library, providing a clear and r
 *   **Purpose**: Supplies lightweight text embeddings for pattern generation and testing.
 *   **Key Files**: `simple_embedding_model.cpp`, `simple_embedding_model.h`.
 *   **Dependencies**: None.
-*   **Diagrams**: [include-embeddings.md](diagrams/include-embeddings.md), [src-embeddings.md](diagrams/src-embeddings.md).
+*   **Diagrams**: [embeddings.md](diagrams/embeddings.md).
 
 ### `api` - The Public Interface
 *   **Purpose**: Exposes the engine's functionality to the outside world via an HTTP server (Crow) and a stable C-style bridge.
@@ -211,7 +211,7 @@ Each module is built as a self-contained static library, providing a clear and r
 *   **Dependencies**: `core`, `quantum`, `memory`.
 *   **Rationale**: Keeping these integrations as separate modules prevents their specific dependencies (e.g., Blender headers, PipeWire) from polluting the core engine build.
 *   **Cycles Integration**: The `cycles_renderer.cpp` provides pattern-driven rendering through Blender's Cycles renderer when `SEP_HAS_CYCLES` is enabled.
-*   **Cycles Source**: Headers are accessed via the `include/cycles_src` symlink. See [include-cycles_src.md](diagrams/include-cycles_src.md) for details.
+*   **Cycles Source**: Headers are accessed via the `src/cycles_src` symlink. See [cycles_src.md](diagrams/cycles_src.md) for details.
 
 ## 4. Detailed Interaction and Data Flows
 
@@ -330,7 +330,7 @@ graph TD
     A[src/core/engine.cpp] -- uses --> B[CudaCore]
     A -- allocates --> C[DeviceMemory]
     A -- creates --> D[Stream]
-    F[include/memory/unified_memory.h] -- calls --> G(allocateUnifiedMemory)
+    F[src/memory/unified_memory.h] -- calls --> G(allocateUnifiedMemory)
     G --> H[Tiered Memory Manager]
     H -->|returns| I[Unified pointer]
     J[src/core/metrics_collector.cpp] -- records --> K[cudaEvent_t]

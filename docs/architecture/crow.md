@@ -33,7 +33,7 @@ HTTP API layer that external clients interact with.
    objects with the internal `HttpRequest`/`HttpResponse` interfaces.
 4. **SepEngine API** – Implements the high‑level operations. It consumes pattern
    data and returns JSON results. Located under `src/api` and uses
-   headers in `include/api`.
+   headers in `src/api`.
 5. **Memory Manager / Quantum Modules** – Lower‑level modules (`src/memory`,
    `src/quantum`). These modules provide data storage and algorithmic
    processing. The `SepEngine` API passes data from HTTP requests down to these
@@ -50,13 +50,13 @@ HTTP API layer that external clients interact with.
 - **Metrics and Health Data** – `server.cpp` exposes health endpoints and gathers
   metrics such as request counts and error codes, which other components can
   query via the API.
-- **Configuration** – `config::APIConfig` values are consumed by `SEPApiServer`
+- **Configuration** – `config::CudaConfig` values are consumed by `SEPApiServer`
   to set up ports, logging, and optional middlewares (authentication and rate
   limiting).
 
 This integration keeps the Crow framework isolated from core engine logic. The
-`crow` headers live under `include/crow`, while API-specific adapters and
-servers reside under `src/api` and `include/api`. External components interact
+`crow` headers live under `src/crow`, while API-specific adapters and
+servers reside under `src/api` and `src/api`. External components interact
 with the engine solely through the defined HTTP routes.
 
 

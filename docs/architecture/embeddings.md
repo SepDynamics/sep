@@ -1,4 +1,23 @@
-# Embedding Source Flow
+# Embeddings Module Overview
+
+The headers and source files reside in `src/embeddings`.
+
+## Header Details
+
+## Header Breakdown
+
+### `simple_embedding_model.h`
+Defines `sep::embeddings::SimpleEmbeddingModel`, a lightweight class that transforms a string into a fixed‑size vector.
+
+```mermaid
+classDiagram
+    class SimpleEmbeddingModel {
+        +compute(text: string) std::vector<double>
+        -weights_[5] : double
+    }
+```
+
+## Implementation Details
 
 The `src/embeddings` folder currently contains a single implementation file providing a toy text embedding model.
 
@@ -29,3 +48,4 @@ sequenceDiagram
 3. **Normalization**: After accumulation the vector is normalized to unit length.
 
 The CMake file exports this object as `sep_embeddings`, allowing other modules to link against the library.
+

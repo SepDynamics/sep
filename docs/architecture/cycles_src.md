@@ -1,10 +1,10 @@
 # Cycles Source Symlink
 
-`include/cycles_src` is a convenience link to the Blender Cycles source tree. It allows the engine's `blender` module to reference Cycles headers without hardcoding absolute paths.
+`src/cycles_src` is a convenience link to the Blender Cycles source tree. It allows the engine's `blender` module to reference Cycles headers without hardcoding absolute paths.
 
 ```mermaid
 flowchart TD
-    CyclesSrc[/include/cycles_src/] --> CyclesExtern[/extern/cycles/src/]
+    CyclesSrc[/src/cycles_src/] --> CyclesExtern[/extern/cycles/src/]
     CyclesSrc --> BlenderRenderer[cycles_renderer.cpp]
 ```
 

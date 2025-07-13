@@ -259,3 +259,145 @@ The SEP Workbench serves as a visualization frontend for the SEP Engine, providi
 4. **Rendering Pipeline**: Multi-stage processing from pattern data to pixels
 5. **SEP Engine Core**: The underlying quantum processing and memory management
 
+
+## Current Workbench Architecture Analysis
+
+### Problem Identification
+
+I've identified that there are **two parallel initialization paths** causing conflicts:
+
+1. **workbench_main.cpp** - A simpler direct approach using DemoManager
+2. **WorkbenchCore** - A more complex state-machine approach with components
+
+Let me create a multi-dimensional Mermaid diagram showing the current architecture and initialization flows:
+
+```mermaid
+graph TB
+    %% Outer Layer - System Entry Points
+    subgraph "System Entry Points"
+        WM[workbench_main.cpp]
+        WC[WorkbenchCore::main]
+    end
+
+    %% Middle Layer - Initialization Flows
+    subgraph "Initialization Flow - workbench_main.cpp"
+        WM --> GLFW1[GLFW Init]
+        GLFW1 --> WIN1[Create Window]
+        WIN1 --> GL1[GLAD Init]
+        GL1 --> ENG1[Create Engine]
+        ENG1 --> REND1[Create CyclesRenderer]
+        REND1 --> DM1[DemoManager.initialize]
+        DM1 --> REG1[registerDemos]
+        REG1 --> LOOP1[Main Loop]
+        LOOP1 --> CRASH[SEGFAULT!]
+    end
+
+    subgraph "Initialization Flow - WorkbenchCore"
+        WC --> GLFW2[initializeGLFW]
+        GLFW2 --> WIN2[createWindow]
+        WIN2 --> GL2[initializeOpenGL]
+        GL2 --> IMGUI2[initializeImGui]
+        IMGUI2 --> COMP[Create Components]
+        COMP --> SC[ServiceConnector]
+        COMP --> DO[DemoOrchestrator]
+        COMP --> LP[LandingPage]
+        COMP --> STATE[SERVICE_CHECK state]
+    end
+
+    %% Inner Layer - Shared Components
+    subgraph "Shared Components"
+        DemoManager[DemoManager Singleton]
+        Engine[sep::Engine]
+        Renderer[sep::CyclesRenderer]
+    end
+
+    %% Connections showing conflicts
+    DM1 -.->|uses| DemoManager
+    DO -.->|also uses?| DemoManager
+    ENG1 --> Engine
+    REND1 --> Renderer
+
+    %% State Machine
+    subgraph "WorkbenchCore State Machine"
+        STATE --> SM{State Machine}
+        SM --> S1[INITIALIZING]
+        SM --> S2[SERVICE_CHECK]
+        SM --> S3[LANDING_PAGE]
+        SM --> S4[DEMO_SELECTION]
+        SM --> S5[DEMO_RUNNING]
+    end
+
+    %% Problem Areas
+    style CRASH fill:#f96,stroke:#f00,stroke-width:4px
+    style DemoManager fill:#ff9,stroke:#f90,stroke-width:2px
+```
+
+### Detailed Component Interaction Flow
+
+```mermaid
+sequenceDiagram
+    participant Main as workbench_main
+    participant DM as DemoManager
+    participant Engine as sep::Engine
+    participant Renderer as CyclesRenderer
+    participant Demo as Demo Instance
+    participant ImGui as ImGui UI
+
+    Main->>Engine: createEngine()
+    Main->>Renderer: createRenderer()
+    Main->>Engine: initialize()
+    Main->>Renderer: initialize()
+    Main->>DM: initialize(engine, renderer)
+    Main->>DM: registerDemos()
+    
+    loop Main Loop
+        Main->>ImGui: NewFrame()
+        Main->>ImGui: BeginMainMenuBar()
+        
+        alt Demo Selected
+            ImGui->>DM: switchToDemo(name)
+            DM->>Demo: create()
+            DM->>Demo: on_load(engine, renderer)
+            Note over Demo: SEGFAULT occurs here?
+        end
+        
+        Main->>DM: on_update(dt)
+        Main->>DM: on_render()
+        Main->>DM: on_ui_render()
+        Main->>ImGui: Render()
+    end
+```
+
+### Root Cause Analysis
+
+The segmentation fault appears to be occurring because:
+
+1. **Missing Renderer Implementation**: The workbench expects a `sep::workbench::Renderer` class but it's not properly implemented/linked
+2. **Demo Initialization**: Demos might be trying to access uninitialized resources
+3. **State Mismatch**: The simple approach in `workbench_main.cpp` bypasses the state machine logic of `WorkbenchCore`
+
+### Proposed Solution Architecture
+
+```mermaid
+graph LR
+    subgraph "Simplified Initialization"
+        A[Main Entry] --> B[Window Setup]
+        B --> C[OpenGL Context]
+        C --> D[ImGui Setup]
+        D --> E[Engine Creation]
+        E --> F[Demo Registration]
+        F --> G[Menu Display]
+        G --> H{User Selection}
+        H -->|Select Demo| I[Load Demo]
+        H -->|Stay in Menu| G
+        I --> J[Run Demo]
+        J --> K[Demo UI]
+        K -->|Exit Demo| G
+    end
+
+    style B fill:#9f9,stroke:#0a0
+    style C fill:#9f9,stroke:#0a0
+    style D fill:#9f9,stroke:#0a0
+    style G fill:#99f,stroke:#00a
+```
+

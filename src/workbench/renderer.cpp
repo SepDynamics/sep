@@ -7,6 +7,11 @@
 // Static member
 bool sep::workbench::Renderer::startButtonClicked = false;
 
+// Define the missing destructor - this is what was causing the linker error
+sep::workbench::Renderer::~Renderer() {
+    cleanup();
+}
+
 void sep::workbench::Renderer::init(int width, int height)
 {
     this->width = width;
@@ -140,6 +145,25 @@ void sep::workbench::Renderer::setupShaders()
     std::cout << "Shader program created with ID: " << shaderProgram << std::endl;
 }
 
+void sep::workbench::Renderer::cleanup() {
+    if (useOpenGL) {
+        if (vao != 0) {
+            glDeleteVertexArrays(1, &vao);
+            vao = 0;
+        }
+        
+        if (vbo != 0) {
+            glDeleteBuffers(1, &vbo);
+            vbo = 0;
+        }
+        
+        if (shaderProgram != 0) {
+            glDeleteProgram(shaderProgram);
+            shaderProgram = 0;
+        }
+    }
+}
+
 void sep::workbench::Renderer::render()
 {
     if (!useOpenGL)
@@ -159,16 +183,98 @@ void sep::workbench::Renderer::render()
     }
 }
 
-// [Rest of your code remains similar, but fix integer division:]
-// In isPointInStartButton:
 bool sep::workbench::Renderer::isPointInStartButton(double x, double y) const
 {
-    // Complete the condition based on your original code
     return (x >= static_cast<double>(width) / 2.0 - 100.0 &&
             x <= static_cast<double>(width) / 2.0 + 100.0 &&
             y >= static_cast<double>(height) / 2.0 + 170.0 &&
-            y <= static_cast<double>(height) / 2.0 +
-                     220.0);  // FIXED: Complete expression, no ellipsis
+            y <= static_cast<double>(height) / 2.0 + 220.0);
 }
 
-// ... [rest of file unchanged]
+void sep::workbench::Renderer::handleMouseClick(double x, double y) {
+    if (isPointInStartButton(x, y)) {
+        startButtonClicked = true;
+    }
+}
+
+bool sep::workbench::Renderer::wasStartButtonClicked() {
+    return startButtonClicked;
+}
+
+void sep::workbench::Renderer::resetStartButtonClicked() {
+    startButtonClicked = false;
+}
+
+// Implementations for the remaining methods
+
+void sep::workbench::Renderer::render(std::vector<Pattern>& patterns) {
+    // Implementation for the first render method overload
+    (void)patterns;  // Mark as intentionally unused
+    render();  // For now, just call the simple render
+}
+
+float sep::workbench::Renderer::calculateAvgCoherence(const std::vector<Pattern>& patterns) {
+    if (patterns.empty()) return 0.0f;
+    
+    float total = 0.0f;
+    for (const auto& pattern : patterns) {
+        total += pattern.coherence;
+    }
+    return total / static_cast<float>(patterns.size());
+}
+
+void sep::workbench::Renderer::render(const std::vector<Pattern>& patterns) {
+    // Implementation for the second render method overload
+    (void)patterns;  // Mark as intentionally unused
+    render();  // For now, just call the simple render
+}
+
+void sep::workbench::Renderer::renderSphere(int latitudes, int longitudes, const glm::vec3& pos,
+                                           float scale, const glm::vec4& color) {
+    // Mark unused parameters to silence warnings
+    (void)latitudes;
+    (void)longitudes;
+    (void)pos;
+    (void)scale;
+    
+    // Simplified implementation - could be expanded in the future
+    if (!useOpenGL) return;
+    
+    // For now, just render a simple shape
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    glUniform4f(colorLoc, color.r, color.g, color.b, color.a);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+void sep::workbench::Renderer::renderCube(const glm::vec3& pos, float scale, const glm::vec4& color) {
+    // Mark unused parameters to silence warnings
+    (void)pos;
+    (void)scale;
+    
+    // Simplified implementation - could be expanded in the future
+    if (!useOpenGL) return;
+    
+    // For now, just render a simple shape
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    glUniform4f(colorLoc, color.r, color.g, color.b, color.a);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+void sep::workbench::Renderer::drawVertices(const std::vector<float>& vertices, GLenum mode) {
+    if (!useOpenGL || vertices.empty()) return;
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    glDrawArrays(mode, 0, vertices.size() / 3);
+    glBindVertexArray(0);
+    glUseProgram(0);
+}

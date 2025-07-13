@@ -66,14 +66,15 @@ bool WorkbenchCore::initialize() {
         service_connector_ = std::make_unique<ServiceConnector>();
         demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         landing_page_ = std::make_unique<LandingPage>(this);
-        
-        std::cout << "[WorkbenchCore] Renderer initialization skipped (incomplete type)" << std::endl;
-        
+
         // Initialize renderer
+        std::cout << "[WorkbenchCore] Initializing renderer..." << std::endl;
+        renderer_ = std::make_unique<Renderer>();
+
         int width, height;
         glfwGetFramebufferSize(window_, &width, &height);
-        // renderer_->init(width, height);
-        
+        renderer_->init(width, height);
+
         // Create offline engine as fallback
         std::cout << "[WorkbenchCore] Creating offline engine skipped (abstract class)" << std::endl;
         // offline_engine_ = std::make_unique<sep::Engine>(); // Abstract class
@@ -146,8 +147,16 @@ bool WorkbenchCore::createWindow() {
 }
 
 bool WorkbenchCore::initializeOpenGL() {
-    std::cerr << "[WorkbenchCore] GLAD initialization skipped" << std::endl;
-    
+    // Initialize GLAD
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cerr << "[WorkbenchCore] Failed to initialize GLAD" << std::endl;
+        return false;
+    }
+
+    std::cout << "[WorkbenchCore] GLAD initialized successfully" << std::endl;
+
+    // Now it's safe to query OpenGL info
     std::cout << "[WorkbenchCore] OpenGL Info:" << std::endl;
     std::cout << "  Version: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "  Vendor: " << glGetString(GL_VENDOR) << std::endl;
@@ -439,8 +448,9 @@ void WorkbenchCore::attemptServiceConnection() {
             // Switch to service engine
             active_engine_ = service_connector_->getEngine();
         } else {
-            std::cout << "[WorkbenchCore] Failed to connect to SEP service, using offline mode" << std::endl;
-            active_engine_ = offline_engine_.get();
+            std::cout << "[WorkbenchCore] Failed to connect to SEP service, offline mode not available" << std::endl;
+            // Don't set active_engine_ to null pointer
+            // active_engine_ = offline_engine_.get();
         }
     }
 }
@@ -456,16 +466,28 @@ void WorkbenchCore::transitionTo(ApplicationState new_state) {
 void WorkbenchCore::selectDemo(const std::string& demo_name) {
     std::cout << "[WorkbenchCore] Selecting demo: " << demo_name << std::endl;
     
-    if (demo_orchestrator_) {
-        bool success = demo_orchestrator_->loadDemo(demo_name, active_engine_, cycles_renderer_.get());
-        
-        if (success) {
-            metrics_.current_demo = demo_name;
-            transitionTo(ApplicationState::DEMO_RUNNING);
-        } else {
-            reportError("Failed to load demo: " + demo_name);
-            transitionTo(ApplicationState::ERROR_RECOVERY);
-        }
+    if (!demo_orchestrator_) {
+        reportError("Demo orchestrator not initialized");
+        transitionTo(ApplicationState::ERROR_RECOVERY);
+        return;
+    }
+    
+    // Check for null engine
+    if (!active_engine_) {
+        reportError("Engine not initialized");
+        transitionTo(ApplicationState::ERROR_RECOVERY);
+        return;
+    }
+    
+    // DemoOrchestrator should handle a null renderer gracefully
+    bool success = demo_orchestrator_->loadDemo(demo_name, active_engine_, nullptr);
+    
+    if (success) {
+        metrics_.current_demo = demo_name;
+        transitionTo(ApplicationState::DEMO_RUNNING);
+    } else {
+        reportError("Failed to load demo: " + demo_name);
+        transitionTo(ApplicationState::ERROR_RECOVERY);
     }
 }
 
@@ -555,8 +577,7 @@ void WorkbenchCore::framebufferSizeCallback(GLFWwindow* /*window*/, int width, i
 
 void WorkbenchCore::handleWindowResize(int width, int height) {
     if (renderer_) {
-        // Comment out renderer init until renderer issue is fixed
-        // renderer_->init(width, height);
+        renderer_->init(width, height);
         std::cout << "[WorkbenchCore] Window resized to " << width << "x" << height << std::endl;
     }
 }

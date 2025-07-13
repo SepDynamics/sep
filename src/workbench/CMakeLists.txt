@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 file(GLOB_RECURSE WB_SOURCES
     "demos/*.cpp"
     "renderer.cpp"
+    "config.cpp"
     "${CMAKE_SOURCE_DIR}/third_party/imgui/*.cpp"
     "${CMAKE_SOURCE_DIR}/third_party/imgui/backends/imgui_impl_glfw.cpp"
     "${CMAKE_SOURCE_DIR}/third_party/imgui/backends/imgui_impl_opengl3.cpp"

@@ -166,8 +166,12 @@ int main() {
         // Initialize demo manager
         std::cout << "Initializing demo manager..." << std::endl;
         demoManager.initialize(engine.get(), renderer.get());
-        // Skip configuration loading for now (linker issues)
-        std::cout << "Using default configuration..." << std::endl;
+
+        // Load workbench configuration
+        auto& config = sep::workbench::Config::getInstance();
+        if (!config.load("src/workbench/config.json")) {
+            std::cout << "Using default configuration..." << std::endl;
+        }
         
         
         // Register demos
@@ -226,6 +230,20 @@ int main() {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
+
+            // Render global demo selection menu
+            if (ImGui::BeginMainMenuBar()) {
+                if (ImGui::BeginMenu("Demos")) {
+                    for (const auto& name : demoManager.getRegisteredDemos()) {
+                        bool selected = (demoManager.getCurrentDemo() == name);
+                        if (ImGui::MenuItem(name.c_str(), nullptr, selected)) {
+                            demoManager.switchToDemo(name);
+                        }
+                    }
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMainMenuBar();
+            }
 
             demoManager.on_ui_render();
 

@@ -1,9 +1,8 @@
-#include <glad/glad.h>  // GLAD first
 #include <GLFW/glfw3.h>  // Then GLFW
+#include <glad/glad.h>   // GLAD first
 
 #include <fstream>
 #include <iostream>
-#include "workbench/config.hpp"
 #include <memory>  // For std::unique_ptr
 
 #include "core/logging.h"
@@ -13,47 +12,56 @@
 #include "imgui_impl_opengl3.h"
 #include "renderer.h"
 #include "sep_engine_wrapper.h"
+#include "workbench/config.hpp"
 #include "workbench/demos/demo_manager.hpp"
 
 // Forward declaration for demo registration
-namespace sep {
-namespace workbench {
-void registerDemos();
-}
+namespace sep
+{
+    namespace workbench
+    {
+        void registerDemos();
+    }
 }  // namespace sep
 
 // Key callback
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
     (void)window;
     (void)scancode;
     (void)mods;
-    if (action == GLFW_PRESS) {
+    if (action == GLFW_PRESS)
+    {
         auto& demoManager = sep::workbench::DemoManager::getInstance();
 
-        if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9) {
+        if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9)
+        {
             const std::map<int, std::string> keyToDemoMap = {
-                {GLFW_KEY_1, "genesis"}, {GLFW_KEY_2, "neural"}, {GLFW_KEY_3, "memory"},
-                {GLFW_KEY_4, "flocking"}, {GLFW_KEY_5, "cosmo"}, {GLFW_KEY_6, "cosmo_sim"},
-                {GLFW_KEY_7, "physics"}, {GLFW_KEY_8, "drug"}, {GLFW_KEY_9, "audio"}
-            };
+                {GLFW_KEY_1, "genesis"},  {GLFW_KEY_2, "neural"}, {GLFW_KEY_3, "memory"},
+                {GLFW_KEY_4, "flocking"}, {GLFW_KEY_5, "cosmo"},  {GLFW_KEY_6, "cosmo_sim"},
+                {GLFW_KEY_7, "physics"},  {GLFW_KEY_8, "drug"},   {GLFW_KEY_9, "audio"}};
             auto it = keyToDemoMap.find(key);
-            if (it != keyToDemoMap.end()) {
+            if (it != keyToDemoMap.end())
+            {
                 demoManager.switchToDemo(it->second);
             }
-        } else {
+        }
+        else
+        {
             demoManager.on_key(key);
         }
     }
 }
 
-int main() {
+int main()
+{
     // Force X11 backend and avoid GTK decorations which can cause segfaults
     setenv("LIBDECOR_BACKEND", "cairo", 1);
     setenv("LIBDECOR_NOT_GTK", "1", 1);
     setenv("GDK_BACKEND", "x11", 1);
     setenv("GLFW_PLATFORM", "x11", 1);
     setenv("GLFW_USE_WAYLAND", "0", 1);
-    
+
     // Additional variables to help avoid GTK issues
     setenv("SDL_VIDEODRIVER", "x11", 1);
     setenv("XDG_SESSION_TYPE", "x11", 1);
@@ -63,7 +71,8 @@ int main() {
         std::cerr << "GLFW Error " << error << ": " << description << std::endl;
     });
 
-    if (!glfwInit()) {
+    if (!glfwInit())
+    {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return -1;
     }
@@ -83,41 +92,57 @@ int main() {
     glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
     glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-    
+
+    auto& cfg = sep::workbench::Config::getInstance();
+    if (!cfg.load("src/workbench/config.json"))
+    {
+        std::cerr << "Failed to load configuration. Using defaults." << std::endl;
+    }
+
     std::cout << "Attempting to create window with OpenGL 2.1..." << std::endl;
 
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "SEP Workbench", nullptr, nullptr);
-    if (!window) {
+    int winW = cfg.window().width == 0 ? 1280 : cfg.window().width;
+    int winH = cfg.window().height == 0 ? 720 : cfg.window().height;
+    const char* winTitle =
+        cfg.window().title.empty() ? "SEP Workbench" : cfg.window().title.c_str();
+    GLFWmonitor* monitor = cfg.window().fullscreen ? glfwGetPrimaryMonitor() : nullptr;
+
+    GLFWwindow* window = glfwCreateWindow(winW, winH, winTitle, monitor, nullptr);
+    if (!window)
+    {
         // Fallback to default hints
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        window = glfwCreateWindow(1280, 720, "SEP Workbench (Fallback)", nullptr, nullptr);
+        window = glfwCreateWindow(winW, winH, "SEP Workbench (Fallback)", monitor, nullptr);
     }
 
-    if (!window) {
+    if (!window)
+    {
         // Ultimate fallback to legacy
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-        window = glfwCreateWindow(1280, 720, "SEP Workbench (Legacy)", nullptr, nullptr);
+        window = glfwCreateWindow(winW, winH, "SEP Workbench (Legacy)", monitor, nullptr);
     }
 
-    if (!window) {
+    if (!window)
+    {
         std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);  // VSync
+    glfwSwapInterval(cfg.window().vsync ? 1 : 0);
 
     glfwSetKeyCallback(window, key_callback);
 
     // Initialize GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
         std::cerr << "Failed to initialize GLAD" << std::endl;
         glfwDestroyWindow(window);
         glfwTerminate();
@@ -132,37 +157,40 @@ int main() {
     // Initialize with safer error handling
     std::unique_ptr<sep::Engine> engine;
     std::unique_ptr<sep::CyclesRenderer> renderer;
-    
+
     // Get reference to demo manager (singleton) outside try block for correct scope
     auto& demoManager = sep::workbench::DemoManager::getInstance();
-    
-    try {
+
+    try
+    {
         // Initialize logger
         std::cout << "Initializing logging system..." << std::endl;
         sep::logging::Manager::initialize();
         auto logger = sep::logging::Manager::getInstance().createLogger("workbench", {});
-        
+
         // Initialize engine and renderer with error handling
         std::cout << "Creating engine..." << std::endl;
         engine = sep::createEngine();
-        if (!engine) {
+        if (!engine)
+        {
             std::cerr << "Failed to create engine!" << std::endl;
             return -1;
         }
-        
+
         std::cout << "Creating renderer..." << std::endl;
         renderer = sep::createRenderer();
-        if (!renderer) {
+        if (!renderer)
+        {
             std::cerr << "Failed to create renderer!" << std::endl;
             return -1;
         }
-        
+
         std::cout << "Initializing engine..." << std::endl;
         engine->initialize();
-        
+
         std::cout << "Initializing renderer..." << std::endl;
         renderer->initialize();
-        
+
         // Initialize demo manager
         std::cout << "Initializing demo manager..." << std::endl;
         demoManager.initialize(engine.get(), renderer.get());
@@ -177,19 +205,24 @@ int main() {
         // Register demos
         std::cout << "Registering demos..." << std::endl;
         sep::workbench::registerDemos();
-        
+
         // Select a default demo to start with
         std::cout << "Selecting default demo..." << std::endl;
-        if (!demoManager.switchToDemo("genesis")) {
+        if (!demoManager.switchToDemo("genesis"))
+        {
             std::cerr << "Failed to select default demo!" << std::endl;
             return -1;
         }
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e)
+    {
         std::cerr << "Exception during initialization: " << e.what() << std::endl;
         glfwDestroyWindow(window);
         glfwTerminate();
         return -1;
-    } catch (...) {
+    }
+    catch (...)
+    {
         std::cerr << "Unknown exception during initialization!" << std::endl;
         glfwDestroyWindow(window);
         glfwTerminate();
@@ -198,7 +231,8 @@ int main() {
 
     // Initialize ImGui (with safeguards)
     bool imgui_available = true;
-    try {
+    try
+    {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
@@ -209,14 +243,17 @@ int main() {
         const char* glsl_version = "#version 330";  // Use 330 for compat
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(glsl_version);
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e)
+    {
         std::cerr << "ImGui init failed: " << e.what() << std::endl;
         imgui_available = false;
     }
 
     // Main loop
     double last_time = glfwGetTime();
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window))
+    {
         glfwPollEvents();
 
         double current_time = glfwGetTime();
@@ -226,7 +263,8 @@ int main() {
         demoManager.on_update(dt);
         demoManager.on_render();
 
-        if (imgui_available) {
+        if (imgui_available)
+        {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
@@ -258,7 +296,8 @@ int main() {
     demoManager.on_unload();
     engine->shutdown();
 
-    if (imgui_available) {
+    if (imgui_available)
+    {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();

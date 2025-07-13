@@ -15,14 +15,7 @@ bool operator==(const std::string& lhs, const sep::shim::string& rhs)
 {
     return lhs == rhs.c_str();
 }
-bool operator==(const sep::shim::string& lhs, const std::string& rhs)
-{
-    return lhs == rhs.c_str();
-}
-bool operator==(const std::string& lhs, const std::string& rhs)
-{
-    return lhs == rhs;
-}
+bool operator==(const sep::shim::string& lhs, const std::string& rhs) { return lhs == rhs.c_str(); }
 
 namespace
 {
@@ -107,9 +100,16 @@ inline float deterministicNoise(uint64_t& state)
                 }
             }
 
-            auto result = processor_->processAll();
+            auto proc_result = processor_->processAll();
             updateStats(patterns);
             generation_number_++;
+
+            // Convert from sep::BatchProcessingResult to sep::quantum::BatchProcessingResult
+            sep::quantum::BatchProcessingResult result;
+            result.success = proc_result.success;
+            result.error_message = proc_result.error_message;
+            result.pattern = proc_result.pattern;
+            result.results = proc_result.results;
             return result;
         }
 
@@ -404,10 +404,7 @@ inline float deterministicNoise(uint64_t& state)
         return impl_->calculateDiversity(patterns);
     }
     void EvolutionEngine::setParams(const EvolutionParams& params) { impl_->setParams(params); }
-    EvolutionEngine::EvolutionParams EvolutionEngine::getParams() const
-    {
-        return impl_->getParams();
-    }
+    EvolutionParams EvolutionEngine::getParams() const { return impl_->getParams(); }
     EvolutionEngine::EvolutionStats EvolutionEngine::getStats() const { return impl_->getStats(); }
     std::vector<EvolutionEngine::EvolutionStats> EvolutionEngine::getHistory() const
     {

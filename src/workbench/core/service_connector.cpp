@@ -42,48 +42,70 @@ bool ServiceConnector::connect() {
     
     connection_state_ = ConnectionState::CONNECTING;
     
-    // Try different connection methods in order of preference
-    bool connected = false;
+    // Implement retry logic with timeouts
+    const int max_attempts = 5;
+    const std::chrono::milliseconds retry_delay(1000); // 1 second between retries
     
-    // 1. Try shared memory (fastest)
-    connected = connectSharedMemory();
+    std::cout << "[ServiceConnector] Will try up to " << max_attempts
+              << " times with " << retry_delay.count() << "ms between attempts" << std::endl;
     
-    // 2. Try IPC (Unix domain sockets / named pipes)
-    if (!connected) {
-        connected = connectIPC();
-    }
-    
-    // 3. Try TCP (most portable)
-    if (!connected) {
-        connected = connectTCP();
-    }
-    
-    if (connected) {
-        // Validate service version
-        if (!validateServiceVersion()) {
-            std::cerr << "[ServiceConnector] Service version mismatch" << std::endl;
-            disconnect();
-            return false;
+    for (int attempt = 1; attempt <= max_attempts; attempt++) {
+        std::cout << "[ServiceConnector] Connection attempt " << attempt << "/" << max_attempts << std::endl;
+        
+        // Try different connection methods in order of preference
+        bool connected = false;
+        
+        // 1. Try shared memory (fastest)
+        connected = connectSharedMemory();
+        
+        // 2. Try IPC (Unix domain sockets / named pipes)
+        if (!connected) {
+            connected = connectIPC();
         }
         
-        connection_state_ = ConnectionState::CONNECTED;
-        health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
-        
-        // Start health monitoring
-        startHealthMonitoring();
-        
-        // Notify callback
-        if (connection_callback_) {
-            connection_callback_(ConnectionState::CONNECTED);
+        // 3. Try TCP (most portable)
+        if (!connected) {
+            connected = connectTCP();
         }
         
-        std::cout << "[ServiceConnector] Successfully connected to SEP service" << std::endl;
-        return true;
+        if (connected) {
+            // Validate service version
+            if (!validateServiceVersion()) {
+                std::cerr << "[ServiceConnector] Service version mismatch" << std::endl;
+                disconnect();
+                
+                // Don't give up yet, try again
+                std::this_thread::sleep_for(retry_delay);
+                continue;
+            }
+            
+            connection_state_ = ConnectionState::CONNECTED;
+            health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
+            
+            // Start health monitoring
+            startHealthMonitoring();
+            
+            // Notify callback
+            if (connection_callback_) {
+                connection_callback_(ConnectionState::CONNECTED);
+            }
+            
+            std::cout << "[ServiceConnector] Successfully connected to SEP service" << std::endl;
+            return true;
+        }
+        
+        // If not the last attempt, wait before trying again
+        if (attempt < max_attempts) {
+            std::cout << "[ServiceConnector] Retrying in " << retry_delay.count() << "ms..." << std::endl;
+            std::this_thread::sleep_for(retry_delay);
+        }
     }
     
+    // All attempts failed
     connection_state_ = ConnectionState::ERROR;
-    std::cerr << "[ServiceConnector] Failed to connect to SEP service" << std::endl;
-
+    std::cerr << "[ServiceConnector] Failed to connect to SEP service after " << max_attempts << " attempts" << std::endl;
+    std::cerr << "[ServiceConnector] Please ensure sep_engine is running and listening on one of the expected ports" << std::endl;
+    
     return false;
 }
 

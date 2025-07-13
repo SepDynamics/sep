@@ -166,9 +166,33 @@ bool WorkbenchCore::initializeOpenGL() {
 }
 
 bool WorkbenchCore::initializeImGui() {
-    // TEMPORARY: Skip ImGui initialization to see if the app runs without it
-    std::cout << "[WorkbenchCore] BYPASSING ImGui initialization for debugging" << std::endl;
-    return true;
+    try {
+        // Create ImGui context
+        std::cout << "[WorkbenchCore] Initializing ImGui..." << std::endl;
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        
+        // Configure ImGui style
+        ImGui::StyleColorsDark();
+        
+        // Setup Platform/Renderer backends
+        if (!ImGui_ImplGlfw_InitForOpenGL(window_, true)) {
+            std::cerr << "[WorkbenchCore] Failed to initialize ImGui GLFW backend" << std::endl;
+            return false;
+        }
+        
+        if (!ImGui_ImplOpenGL3_Init("#version 330")) {
+            std::cerr << "[WorkbenchCore] Failed to initialize ImGui OpenGL3 backend" << std::endl;
+            return false;
+        }
+        
+        std::cout << "[WorkbenchCore] ImGui initialized successfully" << std::endl;
+        return true;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "[WorkbenchCore] Exception during ImGui initialization: " << e.what() << std::endl;
+        return false;
+    }
 }
 
 void WorkbenchCore::cleanupImGui() {
@@ -400,7 +424,14 @@ void WorkbenchCore::handleServiceCheck() {
     // Attempt to connect to service
     attemptServiceConnection();
     
-    // For now, proceed to landing page regardless
+    if (metrics_.service_connected) {
+        std::cout << "[WorkbenchCore] Service connection successful, proceeding" << std::endl;
+    } else {
+        std::cout << "[WorkbenchCore] Service connection failed, proceeding in offline mode" << std::endl;
+        // We'll still proceed, but in offline mode
+    }
+    
+    // Proceed to landing page with graceful error handling
     transitionTo(ApplicationState::LANDING_PAGE);
 }
 
@@ -421,24 +452,37 @@ void WorkbenchCore::handleErrorRecovery() {
 }
 
 void WorkbenchCore::attemptServiceConnection() {
-    if (service_connector_) {
-        metrics_.service_connected = service_connector_->connect();
+    if (!service_connector_) {
+        std::cerr << "[WorkbenchCore] Service connector not initialized" << std::endl;
+        reportError("Service connector not initialized");
+        metrics_.service_connected = false;
+        return;
+    }
+    
+    std::cout << "[WorkbenchCore] Attempting to connect to SEP service..." << std::endl;
+    metrics_.service_connected = service_connector_->connect();
+    
+    if (metrics_.service_connected) {
+        std::cout << "[WorkbenchCore] Successfully connected to SEP service" << std::endl;
+        // Switch to service engine
+        active_engine_ = service_connector_->getEngine();
         
-        if (metrics_.service_connected) {
-            std::cout << "[WorkbenchCore] Successfully connected to SEP service" << std::endl;
-            // Switch to service engine
-            active_engine_ = service_connector_->getEngine();
-        } else {
-            std::cout
-                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
-                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
-                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
-                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
-                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
-                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
-                << std::endl;
-            // Just leave the active_engine_ as null - we'll check for null before using it
+        // Check if we actually got a valid engine pointer
+        if (!active_engine_) {
+            std::cout << "[WorkbenchCore] Warning: Connected to service but engine pointer is null" << std::endl;
+            std::cout << "[WorkbenchCore] Will continue in offline mode" << std::endl;
+            metrics_.service_connected = false;
         }
+    } else {
+        std::cerr << "[WorkbenchCore] Failed to connect to SEP service" << std::endl;
+        std::cerr << "[WorkbenchCore] Please ensure the SEP engine is running before starting the workbench" << std::endl;
+        std::cerr << "[WorkbenchCore] The application will continue in offline mode with limited functionality" << std::endl;
+        
+        // Set error message for user
+        reportError("Failed to connect to SEP service. The application will continue in offline mode.");
+        
+        // Make sure active_engine_ is null
+        active_engine_ = nullptr;
     }
 }
 
@@ -507,24 +551,55 @@ void WorkbenchCore::shutdown() {
     
     current_state_ = ApplicationState::SHUTTING_DOWN;
     
-    // Clean up components
-    if (demo_orchestrator_) {
-        demo_orchestrator_->unloadCurrentDemo();
+    // Safely clean up components in a specific order to prevent segfaults
+    try {
+        // First disconnect from service if connected
+        if (service_connector_) {
+            std::cout << "[WorkbenchCore] Disconnecting from service..." << std::endl;
+            if (metrics_.service_connected) {
+                service_connector_->disconnect();
+            }
+        }
+        
+        // Next, clean up demo orchestrator
+        if (demo_orchestrator_) {
+            std::cout << "[WorkbenchCore] Unloading current demo..." << std::endl;
+            demo_orchestrator_->unloadCurrentDemo();
+        }
+        
+        // Set all engine pointers to null
+        active_engine_ = nullptr;
+        
+        // Clean up components in reverse order of creation
+        cycles_renderer_.reset();
+        renderer_.reset();
+        landing_page_.reset();
+        demo_orchestrator_.reset();
+        service_connector_.reset();
+        
+        // Clean up ImGui
+        std::cout << "[WorkbenchCore] Cleaning up ImGui..." << std::endl;
+        cleanupImGui();
+        
+        // Clean up window
+        if (window_) {
+            std::cout << "[WorkbenchCore] Destroying window..." << std::endl;
+            glfwDestroyWindow(window_);
+            window_ = nullptr;
+        }
+        
+        // Terminate GLFW
+        std::cout << "[WorkbenchCore] Terminating GLFW..." << std::endl;
+        glfwTerminate();
+        
+        std::cout << "[WorkbenchCore] Shutdown complete" << std::endl;
     }
-    
-    // Clean up ImGui
-    cleanupImGui();
-    
-    // Clean up window
-    if (window_) {
-        glfwDestroyWindow(window_);
-        window_ = nullptr;
+    catch (const std::exception& e) {
+        std::cerr << "[WorkbenchCore] Exception during shutdown: " << e.what() << std::endl;
     }
-    
-    // Terminate GLFW
-    glfwTerminate();
-    
-    std::cout << "[WorkbenchCore] Shutdown complete" << std::endl;
+    catch (...) {
+        std::cerr << "[WorkbenchCore] Unknown exception during shutdown" << std::endl;
+    }
 }
 
 // Static callbacks

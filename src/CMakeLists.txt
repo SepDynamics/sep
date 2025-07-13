@@ -1,5 +1,10 @@
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}) 
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/third_party/imgui
+)
+
+add_library(glad STATIC ${PROJECT_SOURCE_DIR}/src/glad/glad.c)
 
 # Configure include paths for all targets
 set(SEP_INCLUDE_DIRS
@@ -7,6 +12,7 @@ set(SEP_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/extern/pipewire/spa/src
     ${PIPEWIRE_INCLUDE_DIRS}
 )
+
 
 # Add component subdirectories
 add_subdirectory(core)
@@ -24,6 +30,15 @@ add_executable(sep_api_server
     api_main.cpp
 )
 set_target_properties(sep_api_server PROPERTIES CXX_STANDARD 17)
+target_sources(sep_api_server PRIVATE
+    /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp
+    /sep/third_party/imgui/backends/imgui_impl_glfw.cpp
+    /sep/third_party/imgui/imgui_tables.cpp
+    /sep/third_party/imgui/imgui_widgets.cpp
+    /sep/third_party/imgui/imgui.cpp
+    /sep/third_party/imgui/imgui_demo.cpp
+    /sep/third_party/imgui/imgui_draw.cpp
+)
 
 target_include_directories(sep_api_server PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -53,6 +68,7 @@ if(SEP_BUILD_WORKBENCH)
         ${CMAKE_SOURCE_DIR}/src
         ${CMAKE_SOURCE_DIR}/third_party/imgui
         ${CMAKE_SOURCE_DIR}/third_party/imgui/backends
+        ${PROJECT_SOURCE_DIR}/include/glad
     )
 
     target_link_libraries(sep_workbench PRIVATE
@@ -85,8 +101,8 @@ if(SEP_BUILD_WORKBENCH)
         ${CURL_LIBRARIES}
         hiredis
         http_parser::http_parser
-        glad
         glfw
+        glad
         OpenGL::GL
         Threads::Threads
         ${PIPEWIRE_LIBRARIES}

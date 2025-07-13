@@ -157,19 +157,15 @@ bool WorkbenchCore::initializeOpenGL() {
     std::cout << "[WorkbenchCore] GLAD initialized successfully" << std::endl;
 
     // Now it's safe to query OpenGL info
-    std::cout << "[WorkbenchCore] OpenGL Info:" << std::endl;
-    const char* version  = reinterpret_cast<const char*>(glGetString(GL_VERSION));
-    const char* vendor   = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-    const char* renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+    const GLubyte* version  = glGetString(GL_VERSION);
+    const GLubyte* vendor   = glGetString(GL_VENDOR);
+    const GLubyte* renderer = glGetString(GL_RENDERER);
 
     if (!version || !vendor || !renderer) {
-        std::cerr << "[WorkbenchCore] Warning: Failed to query GL strings" << std::endl;
+        std::cerr << "[WorkbenchCore] Failed to query OpenGL information" << std::endl;
+        return false;
     }
 
-    std::cout << "  Version: "  << (version  ? version  : "Unknown") << std::endl;
-    std::cout << "  Vendor: "   << (vendor   ? vendor   : "Unknown") << std::endl;
-    std::cout << "  Renderer: " << (renderer ? renderer : "Unknown") << std::endl;
-    
     // Configure OpenGL state
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);

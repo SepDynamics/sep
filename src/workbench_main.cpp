@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include "workbench/config.hpp"
 #include <memory>  // For std::unique_ptr
 
 #include "core/logging.h"
@@ -46,12 +47,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 int main() {
-    // Environment variables (already good, but confirm they're set early)
+    // Force X11 backend and avoid GTK decorations which can cause segfaults
     setenv("LIBDECOR_BACKEND", "cairo", 1);
     setenv("LIBDECOR_NOT_GTK", "1", 1);
     setenv("GDK_BACKEND", "x11", 1);
     setenv("GLFW_PLATFORM", "x11", 1);
     setenv("GLFW_USE_WAYLAND", "0", 1);
+    
+    // Additional variables to help avoid GTK issues
+    setenv("SDL_VIDEODRIVER", "x11", 1);
+    setenv("XDG_SESSION_TYPE", "x11", 1);
 
     // GLFW error callback
     glfwSetErrorCallback([](int error, const char* description) {
@@ -69,14 +74,17 @@ int main() {
     std::cout << "GLFW Version: " << major << "." << minor << "." << rev << std::endl;
     std::cout << "GLFW Compiled: " << glfwGetVersionString() << std::endl;
 
-    // Window hints (start with compat profile)
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    // Start with legacy/basic OpenGL profile for maximum compatibility
+    glfwDefaultWindowHints();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
     glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
     glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+    
+    std::cout << "Attempting to create window with OpenGL 2.1..." << std::endl;
 
     GLFWwindow* window = glfwCreateWindow(1280, 720, "SEP Workbench", nullptr, nullptr);
     if (!window) {
@@ -121,22 +129,68 @@ int main() {
     std::cout << "OpenGL Vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cout << "OpenGL Renderer: " << glGetString(GL_RENDERER) << std::endl;
 
-    // Initialize logger
-    sep::logging::Manager::initialize();
-    auto logger = sep::logging::Manager::getInstance().createLogger("workbench", {});
-
-    // Initialize engine and renderer
-    std::unique_ptr<sep::Engine> engine = sep::createEngine();
-    std::unique_ptr<sep::CyclesRenderer> renderer = sep::createRenderer();
-    engine->initialize();
-    renderer->initialize();
-
-    // Initialize demo manager
+    // Initialize with safer error handling
+    std::unique_ptr<sep::Engine> engine;
+    std::unique_ptr<sep::CyclesRenderer> renderer;
+    
+    // Get reference to demo manager (singleton) outside try block for correct scope
     auto& demoManager = sep::workbench::DemoManager::getInstance();
-    demoManager.initialize(engine.get(), renderer.get());
-
-    // Register demos
-    sep::workbench::registerDemos();
+    
+    try {
+        // Initialize logger
+        std::cout << "Initializing logging system..." << std::endl;
+        sep::logging::Manager::initialize();
+        auto logger = sep::logging::Manager::getInstance().createLogger("workbench", {});
+        
+        // Initialize engine and renderer with error handling
+        std::cout << "Creating engine..." << std::endl;
+        engine = sep::createEngine();
+        if (!engine) {
+            std::cerr << "Failed to create engine!" << std::endl;
+            return -1;
+        }
+        
+        std::cout << "Creating renderer..." << std::endl;
+        renderer = sep::createRenderer();
+        if (!renderer) {
+            std::cerr << "Failed to create renderer!" << std::endl;
+            return -1;
+        }
+        
+        std::cout << "Initializing engine..." << std::endl;
+        engine->initialize();
+        
+        std::cout << "Initializing renderer..." << std::endl;
+        renderer->initialize();
+        
+        // Initialize demo manager
+        std::cout << "Initializing demo manager..." << std::endl;
+        demoManager.initialize(engine.get(), renderer.get());
+        // Skip configuration loading for now (linker issues)
+        std::cout << "Using default configuration..." << std::endl;
+        
+        
+        // Register demos
+        std::cout << "Registering demos..." << std::endl;
+        sep::workbench::registerDemos();
+        
+        // Select a default demo to start with
+        std::cout << "Selecting default demo..." << std::endl;
+        if (!demoManager.switchToDemo("genesis")) {
+            std::cerr << "Failed to select default demo!" << std::endl;
+            return -1;
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Exception during initialization: " << e.what() << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    } catch (...) {
+        std::cerr << "Unknown exception during initialization!" << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    }
 
     // Initialize ImGui (with safeguards)
     bool imgui_available = true;

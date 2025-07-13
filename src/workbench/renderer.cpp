@@ -3,6 +3,11 @@
 #include <cmath>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <vector>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 // Initialize static member variable
 bool sep::workbench::Renderer::startButtonClicked = false;
@@ -260,12 +265,12 @@ void sep::workbench::Renderer::renderSphere(int latitudes, int longitudes, const
     float r = 0.5f * scale;
     for (int i = 0; i < latitudes; ++i)
     {
-        float lat0 = M_PI * (-0.5f + (float)i / latitudes);
-        float lat1 = M_PI * (-0.5f + (float)(i + 1) / latitudes);
+        float lat0 = static_cast<float>(M_PI) * (-0.5f + (float)i / latitudes);
+        float lat1 = static_cast<float>(M_PI) * (-0.5f + (float)(i + 1) / latitudes);
         for (int j = 0; j <= longitudes; ++j)
         {
-            float lng0 = 2 * M_PI * (float)j / longitudes;
-            float lng1 = 2 * M_PI * (float)(j + 1) / longitudes;
+            float lng0 = 2 * static_cast<float>(M_PI) * (float)j / longitudes;
+            float lng1 = 2 * static_cast<float>(M_PI) * (float)(j + 1) / longitudes;
             glm::vec3 v0 =
                 pos + r * glm::vec3(cos(lng0) * cos(lat0), sin(lat0), sin(lng0) * cos(lat0));
             glm::vec3 v1 =
@@ -313,12 +318,11 @@ void sep::workbench::Renderer::renderCube(const glm::vec3& pos, float scale, con
     drawVertices(verts, GL_TRIANGLES);
 }
 
-// Non-const version of render that delegates to the const version
 sep::workbench::Renderer::~Renderer()
 {
     // Call cleanup to release OpenGL resources
     cleanup();
-};
+}
 
 void sep::workbench::Renderer::cleanup()
 {
@@ -358,9 +362,9 @@ void sep::workbench::Renderer::drawVertices(const std::vector<float>& vertices, 
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glDrawArrays(mode, 0, vertices.size() / 3);
+    glDrawArrays(mode, 0, static_cast<GLsizei>(vertices.size() / 3));
 }
-// Check if a point is inside the START button area
+
 bool sep::workbench::Renderer::isPointInStartButton(double x, double y) const
 {
     // The START text is drawn above the square
@@ -376,7 +380,6 @@ bool sep::workbench::Renderer::isPointInStartButton(double x, double y) const
             y <= height / 2 + 220);
 }
 
-// Handle mouse click
 void sep::workbench::Renderer::handleMouseClick(double x, double y)
 {
     if (isPointInStartButton(x, y) && demoManager != nullptr)
@@ -391,7 +394,6 @@ void sep::workbench::Renderer::handleMouseClick(double x, double y)
     }
 }
 
-// Static method implementations
 bool sep::workbench::Renderer::wasStartButtonClicked() { return startButtonClicked; }
 
 void sep::workbench::Renderer::resetStartButtonClicked() { startButtonClicked = false; }

@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "demos/demo_base.hpp"
 #include "imgui.h"
 #include "sep_engine_wrapper.h"
 

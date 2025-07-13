@@ -1,7 +1,6 @@
 #pragma once
 
 // Include GLEW before any other GL headers
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
 #include <cmath>

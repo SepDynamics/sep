@@ -1,5 +1,5 @@
-#include "workbench/demos/demo_base.hpp"
 #pragma once
+
 #include <memory>
 
 #include "demo_manager.hpp"

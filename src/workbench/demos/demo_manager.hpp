@@ -1,13 +1,12 @@
 #pragma once
 
 #include <functional>
+#include <map>
 #include <memory>
 #include <string>
-#include <unordered_map>
 
-#include "demos/demo_base.hpp"
-#include "imgui.h"
 #include "sep_engine_wrapper.h"
+#include "workbench/demos/demo_base.hpp"
 
 namespace sep
 {
@@ -17,12 +16,7 @@ namespace sep
         class DemoManager
         {
         public:
-            static DemoManager& getInstance()
-            {
-                static DemoManager instance;
-                return instance;
-            }
-
+            static DemoManager& getInstance();
             void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer);
             void registerDemo(const std::string& name,
                               std::function<std::unique_ptr<Demo>()> factory);
@@ -32,14 +26,16 @@ namespace sep
             void on_ui_render();
             void on_unload();
             void on_key(int key);
-
-            const std::string& getCurrentDemo() const { return current_demo_name_; }
+            std::string getCurrentDemo() const;
 
         private:
-            DemoManager() = default;
+            DemoManager() = default;  // Singleton
+            ~DemoManager() = default;
 
             sep::Engine* engine_{nullptr};
             sep::CyclesRenderer* renderer_{nullptr};
+            std::map<std::string, std::function<std::unique_ptr<Demo>()>> demo_factories_;
+            std::unique_ptr<Demo> current_demo_;
             std::string current_demo_name_;
         };
 

@@ -1,7 +1,15 @@
 #include "demo_manager.hpp"
 
+#include <iostream>
+
 namespace sep {
 namespace workbench {
+
+    DemoManager& DemoManager::getInstance()
+    {
+        static DemoManager instance;
+        return instance;
+    }
 
 void DemoManager::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
     engine_ = engine;
@@ -14,18 +22,15 @@ void DemoManager::registerDemo(const std::string& name, std::function<std::uniqu
 
 bool DemoManager::switchToDemo(const std::string& name) {
     auto it = demo_factories_.find(name);
-    if (it == demo_factories_.end()) {
-        return false;
-    }
+    if (it == demo_factories_.end()) return false;
 
     if (current_demo_) {
         current_demo_->on_unload();
     }
-    
-    current_demo_ = it->second();
-    current_demo_name_ = name;
-    current_demo_->on_load(engine_, renderer_);
 
+    current_demo_ = it->second();
+    current_demo_->on_load(engine_, renderer_);
+    current_demo_name_ = name;
     return true;
 }
 
@@ -60,5 +65,7 @@ void DemoManager::on_key(int key) {
     }
 }
 
-} // namespace workbench
-} // namespace sep
+std::string DemoManager::getCurrentDemo() const { return current_demo_name_; }
+
+}  // namespace workbench
+}  // namespace sep

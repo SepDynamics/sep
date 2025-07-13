@@ -179,20 +179,35 @@ bool WorkbenchCore::initializeOpenGL() {
 }
 
 bool WorkbenchCore::initializeImGui() {
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    
-    // Setup style
-    ImGui::StyleColorsDark();
-    
-    // Setup platform/renderer bindings
-    ImGui_ImplGlfw_InitForOpenGL(window_, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-    
-    std::cout << "[WorkbenchCore] ImGui initialized successfully" << std::endl;
-    return true;
+    if (!window_) {
+        std::cerr << "[WorkbenchCore] ImGui initialization failed: window not created" << std::endl;
+        return false;
+    }
+
+    try {
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+        // Setup style
+        ImGui::StyleColorsDark();
+
+        // Setup platform/renderer bindings
+        std::cout << "[WorkbenchCore] Initializing ImGui (GLFW)..." << std::endl;
+        ImGui_ImplGlfw_InitForOpenGL(window_, true);
+        std::cout << "[WorkbenchCore] Initializing ImGui (OpenGL)..." << std::endl;
+        ImGui_ImplOpenGL3_Init("#version 330");
+
+        std::cout << "[WorkbenchCore] ImGui initialized successfully" << std::endl;
+        return true;
+    } catch (const std::exception& e) {
+        std::cerr << "[WorkbenchCore] ImGui initialization exception: " << e.what() << std::endl;
+        return false;
+    } catch (...) {
+        std::cerr << "[WorkbenchCore] Unknown error during ImGui initialization" << std::endl;
+        return false;
+    }
 }
 
 void WorkbenchCore::cleanupImGui() {

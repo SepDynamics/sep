@@ -91,19 +91,24 @@ void GenesisPatternDemo::updateVisualization() {
             } visualization;
         } genesis_config;
 
-    // Convert processor patterns to positions for the renderer
-    std::vector<glm::vec3> pattern_state;
-    for (const auto& p : pattern_processor_->getPatterns()) {
-        pattern_state.push_back(glm::vec3(p.position));
-    }
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << "Exception in updateVisualization: " << e.what() << std::endl;
-        // Configure visualization parameters
+        // Convert processor patterns to positions for the renderer
+        std::vector<glm::vec3> pattern_state;
+        for (const auto& p : pattern_processor_->getPatterns()) {
+            pattern_state.push_back(glm::vec3(p.position));
+        }
+        
+        // Set renderer parameters and render patterns
+        renderer_->setColorMode(genesis_config.visualization.color_mode);
+        renderer_->setEmissionMode(genesis_config.visualization.emission_mode);
         renderer_->setRotation(view_.rotation);
         renderer_->setZoom(view_.zoom);
         renderer_->setWireframe(view_.wireframe);
+        
+        // Render the pattern state
+        renderer_->renderPatternState(pattern_state);
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Exception in updateVisualization: " << e.what() << std::endl;
     }
 }
 

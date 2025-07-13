@@ -1,5 +1,4 @@
-#include <GLFW/glfw3.h>  // Then GLFW
-#include <glad/glad.h>   // GLAD first
+#include <glad/glad.h>  // GLAD first
 
 #include <fstream>
 #include <iostream>
@@ -206,13 +205,9 @@ int main()
         std::cout << "Registering demos..." << std::endl;
         sep::workbench::registerDemos();
 
-        // Select a default demo to start with
-        std::cout << "Selecting default demo..." << std::endl;
-        if (!demoManager.switchToDemo("genesis"))
-        {
-            std::cerr << "Failed to select default demo!" << std::endl;
-            return -1;
-        }
+        // Instead of immediately loading a demo, we'll let the user select one through the UI
+        std::cout << "Ready for demo selection..." << std::endl;
+        // Demo selection will be handled in the main UI loop
     }
     catch (const std::exception& e)
     {
@@ -252,6 +247,23 @@ int main()
 
     // Main loop
     double last_time = glfwGetTime();
+    bool demo_selected = false;
+    std::string current_demo = "";
+    const std::map<std::string, std::string> demo_descriptions = {
+        {"genesis", "Genesis Pattern Demo - Base pattern evolution simulation"},
+        {"neural", "Neural Network Demo - Quantum-inspired neural network visualization"},
+        {"memory", "Memory Garden - Explore pattern memory tiers and relationships"},
+        {"flocking", "Flocking Demo - Emergent behavior with coherent pattern movement"},
+        {"cosmo", "Cosmic Demo - Visualization of cosmic-scale pattern interactions"},
+        {"cosmo_sim", "Cosmic Simulator - Interactive cosmic pattern simulator"},
+        {"physics", "Digital Physics - Quantum-inspired physics simulation"},
+        {"drug", "Drug Discovery - Pattern-based molecular optimization demo"},
+        {"audio", "Audio Visualizer - Real-time audio pattern visualization"}
+    };
+
+    // Set window title to show we're in selection mode
+    glfwSetWindowTitle(window, "SEP Workbench - Demo Selection");
+    
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -260,8 +272,15 @@ int main()
         float dt = static_cast<float>(current_time - last_time);
         last_time = current_time;
 
-        demoManager.on_update(dt);
-        demoManager.on_render();
+        // Clear the screen
+        glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Only update and render the demo if one is selected
+        if (demo_selected) {
+            demoManager.on_update(dt);
+            demoManager.on_render();
+        }
 
         if (imgui_available)
         {
@@ -269,13 +288,17 @@ int main()
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
-            // Render global demo selection menu
+            // Always show demo selection in menu bar
             if (ImGui::BeginMainMenuBar()) {
                 if (ImGui::BeginMenu("Demos")) {
                     for (const auto& name : demoManager.getRegisteredDemos()) {
                         bool selected = (demoManager.getCurrentDemo() == name);
                         if (ImGui::MenuItem(name.c_str(), nullptr, selected)) {
-                            demoManager.switchToDemo(name);
+                            if (demoManager.switchToDemo(name)) {
+                                demo_selected = true;
+                                current_demo = name;
+                                glfwSetWindowTitle(window, ("SEP Workbench - " + name).c_str());
+                            }
                         }
                     }
                     ImGui::EndMenu();
@@ -283,7 +306,30 @@ int main()
                 ImGui::EndMainMenuBar();
             }
 
-            demoManager.on_ui_render();
+                    // Create the absolute simplest UI possible to determine if ImGui is the issue
+                    ImGui::Begin("Demo Selection");
+                    
+                    // Just add a simple message
+                    ImGui::Text("SEP Engine Demo Selection");
+                    
+                    // Add a single button that doesn't do anything yet
+                    if (ImGui::Button("Test Button", ImVec2(200, 30))) {
+                        std::cout << "Button clicked" << std::endl;
+                    }
+                    
+                    ImGui::End();
+            
+            // Only call on_ui_render if a demo is selected
+            if (demo_selected) {
+                try {
+                    demoManager.on_ui_render();
+                } catch (const std::exception& e) {
+                    // Log error but don't crash
+                    std::cerr << "Error in demo UI render: " << e.what() << std::endl;
+                } catch (...) {
+                    std::cerr << "Unknown error in demo UI render" << std::endl;
+                }
+            }
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

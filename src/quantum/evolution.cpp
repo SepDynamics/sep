@@ -19,6 +19,10 @@ bool operator==(const sep::shim::string& lhs, const std::string& rhs)
 {
     return lhs == rhs.c_str();
 }
+bool operator==(const std::string& lhs, const std::string& rhs)
+{
+    return lhs == rhs;
+}
 
 namespace
 {

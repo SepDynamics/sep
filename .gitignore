@@ -148,3 +148,4 @@ CMakeTmp/
 *build*/
 */build/
 cmake-build-*/
+src/sep_api_server

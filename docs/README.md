@@ -82,8 +82,7 @@ The future development of the SEP Engine is focused on enhancing its capabilitie
 ## 5. Repository Structure
 
 .
-├── include/ # Public headers for all engine modules
-├── src/ # Source code for all modules (api, core, quantum, etc.)
+├── src/ # Headers and source code for all modules (api, core, quantum, etc.)
 ├── assets/ # Test data and shaders
 ├── third_party/ # External libraries (Crow, nlohmann, etc.)
 ├── extern/ # External submodules (e.g., Blender Cycles)

@@ -1,13 +1,49 @@
-# CUDA Compatibility Layer
+# Compat Module Overview
+
+The headers and source files reside in `src/compat`.
+
+## Header Details
+
+This overview highlights how the engine's compatibility layer (the `compat` headers) is imported by other parts of the code base. Modules pull in CUDA helpers, memory RAII utilities and shim types to remain portable. Below is a summary of the primary connections.
+
+## Key Imports
+
+- **Core module** (`src/core`)
+  - `compat/core.h` for the `CudaCore` singleton
+  - `compat/memory.h` and `compat/raii.h` for `DeviceMemory` and RAII buffers
+  - `compat/stream.h` for the `Stream` wrapper
+- **Memory module** (`src/memory` and `src/memory`)
+  - `compat/raii.h` and `compat/memory.h` to implement `UnifiedMemory`
+- **Quantum and Blender modules**
+  - `compat/math_common.h` and `compat/shim.h` to compile kernels or utility code on both CPU and GPU
+
+The `compat` headers expose unified abstractions so that the rest of the project can allocate device buffers, launch kernels and synchronize streams without direct CUDA dependencies.
+
+## Include Relationships
+
+```mermaid
+flowchart TD
+    A[src/core/engine.cpp] -- uses --> B[CudaCore]
+    A -- allocates --> C[DeviceMemory]
+    A -- creates --> D[Stream]
+    F[src/memory/unified_memory.h] -- calls --> G(allocateUnifiedMemory)
+    G --> H[Tiered Memory Manager]
+    H -->|returns| I[Unified pointer]
+    J[src/core/metrics_collector.cpp] -- records --> K[cudaEvent_t]
+```
+
+The diagram shows how core engine code instantiates CUDA resources. Memory helpers forward to the tiered memory manager and deliver unified pointers back to the caller. Metrics collection relies on CUDA events when available.
+
+## Implementation Details
 
 This document outlines the main files that implement the CUDA backend under `src/compat/` and shows how other parts of the engine invoke them.
 
 ## Overview
 
-The **compat** module provides the GPU implementation and the CPU fallback used when CUDA is not available. The headers live under `include/compat/` and the implementation files are in `src/compat/`.
+The **compat** module provides the GPU implementation and the CPU fallback used when CUDA is not available. The headers live under `src/compat/` and the implementation files are in `src/compat/`.
 
 ```
-include/compat/   # public headers
+src/compat/   # public headers
 src/compat/       # CUDA and fallback implementations
 src/memory/       # explicit instantiations for unified memory
 ```
@@ -47,7 +83,7 @@ Relevant headers provide the public API:
 4. Each wrapper configures the grid, invokes the CUDA kernel, and returns a `cudaError_t` to the caller.
 5. Results are copied back to host memory and processed by the calling module.
 
-The pattern kernel is invoked via `launch_pattern_processing` declared in `include/compat/kernels.cuh`. Other modules do not call the CUDA kernels directly; they use these high-level entry points to keep the GPU details isolated within the compat layer.
+The pattern kernel is invoked via `launch_pattern_processing` declared in `src/compat/kernels.cuh`. Other modules do not call the CUDA kernels directly; they use these high-level entry points to keep the GPU details isolated within the compat layer.
 
 ## Usage by Other Modules
 
@@ -56,3 +92,4 @@ The pattern kernel is invoked via `launch_pattern_processing` declared in `inclu
 - **C API** – `src/compat/cuda_api.cu` exposes functions like `sep_cuda_process_batch` which allocate buffers, call the launch wrappers, and copy results for consumption by external programs.
 
 By funneling all GPU interaction through this module, the rest of the engine can remain agnostic of the CUDA runtime while still benefiting from accelerated kernels when available.
+

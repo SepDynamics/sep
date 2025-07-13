@@ -75,15 +75,6 @@ bool WorkbenchCore::initialize() {
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
 
-        // Create offline engine as fallback
-        std::cout << "[WorkbenchCore] Creating offline engine skipped (abstract class)" << std::endl;
-        // offline_engine_ = std::make_unique<sep::Engine>(); // Abstract class
-        // offline_engine_->initialize();
-        // active_engine_ = offline_engine_.get();
-        
-        // Create Cycles renderer
-        std::cout << "[WorkbenchCore] Creating Cycles renderer skipped (abstract class)" << std::endl;
-        // cycles_renderer_ = std::make_unique<sep::CyclesRenderer>(); // Abstract class
         
         // Transition to service check
         transitionTo(ApplicationState::SERVICE_CHECK);
@@ -175,35 +166,9 @@ bool WorkbenchCore::initializeOpenGL() {
 }
 
 bool WorkbenchCore::initializeImGui() {
-    if (!window_) {
-        std::cerr << "[WorkbenchCore] ImGui initialization failed: window not created" << std::endl;
-        return false;
-    }
-
-    try {
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-        // Setup style
-        ImGui::StyleColorsDark();
-
-        // Setup platform/renderer bindings
-        std::cout << "[WorkbenchCore] Initializing ImGui (GLFW)..." << std::endl;
-        ImGui_ImplGlfw_InitForOpenGL(window_, true);
-        std::cout << "[WorkbenchCore] Initializing ImGui (OpenGL)..." << std::endl;
-        ImGui_ImplOpenGL3_Init("#version 330");
-
-        std::cout << "[WorkbenchCore] ImGui initialized successfully" << std::endl;
-        return true;
-    } catch (const std::exception& e) {
-        std::cerr << "[WorkbenchCore] ImGui initialization exception: " << e.what() << std::endl;
-        return false;
-    } catch (...) {
-        std::cerr << "[WorkbenchCore] Unknown error during ImGui initialization" << std::endl;
-        return false;
-    }
+    // TEMPORARY: Skip ImGui initialization to see if the app runs without it
+    std::cout << "[WorkbenchCore] BYPASSING ImGui initialization for debugging" << std::endl;
+    return true;
 }
 
 void WorkbenchCore::cleanupImGui() {
@@ -273,42 +238,39 @@ void WorkbenchCore::renderFrame() {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    // Start ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    
-    // Render based on state
-    switch (current_state_.load()) {
-        case ApplicationState::LANDING_PAGE:
-        case ApplicationState::DEMO_SELECTION:
-            if (landing_page_) {
-                landing_page_->render();
-            }
-            break;
-            
-        case ApplicationState::DEMO_RUNNING:
-            if (demo_orchestrator_) {
-                demo_orchestrator_->render();
-                demo_orchestrator_->renderUI();
-            }
-            break;
-            
-        case ApplicationState::ERROR_RECOVERY:
-            renderErrorRecovery();
-            break;
-            
-        default:
-            renderLoadingScreen();
-            break;
+    // TEMPORARY: Render a basic message until ImGui is properly initialized
+    // Skip ImGui rendering completely to avoid crashes
+    if (current_state_ == ApplicationState::LANDING_PAGE ||
+        current_state_ == ApplicationState::DEMO_SELECTION) {
+        // Display simplified message when in landing page
+        renderBasicMessage("SEP Workbench",
+                          "ImGui initialization bypassed for debugging.",
+                          "Press ESC to exit.");
+    } else if (current_state_ == ApplicationState::ERROR_RECOVERY) {
+        renderBasicMessage("Error Occurred",
+                          metrics_.last_error,
+                          "Press ESC to exit.");
+    } else {
+        renderBasicMessage("SEP Workbench",
+                          "Loading...",
+                          "");
     }
-    
-    // Render status bar
-    renderStatusBar();
-    
-    // Render ImGui
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+// Helper method for simplified rendering without ImGui
+void WorkbenchCore::renderBasicMessage(const std::string& title,
+                                      const std::string& message,
+                                      const std::string& instruction) {
+    // This method provides a fallback rendering approach without ImGui
+    // It would typically use raw OpenGL to render text, but for debugging
+    // we'll just print to console
+    static bool message_printed = false;
+    if (!message_printed) {
+        std::cout << "\n[Debug Renderer] " << title << "\n"
+                  << message << "\n"
+                  << instruction << std::endl;
+        message_printed = true;
+    }
 }
 
 void WorkbenchCore::renderLoadingScreen() {
@@ -467,9 +429,15 @@ void WorkbenchCore::attemptServiceConnection() {
             // Switch to service engine
             active_engine_ = service_connector_->getEngine();
         } else {
-            std::cout << "[WorkbenchCore] Failed to connect to SEP service, offline mode not available" << std::endl;
-            // Don't set active_engine_ to null pointer
-            // active_engine_ = offline_engine_.get();
+            std::cout
+                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
+                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
+                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
+                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
+                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
+                << "[WorkbenchCore] Failed to connect to SEP service. FIX THE ENGINE CONNECTION"
+                << std::endl;
+            // Just leave the active_engine_ as null - we'll check for null before using it
         }
     }
 }

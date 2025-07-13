@@ -27,9 +27,15 @@ target_include_directories(sep_workbench_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/third_party/imgui
 )
 
+# Add the IMGUI_IMPL_OPENGL_LOADER_GLAD define to ensure consistency with our OpenGL loader choice
+target_compile_definitions(sep_workbench_lib PRIVATE
+    IMGUI_IMPL_OPENGL_LOADER_GLAD
+)
+
 # Link against core components
- target_link_libraries(sep_workbench_lib PRIVATE
+target_link_libraries(sep_workbench_lib PRIVATE
     sep_core sep_quantum sep_memory
+    glad
     glfw
     OpenGL::GL
 )

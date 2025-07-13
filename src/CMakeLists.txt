@@ -45,12 +45,20 @@ target_include_directories(sep_api_server PRIVATE
     ${CMAKE_SOURCE_DIR}/src
 )
 
+# Define OpenGL loader to use GLAD instead of GLEW
+target_compile_definitions(sep_api_server PRIVATE
+    IMGUI_IMPL_OPENGL_LOADER_GLAD
+)
+
 target_link_libraries(sep_api_server PRIVATE
     sep_api
     sep_blender
     sep_core
     sep_compat
     Threads::Threads
+    glad
+    glfw
+    OpenGL::GL
 )
 
 
@@ -62,6 +70,11 @@ if(SEP_BUILD_WORKBENCH)
         workbench_main.cpp
     )
     set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
+    
+    # Also use GLAD for the main executable
+    target_compile_definitions(sep_workbench PRIVATE
+        IMGUI_IMPL_OPENGL_LOADER_GLAD
+    )
     
     target_include_directories(sep_workbench PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}

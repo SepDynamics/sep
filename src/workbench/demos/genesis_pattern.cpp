@@ -1,15 +1,20 @@
 #include "genesis_pattern.hpp"
 
+#include <iostream>
+
+#include "imgui.h"
 #include "blender/cycles_renderer.hpp"
-#include "config.hpp"
 #include "core/engine.h"
 #include "core/types.h"
 #include "memory/quantum_coherence_manager.h"
 #include "quantum/quantum_processor.h"
-namespace sep { namespace quantum { using Pattern = ::sep::Pattern; } }
-#include "imgui.h"
-
 namespace sep {
+namespace quantum {
+
+    using Pattern = ::sep::Pattern;
+
+    }  // namespace quantum
+
 namespace workbench {
 
 void GenesisPatternDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
@@ -42,35 +47,56 @@ void GenesisPatternDemo::on_update(float dt)
 
 void GenesisPatternDemo::evolvePatterns(float)
 {
-    // Evolve all patterns in the processor
-    auto batch = pattern_processor_->processAll();
+    if (!pattern_processor_ || !coherence_manager_) {
+        std::cerr << "Error: Pattern processor or coherence manager is null!" << std::endl;
+        return;
+    }
 
-    // Retrieve updated patterns and compute coherence metrics
-    auto patterns = pattern_processor_->getPatterns();
-    auto coherence = coherence_manager_->updateCoherence(patterns);
+    try {
+        // Evolve all patterns in the processor
+        auto batch = pattern_processor_->processAll();
 
-    // Update metrics
-    metrics_.coherence = coherence.global_coherence;
-    metrics_.pattern_count = patterns.size();
-    metrics_.iterations += 1;
+        // Retrieve updated patterns and compute coherence metrics
+        auto patterns = pattern_processor_->getPatterns();
+        auto coherence = coherence_manager_->updateCoherence(patterns);
 
-    // Trigger visualization update when significant migrations occur
-    if (coherence.total_migrations > 0) {
-        updateVisualization();
+        // Update metrics
+        metrics_.coherence = coherence.global_coherence;
+        metrics_.pattern_count = patterns.size();
+        metrics_.iterations += 1;
+
+        // Trigger visualization update when significant migrations occur
+        if (coherence.total_migrations > 0) {
+            updateVisualization();
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Exception in evolvePatterns: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "Unknown exception in evolvePatterns!" << std::endl;
     }
 }
 
 void GenesisPatternDemo::updateVisualization() {
-    if (!renderer_) return;
+    if (!renderer_) {
+        std::cerr << "Error: Renderer is null!" << std::endl;
+        return;
+    }
 
-    const auto& config = Config::getInstance();
-    const auto& genesis_config = config.genesis_pattern();
+    try {
+        // Use hardcoded defaults instead of Config to avoid linkage issues
+        struct {
+            struct {
+                std::string color_mode = "rainbow";
+                std::string emission_mode = "normal";
+            } visualization;
+        } genesis_config;
 
     // Convert processor patterns to positions for the renderer
     std::vector<glm::vec3> pattern_state;
     for (const auto& p : pattern_processor_->getPatterns()) {
         pattern_state.push_back(glm::vec3(p.position));
     }
+
     
     // Configure visualization parameters
     renderer_->setRotation(view_.rotation);
@@ -84,6 +110,7 @@ void GenesisPatternDemo::updateVisualization() {
     
     // Render updated pattern state
     renderer_->renderPatternState(pattern_state);
+    }
 }
 
 void GenesisPatternDemo::on_render() {

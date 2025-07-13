@@ -301,7 +301,7 @@ float MeshHandler::calculateSurfaceArea() const {
       float cx = ay * bz - az * by;
       float cy = az * bx - ax * bz;
       float cz = ax * by - ay * bx;
-      area += 0.5 * std::sqrt(cx * cx + cy * cy + cz * cz);
+        area += 0.5 * std::sqrt(static_cast<double>(cx * cx + cy * cy + cz * cz));
     }
   }
   return static_cast<float>(area);
@@ -320,7 +320,7 @@ float MeshHandler::calculateAverageEdgeLength() const {
     float dx = v1[0] - v2[0];
     float dy = v1[1] - v2[1];
     float dz = v1[2] - v2[2];
-    total += std::sqrt(dx * dx + dy * dy + dz * dz);
+      total += std::sqrt(static_cast<double>(dx * dx + dy * dy + dz * dz));
   }
   return static_cast<float>(total / mesh_->totedge);
 }
@@ -346,7 +346,7 @@ float MeshHandler::calculateVertexInfluence(const sep::pattern::PatternData& pat
   float dx = vertex[0] - pattern.position.x;
   float dy = vertex[1] - pattern.position.y;
   float dz = vertex[2] - pattern.position.z;
-  float dist = std::sqrt(dx * dx + dy * dy + dz * dz);
+  float dist = std::sqrt(static_cast<double>(dx * dx + dy * dy + dz * dz));
   float weight = 1.0f / (1.0f + dist);
   return computeCoherenceWeight(weight);
 }

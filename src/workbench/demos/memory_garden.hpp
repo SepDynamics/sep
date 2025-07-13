@@ -53,7 +53,6 @@ private:
     float decay_{0.1f};
     float input_strength_{0.5f};
     float learning_rate_{0.05f};
-    float connection_prob_{0.3f};
 
     sep::CyclesRenderer* renderer_{nullptr};
 

@@ -158,6 +158,8 @@ void MemoryGardenDemo::on_key_press(int key)
             relationships_.clear();
             createInitialPatterns();
             break;
+        default:
+            break;
     }
 }
 

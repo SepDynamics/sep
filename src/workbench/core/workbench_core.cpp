@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include "workbench_core.hpp"
 #include "workbench/renderer.h"
 #include "service_connector.hpp"

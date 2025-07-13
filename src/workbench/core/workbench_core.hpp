@@ -128,6 +128,7 @@ private:
     void renderLoadingScreen();
     void renderErrorRecovery();
     void renderStatusBar();
+    void renderBasicMessage(const std::string& title, const std::string& message, const std::string& instruction);
     
     // State handlers
     void handleInitializing();

@@ -34,7 +34,7 @@ struct ServiceHealth {
 // Connection configuration
 struct ConnectionConfig {
     std::string service_address{"localhost"};
-    uint16_t service_port{9876};
+    uint16_t service_port{3000};
     std::chrono::milliseconds connection_timeout{5000};
     std::chrono::milliseconds heartbeat_interval{1000};
     uint32_t max_retry_attempts{3};

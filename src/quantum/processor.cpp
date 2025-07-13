@@ -29,13 +29,17 @@ namespace sep::quantum {
 
 using sep::memory::MemoryTierEnum;
 
-// Global quantum threshold configuration
-sep::workbench::QuantumThresholdConfig qcfg = config::ConfigManager::getInstance().getQuantumThresholdConfig();
+// Define quantum threshold configuration directly
+struct {
+    float ltm_coherence_threshold = 0.9f;
+    float mtm_coherence_threshold = 0.6f;
+    float stability_threshold = 0.8f;
+} qcfg;
 
 class ProcessorImpl {
 public:
     explicit ProcessorImpl(const ProcessingConfig& config)
-        : config_(config), initialized_(false), gpu_context_(nullptr), hooks_(nullptr), params_() {}
+        : config_(config), initialized_(false), gpu_context_(nullptr), hooks_(nullptr) {}
 
     sep::SEPResult init(GPUContext* gpu_context) {
         std::lock_guard<std::mutex> lock(mutex_);

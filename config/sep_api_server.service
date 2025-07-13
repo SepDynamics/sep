@@ -1,13 +1,36 @@
 [Unit]
-Description=SEP API Server
+Description=SEP API Server Service
 After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/usr/local/share/sep
-ExecStart=/usr/local/bin/sep_api_server
-Environment=NODE_ENV=production
+User=ajn
+Group=ajn
+
+# The executable and arguments
+ExecStart=/usr/local/bin/sep_api_server --config /etc/sep/config.json --daemon
+
+# Restart policy
 Restart=always
+RestartSec=1
+
+# Timeouts
+TimeoutStartSec=60
+TimeoutStopSec=30
+KillSignal=SIGTERM
+KillMode=mixed
+
+# Resource limits
+LimitNOFILE=65536
+MemoryMax=2G
+
+# Security settings
+PrivateTmp=yes
+ProtectSystem=yes
+ProtectHome=read-only
+ReadWritePaths=/tmp /var/tmp /run /sep/logs /etc/sep
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+Environment="SEP_LOG_DIR=/sep/logs" "SEP_API_PORT=3000"
 
 [Install]
 WantedBy=multi-user.target

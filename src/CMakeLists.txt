@@ -67,7 +67,7 @@ if(SEP_BUILD_WORKBENCH)
     add_subdirectory(workbench)
 
     add_executable(sep_workbench
-        workbench_main.cpp
+        workbench/core/workbench_main.cpp
     )
     set_target_properties(sep_workbench PROPERTIES CXX_STANDARD 17)
     

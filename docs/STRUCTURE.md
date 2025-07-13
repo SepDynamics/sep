@@ -264,35 +264,19 @@ The SEP Workbench serves as a visualization frontend for the SEP Engine, providi
 
 ### Problem Identification
 
-I've identified that there are **two parallel initialization paths** causing conflicts:
-
-1. **workbench_main.cpp** - A simpler direct approach using DemoManager
-2. **WorkbenchCore** - A more complex state-machine approach with components
+The project previously had **two parallel initialization paths**, but the
+legacy `workbench_main.cpp` entry point has now been removed.  The
+`WorkbenchCore` state-machine approach is the sole initialization path.
 
 Let me create a multi-dimensional Mermaid diagram showing the current architecture and initialization flows:
 
 ```mermaid
 graph TB
-    %% Outer Layer - System Entry Points
-    subgraph "System Entry Points"
-        WM[workbench_main.cpp]
-        WC[WorkbenchCore::main]
-    end
+    %% Outer Layer - Entry Point
+    WC[WorkbenchCore::main]
 
-    %% Middle Layer - Initialization Flows
-    subgraph "Initialization Flow - workbench_main.cpp"
-        WM --> GLFW1[GLFW Init]
-        GLFW1 --> WIN1[Create Window]
-        WIN1 --> GL1[GLAD Init]
-        GL1 --> ENG1[Create Engine]
-        ENG1 --> REND1[Create CyclesRenderer]
-        REND1 --> DM1[DemoManager.initialize]
-        DM1 --> REG1[registerDemos]
-        REG1 --> LOOP1[Main Loop]
-        LOOP1 --> CRASH[SEGFAULT!]
-    end
-
-    subgraph "Initialization Flow - WorkbenchCore"
+    %% Initialization Flow
+    subgraph "Initialization Flow"
         WC --> GLFW2[initializeGLFW]
         GLFW2 --> WIN2[createWindow]
         WIN2 --> GL2[initializeOpenGL]
@@ -311,11 +295,10 @@ graph TB
         Renderer[sep::CyclesRenderer]
     end
 
-    %% Connections showing conflicts
-    DM1 -.->|uses| DemoManager
-    DO -.->|also uses?| DemoManager
-    ENG1 --> Engine
-    REND1 --> Renderer
+    %% Connections
+    DO -.->|uses| DemoManager
+    WC --> Engine
+    WC --> Renderer
 
     %% State Machine
     subgraph "WorkbenchCore State Machine"
@@ -336,7 +319,7 @@ graph TB
 
 ```mermaid
 sequenceDiagram
-    participant Main as workbench_main
+    participant Main as WorkbenchCore
     participant DM as DemoManager
     participant Engine as sep::Engine
     participant Renderer as CyclesRenderer
@@ -374,7 +357,7 @@ The segmentation fault appears to be occurring because:
 
 1. **Missing Renderer Implementation**: The workbench expects a `sep::workbench::Renderer` class but it's not properly implemented/linked
 2. **Demo Initialization**: Demos might be trying to access uninitialized resources
-3. **State Mismatch**: The simple approach in `workbench_main.cpp` bypasses the state machine logic of `WorkbenchCore`
+3. **State Mismatch**: Earlier experiments bypassed the state machine logic of `WorkbenchCore`, leading to inconsistent behavior
 
 ### Proposed Solution Architecture
 

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "sep_engine_wrapper.h"
+#include "../../sep_engine_wrapper.h"
 #include "workbench/demos/demo_base.hpp"
 
 namespace sep

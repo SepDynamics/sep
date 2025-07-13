@@ -32,6 +32,7 @@ target_include_directories(sep_workbench_lib PUBLIC
 # Add the IMGUI_IMPL_OPENGL_LOADER_GLAD define to ensure consistency with our OpenGL loader choice
 target_compile_definitions(sep_workbench_lib PRIVATE
     IMGUI_IMPL_OPENGL_LOADER_GLAD
+    GLFW_INCLUDE_NONE
 )
 
 # Link against core components

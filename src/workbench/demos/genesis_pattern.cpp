@@ -121,7 +121,7 @@ void GenesisPatternDemo::on_ui_render() {
     ImGui::Begin("Genesis Pattern Controls");
     
     ImGui::Text("Pattern Count: %zu", metrics_.pattern_count);
-    ImGui::Text("Global Coherence: %.3f", metrics_.coherence);
+    ImGui::Text("Global Coherence: %.3f", static_cast<double>(metrics_.coherence));
     ImGui::Text("Iterations: %zu", metrics_.iterations);
     
     ImGui::Separator();

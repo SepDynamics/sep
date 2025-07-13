@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 # Gather all workbench sources and demos
 file(GLOB_RECURSE WB_SOURCES
     "demos/*.cpp"
+    "core/*.cpp"
     "renderer.cpp"
     "config.cpp"
     "${CMAKE_SOURCE_DIR}/third_party/imgui/*.cpp"

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "imgui.h"
 #include <memory>
 #include <functional>
 #include <chrono>
@@ -90,8 +91,8 @@ private:
     void updateAnimation();
     
     // UI helpers
-    ImVec4 getCategoryColor(const std::string& category) const;
     float getCardAnimation(const std::string& demo_id) const;
+    ImVec4 getCategoryColor(const std::string& category) const;
 };
 
 } // namespace sep::workbench

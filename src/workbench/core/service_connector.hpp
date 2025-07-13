@@ -5,6 +5,7 @@
 #include <atomic>
 #include <chrono>
 #include <functional>
+#include <thread>
 
 namespace sep {
 class Engine;

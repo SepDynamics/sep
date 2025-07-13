@@ -7,15 +7,9 @@
 #include <cstdint>
 #include <numeric>
 #include <stdexcept>
+#include "compat/string_operators.h"
 
 namespace sep::quantum {
-
-// Convenience comparator for mixed string types - defined in global namespace for wider visibility
-inline bool operator==(const std::string& lhs, const sep::shim::string& rhs)
-{
-    return lhs == rhs.c_str();
-}
-inline bool operator==(const sep::shim::string& lhs, const std::string& rhs) { return lhs.c_str() == rhs; }
 
 namespace
 {

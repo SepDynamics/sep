@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "compat/shim.h"
+#include "compat/string_operators.h"
 #include "memory/types.h"
 
 namespace sep

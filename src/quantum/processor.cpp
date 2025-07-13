@@ -428,4 +428,16 @@ std::unique_ptr<Processor> createGPUProcessor(const ProcessingConfig& config) {
     return createProcessor(gpu_config);
 }
 
+// Implementation of the createProcessor functions that are referenced but not defined
+std::unique_ptr<Processor> createProcessor(const ProcessingConfig& config)
+{
+    return std::make_unique<Processor>(config);
+}
+
+std::unique_ptr<Processor> createProcessor()
+{
+    ProcessingConfig default_config;
+    return std::make_unique<Processor>(default_config);
+}
+
 } // namespace sep::quantum

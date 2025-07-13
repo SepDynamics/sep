@@ -35,6 +35,11 @@ void GenesisPatternDemo::initializePatterns()
     pattern_processor_->addPattern(pattern);
 }
 
+void GenesisPatternDemo::on_update(float dt)
+{
+    evolvePatterns(dt);
+}
+
 void GenesisPatternDemo::evolvePatterns(float)
 {
     // Evolve all patterns in the processor

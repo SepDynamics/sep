@@ -157,10 +157,19 @@ bool WorkbenchCore::initializeOpenGL() {
     std::cout << "[WorkbenchCore] GLAD initialized successfully" << std::endl;
 
     // Now it's safe to query OpenGL info
+    const GLubyte* version  = glGetString(GL_VERSION);
+    const GLubyte* vendor   = glGetString(GL_VENDOR);
+    const GLubyte* renderer = glGetString(GL_RENDERER);
+
+    if (!version || !vendor || !renderer) {
+        std::cerr << "[WorkbenchCore] Failed to query OpenGL information" << std::endl;
+        return false;
+    }
+
     std::cout << "[WorkbenchCore] OpenGL Info:" << std::endl;
-    std::cout << "  Version: " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "  Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "  Renderer: " << glGetString(GL_RENDERER) << std::endl;
+    std::cout << "  Version: " << version << std::endl;
+    std::cout << "  Vendor: " << vendor << std::endl;
+    std::cout << "  Renderer: " << renderer << std::endl;
     
     // Configure OpenGL state
     glEnable(GL_DEPTH_TEST);
@@ -180,8 +189,18 @@ bool WorkbenchCore::initializeImGui() {
     ImGui::StyleColorsDark();
     
     // Setup platform/renderer bindings
-    ImGui_ImplGlfw_InitForOpenGL(window_, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+    if (!ImGui_ImplGlfw_InitForOpenGL(window_, true)) {
+        std::cerr << "[WorkbenchCore] Failed to initialize ImGui GLFW backend" << std::endl;
+        return false;
+    }
+    if (!ImGui_ImplOpenGL3_Init("#version 330")) {
+        std::cerr << "[WorkbenchCore] Failed to initialize ImGui OpenGL backend" << std::endl;
+        return false;
+    }
+    if (io.Fonts->Fonts.empty()) {
+        std::cerr << "[WorkbenchCore] ImGui fonts not available" << std::endl;
+        return false;
+    }
     
     std::cout << "[WorkbenchCore] ImGui initialized successfully" << std::endl;
     return true;

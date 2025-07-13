@@ -99,10 +99,19 @@ public:
     std::size_t max_patterns{0};
     float promote_stm_to_mtm{0.7f};
     float promote_mtm_to_ltm{0.9f};
-    float demote_threshold{0.3f};
+    float demotion_threshold{0.3f}; // Changed from demote_threshold to match usage in memory_tier_manager.cpp
     uint32_t stm_to_mtm_min_gen{};
     uint32_t mtm_to_ltm_min_gen{};
     bool enable_compression{false};
+    
+    // Additional fields used by MemoryTierManager
+    uint32_t min_age_for_promotion{1};
+    uint32_t min_age_for_ltm{10};
+    float promotion_coherence_threshold{0.7f};
+    float ltm_coherence_threshold{0.9f};
+    float fragmentation_threshold{0.3f};
+    float defrag_threshold{0.3f};
+    bool use_compression{false};
   };
 
   explicit MemoryTier(const Config &config);
@@ -147,6 +156,7 @@ public:
   void removePattern(size_t id);
   const sep::persistence::PersistentPatternData *getPattern(size_t id) const;
   sep::persistence::PersistentPatternData *getPattern(size_t id);
+  void setPromotionThreshold(float threshold);
   const std::unordered_map<size_t, sep::persistence::PersistentPatternData> &
   getPatterns() const {
     return m_patterns;

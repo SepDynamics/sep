@@ -38,16 +38,14 @@ MemoryTierManager &MemoryTierManager::getInstance()
 }
 
         // Constructor
-        MemoryTierManager::MemoryTierManager()
-            : stm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::STM, 1 << 20, 0.7f,
-                                                5)),
-              mtm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::MTM, 4 << 20, 0.8f,
-                                                50)),
-              ltm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::LTM, 16 << 20, 0.9f,
-                                                100))
-        {
-            init(Config{});
-        }
+MemoryTierManager::MemoryTierManager()
+    : stm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::STM, 1 << 20, 0.7f, 5)),
+      mtm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::MTM, 4 << 20, 0.8f, 50)),
+      ltm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::LTM, 16 << 20, 0.9f, 100))
+{
+    Config default_config{};
+    init(default_config);
+}
 
         MemoryTierManager::MemoryTierManager(const Config &cfg)
             : stm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::STM, cfg.stm_size,
@@ -55,9 +53,29 @@ MemoryTierManager &MemoryTierManager::getInstance()
               mtm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::MTM, cfg.mtm_size,
                                                 cfg.promote_mtm_to_ltm, cfg.mtm_to_ltm_min_gen)),
               ltm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::LTM, cfg.ltm_size,
-                                                1.0f, 100))
+                                                0.9f, 100))
         {
             init(cfg);
+        }
+
+        // Implementation of init method
+        void MemoryTierManager::init(const Config &config)
+        {
+            // Store the configuration
+            config_.min_age_for_promotion = std::max(config.stm_to_mtm_min_gen, 1u);
+            config_.min_age_for_ltm = std::max(config.mtm_to_ltm_min_gen, 10u);
+            config_.promotion_coherence_threshold = config.promote_stm_to_mtm;
+            config_.ltm_coherence_threshold = config.promote_mtm_to_ltm;
+            config_.demotion_threshold = config.demote_threshold;
+            config_.defrag_threshold = config.fragmentation_threshold;
+            config_.use_compression = config.enable_compression;
+
+            // Initialize the tiers with the config values if needed
+            if (stm_) stm_->setPromotionThreshold(config.promote_stm_to_mtm);
+            if (mtm_) mtm_->setPromotionThreshold(config.promote_mtm_to_ltm);
+
+            // Set up other tier-specific configurations
+            rebuildLookup();
         }
 
         MemoryTierManager::~MemoryTierManager() = default;
@@ -448,8 +466,8 @@ MemoryTierManager &MemoryTierManager::getInstance()
                     return new_block;
                 }
             }
-            else if (block->coherence < config_.demote_threshold ||
-                     block->stability < config_.demote_threshold)
+            else if (block->coherence < config_.demotion_threshold ||
+                     block->stability < config_.demotion_threshold)
             {
                 if (block->tier == MemoryTierEnum::LTM || block->tier == MemoryTierEnum::MTM)
                 {

@@ -1,18 +1,17 @@
-#include <glad/glad.h>  // GLAD first
+#include <glad/glad.h>  // GLAD must be first before any OpenGL headers
+#include <GLFW/glfw3.h>
 
 #include <fstream>
 #include <iostream>
 #include <memory>  // For std::unique_ptr
 
 #include "../sep_engine_wrapper.h"
+#include "config.hpp"
 #include "core/logging.h"
-#include "cycles_renderer_adapter.h"
+#include "demos/demo_manager.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "workbench/config.hpp"
-#include "workbench/demos/demo_manager.hpp"
-#include "workbench/renderer.h"
 
 // Forward declaration for demo registration
 namespace sep
@@ -277,9 +276,16 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Only update and render the demo if one is selected
+        // Added try-catch to prevent segfaults
         if (demo_selected) {
-            demoManager.on_update(dt);
-            demoManager.on_render();
+            try {
+                demoManager.on_update(dt);
+                demoManager.on_render();
+            } catch (const std::exception& e) {
+                std::cerr << "Error in demo update/render: " << e.what() << std::endl;
+            } catch (...) {
+                std::cerr << "Unknown error in demo update/render" << std::endl;
+            }
         }
 
         if (imgui_available)

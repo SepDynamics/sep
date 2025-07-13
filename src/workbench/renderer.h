@@ -1,11 +1,9 @@
 #pragma once
 
-// Include glad before any other GL headers
-#include <glad/glad.h>  // MUST come first
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
-#include <glm/glm.hpp>  // For vector math types
-#include <iostream>     // Needed for error reporting
+#include <glm/glm.hpp>
+#include <iostream>
 #include <vector>
 
 // Include canonical Pattern definition

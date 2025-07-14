@@ -382,9 +382,11 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
 //-----------------------------------------------------------------------------
 
 ImDrawListSharedData::ImDrawListSharedData()
+    : DrawLists(), CircleSegmentMaxError(0.0f), InitialFringeScale(1.0f), ArcFastRadiusCutoff(0.0f)
 {
-    memset(this, 0, sizeof(*this));
-    InitialFringeScale = 1.0f;
+    // Zero initialize arrays
+    memset(CircleSegmentCounts, 0, sizeof(CircleSegmentCounts));
+    memset(ArcFastVtx, 0, sizeof(ArcFastVtx));
     for (int i = 0; i < IM_ARRAYSIZE(ArcFastVtx); i++)
     {
         const float a = ((float)i * 2 * IM_PI) / (float)IM_ARRAYSIZE(ArcFastVtx);
@@ -414,8 +416,23 @@ void ImDrawListSharedData::SetCircleTessellationMaxError(float max_error)
 }
 
 ImDrawList::ImDrawList(ImDrawListSharedData* shared_data)
+    : CmdBuffer(),
+      IdxBuffer(),
+      VtxBuffer(),
+      Flags(0),
+      _VtxCurrentIdx(0),
+      _Data(shared_data),
+      _VtxWritePtr(nullptr),
+      _IdxWritePtr(nullptr),
+      _Path(),
+      _CmdHeader(),
+      _Splitter(),
+      _ClipRectStack(),
+      _TextureStack(),
+      _CallbacksDataBuf(),
+      _FringeScale(0.0f),
+      _OwnerName(nullptr)
 {
-    memset(this, 0, sizeof(*this));
     _SetDrawListSharedData(shared_data);
 }
 
@@ -2107,9 +2124,16 @@ void ImDrawListSplitter::ClearFreeMemory()
     for (int i = 0; i < _Channels.Size; i++)
     {
         if (i == _Current)
-            memset(&_Channels[i], 0, sizeof(_Channels[i]));  // Current channel is a copy of CmdBuffer/IdxBuffer, don't destruct again
-        _Channels[i]._CmdBuffer.clear();
-        _Channels[i]._IdxBuffer.clear();
+        {
+            // Current channel is a copy of CmdBuffer/IdxBuffer, just clear without destructing
+            _Channels[i]._CmdBuffer.clear();
+            _Channels[i]._IdxBuffer.clear();
+        }
+        else
+        {
+            _Channels[i]._CmdBuffer.clear();
+            _Channels[i]._IdxBuffer.clear();
+        }
     }
     _Current = 0;
     _Count = 1;
@@ -2131,7 +2155,8 @@ void ImDrawListSplitter::Split(ImDrawList* draw_list, int channels_count)
     // Channels[] (24/32 bytes each) hold storage that we'll swap with draw_list->_CmdBuffer/_IdxBuffer
     // The content of Channels[0] at this point doesn't matter. We clear it to make state tidy in a debugger but we don't strictly need to.
     // When we switch to the next channel, we'll copy draw_list->_CmdBuffer/_IdxBuffer into Channels[0] and then Channels[1] into draw_list->CmdBuffer/_IdxBuffer
-    memset(&_Channels[0], 0, sizeof(ImDrawChannel));
+    _Channels[0]._CmdBuffer.clear();
+    _Channels[0]._IdxBuffer.clear();
     for (int i = 1; i < channels_count; i++)
     {
         if (i >= old_channels_count)

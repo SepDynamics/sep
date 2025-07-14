@@ -109,7 +109,7 @@ bool WorkbenchCore::createWindow() {
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
     // Create window
     window_ = glfwCreateWindow(
         window_config_.width,

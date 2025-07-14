@@ -1,7 +1,7 @@
 #include "memory_garden.hpp"
 
 #include <glm/vec3.hpp>
-#include <glm/ext/scalar_constants.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include "config.hpp"
 #include "memory/memory_tier_manager.hpp"

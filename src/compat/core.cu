@@ -1,315 +1,59 @@
 #include "compat/core.h"
-
-#include "compat/cuda_common.h"
-#include "compat/kernels.h"
-#include "compat/constants.h"
-#include "compat/raii.h"
-
-#include <cstring>
-
-#include "core/common.h"  // defines sep::SEPResult
-
-#include "compat/cuda_helpers.h"
+#include "compat/cuda_runtime.h"
+#include "compat/types.h"
+#include <stdexcept>
 
 namespace sep::cuda {
 
-namespace detail {
+sep::api::ErrorCode CudaCore::initialize(int device_id) {
+    if (initialized_) {
+        return ErrorCode::Success;
+    }
 
-#ifdef __CUDACC__
-SEP_GLOBAL void qbsa_kernel(const std::uint32_t* probe_idx,
-                            const std::uint32_t* expectations,
-                            std::uint32_t num_probes, std::uint32_t* bitfield,
-                            std::uint32_t* corrections,
-                            std::uint32_t* correction_count) {
-  const std::uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
-  if (tid >= num_probes) return;
+    cudaError_t err = cudaSetDevice(device_id);
+    if (err != cudaSuccess) {
+        return ErrorCode::InvalidArgument;
+    }
 
-  const std::uint32_t bit_index = probe_idx[tid];
-  const std::uint32_t expected = expectations[tid];
+    // Initialize CUDA context
+    err = cudaFree(0);
+    if (err != cudaSuccess) {
+        return ErrorCode::InvalidState;
+    }
 
-  const std::uint32_t word_idx = bit_index / WARP_SIZE;
-  const std::uint32_t bit_pos = bit_index % WARP_SIZE;
-  const std::uint32_t mask = 1U << bit_pos;
+    current_device_ = device_id;
+    initialized_ = true;
 
-  const std::uint32_t current = atomicOr(&bitfield[word_idx], 0);
-  const std::uint32_t current_bit = (current & mask) ? 1U : 0U;
-
-  if (current_bit != expected) {
-    atomicXor(&bitfield[word_idx], mask);
-    const std::uint32_t idx = atomicAdd(correction_count, 1U);
-    if (idx < MAX_BLOCK_SIZE) corrections[idx] = bit_index;
-  }
+    // Query device properties
+    return queryDeviceProperties();
 }
 
-SEP_GLOBAL void qsh_kernel(const std::uint64_t* chunks, std::uint32_t num_chunks,
-                           std::uint32_t* collapse_indices,
-                           std::uint32_t* collapse_counts) {
-  const std::uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
-  if (tid >= num_chunks) return;
+sep::api::ErrorCode CudaCore::queryDeviceProperties() {
+    int count;
+    cudaError_t err = cudaGetDeviceCount(&count);
+    if (err != cudaSuccess) {
+        return ErrorCode::ResourceNotFound;
+    }
 
-  const std::uint64_t chunk = chunks[tid];
-  const std::uint64_t reversed = __brevll(chunk);
-  const std::uint64_t diff = chunk ^ reversed;
+    device_properties_.resize(count);
+    for (int i = 0; i < count; i++) {
+        err = cudaGetDeviceProperties(&device_properties_[i], i);
+        if (err != cudaSuccess) {
+            return ErrorCode::InvalidArgument;
+        }
+    }
 
-  std::uint32_t collapse_count = 0;
-  std::uint32_t match_mask =
-      static_cast<std::uint32_t>(~diff) & ((1U << constants::SYMMETRY_PAIRS) - 1U);
-  const std::uint32_t base = tid * constants::SYMMETRY_PAIRS;
-
-  while (match_mask && collapse_count < constants::SYMMETRY_PAIRS)
-  {
-      std::uint32_t i = __ffs(match_mask) - 1U;
-      collapse_indices[base + collapse_count] = i;
-      collapse_count++;
-      match_mask &= match_mask - 1U;
-  }
-
-  collapse_counts[tid] = collapse_count;
-}
-#endif
-
-}  // namespace detail
-
-CudaCore& CudaCore::instance() {
-    static CudaCore instance;
-    return instance;
+    return Error::SUCCESS;
 }
 
-// Direct implementation of initialize method
-Error CudaCore::initialize(int device_id) {
-  if (is_initialized()) {
-    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-  }
+sep::api::ErrorCode CudaCore::initializeDevice(int device) {
+    cudaError_t err = cudaSetDevice(device);
+    if (err != cudaSuccess) {
+        return CudaResult::ERROR_INVALID_DEVICE_POINTER;
+    }
 
-  Error error = initializeDevice(device_id);
-  if (error.status != Status::Success) {
-    return error;
-  }
-
-  error = queryDeviceProperties();
-  if (error.status != Status::Success) {
-    return error;
-  }
-
-  error = updateMetrics();
-  if (error.status != Status::Success) {
-    return error;
-  }
-
-  initialized_ = true;
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
+    current_device_ = device;
+    return ErrorCode::Success;
 }
 
-Error CudaCore::setDevice(int device) {
-  if (device < 0 || device >= getDeviceCount()) {
-    return {Status::Error, "Invalid device ID", "", sep::SEPResult::INVALID_ARGUMENT};
-  }
-
-  CUDA_CHECK(cudaSetDevice(device));
-
-  current_device_ = device;
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-int CudaCore::getDeviceCount() const {
-  int count = 0;
-  SEP_CUDA_CHECK_NOTHROW(cudaGetDeviceCount(&count));
-  return count;
-}
-
-Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const {
-  if (device < 0 || device >= getDeviceCount()) {
-    return {Status::Error, "Invalid device ID", "", sep::SEPResult::INVALID_ARGUMENT};
-  }
-
-  CUDA_CHECK(cudaGetDeviceProperties(&props, device));
-
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-std::shared_ptr<Stream> CudaCore::createStream(sep::StreamFlags flags) {
-  return Stream::create(flags);
-}
-
-Error CudaCore::destroyStream(cudaStream_t stream) {
-  if (!stream) {
-    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-  }
-
-  CUDA_CHECK(cudaStreamDestroy(stream));
-
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-Error CudaCore::synchronizeStream(cudaStream_t stream) {
-  if (!stream) {
-    return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-  }
-
-  CUDA_CHECK(cudaStreamSynchronize(stream));
-
-  return synchronizeStream(reinterpret_cast<cudaStream_t>(stream));
-  {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-cudaError_t launchQBSAKernel(const std::uint32_t* d_probe_indices,
-                           const std::uint32_t* d_expectations, std::uint32_t num_probes,
-                           std::uint32_t* d_bitfield, std::uint32_t* d_corrections,
-                           std::uint32_t* d_correction_count, cudaStream_t stream) {
-  if (!d_probe_indices || !d_expectations || !d_bitfield || !d_corrections || !d_correction_count) {
-    return cudaErrorInvalidValue;
-  }
-
-  try {
-    const uint32_t block_size = sep::cuda::constants::get_default_block_size();
-    const uint32_t grid_size = (num_probes + block_size - 1) / block_size;
-
-    detail::qbsa_kernel<<<grid_size, block_size, 0, stream>>>(
-        d_probe_indices, d_expectations, num_probes, d_bitfield, d_corrections,
-        d_correction_count);
-
-    return cudaGetLastError();
-  } catch (...) {
-    return cudaErrorUnknown;
-  }
-}
-
-cudaError_t launchQSHKernel(const std::uint64_t* d_chunks,
-                          std::uint32_t num_chunks,
-                          std::uint32_t* d_collapse_indices,
-                          std::uint32_t* d_collapse_counts,
-                          cudaStream_t stream) {
-  if (!d_chunks || !d_collapse_indices || !d_collapse_counts) {
-    return cudaErrorInvalidValue;
-  }
-
-  try {
-    const uint32_t block_size = sep::cuda::constants::get_default_block_size();
-    const uint32_t grid_size = (num_chunks + block_size - 1) / block_size;
-
-    detail::qsh_kernel<<<grid_size, block_size, 0, stream>>>(
-        d_chunks, num_chunks, d_collapse_indices, d_collapse_counts);
-
-    return cudaGetLastError();
-  } catch (...) {
-    return cudaErrorUnknown;
-  }
-}
-
-Error CudaCore::getMemoryInfo(size_t& free, size_t& total) const {
-  CUDA_CHECK(cudaMemGetInfo(&free, &total));
-
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-Error CudaCore::getLastError() const {
-  cudaError_t error = cudaGetLastError();
-  return {error == cudaSuccess ? Status::Success : Status::Error,
-          error != cudaSuccess ? cudaGetErrorString(error) : "", "",
-          error == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
-}
-
-std::string CudaCore::getErrorString(cudaError_t error) const { return cudaGetErrorString(error); }
-
-CudaMetrics CudaCore::getMetrics() const { return current_metrics_; }
-
-// Implementation removed - using the helper-based implementation below instead
-
-Error CudaCore::updateMetrics() {
-  size_t free_memory = 0;
-  size_t total_memory = 0;
-
-  Error error = getMemoryInfo(free_memory, total_memory);
-  if (error.status != Status::Success) {
-    return error;
-  }
-
-  current_metrics_.total_memory = total_memory;
-  current_metrics_.used_memory = total_memory - free_memory;
-  current_metrics_.memory_utilization =
-      static_cast<float>(current_metrics_.used_memory) / total_memory;
-
-  // Update other metrics if we have a valid device
-  if (current_device_ >= 0 && current_device_ < static_cast<int>(device_properties_.size())) {
-    // Note: Would need nvml for actual GPU utilization
-    current_metrics_.gpu_utilization = 0.0f;
-    current_metrics_.active_kernels = 0;
-  }
-
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-Error CudaCore::initializeDevice(int device) {
-  if (device < 0) {
-    return {Status::Error, "Invalid device ID", "", sep::SEPResult::INVALID_ARGUMENT};
-  }
-
-  CUDA_CHECK(cudaSetDevice(device));
-
-  current_device_ = device;
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-Error CudaCore::queryDeviceProperties() {
-  int count = getDeviceCount();
-  if (count <= 0) {
-    return {Status::Error, "No CUDA devices found", "", sep::SEPResult::INVALID_ARGUMENT};
-  }
-
-  device_properties_.resize(count);
-  for (int i = 0; i < count; ++i) {
-    CUDA_CHECK(cudaGetDeviceProperties(&device_properties_[i], i));
-  }
-
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-Error CudaCore::launchQBSA(const DeviceMemory<std::uint32_t>& probe_indices,
-                           const DeviceMemory<std::uint32_t>& expectations,
-                           std::uint32_t num_probes, DeviceMemory<std::uint32_t>& bitfield,
-                           DeviceMemory<std::uint32_t>& corrections,
-                           DeviceMemory<std::uint32_t>& correction_count, Stream& stream)
-{ 
-  cudaError_t result =
-      launchQBSAKernel(probe_indices.get(), expectations.get(), num_probes, bitfield.get(),
-                      corrections.get(), correction_count.get(), reinterpret_cast<cudaStream_t>(stream.handle()));
-  return {result == cudaSuccess ? Status::Success : Status::Error,
-          result != cudaSuccess ? cudaGetErrorString(result) : "", "",
-          result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
-}
-
-Error CudaCore::launchQSH(const DeviceMemory<std::uint64_t>& chunks, std::uint32_t num_chunks,
-                          DeviceMemory<std::uint32_t>& collapse_indices,
-                          DeviceMemory<std::uint32_t>& collapse_counts, Stream& stream)
-{ 
-  cudaError_t result = launchQSHKernel(chunks.get(), num_chunks, collapse_indices.get(),
-                                       collapse_counts.get(), reinterpret_cast<cudaStream_t>(stream.handle()));
-  return {result == cudaSuccess ? Status::Success : Status::Error,
-          result != cudaSuccess ? cudaGetErrorString(result) : "", "",
-          result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
-}
-
-Error CudaCore::launchSimilarity(const DeviceMemory<float>& similarity,
-                                 const DeviceMemory<float>& emb_a, const DeviceMemory<float>& emb_b,
-                                 std::uint32_t embedding_size, Stream& stream)
-{ 
-  cudaError_t result = launchSimilarityKernel(const_cast<float*>(similarity.get()), emb_a.get(),
-                                            emb_b.get(), embedding_size, reinterpret_cast<cudaStream_t>(stream.handle()));
-  return {result == cudaSuccess ? Status::Success : Status::Error,
-          result != cudaSuccess ? cudaGetErrorString(result) : "", "",
-          result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
-}
-
-Error CudaCore::launchBlend(DeviceMemory<float>& output, const DeviceMemory<float>& embeddings,
-                            const DeviceMemory<float>& weights, std::uint32_t num_contexts,
-                            std::uint32_t embedding_size, Stream& stream)
-{ 
-  cudaError_t result = launchBlendKernel(output.get(), embeddings.get(), weights.get(),
-                                       num_contexts, embedding_size, reinterpret_cast<cudaStream_t>(stream.handle()));
-  return {result == cudaSuccess ? Status::Success : Status::Error,
-          result != cudaSuccess ? cudaGetErrorString(result) : "", "",
-          result == cudaSuccess ? sep::SEPResult::SUCCESS : sep::SEPResult::CUDA_ERROR};
-}
-
-}  // namespace sep::cuda
-
+} // namespace sep::cuda

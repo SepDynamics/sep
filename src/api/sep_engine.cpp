@@ -34,7 +34,7 @@
 #include "tests/simple_embedding_model.h"
 
 // Forward declaration of the wrapper function for CUDA initialization
-sep::cuda::Error cuda_core_initialize(int device_id);
+extern "C" sep::cuda::Error cuda_core_initialize(int device_id);
 
 using json = nlohmann::json;
 

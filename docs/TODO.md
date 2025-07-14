@@ -1,9 +1,13 @@
 ### Step-by-Step Outline to Resolve Defects
 
-Prioritized by severity (HIGH > MEDIUM > LOW). Grouped by file within severity. Fixes are direct, itemized actions – copy-paste code snippets where applicable. For third-party files (e.g., ImGui, GLM, SPA), prioritize patching with minimal change; add #pragma clang diagnostic push/pop around code for warnings if patch fails. Test after each file: rebuild, re-run analyzer. Ignore system headers.
+Prioritized by severity (HIGH > MEDIUM > LOW). Grouped by file within severity. Fixes are direct, itemized actions – copy-paste code snippets where applicable. For third-party files (e.g., ImGui, GLM), prioritize patching with minimal change; add #pragma clang diagnostic push/ignored "-Werror=reorder"/pop around code for new reorder errors if patch fails. Test after each file: rebuild, re-run analyzer. Ignore system headers. Address new build errors from imgui_draw.cpp first in HIGH.
 
-#### Step 1: Fix All HIGH Defects (22 total – Potential Crashes/UB)
-Start here – these cause runtime issues.
+#### Step 1: Fix All HIGH Defects (22 total – Potential Crashes/UB + New Build Errors)
+Start here – these cause runtime issues or build failures.
+
+- **/sep/third_party/imgui/imgui_draw.cpp**:
+  - Line 385: field 'DrawLists' will be initialized after field 'CircleSegmentMaxError'.
+    - Fix: In constructor: `ImDrawListSharedData() : CircleSegmentMaxError(0.0f), DrawLists() { }`
 
 - **/sep/third_party/imgui/imgui_draw.cpp**:
   - Line 1720: Called C++ object pointer is null in `font->RenderText(...)`.
@@ -118,4 +122,4 @@ Last step; quick wins.
   - Missing default in switch.
     - Fix: Add `default: break;` in on_key_press switch.
 
-After all: Re-run analyzer to verify zero defects. If warnings persist in third-party, add file-level suppressions like `#pragma clang diagnostic ignored "-Wmaybe-uninitialized"` at top of imgui_widgets.cpp. Rebuild/test full project.
+After all: Re-run analyzer to verify zero defects. If warnings persist in third-party, add file-level suppressions like `#pragma clang diagnostic ignored "-Wreorder"` at top of imgui_draw.cpp. Rebuild/test full project.

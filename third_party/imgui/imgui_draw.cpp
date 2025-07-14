@@ -382,7 +382,7 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
 //-----------------------------------------------------------------------------
 
 ImDrawListSharedData::ImDrawListSharedData()
-    : DrawLists(), CircleSegmentMaxError(0.0f), InitialFringeScale(1.0f), ArcFastRadiusCutoff(0.0f)
+    : DrawLists(), CircleSegmentMaxError(0.0f), ArcFastRadiusCutoff(0.0f), InitialFringeScale(1.0f)
 {
     // Zero initialize arrays
     memset(CircleSegmentCounts, 0, sizeof(CircleSegmentCounts));

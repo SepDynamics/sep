@@ -110,7 +110,7 @@ namespace sep::api
 
         if (impl_->config.use_gpu)
         {
-            auto err = sep::cuda::cuda_core_initialize(0);
+            auto err = sep::cuda::CudaCore::instance().initialize(0);
             if (err.status != sep::cuda::Status::Success)
             {
                 json result;

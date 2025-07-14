@@ -382,7 +382,10 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
 //-----------------------------------------------------------------------------
 
 ImDrawListSharedData::ImDrawListSharedData()
-    : DrawLists(), CircleSegmentMaxError(0.0f), ArcFastRadiusCutoff(0.0f), InitialFringeScale(1.0f)
+    : TexUvWhitePixel(), TexUvLines(NULL), FontAtlas(NULL), Font(NULL), FontSize(0.0f), FontScale(1.0f),
+      CurveTessellationTol(0.0f), CircleSegmentMaxError(0.0f), InitialFringeScale(1.0f), InitialFlags(0),
+      ClipRectFullscreen(), TempBuffer(), DrawLists(), Context(NULL), ArcFastVtx{},
+      ArcFastRadiusCutoff(0.0f), CircleSegmentCounts{}
 {
     // Zero initialize arrays
     memset(CircleSegmentCounts, 0, sizeof(CircleSegmentCounts));
@@ -1723,6 +1726,8 @@ void ImDrawList::AddText(ImFont* font, float font_size, const ImVec2& pos, ImU32
     // Pull default font/size from the shared ImDrawListSharedData instance
     if (font == NULL)
         font = _Data->Font;
+    if (!font)
+        return;
     if (font_size == 0.0f)
         font_size = _Data->FontSize;
 

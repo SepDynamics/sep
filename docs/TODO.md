@@ -1,6 +1,6 @@
 ### Step-by-Step Outline to Resolve Defects
 
-Prioritized by severity (HIGH > MEDIUM > LOW). Grouped by file within severity. Fixes are direct, itemized actions – copy-paste code snippets where applicable. For third-party files (e.g., ImGui, GLM, SPA), prioritize suppression via `#pragma clang diagnostic ignored "-Wchecker-name"` at file top if false positive, or patch with minimal change. Test after each file: rebuild, re-run analyzer. Ignore system headers unless modifiable.
+Prioritized by severity (HIGH > MEDIUM > LOW). Grouped by file within severity. Fixes are direct, itemized actions – copy-paste code snippets where applicable. For third-party files (e.g., ImGui, GLM, SPA), prioritize patching with minimal change; add #pragma clang diagnostic push/pop around code for warnings if patch fails. Test after each file: rebuild, re-run analyzer. Ignore system headers.
 
 #### Step 1: Fix All HIGH Defects (22 total – Potential Crashes/UB)
 Start here – these cause runtime issues.
@@ -41,7 +41,7 @@ Start here – these cause runtime issues.
 
 - **/usr/lib/clang/20/include/cetintrin.h**:
   - Line 49: Uninitialized arg in `__builtin_ia32_rdsspd(t)`.
-    - Fix: Ignore (system header); add `#pragma clang diagnostic ignored "-Wuninitialized"` at include site if needed.
+    - Fix: Ignore (system header); add `#pragma clang diagnostic ignored "-Wuninitialized"` before include.
   - Line 62: Uninitialized arg in `__builtin_ia32_rdsspq(t)`.
     - Fix: Ignore (system header); same suppression.
 
@@ -59,8 +59,6 @@ Batch by file; focus on dead stores, undefined mem, signed char, etc.
 - **/sep/third_party/imgui/imgui_tables.cpp**:
   - Line 1637: Dead store to 'flags'.
     - Fix: Remove `flags = column->Flags;`
-  - Line XXX: Other dead stores.
-    - Fix: Remove unused assignments.
 
 - **/sep/third_party/imgui/imgui_draw.cpp**:
   - Line 5974: Float loop counter 'y'.
@@ -120,4 +118,4 @@ Last step; quick wins.
   - Missing default in switch.
     - Fix: Add `default: break;` in on_key_press switch.
 
-After all: Re-run analyzer to verify zero defects. If warnings persist in third-party, add file-level suppressions. Rebuild/test full project.
+After all: Re-run analyzer to verify zero defects. If warnings persist in third-party, add file-level suppressions like `#pragma clang diagnostic ignored "-Wmaybe-uninitialized"` at top of imgui_widgets.cpp. Rebuild/test full project.

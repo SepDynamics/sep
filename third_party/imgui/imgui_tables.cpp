@@ -3588,10 +3588,9 @@ void ImGui::TableDrawDefaultContextMenu(ImGuiTable* table, ImGuiTableFlags flags
     {
         if (want_separator)
             Separator();
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-value"
+        IMGUI_DISABLE_CLANG_WARNINGS
         want_separator = true;
-#pragma clang diagnostic pop
+        IMGUI_ENABLE_CLANG_WARNINGS
 
         PushItemFlag(ImGuiItemFlags_AutoClosePopups, false);
         for (int other_column_n = 0; other_column_n < table->ColumnsCount; other_column_n++)
@@ -3891,10 +3890,9 @@ static void TableSettingsHandler_ReadLine(ImGuiContext*, ImGuiSettingsHandler*, 
         if (sscanf(line, "Visible=%d%n", &n, &r) == 1)          { line = ImStrSkipBlank(line + r); column->IsEnabled = (ImU8)n; settings->SaveFlags |= ImGuiTableFlags_Hideable; }
         if (sscanf(line, "Order=%d%n", &n, &r) == 1)            { line = ImStrSkipBlank(line + r); column->DisplayOrder = (ImGuiTableColumnIdx)n; settings->SaveFlags |= ImGuiTableFlags_Reorderable; }
         if (sscanf(line, "Sort=%d%c%n", &n, &c, &r) == 2)       {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-value"
+            IMGUI_DISABLE_CLANG_WARNINGS
             line = ImStrSkipBlank(line + r);
-#pragma clang diagnostic pop
+            IMGUI_ENABLE_CLANG_WARNINGS
             column->SortOrder = (ImGuiTableColumnIdx)n;
             column->SortDirection = (c == '^') ? ImGuiSortDirection_Descending : ImGuiSortDirection_Ascending;
             settings->SaveFlags |= ImGuiTableFlags_Sortable;

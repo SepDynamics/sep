@@ -96,6 +96,8 @@
 //  2016-07-29: OpenGL: Explicitly setting GL_UNPACK_ROW_LENGTH to reduce issues because SDL changes it. (#752)
 
 //----------------------------------------
+// Compiler-specific pragma handling
+
 // OpenGL    GLSL      GLSL
 // version   version   string
 //----------------------------------------
@@ -125,6 +127,9 @@
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
 #endif
+
+// Restore GCC warnings
+#pragma GCC diagnostic pop
 
 // Clang/GCC warnings with -Weverything
 #if defined(__clang__)
@@ -1028,8 +1033,10 @@ void    ImGui_ImplOpenGL3_DestroyDeviceObjects()
         if (tex->RefCount == 1)
             ImGui_ImplOpenGL3_DestroyTexture(tex);
 }
-
 //-----------------------------------------------------------------------------
+
+// Restore GCC warnings
+#pragma GCC diagnostic pop
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop

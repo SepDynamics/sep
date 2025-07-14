@@ -1,6 +1,19 @@
 // dear imgui, v1.92.1
 // (headers)
 
+// Compiler-specific pragma handling
+#if defined(__clang__)
+#define IMGUI_DISABLE_CLANG_WARNINGS                                                               \
+    _Pragma("clang diagnostic push") _Pragma("clang diagnostic ignored \"-Wsizeof-array-decay\"")  \
+        _Pragma("clang diagnostic ignored \"-Wsizeof-pointer-div\"")                               \
+            _Pragma("clang diagnostic ignored \"-Wunused-value\"")
+#define IMGUI_ENABLE_CLANG_WARNINGS _Pragma("clang diagnostic pop")
+#else
+#define IMGUI_DISABLE_CLANG_WARNINGS
+#define IMGUI_ENABLE_CLANG_WARNINGS
+#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#endif
+
 // Help:
 // - See links below.
 // - Call and read ImGui::ShowDemoWindow() in imgui_demo.cpp. All applications in examples/ are doing that.
@@ -2199,11 +2212,9 @@ struct ImVector
     inline void         resize(int new_size)                { if (new_size > Capacity) reserve(_grow_capacity(new_size)); Size = new_size; }
     inline void         resize(int new_size, const T& v)    { if (new_size > Capacity) reserve(_grow_capacity(new_size)); if (new_size > Size) for (int n = Size; n < new_size; n++) Data[n] = v; Size = new_size; }
     inline void         shrink(int new_size)                { IM_ASSERT(new_size <= Size); Size = new_size; } // Resize a vector to a smaller size, guaranteed not to cause a reallocation
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wsizeof-array-decay"
-#pragma clang diagnostic ignored "-Wsizeof-pointer-div"
+    IMGUI_DISABLE_CLANG_WARNINGS
     inline void         reserve(int new_capacity)           { if (new_capacity <= Capacity) return; T* new_data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(*Data)); if (Data) { for (int i = 0; i < Size; i++) new_data[i] = Data[i]; IM_FREE(Data); } Data = new_data; Capacity = new_capacity; }
-#pragma clang diagnostic pop
+    IMGUI_ENABLE_CLANG_WARNINGS
     inline void         reserve_discard(int new_capacity)   { if (new_capacity <= Capacity) return; if (Data) IM_FREE(Data); Data = (T*)IM_ALLOC((size_t)new_capacity * sizeof(*Data)); Capacity = new_capacity; }
 
     // NB: It is illegal to call push_back/push_front/insert with a reference pointing inside the ImVector data itself! e.g. v.push_back(v[10]) is forbidden.

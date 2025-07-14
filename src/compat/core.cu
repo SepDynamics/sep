@@ -315,9 +315,3 @@ Error CudaCore::launchBlend(DeviceMemory<float>& output, const DeviceMemory<floa
 
 }  // namespace sep::cuda
 
-// Add C-style wrapper function for CudaCore::initialize
-extern "C" {
-    sep::cuda::Error cuda_core_initialize(int device_id) {
-        return sep::cuda::CudaCore::instance().initialize(device_id);
-    }
-}

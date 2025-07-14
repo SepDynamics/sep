@@ -422,7 +422,7 @@ After=network.target pipewire.service
 
 [Service]
 Type=simple
-ExecStart=$USER_LOCAL_BIN/sep_engine --server --port 8080 --host 0.0.0.0 --debug
+ExecStart=$USER_LOCAL_BIN/sep_engine --server --port 3000 --host 0.0.0.0 --debug
 Restart=on-failure
 Environment=XDG_RUNTIME_DIR=/run/user/$(id -u)
 Environment=HOME=$HOME

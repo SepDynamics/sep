@@ -96,10 +96,8 @@ void GenesisPatternDemo::updateVisualization() {
         for (const auto& p : pattern_processor_->getPatterns()) {
             pattern_state.push_back(glm::vec3(p.position));
         }
-        
+
         // Set renderer parameters and render patterns
-        renderer_->setColorMode(genesis_config.visualization.color_mode);
-        renderer_->setEmissionMode(genesis_config.visualization.emission_mode);
         renderer_->setRotation(view_.rotation);
         renderer_->setZoom(view_.zoom);
         renderer_->setWireframe(view_.wireframe);

@@ -2,11 +2,14 @@
 #define SEP_CROW_ISOLATION_INCLUDED
 
 // This header provides Crow compatibility without requiring the real Crow implementation
-#include <http_parser.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 #include <functional>
 #include <map>
@@ -124,8 +127,53 @@ namespace crow
 
         void port(int p) { port_ = p; }
         void multithreaded() { is_multithreaded_ = true; }
-        void run() {}
-        void stop() {}
+        void run()
+        {
+            should_stop_ = false;
+            server_fd_ = ::socket(AF_INET, SOCK_STREAM, 0);
+            if (server_fd_ < 0)
+                return;
+
+            int opt = 1;
+            ::setsockopt(server_fd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
+            sockaddr_in addr{};
+            addr.sin_family = AF_INET;
+            addr.sin_addr.s_addr = htonl(INADDR_ANY);
+            addr.sin_port = htons(static_cast<uint16_t>(port_));
+
+            if (::bind(server_fd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0)
+            {
+                ::close(server_fd_);
+                server_fd_ = -1;
+                return;
+            }
+
+            ::listen(server_fd_, 16);
+
+            while (!should_stop_)
+            {
+                int client_fd = ::accept(server_fd_, nullptr, nullptr);
+                if (client_fd < 0)
+                    continue;
+
+                const char response[] = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n";
+                ::send(client_fd, response, sizeof(response) - 1, 0);
+                ::close(client_fd);
+            }
+
+            ::close(server_fd_);
+            server_fd_ = -1;
+        }
+
+        void stop()
+        {
+            should_stop_ = true;
+            if (server_fd_ != -1)
+            {
+                ::shutdown(server_fd_, SHUT_RDWR);
+            }
+        }
 
         template <typename MW>
         MW& get_middleware()
@@ -165,6 +213,8 @@ namespace crow
     private:
         int port_ = 3000;
         bool is_multithreaded_ = false;
+        int server_fd_ = -1;
+        bool should_stop_ = false;
     };
 }  // namespace crow
 #endif

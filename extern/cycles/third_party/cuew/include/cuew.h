@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#ifndef __CUEW_H__
-#define __CUEW_H__
+#ifndef CUEW_H
+#define CUEW_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -574,6 +574,7 @@ typedef enum CUresourcetype_enum {
   CU_RESOURCE_TYPE_MIPMAPPED_ARRAY = 0x01,
   CU_RESOURCE_TYPE_LINEAR = 0x02,
   CU_RESOURCE_TYPE_PITCH2D = 0x03,
+  CU_RESOURCE_TYPE_RESERVED = 0x04,
 } CUresourcetype;
 
 typedef enum cudaError_enum {
@@ -884,7 +885,7 @@ typedef enum {
   NVRTC_ERROR_INTERNAL_ERROR = 11,
 } nvrtcResult;
 
-typedef struct _nvrtcProgram *nvrtcProgram;
+typedef struct nvrtcProgram_t *nvrtcProgram;
 
 /* Function types. */
 typedef CUresult CUDAAPI tcuGetErrorString(CUresult error, const char **pStr);

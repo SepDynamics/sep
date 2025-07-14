@@ -2644,7 +2644,7 @@ bool ImGui::DragBehavior(ImGuiID id, ImGuiDataType data_type, void* p_v, float v
 
     switch (data_type)
     {
-    case ImGuiDataType_S8:     { ImS32 v32 = (ImS32)*(ImS8*)p_v;  bool r = DragBehaviorT<ImS32, ImS32, float>(ImGuiDataType_S32, &v32, v_speed, p_min ? *(const ImS8*) p_min : IM_S8_MIN,  p_max ? *(const ImS8*)p_max  : IM_S8_MAX,  format, flags); if (r) *(ImS8*)p_v = (ImS8)v32; return r; }
+    case ImGuiDataType_S8:     { ImS32 v32 = (ImS32)(*(const unsigned char*)p_v);  bool r = DragBehaviorT<ImS32, ImS32, float>(ImGuiDataType_S32, &v32, v_speed, p_min ? (ImS32)(*(const unsigned char*)p_min) : IM_S8_MIN,  p_max ? (ImS32)(*(const unsigned char*)p_max) : IM_S8_MAX,  format, flags); if (r) *(ImS8*)p_v = (ImS8)v32; return r; }
     case ImGuiDataType_U8:     { ImU32 v32 = (ImU32)*(ImU8*)p_v;  bool r = DragBehaviorT<ImU32, ImS32, float>(ImGuiDataType_U32, &v32, v_speed, p_min ? *(const ImU8*) p_min : IM_U8_MIN,  p_max ? *(const ImU8*)p_max  : IM_U8_MAX,  format, flags); if (r) *(ImU8*)p_v = (ImU8)v32; return r; }
     case ImGuiDataType_S16:    { ImS32 v32 = (ImS32)*(ImS16*)p_v; bool r = DragBehaviorT<ImS32, ImS32, float>(ImGuiDataType_S32, &v32, v_speed, p_min ? *(const ImS16*)p_min : IM_S16_MIN, p_max ? *(const ImS16*)p_max : IM_S16_MAX, format, flags); if (r) *(ImS16*)p_v = (ImS16)v32; return r; }
     case ImGuiDataType_U16:    { ImU32 v32 = (ImU32)*(ImU16*)p_v; bool r = DragBehaviorT<ImU32, ImS32, float>(ImGuiDataType_U32, &v32, v_speed, p_min ? *(const ImU16*)p_min : IM_U16_MIN, p_max ? *(const ImU16*)p_max : IM_U16_MAX, format, flags); if (r) *(ImU16*)p_v = (ImU16)v32; return r; }
@@ -3236,7 +3236,7 @@ bool ImGui::SliderBehavior(const ImRect& bb, ImGuiID id, ImGuiDataType data_type
 
     switch (data_type)
     {
-    case ImGuiDataType_S8:  { ImS32 v32 = (ImS32)*(ImS8*)p_v;  bool r = SliderBehaviorT<ImS32, ImS32, float>(bb, id, ImGuiDataType_S32, &v32, *(const ImS8*)p_min,  *(const ImS8*)p_max,  format, flags, out_grab_bb); if (r) *(ImS8*)p_v  = (ImS8)v32;  return r; }
+    case ImGuiDataType_S8:  { ImS32 v32 = (ImS32)(*(const unsigned char*)p_v);  bool r = SliderBehaviorT<ImS32, ImS32, float>(bb, id, ImGuiDataType_S32, &v32, (ImS32)(*(const unsigned char*)p_min), (ImS32)(*(const unsigned char*)p_max), format, flags, out_grab_bb); if (r) *(ImS8*)p_v = (ImS8)v32; return r; }
     case ImGuiDataType_U8:  { ImU32 v32 = (ImU32)*(ImU8*)p_v;  bool r = SliderBehaviorT<ImU32, ImS32, float>(bb, id, ImGuiDataType_U32, &v32, *(const ImU8*)p_min,  *(const ImU8*)p_max,  format, flags, out_grab_bb); if (r) *(ImU8*)p_v  = (ImU8)v32;  return r; }
     case ImGuiDataType_S16: { ImS32 v32 = (ImS32)*(ImS16*)p_v; bool r = SliderBehaviorT<ImS32, ImS32, float>(bb, id, ImGuiDataType_S32, &v32, *(const ImS16*)p_min, *(const ImS16*)p_max, format, flags, out_grab_bb); if (r) *(ImS16*)p_v = (ImS16)v32; return r; }
     case ImGuiDataType_U16: { ImU32 v32 = (ImU32)*(ImU16*)p_v; bool r = SliderBehaviorT<ImU32, ImS32, float>(bb, id, ImGuiDataType_U32, &v32, *(const ImU16*)p_min, *(const ImU16*)p_max, format, flags, out_grab_bb); if (r) *(ImU16*)p_v = (ImU16)v32; return r; }
@@ -3971,7 +3971,7 @@ static ImVec2 InputTextCalcTextSize(ImGuiContext* ctx, const char* text_begin, c
     const char* s = text_begin;
     while (s < text_end)
     {
-        unsigned int c = (unsigned int)*s;
+        unsigned int c = (unsigned int)(*(const unsigned char*)s);
         if (c < 0x80)
             s += 1;
         else
@@ -7444,7 +7444,15 @@ ImGuiTypingSelectRequest* ImGui::GetTypingSelectRequest(ImGuiTypingSelectFlags f
 static int ImStrimatchlen(const char* s1, const char* s1_end, const char* s2)
 {
     int match_len = 0;
-    while (s1 < s1_end && ImToUpper(*s1++) == ImToUpper(*s2++))
+    while (s1 < s1_end) {
+        char c1 = *s1;
+        char c2 = *s2;
+        if (ImToUpper(c1) != ImToUpper(c2))
+            break;
+        s1++;
+        s2++;
+        match_len++;
+    }
         match_len++;
     return match_len;
 }
@@ -8319,11 +8327,10 @@ bool ImGuiSelectionBasicStorage::GetNextSelectedItem(void** opaque_it, ImGuiID* 
     if (it == NULL)
         it = _Storage.Data.Data;
     IM_ASSERT(it >= _Storage.Data.Data && it <= it_end);
-    if (!it)
+    if (!it || it == it_end)
         return false;
-    if (it != it_end)
-        while (it < it_end && it->val_i == 0)
-            it++;
+    while (it < it_end && it->val_i == 0)
+        it++;
     const bool has_more = (it != it_end);
     *opaque_it = has_more ? (void**)(it + 1) : (void**)(it);
     *out_id = has_more ? it->key : 0;
@@ -9407,9 +9414,39 @@ namespace ImGui
 
 ImGuiTabBar::ImGuiTabBar()
 {
-    memset(this, 0, sizeof(*this));
+    // Initialize fields individually instead of using memset
+    Window = NULL;
+    ID = 0;
+    SelectedTabId = NextSelectedTabId = VisibleTabId = 0;
     CurrFrameVisible = PrevFrameVisible = -1;
     LastTabItemIdx = -1;
+    BarRect = ImRect();
+    CurrTabsContentsHeight = 0.0f;
+    PrevTabsContentsHeight = 0.0f;
+    WidthAllTabs = 0.0f;
+    WidthAllTabsIdeal = 0.0f;
+    ScrollingAnim = 0.0f;
+    ScrollingTarget = 0.0f;
+    ScrollingTargetDistToVisibility = 0.0f;
+    ScrollingSpeed = 0.0f;
+    ScrollingRectMinX = ScrollingRectMaxX = 0.0f;
+    SeparatorMinX = SeparatorMaxX = 0.0f;
+    Flags = ImGuiTabBarFlags_None;
+    Window = NULL;
+    ID = SelectedTabId = NextSelectedTabId = VisibleTabId = 0;
+    CurrFrameVisible = PrevFrameVisible = 0;
+    CurrTabsContentsHeight = PrevTabsContentsHeight = 0.0f;
+    WidthAllTabs = WidthAllTabsIdeal = 0.0f;
+    ReorderRequestTabId = 0;
+    ReorderRequestOffset = 0;
+    BeginCount = 0;
+    WantLayout = VisibleTabWasSubmitted = false;
+    TabsAddedNew = false;
+    TabsActiveCount = 0;
+    LastTabItemIdx = -1;
+    ItemSpacingY = 0.0f;
+    FramePadding = ImVec2(0, 0);
+    BackupCursorPos = ImVec2(0, 0);
 }
 
 static inline int TabItemGetSectionIdx(const ImGuiTabItem* tab)

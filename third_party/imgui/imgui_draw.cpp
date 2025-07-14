@@ -381,6 +381,8 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
 // [SECTION] ImDrawList
 //-----------------------------------------------------------------------------
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreorder"
 ImDrawListSharedData::ImDrawListSharedData()
     : TexUvWhitePixel(), TexUvLines(NULL), FontAtlas(NULL), Font(NULL), FontSize(0.0f), FontScale(1.0f),
       CurveTessellationTol(0.0f), CircleSegmentMaxError(0.0f), InitialFringeScale(1.0f), InitialFlags(0),
@@ -569,8 +571,19 @@ void ImDrawList::AddCallback(ImDrawCallback callback, void* userdata, size_t use
 
 // Compare ClipRect, TexRef and VtxOffset with a single memcmp()
 #define ImDrawCmd_HeaderSize                            (offsetof(ImDrawCmd, VtxOffset) + sizeof(unsigned int))
-#define ImDrawCmd_HeaderCompare(CMD_LHS, CMD_RHS)       (memcmp(CMD_LHS, CMD_RHS, ImDrawCmd_HeaderSize))    // Compare ClipRect, TexRef, VtxOffset
-#define ImDrawCmd_HeaderCopy(CMD_DST, CMD_SRC)          (memcpy(CMD_DST, CMD_SRC, ImDrawCmd_HeaderSize))    // Copy ClipRect, TexRef, VtxOffset
+// Safe comparison of command headers using individual field comparisons
+#define ImDrawCmd_HeaderCompare(CMD_LHS, CMD_RHS)       ((CMD_LHS)->ClipRect.x == (CMD_RHS)->ClipRect.x && \
+                                                        (CMD_LHS)->ClipRect.y == (CMD_RHS)->ClipRect.y && \
+                                                        (CMD_LHS)->ClipRect.z == (CMD_RHS)->ClipRect.z && \
+                                                        (CMD_LHS)->ClipRect.w == (CMD_RHS)->ClipRect.w && \
+                                                        (CMD_LHS)->TexRef == (CMD_RHS)->TexRef && \
+                                                        (CMD_LHS)->VtxOffset == (CMD_RHS)->VtxOffset)
+
+#define ImDrawCmd_HeaderCopy(CMD_DST, CMD_SRC)          do { \
+                                                        (CMD_DST)->ClipRect = (CMD_SRC)->ClipRect; \
+                                                        (CMD_DST)->TexRef = (CMD_SRC)->TexRef; \
+                                                        (CMD_DST)->VtxOffset = (CMD_SRC)->VtxOffset; \
+                                                        } while (0)
 #define ImDrawCmd_AreSequentialIdxOffset(CMD_0, CMD_1)  (CMD_0->IdxOffset + CMD_0->ElemCount == CMD_1->IdxOffset)
 
 // Try to merge two last draw commands
@@ -593,7 +606,11 @@ void ImDrawList::_OnChangedClipRect()
     // If current command is used with different settings we need to add a new command
     IM_ASSERT_PARANOID(CmdBuffer.Size > 0);
     ImDrawCmd* curr_cmd = &CmdBuffer.Data[CmdBuffer.Size - 1];
-    if (curr_cmd->ElemCount != 0 && memcmp(&curr_cmd->ClipRect, &_CmdHeader.ClipRect, sizeof(ImVec4)) != 0)
+    if (curr_cmd->ElemCount != 0 &&
+        (curr_cmd->ClipRect.x != _CmdHeader.ClipRect.x ||
+         curr_cmd->ClipRect.y != _CmdHeader.ClipRect.y ||
+         curr_cmd->ClipRect.z != _CmdHeader.ClipRect.z ||
+         curr_cmd->ClipRect.w != _CmdHeader.ClipRect.w))
     {
         AddDrawCmd();
         return;

@@ -2735,13 +2735,21 @@ void ImGui::TableMergeDrawChannels(ImGuiTable* table)
                     ImDrawChannel* channel = &splitter->_Channels[n];
                     IM_ASSERT(channel->_CmdBuffer.Size == 1 && merge_clip_rect.Contains(ImRect(channel->_CmdBuffer[0].ClipRect)));
                     channel->_CmdBuffer[0].ClipRect = merge_clip_rect.ToVec4();
-                    memcpy(dst_tmp++, channel, sizeof(ImDrawChannel));
+                    {
+                        {
+                            *dst_tmp = *channel;  // Use copy assignment
+                            ++dst_tmp;
+                        }
+                    }
                 }
             }
 
             // Make sure Bg2DrawChannelUnfrozen appears in the middle of our groups (whereas Bg0/Bg1 and Bg2 frozen are fixed to 0 and 1)
             if (merge_group_n == 1 && has_freeze_v)
-                memcpy(dst_tmp++, &splitter->_Channels[table->Bg2DrawChannelUnfrozen], sizeof(ImDrawChannel));
+                {
+                    *dst_tmp = splitter->_Channels[table->Bg2DrawChannelUnfrozen];  // Use copy assignment
+                    ++dst_tmp;
+                }
         }
 
         // Append unmergeable channels that we didn't reorder at the end of the list
@@ -2750,11 +2758,17 @@ void ImGui::TableMergeDrawChannels(ImGuiTable* table)
             if (!IM_BITARRAY_TESTBIT(remaining_mask, n))
                 continue;
             ImDrawChannel* channel = &splitter->_Channels[n];
-            memcpy(dst_tmp++, channel, sizeof(ImDrawChannel));
+            *dst_tmp = *channel;  // Use copy assignment
+            ++dst_tmp;
             remaining_count--;
         }
         IM_ASSERT(dst_tmp == g.DrawChannelsTempMergeBuffer.Data + g.DrawChannelsTempMergeBuffer.Size);
-        memcpy(splitter->_Channels.Data + LEADING_DRAW_CHANNELS, g.DrawChannelsTempMergeBuffer.Data, (splitter->_Count - LEADING_DRAW_CHANNELS) * sizeof(ImDrawChannel));
+        // Copy channels using proper object copying
+        {
+            for (int i = 0; i < splitter->_Count - LEADING_DRAW_CHANNELS; i++) {
+                splitter->_Channels[i + LEADING_DRAW_CHANNELS] = g.DrawChannelsTempMergeBuffer[i];
+            }
+        }
     }
 }
 
@@ -3574,7 +3588,10 @@ void ImGui::TableDrawDefaultContextMenu(ImGuiTable* table, ImGuiTableFlags flags
     {
         if (want_separator)
             Separator();
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-value"
         want_separator = true;
+#pragma clang diagnostic pop
 
         PushItemFlag(ImGuiItemFlags_AutoClosePopups, false);
         for (int other_column_n = 0; other_column_n < table->ColumnsCount; other_column_n++)
@@ -3873,7 +3890,15 @@ static void TableSettingsHandler_ReadLine(ImGuiContext*, ImGuiSettingsHandler*, 
         if (sscanf(line, "Weight=%f%n", &f, &r) == 1)           { line = ImStrSkipBlank(line + r); column->WidthOrWeight = f; column->IsStretch = 1; settings->SaveFlags |= ImGuiTableFlags_Resizable; }
         if (sscanf(line, "Visible=%d%n", &n, &r) == 1)          { line = ImStrSkipBlank(line + r); column->IsEnabled = (ImU8)n; settings->SaveFlags |= ImGuiTableFlags_Hideable; }
         if (sscanf(line, "Order=%d%n", &n, &r) == 1)            { line = ImStrSkipBlank(line + r); column->DisplayOrder = (ImGuiTableColumnIdx)n; settings->SaveFlags |= ImGuiTableFlags_Reorderable; }
-        if (sscanf(line, "Sort=%d%c%n", &n, &c, &r) == 2)       { line = ImStrSkipBlank(line + r); column->SortOrder = (ImGuiTableColumnIdx)n; column->SortDirection = (c == '^') ? ImGuiSortDirection_Descending : ImGuiSortDirection_Ascending; settings->SaveFlags |= ImGuiTableFlags_Sortable; }
+        if (sscanf(line, "Sort=%d%c%n", &n, &c, &r) == 2)       {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-value"
+            line = ImStrSkipBlank(line + r);
+#pragma clang diagnostic pop
+            column->SortOrder = (ImGuiTableColumnIdx)n;
+            column->SortDirection = (c == '^') ? ImGuiSortDirection_Descending : ImGuiSortDirection_Ascending;
+            settings->SaveFlags |= ImGuiTableFlags_Sortable;
+        }
     }
 }
 

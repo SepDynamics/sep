@@ -30,9 +30,12 @@ static DynamicLibrary hip_lib;
   name = (t##name *)dynamic_library_find(hip_lib, #name);
 
 /* Function definitions. */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuninitialized"
 thipGetErrorName *hipGetErrorName;
 thipGetErrorString *hipGetErrorString;
 thipGetLastError *hipGetLastError;
+#pragma clang diagnostic pop
 thipInit *hipInit;
 thipDriverGetVersion *hipDriverGetVersion;
 thipRuntimeGetVersion *hipRuntimeGetVersion;

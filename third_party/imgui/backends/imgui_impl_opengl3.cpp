@@ -96,7 +96,17 @@
 //  2016-07-29: OpenGL: Explicitly setting GL_UNPACK_ROW_LENGTH to reduce issues because SDL changes it. (#752)
 
 //----------------------------------------
+#include "imgui.h"
+#ifndef IMGUI_DISABLE
+
 // Compiler-specific pragma handling
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#endif
 
 // OpenGL    GLSL      GLSL
 // version   version   string
@@ -128,10 +138,14 @@
 #include <TargetConditionals.h>
 #endif
 
-// Restore GCC warnings
+// Restore compiler warnings
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
 #pragma GCC diagnostic pop
+#endif
 
-// Clang/GCC warnings with -Weverything
+// Additional Clang/GCC warnings with -Weverything
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunknown-warning-option" // warning: ignore unknown flags
@@ -1046,3 +1060,4 @@ void    ImGui_ImplOpenGL3_DestroyDeviceObjects()
 #endif
 
 #endif // #ifndef IMGUI_DISABLE
+#endif  // #ifdef IMGUI_IMPL_OPENGL_LOADER_GL3W

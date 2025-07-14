@@ -52,15 +52,16 @@ SEP_GLOBAL void qsh_kernel(const std::uint64_t* chunks, std::uint32_t num_chunks
   const std::uint64_t diff = chunk ^ reversed;
 
   std::uint32_t collapse_count = 0;
-  std::uint32_t match_mask = static_cast<std::uint32_t>(~diff) &
-                             ((1U << SYMMETRY_PAIRS) - 1U);
-  const std::uint32_t base = tid * SYMMETRY_PAIRS;
+  std::uint32_t match_mask =
+      static_cast<std::uint32_t>(~diff) & ((1U << constants::SYMMETRY_PAIRS) - 1U);
+  const std::uint32_t base = tid * constants::SYMMETRY_PAIRS;
 
-  while (match_mask && collapse_count < SYMMETRY_PAIRS) {
-    std::uint32_t i = __ffs(match_mask) - 1U;
-    collapse_indices[base + collapse_count] = i;
-    collapse_count++;
-    match_mask &= match_mask - 1U;
+  while (match_mask && collapse_count < constants::SYMMETRY_PAIRS)
+  {
+      std::uint32_t i = __ffs(match_mask) - 1U;
+      collapse_indices[base + collapse_count] = i;
+      collapse_count++;
+      match_mask &= match_mask - 1U;
   }
 
   collapse_counts[tid] = collapse_count;
@@ -147,11 +148,8 @@ Error CudaCore::synchronizeStream(cudaStream_t stream) {
 
   CUDA_CHECK(cudaStreamSynchronize(stream));
 
-  return {Status::Success, "", "", sep::SEPResult::SUCCESS};
-}
-
-Error CudaCore::synchronizeStream(void* stream) {
   return synchronizeStream(reinterpret_cast<cudaStream_t>(stream));
+  {Status::Success, "", "", sep::SEPResult::SUCCESS};
 }
 
 cudaError_t launchQBSAKernel(const std::uint32_t* d_probe_indices,

@@ -6034,7 +6034,7 @@ static void DemoWindowTables()
                     else
                     {
                         char buf[32];
-                        sprintf(buf, "Hello %d,%d", column, row);
+                        (void)sprintf(buf, "Hello %d,%d", column, row);
                         ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f));
                     }
                     //if (ImGui::TableGetColumnFlags() & ImGuiTableColumnFlags_IsHovered)
@@ -6182,7 +6182,7 @@ static void DemoWindowTables()
                 ImGui::PushID(cell);
                 char label[32];
                 static char text_buf[32] = "";
-                sprintf(label, "Hello %d,%d", column, row);
+                (void)sprintf(label, "Hello %d,%d", column, row);
                 switch (contents_type)
                 {
                 case CT_ShortText:  ImGui::TextUnformatted(label); break;

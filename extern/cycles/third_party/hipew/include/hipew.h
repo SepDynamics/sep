@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#ifndef __HIPEW_H__
-#define __HIPEW_H__
+#ifndef HIPEW_H
+#define HIPEW_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -733,6 +733,7 @@ typedef enum hipResourceType {
   hipResourceTypeMipmappedArray = 0x01,
   hipResourceTypeLinear = 0x02,
   hipResourceTypePitch2D = 0x03,
+  hipResourceTypeReserved = 0x04,
 } hipResourceType;
 
 typedef enum hipError_t {
@@ -1105,7 +1106,7 @@ typedef struct hipExternalMemoryBufferDesc_st {
 /**
 * hipRTC related
 */
-typedef struct _hiprtcProgram* hiprtcProgram;
+typedef struct hiprtcProgram_t* hiprtcProgram;
 
 typedef enum hiprtcResult {
 	  HIPRTC_SUCCESS = 0,

@@ -912,8 +912,9 @@ retry:
          stb_textedit_clamp(str, state);
          stb_textedit_find_charpos(&find, str, state->cursor, state->single_line);
 
+         find.prev_first = 0;
          for (j = 0; j < row_count; ++j) {
-            float x, goal_x = state->has_preferred_x ? state->preferred_x : find.x;
+            float  x, goal_x = state->has_preferred_x ? state->preferred_x : find.x;
             int start = find.first_char + find.length;
 
             if (find.length == 0)

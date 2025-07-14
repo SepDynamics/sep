@@ -951,7 +951,7 @@ int cuewCompilerVersion(void)
   strncat(command, "\" --version", sizeof(command) - strlen(command) - 1);
   pipe = popen(command, "r");
   if (!pipe) {
-    fprintf(stderr, "CUDA: failed to run compiler to retrieve version");
+    (void)fprintf(stderr, "CUDA: failed to run compiler to retrieve version");
     return 0;
   }
 
@@ -966,13 +966,13 @@ int cuewCompilerVersion(void)
   /* parse version number */
   versionstr = strstr(output, marker);
   if (versionstr == NULL) {
-    fprintf(stderr, "CUDA: failed to find version number in:\n\n%s\n", output);
+    (void)fprintf(stderr, "CUDA: failed to find version number in:\n\n%s\n", output);
     return 0;
   }
   versionstr += strlen(marker);
 
   if (sscanf(versionstr, "%d.%d", &major, &minor) < 2) {
-    fprintf(stderr, "CUDA: failed to parse version number from:\n\n%s\n", output);
+    (void)fprintf(stderr, "CUDA: failed to parse version number from:\n\n%s\n", output);
     return 0;
   }
 

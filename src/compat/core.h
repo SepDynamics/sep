@@ -89,8 +89,6 @@ class CudaCore {
   Error initializeDevice(int device);
   Error queryDeviceProperties();
 };
-extern "C" sep::cuda::Error cuda_core_initialize(int device_id);
-
 
 }  // namespace sep::cuda
 

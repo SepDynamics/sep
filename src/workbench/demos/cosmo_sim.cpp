@@ -5,6 +5,7 @@
 // Include glm_config.h before any GLM headers to ensure GLM_ENABLE_EXPERIMENTAL is defined
 #include "compat/glm_config.h"
 #include <glm/gtx/norm.hpp>
+#include "blender/cycles_renderer.hpp"
 
 namespace sep
 {
@@ -100,8 +101,8 @@ namespace sep
         void CosmoSim::on_render()
         {
             if (!renderer_) return;
-            renderer_->setColorMode("temperature");
-            renderer_->setEmissionMode("density");
+            renderer_->setColorMode(sep::blender::ColorMode::Temperature);
+            renderer_->setEmissionMode(sep::blender::EmissionMode::Density);
             std::vector<glm::vec3> points;
             points.reserve(bodies_.size());
             for (const auto& b : bodies_)

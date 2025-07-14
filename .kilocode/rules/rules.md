@@ -1,0 +1,22 @@
+[
+  {
+    "fileName": "main-overview.md",
+    "description": "Complete system overview detailing the SEP Engine architecture, quantum processing framework, memory tier system, and core components integration"
+  },
+  {
+    "fileName": "quantum-algorithms.md",
+    "description": "Detailed documentation of quantum processing algorithms including QBSA (Quantum Binary State Analysis), QFH (Quantum Fourier Hierarchy), pattern evolution, coherence calculation, and stability determination"
+  },
+  {
+    "fileName": "memory-tier-system.md",
+    "description": "Comprehensive documentation of the memory tiering system, including tier management, pattern storage/retrieval, block allocation, promotion/demotion logic, and Redis integration"
+  },
+  {
+    "fileName": "pattern-data-model.md",
+    "description": "Detailed documentation of pattern data structures, relationships, coherence metrics, stability calculations, and their evolution through the quantum processing pipeline"
+  },
+  {
+    "fileName": "data-flow.md",
+    "description": "Documentation of data flow between components, including pattern processing pipeline, memory tier transitions, quantum state transformations, and system interactions"
+  }
+]

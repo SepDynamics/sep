@@ -8,7 +8,7 @@
 #include <thread>
 
 namespace sep {
-class Engine;
+namespace core { class Engine; }
 }
 
 namespace sep::workbench {
@@ -57,7 +57,7 @@ public:
     bool isConnected() const { return connection_state_ == ConnectionState::CONNECTED; }
     
     // Service interaction
-    sep::Engine* getEngine() const { return service_engine_; }
+    sep::core::Engine* getEngine() const { return service_engine_; }
     ServiceHealth getServiceHealth() const;
     
     // Health monitoring
@@ -80,7 +80,7 @@ private:
     ServiceHealth health_metrics_;
     
     // Service connection
-    sep::Engine* service_engine_{nullptr};
+    sep::core::Engine* service_engine_{nullptr};
     void* service_handle_{nullptr}; // Platform-specific handle
     
     // Health monitoring

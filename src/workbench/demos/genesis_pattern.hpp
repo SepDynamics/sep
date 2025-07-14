@@ -16,7 +16,7 @@ namespace sep
         class GenesisPatternDemo : public Demo
         {
         public:
-            void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+            void on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer) override;
             void on_update(float dt) override;
             void on_render() override;
             void on_ui_render() override;
@@ -46,9 +46,9 @@ namespace sep
 
             std::unique_ptr<sep::quantum::Processor> pattern_processor_;
             std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_manager_;
-            sep::CyclesRenderer* renderer_{nullptr};
+            sep::blender::CyclesRenderer* renderer_{nullptr};
 
-            sep::Engine* engine_{nullptr};
+            sep::core::Engine* engine_{nullptr};
         };
 
     }  // namespace workbench

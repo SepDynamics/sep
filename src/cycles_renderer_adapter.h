@@ -4,7 +4,7 @@
 #include <string>
 #include <glm/vec3.hpp>
 
-#include "sep_engine_wrapper.h"
+#include "blender/cycles_renderer.hpp"
 #include "renderer.h"
 
 namespace sep {
@@ -14,7 +14,7 @@ namespace workbench {
  * Adapter class that makes a sep::workbench::Renderer compatible with the sep::CyclesRenderer interface
  * This allows the demo code to work with either a real CyclesRenderer or our simplified Renderer
  */
-class CyclesRendererAdapter : public sep::CyclesRenderer {
+class CyclesRendererAdapter : public sep::blender::CyclesRenderer {
 public:
     CyclesRendererAdapter(Renderer* renderer) : renderer_(renderer) {}
     ~CyclesRendererAdapter() override = default;

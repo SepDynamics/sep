@@ -11,7 +11,7 @@ namespace workbench {
 
 using namespace sep::audio;
 
-void AudioVisualizerDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+void AudioVisualizerDemo::on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer) {
     engine_ = engine;
     renderer_ = renderer;
     const auto& cfg = Config::getInstance().audio_visualizer();

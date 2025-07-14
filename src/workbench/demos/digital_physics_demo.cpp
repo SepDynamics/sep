@@ -8,7 +8,7 @@
 namespace sep {
 namespace workbench {
 
-    void DigitalPhysicsDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void DigitalPhysicsDemo::on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer)
     {
         (void)engine;
         (void)renderer;

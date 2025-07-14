@@ -29,8 +29,7 @@ namespace crow {
     class Crow;
 }  // namespace crow
 namespace sep {
-class CyclesRenderer;
-namespace blender { namespace ccl { class CyclesRenderer; } }
+namespace blender { class CyclesRenderer; namespace ccl { class CyclesRenderer; } }
 }  // namespace sep
 namespace sep::api {
 class CrowRequest;
@@ -65,7 +64,7 @@ class SEPApiServer : public Server {
    * @param config The API configuration
    * @param renderer Cycles renderer
    */
-    explicit SEPApiServer(const AuthConfig &config, sep::CyclesRenderer *renderer);
+    explicit SEPApiServer(const AuthConfig &config, sep::blender::CyclesRenderer *renderer);
 
      /**
       * @brief Destructor
@@ -218,7 +217,7 @@ class SEPApiServer : public Server {
   // Clients
   std::unique_ptr<ollama::OllamaClient> ollama_client_;
 
-  sep::CyclesRenderer* cycles_renderer_;
+  sep::blender::CyclesRenderer* cycles_renderer_;
 };
 
 }  // namespace sep::api

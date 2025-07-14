@@ -8,7 +8,8 @@
 #include "api/auth_middleware.h"
 #include "api/server.h"
 #include "core/manager.h"
-#include "sep_engine_wrapper.h"
+#include "core/engine.h"
+#include "blender/cycles_renderer.hpp"
 
 // Default auth configuration
 sep::api::AuthConfig createDefaultConfig()
@@ -72,10 +73,8 @@ int main(int argc, char** argv)
     configMgr.initialize(argc, argv);
 
     // Create renderer implementation
-    std::unique_ptr<sep::CyclesRenderer> renderer = sep::createRenderer();
-    if (renderer) {
-        renderer->initialize();
-    }
+    auto renderer = std::make_unique<sep::blender::CyclesRenderer>();
+    renderer->setRotation(0.0f);
 
     // Create auth config
     sep::api::AuthConfig auth_config = createDefaultConfig();

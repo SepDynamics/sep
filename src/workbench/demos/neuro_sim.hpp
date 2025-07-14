@@ -11,7 +11,8 @@
 #include "imgui.h"
 #include "memory/memory_tier_manager.hpp"
 
-#include "sep_engine_wrapper.h"
+#include "core/engine.h"
+#include "blender/cycles_renderer.hpp"
 
 namespace sep
 {
@@ -23,7 +24,7 @@ namespace sep
         public:
             NeuroSimDemo() : rd_{}, seed_{rd_()}, rng_{seed_} {}
 
-            void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+            void on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer) override;
             void on_ui_render() override;
             void on_update(float dt) override;
             void on_render() override;
@@ -51,7 +52,7 @@ namespace sep
             float input_strength_{0.5f};
             float learning_rate_{0.05f};
             float connection_prob_{0.2f};
-            sep::CyclesRenderer* renderer_{nullptr};
+            sep::blender::CyclesRenderer* renderer_{nullptr};
         };
 
     }  // namespace workbench

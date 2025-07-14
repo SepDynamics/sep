@@ -3139,11 +3139,13 @@ static void ImGuiListClipper_SeekCursorAndSetupPrevLine(float pos_y, float line_
 }
 
 ImGuiListClipper::ImGuiListClipper() :
+    Ctx(NULL),
     DisplayStart(0),
     DisplayEnd(0),
     ItemsCount(0),
     ItemsHeight(0.0f),
     StartPosY(0.0f),
+    StartSeekOffsetY(0.0f),
     TempData(NULL)
 {
 }

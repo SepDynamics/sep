@@ -221,7 +221,7 @@ struct stbrp_context
 #define STBRP__NOTUSED(v)  (void)(v)
 #define STBRP__CDECL       __cdecl
 #else
-#define STBRP__NOTUSED(v)  (void)sizeof(v)
+#define STBRP__NOTUSED(v)  (void)(v)
 #define STBRP__CDECL
 #endif
 

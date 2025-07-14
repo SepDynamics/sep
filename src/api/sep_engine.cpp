@@ -96,6 +96,47 @@ namespace sep::api
     // Private destructor
     SepEngine::~SepEngine() = default;
 
+    nlohmann::json SepEngine::initialize(const AuthConfig& config)
+    {
+        using json = nlohmann::json;
+
+        if (impl_->initialized)
+        {
+            json result;
+            result["success"] = true;
+            result["message"] = "SEP Engine already initialized";
+            return result;
+        }
+
+        impl_->config = {};
+        impl_->config.use_gpu = config.ollama.gpu.enabled;
+
+        if (impl_->config.use_gpu)
+        {
+            auto err = cuda_core_initialize(0);
+            if (err.status != sep::cuda::Status::Success)
+            {
+                json result;
+                result["success"] = false;
+                result["error"] = "Failed to initialize CUDA";
+                return result;
+            }
+        }
+
+        sep::quantum::QuantumProcessor::Config qcfg{};
+        qcfg.enable_gpu = impl_->config.use_gpu;
+        impl_->quantum_processor = sep::quantum::createQuantumProcessor(qcfg);
+
+        impl_->pattern_processor = std::make_unique<sep::pattern::CPUPatternProcessor>();
+
+        impl_->initialized = true;
+
+        json result;
+        result["success"] = true;
+        result["config"] = getConfig(config);
+        return result;
+    }
+
     // Generate deterministic ID
     std::string SepEngine::generateId(const std::string& prefix)
     {
@@ -536,6 +577,28 @@ namespace sep::api
         result["uptime_seconds"] = uptime;
         result["initialized"] = impl_->initialized;
         result["metrics"] = metrics_json;
+        return result;
+    }
+
+    nlohmann::json SepEngine::getConfig(const AuthConfig& config)
+    {
+        nlohmann::json result;
+        result["enabled"] = config.enabled;
+        result["port"] = config.port;
+        result["log_level"] = config.log_level;
+        result["cors"] = {{"enabled", config.cors.enabled}, {"tokens", config.cors.tokens}};
+
+        result["response_modulation"] = {{"enabled", config.response_modulation.enabled}};
+
+        result["ollama"] = {{"enabled", config.ollama.enabled},
+                            {"host", config.ollama.host},
+                            {"model", config.ollama.model},
+                            {"batch_size", config.ollama.batch_size},
+                            {"context_window", config.ollama.context_window},
+                            {"gpu",
+                             {{"enabled", config.ollama.gpu.enabled},
+                              {"memory_fraction", config.ollama.gpu.memory_fraction}}}};
+
         return result;
     }
 

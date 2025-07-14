@@ -2323,7 +2323,7 @@ static const ImU32 GCrc32LookupTable[256] =
 ImGuiID ImHashData(const void* data_p, size_t data_size, ImGuiID seed)
 {
     (void)seed; // Unused parameter
-    ImU32 crc = ~0U;
+    uint32_t crc = ~0U;
     const unsigned char* data = (const unsigned char*)data_p;
     const unsigned char *data_end = (const unsigned char*)data_p + data_size;
 #ifndef IMGUI_ENABLE_SSE4_2_CRC

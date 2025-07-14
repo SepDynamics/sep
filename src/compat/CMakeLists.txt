@@ -61,6 +61,7 @@ set(CPP_SOURCES
     hip_impl.cpp
     hip_compat.cpp
     cuda_impl.cpp
+    core_wrapper.cpp
 )
 
 # Create an OBJECT library for the CUDA sources

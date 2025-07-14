@@ -67,9 +67,12 @@ static DynamicLibrary cuda_lib;
 static DynamicLibrary nvrtc_lib;
 
 /* Function definitions. */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuninitialized"
 tcuGetErrorString *cuGetErrorString;
 tcuGetErrorName *cuGetErrorName;
 tcuInit *cuInit;
+#pragma clang diagnostic pop
 tcuDriverGetVersion *cuDriverGetVersion;
 tcuDeviceGet *cuDeviceGet;
 tcuDeviceGetCount *cuDeviceGetCount;

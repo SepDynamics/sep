@@ -2322,7 +2322,8 @@ static const ImU32 GCrc32LookupTable[256] =
 // FIXME-OPT: Replace with e.g. FNV1a hash? CRC32 pretty much randomly access 1KB. Need to do proper measurements.
 ImGuiID ImHashData(const void* data_p, size_t data_size, ImGuiID seed)
 {
-    ImU32 crc = ~seed;
+    (void)seed; // Unused parameter
+    ImU32 crc = ~0U;
     const unsigned char* data = (const unsigned char*)data_p;
     const unsigned char *data_end = (const unsigned char*)data_p + data_size;
 #ifndef IMGUI_ENABLE_SSE4_2_CRC
@@ -13671,6 +13672,7 @@ void ImGui::NavUpdateCreateMoveRequest()
         scoring_rect_offset_y = NavUpdatePageUpPageDown();
     if (scoring_rect_offset_y != 0.0f && window != NULL)
     {
+        if (!window) return;
         g.NavScoringNoClipRect = window->InnerRect;
         g.NavScoringNoClipRect.TranslateY(scoring_rect_offset_y);
     }
@@ -14154,7 +14156,9 @@ static void ImGui::NavUpdateWindowingApplyFocus(ImGuiWindow* apply_focus_window)
         // FIXME-NAV: This should be done in NavInit.. or in FocusWindow... However in both of those cases,
         // we won't have a guarantee that windows has been visible before and therefore NavLayersActiveMask*
         // won't be valid.
-        if (apply_focus_window && apply_focus_window->DC.NavLayersActiveMaskNext == (1 << ImGuiNavLayer_Menu))
+        if (apply_focus_window == NULL)
+            return;
+        if (apply_focus_window->DC.NavLayersActiveMaskNext == (1 << ImGuiNavLayer_Menu))
             g.NavLayer = ImGuiNavLayer_Menu;
     }
     g.NavWindowingTarget = NULL;

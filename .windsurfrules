@@ -10,25 +10,48 @@
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-## Error Processing System
+The SEP (Specialized Evolution Processing) system implements a quantum-inspired pattern processing architecture with three core subsystems:
 
-System manages error handling for 317 files within processing group 0, indicating a significant batch operation failure scenario. The main system function focuses on batch error control and file state management.
+## Memory Management Architecture
+A three-tier memory system (STM, MTM, LTM) manages pattern storage and evolution:
 
-Error Management Score: 85 - Critical for business continuity and data integrity
+- Pattern promotion based on coherence thresholds:
+  - STM → MTM: 0.7 coherence
+  - MTM → LTM: 0.9 coherence + 0.85 stability
+- Automatic demotion below 0.3 coherence
+- Pattern relationship tracking with strength metrics
+- Memory pressure optimization using quantum manifold analysis
 
-## Key Components
+Key files:
+- src/memory/memory_tier_manager.cpp
+- src/memory/quantum_coherence_manager.cpp
 
-- Group-level error processing
-- File batch management (317 files)
-- Group 0 specific handling
+## Quantum Pattern Processing
+Specialized quantum state evolution system:
 
-Group Processing Score: 75 - Essential for maintaining batch operation integrity
+- Pattern coherence calculation using quantum amplitude/phase
+- State transitions between Superposition/Coherent/Collapsed
+- Entanglement detection between related patterns
+- Evolution mechanics with environmental coupling effects
 
-## Business Impact
+Key files:
+- src/quantum/pattern_evolution.cpp
+- src/quantum/quantum_manifold_optimizer.cpp
 
-System appears to be part of a larger batch processing infrastructure where error handling for specific file groups is crucial for maintaining data processing workflows.
+## Pattern Analysis Pipeline
+Multi-stage pattern processing workflow:
 
-Processing Infrastructure Score: 70 - Important for business operations continuity
+- Context extraction and blending
+- Coherence field computation
+- Pattern stability assessment
+- Relationship strength calculation
+- Memory tier placement decisions
+
+Key files:
+- mcp-tool/sep_manifold_engine.js
+- mcp-tool/pattern_extractor.js
+
+The system uniquely combines quantum computing principles with pattern recognition to implement an evolving memory architecture. Patterns move between memory tiers based on coherence/stability metrics while maintaining quantum-inspired state relationships and evolution characteristics.
 
 $END$
 

@@ -8,6 +8,18 @@
 namespace sep {
 namespace blender {
 
+enum class ColorMode {
+    Temperature = 0,
+    Frequency,
+    Coherence
+};
+
+enum class EmissionMode {
+    Density = 0,
+    Amplitude,
+    Stability
+};
+
 class CyclesRenderer {
 public:
     CyclesRenderer() = default;
@@ -17,8 +29,8 @@ public:
     void setRotation(float rotation) { rotation_ = rotation; }
     void setZoom(float zoom) { zoom_ = zoom; }
     void setWireframe(bool wireframe) { wireframe_ = wireframe; }
-    void setColorMode(int mode) { color_mode_ = mode; }
-    void setEmissionMode(int mode) { emission_mode_ = mode; }
+    void setColorMode(ColorMode mode) { color_mode_ = static_cast<int>(mode); }
+    void setEmissionMode(EmissionMode mode) { emission_mode_ = static_cast<int>(mode); }
     void setRoughnessMode(int mode) { roughness_mode_ = mode; }
     
     // Method to cycle through available color modes

@@ -40,8 +40,8 @@ public:
     bool hasMouseEvent() override { return false; }
     void getLastMouseEvent(int& x, int& y, int& button) override { x = y = button = 0; }
 
-    void setColorMode(const std::string& mode) override { (void)mode; }
-    void setEmissionMode(const std::string& mode) override { (void)mode; }
+    void setColorMode(sep::blender::ColorMode mode) override { (void)mode; }
+    void setEmissionMode(sep::blender::EmissionMode mode) override { (void)mode; }
     void setRotation(float rotation) override { (void)rotation; }
     void setZoom(float zoom) override { (void)zoom; }
     void setWireframe(bool wireframe) override { (void)wireframe; }

@@ -146,6 +146,8 @@ void AudioVisualizerDemo::on_key_press(int key) {
             pattern_mapping_.amplitude_scale = 1.0f;
             pattern_mapping_.evolution_sensitivity = 0.75f;
             break;
+        default:
+            break;
     }
 }
 void AudioVisualizerDemo::on_ui_render() {

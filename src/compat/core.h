@@ -21,6 +21,7 @@ struct CudaMetrics {
   uint32_t active_kernels{0};
 };
 
+
 class CudaCore {
  public:
   static CudaCore& instance() {
@@ -89,6 +90,7 @@ class CudaCore {
   Error initializeDevice(int device);
   Error queryDeviceProperties();
 };
+extern "C" sep::cuda::Error cuda_core_initialize(int device_id);
 
 
 }  // namespace sep::cuda

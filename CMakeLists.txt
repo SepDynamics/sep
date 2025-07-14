@@ -129,8 +129,9 @@ add_compile_definitions(SEP_HAS_AUDIO=1)
 
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
-    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/extern/crow/include
     ${CMAKE_SOURCE_DIR}/extern/crow/src
+    ${CMAKE_SOURCE_DIR}/src
 )
 add_compile_definitions(CROW_USE_BOOST)
 

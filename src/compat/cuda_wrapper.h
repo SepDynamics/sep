@@ -12,6 +12,9 @@
 // Wrapper functions for CUDA functions with different names
 namespace cuda_wrapper {
 
+// Use CUDA types
+using sep::cuda::cudaDeviceProp;
+
 // Stream functions
 inline cudaError_t StreamCreateWithFlags(void** stream, unsigned int flags) {
     return cudaStreamCreateWithFlags(stream, flags);
@@ -91,6 +94,23 @@ inline cudaError_t Memcpy(void* dst, const void* src, size_t count, cudaMemcpyKi
 inline cudaError_t MemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, void* stream) {
     return cudaMemcpyAsync(dst, src, count, kind, (cudaStream_t)stream);
 }
+
+// Device management functions
+inline cudaError_t SetDevice(int device) { return cudaSetDevice(device); }
+
+inline cudaError_t GetDevice(int* device) { return cudaGetDevice(device); }
+
+inline cudaError_t GetDeviceCount(int* count) { return cudaGetDeviceCount(count); }
+
+inline cudaError_t DeviceSynchronize(void) { return cudaDeviceSynchronize(); }
+
+inline cudaError_t DeviceReset(void) { return cudaDeviceReset(); }
+
+inline cudaError_t SetDeviceFlags(unsigned int flags) { return cudaSetDeviceFlags(flags); }
+
+inline cudaError_t GetDeviceFlags(unsigned int* flags) { return cudaGetDeviceFlags(flags); }
+
+inline cudaError_t GetLastError(void) { return cudaGetLastError(); }
 
 // Error handling
 inline const char* GetErrorString(int error) {

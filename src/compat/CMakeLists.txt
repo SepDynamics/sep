@@ -58,8 +58,8 @@ set(CUDA_SOURCES
 set(CPP_SOURCES
     stream.cpp
     raii.cpp
-    hip_impl.cpp
-    hip_compat.cpp
+    # hip_impl.cpp
+    # hip_compat.cpp
     cuda_impl.cpp
 )
 

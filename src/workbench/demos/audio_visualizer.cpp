@@ -90,8 +90,8 @@ void AudioVisualizerDemo::on_update(float dt) {
 
     // Update visualization parameters
     if (renderer_) {
-        renderer_->setColorMode("frequency");  // Color based on frequency
-        renderer_->setEmissionMode("amplitude");  // Emission based on amplitude
+        renderer_->setColorMode(sep::blender::ColorMode::Frequency);  // Color based on frequency
+        renderer_->setEmissionMode(sep::blender::EmissionMode::Amplitude);  // Emission based on amplitude
         renderer_->setRoughnessMode(1);  // Surface detail based on evolution (using mode 1)
     }
 
@@ -145,6 +145,8 @@ void AudioVisualizerDemo::on_key_press(int key) {
             pattern_mapping_.frequency_scale = 0.5f;
             pattern_mapping_.amplitude_scale = 1.0f;
             pattern_mapping_.evolution_sensitivity = 0.75f;
+            break;
+        default:
             break;
     }
 }

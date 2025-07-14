@@ -12,7 +12,7 @@ using sep::pattern::PatternData;
 namespace sep {
 namespace workbench {
 
-    void DrugOptimizerDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void DrugOptimizerDemo::on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer)
     {
         (void)engine;
         renderer_ = renderer;

@@ -8,7 +8,8 @@
 #include "config.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/evolution.h"
-#include "sep_engine_wrapper.h"
+#include "core/engine.h"
+#include "blender/cycles_renderer.hpp"
 
 using sep::memory::MemoryTierEnum;
 using sep::memory::MemoryTierManager;
@@ -19,7 +20,7 @@ namespace sep
     namespace workbench
     {
 
-        void NeuroSimDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+        void NeuroSimDemo::on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer)
         {
             (void)engine;
             renderer_ = renderer;

@@ -40,7 +40,7 @@ namespace sep::api {
 
 // Static instance for signal handling
 SEPApiServer* SEPApiServer::instance_ = nullptr;
-SEPApiServer::SEPApiServer(const AuthConfig& config, sep::CyclesRenderer* renderer)
+SEPApiServer::SEPApiServer(const AuthConfig& config, sep::blender::CyclesRenderer* renderer)
     : config_(config),
       logger_(nullptr),
       app_(nullptr),

@@ -19,8 +19,8 @@ class Renderer;
 // External classes from sep namespace (not in sep::workbench)
 }
 namespace sep {
-    class Engine;
-    class CyclesRenderer;
+    namespace core { class Engine; }
+    namespace blender { class CyclesRenderer; }
 }
 namespace sep::workbench {
 
@@ -97,9 +97,9 @@ private:
     std::unique_ptr<Renderer> renderer_;
     
     // Engine components (may be null if service not connected)
-    std::unique_ptr<sep::Engine> offline_engine_;
-    sep::Engine* active_engine_{nullptr};
-    std::unique_ptr<sep::CyclesRenderer> cycles_renderer_;
+    std::unique_ptr<sep::core::Engine> offline_engine_;
+    sep::core::Engine* active_engine_{nullptr};
+    std::unique_ptr<sep::blender::CyclesRenderer> cycles_renderer_;
 
     // Window configuration
     struct WindowConfig {

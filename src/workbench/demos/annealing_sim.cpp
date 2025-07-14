@@ -5,12 +5,13 @@
 
 #include "core/types.h"
 #include "imgui.h"
-#include "sep_engine_wrapper.h"
+#include "core/engine.h"
+#include "blender/cycles_renderer.hpp"
 
 namespace sep {
 namespace workbench {
 
-    void AnnealingSimDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void AnnealingSimDemo::on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer)
     {
         (void)renderer;
         (void)engine;

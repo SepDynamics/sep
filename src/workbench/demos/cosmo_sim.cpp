@@ -11,7 +11,7 @@ namespace sep
     namespace workbench
     {
 
-        void CosmoSim::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+        void CosmoSim::on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer)
         {
             (void)engine;
             (void)renderer;

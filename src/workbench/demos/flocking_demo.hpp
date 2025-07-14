@@ -13,7 +13,7 @@ namespace workbench {
 
 class FlockingDemo : public Demo {
 public:
-    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer) override;
     void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
@@ -25,7 +25,7 @@ private:
     std::vector<pattern::PatternData> agents_;
     float max_speed_{2.0f};
     float neighbor_radius_{5.0f};
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::blender::CyclesRenderer* renderer_{nullptr};
 };
 
 } // namespace workbench

@@ -9,8 +9,8 @@
 
 // Forward declarations
 namespace sep {
-class Engine;
-class CyclesRenderer;
+namespace core { class Engine; }
+namespace blender { class CyclesRenderer; }
 }
 
 namespace sep::workbench {
@@ -56,7 +56,7 @@ public:
     ~DemoOrchestrator();
 
     // Demo lifecycle management
-    bool loadDemo(const std::string& demo_id, sep::Engine* engine, sep::CyclesRenderer* renderer);
+    bool loadDemo(const std::string& demo_id, sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer);
     void unloadCurrentDemo();
     bool reloadCurrentDemo();
     
@@ -103,8 +103,8 @@ private:
     DemoState current_state_{DemoState::UNLOADED};
     
     // Engine references
-    sep::Engine* engine_{nullptr};
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::core::Engine* engine_{nullptr};
+    sep::blender::CyclesRenderer* renderer_{nullptr};
     
     // Metrics
     DemoMetrics metrics_;

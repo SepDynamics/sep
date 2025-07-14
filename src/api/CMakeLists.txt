@@ -30,7 +30,6 @@ add_library(sep_api STATIC
     sep_engine.cpp
     bridge_c.cpp
     server.cpp
-    ${CMAKE_SOURCE_DIR}/src/sep_engine_factory.cpp
 )
 
 

@@ -6,7 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "../../sep_engine_wrapper.h"
+#include "core/engine.h"
+#include "blender/cycles_renderer.hpp"
 #include "workbench/demos/demo_base.hpp"
 
 namespace sep
@@ -18,7 +19,7 @@ namespace sep
         {
         public:
             static DemoManager& getInstance();
-            void initialize(sep::Engine* engine, sep::CyclesRenderer* renderer);
+            void initialize(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer);
             void registerDemo(const std::string& name,
                               std::function<std::unique_ptr<Demo>()> factory);
             bool switchToDemo(const std::string& name);
@@ -34,8 +35,8 @@ namespace sep
             DemoManager() = default;  // Singleton
             ~DemoManager() = default;
 
-            sep::Engine* engine_{nullptr};
-            sep::CyclesRenderer* renderer_{nullptr};
+            sep::core::Engine* engine_{nullptr};
+            sep::blender::CyclesRenderer* renderer_{nullptr};
             std::map<std::string, std::function<std::unique_ptr<Demo>()>> demo_factories_;
             std::unique_ptr<Demo> current_demo_;
             std::string current_demo_name_;

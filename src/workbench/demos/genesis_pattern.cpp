@@ -17,7 +17,7 @@ namespace quantum {
 
 namespace workbench {
 
-void GenesisPatternDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+void GenesisPatternDemo::on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer) {
     engine_ = engine;
     renderer_ = renderer;
 

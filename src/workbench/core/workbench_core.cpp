@@ -7,7 +7,8 @@
 
 // Include non-OpenGL headers
 #include "core/engine.h"
-#include "../sep_engine_wrapper.h"
+#include "core/engine.h"
+#include "blender/cycles_renderer.hpp"
 
 #include <imgui.h>
 // Use correct paths for ImGui implementation files

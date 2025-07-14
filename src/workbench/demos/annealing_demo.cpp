@@ -3,12 +3,13 @@
 #include <cmath>
 #include <cstdlib>
 
-#include "sep_engine_wrapper.h"
+#include "core/engine.h"
+#include "blender/cycles_renderer.hpp"
 
 namespace sep {
 namespace workbench {
 
-    void AnnealingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void AnnealingDemo::on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer)
     {
         (void)renderer;
         (void)engine;

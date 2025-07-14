@@ -14,7 +14,7 @@ namespace workbench {
 
 class MemoryGardenDemo : public Demo {
 public:
-    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::blender::CyclesRenderer* renderer) override;
     void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
@@ -54,7 +54,7 @@ private:
     float input_strength_{0.5f};
     float learning_rate_{0.05f};
 
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::blender::CyclesRenderer* renderer_{nullptr};
 
 private:
     void createInitialPatterns();

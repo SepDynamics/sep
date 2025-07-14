@@ -1,245 +1,155 @@
-### Build Log Analysis
-The build failed (130/130 targets attempted, but sep_api_server linking failed). Key issues:
-
-- **Linker Error (sep_api_server)**: Undefined reference to `sep::cuda::CudaCore::initialize(int)` in compat/core_wrapper.cpp.o. This is a static member function declared but not defined in a .cpp file.
-- **Compilation Errors**:
-  - cosmo_sim.cpp: Invalid conversions from 'const char*' to 'int' in setColorMode/setEmissionMode (lines 103-104).
-  - memory_garden.cpp: No 'pi' in glm namespace (line 61); missing <glm/gtc/constants.hpp> or equivalent.
-  - audio_visualizer.cpp: Similar invalid conversions (lines 93-94).
-
-TBB version conflict warning persists (system libtbb.so.2 vs. your libtbb.so.12)—set LD_LIBRARY_PATH to prioritize yours, but not causing failure.
-
-### Defects Grouped by File
-From build_log.txt (new failures) and report.md (317 total: HIGH:6, MEDIUM:174, LOW:60). Focused on blockers first, then others.
-
-- **/sep/src/compat/core_wrapper.cpp** (Linker failure):
-  - [HIGH] undefined reference to `sep::cuda::CudaCore::initialize(int)`: Declared static but no definition.
-    - Fix: Add to core_wrapper.cpp: `void sep::cuda::CudaCore::initialize(int device) { /* impl */ }`.
-
-- **/sep/src/workbench/demos/cosmo_sim.cpp**:
-  - [CRITICAL] invalid conversion 'const char*' to 'int' (line 103: setColorMode("temperature")).
-    - Fix: Use enum: `setColorMode(COLOR_TEMPERATURE);` or update CyclesRenderer to accept std::string.
-  - [CRITICAL] invalid conversion 'const char*' to 'int' (line 104: setEmissionMode("density")).
-    - Fix: Similar, `setEmissionMode(EMISSION_DENSITY);`.
-
-- **/sep/src/workbench/demos/memory_garden.cpp**:
-  - [CRITICAL] no member 'pi' in 'glm' (line 61).
-    - Fix: Add `#include <glm/gtc/constants.hpp>`; change to `glm::pi<float>()`.
-
-- **/sep/src/workbench/demos/audio_visualizer.cpp**:
-  - [CRITICAL] invalid conversion 'const char*' to 'int' (line 93: setColorMode("frequency")).
-    - Fix: Use enum as above.
-  - [CRITICAL] invalid conversion 'const char*' to 'int' (line 94: setEmissionMode("amplitude")).
-    - Fix: Use enum as above.
-  - [MEDIUM] double-promotion in ImGui::Text (lines 193-195: peak_level, rms_level, latency_ms).
-    - Fix: Use float literals: `ImGui::Text("Peak: %.2f", metrics.peak_level);`.
-
-- **/sep/third_party/imgui/imgui.cpp** (From report.md):
-  - [HIGH] Garbage in '^' (line 2332: crc & 0xFF ^ *data++).
-    - Fix: Init `crc = ~0U;` before loop.
-  - [MEDIUM] signed char misuse (lines 2486,6979).
-    - Fix: Cast `(unsigned char*)in_text`.
-  - [MEDIUM] undefined mem in memset ImGuiWindow (line 4423).
-    - Fix: Use ctor: `ImGuiWindow() = default;`.
-  - [MEDIUM] inc/dec in cond (lines 5574,5579,13135).
-    - Fix: Separate: `if (g.DebugLocateFrames > 0) { g.DebugLocateFrames--; if (g.DebugLocateFrames == 0) ... }`.
-  - [MEDIUM] bitwise ptr cast in memcpy (line 5675).
-    - Fix: Use std::copy or reinterpret_cast carefully.
-  - [LOW] dead store to p (line 17141).
-    - Fix: Remove `p += ImFormatString...`.
-
-- **/sep/third_party/imgui/imgui_draw.cpp**:
-  - [HIGH] Null font->RenderText (line 1720).
-    - Fix: `if (!font) return;`.
-
-- **/sep/third_party/imgui/imgui_widgets.cpp**:
-  - [HIGH] Null deref in while(it->val_i) (line 8323).
-    - Fix: `if (!it) return;`.
-
-- **/sep/third_party/imgui/imstb_textedit.h**:
-  - [HIGH] Garbage in '==' (line 989: find.prev_first == find.first_char).
-    - Fix: Init `find.prev_first = 0;`.
-
-- **/sep/third_party/imgui/imgui.h**:
-  - [HIGH] Suspicious sizeof(A*) (lines 2202:151,213; 2209:210).
-    - Fix: Change to `sizeof(T)`.
-
-- **/sep/third_party/imgui/imgui_demo.cpp**:
-  - [MEDIUM] cert-err33-c ignored sprintf (multiple lines).
-    - Fix: `(void)sprintf(...);`.
-  - [MEDIUM] integer div in float (lines 6395,10818).
-    - Fix: `(float)TEXT_BASE_WIDTH / 2.f`.
-  - [LOW] dead store (line 9952: x += sz + spacing).
-    - Fix: Remove assignment.
-
-- **/usr/lib/clang/20/include/cetintrin.h**:
-  - [HIGH] Uninit args in builtins (lines 49,62).
-    - Fix: Suppress -Wuninitialized or init t=0.
-
-- **/sep/third_party/imgui/imstb_truetype.h**:
-  - [LOW] dead store (line 3158: xb = t).
-
-- **/sep/src/workbench/core/workbench_main.cpp**:
-  - [MEDIUM] cert-err33-c ignored std::signal (lines 20-21).
-    - Fix: `(void)std::signal(...);`.
-
-- **/sep/third_party/imgui/imgui_internal.h**:
-  - [MEDIUM] noexcept swap missing (line 795).
-    - Fix: Add `noexcept` to swap.
-  - [MEDIUM] undefined mem in memset (lines 2125,3019,3047,3817).
-    - Fix: Use ctors instead.
-
-- **/sep/third_party/imgui/imgui_tables.cpp**:
-  - [LOW] dead stores (lines 3592: want_separator=true; 3894: line=ImStrSkipBlank...).
-
-- **/sep/third_party/imgui/imgui_widgets.cpp**:
-  - [LOW] missing default in switch (lines 2281,2389,2418,2645,3237).
-    - Fix: Add `default: break;`.
-  - [MEDIUM] signed char misuse (lines 2647,3239,3974).
-    - Fix: Cast `(unsigned char)`.
-  - [LOW] suspicious arg swap (lines 4504,9104).
-    - Fix: Check order: insert_len before delete_len.
-  - [LOW] bool ptr implicit conv (line 7113: if(p_visible)).
-    - Fix: `if(*p_visible)`.
-  - [MEDIUM] inc/dec in cond (line 7447).
-    - Fix: Separate: `ImToUpper(*s1); s1++;`.
-  - [MEDIUM] undefined mem in memset (line 9410).
-    - Fix: Use ctor.
-
-- **/sep/src/glad/glad.c**:
-  - [MEDIUM] reserved macro (line 295: _GLAD_IS_SOME_NEW_VERSION).
-    - Fix: Ignore or rename.
-  - [MEDIUM] cert-err33-c ignored sscanf (line 3511).
-    - Fix: `(void)sscanf(...);`.
-
-- **/sep/src/glad/glad.h**:
-  - [MEDIUM] reserved macros (lines 157,162: __glad_h_, __gl_h_).
-    - Fix: Ignore.
-  - [MEDIUM] reserved identifiers (lines 259-261: __GLsync, _cl_context, _cl_event).
-    - Fix: Ignore system header.
-
-- **/sep/src/glad/khrplatform.h**:
-  - [MEDIUM] reserved macro (line 2: __khrplatform_h_).
-    - Fix: Ignore.
-
-- **/sep/third_party/imgui/backends/imgui_impl_opengl3.cpp**:
-  - [MEDIUM] redundant expr (line 310: imgl3wInit() != 0).
-    - Fix: Remove one side.
-  - [MEDIUM] cert-err33-c ignored fprintf/sscanf (lines 312,810,816,829,835,859).
-    - Fix: `(void)fprintf(...);`.
-  - [MEDIUM] unknown pragma (line 1059: #pragma clang diagnostic pop).
-    - Fix: Wrap in #ifdef __clang__.
-
-- **/sep/third_party/imgui/backends/imgui_impl_glfw.cpp**:
-  - [LOW] suspicious arg swap (line 440: SetKeyEventNativeData(imgui_key, keycode...)).
-    - Fix: Check order.
-  - [MEDIUM] double-promotion (lines 629,924: bd->Time = 0.0f; +0.00001f).
-    - Fix: Use 0.0 / 0.00001.
-
-- **/sep/third_party/imgui/imgui_demo.cpp** (18 defects, many sprintf ignored).
-
-- **/sep/third_party/imgui/imgui_internal.h** (5 defects, noexcept, undefined mem).
-
-- **/sep/third_party/imgui/imgui_tables.cpp** (2 low dead stores).
-
-- **/sep/third_party/imgui/imgui_widgets.cpp** (8 defects, switches, signed char, suspicious args, bool ptr, inc/dec, undefined mem).
-
-- **/sep/third_party/imgui/imstb_truetype.h** (4 defects, signed char, missing switches, dead store).
-
-- **/sep/src/audio/pipewire_capture.cpp** (3 low: blocking fgets in critical section).
-  - Fix: Move outside mutex or use non-blocking.
-
-- **/sep/src/workbench/core/landing_page.cpp** (3 medium double-promotion in ImGui::Text).
-
-- **/sep/src/crow/socket_adaptors.h** (8 medium: unused shutdown/close returns, cert-err33-c).
-  - Fix: `(void)socket_.close(...);`.
-
-- **/sep/src/workbench/demos/audio_visualizer.hpp** (5 medium unused private fields).
-  - Fix: Remove or use.
-
-- **/sep/src/workbench/demos/annealing_demo.cpp / annealing_sim.cpp** (1 medium double-promotion each in pow).
-
-- **/sep/extern/cycles/src/util/hash.h** (1 medium signed char).
-
-- **/sep/extern/cycles/third_party/cuew/src/cuew.c** (2 medium reserved macros).
-
-- **/sep/extern/cycles/third_party/sky/include/sky_model.h** (1 medium reserved macro).
-
-- **/sep/extern/cycles/third_party/sky/source/sky_float3.h** (1 medium reserved macro).
-
-- **/sep/extern/cycles/third_party/sky/source/sky_nishita.cpp** (1 medium integer div in float).
-
-- **/usr/include/glm/gtc/bitfield.inl** (3 low dead stores in shifts).
-
-- **/usr/include/boost/asio/detail/impl/signal_set_service.ipp / /usr/include/asio/detail/impl/signal_set_service.ipp** (1 low each: blocking read in critical section).
-
 ### Step-by-Step Outline to Resolve Defects
-Prioritized: Build blockers (HIGH/CRITICAL) first, then MEDIUM, LOW. Grouped by file. Fixes are itemized—copy-paste snippets. For third-party (ImGui, GLM), patch or suppress (#pragma clang diagnostic ignored "-Wname"). Test: Rebuild after each file, re-run analyzer. Ignore system headers.
 
-#### Step 1: Fix HIGH/CRITICAL Defects (Build Blockers + UB/Crashes)
-- **/sep/src/compat/core_wrapper.cpp**:
+Prioritized by severity (HIGH > MEDIUM > LOW). Grouped by file within severity. Fixes are direct, itemized actions – copy-paste code snippets where applicable. For third-party files (e.g., ImGui, GLM), prioritize patching with minimal change; add #pragma clang diagnostic push/ignored "-Wchecker-name"/pop around code if patch fails. Test after each file: rebuild, re-run analyzer. Ignore system headers.
+
+#### Step 1: Fix HIGH Defects (6 total – Potential Crashes/UB + Linker Failure)
+Start here – linker blocks build.
+
+- **/sep/src/compat/core_wrapper.cpp** (Linker undef ref):
   - undefined reference to `sep::cuda::CudaCore::initialize(int)`.
-    - Fix: Add to file: `void sep::cuda::CudaCore::initialize(int device) { /* impl: cudaInit etc. */ }`.
-
-- **/sep/src/workbench/demos/cosmo_sim.cpp**:
-  - Line 103: invalid conversion in setColorMode("temperature").
-    - Fix: `setColorMode(COLOR_TEMPERATURE);` (define enum in cycles_renderer.hpp).
-  - Line 104: invalid conversion in setEmissionMode("density").
-    - Fix: `setEmissionMode(EMISSION_DENSITY);`.
-
-- **/sep/src/workbench/demos/memory_garden.cpp**:
-  - Line 61: no member 'pi' in glm.
-    - Fix: Add `#include <glm/gtc/constants.hpp>` at top; change to `glm::pi<float>()`.
-
-- **/sep/src/workbench/demos/audio_visualizer.cpp**:
-  - Line 93: invalid conversion in setColorMode("frequency").
-    - Fix: `setColorMode(COLOR_FREQUENCY);`.
-  - Line 94: invalid conversion in setEmissionMode("amplitude").
-    - Fix: `setEmissionMode(EMISSION_AMPLITUDE);`.
-
-- **/sep/third_party/imgui/imgui.cpp** (and similar HIGH from report.md):
-  - Line 2332: Garbage in '^'.
-    - Fix: `uint32_t crc = ~0U;` before loop.
-
-#### Step 2: Fix MEDIUM Defects (Bug-Prone/Quality)
-Batch by file.
+    - Fix: Add definition: `void sep::cuda::CudaCore::initialize(int device) { /* impl, e.g., cudaSetDevice(device); */ }`
 
 - **/sep/third_party/imgui/imgui.cpp**:
-  - Lines 2486,6979: signed char misuse.
-    - Fix: Cast `(unsigned char*)`.
-  - Line 4423: undefined mem in memset.
-    - Fix: Default ctor.
+  - Line 2332: Right operand of '^' garbage in `crc & 0xFF ^ *data++`.
+    - Fix: Before loop: `uint32_t crc = ~0U;`
+
+- **/sep/third_party/imgui/imgui_draw.cpp**:
+  - Line 1720: Called C++ object pointer null in `font->RenderText(...)`.
+    - Fix: Insert before: `if (!font) return;`
 
 - **/sep/third_party/imgui/imgui_widgets.cpp**:
-  - Line 7447: inc/dec in cond.
-    - Fix: Separate inc.
+  - Line 8323: Dereference of null pointer in `while (it->val_i == 0 && it < it_end)`.
+    - Fix: Insert before loop: `if (!it) return;`
+
+- **/sep/third_party/imgui/imstb_textedit.h**:
+  - Line 989: Left operand of '==' garbage in `find.prev_first == find.first_char`.
+    - Fix: Before: `find.prev_first = 0;`
+
+- **/usr/include/spa-0.2/spa/pod/parser.h**:
+  - Line 496: Dereference null in `pod->type == SPA_TYPE_Choice`.
+    - Fix: Insert before: `if (!pod) return SPA_POD_PARSER_ERROR_NULL_POD;`
+
+- **/usr/lib/clang/20/include/cetintrin.h**:
+  - Lines 49,62: Uninitialized arg in builtins.
+    - Fix: Ignore; add `#pragma clang diagnostic ignored "-Wuninitialized"` before include.
+
+#### Step 2: Fix MEDIUM Defects (174 total – Bug-Prone/Code Quality)
+Batch by file; focus on dead stores, undefined mem, signed char, etc.
+
+- **/sep/third_party/imgui/imgui_tables.cpp**:
+  - Line 3592: Dead store to 'want_separator'.
+    - Fix: Remove `want_separator = true;`
+  - Line 3894: Dead store to 'line'.
+    - Fix: Remove `line = ImStrSkipBlank(line + r);`
+
+- **/sep/third_party/imgui/imgui_draw.cpp**:
+  - Lines 5438,5552,5729: Signed char misuse in `(unsigned int)*s`.
+    - Fix: Cast `(unsigned char*)s`
+
+- **/sep/third_party/imgui/imgui.cpp**:
+  - Line 2486: Signed char misuse in `lengths[*reinterpret_cast<const unsigned char*>(in_text) >> 3]`.
+    - Fix: Cast to `unsigned char*`.
+  - Line 6979: Signed char misuse in `border_n = (window->ResizeBorderHeld != -1) ? ...`.
+    - Fix: Cast to `unsigned char`.
+  - Line 4423: Undefined mem in memset on ImGuiWindow.
+    - Fix: Use default ctor: `ImGuiWindow() = default;`
+
+- **/sep/third_party/imgui/imgui_widgets.cpp**:
+  - Lines 2647,3239,3974: Signed char misuse.
+    - Fix: Cast to `unsigned char`.
+  - Line 7447: Dec in condition.
+    - Fix: Separate: `ImToUpper(*s1); s1++;`
 
 - **/sep/third_party/imgui/imgui.h**:
-  - Confusable (ImGuiKey_I vs 1, O vs 0).
+  - Confusable identifiers (ImGuiKey_I vs 1, O vs 0).
     - Fix: Ignore.
-  - Undefined mem in memcpy.
-    - Fix: std::copy.
+  - Undefined mem in memcpy on non-trivial.
+    - Fix: Use std::copy: `std::copy(Data, Data + Size, new_data);`
 
 - **/sep/third_party/imgui/imgui_demo.cpp**:
-  - Multiple sprintf ignored.
-    - Fix: (void) prefix.
-  - Lines 6395,10818: int div in float.
-    - Fix: Cast (float).
+  - Multiple `sprintf` returns ignored (e.g., lines 6895,7101).
+    - Fix: Prefix with `(void)`.
+  - Lines 6395,10818: Integer div in float.
+    - Fix: `(float)TEXT_BASE_WIDTH / 2.f`
 
-- **System/SPA headers** (reserved identifiers).
+- **/usr/include/spa-0.2/spa/utils/json-core.h** (30 defects: reserved identifiers, double promotion, etc.).
+    - Fix: Suppress with `#pragma clang diagnostic ignored "-Wreserved-identifier"` before include.
+  - Line 449: Double promotion in `spa_dtoa(str, size, val)`.
+    - Fix: Cast `val` to double.
+
+- **/usr/include/spa-0.2/spa/utils/string.h** (3 cert-err33-c in spa_assert_se).
+    - Fix: (void)spa_assert_se(...);
+
+- **/usr/include/spa-0.2/spa/utils/type.h** (5 reserved identifiers: _SPA_TYPE_LAST etc.).
     - Fix: Suppress -Wreserved-identifier.
 
-- **/sep/src/config.cpp** (double promotion).
-    - Fix: Use doubles: `1.0 / std::exp(-5.0 * ...)`.
+- **/sep/src/crow/socket_adaptors.h** (8 unused returns/cert-err33-c in shutdown/close).
+    - Fix: (void)socket_.close(...);
 
-#### Step 3: Fix LOW Defects (Cleanup)
-- **/usr/include/glm/gtc/bitfield.inl** (dead stores).
+- **/sep/src/workbench/core/landing_page.cpp** (3 double-promotion in ImGui::Text).
+    - Fix: Use float literals: `ImGui::Text("Latency: %.1f ms", 0.0f);`
+
+- **/sep/src/workbench/core/demo_orchestrator.cpp** (5 double-promotion in ImGui::Text).
+    - Fix: Use float literals.
+
+- **/sep/src/workbench/demos/annealing_demo.cpp / annealing_sim.cpp** (1 double-promotion each in pow).
+    - Fix: `std::pow(static_cast<double>(dist), 6.0)`
+
+- **/sep/src/workbench/demos/audio_visualizer.cpp** (3 double-promotion in ImGui::Text).
+    - Fix: Float literals.
+
+- **/sep/src/audio/config.cpp** (4 double-promotion in exp_safe).
+    - Fix: Use doubles: `1.0 / std::exp(-5.0 * (base_coherence - 0.5))`
+
+- **/sep/src/audio/pipewire_capture.cpp** (1 cert-err33-c in snprintf).
+    - Fix: (void)snprintf(...);
+
+- **/sep/src/workbench/core/workbench_core.cpp** (1 double-promotion in ImGui::Text).
+    - Fix: Float literal.
+
+- **/sep/extern/cycles/src/util/hash.h** (1 signed char misuse).
+    - Fix: Cast `(unsigned char*)str++`
+
+- **/sep/extern/cycles/third_party/cuew/src/cuew.c** (2 reserved macros: _LIBRARY_FIND_CHECKED, _LIBRARY_FIND).
+    - Fix: Ignore/suppress.
+
+- **/sep/extern/cycles/third_party/sky/include/sky_model.h** (1 reserved macro: __SKY_MODEL_H__).
+    - Fix: Ignore.
+
+- **/sep/extern/cycles/third_party/sky/source/sky_float3.h** (1 reserved macro: __SKY_FLOAT3_H__).
+    - Fix: Ignore.
+
+- **/sep/extern/cycles/third_party/sky/source/sky_nishita.cpp** (1 integer div in float step_lambda).
+    - Fix: `(float)(max_wavelength - min_wavelength) / (num_wavelengths - 1)`
+
+- **Other MEDIUM (e.g., bugprone-undefined-memory-manipulation in imgui.h)**:
+  - For memcpy on non-trivial: Replace with std::copy or ctors.
+
+#### Step 3: Fix LOW Defects (60 total – Minor Cleanup)
+Last step; quick wins.
+
+- **/usr/include/glm/gtc/bitfield.inl**:
+  - Dead stores (lines 343,397,451: x >>= 1).
+    - Fix: Remove if unused.
+
+- **ImGui files**:
+  - Dead stores: Remove assignments.
+  - Missing default in switch: Add `default: break;`
+
+- **/sep/src/workbench/core/demo_orchestrator.cpp**:
+  - Missing default in switch (line 263).
+    - Fix: Add `default: break;`
+
+- **/sep/third_party/imgui/imgui_demo.cpp** (dead store line 9952: x += sz + spacing).
     - Fix: Remove.
 
-- **ImGui files** (dead stores, missing default).
-    - Fix: Remove/add as needed.
+- **/sep/third_party/imgui/imgui_draw.cpp** (dead init line 1983: temp = _Nodes).
+    - Fix: Remove `temp =`.
 
-- **/sep/src/workbench/demos/genesis_pattern.cpp** (missing default in switch).
-    - Fix: Add `default: break;`.
+- **/sep/third_party/imgui/imstb_truetype.h** (dead store line 3158: xb = t).
+    - Fix: Remove.
 
-After all: Re-run analyzer. Sources: For undef ref <grok:render card_id="cca94c" card_type="citation_card" type="render_inline_citation"><argument name="citation_id">11</argument></grok:render>, <grok:render card_id="2b60b8" card_type="citation_card" type="render_inline_citation"><argument name="citation_id">12</argument></grok:render> support definition needed; no refutes. For glm pi, GLM manual confirms gtc/constants <grok:render card_id="d5252d" card_type="citation_card" type="render_inline_citation"><argument name="citation_id">10</argument></grok:render>. For conversions <grok:render card_id="19cdee" card_type="citation_card" type="render_inline_citation"><argument name="citation_id">0</argument></grok:render> supports no direct conversion; no contradictions.
+- **/usr/include/asio/detail/impl/signal_set_service.ipp / boost/asio/detail/impl/signal_set_service.ipp** (blocking read in critical section lines 145,146).
+    - Fix: Move outside lock if possible.
+
+After all: Re-run analyzer to verify zero defects. If warnings persist in third-party, add file-level suppressions like `#pragma clang diagnostic ignored "-Wsigned-char-misuse"` at top of imgui_draw.cpp. Rebuild/test full project.

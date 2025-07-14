@@ -33,9 +33,6 @@
 #include "quantum/quantum_processor.h"
 #include "tests/simple_embedding_model.h"
 
-// Forward declaration of the wrapper function for CUDA initialization
-extern "C" sep::cuda::Error cuda_core_initialize(int device_id);
-
 using json = nlohmann::json;
 
 namespace sep::api
@@ -113,7 +110,7 @@ namespace sep::api
 
         if (impl_->config.use_gpu)
         {
-            auto err = cuda_core_initialize(0);
+            auto err = sep::cuda::cuda_core_initialize(0);
             if (err.status != sep::cuda::Status::Success)
             {
                 json result;

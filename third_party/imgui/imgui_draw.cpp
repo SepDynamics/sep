@@ -1763,6 +1763,8 @@ void ImDrawList::AddText(ImFont* font, float font_size, const ImVec2& pos, ImU32
 
 void ImDrawList::AddText(const ImVec2& pos, ImU32 col, const char* text_begin, const char* text_end)
 {
+    if (_Data->Font == NULL)
+        return;
     AddText(_Data->Font, _Data->FontSize, pos, col, text_begin, text_end);
 }
 

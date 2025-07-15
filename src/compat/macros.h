@@ -115,8 +115,8 @@
 #define SEP_CUDA_CHECK(call)                                                                                 \
     do {                                                                                                     \
         cudaError_t err = call;                                                                              \
-        if (err != cudaSuccess) {                                                                            \
-            (void)fprintf(stderr, "CUDA error at %s:%d: %s\n", __FILE__, __LINE__, cudaGetErrorString(err)); \
+        if (err != SEP_cudaSuccess) {                                                                            \
+            (void)fprintf(stderr, "CUDA error at %s:%d: %s\n", __FILE__, __LINE__, SEP_cudaGetErrorString(err)); \
             exit(EXIT_FAILURE);                                                                              \
         }                                                                                                    \
     } while (0)
@@ -126,8 +126,8 @@
 #define SEP_CUDA_CHECK_NOTHROW(call)                                                                         \
     do {                                                                                                     \
         cudaError_t err = call;                                                                              \
-        if (err != cudaSuccess) {                                                                            \
-            (void)fprintf(stderr, "CUDA error at %s:%d: %s\n", __FILE__, __LINE__, cudaGetErrorString(err)); \
+        if (err != SEP_cudaSuccess) {                                                                            \
+            (void)fprintf(stderr, "CUDA error at %s:%d: %s\n", __FILE__, __LINE__, SEP_cudaGetErrorString(err)); \
         }                                                                                                    \
     } while (0)
 #endif

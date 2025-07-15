@@ -8321,7 +8321,7 @@ static int IMGUI_CDECL PairComparerByValueInt(const void* lhs, const void* rhs)
 bool ImGuiSelectionBasicStorage::GetNextSelectedItem(void** opaque_it, ImGuiID* out_id)
 {
     ImGuiStoragePair* it = (ImGuiStoragePair*)*opaque_it;
-    if (it == NULL)
+    if (!it)
         return false; // avoid dereferencing a null iterator
     ImGuiStoragePair* it_end = _Storage.Data.Data + _Storage.Data.Size;
     if (PreserveOrder && it == NULL && it_end != NULL)

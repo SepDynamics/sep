@@ -47,10 +47,31 @@ target_link_libraries(sep_quantum
         sep_compat
 )
 
+# Enable CUDA
+find_package(CUDA REQUIRED)
+
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_quantum PRIVATE
     SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
-    SEP_BUILD_QUANTUM=1)
+    SEP_BUILD_QUANTUM=1
+    SEP_ENABLE_CUDA=1
+    SEP_ENGINE_HAS_CUDA=1)
+
+# Add CUDA files
+target_sources(sep_quantum PRIVATE
+    qbsa_cuda.cu)
+
+# Set CUDA flags
+set_source_files_properties(qbsa_cuda.cu PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_PTX_COMPILATION OFF)
+
+# Set CUDA architecture
+set_property(TARGET sep_quantum PROPERTY CUDA_ARCHITECTURES 70 75 80)
+
+# Link CUDA runtime
+target_link_libraries(sep_quantum PRIVATE
+    CUDA::cudart)
 
 # Set library properties
 set_target_properties(sep_quantum PROPERTIES

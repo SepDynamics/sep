@@ -1,16 +1,22 @@
 #ifndef SEP_QUANTUM_QBSA_H
 #define SEP_QUANTUM_QBSA_H
 
-#include <vector>
 #include <cstdint>
+#include <vector>
+
+#include "quantum/gpu_context.h"
+#include "quantum/qbsa.cuh"
 
 namespace sep::quantum {
 
-struct QBSAResult {
-    std::vector<uint32_t> corrections;
-    float correction_ratio{0.0f};
-    bool collapse_detected{false};
-};
+    // CUDA kernel functions are declared in qbsa.cuh
+
+    struct QBSAResult
+    {
+        std::vector<uint32_t> corrections;
+        float correction_ratio{0.0f};
+        bool collapse_detected{false};
+    };
 
 struct QBSAOptions {
     float collapse_threshold{0.6f};

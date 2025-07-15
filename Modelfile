@@ -1,0 +1,10 @@
+FROM llama2
+
+# Set system message
+SYSTEM "You are a code embedding model that helps with semantic code search."
+
+# Set parameters
+PARAMETER temperature 0.1
+
+# Install dependencies and configure model
+ENTRYPOINT pip install transformers sentence-transformers torch && python -c "from transformers import AutoTokenizer, AutoModel; tokenizer = AutoTokenizer.from_pretrained('nomic-ai/nomic-embed-code'); model = AutoModel.from_pretrained('nomic-ai/nomic-embed-code')"

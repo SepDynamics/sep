@@ -5,10 +5,18 @@
 #include <cuda_runtime_api.h>
 #include <cuda_runtime.h>
 
-// Map SEP-prefixed names to CUDA enums/constants when CUDA is available
+// Map SEP-prefixed names to CUDA enums/constants/functions when CUDA is available
 #define SEP_cudaSuccess cudaSuccess
 #define SEP_cudaErrorInvalidValue cudaErrorInvalidValue
 #define SEP_cudaErrorMemoryAllocation cudaErrorMemoryAllocation
+#define SEP_cudaStreamDestroy cudaStreamDestroy
+#define SEP_cudaGetErrorString cudaGetErrorString
+#define SEP_cudaEventCreate cudaEventCreate
+#define SEP_cudaEventDestroy cudaEventDestroy
+#define SEP_cudaEventRecord cudaEventRecord
+#define SEP_cudaEventSynchronize cudaEventSynchronize
+#define SEP_cudaEventElapsedTime cudaEventElapsedTime
+#define SEP_cudaMemGetInfo cudaMemGetInfo
 #define SEP_cudaErrorInitializationError cudaErrorInitializationError
 #define SEP_cudaErrorInvalidDevicePointer cudaErrorInvalidDevicePointer
 #define SEP_cudaErrorInvalidMemcpyDirection cudaErrorInvalidMemcpyDirection
@@ -76,15 +84,111 @@ using sep::cuda::cudaTextureObject_t;
 using sep::cuda::cudaSurfaceObject_t;
 
 // Memory copy kinds
+#ifndef SEP_COMPAT_CUDA_RUNTIME_H
+#define SEP_COMPAT_CUDA_RUNTIME_H
+
+#include <cstddef>
+
+#if SEP_ENGINE_HAS_CUDA
+#include <cuda_runtime.h>
+#include <cuda_runtime_api.h>
+#endif
+
 namespace sep {
 namespace cuda {
-enum cudaMemcpyKind {
-    cudaMemcpyHostToHost = 0,
-    cudaMemcpyHostToDevice = 1,
-    cudaMemcpyDeviceToHost = 2,
-    cudaMemcpyDeviceToDevice = 3,
-    cudaMemcpyDefault = 4
-};
+
+#if SEP_ENGINE_HAS_CUDA
+    // Use actual CUDA types when available
+    using cudaError_t = ::cudaError_t;
+    using cudaStream_t = ::cudaStream_t;
+    using cudaEvent_t = ::cudaEvent_t;
+    using cudaMemcpyKind = ::cudaMemcpyKind;
+
+    // Map CUDA functions
+    inline cudaError_t SEP_cudaStreamDestroy(cudaStream_t stream)
+    {
+        return ::cudaStreamDestroy(stream);
+    }
+    inline const char* SEP_cudaGetErrorString(cudaError_t error)
+    {
+        return ::cudaGetErrorString(error);
+    }
+    inline cudaError_t SEP_cudaEventCreate(cudaEvent_t* event) { return ::cudaEventCreate(event); }
+    inline cudaError_t SEP_cudaEventDestroy(cudaEvent_t event) { return ::cudaEventDestroy(event); }
+    inline cudaError_t SEP_cudaEventRecord(cudaEvent_t event, cudaStream_t stream)
+    {
+        return ::cudaEventRecord(event, stream);
+    }
+    inline cudaError_t SEP_cudaEventSynchronize(cudaEvent_t event)
+    {
+        return ::cudaEventSynchronize(event);
+    }
+    inline cudaError_t SEP_cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end)
+    {
+        return ::cudaEventElapsedTime(ms, start, end);
+    }
+    inline cudaError_t SEP_cudaMemGetInfo(size_t* free, size_t* total)
+    {
+        return ::cudaMemGetInfo(free, total);
+    }
+    inline cudaError_t SEP_cudaMemcpy(void* dst, const void* src, size_t size, cudaMemcpyKind kind)
+    {
+        return ::cudaMemcpy(dst, src, size, kind);
+    }
+    inline cudaError_t SEP_cudaMemcpyAsync(void* dst, const void* src, size_t size,
+                                           cudaMemcpyKind kind, cudaStream_t stream)
+    {
+        return ::cudaMemcpyAsync(dst, src, size, kind, stream);
+    }
+
+#else
+    // Stub types when CUDA is not available
+    using cudaError_t = int;
+    using cudaStream_t = void*;
+    using cudaEvent_t = void*;
+
+    enum cudaMemcpyKind
+    {
+        cudaMemcpyHostToHost = 0,
+        cudaMemcpyHostToDevice = 1,
+        cudaMemcpyDeviceToHost = 2,
+        cudaMemcpyDeviceToDevice = 3,
+        cudaMemcpyDefault = 4
+    };
+
+    static constexpr cudaError_t cudaSuccess = 0;
+
+    // Function stubs
+    inline cudaError_t SEP_cudaStreamDestroy(cudaStream_t) { return cudaSuccess; }
+    inline const char* SEP_cudaGetErrorString(cudaError_t) { return "CUDA not available"; }
+    inline cudaError_t SEP_cudaEventCreate(cudaEvent_t*) { return cudaSuccess; }
+    inline cudaError_t SEP_cudaEventDestroy(cudaEvent_t) { return cudaSuccess; }
+    inline cudaError_t SEP_cudaEventRecord(cudaEvent_t, cudaStream_t) { return cudaSuccess; }
+    inline cudaError_t SEP_cudaEventSynchronize(cudaEvent_t) { return cudaSuccess; }
+    inline cudaError_t SEP_cudaEventElapsedTime(float*, cudaEvent_t, cudaEvent_t)
+    {
+        return cudaSuccess;
+    }
+    inline cudaError_t SEP_cudaMemGetInfo(size_t* free, size_t* total)
+    {
+        *free = 0;
+        *total = 0;
+        return cudaSuccess;
+    }
+    inline cudaError_t SEP_cudaMemcpy(void*, const void*, size_t, cudaMemcpyKind)
+    {
+        return cudaSuccess;
+    }
+    inline cudaError_t SEP_cudaMemcpyAsync(void*, const void*, size_t, cudaMemcpyKind, cudaStream_t)
+    {
+        return cudaSuccess;
+    }
+#endif
+
+}  // namespace cuda
+}  // namespace sep
+
+#endif  // SEP_COMPAT_CUDA_RUNTIME_H
 
 // Device properties structure in global scope
 struct cudaDeviceProp {
@@ -108,11 +212,6 @@ struct cudaDeviceProp {
     int unifiedAddressing;
     int concurrentKernels;
 };
-} // namespace cuda
-} // namespace sep
-
-// Make enum available in global scope
-using sep::cuda::cudaMemcpyKind;
 
 namespace sep {
 namespace cuda {
@@ -225,9 +324,6 @@ cudaError_t SEP_cudaFreeHost(void* ptr);
 cudaError_t SEP_cudaMallocManaged(void** ptr, size_t size,
                                   unsigned int flags = SEP_cudaMemAttachGlobal);
 cudaError_t SEP_cudaHostAlloc(void** ptr, size_t size, unsigned int flags);
-cudaError_t SEP_cudaMemcpy(void* dst, const void* src, size_t size, cudaMemcpyKind kind);
-cudaError_t SEP_cudaMemcpyAsync(void* dst, const void* src, size_t size, cudaMemcpyKind kind,
-                                cudaStream_t stream);
 cudaError_t SEP_cudaMemGetInfo(size_t* free, size_t* total);
 cudaError_t SEP_cudaStreamAttachMemAsync(cudaStream_t stream, void* ptr, size_t size,
                                          unsigned int flags);
@@ -260,8 +356,6 @@ using sep::cuda::SEP_cudaHostAlloc;
 using sep::cuda::SEP_cudaMalloc;
 using sep::cuda::SEP_cudaMallocHost;
 using sep::cuda::SEP_cudaMallocManaged;
-using sep::cuda::SEP_cudaMemcpy;
-using sep::cuda::SEP_cudaMemcpyAsync;
 using sep::cuda::SEP_cudaMemGetInfo;
 using sep::cuda::SEP_cudaMemset;
 using sep::cuda::SEP_cudaMemsetAsync;

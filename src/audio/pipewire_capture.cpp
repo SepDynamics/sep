@@ -220,7 +220,7 @@ AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
         // Try to set it based on UID
         uid_t uid = getuid();
         char runtime_path[256];
-        snprintf(runtime_path, sizeof(runtime_path), "/run/user/%d", uid);
+        (void)snprintf(runtime_path, sizeof(runtime_path), "/run/user/%d", uid);
         
         // Check if directory exists
         struct stat st;
@@ -309,7 +309,9 @@ AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
 
         // Check if service is running
         std::string check_cmd = "systemctl --user is-active " + std::string(service);
+        pw_thread_loop_unlock(loop_);
         FILE* fp = popen(check_cmd.c_str(), "r");
+        pw_thread_loop_lock(loop_);
         if (!fp) {
             spdlog::error("Failed to check service status: {}", service);
             continue; // Try next service
@@ -332,7 +334,9 @@ AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
                 spdlog::error("Failed to start {} (error code: {})", service, start_result);
                 // Check common issues
                 std::string status_cmd = "systemctl --user status " + std::string(service);
+                pw_thread_loop_unlock(loop_);
                 FILE* status_fp = popen(status_cmd.c_str(), "r");
+                pw_thread_loop_lock(loop_);
                 if (status_fp) {
                     char status_buf[1024];
                     while (fgets(status_buf, sizeof(status_buf), status_fp)) {
@@ -352,7 +356,9 @@ AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
             while (retries > 0) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 
+                pw_thread_loop_unlock(loop_);
                 FILE* check_fp = popen(check_cmd.c_str(), "r");
+                pw_thread_loop_lock(loop_);
                 if (check_fp) {
                     if (fgets(service_status, sizeof(service_status), check_fp) != nullptr) {
                         if (strncmp(service_status, "active", 6) == 0) {

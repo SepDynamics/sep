@@ -5,8 +5,8 @@
 #include <cuda_runtime_api.h>
 #include <cuda_runtime.h>
 
-constexpr unsigned int cudaStreamNonBlocking = ::cudaStreamNonBlocking;  // 0x01
-constexpr unsigned int cudaStreamDefault = ::cudaStreamDefault;  // 0x00
+constexpr unsigned int SEP_cudaStreamNonBlocking = 0x01;
+constexpr unsigned int SEP_cudaStreamDefault = 0x00;
 
 namespace sep {
 namespace cuda {

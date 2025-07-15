@@ -5,6 +5,7 @@
 
 #include "core/config.h"
 #include <cuda_runtime.h>
+#include <cufft.h>
 #include "compat/cufft.h"
 #include "compat/cuda_api.hpp"
 #include "memory/types.h"
@@ -15,8 +16,7 @@
 // Forward declarations
 namespace sep::cuda {
 class CudaCore;
-struct cufftHandle_t;
-using cufftHandle = cufftHandle_t*;
+using cufftHandle = ::cufftHandle;
 }
 #include <algorithm>
 #include <array>

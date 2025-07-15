@@ -5,6 +5,9 @@
 #include <cuda_runtime_api.h>
 #include <cuda_runtime.h>
 
+constexpr unsigned int cudaStreamNonBlocking = ::cudaStreamNonBlocking;  // 0x01
+constexpr unsigned int cudaStreamDefault = ::cudaStreamDefault;  // 0x00
+
 namespace sep {
 namespace cuda {
 // Alias CUDA types into our namespace
@@ -13,8 +16,6 @@ using ::cudaStream_t;
 using ::cudaEvent_t;
 using ::cudaMemcpyKind;
 using ::cudaSuccess;
-using ::cudaStreamNonBlocking;
-using ::cudaStreamDefault;
 } // namespace cuda
 } // namespace sep
 
@@ -24,8 +25,6 @@ using sep::cuda::cudaStream_t;
 using sep::cuda::cudaEvent_t;
 using sep::cuda::cudaMemcpyKind;
 using sep::cuda::cudaSuccess;
-using sep::cuda::cudaStreamNonBlocking;
-using sep::cuda::cudaStreamDefault;
 
 #else // !SEP_ENGINE_HAS_CUDA
 // Basic includes for non-CUDA builds
@@ -163,8 +162,6 @@ using sep::cuda::cudaErrorDeviceNotLicensed;
 using sep::cuda::cudaErrorDeviceUninitilialized;
 using sep::cuda::cudaErrorNoDevice;
 
-using sep::cuda::cudaStreamDefault;
-using sep::cuda::cudaStreamNonBlocking;
 using sep::cuda::cudaMemAttachGlobal;
 using sep::cuda::cudaMemAttachHost;
 using sep::cuda::cudaMemAttachSingle;

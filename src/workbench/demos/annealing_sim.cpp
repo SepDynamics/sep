@@ -40,7 +40,7 @@ void AnnealingSimDemo::on_update(float dt) {
             glm::vec3 diff = particles_[j].position - particles_[i].position;
             float dist = glm::length(diff) + eps;
             glm::vec3 dir = diff / dist;
-            float invDist6 = 1.0f / std::pow(dist, 6);
+            float invDist6 = 1.0f / std::pow(static_cast<double>(dist), 6.0);
             float fmag = 24.0f * invDist6 * (2.0f * invDist6 - 1.0f) / dist;
             glm::vec3 force = dir * fmag * temperature;
             particles_[i].velocity += force * dt;

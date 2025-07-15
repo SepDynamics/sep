@@ -2697,6 +2697,7 @@ struct IMGUI_API ImGuiWindow
     bool                    MemoryCompacted;                    // Set when window extraneous data have been garbage collected
 
 public:
+    ImGuiWindow() = default;
     ImGuiWindow(ImGuiContext* context, const char* name);
     ~ImGuiWindow();
 

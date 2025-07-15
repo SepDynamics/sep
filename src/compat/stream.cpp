@@ -15,15 +15,15 @@ struct Stream::Impl {
 
   void setHandle(cudaStream_t handle) { stream_handle_ = handle; }
   void synchronize() {
-    if (stream_handle_) cudaStreamSynchronize(stream_handle_);
+      if (stream_handle_) SEP_cudaStreamSynchronize(stream_handle_);
   }
   void wait(void* event) {
     if (stream_handle_ && event)
-      cudaStreamWaitEvent(stream_handle_, static_cast<cudaEvent_t>(event), 0);
+        SEP_cudaStreamWaitEvent(stream_handle_, static_cast<cudaEvent_t>(event), 0);
   }
   void record(void* event) {
     if (stream_handle_ && event)
-      cudaEventRecord(static_cast<cudaEvent_t>(event), stream_handle_);
+        SEP_cudaEventRecord(static_cast<cudaEvent_t>(event), stream_handle_);
   }
   void* handle() const { return stream_handle_; }
   bool isValid() const { return stream_handle_ != nullptr; }
@@ -54,7 +54,7 @@ std::shared_ptr<Stream> Stream::create(sep::StreamFlags flags) {
   unsigned int cuda_flags =
       (flags == sep::StreamFlags::NonBlocking) ? SEP_cudaStreamNonBlocking : SEP_cudaStreamDefault;
 
-  cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
+  cudaError_t err = SEP_cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
   if (err != cudaSuccess) {
     ::sep::cuda::logCudaError("cudaStreamCreateWithFlags", err);
     return nullptr;

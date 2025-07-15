@@ -177,82 +177,84 @@ namespace sep {
 namespace cuda {
 
 // Function declarations in sep::cuda namespace
-cudaError_t cudaSetDevice(int device);
-cudaError_t cudaGetDevice(int* device);
-cudaError_t cudaGetDeviceCount(int* count);
-cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device);
-cudaError_t cudaDeviceSynchronize(void);
-cudaError_t cudaDeviceReset(void);
-cudaError_t cudaSetDeviceFlags(unsigned int flags);
-cudaError_t cudaGetDeviceFlags(unsigned int* flags);
-cudaError_t cudaDeviceSetCacheConfig(int cacheConfig);
-cudaError_t cudaDeviceGetCacheConfig(int* cacheConfig);
-cudaError_t cudaGetLastError(void);
-const char* cudaGetErrorString(cudaError_t error);
-cudaError_t cudaStreamCreate(cudaStream_t* stream);
-cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags);
-cudaError_t cudaStreamDestroy(cudaStream_t stream);
-cudaError_t cudaStreamSynchronize(cudaStream_t stream);
-cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags);
-cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream);
-cudaError_t cudaEventCreateWithFlags(cudaEvent_t* event, unsigned int flags);
-cudaError_t cudaEventCreate(cudaEvent_t* event);
-cudaError_t cudaEventDestroy(cudaEvent_t event);
-cudaError_t cudaEventSynchronize(cudaEvent_t event);
-cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end);
-cudaError_t cudaMalloc(void** ptr, size_t size);
-cudaError_t cudaFree(void* ptr);
-cudaError_t cudaMallocHost(void** ptr, size_t size);
-cudaError_t cudaFreeHost(void* ptr);
-cudaError_t cudaMallocManaged(void** ptr, size_t size,
-                              unsigned int flags = SEP_cudaMemAttachGlobal);
-cudaError_t cudaHostAlloc(void** ptr, size_t size, unsigned int flags);
-cudaError_t cudaMemcpy(void* dst, const void* src, size_t size, cudaMemcpyKind kind);
-cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, cudaMemcpyKind kind, cudaStream_t stream);
-cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
-cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* ptr, size_t size, unsigned int flags);
-cudaError_t cudaMemset(void* devPtr, int value, size_t count);
-cudaError_t cudaMemsetAsync(void* devPtr, int value, size_t count, cudaStream_t stream);
+cudaError_t SEP_cudaSetDevice(int device);
+cudaError_t SEP_cudaGetDevice(int* device);
+cudaError_t SEP_cudaGetDeviceCount(int* count);
+cudaError_t SEP_cudaGetDeviceProperties(cudaDeviceProp* prop, int device);
+cudaError_t SEP_cudaDeviceSynchronize(void);
+cudaError_t SEP_cudaDeviceReset(void);
+cudaError_t SEP_cudaSetDeviceFlags(unsigned int flags);
+cudaError_t SEP_cudaGetDeviceFlags(unsigned int* flags);
+cudaError_t SEP_cudaDeviceSetCacheConfig(int cacheConfig);
+cudaError_t SEP_cudaDeviceGetCacheConfig(int* cacheConfig);
+cudaError_t SEP_cudaGetLastError(void);
+const char* SEP_cudaGetErrorString(cudaError_t error);
+cudaError_t SEP_cudaStreamCreate(cudaStream_t* stream);
+cudaError_t SEP_cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags);
+cudaError_t SEP_cudaStreamDestroy(cudaStream_t stream);
+cudaError_t SEP_cudaStreamSynchronize(cudaStream_t stream);
+cudaError_t SEP_cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags);
+cudaError_t SEP_cudaEventRecord(cudaEvent_t event, cudaStream_t stream);
+cudaError_t SEP_cudaEventCreateWithFlags(cudaEvent_t* event, unsigned int flags);
+cudaError_t SEP_cudaEventCreate(cudaEvent_t* event);
+cudaError_t SEP_cudaEventDestroy(cudaEvent_t event);
+cudaError_t SEP_cudaEventSynchronize(cudaEvent_t event);
+cudaError_t SEP_cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end);
+cudaError_t SEP_cudaMalloc(void** ptr, size_t size);
+cudaError_t SEP_cudaFree(void* ptr);
+cudaError_t SEP_cudaMallocHost(void** ptr, size_t size);
+cudaError_t SEP_cudaFreeHost(void* ptr);
+cudaError_t SEP_cudaMallocManaged(void** ptr, size_t size,
+                                  unsigned int flags = SEP_cudaMemAttachGlobal);
+cudaError_t SEP_cudaHostAlloc(void** ptr, size_t size, unsigned int flags);
+cudaError_t SEP_cudaMemcpy(void* dst, const void* src, size_t size, cudaMemcpyKind kind);
+cudaError_t SEP_cudaMemcpyAsync(void* dst, const void* src, size_t size, cudaMemcpyKind kind,
+                                cudaStream_t stream);
+cudaError_t SEP_cudaMemGetInfo(size_t* free, size_t* total);
+cudaError_t SEP_cudaStreamAttachMemAsync(cudaStream_t stream, void* ptr, size_t size,
+                                         unsigned int flags);
+cudaError_t SEP_cudaMemset(void* devPtr, int value, size_t count);
+cudaError_t SEP_cudaMemsetAsync(void* devPtr, int value, size_t count, cudaStream_t stream);
 
 } // namespace cuda
 } // namespace sep
 
 // Make functions available in global scope
-using sep::cuda::cudaSetDevice;
-using sep::cuda::cudaGetDevice;
-using sep::cuda::cudaGetDeviceCount;
-using sep::cuda::cudaGetDeviceProperties;
-using sep::cuda::cudaDeviceSynchronize;
-using sep::cuda::cudaDeviceReset;
-using sep::cuda::cudaSetDeviceFlags;
-using sep::cuda::cudaGetDeviceFlags;
-using sep::cuda::cudaDeviceSetCacheConfig;
-using sep::cuda::cudaDeviceGetCacheConfig;
-using sep::cuda::cudaGetLastError;
-using sep::cuda::cudaGetErrorString;
-using sep::cuda::cudaStreamCreate;
-using sep::cuda::cudaStreamCreateWithFlags;
-using sep::cuda::cudaStreamDestroy;
-using sep::cuda::cudaStreamSynchronize;
-using sep::cuda::cudaStreamWaitEvent;
-using sep::cuda::cudaEventRecord;
-using sep::cuda::cudaEventCreateWithFlags;
-using sep::cuda::cudaEventCreate;
-using sep::cuda::cudaEventDestroy;
-using sep::cuda::cudaEventSynchronize;
-using sep::cuda::cudaEventElapsedTime;
-using sep::cuda::cudaMalloc;
-using sep::cuda::cudaFree;
-using sep::cuda::cudaMallocHost;
-using sep::cuda::cudaFreeHost;
-using sep::cuda::cudaMallocManaged;
-using sep::cuda::cudaHostAlloc;
-using sep::cuda::cudaMemcpy;
-using sep::cuda::cudaMemcpyAsync;
-using sep::cuda::cudaMemGetInfo;
-using sep::cuda::cudaStreamAttachMemAsync;
-using sep::cuda::cudaMemset;
-using sep::cuda::cudaMemsetAsync;
+using sep::cuda::SEP_cudaDeviceGetCacheConfig;
+using sep::cuda::SEP_cudaDeviceReset;
+using sep::cuda::SEP_cudaDeviceSetCacheConfig;
+using sep::cuda::SEP_cudaDeviceSynchronize;
+using sep::cuda::SEP_cudaEventCreate;
+using sep::cuda::SEP_cudaEventCreateWithFlags;
+using sep::cuda::SEP_cudaEventDestroy;
+using sep::cuda::SEP_cudaEventElapsedTime;
+using sep::cuda::SEP_cudaEventRecord;
+using sep::cuda::SEP_cudaEventSynchronize;
+using sep::cuda::SEP_cudaFree;
+using sep::cuda::SEP_cudaFreeHost;
+using sep::cuda::SEP_cudaGetDevice;
+using sep::cuda::SEP_cudaGetDeviceCount;
+using sep::cuda::SEP_cudaGetDeviceFlags;
+using sep::cuda::SEP_cudaGetDeviceProperties;
+using sep::cuda::SEP_cudaGetErrorString;
+using sep::cuda::SEP_cudaGetLastError;
+using sep::cuda::SEP_cudaHostAlloc;
+using sep::cuda::SEP_cudaMalloc;
+using sep::cuda::SEP_cudaMallocHost;
+using sep::cuda::SEP_cudaMallocManaged;
+using sep::cuda::SEP_cudaMemcpy;
+using sep::cuda::SEP_cudaMemcpyAsync;
+using sep::cuda::SEP_cudaMemGetInfo;
+using sep::cuda::SEP_cudaMemset;
+using sep::cuda::SEP_cudaMemsetAsync;
+using sep::cuda::SEP_cudaSetDevice;
+using sep::cuda::SEP_cudaSetDeviceFlags;
+using sep::cuda::SEP_cudaStreamAttachMemAsync;
+using sep::cuda::SEP_cudaStreamCreate;
+using sep::cuda::SEP_cudaStreamCreateWithFlags;
+using sep::cuda::SEP_cudaStreamDestroy;
+using sep::cuda::SEP_cudaStreamSynchronize;
+using sep::cuda::SEP_cudaStreamWaitEvent;
 
 #endif // __cplusplus
 #endif // !SEP_CUDA_AVAILABLE

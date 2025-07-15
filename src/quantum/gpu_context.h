@@ -13,7 +13,7 @@ struct GPUContext {
     GPUContext() = default;
     ~GPUContext() {
         if (initialized && default_stream) {
-            sep::cuda::cudaStreamDestroy(default_stream);
+            SEP_cudaStreamDestroy(default_stream);
         }
     }
 

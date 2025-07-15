@@ -6392,7 +6392,7 @@ static void DemoWindowTables()
             ImGui::TableHeadersRow();
             for (int column = 0; column < column_count; column++)
                 column_flags_out[column] = ImGui::TableGetColumnFlags(column);
-            float indent_step = (float)((int)TEXT_BASE_WIDTH / 2);
+            float indent_step = (float)TEXT_BASE_WIDTH / 2.0f;
             for (int row = 0; row < 8; row++)
             {
                 // Add some indentation to demonstrate usage of per-column IndentEnable/IndentDisable flags.
@@ -6892,7 +6892,7 @@ static void DemoWindowTables()
                 for (int column = 0; column < 3; column++)
                 {
                     char buf[32];
-                    sprintf(buf, "Cell %d,%d", column, row);
+                    (void)sprintf(buf, "Cell %d,%d", column, row);
                     ImGui::TableSetColumnIndex(column);
                     ImGui::Selectable(buf, column_selected[column]);
                 }
@@ -7098,7 +7098,7 @@ static void DemoWindowTables()
         for (int n = 0; n < 3; n++)
         {
             char buf[32];
-            sprintf(buf, "Synced Table %d", n);
+            (void)sprintf(buf, "Synced Table %d", n);
             bool open = ImGui::CollapsingHeader(buf, ImGuiTreeNodeFlags_DefaultOpen);
             if (open && ImGui::BeginTable("Table", 3, flags, ImVec2(0.0f, ImGui::GetTextLineHeightWithSpacing() * 5)))
             {
@@ -7442,7 +7442,7 @@ static void DemoWindowTables()
                     // For the demo purpose we can select among different type of items submitted in the first column
                     ImGui::TableSetColumnIndex(0);
                     char label[32];
-                    sprintf(label, "%04d", item->ID);
+                    (void)sprintf(label, "%04d", item->ID);
                     if (contents_type == CT_Text)
                         ImGui::TextUnformatted(label);
                     else if (contents_type == CT_Button)
@@ -7554,7 +7554,7 @@ static void DemoWindowColumns()
         for (int n = 0; n < 14; n++)
         {
             char label[32];
-            sprintf(label, "Item %d", n);
+            (void)sprintf(label, "Item %d", n);
             if (ImGui::Selectable(label)) {}
             //if (ImGui::Button(label, ImVec2(-FLT_MIN,0.0f))) {}
             ImGui::NextColumn();
@@ -7576,7 +7576,7 @@ static void DemoWindowColumns()
         for (int i = 0; i < 3; i++)
         {
             char label[32];
-            sprintf(label, "%04d", i);
+            (void)sprintf(label, "%04d", i);
             if (ImGui::Selectable(label, selected == i, ImGuiSelectableFlags_SpanAllColumns))
                 selected = i;
             bool hovered = ImGui::IsItemHovered();
@@ -7952,7 +7952,7 @@ static void DemoWindowInputs()
             for (int i = 0; i < ImGuiMouseCursor_COUNT; i++)
             {
                 char label[32];
-                sprintf(label, "Mouse cursor %d: %s", i, mouse_cursors_names[i]);
+                (void)sprintf(label, "Mouse cursor %d: %s", i, mouse_cursors_names[i]);
                 ImGui::Bullet(); ImGui::Selectable(label, false);
                 if (ImGui::IsItemHovered())
                     ImGui::SetMouseCursor(i);
@@ -9291,7 +9291,7 @@ static void ShowExampleAppLayout(bool* p_open)
             {
                 // FIXME: Good candidate to use ImGuiSelectableFlags_SelectOnNav
                 char label[128];
-                sprintf(label, "MyObject %d", i);
+                (void)sprintf(label, "MyObject %d", i);
                 if (ImGui::Selectable(label, selected == i))
                     selected = i;
             }
@@ -9792,7 +9792,7 @@ static void ShowExampleAppWindowTitles(bool*)
 
     // Using "###" to display a changing title but keep a static identifier "AnimatedTitle"
     char buf[128];
-    sprintf(buf, "Animated title %c %d###AnimatedTitle", "|/-\\"[(int)(ImGui::GetTime() / 0.25f) & 3], ImGui::GetFrameCount());
+    (void)sprintf(buf, "Animated title %c %d###AnimatedTitle", "|/-\\"[(int)(ImGui::GetTime() / 0.25f) & 3], ImGui::GetFrameCount());
     ImGui::SetNextWindowPos(ImVec2(base_pos.x + 100, base_pos.y + 300), ImGuiCond_FirstUseEver);
     ImGui::Begin(buf);
     ImGui::Text("This window has a changing title.");
@@ -10211,7 +10211,7 @@ struct ExampleAppDocuments
             return;
 
         char buf[256];
-        sprintf(buf, "Save %s", doc->Name);
+        (void)sprintf(buf, "Save %s", doc->Name);
         if (ImGui::MenuItem(buf, "Ctrl+S", false, doc->Open))
             doc->DoSave();
         if (ImGui::MenuItem("Rename...", "Ctrl+R", false, doc->Open))

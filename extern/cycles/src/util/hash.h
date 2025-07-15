@@ -552,7 +552,7 @@ static inline uint hash_string(const char *str)
   uint i = 0;
   uint c;
 
-  while ((c = *str++)) {
+  while ((c = static_cast<unsigned char>(*str++))) {
     i = i * 37 + c;
   }
 

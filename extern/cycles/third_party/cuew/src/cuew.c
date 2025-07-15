@@ -51,11 +51,14 @@ typedef void *DynamicLibrary;
 #  define dynamic_library_find(lib, symbol) dlsym(lib, symbol)
 #endif
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-macro-identifier"
 #define _LIBRARY_FIND_CHECKED(lib, name) \
   name = (t##name *)dynamic_library_find(lib, #name); \
   assert(name);
 
 #define _LIBRARY_FIND(lib, name) name = (t##name *)dynamic_library_find(lib, #name);
+#pragma clang diagnostic pop
 
 #define CUDA_LIBRARY_FIND_CHECKED(name) _LIBRARY_FIND_CHECKED(cuda_lib, name)
 #define CUDA_LIBRARY_FIND(name) _LIBRARY_FIND(cuda_lib, name)

@@ -23,7 +23,7 @@ SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
 #define CUDA_CHECK(call)                              \
     do {                                             \
         cudaError_t error = (call);                  \
-        if (error != SEP_cudaSuccess) {              \
+        if (error != cudaSuccess) {                  \
             ::sep::cuda::logCudaError(#call, error); \
         }                                            \
     } while (0)

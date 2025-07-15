@@ -1,17 +1,14 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
-#include "core/types.h"
-
-#include "core/config.h"
 #include <cuda_runtime.h>
-#include <cufft.h>
-#include "compat/cufft.h"
+
 #include "compat/cuda_api.hpp"
+#include "compat/cufft.h"
+#include "core/config.h"
+#include "core/types.h"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
-#include "core/types.h"
-
 
 // Forward declarations
 namespace sep::cuda {

@@ -11,7 +11,8 @@ namespace sep {
 namespace cuda {
 
 SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
-    if (error != SEP_cudaSuccess) {
+    if (error != cudaSuccess)
+    {
         (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation,
                            SEP_cudaGetErrorString(error));
     }

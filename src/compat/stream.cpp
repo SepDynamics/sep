@@ -52,9 +52,7 @@ std::shared_ptr<Stream> Stream::create(sep::StreamFlags flags) {
 
   cudaStream_t cuda_stream;
   unsigned int cuda_flags =
-      (flags == sep::StreamFlags::NonBlocking) ?
-      cudaStreamNonBlocking :
-      cudaStreamDefault;
+      (flags == sep::StreamFlags::NonBlocking) ? SEP_cudaStreamNonBlocking : SEP_cudaStreamDefault;
 
   cudaError_t err = cudaStreamCreateWithFlags(&cuda_stream, cuda_flags);
   if (err != cudaSuccess) {

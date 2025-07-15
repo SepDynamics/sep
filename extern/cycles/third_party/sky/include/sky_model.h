@@ -298,8 +298,11 @@ HINT #1:   if you want to model the sky of an earth-like planet that orbits
            previous paragraph.
 */
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-macro-identifier"
 #ifndef __SKY_MODEL_H__
 #define __SKY_MODEL_H__
+#pragma clang diagnostic pop
 
 #ifdef __cplusplus
 extern "C" {

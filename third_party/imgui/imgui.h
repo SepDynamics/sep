@@ -90,6 +90,7 @@ Index of this file:
 #include <stdarg.h>                 // va_list, va_start, va_end
 #include <stddef.h>                 // ptrdiff_t, NULL
 #include <string.h>                 // memset, memmove, memcpy, strlen, strchr, strcpy, strcmp
+#include <algorithm>
 
 // Define attributes of all API symbols declarations (e.g. for DLL under Windows)
 // IMGUI_API is used for core imgui functions, IMGUI_IMPL_API is used for the default backends files (imgui_impl_xxx.h)
@@ -2183,7 +2184,7 @@ struct ImVector
     // Constructors, destructor
     inline ImVector()                                       { Size = Capacity = 0; Data = NULL; }
     inline ImVector(const ImVector<T>& src)                 { Size = Capacity = 0; Data = NULL; operator=(src); }
-    inline ImVector<T>& operator=(const ImVector<T>& src)   { clear(); resize(src.Size); if (src.Data) memcpy(Data, src.Data, (size_t)Size * sizeof(T)); return *this; }
+    inline ImVector<T>& operator=(const ImVector<T>& src)   { clear(); resize(src.Size); if (src.Data) std::copy(src.Data, src.Data + Size, Data); return *this; }
     inline ~ImVector()                                      { if (Data) IM_FREE(Data); } // Important: does not destruct anything
 
     inline void         clear()                             { if (Data) { Size = Capacity = 0; IM_FREE(Data); Data = NULL; } }  // Important: does not destruct anything

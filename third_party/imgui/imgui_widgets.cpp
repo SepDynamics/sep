@@ -3971,7 +3971,7 @@ static ImVec2 InputTextCalcTextSize(ImGuiContext* ctx, const char* text_begin, c
     const char* s = text_begin;
     while (s < text_end)
     {
-        unsigned int c = (unsigned int)(*(const unsigned char*)s);
+        unsigned int c = static_cast<unsigned int>(static_cast<unsigned char>(*s));
         if (c < 0x80)
             s += 1;
         else

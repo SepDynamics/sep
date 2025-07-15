@@ -1142,6 +1142,7 @@ IMPLEMENTING SUPPORT for ImGuiBackendFlags_RendererHasTextures:
 #include <stdio.h>      // vsnprintf, sscanf, printf
 #include <stdint.h>     // intptr_t
 #include <cmath>
+#include <algorithm>
 
 // [Windows] On non-Visual Studio compilers, we default to IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS unless explicitly enabled
 #if defined(_WIN32) && !defined(_MSC_VER) && !defined(IMGUI_ENABLE_WIN32_DEFAULT_IME_FUNCTIONS) && !defined(IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS)
@@ -4420,7 +4421,6 @@ void ImGui::CallContextHooks(ImGuiContext* ctx, ImGuiContextHookType hook_type)
 // ImGuiWindow is mostly a dumb struct. It merely has a constructor and a few helper methods
 ImGuiWindow::ImGuiWindow(ImGuiContext* ctx, const char* name) : DrawListInst(NULL)
 {
-    memset(this, 0, sizeof(*this));
     Ctx = ctx;
     Name = ImStrdup(name);
     NameBufLen = (int)ImStrlen(name) + 1;
@@ -5571,10 +5571,14 @@ void ImGui::NewFrame()
     UpdateDebugToolItemPicker();
     UpdateDebugToolStackQueries();
     UpdateDebugToolFlashStyleColor();
-    if (g.DebugLocateFrames > 0 && --g.DebugLocateFrames == 0)
+    if (g.DebugLocateFrames > 0)
     {
-        g.DebugLocateId = 0;
-        g.DebugBreakInLocateId = false;
+        --g.DebugLocateFrames;
+        if (g.DebugLocateFrames == 0)
+        {
+            g.DebugLocateId = 0;
+            g.DebugBreakInLocateId = false;
+        }
     }
     if (g.DebugLogAutoDisableFrames > 0 && --g.DebugLogAutoDisableFrames == 0)
     {
@@ -5672,7 +5676,7 @@ static void FlattenDrawDataIntoSingleLayer(ImDrawDataBuilder* builder)
         ImVector<ImDrawList*>* layer = builder->Layers[layer_n];
         if (layer->empty())
             continue;
-        memcpy(builder->Layers[0]->Data + n, layer->Data, layer->Size * sizeof(ImDrawList*));
+        std::copy(layer->Data, layer->Data + layer->Size, builder->Layers[0]->Data + n);
         n += layer->Size;
         layer->resize(0);
     }
@@ -13132,8 +13136,12 @@ void ImGui::NavProcessItemForTabbingRequest(ImGuiID id, ImGuiItemFlags item_flag
         // Tab Forward or SetKeyboardFocusHere() with >= 0
         if (can_stop && g.NavTabbingResultFirst.ID == 0)
             NavApplyItemToResult(&g.NavTabbingResultFirst);
-        if (can_stop && g.NavTabbingCounter > 0 && --g.NavTabbingCounter == 0)
-            NavMoveRequestResolveWithLastItem(result);
+        if (can_stop && g.NavTabbingCounter > 0)
+        {
+            --g.NavTabbingCounter;
+            if (g.NavTabbingCounter == 0)
+                NavMoveRequestResolveWithLastItem(result);
+        }
         else if (g.NavId == id)
             g.NavTabbingCounter = 1;
     }

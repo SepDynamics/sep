@@ -8,6 +8,10 @@ inline cudaError_t SEP_cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned 
     return ::cudaStreamCreateWithFlags(stream, flags);
 }
 
+inline cudaError_t SEP_cudaStreamCreate(cudaStream_t* stream) {
+    return ::cudaStreamCreate(stream);
+}
+
 inline cudaError_t SEP_cudaStreamDestroy(cudaStream_t stream) {
     return ::cudaStreamDestroy(stream);
 }
@@ -28,12 +32,20 @@ inline cudaError_t SEP_cudaEventCreate(cudaEvent_t* event) {
     return ::cudaEventCreate(event);
 }
 
+inline cudaError_t SEP_cudaEventCreateWithFlags(cudaEvent_t* event, unsigned int flags) {
+    return ::cudaEventCreateWithFlags(event, flags);
+}
+
 inline cudaError_t SEP_cudaEventDestroy(cudaEvent_t event) {
     return ::cudaEventDestroy(event);
 }
 
 inline cudaError_t SEP_cudaEventSynchronize(cudaEvent_t event) {
     return ::cudaEventSynchronize(event);
+}
+
+inline cudaError_t SEP_cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end) {
+    return ::cudaEventElapsedTime(ms, start, end);
 }
 
 inline cudaError_t SEP_cudaEventRecord(cudaEvent_t event, cudaStream_t stream) {
@@ -56,12 +68,20 @@ inline cudaError_t SEP_cudaMallocHost(void** ptr, size_t size) {
     return ::cudaMallocHost(ptr, size);
 }
 
+inline cudaError_t SEP_cudaHostAlloc(void** ptr, size_t size, unsigned int flags) {
+    return ::cudaHostAlloc(ptr, size, flags);
+}
+
 inline cudaError_t SEP_cudaFreeHost(void* ptr) {
     return ::cudaFreeHost(ptr);
 }
 
 inline cudaError_t SEP_cudaMemGetInfo(size_t* free, size_t* total) {
     return ::cudaMemGetInfo(free, total);
+}
+
+inline cudaError_t SEP_cudaGetDeviceProperties(cudaDeviceProp* prop, int device) {
+    return ::cudaGetDeviceProperties(prop, device);
 }
 
 inline cudaError_t SEP_cudaMemset(void* devPtr, int value, size_t count) {
@@ -98,6 +118,19 @@ inline cudaError_t SEP_cudaDeviceSynchronize() {
 
 inline cudaError_t SEP_cudaDeviceReset() {
     return ::cudaDeviceReset();
+}
+
+inline cudaError_t SEP_cudaDeviceSetCacheConfig(int cacheConfig) {
+    return ::cudaDeviceSetCacheConfig(static_cast<cudaFuncCache>(cacheConfig));
+}
+
+inline cudaError_t SEP_cudaDeviceGetCacheConfig(int* cacheConfig) {
+    cudaFuncCache cfg;
+    cudaError_t err = ::cudaDeviceGetCacheConfig(&cfg);
+    if (cacheConfig) {
+        *cacheConfig = static_cast<int>(cfg);
+    }
+    return err;
 }
 
 inline cudaError_t SEP_cudaSetDeviceFlags(unsigned int flags) {

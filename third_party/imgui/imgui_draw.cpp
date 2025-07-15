@@ -1744,7 +1744,7 @@ void ImDrawList::AddText(ImFont* font, float font_size, const ImVec2& pos, ImU32
     if (font == NULL)
         font = _Data->Font;
     if (!font)
-        return;
+        return; // avoid calling RenderText with a null font
     if (font_size == 0.0f)
         font_size = _Data->FontSize;
 

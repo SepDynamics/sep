@@ -1,5 +1,5 @@
-#include <cuda_runtime.h>  // For sep::cuda::cudaMemcpyAsync
-#include <string.h>        // For snprintf, memset
+#include <cuda_runtime.h>
+#include <string.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -16,9 +16,9 @@
 #include "api/bridge.h"
 #include "api/bridge_internal.hpp"
 #include "compat/cuda_helpers.h"
-#include "compat/macros.h"  // For SEP_CUDA_AVAILABLE
+#include "compat/macros.h"
 #include "compat/shim.h"
-#include "core/common.h"  // defines sep::SEPResult
+#include "core/common.h"
 #include "core/manager.h"
 #include "core/types.h"
 #include "crow/asio_isolation.h"
@@ -28,208 +28,115 @@ extern "C"
 {
     SEP_API sep::SEPResult sep_bridge_init(void)
     {
+    #ifdef SEP_HAS_EXCEPTIONS
+      try {
+    #endif
+        std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+        sep::quantum::ProcessingConfig options{};
+        sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
+        sep::api::bridge::detail::g_last_error.clear();
+        sep::api::bridge::detail::g_required_buffer_size = 0;
+        return sep::SEPResult::SUCCESS;
+    #ifdef SEP_HAS_EXCEPTIONS
+      } catch (const std::exception& e) {
+        sep::api::bridge::detail::setLastError(e.what());
+        return sep::SEPResult::UNKNOWN_ERROR;
+      }
+    #endif
+    }
+
+SEP_API sep::SEPResult sep_bridge_cleanup(void) {
 #ifdef SEP_HAS_EXCEPTIONS
   try {
 #endif
-  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-  sep::quantum::ProcessingConfig options{};
-  sep::api::bridge::detail::g_context_processor_bridge = sep::quantum::createProcessor(options);
-  sep::api::bridge::detail::g_last_error.clear();
-  // Initialize g_required_buffer_size to 0 here
-  sep::api::bridge::detail::g_required_buffer_size = 0;
-  return sep::SEPResult::SUCCESS;
-#if SEP_HAS_EXCEPTIONS
-  } SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
+    std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+    sep::api::bridge::detail::g_context_processor_bridge.reset();
+    sep::api::bridge::detail::g_last_error.clear();
+    sep::api::bridge::detail::g_required_buffer_size = 0;
+    return sep::SEPResult::SUCCESS;
+#ifdef SEP_HAS_EXCEPTIONS
+  } catch (const std::exception& e) {
+    sep::api::bridge::detail::setLastError(e.what());
+    return sep::SEPResult::UNKNOWN_ERROR;
+  }
 #endif
 }
 
-SEP_API sep::SEPResult sep_bridge_cleanup(void) {
-  std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-  sep::api::bridge::detail::g_context_processor_bridge.reset();
-  sep::api::bridge::detail::g_last_error.clear();
-  // Initialize g_required_buffer_size to 0 here
-  sep::api::bridge::detail::g_required_buffer_size = 0;
-  return sep::SEPResult::SUCCESS;
-}
-
 SEP_API sep::SEPResult sep_process_context(const char *context_json, const char *layer,
-                                           char *result_buffer, size_t buffer_size)
+                                         char *result_buffer, size_t buffer_size)
 {
-    try
-    {
-        if (!context_json || !result_buffer || !layer || buffer_size == 0)
-        {
+#ifdef SEP_HAS_EXCEPTIONS
+    try {
+#endif
+        if (!context_json || !result_buffer || !layer || buffer_size == 0) {
             sep::api::bridge::detail::setLastError("Invalid parameters");
             return sep::SEPResult::INVALID_ARGUMENT;
         }
 
-        {
-            if (!sep::api::bridge::detail::g_context_processor_bridge)
-            {
-                sep::api::bridge::detail::setLastError("Context processor not initialized");
-                return sep::SEPResult::UNKNOWN_ERROR;
-            }
+        std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
+        
+        if (!sep::api::bridge::detail::g_context_processor_bridge) {
+            sep::api::bridge::detail::setLastError("Context processor not initialized");
+            return sep::SEPResult::UNKNOWN_ERROR;
         }
 
-        {
-            nlohmann::json json_obj = nlohmann::json::parse(context_json, nullptr, false);
-            if (json_obj.is_discarded())
-            {
-                sep::api::bridge::detail::setLastError("JSON parsing error");
-                return sep::SEPResult::PROCESSING_ERROR;
-            }
+        // Parse input JSON
+        nlohmann::json json_obj = nlohmann::json::parse(context_json, nullptr, false);
+        if (json_obj.is_discarded()) {
+            sep::api::bridge::detail::setLastError("JSON parsing error");
+            return sep::SEPResult::PROCESSING_ERROR;
+        }
 
-            nlohmann::json test_result;
-            // Dummy processing result
-            test_result["success"] = true;
-            test_result["results"] = nlohmann::json::array();
+        // Parse input patterns from JSON
+        std::vector<std::string> pattern_ids;
+        for (const auto& pattern : json_obj["patterns"]) {
+            pattern_ids.push_back(pattern["id"].get<std::string>());
+        }
 
-            std::string test_str = test_result.dump();
-            {
-                std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-                sep::api::bridge::detail::setRequiredBufferSize(test_str.size() + 1);
-                if (test_str.size() >= buffer_size)
-                {
-                    sep::api::bridge::detail::setLastError("Result buffer too small");
-                    return sep::SEPResult::BUFFER_TOO_SMALL;
-                }
-            }
+        // Process patterns through quantum pipeline
+        sep::BatchProcessingResult process_result =
+            sep::api::bridge::detail::g_context_processor_bridge->processBatch(pattern_ids);
 
-            sep::BatchProcessingResult process_result;
-            process_result.success = true;
+        // Format results as JSON
+        nlohmann::json result_json;
+        result_json["success"] = process_result.success;
+        result_json["results"] = nlohmann::json::array();
 
-            if (!process_result.success)
-            {
-                sep::api::bridge::detail::setLastError(process_result.error_message.c_str());
-                return sep::SEPResult::PROCESSING_ERROR;
-            }
-
-            nlohmann::json result_json;
-            result_json["success"] = true;
-            result_json["results"] = nlohmann::json::array();
-            for (const auto &processing_result : process_result.results)
-            {
+        if (!process_result.success) {
+            result_json["error"] = process_result.error_message;
+        } else {
+            for (const auto& result : process_result.results) {
                 nlohmann::json result_entry;
-                result_entry["success"] = processing_result.success;
-                result_entry["pattern"] = processing_result.pattern.id;
-                if (!processing_result.success)
-                {
-                    result_entry["error"] = processing_result.error_message;
+                result_entry["success"] = result.success;
+                result_entry["pattern"] = result.pattern.id;
+                result_entry["coherence"] = result.pattern.quantum_state.coherence;
+                result_entry["stability"] = result.pattern.quantum_state.stability;
+                result_entry["generation"] = result.pattern.generation;
+                result_entry["quantum_generation"] = result.pattern.quantum_state.generation;
+                
+                if (!result.success) {
+                    result_entry["error"] = result.error_message;
                 }
                 result_json["results"].push_back(result_entry);
             }
-
-            std::string result_str = result_json.dump();
-            {
-                std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-                sep::quantum::ProcessingConfig options{};
-                sep::api::bridge::detail::g_context_processor_bridge =
-                    sep::quantum::createProcessor(options);
-                sep::api::bridge::detail::g_last_error.clear();
-                // Initialize g_required_buffer_size to 0 here
-                sep::api::bridge::detail::g_required_buffer_size = 0;
-                return sep::SEPResult::SUCCESS;
-            }
         }
 
-        {
-            std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-            sep::api::bridge::detail::g_context_processor_bridge.reset();
-            sep::api::bridge::detail::g_last_error.clear();
-            // Initialize g_required_buffer_size to 0 here
-            sep::api::bridge::detail::g_required_buffer_size = 0;
-            return sep::SEPResult::SUCCESS;
+        // Write results to output buffer
+        std::string result_str = result_json.dump();
+        sep::api::bridge::detail::setRequiredBufferSize(result_str.size() + 1);
+        if (result_str.size() >= buffer_size) {
+            sep::api::bridge::detail::setLastError("Result buffer too small");
+            return sep::SEPResult::BUFFER_TOO_SMALL;
         }
+        std::strncpy(result_buffer, result_str.c_str(), buffer_size - 1);
+        result_buffer[buffer_size - 1] = '\0';
 
-        {
-            if (!context_json || !result_buffer || !layer || buffer_size == 0)
-            {
-                sep::api::bridge::detail::setLastError("Invalid parameters");
-                return sep::SEPResult::INVALID_ARGUMENT;
-            }
-
-            {
-                std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-                if (!sep::api::bridge::detail::g_context_processor_bridge)
-                {
-                    sep::api::bridge::detail::setLastError("Context processor not initialized");
-                    return sep::SEPResult::UNKNOWN_ERROR;
-                }
-            }
-
-            {
-                nlohmann::json json_obj = nlohmann::json::parse(context_json, nullptr, false);
-                if (json_obj.is_discarded())
-                {
-                    sep::api::bridge::detail::setLastError("JSON parsing error");
-                    return sep::SEPResult::PROCESSING_ERROR;
-                }
-
-                nlohmann::json test_result;
-                // Dummy processing result
-                test_result["success"] = true;
-                test_result["results"] = nlohmann::json::array();
-
-                std::string test_str = test_result.dump();
-                {
-                    std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-                    sep::api::bridge::detail::setRequiredBufferSize(test_str.size() + 1);
-                    if (test_str.size() >= buffer_size)
-                    {
-                        sep::api::bridge::detail::setLastError("Result buffer too small");
-                        return sep::SEPResult::BUFFER_TOO_SMALL;
-                    }
-                }
-
-                sep::BatchProcessingResult process_result;
-                process_result.success = true;
-
-                if (!process_result.success)
-                {
-                    sep::api::bridge::detail::setLastError(process_result.error_message.c_str());
-                    return sep::SEPResult::PROCESSING_ERROR;
-                }
-
-                nlohmann::json result_json;
-                result_json["success"] = true;
-                result_json["results"] = nlohmann::json::array();
-                for (const auto &processing_result : process_result.results)
-                {
-                    nlohmann::json result_entry;
-                    result_entry["success"] = processing_result.success;
-                    result_entry["pattern"] = processing_result.pattern.id;
-                    if (!processing_result.success)
-                    {
-                        result_entry["error"] = processing_result.error_message;
-                    }
-                    result_json["results"].push_back(result_entry);
-                }
-
-                std::string result_str = result_json.dump();
-                {
-                    std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-                    sep::api::bridge::detail::setRequiredBufferSize(result_str.size() + 1);
-                    if (result_str.size() >= buffer_size)
-                    {
-                        sep::api::bridge::detail::setLastError("Result buffer too small");
-                        return sep::SEPResult::BUFFER_TOO_SMALL;
-                    }
-                }
-
-                (void)std::snprintf(result_buffer, buffer_size, "%s", result_str.c_str());
-                return sep::SEPResult::SUCCESS;
-            }
-            {
-                return sep::SEPResult::PROCESSING_ERROR;
-            }
-        }
-
-        {
-            std::lock_guard<std::mutex> lock(sep::api::bridge::detail::g_bridge_mutex);
-            return sep::SEPResult::SUCCESS;
-        }
+        return sep::SEPResult::SUCCESS;
+#ifdef SEP_HAS_EXCEPTIONS
+    } catch (const std::exception& e) {
+        sep::api::bridge::detail::setLastError(e.what());
+        return sep::SEPResult::UNKNOWN_ERROR;
     }
-    SEP_CATCH_RETURN(sep::api::ErrorCode::ApiError);
-    return sep::SEPResult::UNKNOWN_ERROR;
+#endif
 }
 }  // extern "C"

@@ -183,6 +183,29 @@ constexpr int FP_CLASS_NAN = 4;        // NaN values
 // These declarations provide the CUDA-compatible versions of math functions
 // that would otherwise conflict with system headers
 
+// Define CUDA device/host function qualifiers
+#if (__CUDACC__)
+#ifndef SEP_HOST
+#define SEP_HOST __host__
+#endif
+#ifndef SEP_DEVICE
+#define SEP_DEVICE __device__
+#endif
+#ifndef SEP_HD
+#define SEP_HD __host__ __device__
+#endif
+#else
+#ifndef SEP_HOST
+#define SEP_HOST
+#endif
+#ifndef SEP_DEVICE
+#define SEP_DEVICE
+#endif
+#ifndef SEP_HD
+#define SEP_HD
+#endif
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 

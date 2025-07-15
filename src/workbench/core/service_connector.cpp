@@ -438,12 +438,20 @@ bool ServiceConnector::connectTCP() {
     // Log the successful port for debugging purposes
     std::cout << "[ServiceConnector] Using port " << config_.service_port << " for API server connection" << std::endl;
     
-    // For now, we'll leave service_engine_ as nullptr but the connection
-    // will be considered successful for the workbench to proceed
-    // The proper implementation would retrieve an engine reference from the server
-    
-    std::cout << "[ServiceConnector] TCP connection established and initialized" << std::endl;
-    return true;
+    // Initialize the engine after successful connection
+    try {
+        service_engine_ = new sep::core::Engine();
+        service_engine_->run();
+        std::cout << "[ServiceConnector] Engine initialized and running" << std::endl;
+        return true;
+    } catch (const std::exception& e) {
+        std::cerr << "[ServiceConnector] Exception during engine initialization: " << e.what() << std::endl;
+        if (service_engine_) {
+            delete service_engine_;
+            service_engine_ = nullptr;
+        }
+        return false;
+    }
 }
 
 } // namespace sep::workbench

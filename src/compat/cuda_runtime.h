@@ -5,6 +5,24 @@
 #include <cuda_runtime_api.h>
 #include <cuda_runtime.h>
 
+// Map SEP-prefixed names to CUDA enums/constants when CUDA is available
+#define SEP_cudaSuccess cudaSuccess
+#define SEP_cudaErrorInvalidValue cudaErrorInvalidValue
+#define SEP_cudaErrorMemoryAllocation cudaErrorMemoryAllocation
+#define SEP_cudaErrorInitializationError cudaErrorInitializationError
+#define SEP_cudaErrorInvalidDevicePointer cudaErrorInvalidDevicePointer
+#define SEP_cudaErrorInvalidMemcpyDirection cudaErrorInvalidMemcpyDirection
+#define SEP_cudaErrorNoDevice cudaErrorNoDevice
+#define SEP_cudaErrorInvalidDevice cudaErrorInvalidDevice
+#define SEP_cudaErrorDeviceUninitialized cudaErrorDeviceUninitialized
+#define SEP_cudaErrorDeviceAlreadyInUse cudaErrorDeviceAlreadyInUse
+#define SEP_cudaErrorInvalidResourceHandle cudaErrorInvalidResourceHandle
+#define SEP_cudaErrorNotReady cudaErrorNotReady
+#define SEP_cudaErrorSetOnActiveProcess cudaErrorSetOnActiveProcess
+#define SEP_cudaErrorStreamCaptureUnsupported cudaErrorStreamCaptureUnsupported
+#define SEP_cudaStreamDefault cudaStreamDefault
+#define SEP_cudaStreamNonBlocking cudaStreamNonBlocking
+
 namespace sep {
 namespace cuda {
 // Remove global scope constants and keep them only in namespace

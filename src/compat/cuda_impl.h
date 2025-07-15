@@ -22,10 +22,10 @@ struct CudaMemcpyParams {
 
 // Helper function for memory copies to avoid parameter similarity issues
 inline cudaError_t performCudaMemcpyAsync(const CudaMemcpyParams& params) {
-    // Use the namespaced wrapper to work both with CUDA and stub builds
-    return sep::cuda::cudaMemcpyAsync(params.destination, params.source,
-                                      params.sizeInBytes, params.direction,
-                                      params.stream);
+    // Use the SEP-prefixed wrapper to work both with CUDA and stub builds
+    return sep::cuda::SEP_cudaMemcpyAsync(params.destination, params.source,
+                                          params.sizeInBytes, params.direction,
+                                          params.stream);
 }
 
 namespace sep {

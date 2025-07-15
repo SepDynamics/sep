@@ -2329,7 +2329,7 @@ ImGuiID ImHashData(const void* data_p, size_t data_size, ImGuiID seed)
 #ifndef IMGUI_ENABLE_SSE4_2_CRC
     const ImU32* crc32_lut = GCrc32LookupTable;
     while (data < data_end)
-        crc = (crc >> 8) ^ crc32_lut[(crc & 0xFF) ^ *data++];
+        crc = (crc >> 8) ^ crc32_lut[(crc & 0xFF) ^ (unsigned char)(*data++)];
     return ~crc;
 #else
     while (data + 4 <= data_end)

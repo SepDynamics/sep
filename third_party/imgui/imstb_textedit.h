@@ -980,7 +980,7 @@ retry:
 
          // compute current position of cursor point
          stb_textedit_clamp(str, state);
-         find.prev_first = 0;  // Initialize before use
+        find.prev_first = 0;  // Initialize before use to avoid garbage comparison
          stb_textedit_find_charpos(&find, str, state->cursor, state->single_line);
 
          for (j = 0; j < row_count; ++j) {

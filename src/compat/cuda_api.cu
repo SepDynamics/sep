@@ -268,33 +268,33 @@ sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const 
 
     try {
         // Ensure proper stream synchronization before memory operations 
-        CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
+        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
 
         // Memory transfers with error checking
         CUDA_CHECK(
-            sep::cuda::cudaMemcpyAsync(d_probe_indices.get(), probe_indices, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
-        CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
+            sep::cuda::SEP_cudaMemcpyAsync(d_probe_indices.get(), probe_indices, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
+        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
 
         CUDA_CHECK(
-            sep::cuda::cudaMemcpyAsync(d_expectations.get(), expectations, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
-        CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
+            sep::cuda::SEP_cudaMemcpyAsync(d_expectations.get(), expectations, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
+        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
 
-        CUDA_CHECK(cudaMemsetAsync(d_correction_count.get(), 0, count_size, g_stream->get()));
-        CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
+        CUDA_CHECK(SEP_cudaMemsetAsync(d_correction_count.get(), 0, count_size, g_stream->get()));
+        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
 
         CUDA_CHECK(sep::cuda::launchQBSAKernel(d_probe_indices.get(), d_expectations.get(), num_probes,
                                                d_bitfield.get(), d_corrections.get(), d_correction_count.get(),
                                                g_stream->get()));
 
-        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(bitfield, d_bitfield.get(), bitfield_size, cudaMemcpyDeviceToHost, g_stream->get()));
+        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(bitfield, d_bitfield.get(), bitfield_size, cudaMemcpyDeviceToHost, g_stream->get()));
 
-        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(correction_indices, d_corrections.get(), corrections_size, cudaMemcpyDeviceToHost,
-                                   g_stream->get()));
+        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(correction_indices, d_corrections.get(), corrections_size, cudaMemcpyDeviceToHost,
+                                  g_stream->get()));
 
-        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(correction_count, d_correction_count.get(), count_size, cudaMemcpyDeviceToHost,
-                                   g_stream->get()));
+        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(correction_count, d_correction_count.get(), count_size, cudaMemcpyDeviceToHost,
+                                  g_stream->get()));
 
-        CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
+        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
     } catch (const sep::CudaException&) {
         return sep::SEPResult::UNKNOWN_ERROR;
     }
@@ -328,22 +328,22 @@ sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint3
 
     try {
         // Ensure proper stream synchronization before memory operations
-        CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
+        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
 
         // Memory transfer with error checking
-        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(d_chunks.get(), chunks, chunks_size, cudaMemcpyHostToDevice, g_stream->get()));
-        CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
+        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(d_chunks.get(), chunks, chunks_size, cudaMemcpyHostToDevice, g_stream->get()));
+        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
 
         CUDA_CHECK(sep::cuda::launchQSHKernel(d_chunks.get(), num_chunks, d_collapse_indices.get(),
                                               d_collapse_counts.get(), g_stream->get()));
 
-        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(collapse_indices, d_collapse_indices.get(), indices_size, cudaMemcpyDeviceToHost,
+        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(collapse_indices, d_collapse_indices.get(), indices_size, cudaMemcpyDeviceToHost,
                                    g_stream->get()));
 
-        CUDA_CHECK(sep::cuda::cudaMemcpyAsync(collapse_counts, d_collapse_counts.get(), counts_size, cudaMemcpyDeviceToHost,
+        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(collapse_counts, d_collapse_counts.get(), counts_size, cudaMemcpyDeviceToHost,
                                    g_stream->get()));
 
-        CUDA_CHECK(cudaStreamSynchronize(g_stream->get()));
+        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
     } catch (const sep::CudaException&) {
         return sep::SEPResult::UNKNOWN_ERROR;
     }

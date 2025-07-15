@@ -311,19 +311,18 @@ AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
         std::string check_cmd = "systemctl --user is-active " + std::string(service);
         pw_thread_loop_unlock(loop_);
         FILE* fp = popen(check_cmd.c_str(), "r");
-        pw_thread_loop_lock(loop_);
-        if (!fp) {
-            spdlog::error("Failed to check service status: {}", service);
-            continue; // Try next service
-        }
-
         char service_status[128];
         bool service_running = false;
-        if (fgets(service_status, sizeof(service_status), fp) != nullptr) {
-            service_running = (strncmp(service_status, "active", 6) == 0);
+        if (!fp) {
+            spdlog::error("Failed to check service status: {}", service);
+        } else {
+            if (fgets(service_status, sizeof(service_status), fp) != nullptr) {
+                service_running = (strncmp(service_status, "active", 6) == 0);
+            }
+            pclose(fp);
         }
-        pclose(fp);
-
+        pw_thread_loop_lock(loop_);
+        
         if (!service_running) {
             spdlog::info("Starting {}...", service);
             
@@ -336,7 +335,6 @@ AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
                 std::string status_cmd = "systemctl --user status " + std::string(service);
                 pw_thread_loop_unlock(loop_);
                 FILE* status_fp = popen(status_cmd.c_str(), "r");
-                pw_thread_loop_lock(loop_);
                 if (status_fp) {
                     char status_buf[1024];
                     while (fgets(status_buf, sizeof(status_buf), status_fp)) {
@@ -348,6 +346,7 @@ AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
                     }
                     pclose(status_fp);
                 }
+                pw_thread_loop_lock(loop_);
                 continue; // Try next service
             }
             
@@ -358,17 +357,17 @@ AudioError sep::audio::PipeWireCapture::init(const AudioConfig& config)
                 
                 pw_thread_loop_unlock(loop_);
                 FILE* check_fp = popen(check_cmd.c_str(), "r");
-                pw_thread_loop_lock(loop_);
                 if (check_fp) {
                     if (fgets(service_status, sizeof(service_status), check_fp) != nullptr) {
                         if (strncmp(service_status, "active", 6) == 0) {
                             service_running = true;
-                            pclose(check_fp);
-                            break;
                         }
                     }
                     pclose(check_fp);
                 }
+                pw_thread_loop_lock(loop_);
+                if (service_running)
+                    break;
                 retries--;
             }
             

@@ -55,7 +55,7 @@ namespace crow {
                 return ec;
             }
             asio_stub::error_code asio_ec;
-            socket_.close(asio_ec);
+            (void)socket_.close(asio_ec);
             ec = asio_ec ? asio_ec.value() : 0;
             if (ec) {
                 // Log the error for debugging purposes
@@ -68,7 +68,7 @@ namespace crow {
         {
             error_t ec = 0;
             asio::error_code asio_ec;
-            socket_.shutdown(tcp::socket::shutdown_both, asio_ec);
+            (void)socket_.shutdown(tcp::socket::shutdown_both, asio_ec);
             ec = asio_ec ? asio_ec.value() : 0;
             if (ec) {
                 CROW_LOG_ERROR << "Socket shutdown_both error: " << ec << " - " << asio_ec.message();
@@ -80,7 +80,7 @@ namespace crow {
         {
             error_t ec = 0;
             asio::error_code asio_ec;
-            socket_.shutdown(tcp::socket::shutdown_send, asio_ec);
+            (void)socket_.shutdown(tcp::socket::shutdown_send, asio_ec);
             ec = asio_ec ? asio_ec.value() : 0;
             if (ec) {
                 CROW_LOG_ERROR << "Socket shutdown_send error: " << ec << " - " << asio_ec.message();
@@ -92,7 +92,7 @@ namespace crow {
         {
             error_t ec = 0;
             asio::error_code asio_ec;
-            socket_.shutdown(tcp::socket::shutdown_receive, asio_ec);
+            (void)socket_.shutdown(tcp::socket::shutdown_receive, asio_ec);
             ec = asio_ec ? asio_ec.value() : 0;
             if (ec) {
                 CROW_LOG_ERROR << "Socket shutdown_receive error: " << ec << " - " << asio_ec.message();
@@ -132,7 +132,7 @@ namespace crow {
                 ec = asio::error::not_connected;
                 CROW_LOG_ERROR << "SSL Socket close error: not connected";
             } else {
-                raw_socket().close(ec);
+                (void)raw_socket().close(ec);
                 if (ec) {
                     CROW_LOG_ERROR << "SSL Socket close error: " << ec << " - " << ec.message();
                 }
@@ -144,7 +144,7 @@ namespace crow {
         {
             error_t ec;
             if (is_open()) {
-                raw_socket().shutdown(tcp::socket::shutdown_both, ec);
+                (void)raw_socket().shutdown(tcp::socket::shutdown_both, ec);
                 if (ec) {
                     CROW_LOG_ERROR << "SSL Socket shutdown_both error: " << ec << " - " << ec.message();
                 }
@@ -156,7 +156,7 @@ namespace crow {
         {
             error_t ec;
             if (is_open()) {
-                raw_socket().shutdown(tcp::socket::shutdown_send, ec);
+                (void)raw_socket().shutdown(tcp::socket::shutdown_send, ec);
                 if (ec) {
                     CROW_LOG_ERROR << "SSL Socket shutdown_send error: " << ec << " - " << ec.message();
                 }
@@ -168,7 +168,7 @@ namespace crow {
         {
             error_t ec;
             if (is_open()) {
-                raw_socket().shutdown(tcp::socket::shutdown_receive, ec);
+                (void)raw_socket().shutdown(tcp::socket::shutdown_receive, ec);
                 if (ec) {
                     CROW_LOG_ERROR << "SSL Socket shutdown_receive error: " << ec << " - " << ec.message();
                 }

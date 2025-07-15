@@ -2,6 +2,7 @@
 #define SEP_COMPAT_CUDA_RUNTIME_H
 
 #if SEP_ENGINE_HAS_CUDA
+#include <cuda_runtime_api.h>
 #include <cuda_runtime.h>
 
 namespace sep {

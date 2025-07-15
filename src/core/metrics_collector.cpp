@@ -36,18 +36,18 @@ class MetricsCollector::Impl {
 
   Impl() : running_(false), latency_window_size_(1000) {
     // Create events for timing
-        CUDA_CHECK(cudaEventCreate(&start_event_));
-    CUDA_CHECK(cudaEventCreate(&stop_event_));
+        CUDA_CHECK(SEP_cudaEventCreate(&start_event_));
+    CUDA_CHECK(SEP_cudaEventCreate(&stop_event_));
     
   }
 
   ~Impl() {
     stopCollection();
     if (start_event_) {
-      CUDA_CHECK(cudaEventDestroy(start_event_));
+      CUDA_CHECK(SEP_cudaEventDestroy(start_event_));
     }
     if (stop_event_) {
-      CUDA_CHECK(cudaEventDestroy(stop_event_));
+      CUDA_CHECK(SEP_cudaEventDestroy(stop_event_));
     }
   }
 
@@ -87,18 +87,18 @@ class MetricsCollector::Impl {
 
   void recordKernelStart() {
     if (start_event_) {
-      CUDA_CHECK(cudaEventRecord(start_event_, nullptr));
+      CUDA_CHECK(SEP_cudaEventRecord(start_event_, nullptr));
     }
   }
 
   void recordKernelStop() {
     if (stop_event_) {
-            CUDA_CHECK(cudaEventRecord(stop_event_, nullptr));
-      CUDA_CHECK(cudaEventSynchronize(stop_event_));
+            CUDA_CHECK(SEP_cudaEventRecord(stop_event_, nullptr));
+      CUDA_CHECK(SEP_cudaEventSynchronize(stop_event_));
 
       float elapsed_time = 0.0f;
       if (start_event_ && stop_event_) {
-        CUDA_CHECK(cudaEventElapsedTime(&elapsed_time, start_event_, stop_event_));
+        CUDA_CHECK(SEP_cudaEventElapsedTime(&elapsed_time, start_event_, stop_event_));
       }
       
 
@@ -168,7 +168,7 @@ class MetricsCollector::Impl {
 
     // Get CUDA memory info
     size_t free_mem, total_mem;
-    CUDA_CHECK(cudaMemGetInfo(&free_mem, &total_mem));
+    CUDA_CHECK(SEP_cudaMemGetInfo(&free_mem, &total_mem));
     float gpu_memory_usage = static_cast<float>(total_mem - free_mem) / total_mem * 100.0f;
     new_metrics.gpu_memory_usage = gpu_memory_usage;
     // GPU utilization requires more complex querying, set to 0 for now

@@ -1,291 +1,193 @@
-### Build Log Analysis
-The build log (from July 15, 2025 snapshot) shows compilation failures in 18/30 targets, primarily in quantum and compat files (e.g., qbsa.cpp, qbsa_qfh.cpp, quantum_processor_qfh.cpp, metrics_collector.cpp, cuda_impl.cpp, raii.cpp). These are due to undeclared prefixed CUDA APIs (e.g., SEP_cudaStreamDestroy suggesting cudaStreamDestroy) and mismatched namespaces/types. Additionally, third-party files (cuew.c, sky_model.h, sky_nishita.cpp) fail due to unknown pragmas treated as errors (-Werror). No linker errors; TBB warnings persist but aren't fatal (fix: export LD_LIBRARY_PATH as before).
+Below is a targeted analysis and resolution guide for the issues identified in your project. I've drawn from the build log (compilation failures), the static analysis report (report.md), and the directory snapshot. Issues are grouped by file (or related file groups where patterns repeat across similar files). For each file, I list:
 
-#### Grouped by File (From Log; Critical Compilation Failures)
-- **/sep/src/quantum/gpu_context.h** (Destructor errors in qbsa.cpp, qbsa_qfh.cpp, quantum_processor_qfh.cpp, evolution.cpp, pattern_evolution.cpp, processor.cpp, quantum_manifold_optimizer.cpp, quantum_processor_qfh_common.cpp, pattern_evolution_bridge.cpp, pattern_processor_interface.cpp):
-  - CRITICAL: ‘SEP_cudaStreamDestroy’ not declared (suggest ‘cudaStreamDestroy’).
-    - Cause: Prefix defined but no mapping to CUDA function.
+- **Key Issues**: Summarized from the documents, including severity (CRITICAL/HIGH/MEDIUM/LOW) and type (e.g., compilation error, clang diagnostic, bugprone, etc.).
+- **Advice & Direction**: Step-by-step fixes, rationale, and potential code snippets. Prioritize CRITICAL/HIGH first, as they block builds. I've focused on actionable, minimal changes to resolve without major refactors.
+- **Priority**: High (fix immediately for build), Medium (fix for warnings/cleanup), Low (optimization/lint).
 
-- **/sep/src/core/metrics_collector.cpp**:
-  - CRITICAL: ‘SEP_cudaEventCreate’ not declared (suggest ‘cudaEventCreate’); similar for SEP_cudaEventDestroy, SEP_cudaEventRecord, SEP_cudaEventSynchronize, SEP_cudaEventElapsedTime, SEP_cudaMemGetInfo.
-    - Cause: Code uses prefixed names in CUDA_CHECK, but not defined.
+If a file has no issues (e.g., many in the snapshot like config.cpp), it's omitted. Test after fixes, as some may have dependencies.
 
-- **/sep/src/compat/stream.cpp**:
-  - CRITICAL: ‘cudaMemcpyAsync’ not a member of ‘sep::cuda’ (suggest ‘cudaMemcpyKind’).
-    - Cause: Namespace mismatch in wrapper; missing prefixed function.
+### /sep/src/quantum/gpu_context.h
+**Key Issues**:
+- CRITICAL: `SEP_cudaStreamDestroy` not a member of `sep::cuda` (compilation error in destructor).
+- MEDIUM: Undeclared identifier `SEP_cudaStreamDestroy` (clang-diagnostic-error).
 
-- **/sep/src/compat/cuda_impl.cpp** (cuda_wrapper.h functions):
-  - CRITICAL: ‘cudaStreamCreateWithFlags’ not declared (suggest ‘StreamCreateWithFlags’); similar for cudaStreamDestroy, cudaStreamSynchronize, cudaStreamWaitEvent, cudaStreamAttachMemAsync, cudaEventCreate, cudaEventDestroy, cudaEventSynchronize, cudaEventRecord, cudaMalloc, cudaFree, cudaMallocManaged, cudaMallocHost, cudaFreeHost, cudaMemGetInfo, cudaMemset, cudaMemsetAsync, cudaMemcpy, cudaMemcpyAsync, cudaSetDevice, cudaGetDevice, cudaGetDeviceCount, cudaDeviceSynchronize, cudaDeviceReset, cudaSetDeviceFlags, cudaGetDeviceFlags, cudaGetLastError, cudaGetErrorString.
-    - Cause: Wrapper calls original CUDA functions without include or qualification.
+**Advice & Direction** (High Priority):
+- This seems like a namespacing or macro issue—`SEP_cudaStreamDestroy` is likely a renamed CUDA function (from CUDA_UNIFIED_FIX), but not properly defined in the `sep::cuda` namespace.
+- Fix: Include the correct CUDA header and use the standard `cudaStreamDestroy` if renaming isn't needed, or define the renamed function in `sep::cuda`. Update the destructor:
+  ```cpp
+  #include <cuda_runtime.h>  // Ensure this is included
 
-- **/sep/src/compat/raii.cpp** (Destructor):
-  - CRITICAL: ‘SEP_cudaStreamDestroy’ not declared (suggest ‘cudaStreamDestroy’).
-    - Cause: Uses prefixed in destructor.
+  namespace sep::quantum {
+  GPUContext::~GPUContext() {
+      cudaStreamDestroy(default_stream);  // Use standard name, or fix renaming macro
+  }
+  }
+  ```
+- Rationale: Avoid custom renames unless necessary for compatibility; test with CUDA samples.
+- Verify: Recompile and check if other CUDA calls (e.g., in qbsa.cpp) resolve similarly.
 
-- **/sep/src/compat/cuda_helpers.h** (CUDA_CHECK macro):
-  - CRITICAL: ‘SEP_cudaSuccess’ not declared (suggest ‘cudaSuccess’); similar for SEP_cudaGetErrorString.
-    - Cause: Update to prefixed: Replace cuda calls with SEP_ versions.
+### /sep/src/core/metrics_collector.cpp
+**Key Issues**:
+- CRITICAL: Undeclared identifier `SEP_cudaSuccess` (multiple instances, clang-diagnostic-error).
+- HIGH: Related to CUDA_CHECK macro expansions failing.
 
-- **Third-party pragmas** (cuew.c, sky_model.h, sky_nishita.cpp):
-  - CRITICAL: Unknown #pragma clang diagnostic (-Werror=unknown-pragmas).
-    - Cause: -Werror treats warnings as errors; pragmas not recognized.
+**Advice & Direction** (High Priority):
+- `SEP_cudaSuccess` is likely a renamed `cudaSuccess` constant, but not defined. This breaks CUDA error checking.
+- Fix: Replace with standard `cudaSuccess` or define the constant in a header like compat/cuda_helpers.h. Update lines like 39-171:
+  ```cpp
+  CUDA_CHECK(cudaGetDeviceCount(&device_count));  // Use standard cudaSuccess in macro
+  ```
+- Update macro in cuda_helpers.h if needed:
+  ```cpp
+  #define CUDA_CHECK(call) \
+      do { \
+          cudaError_t error = call; \
+          if (error != cudaSuccess) { ... } \
+      } while(0)
+  ```
+- Rationale: Custom prefixes (SEP_) suggest compatibility shims—ensure they're consistently defined.
+- Verify: Run CUDA device query tests post-fix.
 
-No other build errors; report.md defects (240 total: HIGH:6, MEDIUM:138, LOW:64, CRITICAL:32 from prior) are secondary (e.g., dead stores, signed char misuse)—focus on fixes below first.
+### /sep/src/compat/cuda_helpers.h
+**Key Issues**:
+- CRITICAL: Undeclared `SEP_cudaGetErrorString` (clang-diagnostic-error in logCudaError).
 
-### Analyzer Defects Grouped by File (From report.md; Relevant to Log)
-- **/sep/third_party/imgui/imgui.cpp** (HIGH: Garbage in '^' line 2333; MEDIUM: signed char misuse lines 2487,6983; undefined mem memset line 5583; inc/dec cond lines 5583,13135; bitwise ptr memcpy line 5675; LOW: dead store line 17149).
-- **/sep/third_party/imgui/imgui_draw.cpp** (HIGH: Null font RenderText line 1720; MEDIUM: signed char misuse lines 5440,5554,5731; LOW: dead init line 1985).
-- **/sep/third_party/imgui/imgui_widgets.cpp** (HIGH: Null deref while(it->val_i) line 8323; MEDIUM: signed char misuse lines 2647,3239,3974; undefined mem memset line 9410; LOW: missing default switch lines 2281,2389,2418,2645,3237; suspicious arg lines 4504,9106; bool ptr if(p_visible) line 7113; inc/dec cond line 7447).
-- **/sep/third_party/imgui/imstb_textedit.h** (HIGH: Garbage '==' line 989).
-- **/sep/third_party/imgui/imgui.h** (HIGH: Suspicious sizeof(A*) lines 2202,2209; MEDIUM: Confusable ImGuiKey_I vs 1, O vs 0; undefined mem memcpy non-trivial).
-- **/sep/third_party/imgui/imgui_demo.cpp** (MEDIUM: ignored sprintf multiple lines; int div float lines 6395,10818; LOW: dead store line 9952; missing default switch lines 8998,9398,9519; suspicious arg lines 7457,9847,9855).
-- **/usr/lib/clang/20/include/cetintrin.h** (HIGH: Uninit args lines 49,62).
-- **/sep/third_party/imgui/imgui_tables.cpp** (LOW: dead stores lines 3592,3894).
-- **/sep/third_party/imgui/imgui_internal.h** (MEDIUM: noexcept missing swap line 795; undefined mem memset lines 2125,3020,3048,3818).
-- **/sep/third_party/imgui/imstb_truetype.h** (LOW: dead store line 3158; missing default switch lines 1477,1479,3659; MEDIUM: signed char misuse line 1318).
-- **/usr/include/glm/gtc/bitfield.inl** (LOW: dead stores lines 343,397,451).
-- **/sep/src/crow/socket_adaptors.h** (MEDIUM: unused returns/cert-err33-c shutdown/close lines 58,71,83,95).
-- **/sep/src/workbench/core/landing_page.cpp** (MEDIUM: double-promotion ImGui::Text lines 159,177,178).
-- **/sep/src/workbench/core/demo_orchestrator.cpp** (MEDIUM: double-promotion ImGui::Text lines 211-213,216,221; LOW: missing default switch line 263).
-- **/sep/src/workbench/demos/annealing_demo.cpp / annealing_sim.cpp** (MEDIUM: double-promotion pow lines 40/43).
-- **/sep/src/workbench/demos/audio_visualizer.cpp** (MEDIUM: double-promotion ImGui::Text lines 193-195).
-- **/sep/src/audio/config.cpp** (MEDIUM: double-promotion exp_safe 4 instances).
-- **/sep/src/audio/pipewire_capture.cpp** (MEDIUM: ignored snprintf line 223; LOW: blocking fgets lines 319,340,361).
-- **/sep/src/workbench/core/workbench_core.cpp** (MEDIUM: double-promotion ImGui::Text line 367).
-- **/sep/extern/cycles/src/util/hash.h** (MEDIUM: signed char *str++ line 555).
-- **/sep/extern/cycles/third_party/cuew/src/cuew.c** (MEDIUM: reserved macros _LIBRARY_FIND_CHECKED, _LIBRARY_FIND lines 54,55).
-- **/sep/extern/cycles/third_party/sky/include/sky_model.h** (MEDIUM: reserved macro __SKY_MODEL_H__ line 301).
-- **/sep/extern/cycles/third_party/sky/source/sky_float3.h** (MEDIUM: reserved macro __SKY_FLOAT3_H__ line 18).
-- **/sep/extern/cycles/third_party/sky/source/sky_nishita.cpp** (MEDIUM: int div float line 34).
-- **/usr/include/spa-0.2/spa/utils/json-core.h** (MEDIUM: reserved identifiers/flags/errors 30 instances; double-promotion spa_dtoa line 449).
-- **/usr/include/spa-0.2/spa/utils/string.h** (MEDIUM: cert-err33-c spa_assert_se 3 instances).
-- **/usr/include/spa-0.2/spa/utils/type.h** (MEDIUM: reserved _SPA_TYPE_* 5 instances).
-- **/usr/include/asio/detail/impl/signal_set_service.ipp / boost/asio/detail/impl/signal_set_service.ipp** (LOW: blocking read critical section lines 145,146).
-- **Other LOW/MEDIUM**: As in prior reports (dead stores, missing defaults, suspicious args, bool ptr).
+**Advice & Direction** (High Priority):
+- Similar to above—renamed CUDA function not found.
+- Fix: Use standard `cudaGetErrorString` or define the rename:
+  ```cpp
+  void sep::cuda::logCudaError(const char* file, cudaError_t error) {
+      LOG_ERROR("CUDA error at {}: {}", file, cudaGetErrorString(error));  // Standard call
+  }
+  ```
+- Rationale: If this is for HIP/CUDA unification, ensure macros in cuda_unified_fix.h are applied correctly.
+- Verify: Compile with CUDA toolkit linked.
 
-### Step-by-Step Outline to Resolve Issues
-Prioritized: Compilation failures (CRITICAL) first, then HIGH/MEDIUM/LOW defects. For compat (third-party like CUDA), define prefixed wrappers minimally. Test: Rebuild after each, re-run analyzer.
+### /sep/extern/cycles/third_party/cuew/src/cuew.c
+**Key Issues**:
+- MEDIUM: Pragma clang diagnostic ignored treated as error (unknown-pragmas, reserved-macro-identifier).
 
-#### Step 1: Fix CRITICAL Compilation Failures (Undeclared Prefixed APIs)
-Root: Code uses SEP_ prefixed (e.g., SEP_cudaStreamDestroy) but not defined; wrappers call original CUDA without include/qualification.
+**Advice & Direction** (Medium Priority):
+- Compiler flag `-Werror` turns warnings into errors for pragmas.
+- Fix: Remove or conditionalize pragmas, or add `-Wno-unknown-pragmas` to CMake:
+  ```cmake
+  target_compile_options(extern_cuew PRIVATE -Wno-unknown-pragmas -Wno-reserved-macro-identifier)
+  ```
+- Alternative: Wrap pragmas:
+  ```c
+  #if defined(__clang__)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wreserved-macro-identifier"
+  #endif
+  // code
+  #if defined(__clang__)
+  #pragma clang diagnostic pop
+  #endif
+  ```
+- Rationale: Third-party code; suppress warnings without changing source.
+- Verify: Rebuild Cycles submodule.
 
-- **/sep/src/compat/cuda_runtime.h** (Root for constants; extend to functions):
-  - Add after #include <cuda_runtime_api.h>:
-    ```
-    #define SEP_cudaSuccess cudaSuccess
-    #define SEP_cudaErrorInvalidValue cudaErrorInvalidValue
-    #define SEP_cudaErrorMemoryAllocation cudaErrorMemoryAllocation
-    #define SEP_cudaErrorInitializationError cudaErrorInitializationError
-    #define SEP_cudaErrorInvalidDevicePointer cudaErrorInvalidDevicePointer
-    #define SEP_cudaErrorInvalidMemcpyDirection cudaErrorInvalidMemcpyDirection
-    #define SEP_cudaErrorNoDevice cudaErrorNoDevice
-    #define SEP_cudaErrorInvalidDevice cudaErrorInvalidDevice
-    #define SEP_cudaErrorDeviceUninitialized cudaErrorDeviceUninitialized
-    #define SEP_cudaErrorDeviceAlreadyInUse cudaErrorDeviceAlreadyInUse
-    #define SEP_cudaErrorInvalidResourceHandle cudaErrorInvalidResourceHandle
-    #define SEP_cudaErrorNotReady cudaErrorNotReady
-    #define SEP_cudaErrorSetOnActiveProcess cudaErrorSetOnActiveProcess
-    #define SEP_cudaErrorStreamCaptureUnsupported cudaErrorStreamCaptureUnsupported
-    #define SEP_cudaStreamDefault cudaStreamDefault
-    #define SEP_cudaStreamNonBlocking cudaStreamNonBlocking
-    // Add more from log/errors
-    ```
-  - Why: Maps prefixed to official enums (avoids redeclaration). Sources confirm macro aliases for compat.
+### /sep/src/glad/glad.c & /sep/src/glad/glad.h
+**Key Issues** (glad.c):
+- MEDIUM: Reserved macro identifier (_GLAD_IS_SOME_NEW_VERSION), disregarded sscanf return (cert-err33-c).
 
-- **/sep/src/compat/cuda_wrapper.h** (Function wrappers):
-  - Add #include <cuda_runtime_api.h> at top.
-  - Prefix wrapper functions:
-    ```
-    namespace sep::cuda {
-    cudaError_t SEP_cudaStreamCreateWithFlags(cudaStream_t* stream, unsigned int flags) {
-      return ::cudaStreamCreateWithFlags(stream, flags);
-    }
-    cudaError_t SEP_cudaStreamDestroy(cudaStream_t stream) {
-      return ::cudaStreamDestroy(stream);
-    }
-    cudaError_t SEP_cudaStreamSynchronize(cudaStream_t stream) {
-      return ::cudaStreamSynchronize(stream);
-    }
-    cudaError_t SEP_cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags) {
-      return ::cudaStreamWaitEvent(stream, event, flags);
-    }
-    cudaError_t SEP_cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
-      return ::cudaStreamAttachMemAsync(stream, devPtr, length, flags);
-    }
-    cudaError_t SEP_cudaEventCreate(cudaEvent_t* event) {
-      return ::cudaEventCreate(event);
-    }
-    cudaError_t SEP_cudaEventDestroy(cudaEvent_t event) {
-      return ::cudaEventDestroy(event);
-    }
-    cudaError_t SEP_cudaEventSynchronize(cudaEvent_t event) {
-      return ::cudaEventSynchronize(event);
-    }
-    cudaError_t SEP_cudaEventRecord(cudaEvent_t event, cudaStream_t stream) {
-      return ::cudaEventRecord(event, stream);
-    }
-    cudaError_t SEP_cudaMalloc(void** devPtr, size_t size) {
-      return ::cudaMalloc(devPtr, size);
-    }
-    cudaError_t SEP_cudaFree(void* devPtr) {
-      return ::cudaFree(devPtr);
-    }
-    cudaError_t SEP_cudaMallocManaged(void** devPtr, size_t size, unsigned int flags) {
-      return ::cudaMallocManaged(devPtr, size, flags);
-    }
-    cudaError_t SEP_cudaMallocHost(void** ptr, size_t size) {
-      return ::cudaMallocHost(ptr, size);
-    }
-    cudaError_t SEP_cudaFreeHost(void* ptr) {
-      return ::cudaFreeHost(ptr);
-    }
-    cudaError_t SEP_cudaMemGetInfo(size_t* free, size_t* total) {
-      return ::cudaMemGetInfo(free, total);
-    }
-    cudaError_t SEP_cudaMemset(void* devPtr, int value, size_t count) {
-      return ::cudaMemset(devPtr, value, count);
-    }
-    cudaError_t SEP_cudaMemsetAsync(void* devPtr, int value, size_t count, cudaStream_t stream) {
-      return ::cudaMemsetAsync(devPtr, value, count, stream);
-    }
-    cudaError_t SEP_cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind) {
-      return ::cudaMemcpy(dst, src, count, kind);
-    }
-    cudaError_t SEP_cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
-      return ::cudaMemcpyAsync(dst, src, count, kind, stream);
-    }
-    cudaError_t SEP_cudaSetDevice(int device) {
-      return ::cudaSetDevice(device);
-    }
-    cudaError_t SEP_cudaGetDevice(int* device) {
-      return ::cudaGetDevice(device);
-    }
-    cudaError_t SEP_cudaGetDeviceCount(int* count) {
-      return ::cudaGetDeviceCount(count);
-    }
-    cudaError_t SEP_cudaDeviceSynchronize() {
-      return ::cudaDeviceSynchronize();
-    }
-    cudaError_t SEP_cudaDeviceReset() {
-      return ::cudaDeviceReset();
-    }
-    cudaError_t SEP_cudaSetDeviceFlags(unsigned int flags) {
-      return ::cudaSetDeviceFlags(flags);
-    }
-    cudaError_t SEP_cudaGetDeviceFlags(unsigned int* flags) {
-      return ::cudaGetDeviceFlags(flags);
-    }
-    cudaError_t SEP_cudaGetLastError() {
-      return ::cudaGetLastError();
-    }
-    const char* SEP_cudaGetErrorString(cudaError_t error) {
-      return ::cudaGetErrorString(error);
-    }
-    } // namespace sep::cuda
-    ```
-  - Why: Wrappers in namespace with prefixed names match code usage. Sources support namespace for compat.
+- (glad.h): MEDIUM: Reserved macros (__glad_h_, __gl_h_), reserved identifiers (__GLsync, _cl_context, _cl_event).
 
-- **/sep/src/compat/cuda_helpers.h** (CUDA_CHECK macro):
-  - Update to prefixed: Replace cuda calls with SEP_ versions (e.g., SEP_cudaEventCreate).
+**Advice & Direction** (Medium Priority):
+- For reserved macros/identifiers: Rename or undefine if possible (third-party GLAD loader—regenerate with non-reserved names via GLAD tool).
+- For sscanf: Cast to void or check return:
+  ```c
+  (void)sscanf(version, "%d.%d", &major, &minor);
+  ```
+- Rationale: GLAD is generated; regenerate with custom prefixes or suppress diagnostics in CMake:
+  ```cmake
+  target_compile_options(glad PRIVATE -Wno-reserved-macro-identifier -Wno-reserved-identifier)
+  ```
+- Verify: Run GL version checks.
 
-- **/sep/src/quantum/gpu_context.h** (Destructor):
-  - Uses SEP_cudaStreamDestroy—fix propagates from wrapper.
+### /sep/third_party/imgui/* (Multiple Files: imgui_impl_opengl3.cpp, imgui.h, imgui_impl_glfw.cpp, imgui_demo.cpp, imgui_internal.h, imgui_widgets.cpp, imgui_draw.cpp, imstb_truetype.h, imgui.cpp, imgui_tables.cpp)
+**Key Issues** (Common Across ImGui Files):
+- MEDIUM: Undefined memory manipulation (bugprone-undefined-memory-manipulation) on non-TriviallyCopyable types (e.g., memset on structs).
+- MEDIUM: Double promotion (implicit float to double).
+- LOW: Suspicious call arguments, switch missing default, dead stores.
+- MEDIUM: Confusable identifiers (e.g., ImGuiKey_I vs ImGuiKey_1).
+- MEDIUM: Noexcept on swap functions missing.
 
-- **/sep/src/core/metrics_collector.cpp**:
-  - In CUDA_CHECK, change to SEP_cudaEventCreate etc.
+**Advice & Direction** (Medium Priority):
+- For undefined memcpy/memset: Use constructors or std::copy for non-trivial types. E.g., in imgui_internal.h:3159:
+  ```cpp
+  ImDrawListSplitter() = default;  // Avoid memset, use member initializers
+  ```
+- For double promotion: Explicit cast:
+  ```cpp
+  bd->Time = 0.0;  // Use double literal
+  ```
+- For suspicious args/dead stores: Reorder args or remove unused assignments (e.g., in imgui_demo.cpp:7457, swap `item_is_selected` and `selectable_flags` if mismatched).
+- For confusable: Rename keys if custom, or suppress with `#pragma clang diagnostic ignored "-Wmisc-confusable-identifiers"`.
+- For noexcept swap: Add noexcept to swap functions in imgui_internal.h.
+- Rationale: ImGui is third-party; apply patches or suppress in CMake:
+  ```cmake
+  target_compile_options(imgui PRIVATE -Wno-double-promotion -Wno-bugprone-undefined-memory-manipulation)
+  ```
+- Verify: Run ImGui demo window to test UI.
 
-- **/sep/src/compat/stream.cpp**:
-  - In performCudaMemcpyAsync: return sep::cuda::SEP_cudaMemcpyAsync(...).
+### /sep/src/workbench/workbench_main.cpp
+**Key Issues**:
+- MEDIUM: Disregarded signal return (cert-err33-c).
 
-After: Clean/rebuild. Sources confirm prefixed wrappers avoid conflicts; no refutes.
+**Advice & Direction** (Medium Priority):
+- Cast to void:
+  ```cpp
+  (void)std::signal(SIGINT, signalHandler);
+  ```
+- Rationale: Signals may fail; add checks if needed.
+- Verify: Test with kill signals.
 
-#### Step 2: Fix HIGH Defects (6 total – UB/Crashes)
-- **/sep/third_party/imgui/imgui.cpp**:
-  - Line 2333: ^ garbage.
-    - Fix: uint32_t crc = ~0U; before loop.
+### /sep/src/cuda_runtime_api.h & /sep/src/cuda_runtime.h
+**Key Issues**:
+- CRITICAL: Ambiguous `cudaMemcpyKind` (name lookup conflict).
+- MEDIUM: Circular include.
 
-- **/sep/third_party/imgui/imgui_draw.cpp**:
-  - Line 1720: Null font RenderText.
-    - Fix: if (!font) return;
+**Advice & Direction** (High Priority):
+- For ambiguous enum: Qualify with `::cudaMemcpyKind` or fix include order (driver_types.h vs cuda_runtime.h).
+- For circular: Guard with #ifndef in cuda_runtime.h:
+  ```cpp
+  #ifndef CUDA_RUNTIME_H
+  #define CUDA_RUNTIME_H
+  // ...
+  #endif
+  ```
+- Rationale: CUDA headers have interdependencies; ensure consistent include paths.
+- Verify: Compile CUDA-dependent files.
 
-- **/sep/third_party/imgui/imgui_widgets.cpp**:
-  - Line 8323: Null deref while(it->val_i).
-    - Fix: if (!it) return;
+### SPA Headers (/usr/include/spa-0.2/spa/*)
+**Key Issues**:
+- MEDIUM: Reserved identifiers (_SPA_TYPE_*).
 
-- **/sep/third_party/imgui/imstb_textedit.h**:
-  - Line 989: == garbage.
-    - Fix: find.prev_first = 0;
+**Advice & Direction** (Low Priority):
+- Suppress in CMake for PipeWire targets:
+  ```cmake
+  target_compile_options(sep_audio PRIVATE -Wno-reserved-identifier)
+  ```
+- Rationale: System headers; don't modify.
+- Verify: Audio capture tests.
 
-- **/usr/include/spa-0.2/spa/pod/parser.h**:
-  - Line 496: Null deref pod->type.
-    - Fix: if (!pod) return SPA_POD_PARSER_ERROR_NULL_POD;
+### Other Files (e.g., bitfield.inl, parser.h, signal_set_service.ipp)
+**Key Issues**:
+- LOW: Dead stores, undefined binary ops, null deref (core.NullDereference), blocking calls in critical sections.
 
-- **/usr/lib/clang/20/include/cetintrin.h**:
-  - Lines 49,62: Uninit args __builtin_ia32_rdsspd/q.
-    - Fix: Suppress #pragma clang diagnostic ignored "-Wuninitialized" before include.
+**Advice & Direction** (Low-Medium Priority):
+- Dead stores: Remove unused assignments (e.g., bitfield.inl:343, remove `x >>= 1` if not needed).
+- Null deref (parser.h): Add null check before `pod->type`.
+- Blocking calls: Use non-blocking alternatives or move outside mutex (e.g., in pipewire_capture.cpp, read fgets outside lock if possible).
+- Rationale: Third-party (Boost/ASIO, GLM); patch or suppress.
+- Verify: Run threaded tests.
 
-#### Step 3: Fix MEDIUM Defects (138 total – Bugs/Quality)
-Batch by file; suppress in system/third-party.
+General Tips:
+- **Build Fixes First**: Focus on CRITICAL/HIGH in quantum/, core/, compat/ to get compilation working.
+- **Suppress Warnings**: Add CMake flags like `-Wno-*` for third-party code.
+- **Re-Analyze**: After fixes, re-run static analysis to confirm resolutions.
+- **Dependencies**: Ensure CUDA toolkit is correctly installed/linked; check include paths for circulars.
+- **Testing**: Add unit tests for fixed functions (e.g., CUDA error handling).
 
-- **/sep/third_party/imgui/imgui.cpp**:
-  - Signed char lines 2487,6983: Cast (unsigned char*).
-  - Undefined mem line 5583: Use ctor ImGuiWindow() = default;.
-  - Inc/dec cond line 5583: Separate --g.DebugLocateFrames == 0.
-  - Bitwise ptr memcpy line 5675: Use std::copy.
-  - Int div float line 17088: (float)(n / 16).
-
-- **/sep/third_party/imgui/imgui_widgets.cpp**:
-  - Signed char lines 2647,3239,3974: Cast (unsigned char).
-  - Undefined mem line 9410: Use ctor StbUndoRecord() = default;.
-  - Dec in cond line 7447: Separate ImToUpper(*s1); s1++.
-
-- **/sep/third_party/imgui/imgui.h**:
-  - Confusable: Ignore.
-  - Undefined mem memcpy: std::copy.
-
-- **/sep/third_party/imgui/imgui_demo.cpp**:
-  - Ignored sprintf: (void)sprintf.
-  - Int div float lines 6395,10818: (float)TEXT_BASE_WIDTH / 2.f.
-
-- **/usr/include/spa-0.2/spa/utils/json-core.h** (reserved identifiers/flags/errors; double-promotion line 449): Suppress #pragma clang diagnostic ignored "-Wreserved-identifier" / "-Wdouble-promotion" before include.
-
-- **/usr/include/spa-0.2/spa/utils/string.h** (cert-err33-c spa_assert_se): (void)spa_assert_se.
-
-- **/usr/include/spa-0.2/spa/utils/type.h** (reserved _SPA_TYPE_*): Suppress -Wreserved-identifier.
-
-- **/sep/src/crow/socket_adaptors.h** (unused returns/cert-err33-c lines 58,71,83,95): (void)socket_.close/shutdown.
-
-- **/sep/src/workbench/core/landing_page.cpp** (double-promotion lines 159,177,178): Use floats ImGui::Text("Latency: %.1f ms", 0.0f).
-
-- **/sep/src/workbench/core/demo_orchestrator.cpp** (double-promotion lines 211-213,216,221): Use floats.
-
-- **/sep/src/workbench/demos/annealing_demo.cpp / annealing_sim.cpp** (double-promotion pow lines 40/43): std::pow(static_cast<double>(dist), 6.0).
-
-- **/sep/src/workbench/demos/audio_visualizer.cpp** (double-promotion lines 193-195): Use floats.
-
-- **/sep/src/audio/config.cpp** (double-promotion exp_safe): Use doubles 1.0 / std::exp(-5.0 * ...).
-
-- **/sep/src/audio/pipewire_capture.cpp** (ignored snprintf line 223): (void)snprintf.
-
-- **/sep/src/workbench/core/workbench_core.cpp** (double-promotion line 367): Use float.
-
-- **/sep/extern/cycles/src/util/hash.h** (signed char line 555): (unsigned char)*str++.
-
-- **/sep/extern/cycles/third_party/cuew/src/cuew.c** (reserved macros lines 54,55): Suppress -Wreserved-macro-identifier.
-
-- **/sep/extern/cycles/third_party/sky/include/sky_model.h** (reserved __SKY_MODEL_H__ line 301): Suppress.
-
-- **/sep/extern/cycles/third_party/sky/source/sky_float3.h** (reserved __SKY_FLOAT3_H__ line 18): Suppress.
-
-- **/sep/extern/cycles/third_party/sky/source/sky_nishita.cpp** (int div float line 34): (float)(max - min) / (num - 1).
-
-- **Other MEDIUM**: Replace memcpy with std::copy for non-trivial.
-
-#### Step 4: Fix LOW Defects (64 total – Cleanup)
-- **/usr/include/glm/gtc/bitfield.inl** (dead stores lines 343,397,451): Remove x >>=1 if unused.
-- **ImGui files** (dead stores, missing defaults, suspicious args, bool ptr): Remove/add/verify.
-- **/sep/src/workbench/demos/audio_visualizer.hpp** (unused private fields threshold_ etc.): Remove or use in update/UI.
-- **/sep/src/audio/pipewire_capture.cpp** (blocking fgets lines 319,340,361): Move outside mutex or non-blocking.
-- **/usr/include/asio/detail/impl/signal_set_service.ipp** (blocking read line 145): Move outside lock.
-
-After all: Re-run analyzer. Sources support prefixed macros for compat; no refutes. Rebuild/test.
+If you provide more details on a specific file, I can refine!

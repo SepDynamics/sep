@@ -13,7 +13,6 @@
 #include "compat/types.h"
 #include "core/common.h"
 #include "core/error_handler.h"
-#include "cuda_wrapper.h"
 
 using sep::cuda::Error;
 using sep::shim::string;
@@ -24,10 +23,10 @@ namespace cuda {
     Error CudaCore::initialize(int device)
     {
         // Basic CUDA device initialization
-        cudaError_t cuda_err = cuda_wrapper::SetDevice(device);
-        if (cuda_err != cuda_wrapper::Success)
+        cudaError_t cuda_err = sep::cuda::SEP_cudaSetDevice(device);
+        if (cuda_err != cudaSuccess)
         {
-            return Error(Status::Error, string(cuda_wrapper::GetErrorString(cuda_err)),
+            return Error(Status::Error, string(sep::cuda::SEP_cudaGetErrorString(cuda_err)),
                          string("CudaCore::initialize"), SEPResult::CUDA_ERROR);
         }
         return Error(Status::Success, string("CUDA initialized successfully"),
@@ -36,76 +35,57 @@ namespace cuda {
 
 // Memory management functions
 cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
-    return static_cast<cudaError_t>(cuda_wrapper::Memset(devPtr, value, count));
+    return sep::cuda::SEP_cudaMemset(devPtr, value, count);
 }
 
 cudaError_t cudaMemsetAsync(void* devPtr, int value, size_t count, void* stream) {
-    return static_cast<cudaError_t>(cuda_wrapper::MemsetAsync(devPtr, value, count, stream));
+    return sep::cuda::SEP_cudaMemsetAsync(devPtr, value, count, stream);
 }
 
 cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
-    return static_cast<cudaError_t>(cuda_wrapper::MemGetInfo(free, total));
+    return sep::cuda::SEP_cudaMemGetInfo(free, total);
 }
 
 cudaError_t cudaMallocHost(void** ptr, size_t size) {
-    return static_cast<cudaError_t>(cuda_wrapper::MallocHost(ptr, size));
+    return sep::cuda::SEP_cudaMallocHost(ptr, size);
 }
 
-cudaError_t cudaFreeHost(void* ptr) {
-    return static_cast<cudaError_t>(cuda_wrapper::FreeHost(ptr));
-}
+cudaError_t cudaFreeHost(void* ptr) { return sep::cuda::SEP_cudaFreeHost(ptr); }
 
 cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind) {
-    return static_cast<cudaError_t>(cuda_wrapper::Memcpy(dst, src, count,
-        static_cast<cudaMemcpyKind>(kind)));
+    return sep::cuda::SEP_cudaMemcpy(dst, src, count, kind);
 }
 
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, void* stream) {
-    return static_cast<cudaError_t>(cuda_wrapper::MemcpyAsync(dst, src, count,
-        static_cast<cudaMemcpyKind>(kind), stream));
+    return sep::cuda::SEP_cudaMemcpyAsync(dst, src, count, kind, stream);
 }
 
 // Device management functions
-cudaError_t cudaSetDevice(int device)
-{
-    return static_cast<cudaError_t>(cuda_wrapper::SetDevice(device));
-}
+cudaError_t cudaSetDevice(int device) { return sep::cuda::SEP_cudaSetDevice(device); }
 
-cudaError_t cudaGetDevice(int* device)
-{
-    return static_cast<cudaError_t>(cuda_wrapper::GetDevice(device));
-}
+cudaError_t cudaGetDevice(int* device) { return sep::cuda::SEP_cudaGetDevice(device); }
 
-cudaError_t cudaGetDeviceCount(int* count)
-{
-    return static_cast<cudaError_t>(cuda_wrapper::GetDeviceCount(count));
-}
+cudaError_t cudaGetDeviceCount(int* count) { return sep::cuda::SEP_cudaGetDeviceCount(count); }
 
-cudaError_t cudaDeviceSynchronize(void)
-{
-    return static_cast<cudaError_t>(cuda_wrapper::DeviceSynchronize());
-}
+cudaError_t cudaDeviceSynchronize(void) { return sep::cuda::SEP_cudaDeviceSynchronize(); }
 
-cudaError_t cudaDeviceReset(void) { return static_cast<cudaError_t>(cuda_wrapper::DeviceReset()); }
+cudaError_t cudaDeviceReset(void) { return sep::cuda::SEP_cudaDeviceReset(); }
 
 cudaError_t cudaSetDeviceFlags(unsigned int flags)
 {
-    return static_cast<cudaError_t>(cuda_wrapper::SetDeviceFlags(flags));
+    return sep::cuda::SEP_cudaSetDeviceFlags(flags);
 }
 
 cudaError_t cudaGetDeviceFlags(unsigned int* flags)
 {
-    return static_cast<cudaError_t>(cuda_wrapper::GetDeviceFlags(flags));
+    return sep::cuda::SEP_cudaGetDeviceFlags(flags);
 }
 
-cudaError_t cudaGetLastError(void)
-{
-    return static_cast<cudaError_t>(cuda_wrapper::GetLastError());
-}
+cudaError_t cudaGetLastError(void) { return sep::cuda::SEP_cudaGetLastError(); }
 
 const char* cudaGetErrorString(cudaError_t error)
 {
-    return cuda_wrapper::GetErrorString(static_cast<int>(error));
+    return sep::cuda::SEP_cudaGetErrorString(error);
 }
 
 } // namespace cuda

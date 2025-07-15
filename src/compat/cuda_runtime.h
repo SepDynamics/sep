@@ -123,19 +123,19 @@ constexpr cudaError_t cudaErrorDeviceNotLicensed = 803;
 constexpr cudaError_t cudaErrorDeviceUninitilialized = 37;
 constexpr cudaError_t cudaErrorNoDevice = 100;
 
-constexpr unsigned int cudaStreamDefault = 0x00;
-constexpr unsigned int cudaStreamNonBlocking = 0x01;
-constexpr unsigned int cudaMemAttachGlobal = 0x01;
-constexpr unsigned int cudaMemAttachHost = 0x02;
-constexpr unsigned int cudaMemAttachSingle = 0x04;
-constexpr unsigned int cudaHostAllocDefault = 0x00;
-constexpr unsigned int cudaHostAllocPortable = 0x01;
-constexpr unsigned int cudaHostAllocMapped = 0x02;
-constexpr unsigned int cudaHostAllocWriteCombined = 0x04;
-constexpr unsigned int cudaEventDefault = 0x00;
-constexpr unsigned int cudaEventBlockingSync = 0x01;
-constexpr unsigned int cudaEventDisableTiming = 0x02;
-constexpr unsigned int cudaEventInterprocess = 0x04;
+constexpr unsigned int SEP_cudaStreamDefault = 0x00;
+constexpr unsigned int SEP_cudaStreamNonBlocking = 0x01;
+constexpr unsigned int SEP_cudaMemAttachGlobal = 0x01;
+constexpr unsigned int SEP_cudaMemAttachHost = 0x02;
+constexpr unsigned int SEP_cudaMemAttachSingle = 0x04;
+constexpr unsigned int SEP_cudaHostAllocDefault = 0x00;
+constexpr unsigned int SEP_cudaHostAllocPortable = 0x01;
+constexpr unsigned int SEP_cudaHostAllocMapped = 0x02;
+constexpr unsigned int SEP_cudaHostAllocWriteCombined = 0x04;
+constexpr unsigned int SEP_cudaEventDefault = 0x00;
+constexpr unsigned int SEP_cudaEventBlockingSync = 0x01;
+constexpr unsigned int SEP_cudaEventDisableTiming = 0x02;
+constexpr unsigned int SEP_cudaEventInterprocess = 0x04;
 
 } // namespace cuda
 } // namespace sep
@@ -162,17 +162,17 @@ using sep::cuda::cudaErrorDeviceNotLicensed;
 using sep::cuda::cudaErrorDeviceUninitilialized;
 using sep::cuda::cudaErrorNoDevice;
 
-using sep::cuda::cudaMemAttachGlobal;
-using sep::cuda::cudaMemAttachHost;
-using sep::cuda::cudaMemAttachSingle;
-using sep::cuda::cudaHostAllocDefault;
-using sep::cuda::cudaHostAllocPortable;
-using sep::cuda::cudaHostAllocMapped;
-using sep::cuda::cudaHostAllocWriteCombined;
-using sep::cuda::cudaEventDefault;
-using sep::cuda::cudaEventBlockingSync;
-using sep::cuda::cudaEventDisableTiming;
-using sep::cuda::cudaEventInterprocess;
+using sep::cuda::SEP_cudaEventBlockingSync;
+using sep::cuda::SEP_cudaEventDefault;
+using sep::cuda::SEP_cudaEventDisableTiming;
+using sep::cuda::SEP_cudaEventInterprocess;
+using sep::cuda::SEP_cudaHostAllocDefault;
+using sep::cuda::SEP_cudaHostAllocMapped;
+using sep::cuda::SEP_cudaHostAllocPortable;
+using sep::cuda::SEP_cudaHostAllocWriteCombined;
+using sep::cuda::SEP_cudaMemAttachGlobal;
+using sep::cuda::SEP_cudaMemAttachHost;
+using sep::cuda::SEP_cudaMemAttachSingle;
 
 #ifdef __cplusplus
 namespace sep {
@@ -206,7 +206,8 @@ cudaError_t cudaMalloc(void** ptr, size_t size);
 cudaError_t cudaFree(void* ptr);
 cudaError_t cudaMallocHost(void** ptr, size_t size);
 cudaError_t cudaFreeHost(void* ptr);
-cudaError_t cudaMallocManaged(void** ptr, size_t size, unsigned int flags = cudaMemAttachGlobal);
+cudaError_t cudaMallocManaged(void** ptr, size_t size,
+                              unsigned int flags = SEP_cudaMemAttachGlobal);
 cudaError_t cudaHostAlloc(void** ptr, size_t size, unsigned int flags);
 cudaError_t cudaMemcpy(void* dst, const void* src, size_t size, cudaMemcpyKind kind);
 cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t size, cudaMemcpyKind kind, cudaStream_t stream);

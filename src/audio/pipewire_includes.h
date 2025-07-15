@@ -23,24 +23,12 @@ extern "C" {
 // SPA core headers
 #include <spa/support/log.h>
 #include <spa/support/plugin.h>
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wreserved-identifier"
-#pragma clang diagnostic ignored "-Wdouble-promotion"
-#include <spa/utils/json-core.h>
-#pragma clang diagnostic pop
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wreserved-identifier"
-#include <spa/utils/string.h>
-#pragma clang diagnostic pop
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wreserved-identifier"
 #include <spa/utils/defs.h>
 #include <spa/utils/dict.h>
 #include <spa/utils/hook.h>
+#include <spa/utils/json-core.h>
+#include <spa/utils/string.h>
 #include <spa/utils/type.h>
-#pragma clang diagnostic pop
 
 // SPA audio headers
 #include <spa/param/audio/format-utils.h>

@@ -5,11 +5,9 @@
 #include <cuda_runtime_api.h>
 #include <cuda_runtime.h>
 
-constexpr unsigned int SEP_cudaStreamNonBlocking = 0x01;
-constexpr unsigned int SEP_cudaStreamDefault = 0x00;
-
 namespace sep {
 namespace cuda {
+// Remove global scope constants and keep them only in namespace
 // Alias CUDA types into our namespace
 using ::cudaError_t;
 using ::cudaStream_t;

@@ -1,11 +1,12 @@
 
-#include "quantum/quantum_processor.h"
-#include "core/types.h"
-
-#include "memory/types.h"
-#include "quantum/pattern_evolution_bridge.h" 
+#include "compat/cuda_helpers.h"
+#include "compat/cuda_runtime.h"
 #include "compat/math_common.h"
 #include "core/common.h"  // defines sep::SEPResult
+#include "core/types.h"
+#include "memory/types.h"
+#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/quantum_processor.h"
 
 using ::sep::memory::MemoryTierEnum;
 
@@ -122,7 +123,16 @@ namespace sep::pattern {
 PatternProcessor::PatternProcessor(Implementation impl) : implementation_(impl) {}
 
 sep::SEPResult PatternProcessor::init(quantum::GPUContext* ctx) {
-    (void)ctx;
+    if (implementation_ == Implementation::GPU)
+    {
+        if (!ctx)
+        {
+            return sep::SEPResult::INVALID_ARGUMENT;
+        }
+        CUDA_CHECK(cudaSetDevice(ctx->device_id));
+        CUDA_CHECK(cudaStreamCreate(&ctx->default_stream));
+        ctx->initialized = true;
+    }
     return sep::SEPResult::SUCCESS;
 }
 

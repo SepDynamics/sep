@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: reserved-identifiers
+        name: Fix Reserved Identifiers
+        entry: python tools/fix_reserved_identifiers.py
+        language: system
+        pass_filenames: false

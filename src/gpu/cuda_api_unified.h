@@ -1,12 +1,10 @@
 #pragma once
 
 #include <memory>
-#include <string>
 
 namespace sep {
 namespace gpu {
 
-// Forward declarations to avoid including CUDA headers
 struct CudaStream;
 struct CudaEvent;
 
@@ -62,7 +60,6 @@ public:
     CudaError set_device(int device);
     CudaError get_device(int* device);
 
-    // Error handling
     CudaError get_last_error();
     std::string error_string(const CudaError& error);
 

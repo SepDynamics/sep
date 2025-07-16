@@ -1,6 +1,8 @@
 #ifndef SEP_COMPAT_CUDA_RUNTIME_H
 #define SEP_COMPAT_CUDA_RUNTIME_H
 
+#include <stddef.h>  // For size_t
+
 #if SEP_ENGINE_HAS_CUDA
 #include <cuda_runtime_api.h>
 #include <cuda_runtime.h>
@@ -33,13 +35,26 @@
 
 namespace sep {
 namespace cuda {
-// Remove global scope constants and keep them only in namespace
 // Alias CUDA types into our namespace
 using ::cudaError_t;
 using ::cudaStream_t;
 using ::cudaEvent_t;
 using ::cudaMemcpyKind;
 using ::cudaSuccess;
+
+// Inline function wrappers for namespace-safe CUDA function usage
+inline cudaError_t SEP_cudaStreamDestroy(cudaStream_t stream) {
+    return ::cudaStreamDestroy(stream);
+}
+
+inline cudaError_t SEP_cudaMemcpy(void* dst, const void* src, size_t size, cudaMemcpyKind kind) {
+    return ::cudaMemcpy(dst, src, size, kind);
+}
+
+inline cudaError_t SEP_cudaMemcpyAsync(void* dst, const void* src, size_t size,
+                                       cudaMemcpyKind kind, cudaStream_t stream) {
+    return ::cudaMemcpyAsync(dst, src, size, kind, stream);
+}
 } // namespace cuda
 } // namespace sep
 

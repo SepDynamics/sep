@@ -9,6 +9,7 @@
 
 #include "compat/core.h"
 #include "compat/cuda_defs.h"
+#include "compat/cuda_wrappers.h"
 #include "compat/shim.h"
 #include "compat/types.h"
 #include "core/common.h"

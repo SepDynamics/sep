@@ -448,7 +448,7 @@ repos:
         name: Check for circular dependencies
         entry: python tools/check_includes.py
         language: python
-        files: \.(h|hpp)$
+        files: \.(cpp|h|hpp|cc|cxx)$
         additional_dependencies: [networkx]
 ```
 

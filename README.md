@@ -89,3 +89,10 @@ The codebase search tool is available as an MCP server that can be used with com
 - **MCP Tool**: TypeScript tool for Model Context Protocol integration
 - **Codebase Search**: Semantic search tool for the codebase
 - **API Server**: Headless HTTP server built from `src/api_main.cpp`.
+
+### Identifier Cleanup Script
+Run the reserved identifier fixer to update legacy macros and guards:
+
+```bash
+python tools/fix_reserved_identifiers.py
+```

@@ -29,10 +29,10 @@ I've created a comprehensive guidance system for you with four major documents:
 ## Your Immediate Action Items
 
 ### Week 1 Critical Path:
-1. **Run the CUDA inventory script** (from the CUDA guide) to understand your exact API usage
+1. **Run the CUDA inventory script** (`tools/cuda_inventory.sh`) to understand your exact API usage
 2. **Fix the self-include in common.h** - this is a 1-line fix
-3. **Create the unified CUDA wrapper structure** - start with just the header
-4. **Run the circular dependency analyzer** to visualize your include graph
+3. **Create the unified CUDA wrapper structure** - start with just the header (`src/gpu/cuda_api_unified.h`)
+4. **Run the circular dependency analyzer** (`tools/analyze_includes.py`) to visualize your include graph
 
 ### Quick Wins (Can do TODAY):
 ```bash

@@ -29,12 +29,11 @@
 #endif
 
 // Project includes
-#include "compat/constants.h"
+#include "compat/cuda_unified.h"
 #include "compat/cuda_wrapper.h"
 #include "compat/kernels.h"
 #include "compat/macros.h"
 #include "compat/raii.h"
-#include "compat/types.h"
 
 namespace sep::cuda {
 

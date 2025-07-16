@@ -1,7 +1,6 @@
 #pragma once
 
-#include "compat/cuda_runtime.h"
-#include "compat/cuda_wrappers.h"
+#include "compat/cuda_unified.h"
 
 namespace sep::quantum {
 
@@ -14,7 +13,7 @@ struct GPUContext {
     GPUContext() = default;
     ~GPUContext() {
         if (initialized && default_stream) {
-            sep::cuda::SEP_cudaStreamDestroy(default_stream);
+            sep::cuda::cudaStreamDestroy(default_stream);
         }
     }
 

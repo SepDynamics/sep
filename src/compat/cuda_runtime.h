@@ -5,7 +5,6 @@
 
 #if SEP_ENGINE_HAS_CUDA
 #include <cuda_runtime_api.h>
-#include <cuda_runtime.h>
 
 // Map SEP-prefixed names to CUDA enums/constants/functions when CUDA is available
 #define SEP_cudaSuccess cudaSuccess
@@ -59,9 +58,9 @@ inline cudaError_t SEP_cudaMemcpyAsync(void* dst, const void* src, size_t size,
 } // namespace sep
 
 // Make CUDA types available in global scope
-using sep::cuda::cudaError_t;
-using sep::cuda::cudaStream_t;
-using sep::cuda::cudaEvent_t;
+// using sep::cuda::cudaError_t;
+// using sep::cuda::cudaStream_t;
+// using sep::cuda::cudaEvent_t;
 using sep::cuda::cudaMemcpyKind;
 using sep::cuda::cudaSuccess;
 

@@ -21,20 +21,19 @@
 #include <spdlog/spdlog.h>
 
 // Project includes
-#include "core/logging.h"
-#include "crow/crow_isolation.h"
 #include "api/crow_request.h"
 #include "api/json_helpers.h"
-#include "api/types.h"
 #include "api/ollama_client.h"
-#include "core/types.h"
-#include "core/common.h"
 #include "api/rate_limit_middleware.h"
 #include "api/request_interface.h"
 #include "api/sep_engine.h"
-#include "core/types.h"
 #include "api/server.h"
-#include "compat/types.h"
+#include "api/types.h"
+#include "compat/cuda_unified.h"
+#include "core/common.h"
+#include "core/logging.h"
+#include "core/types.h"
+#include "crow/crow_isolation.h"
 
 namespace sep::api {
 

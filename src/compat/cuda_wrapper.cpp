@@ -3,8 +3,7 @@
 
 #include "compat/core.h"
 #include "compat/cuda_defs.h"
-#include "compat/shim.h"
-#include "compat/types.h"
+#include "compat/cuda_unified.h"
 #include "core/common.h"
 #include "core/error_handler.h"
 
@@ -25,7 +24,7 @@ namespace sep::cuda {
 
         // Get device properties to verify compatibility
         cudaDeviceProp props;
-        cuda_err = cudaGetDeviceProperties(&props, device);
+        cuda_err = SEP_cudaGetDeviceProperties(&props, device);
         if (cuda_err != cudaSuccess)
         {
             return Error(Status::Error, string(cudaGetErrorString(cuda_err)),

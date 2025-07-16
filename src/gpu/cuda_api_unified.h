@@ -1,98 +1,50 @@
 #pragma once
 
-#include <memory>
+#ifdef __cplusplus
+#include "../compat/cuda_types_fwd.h"
+#include <string.h>
 
-namespace sep {
-namespace gpu {
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-struct CudaStream;
-struct CudaEvent;
+/* CUDA API Unified Interface 
+ * This provides a single entry point for all CUDA operations
+ * to prevent circular dependencies and duplicate declarations
+ */
 
-enum class MemcpyKind {
-    HostToHost,
-    HostToDevice,
-    DeviceToHost,
-    DeviceToDevice,
-    Default
-};
+/* Device Management */
+int cuda_get_device_count(void);
+int cuda_get_current_device(void);
+int cuda_set_device(int device_id);
+const char* cuda_get_device_name(int device_id);
 
-enum class StreamFlags {
-    Default = 0x00,
-    NonBlocking = 0x01
-};
+/* Memory Management */
+void* cuda_allocate_device_memory(size_t size);
+int cuda_free_device_memory(void* ptr);
+void* cuda_allocate_unified_memory(size_t size);
+int cuda_free_unified_memory(void* ptr);
 
-// Error handling
-class CudaError {
-public:
-    CudaError(int code, const std::string& message);
-    bool is_success() const { return code_ == 0; }
-    const std::string& message() const { return message_; }
-    int code() const { return code_; }
+/* Memory Copy Operations */
+int cuda_copy_host_to_device(void* dst, const void* src, size_t size);
+int cuda_copy_device_to_host(void* dst, const void* src, size_t size);
+int cuda_copy_device_to_device(void* dst, const void* src, size_t size);
 
-    static CudaError success() { return CudaError(0, "Success"); }
+/* Stream Management */
+cudaStream_t cuda_create_stream(unsigned int flags);
+int cuda_destroy_stream(cudaStream_t stream);
+int cuda_synchronize_stream(cudaStream_t stream);
 
-private:
-    int code_;
-    std::string message_;
-};
+/* Error Handling */
+cudaError_t cuda_get_last_error(void);
+const char* cuda_get_error_string(cudaError_t error);
 
-// Main API class - Singleton pattern for global state management
-class CudaAPI {
-public:
-    static CudaAPI& instance();
+/* Unified API Initialization */
+int cuda_initialize(void);
+int cuda_is_available(void);
 
-    // Memory operations
-    CudaError malloc(void** ptr, size_t size);
-    CudaError free(void* ptr);
-    CudaError memcpy(void* dst, const void* src, size_t count, MemcpyKind kind);
-    CudaError memcpy_async(void* dst, const void* src, size_t count,
-                          MemcpyKind kind, CudaStream* stream);
-    CudaError memset(void* ptr, int value, size_t count);
+#ifdef __cplusplus
+}
+#endif
 
-    // Stream operations
-    CudaError create_stream(CudaStream** stream, StreamFlags flags = StreamFlags::Default);
-    CudaError destroy_stream(CudaStream* stream);
-    CudaError stream_synchronize(CudaStream* stream);
-    CudaError stream_wait_event(CudaStream* stream, CudaEvent* event);
-
-    // Device management
-    CudaError get_device_count(int* count);
-    CudaError set_device(int device);
-    CudaError get_device(int* device);
-
-    CudaError get_last_error();
-    std::string error_string(const CudaError& error);
-
-private:
-    CudaAPI() = default;
-    ~CudaAPI() = default;
-    CudaAPI(const CudaAPI&) = delete;
-    CudaAPI& operator=(const CudaAPI&) = delete;
-};
-
-// RAII Wrappers
-class CudaMemory {
-public:
-    explicit CudaMemory(size_t size);
-    ~CudaMemory();
-
-    void* get() { return ptr_; }
-    const void* get() const { return ptr_; }
-    size_t size() const { return size_; }
-
-    // Move semantics only
-    CudaMemory(CudaMemory&& other) noexcept;
-    CudaMemory& operator=(CudaMemory&& other) noexcept;
-
-    // No copy
-    CudaMemory(const CudaMemory&) = delete;
-    CudaMemory& operator=(const CudaMemory&) = delete;
-
-private:
-    void* ptr_ = nullptr;
-    size_t size_ = 0;
-};
-
-} // namespace gpu
-} // namespace sep
-
+#endif /* __cplusplus */

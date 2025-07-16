@@ -30,7 +30,7 @@
 
 // Project includes
 #include "compat/cuda_unified.h"
-#include "compat/cuda_wrapper.h"
+#include "compat/cuda/cuda_wrapper_unified.h"
 #include "compat/kernels.h"
 #include "compat/macros.h"
 #include "compat/raii.h"

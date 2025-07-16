@@ -1,5 +1,5 @@
 #include "hip_runtime_wrapper.h"
-#include "cuda_wrapper.h"
+#include "compat/cuda/cuda_wrapper_unified.h"
 
 #include <string>
 

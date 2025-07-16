@@ -2,8 +2,10 @@
 
 // When not compiling with NVCC, include the real Crow common header directly.
 #ifndef __CUDACC__
-// Avoid self-include by using the system path to the actual Crow framework
-#include "/usr/local/include/crow/common.h"
+// Do not include the real Crow common.h header here to avoid circular dependency
+// Instead, we'll forward declare or include specific headers we need
+#include <string>
+#include <utility>
 #else
 
 // This is a minimal version of the common.h file from the Crow framework

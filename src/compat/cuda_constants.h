@@ -1,57 +1,135 @@
 #ifndef SEP_COMPAT_CUDA_CONSTANTS_H
 #define SEP_COMPAT_CUDA_CONSTANTS_H
 
-#include "compat/cuda_types.h"
+#include "cuda_base.h"
+
+// This header provides all CUDA constants needed by the application
+// without directly including CUDA headers that could cause circular dependencies
 
 namespace sep {
 namespace cuda {
 
-#if SEP_ENGINE_HAS_CUDA
-// When CUDA is available, import the actual CUDA constants
-// Note: We don't place these in the global namespace to avoid conflicts
-const cudaError_t cudaSuccess = ::cudaSuccess;
-const cudaError_t cudaErrorNotReady = ::cudaErrorNotReady;
-const cudaError_t cudaErrorInvalidValue = ::cudaErrorInvalidValue;
-const cudaError_t cudaErrorInvalidDevice = ::cudaErrorInvalidDevice;
-const cudaError_t cudaErrorInvalidMemcpyDirection = ::cudaErrorInvalidMemcpyDirection;
-const cudaError_t cudaErrorInitializationError = ::cudaErrorInitializationError;
-const cudaError_t cudaErrorNoDevice = ::cudaErrorNoDevice;
-const cudaError_t cudaErrorOutOfMemory = ::cudaErrorOutOfMemory;
+// Error code constants as an enum to avoid conflicts with actual CUDA definitions
+enum class CudaError : cudaError_t {
+    Success = 0,
+    MemoryAllocation = 2,
+    InitializationError = 3,
+    InvalidDevice = 10,
+    InvalidValue = 11,
+    DeviceUninitialized = 37,
+    NotReady = 34,
+    SetOnActiveProcess = 711,
+    StreamCaptureUnsupported = 900,
+    InvalidMemcpyDirection = 21,
+    InvalidResourceHandle = 400,
+    OutOfMemory = 2,
+    InvalidDevicePointer = 17,
+    InvalidConfiguration = 9,
+    InvalidPitchValue = 12,
+    InvalidSymbol = 13,
+    DeviceAlreadyInUse = 54,
+    DeviceNotLicensed = 803,
+    NoDevice = 100
+};
 
-// Stream flags
-const unsigned int cudaStreamDefault = 0x00;
-const unsigned int cudaStreamNonBlocking = 0x01;
+// For backward compatibility with existing code
+// These constants will be phased out in favor of the enum
+constexpr cudaError_t cudaSuccess = static_cast<cudaError_t>(CudaError::Success);
+constexpr cudaError_t cudaErrorMemoryAllocation = static_cast<cudaError_t>(CudaError::MemoryAllocation);
+constexpr cudaError_t cudaErrorInitializationError = static_cast<cudaError_t>(CudaError::InitializationError);
+constexpr cudaError_t cudaErrorInvalidDevice = static_cast<cudaError_t>(CudaError::InvalidDevice);
+constexpr cudaError_t cudaErrorInvalidValue = static_cast<cudaError_t>(CudaError::InvalidValue);
+constexpr cudaError_t cudaErrorDeviceUninitialized = static_cast<cudaError_t>(CudaError::DeviceUninitialized);
+constexpr cudaError_t cudaErrorNotReady = static_cast<cudaError_t>(CudaError::NotReady);
+constexpr cudaError_t cudaErrorSetOnActiveProcess = static_cast<cudaError_t>(CudaError::SetOnActiveProcess);
+constexpr cudaError_t cudaErrorStreamCaptureUnsupported = static_cast<cudaError_t>(CudaError::StreamCaptureUnsupported);
+constexpr cudaError_t cudaErrorInvalidMemcpyDirection = static_cast<cudaError_t>(CudaError::InvalidMemcpyDirection);
+constexpr cudaError_t cudaErrorInvalidResourceHandle = static_cast<cudaError_t>(CudaError::InvalidResourceHandle);
+constexpr cudaError_t cudaErrorOutOfMemory = static_cast<cudaError_t>(CudaError::OutOfMemory);
+constexpr cudaError_t cudaErrorInvalidDevicePointer = static_cast<cudaError_t>(CudaError::InvalidDevicePointer);
+constexpr cudaError_t cudaErrorInvalidConfiguration = static_cast<cudaError_t>(CudaError::InvalidConfiguration);
+constexpr cudaError_t cudaErrorInvalidPitchValue = static_cast<cudaError_t>(CudaError::InvalidPitchValue);
+constexpr cudaError_t cudaErrorInvalidSymbol = static_cast<cudaError_t>(CudaError::InvalidSymbol);
+constexpr cudaError_t cudaErrorDeviceAlreadyInUse = static_cast<cudaError_t>(CudaError::DeviceAlreadyInUse);
+constexpr cudaError_t cudaErrorDeviceNotLicensed = static_cast<cudaError_t>(CudaError::DeviceNotLicensed);
+constexpr cudaError_t cudaErrorNoDevice = static_cast<cudaError_t>(CudaError::NoDevice);
 
-// MemcpyKind values
-const cudaMemcpyKind memcpyHostToHost = ::cudaMemcpyHostToHost;
-const cudaMemcpyKind memcpyHostToDevice = ::cudaMemcpyHostToDevice;
-const cudaMemcpyKind memcpyDeviceToHost = ::cudaMemcpyDeviceToHost;
-const cudaMemcpyKind memcpyDeviceToDevice = ::cudaMemcpyDeviceToDevice;
-const cudaMemcpyKind memcpyDefault = ::cudaMemcpyDefault;
+// Stream and memory flags
+enum class CudaFlags : unsigned int {
+    // Stream flags
+    StreamDefault = 0x00,
+    StreamNonBlocking = 0x01,
+    
+    // Memory attachment flags
+    MemAttachGlobal = 0x01,
+    MemAttachHost = 0x02,
+    MemAttachSingle = 0x04,
+    
+    // Host allocation flags
+    HostAllocDefault = 0x00,
+    HostAllocPortable = 0x01,
+    HostAllocMapped = 0x02,
+    HostAllocWriteCombined = 0x04,
+    
+    // Event flags
+    EventDefault = 0x00,
+    EventBlockingSync = 0x01,
+    EventDisableTiming = 0x02,
+    EventInterprocess = 0x04
+};
 
-#else
-// When CUDA is not available, define stub constants
-const cudaError_t cudaSuccess = 0;
-const cudaError_t cudaErrorNotReady = 34;
-const cudaError_t cudaErrorInvalidValue = 11;
-const cudaError_t cudaErrorInvalidDevice = 10;
-const cudaError_t cudaErrorInvalidMemcpyDirection = 21;
-const cudaError_t cudaErrorInitializationError = 3;
-const cudaError_t cudaErrorNoDevice = 100;
-const cudaError_t cudaErrorOutOfMemory = 2;
+// Exported SEP-prefixed constants for backward compatibility
+constexpr unsigned int SEP_cudaStreamDefault = static_cast<unsigned int>(CudaFlags::StreamDefault);
+constexpr unsigned int SEP_cudaStreamNonBlocking = static_cast<unsigned int>(CudaFlags::StreamNonBlocking);
+constexpr unsigned int SEP_cudaMemAttachGlobal = static_cast<unsigned int>(CudaFlags::MemAttachGlobal);
+constexpr unsigned int SEP_cudaMemAttachHost = static_cast<unsigned int>(CudaFlags::MemAttachHost);
+constexpr unsigned int SEP_cudaMemAttachSingle = static_cast<unsigned int>(CudaFlags::MemAttachSingle);
+constexpr unsigned int SEP_cudaHostAllocDefault = static_cast<unsigned int>(CudaFlags::HostAllocDefault);
+constexpr unsigned int SEP_cudaHostAllocPortable = static_cast<unsigned int>(CudaFlags::HostAllocPortable);
+constexpr unsigned int SEP_cudaHostAllocMapped = static_cast<unsigned int>(CudaFlags::HostAllocMapped);
+constexpr unsigned int SEP_cudaHostAllocWriteCombined = static_cast<unsigned int>(CudaFlags::HostAllocWriteCombined);
+constexpr unsigned int SEP_cudaEventDefault = static_cast<unsigned int>(CudaFlags::EventDefault);
+constexpr unsigned int SEP_cudaEventBlockingSync = static_cast<unsigned int>(CudaFlags::EventBlockingSync);
+constexpr unsigned int SEP_cudaEventDisableTiming = static_cast<unsigned int>(CudaFlags::EventDisableTiming);
+constexpr unsigned int SEP_cudaEventInterprocess = static_cast<unsigned int>(CudaFlags::EventInterprocess);
 
-// Stream flags
-const unsigned int cudaStreamDefault = 0x00;
-const unsigned int cudaStreamNonBlocking = 0x01;
+// Getter functions for error constants (preferred way to access in new code)
+inline cudaError_t GetCudaSuccess() { return static_cast<cudaError_t>(CudaError::Success); }
+inline cudaError_t GetCudaErrorNotReady() { return static_cast<cudaError_t>(CudaError::NotReady); }
+inline cudaError_t GetCudaErrorInvalidValue() { return static_cast<cudaError_t>(CudaError::InvalidValue); }
+inline cudaError_t GetCudaErrorInvalidDevice() { return static_cast<cudaError_t>(CudaError::InvalidDevice); }
+inline cudaError_t GetCudaErrorInvalidMemcpyDirection() { return static_cast<cudaError_t>(CudaError::InvalidMemcpyDirection); }
+inline cudaError_t GetCudaErrorInitializationError() { return static_cast<cudaError_t>(CudaError::InitializationError); }
+inline cudaError_t GetCudaErrorNoDevice() { return static_cast<cudaError_t>(CudaError::NoDevice); }
+inline cudaError_t GetCudaErrorOutOfMemory() { return static_cast<cudaError_t>(CudaError::OutOfMemory); }
 
-// MemcpyKind values
-const cudaMemcpyKind memcpyHostToHost = cudaMemcpyHostToHost;
-const cudaMemcpyKind memcpyHostToDevice = cudaMemcpyHostToDevice;
-const cudaMemcpyKind memcpyDeviceToHost = cudaMemcpyDeviceToHost;
-const cudaMemcpyKind memcpyDeviceToDevice = cudaMemcpyDeviceToDevice;
-const cudaMemcpyKind memcpyDefault = cudaMemcpyDefault;
+// Stream flags as functions
+inline unsigned int GetCudaStreamDefault() { return static_cast<unsigned int>(CudaFlags::StreamDefault); }
+inline unsigned int GetCudaStreamNonBlocking() { return static_cast<unsigned int>(CudaFlags::StreamNonBlocking); }
 
-#endif
+// Memory flags as functions
+inline unsigned int GetCudaMemAttachGlobal() { return static_cast<unsigned int>(CudaFlags::MemAttachGlobal); }
+inline unsigned int GetCudaMemAttachHost() { return static_cast<unsigned int>(CudaFlags::MemAttachHost); }
+inline unsigned int GetCudaMemAttachSingle() { return static_cast<unsigned int>(CudaFlags::MemAttachSingle); }
+
+// Host allocation flags as functions
+inline unsigned int GetCudaHostAllocDefault() { return static_cast<unsigned int>(CudaFlags::HostAllocDefault); }
+inline unsigned int GetCudaHostAllocPortable() { return static_cast<unsigned int>(CudaFlags::HostAllocPortable); }
+inline unsigned int GetCudaHostAllocMapped() { return static_cast<unsigned int>(CudaFlags::HostAllocMapped); }
+inline unsigned int GetCudaHostAllocWriteCombined() { return static_cast<unsigned int>(CudaFlags::HostAllocWriteCombined); }
+
+// Event flags as functions
+inline unsigned int GetCudaEventDefault() { return static_cast<unsigned int>(CudaFlags::EventDefault); }
+inline unsigned int GetCudaEventBlockingSync() { return static_cast<unsigned int>(CudaFlags::EventBlockingSync); }
+inline unsigned int GetCudaEventDisableTiming() { return static_cast<unsigned int>(CudaFlags::EventDisableTiming); }
+inline unsigned int GetCudaEventInterprocess() { return static_cast<unsigned int>(CudaFlags::EventInterprocess); }
+
+// MemcpyKind values as functions - these use the enum from cuda_base.h
+inline cudaMemcpyKind GetMemcpyHostToHost() { return cudaMemcpyHostToHost; }
+inline cudaMemcpyKind GetMemcpyHostToDevice() { return cudaMemcpyHostToDevice; }
+inline cudaMemcpyKind GetMemcpyDeviceToHost() { return cudaMemcpyDeviceToHost; }
+inline cudaMemcpyKind GetMemcpyDeviceToDevice() { return cudaMemcpyDeviceToDevice; }
+inline cudaMemcpyKind GetMemcpyDefault() { return cudaMemcpyDefault; }
 
 } // namespace cuda
 } // namespace sep

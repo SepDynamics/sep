@@ -114,6 +114,20 @@ if __name__ == '__main__':
     analyzer.visualize()
 ```
 
+**Usage**
+
+Run the tool from the repository root to print cycles:
+
+```bash
+python tools/analyze_includes.py
+```
+
+To also generate a graph image, pass `--graph` with an optional output path:
+
+```bash
+python tools/analyze_includes.py src --graph dependency_graph.png
+```
+
 ### Step 2: Dependency Metrics
 
 ```bash

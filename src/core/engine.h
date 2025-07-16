@@ -4,15 +4,12 @@
 #include <cstdint>
 #include <memory>
 #include <vector>
-#include "compat/shim.h"
-#include <vector>
 
-#include "core/common.h"
-
-#include "core/types.h"
-#include "core/config.h"
 #include "blender/types.h"  // SEPBlenderBridge definition
-#include "compat/types.h"  // for QSHResult
+#include "compat/cuda_unified.h"
+#include "core/common.h"
+#include "core/config.h"
+#include "core/types.h"
 #include "quantum/qbsa.h"
 
 namespace sep {

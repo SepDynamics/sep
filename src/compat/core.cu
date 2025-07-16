@@ -2,7 +2,7 @@
 
 #include "compat/core.h"
 #include "compat/cuda_runtime.h"  // Must come first to define CUDA types
-#include "compat/types.h"
+#include "compat/cuda_unified.h"
 #include "core/common.h"
 #include "core/error_handler.h"
 

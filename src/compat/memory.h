@@ -9,9 +9,8 @@
 #include <cuda_runtime.h>
 #endif
 
-#include "compat/macros.h"
-#include "compat/cuda_common.h"
-#include "compat/cuda_wrappers.h"
+#include "compat/cuda_unified.h"
+
 #if SEP_CUDA_AVAILABLE
 #include "compat/cuda_helpers.h"
 #endif

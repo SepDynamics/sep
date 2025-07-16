@@ -18,25 +18,18 @@ class formatter
 {
 public:
     virtual ~formatter() = default;
-
-    SEP_HOST SEP_DEVICE virtual void format(const sep::shim::string& msg, std::ostringstream& dest) = 0;
-
-    SEP_HOST SEP_DEVICE virtual sep::shim::string pattern() const = 0;
 };
 
 // Default pattern formatter implementation
 class pattern_formatter : public formatter
 {
 public:
-    SEP_HOST SEP_DEVICE void format(const sep::shim::string& msg, std::ostringstream& dest) override
+    SEP_HOST SEP_DEVICE void format(const std::string& msg, std::ostringstream& dest)
     {
         dest << msg.c_str();
     }
 
-    SEP_HOST SEP_DEVICE sep::shim::string pattern() const override
-    {
-        return "%v";
-    }
+    SEP_HOST SEP_DEVICE std::string pattern() const { return "%v"; }
 };
 
 }  // namespace spdlog

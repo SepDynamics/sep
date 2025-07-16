@@ -22,13 +22,12 @@
 
 // Project includes
 #include "api/types.h"
-#include "compat/core.h"         // For CudaCore
-#include "compat/cuda_defs.h"    // For Status enum
-#include "compat/math_common.h"  // Include math common for sqrt_safe
-#include "compat/types.h"
-#include "core/config.h"   // For sep::config::APIConfig
-#include "core/logging.h"  // Include logging header first
-#include "core/types.h"    // For quantum::Pattern::generation
+#include "compat/core.h"
+#include "compat/cuda_unified.h"
+#include "compat/math_common.h"
+#include "core/config.h"
+#include "core/logging.h"
+#include "core/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor.h"
 #include "tests/simple_embedding_model.h"

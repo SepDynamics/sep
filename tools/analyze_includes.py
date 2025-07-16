@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Analyze include dependencies in C/C++ headers.
 
 This script detects circular include dependencies and can optionally

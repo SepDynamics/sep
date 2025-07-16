@@ -37,6 +37,12 @@ grep -rh "sep::cuda::[a-zA-Z]*(" src/ --include="*.cpp" --include="*.h" | \
   sed 's/.*sep::cuda::\([a-zA-Z]*\)(.*/\1/' | sort | uniq -c | sort -nr
 ```
 
+Run the script from the repository root:
+
+```bash
+$ ./tools/cuda_inventory.sh
+```
+
 ### Step 2: Create the Unified Interface
 
 ```cpp

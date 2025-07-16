@@ -1,6 +1,7 @@
 #pragma once
 
 #include "compat/cuda_runtime.h"
+#include "compat/cuda_wrappers.h"
 
 namespace sep::quantum {
 

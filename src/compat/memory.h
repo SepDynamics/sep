@@ -11,6 +11,7 @@
 
 #include "compat/macros.h"
 #include "compat/cuda_common.h"
+#include "compat/cuda_wrappers.h"
 #if SEP_CUDA_AVAILABLE
 #include "compat/cuda_helpers.h"
 #endif
@@ -111,8 +112,8 @@ template <typename T>
 bool copyToDevice(T* dst, const T* src, size_t count, Stream* /*stream*/ = nullptr)
 {
 #if SEP_CUDA_AVAILABLE
-    cudaError_t error = ::sep::cuda::SEP_cudaMemcpyAsync(dst, src, count * sizeof(T),
-                                                         cudaMemcpyHostToDevice, nullptr);
+    cudaError_t error = sep::cuda::cudaMemcpyAsync(dst, src, count * sizeof(T),
+                                                  sep::cuda::cudaMemcpyHostToDevice, nullptr);
     return error == cudaSuccess;
 #else
     (void)stream;
@@ -125,8 +126,8 @@ template <typename T>
 bool copyToHost(T* dst, const T* src, size_t count, Stream* /*stream*/ = nullptr)
 {
 #if SEP_CUDA_AVAILABLE
-    cudaError_t error = ::sep::cuda::SEP_cudaMemcpyAsync(dst, src, count * sizeof(T),
-                                                         cudaMemcpyDeviceToHost, nullptr);
+    cudaError_t error = sep::cuda::cudaMemcpyAsync(dst, src, count * sizeof(T),
+                                                  sep::cuda::cudaMemcpyDeviceToHost, nullptr);
     return error == cudaSuccess;
 #else
     (void)stream;

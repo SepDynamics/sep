@@ -60,7 +60,7 @@ src/compat/
 #define SEP_CUDA_PRELUDE_H
 
 // 1. System CUDA headers
-#ifdef SEP_USE_CUDA
+#ifdef SEP_HAS_CUDA
   #include <cuda_runtime_api.h>
 #endif
 
@@ -319,8 +319,8 @@ make
    - Implement proper error checking
 
 2. **Address Simple Macro Issues**
-   ```cpp
-   // Replace all __MACRO with SEP_PRIVATE_MACRO
+   ```bash
+   # Replace all __MACRO with SEP_PRIVATE_MACRO
    find src -name "*.h" -o -name "*.cpp" | \
      xargs sed -i 's/__\([A-Z_]*\)/SEP_PRIVATE_\1/g'
    ```

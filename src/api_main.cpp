@@ -8,8 +8,6 @@
 #include "api/auth_middleware.h"
 #include "api/server.h"
 #include "core/manager.h"
-#include "core/engine.h"
-#include "blender/cycles_renderer.hpp"
 
 // Default auth configuration
 sep::api::AuthConfig createDefaultConfig()
@@ -72,16 +70,12 @@ int main(int argc, char** argv)
     auto& configMgr = sep::config::ConfigManager::getInstance();
     configMgr.initialize(argc, argv);
 
-    // Create renderer implementation
-    auto renderer = std::make_unique<sep::blender::CyclesRenderer>();
-    renderer->setRotation(0.0f);
-
     // Create auth config
     sep::api::AuthConfig auth_config = createDefaultConfig();
 
     // Create and start API server
     std::unique_ptr<sep::api::SEPApiServer> server =
-        std::make_unique<sep::api::SEPApiServer>(auth_config, renderer.get());
+        std::make_unique<sep::api::SEPApiServer>(auth_config, nullptr);  // Removed demo renderer
 
     std::cout << "Starting SEP API Server on port " << auth_config.port << std::endl;
 

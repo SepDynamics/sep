@@ -1,11 +1,28 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
-import CoherenceEngine from './quantum/coherence-engine.js';
-import AdaptiveTierManager from './memory/adaptive-tier-manager.js';
-import AdvancedContextProcessor from './context/advanced-processor.js';
-import SelfEvolution from './quantum/self-evolution.js';
-import PatternManifold from './quantum/pattern-manifold.js';
+import CoherenceEngine from './coherence-engine.js';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+
+// Placeholder classes for missing modules
+class AdaptiveTierManager {
+    constructor() {}
+    async processPattern(pattern) { return pattern; }
+}
+
+class AdvancedContextProcessor {
+    constructor() {}
+    async enhance(context) { return context; }
+}
+
+class SelfEvolution {
+    constructor() {}
+    async evolve(brain) { return brain; }
+}
+
+class PatternManifold {
+    constructor() {}
+    async queryRelated(pattern, limit) { return []; }
+}
 
 /**
  * AutonomousBrain - Core intelligence system for SEP with enhanced

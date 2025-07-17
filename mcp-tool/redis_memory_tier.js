@@ -42,8 +42,8 @@ class RedisMemoryTier {
                 ltm_promotion: options.generationRequirements?.ltm_promotion || 100
             },
             poolSizes: {
-                stm: options.poolSizes?.stm || 1000,
-                mtm: options.poolSizes?.mtm || 10000,
+                stm: options.poolSizes?.stm || 10000,  // Increased from 1000 to handle initial bulk processing
+                mtm: options.poolSizes?.mtm || 50000,  // Increased from 10000
                 ltm: options.poolSizes?.ltm || 100000
             },
             fragmentationThreshold: options.fragmentationThreshold || 0.3
@@ -535,10 +535,19 @@ class RedisMemoryTier {
 
     async sep_cleanupTier(tier, count) {
         try {
-            // Get the least coherent patterns
-            const patterns = await this.client.zRange(this.keyPrefixes.tier[tier], 0, count - 1);
+            // Calculate how many patterns to remove (at least 10% of pool or the requested count)
+            const poolSizes = await this.client.hGetAll(`${this.keyPrefixes.pool}size`);
+            const currentSize = parseInt(poolSizes[tier] || '0', 10);
+            const maxSize = this.options.poolSizes[tier.toLowerCase()];
             
-            console.log(`Cleaning up ${patterns.length} patterns from ${tier}`);
+            // Remove at least 10% of the pool size or the requested count, whichever is larger
+            const percentageToRemove = Math.floor(maxSize * 0.1);
+            const actualCount = Math.max(count, percentageToRemove);
+            
+            // Get the least coherent patterns
+            const patterns = await this.client.zRange(this.keyPrefixes.tier[tier], 0, actualCount - 1);
+            
+            console.log(`Cleaning up ${patterns.length} patterns from ${tier} (pool: ${currentSize}/${maxSize})`);
             
             // Delete each pattern
             for (const patternId of patterns) {

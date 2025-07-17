@@ -7,21 +7,41 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 class AdaptiveTierManager {
     constructor() {}
     async processPattern(pattern) { return pattern; }
+    async initialize() { return true; }
+    async store(tier, item) { return { success: true }; }
+    async rebalanceMemoryTiers() { return true; }
+    async getTierDistribution() { return { stm: 0.3, mtm: 0.3, ltm: 0.4 }; }
 }
 
 class AdvancedContextProcessor {
     constructor() {}
     async enhance(context) { return context; }
+    async extractContext(input) {
+        // Extract context from input
+        return {
+            content: input.content || input,
+            type: 'text',
+            metadata: {}
+        };
+    }
+    async initialize() { return true; }
+    async trackInteractionPattern() { return true; }
 }
 
 class SelfEvolution {
     constructor() {}
     async evolve(brain) { return brain; }
+    async improveProcessing() { return true; }
+    async getImprovementMetrics() { return {}; }
 }
 
 class PatternManifold {
     constructor() {}
     async queryRelated(pattern, limit) { return []; }
+    async initialize() { return true; }
+    async updateRelationships() { return true; }
+    async evolveManifold() { return true; }
+    calculateManifoldPosition(patternResult) { return { x: 0, y: 0, z: 0 }; }
 }
 
 /**
@@ -80,11 +100,11 @@ export default class AutonomousBrain {
                 await fs.mkdir(path, { recursive: true });
             }
             
-            // Initialize all components
-            await this.coherenceEngine.initialize();
-            await this.memoryManager.initialize();
-            await this.contextProcessor.initialize();
-            await this.patternManifold.initialize();
+            // Initialize all components (only if they have initialize methods)
+            if (this.coherenceEngine.initialize) await this.coherenceEngine.initialize();
+            if (this.memoryManager.initialize) await this.memoryManager.initialize();
+            if (this.contextProcessor.initialize) await this.contextProcessor.initialize();
+            if (this.patternManifold.initialize) await this.patternManifold.initialize();
             
             console.log('Autonomous Brain initialized successfully');
         } catch (error) {
@@ -294,8 +314,10 @@ export default class AutonomousBrain {
             adaptationRate: this.config.evolutionConfig.adaptationRate,
             interactionCount: this.interactionCounter,
             lastEvolution: new Date(this.lastEvolutionTime).toISOString(),
-            coherenceTrend: this.coherenceEngine.getCoherenceTrend(),
-            storageOptimization: this.memoryManager.getOptimizationMetrics()
+            coherenceTrend: this.coherenceEngine.getCoherenceTrend ?
+                this.coherenceEngine.getCoherenceTrend() : {},
+            storageOptimization: this.memoryManager.getOptimizationMetrics ?
+                this.memoryManager.getOptimizationMetrics() : {}
         };
     }
     
@@ -330,7 +352,9 @@ export default class AutonomousBrain {
             this.lastEvolutionTime = Date.now();
             
             // Phase 1: Analyze patterns across memory tiers
-            const patterns = await this.coherenceEngine.analyzePatternsAcrossTiers();
+            const patterns = this.coherenceEngine.analyzePatternsAcrossTiers ?
+                await this.coherenceEngine.analyzePatternsAcrossTiers() :
+                { evolved: [] };
             
             // Phase 2: Promote/demote memory items based on coherence
             await this.memoryManager.rebalanceMemoryTiers(patterns);
@@ -350,7 +374,8 @@ export default class AutonomousBrain {
                 timestamp: new Date().toISOString(),
                 improvements: {
                     patterns: patterns.evolved?.length || 0,
-                    thresholds: this.coherenceEngine.getThresholdChanges(),
+                    thresholds: this.coherenceEngine.getThresholdChanges ?
+                        this.coherenceEngine.getThresholdChanges() : {},
                     algorithms: this.selfEvolution.getImprovementMetrics()
                 }
             };
@@ -377,7 +402,8 @@ export default class AutonomousBrain {
             const adaptationRate = this.config.evolutionConfig.adaptationRate;
             
             // Example: If we're consistently getting high coherence inputs, increase thresholds
-            const recentCoherenceAvg = this.coherenceEngine.getRecentCoherenceAverage();
+            const recentCoherenceAvg = this.coherenceEngine.getRecentCoherenceAverage ?
+                this.coherenceEngine.getRecentCoherenceAverage() : 0.7;
             
             if (recentCoherenceAvg > this.config.coherenceThresholds.mtmPromotion + 0.15) {
                 this.config.coherenceThresholds.mtmPromotion += adaptationRate * 0.1;
@@ -394,7 +420,9 @@ export default class AutonomousBrain {
             this.config.coherenceThresholds.ltmPromotion = Math.min(0.98, Math.max(0.7, this.config.coherenceThresholds.ltmPromotion));
             
             // Update the coherence engine with the new thresholds
-            this.coherenceEngine.updateThresholds(this.config.coherenceThresholds);
+            if (this.coherenceEngine.updateThresholds) {
+                this.coherenceEngine.updateThresholds(this.config.coherenceThresholds);
+            }
         } catch (error) {
             console.error('Error adapting to user patterns:', error);
         }
@@ -425,7 +453,9 @@ export default class AutonomousBrain {
         this.config.coherenceThresholds.ltmPromotion = Math.min(0.98, Math.max(0.7, this.config.coherenceThresholds.ltmPromotion));
         
         // Update the coherence engine with the new thresholds
-        this.coherenceEngine.updateThresholds(this.config.coherenceThresholds);
+        if (this.coherenceEngine.updateThresholds) {
+            this.coherenceEngine.updateThresholds(this.config.coherenceThresholds);
+        }
     }
     
     /**

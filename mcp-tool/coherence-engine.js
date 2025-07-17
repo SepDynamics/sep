@@ -44,4 +44,4 @@ class CoherenceEngine {
   }
 }
 
-export default new CoherenceEngine();
+export default CoherenceEngine;

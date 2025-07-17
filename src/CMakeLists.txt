@@ -9,10 +9,12 @@ include_directories(
 # Configure include paths for all targets
 set(SEP_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/src
-#    ${CMAKE_SOURCE_DIR}/extern/pipewire/spa/src
-#    ${PIPEWIRE_INCLUDE_DIRS}
 )
 
+# Add minimal build configuration
+if(SEP_MINIMAL)
+    add_definitions(-DSEP_MINIMAL=1)
+endif()
 
 # Add component subdirectories
 add_subdirectory(core)
@@ -22,8 +24,9 @@ add_subdirectory(memory)
 add_subdirectory(gpu)
 add_subdirectory(quantum)
 add_subdirectory(api)
-#add_subdirectory(audio)
-#add_subdirectory(blender)
+# Disabled components for minimal build
+# add_subdirectory(audio)
+# add_subdirectory(blender)
 
 
 

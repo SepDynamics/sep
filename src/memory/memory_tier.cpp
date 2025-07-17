@@ -83,9 +83,8 @@ namespace sep::memory
             }
 #else
             memory_pool_ = std::malloc(config.size);
-            cuda::cudaError_t err =
-                memory_pool_ ? cuda::cudaSuccess : cuda::cudaErrorMemoryAllocation;
-            if (err != cuda::cudaSuccess)
+            ::cudaError_t err = memory_pool_ ? ::cudaSuccess : ::cudaErrorMemoryAllocation;
+            if (err != ::cudaSuccess)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
                 if (logger) logger->error("Failed to allocate host memory: {}", err);
@@ -140,7 +139,7 @@ namespace sep::memory
             else
             {
 #if SEP_MEMORY_HAS_CUDA
-                cudaFree(memory_pool_);
+                ::cudaFree(memory_pool_);
 #else
                 std::free(memory_pool_);
 #endif
@@ -583,8 +582,8 @@ namespace sep::memory
         else
         {
 #if SEP_MEMORY_HAS_CUDA
-            cudaError_t err = ::sep::cuda::allocateManaged(&new_pool, new_size);
-            if (err != cudaSuccess)
+            ::cudaError_t err = ::sep::cuda::allocateManaged(&new_pool, new_size);
+            if (err != ::cudaSuccess)
             {
                 if (logger)
                 {
@@ -595,8 +594,8 @@ namespace sep::memory
             }
 #else
             new_pool = std::malloc(new_size);
-            cuda::cudaError_t err = new_pool ? cuda::cudaSuccess : cuda::cudaErrorMemoryAllocation;
-            if (err != cuda::cudaSuccess)
+            sep::cuda::cudaError_t err = new_pool ? sep::cuda::cudaSuccess : sep::cuda::cudaErrorMemoryAllocation;
+            if (err != sep::cuda::cudaSuccess)
             {
                 if (logger)
                 {

@@ -15,10 +15,8 @@ cmake_minimum_required(VERSION 3.15)
 # Enable POSIX features for popen/pclose
 add_compile_definitions(_POSIX_C_SOURCE=200809L)
 add_definitions(-D_GNU_SOURCE)
-add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 # Also propagate POSIX feature macros to all targets
 add_compile_definitions(_POSIX_C_SOURCE=200809L)
-add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
 # Load CUDA toolchain file before project declaration
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
@@ -28,6 +26,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
+# Remove CUDA from LANGUAGES to avoid direct conflicts
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Enable testing at the top-level so subdirectories can register tests
@@ -59,6 +58,14 @@ option(SEP_USE_TBB "Enable TBB parallel features" ON)
 option(SEP_HAS_EXCEPTIONS "Enable C++ exceptions" ON)
 option(SEP_MINIMAL "Enable minimal build with core components only" ON)
 
+# Force disable the following components for minimal quant build
+set(SEP_BUILD_WORKBENCH OFF CACHE BOOL "Build the interactive sep_workbench visualization" FORCE)
+set(SEP_WORKBENCH_DEMO OFF CACHE BOOL "Build sep_workbench in demo mode" FORCE)
+set(SEP_WITH_OPENIMAGEIO OFF CACHE BOOL "Enable OpenImageIO support" FORCE)
+set(SEP_WITH_EMBREE OFF CACHE BOOL "Enable Embree support" FORCE)
+set(SEP_WITH_OSL OFF CACHE BOOL "Enable OpenShadingLanguage support" FORCE)
+set(SEP_WITH_ALEMBIC OFF CACHE BOOL "Enable Alembic support" FORCE)
+
 if(SEP_MINIMAL)
     add_compile_definitions(SEP_MINIMAL=1)
 endif()
@@ -75,9 +82,9 @@ include_directories(BEFORE
 )
 
 # Disable previously required components
-set(SEP_ENABLE_BLENDER OFF)
-set(SEP_ENABLE_AUDIO OFF)
-set(SEP_HAS_CYCLES 0)
+set(SEP_ENABLE_BLENDER OFF CACHE BOOL "Enable Blender integration" FORCE)
+set(SEP_ENABLE_AUDIO OFF CACHE BOOL "Enable Audio processing" FORCE)
+set(SEP_HAS_CYCLES 0 CACHE BOOL "Enable Cycles renderer" FORCE)
 
 # Set CUDA compiler flags before enabling the language
 set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
@@ -139,32 +146,20 @@ find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(http_parser REQUIRED)
-find_package(glm REQUIRED)
+# GLM removed for minimal quant build - not needed for headless operation
+# find_package(glm REQUIRED)
 find_package(spdlog)
-find_package(OpenGL REQUIRED)
-if(SEP_BUILD_WORKBENCH)
-    # GLFW package is typically exported as glfw3 on many systems
-    find_package(glfw3 REQUIRED)
-    # Use our custom FindGLEW.cmake module
-    find_package(GLEW REQUIRED)
-endif()
+# OpenGL not needed for headless quant operation
+# find_package(OpenGL REQUIRED)
+# Workbench disabled for minimal build - not needed for headless quant operation
 if(spdlog_FOUND)
     message(STATUS "Using system spdlog")
 else()
     message(WARNING "spdlog not found, falling back to stub implementation")
     add_compile_definitions(SEP_SPDLOG_FALLBACK)
 endif()
-find_package(OpenVDB REQUIRED)
-if(SEP_WITH_OPENSUBDIV)
-    find_package(OpenSubdiv REQUIRED)
-endif()
-if(SEP_WITH_OPENPGL)
-    find_package(OpenPGL REQUIRED)
-endif()
-if(SEP_WITH_OCIO)
-    find_package(OpenColorIO REQUIRED)
-endif()
-find_package(Imath REQUIRED)
+# OpenVDB, OpenSubdiv, OpenPGL, OpenColorIO, Imath are all related to
+# visualization, rendering or geometry processing - not needed for headless operation
 
 # Set TBB_ROOT to prefer the newer TBB 12.x version only when a valid path exists
 if(NOT DEFINED ENV{TBB_ROOT})
@@ -178,22 +173,8 @@ if(SEP_USE_TBB)
     add_compile_definitions(SEP_USE_TBB)
     find_package(TBB REQUIRED)
 endif()
-if(SEP_WITH_OPENIMAGEIO)
-    find_package(OpenImageIO REQUIRED)
-endif()
-if(SEP_WITH_EMBREE)
-    find_package(embree REQUIRED)
-endif()
-if(SEP_WITH_OSL)
-    find_package(OSL REQUIRED)
-endif()
+# All visualization/rendering libraries removed for minimal build
 
-if(SEP_WITH_ALEMBIC)
-    find_package(Alembic REQUIRED)
-endif()
-
-# Build ImGui from the bundled third_party source
-add_subdirectory(third_party/imgui)
 
 # Add CUDA-specific optimizations for dedicated GPU access
 add_compile_options(-DSEP_CUDA_DEDICATED_GPU=1)

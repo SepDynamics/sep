@@ -1,53 +1,55 @@
-# TODO.md: Roadmap to Standalone SEP Engine Demo for Quant Trading
+# TODO.md: Refined Roadmap to Standalone SEP Engine Demo for Quant Trading
 
-This roadmap is tailored to your current codebase snapshot and the Proposal.md goal: a demo of the SEP Engine as a standalone processor for quantitative trading data. Focus: Analyze market data (e.g., options/stocks) for pattern coherence/evolution, generate DAG representations (using existing dag_graph.h), and output metrics (e.g., stability, generation via quantum_state). 
+This refined roadmap addresses the latest analyzer defects (e.g., macro expansions causing syntax errors like 'expected unqualified-id' from cudaSuccess, circular includes in cuda_runtime.h/cuda_types.h, ambiguous CUDA calls in qbsa.cpp/engine.cpp) and build failures (e.g., missing audio/capture.h, noexcept mismatches in math functions fixed via toolchain flags). Key strategy: Use CUDA toolchain exclusively (no 'CUDA' in project languages) to avoid math conflicts; remove all non-core subs (audio/blender/workbench/UI); qualify CUDA symbols globally (::cudaSuccess); break header cycles with cuda_fwd.h; implement minimal quant CSV parser in data_parser.cpp; use api_main.cpp as CLI demo entry for batch processing with JSON output. Expand steps with sub-tasks for fixes (e.g., test CUDA snippets via code_execution). Proceed sequentially: CMake cleanup first, then CUDA stabilization, then pipeline, verifying with ninja/analyzer after each.
 
-**Assessment Insights**:
-- **Current State**: Core components (quantum/processor.h, memory_tier_manager.hpp, quantum_coherence_manager.h, dag_graph.cpp) exist for pattern processing/coherence/DAGs. Quantum kernels (QBSA/QFH in qbsa.cpp/qfh.cpp) are GPU-ready but plagued by CUDA ambiguities/incomplete types (e.g., cudaStream_t in gpu_context.h). API/bridge (bridge.cpp, client.cpp) can handle inputs/outputs. Non-relevant parts (workbench/demos like genesis_pattern, audio/pipewire, blender/cycles) cause build defects (e.g., missing scene.h, blocking fgets) and bloat—disabling them reduces ~60% of defects/dependencies (no ImGui/GLM/GLAD needed for standalone).
-- **Gaps**: No direct quant data handling (e.g., CSV parsers for market feeds); DAG is basic (needs quant-specific nodes like volatility patterns); metrics output is console/JSON-ready but lacks trading specifics (e.g., alpha generation from coherence). Standalone mode: Engine runs via api_main.cpp/sep_engine.cpp, but needs CLI entry for demo.
-- **Strategy**: Disable visuals/demos to stabilize; build data pipeline around existing quantum/memory cores; test with sample quant data (e.g., options chains). Expand steps as needed (e.g., if CUDA fixes reveal kernel bugs, add sub-tasks). Proceed sequentially: Clean/stabilize first, then pipeline, then demo. Use code_execution tool for quick tests (e.g., verify DAG additions).
+## Step 1: Update CMake Configuration and Remove Non-Essential Components
+- **Insight**: Build fails on missing audio/capture.h (from engine.cpp) and UI deps; toolchain handles CUDA (flags like -include cuda_unified_fix.h stubs sinpi/cospi noexcept); strip all optional finds/subs (no OpenVDB/Imath/GLM/spdlog—use std alternatives); disable workbench/tests for minimal core/API focus—reduces defects by ~80% (no ImGui mem ops, no Blender scene.h).
+- Update main CMakeLists.txt: Load toolchain early; set project LANGUAGES CXX only; add_compile_definitions(SEP_HAS_CUDA=1 SEP_USE_CUDA=1 SEP_MINIMAL=1); find only essentials (CUDAToolkit Threads fmt TBB); include_dirs src/compat/core/quantum/memory/api; add_subdirectory only those.
+- Update src/CMakeLists.txt: Add libs for sep_core (error_handler/dag_graph/logging), sep_compat (cuda_impl/raii/stream), sep_memory (memory_tier_manager/quantum_coherence_manager), sep_quantum (qbsa/qfh/evolution/processor/pattern_processor_interface/types_serialization), sep_api (bridge/client/server/sep_engine/api_main); link sep_api to sep_quantum/sep_memory/sep_core/sep_compat/CUDA/TBB/fmt/Threads; no workbench/audio/blender/third_party.
+- Delete dirs/files: src/workbench src/audio src/blender third_party/glm third_party/imgui; strip refs in core/engine.h (no demo_manager/CyclesRenderer); replace GLM vec3 with std::array<float,3> in Pattern/positions.
+- Rebuild/Verify: ninja clean; ninja; check log for no missing headers/ambiguities; run analyzer—target 0 CRITICAL.
 
-Proceed one major step at a time; after each, rebuild (`ninja`), run analyzer, and test core functionality (e.g., process mock patterns).
+## Step 2: Resolve CUDA Macro and Syntax Issues
+- **Insight**: 'expected unqualified-id' from cudaSuccess macro (redefined as 0, conflicts in enums/constexpr); fix by undefining macros in cuda_fwd.h or using enum class; noexcept math issues (sinpi/cospi) resolved by cuda_unified_fix.h defines (__CUDA_NO_HALF_OPERATORS__ etc.)—ensure -include flag.
+- Sub-task: In compat/cuda_fwd.h, change #define cudaSuccess 0 to enum class CudaError { Success = 0, MemoryAllocation = 2 }; use CudaError::Success; update all uses (e.g., cuda_impl.cpp ::CudaError::Success).
+- Sub-task: Qualify calls in cuda_runtime.h/cuda_impl.cpp with :: (e.g., ::cudaStreamDestroy); remove inline redefs in cuda_wrappers.h causing ambiguities.
+- Sub-task: Fix Error constructor in cuda_impl.cpp: Align to 4 args (add location: __FILE__ ":" + std::to_string(__LINE__)).
+- Test: Use code_execution for snippet: #include "compat/cuda_fwd.h"; cudaError_t err = CudaError::Success; std::cout << (err == 0);
+- Rebuild quantum/core; verify no syntax errors in qbsa.cpp/memory_tier.cpp.
 
-## Step 1: Cleanup and Disable Non-Essential Components
-- **Insight**: Demos (e.g., genesis_pattern) rely on removed deps (GLM for positions, ImGui for UI, Cycles for render)—cause cycles/incomplete types (e.g., gpu_context.h errors in demos). Audio/Blender add unrelated defects (blocking calls, missing headers). Disabling slims build, fixes ~50 defects (e.g., ImGui dead stores), focuses on core/API for quant pipeline.
-- Remove workbench/demos dir (including genesis_pattern.*—not needed for quant; it's a visual sim).
-- Delete src/audio, src/blender dirs.
-- In CMakeLists.txt: Remove `add_subdirectory(workbench/audio/blender)`; excise links/includes for GLM/ImGui/GLAD/Cycles/Pipewire.
-- Strip refs: In engine.h/core files, remove demo_manager.hpp, CyclesRenderer; stub `on_ui_render`/render calls if lingering.
-- Replace GLM uses: In quantum/memory (e.g., vec4 positions), use std::array<float,4> or raw floats.
-- Rebuild: Fix any orphan includes; expect clean(er) log without demo errors.
+## Step 3: Break Circular Dependencies and Include Cycles
+- **Insight**: Cycles like cuda_runtime.h <-> cuda_types.h <-> cuda_unified.h cause undef types (cudaStream_t incomplete in gpu_context.h); LOW defects from misc-header-include-cycle—use cuda_fwd.h for all forwards, ensure #pragma once, one-way includes (fwd -> types -> runtime).
+- Sub-task: Move all typedefs/decls (cudaError_t, cudaStream_t, cudaMemcpyKind enum) to cuda_fwd.h; include cuda_fwd.h first in all CUDA headers; remove <cuda_runtime.h> from cuda_types.h.
+- Sub-task: In cufft.h, qualify using ::cufftComplex; etc.
+- Sub-task: Remove circular refs in engine.h (no audio/capture.h—stub if needed).
+- Audit: Grep for #include "compat/cuda_*" and reorder.
+- Rebuild; check logs for no cycle warnings; analyzer 0 circular defects.
 
-## Step 2: Resolve CUDA/Build Issues for Core Stability
-- **Insight**: Persistent ambiguities (e.g., cudaStreamDestroy in qbsa.cpp) from sep::cuda vs. global; incomplete cudaStream_t in gpu_context.h (demos trigger via includes). Namespace fixes + forwards resolve without stubs.
-- Qualify CUDA calls in cuda_runtime.h/unified.h with `::` (e.g., `::cudaStreamDestroy`).
-- In gpu_context.h/quantum_manifold_optimizer.h, change `sep::cuda::cudaStream_t` to `::cudaStream_t`; include cuda_fwd.h first.
-- Remove redundant stubs in cuda_functions.h; strengthen guards (`#pragma once` + conditionals).
-- Fix namespace in sep_engine.cpp (e.g., `sep::api::Status::Success`).
-- In memory_tier.cpp, declare `cudaError_t err = ::cudaSuccess;` (global qual); fix undef `err`.
-- Rebuild quantum/core; test: Run simple pattern add/process in main.cpp, check no crashes.
+## Step 4: Fix Analyzer Defects and Remaining Compilation Errors
+- **Insight**: CRITICAL in driver_types.h from macro conflicts—undef cudaSuccess before including system CUDA; MEDIUM cert-err33-c ignored returns (add (void)fprintf); HIGH uninit in cetintrin.h (init vars); LOW reserved macros in cuda_unified_fix.h (rename __CUDA_* to SEP_CUDA_*).
+- Sub-task: HIGH/CRITICAL first: Init t in cetintrin.h __builtin_ia32_rdsspd(t); cast chars in ImGui (but remove ImGui); correct Status::Success namespace in sep_engine.cpp to sep::api.
+- Sub-task: MEDIUM/LOW: Replace memset/memcpy on non-trivial (e.g., ImVector—but remove ImGui); add noexcept to swaps; (void) ignored returns in socket_adaptors.h shutdown.
+- Sub-task: In memory_tier.cpp, fix syntax from macro: Use ::cudaSuccess instead of cudaSuccess.
+- Sub-task: In stream.cpp/raii.cpp, define SEP_cudaStreamNonBlocking/SEP_cudaStreamDefault as 1/0.
+- Sub-task: In engine.h, qualify SEPBlenderBridge as pattern::BlenderBridge (but remove Blender).
+- Re-run analyzer; aim for 0 HIGH/CRITICAL; rebuild all modules.
 
-## Step 3: Stabilize Quantum/Memory Cores for Standalone Use
-- **Insight**: Processor (processor.cpp) and coherence_manager ready for patterns; DAG (dag_graph.cpp) can represent quant data (e.g., nodes as price patterns, edges as correlations). Add standalone entry in api_main.cpp.
-- Test/Fix: Use code_execution to verify basics (e.g., add mock Pattern, evolve, compute coherence).
-- Enhance DAG: Add quant nodes (e.g., volatility/coherence as attributes) in dag_graph.h.
-- Standalone Mode: In api_main.cpp, add CLI args for input files; process patterns, output JSON metrics.
-- Metrics Output: In coherence_manager.cpp, add funcs for avg coherence/stability/generation; log/JSON export.
-- Rebuild; run analyzer—aim for 0 CRITICAL/HIGH defects.
+## Step 5: Stabilize Core Runtime and Add Quant Data Parser
+- **Insight**: Post-fixes, test headless runtime; no UI/render—use console/JSON logs; add data_parser.cpp for CSV (ticker,price,vol -> Pattern: id=ticker, energy=price delta, coherence=1/vol).
+- Implement src/core/data_parser.cpp/h: std::vector<sep::Pattern> parseQuantCSV(const std::string& path); use std::ifstream, std::getline, std::stringstream for split.
+- In api_main.cpp, add CLI: if argc>1, parse file argv[1], process patterns, output JSON metrics (coherence/alpha/risk).
+- Test: code_execution for parser snippet with mock CSV; run api_main with sample.csv (web_search_with_snippets "free options csv sample").
+- Rebuild; run basic pattern process; confirm no crashes.
 
-## Step 4: Build Quant Data Pipeline
-- **Insight**: No current market data input; use std::filesystem/Crow for file/socket reads. Process as Patterns: Map prices/vol to quantum_state (e.g., energy=price delta, coherence=signal strength).
-- Add Input Parser: In core/new `data_parser.cpp`: Read CSV/JSON (e.g., options data: strike/expiry/vol); convert to Patterns (id=ticker, position=vec from time/price).
-- Integrate Processor: In engine.cpp, add `processQuantData` : Load data, add to processor, evolve via QBSA/QFH.
-- DAG Reps: In memory_tier_manager.cpp, build DAG from processed patterns (nodes=assets, edges=correlations via coherence).
-- Metrics: Compute/output (e.g., tail risk from low coherence, alpha from evolution).
-- Test: Sample data (browse_page for free options CSV, e.g., from Yahoo Finance); process, verify DAG/metrics.
+## Step 6: Implement DAG for Quant Correlations and Metrics Output
+- **Insight**: dag_graph.cpp ready—extend addNode with volatility attr; build edges if coherence>0.7 (strong hedge).
+- In engine.cpp, add processQuantData: Parse CSV -> add Patterns to processor -> evolve -> build DAG (nodes=assets/edges=correlations) -> compute metrics (alpha=avg coherence * generation, risk=1-stability).
+- JSON output: {"dag":{"nodes":[{id,vol,coherence}],"edges":[{from,to,strength}]}, "metrics":{"alpha":0.15,"risk":"low"}}.
+- Test: Mock patterns, assert DAG size/metrics; code_execution for compute funcs.
 
-## Step 5: Implement Standalone Demo and Validation
-- **Insight**: Demo: CLI tool (api_main.cpp) takes data file, runs pipeline, outputs JSON (DAG graph, coherence metrics) for trading insights (e.g., "High coherence in AAPL options—low risk").
-- Add CLI: Use argc/argv for input file/params; process, print metrics.
-- Validation: Unit tests in src/tests (e.g., mock data, assert coherence >0.5 for stable patterns).
-- Polish: Error handling (e.g., invalid data); CUDA checks for GPU accel.
-- Final Build: Clean ninja; run demo on sample quant data.
-
-Expand as needed: E.g., if Step 2 reveals kernel bugs, sub-task: Debug QBSA in code_execution. Once stable, iterate on quant features (e.g., Black-Scholes comparison metrics).
+## Step 7: Create Standalone CLI Demo and Final Validation
+- **Insight**: Demo: sep_engine --quant data.csv --output metrics.json processes batch, outputs trading insights.
+- In api_main.cpp main: Parse args (--quant file --gpu), call processQuantData, dump JSON.
+- Validation: Add src/tests/quant_test.cpp (mock CSV, assert coherence>0.5); run analyzer/tests.
+- Polish: Error handling (invalid CSV=JSON{"error":"parse failed"}); --gpu flag for CUDA.
+- Final: ninja; run demo on sample data (browse_page "yahoo finance options csv sample"); commit if stable.

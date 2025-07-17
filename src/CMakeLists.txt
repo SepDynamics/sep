@@ -16,7 +16,7 @@ if(SEP_MINIMAL)
     add_definitions(-DSEP_MINIMAL=1)
 endif()
 
-# Add component subdirectories
+# Add component subdirectories - only core components needed for quant processing
 add_subdirectory(core)
 add_subdirectory(compat)
 add_subdirectory(embeddings)
@@ -24,9 +24,10 @@ add_subdirectory(memory)
 add_subdirectory(gpu)
 add_subdirectory(quantum)
 add_subdirectory(api)
-# Disabled components for minimal build
-# add_subdirectory(audio)
-# add_subdirectory(blender)
+# Completely removed for minimal quant build:
+# - audio: not needed for data processing
+# - blender: visualization only
+# - workbench: UI/demo framework
 
 
 
@@ -56,13 +57,17 @@ target_include_directories(sep_engine PRIVATE
 
 target_link_libraries(sep_engine PRIVATE
     sep_api
-#    sep_blender
+    sep_quantum
+    sep_memory
+    sep_embeddings
     sep_core
     sep_compat
+    sep_gpu
     Threads::Threads
-#    glad
-#    glfw
-#    OpenGL::GL
+    CUDA::cudart
+    CUDA::cuda_driver
+    ${CURL_LIBRARIES}
+    http_parser::http_parser
 )
 
 

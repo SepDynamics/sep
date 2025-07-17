@@ -1,11 +1,18 @@
 #pragma once
 
-// When not compiling with NVCC, include the real Crow common header directly.
+// This header provides a simplified version of Crow's common.h
+// It avoids circular dependencies by splitting the implementation
+// into CUDA and non-CUDA paths
+
+// When not compiling with NVCC, include minimal headers needed
 #ifndef __CUDACC__
-// Do not include the real Crow common.h header here to avoid circular dependency
-// Instead, we'll forward declare or include specific headers we need
 #include <string>
 #include <utility>
+// Forward declarations for Crow types used across the codebase
+namespace crow {
+    class request;
+    class response;
+}
 #else
 
 // This is a minimal version of the common.h file from the Crow framework

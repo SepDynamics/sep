@@ -1,50 +1,93 @@
-#pragma once
+/*
+ * CUDA API Unified Interface
+ * 
+ * This header provides a unified interface to CUDA functionality that works
+ * in both CUDA and non-CUDA environments through conditional compilation.
+ */
 
-#ifdef __cplusplus
-#include "../compat/cuda_types_fwd.h"
-#include <string.h>
+#ifndef SEP_CUDA_API_UNIFIED_H
+#define SEP_CUDA_API_UNIFIED_H
+
+#include <stddef.h>  /* For size_t */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* CUDA API Unified Interface 
- * This provides a single entry point for all CUDA operations
- * to prevent circular dependencies and duplicate declarations
- */
+/* Error codes */
+#define SEP_CUDA_SUCCESS                      0
+#define SEP_CUDA_ERROR_INVALID_VALUE          1
+#define SEP_CUDA_ERROR_OUT_OF_MEMORY          2
+#define SEP_CUDA_ERROR_NOT_INITIALIZED        3
+#define SEP_CUDA_ERROR_INVALID_DEVICE         4
+#define SEP_CUDA_ERROR_NO_DEVICE              5
+#define SEP_CUDA_ERROR_LAUNCH_FAILED          6
+#define SEP_CUDA_ERROR_LAUNCH_TIMEOUT         7
+#define SEP_CUDA_ERROR_LAUNCH_OUT_OF_RESOURCES 8
+#define SEP_CUDA_ERROR_SYNCHRONIZATION_ERROR  9
+#define SEP_CUDA_ERROR_NOT_ENOUGH_MEMORY      10
+#define SEP_CUDA_ERROR_INVALID_CONFIGURATION  11
 
-/* Device Management */
-int cuda_get_device_count(void);
-int cuda_get_current_device(void);
-int cuda_set_device(int device_id);
-const char* cuda_get_device_name(int device_id);
+/* Memory copy kinds */
+typedef enum {
+    SEP_CUDA_MEMCPY_HOST_TO_HOST = 0,
+    SEP_CUDA_MEMCPY_HOST_TO_DEVICE = 1,
+    SEP_CUDA_MEMCPY_DEVICE_TO_HOST = 2,
+    SEP_CUDA_MEMCPY_DEVICE_TO_DEVICE = 3,
+    SEP_CUDA_MEMCPY_DEFAULT = 4
+} SEP_CUDA_MEMCPY_KIND;
 
-/* Memory Management */
-void* cuda_allocate_device_memory(size_t size);
-int cuda_free_device_memory(void* ptr);
-void* cuda_allocate_unified_memory(size_t size);
-int cuda_free_unified_memory(void* ptr);
+/* Error structure */
+typedef struct {
+    int code;
+    char message[256];
+} SEP_CUDA_ERROR;
 
-/* Memory Copy Operations */
-int cuda_copy_host_to_device(void* dst, const void* src, size_t size);
-int cuda_copy_device_to_host(void* dst, const void* src, size_t size);
-int cuda_copy_device_to_device(void* dst, const void* src, size_t size);
+/* Device properties structure */
+typedef struct {
+    char name[256];
+    int major;
+    int minor;
+    size_t total_global_mem;
+    size_t shared_mem_per_block;
+    int max_threads_per_block;
+    int multi_processor_count;
+    int warp_size;
+    int max_threads_dim[3];
+    int max_grid_size[3];
+    int unified_addressing;
+} SEP_CUDA_DEVICE_PROPS;
 
-/* Stream Management */
-cudaStream_t cuda_create_stream(unsigned int flags);
-int cuda_destroy_stream(cudaStream_t stream);
-int cuda_synchronize_stream(cudaStream_t stream);
+/* Helper function to create an error with code and message */
+SEP_CUDA_ERROR SEP_CUDA_CreateError(int code, const char* message);
 
-/* Error Handling */
-cudaError_t cuda_get_last_error(void);
-const char* cuda_get_error_string(cudaError_t error);
+/* Check if CUDA is available at runtime */
+int SEP_CUDA_IsAvailable(void);
 
-/* Unified API Initialization */
-int cuda_initialize(void);
-int cuda_is_available(void);
+/* Initialization */
+SEP_CUDA_ERROR SEP_CUDA_Init(void);
+
+/* Memory allocation */
+SEP_CUDA_ERROR SEP_CUDA_Malloc(void** ptr, size_t size);
+
+/* Memory deallocation */
+SEP_CUDA_ERROR SEP_CUDA_Free(void* ptr);
+
+/* Memory copy */
+SEP_CUDA_ERROR SEP_CUDA_Memcpy(void* dst, const void* src, size_t count, 
+                             SEP_CUDA_MEMCPY_KIND kind);
+
+/* Get device count */
+SEP_CUDA_ERROR SEP_CUDA_GetDeviceCount(int* count);
+
+/* Get device properties */
+SEP_CUDA_ERROR SEP_CUDA_GetDeviceProperties(SEP_CUDA_DEVICE_PROPS* prop, int device);
+
+/* Error string function */
+const char* SEP_CUDA_ErrorString(SEP_CUDA_ERROR error);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __cplusplus */
+#endif /* SEP_CUDA_API_UNIFIED_H */

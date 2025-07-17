@@ -1,16 +1,16 @@
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/third_party/imgui
+#    ${PROJECT_SOURCE_DIR}/third_party/imgui
 )
 
-add_library(glad STATIC ${PROJECT_SOURCE_DIR}/src/glad/glad.c)
+#add_library(glad STATIC ${PROJECT_SOURCE_DIR}/src/glad/glad.c)
 
 # Configure include paths for all targets
 set(SEP_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/extern/pipewire/spa/src
-    ${PIPEWIRE_INCLUDE_DIRS}
+#    ${CMAKE_SOURCE_DIR}/extern/pipewire/spa/src
+#    ${PIPEWIRE_INCLUDE_DIRS}
 )
 
 
@@ -22,8 +22,8 @@ add_subdirectory(memory)
 add_subdirectory(gpu)
 add_subdirectory(quantum)
 add_subdirectory(api)
-add_subdirectory(audio)
-add_subdirectory(blender)
+#add_subdirectory(audio)
+#add_subdirectory(blender)
 
 
 
@@ -31,15 +31,15 @@ add_executable(sep_engine
     api_main.cpp
 )
 set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
-target_sources(sep_engine PRIVATE
-    /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp
-    /sep/third_party/imgui/backends/imgui_impl_glfw.cpp
-    /sep/third_party/imgui/imgui_tables.cpp
-    /sep/third_party/imgui/imgui_widgets.cpp
-    /sep/third_party/imgui/imgui.cpp
-    /sep/third_party/imgui/imgui_demo.cpp
-    /sep/third_party/imgui/imgui_draw.cpp
-)
+#target_sources(sep_engine PRIVATE
+#    /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp
+#    /sep/third_party/imgui/backends/imgui_impl_glfw.cpp
+#    /sep/third_party/imgui/imgui_tables.cpp
+#    /sep/third_party/imgui/imgui_widgets.cpp
+#    /sep/third_party/imgui/imgui.cpp
+#    /sep/third_party/imgui/imgui_demo.cpp
+#    /sep/third_party/imgui/imgui_draw.cpp
+#)
 
 target_include_directories(sep_engine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -47,19 +47,19 @@ target_include_directories(sep_engine PRIVATE
 )
 
 # Define OpenGL loader to use GLAD instead of GLEW
-target_compile_definitions(sep_engine PRIVATE
-    IMGUI_IMPL_OPENGL_LOADER_GLAD
-)
+#target_compile_definitions(sep_engine PRIVATE
+#    IMGUI_IMPL_OPENGL_LOADER_GLAD
+#)
 
 target_link_libraries(sep_engine PRIVATE
     sep_api
-    sep_blender
+#    sep_blender
     sep_core
     sep_compat
     Threads::Threads
-    glad
-    glfw
-    OpenGL::GL
+#    glad
+#    glfw
+#    OpenGL::GL
 )
 
 

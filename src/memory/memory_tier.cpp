@@ -56,8 +56,9 @@ namespace sep::memory
         {
             memory_pool_ = std::malloc(config.size);
 #if SEP_MEMORY_HAS_CUDA
-            cudaError_t err = memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
-            if (err != cudaSuccess)
+            cuda::cudaError_t err =
+                memory_pool_ ? cuda::cudaSuccess : cuda::cudaErrorMemoryAllocation;
+            if (err != cuda::cudaSuccess)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
                 if (logger) logger->error("Failed to allocate host memory: {}", err);
@@ -68,8 +69,8 @@ namespace sep::memory
         {
             memory_pool_ = nullptr;
 #if SEP_MEMORY_HAS_CUDA
-            cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
-            if (err != cudaSuccess)
+            cuda::cudaError_t err = cuda::cudaMallocManaged(&memory_pool_, config.size);
+            if (err != cuda::cudaSuccess)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
                 if (logger)
@@ -82,8 +83,9 @@ namespace sep::memory
             }
 #else
             memory_pool_ = std::malloc(config.size);
-            cudaError_t err = memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
-            if (err != cudaSuccess)
+            cuda::cudaError_t err =
+                memory_pool_ ? cuda::cudaSuccess : cuda::cudaErrorMemoryAllocation;
+            if (err != cuda::cudaSuccess)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
                 if (logger) logger->error("Failed to allocate host memory: {}", err);
@@ -291,9 +293,9 @@ namespace sep::memory
                     // Move memory to new position
                     void *new_location = static_cast<char *>(memory_pool_) + current_offset;
 #if SEP_MEMORY_HAS_CUDA
-                    cudaError_t err = cudaMemcpyAsync(new_location, block.ptr, block.size,
-                                                      cudaMemcpyDefault, nullptr);
-                    if (err != cudaSuccess)
+                    cuda::cudaError_t err = cuda::cudaMemcpyAsync(
+                        new_location, block.ptr, block.size, cuda::cudaMemcpyDefault, nullptr);
+                    if (err != cuda::cudaSuccess)
                     {
                         if (logger)
                         {
@@ -301,8 +303,8 @@ namespace sep::memory
                         }
                         return ::sep::SEPResult::CUDA_ERROR;
                     }
-                    err = cudaStreamSynchronize(nullptr);
-                    if (err != cudaSuccess)
+                    err = cuda::cudaStreamSynchronize(nullptr);
+                    if (err != cuda::cudaSuccess)
                     {
                         if (logger)
                         {
@@ -463,9 +465,9 @@ namespace sep::memory
         dst->compression_ratio = src->compression_ratio;
 
 #if SEP_MEMORY_HAS_CUDA
-        cudaError_t err =
-            ::sep::cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
-        if (err != cudaSuccess)
+        cuda::cudaError_t err =
+            cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cuda::cudaMemcpyDefault, nullptr);
+        if (err != cuda::cudaSuccess)
         {
             if (logger)
             {
@@ -476,8 +478,8 @@ namespace sep::memory
         }
         else
         {
-            err = cudaStreamSynchronize(nullptr);
-            if (err != cudaSuccess)
+            err = cuda::cudaStreamSynchronize(nullptr);
+            if (err != cuda::cudaSuccess)
             {
                 if (logger)
                 {
@@ -593,8 +595,8 @@ namespace sep::memory
             }
 #else
             new_pool = std::malloc(new_size);
-            cudaError_t err = new_pool ? cudaSuccess : cudaErrorMemoryAllocation;
-            if (err != cudaSuccess)
+            cuda::cudaError_t err = new_pool ? cuda::cudaSuccess : cuda::cudaErrorMemoryAllocation;
+            if (err != cuda::cudaSuccess)
             {
                 if (logger)
                 {
@@ -701,6 +703,51 @@ namespace sep::memory
     }
 
     void MemoryTier::removePattern(size_t id) { m_patterns.erase(id); }
+
+    void MemoryTier::cleanupSTMPatterns(float cleanup_percentage)
+    {
+        if (m_patterns.empty()) return;
+
+        // Calculate number of patterns to remove
+        size_t patterns_to_remove = static_cast<size_t>(m_patterns.size() * cleanup_percentage);
+        if (patterns_to_remove == 0) patterns_to_remove = 1;  // Remove at least one
+
+        // Sort patterns by coherence and generation count
+        std::vector<std::pair<size_t, const ::sep::persistence::PersistentPatternData *>>
+            pattern_list;
+        for (const auto &pair : m_patterns)
+        {
+            pattern_list.push_back({pair.first, &pair.second});
+        }
+
+        // Sort by coherence (ascending) and generation count (ascending)
+        std::sort(pattern_list.begin(), pattern_list.end(), [](const auto &a, const auto &b) {
+            if (a.second->coherence == b.second->coherence)
+            {
+                return a.second->generation_count < b.second->generation_count;
+            }
+            return a.second->coherence < b.second->coherence;
+        });
+
+        // Remove the patterns with lowest coherence and generation count
+        for (size_t i = 0; i < patterns_to_remove && i < pattern_list.size(); ++i)
+        {
+            removePattern(pattern_list[i].first);
+        }
+    }
+
+    void MemoryTier::checkAndCleanupSTM()
+    {
+        // Get cleanup threshold from config
+        float /*cleanup_threshold*/ = 0.9f;  // Default to 90% if not specified
+
+        // Check if we're above the max patterns threshold
+        if (m_patterns.size() >= m_max_patterns)
+        {
+            // Remove 10% of patterns when we hit the threshold
+            cleanupSTMPatterns(0.1f);
+        }
+    }
 
     const ::sep::persistence::PersistentPatternData *MemoryTier::getPattern(size_t id) const
     {

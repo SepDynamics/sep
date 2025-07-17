@@ -13,6 +13,7 @@
 
 // Project headers
 #include "compat/shim.h"
+#include "compat/cuda.h"
 #include "core/common.h"
 #include "core/types.h"
 #include "memory/persistent_pattern_data.hpp"
@@ -154,6 +155,8 @@ public:
       const sep::persistence::PersistentPatternData &pattern) const;
   void addPattern(size_t id, sep::persistence::PersistentPatternData pattern);
   void removePattern(size_t id);
+  void cleanupSTMPatterns(float cleanup_percentage);
+  void checkAndCleanupSTM();
   const sep::persistence::PersistentPatternData *getPattern(size_t id) const;
   sep::persistence::PersistentPatternData *getPattern(size_t id);
   void setPromotionThreshold(float threshold);

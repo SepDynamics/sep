@@ -29,7 +29,9 @@
         "stm_to_mtm_min_gen": 5,
         "mtm_to_ltm_min_gen": 100,
         "use_unified_memory": true,
-        "enable_compression": true
+        "enable_compression": true,
+        "stm_pool_size": 10000,
+        "stm_cleanup_threshold": 0.9
     },
     "quantum": {
         "ltm_coherence_threshold": 0.9,

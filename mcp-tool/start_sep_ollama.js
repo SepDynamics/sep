@@ -9,17 +9,40 @@ import { promisify } from 'util';
 const execAsync = promisify(exec);
 import net from 'net';
 
-// Check if a port is available
-async function isPortAvailable(port) {
-    return new Promise((resolve) => {
-        const server = net.createServer();
-        server.once('error', () => resolve(false));
-        server.once('listening', () => {
-            server.close();
-            resolve(true);
-        });
-        server.listen(port);
-    });
+// Check if a port is available with retries
+async function isPortAvailable(port, retries = 3, delay = 1000) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const available = await new Promise((resolve, reject) => {
+                const server = net.createServer();
+                server.once('error', (err) => {
+                    if (err.code === 'EADDRINUSE') {
+                        resolve(false);
+                    } else {
+                        reject(err);
+                    }
+                });
+                server.once('listening', () => {
+                    server.close();
+                    resolve(true);
+                });
+                server.listen(port);
+            });
+            
+            if (available) return true;
+            
+            if (attempt < retries) {
+                console.log(chalk.yellow(`Port ${port} not available, attempt ${attempt}/${retries}. Retrying...`));
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        } catch (error) {
+            console.error(chalk.red(`Error checking port ${port}:`, error.message));
+            if (attempt < retries) {
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+    }
+    return false;
 }
 
 // Kill process using a specific port
@@ -101,40 +124,92 @@ async function checkEnvironment() {
     console.log(chalk.green('\n✓ All checks passed!\n'));
 }
 
+// Verify service health
+async function verifyServiceHealth(name, port, maxAttempts = 5, interval = 1000) {
+    const endpoint = `http://localhost:${port}/health`;
+    
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            const response = await fetch(endpoint);
+            if (response.ok) {
+                console.log(chalk.green(`✓ ${name} health check passed`));
+                return true;
+            }
+        } catch (error) {
+            if (attempt === maxAttempts) {
+                console.error(chalk.red(`${name} health check failed after ${maxAttempts} attempts`));
+                return false;
+            }
+            await new Promise(resolve => setTimeout(resolve, interval));
+        }
+    }
+    return false;
+}
+
+// Find next available port
+async function findAvailablePort(startPort, maxAttempts = 10) {
+    for (let port = startPort; port < startPort + maxAttempts; port++) {
+        if (await isPortAvailable(port, 2)) {
+            return port;
+        }
+    }
+    return null;
+}
+
 // Start the SEP-Ollama services
 async function startServices() {
     console.log(chalk.blue.bold('🚀 Starting SEP-Ollama services...\n'));
+    
+    const processes = new Map();
+    const cleanupTimeouts = new Map();
     
     const services = [
         {
             name: 'SEP-Ollama Server',
             script: 'sep_ollama_server.js',
             port: 3001,
-            color: chalk.cyan
+            color: chalk.cyan,
+            required: true
         },
         {
             name: 'SEP-Ollama Monitor',
             script: 'sep_ollama_monitor.js',
             port: 3002,
-            color: chalk.magenta
+            color: chalk.magenta,
+            required: false
         }
     ];
     
-    const processes = [];
-    
-    for (const service of services) {
+    async function startService(service) {
         console.log(service.color(`Starting ${service.name}...`));
         
-        // Check if port is available
-        const portAvailable = await isPortAvailable(service.port);
+        let port = service.port;
+        let portAvailable = await isPortAvailable(port, 3);
+        
         if (!portAvailable) {
-            console.log(chalk.yellow(`⚠ Port ${service.port} is already in use`));
-            await killPortProcess(service.port);
+            if (service.required) {
+                console.log(chalk.yellow(`⚠ Port ${port} is in use, attempting to free...`));
+                await killPortProcess(port);
+                portAvailable = await isPortAvailable(port, 2);
+                
+                if (!portAvailable) {
+                    throw new Error(`Could not free required port ${port} for ${service.name}`);
+                }
+            } else {
+                console.log(chalk.yellow(`⚠ Finding alternative port for ${service.name}...`));
+                port = await findAvailablePort(port);
+                
+                if (!port) {
+                    console.log(chalk.yellow(`⚠ Skipping ${service.name} - no available ports found`));
+                    return null;
+                }
+                console.log(chalk.yellow(`⚠ Using alternative port ${port} for ${service.name}`));
+            }
         }
         
         const proc = spawn('node', [`mcp-tool/${service.script}`], {
             cwd: '/sep',
-            env: { ...process.env, PORT: service.port }
+            env: { ...process.env, PORT: port }
         });
         
         proc.stdout.on('data', (data) => {
@@ -147,18 +222,61 @@ async function startServices() {
         
         proc.on('error', (error) => {
             console.error(service.color(`[${service.name} ERROR] Failed to start: ${error.message}`));
+            if (service.required) {
+                process.exit(1);
+            }
         });
         
-        processes.push(proc);
+        proc.on('exit', (code, signal) => {
+            console.log(service.color(`[${service.name}] Process exited with code ${code}, signal ${signal}`));
+            processes.delete(service.name);
+            
+            if (service.required && code !== 0) {
+                console.error(chalk.red(`Required service ${service.name} failed, shutting down...`));
+                shutdownServices();
+            }
+        });
         
-        // Wait a bit for service to start
+        processes.set(service.name, { proc, port });
+        
+        // Wait briefly for service to start
         await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Verify service health
+        if (!(await verifyServiceHealth(service.name, port))) {
+            if (service.required) {
+                throw new Error(`${service.name} failed health check`);
+            } else {
+                console.log(chalk.yellow(`⚠ Warning: ${service.name} health check failed, but continuing as it's optional`));
+            }
+        }
+        
+        return port;
+    }
+    
+    try {
+        for (const service of services) {
+            const port = await startService(service);
+            if (port) {
+                service.actualPort = port;
+            }
+        }
+    } catch (error) {
+        console.error(chalk.red('Error starting services:'), error.message);
+        await shutdownServices();
+        process.exit(1);
     }
     
     console.log(chalk.green.bold('\n✨ SEP-Ollama is running!\n'));
     console.log(chalk.white('Services:'));
     console.log(chalk.cyan('  • API Server: http://localhost:3001'));
-    console.log(chalk.magenta('  • Monitor: http://localhost:3002'));
+    
+    const monitorService = services.find(s => s.name === 'SEP-Ollama Monitor');
+    if (monitorService && monitorService.actualPort) {
+        console.log(chalk.magenta(`  • Monitor: http://localhost:${monitorService.actualPort}`));
+    } else {
+        console.log(chalk.yellow('  • Monitor: Not running'));
+    }
     console.log(chalk.gray('\nPress Ctrl+C to stop all services\n'));
     
     // Test the API
@@ -190,12 +308,43 @@ async function startServices() {
         }
     }, 5000);
     
-    // Handle shutdown
-    process.on('SIGINT', () => {
-        console.log(chalk.yellow('\n\nShutting down SEP-Ollama...'));
-        processes.forEach(proc => proc.kill());
-        process.exit(0);
-    });
+    // Handle graceful shutdown
+    async function shutdownServices() {
+        console.log(chalk.yellow('\n\nShutting down SEP-Ollama services...'));
+        
+        for (const [name, { proc }] of processes.entries()) {
+            if (proc.killed) continue;
+            
+            console.log(chalk.yellow(`Stopping ${name}...`));
+            
+            // Set a cleanup timeout
+            const cleanupTimeout = setTimeout(() => {
+                console.log(chalk.red(`Force killing ${name} after timeout`));
+                proc.kill('SIGKILL');
+            }, 5000);
+            
+            cleanupTimeouts.set(name, cleanupTimeout);
+            
+            // Try graceful shutdown first
+            proc.kill('SIGTERM');
+        }
+        
+        // Wait for all processes to exit or be killed
+        await Promise.all([...processes.values()].map(
+            ({ proc }) => new Promise(resolve => proc.on('exit', resolve))
+        ));
+        
+        // Clear all timeouts
+        for (const timeout of cleanupTimeouts.values()) {
+            clearTimeout(timeout);
+        }
+        
+        console.log(chalk.green('All services stopped'));
+    }
+    
+    // Handle shutdown signals
+    process.on('SIGINT', shutdownServices);
+    process.on('SIGTERM', shutdownServices);
     
     // Keep the main process alive
     process.stdin.resume();

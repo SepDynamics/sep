@@ -50,22 +50,17 @@ app.post('/api/v1/complete', async (req, res) => {
             return res.status(400).json({ error: 'Prompt is required' });
         }
 
-        // Process through autonomous brain for pattern analysis
-        const brainResult = await autonomousBrain.process({ content: prompt });
-        
-        // Get completion from agent
+        // Get completion from agent with temperature option
         const completion = await sepOllamaAgent.complete(prompt, {
-            temperature,
-            brainContext: brainResult
+            temperature
         });
 
         res.json({
             completion,
             metadata: {
-                coherence: brainResult.coherence,
-                memory_tier: brainResult.memory_tier,
-                patterns_used: brainResult.patterns?.length || 0,
-                confidence: 0.85 // TODO: Implement proper confidence scoring
+                model: sepOllamaAgent.modelName,
+                temperature: temperature || sepOllamaAgent.temperature,
+                timestamp: new Date().toISOString()
             }
         });
     } catch (error) {

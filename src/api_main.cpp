@@ -43,7 +43,7 @@ bool parseCmdArgs(int argc, char** argv, bool& daemon_mode)
         }
         else if (arg == "--help" || arg == "-h")
         {
-            std::cout << "Usage: sep_api_server [OPTIONS]" << std::endl;
+            std::cout << "Usage: sep_engine [OPTIONS]" << std::endl;
             std::cout << "Options:" << std::endl;
             std::cout << "  --config FILE       Path to config file" << std::endl;
             std::cout << "  --foreground        Run in foreground (default)" << std::endl;

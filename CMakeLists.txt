@@ -1,3 +1,15 @@
+# Core CUDA dependencies for all targets
+set(SEP_CORE_LIBS
+    ${CUDAToolkit_LIBRARIES}
+    ${Threads_LIBRARIES}
+    ${CMAKE_DL_LIBS}
+    pthread
+    dl
+    rt
+    m
+    z
+)
+
 cmake_minimum_required(VERSION 3.15)
 
 # Enable POSIX features for popen/pclose
@@ -16,19 +28,19 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
-add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
-
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Enable testing at the top-level so subdirectories can register tests
 include(CTest)
 enable_testing()
 
-# Required components - these are no longer optional
-set(SEP_WITH_CYCLES ON CACHE BOOL "Blender Cycles integration (required)" FORCE)
-set(SEP_WITH_BLENDER ON CACHE BOOL "Blender integration (required)" FORCE)
+# Core required components
 set(SEP_HAS_CUDA ON CACHE BOOL "CUDA support (required)" FORCE)
-set(SEP_WITH_AUDIO ON CACHE BOOL "PipeWire audio integration (required)" FORCE)
+set(CMAKE_GENERATOR "Ninja" CACHE STRING "Generator to use" FORCE)
+
+# Set processor affinity for CUDA orchestration
+add_compile_definitions(SEP_DEDICATED_CORE_ORCHESTRATION=1)
+add_compile_definitions(SEP_GPU_EXCLUSIVE_ACCESS=1)
 
 # Options to control optional modules
 option(SEP_WITH_OPENSUBDIV "Enable OpenSubdiv support" ON)
@@ -61,25 +73,16 @@ include_directories(BEFORE
     $<BUILD_INTERFACE:/usr/src>
 )
 
-# Ensure core headers are available
-# Build the core subsystem first so that memory and other components can
-# link against it. The previous invocation attempted to use the unsupported
-# `BEFORE` argument to `add_subdirectory`, which caused configuration errors
-# with newer versions of CMake. We simply add the directories in the
-# required order instead.
-
-# Backwards compatibility variables - always enabled now
-set(SEP_ENABLE_BLENDER ON)
-set(SEP_ENABLE_AUDIO ON)
-
-# Cycles is now a required component
-set(SEP_HAS_CYCLES 1)
+# Disable previously required components
+set(SEP_ENABLE_BLENDER OFF)
+set(SEP_ENABLE_AUDIO OFF)
+set(SEP_HAS_CYCLES 0)
 
 # Set CUDA compiler flags before enabling the language
 set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/src/compat/cuda_unified_fix.h")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__STRICT_ANSI__ -D_GLIBCXX_USE_CXX11_ABI=1")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=1")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
 
 # Set C++ standard before enabling CUDA
@@ -91,7 +94,6 @@ set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 # Add global definitions needed for CUDA compatibility
 add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1)
 add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1)
-add_definitions(-D__STRICT_ANSI__)
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
 add_definitions(-DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
 set(CMAKE_C_STANDARD 11)
@@ -99,8 +101,6 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # Add cmake directory to module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-# Use Cycles' custom CMake modules for dependencies like OSL and Alembic.
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/cycles/src/cmake/Modules")
 
 # Add library search paths
 link_directories(${CMAKE_SOURCE_DIR}/lib)
@@ -125,11 +125,6 @@ endif()
 find_package(CUDAToolkit REQUIRED)
 add_compile_definitions(SEP_HAS_CUDA=1)
 
-# Cycles, Blender, and Audio are now required components
-add_compile_definitions(SEP_HAS_CYCLES=1)
-add_compile_definitions(SEP_HAS_BLENDER=1)
-add_compile_definitions(SEP_HAS_AUDIO=1)
-
 # Ensure our custom Crow wrappers take precedence over the third-party headers
 include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/extern/crow/include
@@ -137,7 +132,6 @@ include_directories(BEFORE
     ${CMAKE_SOURCE_DIR}/src
 )
 add_compile_definitions(CROW_USE_BOOST)
-
 
 # Find required packages
 find_package(Threads REQUIRED)
@@ -200,28 +194,16 @@ endif()
 # Build ImGui from the bundled third_party source
 add_subdirectory(third_party/imgui)
 
+# Add CUDA-specific optimizations for dedicated GPU access
+add_compile_options(-DSEP_CUDA_DEDICATED_GPU=1)
+add_compile_options(-DSEP_CUDA_CORE_AFFINITY=1)
+
+# Set CUDA compute capability for specific GPU architecture
+# These are reasonable defaults for modern NVIDIA GPUs
+set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
+
 # Add the src directory which contains all module subdirectories and workbench
 add_subdirectory(src)
-# Always add Cycles dependencies
-add_subdirectory(extern/cycles/third_party/cuew)
-add_subdirectory(extern/cycles/third_party/hipew)
-add_subdirectory(extern/cycles/third_party/sky)
-
-
-# Build Cycles from source when prebuilt libraries are not available
-if(NOT EXISTS "${CMAKE_SOURCE_DIR}/lib/libcycles_device.a")
-  message(STATUS "Prebuilt Cycles libraries not found; building from source")
-  set(WITH_CYCLES_DEVICE_HIP OFF CACHE BOOL "Disable HIP" FORCE)
-  set(WITH_CYCLES_DEVICE_HIPRT OFF CACHE BOOL "Disable HIPRT" FORCE)
-  add_subdirectory(extern/cycles)
-endif()
-
-# Consolidated examples are built in a single workbench target
-
-# Main executable is defined in src/CMakeLists.txt
-
-# Only link Cycles libraries if they exist and SEP_WITH_CYCLES is enabled
-
 
 # Export and install targets
 include(GNUInstallDirs)
@@ -246,16 +228,6 @@ install(TARGETS
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-
-if(TARGET sep_audio)
-    install(TARGETS sep_audio
-        EXPORT sep-targets
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-endif()
-
-# Install executable separately
 
 # Install CMake config files
 install(EXPORT sep-targets
@@ -284,51 +256,16 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
 
 # Set install prefix if not specified
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation prefix" FORCE
+    set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation prefix" FORCE)
+endif()
 
-        # 2. Cycles and its dependencies (order is important here too)
-        # Link the main Cycles libs first
-        cycles_session
-        cycles_scene
-        cycles_device
-        cycles_kernel_osl
-        cycles_subd
-        cycles_util
-        extern_sky
-        extern_cuew
-        extern_hipew
-        extern_sky
+# Add CUDA-specific core and GPU pinning
+if(SEP_DEDICATED_CORE_ORCHESTRATION)
+    message(STATUS "Configuring dedicated CPU core for CUDA orchestration")
+    add_compile_definitions(SEP_DEDICATED_CPU_CORE=1)
+endif()
 
-        # Now link the external dependencies that Cycles needs
-        OpenImageIO
-        ${OPENVDB_LIBRARIES}
-        ${OPENSUBDIV_LIBRARIES}
-        openvdb
-        bf_intern_opensubdiv
-        ${OSL_LIBRARIES} # Link the real OSL libs, not the stub
-        ${TBB_LIBRARIES}
-
-        # 3. Other direct dependencies
-        ${CURL_LIBRARIES}
-        http_parser::http_parser
-        fmt::fmt
-        spdlog::spdlog
-        hiredis
-        pipewire-0.3
-
-        # 4. System libraries
-        ${EMBREE_LIBRARIES}
-        Imath
-        ${OpenPGL_LIBRARIES}
-        ${OpenColorIO_LIBRARIES}
-        ${ALEMBIC_LIBRARIES}
-        ${CMAKE_DL_LIBS}
-        ${Threads_LIBRARIES}
-        ${CUDAToolkit_LIBRARIES}
-        pthread
-        dl
-        rt
-        m
-        z
-)
+if(SEP_GPU_EXCLUSIVE_ACCESS)
+    message(STATUS "Configuring exclusive GPU access for CUDA operations")
+    add_compile_definitions(SEP_EXCLUSIVE_GPU_ACCESS=1)
 endif()

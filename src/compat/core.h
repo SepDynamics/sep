@@ -2,7 +2,9 @@
 #define SEP_CUDA_CORE_H
 
 #include <vector>
+#include <string>
 
+#include "core/error_handler.h"  // For Error type
 #include "compat/cuda_runtime.h"  // Must come first to define CUDA types
 #include "compat/cuda_unified.h"
 #include "compat/memory.h"

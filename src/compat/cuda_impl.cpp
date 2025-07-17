@@ -7,15 +7,16 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 
+#include "compat/core.h"
 #include "compat/cuda_unified.h"
 #include "core/common.h"
 #include "core/error_handler.h"
 
-using sep::cuda::Error;
+using sep::Error;
 using sep::shim::string;
 
-namespace sep {
-namespace cuda {
+namespace sep::cuda
+{
 
     Error CudaCore::initialize(int device)
     {
@@ -23,87 +24,142 @@ namespace cuda {
         cudaError_t cuda_err = cudaSetDevice(device);
         if (cuda_err != cudaSuccess)
         {
-            return Error(Status::Error, string(cudaGetErrorString(cuda_err)),
-                         string("CudaCore::initialize"), SEPResult::CUDA_ERROR);
+            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
+                         string("CudaCore::initialize"));
         }
-        return Error(Status::Success, string("CUDA initialized successfully"),
-                     string("CudaCore::initialize"), SEPResult::SUCCESS);
+        
+        // Initialize device properties
+        Error err = queryDeviceProperties();
+        if (err.code != SEPResult::SUCCESS)
+        {
+            return err;
+        }
+        
+        initialized_ = true;
+        current_device_ = device;
+        
+        return Error(SEPResult::SUCCESS, string("CUDA initialized successfully"),
+                     string("CudaCore::initialize"));
     }
 
-// Memory management functions - these are implemented in the global namespace
-// but call the sep::cuda namespace versions
-} // namespace cuda
-} // namespace sep
+    Error CudaCore::setDevice(int device)
+    {
+        cudaError_t cuda_err = cudaSetDevice(device);
+        if (cuda_err != cudaSuccess)
+        {
+            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
+                         string("CudaCore::setDevice"));
+        }
+        current_device_ = device;
+        return Error(SEPResult::SUCCESS, string("Device set successfully"),
+                     string("CudaCore::setDevice"));
+    }
 
-// Global namespace implementations - using the new namespace-based functions
-cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
-    return sep::cuda::cudaMemset(devPtr, value, count);
-}
+    int CudaCore::getDeviceCount() const
+    {
+        int count = 0;
+        cudaError_t cuda_err = cudaGetDeviceCount(&count);
+        if (cuda_err != cudaSuccess)
+        {
+            return 0;
+        }
+        return count;
+    }
 
-cudaError_t cudaMemsetAsync(void* devPtr, int value, size_t count, void* stream) {
-    return sep::cuda::cudaMemsetAsync(devPtr, value, count, 
-                               static_cast<sep::cuda::cudaStream_t>(stream));
-}
+    Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const
+    {
+        cudaError_t cuda_err = cudaGetDeviceProperties(&props, device);
+        if (cuda_err != cudaSuccess)
+        {
+            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
+                         string("CudaCore::getDeviceProperties"));
+        }
+        return Error(SEPResult::SUCCESS, string("Device properties retrieved"),
+                     string("CudaCore::getDeviceProperties"));
+    }
 
-cudaError_t cudaMemGetInfo(size_t* free, size_t* total) {
-    return sep::cuda::cudaMemGetInfo(free, total);
-}
+    Error CudaCore::getMemoryInfo(size_t& free, size_t& total) const
+    {
+        cudaError_t cuda_err = cudaMemGetInfo(&free, &total);
+        if (cuda_err != cudaSuccess)
+        {
+            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
+                         string("CudaCore::getMemoryInfo"));
+        }
+        return Error(SEPResult::SUCCESS, string("Memory info retrieved"),
+                     string("CudaCore::getMemoryInfo"));
+    }
 
-cudaError_t cudaMallocHost(void** ptr, size_t size) {
-    return sep::cuda::cudaMallocHost(ptr, size);
-}
+    Error CudaCore::getLastError() const
+    {
+        cudaError_t cuda_err = cudaGetLastError();
+        if (cuda_err != cudaSuccess)
+        {
+            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
+                         string("CudaCore::getLastError"));
+        }
+        return Error(SEPResult::SUCCESS, string("No error"),
+                     string("CudaCore::getLastError"));
+    }
 
-cudaError_t cudaFreeHost(void* ptr) { 
-    return sep::cuda::cudaFreeHost(ptr); 
-}
+    std::string CudaCore::getErrorString(cudaError_t error) const
+    {
+        return std::string(cudaGetErrorString(error));
+    }
 
-cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind) {
-    return sep::cuda::cudaMemcpy(dst, src, count, 
-                           static_cast<sep::cuda::cudaMemcpyKind>(kind));
-}
+    Error CudaCore::queryDeviceProperties()
+    {
+        int device_count = getDeviceCount();
+        if (device_count == 0)
+        {
+            return Error(SEPResult::CUDA_ERROR, string("No CUDA devices found"),
+                         string("CudaCore::queryDeviceProperties"));
+        }
 
-cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, void* stream) {
-    return sep::cuda::cudaMemcpyAsync(dst, src, count, 
-                                static_cast<sep::cuda::cudaMemcpyKind>(kind),
-                                static_cast<sep::cuda::cudaStream_t>(stream));
-}
+        device_properties_.clear();
+        device_properties_.reserve(device_count);
 
-// Device management functions
-cudaError_t cudaSetDevice(int device) { 
-    return sep::cuda::cudaSetDevice(device); 
-}
+        for (int i = 0; i < device_count; ++i)
+        {
+            cudaDeviceProp props;
+            cudaError_t cuda_err = cudaGetDeviceProperties(&props, i);
+            if (cuda_err != cudaSuccess)
+            {
+                return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
+                             string("CudaCore::queryDeviceProperties"));
+            }
+            device_properties_.push_back(props);
+        }
 
-cudaError_t cudaGetDevice(int* device) { 
-    return sep::cuda::cudaGetDevice(device); 
-}
+        return Error(SEPResult::SUCCESS, string("Device properties queried"),
+                     string("CudaCore::queryDeviceProperties"));
+    }
 
-cudaError_t cudaGetDeviceCount(int* count) { 
-    return sep::cuda::cudaGetDeviceCount(count); 
-}
+    CudaMetrics CudaCore::getMetrics() const
+    {
+        return current_metrics_;
+    }
 
-cudaError_t cudaDeviceSynchronize(void) { 
-    return sep::cuda::cudaDeviceSynchronize(); 
-}
+    Error CudaCore::updateMetrics()
+    {
+        size_t free_mem, total_mem;
+        Error err = getMemoryInfo(free_mem, total_mem);
+        if (err.code != SEPResult::SUCCESS)
+        {
+            return err;
+        }
 
-cudaError_t cudaDeviceReset(void) { 
-    return sep::cuda::cudaDeviceReset(); 
-}
+        current_metrics_.total_memory = total_mem;
+        current_metrics_.used_memory = total_mem - free_mem;
+        current_metrics_.memory_utilization = 
+            (total_mem > 0) ? static_cast<float>(current_metrics_.used_memory) / total_mem : 0.0f;
 
-cudaError_t cudaSetDeviceFlags(unsigned int flags)
-{
-    return sep::cuda::cudaSetDeviceFlags(flags);
-}
+        // GPU utilization would require NVML or similar API
+        // For now, we'll leave it at 0
+        current_metrics_.gpu_utilization = 0.0f;
 
-cudaError_t cudaGetDeviceFlags(unsigned int* flags)
-{
-    return sep::cuda::cudaGetDeviceFlags(flags);
-}
+        return Error(SEPResult::SUCCESS, string("Metrics updated"),
+                     string("CudaCore::updateMetrics"));
+    }
 
-cudaError_t cudaGetLastError(void) { 
-    return sep::cuda::cudaGetLastError(); 
-}
-
-const char* cudaGetErrorString(cudaError_t error)
-{
-    return sep::cuda::cudaGetErrorString(error);
-}
+}  // namespace sep::cuda

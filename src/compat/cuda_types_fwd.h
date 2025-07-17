@@ -8,6 +8,11 @@
 // This breaks circular dependencies by providing only the type information
 // needed by other headers
 
+// Configuration macro if not already defined
+#ifndef SEP_ENGINE_HAS_CUDA
+#define SEP_ENGINE_HAS_CUDA 0
+#endif
+
 #ifdef __cplusplus
 namespace sep {
 namespace cuda {
@@ -18,9 +23,10 @@ typedef struct CUstream_st* cudaStream_t;
 typedef struct CUevent_st* cudaEvent_t;
 typedef int cudaError_t;
 
-// Memory copy kinds enum - defined here only once
-#ifndef CUDA_MEMCPY_KIND_DEFINED
-#define CUDA_MEMCPY_KIND_DEFINED
+// IMPORTANT: This enum must match exactly with the one in cuda_types.h
+// We can't use a forward declaration for enums in C++
+#if !defined(SEP_CUDA_MEMCPYKIND_DEFINED)
+#define SEP_CUDA_MEMCPYKIND_DEFINED
 enum cudaMemcpyKind {
     cudaMemcpyHostToHost = 0,
     cudaMemcpyHostToDevice = 1,

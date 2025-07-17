@@ -9,26 +9,6 @@ set(WITH_CYCLES_OPENVDB ON)
 set(WITH_CYCLES_OPENCOLORIO ON)
 set(WITH_CYCLES_OPENSUBDIV ON)
 
-# Check if HIP repository exists in extern directory
-if(EXISTS "${CMAKE_SOURCE_DIR}/extern/hip")
-    set(HIP_FOUND TRUE)
-    set(HIP_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/extern/hip/include")
-    message(STATUS "Using local HIP repository in extern/hip")
-    add_compile_definitions(SEP_HAS_HIP=1)
-    add_compile_definitions(__HIP_PLATFORM_NVIDIA__=1)
-else()
-    # Try to find system HIP package
-    find_package(HIP QUIET)
-    if(HIP_FOUND)
-        message(STATUS "HIP found: ${HIP_VERSION}")
-        add_compile_definitions(SEP_HAS_HIP=1)
-        add_compile_definitions(__HIP_PLATFORM_NVIDIA__=1)
-    else()
-        message(STATUS "HIP not found, using CUDA only")
-        add_compile_definitions(SEP_HAS_HIP=0)
-    endif()
-endif()
-
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/compat/
         DESTINATION include/sep/compat
@@ -41,7 +21,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/compat/
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.hpp")
-
 
 # Define CUDA sources
 set(CUDA_SOURCES
@@ -58,8 +37,6 @@ set(CUDA_SOURCES
 set(CPP_SOURCES
     stream.cpp
     raii.cpp
-    # hip_impl.cpp
-    # hip_compat.cpp
     cuda_impl.cpp
 )
 
@@ -100,15 +77,6 @@ if(SEP_HAS_CUDA)
     )
 endif()
 
-if(HIP_FOUND)
-    target_include_directories(sep_compat PRIVATE ${HIP_INCLUDE_DIRS})
-    if(EXISTS "${HIP_INCLUDE_DIRS}/hip/hip_runtime.h")
-        message(STATUS "HIP runtime header found at ${HIP_INCLUDE_DIRS}/hip/hip_runtime.h")
-    else()
-        message(STATUS "HIP runtime header NOT found at ${HIP_INCLUDE_DIRS}/hip/hip_runtime.h")
-    endif()
-endif()
-
 set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)
 
 if(SEP_HAS_CUDA)
@@ -124,7 +92,6 @@ target_include_directories(sep_compat
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third_party/glm>
         ${CUDA_INCLUDE_DIRS}
 )

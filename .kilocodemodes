@@ -1,0 +1,10 @@
+customModes:
+  - slug: diff
+    name: diff
+    description: the code implimentor
+    roleDefinition: specialized in applying diffs to the codebase it's trained on and returning to sep mode to orchestrate it.
+    whenToUse: use this to update code to the sep codebase
+    groups:
+      - read
+      - edit
+    source: project

@@ -6,7 +6,7 @@ import { glob } from 'glob';
 import crypto from 'crypto';
 // Import the redis client factory directly
 import { createClient } from 'redis'; 
-import coherenceEngine from './coherence-engine.js';
+import CoherenceEngine from './coherence-engine.js';
 // No longer need the problematic redis_integration module
 // import redisIntegration from './redis_integration.js';
 import { RedisMemoryTier } from './redis_memory_tier.js';
@@ -24,6 +24,9 @@ export class SepOllamaAgent {
         // Memory tier integration
         this.memoryTier = new RedisMemoryTier();
         this.patternRegistry = new RedisPatternRegistry();
+        
+        // Initialize coherence engine
+        this.coherenceEngine = new CoherenceEngine();
         
         // Redis client reference will be initialized in the initialize() method
         this.redisClient = null;
@@ -321,7 +324,7 @@ When generating diffs, always use the unified diff format with proper context.`;
 
     async generateEmbedding(content) {
         // Use coherence engine to generate semantic embedding
-        const analysis = await coherenceEngine.analyzePatterns(content);
+        const analysis = await this.coherenceEngine.analyzePatterns(content);
         
         // Create a vector representation
         const embedding = {

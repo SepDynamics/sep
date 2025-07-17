@@ -125,8 +125,8 @@ template <typename T>
 bool copyToHost(T* dst, const T* src, size_t count, Stream* /*stream*/ = nullptr)
 {
 #if SEP_CUDA_AVAILABLE
-    cudaError_t error = sep::cuda::cudaMemcpyAsync(dst, src, count * sizeof(T),
-                                                  sep::cuda::cudaMemcpyDeviceToHost, nullptr);
+    cudaError_t error =
+        cudaMemcpyAsync(dst, src, count * sizeof(T), cudaMemcpyDeviceToHost, nullptr);
     return error == cudaSuccess;
 #else
     (void)stream;

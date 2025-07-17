@@ -4,8 +4,13 @@
 #include <cstddef>  // For size_t
 #include <cstring>  // For std::memcpy and std::memset
 
+// Include only cuda_types.h - avoid unnecessary dependencies
 #include "compat/cuda_types.h"
-#include "compat/cuda_constants.h"
+
+// Configuration macro if not already defined
+#ifndef SEP_ENGINE_HAS_CUDA
+#define SEP_ENGINE_HAS_CUDA 0
+#endif
 
 namespace sep {
 namespace cuda {
@@ -50,55 +55,7 @@ cudaError_t cudaMemset(void* devPtr, int value, size_t count);
 cudaError_t cudaMemsetAsync(void* devPtr, int value, size_t count, cudaStream_t stream);
 cudaError_t cudaMemGetInfo(size_t* free, size_t* total);
 
-// Inline implementation of simple wrapper functions
-#if SEP_ENGINE_HAS_CUDA
-// When CUDA is available, these inline functions directly call the real CUDA functions
-
-inline cudaError_t cudaStreamDestroy(cudaStream_t stream) {
-    return ::cudaStreamDestroy(stream);
-}
-
-inline cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind) {
-    return ::cudaMemcpy(dst, src, count, kind);
-}
-
-inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) {
-    return ::cudaMemcpyAsync(dst, src, count, kind, stream);
-}
-
-inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
-    return ::cudaMemset(devPtr, value, count);
-}
-
-#else
-// When CUDA is not available, these are stub implementations that do nothing
-
-inline cudaError_t cudaStreamDestroy(cudaStream_t) {
-    return cudaSuccess;
-}
-
-inline cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind) {
-    if (dst && src && count > 0) {
-        std::memcpy(dst, src, count);
-    }
-    return cudaSuccess;
-}
-
-inline cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind, cudaStream_t) {
-    if (dst && src && count > 0) {
-        std::memcpy(dst, src, count);
-    }
-    return cudaSuccess;
-}
-
-inline cudaError_t cudaMemset(void* devPtr, int value, size_t count) {
-    if (devPtr && count > 0) {
-        std::memset(devPtr, value, count);
-    }
-    return cudaSuccess;
-}
-
-#endif
+// Note: Inline implementations are now moved to cuda_runtime.h to prevent duplication
 
 } // namespace cuda
 } // namespace sep

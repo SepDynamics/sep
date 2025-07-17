@@ -27,11 +27,11 @@ add_subdirectory(blender)
 
 
 
-add_executable(sep_api_server
+add_executable(sep_engine
     api_main.cpp
 )
-set_target_properties(sep_api_server PROPERTIES CXX_STANDARD 17)
-target_sources(sep_api_server PRIVATE
+set_target_properties(sep_engine PROPERTIES CXX_STANDARD 17)
+target_sources(sep_engine PRIVATE
     /sep/third_party/imgui/backends/imgui_impl_opengl3.cpp
     /sep/third_party/imgui/backends/imgui_impl_glfw.cpp
     /sep/third_party/imgui/imgui_tables.cpp
@@ -41,17 +41,17 @@ target_sources(sep_api_server PRIVATE
     /sep/third_party/imgui/imgui_draw.cpp
 )
 
-target_include_directories(sep_api_server PRIVATE
+target_include_directories(sep_engine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
 )
 
 # Define OpenGL loader to use GLAD instead of GLEW
-target_compile_definitions(sep_api_server PRIVATE
+target_compile_definitions(sep_engine PRIVATE
     IMGUI_IMPL_OPENGL_LOADER_GLAD
 )
 
-target_link_libraries(sep_api_server PRIVATE
+target_link_libraries(sep_engine PRIVATE
     sep_api
     sep_blender
     sep_core

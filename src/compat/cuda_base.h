@@ -6,6 +6,11 @@
 
 #include <stddef.h>  // For size_t
 
+// Configuration macro if not already defined
+#ifndef SEP_ENGINE_HAS_CUDA
+#define SEP_ENGINE_HAS_CUDA 0
+#endif
+
 namespace sep {
 namespace cuda {
 
@@ -45,15 +50,7 @@ using cudaTextureObject_t = unsigned long long;
 using cudaSurfaceObject_t = unsigned long long;
 #endif
 
-// Memory copy kinds enum 
-enum cudaMemcpyKind
-{
-    cudaMemcpyHostToHost = 0,
-    cudaMemcpyHostToDevice = 1,
-    cudaMemcpyDeviceToHost = 2,
-    cudaMemcpyDeviceToDevice = 3,
-    cudaMemcpyDefault = 4
-};
+// NOTE: cudaMemcpyKind is now defined in cuda_types.h to avoid redefinition
 
 // Device properties structure
 struct cudaDeviceProp {

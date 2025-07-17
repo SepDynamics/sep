@@ -1,8 +1,10 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>  // For uint8_t
 #include <cstdlib>
 #include <cstring>
+#include <new>      // For std::nothrow
 
 // Include CUDA runtime first to define CUDA types
 #if SEP_CUDA_AVAILABLE

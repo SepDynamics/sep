@@ -4,19 +4,24 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/include/sep",
-                "${workspaceFolder}/include/memory",
-                "${workspaceFolder}/include/core",
-                "${workspaceFolder}/include/quantum",
-                "${workspaceFolder}/include/compat",
+                "${workspaceFolder}/src/api",
+                "${workspaceFolder}/src/compat",
+                "${workspaceFolder}/src/core",
+                "${workspaceFolder}/src/crow",
+                "${workspaceFolder}/src/embeddings",
+                "${workspaceFolder}/src/gpu",
+                "${workspaceFolder}/src/memory",
+                "${workspaceFolder}/src/quantum",
+                "${workspaceFolder}/src/tests",
+                "${workspaceFolder}/src/util",
+                "${workspaceFolder}/src",
                 "${workspaceFolder}/extern"
             ],
             "forcedInclude": [
-                "${workspaceFolder}/include/memory/memory_tier_manager.hpp"
+                "${workspaceFolder}/src/memory/memory_tier_manager.hpp"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/usr/bin/gcc-14",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64"

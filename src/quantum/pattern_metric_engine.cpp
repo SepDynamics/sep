@@ -73,25 +73,67 @@ std::vector<PatternMetrics> PatternMetricEngine::computeMetrics() {
     current_metrics_.clear();
     for (const auto& p : current_patterns_) {
         PatternMetrics m;
-        // This is a placeholder. In the real engine, you would use the QFH processor
-        // to compute these values based on the pattern's data.
-        m.coherence = qfh_processor_ ? qfh_processor_->processPattern(glm::vec3(0.0)) : 0.0f;
-        m.stability = 0.5f;
-        m.entropy = 0.1f;
+        // Use the QFH processor to compute coherence.
+        // This is a simplified example; a real implementation would be more complex.
+        if (qfh_processor_ && !p.data.empty()) {
+            // Example: use the first three float values as a vector for processing.
+            if (p.data.size() >= 3) {
+                m.coherence = qfh_processor_->processPattern(glm::vec3(p.data[0], p.data[1], p.data[2]));
+            } else {
+                // Handle cases with fewer than 3 floats.
+                m.coherence = qfh_processor_->processPattern(glm::vec3(p.data[0], 0.0f, 0.0f));
+            }
+        } else {
+            m.coherence = 0.0f;
+        }
+        m.stability = 0.5f; // Placeholder
+        m.entropy = 0.1f;   // Placeholder
         current_metrics_.push_back(m);
     }
     return current_metrics_;
 }
 
-std::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes([[maybe_unused]] const uint8_t* data, size_t size) {
+const std::vector<pattern::PatternData>& PatternMetricEngine::getPatterns() const {
+    return current_patterns_;
+}
+
+std::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes(const uint8_t* data, size_t size) {
     std::vector<pattern::PatternData> patterns;
-    // Placeholder implementation: treats the entire buffer as one pattern.
-    if (size > 0) {
+    const size_t float_size = sizeof(float);
+    const size_t chunk_size_floats = 16; // Example: 16 floats per pattern
+    const size_t chunk_size_bytes = chunk_size_floats * float_size;
+
+    if (size == 0) {
+        return patterns;
+    }
+
+    size_t num_patterns = size / chunk_size_bytes;
+    for (size_t i = 0; i < num_patterns; ++i) {
         pattern::PatternData p;
-        p.id = "pattern_0";
-        // p.data.assign(data, data + size); This is incorrect for float data
+        p.id = "pattern_" + std::to_string(i);
+        
+        const float* float_data = reinterpret_cast<const float*>(data + (i * chunk_size_bytes));
+        p.data.assign(float_data, float_data + chunk_size_floats);
+        
         patterns.push_back(p);
     }
+
+    // Handle remaining bytes
+    size_t remaining_bytes = size % chunk_size_bytes;
+    if (remaining_bytes > 0) {
+        pattern::PatternData p;
+        p.id = "pattern_" + std::to_string(num_patterns);
+        
+        const uint8_t* remaining_data_ptr = data + (num_patterns * chunk_size_bytes);
+        std::vector<float> float_vec;
+        float_vec.resize(remaining_bytes / sizeof(float) + (remaining_bytes % sizeof(float) != 0));
+        std::memcpy(float_vec.data(), remaining_data_ptr, remaining_bytes);
+
+        p.data.assign(float_vec.begin(), float_vec.end());
+        
+        patterns.push_back(p);
+    }
+
     return patterns;
 }
 

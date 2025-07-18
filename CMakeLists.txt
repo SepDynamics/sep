@@ -189,6 +189,7 @@ set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
 add_subdirectory(src)
 
 if(SEP_BUILD_TESTS)
+    add_subdirectory(extern/googletest)
     add_subdirectory(src/tests)
 endif()
 
@@ -264,5 +265,4 @@ endif()
 set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE BOOL "Enable downloading of dependencies")
 set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Enable testing of the benchmark library." FORCE)
 set(BENCHMARK_ENABLE_WERROR OFF CACHE BOOL "Build Release candidates with -Werror." FORCE)
-add_subdirectory(extern/googletest)
 add_subdirectory(extern/benchmark)

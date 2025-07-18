@@ -112,6 +112,7 @@ private:
      * @return A vector of extracted patterns.
      */
     std::vector<pattern::PatternData> extractPatternsFromBytes(const uint8_t* data, size_t size);
+    void processBuffer(bool is_final_chunk = false);
     
     // Quantum processing components
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
@@ -119,6 +120,10 @@ private:
     // Internal pattern storage
     std::vector<pattern::PatternData> current_patterns_;
     std::vector<PatternMetrics> current_metrics_;
+
+    // Thread safety and streaming
+    std::mutex engine_mutex_;
+    std::vector<uint8_t> stream_buffer_;
 };
 
 } // namespace sep::quantum

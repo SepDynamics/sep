@@ -87,12 +87,12 @@ bool Engine::init(const sep::config::CudaConfig &config)
 
 #ifdef SEP_HAS_AUDIO
   printf("DEBUG: Engine::init - Initializing audio capture\n");
-  fflush(stdout);
+  (void)fflush(stdout);
 #endif
 
   // Core initialization only - specialized components are initialized in main
   printf("DEBUG: Engine::init - Setting initialized flag\n");
-  fflush(stdout);
+  (void)fflush(stdout);
 
   impl_->initialized = true;
   return true;
@@ -276,6 +276,26 @@ std::vector<float> Engine::getCoherenceHistory() const {
     history.push_back(n.coherence);
   }
   return history;
+}
+
+void Engine::ingestFile(const std::string& dataPath, bool legacy) {
+    DataParser parser;
+    auto patterns = parser.parseFile(dataPath);
+    if (legacy) {
+        auto pinStates = parser.toPinStates(patterns);
+        // Assuming process_batch is the intended consumer for PinStates
+        // process_batch(pinStates, ...);
+    }
+}
+
+void Engine::ingestFile(const std::string& dataPath, bool legacy) {
+    DataParser parser;
+    auto patterns = parser.parseFile(dataPath);
+    if (legacy) {
+        auto pinStates = parser.toPinStates(patterns);
+        // Assuming process_batch is the intended consumer for PinStates
+        // process_batch(pinStates, ...);
+    }
 }
 
 std::string Engine::processQuantData(const std::string &dataPath, bool useGPU)

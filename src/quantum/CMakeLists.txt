@@ -66,7 +66,8 @@ set_property(TARGET sep_quantum PROPERTY CUDA_ARCHITECTURES 70 75 80)
 # Link CUDA runtime
 target_link_libraries(sep_quantum PRIVATE
     CUDA::cudart
-    CUDA::cuda_driver)
+    CUDA::cuda_driver
+    CUDA::cufft)
 
 # Set library properties
 set_target_properties(sep_quantum PROPERTIES

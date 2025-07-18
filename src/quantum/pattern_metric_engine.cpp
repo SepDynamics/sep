@@ -47,19 +47,19 @@ void PatternMetricEngine::ingestData(std::istream& stream) {
     std::vector<uint8_t> read_buffer(buffer_size);
 
     while (stream.read(reinterpret_cast<char*>(read_buffer.data()), buffer_size)) {
-        std::lock_guard<std::mutex> lock(engine_mutex_);
+        std::lock_guard<std::mutex> lock{engine_mutex_};
         stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.end());
         processBuffer();
     }
 
     // Handle the last partial read
     if (stream.gcount() > 0) {
-        std::lock_guard<std::mutex> lock(engine_mutex_);
+        std::lock_guard<std::mutex> lock{engine_mutex_};
         stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.begin() + stream.gcount());
     }
 
     // Process any remaining data in the buffer
-    std::lock_guard<std::mutex> lock(engine_mutex_);
+    std::lock_guard<std::mutex> lock{engine_mutex_};
     processBuffer(true); // Final chunk
 }
 
@@ -210,17 +210,17 @@ void PatternMetricEngine::ingestFile(const std::string& filepath) {
     std::vector<uint8_t> read_buffer(buffer_size);
 
     while (file.read(reinterpret_cast<char*>(read_buffer.data()), buffer_size)) {
-        std::lock_guard<std::mutex> lock(engine_mutex_);
+        std::lock_guard<std::mutex> lock{engine_mutex_};
         stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.end());
         processBuffer();
     }
 
     if (file.gcount() > 0) {
-        std::lock_guard<std::mutex> lock(engine_mutex_);
+        std::lock_guard<std::mutex> lock{engine_mutex_};
         stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.begin() + file.gcount());
     }
 
-    std::lock_guard<std::mutex> lock(engine_mutex_);
+    std::lock_guard<std::mutex> lock{engine_mutex_};
     processBuffer(true);
 }
 
@@ -265,30 +265,47 @@ void PatternMetricEngine::ingestMappedFile(const std::string& filepath) {
 }
 
 void PatternMetricEngine::processBuffer(bool is_final_chunk) {
-    constexpr size_t CHUNK_SIZE = 64;
-    
-    size_t buffer_size = stream_buffer_.size();
-    if (buffer_size < CHUNK_SIZE) {
-        if (is_final_chunk) {
-            stream_buffer_.clear(); // Not enough for a pattern, discard.
-        }
-        return; // Not enough data, wait for more.
-    }
+    const size_t pattern_chunk_size = 12; // As per extractPatternsFromBytes: 3 floats * 4 bytes
 
-    // Process the entire buffer with a sliding window.
-    // The cache will prevent re-adding duplicate patterns.
-    auto extracted_patterns = extractPatternsFromBytes(stream_buffer_.data(), buffer_size);
-    for (const auto& pattern : extracted_patterns) {
-        addPattern(pattern);
+    while (stream_buffer_.size() >= pattern_chunk_size) {
+        // Extract a single pattern from the buffer
+        glm::vec3 v(0.0f);
+        memcpy(&v, stream_buffer_.data(), pattern_chunk_size);
+        
+        // Normalize the vector to prevent issues with zero vectors
+        v = glm::normalize(v + glm::vec3(1e-6f));
+
+        // Create a new pattern object
+        pattern::PatternData p;
+        p.id = "pattern_" + std::to_string(patterns_.size());
+        p.generation = 0;
+        p.timestamp = std::time(nullptr);
+        p.last_accessed = p.timestamp;
+        p.last_modified = p.timestamp;
+        p.data.assign({v.x, v.y, v.z});
+
+        // Immediately process the pattern to determine its initial quantum state
+        float coherence = qfh_processor_->processPattern(v);
+        bool is_stable = qfh_processor_->isStable(v);
+
+        p.quantum_state.coherence = coherence;
+        p.quantum_state.stability = qfh_processor_->calculateStability(
+            v, 0.5f, p.generation, p.quantum_state.access_frequency);
+        p.quantum_state.entropy = qfh_processor_->getLastQFHResult().entropy;
+        p.quantum_state.state = is_stable ? quantum::QuantumState::Status::COHERENT
+                                          : quantum::QuantumState::Status::SUPERPOSITION;
+        p.generation++;
+
+        // Add the fully processed pattern to the main list
+        addPattern(p);
+
+        // Remove the processed chunk from the stream buffer
+        stream_buffer_.erase(stream_buffer_.begin(), stream_buffer_.begin() + pattern_chunk_size);
     }
 
     if (is_final_chunk) {
+        // If this is the final chunk, discard any remaining bytes that don't form a full pattern.
         stream_buffer_.clear();
-    } else {
-        // Erase the portion of the buffer that has been fully processed,
-        // leaving the tail for overlap analysis with the next chunk.
-        size_t erase_count = buffer_size - (CHUNK_SIZE - 1);
-        stream_buffer_.erase(stream_buffer_.begin(), stream_buffer_.begin() + erase_count);
     }
 }
 

@@ -738,7 +738,7 @@ namespace sep::memory
     void MemoryTier::checkAndCleanupSTM()
     {
         // Get cleanup threshold from config
-        float cleanup_threshold = 0.9f;  // Default to 90% if not specified
+        // float cleanup_threshold = 0.9f;  // Default to 90% if not specified
 
         // Check if we're above the max patterns threshold
         if (m_patterns.size() >= m_max_patterns)

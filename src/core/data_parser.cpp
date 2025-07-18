@@ -117,31 +117,34 @@ std::vector<Pattern> DataParser::parseStream(std::istream& stream, DataFormat fo
     if (!stream_state_) {
         stream_state_ = std::make_unique<StreamState>();
     }
-    
+
     // Read available data from stream
-    std::vector<uint8_t> chunk;
-    char ch;
-    while (stream.get(ch)) {
-        chunk.push_back(static_cast<uint8_t>(ch));
+    char buffer[4096];
+    while (stream.read(buffer, sizeof(buffer))) {
+        stream_state_->buffer.insert(stream_state_->buffer.end(), buffer, buffer + stream.gcount());
     }
-    
-    // Append to buffer
-    stream_state_->buffer.insert(stream_state_->buffer.end(), chunk.begin(), chunk.end());
-    
-    // Try to parse complete patterns from buffer
-    std::vector<Pattern> patterns;
-    
-    if (format == DataFormat::AUTO) {
+    stream_state_->buffer.insert(stream_state_->buffer.end(), buffer, buffer + stream.gcount());
+
+    if (format == DataFormat::AUTO && !stream_state_->buffer.empty()) {
         format = detectFormat(stream_state_->buffer.data(), stream_state_->buffer.size());
     }
-    
-    // For now, simple implementation - parse when we have enough data
-    // In production, this would need more sophisticated boundary detection
-    if (stream_state_->buffer.size() > 1024) {  // Arbitrary threshold
+
+    std::vector<Pattern> patterns;
+    if (format == DataFormat::JSON || format == DataFormat::CANDLE) {
+        try {
+            // Attempt to parse the buffered data
+            patterns = parseBuffer(stream_state_->buffer.data(), stream_state_->buffer.size(), format);
+            // If successful, clear the buffer
+            stream_state_->buffer.clear();
+        } catch (const nlohmann::json::parse_error& e) {
+            // Incomplete JSON, wait for more data
+        }
+    } else {
+        // For other formats, parse what we have
         patterns = parseBuffer(stream_state_->buffer.data(), stream_state_->buffer.size(), format);
-        stream_state_->buffer.clear();  // Clear after successful parse
+        stream_state_->buffer.clear();
     }
-    
+
     return patterns;
 }
 
@@ -215,34 +218,33 @@ std::vector<Pattern> DataParser::parseCSV(const std::string& path) {
 // Parse binary data
 std::vector<Pattern> DataParser::parseBinary(const uint8_t* data, size_t size) {
     std::vector<Pattern> patterns;
-    
-    // Treat binary data as raw float arrays
-    // Each pattern needs at least 4 floats for position
     const size_t floats_per_pattern = 4;
     const size_t bytes_per_pattern = floats_per_pattern * sizeof(float);
-    
+
     if (size < bytes_per_pattern) {
         return patterns;
     }
-    
+
     size_t num_patterns = size / bytes_per_pattern;
     const float* float_data = reinterpret_cast<const float*>(data);
-    
+
     for (size_t i = 0; i < num_patterns; ++i) {
         Pattern pattern;
         pattern.id = std::to_string(i);
         pattern.timestamp = std::chrono::system_clock::now().time_since_epoch().count();
-        
-        // Map binary floats directly to position
+
         size_t offset = i * floats_per_pattern;
-        pattern.position.x = float_data[offset + 0];
-        pattern.position.y = float_data[offset + 1];
-        pattern.position.z = float_data[offset + 2];
-        pattern.position.w = float_data[offset + 3];
-        
-        // Initialize other fields
+        pattern.position = glm::vec4(float_data[offset], float_data[offset + 1], float_data[offset + 2], float_data[offset + 3]);
+
+        // Derive coherence from variance
+        float mean = (pattern.position.x + pattern.position.y + pattern.position.z + pattern.position.w) / 4.0f;
+        float variance = ((pattern.position.x - mean) * (pattern.position.x - mean) +
+                          (pattern.position.y - mean) * (pattern.position.y - mean) +
+                          (pattern.position.z - mean) * (pattern.position.z - mean) +
+                          (pattern.position.w - mean) * (pattern.position.w - mean)) / 4.0f;
+        pattern.coherence = 1.0f / (1.0f + variance);
+
         pattern.generation = 0;
-        pattern.coherence = 0.0f;
         pattern.quantum_state = quantum::QuantumState{};
         pattern.velocity = glm::vec4(0.0f);
         pattern.attributes = glm::vec4(0.0f);
@@ -250,10 +252,10 @@ std::vector<Pattern> DataParser::parseBinary(const uint8_t* data, size_t size) {
         pattern.momentum = glm::vec3(0.0f);
         pattern.last_accessed = pattern.timestamp;
         pattern.last_modified = pattern.timestamp;
-        
+
         patterns.push_back(pattern);
     }
-    
+
     return patterns;
 }
 
@@ -281,18 +283,17 @@ std::vector<PinState> DataParser::toPinStates(const std::vector<Pattern>& patter
 // Format detection
 DataFormat DataParser::detectFormat(const uint8_t* data, size_t size) const {
     if (size == 0) return DataFormat::BINARY;
-    
+
     // Check for JSON
     if (data[0] == '{' || data[0] == '[') {
-        // Simple check for "candles" keyword
         std::string str(reinterpret_cast<const char*>(data), std::min(size, size_t(100)));
         if (str.find("candles") != std::string::npos) {
             return DataFormat::CANDLE;
         }
         return DataFormat::JSON;
     }
-    
-    // Check for CSV (contains commas and newlines)
+
+    // Check for CSV
     bool has_comma = false;
     bool has_newline = false;
     for (size_t i = 0; i < std::min(size, size_t(1000)); ++i) {
@@ -300,9 +301,27 @@ DataFormat DataParser::detectFormat(const uint8_t* data, size_t size) const {
         if (data[i] == '\n') has_newline = true;
         if (has_comma && has_newline) return DataFormat::CSV;
     }
-    
-    // Default to binary
-    return DataFormat::BINARY;
+
+    // Check for binary based on entropy
+    std::vector<int> counts(256, 0);
+    for (size_t i = 0; i < size; ++i) {
+        counts[data[i]]++;
+    }
+
+    double entropy = 0.0;
+    for (int count : counts) {
+        if (count > 0) {
+            double p = static_cast<double>(count) / size;
+            entropy -= p * std::log2(p);
+        }
+    }
+
+    if (entropy > 7.5) { // High entropy suggests binary data
+        return DataFormat::BINARY;
+    }
+
+    // Default to text-based formats if not clearly binary
+    return DataFormat::CSV;
 }
 
 DataFormat DataParser::detectFileFormat(const std::string& path) const {

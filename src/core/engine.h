@@ -72,6 +72,8 @@ class Engine {
 
   std::vector<float> getCoherenceHistory() const;
 
+  void ingestFile(const std::string& dataPath, bool legacy = false);
+
  private:
   static constexpr size_t DEFAULT_SIZE = 1024;
   static constexpr size_t PAIRS_PER_CHUNK = 32;  // WARP_SIZE

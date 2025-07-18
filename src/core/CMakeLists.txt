@@ -46,8 +46,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/core/
 
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_core PRIVATE
-    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1
-    SEP_NO_REDIS
     $<$<BOOL:${SEP_BUILD_QUANTUM}>:SEP_BUILD_QUANTUM=1>
     $<$<NOT:$<BOOL:${SEP_BUILD_QUANTUM}>>:SEP_BUILD_QUANTUM=0>)
 

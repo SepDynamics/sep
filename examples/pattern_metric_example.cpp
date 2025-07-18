@@ -28,6 +28,7 @@
  * 
  */
 #include "quantum/pattern_metric_engine.h"
+#include "quantum/quantum_processor.h" // For GPUContext
 #include <iostream>
 #include <vector>
 #include <string>
@@ -160,6 +161,7 @@ void runOriginalExamples(PatternMetricEngine& engine, std::ostream& out) {
 int main(int argc, char* argv[]) {
     bool benchmark_mode = false;
     bool no_clear = false;
+    bool gpu_mode = false;
     int iterations = 1;
     std::string output_path;
     std::string target_path_str;
@@ -171,6 +173,8 @@ int main(int argc, char* argv[]) {
         std::string arg = argv[i];
         if (arg == "--benchmark") {
             benchmark_mode = true;
+        } else if (arg == "--gpu") {
+            gpu_mode = true;
         } else if (arg == "--iterations") {
             if (i + 1 < argc) {
                 iterations = std::stoi(argv[++i]);
@@ -219,7 +223,17 @@ int main(int argc, char* argv[]) {
     std::ostream& out = outfile.is_open() ? outfile : std::cout;
 
     PatternMetricEngine engine;
-    if (engine.init(nullptr) != sep::SEPResult::SUCCESS) {
+    std::unique_ptr<GPUContext> gpu_context;
+
+    if (gpu_mode) {
+        out << "GPU mode enabled." << std::endl;
+        gpu_context = std::make_unique<GPUContext>();
+        // Simple initialization, assuming device 0
+        gpu_context->device_id = 0;
+        gpu_context->initialized = true;
+    }
+
+    if (engine.init(gpu_context.get()) != sep::SEPResult::SUCCESS) {
         std::cerr << "Failed to initialize pattern metric engine\n";
         return 1;
     }
@@ -254,11 +268,17 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-static void BM_ProcessFile(benchmark::State& state, const char* filepath) {
+static void BM_ProcessFile(benchmark::State& state, const char* filepath, bool use_gpu) {
     for (auto _ : state) {
         state.PauseTiming();
         PatternMetricEngine engine;
-        engine.init(nullptr);
+        std::unique_ptr<GPUContext> gpu_context;
+        if (use_gpu) {
+            gpu_context = std::make_unique<GPUContext>();
+            gpu_context->device_id = 0;
+            gpu_context->initialized = true;
+        }
+        engine.init(gpu_context.get());
         fs::path targetPath(filepath);
         std::ofstream dev_null("/dev/null");
         state.ResumeTiming();
@@ -266,4 +286,5 @@ static void BM_ProcessFile(benchmark::State& state, const char* filepath) {
         processFile(engine, targetPath, 1, false, dev_null);
     }
 }
-BENCHMARK_CAPTURE(BM_ProcessFile, "assets/test_data/benchmark_data.txt", "assets/test_data/benchmark_data.txt");
+BENCHMARK_CAPTURE(BM_ProcessFile, CPU, "assets/test_data/benchmark_data.txt", false);
+BENCHMARK_CAPTURE(BM_ProcessFile, GPU, "assets/test_data/benchmark_data.txt", true);

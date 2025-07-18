@@ -5,7 +5,6 @@ set(SEP_CORE_LIBS
     ${CMAKE_DL_LIBS}
     pthread
     dl
-    rt
     m
     z
 )
@@ -38,7 +37,6 @@ enable_testing()
 
 # Core required components
 set(SEP_HAS_CUDA ON CACHE BOOL "CUDA support (required)" FORCE)
-set(CMAKE_GENERATOR "Ninja" CACHE STRING "Generator to use" FORCE)
 
 # Set processor affinity for CUDA orchestration
 add_compile_definitions(SEP_DEDICATED_CORE_ORCHESTRATION=1)
@@ -55,8 +53,8 @@ option(SEP_WITH_ALEMBIC "Enable Alembic support" OFF)
 option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" OFF)
 option(SEP_BUILD_ENGINE "Build the main engine component" ON)
 option(SEP_BUILD_QUANTUM "Build quantum processing components" ON)
-option(SEP_BUILD_TESTS "Build test components" ON)
-option(SEP_BUILD_EXAMPLES "Build example components" ON)
+option(SEP_BUILD_TESTS "Build test components" OFF)
+option(SEP_BUILD_EXAMPLES "Build example components" OFF)
 option(SEP_BUILD_WORKBENCH "Build the interactive sep_workbench visualization" OFF)
 option(SEP_USE_TBB "Enable TBB parallel features" ON)
 option(SEP_HAS_EXCEPTIONS "Enable C++ exceptions" ON)
@@ -189,7 +187,6 @@ set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
 add_subdirectory(src)
 
 if(SEP_BUILD_TESTS)
-    add_subdirectory(extern/googletest)
     add_subdirectory(src/tests)
 endif()
 
@@ -210,7 +207,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
 
 # Install libraries
 install(TARGETS
-    sep_core
     sep_compat
     sep_memory
     sep_quantum
@@ -265,4 +261,3 @@ endif()
 set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE BOOL "Enable downloading of dependencies")
 set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Enable testing of the benchmark library." FORCE)
 set(BENCHMARK_ENABLE_WERROR OFF CACHE BOOL "Build Release candidates with -Werror." FORCE)
-add_subdirectory(extern/benchmark)

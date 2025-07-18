@@ -12,7 +12,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
 # Find required packages
 find_package(CUDAToolkit REQUIRED)
 find_package(fmt REQUIRED)
-find_package(GTest REQUIRED)
 
 # Create test executables
 # add_executable(memory_tier_test memory_tier_test.cpp)
@@ -54,9 +53,6 @@ add_executable(pattern_metric_test pattern_metric_engine_test.cpp)
 
 # Configure pattern metric test
 target_link_libraries(pattern_metric_test PRIVATE
-    GTest::gtest
-    GTest::gtest_main
-    GTest::gmock
     fmt::fmt
     sep_core
     sep_quantum

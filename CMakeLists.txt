@@ -12,6 +12,9 @@ set(SEP_CORE_LIBS
 
 cmake_minimum_required(VERSION 3.15)
 
+set(CMAKE_C_COMPILER /usr/bin/gcc)
+set(CMAKE_CXX_COMPILER /usr/bin/g++)
+
 # Enable POSIX features for popen/pclose
 add_compile_definitions(_POSIX_C_SOURCE=200809L)
 add_definitions(-D_GNU_SOURCE)
@@ -119,6 +122,12 @@ link_directories(${CMAKE_SOURCE_DIR}/lib)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # Temporarily disable -Werror to allow partial builds for testing during fixes
     add_compile_options(-Wall -Wextra)
+    # Add these flags to suppress common third-party warnings
+    add_compile_options(
+        -Wno-unicode
+        -Wno-objc-signed-char-bool
+        -Wno-redundant-move
+    )
     # Uncomment the line below when all issues are fixed
     # add_compile_options(-Wall -Wextra -Werror)
 endif()
@@ -253,5 +262,7 @@ if(SEP_GPU_EXCLUSIVE_ACCESS)
 endif()
 
 set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE BOOL "Enable downloading of dependencies")
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Enable testing of the benchmark library." FORCE)
+set(BENCHMARK_ENABLE_WERROR OFF CACHE BOOL "Build Release candidates with -Werror." FORCE)
 add_subdirectory(extern/googletest)
 add_subdirectory(extern/benchmark)

@@ -3,6 +3,7 @@
 #include <sstream>
 #include <random>
 #include <string>
+#include <fstream>
 
 using namespace sep::quantum;
 using namespace sep::pattern;
@@ -126,4 +127,42 @@ TEST_F(PatternMetricEngineTest, PatternMutation) {
     EXPECT_NE(mutated.id, patterns[0].id);
     EXPECT_GT(mutated.generation, patterns[0].generation);
     EXPECT_FALSE(mutated.data.empty());
+}
+
+// Test repetitive data
+TEST_F(PatternMetricEngineTest, ProcessRepetitiveData) {
+    std::ifstream f("assets/test_data/repetitive_data.bin", std::ios::binary);
+    ASSERT_TRUE(f.is_open()) << "Failed to open repetitive test data file.";
+    
+    std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), {});
+    ASSERT_FALSE(bytes.empty()) << "Repetitive test data file is empty.";
+    
+    engine_->ingestData(bytes.data(), bytes.size());
+    engine_->evolvePatterns();
+    auto metrics = engine_->computeMetrics();
+    
+    ASSERT_FALSE(metrics.empty());
+    // Expect high coherence for repetitive data
+    for (const auto& m : metrics) {
+        EXPECT_GT(m.coherence, 0.8f);
+    }
+}
+
+// Test random data
+TEST_F(PatternMetricEngineTest, ProcessRandomData) {
+    std::ifstream f("assets/test_data/random_data.bin", std::ios::binary);
+    ASSERT_TRUE(f.is_open()) << "Failed to open random test data file.";
+    
+    std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), {});
+    ASSERT_FALSE(bytes.empty()) << "Random test data file is empty.";
+    
+    engine_->ingestData(bytes.data(), bytes.size());
+    engine_->evolvePatterns();
+    auto metrics = engine_->computeMetrics();
+    
+    ASSERT_FALSE(metrics.empty());
+    // Expect low coherence for random data
+    for (const auto& m : metrics) {
+        EXPECT_LT(m.coherence, 0.4f);
+    }
 }

@@ -32,9 +32,9 @@ inline void checkCudaError(cudaError_t result, const char* operation) {
     if (result != (cudaError_t)SEP_CUDA_SUCCESS) {
         // Use platform-independent error handling
 #if SEP_ENGINE_HAS_CUDA
-        fprintf(stderr, "CUDA Error in %s: %s\n", operation, ::cudaGetErrorString(result));
+        (void)fprintf(stderr, "CUDA Error in %s: %s\n", operation, sep::cuda::cudaGetErrorString(result));
 #else
-        fprintf(stderr, "CUDA Error in %s: %s\n", operation, cudaGetErrorString(result));
+        (void)fprintf(stderr, "CUDA Error in %s: %s\n", operation, sep::cuda::cudaGetErrorString(result));
 #endif
     }
 }

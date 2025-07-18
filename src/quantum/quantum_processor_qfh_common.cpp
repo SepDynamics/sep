@@ -16,10 +16,13 @@ namespace sep::quantum {
 namespace {
 
 float vectorCoherence(const glm::vec3& a, const glm::vec3& b) {
-    glm::vec3 na = glm::normalize(a + glm::vec3(1e-6f));  // Normalize + epsilon avoid zero-vec
-    glm::vec3 nb = glm::normalize(b + glm::vec3(1e-6f));
-    float dot = glm::dot(na, nb);
-    return (dot + 1.0f) * 0.5f;  // [0,1]
+    // Use Euclidean distance, normalized to a [0, 1] range.
+    // A smaller distance means higher coherence.
+    float distance = glm::distance(a, b);
+    
+    // The coherence is inversely proportional to the distance.
+    // The '+ 1.0f' prevents division by zero and ensures the result is <= 1.0.
+    return 1.0f / (1.0f + distance);
 }
 
 float relationshipStrength(float ca, float cb, float interaction_frequency) {
@@ -39,6 +42,11 @@ float patternStability(float coherence, float historical_stability, float genera
 
 QuantumProcessorQFHCommon::QuantumProcessorQFHCommon() : qbsa_processor_(createQFHBasedQBSAProcessor({})) {}
 
+void QuantumProcessorQFHCommon::clear() {
+    m_patterns.clear();
+    m_pattern_bits.clear();
+}
+
 const QFHResult& QuantumProcessorQFHCommon::getLastQFHResult() const {
     return m_last_qfh_result;
 }
@@ -56,16 +64,21 @@ float QuantumProcessorQFHCommon::calculateMutationRate(float base_rate, int succ
 }
 
 float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
-    glm::vec3 np = glm::normalize(pattern + glm::vec3(1e-6f));
-    float coherence = 0.0f;
+    float coherence;
 
-    if (!m_patterns.empty()) {
+    if (m_patterns.empty()) {
+        // The first pattern is perfectly coherent with itself.
+        coherence = 1.0f;
+    } else {
+        // Find the maximum coherence with any existing pattern.
+        coherence = 0.0f;
         for (const auto& existing : m_patterns) {
-            coherence = std::max(coherence, vectorCoherence(np, existing));
+            coherence = std::max(coherence, vectorCoherence(pattern, existing));
         }
     }
 
-    m_patterns.push_back(np);
+    // Store the original, non-normalized pattern for future comparisons.
+    m_patterns.push_back(pattern);
 
     if (!m_pattern_bits.empty()) {
         analyzePatternBits();

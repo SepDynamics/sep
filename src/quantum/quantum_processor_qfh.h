@@ -22,6 +22,7 @@ class QuantumProcessorQFHCommon {
 public:
     QuantumProcessorQFHCommon();
 
+    void clear();
     float calculateMutationRate(float base_rate, int successful_mutations, int stabilization_count);
     float processPattern(const glm::vec3& pattern);
 

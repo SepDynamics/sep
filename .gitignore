@@ -150,3 +150,4 @@ CMakeTmp/
 */build/
 cmake-build-*/
 src/sep_api_server
+examples/

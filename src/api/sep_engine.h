@@ -128,6 +128,18 @@ namespace sep::api
         nlohmann::json blendContexts(const nlohmann::json& request_data);
 
         /**
+         * @brief Process quantitative trading data
+         *
+         * This method processes quantitative trading data (e.g., OHLC candles)
+         * through the SEP Engine's quantum processing pipeline and returns
+         * DAG analysis metrics.
+         *
+         * @param file_path Path to the quantitative data file
+         * @return JSON response with DAG metrics and quantum analysis
+         */
+        nlohmann::json processQuantData(const std::string& file_path);
+
+        /**
          * @brief Get the health status of the SEP Engine
          *
          * This method returns the health status of the SEP Engine, including

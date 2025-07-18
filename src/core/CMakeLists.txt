@@ -6,6 +6,8 @@ set(SEP_CORE_SOURCES
     error_handler.cpp
     metrics_collector.cpp
     logging.cpp
+    data_parser.cpp
+    dag_graph_quant.cpp
 )
 
 # Manager functionality is excluded when building the testbed stubs

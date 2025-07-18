@@ -22,13 +22,13 @@
 // When real CUDA/cuFFT is available, use those types
 namespace sep {
 namespace cuda {
-    using cufftComplex;
-    using cufftDoubleComplex;
-    using cufftDoubleReal;
-    using cufftHandle;
-    using cufftReal;
-    using cufftResult;
-    using cufftType;
+    using ::cufftComplex;
+    using ::cufftDoubleComplex;
+    using ::cufftDoubleReal;
+    using ::cufftHandle;
+    using ::cufftReal;
+    using ::cufftResult;
+    using ::cufftType;
 } // namespace cuda
 } // namespace sep
 

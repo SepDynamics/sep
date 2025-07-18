@@ -1,49 +1,59 @@
 #ifndef SEP_COMPAT_CUDA_TYPES_H
 #define SEP_COMPAT_CUDA_TYPES_H
 
+#include <cstddef>  // For size_t
 #include "compat/cuda_config.h"
 #include "compat/cuda_fwd.h"  // Include forward declarations first
-
-// Include CUDA headers outside namespace when available
-#if SEP_ENGINE_HAS_CUDA
-#include <cuda_runtime_api.h>
-#include <cuda_runtime.h>
-#endif
 
 namespace sep {
 namespace cuda {
 
-// Include the actual CUDA runtime when available
-#if SEP_ENGINE_HAS_CUDA
-// When CUDA is available, import the actual CUDA types
+// Import types from global namespace
 using ::cudaError_t;
 using ::cudaStream_t;
 using ::cudaEvent_t;
 using ::cudaMemcpyKind;
-using ::cudaDeviceProp;
-// Use the CUDA-defined cudaSuccess
-static const int cudaSuccess = ::cudaSuccess;
 
+#if SEP_ENGINE_HAS_CUDA
+// When CUDA is available, use the actual types
+using ::cudaDeviceProp;
 #else
-// Define success constant for non-CUDA builds
-static const int cudaSuccess = 0;
-// Types are already defined in cuda_fwd.h
+// For non-CUDA builds, define a placeholder
 struct cudaDeviceProp
 {
-    char data[256];
-};  // Simple placeholder struct
+    char name[256];
+    size_t totalGlobalMem;
+    size_t sharedMemPerBlock;
+    int regsPerBlock;
+    int warpSize;
+    size_t memPitch;
+    int maxThreadsPerBlock;
+    int maxThreadsDim[3];
+    int maxGridSize[3];
+    int clockRate;
+    size_t totalConstMem;
+    int major;
+    int minor;
+    size_t textureAlignment;
+    int deviceOverlap;
+    int multiProcessorCount;
+    int kernelExecTimeoutEnabled;
+    int integrated;
+    int canMapHostMemory;
+    int computeMode;
+};
 #endif
 
 // Error code definitions (consistent regardless of CUDA availability)
 enum ErrorCode
 {
-    Success = cudaSuccess,
+    Success = SEP_CUDA_SUCCESS,
     InvalidValue = 1,
     OutOfMemory = 2,
     NotInitialized = 3,
     Deinitialized = 4,
     DeviceNotLicensed = 10,
-    MemoryAllocation = 2,
+    MemoryAllocation = SEP_CUDA_ERROR_MEMORY_ALLOCATION,
     InvalidDevice = 101
 };
 

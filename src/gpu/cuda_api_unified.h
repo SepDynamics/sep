@@ -11,6 +11,10 @@
 #include <stddef.h>  /* For size_t */
 
 #ifdef __cplusplus
+#include <string>
+#endif
+
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -83,11 +87,13 @@ SEP_CUDA_ERROR SEP_CUDA_GetDeviceCount(int* count);
 /* Get device properties */
 SEP_CUDA_ERROR SEP_CUDA_GetDeviceProperties(SEP_CUDA_DEVICE_PROPS* prop, int device);
 
-/* Error string function */
-const char* SEP_CUDA_ErrorString(SEP_CUDA_ERROR error);
-
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef __cplusplus
+/* Error string function */
+std::string SEP_CUDA_ErrorString(SEP_CUDA_ERROR error);
 #endif
 
 #endif /* SEP_CUDA_API_UNIFIED_H */

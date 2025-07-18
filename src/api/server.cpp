@@ -619,7 +619,7 @@ void SEPApiServer::setup_routes() {
                   result = engine.processQuantData(temp_file);
                   
                   // Clean up temp file
-                  std::remove(temp_file.c_str());
+                  (void)std::remove(temp_file.c_str());
               } else {
                   throw std::runtime_error("Missing 'file_path' or 'candles' in request");
               }

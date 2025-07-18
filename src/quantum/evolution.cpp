@@ -154,7 +154,7 @@ inline float deterministicNoise(uint64_t& state)
                 glm::clamp(state.coherence + (nextFloat() * 2.0f - 1.0f) * sigma, 0.0f, 1.0f);
             state.stability = glm::clamp(
                 state.stability + (nextFloat() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
-            state.phase += (nextFloat() * 2.0f - 1.0f) * sigma * M_PI;  // Add phase mutation
+            state.phase += (nextFloat() * 2.0f - 1.0f) * sigma * static_cast<float>(M_PI);  // Add phase mutation
             state.entropy =
                 glm::clamp(state.entropy + (nextFloat() * 2.0f - 1.0f) * sigma * 2.0f, 0.0f, 1.0f);
             mutated.position +=
@@ -418,7 +418,7 @@ inline float deterministicNoise(uint64_t& state)
                 glm::clamp(state.coherence + (rnd() * 2.0f - 1.0f) * sigma, 0.0f, 1.0f);
             state.stability =
                 glm::clamp(state.stability + (rnd() * 2.0f - 1.0f) * sigma * 0.5f, 0.0f, 1.0f);
-            state.phase += (rnd() * 2.0f - 1.0f) * sigma * M_PI;  // Add phase mutation
+            state.phase += (rnd() * 2.0f - 1.0f) * sigma * static_cast<float>(M_PI);  // Add phase mutation
             state.entropy =
                 glm::clamp(state.entropy + (rnd() * 2.0f - 1.0f) * sigma * 2.0f, 0.0f, 1.0f);
             mutated.position +=

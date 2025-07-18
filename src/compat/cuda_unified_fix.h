@@ -21,20 +21,20 @@
 #endif
 
 // Disable problematic fp8 and half precision conversions
-#ifndef __CUDA_NO_FP8_CONVERSIONS__
-#define __CUDA_NO_FP8_CONVERSIONS__ 1
+#ifndef SEP_CUDA_NO_FP8_CONVERSIONS
+#define SEP_CUDA_NO_FP8_CONVERSIONS 1
 #endif
 
-#ifndef __CUDA_NO_HALF_OPERATORS__
-#define __CUDA_NO_HALF_OPERATORS__ 1
+#ifndef SEP_CUDA_NO_HALF_OPERATORS
+#define SEP_CUDA_NO_HALF_OPERATORS 1
 #endif
 
-#ifndef __CUDA_NO_HALF2_OPERATORS__
-#define __CUDA_NO_HALF2_OPERATORS__ 1
+#ifndef SEP_CUDA_NO_HALF2_OPERATORS
+#define SEP_CUDA_NO_HALF2_OPERATORS 1
 #endif
 
-#ifndef __CUDA_NO_BFLOAT16_CONVERSIONS__
-#define __CUDA_NO_BFLOAT16_CONVERSIONS__ 1
+#ifndef SEP_CUDA_NO_BFLOAT16_CONVERSIONS
+#define SEP_CUDA_NO_BFLOAT16_CONVERSIONS 1
 #endif
 
 // Define CUDA device/host function qualifiers

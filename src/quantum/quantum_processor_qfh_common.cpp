@@ -56,24 +56,20 @@ float QuantumProcessorQFHCommon::calculateMutationRate(float base_rate, int succ
 }
 
 float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
-    m_patterns.push_back(pattern);
+    glm::vec3 np = glm::normalize(pattern + glm::vec3(1e-6f));
     float coherence = 0.0f;
-    glm::vec3 np = glm::normalize(pattern + glm::vec3(1e-6f));  // Normalize input
 
-    for (const auto& existing : m_patterns) {
-        coherence = std::max(coherence, vectorCoherence(np, existing));
+    if (!m_patterns.empty()) {
+        for (const auto& existing : m_patterns) {
+            coherence = std::max(coherence, vectorCoherence(np, existing));
+        }
     }
 
-    // Scale by input magnitude for small patterns
-    coherence *= std::clamp(glm::length(pattern) / 10.0f, 0.1f, 1.0f);
-
-    if (coherence >= 0.1f) {
-        m_patterns.back() = np;  // Store normalized
-    }
+    m_patterns.push_back(np);
 
     if (!m_pattern_bits.empty()) {
         analyzePatternBits();
-        coherence = 0.7f * coherence + 0.3f * (1.0f - m_last_qfh_result.rupture_ratio);  // Blend with QFH
+        coherence = 0.7f * coherence + 0.3f * (1.0f - m_last_qfh_result.rupture_ratio);
     }
 
     return coherence;
@@ -152,13 +148,23 @@ void QuantumProcessorQFHCommon::analyzePatternBits() {
         m_last_qfh_result.entropy = 0.0f;
         return;
     }
-    float p1 = static_cast<float>(std::count(shim_bits.begin(), shim_bits.end(), 1)) / shim_bits.size();
-    float p0 = 1.0f - p1;
-    if (p0 > 0 && p1 > 0) {
-        m_last_qfh_result.entropy = - (p0 * std::log2(p0) + p1 * std::log2(p1));
-    } else {
+    auto bits = QFHBasedProcessor::convertToBits(shim_bits);
+    if (bits.empty()) {
         m_last_qfh_result.entropy = 0.0f;
+        return;
     }
+    float p1 = static_cast<float>(std::count(bits.begin(), bits.end(), 1)) / bits.size();
+    float p0 = 1.0f - p1;
+    
+    float entropy = 0.0f;
+    if (p0 > 0) {
+        entropy -= p0 * std::log2(p0 + 1e-6f);
+    }
+    if (p1 > 0) {
+        entropy -= p1 * std::log2(p1 + 1e-6f);
+    }
+    
+    m_last_qfh_result.entropy = std::clamp(entropy, 0.0f, 1.0f);
 }
 
 }  // namespace sep::quantum

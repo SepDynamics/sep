@@ -62,6 +62,7 @@ struct QFHResult {
     float flip_ratio{0.0f};
     float collapse_threshold{0.0f};
     bool collapse_detected{false};
+    float entropy{0.0f};
 };
 
 // QFH analysis options

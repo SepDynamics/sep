@@ -103,7 +103,7 @@ void DagGraph::calculateAlpha() {
         float baseAlpha = node.coherence;
         
         // Generation bonus (more evolved patterns have higher alpha)
-        float generationBonus = std::log1p(node.generation) * 0.1f;
+        float generationBonus = std::log1p(static_cast<float>(node.generation)) * 0.1f;
         
         // Stability factor
         float stabilityFactor = node.stability;

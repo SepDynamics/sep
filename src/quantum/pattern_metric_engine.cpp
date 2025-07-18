@@ -15,8 +15,6 @@ void PatternMetricEngine::clear() {
 }
 
 SEPResult PatternMetricEngine::init([[maybe_unused]] quantum::GPUContext* ctx) {
-    // In a real scenario, you might initialize GPU resources here.
-    // For now, we just ensure the QFH processor is ready.
     return SEPResult::SUCCESS;
 }
 
@@ -46,9 +44,13 @@ void PatternMetricEngine::ingestMappedFile([[maybe_unused]] const std::string& f
 
 void PatternMetricEngine::evolvePatterns() {
     std::lock_guard<std::mutex> lock(engine_mutex_);
-    current_patterns_ = extractPatternsFromBytes(stream_buffer_.data(), stream_buffer_.size());
-    // In a more complex system, this is where you would manage pattern evolution,
-    // mutation, and interaction with the memory tiers.
+    if (stream_buffer_.empty()) {
+        return;
+    }
+    // Process the new data in the buffer, append patterns, and clear the buffer.
+    auto new_patterns = extractPatternsFromBytes(stream_buffer_.data(), stream_buffer_.size());
+    current_patterns_.insert(current_patterns_.end(), new_patterns.begin(), new_patterns.end());
+    stream_buffer_.clear();
 }
 
 void PatternMetricEngine::addPattern(const pattern::PatternData& pattern) {
@@ -57,11 +59,9 @@ void PatternMetricEngine::addPattern(const pattern::PatternData& pattern) {
 }
 
 pattern::PatternData PatternMetricEngine::mutatePattern(const pattern::PatternData& parent) {
-    // This is a placeholder for a more sophisticated mutation algorithm.
     pattern::PatternData mutated = parent;
-    mutated.id = parent.id + "_child"; // Assign a new ID
+    mutated.id = parent.id + "_child";
     mutated.generation++;
-    // Example mutation: add a small value
     if (!mutated.data.empty()) {
         mutated.data[0] += 0.1f;
     }
@@ -70,17 +70,21 @@ pattern::PatternData PatternMetricEngine::mutatePattern(const pattern::PatternDa
 
 std::vector<PatternMetrics> PatternMetricEngine::computeMetrics() {
     std::lock_guard<std::mutex> lock(engine_mutex_);
+    
+    // PERFORMANCE FIX: Clear the processor state before the metric run.
+    // This prevents the O(N^2) slowdown from an ever-growing history in the processor.
+    // Each call to computeMetrics is now an independent analysis of the current patterns.
+    qfh_processor_->clear();
+    
     current_metrics_.clear();
+    current_metrics_.reserve(current_patterns_.size());
+
     for (const auto& p : current_patterns_) {
         PatternMetrics m;
-        // Use the QFH processor to compute coherence.
-        // This is a simplified example; a real implementation would be more complex.
         if (qfh_processor_ && !p.data.empty()) {
-            // Example: use the first three float values as a vector for processing.
             if (p.data.size() >= 3) {
                 m.coherence = qfh_processor_->processPattern(glm::vec3(p.data[0], p.data[1], p.data[2]));
             } else {
-                // Handle cases with fewer than 3 floats.
                 m.coherence = qfh_processor_->processPattern(glm::vec3(p.data[0], 0.0f, 0.0f));
             }
         } else {
@@ -100,7 +104,7 @@ const std::vector<pattern::PatternData>& PatternMetricEngine::getPatterns() cons
 std::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes(const uint8_t* data, size_t size) {
     std::vector<pattern::PatternData> patterns;
     const size_t float_size = sizeof(float);
-    const size_t chunk_size_floats = 16; // Example: 16 floats per pattern
+    const size_t chunk_size_floats = 16;
     const size_t chunk_size_bytes = chunk_size_floats * float_size;
 
     if (size == 0) {
@@ -118,7 +122,6 @@ std::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes(
         patterns.push_back(p);
     }
 
-    // Handle remaining bytes
     size_t remaining_bytes = size % chunk_size_bytes;
     if (remaining_bytes > 0) {
         pattern::PatternData p;

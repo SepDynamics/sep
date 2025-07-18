@@ -45,6 +45,7 @@ QuantumProcessorQFHCommon::QuantumProcessorQFHCommon() : qbsa_processor_(createQ
 void QuantumProcessorQFHCommon::clear() {
     m_patterns.clear();
     m_pattern_bits.clear();
+    m_last_qfh_result = QFHResult();
 }
 
 const QFHResult& QuantumProcessorQFHCommon::getLastQFHResult() const {
@@ -70,22 +71,32 @@ float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
         // The first pattern is perfectly coherent with itself.
         coherence = 1.0f;
     } else {
-        // Calculate the average coherence with all existing patterns.
-        coherence = 0.0f;
-        for (const auto& existing : m_patterns) {
-            coherence += vectorCoherence(pattern, existing);
+        if (m_patterns.back() == pattern) {
+            return m_last_qfh_result.coherence;
         }
-        coherence /= m_patterns.size();
+        // Calculate the average coherence with all existing patterns.
+        float total_coherence = 0.0f;
+        for (const auto& existing : m_patterns) {
+            total_coherence += vectorCoherence(pattern, existing);
+        }
+        coherence = total_coherence / m_patterns.size();
     }
 
     // Store the original, non-normalized pattern for future comparisons.
     m_patterns.push_back(pattern);
+    
+    // PERFORMANCE FIX: Limit the pattern history to prevent O(N^2) slowdown.
+    // This acts as a sliding window, keeping performance high for large files.
+    const size_t MAX_PATTERN_HISTORY = 1024;
+    if (m_patterns.size() > MAX_PATTERN_HISTORY) {
+        m_patterns.erase(m_patterns.begin());
+    }
 
     if (!m_pattern_bits.empty()) {
         analyzePatternBits();
         coherence = 0.7f * coherence + 0.3f * (1.0f - m_last_qfh_result.rupture_ratio);
     }
-
+    m_last_qfh_result.coherence = coherence;
     return coherence;
 }
 

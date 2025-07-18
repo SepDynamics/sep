@@ -24,8 +24,8 @@ namespace sep::cuda
         cudaError_t cuda_err = cudaSetDevice(device);
         if (cuda_err != cudaSuccess)
         {
-            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
-                         string("CudaCore::initialize"));
+            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
+                         string("CudaCore::initialize"), SEPResult::CUDA_ERROR);
         }
         
         // Initialize device properties
@@ -38,8 +38,8 @@ namespace sep::cuda
         initialized_ = true;
         current_device_ = device;
         
-        return Error(SEPResult::SUCCESS, string("CUDA initialized successfully"),
-                     string("CudaCore::initialize"));
+        return Error(cuda::Status::Success, string("CUDA initialized successfully"),
+                    string("CudaCore::initialize"), SEPResult::SUCCESS);
     }
 
     Error CudaCore::setDevice(int device)
@@ -47,12 +47,12 @@ namespace sep::cuda
         cudaError_t cuda_err = cudaSetDevice(device);
         if (cuda_err != cudaSuccess)
         {
-            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
-                         string("CudaCore::setDevice"));
+            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
+                         string("CudaCore::setDevice"), SEPResult::CUDA_ERROR);
         }
         current_device_ = device;
-        return Error(SEPResult::SUCCESS, string("Device set successfully"),
-                     string("CudaCore::setDevice"));
+        return Error(cuda::Status::Success, string("Device set successfully"),
+                    string("CudaCore::setDevice"), SEPResult::SUCCESS);
     }
 
     int CudaCore::getDeviceCount() const
@@ -71,11 +71,11 @@ namespace sep::cuda
         cudaError_t cuda_err = cudaGetDeviceProperties(&props, device);
         if (cuda_err != cudaSuccess)
         {
-            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
-                         string("CudaCore::getDeviceProperties"));
+            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
+                         string("CudaCore::getDeviceProperties"), SEPResult::CUDA_ERROR);
         }
-        return Error(SEPResult::SUCCESS, string("Device properties retrieved"),
-                     string("CudaCore::getDeviceProperties"));
+        return Error(cuda::Status::Success, string("Device properties retrieved"),
+                    string("CudaCore::getDeviceProperties"), SEPResult::SUCCESS);
     }
 
     Error CudaCore::getMemoryInfo(size_t& free, size_t& total) const
@@ -83,11 +83,11 @@ namespace sep::cuda
         cudaError_t cuda_err = cudaMemGetInfo(&free, &total);
         if (cuda_err != cudaSuccess)
         {
-            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
-                         string("CudaCore::getMemoryInfo"));
+            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
+                         string("CudaCore::getMemoryInfo"), SEPResult::CUDA_ERROR);
         }
-        return Error(SEPResult::SUCCESS, string("Memory info retrieved"),
-                     string("CudaCore::getMemoryInfo"));
+        return Error(cuda::Status::Success, string("Memory info retrieved"),
+                    string("CudaCore::getMemoryInfo"), SEPResult::SUCCESS);
     }
 
     Error CudaCore::getLastError() const
@@ -95,16 +95,16 @@ namespace sep::cuda
         cudaError_t cuda_err = cudaGetLastError();
         if (cuda_err != cudaSuccess)
         {
-            return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
-                         string("CudaCore::getLastError"));
+            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
+                         string("CudaCore::getLastError"), SEPResult::CUDA_ERROR);
         }
-        return Error(SEPResult::SUCCESS, string("No error"),
-                     string("CudaCore::getLastError"));
+        return Error(cuda::Status::Success, string("No error"),
+                    string("CudaCore::getLastError"), SEPResult::SUCCESS);
     }
 
     std::string CudaCore::getErrorString(cudaError_t error) const
     {
-        return std::string(cudaGetErrorString(error));
+        return std::string(::cudaGetErrorString(error));
     }
 
     Error CudaCore::queryDeviceProperties()
@@ -112,8 +112,8 @@ namespace sep::cuda
         int device_count = getDeviceCount();
         if (device_count == 0)
         {
-            return Error(SEPResult::CUDA_ERROR, string("No CUDA devices found"),
-                         string("CudaCore::queryDeviceProperties"));
+            return Error(Status::Error, string("No CUDA devices found"),
+                         string("CudaCore::queryDeviceProperties"), SEPResult::CUDA_ERROR);
         }
 
         device_properties_.clear();
@@ -125,14 +125,14 @@ namespace sep::cuda
             cudaError_t cuda_err = cudaGetDeviceProperties(&props, i);
             if (cuda_err != cudaSuccess)
             {
-                return Error(SEPResult::CUDA_ERROR, string(cudaGetErrorString(cuda_err)),
-                             string("CudaCore::queryDeviceProperties"));
+                return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
+                             string("CudaCore::queryDeviceProperties"), SEPResult::CUDA_ERROR);
             }
             device_properties_.push_back(props);
         }
 
-        return Error(SEPResult::SUCCESS, string("Device properties queried"),
-                     string("CudaCore::queryDeviceProperties"));
+        return Error(cuda::Status::Success, string("Device properties queried"),
+                    string("CudaCore::queryDeviceProperties"), SEPResult::SUCCESS);
     }
 
     CudaMetrics CudaCore::getMetrics() const
@@ -158,8 +158,8 @@ namespace sep::cuda
         // For now, we'll leave it at 0
         current_metrics_.gpu_utilization = 0.0f;
 
-        return Error(SEPResult::SUCCESS, string("Metrics updated"),
-                     string("CudaCore::updateMetrics"));
+        return Error(Status::Success, string("Metrics updated"),
+                     string("CudaCore::updateMetrics"), SEPResult::SUCCESS);
     }
 
 }  // namespace sep::cuda

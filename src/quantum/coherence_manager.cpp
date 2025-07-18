@@ -1,5 +1,4 @@
 #include "quantum/coherence_manager.h"
-#include "core/types.h"
 
 #include <cuda_runtime.h>
 #include <tbb/concurrent_hash_map.h>
@@ -15,11 +14,11 @@
 #include <string>
 #include <vector>
 
-#include "blender/bridge.h"
 #include "compat/core.h"
 #include "compat/cuda.h"
 #include "compat/cuda_helpers.h"
 #include "core/logging.h"
+#include "core/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"

@@ -30,7 +30,6 @@
 #include <vector>
 
 #include "api/types.h"
-// (Removed audio and blender includes - not needed for quant processing)
 #include "compat/core.h"
 #include "compat/cuda_api.hpp"
 #include "compat/cuda_common.h"

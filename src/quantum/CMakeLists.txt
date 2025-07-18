@@ -31,6 +31,7 @@ add_library(sep_quantum STATIC
     processor.cpp
     manifold_config.cpp
     quantum_manifold_optimizer.cpp
+    pattern_metric_engine.cpp
 )
 
 target_include_directories(sep_quantum

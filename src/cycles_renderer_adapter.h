@@ -1,10 +1,9 @@
 #pragma once
 
-#include <vector>
-#include <string>
 #include <glm/vec3.hpp>
+#include <string>
+#include <vector>
 
-#include "blender/cycles_renderer.hpp"
 #include "renderer.h"
 
 namespace sep {

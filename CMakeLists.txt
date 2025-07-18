@@ -81,11 +81,6 @@ include_directories(BEFORE
     $<BUILD_INTERFACE:/usr/src>
 )
 
-# Disable previously required components
-set(SEP_ENABLE_BLENDER OFF CACHE BOOL "Enable Blender integration" FORCE)
-set(SEP_ENABLE_AUDIO OFF CACHE BOOL "Enable Audio processing" FORCE)
-set(SEP_HAS_CYCLES 0 CACHE BOOL "Enable Cycles renderer" FORCE)
-
 # Set CUDA compiler flags before enabling the language
 set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")
@@ -146,22 +141,14 @@ find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(http_parser REQUIRED)
-# GLM removed for minimal quant build - not needed for headless operation
-# find_package(glm REQUIRED)
 find_package(spdlog)
-# OpenGL not needed for headless quant operation
-# find_package(OpenGL REQUIRED)
-# Workbench disabled for minimal build - not needed for headless quant operation
 if(spdlog_FOUND)
     message(STATUS "Using system spdlog")
 else()
     message(WARNING "spdlog not found, falling back to stub implementation")
     add_compile_definitions(SEP_SPDLOG_FALLBACK)
 endif()
-# OpenVDB, OpenSubdiv, OpenPGL, OpenColorIO, Imath are all related to
-# visualization, rendering or geometry processing - not needed for headless operation
 
-# Set TBB_ROOT to prefer the newer TBB 12.x version only when a valid path exists
 if(NOT DEFINED ENV{TBB_ROOT})
   if(EXISTS "/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
     set(ENV{TBB_ROOT} "/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
@@ -173,14 +160,12 @@ if(SEP_USE_TBB)
     add_compile_definitions(SEP_USE_TBB)
     find_package(TBB REQUIRED)
 endif()
-# All visualization/rendering libraries removed for minimal build
 
 
 # Add CUDA-specific optimizations for dedicated GPU access
 add_compile_options(-DSEP_CUDA_DEDICATED_GPU=1)
 add_compile_options(-DSEP_CUDA_CORE_AFFINITY=1)
 
-# Set CUDA compute capability for specific GPU architecture
 # These are reasonable defaults for modern NVIDIA GPUs
 set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
 

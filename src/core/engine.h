@@ -20,7 +20,6 @@ class DeviceMemory;
 using StreamPtr = std::shared_ptr<Stream>;
 struct QSHResult;
 }  // namespace cuda
-// Removed audio and blender forward declarations - not needed for quant processing
 }  // namespace sep
 
 namespace sep {
@@ -79,9 +78,6 @@ class Engine {
 
   struct Impl;
   std::unique_ptr<Impl> impl_;
-
-  // Managed components
-  // (Removed audio and blender - not needed for quant processing)
 };
 
 }  // namespace core

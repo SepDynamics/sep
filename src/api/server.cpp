@@ -39,29 +39,6 @@
 
 namespace sep::api {
 
-// Static instance for signal handling
-SEPApiServer* SEPApiServer::instance_ = nullptr;
-SEPApiServer::SEPApiServer(const AuthConfig& config, sep::blender::CyclesRenderer* renderer)
-    : config_(config),
-      logger_(nullptr),
-      app_(nullptr),
-      server_thread_(nullptr),
-      running_(false),
-      metrics_(),
-      server_metrics_(),
-      metrics_mutex_(),
-      ollama_client_(nullptr),
-      cycles_renderer_(renderer)
-{
-    instance_ = this;
-
-    // Initialize the Crow app with middlewares
-    app_ = std::make_unique<crow::Crow<RateLimitMiddleware, AuthMiddleware>>();
-
-    // Initialize logger
-    setup_logging();
-}
-
 SEPApiServer::~SEPApiServer() {
   if (running_.load()) {
     stop();

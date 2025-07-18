@@ -213,11 +213,11 @@ int main(int argc, char** argv)
     if (daemon_mode)
     {
         // In daemon mode, block indefinitely until a signal is received
-        std::signal(SIGINT, [](int) {
+        (void)std::signal(SIGINT, [](int) {
             std::cout << "Received SIGINT, shutting down..." << std::endl;
             exit(0);
         });
-        std::signal(SIGTERM, [](int) {
+        (void)std::signal(SIGTERM, [](int) {
             std::cout << "Received SIGTERM, shutting down..." << std::endl;
             exit(0);
         });

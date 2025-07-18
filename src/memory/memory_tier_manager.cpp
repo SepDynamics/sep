@@ -355,7 +355,7 @@ MemoryTierManager::MemoryTierManager()
             src_tier->deallocate(block);
 
             printf("DEBUG: Promotion complete with coherence %.3f, stability %.3f\n",
-                   out_block->coherence, out_block->stability);
+                   static_cast<double>(out_block->coherence), static_cast<double>(out_block->stability));
             return SEPResult::SUCCESS;
         }
 

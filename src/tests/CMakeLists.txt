@@ -16,7 +16,7 @@ find_package(GTest REQUIRED)
 
 # Create test executables
 # add_executable(memory_tier_test memory_tier_test.cpp)
-add_executable(pattern_metric_test pattern_metric_engine_test.cpp)
+add_executable(pattern_metric_test pattern_metric_engine_test.cpp cetintrin_test.cpp)
 
 # Link dependencies
 # target_link_libraries(cycles_test PRIVATE

@@ -698,7 +698,7 @@ namespace sep::memory
         if (!canAcceptPattern(pattern)) return;
         // PatternData doesn't have id or memory_tier fields
         // Just store the pattern as is
-        m_patterns[id] = std::move(pattern);
+        m_patterns[id] = pattern;
     }
 
     void MemoryTier::removePattern(size_t id) { m_patterns.erase(id); }

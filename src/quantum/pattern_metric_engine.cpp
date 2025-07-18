@@ -47,19 +47,20 @@ void PatternMetricEngine::ingestData(std::istream& stream) {
     std::vector<uint8_t> read_buffer(buffer_size);
 
     while (stream.read(reinterpret_cast<char*>(read_buffer.data()), buffer_size)) {
-        std::lock_guard<std::mutex> lock{engine_mutex_};
+        std::lock_guard<std::mutex> lock(engine_mutex_);
         stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.end());
-        processBuffer();
+        if (stream_buffer_.size() >= buffer_size) {
+            processBuffer();
+        }
     }
 
     // Handle the last partial read
     if (stream.gcount() > 0) {
-        std::lock_guard<std::mutex> lock{engine_mutex_};
+        std::lock_guard<std::mutex> lock(engine_mutex_);
         stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.begin() + stream.gcount());
     }
 
     // Process any remaining data in the buffer
-    std::lock_guard<std::mutex> lock{engine_mutex_};
     processBuffer(true); // Final chunk
 }
 
@@ -210,17 +211,16 @@ void PatternMetricEngine::ingestFile(const std::string& filepath) {
     std::vector<uint8_t> read_buffer(buffer_size);
 
     while (file.read(reinterpret_cast<char*>(read_buffer.data()), buffer_size)) {
-        std::lock_guard<std::mutex> lock{engine_mutex_};
+        std::lock_guard<std::mutex> lock(engine_mutex_);
         stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.end());
         processBuffer();
     }
 
     if (file.gcount() > 0) {
-        std::lock_guard<std::mutex> lock{engine_mutex_};
+        std::lock_guard<std::mutex> lock(engine_mutex_);
         stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.begin() + file.gcount());
     }
 
-    std::lock_guard<std::mutex> lock{engine_mutex_};
     processBuffer(true);
 }
 

@@ -28,6 +28,8 @@
 #include <numeric>
 #include <sstream>
 #include <vector>
+#include <filesystem>
+#include <iostream>
 
 #include "api/types.h"
 #include "compat/core.h"
@@ -71,7 +73,10 @@ struct Engine::Impl {
   bool initialized{false};
 };
 
-Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
+Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {
+    sep::quantum::QuantumProcessor::Config config;
+    quantum_processor_ = sep::quantum::createQuantumProcessor(config);
+}
 
 bool Engine::init(const sep::config::CudaConfig &config)
 {
@@ -279,23 +284,63 @@ std::vector<float> Engine::getCoherenceHistory() const {
 }
 
 void Engine::ingestFile(const std::string& dataPath, bool legacy) {
-    DataParser parser;
-    auto patterns = parser.parseFile(dataPath);
+    metrics_collector_.increment("files_ingested");
     if (legacy) {
+        DataParser parser;
+        auto patterns = parser.parseFile(dataPath);
         auto pinStates = parser.toPinStates(patterns);
+        metrics_collector_.increment("patterns_converted_to_pin_states", patterns.size());
         // Assuming process_batch is the intended consumer for PinStates
         // process_batch(pinStates, ...);
+    } else {
+        pattern_metric_engine_.ingestFile(dataPath);
+        pattern_metric_engine_.evolvePatterns();
+        auto metrics = pattern_metric_engine_.computeMetrics();
+        metrics_collector_.increment("patterns_processed", metrics.size());
+        for (size_t i = 0; i < metrics.size(); ++i) {
+            // This is a placeholder for a more sophisticated mapping
+            // between PatternMetrics and the QuantumProcessor's representation.
+            quantum_processor_->processPattern(glm::vec3(metrics[i].coherence, metrics[i].stability, metrics[i].entropy), i);
+        }
     }
 }
 
-void Engine::ingestFile(const std::string& dataPath, bool legacy) {
-    DataParser parser;
-    auto patterns = parser.parseFile(dataPath);
-    if (legacy) {
-        auto pinStates = parser.toPinStates(patterns);
-        // Assuming process_batch is the intended consumer for PinStates
-        // process_batch(pinStates, ...);
+void Engine::ingestFromDirectory(const std::string& dirPath, bool recursive) {
+    std::vector<std::string> filePaths;
+    if (recursive) {
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(dirPath)) {
+            if (entry.is_regular_file()) {
+                filePaths.push_back(entry.path().string());
+            }
+        }
+    } else {
+        for (const auto& entry : std::filesystem::directory_iterator(dirPath)) {
+            if (entry.is_regular_file()) {
+                filePaths.push_back(entry.path().string());
+            }
+        }
     }
+
+    const size_t batch_size = 16;
+    for (size_t i = 0; i < filePaths.size(); i += batch_size) {
+        // This is a placeholder for parallel processing
+        for (size_t j = i; j < std::min(i + batch_size, filePaths.size()); ++j) {
+            ingestFile(filePaths[j], false);
+        }
+    }
+}
+
+void Engine::ingestFromSocket(int socket_fd) {
+    // This is a placeholder implementation.
+    // A real implementation would use a library like Asio or Boost.Asio
+    // to wrap the socket file descriptor in a stream object.
+    // For now, we'll just log a message.
+    std::cout << "Ingesting from socket: " << socket_fd << std::endl;
+}
+
+void Engine::ingestFromStream(std::istream& stream) {
+    pattern_metric_engine_.ingestData(stream);
+    pattern_metric_engine_.evolvePatterns();
 }
 
 std::string Engine::processQuantData(const std::string &dataPath, bool useGPU)

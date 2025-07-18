@@ -11,6 +11,9 @@
 #include "core/config.h"
 #include "core/types.h"
 #include "quantum/qbsa.h"
+#include "quantum/pattern_metric_engine.h"
+#include "quantum/quantum_processor.h"
+#include "core/metrics_collector.h"
 
 namespace sep {
 namespace cuda {
@@ -73,6 +76,9 @@ class Engine {
   std::vector<float> getCoherenceHistory() const;
 
   void ingestFile(const std::string& dataPath, bool legacy = false);
+  void ingestFromDirectory(const std::string& dirPath, bool recursive = true);
+  void ingestFromSocket(int socket_fd);
+  void ingestFromStream(std::istream& stream);
 
  private:
   static constexpr size_t DEFAULT_SIZE = 1024;
@@ -80,6 +86,9 @@ class Engine {
 
   struct Impl;
   std::unique_ptr<Impl> impl_;
+  sep::quantum::PatternMetricEngine pattern_metric_engine_;
+  std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor_;
+  MetricsCollector metrics_collector_;
 };
 
 }  // namespace core

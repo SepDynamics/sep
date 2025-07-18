@@ -15,13 +15,11 @@ namespace sep::quantum {
 
 namespace {
 
-float vectorCoherence(const glm::vec3& a, const glm::vec3& b) { // Remove unused parameter
-    float dot = glm::dot(a, b);
-    float mags = glm::length(a) * glm::length(b);
-    if (mags <= 0.0f)
-        return 0.0f;
-    float cos_theta = std::clamp(dot / mags, -1.0f, 1.0f);
-    return (cos_theta + 1.0f) * 0.5f;
+float vectorCoherence(const glm::vec3& a, const glm::vec3& b) {
+    glm::vec3 na = glm::normalize(a + glm::vec3(1e-6f));  // Normalize + epsilon avoid zero-vec
+    glm::vec3 nb = glm::normalize(b + glm::vec3(1e-6f));
+    float dot = glm::dot(na, nb);
+    return (dot + 1.0f) * 0.5f;  // [0,1]
 }
 
 float relationshipStrength(float ca, float cb, float interaction_frequency) {
@@ -58,20 +56,24 @@ float QuantumProcessorQFHCommon::calculateMutationRate(float base_rate, int succ
 }
 
 float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
-    auto normalized = glm::normalize(pattern);
+    m_patterns.push_back(pattern);
     float coherence = 0.0f;
+    glm::vec3 np = glm::normalize(pattern + glm::vec3(1e-6f));  // Normalize input
 
     for (const auto& existing : m_patterns) {
-        float pattern_coherence = vectorCoherence(normalized, existing);
-        coherence = std::max(coherence, pattern_coherence);
+        coherence = std::max(coherence, vectorCoherence(np, existing));
     }
 
+    // Scale by input magnitude for small patterns
+    coherence *= std::clamp(glm::length(pattern) / 10.0f, 0.1f, 1.0f);
+
     if (coherence >= 0.1f) {
-        m_patterns.push_back(normalized);
+        m_patterns.back() = np;  // Store normalized
     }
 
     if (!m_pattern_bits.empty()) {
         analyzePatternBits();
+        coherence = 0.7f * coherence + 0.3f * (1.0f - m_last_qfh_result.rupture_ratio);  // Blend with QFH
     }
 
     return coherence;
@@ -144,6 +146,19 @@ void QuantumProcessorQFHCommon::analyzePatternBits() {
         shim_bits.push_back(v);
     }
     m_last_qfh_result = qfh_processor.analyze(QFHBasedProcessor::convertToBits(shim_bits));
+
+    // Add entropy calculation (Shannon on bits)
+    if (shim_bits.empty()) {
+        m_last_qfh_result.entropy = 0.0f;
+        return;
+    }
+    float p1 = static_cast<float>(std::count(shim_bits.begin(), shim_bits.end(), 1)) / shim_bits.size();
+    float p0 = 1.0f - p1;
+    if (p0 > 0 && p1 > 0) {
+        m_last_qfh_result.entropy = - (p0 * std::log2(p0) + p1 * std::log2(p1));
+    } else {
+        m_last_qfh_result.entropy = 0.0f;
+    }
 }
 
 }  // namespace sep::quantum

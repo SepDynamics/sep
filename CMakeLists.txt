@@ -26,7 +26,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
-# Remove CUDA from LANGUAGES to avoid direct conflicts
+# Enable CUDA language
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Enable testing at the top-level so subdirectories can register tests
@@ -53,6 +53,7 @@ option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" OFF)
 option(SEP_BUILD_ENGINE "Build the main engine component" ON)
 option(SEP_BUILD_QUANTUM "Build quantum processing components" ON)
 option(SEP_BUILD_TESTS "Build test components" ON)
+option(SEP_BUILD_EXAMPLES "Build example components" ON)
 option(SEP_BUILD_WORKBENCH "Build the interactive sep_workbench visualization" OFF)
 option(SEP_USE_TBB "Enable TBB parallel features" ON)
 option(SEP_HAS_EXCEPTIONS "Enable C++ exceptions" ON)
@@ -87,6 +88,12 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constex
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/src/compat/cuda_unified_fix.h")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=1")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --extended-lambda --expt-relaxed-constexpr")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__STRICT_ANSI__=0")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --disable-warnings")
+
+# Set modern CUDA architectures
+set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
 
 # Set C++ standard before enabling CUDA
 set(CMAKE_CXX_STANDARD 17)
@@ -171,6 +178,14 @@ set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
 
 # Add the src directory which contains all module subdirectories and workbench
 add_subdirectory(src)
+
+if(SEP_BUILD_TESTS)
+    add_subdirectory(src/tests)
+endif()
+
+if(SEP_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 # Export and install targets
 include(GNUInstallDirs)

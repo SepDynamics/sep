@@ -3,6 +3,15 @@
 #include <algorithm>
 #include <cstring>
 #include <sstream>
+#include <fstream>
+#include <functional>
+
+#ifdef __linux__
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#endif
 
 namespace sep::quantum {
 
@@ -34,57 +43,66 @@ void PatternMetricEngine::ingestData(const uint8_t* data, size_t size) {
 }
 
 void PatternMetricEngine::ingestData(std::istream& stream) {
-    std::vector<uint8_t> buffer;
-    char chunk[4096];
-    
-    while (stream.read(chunk, sizeof(chunk))) {
-        size_t bytes_read = stream.gcount();
-        buffer.insert(buffer.end(), chunk, chunk + bytes_read);
+    const size_t buffer_size = 4096; // Use a smaller chunk size for general streams
+    std::vector<uint8_t> read_buffer(buffer_size);
+
+    while (stream.read(reinterpret_cast<char*>(read_buffer.data()), buffer_size)) {
+        std::lock_guard<std::mutex> lock(engine_mutex_);
+        stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.end());
+        processBuffer();
     }
-    
-    if (stream.eof() && !buffer.empty()) {
-        size_t bytes_read = stream.gcount();
-        if (bytes_read > 0) {
-            buffer.insert(buffer.end(), chunk, chunk + bytes_read);
-        }
+
+    // Handle the last partial read
+    if (stream.gcount() > 0) {
+        std::lock_guard<std::mutex> lock(engine_mutex_);
+        stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.begin() + stream.gcount());
     }
-    
-    if (!buffer.empty()) {
-        ingestData(buffer.data(), buffer.size());
-    }
+
+    // Process any remaining data in the buffer
+    std::lock_guard<std::mutex> lock(engine_mutex_);
+    processBuffer(true); // Final chunk
+}
+
+void PatternMetricEngine::addPattern(const pattern::PatternData& pattern) {
+    patterns_.push_back(pattern);
+    current_patterns_.push_back(pattern);
 }
 
 std::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes(
     const uint8_t* data, size_t size) {
     std::vector<pattern::PatternData> patterns;
     
-    // Process data in chunks to extract patterns
-    constexpr size_t CHUNK_SIZE = 64; // Quantum processing chunk size
+    const size_t chunk_size = 12;  // 3 floats * 4 bytes
     
-    for (size_t i = 0; i < size; i += CHUNK_SIZE) {
-        pattern::PatternData pattern;
-        size_t chunk_size = std::min(CHUNK_SIZE, size - i);
+    if (size < chunk_size) {
+        return patterns;
+    }
+
+    for (size_t i = 0; i <= size - chunk_size; i += chunk_size) {
+        pattern::PatternData p;
         
-        // Initialize pattern fields
-        pattern.id = "pattern_" + std::to_string(current_patterns_.size());
-        pattern.generation = 0;
-        pattern.timestamp = std::time(nullptr);
-        pattern.last_accessed = pattern.timestamp;
-        pattern.last_modified = pattern.timestamp;
+        glm::vec3 v(0.0f);
+        memcpy(&v, data + i, chunk_size);
         
-        // Convert chunk to pattern data values
-        pattern.data.reserve(chunk_size);
-        for (size_t j = 0; j < chunk_size; j++) {
-            pattern.data.push_back(static_cast<float>(data[i + j]) / 255.0f);
-        }
-        
+        p.id = "pattern_" + std::to_string(current_patterns_.size() + patterns.size());
+        p.generation = 0;
+        p.timestamp = std::time(nullptr);
+        p.last_accessed = p.timestamp;
+        p.last_modified = p.timestamp;
+
+        // Store the vec3 components in the pattern data
+        v = glm::normalize(v + glm::vec3(1e-6f));
+        p.data.push_back(v.x);
+        p.data.push_back(v.y);
+        p.data.push_back(v.z);
+
         // Initialize quantum state
-        pattern.quantum_state.coherence = 0.5f;
-        pattern.quantum_state.stability = 0.5f;
-        pattern.quantum_state.entropy = 0.0f;
-        pattern.quantum_state.state = quantum::QuantumState::Status::SUPERPOSITION;
+        p.quantum_state.coherence = 0.5f;
+        p.quantum_state.stability = 0.5f;
+        p.quantum_state.entropy = 0.0f;
+        p.quantum_state.state = quantum::QuantumState::Status::SUPERPOSITION;
         
-        patterns.push_back(std::move(pattern));
+        patterns.push_back(p);
     }
     
     return patterns;
@@ -117,6 +135,7 @@ void PatternMetricEngine::evolvePatterns() {
             pattern.generation,
             pattern.quantum_state.access_frequency
         );
+        pattern.quantum_state.entropy = qfh_processor_->getLastQFHResult().entropy;
         
         // Update state based on stability
         if (is_stable) {
@@ -178,6 +197,99 @@ std::vector<PatternMetrics> PatternMetricEngine::computeMetrics() {
     
     current_metrics_ = metrics;
     return metrics;
+}
+
+void PatternMetricEngine::ingestFile(const std::string& filepath) {
+    std::ifstream file(filepath, std::ios::binary);
+    if (!file.is_open()) {
+        // TODO: Log error
+        return;
+    }
+
+    const size_t buffer_size = 4 * 1024 * 1024; // 4MB chunks
+    std::vector<uint8_t> read_buffer(buffer_size);
+
+    while (file.read(reinterpret_cast<char*>(read_buffer.data()), buffer_size)) {
+        std::lock_guard<std::mutex> lock(engine_mutex_);
+        stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.end());
+        processBuffer();
+    }
+
+    if (file.gcount() > 0) {
+        std::lock_guard<std::mutex> lock(engine_mutex_);
+        stream_buffer_.insert(stream_buffer_.end(), read_buffer.begin(), read_buffer.begin() + file.gcount());
+    }
+
+    std::lock_guard<std::mutex> lock(engine_mutex_);
+    processBuffer(true);
+}
+
+void PatternMetricEngine::ingestMappedFile(const std::string& filepath) {
+#ifdef __linux__
+    int fd = open(filepath.c_str(), O_RDONLY);
+    if (fd == -1) {
+        // TODO: Log error
+        return;
+    }
+
+    struct stat sb;
+    if (fstat(fd, &sb) == -1) {
+        close(fd);
+        // TODO: Log error
+        return;
+    }
+
+    size_t length = sb.st_size;
+    if (length == 0) {
+        close(fd);
+        return;
+    }
+    
+    const uint8_t* addr = static_cast<const uint8_t*>(mmap(NULL, length, PROT_READ, MAP_PRIVATE, fd, 0));
+    if (addr == MAP_FAILED) {
+        close(fd);
+        // TODO: Log error
+        return;
+    }
+
+    // With mmap, we can process the whole file at once without chunking in this engine.
+    // The OS handles the paging. This is a different approach than chunked reading.
+    ingestData(addr, length);
+
+    munmap((void*)addr, length);
+    close(fd);
+#else
+    // Fallback for non-Linux systems
+    ingestFile(filepath);
+#endif
+}
+
+void PatternMetricEngine::processBuffer(bool is_final_chunk) {
+    constexpr size_t CHUNK_SIZE = 64;
+    
+    size_t buffer_size = stream_buffer_.size();
+    if (buffer_size < CHUNK_SIZE) {
+        if (is_final_chunk) {
+            stream_buffer_.clear(); // Not enough for a pattern, discard.
+        }
+        return; // Not enough data, wait for more.
+    }
+
+    // Process the entire buffer with a sliding window.
+    // The cache will prevent re-adding duplicate patterns.
+    auto extracted_patterns = extractPatternsFromBytes(stream_buffer_.data(), buffer_size);
+    for (const auto& pattern : extracted_patterns) {
+        addPattern(pattern);
+    }
+
+    if (is_final_chunk) {
+        stream_buffer_.clear();
+    } else {
+        // Erase the portion of the buffer that has been fully processed,
+        // leaving the tail for overlap analysis with the next chunk.
+        size_t erase_count = buffer_size - (CHUNK_SIZE - 1);
+        stream_buffer_.erase(stream_buffer_.begin(), stream_buffer_.begin() + erase_count);
+    }
 }
 
 } // namespace sep::quantum

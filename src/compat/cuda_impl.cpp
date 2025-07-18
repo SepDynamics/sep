@@ -21,11 +21,11 @@ namespace sep::cuda
     Error CudaCore::initialize(int device)
     {
         // Basic CUDA device initialization
-        cudaError_t cuda_err = cudaSetDevice(device);
+        cudaError_t cuda_err = SEP_cudaSetDevice(device);
         if (cuda_err != cudaSuccess)
         {
-            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
-                         string("CudaCore::initialize"), SEPResult::CUDA_ERROR);
+            return Error(Status::Error, string(SEP_cudaGetErrorString(cuda_err)),
+                          string("CudaCore::initialize"), SEPResult::CUDA_ERROR);
         }
         
         // Initialize device properties
@@ -44,11 +44,11 @@ namespace sep::cuda
 
     Error CudaCore::setDevice(int device)
     {
-        cudaError_t cuda_err = cudaSetDevice(device);
+        cudaError_t cuda_err = SEP_cudaSetDevice(device);
         if (cuda_err != cudaSuccess)
         {
-            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
-                         string("CudaCore::setDevice"), SEPResult::CUDA_ERROR);
+            return Error(Status::Error, string(SEP_cudaGetErrorString(cuda_err)),
+                          string("CudaCore::setDevice"), SEPResult::CUDA_ERROR);
         }
         current_device_ = device;
         return Error(cuda::Status::Success, string("Device set successfully"),
@@ -58,7 +58,7 @@ namespace sep::cuda
     int CudaCore::getDeviceCount() const
     {
         int count = 0;
-        cudaError_t cuda_err = cudaGetDeviceCount(&count);
+        cudaError_t cuda_err = SEP_cudaGetDeviceCount(&count);
         if (cuda_err != cudaSuccess)
         {
             return 0;
@@ -68,11 +68,11 @@ namespace sep::cuda
 
     Error CudaCore::getDeviceProperties(cudaDeviceProp& props, int device) const
     {
-        cudaError_t cuda_err = cudaGetDeviceProperties(&props, device);
+        cudaError_t cuda_err = SEP_cudaGetDeviceProperties(&props, device);
         if (cuda_err != cudaSuccess)
         {
-            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
-                         string("CudaCore::getDeviceProperties"), SEPResult::CUDA_ERROR);
+            return Error(Status::Error, string(SEP_cudaGetErrorString(cuda_err)),
+                          string("CudaCore::getDeviceProperties"), SEPResult::CUDA_ERROR);
         }
         return Error(cuda::Status::Success, string("Device properties retrieved"),
                     string("CudaCore::getDeviceProperties"), SEPResult::SUCCESS);
@@ -80,11 +80,11 @@ namespace sep::cuda
 
     Error CudaCore::getMemoryInfo(size_t& free, size_t& total) const
     {
-        cudaError_t cuda_err = cudaMemGetInfo(&free, &total);
+        cudaError_t cuda_err = SEP_cudaMemGetInfo(&free, &total);
         if (cuda_err != cudaSuccess)
         {
-            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
-                         string("CudaCore::getMemoryInfo"), SEPResult::CUDA_ERROR);
+            return Error(Status::Error, string(SEP_cudaGetErrorString(cuda_err)),
+                          string("CudaCore::getMemoryInfo"), SEPResult::CUDA_ERROR);
         }
         return Error(cuda::Status::Success, string("Memory info retrieved"),
                     string("CudaCore::getMemoryInfo"), SEPResult::SUCCESS);
@@ -92,11 +92,11 @@ namespace sep::cuda
 
     Error CudaCore::getLastError() const
     {
-        cudaError_t cuda_err = cudaGetLastError();
+        cudaError_t cuda_err = SEP_cudaGetLastError();
         if (cuda_err != cudaSuccess)
         {
-            return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
-                         string("CudaCore::getLastError"), SEPResult::CUDA_ERROR);
+            return Error(Status::Error, string(SEP_cudaGetErrorString(cuda_err)),
+                          string("CudaCore::getLastError"), SEPResult::CUDA_ERROR);
         }
         return Error(cuda::Status::Success, string("No error"),
                     string("CudaCore::getLastError"), SEPResult::SUCCESS);
@@ -104,7 +104,7 @@ namespace sep::cuda
 
     std::string CudaCore::getErrorString(cudaError_t error) const
     {
-        return std::string(::cudaGetErrorString(error));
+        return std::string(SEP_cudaGetErrorString(error));
     }
 
     Error CudaCore::queryDeviceProperties()
@@ -122,11 +122,11 @@ namespace sep::cuda
         for (int i = 0; i < device_count; ++i)
         {
             cudaDeviceProp props;
-            cudaError_t cuda_err = cudaGetDeviceProperties(&props, i);
+            cudaError_t cuda_err = SEP_cudaGetDeviceProperties(&props, i);
             if (cuda_err != cudaSuccess)
             {
-                return Error(Status::Error, string(::cudaGetErrorString(cuda_err)),
-                             string("CudaCore::queryDeviceProperties"), SEPResult::CUDA_ERROR);
+                return Error(Status::Error, string(SEP_cudaGetErrorString(cuda_err)),
+                              string("CudaCore::queryDeviceProperties"), SEPResult::CUDA_ERROR);
             }
             device_properties_.push_back(props);
         }

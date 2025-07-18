@@ -13,57 +13,34 @@
 - **Error Handling:** Follow `util/error_handling.h` and `core/error_handler.h`.
 - **Type Safety:** Use `util/type_safety.h` for operations.
 
-## Phase 1: Core Engine Skeleton & Raw Oanda Byte Test (Complete Today)
-Focus: Minimal engine ingests raw bytes, converts to bitfield, runs QBSA/QFH, outputs metrics. Test with Oanda data as raw file bytes.
+## Phase 1: Core Engine Implementation (Completed)
+**Status:** Complete.
 
-1. **Define Engine Interface**
-   - Create `include/sep/pattern_metric_engine.h` with class `PatternMetricEngine`.
-   - Methods:
-     - `void ingestRawBytes(const std::vector<uint8_t>& bytes);` (core ingest—everything converts to this)
-     - `void ingestFromFile(const std::string& path);` (read file as bytes, call ingestRawBytes)
-     - `void ingestFromSocket(int socket_fd);` (read stream as bytes, call ingestRawBytes)
-     - `std::vector<PatternMetrics> computeMetrics();` (run QBSA/QFH on bits)
-   - `struct PatternMetrics { QFHResult qfh; /* Add QBSA result struct */ float coherence, stability, entropy; };`
-   - Integrate directly with `QuantumProcessorQFHCommon` for `processPatternBits` (convert bytes to `std::vector<uint32_t>` bitfield).
+**Accomplishments:**
+- Successfully designed and implemented the `PatternMetricEngine` as a datatype-agnostic component.
+- The engine ingests data via raw byte pointers (`const uint8_t*`) and C++ input streams (`std::istream`).
+- It correctly processes various data types, including binary, text, and numerical data, by treating them as byte sequences.
+- Integrated the Quantum Fourier Hierarchy (QFH) processor to compute key metrics: coherence, stability, and entropy.
+- All unit tests pass, verifying the engine's functionality and its agnostic design.
 
-2. **Implement Raw Byte Ingestion**
-   - In `src/pattern_metric_engine.cpp`, add byte loader.
-   - For file: `std::ifstream f(path, std::ios::binary); std::vector<uint8_t> bytes(std::istreambuf_iterator<char>(f), {});`
-   - For socket: Read in loop until EOF/error, append to vector.
-   - Convert bytes to bitfield: Pack into `std::vector<uint32_t>` (e.g., 4 bytes per uint32).
-   - Store as internal bitfield for QBSA/QFH.
+## Phase 2: Expansion and Integration
+**Goal:** Expand the engine's capabilities to handle more complex data sources, enhance its analytical power, and integrate it more deeply with the SEP ecosystem.
 
-3. **Run QBSA/QFH on Bits**
-   - In computeMetrics: Call `QuantumProcessorQFHCommon::processPatternBits(bitfield);`
-   - Get `QFHResult` and derive metrics (coherence from flip_ratio, etc.).
-   - No format assumptions—raw bits are the input.
+1.  **Advanced Ingestion Capabilities:**
+    -   **File/Directory Ingestion:** Implement methods to ingest entire files or recursively scan directories, treating each file as a distinct data stream.
+    -   **Socket/Stream Ingestion:** Add support for real-time data ingestion from network sockets and other streaming sources.
 
-4. **Output Metrics**
-   - Print to console or file as plain text/key-value (no JSON unless requested).
-   - E.g., "Coherence: 0.85\nStability: 0.92\n..."
+2.  **Advanced Metrics and Pattern Detection:**
+    -   Implement more sophisticated pattern detection algorithms beyond simple byte-level analysis.
+    -   Integrate the full QBSA (Quantum Binary State Analysis) feature set for more detailed metrics.
+    -   Explore algorithms for detecting emergent and evolving patterns over time.
 
-5. **Write Raw Oanda Byte Test**
-   - In `/sep/src/tests/raw_data_test.cpp` (add to CMake).
-   - Load Oanda file as bytes.
-   - Create engine, ingestFromFile, computeMetrics.
-   - ASSERT metrics make sense (e.g., coherence > 0).
-   - Run with `ctest -R raw_data_test`.
+3.  **Integration with Memory Tiers:**
+    -   Connect the engine to the memory tier system (`short-term`, `mid-term`, `long-term`).
+    -   Develop logic for promoting significant patterns to higher memory tiers based on their metrics (e.g., high coherence or stability).
 
-6. **Build & Debug**
-   - Fix errors (e.g., ambiguous calls—qualify namespaces).
-   - Test small byte vectors first.
-
-
-## Phase 2: Expand Sources & Refinements 
-1. **Add Directory/Socket Ingestion**
-   - Scan dir, ingest each file as bytes, aggregate bitfields.
-   - Socket: Non-blocking read loop.
-
-2. **Advanced Metrics**
-   - Full QBSA/QFH integration.
-   - Custom: Bit entropy, pattern repeats.
-
-3. **Optimization**
-   - Memory tiers for large bitfields.
-   - GPU accel via compat.
+4.  **Performance and Optimization:**
+    -   Optimize the pattern extraction and metric computation algorithms for high-throughput scenarios.
+    -   Leverage GPU acceleration for quantum processing tasks where applicable.
+    -   Investigate strategies for managing memory usage with very large data sets.
 

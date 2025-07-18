@@ -1,263 +1,106 @@
-# Core CUDA dependencies for all targets
-set(SEP_CORE_LIBS
-    ${CUDAToolkit_LIBRARIES}
-    ${Threads_LIBRARIES}
-    ${CMAKE_DL_LIBS}
-    pthread
-    dl
-    m
-    z
-)
-
 cmake_minimum_required(VERSION 3.15)
+project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_C_COMPILER /usr/bin/gcc)
-set(CMAKE_CXX_COMPILER /usr/bin/g++)
-
-# Enable POSIX features for popen/pclose
-add_compile_definitions(_POSIX_C_SOURCE=200809L)
-add_definitions(-D_GNU_SOURCE)
-# Also propagate POSIX feature macros to all targets
-add_compile_definitions(_POSIX_C_SOURCE=200809L)
-
-# Load CUDA toolchain file before project declaration
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
-
-# Set C++ standard before project declaration
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
-
-# Enable CUDA language
-project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
-
-# Enable testing at the top-level so subdirectories can register tests
-include(CTest)
-enable_testing()
-
-# Core required components
-set(SEP_HAS_CUDA ON CACHE BOOL "CUDA support (required)" FORCE)
-
-# Set processor affinity for CUDA orchestration
-add_compile_definitions(SEP_DEDICATED_CORE_ORCHESTRATION=1)
-add_compile_definitions(SEP_GPU_EXCLUSIVE_ACCESS=1)
-
-# Options to control optional modules
-option(SEP_WITH_OPENSUBDIV "Enable OpenSubdiv support" OFF)
-option(SEP_WITH_OPENPGL "Enable OpenPGL support" OFF)
-option(SEP_WITH_OCIO "Enable OpenColorIO support" OFF)
-option(SEP_WITH_OPENIMAGEIO "Enable OpenImageIO support" OFF)
-option(SEP_WITH_EMBREE "Enable Embree support" OFF)
-option(SEP_WITH_OSL "Enable OpenShadingLanguage support" OFF)
-option(SEP_WITH_ALEMBIC "Enable Alembic support" OFF)
-option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" OFF)
-option(SEP_BUILD_ENGINE "Build the main engine component" ON)
-option(SEP_BUILD_QUANTUM "Build quantum processing components" ON)
-option(SEP_BUILD_TESTS "Build test components" OFF)
-option(SEP_BUILD_EXAMPLES "Build example components" OFF)
-option(SEP_BUILD_WORKBENCH "Build the interactive sep_workbench visualization" OFF)
-option(SEP_USE_TBB "Enable TBB parallel features" ON)
-option(SEP_HAS_EXCEPTIONS "Enable C++ exceptions" ON)
-option(SEP_MINIMAL "Enable minimal build with core components only" ON)
-
-# Force disable the following components for minimal quant build
-set(SEP_BUILD_WORKBENCH OFF CACHE BOOL "Build the interactive sep_workbench visualization" FORCE)
-set(SEP_WORKBENCH_DEMO OFF CACHE BOOL "Build sep_workbench in demo mode" FORCE)
-set(SEP_WITH_OPENIMAGEIO OFF CACHE BOOL "Enable OpenImageIO support" FORCE)
-set(SEP_WITH_EMBREE OFF CACHE BOOL "Enable Embree support" FORCE)
-set(SEP_WITH_OSL OFF CACHE BOOL "Enable OpenShadingLanguage support" FORCE)
-set(SEP_WITH_ALEMBIC OFF CACHE BOOL "Enable Alembic support" FORCE)
-
-if(SEP_MINIMAL)
-    add_compile_definitions(SEP_MINIMAL=1)
-endif()
-
-# Configure include paths
-set(SEP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src)
-set(SEP_SRC_DIR ${CMAKE_SOURCE_DIR}/src)
-
-# Add include paths after project declaration
-include_directories(BEFORE
-    ${SEP_INCLUDE_DIR}
-    ${SEP_SRC_DIR}
-    $<BUILD_INTERFACE:/usr/src>
-)
-
-# Set CUDA compiler flags before enabling the language
-set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/src/compat/cuda_unified_fix.h")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=1")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --extended-lambda --expt-relaxed-constexpr")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__STRICT_ANSI__=0")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --disable-warnings")
-
-# Set modern CUDA architectures
-set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
-
-# Set C++ standard before enabling CUDA
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CUDA_STANDARD 17)
-set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-
-# Add global definitions needed for CUDA compatibility
-add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_MATH_STUBS=1)
-add_definitions(-DCUDA_UNIFIED_FIX_ENABLE_FUNCTION_RENAMING=1)
-add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
-add_definitions(-DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-
-# Add cmake directory to module path
+# Add custom cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Add library search paths
-link_directories(${CMAKE_SOURCE_DIR}/lib)
-
-# Set strict compiler flags
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    # Temporarily disable -Werror to allow partial builds for testing during fixes
-    add_compile_options(-Wall -Wextra)
-    # Add these flags to suppress common third-party warnings
-    add_compile_options(
-        -Wno-unicode
-        -Wno-objc-signed-char-bool
-        -Wno-redundant-move
-    )
-    # Uncomment the line below when all issues are fixed
-    # add_compile_options(-Wall -Wextra -Werror)
+# Default build type if not specified
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
 endif()
 
-# Include unified configuration module
-include(SEPConfig)
-configure_sep()
-
-if(NOT SEP_HAS_EXCEPTIONS)
-    add_compile_options(-fno-exceptions)
-endif()
-
-# CUDA is now a required component
-find_package(CUDAToolkit REQUIRED)
-add_compile_definitions(SEP_HAS_CUDA=1)
-
-# Ensure our custom Crow wrappers take precedence over the third-party headers
-include_directories(BEFORE
-    ${CMAKE_SOURCE_DIR}/extern/crow/include
-    ${CMAKE_SOURCE_DIR}/extern/crow/src
-    ${CMAKE_SOURCE_DIR}/src
-)
-add_compile_definitions(CROW_USE_BOOST)
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Find required packages
 find_package(Threads REQUIRED)
-find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
-find_package(http_parser REQUIRED)
-find_package(spdlog)
-if(spdlog_FOUND)
-    message(STATUS "Using system spdlog")
-else()
-    message(WARNING "spdlog not found, falling back to stub implementation")
-    add_compile_definitions(SEP_SPDLOG_FALLBACK)
-endif()
+find_package(TBB REQUIRED)
+find_package(benchmark REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
-if(NOT DEFINED ENV{TBB_ROOT})
-  if(EXISTS "/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
-    set(ENV{TBB_ROOT} "/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
-  elseif(EXISTS "/home/ajn/Documents/AVarietyOShit/BUILTASF/oneTBB-2021.9.0/build/gnu_12.3_cxx11_64_release")
-    set(ENV{TBB_ROOT} "/home/ajn/Documents/AVarietyOShit/BUILTASF/oneTBB-2021.9.0/build/gnu_12.3_cxx11_64_release")
-  endif()
-endif()
-if(SEP_USE_TBB)
-    add_compile_definitions(SEP_USE_TBB)
-    find_package(TBB REQUIRED)
-endif()
-
-
-# Add CUDA-specific optimizations for dedicated GPU access
-add_compile_options(-DSEP_CUDA_DEDICATED_GPU=1)
-add_compile_options(-DSEP_CUDA_CORE_AFFINITY=1)
-
-# These are reasonable defaults for modern NVIDIA GPUs
-set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
-
-# Add the src directory which contains all module subdirectories and workbench
-add_subdirectory(src)
-
-if(SEP_BUILD_TESTS)
-    add_subdirectory(src/tests)
-endif()
-
-if(SEP_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
-
-# Export and install targets
-include(GNUInstallDirs)
-
-# Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/sep
-    FILES_MATCHING
-    PATTERN "*.h"
-    PATTERN "*.hpp"
+# Include directories
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party
 )
 
-# Install libraries
-install(TARGETS
-    sep_compat
+# Set policy for CUDA modules
+cmake_policy(SET CMP0146 NEW)
+
+# Add compiler definition to bypass CUDA host compiler check
+add_compile_definitions(__NV_NO_HOST_COMPILER_CHECK=1)
+
+# Set CUDA flags for the host compiler check bypass
+set(CMAKE_CUDA_FLAGS "-D__NV_NO_HOST_COMPILER_CHECK=1")
+
+# CUDA configuration
+option(SEP_USE_CUDA "Enable CUDA support" ON)
+if(SEP_USE_CUDA)
+    enable_language(CUDA)
+    if(CMAKE_CUDA_COMPILER)
+        message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}")
+        set(CMAKE_CUDA_STANDARD 17)
+        set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+        
+        # For compatibility with existing code
+        set(SEP_HAS_CUDA ${SEP_USE_CUDA})
+        add_definitions(-DSEP_USE_CUDA=1 -DSEP_HAS_CUDA=1)
+        
+        # Create targets compatible with old CUDA::* targets
+        add_library(CUDA::cudart INTERFACE IMPORTED)
+        add_library(CUDA::cuda_driver INTERFACE IMPORTED)
+        add_library(CUDA::cufft INTERFACE IMPORTED)
+        
+        # Set the include directories and link libraries
+        target_link_libraries(CUDA::cudart INTERFACE CUDA::cudart_static)
+        target_link_libraries(CUDA::cuda_driver INTERFACE ${CMAKE_CUDA_LIBRARIES})
+        target_link_libraries(CUDA::cufft INTERFACE CUDA::cufft_static)
+    else()
+        message(WARNING "CUDA requested but compiler not found, disabling CUDA support")
+        set(SEP_USE_CUDA OFF)
+        set(SEP_HAS_CUDA OFF)
+        add_definitions(-DSEP_USE_CUDA=0 -DSEP_HAS_CUDA=0)
+    endif()
+endif()
+
+# Add subdirectories
+add_subdirectory(src)
+add_subdirectory(examples)
+
+# Set build output directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# Create the export set
+set(SEP_TARGETS
+    sep_core
     sep_memory
     sep_quantum
-        
+    sep_compat
+)
+
+# Install configuration
+include(GNUInstallDirs)
+configure_file(cmake/sep-config.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/sep-config.cmake" @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sep-config.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep)
+
+# Export the targets (define the export)
+install(TARGETS ${SEP_TARGETS}
     EXPORT sep-targets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Install CMake config files
+# Install the export
 install(EXPORT sep-targets
+    FILE sep-targets.cmake
     NAMESPACE sep::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep
-)
-
-# Generate and install CMake config file
-configure_file(
-    ${CMAKE_SOURCE_DIR}/cmake/sep-config.cmake.in
-    ${CMAKE_BINARY_DIR}/sep-config.cmake
-    @ONLY
-)
-install(FILES
-    ${CMAKE_BINARY_DIR}/sep-config.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep
-)
-
-# Install headers from include directory
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
-    DESTINATION include/sep
-    FILES_MATCHING
-    PATTERN "*.h"
-    PATTERN "*.hpp"
-)
-
-# Set install prefix if not specified
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation prefix" FORCE)
-endif()
-
-# Add CUDA-specific core and GPU pinning
-if(SEP_DEDICATED_CORE_ORCHESTRATION)
-    message(STATUS "Configuring dedicated CPU core for CUDA orchestration")
-    add_compile_definitions(SEP_DEDICATED_CPU_CORE=1)
-endif()
-
-if(SEP_GPU_EXCLUSIVE_ACCESS)
-    message(STATUS "Configuring exclusive GPU access for CUDA operations")
-    add_compile_definitions(SEP_EXCLUSIVE_GPU_ACCESS=1)
-endif()
-
-set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE BOOL "Enable downloading of dependencies")
-set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Enable testing of the benchmark library." FORCE)
-set(BENCHMARK_ENABLE_WERROR OFF CACHE BOOL "Build Release candidates with -Werror." FORCE)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep)

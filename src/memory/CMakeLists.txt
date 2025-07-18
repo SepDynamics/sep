@@ -53,6 +53,8 @@ set_target_properties(sep_memory PROPERTIES
     POSITION_INDEPENDENT_CODE ON
     CXX_VISIBILITY_PRESET default
     VISIBILITY_INLINES_HIDDEN OFF
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
 )
 
 # Link dependencies

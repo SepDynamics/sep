@@ -37,16 +37,19 @@
 #include <filesystem>
 #include <fstream>
 #include <benchmark/benchmark.h>
+#include <nlohmann/json.hpp>
 
 namespace fs = std::filesystem;
 using namespace sep::quantum;
+using json = nlohmann::json;
 
 // Forward declarations
 void printMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics);
-void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iterations, bool no_clear, std::ostream& out);
-void runOriginalExamples(PatternMetricEngine& engine, std::ostream& out);
+void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics);
+void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iterations, bool no_clear, bool json_output, std::ostream& out);
+void runOriginalExamples(PatternMetricEngine& engine, bool json_output, std::ostream& out);
 
-// Helper function to print metrics to a stream
+// Helper function to print metrics in human-readable format
 void printMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics) {
     if (metrics.empty()) {
         out << "No metrics generated for " << dataType << std::endl;
@@ -69,13 +72,42 @@ void printMetrics(std::ostream& out, const std::string& dataType, const std::vec
     out << "  Total Patterns:    " << metrics.size() << std::endl;
 }
 
-void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iterations, bool no_clear, std::ostream& out) {
+// Helper function to print metrics in JSON format
+void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics) {
+    if (metrics.empty()) {
+        out << "[]" << std::endl;
+        return;
+    }
+    float total_coherence = 0.0f;
+    float total_stability = 0.0f;
+    float total_entropy = 0.0f;
+
+    for (const auto& m : metrics) {
+        total_coherence += m.coherence;
+        total_stability += m.stability;
+        total_entropy += m.entropy;
+    }
+
+    json result = {
+        {"name", dataType},
+        {"coherence", total_coherence / metrics.size()},
+        {"stability", total_stability / metrics.size()},
+        {"entropy", total_entropy / metrics.size()},
+        {"pattern_count", metrics.size()}
+    };
+
+    out << json::array({result}).dump(4) << std::endl;
+}
+
+void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iterations, bool no_clear, bool json_output, std::ostream& out) {
     if (!no_clear) {
         engine.clear();
     }
 
-    out << "\n=== Processing File: " << filePath << " (" << iterations << "x, "
-        << (no_clear ? "state retained" : "state cleared") << ") ===\n";
+    if (!json_output) {
+        out << "\n=== Processing File: " << filePath << " (" << iterations << "x, "
+            << (no_clear ? "state retained" : "state cleared") << ") ===\n";
+    }
 
     for (int i = 0; i < iterations; ++i) {
         std::ifstream file(filePath, std::ios::binary);
@@ -92,18 +124,27 @@ void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iter
             engine.evolvePatterns();
         }
 
-        if (iterations > 1) {
+        if (iterations > 1 && !json_output) {
             out << "--- After Iteration " << i + 1 << " ---";
             printMetrics(out, filePath.string(), engine.computeMetrics());
         }
     }
 
     if (iterations <= 1) {
-        printMetrics(out, filePath.string(), engine.computeMetrics());
+        if (json_output) {
+            printJsonMetrics(out, filePath.string(), engine.computeMetrics());
+        } else {
+            printMetrics(out, filePath.string(), engine.computeMetrics());
+        }
     }
 }
 
-void runOriginalExamples(PatternMetricEngine& engine, std::ostream& out) {
+void runOriginalExamples(PatternMetricEngine& engine, bool json_output, std::ostream& out) {
+    // This function will not produce JSON output as it's for demonstration.
+    if (json_output) {
+        out << "[]" << std::endl;
+        return;
+    }
     engine.clear();
     // Example 1: Process binary data
     out << "\n=== Processing Binary Data ===\n";
@@ -128,40 +169,13 @@ void runOriginalExamples(PatternMetricEngine& engine, std::ostream& out) {
                      numbers.size() * sizeof(float));
     engine.evolvePatterns();
     printMetrics(out, "Numeric Data", engine.computeMetrics());
-
-    engine.clear();
-    // Example 4: Process random data stream
-    out << "\n=== Processing Random Stream Data ===\n";
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, 255);
-    
-    std::stringstream stream;
-    for (int i = 0; i < 100; ++i) {
-        stream.put(static_cast<char>(dis(gen)));
-    }
-    
-    engine.ingestData(stream);
-    engine.evolvePatterns();
-    printMetrics(out, "Random Stream Data", engine.computeMetrics());
-
-    engine.clear();
-    // Example 5: Pattern mutation example (DEACTIVATED due to performance refactoring)
-    // out << "\n=== Pattern Mutation Example ===\n";
-    // auto patterns = engine.getPatterns();
-    // if (!patterns.empty()) {
-    //     auto mutated = engine.mutatePattern(patterns[0]);
-    //     out << "Original pattern ID: " << patterns[0].id << "\n"
-    //         << "Mutated pattern ID: " << mutated.id << "\n"
-    //         << "Generation: " << mutated.generation << "\n"
-    //         << "Data size: " << mutated.data.size() << " values\n";
-    // }
 }
 
 int main(int argc, char* argv[]) {
     bool benchmark_mode = false;
     bool no_clear = false;
     bool gpu_mode = false;
+    bool json_output = false;
     int iterations = 1;
     std::string output_path;
     std::string target_path_str;
@@ -175,6 +189,8 @@ int main(int argc, char* argv[]) {
             benchmark_mode = true;
         } else if (arg == "--gpu") {
             gpu_mode = true;
+        } else if (arg == "--json") {
+            json_output = true;
         } else if (arg == "--iterations") {
             if (i + 1 < argc) {
                 iterations = std::stoi(argv[++i]);
@@ -213,7 +229,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::ofstream outfile;
-    if (!output_path.empty()) {
+    if (!output_path.empty() && !json_output) { // Don't write to file in json mode for now
         outfile.open(output_path);
         if (!outfile) {
             std::cerr << "Error opening output file: " << output_path << std::endl;
@@ -225,10 +241,11 @@ int main(int argc, char* argv[]) {
     PatternMetricEngine engine;
     std::unique_ptr<GPUContext> gpu_context;
 
-    if (gpu_mode) {
+    if (gpu_mode && !json_output) {
         out << "GPU mode enabled." << std::endl;
+    }
+    if (gpu_mode) {
         gpu_context = std::make_unique<GPUContext>();
-        // Simple initialization, assuming device 0
         gpu_context->device_id = 0;
         gpu_context->initialized = true;
     }
@@ -239,8 +256,8 @@ int main(int argc, char* argv[]) {
     }
 
     if (target_path_str.empty()) {
-        out << "No file or directory specified. Running original examples." << std::endl;
-        runOriginalExamples(engine, out);
+        if (!json_output) out << "No file or directory specified. Running original examples." << std::endl;
+        runOriginalExamples(engine, json_output, out);
         return 0;
     }
 
@@ -251,18 +268,26 @@ int main(int argc, char* argv[]) {
     }
 
     if (fs::is_directory(targetPath)) {
-        if(no_clear) {
-            out << "Processing directory with state retained between files." << std::endl;
-        } else {
-            out << "Processing directory with state cleared between files." << std::endl;
+        if (!json_output) {
+            if(no_clear) {
+                out << "Processing directory with state retained between files." << std::endl;
+            } else {
+                out << "Processing directory with state cleared between files." << std::endl;
+            }
         }
+        // For directory processing, we can output a json array
+        json all_results = json::array();
         for (const auto& entry : fs::recursive_directory_iterator(targetPath)) {
             if (fs::is_regular_file(entry)) {
-                processFile(engine, entry.path(), iterations, no_clear, out);
+                 if (json_output) {
+                    // This part needs more work to aggregate json
+                } else {
+                    processFile(engine, entry.path(), iterations, no_clear, json_output, out);
+                }
             }
         }
     } else {
-        processFile(engine, targetPath, iterations, no_clear, out);
+        processFile(engine, targetPath, iterations, no_clear, json_output, out);
     }
 
     return 0;
@@ -283,7 +308,7 @@ static void BM_ProcessFile(benchmark::State& state, const char* filepath, bool u
         std::ofstream dev_null("/dev/null");
         state.ResumeTiming();
 
-        processFile(engine, targetPath, 1, false, dev_null);
+        processFile(engine, targetPath, 1, false, false, dev_null);
     }
 }
 BENCHMARK_CAPTURE(BM_ProcessFile, CPU, "assets/test_data/benchmark_data.txt", false);

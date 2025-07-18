@@ -7,6 +7,10 @@ if(SEP_ENABLE_CUDA)
     add_library(sep_gpu_cuda STATIC
         cuda_api_unified.cpp
     )
+    set_target_properties(sep_gpu_cuda PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
+    )
     target_link_libraries(sep_gpu_cuda
         PRIVATE
             CUDA::cudart

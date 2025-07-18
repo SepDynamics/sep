@@ -3,7 +3,6 @@
 # Set CUDA paths and compiler
 set(CUDA_PATH "/usr/local/cuda")
 set(CMAKE_CUDA_COMPILER "${CUDA_PATH}/bin/nvcc")
-set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/g++-14")
 
 # Configure CUDA compiler settings
 set(CMAKE_CUDA_ARCHITECTURES "60;61;70;75" CACHE STRING "CUDA architectures")

@@ -10,20 +10,25 @@ find_library(HIREDIS_LIBRARIES
         /usr/lib64
         /usr/local/lib
         /usr/local/lib64
-        ${BLENDER_ROOT}/lib
 )
 
 find_path(HIREDIS_INCLUDE_DIRS
     NAMES
-        Hiredis/device/device.h
+        hiredis/hiredis.h
     PATHS
         /usr/include
         /usr/local/include
-        ${BLENDER_ROOT}/src
+)
+
+# Create imported target
+add_library(hiredis UNKNOWN IMPORTED)
+set_target_properties(hiredis PROPERTIES
+    IMPORTED_LOCATION "${HIREDIS_LIBRARIES}"
+    INTERFACE_INCLUDE_DIRECTORIES "${HIREDIS_INCLUDE_DIRS}"
 )
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Hiredis
+find_package_handle_standard_args(hiredis
     REQUIRED_VARS
         HIREDIS_LIBRARIES
         HIREDIS_INCLUDE_DIRS

@@ -16,7 +16,7 @@ endif()
 
 # Add component subdirectories - only core components needed for quant processing
 add_subdirectory(compat)
-add_subdirectory(embeddings)
+# add_subdirectory(embeddings)
 add_subdirectory(memory)
 add_subdirectory(gpu)
 add_subdirectory(quantum)

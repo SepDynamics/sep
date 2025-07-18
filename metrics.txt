@@ -1,0 +1,39 @@
+No file or directory specified. Running original examples.
+
+=== Processing Binary Data ===
+
+Metrics for Binary Data:
+  Average Coherence: 1.0000
+  Average Stability: 0.5000
+  Average Entropy:   0.1000
+  Total Patterns:    1
+
+=== Processing Text Data ===
+
+Metrics for Text Data:
+  Average Coherence: 0.0000
+  Average Stability: 0.5000
+  Average Entropy:   0.1000
+  Total Patterns:    1
+
+=== Processing Numeric Data ===
+
+Metrics for Numeric Data:
+  Average Coherence: 0.0000
+  Average Stability: 0.5000
+  Average Entropy:   0.1000
+  Total Patterns:    1
+
+=== Processing Random Stream Data ===
+
+Metrics for Random Stream Data:
+  Average Coherence: nan
+  Average Stability: 0.5000
+  Average Entropy:   0.1000
+  Total Patterns:    3
+
+=== Pattern Mutation Example ===
+Original pattern ID: pattern_0
+Mutated pattern ID: pattern_0_child
+Generation: 1
+Data size: 16 values

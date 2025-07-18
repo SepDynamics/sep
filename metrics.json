@@ -1,0 +1,1 @@
+[{"name": "Binary Data:", "coherence": 1.0, "stability": 0.5, "entropy": 0.1}, {"name": "Text Data:", "coherence": 0.0, "stability": 0.5, "entropy": 0.1}, {"name": "Numeric Data:", "coherence": 0.0, "stability": 0.5, "entropy": 0.1}, {"name": "Random Stream Data:", "coherence": 0.0, "stability": 0.5, "entropy": 0.1}]

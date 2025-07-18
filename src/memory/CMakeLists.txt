@@ -41,8 +41,7 @@ else()
 endif()
 
 # Add CUDA-specific compile definitions to handle exception specs
-target_compile_definitions(sep_memory PRIVATE
-    SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1)
+target_compile_definitions(sep_memory PRIVATE)
 set_target_properties(sep_memory PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON

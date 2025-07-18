@@ -58,7 +58,8 @@ target_compile_definitions(sep_quantum PRIVATE
 
 # Add CUDA files
 target_sources(sep_quantum PRIVATE
-    qbsa_cuda.cu)
+    qbsa_cuda.cu
+    quantum_processor_cuda.cu)
 
 # Set CUDA architecture
 set_property(TARGET sep_quantum PROPERTY CUDA_ARCHITECTURES 70 75 80)

@@ -35,18 +35,18 @@ public:
 
     QuantumProcessor() = delete; // Base class Processor has no default constructor
     explicit QuantumProcessor(const Config& config);
-    ~QuantumProcessor();
+    virtual ~QuantumProcessor();
 
-    float calculateCoherence(const glm::vec3& a, const glm::vec3& b);
-    float calculateStability(float coherence, float historical_stability,
+    virtual float calculateCoherence(const glm::vec3& a, const glm::vec3& b);
+    virtual float calculateStability(float coherence, float historical_stability,
                              float generation_count, float access_frequency);
-    bool processPattern(const glm::vec3& data, size_t id);
-    bool updatePattern(size_t id, const glm::vec3& data);
-    void removePattern(size_t id);
-    bool isStable(float coherence) const;
-    bool isCollapsed(float coherence) const;
-    bool isQuantum(float coherence) const;
-    void updateConfig(const Config& new_config);
+    virtual bool processPattern(const glm::vec3& data, size_t id);
+    virtual bool updatePattern(size_t id, const glm::vec3& data);
+    virtual void removePattern(size_t id);
+    virtual bool isStable(float coherence) const;
+    virtual bool isCollapsed(float coherence) const;
+    virtual bool isQuantum(float coherence) const;
+    virtual void updateConfig(const Config& new_config);
 
 private:
     Config config_{};

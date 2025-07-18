@@ -251,3 +251,7 @@ if(SEP_GPU_EXCLUSIVE_ACCESS)
     message(STATUS "Configuring exclusive GPU access for CUDA operations")
     add_compile_definitions(SEP_EXCLUSIVE_GPU_ACCESS=1)
 endif()
+
+set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE BOOL "Enable downloading of dependencies")
+add_subdirectory(extern/googletest)
+add_subdirectory(extern/benchmark)

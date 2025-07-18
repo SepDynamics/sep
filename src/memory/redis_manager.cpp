@@ -4,6 +4,8 @@
 #include <time.h>
 #include <unistd.h>
 #include <cstdlib>
+#include <algorithm>
+#include <cctype>
 
 #ifdef SEP_NO_REDIS
 #undef SEP_NO_REDIS
@@ -43,6 +45,12 @@ std::string RedisManager::Impl::getTierPatternsKey(const std::string& tier) cons
     std::stringstream key;
     key << normalizeTier(tier) << ":patterns";
     return key.str();
+}
+std::string RedisManager::Impl::normalizeTier(const std::string& tier) const {
+    std::string lower_tier = tier;
+    std::transform(lower_tier.begin(), lower_tier.end(), lower_tier.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+    return lower_tier;
 }
 
 // RedisManager::Impl method implementations

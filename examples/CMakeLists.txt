@@ -15,3 +15,4 @@ target_link_libraries(financial_demo PRIVATE
     sep_compat
     fmt::fmt
 )
+add_subdirectory(sep_memory_verifier)

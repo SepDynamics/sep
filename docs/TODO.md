@@ -1,59 +1,63 @@
-# TODO.md: Datatype-Agnostic Pattern Metric Engine
+# TODO.md: Predictive Financial Modeling with SEP Engine
 
-**Last Updated:** July 18, 2025  
-**Goal:** Build datatype-agnostic engine ingesting raw bytes (sockets/files/directories/streams), processing via QBSA/QFH on bitfields (no assumptions), computing meaningful metrics (coherence via distance, stability, entropy, mutation, relationships). Leverage SEP codebase. Validate on Oanda; ensure varied metrics (high repetitive, low random, med structured). POCs confirm fixes work—focus on scaling for large data.
+**Last Updated:** July 18, 2025
+**Goal:** Develop and validate a predictive financial gauge using the SEP Engine on historical forex data. This involves optimizing the engine's performance with CUDA, defining a robust predictive metric, backtesting trading strategies, and documenting the results for a business proposal.
 
 **Key Principles:**
-- Agnosticism: Raw bytes to bitfield; QBSA misalignments, QFH ruptures.
-- Metrics: Coherence (1/(1+dist), not cos-sim); first=1.0, subsequent max vs prior.
-- Testing: Repetitive/random/text/Oanda; benchmarks for speed (keep Google Benchmark, suppress noise).
-- State: Clear per batch/file to avoid carryover (validated in POC2).
-- Tools: util/error_handling.h (SEP_CHECK_); util/type_safety.h (sep_float_equal).
-- Performance: Small data fast (~27µs/211B); fix O(n^2) in evolve/compute for large files.
+- **Performance:** The engine must be optimized to handle large-scale time-series data efficiently. This requires profiling and parallelizing the core algorithms on the GPU.
+- **Predictive Power:** The "predictive gauge" must be a leading indicator of market movements, combining multiple of the engine's metrics (coherence, stability, entropy).
+- **Validation:** The strategies must be rigorously backtested against historical data to measure performance metrics like Alpha, Sharpe Ratio, and Total Return.
+- **Automation:** The entire workflow, from data processing to analysis and reporting, must be automated for repeatability and scalability.
 
-**Root Bug Fix Context (Completed):**
-- Over-normalization/self-comparison caused uniform 1.0/0.0.
-- Fixed: Remove glm::normalize; store raw; distance metric; clear state per file.
-- Validation: POCs show expected varied coherence (1.0 repetitive, 0.056 random, 0.5 text, 0.47 binary).
-- Business: Ties to proposal (coherence quant, evolution tracking); demos for funding.
+---
 
-## Phase 1: Oanda Integration + Scaling Baseline (Complete Today)
-1. **Verify Fixes (Done - 30 Min)**  
-   Run POCs/tests: ctest -V; examples with repetitive/random/Oanda. Confirm varied metrics.
+## Phase 1: System Optimization & Foundation (Current)
 
-2. **Integrate Raw Oanda (Done - 1-2 Hours)**  
-   Load binary/CSV as bytes; ingest in chunks. Extend tests: ProcessOandaData (EXPECT coherence 0.4-0.7 for market data). Add to financial_demo.
+1.  **Profile CUDA Performance (In Progress)**
+    *   **Task:** Analyze the current SEP Engine implementation to identify performance bottlenecks, specifically in the pattern comparison and evolution algorithms.
+    *   **Tools:** Use `nvprof` or `Nsight Systems` to profile the `pattern_metric_example` executable when processing the large forex dataset.
+    *   **Goal:** Pinpoint the exact functions and loops that are candidates for CUDA acceleration.
 
-3. **Benchmark Setup (Done - 30 Min)**  
-   Run sep_memory_verifier/pattern_metric_example --benchmark_out=mem.csv (alloc/promotion/ingest <1ms small). POC4 baseline: ~7.8 MB/s small; identify quadratic loops.
+2.  **Define Predictive Gauge (Next)**
+    *   **Task:** Create a markdown document (`docs/predictive_gauge_definition.md`) that formally defines the predictive gauge.
+    *   **Details:** Specify the formula combining coherence, stability, and entropy. Define the smoothing techniques (e.g., 20-day rolling average, Z-score normalization) to be applied.
 
-**Milestone:** Varied Oanda metrics; baseline perf; no uniform bugs.
+---
 
-## Phase 2: Scaling + Enhancements (Tomorrow+)
-1. **Fix Large Data Scaling (1-2 Hours)**  
-   Profile evolvePatterns/computeMetrics (O(n^2) comparisons). Optimize: Batch compares, KD-tree for similarity, or limit history (sliding window). Test on 280MB: Aim <10s. Benchmark before/after.
+## Phase 2: Financial Analysis & Backtesting
 
-2. **Expand Sources**  
-   Directory: Recursive ingest, aggregate bitfields.  
-   Socket: Non-blocking recv; test netcat Oanda stream.  
-   Test: Dir CSVs; socket mock.
+1.  **Implement Backtesting Script (`financial_backtest.py`)**
+    *   **Task:** Develop a Python script to perform three distinct backtesting analyses using the generated metrics from the SEP Engine.
+    *   **Analysis A (Leading Breakout):** Implement a strategy that buys/sells based on breakouts in the predictive gauge.
+    *   **Analysis B (Iterative Learning):** Implement a walk-forward analysis that trains the engine on a rolling window of past data to predict the next period.
+    *   **Analysis C (Multi-Resolution Mapping):** Correlate the daily gauge signals with the high-resolution minute-by-minute data to test intra-day effectiveness.
 
-3. **Advanced Metrics/Features**  
-   Relationships: Integrate relationship.h.  
-   Custom: Tune stability (mutation resistance), entropy (info density).  
-   Memory Tiers: Promote on metrics; benchmark Redis LTM.  
-   GPU: Fix cetintrin.h; enable QFH accel.
+2.  **Create Experiment Runner (`run_experiment.sh`)**
+    *   **Task:** Write a shell script to automate the end-to-end experiment.
+    *   **Workflow:**
+        1.  Run the `pattern_metric_example` on the raw forex data (`/workspace/train_data_2021_to_2025`).
+        2.  Output the metrics to a `metrics.json` file.
+        3.  Execute the `financial_backtest.py` script to consume the metrics and generate an analysis report.
 
-4. **Optimization & Testing**  
-   Error/Type: Add SEP_CHECK_ in ingest; sep_float_equal in metrics.  
-   Benchmarks: Full cycles (ingest+evolve+metrics on Oanda); Valgrind leaks.  
-   Suite: Socket/dir tests; perf on volatile/stable Oanda (high/low entropy).  
-   Export: Add exportMetrics CSV/JSON; visualize coherence graphs.
+---
+
+## Phase 3: Optimization & Documentation
+
+1.  **Optimize CUDA Kernels**
+    *   **Task:** Based on the profiling from Phase 1, refactor the core processing loops into CUDA kernels.
+    *   **Goal:** Achieve significant performance speedup (target: >10x) for large-scale data analysis by parallelizing pattern comparisons.
+
+2.  **Benchmark & Document Performance**
+    *   **Task:** Run the automated experiment before and after the CUDA optimizations.
+    *   **Goal:** Quantify the performance improvements and document them in the final report.
+
+3.  **Create Final Proposal Report (`docs/proofs/poc_6_predictive_backtest.md`)**
+    *   **Task:** Write a new, detailed proof-of-concept document summarizing the entire project.
+    *   **Content:** Include the definition of the predictive gauge, the backtesting results (with graphs and tables), and the performance benchmarks. This document should be suitable for inclusion in a business proposal.
+
+---
 
 ## Open Issues/Blockers
-- Defects: Fix SEP HIGH/MEDIUM (cuda fprintf casts, socket ignores); suppress third-party.
-- Large Files: Quadratic bottleneck—profile/fix before full Oanda.
-- Data: Test Oanda volatility (high entropy) vs trends (high coherence).
-- If Stuck: GDB on large stalls; share benchmarks/outputs.
-
-Track: Commit often. Next: Scale to 280MB without stall—unlock real analysis!
+- **CUDA Expertise:** Requires careful implementation of CUDA kernels to ensure correctness and avoid race conditions.
+- **Financial Modeling:** The backtesting strategies are simplified models; their results are indicative but not a guarantee of future performance.
+- **Data Integrity:** Assumes the provided forex data is clean and correctly formatted.

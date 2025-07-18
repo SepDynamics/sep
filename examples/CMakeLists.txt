@@ -6,3 +6,12 @@ target_link_libraries(pattern_metric_example PRIVATE
     sep_compat
     fmt::fmt
 )
+
+add_executable(financial_demo financial_demo.cpp)
+
+target_link_libraries(financial_demo PRIVATE
+    sep_quantum
+    sep_core
+    sep_compat
+    fmt::fmt
+)

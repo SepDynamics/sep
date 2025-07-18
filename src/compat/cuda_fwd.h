@@ -41,7 +41,9 @@ enum {
 #include <cuda_runtime_api.h>
 
 // Use CUDA's actual values
+#ifndef SEP_CUDA_SUCCESS
 #define SEP_CUDA_SUCCESS cudaSuccess
+#endif
 #define SEP_CUDA_ERROR_MEMORY_ALLOCATION cudaErrorMemoryAllocation
 #endif
 

@@ -5,6 +5,7 @@ target_link_libraries(pattern_metric_example PRIVATE
     sep_core
     sep_compat
     fmt::fmt
+    benchmark::benchmark
 )
 
 add_executable(financial_demo financial_demo.cpp)

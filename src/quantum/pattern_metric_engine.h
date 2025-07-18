@@ -58,6 +58,9 @@ public:
     explicit PatternMetricEngine();
     ~PatternMetricEngine() override = default;
 
+    /// @brief Clears the internal state of the engine.
+    void clear();
+
     /// @brief Initializes the engine and its quantum processing components.
     /// @param ctx A pointer to the GPU context, or `nullptr` for CPU-only operation.
     /// @return SEPResult::SUCCESS on success.

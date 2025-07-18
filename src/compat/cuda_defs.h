@@ -43,7 +43,7 @@ public:
 
 // Legacy type aliases for backward compatibility
 using SepCudaStatus = Status;
-#define SEP_CUDA_SUCCESS (Status::Success)
+// SEP_CUDA_SUCCESS is already defined in cuda_fwd.h
 
 }  // namespace cuda
 }  // namespace sep

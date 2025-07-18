@@ -102,21 +102,21 @@ inline cudaError_t memcpyFromDevice(void* dst, const void* src, std::size_t size
 #else
 // Provide stub implementations when CUDA is not available
 inline cudaError_t deviceSynchronize() {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 inline cudaError_t memcpyToDevice(void* dst, const void* src, std::size_t size) {
     if (dst && src && size > 0) {
         std::memcpy(dst, src, size);
     }
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 inline cudaError_t memcpyFromDevice(void* dst, const void* src, std::size_t size) {
     if (dst && src && size > 0) {
         std::memcpy(dst, src, size);
     }
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 #endif
 

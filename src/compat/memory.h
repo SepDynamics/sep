@@ -113,9 +113,9 @@ template <typename T>
 bool copyToDevice(T* dst, const T* src, size_t count, Stream* /*stream*/ = nullptr)
 {
 #if SEP_CUDA_AVAILABLE
-    cudaError_t error = sep::cuda::cudaMemcpyAsync(dst, src, count * sizeof(T),
-                                                  sep::cuda::cudaMemcpyHostToDevice, nullptr);
-    return error == cudaSuccess;
+    cudaError_t error =
+        sep::cuda::cudaMemcpyAsync(dst, src, count * sizeof(T), ::cudaMemcpyHostToDevice, nullptr);
+    return error == (cudaError_t)SEP_CUDA_SUCCESS;
 #else
     (void)stream;
     std::memcpy(dst, src, count * sizeof(T));
@@ -128,8 +128,8 @@ bool copyToHost(T* dst, const T* src, size_t count, Stream* /*stream*/ = nullptr
 {
 #if SEP_CUDA_AVAILABLE
     cudaError_t error =
-        cudaMemcpyAsync(dst, src, count * sizeof(T), cudaMemcpyDeviceToHost, nullptr);
-    return error == cudaSuccess;
+        cudaMemcpyAsync(dst, src, count * sizeof(T), ::cudaMemcpyDeviceToHost, nullptr);
+    return error == (cudaError_t)SEP_CUDA_SUCCESS;
 #else
     (void)stream;
     std::memcpy(dst, src, count * sizeof(T));
@@ -141,7 +141,7 @@ bool copyToHost(T* dst, const T* src, size_t count, Stream* /*stream*/ = nullptr
 template <typename T>
 bool memsetDevice(T* ptr, int value, size_t count) {
 #if SEP_CUDA_AVAILABLE
-    return cudaMemset(ptr, value, count * sizeof(T)) == cudaSuccess;
+    return cudaMemset(ptr, value, count * sizeof(T)) == (cudaError_t)SEP_CUDA_SUCCESS;
 #else
     std::memset(ptr, value, count * sizeof(T));
     return true;

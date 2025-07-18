@@ -28,6 +28,8 @@
 #include "core/config.h"
 #include "core/logging.h"
 #include "core/types.h"
+#include "core/data_parser.h"
+#include "core/dag_graph.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor.h"
 #include "tests/simple_embedding_model.h"
@@ -596,6 +598,152 @@ namespace sep::api
                               {"memory_fraction", config.ollama.gpu.memory_fraction}}}};
 
         return result;
+    }
+
+    nlohmann::json SepEngine::processQuantData(const std::string& file_path)
+    {
+        using json = nlohmann::json;
+        
+        if (!impl_->initialized)
+        {
+            return makeErrorResponse(ErrorCode::InvalidState, "Engine not initialized");
+        }
+
+        try
+        {
+            // Create data parser
+            sep::DataParser parser;
+            
+            // Parse the quantitative data file
+            auto patterns = parser.parseFile(file_path);
+            
+            if (patterns.empty())
+            {
+                return makeErrorResponse(ErrorCode::InvalidArgument, "No patterns found in file");
+            }
+            
+            // Apply provisional heuristics for coherence
+            // (Full quantum processing integration pending)
+            for (auto& pattern : patterns)
+            {
+                // Calculate price volatility as a proxy for coherence
+                // Pattern.position is a glm::vec4, access components directly
+                float high = pattern.position.y;
+                float low = pattern.position.z;
+                float close = pattern.position.w;
+                
+                if (close > 0.0f)
+                {
+                    float volatility = (high - low) / close;
+                    pattern.coherence = 1.0f / (1.0f + volatility);  // Higher volatility = lower coherence
+                }
+            }
+            
+            // Create DAG for pattern analysis
+            sep::dag::DagGraph dag;
+            
+            // Store node IDs for building relationships
+            std::vector<uint64_t> node_ids;
+            
+            // Add patterns as nodes with market data
+            for (size_t i = 0; i < patterns.size(); ++i)
+            {
+                const auto& pattern = patterns[i];
+                
+                // Extract market data from pattern
+                float price = pattern.position.w;  // close price
+                float high = pattern.position.y;
+                float low = pattern.position.z;
+                float volatility = (high - low) / (price > 0 ? price : 1.0f);
+                float volume = !pattern.data.empty() ? pattern.data[0] : 0.0f;
+                
+                // Determine parent nodes based on temporal relationships
+                std::vector<uint64_t> parents;
+                if (i > 0 && !node_ids.empty())
+                {
+                    parents.push_back(node_ids[i - 1]);  // Previous candle
+                    if (i >= 5 && node_ids.size() > 5)
+                    {
+                        parents.push_back(node_ids[i - 5]);  // 5 candles back
+                    }
+                }
+                
+                // Convert position to vec3 for DAG (using first 3 components)
+                glm::vec3 pattern_vec(pattern.position.x, pattern.position.y, pattern.position.z);
+                
+                // Add node with market data
+                uint64_t node_id = dag.addMarketDataNode(
+                    pattern_vec,
+                    pattern.coherence,
+                    price,
+                    volatility,
+                    volume,
+                    parents
+                );
+                
+                node_ids.push_back(node_id);
+            }
+            
+            // Calculate metrics
+            dag.calculateNodeCorrelations();
+            dag.calculateTailRisk();
+            dag.calculateAlpha();
+            
+            // Build response
+            json result;
+            result["success"] = true;
+            result["patterns_processed"] = patterns.size();
+            
+            // Export DAG as JSON
+            std::string dag_json_str = dag.exportAsJson();
+            result["dag"] = json::parse(dag_json_str);
+            
+            // Add additional metrics
+            json metrics_json;
+            
+            // Calculate aggregate metrics
+            float total_tail_risk = 0.0f;
+            float total_alpha = 0.0f;
+            float max_volatility = 0.0f;
+            float total_volume = 0.0f;
+            
+            for (size_t i = 0; i < node_ids.size(); ++i)
+            {
+                uint64_t node_id = node_ids[i];
+                total_tail_risk += dag.getTailRisk(node_id);
+                total_alpha += dag.getAlpha(node_id);
+                max_volatility = std::max(max_volatility, dag.getVolatility(node_id));
+                total_volume += dag.getVolume(node_id);
+            }
+            
+            metrics_json["total_tail_risk"] = total_tail_risk;
+            metrics_json["average_tail_risk"] = node_ids.empty() ? 0.0f : total_tail_risk / node_ids.size();
+            metrics_json["total_alpha"] = total_alpha;
+            metrics_json["average_alpha"] = node_ids.empty() ? 0.0f : total_alpha / node_ids.size();
+            metrics_json["max_volatility"] = max_volatility;
+            metrics_json["total_volume"] = total_volume;
+            
+            // Calculate average coherence
+            float avg_coherence = 0.0f;
+            for (const auto& pattern : patterns)
+            {
+                avg_coherence += pattern.coherence;
+            }
+            if (!patterns.empty())
+            {
+                avg_coherence /= patterns.size();
+            }
+            metrics_json["average_coherence"] = avg_coherence;
+            
+            result["metrics"] = metrics_json;
+            
+            return result;
+        }
+        catch (const std::exception& e)
+        {
+            return makeErrorResponse(ErrorCode::GeneralError,
+                                   std::string("Quant data processing failed: ") + e.what());
+        }
     }
 
     nlohmann::json SepEngine::getMemoryMetrics()

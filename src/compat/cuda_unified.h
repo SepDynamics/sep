@@ -29,9 +29,13 @@ namespace cuda {
 
 // Utility function for error checking and logging
 inline void checkCudaError(cudaError_t result, const char* operation) {
-    if (result != cudaSuccess) {
+    if (result != (cudaError_t)SEP_CUDA_SUCCESS) {
         // Use platform-independent error handling
+#if SEP_ENGINE_HAS_CUDA
+        fprintf(stderr, "CUDA Error in %s: %s\n", operation, ::cudaGetErrorString(result));
+#else
         fprintf(stderr, "CUDA Error in %s: %s\n", operation, cudaGetErrorString(result));
+#endif
     }
 }
 

@@ -33,6 +33,8 @@
 #include "core/common.h"
 #include "core/logging.h"
 #include "core/types.h"
+#include "core/data_parser.h"
+#include "core/dag_graph.h"
 #include "crow/crow_isolation.h"
 
 namespace sep::api {
@@ -502,6 +504,172 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow = handleCrowError("Pattern history failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
+        #endif
+      });
+
+  // Streaming data endpoint for real-time quant data
+  app_->route_dynamic("/api/v1/data/stream")
+      .methods(crow::HTTPMethod::POST)([this](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
+
+#if SEP_HAS_EXCEPTIONS
+          try
+          {
+#endif
+              // Parse request body - expects raw data or base64 encoded binary
+              nlohmann::json request_data = parse_json(std::string(req.body));
+              
+              std::string data_format = request_data.value("format", "auto");
+              std::string data_content;
+              std::vector<uint8_t> binary_data;
+              
+              // Check if data is provided as string or binary
+              if (request_data.contains("data")) {
+                  data_content = request_data["data"].get<std::string>();
+              } else if (request_data.contains("binary")) {
+                  // Base64 decode if binary data is provided
+                  std::string base64_data = request_data["binary"].get<std::string>();
+                  // Simple base64 decode (you may want to use a proper base64 library)
+                  binary_data.resize(base64_data.length() * 3 / 4);
+                  // TODO: Implement proper base64 decoding
+              }
+              
+              // Create data parser
+              sep::DataParser parser;
+              std::vector<sep::Pattern> patterns;
+              
+              // Parse based on content type
+              if (!binary_data.empty()) {
+                  sep::DataFormat format = sep::DataFormat::AUTO;
+                  if (data_format == "binary") format = sep::DataFormat::BINARY;
+                  else if (data_format == "json") format = sep::DataFormat::JSON;
+                  else if (data_format == "csv") format = sep::DataFormat::CSV;
+                  
+                  patterns = parser.parseBuffer(binary_data.data(), binary_data.size(), format);
+              } else if (!data_content.empty()) {
+                  // Parse as string data
+                  std::istringstream stream(data_content);
+                  patterns = parser.parseStream(stream);
+              }
+              
+              // Process patterns
+              nlohmann::json response;
+              response["patterns_received"] = patterns.size();
+              response["status"] = "processed";
+              
+              if (!patterns.empty()) {
+                  // Calculate basic metrics
+                  float avg_coherence = 0.0f;
+                  for (const auto& pattern : patterns) {
+                      avg_coherence += pattern.coherence;
+                  }
+                  avg_coherence /= patterns.size();
+                  
+                  response["metrics"]["average_coherence"] = avg_coherence;
+                  response["metrics"]["pattern_count"] = patterns.size();
+              }
+              
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
+
+              logRequest(req, HTTP_OK, response.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, response);
+
+        #if SEP_HAS_EXCEPTIONS
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
+
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
+
+              auto error_crow = handleCrowError("Stream processing failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
+              logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
+          }
+        #endif
+      });
+
+  // Quant data processing endpoint with full DAG analysis
+  app_->route_dynamic("/api/v1/quant/process")
+      .methods(crow::HTTPMethod::POST)([this, &engine](const crow::request& req) {
+          auto start_time = std::chrono::steady_clock::now();
+
+#if SEP_HAS_EXCEPTIONS
+          try
+          {
+#endif
+              nlohmann::json request_data = parse_json(std::string(req.body));
+              
+              // Extract candle data or file path
+              nlohmann::json result;
+              
+              if (request_data.contains("file_path")) {
+                  // Process from file
+                  std::string file_path = request_data["file_path"].get<std::string>();
+                  result = engine.processQuantData(file_path);
+              } else if (request_data.contains("candles")) {
+                  // Process inline candle data
+                  // Save to temporary file for processing
+                  std::string temp_file = "/tmp/quant_data_" + std::to_string(std::time(nullptr)) + ".json";
+                  std::ofstream out(temp_file);
+                  out << request_data["candles"].dump();
+                  out.close();
+                  
+                  result = engine.processQuantData(temp_file);
+                  
+                  // Clean up temp file
+                  std::remove(temp_file.c_str());
+              } else {
+                  throw std::runtime_error("Missing 'file_path' or 'candles' in request");
+              }
+              
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
+
+              logRequest(req, HTTP_OK, result.dump(), duration);
+              return makeCrowJsonResponse(HTTP_OK, result);
+
+        #if SEP_HAS_EXCEPTIONS
+          } catch (const nlohmann::json::parse_error& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
+
+              auto error_crow =
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
+              logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
+              return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
+          } catch (const std::exception& e)
+          {
+              auto end_time = std::chrono::steady_clock::now();
+              auto duration =
+                  std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                      .count();
+
+              auto error_crow = handleCrowError("Quant processing failed: " + std::string(e.what()),
                                                 HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);

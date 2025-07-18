@@ -30,40 +30,10 @@ include_directories(
 # Set policy for CUDA modules
 cmake_policy(SET CMP0146 NEW)
 
-# Add compiler definition to bypass CUDA host compiler check
-add_compile_definitions(__NV_NO_HOST_COMPILER_CHECK=1)
-
-# Set CUDA flags for the host compiler check bypass
-set(CMAKE_CUDA_FLAGS "-D__NV_NO_HOST_COMPILER_CHECK=1")
-
 # CUDA configuration
 option(SEP_USE_CUDA "Enable CUDA support" ON)
 if(SEP_USE_CUDA)
-    enable_language(CUDA)
-    if(CMAKE_CUDA_COMPILER)
-        message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}")
-        set(CMAKE_CUDA_STANDARD 17)
-        set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-        
-        # For compatibility with existing code
-        set(SEP_HAS_CUDA ${SEP_USE_CUDA})
-        add_definitions(-DSEP_USE_CUDA=1 -DSEP_HAS_CUDA=1)
-        
-        # Create targets compatible with old CUDA::* targets
-        add_library(CUDA::cudart INTERFACE IMPORTED)
-        add_library(CUDA::cuda_driver INTERFACE IMPORTED)
-        add_library(CUDA::cufft INTERFACE IMPORTED)
-        
-        # Set the include directories and link libraries
-        target_link_libraries(CUDA::cudart INTERFACE CUDA::cudart_static)
-        target_link_libraries(CUDA::cuda_driver INTERFACE ${CMAKE_CUDA_LIBRARIES})
-        target_link_libraries(CUDA::cufft INTERFACE CUDA::cufft_static)
-    else()
-        message(WARNING "CUDA requested but compiler not found, disabling CUDA support")
-        set(SEP_USE_CUDA OFF)
-        set(SEP_HAS_CUDA OFF)
-        add_definitions(-DSEP_USE_CUDA=0 -DSEP_HAS_CUDA=0)
-    endif()
+    find_package(CUDA REQUIRED)
 endif()
 
 # Add subdirectories
@@ -71,9 +41,9 @@ add_subdirectory(src)
 add_subdirectory(examples)
 
 # Set build output directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
 # Create the export set
 set(SEP_TARGETS

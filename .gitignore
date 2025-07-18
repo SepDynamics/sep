@@ -18,6 +18,7 @@ workspace/
 actions-runner/
 *build*/
 */build/
+Testing/OANDA/
 cmake-build-*/
 
 # Compiled Files

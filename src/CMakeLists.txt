@@ -15,6 +15,7 @@ if(SEP_MINIMAL)
 endif()
 
 # Add component subdirectories - only core components needed for quant processing
+add_subdirectory(core)
 add_subdirectory(compat)
 # add_subdirectory(embeddings)
 add_subdirectory(memory)

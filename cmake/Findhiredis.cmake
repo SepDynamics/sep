@@ -21,11 +21,13 @@ find_path(HIREDIS_INCLUDE_DIRS
 )
 
 # Create imported target
-add_library(hiredis UNKNOWN IMPORTED)
-set_target_properties(hiredis PROPERTIES
-    IMPORTED_LOCATION "${HIREDIS_LIBRARIES}"
-    INTERFACE_INCLUDE_DIRECTORIES "${HIREDIS_INCLUDE_DIRS}"
-)
+if(NOT TARGET hiredis::hiredis)
+    add_library(hiredis::hiredis UNKNOWN IMPORTED)
+    set_target_properties(hiredis::hiredis PROPERTIES
+        IMPORTED_LOCATION "${HIREDIS_LIBRARIES}"
+        INTERFACE_INCLUDE_DIRECTORIES "${HIREDIS_INCLUDE_DIRS}"
+    )
+endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(hiredis

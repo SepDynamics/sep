@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(sep_memory_verifier)
+project(sep_memory_verifier LANGUAGES CXX)
 
 find_package(hiredis REQUIRED)
 

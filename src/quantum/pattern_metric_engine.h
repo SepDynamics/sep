@@ -99,6 +99,10 @@ public:
     /// @return A vector of PatternMetrics structs.
     std::vector<PatternMetrics> computeMetrics();
 
+    /// @brief Gets the current patterns.
+    /// @return A vector of PatternData structs.
+    const std::vector<pattern::PatternData>& getPatterns() const;
+
 private:
     /**
      * @brief Extracts patterns from a raw byte stream.

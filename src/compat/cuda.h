@@ -32,7 +32,7 @@ inline bool isCudaAvailable() {
 
 // Helper function to get error message
 inline const char* getErrorString(cudaError_t error) {
-    return cudaGetErrorString(error);
+    return SEP_cudaGetErrorString(error);
 }
 
 } // namespace cuda

@@ -1,230 +1,159 @@
 #include "cuda_api_unified.h"
+#include <string.h>
+#include <stdio.h>
 
 #ifdef SEP_HAS_CUDA
 #include <cuda_runtime_api.h>
+#include "compat/cuda_runtime.h"
 
-namespace sep::gpu {
-struct CudaStream { cudaStream_t handle; };
-struct CudaEvent { cudaEvent_t handle; };
-}
-#else
-#include <cstdlib>
-#include <cstring>
-
-namespace sep::gpu {
-struct CudaStream { int dummy; };
-struct CudaEvent { int dummy; };
-}
-#endif
-
-namespace sep::gpu {
-
-#ifdef SEP_HAS_CUDA
-static cudaMemcpyKind convert_memcpy_kind(MemcpyKind kind) {
+static cudaMemcpyKind convert_memcpy_kind(SEP_CUDA_MEMCPY_KIND kind) {
     switch (kind) {
-        case MemcpyKind::HostToHost: return cudaMemcpyHostToHost;
-        case MemcpyKind::HostToDevice: return cudaMemcpyHostToDevice;
-        case MemcpyKind::DeviceToHost: return cudaMemcpyDeviceToHost;
-        case MemcpyKind::DeviceToDevice: return cudaMemcpyDeviceToDevice;
-        default: return cudaMemcpyDefault;
+        case SEP_CUDA_MEMCPY_HOST_TO_HOST: return ::cudaMemcpyHostToHost;
+        case SEP_CUDA_MEMCPY_HOST_TO_DEVICE: return ::cudaMemcpyHostToDevice;
+        case SEP_CUDA_MEMCPY_DEVICE_TO_HOST: return ::cudaMemcpyDeviceToHost;
+        case SEP_CUDA_MEMCPY_DEVICE_TO_DEVICE: return ::cudaMemcpyDeviceToDevice;
+        default: return ::cudaMemcpyDefault;
     }
 }
-#endif
 
-CudaError::CudaError(int code, const std::string& message)
-    : code_(code), message_(message) {}
-
-CudaAPI& CudaAPI::instance() {
-    static CudaAPI api;
-    return api;
+static SEP_CUDA_ERROR make_error(cudaError_t cuda_err) {
+    SEP_CUDA_ERROR err;
+    err.code = (int)cuda_err;
+    const char* msg = ::cudaGetErrorString(cuda_err);
+    strncpy(err.message, msg, sizeof(err.message) - 1);
+    err.message[sizeof(err.message) - 1] = '\0';
+    return err;
 }
 
-CudaError CudaAPI::malloc(void** ptr, size_t size) {
+#else
+// Non-CUDA stubs
+static SEP_CUDA_ERROR make_error(int code, const char* msg) {
+    SEP_CUDA_ERROR err;
+    err.code = code;
+    strncpy(err.message, msg, sizeof(err.message) - 1);
+    err.message[sizeof(err.message) - 1] = '\0';
+    return err;
+}
+#endif
+
+SEP_CUDA_ERROR SEP_CUDA_CreateError(int code, const char* message) {
+    SEP_CUDA_ERROR err;
+    err.code = code;
+    strncpy(err.message, message, sizeof(err.message) - 1);
+    err.message[sizeof(err.message) - 1] = '\0';
+    return err;
+}
+
+int SEP_CUDA_IsAvailable(void) {
+#ifdef SEP_HAS_CUDA
+    int device_count = 0;
+    cudaError_t err = ::cudaGetDeviceCount(&device_count);
+    return (err == cudaSuccess && device_count > 0) ? 1 : 0;
+#else
+    return 0;
+#endif
+}
+
+SEP_CUDA_ERROR SEP_CUDA_Init(void) {
+#ifdef SEP_HAS_CUDA
+    cudaError_t err = ::cudaSetDevice(0);
+    if (err != cudaSuccess) {
+        return make_error(err);
+    }
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
+#else
+    return make_error(SEP_CUDA_ERROR_NO_DEVICE, "CUDA not available");
+#endif
+}
+
+SEP_CUDA_ERROR SEP_CUDA_Malloc(void** ptr, size_t size) {
 #ifdef SEP_HAS_CUDA
     cudaError_t err = ::cudaMalloc(ptr, size);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
+    if (err != cudaSuccess) {
+        return make_error(err);
+    }
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
 #else
-    *ptr = std::malloc(size);
-    return CudaError::success();
+    *ptr = malloc(size);
+    if (*ptr == NULL) {
+        return make_error(SEP_CUDA_ERROR_OUT_OF_MEMORY, "Out of memory");
+    }
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
 #endif
 }
 
-CudaError CudaAPI::free(void* ptr) {
+SEP_CUDA_ERROR SEP_CUDA_Free(void* ptr) {
 #ifdef SEP_HAS_CUDA
     cudaError_t err = ::cudaFree(ptr);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
+    if (err != cudaSuccess) {
+        return make_error(err);
+    }
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
 #else
-    std::free(ptr);
-    return CudaError::success();
+    free(ptr);
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
 #endif
 }
 
-CudaError CudaAPI::memcpy(void* dst, const void* src, size_t count, MemcpyKind kind) {
+SEP_CUDA_ERROR SEP_CUDA_Memcpy(void* dst, const void* src, size_t count, 
+                             SEP_CUDA_MEMCPY_KIND kind) {
 #ifdef SEP_HAS_CUDA
     cudaError_t err = ::cudaMemcpy(dst, src, count, convert_memcpy_kind(kind));
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    std::memcpy(dst, src, count);
-    return CudaError::success();
-#endif
-}
-
-CudaError CudaAPI::memcpy_async(void* dst, const void* src, size_t count,
-                                MemcpyKind kind, CudaStream* stream) {
-#ifdef SEP_HAS_CUDA
-    cudaStream_t s = stream ? stream->handle : nullptr;
-    cudaError_t err = ::cudaMemcpyAsync(dst, src, count, convert_memcpy_kind(kind), s);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    (void)stream;
-    std::memcpy(dst, src, count);
-    return CudaError::success();
-#endif
-}
-
-CudaError CudaAPI::memset(void* ptr, int value, size_t count) {
-#ifdef SEP_HAS_CUDA
-    cudaError_t err = ::cudaMemset(ptr, value, count);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    std::memset(ptr, value, count);
-    return CudaError::success();
-#endif
-}
-
-CudaError CudaAPI::create_stream(CudaStream** stream, StreamFlags flags) {
-#ifdef SEP_HAS_CUDA
-    auto s = new CudaStream;
-    cudaError_t err = ::cudaStreamCreateWithFlags(&s->handle, flags == StreamFlags::NonBlocking ? cudaStreamNonBlocking : cudaStreamDefault);
     if (err != cudaSuccess) {
-        delete s;
-        return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
+        return make_error(err);
     }
-    *stream = s;
-    return CudaError::success();
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
 #else
-    *stream = new CudaStream{0};
-    (void)flags;
-    return CudaError::success();
+    memcpy(dst, src, count);
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
 #endif
 }
 
-CudaError CudaAPI::destroy_stream(CudaStream* stream) {
-    if (!stream) return CudaError::success();
-#ifdef SEP_HAS_CUDA
-    cudaError_t err = ::cudaStreamDestroy(stream->handle);
-    delete stream;
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    delete stream;
-    return CudaError::success();
-#endif
-}
-
-CudaError CudaAPI::stream_synchronize(CudaStream* stream) {
-#ifdef SEP_HAS_CUDA
-    cudaError_t err = ::cudaStreamSynchronize(stream ? stream->handle : nullptr);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    (void)stream;
-    return CudaError::success();
-#endif
-}
-
-CudaError CudaAPI::stream_wait_event(CudaStream* stream, CudaEvent* event) {
-#ifdef SEP_HAS_CUDA
-    cudaError_t err = ::cudaStreamWaitEvent(stream ? stream->handle : nullptr,
-                                            event ? event->handle : nullptr, 0);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    (void)stream;
-    (void)event;
-    return CudaError::success();
-#endif
-}
-
-CudaError CudaAPI::get_device_count(int* count) {
+SEP_CUDA_ERROR SEP_CUDA_GetDeviceCount(int* count) {
 #ifdef SEP_HAS_CUDA
     cudaError_t err = ::cudaGetDeviceCount(count);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
+    if (err != cudaSuccess) {
+        return make_error(err);
+    }
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
 #else
     *count = 0;
-    return CudaError::success();
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
 #endif
 }
 
-CudaError CudaAPI::set_device(int device) {
+SEP_CUDA_ERROR SEP_CUDA_GetDeviceProperties(SEP_CUDA_DEVICE_PROPS* prop, int device) {
 #ifdef SEP_HAS_CUDA
-    cudaError_t err = ::cudaSetDevice(device);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    (void)device;
-    return CudaError::success();
-#endif
-}
-
-CudaError CudaAPI::get_device(int* device) {
-#ifdef SEP_HAS_CUDA
-    cudaError_t err = ::cudaGetDevice(device);
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    *device = 0;
-    return CudaError::success();
-#endif
-}
-
-CudaError CudaAPI::get_last_error() {
-#ifdef SEP_HAS_CUDA
-    cudaError_t err = ::cudaGetLastError();
-    return CudaError(static_cast<int>(err), ::cudaGetErrorString(err));
-#else
-    return CudaError::success();
-#endif
-}
-
-std::string CudaAPI::error_string(const CudaError& error) {
-#ifdef SEP_HAS_CUDA
-    (void)error; // message already provided
-    return error.message();
-#else
-    return error.message();
-#endif
-}
-
-CudaMemory::CudaMemory(size_t size) {
-    if (CudaAPI::instance().malloc(&ptr_, size).is_success()) {
-        size_ = size;
-    } else {
-        ptr_ = nullptr;
-        size_ = 0;
+    cudaDeviceProp cuda_prop;
+    cudaError_t err = ::cudaGetDeviceProperties(&cuda_prop, device);
+    if (err != cudaSuccess) {
+        return make_error(err);
     }
+    
+    // Copy relevant properties
+    strncpy(prop->name, cuda_prop.name, sizeof(prop->name) - 1);
+    prop->name[sizeof(prop->name) - 1] = '\0';
+    prop->major = cuda_prop.major;
+    prop->minor = cuda_prop.minor;
+    prop->total_global_mem = cuda_prop.totalGlobalMem;
+    prop->shared_mem_per_block = cuda_prop.sharedMemPerBlock;
+    prop->max_threads_per_block = cuda_prop.maxThreadsPerBlock;
+    prop->multi_processor_count = cuda_prop.multiProcessorCount;
+    prop->warp_size = cuda_prop.warpSize;
+    prop->max_threads_dim[0] = cuda_prop.maxThreadsDim[0];
+    prop->max_threads_dim[1] = cuda_prop.maxThreadsDim[1];
+    prop->max_threads_dim[2] = cuda_prop.maxThreadsDim[2];
+    prop->max_grid_size[0] = cuda_prop.maxGridSize[0];
+    prop->max_grid_size[1] = cuda_prop.maxGridSize[1];
+    prop->max_grid_size[2] = cuda_prop.maxGridSize[2];
+    prop->unified_addressing = cuda_prop.unifiedAddressing;
+    
+    return SEP_CUDA_CreateError(SEP_CUDA_SUCCESS, "Success");
+#else
+    return make_error(SEP_CUDA_ERROR_NO_DEVICE, "CUDA not available");
+#endif
 }
 
-CudaMemory::~CudaMemory() {
-    if (ptr_) {
-        CudaAPI::instance().free(ptr_);
-    }
+const char* SEP_CUDA_ErrorString(SEP_CUDA_ERROR error) {
+    return error.message;
 }
-
-CudaMemory::CudaMemory(CudaMemory&& other) noexcept {
-    ptr_ = other.ptr_;
-    size_ = other.size_;
-    other.ptr_ = nullptr;
-    other.size_ = 0;
-}
-
-CudaMemory& CudaMemory::operator=(CudaMemory&& other) noexcept {
-    if (this != &other) {
-        if (ptr_) {
-            CudaAPI::instance().free(ptr_);
-        }
-        ptr_ = other.ptr_;
-        size_ = other.size_;
-        other.ptr_ = nullptr;
-        other.size_ = 0;
-    }
-    return *this;
-}
-
-} // namespace sep::gpu
-

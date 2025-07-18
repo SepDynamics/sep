@@ -15,13 +15,14 @@ namespace sep::quantum {
 
 namespace {
 
-float vectorCoherence(const glm::vec3& a, const glm::vec3& b) { // Remove unused parameter
-    float dot = glm::dot(a, b);
-    float mags = glm::length(a) * glm::length(b);
-    if (mags <= 0.0f)
-        return 0.0f;
-    float cos_theta = std::clamp(dot / mags, -1.0f, 1.0f);
-    return (cos_theta + 1.0f) * 0.5f;
+float vectorCoherence(const glm::vec3& a, const glm::vec3& b) {
+    // Use Euclidean distance, normalized to a [0, 1] range.
+    // A smaller distance means higher coherence.
+    float distance = glm::distance(a, b);
+    
+    // The coherence is inversely proportional to the distance.
+    // The '+ 1.0f' prevents division by zero and ensures the result is <= 1.0.
+    return 1.0f / (1.0f + distance);
 }
 
 float relationshipStrength(float ca, float cb, float interaction_frequency) {
@@ -41,6 +42,12 @@ float patternStability(float coherence, float historical_stability, float genera
 
 QuantumProcessorQFHCommon::QuantumProcessorQFHCommon() : qbsa_processor_(createQFHBasedQBSAProcessor({})) {}
 
+void QuantumProcessorQFHCommon::clear() {
+    m_patterns.clear();
+    m_pattern_bits.clear();
+    m_last_qfh_result = QFHResult();
+}
+
 const QFHResult& QuantumProcessorQFHCommon::getLastQFHResult() const {
     return m_last_qfh_result;
 }
@@ -58,22 +65,38 @@ float QuantumProcessorQFHCommon::calculateMutationRate(float base_rate, int succ
 }
 
 float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
-    auto normalized = glm::normalize(pattern);
-    float coherence = 0.0f;
+    float coherence;
 
-    for (const auto& existing : m_patterns) {
-        float pattern_coherence = vectorCoherence(normalized, existing);
-        coherence = std::max(coherence, pattern_coherence);
+    if (m_patterns.empty()) {
+        // The first pattern is perfectly coherent with itself.
+        coherence = 1.0f;
+    } else {
+        if (m_patterns.back() == pattern) {
+            return m_last_qfh_result.coherence;
+        }
+        // Calculate the average coherence with all existing patterns.
+        float total_coherence = 0.0f;
+        for (const auto& existing : m_patterns) {
+            total_coherence += vectorCoherence(pattern, existing);
+        }
+        coherence = total_coherence / m_patterns.size();
     }
 
-    if (coherence >= 0.1f) {
-        m_patterns.push_back(normalized);
+    // Store the original, non-normalized pattern for future comparisons.
+    m_patterns.push_back(pattern);
+    
+    // PERFORMANCE FIX: Limit the pattern history to prevent O(N^2) slowdown.
+    // This acts as a sliding window, keeping performance high for large files.
+    const size_t MAX_PATTERN_HISTORY = 1024;
+    if (m_patterns.size() > MAX_PATTERN_HISTORY) {
+        m_patterns.erase(m_patterns.begin());
     }
 
     if (!m_pattern_bits.empty()) {
         analyzePatternBits();
+        coherence = 0.7f * coherence + 0.3f * (1.0f - m_last_qfh_result.rupture_ratio);
     }
-
+    m_last_qfh_result.coherence = coherence;
     return coherence;
 }
 
@@ -144,6 +167,29 @@ void QuantumProcessorQFHCommon::analyzePatternBits() {
         shim_bits.push_back(v);
     }
     m_last_qfh_result = qfh_processor.analyze(QFHBasedProcessor::convertToBits(shim_bits));
+
+    // Add entropy calculation (Shannon on bits)
+    if (shim_bits.empty()) {
+        m_last_qfh_result.entropy = 0.0f;
+        return;
+    }
+    auto bits = QFHBasedProcessor::convertToBits(shim_bits);
+    if (bits.empty()) {
+        m_last_qfh_result.entropy = 0.0f;
+        return;
+    }
+    float p1 = static_cast<float>(std::count(bits.begin(), bits.end(), 1)) / bits.size();
+    float p0 = 1.0f - p1;
+    
+    float entropy = 0.0f;
+    if (p0 > 0) {
+        entropy -= p0 * std::log2(p0 + 1e-6f);
+    }
+    if (p1 > 0) {
+        entropy -= p1 * std::log2(p1 + 1e-6f);
+    }
+    
+    m_last_qfh_result.entropy = std::clamp(entropy, 0.0f, 1.0f);
 }
 
 }  // namespace sep::quantum

@@ -1,9 +1,5 @@
 {
   "terminal.integrated.autoRun.prevent": [
-    "**/mcp-tool/start_codebase_search.js",
-    "**/mcp-tool/start_sep_system.js",
-    "**/mcp-tool/sep_mcp_startup.js",
-    "**/extern/Kilo-Code/webview-ui/**"
   ],
   "npm.autoDetect": "off",
   "npm.exclude": [

@@ -226,8 +226,8 @@ public:
                              int n_values, float modulation_strength);
 
 private:
-    cudaStream_t stream_;
-    cufftHandle fft_plan_;
+    ::cudaStream_t stream_;
+    ::cufftHandle fft_plan_;
     workbench::CudaConfig config_;
 
     void* d_workspace_;

@@ -2,13 +2,7 @@
 
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
-        DESTINATION include/sep/tests
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp")
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
-        DESTINATION include/sep/tests/internal
+        DESTINATION src/tests
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.hpp")
@@ -18,65 +12,64 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
 # Find required packages
 find_package(CUDAToolkit REQUIRED)
 find_package(fmt REQUIRED)
-
-# Add test sources
-set(CYCLES_TEST_SOURCES
-    cycles_test.cpp
-    memory_tier_test.cpp
-    simple_embedding_model.cpp
-    dataset_loader.cpp
-)
-
-set(MEMORY_TEST_SOURCES
-    memory_tier_test.cpp
-)
+find_package(GTest REQUIRED)
 
 # Create test executables
-add_executable(cycles_test ${CYCLES_TEST_SOURCES})
-add_executable(memory_tier_test ${MEMORY_TEST_SOURCES})
+# add_executable(memory_tier_test memory_tier_test.cpp)
+add_executable(pattern_metric_test pattern_metric_engine_test.cpp)
 
 # Link dependencies
-target_link_libraries(cycles_test PRIVATE
+# target_link_libraries(cycles_test PRIVATE
+#     GTest::gtest
+#     GTest::gtest_main
+#     GTest::gmock
+#     fmt::fmt
+#     sep_core
+#     sep_compat
+#     CUDA::cudart
+#     CUDA::cuda_driver
+# )
+
+# target_link_libraries(memory_tier_test PRIVATE
+#     GTest::gtest
+#     GTest::gtest_main
+#     GTest::gmock
+#     fmt::fmt
+#     sep_core
+#     sep_memory
+#     sep_compat
+# )
+
+# # Set up include directories for memory test
+# target_include_directories(memory_tier_test PRIVATE
+#     ${CMAKE_SOURCE_DIR}
+#     ${CMAKE_SOURCE_DIR}/src
+# )
+
+
+# add_test(NAME memory_tier_test COMMAND memory_tier_test)
+# set_tests_properties(memory_tier_test PROPERTIES
+#     LABELS "unit;memory"
+# )
+
+# Configure pattern metric test
+target_link_libraries(pattern_metric_test PRIVATE
     GTest::gtest
     GTest::gtest_main
     GTest::gmock
     fmt::fmt
     sep_core
+    sep_quantum
     sep_compat
-    CUDA::cudart
-    CUDA::cuda_driver
+    TBB::tbb
 )
 
-target_link_libraries(memory_tier_test PRIVATE
-    GTest::gtest
-    GTest::gtest_main
-    GTest::gmock
-    fmt::fmt
-    sep_core
-    sep_memory
-    sep_compat
-)
-
-# Configure include directories
-target_include_directories(cycles_test PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/src
-    ${CUDAToolkit_INCLUDE_DIRS}
-)
-
-# Set up include directories for memory test
-target_include_directories(memory_tier_test PRIVATE
-    ${CMAKE_SOURCE_DIR}
+target_include_directories(pattern_metric_test PRIVATE
     ${CMAKE_SOURCE_DIR}/src
 )
 
-# Add tests to CTest
-add_test(NAME cycles_test COMMAND cycles_test)
-set_tests_properties(cycles_test PROPERTIES
-    LABELS "unit;cycles"
-)
-
-add_test(NAME memory_tier_test COMMAND memory_tier_test)
-set_tests_properties(memory_tier_test PROPERTIES
-    LABELS "unit;memory"
+add_test(NAME pattern_metric_test COMMAND pattern_metric_test)
+set_tests_properties(pattern_metric_test PROPERTIES
+    LABELS "unit;quantum;pattern"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )

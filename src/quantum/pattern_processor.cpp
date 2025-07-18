@@ -129,8 +129,8 @@ sep::SEPResult PatternProcessor::init(quantum::GPUContext* ctx) {
         {
             return sep::SEPResult::INVALID_ARGUMENT;
         }
-        CUDA_CHECK(cudaSetDevice(ctx->device_id));
-        CUDA_CHECK(cudaStreamCreate(&ctx->default_stream));
+        CUDA_CHECK(::cudaSetDevice(ctx->device_id));
+        CUDA_CHECK(::cudaStreamCreate(&ctx->default_stream));
         ctx->initialized = true;
     }
     return sep::SEPResult::SUCCESS;

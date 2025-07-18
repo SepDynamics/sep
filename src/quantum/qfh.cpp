@@ -103,10 +103,16 @@ QFHResult QFHBasedProcessor::analyze(const std::vector<uint8_t>& bits) {
     
     // Calculate ratios
     if (!result.events.empty()) {
-        result.rupture_ratio = static_cast<float>(result.rupture_count) / 
+        result.rupture_ratio = static_cast<float>(result.rupture_count) /
                                static_cast<float>(result.events.size());
-        result.flip_ratio = static_cast<float>(result.flip_count) / 
+        result.flip_ratio = static_cast<float>(result.flip_count) /
                             static_cast<float>(result.events.size());
+    }
+
+    // Enhance ratios with variance
+    if (!result.events.empty()) {
+        result.rupture_ratio *= (1.0f + result.rupture_count / (result.flip_count + 1e-6f));  // Boost if many ruptures
+        result.flip_ratio = std::clamp(result.flip_ratio * 1.5f, 0.0f, 1.0f);  // Amplify flips for dynamic data
     }
     
     // Detect collapse

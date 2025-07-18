@@ -21,20 +21,20 @@
 #endif
 
 // Disable problematic fp8 and half precision conversions
-#ifndef __CUDA_NO_FP8_CONVERSIONS__
-#define __CUDA_NO_FP8_CONVERSIONS__ 1
+#ifndef SEP_CUDA_NO_FP8_CONVERSIONS
+#define SEP_CUDA_NO_FP8_CONVERSIONS 1
 #endif
 
-#ifndef __CUDA_NO_HALF_OPERATORS__
-#define __CUDA_NO_HALF_OPERATORS__ 1
+#ifndef SEP_CUDA_NO_HALF_OPERATORS
+#define SEP_CUDA_NO_HALF_OPERATORS 1
 #endif
 
-#ifndef __CUDA_NO_HALF2_OPERATORS__
-#define __CUDA_NO_HALF2_OPERATORS__ 1
+#ifndef SEP_CUDA_NO_HALF2_OPERATORS
+#define SEP_CUDA_NO_HALF2_OPERATORS 1
 #endif
 
-#ifndef __CUDA_NO_BFLOAT16_CONVERSIONS__
-#define __CUDA_NO_BFLOAT16_CONVERSIONS__ 1
+#ifndef SEP_CUDA_NO_BFLOAT16_CONVERSIONS
+#define SEP_CUDA_NO_BFLOAT16_CONVERSIONS 1
 #endif
 
 // Define CUDA device/host function qualifiers
@@ -102,21 +102,21 @@ inline cudaError_t memcpyFromDevice(void* dst, const void* src, std::size_t size
 #else
 // Provide stub implementations when CUDA is not available
 inline cudaError_t deviceSynchronize() {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 inline cudaError_t memcpyToDevice(void* dst, const void* src, std::size_t size) {
     if (dst && src && size > 0) {
         std::memcpy(dst, src, size);
     }
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 inline cudaError_t memcpyFromDevice(void* dst, const void* src, std::size_t size) {
     if (dst && src && size > 0) {
         std::memcpy(dst, src, size);
     }
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 #endif
 

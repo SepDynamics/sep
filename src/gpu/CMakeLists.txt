@@ -13,5 +13,16 @@ if(SEP_ENABLE_CUDA)
         PUBLIC
             sep_gpu_interface
     )
+    # Create both aliases for compatibility
     add_library(sep::gpu ALIAS sep_gpu_cuda)
+    add_library(sep_gpu ALIAS sep_gpu_cuda)
+    
+    # Install the libraries
+    install(TARGETS sep_gpu_cuda sep_gpu_interface
+        EXPORT sep-targets
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
 endif()

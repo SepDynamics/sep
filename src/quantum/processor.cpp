@@ -311,9 +311,9 @@ public:
 
 private:
     void evolveQuantumState(QuantumState& state) {
-        state.entropy *= 0.95f;
-        float coherence_change = state.stability * 0.01f - (1.0f - state.stability) * 0.02f;
-        state.coherence = glm::clamp(state.coherence + coherence_change, 0.0f, 1.0f);
+        state.entropy *= 0.95f;  // Decay
+        float coherence_change = state.stability * 0.05f - (1.0f - state.stability) * 0.01f;  // Slower decay
+        state.coherence = glm::clamp(state.coherence + coherence_change, 0.1f, 1.0f);  // Min 0.1
         state.stability = glm::mix(state.stability, state.coherence, 0.1f);
         state.generation++;
     }
@@ -322,9 +322,9 @@ private:
         static uint64_t noise_state = 0;
         
         auto rnd = [&]() { return deterministicNoise(noise_state); };
-        state.coherence = glm::clamp(state.coherence + (rnd() * 2.0f - 1.0f) * config_.mutation_rate, 0.0f, 1.0f);
+        state.coherence = glm::clamp(state.coherence + (rnd() * 0.4f - 0.2f), 0.1f, 1.0f);  // Wider range
         state.stability = glm::clamp(state.stability + (rnd() * 2.0f - 1.0f) * config_.mutation_rate * 0.5f, 0.0f, 1.0f);
-        state.entropy = glm::clamp(state.entropy + (rnd() * 2.0f - 1.0f) * config_.mutation_rate * 2.0f, 0.0f, 1.0f);
+        state.entropy = glm::clamp(state.entropy + rnd() * 0.3f - 0.15f, 0.0f, 1.0f);
         state.mutation_rate *= (1.0f + (rnd() * 2.0f - 1.0f) * 0.1f);
         state.mutation_count++;
     }

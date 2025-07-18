@@ -5,12 +5,15 @@
 #include <memory>
 #include <vector>
 
-#include "blender/types.h"  // SEPBlenderBridge definition
 #include "compat/cuda_unified.h"
+#include "compat/types.h"  // For QSHResult definition
 #include "core/common.h"
 #include "core/config.h"
 #include "core/types.h"
 #include "quantum/qbsa.h"
+#include "quantum/pattern_metric_engine.h"
+#include "quantum/quantum_processor.h"
+#include "core/metrics_collector.h"
 
 namespace sep {
 namespace cuda {
@@ -20,12 +23,6 @@ class DeviceMemory;
 using StreamPtr = std::shared_ptr<Stream>;
 struct QSHResult;
 }  // namespace cuda
-namespace audio {
-class AudioCapture;
-}  // namespace audio
-namespace pattern {
-class BlenderBridge;
-}  // namespace pattern
 }  // namespace sep
 
 namespace sep {
@@ -63,6 +60,9 @@ class Engine {
                       sep::quantum::QBSAResult &qbsa_result,
                       sep::cuda::QSHResult &qsh_result);
 
+  // Process quantitative data (market data, etc.)
+  std::string processQuantData(const std::string &dataPath, bool useGPU = true);
+
   // DAG accessors
   struct StateNode {
     std::uint64_t tick{0};
@@ -75,16 +75,20 @@ class Engine {
 
   std::vector<float> getCoherenceHistory() const;
 
+  void ingestFile(const std::string& dataPath, bool legacy = false);
+  void ingestFromDirectory(const std::string& dirPath, bool recursive = true);
+  void ingestFromSocket(int socket_fd);
+  void ingestFromStream(std::istream& stream);
+
  private:
   static constexpr size_t DEFAULT_SIZE = 1024;
   static constexpr size_t PAIRS_PER_CHUNK = 32;  // WARP_SIZE
 
   struct Impl;
   std::unique_ptr<Impl> impl_;
-
-  // Managed components
-  std::unique_ptr<::sep::audio::AudioCapture> audio_capture_;
-  std::unique_ptr<SEPBlenderBridge> blender_bridge_;
+  sep::quantum::PatternMetricEngine pattern_metric_engine_;
+  std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor_;
+  MetricsCollector metrics_collector_;
 };
 
 }  // namespace core

@@ -12,13 +12,14 @@ set(SEP_CORE_LIBS
 
 cmake_minimum_required(VERSION 3.15)
 
+set(CMAKE_C_COMPILER /usr/bin/gcc)
+set(CMAKE_CXX_COMPILER /usr/bin/g++)
+
 # Enable POSIX features for popen/pclose
 add_compile_definitions(_POSIX_C_SOURCE=200809L)
 add_definitions(-D_GNU_SOURCE)
-add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 # Also propagate POSIX feature macros to all targets
 add_compile_definitions(_POSIX_C_SOURCE=200809L)
-add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
 # Load CUDA toolchain file before project declaration
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
@@ -28,6 +29,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
+# Enable CUDA language
 project(sep_engine VERSION 1.0.0 LANGUAGES C CXX)
 
 # Enable testing at the top-level so subdirectories can register tests
@@ -54,10 +56,19 @@ option(SEP_WORKBENCH_DEMO "Build sep_workbench in demo mode" OFF)
 option(SEP_BUILD_ENGINE "Build the main engine component" ON)
 option(SEP_BUILD_QUANTUM "Build quantum processing components" ON)
 option(SEP_BUILD_TESTS "Build test components" ON)
+option(SEP_BUILD_EXAMPLES "Build example components" ON)
 option(SEP_BUILD_WORKBENCH "Build the interactive sep_workbench visualization" OFF)
 option(SEP_USE_TBB "Enable TBB parallel features" ON)
 option(SEP_HAS_EXCEPTIONS "Enable C++ exceptions" ON)
 option(SEP_MINIMAL "Enable minimal build with core components only" ON)
+
+# Force disable the following components for minimal quant build
+set(SEP_BUILD_WORKBENCH OFF CACHE BOOL "Build the interactive sep_workbench visualization" FORCE)
+set(SEP_WORKBENCH_DEMO OFF CACHE BOOL "Build sep_workbench in demo mode" FORCE)
+set(SEP_WITH_OPENIMAGEIO OFF CACHE BOOL "Enable OpenImageIO support" FORCE)
+set(SEP_WITH_EMBREE OFF CACHE BOOL "Enable Embree support" FORCE)
+set(SEP_WITH_OSL OFF CACHE BOOL "Enable OpenShadingLanguage support" FORCE)
+set(SEP_WITH_ALEMBIC OFF CACHE BOOL "Enable Alembic support" FORCE)
 
 if(SEP_MINIMAL)
     add_compile_definitions(SEP_MINIMAL=1)
@@ -74,17 +85,18 @@ include_directories(BEFORE
     $<BUILD_INTERFACE:/usr/src>
 )
 
-# Disable previously required components
-set(SEP_ENABLE_BLENDER OFF)
-set(SEP_ENABLE_AUDIO OFF)
-set(SEP_HAS_CYCLES 0)
-
 # Set CUDA compiler flags before enabling the language
 set(CMAKE_CUDA_FLAGS "-Xcompiler -fno-gnu-unique -Wno-deprecated-gpu-targets")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math --expt-relaxed-constexpr")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -include ${CMAKE_SOURCE_DIR}/src/compat/cuda_unified_fix.h")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=1")
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --extended-lambda --expt-relaxed-constexpr")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__STRICT_ANSI__=0")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --disable-warnings")
+
+# Set modern CUDA architectures
+set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
 
 # Set C++ standard before enabling CUDA
 set(CMAKE_CXX_STANDARD 17)
@@ -110,6 +122,12 @@ link_directories(${CMAKE_SOURCE_DIR}/lib)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # Temporarily disable -Werror to allow partial builds for testing during fixes
     add_compile_options(-Wall -Wextra)
+    # Add these flags to suppress common third-party warnings
+    add_compile_options(
+        -Wno-unicode
+        -Wno-objc-signed-char-bool
+        -Wno-redundant-move
+    )
     # Uncomment the line below when all issues are fixed
     # add_compile_options(-Wall -Wextra -Werror)
 endif()
@@ -139,34 +157,14 @@ find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(http_parser REQUIRED)
-find_package(glm REQUIRED)
 find_package(spdlog)
-find_package(OpenGL REQUIRED)
-if(SEP_BUILD_WORKBENCH)
-    # GLFW package is typically exported as glfw3 on many systems
-    find_package(glfw3 REQUIRED)
-    # Use our custom FindGLEW.cmake module
-    find_package(GLEW REQUIRED)
-endif()
 if(spdlog_FOUND)
     message(STATUS "Using system spdlog")
 else()
     message(WARNING "spdlog not found, falling back to stub implementation")
     add_compile_definitions(SEP_SPDLOG_FALLBACK)
 endif()
-find_package(OpenVDB REQUIRED)
-if(SEP_WITH_OPENSUBDIV)
-    find_package(OpenSubdiv REQUIRED)
-endif()
-if(SEP_WITH_OPENPGL)
-    find_package(OpenPGL REQUIRED)
-endif()
-if(SEP_WITH_OCIO)
-    find_package(OpenColorIO REQUIRED)
-endif()
-find_package(Imath REQUIRED)
 
-# Set TBB_ROOT to prefer the newer TBB 12.x version only when a valid path exists
 if(NOT DEFINED ENV{TBB_ROOT})
   if(EXISTS "/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
     set(ENV{TBB_ROOT} "/home/ajn/Documents/AVarietyOShit/BUILTASF/tbb")
@@ -178,33 +176,26 @@ if(SEP_USE_TBB)
     add_compile_definitions(SEP_USE_TBB)
     find_package(TBB REQUIRED)
 endif()
-if(SEP_WITH_OPENIMAGEIO)
-    find_package(OpenImageIO REQUIRED)
-endif()
-if(SEP_WITH_EMBREE)
-    find_package(embree REQUIRED)
-endif()
-if(SEP_WITH_OSL)
-    find_package(OSL REQUIRED)
-endif()
 
-if(SEP_WITH_ALEMBIC)
-    find_package(Alembic REQUIRED)
-endif()
-
-# Build ImGui from the bundled third_party source
-add_subdirectory(third_party/imgui)
 
 # Add CUDA-specific optimizations for dedicated GPU access
 add_compile_options(-DSEP_CUDA_DEDICATED_GPU=1)
 add_compile_options(-DSEP_CUDA_CORE_AFFINITY=1)
 
-# Set CUDA compute capability for specific GPU architecture
 # These are reasonable defaults for modern NVIDIA GPUs
 set(CMAKE_CUDA_ARCHITECTURES "75;80;86" CACHE STRING "CUDA architectures")
 
 # Add the src directory which contains all module subdirectories and workbench
 add_subdirectory(src)
+
+if(SEP_BUILD_TESTS)
+    add_subdirectory(extern/googletest)
+    add_subdirectory(src/tests)
+endif()
+
+if(SEP_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 # Export and install targets
 include(GNUInstallDirs)
@@ -270,3 +261,8 @@ if(SEP_GPU_EXCLUSIVE_ACCESS)
     message(STATUS "Configuring exclusive GPU access for CUDA operations")
     add_compile_definitions(SEP_EXCLUSIVE_GPU_ACCESS=1)
 endif()
+
+set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON CACHE BOOL "Enable downloading of dependencies")
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Enable testing of the benchmark library." FORCE)
+set(BENCHMARK_ENABLE_WERROR OFF CACHE BOOL "Build Release candidates with -Werror." FORCE)
+add_subdirectory(extern/benchmark)

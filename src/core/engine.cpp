@@ -24,14 +24,14 @@
 #include <cstring>
 #include <cstring>  // For std::memcpy, std::memcmp if used in headers
 #include <exception>
+#include <nlohmann/json.hpp>
 #include <numeric>
+#include <sstream>
 #include <vector>
+#include <filesystem>
+#include <iostream>
 
 #include "api/types.h"
-#include "audio/capture.h"
-#include "audio/factory.h"
-#include "blender/pattern_bridge.h"
-#include "blender/types.h"  // For SEPBlenderBridge definition
 #include "compat/core.h"
 #include "compat/cuda_api.hpp"
 #include "compat/cuda_common.h"
@@ -39,8 +39,10 @@
 #include "compat/shim.h"
 #include "compat/stream.h"
 #include "core/common.h"  // defines sep::SEPResult
-#include "core/engine.h"
 #include "core/config.h"
+#include "core/dag_graph.h"
+#include "core/data_parser.h"
+#include "core/engine.h"
 #include "core/error_handler.h"
 #include "core/logging.h"  // This is actually the logging manager
 #include "core/types.h"
@@ -71,7 +73,10 @@ struct Engine::Impl {
   bool initialized{false};
 };
 
-Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {}
+Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {
+    sep::quantum::QuantumProcessor::Config config;
+    quantum_processor_ = sep::quantum::createQuantumProcessor(config);
+}
 
 bool Engine::init(const sep::config::CudaConfig &config)
 {
@@ -87,12 +92,12 @@ bool Engine::init(const sep::config::CudaConfig &config)
 
 #ifdef SEP_HAS_AUDIO
   printf("DEBUG: Engine::init - Initializing audio capture\n");
-  fflush(stdout);
+  (void)fflush(stdout);
 #endif
 
   // Core initialization only - specialized components are initialized in main
   printf("DEBUG: Engine::init - Setting initialized flag\n");
-  fflush(stdout);
+  (void)fflush(stdout);
 
   impl_->initialized = true;
   return true;
@@ -104,27 +109,11 @@ void Engine::run() {
       return;
   }
 
-#ifdef SEP_HAS_AUDIO
-  if (audio_capture_) {
-    auto result = audio_capture_->start();
-    if (result != audio::AudioError::NONE) {
-      spdlog::error("Failed to start audio capture: {}",
-                    static_cast<int>(result));
-    }
-  }
-#endif
+  // (Removed audio capture start - not needed for quant processing)
 }
 
 void Engine::shutdown() {
-#ifdef SEP_HAS_AUDIO
-  if (audio_capture_) {
-    auto result = audio_capture_->stop();
-    if (result != audio::AudioError::NONE) {
-      spdlog::error("Failed to stop audio capture: {}",
-                    static_cast<int>(result));
-    }
-  }
-#endif
+  // (Removed audio capture stop - not needed for quant processing)
 }
 
 namespace {
@@ -292,6 +281,155 @@ std::vector<float> Engine::getCoherenceHistory() const {
     history.push_back(n.coherence);
   }
   return history;
+}
+
+void Engine::ingestFile(const std::string& dataPath, bool legacy) {
+    metrics_collector_.increment("files_ingested");
+    if (legacy) {
+        DataParser parser;
+        auto patterns = parser.parseFile(dataPath);
+        auto pinStates = parser.toPinStates(patterns);
+        metrics_collector_.increment("patterns_converted_to_pin_states", patterns.size());
+        // Assuming process_batch is the intended consumer for PinStates
+        // process_batch(pinStates, ...);
+    } else {
+        pattern_metric_engine_.ingestFile(dataPath);
+        pattern_metric_engine_.evolvePatterns();
+        auto metrics = pattern_metric_engine_.computeMetrics();
+        metrics_collector_.increment("patterns_processed", metrics.size());
+        for (size_t i = 0; i < metrics.size(); ++i) {
+            // This is a placeholder for a more sophisticated mapping
+            // between PatternMetrics and the QuantumProcessor's representation.
+            quantum_processor_->processPattern(glm::vec3(metrics[i].coherence, metrics[i].stability, metrics[i].entropy), i);
+        }
+    }
+}
+
+void Engine::ingestFromDirectory(const std::string& dirPath, bool recursive) {
+    std::vector<std::string> filePaths;
+    if (recursive) {
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(dirPath)) {
+            if (entry.is_regular_file()) {
+                filePaths.push_back(entry.path().string());
+            }
+        }
+    } else {
+        for (const auto& entry : std::filesystem::directory_iterator(dirPath)) {
+            if (entry.is_regular_file()) {
+                filePaths.push_back(entry.path().string());
+            }
+        }
+    }
+
+    const size_t batch_size = 16;
+    for (size_t i = 0; i < filePaths.size(); i += batch_size) {
+        // This is a placeholder for parallel processing
+        for (size_t j = i; j < std::min(i + batch_size, filePaths.size()); ++j) {
+            ingestFile(filePaths[j], false);
+        }
+    }
+}
+
+void Engine::ingestFromSocket(int socket_fd) {
+    // This is a placeholder implementation.
+    // A real implementation would use a library like Asio or Boost.Asio
+    // to wrap the socket file descriptor in a stream object.
+    // For now, we'll just log a message.
+    std::cout << "Ingesting from socket: " << socket_fd << std::endl;
+}
+
+void Engine::ingestFromStream(std::istream& stream) {
+    pattern_metric_engine_.ingestData(stream);
+    pattern_metric_engine_.evolvePatterns();
+}
+
+std::string Engine::processQuantData(const std::string &dataPath, bool useGPU)
+{
+    try
+    {
+        // Create data parser
+        DataParser parser;
+
+        // Parse the data file (auto-detects format)
+        auto patterns = parser.parseFile(dataPath);
+
+        if (patterns.empty())
+        {
+            nlohmann::json error_json;
+            error_json["error"] = "No patterns parsed from file";
+            error_json["file"] = dataPath;
+            return error_json.dump();
+        }
+
+        // Process patterns to calculate basic metrics
+        // The quantum algorithms would normally calculate coherence
+        // For now, we'll use simple heuristics based on price volatility
+        
+        for (auto &pattern : patterns)
+        {
+            // Calculate simple volatility metric from OHLC
+            float range = pattern.position.y - pattern.position.z; // high - low
+            float avg_price = (pattern.position.x + pattern.position.w) / 2.0f; // (open + close) / 2
+            float volatility = (range / avg_price) * 100.0f; // percentage
+            
+            // Simple coherence calculation (inverse of volatility)
+            pattern.coherence = 1.0f / (1.0f + volatility * 0.01f);
+            pattern.quantum_state.coherence = pattern.coherence;
+            pattern.quantum_state.stability = pattern.coherence;
+            pattern.quantum_state.energy = volatility;
+        }
+
+        // Build DAG for correlations
+        ::sep::dag::DagGraph dag;
+
+        // Add patterns to DAG
+        for (const auto &pattern : patterns)
+        {
+            std::vector<uint64_t> parents;  // No parents for initial patterns
+
+            // Extract position as vec3 for DAG
+            glm::vec3 pos(pattern.position.x, pattern.position.y, pattern.position.z);
+
+            // Add to DAG with market data if available
+            if (!pattern.data.empty())
+            {
+                float volume = pattern.data[0];
+                dag.addMarketDataNode(pos, pattern.coherence, pattern.position.w, 0.0f, volume,
+                                      parents);
+            }
+            else
+            {
+                dag.addNode(pos, pattern.coherence, parents);
+            }
+        }
+
+        // Calculate correlations and metrics
+        dag.calculateNodeCorrelations();
+        dag.calculateTailRisk();
+        dag.calculateAlpha();
+
+        // Export results as JSON
+        std::string result = dag.exportAsJson();
+
+        // Add processing metadata
+        nlohmann::json metadata;
+        metadata["patterns_processed"] = patterns.size();
+        metadata["gpu_enabled"] = useGPU;
+        metadata["file"] = dataPath;
+
+        // Parse existing result and add metadata
+        nlohmann::json final_json = nlohmann::json::parse(result);
+        final_json["metadata"] = metadata;
+
+        return final_json.dump(2);  // Pretty print with 2-space indent
+    }
+    catch (const std::exception &e)
+    {
+        nlohmann::json error_json;
+        error_json["error"] = e.what();
+        error_json["file"] = dataPath;
+        return error_json.dump();
+    }
 }
 
 } // namespace core

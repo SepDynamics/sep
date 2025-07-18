@@ -1,5 +1,5 @@
 #pragma once
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuninitialized"
-#include <cetintrin.h>
+#include <immintrin.h>
 #pragma clang diagnostic pop

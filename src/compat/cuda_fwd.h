@@ -6,22 +6,20 @@
 
 // Configuration macro if not already defined
 #ifndef SEP_ENGINE_HAS_CUDA
-#define SEP_ENGINE_HAS_CUDA 0
+#define SEP_ENGINE_HAS_CUDA 1
 #endif
 
-#if SEP_ENGINE_HAS_CUDA
-// When CUDA is available, include minimal CUDA headers for type definitions
-#include <driver_types.h>
-#else
-// When CUDA is not available, forward declare the types
+// Only define types if CUDA runtime is not available
+#if !SEP_ENGINE_HAS_CUDA
+
+// Global namespace forward declarations of CUDA types for non-CUDA builds
 typedef int cudaError_t;
 typedef void* cudaStream_t;
 typedef void* cudaEvent_t;
 struct cudaDeviceProp;
+typedef int cufftHandle;
 
 // Define cudaMemcpyKind enum for non-CUDA builds
-#if !defined(SEP_CUDA_MEMCPYKIND_DEFINED)
-#define SEP_CUDA_MEMCPYKIND_DEFINED
 enum cudaMemcpyKind
 {
     cudaMemcpyHostToHost = 0,
@@ -30,7 +28,32 @@ enum cudaMemcpyKind
     cudaMemcpyDeviceToDevice = 3,
     cudaMemcpyDefault = 4
 };
+
+// Define error constants as enum values to avoid macro conflicts
+enum {
+    SEP_CUDA_SUCCESS = 0,
+    SEP_CUDA_ERROR_MEMORY_ALLOCATION = 2
+};
+
+#else
+// When CUDA is available, include the actual CUDA headers
+#include <driver_types.h>
+#include <cuda_runtime_api.h>
+
+// Use CUDA's actual values
+#ifndef SEP_CUDA_SUCCESS
+#define SEP_CUDA_SUCCESS cudaSuccess
 #endif
+#define SEP_CUDA_ERROR_MEMORY_ALLOCATION cudaErrorMemoryAllocation
+#endif
+
+// Define stream flags that were missing
+#ifndef SEP_cudaStreamNonBlocking
+#define SEP_cudaStreamNonBlocking 0x01
+#endif
+
+#ifndef SEP_cudaStreamDefault
+#define SEP_cudaStreamDefault 0x00
 #endif
 
 #endif // SEP_COMPAT_CUDA_FWD_H

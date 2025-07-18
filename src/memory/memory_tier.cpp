@@ -57,8 +57,8 @@ namespace sep::memory
             memory_pool_ = std::malloc(config.size);
 #if SEP_MEMORY_HAS_CUDA
             cuda::cudaError_t err =
-                memory_pool_ ? cuda::cudaSuccess : cuda::cudaErrorMemoryAllocation;
-            if (err != cuda::cudaSuccess)
+                memory_pool_ ? cuda::Success : cuda::MemoryAllocation;
+            if (err != cuda::Success)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
                 if (logger) logger->error("Failed to allocate host memory: {}", err);
@@ -83,9 +83,8 @@ namespace sep::memory
             }
 #else
             memory_pool_ = std::malloc(config.size);
-            cuda::cudaError_t err =
-                memory_pool_ ? cuda::cudaSuccess : cuda::cudaErrorMemoryAllocation;
-            if (err != cuda::cudaSuccess)
+            cuda::cudaError_t err = memory_pool_ ? cuda::Success : cuda::MemoryAllocation;
+            if (err != cuda::Success)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
                 if (logger) logger->error("Failed to allocate host memory: {}", err);
@@ -140,7 +139,7 @@ namespace sep::memory
             else
             {
 #if SEP_MEMORY_HAS_CUDA
-                cudaFree(memory_pool_);
+                ::cudaFree(memory_pool_);
 #else
                 std::free(memory_pool_);
 #endif
@@ -295,7 +294,7 @@ namespace sep::memory
 #if SEP_MEMORY_HAS_CUDA
                     cuda::cudaError_t err = cuda::cudaMemcpyAsync(
                         new_location, block.ptr, block.size, cuda::cudaMemcpyDefault, nullptr);
-                    if (err != cuda::cudaSuccess)
+                    if (err != cuda::Success)
                     {
                         if (logger)
                         {
@@ -304,7 +303,7 @@ namespace sep::memory
                         return ::sep::SEPResult::CUDA_ERROR;
                     }
                     err = cuda::cudaStreamSynchronize(nullptr);
-                    if (err != cuda::cudaSuccess)
+                    if (err != cuda::Success)
                     {
                         if (logger)
                         {
@@ -467,7 +466,7 @@ namespace sep::memory
 #if SEP_MEMORY_HAS_CUDA
         cuda::cudaError_t err =
             cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cuda::cudaMemcpyDefault, nullptr);
-        if (err != cuda::cudaSuccess)
+        if (err != cuda::Success)
         {
             if (logger)
             {
@@ -479,7 +478,7 @@ namespace sep::memory
         else
         {
             err = cuda::cudaStreamSynchronize(nullptr);
-            if (err != cuda::cudaSuccess)
+            if (err != cuda::Success)
             {
                 if (logger)
                 {
@@ -583,8 +582,8 @@ namespace sep::memory
         else
         {
 #if SEP_MEMORY_HAS_CUDA
-            cudaError_t err = ::sep::cuda::allocateManaged(&new_pool, new_size);
-            if (err != cudaSuccess)
+            ::cudaError_t err = ::sep::cuda::allocateManaged(&new_pool, new_size);
+            if (err != ::cudaSuccess)
             {
                 if (logger)
                 {
@@ -595,8 +594,8 @@ namespace sep::memory
             }
 #else
             new_pool = std::malloc(new_size);
-            cuda::cudaError_t err = new_pool ? cuda::cudaSuccess : cuda::cudaErrorMemoryAllocation;
-            if (err != cuda::cudaSuccess)
+            cuda::cudaError_t err = new_pool ? cuda::Success : cuda::MemoryAllocation;
+            if (err != cuda::Success)
             {
                 if (logger)
                 {
@@ -699,7 +698,7 @@ namespace sep::memory
         if (!canAcceptPattern(pattern)) return;
         // PatternData doesn't have id or memory_tier fields
         // Just store the pattern as is
-        m_patterns[id] = std::move(pattern);
+        m_patterns[id] = pattern;
     }
 
     void MemoryTier::removePattern(size_t id) { m_patterns.erase(id); }
@@ -739,7 +738,7 @@ namespace sep::memory
     void MemoryTier::checkAndCleanupSTM()
     {
         // Get cleanup threshold from config
-        float /*cleanup_threshold*/ = 0.9f;  // Default to 90% if not specified
+        // float cleanup_threshold = 0.9f;  // Default to 90% if not specified
 
         // Check if we're above the max patterns threshold
         if (m_patterns.size() >= m_max_patterns)

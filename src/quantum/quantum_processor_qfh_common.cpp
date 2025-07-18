@@ -70,11 +70,12 @@ float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
         // The first pattern is perfectly coherent with itself.
         coherence = 1.0f;
     } else {
-        // Find the maximum coherence with any existing pattern.
+        // Calculate the average coherence with all existing patterns.
         coherence = 0.0f;
         for (const auto& existing : m_patterns) {
-            coherence = std::max(coherence, vectorCoherence(pattern, existing));
+            coherence += vectorCoherence(pattern, existing);
         }
+        coherence /= m_patterns.size();
     }
 
     // Store the original, non-normalized pattern for future comparisons.

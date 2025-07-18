@@ -61,6 +61,7 @@ target_link_libraries(pattern_metric_test PRIVATE
     sep_core
     sep_quantum
     sep_compat
+    TBB::tbb
 )
 
 target_include_directories(pattern_metric_test PRIVATE
@@ -70,4 +71,5 @@ target_include_directories(pattern_metric_test PRIVATE
 add_test(NAME pattern_metric_test COMMAND pattern_metric_test)
 set_tests_properties(pattern_metric_test PROPERTIES
     LABELS "unit;quantum;pattern"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )

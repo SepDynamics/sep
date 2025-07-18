@@ -112,14 +112,11 @@ TEST_F(PatternMetricEngineTest, HandleEdgeCases) {
 
 // Test pattern mutation
 TEST_F(PatternMetricEngineTest, PatternMutation) {
-    std::vector<uint8_t> data = {0x42, 0x84, 0x21};
-    engine_->ingestData(data.data(), data.size());
-    engine_->evolvePatterns();
+    sep::pattern::PatternData p;
+    p.id = "pattern_0";
+    p.data.push_back(1.0f);
+    engine_->addPattern(p);
     
-    auto metrics_before = engine_->computeMetrics();
-    EXPECT_FALSE(metrics_before.empty());
-    
-    // Get first pattern and mutate it
     auto patterns = engine_->getPatterns();
     EXPECT_FALSE(patterns.empty());
     

@@ -44,7 +44,7 @@ target_link_libraries(sep_engine PRIVATE
     sep_embeddings
     sep_core
     sep_compat
-    sep_gpu
+    sep::gpu
     Threads::Threads
     CUDA::cudart
     CUDA::cuda_driver

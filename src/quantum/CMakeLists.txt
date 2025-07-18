@@ -1,5 +1,3 @@
-
-
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/quantum/
         DESTINATION include/sep/quantum
@@ -48,8 +46,8 @@ target_link_libraries(sep_quantum
         sep_compat
 )
 
-# Enable CUDA
-find_package(CUDA REQUIRED)
+# Set modern CUDA policy
+cmake_policy(SET CMP0146 NEW)
 
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_quantum PRIVATE
@@ -62,17 +60,13 @@ target_compile_definitions(sep_quantum PRIVATE
 target_sources(sep_quantum PRIVATE
     qbsa_cuda.cu)
 
-# Set CUDA flags
-set_source_files_properties(qbsa_cuda.cu PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_PTX_COMPILATION OFF)
-
 # Set CUDA architecture
 set_property(TARGET sep_quantum PROPERTY CUDA_ARCHITECTURES 70 75 80)
 
 # Link CUDA runtime
 target_link_libraries(sep_quantum PRIVATE
-    CUDA::cudart)
+    CUDA::cudart
+    CUDA::cuda_driver)
 
 # Set library properties
 set_target_properties(sep_quantum PROPERTIES

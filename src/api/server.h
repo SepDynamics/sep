@@ -30,7 +30,7 @@ namespace crow {
 }  // namespace crow
 namespace sep
 {
-    namespace sep::api
+    namespace api
     {
         class CrowRequest;
 
@@ -65,8 +65,14 @@ namespace sep
             /**
              * @brief Construct a new SEPApiServer
              * @param config The API configuration
-             * @param renderer Cycles renderer
+             * @param renderer Cycles renderer (can be nullptr)
              */
+            SEPApiServer(const AuthConfig& config, std::nullptr_t)
+                : config_(config), running_(false) {
+                setup_logging();
+                app_ = std::make_unique<::crow::Crow<RateLimitMiddleware, AuthMiddleware>>();
+                instance_ = this;
+            }
 
             /**
              * @brief Destructor

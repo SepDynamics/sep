@@ -37,7 +37,12 @@
 #include "core/dag_graph.h"
 #include "crow/crow_isolation.h"
 
-namespace sep::api {
+namespace sep {
+namespace api {
+
+// Define static instance
+SEPApiServer* SEPApiServer::instance_ = nullptr;
+
 
 SEPApiServer::~SEPApiServer() {
   if (running_.load()) {
@@ -940,5 +945,6 @@ void SEPApiServer::handleSignal(int signal) {
   }
 }
 
-} // namespace sep::api
+}  // namespace api
+}  // namespace sep
 

@@ -1,98 +1,56 @@
-# SEP Engine Build System
+# SEP Engine for Predictive Financial Modeling
 
-This repository contains the SEP Engine, a high-performance C++ framework for quantum-inspired pattern analysis and evolution, along with supporting JavaScript/TypeScript tools.
+This repository contains the **SEP Engine**, a high-performance C++ framework for quantum-inspired pattern analysis, specifically tailored for developing and validating predictive financial models. The goal of this project is to create a "predictive gauge" for financial markets by analyzing historical forex data.
 
-## Project Structure
+## Project Goal
 
-- **C++ Components**: The core SEP Engine is written in C++ and built using CMake
-- **JavaScript/TypeScript Components**: Supporting tools written in TypeScript/JavaScript
-- **API Server**: Built as a separate executable (`sep_api_server`)
+The primary objective is to develop and validate a predictive financial gauge using the SEP Engine. This involves:
 
-## Build System
+*   **Performance Optimization**: Optimizing the engine's performance with CUDA to handle large-scale time-series data.
+*   **Predictive Gauge**: Defining a robust predictive metric that combines coherence, stability, and entropy to act as a leading indicator for market movements.
+*   **Backtesting**: Rigorously backtesting trading strategies based on the predictive gauge against historical data.
+*   **Automation**: Automating the entire workflow from data processing to analysis and reporting.
 
-The build system has been simplified to use npm for JavaScript/TypeScript components and make for C++ components.
+For a detailed breakdown of the project's phases and tasks, please see [`docs/TODO.md`](docs/TODO.md).
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- CMake 3.20+
-- C++ compiler with C++17 support (GCC 10+ or Clang 12+)
+*   CMake 3.20+
+*   A C++17 compliant compiler (GCC 10+, Clang 12+)
+*   NVIDIA CUDA Toolkit (for GPU acceleration)
+*   Python 3.x with pandas and other common data science libraries
 
-### Installation
+### Build and Run
 
-```bash
-# Install JavaScript dependencies
-npm install
+1.  **Configure and Build the Engine**:
+    ```bash
+    mkdir build
+    cd build
+    cmake ..
+    make
+    ```
 
-# Build C++ components
-make build-cpp
+2.  **Run the Experiment**:
+    The `run_experiment.sh` script automates the process of running the pattern metric engine on the training data and executing the backtesting script.
+    ```bash
+    ./run_experiment.sh
+    ```
 
-# Build JavaScript components
-make build-js
+## Project Structure
 
-# Or build everything at once
-make
-```
+*   `src/`: Core C++ source code for the SEP Engine.
+    *   `quantum/`: Quantum-inspired algorithms for pattern analysis.
+    *   `compat/`: CUDA compatibility layer for GPU acceleration.
+    *   `core/`: Core data structures and utilities.
+*   `docs/`: Project documentation, including the project roadmap and predictive gauge definition.
+*   `examples/`: Example executables, including `pattern_metric_example`.
+*   `scripts/`: Helper scripts for tasks like backtesting and data conversion.
 
-### Development
+## Key Components
 
-```bash
-# Start the development environment
-make dev
-
-# Watch for TypeScript changes
-make watch-tsc
-
-# Watch for bundle changes
-make watch-bundle
-```
-
-## Codebase Search
-
-The project includes a codebase search tool that integrates with the Model Context Protocol (MCP). This allows for semantic search across the codebase.
-
-### Using Codebase Search
-
-```bash
-# Start the codebase search MCP server
-make codebase-search
-
-# Or use npm directly
-npm run codebase-search
-```
-
-### MCP Integration
-
-The codebase search tool is available as an MCP server that can be used with compatible LLM interfaces. It provides the following capabilities:
-
-- Semantic search across the codebase
-- File content retrieval with line ranges
-- Integration with the SEP Engine API
-
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `make` | Build all components |
-| `make build-cpp` | Build C++ components only |
-| `make build-js` | Build JavaScript components only |
-| `make clean` | Clean build artifacts |
-| `make install` | Install dependencies |
-| `make dev` | Start development environment |
-| `make watch-tsc` | Watch for TypeScript changes |
-| `make watch-bundle` | Watch for bundle changes |
-| `make codebase-search` | Start codebase search server |
-
-## Project Components
-
-- **SEP Engine**: Core C++ engine for pattern analysis
-- **MCP Tool**: TypeScript tool for Model Context Protocol integration
-- **Codebase Search**: Semantic search tool for the codebase
-- **API Server**: Headless HTTP server built from `src/api_main.cpp`.
-
-### Identifier Cleanup Script
-Run the reserved identifier fixer to update legacy macros and guards:
-
-```bash
-python tools/fix_reserved_identifiers.py
-```
+*   **SEP Engine**: The core C++ engine for pattern analysis.
+*   **Predictive Gauge**: A composite metric for financial market prediction.
+*   **Backtesting Script**: A Python script (`financial_backtest.py`) for validating trading strategies.
+*   **Experiment Runner**: A shell script (`run_experiment.sh`) to automate the end-to-end workflow.

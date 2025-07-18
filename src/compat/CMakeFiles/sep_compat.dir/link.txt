@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsep_compat.a CMakeFiles/sep_compat.dir/stream.cpp.o CMakeFiles/sep_compat.dir/raii.cpp.o CMakeFiles/sep_compat.dir/cuda_impl.cpp.o
+/usr/bin/ranlib libsep_compat.a

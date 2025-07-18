@@ -1,21 +1,8 @@
-# Build artifacts (most frequent)
-tests/compositor_cpu/
-tests/cycles/
-tests/sequence_editing/
-Testing/
-tests/**/*_tests
-tests/io_curve_svg/
-sep_engine
-extern/*
-!extern/cycles/
-!extern/crow/
+# Build Artifacts
 build/
 _build/
 sep_build/
 sep-build/
-changes.diff
-docs/proofs/
-!docs/proofs/*.*
 out/
 dist/
 bin/
@@ -25,15 +12,15 @@ Makefile
 _work/
 _diag/
 _deps/
-!cmake/**
-output/
 .codechecker/
 opentelemetry-cpp/
 workspace/
-glm/doc/
 actions-runner/
+*build*/
+*/build/
+cmake-build-*/
 
-# Compiled files
+# Compiled Files
 *.o
 *.a
 *.so
@@ -43,52 +30,51 @@ actions-runner/
 *.lib
 *.dylib
 *.tar.gz
-
-# Dependencies (second most common)
-vendor/
-/sep/blender/
-cmake-make/
-intern/
-source/
-release/
-*.cmake
-!cmake/SEPConfig.cmake
-!extern/cycles/src/cmake/**
-!extern/cycles/src/cmake/*.cmake
-!extern/cycles/cmake/cuda-toolchain.cmake
-externals/
-boost/
-!third_party/
-!src/
-!include/
-tbb/
-temp/
-ollama/
-.turbo/
-
-#.vscode/
-.idea/
-.cache/
-*.swp
-*.swo
 *.cu.o
 *.device-link.o
 *.ptx
 *.cubin
 *.fatbin
 *.deb
-CMakeFiles/
-# Testing
-coverage/
-.nyc_output/
-test-results/
-.pytest_cache/
-asio/
-cmake_install.cmake
-.pnpm-store/
+
+# Dependencies
+vendor/
+extern/
+!extern/crow
+cmake-make/
+intern/
+source/
+release/
+externals/
+boost/
+tbb/
+temp/
+ollama/
+.turbo/
 node_modules/
-!extern/patches/
-blender-src/
+asio/
+third_party/glm/
+third_party/crow/
+
+# IDE & Editor Files
+.idea/
+.cache/
+*.swp
+*.swo
+# .vscode/
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+.Trash-1000/
+
+# Log & Data Files
+*.log
+logs/
+metrics.json
+market_data.csv
+*.sqlite
+*.nsys-rep
 
 # Security
 .env*
@@ -96,58 +82,27 @@ blender-src/
 *.pem
 secrets/
 
-# Modern build tools
-.next/
-.nuxt/
-.svelte-kit/
+# Testing
+coverage/
+.nyc_output/
+test-results/
+.pytest_cache/
 
-# Environment
-.env*
-*.log
-logs/
-
-# OS
-.DS_Store
-Thumbs.db
-.Trash-1000/
-
-# Generated files
+# Generated Files
 .embeddings/
-
 CMakeCache.txt
 build.ninja
 compile_commands.json
 .ninja_deps
 .ninja_log
-!CMakeLists.txt
 build.log
-src/workbench/sep_workbench
-include/workbench/build_log.txt
-assets/sep_engine
-blender
-!tests/blender/
-!include/blender/
-!src/blender/
-!tests/blender/
-!include/blender/cycles_renderer.h
-!src/blender/cycles_renderer.cpp
-!sep_engine/
-package-lock.json
-third_party/glm/
-cmake-nocuda/
-third_party/crow/
-src/sep_workbench
-
-# CMake generated files
-*.o
 cmake_install.cmake
-CMakeFiles/
-CMakeCache.txt
 CMakeScripts/
 CMakeTmp/
-# Build directories
-*build*/
-*/build/
-cmake-build-*/
+DartConfiguration.tcl
+
+# Project Specific
+sep_engine
 src/sep_api_server
-examples/
+profiling_results.txt
+changes.diff

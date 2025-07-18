@@ -1,8 +1,0 @@
-{
-  "scene": "complex",
-  "objects": [
-    {"type": "sphere", "location": [1,1,1]},
-    {"type": "cube", "location": [-1,-1,0]},
-    {"type": "camera", "location": [0,-5,2]}
-  ]
-}

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsep_memory.a CMakeFiles/sep_memory.dir/memory_tier.cpp.o CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o CMakeFiles/sep_memory.dir/memory_tier_manager_serialization.cpp.o CMakeFiles/sep_memory.dir/redis_manager.cpp.o CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o
+/usr/bin/ranlib libsep_memory.a

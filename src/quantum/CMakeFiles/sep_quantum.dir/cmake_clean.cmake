@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/sep_quantum.dir/evolution.cpp.o"
+  "CMakeFiles/sep_quantum.dir/evolution.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/manifold_config.cpp.o"
+  "CMakeFiles/sep_quantum.dir/manifold_config.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o"
+  "CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o"
+  "CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/pattern_metric_engine.cpp.o"
+  "CMakeFiles/sep_quantum.dir/pattern_metric_engine.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o"
+  "CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o"
+  "CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/processor.cpp.o"
+  "CMakeFiles/sep_quantum.dir/processor.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/qbsa.cpp.o"
+  "CMakeFiles/sep_quantum.dir/qbsa.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o"
+  "CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/qfh.cpp.o"
+  "CMakeFiles/sep_quantum.dir/qfh.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o"
+  "CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o"
+  "CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o"
+  "CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o"
+  "CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o.d"
+  "CMakeFiles/sep_quantum.dir/types_serialization.cpp.o"
+  "CMakeFiles/sep_quantum.dir/types_serialization.cpp.o.d"
+  "libsep_quantum.a"
+  "libsep_quantum.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/sep_quantum.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

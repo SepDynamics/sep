@@ -1,12 +1,6 @@
-The current state of the project, as reflected in the `TODO.md` and the provided scripts, indicates that the immediate focus is on resolving CUDA build issues, refining the financial analysis pipeline, and defining the predictive gauge for alpha prediction.
-
-Here's a refreshed `TODO.md` with a target focus on demonstrating alpha prediction:
-
----
-
 # TODO.md: Predictive Financial Modeling with SEP Engine
 
-**Last Updated:** July 18, 2025
+**Last Updated:** July 19, 2025  
 **Goal:** Develop and validate a predictive financial gauge using the SEP Engine on historical forex data. This involves optimizing the engine's performance with CUDA, defining a robust predictive metric, backtesting trading strategies, and documenting the results for a business proposal. The immediate focus is to achieve a demonstrable alpha prediction capability.
 
 **Key Principles:**
@@ -32,6 +26,9 @@ Here's a refreshed `TODO.md` with a target focus on demonstrating alpha predicti
     * Ready for testing the backtesting pipeline
     * `prepare_experiment_data.py` exists to split `OANDA.json` into train/test sets, which is crucial for walk-forward analysis.
 
+3.  **Defined CUDA Fix Plan**
+    * Documented detailed fix plan in `cuda_fix_plan.md` based on analysis of CMake files and build errors.
+
 ### In Progress
 
 1.  **Build System CUDA Issues (Critical)**
@@ -40,12 +37,11 @@ Here's a refreshed `TODO.md` with a target focus on demonstrating alpha predicti
         * `FindCUDA.cmake` searches for nvcc in wrong location (should be `/usr/local/cuda/bin/nvcc`)
         * Toolchain files set incorrect include paths (`${CUDA_PATH}/src` instead of `${CUDA_PATH}/include`)
         * Results in invalid path construction: `/usr/local/cuda-12.9/bin/include`
-    * **Required Fixes:**
-        * Fix `FindCUDA.cmake` line 18 to search in bin subdirectory.
-        * Update `cuda-toolchain.cmake` line 17 to use `/include`.
-        * Update `cuda-clang-toolchain.cmake` line 13 to use `/include`.
-        * Update `cuda-gcc-toolchain.cmake` to use correct paths.
-    * **Status:** Ready for implementation, detailed plan available in `cuda_fix_plan.md`.
+    * **Required Fixes:** As detailed in `cuda_fix_plan.md`:
+        * Update `FindCUDA.cmake` to search in `bin` subdirectory.
+        * Correct include paths in `cuda-toolchain.cmake`.
+        * Review and align `cuda-clang-toolchain.cmake` and `cuda-gcc-toolchain.cmake`.
+    * **Status:** Fix plan complete; implementation pending. Test build after changes.
 
 2.  **Profile CUDA Performance**
     * **Task:** Analyze the current SEP Engine implementation to identify performance bottlenecks.
@@ -108,7 +104,7 @@ Here's a refreshed `TODO.md` with a target focus on demonstrating alpha predicti
 ## Technical Debt & Issues
 
 ### Critical Issues
-1.  **CUDA Build System** - Multiple CMake configuration errors preventing compilation.
+1.  **CUDA Build System** - Multiple CMake configuration errors preventing compilation. Fix plan documented in `cuda_fix_plan.md`.
 2.  **`pattern_metric_example` output format** - `pattern_metric_example` outputs unstructured text instead of JSON, requiring parsing workaround in `run_alpha_experiment.py`.
 
 ### Minor Issues
@@ -119,12 +115,10 @@ Here's a refreshed `TODO.md` with a target focus on demonstrating alpha predicti
 
 ## Next Steps (Priority Order)
 
-1.  **Fix CUDA Build Issues** - Update all CMake files with correct paths as per `cuda_fix_plan.md`.
-2.  **Build SEP Engine** - Compile with CUDA support enabled.
+1.  **Implement CUDA Build Fixes** - Apply changes from `cuda_fix_plan.md` to CMake files.
+2.  **Build SEP Engine** - Compile with CUDA support enabled and verify successful build.
 3.  **Refine `pattern_metric_example` JSON Output**: Modify `pattern_metric_example.cpp` to output metrics in JSON format, eliminating the need for `parse_metrics_from_stream` in `run_alpha_experiment.py`.
 4.  **Test Pipeline** - Run complete experiment with `run_alpha_experiment.py` using OANDA train/test data to demonstrate alpha prediction and evaluate iterative training effectiveness.
 5.  **Profile Performance** - Use CUDA profiling tools (`nvprof` or `Nsight Systems`).
 6.  **Enhance Visualization** - Add charts to backtesting results in `financial_backtest.py`.
 7.  **Document Results** - Create comprehensive experiment documentation in `docs/proofs/poc_6_predictive_backtest.md`.
-
----

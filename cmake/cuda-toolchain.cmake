@@ -25,7 +25,7 @@ set(CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES "${CUDA_PATH}/include" CACHE STRING 
 
 set(CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES "${CUDA_PATH}/lib64;${CUDA_PATH}/targets/x86_64-linux/lib;${CUDA_PATH}/targets/x86_64-linux/lib/stubs" CACHE STRING "CUDA implicit link directories" FORCE)
 
-set(CMAKE_CUDA_IMPLICIT_LINK_LIBRARIES "cudart;cudart_static;cudadevrt;cuda;rt;pthread;dl" CACHE STRING "CUDA implicit libraries" FORCE)
+set(CMAKE_CUDA_IMPLICIT_LINK_LIBRARIES "cudart;rt;pthread;dl" CACHE STRING "CUDA implicit libraries" FORCE)
 
 set(CMAKE_CUDA_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "CUDA implicit framework directories" FORCE)
 
@@ -36,7 +36,8 @@ set(CMAKE_BUILD_RPATH "${CUDA_PATH}/lib64" CACHE STRING "Build rpath" FORCE)
 set(CMAKE_CUDA_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "CUDA implicit framework directories" FORCE)
 
 #Set CUDA host compiler - use absolute path without quotes
-set(CMAKE_CUDA_HOST_COMPILER /usr/bin/clang++-15 CACHE FILEPATH "Host compiler for CUDA" FORCE)
+# The host compiler is set via the CUDAHOSTCXX environment variable
+# set(CMAKE_CUDA_HOST_COMPILER /usr/bin/clang++-15 CACHE FILEPATH "Host compiler for CUDA" FORCE)
 
 # Enable CUDA support
 set(SEP_ENABLE_CUDA ON CACHE BOOL "Enable CUDA support" FORCE)

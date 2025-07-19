@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
+project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
 
 # Set CMAKE_LIBRARY_PATH to help find system libraries like librt
 set(CMAKE_LIBRARY_PATH "/usr/lib;/usr/lib64")
 
 # Temporarily disable CUDA related configurations
 # find_package(CUDAToolkit)
-set(SEP_USE_CUDA OFF)
+set(SEP_USE_CUDA ON)
 find_package(Threads REQUIRED)
 
 # Add custom cmake module path
@@ -22,8 +22,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Enable Clang-tidy with CUDA support
-set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*;-I/usr/local/cuda/include;--cuda-gpu-arch=sm_70")
+# Disable Clang-tidy integration for now (will run separately)
+# set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*")
 
 # Enable testing
 enable_testing()
@@ -62,7 +62,7 @@ if(SEP_USE_CUDA)
     endif()
     
     # Add CUDA compile options to avoid sin/cos issues
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler -Xcompiler -D__NV_NO_HOST_COMPILER_CHECK=1 -D_GLIBCXX_USE_CXX11_ABI=0 -Xcompiler -Wno-error=deprecated-declarations -Xcompiler -Wno-error=ignored-attributes -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -ccbin=/usr/bin/clang++-15")
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler -Xcompiler -D__NV_NO_HOST_COMPILER_CHECK=1 -D_GLIBCXX_USE_CXX11_ABI=0 -Xcompiler -Wno-error=deprecated-declarations -Xcompiler -Wno-error=ignored-attributes -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -ccbin=/usr/bin/clang++-15 -allow-unsupported-compiler")
     
     # Add librt to CUDA libraries for linking
     list(APPEND CMAKE_CUDA_LIBRARIES "rt")

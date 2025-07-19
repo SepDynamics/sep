@@ -1,28 +1,13 @@
 cmake_minimum_required(VERSION 3.15)
+project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
 
 # Set CMAKE_LIBRARY_PATH to help find system libraries like librt
 set(CMAKE_LIBRARY_PATH "/usr/lib;/usr/lib64")
 
-# Explicitly set CUDA host compiler
-set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/g++-14" CACHE FILEPATH "Host compiler for CUDA" FORCE)
-
-# Set CUDA architectures
-set(CMAKE_CUDA_ARCHITECTURES "70;75;80;86;89" CACHE STRING "CUDA architectures")
-set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -allow-unsupported-compiler -Xcompiler -D__NV_NO_HOST_COMPILER_CHECK=1 -D_GLIBCXX_USE_CXX11_ABI=0 -Xcompiler -Wno-error=deprecated-declarations -Xcompiler -Wno-error=ignored-attributes -D__NVCC_DIAG_PRAGMA_SUPPORT__=1")
-set(CMAKE_CUDA_COMPILER_ID_RUN_FLAGS "${CMAKE_CUDA_COMPILER_ID_RUN_FLAGS} -allow-unsupported-compiler -Xcompiler -D__NV_NO_HOST_COMPILER_CHECK=1 -D_GLIBCXX_USE_CXX11_ABI=0 -Xcompiler -Wno-error=deprecated-declarations -Xcompiler -Wno-error=ignored-attributes -D__NVCC_DIAG_PRAGMA_SUPPORT__=1")
-
-# Check if CUDA is available before enabling it as a language
-find_package(CUDAToolkit)
-if(CUDAToolkit_FOUND)
-    project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
-    set(SEP_USE_CUDA ON)
-else()
-    project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
-    set(SEP_USE_CUDA OFF)
-endif()
-
-# Link librt to the main project target
-target_link_libraries(sep_engine PUBLIC rt)
+# Temporarily disable CUDA related configurations
+# find_package(CUDAToolkit)
+set(SEP_USE_CUDA OFF)
+find_package(Threads REQUIRED)
 
 # Add custom cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -37,13 +22,18 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Enable Clang-tidy with CUDA support
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*;-I/usr/local/cuda/include;--cuda-gpu-arch=sm_70")
+
 # Enable testing
 enable_testing()
 
 # Find required packages
-find_package(Threads REQUIRED)
+set(fmt_DIR "/usr/lib64/cmake/fmt")
 find_package(fmt REQUIRED)
+
 find_package(TBB REQUIRED)
+set(benchmark_DIR "/usr/lib64/cmake/benchmark")
 find_package(benchmark REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
@@ -72,7 +62,7 @@ if(SEP_USE_CUDA)
     endif()
     
     # Add CUDA compile options to avoid sin/cos issues
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler -Xcompiler -D__NV_NO_HOST_COMPILER_CHECK=1 -D_GLIBCXX_USE_CXX11_ABI=0 -Xcompiler -Wno-error=deprecated-declarations -Xcompiler -Wno-error=ignored-attributes -D__NVCC_DIAG_PRAGMA_SUPPORT__=1")
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler -Xcompiler -D__NV_NO_HOST_COMPILER_CHECK=1 -D_GLIBCXX_USE_CXX11_ABI=0 -Xcompiler -Wno-error=deprecated-declarations -Xcompiler -Wno-error=ignored-attributes -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -ccbin=/usr/bin/clang++-15")
     
     # Add librt to CUDA libraries for linking
     list(APPEND CMAKE_CUDA_LIBRARIES "rt")
@@ -86,11 +76,20 @@ if(SEP_USE_CUDA)
     # Log CUDA flags for debugging
     message(STATUS "CMAKE_CUDA_COMPILER_ID_RUN_FLAGS: ${CMAKE_CUDA_COMPILER_ID_RUN_FLAGS}")
     message(STATUS "CMAKE_CUDA_FLAGS: ${CMAKE_CUDA_FLAGS}")
+
+    # Link librt to the main project target
+    # target_link_libraries(sep_engine PUBLIC rt) # Temporarily disabled
 endif()
 
 # Add subdirectories
 add_subdirectory(src)
 add_subdirectory(examples)
+
+# Set source file properties for CUDA files to be treated as CXX
+file(GLOB_RECURSE CUDA_FILES "src/*.cu" "src/**/*.cu")
+foreach(CU_FILE ${CUDA_FILES})
+    set_source_files_properties(${CU_FILE} PROPERTIES LANGUAGE CXX)
+endforeach()
 
 # Set build output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
@@ -106,7 +105,7 @@ set(SEP_TARGETS
 )
 
 # Install configuration
-include(GNUInstallDirs)
+#include(GNUInstallDirs)
 configure_file(cmake/sep-config.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/sep-config.cmake" @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sep-config.cmake"

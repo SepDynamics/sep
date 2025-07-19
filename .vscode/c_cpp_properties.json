@@ -21,7 +21,7 @@
                 "${workspaceFolder}/src/memory/memory_tier_manager.hpp"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc-14",
+            "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64"

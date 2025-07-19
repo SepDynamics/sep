@@ -36,7 +36,7 @@ set(CMAKE_BUILD_RPATH "${CUDA_PATH}/lib64" CACHE STRING "Build rpath" FORCE)
 set(CMAKE_CUDA_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "CUDA implicit framework directories" FORCE)
 
 #Set CUDA host compiler - use absolute path without quotes
-set(CMAKE_CUDA_HOST_COMPILER /usr/bin/g++-14 CACHE FILEPATH "Host compiler for CUDA" FORCE)
+set(CMAKE_CUDA_HOST_COMPILER /usr/bin/clang++-15 CACHE FILEPATH "Host compiler for CUDA" FORCE)
 
 # Enable CUDA support
 set(SEP_ENABLE_CUDA ON CACHE BOOL "Enable CUDA support" FORCE)

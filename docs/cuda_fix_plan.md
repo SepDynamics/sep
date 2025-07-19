@@ -54,7 +54,7 @@ find_path(CUDA_TOOLKIT_ROOT_DIR NAMES nvcc PATH_SUFFIXES bin HINTS /usr/local/cu
 
 - **File:** `cmake/cuda-gcc-toolchain.cmake`
 - **Problem:** This file has a copy-paste error. It's intended for a GCC toolchain but sets the CUDA host compiler to Clang (`clang++-15`) and has a comment mentioning Clang.
-- **Change:** Correct the host compiler to `g++-14` (to match the default toolchain) and update the comment.
+- **Change:** Correct the host compiler to `clang++-15` (to match the default toolchain) and update the comment.
 
 **Action:**
 Replace the content of the file:
@@ -65,4 +65,4 @@ set(CMAKE_CUDA_HOST_COMPILER "clang++-15")
 with:
 ```cmake
 # Custom CUDA toolchain for GCC
-set(CMAKE_CUDA_HOST_COMPILER "g++-14")
+set(CMAKE_CUDA_HOST_COMPILER "clang++-15")

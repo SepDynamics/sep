@@ -40,7 +40,7 @@ set(CMAKE_CUDA_IMPLICIT_LINK_LIBRARIES
 set(CMAKE_CUDA_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "CUDA implicit framework directories" FORCE)
 
 #Set CUDA host compiler - use absolute path without quotes
-set(CMAKE_CUDA_HOST_COMPILER /usr/bin/clang++ CACHE FILEPATH "Host compiler for CUDA" FORCE)
+set(CMAKE_CUDA_HOST_COMPILER /usr/bin/clang++-15 CACHE FILEPATH "Host compiler for CUDA" FORCE)
 
 #Set CUDA flags
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")

@@ -66,7 +66,7 @@ if [[ "$SOURCE_FILE" == *.cu ]]; then
         "${INCLUDES[@]}"
         "${DEFINES[@]}"
         -std=c++17
-        --compiler-bindir=/usr/bin/g++-14
+        --compiler-bindir=/usr/bin/clang++-15
     )
 
     if [[ "$DEVICE_ONLY" == true ]]; then
@@ -106,7 +106,7 @@ if [[ "$SOURCE_FILE" == *.cu ]]; then
     "${NVCC_COMMAND[@]}"
 
 else # For C++ files (not .cu)
-    /usr/bin/g++-14 \
+    /usr/bin/clang++-15 \
         -c "$SOURCE_FILE" \
         -o "$OUTPUT_FILE" \
         "${INCLUDES[@]}" \

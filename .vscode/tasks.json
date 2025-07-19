@@ -26,7 +26,7 @@
       "args": [
         "-B",
         "build",
-        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE",
         "-DCMAKE_BUILD_TYPE=Release",
         "-DSEP_HAS_CUDA=1",
         "-DSEP_HAS_BLENDER=1",

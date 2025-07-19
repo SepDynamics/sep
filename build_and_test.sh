@@ -23,7 +23,7 @@ cd build
 
 # Configure the project using CMake with explicit paths
 echo "Configuring build in $(pwd)..."
-CXX=/usr/bin/g++-14 cmake -S .. -B . -GNinja -DCMAKE_BUILD_TYPE=Debug
+CXX=/usr/bin/clang++-15 cmake -S .. -B . -GNinja -DCMAKE_BUILD_TYPE=Debug
 
 # Verify build files were created in the right place
 echo "Checking for build.ninja in $(pwd)..."

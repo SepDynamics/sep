@@ -13,6 +13,7 @@ _work/
 _diag/
 _deps/
 .codechecker/
+backup-src/
 temp_train_chunks/
 opentelemetry-cpp/
 workspace/

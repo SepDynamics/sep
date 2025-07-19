@@ -23,8 +23,16 @@ cd build
 
 # Configure the project using CMake with explicit paths
 echo "Configuring build in $(pwd)..."
-export CUDA_HOST_COMPILER=/usr/bin/clang++-15
-cmake -S .. -B . -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=/usr/bin/clang++-15
+# Set CUDA host compiler BEFORE cmake
+export CUDAHOSTCXX=/usr/bin/gcc-14
+
+# Configure with explicit settings
+cmake -S .. -B . \
+    -GNinja \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_CXX_COMPILER=/usr/bin/clang++-15 \
+    -DCMAKE_CUDA_HOST_COMPILER=/usr/bin/gcc-14 \
+    -DSEP_USE_CUDA=ON
 
 # Verify build files were created in the right place
 echo "Checking for build.ninja in $(pwd)..."

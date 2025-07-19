@@ -6,15 +6,17 @@ option(SEP_USE_CUDA "Enable CUDA support" ON)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if(SEP_USE_CUDA)
-    include(FindCUDA)
-    project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
-    set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/clang++-15" CACHE FILEPATH "Host compiler for CUDA" FORCE)
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler")
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__")
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__")
-else()
-    project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
+    # Method 1: Set via environment variable (most reliable)
+    set(ENV{CUDAHOSTCXX} "/usr/bin/gcc-14")
+    
+    # Method 3: Set in toolchain file
+    include(${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
 endif()
+
+project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__")
 
 # Set CMAKE_LIBRARY_PATH to help find system libraries like librt
 set(CMAKE_LIBRARY_PATH "/usr/lib;/usr/lib64")

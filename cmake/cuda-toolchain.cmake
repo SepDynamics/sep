@@ -1,7 +1,7 @@
 #Custom CUDA toolchain file to bypass CMake's CUDA detection
 
 # Set CUDA paths and compiler
-set(CUDA_PATH "/usr/local/cuda")
+set(CUDA_PATH "/usr/local/cuda-12.9")
 set(CMAKE_CUDA_COMPILER "${CUDA_PATH}/bin/nvcc")
 
 # Configure CUDA compiler settings
@@ -37,7 +37,7 @@ set(CMAKE_CUDA_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "" CACHE STRING "CUDA implici
 
 #Set CUDA host compiler - use absolute path without quotes
 # The host compiler is set via the CUDAHOSTCXX environment variable
-# set(CMAKE_CUDA_HOST_COMPILER /usr/bin/clang++-15 CACHE FILEPATH "Host compiler for CUDA" FORCE)
+set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/gcc-14")
 
 # Enable CUDA support
 set(SEP_ENABLE_CUDA ON CACHE BOOL "Enable CUDA support" FORCE)
@@ -46,7 +46,6 @@ set(SEP_ENABLE_CUDA ON CACHE BOOL "Enable CUDA support" FORCE)
 set(CMAKE_CUDA_FLAGS_INIT "-D__STRICT_ANSI__=0 -D_GLIBCXX_USE_CXX11_ABI=1")
 set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} --allow-unsupported-compiler")
 set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -Xcompiler -fno-gnu-unique")
-set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -Xcompiler -fno-noexcept-type")
 set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} --extended-lambda")
 set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} --expt-relaxed-constexpr")
 set(CMAKE_CUDA_FLAGS_INIT "${CMAKE_CUDA_FLAGS_INIT} -DSEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS=1")

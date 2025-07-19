@@ -1,0 +1,165 @@
+import os
+import subprocess
+import sys
+import json
+import re
+import pandas as pd
+import numpy as np
+from pathlib import Path
+import shutil
+import tempfile
+
+def parse_metrics_from_stream(output_stream):
+    """Parses a stream of text from pattern_metric_example into a list of metric dicts."""
+    all_metrics = []
+    
+    # Each metric block is separated by "==="
+    metric_blocks = output_stream.strip().split('===')
+    
+    for block in metric_blocks:
+        if not block.strip():
+            continue
+
+        try:
+            # Extract the name of the file/chunk
+            name_match = re.search(r"Processing File: (.+?)\s", block)
+            name = name_match.group(1).strip() if name_match else "unknown"
+
+            coherence_match = re.search(r"Average Coherence:\s+([\d\.]+)", block)
+            stability_match = re.search(r"Average Stability:\s+([\d\.]+)", block)
+            entropy_match = re.search(r"Average Entropy:\s+([\d\.]+)", block)
+            patterns_match = re.search(r"Total Patterns:\s+(\d+)", block)
+
+            if coherence_match and stability_match and entropy_match:
+                metrics = {
+                    'name': name,
+                    'coherence': float(coherence_match.group(1)),
+                    'stability': float(stability_match.group(1)),
+                    'entropy': float(entropy_match.group(1)),
+                    'patterns': int(patterns_match.group(1)) if patterns_match else 0
+                }
+                all_metrics.append(metrics)
+        except Exception as e:
+            print(f"Error parsing metric block: {e}\nBlock was:\n{block}")
+            
+    return all_metrics
+
+def create_chunks(input_file, num_chunks, output_dir):
+    """Splits the input file into a specified number of chunks."""
+    input_path = Path(input_file)
+    output_path = Path(output_dir)
+    if output_path.exists():
+        shutil.rmtree(output_path)
+    output_path.mkdir(parents=True)
+
+    file_size = input_path.stat().st_size
+    chunk_size = file_size // num_chunks
+    
+    chunk_paths = []
+    with open(input_path, 'rb') as f:
+        for i in range(num_chunks):
+            chunk_data = f.read(chunk_size)
+            if not chunk_data:
+                break
+            
+            if i == num_chunks - 1:
+                remainder = f.read()
+                if remainder:
+                    chunk_data += remainder
+
+            chunk_file_path = output_path / f"chunk_{i:04d}.bin"
+            with open(chunk_file_path, 'wb') as chunk_f:
+                chunk_f.write(chunk_data)
+            chunk_paths.append(chunk_file_path)
+    
+    return sorted(chunk_paths) # Ensure order is correct
+
+def analyze_chunks_statefully(chunk_list, temp_dir):
+    """Runs the metric engine statefully over a list of chunks."""
+    # Copy all chunks to a single directory for processing
+    for i, chunk_path in enumerate(chunk_list):
+        shutil.copy(chunk_path, temp_dir / f"process_{i:05d}_{chunk_path.name}")
+
+    executable_path = Path("./build/examples/pattern_metric_example")
+    cmd = [str(executable_path), str(temp_dir), "--no-clear"]
+    
+    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+    return parse_metrics_from_stream(result.stdout)
+
+def run_backtest(metrics_data):
+    """Runs the financial_backtest.py script on a list of metrics."""
+    if not metrics_data:
+        print("No metrics data to backtest.")
+        return 0.0
+
+    # Use a temporary file for the backtest
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp:
+        json.dump(metrics_data, tmp)
+        tmp_path = tmp.name
+
+    cmd = ["python3", "./financial_backtest.py", tmp_path]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        alpha_match = re.search(r"Annualized Alpha:\s+([-\d\.]+)%", result.stdout)
+        if alpha_match:
+            return float(alpha_match.group(1))
+    except subprocess.CalledProcessError as e:
+        print(f"Backtest failed. STDERR:\n{e.stderr}")
+    finally:
+        os.unlink(tmp_path) # Clean up the temp file
+    
+    return 0.0
+
+def main():
+    # --- Setup ---
+    train_file = Path("Testing/OANDA/O-train-1.json")
+    test_file = Path("Testing/OANDA/O-test-2.json")
+    num_chunks = 100 # Use 100 chunks for a reasonable time series
+    
+    print("--- Preparing Data Chunks ---")
+    train_chunks = create_chunks(train_file, num_chunks, Path("./temp_train_chunks"))
+    test_chunks = create_chunks(test_file, num_chunks, Path("./temp_test_chunks"))
+
+    # --- 1. Establish Baseline ---
+    print("\n--- Establishing Baseline Alpha on Test Data ---")
+    with tempfile.TemporaryDirectory() as temp_dir:
+        baseline_metrics = analyze_chunks_statefully(test_chunks, Path(temp_dir))
+        baseline_alpha = run_backtest(baseline_metrics)
+    print(f"Baseline Alpha (untrained model): {baseline_alpha:.4f}%")
+
+    # --- 2. Iterative Training ---
+    print("\n--- Starting Iterative Training and Evaluation ---")
+    training_iterations = [1, 2, 5, 10, 20]
+    results = []
+
+    for i in training_iterations:
+        print(f"\n--- Evaluating after {i} training iteration(s) ---")
+        
+        # Create the full processing list: N passes over train chunks, then 1 pass over test chunks
+        processing_list = (train_chunks * i) + test_chunks
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            all_metrics = analyze_chunks_statefully(processing_list, Path(temp_dir))
+            
+            # We only care about the metrics from the test set
+            test_metrics = all_metrics[-len(test_chunks):]
+            
+            alpha = run_backtest(test_metrics)
+            print(f"Alpha after {i} training iteration(s): {alpha:.4f}%")
+            results.append({"iterations": i, "alpha": alpha})
+
+    # --- 3. Report Results ---
+    print("\n--- Experiment Complete ---")
+    print(f"Baseline Alpha: {baseline_alpha:.4f}%")
+    
+    results_df = pd.DataFrame(results)
+    print("\nAlpha Improvement Curve:")
+    print(results_df)
+
+    # --- Cleanup ---
+    shutil.rmtree("./temp_train_chunks")
+    shutil.rmtree("./temp_test_chunks")
+    print("\nCleaned up temporary chunk directories.")
+
+if __name__ == "__main__":
+    main()

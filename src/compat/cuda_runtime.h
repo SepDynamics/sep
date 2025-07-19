@@ -9,6 +9,9 @@
 #include "compat/cuda_fwd.h"    // Include forward declarations first
 #include "compat/cuda_types.h"  // Include centralized CUDA type definitions
 
+// Include math compatibility header to handle noexcept issues
+#include "compat/cuda_math_compat.h"
+
 // Define needed constants that were previously in cuda_constants.h
 // Memory attachment flags
 constexpr unsigned int SEP_cudaMemAttachGlobal = 0x01;

@@ -1,4 +1,5 @@
 #pragma once
+#pragma message("cuda_math_compat.h is being included!")
 
 // Temporarily undefine problematic math functions
 #ifdef cospi

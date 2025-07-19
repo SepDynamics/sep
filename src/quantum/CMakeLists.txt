@@ -1,3 +1,8 @@
+# Find CUDA if enabled
+if(SEP_USE_CUDA)
+    find_package(CUDAToolkit REQUIRED)
+endif()
+
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/quantum/
         DESTINATION include/sep/quantum
@@ -65,10 +70,12 @@ target_sources(sep_quantum PRIVATE
 set_property(TARGET sep_quantum PROPERTY CUDA_ARCHITECTURES 70 75 80)
 
 # Link CUDA runtime
-target_link_libraries(sep_quantum PRIVATE
-    CUDA::cudart
-    CUDA::cuda_driver
-    CUDA::cufft)
+if(SEP_USE_CUDA)
+    target_link_libraries(sep_quantum PRIVATE
+        ${CUDA_LIBRARIES}
+        ${CUDA_CUDART_LIBRARY}
+        ${CUDA_CUFFT_LIBRARIES})
+endif()
 
 # Set library properties
 set_target_properties(sep_quantum PROPERTIES

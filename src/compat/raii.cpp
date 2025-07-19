@@ -20,7 +20,6 @@
 #include <utility>
 
 // Include CUDA headers in the correct order
-#include <cuda_runtime.h>
 #include "compat/cuda_runtime.h"  // Must come first to define types
 #include "compat/raii.h"
 #include "compat/cuda_helpers.h"  // For CUDA_CHECK macro
@@ -39,7 +38,7 @@ bool debugAllocEnabled() {
 
 namespace sep::cuda {
 
-#if !SEP_CUDA_AVAILABLE
+#if !SEP_ENGINE_HAS_CUDA
 // Provide lightweight wrappers when the real CUDA runtime is absent.
 // These implementations match the declarations in cuda_runtime.h
 cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream,
@@ -47,55 +46,55 @@ cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream,
     if (stream) {
         *stream = nullptr;
     }
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 cudaError_t cudaStreamDestroy(cudaStream_t /*stream*/) {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 cudaError_t cudaStreamSynchronize(cudaStream_t /*stream*/) {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 cudaError_t cudaStreamWaitEvent(cudaStream_t /*stream*/, cudaEvent_t /*event*/, unsigned int /*flags*/) {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 cudaError_t cudaEventRecord(cudaEvent_t /*event*/, cudaStream_t /*stream*/) {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 cudaError_t cudaEventCreateWithFlags(cudaEvent_t* event, unsigned int /*flags*/) {
     if (event) {
         *event = nullptr;
     }
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 cudaError_t cudaEventCreate(void** event) {
     if (event) {
         *event = nullptr;
     }
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 extern "C" cudaError_t cudaEventDestroy(cudaEvent_t /*event*/) {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 cudaError_t cudaEventSynchronize(cudaEvent_t /*event*/) {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t /*start*/, cudaEvent_t /*end*/) {
     if (ms) {
         *ms = 0.0f;
     }
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 cudaError_t cudaStreamAttachMemAsync(cudaStream_t /*stream*/, void* /*ptr*/,
                                    size_t /*size*/, unsigned int /*flags*/) {
-    return cudaSuccess;
+    return (cudaError_t)SEP_CUDA_SUCCESS;
 }
 
 const char* cudaGetErrorString(cudaError_t /*error*/) {
@@ -106,7 +105,7 @@ const char* cudaGetErrorString(cudaError_t /*error*/) {
 StreamRAII::StreamRAII(sep::StreamFlags flags) {
     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? SEP_cudaStreamNonBlocking : SEP_cudaStreamDefault;
     cudaError_t err = SEP_cudaStreamCreateWithFlags(&stream_, cuda_flags);
-    if (err != cudaSuccess) {
+    if (err != (cudaError_t)SEP_CUDA_SUCCESS) {
         stream_ = nullptr;
         if (debugAllocEnabled()) {
             (void)fprintf(stderr, "Failed to create CUDA stream: %s\n",
@@ -142,7 +141,7 @@ StreamRAII& StreamRAII::operator=(StreamRAII&& other) noexcept {
 void StreamRAII::synchronize() const {
     if (stream_) {
         cudaError_t err = SEP_cudaStreamSynchronize(stream_);
-        if (err != cudaSuccess) {
+        if (err != (cudaError_t)SEP_CUDA_SUCCESS) {
             if (debugAllocEnabled()) {
                 (void)fprintf(stderr, "Failed to synchronize CUDA stream: %s\n",
                               SEP_cudaGetErrorString(err));
@@ -153,7 +152,7 @@ void StreamRAII::synchronize() const {
 
 EventRAII::EventRAII() {
     cudaError_t err = SEP_cudaEventCreate(&event_);
-    if (err != cudaSuccess) {
+    if (err != (cudaError_t)SEP_CUDA_SUCCESS) {
         event_ = nullptr;
         if (debugAllocEnabled()) {
             (void)fprintf(stderr, "Failed to create CUDA event: %s\n", SEP_cudaGetErrorString(err));
@@ -169,7 +168,7 @@ EventRAII::~EventRAII() noexcept {
             std::cout << "Event destroyed" << std::endl;
         }
         cudaError_t err = SEP_cudaEventDestroy(event_);
-        if (err != cudaSuccess) {
+        if (err != (cudaError_t)SEP_CUDA_SUCCESS) {
             if (debugAllocEnabled()) {
                 (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n",
                               SEP_cudaGetErrorString(err));
@@ -185,7 +184,7 @@ EventRAII& EventRAII::operator=(EventRAII&& other) noexcept {
     if (this != &other) {
         if (event_) {
             cudaError_t err = SEP_cudaEventDestroy(event_);
-            if (err != cudaSuccess) {
+            if (err != (cudaError_t)SEP_CUDA_SUCCESS) {
                 if (debugAllocEnabled()) {
                     (void)fprintf(stderr, "Failed to destroy CUDA event: %s\n",
                                   SEP_cudaGetErrorString(err));
@@ -200,7 +199,7 @@ EventRAII& EventRAII::operator=(EventRAII&& other) noexcept {
 void EventRAII::synchronize() const {
     if (event_) {
         cudaError_t err = SEP_cudaEventSynchronize(event_);
-        if (err != cudaSuccess) {
+        if (err != (cudaError_t)SEP_CUDA_SUCCESS) {
             if (debugAllocEnabled()) {
                 (void)fprintf(stderr, "Failed to synchronize CUDA event: %s\n",
                               SEP_cudaGetErrorString(err));
@@ -258,7 +257,7 @@ template class DeviceBufferRAII<double>;
 void* allocateDeviceMemory(std::size_t size) {
     void* ptr = nullptr;
     cudaError_t err = SEP_cudaMalloc(&ptr, size);
-    if (err != cudaSuccess) {
+    if (err != (cudaError_t)SEP_CUDA_SUCCESS) {
         if (debugAllocEnabled()) {
             (void)fprintf(stderr, "cudaMalloc failed: %s\n", SEP_cudaGetErrorString(err));
         }
@@ -271,7 +270,7 @@ void freeDeviceMemory(void* ptr) {
     if (!ptr)
         return;
     cudaError_t err = SEP_cudaFree(ptr);
-    if (err != cudaSuccess && debugAllocEnabled()) {
+    if (err != (cudaError_t)SEP_CUDA_SUCCESS && debugAllocEnabled()) {
         (void)fprintf(stderr, "cudaFree failed: %s\n", SEP_cudaGetErrorString(err));
     }
 }
@@ -279,7 +278,7 @@ void freeDeviceMemory(void* ptr) {
 void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
     void* ptr = nullptr;
     cudaError_t err = SEP_cudaMallocManaged(&ptr, size);
-    if (err != cudaSuccess) {
+    if (err != (cudaError_t)SEP_CUDA_SUCCESS) {
         if (debugAllocEnabled()) {
             (void)fprintf(stderr, "cudaMallocManaged failed: %s\n", SEP_cudaGetErrorString(err));
         }
@@ -287,7 +286,7 @@ void* allocateUnifiedMemory(std::size_t size, cudaStream_t stream) {
     }
     if (stream) {
         err = SEP_cudaStreamAttachMemAsync(stream, ptr, 0, 0);
-        if (err != cudaSuccess && debugAllocEnabled()) {
+        if (err != (cudaError_t)SEP_CUDA_SUCCESS && debugAllocEnabled()) {
             (void)fprintf(stderr, "cudaStreamAttachMemAsync failed: %s\n",
                           SEP_cudaGetErrorString(err));
         }

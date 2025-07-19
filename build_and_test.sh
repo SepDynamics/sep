@@ -1,20 +1,43 @@
 #!/bin/bash
 set -e
 
-# Create build directory if it doesn't exist
-mkdir -p build
+# Ensure we are in the project root directory
+cd /sep
 
-# Configure only if CMakeCache.txt doesn't exist
-if [ ! -f build/CMakeCache.txt ]; then
-    echo "Configuring build..."
-    cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=Debug
+# Clean up ALL build artifacts from both root and build directory
+echo "Cleaning up previous build artifacts..."
+rm -rf build/
+rm -f CMakeCache.txt
+rm -rf CMakeFiles/
+rm -f build.ninja
+rm -f compile_commands.json
+rm -f CTestTestfile.cmake
+rm -f DartConfiguration.tcl
+rm -f cmake_install.cmake
+rm -f sep-config.cmake
+
+# Create fresh build directory
+echo "Creating fresh build directory..."
+mkdir -p build
+cd build
+
+# Configure the project using CMake with explicit paths
+echo "Configuring build in $(pwd)..."
+CXX=/usr/bin/g++-14 cmake -S .. -B . -GNinja -DCMAKE_BUILD_TYPE=Debug
+
+# Verify build files were created in the right place
+echo "Checking for build.ninja in $(pwd)..."
+if [ ! -f "build.ninja" ]; then
+    echo "ERROR: build.ninja not found in build directory!"
+    echo "Contents of build directory:"
+    ls -la
+    exit 1
 fi
 
-# Always build
-echo "Building..."
-cmake --build build
+# Build the project
+echo "Building project..."
+ninja
 
-# Run tests
+# Run the tests
 echo "Running tests..."
-cd build
 ctest --output-on-failure

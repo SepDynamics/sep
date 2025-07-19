@@ -22,5 +22,8 @@ add_subdirectory(memory)
 add_subdirectory(gpu)
 add_subdirectory(quantum)
 
+# Add tests subdirectory
+add_subdirectory(tests)
+
 
 

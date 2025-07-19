@@ -1,6 +1,11 @@
 # src/compat/CMakeLists.txt
 # Enhanced CUDA compatibility library with explicit symbol exports
 
+# Find CUDA if enabled
+if(SEP_USE_CUDA)
+    find_package(CUDAToolkit REQUIRED)
+endif()
+
 # Build sep_compat as a static library that encapsulates all CUDA functionality
 # Use Cycles naming convention for feature flags
 set(WITH_CYCLES_NANOVDB ON)
@@ -97,4 +102,8 @@ target_include_directories(sep_compat
 )
 
 # Dependencies
-target_link_libraries(sep_compat PUBLIC CUDA::cudart CUDA::cuda_driver)
+if(SEP_USE_CUDA)
+    target_link_libraries(sep_compat PUBLIC ${CUDA_LIBRARIES} ${CUDA_CUDART_LIBRARY})
+else()
+    # Placeholder for non-CUDA builds
+endif()

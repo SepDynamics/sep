@@ -4,9 +4,13 @@
 // Forward declarations of CUDA types to break circular dependencies
 // This header should be included first in both cuda_runtime.h and cuda_types.h
 
-// Configuration macro if not already defined
+// Configuration macro - respect SEP_USE_CUDA from CMake
 #ifndef SEP_ENGINE_HAS_CUDA
-#define SEP_ENGINE_HAS_CUDA 1
+  #ifdef SEP_USE_CUDA
+    #define SEP_ENGINE_HAS_CUDA SEP_USE_CUDA
+  #else
+    #define SEP_ENGINE_HAS_CUDA 0
+  #endif
 #endif
 
 // Only define types if CUDA runtime is not available
@@ -37,8 +41,14 @@ enum {
 
 #else
 // When CUDA is available, include the actual CUDA headers
-#include <driver_types.h>
-#include <cuda_runtime_api.h>
+#if __has_include(<cuda_runtime.h>)
+    #include <cuda_runtime.h>
+    #include <cuda_runtime_api.h>
+#else
+    // Fallback if CUDA headers not found in system paths
+    #include "/usr/local/cuda/include/cuda_runtime.h"
+    #include "/usr/local/cuda/include/cuda_runtime_api.h"
+#endif
 
 // Use CUDA's actual values
 #ifndef SEP_CUDA_SUCCESS

@@ -4,13 +4,12 @@
  * Implementation of CUDA functions in the sep::cuda namespace
  */
 
-#include <cuda.h>
-#include <cuda_runtime.h>
-
 #include "compat/core.h"
 #include "compat/cuda_unified.h"
 #include "core/common.h"
 #include "core/error_handler.h"
+#include "cuda/cuda.h"
+#include "cuda_runtime.h"
 
 using sep::Error;
 using sep::shim::string;

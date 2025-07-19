@@ -1,5 +1,14 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
+
+# Check if CUDA is available before enabling it as a language
+find_package(CUDAToolkit)
+if(CUDAToolkit_FOUND)
+    project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
+    set(SEP_USE_CUDA ON)
+else()
+    project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
+    set(SEP_USE_CUDA OFF)
+endif()
 
 # Add custom cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -13,6 +22,9 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Enable testing
+enable_testing()
 
 # Find required packages
 find_package(Threads REQUIRED)
@@ -31,9 +43,22 @@ include_directories(
 cmake_policy(SET CMP0146 NEW)
 
 # CUDA configuration
-option(SEP_USE_CUDA "Enable CUDA support" ON)
 if(SEP_USE_CUDA)
+    # Set CUDA standard
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+    
+    # Find CUDA packages
     find_package(CUDA REQUIRED)
+    find_package(CUDAToolkit REQUIRED)
+    
+    # Set CUDA architectures
+    if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+        set(CMAKE_CUDA_ARCHITECTURES "60;70;75;80")
+    endif()
+    
+    # Add CUDA compile options to avoid sin/cos issues
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler")
 endif()
 
 # Add subdirectories

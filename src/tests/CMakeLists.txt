@@ -1,5 +1,10 @@
 
 
+# Find GoogleTest
+find_package(GTest REQUIRED)
+include(GoogleTest)
+enable_testing()
+
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
         DESTINATION src/tests
@@ -16,6 +21,31 @@ find_package(fmt REQUIRED)
 # Create test executables
 # add_executable(memory_tier_test memory_tier_test.cpp)
 add_executable(pattern_metric_test pattern_metric_engine_test.cpp)
+
+# Add CUDA test if CUDA is enabled
+if(SEP_USE_CUDA)
+    add_executable(cuda_test cuda_test.cu)
+    set_target_properties(cuda_test PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+        LINKER_LANGUAGE CXX
+    )
+    # Add CUDA flags to avoid sin/cos issues
+    target_compile_options(cuda_test PRIVATE
+        $<$<COMPILE_LANGUAGE:CUDA>:
+            --expt-relaxed-constexpr
+            --extended-lambda
+            -Xcompiler -fPIC
+        >
+    )
+    target_link_libraries(cuda_test PRIVATE
+        ${CUDA_LIBRARIES}
+        ${CUDA_CUDART_LIBRARY}
+    )
+    add_test(NAME cuda_test COMMAND cuda_test)
+    set_tests_properties(cuda_test PROPERTIES
+        LABELS "unit;cuda"
+    )
+endif()
 
 # Link dependencies
 # target_link_libraries(cycles_test PRIVATE
@@ -53,6 +83,8 @@ add_executable(pattern_metric_test pattern_metric_engine_test.cpp)
 
 # Configure pattern metric test
 target_link_libraries(pattern_metric_test PRIVATE
+    GTest::gtest
+    GTest::gtest_main
     fmt::fmt
     sep_core
     sep_quantum

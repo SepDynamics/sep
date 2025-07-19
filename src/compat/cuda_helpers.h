@@ -20,13 +20,13 @@ SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
 
 
 #ifndef CUDA_CHECK
-#define CUDA_CHECK(call)                              \
-    do {                                             \
-        cudaError_t error = (call);                  \
-        if (error != cudaSuccess) {                  \
-            ::sep::cuda::logCudaError(#call, error); \
-        }                                            \
-    } while (0)
+#define CUDA_CHECK(call)                                                  \
+  do {                                                                    \
+    cudaError_t error = (call);                                           \
+    if (error != (cudaError_t)SEP_CUDA_SUCCESS) {                         \
+      ::sep::cuda::logCudaError(#call, error);                            \
+    }                                                                     \
+  } while (0)
 #endif
 
 // Additional CUDA utility functions that may be moved from other files

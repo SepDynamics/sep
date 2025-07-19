@@ -1,16 +1,25 @@
 cmake_minimum_required(VERSION 3.15)
-project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
+
+option(SEP_USE_CUDA "Enable CUDA support" ON)
+
+# Add custom cmake module path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+if(SEP_USE_CUDA)
+    include(FindCUDA)
+    project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
+    set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/clang++-15" CACHE FILEPATH "Host compiler for CUDA" FORCE)
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler")
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__")
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__")
+else()
+    project(sep_engine VERSION 1.0.0 LANGUAGES CXX)
+endif()
 
 # Set CMAKE_LIBRARY_PATH to help find system libraries like librt
 set(CMAKE_LIBRARY_PATH "/usr/lib;/usr/lib64")
 
-# Temporarily disable CUDA related configurations
-# find_package(CUDAToolkit)
-set(SEP_USE_CUDA ON)
 find_package(Threads REQUIRED)
-
-# Add custom cmake module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Default build type if not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -21,9 +30,6 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Disable Clang-tidy integration for now (will run separately)
-# set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*")
 
 # Enable testing
 enable_testing()
@@ -61,9 +67,6 @@ if(SEP_USE_CUDA)
         set(CMAKE_CUDA_ARCHITECTURES "60;70;75;80")
     endif()
     
-    # Add CUDA compile options to avoid sin/cos issues
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler -Xcompiler -D__NV_NO_HOST_COMPILER_CHECK=1 -D_GLIBCXX_USE_CXX11_ABI=0 -Xcompiler -Wno-error=deprecated-declarations -Xcompiler -Wno-error=ignored-attributes -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -ccbin=/usr/bin/clang++-15 -allow-unsupported-compiler")
-    
     # Add librt to CUDA libraries for linking
     list(APPEND CMAKE_CUDA_LIBRARIES "rt")
 
@@ -76,9 +79,6 @@ if(SEP_USE_CUDA)
     # Log CUDA flags for debugging
     message(STATUS "CMAKE_CUDA_COMPILER_ID_RUN_FLAGS: ${CMAKE_CUDA_COMPILER_ID_RUN_FLAGS}")
     message(STATUS "CMAKE_CUDA_FLAGS: ${CMAKE_CUDA_FLAGS}")
-
-    # Link librt to the main project target
-    # target_link_libraries(sep_engine PUBLIC rt) # Temporarily disabled
 endif()
 
 # Add subdirectories

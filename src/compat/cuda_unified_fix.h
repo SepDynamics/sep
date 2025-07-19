@@ -6,13 +6,8 @@
 #include <cstring>  // For std::memcpy
 #include <cerrno>   // For errno constants
 
-// Configuration macro if not already defined
-#ifndef SEP_ENGINE_HAS_CUDA
-#define SEP_ENGINE_HAS_CUDA 0
-#endif
-
-// Include our headers first - this establishes the baseline types
-#include "compat/cuda_types.h"
+// Include our base types header
+#include "compat/cuda_base_types.h"
 
 // *** CRITICAL: COMPATIBILITY SETTINGS FOR GCC 14 AND CUDA 12.9 ***
 // These must be defined before any CUDA headers are included
@@ -37,48 +32,9 @@
 #define SEP_CUDA_NO_BFLOAT16_CONVERSIONS 1
 #endif
 
-// Define CUDA device/host function qualifiers
-#if defined(__CUDACC__)
-#ifndef SEP_HOST
-#define SEP_HOST __host__
-#endif
-#ifndef SEP_DEVICE
-#define SEP_DEVICE __device__
-#endif
-#ifndef SEP_HD
-#define SEP_HD __host__ __device__
-#endif
-#else
-#ifndef SEP_HOST
-#define SEP_HOST
-#endif
-#ifndef SEP_DEVICE
-#define SEP_DEVICE
-#endif
-#ifndef SEP_HD
-#define SEP_HD
-#endif
-#endif
-
-// Define float math constants
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 // Include the real CUDA runtime only when compiling with CUDA compiler
 #if defined(__CUDACC__) && SEP_ENGINE_HAS_CUDA
 #include <cuda_runtime.h>
-#endif
-
-// Math function declarations and implementations only when needed
-#ifdef __cplusplus
-extern "C" {
-// Forward declarations of math functions with noexcept to match system headers
-SEP_HD double sinpi(double x) noexcept;
-SEP_HD double cospi(double x) noexcept;
-SEP_HD float sinpif(float x) noexcept;
-SEP_HD float cospif(float x) noexcept;
-}
 #endif
 
 namespace sep {

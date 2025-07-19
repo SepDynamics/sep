@@ -23,7 +23,8 @@ cd build
 
 # Configure the project using CMake with explicit paths
 echo "Configuring build in $(pwd)..."
-CXX=/usr/bin/clang++-15 cmake -S .. -B . -GNinja -DCMAKE_BUILD_TYPE=Debug
+export CUDA_HOST_COMPILER=/usr/bin/clang++-15
+cmake -S .. -B . -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=/usr/bin/clang++-15
 
 # Verify build files were created in the right place
 echo "Checking for build.ninja in $(pwd)..."

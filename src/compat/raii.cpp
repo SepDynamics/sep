@@ -38,70 +38,8 @@ bool debugAllocEnabled() {
 
 namespace sep::cuda {
 
-#if !SEP_ENGINE_HAS_CUDA
-// Provide lightweight wrappers when the real CUDA runtime is absent.
-// These implementations match the declarations in cuda_runtime.h
-cudaError_t cudaStreamCreateWithFlags(cudaStream_t* stream,
-                                      unsigned int /*flags*/) {
-    if (stream) {
-        *stream = nullptr;
-    }
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-cudaError_t cudaStreamDestroy(cudaStream_t /*stream*/) {
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-cudaError_t cudaStreamSynchronize(cudaStream_t /*stream*/) {
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-cudaError_t cudaStreamWaitEvent(cudaStream_t /*stream*/, cudaEvent_t /*event*/, unsigned int /*flags*/) {
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-cudaError_t cudaEventRecord(cudaEvent_t /*event*/, cudaStream_t /*stream*/) {
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-cudaError_t cudaEventCreateWithFlags(cudaEvent_t* event, unsigned int /*flags*/) {
-    if (event) {
-        *event = nullptr;
-    }
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-cudaError_t cudaEventCreate(void** event) {
-    if (event) {
-        *event = nullptr;
-    }
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-extern "C" cudaError_t cudaEventDestroy(cudaEvent_t /*event*/) {
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-cudaError_t cudaEventSynchronize(cudaEvent_t /*event*/) {
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-cudaError_t cudaEventElapsedTime(float* ms, cudaEvent_t /*start*/, cudaEvent_t /*end*/) {
-    if (ms) {
-        *ms = 0.0f;
-    }
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-cudaError_t cudaStreamAttachMemAsync(cudaStream_t /*stream*/, void* /*ptr*/,
-                                   size_t /*size*/, unsigned int /*flags*/) {
-    return (cudaError_t)SEP_CUDA_SUCCESS;
-}
-
-const char* cudaGetErrorString(cudaError_t /*error*/) {
-    return "CUDA not available";
-}
-#endif
-
+// The CUDA function implementations are now provided by cuda_runtime_impl.h
+// This file only contains RAII wrapper implementations
 StreamRAII::StreamRAII(sep::StreamFlags flags) {
     unsigned int cuda_flags = (flags == sep::StreamFlags::NonBlocking) ? SEP_cudaStreamNonBlocking : SEP_cudaStreamDefault;
     cudaError_t err = SEP_cudaStreamCreateWithFlags(&stream_, cuda_flags);

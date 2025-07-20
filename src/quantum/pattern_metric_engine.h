@@ -21,10 +21,15 @@ namespace sep::quantum {
 
 /// @brief Holds the computed metrics for a single pattern.
 struct PatternMetrics {
+    char pattern_id[compat::PatternData::MAX_ID_LENGTH]; ///< The ID of the pattern.
     float coherence{0.0f}; ///< Measure of the pattern's internal consistency.
     float stability{0.0f}; ///< Measure of how resistant the pattern is to change.
     float entropy{0.0f};   ///< Measure of the pattern's complexity and randomness.
     std::vector<PatternRelationship> relationships;  ///< Relationships to other patterns.
+
+    PatternMetrics() {
+        pattern_id[0] = '\0';
+    }
 };
 
 /**
@@ -103,7 +108,7 @@ public:
 
     /// @brief Computes metrics for the currently identified patterns.
     /// @return A vector of PatternMetrics structs.
-    std::vector<PatternMetrics> computeMetrics();
+    const std::vector<PatternMetrics>& computeMetrics();
 
     /// @brief Gets the current patterns.
     /// @return A vector of PatternData structs.

@@ -75,7 +75,7 @@ sep::compat::PatternData PatternMetricEngine::mutatePattern(const sep::compat::P
     return mutated;
 }
 
-sep::vector<PatternMetrics> PatternMetricEngine::computeMetrics()
+const sep::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
 {
     std::lock_guard<std::mutex> lock(engine_mutex_);
     
@@ -89,6 +89,9 @@ sep::vector<PatternMetrics> PatternMetricEngine::computeMetrics()
 
     for (const auto& p : current_patterns_) {
         PatternMetrics m;
+        std::strncpy(m.pattern_id, p.id, sizeof(m.pattern_id) - 1);
+        m.pattern_id[sizeof(m.pattern_id) - 1] = '\0';
+
         if (!p.data.empty()) {
             glm::vec3 pattern_vec;
             if (p.data.size() >= 3) {

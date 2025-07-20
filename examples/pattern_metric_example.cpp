@@ -73,20 +73,16 @@ void printMetrics(std::ostream& out, const std::string& dataType, const std::vec
 }
 
 // Helper function to print metrics in JSON format
-void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics, const PatternMetricEngine& engine) {
+void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics) {
     if (metrics.empty()) {
         out << "[]" << std::endl;
         return;
     }
 
     json result = json::array();
-    const auto& patterns = engine.getPatterns();
-    
-    for (size_t i = 0; i < metrics.size() && i < patterns.size(); ++i) {
-        const auto& m = metrics[i];
-        const auto& pattern = patterns[i];
+    for (const auto& m : metrics) {
         json pattern_obj = {
-            {"id", std::string(pattern.id)},
+            {"id", std::string(m.pattern_id)},
             {"coherence", m.coherence},
             {"stability", m.stability},
             {"entropy", m.entropy}
@@ -129,10 +125,11 @@ void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iter
     }
 
     if (iterations <= 1) {
+        const auto& metrics = engine.computeMetrics();
         if (json_output) {
-            printJsonMetrics(out, filePath.string(), engine.computeMetrics(), engine);
+            printJsonMetrics(out, filePath.string(), metrics);
         } else {
-            printMetrics(out, filePath.string(), engine.computeMetrics());
+            printMetrics(out, filePath.string(), metrics);
         }
     }
 }
@@ -280,7 +277,7 @@ int main(int argc, char* argv[]) {
                             engine.ingestData(reinterpret_cast<const uint8_t*>(buffer.data()), file.gcount());
                             engine.evolvePatterns();
                         }
-                        printJsonMetrics(ss, entry.path().string(), engine.computeMetrics(), engine);
+                        printJsonMetrics(ss, entry.path().string(), engine.computeMetrics());
                     }
                     std::string json_str = ss.str();
                     if (!json_str.empty()) {

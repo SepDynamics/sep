@@ -116,6 +116,7 @@ docker build -t $IMAGE_NAME . &> "$LOG_FILE"
 echo "Running build and test inside Docker container..."
 docker run --gpus all --rm $IMAGE_NAME /bin/bash -c "
     set -e
+    cd /project
     echo '--- Cleaning up previous build artifacts... ---'
     rm -rf build && mkdir build && cd build
     
@@ -139,7 +140,7 @@ docker run --gpus all --rm $IMAGE_NAME /bin/bash -c "
     echo '--- Processing 280MB data for financial pipeline (JSON output)... ---'
     # Use the actual OANDA training data
     mkdir -p output
-    ./examples/pattern_metric_example Testing/OANDA/O-train-1.json --json --output output/metrics_output.json
+    ./examples/pattern_metric_example /project/Testing/OANDA/O-train-1.json --json --output output/metrics_output.json
 
     echo '--- Executing Alpha Prediction Pipeline... ---'
     # Run the python script that's in the root directory

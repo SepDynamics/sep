@@ -18,8 +18,5 @@ for arg in "$@"; do
   esac
 done
 
-# Add the flag to solve the noexcept issue
-args+=("-Dnoexcept(x)=")
-
 # Call the actual host compiler with the modified arguments
 exec "$HOST_COMPILER" "${args[@]}"

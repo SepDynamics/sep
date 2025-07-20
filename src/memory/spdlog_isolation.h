@@ -1,12 +1,12 @@
 #pragma once
 
-#include "compat/cuda.h"
-#include "compat/macros.h"
-
+#include <mutex>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <mutex>
+
+#include "engine/cuda.h"
+#include "engine/macros.h"
 
 #define SEP_SPDLOG_AVAILABLE 1
 

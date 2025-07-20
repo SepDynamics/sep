@@ -1,17 +1,17 @@
+#include "quantum/pattern_evolution.h"
+
 #include <string.h>
-#include <cstring>
-#include <ctime>
 #include <time.h>
 #include <unistd.h>
+
 #include <cstdlib>
-
-#include "quantum/pattern_evolution.h"
-#include "core/types.h"  // For PatternData/PatternConfig
-
-#include "core/types.h"
-
+#include <cstring>
+#include <ctime>
 #include <nlohmann/json.hpp>
+
 #include "api/sep_engine.h"
+#include "engine/types.h"  // For PatternData/PatternConfig
+#include "engine/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"
 

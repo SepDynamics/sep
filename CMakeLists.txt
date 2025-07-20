@@ -83,10 +83,6 @@ if(SEP_USE_CUDA)
     message(STATUS "CMAKE_CUDA_FLAGS: ${CMAKE_CUDA_FLAGS}")
 endif()
 
-# Add subdirectories
-add_subdirectory(src)
-add_subdirectory(examples)
-
 # Set source file properties for CUDA files to be treated as CXX
 file(GLOB_RECURSE CUDA_FILES "src/*.cu" "src/**/*.cu")
 foreach(CU_FILE ${CUDA_FILES})
@@ -98,12 +94,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
+# Add subdirectories
+add_subdirectory(src)
+add_subdirectory(examples)
+
 # Create the export set
 set(SEP_TARGETS
-    sep_core
+    sep_engine
     sep_memory
     sep_quantum
-    sep_compat
 )
 
 # Install configuration
@@ -127,3 +126,4 @@ install(EXPORT sep-targets
     FILE sep-targets.cmake
     NAMESPACE sep::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep)
+

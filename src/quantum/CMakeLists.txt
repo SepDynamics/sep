@@ -42,15 +42,21 @@ target_include_directories(sep_quantum
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/compat
+        ${CMAKE_SOURCE_DIR}/src/engine
         ${CMAKE_SOURCE_DIR}/src/quantum
-        ${CMAKE_SOURCE_DIR}/src/core
 )
+
+# Add CUDA include directories if CUDA is enabled
+if(SEP_USE_CUDA)
+    target_include_directories(sep_quantum
+        PUBLIC
+            ${CUDAToolkit_INCLUDE_DIRS}
+    )
+endif()
 
 target_link_libraries(sep_quantum
     PUBLIC
-        sep_core
-        sep_compat
+        sep_engine
 )
 
 # Set modern CUDA policy

@@ -3,12 +3,12 @@
 
 #include <cuda_runtime.h>
 
-#include "compat/cuda_api.hpp"
-#include "compat/cufft.h"
 #include "config.h"
-#include "types.h"
+#include "engine/cuda_api.hpp"
+#include "engine/cufft.h"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
+#include "types.h"
 
 // Forward declarations
 namespace sep::cuda {
@@ -61,9 +61,9 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        workbench::CudaConfig cuda;
-        workbench::LogConfig log;
-        workbench::AnalyticsConfig analytics;
+        CudaConfig cuda;
+        LogConfig log;
+        AnalyticsConfig analytics;
         float base_resonance_frequency{0.42f};
         float convergence_threshold{0.001f};
         float step_size{0.05f};
@@ -144,9 +144,9 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    workbench::CudaConfig cuda;
-    workbench::LogConfig log;
-    workbench::AnalyticsConfig analytics;
+    CudaConfig cuda;
+    LogConfig log;
+    AnalyticsConfig analytics;
 };
 
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
@@ -209,7 +209,7 @@ private:
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
 class CUDAQuantumKernel {
 public:
-    explicit CUDAQuantumKernel(const workbench::CudaConfig &config);
+    explicit CUDAQuantumKernel(const CudaConfig &config);
     ~CUDAQuantumKernel();
 
   // Warp-level primitive operations
@@ -228,7 +228,7 @@ public:
 private:
     ::cudaStream_t stream_;
     ::cufftHandle fft_plan_;
-    workbench::CudaConfig config_;
+    CudaConfig config_;
 
     void* d_workspace_;
     size_t workspace_size_;
@@ -237,7 +237,7 @@ private:
 // 4. API COHERENCE MODULATION
 class APICoherenceModulator {
 public:
-    explicit APICoherenceModulator(const workbench::LogConfig &config);
+    explicit APICoherenceModulator(const LogConfig &config);
 
     // Dynamic response coherence synthesis
     struct CoherenceResponse
@@ -257,7 +257,7 @@ public:
                                   const std::vector<double> &weights);
 
 private:
-    workbench::LogConfig config_;
+    LogConfig config_;
     std::unordered_map<std::string, double> context_coherence_map_;
     
     std::vector<double> extractCoherenceFactors(const std::string& context,
@@ -306,7 +306,7 @@ private:
 // 6. REAL-TIME PERFORMANCE ANALYTICS
 class PerformanceAnalyzer {
 public:
-    explicit PerformanceAnalyzer(const workbench::AnalyticsConfig &config);
+    explicit PerformanceAnalyzer(const AnalyticsConfig &config);
 
     // Quantum state space analysis
     struct StateSpaceAnalysis
@@ -342,7 +342,7 @@ public:
                         const std::vector<double> &performance_metrics);
 
 private:
-    workbench::AnalyticsConfig config_;
+    AnalyticsConfig config_;
     std::vector<double> performance_history_;
     std::mutex history_mutex_;
 

@@ -1,14 +1,12 @@
 #ifndef SEP_CONTEXT_PRIORITY_H
 #define SEP_CONTEXT_PRIORITY_H
 
-#include "compat/shim.h"
-#include "compat/math_common.h"
-
-
 #include <ctime>
 #include <memory>
 #include <unordered_map>
 
+#include "engine/math_common.h"
+#include "engine/shim.h"
 
 namespace sep::context {
 

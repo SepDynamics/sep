@@ -1,14 +1,15 @@
 #pragma once
 
-#include "core/types.h"
-#include <string>
-#include <vector>
-#include <memory>
-#include <future>
-#include <mutex>
-#include <thread>
 #include <atomic>
+#include <future>
 #include <glm/glm.hpp>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
+#include "engine/types.h"
 
 namespace sep::quantum {
 

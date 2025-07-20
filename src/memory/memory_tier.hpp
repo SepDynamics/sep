@@ -12,9 +12,8 @@
 #include <glm/vec3.hpp>
 
 // Project headers
-#include "core/types.h"
-#include "core/common.h"
-#include "core/types.h"
+#include "engine/common.h"
+#include "engine/types.h"
 #include "memory/persistent_pattern_data.hpp"
 
 namespace sep {

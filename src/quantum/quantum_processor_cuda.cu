@@ -1,10 +1,11 @@
 // Include compatibility header first to handle math function conflicts
-#include "compat/cuda_math_compat.h"
-
-#include "quantum/quantum_processor_cuda.h"
 #include <cuda_runtime.h>
+
 #include <cmath>
 #include <glm/glm.hpp>
+
+#include "engine/cuda_math_compat.h"
+#include "quantum/quantum_processor_cuda.h"
 
 namespace sep::quantum {
 

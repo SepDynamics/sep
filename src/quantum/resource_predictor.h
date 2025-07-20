@@ -1,10 +1,11 @@
 #ifndef SEP_CONTEXT_RESOURCE_PREDICTOR_H
 #define SEP_CONTEXT_RESOURCE_PREDICTOR_H
 
-#include "compat/shim.h"
 #include <cstddef>
-#include <vector>
 #include <nlohmann/json.hpp>
+#include <vector>
+
+#include "engine/shim.h"
 
 // Minimal context types for compilation
 namespace sep::context {

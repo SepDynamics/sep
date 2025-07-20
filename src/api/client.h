@@ -13,9 +13,9 @@
 
 #include "api/ollama_types.h"
 #include "api/types.h"
-#include "core/common.h"
-#include "core/types.h"
 #include "curl/curl.h"
+#include "engine/common.h"
+#include "engine/types.h"
 
 namespace sep {
 namespace config {

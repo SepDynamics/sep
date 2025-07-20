@@ -1,14 +1,14 @@
 #pragma once
 
-#include "memory/types.h"
-#include "core/types.h"
-
-#include <glm/vec4.hpp>
-#include <glm/glm.hpp>
 #include <array>
+#include <glm/glm.hpp>
+#include <glm/vec4.hpp>
 #include <memory>
 #include <string>
 #include <vector>
+
+#include "engine/types.h"
+#include "memory/types.h"
 
 namespace sep::memory {
 

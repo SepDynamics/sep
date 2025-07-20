@@ -8,10 +8,10 @@
  */
 
 // Project includes
-#include "compat/shim.h"
-#include "core/common.h"
-#include "core/dag_graph.h"
-#include "core/types.h"
+#include "engine/common.h"
+#include "engine/dag_graph.h"
+#include "engine/shim.h"
+#include "engine/types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/persistent_pattern_data.hpp"
 #include "memory/types.h"
@@ -44,7 +44,7 @@ namespace memory {
     class MemoryTierManager
     {
     public:
-        using Config = workbench::MemoryThresholdConfig;
+        using Config = MemoryThresholdConfig;
 
         // Singleton access
         static MemoryTierManager &getInstance();
@@ -168,8 +168,8 @@ namespace memory {
 } // namespace memory
 
 namespace config {
-    void to_json(nlohmann::json &j, const workbench::MemoryThresholdConfig &c);
-    void from_json(const nlohmann::json &j, workbench::MemoryThresholdConfig &c);
+    void to_json(nlohmann::json &j, const MemoryThresholdConfig &c);
+    void from_json(const nlohmann::json &j, MemoryThresholdConfig &c);
 } // namespace config
 
 } // namespace sep

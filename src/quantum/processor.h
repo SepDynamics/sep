@@ -2,14 +2,15 @@
 #define SEP_QUANTUM_PROCESSOR_H
 #pragma once
 
-#include "core/common.h"
-#include "core/system_hooks.h"
-#include "quantum/gpu_context.h"
-#include "core/types.h"
-#include "memory/types.h"
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "engine/common.h"
+#include "engine/system_hooks.h"
+#include "engine/types.h"
+#include "memory/types.h"
+#include "quantum/gpu_context.h"
 
 namespace sep {
 

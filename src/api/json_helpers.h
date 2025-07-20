@@ -1,8 +1,9 @@
 #pragma once
 
-#include "compat/shim.h"
 #include <nlohmann/json.hpp>
 #include <string>
+
+#include "engine/shim.h"
 
 namespace sep {
 namespace api {

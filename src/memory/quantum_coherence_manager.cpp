@@ -2,30 +2,32 @@
 
 #include <cuda_runtime.h>
 
-#include "compat/core.h"
-#include "compat/cuda.h"
-#include "compat/cuda_helpers.h"
-#include "core/types.h"
+#include "engine/core.h"
+#include "engine/cuda.h"
+#include "engine/cuda_helpers.h"
+#include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
 
+using ::sep::CudaConfig;
 using ::sep::memory::MemoryTierEnum;
-using ::sep::workbench::CudaConfig;
-#include "core/logging.h" 
-#include <tbb/parallel_for.h>
 #include <tbb/concurrent_hash_map.h>
+#include <tbb/parallel_for.h>
+
 #include <algorithm>
-#include <atomic>
-#include <numeric>
-#include <cmath>
 #include <array>
+#include <atomic>
+#include <cmath>
+#include <glm/vec4.hpp>
 #include <memory>
+#include <numeric>
 #include <string>
 #include <vector>
-#include <glm/vec4.hpp>
+
+#include "engine/logging.h"
 
 namespace sep::memory {
 

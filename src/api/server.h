@@ -16,7 +16,7 @@
 #include "api/ollama_client.h"
 #include "api/rate_limit_middleware.h"
 #include "api/types.h"
-#include "core/types.h"
+#include "engine/types.h"
 
 // External forward declarations
 namespace crow {

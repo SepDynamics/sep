@@ -1,20 +1,21 @@
 #include "quantum/quantum_processor.h"
-#include "quantum/quantum_processor_qfh.h"
-#include "quantum/quantum_processor_cuda.h"
-#include "compat/math_common.h"
-#include "types.h"
-#include "quantum/qbsa_qfh.h"
-#include "types.h"
-#include <glm/glm.hpp>
-#include <vector>
-#include <memory>
+
+#include <algorithm>
 #include <bitset>
 #include <cstdint>
 #include <cstdlib>
-#include <string>
-#include <algorithm>
+#include <glm/glm.hpp>
+#include <memory>
 #include <stdexcept>
+#include <string>
 #include <unordered_map>
+#include <vector>
+
+#include "engine/math_common.h"
+#include "quantum/qbsa_qfh.h"
+#include "quantum/quantum_processor_cuda.h"
+#include "quantum/quantum_processor_qfh.h"
+#include "types.h"
 
 namespace sep::quantum {
 

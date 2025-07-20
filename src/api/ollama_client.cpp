@@ -7,7 +7,7 @@
 #include "api/client.h"
 #include "api/ollama_types.h"
 #include "api/types.h"
-#include "core/common.h"
+#include "engine/common.h"
 
 namespace sep {
 namespace ollama {

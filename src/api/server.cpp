@@ -14,7 +14,7 @@
 #include <thread>
 
 // Compatibility layer includes
-#include "compat/shim.h"
+#include "engine/shim.h"
 
 // Third-party includes
 #include <nlohmann/json.hpp>
@@ -29,13 +29,13 @@
 #include "api/sep_engine.h"
 #include "api/server.h"
 #include "api/types.h"
-#include "compat/cuda_unified.h"
-#include "core/common.h"
-#include "core/logging.h"
-#include "core/types.h"
-#include "core/data_parser.h"
-#include "core/dag_graph.h"
 #include "crow/crow_isolation.h"
+#include "engine/common.h"
+#include "engine/cuda_unified.h"
+#include "engine/dag_graph.h"
+#include "engine/data_parser.h"
+#include "engine/logging.h"
+#include "engine/types.h"
 
 namespace sep {
 namespace api {

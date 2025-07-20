@@ -16,11 +16,11 @@
 // Include our API headers
 #include "api/crow_adapter.h"
 #include "api/json_helpers.h"
-#include "api/types.h"
 #include "api/sep_engine.h"
-#include "api/server.h" // Include server header
-#include "core/types.h"  // For sep::config::APIConfig
-#include "core/manager.h" // For sep::config::ConfigManager
+#include "api/server.h"  // Include server header
+#include "api/types.h"
+#include "engine/manager.h"  // For sep::config::ConfigManager
+#include "engine/types.h"    // For sep::config::APIConfig
 #include "memory/memory_tier_manager.hpp"
 
 // Include standard headers

@@ -1,13 +1,14 @@
 #include "memory/memory_tier.hpp"
 
 #include <cuda_runtime.h>
-#include "compat/cuda_sep.h"
-#include "compat/macros.h"
-#include "compat/math_common.h"
-#include "core/allocation_metrics.h"
-#include "core/common.h"
-#include "core/logging.h"
-#include "core/types.h"
+
+#include "engine/allocation_metrics.h"
+#include "engine/common.h"
+#include "engine/cuda_sep.h"
+#include "engine/logging.h"
+#include "engine/macros.h"
+#include "engine/math_common.h"
+#include "engine/types.h"
 #include "memory/logger.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"

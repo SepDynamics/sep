@@ -11,14 +11,15 @@
 #undef SEP_NO_REDIS
 #endif
 #define SEP_HAS_HIREDIS 1
-#include "memory/redis_manager.h"
-#include "core/types.h"
-#include "core/logging.h"
-#include <mutex>
-
 #include <cuda_runtime.h>
+
 #include <cstdint>
 #include <cstring>
+#include <mutex>
+
+#include "engine/logging.h"
+#include "engine/types.h"
+#include "memory/redis_manager.h"
 #ifndef SEP_NO_REDIS
 #include <hiredis/hiredis.h>
 #define SEP_HAS_HIREDIS 1

@@ -86,9 +86,8 @@ target_link_libraries(pattern_metric_test PRIVATE
     GTest::gtest
     GTest::gtest_main
     fmt::fmt
-    sep_core
+    sep_engine
     sep_quantum
-    sep_compat
     TBB::tbb
 )
 

@@ -5,10 +5,10 @@
 #include <cstring>
 #include <vector>
 
-#include "compat/shim.h"
-#include "types.h"
+#include "engine/shim.h"
 #include "memory/memory_tier.hpp"
 #include "memory/memory_tier_manager.hpp"
+#include "types.h"
 
 using namespace sep::memory;
 using sep::SEPResult;

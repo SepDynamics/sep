@@ -1,10 +1,12 @@
 #include <string.h>
-#include <cstring> // For std::memcpy
+
 #include <chrono>
+#include <cstring>  // For std::memcpy
 #include <stdexcept>
 #include <string>
+
 #include "api/client.h"
-#include "core/error_handler.h"
+#include "engine/error_handler.h"
 
 namespace sep::api {
 

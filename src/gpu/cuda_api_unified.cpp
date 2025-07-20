@@ -5,7 +5,8 @@
 
 #ifdef SEP_HAS_CUDA
 #include <cuda_runtime_api.h>
-#include "compat/cuda_sep.h"
+
+#include "engine/cuda_sep.h"
 
 static cudaMemcpyKind convert_memcpy_kind(SEP_CUDA_MEMCPY_KIND kind) {
     switch (kind) {

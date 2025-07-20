@@ -1,10 +1,10 @@
 
-#include "compat/cuda_helpers.h"
-#include "compat/cuda_sep.h"
-#include "compat/math_common.h"
-#include "compat/pattern_types.h"
-#include "core/common.h"  // defines sep::SEPResult
-#include "core/types.h"
+#include "engine/common.h"  // defines sep::SEPResult
+#include "engine/cuda_helpers.h"
+#include "engine/cuda_sep.h"
+#include "engine/math_common.h"
+#include "engine/pattern_types.h"
+#include "engine/types.h"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor.h"

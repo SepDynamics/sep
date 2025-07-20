@@ -81,7 +81,7 @@ target_include_directories(sep_memory
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/compat
+        ${CMAKE_SOURCE_DIR}/src/engine
         ${CMAKE_SOURCE_DIR}/src/memory
 )
 if(HIREDIS_FOUND)

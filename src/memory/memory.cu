@@ -2,15 +2,12 @@
 // Include CUDA compatibility layer for C++ standard library functions
 
 // Include CUDA headers
-#include "compat/cuda.h"
 #include <cstring>
+#include <cstring>  // For std::memcpy (if needed implicitly for unified memory)
 
-#include <cstring> // For std::memcpy (if needed implicitly for unified memory)
-
-
-#include "compat/raii.h"
+#include "engine/cuda.h"
+#include "engine/raii.h"
 #include "memory/types.h"
-
 
 namespace sep {
 

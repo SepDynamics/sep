@@ -1,8 +1,9 @@
 #ifndef SEP_API_BRIDGE_H
 #define SEP_API_BRIDGE_H
 
-#include <cstddef> // For size_t
-#include "core/common.h"  // for sep::SEPResult
+#include <cstddef>  // For size_t
+
+#include "engine/common.h"  // for sep::SEPResult
 
 // Cross-platform API export macro
 #if defined(_WIN32)

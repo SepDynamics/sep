@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "core/types.h"
+#include "engine/types.h"
 #include "quantum/processor.h"
 
 namespace sep::quantum {

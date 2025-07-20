@@ -9,8 +9,8 @@
 #include <new>
 #include <string>
 
-#include "common.h"
-#include "types.h"
+#include "engine/common.h"
+#include "engine/types.h"
 #include "quantum/pattern.h"
 #include "quantum/pattern_processor.hpp"
 #include "quantum/processor.h"
@@ -644,7 +644,7 @@ MemoryTierManager::MemoryTierManager()
 
     namespace config
     {
-        void to_json(nlohmann::json &j, const workbench::MemoryThresholdConfig &c)
+        void to_json(nlohmann::json &j, const MemoryThresholdConfig &c)
         {
             j = nlohmann::json{{"promote_stm_to_mtm", c.promote_stm_to_mtm},
                                {"promote_mtm_to_ltm", c.promote_mtm_to_ltm},
@@ -659,7 +659,7 @@ MemoryTierManager::MemoryTierManager()
                                {"enable_compression", c.enable_compression}};
         }
 
-        void from_json(const nlohmann::json &j, workbench::MemoryThresholdConfig &c)
+        void from_json(const nlohmann::json &j, MemoryThresholdConfig &c)
         {
             j.at("promote_stm_to_mtm").get_to(c.promote_stm_to_mtm);
             j.at("promote_mtm_to_ltm").get_to(c.promote_mtm_to_ltm);

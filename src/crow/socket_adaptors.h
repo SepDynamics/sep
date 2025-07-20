@@ -16,10 +16,11 @@
 #endif
 
 // Include our own headers and Boost.ASIO
-#include "compat/shim.h"
-#include "crow/logging.h"
-#include "crow/asio_isolation.h"
 #include <boost/asio.hpp>
+
+#include "crow/asio_isolation.h"
+#include "crow/logging.h"
+#include "engine/shim.h"
 #ifdef CROW_ENABLE_SSL
 #include <boost/asio/ssl.hpp>
 #endif

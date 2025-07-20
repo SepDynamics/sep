@@ -6,11 +6,13 @@
 // of the engine.  When spdlog is not available (e.g. CUDA compilation)
 // the isolation headers provide light‑weight stubs.
 
-#include "compat/shim.h"
-#include "memory/spdlog_isolation.h"
-#include <sstream>
-#include <memory>
 #include <spdlog/sinks/stdout_color_sinks.h>
+
+#include <memory>
+#include <sstream>
+
+#include "engine/shim.h"
+#include "memory/spdlog_isolation.h"
 
 namespace crow {
 

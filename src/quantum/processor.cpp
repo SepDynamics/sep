@@ -1,13 +1,13 @@
 #include "quantum/processor.h"
-#include "core/types.h"
-#include "core/manager.h"
+
+#include <glm/glm.hpp>
+
+#include "engine/common.h"  // defines sep::SEPResult
+#include "engine/manager.h"
+#include "engine/types.h"
+#include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"
-#include <glm/glm.hpp>
-#include "memory/types.h"
-#include "core/manager.h"
-#include "core/common.h"  // defines sep::SEPResult
-#include "core/manager.h"
 
 using ::sep::memory::MemoryTierEnum;
 #include <mutex>

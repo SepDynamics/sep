@@ -1,13 +1,10 @@
 #ifndef SEP_CONFIG_MANAGER_H
 #define SEP_CONFIG_MANAGER_H
 
+#include "config.h"
+#include "engine/shim.h"
 #include "memory/memory_tier_manager.hpp"
 #include "types.h"
-#include "config.h"
-#include <memory>
-#include <mutex>
-#include <string>
-#include "shim.h"
 
 namespace sep::config {
 
@@ -38,8 +35,8 @@ public:
 
   void updateCudaConfig(const sep::config::CudaConfig &config);
   void updateLogConfig(const LogConfig &config);
-  void updateMemoryConfig(const MemoryThresholdConfig &config);
-  void updateQuantumConfig(const QuantumThresholdConfig &config);
+  void updateMemoryConfig(const sep::memory::MemoryThresholdConfig &config);
+  void updateQuantumConfig(const sep::QuantumThresholdConfig &config);
 
   // Reset configuration to defaults
   void resetToDefaults();

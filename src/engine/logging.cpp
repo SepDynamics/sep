@@ -1,4 +1,5 @@
 #include "logging.h"
+
 #include "common.h"
 
 #ifdef SEP_HAS_OPENTELEMETRY
@@ -50,71 +51,80 @@ void *Manager::getTracer() {
 #endif
 }
 
-std::shared_ptr<spdlog::logger> Manager::createLogger(const std::string &name,
-                                                      const LoggerConfig &config) {
-  auto logger = spdlog::get(name);
-  if (logger && !logger->sinks().empty()) {
+std::shared_ptr<spdlog::logger> Manager::createLogger(const shim::string &name,
+                                                      const LoggerConfig &config)
+{
+    auto logger = spdlog::get(name);
+    if (logger && !logger->sinks().empty())
+    {
+        return logger;
+    }
+
+    shim::vector<spdlog::sink_ptr> sinks;
+
+    if (config.console.enabled)
+    {
+        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+        console_sink->set_level(toSpdLogLevel(config.level));
+        sinks.push_back(console_sink);
+    }
+
+    if (!config.file.path.empty())
+    {
+        auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
+            config.file.path, config.file.max_size, config.file.max_files);
+        file_sink->set_level(toSpdLogLevel(config.level));
+        sinks.push_back(file_sink);
+    }
+
+    logger = std::make_shared<spdlog::logger>(name, sinks.begin(), sinks.end());
+    logger->set_level(toSpdLogLevel(config.level));
+    if (!config.pattern.empty())
+    {
+        logger->set_pattern(config.pattern);
+    }
+    spdlog::register_logger(logger);
+
     return logger;
-  }
-
-  std::vector<spdlog::sink_ptr> sinks;
-
-  if (config.console.enabled) {
-    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_level(toSpdLogLevel(config.level));
-    sinks.push_back(console_sink);
-  }
-
-  if (!config.file.path.empty()) {
-    auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-        config.file.path, config.file.max_size, config.file.max_files);
-    file_sink->set_level(toSpdLogLevel(config.level));
-    sinks.push_back(file_sink);
-  }
-
-  logger = std::make_shared<spdlog::logger>(name, sinks.begin(), sinks.end());
-  logger->set_level(toSpdLogLevel(config.level));
-  if (!config.pattern.empty()) {
-    logger->set_pattern(config.pattern);
-  }
-  spdlog::register_logger(logger);
-
-  return logger;
 }
 
-std::shared_ptr<spdlog::logger> Manager::getLogger(const std::string &name) {
-  return spdlog::get(name);
+std::shared_ptr<spdlog::logger> Manager::getLogger(const shim::string &name)
+{
+    return spdlog::get(name);
 }
 
 void Manager::setGlobalLevel(Level level) { spdlog::set_level(toSpdLogLevel(level)); }
 
-Level Manager::levelFromString(const std::string &level) {
-  if (level == "trace") return Level::TRACE;
-  if (level == "debug") return Level::DEBUG;
-  if (level == "info") return Level::INFO;
-  if (level == "warn") return Level::WARN;
-  if (level == "error") return Level::ERROR;
-  if (level == "critical") return Level::CRITICAL;
-  return Level::INFO;
+Level Manager::levelFromString(const shim::string &level)
+{
+    if (level == "trace") return Level::TRACE;
+    if (level == "debug") return Level::DEBUG;
+    if (level == "info") return Level::INFO;
+    if (level == "warn") return Level::WARN;
+    if (level == "error") return Level::ERROR;
+    if (level == "critical") return Level::CRITICAL;
+    return Level::INFO;
 }
 
-std::string Manager::levelToString(Level level) {
-  switch (level) {
-    case Level::TRACE:
-      return "trace";
-    case Level::DEBUG:
-      return "debug";
-    case Level::INFO:
-      return "info";
-    case Level::WARN:
-      return "warn";
-    case Level::ERROR:
-      return "error";
-    case Level::CRITICAL:
-      return "critical";
-    default:
-      return "info";
-  }
+shim::string Manager::levelToString(Level level)
+{
+    switch (level)
+    {
+        case Level::TRACE:
+            return "trace";
+        case Level::DEBUG:
+            return "debug";
+        case Level::INFO:
+            return "info";
+        case Level::WARN:
+            return "warn";
+        case Level::ERROR:
+            return "error";
+        case Level::CRITICAL:
+            return "critical";
+        default:
+            return "info";
+    }
 }
 
 }  // namespace sep::logging

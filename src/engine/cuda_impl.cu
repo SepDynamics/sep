@@ -4,18 +4,20 @@
  * Implementation of CUDA functions in the sep::cuda namespace
  */
 
+#include <cuda_runtime.h>
+
+#include <string>
+#include <vector>
+
 #include "core.h"
 #include "error_handler.h"
-#include <cuda_runtime.h>
-#include <vector>
-#include <string>
 
 namespace sep::cuda {
 
 struct CudaCore::Impl {
     bool initialized_ = false;
     int current_device_ = -1;
-    std::vector<cudaDeviceProp> device_properties_;
+    shim::vector<cudaDeviceProp> device_properties_;
     CudaMetrics current_metrics_;
 };
 
@@ -95,7 +97,7 @@ Error CudaCore::getLastError() const {
     return Error();
 }
 
-std::string CudaCore::getErrorString(cudaError_t error) const {
+shim::string CudaCore::getErrorString(cudaError_t error) const {
     return cudaGetErrorString(error);
 }
 

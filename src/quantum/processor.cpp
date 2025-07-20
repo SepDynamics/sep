@@ -2,12 +2,12 @@
 
 #include <glm/glm.hpp>
 
-#include "common.h"  // defines sep::SEPResult
-#include "manager.h"
+#include "engine/common.h"  // defines sep::SEPResult
+#include "engine/manager.h"
+#include "engine/types.h"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "types.h"
 
 using ::sep::memory::MemoryTierEnum;
 #include <mutex>
@@ -62,7 +62,8 @@ public:
         return sep::SEPResult::SUCCESS;
     }
 
-    sep::SEPResult removePattern(const std::string& pattern_id) {
+    sep::SEPResult removePattern(const shim::string& pattern_id)
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(pattern_id);
         if (it == pattern_map_.end()) {
@@ -73,7 +74,8 @@ public:
         return sep::SEPResult::SUCCESS;
     }
 
-    sep::SEPResult updatePattern(const std::string& pattern_id, const Pattern& pattern) {
+    sep::SEPResult updatePattern(const shim::string& pattern_id, const Pattern& pattern)
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(pattern_id);
         if (it == pattern_map_.end()) {
@@ -83,7 +85,8 @@ public:
         return sep::SEPResult::SUCCESS;
     }
 
-    Pattern getPattern(const std::string& pattern_id) const {
+    Pattern getPattern(const shim::string& pattern_id) const
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(pattern_id);
         if (it == pattern_map_.end()) {
@@ -92,14 +95,16 @@ public:
         return patterns_[it->second];
     }
 
-    std::vector<Pattern> getPatterns() const {
+    shim::vector<Pattern> getPatterns() const
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         return patterns_;
     }
 
-    std::vector<Pattern> getPatternsByTier(::sep::memory::MemoryTierEnum tier) const {
+    shim::vector<Pattern> getPatternsByTier(::sep::memory::MemoryTierEnum tier) const
+    {
         std::lock_guard<std::mutex> lock(mutex_);
-        std::vector<Pattern> result;
+        shim::vector<Pattern> result;
         for (const auto& pattern : patterns_) {
             if (pattern.quantum_state.memory_tier == tier) {
                 result.push_back(pattern);
@@ -113,7 +118,8 @@ public:
         return patterns_.size();
     }
 
-    ProcessingResult processPattern(const std::string& pattern_id) {
+    ProcessingResult processPattern(const shim::string& pattern_id)
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(pattern_id);
         if (it == pattern_map_.end()) {
@@ -126,7 +132,8 @@ public:
         return {true, pattern, ""};
     }
 
-    BatchProcessingResult processBatch(const std::vector<std::string>& pattern_ids) {
+    BatchProcessingResult processBatch(const shim::vector<shim::string>& pattern_ids)
+    {
         BatchProcessingResult result;
         result.success = true;
         for (const auto& id : pattern_ids) {
@@ -153,7 +160,8 @@ public:
         return result;
     }
 
-    ProcessingResult evolvePattern(const std::string& pattern_id) {
+    ProcessingResult evolvePattern(const shim::string& pattern_id)
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(pattern_id);
         if (it == pattern_map_.end()) {
@@ -165,7 +173,8 @@ public:
         return {true, pattern, ""};
     }
 
-    ProcessingResult collapsePattern(const std::string& pattern_id) {
+    ProcessingResult collapsePattern(const shim::string& pattern_id)
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(pattern_id);
         if (it == pattern_map_.end()) {
@@ -175,10 +184,12 @@ public:
         pattern.quantum_state.coherence = 0.0f;
         pattern.last_modified = getCurrentTimestamp();
         
-        return {true, pattern, ""}; 
+        return {true, pattern, ""};
     }
 
-    ProcessingResult entanglePatterns(const std::string& pattern_id1, const std::string& pattern_id2) {
+    ProcessingResult entanglePatterns(const shim::string& pattern_id1,
+                                      const shim::string& pattern_id2)
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it1 = pattern_map_.find(pattern_id1);
         auto it2 = pattern_map_.find(pattern_id2);
@@ -192,7 +203,8 @@ public:
         return {true, p1, ""};
     }
 
-    ProcessingResult mutatePattern(const std::string& parent_id) {
+    ProcessingResult mutatePattern(const shim::string& parent_id)
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = pattern_map_.find(parent_id);
         if (it == pattern_map_.end()) {
@@ -241,8 +253,9 @@ public:
         rebuildPatternMap();
     }
 
-    sep::SEPResult addRelationship(const std::string& pattern_id1, const std::string& pattern_id2,
-                               float strength, RelationshipType type) {
+    sep::SEPResult addRelationship(const shim::string& pattern_id1, const shim::string& pattern_id2,
+                                   float strength, RelationshipType type)
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it1 = pattern_map_.find(pattern_id1);
         auto it2 = pattern_map_.find(pattern_id2);
@@ -256,7 +269,8 @@ public:
         return sep::SEPResult::SUCCESS;
     }
 
-    float calculateCoherence(const std::string& pattern_id1, const std::string& pattern_id2) const {
+    float calculateCoherence(const shim::string& pattern_id1, const shim::string& pattern_id2) const
+    {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it1 = pattern_map_.find(pattern_id1);
         auto it2 = pattern_map_.find(pattern_id2);
@@ -271,12 +285,13 @@ public:
         return 0.7f * state_coherence + 0.3f * position_coherence;
     }
 
-    std::string getStatus() const {
+    shim::string getStatus() const
+    {
         std::lock_guard<std::mutex> lock(mutex_);
-        std::string status = "Quantum Processor Status:\n";
+        shim::string status = "Quantum Processor Status:\n";
         status += "  Total patterns: " + std::to_string(patterns_.size()) + "\n";
         status += "  Max patterns: " + std::to_string(config_.max_patterns) + "\n";
-        status += "  GPU enabled: " + std::string(config_.enable_cuda ? "Yes" : "No") + "\n";
+        status += "  GPU enabled: " + shim::string(config_.enable_cuda ? "Yes" : "No") + "\n";
         size_t stm_count = 0, mtm_count = 0, ltm_count = 0;
         size_t host_count = 0, device_count = 0, unified_count = 0;
         for (const auto& pattern : patterns_) {
@@ -353,14 +368,16 @@ private:
         }
     }
 
-    ProcessingResult createErrorResult(const std::string& error) const {
+    ProcessingResult createErrorResult(const shim::string& error) const
+    {
         ProcessingResult result;
         result.success = false;
         result.error_message = error;
         return result;
     }
 
-    std::string generatePatternId() const {
+    shim::string generatePatternId() const
+    {
         static std::atomic<uint64_t> counter{0};
         return "pat_" + std::to_string(getCurrentTimestamp()) + "_" + std::to_string(counter.fetch_add(1));
     }
@@ -371,8 +388,8 @@ private:
     }
 
     ProcessingConfig config_;
-    std::vector<Pattern> patterns_;
-    std::unordered_map<std::string, size_t> pattern_map_;
+    shim::vector<Pattern> patterns_;
+    std::unordered_map<shim::string, size_t> pattern_map_;
     mutable std::mutex mutex_;
     bool initialized_;
     GPUContext* gpu_context_;
@@ -386,33 +403,68 @@ Processor& Processor::operator=(Processor&&) noexcept = default;
 sep::SEPResult Processor::init(GPUContext* gpu_context) { return impl_->init(gpu_context); }
 void Processor::setHooks(core::SystemHooks* hooks) { impl_->setHooks(hooks); }
 sep::SEPResult Processor::addPattern(const Pattern& pattern) { return impl_->addPattern(pattern); }
-sep::SEPResult Processor::removePattern(const std::string& pattern_id) { return impl_->removePattern(pattern_id); }
-sep::SEPResult Processor::updatePattern(const std::string& pattern_id, const Pattern& pattern) { return impl_->updatePattern(pattern_id, pattern); }
-Pattern Processor::getPattern(const std::string& pattern_id) const { return impl_->getPattern(pattern_id); }
+sep::SEPResult Processor::removePattern(const shim::string& pattern_id)
+{
+    return impl_->removePattern(pattern_id);
+}
+sep::SEPResult Processor::updatePattern(const shim::string& pattern_id, const Pattern& pattern)
+{
+    return impl_->updatePattern(pattern_id, pattern);
+}
+Pattern Processor::getPattern(const shim::string& pattern_id) const
+{
+    return impl_->getPattern(pattern_id);
+}
 
-std::vector<Pattern> Processor::getPatterns() const { return impl_->getPatterns(); }
-std::vector<Pattern> Processor::getPatternsByTier(::sep::memory::MemoryTierEnum tier) const { return impl_->getPatternsByTier(tier); }
+shim::vector<Pattern> Processor::getPatterns() const { return impl_->getPatterns(); }
+shim::vector<Pattern> Processor::getPatternsByTier(::sep::memory::MemoryTierEnum tier) const
+{
+    return impl_->getPatternsByTier(tier);
+}
 size_t Processor::getPatternCount() const { return impl_->getPatternCount(); }
-ProcessingResult Processor::processPattern(const std::string& pattern_id) { return impl_->processPattern(pattern_id); }
+ProcessingResult Processor::processPattern(const shim::string& pattern_id)
+{
+    return impl_->processPattern(pattern_id);
+}
 
-
-BatchProcessingResult Processor::processBatch(const std::vector<std::string>& pattern_ids) { return impl_->processBatch(pattern_ids); }
+BatchProcessingResult Processor::processBatch(const shim::vector<shim::string>& pattern_ids)
+{
+    return impl_->processBatch(pattern_ids);
+}
 
 BatchProcessingResult Processor::processAll() { return impl_->processAll(); }
-ProcessingResult Processor::evolvePattern(const std::string& pattern_id) { return impl_->evolvePattern(pattern_id); }
-ProcessingResult Processor::collapsePattern(const std::string& pattern_id) { return impl_->collapsePattern(pattern_id); }
-ProcessingResult Processor::entanglePatterns(const std::string& pattern_id1, const std::string& pattern_id2) { return impl_->entanglePatterns(pattern_id1, pattern_id2); }
-ProcessingResult Processor::mutatePattern(const std::string& parent_id) { return impl_->mutatePattern(parent_id); }
+ProcessingResult Processor::evolvePattern(const shim::string& pattern_id)
+{
+    return impl_->evolvePattern(pattern_id);
+}
+ProcessingResult Processor::collapsePattern(const shim::string& pattern_id)
+{
+    return impl_->collapsePattern(pattern_id);
+}
+ProcessingResult Processor::entanglePatterns(const shim::string& pattern_id1,
+                                             const shim::string& pattern_id2)
+{
+    return impl_->entanglePatterns(pattern_id1, pattern_id2);
+}
+ProcessingResult Processor::mutatePattern(const shim::string& parent_id)
+{
+    return impl_->mutatePattern(parent_id);
+}
 void Processor::promotePatterns() { impl_->promotePatterns(); }
 void Processor::demotePatterns() { impl_->demotePatterns(); }
 void Processor::removeWeakPatterns() { impl_->removeWeakPatterns(); }
-sep::SEPResult Processor::addRelationship(const std::string& pattern_id1, const std::string& pattern_id2, float strength, RelationshipType type) {
+sep::SEPResult Processor::addRelationship(const shim::string& pattern_id1,
+                                          const shim::string& pattern_id2, float strength,
+                                          RelationshipType type)
+{
     return impl_->addRelationship(pattern_id1, pattern_id2, strength, type);
 }
-float Processor::calculateCoherence(const std::string& pattern_id1, const std::string& pattern_id2) const {
+float Processor::calculateCoherence(const shim::string& pattern_id1,
+                                    const shim::string& pattern_id2) const
+{
     return impl_->calculateCoherence(pattern_id1, pattern_id2);
 }
-std::string Processor::getStatus() const { return impl_->getStatus(); }
+shim::string Processor::getStatus() const { return impl_->getStatus(); }
 ProcessingConfig Processor::getConfig() const { return impl_->getConfig(); }
 void Processor::updateConfig(const ProcessingConfig& config) { impl_->updateConfig(config); }
 

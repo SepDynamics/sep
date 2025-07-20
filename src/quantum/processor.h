@@ -6,12 +6,12 @@
 #include <string>
 #include <vector>
 
-#include "common.h"
-#include "pattern_types.h"
+#include "engine/common.h"
+#include "engine/pattern_types.h"
+#include "engine/system_hooks.h"
+#include "engine/types.h"
 #include "quantum/gpu_context.h"
 #include "quantum/types.h"
-#include "system_hooks.h"
-#include "types.h"
 
 namespace sep {
 
@@ -28,11 +28,11 @@ constexpr float DEMOTION_THRESHOLD = 0.3f;
 struct ProcessingResult {
     bool success{false};
     compat::Pattern pattern{};
-    std::string error_message{};
+    shim::string error_message{};
 };
 
 struct BatchProcessingResult : public ProcessingResult {
-    std::vector<ProcessingResult> results{};
+    shim::vector<ProcessingResult> results{};
 };
 
 namespace pattern {
@@ -54,10 +54,10 @@ public:
     virtual compat::PatternData mutatePattern(const compat::PatternData& parent);
     
     SEPResult addPattern(const compat::PatternData& pattern);
-    const std::vector<compat::PatternData>& getPatterns() const;
+    const shim::vector<compat::PatternData>& getPatterns() const;
 
     // Convenience method to evolve patterns and return the results
-    virtual const std::vector<compat::PatternData>& process()
+    virtual const shim::vector<compat::PatternData>& process()
     {
         evolvePatterns();
         return patterns_;
@@ -65,7 +65,7 @@ public:
     
 protected:
     Implementation implementation_;
-    std::vector<compat::PatternData> patterns_;
+    shim::vector<compat::PatternData> patterns_;
 };
 
 // CPU implementation of pattern processor
@@ -79,7 +79,7 @@ public:
     compat::PatternData mutatePattern(const compat::PatternData& parent) override;
     
 protected:
-    std::vector<compat::PatternData>& patterns_;
+    shim::vector<compat::PatternData>& patterns_;
 };
 
 } // namespace pattern
@@ -102,31 +102,33 @@ public:
     void setHooks(core::SystemHooks* hooks);
 
     SEPResult addPattern(const compat::Pattern& pattern);
-    SEPResult removePattern(const std::string& pattern_id);
-    SEPResult updatePattern(const std::string& pattern_id, const compat::Pattern& pattern);
-    compat::Pattern getPattern(const std::string& pattern_id) const;
-    std::vector<sep::compat::Pattern> getPatterns() const;
-    std::vector<sep::compat::Pattern> getPatternsByTier(sep::memory::MemoryTierEnum tier) const;
+    SEPResult removePattern(const shim::string& pattern_id);
+    SEPResult updatePattern(const shim::string& pattern_id, const compat::Pattern& pattern);
+    compat::Pattern getPattern(const shim::string& pattern_id) const;
+    shim::vector<sep::compat::Pattern> getPatterns() const;
+    shim::vector<sep::compat::Pattern> getPatternsByTier(sep::memory::MemoryTierEnum tier) const;
     size_t getPatternCount() const;
 
-    ProcessingResult processPattern(const std::string& pattern_id);
-    BatchProcessingResult processBatch(const std::vector<std::string>& pattern_ids);
+    ProcessingResult processPattern(const shim::string& pattern_id);
+    BatchProcessingResult processBatch(const shim::vector<shim::string>& pattern_ids);
     BatchProcessingResult processAll();
 
-    ProcessingResult evolvePattern(const std::string& pattern_id);
-    ProcessingResult collapsePattern(const std::string& pattern_id);
-    ProcessingResult entanglePatterns(const std::string& pattern_id1, const std::string& pattern_id2);
-    ProcessingResult mutatePattern(const std::string& parent_id);
+    ProcessingResult evolvePattern(const shim::string& pattern_id);
+    ProcessingResult collapsePattern(const shim::string& pattern_id);
+    ProcessingResult entanglePatterns(const shim::string& pattern_id1,
+                                      const shim::string& pattern_id2);
+    ProcessingResult mutatePattern(const shim::string& parent_id);
 
     void promotePatterns();
     void demotePatterns();
     void removeWeakPatterns();
 
-    SEPResult addRelationship(const std::string& pattern_id1, const std::string& pattern_id2,
+    SEPResult addRelationship(const shim::string& pattern_id1, const shim::string& pattern_id2,
                               float strength, RelationshipType type);
-    float calculateCoherence(const std::string& pattern_id1, const std::string& pattern_id2) const;
+    float calculateCoherence(const shim::string& pattern_id1,
+                             const shim::string& pattern_id2) const;
 
-    std::string getStatus() const;
+    shim::string getStatus() const;
     ProcessingConfig getConfig() const;
     void updateConfig(const ProcessingConfig& config);
 

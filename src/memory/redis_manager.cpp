@@ -17,9 +17,9 @@
 #include <cstring>
 #include <mutex>
 
-#include "logging.h"
+#include "engine/logging.h"
+#include "engine/types.h"
 #include "memory/redis_manager.h"
-#include "types.h"
 #ifndef SEP_NO_REDIS
 #include <hiredis/hiredis.h>
 #define SEP_HAS_HIREDIS 1
@@ -27,27 +27,31 @@
 #define SEP_HAS_HIREDIS 0
 #endif
 // Define namespace alias to clarify that Manager is in the logging namespace
-namespace logging = sep::logging; 
-#include "memory/memory_tier_manager.hpp"
+namespace logging = sep::logging;
 #include <memory>
 #include <sstream>
 #include <string>
 
+#include "memory/memory_tier_manager.hpp"
+
 namespace sep::persistence {
 
-std::string RedisManager::Impl::getPatternKey(std::uint64_t id, const std::string& tier) const {
-    std::stringstream key;
-    key << "pattern:" << normalizeTier(tier) << ":" << id;
-    return key.str();
-}
+    shim::string RedisManager::Impl::getPatternKey(std::uint64_t id, const shim::string& tier) const
+    {
+        std::stringstream key;
+        key << "pattern:" << normalizeTier(tier) << ":" << id;
+        return key.str();
+    }
 
-std::string RedisManager::Impl::getTierPatternsKey(const std::string& tier) const {
+shim::string RedisManager::Impl::getTierPatternsKey(const shim::string& tier) const
+{
     std::stringstream key;
     key << normalizeTier(tier) << ":patterns";
     return key.str();
 }
-std::string RedisManager::Impl::normalizeTier(const std::string& tier) const {
-    std::string lower_tier = tier;
+shim::string RedisManager::Impl::normalizeTier(const shim::string& tier) const
+{
+    shim::string lower_tier = tier;
     std::transform(lower_tier.begin(), lower_tier.end(), lower_tier.begin(),
                    [](unsigned char c){ return std::tolower(c); });
     return lower_tier;
@@ -55,8 +59,8 @@ std::string RedisManager::Impl::normalizeTier(const std::string& tier) const {
 
 // RedisManager::Impl method implementations
 
-RedisManager::Impl::Impl(const std::string& host, int port)
-    : context_(nullptr), connected_(false) {
+RedisManager::Impl::Impl(const shim::string& host, int port) : context_(nullptr), connected_(false)
+{
 #if SEP_HAS_HIREDIS
     auto logger = logging::Manager::getInstance().getLogger("redis");
     context_ = redisConnect(host.c_str(), port); 
@@ -91,9 +95,9 @@ RedisManager::Impl::~Impl() {
 
 bool RedisManager::Impl::isConnected() const { return connected_; }
 
-void RedisManager::Impl::storePattern(std::uint64_t id,
-                                      const PersistentPatternData& data,
-                                      const std::string& tier) {
+void RedisManager::Impl::storePattern(std::uint64_t id, const PersistentPatternData& data,
+                                      const shim::string& tier)
+{
 #if SEP_HAS_HIREDIS
     if (!connected_ || !context_)
         return;
@@ -133,7 +137,8 @@ void RedisManager::Impl::storePattern(std::uint64_t id,
 }
 
 std::optional<PersistentPatternData> RedisManager::Impl::loadPattern(std::uint64_t id,
-                                                                  const std::string& tier) {
+                                                                     const shim::string& tier)
+{
 #if SEP_HAS_HIREDIS
 if (!connected_ || !context_)
     return std::nullopt;
@@ -181,9 +186,10 @@ return pattern_data;
 #endif
 }
 
-std::vector<std::uint64_t> RedisManager::Impl::getPatternIds(const std::string& tier) {
+shim::vector<std::uint64_t> RedisManager::Impl::getPatternIds(const shim::string& tier)
+{
 #if SEP_HAS_HIREDIS
-    std::vector<std::uint64_t> ids;
+    shim::vector<std::uint64_t> ids;
     if (!connected_ || !context_)
         return ids;
 
@@ -208,7 +214,8 @@ std::vector<std::uint64_t> RedisManager::Impl::getPatternIds(const std::string& 
 #endif
 }
 
-void RedisManager::Impl::removePattern(std::uint64_t id, const std::string& tier) {
+void RedisManager::Impl::removePattern(std::uint64_t id, const shim::string& tier)
+{
 #if SEP_HAS_HIREDIS
     if (!connected_ || !context_)
         return;
@@ -230,16 +237,19 @@ void RedisManager::Impl::removePattern(std::uint64_t id, const std::string& tier
 #endif
 }
 
-void RedisManager::Impl::bulkStore(const std::vector<std::pair<std::uint64_t, PersistentPatternData>>& patterns,
-                                   const std::string& tier) {
+void RedisManager::Impl::bulkStore(
+    const shim::vector<std::pair<std::uint64_t, PersistentPatternData>>& patterns,
+    const shim::string& tier)
+{
     for (const auto& p : patterns) {
         storePattern(p.first, p.second, tier);
     }
 }
 
-std::vector<PersistentPatternData> RedisManager::Impl::bulkLoad(const std::vector<std::uint64_t>& ids,
-                                                                const std::string& tier) {
-    std::vector<PersistentPatternData> results;
+shim::vector<PersistentPatternData> RedisManager::Impl::bulkLoad(
+    const shim::vector<std::uint64_t>& ids, const shim::string& tier)
+{
+    shim::vector<PersistentPatternData> results;
     results.reserve(ids.size());
     for (std::uint64_t id : ids) {
         auto data = loadPattern(id, tier);
@@ -250,37 +260,47 @@ std::vector<PersistentPatternData> RedisManager::Impl::bulkLoad(const std::vecto
 }
 
 // RedisManager implementation
-RedisManager::RedisManager(const std::string& host, int port) : impl_(std::make_unique<Impl>(host, port)) {}
+RedisManager::RedisManager(const shim::string& host, int port)
+    : impl_(std::make_unique<Impl>(host, port))
+{
+}
 RedisManager::~RedisManager() = default;
-std::shared_ptr<IRedisManager> createRedisManager(const std::string& host, int port) { return std::make_shared<RedisManager>(host, port); }
-void RedisManager::storePattern(std::uint64_t id, const sep::persistence::PersistentPatternData& data, const std::string& tier)
+std::shared_ptr<IRedisManager> createRedisManager(const shim::string& host, int port)
+{
+    return std::make_shared<RedisManager>(host, port);
+}
+void RedisManager::storePattern(std::uint64_t id,
+                                const sep::persistence::PersistentPatternData& data,
+                                const shim::string& tier)
 {
     impl_->storePattern(id, data, tier);
 }
 
-std::optional<sep::persistence::PersistentPatternData> RedisManager::loadPattern(std::uint64_t id, const std::string& tier)
+std::optional<sep::persistence::PersistentPatternData> RedisManager::loadPattern(
+    std::uint64_t id, const shim::string& tier)
 {
     return impl_->loadPattern(id, tier);
 }
 
-std::vector<std::uint64_t> RedisManager::getPatternIds(const std::string& tier)
+shim::vector<std::uint64_t> RedisManager::getPatternIds(const shim::string& tier)
 {
     return impl_->getPatternIds(tier);
 }
 
-void RedisManager::removePattern(std::uint64_t id, const std::string& tier)
+void RedisManager::removePattern(std::uint64_t id, const shim::string& tier)
 {
     impl_->removePattern(id, tier);
 }
 
-void RedisManager::bulkStore(const std::vector<std::pair<std::uint64_t, sep::persistence::PersistentPatternData>>& patterns,
-                             const std::string& tier)
+void RedisManager::bulkStore(
+    const shim::vector<std::pair<std::uint64_t, sep::persistence::PersistentPatternData>>& patterns,
+    const shim::string& tier)
 {
     impl_->bulkStore(patterns, tier);
 }
 
-std::vector<sep::persistence::PersistentPatternData> RedisManager::bulkLoad(const std::vector<std::uint64_t>& ids,
-                                                                               const std::string& tier)
+shim::vector<sep::persistence::PersistentPatternData> RedisManager::bulkLoad(
+    const shim::vector<std::uint64_t>& ids, const shim::string& tier)
 {
     return impl_->bulkLoad(ids, tier);
 }

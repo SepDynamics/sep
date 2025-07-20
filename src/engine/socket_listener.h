@@ -1,9 +1,11 @@
 #ifndef SEP_CORE_SOCKET_LISTENER_H
 #define SEP_CORE_SOCKET_LISTENER_H
 
-#include <string>
 #include <functional>
 #include <memory>
+#include <string>
+
+#include "engine/shim.h"
 
 namespace sep {
 namespace core {

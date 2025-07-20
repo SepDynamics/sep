@@ -8,13 +8,13 @@
  */
 
 // Project includes
-#include "common.h"
-#include "dag_graph.h"
+#include "engine/common.h"
+#include "engine/dag_graph.h"
+#include "engine/shim.h"
+#include "engine/types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/persistent_pattern_data.hpp"
 #include "memory/types.h"
-#include "shim.h"
-#include "types.h"
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
 #endif // SEP_NO_REDIS

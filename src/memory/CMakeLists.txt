@@ -1,121 +1,13 @@
-set(SEP_MEMORY_SOURCES
-    memory_tier.cpp
-    memory_tier_manager.cpp
-    memory_tier_manager_serialization.cpp
-)
-if(NOT SEP_MEMORY_MINIMAL)
-  list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
-endif()
-if(SEP_TESTBED_STUBS)
-  list(APPEND SEP_MEMORY_SOURCES ${CMAKE_SOURCE_DIR}/_sep/testbed/memory_minimal/memory_tier_manager_stubs.cpp)
-endif()
-
-set(SEP_HAS_REDIS 0)
-set(HIREDIS_FOUND FALSE)
-find_package(TBB REQUIRED)
-
-if(HIREDIS_FOUND)
-    list(APPEND SEP_MEMORY_SOURCES redis_manager.cpp)
-    set(SEP_HAS_REDIS 1)
-else()
-    add_compile_definitions(SEP_NO_REDIS)
-endif()
-
-add_library(sep_memory STATIC ${SEP_MEMORY_SOURCES})
-
-if(SEP_BUILD_QUANTUM)
-  target_sources(sep_memory PRIVATE quantum_coherence_manager.cpp)
-endif()
-
-# Find hiredis for Redis persistence support
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(HIREDIS hiredis)
-if(HIREDIS_FOUND AND NOT SEP_MEMORY_MINIMAL)
-  set(SEP_HAS_REDIS 1)
-  target_sources(sep_memory PRIVATE redis_manager.cpp)
-  target_link_libraries(sep_memory PRIVATE ${HIREDIS_LIBRARIES})
-  target_include_directories(sep_memory PRIVATE ${HIREDIS_INCLUDE_DIRS})
-else()
-  set(SEP_HAS_REDIS 0)
-  add_compile_definitions(SEP_NO_REDIS)
-endif()
-
-# Add CUDA-specific compile definitions to handle exception specs
-target_compile_definitions(sep_memory PRIVATE)
-set_target_properties(sep_memory PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    CUDA_ARCHITECTURES "75;70;61;60")
-
-find_package(Threads REQUIRED)
-
-set_target_properties(sep_memory PROPERTIES
-    POSITION_INDEPENDENT_CODE ON
-    CXX_VISIBILITY_PRESET default
-    VISIBILITY_INLINES_HIDDEN OFF
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
-)
-
-# Link dependencies
-target_link_libraries(sep_memory
-    PUBLIC
-        sep_engine
+add_sep_library(sep_memory
+    SOURCES
+        memory_tier_manager_serialization.cpp
+        memory_tier.cpp
+        memory_tier_manager.cpp
+        quantum_coherence_manager.cpp
+        redis_manager.cpp
+    DEPENDENCIES
+        sep_quantum
         fmt::fmt
-        $<$<BOOL:${SEP_BUILD_QUANTUM}>:sep_quantum>
-    PRIVATE
         Threads::Threads
         TBB::tbb
 )
-if(SEP_USE_TBB)
-    target_compile_definitions(sep_memory PRIVATE SEP_USE_TBB)
-endif()
-if(HIREDIS_FOUND)
-    target_link_libraries(sep_memory PRIVATE ${HIREDIS_LIB})
-endif()
-
-# Configure include directories
-target_include_directories(sep_memory
-    PUBLIC
-        ${CMAKE_SOURCE_DIR}/src
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/src/engine
-)
-
-# Add CUDA include directories if CUDA is enabled
-if(SEP_USE_CUDA)
-    target_include_directories(sep_memory
-        PUBLIC
-            ${CUDAToolkit_INCLUDE_DIRS}
-    )
-endif()
-if(HIREDIS_FOUND)
-    target_include_directories(sep_memory PRIVATE ${HIREDIS_INCLUDE_DIR})
-endif()
-
-# Add compile definitions
-target_compile_definitions(sep_memory
-    PUBLIC
-        $<$<BOOL:${SEP_MEMORY_MINIMAL}>:SEP_MEMORY_MINIMAL>
-    PRIVATE
-        SEP_HAS_REDIS=${SEP_HAS_REDIS}
-)
-
-if(HIREDIS_FOUND)
-    message(STATUS "Found hiredis: ${HIREDIS_LIB}")
-    message(STATUS "Found hiredis headers: ${HIREDIS_INCLUDE_DIR}")
-endif()
-
-# Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/memory/
-        DESTINATION include/sep/memory
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp")
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/memory/
-        DESTINATION include/sep/memory/internal
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp")

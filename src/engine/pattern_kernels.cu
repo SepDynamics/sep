@@ -1,6 +1,7 @@
-#include "pattern_types.h"
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
+
+#include "pattern_types.h"
 
 namespace {
 constexpr int BLOCK_SIZE = 256;

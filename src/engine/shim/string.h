@@ -5,7 +5,7 @@
 namespace sep {
 namespace shim {
 
-using string = std::string;
+    using string = shim::string;
 
 } // namespace shim
 } // namespace sep

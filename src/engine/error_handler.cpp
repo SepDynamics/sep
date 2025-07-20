@@ -1,9 +1,10 @@
 #include "error_handler.h"
-#include "shim.h"
 
-#include <functional> // Required for std::function
+#include <functional>  // Required for std::function
 #include <mutex>
 #include <vector>
+
+#include "engine/shim.h"
 
 namespace sep::core {
 using ::sep::Error;
@@ -19,14 +20,16 @@ void ErrorHandler::reportError(const Error &error, std::function<bool()> retry) 
   processRetriesLocked();
 }
 
-std::vector<Error> ErrorHandler::getErrors() const {
-  std::lock_guard<std::mutex> lock(mutex_);
-  std::vector<Error> result;
-  result.reserve(errors_.size());
-  for (const auto &e : errors_) {
-    result.push_back(e.error);
-  }
-  return result;
+shim::vector<Error> ErrorHandler::getErrors() const
+{
+    std::lock_guard<std::mutex> lock(mutex_);
+    shim::vector<Error> result;
+    result.reserve(errors_.size());
+    for (const auto &e : errors_)
+    {
+        result.push_back(e.error);
+    }
+    return result;
 }
 
 void ErrorHandler::clearErrors() {

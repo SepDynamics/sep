@@ -1,13 +1,13 @@
-#include "common.h"  // defines sep::SEPResult
-#include "core.h"
-#include "logging.h"
+#include "engine/common.h"  // defines sep::SEPResult
+#include "engine/core.h"
+#include "engine/logging.h"
+#include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/processor.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "types.h"
 
 // Define namespace alias for clarity
 namespace logging = sep::logging;
@@ -46,10 +46,7 @@ sep::SEPResult PatternProcessor::addPattern(const PatternData& pattern)
     return sep::SEPResult::SUCCESS;
 }
 
-const std::vector<PatternData>& PatternProcessor::getPatterns() const
-{
-    return patterns_;
-}
+const shim::vector<PatternData>& PatternProcessor::getPatterns() const { return patterns_; }
 
 CPUPatternProcessor::CPUPatternProcessor()
     : PatternProcessor(Implementation::CPU), patterns_(PatternProcessor::patterns_)

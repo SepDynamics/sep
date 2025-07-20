@@ -1,12 +1,14 @@
 #include "quantum/quantum_manifold_optimizer.h"
-#include "types.h"
-#include "quantum/quantum_processor_qfh.h"
-#include <numeric>
-#include <vector>
+
 #include <glm/glm.hpp>
 #include <memory>
 #include <mutex>
+#include <numeric>
 #include <thread>
+#include <vector>
+
+#include "engine/types.h"
+#include "quantum/quantum_processor_qfh.h"
 
 namespace sep::quantum::manifold {
 #include "quantum/pattern_evolution_bridge.h"
@@ -88,9 +90,9 @@ QuantumManifoldOptimizer::optimize(const QuantumState& initial_state,
     return result;
 }
 
-std::vector<Pattern> QuantumManifoldOptimizer::optimize(
-    const std::vector<Pattern>& patterns) {
-    std::vector<Pattern> result = patterns;
+shim::vector<Pattern> QuantumManifoldOptimizer::optimize(const shim::vector<Pattern>& patterns)
+{
+    shim::vector<Pattern> result = patterns;
     OptimizationTarget target{};
     target.target_coherence = config_.target_coherence;
     target.target_stability = config_.target_stability;
@@ -102,8 +104,8 @@ std::vector<Pattern> QuantumManifoldOptimizer::optimize(
     return result;
 }
 
-void QuantumManifoldOptimizer::updateManifoldGeometry(
-    const std::vector<QuantumState>& states) {
+void QuantumManifoldOptimizer::updateManifoldGeometry(const shim::vector<QuantumState>& states)
+{
     std::lock_guard<std::mutex> lock(state_mutex_);
     manifold_points_.clear();
     manifold_points_.reserve(states.size());
@@ -127,13 +129,14 @@ float QuantumManifoldOptimizer::computeManifoldCoherence(
     return glm::dot(glm::normalize(position), glm::normalize(avg));
 }
 
-std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::vec3& position,
-                                                                     uint32_t num_samples) const {
-    std::vector<glm::vec3> samples;
+shim::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::vec3& position,
+                                                                     uint32_t num_samples) const
+{
+    shim::vector<glm::vec3> samples;
     samples.reserve(num_samples);
 
     // Calculate orthonormal basis for tangent space using Gram-Schmidt
-    std::vector<glm::vec3> basis;
+    shim::vector<glm::vec3> basis;
     basis.reserve(2);
 
     // First basis vector: project onto manifold surface
@@ -157,6 +160,5 @@ std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::v
 
     return samples;
 }
-
 
 } // namespace sep::quantum::manifold

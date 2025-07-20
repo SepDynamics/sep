@@ -1,4 +1,5 @@
 #include "quantum/qbsa.h"
+
 #include <cstdint>
 #include <vector>
 
@@ -6,26 +7,29 @@ namespace sep::quantum {
 
 QBSAProcessor::QBSAProcessor(const QBSAOptions& options) : options_(options) {}
 
-QBSAResult QBSAProcessor::analyze(const std::vector<uint32_t>& probe_indices,
-                                  const std::vector<uint32_t>& expectations) {
-  QBSAResult result{};
-  if (probe_indices.empty() || probe_indices.size() != expectations.size()) return result;
+QBSAResult QBSAProcessor::analyze(const shim::vector<uint32_t>& probe_indices,
+                                  const shim::vector<uint32_t>& expectations)
+{
+    QBSAResult result{};
+    if (probe_indices.empty() || probe_indices.size() != expectations.size()) return result;
 
-  // Count corrections needed
-  for (size_t i = 0; i < probe_indices.size(); ++i) {
-    if (probe_indices[i] != expectations[i]) {
-      result.corrections.push_back(static_cast<uint32_t>(i));
+    // Count corrections needed
+    for (size_t i = 0; i < probe_indices.size(); ++i)
+    {
+        if (probe_indices[i] != expectations[i])
+        {
+            result.corrections.push_back(static_cast<uint32_t>(i));
+        }
     }
-  }
 
-  // Calculate correction ratio
-  result.correction_ratio =
-      static_cast<float>(result.corrections.size()) / static_cast<float>(probe_indices.size());
+    // Calculate correction ratio
+    result.correction_ratio =
+        static_cast<float>(result.corrections.size()) / static_cast<float>(probe_indices.size());
 
-  // Detect collapse based on correction ratio
-  result.collapse_detected = (result.correction_ratio >= options_.collapse_threshold);
+    // Detect collapse based on correction ratio
+    result.collapse_detected = (result.correction_ratio >= options_.collapse_threshold);
 
-  return result;
+    return result;
 }
 
 bool QBSAProcessor::detectCollapse(const QBSAResult& result, std::size_t total_bits) const {

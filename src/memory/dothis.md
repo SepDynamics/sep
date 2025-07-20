@@ -338,7 +338,7 @@ TEST_F(MemoryTierManagerTest, PromotionAndDemotion) {
 4.  Once `PromotionAndDemotion` passes, `DefragmentationTriggersPromotionDemotion` and `OptimizeBlocksPromotionDemotion` will likely also pass, as they rely on the same underlying promotion mechanisms.
 
 
-Alright, let's tackle this wall of errors. It looks like you've got a mix of header include issues, namespace problems, and potentially some fundamental type confusion (like `std::string` being seen as `int`!).
+Alright, let's tackle this wall of errors. It looks like you've got a mix of header include issues, namespace problems, and potentially some fundamental type confusion (like `shim::string` being seen as `int`!).
 
 The "Too many errors emitted" is just a consequence of the first few errors cascading. We need to focus on the initial ones.
 
@@ -354,15 +354,15 @@ Here is an outline to follow to systematically diagnose and resolve these compil
 
 1.  **Missing Header Files (`pp_file_not_found`):** `compat/cuda.h`, `core/common.h`, `memory/memory_tier_manager.hpp`, `core/types.h`, `memory/types.h`, `core/compression.h` are not being found by the compiler when included.
 2.  **Type/Namespace Lookup (`unknown_typename`, `undeclared_var_use`, `no_member`, `typename_nested_not_found`):** Types like `MemoryBlock`, `MemoryTierEnum`, `MemoryTier`, `Compressor`, `CompressionType`, `ollama`, and internal standard library types (`_Node_ptr`, `_Tp_alloc_type`) are not recognized. This is often a consequence of missing headers, incorrect include order, or namespace pollution/redefinition.
-3.  **Type Redefinition/Confusion (`init_conversion_failed`, `typecheck_comparison_of_pointer_integer`):** Especially the `std::string` (aka 'int') errors. This is a major red flag and indicates some macro or typedef is incorrectly redefining standard library types.
+3.  **Type Redefinition/Confusion (`init_conversion_failed`, `typecheck_comparison_of_pointer_integer`):** Especially the `shim::string` (aka 'int') errors. This is a major red flag and indicates some macro or typedef is incorrectly redefining standard library types.
 4.  **Syntax/Usage Errors (`expected_class_name`, `override keyword only allowed...`):** Basic C++ syntax or incorrect use of language features.
 5.  **Typo:** The stray `e` in `src/memory/memory_tier.cpp`.
 
 ---
 
-### **Step 1: Fix the `std::string` Redefinition (Highest Priority)**
+### **Step 1: Fix the `shim::string` Redefinition (Highest Priority)**
 
-This is causing `std::string` to be treated as `int`, leading to cascading errors in standard library usage (`vector`, `map`, string literals).
+This is causing `shim::string` to be treated as `int`, leading to cascading errors in standard library usage (`vector`, `map`, string literals).
 
 1.  **Identify the source:** The errors appear first in `/sep/include/core/types.h`. This header is likely including another header *before* the errors occur, and that header is causing the redefinition.
 2.  **Examine `/sep/include/core/types.h` (around line 12):** Look at the headers included *before* the first error on line 12 (`compat/cuda.h`).
@@ -370,14 +370,14 @@ This is causing `std::string` to be treated as `int`, leading to cascading error
     *   `#include <vector>` (line 9)
     *   `#include <map>` (line 10)
     *   `#include <unordered_map>` (line 11)
-    *   `#include "cuda.h"` (line 12 - error here)
+    *   `#include "engine/cuda.h"` (line 12 - error here)
     *   ... and others after.
-3.  **Hypothesis:** A header included *before* `<string>` or `<vector>` is defining a macro or typedef that conflicts with `std::string` or its dependencies. The `compat/shim.h` header is a likely candidate for compatibility layer issues.
+3.  **Hypothesis:** A header included *before* `<string>` or `<vector>` is defining a macro or typedef that conflicts with `shim::string` or its dependencies. The `compat/shim.h` header is a likely candidate for compatibility layer issues.
 4.  **Action:**
-    *   Temporarily comment out includes in `/sep/include/core/types.h` one by one, starting from the top, until the `std::string` (aka 'int') errors disappear.
+    *   Temporarily comment out includes in `/sep/include/core/types.h` one by one, starting from the top, until the `shim::string` (aka 'int') errors disappear.
     *   Once you've isolated the problematic include, examine that header file for macros (like `#define string ...`), `typedef`s, or `using` declarations that might be the culprit. Pay close attention to conditional compilation blocks (`#ifdef`, `#ifndef`).
-    *   **Focus on `compat/shim.h`**: Review this file thoroughly for anything that might affect `std::string`. It includes `<string_view>`, `<vector>`, `<string>`, and has `namespace sep::shim`. It defines `shim::string`. Is `shim::string` perhaps being aliased globally or used instead of `std::string` where `std::string` is expected?
-    *   **Resolution:** Correct the problematic definition or ensure that the code correctly uses `std::string` or `sep::shim::string` where intended, without unwanted global redefinitions. If `sep::shim::string` is intended as a replacement, ensure all code uses it consistently and correctly, and that it behaves like a string, not an int.
+    *   **Focus on `compat/shim.h`**: Review this file thoroughly for anything that might affect `shim::string`. It includes `<string_view>`, `<vector>`, `<string>`, and has `namespace sep::shim`. It defines `shim::string`. Is `shim::string` perhaps being aliased globally or used instead of `shim::string` where `shim::string` is expected?
+    *   **Resolution:** Correct the problematic definition or ensure that the code correctly uses `shim::string` or `sep::shim::string` where intended, without unwanted global redefinitions. If `sep::shim::string` is intended as a replacement, ensure all code uses it consistently and correctly, and that it behaves like a string, not an int.
 
 ---
 
@@ -388,7 +388,7 @@ These are straightforward include path issues or missing physical files.
 1.  **`'compat/cuda.h' file not found` (in `/sep/include/core/types.h`, line 12):**
     *   Check the `compat` module's public include directory (`include/sep/compat`). Is `cuda.h` actually there?
     *   Refer to `include-compat.md`. The public headers are listed as `core.h`, `kernels.h`, `raii.h`, `memory.h`, `macros.h`, `cuda_common.h`. `cuda.h` is *not* listed as a public header.
-    *   **Action:** The include `#include "cuda.h"` in `include/core/types.h` is likely incorrect. Determine what functionality from `compat` is needed in `core/types.h` and include the *correct* public header (e.g., `compat/core.h` if `CudaCore` types are needed, `compat/types.h` if basic `compat` types are needed). Replace `#include "cuda.h"` with the appropriate one.
+    *   **Action:** The include `#include "engine/cuda.h"` in `include/core/types.h` is likely incorrect. Determine what functionality from `compat` is needed in `core/types.h` and include the *correct* public header (e.g., `compat/core.h` if `CudaCore` types are needed, `compat/types.h` if basic `compat` types are needed). Replace `#include "engine/cuda.h"` with the appropriate one.
 
 2.  **`'core/common.h' file not found` (in `/sep/include/memory/memory_tier_manager.hpp`, line 23 and `tests/memory/memory_tier_manager_test.cpp`, line 2):**
     *   The `memory` module and its tests need to include headers from `core`.
@@ -420,7 +420,7 @@ These are straightforward include path issues or missing physical files.
 
 ### **Step 4: Address Type and Namespace Lookup Errors**
 
-Once missing includes are fixed and the `std::string` redefinition is gone, many of these should resolve.
+Once missing includes are fixed and the `shim::string` redefinition is gone, many of these should resolve.
 
 1.  **`Unknown type name 'MemoryBlock'`, `MemoryTierEnum'`, `MemoryTier'`, `Use of undeclared identifier 'MemoryTierEnum'`:** If the header `memory/types.h` and `memory/memory_tier_manager.hpp` are now being found (Step 2), ensure that when these types are used (e.g., in `MemoryTierManagerTest` or `src/memory/memory_tier_manager.cpp`), they are correctly qualified with their namespace `sep::memory::` (e.g., `sep::memory::MemoryBlock* block;`) or that appropriate `using namespace sep::memory;` declarations are in place *after* the includes. The errors themselves often suggest the correct qualified name (e.g., `did you mean 'sep::memory::MemoryBlock'?`).
 2.  **`undeclared identifier 'Compressor'`, `CompressionType'`:** If `core/compression.h` is now found (Step 2), ensure the `Compressor` class and `CompressionType` enum are correctly defined within the `sep::core` namespace and are used with the correct qualification or `using` declarations.
@@ -436,7 +436,7 @@ Once missing includes are fixed and the `std::string` redefinition is gone, many
     *   **Action:** Ensure the definition of `Compressor` in `core/compression.h` appears *before* `DefaultCompressor` in `src/engine/compression.cpp`. Standard practice is to declare the base class in the header and define derived classes in the `.cpp`. Make sure `src/engine/compression.cpp` includes `core/compression.h` at the top.
 2.  **`override keyword only allowed on virtual member functions` (in `src/engine/compression.cpp`):** This means the `compress` and `decompress` methods in the base class `Compressor` are not marked as `virtual`.
     *   **Action:** In the `Compressor` definition in `core/compression.h`, add the `virtual` keyword to the declarations of `compress` and `decompress`.
-3.  **`typecheck_nonviable_condition` (in `src/engine/compression.cpp`, line 63):** `return std::make_unique<DefaultCompressor>();` is trying to return `std::unique_ptr<DefaultCompressor>` but the compiler thinks the function (`createCompressor`) returns `int`. This strongly reinforces the idea that return types or `std::unique_ptr` itself is messed up by the `std::string` redefinition.
+3.  **`typecheck_nonviable_condition` (in `src/engine/compression.cpp`, line 63):** `return std::make_unique<DefaultCompressor>();` is trying to return `std::unique_ptr<DefaultCompressor>` but the compiler thinks the function (`createCompressor`) returns `int`. This strongly reinforces the idea that return types or `std::unique_ptr` itself is messed up by the `shim::string` redefinition.
     *   **Action:** This error should resolve after Step 1 is complete. If not, check the declaration of `createCompressor` in `core/compression.h` to ensure it's correctly declared as returning `std::unique_ptr<Compressor>`.
 
 ---

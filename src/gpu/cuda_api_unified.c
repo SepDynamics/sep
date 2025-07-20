@@ -6,9 +6,11 @@
  * conditional compilation.
  */
 
-#include "cuda_api_unified.h"
-#include "../util/error_handling.h"
-#include <string.h>  /* For memcpy, memset, etc. */
+#include "engine/cuda_api_unified.h"
+
+#include <string.h> /* For memcpy, memset, etc. */
+
+#include "engine/../util/error_handling.h"
 
 /* Macro for unused parameters to prevent compiler warnings */
 #define SEP_CUDA_UNUSED(x) (void)(x)

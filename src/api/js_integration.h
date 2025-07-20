@@ -1,8 +1,9 @@
 #ifndef SEP_API_JS_INTEGRATION_H
 #define SEP_API_JS_INTEGRATION_H
 
-#include "api/bridge.h"
 #include <string>
+
+#include "api/bridge.h"
 
 namespace sep::api {
 
@@ -16,8 +17,8 @@ public:
    * @param layer Layer name to check against
    * @return JSON string containing the check result
    */
-  static std::string processContextCheck(const std::string &context_json,
-                                         const std::string &layer);
+  static shim::string processContextCheck(const shim::string &context_json,
+                                          const shim::string &layer);
 };
 
 } // namespace sep::api

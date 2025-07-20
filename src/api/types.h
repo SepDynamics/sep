@@ -1,13 +1,13 @@
 #pragma once
 
-#include <string>
 #include <atomic>
-#include <cstdint>
 #include <chrono>
-#include <map>
 #include <cstdint>
-#include <vector>
+#include <map>
 #include <nlohmann/json.hpp>
+#include <string>
+#include <vector>
+
 #include "api/ollama_types.h"
 
 namespace sep::api {
@@ -44,11 +44,12 @@ class HttpRequest {
 public:
     virtual ~HttpRequest() = default;
 
-    virtual std::string url() const = 0;
-    virtual std::string method() const = 0;
-    virtual std::string body() const = 0;
+    virtual shim::string url() const = 0;
+    virtual shim::string method() const = 0;
+    virtual shim::string body() const = 0;
 
-    virtual std::string getHeader(const std::string& name) const {
+    virtual shim::string getHeader(const shim::string& name) const
+    {
         (void)name;
         return "";
     }
@@ -60,11 +61,12 @@ public:
 
     virtual void setCode(int code) = 0;
     virtual int getCode() const = 0;
-    virtual void setBody(const std::string& body) = 0;
-    virtual std::string getBody() const = 0;
+    virtual void setBody(const shim::string& body) = 0;
+    virtual shim::string getBody() const = 0;
     virtual void end() = 0;
 
-    virtual void setHeader(const std::string& name, const std::string& value) {
+    virtual void setHeader(const shim::string& name, const shim::string& value)
+    {
         (void)name; (void)value;
     }
 };
@@ -87,25 +89,25 @@ enum class ErrorCode {
 };
 
 struct APIRequest {
-    std::string method;
-    std::string url;
-    std::string body;
-    std::map<std::string, std::string> headers;
+    shim::string method;
+    shim::string url;
+    shim::string body;
+    std::map<shim::string, shim::string> headers;
     Priority priority = Priority::NORMAL;
     std::chrono::milliseconds timeout{5000};
-    std::string requestId;
+    shim::string requestId;
 };
 
 struct APIResponse {
     int statusCode = 0;
-    std::string body;
-    std::map<std::string, std::string> headers;
+    shim::string body;
+    std::map<shim::string, shim::string> headers;
     std::chrono::milliseconds responseTime{0};
-    std::string requestId;
+    shim::string requestId;
     bool success = false;
     struct Error {
         ErrorCode code{ErrorCode::Success};
-        std::string message;
+        shim::string message;
     } error;
 };
 
@@ -135,7 +137,7 @@ struct RateLimitConfig {
 
 struct CORSConfig {
     bool enabled{false};
-    std::vector<std::string> tokens{};
+    shim::vector<shim::string> tokens{};
 };
 
 struct ResponseModulationConfig {
@@ -144,10 +146,10 @@ struct ResponseModulationConfig {
 
 struct AuthConfig {
     bool enabled = false;
-    std::vector<std::string> tokens;
+    shim::vector<shim::string> tokens;
     ollama::OllamaConfig ollama;
     uint16_t port{3000};
-    std::string log_level{"info"};
+    shim::string log_level{"info"};
     CORSConfig cors;
     ResponseModulationConfig response_modulation;
 };

@@ -1,7 +1,8 @@
-#include "stream.h"
-
 #include <cuda_runtime.h>
+
 #include <stdexcept>
+
+#include "stream.h"
 
 namespace sep {
 namespace cuda {

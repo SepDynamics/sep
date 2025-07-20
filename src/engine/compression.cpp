@@ -1,13 +1,6 @@
-#include <cstddef>
-#include <cstdint>
-#include <vector>
-#include <memory>
-#include <algorithm>
-#include <stdexcept>
 #include "compression.h"
-#include <algorithm>
-#include <cstring>
-#include <stdexcept>
+
+#include "engine/shim.h"
 
 namespace sep {
 namespace core {
@@ -15,9 +8,10 @@ namespace core {
 // Default compression implementation using simple RLE
 class DefaultCompressor : public CompressionStrategy {
 public:
-    std::vector<uint8_t> compress(const void* data, size_t size) override {
+    shim::vector<uint8_t> compress(const void* data, size_t size) override
+    {
         const uint8_t* bytes = static_cast<const uint8_t*>(data);
-        std::vector<uint8_t> compressed;
+        shim::vector<uint8_t> compressed;
         compressed.reserve(size);
 
         for (size_t i = 0; i < size; i++) {
@@ -36,7 +30,9 @@ public:
         return compressed;
     }
 
-    bool decompress(const std::vector<uint8_t>& compressed, void* output, size_t outputSize) override {
+    bool decompress(const shim::vector<uint8_t>& compressed, void* output,
+                    size_t outputSize) override
+    {
         uint8_t* out = static_cast<uint8_t*>(output);
         size_t outPos = 0;
         
@@ -55,8 +51,9 @@ public:
         return outPos == outputSize;
     }
 
-    CompressionMethod getMethod() const override {
-        return CompressionMethod::None;
+    sep::memory::CompressionMethod getMethod() const override
+    {
+        return sep::memory::CompressionMethod::None;
     }
 
     CompressionStats getStats() const override {
@@ -68,40 +65,41 @@ private:
 };
 
 // Factory method implementation
-std::unique_ptr<CompressionStrategy>
-CompressionFactory::create(CompressionMethod method) {
+std::unique_ptr<CompressionStrategy> CompressionFactory::create(
+    sep::memory::CompressionMethod method)
+{
     switch (method) {
-        case CompressionMethod::DeltaEncoding:
-        case CompressionMethod::LZ4:
-        case CompressionMethod::ZSTD:
-        case CompressionMethod::None:
+        case sep::memory::CompressionMethod::ZSTD:
+        case sep::memory::CompressionMethod::None:
         default:
             // Only a simple RLE compressor is implemented in this minimal build
             return std::make_unique<DefaultCompressor>();
     }
 }
 
-CompressionMethod CompressionFactory::analyzeData(const void* /*data*/,
-                                                  size_t /*size*/) {
+sep::memory::CompressionMethod CompressionFactory::analyzeData(const void* /*data*/,
+                                                               size_t /*size*/)
+{
     // Minimal heuristic: always return None
-    return CompressionMethod::None;
+    return sep::memory::CompressionMethod::None;
 }
 
-float CompressionFactory::estimateCompressionRatio(const void* /*data*/,
-                                                   size_t /*size*/,
-                                                   CompressionMethod /*method*/) {
+float CompressionFactory::estimateCompressionRatio(const void* /*data*/, size_t /*size*/,
+                                                   sep::memory::CompressionMethod /*method*/)
+{
     return 1.0f;
 }
 
 // Utility functions implementation
-std::vector<uint8_t> downsample(const void* data, size_t size, size_t factor) {
+shim::vector<uint8_t> downsample(const void* data, size_t size, size_t factor)
+{
     if (factor < 1) throw std::invalid_argument("Downsample factor must be >= 1");
     if (factor == 1) {
         const uint8_t* bytes = static_cast<const uint8_t*>(data);
-        return std::vector<uint8_t>(bytes, bytes + size);
+        return shim::vector<uint8_t>(bytes, bytes + size);
     }
 
-    std::vector<uint8_t> result;
+    shim::vector<uint8_t> result;
     result.reserve(size / factor + 1);
     
     const uint8_t* bytes = static_cast<const uint8_t*>(data);
@@ -119,11 +117,13 @@ std::vector<uint8_t> downsample(const void* data, size_t size, size_t factor) {
     return result;
 }
 
-std::vector<uint8_t> upsample(const std::vector<uint8_t>& data, size_t original_size, size_t factor) {
+shim::vector<uint8_t> upsample(const shim::vector<uint8_t>& data, size_t original_size,
+                               size_t factor)
+{
     if (factor < 1) throw std::invalid_argument("Upsample factor must be >= 1");
     if (factor == 1) return data;
 
-    std::vector<uint8_t> result;
+    shim::vector<uint8_t> result;
     result.reserve(original_size);
 
     // Linear interpolation between points

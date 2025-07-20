@@ -1,7 +1,8 @@
 #include "crow/crow_error.h"
-#include <cstring> // For std::strcmp
+
 #include <cstdio>
-#include <string> // For std::string
+#include <cstring>  // For std::strcmp
+#include <string>   // For shim::string
 void sep::crow::error::log(sep::crow::error::Code code, const sep::shim::string& message)
 {
     (void)fprintf(stderr,

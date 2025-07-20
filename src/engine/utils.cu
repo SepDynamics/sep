@@ -1,23 +1,12 @@
-#include <cstring>
-
-#include "cuda.h"
+#include "engine/shim.h"
 
 // GLM isolation layer
 #ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
 #define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
 #endif
-#include "constants.h"
-
-#if !defined(__CUDACC__)
-#include <cstdlib>
-#include <cstring> // For std::memcpy (when not in __CUDACC__)
-#include <sstream>
-#include <stdexcept>
-#include <sys/sysinfo.h>
-#endif
-
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
+#include "constants.h"
 
 namespace sep::cuda {
 #if !defined(__CUDACC__)

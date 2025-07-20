@@ -8,8 +8,8 @@
 #include <string>
 #include <utility>
 
-#include "curl/curl.h"
-#include "error_handler.h"  // For sep::ErrorCode
+#include "engine/curl/curl.h"
+#include "engine/error_handler.h"  // For sep::ErrorCode
 
 namespace sep::api {
 
@@ -33,43 +33,47 @@ APIResponse Client::send(const APIRequest &request) {
   return response;
 }
 
-APIResponse Client::get(const std::string &endpoint,
-                        const std::map<std::string, std::string> &queryParams, Priority priority) {
-  APIRequest request;
-  request.method = "GET";
-  request.url = buildUrl(endpoint, queryParams);
-  request.headers = impl_->config.defaultHeaders;
-  request.priority = priority;
-  return send(request);
+APIResponse Client::get(const shim::string &endpoint,
+                        const std::map<shim::string, shim::string> &queryParams, Priority priority)
+{
+    APIRequest request;
+    request.method = "GET";
+    request.url = buildUrl(endpoint, queryParams);
+    request.headers = impl_->config.defaultHeaders;
+    request.priority = priority;
+    return send(request);
 }
 
-APIResponse Client::post(const std::string &endpoint, const std::string &body, Priority priority) {
-  APIRequest request;
-  request.method = "POST";
-  request.url = buildUrl(endpoint);
-  request.headers = impl_->config.defaultHeaders;
-  request.body = body;
-  request.priority = priority;
-  return send(request);
+APIResponse Client::post(const shim::string &endpoint, const shim::string &body, Priority priority)
+{
+    APIRequest request;
+    request.method = "POST";
+    request.url = buildUrl(endpoint);
+    request.headers = impl_->config.defaultHeaders;
+    request.body = body;
+    request.priority = priority;
+    return send(request);
 }
 
-APIResponse Client::put(const std::string &endpoint, const std::string &body, Priority priority) {
-  APIRequest request;
-  request.method = "PUT";
-  request.url = buildUrl(endpoint);
-  request.headers = impl_->config.defaultHeaders;
-  request.body = body;
-  request.priority = priority;
-  return send(request);
+APIResponse Client::put(const shim::string &endpoint, const shim::string &body, Priority priority)
+{
+    APIRequest request;
+    request.method = "PUT";
+    request.url = buildUrl(endpoint);
+    request.headers = impl_->config.defaultHeaders;
+    request.body = body;
+    request.priority = priority;
+    return send(request);
 }
 
-APIResponse Client::delete_(const std::string &endpoint, Priority priority) {
-  APIRequest request;
-  request.method = "DELETE";
-  request.url = buildUrl(endpoint);
-  request.headers = impl_->config.defaultHeaders;
-  request.priority = priority;
-  return send(request);
+APIResponse Client::delete_(const shim::string &endpoint, Priority priority)
+{
+    APIRequest request;
+    request.method = "DELETE";
+    request.url = buildUrl(endpoint);
+    request.headers = impl_->config.defaultHeaders;
+    request.priority = priority;
+    return send(request);
 }
 
 void Client::setRequestInterceptor(std::function<void(APIRequest &)> interceptor) {
@@ -99,9 +103,10 @@ void Client::resetMetrics() {
 
 const ClientConfig &Client::getConfig() const { return impl_->config; }
 
-std::string Client::getLastRequestId() const {
-  std::lock_guard<std::mutex> lock(impl_->mutex);
-  return impl_->lastRequestId;
+shim::string Client::getLastRequestId() const
+{
+    std::lock_guard<std::mutex> lock(impl_->mutex);
+    return impl_->lastRequestId;
 }
 
 APIResponse Client::sendWithRetry(const APIRequest &request) {
@@ -164,19 +169,22 @@ void Client::updateMetrics(const APIRequest &request, const APIResponse &respons
   }
 }
 
-std::string Client::buildUrl(const std::string &endpoint,
-                             const std::map<std::string, std::string> &queryParams) {
-  std::string url = impl_->config.baseUrl + endpoint;
-  if (!queryParams.empty()) {
-    url += "?";
-    bool first = true;
-    for (const auto &param : queryParams) {
-      if (!first) url += "&";
-      url += param.first + "=" + param.second;
-      first = false;
+shim::string Client::buildUrl(const shim::string &endpoint,
+                              const std::map<shim::string, shim::string> &queryParams)
+{
+    shim::string url = impl_->config.baseUrl + endpoint;
+    if (!queryParams.empty())
+    {
+        url += "?";
+        bool first = true;
+        for (const auto &param : queryParams)
+        {
+            if (!first) url += "&";
+            url += param.first + "=" + param.second;
+            first = false;
+        }
     }
-  }
-  return url;
+    return url;
 }
 
 std::shared_ptr<Client> createClient(const ClientConfig &config) {

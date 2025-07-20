@@ -2,8 +2,9 @@
 #define SEP_COMPAT_CUDA_SEP_H
 
 // Include proper dependencies in correct order
-#include "shim.h"
 #include <cuda_runtime.h>
+
+#include "engine/shim.h"
 
 #ifndef SEP_cudaMemAttachGlobal
 #define SEP_cudaMemAttachGlobal cudaMemAttachGlobal
@@ -28,7 +29,7 @@ inline cudaError_t SEP_cudaEventSynchronize(cudaEvent_t event) { return cudaEven
 inline cudaError_t SEP_cudaEventElapsedTime(float* ms, cudaEvent_t start, cudaEvent_t end) { return cudaEventElapsedTime(ms, start, end); }
 inline cudaError_t SEP_cudaMemGetInfo(size_t* free, size_t* total) { return cudaMemGetInfo(free, total); }
 inline cudaError_t SEP_cudaMemcpy(void* dst, const void* src, size_t size, cudaMemcpyKind kind) { return cudaMemcpy(dst, src, size, kind); }
-inline cudaError_t SEP_cudaMemcpyAsync(void* dst, const void* src, size_t size, cudaMemcpyKind kind, cudaStream_t stream) { return cudaMemcpyAsync(dst, src, size, kind, stream); }
+inline cudaError_t SEP_cudaMemcpyAsync(void* dst, const void* src, size_t size, cudaMemcpyKind kind, cudaStream_t stream) { return ::cudaMemcpyAsync(dst, src, size, kind, stream); }
 inline cudaError_t SEP_cudaSetDevice(int device) { return cudaSetDevice(device); }
 inline cudaError_t SEP_cudaGetDevice(int* device) { return cudaGetDevice(device); }
 inline cudaError_t SEP_cudaGetDeviceCount(int* count) { return cudaGetDeviceCount(count); }

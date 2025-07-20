@@ -4,106 +4,36 @@ cmake_minimum_required(VERSION 3.15)
 option(SEP_USE_CUDA "Enable CUDA support" ON)
 
 if(SEP_USE_CUDA)
-    # Method 1: Set via environment variable (most reliable)
-    # set(ENV{CUDAHOSTCXX} "/usr/bin/clang++-15")
-    
-    # Method 3: Set in toolchain file
-    # include(${CMAKE_SOURCE_DIR}/cmake/cuda-override-toolchain.cmake)
-
-    # CUDA flags are now set in the nvcc_wrapper.sh to ensure correct quoting and filtering.
-    set(CMAKE_CUDA_COMPILER "${CMAKE_SOURCE_DIR}/cmake/nvcc_wrapper.sh")
+    # Set the host compiler for CUDA. This is the standard and correct way.
+    # Using clang++-15 as specified in the original wrapper script's intent.
+    # set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/clang++-15") # Let NVCC use its default host compiler
     set(CMAKE_CUDA_ARCHITECTURES 75)
 endif()
 
 # NOW call project() - CUDA will use the correct compiler
 project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
 
-# Set CMAKE_LIBRARY_PATH to help find system libraries like librt
-set(CMAKE_LIBRARY_PATH "/usr/lib;/usr/lib64")
-
-find_package(Threads REQUIRED)
-
-# Default build type if not specified
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
-endif()
+# Include the template
+include(cmake/template.cmake)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Enable testing
 enable_testing()
 
 # Find required packages
-set(fmt_DIR "/usr/lib64/cmake/fmt")
+find_package(Threads REQUIRED)
 find_package(fmt REQUIRED)
-
 find_package(TBB REQUIRED)
-set(benchmark_DIR "/usr/lib64/cmake/benchmark")
 find_package(benchmark REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(glm REQUIRED)
 
-# Include directories
-include_directories(
-    src
-)
-
-# Set policy for CUDA modules
-# cmake_policy(SET CMP0146 NEW)
-
-# CUDA configuration
-if(SEP_USE_CUDA)
-    # Set CUDA standard
-    set(CMAKE_CUDA_STANDARD 17)
-    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-    
-    # Find CUDA packages
-    find_package(CUDA REQUIRED)
-    find_package(CUDAToolkit REQUIRED)
-    
-    # Set CUDA architectures
-    if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-        set(CMAKE_CUDA_ARCHITECTURES "60;70;75;80")
-    endif()
-    
-    # Add librt to CUDA libraries for linking
-    list(APPEND CMAKE_CUDA_LIBRARIES "rt")
-
-    # Explicitly add linker directories for librt
-    link_directories(/usr/lib /usr/lib64)
-
-    # Set CUDA architectures
-    set(CMAKE_CUDA_ARCHITECTURES "70;75;80;86;89" CACHE STRING "CUDA architectures")
-
-    # Log CUDA flags for debugging
-    message(STATUS "CMAKE_CUDA_COMPILER_ID_RUN_FLAGS: ${CMAKE_CUDA_COMPILER_ID_RUN_FLAGS}")
-    message(STATUS "CMAKE_CUDA_FLAGS: ${CMAKE_CUDA_FLAGS}")
-endif()
-
-# Set source file properties for CUDA files to be treated as CXX
-file(GLOB_RECURSE CUDA_FILES "src/*.cu" "src/**/*.cu")
-foreach(CU_FILE ${CUDA_FILES})
-    set_source_files_properties(${CU_FILE} PROPERTIES LANGUAGE CXX)
-endforeach()
-
-# Set build output directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-
 # Add subdirectories
 add_subdirectory(src)
 add_subdirectory(examples)
-
-# Create the export set
-set(SEP_TARGETS
-    sep_engine
-    sep_memory
-    sep_quantum
-)
 
 

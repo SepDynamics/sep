@@ -9,8 +9,8 @@
 #ifndef SEP_CUDA_ERROR_HANDLING_H
 #define SEP_CUDA_ERROR_HANDLING_H
 
-#include "../util/error_handling.h"
-#include "cuda_api_unified.h"
+#include "engine/../util/error_handling.h"
+#include "engine/cuda_api_unified.h"
 
 #ifdef __cplusplus
 extern "C" {

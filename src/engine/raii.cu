@@ -1,7 +1,8 @@
-#include "raii.h"
-
 #include <cuda_runtime.h>
+
 #include <stdexcept>
+
+#include "raii.h"
 
 namespace sep {
 namespace cuda {

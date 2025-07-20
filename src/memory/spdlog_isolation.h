@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "cuda.h"
-#include "macros.h"
+#include "engine/cuda.h"
+#include "engine/macros.h"
 
 #define SEP_SPDLOG_AVAILABLE 1
 
@@ -24,12 +24,12 @@ public:
 class pattern_formatter : public formatter
 {
 public:
-    SEP_HOST SEP_DEVICE void format(const std::string& msg, std::ostringstream& dest)
+    SEP_HOST SEP_DEVICE void format(const shim::string& msg, std::ostringstream& dest)
     {
         dest << msg.c_str();
     }
 
-    SEP_HOST SEP_DEVICE std::string pattern() const { return "%v"; }
+    SEP_HOST SEP_DEVICE shim::string pattern() const { return "%v"; }
 };
 
 }  // namespace spdlog
@@ -303,10 +303,7 @@ public:
         return inst;
     }
 
-    std::shared_ptr<logger> get(const std::string& name)
-    {
-        return ::spdlog::get(name);
-    }
+    std::shared_ptr<logger> get(const shim::string& name) { return ::spdlog::get(name); }
 
     void register_logger(std::shared_ptr<logger> lg)
     {
@@ -318,10 +315,7 @@ public:
         ::spdlog::set_default_logger(std::move(lg));
     }
 
-    void drop(const std::string& name)
-    {
-        ::spdlog::drop(name);
-    }
+    void drop(const shim::string& name) { ::spdlog::drop(name); }
 
     void drop_all()
     {

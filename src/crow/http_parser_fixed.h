@@ -6,9 +6,9 @@
 // Include the official http-parser header and our compatibility helpers
 #include <http_parser.h>
 
-#include "common.h"
-#include "crow_isolation.h"
-#include "shim.h"
+#include "engine/common.h"
+#include "engine/crow_isolation.h"
+#include "engine/shim.h"
 
 // Reuse version constants from the official library
 

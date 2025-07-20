@@ -1,12 +1,14 @@
-#include "cuda_api_unified.h"
-#include <string>
-#include <string.h>
+#include "engine/cuda_api_unified.h"
+
 #include <stdio.h>
+#include <string.h>
+
+#include <string>
 
 #ifdef SEP_HAS_CUDA
 #include <cuda_runtime_api.h>
 
-#include "cuda_sep.h"
+#include "engine/cuda_sep.h"
 
 static cudaMemcpyKind convert_memcpy_kind(SEP_CUDA_MEMCPY_KIND kind) {
     switch (kind) {
@@ -156,6 +158,4 @@ SEP_CUDA_ERROR SEP_CUDA_GetDeviceProperties(SEP_CUDA_DEVICE_PROPS* prop, int dev
 #endif
 }
 
-std::string SEP_CUDA_ErrorString(SEP_CUDA_ERROR error) {
-    return std::string(error.message);
-}
+shim::string SEP_CUDA_ErrorString(SEP_CUDA_ERROR error) { return shim::string(error.message); }

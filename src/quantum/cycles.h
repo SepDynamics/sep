@@ -24,10 +24,10 @@ struct EvolutionResult {
         double coherence;
         double field_strength;
     };
-    std::vector<TrajectoryPoint> trajectory;
-    
+    shim::vector<TrajectoryPoint> trajectory;
+
     bool has_mesh_data = false;
-    std::vector<glm::vec3> evolved_vertices;
+    shim::vector<glm::vec3> evolved_vertices;
 };
 
 class QuantumRenderer {

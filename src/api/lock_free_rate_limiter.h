@@ -47,16 +47,15 @@ public:
 
   // Core rate limiting interface
   bool checkRateLimit(const IRequest &req) override;
-  std::string getErrorResponse(const std::string &message, int status) override;
+  shim::string getErrorResponse(const shim::string &message, int status) override;
 
   // Configuration methods
   void setEnabled(bool enabled) override;
   void setPriorityQuota(Priority priority, float multiplier) override;
 
   // Monitoring methods
-  unsigned int GetRequestCount(const std::string &client_id) const override;
-  unsigned int GetWindowSize(const std::string &client_id,
-                             Priority priority) const override;
+  unsigned int GetRequestCount(const shim::string &client_id) const override;
+  unsigned int GetWindowSize(const shim::string &client_id, Priority priority) const override;
 
   // System metrics methods
   void updateSystemMetrics(const SystemMetrics &metrics);
@@ -93,7 +92,7 @@ private:
   void cleanup(std::chrono::steady_clock::time_point now);
   unsigned int getAdjustedLimit(Priority priority) const;
   Priority getPriorityFromRequest(const IRequest &req) const;
-  std::string getClientId(const IRequest &req) const;
+  shim::string getClientId(const IRequest &req) const;
   float calculateAdaptiveMultiplier() const;
 
   // Atomic operations
@@ -129,8 +128,7 @@ private:
   };
 
   // Client management container
-  using ClientMap =
-      tbb::concurrent_hash_map<std::string, std::unique_ptr<ClientData>>;
+  using ClientMap = tbb::concurrent_hash_map<shim::string, std::unique_ptr<ClientData>>;
   ClientMap clients_;
   std::unique_ptr<BackgroundCleanup> background_cleanup_;
 };

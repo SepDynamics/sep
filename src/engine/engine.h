@@ -1,18 +1,15 @@
 #ifndef SEP_CORE_ENGINE_H
 #define SEP_CORE_ENGINE_H
 
-#include <cstdint>
-#include <memory>
-#include <vector>
-
-#include "types.h"  // For QSHResult definition
 #include "common.h"
 #include "config.h"
-#include "types.h"
-#include "quantum/qbsa.h"
-#include "quantum/pattern_metric_engine.h"
-#include "quantum/quantum_processor.h"
+#include "engine/shim.h"
 #include "metrics_collector.h"
+#include "quantum/pattern_metric_engine.h"
+#include "quantum/qbsa.h"
+#include "quantum/quantum_processor.h"
+#include "quantum/types.h"
+#include "types.h"
 
 namespace sep {
 namespace cuda {
@@ -49,33 +46,30 @@ class Engine {
   void run();
   void shutdown();
 
-  void generate_probes(const std::vector<::sep::PinState> &inputs,
-                       std::vector<std::uint32_t> &indices,
-                       std::vector<std::uint32_t> &expectations,
-                       std::uint64_t tick);
+  void generate_probes(const shim::vector<::sep::PinState> &inputs,
+                       shim::vector<std::uint32_t> &indices,
+                       shim::vector<std::uint32_t> &expectations, std::uint64_t tick);
 
-  void process_batch(const std::vector<::sep::PinState> &inputs,
-                     std::uint64_t tick,
-                      sep::quantum::QBSAResult &qbsa_result,
-                      sep::cuda::QSHResult &qsh_result);
+  void process_batch(const shim::vector<::sep::PinState> &inputs, std::uint64_t tick,
+                     sep::quantum::QBSAResult &qbsa_result, sep::cuda::QSHResult &qsh_result);
 
   // Process quantitative data (market data, etc.)
-  std::string processQuantData(const std::string &dataPath, bool useGPU = true);
+  shim::string processQuantData(const shim::string &dataPath, bool useGPU = true);
 
   // DAG accessors
   struct StateNode {
     std::uint64_t tick{0};
     float coherence{0.0f};
     bool rupture{false};
-    std::vector<std::size_t> parents;
+    shim::vector<std::size_t> parents;
   };
 
-  const std::vector<StateNode> &getStateHistory() const noexcept;
+  const shim::vector<StateNode> &getStateHistory() const noexcept;
 
-  std::vector<float> getCoherenceHistory() const;
+  shim::vector<float> getCoherenceHistory() const;
 
-  void ingestFile(const std::string& dataPath, bool legacy = false);
-  void ingestFromDirectory(const std::string& dirPath, bool recursive = true);
+  void ingestFile(const shim::string &dataPath, bool legacy = false);
+  void ingestFromDirectory(const shim::string &dirPath, bool recursive = true);
   void ingestFromSocket(int socket_fd);
   void ingestFromStream(std::istream& stream);
 

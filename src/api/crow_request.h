@@ -5,9 +5,8 @@
 // macro is expected to be undefined during normal builds.
 
 // Include directly from crow_isolation.h to avoid shim.h dependency
-#include "crow/crow_isolation.h"
-
 #include "api/request_interface.h"
+#include "crow/crow_isolation.h"
 
 namespace sep::api {
 
@@ -24,28 +23,25 @@ public:
         headers_["accept"] = "";
     }
 
-    std::string method() const override { return crow::method_name(req_.method); }
+    shim::string method() const override { return crow::method_name(req_.method); }
 
-    std::string url() const override
+    shim::string url() const override
     {
-        // Convert crow_string to std::string by using c_str()
-        return std::string(req_.url.c_str());
-    }
-    
-    const std::string& body() const override
-    {
-        return body_;
+        // Convert crow_string to shim::string by using c_str()
+        return shim::string(req_.url.c_str());
     }
 
-    const std::unordered_map<std::string, std::string>& headers() const override
+    const shim::string& body() const override { return body_; }
+
+    const std::unordered_map<shim::string, shim::string>& headers() const override
     {
         return headers_;
     }
 
-    std::string get_header_value(const std::string& key) const override
+    shim::string get_header_value(const shim::string& key) const override
     {
         // Use the cached headers instead of calling the stub directly
-        // This avoids the conversion from std::string to crow_string
+        // This avoids the conversion from shim::string to crow_string
         auto it = headers_.find(key);
         if (it != headers_.end()) {
             return it->second;
@@ -53,10 +49,10 @@ public:
         return "";
     }
 
-    const std::string& get_remote_ip() const override
+    const shim::string& get_remote_ip() const override
     {
         // Access might have changed in Crow - use a static empty string as fallback
-        static std::string ip_address = "127.0.0.1";
+        static shim::string ip_address = "127.0.0.1";
         // In newer Crow versions, remote_ip_address should be accessed differently
         // or might not be directly accessible
         return ip_address;
@@ -64,8 +60,8 @@ public:
 
 private:
     const crow::request& req_;
-    std::string body_;
-    std::unordered_map<std::string, std::string> headers_;
+    shim::string body_;
+    std::unordered_map<shim::string, shim::string> headers_;
 };
 
 }  // namespace sep::api

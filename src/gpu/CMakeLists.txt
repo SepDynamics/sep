@@ -3,6 +3,13 @@ target_include_directories(sep_gpu_interface INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/gpu/
+        DESTINATION src/gpu
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
+
+
 if(SEP_ENABLE_CUDA)
     add_library(sep_gpu_cuda STATIC
         cuda_api_unified.cpp
@@ -30,3 +37,4 @@ if(SEP_ENABLE_CUDA)
         INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 endif()
+

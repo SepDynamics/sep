@@ -24,21 +24,23 @@ void PatternMetricEngine::ingestData(const uint8_t* data, size_t size) {
 }
 
 void PatternMetricEngine::ingestData(std::istream& stream) {
-    std::vector<uint8_t> buffer(4096);
+    shim::vector<uint8_t> buffer(4096);
     while (stream.read(reinterpret_cast<char*>(buffer.data()), buffer.size())) {
         ingestData(buffer.data(), stream.gcount());
     }
     ingestData(buffer.data(), stream.gcount());
 }
 
-void PatternMetricEngine::ingestFile(const std::string& filepath) {
+void PatternMetricEngine::ingestFile(const shim::string& filepath)
+{
     std::ifstream file(filepath, std::ios::binary);
     if (file) {
         ingestData(file);
     }
 }
 
-void PatternMetricEngine::ingestMappedFile([[maybe_unused]] const std::string& filepath) {
+void PatternMetricEngine::ingestMappedFile([[maybe_unused]] const shim::string& filepath)
+{
     // Implementation for memory-mapped file ingestion would go here.
 }
 
@@ -68,7 +70,8 @@ pattern::PatternData PatternMetricEngine::mutatePattern(const pattern::PatternDa
     return mutated;
 }
 
-std::vector<PatternMetrics> PatternMetricEngine::computeMetrics() {
+shim::vector<PatternMetrics> PatternMetricEngine::computeMetrics()
+{
     std::lock_guard<std::mutex> lock(engine_mutex_);
     
     // PERFORMANCE FIX: Clear the processor state before the metric run.
@@ -97,12 +100,15 @@ std::vector<PatternMetrics> PatternMetricEngine::computeMetrics() {
     return current_metrics_;
 }
 
-const std::vector<pattern::PatternData>& PatternMetricEngine::getPatterns() const {
+const shim::vector<pattern::PatternData>& PatternMetricEngine::getPatterns() const
+{
     return current_patterns_;
 }
 
-std::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes(const uint8_t* data, size_t size) {
-    std::vector<pattern::PatternData> patterns;
+shim::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes(
+    const uint8_t* data, size_t size)
+{
+    shim::vector<pattern::PatternData> patterns;
     const size_t float_size = sizeof(float);
     const size_t chunk_size_floats = 16;
     const size_t chunk_size_bytes = chunk_size_floats * float_size;
@@ -128,7 +134,7 @@ std::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes(
         p.id = "pattern_" + std::to_string(num_patterns);
         
         const uint8_t* remaining_data_ptr = data + (num_patterns * chunk_size_bytes);
-        std::vector<float> float_vec;
+        shim::vector<float> float_vec;
         float_vec.resize(remaining_bytes / sizeof(float) + (remaining_bytes % sizeof(float) != 0));
         std::memcpy(float_vec.data(), remaining_data_ptr, remaining_bytes);
 

@@ -1,9 +1,10 @@
 #ifndef SEP_QUANTUM_PROCESSOR_CUDA_H
 #define SEP_QUANTUM_PROCESSOR_CUDA_H
 
-#include "quantum/quantum_processor.h"
-#include <memory>
 #include <glm/vec3.hpp>
+#include <memory>
+
+#include "quantum/quantum_processor.h"
 
 namespace sep::quantum {
 

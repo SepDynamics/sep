@@ -1,23 +1,23 @@
 #ifndef SEP_CORE_ERROR_HANDLER_H
 #define SEP_CORE_ERROR_HANDLER_H
 
-#include "shim.h"
 #include "common.h"
-#include <vector>
-#include <mutex>
+#include "engine/shim.h"
 // Removed duplicate include of core/types.h
 
 namespace sep {
 
 // Error type for the SEP engine
 struct Error {
-    SEPResult code{SEPResult::SUCCESS};
+    shim::SEPResult code{shim::SEPResult::SUCCESS};
     ::sep::shim::string message;
     ::sep::shim::string location;
     
     Error() = default;
-    Error(SEPResult code, const ::sep::shim::string& msg, const ::sep::shim::string& loc = "")
-        : code(code), message(msg), location(loc) {}
+    Error(shim::SEPResult code, const ::sep::shim::string &msg, const ::sep::shim::string &loc = "")
+        : code(code), message(msg), location(loc)
+    {
+    }
 };
 
 namespace core {
@@ -28,7 +28,7 @@ class ErrorHandler {
 
   void reportError(const ::sep::Error &error, std::function<bool()> retry = {});
 
-  std::vector<::sep::Error> getErrors() const;
+  shim::vector<::sep::Error> getErrors() const;
 
   void clearErrors();
 
@@ -45,7 +45,7 @@ class ErrorHandler {
   void processRetriesLocked();
 
   mutable std::mutex mutex_;
-  std::vector<Entry> errors_;
+  shim::vector<Entry> errors_;
 };
 
 }  // namespace core

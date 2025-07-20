@@ -15,14 +15,14 @@
 
 #include "api/bridge.h"
 #include "api/bridge_internal.hpp"
-#include "common.h"
 #include "crow/asio_isolation.h"
 #include "crow/socket_adaptors.h"
-#include "cuda_helpers.h"
-#include "macros.h"
-#include "manager.h"
-#include "shim.h"
-#include "types.h"
+#include "engine/common.h"
+#include "engine/cuda_helpers.h"
+#include "engine/macros.h"
+#include "engine/manager.h"
+#include "engine/shim.h"
+#include "engine/types.h"
 
 extern "C"
 {
@@ -88,9 +88,9 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
         }
 
         // Parse input patterns from JSON
-        std::vector<std::string> pattern_ids;
+        shim::vector<shim::string> pattern_ids;
         for (const auto& pattern : json_obj["patterns"]) {
-            pattern_ids.push_back(pattern["id"].get<std::string>());
+            pattern_ids.push_back(pattern["id"].get<shim::string>());
         }
 
         // Process patterns through quantum pipeline
@@ -122,7 +122,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
         }
 
         // Write results to output buffer
-        std::string result_str = result_json.dump();
+        shim::string result_str = result_json.dump();
         sep::api::bridge::detail::setRequiredBufferSize(result_str.size() + 1);
         if (result_str.size() >= buffer_size) {
             sep::api::bridge::detail::setLastError("Result buffer too small");

@@ -1,19 +1,16 @@
 #include "data_parser.h"
-#include "types.h"
-#include "common.h"
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <chrono>
-#include <iomanip>
-#include <cstring>
-#include <algorithm>
+
 #include <nlohmann/json.hpp>
+
+#include "engine/shim.h"
+#include "quantum/types.h"
+#include "types.h"
 
 namespace sep {
 
 // Parse from file (auto-detects format)
-std::vector<Pattern> DataParser::parseFile(const std::string& path, DataFormat format) {
+shim::vector<Pattern> DataParser::parseFile(const shim::string& path, DataFormat format)
+{
     if (format == DataFormat::AUTO) {
         format = detectFileFormat(path);
     }
@@ -27,9 +24,9 @@ std::vector<Pattern> DataParser::parseFile(const std::string& path, DataFormat f
         case DataFormat::CSV:
             return parseCSV(path);
         case DataFormat::BINARY: {
-            std::ifstream file(path, std::ios::binary);
+            shim::ifstream file(path.c_str(), std::ios::binary);
             if (!file.is_open()) {
-                std::cerr << "Error: Could not open file: " << path << std::endl;
+                shim::cerr << "Error: Could not open file: " << path << std::endl;
                 return {};
             }
             
@@ -37,21 +34,22 @@ std::vector<Pattern> DataParser::parseFile(const std::string& path, DataFormat f
             file.seekg(0, std::ios::end);
             size_t size = file.tellg();
             file.seekg(0, std::ios::beg);
-            
-            std::vector<uint8_t> buffer(size);
+
+            shim::vector<uint8_t> buffer(size);
             file.read(reinterpret_cast<char*>(buffer.data()), size);
             file.close();
             
             return parseBinary(buffer.data(), size);
         }
         default:
-            std::cerr << "Error: Unsupported format" << std::endl;
+            shim::cerr << "Error: Unsupported format" << std::endl;
             return {};
     }
 }
 
 // Parse from memory buffer (binary/non-UTF8 safe)
-std::vector<Pattern> DataParser::parseBuffer(const uint8_t* data, size_t size, DataFormat format) {
+shim::vector<Pattern> DataParser::parseBuffer(const uint8_t* data, size_t size, DataFormat format)
+{
     if (format == DataFormat::AUTO) {
         format = detectFormat(data, size);
     }
@@ -60,17 +58,17 @@ std::vector<Pattern> DataParser::parseBuffer(const uint8_t* data, size_t size, D
         case DataFormat::JSON:
         case DataFormat::CANDLE: {
             // Convert buffer to string for JSON parsing
-            std::string json_str(reinterpret_cast<const char*>(data), size);
+            shim::string json_str(reinterpret_cast<const char*>(data), size);
             try {
                 nlohmann::json j = nlohmann::json::parse(json_str);
-                std::vector<CandleData> candles;
-                
+                shim::vector<CandleData> candles;
+
                 if (j.contains("candles") && j["candles"].is_array()) {
                     for (const auto& candle_json : j["candles"]) {
                         CandleData candle;
                         
                         if (candle_json.contains("time") && candle_json["time"].is_string()) {
-                            candle.time = candle_json["time"].get<std::string>();
+                            candle.time = candle_json["time"].get<shim::string>();
                         }
                         
                         if (candle_json.contains("volume") && candle_json["volume"].is_number()) {
@@ -81,16 +79,16 @@ std::vector<Pattern> DataParser::parseBuffer(const uint8_t* data, size_t size, D
                             const auto& mid = candle_json["mid"];
                             
                             if (mid.contains("o") && mid["o"].is_string()) {
-                                candle.open = std::stof(mid["o"].get<std::string>());
+                                candle.open = std::stof(mid["o"].get<shim::string>());
                             }
                             if (mid.contains("h") && mid["h"].is_string()) {
-                                candle.high = std::stof(mid["h"].get<std::string>());
+                                candle.high = std::stof(mid["h"].get<shim::string>());
                             }
                             if (mid.contains("l") && mid["l"].is_string()) {
-                                candle.low = std::stof(mid["l"].get<std::string>());
+                                candle.low = std::stof(mid["l"].get<shim::string>());
                             }
                             if (mid.contains("c") && mid["c"].is_string()) {
-                                candle.close = std::stof(mid["c"].get<std::string>());
+                                candle.close = std::stof(mid["c"].get<shim::string>());
                             }
                         }
                         
@@ -100,22 +98,23 @@ std::vector<Pattern> DataParser::parseBuffer(const uint8_t* data, size_t size, D
                 
                 return candlesToPatterns(candles);
             } catch (const std::exception& e) {
-                std::cerr << "Error parsing JSON from buffer: " << e.what() << std::endl;
+                shim::cerr << "Error parsing JSON from buffer: " << e.what() << std::endl;
                 return {};
             }
         }
         case DataFormat::BINARY:
             return parseBinary(data, size);
         default:
-            std::cerr << "Error: Unsupported format for buffer parsing" << std::endl;
+            shim::cerr << "Error: Unsupported format for buffer parsing" << std::endl;
             return {};
     }
 }
 
 // Parse from stream (maintains state for continuous data)
-std::vector<Pattern> DataParser::parseStream(std::istream& stream, DataFormat format) {
+shim::vector<Pattern> DataParser::parseStream(std::istream& stream, DataFormat format)
+{
     if (!stream_state_) {
-        stream_state_ = std::make_unique<StreamState>();
+        stream_state_ = shim::make_unique<StreamState>();
     }
 
     // Read available data from stream
@@ -129,7 +128,7 @@ std::vector<Pattern> DataParser::parseStream(std::istream& stream, DataFormat fo
         format = detectFormat(stream_state_->buffer.data(), stream_state_->buffer.size());
     }
 
-    std::vector<Pattern> patterns;
+    shim::vector<Pattern> patterns;
     if (format == DataFormat::JSON || format == DataFormat::CANDLE) {
         try {
             // Attempt to parse the buffered data
@@ -149,16 +148,17 @@ std::vector<Pattern> DataParser::parseStream(std::istream& stream, DataFormat fo
 }
 
 // Parse CSV file
-std::vector<Pattern> DataParser::parseCSV(const std::string& path) {
-    std::vector<Pattern> patterns;
-    std::ifstream file(path);
-    
+shim::vector<Pattern> DataParser::parseCSV(const shim::string& path)
+{
+    shim::vector<Pattern> patterns;
+    shim::ifstream file(path.c_str());
+
     if (!file.is_open()) {
-        std::cerr << "Error: Could not open CSV file: " << path << std::endl;
+        shim::cerr << "Error: Could not open CSV file: " << path << std::endl;
         return patterns;
     }
-    
-    std::string line;
+
+    shim::string line;
     int line_num = 0;
     
     while (std::getline(file, line)) {
@@ -168,13 +168,13 @@ std::vector<Pattern> DataParser::parseCSV(const std::string& path) {
         if (line.empty()) continue;
         
         // Simple CSV parsing - split by comma
-        std::stringstream ss(line);
-        std::vector<float> values;
-        std::string field;
-        
+        shim::stringstream ss(line.c_str());
+        shim::vector<float> values;
+        shim::string field;
+
         while (std::getline(ss, field, ',')) {
             try {
-                values.push_back(std::stof(field));
+                values.push_back(shim::stof(field));
             } catch (...) {
                 // If not a number, skip
             }
@@ -182,7 +182,7 @@ std::vector<Pattern> DataParser::parseCSV(const std::string& path) {
         
         if (!values.empty()) {
             Pattern pattern;
-            pattern.id = std::to_string(line_num);
+            pattern.id = shim::to_string(line_num);
             pattern.timestamp = std::chrono::system_clock::now().time_since_epoch().count();
             
             // Map values to pattern fields
@@ -216,8 +216,9 @@ std::vector<Pattern> DataParser::parseCSV(const std::string& path) {
 }
 
 // Parse binary data
-std::vector<Pattern> DataParser::parseBinary(const uint8_t* data, size_t size) {
-    std::vector<Pattern> patterns;
+shim::vector<Pattern> DataParser::parseBinary(const uint8_t* data, size_t size)
+{
+    shim::vector<Pattern> patterns;
     const size_t floats_per_pattern = 4;
     const size_t bytes_per_pattern = floats_per_pattern * sizeof(float);
 
@@ -230,7 +231,7 @@ std::vector<Pattern> DataParser::parseBinary(const uint8_t* data, size_t size) {
 
     for (size_t i = 0; i < num_patterns; ++i) {
         Pattern pattern;
-        pattern.id = std::to_string(i);
+        pattern.id = shim::to_string(i);
         pattern.timestamp = std::chrono::system_clock::now().time_since_epoch().count();
 
         size_t offset = i * floats_per_pattern;
@@ -260,9 +261,10 @@ std::vector<Pattern> DataParser::parseBinary(const uint8_t* data, size_t size) {
 }
 
 // Convert patterns to PinStates for engine compatibility
-std::vector<PinState> DataParser::toPinStates(const std::vector<Pattern>& patterns) {
-    std::vector<PinState> pin_states;
-    
+shim::vector<PinState> DataParser::toPinStates(const shim::vector<Pattern>& patterns)
+{
+    shim::vector<PinState> pin_states;
+
     for (const auto& pattern : patterns) {
         PinState state;
         
@@ -286,8 +288,9 @@ DataFormat DataParser::detectFormat(const uint8_t* data, size_t size) const {
 
     // Check for JSON
     if (data[0] == '{' || data[0] == '[') {
-        std::string str(reinterpret_cast<const char*>(data), std::min(size, size_t(100)));
-        if (str.find("candles") != std::string::npos) {
+        shim::string str(reinterpret_cast<const char*>(data), std::min(size, size_t(100)));
+        if (str.find("candles") != shim::string::npos)
+        {
             return DataFormat::CANDLE;
         }
         return DataFormat::JSON;
@@ -303,7 +306,7 @@ DataFormat DataParser::detectFormat(const uint8_t* data, size_t size) const {
     }
 
     // Check for binary based on entropy
-    std::vector<int> counts(256, 0);
+    shim::vector<int> counts(256, 0);
     for (size_t i = 0; i < size; ++i) {
         counts[data[i]]++;
     }
@@ -312,7 +315,7 @@ DataFormat DataParser::detectFormat(const uint8_t* data, size_t size) const {
     for (int count : counts) {
         if (count > 0) {
             double p = static_cast<double>(count) / size;
-            entropy -= p * std::log2(p);
+            entropy -= p * shim::log2(p);
         }
     }
 
@@ -324,20 +327,22 @@ DataFormat DataParser::detectFormat(const uint8_t* data, size_t size) const {
     return DataFormat::CSV;
 }
 
-DataFormat DataParser::detectFileFormat(const std::string& path) const {
+DataFormat DataParser::detectFileFormat(const shim::string& path) const
+{
     // Check file extension
     size_t dot_pos = path.find_last_of('.');
-    if (dot_pos != std::string::npos) {
-        std::string ext = path.substr(dot_pos + 1);
+    if (dot_pos != shim::string::npos)
+    {
+        shim::string ext = path.substr(dot_pos + 1);
         std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
         
         if (ext == "json") return DataFormat::JSON;
         if (ext == "csv") return DataFormat::CSV;
         if (ext == "bin" || ext == "dat") return DataFormat::BINARY;
     }
-    
+
     // Read first few bytes to detect format
-    std::ifstream file(path, std::ios::binary);
+    shim::ifstream file(path.c_str(), std::ios::binary);
     if (file.is_open()) {
         uint8_t buffer[1024];
         file.read(reinterpret_cast<char*>(buffer), sizeof(buffer));
@@ -350,12 +355,13 @@ DataFormat DataParser::detectFileFormat(const std::string& path) const {
     return DataFormat::BINARY;
 }
 
-std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path) {
-    std::vector<CandleData> candles;
-    std::ifstream file(path);
-    
+shim::vector<CandleData> DataParser::parseQuantJSON(const shim::string& path)
+{
+    shim::vector<CandleData> candles;
+    shim::ifstream file(path.c_str());
+
     if (!file.is_open()) {
-        std::cerr << "Error: Could not open JSON file: " << path << std::endl;
+        shim::cerr << "Error: Could not open JSON file: " << path << std::endl;
         return candles;
     }
     
@@ -364,7 +370,7 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path) {
         file >> j;
         
         if (!j.contains("candles") || !j["candles"].is_array()) {
-            std::cerr << "Error: JSON file does not contain 'candles' array" << std::endl;
+            shim::cerr << "Error: JSON file does not contain 'candles' array" << std::endl;
             return candles;
         }
         
@@ -373,7 +379,7 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path) {
             
             // Parse time
             if (candle_json.contains("time") && candle_json["time"].is_string()) {
-                candle.time = candle_json["time"].get<std::string>();
+                candle.time = candle_json["time"].get<shim::string>();
             }
             
             // Parse volume
@@ -386,16 +392,16 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path) {
                 const auto& mid = candle_json["mid"];
                 
                 if (mid.contains("o") && mid["o"].is_string()) {
-                    candle.open = std::stof(mid["o"].get<std::string>());
+                    candle.open = std::stof(mid["o"].get<shim::string>());
                 }
                 if (mid.contains("h") && mid["h"].is_string()) {
-                    candle.high = std::stof(mid["h"].get<std::string>());
+                    candle.high = std::stof(mid["h"].get<shim::string>());
                 }
                 if (mid.contains("l") && mid["l"].is_string()) {
-                    candle.low = std::stof(mid["l"].get<std::string>());
+                    candle.low = std::stof(mid["l"].get<shim::string>());
                 }
                 if (mid.contains("c") && mid["c"].is_string()) {
-                    candle.close = std::stof(mid["c"].get<std::string>());
+                    candle.close = std::stof(mid["c"].get<shim::string>());
                 }
             }
             
@@ -403,22 +409,23 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path) {
         }
         
     } catch (const std::exception& e) {
-        std::cerr << "Error parsing JSON: " << e.what() << std::endl;
+        shim::cerr << "Error parsing JSON: " << e.what() << std::endl;
     }
     
     file.close();
     return candles;
 }
 
-std::vector<Pattern> DataParser::candlesToPatterns(const std::vector<CandleData>& candles) {
-    std::vector<Pattern> patterns;
-    
+shim::vector<Pattern> DataParser::candlesToPatterns(const shim::vector<CandleData>& candles)
+{
+    shim::vector<Pattern> patterns;
+
     for (const auto& candle : candles) {
         Pattern pattern;
         
         // Use timestamp as unique ID
-        pattern.id = std::to_string(parseTimestamp(candle.time));
-        
+        pattern.id = shim::to_string(parseTimestamp(candle.time));
+
         // Map OHLC to position vector (raw data, no normalization)
         pattern.position.x = candle.open;
         pattern.position.y = candle.high;
@@ -450,17 +457,18 @@ std::vector<Pattern> DataParser::candlesToPatterns(const std::vector<CandleData>
     return patterns;
 }
 
-uint64_t DataParser::parseTimestamp(const std::string& timestamp) const {
+uint64_t DataParser::parseTimestamp(const shim::string& timestamp) const
+{
     // Parse ISO 8601 format with nanoseconds: "2021-04-07T00:00:00.000000000Z"
     std::tm tm = {};
-    std::istringstream ss(timestamp);
-    
+    shim::istringstream ss(timestamp.c_str());
+
     // Parse up to seconds
     ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
     
     if (!ss.fail()) {
         // Skip the fractional seconds part
-        std::string fractional;
+        shim::string fractional;
         std::getline(ss, fractional, 'Z');
         
         auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));

@@ -7,7 +7,7 @@
 #include <optional>
 #include <vector>
 
-#include "shim.h"
+#include "engine/shim.h"
 
 namespace sep::quantum {
 
@@ -36,10 +36,10 @@ struct QFHAggregateEvent {
 };
 
 // Transform an entire bit vector into transition events.
-std::vector<QFHEvent> transform_rich(const std::vector<uint8_t>& bits);
+shim::vector<QFHEvent> transform_rich(const shim::vector<uint8_t>& bits);
 
 // Aggregate events by state
-std::vector<QFHAggregateEvent> aggregate(const std::vector<QFHEvent>& events);
+shim::vector<QFHAggregateEvent> aggregate(const shim::vector<QFHEvent>& events);
 
 // Streaming processor for online transformation.
 class QFHProcessor {
@@ -54,8 +54,8 @@ public:
 
 // QFH analysis result
 struct QFHResult {
-    std::vector<QFHEvent> events;
-    std::vector<QFHAggregateEvent> aggregated_events;
+    shim::vector<QFHEvent> events;
+    shim::vector<QFHAggregateEvent> aggregated_events;
     int null_state_count{0};
     int flip_count{0};
     int rupture_count{0};
@@ -79,13 +79,13 @@ public:
     explicit QFHBasedProcessor(const QFHOptions& options = {});
 
     // Analyze bit pattern
-    QFHResult analyze(const std::vector<uint8_t>& bits);
+    QFHResult analyze(const shim::vector<uint8_t>& bits);
 
     // Detect collapse based on rupture ratio
     bool detectCollapse(const QFHResult& result) const;
 
     // Convert uint32_t vector to bit vector
-    static std::vector<uint8_t> convertToBits(const std::vector<uint32_t>& values);
+    static shim::vector<uint8_t> convertToBits(const shim::vector<uint32_t>& values);
 
 private:
     QFHOptions options_;

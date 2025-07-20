@@ -1,9 +1,10 @@
 #include "api/logging_middleware.h"
-#include "api/crow_adapter.h"
+
 #include <atomic>
 #include <chrono>
+#include <chrono>  // For std::chrono
 
-#include <chrono> // For std::chrono
+#include "api/crow_adapter.h"
 
 namespace sep::api {
 
@@ -34,13 +35,13 @@ namespace sep::api {
         {
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - ctx.start);
-            // Convert crow_string to std::string using c_str() method
-            std::string body_str(res.body.c_str());
+            // Convert crow_string to shim::string using c_str() method
+            shim::string body_str(res.body.c_str());
             server_->logRequest(*req_ptr, res.code, body_str, duration.count());
         }
         else
         {
-            std::string body_str(res.body.c_str());
+            shim::string body_str(res.body.c_str());
             server_->logRequest(*req_ptr, res.code, body_str, 0);
         }
     }

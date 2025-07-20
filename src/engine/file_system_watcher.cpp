@@ -1,15 +1,18 @@
 #include "file_system_watcher.h"
+
+#include <chrono>
 #include <iostream>
 #include <thread>
-#include <chrono>
 
 namespace sep {
 namespace core {
 
 class FileSystemWatcher::Impl {
 public:
-    Impl(const std::string& path, std::function<void(const std::string&)> callback)
-        : path_(path), callback_(callback), running_(false) {}
+    Impl(const shim::string& path, std::function<void(const shim::string&)> callback)
+        : path_(path), callback_(callback), running_(false)
+    {
+    }
 
     void start() {
         running_ = true;
@@ -27,13 +30,16 @@ public:
     }
 
 private:
-    std::string path_;
-    std::function<void(const std::string&)> callback_;
+    shim::string path_;
+    std::function<void(const shim::string&)> callback_;
     bool running_;
 };
 
-FileSystemWatcher::FileSystemWatcher(const std::string& path, std::function<void(const std::string&)> callback)
-    : impl_(std::make_unique<Impl>(path, callback)) {}
+FileSystemWatcher::FileSystemWatcher(const shim::string& path,
+                                     std::function<void(const shim::string&)> callback)
+    : impl_(std::make_unique<Impl>(path, callback))
+{
+}
 
 FileSystemWatcher::~FileSystemWatcher() = default;
 

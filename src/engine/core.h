@@ -1,8 +1,9 @@
 #ifndef SEP_CUDA_CORE_H
 #define SEP_CUDA_CORE_H
 
-#include "error_handler.h"
 #include <cuda_runtime.h>
+
+#include "error_handler.h"
 
 namespace sep::cuda {
 
@@ -30,7 +31,7 @@ class CudaCore {
   // Memory management
   Error getMemoryInfo(size_t& free, size_t& total) const;
   Error getLastError() const;
-  std::string getErrorString(cudaError_t error) const;
+  shim::string getErrorString(cudaError_t error) const;
 
   // Metrics
   CudaMetrics getMetrics() const;

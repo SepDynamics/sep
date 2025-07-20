@@ -1,7 +1,7 @@
 #include <fstream>
 
 #include "engine.h"
-#include "gtest/gtest.h"
+#include "engine/gtest/gtest.h"
 
 TEST(IngestionTest, DirectoryIngestion) {
     sep::core::Engine engine;

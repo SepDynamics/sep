@@ -1,10 +1,12 @@
-#include "quantum/qbsa.h"
-#include "quantum/qfh.h"
 #include "quantum/qbsa_qfh.h"
+
 #include <algorithm>
 #include <cstdint>
 #include <memory>
 #include <vector>
+
+#include "quantum/qbsa.h"
+#include "quantum/qfh.h"
 
 namespace sep::quantum {
 
@@ -14,8 +16,9 @@ public:
     explicit QFHBasedQBSAProcessor(const QBSAOptions& options = {})
         : QBSAProcessor(options), qfh_processor_(createQFHOptions(options)) {}
 
-    QBSAResult analyze(const std::vector<uint32_t>& probe_indices,
-                       const std::vector<uint32_t>& expectations) override {
+    QBSAResult analyze(const shim::vector<uint32_t>& probe_indices,
+                       const shim::vector<uint32_t>& expectations) override
+    {
         QBSAResult result{};
         if (probe_indices.empty() || probe_indices.size() != expectations.size()) return result;
 
@@ -31,7 +34,7 @@ public:
                                  static_cast<float>(probe_indices.size());
 
         // Use QFH to analyze the probe bits for collapse detection
-        std::vector<uint8_t> probe_bits = convertToBits(probe_indices);
+        shim::vector<uint8_t> probe_bits = convertToBits(probe_indices);
         QFHResult qfh_result = qfh_processor_.analyze(probe_bits);
 
         // Detect collapse based on rupture ratio from QFH
@@ -67,8 +70,9 @@ private:
     }
 
     // Convert uint32_t values to bit sequences
-    std::vector<uint8_t> convertToBits(const std::vector<uint32_t>& values) {
-        std::vector<uint32_t> shim_values;
+    shim::vector<uint8_t> convertToBits(const shim::vector<uint32_t>& values)
+    {
+        shim::vector<uint32_t> shim_values;
         shim_values.reserve(values.size());
         for (uint32_t v : values) {
             shim_values.push_back(v);

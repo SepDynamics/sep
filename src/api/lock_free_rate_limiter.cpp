@@ -1,13 +1,15 @@
 #include "api/lock_free_rate_limiter.h"
-#include "api/rate_limiter.h" // for factory declaration
-#include "api/background_cleanup.h"
-#include "crow/crow_isolation.h"
-#include <algorithm> // For std::clamp
+
+#include <algorithm>  // For std::clamp
+#include <chrono>     // For std::chrono
 #include <cstring>
-#include <chrono>    // For std::chrono
+#include <mutex>  // For std::lock_guard, std::mutex, std::unique_lock
 #include <nlohmann/json.hpp>
-#include <mutex>     // For std::lock_guard, std::mutex, std::unique_lock
 #include <string>
+
+#include "api/background_cleanup.h"
+#include "api/rate_limiter.h"  // for factory declaration
+#include "crow/crow_isolation.h"
 
 namespace sep::api {
 
@@ -133,12 +135,12 @@ void LockFreeRateLimiter::cleanup(std::chrono::steady_clock::time_point now) {
     }
 }
 
-std::string LockFreeRateLimiter::getErrorResponse(const std::string &message,
-                                                  int status) {
-  nlohmann::json error;
-  error["error"] = message;
-  error["status"] = status;
-  return error.dump();
+shim::string LockFreeRateLimiter::getErrorResponse(const shim::string &message, int status)
+{
+    nlohmann::json error;
+    error["error"] = message;
+    error["status"] = status;
+    return error.dump();
 }
 
 void LockFreeRateLimiter::setEnabled(bool enabled) {
@@ -154,7 +156,7 @@ void LockFreeRateLimiter::setPriorityQuota(sep::api::Priority priority, float mu
     }
 }
 
-unsigned int LockFreeRateLimiter::GetRequestCount(const std::string &client_id) const
+unsigned int LockFreeRateLimiter::GetRequestCount(const shim::string &client_id) const
 {
     ClientMap::const_accessor acc;
     if (clients_.find(acc, client_id))
@@ -164,7 +166,7 @@ unsigned int LockFreeRateLimiter::GetRequestCount(const std::string &client_id) 
     return 0;
 }
 
-unsigned int LockFreeRateLimiter::GetWindowSize(const std::string &client_id,
+unsigned int LockFreeRateLimiter::GetWindowSize(const shim::string &client_id,
                                                 Priority priority) const
 {
     ClientMap::const_accessor acc;
@@ -267,7 +269,7 @@ LockFreeRateLimiter::getPriorityFromRequest(const IRequest &req) const {
   return Priority::NORMAL;
 }
 
-std::string LockFreeRateLimiter::getClientId(const IRequest &req) const
+shim::string LockFreeRateLimiter::getClientId(const IRequest &req) const
 {
     auto clientId = req.get_header_value("X-Client-ID");
     return clientId.empty() ? req.get_remote_ip() : clientId;

@@ -1,17 +1,23 @@
-
-
-# Find GoogleTest
-find_package(GTest REQUIRED)
-include(GoogleTest)
-enable_testing()
-
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
         DESTINATION src/tests
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.hpp")
+        
+add_library(sep_tests STATIC
+    memory_tier_test.cpp
+    simple_embedding_model.cpp
+    dataset_loader.cpp
+    ingestion_test.cpp
+    pattern_metric_engine_test.cpp)
 
+
+
+# Find GoogleTest
+find_package(GTest REQUIRED)
+include(GoogleTest)
+enable_testing()
 
 # Set C++ standard
 # Find required packages

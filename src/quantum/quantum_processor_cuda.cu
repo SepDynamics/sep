@@ -4,7 +4,7 @@
 #include <cmath>
 #include <glm/glm.hpp>
 
-#include "cuda_math_compat.h"
+#include "engine/cuda_math_compat.h"
 #include "quantum/quantum_processor_cuda.h"
 
 namespace sep::quantum {

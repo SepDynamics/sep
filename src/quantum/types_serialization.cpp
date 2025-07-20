@@ -1,9 +1,9 @@
 #include <cstring>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <nlohmann/json.hpp>
 #include <vector>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include "quantum/types.h"
 
 using namespace glm;
@@ -18,7 +18,7 @@ void to_json(nlohmann::json& j, const PatternData& data) {
 }
 
 void from_json(const nlohmann::json& j, PatternData& data) {
-    auto attrs = j.at("attributes").get<std::vector<float>>();
+    auto attrs = j.at("attributes").get<shim::vector<float>>();
     data.attributes = glm::vec4(attrs[0], attrs[1], attrs[2], attrs[3]);
     j.at("coherence").get_to(data.coherence);
     j.at("stability").get_to(data.stability);
@@ -84,10 +84,10 @@ void to_json(nlohmann::json& j, const Pattern& pattern) {
 
 void from_json(const nlohmann::json& j, Pattern& pattern) {
     j.at("id").get_to(pattern.id);
-    auto pos = j.at("position").get<std::vector<float>>();
+    auto pos = j.at("position").get<shim::vector<float>>();
     pattern.position = glm::vec4(pos[0], pos[1], pos[2], pos[3]);
     if (j.contains("momentum")) {
-        auto mom = j.at("momentum").get<std::vector<float>>();
+        auto mom = j.at("momentum").get<shim::vector<float>>();
         pattern.momentum = glm::vec3(mom[0], mom[1], mom[2]);
     } else {
         pattern.momentum = glm::vec3(0.0f);

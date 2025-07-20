@@ -1,15 +1,14 @@
-#include "quantum/pattern_processor.hpp"
-
-#include "common.h"
-#include "cuda_helpers.h"
-#include "cuda_sep.h"
+#include "engine/common.h"
+#include "engine/cuda_helpers.h"
+#include "engine/cuda_sep.h"
+#include "engine/pattern_types.h"
+#include "engine/types.h"
 #include "memory/types.h"
-#include "pattern_types.h"
 #include "quantum/config.h"
 #include "quantum/pattern_evolution_bridge.h"
+#include "quantum/processor.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
-#include "types.h"
 
 using ::sep::memory::MemoryTierEnum;
 
@@ -37,8 +36,9 @@ public:
         glm::vec3 stateData(quantum_state.coherence, quantum_state.stability, quantum_state.entropy);
         
         // Process using quantum processor
-        bool success = quantum_processor_->processPattern(stateData, std::hash<std::string>{}(pattern.id));
-        
+        bool success =
+            quantum_processor_->processPattern(stateData, std::hash<shim::string>{}(pattern.id));
+
         result.success = success;
         if (success) {
             // Update quantum state values based on processing
@@ -68,9 +68,10 @@ public:
         return result;
     }
 
-    std::vector<sep::ProcessingResult> processBatch(
-        const std::vector<sep::quantum::Pattern>& patterns) {
-        std::vector<sep::ProcessingResult> results;
+    shim::vector<sep::ProcessingResult> processBatch(
+        const shim::vector<sep::quantum::Pattern>& patterns)
+    {
+        shim::vector<sep::ProcessingResult> results;
         results.reserve(patterns.size());
         
         for (const auto& pattern : patterns) {
@@ -119,8 +120,6 @@ std::unique_ptr<QuantumProcessor> quantum_processor_;
 //     return std::make_unique<PatternQuantumProcessorImpl>(qp_cfg);
 // }
 
-} // namespace sep::quantum
-
 namespace sep::pattern {
 
 PatternProcessor::PatternProcessor(Implementation impl) : implementation_(impl) {}
@@ -141,23 +140,28 @@ sep::SEPResult PatternProcessor::init(quantum::GPUContext* ctx) {
 
 void PatternProcessor::evolvePatterns() {
     for (auto& p : patterns_) {
-        ++p.generation;
+        // ++p.generation;
     }
 }
 
-PatternData PatternProcessor::mutatePattern(const PatternData& parent) {
-    PatternData child = parent;
-    child.generation = parent.generation + 1;
-    child.id = parent.id + "_child";
+sep::compat::PatternData PatternProcessor::mutatePattern(const sep::compat::PatternData& parent)
+{
+    sep::compat::PatternData child = parent;
+    // child.generation = parent.generation + 1;
+    // child.id = parent.id + "_child";
     return child;
 }
 
-sep::SEPResult PatternProcessor::addPattern(const PatternData& pattern) {
+sep::SEPResult PatternProcessor::addPattern(const sep::compat::PatternData& pattern)
+{
     patterns_.push_back(pattern);
     return sep::SEPResult::SUCCESS;
 }
 
-const std::vector<PatternData>& PatternProcessor::getPatterns() const { return patterns_; }
+const shim::vector<sep::compat::PatternData>& PatternProcessor::getPatterns() const
+{
+    return patterns_;
+}
 
 CPUPatternProcessor::CPUPatternProcessor() : PatternProcessor(Implementation::CPU), patterns_(PatternProcessor::patterns_) {}
 
@@ -169,7 +173,8 @@ void CPUPatternProcessor::evolvePatterns() {
     }
 }
 
-PatternData CPUPatternProcessor::mutatePattern(const PatternData& parent) {
+sep::compat::PatternData CPUPatternProcessor::mutatePattern(const sep::compat::PatternData& parent)
+{
     return PatternProcessor::mutatePattern(parent);
 }
 

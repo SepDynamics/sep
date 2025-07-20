@@ -10,19 +10,21 @@
 #include <nlohmann/json.hpp>
 
 #include "api/sep_engine.h"
+#include "engine/types.h"  // For PatternData/PatternConfig
+#include "engine/types.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "types.h"  // For PatternData/PatternConfig
-#include "types.h"
 
 // Standard Library Includes
+#include <cmath>
 #include <cstring>
-#include "quantum/pattern_evolution_bridge.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <cmath>
 
-sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(const nlohmann::json& config, const std::string& patternId)
+#include "quantum/pattern_evolution_bridge.h"
+
+sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(
+    const nlohmann::json& config, const shim::string& patternId)
 {
     sep::pattern::PatternData pattern;
     
@@ -69,8 +71,8 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
         for (const auto& rel_json : config["relationships"])
         {
             sep::pattern::PatternRelationship rel;
-            
-            std::string target_id = rel_json.value("target", "");
+
+            shim::string target_id = rel_json.value("target", "");
             if (!target_id.empty())
             {
                 rel.targetId = shim::string(target_id.c_str());
@@ -83,9 +85,10 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(con
     
     return pattern;
 }
-std::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns( const nlohmann::json& args)
+shim::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns(
+    const nlohmann::json& args)
 {
-    std::vector<sep::pattern::PatternData> patterns;
+    shim::vector<sep::pattern::PatternData> patterns;
     auto json_patterns = args.value("patterns", nlohmann::json::array());
     float min_coherence = args.value("min_coherence", 0.0f);
     float min_stability = args.value("min_stability", 0.0f);
@@ -129,8 +132,8 @@ float sep::quantum::mcp::PatternEvolution::calculateRelationshipStrength(const s
 nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::pattern::PatternData& pattern)
 {
     nlohmann::json j;
-    
-    j["id"] = std::string(pattern.id.c_str());
+
+    j["id"] = shim::string(pattern.id.c_str());
     j["generation"] = pattern.generation;
     
     j["position"] = {
@@ -153,7 +156,7 @@ nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::pattern::P
         for (const auto& rel : pattern.relationships)
         {
             nlohmann::json rel_json;
-            rel_json["target"] = std::string(rel.targetId.c_str());
+            rel_json["target"] = shim::string(rel.targetId.c_str());
             rel_json["strength"] = rel.strength;
             rel_json["type"] = static_cast<int>(rel.type);
             j["relationships"].push_back(rel_json);
@@ -170,7 +173,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nl
     // Import basic properties
     if (j.contains("id") && j["id"].is_string())
     {
-        std::string id_str = j["id"].get<std::string>();
+        shim::string id_str = j["id"].get<shim::string>();
         p.id = shim::string(id_str.c_str());
     }
     
@@ -202,7 +205,7 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nl
             
             if (rel_json.contains("target") && rel_json["target"].is_string())
             {
-                std::string target_str = rel_json["target"].get<std::string>();
+                shim::string target_str = rel_json["target"].get<shim::string>();
                 rel.targetId = shim::string(target_str.c_str());
                 rel.strength = rel_json.value("strength", 0.0f);
                 rel.type = static_cast<::sep::quantum::RelationshipType>(rel_json.value("type", 0));

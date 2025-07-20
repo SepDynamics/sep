@@ -6,12 +6,13 @@
 namespace sep {
 namespace metrics {
 
-TraceSpan::TraceSpan(const std::string &name)
-    : name_(name), start_(std::chrono::high_resolution_clock::now()) {
+    TraceSpan::TraceSpan(const shim::string &name)
+        : name_(name), start_(std::chrono::high_resolution_clock::now())
+    {
 #ifdef SEP_VERBOSE_TRACE
   std::cout << "[TRACE] Start span: " << name_ << std::endl;
 #endif
-}
+    }
 
 TraceSpan::~TraceSpan() {
 #ifdef SEP_VERBOSE_TRACE
@@ -24,7 +25,8 @@ TraceSpan::~TraceSpan() {
 #endif
 }
 
-void TraceSpan::setAttribute(const std::string& key, std::int64_t value) {
+void TraceSpan::setAttribute(const shim::string &key, std::int64_t value)
+{
 #ifdef SEP_VERBOSE_TRACE
   std::cout << "[TRACE] Attribute: " << key << "=" << value
             << " for span: " << name_ << std::endl;

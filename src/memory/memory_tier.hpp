@@ -1,28 +1,17 @@
 #pragma once
 
 // C++ Standard Library
-#include <chrono>
-#include <cstddef>
-#include <cstdint>
-#include <deque>
-#include <unordered_map>
-#include <vector>
+#include "engine/shim.h"
 
 // Third-party headers
 #include <glm/vec3.hpp>
 
 // Project headers
-#include "common.h"
 #include "memory/persistent_pattern_data.hpp"
-#include "types.h"
+#include "memory/types.h"
 
 namespace sep {
 namespace memory {
-
-using ::sep::memory::CompressionMethod;
-using ::sep::SEPResult;
-using ::sep::memory::MemoryTierEnum;
-// Already declared above
 
 // Small epsilon for utilization metrics. Keeps a 1 KiB allocation visible in a
 // 1 MiB tier while clamping rounding noise after promotions or defragmentation.
@@ -143,6 +132,9 @@ public:
 
   // Resize the underlying memory pool, returns true on success
   bool resize(std::size_t new_size);
+
+  // Clears all allocations from the tier
+  void clear();
 
   // Expose configuration for manager-level optimizations
   MemoryTierEnum getType() const { return config_.type; }

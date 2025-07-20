@@ -11,17 +11,19 @@
 #include <unordered_map>
 #include <vector>
 
-#include "math_common.h"
+#include "engine/math_common.h"
+#include "engine/types.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_processor_cuda.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "types.h"
 
 namespace sep::quantum {
 
 // QuantumProcessorError implementation
-QuantumProcessorError::QuantumProcessorError(const std::string& message)
-    : std::runtime_error("QuantumProcessor: " + message) {}
+QuantumProcessorError::QuantumProcessorError(const shim::string& message)
+    : std::runtime_error("QuantumProcessor: " + message)
+{
+}
 
 // Internal implementation class to maintain existing functionality
 class QuantumProcessorImpl : public QuantumProcessorQFHCommon {

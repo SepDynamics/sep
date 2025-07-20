@@ -2,9 +2,9 @@
 
 #include <cstddef>
 
-#include "cuda.h"
+#include "engine/cuda.h"
+#include "engine/raii.h"
 #include "memory/types.h"
-#include "raii.h"
 
 namespace sep {
 

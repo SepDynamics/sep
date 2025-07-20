@@ -11,8 +11,8 @@
 #include <memory>
 #include <sstream>
 
+#include "engine/shim.h"
 #include "memory/spdlog_isolation.h"
-#include "shim.h"
 
 namespace crow {
 

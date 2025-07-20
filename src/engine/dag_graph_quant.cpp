@@ -1,25 +1,29 @@
-#include "dag_graph.h"
-#include <sstream>
-#include <iomanip>
 #include <cmath>
 #include <glm/geometric.hpp>
+#include <iomanip>
+#include <sstream>
+
+#include "dag_graph.h"
 
 namespace sep {
 namespace dag {
 
-uint64_t DagGraph::addMarketDataNode(const glm::vec3& pattern, float coherence, float price,
-                                   float volatility, float volume, const std::vector<uint64_t>& parents) {
-    uint64_t id = addNode(pattern, coherence, parents);
-    
-    if (nodes_.find(id) != nodes_.end()) {
-        nodes_[id].price = price;
-        nodes_[id].volatility = volatility;
-        nodes_[id].volume = volume;
-        nodes_[id].stability = coherence; // Initial stability equals coherence
+    uint64_t DagGraph::addMarketDataNode(const glm::vec3& pattern, float coherence, float price,
+                                         float volatility, float volume,
+                                         const shim::vector<uint64_t>& parents)
+    {
+        uint64_t id = addNode(pattern, coherence, parents);
+
+        if (nodes_.find(id) != nodes_.end())
+        {
+            nodes_[id].price = price;
+            nodes_[id].volatility = volatility;
+            nodes_[id].volume = volume;
+            nodes_[id].stability = coherence;  // Initial stability equals coherence
+        }
+
+        return id;
     }
-    
-    return id;
-}
 
 void DagGraph::updateVolatility(uint64_t id, float volatility) {
     auto it = nodes_.find(id);
@@ -155,7 +159,8 @@ uint32_t DagGraph::getGeneration(uint64_t id) const {
     return (it != nodes_.end()) ? it->second.generation : 0;
 }
 
-std::string DagGraph::exportAsJson() const {
+shim::string DagGraph::exportAsJson() const
+{
     std::stringstream json;
     json << std::fixed << std::setprecision(4);
     json << "{\n";

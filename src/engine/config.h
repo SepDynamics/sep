@@ -1,6 +1,9 @@
 #pragma once
 
-#include "shim.h"
+#include "engine/shim.h"
+#include "memory/types.h"
+#include "quantum/types.h"
+#include "types.h"
 
 namespace sep {
 namespace config {
@@ -16,14 +19,23 @@ namespace config {
 
     struct LogConfig
     {
-        std::string level;
-        std::string path;
+        shim::string level;
+        shim::string path;
     };
 
     struct AnalyticsConfig
     {
         bool enabled;
-        std::string endpoint;
+        shim::string endpoint;
+    };
+
+    struct SystemConfig
+    {
+        sep::memory::MemoryThresholdConfig memory;
+        sep::QuantumThresholdConfig quantum;
+        CudaConfig cuda;
+        LogConfig logging;
+        AnalyticsConfig analytics;
     };
 }  // namespace config
 }  // namespace sep

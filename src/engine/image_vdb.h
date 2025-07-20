@@ -52,9 +52,9 @@ namespace openvdb {
 /* VDB Image Loader */
 class VDBImageLoader : public ImageLoader {
 public:
-    VDBImageLoader(const std::string &grid_name);
+    VDBImageLoader(const shim::string &grid_name);
 #ifdef WITH_OPENVDB
-    VDBImageLoader(::openvdb::GridBase::ConstPtr grid_, const std::string &grid_name);
+    VDBImageLoader(::openvdb::GridBase::ConstPtr grid_, const shim::string &grid_name);
     ::openvdb::GridBase::ConstPtr get_grid();
 #endif
     ~VDBImageLoader();
@@ -64,13 +64,13 @@ public:
                     void *pixels, 
                     const size_t pixels_size, 
                     const bool associate_alpha);
-    std::string name() const;
+    shim::string name() const;
     bool equals(const ImageLoader &other) const;
     void cleanup();
     bool is_vdb_loader() const;
 
 private:
-    std::string grid_name;
+    shim::string grid_name;
 #ifdef WITH_OPENVDB
     ::openvdb::GridBase::ConstPtr grid;
     void* bbox_ptr = nullptr;  // Will hold openvdb::math::CoordBBox

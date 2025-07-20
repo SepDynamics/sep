@@ -2,6 +2,7 @@
 #define SEP_CUDA_STREAM_IMPL_H
 
 #include <cuda_runtime.h>
+
 #include "stream.h"
 
 namespace sep {

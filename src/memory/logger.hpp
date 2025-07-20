@@ -12,38 +12,38 @@ class Logger
 public:
     virtual ~Logger() = default;
 
-    virtual void debug(const std::string& msg) = 0;
-    virtual void info(const std::string& msg)  = 0;
-    virtual void warn(const std::string& msg)  = 0;
-    virtual void error(const std::string& msg) = 0;
-    virtual void critical(const std::string& msg) = 0;
+    virtual void debug(const shim::string& msg) = 0;
+    virtual void info(const shim::string& msg) = 0;
+    virtual void warn(const shim::string& msg) = 0;
+    virtual void error(const shim::string& msg) = 0;
+    virtual void critical(const shim::string& msg) = 0;
 
-    template<typename... Args>
-    void debug(const std::string& fmt, Args&&... args)
+    template <typename... Args>
+    void debug(const shim::string& fmt, Args&&... args)
     {
         debug(fmt::format(fmt, std::forward<Args>(args)...));
     }
 
-    template<typename... Args>
-    void info(const std::string& fmt, Args&&... args)
+    template <typename... Args>
+    void info(const shim::string& fmt, Args&&... args)
     {
         info(fmt::format(fmt, std::forward<Args>(args)...));
     }
 
-    template<typename... Args>
-    void warn(const std::string& fmt, Args&&... args)
+    template <typename... Args>
+    void warn(const shim::string& fmt, Args&&... args)
     {
         warn(fmt::format(fmt, std::forward<Args>(args)...));
     }
 
-    template<typename... Args>
-    void error(const std::string& fmt, Args&&... args)
+    template <typename... Args>
+    void error(const shim::string& fmt, Args&&... args)
     {
         error(fmt::format(fmt, std::forward<Args>(args)...));
     }
 
-    template<typename... Args>
-    void critical(const std::string& fmt, Args&&... args)
+    template <typename... Args>
+    void critical(const shim::string& fmt, Args&&... args)
     {
         critical(fmt::format(fmt, std::forward<Args>(args)...));
     }

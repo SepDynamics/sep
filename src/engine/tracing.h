@@ -5,18 +5,20 @@
 #include <memory>
 #include <string>
 
+#include "engine/shim.h"
+
 namespace sep::metrics {
 
 class TraceSpan {
  public:
-  explicit TraceSpan(const std::string& name);
-  ~TraceSpan();
+     explicit TraceSpan(const shim::string& name);
+     ~TraceSpan();
 
-  void setAttribute(const std::string& key, std::int64_t value);
+     void setAttribute(const shim::string& key, std::int64_t value);
 
  private:
-  std::string name_;
-  std::chrono::high_resolution_clock::time_point start_;
+     shim::string name_;
+     std::chrono::high_resolution_clock::time_point start_;
 };
 
 }  // namespace sep::metrics

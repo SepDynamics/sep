@@ -4,8 +4,9 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+#include "api/types.h"  // For ErrorCode
 #include "quantum/processor.h"
-#include "api/types.h" // For ErrorCode
 // Forward declarations
 namespace sep {
 namespace quantum {
@@ -37,16 +38,15 @@ class Processor;
 
 namespace sep::api::bridge::detail {
 extern std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
-extern std::string g_last_error;
+extern shim::string g_last_error;
 extern size_t g_required_buffer_size;
 extern std::mutex g_bridge_mutex;
-extern std::unordered_map<std::string, std::vector<void (*)(const char *)>>
-    g_callback_map;
+extern std::unordered_map<shim::string, shim::vector<void (*)(const char*)>> g_callback_map;
 
-void setLastError(const std::string& error);
-std::string getLastError();
+void setLastError(const shim::string& error);
+shim::string getLastError();
 void setRequiredBufferSize(size_t size);
 size_t getRequiredBufferSize();
 sep::SEPResult mapSepError(::sep::api::ErrorCode code);
-void invokeCallbacks(const std::string& event_type, const std::string& event_data);
+void invokeCallbacks(const shim::string& event_type, const shim::string& event_data);
 } // namespace sep::api::bridge::detail

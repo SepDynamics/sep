@@ -5,9 +5,10 @@
  * utilities defined in cuda_error_handling.h.
  */
 
-#include "cuda_error_handling.h"
-#include <string.h>
+#include "engine/cuda_error_handling.h"
+
 #include <stdio.h>
+#include <string.h>
 
 /* Translates a CUDA error code to a standardized error code */
 static int translate_cuda_error_code(int cuda_code) {

@@ -1,7 +1,8 @@
-#include "kernels.h"
+#include <cuda_runtime.h>
 
 #include <cstdint>
-#include <cuda_runtime.h>
+
+#include "kernels.h"
 
 namespace {
 

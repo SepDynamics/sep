@@ -8,3 +8,11 @@ customModes:
       - read
       - edit
     source: project
+  - slug: architect
+    name: Architect
+    description: High-level codebase analysis and design
+    roleDefinition: As an expert architect, I analyze the codebase structure, dependencies, and overall design. I use codebase snapshots to inform my recommendations and generate high-level plans.
+    whenToUse: Use this mode to gain a deep understanding of the codebase, plan new features, or identify areas for refactoring.
+    groups:
+      - read
+    source: project

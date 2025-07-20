@@ -1,19 +1,21 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
-#include "config.h"
-#include "cuda_api.hpp"
-#include "cuda_runtime.h"
-#include "cufft.h"
+#include "engine/config.h"
+#include "engine/cuda_api.hpp"
+#include "engine/cuda_runtime.h"
+#include "engine/cufft.h"
+#include "engine/types.h"
 #include "memory/types.h"
 #include "quantum/config.h"
 #include "quantum/pattern_evolution_bridge.h"
-#include "types.h"
 
 // Forward declarations
 namespace sep::cuda {
     class CudaCore;
 }
+#include <cuda_runtime.h>
+
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -35,15 +37,13 @@ namespace sep::cuda {
 #include <unordered_map>
 #include <vector>
 
-#include <cuda_runtime.h>
+#include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
+#include "quantum/pattern.h"
 #include "quantum/qbsa.h"
 #include "quantum/qfh.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "types.h"
-
-#include "quantum/pattern.h"
 
 namespace sep::quantum { class PatternEvolutionBridge; }
 
@@ -75,14 +75,14 @@ public:
     struct OptimizationResult {
         bool success{false};
         QuantumState optimized_state{};
-        std::vector<float> optimized_values;
-        std::string error_message;
+        shim::vector<float> optimized_values;
+        shim::string error_message;
     };
 
     struct OptimizationTarget {
         float target_coherence{0.8f};
         float target_stability{0.5f};
-        std::vector<float> target_values{};
+        shim::vector<float> target_values{};
         float coherence_threshold{0.5f};
     };
 
@@ -93,10 +93,11 @@ public:
 
     OptimizationResult optimize(const QuantumState& initial_state,
                                 const OptimizationTarget& target);
-    std::vector<Pattern> optimize(const std::vector<Pattern>& patterns);
-    void updateManifoldGeometry(const std::vector<QuantumState>& quantum_states);
+    shim::vector<Pattern> optimize(const shim::vector<Pattern> &patterns);
+    void updateManifoldGeometry(const shim::vector<QuantumState> &quantum_states);
     float computeManifoldCoherence(const glm::vec3& position) const;
-    std::vector<glm::vec3> sampleTangentSpace(const glm::vec3& position, uint32_t num_samples) const;
+    shim::vector<glm::vec3> sampleTangentSpace(const glm::vec3 &position,
+                                               uint32_t num_samples) const;
 
 private:
     struct ManifoldPoint {
@@ -112,11 +113,11 @@ private:
     };
 
     Config config_{};
-    std::vector<ManifoldPoint> manifold_points_{};
+    shim::vector<ManifoldPoint> manifold_points_{};
     glm::mat4 riemannian_metric_{1.0f};
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_{};
     std::unique_ptr<EvolutionState> evolution_state_{};
-    std::vector<std::thread> worker_threads_{};
+    shim::vector<std::thread> worker_threads_{};
     std::atomic<bool> running_{false};
     mutable std::mutex state_mutex_{};
 };
@@ -154,7 +155,7 @@ public:
   explicit AdvancedMemoryTierOptimizer(const ManifoldConfig &config);
 
   // Adaptive coherence threshold optimization
-  void optimizeThresholds(const std::vector<QuantumPattern> &patterns);
+  void optimizeThresholds(const shim::vector<QuantumPattern> &patterns);
 
   // Predictive pattern migration using Hamiltonian evolution
   void predictiveMigration(int pattern_id, double time_horizon_ms);
@@ -179,25 +180,22 @@ public:
 
   // Multi-dimensional coherence manifold analysis
   struct ManifoldAnalysis {
-    std::vector<std::vector<double>> coherence_matrix;
-    std::vector<double> eigenvalues;
-    std::vector<std::vector<double>> eigenvectors;
-    double manifold_curvature;
-    bool topological_defect_detected;
+      shim::vector<shim::vector<double>> coherence_matrix;
+      shim::vector<double> eigenvalues;
+      shim::vector<shim::vector<double>> eigenvectors;
+      double manifold_curvature;
+      bool topological_defect_detected;
   };
 
-  ManifoldAnalysis
-  analyzeCoherenceManifold(const std::vector<QuantumPattern> &patterns);
+  ManifoldAnalysis analyzeCoherenceManifold(const shim::vector<QuantumPattern> &patterns);
 
   // Enhanced QFH with cross-scale rupture detection
-  QFHResult
-  processWithCrossScaleAnalysis(const std::vector<uint32_t> &pattern_bits);
+  QFHResult processWithCrossScaleAnalysis(const shim::vector<uint32_t> &pattern_bits);
 
   // Wavelet-based frequency domain processing
-  std::vector<std::complex<double>> waveletQFH(const std::vector<uint8_t> &bits,
-                                               int levels = 4);
+  shim::vector<std::complex<double>> waveletQFH(const shim::vector<uint8_t> &bits, int levels = 4);
 
-private:
+  private:
   ManifoldConfig config_;
   std::unique_ptr<CUDAQuantumKernel> cuda_kernel_;
 
@@ -242,25 +240,24 @@ public:
     struct CoherenceResponse
     {
         double final_coherence;
-        std::vector<double> superposition_weights;
-        std::string modulation_strategy;
+        shim::vector<double> superposition_weights;
+        shim::string modulation_strategy;
     };
 
-  CoherenceResponse synthesizeResponse(
-      const std::string &client_context,
-      const std::unordered_map<std::string, double> &system_state);
+    CoherenceResponse synthesizeResponse(
+        const shim::string &client_context,
+        const std::unordered_map<shim::string, double> &system_state);
 
-  // Quantum superposition of coherence factors
-  double
-  calculateSuperpositionCoherence(const std::vector<double> &coherence_factors,
-                                  const std::vector<double> &weights);
+    // Quantum superposition of coherence factors
+    double calculateSuperpositionCoherence(const shim::vector<double> &coherence_factors,
+                                           const shim::vector<double> &weights);
 
 private:
     LogConfig config_;
-    std::unordered_map<std::string, double> context_coherence_map_;
-    
-    std::vector<double> extractCoherenceFactors(const std::string& context,
-                                               const std::unordered_map<std::string, double>& state);
+    std::unordered_map<shim::string, double> context_coherence_map_;
+
+    shim::vector<double> extractCoherenceFactors(
+        const shim::string &context, const std::unordered_map<shim::string, double> &state);
 };
 
 // 5. HIERARCHICAL SEMANTIC PROCESSING
@@ -270,36 +267,35 @@ public:
 
   // Code embedding with structural awareness
   struct CodeEmbedding {
-    std::vector<double> vector;
-    std::vector<int> hierarchy_indices;
-    double structural_coherence;
+      shim::vector<double> vector;
+      shim::vector<int> hierarchy_indices;
+      double structural_coherence;
   };
 
-  CodeEmbedding embedCode(const std::string &code_snippet);
+  CodeEmbedding embedCode(const shim::string &code_snippet);
 
   // Context-aware search with quantum interference
   struct SearchResult {
     int pattern_id;
     double relevance_score;
     double interference_factor;
-    std::vector<int> entangled_patterns;
+    shim::vector<int> entangled_patterns;
   };
 
-  std::vector<SearchResult>
-  quantumSearch(const CodeEmbedding &query,
-                const std::vector<QuantumPattern> &patterns);
+  shim::vector<SearchResult> quantumSearch(const CodeEmbedding &query,
+                                           const shim::vector<QuantumPattern> &patterns);
 
   // Multi-modal result fusion
-  std::vector<SearchResult> fuseMultiModalResults(
-      const std::vector<std::vector<SearchResult>> &modal_results);
+  shim::vector<SearchResult> fuseMultiModalResults(
+      const shim::vector<shim::vector<SearchResult>> &modal_results);
 
-private:
+  private:
   SemanticConfig config_;
   std::unique_ptr<CUDAQuantumKernel> cuda_kernel_;
 
   double calculateQuantumInterference(const CodeEmbedding &a,
                                       const CodeEmbedding &b);
-  void buildHierarchicalIndex(const std::vector<CodeEmbedding> &embeddings);
+  void buildHierarchicalIndex(const shim::vector<CodeEmbedding> &embeddings);
 };
 
 // 6. REAL-TIME PERFORMANCE ANALYTICS
@@ -310,43 +306,42 @@ public:
     // Quantum state space analysis
     struct StateSpaceAnalysis
     {
-        std::vector<std::vector<double>> state_trajectories;
-        std::vector<double> lyapunov_exponents;
+        shim::vector<shim::vector<double>> state_trajectories;
+        shim::vector<double> lyapunov_exponents;
         double entropy_rate;
-        std::vector<int> anomaly_indices;
+        shim::vector<int> anomaly_indices;
     };
 
-  StateSpaceAnalysis
-  analyzeStateSpace(const std::vector<QuantumPattern> &pattern_history);
+    StateSpaceAnalysis analyzeStateSpace(const shim::vector<QuantumPattern> &pattern_history);
 
-  // Anomaly detection with predictive modeling
-  struct AnomalyPrediction {
-    double probability;
-    int predicted_time_steps;
-    std::string anomaly_type;
-    std::vector<double> confidence_interval;
-  };
+    // Anomaly detection with predictive modeling
+    struct AnomalyPrediction
+    {
+        double probability;
+        int predicted_time_steps;
+        shim::string anomaly_type;
+        shim::vector<double> confidence_interval;
+    };
 
   AnomalyPrediction predictAnomaly(const StateSpaceAnalysis &analysis);
 
   // Adaptive optimization deployment
   struct OptimizationStrategy {
-    std::string strategy_name;
-    std::unordered_map<std::string, double> parameters;
-    double expected_improvement;
+      shim::string strategy_name;
+      std::unordered_map<shim::string, double> parameters;
+      double expected_improvement;
   };
 
-  OptimizationStrategy
-  recommendOptimization(const StateSpaceAnalysis &analysis,
-                        const std::vector<double> &performance_metrics);
+  OptimizationStrategy recommendOptimization(const StateSpaceAnalysis &analysis,
+                                             const shim::vector<double> &performance_metrics);
 
-private:
-    config::AnalyticsConfig config_;
-    std::vector<double> performance_history_;
-    std::mutex history_mutex_;
+  private:
+  config::AnalyticsConfig config_;
+  shim::vector<double> performance_history_;
+  std::mutex history_mutex_;
 
-    double calculateLyapunovExponent(const std::vector<std::vector<double>> &trajectory);
-    double calculateEntropyRate(const std::vector<QuantumPattern> &patterns);
+  double calculateLyapunovExponent(const shim::vector<shim::vector<double>> &trajectory);
+  double calculateEntropyRate(const shim::vector<QuantumPattern> &patterns);
 };
 
 // COMPREHENSIVE VALIDATION FRAMEWORK
@@ -356,7 +351,7 @@ public:
     bool passed;
     double processing_rate; // patterns/second
     double error_rate;
-    std::vector<std::string> failed_tests;
+    shim::vector<shim::string> failed_tests;
     std::chrono::milliseconds total_time;
   };
 
@@ -414,8 +409,8 @@ private:
     };
     
     DeterministicPatternGenerator pattern_gen_;
-    
-    std::vector<QuantumPattern> generateTestPatterns(int count);
+
+    shim::vector<QuantumPattern> generateTestPatterns(int count);
     bool validateProcessingRate(double rate, double target);
     bool validateErrorRate(double rate, double max_allowed);
 };
@@ -429,7 +424,7 @@ public:
   void initialize();
 
   // Process patterns through complete optimization pipeline
-  void processPatterns(const std::vector<QuantumPattern> &patterns);
+  void processPatterns(const shim::vector<QuantumPattern> &patterns);
 
   // Get optimization metrics
   struct OptimizationMetrics {

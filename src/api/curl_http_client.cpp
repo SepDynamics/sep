@@ -6,7 +6,7 @@
 #include <string>
 
 #include "api/client.h"
-#include "error_handler.h"
+#include "engine/error_handler.h"
 
 namespace sep::api {
 
@@ -20,7 +20,7 @@ CurlHttpClient::~CurlHttpClient() {
 
 size_t CurlHttpClient::write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
     size_t total = size * nmemb;
-    std::string *str = static_cast<std::string *>(userp);
+    shim::string *str = static_cast<shim::string *>(userp);
     str->append(static_cast<char *>(contents), total);
     return total;
 }
@@ -38,8 +38,8 @@ APIResponse CurlHttpClient::send_request(const APIRequest &request) {
         resp.error.message = "curl_easy_init failed";
         return resp;
     }
-    
-    std::string buffer;
+
+    shim::string buffer;
     curl_easy_setopt(curl, CURLOPT_URL, request.url.c_str()); 
 
     // Set timeout
@@ -48,7 +48,7 @@ APIResponse CurlHttpClient::send_request(const APIRequest &request) {
     // Set up headers
     struct curl_slist *headers = nullptr; 
     for (const auto &h : request.headers) {
-        std::string header = h.first + ": " + h.second;
+        shim::string header = h.first + ": " + h.second;
         headers = curl_slist_append(headers, header.c_str());
     }
     

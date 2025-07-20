@@ -1,8 +1,9 @@
 #ifndef SEP_QUANTUM_QBSA_QFH_H
 #define SEP_QUANTUM_QBSA_QFH_H
 
-#include "quantum/qbsa.h"
 #include <memory>
+
+#include "quantum/qbsa.h"
 
 namespace sep::quantum {
 

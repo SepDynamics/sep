@@ -5,10 +5,10 @@
 #include <cstring>
 #include <vector>
 
+#include "engine/shim.h"
+#include "engine/types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/memory_tier_manager.hpp"
-#include "shim.h"
-#include "types.h"
 
 using namespace sep::memory;
 using sep::SEPResult;
@@ -131,7 +131,7 @@ TEST_F(MemoryTierManagerTest, TierUtilization) {
     EXPECT_NEAR(manager.getTierUtilization(sep::memory::MemoryTierEnum::LTM), 0.0f, 0.001f);
     
     // Allocate blocks to fill about 50% of STM
-    std::vector<MemoryBlock*> blocks;
+    shim::vector<MemoryBlock*> blocks;
     size_t allocated = 0;
     size_t target = manager.getSTM().getSize() / 2;
     

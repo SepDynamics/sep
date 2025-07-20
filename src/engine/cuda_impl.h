@@ -1,12 +1,12 @@
 #pragma once
 
+#include <cuda_runtime.h>
 #include <stddef.h>  // For size_t
 #include <stdio.h>   // For fprintf
 #include <stdlib.h>  // For malloc/free
 
 #include <cstring>  // For strcpy, memcpy, memset
 
-#include <cuda_runtime.h>
 #include "cuda_wrappers.h"  // For proper CUDA type definitions
 
 #ifndef SEP_HD

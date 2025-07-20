@@ -1,7 +1,8 @@
 #pragma once
 
-#include "types.h"
 #include <nlohmann/json.hpp>
+
+#include "engine/types.h"
 
 // Forward declaration of PatternConfig
 namespace sep {
@@ -19,13 +20,13 @@ namespace mcp {
 class PatternEvolution {
 public:
     static sep::pattern::PatternData evolvePattern(const nlohmann::json& config,
-                                         const std::string& patternId = "");
+                                                   const shim::string& patternId = "");
 
-    static std::vector<sep::pattern::PatternData> getPatterns(const nlohmann::json& args = {});
+    static shim::vector<sep::pattern::PatternData> getPatterns(const nlohmann::json& args = {});
 
-    static pattern::PatternResult processPatterns(const std::vector<sep::pattern::PatternData>& input,
-                                          const sep::pattern::PatternConfig& config,
-                                          std::vector<sep::pattern::PatternData>& output);
+    static pattern::PatternResult processPatterns(
+        const shim::vector<sep::pattern::PatternData>& input,
+        const sep::pattern::PatternConfig& config, shim::vector<sep::pattern::PatternData>& output);
 
     static float calculateRelationshipStrength(const sep::pattern::PatternData& pattern1,
                                                const sep::pattern::PatternData& pattern2);

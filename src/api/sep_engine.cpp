@@ -22,17 +22,17 @@
 
 // Project includes
 #include "api/types.h"
-#include "config.h"
-#include "core.h"
-#include "cuda_unified.h"
-#include "dag_graph.h"
-#include "data_parser.h"
-#include "logging.h"
-#include "math_common.h"
+#include "engine/config.h"
+#include "engine/core.h"
+#include "engine/cuda_unified.h"
+#include "engine/dag_graph.h"
+#include "engine/data_parser.h"
+#include "engine/logging.h"
+#include "engine/math_common.h"
+#include "engine/tests/simple_embedding_model.h"
+#include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor.h"
-#include "tests/simple_embedding_model.h"
-#include "types.h"
 
 using json = nlohmann::json;
 
@@ -136,7 +136,7 @@ namespace sep::api
     }
 
     // Generate deterministic ID
-    std::string SepEngine::generateId(const std::string& prefix)
+    shim::string SepEngine::generateId(const shim::string& prefix)
     {
         // fetch_add uses seq_cst semantics
         uint64_t id = id_counter_.fetch_add(1);
@@ -189,7 +189,7 @@ namespace sep::api
                           pattern_data[2].get<float>()};
 
         // Generate pattern ID first
-        std::string pattern_id = generateId("pat");
+        shim::string pattern_id = generateId("pat");
         size_t numeric_id = std::stoull(pattern_id.substr(4));
 
         // Process through quantum processor
@@ -244,7 +244,7 @@ namespace sep::api
             return result;
         }
 
-        std::string batch_id = generateId("batch");
+        shim::string batch_id = generateId("batch");
         json results = json::array();
 
         for (const auto& p : request_data["patterns"])
@@ -253,7 +253,7 @@ namespace sep::api
             glm::vec3 pattern{p[0].get<float>(), p[1].get<float>(), p[2].get<float>()};
 
             // Generate ID first
-            std::string id = generateId("pat");
+            shim::string id = generateId("pat");
             size_t numeric_id = std::stoull(id.substr(4));
 
             // Process pattern with numeric ID
@@ -378,7 +378,7 @@ namespace sep::api
         }
 
         static sep::embeddings::SimpleEmbeddingModel model;
-        std::vector<double> embeddings = model.compute(request_data["text"].get<std::string>());
+        shim::vector<double> embeddings = model.compute(request_data["text"].get<shim::string>());
 
         impl_->health_metrics.successfulRequests++;
 
@@ -459,8 +459,8 @@ namespace sep::api
             return result;
         }
 
-        std::vector<std::vector<double>> embeddings;
-        std::vector<double> timestamps;
+        shim::vector<shim::vector<double>> embeddings;
+        shim::vector<double> timestamps;
         for (size_t idx = 0; idx < request_data["contexts"].size(); ++idx)
         {
             const auto& ctx = request_data["contexts"][idx];
@@ -470,10 +470,10 @@ namespace sep::api
             {
                 json result;
                 result["success"] = false;
-                result["error"] = std::string("invalid context at index ") + std::to_string(idx);
+                result["error"] = shim::string("invalid context at index ") + std::to_string(idx);
                 return result;
             }
-            std::vector<double> emb;
+            shim::vector<double> emb;
             emb.reserve(ctx["content"].size());
             for (const auto& v : ctx["content"]) emb.push_back(v.get<double>());
             embeddings.push_back(std::move(emb));
@@ -492,7 +492,7 @@ namespace sep::api
             }
         }
 
-        std::vector<double> weights;
+        shim::vector<double> weights;
         if (request_data.contains("weights"))
         {
             if (!request_data["weights"].is_array() ||
@@ -600,7 +600,7 @@ namespace sep::api
         return result;
     }
 
-    nlohmann::json SepEngine::processQuantData(const std::string& file_path)
+    nlohmann::json SepEngine::processQuantData(const shim::string& file_path)
     {
         using json = nlohmann::json;
         
@@ -643,8 +643,8 @@ namespace sep::api
             sep::dag::DagGraph dag;
             
             // Store node IDs for building relationships
-            std::vector<uint64_t> node_ids;
-            
+            shim::vector<uint64_t> node_ids;
+
             // Add patterns as nodes with market data
             for (size_t i = 0; i < patterns.size(); ++i)
             {
@@ -658,7 +658,7 @@ namespace sep::api
                 float volume = !pattern.data.empty() ? pattern.data[0] : 0.0f;
                 
                 // Determine parent nodes based on temporal relationships
-                std::vector<uint64_t> parents;
+                shim::vector<uint64_t> parents;
                 if (i > 0 && !node_ids.empty())
                 {
                     parents.push_back(node_ids[i - 1]);  // Previous candle
@@ -695,7 +695,7 @@ namespace sep::api
             result["patterns_processed"] = patterns.size();
             
             // Export DAG as JSON
-            std::string dag_json_str = dag.exportAsJson();
+            shim::string dag_json_str = dag.exportAsJson();
             result["dag"] = json::parse(dag_json_str);
             
             // Add additional metrics
@@ -742,7 +742,7 @@ namespace sep::api
         catch (const std::exception& e)
         {
             return makeErrorResponse(ErrorCode::GeneralError,
-                                   std::string("Quant data processing failed: ") + e.what());
+                                     shim::string("Quant data processing failed: ") + e.what());
         }
     }
 
@@ -784,7 +784,7 @@ namespace sep::api
         return result;
     }
 
-    nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
+    nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const shim::string& message)
     {
         nlohmann::json result;
         result["success"] = false;
@@ -794,7 +794,7 @@ namespace sep::api
     }
 
     bool SepEngine::validateFields(const nlohmann::json& data,
-                                   const std::vector<std::string>& fields, nlohmann::json& error)
+                                   const shim::vector<shim::string>& fields, nlohmann::json& error)
     {
         for (const auto& field : fields)
         {

@@ -7,10 +7,10 @@
 
 #include "api/bridge.h"
 #include "api/types.h"
-#include "common.h"
+#include "engine/common.h"
+#include "engine/types.h"
 #include "quantum/processor.h"
 #include "quantum/resource_predictor.h"  // Provides context types
-#include "types.h"
 
 namespace sep::api::bridge {
 
@@ -22,13 +22,12 @@ nlohmann::json resultToJson(const ::sep::context::CheckResult &result);
 
 // Internal bridge utilities
 namespace detail {
-void setLastError(const std::string &error);
-std::string getLastError();
-  void setRequiredBufferSize(size_t size);
-  size_t getRequiredBufferSize();
-  sep::SEPResult mapSepError(::sep::api::ErrorCode core);
-  void invokeCallbacks(const std::string &event_type,
-                       const std::string &event_data);
+    void setLastError(const shim::string &error);
+    shim::string getLastError();
+    void setRequiredBufferSize(size_t size);
+    size_t getRequiredBufferSize();
+    sep::SEPResult mapSepError(::sep::api::ErrorCode core);
+    void invokeCallbacks(const shim::string &event_type, const shim::string &event_data);
 } // namespace detail
 
 } // namespace sep::api::bridge

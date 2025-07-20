@@ -1,14 +1,15 @@
 #ifndef SEP_QUANTUM_PROCESSOR_QFH_H
 #define SEP_QUANTUM_PROCESSOR_QFH_H
 
-#include "memory/types.h"
-#include "quantum/qbsa.h"
-#include "quantum/qfh.h"
-#include "types.h"
 #include <cstdint>
 #include <glm/glm.hpp>
 #include <memory>
 #include <vector>
+
+#include "engine/types.h"
+#include "memory/types.h"
+#include "quantum/qbsa.h"
+#include "quantum/qfh.h"
 
 namespace sep::quantum {
 
@@ -40,11 +41,11 @@ public:
     bool isStable(const glm::vec3& pattern);
     bool isQuantum(const glm::vec3& pattern);
 
-    void processPatternBits(const std::vector<uint32_t>& pattern_bits);
+    void processPatternBits(const shim::vector<uint32_t>& pattern_bits);
 
 protected:
-    std::vector<glm::vec3> m_patterns;
-    std::vector<uint32_t> m_pattern_bits;
+    shim::vector<glm::vec3> m_patterns;
+    shim::vector<uint32_t> m_pattern_bits;
     std::unique_ptr<QBSAProcessor> qbsa_processor_;
     QFHResult m_last_qfh_result;
 

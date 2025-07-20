@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/shim.h"
 #include "prometheus_exporter.h"
 
 namespace sep::metrics {

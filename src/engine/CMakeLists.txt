@@ -1,66 +1,44 @@
-# src/engine/CMakeLists.txt
-# SEP Engine library combining core and CUDA compatibility functionality
-
-# Find CUDA if enabled (Note: CUDAToolkit is already found in the root CMakeLists.txt)
-
-# Build sep_compat as a static library that encapsulates all CUDA functionality
-# Use Cycles naming convention for feature flags
-set(WITH_CYCLES_NANOVDB ON)
-set(WITH_CYCLES_OPENIMAGEDENOISE ON)
-set(WITH_CYCLES_OPENVDB ON)
-set(WITH_CYCLES_OPENCOLORIO ON)
-set(WITH_CYCLES_OPENSUBDIV ON)
-
-
-# Define CUDA sources
-set(CUDA_SOURCES
-    pattern_kernels.cu
-    cuda_api.cu
-    event.cu
-    utils.cu
-    kernels.cu
-    core.cu
-    quantum_kernels.cu
+add_sep_library(sep_engine
+    SOURCES
+        allocation_metrics.cpp
+        compression.cpp
+        dag_graph.cpp
+        dag_graph_quant.cpp
+        data_parser.cpp
+        error_handler.cpp
+        file_system_watcher.cpp
+        logging.cpp
+        manager.cpp
+        metrics_collector.cpp
+        prometheus_exporter.cpp
+        socket_listener.cpp
+        tracing.cpp
+    CUDA_SOURCES
+        engine.cu
+        cuda_impl.cu
+        raii.cu
+        stream.cu
+        pattern_kernels.cu
+        cuda_api.cu
+        event.cu
+        utils.cu
+        kernels.cu
+        core.cu
+        quantum_kernels.cu
 )
 
-# Define C++ sources
-set(CPP_SOURCES
-    stream.cpp
-    raii.cpp
-    cuda_impl.cpp
+target_include_directories(sep_engine PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
-add_library(sep_engine STATIC
-    ${CPP_SOURCES}
-    ${CUDA_SOURCES}
-)
-
-# Set properties for the shared library
-set_target_properties(sep_engine PROPERTIES
-    POSITION_INDEPENDENT_CODE ON
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    CUDA_STANDARD 17
-    CXX_STANDARD 17
-    CUDA_ARCHITECTURES "75" # Keep it simple for now, add others back later
-    C_VISIBILITY_PRESET default
-    CXX_VISIBILITY_PRESET default
-    CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -I${CMAKE_SOURCE_DIR}/src -I${CMAKE_SOURCE_DIR}/src/engine -I${CMAKE_SOURCE_DIR}/src/quantum"
-)
-
-target_include_directories(sep_engine
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/src
-)
-
-if(SEP_USE_CUDA)
-    target_compile_definitions(sep_engine PUBLIC SEP_USE_CUDA=1)
-    set_target_properties(sep_engine PROPERTIES CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -DGLM_FORCE_CUDA")
-# Link against modern CUDA targets. This transitively handles include paths and libraries.
-target_link_libraries(sep_engine PUBLIC
-    CUDA::toolkit
-)
+if(MSVC)
+    target_compile_options(sep_engine PRIVATE /FI"${CMAKE_CURRENT_SOURCE_DIR}/json_config.h")
 else()
-    target_compile_definitions(sep_engine PUBLIC SEP_USE_CUDA=0)
+    target_compile_options(sep_engine PRIVATE -include "${CMAKE_CURRENT_SOURCE_DIR}/json_config.h")
 endif()
+
+target_include_directories(sep_engine PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+
+target_link_libraries(sep_engine PUBLIC sep_memory sep_quantum)
+

@@ -1,0 +1,14 @@
+[Unit]
+Description=MCP Context7 Server
+After=network.target
+
+[Service]
+Type=simple
+User=ajn
+WorkingDirectory=/sep
+ExecStart=/usr/bin/npx -y @upstash/context7-mcp
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

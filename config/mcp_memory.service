@@ -1,0 +1,14 @@
+[Unit]
+Description=MCP Memory Server
+After=network.target
+
+[Service]
+Type=simple
+User=ajn
+WorkingDirectory=/sep
+ExecStart=/usr/bin/npx -y @modelcontextprotocol/server-memory
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

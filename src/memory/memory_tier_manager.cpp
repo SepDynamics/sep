@@ -9,10 +9,10 @@
 #include <new>
 #include <string>
 
-#include "common.h"
+#include "engine/common.h"
+#include "engine/types.h"
 #include "quantum/pattern_processor.hpp"
 #include "quantum/processor.h"
-#include "types.h"
 
 namespace sep {
 namespace memory {
@@ -635,38 +635,5 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             return SEPResult::NOT_IMPLEMENTED;
         }
 
-    }  // namespace memory
-
-    namespace config
-    {
-        void to_json(nlohmann::json &j, const MemoryThresholdConfig &c)
-        {
-            j = nlohmann::json{{"promote_stm_to_mtm", c.promote_stm_to_mtm},
-                               {"promote_mtm_to_ltm", c.promote_mtm_to_ltm},
-                               {"demote_threshold", c.demote_threshold},
-                               {"fragmentation_threshold", c.fragmentation_threshold},
-                               {"stm_size", c.stm_size},
-                               {"mtm_size", c.mtm_size},
-                               {"ltm_size", c.ltm_size},
-                               {"stm_to_mtm_min_gen", c.stm_to_mtm_min_gen},
-                               {"mtm_to_ltm_min_gen", c.mtm_to_ltm_min_gen},
-                               {"use_unified_memory", c.use_unified_memory},
-                               {"enable_compression", c.enable_compression}};
-        }
-
-        void from_json(const nlohmann::json &j, MemoryThresholdConfig &c)
-        {
-            j.at("promote_stm_to_mtm").get_to(c.promote_stm_to_mtm);
-            j.at("promote_mtm_to_ltm").get_to(c.promote_mtm_to_ltm);
-            j.at("demote_threshold").get_to(c.demote_threshold);
-            j.at("fragmentation_threshold").get_to(c.fragmentation_threshold);
-            j.at("stm_size").get_to(c.stm_size);
-            j.at("mtm_size").get_to(c.mtm_size);
-            j.at("ltm_size").get_to(c.ltm_size);
-            j.at("stm_to_mtm_min_gen").get_to(c.stm_to_mtm_min_gen);
-            j.at("mtm_to_ltm_min_gen").get_to(c.mtm_to_ltm_min_gen);
-            j.at("use_unified_memory").get_to(c.use_unified_memory);
-            j.at("enable_compression").get_to(c.enable_compression);
-        }
-    }  // namespace config
+}  // namespace memory
 }  // namespace sep

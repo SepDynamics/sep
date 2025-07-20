@@ -1,13 +1,14 @@
 #pragma once
 
 // Include C API definitions first
+#include <cuda_runtime.h>  // For CUDA types
+
 #include <cstddef>  // For size_t
 #include <cstdint>  // For fixed-width integers
 
-#include "api/bridge.h"    // For SEP_API
-#include "common.h"   // For sep::SEPResult
+#include "api/bridge.h"     // For SEP_API
+#include "common.h"         // For sep::SEPResult
 #include "pattern_types.h"
-#include <cuda_runtime.h>  // For CUDA types
 
 #ifdef __cplusplus
 extern "C" {

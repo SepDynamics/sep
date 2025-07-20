@@ -1,36 +1,31 @@
+
 #pragma once
 
-#include <string>
-#include <vector>
-#include <memory>
-#include <array>
-#include <cstdint>
-#include <istream>
+#include "engine/shim.h"
+#include "quantum/types.h"
 
 namespace sep {
 
-// Forward declarations
-struct Pattern;
-struct PinState;
+    // Supported data formats
+    enum class DataFormat
+    {
+        AUTO,    // Auto-detect format
+        JSON,    // JSON format
+        CSV,     // CSV format
+        BINARY,  // Raw binary data
+        CANDLE   // Market candle data
+    };
 
-// Supported data formats
-enum class DataFormat {
-    AUTO,      // Auto-detect format
-    JSON,      // JSON format
-    CSV,       // CSV format
-    BINARY,    // Raw binary data
-    CANDLE     // Market candle data
-};
-
-// Raw candle data structure matching the JSON format
-struct CandleData {
-    std::string time;
-    uint64_t volume;
-    float open;
-    float high;
-    float low;
-    float close;
-};
+    // Raw candle data structure matching the JSON format
+    struct CandleData
+    {
+        shim::string time;
+        uint64_t volume;
+        float open;
+        float high;
+        float low;
+        float close;
+    };
 
 // Universal data parser for all input sources
 class DataParser {
@@ -39,39 +34,42 @@ public:
     ~DataParser() = default;
 
     // Parse from file (auto-detects format)
-    std::vector<Pattern> parseFile(const std::string& path, DataFormat format = DataFormat::AUTO);
-    
+    shim::vector<sep::quantum::Pattern> parseFile(const shim::string& path,
+                                                  DataFormat format = DataFormat::AUTO);
+
     // Parse from memory buffer (binary/non-UTF8 safe)
-    std::vector<Pattern> parseBuffer(const uint8_t* data, size_t size, DataFormat format = DataFormat::AUTO);
-    
+    shim::vector<sep::quantum::Pattern> parseBuffer(const uint8_t* data, size_t size,
+                                                    DataFormat format = DataFormat::AUTO);
+
     // Parse from stream (maintains state for continuous data)
-    std::vector<Pattern> parseStream(std::istream& stream, DataFormat format = DataFormat::AUTO);
-    
+    shim::vector<sep::quantum::Pattern> parseStream(std::istream& stream,
+                                                    DataFormat format = DataFormat::AUTO);
+
     // Specific format parsers
-    std::vector<CandleData> parseQuantJSON(const std::string& path);
-    std::vector<Pattern> parseCSV(const std::string& path);
-    std::vector<Pattern> parseBinary(const uint8_t* data, size_t size);
-    
+    shim::vector<CandleData> parseQuantJSON(const shim::string& path);
+    shim::vector<sep::quantum::Pattern> parseCSV(const shim::string& path);
+    shim::vector<sep::quantum::Pattern> parseBinary(const uint8_t* data, size_t size);
+
     // Convert raw candle data to SEP patterns
-    std::vector<Pattern> candlesToPatterns(const std::vector<CandleData>& candles);
-    
+    shim::vector<sep::quantum::Pattern> candlesToPatterns(const shim::vector<CandleData>& candles);
+
     // Convert patterns to PinStates for engine compatibility
-    std::vector<PinState> toPinStates(const std::vector<Pattern>& patterns);
-    
+    shim::vector<PinState> toPinStates(const shim::vector<sep::quantum::Pattern>& patterns);
+
 private:
     // Format detection
     DataFormat detectFormat(const uint8_t* data, size_t size) const;
-    DataFormat detectFileFormat(const std::string& path) const;
-    
+    DataFormat detectFileFormat(const shim::string& path) const;
+
     // Parse timestamp string to unix timestamp
-    uint64_t parseTimestamp(const std::string& timestamp) const;
-    
+    uint64_t parseTimestamp(const shim::string& timestamp) const;
+
     // Stream state for continuous parsing
     struct StreamState {
-        std::vector<uint8_t> buffer;
+        shim::vector<uint8_t> buffer;
         size_t processed = 0;
     };
-    std::unique_ptr<StreamState> stream_state_;
+    shim::unique_ptr<StreamState> stream_state_;
 };
 
 } // namespace sep

@@ -1,16 +1,17 @@
 #pragma once
 
 // Compatibility header - redirects to new unified processor
-#include "quantum/processor.h"
-#include <stdexcept>
 #include <glm/vec3.hpp>
 #include <memory>
+#include <stdexcept>
+
+#include "quantum/processor.h"
 
 namespace sep::quantum {
 
 class QuantumProcessorError : public std::runtime_error {
 public:
-    explicit QuantumProcessorError(const std::string& message);
+    explicit QuantumProcessorError(const shim::string& message);
 };
 
 class QBSAProcessor;

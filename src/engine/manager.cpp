@@ -1,11 +1,10 @@
 #include "manager.h"
-#include "config.h"
 
-#include <fstream>
 #include <nlohmann/json.hpp>
-#include <cstdlib>
-#include "env_keys.h"
 
+#include "config.h"
+#include "engine/shim.h"
+#include "env_keys.h"
 #include "memory/memory_tier_manager_serialization.hpp"
 
 namespace sep::config
@@ -13,8 +12,8 @@ namespace sep::config
 
     struct ConfigManager::Impl
     {
-        MemoryThresholdConfig mem_cfg{};
-        QuantumThresholdConfig quantum_cfg{};
+        sep::MemoryThresholdConfig mem_cfg{};
+        sep::MemoryThresholdConfig quantum_cfg{};
         CudaConfig api_cfg{};
         bool loaded{false};
     };
@@ -77,21 +76,21 @@ namespace sep::config
 
         const char* metrics = std::getenv(env_keys::ENV_API_ENABLE_METRICS);
         if (metrics) {
-            std::string val{metrics};
+            shim::string val{metrics};
         }
         return impl_->api_cfg;
     }
 
     void ConfigManager::updateCudaConfig(const sep::config::CudaConfig&) {}
     void ConfigManager::updateLogConfig(const LogConfig&) {}
-    void ConfigManager::updateMemoryConfig(const MemoryThresholdConfig& cfg)
+    void ConfigManager::updateMemoryConfig(const sep::MemoryThresholdConfig& cfg)
     {
         impl_->mem_cfg = cfg;
     }
-    void ConfigManager::updateQuantumConfig(const QuantumThresholdConfig& cfg)
+    void ConfigManager::updateQuantumConfig(const sep::MemoryThresholdConfig& cfg)
     {
         impl_->quantum_cfg = cfg;
     }
-    void ConfigManager::resetToDefaults() { impl_->mem_cfg = MemoryThresholdConfig{}; }
+    void ConfigManager::resetToDefaults() { impl_->mem_cfg = sep::MemoryThresholdConfig{}; }
 
 }  // namespace sep::config

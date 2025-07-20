@@ -5,8 +5,8 @@
 #include <type_traits>
 #include <unordered_map>
 #include <vector>
-#include "shim.h"
-#include <vector>
+
+#include "engine/shim.h"
 
 namespace sep {
 namespace dag {
@@ -17,8 +17,8 @@ struct DagNode
     uint64_t              id;
     glm::vec3             pattern;          // Original pattern data
     float                 coherence;        // Quantum coherence
-    std::vector<uint64_t> parents;          // Parent node IDs
-    
+    shim::vector<uint64_t> parents;         // Parent node IDs
+
     // Quant-specific attributes
     float                 volatility{0.0f}; // Market volatility
     float                 price{0.0f};      // Current price or value
@@ -36,18 +36,21 @@ class DagGraph
 {
 public:
     // Core node operations
-    uint64_t addNode(const glm::vec3& pattern, float coherence, const std::vector<uint64_t>& parents);
-    uint64_t addNodeWithId(uint64_t id, const glm::vec3& pattern, float coherence, const std::vector<uint64_t>& parents);
+    uint64_t addNode(const glm::vec3& pattern, float coherence,
+                     const shim::vector<uint64_t>& parents);
+    uint64_t addNodeWithId(uint64_t id, const glm::vec3& pattern, float coherence,
+                           const shim::vector<uint64_t>& parents);
     void updateCoherence(uint64_t id, float coherence);
-    void updateNodeParents(uint64_t id, const std::vector<uint64_t>& parents);
-    std::vector<uint64_t> getParents(uint64_t id) const;
+    void updateNodeParents(uint64_t id, const shim::vector<uint64_t>& parents);
+    shim::vector<uint64_t> getParents(uint64_t id) const;
     void removeNode(uint64_t id);
     bool hasNode(uint64_t id) const;
     
     // Quant-specific node operations
     uint64_t addMarketDataNode(const glm::vec3& pattern, float coherence, float price,
-                             float volatility, float volume, const std::vector<uint64_t>& parents);
-    
+                               float volatility, float volume,
+                               const shim::vector<uint64_t>& parents);
+
     // Node attribute updates
     void updateVolatility(uint64_t id, float volatility);
     void updatePrice(uint64_t id, float price);
@@ -71,14 +74,14 @@ public:
     uint32_t getGeneration(uint64_t id) const;
     
     // JSON serialization for metrics output
-    std::string exportAsJson() const;
+    shim::string exportAsJson() const;
 
     // Compatibility overload for integral identifiers that are not uint64_t
-    template<typename T>
+    template <typename T>
     typename std::enable_if_t<std::is_integral_v<T> && !std::is_same_v<T, uint64_t>, uint64_t>
-    addNode(T /*pattern_id*/, float coherence, const std::vector<T>& parents)
+    addNode(T /*pattern_id*/, float coherence, const shim::vector<T>& parents)
     {
-        std::vector<uint64_t> converted_parents;
+        shim::vector<uint64_t> converted_parents;
         converted_parents.reserve(parents.size());
         for (const auto& p : parents)
         {

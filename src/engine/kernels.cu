@@ -1,6 +1,6 @@
-#include "kernels.h"
-
 #include <cuda_runtime.h>
+
+#include "kernels.h"
 
 __global__ void qbsa_kernel(const std::uint32_t* d_probe_indices,
                             const std::uint32_t* d_expectations,

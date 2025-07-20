@@ -5,7 +5,7 @@
 namespace sep {
 
 struct LogConfig {
-    std::string level;
+    shim::string level;
 };
 
 }

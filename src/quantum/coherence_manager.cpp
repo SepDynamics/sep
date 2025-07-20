@@ -14,16 +14,16 @@
 #include <string>
 #include <vector>
 
-#include "core.h"
-#include "cuda.h"
-#include "cuda_helpers.h"
-#include "logging.h"
+#include "engine/core.h"
+#include "engine/cuda.h"
+#include "engine/cuda_helpers.h"
+#include "engine/logging.h"
+#include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "types.h"
 
 namespace sep::quantum {
 
@@ -67,33 +67,34 @@ public:
             allocateGPUBuffers();
         }
     }
-    
-CoherenceResult updateCoherence(const std::vector<sep::Pattern>& patterns) {
+
+    CoherenceResult updateCoherence(const shim::vector<sep::Pattern>& patterns)
+    {
         CoherenceResult result;
         global_tick_++;
-        
+
         // Update pattern coherence data
         tbb::parallel_for(
             tbb::blocked_range<size_t>(0, patterns.size(), COHERENCE_UPDATE_BATCH_SIZE),
             [this, &patterns](const tbb::blocked_range<size_t>& range) {
-                for (size_t i = range.begin(); i != range.end(); ++i) {
+                for (size_t i = range.begin(); i != range.end(); ++i)
+                {
                     updatePatternCoherence(patterns[i]);
                 }
-            }
-        );
-        
+            });
+
         // Compute global coherence metrics
         computeGlobalMetrics();
-        
+
         // Detect and handle coherence anomalies
         result.anomalies = detectCoherenceAnomalies(patterns);
-        
+
         // Perform tier migrations based on coherence
         result.tier_migrations = performTierMigrations();
-        
+
         // Update entanglement graph
         updateEntanglementGraph(patterns);
-        
+
         // Fill result structure
         result.global_coherence = metrics_.global_coherence;
         result.memory_pressure = metrics_.memory_pressure;
@@ -101,25 +102,30 @@ CoherenceResult updateCoherence(const std::vector<sep::Pattern>& patterns) {
         result.success = true;
 
         // Fill in missing fields in result
-        for(int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i)
+        {
             result.tier_fragmentation[i] = metrics_.tier_fragmentation[i];
-            result.tier_pattern_count[i] = countPatternsInTier(static_cast<sep::memory::MemoryTierEnum>(i));
+            result.tier_pattern_count[i] =
+                countPatternsInTier(static_cast<sep::memory::MemoryTierEnum>(i));
         }
-        
+
         return result;
     }
-    
-    std::vector<TierMigration> optimizeMemoryLayout() {
-        std::vector<TierMigration> migrations;
-        
+
+    shim::vector<TierMigration> optimizeMemoryLayout()
+    {
+        shim::vector<TierMigration> migrations;
+
         analyzeTierCoherence();
-        
-        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it)
+        {
             const auto& pair = *it;
             const auto& data = pair.second;
             memory::MemoryTierEnum target_tier = determineOptimalTier(data);
 
-            if (target_tier != data.current_tier) {
+            if (target_tier != data.current_tier)
+            {
                 TierMigration migration;
                 migration.pattern_id = data.pattern_id;
                 migration.from_tier = data.current_tier;
@@ -129,16 +135,18 @@ CoherenceResult updateCoherence(const std::vector<sep::Pattern>& patterns) {
                 migrations.push_back(migration);
             }
         }
-        
+
         // Apply memory pressure optimizations
-        if (metrics_.memory_pressure > MEMORY_PRESSURE_FACTOR) {
+        if (metrics_.memory_pressure > MEMORY_PRESSURE_FACTOR)
+        {
             applyMemoryPressureOptimizations(migrations);
         }
-        
+
         return migrations;
     }
-    
-EntanglementGraph computeEntanglementGraph(const std::vector<sep::Pattern>& patterns) {
+
+    EntanglementGraph computeEntanglementGraph(const shim::vector<sep::Pattern>& patterns)
+    {
         EntanglementGraph graph;
         graph.nodes.reserve(patterns.size());
         
@@ -178,7 +186,7 @@ EntanglementGraph computeEntanglementGraph(const std::vector<sep::Pattern>& patt
         
         return graph;
     }
-    
+
     void applyCoherenceDecay(float decay_factor) {
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             auto& pair = *it;
@@ -256,7 +264,8 @@ private:
     cuda::CudaCore* cuda_core_ = nullptr;
     
     // Concurrent data structures
-    using CoherenceMap = tbb::concurrent_hash_map<std::string, CoherenceManager::PatternCoherenceData>;
+    using CoherenceMap =
+        tbb::concurrent_hash_map<shim::string, CoherenceManager::PatternCoherenceData>;
     CoherenceMap coherence_map_;
     
     CoherenceManager::CoherenceMetrics metrics_;
@@ -390,90 +399,100 @@ private:
         metrics_.entanglement_density = (pattern_count > 1) ?
             static_cast<float>(total_entanglements) / (pattern_count * (pattern_count - 1)) : 0.0f;
     }
-    
-    std::vector<CoherenceAnomaly> detectCoherenceAnomalies(const std::vector<sep::Pattern>& patterns) {
-        std::vector<CoherenceAnomaly> anomalies;
-        
+
+    shim::vector<CoherenceAnomaly> detectCoherenceAnomalies(
+        const shim::vector<sep::Pattern>& patterns)
+    {
+        shim::vector<CoherenceAnomaly> anomalies;
+
         // Statistical anomaly detection
         float mean_coherence = metrics_.global_coherence;
         float variance = computeCoherenceVariance();
         float std_dev = std::sqrt(variance);
-        
-        for (const auto& pattern : patterns) {
+
+        for (const auto& pattern : patterns)
+        {
             CoherenceMap::const_accessor accessor;
-            if (coherence_map_.find(accessor, pattern.id)) {
+            if (coherence_map_.find(accessor, pattern.id))
+            {
                 const auto& data = accessor->second;
-                
+
                 // Z-score based anomaly detection
                 float z_score = (data.coherence - mean_coherence) / std_dev;
-                
-                if (std::abs(z_score) > 3.0f) {  // 3-sigma rule
+
+                if (std::abs(z_score) > 3.0f)
+                {  // 3-sigma rule
                     CoherenceAnomaly anomaly;
                     anomaly.pattern_id = pattern.id;
                     anomaly.coherence_value = data.coherence;
                     anomaly.expected_value = mean_coherence;
                     anomaly.severity = std::abs(z_score) / 3.0f;
-                    anomaly.type = (z_score > 0) ? 
-                        AnomalyType::ExcessiveCoherence : 
-                        AnomalyType::InsufficientCoherence;
-                    
+                    anomaly.type = (z_score > 0) ? AnomalyType::ExcessiveCoherence
+                                                 : AnomalyType::InsufficientCoherence;
+
                     anomalies.push_back(anomaly);
                 }
-                
+
                 // Detect rapid coherence changes
-                if (data.access_count > 1) {
-                    float coherence_change_rate = std::abs(
-                        data.coherence - pattern.quantum_state.coherence
-                    );
-                    
-                    if (coherence_change_rate > config_.anomaly_threshold) {
+                if (data.access_count > 1)
+                {
+                    float coherence_change_rate =
+                        std::abs(data.coherence - pattern.quantum_state.coherence);
+
+                    if (coherence_change_rate > config_.anomaly_threshold)
+                    {
                         CoherenceAnomaly anomaly;
                         anomaly.pattern_id = pattern.id;
                         anomaly.coherence_value = data.coherence;
                         anomaly.expected_value = pattern.quantum_state.coherence;
                         anomaly.severity = coherence_change_rate;
                         anomaly.type = AnomalyType::RapidChange;
-                        
+
                         anomalies.push_back(anomaly);
                     }
                 }
             }
         }
-        
+
         return anomalies;
     }
-    
-    std::vector<TierMigration> performTierMigrations() {
-        std::vector<TierMigration> migrations;
-        
-        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
+
+    shim::vector<TierMigration> performTierMigrations()
+    {
+        shim::vector<TierMigration> migrations;
+
+        for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it)
+        {
             auto& pair = *it;
             auto& data = pair.second;
             sep::memory::MemoryTierEnum current_tier = data.current_tier;
             sep::memory::MemoryTierEnum target_tier = determineOptimalTier(data);
-            
-            if (current_tier != target_tier) {
+
+            if (current_tier != target_tier)
+            {
                 // Check migration conditions
-                if (shouldMigrate(data, current_tier, target_tier)) {
+                if (shouldMigrate(data, current_tier, target_tier))
+                {
                     TierMigration migration;
                     migration.pattern_id = data.pattern_id;
                     migration.from_tier = current_tier;
                     migration.to_tier = target_tier;
                     migration.coherence = data.coherence;
                     migration.reason = determineMigrationReason(data);
-                    
+
                     migrations.push_back(migration);
-                    
+
                     // Update pattern tier
                     data.current_tier = target_tier;
                 }
             }
         }
-        
+
         return migrations;
     }
-    
-    void updateEntanglementGraph(const std::vector<sep::Pattern>& patterns) {
+
+    void updateEntanglementGraph(const shim::vector<sep::Pattern>& patterns)
+    {
         // Clear existing entanglements
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             auto& pair = *it;
@@ -500,7 +519,7 @@ private:
             }
         }
     }
-    
+
     sep::memory::MemoryTierEnum determineOptimalTier(const PatternCoherenceData& data) const {
         // Multi-factor tier determination
         float coherence_score = data.coherence;
@@ -545,11 +564,12 @@ private:
         if (metrics_.memory_pressure > MEMORY_PRESSURE_FACTOR) return MigrationReason::MemoryPressure;
         return MigrationReason::LowActivity;
     }
-    
-    void applyMemoryPressureOptimizations(std::vector<TierMigration>& migrations) {
+
+    void applyMemoryPressureOptimizations(shim::vector<TierMigration>& migrations)
+    {
         // Sort by coherence ascending for demotion candidates
-        std::vector<std::pair<std::string, float>> demotion_candidates;
-        
+        shim::vector<std::pair<shim::string, float>> demotion_candidates;
+
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
             if (pair.second.current_tier == sep::memory::MemoryTierEnum::LTM &&
@@ -575,10 +595,10 @@ private:
             migrations.push_back(migration);
         }
     }
-    
+
     void cleanupZeroCoherencePatterns() {
-        std::vector<std::string> to_remove;
-        
+        shim::vector<shim::string> to_remove;
+
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
             if (pair.second.coherence <= 0.0f) {
@@ -622,8 +642,8 @@ private:
     
     uint32_t computeMaxDegree(const EntanglementGraph& graph) const {
         // Count connections per node
-        std::vector<uint32_t> degrees(graph.nodes.size(), 0);
-        
+        shim::vector<uint32_t> degrees(graph.nodes.size(), 0);
+
         for (const auto& edge : graph.edges) {
             degrees[edge.node1_idx]++;
             degrees[edge.node2_idx]++;
@@ -644,8 +664,8 @@ private:
         
         for (size_t i = 0; i < graph.nodes.size(); ++i) {
             // Get neighbors of node i
-            std::vector<size_t> neighbors;
-            
+            shim::vector<size_t> neighbors;
+
             for (const auto& edge : graph.edges) {
                 if (edge.node1_idx == i) {
                     neighbors.push_back(edge.node2_idx);
@@ -744,16 +764,19 @@ CoherenceManager::CoherenceManager(const Config& config)
 CoherenceManager::~CoherenceManager() = default;
 
 CoherenceManager::CoherenceResult CoherenceManager::updateCoherence(
-        const std::vector<sep::Pattern>& patterns) {
+    const shim::vector<sep::Pattern>& patterns)
+{
     return impl_->updateCoherence(patterns);
 }
 
-std::vector<CoherenceManager::TierMigration> CoherenceManager::optimizeMemoryLayout() {
+shim::vector<CoherenceManager::TierMigration> CoherenceManager::optimizeMemoryLayout()
+{
     return impl_->optimizeMemoryLayout();
 }
 
 CoherenceManager::EntanglementGraph CoherenceManager::computeEntanglementGraph(
-        const std::vector<sep::Pattern>& patterns) {
+    const shim::vector<sep::Pattern>& patterns)
+{
     return impl_->computeEntanglementGraph(patterns);
 }
 

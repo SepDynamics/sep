@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "types.h"
+#include "engine/types.h"
 
 namespace sep::quantum::manifold {
 
@@ -15,7 +15,7 @@ enum class ManifoldQuantumState {
 };
 
 struct QuantumPattern {
-    std::vector<double> position;
+    shim::vector<double> position;
     double coherence;
     double stability;
     int generation;

@@ -1,12 +1,10 @@
 #pragma once
 
-#include <cstdint>
 #include <glm/glm.hpp>
-#include <string>
-#include <vector>
 
+#include "engine/pattern_types.h"
+#include "engine/shim.h"
 #include "memory/types.h"
-#include "pattern_types.h"
 #include "quantum/config.h"
 
 namespace sep {
@@ -38,19 +36,19 @@ enum class RelationshipType {
 };
 
 struct PatternRelationship {
-    std::string targetId;
+    shim::string targetId;
     float strength;
     RelationshipType type;
 };
 
 struct Pattern {
-    std::string id;
+    shim::string id;
     glm::vec4 position{0.0f};
     glm::vec3 momentum{0.0f};
     QuantumState quantum_state{};
-    std::vector<PatternRelationship> relationships{};
+    shim::vector<PatternRelationship> relationships{};
     sep::compat::PatternData data{};
-    std::vector<std::string> parent_ids{};
+    shim::vector<shim::string> parent_ids{};
     uint64_t timestamp{0};
     uint64_t last_accessed{0};
     uint64_t last_modified{0};

@@ -1,34 +1,25 @@
-
-
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/api/
-        DESTINATION include/sep/api
+        DESTINATION src/api
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.hpp")
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/api/
-        DESTINATION include/sep/api/internal
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp")
-
 
 add_library(sep_api STATIC
-    crow_error.cpp
-    lock_free_rate_limiter.cpp
-    js_integration.cpp
     rate_limit_middleware.cpp
-    logging_middleware.cpp
-    bridge.cpp
-    crow_adapter.cpp
-    crow_request_adapter.cpp
-    curl_http_client.cpp
     auth_middleware.cpp
+    bridge.cpp
+    crow_error.cpp
+    crow_request_adapter.cpp
+    js_integration.cpp
+    lock_free_rate_limiter.cpp
+    logging_middleware.cpp
+    crow_adapter.cpp
     client.cpp
+    curl_http_client.cpp
+    bridge_c.cpp
     ollama_client.cpp
     sep_engine.cpp
-    bridge_c.cpp
     server.cpp
 )
 

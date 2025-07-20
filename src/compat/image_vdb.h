@@ -6,9 +6,9 @@
 
 #include <string>
 
-#include "compat/image.h"
-#include "compat/transform.h"
-#include "compat/texture.h"
+#include "image.h"
+#include "texture.h"
+#include "transform.h"
 
 #ifdef WITH_OPENVDB
 #  include <openvdb/openvdb.h>

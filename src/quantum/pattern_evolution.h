@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/types.h"
+#include "types.h"
 #include <nlohmann/json.hpp>
 
 // Forward declaration of PatternConfig

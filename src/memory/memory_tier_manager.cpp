@@ -9,8 +9,8 @@
 #include <new>
 #include <string>
 
-#include "core/common.h"
-#include "core/types.h"
+#include "common.h"
+#include "types.h"
 #include "quantum/pattern.h"
 #include "quantum/pattern_processor.hpp"
 #include "quantum/processor.h"

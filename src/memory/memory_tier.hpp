@@ -12,8 +12,7 @@
 #include <glm/vec3.hpp>
 
 // Project headers
-#include "compat/shim.h"
-#include "compat/cuda.h"
+#include "core/types.h"
 #include "core/common.h"
 #include "core/types.h"
 #include "memory/persistent_pattern_data.hpp"

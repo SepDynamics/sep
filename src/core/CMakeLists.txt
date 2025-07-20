@@ -58,20 +58,33 @@ set_target_properties(sep_core PROPERTIES
 
 target_include_directories(sep_core
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        $<INSTALL_INTERFACE:include/sep/core>
     PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/core>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/compat>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/utils>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third_party/glm>
 )
 
+# Add the necessary subdirectories to the public interface of sep_core
+target_include_directories(sep_core PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/api>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/compat>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/core>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/crow>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/gpu>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/memory>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/quantum>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/tests>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/utils>
+)
 target_link_libraries(sep_core
     PUBLIC
         Threads::Threads
-        sep_compat
         fmt::fmt
+        spdlog::spdlog
+        glm::glm
+        sep_compat
 )
 
 # Install headers from include directory

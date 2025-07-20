@@ -2,34 +2,22 @@
 
 #include <cstdio>
 
-#include "compat/cuda_runtime.h"
-
-#include "compat/cuda_defs.h"
+#include <cuda_runtime.h>
 
 // Comprehensive CUDA helper utilities - consolidated from multiple files
 namespace sep {
 namespace cuda {
 
-SEP_HOST inline void logCudaError(const char* operation, cudaError_t error) {
-    if (error != (cudaError_t)SEP_CUDA_SUCCESS)
-    {
-        (void)std::fprintf(stderr, "CUDA error in %s: %s\n", operation,
-                           SEP_cudaGetErrorString(error));
-    }
-}
-
-
 #ifndef CUDA_CHECK
 #define CUDA_CHECK(call)                                                  \
   do {                                                                    \
     cudaError_t error = (call);                                           \
-    if (error != (cudaError_t)SEP_CUDA_SUCCESS) {                         \
-      ::sep::cuda::logCudaError(#call, error);                            \
+    if (error != cudaSuccess) {                                           \
+      (void)std::fprintf(stderr, "CUDA error in %s: %s\n", #call,          \
+                         cudaGetErrorString(error));                      \
     }                                                                     \
   } while (0)
 #endif
-
-// Additional CUDA utility functions that may be moved from other files
 
 }  // namespace cuda
 }  // namespace sep

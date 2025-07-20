@@ -8,11 +8,12 @@
 #endif
 
 // Project headers
-#include "compat/glm_config.h"
-#include "compat/shim.h"
-#include "compat/macros.h"
+#include "glm_config.h"
+#include "macros.h"
+#include "shim.h"
 
 // Standard C++ headers
+#include <string>
 #include <algorithm>
 #include <cmath>
 #include <cstddef>

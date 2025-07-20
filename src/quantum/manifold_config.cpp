@@ -1,4 +1,5 @@
 #include "quantum/manifold_config.h"
+#include "core/types.h"
 
 namespace sep::quantum::manifold {
 

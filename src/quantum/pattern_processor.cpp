@@ -1,7 +1,8 @@
 
 #include "compat/cuda_helpers.h"
-#include "compat/cuda_runtime.h"
+#include "compat/cuda_sep.h"
 #include "compat/math_common.h"
+#include "compat/pattern_types.h"
 #include "core/common.h"  // defines sep::SEPResult
 #include "core/types.h"
 #include "memory/types.h"
@@ -95,13 +96,58 @@ public:
     bool isCollapsed(const QuantumState& state) const {
         return state.coherence < pattern::MIN_COHERENCE;
     }
-
-    bool isQuantum(const QuantumState& state) const {
-        return state.coherence >= sep::quantum::MIN_COHERENCE;
-    }
+bool isQuantum(const QuantumState& state) const {
+    return state.coherence >= sep::quantum::MIN_COHERENCE;
+}
 private:
-    std::unique_ptr<QuantumProcessor> quantum_processor_;
+std::unique_ptr<QuantumProcessor> quantum_processor_;
 };
+}
+
+void GPUPatternProcessor::evolvePatterns() {
+std::vector<compat::PatternData> compat_patterns(patterns_.size());
+for (size_t i = 0; i < patterns_.size(); ++i) {
+    compat_patterns[i].attributes = patterns_[i].attributes;
+    compat_patterns[i].coherence = patterns_[i].coherence;
+    compat_patterns[i].stability = patterns_[i].quantum_state.stability;
+}
+
+compat::PatternData* d_compat_patterns;
+cudaMalloc(&d_compat_patterns, compat_patterns.size() * sizeof(compat::PatternData));
+cudaMemcpy(d_compat_patterns, compat_patterns.data(), compat_patterns.size() * sizeof(compat::PatternData), cudaMemcpyHostToDevice);
+
+compat::PatternData* d_compat_results;
+cudaMalloc(&d_compat_results, compat_patterns.size() * sizeof(compat::PatternData));
+
+compat::PatternData* d_compat_previous_patterns = nullptr;
+// if (m_previous_patterns.size() > 0) {
+//     std::vector<compat::PatternData> compat_previous_patterns(m_previous_patterns.size());
+//     for (size_t i = 0; i < m_previous_patterns.size(); ++i) {
+//         compat_previous_patterns[i].attributes = m_previous_patterns[i].attributes;
+//         compat_previous_patterns[i].coherence = m_previous_patterns[i].coherence;
+//         compat_previous_patterns[i].stability = m_previous_patterns[i].quantum_state.stability;
+//     }
+//     cudaMalloc(&d_compat_previous_patterns, compat_previous_patterns.size() * sizeof(compat::PatternData));
+//     cudaMemcpy(d_compat_previous_patterns, compat_previous_patterns.data(), compat_previous_patterns.size() * sizeof(compat::PatternData), cudaMemcpyHostToDevice);
+// }
+
+launch_pattern_processing(d_compat_patterns, d_compat_results, compat_patterns.size(), d_compat_previous_patterns, nullptr);
+
+std::vector<compat::PatternData> compat_results(compat_patterns.size());
+cudaMemcpy(compat_results.data(), d_compat_results, compat_results.size() * sizeof(compat::PatternData), cudaMemcpyDeviceToHost);
+
+for (size_t i = 0; i < patterns_.size(); ++i) {
+    patterns_[i].attributes = compat_results[i].attributes;
+    patterns_[i].coherence = compat_results[i].coherence;
+    patterns_[i].quantum_state.stability = compat_results[i].stability;
+}
+
+cudaFree(d_compat_patterns);
+cudaFree(d_compat_results);
+if (d_compat_previous_patterns) {
+    cudaFree(d_compat_previous_patterns);
+}
+}
 }
 
 // Function commented out to fix "defined but not used" error

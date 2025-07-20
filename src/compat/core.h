@@ -1,8 +1,8 @@
 #ifndef SEP_CUDA_CORE_H
 #define SEP_CUDA_CORE_H
 
-#include "compat/cuda_unified.h"
-#include "core/error_handler.h"
+#include "error_handler.h"
+#include <cuda_runtime.h>
 
 namespace sep::cuda {
 

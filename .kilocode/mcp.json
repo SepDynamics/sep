@@ -1,3 +1,78 @@
 {
-  "mcpServers": {}
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/sep"
+      ],
+      "alwaysAllow": [
+        "list_allowed_directories",
+        "get_file_info",
+        "search_files",
+        "move_file",
+        "directory_tree",
+        "list_directory_with_sizes",
+        "list_directory",
+        "create_directory",
+        "edit_file",
+        "write_file",
+        "read_multiple_files",
+        "read_file"
+      ],
+      "timeout": 30
+    },
+    "sequentialthinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "timeout": 30,
+      "alwaysAllow": [
+        "sequentialthinking"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "alwaysAllow": [
+        "delete_observations",
+        "delete_entities",
+        "add_observations",
+        "create_relations",
+        "create_entities",
+        "open_nodes",
+        "search_nodes",
+        "read_graph",
+        "delete_relations",
+        "remember"
+      ],
+      "timeout": 15
+    },
+    "redis": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-redis",
+        "--url",
+        "redis://127.0.0.1:6379"
+      ]
+    },
+    "qdrant": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-qdrant"
+      ],
+      "env": {
+        "QDRANT_URL": "https://14078592-0e60-4aa2-8e5b-eba64bdb8eb4.us-east4-0.gcp.cloud.qdrant.io",
+        "QDRANT_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.JV5NLtPzGNW50K6UV-_3aFHJkNLSTntwO3mV6Y5A5i8",
+        "COLLECTION_NAME": "sep-cluster",
+        "EMBEDDING_MODEL": "nomic-ai/nomic-embed-code"
+      }
+    }
+  }
 }

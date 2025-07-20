@@ -1,52 +1,34 @@
 #!/bin/bash
 set -e
 
-# Ensure we are in the project root directory
-cd /sep
+# Define the Docker image name
+IMAGE_NAME="sep-engine-builder"
 
-# Clean up ALL build artifacts from both root and build directory
-echo "Cleaning up previous build artifacts..."
-rm -rf build/
-rm -f CMakeCache.txt
-rm -rf CMakeFiles/
-rm -f build.ninja
-rm -f compile_commands.json
-rm -f CTestTestfile.cmake
-rm -f DartConfiguration.tcl
-rm -f cmake_install.cmake
-rm -f sep-config.cmake
+# Build the Docker image
+echo "Building Docker image: $IMAGE_NAME..."
+docker build -t $IMAGE_NAME .
 
-# Create fresh build directory
-echo "Creating fresh build directory..."
-mkdir -p build
-cd build
+# Run the build and test process inside the container
+echo "Running build and test inside Docker container..."
+docker run --rm -v "$(pwd)":/project $IMAGE_NAME /bin/bash -c "
+    set -e
+    echo 'Cleaning up previous build artifacts...'
+    rm -rf build
+    mkdir build
+    cd build
+    
+    echo 'Configuring project with CMake (CUDA Disabled)...'
+    cmake .. -G Ninja \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_C_COMPILER=clang-15 \
+        -DCMAKE_CXX_COMPILER=clang++-15 \
+        -DSEP_USE_CUDA=ON
 
-# Configure the project using CMake with explicit paths
-echo "Configuring build in $(pwd)..."
-# Set CUDA host compiler BEFORE cmake
-export CUDAHOSTCXX=/usr/bin/gcc-14
+    echo 'Building project with Ninja...'
+    ninja
 
-# Configure with explicit settings
-cmake -S .. -B . \
-    -GNinja \
-    -DCMAKE_BUILD_TYPE=Debug \
-    -DCMAKE_CXX_COMPILER=/usr/bin/clang++-15 \
-    -DCMAKE_CUDA_HOST_COMPILER=/usr/bin/gcc-14 \
-    -DSEP_USE_CUDA=ON
+    echo 'Running tests with CTest...'
+    ctest --output-on-failure
+"
 
-# Verify build files were created in the right place
-echo "Checking for build.ninja in $(pwd)..."
-if [ ! -f "build.ninja" ]; then
-    echo "ERROR: build.ninja not found in build directory!"
-    echo "Contents of build directory:"
-    ls -la
-    exit 1
-fi
-
-# Build the project
-echo "Building project..."
-ninja
-
-# Run the tests
-echo "Running tests..."
-ctest --output-on-failure
+echo "Build and test process completed successfully."

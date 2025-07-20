@@ -12,11 +12,10 @@
 #endif
 #define SEP_HAS_HIREDIS 1
 #include "memory/redis_manager.h"
-#include "memory/types.h"
+#include "core/types.h"
 #include "core/logging.h"
 #include <mutex>
 
-#include "compat/cuda_common.h"
 #include <cuda_runtime.h>
 #include <cstdint>
 #include <cstring>

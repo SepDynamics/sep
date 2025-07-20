@@ -8,9 +8,9 @@
 
 #include "api/auth_middleware.h"
 #include "api/server.h"
-#include "core/manager.h"
-#include "core/data_parser.h"
-#include "core/dag_graph.h"
+#include "manager.h"
+#include "data_parser.h"
+#include "dag_graph.h"
 #include <nlohmann/json.hpp>
 
 // Default auth configuration

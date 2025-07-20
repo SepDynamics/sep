@@ -44,7 +44,7 @@ graph TD
 ### Component Breakdown
 
 *   **`core`**: Provides foundational utilities, data structures, and managers required by all other engine modules.
-*   **`compat`**: Provides the CUDA backend for GPU acceleration and compatibility shims for non-GPU environments.
+*   **`compat`**: Provides the CUDA backend for GPU acceleration.
 *   **`quantum`**: Contains the quantum-inspired algorithms for analyzing and evolving patterns, including QBSA and QFH.
 *   **`memory`**: Manages the three-tiered memory hierarchy (STM, MTM, LTM) and handles optional pattern persistence via Redis.
 *   **`api`**: Exposes the engine's functionality via an HTTP server and a stable C-style bridge.
@@ -81,6 +81,7 @@ The main class is `sep::quantum::PatternMetricEngine`, which provides methods fo
     *   Adopted a "raw bytes" approach for all data ingestion to ensure universal applicability.
     *   Used fixed-size chunking for computationally efficient pattern extraction.
     *   Leveraged the existing QFH processor for powerful and well-tested metric computation.
+*   **Build System**: A stable, containerized build environment has been established, and the legacy CUDA compatibility layer has been refactored to use the modern CUDA API directly.
 
 ### Phase 2: Financial Analysis & Backtesting (Current)
 

@@ -593,20 +593,6 @@ struct string_hash {
 }  // namespace shim
 }  // namespace sep
 
-namespace std {
-    template<>
-    struct hash<sep::shim::string> {
-        size_t operator()(const sep::shim::string& s) const {
-            size_t h = 0;
-            const char* data = s.data();
-            size_t len = s.size();
-            for (size_t i = 0; i < len; ++i) {
-                h = h * 31 + static_cast<size_t>(data[i]);
-            }
-            return h;
-        }
-    };
-}
 
 // Previously shim types were injected into the std namespace when SEP_NO_STDLIB
 // was defined. That mapping has been removed; use sep::shim directly instead.

@@ -4,10 +4,6 @@ include_directories(
 )
 
 
-# Configure include paths for all targets
-set(SEP_INCLUDE_DIRS
-    ${CMAKE_SOURCE_DIR}/src
-)
 
 # Add minimal build configuration
 if(SEP_MINIMAL)

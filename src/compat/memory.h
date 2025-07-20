@@ -1,6 +1,6 @@
 #pragma once
 
-#include "compat/cuda_unified.h"
+#include <cuda_runtime.h>
 
 namespace sep {
 namespace cuda {

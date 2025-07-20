@@ -57,7 +57,7 @@ if [[ "$DEVICE_ONLY" == true ]]; then
     FLAGS=("${filtered_flags[@]}")
 fi
 
-# Use nvcc for .cu files, g++ for others
+# Use nvcc for .cu files, clang++ for others
 if [[ "$SOURCE_FILE" == *.cu ]]; then
     NVCC_COMMAND=(
         /usr/local/cuda/bin/nvcc

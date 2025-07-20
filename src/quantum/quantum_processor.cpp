@@ -2,9 +2,9 @@
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/quantum_processor_cuda.h"
 #include "compat/math_common.h"
-#include "core/types.h"
+#include "types.h"
 #include "quantum/qbsa_qfh.h"
-#include "core/types.h"
+#include "types.h"
 #include <glm/glm.hpp>
 #include <vector>
 #include <memory>

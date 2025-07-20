@@ -2,7 +2,7 @@
 // Include CUDA compatibility layer for C++ standard library functions
 
 // Include CUDA headers
-#include "compat/cuda_common.h"
+#include "compat/cuda.h"
 #include <cstring>
 
 #include <cstring> // For std::memcpy (if needed implicitly for unified memory)

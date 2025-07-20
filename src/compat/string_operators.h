@@ -1,7 +1,8 @@
 #pragma once
 
-#include "compat/shim.h"
 #include <string>
+
+#include "shim.h"
 
 // Global operators for string comparison compatibility between std::string and sep::shim::string
 // These operators ensure proper string comparison in containers and algorithms

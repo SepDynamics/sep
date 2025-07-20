@@ -1,30 +1,32 @@
 #pragma once
 
 // CUDA macros and compatibility layer
-#include "compat/macros.h"
+#include "macros.h"
 
 #ifdef __CUDACC__
-#include <cmath>
 #include <cuda_runtime.h>
-#include "compat/cuda_helpers.h"
 #include <device_launch_parameters.h>
+
+#include <cmath>
+
+#include "cuda_helpers.h"
 #endif
 
 // Standard headers
 #include <cstddef>
 
 // Project headers - math first
-#include "compat/math_common.h"
-
+#include "math_common.h"
 
 // Other project headers
-#include "compat/constants.h"
-#include "core/types.h"
+#include "constants.h"
+#include "types.h"
 
 #ifndef __CUDACC__
-#include "compat/cuda_impl.h"
-#include <cmath>
 #include <algorithm>
+#include <cmath>
+
+#include "cuda_impl.h"
 #endif
 
 namespace sep {

@@ -1,10 +1,7 @@
 # src/compat/CMakeLists.txt
 # Enhanced CUDA compatibility library with explicit symbol exports
 
-# Find CUDA if enabled
-if(SEP_USE_CUDA)
-    find_package(CUDAToolkit REQUIRED)
-endif()
+# Find CUDA if enabled (Note: CUDAToolkit is already found in the root CMakeLists.txt)
 
 # Build sep_compat as a static library that encapsulates all CUDA functionality
 # Use Cycles naming convention for feature flags
@@ -15,13 +12,13 @@ set(WITH_CYCLES_OPENCOLORIO ON)
 set(WITH_CYCLES_OPENSUBDIV ON)
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/compat/
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
         DESTINATION include/sep/compat
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.hpp")
 
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/compat/
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
         DESTINATION include/sep/compat/internal
         FILES_MATCHING
         PATTERN "*.h"
@@ -45,18 +42,6 @@ set(CPP_SOURCES
     cuda_impl.cpp
 )
 
-# Create an OBJECT library for the CUDA sources
-add_library(sep_compat_cuda OBJECT ${CUDA_SOURCES})
-set_target_properties(sep_compat_cuda PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    POSITION_INDEPENDENT_CODE ON
-    LINKER_LANGUAGE CXX
-    CUDA_STANDARD 17
-    CUDA_ARCHITECTURES "75;70;61;60"
-)
-target_compile_options(sep_compat_cuda PRIVATE COMPILE_LANGUAGE:CUDA>:${CUDA_NVCC_FLAGS}>)
-
 add_library(sep_compat STATIC
     ${CPP_SOURCES}
     ${CUDA_SOURCES}
@@ -72,38 +57,26 @@ set_target_properties(sep_compat PROPERTIES
     CUDA_ARCHITECTURES "75" # Keep it simple for now, add others back later
     C_VISIBILITY_PRESET default
     CXX_VISIBILITY_PRESET default
+    CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -I${CMAKE_SOURCE_DIR}/src -I${CMAKE_SOURCE_DIR}/src/core -I${CMAKE_SOURCE_DIR}/src/quantum"
 )
 
-if(SEP_HAS_CUDA)
-    target_link_libraries(sep_compat
-        PUBLIC
-            CUDA::cudart
-            CUDA::cuda_driver
-    )
-endif()
-
-set_property(TARGET sep_compat PROPERTY CUDA_STANDARD 17)
-
-if(SEP_HAS_CUDA)
-    target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=1)
-else()
-    target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=0)
-endif()
-
-# Include directories
 target_include_directories(sep_compat
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:include/sep/compat>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third_party/glm>
-        ${CUDA_INCLUDE_DIRS}
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/core>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/quantum>
 )
 
-# Dependencies
 if(SEP_USE_CUDA)
-    target_link_libraries(sep_compat PUBLIC ${CUDA_LIBRARIES} ${CUDA_CUDART_LIBRARY})
+    target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=1)
+# Link against modern CUDA targets. This transitively handles include paths and libraries.
+target_link_libraries(sep_compat PUBLIC
+    CUDA::toolkit
+    sep_core
+    sep_quantum
+)
 else()
-    # Placeholder for non-CUDA builds
+    target_compile_definitions(sep_compat PUBLIC SEP_USE_CUDA=0)
 endif()

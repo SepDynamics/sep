@@ -5,7 +5,6 @@
 #include <memory>
 #include <vector>
 
-#include "compat/cuda_unified.h"
 #include "compat/types.h"  // For QSHResult definition
 #include "core/common.h"
 #include "core/config.h"

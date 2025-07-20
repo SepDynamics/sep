@@ -75,7 +75,7 @@ void printMetrics(std::ostream& out, const std::string& dataType, const std::vec
 // Helper function to print metrics in JSON format
 void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics) {
     if (metrics.empty()) {
-        out << "[]" << std::endl;
+        out << "{}" << std::endl;
         return;
     }
     float total_coherence = 0.0f;
@@ -96,7 +96,7 @@ void printJsonMetrics(std::ostream& out, const std::string& dataType, const std:
         {"pattern_count", metrics.size()}
     };
 
-    out << json::array({result}).dump(4) << std::endl;
+    out << result.dump(4) << std::endl;
 }
 
 void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iterations, bool no_clear, bool json_output, std::ostream& out) {
@@ -229,7 +229,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::ofstream outfile;
-    if (!output_path.empty() && !json_output) { // Don't write to file in json mode for now
+    if (!output_path.empty()) {
         outfile.open(output_path);
         if (!outfile) {
             std::cerr << "Error opening output file: " << output_path << std::endl;
@@ -268,20 +268,36 @@ int main(int argc, char* argv[]) {
     }
 
     if (fs::is_directory(targetPath)) {
-        if (!json_output) {
+        if (json_output) {
+            json all_results = json::array();
+            for (const auto& entry : fs::recursive_directory_iterator(targetPath)) {
+                if (fs::is_regular_file(entry)) {
+                    std::stringstream ss;
+                    processFile(engine, entry.path(), 1, false, true, ss);
+                    std::string json_str = ss.str();
+                    if (!json_str.empty()) {
+                        try {
+                            json j = json::parse(json_str);
+                            if (!j.empty()) {
+                                all_results.push_back(j);
+                            }
+                        }
+                        catch (json::parse_error& e) {
+                            std::cerr << "Failed to parse JSON for " << entry.path() << ": " << e.what() << std::endl;
+                        }
+                    }
+                }
+            }
+            out << all_results.dump(4) << std::endl;
+        }
+        else {
             if(no_clear) {
                 out << "Processing directory with state retained between files." << std::endl;
             } else {
                 out << "Processing directory with state cleared between files." << std::endl;
             }
-        }
-        // For directory processing, we can output a json array
-        json all_results = json::array();
-        for (const auto& entry : fs::recursive_directory_iterator(targetPath)) {
-            if (fs::is_regular_file(entry)) {
-                 if (json_output) {
-                    // This part needs more work to aggregate json
-                } else {
+            for (const auto& entry : fs::recursive_directory_iterator(targetPath)) {
+                if (fs::is_regular_file(entry)) {
                     processFile(engine, entry.path(), iterations, no_clear, json_output, out);
                 }
             }

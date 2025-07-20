@@ -1,11 +1,13 @@
 #pragma once
 
 // Include C API definitions first
-#include "api/bridge.h"  // For SEP_API
-#include "core/common.h"  // For sep::SEPResult
-#include "compat/cuda_runtime.h"  // For CUDA types
 #include <cstddef>  // For size_t
 #include <cstdint>  // For fixed-width integers
+
+#include "api/bridge.h"    // For SEP_API
+#include "common.h"   // For sep::SEPResult
+#include "compat/pattern_types.h"
+#include "cuda_runtime.h"  // For CUDA types
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,7 +49,7 @@ SEP_API sep::cuda::cudaError_t sep_cuda_memcpy_async(
 }
 
 // C++ specific includes and definitions
-#include "core/types.h"
+#include "types.h"
 
 namespace sep::cuda {
 
@@ -81,9 +83,9 @@ cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
                           cudaStream_t stream);
 
 // Pattern processing functions
-cudaError_t launch_pattern_processing(pattern::PatternData* patterns, pattern::PatternData* results,
+cudaError_t launch_pattern_processing(compat::PatternData* patterns, compat::PatternData* results,
                                       size_t pattern_count,
-                                      const pattern::PatternData* previous_patterns,
+                                      const compat::PatternData* previous_patterns,
                                       cudaStream_t stream);
 
 } // namespace sep::cuda

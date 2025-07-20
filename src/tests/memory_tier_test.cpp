@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "compat/shim.h"
-#include "core/types.h"
+#include "types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/memory_tier_manager.hpp"
 

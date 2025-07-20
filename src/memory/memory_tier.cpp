@@ -1,6 +1,7 @@
 #include "memory/memory_tier.hpp"
 
-#include "compat/cuda.h"
+#include <cuda_runtime.h>
+#include "compat/cuda_sep.h"
 #include "compat/macros.h"
 #include "compat/math_common.h"
 #include "core/allocation_metrics.h"
@@ -56,12 +57,12 @@ namespace sep::memory
         {
             memory_pool_ = std::malloc(config.size);
 #if SEP_MEMORY_HAS_CUDA
-            cuda::cudaError_t err =
-                memory_pool_ ? cuda::Success : cuda::MemoryAllocation;
-            if (err != cuda::Success)
+            cudaError_t err =
+                memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
+            if (err != cudaSuccess)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
-                if (logger) logger->error("Failed to allocate host memory: {}", err);
+                if (logger) logger->error("Failed to allocate host memory: {}", cudaGetErrorString(err));
             }
 #endif
         }
@@ -69,13 +70,13 @@ namespace sep::memory
         {
             memory_pool_ = nullptr;
 #if SEP_MEMORY_HAS_CUDA
-            cuda::cudaError_t err = cuda::cudaMallocManaged(&memory_pool_, config.size);
-            if (err != cuda::cudaSuccess)
+            cudaError_t err = cudaMallocManaged(&memory_pool_, config.size);
+            if (err != cudaSuccess)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
                 if (logger)
                 {
-                    logger->error("Failed to allocate managed memory: {}", err);
+                    logger->error("Failed to allocate managed memory: {}", cudaGetErrorString(err));
                     logger->info("Falling back to host allocation");
                 }
                 memory_pool_ = std::malloc(config.size);
@@ -83,11 +84,11 @@ namespace sep::memory
             }
 #else
             memory_pool_ = std::malloc(config.size);
-            cuda::cudaError_t err = memory_pool_ ? cuda::Success : cuda::MemoryAllocation;
-            if (err != cuda::Success)
+            cudaError_t err = memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
+            if (err != cudaSuccess)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
-                if (logger) logger->error("Failed to allocate host memory: {}", err);
+                if (logger) logger->error("Failed to allocate host memory: {}", cudaGetErrorString(err));
             }
 #endif
         }
@@ -292,22 +293,22 @@ namespace sep::memory
                     // Move memory to new position
                     void *new_location = static_cast<char *>(memory_pool_) + current_offset;
 #if SEP_MEMORY_HAS_CUDA
-                    cuda::cudaError_t err = cuda::cudaMemcpyAsync(
-                        new_location, block.ptr, block.size, cuda::cudaMemcpyDefault, nullptr);
-                    if (err != cuda::Success)
+                    cudaError_t err = cudaMemcpyAsync(
+                        new_location, block.ptr, block.size, cudaMemcpyDefault, nullptr);
+                    if (err != cudaSuccess)
                     {
                         if (logger)
                         {
-                            LOG_ERROR(logger, "Defragment memory copy failed: {}", err);
+                            LOG_ERROR(logger, "Defragment memory copy failed: {}", cudaGetErrorString(err));
                         }
                         return ::sep::SEPResult::CUDA_ERROR;
                     }
-                    err = cuda::cudaStreamSynchronize(nullptr);
-                    if (err != cuda::Success)
+                    err = cudaStreamSynchronize(nullptr);
+                    if (err != cudaSuccess)
                     {
                         if (logger)
                         {
-                            LOG_ERROR(logger, "Defragment stream sync failed: {}", err);
+                            LOG_ERROR(logger, "Defragment stream sync failed: {}", cudaGetErrorString(err));
                         }
                         return ::sep::SEPResult::CUDA_ERROR;
                     }
@@ -464,25 +465,25 @@ namespace sep::memory
         dst->compression_ratio = src->compression_ratio;
 
 #if SEP_MEMORY_HAS_CUDA
-        cuda::cudaError_t err =
-            cuda::cudaMemcpyAsync(dst->ptr, src->ptr, size, cuda::cudaMemcpyDefault, nullptr);
-        if (err != cuda::Success)
+        cudaError_t err =
+            cudaMemcpyAsync(dst->ptr, src->ptr, size, cudaMemcpyDefault, nullptr);
+        if (err != cudaSuccess)
         {
             if (logger)
             {
-                LOG_ERROR(logger, "Failed to copy memory via CUDA: {}", err);
+                LOG_ERROR(logger, "Failed to copy memory via CUDA: {}", cudaGetErrorString(err));
                 LOG_INFO(logger, "Falling back to CPU memcpy");
             }
             std::memcpy(dst->ptr, src->ptr, size);
         }
         else
         {
-            err = cuda::cudaStreamSynchronize(nullptr);
-            if (err != cuda::Success)
+            err = cudaStreamSynchronize(nullptr);
+            if (err != cudaSuccess)
             {
                 if (logger)
                 {
-                    LOG_ERROR(logger, "Failed to synchronize stream: {}", err);
+                    LOG_ERROR(logger, "Failed to synchronize stream: {}", cudaGetErrorString(err));
                 }
                 return false;
             }

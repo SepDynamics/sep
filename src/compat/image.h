@@ -4,10 +4,8 @@
 
 #pragma once
 
-#include "compat/memory.h"
-
+#include "memory.h"
 #include "scene/colorspace.h"
-
 #include "util/string.h"
 #include "util/thread.h"
 #include "util/transform.h"

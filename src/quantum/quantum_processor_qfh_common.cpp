@@ -1,6 +1,6 @@
-#include "compat/cuda.h"
+#include "compat/cuda_sep.h"
 #include "compat/math_common.h"
-#include "core/types.h"
+#include "types.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"

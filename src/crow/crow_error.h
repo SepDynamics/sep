@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/shim/string.h"
+#include "shim/string.h"
 
 namespace sep {
 namespace crow {

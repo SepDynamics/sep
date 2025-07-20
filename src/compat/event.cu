@@ -1,77 +1,60 @@
-#include "compat/cuda_common.h"
-
-#include "compat/cuda_unified_fix.h"
-
-#include "compat/cuda_helpers.h"
-
-#include <cstring>
-
-// GLM isolation layer
-
-#include "compat/core.h"
 #include "compat/event.h"
-#include "compat/macros.h"
-// Ensure CUDA_CHECK is defined before use
-#include "compat/sep_glm_wrapper.h"
+#include "compat/stream.h"
+#include <cuda_runtime.h>
 
 namespace sep::cuda {
 
-Event::Event(EventFlags flags) {
-    unsigned int cuda_flags = 0;
-    if ((static_cast<unsigned int>(flags) & static_cast<unsigned int>(EventFlags::Default)))
-        cuda_flags |= cudaEventDefault;
-    if ((static_cast<unsigned int>(flags) & static_cast<unsigned int>(EventFlags::BlockingSync)))
-        cuda_flags |= cudaEventBlockingSync;
-    if ((static_cast<unsigned int>(flags) & static_cast<unsigned int>(EventFlags::DisableTiming)))
-        cuda_flags |= cudaEventDisableTiming;
-    if ((static_cast<unsigned int>(flags) & static_cast<unsigned int>(EventFlags::InterProcess)))
-        cuda_flags |= cudaEventInterprocess;
-
-    // Remove try-catch for CUDA compatibility
-    cudaError_t result = cudaEventCreateWithFlags(&handle_, cuda_flags);
-    if (result != cudaSuccess) {
-        handle_ = nullptr;
-    }
+Event::Event(unsigned int flags) {
+    cudaEventCreateWithFlags(&event_, flags);
 }
 
 Event::~Event() {
-    if (handle_) {
-        // Remove try-catch for CUDA compatibility 
-        cudaError_t result = cudaEventDestroy(handle_);
-        (void)result; // Avoid unused variable warning
-        handle_ = nullptr;
+    if (event_) {
+        cudaEventDestroy(event_);
     }
 }
 
+Event::Event(Event&& other) noexcept : event_(other.event_) {
+    other.event_ = nullptr;
+}
+
+Event& Event::operator=(Event&& other) noexcept {
+    if (this != &other) {
+        if (event_) {
+            cudaEventDestroy(event_);
+        }
+        event_ = other.event_;
+        other.event_ = nullptr;
+    }
+    return *this;
+}
+
 void Event::record(Stream& stream) {
-    if (handle_) {
-        // Remove try-catch for CUDA compatibility 
-        cudaError_t result = cudaEventRecord(handle_, reinterpret_cast<cudaStream_t>(stream.handle())); 
-        (void)result; // Avoid unused variable warning
+    if (event_ && stream.isValid()) {
+        cudaEventRecord(event_, stream.handle());
     }
 }
 
 void Event::synchronize() {
-    if (handle_) {
-        // Remove try-catch for CUDA compatibility 
-        cudaError_t result = cudaEventSynchronize(handle_);
-        (void)result; // Avoid unused variable warning
+    if (event_) {
+        cudaEventSynchronize(event_);
     }
 }
 
 float Event::elapsedTime(Event& start) {
-    if (!handle_ || !start.handle_) {
-        return 0.0f;
+    float time = 0.0f;
+    if (event_ && start.valid()) {
+        cudaEventElapsedTime(&time, start.handle(), event_);
     }
+    return time;
+}
 
-    float elapsed = 0.0f;
-    // Remove try-catch for CUDA compatibility 
-    cudaError_t result = cudaEventElapsedTime(&elapsed, start.handle_, handle_);
-    if (result != cudaSuccess) {
-        return 0.0f;
-    }
+cudaEvent_t Event::handle() const {
+    return event_;
+}
 
-    return elapsed;
+bool Event::valid() const {
+    return event_ != nullptr;
 }
 
 }  // namespace sep::cuda

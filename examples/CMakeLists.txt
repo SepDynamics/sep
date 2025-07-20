@@ -7,6 +7,7 @@ target_link_libraries(pattern_metric_example PRIVATE
     fmt::fmt
     benchmark::benchmark
     TBB::tbb
+    nlohmann_json::nlohmann_json
 )
 
 add_executable(financial_demo financial_demo.cpp)

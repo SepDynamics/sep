@@ -1,197 +1,12 @@
-#if !defined(__CUDACC__)
+#include <cuda_runtime.h>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-#include <utility>
-#endif
+#include <mutex>
 
 #include "core/common.h"
-
-#include "compat/cuda_common.h"
-#include "compat/cuda_unified_fix.h"
-
-// CUDA runtime must come first
-#ifndef SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS
-#define SEP_CUDACC_DISABLE_EXCEPTION_SPEC_CHECKS 1
-#endif
-#include <cuda_runtime.h>
-#include "compat/cuda_helpers.h"
-
-// Standard library includes - only for host compilation
-#if !defined(__CUDACC__)
-#include <cstddef>
-#include <cstdint>
-#include <memory>
-#include <cstring> // For std::memcpy, std::memset, std::strlen, std::strcmp
-#include <mutex>
-#include <cstring>
-#include <utility>
-#endif
-
-// Project includes
-#include "compat/cuda_unified.h"
-#include "compat/cuda/cuda_wrapper_unified.h"
 #include "compat/kernels.h"
-#include "compat/macros.h"
 #include "compat/raii.h"
-
-namespace sep::cuda {
-
-// CUDA API wrapper functions
-cudaError_t cudaStreamCreateWithFlags(cudaStream_t* pStream, unsigned int flags) {
-    return ::cudaStreamCreateWithFlags(pStream, flags);
-}
-
-cudaError_t cudaStreamDestroy(cudaStream_t stream) {
-    return ::cudaStreamDestroy(stream);
-}
-
-cudaError_t cudaStreamSynchronize(cudaStream_t stream) {
-    return ::cudaStreamSynchronize(stream);
-}
-
-cudaError_t cudaEventCreate(cudaEvent_t* event) {
-    return ::cudaEventCreate(event);
-}
-
-cudaError_t cudaEventDestroy(cudaEvent_t event) {
-    return ::cudaEventDestroy(event);
-}
-
-cudaError_t cudaEventSynchronize(cudaEvent_t event) {
-    return ::cudaEventSynchronize(event);
-}
-
-cudaError_t cudaMalloc(void** devPtr, size_t size) {
-    return ::cudaMalloc(devPtr, size);
-}
-
-cudaError_t cudaFree(void* devPtr) {
-    return ::cudaFree(devPtr);
-}
-
-cudaError_t cudaMallocManaged(void** devPtr, size_t size, unsigned int flags) {
-    return ::cudaMallocManaged(devPtr, size, flags);
-}
-
-cudaError_t cudaStreamAttachMemAsync(cudaStream_t stream, void* devPtr, size_t length, unsigned int flags) {
-    return ::cudaStreamAttachMemAsync(stream, devPtr, length, flags);
-}
-
-const char* cudaGetErrorString(cudaError_t error) {
-    return ::cudaGetErrorString(error);
-}
-
-// Memory management functions
-cudaError_t allocateManaged(void** ptr, size_t size) {
-    return ::cudaMallocManaged(ptr, size);
-}
-
-cudaError_t deallocate(void* ptr) {
-    return ::cudaFree(ptr);
-}
-
-namespace detail {
-SEP_GLOBAL void qbsa_kernel(const std::uint32_t* d_probe_indices,
-                           const std::uint32_t* d_expectations,
-                           std::uint32_t num_probes, std::uint32_t* d_bitfield,
-                           std::uint32_t* d_corrections,
-                           std::uint32_t* d_correction_count);
-
-SEP_GLOBAL void qsh_kernel(const std::uint64_t* d_chunks, std::uint32_t num_chunks,
-                           std::uint32_t* d_collapse_indices,
-                           std::uint32_t* d_collapse_counts);
-
-SEP_GLOBAL void pattern_processing_kernel(pattern::PatternData* patterns,
-                                        pattern::PatternData* results,
-                                        pattern::PatternConfig config,
-                                        size_t pattern_count,
-                                        const pattern::PatternData* previous_patterns);
-}  // namespace detail
-
-cudaError_t launch_pattern_processing(pattern::PatternData* patterns,
-                                    pattern::PatternData* results,
-                                    const pattern::PatternConfig& config,
-                                    size_t pattern_count,
-                                    const pattern::PatternData* previous_patterns,
-                                    cudaStream_t stream) {
-    if (!patterns || !results) {
-        return cudaErrorInvalidValue;
-    }
-
-    try {
-        const uint32_t block_size = constants::get_default_block_size();
-        const uint32_t grid_size = (pattern_count + block_size - 1) / block_size;
-
-        detail::pattern_processing_kernel<<<grid_size, block_size, 0, stream>>>(
-            patterns, results, config, pattern_count, previous_patterns);
-
-        return cudaGetLastError();
-    } catch (...) {
-        return cudaErrorUnknown;
-    }
-}
-
-cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
-                           cudaMemcpyKind kind, cudaStream_t stream) {
-  return ::cudaMemcpyAsync(dst, src, count, kind, stream);
-}
-
-// Overload taking raw stream pointer for backward compatibility
-cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
-                            cudaMemcpyKind kind, void* stream) {
-  return ::cudaMemcpyAsync(dst, src, count, kind,
-                            reinterpret_cast<cudaStream_t>(stream));
-}
-
-// Implement CUDA kernel launch functions
-cudaError_t launchQBSAKernel(const std::uint32_t *d_probe_indices,
-                           const std::uint32_t *d_expectations, std::uint32_t num_probes,
-                           std::uint32_t *d_bitfield, std::uint32_t *d_corrections,
-                           std::uint32_t *d_correction_count, cudaStream_t stream) {
-  if (!d_probe_indices || !d_expectations || !d_bitfield || !d_corrections ||
-      !d_correction_count) {
-    return cudaErrorInvalidValue;
-  }
-  
-  try {
-    const uint32_t block_size = sep::cuda::constants::get_default_block_size();
-    const uint32_t grid_size = (num_probes + block_size - 1) / block_size;
-
-    detail::qbsa_kernel<<<grid_size, block_size, 0, stream>>>(
-        d_probe_indices, d_expectations, num_probes, d_bitfield, d_corrections,
-        d_correction_count);
-
-    return cudaGetLastError();
-  } catch (...) {
-    return cudaErrorUnknown;
-  }
-}
-
-cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
-                          std::uint32_t num_chunks,
-                          std::uint32_t *d_collapse_indices,
-                          std::uint32_t *d_collapse_counts,
-                          cudaStream_t stream) {
-  if (!d_chunks || !d_collapse_indices || !d_collapse_counts) {
-    return cudaErrorInvalidValue;
-  }
-  
-  try {
-    const uint32_t block_size = sep::cuda::constants::get_default_block_size();
-    const uint32_t grid_size = (num_chunks + block_size - 1) / block_size;
-
-    detail::qsh_kernel<<<grid_size, block_size, 0, stream>>>(
-        d_chunks, num_chunks, d_collapse_indices, d_collapse_counts);
-
-    return cudaGetLastError();
-  } catch (...) {
-    return cudaErrorUnknown;
-  }
-}
-
-} // namespace sep::cuda
-
 
 extern "C" {
 
@@ -211,7 +26,7 @@ sep::SEPResult sep_cuda_init(int device_id) {
     }
 
     if (device_id >= 0) {
-        sep::cuda::CudaWrapper::getInstance().setDevice(device_id);
+        cudaSetDevice(device_id);
     }
 
     g_stream = std::make_unique<sep::cuda::StreamRAII>();
@@ -243,21 +58,15 @@ sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const 
         return sep::SEPResult::UNKNOWN_ERROR;
     }
 
-    // Get constants
-    const uint32_t bitfield_words = sep::cuda::constants::BITFIELD_WORDS;
-    const uint32_t max_block_size = sep::cuda::constants::MAX_BLOCK_SIZE;
-    
-    // Pre-calculate all sizes
     const size_t probe_size = num_probes * sizeof(std::uint32_t);
-    const size_t bitfield_size = bitfield_words * sizeof(std::uint32_t);
-    const size_t corrections_size = max_block_size * sizeof(std::uint32_t);
+    const size_t bitfield_size = 1024 * sizeof(std::uint32_t);
+    const size_t corrections_size = 1024 * sizeof(std::uint32_t);
     const size_t count_size = sizeof(std::uint32_t);
 
-    // Device buffers managed via RAII
     sep::cuda::DeviceBufferRAII<std::uint32_t> d_probe_indices(num_probes);
     sep::cuda::DeviceBufferRAII<std::uint32_t> d_expectations(num_probes);
-    sep::cuda::DeviceBufferRAII<std::uint32_t> d_bitfield(bitfield_words);
-    sep::cuda::DeviceBufferRAII<std::uint32_t> d_corrections(max_block_size);
+    sep::cuda::DeviceBufferRAII<std::uint32_t> d_bitfield(1024);
+    sep::cuda::DeviceBufferRAII<std::uint32_t> d_corrections(1024);
     sep::cuda::DeviceBufferRAII<std::uint32_t> d_correction_count(1);
 
     if (!d_probe_indices.valid() || !d_expectations.valid() || !d_bitfield.valid() || !d_corrections.valid() ||
@@ -265,38 +74,24 @@ sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const 
         return sep::SEPResult::UNKNOWN_ERROR;
     }
 
-    try {
-        // Ensure proper stream synchronization before memory operations 
-        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
+    cudaStreamSynchronize(g_stream->get());
+    cudaMemcpyAsync(d_probe_indices.get(), probe_indices, probe_size, cudaMemcpyHostToDevice, g_stream->get());
+    cudaStreamSynchronize(g_stream->get());
+    cudaMemcpyAsync(d_expectations.get(), expectations, probe_size, cudaMemcpyHostToDevice, g_stream->get());
+    cudaStreamSynchronize(g_stream->get());
+    cudaMemsetAsync(d_correction_count.get(), 0, count_size, g_stream->get());
+    cudaStreamSynchronize(g_stream->get());
 
-        // Memory transfers with error checking
-        CUDA_CHECK(
-            sep::cuda::SEP_cudaMemcpyAsync(d_probe_indices.get(), probe_indices, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
-        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
+    launchQBSAKernel(d_probe_indices.get(), d_expectations.get(), num_probes,
+                     d_bitfield.get(), d_corrections.get(), d_correction_count.get(),
+                     g_stream->get());
 
-        CUDA_CHECK(
-            sep::cuda::SEP_cudaMemcpyAsync(d_expectations.get(), expectations, probe_size, cudaMemcpyHostToDevice, g_stream->get()));
-        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
-
-        CUDA_CHECK(SEP_cudaMemsetAsync(d_correction_count.get(), 0, count_size, g_stream->get()));
-        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
-
-        CUDA_CHECK(sep::cuda::launchQBSAKernel(d_probe_indices.get(), d_expectations.get(), num_probes,
-                                               d_bitfield.get(), d_corrections.get(), d_correction_count.get(),
-                                               g_stream->get()));
-
-        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(bitfield, d_bitfield.get(), bitfield_size, cudaMemcpyDeviceToHost, g_stream->get()));
-
-        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(correction_indices, d_corrections.get(), corrections_size, cudaMemcpyDeviceToHost,
-                                  g_stream->get()));
-
-        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(correction_count, d_correction_count.get(), count_size, cudaMemcpyDeviceToHost,
-                                  g_stream->get()));
-
-        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
-    } catch (const sep::CudaException&) {
-        return sep::SEPResult::UNKNOWN_ERROR;
-    }
+    cudaMemcpyAsync(bitfield, d_bitfield.get(), bitfield_size, cudaMemcpyDeviceToHost, g_stream->get());
+    cudaMemcpyAsync(correction_indices, d_corrections.get(), corrections_size, cudaMemcpyDeviceToHost,
+                                  g_stream->get());
+    cudaMemcpyAsync(correction_count, d_correction_count.get(), count_size, cudaMemcpyDeviceToHost,
+                                  g_stream->get());
+    cudaStreamSynchronize(g_stream->get());
 
     return sep::SEPResult::SUCCESS;
 }
@@ -308,60 +103,45 @@ sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint3
         return sep::SEPResult::UNKNOWN_ERROR;
     }
 
-    // Get constants
-    const uint32_t symmetry_pairs = sep::cuda::constants::SYMMETRY_PAIRS;
-
-    // Pre-calculate sizes
     const size_t chunks_size = num_chunks * sizeof(std::uint64_t);
-    const size_t indices_size = num_chunks * symmetry_pairs * sizeof(std::uint32_t);
+    const size_t indices_size = num_chunks * 32 * sizeof(std::uint32_t);
     const size_t counts_size = num_chunks * sizeof(std::uint32_t);
 
-    // Device buffers managed via RAII
     sep::cuda::DeviceBufferRAII<std::uint64_t> d_chunks(num_chunks);
-    sep::cuda::DeviceBufferRAII<std::uint32_t> d_collapse_indices(num_chunks * symmetry_pairs);
+    sep::cuda::DeviceBufferRAII<std::uint32_t> d_collapse_indices(num_chunks * 32);
     sep::cuda::DeviceBufferRAII<std::uint32_t> d_collapse_counts(num_chunks);
 
     if (!d_chunks.valid() || !d_collapse_indices.valid() || !d_collapse_counts.valid()) {
         return sep::SEPResult::UNKNOWN_ERROR;
     }
 
-    try {
-        // Ensure proper stream synchronization before memory operations
-        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
+    cudaStreamSynchronize(g_stream->get());
+    cudaMemcpyAsync(d_chunks.get(), chunks, chunks_size, cudaMemcpyHostToDevice, g_stream->get());
+    cudaStreamSynchronize(g_stream->get());
 
-        // Memory transfer with error checking
-        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(d_chunks.get(), chunks, chunks_size, cudaMemcpyHostToDevice, g_stream->get()));
-        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
+    launchQSHKernel(d_chunks.get(), num_chunks, d_collapse_indices.get(),
+                    d_collapse_counts.get(), g_stream->get());
 
-        CUDA_CHECK(sep::cuda::launchQSHKernel(d_chunks.get(), num_chunks, d_collapse_indices.get(),
-                                              d_collapse_counts.get(), g_stream->get()));
-
-        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(collapse_indices, d_collapse_indices.get(), indices_size, cudaMemcpyDeviceToHost,
-                                   g_stream->get()));
-
-        CUDA_CHECK(sep::cuda::SEP_cudaMemcpyAsync(collapse_counts, d_collapse_counts.get(), counts_size, cudaMemcpyDeviceToHost,
-                                   g_stream->get()));
-
-        CUDA_CHECK(SEP_cudaStreamSynchronize(g_stream->get()));
-    } catch (const sep::CudaException&) {
-        return sep::SEPResult::UNKNOWN_ERROR;
-    }
+    cudaMemcpyAsync(collapse_indices, d_collapse_indices.get(), indices_size, cudaMemcpyDeviceToHost,
+                                   g_stream->get());
+    cudaMemcpyAsync(collapse_counts, d_collapse_counts.get(), counts_size, cudaMemcpyDeviceToHost,
+                                   g_stream->get());
+    cudaStreamSynchronize(g_stream->get());
 
     return sep::SEPResult::SUCCESS;
 }
 
-// C API wrappers for CUDA memory management
 cudaError_t sep_cuda_allocate_managed(void** ptr, size_t size) {
-    return sep::cuda::allocateManaged(ptr, size);
+    return cudaMallocManaged(ptr, size);
 }
 
 cudaError_t sep_cuda_deallocate(void* ptr) {
-    return sep::cuda::deallocate(ptr);
+    return cudaFree(ptr);
 }
 
 cudaError_t sep_cuda_memcpy_async(void* dst, const void* src, size_t count,
                                  cudaMemcpyKind kind, void* stream) {
-    return sep::cuda::cudaMemcpyAsync(dst, src, count, kind, stream);
+   return cudaMemcpyAsync(dst, src, count, kind, reinterpret_cast<cudaStream_t>(stream));
 }
 
 } // extern "C"

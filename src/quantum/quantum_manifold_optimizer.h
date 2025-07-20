@@ -5,8 +5,8 @@
 
 #include "compat/cuda_api.hpp"
 #include "compat/cufft.h"
-#include "core/config.h"
-#include "core/types.h"
+#include "config.h"
+#include "types.h"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 
@@ -42,7 +42,7 @@ using cufftHandle = ::cufftHandle;
 #include "quantum/qbsa.h"
 #include "quantum/qfh.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "core/types.h"
+#include "types.h"
 
 #include "quantum/pattern.h"
 

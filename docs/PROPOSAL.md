@@ -122,8 +122,8 @@ Our competitive edge is not just a better model, but a fundamentally different a
 
 #### **8. Detailed Financial Projections for SEP Dynamics**
 
-Prepared by: Alexander Nagy  
-Date: July 16, 2025  
+Prepared by: Alexander Nagy
+Date: July 16, 2025
 
 **Assumptions:**
 *   Revenue from proprietary trading: Starts Year 2 with $1M initial capital. The **30% annual return target** is a conservative estimate based on the engine's **demonstrated ability (PoC #1, #5)** to identify high-coherence signals. In preliminary analysis, these signals correspond to higher-probability trade setups than those identified by traditional indicators, leading to an improved risk-adjusted return profile.

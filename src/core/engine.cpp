@@ -34,7 +34,7 @@
 #include "api/types.h"
 #include "compat/core.h"
 #include "compat/cuda_api.hpp"
-#include "compat/cuda_common.h"
+#include "compat/cuda.h"
 #include "compat/memory.h"
 #include "compat/shim.h"
 #include "compat/stream.h"

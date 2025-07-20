@@ -1,22 +1,22 @@
 cmake_minimum_required(VERSION 3.15)
 
+# Set up CUDA BEFORE project()
 option(SEP_USE_CUDA "Enable CUDA support" ON)
-
-# Add custom cmake module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if(SEP_USE_CUDA)
     # Method 1: Set via environment variable (most reliable)
-    set(ENV{CUDAHOSTCXX} "/usr/bin/gcc-14")
+    # set(ENV{CUDAHOSTCXX} "/usr/bin/clang++-15")
     
     # Method 3: Set in toolchain file
-    include(${CMAKE_SOURCE_DIR}/cmake/cuda-toolchain.cmake)
+    # include(${CMAKE_SOURCE_DIR}/cmake/cuda-override-toolchain.cmake)
+
+    # CUDA flags are now set in the nvcc_wrapper.sh to ensure correct quoting and filtering.
+    set(CMAKE_CUDA_COMPILER "${CMAKE_SOURCE_DIR}/cmake/nvcc_wrapper.sh")
+    set(CMAKE_CUDA_ARCHITECTURES 75)
 endif()
 
+# NOW call project() - CUDA will use the correct compiler
 project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -allow-unsupported-compiler")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__")
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__")
 
 # Set CMAKE_LIBRARY_PATH to help find system libraries like librt
 set(CMAKE_LIBRARY_PATH "/usr/lib;/usr/lib64")
@@ -44,15 +44,15 @@ find_package(TBB REQUIRED)
 set(benchmark_DIR "/usr/lib64/cmake/benchmark")
 find_package(benchmark REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(glm REQUIRED)
 
 # Include directories
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party
 )
 
 # Set policy for CUDA modules
-cmake_policy(SET CMP0146 NEW)
+# cmake_policy(SET CMP0146 NEW)
 
 # CUDA configuration
 if(SEP_USE_CUDA)

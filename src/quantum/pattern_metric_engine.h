@@ -3,7 +3,7 @@
 
 #include "quantum/processor.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "core/types.h"
+#include "types.h"
 #include <memory>
 #include <vector>
 #include <istream>

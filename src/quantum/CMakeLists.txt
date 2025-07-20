@@ -39,10 +39,12 @@ add_library(sep_quantum STATIC
 
 target_include_directories(sep_quantum
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
     PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        ${CMAKE_SOURCE_DIR}/src/compat
+        ${CMAKE_SOURCE_DIR}/src/quantum
+        ${CMAKE_SOURCE_DIR}/src/core
 )
 
 target_link_libraries(sep_quantum
@@ -52,7 +54,7 @@ target_link_libraries(sep_quantum
 )
 
 # Set modern CUDA policy
-cmake_policy(SET CMP0146 NEW)
+# cmake_policy(SET CMP0146 NEW)
 
 # Enable CUDA and handle exception specs
 target_compile_definitions(sep_quantum PRIVATE

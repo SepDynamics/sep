@@ -32,12 +32,12 @@ sep::api::AuthConfig createDefaultConfig()
 }
 
 // Parse command line arguments
-bool parseCmdArgs(int argc, char** argv, bool& daemon_mode, shim::string& quant_file,
-                  shim::string& output_file)
+bool parseCmdArgs(int argc, char** argv, bool& daemon_mode, std::string& quant_file,
+                  std::string& output_file)
 {
     for (int i = 1; i < argc; i++)
     {
-        shim::string arg = argv[i];
+        std::string arg = argv[i];
         if (arg == "--foreground")
         {
             daemon_mode = false;
@@ -74,8 +74,8 @@ int main(int argc, char** argv)
 {
     // Default to foreground mode
     bool daemon_mode = false;
-    shim::string quant_file;
-    shim::string output_file;
+    std::string quant_file;
+    std::string output_file;
 
     // Parse command line arguments
     if (!parseCmdArgs(argc, argv, daemon_mode, quant_file, output_file))
@@ -124,7 +124,7 @@ int main(int argc, char** argv)
             // Add patterns to DAG
             for (const auto& pattern : patterns)
             {
-                shim::vector<uint64_t> parents;  // No parents for initial patterns
+                std::vector<uint64_t> parents;  // No parents for initial patterns
 
                 // Extract position as vec3 for DAG
                 glm::vec3 pos(pattern.position.x, pattern.position.y, pattern.position.z);
@@ -148,7 +148,7 @@ int main(int argc, char** argv)
             dag.calculateAlpha();
             
             // Export results as JSON
-            shim::string result = dag.exportAsJson();
+            std::string result = dag.exportAsJson();
 
             // Add processing metadata
             nlohmann::json metadata;

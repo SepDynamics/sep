@@ -41,11 +41,11 @@ public:
     bool isStable(const glm::vec3& pattern);
     bool isQuantum(const glm::vec3& pattern);
 
-    void processPatternBits(const shim::vector<uint32_t>& pattern_bits);
+    void processPatternBits(const std::vector<uint32_t>& pattern_bits);
 
 protected:
-    shim::vector<glm::vec3> m_patterns;
-    shim::vector<uint32_t> m_pattern_bits;
+    std::vector<glm::vec3> m_patterns;
+    std::vector<uint32_t> m_pattern_bits;
     std::unique_ptr<QBSAProcessor> qbsa_processor_;
     QFHResult m_last_qfh_result;
 

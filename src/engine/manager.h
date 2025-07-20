@@ -2,7 +2,7 @@
 #define SEP_CONFIG_MANAGER_H
 
 #include "config.h"
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "memory/memory_tier_manager.hpp"
 #include "types.h"
 
@@ -25,7 +25,7 @@ public:
   const SystemConfig &getConfig() const;
   void setConfig(const SystemConfig &config);
 
-  bool loadFromFile(const sep::shim::string &filename);
+  bool loadFromFile(const sep::string &filename);
   bool loadFromEnvironment();
   bool loadFromCommandLine(int argc, char *argv[]);
 

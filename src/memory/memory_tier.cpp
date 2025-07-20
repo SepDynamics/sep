@@ -1,7 +1,5 @@
 #include "memory/memory_tier.hpp"
 
-#include <cuda_runtime.h>
-
 #include "engine/allocation_metrics.h"
 #include "engine/common.h"
 #include "engine/cuda_sep.h"
@@ -84,12 +82,20 @@ namespace sep::memory
             }
 #else
             memory_pool_ = std::malloc(config.size);
+#ifdef __CUDACC__
             cudaError_t err = memory_pool_ ? cudaSuccess : cudaErrorMemoryAllocation;
             if (err != cudaSuccess)
             {
                 auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
                 if (logger) logger->error("Failed to allocate host memory: {}", cudaGetErrorString(err));
             }
+#else
+            if (!memory_pool_)
+            {
+                auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
+                if (logger) logger->error("Failed to allocate host memory");
+            }
+#endif
 #endif
         }
         if (!memory_pool_)
@@ -270,7 +276,7 @@ namespace sep::memory
             used_space_ = 0;
     }
 
-    ::sep::SEPResult MemoryTier::defragment()
+    sep::SEPResult MemoryTier::defragment()
     {
         auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");
         if (logger)
@@ -340,7 +346,7 @@ namespace sep::memory
         // iterating over the container can invalidate references, so we build a list
         // of pointers first and then process them after the compaction step.
         MemoryTierManager &mgr = MemoryTierManager::getInstance();
-        shim::vector<MemoryBlock *> active_blocks;
+        std::vector<MemoryBlock *> active_blocks;
         for (auto &blk : blocks_)
         {
             if (blk.allocated)
@@ -368,7 +374,7 @@ namespace sep::memory
             logger->info("Tier {} fragmentation now {:.2f}", static_cast<int>(config_.type),
                          calculateFragmentation());
         }
-        return ::sep::SEPResult::SUCCESS;
+        return sep::SEPResult::SUCCESS;
     }
 
     float MemoryTier::calculateFragmentation() const

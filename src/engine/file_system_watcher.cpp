@@ -9,7 +9,7 @@ namespace core {
 
 class FileSystemWatcher::Impl {
 public:
-    Impl(const shim::string& path, std::function<void(const shim::string&)> callback)
+    Impl(const std::string& path, std::function<void(const std::string&)> callback)
         : path_(path), callback_(callback), running_(false)
     {
     }
@@ -30,13 +30,13 @@ public:
     }
 
 private:
-    shim::string path_;
-    std::function<void(const shim::string&)> callback_;
+    std::string path_;
+    std::function<void(const std::string&)> callback_;
     bool running_;
 };
 
-FileSystemWatcher::FileSystemWatcher(const shim::string& path,
-                                     std::function<void(const shim::string&)> callback)
+FileSystemWatcher::FileSystemWatcher(const std::string& path,
+                                     std::function<void(const std::string&)> callback)
     : impl_(std::make_unique<Impl>(path, callback))
 {
 }

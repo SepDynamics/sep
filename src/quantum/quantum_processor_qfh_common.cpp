@@ -149,7 +149,7 @@ bool QuantumProcessorQFHCommon::isQuantum(const glm::vec3& pattern) {
     return traditional_quantum || qfh_quantum;
 }
 
-void QuantumProcessorQFHCommon::processPatternBits(const shim::vector<uint32_t>& pattern_bits)
+void QuantumProcessorQFHCommon::processPatternBits(const std::vector<uint32_t>& pattern_bits)
 {
     m_pattern_bits = pattern_bits;
     analyzePatternBits();
@@ -163,7 +163,7 @@ void QuantumProcessorQFHCommon::analyzePatternBits() {
     options.collapse_threshold = 0.6f;
     QFHBasedProcessor qfh_processor(options);
 
-    shim::vector<uint32_t> shim_bits;
+    std::vector<uint32_t> shim_bits;
     shim_bits.reserve(m_pattern_bits.size());
     for (uint32_t v : m_pattern_bits) {
         shim_bits.push_back(v);

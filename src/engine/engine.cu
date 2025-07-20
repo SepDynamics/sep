@@ -1,4 +1,4 @@
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "macros.h"
 #if defined(__CUDACC__)
 #  include <cuda_runtime.h> // real CUDA header when available
@@ -34,7 +34,6 @@
 #include "dag_graph.h"
 #include "data_parser.h"
 #include "engine.h"
-#include "engine/shim.h"
 #include "error_handler.h"
 #include "logging.h"  // This is actually the logging manager
 #include "memory.h"
@@ -54,15 +53,15 @@ using namespace ::sep::cuda;
 
 struct Engine::Impl {
   // CPU fallback buffers
-  shim::vector<std::uint32_t> d_bitfield_;
-  shim::vector<std::uint32_t> d_probe_indices_;
-  shim::vector<std::uint32_t> d_expectations_;
-  shim::vector<std::uint32_t> d_corrections_;
-  shim::vector<std::uint32_t> d_correction_count_;
-  shim::vector<std::uint64_t> d_chunks_;
-  shim::vector<std::uint32_t> d_collapse_indices_;
-  shim::vector<std::uint32_t> d_collapse_counts_;
-  shim::vector<StateNode> state_history_;
+  std::vector<std::uint32_t> d_bitfield_;
+  std::vector<std::uint32_t> d_probe_indices_;
+  std::vector<std::uint32_t> d_expectations_;
+  std::vector<std::uint32_t> d_corrections_;
+  std::vector<std::uint32_t> d_correction_count_;
+  std::vector<std::uint64_t> d_chunks_;
+  std::vector<std::uint32_t> d_collapse_indices_;
+  std::vector<std::uint32_t> d_collapse_counts_;
+  std::vector<StateNode> state_history_;
   ::sep::config::CudaConfig config;
   bool initialized{false};
 };
@@ -142,142 +141,151 @@ Engine::~Engine() {
 #endif
 }
 
-void Engine::generate_probes(const shim::vector<::sep::PinState> &inputs,
-                             shim::vector<std::uint32_t> &probe_indices,
-                             shim::vector<std::uint32_t> &expectations,
-                             std::uint64_t tick) {
-  if (inputs.empty()) {
-    ::sep::core::ErrorHandler::instance().reportError(
-        {sep::SEPResult::INVALID_ARGUMENT, "No input states",
-         "Engine::generate_probes"});
-    return;
-  }
-
-  probe_indices.clear();
-  expectations.clear();
-  probe_indices.reserve(inputs.size());
-  expectations.reserve(inputs.size());
-
-  // Convert each input state to probe indices and expectations
-  for (size_t i = 0; i < inputs.size(); ++i) {
-    const auto &pin_state = inputs[i];
-
-    // Generate probe index based on pin state and current tick
-    std::uint32_t probe_idx =
-        static_cast<std::uint32_t>((pin_state.pin_id + tick) % DEFAULT_SIZE);
-    probe_indices.push_back(probe_idx);
-
-    // Calculate expected value based on pin state and coherence
-    std::uint32_t expected = static_cast<std::uint32_t>(
-        pin_state.value * pin_state.coherence * 1000.f);
-    expectations.push_back(expected);
-  }
-
-  // Ensure device buffers are properly sized
-  if (impl_->d_bitfield_.size() < inputs.size()) {
-    impl_->d_bitfield_.resize(inputs.size());
-  }
-  if (impl_->d_corrections_.size() < inputs.size()) {
-    impl_->d_corrections_.resize(inputs.size());
-  }
-  if (impl_->d_correction_count_.size() < 1) {
-    impl_->d_correction_count_.resize(1);
-  }
-  if (impl_->d_collapse_indices_.size() < inputs.size()) {
-    impl_->d_collapse_indices_.resize(inputs.size());
-  }
-  if (impl_->d_collapse_counts_.size() < inputs.size()) {
-    impl_->d_collapse_counts_.resize(inputs.size());
-  }
-  if (impl_->d_chunks_.size() < inputs.size()) {
-    impl_->d_chunks_.resize(inputs.size());
-  }
-
-  // Initialize device buffers
-  std::fill(impl_->d_bitfield_.begin(), impl_->d_bitfield_.end(), 0);
-  std::fill(impl_->d_corrections_.begin(), impl_->d_corrections_.end(), 0);
-  impl_->d_correction_count_[0] = 0;
-  std::fill(impl_->d_collapse_indices_.begin(),
-            impl_->d_collapse_indices_.end(), 0);
-  std::fill(impl_->d_collapse_counts_.begin(), impl_->d_collapse_counts_.end(),
-            0);
-  std::fill(impl_->d_chunks_.begin(), impl_->d_chunks_.end(), 0);
-}
-
-void Engine::process_batch(const shim::vector<::sep::PinState> &inputs,
-                           std::uint64_t tick,
-                           ::sep::quantum::QBSAResult &qbsa_result,
-                           ::sep::cuda::QSHResult &qsh_result) {
-  // Input validation
-  if (inputs.empty()) {
-    ::sep::core::ErrorHandler::instance().reportError(
-        {sep::SEPResult::INVALID_ARGUMENT, "No input states",
-         "Engine::process_batch"});
-    return;
-  }
-
-  if (inputs.size() > DEFAULT_SIZE) {
-    ::sep::core::ErrorHandler::instance().reportError(
-        {sep::SEPResult::INVALID_ARGUMENT, "Batch too large",
-         "Engine::process_batch"});
-    return;
-  }
-
-  // Initialize result structures
-  qbsa_result.corrections.clear();
-  qbsa_result.correction_ratio = 0.0f;
-  qbsa_result.collapse_detected = false;
-
-  qsh_result.collapse_indices.assign(inputs.size(), {});
-  qsh_result.collapse_counts.assign(inputs.size(), 0);
-  qsh_result.total_collapses = 0;
-  qsh_result.total_states = inputs.size();
-
-  try {
-    // Generate probes from inputs
-    shim::vector<std::uint32_t> probe_indices;
-    shim::vector<std::uint32_t> expectations;
-    generate_probes(inputs, probe_indices, expectations, tick);
-
-    // CPU fallback when CUDA is unavailable
-    sep::quantum::QBSAProcessor cpu_proc;
-    qbsa_result = cpu_proc.analyze(probe_indices, expectations);
-    qbsa_result.collapse_detected =
-        cpu_proc.detectCollapse(qbsa_result, inputs.size());
-
-    // No CUDA results to copy when using CPU path
-
-    // Update state history
-    StateNode node;
-    node.tick = tick;
-    node.coherence = 1.0f - qbsa_result.correction_ratio;
-    node.rupture = qbsa_result.collapse_detected;
-    if (!impl_->state_history_.empty()) {
-      node.parents.push_back(impl_->state_history_.size() - 1);
+void Engine::generate_probes(const std::vector<sep::PinState> &inputs,
+                             std::vector<std::uint32_t> &probe_indices,
+                             std::vector<std::uint32_t> &expectations, std::uint64_t tick)
+{
+    if (inputs.empty())
+    {
+        ::sep::core::ErrorHandler::instance().reportError(
+            {sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::generate_probes"});
+        return;
     }
-    impl_->state_history_.push_back(node);
 
-  } catch (const std::exception &e) {
-    ::sep::core::ErrorHandler::instance().reportError(
-        {sep::SEPResult::PROCESSING_ERROR, e.what(), "Engine::process_batch"});
-    return;
+    probe_indices.clear();
+    expectations.clear();
+    probe_indices.reserve(inputs.size());
+    expectations.reserve(inputs.size());
+
+    // Convert each input state to probe indices and expectations
+    for (size_t i = 0; i < inputs.size(); ++i)
+    {
+        const auto &pin_state = inputs[i];
+
+        // Generate probe index based on pin state and current tick
+        std::uint32_t probe_idx =
+            static_cast<std::uint32_t>((pin_state.pin_id + tick) % DEFAULT_SIZE);
+        probe_indices.push_back(probe_idx);
+
+        // Calculate expected value based on pin state and coherence
+        std::uint32_t expected =
+            static_cast<std::uint32_t>(pin_state.value * pin_state.coherence * 1000.f);
+        expectations.push_back(expected);
+    }
+
+    // Ensure device buffers are properly sized
+    if (impl_->d_bitfield_.size() < inputs.size())
+    {
+        impl_->d_bitfield_.resize(inputs.size());
+    }
+    if (impl_->d_corrections_.size() < inputs.size())
+    {
+        impl_->d_corrections_.resize(inputs.size());
+    }
+    if (impl_->d_correction_count_.size() < 1)
+    {
+        impl_->d_correction_count_.resize(1);
+    }
+    if (impl_->d_collapse_indices_.size() < inputs.size())
+    {
+        impl_->d_collapse_indices_.resize(inputs.size());
+    }
+    if (impl_->d_collapse_counts_.size() < inputs.size())
+    {
+        impl_->d_collapse_counts_.resize(inputs.size());
+    }
+    if (impl_->d_chunks_.size() < inputs.size())
+    {
+        impl_->d_chunks_.resize(inputs.size());
+    }
+
+    // Initialize device buffers
+    std::fill(impl_->d_bitfield_.begin(), impl_->d_bitfield_.end(), 0);
+    std::fill(impl_->d_corrections_.begin(), impl_->d_corrections_.end(), 0);
+    impl_->d_correction_count_[0] = 0;
+    std::fill(impl_->d_collapse_indices_.begin(), impl_->d_collapse_indices_.end(), 0);
+    std::fill(impl_->d_collapse_counts_.begin(), impl_->d_collapse_counts_.end(), 0);
+    std::fill(impl_->d_chunks_.begin(), impl_->d_chunks_.end(), 0);
+}
+
+void Engine::process_batch(const std::vector<sep::PinState> &inputs, std::uint64_t tick,
+                           ::sep::quantum::QBSAResult &qbsa_result,
+                           ::sep::cuda::QSHResult &qsh_result)
+{
+    // Input validation
+    if (inputs.empty())
+    {
+        ::sep::core::ErrorHandler::instance().reportError(
+            {sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::process_batch"});
+        return;
+    }
+
+    if (inputs.size() > DEFAULT_SIZE)
+    {
+        ::sep::core::ErrorHandler::instance().reportError(
+            {sep::SEPResult::INVALID_ARGUMENT, "Batch too large", "Engine::process_batch"});
+        return;
+    }
+
+    // Initialize result structures
+    qbsa_result.corrections.clear();
+    qbsa_result.correction_ratio = 0.0f;
+    qbsa_result.collapse_detected = false;
+
+    qsh_result.collapse_indices.assign(inputs.size(), {});
+    qsh_result.collapse_counts.assign(inputs.size(), 0);
+    qsh_result.total_collapses = 0;
+    qsh_result.total_states = inputs.size();
+
+    try
+    {
+        // Generate probes from inputs
+        std::vector<std::uint32_t> probe_indices;
+        std::vector<std::uint32_t> expectations;
+        generate_probes(inputs, probe_indices, expectations, tick);
+
+        // CPU fallback when CUDA is unavailable
+        sep::quantum::QBSAProcessor cpu_proc;
+        qbsa_result = cpu_proc.analyze(probe_indices, expectations);
+        qbsa_result.collapse_detected = cpu_proc.detectCollapse(qbsa_result, inputs.size());
+
+        // No CUDA results to copy when using CPU path
+
+        // Update state history
+        StateNode node;
+        node.tick = tick;
+        node.coherence = 1.0f - qbsa_result.correction_ratio;
+        node.rupture = qbsa_result.collapse_detected;
+        if (!impl_->state_history_.empty())
+        {
+            node.parents.push_back(impl_->state_history_.size() - 1);
+        }
+        impl_->state_history_.push_back(node);
+    } catch (const std::exception &e) {
+      ::sep::core::ErrorHandler::instance().reportError(
+          {sep::SEPResult::PROCESSING_ERROR, e.what(), "Engine::process_batch"});
+      return;
   }
 }
 
-const shim::vector<Engine::StateNode> &Engine::getStateHistory() const noexcept {
-  return impl_->state_history_;
+const std::vector<Engine::StateNode> &Engine::getStateHistory() const noexcept
+{
+    return impl_->state_history_;
 }
 
-shim::vector<float> Engine::getCoherenceHistory() const {
-  shim::vector<float> history;
-  history.reserve(impl_->state_history_.size());
-  for (const auto &n : impl_->state_history_) {
-    history.push_back(n.coherence);
-  }
-  return history;
+std::vector<float> Engine::getCoherenceHistory() const
+{
+    std::vector<float> history;
+    history.reserve(impl_->state_history_.size());
+    for (const auto &n : impl_->state_history_)
+    {
+        history.push_back(n.coherence);
+    }
+    return history;
 }
 
-void Engine::ingestFile(const shim::string& dataPath, bool legacy) {
+void Engine::ingestFile(const std::string &dataPath, bool legacy)
+{
     metrics_collector_.increment("files_ingested");
     if (legacy) {
         DataParser parser;
@@ -299,8 +307,9 @@ void Engine::ingestFile(const shim::string& dataPath, bool legacy) {
     }
 }
 
-void Engine::ingestFromDirectory(const shim::string& dirPath, bool recursive) {
-    shim::vector<shim::string> filePaths;
+void Engine::ingestFromDirectory(const std::string &dirPath, bool recursive)
+{
+    std::vector<std::string> filePaths;
     if (recursive) {
         for (const auto& entry : std::filesystem::recursive_directory_iterator(dirPath)) {
             if (entry.is_regular_file()) {
@@ -337,7 +346,7 @@ void Engine::ingestFromStream(std::istream& stream) {
     pattern_metric_engine_.evolvePatterns();
 }
 
-shim::string Engine::processQuantData(const shim::string &dataPath, bool useGPU)
+std::string Engine::processQuantData(const std::string &dataPath, bool useGPU)
 {
     try
     {
@@ -379,15 +388,16 @@ shim::string Engine::processQuantData(const shim::string &dataPath, bool useGPU)
         // Add patterns to DAG
         for (const auto &pattern : patterns)
         {
-            shim::vector<uint64_t> parents;  // No parents for initial patterns
+            std::vector<uint64_t> parents;  // No parents for initial patterns
 
             // Extract position as vec3 for DAG
             glm::vec3 pos(pattern.position.x, pattern.position.y, pattern.position.z);
 
             // Add to DAG with market data if available
-            if (!pattern.data.empty())
+            // Use attributes[0] as volume data if available
+            if (pattern.data.size > 0)
             {
-                float volume = pattern.data[0];
+                float volume = pattern.data.attributes[0];
                 dag.addMarketDataNode(pos, pattern.coherence, pattern.position.w, 0.0f, volume,
                                       parents);
             }
@@ -403,7 +413,7 @@ shim::string Engine::processQuantData(const shim::string &dataPath, bool useGPU)
         dag.calculateAlpha();
 
         // Export results as JSON
-        shim::string result = dag.exportAsJson();
+        std::string result = dag.exportAsJson();
 
         // Add processing metadata
         nlohmann::json metadata;

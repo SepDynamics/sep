@@ -51,16 +51,16 @@ void *Manager::getTracer() {
 #endif
 }
 
-std::shared_ptr<spdlog::logger> Manager::createLogger(const shim::string &name,
+std::shared_ptr<spdlog::logger> Manager::createLogger(const std::string &name,
                                                       const LoggerConfig &config)
 {
-    auto logger = spdlog::get(name);
+    auto logger = spdlog::get(name.c_str());
     if (logger && !logger->sinks().empty())
     {
         return logger;
     }
 
-    shim::vector<spdlog::sink_ptr> sinks;
+    std::vector<spdlog::sink_ptr> sinks;
 
     if (config.console.enabled)
     {
@@ -72,30 +72,30 @@ std::shared_ptr<spdlog::logger> Manager::createLogger(const shim::string &name,
     if (!config.file.path.empty())
     {
         auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-            config.file.path, config.file.max_size, config.file.max_files);
+            config.file.path.c_str(), config.file.max_size, config.file.max_files);
         file_sink->set_level(toSpdLogLevel(config.level));
         sinks.push_back(file_sink);
     }
 
-    logger = std::make_shared<spdlog::logger>(name, sinks.begin(), sinks.end());
+    logger = std::make_shared<spdlog::logger>(name.c_str(), sinks.begin(), sinks.end());
     logger->set_level(toSpdLogLevel(config.level));
     if (!config.pattern.empty())
     {
-        logger->set_pattern(config.pattern);
+        logger->set_pattern(config.pattern.c_str());
     }
     spdlog::register_logger(logger);
 
     return logger;
 }
 
-std::shared_ptr<spdlog::logger> Manager::getLogger(const shim::string &name)
+std::shared_ptr<spdlog::logger> Manager::getLogger(const std::string &name)
 {
-    return spdlog::get(name);
+    return spdlog::get(name.c_str());
 }
 
 void Manager::setGlobalLevel(Level level) { spdlog::set_level(toSpdLogLevel(level)); }
 
-Level Manager::levelFromString(const shim::string &level)
+Level Manager::levelFromString(const std::string &level)
 {
     if (level == "trace") return Level::TRACE;
     if (level == "debug") return Level::DEBUG;
@@ -106,7 +106,7 @@ Level Manager::levelFromString(const shim::string &level)
     return Level::INFO;
 }
 
-shim::string Manager::levelToString(Level level)
+std::string Manager::levelToString(Level level)
 {
     switch (level)
     {

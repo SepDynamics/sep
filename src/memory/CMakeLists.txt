@@ -11,3 +11,9 @@ add_sep_library(sep_memory
         Threads::Threads
         TBB::tbb
 )
+
+target_include_directories(sep_memory PUBLIC
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/engine
+    $<TARGET_PROPERTY:sep_engine,INTERFACE_INCLUDE_DIRECTORIES>
+)

@@ -29,7 +29,8 @@ add_sep_library(sep_engine
 
 target_include_directories(sep_engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/engine
 )
 
 if(MSVC)

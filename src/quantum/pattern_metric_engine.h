@@ -19,7 +19,7 @@ struct PatternMetrics {
     float coherence{0.0f}; ///< Measure of the pattern's internal consistency.
     float stability{0.0f}; ///< Measure of how resistant the pattern is to change.
     float entropy{0.0f};   ///< Measure of the pattern's complexity and randomness.
-    shim::vector<PatternRelationship> relationships;  ///< Relationships to other patterns.
+    std::vector<PatternRelationship> relationships;  ///< Relationships to other patterns.
 };
 
 /**
@@ -41,7 +41,7 @@ struct PatternMetrics {
  *     PatternMetricEngine engine;
  *     engine.init(nullptr); // Initialize for CPU operation
  *
- *     shim::vector<uint8_t> my_data = { ... };
+ *     std::vector<uint8_t> my_data = { ... };
  *     engine.ingestData(my_data.data(), my_data.size());
  *     engine.evolvePatterns();
  *
@@ -65,7 +65,7 @@ public:
     /// @brief Initializes the engine and its quantum processing components.
     /// @param ctx A pointer to the GPU context, or `nullptr` for CPU-only operation.
     /// @return SEPResult::SUCCESS on success.
-    SEPResult init(quantum::GPUContext* ctx) override;
+    sep::SEPResult init(quantum::GPUContext* ctx) override;
 
     /// @brief Ingests a block of data from a raw byte pointer.
     /// @param data Pointer to the data buffer.
@@ -78,11 +78,11 @@ public:
 
     /// @brief Ingests a file by reading it in chunks. Suitable for large files.
     /// @param filepath Path to the file to be ingested.
-    void ingestFile(const shim::string& filepath);
+    void ingestFile(const std::string& filepath);
 
     /// @brief Ingests a file using memory-mapped I/O.
     /// @param filepath Path to the file to be ingested.
-    void ingestMappedFile(const shim::string& filepath);
+    void ingestMappedFile(const std::string& filepath);
 
     /// @brief Processes the ingested data to identify and evolve patterns.
     void evolvePatterns() override;
@@ -98,11 +98,11 @@ public:
 
     /// @brief Computes metrics for the currently identified patterns.
     /// @return A vector of PatternMetrics structs.
-    shim::vector<PatternMetrics> computeMetrics();
+    std::vector<PatternMetrics> computeMetrics();
 
     /// @brief Gets the current patterns.
     /// @return A vector of PatternData structs.
-    const shim::vector<compat::PatternData>& getPatterns() const;
+    const std::vector<compat::PatternData>& getPatterns() const;
 
 private:
     /**
@@ -119,19 +119,19 @@ private:
      * @param size Size of the data in bytes.
      * @return A vector of extracted patterns.
      */
-    shim::vector<compat::PatternData> extractPatternsFromBytes(const uint8_t* data, size_t size);
+    std::vector<compat::PatternData> extractPatternsFromBytes(const uint8_t* data, size_t size);
     void processBuffer(bool is_final_chunk = false);
     
     // Quantum processing components
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
     
     // Internal pattern storage
-    shim::vector<compat::PatternData> current_patterns_;
-    shim::vector<PatternMetrics> current_metrics_;
+    std::vector<compat::PatternData> current_patterns_;
+    std::vector<PatternMetrics> current_metrics_;
 
     // Thread safety and streaming
     std::mutex engine_mutex_;
-    shim::vector<uint8_t> stream_buffer_;
+    std::vector<uint8_t> stream_buffer_;
 };
 
 } // namespace sep::quantum

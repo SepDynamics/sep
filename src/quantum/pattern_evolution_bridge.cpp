@@ -14,7 +14,7 @@ class PatternEvolutionBridge::Impl {
 public:
     explicit Impl(const PatternEvolutionBridge::Config& config) : config_(config) {}
 
-    void updateCoherenceMatrix(shim::vector<Pattern>& patterns)
+    void updateCoherenceMatrix(std::vector<Pattern>& patterns)
     {
         // Update each pattern's quantum state in-place
         for (auto& pattern : patterns) {
@@ -22,7 +22,7 @@ public:
         }
     }
 
-    EvolutionResult evolvePatterns(shim::vector<Pattern>& patterns, float time_step)
+    EvolutionResult evolvePatterns(std::vector<Pattern>& patterns, float time_step)
     {
         EvolutionResult result;
         result.evolved_patterns.reserve(patterns.size());
@@ -41,9 +41,9 @@ public:
         return result;
     }
 
-    shim::vector<EntanglementPair> computeEntanglements(const shim::vector<Pattern>& patterns)
+    std::vector<EntanglementPair> computeEntanglements(const std::vector<Pattern>& patterns)
     {
-        shim::vector<EntanglementPair> pairs;
+        std::vector<EntanglementPair> pairs;
 
         // Compare each pattern pair
         for (size_t i = 0; i < patterns.size(); ++i) {
@@ -58,15 +58,15 @@ public:
         return pairs;
     }
 
-    CollapseEvent detectCollapse(const shim::vector<Pattern>& patterns)
+    CollapseEvent detectCollapse(const std::vector<Pattern>& patterns)
     {
         // Initialize with aggregate initialization
         CollapseEvent event = {
-            false,                        // detected
-            glm::vec4(0.0f),              // collapse_center
-            0.0f,                         // affected_radius
-            0.0f,                         // severity
-            shim::vector<shim::string>{}  // collapsed_pattern_ids
+            false,                      // detected
+            glm::vec4(0.0f),            // collapse_center
+            0.0f,                       // affected_radius
+            0.0f,                       // severity
+            std::vector<std::string>{}  // collapsed_pattern_ids
         };
 
         // Calculate variance in quantum states
@@ -96,29 +96,29 @@ private:
         return evolved;
     }
 
-    float calculateTotalCoherence(const shim::vector<Pattern>& patterns) const
+    float calculateTotalCoherence(const std::vector<Pattern>& patterns) const
     {
         return std::accumulate(patterns.begin(), patterns.end(), 0.0f,
             [](float sum, const Pattern& p) { return sum + p.quantum_state.coherence; }
         ) / patterns.size();
     }
 
-    float calculateEntropyChange(const shim::vector<Pattern>& before,
-                                 const shim::vector<Pattern>& after) const
+    float calculateEntropyChange(const std::vector<Pattern>& before,
+                                 const std::vector<Pattern>& after) const
     {
         float entropy_before = calculateEntropy(before);
         float entropy_after = calculateEntropy(after);
         return entropy_after - entropy_before;
     }
 
-    float calculateEntropy(const shim::vector<Pattern>& patterns) const
+    float calculateEntropy(const std::vector<Pattern>& patterns) const
     {
         return std::accumulate(patterns.begin(), patterns.end(), 0.0f,
             [](float sum, const Pattern& p) { return sum + p.quantum_state.entropy; }
         );
     }
 
-    float calculateStabilityMetric(const shim::vector<Pattern>& patterns) const
+    float calculateStabilityMetric(const std::vector<Pattern>& patterns) const
     {
         return std::accumulate(patterns.begin(), patterns.end(), 0.0f,
             [](float sum, const Pattern& p) { return sum + p.quantum_state.stability; }
@@ -133,7 +133,7 @@ private:
         return std::abs(p1.quantum_state.phase - p2.quantum_state.phase);
     }
 
-    float calculateStateVariance(const shim::vector<Pattern>& patterns) const
+    float calculateStateVariance(const std::vector<Pattern>& patterns) const
     {
         float mean_coherence = calculateTotalCoherence(patterns);
         float variance = 0.0f;
@@ -144,7 +144,7 @@ private:
         return variance / patterns.size();
     }
 
-    glm::vec4 calculateCollapseCenter(const shim::vector<Pattern>& patterns) const
+    glm::vec4 calculateCollapseCenter(const std::vector<Pattern>& patterns) const
     {
         glm::vec4 center(0.0f);
         for (const auto& pattern : patterns) {
@@ -153,7 +153,7 @@ private:
         return center / static_cast<float>(patterns.size());
     }
 
-    float calculateAffectedRadius(const shim::vector<Pattern>& patterns,
+    float calculateAffectedRadius(const std::vector<Pattern>& patterns,
                                   const glm::vec4& center) const
     {
         float max_distance = 0.0f;
@@ -164,10 +164,10 @@ private:
         return max_distance;
     }
 
-    shim::vector<shim::string> identifyCollapsedPatterns(const shim::vector<Pattern>& patterns,
-                                                         const CollapseEvent& event) const
+    std::vector<std::string> identifyCollapsedPatterns(const std::vector<Pattern>& patterns,
+                                                       const CollapseEvent& event) const
     {
-        shim::vector<shim::string> collapsed;
+        std::vector<std::string> collapsed;
         for (const auto& pattern : patterns) {
             float distance = glm::length(pattern.position - event.collapse_center);
             if (distance <= event.affected_radius) {
@@ -188,24 +188,24 @@ PatternEvolutionBridge::PatternEvolutionBridge(const Config& config)
 PatternEvolutionBridge::~PatternEvolutionBridge() = default;
 
 // Public method implementations
-EvolutionResult PatternEvolutionBridge::evolvePatterns(shim::vector<Pattern>& patterns,
+EvolutionResult PatternEvolutionBridge::evolvePatterns(std::vector<Pattern>& patterns,
                                                        float time_step)
 {
     return impl_->evolvePatterns(patterns, time_step);
 }
 
-shim::vector<EntanglementPair> PatternEvolutionBridge::computeEntanglements(
-    const shim::vector<Pattern>& patterns)
+std::vector<EntanglementPair> PatternEvolutionBridge::computeEntanglements(
+    const std::vector<Pattern>& patterns)
 {
     return impl_->computeEntanglements(patterns);
 }
 
-CollapseEvent PatternEvolutionBridge::detectCollapse(const shim::vector<Pattern>& patterns)
+CollapseEvent PatternEvolutionBridge::detectCollapse(const std::vector<Pattern>& patterns)
 {
     return impl_->detectCollapse(patterns);
 }
 
-void PatternEvolutionBridge::updatePatterns(shim::vector<Pattern>& patterns)
+void PatternEvolutionBridge::updatePatterns(std::vector<Pattern>& patterns)
 {
     impl_->updateCoherenceMatrix(patterns);
 }

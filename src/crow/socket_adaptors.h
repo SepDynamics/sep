@@ -20,7 +20,7 @@
 
 #include "crow/asio_isolation.h"
 #include "crow/logging.h"
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #ifdef CROW_ENABLE_SSL
 #include <boost/asio/ssl.hpp>
 #endif

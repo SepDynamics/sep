@@ -25,9 +25,9 @@ struct routing_params
 #ifdef __cplusplus
 namespace crow
 {
-    // Use shim::string directly
-    using string = shim::string;
-    using crow_string = shim::string;
+    // Use std::string directly
+    using string = std::string;
+    using crow_string = std::string;
 
     enum class HTTPMethod
     {
@@ -73,13 +73,13 @@ namespace crow
     class request {
     public:
         HTTPMethod method;
-        shim::string url;
-        shim::string body;
-        std::map<shim::string, shim::string> headers;
+        std::string url;
+        std::string body;
+        std::map<std::string, std::string> headers;
 
         request() : method(HTTPMethod::GET) {}
 
-        const char* get_header_value(const shim::string& key) const
+        const char* get_header_value(const std::string& key) const
         {
             auto it = headers.find(key);
             if (it != headers.end()) return it->second.c_str();
@@ -95,23 +95,17 @@ namespace crow
     public:
         int code;
         int status;
-        shim::string body;
-        std::map<shim::string, shim::string> headers;
+        std::string body;
+        std::map<std::string, std::string> headers;
 
         response() : code(200), status(200) {}
         explicit response(int c) : code(c), status(c) {}
 
-        void set_header(const shim::string& key, const shim::string& value)
-        {
-            headers[key] = value;
-        }
+        void set_header(const std::string& key, const std::string& value) { headers[key] = value; }
 
-        void add_header(const shim::string& key, const shim::string& value)
-        {
-            headers[key] = value;
-        }
+        void add_header(const std::string& key, const std::string& value) { headers[key] = value; }
 
-        void write(const shim::string& data) { body += data; }
+        void write(const std::string& data) { body += data; }
 
         void end() {}
     };
@@ -210,7 +204,7 @@ namespace crow
         };
 
         // Method to create a route
-        RouteHandler route_dynamic(const shim::string& url)
+        RouteHandler route_dynamic(const std::string& url)
         {
             (void)url;  // Avoid unused parameter warning
             return RouteHandler();

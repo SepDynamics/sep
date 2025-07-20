@@ -19,7 +19,7 @@ namespace crow {
 // used during CUDA compilation to avoid heavy template instantiation.
 
 // Include our own headers
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 // Define CROW_LIKELY and CROW_UNLIKELY if not already defined
 #ifndef CROW_LIKELY
@@ -36,7 +36,7 @@ namespace crow
  {
     const char cr = '\r';
     const char lf = '\n';
-    const sep::shim::string crlf("\r\n");
+    const sep::string crlf("\r\n");
 
     // Stub implementation for HTTP methods
     // IMPORTANT: Use uppercase names to match the original Crow implementation
@@ -87,7 +87,8 @@ namespace crow
         InternalMethodCount,
     };
 
-    inline sep::shim::string method_name(HTTPMethod method) {
+    inline sep::string method_name(HTTPMethod method)
+    {
         switch (method) {
             case HTTPMethod::GET:
                 return "GET";

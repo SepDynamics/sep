@@ -1,7 +1,8 @@
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# This is handled by target_include_directories in the subdirectories
+# include_directories(
+#     ${CMAKE_CURRENT_SOURCE_DIR}
+# )
 
 
 

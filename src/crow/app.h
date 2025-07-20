@@ -16,7 +16,7 @@ inline Crow<Middlewares...>* make_app() {
 
 // Convenience wrapper around Crow::route_dynamic.
 template <typename... Middlewares>
-inline auto route(Crow<Middlewares...>* app, const shim::string& url)
+inline auto route(Crow<Middlewares...>* app, const std::string& url)
 {
     return app->route_dynamic(url);
 }

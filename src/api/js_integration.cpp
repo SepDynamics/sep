@@ -1,7 +1,7 @@
 #include "api/js_integration.h"
 
 #include <cstring>
-#include <string>  // For shim::string
+#include <string>  // For std::string
 #include <string>
 
 #include "api/bridge.h"
@@ -9,11 +9,11 @@
 
 namespace sep::api {
 
-    shim::string JSIntegration::processContextCheck(const shim::string& context_json,
-                                                    const shim::string& layer)
+    std::string JSIntegration::processContextCheck(const std::string& context_json,
+                                                   const std::string& layer)
     {
         size_t buffer_size = initial_buffer_size;
-        shim::string result_buffer(buffer_size, '\0');
+        std::string result_buffer(buffer_size, '\0');
         int ret_code;
 
         do
@@ -40,7 +40,7 @@ namespace sep::api {
         {
             char error_buffer[1024] = {0};
             sep_bridge_get_last_error(error_buffer, sizeof(error_buffer));
-            return shim::string("{\"error\":\"") + error_buffer + "\"}";  // Use shim::string
+            return std::string("{\"error\":\"") + error_buffer + "\"}";  // Use std::string
         }
 
         // Trim to actual content length

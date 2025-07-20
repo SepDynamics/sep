@@ -45,7 +45,7 @@ inline float deterministicNoise(uint64_t& state)
                 return result;
             }
 
-            shim::vector<std::pair<shim::string, float>> fitness_scores;
+            std::vector<std::pair<std::string, float>> fitness_scores;
             for (const auto& pattern : patterns)
             {
                 fitness_scores.push_back(std::make_pair(pattern.id, calculateFitness(pattern)));
@@ -53,14 +53,14 @@ inline float deterministicNoise(uint64_t& state)
             std::sort(fitness_scores.begin(), fitness_scores.end(),
                       [](const auto& a, const auto& b) { return a.second > b.second; });
 
-            shim::vector<shim::string> elite_ids;
+            std::vector<std::string> elite_ids;
             size_t elite_count = std::min(params.elite_count, patterns.size());
             for (size_t i = 0; i < elite_count; ++i)
             {
                 elite_ids.push_back(fitness_scores[i].first);
             }
 
-            shim::vector<shim::string> next_generation_ids = elite_ids;
+            std::vector<std::string> next_generation_ids = elite_ids;
             while (next_generation_ids.size() < patterns.size())
             {
                 auto parent_ids = tournamentSelection(params.tournament_size, 2);
@@ -89,7 +89,7 @@ inline float deterministicNoise(uint64_t& state)
             for (const auto& pattern : patterns)
             {
                 if (std::find(next_generation_ids.begin(), next_generation_ids.end(),
-                              shim::string(pattern.id.c_str())) == next_generation_ids.end())
+                              std::string(pattern.id.c_str())) == next_generation_ids.end())
                 {
                     processor_->removePattern(pattern.id);
                 }
@@ -134,7 +134,7 @@ inline float deterministicNoise(uint64_t& state)
 
             if (!parent1.data.empty() && !parent2.data.empty())
             {
-                size_t size = std::min(parent1.data.size(), parent2.data.size());
+                size_t size = std::min(parent1.data.get_size(), parent2.data.get_size());
                 child.data.resize(size);
                 for (size_t i = 0; i < size; ++i)
                 {
@@ -166,10 +166,10 @@ inline float deterministicNoise(uint64_t& state)
             return mutated;
         }
 
-        shim::vector<shim::string> selectElite(size_t count)
+        std::vector<std::string> selectElite(size_t count)
         {
             auto patterns = processor_->getPatterns();
-            shim::vector<std::pair<shim::string, float>> fitness_scores;
+            std::vector<std::pair<std::string, float>> fitness_scores;
             for (const auto& pattern : patterns)
             {
                 fitness_scores.push_back(std::make_pair(pattern.id, calculateFitness(pattern)));
@@ -177,7 +177,7 @@ inline float deterministicNoise(uint64_t& state)
             std::sort(fitness_scores.begin(), fitness_scores.end(),
                       [](const auto& a, const auto& b) { return a.second > b.second; });
 
-            shim::vector<shim::string> elite_ids;
+            std::vector<std::string> elite_ids;
             count = std::min(count, fitness_scores.size());
             for (size_t i = 0; i < count; ++i)
             {
@@ -186,15 +186,15 @@ inline float deterministicNoise(uint64_t& state)
             return elite_ids;
         }
 
-        shim::vector<shim::string> tournamentSelection(size_t tournament_size, size_t num_winners)
+        std::vector<std::string> tournamentSelection(size_t tournament_size, size_t num_winners)
         {
             auto patterns = processor_->getPatterns();
             if (patterns.empty()) return {};
 
-            shim::vector<shim::string> winners;
+            std::vector<std::string> winners;
             for (size_t w = 0; w < num_winners; ++w)
             {
-                shim::vector<std::pair<shim::string, float>> tournament;
+                std::vector<std::pair<std::string, float>> tournament;
                 for (size_t i = 0; i < tournament_size; ++i)
                 {
                     size_t idx = nextIndex(patterns.size());
@@ -208,12 +208,12 @@ inline float deterministicNoise(uint64_t& state)
             return winners;
         }
 
-        shim::vector<shim::string> rouletteWheelSelection(size_t count)
+        std::vector<std::string> rouletteWheelSelection(size_t count)
         {
             auto patterns = processor_->getPatterns();
             if (patterns.empty()) return {};
 
-            shim::vector<float> fitness_values;
+            std::vector<float> fitness_values;
             float total_fitness = 0.0f;
             for (const auto& pattern : patterns)
             {
@@ -222,7 +222,7 @@ inline float deterministicNoise(uint64_t& state)
                 total_fitness += fitness;
             }
 
-            shim::vector<shim::string> selected;
+            std::vector<std::string> selected;
 
             for (size_t i = 0; i < count; ++i)
             {
@@ -255,7 +255,7 @@ inline float deterministicNoise(uint64_t& state)
             return glm::clamp(fitness, 0.0f, 1.0f);
         }
 
-        float calculateDiversity(const shim::vector<Pattern>& patterns) const
+        float calculateDiversity(const std::vector<Pattern>& patterns) const
         {
             if (patterns.size() < 2) return 1.0f;
             float total_distance = 0.0f;
@@ -275,7 +275,7 @@ inline float deterministicNoise(uint64_t& state)
         void setParams(const EvolutionParams& params) { params_ = params; }
         EvolutionParams getParams() const { return params_; }
         EvolutionStats getStats() const { return current_stats_; }
-        shim::vector<EvolutionStats> getHistory() const { return stats_history_; }
+        std::vector<EvolutionStats> getHistory() const { return stats_history_; }
 
     private:
         float calculatePatternDiversity(const Pattern& pattern) const
@@ -305,14 +305,14 @@ inline float deterministicNoise(uint64_t& state)
             return (pos_distance + state_distance) * 0.5f;
         }
 
-        void updateStats(const shim::vector<Pattern>& patterns)
+        void updateStats(const std::vector<Pattern>& patterns)
         {
             EvolutionStats stats;
             stats.generation_number = generation_number_;
             stats.population_size = patterns.size();
             if (!patterns.empty())
             {
-                shim::vector<float> fitness_values;
+                std::vector<float> fitness_values;
                 for (const auto& pattern : patterns)
                 {
                     fitness_values.push_back(calculateFitness(pattern));
@@ -330,7 +330,7 @@ inline float deterministicNoise(uint64_t& state)
             stats_history_.push_back(stats);
         }
 
-        shim::string generatePatternId() const
+        std::string generatePatternId() const
         {
             static std::atomic<uint64_t> counter{0};
             return "evo_pat_" + std::to_string(getCurrentTimestamp()) + "_" +
@@ -356,7 +356,7 @@ inline float deterministicNoise(uint64_t& state)
         size_t generation_number_;
         uint64_t noise_state_;
         EvolutionStats current_stats_;
-        shim::vector<EvolutionStats> stats_history_;
+        std::vector<EvolutionStats> stats_history_;
     };
 
     EvolutionEngine::EvolutionEngine(sep::quantum::Processor* processor)
@@ -377,16 +377,16 @@ inline float deterministicNoise(uint64_t& state)
         return impl_->crossover(parent1, parent2);
     }
     Pattern EvolutionEngine::mutate(const Pattern& pattern) { return impl_->mutate(pattern); }
-    shim::vector<shim::string> EvolutionEngine::selectElite(size_t count)
+    std::vector<std::string> EvolutionEngine::selectElite(size_t count)
     {
         return impl_->selectElite(count);
     }
-    shim::vector<shim::string> EvolutionEngine::tournamentSelection(size_t tournament_size,
-                                                                    size_t num_winners)
+    std::vector<std::string> EvolutionEngine::tournamentSelection(size_t tournament_size,
+                                                                  size_t num_winners)
     {
         return impl_->tournamentSelection(tournament_size, num_winners);
     }
-    shim::vector<shim::string> EvolutionEngine::rouletteWheelSelection(size_t count)
+    std::vector<std::string> EvolutionEngine::rouletteWheelSelection(size_t count)
     {
         return impl_->rouletteWheelSelection(count);
     }
@@ -394,14 +394,14 @@ inline float deterministicNoise(uint64_t& state)
     {
         return impl_->calculateFitness(pattern);
     }
-    float EvolutionEngine::calculateDiversity(const shim::vector<Pattern>& patterns) const
+    float EvolutionEngine::calculateDiversity(const std::vector<Pattern>& patterns) const
     {
         return impl_->calculateDiversity(patterns);
     }
     void EvolutionEngine::setParams(const EvolutionParams& params) { impl_->setParams(params); }
     EvolutionParams EvolutionEngine::getParams() const { return impl_->getParams(); }
     EvolutionEngine::EvolutionStats EvolutionEngine::getStats() const { return impl_->getStats(); }
-    shim::vector<EvolutionEngine::EvolutionStats> EvolutionEngine::getHistory() const
+    std::vector<EvolutionEngine::EvolutionStats> EvolutionEngine::getHistory() const
     {
         return impl_->getHistory();
     }

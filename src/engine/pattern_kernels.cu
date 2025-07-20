@@ -18,41 +18,44 @@ namespace sep {
 namespace compat {
 
 __device__ float calculateCoherence(const PatternData& pattern) {
-    float real_part = pattern.attributes.x;
-    float imag_part = pattern.attributes.y;
-    float amplitude = pattern.attributes.z;
-    float phase = pattern.attributes.w;
+    // Ensure we have at least 4 attributes
+    if (pattern.get_size() < 4) return 0.5f;
+    
+    float real_part = pattern[0];
+    float imag_part = pattern[1];
+    float amplitude = pattern[2];
+    float phase = pattern[3];
 
     float coherence = amplitude * cosf(phase) * real_part + amplitude * sinf(phase) * imag_part;
     return fmaxf(0.1F, fminf(1.0F, coherence));
 }
 
 __device__ float calculateStability(const PatternData& pattern) {
-    return pattern.stability;
+    // Use the 5th attribute as stability, or default to 0.5
+    return pattern.get_size() > 4 ? pattern[4] : 0.5f;
 }
 
 __device__ void evolvePattern(PatternData& pattern, float evolutionRate, float timeDelta) {
-    glm::vec4 attrs = pattern.attributes;
-
+    // Ensure we have at least 4 attributes
+    if (pattern.get_size() < 4) return;
+    
     float mutation = evolutionRate * timeDelta * 1e-5F;
     float2 mutationVector = make_float2(cosf(mutation), sinf(mutation));
 
-    float2 newState = make_float2(attrs.x * mutationVector.x - attrs.y * mutationVector.y,
-                                  attrs.x * mutationVector.y + attrs.y * mutationVector.x);
+    float2 newState = make_float2(pattern[0] * mutationVector.x - pattern[1] * mutationVector.y,
+                                  pattern[0] * mutationVector.y + pattern[1] * mutationVector.x);
 
-    attrs.x = newState.x;
-    attrs.y = newState.y;
+    pattern[0] = newState.x;
+    pattern[1] = newState.y;
 
     float magnitude = sqrtf((newState.x * newState.x) + (newState.y * newState.y));
     if (magnitude > 1e-5F) {
-        attrs.x /= magnitude;
-        attrs.y /= magnitude;
-        attrs.z = magnitude;
+        pattern[0] /= magnitude;
+        pattern[1] /= magnitude;
+        pattern[2] = magnitude;
     }
 
-    attrs.w = atan2f(newState.y, newState.x);
-
-    pattern.attributes = attrs;
+    pattern[3] = atan2f(newState.y, newState.x);
 }
 
 __global__ void processPatternKernel(PatternData* patterns, PatternData* results,
@@ -63,7 +66,8 @@ __global__ void processPatternKernel(PatternData* patterns, PatternData* results
 
     PatternData pattern = patterns[idx];
 
-    pattern.coherence = calculateCoherence(pattern);
+    // PatternData doesn't have a coherence member, store in attributes if needed
+    float coherence = calculateCoherence(pattern);
 
     float timeDelta = 0.016F;
     float evolutionRate = 0.05F;
@@ -75,8 +79,10 @@ __global__ void processPatternKernel(PatternData* patterns, PatternData* results
         PatternData rightPattern = patterns[idx + 1];
 
         float interactionStrength = 0.05F;
-        pattern.attributes.x += interactionStrength * (leftPattern.attributes.x + rightPattern.attributes.x) * 0.5F;
-        pattern.attributes.y += interactionStrength * (leftPattern.attributes.y + rightPattern.attributes.y) * 0.5F;
+        if (pattern.get_size() >= 2 && leftPattern.get_size() >= 2 && rightPattern.get_size() >= 2) {
+            pattern[0] += interactionStrength * (leftPattern[0] + rightPattern[0]) * 0.5F;
+            pattern[1] += interactionStrength * (leftPattern[1] + rightPattern[1]) * 0.5F;
+        }
     }
 
     results[idx] = pattern;

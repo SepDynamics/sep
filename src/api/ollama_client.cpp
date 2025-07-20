@@ -37,11 +37,11 @@ OllamaClient &OllamaClient::operator=(OllamaClient &&) noexcept = default;
 
 namespace ollama {
 
-    sep::SEPResult OllamaClient::get(const shim::string &endpoint, shim::string &response_out)
+    sep::SEPResult OllamaClient::get(const std::string &endpoint, std::string &response_out)
     {
         if (impl_->config.host.rfind("file://", 0) == 0)
         {
-            shim::string path = impl_->config.host.substr(7) + endpoint;
+            std::string path = impl_->config.host.substr(7) + endpoint;
             std::ifstream file(path);
             if (!file)
             {
@@ -66,30 +66,30 @@ namespace ollama {
         return sep::SEPResult::SUCCESS;
     }
 
-sep::SEPResult OllamaClient::post(const shim::string &endpoint, const nlohmann::json &payload,
-                                  shim::string &response_out)
-{
-    if (impl_->config.host.rfind("file://", 0) == 0)
+    sep::SEPResult OllamaClient::post(const std::string &endpoint, const nlohmann::json &payload,
+                                      std::string &response_out)
     {
-        return sep::SEPResult::INVALID_ARGUMENT;
-    }
-    sep::api::APIResponse resp = impl_->client.post(endpoint, payload.dump());
-    if (!resp.success)
-    {
-        response_out.clear();
-        if (resp.error.code == sep::api::ErrorCode::ApiError)
+        if (impl_->config.host.rfind("file://", 0) == 0)
         {
-            return sep::SEPResult::PROCESSING_ERROR;
+            return sep::SEPResult::INVALID_ARGUMENT;
         }
-        return sep::SEPResult::UNKNOWN_ERROR;
+        sep::api::APIResponse resp = impl_->client.post(endpoint, payload.dump());
+        if (!resp.success)
+        {
+            response_out.clear();
+            if (resp.error.code == sep::api::ErrorCode::ApiError)
+            {
+                return sep::SEPResult::PROCESSING_ERROR;
+            }
+            return sep::SEPResult::UNKNOWN_ERROR;
+        }
+        response_out = resp.body;
+        return sep::SEPResult::SUCCESS;
     }
-    response_out = resp.body;
-    return sep::SEPResult::SUCCESS;
-}
 
 GenerateResponse OllamaClient::generate(const GenerateRequest &request) {
   nlohmann::json payload{{"model", request.model}, {"prompt", request.prompt}};
-  shim::string result;
+  std::string result;
   sep::SEPResult res = post("/api/generate", payload, result);
   if (res != sep::SEPResult::SUCCESS) {
     return {};
@@ -105,7 +105,7 @@ GenerateResponse OllamaClient::generate(const GenerateRequest &request) {
 EmbeddingResponse OllamaClient::getEmbedding(
     const EmbeddingRequest &request) {
   nlohmann::json payload{{"model", request.model}, {"prompt", request.prompt}};
-  shim::string result;
+  std::string result;
   sep::SEPResult res = post("/api/embeddings", payload, result);
   if (res != sep::SEPResult::SUCCESS) {
     return {};
@@ -113,7 +113,7 @@ EmbeddingResponse OllamaClient::getEmbedding(
   nlohmann::json json_result = nlohmann::json::parse(result);
   EmbeddingResponse resp;
   if (json_result.contains("embedding") && json_result["embedding"].is_array()) {
-      resp.embedding = json_result["embedding"].get<shim::vector<float>>();
+      resp.embedding = json_result["embedding"].get<std::vector<float>>();
   }
   return resp;
 };

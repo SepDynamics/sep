@@ -15,15 +15,15 @@ public:
 
     // Core rate limiting interface
     virtual bool checkRateLimit(const IRequest& req) = 0;
-    virtual shim::string getErrorResponse(const shim::string& message, int status) = 0;
+    virtual std::string getErrorResponse(const std::string& message, int status) = 0;
 
     // Configuration methods
     virtual void setEnabled(bool enabled) = 0;
     virtual void setPriorityQuota(Priority priority, float multiplier) = 0;
 
     // Monitoring methods
-    virtual unsigned int GetRequestCount(const shim::string& client_id) const = 0;
-    virtual unsigned int GetWindowSize(const shim::string& client_id, Priority priority) const = 0;
+    virtual unsigned int GetRequestCount(const std::string& client_id) const = 0;
+    virtual unsigned int GetWindowSize(const std::string& client_id, Priority priority) const = 0;
 };
 
 // Factory function declaration

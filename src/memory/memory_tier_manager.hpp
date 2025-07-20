@@ -10,7 +10,7 @@
 // Project includes
 #include "engine/common.h"
 #include "engine/dag_graph.h"
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "engine/types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/persistent_pattern_data.hpp"
@@ -83,8 +83,8 @@ namespace memory {
         MemoryTier &getLTM();
 
         // Block promotion/demotion
-        SEPResult promoteBlock(MemoryBlock *block, MemoryBlock *&out_block);
-        SEPResult demoteBlock(MemoryBlock *block, MemoryBlock *&out_block);
+        sep::SEPResult promoteBlock(MemoryBlock *block, MemoryBlock *&out_block);
+        sep::SEPResult demoteBlock(MemoryBlock *block, MemoryBlock *&out_block);
         MemoryTier *determineTier(float coherence, float stability, int generation_count);
         MemoryBlock *updateBlockProperties(MemoryBlock *block, float promotion_score,
                                            float priority_score, std::uint32_t age = 0,
@@ -95,8 +95,8 @@ namespace memory {
 
         // Pattern management
 
-        SEPResult processMemoryBlocks(void *input_data, void *output_data, const void *config,
-                                      size_t count, const void *previous_data, void *stream);
+        sep::SEPResult processMemoryBlocks(void *input_data, void *output_data, const void *config,
+                                           size_t count, const void *previous_data, void *stream);
 
         // Generic relationship management functions
         void updateGenericRelationship(std::size_t id_a, std::size_t id_b, float strength);
@@ -160,8 +160,9 @@ namespace memory {
         std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>>
             pattern_relationships_;
 
-        SEPResult promoteToTier(MemoryBlock *block, MemoryTierEnum tier, MemoryBlock *&out_block);
-        SEPResult compressBlock(MemoryBlock *block);
+        sep::SEPResult promoteToTier(MemoryBlock *block, MemoryTierEnum tier,
+                                     MemoryBlock *&out_block);
+        sep::SEPResult compressBlock(MemoryBlock *block);
 
         // Generic data scoring methods for tier transition
         bool checkScoreForPromotion(float score, MemoryTier *target_tier) const;

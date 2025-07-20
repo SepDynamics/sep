@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "logging_types.h"
 #include "memory/types.h"
 #include "tracing.h"
@@ -35,9 +35,8 @@ class Manager {
   Manager &operator=(const Manager &) = delete;
 
   // Logger operations
-  std::shared_ptr<spdlog::logger> createLogger(const shim::string &name,
-                                               const LoggerConfig &config);
-  std::shared_ptr<spdlog::logger> getLogger(const shim::string &name);
+  std::shared_ptr<spdlog::logger> createLogger(const std::string &name, const LoggerConfig &config);
+  std::shared_ptr<spdlog::logger> getLogger(const std::string &name);
   void setGlobalLevel(Level level);
 
   // Retrieve tracer. When OpenTelemetry is not compiled in, a lightweight
@@ -45,8 +44,8 @@ class Manager {
   static void *getTracer();
 
   // Level conversion
-  Level levelFromString(const shim::string &level);
-  shim::string levelToString(Level level);
+  Level levelFromString(const std::string &level);
+  std::string levelToString(Level level);
 
   // Initialize/shutdown
   static void initialize();
@@ -61,11 +60,11 @@ class Manager {
 
 // Global functions
 inline void initializeLogging() { Manager::initialize(); }
-inline Level levelFromString(const shim::string &level)
+inline Level levelFromString(const std::string &level)
 {
     return Manager::getInstance().levelFromString(level);
 }
-inline shim::string levelToString(Level level)
+inline std::string levelToString(Level level)
 {
     return Manager::getInstance().levelToString(level);
 }

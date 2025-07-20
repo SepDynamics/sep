@@ -93,7 +93,7 @@ SEP_CUDA_ERROR SEP_CUDA_GetDeviceProperties(SEP_CUDA_DEVICE_PROPS* prop, int dev
 
 #ifdef __cplusplus
 /* Error string function */
-shim::string SEP_CUDA_ErrorString(SEP_CUDA_ERROR error);
+std::string SEP_CUDA_ErrorString(SEP_CUDA_ERROR error);
 #endif
 
 #endif /* SEP_CUDA_API_UNIFIED_H */

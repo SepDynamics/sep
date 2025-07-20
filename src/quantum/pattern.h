@@ -15,7 +15,7 @@ enum class ManifoldQuantumState {
 };
 
 struct QuantumPattern {
-    shim::vector<double> position;
+    std::vector<double> position;
     double coherence;
     double stability;
     int generation;

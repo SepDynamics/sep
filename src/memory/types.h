@@ -29,7 +29,7 @@ namespace memory {
     };
 
 // Convert string to MemoryTierEnum
-    inline MemoryTierEnum stringToMemoryTier(const shim::string& tier)
+    inline MemoryTierEnum stringToMemoryTier(const std::string& tier)
     {
         if (tier == "stm") return MemoryTierEnum::STM;
         if (tier == "mtm") return MemoryTierEnum::MTM;
@@ -37,7 +37,7 @@ namespace memory {
         if (tier == "host") return MemoryTierEnum::HOST;
         if (tier == "device") return MemoryTierEnum::DEVICE;
         if (tier == "unified") return MemoryTierEnum::UNIFIED;
-        throw std::invalid_argument("Invalid memory tier string: " + tier);
+        throw std::invalid_argument(std::string("Invalid memory tier string: ") + tier.c_str());
     }
 
 enum class CompressionMethod : std::uint8_t {

@@ -158,4 +158,4 @@ SEP_CUDA_ERROR SEP_CUDA_GetDeviceProperties(SEP_CUDA_DEVICE_PROPS* prop, int dev
 #endif
 }
 
-shim::string SEP_CUDA_ErrorString(SEP_CUDA_ERROR error) { return shim::string(error.message); }
+std::string SEP_CUDA_ErrorString(SEP_CUDA_ERROR error) { return std::string(error.message); }

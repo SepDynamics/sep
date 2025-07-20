@@ -24,33 +24,33 @@ public:
      * @brief Gets the request URL
      * @return The request URL as a copy
      */
-    shim::string url() const override;
+    std::string url() const override;
 
     /**
      * @brief Gets the HTTP method
      * @return The request method as a copy
      */
-    shim::string method() const override;
+    std::string method() const override;
 
     /**
      * @brief Gets the request body
      * @return The request body as a copy
      */
-    shim::string body() const override;
+    std::string body() const override;
 
     /**
      * @brief Gets the value of a specific header
      * @param name The header name to look up
      * @return The header value if found, empty string otherwise
      */
-    shim::string getHeader(const shim::string& name) const override;
+    std::string getHeader(const std::string& name) const override;
 
     /**
      * @brief Gets a URL parameter value
      * @param name The parameter name
      * @return The parameter value if found, empty string otherwise
      */
-    shim::string getQueryParam(const shim::string& name) const;
+    std::string getQueryParam(const std::string& name) const;
 
 private:
     crow::request& request_; ///< Reference to the underlying Crow request

@@ -8,13 +8,13 @@
 
 namespace sep::context {
 
-    float cosineSimilarity(const shim::vector<float>& a, const shim::vector<float>& b);
-    bool simplePatternMatch(const shim::string& pattern, const shim::string& text);
+    float cosineSimilarity(const std::vector<float>& a, const std::vector<float>& b);
+    bool simplePatternMatch(const std::string& pattern, const std::string& text);
 
     // Relationship strength and metadata
     struct RelationshipInfo
     {
-        shim::string target_id;
+        std::string target_id;
         uint8_t type{0};  // 0 = REFERENCE
         float strength{0.0f};
         bool bidirectional{false};
@@ -34,45 +34,45 @@ class RelationshipManager {
   ~RelationshipManager() = default;
 
   // Add a relationship between contexts
-  bool addRelationship(const shim::string& source_id, const shim::string& target_id, uint8_t type,
+  bool addRelationship(const std::string& source_id, const std::string& target_id, uint8_t type,
                        float strength, bool bidirectional = false);
 
   // Remove a relationship
-  bool removeRelationship(const shim::string& source_id, const shim::string& target_id);
+  bool removeRelationship(const std::string& source_id, const std::string& target_id);
 
   // Get relationships for a context
-  shim::vector<RelationshipInfo> getRelationships(const shim::string& context_id) const;
+  std::vector<RelationshipInfo> getRelationships(const std::string& context_id) const;
 
   // Get parent-child relationships
-  shim::vector<shim::string> getChildren(const shim::string& parent_id) const;
-  shim::string getParent(const shim::string& child_id) const;
+  std::vector<std::string> getChildren(const std::string& parent_id) const;
+  std::string getParent(const std::string& child_id) const;
 
   // Calculate relationship strength using normalized dot product
-  float calculateRelationshipStrength(const shim::vector<float>& embedding1,
-                                      const shim::vector<float>& embedding2) const;
+  float calculateRelationshipStrength(const std::vector<float>& embedding1,
+                                      const std::vector<float>& embedding2) const;
 
   // Prune weak relationships
-  size_t pruneWeakRelationships(const shim::string& context_id);
+  size_t pruneWeakRelationships(const std::string& context_id);
 
   // Check if relationship count exceeds maximum
-  bool exceedsMaxRelationships(const shim::string& context_id) const;
+  bool exceedsMaxRelationships(const std::string& context_id) const;
 
   // Get relationship count
-  size_t getRelationshipCount(const shim::string& context_id) const;
+  size_t getRelationshipCount(const std::string& context_id) const;
 
   // Store cosine similarity result between two contexts
-  float storeCosineSimilarity(const shim::string& source_id, const shim::string& target_id,
-                              const shim::vector<float>& emb_a, const shim::vector<float>& emb_b);
+  float storeCosineSimilarity(const std::string& source_id, const std::string& target_id,
+                              const std::vector<float>& emb_a, const std::vector<float>& emb_b);
 
   // Store pattern matching result between two contexts
-  bool storePatternMatch(const shim::string& source_id, const shim::string& target_id,
-                         const shim::string& pattern, const shim::string& text);
+  bool storePatternMatch(const std::string& source_id, const std::string& target_id,
+                         const std::string& pattern, const std::string& text);
 
   private:
   RelationshipConfig config_;
-  std::unordered_map<shim::string, shim::vector<RelationshipInfo>> relationships_;
-  std::unordered_map<shim::string, std::unordered_map<shim::string, float>> similarity_map_;
-  std::unordered_map<shim::string, std::unordered_map<shim::string, bool>> pattern_map_;
+  std::unordered_map<std::string, std::vector<RelationshipInfo>> relationships_;
+  std::unordered_map<std::string, std::unordered_map<std::string, float>> similarity_map_;
+  std::unordered_map<std::string, std::unordered_map<std::string, bool>> pattern_map_;
 };
 
 }  // namespace sep::context

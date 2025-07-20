@@ -21,15 +21,15 @@ enum class QuantumPhase {
 };
 
 struct PhaseTransition {
-    shim::string pattern_id;
+    std::string pattern_id;
     QuantumPhase from_phase;
     QuantumPhase to_phase;
     float transition_energy;
 };
 
 struct EntanglementPair {
-    shim::string pattern_id1;
-    shim::string pattern_id2;
+    std::string pattern_id1;
+    std::string pattern_id2;
     float strength;
     float phase_correlation;
 };
@@ -39,12 +39,12 @@ struct CollapseEvent {
     glm::vec4 collapse_center;
     float affected_radius;
     float severity;
-    shim::vector<shim::string> collapsed_pattern_ids;
+    std::vector<std::string> collapsed_pattern_ids;
 };
 
 struct EvolutionResult {
-    shim::vector<Pattern> evolved_patterns;
-    shim::vector<PhaseTransition> phase_transitions;
+    std::vector<Pattern> evolved_patterns;
+    std::vector<PhaseTransition> phase_transitions;
     float total_coherence;
     float entropy_change;
     float stability_metric;
@@ -68,12 +68,12 @@ public:
     explicit PatternEvolutionBridge(const Config& config);
     ~PatternEvolutionBridge();
 
-    EvolutionResult evolvePatterns(shim::vector<Pattern>& patterns, float time_step);
-    shim::vector<EntanglementPair> computeEntanglements(const shim::vector<Pattern>& patterns);
-    CollapseEvent detectCollapse(const shim::vector<Pattern>& patterns);
+    EvolutionResult evolvePatterns(std::vector<Pattern>& patterns, float time_step);
+    std::vector<EntanglementPair> computeEntanglements(const std::vector<Pattern>& patterns);
+    CollapseEvent detectCollapse(const std::vector<Pattern>& patterns);
 
     void initializeEvolutionState();
-    void updatePatterns(shim::vector<Pattern>& patterns);
+    void updatePatterns(std::vector<Pattern>& patterns);
 
 private:
     class Impl;

@@ -47,10 +47,10 @@ namespace sep
             virtual std::mutex &getMetricsMutex() = 0;
             virtual ServerMetrics &getModifiableMetrics() = 0;
             virtual std::unique_ptr<::sep::api::HttpResponse> makeJsonResponse(
-                int code, const shim::string &message) = 0;
-            virtual shim::string handleError(const shim::string &message, int code) = 0;
+                int code, const std::string &message) = 0;
+            virtual std::string handleError(const std::string &message, int code) = 0;
             virtual void logRequest(const ::sep::api::HttpRequest &req, int code,
-                                    const shim::string &body, int64_t duration) = 0;
+                                    const std::string &body, int64_t duration) = 0;
         };
 
         /**
@@ -113,9 +113,9 @@ namespace sep
             std::mutex &getMetricsMutex() override;
             ServerMetrics &getModifiableMetrics() override;
             std::unique_ptr<::sep::api::HttpResponse> makeJsonResponse(
-                int code, const shim::string &message) override;
-            shim::string handleError(const shim::string &message, int code) override;
-            void logRequest(const ::sep::api::HttpRequest &req, int code, const shim::string &body,
+                int code, const std::string &message) override;
+            std::string handleError(const std::string &message, int code) override;
+            void logRequest(const ::sep::api::HttpRequest &req, int code, const std::string &body,
                             int64_t duration) override;
 
             /**
@@ -124,7 +124,7 @@ namespace sep
              * @param status HTTP status code
              * @return JSON error response string
              */
-            shim::string getErrorResponse(const shim::string &message, int status);
+            std::string getErrorResponse(const std::string &message, int status);
 
         private:
             /**
@@ -158,7 +158,7 @@ namespace sep
              * @param status_code HTTP status code
              * @return JSON error response
              */
-            nlohmann::json handleCrowError(const shim::string &message, int status_code);
+            nlohmann::json handleCrowError(const std::string &message, int status_code);
 
             /**
              * @brief Log request details
@@ -168,7 +168,7 @@ namespace sep
              * @param duration_ms Request duration in milliseconds
              */
             void logRequest(const crow::request &req, int status_code,
-                            const shim::string &response_body, int64_t duration_ms);
+                            const std::string &response_body, int64_t duration_ms);
 
             /**
              * @brief Setup logging configuration

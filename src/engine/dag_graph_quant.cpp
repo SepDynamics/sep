@@ -10,7 +10,7 @@ namespace dag {
 
     uint64_t DagGraph::addMarketDataNode(const glm::vec3& pattern, float coherence, float price,
                                          float volatility, float volume,
-                                         const shim::vector<uint64_t>& parents)
+                                         const std::vector<uint64_t>& parents)
     {
         uint64_t id = addNode(pattern, coherence, parents);
 
@@ -159,7 +159,7 @@ uint32_t DagGraph::getGeneration(uint64_t id) const {
     return (it != nodes_.end()) ? it->second.generation : 0;
 }
 
-shim::string DagGraph::exportAsJson() const
+std::string DagGraph::exportAsJson() const
 {
     std::stringstream json;
     json << std::fixed << std::setprecision(4);

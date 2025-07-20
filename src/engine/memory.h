@@ -1,6 +1,9 @@
 #pragma once
 
+#include <cstddef>
+#ifdef __CUDACC__
 #include <cuda_runtime.h>
+#endif
 
 namespace sep {
 namespace cuda {

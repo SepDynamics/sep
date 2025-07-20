@@ -1,6 +1,12 @@
 // Include compatibility header first to handle math function conflicts
 #include <cuda_runtime.h>
 
+// GLM CUDA compatibility
+#define GLM_COMPILER 0
+#define CUDA_VERSION 12090
+#define __CUDA_VER_MAJOR__ 12
+#define __CUDA_VER_MINOR__ 9
+
 #include <cmath>
 #include <glm/glm.hpp>
 

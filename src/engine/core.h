@@ -1,7 +1,14 @@
 #ifndef SEP_CUDA_CORE_H
 #define SEP_CUDA_CORE_H
 
+#ifndef __CUDACC__
+// Forward declare CUDA types for non-CUDA files
+struct cudaDeviceProp;
+typedef int cudaError_t;
+#else
+// Include real CUDA headers for CUDA files
 #include <cuda_runtime.h>
+#endif
 
 #include "error_handler.h"
 
@@ -31,7 +38,7 @@ class CudaCore {
   // Memory management
   Error getMemoryInfo(size_t& free, size_t& total) const;
   Error getLastError() const;
-  shim::string getErrorString(cudaError_t error) const;
+  std::string getErrorString(cudaError_t error) const;
 
   // Metrics
   CudaMetrics getMetrics() const;

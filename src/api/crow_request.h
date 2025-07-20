@@ -23,25 +23,25 @@ public:
         headers_["accept"] = "";
     }
 
-    shim::string method() const override { return crow::method_name(req_.method); }
+    std::string method() const override { return crow::method_name(req_.method); }
 
-    shim::string url() const override
+    std::string url() const override
     {
-        // Convert crow_string to shim::string by using c_str()
-        return shim::string(req_.url.c_str());
+        // Convert crow_string to std::string by using c_str()
+        return std::string(req_.url.c_str());
     }
 
-    const shim::string& body() const override { return body_; }
+    const std::string& body() const override { return body_; }
 
-    const std::unordered_map<shim::string, shim::string>& headers() const override
+    const std::unordered_map<std::string, std::string>& headers() const override
     {
         return headers_;
     }
 
-    shim::string get_header_value(const shim::string& key) const override
+    std::string get_header_value(const std::string& key) const override
     {
         // Use the cached headers instead of calling the stub directly
-        // This avoids the conversion from shim::string to crow_string
+        // This avoids the conversion from std::string to crow_string
         auto it = headers_.find(key);
         if (it != headers_.end()) {
             return it->second;
@@ -49,10 +49,10 @@ public:
         return "";
     }
 
-    const shim::string& get_remote_ip() const override
+    const std::string& get_remote_ip() const override
     {
         // Access might have changed in Crow - use a static empty string as fallback
-        static shim::string ip_address = "127.0.0.1";
+        static std::string ip_address = "127.0.0.1";
         // In newer Crow versions, remote_ip_address should be accessed differently
         // or might not be directly accessible
         return ip_address;
@@ -60,8 +60,8 @@ public:
 
 private:
     const crow::request& req_;
-    shim::string body_;
-    std::unordered_map<shim::string, shim::string> headers_;
+    std::string body_;
+    std::unordered_map<std::string, std::string> headers_;
 };
 
 }  // namespace sep::api

@@ -1,5 +1,5 @@
 #pragma once
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 namespace sep::logging {
 
@@ -13,18 +13,18 @@ enum class Level {
 };
 
 struct LoggerConfig {
-    shim::string name;
+    std::string name;
     Level level{Level::INFO};
     struct ConsoleConfig
     {
         bool enabled{true};
     } console;
   struct FileConfig {
-      shim::string path;
+      std::string path;
       std::size_t max_size{1048576};
       std::size_t max_files{3};
   } file;
-  shim::string pattern;
+  std::string pattern;
 };
 
 } // namespace sep::logging

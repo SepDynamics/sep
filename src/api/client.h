@@ -20,7 +20,7 @@
 namespace sep {
 namespace config {
 struct OllamaConfig {
-    shim::string host{"localhost"};
+    std::string host{"localhost"};
     int port{11434};
 };
 }
@@ -30,11 +30,11 @@ namespace api {
 
         struct ClientConfig
         {
-            shim::string baseUrl;
+            std::string baseUrl;
             std::chrono::milliseconds defaultTimeout{5000};
             size_t maxRetries{3};
             bool enableMetrics{true};
-            std::map<shim::string, shim::string> defaultHeaders;
+            std::map<std::string, std::string> defaultHeaders;
         };
 
         class IHttpClient
@@ -78,24 +78,24 @@ namespace api {
 
             APIResponse send(const APIRequest &request);
 
-            APIResponse get(const shim::string &endpoint,
-                            const std::map<shim::string, shim::string> &queryParams = {},
+            APIResponse get(const std::string &endpoint,
+                            const std::map<std::string, std::string> &queryParams = {},
                             Priority priority = Priority::NORMAL);
 
-            APIResponse post(const shim::string &endpoint, const shim::string &body,
+            APIResponse post(const std::string &endpoint, const std::string &body,
                              Priority priority = Priority::NORMAL);
 
-            APIResponse put(const shim::string &endpoint, const shim::string &body,
+            APIResponse put(const std::string &endpoint, const std::string &body,
                             Priority priority = Priority::NORMAL);
 
-            APIResponse delete_(const shim::string &endpoint, Priority priority = Priority::NORMAL);
+            APIResponse delete_(const std::string &endpoint, Priority priority = Priority::NORMAL);
 
             void setRequestInterceptor(std::function<void(APIRequest &)> interceptor);
             void setResponseInterceptor(std::function<void(APIResponse &)> interceptor);
             const HealthMetrics &getMetrics() const;
             void resetMetrics();
             const ClientConfig &getConfig() const;
-            shim::string getLastRequestId() const;
+            std::string getLastRequestId() const;
 
         private:
             class Impl
@@ -110,14 +110,14 @@ namespace api {
                 std::function<void(APIResponse &)> responseInterceptor;
                 HealthMetrics metrics;
                 mutable std::mutex mutex;
-                shim::string lastRequestId;
+                std::string lastRequestId;
             };
 
             std::unique_ptr<Impl> impl_;
             APIResponse sendWithRetry(const APIRequest &request);
             void updateMetrics(const APIRequest &request, const APIResponse &response);
-            shim::string buildUrl(const shim::string &endpoint,
-                                  const std::map<shim::string, shim::string> &queryParams = {});
+            std::string buildUrl(const std::string &endpoint,
+                                 const std::map<std::string, std::string> &queryParams = {});
         };
 
         std::shared_ptr<Client> createClient(const ClientConfig &config);
@@ -141,9 +141,9 @@ namespace ollama {
             OllamaClient &operator=(OllamaClient &&) noexcept;
 
             // API methods
-            SEPResult post(const shim::string &endpoint, const nlohmann::json &payload,
-                           shim::string &response_out);
-            SEPResult get(const shim::string &endpoint, shim::string &response_out);
+            SEPResult post(const std::string &endpoint, const nlohmann::json &payload,
+                           std::string &response_out);
+            SEPResult get(const std::string &endpoint, std::string &response_out);
             sep::ollama::GenerateResponse generate(const sep::ollama::GenerateRequest &request);
 
             sep::ollama::EmbeddingResponse getEmbedding(

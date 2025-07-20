@@ -20,7 +20,7 @@
 namespace sep::quantum {
 
 // QuantumProcessorError implementation
-QuantumProcessorError::QuantumProcessorError(const shim::string& message)
+QuantumProcessorError::QuantumProcessorError(const std::string& message)
     : std::runtime_error("QuantumProcessor: " + message)
 {
 }

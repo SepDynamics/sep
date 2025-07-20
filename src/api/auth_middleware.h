@@ -13,7 +13,7 @@ struct AuthMiddleware {
     bool authorized{false};
   };
 
-  void set_tokens(shim::vector<shim::string> tokens);
+  void set_tokens(std::vector<std::string> tokens);
 
   template <typename AllContext>
   void before_handle(crow::request& req, crow::response& res, context& ctx, AllContext&);
@@ -22,8 +22,8 @@ struct AuthMiddleware {
   void after_handle(crow::request&, crow::response&, context&, AllContext&) {}
 
 protected:
-    bool validate_token(const shim::string& header) const;
-    shim::vector<shim::string> tokens_;
+    bool validate_token(const std::string& header) const;
+    std::vector<std::string> tokens_;
 };
 
 }  // namespace sep::api

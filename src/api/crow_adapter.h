@@ -36,13 +36,13 @@ namespace sep::api {
 class CrowRequestAdapter : public HttpRequest {
 public:
     explicit CrowRequestAdapter(crow::request &req);
-    shim::string url() const override;
-    shim::string method() const override;
-    shim::string body() const override;
+    std::string url() const override;
+    std::string method() const override;
+    std::string body() const override;
 
 private:
     crow::request &req_;
-    shim::string method_str_;
+    std::string method_str_;
 };
 
 // Adapter for crow::response to HttpResponse
@@ -51,9 +51,9 @@ public:
     explicit CrowResponseAdapter(crow::response &res);
     void setCode(int code) override;
     int getCode() const override;
-    void setBody(const shim::string &body) override;
+    void setBody(const std::string &body) override;
     void end() override;
-    shim::string getBody() const override;
+    std::string getBody() const override;
 
 private:
     crow::response &res_;

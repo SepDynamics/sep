@@ -20,7 +20,8 @@ static std::mutex g_stream_mutex;
 static StreamPtr g_stream;
 static bool g_initialized = false;
 
-sep::SEPResult sep_cuda_init(int device_id) {
+sep::SEPResult sep_cuda_init(int device_id)
+{
     std::lock_guard<std::mutex> lock(g_stream_mutex);
     if (g_initialized) {
         return sep::SEPResult::SUCCESS;
@@ -40,7 +41,8 @@ sep::SEPResult sep_cuda_init(int device_id) {
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult sep_cuda_cleanup(void) {
+sep::SEPResult sep_cuda_cleanup(void)
+{
     if (!g_initialized) {
         return sep::SEPResult::SUCCESS;
     }
@@ -51,9 +53,11 @@ sep::SEPResult sep_cuda_cleanup(void) {
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const std::uint32_t* expectations,
-                           std::uint32_t num_probes, std::uint32_t* bitfield, std::uint32_t* correction_indices,
-                           std::uint32_t* correction_count) {
+sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices,
+                                      const std::uint32_t* expectations, std::uint32_t num_probes,
+                                      std::uint32_t* bitfield, std::uint32_t* correction_indices,
+                                      std::uint32_t* correction_count)
+{
     std::lock_guard<std::mutex> lock(g_stream_mutex);
     if (!g_initialized || !g_stream || !g_stream->valid()) {
         return sep::SEPResult::UNKNOWN_ERROR;
@@ -97,8 +101,10 @@ sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices, const 
     return sep::SEPResult::SUCCESS;
 }
 
-sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chunks, std::uint32_t* collapse_indices,
-                              std::uint32_t* collapse_counts) {
+sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks, std::uint32_t num_chunks,
+                                         std::uint32_t* collapse_indices,
+                                         std::uint32_t* collapse_counts)
+{
     std::lock_guard<std::mutex> lock(g_stream_mutex);
     if (!g_initialized || !g_stream || !g_stream->valid()) {
         return sep::SEPResult::UNKNOWN_ERROR;

@@ -21,7 +21,7 @@
 #include "engine/cuda_helpers.h"
 #include "engine/macros.h"
 #include "engine/manager.h"
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "engine/types.h"
 
 extern "C"
@@ -88,9 +88,9 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
         }
 
         // Parse input patterns from JSON
-        shim::vector<shim::string> pattern_ids;
+        std::vector<std::string> pattern_ids;
         for (const auto& pattern : json_obj["patterns"]) {
-            pattern_ids.push_back(pattern["id"].get<shim::string>());
+            pattern_ids.push_back(pattern["id"].get<std::string>());
         }
 
         // Process patterns through quantum pipeline
@@ -122,7 +122,7 @@ SEP_API sep::SEPResult sep_process_context(const char *context_json, const char 
         }
 
         // Write results to output buffer
-        shim::string result_str = result_json.dump();
+        std::string result_str = result_json.dump();
         sep::api::bridge::detail::setRequiredBufferSize(result_str.size() + 1);
         if (result_str.size() >= buffer_size) {
             sep::api::bridge::detail::setLastError("Result buffer too small");

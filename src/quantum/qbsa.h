@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "engine/standard_includes.h"
 #include "quantum/gpu_context.h"
 #include "quantum/qbsa.cuh"
 
@@ -13,7 +14,7 @@ namespace sep::quantum {
 
     struct QBSAResult
     {
-        shim::vector<uint32_t> corrections;
+        std::vector<uint32_t> corrections;
         float correction_ratio{0.0f};
         bool collapse_detected{false};
     };
@@ -30,8 +31,8 @@ public:
     virtual ~QBSAProcessor() = default;
 
     // Analyze probe indices against expected values
-    virtual QBSAResult analyze(const shim::vector<uint32_t>& probe_indices,
-                               const shim::vector<uint32_t>& expectations);
+    virtual QBSAResult analyze(const std::vector<uint32_t>& probe_indices,
+                               const std::vector<uint32_t>& expectations);
 
     // Detect collapse based on correction ratio
     virtual bool detectCollapse(const QBSAResult& result,

@@ -3,18 +3,20 @@
 #include <cstdint>
 #include <vector>
 
+#include "engine/standard_includes.h"
+
 namespace sep::quantum {
 
 QBSAProcessor::QBSAProcessor(const QBSAOptions& options) : options_(options) {}
 
-QBSAResult QBSAProcessor::analyze(const shim::vector<uint32_t>& probe_indices,
-                                  const shim::vector<uint32_t>& expectations)
+QBSAResult QBSAProcessor::analyze(const std::vector<uint32_t>& probe_indices,
+                                  const std::vector<uint32_t>& expectations)
 {
     QBSAResult result{};
     if (probe_indices.empty() || probe_indices.size() != expectations.size()) return result;
 
     // Count corrections needed
-    for (size_t i = 0; i < probe_indices.size(); ++i)
+    for (std::size_t i = 0; i < probe_indices.size(); ++i)
     {
         if (probe_indices[i] != expectations[i])
         {

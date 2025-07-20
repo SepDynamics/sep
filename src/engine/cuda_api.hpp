@@ -1,7 +1,15 @@
 #pragma once
 
 // Include C API definitions first
-#include <cuda_runtime.h>  // For CUDA types
+#ifndef __CUDACC__
+// Forward declare CUDA types for non-CUDA files
+typedef int cudaError_t;
+typedef int cudaMemcpyKind;
+typedef struct CUstream_st* cudaStream_t;
+#else
+// Include real CUDA headers for CUDA files
+#include <cuda_runtime.h>
+#endif
 
 #include <cstddef>  // For size_t
 #include <cstdint>  // For fixed-width integers
@@ -19,21 +27,16 @@ SEP_API sep::SEPResult sep_cuda_init(int device_id);
 SEP_API sep::SEPResult sep_cuda_cleanup(void);
 
 // Batch processing operations
-SEP_API sep::SEPResult sep_cuda_process_batch(
-    const std::uint32_t* probe_indices,
-    const std::uint32_t* expectations,
-    std::uint32_t num_probes,
-    std::uint32_t* bitfield,
-    std::uint32_t* correction_indices,
-    std::uint32_t* correction_count
-);
+SEP_API sep::SEPResult sep_cuda_process_batch(const std::uint32_t* probe_indices,
+                                              const std::uint32_t* expectations,
+                                              std::uint32_t num_probes, std::uint32_t* bitfield,
+                                              std::uint32_t* correction_indices,
+                                              std::uint32_t* correction_count);
 
-SEP_API sep::SEPResult sep_cuda_process_symmetry(
-    const std::uint64_t* chunks,
-    std::uint32_t num_chunks,
-    std::uint32_t* collapse_indices,
-    std::uint32_t* collapse_counts
-);
+SEP_API sep::SEPResult sep_cuda_process_symmetry(const std::uint64_t* chunks,
+                                                 std::uint32_t num_chunks,
+                                                 std::uint32_t* collapse_indices,
+                                                 std::uint32_t* collapse_counts);
 
 // Memory management functions
 SEP_API cudaError_t sep_cuda_allocate_managed(void** ptr, size_t size);

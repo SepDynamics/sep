@@ -8,9 +8,9 @@ SimpleEmbeddingModel::SimpleEmbeddingModel() {
     weights_ = {0.01, 0.02, 0.03, 0.04, 0.05};
 }
 
-shim::vector<double> SimpleEmbeddingModel::compute(const shim::string& text) const
+std::vector<double> SimpleEmbeddingModel::compute(const std::string& text) const
 {
-    shim::vector<double> out(kDim, 0.0);
+    std::vector<double> out(kDim, 0.0);
     for (unsigned char c : text) {
         for (std::size_t i = 0; i < kDim; ++i) {
             out[i] += static_cast<double>(c) * weights_[i];

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "memory/types.h"
+#include "quantum/config.h"
 #include "quantum/types.h"
 #include "types.h"
 
@@ -19,14 +20,14 @@ namespace config {
 
     struct LogConfig
     {
-        shim::string level;
-        shim::string path;
+        std::string level;
+        std::string path;
     };
 
     struct AnalyticsConfig
     {
         bool enabled;
-        shim::string endpoint;
+        std::string endpoint;
     };
 
     struct SystemConfig

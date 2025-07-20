@@ -1,9 +1,11 @@
 #pragma once
 
+#include <complex>
 #include <glm/glm.hpp>
 
 #include "engine/pattern_types.h"
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
+#include "engine/types.h"
 #include "memory/types.h"
 #include "quantum/config.h"
 
@@ -15,6 +17,9 @@ struct QuantumState {
     float stability{0.0f};
     float entropy{0.0f};
     float mutation_rate{0.0f};
+    float evolution_rate{0.0f};
+    float energy{0.0f};
+    float coupling_strength{0.0f};
     int generation{0};
     int mutation_count{0};
     sep::memory::MemoryTierEnum memory_tier{sep::memory::MemoryTierEnum::STM};
@@ -32,26 +37,32 @@ struct QuantumState {
 enum class RelationshipType {
     Generic,
     Entanglement,
+    ENTANGLEMENT = Entanglement,  // Add alias for compatibility
     Causality
 };
 
 struct PatternRelationship {
-    shim::string targetId;
+    std::string targetId;
     float strength;
     RelationshipType type;
 };
 
 struct Pattern {
-    shim::string id;
+    std::string id;
     glm::vec4 position{0.0f};
     glm::vec3 momentum{0.0f};
     QuantumState quantum_state{};
-    shim::vector<PatternRelationship> relationships{};
+    std::vector<PatternRelationship> relationships{};
     sep::compat::PatternData data{};
-    shim::vector<shim::string> parent_ids{};
+    std::vector<std::string> parent_ids{};
     uint64_t timestamp{0};
     uint64_t last_accessed{0};
     uint64_t last_modified{0};
+    int generation{0};
+    float coherence{0.0f};
+    glm::vec4 velocity{0.0f};
+    glm::vec4 attributes{0.0f};
+    std::complex<float> amplitude{1.0f, 0.0f};
     QuantumState state;
     uint64_t last_updated{0};
 };

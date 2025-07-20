@@ -33,8 +33,8 @@ APIResponse Client::send(const APIRequest &request) {
   return response;
 }
 
-APIResponse Client::get(const shim::string &endpoint,
-                        const std::map<shim::string, shim::string> &queryParams, Priority priority)
+APIResponse Client::get(const std::string &endpoint,
+                        const std::map<std::string, std::string> &queryParams, Priority priority)
 {
     APIRequest request;
     request.method = "GET";
@@ -44,7 +44,7 @@ APIResponse Client::get(const shim::string &endpoint,
     return send(request);
 }
 
-APIResponse Client::post(const shim::string &endpoint, const shim::string &body, Priority priority)
+APIResponse Client::post(const std::string &endpoint, const std::string &body, Priority priority)
 {
     APIRequest request;
     request.method = "POST";
@@ -55,7 +55,7 @@ APIResponse Client::post(const shim::string &endpoint, const shim::string &body,
     return send(request);
 }
 
-APIResponse Client::put(const shim::string &endpoint, const shim::string &body, Priority priority)
+APIResponse Client::put(const std::string &endpoint, const std::string &body, Priority priority)
 {
     APIRequest request;
     request.method = "PUT";
@@ -66,7 +66,7 @@ APIResponse Client::put(const shim::string &endpoint, const shim::string &body, 
     return send(request);
 }
 
-APIResponse Client::delete_(const shim::string &endpoint, Priority priority)
+APIResponse Client::delete_(const std::string &endpoint, Priority priority)
 {
     APIRequest request;
     request.method = "DELETE";
@@ -103,7 +103,7 @@ void Client::resetMetrics() {
 
 const ClientConfig &Client::getConfig() const { return impl_->config; }
 
-shim::string Client::getLastRequestId() const
+std::string Client::getLastRequestId() const
 {
     std::lock_guard<std::mutex> lock(impl_->mutex);
     return impl_->lastRequestId;
@@ -169,10 +169,10 @@ void Client::updateMetrics(const APIRequest &request, const APIResponse &respons
   }
 }
 
-shim::string Client::buildUrl(const shim::string &endpoint,
-                              const std::map<shim::string, shim::string> &queryParams)
+std::string Client::buildUrl(const std::string &endpoint,
+                             const std::map<std::string, std::string> &queryParams)
 {
-    shim::string url = impl_->config.baseUrl + endpoint;
+    std::string url = impl_->config.baseUrl + endpoint;
     if (!queryParams.empty())
     {
         url += "?";

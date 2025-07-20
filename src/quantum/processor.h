@@ -28,11 +28,11 @@ constexpr float DEMOTION_THRESHOLD = 0.3f;
 struct ProcessingResult {
     bool success{false};
     compat::Pattern pattern{};
-    shim::string error_message{};
+    std::string error_message{};
 };
 
 struct BatchProcessingResult : public ProcessingResult {
-    shim::vector<ProcessingResult> results{};
+    std::vector<ProcessingResult> results{};
 };
 
 namespace pattern {
@@ -49,15 +49,15 @@ public:
     explicit PatternProcessor(Implementation impl = Implementation::CPU);
     virtual ~PatternProcessor() = default;
 
-    virtual SEPResult init(quantum::GPUContext* ctx);
+    virtual sep::SEPResult init(quantum::GPUContext* ctx);
     virtual void evolvePatterns();
     virtual compat::PatternData mutatePattern(const compat::PatternData& parent);
-    
-    SEPResult addPattern(const compat::PatternData& pattern);
-    const shim::vector<compat::PatternData>& getPatterns() const;
+
+    sep::SEPResult addPattern(const compat::PatternData& pattern);
+    const std::vector<compat::PatternData>& getPatterns() const;
 
     // Convenience method to evolve patterns and return the results
-    virtual const shim::vector<compat::PatternData>& process()
+    virtual const std::vector<compat::PatternData>& process()
     {
         evolvePatterns();
         return patterns_;
@@ -65,7 +65,7 @@ public:
     
 protected:
     Implementation implementation_;
-    shim::vector<compat::PatternData> patterns_;
+    std::vector<compat::PatternData> patterns_;
 };
 
 // CPU implementation of pattern processor
@@ -74,12 +74,12 @@ public:
     explicit CPUPatternProcessor();
     ~CPUPatternProcessor() override = default;
 
-    SEPResult init(quantum::GPUContext* ctx) override;
+    sep::SEPResult init(quantum::GPUContext* ctx) override;
     void evolvePatterns() override;
     compat::PatternData mutatePattern(const compat::PatternData& parent) override;
     
 protected:
-    shim::vector<compat::PatternData>& patterns_;
+    std::vector<compat::PatternData>& patterns_;
 };
 
 } // namespace pattern
@@ -98,37 +98,36 @@ public:
     Processor(Processor&&) noexcept;
     Processor& operator=(Processor&&) noexcept;
 
-    SEPResult init(GPUContext* gpu_context);
+    sep::SEPResult init(GPUContext* gpu_context);
     void setHooks(core::SystemHooks* hooks);
 
-    SEPResult addPattern(const compat::Pattern& pattern);
-    SEPResult removePattern(const shim::string& pattern_id);
-    SEPResult updatePattern(const shim::string& pattern_id, const compat::Pattern& pattern);
-    compat::Pattern getPattern(const shim::string& pattern_id) const;
-    shim::vector<sep::compat::Pattern> getPatterns() const;
-    shim::vector<sep::compat::Pattern> getPatternsByTier(sep::memory::MemoryTierEnum tier) const;
+    sep::SEPResult addPattern(const compat::Pattern& pattern);
+    sep::SEPResult removePattern(const std::string& pattern_id);
+    sep::SEPResult updatePattern(const std::string& pattern_id, const compat::Pattern& pattern);
+    compat::Pattern getPattern(const std::string& pattern_id) const;
+    std::vector<sep::compat::Pattern> getPatterns() const;
+    std::vector<sep::compat::Pattern> getPatternsByTier(sep::memory::MemoryTierEnum tier) const;
     size_t getPatternCount() const;
 
-    ProcessingResult processPattern(const shim::string& pattern_id);
-    BatchProcessingResult processBatch(const shim::vector<shim::string>& pattern_ids);
+    ProcessingResult processPattern(const std::string& pattern_id);
+    BatchProcessingResult processBatch(const std::vector<std::string>& pattern_ids);
     BatchProcessingResult processAll();
 
-    ProcessingResult evolvePattern(const shim::string& pattern_id);
-    ProcessingResult collapsePattern(const shim::string& pattern_id);
-    ProcessingResult entanglePatterns(const shim::string& pattern_id1,
-                                      const shim::string& pattern_id2);
-    ProcessingResult mutatePattern(const shim::string& parent_id);
+    ProcessingResult evolvePattern(const std::string& pattern_id);
+    ProcessingResult collapsePattern(const std::string& pattern_id);
+    ProcessingResult entanglePatterns(const std::string& pattern_id1,
+                                      const std::string& pattern_id2);
+    ProcessingResult mutatePattern(const std::string& parent_id);
 
     void promotePatterns();
     void demotePatterns();
     void removeWeakPatterns();
 
-    SEPResult addRelationship(const shim::string& pattern_id1, const shim::string& pattern_id2,
-                              float strength, RelationshipType type);
-    float calculateCoherence(const shim::string& pattern_id1,
-                             const shim::string& pattern_id2) const;
+    sep::SEPResult addRelationship(const std::string& pattern_id1, const std::string& pattern_id2,
+                                   float strength, RelationshipType type);
+    float calculateCoherence(const std::string& pattern_id1, const std::string& pattern_id2) const;
 
-    shim::string getStatus() const;
+    std::string getStatus() const;
     ProcessingConfig getConfig() const;
     void updateConfig(const ProcessingConfig& config);
 

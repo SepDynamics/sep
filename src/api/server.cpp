@@ -14,7 +14,7 @@
 #include <thread>
 
 // Compatibility layer includes
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 // Third-party includes
 #include <nlohmann/json.hpp>
@@ -118,22 +118,22 @@ void SEPApiServer::waitForShutdown() {
   }
 }
 
-std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const shim::string& message)
+std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const std::string& message)
 {
     // This is a simplified implementation
     class SimpleHttpResponse : public HttpResponse
     {
     public:
-        SimpleHttpResponse(int code, const shim::string& body) : code_(code), body_(body) {}
+        SimpleHttpResponse(int code, const std::string& body) : code_(code), body_(body) {}
         void setCode(int code) override { code_ = code; }
-        void setBody(const shim::string& body) override { body_ = body; }
+        void setBody(const std::string& body) override { body_ = body; }
         void end() override {}
         int getCode() const override { return code_; }
-        shim::string getBody() const override { return body_; }
+        std::string getBody() const override { return body_; }
 
     private:
         int code_;
-        shim::string body_;
+        std::string body_;
     };
 
     nlohmann::json response;
@@ -144,7 +144,7 @@ std::unique_ptr<HttpResponse> SEPApiServer::makeJsonResponse(int code, const shi
     return std::make_unique<SimpleHttpResponse>(code, response.dump());
 }
 
-shim::string SEPApiServer::handleError(const shim::string& message, int code)
+std::string SEPApiServer::handleError(const std::string& message, int code)
 {
     nlohmann::json error_response{};
     error_response["error"] = true;
@@ -164,7 +164,7 @@ shim::string SEPApiServer::handleError(const shim::string& message, int code)
     return error_response.dump();
 }
 
-void SEPApiServer::logRequest(const HttpRequest& req, int code, const shim::string& response_body,
+void SEPApiServer::logRequest(const HttpRequest& req, int code, const std::string& response_body,
                               int64_t duration)
 {
     (void)response_body; // Silence unused parameter warning
@@ -193,7 +193,7 @@ void SEPApiServer::logRequest(const HttpRequest& req, int code, const shim::stri
                   req.method(), req.url(), code, duration);
 }
 
-shim::string SEPApiServer::getErrorResponse(const shim::string& message, int status)
+std::string SEPApiServer::getErrorResponse(const std::string& message, int status)
 {
     return handleError(message, status);
 }
@@ -206,7 +206,7 @@ crow::response SEPApiServer::makeCrowJsonResponse(int status_code, const nlohman
     return res;
 }
 
-nlohmann::json SEPApiServer::handleCrowError(const shim::string& message, int status_code)
+nlohmann::json SEPApiServer::handleCrowError(const std::string& message, int status_code)
 {
     nlohmann::json error_json{{"error", true},
                               {"message", message},
@@ -226,7 +226,7 @@ nlohmann::json SEPApiServer::handleCrowError(const shim::string& message, int st
 }
 
 void SEPApiServer::logRequest(const crow::request& req, int status_code,
-                              const shim::string& response_body, int64_t duration_ms)
+                              const std::string& response_body, int64_t duration_ms)
 {
     (void)response_body; // Silence unused parameter warning
     if (!logger_) return;
@@ -250,8 +250,8 @@ void SEPApiServer::logRequest(const crow::request& req, int status_code,
 
   metrics_.lastResponseTime = std::chrono::milliseconds(duration_ms);
 
-  shim::string method_name = shim::string(crow::method_name(req.method));
-  shim::string url = shim::string(req.url);
+  std::string method_name = std::string(crow::method_name(req.method));
+  std::string url = std::string(req.url);
 
   if (logger_)
     logger_->info("Request: {} {} - Status: {} - Duration: {}ms",
@@ -336,7 +336,7 @@ void SEPApiServer::setup_routes() {
                   std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
                       .count();
 
-              auto error_crow = handleCrowError("Health check failed: " + shim::string(e.what()),
+              auto error_crow = handleCrowError("Health check failed: " + std::string(e.what()),
                                                 HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
@@ -354,7 +354,7 @@ void SEPApiServer::setup_routes() {
           {
 #endif
               // Parse request body
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
 
               // Process patterns through SEP engine
               auto result = engine.processPatterns(request_data);
@@ -377,7 +377,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -388,7 +388,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow = handleCrowError(
-                  "Pattern processing failed: " + shim::string(e.what()), HTTP_INTERNAL_ERROR);
+                  "Pattern processing failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
           }
@@ -405,7 +405,7 @@ void SEPApiServer::setup_routes() {
           {
           
 #endif
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
               auto result = engine.processBatch(request_data);
               auto response_data = applyCoherenceModulation(result);
 
@@ -426,7 +426,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -436,8 +436,8 @@ void SEPApiServer::setup_routes() {
                   std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
                       .count();
 
-              auto error_crow = handleCrowError(
-                  "Batch processing failed: " + shim::string(e.what()), HTTP_INTERNAL_ERROR);
+              auto error_crow = handleCrowError("Batch processing failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
           }
@@ -454,7 +454,7 @@ void SEPApiServer::setup_routes() {
           {
           
 #endif
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
               auto result = engine.getPatternHistory(request_data);
               auto response_data = applyCoherenceModulation(result);
 
@@ -475,7 +475,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -485,7 +485,7 @@ void SEPApiServer::setup_routes() {
                   std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
                       .count();
 
-              auto error_crow = handleCrowError("Pattern history failed: " + shim::string(e.what()),
+              auto error_crow = handleCrowError("Pattern history failed: " + std::string(e.what()),
                                                 HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
@@ -503,18 +503,18 @@ void SEPApiServer::setup_routes() {
           {
 #endif
               // Parse request body - expects raw data or base64 encoded binary
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
 
-              shim::string data_format = request_data.value("format", "auto");
-              shim::string data_content;
-              shim::vector<uint8_t> binary_data;
+              std::string data_format = request_data.value("format", "auto");
+              std::string data_content;
+              std::vector<uint8_t> binary_data;
 
               // Check if data is provided as string or binary
               if (request_data.contains("data")) {
-                  data_content = request_data["data"].get<shim::string>();
+                  data_content = request_data["data"].get<std::string>();
               } else if (request_data.contains("binary")) {
                   // Base64 decode if binary data is provided
-                  shim::string base64_data = request_data["binary"].get<shim::string>();
+                  std::string base64_data = request_data["binary"].get<std::string>();
                   // Simple base64 decode (you may want to use a proper base64 library)
                   binary_data.resize(base64_data.length() * 3 / 4);
                   // TODO: Implement proper base64 decoding
@@ -522,7 +522,7 @@ void SEPApiServer::setup_routes() {
               
               // Create data parser
               sep::DataParser parser;
-              shim::vector<sep::Pattern> patterns;
+              std::vector<sep::Pattern> patterns;
 
               // Parse based on content type
               if (!binary_data.empty()) {
@@ -572,7 +572,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -583,7 +583,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow = handleCrowError(
-                  "Stream processing failed: " + shim::string(e.what()), HTTP_INTERNAL_ERROR);
+                  "Stream processing failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
           }
@@ -599,19 +599,19 @@ void SEPApiServer::setup_routes() {
           try
           {
 #endif
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
 
               // Extract candle data or file path
               nlohmann::json result;
               
               if (request_data.contains("file_path")) {
                   // Process from file
-                  shim::string file_path = request_data["file_path"].get<shim::string>();
+                  std::string file_path = request_data["file_path"].get<std::string>();
                   result = engine.processQuantData(file_path);
               } else if (request_data.contains("candles")) {
                   // Process inline candle data
                   // Save to temporary file for processing
-                  shim::string temp_file =
+                  std::string temp_file =
                       "/tmp/quant_data_" + std::to_string(std::time(nullptr)) + ".json";
                   std::ofstream out(temp_file);
                   out << request_data["candles"].dump();
@@ -642,7 +642,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -652,8 +652,8 @@ void SEPApiServer::setup_routes() {
                   std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
                       .count();
 
-              auto error_crow = handleCrowError(
-                  "Quant processing failed: " + shim::string(e.what()), HTTP_INTERNAL_ERROR);
+              auto error_crow = handleCrowError("Quant processing failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
           }
@@ -670,7 +670,7 @@ void SEPApiServer::setup_routes() {
           {
           
 #endif
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
               auto result = engine.validateContexts(request_data);
               auto response_data = applyCoherenceModulation(result);
 
@@ -691,7 +691,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -702,7 +702,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow = handleCrowError(
-                  "Context validation failed: " + shim::string(e.what()), HTTP_INTERNAL_ERROR);
+                  "Context validation failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
           }
@@ -719,7 +719,7 @@ void SEPApiServer::setup_routes() {
           {
           
 #endif
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
               auto result = engine.extractEmbeddings(request_data);
               auto response_data = applyCoherenceModulation(result);
 
@@ -740,7 +740,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -751,7 +751,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow = handleCrowError(
-                  "Embedding extraction failed: " + shim::string(e.what()), HTTP_INTERNAL_ERROR);
+                  "Embedding extraction failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
           }
@@ -768,7 +768,7 @@ void SEPApiServer::setup_routes() {
           {
           
 #endif
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
               auto result = engine.calculateSimilarity(request_data);
               auto response_data = applyCoherenceModulation(result);
 
@@ -789,7 +789,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -800,7 +800,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow = handleCrowError(
-                  "Similarity calculation failed: " + shim::string(e.what()), HTTP_INTERNAL_ERROR);
+                  "Similarity calculation failed: " + std::string(e.what()), HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
           }
@@ -817,7 +817,7 @@ void SEPApiServer::setup_routes() {
           {
           
 #endif
-              nlohmann::json request_data = parse_json(shim::string(req.body));
+              nlohmann::json request_data = parse_json(std::string(req.body));
               auto result = engine.blendContexts(request_data);
               auto response_data = applyCoherenceModulation(result);
 
@@ -838,7 +838,7 @@ void SEPApiServer::setup_routes() {
                       .count();
 
               auto error_crow =
-                  handleCrowError("Invalid JSON: " + shim::string(e.what()), HTTP_BAD_REQUEST);
+                  handleCrowError("Invalid JSON: " + std::string(e.what()), HTTP_BAD_REQUEST);
               logRequest(req, HTTP_BAD_REQUEST, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_BAD_REQUEST, error_crow);
           } catch (const std::exception& e)
@@ -848,8 +848,8 @@ void SEPApiServer::setup_routes() {
                   std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
                       .count();
 
-              auto error_crow = handleCrowError(
-                  "Context blending failed: " + shim::string(e.what()), HTTP_INTERNAL_ERROR);
+              auto error_crow = handleCrowError("Context blending failed: " + std::string(e.what()),
+                                                HTTP_INTERNAL_ERROR);
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);
               return makeCrowJsonResponse(HTTP_INTERNAL_ERROR, error_crow);
           }
@@ -885,7 +885,7 @@ void SEPApiServer::setup_routes() {
                   std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
                       .count();
 
-              auto error_crow = handleCrowError("Memory metrics failed: " + shim::string(e.what()),
+              auto error_crow = handleCrowError("Memory metrics failed: " + std::string(e.what()),
                                                 HTTP_INTERNAL_ERROR);
 
               logRequest(req, HTTP_INTERNAL_ERROR, error_crow.dump(), duration);

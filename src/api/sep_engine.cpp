@@ -136,7 +136,7 @@ namespace sep::api
     }
 
     // Generate deterministic ID
-    shim::string SepEngine::generateId(const shim::string& prefix)
+    std::string SepEngine::generateId(const std::string& prefix)
     {
         // fetch_add uses seq_cst semantics
         uint64_t id = id_counter_.fetch_add(1);
@@ -189,7 +189,7 @@ namespace sep::api
                           pattern_data[2].get<float>()};
 
         // Generate pattern ID first
-        shim::string pattern_id = generateId("pat");
+        std::string pattern_id = generateId("pat");
         size_t numeric_id = std::stoull(pattern_id.substr(4));
 
         // Process through quantum processor
@@ -244,7 +244,7 @@ namespace sep::api
             return result;
         }
 
-        shim::string batch_id = generateId("batch");
+        std::string batch_id = generateId("batch");
         json results = json::array();
 
         for (const auto& p : request_data["patterns"])
@@ -253,7 +253,7 @@ namespace sep::api
             glm::vec3 pattern{p[0].get<float>(), p[1].get<float>(), p[2].get<float>()};
 
             // Generate ID first
-            shim::string id = generateId("pat");
+            std::string id = generateId("pat");
             size_t numeric_id = std::stoull(id.substr(4));
 
             // Process pattern with numeric ID
@@ -378,7 +378,7 @@ namespace sep::api
         }
 
         static sep::embeddings::SimpleEmbeddingModel model;
-        shim::vector<double> embeddings = model.compute(request_data["text"].get<shim::string>());
+        std::vector<double> embeddings = model.compute(request_data["text"].get<std::string>());
 
         impl_->health_metrics.successfulRequests++;
 
@@ -459,8 +459,8 @@ namespace sep::api
             return result;
         }
 
-        shim::vector<shim::vector<double>> embeddings;
-        shim::vector<double> timestamps;
+        std::vector<std::vector<double>> embeddings;
+        std::vector<double> timestamps;
         for (size_t idx = 0; idx < request_data["contexts"].size(); ++idx)
         {
             const auto& ctx = request_data["contexts"][idx];
@@ -470,10 +470,10 @@ namespace sep::api
             {
                 json result;
                 result["success"] = false;
-                result["error"] = shim::string("invalid context at index ") + std::to_string(idx);
+                result["error"] = std::string("invalid context at index ") + std::to_string(idx);
                 return result;
             }
-            shim::vector<double> emb;
+            std::vector<double> emb;
             emb.reserve(ctx["content"].size());
             for (const auto& v : ctx["content"]) emb.push_back(v.get<double>());
             embeddings.push_back(std::move(emb));
@@ -492,7 +492,7 @@ namespace sep::api
             }
         }
 
-        shim::vector<double> weights;
+        std::vector<double> weights;
         if (request_data.contains("weights"))
         {
             if (!request_data["weights"].is_array() ||
@@ -600,7 +600,7 @@ namespace sep::api
         return result;
     }
 
-    nlohmann::json SepEngine::processQuantData(const shim::string& file_path)
+    nlohmann::json SepEngine::processQuantData(const std::string& file_path)
     {
         using json = nlohmann::json;
         
@@ -643,7 +643,7 @@ namespace sep::api
             sep::dag::DagGraph dag;
             
             // Store node IDs for building relationships
-            shim::vector<uint64_t> node_ids;
+            std::vector<uint64_t> node_ids;
 
             // Add patterns as nodes with market data
             for (size_t i = 0; i < patterns.size(); ++i)
@@ -658,7 +658,7 @@ namespace sep::api
                 float volume = !pattern.data.empty() ? pattern.data[0] : 0.0f;
                 
                 // Determine parent nodes based on temporal relationships
-                shim::vector<uint64_t> parents;
+                std::vector<uint64_t> parents;
                 if (i > 0 && !node_ids.empty())
                 {
                     parents.push_back(node_ids[i - 1]);  // Previous candle
@@ -695,7 +695,7 @@ namespace sep::api
             result["patterns_processed"] = patterns.size();
             
             // Export DAG as JSON
-            shim::string dag_json_str = dag.exportAsJson();
+            std::string dag_json_str = dag.exportAsJson();
             result["dag"] = json::parse(dag_json_str);
             
             // Add additional metrics
@@ -742,7 +742,7 @@ namespace sep::api
         catch (const std::exception& e)
         {
             return makeErrorResponse(ErrorCode::GeneralError,
-                                     shim::string("Quant data processing failed: ") + e.what());
+                                     std::string("Quant data processing failed: ") + e.what());
         }
     }
 
@@ -784,7 +784,7 @@ namespace sep::api
         return result;
     }
 
-    nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const shim::string& message)
+    nlohmann::json SepEngine::makeErrorResponse(api::ErrorCode code, const std::string& message)
     {
         nlohmann::json result;
         result["success"] = false;
@@ -794,7 +794,7 @@ namespace sep::api
     }
 
     bool SepEngine::validateFields(const nlohmann::json& data,
-                                   const shim::vector<shim::string>& fields, nlohmann::json& error)
+                                   const std::vector<std::string>& fields, nlohmann::json& error)
     {
         for (const auto& field : fields)
         {

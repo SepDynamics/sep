@@ -39,11 +39,11 @@ CrowRequestAdapter::CrowRequestAdapter(crow::request &req) : req_(req)
     method_str_ = crow::method_name(req.method);
 }
 
-shim::string CrowRequestAdapter::url() const { return shim::string(req_.url.c_str()); }
+std::string CrowRequestAdapter::url() const { return std::string(req_.url.c_str()); }
 
-shim::string CrowRequestAdapter::method() const { return method_str_; }
+std::string CrowRequestAdapter::method() const { return method_str_; }
 
-shim::string CrowRequestAdapter::body() const { return shim::string(req_.body.c_str()); }
+std::string CrowRequestAdapter::body() const { return std::string(req_.body.c_str()); }
 
 CrowResponseAdapter::CrowResponseAdapter(crow::response &res) : res_(res) {}
 
@@ -51,11 +51,11 @@ void CrowResponseAdapter::setCode(int code) { res_.code = code; }
 
 int CrowResponseAdapter::getCode() const { return res_.code; }
 
-void CrowResponseAdapter::setBody(const shim::string &body) { res_.body = body.c_str(); }
+void CrowResponseAdapter::setBody(const std::string &body) { res_.body = body.c_str(); }
 
 void CrowResponseAdapter::end() { res_.end(); }
 
-shim::string CrowResponseAdapter::getBody() const { return shim::string(res_.body.c_str()); }
+std::string CrowResponseAdapter::getBody() const { return std::string(res_.body.c_str()); }
 
 std::unique_ptr<HttpResponse> makeResponse(crow::response &res)
 {

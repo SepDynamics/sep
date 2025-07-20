@@ -23,7 +23,7 @@ protected:
 // Test binary data processing
 TEST_F(PatternMetricEngineTest, ProcessBinaryData) {
     // Create binary test data
-    shim::vector<uint8_t> binary_data = {0x00, 0xFF, 0x80, 0x40, 0x20, 0x10};
+    std::vector<uint8_t> binary_data = {0x00, 0xFF, 0x80, 0x40, 0x20, 0x10};
 
     // Process binary data
     engine_->ingestData(binary_data.data(), binary_data.size());
@@ -40,7 +40,7 @@ TEST_F(PatternMetricEngineTest, ProcessBinaryData) {
 
 // Test text string processing
 TEST_F(PatternMetricEngineTest, ProcessTextData) {
-    shim::string text = "Hello, Quantum Pattern Processing!";
+    std::string text = "Hello, Quantum Pattern Processing!";
 
     // Process text data as bytes
     engine_->ingestData(reinterpret_cast<const uint8_t*>(text.data()), text.size());
@@ -54,10 +54,10 @@ TEST_F(PatternMetricEngineTest, ProcessTextData) {
 
 // Test numeric array processing
 TEST_F(PatternMetricEngineTest, ProcessNumericArray) {
-    shim::vector<float> numbers = {1.0f, 2.5f, 3.7f, 4.2f, 5.0f};
+    std::vector<float> numbers = {1.0f, 2.5f, 3.7f, 4.2f, 5.0f};
 
     // Convert floats to bytes for processing
-    shim::vector<uint8_t> bytes(numbers.size() * sizeof(float));
+    std::vector<uint8_t> bytes(numbers.size() * sizeof(float));
     std::memcpy(bytes.data(), numbers.data(), bytes.size());
     
     engine_->ingestData(bytes.data(), bytes.size());
@@ -105,7 +105,7 @@ TEST_F(PatternMetricEngineTest, HandleEdgeCases) {
     EXPECT_FALSE(metrics.empty());
     
     // Large data (>64 byte chunks)
-    shim::vector<uint8_t> large_data(1000, 0x55);
+    std::vector<uint8_t> large_data(1000, 0x55);
     engine_->ingestData(large_data.data(), large_data.size());
     engine_->evolvePatterns();
     metrics = engine_->computeMetrics();
@@ -134,7 +134,7 @@ TEST_F(PatternMetricEngineTest, ProcessRepetitiveData) {
     std::ifstream f("assets/test_data/repetitive_data.bin", std::ios::binary);
     ASSERT_TRUE(f.is_open()) << "Failed to open repetitive test data file.";
 
-    shim::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), {});
+    std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), {});
     ASSERT_FALSE(bytes.empty()) << "Repetitive test data file is empty.";
     
     engine_->ingestData(bytes.data(), bytes.size());
@@ -154,7 +154,7 @@ TEST_F(PatternMetricEngineTest, ProcessRandomData) {
     std::ifstream f("assets/test_data/random_data.bin", std::ios::binary);
     ASSERT_TRUE(f.is_open()) << "Failed to open random test data file.";
 
-    shim::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), {});
+    std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), {});
     ASSERT_FALSE(bytes.empty()) << "Random test data file is empty.";
     
     engine_->ingestData(bytes.data(), bytes.size());

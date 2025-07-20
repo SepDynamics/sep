@@ -5,14 +5,14 @@
 #include <memory>
 #include <string>
 
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 namespace sep {
 namespace core {
 
 class FileSystemWatcher {
 public:
-    FileSystemWatcher(const shim::string& path, std::function<void(const shim::string&)> callback);
+    FileSystemWatcher(const std::string& path, std::function<void(const std::string&)> callback);
     ~FileSystemWatcher();
 
     void start();

@@ -14,8 +14,8 @@ void PatternMetricEngine::clear() {
     }
 }
 
-SEPResult PatternMetricEngine::init([[maybe_unused]] quantum::GPUContext* ctx) {
-    return SEPResult::SUCCESS;
+sep::SEPResult PatternMetricEngine::init([[maybe_unused]] quantum::GPUContext* ctx) {
+return sep::SEPResult::SUCCESS;
 }
 
 void PatternMetricEngine::ingestData(const uint8_t* data, size_t size) {
@@ -24,14 +24,14 @@ void PatternMetricEngine::ingestData(const uint8_t* data, size_t size) {
 }
 
 void PatternMetricEngine::ingestData(std::istream& stream) {
-    shim::vector<uint8_t> buffer(4096);
+    sep::vector<uint8_t> buffer(4096);
     while (stream.read(reinterpret_cast<char*>(buffer.data()), buffer.size())) {
         ingestData(buffer.data(), stream.gcount());
     }
     ingestData(buffer.data(), stream.gcount());
 }
 
-void PatternMetricEngine::ingestFile(const shim::string& filepath)
+void PatternMetricEngine::ingestFile(const sep::string& filepath)
 {
     std::ifstream file(filepath, std::ios::binary);
     if (file) {
@@ -39,7 +39,7 @@ void PatternMetricEngine::ingestFile(const shim::string& filepath)
     }
 }
 
-void PatternMetricEngine::ingestMappedFile([[maybe_unused]] const shim::string& filepath)
+void PatternMetricEngine::ingestMappedFile([[maybe_unused]] const sep::string& filepath)
 {
     // Implementation for memory-mapped file ingestion would go here.
 }
@@ -55,14 +55,17 @@ void PatternMetricEngine::evolvePatterns() {
     stream_buffer_.clear();
 }
 
-void PatternMetricEngine::addPattern(const pattern::PatternData& pattern) {
+void PatternMetricEngine::addPattern(const sep::compat::PatternData& pattern) {
     std::lock_guard<std::mutex> lock(engine_mutex_);
     current_patterns_.push_back(pattern);
 }
 
-pattern::PatternData PatternMetricEngine::mutatePattern(const pattern::PatternData& parent) {
-    pattern::PatternData mutated = parent;
-    mutated.id = parent.id + "_child";
+sep::compat::PatternData PatternMetricEngine::mutatePattern(const sep::compat::PatternData& parent) {
+    sep::compat::PatternData mutated = parent;
+    std::string parent_id(parent.id);
+    std::string new_id = parent_id + "_child";
+    std::strncpy(mutated.id, new_id.c_str(), sizeof(mutated.id) - 1);
+    mutated.id[sizeof(mutated.id) - 1] = '\0';
     mutated.generation++;
     if (!mutated.data.empty()) {
         mutated.data[0] += 0.1f;
@@ -70,7 +73,7 @@ pattern::PatternData PatternMetricEngine::mutatePattern(const pattern::PatternDa
     return mutated;
 }
 
-shim::vector<PatternMetrics> PatternMetricEngine::computeMetrics()
+sep::vector<PatternMetrics> PatternMetricEngine::computeMetrics()
 {
     std::lock_guard<std::mutex> lock(engine_mutex_);
     
@@ -100,15 +103,15 @@ shim::vector<PatternMetrics> PatternMetricEngine::computeMetrics()
     return current_metrics_;
 }
 
-const shim::vector<pattern::PatternData>& PatternMetricEngine::getPatterns() const
+const sep::vector<sep::compat::PatternData>& PatternMetricEngine::getPatterns() const
 {
     return current_patterns_;
 }
 
-shim::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes(
+sep::vector<sep::compat::PatternData> PatternMetricEngine::extractPatternsFromBytes(
     const uint8_t* data, size_t size)
 {
-    shim::vector<pattern::PatternData> patterns;
+    sep::vector<sep::compat::PatternData> patterns;
     const size_t float_size = sizeof(float);
     const size_t chunk_size_floats = 16;
     const size_t chunk_size_bytes = chunk_size_floats * float_size;
@@ -119,8 +122,10 @@ shim::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes
 
     size_t num_patterns = size / chunk_size_bytes;
     for (size_t i = 0; i < num_patterns; ++i) {
-        pattern::PatternData p;
-        p.id = "pattern_" + std::to_string(i);
+        sep::compat::PatternData p;
+        std::string id_str = "pattern_" + std::to_string(i);
+        std::strncpy(p.id, id_str.c_str(), sizeof(p.id) - 1);
+        p.id[sizeof(p.id) - 1] = '\0';
         
         const float* float_data = reinterpret_cast<const float*>(data + (i * chunk_size_bytes));
         p.data.assign(float_data, float_data + chunk_size_floats);
@@ -130,11 +135,13 @@ shim::vector<pattern::PatternData> PatternMetricEngine::extractPatternsFromBytes
 
     size_t remaining_bytes = size % chunk_size_bytes;
     if (remaining_bytes > 0) {
-        pattern::PatternData p;
-        p.id = "pattern_" + std::to_string(num_patterns);
+        sep::compat::PatternData p;
+        std::string id_str = "pattern_" + std::to_string(num_patterns);
+        std::strncpy(p.id, id_str.c_str(), sizeof(p.id) - 1);
+        p.id[sizeof(p.id) - 1] = '\0';
         
         const uint8_t* remaining_data_ptr = data + (num_patterns * chunk_size_bytes);
-        shim::vector<float> float_vec;
+        sep::vector<float> float_vec;
         float_vec.resize(remaining_bytes / sizeof(float) + (remaining_bytes % sizeof(float) != 0));
         std::memcpy(float_vec.data(), remaining_data_ptr, remaining_bytes);
 

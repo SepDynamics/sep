@@ -2,47 +2,14 @@ import os
 import subprocess
 import sys
 import json
-import re
+
 import pandas as pd
 import numpy as np
 from pathlib import Path
 import shutil
 import tempfile
 
-def parse_metrics_from_stream(output_stream):
-    """Parses a stream of text from pattern_metric_example into a list of metric dicts."""
-    all_metrics = []
-    
-    # Each metric block is separated by "==="
-    metric_blocks = output_stream.strip().split('===')
-    
-    for block in metric_blocks:
-        if not block.strip():
-            continue
-
-        try:
-            # Extract the name of the file/chunk
-            name_match = re.search(r"Processing File: (.+?)\s", block)
-            name = name_match.group(1).strip() if name_match else "unknown"
-
-            coherence_match = re.search(r"Average Coherence:\s+([\d\.]+)", block)
-            stability_match = re.search(r"Average Stability:\s+([\d\.]+)", block)
-            entropy_match = re.search(r"Average Entropy:\s+([\d\.]+)", block)
-            patterns_match = re.search(r"Total Patterns:\s+(\d+)", block)
-
-            if coherence_match and stability_match and entropy_match:
-                metrics = {
-                    'name': name,
-                    'coherence': float(coherence_match.group(1)),
-                    'stability': float(stability_match.group(1)),
-                    'entropy': float(entropy_match.group(1)),
-                    'patterns': int(patterns_match.group(1)) if patterns_match else 0
-                }
-                all_metrics.append(metrics)
-        except Exception as e:
-            print(f"Error parsing metric block: {e}\nBlock was:\n{block}")
-            
-    return all_metrics
+# Removed parse_metrics_from_stream function - now using direct JSON parsing
 
 def create_chunks(input_file, num_chunks, output_dir):
     """Splits the input file into a specified number of chunks."""
@@ -81,10 +48,10 @@ def analyze_chunks_statefully(chunk_list, temp_dir):
         shutil.copy(chunk_path, temp_dir / f"process_{i:05d}_{chunk_path.name}")
 
     executable_path = Path("./build/examples/pattern_metric_example")
-    cmd = [str(executable_path), str(temp_dir), "--no-clear"]
+    cmd = [str(executable_path), str(temp_dir), "--no-clear", "--json"]
     
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    return parse_metrics_from_stream(result.stdout)
+    return json.loads(result.stdout)
 
 def run_backtest(metrics_data):
     """Runs the financial_backtest.py script on a list of metrics."""
@@ -100,6 +67,8 @@ def run_backtest(metrics_data):
     cmd = ["python3", "./financial_backtest.py", tmp_path]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        # Look for "Annualized Alpha: X.XX%" in the output
+        import re
         alpha_match = re.search(r"Annualized Alpha:\s+([-\d\.]+)%", result.stdout)
         if alpha_match:
             return float(alpha_match.group(1))

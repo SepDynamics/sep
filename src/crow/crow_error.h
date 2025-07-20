@@ -14,7 +14,7 @@ enum class Code {
     ServerError = 4
 };
 
-void log(Code code, const sep::shim::string& message);
+void log(Code code, const sep::string& message);
 
 } // namespace error
 } // namespace crow

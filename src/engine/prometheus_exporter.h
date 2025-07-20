@@ -6,19 +6,19 @@
 #include <string>
 #include <vector>
 
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 namespace sep::metrics {
 
 struct Counter {
-    shim::string name;
-    shim::string help;
+    std::string name;
+    std::string help;
     std::atomic<uint64_t> value{0};
 };
 
 struct Gauge {
-    shim::string name;
-    shim::string help;
+    std::string name;
+    std::string help;
     std::atomic<double> value{0.0};
 };
 
@@ -28,12 +28,12 @@ public:
 
     void registerCounter(Counter *counter);
     void registerGauge(Gauge *gauge);
-    shim::string exportMetrics();
+    std::string exportMetrics();
 
 private:
     PrometheusExporter() = default;
-    shim::vector<Counter *> counters_;
-    shim::vector<Gauge *> gauges_;
+    std::vector<Counter *> counters_;
+    std::vector<Gauge *> gauges_;
     mutable std::mutex mutex_;
 };
 

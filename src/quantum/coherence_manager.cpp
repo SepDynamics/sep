@@ -1,6 +1,8 @@
 #include "quantum/coherence_manager.h"
 
+#ifdef __CUDACC__
 #include <cuda_runtime.h>
+#endif
 #include <tbb/concurrent_hash_map.h>
 #include <tbb/parallel_for.h>
 
@@ -18,6 +20,7 @@
 #include "engine/cuda.h"
 #include "engine/cuda_helpers.h"
 #include "engine/logging.h"
+#include "engine/memory.h"
 #include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
@@ -68,7 +71,7 @@ public:
         }
     }
 
-    CoherenceResult updateCoherence(const shim::vector<sep::Pattern>& patterns)
+    CoherenceResult updateCoherence(const std::vector<sep::quantum::Pattern>& patterns)
     {
         CoherenceResult result;
         global_tick_++;
@@ -112,9 +115,9 @@ public:
         return result;
     }
 
-    shim::vector<TierMigration> optimizeMemoryLayout()
+    std::vector<TierMigration> optimizeMemoryLayout()
     {
-        shim::vector<TierMigration> migrations;
+        std::vector<TierMigration> migrations;
 
         analyzeTierCoherence();
 
@@ -145,7 +148,7 @@ public:
         return migrations;
     }
 
-    EntanglementGraph computeEntanglementGraph(const shim::vector<sep::Pattern>& patterns)
+    EntanglementGraph computeEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns)
     {
         EntanglementGraph graph;
         graph.nodes.reserve(patterns.size());
@@ -265,15 +268,15 @@ private:
     
     // Concurrent data structures
     using CoherenceMap =
-        tbb::concurrent_hash_map<shim::string, CoherenceManager::PatternCoherenceData>;
+        tbb::concurrent_hash_map<std::string, CoherenceManager::PatternCoherenceData>;
     CoherenceMap coherence_map_;
     
     CoherenceManager::CoherenceMetrics metrics_;
     std::atomic<uint64_t> global_tick_;
     
     // GPU buffers for coherence computation
-    std::unique_ptr<cuda::DeviceMemory<float>> d_coherence_values_;
-    std::unique_ptr<cuda::DeviceMemory<float>> d_stability_values_;
+    std::unique_ptr<sep::cuda::DeviceMemory<float>> d_coherence_values_;
+    std::unique_ptr<sep::cuda::DeviceMemory<float>> d_stability_values_;
     
     void initializeCoherenceTracking() {
         metrics_.global_coherence = 1.0f;
@@ -292,12 +295,12 @@ private:
     void allocateGPUBuffers() {
         if (cuda_core_) {
             size_t buffer_size = config_.max_patterns;
-            d_coherence_values_ = std::make_unique<cuda::DeviceMemory<float>>(buffer_size);
-            d_stability_values_ = std::make_unique<cuda::DeviceMemory<float>>(buffer_size);
+            d_coherence_values_ = std::make_unique<sep::cuda::DeviceMemory<float>>(buffer_size);
+            d_stability_values_ = std::make_unique<sep::cuda::DeviceMemory<float>>(buffer_size);
         }
     }
     
-    void updatePatternCoherence(const sep::Pattern& pattern) {
+    void updatePatternCoherence(const sep::quantum::Pattern& pattern) {
         CoherenceMap::accessor accessor;
         
         if (coherence_map_.find(accessor, pattern.id)) {
@@ -400,10 +403,10 @@ private:
             static_cast<float>(total_entanglements) / (pattern_count * (pattern_count - 1)) : 0.0f;
     }
 
-    shim::vector<CoherenceAnomaly> detectCoherenceAnomalies(
-        const shim::vector<sep::Pattern>& patterns)
+    std::vector<CoherenceAnomaly> detectCoherenceAnomalies(
+        const std::vector<sep::quantum::Pattern>& patterns)
     {
-        shim::vector<CoherenceAnomaly> anomalies;
+        std::vector<CoherenceAnomaly> anomalies;
 
         // Statistical anomaly detection
         float mean_coherence = metrics_.global_coherence;
@@ -457,9 +460,9 @@ private:
         return anomalies;
     }
 
-    shim::vector<TierMigration> performTierMigrations()
+    std::vector<TierMigration> performTierMigrations()
     {
-        shim::vector<TierMigration> migrations;
+        std::vector<TierMigration> migrations;
 
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it)
         {
@@ -491,7 +494,7 @@ private:
         return migrations;
     }
 
-    void updateEntanglementGraph(const shim::vector<sep::Pattern>& patterns)
+    void updateEntanglementGraph(const std::vector<sep::quantum::Pattern>& patterns)
     {
         // Clear existing entanglements
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
@@ -565,10 +568,10 @@ private:
         return MigrationReason::LowActivity;
     }
 
-    void applyMemoryPressureOptimizations(shim::vector<TierMigration>& migrations)
+    void applyMemoryPressureOptimizations(std::vector<TierMigration>& migrations)
     {
         // Sort by coherence ascending for demotion candidates
-        shim::vector<std::pair<shim::string, float>> demotion_candidates;
+        std::vector<std::pair<std::string, float>> demotion_candidates;
 
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
@@ -597,7 +600,7 @@ private:
     }
 
     void cleanupZeroCoherencePatterns() {
-        shim::vector<shim::string> to_remove;
+        std::vector<std::string> to_remove;
 
         for (auto it = coherence_map_.begin(); it != coherence_map_.end(); ++it) {
             const auto& pair = *it;
@@ -626,7 +629,7 @@ private:
         return (count > 1) ? (sum_squared_diff / (count - 1)) : 0.0f;
     }
     
-    float computeEntanglement(const sep::Pattern& p1, const sep::Pattern& p2) const {
+    float computeEntanglement(const sep::quantum::Pattern& p1, const sep::quantum::Pattern& p2) const {
         // Quantum entanglement calculation - simplified example using inverse distance
         float distance = glm::distance(p1.position, p2.position);
         float phase_correlation = std::abs(std::cos(p1.quantum_state.phase - p2.quantum_state.phase));
@@ -635,14 +638,14 @@ private:
         return glm::mix(1.0f / (1.0f + distance), phase_correlation, 0.5f);
     }
     
-    float computePhaseCorrelation(const sep::Pattern& p1, const sep::Pattern& p2) const {
+    float computePhaseCorrelation(const sep::quantum::Pattern& p1, const sep::quantum::Pattern& p2) const {
         // Example phase correlation computation
         return std::abs(std::cos(p1.quantum_state.phase - p2.quantum_state.phase));
     }
     
     uint32_t computeMaxDegree(const EntanglementGraph& graph) const {
         // Count connections per node
-        shim::vector<uint32_t> degrees(graph.nodes.size(), 0);
+        std::vector<uint32_t> degrees(graph.nodes.size(), 0);
 
         for (const auto& edge : graph.edges) {
             degrees[edge.node1_idx]++;
@@ -664,7 +667,7 @@ private:
         
         for (size_t i = 0; i < graph.nodes.size(); ++i) {
             // Get neighbors of node i
-            shim::vector<size_t> neighbors;
+            std::vector<size_t> neighbors;
 
             for (const auto& edge : graph.edges) {
                 if (edge.node1_idx == i) {
@@ -764,18 +767,18 @@ CoherenceManager::CoherenceManager(const Config& config)
 CoherenceManager::~CoherenceManager() = default;
 
 CoherenceManager::CoherenceResult CoherenceManager::updateCoherence(
-    const shim::vector<sep::Pattern>& patterns)
+    const std::vector<sep::quantum::Pattern>& patterns)
 {
     return impl_->updateCoherence(patterns);
 }
 
-shim::vector<CoherenceManager::TierMigration> CoherenceManager::optimizeMemoryLayout()
+std::vector<CoherenceManager::TierMigration> CoherenceManager::optimizeMemoryLayout()
 {
     return impl_->optimizeMemoryLayout();
 }
 
 CoherenceManager::EntanglementGraph CoherenceManager::computeEntanglementGraph(
-    const shim::vector<sep::Pattern>& patterns)
+    const std::vector<sep::quantum::Pattern>& patterns)
 {
     return impl_->computeEntanglementGraph(patterns);
 }

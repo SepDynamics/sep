@@ -7,41 +7,41 @@ namespace api {
 
 CrowRequestAdapter::CrowRequestAdapter(crow::request& req) : request_(req) {}
 
-shim::string CrowRequestAdapter::getHeader(const shim::string& name) const
+std::string CrowRequestAdapter::getHeader(const std::string& name) const
 {
     return request_.get_header_value(name);
 }
 
-shim::string CrowRequestAdapter::body() const { return shim::string(request_.body); }
+std::string CrowRequestAdapter::body() const { return std::string(request_.body); }
 
-shim::string CrowRequestAdapter::method() const
+std::string CrowRequestAdapter::method() const
 {
-    return shim::string(crow::method_name(request_.method));
+    return std::string(crow::method_name(request_.method));
 }
 
-shim::string CrowRequestAdapter::url() const { return shim::string(request_.url); }
+std::string CrowRequestAdapter::url() const { return std::string(request_.url); }
 
-shim::string CrowRequestAdapter::getQueryParam(const shim::string& name) const
+std::string CrowRequestAdapter::getQueryParam(const std::string& name) const
 {
     // Parse query parameters from URL
-    shim::string url = request_.url;
+    std::string url = request_.url;
     size_t pos = url.find('?');
-    if (pos == shim::string::npos)
+    if (pos == std::string::npos)
     {
-        return shim::string();
+        return std::string();
     }
 
-    shim::string query = url.substr(pos + 1);
-    shim::string param = name + "=";
+    std::string query = url.substr(pos + 1);
+    std::string param = name + "=";
     pos = query.find(param);
-    if (pos == shim::string::npos)
+    if (pos == std::string::npos)
     {
-        return shim::string();
+        return std::string();
     }
 
     size_t start = pos + param.length();
     size_t end = query.find('&', start);
-    if (end == shim::string::npos)
+    if (end == std::string::npos)
     {
         end = query.length();
     }

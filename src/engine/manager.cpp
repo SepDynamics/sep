@@ -3,17 +3,18 @@
 #include <nlohmann/json.hpp>
 
 #include "config.h"
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "env_keys.h"
 #include "memory/memory_tier_manager_serialization.hpp"
+#include "memory/types.h"
 
 namespace sep::config
 {
 
     struct ConfigManager::Impl
     {
-        sep::MemoryThresholdConfig mem_cfg{};
-        sep::MemoryThresholdConfig quantum_cfg{};
+        sep::memory::MemoryThresholdConfig mem_cfg{};
+        sep::QuantumThresholdConfig quantum_cfg{};
         CudaConfig api_cfg{};
         bool loaded{false};
     };
@@ -41,7 +42,7 @@ namespace sep::config
         impl_->mem_cfg = cfg.memory;
         impl_->quantum_cfg = cfg.quantum;
     }
-    bool ConfigManager::loadFromFile(const sep::shim::string& filename)
+    bool ConfigManager::loadFromFile(const sep::string& filename)
     {
         try
         {
@@ -51,16 +52,38 @@ namespace sep::config
             file >> j;
             std::lock_guard<std::mutex> lock(mutex_);
             if (j.contains("memory"))
-                if (j.contains("quantum"))
-                {
-                    const auto& q = j.at("quantum");
-                    impl_->quantum_cfg.ltm_coherence_threshold = q.value(
-                        "ltm_coherence_threshold", impl_->quantum_cfg.ltm_coherence_threshold);
-                    impl_->quantum_cfg.mtm_coherence_threshold = q.value(
-                        "mtm_coherence_threshold", impl_->quantum_cfg.mtm_coherence_threshold);
-                    impl_->quantum_cfg.stability_threshold =
-                        q.value("stability_threshold", impl_->quantum_cfg.stability_threshold);
-                }
+            {
+                const auto& m = j.at("memory");
+                impl_->mem_cfg.stm_size = m.value("stm_size", impl_->mem_cfg.stm_size);
+                impl_->mem_cfg.mtm_size = m.value("mtm_size", impl_->mem_cfg.mtm_size);
+                impl_->mem_cfg.ltm_size = m.value("ltm_size", impl_->mem_cfg.ltm_size);
+                impl_->mem_cfg.promote_stm_to_mtm =
+                    m.value("promote_stm_to_mtm", impl_->mem_cfg.promote_stm_to_mtm);
+                impl_->mem_cfg.promote_mtm_to_ltm =
+                    m.value("promote_mtm_to_ltm", impl_->mem_cfg.promote_mtm_to_ltm);
+                impl_->mem_cfg.demote_threshold =
+                    m.value("demote_threshold", impl_->mem_cfg.demote_threshold);
+                impl_->mem_cfg.fragmentation_threshold =
+                    m.value("fragmentation_threshold", impl_->mem_cfg.fragmentation_threshold);
+                impl_->mem_cfg.use_unified_memory =
+                    m.value("use_unified_memory", impl_->mem_cfg.use_unified_memory);
+                impl_->mem_cfg.enable_compression =
+                    m.value("enable_compression", impl_->mem_cfg.enable_compression);
+                impl_->mem_cfg.stm_to_mtm_min_gen =
+                    m.value("stm_to_mtm_min_gen", impl_->mem_cfg.stm_to_mtm_min_gen);
+                impl_->mem_cfg.mtm_to_ltm_min_gen =
+                    m.value("mtm_to_ltm_min_gen", impl_->mem_cfg.mtm_to_ltm_min_gen);
+            }
+            if (j.contains("quantum"))
+            {
+                const auto& q = j.at("quantum");
+                impl_->quantum_cfg.ltm_coherence_threshold =
+                    q.value("ltm_coherence_threshold", impl_->quantum_cfg.ltm_coherence_threshold);
+                impl_->quantum_cfg.mtm_coherence_threshold =
+                    q.value("mtm_coherence_threshold", impl_->quantum_cfg.mtm_coherence_threshold);
+                impl_->quantum_cfg.stability_threshold =
+                    q.value("stability_threshold", impl_->quantum_cfg.stability_threshold);
+            }
             return true;
         }
         catch (...)
@@ -76,21 +99,21 @@ namespace sep::config
 
         const char* metrics = std::getenv(env_keys::ENV_API_ENABLE_METRICS);
         if (metrics) {
-            shim::string val{metrics};
+            std::string val{metrics};
         }
         return impl_->api_cfg;
     }
 
     void ConfigManager::updateCudaConfig(const sep::config::CudaConfig&) {}
     void ConfigManager::updateLogConfig(const LogConfig&) {}
-    void ConfigManager::updateMemoryConfig(const sep::MemoryThresholdConfig& cfg)
+    void ConfigManager::updateMemoryConfig(const sep::memory::MemoryThresholdConfig& cfg)
     {
         impl_->mem_cfg = cfg;
     }
-    void ConfigManager::updateQuantumConfig(const sep::MemoryThresholdConfig& cfg)
+    void ConfigManager::updateQuantumConfig(const sep::QuantumThresholdConfig& cfg)
     {
         impl_->quantum_cfg = cfg;
     }
-    void ConfigManager::resetToDefaults() { impl_->mem_cfg = sep::MemoryThresholdConfig{}; }
+    void ConfigManager::resetToDefaults() { impl_->mem_cfg = sep::memory::MemoryThresholdConfig{}; }
 
 }  // namespace sep::config

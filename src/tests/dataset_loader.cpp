@@ -5,9 +5,9 @@
 
 namespace sep::utils {
 
-    shim::vector<glm::vec3> parseJsonDataset(const nlohmann::json &jsonData)
+    std::vector<glm::vec3> parseJsonDataset(const nlohmann::json &jsonData)
     {
-        shim::vector<glm::vec3> patterns;
+        std::vector<glm::vec3> patterns;
         auto processItem = [&](const nlohmann::json &item) {
             float x = 0.0f, y = 0.0f, z = 0.0f;
             if (item.is_array() && item.size() >= 3)
@@ -70,7 +70,7 @@ namespace sep::utils {
         return patterns;
     }
 
-    static shim::vector<glm::vec3> loadJsonFile(const shim::string &path)
+    static std::vector<glm::vec3> loadJsonFile(const std::string &path)
     {
         std::ifstream file(path);
         if (!file.is_open())
@@ -82,22 +82,23 @@ namespace sep::utils {
         return parseJsonDataset(j);
     }
 
-static shim::vector<glm::vec3> loadBinaryFile(const shim::string &path)
-{
-    std::ifstream file(path, std::ios::binary);
-    if (!file.is_open()) {
-        throw std::runtime_error("failed to open dataset");
+    static std::vector<glm::vec3> loadBinaryFile(const std::string &path)
+    {
+        std::ifstream file(path, std::ios::binary);
+        if (!file.is_open())
+        {
+            throw std::runtime_error("failed to open dataset");
+        }
+        file.seekg(0, std::ios::end);
+        std::size_t sz = file.tellg();
+        file.seekg(0, std::ios::beg);
+        std::size_t count = sz / (sizeof(float) * 3);
+        std::vector<glm::vec3> data(count);
+        file.read(reinterpret_cast<char *>(data.data()), count * sizeof(glm::vec3));
+        return data;
     }
-    file.seekg(0, std::ios::end);
-    std::size_t sz = file.tellg();
-    file.seekg(0, std::ios::beg);
-    std::size_t count = sz / (sizeof(float) * 3);
-    shim::vector<glm::vec3> data(count);
-    file.read(reinterpret_cast<char *>(data.data()), count * sizeof(glm::vec3));
-    return data;
-}
 
-shim::vector<glm::vec3> loadDataset(const shim::string &path)
+std::vector<glm::vec3> loadDataset(const std::string &path)
 {
     if (path.size() >= 4 && path.substr(path.size() - 4) == ".bin") {
         return loadBinaryFile(path);

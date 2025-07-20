@@ -12,7 +12,7 @@ public:
 
     SimpleEmbeddingModel();
 
-    shim::vector<double> compute(const shim::string& text) const;
+    std::vector<double> compute(const std::string& text) const;
 
 private:
     std::array<double, kDim> weights_;

@@ -5,29 +5,29 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 // Minimal context types for compilation
 namespace sep::context {
 struct Context {
-  ::sep::shim::string type;
-  nlohmann::json content;
-  shim::vector<nlohmann::json> relationships;
-  shim::vector<::sep::shim::string> tags;
-  nlohmann::json metadata;
-  nlohmann::json processorResult;
+    ::sep::string type;
+    nlohmann::json content;
+    std::vector<nlohmann::json> relationships;
+    std::vector<::sep::string> tags;
+    nlohmann::json metadata;
+    nlohmann::json processorResult;
 };
 
 struct CheckResult {
   enum class Status { VALID = 0, INVALID = 1, STABLE = 2 };
   Status status{Status::VALID};
   float score{0.0f};
-  ::sep::shim::string error;
+  ::sep::string error;
 };
 
 struct Batch {
-  ::sep::shim::string layer;
-  shim::vector<Context> contexts;
+    ::sep::string layer;
+    std::vector<Context> contexts;
 };
 
 struct ResourcePrediction {
@@ -96,7 +96,7 @@ public:
   virtual float calculateResourceEfficiency() const = 0;
 
   // Suggest batch sizes for target throughput
-  virtual shim::vector<std::size_t> suggestBatchSizes(std::size_t target_throughput) const = 0;
+  virtual std::vector<std::size_t> suggestBatchSizes(std::size_t target_throughput) const = 0;
 };
 
 } // namespace sep::context

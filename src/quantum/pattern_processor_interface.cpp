@@ -32,21 +32,22 @@ void PatternProcessor::evolvePatterns()
         ++p.generation;
 }
 
-PatternData PatternProcessor::mutatePattern(const PatternData& parent)
+sep::compat::PatternData PatternProcessor::mutatePattern(const sep::compat::PatternData& parent)
 {
-    PatternData child = parent;
-    child.id = parent.id + "_child";
+    sep::compat::PatternData child = parent;
+    std::strncpy(child.id, (std::string(parent.id) + "_child").c_str(), sizeof(child.id) - 1);
+    child.id[sizeof(child.id) - 1] = '\0';
     ++child.generation;
     return child;
 }
 
-sep::SEPResult PatternProcessor::addPattern(const PatternData& pattern)
+sep::SEPResult PatternProcessor::addPattern(const sep::compat::PatternData& pattern)
 {
     patterns_.push_back(pattern);
     return sep::SEPResult::SUCCESS;
 }
 
-const shim::vector<PatternData>& PatternProcessor::getPatterns() const { return patterns_; }
+const std::vector<sep::compat::PatternData>& PatternProcessor::getPatterns() const { return patterns_; }
 
 CPUPatternProcessor::CPUPatternProcessor()
     : PatternProcessor(Implementation::CPU), patterns_(PatternProcessor::patterns_)
@@ -63,7 +64,7 @@ void CPUPatternProcessor::evolvePatterns()
     PatternProcessor::evolvePatterns();
 }
 
-PatternData CPUPatternProcessor::mutatePattern(const PatternData& parent)
+sep::compat::PatternData CPUPatternProcessor::mutatePattern(const sep::compat::PatternData& parent)
 {
     return PatternProcessor::mutatePattern(parent);
 }

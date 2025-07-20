@@ -2,9 +2,20 @@
 #define SEP_COMPAT_CUDA_SEP_H
 
 // Include proper dependencies in correct order
+#ifndef __CUDACC__
+// Forward declare CUDA types for non-CUDA files
+typedef int cudaError_t;
+typedef int cudaMemoryAdvise;
+typedef int cudaMemcpyKind;
+typedef struct CUstream_st* cudaStream_t;
+typedef struct CUevent_st* cudaEvent_t;
+struct cudaDeviceProp;
+#else
+// Include real CUDA headers for CUDA files
 #include <cuda_runtime.h>
+#endif
 
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 #ifndef SEP_cudaMemAttachGlobal
 #define SEP_cudaMemAttachGlobal cudaMemAttachGlobal
@@ -19,7 +30,8 @@ namespace cuda {
     // Stream class forward declaration
     class Stream;
 
-// When CUDA is available, use the real CUDA functions directly
+#ifdef __CUDACC__
+// When compiling CUDA files, use the real CUDA functions directly
 inline cudaError_t SEP_cudaStreamDestroy(cudaStream_t stream) { return cudaStreamDestroy(stream); }
 inline const char* SEP_cudaGetErrorString(cudaError_t error) { return cudaGetErrorString(error); }
 inline cudaError_t SEP_cudaEventCreate(cudaEvent_t* event) { return cudaEventCreate(event); }
@@ -55,6 +67,44 @@ inline cudaError_t SEP_cudaHostAlloc(void** ptr, size_t size, unsigned int flags
 inline cudaError_t SEP_cudaStreamAttachMemAsync(cudaStream_t stream, void* ptr, size_t size, unsigned int flags) { return cudaStreamAttachMemAsync(stream, ptr, size, flags); }
 inline cudaError_t SEP_cudaMemset(void* devPtr, int value, size_t count) { return cudaMemset(devPtr, value, count); }
 inline cudaError_t SEP_cudaMemsetAsync(void* devPtr, int value, size_t count, cudaStream_t stream) { return cudaMemsetAsync(devPtr, value, count, stream); }
+#else
+// When compiling non-CUDA files, provide stub implementations
+inline cudaError_t SEP_cudaStreamDestroy(cudaStream_t) { return 0; }
+inline const char* SEP_cudaGetErrorString(cudaError_t) { return "CUDA not available"; }
+inline cudaError_t SEP_cudaEventCreate(cudaEvent_t*) { return 0; }
+inline cudaError_t SEP_cudaEventDestroy(cudaEvent_t) { return 0; }
+inline cudaError_t SEP_cudaEventRecord(cudaEvent_t, cudaStream_t) { return 0; }
+inline cudaError_t SEP_cudaEventSynchronize(cudaEvent_t) { return 0; }
+inline cudaError_t SEP_cudaEventElapsedTime(float* ms, cudaEvent_t, cudaEvent_t) { if (ms) *ms = 0.0f; return 0; }
+inline cudaError_t SEP_cudaMemGetInfo(size_t* free, size_t* total) { if (free) *free = 0; if (total) *total = 0; return 0; }
+inline cudaError_t SEP_cudaMemcpy(void*, const void*, size_t, cudaMemcpyKind) { return 0; }
+inline cudaError_t SEP_cudaMemcpyAsync(void*, const void*, size_t, cudaMemcpyKind, cudaStream_t) { return 0; }
+inline cudaError_t SEP_cudaSetDevice(int) { return 0; }
+inline cudaError_t SEP_cudaGetDevice(int* device) { if (device) *device = 0; return 0; }
+inline cudaError_t SEP_cudaGetDeviceCount(int* count) { if (count) *count = 0; return 0; }
+inline cudaError_t SEP_cudaGetDeviceProperties(cudaDeviceProp*, int) { return 0; }
+inline cudaError_t SEP_cudaDeviceSynchronize() { return 0; }
+inline cudaError_t SEP_cudaDeviceReset() { return 0; }
+inline cudaError_t SEP_cudaSetDeviceFlags(unsigned int) { return 0; }
+inline cudaError_t SEP_cudaGetDeviceFlags(unsigned int* flags) { if (flags) *flags = 0; return 0; }
+inline cudaError_t SEP_cudaDeviceSetCacheConfig(int) { return 0; }
+inline cudaError_t SEP_cudaDeviceGetCacheConfig(int* config) { if (config) *config = 0; return 0; }
+inline cudaError_t SEP_cudaGetLastError() { return 0; }
+inline cudaError_t SEP_cudaStreamCreate(cudaStream_t*) { return 0; }
+inline cudaError_t SEP_cudaStreamCreateWithFlags(cudaStream_t*, unsigned int) { return 0; }
+inline cudaError_t SEP_cudaStreamSynchronize(cudaStream_t) { return 0; }
+inline cudaError_t SEP_cudaStreamWaitEvent(cudaStream_t, cudaEvent_t, unsigned int) { return 0; }
+inline cudaError_t SEP_cudaEventCreateWithFlags(cudaEvent_t*, unsigned int) { return 0; }
+inline cudaError_t SEP_cudaMalloc(void** ptr, size_t) { if (ptr) *ptr = nullptr; return 0; }
+inline cudaError_t SEP_cudaFree(void*) { return 0; }
+inline cudaError_t SEP_cudaMallocHost(void** ptr, size_t) { if (ptr) *ptr = nullptr; return 0; }
+inline cudaError_t SEP_cudaFreeHost(void*) { return 0; }
+inline cudaError_t SEP_cudaMallocManaged(void** ptr, size_t, unsigned int = 0) { if (ptr) *ptr = nullptr; return 0; }
+inline cudaError_t SEP_cudaHostAlloc(void** ptr, size_t, unsigned int) { if (ptr) *ptr = nullptr; return 0; }
+inline cudaError_t SEP_cudaStreamAttachMemAsync(cudaStream_t, void*, size_t, unsigned int) { return 0; }
+inline cudaError_t SEP_cudaMemset(void*, int, size_t) { return 0; }
+inline cudaError_t SEP_cudaMemsetAsync(void*, int, size_t, cudaStream_t) { return 0; }
+#endif
 }  // namespace cuda
 } // namespace sep
 #endif // SEP_COMPAT_CUDA_SEP_H

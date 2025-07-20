@@ -11,33 +11,33 @@ struct GPUConfig {
 
 struct OllamaConfig {
     bool enabled{false};
-    shim::string host{"http://127.0.0.1:11434"};
-    shim::string model{"llama2"};
+    std::string host{"http://127.0.0.1:11434"};
+    std::string model{"llama2"};
     std::size_t batch_size{1};
     std::size_t context_window{512};
     GPUConfig gpu{};
 };
 
 struct GenerateRequest {
-    shim::string model;
-    shim::string prompt;
-    shim::string system;
+    std::string model;
+    std::string prompt;
+    std::string system;
     bool stream{false};
 };
 
 struct GenerateResponse {
-    shim::string response;
+    std::string response;
     bool done{false};
-    shim::string model;
+    std::string model;
 };
 
 struct EmbeddingRequest {
-    shim::string model;
-    shim::string prompt;
+    std::string model;
+    std::string prompt;
 };
 
 struct EmbeddingResponse {
-    shim::vector<float> embedding;
+    std::vector<float> embedding;
 };
 
 } // namespace sep::ollama

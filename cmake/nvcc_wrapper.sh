@@ -7,16 +7,5 @@
 # The actual host compiler
 HOST_COMPILER="/usr/bin/clang++-15"
 
-# Filter out problematic flags and add necessary ones
-args=()
-for arg in "$@"; do
-  case "$arg" in
-    # Add more flags to filter here if needed
-    *)
-      args+=("$arg")
-      ;;
-  esac
-done
-
-# Call the actual host compiler with the modified arguments
-exec "$HOST_COMPILER" "${args[@]}"
+# Call the actual host compiler with all original arguments
+exec "$HOST_COMPILER" "$@"

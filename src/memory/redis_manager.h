@@ -18,60 +18,60 @@ class IRedisManager {
 public:
     virtual ~IRedisManager() = default;
     virtual void storePattern(std::uint64_t id, const persistence::PersistentPatternData& data,
-                              const shim::string& tier) = 0;
+                              const std::string& tier) = 0;
     virtual std::optional<persistence::PersistentPatternData> loadPattern(
-        std::uint64_t id, const shim::string& tier) = 0;
-    virtual shim::vector<std::uint64_t> getPatternIds(const shim::string& tier) = 0;
-    virtual void removePattern(std::uint64_t id, const shim::string& tier) = 0;
+        std::uint64_t id, const std::string& tier) = 0;
+    virtual std::vector<std::uint64_t> getPatternIds(const std::string& tier) = 0;
+    virtual void removePattern(std::uint64_t id, const std::string& tier) = 0;
     virtual void bulkStore(
-        const shim::vector<std::pair<std::uint64_t, persistence::PersistentPatternData>>& patterns,
-        const shim::string& tier) = 0;
-    virtual shim::vector<persistence::PersistentPatternData> bulkLoad(
-        const shim::vector<std::uint64_t>& ids, const shim::string& tier) = 0;
+        const std::vector<std::pair<std::uint64_t, persistence::PersistentPatternData>>& patterns,
+        const std::string& tier) = 0;
+    virtual std::vector<persistence::PersistentPatternData> bulkLoad(
+        const std::vector<std::uint64_t>& ids, const std::string& tier) = 0;
     virtual bool isConnected() const = 0;
 };
 
 class RedisManager : public IRedisManager {
 public:
-    RedisManager(const shim::string& host, int port);
+    RedisManager(const std::string& host, int port);
     ~RedisManager() override;
 
     void storePattern(std::uint64_t id, const persistence::PersistentPatternData& data,
-                      const shim::string& tier) override;
-    std::optional<persistence::PersistentPatternData> loadPattern(
-        std::uint64_t id, const shim::string& tier) override;
-    shim::vector<std::uint64_t> getPatternIds(const shim::string& tier) override;
-    void removePattern(std::uint64_t id, const shim::string& tier) override;
+                      const std::string& tier) override;
+    std::optional<persistence::PersistentPatternData> loadPattern(std::uint64_t id,
+                                                                  const std::string& tier) override;
+    std::vector<std::uint64_t> getPatternIds(const std::string& tier) override;
+    void removePattern(std::uint64_t id, const std::string& tier) override;
     void bulkStore(
-        const shim::vector<std::pair<std::uint64_t, persistence::PersistentPatternData>>& patterns,
-        const shim::string& tier) override;
-    shim::vector<persistence::PersistentPatternData> bulkLoad(
-        const shim::vector<std::uint64_t>& ids, const shim::string& tier) override;
+        const std::vector<std::pair<std::uint64_t, persistence::PersistentPatternData>>& patterns,
+        const std::string& tier) override;
+    std::vector<persistence::PersistentPatternData> bulkLoad(const std::vector<std::uint64_t>& ids,
+                                                             const std::string& tier) override;
     bool isConnected() const override;
 
 private:
     class Impl {
     public:
-        Impl(const shim::string& host, int port);
+        Impl(const std::string& host, int port);
         ~Impl();
         
         bool isConnected() const;
         void storePattern(std::uint64_t id, const persistence::PersistentPatternData& data,
-                          const shim::string& tier);
+                          const std::string& tier);
         std::optional<persistence::PersistentPatternData> loadPattern(std::uint64_t id,
-                                                                      const shim::string& tier);
-        shim::vector<std::uint64_t> getPatternIds(const shim::string& tier);
-        void removePattern(std::uint64_t id, const shim::string& tier);
-        void bulkStore(const shim::vector<
+                                                                      const std::string& tier);
+        std::vector<std::uint64_t> getPatternIds(const std::string& tier);
+        void removePattern(std::uint64_t id, const std::string& tier);
+        void bulkStore(const std::vector<
                            std::pair<std::uint64_t, persistence::PersistentPatternData>>& patterns,
-                       const shim::string& tier);
-        shim::vector<persistence::PersistentPatternData> bulkLoad(
-            const shim::vector<std::uint64_t>& ids, const shim::string& tier);
+                       const std::string& tier);
+        std::vector<persistence::PersistentPatternData> bulkLoad(
+            const std::vector<std::uint64_t>& ids, const std::string& tier);
 
     private:
-        shim::string getPatternKey(std::uint64_t id, const shim::string& tier) const;
-        shim::string getTierPatternsKey(const shim::string& tier) const;
-        shim::string normalizeTier(const shim::string& tier) const;
+        std::string getPatternKey(std::uint64_t id, const std::string& tier) const;
+        std::string getTierPatternsKey(const std::string& tier) const;
+        std::string normalizeTier(const std::string& tier) const;
 
         ::redisContext* context_;
         bool connected_;
@@ -82,7 +82,7 @@ private:
 };
 
 // Factory function to create RedisManager instances
-std::shared_ptr<IRedisManager> createRedisManager(const shim::string& host = "localhost",
+std::shared_ptr<IRedisManager> createRedisManager(const std::string& host = "localhost",
                                                   int port = 6379);
 
 } // namespace sep::persistence

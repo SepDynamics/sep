@@ -10,8 +10,8 @@
 namespace sep::quantum {
 
 struct BatchProcessingResult : public ProcessingResult {
-    shim::string message{};
-    shim::vector<ProcessingResult> results{};
+    std::string message{};
+    std::vector<ProcessingResult> results{};
 };
 
 
@@ -47,17 +47,17 @@ public:
     Pattern crossover(const Pattern& parent1, const Pattern& parent2);
     Pattern mutate(const Pattern& pattern);
 
-    shim::vector<shim::string> selectElite(size_t count);
-    shim::vector<shim::string> tournamentSelection(size_t tournament_size, size_t num_winners);
-    shim::vector<shim::string> rouletteWheelSelection(size_t count);
+    std::vector<std::string> selectElite(size_t count);
+    std::vector<std::string> tournamentSelection(size_t tournament_size, size_t num_winners);
+    std::vector<std::string> rouletteWheelSelection(size_t count);
 
     float calculateFitness(const Pattern& pattern) const;
-    float calculateDiversity(const shim::vector<Pattern>& patterns) const;
+    float calculateDiversity(const std::vector<Pattern>& patterns) const;
 
     void setParams(const EvolutionParams& params);
     EvolutionParams getParams() const;
     EvolutionStats getStats() const;
-    shim::vector<EvolutionStats> getHistory() const;
+    std::vector<EvolutionStats> getHistory() const;
 
 private:
     class EvolutionEngineImpl;
@@ -71,7 +71,7 @@ Pattern blendCrossover(const Pattern& parent1, const Pattern& parent2, float alp
 float coherenceFitness(const Pattern& pattern);
 float stabilityFitness(const Pattern& pattern);
 float complexityFitness(const Pattern& pattern);
-shim::vector<Pattern> createRandomPopulation(size_t size);
+std::vector<Pattern> createRandomPopulation(size_t size);
 void applySpike(Pattern& neuron, float input, float decay, float threshold);
 void hebbianUpdate(const Pattern& pre, Pattern& post, float rate);
 void applyGravity(Pattern& pattern, const glm::vec3& center, float strength);

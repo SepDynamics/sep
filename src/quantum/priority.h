@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include "engine/math_common.h"
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 namespace sep::context {
 
@@ -34,7 +34,7 @@ struct PriorityInfo {
     float base_score{0.0f};
     float time_decay{1.0f};
     float final_score{0.0f};
-    sep::shim::string parent_context_id;
+    sep::string parent_context_id;
 };
 
 // Priority system configuration
@@ -63,11 +63,11 @@ public:
     float calculateFinalScore(float base_relevance, float time_decay, PriorityTier tier) const;
     
     // Update priority info for a context
-    void updatePriority(const sep::shim::string& context_id, PriorityInfo& info);
-    
+    void updatePriority(const sep::string& context_id, PriorityInfo& info);
+
     // Record context access
-    void recordAccess(const sep::shim::string& context_id, PriorityInfo& info);
-    
+    void recordAccess(const sep::string& context_id, PriorityInfo& info);
+
     // Determine if a context should be expired
     bool shouldExpire(const PriorityInfo& info) const;
     

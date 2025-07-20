@@ -135,7 +135,7 @@ void LockFreeRateLimiter::cleanup(std::chrono::steady_clock::time_point now) {
     }
 }
 
-shim::string LockFreeRateLimiter::getErrorResponse(const shim::string &message, int status)
+std::string LockFreeRateLimiter::getErrorResponse(const std::string &message, int status)
 {
     nlohmann::json error;
     error["error"] = message;
@@ -156,7 +156,7 @@ void LockFreeRateLimiter::setPriorityQuota(sep::api::Priority priority, float mu
     }
 }
 
-unsigned int LockFreeRateLimiter::GetRequestCount(const shim::string &client_id) const
+unsigned int LockFreeRateLimiter::GetRequestCount(const std::string &client_id) const
 {
     ClientMap::const_accessor acc;
     if (clients_.find(acc, client_id))
@@ -166,7 +166,7 @@ unsigned int LockFreeRateLimiter::GetRequestCount(const shim::string &client_id)
     return 0;
 }
 
-unsigned int LockFreeRateLimiter::GetWindowSize(const shim::string &client_id,
+unsigned int LockFreeRateLimiter::GetWindowSize(const std::string &client_id,
                                                 Priority priority) const
 {
     ClientMap::const_accessor acc;
@@ -269,7 +269,7 @@ LockFreeRateLimiter::getPriorityFromRequest(const IRequest &req) const {
   return Priority::NORMAL;
 }
 
-shim::string LockFreeRateLimiter::getClientId(const IRequest &req) const
+std::string LockFreeRateLimiter::getClientId(const IRequest &req) const
 {
     auto clientId = req.get_header_value("X-Client-ID");
     return clientId.empty() ? req.get_remote_ip() : clientId;

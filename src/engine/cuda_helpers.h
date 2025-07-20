@@ -2,7 +2,13 @@
 
 #include <cstdio>
 
+#ifdef __CUDACC__
 #include <cuda_runtime.h>
+#else
+// Forward declarations when not compiling with CUDA
+typedef int cudaError_t;
+const int cudaSuccess = 0;
+#endif
 
 // Comprehensive CUDA helper utilities - consolidated from multiple files
 namespace sep {
@@ -14,7 +20,7 @@ namespace cuda {
     cudaError_t error = (call);                                           \
     if (error != cudaSuccess) {                                           \
       (void)std::fprintf(stderr, "CUDA error in %s: %s\n", #call,          \
-                         cudaGetErrorString(error));                      \
+                         cuda::SEP_cudaGetErrorString(error));                      \
     }                                                                     \
   } while (0)
 #endif

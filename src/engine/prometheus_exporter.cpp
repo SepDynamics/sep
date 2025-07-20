@@ -23,7 +23,7 @@ void PrometheusExporter::registerGauge(Gauge *gauge) {
   gauges_.push_back(gauge);
 }
 
-shim::string PrometheusExporter::exportMetrics()
+std::string PrometheusExporter::exportMetrics()
 {
     std::lock_guard<std::mutex> lock(mutex_);
     std::ostringstream oss;

@@ -11,7 +11,7 @@
 #include <memory>
 #include <sstream>
 
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "memory/spdlog_isolation.h"
 
 namespace crow {
@@ -28,7 +28,7 @@ namespace crow {
     class LogHandler {
     public:
         LogHandler();
-        void operator()(LogLevel level, const sep::shim::string& message);
+        void operator()(LogLevel level, const sep::string& message);
 
     private:
         std::shared_ptr<::spdlog::logger> logger_;
@@ -68,7 +68,7 @@ namespace crow {
         }
     }
 
-    inline void LogHandler::operator()(LogLevel lvl, const sep::shim::string& message)
+    inline void LogHandler::operator()(LogLevel lvl, const sep::string& message)
     {
         if (logger_)
         {

@@ -1,4 +1,5 @@
 {
+  "amp.experimental.connections": true,
   "terminal.integrated.autoRun.prevent": [
   ],
   "npm.autoDetect": "off",

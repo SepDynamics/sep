@@ -53,7 +53,7 @@ FULL_PACKAGES=(
   libglu1-mesa-dev libpcre3-dev libtbb-dev libxrandr-dev libglfw3-dev
   libboost-all-dev libopencolorio-dev libopenimageio-dev
   libembree-dev libpugixml-dev libopenjp2-7-dev
-  libcurl4-openssl-dev libhttp-parser-dev libopenvdb-dev
+  libcurl4-openssl-dev libhttp-parser-dev
   libhiredis-dev libglm-dev libglfw3 libglfw3-dev
   liblz4-dev libzstd-dev
   libpipewire-0.3-dev libfftw3-dev libopenexr-dev

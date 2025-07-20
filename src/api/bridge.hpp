@@ -22,12 +22,12 @@ nlohmann::json resultToJson(const ::sep::context::CheckResult &result);
 
 // Internal bridge utilities
 namespace detail {
-    void setLastError(const shim::string &error);
-    shim::string getLastError();
+    void setLastError(const std::string &error);
+    std::string getLastError();
     void setRequiredBufferSize(size_t size);
     size_t getRequiredBufferSize();
     sep::SEPResult mapSepError(::sep::api::ErrorCode core);
-    void invokeCallbacks(const shim::string &event_type, const shim::string &event_data);
+    void invokeCallbacks(const std::string &event_type, const std::string &event_data);
 } // namespace detail
 
 } // namespace sep::api::bridge

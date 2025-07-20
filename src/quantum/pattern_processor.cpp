@@ -37,7 +37,7 @@ public:
         
         // Process using quantum processor
         bool success =
-            quantum_processor_->processPattern(stateData, std::hash<shim::string>{}(pattern.id));
+            quantum_processor_->processPattern(stateData, std::hash<std::string>{}(pattern.id));
 
         result.success = success;
         if (success) {
@@ -68,10 +68,10 @@ public:
         return result;
     }
 
-    shim::vector<sep::ProcessingResult> processBatch(
-        const shim::vector<sep::quantum::Pattern>& patterns)
+    std::vector<sep::ProcessingResult> processBatch(
+        const std::vector<sep::quantum::Pattern>& patterns)
     {
-        shim::vector<sep::ProcessingResult> results;
+        std::vector<sep::ProcessingResult> results;
         results.reserve(patterns.size());
         
         for (const auto& pattern : patterns) {
@@ -131,8 +131,8 @@ sep::SEPResult PatternProcessor::init(quantum::GPUContext* ctx) {
         {
             return sep::SEPResult::INVALID_ARGUMENT;
         }
-        CUDA_CHECK(::cudaSetDevice(ctx->device_id));
-        CUDA_CHECK(::cudaStreamCreate(&ctx->default_stream));
+        CUDA_CHECK(sep::cuda::SEP_cudaSetDevice(ctx->device_id));
+        CUDA_CHECK(sep::cuda::SEP_cudaStreamCreate(&ctx->default_stream));
         ctx->initialized = true;
     }
     return sep::SEPResult::SUCCESS;
@@ -158,7 +158,7 @@ sep::SEPResult PatternProcessor::addPattern(const sep::compat::PatternData& patt
     return sep::SEPResult::SUCCESS;
 }
 
-const shim::vector<sep::compat::PatternData>& PatternProcessor::getPatterns() const
+const std::vector<sep::compat::PatternData>& PatternProcessor::getPatterns() const
 {
     return patterns_;
 }

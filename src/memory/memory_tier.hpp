@@ -1,7 +1,7 @@
 #pragma once
 
 // C++ Standard Library
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 // Third-party headers
 #include <glm/vec3.hpp>

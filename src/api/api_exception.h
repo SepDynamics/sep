@@ -16,7 +16,7 @@ public:
      * @param message The error message.
      * @param transient True if the error is considered transient and might succeed on retry, false otherwise.
      */
-    APIException(const shim::string& message, bool transient = false)
+    APIException(const std::string& message, bool transient = false)
         : std::runtime_error(message), transient_(transient)
     {
     }

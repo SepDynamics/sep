@@ -2,8 +2,8 @@
 
 #include <cstdio>
 #include <cstring>  // For std::strcmp
-#include <string>   // For shim::string
-void sep::crow::error::log(sep::crow::error::Code code, const sep::shim::string& message)
+#include <string>   // For std::string
+void sep::crow::error::log(sep::crow::error::Code code, const sep::string& message)
 {
     (void)fprintf(stderr,
                   "Crow error %d: %s\n",

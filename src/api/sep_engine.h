@@ -137,7 +137,7 @@ namespace sep::api
          * @param file_path Path to the quantitative data file
          * @return JSON response with DAG metrics and quantum analysis
          */
-        nlohmann::json processQuantData(const shim::string& file_path);
+        nlohmann::json processQuantData(const std::string& file_path);
 
         /**
          * @brief Get the health status of the SEP Engine
@@ -155,14 +155,14 @@ namespace sep::api
         nlohmann::json getConfig(const AuthConfig& config);
 
         static nlohmann::json getMemoryMetrics();
-        static nlohmann::json makeErrorResponse(ErrorCode code, const shim::string& message);
+        static nlohmann::json makeErrorResponse(ErrorCode code, const std::string& message);
         static bool validateFields(const nlohmann::json& data,
-                                   const shim::vector<shim::string>& fields, nlohmann::json& error);
+                                   const std::vector<std::string>& fields, nlohmann::json& error);
 
         /**
          * @brief Generate deterministic ID
          */
-        static shim::string generateId(const shim::string& prefix);
+        static std::string generateId(const std::string& prefix);
 
     private:
         /**

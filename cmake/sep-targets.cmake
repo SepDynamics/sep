@@ -8,7 +8,7 @@ find_dependency(CURL)
 find_dependency(fmt)
 find_dependency(http_parser)
 find_dependency(spdlog)
-find_dependency(OpenVDB)
+# find_dependency(OpenVDB) # Removed - not needed
 find_dependency(OpenSubdiv)
 find_dependency(OpenPGL)
 find_dependency(OpenColorIO)

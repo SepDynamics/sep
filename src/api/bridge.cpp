@@ -17,16 +17,16 @@
 
 namespace sep::api::bridge::detail {
 std::unique_ptr<sep::quantum::Processor> g_context_processor_bridge;
-shim::string g_last_error;
+std::string g_last_error;
 size_t g_required_buffer_size = 0;
 // Global mutex protects shared bridge state
 std::mutex g_bridge_mutex;  // Mutex for thread safety
-std::unordered_map<shim::string, shim::vector<void (*)(const char *)>> g_callback_map;
+std::unordered_map<std::string, std::vector<void (*)(const char *)>> g_callback_map;
 } // namespace sep::api::bridge::detail
 
 namespace sep::api::bridge::detail {
 
-    void setLastError(const shim::string &error)
+    void setLastError(const std::string &error)
     {
         std::lock_guard<std::mutex> lock(g_bridge_mutex);
         g_last_error = error;
@@ -34,11 +34,11 @@ namespace sep::api::bridge::detail {
   sep::crow::error::set_last_error(error.c_str());
 #endif
     }
-shim::string getLastError()
-{
-    std::lock_guard<std::mutex> lock(g_bridge_mutex);
-    return g_last_error;
-}
+    std::string getLastError()
+    {
+        std::lock_guard<std::mutex> lock(g_bridge_mutex);
+        return g_last_error;
+    }
 
 void setRequiredBufferSize(size_t size) {
   std::lock_guard<std::mutex> lock(g_bridge_mutex);
@@ -83,11 +83,11 @@ namespace sep::api::bridge {
 
 nlohmann::json contextToJson(const sep::context::Context &context) {
   nlohmann::json json;
-  json["type"] = shim::string(context.type.c_str());
+  json["type"] = std::string(context.type.c_str());
   json["content"] = context.content;
   json["relationships"] =
-      shim::vector<nlohmann::json>(context.relationships.begin(), context.relationships.end());
-  shim::vector<shim::string> tags;
+      std::vector<nlohmann::json>(context.relationships.begin(), context.relationships.end());
+  std::vector<std::string> tags;
   tags.reserve(context.tags.size());
   for (const auto &t : context.tags) {
     tags.emplace_back(t.c_str());
@@ -100,22 +100,22 @@ nlohmann::json contextToJson(const sep::context::Context &context) {
 
 sep::context::Context jsonToContext(const nlohmann::json &json) {
   sep::context::Context context;
-  auto type_str = json.value("type", shim::string{});
-  context.type = sep::shim::string(type_str.c_str());
+  auto type_str = json.value("type", std::string{});
+  context.type = sep::string(type_str.c_str());
   context.content = json.value("content", nlohmann::json{});
 
-  auto rels = json.value("relationships", shim::vector<nlohmann::json>{});
+  auto rels = json.value("relationships", std::vector<nlohmann::json>{});
   context.relationships.clear();
   context.relationships.reserve(rels.size());
   for (const auto &r : rels) {
     context.relationships.push_back(r);
   }
 
-  auto tag_vec = json.value("tags", shim::vector<shim::string>{});
+  auto tag_vec = json.value("tags", std::vector<std::string>{});
   context.tags.clear();
   context.tags.reserve(tag_vec.size());
   for (const auto &t : tag_vec) {
-    context.tags.push_back(sep::shim::string(t.c_str()));
+      context.tags.push_back(sep::string(t.c_str()));
   }
 
   context.metadata = json.value("metadata", nlohmann::json{});
@@ -128,7 +128,7 @@ nlohmann::json resultToJson(const sep::context::CheckResult &result) {
   json["status"] = static_cast<int>(result.status);
   json["score"] = result.score;
   if (!result.error.empty()) {
-      json["error"] = shim::string(result.error.c_str());
+      json["error"] = std::string(result.error.c_str());
   }
   return json;
 }
@@ -138,8 +138,8 @@ sep::context::CheckResult jsonToCheckResult(const nlohmann::json &json) {
   result.status =
       static_cast<sep::context::CheckResult::Status>(json.value("status", 0));
   result.score = json.value("score", 0.0f);
-  auto err = json.value("error", shim::string{});
-  result.error = sep::shim::string(err.c_str());
+  auto err = json.value("error", std::string{});
+  result.error = sep::string(err.c_str());
   return result;
 }
 
@@ -147,7 +147,7 @@ sep::context::CheckResult jsonToCheckResult(const nlohmann::json &json) {
 
 namespace sep::api::bridge::detail {
 
-    void invokeCallbacks(const shim::string &event_type, const shim::string &event_data)
+    void invokeCallbacks(const std::string &event_type, const std::string &event_data)
     {
         std::lock_guard<std::mutex> lock(g_bridge_mutex);
         auto it = g_callback_map.find(event_type);

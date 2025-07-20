@@ -244,9 +244,9 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
         }
 
         // Convenience helpers used in tests
-        SEPResult MemoryTierManager::promoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
+        sep::SEPResult MemoryTierManager::promoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
         {
-            if (!block || !block->allocated) return SEPResult::INVALID_ARGUMENT;
+            if (!block || !block->allocated) return sep::SEPResult::INVALID_ARGUMENT;
 
             // Determine the target tier for promotion
             MemoryTierEnum next_tier;
@@ -255,14 +255,14 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             else if (block->tier == MemoryTierEnum::MTM)
                 next_tier = MemoryTierEnum::LTM;
             else
-                return SEPResult::INVALID_ARGUMENT;
+                return sep::SEPResult::INVALID_ARGUMENT;
 
             return promoteToTier(block, next_tier, out_block);
         }
 
-        SEPResult MemoryTierManager::demoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
+        sep::SEPResult MemoryTierManager::demoteBlock(MemoryBlock *block, MemoryBlock *&out_block)
         {
-            if (!block || !block->allocated) return SEPResult::INVALID_ARGUMENT;
+            if (!block || !block->allocated) return sep::SEPResult::INVALID_ARGUMENT;
 
             MemoryTierEnum target;
             if (block->tier == MemoryTierEnum::LTM)
@@ -270,21 +270,22 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             else if (block->tier == MemoryTierEnum::MTM)
                 target = MemoryTierEnum::STM;
             else
-                return SEPResult::INVALID_ARGUMENT;
+                return sep::SEPResult::INVALID_ARGUMENT;
 
             return promoteToTier(block, target, out_block);
         }
 
         // --- Promotion and Demotion Logic ---
-        SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block, MemoryTierEnum target_tier,
-                                                   MemoryBlock *&out_block)
+        sep::SEPResult MemoryTierManager::promoteToTier(MemoryBlock *block,
+                                                        MemoryTierEnum target_tier,
+                                                        MemoryBlock *&out_block)
         {
             out_block = nullptr;
             printf("DEBUG: Attempting promotion from tier %d to tier %d\n",
                    static_cast<int>(block->tier), static_cast<int>(target_tier));
             if (!block || !block->allocated)
             {
-                return SEPResult::INVALID_ARGUMENT;
+                return sep::SEPResult::INVALID_ARGUMENT;
             }
 
             // Get source and destination tiers
@@ -292,7 +293,7 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             MemoryTier *dst_tier = getTier(target_tier);
             if (!src_tier || !dst_tier)
             {
-                return SEPResult::INVALID_ARGUMENT;
+                return sep::SEPResult::INVALID_ARGUMENT;
             }
 
             // Try to allocate in destination tier
@@ -316,8 +317,8 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
                 printf(
                     "DEBUG: Allocation failed even after defragmentation; attempting "
                     "compression\n");
-                SEPResult compress_result = compressBlock(block);
-                if (compress_result == SEPResult::SUCCESS)
+                sep::SEPResult compress_result = compressBlock(block);
+                if (compress_result == sep::SEPResult::SUCCESS)
                 {
                     out_block = dst_tier->allocate(block->size);
                 }
@@ -325,7 +326,7 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
 
             if (!out_block)
             {
-                return SEPResult::OUT_OF_MEMORY;
+                return sep::SEPResult::OUT_OF_MEMORY;
             }
 
             // Copy data
@@ -351,16 +352,16 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
 
             printf("DEBUG: Promotion complete with coherence %.3f, stability %.3f\n",
                    static_cast<double>(out_block->coherence), static_cast<double>(out_block->stability));
-            return SEPResult::SUCCESS;
+            return sep::SEPResult::SUCCESS;
         }
 
-        SEPResult MemoryTierManager::compressBlock(MemoryBlock *block)
+        sep::SEPResult MemoryTierManager::compressBlock(MemoryBlock *block)
         {
             if (!block || !block->allocated || !config_.enable_compression)
-                return SEPResult::INVALID_ARGUMENT;
+                return sep::SEPResult::INVALID_ARGUMENT;
 
             // Real compression would go here
-            return SEPResult::NOT_IMPLEMENTED;
+            return sep::SEPResult::NOT_IMPLEMENTED;
         }
 
         MemoryTier *MemoryTierManager::determineTier(float coherence, float stability,
@@ -456,7 +457,7 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
                     return block;  // No promotion from LTM
 
                 MemoryBlock *new_block = nullptr;
-                if (promoteToTier(block, target_tier, new_block) == SEPResult::SUCCESS)
+                if (promoteToTier(block, target_tier, new_block) == sep::SEPResult::SUCCESS)
                 {
                     return new_block;
                 }
@@ -470,7 +471,7 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
                                                      ? MemoryTierEnum::MTM
                                                      : MemoryTierEnum::STM;
                     MemoryBlock *new_block = nullptr;
-                    if (promoteToTier(block, target_tier, new_block) == SEPResult::SUCCESS)
+                    if (promoteToTier(block, target_tier, new_block) == sep::SEPResult::SUCCESS)
                     {
                         return new_block;
                     }
@@ -621,9 +622,10 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             return findDataById(id);
         }
 
-        SEPResult MemoryTierManager::processMemoryBlocks(void *input_data, void *output_data,
-                                                         const void *config, size_t count,
-                                                         const void *previous_data, void *stream)
+        sep::SEPResult MemoryTierManager::processMemoryBlocks(void *input_data, void *output_data,
+                                                              const void *config, size_t count,
+                                                              const void *previous_data,
+                                                              void *stream)
         {
             // TODO: Implement
             (void)input_data;
@@ -632,7 +634,7 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             (void)count;
             (void)previous_data;
             (void)stream;
-            return SEPResult::NOT_IMPLEMENTED;
+            return sep::SEPResult::NOT_IMPLEMENTED;
         }
 
 }  // namespace memory

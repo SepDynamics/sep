@@ -17,8 +17,7 @@ public:
    * @param layer Layer name to check against
    * @return JSON string containing the check result
    */
-  static shim::string processContextCheck(const shim::string &context_json,
-                                          const shim::string &layer);
+  static std::string processContextCheck(const std::string &context_json, const std::string &layer);
 };
 
 } // namespace sep::api

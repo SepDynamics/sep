@@ -37,14 +37,15 @@ target_link_libraries(sep_api
 )
 
 target_include_directories(sep_api
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        $<INSTALL_INTERFACE:include>
-    PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-    SYSTEM PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/crow/include>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/cycles/src>
+  PUBLIC
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/engine
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+    $<INSTALL_INTERFACE:include>
+  PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+  SYSTEM PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/extern/crow/include>
 )
 
 # Link external dependencies when available

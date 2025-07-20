@@ -35,13 +35,13 @@ namespace sep::api {
         {
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - ctx.start);
-            // Convert crow_string to shim::string using c_str() method
-            shim::string body_str(res.body.c_str());
+            // Convert crow_string to std::string using c_str() method
+            std::string body_str(res.body.c_str());
             server_->logRequest(*req_ptr, res.code, body_str, duration.count());
         }
         else
         {
-            shim::string body_str(res.body.c_str());
+            std::string body_str(res.body.c_str());
             server_->logRequest(*req_ptr, res.code, body_str, 0);
         }
     }

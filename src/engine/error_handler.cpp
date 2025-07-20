@@ -4,7 +4,7 @@
 #include <mutex>
 #include <vector>
 
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 
 namespace sep::core {
 using ::sep::Error;
@@ -20,10 +20,10 @@ void ErrorHandler::reportError(const Error &error, std::function<bool()> retry) 
   processRetriesLocked();
 }
 
-shim::vector<Error> ErrorHandler::getErrors() const
+std::vector<Error> ErrorHandler::getErrors() const
 {
     std::lock_guard<std::mutex> lock(mutex_);
-    shim::vector<Error> result;
+    std::vector<Error> result;
     result.reserve(errors_.size());
     for (const auto &e : errors_)
     {

@@ -7,7 +7,7 @@
 
 namespace sep::utils {
 
-    shim::vector<glm::vec3> loadDataset(const shim::string &path);
+    std::vector<glm::vec3> loadDataset(const std::string &path);
 
-    shim::vector<glm::vec3> parseJsonDataset(const nlohmann::json &j);
+    std::vector<glm::vec3> parseJsonDataset(const nlohmann::json &j);
 }

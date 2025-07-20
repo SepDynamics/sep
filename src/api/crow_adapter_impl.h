@@ -29,29 +29,29 @@ public:
         method_str_ = crow::method_name(req.method);
     }
 
-    shim::string url() const { return req_.url; }
-    shim::string method() const { return method_str_; }
-    shim::string body() const { return req_.body; }
+    std::string url() const { return req_.url; }
+    std::string method() const { return method_str_; }
+    std::string body() const { return req_.body; }
 
-    shim::string get_header_value(const shim::string& key) const
+    std::string get_header_value(const std::string& key) const
     {
         return req_.get_header_value(key);
     }
 
     // Create a JSON object from the request body
-    shim::string parse_json() const
+    std::string parse_json() const
     {
         try {
             // Just return the raw body as string for parsing by caller
-            return shim::string(req_.body);
+            return std::string(req_.body);
         } catch (...) {
-            return shim::string();  // Return empty string on error
+            return std::string();  // Return empty string on error
         }
     }
 
 private:
     const crow::request& req_;
-    shim::string method_str_;
+    std::string method_str_;
 };
 
 /**
@@ -64,9 +64,9 @@ public:
 
     void set_code(int code) { res_.code = code; }
     int get_code() const { return res_.code; }
-    void set_body(const shim::string& body) { res_.body = body; }
-    shim::string get_body() const { return res_.body; }
-    void set_header(const shim::string& key, const shim::string& value)
+    void set_body(const std::string& body) { res_.body = body; }
+    std::string get_body() const { return res_.body; }
+    void set_header(const std::string& key, const std::string& value)
     {
         res_.set_header(key, value);
     }

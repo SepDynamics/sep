@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "config.h"
-#include "engine/shim.h"
+#include "engine/standard_includes.h"
 #include "metrics_collector.h"
 #include "quantum/pattern_metric_engine.h"
 #include "quantum/qbsa.h"
@@ -17,7 +17,13 @@ class Stream;
 template <typename T>
 class DeviceMemory;
 using StreamPtr = std::shared_ptr<Stream>;
-struct QSHResult;
+
+struct QSHResult {
+    std::vector<std::vector<std::uint32_t>> collapse_indices;
+    std::vector<std::uint32_t> collapse_counts;
+    std::uint32_t total_collapses{0};
+    std::uint32_t total_states{0};
+};
 }  // namespace cuda
 }  // namespace sep
 
@@ -38,38 +44,38 @@ class Engine {
   Engine(const Engine &) = delete;
   Engine &operator=(const Engine &) = delete;
 
-  // Allow move operations
-  Engine(Engine &&) noexcept = default;
-  Engine &operator=(Engine &&) noexcept = default;
+  // Explicitly implement move operations
+  Engine(Engine &&) noexcept;
+  Engine &operator=(Engine &&) noexcept;
 
   // Explicit initialization and lifecycle management
   void run();
   void shutdown();
 
-  void generate_probes(const shim::vector<::sep::PinState> &inputs,
-                       shim::vector<std::uint32_t> &indices,
-                       shim::vector<std::uint32_t> &expectations, std::uint64_t tick);
+  void generate_probes(const std::vector<::sep::PinState> &inputs,
+                       std::vector<std::uint32_t> &indices,
+                       std::vector<std::uint32_t> &expectations, std::uint64_t tick);
 
-  void process_batch(const shim::vector<::sep::PinState> &inputs, std::uint64_t tick,
+  void process_batch(const std::vector<::sep::PinState> &inputs, std::uint64_t tick,
                      sep::quantum::QBSAResult &qbsa_result, sep::cuda::QSHResult &qsh_result);
 
   // Process quantitative data (market data, etc.)
-  shim::string processQuantData(const shim::string &dataPath, bool useGPU = true);
+  std::string processQuantData(const std::string &dataPath, bool useGPU = true);
 
   // DAG accessors
   struct StateNode {
     std::uint64_t tick{0};
     float coherence{0.0f};
     bool rupture{false};
-    shim::vector<std::size_t> parents;
+    std::vector<std::size_t> parents;
   };
 
-  const shim::vector<StateNode> &getStateHistory() const noexcept;
+  const std::vector<StateNode> &getStateHistory() const noexcept;
 
-  shim::vector<float> getCoherenceHistory() const;
+  std::vector<float> getCoherenceHistory() const;
 
-  void ingestFile(const shim::string &dataPath, bool legacy = false);
-  void ingestFromDirectory(const shim::string &dirPath, bool recursive = true);
+  void ingestFile(const std::string &dataPath, bool legacy = false);
+  void ingestFromDirectory(const std::string &dirPath, bool recursive = true);
   void ingestFromSocket(int socket_fd);
   void ingestFromStream(std::istream& stream);
 

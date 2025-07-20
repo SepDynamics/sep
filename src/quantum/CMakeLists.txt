@@ -23,3 +23,9 @@ add_sep_library(sep_quantum
     DEPENDENCIES
         sep_engine
 )
+
+target_include_directories(sep_quantum PUBLIC
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/engine
+    $<TARGET_PROPERTY:sep_engine,INTERFACE_INCLUDE_DIRECTORIES>
+)

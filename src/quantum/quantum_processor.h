@@ -11,7 +11,7 @@ namespace sep::quantum {
 
 class QuantumProcessorError : public std::runtime_error {
 public:
-    explicit QuantumProcessorError(const shim::string& message);
+    explicit QuantumProcessorError(const std::string& message);
 };
 
 class QBSAProcessor;

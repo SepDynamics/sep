@@ -23,17 +23,24 @@
 
 #include "quantum/pattern_evolution_bridge.h"
 
-sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(
-    const nlohmann::json& config, const shim::string& patternId)
+sep::compat::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(
+    const nlohmann::json& config, const std::string& patternId)
 {
-    sep::pattern::PatternData pattern;
-    
+    sep::compat::PatternData pattern;
+
     // Set pattern ID
     if (!patternId.empty())
-        pattern.id = shim::string(patternId.c_str());
+    {
+        std::strncpy(pattern.id, patternId.c_str(), sizeof(pattern.id) - 1);
+        pattern.id[sizeof(pattern.id) - 1] = '\0';
+    }
     else
-        pattern.id = shim::string(api::SepEngine::generateId("pat").c_str());
-    
+    {
+        auto id_str = api::SepEngine::generateId("pat");
+        std::strncpy(pattern.id, id_str.c_str(), sizeof(pattern.id) - 1);
+        pattern.id[sizeof(pattern.id) - 1] = '\0';
+    }
+
     // Extract configuration values
     float coherence = config.value("coherence", 0.5f);
     float stability = config.value("stability", 0.5f);
@@ -70,25 +77,33 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(
     {
         for (const auto& rel_json : config["relationships"])
         {
-            sep::pattern::PatternRelationship rel;
+            sep::compat::PatternRelationship rel;
 
-            shim::string target_id = rel_json.value("target", "");
-            if (!target_id.empty())
+            std::string target_id = rel_json.value("target", "");
+            if (!target_id.empty() &&
+                pattern.relationship_count < sep::compat::PatternData::MAX_RELATIONSHIPS)
             {
-                rel.targetId = shim::string(target_id.c_str());
+                sep::compat::PatternData::HostRelationship host_rel;
+                host_rel.target_id = target_id;
+                host_rel.strength = rel_json.value("strength", 0.0f);
+                pattern.host_relationships.push_back(host_rel);
+
+                // Also update the fixed array
+                auto& rel = pattern.relationships[pattern.relationship_count];
+                std::strncpy(rel.target_id, target_id.c_str(), sizeof(rel.target_id) - 1);
+                rel.target_id[sizeof(rel.target_id) - 1] = '\0';
                 rel.strength = rel_json.value("strength", 0.0f);
-                rel.type = static_cast<::sep::quantum::RelationshipType>(rel_json.value("type", 0));
-                pattern.relationships.push_back(rel);
+                pattern.relationship_count++;
             }
         }
     }
     
     return pattern;
 }
-shim::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns(
+sep::vector<sep::compat::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns(
     const nlohmann::json& args)
 {
-    shim::vector<sep::pattern::PatternData> patterns;
+    sep::vector<sep::compat::PatternData> patterns;
     auto json_patterns = args.value("patterns", nlohmann::json::array());
     float min_coherence = args.value("min_coherence", 0.0f);
     float min_stability = args.value("min_stability", 0.0f);
@@ -96,9 +111,11 @@ shim::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::get
     for (const auto& jp : json_patterns)
     {
         auto p = fromJson(jp);
-        if (p.id.empty())
+        if (p.get_id().empty())
         {
-            p.id = shim::string(api::SepEngine::generateId("pat").c_str());
+            auto id_str = api::SepEngine::generateId("pat");
+            std::strncpy(p.id, id_str.c_str(), sizeof(p.id) - 1);
+            p.id[sizeof(p.id) - 1] = '\0';
         }
         if (p.quantum_state.coherence >= min_coherence &&
             p.quantum_state.stability >= min_stability)
@@ -110,8 +127,8 @@ shim::vector<sep::pattern::PatternData> sep::quantum::mcp::PatternEvolution::get
     return patterns;
 }
 
-float sep::quantum::mcp::PatternEvolution::calculateRelationshipStrength(const sep::pattern::PatternData& pattern1,
-                                                                        const sep::pattern::PatternData& pattern2)
+float sep::quantum::mcp::PatternEvolution::calculateRelationshipStrength(
+    const sep::compat::PatternData& pattern1, const sep::compat::PatternData& pattern2)
 {
     // Calculate Euclidean distance between position vectors
     glm::vec4 diff = pattern1.position - pattern2.position;
@@ -129,11 +146,11 @@ float sep::quantum::mcp::PatternEvolution::calculateRelationshipStrength(const s
     return (data_similarity + metadata_similarity) / 2.0f;
 }
 
-nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::pattern::PatternData& pattern)
+nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::compat::PatternData& pattern)
 {
     nlohmann::json j;
 
-    j["id"] = shim::string(pattern.id.c_str());
+    j["id"] = std::string(pattern.id);
     j["generation"] = pattern.generation;
     
     j["position"] = {
@@ -150,15 +167,15 @@ nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::pattern::P
     j["mutation_rate"] = pattern.quantum_state.mutation_rate;
     
     // Export relationships
-    if (!pattern.relationships.empty())
+    if (pattern.relationship_count > 0)
     {
         j["relationships"] = nlohmann::json::array();
-        for (const auto& rel : pattern.relationships)
+        for (int i = 0; i < pattern.relationship_count; ++i)
         {
+            const auto& rel = pattern.relationships[i];
             nlohmann::json rel_json;
-            rel_json["target"] = shim::string(rel.targetId.c_str());
+            rel_json["target"] = std::string(rel.target_id);
             rel_json["strength"] = rel.strength;
-            rel_json["type"] = static_cast<int>(rel.type);
             j["relationships"].push_back(rel_json);
         }
     }
@@ -166,15 +183,16 @@ nlohmann::json sep::quantum::mcp::PatternEvolution::toJson(const sep::pattern::P
     return j;
 }
 
-sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nlohmann::json& j)
+sep::compat::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nlohmann::json& j)
 {
-    sep::pattern::PatternData p;
-    
+    sep::compat::PatternData p;
+
     // Import basic properties
     if (j.contains("id") && j["id"].is_string())
     {
-        shim::string id_str = j["id"].get<shim::string>();
-        p.id = shim::string(id_str.c_str());
+        std::string id_str = j["id"].get<std::string>();
+        std::strncpy(p.id, id_str.c_str(), sizeof(p.id) - 1);
+        p.id[sizeof(p.id) - 1] = '\0';
     }
     
     p.generation = j.value("generation", 0);
@@ -201,15 +219,24 @@ sep::pattern::PatternData sep::quantum::mcp::PatternEvolution::fromJson(const nl
     {
         for (const auto& rel_json : j["relationships"])
         {
-            sep::pattern::PatternRelationship rel;
-            
+            if (p.relationship_count >= sep::compat::PatternData::MAX_RELATIONSHIPS) break;
+
             if (rel_json.contains("target") && rel_json["target"].is_string())
             {
-                shim::string target_str = rel_json["target"].get<shim::string>();
-                rel.targetId = shim::string(target_str.c_str());
+                std::string target_str = rel_json["target"].get<std::string>();
+
+                // Add to host relationships for easier manipulation
+                sep::compat::PatternData::HostRelationship host_rel;
+                host_rel.target_id = target_str;
+                host_rel.strength = rel_json.value("strength", 0.0f);
+                p.host_relationships.push_back(host_rel);
+
+                // Add to fixed array
+                auto& rel = p.relationships[p.relationship_count];
+                std::strncpy(rel.target_id, target_str.c_str(), sizeof(rel.target_id) - 1);
+                rel.target_id[sizeof(rel.target_id) - 1] = '\0';
                 rel.strength = rel_json.value("strength", 0.0f);
-                rel.type = static_cast<::sep::quantum::RelationshipType>(rel_json.value("type", 0));
-                p.relationships.push_back(rel);
+                p.relationship_count++;
             }
         }
     }

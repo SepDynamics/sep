@@ -24,12 +24,12 @@ public:
 class pattern_formatter : public formatter
 {
 public:
-    SEP_HOST SEP_DEVICE void format(const shim::string& msg, std::ostringstream& dest)
+    SEP_HOST SEP_DEVICE void format(const std::string& msg, std::ostringstream& dest)
     {
         dest << msg.c_str();
     }
 
-    SEP_HOST SEP_DEVICE shim::string pattern() const { return "%v"; }
+    SEP_HOST SEP_DEVICE std::string pattern() const { return "%v"; }
 };
 
 }  // namespace spdlog
@@ -44,7 +44,7 @@ public:
 // When compiling with CUDA, provide stub implementations
 
 // Include our isolation headers
-#    include "compat/shim.h"
+#include "engine/standard_includes.h"
 
 // Forward declarations for standard library components used by spdlog
 namespace sep::shim {
@@ -200,7 +200,7 @@ class logger
 {
 public:
     logger() {}
-    logger(const sep::shim::string&) {}
+    logger(const sep::string&) {}
 
     template<typename... Args>
     void log(level, const fmt::format_string<Args...>&, Args&&...)
@@ -248,24 +248,24 @@ public:
         return instance;
     }
 
-    sep::shim::shared_ptr<logger> get(const sep::shim::string&)
+    sep::shared_ptr<logger> get(const sep::string&)
     {
         try
         {
-            return sep::shim::make_shared<logger>();
+            return sep::make_shared<logger>();
         }
-        catch (const sep::shim::exception& e)
+        catch (const sep::exception& e)
         {
             (void)fprintf(stderr, "Failed to create logger: %s\n", e.what());
             return nullptr;
         }
     }
 
-    void register_logger(sep::shim::shared_ptr<logger>) {}
+    void register_logger(sep::shared_ptr<logger>) {}
 
-    void set_default_logger(sep::shim::shared_ptr<logger>) {}
+    void set_default_logger(sep::shared_ptr<logger>) {}
 
-    void drop(const sep::shim::string&) {}
+    void drop(const sep::string&) {}
 
     void drop_all() {}
 
@@ -277,7 +277,7 @@ public:
 
     void flush_on(level) {}
 
-    void flush_every(sep::shim::chrono::seconds) {}
+    void flush_every(sep::chrono::seconds) {}
 };
 } // namespace details
 } // namespace spdlog
@@ -303,7 +303,7 @@ public:
         return inst;
     }
 
-    std::shared_ptr<logger> get(const shim::string& name) { return ::spdlog::get(name); }
+    std::shared_ptr<logger> get(const std::string& name) { return ::spdlog::get(name); }
 
     void register_logger(std::shared_ptr<logger> lg)
     {
@@ -315,7 +315,7 @@ public:
         ::spdlog::set_default_logger(std::move(lg));
     }
 
-    void drop(const shim::string& name) { ::spdlog::drop(name); }
+    void drop(const std::string& name) { ::spdlog::drop(name); }
 
     void drop_all()
     {

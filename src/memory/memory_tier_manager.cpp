@@ -9,17 +9,12 @@
 #include <new>
 #include <string>
 
-#include "engine/common.h"
-#include "engine/types.h"
+#include "common.h"
 #include "quantum/pattern_processor.hpp"
 #include "quantum/processor.h"
+#include "types.h"
 
 namespace sep {
-    namespace config
-    {
-        class ConfigManager;
-    }
-
 namespace memory {
 
 // Static member initializations

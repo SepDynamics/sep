@@ -56,6 +56,7 @@ target_include_directories(sep_engine
 
 if(SEP_USE_CUDA)
     target_compile_definitions(sep_engine PUBLIC SEP_USE_CUDA=1)
+    set_target_properties(sep_engine PROPERTIES CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -DGLM_FORCE_CUDA")
 # Link against modern CUDA targets. This transitively handles include paths and libraries.
 target_link_libraries(sep_engine PUBLIC
     CUDA::toolkit

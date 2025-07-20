@@ -4,7 +4,7 @@
 #include <string>
 
 #include "api/types.h"     // API-specific types
-#include "engine/types.h"  // For Status enum
+#include "types.h"         // For Status enum
 
 namespace sep {
 namespace api {

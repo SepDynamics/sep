@@ -10,9 +10,9 @@
 #include <nlohmann/json.hpp>
 
 #include "api/sep_engine.h"
-#include "engine/types.h"  // For PatternData/PatternConfig
-#include "engine/types.h"
 #include "quantum/quantum_processor_qfh.h"
+#include "types.h"  // For PatternData/PatternConfig
+#include "types.h"
 
 // Standard Library Includes
 #include <cstring>

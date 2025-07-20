@@ -66,6 +66,7 @@ set_property(TARGET sep_quantum PROPERTY CUDA_ARCHITECTURES 70 75 80)
 # Link CUDA runtime
 if(SEP_USE_CUDA)
     target_link_libraries(sep_quantum PRIVATE
+        CUDA::cufft
         ${CUDA_LIBRARIES}
         ${CUDA_CUDART_LIBRARY}
         ${CUDA_CUFFT_LIBRARIES})

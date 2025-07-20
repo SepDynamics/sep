@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "engine/engine.h"
+#include "engine.h"
 
 namespace sep
 {

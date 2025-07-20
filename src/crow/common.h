@@ -19,7 +19,7 @@ namespace crow {
 // used during CUDA compilation to avoid heavy template instantiation.
 
 // Include our own headers
-#include "engine/shim.h"
+#include "shim.h"
 
 // Define CROW_LIKELY and CROW_UNLIKELY if not already defined
 #ifndef CROW_LIKELY

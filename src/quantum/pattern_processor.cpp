@@ -1,15 +1,15 @@
 #include "quantum/pattern_processor.hpp"
-#include "engine/common.h"
-#include "engine/cuda_helpers.h"
-#include "engine/cuda_sep.h"
-#include "engine/pattern_types.h"
-#include "engine/types.h"
+
+#include "common.h"
+#include "cuda_helpers.h"
+#include "cuda_sep.h"
 #include "memory/types.h"
+#include "pattern_types.h"
 #include "quantum/config.h"
+#include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/types.h"
-
-#include "quantum/pattern_evolution_bridge.h"
+#include "types.h"
 
 using ::sep::memory::MemoryTierEnum;
 

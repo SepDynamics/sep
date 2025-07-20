@@ -2,15 +2,15 @@
 
 #include <cuda_runtime.h>
 
-#include "engine/core.h"
-#include "engine/cuda.h"
-#include "engine/cuda_helpers.h"
-#include "engine/types.h"
+#include "core.h"
+#include "cuda.h"
+#include "cuda_helpers.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor_qfh.h"
+#include "types.h"
 
 using ::sep::CudaConfig;
 using ::sep::memory::MemoryTierEnum;
@@ -27,7 +27,7 @@ using ::sep::memory::MemoryTierEnum;
 #include <string>
 #include <vector>
 
-#include "engine/logging.h"
+#include "logging.h"
 
 namespace sep::memory {
 

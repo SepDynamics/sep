@@ -8,13 +8,13 @@
  */
 
 // Project includes
-#include "engine/common.h"
-#include "engine/dag_graph.h"
-#include "engine/shim.h"
-#include "engine/types.h"
+#include "common.h"
+#include "dag_graph.h"
 #include "memory/memory_tier.hpp"
 #include "memory/persistent_pattern_data.hpp"
 #include "memory/types.h"
+#include "shim.h"
+#include "types.h"
 #ifndef SEP_NO_REDIS
 #include "memory/redis_manager.h"
 #endif // SEP_NO_REDIS
@@ -32,6 +32,9 @@
 #include <glm/vec3.hpp>
 
 namespace sep {
+namespace compat {
+struct PatternData;
+}
 namespace core {
 class SystemHooks;
 }
@@ -168,10 +171,36 @@ namespace memory {
 } // namespace memory
 } // namespace sep
 
-namespace sep {
-namespace memory {
-    void to_json(nlohmann::json &j, const MemoryThresholdConfig &c);
-    void from_json(const nlohmann::json &j, MemoryThresholdConfig &c);
-} // namespace memory
-} // namespace sep
+namespace nlohmann {
+template <>
+struct adl_serializer<sep::memory::MemoryThresholdConfig> {
+    static void to_json(json& j, const sep::memory::MemoryThresholdConfig& c) {
+        j = json{{"promote_stm_to_mtm", c.promote_stm_to_mtm},
+                 {"promote_mtm_to_ltm", c.promote_mtm_to_ltm},
+                 {"demote_threshold", c.demote_threshold},
+                 {"fragmentation_threshold", c.fragmentation_threshold},
+                 {"stm_size", c.stm_size},
+                 {"mtm_size", c.mtm_size},
+                 {"ltm_size", c.ltm_size},
+                 {"stm_to_mtm_min_gen", c.stm_to_mtm_min_gen},
+                 {"mtm_to_ltm_min_gen", c.mtm_to_ltm_min_gen},
+                 {"use_unified_memory", c.use_unified_memory},
+                 {"enable_compression", c.enable_compression}};
+    }
+
+    static void from_json(const json& j, sep::memory::MemoryThresholdConfig& c) {
+        j.at("promote_stm_to_mtm").get_to(c.promote_stm_to_mtm);
+        j.at("promote_mtm_to_ltm").get_to(c.promote_mtm_to_ltm);
+        j.at("demote_threshold").get_to(c.demote_threshold);
+        j.at("fragmentation_threshold").get_to(c.fragmentation_threshold);
+        j.at("stm_size").get_to(c.stm_size);
+        j.at("mtm_size").get_to(c.mtm_size);
+        j.at("ltm_size").get_to(c.ltm_size);
+        j.at("stm_to_mtm_min_gen").get_to(c.stm_to_mtm_min_gen);
+        j.at("mtm_to_ltm_min_gen").get_to(c.mtm_to_ltm_min_gen);
+        j.at("use_unified_memory").get_to(c.use_unified_memory);
+        j.at("enable_compression").get_to(c.enable_compression);
+    }
+};
+} // namespace nlohmann
 

@@ -2,9 +2,9 @@
 #pragma once
 
 #include "config.h"
-#include "engine/cuda_api.hpp"
-#include "engine/cuda_runtime.h"
-#include "engine/cufft.h"
+#include "cuda_api.hpp"
+#include "cuda_runtime.h"
+#include "cufft.h"
 #include "memory/types.h"
 #include "quantum/config.h"
 #include "quantum/pattern_evolution_bridge.h"

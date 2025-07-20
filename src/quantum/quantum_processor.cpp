@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "engine/math_common.h"
+#include "math_common.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_processor_cuda.h"
 #include "quantum/quantum_processor_qfh.h"

@@ -17,9 +17,9 @@
 #include <cstring>
 #include <mutex>
 
-#include "engine/logging.h"
-#include "engine/types.h"
+#include "logging.h"
 #include "memory/redis_manager.h"
+#include "types.h"
 #ifndef SEP_NO_REDIS
 #include <hiredis/hiredis.h>
 #define SEP_HAS_HIREDIS 1

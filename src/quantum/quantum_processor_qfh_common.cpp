@@ -1,17 +1,16 @@
 #include <algorithm>
 #include <cmath>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
-#include "engine/cuda_sep.h"
-#include <glm/gtc/type_ptr.hpp>
+#include "cuda_sep.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "types.h"
-
 
 namespace sep::quantum {
 
@@ -129,14 +128,14 @@ float QuantumProcessorQFHCommon::updateRelationship(const glm::vec3& pattern_a, 
 
 bool QuantumProcessorQFHCommon::isCollapsed(const glm::vec3& pattern) {
     float coherence = processPattern(pattern);
-    bool traditional_collapse = coherence < sep::pattern::COLLAPSE_THRESHOLD;
+    bool traditional_collapse = coherence < sep::COLLAPSE_THRESHOLD;
     bool qfh_collapse = m_last_qfh_result.collapse_detected;
     return qfh_collapse || traditional_collapse;
 }
 
 bool QuantumProcessorQFHCommon::isStable(const glm::vec3& pattern) {
     float coherence = processPattern(pattern);
-    bool traditional_stable = coherence >= sep::pattern::STABILITY_THRESHOLD;
+    bool traditional_stable = coherence >= sep::STABILITY_THRESHOLD;
     bool qfh_stable = m_last_qfh_result.rupture_ratio < 0.3f;
     return traditional_stable && qfh_stable;
 }
@@ -144,8 +143,8 @@ bool QuantumProcessorQFHCommon::isStable(const glm::vec3& pattern) {
 bool QuantumProcessorQFHCommon::isQuantum(const glm::vec3& pattern) {
     float coherence = processPattern(pattern);
     bool traditional_quantum =
-        coherence >= sep::pattern::MIN_COHERENCE &&
-        coherence < sep::pattern::COLLAPSE_THRESHOLD;
+        coherence >= sep::MIN_COHERENCE &&
+        coherence < sep::COLLAPSE_THRESHOLD;
     bool qfh_quantum = m_last_qfh_result.flip_ratio > 0.3f && m_last_qfh_result.rupture_ratio < 0.5f;
     return traditional_quantum || qfh_quantum;
 }

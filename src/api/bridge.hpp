@@ -7,10 +7,10 @@
 
 #include "api/bridge.h"
 #include "api/types.h"
-#include "engine/common.h"
-#include "engine/types.h"
+#include "common.h"
 #include "quantum/processor.h"
 #include "quantum/resource_predictor.h"  // Provides context types
+#include "types.h"
 
 namespace sep::api::bridge {
 

@@ -1,6 +1,6 @@
 #include <fstream>
 
-#include "engine/engine.h"
+#include "engine.h"
 #include "gtest/gtest.h"
 
 TEST(IngestionTest, DirectoryIngestion) {

@@ -9,7 +9,7 @@
 #include <utility>
 
 #include "curl/curl.h"
-#include "engine/error_handler.h"  // For sep::ErrorCode
+#include "error_handler.h"  // For sep::ErrorCode
 
 namespace sep::api {
 

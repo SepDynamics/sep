@@ -3,7 +3,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
-#include "engine/shim.h"
+#include "shim.h"
 
 namespace sep {
 namespace api {

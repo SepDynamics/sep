@@ -5,8 +5,8 @@
 #include <memory>
 #include <unordered_map>
 
-#include "engine/math_common.h"
-#include "engine/shim.h"
+#include "math_common.h"
+#include "shim.h"
 
 namespace sep::context {
 

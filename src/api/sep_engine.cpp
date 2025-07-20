@@ -22,17 +22,17 @@
 
 // Project includes
 #include "api/types.h"
-#include "engine/config.h"
-#include "engine/core.h"
-#include "engine/cuda_unified.h"
-#include "engine/dag_graph.h"
-#include "engine/data_parser.h"
-#include "engine/logging.h"
-#include "engine/math_common.h"
-#include "engine/types.h"
+#include "config.h"
+#include "core.h"
+#include "cuda_unified.h"
+#include "dag_graph.h"
+#include "data_parser.h"
+#include "logging.h"
+#include "math_common.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/quantum_processor.h"
 #include "tests/simple_embedding_model.h"
+#include "types.h"
 
 using json = nlohmann::json;
 

@@ -15,14 +15,14 @@
 
 #include "api/bridge.h"
 #include "api/bridge_internal.hpp"
+#include "common.h"
 #include "crow/asio_isolation.h"
 #include "crow/socket_adaptors.h"
-#include "engine/common.h"
-#include "engine/cuda_helpers.h"
-#include "engine/macros.h"
-#include "engine/manager.h"
-#include "engine/shim.h"
-#include "engine/types.h"
+#include "cuda_helpers.h"
+#include "macros.h"
+#include "manager.h"
+#include "shim.h"
+#include "types.h"
 
 extern "C"
 {

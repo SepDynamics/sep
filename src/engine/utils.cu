@@ -1,4 +1,3 @@
-#define GLM_FORCE_CUDA
 #include <cstring>
 
 #include "cuda.h"

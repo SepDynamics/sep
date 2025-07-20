@@ -3,7 +3,7 @@
 
 #include <cstddef>  // For size_t
 
-#include "engine/common.h"  // for sep::SEPResult
+#include "common.h"  // for sep::SEPResult
 
 // Cross-platform API export macro
 #if defined(_WIN32)

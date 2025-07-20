@@ -2,16 +2,16 @@
 
 #include <cuda_runtime.h>
 
-#include "engine/allocation_metrics.h"
-#include "engine/common.h"
-#include "engine/cuda_sep.h"
-#include "engine/logging.h"
-#include "engine/macros.h"
-#include "engine/math_common.h"
-#include "engine/types.h"
+#include "allocation_metrics.h"
+#include "common.h"
+#include "cuda_sep.h"
+#include "../engine/math_common.h"
+#include "logging.h"
+#include "macros.h"
 #include "memory/logger.hpp"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
+#include "types.h"
 
 // Standard headers
 #include <algorithm>

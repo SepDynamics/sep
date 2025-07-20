@@ -1,13 +1,12 @@
 #pragma once
 
 #include <cstdint>
+#include <glm/glm.hpp>
 #include <string>
 #include <vector>
 
-#include <glm/glm.hpp>
-
-#include "engine/pattern_types.h"
 #include "memory/types.h"
+#include "pattern_types.h"
 #include "quantum/config.h"
 
 namespace sep {
@@ -29,6 +28,7 @@ struct QuantumState {
         COLLAPSED
     };
     Status state{Status::STABLE};
+    float phase{0.0f};
 };
 
 enum class RelationshipType {

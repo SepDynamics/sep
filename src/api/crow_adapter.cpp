@@ -19,9 +19,9 @@
 #include "api/sep_engine.h"
 #include "api/server.h"  // Include server header
 #include "api/types.h"
-#include "engine/manager.h"  // For sep::config::ConfigManager
-#include "engine/types.h"    // For sep::config::APIConfig
+#include "manager.h"  // For sep::config::ConfigManager
 #include "memory/memory_tier_manager.hpp"
+#include "types.h"  // For sep::config::APIConfig
 
 // Include standard headers
 #include <memory>

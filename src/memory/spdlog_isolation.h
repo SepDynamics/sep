@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "engine/cuda.h"
-#include "engine/macros.h"
+#include "cuda.h"
+#include "macros.h"
 
 #define SEP_SPDLOG_AVAILABLE 1
 

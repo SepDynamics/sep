@@ -6,7 +6,7 @@
 #include <string>
 
 #include "api/client.h"
-#include "engine/error_handler.h"
+#include "error_handler.h"
 
 namespace sep::api {
 

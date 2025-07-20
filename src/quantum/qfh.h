@@ -7,7 +7,7 @@
 #include <optional>
 #include <vector>
 
-#include "engine/shim.h"
+#include "shim.h"
 
 namespace sep::quantum {
 

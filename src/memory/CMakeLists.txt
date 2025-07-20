@@ -80,6 +80,7 @@ target_include_directories(sep_memory
         ${CMAKE_SOURCE_DIR}/src
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/src/engine
 )
 
 # Add CUDA include directories if CUDA is enabled

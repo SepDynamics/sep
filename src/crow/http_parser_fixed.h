@@ -8,7 +8,7 @@
 
 #include "common.h"
 #include "crow_isolation.h"
-#include "engine/shim.h"
+#include "shim.h"
 
 // Reuse version constants from the official library
 

@@ -5,7 +5,7 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 
-#include "engine/shim.h"
+#include "shim.h"
 
 // Minimal context types for compilation
 namespace sep::context {

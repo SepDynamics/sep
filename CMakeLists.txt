@@ -13,6 +13,9 @@ endif()
 # NOW call project() - CUDA will use the correct compiler
 project(sep_engine VERSION 1.0.0 LANGUAGES CXX CUDA)
 
+# Add our cmake modules to the module path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 # Include the template
 include(cmake/template.cmake)
 

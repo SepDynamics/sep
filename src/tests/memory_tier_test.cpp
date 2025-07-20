@@ -1,4 +1,4 @@
-#include <gmock/gmock.h>
+// #include <gmock/gmock.h> // GMock not available in container
 #include <gtest/gtest.h>
 
 #include <cstdlib>

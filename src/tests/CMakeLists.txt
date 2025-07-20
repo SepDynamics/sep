@@ -4,6 +4,11 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/tests/
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.hpp")
+
+# Find GoogleTest (includes GMock in modern versions)
+find_package(GTest REQUIRED)
+include(GoogleTest)
+enable_testing()
         
 add_library(sep_tests STATIC
     memory_tier_test.cpp
@@ -12,12 +17,18 @@ add_library(sep_tests STATIC
     ingestion_test.cpp
     pattern_metric_engine_test.cpp)
 
+# Set up include directories for sep_tests
+target_include_directories(sep_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+)
 
-
-# Find GoogleTest
-find_package(GTest REQUIRED)
-include(GoogleTest)
-enable_testing()
+# Link dependencies for sep_tests
+target_link_libraries(sep_tests PRIVATE
+    GTest::gtest
+    fmt::fmt
+    glm::glm
+    nlohmann_json::nlohmann_json
+)
 
 # Set C++ standard
 # Find required packages

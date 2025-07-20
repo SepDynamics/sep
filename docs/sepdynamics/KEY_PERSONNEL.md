@@ -1,42 +1,35 @@
-# Key Personnel & Operations Plan
+# The AI-Augmented Team
 
-## Founder: Alexander Nagy
+## Founder: Alexander Nagy (CEO & Chief Architect)
 
-### Background
-- B.S. Mechanical Engineering (2019)
-- Control Systems: Mark Rober projects
-- Manufacturing: Apple automation at Flex
-- Self-taught: C++, CUDA, Financial markets
+### The New Breed of Founder
+Alexander Nagy represents a new paradigm in technology leadership: the **AI-Augmented Founder**. His value is not in writing lines of code, but in providing the unique architectural vision and deep domain expertise required to direct advanced AI agents to synthesize novel, high-performance software.
+
+### Background & Core Competencies
+*   **First-Principles Thinker:** With a B.S. in Mechanical Engineering, his approach is grounded in the fundamental laws of physics and thermodynamics, not just computer science conventions.
+*   **Proven Systems Engineer:** Honed execution and systems-thinking at Mark Rober (control systems) and Flex (Apple manufacturing automation).
+*   **Master of AI Curation:** His deep dive into physics and mathematics for the MXBikes A-Kit project provided the granular expertise needed to direct, validate, and optimize the output of AI code generation agents for the SEP Engine.
 
 ### Role Post-Funding
-- CEO & Chief Scientist
-- Focus: Core algorithm development, strategic vision, and lead on initial proprietary trading operations.
-
-## Co-Founder: William Nagy
+*   **Chief Architect & Visionary:** Will continue to drive the core algorithmic and theoretical development of the SEP Engine.
+*   **AI Development Lead:** Will lead the process of directing AI agents to build, extend, and optimize the technology, establishing a hyper-efficient development culture.
+*   **CEO:** Will lead the company's strategic vision, investor relations, and initial proprietary trading operations.
 
 ## Identified Hires (Ready to Onboard)
 
-We have identified key individuals ready to join upon securing funding. These are not placeholders; these are professionals with whom we have standing relationships.
+Our hiring strategy focuses on individuals with proven execution capability in complex, high-stakes environments.
 
 1.  **Executive Producer / Project Manager**
-    *   **Background:** Former Executive Producer for Mark Rober during Alexander Nagy's tenure.
-    *   **Expertise:** Proven ability to manage complex, high-stakes projects, coordinate diverse talent, and deliver results under pressure.
+    *   **Background:** Former Executive Producer for Mark Rober.
+    *   **Expertise:** Proven ability to manage complex projects and diverse talent, ensuring visionary concepts are translated into tangible results.
 
 2.  **Director of Program Management**
     *   **Background:** Former Director of Program Management at Flex (Austin).
-    *   **Expertise:** Deep experience in scaling complex manufacturing and engineering processes, directly relevant to operationalizing and scaling the SEP Engine's deployment.
+    *   **Expertise:** Deep experience in scaling complex engineering processes, critical for operationalizing the SEP Engine.
 
-3.  **Operations Manager**
-    *   **Background:** Experienced in fintech operations and compliance.
-    *   **Role:** Will handle the critical day-to-day operations, compliance, and infrastructure management required for both proprietary trading and future licensing.
+## Co-Founder: William Nagy
 
 ## Advisory Board
+We are formalizing our advisory board, starting with a key figure in our founder's journey.
 
-We are in the process of formalizing our advisory board. The first seat will be offered to an angel investor we are currently approaching.
-
-*   **Angel Investor & Advisor:** This individual was instrumental in the founder's journey, providing a book that sparked the paradigm shift leading to the creation of the SEP Engine. We are approaching them for a **$50,000 investment in exchange for 0.5% equity and an advisory position.**
-
-## Scaling Plan
-
--   **Immediate Focus:** Onboard the identified key hires to establish a robust operational foundation.
--   **Scaling:** As revenue from proprietary trading and licensing grows, we will rapidly expand the team with specialized domain experts (quants, biologists, climate scientists) and additional high-performance engineers.
+*   **Angel Investor & Advisor:** We are approaching an angel investor for a **$50,000 investment for 0.5% equity and an advisory role.** This individual's influence was a direct catalyst for the insights that led to the SEP Engine's creation.

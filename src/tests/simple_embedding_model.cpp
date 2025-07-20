@@ -1,4 +1,4 @@
-#include "engine/tests/simple_embedding_model.h"
+#include "tests/simple_embedding_model.h"
 
 #include <cmath>
 

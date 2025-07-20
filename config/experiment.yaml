@@ -1,0 +1,24 @@
+experiment:
+  name: "OANDA EUR/USD Prediction"
+  training_data_source: "/sep/Testing/OANDA/O-train-1.json"
+  testing_data_source: "/sep/Testing/OANDA/O-test-2.json"
+  
+  modulation:
+    coherence:
+      type: "sinusoidal"
+      amplitude: 0.3
+      frequency: 0.1
+    stability:
+      type: "exponential_decay"
+      rate: 0.95
+    entropy:
+      type: "adaptive"
+      window: 100
+      
+  training:
+    window_size: 100
+    prediction_horizon: 10
+    
+  evaluation:
+    metrics: ["mse", "mae", "sharpe_ratio", "max_drawdown"]
+    backtesting: true

@@ -14,7 +14,17 @@ RUN apt-get update && apt-get install -y \
     libhiredis-dev \
     libgtest-dev \
     libspdlog-dev \
-    libglm-dev
+    libglm-dev \
+    libyaml-cpp-dev \
+    libimgui-dev \
+    libgl1-mesa-dev \
+    libglfw3-dev \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+RUN pip3 install pandas numpy matplotlib
 
 # Set the working directory
 WORKDIR /project

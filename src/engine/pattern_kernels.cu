@@ -4,9 +4,6 @@
 #include "pattern_types.h"
 
 namespace {
-constexpr int BLOCK_SIZE = 256;
-constexpr float CUDA_MIN_COHERENCE = 0.1F;
-constexpr float QUANTUM_EPSILON = 1e-5F;
 
 __device__ unsigned int get_global_idx() {
     return blockIdx.x * blockDim.x + threadIdx.x;

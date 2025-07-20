@@ -41,8 +41,8 @@ class SystemHooks;
 
 namespace memory {
 
-    using ::sep::memory::MemoryTierEnum;
-    using sep::persistence::PersistentPatternData;
+    using MemoryTierEnum = ::sep::memory::MemoryTierEnum;
+    using PersistentPatternData = ::sep::persistence::PersistentPatternData;
 
     class MemoryTierManager
     {

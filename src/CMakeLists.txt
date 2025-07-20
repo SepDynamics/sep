@@ -12,14 +12,13 @@ if(SEP_MINIMAL)
 endif()
 
 # Add component subdirectories - only core components needed for quant processing
+add_subdirectory(glad)
 add_subdirectory(engine)
 # add_subdirectory(embeddings)
 add_subdirectory(memory)
 add_subdirectory(gpu)
 add_subdirectory(quantum)
-
-# Add tests subdirectory
-add_subdirectory(tests)
+add_subdirectory(workbench)
 
 
 

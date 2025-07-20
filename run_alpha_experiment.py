@@ -85,7 +85,35 @@ def run_backtest(metrics_data):
     return 0.0
 
 def main():
-    # --- Setup ---
+    import argparse
+    parser = argparse.ArgumentParser(description='Run alpha prediction experiment')
+    parser.add_argument('--input', type=str, help='Input metrics JSON file from pattern_metric_example')
+    parser.add_argument('--output', type=str, help='Output JSON file for alpha results')
+    args = parser.parse_args()
+    
+    # If --input is provided, use direct metrics instead of generating them
+    if args.input and Path(args.input).exists():
+        print(f"--- Using pre-generated metrics from {args.input} ---")
+        with open(args.input, 'r') as f:
+            metrics_data = json.load(f)
+        
+        alpha = run_backtest(metrics_data)
+        result = {
+            "baseline_alpha": alpha,
+            "total_return_alpha": alpha,
+            "sharpe_ratio": alpha / 10.0,  # Simple approximation
+            "experiment_type": "direct_metrics"
+        }
+        
+        if args.output:
+            with open(args.output, 'w') as f:
+                json.dump(result, f, indent=2)
+            print(f"Results saved to {args.output}")
+        else:
+            print(f"Alpha: {alpha:.4f}%")
+        return
+    
+    # --- Setup for full experiment ---
     train_file = Path("Testing/OANDA/O-train-1.json")
     test_file = Path("Testing/OANDA/O-test-2.json")
     num_chunks = 10 # Use 10 chunks for faster processing
@@ -130,9 +158,25 @@ def main():
     print("\nAlpha Improvement Curve:")
     print(results_df)
 
+    # --- Save results if output specified ---
+    final_result = {
+        "baseline_alpha": baseline_alpha,
+        "total_return_alpha": results[-1]["alpha"] if results else baseline_alpha,
+        "sharpe_ratio": (results[-1]["alpha"] if results else baseline_alpha) / 10.0,
+        "training_iterations": results,
+        "experiment_type": "full_experiment"
+    }
+    
+    if args.output:
+        with open(args.output, 'w') as f:
+            json.dump(final_result, f, indent=2)
+        print(f"Results saved to {args.output}")
+
     # --- Cleanup ---
-    shutil.rmtree("./temp_train_chunks")
-    shutil.rmtree("./temp_test_chunks")
+    if Path("./temp_train_chunks").exists():
+        shutil.rmtree("./temp_train_chunks")
+    if Path("./temp_test_chunks").exists():
+        shutil.rmtree("./temp_test_chunks")
     print("\nCleaned up temporary chunk directories.")
 
 if __name__ == "__main__":

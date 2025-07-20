@@ -43,12 +43,17 @@ def create_chunks(input_file, num_chunks, output_dir):
 
 def analyze_chunks_statefully(chunk_list, temp_dir):
     """Runs the metric engine statefully over a list of chunks."""
-    # Copy all chunks to a single directory for processing
-    for i, chunk_path in enumerate(chunk_list):
-        shutil.copy(chunk_path, temp_dir / f"process_{i:05d}_{chunk_path.name}")
+    # For stateful processing, we need to process all chunks through a single file
+    # Concatenate all chunks into a single file
+    combined_file = temp_dir / "combined_data.bin"
+    
+    with open(combined_file, 'wb') as outf:
+        for chunk_path in chunk_list:
+            with open(chunk_path, 'rb') as inf:
+                outf.write(inf.read())
 
-    executable_path = Path("./build/examples/pattern_metric_example")
-    cmd = [str(executable_path), str(temp_dir), "--no-clear", "--json"]
+    executable_path = Path("./examples/pattern_metric_example")
+    cmd = [str(executable_path), str(combined_file), "--json"]
     
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     return json.loads(result.stdout)
@@ -83,7 +88,7 @@ def main():
     # --- Setup ---
     train_file = Path("Testing/OANDA/O-train-1.json")
     test_file = Path("Testing/OANDA/O-test-2.json")
-    num_chunks = 100 # Use 100 chunks for a reasonable time series
+    num_chunks = 10 # Use 10 chunks for faster processing
     
     print("--- Preparing Data Chunks ---")
     train_chunks = create_chunks(train_file, num_chunks, Path("./temp_train_chunks"))
@@ -98,7 +103,7 @@ def main():
 
     # --- 2. Iterative Training ---
     print("\n--- Starting Iterative Training and Evaluation ---")
-    training_iterations = [1, 2, 5, 10, 20]
+    training_iterations = [1, 2, 5]
     results = []
 
     for i in training_iterations:

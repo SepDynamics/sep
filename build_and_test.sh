@@ -130,18 +130,19 @@ docker run --gpus all --rm $IMAGE_NAME /bin/bash -c "
     ninja
 
     echo '--- Running unit tests with CTest... ---'
-    ctest --output-on-failure --test-dir ./tests
+    ctest --output-on-failure
 
     echo '--- Running benchmarks... ---'
     # Ensure the benchmark executable is built and run directly or via ctest if labeled
-    ./examples/pattern_metric_example --benchmark &>> /dev/null || true # Run benchmarks but suppress their verbose output from pipe
+    ./examples/pattern_metric_example --benchmark || true # Run benchmarks but continue if they fail
 
     echo '--- Processing 280MB data for financial pipeline (JSON output)... ---'
-    # Assuming OANDA_full_history.json is in assets/test_data/
-    ./examples/pattern_metric_example assets/test_data/OANDA_full_history.json --json --output output/metrics_output.json
+    # Use the actual OANDA training data
+    mkdir -p output
+    ./examples/pattern_metric_example Testing/OANDA/O-train-1.json --json --output output/metrics_output.json
 
     echo '--- Executing Alpha Prediction Pipeline... ---'
-    # Assuming run_alpha_experiment.py is in a 'scripts' directory relative to /sep
-    python3 scripts/run_alpha_experiment.py --input output/metrics_output.json --output output/alpha_results.json
+    # Run the python script that's in the root directory
+    python3 run_alpha_experiment.py --input output/metrics_output.json --output output/alpha_results.json
 
 " &>> "$LOG_FILE"    

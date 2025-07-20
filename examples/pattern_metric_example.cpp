@@ -45,7 +45,7 @@ using json = nlohmann::json;
 
 // Forward declarations
 void printMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics);
-void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics);
+void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics, const PatternMetricEngine& engine);
 void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iterations, bool no_clear, bool json_output, std::ostream& out);
 void runOriginalExamples(PatternMetricEngine& engine, bool json_output, std::ostream& out);
 
@@ -73,28 +73,26 @@ void printMetrics(std::ostream& out, const std::string& dataType, const std::vec
 }
 
 // Helper function to print metrics in JSON format
-void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics) {
+void printJsonMetrics(std::ostream& out, const std::string& dataType, const std::vector<PatternMetrics>& metrics, const PatternMetricEngine& engine) {
     if (metrics.empty()) {
-        out << "{}" << std::endl;
+        out << "[]" << std::endl;
         return;
     }
-    float total_coherence = 0.0f;
-    float total_stability = 0.0f;
-    float total_entropy = 0.0f;
 
-    for (const auto& m : metrics) {
-        total_coherence += m.coherence;
-        total_stability += m.stability;
-        total_entropy += m.entropy;
+    json result = json::array();
+    const auto& patterns = engine.getPatterns();
+    
+    for (size_t i = 0; i < metrics.size() && i < patterns.size(); ++i) {
+        const auto& m = metrics[i];
+        const auto& pattern = patterns[i];
+        json pattern_obj = {
+            {"id", std::string(pattern.id)},
+            {"coherence", m.coherence},
+            {"stability", m.stability},
+            {"entropy", m.entropy}
+        };
+        result.push_back(pattern_obj);
     }
-
-    json result = {
-        {"name", dataType},
-        {"coherence", total_coherence / metrics.size()},
-        {"stability", total_stability / metrics.size()},
-        {"entropy", total_entropy / metrics.size()},
-        {"pattern_count", metrics.size()}
-    };
 
     out << result.dump(4) << std::endl;
 }
@@ -132,7 +130,7 @@ void processFile(PatternMetricEngine& engine, const fs::path& filePath, int iter
 
     if (iterations <= 1) {
         if (json_output) {
-            printJsonMetrics(out, filePath.string(), engine.computeMetrics());
+            printJsonMetrics(out, filePath.string(), engine.computeMetrics(), engine);
         } else {
             printMetrics(out, filePath.string(), engine.computeMetrics());
         }
@@ -273,7 +271,17 @@ int main(int argc, char* argv[]) {
             for (const auto& entry : fs::recursive_directory_iterator(targetPath)) {
                 if (fs::is_regular_file(entry)) {
                     std::stringstream ss;
-                    processFile(engine, entry.path(), 1, false, true, ss);
+                    engine.clear(); // Clear state for each file in directory mode
+                    std::ifstream file(entry.path(), std::ios::binary);
+                    if (file) {
+                        const size_t internal_chunk_size = 65536;
+                        std::vector<char> buffer(internal_chunk_size);
+                        while (file.read(buffer.data(), internal_chunk_size) || file.gcount() > 0) {
+                            engine.ingestData(reinterpret_cast<const uint8_t*>(buffer.data()), file.gcount());
+                            engine.evolvePatterns();
+                        }
+                        printJsonMetrics(ss, entry.path().string(), engine.computeMetrics(), engine);
+                    }
                     std::string json_str = ss.str();
                     if (!json_str.empty()) {
                         try {

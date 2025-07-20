@@ -12,6 +12,11 @@
 #include "quantum/processor.h"
 #include "quantum/quantum_processor_qfh.h"
 
+// Forward declaration to avoid circular includes
+namespace sep::quantum {
+    class QuantumProcessorCUDA;
+}
+
 namespace sep::quantum {
 
 /// @brief Holds the computed metrics for a single pattern.
@@ -124,6 +129,7 @@ private:
     
     // Quantum processing components
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
+    bool use_gpu_;
     
     // Internal pattern storage
     std::vector<compat::PatternData> current_patterns_;

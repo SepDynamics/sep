@@ -28,7 +28,7 @@ function(add_sep_library target_name)
     if(SEP_USE_CUDA AND SEP_LIB_CUDA_SOURCES)
         set_target_properties(${target_name} PROPERTIES
             CUDA_SEPARABLE_COMPILATION ON
-            CUDA_RESOLVE_DEVICE_SYMBOLS ON
+            CUDA_RESOLVE_DEVICE_SYMBOLS OFF
             CUDA_STANDARD 17
         )
         if(CUDAToolkit_FOUND)

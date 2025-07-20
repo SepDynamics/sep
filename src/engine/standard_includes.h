@@ -86,7 +86,7 @@ namespace sep {
 
     using ifstream = std::ifstream;
     using istringstream = std::istringstream;
-    auto& cerr = std::cerr;
+    extern std::ostream& cerr;
     
     // Use std::string directly instead of custom implementation
     using string = std::string;

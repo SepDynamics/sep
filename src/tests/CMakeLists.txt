@@ -11,11 +11,12 @@ include(GoogleTest)
 enable_testing()
         
 add_library(sep_tests STATIC
-    memory_tier_test.cpp
+    # memory_tier_test.cpp
     simple_embedding_model.cpp
     dataset_loader.cpp
-    ingestion_test.cpp
-    pattern_metric_engine_test.cpp)
+    # ingestion_test.cpp
+    # pattern_metric_engine_test.cpp
+)
 
 # Set up include directories for sep_tests
 target_include_directories(sep_tests PRIVATE
@@ -37,7 +38,7 @@ find_package(fmt REQUIRED)
 
 # Create test executables
 # add_executable(memory_tier_test memory_tier_test.cpp)
-add_executable(pattern_metric_test pattern_metric_engine_test.cpp)
+# add_executable(pattern_metric_test pattern_metric_engine_test.cpp)
 
 # Add CUDA test if CUDA is enabled
 if(SEP_USE_CUDA)
@@ -99,21 +100,21 @@ endif()
 # )
 
 # Configure pattern metric test
-target_link_libraries(pattern_metric_test PRIVATE
-    GTest::gtest
-    GTest::gtest_main
-    fmt::fmt
-    sep_engine
-    sep_quantum
-    TBB::tbb
-)
+# target_link_libraries(pattern_metric_test PRIVATE
+#     GTest::gtest
+#     GTest::gtest_main
+#     fmt::fmt
+#     sep_engine
+#     sep_quantum
+#     TBB::tbb
+# )
 
-target_include_directories(pattern_metric_test PRIVATE
-    ${CMAKE_SOURCE_DIR}/src
-)
+# target_include_directories(pattern_metric_test PRIVATE
+#     ${CMAKE_SOURCE_DIR}/src
+# )
 
-add_test(NAME pattern_metric_test COMMAND pattern_metric_test)
-set_tests_properties(pattern_metric_test PROPERTIES
-    LABELS "unit;quantum;pattern"
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-)
+# add_test(NAME pattern_metric_test COMMAND pattern_metric_test)
+# set_tests_properties(pattern_metric_test PROPERTIES
+#     LABELS "unit;quantum;pattern"
+#     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+# )

@@ -21,7 +21,6 @@ add_sep_library(sep_quantum
         qbsa_cuda.cu
         quantum_processor_cuda.cu
     DEPENDENCIES
-        sep_engine
 )
 
 target_include_directories(sep_quantum PUBLIC

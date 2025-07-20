@@ -114,9 +114,10 @@ TEST_F(PatternMetricEngineTest, HandleEdgeCases) {
 
 // Test pattern mutation
 TEST_F(PatternMetricEngineTest, PatternMutation) {
-    sep::pattern::PatternData p;
-    p.id = "pattern_0";
-    p.data.push_back(1.0f);
+    sep::compat::PatternData p;
+    strcpy(p.id, "pattern_0");
+    p.attributes[0] = 1.0f;
+    p.size = 1;
     engine_->addPattern(p);
     
     auto patterns = engine_->getPatterns();

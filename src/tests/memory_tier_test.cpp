@@ -158,9 +158,12 @@ TEST_F(MemoryTierManagerTest, PatternRegistry) {
     auto& manager = MemoryTierManager::getInstance();
     
     // Create a simple pattern
-    sep::pattern::PatternData pattern;
-    pattern.id = 1;
-    pattern.values = {0.5f, 0.6f, 0.7f};
+    sep::compat::PatternData pattern;
+    strcpy(pattern.id, "pattern_1");
+    pattern.attributes[0] = 0.5f;
+    pattern.attributes[1] = 0.6f;
+    pattern.attributes[2] = 0.7f;
+    pattern.size = 3;
     
     // Register it
     manager.registerPattern(pattern.id, pattern);
@@ -172,9 +175,12 @@ TEST_F(MemoryTierManagerTest, PatternRegistry) {
     EXPECT_EQ(retrieved->values.size(), 3);
     
     // Add a relationship
-    sep::pattern::PatternData pattern2;
-    pattern2.id = 2;
-    pattern2.values = {0.1f, 0.2f, 0.3f};
+    sep::compat::PatternData pattern2;
+    strcpy(pattern2.id, "pattern_2");
+    pattern2.attributes[0] = 0.1f;
+    pattern2.attributes[1] = 0.2f;
+    pattern2.attributes[2] = 0.3f;
+    pattern2.size = 3;
     manager.registerPattern(pattern2.id, pattern2);
     
     // Link them

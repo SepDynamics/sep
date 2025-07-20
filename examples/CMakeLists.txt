@@ -2,8 +2,7 @@ add_executable(pattern_metric_example pattern_metric_example.cpp)
 
 target_link_libraries(pattern_metric_example PRIVATE
     sep_quantum
-    sep_core
-    sep_compat
+    sep_engine
     fmt::fmt
     benchmark::benchmark
     TBB::tbb
@@ -14,9 +13,9 @@ add_executable(financial_demo financial_demo.cpp)
 
 target_link_libraries(financial_demo PRIVATE
     sep_quantum
-    sep_core
-    sep_compat
+    sep_engine
     fmt::fmt
     TBB::tbb
 )
-add_subdirectory(sep_memory_verifier)
+# Temporarily disabled due to DWARF linker issues
+# add_subdirectory(sep_memory_verifier)

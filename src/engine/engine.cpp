@@ -34,6 +34,11 @@
 #include "dag_graph.h"
 #include "data_parser.h"
 #include "engine.h"
+
+// Define the extern declaration from standard_includes.h
+namespace sep {
+    std::ostream& cerr = std::cerr;
+}
 #include "error_handler.h"
 #include "logging.h"  // This is actually the logging manager
 #include "memory.h"

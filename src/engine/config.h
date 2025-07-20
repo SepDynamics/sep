@@ -1,22 +1,29 @@
 #pragma once
 
-// Core configuration macros and constants
-#ifndef SEP_CUDA_AVAILABLE
-#define SEP_CUDA_AVAILABLE 0
-#endif
+#include "shim.h"
 
 namespace sep {
 namespace config {
 
-// Version information
-constexpr int VERSION_MAJOR = 0;
-constexpr int VERSION_MINOR = 1;
-constexpr int VERSION_PATCH = 0;
+    struct CudaConfig
+    {
+        bool use_gpu{true};
+        int max_memory_mb{8192};
+        int batch_size{1024};
+        float gpu_memory_limit{0.9f};
+        bool enable_profiling{false};
+    };
 
-// System configuration
-constexpr bool ENABLE_DEBUG_LOGGING = false;
-constexpr bool ENABLE_METRICS = true;
-constexpr bool ENABLE_TRACING = false;
+    struct LogConfig
+    {
+        std::string level;
+        std::string path;
+    };
 
+    struct AnalyticsConfig
+    {
+        bool enabled;
+        std::string endpoint;
+    };
 }  // namespace config
 }  // namespace sep

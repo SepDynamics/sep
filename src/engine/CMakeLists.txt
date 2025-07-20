@@ -11,18 +11,6 @@ set(WITH_CYCLES_OPENVDB ON)
 set(WITH_CYCLES_OPENCOLORIO ON)
 set(WITH_CYCLES_OPENSUBDIV ON)
 
-# Install headers
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
-        DESTINATION include/sep/compat
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp")
-
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
-        DESTINATION include/sep/compat/internal
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp")
 
 # Define CUDA sources
 set(CUDA_SOURCES
@@ -62,9 +50,8 @@ set_target_properties(sep_engine PROPERTIES
 
 target_include_directories(sep_engine
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include/sep/engine>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/src
 )
 
 if(SEP_USE_CUDA)
@@ -72,7 +59,6 @@ if(SEP_USE_CUDA)
 # Link against modern CUDA targets. This transitively handles include paths and libraries.
 target_link_libraries(sep_engine PUBLIC
     CUDA::toolkit
-    sep_quantum
 )
 else()
     target_compile_definitions(sep_engine PUBLIC SEP_USE_CUDA=0)

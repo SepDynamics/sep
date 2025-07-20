@@ -49,6 +49,7 @@ find_package(glm REQUIRED)
 
 # Include directories
 include_directories(
+    src
 )
 
 # Set policy for CUDA modules
@@ -105,25 +106,4 @@ set(SEP_TARGETS
     sep_quantum
 )
 
-# Install configuration
-#include(GNUInstallDirs)
-configure_file(cmake/sep-config.cmake.in
-    "${CMAKE_CURRENT_BINARY_DIR}/sep-config.cmake" @ONLY)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sep-config.cmake"
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep)
-
-# Export the targets (define the export)
-install(TARGETS ${SEP_TARGETS}
-    EXPORT sep-targets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-# Install the export
-install(EXPORT sep-targets
-    FILE sep-targets.cmake
-    NAMESPACE sep::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sep)
 

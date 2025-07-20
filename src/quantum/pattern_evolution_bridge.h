@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "engine/types.h"
+#include "quantum/types.h"
 
 namespace sep::quantum {
 

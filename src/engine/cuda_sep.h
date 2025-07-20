@@ -5,11 +5,15 @@
 #include "shim.h"
 #include <cuda_runtime.h>
 
+#ifndef SEP_cudaMemAttachGlobal
+#define SEP_cudaMemAttachGlobal cudaMemAttachGlobal
+#endif
+
 // This header provides CUDA runtime function implementations that
 // can be used regardless of whether CUDA is available
 
 namespace sep {
-namespace sep {
+namespace cuda {
 
     // Stream class forward declaration
     class Stream;
@@ -50,5 +54,6 @@ inline cudaError_t SEP_cudaHostAlloc(void** ptr, size_t size, unsigned int flags
 inline cudaError_t SEP_cudaStreamAttachMemAsync(cudaStream_t stream, void* ptr, size_t size, unsigned int flags) { return cudaStreamAttachMemAsync(stream, ptr, size, flags); }
 inline cudaError_t SEP_cudaMemset(void* devPtr, int value, size_t count) { return cudaMemset(devPtr, value, count); }
 inline cudaError_t SEP_cudaMemsetAsync(void* devPtr, int value, size_t count, cudaStream_t stream) { return cudaMemsetAsync(devPtr, value, count, stream); }
-}  // namespace sep
+}  // namespace cuda
+} // namespace sep
 #endif // SEP_COMPAT_CUDA_SEP_H

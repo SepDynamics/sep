@@ -2,11 +2,27 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 
-#include "engine/types.h"
-#include "memory/types.h"  // Add include for MemoryTierEnum
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "quantum/types.h"
 
-namespace sep {
-using PatternRelationship = quantum::PatternRelationship;
+using namespace glm;
+
+namespace sep::compat {
+void to_json(nlohmann::json& j, const PatternData& data) {
+    j = nlohmann::json{
+        {"attributes", {data.attributes.x, data.attributes.y, data.attributes.z, data.attributes.w}},
+        {"coherence", data.coherence},
+        {"stability", data.stability}
+    };
+}
+
+void from_json(const nlohmann::json& j, PatternData& data) {
+    auto attrs = j.at("attributes").get<std::vector<float>>();
+    data.attributes = glm::vec4(attrs[0], attrs[1], attrs[2], attrs[3]);
+    j.at("coherence").get_to(data.coherence);
+    j.at("stability").get_to(data.stability);
+}
 }
 
 namespace sep::quantum {
@@ -37,7 +53,7 @@ void from_json(const nlohmann::json& j, QuantumState& state) {
     state.state = static_cast<QuantumState::Status>(j.value("state", 0));
 }
 
-void to_json(nlohmann::json& j, const sep::PatternRelationship& rel) {
+void to_json(nlohmann::json& j, const PatternRelationship& rel) {
     j = nlohmann::json{
         {"targetId", rel.targetId},
         {"strength", rel.strength},
@@ -45,28 +61,28 @@ void to_json(nlohmann::json& j, const sep::PatternRelationship& rel) {
     };
 }
 
-void from_json(const nlohmann::json& j, sep::PatternRelationship& rel) {
+void from_json(const nlohmann::json& j, PatternRelationship& rel) {
     j.at("targetId").get_to(rel.targetId);
     j.at("strength").get_to(rel.strength);
-    rel.type = static_cast<RelationshipType>(j.value("type", 0)); 
+    rel.type = static_cast<RelationshipType>(j.value("type", 0));
 }
 
-void to_json(nlohmann::json& j, const sep::Pattern& pattern) {
-    j = nlohmann::json{
-        {"id", pattern.id},
-        {"position", {pattern.position.x, pattern.position.y, pattern.position.z, pattern.position.w}},
-        {"momentum", {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z}},
-        {"quantum_state", pattern.quantum_state},
-        {"relationships", pattern.relationships},
-        {"data", pattern.data},
-        {"parent_ids", pattern.parent_ids},
-        {"timestamp", pattern.timestamp},
-        {"last_accessed", pattern.last_accessed},
-        {"last_modified", pattern.last_modified}
-    };
+
+void to_json(nlohmann::json& j, const Pattern& pattern) {
+    j = nlohmann::json::object();
+    j["id"] = pattern.id;
+    j["position"] = {pattern.position.x, pattern.position.y, pattern.position.z, pattern.position.w};
+    j["momentum"] = {pattern.momentum.x, pattern.momentum.y, pattern.momentum.z};
+    j["quantum_state"] = pattern.quantum_state;
+    j["relationships"] = pattern.relationships;
+    j["data"] = pattern.data;
+    j["parent_ids"] = pattern.parent_ids;
+    j["timestamp"] = pattern.timestamp;
+    j["last_accessed"] = pattern.last_accessed;
+    j["last_modified"] = pattern.last_modified;
 }
 
-void from_json(const nlohmann::json& j, sep::Pattern& pattern) {
+void from_json(const nlohmann::json& j, Pattern& pattern) {
     j.at("id").get_to(pattern.id);
     auto pos = j.at("position").get<std::vector<float>>();
     pattern.position = glm::vec4(pos[0], pos[1], pos[2], pos[3]);

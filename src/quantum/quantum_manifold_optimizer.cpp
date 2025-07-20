@@ -1,7 +1,6 @@
 #include "quantum/quantum_manifold_optimizer.h"
 #include "types.h"
 #include "quantum/quantum_processor_qfh.h"
-#include "quantum/pattern_evolution_bridge.h"
 #include <numeric>
 #include <vector>
 #include <glm/glm.hpp>
@@ -10,6 +9,7 @@
 #include <thread>
 
 namespace sep::quantum::manifold {
+#include "quantum/pattern_evolution_bridge.h"
 
     QuantumManifoldOptimizer::Config QuantumManifoldOptimizer::createManifoldConfig(
         const PatternEvolutionBridge::Config& cfg)

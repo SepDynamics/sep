@@ -4,17 +4,16 @@
 
 namespace sep::quantum::manifold {
 
-    ::sep::MemoryThresholdConfig memory{.promote_stm_to_mtm = 0.7f,
-                                        .promote_mtm_to_ltm = 0.9f,
-                                        .demote_threshold = 0.3f,
-                                        .fragmentation_threshold = 0.3f,
-                                        .stm_size = 1 << 20,
-                                        .mtm_size = 4 << 20,
-                                        .ltm_size = 16 << 20,
-                                        .stm_to_mtm_min_gen = 5,
-                                        .mtm_to_ltm_min_gen = 100,
-                                        .use_unified_memory = true,
-                                        .enable_compression = true};
+    ::sep::memory::MemoryThresholdConfig memory{.promote_stm_to_mtm = 0.7f,
+                                                .promote_mtm_to_ltm = 0.9f,
+                                                .demote_threshold = 0.3f,
+                                                .fragmentation_threshold = 0.3f,
+                                                .stm_size = 1 << 20,
+                                                .mtm_size = 4 << 20,
+                                                .ltm_size = 16 << 20,
+                                                .stm_to_mtm_min_gen = 5,
+                                                .use_unified_memory = true,
+                                                .enable_compression = true};
 
     ::sep::QuantumThresholdConfig quantum{.ltm_coherence_threshold = 0.9f,
                                           .mtm_coherence_threshold = 0.6f,

@@ -88,12 +88,12 @@ public:
 
     /// @brief Manually adds a pattern to the engine.
     /// @param pattern The pattern to add.
-    void addPattern(const pattern::PatternData& pattern);
+    void addPattern(const compat::PatternData& pattern);
 
     /// @brief Creates a mutated version of a given pattern.
     /// @param parent The pattern to mutate.
     /// @return A new PatternData struct representing the mutated pattern.
-    pattern::PatternData mutatePattern(const pattern::PatternData& parent) override;
+    compat::PatternData mutatePattern(const compat::PatternData& parent) override;
 
     /// @brief Computes metrics for the currently identified patterns.
     /// @return A vector of PatternMetrics structs.
@@ -101,7 +101,7 @@ public:
 
     /// @brief Gets the current patterns.
     /// @return A vector of PatternData structs.
-    const std::vector<pattern::PatternData>& getPatterns() const;
+    const std::vector<compat::PatternData>& getPatterns() const;
 
 private:
     /**
@@ -118,14 +118,14 @@ private:
      * @param size Size of the data in bytes.
      * @return A vector of extracted patterns.
      */
-    std::vector<pattern::PatternData> extractPatternsFromBytes(const uint8_t* data, size_t size);
+    std::vector<compat::PatternData> extractPatternsFromBytes(const uint8_t* data, size_t size);
     void processBuffer(bool is_final_chunk = false);
     
     // Quantum processing components
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
     
     // Internal pattern storage
-    std::vector<pattern::PatternData> current_patterns_;
+    std::vector<compat::PatternData> current_patterns_;
     std::vector<PatternMetrics> current_metrics_;
 
     // Thread safety and streaming

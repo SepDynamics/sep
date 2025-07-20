@@ -60,8 +60,7 @@ set_target_properties(sep_memory PROPERTIES
 # Link dependencies
 target_link_libraries(sep_memory
     PUBLIC
-        sep_core
-        sep_compat
+        sep_engine
         fmt::fmt
         $<$<BOOL:${SEP_BUILD_QUANTUM}>:sep_quantum>
     PRIVATE
@@ -78,12 +77,18 @@ endif()
 # Configure include directories
 target_include_directories(sep_memory
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        $<INSTALL_INTERFACE:include>
+        ${CMAKE_SOURCE_DIR}/src
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/engine
-        ${CMAKE_SOURCE_DIR}/src/memory
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+# Add CUDA include directories if CUDA is enabled
+if(SEP_USE_CUDA)
+    target_include_directories(sep_memory
+        PUBLIC
+            ${CUDAToolkit_INCLUDE_DIRS}
+    )
+endif()
 if(HIREDIS_FOUND)
     target_include_directories(sep_memory PRIVATE ${HIREDIS_INCLUDE_DIR})
 endif()
@@ -102,7 +107,7 @@ if(HIREDIS_FOUND)
 endif()
 
 # Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/memory/
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/memory/
         DESTINATION include/sep/memory
         FILES_MATCHING
         PATTERN "*.h"

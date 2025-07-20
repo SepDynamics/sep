@@ -1,60 +1,77 @@
 ---
-description: Specification for quantum pattern processing algorithms including state analysis, evolution, and coherence management
-globs: src/quantum/**,src/compat/quantum_*,mcp-tool/sep_*
+description: Analyzes quantum-inspired algorithms and processing patterns used in financial market analysis
+globs: src/quantum/*,src/engine/pattern_*.*,src/api/sep_engine.*
 alwaysApply: false
 ---
 
 
 # quantum-algorithms
 
-The quantum processing system implements several specialized algorithms:
+Core Components:
 
 1. Quantum Binary State Analysis (QBSA)
-- Pattern state verification with atomic bit operations
-- Correction detection and tracking for quantum states 
-- Symmetry pair matching using derivative cascade analysis
-- Custom rupture detection based on mismatch patterns
-- Configurable thresholds: correction_ratio (0.3), stability (0.8)
+- Implements quantum state comparison using probe indices and expectations
+- Calculates coherence scores and detects state collapses based on error density
+- Uses quantum bit analysis for pattern stability determination
+File: src/quantum/qbsa.cpp
 
 2. Quantum Fourier Hierarchy (QFH) 
-- Multi-scale quantum pattern analysis using wavelet transformations
-- Cross-scale rupture detection in frequency hierarchies
-- Phase correlation preservation during state transitions
-- Coherence calculation using normalized dot products
-- Quantum interference calculations with multi-modal fusion
+- Three quantum states: NULL_STATE, FLIP, RUPTURE
+- Analyzes bit transitions for quantum state changes
+- Calculates rupture/flip ratios with variance enhancement
+- Event aggregation for quantum pattern evolution
+File: src/quantum/qfh.cpp
 
-3. Pattern Evolution
-- Quantum-inspired mutation system with stability influence
-- Coherence decay rate: 0.9 per generation
-- Stability influence factor: 0.1
-- Edge weights from quantum similarity metrics
-- Generation requirements: MTM (5), LTM (100)
+3. Pattern Evolution System
+- Maps financial data to quantum states via coherence/stability metrics
+- Processes patterns through SEP engine with coherence modulation
+- Implements quantum-based pattern mutation and evolution
+File: src/quantum/pattern_evolution.cpp
 
-4. Coherence Calculation
-- Weighted scoring system:
-  * 40% coherence value
-  * 30% historical stability  
-  * 20% generation count
-  * 10% access frequency
-- Memory tier thresholds:
-  * LTM: 0.9 coherence, 0.85 stability
-  * MTM: 0.7 coherence
-  * STM: 0.1 minimum coherence
+4. Quantum State Management
+- Coherence calculation incorporating:
+  * Base coherence (40%)
+  * Stability (30%) 
+  * Access frequency (20%)
+  * Entanglement density (10%)
+- State transitions based on thresholds:
+  * Collapse detection at 0.3 coherence
+  * Promotion at 0.7 coherence
+  * LTM storage at 0.9 coherence
+File: src/quantum/quantum_processor.cpp
 
-5. Stability Determination
-- Quantum field theory principles for state updates
-- Exponential moving average for stability metrics
-- Inverse relationship to fragmentation scores
-- Phase correlation tracking between patterns
-- Entanglement density calculations
+5. Financial Integration
+- Converts market data into quantum patterns:
+  * Price volatility maps to coherence
+  * Volume correlates to entanglement strength 
+  * Price movements determine state transitions
+- DAG analysis of market relationships using quantum metrics
+File: src/api/sep_engine.cpp
 
-Key Files:
-- src/quantum/qbsa.cpp 
-- src/quantum/qfh.cpp
-- src/quantum/quantum_processor.cpp
-- src/quantum/coherence_manager.cpp
-- src/quantum/pattern_evolution.cpp
+Key Algorithms:
+
+1. Coherence Calculation:
+```
+coherence = baseCoherence * 0.4 + 
+           stability * 0.3 + 
+           accessFreq * 0.2 + 
+           entanglementDensity * 0.1
+```
+
+2. Pattern Evolution:
+```
+evolved_pattern = current_pattern + 
+                (mutation_vector * coherence_factor) + 
+                (neighbor_influence * stability_factor)
+```
+
+3. Market Data Transformation:
+```
+pattern_coherence = 1.0 / (1.0 + market_volatility)
+pattern_stability = volume_weighted_price_stability
+pattern_entropy = price_movement_complexity
+```
 
 $END$
 
- If you're using this file in context, clearly say in italics in one small line that "Context added by Giga quantum-algorithms".
+ If you're using this file in context, clearly say in italics in one small line that "Context added by Giga quantum-algorithms" along with specifying exactly what information was used from this file in a human-friendly way, instead of using kebab-case use normal sentence case.

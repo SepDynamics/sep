@@ -4,13 +4,14 @@
 #include <vector>
 
 #include "engine/cuda_sep.h"
-#include "engine/math_common.h"
+#include <glm/gtc/type_ptr.hpp>
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "types.h"
+
 
 namespace sep::quantum {
 

@@ -1,13 +1,15 @@
-
-#include "engine/common.h"  // defines sep::SEPResult
+#include "quantum/pattern_processor.hpp"
+#include "engine/common.h"
 #include "engine/cuda_helpers.h"
 #include "engine/cuda_sep.h"
-#include "engine/math_common.h"
 #include "engine/pattern_types.h"
 #include "engine/types.h"
 #include "memory/types.h"
-#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/config.h"
 #include "quantum/quantum_processor.h"
+#include "quantum/types.h"
+
+#include "quantum/pattern_evolution_bridge.h"
 
 using ::sep::memory::MemoryTierEnum;
 
@@ -24,7 +26,7 @@ public:
         : quantum_processor_(createQuantumProcessor(config)) {}
 
     sep::ProcessingResult processPattern(
-        const sep::Pattern& pattern) {
+        const sep::quantum::Pattern& pattern) {
         sep::ProcessingResult result;
         result.pattern = pattern;
         result.pattern.quantum_state.memory_tier = ::sep::memory::MemoryTierEnum::STM;
@@ -46,10 +48,10 @@ public:
             evolved_state.generation++;
 
             // Determine memory tier based on coherence and stability
-            if (evolved_state.coherence >= pattern::LTM_COHERENCE_THRESHOLD &&
+            if (evolved_state.coherence >= sep::quantum::COHERENCE_THRESHOLD &&
                 evolved_state.stability >= sep::quantum::STABILITY_THRESHOLD) {
                 evolved_state.memory_tier = ::sep::memory::MemoryTierEnum::LTM;
-            } else if (evolved_state.coherence >= pattern::MTM_COHERENCE_THRESHOLD) {
+            } else if (evolved_state.coherence >= sep::quantum::COHERENCE_THRESHOLD) {
                 evolved_state.memory_tier = ::sep::memory::MemoryTierEnum::MTM;
             }
             // Memory tier transition is tracked in the quantum state
@@ -67,7 +69,7 @@ public:
     }
 
     std::vector<sep::ProcessingResult> processBatch(
-        const std::vector<sep::Pattern>& patterns) {
+        const std::vector<sep::quantum::Pattern>& patterns) {
         std::vector<sep::ProcessingResult> results;
         results.reserve(patterns.size());
         
@@ -90,11 +92,11 @@ public:
     }
 
     bool isStable(const QuantumState& state) const {
-        return state.stability >= pattern::STABILITY_THRESHOLD;
+        return state.stability >= sep::quantum::STABILITY_THRESHOLD;
     }
 
     bool isCollapsed(const QuantumState& state) const {
-        return state.coherence < pattern::MIN_COHERENCE;
+        return state.coherence < sep::quantum::MIN_COHERENCE;
     }
 bool isQuantum(const QuantumState& state) const {
     return state.coherence >= sep::quantum::MIN_COHERENCE;
@@ -102,51 +104,6 @@ bool isQuantum(const QuantumState& state) const {
 private:
 std::unique_ptr<QuantumProcessor> quantum_processor_;
 };
-}
-
-void GPUPatternProcessor::evolvePatterns() {
-std::vector<compat::PatternData> compat_patterns(patterns_.size());
-for (size_t i = 0; i < patterns_.size(); ++i) {
-    compat_patterns[i].attributes = patterns_[i].attributes;
-    compat_patterns[i].coherence = patterns_[i].coherence;
-    compat_patterns[i].stability = patterns_[i].quantum_state.stability;
-}
-
-compat::PatternData* d_compat_patterns;
-cudaMalloc(&d_compat_patterns, compat_patterns.size() * sizeof(compat::PatternData));
-cudaMemcpy(d_compat_patterns, compat_patterns.data(), compat_patterns.size() * sizeof(compat::PatternData), cudaMemcpyHostToDevice);
-
-compat::PatternData* d_compat_results;
-cudaMalloc(&d_compat_results, compat_patterns.size() * sizeof(compat::PatternData));
-
-compat::PatternData* d_compat_previous_patterns = nullptr;
-// if (m_previous_patterns.size() > 0) {
-//     std::vector<compat::PatternData> compat_previous_patterns(m_previous_patterns.size());
-//     for (size_t i = 0; i < m_previous_patterns.size(); ++i) {
-//         compat_previous_patterns[i].attributes = m_previous_patterns[i].attributes;
-//         compat_previous_patterns[i].coherence = m_previous_patterns[i].coherence;
-//         compat_previous_patterns[i].stability = m_previous_patterns[i].quantum_state.stability;
-//     }
-//     cudaMalloc(&d_compat_previous_patterns, compat_previous_patterns.size() * sizeof(compat::PatternData));
-//     cudaMemcpy(d_compat_previous_patterns, compat_previous_patterns.data(), compat_previous_patterns.size() * sizeof(compat::PatternData), cudaMemcpyHostToDevice);
-// }
-
-launch_pattern_processing(d_compat_patterns, d_compat_results, compat_patterns.size(), d_compat_previous_patterns, nullptr);
-
-std::vector<compat::PatternData> compat_results(compat_patterns.size());
-cudaMemcpy(compat_results.data(), d_compat_results, compat_results.size() * sizeof(compat::PatternData), cudaMemcpyDeviceToHost);
-
-for (size_t i = 0; i < patterns_.size(); ++i) {
-    patterns_[i].attributes = compat_results[i].attributes;
-    patterns_[i].coherence = compat_results[i].coherence;
-    patterns_[i].quantum_state.stability = compat_results[i].stability;
-}
-
-cudaFree(d_compat_patterns);
-cudaFree(d_compat_results);
-if (d_compat_previous_patterns) {
-    cudaFree(d_compat_previous_patterns);
-}
 }
 }
 

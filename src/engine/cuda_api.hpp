@@ -35,13 +35,13 @@ SEP_API sep::SEPResult sep_cuda_process_symmetry(
 );
 
 // Memory management functions
-SEP_API sep::cuda::cudaError_t sep_cuda_allocate_managed(void** ptr, size_t size);
-SEP_API sep::cuda::cudaError_t sep_cuda_deallocate(void* ptr);
-SEP_API sep::cuda::cudaError_t sep_cuda_memcpy_async(
+SEP_API cudaError_t sep_cuda_allocate_managed(void** ptr, size_t size);
+SEP_API cudaError_t sep_cuda_deallocate(void* ptr);
+SEP_API cudaError_t sep_cuda_memcpy_async(
     void* dst,
     const void* src,
     size_t count,
-    sep::cuda::cudaMemcpyKind kind,
+    cudaMemcpyKind kind,
     void* stream
 );
 
@@ -54,9 +54,9 @@ SEP_API sep::cuda::cudaError_t sep_cuda_memcpy_async(
 namespace sep::cuda {
 
 // Memory allocation/deallocation
-using cudaError_t = sep::cuda::cudaError_t;
-using cudaMemcpyKind = sep::cuda::cudaMemcpyKind;
-using cudaStream_t = sep::cuda::cudaStream_t;
+using cudaError_t = ::cudaError_t;
+using cudaMemcpyKind = ::cudaMemcpyKind;
+using cudaStream_t = ::cudaStream_t;
 
 // Memory management
 cudaError_t allocateManaged(void** ptr, size_t size);

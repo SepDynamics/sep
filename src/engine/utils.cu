@@ -1,3 +1,4 @@
+#define GLM_FORCE_CUDA
 #include <cstring>
 
 #include "cuda.h"
@@ -16,7 +17,8 @@
 #include <sys/sysinfo.h>
 #endif
 
-#include "sep_glm_wrapper.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace sep::cuda {
 #if !defined(__CUDACC__)

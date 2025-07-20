@@ -11,7 +11,6 @@
 
 #include "engine/common.h"
 #include "engine/types.h"
-#include "quantum/pattern.h"
 #include "quantum/pattern_processor.hpp"
 #include "quantum/processor.h"
 
@@ -47,23 +46,24 @@ MemoryTierManager::MemoryTierManager()
     init(default_config);
 }
 
-        MemoryTierManager::MemoryTierManager(const Config &cfg)
-            : stm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::STM, cfg.stm_size,
-                                                cfg.promote_stm_to_mtm, cfg.stm_to_mtm_min_gen)),
-              mtm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::MTM, cfg.mtm_size,
-                                                cfg.promote_mtm_to_ltm, cfg.mtm_to_ltm_min_gen)),
-              ltm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::LTM, cfg.ltm_size,
-                                                0.9f, 100))
-        {
-            init(cfg);
-        }
+MemoryTierManager::MemoryTierManager(const Config &cfg)
+    : stm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::STM, cfg.stm_size,
+                                        cfg.promote_stm_to_mtm, cfg.stm_to_mtm_min_gen)),
+      mtm_(std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::MTM, cfg.mtm_size,
+                                        cfg.promote_mtm_to_ltm, cfg.stm_to_mtm_min_gen)),
+      ltm_(
+          std::make_unique<MemoryTier>(::sep::memory::MemoryTierEnum::LTM, cfg.ltm_size, 0.9f, 100))
+{
+    init(cfg);
+}
 
         // Implementation of init method
         void MemoryTierManager::init(const Config &config)
         {
             // Store the configuration
-            config_.min_age_for_promotion = std::max(config.stm_to_mtm_min_gen, 1u);
-            config_.min_age_for_ltm = std::max(config.mtm_to_ltm_min_gen, 10u);
+            config_.min_age_for_promotion =
+                std::max(static_cast<unsigned int>(config.stm_to_mtm_min_gen), 1u);
+            config_.min_age_for_ltm = std::max(config.mtm_to_ltm_min_gen, 10);
             config_.promotion_coherence_threshold = config.promote_stm_to_mtm;
             config_.ltm_coherence_threshold = config.promote_mtm_to_ltm;
             config_.demotion_threshold = config.demote_threshold;
@@ -538,12 +538,12 @@ MemoryTierManager::MemoryTierManager()
 
         // ----- Pattern-specific relationship management -----
         void MemoryTierManager::registerPattern(std::size_t id,
-                                                const ::sep::pattern::PatternData &pattern)
+                                                const ::sep::compat::PatternData &pattern)
         {
-            pattern_registry_[id] = std::make_unique<::sep::pattern::PatternData>(pattern);
+            pattern_registry_[id] = std::make_unique<::sep::compat::PatternData>(pattern);
         }
 
-        const ::sep::pattern::PatternData *MemoryTierManager::getPatternData(std::size_t id) const
+        const ::sep::compat::PatternData *MemoryTierManager::getPatternData(std::size_t id) const
         {
             auto it = pattern_registry_.find(id);
             return it != pattern_registry_.end() ? it->second.get() : nullptr;

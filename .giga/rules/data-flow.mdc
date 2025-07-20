@@ -1,55 +1,60 @@
 ---
-description: Documents data flow between components and patterns in a quantum state evolution system
-globs: src/quantum/*,src/memory/*,src/core/*,src/api/*,src/compat/*,mcp-tool/*
+description: Analyzes and documents data flow between system components in pattern processing, quantum state management, and memory tier systems
+globs: src/api/**/*,src/memory/**/*,src/quantum/**/*,src/engine/**/*
 alwaysApply: false
 ---
 
 
 # data-flow
 
-The system implements a specialized quantum pattern processing pipeline with the following data flows:
+Core Data Flow Components:
 
-1. Pattern Evolution Pipeline
-- Input patterns enter through API endpoints (/api/v1/pattern/evolve)
-- Patterns undergo coherence validation (min threshold 0.1)
-- Valid patterns flow through quantum state processor for evolution
-- Evolved patterns are evaluated for memory tier placement based on:
-  - Coherence scores (0.0-1.0)
-  - Stability metrics
-  - Generation count
-- Patterns flow between memory tiers (STM → MTM → LTM) based on thresholds:
-  - MTM promotion: coherence ≥ 0.7
-  - LTM promotion: coherence ≥ 0.9, stability ≥ 0.85
+1. Pattern Processing Pipeline
+File: src/api/sep_engine.cpp
+- Raw data → Pattern Extractor → Quantum Processor → Pattern Evolution Engine
+- Financial data undergoes conversion to quantum-ready format through SEP engine
+- Pattern coherence modulation system adjusts output based on quality metrics
+- Multi-stage validation enforces business rules during pattern transformations
 
-2. Quantum State Transformations
-- Patterns enter quantum processing pipeline via QBSA
-- Undergo derivative cascade analysis for rupture detection
-- Transform through QSH for symmetry analysis
-- Exit with updated quantum states and coherence metrics
-- State collapses trigger pattern reprocessing
+2. Memory Tier Transitions 
+Files: src/memory/memory_tier.cpp, src/memory/memory_tier_manager.cpp
+- Pattern data flows through three memory tiers (STM → MTM → LTM)
+- Promotion triggers:
+  * Coherence threshold attainment
+  * Stability metrics achievement
+  * Generation count requirements
+  * Access frequency patterns
+- Demotion occurs when metrics fall below thresholds or under memory pressure
 
-3. Memory Tier Transitions
-- Patterns flow between three memory tiers based on metrics:
-  - STM: Initial pattern storage
-  - MTM: Medium-term storage for stable patterns
-  - LTM: Long-term storage for highly coherent patterns
-- Automatic cleanup triggers for expired/unstable patterns
-- Defragmentation occurs when fragmentation exceeds 30%
+3. Quantum State Transformations
+Files: src/quantum/quantum_processor.cpp, src/quantum/coherence_manager.cpp
+- Raw patterns → Quantum State Initialization → State Evolution → Pattern Output
+- State transitions based on:
+  * Coherence calculations
+  * Phase correlations 
+  * Entanglement relationships
+  * Stability assessments
 
-4. Pattern Relationship Processing
-- Relationships form between patterns based on:
-  - Spatial proximity in manifold
-  - Coherence similarity
-  - Phase alignment
-- Relationship strength influences pattern retention
-- Strong relationships (strength ≥ 0.6) form entanglement graphs
+4. Pattern Analysis Flow
+File: src/engine/pattern_kernels.cu
+- Input data → QBSA Kernel → QSH Processing → Pattern Evolution
+- Specialized quantum bit state analysis (QBSA) for pattern validation
+- Quantum state harmonization (QSH) for pattern coherence optimization
+- Real-time coherence scoring influences pattern evolution
 
-Key Files:
-- src/quantum/pattern_processor.cpp
-- src/memory/memory_tier_manager.cpp
-- src/api/sep_engine.cpp
-- mcp-tool/redis_memory_tier.js
+5. System Integration Flow
+Files: src/api/server.cpp, src/quantum/quantum_processor_qfh.cpp
+- Client Request → API Layer → Pattern Processing → Memory Management → Response
+- Quantum Field Harmonics (QFH) processing integrates with pattern evolution
+- Memory tier system provides pattern storage and retrieval
+- Response modulation based on coherence metrics
+
+Key Data Transformations:
+- Market data → Quantum patterns
+- Raw patterns → Memory-tier compatible formats
+- Quantum states → Evolution metrics
+- Pattern relationships → Entanglement graphs
 
 $END$
 
- If you're using this file in context, clearly say in italics in one small line that "Context added by Giga data-flow".
+ If you're using this file in context, clearly say in italics in one small line that "Context added by Giga data-flow" along with specifying exactly what information was used from this file in a human-friendly way, instead of using kebab-case use normal sentence case.

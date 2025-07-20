@@ -1,19 +1,18 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
-#include <cuda_runtime.h>
-
 #include "config.h"
 #include "engine/cuda_api.hpp"
+#include "engine/cuda_runtime.h"
 #include "engine/cufft.h"
 #include "memory/types.h"
+#include "quantum/config.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "types.h"
 
 // Forward declarations
 namespace sep::cuda {
-class CudaCore;
-using cufftHandle = ::cufftHandle;
+    class CudaCore;
 }
 #include <algorithm>
 #include <array>
@@ -61,9 +60,9 @@ class QuantumManifoldOptimizer {
 public:
     struct Config {
         MemoryTierEnum tier{MemoryTierEnum::STM};
-        CudaConfig cuda;
+        config::CudaConfig cuda;
         LogConfig log;
-        AnalyticsConfig analytics;
+        config::AnalyticsConfig analytics;
         float base_resonance_frequency{0.42f};
         float convergence_threshold{0.001f};
         float step_size{0.05f};
@@ -144,9 +143,9 @@ struct SemanticConfig {
 
 struct ManifoldConfig {
     SemanticConfig semantic;
-    CudaConfig cuda;
+    config::CudaConfig cuda;
     LogConfig log;
-    AnalyticsConfig analytics;
+    config::AnalyticsConfig analytics;
 };
 
 // 1. ADVANCED MEMORY TIER OPTIMIZATION
@@ -209,7 +208,7 @@ private:
 // 3. CUDA ACCELERATION WITH HIERARCHICAL PARALLELIZATION
 class CUDAQuantumKernel {
 public:
-    explicit CUDAQuantumKernel(const CudaConfig &config);
+    explicit CUDAQuantumKernel(const config::CudaConfig &config);
     ~CUDAQuantumKernel();
 
   // Warp-level primitive operations
@@ -226,9 +225,9 @@ public:
                              int n_values, float modulation_strength);
 
 private:
-    ::cudaStream_t stream_;
-    ::cufftHandle fft_plan_;
-    CudaConfig config_;
+    cudaStream_t stream_;
+    cufftHandle fft_plan_;
+    config::CudaConfig config_;
 
     void* d_workspace_;
     size_t workspace_size_;
@@ -306,7 +305,7 @@ private:
 // 6. REAL-TIME PERFORMANCE ANALYTICS
 class PerformanceAnalyzer {
 public:
-    explicit PerformanceAnalyzer(const AnalyticsConfig &config);
+    explicit PerformanceAnalyzer(const config::AnalyticsConfig &config);
 
     // Quantum state space analysis
     struct StateSpaceAnalysis
@@ -342,7 +341,7 @@ public:
                         const std::vector<double> &performance_metrics);
 
 private:
-    AnalyticsConfig config_;
+    config::AnalyticsConfig config_;
     std::vector<double> performance_history_;
     std::mutex history_mutex_;
 

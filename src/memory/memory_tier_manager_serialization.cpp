@@ -6,7 +6,7 @@
 namespace sep {
 namespace config {
 
-    void to_json(nlohmann::json& j, const MemoryThresholdConfig& c)
+    void to_json(nlohmann::json& j, const sep::memory::MemoryThresholdConfig& c)
     {
         j = nlohmann::json{{"stm_size", c.stm_size},
                            {"mtm_size", c.mtm_size},
@@ -17,11 +17,10 @@ namespace config {
                            {"fragmentation_threshold", c.fragmentation_threshold},
                            {"use_unified_memory", c.use_unified_memory},
                            {"enable_compression", c.enable_compression},
-                           {"stm_to_mtm_min_gen", c.stm_to_mtm_min_gen},
-                           {"mtm_to_ltm_min_gen", c.mtm_to_ltm_min_gen}};
+                           {"stm_to_mtm_min_gen", c.stm_to_mtm_min_gen}};
     }
 
-    void from_json(const nlohmann::json& j, MemoryThresholdConfig& c)
+    void from_json(const nlohmann::json& j, sep::memory::MemoryThresholdConfig& c)
     {
         c.stm_size = j.value("stm_size", static_cast<std::size_t>(1 << 20));
         c.mtm_size = j.value("mtm_size", static_cast<std::size_t>(4 << 20));
@@ -33,7 +32,6 @@ namespace config {
         c.use_unified_memory = j.value("use_unified_memory", true);
         c.enable_compression = j.value("enable_compression", true);
         c.stm_to_mtm_min_gen = j.value("stm_to_mtm_min_gen", 5u);
-        c.mtm_to_ltm_min_gen = j.value("mtm_to_ltm_min_gen", 100u);
     }
 
 } // namespace config

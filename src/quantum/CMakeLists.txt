@@ -3,18 +3,6 @@ if(SEP_USE_CUDA)
     find_package(CUDAToolkit REQUIRED)
 endif()
 
-# Install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/quantum/
-        DESTINATION include/sep/quantum
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp")
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/quantum/
-        DESTINATION include/sep/quantum/internal
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp")
 
 
 add_library(sep_quantum STATIC
@@ -39,11 +27,9 @@ add_library(sep_quantum STATIC
 
 target_include_directories(sep_quantum
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        $<INSTALL_INTERFACE:include>
+        ${CMAKE_SOURCE_DIR}/src
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/engine
-        ${CMAKE_SOURCE_DIR}/src/quantum
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # Add CUDA include directories if CUDA is enabled

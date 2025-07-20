@@ -19,7 +19,7 @@
 namespace sep {
 namespace memory {
 
-using ::sep::CompressionMethod;
+using ::sep::memory::CompressionMethod;
 using ::sep::SEPResult;
 using ::sep::memory::MemoryTierEnum;
 // Already declared above

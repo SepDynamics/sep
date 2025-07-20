@@ -2,6 +2,7 @@
 #define SEP_QUANTUM_PROCESSOR_H
 #pragma once
 
+#include "quantum/types.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -9,13 +10,14 @@
 #include "engine/common.h"
 #include "engine/system_hooks.h"
 #include "engine/types.h"
-#include "memory/types.h"
+#include "engine/pattern_types.h"
 #include "quantum/gpu_context.h"
 
 namespace sep {
 
 // Constants for pattern processing
 namespace quantum {
+
 constexpr float MIN_COHERENCE = 0.1f;
 constexpr float STABILITY_THRESHOLD = 0.85f;
 constexpr float COHERENCE_THRESHOLD = 0.7f;
@@ -25,7 +27,7 @@ constexpr float DEMOTION_THRESHOLD = 0.3f;
 // Result objects returned by Processor operations
 struct ProcessingResult {
     bool success{false};
-    Pattern pattern{};
+    compat::Pattern pattern{};
     std::string error_message{};
 };
 
@@ -49,13 +51,13 @@ public:
 
     virtual SEPResult init(quantum::GPUContext* ctx);
     virtual void evolvePatterns();
-    virtual PatternData mutatePattern(const PatternData& parent);
+    virtual compat::PatternData mutatePattern(const compat::PatternData& parent);
     
-    SEPResult addPattern(const PatternData& pattern);
-    const std::vector<PatternData>& getPatterns() const;
+    SEPResult addPattern(const compat::PatternData& pattern);
+    const std::vector<compat::PatternData>& getPatterns() const;
 
     // Convenience method to evolve patterns and return the results
-    virtual const std::vector<PatternData>& process()
+    virtual const std::vector<compat::PatternData>& process()
     {
         evolvePatterns();
         return patterns_;
@@ -63,7 +65,7 @@ public:
     
 protected:
     Implementation implementation_;
-    std::vector<PatternData> patterns_;
+    std::vector<compat::PatternData> patterns_;
 };
 
 // CPU implementation of pattern processor
@@ -74,10 +76,10 @@ public:
 
     SEPResult init(quantum::GPUContext* ctx) override;
     void evolvePatterns() override;
-    PatternData mutatePattern(const PatternData& parent) override;
+    compat::PatternData mutatePattern(const compat::PatternData& parent) override;
     
 protected:
-    std::vector<PatternData>& patterns_;
+    std::vector<compat::PatternData>& patterns_;
 };
 
 } // namespace pattern
@@ -99,12 +101,12 @@ public:
     SEPResult init(GPUContext* gpu_context);
     void setHooks(core::SystemHooks* hooks);
 
-    SEPResult addPattern(const Pattern& pattern);
+    SEPResult addPattern(const compat::Pattern& pattern);
     SEPResult removePattern(const std::string& pattern_id);
-    SEPResult updatePattern(const std::string& pattern_id, const Pattern& pattern);
-    Pattern getPattern(const std::string& pattern_id) const;
-    std::vector<sep::Pattern> getPatterns() const;
-    std::vector<sep::Pattern> getPatternsByTier(sep::memory::MemoryTierEnum tier) const;
+    SEPResult updatePattern(const std::string& pattern_id, const compat::Pattern& pattern);
+    compat::Pattern getPattern(const std::string& pattern_id) const;
+    std::vector<sep::compat::Pattern> getPatterns() const;
+    std::vector<sep::compat::Pattern> getPatternsByTier(sep::memory::MemoryTierEnum tier) const;
     size_t getPatternCount() const;
 
     ProcessingResult processPattern(const std::string& pattern_id);

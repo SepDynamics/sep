@@ -111,8 +111,8 @@ namespace memory {
         void pruneDataByPriority(MemoryTierEnum tier, size_t max_count);
 
         // Pattern management
-        void registerPattern(std::size_t id, const ::sep::pattern::PatternData &pattern);
-        const ::sep::pattern::PatternData *getPatternData(std::size_t id) const;
+        void registerPattern(std::size_t id, const ::sep::compat::PatternData &pattern);
+        const ::sep::compat::PatternData *getPatternData(std::size_t id) const;
         void removePattern(std::size_t id);
         void updateRelationship(std::size_t id_a, std::size_t id_b, float strength);
         void cleanupExpiredPatterns();
@@ -152,7 +152,7 @@ namespace memory {
         std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>> data_relationships_;
 
         // Pattern specific registries
-        std::unordered_map<std::size_t, std::unique_ptr<::sep::pattern::PatternData>>
+        std::unordered_map<std::size_t, std::unique_ptr<::sep::compat::PatternData>>
             pattern_registry_;
         std::unordered_map<std::size_t, std::unordered_map<std::size_t, float>>
             pattern_relationships_;
@@ -166,11 +166,12 @@ namespace memory {
     };
 
 } // namespace memory
+} // namespace sep
 
-namespace config {
+namespace sep {
+namespace memory {
     void to_json(nlohmann::json &j, const MemoryThresholdConfig &c);
     void from_json(const nlohmann::json &j, MemoryThresholdConfig &c);
-} // namespace config
-
+} // namespace memory
 } // namespace sep
 

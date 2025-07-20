@@ -39,5 +39,25 @@ inline MemoryTierEnum stringToMemoryTier(const std::string& tier) {
     throw std::invalid_argument("Invalid memory tier string: " + tier);
 }
 
+enum class CompressionMethod : std::uint8_t {
+    None,
+    ZSTD,
+    // Add other methods as needed
+};
+
+struct MemoryThresholdConfig {
+    std::size_t stm_size;
+    std::size_t mtm_size;
+    std::size_t ltm_size;
+    float promote_stm_to_mtm;
+    float promote_mtm_to_ltm;
+    float demote_threshold;
+    float fragmentation_threshold;
+    bool use_unified_memory;
+    bool enable_compression;
+    int stm_to_mtm_min_gen;
+    int mtm_to_ltm_min_gen;
+};
+
 } // namespace memory
 } // namespace sep

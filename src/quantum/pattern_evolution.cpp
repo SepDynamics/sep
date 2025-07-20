@@ -12,11 +12,11 @@
 #include "api/sep_engine.h"
 #include "engine/types.h"  // For PatternData/PatternConfig
 #include "engine/types.h"
-#include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"
 
 // Standard Library Includes
 #include <cstring>
+#include "quantum/pattern_evolution_bridge.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

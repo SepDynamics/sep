@@ -1,3 +1,7 @@
+### **2. `README.md` (Rewritten)**
+
+This version updates the architecture section to match the new library structure (`engine`), ensuring the main entry point for the repository is accurate and up-to-date.
+
 # The Self-Emergent Processor (SEP): A Unified Framework for Recursive Reality
 
 This repository presents the **Self-Emergent Processor (SEP)**, a unified framework positing that physical reality, consciousness, and the laws of nature emerge from a recursive, information-theoretic process. The core principle, the **Law of Generality**, asserts that existence and identity arise from self-referential observation within a constrained, coherent system.
@@ -26,9 +30,9 @@ The SEP framework is realized in a C++ computational engine designed for high-pe
 
 ### 2.1 Architecture
 
-The engine is built on a modular, multi-tiered architecture with clear component boundaries:
--   **`core`**: The foundational layer providing configuration, metrics, logging, and the core DAG for tracking pattern lineage.
--   **`compat`**: A compatibility layer providing the CUDA backend and shims for GPU acceleration.
+The engine is built on a modular, multi-tiered architecture with clear component boundaries. The legacy `core` and `compat` libraries have been consolidated into a single foundational `engine` library to simplify the dependency graph.
+
+-   **`engine`**: The foundational layer providing core utilities, data structures, logging, metrics, and the CUDA backend for GPU acceleration.
 -   **`quantum`**: The algorithmic core, containing the quantum-inspired algorithms for pattern evolution, including **Quantum Binary State Analysis (QBSA)** and the **Quantum Fourier Hierarchy (QFH)**.
 -   **`memory`**: A three-tiered memory manager (STM, MTM, LTM) for efficient handling of pattern data, with optional Redis persistence.
 -   **`api`**: Interfaces for external interaction, including an HTTP API server.
@@ -57,20 +61,26 @@ The future development of the SEP Engine is focused on enhancing its capabilitie
 
 ## 4. Repository Structure
 
+```
 .
-├── src/ # Headers and source code for all modules (api, core, quantum, etc.)
-├── assets/ # Test data and shaders
+├── src/         # Headers and source code for all modules (api, engine, quantum, etc.)
+├── assets/      # Test data and shaders
 ├── third_party/ # External libraries (Crow, nlohmann, etc.)
-├── extern/ # External submodules (e.g., Blender Cycles)
-├── tests/ # Unit and integration tests
-└── README.md # This document
+├── extern/      # External submodules (e.g., Blender Cycles)
+├── tests/       # Unit and integration tests
+└── README.md    # This document
+```
 
 ### Build Instructions
 
-The SEP Engine is built using a containerized build environment to ensure consistency and avoid system-level library conflicts. The build process is encapsulated in the `build_and_test.sh` script.
+The SEP Engine uses a containerized build environment to guarantee consistency and eliminate system-level library conflicts. The entire build and test process is automated.
 
+**Prerequisites:**
+- Docker
+
+**To build the engine and run all tests:**
 ```bash
 ./build_and_test.sh
 ```
 
-This script will build the Docker image, run the build within the container, and execute the test suite.
+This script handles building the Docker image, compiling the C++ source code with Ninja within the container, and executing the test suite. This is the official and required method for building the project.

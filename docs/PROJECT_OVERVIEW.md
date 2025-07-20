@@ -7,44 +7,42 @@ The SEP Engine is a high-performance C++ framework for quantum-inspired pattern 
 ### Guiding Principles
 
 *   **Clear Component Boundaries**: Each module has a distinct responsibility and a well-defined public interface.
-*   **Unidirectional Dependencies**: High-level modules can depend on low-level modules, but not the other way around, preventing circular dependencies.
-*   **Consolidation of Core Logic**: Cross-cutting concerns like logging, metrics, and error handling are unified into a single, foundational `core` library.
-*   **Isolate External Dependencies**: Third-party libraries are kept separate from the engine's source code.
+*   **Unidirectional Dependencies**: High-level modules depend on low-level modules, preventing circular dependencies.
+*   **Consolidation of Core Logic**: Foundational logic, including utilities and the CUDA backend, is unified into a single `engine` library.
+*   **Isolate External Dependencies**: Third-party libraries are managed by the build system and kept separate from the engine's source code.
 
 ## 2. System Architecture
 
-The SEP Engine is compiled into a single executable, `sep_engine`, which links a set of self-contained static libraries. This design ensures modularity and a clean, unidirectional dependency graph.
+The SEP Engine is compiled into executables that link a set of self-contained static libraries. This design ensures modularity and a clean, unidirectional dependency graph. The former `core` and `compat` libraries have been merged into a single, foundational `engine` library.
 
 ```mermaid
 graph TD
-    subgraph Executable
-        exe[sep_engine]
+    subgraph "Executables"
+        exe[api_main]
+        examples[Examples]
     end
 
     subgraph "Static Libraries (.a)"
         api[libsep_api.a]
         quantum[libsep_quantum.a]
         memory[libsep_memory.a]
-        compat[libsep_compat.a]
-        core[libsep_core.a]
+        engine[libsep_engine.a]
     end
 
     exe --> api
-    exe --> core
+    examples --> quantum
+    examples --> engine
 
     api --> quantum
     api --> memory
 
-    quantum --> compat
-    quantum --> core
-    memory --> core
-    compat --> core
+    quantum --> engine
+    memory --> engine
 ```
 
 ### Component Breakdown
 
-*   **`core`**: Provides foundational utilities, data structures, and managers required by all other engine modules.
-*   **`compat`**: Provides the CUDA backend for GPU acceleration.
+*   **`engine`**: The foundational library providing core utilities (data structures, logging, metrics), CUDA kernels, and the GPU abstraction layer. It serves as the base for all other high-level engine modules.
 *   **`quantum`**: Contains the quantum-inspired algorithms for analyzing and evolving patterns, including QBSA and QFH.
 *   **`memory`**: Manages the three-tiered memory hierarchy (STM, MTM, LTM) and handles optional pattern persistence via Redis.
 *   **`api`**: Exposes the engine's functionality via an HTTP server and a stable C-style bridge.
@@ -81,7 +79,7 @@ The main class is `sep::quantum::PatternMetricEngine`, which provides methods fo
     *   Adopted a "raw bytes" approach for all data ingestion to ensure universal applicability.
     *   Used fixed-size chunking for computationally efficient pattern extraction.
     *   Leveraged the existing QFH processor for powerful and well-tested metric computation.
-*   **Build System**: A stable, containerized build environment has been established, and the legacy CUDA compatibility layer has been refactored to use the modern CUDA API directly.
+*   **Build System**: A stable, containerized build environment has been established. The legacy `core` and `compat` libraries have been consolidated into a single `engine` library, simplifying the build and dependency management.
 
 ### Phase 2: Financial Analysis & Backtesting (Current)
 
@@ -91,4 +89,5 @@ The main class is `sep::quantum::PatternMetricEngine`, which provides methods fo
 *   **Advanced Metrics**: Implement metrics beyond coherence, such as Rupture Ratio, Flip Ratio, Entropy, and a Stability Score.
 *   **GPU Acceleration**: Port QFH kernels to CUDA to achieve significant speedup for large-scale analysis.
 
-For a more detailed breakdown of the current and future tasks, see [`docs/TODO.md`](docs/TODO.md).
+For a more detailed breakdown of the current and future tasks, see [`TODO.md`](TODO.md).
+```

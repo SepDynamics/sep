@@ -10,7 +10,7 @@ docker build -t $IMAGE_NAME .
 
 # Run the build and test process inside the container
 echo "Running build and test inside Docker container..."
-docker run --rm -v "$(pwd)":/project $IMAGE_NAME /bin/bash -c "
+docker run --rm -v "$(pwd)":/sep/build $IMAGE_NAME /bin/bash -c "
     set -e
     echo 'Cleaning up previous build artifacts...'
     rm -rf build
@@ -20,6 +20,7 @@ docker run --rm -v "$(pwd)":/project $IMAGE_NAME /bin/bash -c "
     echo 'Configuring project with CMake (CUDA Disabled)...'
     cmake .. -G Ninja \
         -DCMAKE_BUILD_TYPE=Debug \
+#        -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE \
         -DCMAKE_C_COMPILER=clang-15 \
         -DCMAKE_CXX_COMPILER=clang++-15 \
         -DSEP_USE_CUDA=ON

@@ -26,7 +26,7 @@ add_library(sep_api STATIC
 
 target_link_libraries(sep_api
     PUBLIC
-        sep_core
+        sep_engine
         sep_compat
         sep_quantum
         sep_memory

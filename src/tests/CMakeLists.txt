@@ -71,7 +71,7 @@ endif()
 #     GTest::gtest_main
 #     GTest::gmock
 #     fmt::fmt
-#     sep_core
+#     sep_engine
 #     sep_compat
 #     CUDA::cudart
 #     CUDA::cuda_driver
@@ -82,7 +82,7 @@ endif()
 #     GTest::gtest_main
 #     GTest::gmock
 #     fmt::fmt
-#     sep_core
+#     sep_engine
 #     sep_memory
 #     sep_compat
 # )

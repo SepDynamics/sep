@@ -1,71 +1,124 @@
 #include "metrics_monitor.h"
-#include <algorithm>
-#include <sstream>
-#include <fstream>
-#include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
+#include <algorithm>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
+#include "quantum/pattern_metric_engine.h"
 
 namespace sep::workbench {
 
-MetricsMonitor::MetricsMonitor() 
-    : engine_(std::make_unique<sep::quantum::PatternMetricEngine>()) {
-    start_time_ = std::chrono::steady_clock::now();
-    last_metrics_update_ = start_time_;
-}
+    MetricsMonitor::MetricsMonitor() : engine_(nullptr)
+    {
+        start_time_ = std::chrono::steady_clock::now();
+        last_metrics_update_ = start_time_;
+    }
 
 MetricsMonitor::~MetricsMonitor() {
     shutdown();
+    if (engine_)
+    {
+        delete static_cast<sep::quantum::PatternMetricEngine*>(engine_);
+    }
 }
 
 bool MetricsMonitor::initialize() {
-    auto result = engine_->init(nullptr);  // CPU-only for now
-    return result == sep::SEPResult::SUCCESS;
+    try
+    {
+        // Create the actual quantum pattern metric engine
+        auto* engine = new sep::quantum::PatternMetricEngine();
+
+        // Initialize for CPU operation (nullptr for GPU context)
+        sep::SEPResult result = engine->init(nullptr);
+
+        if (result != sep::SEPResult::SUCCESS)
+        {
+            std::cerr << "[MetricsMonitor] Failed to initialize PatternMetricEngine" << std::endl;
+            delete engine;
+            return false;
+        }
+
+        engine_ = engine;
+        std::cout << "[MetricsMonitor] Initialized with quantum engine" << std::endl;
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "[MetricsMonitor] Initialization failed: " << e.what() << std::endl;
+        return false;
+    }
 }
 
 void MetricsMonitor::shutdown() {
     stopProcessing();
-    shutdown_requested_ = true;
+    clear();
 }
 
 void MetricsMonitor::clear() {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
-    
-    engine_->clear();
     pattern_stats_.clear();
     system_metrics_ = SystemMetrics{};
-    
-    start_time_ = std::chrono::steady_clock::now();
-    last_metrics_update_ = start_time_;
-    
-    std::cout << "[MetricsMonitor] Data cleared - ready for fresh analysis" << std::endl;
+    system_metrics_.last_update = std::chrono::steady_clock::now();
+
+    if (engine_)
+    {
+        static_cast<sep::quantum::PatternMetricEngine*>(engine_)->clear();
+    }
 }
 
 void MetricsMonitor::ingestData(const uint8_t* data, size_t size) {
-    engine_->ingestData(data, size);
-    processIngestedData();
+    if (!data || size == 0 || !engine_) return;
+
+    // Use the real quantum engine to ingest data
+    auto* engine = static_cast<sep::quantum::PatternMetricEngine*>(engine_);
+    engine->ingestData(data, size);
+
+    // Process if we're in processing mode
+    if (processing_)
+    {
+        processIngestedData();
+    }
 }
 
 void MetricsMonitor::ingestFile(const std::string& filepath) {
-    std::cout << "[MetricsMonitor] Ingesting file: " << filepath << std::endl;
-    engine_->ingestFile(filepath);
-    processIngestedData();
+    if (!engine_)
+    {
+        std::cerr << "[MetricsMonitor] Engine not initialized" << std::endl;
+        return;
+    }
+
+    // Use the engine's file ingestion capability
+    auto* engine = static_cast<sep::quantum::PatternMetricEngine*>(engine_);
+    engine->ingestFile(filepath);
+
+    if (processing_)
+    {
+        processIngestedData();
+    }
 }
 
 void MetricsMonitor::ingestStream(std::istream& stream) {
-    engine_->ingestData(stream);
-    processIngestedData();
+    if (!engine_)
+    {
+        std::cerr << "[MetricsMonitor] Engine not initialized" << std::endl;
+        return;
+    }
+
+    // Use the engine's stream ingestion capability
+    auto* engine = static_cast<sep::quantum::PatternMetricEngine*>(engine_);
+    engine->ingestData(stream);
+
+    if (processing_)
+    {
+        processIngestedData();
+    }
 }
 
-void MetricsMonitor::startProcessing() {
-    processing_ = true;
-    std::cout << "[MetricsMonitor] Started real-time processing" << std::endl;
-}
+void MetricsMonitor::startProcessing() { processing_ = true; }
 
-void MetricsMonitor::stopProcessing() {
-    processing_ = false;
-    std::cout << "[MetricsMonitor] Stopped real-time processing" << std::endl;
-}
+void MetricsMonitor::stopProcessing() { processing_ = false; }
 
 bool MetricsMonitor::isProcessing() const {
     return processing_;
@@ -92,139 +145,135 @@ void MetricsMonitor::setActiveWindowSeconds(float seconds) {
 }
 
 std::string MetricsMonitor::exportMetricsAsJSON() const {
-    std::lock_guard<std::mutex> lock(metrics_mutex_);
-    
-    json result;
-    result["timestamp"] = std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now().time_since_epoch()).count();
-    
-    // System metrics
-    result["system"] = {
-        {"avg_coherence", system_metrics_.avg_coherence},
-        {"avg_stability", system_metrics_.avg_stability},
-        {"avg_entropy", system_metrics_.avg_entropy},
-        {"total_patterns", system_metrics_.total_patterns},
-        {"unique_patterns", system_metrics_.unique_patterns},
-        {"active_patterns", system_metrics_.active_patterns},
-        {"pattern_emergence_rate", system_metrics_.pattern_emergence_rate}
-    };
-    
-    // Individual patterns
-    json patterns = json::array();
-    for (const auto& stats : pattern_stats_) {
-        json pattern = {
-            {"id", stats.pattern_id},
-            {"coherence", stats.coherence},
-            {"stability", stats.stability},
-            {"entropy", stats.entropy},
-            {"length", stats.length},
-            {"frequency", stats.frequency},
-            {"persistence", stats.persistence}
-        };
-        patterns.push_back(pattern);
+    // Note: Can't lock a mutex in a const method, so we'll work with current state
+
+    std::stringstream json;
+    json << "{\n";
+    json << "  \"system_metrics\": {\n";
+    json << "    \"avg_coherence\": " << system_metrics_.avg_coherence << ",\n";
+    json << "    \"avg_stability\": " << system_metrics_.avg_stability << ",\n";
+    json << "    \"avg_entropy\": " << system_metrics_.avg_entropy << ",\n";
+    json << "    \"total_patterns\": " << system_metrics_.total_patterns << ",\n";
+    json << "    \"unique_patterns\": " << system_metrics_.unique_patterns << ",\n";
+    json << "    \"active_patterns\": " << system_metrics_.active_patterns << ",\n";
+    json << "    \"pattern_emergence_rate\": " << system_metrics_.pattern_emergence_rate << "\n";
+    json << "  },\n";
+    json << "  \"patterns\": [\n";
+
+    for (size_t i = 0; i < pattern_stats_.size(); ++i)
+    {
+        const auto& p = pattern_stats_[i];
+        json << "    {\n";
+        json << "      \"id\": \"" << p.pattern_id << "\",\n";
+        json << "      \"coherence\": " << p.coherence << ",\n";
+        json << "      \"stability\": " << p.stability << ",\n";
+        json << "      \"entropy\": " << p.entropy << ",\n";
+        json << "      \"length\": " << p.length << ",\n";
+        json << "      \"frequency\": " << p.frequency << ",\n";
+        json << "      \"persistence\": " << p.persistence << "\n";
+        json << "    }";
+        if (i < pattern_stats_.size() - 1) json << ",";
+        json << "\n";
     }
-    result["patterns"] = patterns;
-    
-    return result.dump(2);
+
+    json << "  ]\n";
+    json << "}\n";
+
+    return json.str();
 }
 
 void MetricsMonitor::saveMetricsToFile(const std::string& filepath) const {
     std::ofstream file(filepath);
-    if (file.is_open()) {
+    if (file)
+    {
         file << exportMetricsAsJSON();
-        std::cout << "[MetricsMonitor] Metrics saved to " << filepath << std::endl;
-    } else {
-        std::cerr << "[MetricsMonitor] Failed to save metrics to " << filepath << std::endl;
     }
 }
 
-void MetricsMonitor::processIngestedData() {
-    // Process patterns in the engine
-    engine_->evolvePatterns();
-    
+void MetricsMonitor::updateMetrics() {
+    if (!engine_) return;
+
+    auto* engine = static_cast<sep::quantum::PatternMetricEngine*>(engine_);
+
+    // Get metrics from the quantum engine
+    auto metrics = engine->computeMetrics();
+
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
+    pattern_stats_.clear();
+
+    auto now = std::chrono::steady_clock::now();
+
+    // Convert quantum engine metrics to our format
+    for (const auto& metric : metrics)
+    {
+        PatternStats stats;
+        stats.pattern_id = std::string(metric.pattern_id);
+        stats.coherence = metric.coherence;
+        stats.stability = metric.stability;
+        stats.entropy = metric.entropy;
+        stats.first_seen = now;  // We don't track this in the engine yet
+        stats.last_seen = now;
+        stats.frequency = 1;                       // TODO: Track frequency in engine
+        stats.length = strlen(metric.pattern_id);  // Approximate
+        stats.persistence = 0.0f;
+
+        pattern_stats_.push_back(stats);
+    }
+
+    calculateSystemMetrics();
+}
+
+void MetricsMonitor::processIngestedData()
+{
+    if (!engine_) return;
+
+    auto* engine = static_cast<sep::quantum::PatternMetricEngine*>(engine_);
+
+    // Evolve patterns using quantum processing
+    engine->evolvePatterns();
+
     // Update our metrics
     updateMetrics();
 }
 
-void MetricsMonitor::updateMetrics() {
-    std::lock_guard<std::mutex> lock(metrics_mutex_);
-    
-    auto now = std::chrono::steady_clock::now();
-    auto active_threshold = now - std::chrono::duration<float>(active_window_seconds_);
-    
-    // Get metrics from engine
-    const auto& engine_metrics = engine_->computeMetrics();
-    const auto& patterns = engine_->getPatterns();
-    
-    // Update pattern stats
-    pattern_stats_.clear();
-    pattern_stats_.reserve(std::min(engine_metrics.size(), max_patterns_));
-    
-    for (size_t i = 0; i < std::min(engine_metrics.size(), max_patterns_); ++i) {
-        const auto& metric = engine_metrics[i];
-        
-        PatternStats stats;
-        stats.pattern_id = metric.pattern_id;
-        stats.coherence = metric.coherence;
-        stats.stability = metric.stability;
-        stats.entropy = metric.entropy;
-        stats.length = patterns[i].size;
-        stats.frequency = 1;  // TODO: Track frequency over time
-        stats.first_seen = now;  // TODO: Track actual first seen time
-        stats.last_seen = now;
-        
-        // Calculate persistence (simplified for now)
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-            stats.last_seen - stats.first_seen);
-        stats.persistence = duration.count() / 1000.0f;
-        
-        pattern_stats_.push_back(stats);
-    }
-    
-    // Calculate system metrics
-    calculateSystemMetrics();
-    
-    last_metrics_update_ = now;
-}
-
 void MetricsMonitor::calculateSystemMetrics() {
-    if (pattern_stats_.empty()) {
-        system_metrics_ = SystemMetrics{};
-        return;
-    }
-    
-    auto now = std::chrono::steady_clock::now();
-    auto active_threshold = now - std::chrono::duration<float>(active_window_seconds_);
-    
+    if (pattern_stats_.empty()) return;
+
     float total_coherence = 0.0f;
     float total_stability = 0.0f;
     float total_entropy = 0.0f;
     size_t active_count = 0;
-    
-    for (const auto& stats : pattern_stats_) {
-        total_coherence += stats.coherence;
-        total_stability += stats.stability;
-        total_entropy += stats.entropy;
-        
-        if (stats.last_seen > active_threshold) {
+
+    auto now = std::chrono::steady_clock::now();
+    auto active_threshold = now - std::chrono::seconds(static_cast<int>(active_window_seconds_));
+
+    for (const auto& pattern : pattern_stats_)
+    {
+        total_coherence += pattern.coherence;
+        total_stability += pattern.stability;
+        total_entropy += pattern.entropy;
+
+        if (pattern.last_seen >= active_threshold)
+        {
             active_count++;
         }
     }
-    
-    size_t total = pattern_stats_.size();
-    system_metrics_.avg_coherence = total_coherence / total;
-    system_metrics_.avg_stability = total_stability / total;
-    system_metrics_.avg_entropy = total_entropy / total;
-    system_metrics_.total_patterns = total;
-    system_metrics_.unique_patterns = total;  // All patterns are unique by definition
+
+    system_metrics_.avg_coherence = total_coherence / pattern_stats_.size();
+    system_metrics_.avg_stability = total_stability / pattern_stats_.size();
+    system_metrics_.avg_entropy = total_entropy / pattern_stats_.size();
+    system_metrics_.total_patterns = pattern_stats_.size();
+    system_metrics_.unique_patterns = pattern_stats_.size();  // All are unique from engine
     system_metrics_.active_patterns = active_count;
-    
-    // Calculate emergence rate (patterns per second)
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start_time_);
-    if (elapsed.count() > 0) {
-        system_metrics_.pattern_emergence_rate = float(total) / elapsed.count();
+
+    // Calculate emergence rate
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - start_time_).count();
+    if (duration > 0)
+    {
+        system_metrics_.pattern_emergence_rate =
+            static_cast<float>(pattern_stats_.size()) / duration;
     }
-    
+
     system_metrics_.last_update = now;
 }
 

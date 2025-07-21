@@ -26,28 +26,29 @@
  *   ./sep financial OANDA_data.json --backtest
  */
 
-#include "quantum/pattern_metric_engine.h"
-#include "quantum/quantum_processor.h"
-#include <iostream>
-#include <fstream>
-#include <filesystem>
-#include <vector>
-#include <string>
-#include <memory>
-#include <chrono>
-#include <iomanip>
-#include <cstring>
-#include <random>
-#include <nlohmann/json.hpp>
 #include <benchmark/benchmark.h>
-#include <signal.h>
-#include <thread>
-#include <atomic>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <netinet/in.h>
+#include <signal.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+#include <atomic>
+#include <chrono>
+#include <cstring>
+#include <filesystem>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <memory>
+#include <nlohmann/json.hpp>
+#include <string>
+#include <thread>
+#include <vector>
+
+#include "quantum/pattern_metric_engine.h"
+#include "quantum/quantum_processor.h"
 
 namespace fs = std::filesystem;
 using namespace sep::quantum;

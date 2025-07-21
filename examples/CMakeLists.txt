@@ -18,6 +18,19 @@ target_link_libraries(financial_demo PRIVATE
     TBB::tbb
 )
 
+# Simple command-line data processing sandbox
+add_executable(simple_data_sandbox simple_data_sandbox.cpp)
+
+target_link_libraries(simple_data_sandbox PRIVATE
+    sep_quantum
+    sep_engine
+    fmt::fmt
+    TBB::tbb
+)
+
+# Data processing sandbox with ImGui interface (disabled due to build issues)
+# add_executable(data_processing_sandbox data_processing_sandbox.cpp)
+
 # Standalone SEP executable with all functionality
 add_executable(sep_standalone sep_standalone.cpp)
 

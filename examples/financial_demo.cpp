@@ -1,9 +1,10 @@
-#include "quantum/pattern_metric_engine.h"
-#include <iostream>
-#include <vector>
-#include <string>
-#include <random>
 #include <iomanip>
+#include <iostream>
+#include <random>
+#include <string>
+#include <vector>
+
+#include "quantum/pattern_metric_engine.h"
 
 using namespace sep::quantum;
 

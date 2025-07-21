@@ -85,10 +85,10 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
         {
             MemoryTier *t = getTier(tier);
             if (!t) {
-            // CRITICAL FIX: Create fallback tier instead of returning nullptr
-            std::cerr << "[MemoryTierManager] Creating fallback tier for allocation" << std::endl;
-            t = &fallback_tier_;
-        }
+                // CRITICAL FIX: Use STM as fallback tier instead of returning nullptr
+                std::cerr << "[MemoryTierManager] WARNING: Invalid tier requested, using STM as fallback" << std::endl;
+                t = stm_.get();
+            }
             MemoryBlock *block = t->allocate(size);
             if (block)
             {

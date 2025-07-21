@@ -27,17 +27,18 @@
  *     ./pattern_metric_example --benchmark
  * 
  */
-#include "quantum/pattern_metric_engine.h"
-#include "quantum/quantum_processor.h" // For GPUContext
-#include <iostream>
-#include <vector>
-#include <string>
-#include <random>
-#include <iomanip>
+#include <benchmark/benchmark.h>
+
 #include <filesystem>
 #include <fstream>
-#include <benchmark/benchmark.h>
+#include <iomanip>
+#include <iostream>
 #include <nlohmann/json.hpp>
+#include <string>
+#include <vector>
+
+#include "quantum/pattern_metric_engine.h"
+#include "quantum/quantum_processor.h"  // For GPUContext
 
 namespace fs = std::filesystem;
 using namespace sep::quantum;

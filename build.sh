@@ -40,7 +40,7 @@ echo "Checking build results..."
 if [ -f "build/sep" ]; then
     echo "SUCCESS: SEP executable found at build/sep"
     ls -la build/sep
-    ./build/sep_workbench
+    ./build/sep_standalone
     # sudo scripts/install_sep_service.sh
 else
     echo "ERROR: SEP executable not found"

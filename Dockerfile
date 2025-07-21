@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
     libimgui-dev \
     libgl1-mesa-dev \
     libglfw3-dev \
+    libcurl4-openssl-dev \
+    curl \
     python3 \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*

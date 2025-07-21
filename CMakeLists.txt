@@ -42,6 +42,7 @@ find_package(OpenGL REQUIRED)
 add_subdirectory(third_party/imgui)
 add_subdirectory(src)
 add_subdirectory(examples)
+add_subdirectory(src/apps)
 
 add_executable(sep_workbench src/workbench/core/workbench_main.cpp)
 target_link_libraries(sep_workbench PRIVATE

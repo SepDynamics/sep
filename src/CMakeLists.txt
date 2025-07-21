@@ -10,6 +10,7 @@ add_subdirectory(memory)
 add_subdirectory(gpu)
 add_subdirectory(quantum)
 add_subdirectory(workbench)
+add_subdirectory(connectors)
 
 
 

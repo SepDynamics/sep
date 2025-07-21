@@ -37,12 +37,16 @@ docker run --gpus all --rm -v $(pwd):/host sep-engine-builder bash -c '
     echo "Build complete!"
 '
 echo "Checking build results..."
-if [ -f "build/sep" ]; then
-    echo "SUCCESS: SEP executable found at build/sep"
-    ls -la build/sep
-    ./build/sep_standalone
+if [ -f "build/sep_workbench" ]; then
+    echo "SUCCESS: SEP Workbench executable found at build/sep_workbench"
+    ls -la build/sep_workbench
+    echo "OANDA Trader structure created in src/apps/oanda_trader/"
+    ls -la src/apps/oanda_trader/ 2>/dev/null || true
+    ./build/sep_workbench
     # sudo scripts/install_sep_service.sh
 else
     echo "ERROR: SEP executable not found"
+    echo "Checking for other executables..."
+    ls -la build/ 2>/dev/null || true
     exit 1
 fi

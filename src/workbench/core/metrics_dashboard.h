@@ -3,6 +3,7 @@
 #include "metrics_monitor.h"
 #include "memory_monitor.hpp"
 #include "file_dialog.hpp"
+#include "oanda_connector.h"
 #include <memory>
 #include <vector>
 #include <string>
@@ -81,6 +82,17 @@ private:
     std::vector<float> memory_history_;
     std::vector<float> memory_growth_history_;
     bool auto_monitor_memory_{true};
+    
+    // OANDA integration
+    std::unique_ptr<sep::connectors::OandaConnector> oanda_connector_;
+    bool oanda_connected_{false};
+    std::string oanda_status_{"Disconnected"};
+    bool use_oanda_data_{false};
+    
+    // OANDA helper methods
+    void initializeOandaConnection();
+    void updateOandaData();
+    void renderOandaPanel();
 };
 
 } // namespace sep::workbench

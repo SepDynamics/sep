@@ -74,5 +74,13 @@ set_target_properties(sep_standalone PROPERTIES
     OUTPUT_NAME "sep"
 )
 
+# Add OANDA connector test
+add_executable(test_oanda_connector test_oanda_connector.cpp)
+
+target_link_libraries(test_oanda_connector PRIVATE
+    sep_connectors
+    nlohmann_json::nlohmann_json
+)
+
 # Temporarily disabled due to DWARF linker issues
 # add_subdirectory(sep_memory_verifier)

@@ -1,16 +1,16 @@
-#include "workbench_core.hpp"
+#include "oanda_trader_app.hpp"
 #include <iostream>
 #include <exception>
 #include <csignal>
 
-// Global workbench instance for signal handling
-static sep::workbench::WorkbenchEngine* g_workbench = nullptr;
+// Global app instance for signal handling
+static sep::apps::OandaTraderApp* g_app = nullptr;
 
 // Signal handler for graceful shutdown
 void signalHandler(int signal) {
     std::cout << "\n[Main] Received signal " << signal << ", shutting down gracefully..." << std::endl;
-    if (g_workbench) {
-        g_workbench->shutdown();
+    if (g_app) {
+        g_app->shutdown();
     }
     exit(0);
 }
@@ -21,29 +21,29 @@ int main(int /*argc*/, char* /*argv*/[]) {
     std::signal(SIGTERM, signalHandler);
     
     std::cout << "=====================================\n";
-    std::cout << "   SEP OANDA Trading Engine v1.0     \n";
+    std::cout << "   SEP OANDA Trader - v1.0          \n";
     std::cout << "=====================================\n\n";
     
     try {
-        // Create workbench core
-        auto workbench = std::make_unique<sep::workbench::WorkbenchEngine>();
-        g_workbench = workbench.get();
+        // Create OANDA trader app
+        auto app = std::make_unique<sep::apps::OandaTraderApp>();
+        g_app = app.get();
         
         // Initialize
-        std::cout << "[Main] Initializing workbench..." << std::endl;
-        if (!workbench->initialize()) {
-            std::cerr << "[Main] Failed to initialize workbench: " 
-                      << workbench->getLastError() << std::endl;
+        std::cout << "[Main] Initializing OANDA Trader..." << std::endl;
+        if (!app->initialize()) {
+            std::cerr << "[Main] Failed to initialize OANDA Trader: " 
+                      << app->getLastError() << std::endl;
             return 1;
         }
         
         // Run main loop
-        std::cout << "[Main] Starting main loop..." << std::endl;
-        workbench->run();
+        std::cout << "[Main] Starting OANDA Trader interface..." << std::endl;
+        app->run();
         
         // Cleanup
         std::cout << "[Main] Shutting down..." << std::endl;
-        workbench->shutdown();
+        app->shutdown();
         
         std::cout << "[Main] Goodbye!" << std::endl;
         return 0;

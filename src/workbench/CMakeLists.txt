@@ -17,6 +17,7 @@ target_include_directories(sep_workbench_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/src/engine
     ${CMAKE_SOURCE_DIR}/src/api
     ${CMAKE_SOURCE_DIR}/src/workbench
+    ${CMAKE_SOURCE_DIR}/src/connectors
     ${CMAKE_SOURCE_DIR}/third_party/imgui/backends
     ${CMAKE_SOURCE_DIR}/src/glad
 )
@@ -26,6 +27,7 @@ target_link_libraries(sep_workbench_lib PUBLIC
     sep_engine
     sep_quantum
     sep_memory
+    sep_connectors
     imgui
     glad
     OpenGL::GL

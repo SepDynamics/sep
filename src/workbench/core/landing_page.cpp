@@ -25,8 +25,13 @@ LandingPage::LandingPage(WorkbenchEngine* core) : core_(core)
 LandingPage::~LandingPage() = default;
 
 void LandingPage::initializeDemoData() {
-    // Initialize available features - Primary focus on Pattern Metrics
+    // Initialize available features - Primary focus on OANDA Trading
     available_demos_ = {
+        {
+            "oanda", "OANDA Trading Hub", 
+            "Real-time forex trading with pattern analysis and automated strategy execution",
+            "Trading Engine", "", true, false, {"oanda", "forex", "trading", "real-time"}
+        },
         {
             "metrics", "Pattern Metrics Dashboard", 
             "Real-time analysis of data patterns with Coherence, Stability, and Entropy metrics",

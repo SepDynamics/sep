@@ -7,6 +7,7 @@
 // Include workbench components
 #include "cycles_renderer.h"
 #include "demo_orchestrator.hpp"
+#include "demos/register_demos.hpp"
 #include "landing_page.hpp"
 #include "renderer.h"
 #include "service_connector.hpp"
@@ -37,7 +38,11 @@ WorkbenchEngine::WorkbenchEngine()
 
 WorkbenchEngine::~WorkbenchEngine()
 {
-    shutdown();
+    // Only shutdown if not already shut down
+    if (current_state_ != ApplicationState::SHUTTING_DOWN)
+    {
+        shutdown();
+    }
     instance_ = nullptr;
 }
 
@@ -77,6 +82,9 @@ bool WorkbenchEngine::initialize()
         demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = std::make_unique<Renderer>();
+        
+        // Register all available demos
+        registerDemos();
         
         // Initialize renderer
         int width, height;
@@ -462,11 +470,35 @@ void WorkbenchEngine::attemptServiceConnection()
             std::cout << "[WorkbenchEngine] Successfully connected to SEP service" << std::endl;
             // Switch to service engine
             active_engine_ = service_connector_->getEngine();
+
+            // If service engine is null, fall back to offline
+            if (!active_engine_)
+            {
+                std::cout
+                    << "[WorkbenchEngine] Service engine is null, falling back to offline mode"
+                    << std::endl;
+                active_engine_ = offline_engine_.get();
+                metrics_.service_connected = false;
+            }
         } else {
             std::cout << "[WorkbenchEngine] Failed to connect to SEP service, using offline mode"
                       << std::endl;
             active_engine_ = offline_engine_.get();
         }
+    }
+    else
+    {
+        // No service connector, use offline mode
+        std::cout << "[WorkbenchEngine] No service connector available, using offline mode"
+                  << std::endl;
+        active_engine_ = offline_engine_.get();
+    }
+
+    // Ensure we always have a valid engine
+    if (!active_engine_)
+    {
+        std::cerr << "[WorkbenchEngine] CRITICAL: No engine available!" << std::endl;
+        reportError("No engine available - cannot proceed");
     }
 }
 
@@ -525,10 +557,27 @@ void WorkbenchEngine::reportError(const std::string& error)
 
 void WorkbenchEngine::shutdown()
 {
+    // Prevent double shutdown - try to transition from any non-shutdown state
+    ApplicationState current = current_state_.load();
+    if (current == ApplicationState::SHUTTING_DOWN)
+    {
+        return;  // Already shutting down
+    }
+
+    // Try to set to shutting down from current state
+    while (!current_state_.compare_exchange_weak(current, ApplicationState::SHUTTING_DOWN))
+    {
+        if (current == ApplicationState::SHUTTING_DOWN)
+        {
+            return;  // Another thread started shutdown
+        }
+    }
+
     std::cout << "[WorkbenchEngine] Shutting down..." << std::endl;
 
-    current_state_ = ApplicationState::SHUTTING_DOWN;
-    
+    // Stop the main loop
+    should_exit_ = true;
+
     // Clean up components
     if (demo_orchestrator_) {
         demo_orchestrator_->unloadCurrentDemo();

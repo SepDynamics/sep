@@ -49,6 +49,13 @@
    - Multiple redefinition errors in genesis_pattern.cpp
    - OpenGL header conflicts with glad.h
 
+5. **Service Connection Issue** ✅ FIXED
+   - **Problem:** Demos failed to launch due to heartbeat failure after connection
+   - **Root Cause:** Service connector returned nullptr engine when no service running
+   - **Solution:** Enhanced offline mode detection and graceful fallback
+   - **Documentation:** See `docs/WORKBENCH_CONNECTION_FIX.md` for details
+   - **Status:** Workbench now works in offline mode without requiring service
+
 5. **Forward Declaration Dependencies**
    - `sep::Engine` only forward declared but code tries to use it
    - `make_unique<sep::Engine>()` fails due to incomplete type

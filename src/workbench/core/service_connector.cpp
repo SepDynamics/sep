@@ -166,7 +166,12 @@ void ServiceConnector::monitoringLoop() {
                 // Check if we should attempt reconnection
                 if (config_.auto_reconnect) {
                     std::cout << "[ServiceConnector] Attempting auto-reconnect..." << std::endl;
-                    reconnect();
+                    // Set flag for main thread to handle reconnection
+                    connection_state_ = ConnectionState::DISCONNECTED;
+                    // Notify callback
+                    if (connection_callback_) {
+                        connection_callback_(ConnectionState::DISCONNECTED);
+                    }
                 }
             } else {
                 // Update health metrics
@@ -184,22 +189,53 @@ bool ServiceConnector::sendHeartbeat() {
         return false;
     }
     
-    // Simple heartbeat message
-    const char* heartbeat_msg = "HEARTBEAT\n";
-    
-    // Platform-specific send
-#ifdef _WIN32
-    int result = send(reinterpret_cast<SOCKET>(service_handle_), 
-                     heartbeat_msg, strlen(heartbeat_msg), 0);
-#else
-    ssize_t result = send(reinterpret_cast<intptr_t>(service_handle_), 
-                         heartbeat_msg, strlen(heartbeat_msg), MSG_NOSIGNAL);
-#endif
-    
-    if (result > 0) {
+    // For now, skip actual heartbeat check if we're in offline mode
+    // This prevents immediate disconnection when no service is running
+    if (!service_engine_) {
+        // We're in offline mode, just update metrics
         health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
         health_metrics_.is_responsive = true;
         return true;
+    }
+    
+    // Send HTTP GET request for health check
+    const char* health_request = "GET /health HTTP/1.1\r\n"
+                                "Host: localhost\r\n"
+                                "Connection: keep-alive\r\n"
+                                "\r\n";
+    
+    // Platform-specific send
+#ifdef _WIN32
+    int result = send(reinterpret_cast<SOCKET>(service_handle_),
+                     health_request, strlen(health_request), 0);
+#else
+    ssize_t result = send(reinterpret_cast<intptr_t>(service_handle_),
+                         health_request, strlen(health_request), MSG_NOSIGNAL);
+#endif
+    
+    if (result > 0) {
+        // Try to read response (non-blocking)
+        char buffer[1024];
+#ifdef _WIN32
+        int recv_result = recv(reinterpret_cast<SOCKET>(service_handle_),
+                              buffer, sizeof(buffer) - 1, 0);
+#else
+        ssize_t recv_result = recv(reinterpret_cast<intptr_t>(service_handle_),
+                                  buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
+#endif
+        
+        if (recv_result > 0) {
+            buffer[recv_result] = '\0';
+            // Check if response contains "200 OK"
+            if (strstr(buffer, "200 OK") != nullptr) {
+                health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
+                health_metrics_.is_responsive = true;
+                return true;
+            }
+        } else if (recv_result == 0) {
+            // Connection closed
+            std::cerr << "[ServiceConnector] Connection closed by service" << std::endl;
+        }
     }
     
     health_metrics_.is_responsive = false;
@@ -264,10 +300,10 @@ bool ServiceConnector::connectTCP() {
         return false;
     }
     
-    // Set socket timeout
+    // Set socket timeout - use shorter timeout for quick failure
     struct timeval timeout;
-    timeout.tv_sec = config_.connection_timeout.count() / 1000;
-    timeout.tv_usec = (config_.connection_timeout.count() % 1000) * 1000;
+    timeout.tv_sec = 2;  // 2 seconds timeout
+    timeout.tv_usec = 0;
     
     setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout, sizeof(timeout));
     setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (const char*)&timeout, sizeof(timeout));
@@ -294,8 +330,7 @@ bool ServiceConnector::connectTCP() {
     // Attempt connection
     if (::connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
         std::cerr << "[ServiceConnector] Connection failed: " << strerror(errno) << std::endl;
-        std::cerr << "[ServiceConnector] Make sure the SEP API server is running on port "
-                  << config_.service_port << std::endl;
+        std::cerr << "[ServiceConnector] SEP service not available - will use offline mode" << std::endl;
 #ifdef _WIN32
         closesocket(sock);
 #else

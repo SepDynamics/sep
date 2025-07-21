@@ -669,4 +669,9 @@ namespace sep::memory
         return true;
     }
 
+    void MemoryTier::setPromotionThreshold(float threshold)
+    {
+        m_coherence_threshold = threshold;
+    }
+
 }  // namespace sep::memory

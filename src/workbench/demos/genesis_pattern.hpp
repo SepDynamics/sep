@@ -4,7 +4,7 @@
 
 #include "demo_base.hpp"
 #include "stubs/engine_stubs.h"
-#include "stubs/imgui.h"
+#include <imgui.h>
 
 // Forward declarations
 namespace sep {

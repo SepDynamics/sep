@@ -44,7 +44,18 @@ add_subdirectory(src)
 add_subdirectory(examples)
 
 add_executable(sep_workbench src/workbench/core/workbench_main.cpp)
-target_link_libraries(sep_workbench PRIVATE sep_workbench_lib)
+target_link_libraries(sep_workbench PRIVATE
+    sep_workbench_lib
+    imgui
+    glad
+    sep_quantum
+    sep_memory
+    sep_engine
+    fmt::fmt
+    TBB::tbb
+    OpenGL::GL
+    glfw
+)
 
 if(SEP_USE_CUDA)
     set_target_properties(sep_workbench PROPERTIES

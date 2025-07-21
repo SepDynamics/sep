@@ -4,6 +4,8 @@
 set -e
 
 echo "Building SEP Engine..."
+rm -rf build output 
+mkdir build output
 
 # Ensure Docker image is built
 docker build -t sep-engine-builder .
@@ -34,7 +36,11 @@ docker run --gpus all --rm -v $(pwd):/host sep-engine-builder bash -c '
 echo "Checking build results..."
 if [ -f "build/sep" ]; then
     echo "SUCCESS: SEP executable found at build/sep"
+    sudo systemctl stop sep-engine
+    sudo /sep/scripts/install_sep_service.sh 
+    sudo systemctl start sep-engine
     ls -la build/sep
+    sudo systemctl enable sep-engine
 else
     echo "ERROR: SEP executable not found"
     exit 1

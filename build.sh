@@ -4,7 +4,7 @@
 set -e
 
 echo "Building SEP Engine..."
-rm -rf build output 
+sudo rm -rf build output 
 mkdir build output
 
 # Ensure Docker image is built
@@ -40,7 +40,7 @@ if [ -f "build/sep" ]; then
     sudo /sep/scripts/install_sep_service.sh 
     sudo systemctl start sep-engine
     ls -la build/sep
-    sudo systemctl enable sep-engine
+    sudo systemctl status sep-engine
 else
     echo "ERROR: SEP executable not found"
     exit 1

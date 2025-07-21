@@ -3,6 +3,13 @@
 ## Overview
 
 This guide provides specific research areas and resources to explore before beginning development of the financial processing pipeline. Each section includes key concepts, recommended resources, and practical considerations.
+### Immediate Research Priorities
+
+- Confirm regulatory requirements for initial testing regions.
+- Compare InfluxDB versus TimescaleDB for tick storage.
+- Identify open-source code samples for OANDA streaming in C++.
+- Review TA-Lib integration options for early indicator prototypes.
+
 
 ## 1. OANDA API Integration
 

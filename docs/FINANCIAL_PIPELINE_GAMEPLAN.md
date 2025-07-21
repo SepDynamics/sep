@@ -29,6 +29,14 @@ This document outlines a comprehensive plan to transform the SEP Engine from its
    - No risk management features
 
 ## Development Phases
+### Preparation Focus (Weeks 0-1)
+
+Before diving into the multiweek schedule, verify that the existing SEP Engine components operate correctly:
+- Build the project using `./build.sh` to validate CUDA compatibility.
+- Run `examples/pattern_metric_example` on data from `Testing/OANDA/` to test JSON output.
+- Review `run_alpha_experiment.py` and `financial_backtest.py` to see how metrics feed the backtester.
+- Convert any new market data to the engine's chunk format for rapid testing.
+
 
 ### Phase 1: Financial Data Infrastructure (Weeks 1-3)
 

@@ -7,7 +7,7 @@ add_executable(oanda_trader
 )
 
 target_link_libraries(oanda_trader
-    sep_core
+    sep_engine
     sep_connectors
     imgui
     glad

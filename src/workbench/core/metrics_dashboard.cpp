@@ -510,11 +510,16 @@ void MetricsDashboard::renderMemoryMonitor() {
 }
 
 void MetricsDashboard::initializeOandaConnection() {
-    const char* api_key = std::getenv("OANDA_API_KEY");
-    const char* account_id = std::getenv("OANDA_ACCOUNT_ID");
+    // Hardcoded OANDA credentials for demo
+    std::string key_part1 = "b54bcf4bbfb02f6ce1fd918906cb71d5-";
+    std::string key_part2 = "976ba02922829fafcc4d9e847b81c0f2";
+    std::string full_key = key_part1 + key_part2;
+    const char* api_key = full_key.c_str();
+    const char* api_key = "b54bcf4bbfb02f6ce1fd918906cb71d5-976ba02922829fafcc4d9e847b81c0f2";
+    const char* account_id = "101-001-31229774-001";
     
     if (api_key && account_id) {
-        oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, true);
+        oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, false);
         if (oanda_connector_->initialize()) {
             oanda_connected_ = true;
             oanda_status_ = "Connected";

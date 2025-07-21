@@ -42,7 +42,7 @@ if [ -f "build/sep_workbench" ]; then
     ls -la build/sep_workbench
     echo "OANDA Trader structure created in src/apps/oanda_trader/"
     ls -la src/apps/oanda_trader/ 2>/dev/null || true
-    ./build/sep_workbench
+    OANDA_API_KEY="$OANDA_API_KEY" OANDA_ACCOUNT_ID="$OANDA_ACCOUNT_ID" ./build/sep_workbench
     # sudo scripts/install_sep_service.sh
 else
     echo "ERROR: SEP executable not found"

@@ -9,7 +9,7 @@
 // Forward declaration for GLFW
 struct GLFWwindow;
 
-#include "../cycles_renderer.h"
+#include "cycles_renderer.h"
 
 namespace sep::workbench {
 
@@ -18,6 +18,7 @@ class ServiceConnector;
 class DemoOrchestrator;
 class LandingPage;
 class Renderer;
+class MetricsDashboard;
 
 }  // namespace sep::workbench
 
@@ -83,6 +84,9 @@ public:
     // Demo management
     void selectDemo(const std::string& demo_name);
     void stopCurrentDemo();
+    
+    // Metrics dashboard
+    void showMetricsDashboard(bool show);
 
     // Static callbacks for GLFW
     static void errorCallback(int error, const char* description);
@@ -103,6 +107,7 @@ private:
     std::unique_ptr<DemoOrchestrator> demo_orchestrator_;
     std::unique_ptr<LandingPage> landing_page_;
     std::unique_ptr<Renderer> renderer_;
+    std::unique_ptr<MetricsDashboard> metrics_dashboard_;
     
     // Engine components (may be null if service not connected)
     std::unique_ptr<sep::core::Engine> offline_engine_;

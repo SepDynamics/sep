@@ -3,11 +3,18 @@
 ## 🔥 Engine Overview
 The SEP (Self-Emergent Processor) is a **living computational engine** - not just a binary, but a dynamic system that breathes data, pulses with GPU acceleration, and evolves its consciousness through pattern recognition. Like watching a V8 engine through a transparent hood, we need real-time visibility into its operation.
 
+## Core Principles
+
+1. **GPU is NOT Optional**: GPU acceleration is the CORE of the framework - there are no flags to enable/disable it
+2. **No Offline Mode**: The SEP Workbench requires a live SEP Engine connection
+3. **Unified Architecture**: The engine and API are integrated - no separate API server
+4. **Living System**: This is not just software, it's a living computational organism
+
 ## Current Capabilities
 
 ### Working Features
 - **Binary Executable**: `./sep` - standalone executable with all functionality integrated
-- **GPU Acceleration**: Confirmed working with CUDA kernels (GPU turns on/off during processing)
+- **GPU Acceleration**: CUDA kernels REQUIRED for all processing
 - **Data Processing**: Successfully processes files of any size (tested up to 280MB)
 - **Pattern Metrics**: Generates coherence, stability, and entropy measurements
 - **Performance**: 280MB file processed in ~2 minutes with GPU acceleration
@@ -196,7 +203,7 @@ docker run --gpus all --rm -v $(pwd):/host sep-engine-builder bash -c '
 
 ### Basic Commands
 ```bash
-# Process a file
+# Process a file (GPU required)
 ./sep process <file_path>
 
 # Process with JSON output
@@ -205,14 +212,15 @@ docker run --gpus all --rm -v $(pwd):/host sep-engine-builder bash -c '
 # Run demo
 ./sep demo
 
-# Run with GPU (default if available)
-./sep process <file_path> --gpu
+# Start service (required for workbench)
+./sep service
 ```
 
 ## Technical Details
 
 ### Dependencies
-- CUDA 12.9+
+- CUDA 12.9+ (REQUIRED - no CPU fallback)
+- NVIDIA GPU with compute capability 7.0+ (REQUIRED)
 - C++20 compiler (Clang 15+)
 - Libraries: fmt, spdlog, TBB, nlohmann_json, benchmark
 

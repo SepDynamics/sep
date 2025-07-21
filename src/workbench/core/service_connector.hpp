@@ -102,6 +102,9 @@ private:
     bool connectTCP();
     bool connectIPC();
     bool connectSharedMemory();
+    
+    // Service engine creation
+    sep::core::Engine* createServiceEngineProxy(int socket_fd);
 };
 
 } // namespace sep::workbench

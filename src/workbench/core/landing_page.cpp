@@ -25,8 +25,13 @@ LandingPage::LandingPage(WorkbenchEngine* core) : core_(core)
 LandingPage::~LandingPage() = default;
 
 void LandingPage::initializeDemoData() {
-    // Initialize available demos
+    // Initialize available features - Primary focus on Pattern Metrics
     available_demos_ = {
+        {
+            "metrics", "Pattern Metrics Dashboard", 
+            "Real-time analysis of data patterns with Coherence, Stability, and Entropy metrics",
+            "Core Engine", "", true, false, {"metrics", "patterns", "real-time", "investor-demo"}
+        },
         {
             "genesis", "Genesis Pattern", 
             "Explore the emergence of coherent patterns from quantum fluctuations",
@@ -130,13 +135,14 @@ void LandingPage::renderHeader() {
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + title_offset);
     
     ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]); // Assume larger font at index 0
-    ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "SEP Workbench");
+    ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "SEP Pattern Metrics Engine");
     ImGui::PopFont();
     
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "v0.1.0");
+    ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "v2.0.0");
     
-    ImGui::Text("Semantic Emergence Platform - Interactive Demo Suite");
+    ImGui::Text("Real-time Pattern Analysis: Coherence • Stability • Entropy");
+    ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.3f, 1.0f), "→ Click 'Pattern Metrics Dashboard' to start analyzing data patterns");
     
     // Quick actions
     ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 200, 20));
@@ -409,7 +415,13 @@ void LandingPage::renderDemoDetails() {
             
             if (ImGui::Button("Launch Demo", ImVec2(150, 30))) {
                 if (can_launch) {
-                    launchDemo(demo.id);
+                    // Special handling for metrics dashboard
+                    if (demo.id == "metrics") {
+                        // Trigger metrics dashboard visibility in workbench core
+                        core_->showMetricsDashboard(true);
+                    } else {
+                        launchDemo(demo.id);
+                    }
                     ImGui::CloseCurrentPopup();
                 }
             }

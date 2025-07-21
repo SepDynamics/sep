@@ -22,4 +22,4 @@ Our current and most promising strategy is a more precise workaround. Instead of
 
 **4. Next Step:**
 
-The immediate next step is to update the `build_and_test.sh` script to align with the changes in `CMakeLists.txt` (ensuring it uses `gcc-14` consistently) and then execute the build. This will test our current hypothesis and determine if this targeted workaround is successful.
+The immediate next step is to update the `build.sh` script to align with the changes in `CMakeLists.txt` (ensuring it uses `gcc-14` consistently) and then execute the build. This will test our current hypothesis and determine if this targeted workaround is successful.

@@ -17,7 +17,7 @@ The SEP (Self-Emergent Processor) standalone executable is a comprehensive tool 
 The standalone executable is built automatically when running:
 
 ```bash
-./build_and_test.sh
+./build.sh
 ```
 
 This will:

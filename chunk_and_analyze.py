@@ -81,7 +81,7 @@ def main():
     executable_path = Path("./build/examples/pattern_metric_example")
     if not executable_path.exists():
         print(f"Error: Executable not found at {executable_path}")
-        print("Please build the project first using ./build_and_test.sh")
+        print("Please build the project first using ./build.sh")
         sys.exit(1)
 
     output_dir = Path(f"./temp_chunks_{num_chunks}")

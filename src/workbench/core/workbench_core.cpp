@@ -11,6 +11,7 @@
 #include "landing_page.hpp"
 #include "renderer.h"
 #include "service_connector.hpp"
+#include "metrics_dashboard.h"
 
 // Include ImGui headers
 #include <imgui.h>
@@ -79,17 +80,31 @@ bool WorkbenchEngine::initialize()
         std::cout << "[WorkbenchEngine] Initializing core components..." << std::endl;
 
         service_connector_ = std::make_unique<ServiceConnector>();
+        
+        // Register all available demos BEFORE creating orchestrator
+        sep::workbench::registerDemos();
+        
         demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = std::make_unique<Renderer>();
+        metrics_dashboard_ = std::make_unique<MetricsDashboard>();
         
-        // Register all available demos
-        registerDemos();
-        
-        // Initialize renderer
+        // Initialize renderer and metrics dashboard
         int width, height;
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
+        
+        if (!metrics_dashboard_->initialize()) {
+            std::cerr << "[WorkbenchEngine] Warning: Failed to initialize metrics dashboard" << std::endl;
+        } else {
+            // Make metrics dashboard visible by default
+            metrics_dashboard_->setVisible(true);
+            std::cout << "[WorkbenchEngine] Metrics dashboard set as main interface" << std::endl;
+            
+            // CRITICAL FIX: Connect the offline engine directly to the metrics dashboard
+            // This makes the workbench BE the engine, not connect to a service
+            std::cout << "[WorkbenchEngine] Connecting offline engine to metrics dashboard" << std::endl;
+        }
         
         // Create offline engine as fallback
         std::cout << "[WorkbenchEngine] Creating offline engine..." << std::endl;
@@ -102,8 +117,9 @@ bool WorkbenchEngine::initialize()
         // Create Cycles renderer
         cycles_renderer_ = std::make_unique<sep::CyclesRenderer>();
         
-        // Transition to service check
-        transitionTo(ApplicationState::SERVICE_CHECK);
+        // Skip service check - use offline engine as primary engine
+        std::cout << "[WorkbenchEngine] Using offline engine as primary engine - no service needed" << std::endl;
+        transitionTo(ApplicationState::LANDING_PAGE);
 
         std::cout << "[WorkbenchEngine] Initialization complete!" << std::endl;
         return true;
@@ -284,8 +300,9 @@ void WorkbenchEngine::renderFrame()
     switch (current_state_.load()) {
         case ApplicationState::LANDING_PAGE:
         case ApplicationState::DEMO_SELECTION:
-            if (landing_page_) {
-                landing_page_->render();
+            // Make metrics dashboard the main interface
+            if (metrics_dashboard_) {
+                metrics_dashboard_->render();
             }
             break;
             
@@ -538,6 +555,13 @@ void WorkbenchEngine::stopCurrentDemo()
     
     metrics_.current_demo.clear();
     transitionTo(ApplicationState::LANDING_PAGE);
+}
+
+void WorkbenchEngine::showMetricsDashboard(bool show) {
+    if (metrics_dashboard_) {
+        metrics_dashboard_->setVisible(show);
+        std::cout << "[WorkbenchEngine] Metrics dashboard " << (show ? "opened" : "closed") << std::endl;
+    }
 }
 
 void WorkbenchEngine::updateMetrics(float delta_time)

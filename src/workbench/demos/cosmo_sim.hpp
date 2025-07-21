@@ -20,7 +20,7 @@ namespace workbench {
 
 class CosmoSim : public Demo {
 public:
-    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
     void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
@@ -39,7 +39,7 @@ private:
     float learning_rate_{0.05f};
     float connection_prob_{0.2f};
 
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::SimpleRenderer* renderer_{nullptr};
 
     void initBodies();
     void integrate(float dt);

@@ -19,7 +19,7 @@ namespace workbench {
 
 class CosmoDemo : public Demo {
 public:
-    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
     void on_update(float dt) override;
     void on_render() override;
     void on_ui_render() override;
@@ -40,7 +40,7 @@ private:
     float time_step_{0.01f};
 
     sep::core::Engine* engine_{nullptr};
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::SimpleRenderer* renderer_{nullptr};
 
     void initParticles();
     void integrate(float dt);

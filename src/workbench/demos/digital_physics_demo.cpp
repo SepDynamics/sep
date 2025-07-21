@@ -3,12 +3,13 @@
 #include <cstdlib>
 #include <glm/vec3.hpp>
 
+#include "../simple_renderer.h"
 #include "config.hpp"
 
 namespace sep {
 namespace workbench {
 
-    void DigitalPhysicsDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+    void DigitalPhysicsDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
     {
         (void)engine;
         (void)renderer;

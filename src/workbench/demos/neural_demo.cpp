@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "../simple_renderer.h"
 #include "config.hpp"
 
 namespace sep
@@ -9,7 +10,7 @@ namespace sep
     namespace workbench
     {
 
-        void NeuralDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+        void NeuralDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
         {
             (void)engine;
             renderer_ = renderer;

@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <glm/glm.hpp>
 
+#include "../simple_renderer.h"
 #include "config.hpp"
 
 namespace sep
@@ -10,7 +11,7 @@ namespace sep
     namespace workbench
     {
 
-        void FlockingDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+        void FlockingDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
         {
             (void)engine;
             renderer_ = renderer;
@@ -21,12 +22,18 @@ namespace sep
             agents_.resize(agent_count);
             for (auto& a : agents_)
             {
-                float px = (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 20.f;
-                float py = (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 20.f;
-                float pz = (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 20.f;
-                float vx = (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 2.f;
-                float vy = (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 2.f;
-                float vz = (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 2.f;
+                float px =
+                    (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 20.f;
+                float py =
+                    (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 20.f;
+                float pz =
+                    (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 20.f;
+                float vx =
+                    (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 2.f;
+                float vy =
+                    (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 2.f;
+                float vz =
+                    (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 2.f;
                 a.position = glm::vec4(px, py, pz, 0.f);
                 a.velocity = glm::vec4(vx, vy, vz, 0.f);
             }

@@ -28,6 +28,9 @@ mkdir -p /var/log/sep
 chown -R sep:sep /var/lib/sep
 chown -R sep:sep /var/log/sep
 
+#Stop service
+sudo systemctl stop sep-engine
+
 # Copy executable
 echo "Installing SEP executable..."
 if [ -f "build/sep" ]; then
@@ -43,7 +46,7 @@ echo "Creating default configuration..."
 cat > /etc/sep/engine.conf << EOF
 {
     "service": {
-        "port": 8080,
+        "port": 3000,
         "host": "127.0.0.1",
         "workers": 4
     },
@@ -59,7 +62,7 @@ cat > /etc/sep/engine.conf << EOF
     },
     "telemetry": {
         "prometheus_port": 9090,
-        "websocket_port": 8081,
+        "websocket_port": 8080,
         "update_interval_ms": 100
     }
 }
@@ -71,15 +74,5 @@ cp config/sep-engine.service /etc/systemd/system/
 systemctl daemon-reload
 
 echo "SEP Engine service installed successfully!"
-echo ""
-echo "To start the service:"
-echo "  sudo systemctl start sep-engine"
-echo ""
-echo "To enable on boot:"
-echo "  sudo systemctl enable sep-engine"
-echo ""
-echo "To view logs:"
-echo "  sudo journalctl -u sep-engine -f"
-echo ""
-echo "To check status:"
-echo "  sudo systemctl status sep-engine"
+sudo systemctl enable sep-engine
+sudo systemctl status sep-engine

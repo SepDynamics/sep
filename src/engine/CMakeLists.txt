@@ -25,6 +25,7 @@ add_sep_library(sep_engine
         kernels.cu
         core.cu
         quantum_kernels.cu
+        memory.cu
 )
 
 target_include_directories(sep_engine PUBLIC

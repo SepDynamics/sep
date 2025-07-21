@@ -19,7 +19,7 @@ namespace workbench {
 
 class AnnealingDemo : public Demo {
 public:
-    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
     void on_update(float dt) override;
     void on_render() override;
     void on_ui_render() override;
@@ -28,7 +28,7 @@ public:
     void on_mouse(int x, int y, int button);
 
 private:
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::SimpleRenderer* renderer_{nullptr};
     struct Particle {
         glm::vec3 position{0.0f};
         glm::vec3 velocity{0.0f};

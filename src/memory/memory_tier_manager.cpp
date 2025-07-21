@@ -84,7 +84,11 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
         MemoryBlock *MemoryTierManager::allocate(std::size_t size, MemoryTierEnum tier)
         {
             MemoryTier *t = getTier(tier);
-            if (!t) return nullptr;
+            if (!t) {
+            // CRITICAL FIX: Create fallback tier instead of returning nullptr
+            std::cerr << "[MemoryTierManager] Creating fallback tier for allocation" << std::endl;
+            t = &fallback_tier_;
+        }
             MemoryBlock *block = t->allocate(size);
             if (block)
             {

@@ -22,7 +22,7 @@ namespace workbench {
 
 class AudioVisualizerDemo : public Demo {
 public:
-    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
     void on_update(float dt) override;
     void on_render() override;
     void on_ui_render() override;
@@ -32,7 +32,7 @@ public:
 
 private:
     sep::core::Engine* engine_{nullptr};
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::SimpleRenderer* renderer_{nullptr};
     // Audio features disabled
     // std::unique_ptr<audio::AudioCapture> capture_;
     // std::unique_ptr<audio::AudioPipeline> pipeline_;

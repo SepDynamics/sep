@@ -70,7 +70,7 @@ Demonstrate the SEP Engine's ability to extract alpha from financial time-series
 
 ### Build Commands
 ```bash
-./build_and_test.sh              # Complete Docker build
+./build.sh              # Complete Docker build
 python3 quick_alpha_test.py      # Pipeline validation
 ```
 

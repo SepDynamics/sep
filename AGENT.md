@@ -7,7 +7,7 @@
 
 ### Primary Build Command
 ```bash
-./build_and_test.sh
+./build.sh
 ```
 - **Purpose**: Complete Docker-based build and test cycle
 - **Environment**: Containerized build eliminates system dependencies
@@ -63,7 +63,7 @@
 ### Profiling Commands
 ```bash
 # Build first
-./build_and_test.sh
+./build.sh
 
 # Profile with Nsight Systems
 nsys profile --output=pattern_metric_profile ./build/examples/pattern_metric_example Testing/OANDA/
@@ -86,7 +86,7 @@ nvprof ./build/examples/pattern_metric_example Testing/OANDA/
 - **JSON**: Use structured output for all metrics and results
 
 ### Testing Approach
-1. Build with `./build_and_test.sh`
+1. Build with `./build.sh`
 2. Check `output/build_log.txt` for issues
 3. Run experiments with Python scripts
 4. Profile CUDA performance for optimization
@@ -101,13 +101,13 @@ nvprof ./build/examples/pattern_metric_example Testing/OANDA/
 ├── build/                 # Build artifacts (generated)
 ├── output/                # Logs and results
 ├── *.py                   # Python pipeline scripts
-└── build_and_test.sh      # Primary build command
+└── build.sh      # Primary build command
 ```
 
 ## Communication Protocol
 
 ### Build Issues
-1. Run `./build_and_test.sh`
+1. Run `./build.sh`
 2. Check `output/build_log.txt` for detailed errors
 3. Address CUDA/compilation issues in Docker environment
 

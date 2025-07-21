@@ -2,6 +2,8 @@
 
 #include <config.hpp>
 #include <cstdlib>
+
+#include "../simple_renderer.h"
 // Include glm_config.h before any GLM headers to ensure GLM_ENABLE_EXPERIMENTAL is defined
 #include <glm/gtx/norm.hpp>
 
@@ -12,7 +14,7 @@ namespace sep
     namespace workbench
     {
 
-        void CosmoSim::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+        void CosmoSim::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
         {
             (void)engine;
             (void)renderer;
@@ -31,10 +33,11 @@ namespace sep
             for (std::size_t i = 0; i < count; ++i)
             {
                 sep::compat::PatternData d{};
-                d.position =
-                    glm::vec4(static_cast<float>(std::rand()) / RAND_MAX * box_size_,
-                              static_cast<float>(std::rand()) / RAND_MAX * box_size_,
-                              static_cast<float>(std::rand()) / RAND_MAX * box_size_, 1.0f);
+                d.position = glm::vec4(
+                    static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * box_size_,
+                    static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * box_size_,
+                    static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * box_size_,
+                    1.0f);
                 // d.velocity = glm::vec4(0.0f);  // velocity field doesn't exist in
                 // engine::PatternData
                 d.attributes[0] = 1.0f;  // mass

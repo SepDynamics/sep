@@ -9,7 +9,7 @@
 namespace sep {
 namespace workbench {
 
-    void MemoryGardenDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+    void MemoryGardenDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
     {
         (void)engine;
         renderer_ = renderer;

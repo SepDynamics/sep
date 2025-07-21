@@ -11,7 +11,7 @@ namespace workbench {
         return instance;
     }
 
-    void DemoManager::initialize(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+    void DemoManager::initialize(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
     {
         engine_ = engine;
         renderer_ = renderer;

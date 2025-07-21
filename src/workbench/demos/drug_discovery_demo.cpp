@@ -4,12 +4,14 @@
 #include <cstdlib>
 #include <glm/glm.hpp>
 
+#include "../simple_renderer.h"
+
 namespace sep
 {
     namespace workbench
     {
 
-        void DrugDiscoveryDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+        void DrugDiscoveryDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
         {
             (void)engine;
             renderer_ = renderer;

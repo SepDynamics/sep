@@ -3,10 +3,12 @@
 #include <cstdlib>
 #include <glm/glm.hpp>
 
+#include "../simple_renderer.h"
+
 namespace sep {
 namespace workbench {
 
-    void CosmoDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+    void CosmoDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
     {
         (void)engine;
         (void)renderer;
@@ -21,10 +23,10 @@ void CosmoDemo::initParticles() {
     particles_.reserve(count);
     for (std::size_t i = 0; i < count; ++i) {
         Particle p;
-        p.position = glm::vec3(
-            static_cast<float>(std::rand()) / RAND_MAX * box_size_,
-            static_cast<float>(std::rand()) / RAND_MAX * box_size_,
-            static_cast<float>(std::rand()) / RAND_MAX * box_size_);
+        p.position =
+            glm::vec3(static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * box_size_,
+                      static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * box_size_,
+                      static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * box_size_);
         p.velocity = glm::vec3(0.0f);
         p.mass = 1.0f;
         particles_.push_back(p);

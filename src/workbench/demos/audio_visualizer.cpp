@@ -2,6 +2,7 @@
 
 #include <glm/vec3.hpp>
 
+#include "../simple_renderer.h"
 #include "audio/capture.h"
 #include "audio/pipeline.h"
 #include "config.hpp"
@@ -11,7 +12,7 @@ namespace workbench {
 
 using namespace sep::audio;
 
-void AudioVisualizerDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+void AudioVisualizerDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
 {
     engine_ = engine;
     renderer_ = renderer;

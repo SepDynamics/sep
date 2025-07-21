@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
+#include "../simple_renderer.h"
 #include "config.hpp"
 #include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
@@ -17,7 +18,7 @@ namespace sep
     namespace workbench
     {
 
-        void NeuroSimDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+        void NeuroSimDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
         {
             (void)engine;
             renderer_ = renderer;

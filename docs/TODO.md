@@ -1,268 +1,219 @@
-# SEP Engine TODO - Living System Development
+# SEP Workbench Sandbox - Implementation TODO
 
-**Last Updated:** 2025-01-20
-**Current State:** Core engine operational, workbench has multiple compilation errors
-**Goal:** Transform the SEP Engine from a functional binary into a living system service with real-time monitoring, control mechanisms, and predictive capabilities.
+## Overview
+Transform the existing SEP Workbench into a standalone data processing sandbox that can ingest any file type, process it through the SEP Engine, and provide real-time metrics visualization with memory monitoring.
 
----
+## Phase 1: Core Infrastructure ✅ (Completed)
+- [x] Standalone executable with embedded SEP Engine
+- [x] Basic metrics dashboard UI
+- [x] Service connector with offline mode
+- [x] Pattern metric engine integration
 
-## Phase 1: Core Engine Stabilization ✅ COMPLETE
+## Phase 2: Enhanced File Processing 🚧 (Current Focus)
 
-### ✓ Build System
-- **Achievement:** Stable Docker-based build environment with CUDA 12.9 support
-- **Binary:** Standalone `./sep` executable successfully built (3.5MB)
-- **Commands:** process, benchmark, demo, financial, service modes implemented
+### 2.1 File Selection & Loading
+- [ ] Implement native file dialog using `nativefiledialog` library
+  - [ ] Add NFD to CMakeLists.txt dependencies
+  - [ ] Create FileSelector class wrapper
+  - [ ] Support multi-file selection
+- [ ] Add drag-and-drop file support
+  - [ ] Implement GLFW drop callbacks
+  - [ ] Visual feedback for drop zones
+- [ ] File type detection and preview
+  - [ ] Show file size, type, preview
+  - [ ] Support for common formats (text, binary, images, CSV, JSON)
 
-### ✓ Pattern Processing 
-- **Achievement:** QBSA and QFH algorithms fully operational
-- **Performance:** 280MB file processed in ~2 minutes with GPU acceleration
-- **Metrics:** Coherence calculation working, stability and entropy currently hardcoded
+### 2.2 Batch Processing
+- [ ] File queue management
+  - [ ] Add files to processing queue
+  - [ ] Process files sequentially or in parallel
+  - [ ] Progress indicators per file
+- [ ] Comparative analysis mode
+  - [ ] Process multiple files and compare metrics
+  - [ ] Side-by-side visualization
 
-### ✓ Service Mode
-- **Achievement:** SEP can run as a system service with `./sep service`
-- **Infrastructure:** Installation script ready at `scripts/install_sep_service.sh`
-- **API Server:** REST API framework implemented with Crow, auth middleware ready
+## Phase 3: Memory Monitoring & Visualization 📊
 
----
+### 3.1 Memory Tracking
+- [ ] Real-time memory usage monitoring
+  - [ ] Track process memory (RSS, VMS)
+  - [ ] Monitor heap allocations
+  - [ ] Per-component memory breakdown
+- [ ] Memory growth visualization
+  - [ ] Time-series graph of memory usage
+  - [ ] Correlation with data size
+  - [ ] Memory efficiency metrics
 
-## Phase 2: Workbench Visualization 🚧 MULTIPLE BLOCKERS
+### 3.2 Pattern Memory Distribution
+- [ ] Tier-based memory visualization
+  - [ ] Show pattern distribution across L1/L2/L3 tiers
+  - [ ] Cache hit/miss rates
+  - [ ] Memory pressure indicators
+- [ ] Pattern lifecycle tracking
+  - [ ] Track pattern creation/promotion/eviction
+  - [ ] Memory residence time
 
-### Critical Issues Found in Build
+## Phase 4: Advanced Metrics & Visualization 📈
 
-1. **CyclesRenderer Missing Implementation**
-   - Forward declared but never implemented
-   - Type alias solution attempted but revealed deeper issues
-   - Affects all demo files
+### 4.1 Enhanced Metrics Display
+- [ ] Real-time metric streaming
+  - [ ] Smooth graph updates (60 FPS)
+  - [ ] Adjustable time windows
+  - [ ] Metric aggregation options
+- [ ] Statistical analysis
+  - [ ] Running averages, std deviation
+  - [ ] Trend detection
+  - [ ] Anomaly highlighting
 
-2. **Namespace and Type Issues**
-   - `sep::engine::PatternData` referenced but doesn't exist in that namespace
-   - `sep::quantum::PatternData` also missing
-   - Should likely be `sep::compat::PatternData` based on memory tier manager
+### 4.2 Cycle Analysis
+- [ ] Periodic pattern detection
+  - [ ] FFT-based cycle analysis
+  - [ ] Dominant frequency identification
+  - [ ] Phase relationship visualization
+- [ ] Metric correlation
+  - [ ] Cross-correlation between metrics
+  - [ ] Lead/lag relationships
+  - [ ] Causality indicators
 
-3. **Include Path Problems**
-   - Headers using `src/` prefix when CMake already includes src directory
-   - Files can't find headers despite correct CMakeLists.txt configuration
-   - Both absolute and relative paths failing
+### 4.3 3D Visualization (Future)
+- [ ] 3D pattern space
+  - [ ] Project patterns into 3D using PCA/t-SNE
+  - [ ] Interactive rotation/zoom
+  - [ ] Pattern clustering visualization
 
-4. **GLM Library Conflicts**
-   - Engine stubs defining `vec3` and `vec4` conflicting with actual GLM
-   - Multiple redefinition errors in genesis_pattern.cpp
-   - OpenGL header conflicts with glad.h
+## Phase 5: Export & Integration 💾
 
-5. **Service Connection Issue** ✅ FIXED
-   - **Problem:** Demos failed to launch due to heartbeat failure after connection
-   - **Root Cause:** Service connector returned nullptr engine when no service running
-   - **Solution:** Enhanced offline mode detection and graceful fallback
-   - **Documentation:** See `docs/WORKBENCH_CONNECTION_FIX.md` for details
-   - **Status:** Workbench now works in offline mode without requiring service
+### 5.1 Data Export
+- [ ] Enhanced JSON export
+  - [ ] Full metric time series
+  - [ ] Pattern relationships
+  - [ ] Processing metadata
+- [ ] CSV export for analysis
+  - [ ] Tabular metric data
+  - [ ] Excel-compatible format
+- [ ] Binary format for large datasets
+  - [ ] Efficient storage of patterns
+  - [ ] Fast reload capability
 
-5. **Forward Declaration Dependencies**
-   - `sep::Engine` only forward declared but code tries to use it
-   - `make_unique<sep::Engine>()` fails due to incomplete type
-   - Pattern and PatternData types not properly exposed
+### 5.2 External Tool Integration
+- [ ] Python bindings
+  - [ ] Export to NumPy arrays
+  - [ ] Jupyter notebook integration
+- [ ] REST API endpoint
+  - [ ] Remote data submission
+  - [ ] Real-time metric streaming
 
-### Build Errors Summary (from build log)
-- cosmo_sim.cpp: `sep::engine::PatternData` namespace error
-- genesis_pattern.cpp: GLM type redefinitions, clamp function errors
-- workbench_core.cpp: OpenGL header conflict, incomplete Engine type
-- digital_physics_demo.cpp: PatternData namespace issues
-- flocking_demo.cpp: Missing `quantum::PatternData`
-- memory_garden.cpp: Missing `glm::pi` function
-- drug_optimizer.cpp: Wrong PatternData namespace
-- neuro_sim.cpp: Missing `sep::Pattern` type
+## Phase 6: Performance & Optimization ⚡
 
-### Root Causes Analysis
+### 6.1 GPU Acceleration
+- [ ] CUDA kernel optimization
+  - [ ] Parallel pattern processing
+  - [ ] GPU memory management
+  - [ ] Multi-GPU support
+- [ ] Performance profiling
+  - [ ] Kernel timing
+  - [ ] Bottleneck identification
 
-1. **Improper Dependency Management**
-   - Workbench trying to use engine internals without proper includes
-   - Missing header files or incorrect paths
-   - Circular dependencies between modules
+### 6.2 Streaming Optimization
+- [ ] Chunked file processing
+  - [ ] Process large files in chunks
+  - [ ] Streaming metrics calculation
+  - [ ] Memory-mapped file support
+- [ ] Parallel processing pipeline
+  - [ ] Multi-threaded ingestion
+  - [ ] Lock-free data structures
 
-2. **Type System Confusion**
-   - Multiple PatternData definitions across namespaces
-   - Pattern vs PatternData inconsistency
-   - Missing type exports from core modules
+## Implementation Priority
 
-3. **Build System Configuration**
-   - Include directories not properly propagated
-   - Missing dependencies in CMakeLists.txt
-   - Incorrect module boundaries
+### Week 1 (Immediate)
+1. Native file dialog integration
+2. Basic memory monitoring
+3. Enhanced metric graphs
+4. Drag-and-drop support
 
-### Immediate Fixes Required
+### Week 2
+1. Batch file processing
+2. Memory tier visualization
+3. Export enhancements
+4. Cycle analysis basics
 
-1. **Fix Include Paths**
-   ```cpp
-   // Change from:
-   #include "src/memory/quantum_coherence_manager.h"
-   // To:
-   #include "memory/quantum_coherence_manager.h"
-   ```
+### Week 3
+1. Performance optimizations
+2. Advanced visualizations
+3. External integrations
+4. Documentation & examples
 
-2. **Resolve Type Namespaces**
-   ```cpp
-   // Find correct namespace for PatternData
-   // Options: sep::compat::PatternData, sep::PatternData
-   // Update all references consistently
-   ```
+## Technical Requirements
 
-3. **Fix GLM Conflicts**
-   ```cpp
-   // Remove engine stubs that conflict with GLM
-   // Or use proper namespacing to avoid conflicts
-   ```
+### Dependencies to Add
+```cmake
+# File dialogs
+find_package(nativefiledialog REQUIRED)
 
-4. **Complete Type Definitions**
-   ```cpp
-   // Include full engine.h instead of forward declarations
-   // Or create proper interface headers
-   ```
+# Memory profiling
+find_package(gperftools)
 
----
+# Advanced plotting
+find_package(implot REQUIRED)
 
-## Phase 3: Service Deployment 🎯 READY (Core Only)
-
-### System Service Configuration
-
-**Installation Ready:**
-```bash
-sudo ./scripts/install_sep_service.sh
+# Data export
+find_package(rapidcsv)
 ```
 
-**Features Configured:**
-- Systemd service unit file
-- Dedicated `sep` user for security
-- Directory structure: `/var/lib/sep/`, `/var/log/sep/`
-- Configuration: `/etc/sep/engine.conf`
-- Prometheus metrics on port 9090
-- WebSocket telemetry on port 8081
+### Key Classes to Implement
+```cpp
+// File handling
+class FileSelector
+class DragDropHandler
+class FileQueue
 
-### API Endpoints (Implemented)
-- `POST /api/v1/process` - Submit data for processing
-- `GET /api/v1/health` - Health check endpoint
-- `GET /api/v1/metrics` - Prometheus metrics
-- `WS /api/v1/stream` - Real-time pattern stream
+// Memory monitoring
+class MemoryMonitor
+class MemoryVisualizer
+class TierDistribution
 
----
+// Visualization
+class CycleAnalyzer
+class PatternVisualizer3D
+class MetricCorrelator
 
-## Phase 4: Metric Modulation 🔬 NEXT PRIORITY
+// Export
+class DataExporter
+class StreamingAPI
+```
 
-### Current Limitations
-From `src/quantum/pattern_metric_engine.cpp`:
-- **Coherence:** Properly calculated via QFH
-- **Stability:** Hardcoded to 0.5f (line 142)
-- **Entropy:** Hardcoded to 0.1f (line 143)
+## Testing Strategy
 
-### Required Implementation
+### Unit Tests
+- [ ] File loading edge cases
+- [ ] Memory tracking accuracy
+- [ ] Metric calculation verification
+- [ ] Export format validation
 
-1. **Stability Calculation**
-   ```cpp
-   // Based on pattern recurrence and evolution
-   float calculateStability(const Pattern& pattern) {
-       // Track pattern occurrences over time
-       // Measure consistency of coherence values
-       // Return normalized stability metric
-   }
-   ```
+### Integration Tests
+- [ ] End-to-end file processing
+- [ ] Memory scaling tests
+- [ ] Performance benchmarks
+- [ ] UI responsiveness
 
-2. **Entropy Calculation**
-   ```cpp
-   // Shannon entropy of pattern distribution
-   float calculateEntropy(const Pattern& pattern) {
-       // Calculate probability distribution
-       // Apply Shannon formula
-       // Normalize to [0,1] range
-   }
-   ```
-
-3. **Modulation Framework**
-   - Configurable parameters for each metric
-   - Real-time adjustment capabilities
-   - Feedback loop for optimization
-
----
-
-## Immediate Action Items (Revised)
-
-### Priority 1: Fix Workbench Build Errors
-1. **Day 1: Type System Resolution**
-   - Identify correct PatternData namespace
-   - Create type mapping header
-   - Update all demo files
-
-2. **Day 2: Include Path Fixes**
-   - Remove `src/` prefixes from includes
-   - Verify CMake include directories
-   - Test incremental builds
-
-3. **Day 3: Dependency Resolution**
-   - Replace forward declarations with proper includes
-   - Fix GLM conflicts
-   - Resolve OpenGL/glad issues
-
-4. **Day 4: Integration Testing**
-   - Test each demo individually
-   - Verify renderer functionality
-   - Check GPU acceleration
-
-### Priority 2: Deploy Core Service
-1. Run installation script (core engine only)
-2. Start SEP service
-3. Test API endpoints
-4. Configure monitoring
-
-### Priority 3: Implement Metrics
-1. Add stability calculation
-2. Add entropy calculation
-3. Create modulation config
-4. Test metric accuracy
-
----
-
-## Technical Debt (Updated)
-
-### Critical (Blocking)
-- [ ] Fix namespace issues for PatternData types
-- [ ] Resolve include path problems
-- [ ] Fix GLM/engine stub conflicts
-- [ ] Complete Engine type definition
-- [ ] Fix OpenGL/glad header conflicts
-
-### High Priority
-- [ ] Implement missing metric calculations
-- [ ] Add comprehensive error handling
-- [ ] Create integration tests
-- [ ] Document type system properly
-
-### Medium Priority
-- [ ] Optimize memory allocations
-- [ ] Add metric caching
-- [ ] Implement rate limiting
-- [ ] Create backup/restore
-
-### Low Priority
-- [ ] Code style consistency
-- [ ] Documentation gaps
-- [ ] Performance profiling
-- [ ] UI polish
-
----
+### User Testing
+- [ ] Usability studies
+- [ ] Performance on various file types
+- [ ] Memory usage patterns
+- [ ] Export workflow validation
 
 ## Success Metrics
 
-1. **Build:** All components compile without errors
-2. **Service:** 99.9% uptime over 7 days
-3. **Performance:** 1GB/minute processing rate
-4. **API:** <100ms response time
-5. **Metrics:** Real stability/entropy calculations
-6. **Dashboard:** Live visualization working
-
----
+1. **Performance**: Process 100MB+ files in <10 seconds
+2. **Memory**: Linear memory scaling with data size
+3. **Accuracy**: Consistent metrics across runs
+4. **Usability**: <5 clicks to analyze a file
+5. **Stability**: 24+ hour continuous operation
 
 ## Notes
 
-- Core SEP engine is solid and production-ready
-- Service infrastructure is well-designed
-- Workbench has significant compilation issues beyond renderer
-- Multiple type system and namespace problems need resolution
-- Focus on fixing build errors before deployment
-- Consider deploying core service without workbench initially
+- Focus on making the tool immediately useful for data exploration
+- Prioritize visual feedback and responsiveness
+- Keep the UI simple but informative
+- Document all metrics and their interpretations
+- Create example datasets for testing

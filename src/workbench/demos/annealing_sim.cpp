@@ -3,6 +3,7 @@
 #include <cmath>
 #include <glm/gtc/random.hpp>
 
+#include "../simple_renderer.h"
 #include "engine/types.h"
 #include "imgui.h"
 #include "memory/quantum_coherence_manager.h"

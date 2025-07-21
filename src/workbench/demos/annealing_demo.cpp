@@ -4,10 +4,12 @@
 #include <cstdlib>
 #include <glm/geometric.hpp>
 
+#include "../simple_renderer.h"
+
 namespace sep {
 namespace workbench {
 
-    void AnnealingDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+    void AnnealingDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
     {
         (void)renderer;
         (void)engine;
@@ -19,9 +21,9 @@ namespace workbench {
         particles_.resize(count);
         for (auto& p : particles_)
         {
-            p.position = glm::vec3(static_cast<float>(std::rand()) / RAND_MAX,
-                                   static_cast<float>(std::rand()) / RAND_MAX,
-                                   static_cast<float>(std::rand()) / RAND_MAX);
+            p.position = glm::vec3(static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX),
+                                   static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX),
+                                   static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX));
             p.velocity = glm::vec3(0.0f);
         }
     }

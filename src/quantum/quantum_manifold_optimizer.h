@@ -30,7 +30,6 @@ namespace sep::cuda {
 #include <execution>
 #include <functional>
 #include <future>
-#include "../engine/glm_cuda_compat.h"
 #include <glm/glm.hpp>
 #include <memory>
 #include <mutex>
@@ -41,6 +40,7 @@ namespace sep::cuda {
 #include <unordered_map>
 #include <vector>
 
+#include "engine/glm_cuda_compat.h"
 #include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"

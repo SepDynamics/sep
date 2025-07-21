@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=ajn
-Group=ajn
+User=sep
+Group=sep
 
 # The executable and arguments
 ExecStart=/usr/local/bin/sep_api_server --config /etc/sep/config.json --daemon

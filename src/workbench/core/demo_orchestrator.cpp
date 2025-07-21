@@ -5,6 +5,7 @@
 #include <chrono>
 #include <iostream>
 
+#include "../simple_renderer.h"
 #include "demos/demo_base.hpp"
 #include "demos/demo_manager.hpp"
 #include "imgui.h"
@@ -62,11 +63,13 @@ bool DemoOrchestrator::loadDemo(const std::string& demo_id, sep::core::Engine* e
         // Store engine references
         engine_ = engine;
         renderer_ = renderer;
-        
+
         // Use DemoManager to create the demo
         auto& manager = DemoManager::getInstance();
-        manager.initialize(engine, renderer);
-        
+        // CyclesRenderer is a type alias for SimpleRenderer, so we can safely cast
+        sep::SimpleRenderer* simple_renderer = static_cast<sep::SimpleRenderer*>(renderer);
+        manager.initialize(engine, simple_renderer);
+
         if (!manager.switchToDemo(demo_id)) {
             throw std::runtime_error("Failed to create demo: " + demo_id);
         }

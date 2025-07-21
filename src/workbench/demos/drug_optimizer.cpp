@@ -1,6 +1,8 @@
 #include "drug_optimizer.hpp"
 
 #include <cstdlib>
+
+#include "../simple_renderer.h"
 // Include glm_config.h before any GLM headers to ensure GLM_ENABLE_EXPERIMENTAL is defined
 #include <glm/gtx/norm.hpp>
 
@@ -13,16 +15,16 @@ using sep::compat::PatternData;
 namespace sep {
 namespace workbench {
 
-    void DrugOptimizerDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+    void DrugOptimizerDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
     {
         (void)engine;
         renderer_ = renderer;
         poses_.resize(5);
         for (auto& p : poses_)
         {
-            p.position = glm::vec3(static_cast<float>(std::rand()) / RAND_MAX,
-                                   static_cast<float>(std::rand()) / RAND_MAX,
-                                   static_cast<float>(std::rand()) / RAND_MAX);
+            p.position = glm::vec3(static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX),
+                                   static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX),
+                                   static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX));
             p.orientation = glm::vec3(0.0f);
             p.binding_affinity = computeBindingScore(p);
         }
@@ -54,11 +56,10 @@ void DrugOptimizerDemo::on_update(float) {
             MoleculePose test_pose = pose;
             // Apply small random perturbation
             test_pose.position += glm::vec3(
-                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 0.1f,
-                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 0.1f,
-                (static_cast<float>(std::rand()) / RAND_MAX - 0.5f) * 0.1f
-            );
-            
+                (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 0.1f,
+                (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 0.1f,
+                (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) - 0.5f) * 0.1f);
+
             // Compute new binding score
             float score = computeBindingScore(test_pose);
             

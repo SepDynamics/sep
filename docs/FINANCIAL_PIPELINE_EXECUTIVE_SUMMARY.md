@@ -3,6 +3,13 @@
 ## Project Overview
 
 The SEP Engine is a working C++ framework that uses quantum-inspired algorithms (QBSA/QFH) to analyze patterns in data. Currently, it can process any data type and calculate coherence, stability, and entropy metrics. The goal is to transform this into a comprehensive financial processing pipeline that can analyze market data and generate trading signals.
+## Preparation Goals
+
+- Reuse the existing pattern metric engine as the core analysis module.
+- Consolidate `run_alpha_experiment.py` and `financial_backtest.py` into a unified prototype pipeline.
+- Start with the OANDA connector before adding additional data feeds.
+- Keep builds containerized via `./build.sh` for consistency.
+
 
 ## Key Findings from Survey
 

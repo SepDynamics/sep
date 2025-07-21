@@ -16,6 +16,13 @@
 - **MTM (Medium-Term)**: Evolving patterns, coherence > 0.5, 5+ generations
 - **LTM (Long-Term)**: Stable patterns, coherence > 0.8, 100+ generations
 
+## Immediate Setup Steps
+
+- Build the engine with `./build.sh`.
+- Run `examples/pattern_metric_example` on the test JSON files in `Testing/OANDA/`.
+- Use `run_alpha_experiment.py` to generate metrics and call `financial_backtest.py`.
+- Review the outputs in `output/` for initial benchmarks.
+
 ## Financial Mapping
 
 ### Market Data → Quantum States

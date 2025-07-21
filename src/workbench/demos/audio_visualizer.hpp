@@ -10,12 +10,19 @@
 #include "demo_manager.hpp"
 #include "imgui.h"
 
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+}
+
 namespace sep {
 namespace workbench {
 
 class AudioVisualizerDemo : public Demo {
 public:
-    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
     void on_update(float dt) override;
     void on_render() override;
     void on_ui_render() override;
@@ -24,10 +31,11 @@ public:
     void on_mouse(int x, int y, int button);
 
 private:
-    sep::Engine* engine_{nullptr};
+    sep::core::Engine* engine_{nullptr};
     sep::CyclesRenderer* renderer_{nullptr};
-    std::unique_ptr<audio::AudioCapture> capture_;
-    std::unique_ptr<audio::AudioPipeline> pipeline_;
+    // Audio features disabled
+    // std::unique_ptr<audio::AudioCapture> capture_;
+    // std::unique_ptr<audio::AudioPipeline> pipeline_;
     std::vector<glm::vec3> latest_patterns_;
     std::vector<glm::vec3> latest_visual_patterns_;
 

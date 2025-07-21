@@ -1,11 +1,15 @@
 #pragma once
 
-#include <memory>
 #include <atomic>
-#include <string>
 #include <chrono>
 #include <functional>
-#include <GLFW/glfw3.h>
+#include <memory>
+#include <string>
+
+// Forward declaration for GLFW
+struct GLFWwindow;
+
+#include "../cycles_renderer.h"
 
 namespace sep::workbench {
 
@@ -15,12 +19,16 @@ class DemoOrchestrator;
 class LandingPage;
 class Renderer;
 
+}  // namespace sep::workbench
+
 // External classes from sep namespace (not in sep::workbench)
-}
 namespace sep {
-    class Engine;
-    class SimpleRenderer;
-}
+    namespace core
+    {
+        class Engine;
+    }
+}  // namespace sep
+
 namespace sep::workbench {
 
 enum class ApplicationState {
@@ -42,10 +50,11 @@ struct ApplicationMetrics {
     std::string last_error;
 };
 
-class WorkbenchCore {
+class WorkbenchEngine
+{
 public:
-    WorkbenchCore();
-    ~WorkbenchCore();
+    WorkbenchEngine();
+    ~WorkbenchEngine();
 
     // Lifecycle management
     bool initialize();
@@ -83,12 +92,12 @@ public:
     static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 private:
-    // Core state
+    // Engine state
     std::atomic<ApplicationState> current_state_{ApplicationState::INITIALIZING};
     std::atomic<bool> should_exit_{false};
     ApplicationMetrics metrics_;
 
-    // Core components
+    // Engine components
     GLFWwindow* window_{nullptr};
     std::unique_ptr<ServiceConnector> service_connector_;
     std::unique_ptr<DemoOrchestrator> demo_orchestrator_;
@@ -96,9 +105,10 @@ private:
     std::unique_ptr<Renderer> renderer_;
     
     // Engine components (may be null if service not connected)
-    std::unique_ptr<sep::Engine> offline_engine_;
-    sep::Engine* active_engine_{nullptr};
+    std::unique_ptr<sep::core::Engine> offline_engine_;
+    sep::core::Engine* active_engine_{nullptr};
     std::unique_ptr<sep::SimpleRenderer> simple_renderer_;
+    std::unique_ptr<sep::CyclesRenderer> cycles_renderer_;
 
     // Window configuration
     struct WindowConfig {
@@ -137,7 +147,7 @@ private:
     void handleErrorRecovery();
     
     // Singleton instance for static callbacks
-    static WorkbenchCore* instance_;
+    static WorkbenchEngine* instance_;
 };
 
 } // namespace sep::workbench

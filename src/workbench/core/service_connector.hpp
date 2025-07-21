@@ -8,7 +8,9 @@
 #include <thread>
 
 namespace sep {
+namespace core {
 class Engine;
+}
 }
 
 namespace sep::workbench {
@@ -33,8 +35,8 @@ struct ServiceHealth {
 
 // Connection configuration
 struct ConnectionConfig {
-    std::string service_address{"localhost"};
-    uint16_t service_port{9876};
+    std::string service_address{"127.0.0.1"};
+    uint16_t service_port{3000};  // Changed to match API server default port
     std::chrono::milliseconds connection_timeout{5000};
     std::chrono::milliseconds heartbeat_interval{1000};
     uint32_t max_retry_attempts{3};
@@ -57,7 +59,7 @@ public:
     bool isConnected() const { return connection_state_ == ConnectionState::CONNECTED; }
     
     // Service interaction
-    sep::Engine* getEngine() const { return service_engine_; }
+    sep::core::Engine* getEngine() const { return service_engine_; }
     ServiceHealth getServiceHealth() const;
     
     // Health monitoring
@@ -80,7 +82,7 @@ private:
     ServiceHealth health_metrics_;
     
     // Service connection
-    sep::Engine* service_engine_{nullptr};
+    sep::core::Engine* service_engine_{nullptr};
     void* service_handle_{nullptr}; // Platform-specific handle
     
     // Health monitoring

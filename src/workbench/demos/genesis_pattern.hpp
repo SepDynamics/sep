@@ -3,8 +3,16 @@
 #include <memory>
 
 #include "demo_base.hpp"
-#include "../stubs/imgui.h"
-#include "../stubs/engine_stubs.h"
+#include "stubs/engine_stubs.h"
+#include "stubs/imgui.h"
+
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+class SimpleRenderer;
+}
 
 namespace sep
 {
@@ -14,7 +22,7 @@ namespace sep
         class GenesisPatternDemo : public Demo
         {
         public:
-            void on_load(sep::Engine* engine, sep::SimpleRenderer* renderer) override;
+            void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
             void on_update(float dt) override;
             void on_render() override;
             void on_ui_render() override;
@@ -42,11 +50,11 @@ namespace sep
                 std::size_t iterations{0};
             } metrics_;
 
-            std::unique_ptr<sep::quantum::QuantumProcessor> pattern_processor_;
+            std::unique_ptr<sep::quantum::Processor> pattern_processor_;
             std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_manager_;
             sep::SimpleRenderer* renderer_{nullptr};
 
-            sep::Engine* engine_{nullptr};
+            sep::core::Engine* engine_{nullptr};
         };
 
     }  // namespace workbench

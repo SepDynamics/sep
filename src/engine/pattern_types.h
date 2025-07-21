@@ -65,6 +65,12 @@ struct PatternData {
     // Position for pattern evolution
     glm::vec4 position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
     
+    // Velocity for movement simulations
+    glm::vec4 velocity = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    
+    // Coherence value for pattern stability
+    float coherence = 0.0f;
+    
     // Fixed-size array for relationships
     PatternRelationship relationships[MAX_RELATIONSHIPS];
     int relationship_count = 0;

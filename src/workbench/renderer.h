@@ -9,13 +9,13 @@
 #include <vector>
 
 // Include canonical Pattern definition
-#include "engine/types.h"
+#include "quantum/types.h"
 
 namespace sep
 {
     namespace workbench
     {
-        using Pattern = ::sep::Pattern;
+        using Pattern = ::sep::quantum::Pattern;
 
         class Renderer
         {
@@ -36,6 +36,7 @@ namespace sep
 
             // Render patterns (implementation for main.cpp)
             void render(const std::vector<Pattern>& patterns);
+            void renderPatternState(const std::vector<glm::vec3>& positions, const glm::vec3& color);
 
             // Mouse interaction handling
             bool isPointInStartButton(double x, double y) const;

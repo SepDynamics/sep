@@ -11,6 +11,13 @@
 #include "imgui.h"
 #include "memory/memory_tier_manager.hpp"
 
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+}
+
 namespace sep
 {
     namespace workbench
@@ -21,7 +28,7 @@ namespace sep
         public:
             NeuroSimDemo() : rd_{}, seed_{rd_()}, rng_{seed_} {}
 
-            void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+            void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
             void on_ui_render() override;
             void on_update(float dt) override;
             void on_render() override;
@@ -32,7 +39,7 @@ namespace sep
         private:
             struct Neuron
             {
-                sep::Pattern pattern;
+                sep::quantum::Pattern pattern;
                 float potential{0.f};
                 uint64_t node_id{0};
             };

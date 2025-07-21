@@ -5,11 +5,14 @@
 
 #include "engine/types.h"
 #include "imgui.h"
+#include "memory/quantum_coherence_manager.h"
+#include "quantum/quantum_processor.h"
+#include "quantum/types.h"
 
 namespace sep {
 namespace workbench {
 
-    void AnnealingSimDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void AnnealingSimDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
     {
         (void)renderer;
         (void)engine;
@@ -24,8 +27,9 @@ namespace workbench {
             p.velocity = glm::vec3(0.f);
             p.color = glm::vec3(1.f);
         }
-        processor_ = std::make_unique<sep::pattern::PatternProcessor>();
-        coherence_mgr_ = std::make_unique<sep::memory::QuantumCoherenceManager>(
+        // Initialize quantum components
+        processor_ = sep::quantum::createQuantumProcessor(sep::quantum::QuantumProcessor::Config{});
+        coherence_mgr_ = sep::memory::createQuantumCoherenceManager(
             sep::memory::QuantumCoherenceManager::Config{});
     }
 
@@ -48,17 +52,11 @@ void AnnealingSimDemo::on_update(float dt) {
     for (auto& p : particles_) {
         p.position += p.velocity * dt;
     }
+    // Process quantum patterns for real coherence calculation
+    std::vector<sep::quantum::Pattern> quantum_patterns;
     for (const auto& p : particles_) {
-        sep::pattern::PatternData pattern;
-        pattern.data = {p.position.x, p.position.y, p.position.z};
-        processor_->addPattern(pattern);
-    }
-    processor_->evolvePatterns();
-    const auto& patterns = processor_->getPatterns();
-    std::vector<sep::Pattern> quantum_patterns;
-    for (const auto& p : patterns) {
-        sep::Pattern qp;
-        qp.data = p.data;
+        sep::quantum::Pattern qp;
+        qp.position = glm::vec4(p.position, 1.0f);
         quantum_patterns.push_back(qp);
     }
     auto result = coherence_mgr_->updateCoherence(quantum_patterns);

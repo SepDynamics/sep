@@ -1,33 +1,33 @@
 #include "genesis_pattern.hpp"
 
 #include <iostream>
+#include <vector>
+
+#include <glm/glm.hpp>
 
 #include "simple_renderer.h"
+#include "quantum/processor.h"
+#include "memory/quantum_coherence_manager.h"
 
 namespace sep {
-namespace quantum {
-
-    using Pattern = ::sep::Pattern;
-
-    }  // namespace quantum
-
 namespace workbench {
 
-void GenesisPatternDemo::on_load(sep::Engine* engine, sep::SimpleRenderer* renderer) {
-    engine_ = engine;
-    renderer_ = renderer;
+    void GenesisPatternDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
+    {
+        engine_ = engine;
+        renderer_ = renderer;
 
-    pattern_processor_ = sep::quantum::createProcessor();
-    sep::memory::QuantumCoherenceManager::Config cm_cfg{};
-    coherence_manager_ = sep::memory::createQuantumCoherenceManager(cm_cfg);
+        pattern_processor_ = sep::quantum::createProcessor();
+        sep::memory::QuantumCoherenceManager::Config cm_cfg{};
+        coherence_manager_ = sep::memory::createQuantumCoherenceManager(cm_cfg);
 
-    initializePatterns();
-}
+        initializePatterns();
+    }
 
 void GenesisPatternDemo::initializePatterns()
 {
     // Initialize base quantum pattern
-    sep::Pattern pattern;
+    sep::quantum::Pattern pattern;
     pattern.id = "seed";
     pattern.position = glm::vec4(0.0f);
     pattern.quantum_state.energy = 1.0f;
@@ -50,7 +50,7 @@ void GenesisPatternDemo::evolvePatterns(float)
 
     try {
         // Evolve all patterns in the processor
-        auto batch = pattern_processor_->processAll();
+        auto batch_result = pattern_processor_->processAll();
 
         // Retrieve updated patterns and compute coherence metrics
         auto patterns = pattern_processor_->getPatterns();

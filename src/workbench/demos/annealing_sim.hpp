@@ -6,15 +6,26 @@
 
 #include "demo_base.hpp"
 #include "demo_manager.hpp"
+#include "engine/types.h"
+#include "imgui.h"
 #include "memory/quantum_coherence_manager.h"
-#include "quantum/processor.h"
+#include "quantum/quantum_processor.h"
+#include "workbench/renderer.h"
+
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+class SimpleRenderer;
+}
 
 namespace sep {
 namespace workbench {
 
 class AnnealingSimDemo : public Demo {
 public:
-    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
     void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
@@ -23,14 +34,14 @@ public:
     void on_mouse(int x, int y, int button);
 
 private:
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::SimpleRenderer* renderer_{nullptr};
     struct Particle {
         glm::vec3 position{0.0f};
         glm::vec3 velocity{0.0f};
         glm::vec3 color{1.0f};
     };
 
-    std::unique_ptr<sep::pattern::PatternProcessor> processor_;
+    std::unique_ptr<sep::quantum::QuantumProcessor> processor_;
     std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_mgr_;
     std::vector<Particle> particles_;
     std::vector<float> temperature_schedule_;

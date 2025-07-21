@@ -5,15 +5,22 @@
 
 #include "demo_base.hpp"
 #include "demo_manager.hpp"
-#include "engine/types.h"
+#include "engine/pattern_types.h"
 #include "imgui.h"
+
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+}
 
 namespace sep {
 namespace workbench {
 
 class CosmoSim : public Demo {
 public:
-    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
     void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
@@ -22,7 +29,7 @@ public:
     void on_mouse(int x, int y, int button = 0);
 
 private:
-    std::vector<sep::pattern::PatternData> bodies_;
+    std::vector<sep::compat::PatternData> bodies_;
     float box_size_{50.0f};
     float time_step_{0.01f};
     float G_{1.0f};

@@ -6,7 +6,7 @@
 namespace sep {
 namespace workbench {
 
-    void CosmoDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void CosmoDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
     {
         (void)engine;
         (void)renderer;

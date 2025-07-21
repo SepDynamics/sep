@@ -46,4 +46,11 @@ add_subdirectory(examples)
 add_executable(sep_workbench src/workbench/core/workbench_main.cpp)
 target_link_libraries(sep_workbench PRIVATE sep_workbench_lib)
 
+if(SEP_USE_CUDA)
+    set_target_properties(sep_workbench PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+        CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    )
+endif()
+
 

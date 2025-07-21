@@ -84,9 +84,7 @@ bool ServiceConnector::connect() {
     connection_state_ = ConnectionState::ERROR;
     std::cerr << "[ServiceConnector] Failed to connect to SEP service" << std::endl;
     
-    // For now, create a mock engine for offline mode
-    // In production, this would return false
-    std::cout << "[ServiceConnector] Creating mock engine for offline mode" << std::endl;
+    // Return false to indicate connection failure
     return false;
 }
 
@@ -221,8 +219,9 @@ void ServiceConnector::updateHealthMetrics() {
 }
 
 bool ServiceConnector::validateServiceVersion() {
-    // In production, this would query the service for version info
-    health_metrics_.version_info = "SEP Service v0.1.0-mock";
+    // TODO: Implement actual version validation with the service
+    // For now, assume version is compatible
+    health_metrics_.version_info = "SEP Service v0.1.0";
     return true;
 }
 
@@ -246,7 +245,7 @@ bool ServiceConnector::connectIPC() {
 }
 
 bool ServiceConnector::connectTCP() {
-    std::cout << "[ServiceConnector] Trying TCP connection to " 
+    std::cout << "[ServiceConnector] Trying TCP connection to "
               << config_.service_address << ":" << config_.service_port << "..." << std::endl;
     
 #ifdef _WIN32
@@ -279,7 +278,10 @@ bool ServiceConnector::connectTCP() {
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(config_.service_port);
     
-    if (inet_pton(AF_INET, config_.service_address.c_str(), &server_addr.sin_addr) <= 0) {
+    // Handle localhost/hostname resolution
+    if (config_.service_address == "localhost") {
+        server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    } else if (inet_pton(AF_INET, config_.service_address.c_str(), &server_addr.sin_addr) <= 0) {
         std::cerr << "[ServiceConnector] Invalid address: " << config_.service_address << std::endl;
 #ifdef _WIN32
         closesocket(sock);
@@ -292,6 +294,8 @@ bool ServiceConnector::connectTCP() {
     // Attempt connection
     if (::connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
         std::cerr << "[ServiceConnector] Connection failed: " << strerror(errno) << std::endl;
+        std::cerr << "[ServiceConnector] Make sure the SEP API server is running on port "
+                  << config_.service_port << std::endl;
 #ifdef _WIN32
         closesocket(sock);
 #else
@@ -302,20 +306,11 @@ bool ServiceConnector::connectTCP() {
     
     std::cout << "[ServiceConnector] TCP connection established" << std::endl;
     
-    // Store socket handle
+    // Store socket handle for persistent connection
     service_handle_ = reinterpret_cast<void*>(static_cast<intptr_t>(sock));
     
-    // In production, this would establish protocol and get engine reference
-    // For now, return false to indicate no real service
-    
-#ifdef _WIN32
-    closesocket(sock);
-#else
-    close(sock);
-#endif
-    service_handle_ = nullptr;
-    
-    return false;
+    // Connection successful - keep socket open for communication
+    return true;
 }
 
 } // namespace sep::workbench

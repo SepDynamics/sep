@@ -5,15 +5,22 @@
 
 #include "demo_base.hpp"
 #include "demo_manager.hpp"
-#include "engine/types.h"
+#include "engine/pattern_types.h"
 #include "imgui.h"
+
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+}
 
 namespace sep {
 namespace workbench {
 
 class DigitalPhysicsDemo : public Demo {
 public:
-    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
     void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
@@ -24,7 +31,7 @@ public:
 private:
     std::size_t width_{0};
     std::size_t height_{0};
-    std::vector<sep::pattern::PatternData> grid_;
+    std::vector<sep::compat::PatternData> grid_;
     std::vector<int> birth_rules_;
     std::vector<int> survival_rules_;
     float threshold_{1.0f};

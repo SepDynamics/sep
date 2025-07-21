@@ -1,6 +1,6 @@
 # SEP Workbench Redesign Architecture
 
-## Core Issues Identified
+## Engine Issues Identified
 
 1. **Service Connectivity**: No proper handling for missing SEP engine service
 2. **Lifecycle Management**: Improper initialization order causing segfaults
@@ -12,7 +12,7 @@
 
 ### 1. Service Connection Layer
 ```
-WorkbenchCore
+WorkbenchEngine
 ├── ServiceConnector (handles SEP service connection)
 ├── OfflineEngine (fallback for when service unavailable)
 ├── RenderingPipeline (manages GL/Cycles rendering)
@@ -49,7 +49,7 @@ DemoLifecycle:
 
 ## Implementation Strategy
 
-1. **Phase 1**: Core infrastructure with proper error handling
+1. **Phase 1**: Engine infrastructure with proper error handling
 2. **Phase 2**: Service connection layer with offline fallback
 3. **Phase 3**: Landing page UI with ImGui
 4. **Phase 4**: Demo integration with proper lifecycle

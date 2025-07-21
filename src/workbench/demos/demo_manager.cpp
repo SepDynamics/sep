@@ -11,10 +11,11 @@ namespace workbench {
         return instance;
     }
 
-void DemoManager::initialize(sep::Engine* engine, sep::CyclesRenderer* renderer) {
-    engine_ = engine;
-    renderer_ = renderer;
-}
+    void DemoManager::initialize(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+    {
+        engine_ = engine;
+        renderer_ = renderer;
+    }
 
 void DemoManager::registerDemo(const std::string& name, std::function<std::unique_ptr<Demo>()> factory) {
     demo_factories_[name] = std::move(factory);

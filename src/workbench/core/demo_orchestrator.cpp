@@ -1,9 +1,12 @@
 #include "demo_orchestrator.hpp"
-#include "../demos/demo_base.hpp"
-#include "../demos/demo_manager.hpp"
-#include <iostream>
-#include <chrono>
+
 #include <GLFW/glfw3.h>
+
+#include <chrono>
+#include <iostream>
+
+#include "demos/demo_base.hpp"
+#include "demos/demo_manager.hpp"
 #include "imgui.h"
 
 namespace sep::workbench {
@@ -41,7 +44,9 @@ void DemoOrchestrator::registerDemoFactories() {
     // For now, this acts as a bridge to the existing DemoManager system
 }
 
-bool DemoOrchestrator::loadDemo(const std::string& demo_id, sep::Engine* engine, sep::CyclesRenderer* renderer) {
+bool DemoOrchestrator::loadDemo(const std::string& demo_id, sep::core::Engine* engine,
+                                sep::CyclesRenderer* renderer)
+{
     std::lock_guard<std::mutex> lock(state_mutex_);
     
     std::cout << "[DemoOrchestrator] Loading demo: " << demo_id << std::endl;
@@ -120,7 +125,7 @@ bool DemoOrchestrator::reloadCurrentDemo() {
     }
     
     std::string demo_id = current_demo_id_;
-    sep::Engine* engine = engine_;
+    sep::core::Engine* engine = engine_;
     sep::CyclesRenderer* renderer = renderer_;
     
     unloadCurrentDemo();

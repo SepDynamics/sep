@@ -8,12 +8,19 @@
 #include "engine/types.h"
 #include "imgui.h"
 
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+}
+
 namespace sep {
 namespace workbench {
 
 class FlockingDemo : public Demo {
 public:
-    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
     void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;
@@ -22,7 +29,7 @@ public:
     void on_mouse(int x, int y, int button);
 
 private:
-    std::vector<pattern::PatternData> agents_;
+    std::vector<sep::compat::PatternData> agents_;
     float max_speed_{2.0f};
     float neighbor_radius_{5.0f};
     sep::CyclesRenderer* renderer_{nullptr};

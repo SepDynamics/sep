@@ -1,4 +1,5 @@
 #include "simple_renderer.h"
+#include <algorithm>
 #include <iostream>
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -120,9 +121,9 @@ uint32_t SimpleRenderer::createShaderProgram() {
 glm::vec3 SimpleRenderer::getColorForMode(const std::string& mode, int index, float value) {
     if (mode == "rainbow") {
         float hue = fmod(index * 0.618f, 1.0f); // Golden ratio for nice distribution
-        float r = abs(6.0f * hue - 3.0f) - 1.0f;
-        float g = 2.0f - abs(6.0f * hue - 2.0f);
-        float b = 2.0f - abs(6.0f * hue - 4.0f);
+        float r = std::abs(6.0f * hue - 3.0f) - 1.0f;
+        float g = 2.0f - std::abs(6.0f * hue - 2.0f);
+        float b = 2.0f - std::abs(6.0f * hue - 4.0f);
         return glm::clamp(glm::vec3(r, g, b), 0.0f, 1.0f);
     } else if (mode == "temperature") {
         float t = glm::clamp(value, 0.0f, 1.0f);

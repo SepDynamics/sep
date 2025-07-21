@@ -10,7 +10,7 @@
 namespace sep::workbench {
 
 // Forward declarations
-class WorkbenchCore;
+class WorkbenchEngine;
 
 // Demo information structure
 struct DemoInfo {
@@ -36,7 +36,7 @@ struct LandingPageConfig {
 
 class LandingPage {
 public:
-    explicit LandingPage(WorkbenchCore* core);
+    explicit LandingPage(WorkbenchEngine* core);
     ~LandingPage();
 
     // Main render function
@@ -51,9 +51,9 @@ public:
     const LandingPageConfig& getConfig() const { return config_; }
 
 private:
-    // Core reference
-    WorkbenchCore* core_{nullptr};
-    
+    // Engine reference
+    WorkbenchEngine* core_{nullptr};
+
     // Configuration
     LandingPageConfig config_;
     

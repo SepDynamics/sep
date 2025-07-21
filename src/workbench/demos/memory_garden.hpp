@@ -9,12 +9,19 @@
 #include "memory/memory_tier_manager.hpp"
 #include "memory/quantum_coherence_manager.h"
 
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+}
+
 namespace sep {
 namespace workbench {
 
 class MemoryGardenDemo : public Demo {
 public:
-    void on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) override;
+    void on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer) override;
     void on_ui_render() override;
     void on_update(float dt) override;
     void on_render() override;

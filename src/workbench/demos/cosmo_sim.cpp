@@ -12,7 +12,7 @@ namespace sep
     namespace workbench
     {
 
-        void CosmoSim::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+        void CosmoSim::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
         {
             (void)engine;
             (void)renderer;
@@ -30,13 +30,14 @@ namespace sep
             bodies_.reserve(count);
             for (std::size_t i = 0; i < count; ++i)
             {
-                sep::pattern::PatternData d{};
+                sep::compat::PatternData d{};
                 d.position =
                     glm::vec4(static_cast<float>(std::rand()) / RAND_MAX * box_size_,
                               static_cast<float>(std::rand()) / RAND_MAX * box_size_,
                               static_cast<float>(std::rand()) / RAND_MAX * box_size_, 1.0f);
-                d.velocity = glm::vec4(0.0f);
-                d.attributes.x = 1.0f;  // mass
+                // d.velocity = glm::vec4(0.0f);  // velocity field doesn't exist in
+                // engine::PatternData
+                d.attributes[0] = 1.0f;  // mass
                 bodies_.push_back(d);
             }
         }
@@ -53,8 +54,8 @@ namespace sep
                         glm::vec3(bodies_[j].position) - glm::vec3(bodies_[i].position);
                     float dist2 = glm::dot(diff, diff) + eps;
                     float invDist3 = 1.0f / (glm::sqrt(dist2) * dist2);
-                    float m1 = bodies_[i].attributes.x;
-                    float m2 = bodies_[j].attributes.x;
+                    float m1 = bodies_[i].attributes[0];
+                    float m2 = bodies_[j].attributes[0];
                     glm::vec3 force = G_ * m1 * m2 * invDist3 * diff;
                     acc[i] += force / m1;
                     acc[j] -= force / m2;
@@ -74,7 +75,7 @@ namespace sep
             const float eps = 1e-5f;
             for (std::size_t i = 0; i < bodies_.size(); ++i)
             {
-                float m = bodies_[i].attributes.x;
+                float m = bodies_[i].attributes[0];
                 glm::vec3 vel = glm::vec3(bodies_[i].velocity);
                 float kinetic = 0.5f * m * glm::length2(vel);
                 float potential = 0.0f;
@@ -84,7 +85,7 @@ namespace sep
                     glm::vec3 diff =
                         glm::vec3(bodies_[j].position) - glm::vec3(bodies_[i].position);
                     float dist = glm::length(diff) + eps;
-                    float mj = bodies_[j].attributes.x;
+                    float mj = bodies_[j].attributes[0];
                     potential -= G_ * m * mj / dist;
                 }
                 float total = kinetic + std::abs(potential);

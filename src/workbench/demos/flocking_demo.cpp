@@ -10,7 +10,7 @@ namespace sep
     namespace workbench
     {
 
-        void FlockingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+        void FlockingDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
         {
             (void)engine;
             renderer_ = renderer;

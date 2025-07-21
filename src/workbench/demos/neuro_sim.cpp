@@ -10,14 +10,14 @@
 
 using sep::memory::MemoryTierEnum;
 using sep::memory::MemoryTierManager;
-using sep::Pattern;
+using sep::quantum::Pattern;
 
 namespace sep
 {
     namespace workbench
     {
 
-        void NeuroSimDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+        void NeuroSimDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
         {
             (void)engine;
             renderer_ = renderer;
@@ -39,7 +39,12 @@ namespace sep
                 n.pattern.quantum_state.stability = 0.5f;
                 n.pattern.quantum_state.memory_tier = sep::memory::MemoryTierEnum::STM;
                 n.pattern.position = glm::vec4(static_cast<float>(i), 0.f, 0.f, 1.f);
-                memory_manager_->registerPattern(i, n.pattern);
+                // Convert quantum::Pattern to compat::PatternData
+                sep::compat::PatternData pattern_data(n.pattern.id);
+                pattern_data.position = n.pattern.position;
+                pattern_data.velocity = n.pattern.velocity;
+                pattern_data.coherence = n.pattern.coherence;
+                memory_manager_->registerPattern(i, pattern_data);
                 n.node_id = dag.addNode(glm::vec3(n.pattern.position),
                                         n.pattern.quantum_state.coherence, {});
             }
@@ -86,7 +91,12 @@ namespace sep
                                                            n.pattern.quantum_state.generation);
                 n.pattern.quantum_state.memory_tier = static_cast<sep::memory::MemoryTierEnum>(tier->getType());
                 dag.updateCoherence(n.node_id, n.pattern.quantum_state.coherence);
-                memory_manager_->registerPattern(std::stoull(n.pattern.id), n.pattern);
+                // Convert quantum::Pattern to compat::PatternData
+                sep::compat::PatternData update_pattern_data(n.pattern.id);
+                update_pattern_data.position = n.pattern.position;
+                update_pattern_data.velocity = n.pattern.velocity;
+                update_pattern_data.coherence = n.pattern.coherence;
+                memory_manager_->registerPattern(std::stoull(n.pattern.id), update_pattern_data);
             }
         }
 

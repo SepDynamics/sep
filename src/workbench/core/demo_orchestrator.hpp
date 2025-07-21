@@ -1,16 +1,21 @@
 #pragma once
 
+#include <chrono>
+#include <functional>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <unordered_map>
-#include <functional>
-#include <chrono>
-#include <mutex>
+
+#include "cycles_renderer.h"
+#include "demos/demo_base.hpp"
 
 // Forward declarations
 namespace sep {
-class Engine;
-class CyclesRenderer;
+    namespace core
+    {
+        class Engine;
+    }
 }
 
 namespace sep::workbench {
@@ -56,7 +61,8 @@ public:
     ~DemoOrchestrator();
 
     // Demo lifecycle management
-    bool loadDemo(const std::string& demo_id, sep::Engine* engine, sep::CyclesRenderer* renderer);
+    bool loadDemo(const std::string& demo_id, sep::core::Engine* engine,
+                  sep::CyclesRenderer* renderer);
     void unloadCurrentDemo();
     bool reloadCurrentDemo();
     
@@ -103,7 +109,7 @@ private:
     DemoState current_state_{DemoState::UNLOADED};
     
     // Engine references
-    sep::Engine* engine_{nullptr};
+    sep::core::Engine* engine_{nullptr};
     sep::CyclesRenderer* renderer_{nullptr};
     
     // Metrics

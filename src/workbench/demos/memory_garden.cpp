@@ -9,7 +9,7 @@
 namespace sep {
 namespace workbench {
 
-    void MemoryGardenDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void MemoryGardenDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
     {
         (void)engine;
         renderer_ = renderer;
@@ -58,7 +58,7 @@ glm::vec3 MemoryGardenDemo::calculateNodePosition(float coherence) {
     }
     
     // Calculate position on circular layout
-    float angle = static_cast<float>(nodes_.size()) * glm::pi<float>() * 0.5f;
+    float angle = static_cast<float>(nodes_.size()) * 3.14159f * 0.5f;
     return glm::vec3(
         radius * std::cos(angle),
         0.0f,

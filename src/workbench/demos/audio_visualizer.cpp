@@ -11,7 +11,8 @@ namespace workbench {
 
 using namespace sep::audio;
 
-void AudioVisualizerDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer) {
+void AudioVisualizerDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
+{
     engine_ = engine;
     renderer_ = renderer;
     const auto& cfg = Config::getInstance().audio_visualizer();
@@ -92,7 +93,7 @@ void AudioVisualizerDemo::on_update(float dt) {
     if (renderer_) {
         renderer_->setColorMode("frequency");  // Color based on frequency
         renderer_->setEmissionMode("amplitude");  // Emission based on amplitude
-        renderer_->setRoughnessMode(1);  // Surface detail based on evolution (using mode 1)
+        // renderer_->setRoughnessMode(1);  // Method not available in SimpleRenderer
     }
 
     latest_visual_patterns_ = std::move(visual_patterns);

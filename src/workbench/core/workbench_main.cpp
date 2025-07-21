@@ -4,7 +4,7 @@
 #include <csignal>
 
 // Global workbench instance for signal handling
-static sep::workbench::WorkbenchCore* g_workbench = nullptr;
+static sep::workbench::WorkbenchEngine* g_workbench = nullptr;
 
 // Signal handler for graceful shutdown
 void signalHandler(int signal) {
@@ -26,7 +26,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
     
     try {
         // Create workbench core
-        auto workbench = std::make_unique<sep::workbench::WorkbenchCore>();
+        auto workbench = std::make_unique<sep::workbench::WorkbenchEngine>();
         g_workbench = workbench.get();
         
         // Initialize

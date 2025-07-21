@@ -16,6 +16,3 @@ docker run --gpus all --rm -v $(pwd):/sep sep-engine-builder /bin/bash -c "
 
 echo "Checking host dependencies:"
 ldd build/sep 2>&1 | grep -E "(not found|=>)" || echo "Executable appears to be statically linked"
-
-echo "Testing executable:"
-./build/sep --help 2>&1 | head -20

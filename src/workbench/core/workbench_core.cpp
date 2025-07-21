@@ -1,42 +1,50 @@
 #include "workbench_core.hpp"
 
-#include "demo_orchestrator.hpp"
-#include "engine/cycles_renderer.h"
+// Include engine first to get proper includes
+#include "engine/config.h"
 #include "engine/engine.h"
-#include "glad/glad.h"
+
+// Include workbench components
+#include "cycles_renderer.h"
+#include "demo_orchestrator.hpp"
 #include "landing_page.hpp"
+#include "renderer.h"
 #include "service_connector.hpp"
 
-// Include non-OpenGL headers
+// Include ImGui headers
 #include <imgui.h>
 
 #include "imgui_internal.h"
 
 // Use correct paths for ImGui implementation files
-#include "../../third_party/imgui/backends/imgui_impl_glfw.h"
-#include "../../third_party/imgui/backends/imgui_impl_opengl3.h"
+#include <chrono>
 #include <iostream>
 #include <thread>
-#include <chrono>
+
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 
 namespace sep::workbench {
 
 // Static instance for GLFW callbacks
-WorkbenchCore* WorkbenchCore::instance_ = nullptr;
+WorkbenchEngine* WorkbenchEngine::instance_ = nullptr;
 
-WorkbenchCore::WorkbenchCore() {
+WorkbenchEngine::WorkbenchEngine()
+{
     instance_ = this;
     metrics_.startup_time = std::chrono::steady_clock::now();
 }
 
-WorkbenchCore::~WorkbenchCore() {
+WorkbenchEngine::~WorkbenchEngine()
+{
     shutdown();
     instance_ = nullptr;
 }
 
-bool WorkbenchCore::initialize() {
-    std::cout << "[WorkbenchCore] Starting initialization sequence..." << std::endl;
-    
+bool WorkbenchEngine::initialize()
+{
+    std::cout << "[WorkbenchEngine] Starting initialization sequence..." << std::endl;
+
     try {
         // Initialize GLFW
         if (!initializeGLFW()) {
@@ -63,8 +71,8 @@ bool WorkbenchCore::initialize() {
         }
         
         // Initialize core components
-        std::cout << "[WorkbenchCore] Initializing core components..." << std::endl;
-        
+        std::cout << "[WorkbenchEngine] Initializing core components..." << std::endl;
+
         service_connector_ = std::make_unique<ServiceConnector>();
         demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         landing_page_ = std::make_unique<LandingPage>(this);
@@ -76,9 +84,11 @@ bool WorkbenchCore::initialize() {
         renderer_->init(width, height);
         
         // Create offline engine as fallback
-        std::cout << "[WorkbenchCore] Creating offline engine..." << std::endl;
-        offline_engine_ = std::make_unique<sep::Engine>();
-        offline_engine_->initialize();
+        std::cout << "[WorkbenchEngine] Creating offline engine..." << std::endl;
+        offline_engine_ = std::make_unique<sep::core::Engine>();
+        // Initialize with default config
+        sep::config::CudaConfig config;
+        offline_engine_->init(config);
         active_engine_ = offline_engine_.get();
         
         // Create Cycles renderer
@@ -86,8 +96,8 @@ bool WorkbenchCore::initialize() {
         
         // Transition to service check
         transitionTo(ApplicationState::SERVICE_CHECK);
-        
-        std::cout << "[WorkbenchCore] Initialization complete!" << std::endl;
+
+        std::cout << "[WorkbenchEngine] Initialization complete!" << std::endl;
         return true;
         
     } catch (const std::exception& e) {
@@ -96,19 +106,21 @@ bool WorkbenchCore::initialize() {
     }
 }
 
-bool WorkbenchCore::initializeGLFW() {
+bool WorkbenchEngine::initializeGLFW()
+{
     glfwSetErrorCallback(errorCallback);
     
     if (!glfwInit()) {
-        std::cerr << "[WorkbenchCore] Failed to initialize GLFW" << std::endl;
+        std::cerr << "[WorkbenchEngine] Failed to initialize GLFW" << std::endl;
         return false;
     }
-    
-    std::cout << "[WorkbenchCore] GLFW initialized successfully" << std::endl;
+
+    std::cout << "[WorkbenchEngine] GLFW initialized successfully" << std::endl;
     return true;
 }
 
-bool WorkbenchCore::createWindow() {
+bool WorkbenchEngine::createWindow()
+{
     // Configure GLFW
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -128,7 +140,7 @@ bool WorkbenchCore::createWindow() {
     );
     
     if (!window_) {
-        std::cerr << "[WorkbenchCore] Failed to create GLFW window" << std::endl;
+        std::cerr << "[WorkbenchEngine] Failed to create GLFW window" << std::endl;
         return false;
     }
     
@@ -140,18 +152,19 @@ bool WorkbenchCore::createWindow() {
     glfwSetMouseButtonCallback(window_, mouseButtonCallback);
     glfwSetCursorPosCallback(window_, cursorPosCallback);
     glfwSetFramebufferSizeCallback(window_, framebufferSizeCallback);
-    
-    std::cout << "[WorkbenchCore] Window created successfully" << std::endl;
+
+    std::cout << "[WorkbenchEngine] Window created successfully" << std::endl;
     return true;
 }
 
-bool WorkbenchCore::initializeOpenGL() {
+bool WorkbenchEngine::initializeOpenGL()
+{
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "[WorkbenchCore] Failed to initialize GLAD" << std::endl;
+        std::cerr << "[WorkbenchEngine] Failed to initialize GLAD" << std::endl;
         return false;
     }
-    
-    std::cout << "[WorkbenchCore] OpenGL Info:" << std::endl;
+
+    std::cout << "[WorkbenchEngine] OpenGL Info:" << std::endl;
     std::cout << "  Version: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "  Vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cout << "  Renderer: " << glGetString(GL_RENDERER) << std::endl;
@@ -164,7 +177,8 @@ bool WorkbenchCore::initializeOpenGL() {
     return true;
 }
 
-bool WorkbenchCore::initializeImGui() {
+bool WorkbenchEngine::initializeImGui()
+{
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -176,20 +190,22 @@ bool WorkbenchCore::initializeImGui() {
     // Setup platform/renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window_, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-    
-    std::cout << "[WorkbenchCore] ImGui initialized successfully" << std::endl;
+
+    std::cout << "[WorkbenchEngine] ImGui initialized successfully" << std::endl;
     return true;
 }
 
-void WorkbenchCore::cleanupImGui() {
+void WorkbenchEngine::cleanupImGui()
+{
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void WorkbenchCore::run() {
-    std::cout << "[WorkbenchCore] Starting main loop..." << std::endl;
-    
+void WorkbenchEngine::run()
+{
+    std::cout << "[WorkbenchEngine] Starting main loop..." << std::endl;
+
     auto last_frame_time = std::chrono::steady_clock::now();
     
     while (!glfwWindowShouldClose(window_) && !should_exit_) {
@@ -217,7 +233,8 @@ void WorkbenchCore::run() {
     }
 }
 
-void WorkbenchCore::processInput() {
+void WorkbenchEngine::processInput()
+{
     // ESC to exit
     if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         if (current_state_ == ApplicationState::DEMO_RUNNING) {
@@ -233,7 +250,8 @@ void WorkbenchCore::processInput() {
     }
 }
 
-void WorkbenchCore::updateFrame(float delta_time) {
+void WorkbenchEngine::updateFrame(float delta_time)
+{
     // Handle state-specific updates
     handleStateTransition();
     
@@ -243,7 +261,8 @@ void WorkbenchCore::updateFrame(float delta_time) {
     }
 }
 
-void WorkbenchCore::renderFrame() {
+void WorkbenchEngine::renderFrame()
+{
     // Clear
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -286,7 +305,8 @@ void WorkbenchCore::renderFrame() {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void WorkbenchCore::renderLoadingScreen() {
+void WorkbenchEngine::renderLoadingScreen()
+{
     ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, 
                                    ImGui::GetIO().DisplaySize.y * 0.5f), 
                            ImGuiCond_Always, ImVec2(0.5f, 0.5f));
@@ -298,12 +318,14 @@ void WorkbenchCore::renderLoadingScreen() {
     
     // Spinner
     float time = ImGui::GetTime();
-    ImGui::Spinner("##spinner", 16, 3, ImGui::GetColorU32(ImGuiCol_ButtonActive));
-    
+    // Replace spinner with simple loading text
+    ImGui::Text("Loading...");
+
     ImGui::End();
 }
 
-void WorkbenchCore::renderErrorRecovery() {
+void WorkbenchEngine::renderErrorRecovery()
+{
     ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, 
                                    ImGui::GetIO().DisplaySize.y * 0.5f), 
                            ImGuiCond_Always, ImVec2(0.5f, 0.5f));
@@ -327,7 +349,8 @@ void WorkbenchCore::renderErrorRecovery() {
     ImGui::End();
 }
 
-void WorkbenchCore::renderStatusBar() {
+void WorkbenchEngine::renderStatusBar()
+{
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | 
                                    ImGuiWindowFlags_NoSavedSettings | 
                                    ImGuiWindowFlags_MenuBar;
@@ -368,7 +391,8 @@ void WorkbenchCore::renderStatusBar() {
     }
 }
 
-void WorkbenchCore::handleStateTransition() {
+void WorkbenchEngine::handleStateTransition()
+{
     switch (current_state_.load()) {
         case ApplicationState::INITIALIZING:
             handleInitializing();
@@ -393,13 +417,15 @@ void WorkbenchCore::handleStateTransition() {
     }
 }
 
-void WorkbenchCore::handleInitializing() {
+void WorkbenchEngine::handleInitializing()
+{
     // Initialization is handled in initialize()
 }
 
-void WorkbenchCore::handleServiceCheck() {
-    std::cout << "[WorkbenchCore] Checking for SEP service..." << std::endl;
-    
+void WorkbenchEngine::handleServiceCheck()
+{
+    std::cout << "[WorkbenchEngine] Checking for SEP service..." << std::endl;
+
     // Attempt to connect to service
     attemptServiceConnection();
     
@@ -407,48 +433,56 @@ void WorkbenchCore::handleServiceCheck() {
     transitionTo(ApplicationState::LANDING_PAGE);
 }
 
-void WorkbenchCore::handleLandingPage() {
+void WorkbenchEngine::handleLandingPage()
+{
     // Landing page handles its own logic
 }
 
-void WorkbenchCore::handleDemoSelection() {
+void WorkbenchEngine::handleDemoSelection()
+{
     // Demo selection is handled by landing page
 }
 
-void WorkbenchCore::handleDemoRunning() {
+void WorkbenchEngine::handleDemoRunning()
+{
     // Demo running is handled by demo orchestrator
 }
 
-void WorkbenchCore::handleErrorRecovery() {
+void WorkbenchEngine::handleErrorRecovery()
+{
     // Error recovery UI is rendered in renderErrorRecovery()
 }
 
-void WorkbenchCore::attemptServiceConnection() {
+void WorkbenchEngine::attemptServiceConnection()
+{
     if (service_connector_) {
         metrics_.service_connected = service_connector_->connect();
         
         if (metrics_.service_connected) {
-            std::cout << "[WorkbenchCore] Successfully connected to SEP service" << std::endl;
+            std::cout << "[WorkbenchEngine] Successfully connected to SEP service" << std::endl;
             // Switch to service engine
             active_engine_ = service_connector_->getEngine();
         } else {
-            std::cout << "[WorkbenchCore] Failed to connect to SEP service, using offline mode" << std::endl;
+            std::cout << "[WorkbenchEngine] Failed to connect to SEP service, using offline mode"
+                      << std::endl;
             active_engine_ = offline_engine_.get();
         }
     }
 }
 
-void WorkbenchCore::transitionTo(ApplicationState new_state) {
+void WorkbenchEngine::transitionTo(ApplicationState new_state)
+{
     ApplicationState old_state = current_state_.load();
-    std::cout << "[WorkbenchCore] State transition: " << static_cast<int>(old_state) 
-              << " -> " << static_cast<int>(new_state) << std::endl;
-    
+    std::cout << "[WorkbenchEngine] State transition: " << static_cast<int>(old_state) << " -> "
+              << static_cast<int>(new_state) << std::endl;
+
     current_state_ = new_state;
 }
 
-void WorkbenchCore::selectDemo(const std::string& demo_name) {
-    std::cout << "[WorkbenchCore] Selecting demo: " << demo_name << std::endl;
-    
+void WorkbenchEngine::selectDemo(const std::string& demo_name)
+{
+    std::cout << "[WorkbenchEngine] Selecting demo: " << demo_name << std::endl;
+
     if (demo_orchestrator_) {
         bool success = demo_orchestrator_->loadDemo(demo_name, active_engine_, cycles_renderer_.get());
         
@@ -462,9 +496,10 @@ void WorkbenchCore::selectDemo(const std::string& demo_name) {
     }
 }
 
-void WorkbenchCore::stopCurrentDemo() {
-    std::cout << "[WorkbenchCore] Stopping current demo" << std::endl;
-    
+void WorkbenchEngine::stopCurrentDemo()
+{
+    std::cout << "[WorkbenchEngine] Stopping current demo" << std::endl;
+
     if (demo_orchestrator_) {
         demo_orchestrator_->unloadCurrentDemo();
     }
@@ -473,7 +508,8 @@ void WorkbenchCore::stopCurrentDemo() {
     transitionTo(ApplicationState::LANDING_PAGE);
 }
 
-void WorkbenchCore::updateMetrics(float delta_time) {
+void WorkbenchEngine::updateMetrics(float delta_time)
+{
     metrics_.frame_count++;
     
     // Update FPS (simple moving average)
@@ -481,14 +517,16 @@ void WorkbenchCore::updateMetrics(float delta_time) {
     metrics_.average_fps = metrics_.average_fps * 0.95f + fps * 0.05f;
 }
 
-void WorkbenchCore::reportError(const std::string& error) {
-    std::cerr << "[WorkbenchCore] ERROR: " << error << std::endl;
+void WorkbenchEngine::reportError(const std::string& error)
+{
+    std::cerr << "[WorkbenchEngine] ERROR: " << error << std::endl;
     metrics_.last_error = error;
 }
 
-void WorkbenchCore::shutdown() {
-    std::cout << "[WorkbenchCore] Shutting down..." << std::endl;
-    
+void WorkbenchEngine::shutdown()
+{
+    std::cout << "[WorkbenchEngine] Shutting down..." << std::endl;
+
     current_state_ = ApplicationState::SHUTTING_DOWN;
     
     // Clean up components
@@ -507,23 +545,26 @@ void WorkbenchCore::shutdown() {
     
     // Terminate GLFW
     glfwTerminate();
-    
-    std::cout << "[WorkbenchCore] Shutdown complete" << std::endl;
+
+    std::cout << "[WorkbenchEngine] Shutdown complete" << std::endl;
 }
 
 // Static callbacks
-void WorkbenchCore::errorCallback(int error, const char* description) {
+void WorkbenchEngine::errorCallback(int error, const char* description)
+{
     std::cerr << "[GLFW Error " << error << "]: " << description << std::endl;
 }
 
-void WorkbenchCore::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void WorkbenchEngine::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
     if (instance_ && instance_->demo_orchestrator_ && 
         instance_->current_state_ == ApplicationState::DEMO_RUNNING) {
         instance_->demo_orchestrator_->handleKeyPress(key, scancode, action, mods);
     }
 }
 
-void WorkbenchCore::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+void WorkbenchEngine::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
     if (instance_ && instance_->demo_orchestrator_ && 
         instance_->current_state_ == ApplicationState::DEMO_RUNNING) {
         double xpos, ypos;
@@ -532,28 +573,29 @@ void WorkbenchCore::mouseButtonCallback(GLFWwindow* window, int button, int acti
     }
 }
 
-void WorkbenchCore::cursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
+void WorkbenchEngine::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+{
     if (instance_ && instance_->demo_orchestrator_ && 
         instance_->current_state_ == ApplicationState::DEMO_RUNNING) {
         instance_->demo_orchestrator_->handleMouseMove(xpos, ypos);
     }
 }
 
-void WorkbenchCore::framebufferSizeCallback(GLFWwindow* window, int width, int height) {
+void WorkbenchEngine::framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
     glViewport(0, 0, width, height);
     if (instance_) {
         instance_->handleWindowResize(width, height);
     }
 }
 
-void WorkbenchCore::handleWindowResize(int width, int height) {
+void WorkbenchEngine::handleWindowResize(int width, int height)
+{
     if (renderer_) {
         renderer_->init(width, height);
     }
 }
 
-bool WorkbenchCore::isServiceConnected() const {
-    return metrics_.service_connected;
-}
+bool WorkbenchEngine::isServiceConnected() const { return metrics_.service_connected; }
 
 } // namespace sep::workbench

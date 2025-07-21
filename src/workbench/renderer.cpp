@@ -171,4 +171,143 @@ bool sep::workbench::Renderer::isPointInStartButton(double x, double y) const
                      220.0);  // FIXED: Complete expression, no ellipsis
 }
 
-// ... [rest of file unchanged]
+sep::workbench::Renderer::~Renderer()
+{
+    cleanup();
+}
+
+void sep::workbench::Renderer::cleanup()
+{
+    if (vao != 0)
+    {
+        glDeleteVertexArrays(1, &vao);
+        vao = 0;
+    }
+    if (vbo != 0)
+    {
+        glDeleteBuffers(1, &vbo);
+        vbo = 0;
+    }
+    if (shaderProgram != 0)
+    {
+        glDeleteProgram(shaderProgram);
+        shaderProgram = 0;
+    }
+}
+
+void sep::workbench::Renderer::handleMouseClick(double x, double y)
+{
+    if (isPointInStartButton(x, y))
+    {
+        startButtonClicked = true;
+    }
+}
+
+bool sep::workbench::Renderer::wasStartButtonClicked()
+{
+    return startButtonClicked;
+}
+
+void sep::workbench::Renderer::resetStartButtonClicked()
+{
+    startButtonClicked = false;
+}
+
+void sep::workbench::Renderer::render(std::vector<Pattern>& patterns)
+{
+    render(static_cast<const std::vector<Pattern>&>(patterns));
+}
+
+void sep::workbench::Renderer::render(const std::vector<Pattern>& patterns)
+{
+    if (!useOpenGL) return;
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    
+    // Render each pattern as a colored point
+    for (size_t i = 0; i < patterns.size(); ++i)
+    {
+        const auto& pattern = patterns[i];
+        glm::vec4 color(1.0f, 0.5f, 0.2f, 1.0f); // Default orange color
+        
+        // Use pattern coherence for color variation if available
+        if (pattern.coherence > 0.0f)
+        {
+            color.r = pattern.coherence;
+            color.g = 1.0f - pattern.coherence;
+        }
+        
+        glUniform4f(colorLoc, color.r, color.g, color.b, color.a);
+        glDrawArrays(GL_POINTS, 0, 1);
+    }
+    
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+float sep::workbench::Renderer::calculateAvgCoherence(const std::vector<Pattern>& patterns)
+{
+    if (patterns.empty()) return 0.0f;
+    
+    float total = 0.0f;
+    for (const auto& pattern : patterns)
+    {
+        total += pattern.coherence;
+    }
+    return total / static_cast<float>(patterns.size());
+}
+
+void sep::workbench::Renderer::renderPatternState(const std::vector<glm::vec3>& positions, const glm::vec3& color)
+{
+    if (!useOpenGL) return;
+    
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    glUniform4f(colorLoc, color.r, color.g, color.b, 1.0f);
+    
+    for (const auto& pos : positions)
+    {
+        // Simple point rendering at position
+        glDrawArrays(GL_POINTS, 0, 1);
+    }
+    
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+void sep::workbench::Renderer::renderSphere(int latitudes, int longitudes, const glm::vec3& pos, float scale, const glm::vec4& color)
+{
+    if (!useOpenGL) return;
+    
+    // Simple sphere rendering implementation
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    glUniform4f(colorLoc, color.r, color.g, color.b, color.a);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+void sep::workbench::Renderer::renderCube(const glm::vec3& pos, float scale, const glm::vec4& color)
+{
+    if (!useOpenGL) return;
+    
+    // Simple cube rendering implementation
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    glUniform4f(colorLoc, color.r, color.g, color.b, color.a);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+void sep::workbench::Renderer::drawVertices(const std::vector<float>& vertices, GLenum mode)
+{
+    if (!useOpenGL) return;
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
+    glDrawArrays(mode, 0, vertices.size() / 3);
+}

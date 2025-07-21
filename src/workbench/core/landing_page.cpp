@@ -16,7 +16,8 @@ inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) {
     return ImVec2(a.x - b.x, a.y - b.y);
 }
 
-LandingPage::LandingPage(WorkbenchCore* core) : core_(core) {
+LandingPage::LandingPage(WorkbenchEngine* core) : core_(core)
+{
     initializeDemoData();
     last_update_ = std::chrono::steady_clock::now();
 }
@@ -249,6 +250,7 @@ void LandingPage::renderDemoGrid() {
     
     if (filtered_demos.empty()) {
         ImGui::SetCursorPos(ImVec2(window_width * 0.5f - 100, 100));
+        ImGui::Dummy(ImVec2(200, 20)); // Reserve space before positioning text
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "No demos match your search");
     } else {
         int column = 0;
@@ -318,6 +320,7 @@ void LandingPage::renderDemoCard(const DemoInfo& demo) {
     
     // Requirements
     ImGui::SetCursorPosY(cursor_pos.y + card_size.y - 50);
+    ImGui::Dummy(ImVec2(config_.thumbnail_size - 20, 20)); // Reserve space for requirements
     
     if (demo.requires_service) {
         ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.2f, 1.0f), "Requires Service");
@@ -333,6 +336,9 @@ void LandingPage::renderDemoCard(const DemoInfo& demo) {
     if (ImGui::InvisibleButton("##card", card_size)) {
         selected_demo_id_ = demo.id;
     }
+    
+    // Ensure proper boundary calculation
+    ImGui::Dummy(card_size);
     
     // Hover tooltip
     if (is_hovered && ImGui::BeginTooltip()) {

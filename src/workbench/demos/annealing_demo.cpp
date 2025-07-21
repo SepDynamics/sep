@@ -7,7 +7,7 @@
 namespace sep {
 namespace workbench {
 
-    void AnnealingDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+    void AnnealingDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
     {
         (void)renderer;
         (void)engine;

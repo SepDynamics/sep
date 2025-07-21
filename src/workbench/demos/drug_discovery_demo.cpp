@@ -9,7 +9,7 @@ namespace sep
     namespace workbench
     {
 
-        void DrugDiscoveryDemo::on_load(sep::Engine* engine, sep::CyclesRenderer* renderer)
+        void DrugDiscoveryDemo::on_load(sep::core::Engine* engine, sep::CyclesRenderer* renderer)
         {
             (void)engine;
             renderer_ = renderer;

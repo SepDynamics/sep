@@ -210,6 +210,22 @@ bool WorkbenchEngine::initializeImGui()
     
     // Setup style
     ImGui::StyleColorsDark();
+    auto applyModernTheme = [](){
+        ImGuiStyle& style = ImGui::GetStyle();
+        style.WindowRounding = 5.0f;
+        style.FrameRounding = 5.0f;
+        style.ScrollbarRounding = 5.0f;
+
+        ImVec4* colors = style.Colors;
+        colors[ImGuiCol_WindowBg] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+        colors[ImGuiCol_Header] = ImVec4(0.2f, 0.205f, 0.21f, 1.0f);
+        colors[ImGuiCol_HeaderHovered] = ImVec4(0.3f, 0.305f, 0.31f, 1.0f);
+        colors[ImGuiCol_HeaderActive] = ImVec4(0.25f, 0.255f, 0.26f, 1.0f);
+        colors[ImGuiCol_Button] = ImVec4(0.2f, 0.205f, 0.21f, 1.0f);
+        colors[ImGuiCol_ButtonHovered] = ImVec4(0.3f, 0.305f, 0.31f, 1.0f);
+        colors[ImGuiCol_ButtonActive] = ImVec4(0.15f, 0.1505f, 0.151f, 1.0f);
+    };
+    applyModernTheme();
     
     // Setup platform/renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window_, true);

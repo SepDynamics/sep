@@ -2,6 +2,7 @@
 
 #include "metrics_monitor.h"
 #include "memory_monitor.hpp"
+#include "file_dialog.hpp"
 #include <memory>
 #include <vector>
 #include <string>
@@ -47,6 +48,7 @@ private:
 
     std::unique_ptr<MetricsMonitor> monitor_;
     std::unique_ptr<MemoryMonitor> memory_monitor_;
+    FileDialog file_dialog_;
     
     // UI State
     bool show_dashboard_{true};

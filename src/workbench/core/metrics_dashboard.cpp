@@ -1,9 +1,10 @@
 #include "metrics_dashboard.h"
 #include <imgui.h>
+#include <filesystem>
 // #include <implot.h> // TODO: Add implot to third_party
 #include <iostream>
 #include <algorithm>
-#include <filesystem>
+#include "file_dialog.hpp"
 
 namespace sep::workbench {
 
@@ -129,6 +130,12 @@ void MetricsDashboard::render() {
         }
     }
     ImGui::End();
+
+    std::string selected;
+    if (file_dialog_.render(selected)) {
+        strncpy(file_path_buffer_, selected.c_str(), sizeof(file_path_buffer_) - 1);
+        file_path_buffer_[sizeof(file_path_buffer_) - 1] = '\0';
+    }
 }
 
 void MetricsDashboard::renderControlPanel() {
@@ -330,7 +337,7 @@ void MetricsDashboard::renderDataSourceSelector() {
             ImGui::InputText("File Path", file_path_buffer_, sizeof(file_path_buffer_));
             ImGui::SameLine();
             if (ImGui::Button("Browse")) {
-                // Could open file dialog
+                file_dialog_.open(std::filesystem::path(file_path_buffer_).empty() ? "." : std::filesystem::path(file_path_buffer_).parent_path().string());
             }
             if (ImGui::Button("Load File", ImVec2(-1, 0))) {
                 handleDataLoad();

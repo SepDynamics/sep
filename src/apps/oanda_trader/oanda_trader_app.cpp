@@ -1,10 +1,12 @@
 #include "oanda_trader_app.hpp"
+#include "connectors/market_data_converter.h"
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
 #include <cstdlib>
 #include <GL/gl.h>
+#include <nlohmann/json.hpp>
 
 namespace sep::apps {
 
@@ -17,10 +19,16 @@ bool OandaTraderApp::initialize() {
     setupImGui();
     
     // Initialize OANDA connector
-    // oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>();
+    const char* api_key = std::getenv("OANDA_API_KEY");
+    const char* account_id = std::getenv("OANDA_ACCOUNT_ID");
+    if (!api_key || !account_id) {
+        last_error_ = "OANDA_API_KEY and OANDA_ACCOUNT_ID environment variables must be set.";
+        return false;
+    }
+    oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id);
     
     // Initialize SEP engine
-    // sep_engine_ = std::make_unique<sep::core::SepEngine>();
+    sep_engine_ = std::make_unique<sep::core::Engine>();
     
     // Attempt to connect to OANDA
     connectToOanda();
@@ -61,7 +69,6 @@ void OandaTraderApp::setupImGui() {
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Not available in this ImGui version
     
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -96,9 +103,6 @@ void OandaTraderApp::run() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        
-        // Enable docking (not available in this ImGui version)
-        // ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
         
         // Render main interface
         renderMainInterface();
@@ -141,17 +145,29 @@ void OandaTraderApp::renderMainInterface() {
         ImGui::EndMainMenuBar();
     }
     
-    // Show demo window if requested (not available in this ImGui version)
-    // if (show_demo_window_) {
-    //     ImGui::ShowDemoWindow(&show_demo_window_);
-    // }
-    
-    // Main content panels
+    // Set default window positions and sizes
+    ImGui::SetNextWindowPos(ImVec2(0, 18));
+    ImGui::SetNextWindowSize(ImVec2(300, 200));
     renderConnectionStatus();
+
+    ImGui::SetNextWindowPos(ImVec2(0, 218));
+    ImGui::SetNextWindowSize(ImVec2(300, 150));
     renderAccountInfo();
-    renderMarketData();
+
+    ImGui::SetNextWindowPos(ImVec2(0, 368));
+    ImGui::SetNextWindowSize(ImVec2(300, 200));
     renderTradePanel();
+
+    ImGui::SetNextWindowPos(ImVec2(300, 18));
+    ImGui::SetNextWindowSize(ImVec2(1100, 450));
+    renderMarketData();
+
+    ImGui::SetNextWindowPos(ImVec2(300, 468));
+    ImGui::SetNextWindowSize(ImVec2(1100, 200));
     renderPositions();
+
+    ImGui::SetNextWindowPos(ImVec2(300, 668));
+    ImGui::SetNextWindowSize(ImVec2(1100, 232));
     renderOrderHistory();
 }
 
@@ -199,17 +215,13 @@ void OandaTraderApp::renderAccountInfo() {
 void OandaTraderApp::renderMarketData() {
     ImGui::Begin("Market Data");
     
-    ImGui::Text("Real-time market data will appear here");
+    ImGui::Text("Real-time market data:");
     ImGui::Separator();
     
-    // Placeholder for currency pairs
-    const char* pairs[] = { "EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD" };
-    for (const char* pair : pairs) {
-        ImGui::Text("%s: Loading...", pair);
-    }
-    
-    if (ImGui::Button("Update Market Data##market")) {
-        updateMarketData();
+    std::lock_guard<std::mutex> lock(market_data_mutex_);
+    for (const auto& [instrument, data] : market_data_map_) {
+        ImGui::Text("%s - Bid: %.5f, Ask: %.5f, Time: %llu",
+                    instrument.c_str(), data.bid, data.ask, (unsigned long long)data.timestamp);
     }
     
     ImGui::End();
@@ -217,50 +229,160 @@ void OandaTraderApp::renderMarketData() {
 
 void OandaTraderApp::renderTradePanel() {
     ImGui::Begin("Trade Panel");
-    
+
     static char instrument[64] = "EUR_USD";
-    static float units = 1000.0f;
+    static float risk_per_trade = 2.0f; // 2% risk
     static bool is_buy = true;
-    
+    static float manual_atr = 0.0010; // Manual ATR for now
+
     ImGui::InputText("Instrument", instrument, sizeof(instrument));
-    ImGui::InputFloat("Units", &units);
+    ImGui::InputFloat("Risk %", &risk_per_trade);
+    ImGui::InputFloat("Manual ATR", &manual_atr); // Later get this from connector
     ImGui::Checkbox("Buy", &is_buy);
     ImGui::SameLine();
     if (!is_buy) ImGui::Text("(Sell)");
-    
+
     ImGui::Separator();
-    
+
     if (ImGui::Button("Place Order##trade", ImVec2(120, 30))) {
-        // TODO: Implement order placement
-        std::cout << "[Trade] Order placement not yet implemented" << std::endl;
+        if (oanda_connected_) {
+            // --- Logic from oanda_connector.js ---
+            double balance = 0.0;
+            try {
+                balance = std::stod(account_balance_);
+            } catch (...) {
+                std::cerr << "Invalid account balance" << std::endl;
+                return;
+            }
+
+            const double risk_amount = balance * (risk_per_trade / 100.0);
+            const double stop_loss_pips = manual_atr * 10000;
+            const double pip_value = 0.0001; // For EUR_USD
+            const double position_units_double = std::floor(risk_amount / (stop_loss_pips * pip_value));
+            const int position_units = static_cast<int>(position_units_double);
+
+
+            float order_units = is_buy ? position_units : -position_units;
+
+            double current_price = 0.0;
+            {
+                std::lock_guard<std::mutex> lock(market_data_mutex_);
+                if (market_data_map_.count(instrument)) {
+                    current_price = market_data_map_[instrument].mid;
+                }
+            }
+
+            if (current_price > 0) {
+                double stop_loss_price = is_buy
+                                       ? (current_price - (stop_loss_pips * pip_value))
+                                       : (current_price + (stop_loss_pips * pip_value));
+
+                nlohmann::json order_details;
+                order_details["order"]["instrument"] = instrument;
+                order_details["order"]["units"] = std::to_string(order_units);
+                order_details["order"]["type"] = "MARKET";
+                order_details["order"]["timeInForce"] = "FOK";
+                order_details["order"]["positionFill"] = "DEFAULT";
+                order_details["order"]["stopLossOnFill"]["price"] = std::to_string(stop_loss_price);
+                order_details["order"]["stopLossOnFill"]["timeInForce"] = "GTC";
+
+
+                // This assumes placeOrder is updated to take a json object
+                auto result = oanda_connector_->placeOrder(order_details);
+
+                if (result.find("error") != result.end()) {
+                    std::cout << "[Trade] Failed to place order: " << result["error"] << std::endl;
+                } else {
+                    std::cout << "[Trade] Order placed successfully: " << instrument << " " << order_units << std::endl;
+                }
+            } else {
+                 std::cout << "[Trade] Could not get current price for " << instrument << std::endl;
+            }
+
+        } else {
+            std::cout << "[Trade] Not connected to OANDA" << std::endl;
+        }
     }
-    
+
     ImGui::End();
 }
 
 void OandaTraderApp::renderPositions() {
     ImGui::Begin("Open Positions");
     
-    ImGui::Text("No open positions");
-    // TODO: Display actual positions from OANDA
+    if (ImGui::Button("Refresh Positions")) {
+        refreshPositions();
+    }
+    
+    ImGui::Separator();
+    
+    std::lock_guard<std::mutex> lock(positions_mutex_);
+    for (const auto& position : open_positions_) {
+        std::string instrument = position["instrument"];
+        std::string long_units = position["long"]["units"];
+        std::string short_units = position["short"]["units"];
+        std::string pnl = position["unrealizedPL"];
+        
+        if (long_units != "0") {
+            ImGui::Text("%s | Units: %s | P/L: %s", instrument.c_str(), long_units.c_str(), pnl.c_str());
+        }
+        if (short_units != "0") {
+            ImGui::Text("%s | Units: %s | P/L: %s", instrument.c_str(), short_units.c_str(), pnl.c_str());
+        }
+    }
     
     ImGui::End();
+}
+
+void OandaTraderApp::refreshPositions() {
+    if (!oanda_connected_) return;
+    
+    auto positions_json = oanda_connector_->getOpenPositions();
+    if (positions_json.contains("positions")) {
+        std::lock_guard<std::mutex> lock(positions_mutex_);
+        open_positions_ = positions_json["positions"].get<std::vector<nlohmann::json>>();
+    }
+}
+
+void OandaTraderApp::refreshOrderHistory() {
+    if (!oanda_connected_) return;
+    
+    auto orders_json = oanda_connector_->getOrders();
+    if (orders_json.contains("orders")) {
+        std::lock_guard<std::mutex> lock(history_mutex_);
+        order_history_ = orders_json["orders"].get<std::vector<nlohmann::json>>();
+    }
 }
 
 void OandaTraderApp::renderOrderHistory() {
     ImGui::Begin("Order History");
     
-    ImGui::Text("Order history will appear here");
-    // TODO: Display order history from OANDA
+    if (ImGui::Button("Refresh History")) {
+        refreshOrderHistory();
+    }
+    
+    ImGui::Separator();
+    
+    std::lock_guard<std::mutex> lock(history_mutex_);
+    for (const auto& order : order_history_) {
+        std::string id = order["id"];
+        std::string instrument = order["instrument"];
+        std::string units = order["units"];
+        std::string type = order["type"];
+        std::string state = order["state"];
+        
+        ImGui::Text("ID: %s | %s | Units: %s | Type: %s | Status: %s",
+                    id.c_str(), instrument.c_str(), units.c_str(), type.c_str(), state.c_str());
+    }
     
     ImGui::End();
 }
 
 void OandaTraderApp::connectToOanda() {
-    // if (!oanda_connector_) {
-    //     std::cerr << "[OANDA] Connector not initialized" << std::endl;
-    //     return;
-    // }
+    if (!oanda_connector_) {
+        std::cerr << "[OANDA] Connector not initialized" << std::endl;
+        return;
+    }
     
     // Check for environment variables
     const char* api_key = std::getenv("OANDA_API_KEY");
@@ -274,59 +396,78 @@ void OandaTraderApp::connectToOanda() {
     
     std::cout << "[OANDA] Attempting to connect..." << std::endl;
     
-    // Test connection by fetching account info
-    // try {
-    //     auto account_info = oanda_connector_->getAccountInfo();
-    //     if (!account_info.empty()) {
-    //         oanda_connected_ = true;
-    //         std::cout << "[OANDA] Successfully connected!" << std::endl;
-    //         refreshAccountInfo();
-    //     } else {
-    //         oanda_connected_ = false;
-    //         std::cerr << "[OANDA] Failed to get account info" << std::endl;
-    //     }
-    // } catch (const std::exception& e) {
-    //     oanda_connected_ = false;
-    //     std::cerr << "[OANDA] Connection failed: " << e.what() << std::endl;
-    // }
+    // Initialize the connector
+    if (!oanda_connector_->initialize()) {
+        std::cerr << "[OANDA] Failed to initialize connector: " << oanda_connector_->getLastError() << std::endl;
+        oanda_connected_ = false;
+        return;
+    }
     
-    // Placeholder - mark as connected for UI testing
     oanda_connected_ = true;
-    std::cout << "[OANDA] Mock connection successful" << std::endl;
-}
-
-void OandaTraderApp::updateMarketData() {
-    if (!oanda_connected_) {
-        std::cout << "[Market] Not connected to OANDA" << std::endl;
-        return;
-    }
+    std::cout << "[OANDA] Successfully connected!" << std::endl;
+    refreshAccountInfo();
     
-    std::cout << "[Market] Updating market data..." << std::endl;
-    // TODO: Implement market data updates
-}
+    // Set the price callback
+    oanda_connector_->setPriceCallback([this](const sep::connectors::MarketData& data) {
+        std::lock_guard<std::mutex> lock(market_data_mutex_);
+        market_data_map_[data.instrument] = data;
+        
+        // Log real market data
+        std::cout << "[Market Data] " << data.instrument
+                  << " - Bid: " << data.bid
+                  << ", Ask: " << data.ask
+                  << ", Mid: " << data.mid
+                  << ", Time: " << data.timestamp << std::endl;
+    });
 
+    // Start the price stream in a new thread with error handling
+    try {
+        data_stream_thread_ = std::thread([this]() {
+            std::cout << "[OANDA] Starting price stream for EUR_USD..." << std::endl;
+            if (!oanda_connector_->startPriceStream({"EUR_USD"})) {
+                std::cerr << "[OANDA] Failed to start price stream: "
+                          << oanda_connector_->getLastError() << std::endl;
+            }
+        });
+        data_stream_thread_.detach();
+    } catch (const std::exception& e) {
+        std::cerr << "[OANDA] Exception starting price stream: " << e.what() << std::endl;
+    }
+}
 void OandaTraderApp::refreshAccountInfo() {
-    if (!oanda_connected_) {
+    if (!oanda_connected_ || !oanda_connector_) {
         account_balance_ = "N/A";
+        account_currency_ = "N/A";
         return;
     }
     
-    // try {
-    //     auto account_info = oanda_connector_->getAccountInfo();
-    //     // TODO: Parse account info JSON and extract balance
-    //     account_balance_ = "Loading...";
-    //     std::cout << "[Account] Account info refreshed" << std::endl;
-    // } catch (const std::exception& e) {
-    //     std::cerr << "[Account] Failed to refresh: " << e.what() << std::endl;
-    //     account_balance_ = "Error";
-    // }
-    
-    // Mock account info for UI testing
-    account_balance_ = "10000.00";
-    std::cout << "[Account] Mock account info refreshed" << std::endl;
+    try {
+        auto account_json = oanda_connector_->getAccountInfo();
+        if (account_json.contains("account")) {
+            account_balance_ = account_json["account"]["balance"];
+            account_currency_ = account_json["account"]["currency"];
+            
+            std::cout << "[Account] Balance: " << account_balance_
+                      << " " << account_currency_ << std::endl;
+        } else if (account_json.contains("error")) {
+            std::cerr << "[Account] Error: " << account_json["error"] << std::endl;
+            account_balance_ = "Error";
+            account_currency_ = "N/A";
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "[Account] Exception: " << e.what() << std::endl;
+        account_balance_ = "Error";
+        account_currency_ = "N/A";
+    }
 }
 
 void OandaTraderApp::shutdown() {
+    if (oanda_connector_) {
+        oanda_connector_->stopPriceStream();
+    }
+    if (data_stream_thread_.joinable()) {
+        data_stream_thread_.join();
+    }
     cleanupGraphics();
 }
 

@@ -7,9 +7,7 @@ add_subdirectory(glad)
 add_subdirectory(engine)
 # add_subdirectory(embeddings)
 add_subdirectory(memory)
-add_subdirectory(gpu)
 add_subdirectory(quantum)
-add_subdirectory(workbench)
 add_subdirectory(connectors)
 
 

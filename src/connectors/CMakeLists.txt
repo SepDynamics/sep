@@ -5,10 +5,13 @@ pkg_check_modules(CURL REQUIRED libcurl)
 # Create the connectors library
 add_library(sep_connectors STATIC
     oanda_connector.cpp
+    market_data_converter.cpp
 )
 
 target_include_directories(sep_connectors PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
+PRIVATE
     ${CURL_INCLUDE_DIRS}
 )
 

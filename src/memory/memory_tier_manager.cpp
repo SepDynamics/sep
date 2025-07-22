@@ -1,13 +1,16 @@
 #include "memory/memory_tier_manager.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
+#include <fstream>
 #include <memory>
 #include <mutex>
 #include <new>
 #include <string>
+#include <vector>
 
 #include "engine/common.h"
 #include "engine/types.h"
@@ -64,6 +67,7 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             config_.demotion_threshold = config.demote_threshold;
             config_.defrag_threshold = config.fragmentation_threshold;
             config_.use_compression = config.enable_compression;
+            config_.pattern_expiration_age = config.pattern_expiration_age;
 
             // Initialize the tiers with the config values if needed
             if (stm_) stm_->setPromotionThreshold(config.promote_stm_to_mtm);
@@ -499,7 +503,6 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
                 block = resolved;
             }
 
-            // Update block properties
             block->promotion_score = promotion_score;
             block->priority_score = priority_score;
             block->age = age;
@@ -508,138 +511,253 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             return block;
         }
 
-        // ----- Relationship Management -----
-        void MemoryTierManager::updateGenericRelationship(std::size_t id_a, std::size_t id_b,
-                                                          float strength)
-        {
-            data_relationships_[id_a][id_b] = strength;
-        }
-
-        void MemoryTierManager::removeDataEntry(std::size_t id)
-        {
-            data_registry_.erase(id);
-            data_relationships_.erase(id);
-            for (auto &rel : data_relationships_)
-            {
-                rel.second.erase(id);
-            }
-        }
-
-        void MemoryTierManager::cleanupExpiredData()
-        {
-            // TODO: Implement
-        }
-
-        void MemoryTierManager::pruneDataByPriority([[maybe_unused]] MemoryTierEnum tier,
-                                                    [[maybe_unused]] size_t max_count)
-        {
-            // TODO: Implement
-        }
-
-        // ----- Pattern-specific relationship management -----
-        void MemoryTierManager::registerPattern(std::size_t id,
-                                                const ::sep::compat::PatternData &pattern)
-        {
-            pattern_registry_[id] = std::make_unique<::sep::compat::PatternData>(pattern);
-        }
-
-        const ::sep::compat::PatternData *MemoryTierManager::getPatternData(std::size_t id) const
-        {
-            auto it = pattern_registry_.find(id);
-            return it != pattern_registry_.end() ? it->second.get() : nullptr;
-        }
-
-        void MemoryTierManager::removePattern(std::size_t id)
-        {
-            pattern_registry_.erase(id);
-            pattern_relationships_.erase(id);
-            for (auto &rel : pattern_relationships_)
-            {
-                rel.second.erase(id);
-            }
-        }
-
-        void MemoryTierManager::updateRelationship(std::size_t id_a, std::size_t id_b,
-                                                   float strength)
-        {
-            pattern_relationships_[id_a][id_b] = strength;
-        }
-
-        void MemoryTierManager::pruneWeakRelationships()
-        {
-            // TODO: Implement
-        }
-
-        void MemoryTierManager::calculateRelationshipScores()
-        {
-            // TODO: Implement
-        }
-
-        void MemoryTierManager::calculateRelationshipCoherence()
-        {
-            // TODO: Implement
-        }
-
         void MemoryTierManager::cleanupExpiredPatterns()
         {
-            // TODO: Implement
+            std::vector<std::size_t> expired_ids;
+
+            for (auto &tier_ptr : {stm_.get(), mtm_.get(), ltm_.get()})
+            {
+                if (!tier_ptr) continue;
+                for (auto &block : tier_ptr->getBlocksForModification())
+                {
+                    if (block.allocated && block.age > config_.pattern_expiration_age)
+                    {
+                        expired_ids.push_back(reinterpret_cast<std::size_t>(block.ptr));
+                    }
+                }
+            }
+
+            for (const auto id : expired_ids)
+            {
+                removePattern(id);
+            }
         }
 
-        void MemoryTierManager::prunePatternsByPriority([[maybe_unused]] MemoryTierEnum tier,
-                                                        [[maybe_unused]] size_t max_count)
+        void MemoryTierManager::prunePatternsByPriority(MemoryTierEnum tier, size_t max_count)
         {
-            // TODO: Implement
+            MemoryTier *target_tier = getTier(tier);
+            if (!target_tier) return;
+
+            auto &blocks = target_tier->getBlocksForModification();
+            if (blocks.size() <= max_count) return;
+
+            std::vector<MemoryBlock *> allocated_blocks;
+            for (auto &block : blocks)
+            {
+                if (block.allocated)
+                {
+                    allocated_blocks.push_back(&block);
+                }
+            }
+
+            if (allocated_blocks.size() <= max_count) return;
+
+            std::sort(allocated_blocks.begin(), allocated_blocks.end(),
+                      [](const MemoryBlock *a, const MemoryBlock *b) {
+                          return a->priority_score < b->priority_score;
+                      });
+
+            size_t num_to_prune = allocated_blocks.size() - max_count;
+            for (size_t i = 0; i < num_to_prune; ++i)
+            {
+                removePattern(reinterpret_cast<std::size_t>(allocated_blocks[i]->ptr));
+                deallocate(allocated_blocks[i]);
+            }
         }
 
-        void MemoryTierManager::loadDataFromPersistence()
+        void MemoryTierManager::registerGenericData(std::size_t id, const void *data)
         {
-            // TODO: Implement
+            // This implementation assumes the caller manages the lifetime of the data.
+            // A more robust implementation would involve copying the data or using smart pointers.
+            data_registry_[id] = std::unique_ptr<void, std::function<void(void *)>>(
+                const_cast<void *>(data), [](void *) {});
         }
 
-        void MemoryTierManager::storeDataToPersistence(
-            [[maybe_unused]] const void *data,
-            [[maybe_unused]] const sep::persistence::PersistentPatternData &metadata)
+void MemoryTierManager::loadDataFromPersistence()
+{
+    std::ifstream i("persistence.json");
+    if (!i.is_open())
+    {
+        return;  // Silently fail if no persistence file
+    }
+
+    try
+    {
+        nlohmann::json j;
+        i >> j;
+
+        if (j.contains("patterns"))
         {
-            // TODO: Implement
+            for (auto &element : j["patterns"])
+            {
+                auto id = element.at("id").get<std::size_t>();
+
+                // Manually deserialize PatternData
+                ::sep::compat::PatternData pattern;
+                if (element.contains("attributes") && element["attributes"].is_array())
+                {
+                    for (const auto &attr : element["attributes"])
+                    {
+                        pattern.push_back(attr.get<float>());
+                    }
+                }
+
+                registerPattern(id, pattern);
+            }
+        }
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "[MemoryTierManager] Error loading persistence data: " << e.what()
+                  << std::endl;
+    }
+}
+
+void MemoryTierManager::storeDataToPersistence(
+    const void *data, const sep::persistence::PersistentPatternData &metadata)
+{
+    try
+    {
+        nlohmann::json j;
+
+        // Read existing data if file exists
+        std::ifstream input("persistence.json");
+        if (input.is_open())
+        {
+            input >> j;
+            input.close();
         }
 
-        void *MemoryTierManager::findDataById(std::size_t id)
+        // Create patterns array if it doesn't exist
+        if (!j.contains("patterns"))
         {
-            auto it = data_registry_.find(id);
-            return it != data_registry_.end() ? it->second.get() : nullptr;
+            j["patterns"] = nlohmann::json::array();
         }
 
-        const void *MemoryTierManager::findDataById(std::size_t id) const
+        // Add new pattern metadata
+        nlohmann::json pattern_json;
+        pattern_json["coherence"] = metadata.coherence;
+        pattern_json["stability"] = metadata.stability;
+        pattern_json["generation_count"] = metadata.generation_count;
+        pattern_json["weight"] = metadata.weight;
+        pattern_json["timestamp"] = std::chrono::system_clock::now().time_since_epoch().count();
+
+        j["patterns"].push_back(pattern_json);
+
+        // Write back to file
+        std::ofstream output("persistence.json");
+        output << std::setw(4) << j << std::endl;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "[MemoryTierManager] Error storing persistence data: " << e.what()
+                  << std::endl;
+    }
+}
+
+sep::SEPResult MemoryTierManager::processMemoryBlocks(void *input_data, void *output_data,
+                                                      const void *config, size_t count,
+                                                      const void *previous_data, void *stream)
+{
+    if (!input_data || !output_data)
+    {
+        return sep::SEPResult::INVALID_ARGUMENT;
+    }
+
+    // Cast config to expected type if provided
+    const sep::ProcessingConfig *proc_config = nullptr;
+    if (config)
+    {
+        proc_config = static_cast<const sep::ProcessingConfig *>(config);
+    }
+
+    try
+    {
+        // Process memory blocks based on their type
+        // This function is designed to work with raw memory blocks
+        // and apply transformations based on the configuration
+
+        // For now, implement a simple memory processing pipeline
+        // that can be extended with CUDA support later
+        auto *in_blocks = static_cast<MemoryBlock *>(input_data);
+        auto *out_blocks = static_cast<MemoryBlock *>(output_data);
+
+        for (size_t i = 0; i < count; ++i)
         {
-            auto it = data_registry_.find(id);
-            return it != data_registry_.end() ? it->second.get() : nullptr;
+            // Copy basic block information
+            out_blocks[i] = in_blocks[i];
+
+            // Update block metrics based on processing
+            if (in_blocks[i].allocated)
+            {
+                // Age the block
+                out_blocks[i].age++;
+
+                // Update coherence based on age and previous state
+                float age_factor = 1.0f / (1.0f + 0.01f * out_blocks[i].age);
+                out_blocks[i].coherence *= age_factor;
+
+                // Update stability based on coherence
+                out_blocks[i].stability =
+                    0.9f * out_blocks[i].stability + 0.1f * out_blocks[i].coherence;
+
+                // Calculate promotion score
+                float avg_score = (out_blocks[i].coherence + out_blocks[i].stability) * 0.5f;
+                out_blocks[i].promotion_score = avg_score;
+
+                // Update priority score with weight factor
+                out_blocks[i].priority_score = avg_score * (1.0f + out_blocks[i].weight * 0.2f);
+
+                // If we have previous data, apply interaction effects
+                if (previous_data && i > 0 && i < count - 1)
+                {
+                    auto *prev_blocks = static_cast<const MemoryBlock *>(previous_data);
+                    if (prev_blocks[i - 1].allocated && prev_blocks[i + 1].allocated)
+                    {
+                        // Simple interaction: average neighboring coherence values
+                        float neighbor_coherence =
+                            (prev_blocks[i - 1].coherence + prev_blocks[i + 1].coherence) * 0.5f;
+                        out_blocks[i].coherence =
+                            0.95f * out_blocks[i].coherence + 0.05f * neighbor_coherence;
+                    }
+                }
+            }
         }
 
-        void MemoryTierManager::registerGenericData([[maybe_unused]] std::size_t id,
-                                                    [[maybe_unused]] const void *data)
+        // If CUDA stream is provided and we have CUDA support in the future,
+        // we can dispatch to GPU kernels here
+        if (stream && proc_config && proc_config->enable_cuda)
         {
-            // TODO: Implement properly with proper cloning
+            // Future: Launch CUDA kernels for parallel processing
+            // For now, just log that CUDA was requested but not available
+            std::cerr << "[MemoryTierManager] CUDA processing requested but not implemented yet"
+                      << std::endl;
         }
 
-        const void *MemoryTierManager::getRegisteredData(std::size_t id) const
-        {
-            return findDataById(id);
-        }
+        return sep::SEPResult::SUCCESS;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "[MemoryTierManager] Error in processMemoryBlocks: " << e.what() << std::endl;
+        return sep::SEPResult::PROCESSING_ERROR;
+    }
+}
 
-        sep::SEPResult MemoryTierManager::processMemoryBlocks(void *input_data, void *output_data,
-                                                              const void *config, size_t count,
-                                                              const void *previous_data,
-                                                              void *stream)
-        {
-            // TODO: Implement
-            (void)input_data;
-            (void)output_data;
-            (void)config;
-            (void)count;
-            (void)previous_data;
-            (void)stream;
-            return sep::SEPResult::NOT_IMPLEMENTED;
-        }
+void MemoryTierManager::registerPattern(std::size_t id, const ::sep::compat::PatternData &pattern)
+{
+    auto new_pattern = std::make_unique<::sep::compat::PatternData>(pattern);
+    pattern_registry_[id] = std::move(new_pattern);
+}
+
+void MemoryTierManager::removePattern(std::size_t id)
+{
+    pattern_registry_.erase(id);
+    pattern_relationships_.erase(id);
+    for (auto &pair : pattern_relationships_)
+    {
+        pair.second.erase(id);
+    }
+}
 
 }  // namespace memory
 }  // namespace sep

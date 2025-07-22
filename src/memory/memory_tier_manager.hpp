@@ -186,8 +186,9 @@ struct adl_serializer<sep::memory::MemoryThresholdConfig> {
                  {"stm_to_mtm_min_gen", c.stm_to_mtm_min_gen},
                  {"mtm_to_ltm_min_gen", c.mtm_to_ltm_min_gen},
                  {"use_unified_memory", c.use_unified_memory},
-                 {"enable_compression", c.enable_compression}};
-    }
+                 {"enable_compression", c.enable_compression},
+                 {"pattern_expiration_age", c.pattern_expiration_age}};
+   }
 
     static void from_json(const json& j, sep::memory::MemoryThresholdConfig& c) {
         j.at("promote_stm_to_mtm").get_to(c.promote_stm_to_mtm);
@@ -201,6 +202,9 @@ struct adl_serializer<sep::memory::MemoryThresholdConfig> {
         j.at("mtm_to_ltm_min_gen").get_to(c.mtm_to_ltm_min_gen);
         j.at("use_unified_memory").get_to(c.use_unified_memory);
         j.at("enable_compression").get_to(c.enable_compression);
+        if (j.contains("pattern_expiration_age")) {
+            j.at("pattern_expiration_age").get_to(c.pattern_expiration_age);
+        }
     }
 };
 } // namespace nlohmann

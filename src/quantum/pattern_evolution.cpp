@@ -9,7 +9,6 @@
 #include <ctime>
 #include <nlohmann/json.hpp>
 
-#include "api/sep_engine.h"
 #include "engine/types.h"  // For PatternData/PatternConfig
 #include "engine/types.h"
 #include "quantum/quantum_processor_qfh.h"
@@ -36,7 +35,8 @@ sep::compat::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(
     }
     else
     {
-        auto id_str = api::SepEngine::generateId("pat");
+        // Placeholder for ID generation
+        std::string id_str = "pat-" + std::to_string(time(0));
         std::strncpy(pattern.id, id_str.c_str(), sizeof(pattern.id) - 1);
         pattern.id[sizeof(pattern.id) - 1] = '\0';
     }
@@ -113,7 +113,8 @@ sep::vector<sep::compat::PatternData> sep::quantum::mcp::PatternEvolution::getPa
         auto p = fromJson(jp);
         if (p.get_id().empty())
         {
-            auto id_str = api::SepEngine::generateId("pat");
+            // Placeholder for ID generation
+            std::string id_str = "pat-" + std::to_string(time(0));
             std::strncpy(p.id, id_str.c_str(), sizeof(p.id) - 1);
             p.id[sizeof(p.id) - 1] = '\0';
         }

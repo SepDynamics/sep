@@ -330,8 +330,13 @@ private:
             
             PatternCoherenceData new_data;
             new_data.pattern_id = pattern.id;
-            new_data.coherence = pattern.quantum_state.coherence;
-            new_data.stability = pattern.quantum_state.stability;
+            new_data.coherence = qfh_processor_->processPattern(pattern.position);
+            new_data.stability = qfh_processor_->calculateStability(
+                pattern.position,
+                0.5f, // Start with neutral stability
+                pattern.quantum_state.generation,
+                0.0f
+            );
             new_data.access_count = 1;
             new_data.last_access_tick = global_tick_;
             new_data.current_tier = pattern.quantum_state.memory_tier;

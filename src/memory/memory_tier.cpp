@@ -441,7 +441,9 @@ namespace sep::memory
     }
 
     const std::deque<MemoryBlock> &MemoryTier::getBlocks() const { return blocks_; }
-
+    
+    std::deque<MemoryBlock> &MemoryTier::getBlocksForModification() { return blocks_; }
+    
     bool MemoryTier::moveData(MemoryBlock *dst, const MemoryBlock *src)
     {
         auto logger = ::sep::logging::Manager::getInstance().getLogger("memory");

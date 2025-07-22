@@ -38,14 +38,11 @@ int main(int /*argc*/, char* /*argv*/[]) {
         }
         
         // Run main loop
-        std::cout << "[Main] Starting OANDA Trader interface..." << std::endl;
         app->run();
         
         // Cleanup
-        std::cout << "[Main] Shutting down..." << std::endl;
         app->shutdown();
         
-        std::cout << "[Main] Goodbye!" << std::endl;
         return 0;
         
     } catch (const std::exception& e) {

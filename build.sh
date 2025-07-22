@@ -1,22 +1,67 @@
 #!/bin/bash
-# Simple build script that actually works
+# Enhanced build script with development tools integration
 
-set -uo pipefall
+set -uo pipefail
 
 echo "Building SEP Engine..."
-sudo  rm -rf .cache .codechecker CMakeCache.txt output CMakeFiles Makefile 
-sudo rm -rf /sep/.Trash-1000
-mkdir .cache output .codechecker/output build
-totxt.save
+
+# Clean up with proper permissions
+sudo rm -rf .cache .codechecker CMakeCache.txt output CMakeFiles Makefile /sep/.Trash-1000
+mkdir -p .cache output .codechecker/{output,reports,html} build
+chmod -R 777 .cache .codechecker build output
+
+# Save text output if the command exists
+if command -v totxt.save &> /dev/null; then
+    totxt.save
+fi
+
+# Ensure proper permissions for CodeChecker directories
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
 
 # Ensure Docker image is built
-docker build -t sep-engine-builder .
+DOCKER_BUILDKIT=1 docker build -t sep-engine-builder .
 
-# Build and copy executable
-docker run --gpus all --rm -v $(pwd):/host sep-engine-builder bash -c '
-    cd /project
+# Function to fix paths in compile_commands.json for host IDE
+fix_compile_commands() {
+    # Replace container paths with host paths for IDE integration
+    sed -i "s|/sep/|$(pwd)/|g" compile_commands.json
+}
+
+# Build and setup development environment
+docker run --gpus all --rm \
+    -v $(pwd):/sep \
+    -v $(pwd)/.cache:/home/codecheck/.cache \
+    -v $(pwd)/.codechecker:/home/codecheck/.codechecker \
+    -e USER_ID=$USER_ID \
+    -e GROUP_ID=$GROUP_ID \
+    -e CUDA_HOME=/usr/local/cuda \
+    -e CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda \
+    -e CUDA_BIN_PATH=/usr/local/cuda/bin \
+    -e CMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc \
+    -e PATH=/usr/local/cuda/bin:${PATH} \
+    -e LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH-} \
+    sep-engine-builder bash -c '
+    # Verify CUDA environment
+    echo "Verifying CUDA environment..."
+    echo "CUDA_HOME: $CUDA_HOME"
+    echo "CUDA_TOOLKIT_ROOT_DIR: $CUDA_TOOLKIT_ROOT_DIR"
+    echo "CUDA_BIN_PATH: $CUDA_BIN_PATH"
+    echo "CMAKE_CUDA_COMPILER: $CMAKE_CUDA_COMPILER"
+    ls -la $CUDA_HOME/bin/nvcc || echo "NVCC not found!"
+    # Switch to codecheck user while preserving environment
+    sudo -E -u codecheck bash -c "
+    # Export CUDA environment variables
+    export CUDA_HOME=/usr/local/cuda
+    export CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda
+    export CUDA_BIN_PATH=/usr/local/cuda/bin
+    export CMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc
+    export PATH=/usr/local/cuda/bin:${PATH}
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH-}
+    
+    cd /sep
     rm -rf build
-    mkdir build
+    mkdir -p build
     cd build
     
     # Configure
@@ -28,25 +73,76 @@ docker run --gpus all --rm -v $(pwd):/host sep-engine-builder bash -c '
         -DSEP_USE_CUDA=ON
     
     # Build
-    cp /project/build/compile_commands.json /host/
     ninja
     
-    # Copy to host
-    echo "Copying build artifacts to host..."
-    cp -r /project/build /host/
-    echo "Build complete!"
+    # Copy and fix compile_commands.json for IDE
+    cp compile_commands.json ../ && cd ..
+    
+    # Fix ownership of all generated files
+    sudo chown -R $USER_ID:$GROUP_ID /sep/.cache /sep/.codechecker /sep/build /sep/output /home/codecheck/.cache /home/codecheck/.codechecker
+    
+    # Run static analysis if requested
+    if [ "${RUN_ANALYSIS:-}" = "true" ]; then
+        echo "Running CodeChecker analysis..."
+        ./scripts/run_codechecker.sh
+    fi
+    "
 '
+
+# Fix paths in compile_commands.json for local IDE integration
+fix_compile_commands
+echo "Build complete!"
 echo "Checking build results..."
-if [ -f "build/sep_workbench" ]; then
-    echo "SUCCESS: SEP Workbench executable found at build/sep_workbench"
-    ls -la build/sep_workbench
-    echo "OANDA Trader structure created in src/apps/oanda_trader/"
-    ls -la src/apps/oanda_trader/ 2>/dev/null || true
-    OANDA_API_KEY="$OANDA_API_KEY" OANDA_ACCOUNT_ID="$OANDA_ACCOUNT_ID" ./build/sep_workbench
-    # sudo scripts/install_sep_service.sh
+# SEP Workbench Runner with OANDA Credentials
+# This script sets up the environment and runs the SEP workbench
+
+echo "==================================="
+echo "SEP Workbench with OANDA Trading"
+echo "==================================="
+
+# Source the OANDA credentials
+if [ -f "keys.txt" ]; then
+    echo "Loading OANDA credentials..."
+    source keys.txt
 else
-    echo "ERROR: SEP executable not found"
-    echo "Checking for other executables..."
-    ls -la build/ 2>/dev/null || true
+    echo "Error: keys.txt not found!"
+    echo "Please create keys.txt with:"
+    export OANDA_API_KEY="9a5380d0af7dc6d3cdd0c9b29cc5917a-02ceee9244b286c586239697d1ab8b95a"
+    export OANDA_ACCOUNT_ID="101-001-31229774-001"
     exit 1
 fi
+
+# Verify credentials are loaded
+if [ -z "$OANDA_API_KEY" ] || [ -z "$OANDA_ACCOUNT_ID" ]; then
+    echo "Error: OANDA credentials not properly loaded!"
+    exit 1
+fi
+
+echo "OANDA Account: $OANDA_ACCOUNT_ID"
+echo "Using practice/demo server: api-fxpractice.oanda.com"
+echo ""
+
+# Check if build directory exists
+if [ ! -d "build" ]; then
+    echo "Build directory not found. Running build.sh first..."
+    if [ -f "build.sh" ]; then
+        ./build.sh
+    else
+        echo "Error: build.sh not found!"
+        exit 1
+    fi
+fi
+
+# Check if workbench executable exists
+if [ ! -f "build/sep_workbench" ]; then
+    echo "Error: sep_workbench executable not found!"
+    echo "Please build the project first with: ./build.sh"
+    exit 1
+fi
+
+# Run the workbench with OANDA credentials
+echo "Starting SEP Workbench..."
+echo "Press Ctrl+C to exit"
+echo ""
+
+./run_workbench.sh

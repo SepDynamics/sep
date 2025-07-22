@@ -100,6 +100,7 @@ public:
     float fragmentation_threshold{0.3f};
     float defrag_threshold{0.3f};
     bool use_compression{false};
+    std::uint32_t pattern_expiration_age{1000};
   };
 
   explicit MemoryTier(const Config &config);
@@ -124,6 +125,7 @@ public:
   std::size_t getFreeSpace() const;
   std::size_t getLargestFreeBlock() const;
   const std::deque<MemoryBlock> &getBlocks() const;
+  std::deque<MemoryBlock> &getBlocksForModification();
   bool moveData(MemoryBlock *dst, const MemoryBlock *src);
   // Expose used space for deterministic unit tests. This allows callers like
   // MemoryTierManager to clamp tiny residual values without relying on

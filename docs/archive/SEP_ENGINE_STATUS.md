@@ -192,10 +192,10 @@ The engine works. Now let's make it **sing**.
 ### Manual Build
 ```bash
 docker run --gpus all --rm -v $(pwd):/host sep-engine-builder bash -c '
-    cd /project && rm -rf build && mkdir build && cd build
+    cd /sep/build && rm -rf build && mkdir build && cd build
     cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DSEP_USE_CUDA=ON
     ninja
-    cp -r /project/build /host/
+    cp -r /sep/build /host/
 '
 ```
 

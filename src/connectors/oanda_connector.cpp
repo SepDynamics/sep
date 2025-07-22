@@ -117,13 +117,46 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
 }
 
 bool OandaConnector::startPriceStream(const std::vector<std::string>& instruments) {
-    // TODO: Implement streaming via separate thread
-    last_error_ = "Streaming not yet implemented";
-    return false;
+    if (streaming_active_)
+    {
+        last_error_ = "Streaming already active";
+        return false;
+    }
+
+    if (instruments.empty())
+    {
+        last_error_ = "No instruments specified for streaming";
+        return false;
+    }
+
+    // Build instruments parameter
+    std::string instruments_param;
+    for (size_t i = 0; i < instruments.size(); ++i)
+    {
+        if (i > 0) instruments_param += ",";
+        instruments_param += instruments[i];
+    }
+
+    streaming_active_ = true;
+    stream_thread_ =
+        std::thread([this, instruments_param]() { streamPriceData(instruments_param); });
+
+    return true;
 }
 
 bool OandaConnector::stopPriceStream() {
-    // TODO: Implement
+    if (!streaming_active_)
+    {
+        return true;
+    }
+
+    streaming_active_ = false;
+
+    if (stream_thread_.joinable())
+    {
+        stream_thread_.join();
+    }
+
     return true;
 }
 
@@ -170,6 +203,9 @@ size_t OandaConnector::WriteCallback(void* contents, size_t size, size_t nmemb, 
 }
 
 size_t OandaConnector::StreamCallback(void* contents, size_t size, size_t nmemb, OandaConnector* connector) {
+    if (!connector->streaming_active_) {
+        return 0; // Abort stream
+    }
     size_t total_size = size * nmemb;
     std::string data(static_cast<char*>(contents), total_size);
     connector->processStreamData(data);
@@ -222,15 +258,52 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
 }
 
 void OandaConnector::processStreamData(const std::string& data) {
-    // TODO: Parse streaming price data and call price_callback_
+    stream_buffer_ += data;
+    size_t newline_pos;
+    while ((newline_pos = stream_buffer_.find('\n')) != std::string::npos) {
+        std::string line = stream_buffer_.substr(0, newline_pos);
+        stream_buffer_.erase(0, newline_pos + 1);
+
+        if (line.empty() || line.length() <= 1) {
+            continue;
+        }
+
+        try {
+            auto json_data = nlohmann::json::parse(line);
+            if (json_data.contains("type")) {
+                std::string type = json_data["type"];
+                if (type == "PRICE") {
+                    if (price_callback_) {
+                        price_callback_(parseMarketData(json_data));
+                    }
+                } else if (type == "HEARTBEAT") {
+                    // Connection is alive
+                }
+            }
+        } catch (const nlohmann::json::parse_error& e) {
+            // Incomplete JSON object, wait for more data
+        }
+    }
 }
 
 MarketData OandaConnector::parseMarketData(const nlohmann::json& price_data) {
     MarketData market_data;
     
-    // TODO: Parse JSON price data into MarketData struct
     if (price_data.contains("instrument")) {
         market_data.instrument = price_data["instrument"];
+    }
+
+    if (price_data.contains("time")) {
+        std::string time_str = price_data["time"];
+        try {
+            size_t dot_pos = time_str.find('.');
+            if (dot_pos != std::string::npos) {
+                time_str = time_str.substr(0, dot_pos);
+            }
+            market_data.timestamp = std::stoull(time_str);
+        } catch (const std::exception& e) {
+            market_data.timestamp = 0;
+        }
     }
     
     if (price_data.contains("bids") && !price_data["bids"].empty()) {
@@ -279,6 +352,90 @@ void OandaConnector::enforceRateLimit() {
     }
     
     last_request_time_ = std::chrono::steady_clock::now();
+}
+
+void OandaConnector::streamPriceData(const std::string& instruments)
+{
+    std::string url = stream_url_ + "/v3/accounts/" + account_id_ + "/pricing/stream";
+    url += "?instruments=" + instruments;
+
+    CURL* curl = curl_easy_init();
+    if (!curl)
+    {
+        std::cerr << "Failed to initialize CURL for streaming" << std::endl;
+        return;
+    }
+
+    // Set up headers
+    struct curl_slist* headers = nullptr;
+    headers = curl_slist_append(headers, ("Authorization: Bearer " + api_key_).c_str());
+    headers = curl_slist_append(headers, "Accept-Datetime-Format: UNIX");
+
+    // Configure CURL for streaming
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OandaConnector::StreamCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
+
+    // Keep connection alive
+    curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
+    curl_easy_setopt(curl, CURLOPT_TCP_KEEPIDLE, 120L);
+    curl_easy_setopt(curl, CURLOPT_TCP_KEEPINTVL, 60L);
+
+    // Perform the streaming request
+    CURLcode res = curl_easy_perform(curl);
+    if (res != CURLE_OK && streaming_active_)
+    {
+        std::cerr << "Streaming error: " << curl_easy_strerror(res) << std::endl;
+    }
+
+    // Cleanup
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+}
+
+nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
+    std::string endpoint = "/v3/accounts/" + account_id_ + "/orders";
+
+    CurlResponse response = makeRequest(endpoint, "POST", order_details.dump());
+
+    if (response.response_code == 201) {
+        try {
+            return nlohmann::json::parse(response.data);
+        } catch (const std::exception& e) {
+            last_error_ = "Failed to parse placeOrder response: " + std::string(e.what());
+            return nlohmann::json{{"error", last_error_}};
+        }
+    }
+
+    last_error_ = "Failed to place order: " + response.data;
+    return nlohmann::json{{"error", last_error_}};
+}
+
+nlohmann::json OandaConnector::getOpenPositions() {
+    std::string endpoint = "/v3/accounts/" + account_id_ + "/openPositions";
+    
+    CurlResponse response = makeRequest(endpoint, "GET");
+    
+    if (response.response_code == 200) {
+        return nlohmann::json::parse(response.data);
+    }
+    
+    last_error_ = "Failed to get open positions: " + response.data;
+    return nlohmann::json{ {"error", last_error_} };
+}
+
+nlohmann::json OandaConnector::getOrders() {
+    std::string endpoint = "/v3/accounts/" + account_id_ + "/orders?state=FILLED";
+    
+    CurlResponse response = makeRequest(endpoint, "GET");
+    
+    if (response.response_code == 200) {
+        return nlohmann::json::parse(response.data);
+    }
+    
+    last_error_ = "Failed to get orders: " + response.data;
+    return nlohmann::json{ {"error", last_error_} };
 }
 
 } // namespace connectors

@@ -4,6 +4,8 @@
 #include <vector>
 #include <functional>
 #include <memory>
+#include <thread>
+#include <atomic>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 
@@ -57,6 +59,9 @@ public:
     // Account information
     nlohmann::json getAccountInfo();
     nlohmann::json getInstruments();
+    nlohmann::json placeOrder(const nlohmann::json& order_details);
+    nlohmann::json getOpenPositions();
+    nlohmann::json getOrders();
 
     // Error handling
     std::string getLastError() const { return last_error_; }
@@ -92,6 +97,12 @@ private:
     // Rate limiting
     void enforceRateLimit();
     std::chrono::steady_clock::time_point last_request_time_;
+    
+    // Streaming support
+    std::atomic<bool> streaming_active_{false};
+    std::thread stream_thread_;
+    std::string stream_buffer_;
+    void streamPriceData(const std::string& instruments);
 };
 
 } // namespace connectors

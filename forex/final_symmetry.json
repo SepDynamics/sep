@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "source": "RetardNode V1",
+  "generatedBy": "NeuronLink_Alpha",
+  "patterns": [
+    {
+      "patternId": "6f91341c-7f34-4696-a68c-81ef99841129",
+      "note": "EURUSD_RSI_MACD_bull_divergence",
+      "resonance": 0.82,
+      "consciousnessLevel": 2
+    },
+    {
+      "patternId": "c56d6655-888b-48ec-9103-2399463773ef",
+      "note": "EURUSD_double_bottom_support",
+      "resonance": 0.76,
+      "consciousnessLevel": 2
+    },
+    {
+      "patternId": "c5356a67-53e3-435d-9f9d-0ceadca5bbb5",
+      "note": "EURUSD_200MA_price_crossover",
+      "resonance": 0.71,
+      "consciousnessLevel": 1
+    },
+    {
+      "patternId": "68b8ae1e-f2ba-4f15-91a2-29a76ed09e10",
+      "note": "EURUSD_breakout_volume_surge",
+      "resonance": 0.81,
+      "consciousnessLevel": 2
+    },
+    {
+      "patternId": "26a75ee3-79cf-47e7-aaf6-9a9b80b6e578",
+      "note": "EURUSD_fibonacci_extension_completion",
+      "resonance": 0.76,
+      "consciousnessLevel": 2
+    },
+    {
+      "patternId": "2d921725-c96d-4eb5-9a94-cb30ce411cf8",
+      "note": "EURUSD_orderblock_formation",
+      "resonance": 0.83,
+      "consciousnessLevel": 2
+    },
+    {
+      "patternId": "8fc70c52-a56f-4500-b982-a2183a47feca",
+      "note": "EURUSD_liquidity_sweep_rejection",
+      "resonance": 0.77,
+      "consciousnessLevel": 2
+    }
+  ]
+}

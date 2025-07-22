@@ -14,7 +14,7 @@ typedef struct CUstream_st* cudaStream_t;
 #include <cstddef>  // For size_t
 #include <cstdint>  // For fixed-width integers
 
-#include "api/bridge.h"     // For SEP_API
+#define SEP_API
 #include "common.h"         // For sep::SEPResult
 #include "pattern_types.h"
 

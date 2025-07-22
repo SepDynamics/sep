@@ -58,6 +58,7 @@ struct MemoryThresholdConfig {
     bool enable_compression;
     int stm_to_mtm_min_gen;
     int mtm_to_ltm_min_gen;
+    std::uint32_t pattern_expiration_age{1000};
 };
 
 } // namespace memory

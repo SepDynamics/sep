@@ -1,2 +1,0 @@
-/usr/bin/ar qc libsep_gpu_cuda.a CMakeFiles/sep_gpu_cuda.dir/cuda_api_unified.cpp.o
-/usr/bin/ranlib libsep_gpu_cuda.a

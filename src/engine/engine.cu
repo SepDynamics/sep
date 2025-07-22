@@ -25,7 +25,6 @@
 #include <sstream>
 #include <vector>
 
-#include "api/types.h"
 #include "common.h"  // defines sep::SEPResult
 #include "config.h"
 #include "core.h"

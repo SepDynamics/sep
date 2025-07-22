@@ -1,9 +1,15 @@
 #pragma once
 
-// #include "connectors/oanda_connector.h"
+#include "connectors/oanda_connector.h"
+#include "engine/engine.h"
 #include <GLFW/glfw3.h>
 #include <string>
+#include <imgui.h>
 #include <memory>
+#include <thread>
+#include <mutex>
+#include <map>
+#include <vector>
 
 namespace sep::apps {
 
@@ -32,8 +38,9 @@ private:
     
     // OANDA integration
     void connectToOanda();
-    void updateMarketData();
     void refreshAccountInfo();
+    void refreshPositions();
+    void refreshOrderHistory();
     
     // OpenGL/GLFW setup
     bool initializeGraphics();
@@ -42,14 +49,23 @@ private:
     
     // Members
     GLFWwindow* window_ = nullptr;
-    // std::unique_ptr<sep::connectors::OandaConnector> oanda_connector_;
-    // std::unique_ptr<sep::core::SepEngine> sep_engine_;
+    std::unique_ptr<sep::connectors::OandaConnector> oanda_connector_;
+    std::unique_ptr<sep::core::Engine> sep_engine_;
     
     // UI state
     bool show_demo_window_ = false;
     bool oanda_connected_ = false;
     std::string account_balance_ = "N/A";
     std::string account_currency_ = "USD";
+    
+    // Real-time data handling
+    std::thread data_stream_thread_;
+    std::mutex market_data_mutex_;
+    std::map<std::string, sep::connectors::MarketData> market_data_map_;
+    std::vector<nlohmann::json> open_positions_;
+    std::mutex positions_mutex_;
+    std::vector<nlohmann::json> order_history_;
+    std::mutex history_mutex_;
     
     // Error handling
     std::string last_error_;

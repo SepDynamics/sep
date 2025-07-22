@@ -1,0 +1,149 @@
+[
+  {
+    "patternId": "6f91341c-7f34-4696-a68c-81ef99841129",
+    "note": "EURUSD_RSI_MACD_bull_divergence",
+    "resonance": 0.86,
+    "consciousnessLevel": 4,
+    "timestamp": 1743203014328,
+    "recursiveSeed": 0.9429201050058457,
+    "signalValue": 0.96310374,
+    "direction": 1,
+    "strength": 0.86,
+    "confidence": 0.8109,
+    "feedbackHash": 2.4128686327077804,
+    "previousResults": {
+      "winRate": 1,
+      "rr": 2.16,
+      "latency": 0,
+      "atr": 0.007927,
+      "executed": true,
+      "timestamp": 1743198892788
+    }
+  },
+  {
+    "patternId": "c56d6655-888b-48ec-9103-2399463773ef",
+    "note": "EURUSD_double_bottom_support",
+    "resonance": 0.8,
+    "consciousnessLevel": 4,
+    "timestamp": 1743203014328,
+    "recursiveSeed": 0.9674833882452971,
+    "signalValue": 0.34512474,
+    "direction": 0,
+    "strength": 0.8,
+    "confidence": 0.774,
+    "feedbackHash": 2.41286863270778,
+    "previousResults": {
+      "winRate": 1,
+      "rr": 2.11,
+      "latency": 0,
+      "atr": 0.007927,
+      "executed": true,
+      "timestamp": 1743198892788
+    }
+  },
+  {
+    "patternId": "c5356a67-53e3-435d-9f9d-0ceadca5bbb5",
+    "note": "EURUSD_200MA_price_crossover",
+    "resonance": 0.75,
+    "consciousnessLevel": 4,
+    "timestamp": 1743203014328,
+    "recursiveSeed": 0.9808703767669253,
+    "signalValue": 0.89026405,
+    "direction": 1,
+    "strength": 0.75,
+    "confidence": 0.7357,
+    "feedbackHash": 2.41286863270778,
+    "previousResults": {
+      "winRate": 1,
+      "rr": 2.07,
+      "latency": 0,
+      "atr": 0.007927,
+      "executed": true,
+      "timestamp": 1743198892789
+    }
+  },
+  {
+    "patternId": "68b8ae1e-f2ba-4f15-91a2-29a76ed09e10",
+    "note": "EURUSD_breakout_volume_surge",
+    "resonance": 0.85,
+    "consciousnessLevel": 4,
+    "timestamp": 1743203014328,
+    "recursiveSeed": 0.9195376952917421,
+    "signalValue": 0.11892993,
+    "direction": -1,
+    "strength": 0.85,
+    "confidence": 0.7816,
+    "feedbackHash": 2.4128686327077804,
+    "previousResults": {
+      "winRate": 1,
+      "rr": 2.13,
+      "latency": 0,
+      "atr": 0.007927,
+      "executed": true,
+      "timestamp": 1743198892789
+    }
+  },
+  {
+    "patternId": "26a75ee3-79cf-47e7-aaf6-9a9b80b6e578",
+    "note": "EURUSD_fibonacci_extension_completion",
+    "resonance": 0.8,
+    "consciousnessLevel": 4,
+    "timestamp": 1743203014328,
+    "recursiveSeed": 0.9441924965458603,
+    "signalValue": 0.92872452,
+    "direction": 1,
+    "strength": 0.8,
+    "confidence": 0.7554,
+    "feedbackHash": 2.41286863270778,
+    "previousResults": {
+      "winRate": 1,
+      "rr": 2.09,
+      "latency": 0,
+      "atr": 0.007927,
+      "executed": true,
+      "timestamp": 1743198892789
+    }
+  },
+  {
+    "patternId": "2d921725-c96d-4eb5-9a94-cb30ce411cf8",
+    "note": "EURUSD_orderblock_formation",
+    "resonance": 0.87,
+    "consciousnessLevel": 4,
+    "timestamp": 1743203014328,
+    "recursiveSeed": 0.8772097063449888,
+    "signalValue": 0.94097376,
+    "direction": 1,
+    "strength": 0.87,
+    "confidence": 0.7632,
+    "feedbackHash": 2.412868632707781,
+    "previousResults": {
+      "winRate": 1,
+      "rr": 2.11,
+      "latency": 0,
+      "atr": 0.007927,
+      "executed": true,
+      "timestamp": 1743198892789
+    }
+  },
+  {
+    "patternId": "8fc70c52-a56f-4500-b982-a2183a47feca",
+    "note": "EURUSD_liquidity_sweep_rejection",
+    "resonance": 0.81,
+    "consciousnessLevel": 4,
+    "timestamp": 1743203014328,
+    "recursiveSeed": 0.9168501289191199,
+    "signalValue": 0.05331224,
+    "direction": -1,
+    "strength": 0.81,
+    "confidence": 0.7426,
+    "feedbackHash": 2.4128686327077804,
+    "previousResults": {
+      "winRate": 1,
+      "rr": 2.08,
+      "latency": 0,
+      "atr": 0.007927,
+      "executed": true,
+      "timestamp": 1743198892789
+    }
+  }
+]

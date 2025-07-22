@@ -1,16 +1,15 @@
+#include "quantum/quantum_processor_qfh.h"
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <vector>
-
 #include "engine/cuda_sep.h"
 #include "engine/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor.h"
-#include "quantum/quantum_processor_qfh.h"
 
 namespace sep::quantum {
 
@@ -33,10 +32,20 @@ float relationshipStrength(float ca, float cb, float interaction_frequency) {
 }
 
 float patternStability(float coherence, float historical_stability, float generation_count, float access_frequency) {
-    float base = (coherence + historical_stability) * 0.5f;
-    float freq = std::clamp(access_frequency, 0.0f, 1.0f);
-    float gen = std::clamp(generation_count / 100.0f, 0.0f, 1.0f);
-    return std::clamp(base * freq + gen, 0.0f, 1.0f);
+    const float coherence_weight = 0.4f;
+    const float history_weight = 0.3f;
+    const float generation_weight = 0.2f;
+    const float access_weight = 0.1f;
+
+    // Invert generation_count effect: higher generation should mean less stability
+    float generation_factor = 1.0f / (1.0f + generation_count * 0.1f);
+
+    float stability = coherence_weight * coherence +
+                      history_weight * historical_stability +
+                      generation_weight * generation_factor +
+                      access_weight * access_frequency;
+
+    return std::clamp(stability, 0.0f, 1.0f);
 }
 
 }  // namespace
@@ -46,14 +55,14 @@ QuantumProcessorQFHCommon::QuantumProcessorQFHCommon() : qbsa_processor_(createQ
 void QuantumProcessorQFHCommon::clear() {
     m_patterns.clear();
     m_pattern_bits.clear();
-    m_last_qfh_result = QFHResult();
+    m_last_qfh_result = sep::quantum::QFHResult();
 }
 
-const QFHResult& QuantumProcessorQFHCommon::getLastQFHResult() const {
+const sep::quantum::QFHResult& QuantumProcessorQFHCommon::getLastQFHResult() const {
     return m_last_qfh_result;
 }
 
-const QFHResult& QuantumProcessorQFHCommon::lastQFHResult() const {
+const sep::quantum::QFHResult& QuantumProcessorQFHCommon::lastQFHResult() const {
     return m_last_qfh_result;
 }
 
@@ -91,6 +100,21 @@ float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
     const size_t MAX_PATTERN_HISTORY = 1024;
     if (m_patterns.size() > MAX_PATTERN_HISTORY) {
         m_patterns.erase(m_patterns.begin());
+    }
+
+    // Convert pattern to bits for entropy analysis
+    uint32_t x_bits, y_bits, z_bits;
+    std::memcpy(&x_bits, &pattern.x, sizeof(uint32_t));
+    std::memcpy(&y_bits, &pattern.y, sizeof(uint32_t));
+    std::memcpy(&z_bits, &pattern.z, sizeof(uint32_t));
+    m_pattern_bits.push_back(x_bits);
+    m_pattern_bits.push_back(y_bits);
+    m_pattern_bits.push_back(z_bits);
+
+    // Limit pattern bits history as well
+    const size_t MAX_PATTERN_BITS_HISTORY = MAX_PATTERN_HISTORY * 3;
+    if (m_pattern_bits.size() > MAX_PATTERN_BITS_HISTORY) {
+        m_pattern_bits.erase(m_pattern_bits.begin(), m_pattern_bits.begin() + (m_pattern_bits.size() - MAX_PATTERN_BITS_HISTORY));
     }
 
     if (!m_pattern_bits.empty()) {
@@ -193,5 +217,4 @@ void QuantumProcessorQFHCommon::analyzePatternBits() {
     
     m_last_qfh_result.entropy = std::clamp(entropy, 0.0f, 1.0f);
 }
-
 }  // namespace sep::quantum

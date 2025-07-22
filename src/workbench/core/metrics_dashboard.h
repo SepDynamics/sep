@@ -10,9 +10,10 @@
 
 namespace sep::workbench {
 
+
 /**
  * @brief ImGui-based dashboard for real-time SEP metrics visualization
- * 
+ *
  * Provides an investor-ready interface showing:
  * - Real-time coherence, stability, entropy graphs
  * - Pattern detection statistics
@@ -25,6 +26,7 @@ public:
     ~MetricsDashboard();
 
     bool initialize();
+    void setTradeManager(core::TradeManager* trade_manager);
     void shutdown();
     void render();  // Call this in ImGui render loop
 
@@ -85,6 +87,7 @@ private:
     
     // OANDA integration
     std::unique_ptr<sep::connectors::OandaConnector> oanda_connector_;
+    core::TradeManager* trade_manager_{nullptr};
     bool oanda_connected_{false};
     std::string oanda_status_{"Disconnected"};
     bool use_oanda_data_{false};

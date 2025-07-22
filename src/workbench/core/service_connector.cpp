@@ -25,9 +25,14 @@ namespace sep::workbench {
 
 ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 
-ServiceConnector::ServiceConnector(const ConnectionConfig& config) 
+ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
-    std::cout << "[ServiceConnector] Initialized with config: " 
+    const char* api_key = std::getenv("OANDA_API_KEY");
+    const char* account_id = std::getenv("OANDA_ACCOUNT_ID");
+    if (api_key && account_id) {
+        oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id);
+    }
+    std::cout << "[ServiceConnector] Initialized with config: "
               << config.service_address << ":" << config.service_port << std::endl;
 }
 

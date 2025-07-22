@@ -6,8 +6,7 @@
 
 #ifdef SEP_HAS_AUDIO
 #include "audio/types.h"
-#include "compat/math_common.h"
-
+#include "engine/math_common.h"
 
 namespace sep {
 namespace audio {

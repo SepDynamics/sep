@@ -14,8 +14,8 @@ if [ -f "keys.txt" ]; then
 else
     echo "Error: keys.txt not found!"
     echo "Please create keys.txt with:"
-    export OANDA_API_KEY="9a5380d0af7dc6d3cdd0c9b29cc5917a-02ceee9244b286c586239697d1ab8b95a"
-    export OANDA_ACCOUNT_ID="101-001-31229774-001"
+    echo "export OANDA_API_KEY=\"<your_api_key>\""
+    echo "export OANDA_ACCOUNT_ID=\"<your_account_id>\""
     exit 1
 fi
 
@@ -40,17 +40,15 @@ if [ ! -d "build" ]; then
     fi
 fi
 
-# Check if oanda_trader executable exists
-if [ ! -f "build/src/apps/oanda_trader/oanda_trader" ]; then
-    echo "Error: oanda_trader executable not found!"
-    echo "Please build the project first with: ./build.sh"
-    exit 1
-fi
+# Wait for the executable to be created
+echo "Waiting for sep_workbench executable..."
+while [ ! -f "build/src/sep_workbench" ]; do
+    sleep 1
+done
 
-# Run the oanda_trader with OANDA credentials
-echo "Starting OANDA Trader..."
+# Run the sep_workbench with OANDA credentials
+echo "Starting SEP Workbench..."
 echo "Press Ctrl+C to exit"
 echo ""
 
-cd build/src/apps/oanda_trader
-./oanda_trader
+./build/src/sep_workbench --api-key "$OANDA_API_KEY" --account-id "$OANDA_ACCOUNT_ID"

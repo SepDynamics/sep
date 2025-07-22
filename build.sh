@@ -20,7 +20,7 @@ USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
 # Ensure Docker image is built
-DOCKER_BUILDKIT=1 docker build -t sep-engine-builder .
+DOCKER_BUILDKIT=1 docker build --no-cache -t sep-engine-builder .
 
 # Function to fix paths in compile_commands.json for host IDE
 fix_compile_commands() {

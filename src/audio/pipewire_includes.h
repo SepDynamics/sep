@@ -26,7 +26,6 @@ extern "C" {
 #include <spa/utils/defs.h>
 #include <spa/utils/dict.h>
 #include <spa/utils/hook.h>
-#include <spa/utils/json-core.h>
 #include <spa/utils/string.h>
 #include <spa/utils/type.h>
 

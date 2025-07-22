@@ -1,11 +1,13 @@
 #include "audio/pipeline.h"
-#include "compat/math_common.h"
-#include <complex>
+
 #include <algorithm>
-#include <memory>
+#include <complex>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
-#include "compat/cufft.h"
+#include <memory>
+
+#include "engine/cufft.h"
+#include "engine/math_common.h"
 #ifdef SEP_USE_FFTW
 #    include <fftw3.h>
 #endif

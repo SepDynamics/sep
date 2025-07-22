@@ -4,6 +4,7 @@
 // #include <implot.h> // TODO: Add implot to third_party
 #include <iostream>
 #include <algorithm>
+#include <cstdlib>
 #include "file_dialog.hpp"
 
 namespace sep::workbench {
@@ -44,6 +45,10 @@ bool MetricsDashboard::initialize() {
     
     std::cout << "[MetricsDashboard] Initialized successfully" << std::endl;
     return true;
+}
+
+void MetricsDashboard::setTradeManager(core::TradeManager* trade_manager) {
+    trade_manager_ = trade_manager;
 }
 
 void MetricsDashboard::shutdown() {
@@ -510,13 +515,8 @@ void MetricsDashboard::renderMemoryMonitor() {
 }
 
 void MetricsDashboard::initializeOandaConnection() {
-    // Hardcoded OANDA credentials for demo
-    std::string key_part1 = "b54bcf4bbfb02f6ce1fd918906cb71d5-";
-    std::string key_part2 = "976ba02922829fafcc4d9e847b81c0f2";
-    std::string full_key = key_part1 + key_part2;
-    const char* api_key = full_key.c_str();
-    const char* api_key = "b54bcf4bbfb02f6ce1fd918906cb71d5-976ba02922829fafcc4d9e847b81c0f2";
-    const char* account_id = "101-001-31229774-001";
+    const char* api_key = std::getenv("OANDA_API_KEY");
+    const char* account_id = std::getenv("OANDA_ACCOUNT_ID");
     
     if (api_key && account_id) {
         oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, false);
@@ -561,6 +561,32 @@ void MetricsDashboard::renderOandaPanel() {
             }
             
             ImGui::Text("Real-time forex data is feeding into your pattern analysis");
+
+            ImGui::Separator();
+            ImGui::Text("Trade Panel");
+
+            static char instrument[64] = "EUR_USD";
+            static float units = 1000;
+            static float stop_loss_pips = 10;
+
+            ImGui::InputText("Instrument", instrument, sizeof(instrument));
+            ImGui::InputFloat("Units", &units);
+            ImGui::InputFloat("Stop Loss (pips)", &stop_loss_pips);
+
+            if (ImGui::Button("Buy")) {
+                if (trade_manager_) {
+                    trade_manager_->placeOrder(instrument, units, 1.1, stop_loss_pips);
+                }
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Sell")) {
+                if (trade_manager_) {
+                    trade_manager_->placeOrder(instrument, -units, 1.1, stop_loss_pips);
+                }
+            }
+
         } else {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "● Disconnected");
             ImGui::Text("Set OANDA_API_KEY and OANDA_ACCOUNT_ID environment variables");

@@ -12,6 +12,7 @@
 #include "renderer.h"
 #include "service_connector.hpp"
 #include "metrics_dashboard.h"
+#include "trade_manager.h"
 
 // Include ImGui headers
 #include <imgui.h>
@@ -87,6 +88,7 @@ bool WorkbenchEngine::initialize()
         demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = std::make_unique<Renderer>();
+        trade_manager_ = std::make_unique<TradeManager>(service_connector_->getOandaConnector());
         metrics_dashboard_ = std::make_unique<MetricsDashboard>();
         
         // Initialize renderer and metrics dashboard
@@ -97,6 +99,7 @@ bool WorkbenchEngine::initialize()
         if (!metrics_dashboard_->initialize()) {
             std::cerr << "[WorkbenchEngine] Warning: Failed to initialize metrics dashboard" << std::endl;
         } else {
+            metrics_dashboard_->setTradeManager(trade_manager_.get());
             // Make metrics dashboard visible by default
             metrics_dashboard_->setVisible(true);
             std::cout << "[WorkbenchEngine] Metrics dashboard set as main interface" << std::endl;

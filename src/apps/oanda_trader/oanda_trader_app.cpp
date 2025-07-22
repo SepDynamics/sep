@@ -30,9 +30,6 @@ bool OandaTraderApp::initialize() {
     // Initialize SEP engine
     sep_engine_ = std::make_unique<sep::core::Engine>();
     
-    // Attempt to connect to OANDA
-    connectToOanda();
-    
     return true;
 }
 

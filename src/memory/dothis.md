@@ -408,7 +408,7 @@ These are straightforward include path issues or missing physical files.
 
 6.  **`'core/compression.h' file not found` (in `src/engine/compression.cpp`, line 7):**
     *   A `.cpp` file needs to include its corresponding `.h` header within the *same* module.
-    *   **Action:** Check `src/engine/CMakeLists.txt`. Ensure `$CMAKE_SOURCE_DIR/src` is added to the `sep_core` target's `target_include_directories` with `PRIVATE` visibility. This allows `src/engine/*.cpp` files to include `src/engine/*.h` (or `.hpp`) files.
+    *   **Action:** Check `src/engine/CMakeLists.txt`. Ensure `$CMAKE_SOURCE_DIR/src` is added to the `sep_engine` target's `target_include_directories` with `PRIVATE` visibility. This allows `src/engine/*.cpp` files to include `src/engine/*.h` (or `.hpp`) files.
 
 ---
 

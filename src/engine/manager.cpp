@@ -93,7 +93,7 @@ namespace sep::config
     }
     bool ConfigManager::loadFromEnvironment() { return false; }
     bool ConfigManager::loadFromCommandLine(int, char**) { return false; }
-    const CudaConfig& ConfigManager::getAPIConfig() const
+    const SystemConfig& ConfigManager::getAPIConfig() const
     {
         std::lock_guard<std::mutex> lock(mutex_);
 
@@ -101,7 +101,8 @@ namespace sep::config
         if (metrics) {
             std::string val{metrics};
         }
-        return impl_->api_cfg;
+        static SystemConfig cfg{};
+        return cfg;
     }
 
     void ConfigManager::updateCudaConfig(const sep::config::CudaConfig&) {}

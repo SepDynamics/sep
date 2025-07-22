@@ -1,9 +1,10 @@
 // Project headers
 #include "audio/pipewire_capture.h"
-#include "audio/types.h"
+
 #include "audio/capture.h"
 #include "audio/config.h"
-#include "compat/math_common.h"
+#include "audio/types.h"
+#include "engine/math_common.h"
 
 #ifdef SEP_HAS_AUDIO
 
@@ -632,7 +633,7 @@ void PipeWireCapture::streamProcess(void* data)
         if (self->running_) {  // Check again under lock
             self->metrics_.total_samples += n_samples;
             self->metrics_.peak_level = peak;
-            self->metrics_.rms_level = sep::math::to_float(sep::math::sqrt_safe(static_cast<double>(rms_sum / n_samples)));
+            self->metrics_.rms_level = static_cast<float>(sqrt(static_cast<double>(rms_sum / n_samples)));
             self->metrics_.latency_ms = static_cast<float>(n_samples) / self->config_.rate * 1000.0f;
             
             // Check for audio clipping

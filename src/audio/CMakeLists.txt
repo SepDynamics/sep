@@ -36,6 +36,8 @@ target_include_directories(sep_audio
     PRIVATE
         ${PIPEWIRE_INCLUDE_DIRS}
         ${FFTW_INCLUDE_DIRS}
+        /usr/include
+        ${CMAKE_SOURCE_DIR}/src/engine
 )
 
 target_link_libraries(sep_audio
@@ -43,7 +45,7 @@ target_link_libraries(sep_audio
         ${PIPEWIRE_LIBRARIES}
         ${FFTW_LIBRARIES}
     PUBLIC
-        sep_core
+        sep_engine
 )
 
 # Configure symbol visibility

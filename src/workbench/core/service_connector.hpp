@@ -7,6 +7,8 @@
 #include <functional>
 #include <thread>
 
+#include "connectors/oanda_connector.h"
+
 namespace sep {
 namespace core {
 class Engine;
@@ -60,6 +62,7 @@ public:
     
     // Service interaction
     sep::core::Engine* getEngine() const { return service_engine_; }
+    sep::connectors::OandaConnector* getOandaConnector() const { return oanda_connector_.get(); }
     ServiceHealth getServiceHealth() const;
     
     // Health monitoring
@@ -83,6 +86,7 @@ private:
     
     // Service connection
     sep::core::Engine* service_engine_{nullptr};
+    std::unique_ptr<sep::connectors::OandaConnector> oanda_connector_;
     void* service_handle_{nullptr}; // Platform-specific handle
     
     // Health monitoring

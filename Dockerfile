@@ -30,6 +30,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3-pip \
     gdb \
     sudo \
+    libpipewire-0.3-dev \
+    libspa-0.2-dev \
+    fftw3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Configure CUDA environment with explicit paths

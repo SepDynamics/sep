@@ -2,6 +2,7 @@
 
 #ifdef SEP_HAS_AUDIO
 #include <algorithm>
+#include <cmath>
 #include <cstring>
 #include <cmath>
 #include <spdlog/spdlog.h>
@@ -26,7 +27,7 @@ float AudioCoherenceEngine::calculateCoherence(const float* pSamples, uint32_t c
     {
         rms_sum += pSamples[i] * pSamples[i];
     }
-    float rms = math::to_float(math::sqrt_safe(static_cast<double>(rms_sum / count)));
+    float rms = static_cast<float>(sqrt(static_cast<double>(rms_sum / count)));
 
     // Calculate spectral coherence using autocorrelation
     float    autocorr_sum = 0.0f;

@@ -1,228 +1,372 @@
 {
     "concepts": [
         {
-            "name": "Manager for STM/MTM/LTM memory tiers.",
-            "description": "*  *"
-        },
-        {
-            "name": "Template class for managing CUDA unified memory",
-            "description": "*  *"
-        },
-        {
-            "name": "Constructs a new UnifiedMemory object with the specified size",
-            "description": "*      *"
-        },
-        {
-            "name": "Constructs a new UnifiedMemory object with existing data pointer",
-            "description": "*      *"
-        },
-        {
-            "name": "Gets the data pointer",
-            "description": "*      *"
-        },
-        {
-            "name": "Gets the size of the allocation",
-            "description": "*      *"
-        },
-        {
-            "name": "Checks if the allocation is valid",
-            "description": "*      *"
-        },
-        {
             "name": "A datatype-agnostic engine for analyzing patterns in raw byte streams.",
-            "description": "* @class PatternMetricEngine"
+            "description": "This engine ingests data from any source, treats it as a sequence of bytes, and uses quantum-inspired algorithms to extract and analyze patterns. It is the core component for understanding data in the SEP system without relying on format-specific parsers. #include \"quantum/pattern_metric_engine.h\" #include <vector> #include <iostream> int main() { PatternMetricEngine engine; engine.init(nullptr); // Initialize for CPU operation std::vector<uint8_t> my_data = { ... }; engine.ingestData(my_data.data(), my_data.size()); engine.evolvePatterns(); auto metrics = engine.computeMetrics(); for (const auto& m : metrics) { std::cout << \"Coherence: \" << m.coherence << std::endl; } return 0; }"
         },
         {
-            "name": "Extracts patterns from a raw byte stream.",
-            "description": "*      *"
+            "name": "Abstract interface for HTTP requests",
+            "description": "No description available."
         },
         {
-            "name": "Standardized error handling utilities for the SEP Engine",
-            "description": "* @file error_handling.h"
+            "name": "Adapter for Crow requests",
+            "description": "Provides a consistent interface to access Crow request data"
         },
         {
-            "name": "Initialize the error handling system",
-            "description": "*  *"
-        },
-        {
-            "name": "Report an error with context information",
-            "description": "*  *"
-        },
-        {
-            "name": "Get string representation of an error code",
-            "description": "*  *"
-        },
-        {
-            "name": "Set the error callback function",
-            "description": "*  *"
-        },
-        {
-            "name": "Gets the request URL",
-            "description": "*      * @return The request URL"
-        },
-        {
-            "name": "Gets the HTTP method",
-            "description": "*      * @return The request method"
-        },
-        {
-            "name": "Gets the request body",
-            "description": "*      * @return The request body"
-        },
-        {
-            "name": "Gets the value of a specific header",
-            "description": "*      * @param name The header name to look up"
-        },
-        {
-            "name": "Real-time memory usage monitor for the SEP Workbench",
-            "description": "*  *"
-        },
-        {
-            "name": "ImGui-based dashboard for real-time SEP metrics visualization",
-            "description": "*  *"
-        },
-        {
-            "name": "Real-time metrics monitoring system for SEP engine data",
-            "description": "*  *"
-        },
-        {
-            "name": "Proxy engine that forwards operations to a remote SEP service",
-            "description": "*  * Since Engine methods aren't virtual, we compose rather than inherit"
-        },
-        {
-            "name": "Converts market data from OANDA into byte streams for SEP pattern analysis",
-            "description": "*  *"
-        },
-        {
-            "name": "Convert OANDA candle data to byte stream",
-            "description": "*      *"
-        },
-        {
-            "name": "Convert real-time market data to byte stream",
-            "description": "*      *"
-        },
-        {
-            "name": "Convert price series to byte stream with normalization",
-            "description": "*      *"
-        },
-        {
-            "name": "Convert order book data to byte stream",
-            "description": "*      *"
-        },
-        {
-            "name": "Create a composite byte stream from multiple data sources",
-            "description": "*      *"
-        },
-        {
-            "name": "Constructs an APIException.",
-            "description": "*      * @param message The error message."
-        },
-        {
-            "name": "Checks if the error is transient.",
-            "description": "*      * @return True if the error is transient, false otherwise."
-        },
-        {
-            "name": "Implementation of adapters for integrating with the Crow web framework",
-            "description": "* @file crow_adapter_impl.h"
-        },
-        {
-            "name": "Header file for the Crow adapter for the SEP Engine API",
-            "description": "* @file crow_adapter.h"
-        },
-        {
-            "name": "Setup the SEP API routes in a Crow application",
-            "description": "*  *"
-        },
-        {
-            "name": "Process a context check request from JavaScript",
-            "description": "*    * @param context_json JSON string containing the context to check"
-        },
-        {
-            "name": "Main API interface for the SEP Engine",
-            "description": "* @file sep_engine.h"
-        },
-        {
-            "name": "Main API interface for the SEP Engine",
-            "description": "*  *"
-        },
-        {
-            "name": "Get the singleton instance of the SepEngine",
-            "description": "*      *"
-        },
-        {
-            "name": "Initialize the SEP Engine",
-            "description": "*      *"
-        },
-        {
-            "name": "Shutdown the SEP Engine",
-            "description": "*      *"
-        },
-        {
-            "name": "Process patterns through the SEP Engine",
-            "description": "*      *"
-        },
-        {
-            "name": "Process a batch of patterns",
-            "description": "*      *"
-        },
-        {
-            "name": "Validate context data",
-            "description": "*      *"
-        },
-        {
-            "name": "Extract embeddings from data",
-            "description": "*      *"
-        },
-        {
-            "name": "Calculate similarity between embeddings",
-            "description": "*      *"
+            "name": "Adapter for Crow responses",
+            "description": "Provides a consistent interface to set Crow response data"
         },
         {
             "name": "Blend contexts together",
-            "description": "*      *"
+            "description": "No description available."
         },
         {
-            "name": "Get the health status of the SEP Engine",
-            "description": "*      *"
+            "name": "Calculate similarity between embeddings",
+            "description": "No description available."
+        },
+        {
+            "name": "Check a file operation result",
+            "description": "No description available."
+        },
+        {
+            "name": "Check for NULL pointer and report error if NULL",
+            "description": "No description available."
+        },
+        {
+            "name": "Check for memory allocation failure",
+            "description": "No description available."
+        },
+        {
+            "name": "Check return value and report error if condition is true",
+            "description": "No description available."
+        },
+        {
+            "name": "Checks if the allocation is valid",
+            "description": "No description available."
+        },
+        {
+            "name": "Checks if the error is transient.",
+            "description": "No description available."
+        },
+        {
+            "name": "Clean up the error handling system",
+            "description": "No description available."
         },
         {
             "name": "Concrete implementation of the SEP API Server",
-            "description": "*  *"
+            "description": "This class implements the main HTTP API server for the SEP Engine, providing REST endpoints for quantum processing, health checks, and metrics."
+        },
+        {
+            "name": "Concrete processor interface used by the rest of the codebase.",
+            "description": "No description available."
+        },
+        {
+            "name": "Configuration structures and helpers for the audio pipeline.",
+            "description": "No description available."
         },
         {
             "name": "Construct a new SEPApiServer",
-            "description": "*    * @param config The API configuration"
+            "description": "No description available."
         },
         {
-            "name": "Update server configuration",
-            "description": "*    * @param new_config The new configuration"
+            "name": "Constructs a new UnifiedMemory object with existing data pointer",
+            "description": "No description available."
+        },
+        {
+            "name": "Constructs a new UnifiedMemory object with the specified size",
+            "description": "No description available."
+        },
+        {
+            "name": "Constructs an APIException.",
+            "description": "No description available."
+        },
+        {
+            "name": "Convert OANDA candle data to byte stream",
+            "description": "Serializes OHLCV data into a byte stream format that preserves temporal relationships and price movements for pattern analysis."
+        },
+        {
+            "name": "Convert order book data to byte stream",
+            "description": "Encodes bid/ask depth information to detect market microstructure patterns."
+        },
+        {
+            "name": "Convert price series to byte stream with normalization",
+            "description": "Normalizes price data to enhance pattern detection while preserving relative movements and volatility characteristics."
+        },
+        {
+            "name": "Convert real-time market data to byte stream",
+            "description": "Converts bid/ask/spread data into bytes for real-time pattern detection. Includes timestamp encoding to preserve temporal patterns."
+        },
+        {
+            "name": "Converts market data from OANDA into byte streams for SEP pattern analysis",
+            "description": "This class bridges the gap between financial market data and the SEP engine's datatype-agnostic pattern analysis. It converts various market data types (prices, volumes, spreads) into byte representations that can be analyzed for quantum patterns."
+        },
+        {
+            "name": "Create a composite byte stream from multiple data sources",
+            "description": "Combines price, volume, and spread data into a unified byte stream for comprehensive pattern analysis."
+        },
+        {
+            "name": "Custom exception class for API client errors.",
+            "description": "No description available."
+        },
+        {
+            "name": "Deleted assignment operator to enforce Singleton pattern",
+            "description": "No description available."
+        },
+        {
+            "name": "Deleted copy constructor to enforce Singleton pattern",
+            "description": "No description available."
+        },
+        {
+            "name": "Destroys the UnifiedMemory object and frees the allocated memory",
+            "description": "No description available."
+        },
+        {
+            "name": "Destructor",
+            "description": "No description available."
+        },
+        {
+            "name": "Error categories",
+            "description": "No description available."
+        },
+        {
+            "name": "Error context information",
+            "description": "No description available."
+        },
+        {
+            "name": "Error severity levels",
+            "description": "No description available."
+        },
+        {
+            "name": "Extract embeddings from data",
+            "description": "No description available."
+        },
+        {
+            "name": "Extracts patterns from a raw byte stream.",
+            "description": "This is the core of the datatype-agnostic design. The algorithm works as follows: 1. The raw byte stream is segmented into fixed-size chunks (e.g., 64 bytes). 2. Each chunk is treated as a potential pattern. 3. A hash is computed for each chunk to quickly identify duplicates. 4. Unique chunks are stored as `PatternData` objects. This approach allows the engine to find repeated sequences in any data type."
+        },
+        {
+            "name": "Generate deterministic ID",
+            "description": "No description available."
         },
         {
             "name": "Get error response string",
-            "description": "*    * @param message Error message"
+            "description": "No description available."
         },
         {
-            "name": "Make JSON response for Crow",
-            "description": "*    * @param status_code HTTP status code"
+            "name": "Get metrics from HealthMetrics struct",
+            "description": "No description available."
         },
         {
-            "name": "Modulate response detail based on coherence metrics (extract coherence from JSON)",
-            "description": "*    * @param response Original JSON response data"
+            "name": "Get string representation of an error code",
+            "description": "No description available."
         },
         {
-            "name": "Modulate response detail based on coherence metrics (explicit coherence score)",
-            "description": "*    * @param response Original JSON response data"
+            "name": "Get the health status of the SEP Engine",
+            "description": "This method returns the health status of the SEP Engine, including component status, resource usage, and error information."
+        },
+        {
+            "name": "Get the singleton instance of the SepEngine",
+            "description": "No description available."
+        },
+        {
+            "name": "Gets the HTTP method",
+            "description": "No description available."
+        },
+        {
+            "name": "Gets the data pointer",
+            "description": "No description available."
+        },
+        {
+            "name": "Gets the request URL",
+            "description": "No description available."
+        },
+        {
+            "name": "Gets the request body",
+            "description": "No description available."
+        },
+        {
+            "name": "Gets the size of the allocation",
+            "description": "No description available."
+        },
+        {
+            "name": "Gets the value of a specific header",
+            "description": "No description available."
         },
         {
             "name": "Handle error and return JSON for Crow",
-            "description": "*    * @param message Error message"
+            "description": "No description available."
+        },
+        {
+            "name": "Header file for the Crow adapter for the SEP Engine API",
+            "description": "This file declares the functions needed to integrate the SEP Engine API with the Crow web framework."
+        },
+        {
+            "name": "ID counter for deterministic identifiers",
+            "description": "No description available."
+        },
+        {
+            "name": "ImGui-based dashboard for real-time SEP metrics visualization",
+            "description": "Provides an investor-ready interface showing: - Real-time coherence, stability, entropy graphs - Pattern detection statistics - Data source selection and control - Export and analysis tools"
+        },
+        {
+            "name": "Implementation of adapters for integrating with the Crow web framework",
+            "description": "This file provides the necessary adapter implementations to bridge the SEP Engine API with the Crow web framework."
+        },
+        {
+            "name": "Initialize API clients",
+            "description": "No description available."
+        },
+        {
+            "name": "Initialize the SEP Engine",
+            "description": "This method initializes all components of the SEP Engine, including the context processor, pattern evolution, and memory tier manager."
+        },
+        {
+            "name": "Initialize the error handling system",
+            "description": "No description available."
         },
         {
             "name": "Log request details",
-            "description": "*    * @param req The request"
+            "description": "No description available."
+        },
+        {
+            "name": "Main API interface for the SEP Engine",
+            "description": "This file defines the SepEngine class that serves as the main API interface, exposing methods for context processing, pattern recognition, and memory management."
+        },
+        {
+            "name": "Main quantum processing engine",
+            "description": "No description available."
+        },
+        {
+            "name": "Make JSON response for Crow",
+            "description": "No description available."
+        },
+        {
+            "name": "Manager for STM/MTM/LTM memory tiers.",
+            "description": "Provides global access to tiered memory pools, handling allocation, promotion and demotion of MemoryBlock instances."
+        },
+        {
+            "name": "Modulate response detail based on coherence metrics (explicit coherence score)",
+            "description": "No description available."
+        },
+        {
+            "name": "Modulate response detail based on coherence metrics (extract coherence from JSON)",
+            "description": "No description available."
+        },
+        {
+            "name": "Private constructor to enforce Singleton pattern",
+            "description": "No description available."
+        },
+        {
+            "name": "Private destructor to enforce Singleton pattern",
+            "description": "No description available."
+        },
+        {
+            "name": "Process a batch of patterns",
+            "description": "No description available."
+        },
+        {
+            "name": "Process a context check request from JavaScript",
+            "description": "No description available."
+        },
+        {
+            "name": "Process patterns through the SEP Engine",
+            "description": "No description available."
+        },
+        {
+            "name": "Proxy engine that forwards operations to a remote SEP service",
+            "description": "Since Engine methods aren't virtual, we compose rather than inherit"
+        },
+        {
+            "name": "QFH-enhanced Quantum Processor",
+            "description": "Integrates the Quantum Fourier Hierarchy (QFH) approach from the testbed project into the main SEP codebase."
+        },
+        {
+            "name": "Real-time memory usage monitor for the SEP Workbench",
+            "description": "Tracks process memory usage, heap allocations, and provides time-series data for visualization in the metrics dashboard."
+        },
+        {
+            "name": "Real-time metrics monitoring system for SEP engine data",
+            "description": "This class provides the core functionality needed for an investor demo: - Real-time pattern detection and metrics calculation - Data stream ingestion with configurable sources - Coherence, Stability, and Entropy tracking - Pattern statistics (length, frequency, persistence) - Clear/reset functionality for fresh analysis"
+        },
+        {
+            "name": "Register routes and start the server",
+            "description": "No description available."
+        },
+        {
+            "name": "Report a CUDA error",
+            "description": "No description available."
+        },
+        {
+            "name": "Report a system error (errno-based)",
+            "description": "No description available."
+        },
+        {
+            "name": "Report an error with context information",
+            "description": "No description available."
+        },
+        {
+            "name": "Retrieve recent pattern history metrics",
+            "description": "No description available."
+        },
+        {
+            "name": "Set the error callback function",
+            "description": "No description available."
+        },
+        {
+            "name": "Setup API routes",
+            "description": "No description available."
+        },
+        {
+            "name": "Setup logging configuration",
+            "description": "No description available."
+        },
+        {
+            "name": "Setup middleware",
+            "description": "No description available."
+        },
+        {
+            "name": "Setup signal handlers",
+            "description": "No description available."
+        },
+        {
+            "name": "Setup the SEP API routes in a Crow application",
+            "description": "This function sets up the routes for the SEP Engine API in a Crow application."
+        },
+        {
+            "name": "Shutdown the SEP Engine",
+            "description": "No description available."
         },
         {
             "name": "Signal handler",
-            "description": "*    * @param signal Signal number"
+            "description": "No description available."
+        },
+        {
+            "name": "Standardized error handling utilities for the SEP Engine",
+            "description": "This file provides common error handling mechanisms that comply with CERT-ERR33-C (detect and handle standard library errors). It includes error codes, error reporting functions, and macros to simplify error handling throughout the codebase."
+        },
+        {
+            "name": "Start the server",
+            "description": "No description available."
+        },
+        {
+            "name": "Stop the server",
+            "description": "No description available."
+        },
+        {
+            "name": "Template class for managing CUDA unified memory",
+            "description": "This class provides automatic memory management for CUDA unified memory, which can be accessed by both CPU and GPU."
+        },
+        {
+            "name": "Update server configuration",
+            "description": "No description available."
+        },
+        {
+            "name": "Validate context data",
+            "description": "No description available."
+        },
+        {
+            "name": "Wait for server shutdown",
+            "description": "No description available."
         }
     ]
 }

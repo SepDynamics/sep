@@ -8,6 +8,8 @@
 #include <vector>
 #include <string>
 
+#include "trade_manager.h"
+
 namespace sep::workbench {
     namespace core {
         class TradeManager;
@@ -29,7 +31,7 @@ public:
     ~MetricsDashboard();
 
     bool initialize();
-    void setTradeManager(core::TradeManager* trade_manager);
+    void setTradeManager(TradeManager* trade_manager);
     void shutdown();
     void render();  // Call this in ImGui render loop
 
@@ -90,7 +92,7 @@ private:
     
     // OANDA integration
     std::unique_ptr<sep::connectors::OandaConnector> oanda_connector_;
-    core::TradeManager* trade_manager_{nullptr};
+    TradeManager* trade_manager_{nullptr};
     bool oanda_connected_{false};
     std::string oanda_status_{"Disconnected"};
     bool use_oanda_data_{false};

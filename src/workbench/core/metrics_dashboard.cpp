@@ -47,7 +47,7 @@ bool MetricsDashboard::initialize() {
     return true;
 }
 
-void MetricsDashboard::setTradeManager(core::TradeManager* trade_manager) {
+void MetricsDashboard::setTradeManager(TradeManager* trade_manager) {
     trade_manager_ = trade_manager;
 }
 

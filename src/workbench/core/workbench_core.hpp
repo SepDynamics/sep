@@ -19,9 +19,7 @@ class DemoOrchestrator;
 class LandingPage;
 class Renderer;
 class MetricsDashboard;
-namespace core {
-    class TradeManager;
-}
+#include "trade_manager.h"
 
 }  // namespace sep::workbench
 
@@ -111,7 +109,7 @@ private:
     std::unique_ptr<LandingPage> landing_page_;
     std::unique_ptr<Renderer> renderer_;
     std::unique_ptr<MetricsDashboard> metrics_dashboard_;
-    std::unique_ptr<core::TradeManager> trade_manager_;
+    std::unique_ptr<TradeManager> trade_manager_;
     
     // Engine components (may be null if service not connected)
     std::unique_ptr<sep::core::Engine> offline_engine_;

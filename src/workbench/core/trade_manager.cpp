@@ -2,7 +2,6 @@
 
 namespace sep {
 namespace workbench {
-namespace core {
 
 TradeManager::TradeManager(sep::connectors::OandaConnector* connector)
     : oanda_connector_(connector) {}
@@ -31,6 +30,5 @@ nlohmann::json TradeManager::placeOrder(const std::string& instrument,
     return oanda_connector_->placeOrder(order_details);
 }
 
-} // namespace core
 } // namespace workbench
 } // namespace sep

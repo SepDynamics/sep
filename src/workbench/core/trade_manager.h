@@ -3,10 +3,10 @@
 #include "connectors/oanda_connector.h"
 #include <nlohmann/json.hpp>
 #include <string>
+#include <functional>
 
 namespace sep {
 namespace workbench {
-namespace core {
 
 class TradeManager {
 public:
@@ -22,6 +22,5 @@ private:
     sep::connectors::OandaConnector* oanda_connector_;
 };
 
-} // namespace core
 } // namespace workbench
 } // namespace sep

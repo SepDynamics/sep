@@ -2,6 +2,7 @@
 #include <iostream>
 #include <exception>
 #include <csignal>
+#include <memory>
 
 // Global workbench instance for signal handling
 static sep::workbench::WorkbenchEngine* g_workbench = nullptr;

@@ -5,6 +5,9 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
 // Forward declaration for GLFW
 struct GLFWwindow;

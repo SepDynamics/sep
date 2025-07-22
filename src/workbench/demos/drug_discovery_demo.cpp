@@ -1,0 +1,85 @@
+#include "drug_discovery_demo.hpp"
+
+#include <config.hpp>
+#include <cstdlib>
+#include <glm/glm.hpp>
+
+#include "../simple_renderer.h"
+
+namespace sep
+{
+    namespace workbench
+    {
+
+        void DrugDiscoveryDemo::on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer)
+        {
+            (void)engine;
+            renderer_ = renderer;
+            const auto& cfg = Config::getInstance().drug_discovery();
+            iterations_ = cfg.optimizer.iterations;
+            mutation_rate_ = cfg.optimizer.mutation_rate;
+
+            // Create a few initial poses
+            for (int i = 0; i < 5; ++i)
+            {
+                Pose p;
+                p.position = glm::vec3((std::rand() % 100) * 0.01f);
+                p.orientation = glm::vec3(0.0f);
+                p.binding_affinity = 0.0f;
+                poses_.push_back(p);
+            }
+        }
+
+        void DrugDiscoveryDemo::optimizePoses()
+        {
+            for (int it = 0; it < iterations_; ++it)
+            {
+                for (auto& p : poses_)
+                {
+                    // Simple random mutation of pose variables
+                    p.position += mutation_rate_ * glm::vec3(((std::rand() % 200) - 100) * 0.001f,
+                                                             ((std::rand() % 200) - 100) * 0.001f,
+                                                             ((std::rand() % 200) - 100) * 0.001f);
+                    p.orientation +=
+                        mutation_rate_ * glm::vec3(((std::rand() % 200) - 100) * 0.001f,
+                                                   ((std::rand() % 200) - 100) * 0.001f,
+                                                   ((std::rand() % 200) - 100) * 0.001f);
+
+                    // Mock binding affinity computation
+                    float dist = glm::length(p.position);
+                    p.binding_affinity = glm::clamp(1.0f - dist, 0.0f, 1.0f);
+                }
+            }
+        }
+
+        void DrugDiscoveryDemo::on_update(float) { optimizePoses(); }
+
+        void DrugDiscoveryDemo::on_render()
+        {
+            if (!renderer_) return;
+            std::vector<glm::vec3> points;
+            for (const auto& p : poses_)
+            {
+                points.push_back(p.position);
+            }
+            renderer_->renderPatternState(points);
+        }
+
+        void DrugDiscoveryDemo::on_unload() { poses_.clear(); }
+
+        void DrugDiscoveryDemo::on_ui_render()
+        {
+            ImGui::Begin("Neural Simulation Controls");
+            ImGui::SliderFloat("Threshold", &threshold_, 0.1f, 2.0f);
+            ImGui::SliderFloat("Decay Rate", &decay_, 0.01f, 0.5f);
+            ImGui::SliderFloat("Input Strength", &input_strength_, 0.1f, 1.0f);
+            ImGui::SliderFloat("Learning Rate", &learning_rate_, 0.01f, 0.2f);
+            ImGui::SliderFloat("Connection Probability", &connection_prob_, 0.1f, 0.5f);
+            ImGui::End();
+        }
+
+        void DrugDiscoveryDemo::on_key_press(int key) { (void)key; }
+        void DrugDiscoveryDemo::on_mouse(int, int, int) {}
+
+    }  // namespace workbench
+}  // namespace sep

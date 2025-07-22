@@ -1,0 +1,74 @@
+#pragma once
+
+#include <memory>
+#include <vector>
+
+#include "demo_base.hpp"
+#include "demo_manager.hpp"
+#include "imgui.h"
+#include "memory/memory_tier_manager.hpp"
+#include "memory/quantum_coherence_manager.h"
+
+// Forward declarations
+namespace sep {
+namespace core {
+class Engine;
+}
+}
+
+namespace sep {
+namespace workbench {
+
+class MemoryGardenDemo : public Demo {
+public:
+    void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
+    void on_ui_render() override;
+    void on_update(float dt) override;
+    void on_render() override;
+    void on_unload() override;
+    void on_key_press(int key) override;
+    void on_mouse(int x, int y, int button);
+
+private:
+    struct Node {
+        glm::vec3 position;
+        float coherence{0.f};
+    };
+
+    struct Relationship {
+        size_t from;
+        size_t to;
+        float strength;
+    };
+
+    sep::memory::MemoryTierManager* memory_manager_ = nullptr;
+    std::unique_ptr<sep::memory::QuantumCoherenceManager> coherence_manager_;
+
+    std::vector<Node> nodes_;
+    std::vector<Relationship> relationships_;
+
+    // Layout parameters
+    float stm_radius_{10.0f};
+    float mtm_radius_{20.0f};
+    float ltm_radius_{30.0f};
+
+    // Visualization settings
+    bool show_connections_{true};
+    float connection_opacity_{0.5f};
+    float pattern_scale_{1.0f};
+    float threshold_{1.0f};
+    float decay_{0.1f};
+    float input_strength_{0.5f};
+    float learning_rate_{0.05f};
+    float connection_prob_{0.3f};
+
+    sep::SimpleRenderer* renderer_{nullptr};
+
+private:
+    void createInitialPatterns();
+    void updateRelationships();
+    glm::vec3 calculateNodePosition(float coherence);
+};
+
+} // namespace workbench
+}  // namespace sep

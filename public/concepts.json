@@ -1,0 +1,228 @@
+{
+    "concepts": [
+        {
+            "name": "Manager for STM/MTM/LTM memory tiers.",
+            "description": "*  *"
+        },
+        {
+            "name": "Template class for managing CUDA unified memory",
+            "description": "*  *"
+        },
+        {
+            "name": "Constructs a new UnifiedMemory object with the specified size",
+            "description": "*      *"
+        },
+        {
+            "name": "Constructs a new UnifiedMemory object with existing data pointer",
+            "description": "*      *"
+        },
+        {
+            "name": "Gets the data pointer",
+            "description": "*      *"
+        },
+        {
+            "name": "Gets the size of the allocation",
+            "description": "*      *"
+        },
+        {
+            "name": "Checks if the allocation is valid",
+            "description": "*      *"
+        },
+        {
+            "name": "A datatype-agnostic engine for analyzing patterns in raw byte streams.",
+            "description": "* @class PatternMetricEngine"
+        },
+        {
+            "name": "Extracts patterns from a raw byte stream.",
+            "description": "*      *"
+        },
+        {
+            "name": "Standardized error handling utilities for the SEP Engine",
+            "description": "* @file error_handling.h"
+        },
+        {
+            "name": "Initialize the error handling system",
+            "description": "*  *"
+        },
+        {
+            "name": "Report an error with context information",
+            "description": "*  *"
+        },
+        {
+            "name": "Get string representation of an error code",
+            "description": "*  *"
+        },
+        {
+            "name": "Set the error callback function",
+            "description": "*  *"
+        },
+        {
+            "name": "Gets the request URL",
+            "description": "*      * @return The request URL"
+        },
+        {
+            "name": "Gets the HTTP method",
+            "description": "*      * @return The request method"
+        },
+        {
+            "name": "Gets the request body",
+            "description": "*      * @return The request body"
+        },
+        {
+            "name": "Gets the value of a specific header",
+            "description": "*      * @param name The header name to look up"
+        },
+        {
+            "name": "Real-time memory usage monitor for the SEP Workbench",
+            "description": "*  *"
+        },
+        {
+            "name": "ImGui-based dashboard for real-time SEP metrics visualization",
+            "description": "*  *"
+        },
+        {
+            "name": "Real-time metrics monitoring system for SEP engine data",
+            "description": "*  *"
+        },
+        {
+            "name": "Proxy engine that forwards operations to a remote SEP service",
+            "description": "*  * Since Engine methods aren't virtual, we compose rather than inherit"
+        },
+        {
+            "name": "Converts market data from OANDA into byte streams for SEP pattern analysis",
+            "description": "*  *"
+        },
+        {
+            "name": "Convert OANDA candle data to byte stream",
+            "description": "*      *"
+        },
+        {
+            "name": "Convert real-time market data to byte stream",
+            "description": "*      *"
+        },
+        {
+            "name": "Convert price series to byte stream with normalization",
+            "description": "*      *"
+        },
+        {
+            "name": "Convert order book data to byte stream",
+            "description": "*      *"
+        },
+        {
+            "name": "Create a composite byte stream from multiple data sources",
+            "description": "*      *"
+        },
+        {
+            "name": "Constructs an APIException.",
+            "description": "*      * @param message The error message."
+        },
+        {
+            "name": "Checks if the error is transient.",
+            "description": "*      * @return True if the error is transient, false otherwise."
+        },
+        {
+            "name": "Implementation of adapters for integrating with the Crow web framework",
+            "description": "* @file crow_adapter_impl.h"
+        },
+        {
+            "name": "Header file for the Crow adapter for the SEP Engine API",
+            "description": "* @file crow_adapter.h"
+        },
+        {
+            "name": "Setup the SEP API routes in a Crow application",
+            "description": "*  *"
+        },
+        {
+            "name": "Process a context check request from JavaScript",
+            "description": "*    * @param context_json JSON string containing the context to check"
+        },
+        {
+            "name": "Main API interface for the SEP Engine",
+            "description": "* @file sep_engine.h"
+        },
+        {
+            "name": "Main API interface for the SEP Engine",
+            "description": "*  *"
+        },
+        {
+            "name": "Get the singleton instance of the SepEngine",
+            "description": "*      *"
+        },
+        {
+            "name": "Initialize the SEP Engine",
+            "description": "*      *"
+        },
+        {
+            "name": "Shutdown the SEP Engine",
+            "description": "*      *"
+        },
+        {
+            "name": "Process patterns through the SEP Engine",
+            "description": "*      *"
+        },
+        {
+            "name": "Process a batch of patterns",
+            "description": "*      *"
+        },
+        {
+            "name": "Validate context data",
+            "description": "*      *"
+        },
+        {
+            "name": "Extract embeddings from data",
+            "description": "*      *"
+        },
+        {
+            "name": "Calculate similarity between embeddings",
+            "description": "*      *"
+        },
+        {
+            "name": "Blend contexts together",
+            "description": "*      *"
+        },
+        {
+            "name": "Get the health status of the SEP Engine",
+            "description": "*      *"
+        },
+        {
+            "name": "Concrete implementation of the SEP API Server",
+            "description": "*  *"
+        },
+        {
+            "name": "Construct a new SEPApiServer",
+            "description": "*    * @param config The API configuration"
+        },
+        {
+            "name": "Update server configuration",
+            "description": "*    * @param new_config The new configuration"
+        },
+        {
+            "name": "Get error response string",
+            "description": "*    * @param message Error message"
+        },
+        {
+            "name": "Make JSON response for Crow",
+            "description": "*    * @param status_code HTTP status code"
+        },
+        {
+            "name": "Modulate response detail based on coherence metrics (extract coherence from JSON)",
+            "description": "*    * @param response Original JSON response data"
+        },
+        {
+            "name": "Modulate response detail based on coherence metrics (explicit coherence score)",
+            "description": "*    * @param response Original JSON response data"
+        },
+        {
+            "name": "Handle error and return JSON for Crow",
+            "description": "*    * @param message Error message"
+        },
+        {
+            "name": "Log request details",
+            "description": "*    * @param req The request"
+        },
+        {
+            "name": "Signal handler",
+            "description": "*    * @param signal Signal number"
+        }
+    ]
+}

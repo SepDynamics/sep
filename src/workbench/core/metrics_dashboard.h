@@ -9,6 +9,9 @@
 #include <string>
 
 namespace sep::workbench {
+    namespace core {
+        class TradeManager;
+    }
 
 
 /**

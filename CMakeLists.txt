@@ -70,4 +70,11 @@ add_subdirectory(third_party/imgui)
 add_subdirectory(src)
 add_subdirectory(src/apps)
 
+# Custom command to generate documentation
+add_custom_target(generate_docs
+    COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/parse_docs.py
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Generating documentation from source headers"
+)
+
 

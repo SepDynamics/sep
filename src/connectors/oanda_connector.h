@@ -9,6 +9,7 @@
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 #include <thread>
+#include <iterator>
 
 namespace sep {
 namespace connectors {

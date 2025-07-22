@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <iterator>
 
 // Forward declaration for GLFW
 struct GLFWwindow;

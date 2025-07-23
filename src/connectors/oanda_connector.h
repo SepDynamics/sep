@@ -25,6 +25,12 @@ struct MarketData {
     double volume;
     std::vector<double> bid_book;
     std::vector<double> ask_book;
+    
+    // Technical indicators (matching JS prototype)
+    double atr;              // Average True Range
+    int volatility_level;    // 1-4 volatility classification
+    double spread;           // Bid-ask spread
+    double daily_change;     // Daily price change %
 };
 
 struct OandaCandle {
@@ -66,6 +72,13 @@ public:
     nlohmann::json placeOrder(const nlohmann::json& order_details);
     nlohmann::json getOpenPositions();
     nlohmann::json getOrders();
+    
+    // Technical analysis (matching JS prototype)
+    double calculateATR(const std::string& instrument, 
+                       const std::string& granularity = "H1", 
+                       int periods = 14);
+    MarketData getMarketData(const std::string& instrument);
+    int getVolatilityLevel(double atr);
 
     // Error handling
     std::string getLastError() const { return last_error_; }

@@ -277,6 +277,87 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
     return response;
 }
 
+// Technical Analysis Implementation (matching JS prototype)
+double OandaConnector::calculateATR(const std::string& instrument, 
+                                   const std::string& granularity, 
+                                   int periods) {
+    // Get historical data for ATR calculation
+    auto candles = getHistoricalData(instrument, granularity, "", "", periods + 1);
+    
+    if (candles.size() < periods) {
+        last_error_ = "Insufficient candle data for ATR calculation";
+        return 0.0;
+    }
+    
+    std::vector<double> true_ranges;
+    
+    // Calculate true ranges (skip first candle as we need previous close)
+    for (size_t i = 1; i < candles.size(); i++) {
+        double high = candles[i].high;
+        double low = candles[i].low;
+        double prev_close = candles[i-1].close;
+        
+        // True Range = max(high - low, |high - prev_close|, |low - prev_close|)
+        double tr1 = high - low;
+        double tr2 = std::abs(high - prev_close);
+        double tr3 = std::abs(low - prev_close);
+        double true_range = std::max({tr1, tr2, tr3});
+        
+        true_ranges.push_back(true_range);
+    }
+    
+    // Calculate average true range
+    if (true_ranges.empty()) {
+        return 0.0;
+    }
+    
+    double atr = std::accumulate(true_ranges.begin(), true_ranges.end(), 0.0) / true_ranges.size();
+    return atr;
+}
+
+int OandaConnector::getVolatilityLevel(double atr) {
+    // Volatility classification matching JS prototype
+    if (atr < 0.003) return 1;      // Low volatility
+    if (atr < 0.007) return 2;      // Medium-low volatility  
+    if (atr < 0.012) return 3;      // Medium-high volatility
+    return 4;                       // High volatility
+}
+
+MarketData OandaConnector::getMarketData(const std::string& instrument) {
+    MarketData market_data;
+    market_data.instrument = instrument;
+    
+    try {
+        // Get current price data
+        auto candles = getHistoricalData(instrument, "M1", "", "", 10);
+        if (!candles.empty()) {
+            auto& latest = candles.back();
+            market_data.bid = latest.close - 0.0001;  // Approximate bid
+            market_data.ask = latest.close + 0.0001;  // Approximate ask
+            market_data.mid = latest.close;
+            market_data.spread = market_data.ask - market_data.bid;
+            market_data.volume = latest.volume;
+        }
+        
+        // Calculate ATR for volatility analysis
+        market_data.atr = calculateATR(instrument);
+        market_data.volatility_level = getVolatilityLevel(market_data.atr);
+        
+        // Set timestamp
+        auto now = std::chrono::system_clock::now();
+        market_data.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+            now.time_since_epoch()).count();
+        
+        // Calculate daily change (simplified - would need daily candles for accurate calculation)
+        market_data.daily_change = 0.0;
+        
+    } catch (const std::exception& e) {
+        last_error_ = "Error getting market data: " + std::string(e.what());
+    }
+    
+    return market_data;
+}
+
 void OandaConnector::processStreamData(const std::string& data) {
     stream_buffer_ += data;
     size_t newline_pos;

@@ -169,6 +169,12 @@ private:
     void renderOHLCCandlesticks(const std::deque<Candlestick>& candles, float min_price, float max_price, float price_range);
     void renderSEPSignalOverlay(const std::string& instrument, float min_price, float max_price, float price_range);
     void renderSEPMetricChart(const std::string& instrument);
+    void render24HourTrailingWindow(const std::string& instrument);
+    void renderTraditionalVsSEPComparison(const std::string& instrument);
+    void calculateTraditionalSignals(const std::string& instrument);
+    double calculateRSI(const std::vector<double>& prices, int period = 14);
+    std::pair<double, double> calculateMACD(const std::vector<double>& prices);
+    std::pair<double, double> calculateBollingerBands(const std::vector<double>& prices, int period = 20);
     
     // Market data storage
     std::mutex market_data_mutex_;
@@ -194,6 +200,30 @@ private:
     
     std::map<std::string, Chart24HrCache> instrument_cache_;
     std::chrono::minutes cache_update_interval_{5}; // Update every 5 minutes
+    
+    // Traditional signals for comparison with SEP engine
+    struct TraditionalSignals {
+        double rsi;
+        double macd;
+        double macd_signal;
+        double bb_upper;
+        double bb_lower;
+        std::string overall_signal; // "BUY", "SELL", "NEUTRAL"
+        double confidence;
+        std::chrono::system_clock::time_point timestamp;
+    };
+    std::map<std::string, std::vector<TraditionalSignals>> traditional_signals_history_;
+    
+    // 24-hour trailing window data
+    struct TrailingWindowData {
+        std::vector<double> sep_coherence;
+        std::vector<double> sep_stability;
+        std::vector<double> sep_entropy;
+        std::vector<double> traditional_scores;
+        std::vector<std::chrono::system_clock::time_point> timestamps;
+        size_t max_points{1440}; // 24 hours * 60 minutes
+    };
+    std::map<std::string, TrailingWindowData> trailing_window_data_;
 };
 
 } // namespace sep::workbench

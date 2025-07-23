@@ -634,6 +634,12 @@ void MetricsDashboard::renderCandlestickChart(const std::string& instrument) {
         
         // SEP Engine Metrics as 0-1 line chart
         renderSEPMetricChart(instrument);
+        
+        // 24-hour trailing window analysis
+        render24HourTrailingWindow(instrument);
+        
+        // Traditional vs SEP comparison
+        renderTraditionalVsSEPComparison(instrument);
     }
 }
 
@@ -1694,6 +1700,373 @@ void MetricsDashboard::calculateSnapshotMetrics(Chart24HrCache& cache) {
     
     std::cout << "[MetricsDashboard] Snapshot metrics calculated - C:" << cache.coherence_metric 
              << " S:" << cache.stability_metric << " E:" << cache.entropy_metric << std::endl;
+}
+
+void MetricsDashboard::render24HourTrailingWindow(const std::string& instrument) {
+    ImGui::SeparatorText("24-Hour Trailing Window Analysis");
+    
+    auto& cache = instrument_cache_[instrument];
+    auto trailing_it = trailing_window_data_.find(instrument);
+    
+    if (!cache.is_valid || trailing_it == trailing_window_data_.end()) {
+        ImGui::Text("No trailing window data available for %s", instrument.c_str());
+        return;
+    }
+    
+    const auto& trailing_data = trailing_it->second;
+    
+    // Calculate 24-hour window (last 1440 minutes)
+    auto now = std::chrono::system_clock::now();
+    auto window_start = now - std::chrono::hours(24);
+    
+    std::vector<float> coherence_values;
+    std::vector<float> stability_values;
+    std::vector<float> entropy_values;
+    std::vector<float> atr_values;
+    std::vector<float> timestamps; // For X-axis
+    
+    // Extract SEP metrics from sliding window within 24 hours
+    for (size_t i = 0; i < trailing_data.timestamps.size(); i++) {
+        if (trailing_data.timestamps[i] >= window_start) {
+            if (i < trailing_data.sep_coherence.size()) coherence_values.push_back(trailing_data.sep_coherence[i]);
+            if (i < trailing_data.sep_stability.size()) stability_values.push_back(trailing_data.sep_stability[i]);
+            if (i < trailing_data.sep_entropy.size()) entropy_values.push_back(trailing_data.sep_entropy[i]);
+            
+            // Calculate synthetic ATR from minute data if available
+            if (i < cache.minute_data.size()) {
+                // Simple volatility proxy using high-low range
+                double volatility = cache.minute_data[i].high - cache.minute_data[i].low;
+                atr_values.push_back(volatility);
+            }
+            
+            // Convert to hours ago for x-axis
+            auto hours_ago = std::chrono::duration_cast<std::chrono::hours>(now - trailing_data.timestamps[i]).count();
+            timestamps.push_back(static_cast<float>(-hours_ago)); // Negative for past
+        }
+    }
+    
+    if (coherence_values.empty()) {
+        ImGui::Text("No data in 24-hour window");
+        return;
+    }
+    
+    // Create composite window showing SEP metrics vs market volatility
+    if (ImGui::BeginTable("TrailingWindow", 2, ImGuiTableFlags_Resizable)) {
+        ImGui::TableSetupColumn("SEP Metrics", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("Market Conditions", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableHeadersRow();
+        
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        
+        // SEP Engine metrics plot
+        ImGui::Text("SEP Pattern Metrics (24hr)");
+        if (!coherence_values.empty()) {
+            ImGui::PlotLines("Coherence", coherence_values.data(), coherence_values.size(),
+                           0, nullptr, 0.0f, 1.0f, ImVec2(0, 120));
+            ImGui::PlotLines("Stability", stability_values.data(), stability_values.size(),
+                           0, nullptr, 0.0f, 1.0f, ImVec2(0, 120));
+            ImGui::PlotLines("Entropy", entropy_values.data(), entropy_values.size(),
+                           0, nullptr, 0.0f, 1.0f, ImVec2(0, 120));
+        }
+        
+        ImGui::TableSetColumnIndex(1);
+        
+        // Market volatility correlation
+        ImGui::Text("Market Volatility (ATR)");
+        if (!atr_values.empty()) {
+            float min_atr = *std::min_element(atr_values.begin(), atr_values.end());
+            float max_atr = *std::max_element(atr_values.begin(), atr_values.end());
+            ImGui::PlotLines("ATR", atr_values.data(), atr_values.size(),
+                           0, nullptr, min_atr * 0.9f, max_atr * 1.1f, ImVec2(0, 120));
+            
+            // Show current ATR levels and pattern matching from JS prototype
+            if (!atr_values.empty()) {
+                float current_atr = atr_values.back();
+                ImGui::Text("Current ATR: %.6f", current_atr);
+                
+                // Pattern condition matching based on JS prototype logic
+                if (current_atr > 0.008) {
+                    ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "High Volatility - Breakout Patterns");
+                } else if (current_atr > 0.007) {
+                    ImGui::TextColored(ImVec4(1, 1, 0, 1), "Medium-High - RSI/MACD Patterns");
+                } else if (current_atr < 0.006) {
+                    ImGui::TextColored(ImVec4(0, 1, 0, 1), "Low Volatility - Support/Resistance");
+                } else {
+                    ImGui::Text("Normal Volatility");
+                }
+            }
+        }
+        
+        ImGui::EndTable();
+    }
+    
+    // Summary metrics for the 24-hour window
+    if (!coherence_values.empty()) {
+        float avg_coherence = std::accumulate(coherence_values.begin(), coherence_values.end(), 0.0f) / coherence_values.size();
+        float avg_stability = std::accumulate(stability_values.begin(), stability_values.end(), 0.0f) / stability_values.size();
+        float avg_entropy = std::accumulate(entropy_values.begin(), entropy_values.end(), 0.0f) / entropy_values.size();
+        
+        ImGui::SeparatorText("24hr Window Summary");
+        ImGui::Text("Average Coherence: %.3f", avg_coherence);
+        ImGui::SameLine(); ImGui::Text("Average Stability: %.3f", avg_stability);
+        ImGui::SameLine(); ImGui::Text("Average Entropy: %.3f", avg_entropy);
+        
+        // Calculate resonance similar to JS prototype
+        float resonance = (avg_coherence + avg_stability + (1.0f - avg_entropy)) / 3.0f;
+        if (resonance >= 0.7) {
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), "High Resonance: %.3f", resonance);
+        } else if (resonance >= 0.55) {
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), "Medium Resonance: %.3f", resonance);
+        } else {
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "Low Resonance: %.3f", resonance);
+        }
+    }
+}
+
+void MetricsDashboard::renderTraditionalVsSEPComparison(const std::string& instrument) {
+    ImGui::SeparatorText("Traditional Signals vs SEP Engine Analysis");
+    
+    // Calculate traditional signals first
+    calculateTraditionalSignals(instrument);
+    
+    auto trad_it = traditional_signals_history_.find(instrument);
+    auto& cache = instrument_cache_[instrument];
+    
+    if (trad_it == traditional_signals_history_.end() || trad_it->second.empty() || !cache.is_valid) {
+        ImGui::Text("Insufficient data for comparison");
+        return;
+    }
+    
+    const auto& signals = trad_it->second.back(); // Use latest signals
+    
+    if (ImGui::BeginTable("SignalComparison", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable)) {
+        ImGui::TableSetupColumn("Traditional Signals");
+        ImGui::TableSetupColumn("SEP Engine");
+        ImGui::TableSetupColumn("Agreement");
+        ImGui::TableHeadersRow();
+        
+        // RSI vs SEP Entropy
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        double current_rsi = signals.rsi;
+        ImGui::Text("RSI: %.1f", current_rsi);
+        if (current_rsi > 70) {
+            ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 0, 0, 1), "(Overbought)");
+        } else if (current_rsi < 30) {
+            ImGui::SameLine(); ImGui::TextColored(ImVec4(0, 1, 0, 1), "(Oversold)");
+        }
+        
+        ImGui::TableSetColumnIndex(1);
+        double entropy = cache.entropy_metric;
+        ImGui::Text("Entropy: %.3f", entropy);
+        if (entropy < 0.3) {
+            ImGui::SameLine(); ImGui::TextColored(ImVec4(0, 1, 0, 1), "(Low Chaos)");
+        } else if (entropy > 0.7) {
+            ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 0, 0, 1), "(High Chaos)");
+        }
+        
+        ImGui::TableSetColumnIndex(2);
+        // Compare RSI overbought/oversold with entropy levels
+        bool rsi_extreme = (current_rsi > 70 || current_rsi < 30);
+        bool entropy_extreme = (entropy < 0.3 || entropy > 0.7);
+        
+        if (rsi_extreme && entropy_extreme) {
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), "AGREE");
+        } else if (!rsi_extreme && !entropy_extreme) {
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), "AGREE");
+        } else {
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "DISAGREE");
+        }
+        
+        // MACD vs SEP Coherence
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        double macd = signals.macd;
+        double macd_signal = signals.macd_signal;
+        ImGui::Text("MACD: %.5f", macd - macd_signal);
+        if (macd > macd_signal) {
+            ImGui::SameLine(); ImGui::TextColored(ImVec4(0, 1, 0, 1), "(Bullish)");
+        } else {
+            ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 0, 0, 1), "(Bearish)");
+        }
+        
+        ImGui::TableSetColumnIndex(1);
+        double coherence = cache.coherence_metric;
+        ImGui::Text("Coherence: %.3f", coherence);
+        if (coherence > 0.6) {
+            ImGui::SameLine(); ImGui::TextColored(ImVec4(0, 1, 0, 1), "(Strong Pattern)");
+        } else {
+            ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 0, 0, 1), "(Weak Pattern)");
+        }
+        
+        ImGui::TableSetColumnIndex(2);
+        // Compare MACD direction with coherence strength
+        double macd_histogram = macd - macd_signal;
+        
+        bool macd_strong = std::abs(macd_histogram) > 0.0001;
+        bool coherence_strong = coherence > 0.6;
+        
+        if (macd_strong && coherence_strong) {
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), "BOTH STRONG");
+        } else if (!macd_strong && !coherence_strong) {
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), "BOTH WEAK");
+        } else {
+            ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "DIVERGENCE");
+        }
+        
+        ImGui::EndTable();
+    }
+    
+    // Generate combined signal like JS prototype
+    double coherence = cache.coherence_metric;
+    double stability = cache.stability_metric;
+    double entropy = cache.entropy_metric;
+    
+    // Calculate SEP resonance
+    double sep_resonance = (coherence + stability + (1.0 - entropy)) / 3.0;
+    
+    ImGui::SeparatorText("Combined Signal Analysis");
+    ImGui::Text("SEP Resonance: %.3f", sep_resonance);
+    
+    // Signal direction based on JS prototype logic
+    if (sep_resonance >= 0.7) {
+        ImGui::TextColored(ImVec4(0, 1, 0, 1), "STRONG SEP SIGNAL - High Confidence");
+    } else if (sep_resonance >= 0.55) {
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "MEDIUM SEP SIGNAL - Medium Confidence");
+    } else {
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "WEAK SEP SIGNAL - Low Confidence");
+    }
+}
+
+void MetricsDashboard::calculateTraditionalSignals(const std::string& instrument) {
+    std::lock_guard<std::mutex> lock(market_data_mutex_);
+    
+    if (historical_data_.empty()) {
+        return;
+    }
+    
+    // Extract close prices
+    std::vector<double> close_prices;
+    for (const auto& candle : historical_data_) {
+        close_prices.push_back(candle.close);
+    }
+    
+    if (close_prices.size() < 26) { // Need at least 26 periods for MACD
+        return;
+    }
+    
+    // Create a new signal entry
+    TraditionalSignals signal;
+    signal.timestamp = std::chrono::system_clock::now();
+    
+    // Simple RSI calculation (approximation)
+    if (close_prices.size() >= 14) {
+        signal.rsi = calculateRSI(close_prices);
+    }
+    
+    // Simple MACD calculation (approximation)
+    auto macd_data = calculateMACD(close_prices);
+    signal.macd = macd_data.first;
+    signal.macd_signal = macd_data.second;
+    
+    // Bollinger Bands
+    auto bb_data = calculateBollingerBands(close_prices);
+    signal.bb_upper = bb_data.first;
+    signal.bb_lower = bb_data.second;
+    
+    // Simple signal classification
+    if (signal.rsi > 70 && close_prices.back() > signal.bb_upper) {
+        signal.overall_signal = "SELL";
+        signal.confidence = 0.8;
+    } else if (signal.rsi < 30 && close_prices.back() < signal.bb_lower) {
+        signal.overall_signal = "BUY";
+        signal.confidence = 0.8;
+    } else {
+        signal.overall_signal = "NEUTRAL";
+        signal.confidence = 0.5;
+    }
+    
+    // Add to history
+    traditional_signals_history_[instrument].push_back(signal);
+    
+    // Keep only recent data (last 1000 signals)
+    auto& history = traditional_signals_history_[instrument];
+    if (history.size() > 1000) {
+        history.erase(history.begin(), history.begin() + (history.size() - 1000));
+    }
+}
+
+double MetricsDashboard::calculateRSI(const std::vector<double>& prices, int period) {
+    if (prices.size() < period + 1) {
+        return 50.0; // Default neutral RSI
+    }
+    
+    // Simple RSI calculation using last 14 periods
+    double gain_sum = 0, loss_sum = 0;
+    for (int i = std::max(0, (int)prices.size() - period - 1); i < (int)prices.size() - 1; i++) {
+        double change = prices[i + 1] - prices[i];
+        if (change > 0) {
+            gain_sum += change;
+        } else {
+            loss_sum += -change;
+        }
+    }
+    
+    if (loss_sum == 0) return 100.0;
+    
+    double avg_gain = gain_sum / period;
+    double avg_loss = loss_sum / period;
+    double rs = avg_gain / avg_loss;
+    
+    return 100.0 - (100.0 / (1.0 + rs));
+}
+
+std::pair<double, double> MetricsDashboard::calculateMACD(const std::vector<double>& prices) {
+    if (prices.size() < 26) {
+        return {0.0, 0.0}; // Default neutral MACD
+    }
+    
+    // Simple EMA approximation for MACD
+    size_t len = prices.size();
+    double ema12 = prices[len-1]; // Simplified
+    double ema26 = 0;
+    
+    // Rough approximation of 26-period EMA
+    for (size_t i = len >= 26 ? len - 26 : 0; i < len; i++) {
+        ema26 += prices[i];
+    }
+    ema26 /= std::min(26, (int)len);
+    
+    double macd_line = ema12 - ema26;
+    double signal_line = macd_line * 0.9; // Simplified signal line
+    
+    return {macd_line, signal_line};
+}
+
+std::pair<double, double> MetricsDashboard::calculateBollingerBands(const std::vector<double>& prices, int period) {
+    if (prices.size() < period) {
+        return {0.0, 0.0}; // Default values
+    }
+    
+    // Simple moving average for last period
+    double sma = 0;
+    for (int i = prices.size() - period; i < prices.size(); i++) {
+        sma += prices[i];
+    }
+    sma /= period;
+    
+    // Calculate standard deviation
+    double variance = 0;
+    for (int i = prices.size() - period; i < prices.size(); i++) {
+        variance += (prices[i] - sma) * (prices[i] - sma);
+    }
+    double std_dev = std::sqrt(variance / period);
+    
+    double upper_band = sma + (2.0 * std_dev);
+    double lower_band = sma - (2.0 * std_dev);
+    
+    return {upper_band, lower_band};
 }
 
 } // namespace sep::workbench

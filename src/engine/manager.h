@@ -25,7 +25,7 @@ public:
   const SystemConfig &getConfig() const;
   void setConfig(const SystemConfig &config);
 
-  bool loadFromFile(const sep::string &filename);
+  bool loadFromFile(const std::string &filename);
   bool loadFromEnvironment();
   bool loadFromCommandLine(int argc, char *argv[]);
 

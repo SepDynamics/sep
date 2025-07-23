@@ -10,7 +10,7 @@
 namespace sep {
 namespace cuda {
 
-#if SEP_ENGINE_HAS_CUDA
+#ifdef __CUDACC__
 #include <cuda_runtime_api.h>
 #else
 // Stub types when CUDA is not available

@@ -5,7 +5,6 @@
 #include <chrono>
 #include <iostream>
 
-#include "../simple_renderer.h"
 #include "demos/demo_base.hpp"
 #include "demos/demo_manager.hpp"
 #include "imgui.h"
@@ -46,7 +45,7 @@ void DemoOrchestrator::registerDemoFactories() {
 }
 
 bool DemoOrchestrator::loadDemo(const std::string& demo_id, sep::core::Engine* engine,
-                                sep::CyclesRenderer* renderer)
+                                  sep::SimpleRenderer* renderer)
 {
     std::lock_guard<std::mutex> lock(state_mutex_);
     
@@ -66,9 +65,7 @@ bool DemoOrchestrator::loadDemo(const std::string& demo_id, sep::core::Engine* e
 
         // Use DemoManager to create the demo
         auto& manager = DemoManager::getInstance();
-        // CyclesRenderer is a type alias for SimpleRenderer, so we can safely cast
-        sep::SimpleRenderer* simple_renderer = static_cast<sep::SimpleRenderer*>(renderer);
-        manager.initialize(engine, simple_renderer);
+        manager.initialize(engine, renderer);
 
         if (!manager.switchToDemo(demo_id)) {
             throw std::runtime_error("Failed to create demo: " + demo_id);
@@ -129,7 +126,7 @@ bool DemoOrchestrator::reloadCurrentDemo() {
     
     std::string demo_id = current_demo_id_;
     sep::core::Engine* engine = engine_;
-    sep::CyclesRenderer* renderer = renderer_;
+    sep::SimpleRenderer* renderer = renderer_;
     
     unloadCurrentDemo();
     return loadDemo(demo_id, engine, renderer);

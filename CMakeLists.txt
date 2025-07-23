@@ -48,7 +48,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cmake/template.cmake)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable testing
@@ -62,8 +62,17 @@ find_package(benchmark REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(glm REQUIRED)
-find_package(yaml-cpp REQUIRED)
 find_package(OpenGL REQUIRED)
+
+include(FetchContent)
+FetchContent_Declare(
+  yaml-cpp
+  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+  GIT_TAG 0.8.0
+)
+FetchContent_MakeAvailable(yaml-cpp)
+set_target_properties(yaml-cpp PROPERTIES CXX_STANDARD 17)
+
 # Add subdirectories
 # Trigger rebuild again
 add_subdirectory(third_party/imgui)

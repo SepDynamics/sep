@@ -335,6 +335,11 @@ void Engine::ingestFile(const std::string &dataPath, bool legacy)
 
 void Engine::ingestFromDirectory(const std::string &dirPath, bool recursive)
 {
+    if (dirPath.empty()) {
+        ErrorHandler::instance().reportError({SEPResult::INVALID_ARGUMENT, "Directory path is empty", "Engine::ingestFromDirectory"});
+        return;
+    }
+
     std::vector<std::string> filePaths;
     if (recursive) {
         for (const auto& entry : std::filesystem::recursive_directory_iterator(dirPath)) {

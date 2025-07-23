@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <glm/glm.hpp>
 #include <memory>
+#include <mutex>
 #include <vector>
 
 #include "engine/types.h"
@@ -53,6 +54,7 @@ protected:
 
 private:
     void analyzePatternBits();
+    mutable std::mutex m_mutex;
 };
 
 /**

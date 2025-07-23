@@ -5,7 +5,6 @@
 #include "engine/engine.h"
 
 // Include workbench components
-#include "cycles_renderer.h"
 #include "demo_orchestrator.hpp"
 #include "demos/register_demos.hpp"
 #include "landing_page.hpp"
@@ -116,9 +115,6 @@ bool WorkbenchEngine::initialize()
         sep::config::CudaConfig config;
         offline_engine_->init(config);
         active_engine_ = offline_engine_.get();
-        
-        // Create Cycles renderer
-        cycles_renderer_ = std::make_unique<sep::CyclesRenderer>();
         
         // Skip service check - use offline engine as primary engine
         std::cout << "[WorkbenchEngine] Using offline engine as primary engine - no service needed" << std::endl;
@@ -552,7 +548,7 @@ void WorkbenchEngine::selectDemo(const std::string& demo_name)
     std::cout << "[WorkbenchEngine] Selecting demo: " << demo_name << std::endl;
 
     if (demo_orchestrator_) {
-        bool success = demo_orchestrator_->loadDemo(demo_name, active_engine_, cycles_renderer_.get());
+        bool success = demo_orchestrator_->loadDemo(demo_name, active_engine_, nullptr);
         
         if (success) {
             metrics_.current_demo = demo_name;

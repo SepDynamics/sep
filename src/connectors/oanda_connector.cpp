@@ -254,6 +254,13 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
     }
     
     curl_easy_getinfo(curl_handle_, CURLINFO_RESPONSE_CODE, &response.response_code);
+
+    if (response.response_code >= 400)
+    {
+        std::cerr << "OANDA API Error: " << response.response_code << " - " << response.data
+                  << std::endl;
+    }
+
     return response;
 }
 

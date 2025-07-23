@@ -7,7 +7,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "cycles_renderer.h"
 #include "demos/demo_base.hpp"
 
 // Forward declarations
@@ -16,6 +15,7 @@ namespace sep {
     {
         class Engine;
     }
+    class SimpleRenderer;
 }
 
 namespace sep::workbench {
@@ -62,7 +62,7 @@ public:
 
     // Demo lifecycle management
     bool loadDemo(const std::string& demo_id, sep::core::Engine* engine,
-                  sep::CyclesRenderer* renderer);
+                  sep::SimpleRenderer* renderer);
     void unloadCurrentDemo();
     bool reloadCurrentDemo();
     
@@ -110,7 +110,7 @@ private:
     
     // Engine references
     sep::core::Engine* engine_{nullptr};
-    sep::CyclesRenderer* renderer_{nullptr};
+    sep::SimpleRenderer* renderer_{nullptr};
     
     // Metrics
     DemoMetrics metrics_;

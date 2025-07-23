@@ -100,10 +100,10 @@ sep::compat::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(
     
     return pattern;
 }
-sep::vector<sep::compat::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns(
+std::vector<sep::compat::PatternData> sep::quantum::mcp::PatternEvolution::getPatterns(
     const nlohmann::json& args)
 {
-    sep::vector<sep::compat::PatternData> patterns;
+    std::vector<sep::compat::PatternData> patterns;
     auto json_patterns = args.value("patterns", nlohmann::json::array());
     float min_coherence = args.value("min_coherence", 0.0f);
     float min_stability = args.value("min_stability", 0.0f);

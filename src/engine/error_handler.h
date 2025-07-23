@@ -10,11 +10,11 @@ namespace sep {
 // Error type for the SEP engine
 struct Error {
     sep::SEPResult code{sep::SEPResult::SUCCESS};
-    sep::string message;
-sep::string location;
+    std::string message;
+    std::string location;
 
     Error() = default;
-    Error(sep::SEPResult code, const sep::string &msg, const sep::string &loc = "")
+    Error(sep::SEPResult code, const std::string &msg, const std::string &loc = "")
         : code(code), message(msg), location(loc)
     {
     }
@@ -26,7 +26,7 @@ class ErrorHandler {
  public:
   static ErrorHandler &instance();
 
-  void reportError(const ::sep::Error &error, std::function<bool()> retry = {});
+  void reportError(const sep::Error &error, std::function<bool()> retry = {});
 
   std::vector<::sep::Error> getErrors() const;
 

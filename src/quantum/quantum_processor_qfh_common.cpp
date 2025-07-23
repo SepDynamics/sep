@@ -53,20 +53,21 @@ float patternStability(float coherence, float historical_stability, float genera
 QuantumProcessorQFHCommon::QuantumProcessorQFHCommon() : qbsa_processor_(createQFHBasedQBSAProcessor({})) {}
 
 void QuantumProcessorQFHCommon::clear() {
+    std::lock_guard<std::mutex> lock(m_mutex);
     m_patterns.clear();
     m_pattern_bits.clear();
     m_last_qfh_result = sep::quantum::QFHResult();
 }
-
 const sep::quantum::QFHResult& QuantumProcessorQFHCommon::getLastQFHResult() const {
+    std::lock_guard<std::mutex> lock(m_mutex);
     return m_last_qfh_result;
 }
 
-const sep::quantum::QFHResult& QuantumProcessorQFHCommon::lastQFHResult() const {
+const sep::quantum::QFHResult& sep::quantum::QuantumProcessorQFHCommon::lastQFHResult() const {
     return m_last_qfh_result;
 }
 
-float QuantumProcessorQFHCommon::calculateMutationRate(float base_rate, int successful_mutations,
+float sep::quantum::QuantumProcessorQFHCommon::calculateMutationRate(float base_rate, int successful_mutations,
                                                        int stabilization_count) {
     float success_factor = 1.0f + static_cast<float>(successful_mutations) * 0.05f;
     float stability_factor = 1.0f / (1.0f + static_cast<float>(stabilization_count) * 0.1f);
@@ -74,7 +75,8 @@ float QuantumProcessorQFHCommon::calculateMutationRate(float base_rate, int succ
     return std::clamp(rate, 0.0f, 1.0f);
 }
 
-float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
+float sep::quantum::QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
+    std::lock_guard<std::mutex> lock(m_mutex);
     float coherence;
 
     if (m_patterns.empty()) {
@@ -125,13 +127,13 @@ float QuantumProcessorQFHCommon::processPattern(const glm::vec3& pattern) {
     return coherence;
 }
 
-float QuantumProcessorQFHCommon::calculateStability(const glm::vec3& pattern, float historical_stability,
+float sep::quantum::QuantumProcessorQFHCommon::calculateStability(const glm::vec3& pattern, float historical_stability,
                                                     int generation_count, float access_frequency) {
     float coherence = processPattern(pattern);
     return patternStability(coherence, historical_stability, static_cast<float>(generation_count), access_frequency);
 }
 
-glm::vec3 QuantumProcessorQFHCommon::mutatePattern(const glm::vec3& pattern, float base_rate, int successful_mutations,
+glm::vec3 sep::quantum::QuantumProcessorQFHCommon::mutatePattern(const glm::vec3& pattern, float base_rate, int successful_mutations,
                                                    int stabilization_count) {
     float rate = calculateMutationRate(base_rate, successful_mutations, stabilization_count);
 
@@ -142,7 +144,7 @@ glm::vec3 QuantumProcessorQFHCommon::mutatePattern(const glm::vec3& pattern, flo
     return glm::normalize(pattern + mutation);
 }
 
-float QuantumProcessorQFHCommon::updateRelationship(const glm::vec3& pattern_a, const glm::vec3& pattern_b,
+float sep::quantum::QuantumProcessorQFHCommon::updateRelationship(const glm::vec3& pattern_a, const glm::vec3& pattern_b,
                                                     float interaction_frequency) {
     float coherence_a = processPattern(pattern_a);
     float coherence_b = processPattern(pattern_b);
@@ -150,21 +152,21 @@ float QuantumProcessorQFHCommon::updateRelationship(const glm::vec3& pattern_a, 
     return relationshipStrength(coherence_a, coherence_b, interaction_frequency);
 }
 
-bool QuantumProcessorQFHCommon::isCollapsed(const glm::vec3& pattern) {
+bool sep::quantum::QuantumProcessorQFHCommon::isCollapsed(const glm::vec3& pattern) {
     float coherence = processPattern(pattern);
     bool traditional_collapse = coherence < sep::COLLAPSE_THRESHOLD;
     bool qfh_collapse = m_last_qfh_result.collapse_detected;
     return qfh_collapse || traditional_collapse;
 }
 
-bool QuantumProcessorQFHCommon::isStable(const glm::vec3& pattern) {
+bool sep::quantum::QuantumProcessorQFHCommon::isStable(const glm::vec3& pattern) {
     float coherence = processPattern(pattern);
     bool traditional_stable = coherence >= sep::STABILITY_THRESHOLD;
     bool qfh_stable = m_last_qfh_result.rupture_ratio < 0.3f;
     return traditional_stable && qfh_stable;
 }
 
-bool QuantumProcessorQFHCommon::isQuantum(const glm::vec3& pattern) {
+bool sep::quantum::QuantumProcessorQFHCommon::isQuantum(const glm::vec3& pattern) {
     float coherence = processPattern(pattern);
     bool traditional_quantum =
         coherence >= sep::MIN_COHERENCE &&
@@ -173,15 +175,17 @@ bool QuantumProcessorQFHCommon::isQuantum(const glm::vec3& pattern) {
     return traditional_quantum || qfh_quantum;
 }
 
-void QuantumProcessorQFHCommon::processPatternBits(const std::vector<uint32_t>& pattern_bits)
+void sep::quantum::QuantumProcessorQFHCommon::processPatternBits(const std::vector<uint32_t>& pattern_bits)
 {
+    std::lock_guard<std::mutex> lock(m_mutex);
     m_pattern_bits = pattern_bits;
     analyzePatternBits();
 }
 
-void QuantumProcessorQFHCommon::analyzePatternBits() {
-    if (m_pattern_bits.empty())
+void sep::quantum::QuantumProcessorQFHCommon::analyzePatternBits() {
+    if (m_pattern_bits.empty()) {
         return;
+    }
 
     QFHOptions options;
     options.collapse_threshold = 0.6f;

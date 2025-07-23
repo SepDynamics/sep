@@ -1,7 +1,11 @@
 #ifndef SEP_CUDA_STREAM_H
 #define SEP_CUDA_STREAM_H
 
+#ifdef __CUDACC__
 #include <cuda_runtime.h>
+#else
+#include "cuda_base.h"
+#endif
 #include <memory>
 
 namespace sep {

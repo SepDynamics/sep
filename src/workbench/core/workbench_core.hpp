@@ -1,19 +1,9 @@
 #pragma once
 
-#include <atomic>
-#include <chrono>
-#include <functional>
-#include <memory>
-#include <string>
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <iterator>
+#include "std_includes.h"
 
 // Forward declaration for GLFW
 struct GLFWwindow;
-
-#include "cycles_renderer.h"
 
 namespace sep::workbench {
 
@@ -23,10 +13,11 @@ class DemoOrchestrator;
 class LandingPage;
 class Renderer;
 class MetricsDashboard;
-#include "trade_manager.h"
+class TradeManager;
 
 }  // namespace sep::workbench
 
+#include "trade_manager.h"
 // External classes from sep namespace (not in sep::workbench)
 namespace sep {
     namespace core
@@ -118,8 +109,6 @@ private:
     // Engine components (may be null if service not connected)
     std::unique_ptr<sep::core::Engine> offline_engine_;
     sep::core::Engine* active_engine_{nullptr};
-    std::unique_ptr<sep::SimpleRenderer> simple_renderer_;
-    std::unique_ptr<sep::CyclesRenderer> cycles_renderer_;
 
     // Window configuration
     struct WindowConfig {

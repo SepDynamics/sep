@@ -1,8 +1,5 @@
+#include "std_includes.h"
 #include "workbench_core.hpp"
-#include <iostream>
-#include <exception>
-#include <csignal>
-#include <memory>
 
 // Global workbench instance for signal handling
 static sep::workbench::WorkbenchEngine* g_workbench = nullptr;

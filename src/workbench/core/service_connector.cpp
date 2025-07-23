@@ -30,10 +30,10 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     const char* api_key = std::getenv("OANDA_API_KEY");
     const char* account_id = std::getenv("OANDA_ACCOUNT_ID");
     if (api_key && account_id) {
-        oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id);
+        oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, true);
     }
     std::cout << "[ServiceConnector] Initialized with config: "
-              << config.service_address << ":" << config.service_port << std::endl;
+               << config.service_address << ":" << config.service_port << std::endl;
 }
 
 ServiceConnector::~ServiceConnector() {

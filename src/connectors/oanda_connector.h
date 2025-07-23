@@ -1,15 +1,17 @@
 #pragma once
 
+#include <string>
+#include <vector>
 #include <atomic>
 #include <chrono>
 #include <functional>
 #include <memory>
-#include <string>
-#include <vector>
+#include <algorithm>
+#include <iterator>
+#include <numeric>
+#include <thread>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
-#include <thread>
-#include <iterator>
 
 namespace sep {
 namespace connectors {
@@ -104,7 +106,7 @@ private:
     std::atomic<bool> streaming_active_{false};
     std::thread stream_thread_;
     std::string stream_buffer_;
-    void streamPriceData(const std::vector<std::string>& instruments);
+    void streamPriceData(const std::string& instruments);
 };
 
 } // namespace connectors

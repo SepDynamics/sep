@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Get the directory of the script
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd "$SCRIPT_DIR"
+
 # SEP Workbench Runner with OANDA Credentials
 # This script sets up the environment and runs the SEP workbench
 
@@ -12,11 +16,11 @@ if [ -f "keys.txt" ]; then
     echo "Loading OANDA credentials..."
     source keys.txt
 else
-    echo "Error: keys.txt not found!"
-    echo "Please create keys.txt with:"
-    echo "export OANDA_API_KEY=\"<your_api_key>\""
-    echo "export OANDA_ACCOUNT_ID=\"<your_account_id>\""
-    exit 1
+    echo "keys.txt not found. Creating with placeholder values."
+    echo "export OANDA_API_KEY=\"<your_api_key>\"" > keys.txt
+    echo "export OANDA_ACCOUNT_ID=\"<your_account_id>\"" >> keys.txt
+    echo "Please edit keys.txt with your actual OANDA credentials."
+    source keys.txt
 fi
 
 # Verify credentials are loaded
@@ -51,4 +55,4 @@ echo "Starting SEP Workbench..."
 echo "Press Ctrl+C to exit"
 echo ""
 
-./build/src/sep_workbench --api-key "$OANDA_API_KEY" --account-id "$OANDA_ACCOUNT_ID"
+gdb -ex run --ex bt --ex quit --args ./build/src/sep_workbench --api-key "$OANDA_API_KEY" --account-id "$OANDA_ACCOUNT_ID"

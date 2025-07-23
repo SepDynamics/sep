@@ -42,7 +42,7 @@ namespace sep::config
         impl_->mem_cfg = cfg.memory;
         impl_->quantum_cfg = cfg.quantum;
     }
-    bool ConfigManager::loadFromFile(const sep::string& filename)
+    bool ConfigManager::loadFromFile(const std::string& filename)
     {
         try
         {

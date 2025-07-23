@@ -1,5 +1,6 @@
 #include "quantum/qfh.h"
 
+#include <iostream>
 #include <numeric>
 #include <vector>
 
@@ -33,10 +34,11 @@ std::vector<QFHEvent> transform_rich(const std::vector<uint8_t>& bits)
     }
     return result;
 }
-
 std::vector<QFHAggregateEvent> aggregate(const std::vector<QFHEvent>& events)
 {
-    if (events.empty()) return {};
+    if (events.empty()) {
+        return {};
+    }
     std::vector<QFHAggregateEvent> aggregated;
     aggregated.push_back({events[0].index, events[0].state, 1});
     for (size_t i = 1; i < events.size(); ++i) {
@@ -49,55 +51,56 @@ std::vector<QFHAggregateEvent> aggregate(const std::vector<QFHEvent>& events)
     return aggregated;
 }
 
-std::optional<QFHState> QFHProcessor::process(uint8_t current_bit) {
+std::optional<sep::quantum::QFHState> sep::quantum::QFHProcessor::process(uint8_t current_bit) {
     if (current_bit != 0 && current_bit != 1) {
-        return std::nullopt; 
+        return std::nullopt;
     }
     if (!prev_bit.has_value()) {
         prev_bit = current_bit;
         return std::nullopt;
     }
     uint8_t prev = prev_bit.value();
-    std::optional<QFHState> event_state;
+    std::optional<sep::quantum::QFHState> event_state;
     if (prev == 0 && current_bit == 0) {
-        event_state = QFHState::NULL_STATE;
+        event_state = sep::quantum::QFHState::NULL_STATE;
     } else if ((prev == 0 && current_bit == 1) || (prev == 1 && current_bit == 0)) {
-        event_state = QFHState::FLIP;
+        event_state = sep::quantum::QFHState::FLIP;
     } else if (prev == 1 && current_bit == 1) {
-        event_state = QFHState::RUPTURE;
+        event_state = sep::quantum::QFHState::RUPTURE;
     }
     prev_bit = current_bit;
     return event_state;
 }
 
-void QFHProcessor::reset() {
+void sep::quantum::QFHProcessor::reset() {
     prev_bit.reset();
 }
 
 // QFHBasedProcessor implementation
-QFHBasedProcessor::QFHBasedProcessor(const QFHOptions& options) : options_(options) {}
+sep::quantum::QFHBasedProcessor::QFHBasedProcessor(const QFHOptions& options) : options_(options) {}
 
-QFHResult QFHBasedProcessor::analyze(const std::vector<uint8_t>& bits)
+sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const std::vector<uint8_t>& bits)
 {
-    QFHResult result;
-    result.collapse_threshold = options_.collapse_threshold; 
-    
+    sep::quantum::QFHResult result;
+    result.collapse_threshold = options_.collapse_threshold;
+
     // Transform bits to events
     result.events = transform_rich(bits);
-    
+    std::cerr << "analyze: events size: " << result.events.size() << std::endl;
+
     // Aggregate events
     result.aggregated_events = aggregate(result.events);
     
     // Count event types
     for (const auto& event : result.events) {
         switch (event.state) {
-            case QFHState::NULL_STATE:
+            case sep::quantum::QFHState::NULL_STATE:
                 result.null_state_count++;
                 break;
-            case QFHState::FLIP:
+            case sep::quantum::QFHState::FLIP:
                 result.flip_count++;
                 break;
-            case QFHState::RUPTURE:
+            case sep::quantum::QFHState::RUPTURE:
                 result.rupture_count++;
                 break;
             default:
@@ -125,11 +128,11 @@ QFHResult QFHBasedProcessor::analyze(const std::vector<uint8_t>& bits)
     return result;
 }
 
-bool QFHBasedProcessor::detectCollapse(const QFHResult& result) const {
+bool sep::quantum::QFHBasedProcessor::detectCollapse(const QFHResult& result) const {
     return result.collapse_detected || result.rupture_ratio >= options_.collapse_threshold;
 }
 
-std::vector<uint8_t> QFHBasedProcessor::convertToBits(const std::vector<uint32_t>& values)
+std::vector<uint8_t> sep::quantum::QFHBasedProcessor::convertToBits(const std::vector<uint32_t>& values)
 {
     std::vector<uint8_t> bits;
     bits.reserve(values.size() * 32);

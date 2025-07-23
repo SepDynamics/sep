@@ -73,9 +73,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(yaml-cpp)
 set_target_properties(yaml-cpp PROPERTIES CXX_STANDARD 17)
 
+FetchContent_Declare(
+  imgui
+  GIT_REPOSITORY https://github.com/ocornut/imgui.git
+  GIT_TAG v1.89.9
+)
+FetchContent_MakeAvailable(imgui)
+
 # Add subdirectories
 # Trigger rebuild again
-add_subdirectory(third_party/imgui)
 add_subdirectory(src)
 add_subdirectory(src/apps)
 

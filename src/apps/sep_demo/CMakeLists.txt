@@ -16,8 +16,7 @@ add_executable(sep_demo
 target_include_directories(sep_demo PRIVATE
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/third_party/imgui
-    ${CMAKE_SOURCE_DIR}/third_party/imgui/backends
+    ${imgui_SOURCE_DIR}
 )
 
 # Link libraries - order matters for static libraries

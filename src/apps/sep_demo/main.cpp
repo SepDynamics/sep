@@ -1,14 +1,14 @@
-#include <iostream>
-#include <memory>
-#include <chrono>
-#include <thread>
-
-#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <chrono>
+#include <iostream>
+#include <memory>
+#include <thread>
+
+#include "glad/glad.h"
 #include "sep_demo_app.hpp"
 
 static void glfw_error_callback(int error, const char* description) {

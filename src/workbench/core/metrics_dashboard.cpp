@@ -1319,8 +1319,8 @@ void MetricsDashboard::renderOandaMainView() {
     
     if (ImGui::BeginChild("MainChart", chart_size, true)) {
         if (historical_data_loaded_ && !historical_data_.empty()) {
-            // Display the time range of the cached candles (48 hours)
-            ImGui::Text("Historical Chart (48hr) for %s", selected_instrument_.c_str());
+            // Display the time range of the plotted candles (last 24 hours)
+            ImGui::Text("Historical Chart (Last 24hr) for %s", selected_instrument_.c_str());
             ImGui::Text("Candles: %zu", historical_data_.size());
             
             // Chart info header
@@ -1411,26 +1411,32 @@ void MetricsDashboard::fetchHistoricalData() {
     // Check if we need to update the cache for this instrument
     updateInstrumentCache(selected_instrument_);
     
-    // Use cached data for display
+    // Use cached data for display, showing the last 24 hours
     auto& cache = instrument_cache_[selected_instrument_];
     if (cache.is_valid && !cache.minute_data.empty()) {
-        historical_data_ = cache.minute_data;
+        const auto& all_candles = cache.minute_data;
+        const int minutes_in_24_hours = 24 * 60;
+
+        if (all_candles.size() > minutes_in_24_hours) {
+            auto start_it = all_candles.end() - minutes_in_24_hours;
+            historical_data_ = std::vector<sep::connectors::OandaCandle>(start_it, all_candles.end());
+        } else {
+            historical_data_ = all_candles;
+        }
+
         historical_data_loaded_ = true;
-        std::cout << "[MetricsDashboard] Using cached data: " << historical_data_.size() << " minute candles" << std::endl;
-        
+        std::cout << "[MetricsDashboard] Using cached data: " << historical_data_.size() << " minute candles for 24hr view" << std::endl;
+
         // Debug: Print sample data points
-        if (historical_data_.size() > 0) {
-            std::cout << "[DEBUG] First candle: O=" << historical_data_[0].open 
-                     << " H=" << historical_data_[0].high 
-                     << " L=" << historical_data_[0].low 
-                     << " C=" << historical_data_[0].close << std::endl;
-            if (historical_data_.size() > 1) {
-                auto last_idx = historical_data_.size() - 1;
-                std::cout << "[DEBUG] Last candle: O=" << historical_data_[last_idx].open 
-                         << " H=" << historical_data_[last_idx].high 
-                         << " L=" << historical_data_[last_idx].low 
-                         << " C=" << historical_data_[last_idx].close << std::endl;
-            }
+        if (!historical_data_.empty()) {
+            std::cout << "[DEBUG] First plotted candle: O=" << historical_data_.front().open
+                     << " H=" << historical_data_.front().high
+                     << " L=" << historical_data_.front().low
+                     << " C=" << historical_data_.front().close << std::endl;
+            std::cout << "[DEBUG] Last plotted candle: O=" << historical_data_.back().open
+                     << " H=" << historical_data_.back().high
+                     << " L=" << historical_data_.back().low
+                     << " C=" << historical_data_.back().close << std::endl;
         }
     } else {
         historical_data_loaded_ = false;
@@ -1559,9 +1565,9 @@ void MetricsDashboard::renderHistoricalChart() {
     // Time axis (simple for now)
     if (!historical_data_.empty()) {
         // First candle time
-        // Indicate the start of the cached window (48 hours ago)
+        // Indicate the start of the plotted window (24 hours ago)
         draw_list->AddText(ImVec2(chart_pos.x, chart_pos.y + chart_size.y + 5),
-                          IM_COL32(180, 180, 190, 255), "48hr ago");
+                          IM_COL32(180, 180, 190, 255), "24hr ago");
         
         // Last candle time  
         draw_list->AddText(ImVec2(chart_pos.x + chart_size.x - 30, chart_pos.y + chart_size.y + 5), 
@@ -1594,15 +1600,16 @@ void MetricsDashboard::updateInstrumentCache(const std::string& instrument) {
     // Use current time, not future time
     auto to_time = now;
     
-    auto from_time_t = std::chrono::system_clock::to_time_t(yesterday);
-    auto to_time_t = std::chrono::system_clock::to_time_t(to_time);
-    
-    std::tm* from_tm = std::gmtime(&from_time_t);
-    std::tm* to_tm = std::gmtime(&to_time_t);
-    
     char now_str[32], yesterday_str[32];
-    std::strftime(now_str, sizeof(now_str), "%Y-%m-%dT%H:%M:%SZ", to_tm);
+
+    // Format 'from' time first, then 'to' time to avoid static buffer issues with std::gmtime
+    auto from_time_t = std::chrono::system_clock::to_time_t(yesterday);
+    std::tm* from_tm = std::gmtime(&from_time_t);
     std::strftime(yesterday_str, sizeof(yesterday_str), "%Y-%m-%dT%H:%M:%SZ", from_tm);
+
+    auto to_time_t = std::chrono::system_clock::to_time_t(now);
+    std::tm* to_tm = std::gmtime(&to_time_t);
+    std::strftime(now_str, sizeof(now_str), "%Y-%m-%dT%H:%M:%SZ", to_tm);
     
     try {
         std::cout << "[MetricsDashboard] Updating 48hr cache for " << instrument << " (M1 data)" << std::endl;

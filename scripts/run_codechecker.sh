@@ -33,6 +33,7 @@ docker run --rm \
             cd /sep
             CodeChecker analyze compile_commands.json \
                 --output /home/codecheck/.codechecker/reports \
+                --analyzer-config clangsa:clang-path=/usr/bin/clang++-15 \
                 --enable sensitive \
                 --enable extreme
 

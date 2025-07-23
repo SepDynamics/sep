@@ -80,6 +80,31 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
+# Create imgui library manually since imgui doesn't provide CMakeLists.txt
+set(IMGUI_SOURCES
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+add_library(imgui STATIC ${IMGUI_SOURCES})
+
+target_include_directories(imgui PUBLIC
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+
+# Find and link required dependencies
+find_package(PkgConfig REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(OpenGL REQUIRED)
+
+target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
+
 # Add subdirectories
 # Trigger rebuild again
 add_subdirectory(src)

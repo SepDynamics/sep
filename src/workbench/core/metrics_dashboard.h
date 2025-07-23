@@ -64,14 +64,16 @@ struct MarketDepth {
  */
 class MetricsDashboard {
 public:
-    // 24-hour sliding window cache
+    // 48-hour sliding window cache
     struct Chart24HrCache {
-        std::vector<sep::connectors::OandaCandle> minute_data;  // 1440 minutes = 24 hours
+        // Minute-by-minute data for two full days (used for a
+        // 24-hour sliding window view and short-term analysis)
+        std::vector<sep::connectors::OandaCandle> minute_data;  // 2880 minutes = 48 hours
         std::string instrument;
         std::chrono::system_clock::time_point last_update;
         bool is_valid{false};
         
-        // Coherence metrics for this 24hr snapshot
+        // Coherence metrics for this 48hr snapshot
         double coherence_metric{0.0};
         double stability_metric{0.0};
         double entropy_metric{0.0};

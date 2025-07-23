@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input');
     let allConcepts = [];
 
-    fetch('public/concepts.json')
+    // Load the generated concepts list from the repository root.
+    // This path was previously "public/concepts.json" but the file
+    // was moved to the project root to simplify deployment.
+    fetch('concepts.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

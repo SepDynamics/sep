@@ -1313,7 +1313,8 @@ void MetricsDashboard::renderOandaMainView() {
     
     if (ImGui::BeginChild("MainChart", chart_size, true)) {
         if (historical_data_loaded_ && !historical_data_.empty()) {
-            ImGui::Text("24hr Historical Chart for %s", selected_instrument_.c_str());
+            // Display the time range of the cached candles (48 hours)
+            ImGui::Text("Historical Chart (48hr) for %s", selected_instrument_.c_str());
             ImGui::Text("Candles: %zu", historical_data_.size());
             
             // Chart info header
@@ -1342,7 +1343,8 @@ void MetricsDashboard::renderOandaMainView() {
     
     // SEP Metrics panel below chart
     if (ImGui::BeginChild("SEPMetrics", ImVec2(ImGui::GetContentRegionAvail().x, 200), true)) {
-        ImGui::Text("24hr Market Snapshot Metrics");
+        // Metrics calculated from the cached 48hr window
+        ImGui::Text("48hr Market Snapshot Metrics");
         ImGui::Separator();
         
         // Show cached snapshot metrics
@@ -1381,7 +1383,7 @@ void MetricsDashboard::renderOandaMainView() {
             ImGui::Text("Data Points: %zu | Calculated: %ld min ago", 
                        cache.minute_data.size(), time_since_calc);
         } else {
-            ImGui::Text("Loading 24hr snapshot metrics...");
+            ImGui::Text("Loading 48hr snapshot metrics...");
         }
         
         ImGui::Separator();
@@ -1551,8 +1553,9 @@ void MetricsDashboard::renderHistoricalChart() {
     // Time axis (simple for now)
     if (!historical_data_.empty()) {
         // First candle time
-        draw_list->AddText(ImVec2(chart_pos.x, chart_pos.y + chart_size.y + 5), 
-                          IM_COL32(180, 180, 190, 255), "24hr ago");
+        // Indicate the start of the cached window (48 hours ago)
+        draw_list->AddText(ImVec2(chart_pos.x, chart_pos.y + chart_size.y + 5),
+                          IM_COL32(180, 180, 190, 255), "48hr ago");
         
         // Last candle time  
         draw_list->AddText(ImVec2(chart_pos.x + chart_size.x - 30, chart_pos.y + chart_size.y + 5), 

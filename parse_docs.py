@@ -55,9 +55,12 @@ def parse_cpp_headers(source_dir):
 def main():
     source_dir = 'src'
     concepts = parse_cpp_headers(source_dir)
-    with open('public/concepts.json', 'w') as f:
+    # Write the concepts file to the repository root so it can be
+    # served directly alongside index.html. Previously this script
+    # wrote to the old `public/` directory.
+    with open('concepts.json', 'w') as f:
         json.dump({'concepts': concepts}, f, indent=4)
-    print(f"Generated public/concepts.json with {len(concepts)} concepts.")
+    print(f"Generated concepts.json with {len(concepts)} concepts.")
 
 if __name__ == '__main__':
     main()

@@ -5,9 +5,13 @@
 
 #include "engine/pattern_types.h"
 #include "engine/standard_includes.h"
-#include "engine/types.h"
 #include "memory/types.h"
 #include "quantum/config.h"
+
+// Forward declarations to avoid circular dependency
+namespace sep {
+    struct PinState;
+}
 
 namespace sep {
 namespace quantum {

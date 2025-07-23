@@ -15,8 +15,8 @@ void signalHandler(int signal) {
 
 int main(int argc, char* argv[]) {
     // Install signal handlers
-    std::signal(SIGINT, signalHandler);
-    std::signal(SIGTERM, signalHandler);
+    (void)std::signal(SIGINT, signalHandler);
+    (void)std::signal(SIGTERM, signalHandler);
     
     // Parse command line arguments for OANDA credentials
     std::string api_key, account_id;

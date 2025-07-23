@@ -9,6 +9,7 @@
 
 #include "engine/types.h"
 #include "memory/types.h"
+#include "quantum/types.h"
 
 namespace sep::quantum {
 

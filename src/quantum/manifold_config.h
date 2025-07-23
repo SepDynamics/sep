@@ -1,6 +1,8 @@
 #pragma once
 
-#include "engine/types.h"
+#include "engine/config.h"
+#include "memory/types.h"
+#include "quantum/config.h"
 
 namespace sep::quantum::manifold {
 // Default configuration values used across the engine.

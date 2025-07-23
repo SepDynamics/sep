@@ -30,7 +30,15 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     const char* api_key = std::getenv("OANDA_API_KEY");
     const char* account_id = std::getenv("OANDA_ACCOUNT_ID");
     if (api_key && account_id) {
+        // Use practice server (sandbox=true) for safe testing
         oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, true);
+        std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
+        std::cout << "[ServiceConnector] API Key length: " << strlen(api_key) << std::endl;
+        std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
+    } else {
+        std::cout << "[ServiceConnector] ERROR: OANDA credentials not found in environment" << std::endl;
+        std::cout << "[ServiceConnector] API Key: " << (api_key ? "FOUND" : "NOT FOUND") << std::endl;
+        std::cout << "[ServiceConnector] Account ID: " << (account_id ? "FOUND" : "NOT FOUND") << std::endl;
     }
     std::cout << "[ServiceConnector] Initialized with config: "
                << config.service_address << ":" << config.service_port << std::endl;

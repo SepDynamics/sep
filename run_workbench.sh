@@ -30,7 +30,8 @@ if [ -z "$OANDA_API_KEY" ] || [ -z "$OANDA_ACCOUNT_ID" ]; then
 fi
 
 echo "OANDA Account: $OANDA_ACCOUNT_ID"
-echo "Using practice/demo server: api-fxpractice.oanda.com"
+echo "Using PRACTICE server: api-fxpractice.oanda.com"
+echo "This is REAL money trading - be careful!"
 echo ""
 
 # Check if build directory exists
@@ -55,4 +56,4 @@ echo "Starting SEP Workbench..."
 echo "Press Ctrl+C to exit"
 echo ""
 
-gdb -ex run --ex bt --ex quit --args ./build/src/sep_workbench --api-key "$OANDA_API_KEY" --account-id "$OANDA_ACCOUNT_ID"
+./build/src/sep_workbench --api-key "$OANDA_API_KEY" --account-id "$OANDA_ACCOUNT_ID"

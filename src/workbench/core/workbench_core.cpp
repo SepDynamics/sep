@@ -5,8 +5,8 @@
 #include "engine/engine.h"
 
 // Include workbench components
-#include "demo_orchestrator.hpp"
-#include "demos/register_demos.hpp"
+// #include "demo_orchestrator.hpp"
+// #include "demos/register_demos.hpp"
 #include "landing_page.hpp"
 #include "renderer.h"
 #include "service_connector.hpp"
@@ -81,11 +81,10 @@ bool WorkbenchEngine::initialize()
 
         service_connector_ = std::make_unique<ServiceConnector>();
         
-        // Register all available demos BEFORE creating orchestrator
-        sep::workbench::registerDemos();
-        
-        demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
-        landing_page_ = std::make_unique<LandingPage>(this);
+        // Removed demo components for real trading
+        // sep::workbench::registerDemos();
+        // demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
+        // landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = std::make_unique<Renderer>();
         trade_manager_ = std::make_unique<TradeManager>(service_connector_->getOandaConnector());
         metrics_dashboard_ = std::make_unique<MetricsDashboard>();
@@ -276,11 +275,7 @@ void WorkbenchEngine::processInput()
 {
     // ESC to exit
     if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        if (current_state_ == ApplicationState::DEMO_RUNNING) {
-            stopCurrentDemo();
-        } else if (current_state_ == ApplicationState::LANDING_PAGE) {
-            should_exit_ = true;
-        }
+        should_exit_ = true;
     }
     
     // F1 for help
@@ -294,10 +289,7 @@ void WorkbenchEngine::updateFrame(float delta_time)
     // Handle state-specific updates
     handleStateTransition();
     
-    // Update demo if running
-    if (current_state_ == ApplicationState::DEMO_RUNNING && demo_orchestrator_) {
-        demo_orchestrator_->update(delta_time);
-    }
+    // No demo updates needed for trading mode
 }
 
 void WorkbenchEngine::renderFrame()
@@ -311,30 +303,14 @@ void WorkbenchEngine::renderFrame()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     
-    // Render based on state
-    switch (current_state_.load()) {
-        case ApplicationState::LANDING_PAGE:
-        case ApplicationState::DEMO_SELECTION:
-            // Make metrics dashboard the main interface
-            if (metrics_dashboard_) {
-                metrics_dashboard_->render();
-            }
-            break;
-            
-        case ApplicationState::DEMO_RUNNING:
-            if (demo_orchestrator_) {
-                demo_orchestrator_->render();
-                demo_orchestrator_->renderUI();
-            }
-            break;
-            
-        case ApplicationState::ERROR_RECOVERY:
-            renderErrorRecovery();
-            break;
-            
-        default:
-            renderLoadingScreen();
-            break;
+    // Always render metrics dashboard as main interface (removed demo system)
+    if (metrics_dashboard_) {
+        metrics_dashboard_->render();
+    }
+    
+    // Handle special states
+    if (current_state_.load() == ApplicationState::ERROR_RECOVERY) {
+        renderErrorRecovery();
     }
     
     // Render status bar
@@ -545,31 +521,13 @@ void WorkbenchEngine::transitionTo(ApplicationState new_state)
 
 void WorkbenchEngine::selectDemo(const std::string& demo_name)
 {
-    std::cout << "[WorkbenchEngine] Selecting demo: " << demo_name << std::endl;
-
-    if (demo_orchestrator_) {
-        bool success = demo_orchestrator_->loadDemo(demo_name, active_engine_, nullptr);
-        
-        if (success) {
-            metrics_.current_demo = demo_name;
-            transitionTo(ApplicationState::DEMO_RUNNING);
-        } else {
-            reportError("Failed to load demo: " + demo_name);
-            transitionTo(ApplicationState::ERROR_RECOVERY);
-        }
-    }
+    // Demo system removed for trading mode
+    (void)demo_name;
 }
 
 void WorkbenchEngine::stopCurrentDemo()
 {
-    std::cout << "[WorkbenchEngine] Stopping current demo" << std::endl;
-
-    if (demo_orchestrator_) {
-        demo_orchestrator_->unloadCurrentDemo();
-    }
-    
-    metrics_.current_demo.clear();
-    transitionTo(ApplicationState::LANDING_PAGE);
+    // Demo system removed for trading mode
 }
 
 void WorkbenchEngine::showMetricsDashboard(bool show) {
@@ -617,10 +575,7 @@ void WorkbenchEngine::shutdown()
     // Stop the main loop
     should_exit_ = true;
 
-    // Clean up components
-    if (demo_orchestrator_) {
-        demo_orchestrator_->unloadCurrentDemo();
-    }
+    // Clean up components (demo system removed)
     
     // Clean up ImGui
     cleanupImGui();
@@ -645,28 +600,20 @@ void WorkbenchEngine::errorCallback(int error, const char* description)
 
 void WorkbenchEngine::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (instance_ && instance_->demo_orchestrator_ && 
-        instance_->current_state_ == ApplicationState::DEMO_RUNNING) {
-        instance_->demo_orchestrator_->handleKeyPress(key, scancode, action, mods);
-    }
+    // Demo system removed
+    (void)window; (void)key; (void)scancode; (void)action; (void)mods;
 }
 
 void WorkbenchEngine::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (instance_ && instance_->demo_orchestrator_ && 
-        instance_->current_state_ == ApplicationState::DEMO_RUNNING) {
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-        instance_->demo_orchestrator_->handleMouseButton(button, action, mods, xpos, ypos);
-    }
+    // Demo system removed
+    (void)window; (void)button; (void)action; (void)mods;
 }
 
 void WorkbenchEngine::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (instance_ && instance_->demo_orchestrator_ && 
-        instance_->current_state_ == ApplicationState::DEMO_RUNNING) {
-        instance_->demo_orchestrator_->handleMouseMove(xpos, ypos);
-    }
+    // Demo system removed
+    (void)window; (void)xpos; (void)ypos;
 }
 
 void WorkbenchEngine::framebufferSizeCallback(GLFWwindow* window, int width, int height)

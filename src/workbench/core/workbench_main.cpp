@@ -13,10 +13,32 @@ void signalHandler(int signal) {
     exit(0);
 }
 
-int main(int /*argc*/, char* /*argv*/[]) {
+int main(int argc, char* argv[]) {
     // Install signal handlers
     std::signal(SIGINT, signalHandler);
     std::signal(SIGTERM, signalHandler);
+    
+    // Parse command line arguments for OANDA credentials
+    std::string api_key, account_id;
+    for (int i = 1; i < argc; i++) {
+        if (std::string(argv[i]) == "--api-key" && i + 1 < argc) {
+            api_key = argv[i + 1];
+            i++; // Skip the next argument
+        } else if (std::string(argv[i]) == "--account-id" && i + 1 < argc) {
+            account_id = argv[i + 1];
+            i++; // Skip the next argument
+        }
+    }
+    
+    // Set environment variables if provided via command line
+    if (!api_key.empty()) {
+        setenv("OANDA_API_KEY", api_key.c_str(), 1);
+        std::cout << "[Main] OANDA API Key set from command line" << std::endl;
+    }
+    if (!account_id.empty()) {
+        setenv("OANDA_ACCOUNT_ID", account_id.c_str(), 1);
+        std::cout << "[Main] OANDA Account ID set: " << account_id << std::endl;
+    }
     
     std::cout << "=====================================\n";
     std::cout << "   SEP OANDA Trading Engine v1.0     \n";

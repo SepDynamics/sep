@@ -9,7 +9,6 @@ namespace sep::workbench {
 
 // Forward declarations
 class ServiceConnector;
-class DemoOrchestrator;
 class LandingPage;
 class Renderer;
 class MetricsDashboard;
@@ -100,7 +99,7 @@ private:
     // Engine components
     GLFWwindow* window_{nullptr};
     std::unique_ptr<ServiceConnector> service_connector_;
-    std::unique_ptr<DemoOrchestrator> demo_orchestrator_;
+    // Demo orchestrator removed for trading-focused version
     std::unique_ptr<LandingPage> landing_page_;
     std::unique_ptr<Renderer> renderer_;
     std::unique_ptr<MetricsDashboard> metrics_dashboard_;

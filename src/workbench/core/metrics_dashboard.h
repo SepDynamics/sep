@@ -7,6 +7,9 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <mutex>
+#include <deque>
+#include <map>
 
 #include "trade_manager.h"
 
@@ -15,6 +18,39 @@ namespace sep::workbench {
         class TradeManager;
     }
 
+// Candlestick data structure for OHLC charts
+struct Candlestick {
+    double timestamp;
+    double open;
+    double high;
+    double low;
+    double close;
+    double volume;
+    
+    Candlestick(double t = 0, double o = 0, double h = 0, double l = 0, double c = 0, double v = 0)
+        : timestamp(t), open(o), high(h), low(l), close(c), volume(v) {}
+};
+
+// Technical indicator calculations
+struct TechnicalIndicators {
+    std::vector<double> sma_20;
+    std::vector<double> sma_50;
+    std::vector<double> ema_12;
+    std::vector<double> ema_26;
+    std::vector<double> rsi;
+    std::vector<double> macd;
+    std::vector<double> macd_signal;
+    std::vector<double> bollinger_upper;
+    std::vector<double> bollinger_lower;
+    std::vector<double> atr;
+    std::vector<double> timestamps;
+};
+
+// Market depth data
+struct MarketDepth {
+    std::vector<std::pair<double, double>> bids; // price, volume
+    std::vector<std::pair<double, double>> asks; // price, volume
+};
 
 /**
  * @brief ImGui-based dashboard for real-time SEP metrics visualization
@@ -24,9 +60,24 @@ namespace sep::workbench {
  * - Pattern detection statistics
  * - Data source selection and control
  * - Export and analysis tools
+ * - Advanced OANDA market data visualization with candlesticks and indicators
  */
 class MetricsDashboard {
 public:
+    // 24-hour sliding window cache
+    struct Chart24HrCache {
+        std::vector<sep::connectors::OandaCandle> minute_data;  // 1440 minutes = 24 hours
+        std::string instrument;
+        std::chrono::system_clock::time_point last_update;
+        bool is_valid{false};
+        
+        // Coherence metrics for this 24hr snapshot
+        double coherence_metric{0.0};
+        double stability_metric{0.0};
+        double entropy_metric{0.0};
+        std::chrono::system_clock::time_point metrics_calculated;
+    };
+    
     MetricsDashboard();
     ~MetricsDashboard();
 
@@ -101,6 +152,46 @@ private:
     void initializeOandaConnection();
     void updateOandaData();
     void renderOandaPanel();
+    void renderOandaMainView();
+    void fetchHistoricalData();
+    void renderHistoricalChart();
+    void updateInstrumentCache(const std::string& instrument);
+    void calculateSnapshotMetrics(Chart24HrCache& cache);
+    bool needsCacheUpdate(const Chart24HrCache& cache);
+    void renderCandlestickChart(const std::string& instrument);
+    void renderTechnicalIndicators(const std::string& instrument);
+    void renderMarketDepth(const std::string& instrument);
+    void renderPatternMetrics();
+    void updateCandlestickData(const std::string& instrument, const sep::connectors::MarketData& data);
+    void calculateTechnicalIndicators(const std::string& instrument);
+    void renderOHLCCandlesticks(const std::deque<Candlestick>& candles, float min_price, float max_price, float price_range);
+    void renderSEPSignalOverlay(const std::string& instrument, float min_price, float max_price, float price_range);
+    void renderSEPMetricChart(const std::string& instrument);
+    
+    // Market data storage
+    std::mutex market_data_mutex_;
+    std::map<std::string, std::deque<Candlestick>> candlestick_data_;
+    std::map<std::string, TechnicalIndicators> technical_indicators_;
+    std::map<std::string, MarketDepth> market_depth_;
+    std::map<std::string, sep::connectors::MarketData> latest_prices_;
+    
+    // Chart settings
+    int max_candlesticks_{500};
+    bool show_sma_{true};
+    bool show_ema_{true};
+    bool show_rsi_{true};
+    bool show_macd_{true};
+    bool show_bollinger_{true};
+    bool show_volume_{true};
+    std::string selected_instrument_{"EUR_USD"};
+    
+    // Historical data and live streaming
+    bool live_data_enabled_{false};
+    std::vector<sep::connectors::OandaCandle> historical_data_;
+    bool historical_data_loaded_{false};
+    
+    std::map<std::string, Chart24HrCache> instrument_cache_;
+    std::chrono::minutes cache_update_interval_{5}; // Update every 5 minutes
 };
 
 } // namespace sep::workbench

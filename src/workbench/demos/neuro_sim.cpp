@@ -7,6 +7,7 @@
 #include "config.hpp"
 #include "engine/types.h"
 #include "memory/memory_tier_manager.hpp"
+#include "quantum/types.h"
 #include "quantum/evolution.h"
 
 using sep::memory::MemoryTierEnum;

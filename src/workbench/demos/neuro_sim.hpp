@@ -10,6 +10,7 @@
 #include "engine/types.h"
 #include "imgui.h"
 #include "memory/memory_tier_manager.hpp"
+#include "quantum/types.h"
 
 // Forward declarations
 namespace sep {

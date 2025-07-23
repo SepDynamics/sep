@@ -1591,8 +1591,8 @@ void MetricsDashboard::updateInstrumentCache(const std::string& instrument) {
     auto yesterday = now - std::chrono::hours(48);
     
     // Format times for OANDA API (ISO 8601) 
-    // Ensure they're different by adding a small offset to 'to' time
-    auto to_time = now + std::chrono::minutes(1); // Slightly in the future
+    // Use current time, not future time
+    auto to_time = now;
     
     auto from_time_t = std::chrono::system_clock::to_time_t(yesterday);
     auto to_time_t = std::chrono::system_clock::to_time_t(to_time);

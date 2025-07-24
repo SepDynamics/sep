@@ -93,50 +93,125 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
         m.pattern_id[sizeof(m.pattern_id) - 1] = '\0';
 
         if (!p.data.empty()) {
-            glm::vec3 pattern_vec;
-            if (p.data.size() >= 3) {
-                pattern_vec = glm::vec3(p.data[0], p.data[1], p.data[2]);
-            } else {
-                pattern_vec = glm::vec3(p.data[0], 0.0f, 0.0f);
-            }
-            
-            if (use_gpu_) {
-                // For GPU mode, use enhanced processing (placeholder for future CUDA acceleration)
-                // Current implementation uses CPU but will be accelerated with CUDA kernels
-                m.coherence = qfh_processor_->processPattern(pattern_vec) * 1.1f; // GPU boost placeholder
-            } else if (qfh_processor_) {
-                // Fallback to CPU processing
-                m.coherence = qfh_processor_->processPattern(pattern_vec);
-            } else {
-                m.coherence = 0.0f;
-            }
-        } else {
-            m.coherence = 0.0f;
-        }
-        
-        // Calculate stability based on pattern coherence and generation
-        // Higher coherence + lower generation changes = more stable
-        float generation_factor = 1.0f / (1.0f + p.generation * 0.1f);
-        m.stability = m.coherence * generation_factor;
-        
-        // Calculate entropy based on data variance and coherence
-        // Higher variance = higher entropy, higher coherence = lower entropy
-        if (!p.data.empty()) {
-            // Calculate variance of the pattern data
+            // Calculate coherence based on pattern self-similarity and consistency
+            float sum_squares = 0.0f;
             float mean = 0.0f;
+            
+            // Calculate mean
             for (float val : p.data) {
                 mean += val;
             }
             mean /= p.data.size();
             
+            // Calculate variance and coherence
             float variance = 0.0f;
             for (float val : p.data) {
-                variance += (val - mean) * (val - mean);
+                float diff = val - mean;
+                variance += diff * diff;
+                sum_squares += val * val;
             }
             variance /= p.data.size();
             
-            // Entropy is high variance with low coherence
-            m.entropy = std::min(1.0f, variance * (1.0f - m.coherence));
+            // Coherence is high when variance is low relative to signal strength
+            // Use coefficient of variation (inverse) as coherence measure
+            if (std::abs(mean) > 1e-6f) {
+                float cv = std::sqrt(variance) / std::abs(mean);
+                m.coherence = std::max(0.0f, std::min(1.0f, 1.0f / (1.0f + cv)));
+            } else {
+                // For zero-mean patterns, use energy concentration
+                float energy = sum_squares / p.data.size();
+                m.coherence = std::max(0.0f, std::min(1.0f, energy / (energy + variance + 1e-6f)));
+            }
+            
+            // Boost coherence if pattern has clear structure
+            if (p.data.size() >= 4) {
+                // Check for repeating patterns or structure
+                float structure_bonus = 0.0f;
+                for (size_t i = 0; i < p.data.size() - 1; ++i) {
+                    if (std::abs(p.data[i] - p.data[i+1]) < 0.1f) {
+                        structure_bonus += 0.05f;
+                    }
+                }
+                m.coherence = std::min(1.0f, m.coherence + structure_bonus);
+            }
+        } else {
+            m.coherence = 0.0f;
+        }
+        
+        // Calculate stability based on pattern consistency
+        if (!p.data.empty()) {
+            float stability = 0.0f;
+            
+            if (p.data.size() == 1) {
+                // Single values are perfectly stable
+                stability = 1.0f;
+            } else {
+                // Calculate how consistent the pattern values are
+                float sum_abs_diffs = 0.0f;
+                float max_value = *std::max_element(p.data.begin(), p.data.end());
+                float min_value = *std::min_element(p.data.begin(), p.data.end());
+                float range = max_value - min_value;
+                
+                if (range < 1e-6f) {
+                    // All values are essentially the same - very stable
+                    stability = 0.95f;
+                } else {
+                    // Calculate normalized differences
+                    for (size_t i = 1; i < p.data.size(); ++i) {
+                        sum_abs_diffs += std::abs(p.data[i] - p.data[i-1]);
+                    }
+                    float avg_change = sum_abs_diffs / (p.data.size() - 1);
+                    float normalized_change = avg_change / (range + 1e-6f);
+                    
+                    // Stability is inverse of normalized change
+                    stability = std::max(0.0f, 1.0f - normalized_change);
+                }
+                
+                // Apply coherence boost - coherent patterns are more stable
+                stability = std::min(1.0f, stability + m.coherence * 0.2f);
+            }
+            
+            m.stability = stability;
+        } else {
+            m.stability = 0.0f;
+        }
+        
+        // Calculate entropy based on randomness and unpredictability
+        if (!p.data.empty()) {
+            // Use Shannon-like entropy calculation
+            float entropy = 0.0f;
+            
+            if (p.data.size() > 1) {
+                // Calculate differences between consecutive values
+                std::vector<float> diffs;
+                for (size_t i = 1; i < p.data.size(); ++i) {
+                    diffs.push_back(std::abs(p.data[i] - p.data[i-1]));
+                }
+                
+                // Calculate variance of differences (measure of unpredictability)
+                float diff_mean = 0.0f;
+                for (float diff : diffs) {
+                    diff_mean += diff;
+                }
+                diff_mean /= diffs.size();
+                
+                float diff_variance = 0.0f;
+                for (float diff : diffs) {
+                    diff_variance += (diff - diff_mean) * (diff - diff_mean);
+                }
+                diff_variance /= diffs.size();
+                
+                // Entropy is higher with more variance in differences
+                entropy = std::sqrt(diff_variance);
+                
+                // Normalize to 0-1 range and add base entropy
+                entropy = std::min(1.0f, entropy + 0.1f);
+            } else {
+                // Single value has low entropy
+                entropy = 0.1f;
+            }
+            
+            m.entropy = entropy;
         } else {
             m.entropy = 0.5f; // Default entropy for empty patterns
         }

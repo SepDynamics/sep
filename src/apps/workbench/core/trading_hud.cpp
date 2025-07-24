@@ -721,12 +721,20 @@ void TradingHUD::calculateMovingAverages() {
         
         if (candle_data_.size() < period) continue;
         
-        // Calculate EMA
+        // Calculate EMA starting with SMA
         double multiplier = 2.0 / (period + 1.0);
-        double ema = candle_data_[period - 1].close; // Start with SMA
         
+        // Calculate initial SMA for the first 'period' values
+        double sma = 0;
+        for (size_t i = 0; i < period; i++) {
+            sma += candle_data_[i].close;
+        }
+        sma /= period;
+        double ema = sma;
+        
+        // Fill initial periods with SMA value
         for (size_t i = 0; i < period - 1; i++) {
-            indicator.values.push_back(0); // Placeholder
+            indicator.values.push_back(sma);
         }
         indicator.values.push_back(ema);
         
@@ -762,8 +770,9 @@ void TradingHUD::calculateRSI() {
     avg_gain /= period;
     avg_loss /= period;
     
+    // Fill initial periods with 50 (neutral RSI) since we don't have enough data
     for (size_t i = 0; i < period; i++) {
-        rsi_indicator.values.push_back(0); // Placeholder
+        rsi_indicator.values.push_back(0.5); // 50% RSI as neutral starting point
     }
     
     // Calculate RSI
@@ -781,20 +790,42 @@ void TradingHUD::calculateRSI() {
 void TradingHUD::calculateMACD() {
     if (candle_data_.size() < 26) return;
     
-    // Calculate 12 and 26 period EMAs
+    // Calculate 12 and 26 period EMAs with proper initialization
     std::vector<double> ema12, ema26;
     
-    // EMA 12
+    // EMA 12 - start with SMA for initial periods
     double multiplier12 = 2.0 / 13.0;
-    double ema_val12 = candle_data_[11].close;
+    double sma12 = 0;
+    for (int i = 0; i < 12; i++) {
+        sma12 += candle_data_[i].close;
+    }
+    sma12 /= 12.0;
+    double ema_val12 = sma12;
+    
+    // Fill initial 12 periods with progressive values towards first EMA
+    for (int i = 0; i < 12; i++) {
+        ema12.push_back(sma12);
+    }
+    
     for (size_t i = 12; i < candle_data_.size(); i++) {
         ema_val12 = (candle_data_[i].close * multiplier12) + (ema_val12 * (1 - multiplier12));
         ema12.push_back(ema_val12);
     }
     
-    // EMA 26
+    // EMA 26 - start with SMA for initial periods
     double multiplier26 = 2.0 / 27.0;
-    double ema_val26 = candle_data_[25].close;
+    double sma26 = 0;
+    for (int i = 0; i < 26; i++) {
+        sma26 += candle_data_[i].close;
+    }
+    sma26 /= 26.0;
+    double ema_val26 = sma26;
+    
+    // Fill initial 26 periods with progressive values towards first EMA
+    for (int i = 0; i < 26; i++) {
+        ema26.push_back(sma26);
+    }
+    
     for (size_t i = 26; i < candle_data_.size(); i++) {
         ema_val26 = (candle_data_[i].close * multiplier26) + (ema_val26 * (1 - multiplier26));
         ema26.push_back(ema_val26);
@@ -805,12 +836,9 @@ void TradingHUD::calculateMACD() {
     macd_indicator.values.clear();
     macd_indicator.values.reserve(candle_data_.size());
     
-    for (size_t i = 0; i < 26; i++) {
-        macd_indicator.values.push_back(0); // Placeholder
-    }
-    
-    for (size_t i = 0; i < ema26.size(); i++) {
-        double macd = ema12[i + 14] - ema26[i]; // Align indices
+    // Calculate MACD for all available periods
+    for (size_t i = 0; i < candle_data_.size(); i++) {
+        double macd = ema12[i] - ema26[i];
         macd_indicator.values.push_back(macd);
     }
 }
@@ -3078,35 +3106,11 @@ void TradingHUD::ingestMarketDataToEngine(const std::vector<sep::connectors::Oan
     if (!pattern_engine_ || oanda_candles.empty()) return;
     
     try {
-        // Convert OANDA candles to byte stream for pattern analysis
-        for (const auto& candle : oanda_candles) {
-            // Create a data structure representing the candle
-            struct CandleBytes {
-                float open, high, low, close;
-                int volume;
-                uint64_t timestamp;
-            } candle_data;
-            
-            candle_data.open = static_cast<float>(candle.open);
-            candle_data.high = static_cast<float>(candle.high);
-            candle_data.low = static_cast<float>(candle.low);
-            candle_data.close = static_cast<float>(candle.close);
-            candle_data.volume = static_cast<int>(candle.volume);
-            
-            // Parse timestamp from time string (ISO format)
-            // For now, use current time as fallback
-            candle_data.timestamp = static_cast<uint64_t>(
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    std::chrono::system_clock::now().time_since_epoch()
-                ).count()
-            );
-            
-            // Ingest the candle data as bytes
-            pattern_engine_->ingestData(
-                reinterpret_cast<const uint8_t*>(&candle_data), 
-                sizeof(candle_data)
-            );
-        }
+        // Convert OANDA candles to proper byte stream for pattern analysis
+        auto byte_stream = sep::connectors::MarketDataConverter::candlesToByteStream(oanda_candles);
+        
+        // Ingest the properly converted candle data
+        pattern_engine_->ingestData(byte_stream.data(), byte_stream.size());
         
         // Process the ingested data
         pattern_engine_->evolvePatterns();

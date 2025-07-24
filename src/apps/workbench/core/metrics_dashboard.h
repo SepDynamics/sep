@@ -4,6 +4,7 @@
 #include "memory_monitor.hpp"
 #include "file_dialog.hpp"
 #include "oanda_connector.h"
+#include "market_data_converter.h"
 #include <memory>
 #include <vector>
 #include <string>

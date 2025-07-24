@@ -47,7 +47,7 @@ fi
 
 # Wait for the executable to be created
 echo "Waiting for sep_workbench executable..."
-while [ ! -f "build/src/sep_workbench" ]; do
+while [ ! -f "build/src/apps/workbench/sep_workbench" ]; do
     sleep 1
 done
 
@@ -56,4 +56,4 @@ echo "Starting SEP Workbench..."
 echo "Press Ctrl+C to exit"
 echo ""
 
-./build/src/sep_workbench --api-key "$OANDA_API_KEY" --account-id "$OANDA_ACCOUNT_ID"
+./build/src/apps/workbench/sep_workbench --api-key "$OANDA_API_KEY" --account-id "$OANDA_ACCOUNT_ID"

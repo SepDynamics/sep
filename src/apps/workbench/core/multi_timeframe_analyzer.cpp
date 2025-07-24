@@ -203,17 +203,22 @@ TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
     try {
         auto& engine = pattern_engines_[timeframe];
         
-        // Convert candles to price data for pattern analysis
-        std::vector<float> price_data;
-        price_data.reserve(candles.size());
-        
+        // Convert candles to proper byte stream for pattern analysis
+        std::vector<sep::connectors::OandaCandle> oanda_candles;
         for (const auto& candle : candles) {
-            price_data.push_back(static_cast<float>(candle.close));
+            sep::connectors::OandaCandle oanda_candle;
+            oanda_candle.open = candle.open;
+            oanda_candle.high = candle.high;
+            oanda_candle.low = candle.low;
+            oanda_candle.close = candle.close;
+            oanda_candle.volume = candle.volume;
+            oanda_candle.time = ""; // TODO: Convert timestamp properly
+            oanda_candles.push_back(oanda_candle);
         }
+        auto byte_stream = sep::connectors::MarketDataConverter::candlesToByteStream(oanda_candles);
         
-        // Feed price data to SEP engine
-        engine->ingestData(reinterpret_cast<const uint8_t*>(price_data.data()), 
-                          price_data.size() * sizeof(float));
+        // Feed properly converted data to SEP engine
+        engine->ingestData(byte_stream.data(), byte_stream.size());
         
         // Process patterns
         engine->evolvePatterns();
@@ -240,12 +245,12 @@ TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
             metrics.volatility_prediction = calculateVolatilityPrediction(detected_patterns);
             metrics.breakout_probability = calculateBreakoutProbability(dominant_pattern);
             
-            // Determine trend direction
-            if (metrics.trend_strength > 0.7f) {
-                metrics.trend_direction = (price_data.back() > price_data[price_data.size() - 10]) ?
+            // Determine trend direction using candle closes
+            if (metrics.trend_strength > 0.7f && candles.size() > 10) {
+                metrics.trend_direction = (candles.back().close > candles[candles.size() - 10].close) ?
                     TimeframeMetrics::STRONG_UP : TimeframeMetrics::STRONG_DOWN;
-            } else if (metrics.trend_strength > 0.4f) {
-                metrics.trend_direction = (price_data.back() > price_data[price_data.size() - 5]) ?
+            } else if (metrics.trend_strength > 0.4f && candles.size() > 5) {
+                metrics.trend_direction = (candles.back().close > candles[candles.size() - 5].close) ?
                     TimeframeMetrics::UP : TimeframeMetrics::DOWN;
             } else {
                 metrics.trend_direction = TimeframeMetrics::NEUTRAL;

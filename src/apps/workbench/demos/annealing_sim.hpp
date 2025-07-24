@@ -10,7 +10,7 @@
 #include "imgui.h"
 #include "memory/quantum_coherence_manager.h"
 #include "quantum/quantum_processor.h"
-#include "workbench/renderer.h"
+#include "apps/workbench/renderer.h"
 
 // Forward declarations
 namespace sep {

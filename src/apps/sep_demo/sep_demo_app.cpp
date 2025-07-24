@@ -453,11 +453,14 @@ bool SEPDemoApp::initialize() {
         quantum_processor_ = std::make_shared<quantum::Processor>(proc_config);
         quantum_processor_->init(nullptr); // No GPU context for now
 
+        signal_generator_ = std::make_shared<workbench::QuantumSignalGenerator>();
+
         // Create demo panels
         panels_.push_back(std::make_unique<MemoryTierPanel>(memory_manager_));
         panels_.push_back(std::make_unique<PatternProcessingPanel>(quantum_processor_));
         panels_.push_back(std::make_unique<SystemMetricsPanel>(memory_manager_, quantum_processor_));
         panels_.push_back(std::make_unique<PatternGeneratorPanel>(quantum_processor_));
+        signal_testing_panel_ = std::make_unique<workbench::SignalTestingPanel>(signal_generator_);
 
         // Initialize with some demo data
         initializeDemoData();
@@ -539,6 +542,7 @@ void SEPDemoApp::renderMainMenu() {
                     panel->setVisible(visible);
                 }
             }
+
             ImGui::Separator();
             ImGui::MenuItem("ImGui Demo", nullptr, &show_demo_window_);
             ImGui::MenuItem("Metrics Overlay", nullptr, &show_metrics_overlay_);

@@ -12,6 +12,7 @@
 #include <condition_variable>
 #include <imgui.h>
 #include "connectors/oanda_connector.h"
+#include "connectors/market_data_converter.h"
 #include "metrics_monitor.h"
 #include "trade_manager.h"
 #include "forex_pattern_generator.h"

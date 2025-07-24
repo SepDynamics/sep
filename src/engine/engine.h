@@ -79,6 +79,10 @@ class Engine {
   void ingestFromSocket(int socket_fd);
   void ingestFromStream(std::istream& stream);
 
+  // Dashboard integration methods
+  std::map<std::string, double> getMetrics() const;
+  bool isProcessing() const;
+
  private:
   static constexpr size_t DEFAULT_SIZE = 1024;
   static constexpr size_t PAIRS_PER_CHUNK = 32;  // WARP_SIZE

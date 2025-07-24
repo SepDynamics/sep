@@ -63,6 +63,7 @@ struct Engine::Impl {
   std::vector<StateNode> state_history_;
   ::sep::config::CudaConfig config;
   bool initialized{false};
+  bool processing_{false};
 };
 
 Engine::Engine() noexcept(false) : impl_(std::make_unique<Impl>()) {
@@ -433,6 +434,35 @@ std::string Engine::processQuantData(const std::string &dataPath, bool useGPU)
         error_json["file"] = dataPath;
         return error_json.dump();
     }
+}
+
+std::map<std::string, double> Engine::getMetrics() const {
+    auto metrics = metrics_collector_.getMetrics();
+    
+    // Add pattern metrics if available
+    if (!impl_->state_history_.empty()) {
+        const auto& latest = impl_->state_history_.back();
+        metrics["coherence"] = latest.coherence;
+        metrics["rupture"] = latest.rupture ? 1.0 : 0.0;
+        metrics["tick"] = static_cast<double>(latest.tick);
+        metrics["state_history_size"] = static_cast<double>(impl_->state_history_.size());
+    }
+    
+    // Add pattern metric engine metrics if available
+    const auto& pattern_metrics = const_cast<sep::quantum::PatternMetricEngine&>(pattern_metric_engine_).computeMetrics();
+    for (size_t i = 0; i < pattern_metrics.size(); ++i) {
+        const auto& pm = pattern_metrics[i];
+        metrics["pattern_" + std::string(pm.pattern_id) + "_coherence"] = pm.coherence;
+        metrics["pattern_" + std::string(pm.pattern_id) + "_stability"] = pm.stability;
+        metrics["pattern_" + std::string(pm.pattern_id) + "_entropy"] = pm.entropy;
+    }
+    
+    return metrics;
+}
+
+bool Engine::isProcessing() const {
+    // Engine is processing if it has active state history or is evolving patterns
+    return !impl_->state_history_.empty() || impl_->processing_;
 }
 
 } // namespace core

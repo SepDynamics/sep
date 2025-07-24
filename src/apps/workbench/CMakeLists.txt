@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.16)
 file(GLOB_RECURSE WB_SOURCES
     "demos/*.cpp"
     "core/*.cpp"
+    "panels/*.cpp"
+    "signal_generator/*.cpp"
     "simple_renderer.cpp"
     "renderer.cpp"
     "config.cpp"
@@ -16,7 +18,8 @@ target_include_directories(sep_workbench_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/engine
     ${CMAKE_SOURCE_DIR}/src/api
-    ${CMAKE_SOURCE_DIR}/src/workbench
+    ${CMAKE_SOURCE_DIR}/src/apps/workbench
+    ${CMAKE_SOURCE_DIR}/src/apps/common
     ${CMAKE_SOURCE_DIR}/src/connectors
     ${CMAKE_SOURCE_DIR}/src/glad
     ${imgui_SOURCE_DIR}
@@ -35,4 +38,25 @@ target_link_libraries(sep_workbench_lib PUBLIC
     nlohmann_json::nlohmann_json
     fmt::fmt
     TBB::tbb
+)
+
+# Create the sep_workbench executable
+add_executable(sep_workbench core/workbench_main.cpp)
+target_link_libraries(sep_workbench PRIVATE
+    sep_workbench_lib
+    imgui
+    sep_audio
+    sep_quantum
+    sep_memory  
+    sep_engine
+    ${TBB_LIBRARIES}
+    ${ALEMBIC_LIBRARIES}
+    ${OPENPGL_LIBRARIES}
+    ${CURL_LIBRARIES}
+    ${HTTP_PARSER_LIBRARIES}
+    glfw
+    glad
+    ${CUDA_LIBRARIES}
+    OpenGL::GLX
+    OpenGL::OpenGL
 )

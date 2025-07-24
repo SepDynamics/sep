@@ -1,0 +1,42 @@
+#include "quantum_signal_generator.h"
+
+#include "logistic_chaos_strategy.h"
+
+namespace sep::workbench {
+
+QuantumSignalGenerator::QuantumSignalGenerator() {
+    // Set a default strategy
+    strategy_ = std::make_unique<LogisticChaosStrategy>();
+}
+
+void QuantumSignalGenerator::setStrategy(std::unique_ptr<SignalStrategy> strategy) {
+    strategy_ = std::move(strategy);
+}
+
+SignalResult QuantumSignalGenerator::generateSignal(const dag::DagNode& pattern) {
+    if (strategy_) {
+        return strategy_->generateSignal(pattern);
+    }
+    return {SignalType::HOLD, 0.0f, "No strategy set"};
+}
+
+void QuantumSignalGenerator::tick() {
+    if (strategy_) {
+        // A dummy DagNode is created here for demonstration purposes.
+        // In a real scenario, this would come from the engine.
+        dag::DagNode dummy_node;
+        last_signal_ = strategy_->generateSignal(dummy_node);
+    } else {
+        last_signal_ = {SignalType::HOLD, 0.0f, "No strategy set"};
+    }
+}
+
+SignalResult QuantumSignalGenerator::getCurrentSignal() const {
+    return last_signal_;
+}
+
+SignalStrategy* QuantumSignalGenerator::getStrategy() const {
+    return strategy_.get();
+}
+
+} // namespace sep::workbench

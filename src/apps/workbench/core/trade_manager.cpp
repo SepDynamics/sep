@@ -1,4 +1,4 @@
-#include "workbench/core/trade_manager.h"
+#include "apps/workbench/core/trade_manager.h"
 
 namespace sep {
 namespace workbench {

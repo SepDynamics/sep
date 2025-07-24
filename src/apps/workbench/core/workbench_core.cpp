@@ -10,9 +10,8 @@
 #include "landing_page.hpp"
 #include "renderer.h"
 #include "service_connector.hpp"
-#include "metrics_dashboard.h"
-#include "trade_manager.h"
-#include "trading_hud.h"
+#include "unified_dashboard.h"
+#include "apps/workbench/signal_generator/quantum_signal_generator.h"
 
 // Include ImGui headers
 #include <imgui.h>
@@ -87,33 +86,18 @@ bool WorkbenchEngine::initialize()
         // demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         // landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = std::make_unique<Renderer>();
-        trade_manager_ = std::make_unique<TradeManager>(service_connector_->getOandaConnector());
-        metrics_dashboard_ = std::make_unique<MetricsDashboard>();
-        trading_hud_ = std::make_unique<TradingHUD>();
+        unified_dashboard_ = std::make_unique<UnifiedDashboard>();
+        signal_generator_ = std::make_unique<QuantumSignalGenerator>();
         
         // Initialize renderer and metrics dashboard
         int width, height;
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
         
-        if (!metrics_dashboard_->initialize()) {
-            std::cerr << "[WorkbenchEngine] Warning: Failed to initialize metrics dashboard" << std::endl;
+        if (!unified_dashboard_->initialize()) {
+            std::cerr << "[WorkbenchEngine] Warning: Failed to initialize dashboard" << std::endl;
         } else {
-            metrics_dashboard_->setTradeManager(trade_manager_.get());
-            // Make metrics dashboard visible by default
-            metrics_dashboard_->setVisible(true);
-            std::cout << "[WorkbenchEngine] Metrics dashboard set as main interface" << std::endl;
-            
-            // CRITICAL FIX: Connect the offline engine directly to the metrics dashboard
-            // This makes the workbench BE the engine, not connect to a service
-            std::cout << "[WorkbenchEngine] Connecting offline engine to metrics dashboard" << std::endl;
-        }
-        
-        // Initialize trading HUD
-        if (!trading_hud_->initialize()) {
-            std::cerr << "[WorkbenchEngine] Warning: Failed to initialize trading HUD" << std::endl;
-        } else {
-            std::cout << "[WorkbenchEngine] Trading HUD initialized successfully" << std::endl;
+            std::cout << "[WorkbenchEngine] Unified dashboard initialized successfully" << std::endl;
         }
         
         // Create offline engine as fallback
@@ -129,14 +113,9 @@ bool WorkbenchEngine::initialize()
         
         // Connect components together
         std::cout << "[WorkbenchEngine] Connecting trading components..." << std::endl;
-        if (trading_hud_ && service_connector_ && service_connector_->getOandaConnector()) {
-            // Create shared_ptr from raw pointer (careful with ownership)
+        if (service_connector_ && service_connector_->getOandaConnector()) {
             auto oanda_ptr = service_connector_->getOandaConnector();
-            // For now, we'll skip the connection since we need proper shared_ptr management
             std::cout << "[WorkbenchEngine] OANDA connector available: " << (oanda_ptr ? "Yes" : "No") << std::endl;
-            
-            // TODO: Connect metrics monitor when available
-            // trading_hud_->setMetricsMonitor(metrics_monitor);
         }
         
         transitionTo(ApplicationState::LANDING_PAGE);
@@ -325,14 +304,9 @@ void WorkbenchEngine::renderFrame()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     
-    // Always render metrics dashboard as main interface (removed demo system)
-    if (metrics_dashboard_) {
-        metrics_dashboard_->render();
-    }
-    
-    // Render advanced trading HUD
-    if (trading_hud_) {
-        trading_hud_->render();
+    // Render unified dashboard as main interface  
+    if (unified_dashboard_) {
+        unified_dashboard_->render();
     }
     
     // Handle special states
@@ -557,10 +531,8 @@ void WorkbenchEngine::stopCurrentDemo()
 }
 
 void WorkbenchEngine::showMetricsDashboard(bool show) {
-    if (metrics_dashboard_) {
-        metrics_dashboard_->setVisible(show);
-        std::cout << "[WorkbenchEngine] Metrics dashboard " << (show ? "opened" : "closed") << std::endl;
-    }
+    // Dashboard is always visible in unified mode
+    std::cout << "[WorkbenchEngine] Dashboard is always visible" << std::endl;
 }
 
 void WorkbenchEngine::updateMetrics(float delta_time)

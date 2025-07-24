@@ -11,9 +11,8 @@ namespace sep::workbench {
 class ServiceConnector;
 class LandingPage;
 class Renderer;
-class MetricsDashboard;
-class TradeManager;
-class TradingHUD;
+class UnifiedDashboard;
+class QuantumSignalGenerator;
 
 }  // namespace sep::workbench
 
@@ -84,6 +83,9 @@ public:
     // Metrics dashboard
     void showMetricsDashboard(bool show);
 
+    // Signal generator
+    QuantumSignalGenerator* getSignalGenerator() const { return signal_generator_.get(); }
+
     // Static callbacks for GLFW
     static void errorCallback(int error, const char* description);
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -103,9 +105,8 @@ private:
     // Demo orchestrator removed for trading-focused version
     std::unique_ptr<LandingPage> landing_page_;
     std::unique_ptr<Renderer> renderer_;
-    std::unique_ptr<MetricsDashboard> metrics_dashboard_;
-    std::unique_ptr<TradeManager> trade_manager_;
-    std::unique_ptr<TradingHUD> trading_hud_;
+    std::unique_ptr<UnifiedDashboard> unified_dashboard_;
+    std::unique_ptr<QuantumSignalGenerator> signal_generator_;
     
     // Engine components (may be null if service not connected)
     std::unique_ptr<sep::core::Engine> offline_engine_;

@@ -15,7 +15,7 @@ add_executable(sep_demo
 # Include directories
 target_include_directories(sep_demo PRIVATE
     ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src/apps/common
     ${imgui_SOURCE_DIR}
 )
 
@@ -23,6 +23,7 @@ target_include_directories(sep_demo PRIVATE
 # Libraries that use symbols must come before libraries that provide them
 target_link_libraries(sep_demo PRIVATE
     # Libraries with dependencies first
+    sep_workbench_lib
     sep_memory
     sep_quantum
     # Then the library that provides symbols they need

@@ -12,21 +12,11 @@
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/processor.h"
 #include "quantum/types.h"
+#include "apps/workbench/panels/signal_testing_panel.h"
+#include "apps/workbench/signal_generator/quantum_signal_generator.h"
+#include "demo_panel.h"
 
 namespace sep::demo {
-
-// Demo panel base class
-class DemoPanel {
-public:
-    virtual ~DemoPanel() = default;
-    virtual void render() = 0;
-    virtual const char* getName() const = 0;
-    bool isVisible() const { return visible_; }
-    void setVisible(bool visible) { visible_ = visible; }
-
-protected:
-    bool visible_ = true;
-};
 
 // Memory Tier Visualization Panel
 class MemoryTierPanel : public DemoPanel {
@@ -124,9 +114,11 @@ private:
     // Core components
     std::shared_ptr<memory::MemoryTierManager> memory_manager_;
     std::shared_ptr<quantum::Processor> quantum_processor_;
+    std::shared_ptr<workbench::QuantumSignalGenerator> signal_generator_;
     
     // Demo panels
     std::vector<std::unique_ptr<DemoPanel>> panels_;
+    std::unique_ptr<workbench::SignalTestingPanel> signal_testing_panel_;
     
     // UI state
     bool show_demo_window_ = false;

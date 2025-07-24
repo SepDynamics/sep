@@ -13,6 +13,17 @@
 #include <imgui.h>
 #include "connectors/oanda_connector.h"
 #include "metrics_monitor.h"
+#include "trade_manager.h"
+#include "forex_pattern_generator.h"
+#include "ui_layout_manager.h"
+#include "multi_timeframe_analyzer.h"
+
+// SEP Engine Components
+#include "engine/engine.h"
+#include "engine/metrics_collector.h"
+#include "quantum/pattern_metric_engine.h"
+#include "quantum/coherence_manager.h"
+#include "quantum/quantum_processor.h"
 
 namespace sep::workbench {
 
@@ -158,6 +169,13 @@ struct SEPSignalData {
     float trend_strength;
     std::chrono::system_clock::time_point timestamp;
     
+    // Real market data from OANDA
+    float atr;              // Average True Range
+    int volatility_level;   // Volatility level (1-4)
+    float bid;              // Current bid price
+    float ask;              // Current ask price
+    float spread;           // Bid-ask spread
+    
     // Trading signal interpretation
     enum SignalType {
         STRONG_BUY,
@@ -168,7 +186,8 @@ struct SEPSignalData {
     } signal_type;
     
     SEPSignalData() : coherence(0), stability(0), entropy(0), alpha_signal(0), 
-                      trend_strength(0), signal_type(NEUTRAL) {}
+                      trend_strength(0), atr(0), volatility_level(1), bid(0), ask(0), 
+                      spread(0), signal_type(NEUTRAL) {}
 };
 
 struct CandleData {
@@ -181,13 +200,70 @@ struct CandleData {
         : open(o), high(h), low(l), close(c), volume(v), timestamp(t) {}
 };
 
-struct HoverInfo {
+struct EnhancedHoverInfo {
     bool active = false;
     ImVec2 position;
     double price;
     std::chrono::system_clock::time_point time;
     CandleData* nearest_candle = nullptr;
     SEPSignalData* nearest_sep_signal = nullptr;
+    
+    // Enhanced derived metrics
+    float price_momentum = 0.0f;      // Rate of price change
+    float volume_profile = 0.0f;      // Volume at this price level
+    float sep_divergence = 0.0f;      // Divergence between price and SEP signal
+    
+    // Multi-timeframe data
+    std::map<std::string, float> mtf_coherence; // 1m, 5m, 15m, 1h coherence
+    
+    // Support/Resistance proximity
+    float nearest_support = 0.0f;
+    float nearest_resistance = 0.0f;
+    float s_r_strength = 0.0f;
+    
+    // Traditional indicators at hover point
+    float rsi_value = 0.0f;
+    float macd_value = 0.0f;
+    float bb_position = 0.0f;  // Position within Bollinger Bands (0-1)
+    
+    // Market context
+    float market_correlation = 0.0f;  // Correlation with other pairs
+    std::string market_regime = "Unknown";  // Trending, Ranging, Breakout
+};
+
+// Coherence Trading Strategy
+struct CoherenceStrategy {
+    bool enabled = false;
+    float coherence_threshold = 0.5f;  // Base coherence level (50%)
+    float buy_threshold_offset = 0.1f;  // Buy when coherence > 50% + offset
+    float sell_threshold_offset = 0.1f; // Sell when coherence < 50% - offset
+    
+    // Risk management
+    double position_size_units = 1000.0;  // Base position size
+    double stop_loss_pips = 20.0;         // Stop loss in pips
+    double max_positions = 3;             // Maximum concurrent positions
+    
+    // Current state
+    float last_coherence = 0.0f;
+    int current_positions = 0;
+    std::chrono::system_clock::time_point last_trade_time;
+    
+    // Strategy statistics
+    int total_trades = 0;
+    int winning_trades = 0;
+    double total_pnl = 0.0;
+    
+    bool shouldBuy(float coherence) const {
+        return coherence > (coherence_threshold + buy_threshold_offset);
+    }
+    
+    bool shouldSell(float coherence) const {
+        return coherence < (coherence_threshold - sell_threshold_offset);
+    }
+    
+    bool canTrade() const {
+        return enabled && current_positions < max_positions;
+    }
 };
 
 class TradingHUD {
@@ -206,6 +282,16 @@ void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
 void updateCandleData(const std::vector<sep::connectors::OandaCandle>& oanda_candles);
 void updateSEPSignals();
 void calculateTechnicalIndicators();
+
+// SEP Engine Integration
+void initializeSEPEngine();
+void updateEngineMetrics();
+void ingestMarketDataToEngine(const std::vector<sep::connectors::OandaCandle>& oanda_candles);
+void processQuantumSignals();
+void updateCoherenceMetrics();
+std::vector<sep::quantum::PatternMetrics> getCurrentPatternMetrics();
+sep::quantum::CoherenceManager::CoherenceMetrics getCoherenceMetrics();
+void resetEngineState();
     
     // Real-time data streaming
 void startRealtimeStreaming();
@@ -224,18 +310,36 @@ bool cancelOrder(const std::string& order_id);
     void addAlert(AlertCondition::Type type, double price_level, const std::string& message);
     void checkAlerts();
     void removeAlert(const std::string& alert_id);
+    
+    // Coherence trading strategy
+    void updateCoherenceStrategy();
+    void executeCoherenceTrade(bool is_buy);
+    float calculateCurrentCoherence();
+    void resetCoherenceStrategy();
+    void calculateMarketCorrelations(float correlation_matrix[6][6], const char* pairs[], int num_pairs);
+    
+    // Forex pattern validation
+    bool validateMarketConditions(float coherence, float stability, float entropy);
 
 private:
     // Core components
     std::shared_ptr<sep::connectors::OandaConnector> oanda_connector_;
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
+    std::unique_ptr<TradeManager> trade_manager_;
+    
+    // SEP Engine Components
+    std::unique_ptr<sep::core::Engine> sep_engine_;
+    std::unique_ptr<sep::core::MetricsCollector> sep_metrics_collector_;
+    std::unique_ptr<sep::quantum::PatternMetricEngine> pattern_engine_;
+    std::unique_ptr<sep::quantum::CoherenceManager> coherence_manager_;
+    std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor_;
     
     // Chart data
     std::deque<CandleData> candle_data_;
     std::deque<SEPSignalData> sep_signals_;
     std::unordered_map<std::string, TechnicalIndicator> indicators_;
     std::vector<TrendLine> trend_lines_;
-    HoverInfo hover_info_;
+    EnhancedHoverInfo hover_info_;
     
     // Real-time data
     std::deque<TickData> tick_data_;
@@ -289,6 +393,16 @@ private:
     enum TimeFrame { TF_24H, TF_6H, TF_3H };
     TimeFrame current_timeframe_ = TF_24H;
     
+    // Coherence trading strategy
+    CoherenceStrategy coherence_strategy_;
+    
+    // UI Layout Manager
+    std::unique_ptr<UILayoutManager> layout_manager_;
+    
+    // Multi-timeframe Analyzer
+    std::unique_ptr<MultiTimeframeAnalyzer> mtf_analyzer_;
+    MultiTimeframeSignal latest_mtf_signal_;
+    
     // Chart dimensions and state
     ImVec2 chart_size_;
     ImVec2 chart_pos_;
@@ -319,12 +433,20 @@ private:
     void renderPerformanceMetrics();
     void renderAlertsPanel();
     void renderRiskManager();
+    void renderMarketCorrelationMatrix();
+    void renderCoherenceStrategyControls();
     void renderAdvancedChart();
     void renderCrosshair();
     void renderChartGrid();
     void renderFibonacciLevels();
     void renderIchimokuCloud();
     void renderCustomSEPOverlays();
+    
+    // Multi-timeframe analysis rendering
+    void renderMultiTimeframePanel();
+    void renderTimeframeMetricsTable();
+    void renderTimeframeAlignmentChart();
+    void renderGenerativeAnalysisTab();
     
     // Technical analysis
     void calculateMovingAverages();
@@ -356,7 +478,11 @@ private:
     void setupChartArea();
     void handleMouseInput();
     void updateHoverInfo();
+    void calculateEnhancedHoverMetrics();
+    void calculateSupportResistanceLevels();
+    void calculateTraditionalIndicatorsAtPoint();
     void setDefaultWindowPositions();
+    void setupLayoutPanels();
     
     // SEP signal processing
     SEPSignalData::SignalType interpretSEPSignal(float coherence, float stability, float entropy);
@@ -389,13 +515,42 @@ private:
     
     // Window management
     struct WindowPositions {
+        // Main chart window - 70% of screen
         ImVec2 trading_hud_pos = ImVec2(10, 10);
         ImVec2 trading_hud_size = ImVec2(1200, 800);
+        
+        // Right panel windows - 30% of screen
         ImVec2 account_balance_pos = ImVec2(1220, 10);
         ImVec2 account_balance_size = ImVec2(300, 200);
         ImVec2 sep_metrics_pos = ImVec2(1220, 220);
         ImVec2 sep_metrics_size = ImVec2(300, 400);
+        
+        // Additional trading windows
+        ImVec2 order_book_pos = ImVec2(1540, 10);
+        ImVec2 order_book_size = ImVec2(300, 400);
+        ImVec2 positions_panel_pos = ImVec2(1540, 420);
+        ImVec2 positions_panel_size = ImVec2(300, 200);
+        ImVec2 orders_panel_pos = ImVec2(1540, 630);
+        ImVec2 orders_panel_size = ImVec2(300, 180);
+        
+        // Analysis windows
+        ImVec2 trade_history_pos = ImVec2(200, 500);
+        ImVec2 trade_history_size = ImVec2(600, 300);
+        ImVec2 performance_metrics_pos = ImVec2(1220, 630);
+        ImVec2 performance_metrics_size = ImVec2(300, 200);
+        
+        // Bottom panels
+        ImVec2 alerts_panel_pos = ImVec2(10, 850);
+        ImVec2 alerts_panel_size = ImVec2(400, 150);
+        ImVec2 risk_manager_pos = ImVec2(420, 850);
+        ImVec2 risk_manager_size = ImVec2(350, 150);
+        
+        // Market correlation matrix (new)
+        ImVec2 correlation_pos = ImVec2(780, 850);
+        ImVec2 correlation_size = ImVec2(400, 150);
+        
         bool positions_set = false;
+        bool need_save = false;  // Flag to indicate positions should be saved
     } window_positions_;
 };
 

@@ -32,10 +32,6 @@ fix_compile_commands() {
 # Build and setup development environment
 docker run --gpus all --rm \
     -v $(pwd):/sep \
-    -v $(pwd)/.cache:/home/codecheck/.cache \
-    -v $(pwd)/.codechecker:/home/codecheck/.codechecker \
-    -e USER_ID=$USER_ID \
-    -e GROUP_ID=$GROUP_ID \
     -e CUDA_HOME=/usr/local/cuda \
     -e CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda \
     -e CUDA_BIN_PATH=/usr/local/cuda/bin \
@@ -50,16 +46,7 @@ docker run --gpus all --rm \
     echo "CUDA_BIN_PATH: $CUDA_BIN_PATH"
     echo "CMAKE_CUDA_COMPILER: $CMAKE_CUDA_COMPILER"
     ls -la $CUDA_HOME/bin/nvcc || echo "NVCC not found!"
-    # Switch to codecheck user while preserving environment
-    sudo -E -u codecheck bash -c "
-    # Export CUDA environment variables
-    export CUDA_HOME=/usr/local/cuda
-    export CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda
-    export CUDA_BIN_PATH=/usr/local/cuda/bin
-    export CMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc
-    export PATH=/usr/local/cuda/bin:${PATH}
-    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH-}
-    
+    # Build as root - no user switching needed
     cd /sep
     rm -rf build
     mkdir -p build
@@ -87,7 +74,6 @@ docker run --gpus all --rm \
         echo "Running CodeChecker analysis..."
         ./scripts/run_codechecker.sh
     fi
-    "
 '
 
 # Fix paths in compile_commands.json for local IDE integration

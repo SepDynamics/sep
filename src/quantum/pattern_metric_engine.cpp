@@ -113,8 +113,33 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
         } else {
             m.coherence = 0.0f;
         }
-        m.stability = 0.5f; // Placeholder
-        m.entropy = 0.1f;   // Placeholder
+        
+        // Calculate stability based on pattern coherence and generation
+        // Higher coherence + lower generation changes = more stable
+        float generation_factor = 1.0f / (1.0f + p.generation * 0.1f);
+        m.stability = m.coherence * generation_factor;
+        
+        // Calculate entropy based on data variance and coherence
+        // Higher variance = higher entropy, higher coherence = lower entropy
+        if (!p.data.empty()) {
+            // Calculate variance of the pattern data
+            float mean = 0.0f;
+            for (float val : p.data) {
+                mean += val;
+            }
+            mean /= p.data.size();
+            
+            float variance = 0.0f;
+            for (float val : p.data) {
+                variance += (val - mean) * (val - mean);
+            }
+            variance /= p.data.size();
+            
+            // Entropy is high variance with low coherence
+            m.entropy = std::min(1.0f, variance * (1.0f - m.coherence));
+        } else {
+            m.entropy = 0.5f; // Default entropy for empty patterns
+        }
         current_metrics_.push_back(m);
     }
     return current_metrics_;

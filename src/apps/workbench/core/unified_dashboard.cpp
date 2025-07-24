@@ -170,18 +170,21 @@ void UnifiedDashboard::renderEngineMetricsSection() {
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1), "● IDLE");
     }
     
-    // Display metrics as progress bars for visual clarity
+    // Display metrics with proper formatting
     ImGui::Text("Coherence:");
-    ImGui::ProgressBar(engine_metrics_.coherence, ImVec2(-1, 0), 
-        ("%.3f" + std::to_string(engine_metrics_.coherence)).c_str());
+    char coherence_buf[32];
+    snprintf(coherence_buf, sizeof(coherence_buf), "%.3f", engine_metrics_.coherence);
+    ImGui::ProgressBar(engine_metrics_.coherence, ImVec2(-1, 0), coherence_buf);
     
     ImGui::Text("Stability:");
-    ImGui::ProgressBar(engine_metrics_.stability, ImVec2(-1, 0), 
-        ("%.3f" + std::to_string(engine_metrics_.stability)).c_str());
+    char stability_buf[32];
+    snprintf(stability_buf, sizeof(stability_buf), "%.3f", engine_metrics_.stability);
+    ImGui::ProgressBar(engine_metrics_.stability, ImVec2(-1, 0), stability_buf);
     
     ImGui::Text("Entropy:");
-    ImGui::ProgressBar(engine_metrics_.entropy, ImVec2(-1, 0), 
-        ("%.3f" + std::to_string(engine_metrics_.entropy)).c_str());
+    char entropy_buf[32];
+    snprintf(entropy_buf, sizeof(entropy_buf), "%.3f", engine_metrics_.entropy);
+    ImGui::ProgressBar(engine_metrics_.entropy, ImVec2(-1, 0), entropy_buf);
     
     ImGui::Text("Patterns: %zu", engine_metrics_.pattern_count);
 }
@@ -255,21 +258,30 @@ void UnifiedDashboard::updateEngineMetrics() {
         auto metrics = sep_engine_->getMetrics();
         engine_metrics_.processing = sep_engine_->isProcessing();
         
+        // Debug: Print all available metrics
+        static int debug_counter = 0;
+        if (debug_counter++ % 60 == 0) { // Print every 60 frames (~1 second)
+            std::cout << "[UnifiedDashboard] Available metrics (" << metrics.size() << "):" << std::endl;
+            for (const auto& [key, value] : metrics) {
+                std::cout << "  " << key << " = " << value << std::endl;
+            }
+        }
+        
         // Extract standard metrics
         if (metrics.find("coherence") != metrics.end()) {
             engine_metrics_.coherence = metrics["coherence"];
         }
         if (metrics.find("state_history_size") != metrics.end()) {
-            engine_metrics_.pattern_count = static_cast<int>(metrics["state_history_size"]);
+            engine_metrics_.pattern_count = static_cast<size_t>(metrics["state_history_size"]);
         }
         
         // Calculate stability and entropy from available pattern metrics
-        engine_metrics_.stability = 0.0f;
-        engine_metrics_.entropy = 0.0f;
+        engine_metrics_.stability = 0.0;
+        engine_metrics_.entropy = 0.0;
         int pattern_count = 0;
         
         for (const auto& [key, value] : metrics) {
-            if (key.find("pattern_") == 0 && key.find("_coherence") != std::string::npos) {
+            if (key.find("pattern_") == 0 && key.find("_stability") != std::string::npos) {
                 engine_metrics_.stability += value;
                 pattern_count++;
             }
@@ -282,8 +294,13 @@ void UnifiedDashboard::updateEngineMetrics() {
             engine_metrics_.stability /= pattern_count; // Average coherence
         }
         
+        // If no pattern metrics, use base coherence for stability
+        if (pattern_count == 0 && metrics.find("coherence") != metrics.end()) {
+            engine_metrics_.stability = metrics["coherence"];
+        }
+        
     } catch (const std::exception& e) {
-        // Silently handle - engine might not be fully initialized
+        std::cout << "[UnifiedDashboard] Error updating metrics: " << e.what() << std::endl;
     }
 }
 

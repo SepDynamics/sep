@@ -30,7 +30,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3 \
     python3-pip \
     gdb \
-    sudo \
     libpipewire-0.3-dev \
     libspa-0.2-dev \
     fftw3-dev \
@@ -55,39 +54,14 @@ RUN ls -la /usr/local/cuda/bin/nvcc && \
     ln -sf /usr/local/cuda/lib64/* /usr/local/lib/cuda/ && \
     echo "CUDA environment verification complete"
 
-# Install Python dependencies
+# Install Python packages for analysis
 RUN pip3 install pandas numpy matplotlib
 
 # Install CodeChecker for static analysis
 RUN pip3 install codechecker
 
-# Create a non-root user for CodeChecker
-RUN useradd -m -s /bin/bash codecheck && \
-   echo "codecheck ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
 # Set the default working directory to the project root
 WORKDIR /project
 
-# Set up entrypoint script to handle user permissions
-COPY --chmod=755 <<-"EOF" /usr/local/bin/docker-entrypoint.sh
-#!/bin/bash
-if [ ! -z "$USER_ID" ] && [ ! -z "$GROUP_ID" ]; then
-    # Update user/group IDs
-    usermod -u $USER_ID codecheck
-    groupmod -g $GROUP_ID codecheck
-    
-    # Ensure CodeChecker directories exist with correct permissions
-    mkdir -p /home/codecheck/.codechecker /home/codecheck/.cache
-    chown -R codecheck:codecheck /home/codecheck /sep
-fi
-
-# Switch to codecheck user and execute command
-if [ "$1" = "bash" ]; then
-    exec sudo -u codecheck "$@"
-else
-    exec sudo -E -u codecheck "$@"
-fi
-EOF
-
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+# Default command
 CMD ["bash"]

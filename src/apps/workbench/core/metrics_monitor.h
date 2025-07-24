@@ -98,6 +98,16 @@ public:
     const RollingMetrics& getRollingMetrics() const;
     const ThresholdSignal& getLatestSignal() const;
     
+    // Simple threshold detection as specified in TODO.md
+    struct SimpleSignals {
+        bool sellSignal{false};
+        bool buySignal{false};
+        float stability{0.0f};
+        float entropy{0.0f};
+        float coherence{0.0f};
+    };
+    SimpleSignals getSimpleThresholdSignals() const;
+    
     // Pattern selection and filtering
     void setMinPatternLength(size_t min_length);
     void setMaxPatterns(size_t max_patterns);

@@ -379,6 +379,21 @@ void MetricsMonitor::calculateRollingMetrics() {
     rolling_metrics_.last_calculation = now;
 }
 
+MetricsMonitor::SimpleSignals MetricsMonitor::getSimpleThresholdSignals() const {
+    // Note: removing lock for const method - consider making metrics_mutex_ mutable if needed
+    
+    SimpleSignals signals;
+    signals.stability = system_metrics_.avg_stability;
+    signals.entropy = system_metrics_.avg_entropy;
+    signals.coherence = system_metrics_.avg_coherence;
+    
+    // Implement the exact logic from TODO.md
+    signals.sellSignal = (signals.stability < 0.3f && signals.entropy > 0.7f);
+    signals.buySignal = (signals.stability > 0.7f && signals.entropy < 0.3f);
+    
+    return signals;
+}
+
 void MetricsMonitor::detectThresholdSignals() {
     if (metrics_history_.size() < 10) return;  // Need some history for confidence
 

@@ -3,7 +3,7 @@
 // Include engine headers - they should be found via CMake include paths
 #include "engine.h"
 #include "service_proxy_engine.h"
-#include "config/cuda_config.h"
+#include "config.h"
 
 #include <iostream>
 #include <thread>
@@ -774,9 +774,8 @@ sep::core::Engine* ServiceConnector::createLocalEngine()
         
         // Initialize the engine with default configuration
         sep::config::CudaConfig cuda_config;
-        cuda_config.enable_cuda = true;
-        cuda_config.device_id = 0;
-        cuda_config.memory_limit_mb = 1024;
+        cuda_config.use_gpu = true;
+        cuda_config.max_memory_mb = 1024;
         
         if (!local_engine_->init(cuda_config)) {
             std::cerr << "[ServiceConnector] Failed to initialize local engine" << std::endl;

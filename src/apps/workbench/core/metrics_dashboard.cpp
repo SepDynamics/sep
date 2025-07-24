@@ -1629,6 +1629,26 @@ void MetricsDashboard::renderOandaMainView() {
             } else {
                 ImGui::Text("SIGNAL: HOLD (Insufficient data for analysis)");
             }
+            
+            // Add simple threshold signals as specified in TODO.md
+            ImGui::Separator();
+            ImGui::Text("Simple Threshold Signals (TODO.md implementation):");
+            
+            if (monitor_) {
+                auto simple_signals = monitor_->getSimpleThresholdSignals();
+                
+                ImGui::Text("Stability: %.3f, Entropy: %.3f, Coherence: %.3f", 
+                           simple_signals.stability, simple_signals.entropy, simple_signals.coherence);
+                
+                if (simple_signals.sellSignal) {
+                    ImGui::TextColored(ImVec4(1, 0.2f, 0.2f, 1), "SELL SIGNAL: stability < 0.3 && entropy > 0.7");
+                } else if (simple_signals.buySignal) {
+                    ImGui::TextColored(ImVec4(0.2f, 1, 0.2f, 1), "BUY SIGNAL: stability > 0.7 && entropy < 0.3");
+                } else {
+                    ImGui::TextColored(ImVec4(1, 1, 0, 1), "HOLD: No threshold conditions met");
+                }
+            }
+            
         } else {
             ImGui::Text("Rolling analysis requires active SEP engine");
         }

@@ -3,11 +3,11 @@ import json
 # --- Configuration ---
 
 # 1. The master data file to split
-input_file_path = '/workspace/OANDA.json'
+input_file_path = 'Testing/OANDA/sample_48h.json'
 
 # 2. The names for your output files
-train_file_path = 'O-train-1.json'
-test_file_path = 'O-test-2.json'
+train_file_path = 'Testing/OANDA/O-train-1.json'
+test_file_path = 'Testing/OANDA/O-test-2.json'
 
 # 3. The split ratio for the training set.
 #    - Set to 0.5 for a 50/50 split ("exactly in 2 parts").

@@ -1,45 +1,33 @@
-# SEP Engine - Predictive Financial Modeling System
+# SEP Documentation Overview
 
-## Overview
-SEP Engine is a CUDA-accelerated predictive financial modeling system using quantum-inspired pattern analysis on forex data. The system combines advanced time-series analysis with GPU optimization to develop alpha prediction capabilities for trading applications.
+This directory centralizes all project documents. The [root README](../README.md) covers the overall build and execution instructions.
+Use this file as a map for locating more detailed material.
 
-## Current State ✅
-- **Build System**: Stabilized Docker-based builds with CUDA Toolkit v12.9
-- **Core Engine**: Functional pattern analysis with JSON output support
-- **Data Pipeline**: Integrated Python scripts for complete experiment workflow
-- **Performance**: Sub-10ms processing on CUDA-enabled systems
+## Quick Links
 
-## Key Components
-- **Pattern Analysis**: CUDA-accelerated pattern metric calculations (coherence, stability, entropy)
-- **Financial Data**: OANDA historical forex data integration
-- **Prediction Engine**: Alpha generation through time-series pattern recognition
-- **Backtesting**: Strategy validation with performance metrics
+- **Proof-of-Concepts:** [`proofs/`](proofs/) – chronological experiments validating engine performance and predictive capability.
+- **Architecture Notes:** [`integrated_trading_platform_architecture.md`](integrated_trading_platform_architecture.md), [`signal_generation_architecture.md`](signal_generation_architecture.md), [`trading_hud_features.md`](trading_hud_features.md)
+- **Forex Prototype:** [`../forex/`](../forex/) – JavaScript signal generation reference from earlier work.
 
-## Quick Start
+## Building and Running
+
 ```bash
-# Build the complete system
+# Build the engine
 ./build.sh
 
-# Run pattern analysis
-./build/examples/pattern_metric_example Testing/OANDA/ --json
+# Start the workbench (requires keys.txt with OANDA credentials)
+./run_workbench.sh
 
-# Execute complete alpha experiment
-python3 run_alpha_experiment.py
-
-# Run financial backtesting
-python3 financial_backtest.py
+# Backtest using metrics
+python3 financial_backtest.py metrics.json
 ```
 
-## Architecture
-```
-[Forex Data] → [CUDA Pattern Analysis] → [Alpha Prediction] → [Backtesting] → [Performance Metrics]
-                       ↓
-               [JSON Output Pipeline] → [Python Analysis] → [Visualization]
-```
+Metrics such as coherence, stability and entropy stream to the console when the workbench runs.
 
-## Performance & Profiling
-- **CUDA Profiling**: `nsys profile --output=profile ./build/examples/pattern_metric_example Testing/OANDA/`
-- **Target Latency**: <10ms for real-time analysis
-- **Throughput**: 1M+ data points per second on RTX-class GPUs
+## Document Index
 
-This is a launching demo ready for extended development. See TODO.md for current priorities.
+- [`proofs/README.md`](proofs/README.md) – explains each PoC document.
+- [`archive_old/`](archive_old/) – historic planning material.
+- [`TODO.md`](TODO.md) – active task list.
+
+Refer to the PoC documents for verified benchmarks and previous analyses.

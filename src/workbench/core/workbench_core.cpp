@@ -360,7 +360,6 @@ void WorkbenchEngine::renderLoadingScreen()
     ImGui::Text("Initializing SEP Workbench...");
     
     // Spinner
-    float time = ImGui::GetTime();
     // Replace spinner with simple loading text
     ImGui::Text("Loading...");
 

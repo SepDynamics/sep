@@ -4,6 +4,7 @@
 #include <random>
 #include <sstream>
 #include <iomanip>
+#include <cmath>
 
 #include <imgui.h>
 
@@ -71,17 +72,6 @@ void MemoryTierPanel::renderTierInfo(const char* tier_name, memory::MemoryTierEn
 
         ImGui::TreePop();
     }
-}
-
-void MemoryTierPanel::renderMemoryBlock(const memory::MemoryBlock* block) {
-    if (!block) return;
-    
-    ImGui::Text("Block Address: %p", block);
-    ImGui::Text("Size: %zu bytes", block->size);
-    ImGui::Text("Age: %u", block->age);
-    ImGui::Text("Coherence: %.3f", block->coherence);
-    ImGui::Text("Stability: %.3f", block->stability);
-    ImGui::Text("Generation: %u", block->generation);
 }
 
 // PatternProcessingPanel Implementation

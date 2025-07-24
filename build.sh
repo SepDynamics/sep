@@ -6,9 +6,9 @@ set -uo pipefail
 echo "Building SEP Engine..."
 
 # Clean up with proper permissions
-sudo rm -rf .cache .codechecker CMakeCache.txt output CMakeFiles Makefile /sep/.Trash-1000
-mkdir -p .cache output .codechecker/{output,reports,html} build
-chmod -R 777 .cache .codechecker build output
+# sudo rm -rf .cache .codechecker CMakeCache.txt output CMakeFiles Makefile /sep/.Trash-1000
+# mkdir -p .cache output .codechecker/{output,reports,html} build
+# chmod -R 777 .cache .codechecker build output
 
 # Save text output if the command exists
 if command -v totxt.save &> /dev/null; then
@@ -20,7 +20,8 @@ USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
 # Ensure Docker image is built
-DOCKER_BUILDKIT=1 docker build --no-cache -t sep-engine-builder .
+DOCKER_BUILDKIT=1 docker build -t sep-engine-builder .
+# DOCKER_BUILDKIT=1 docker build --no-cache -t sep-engine-builder .
 
 # Function to fix paths in compile_commands.json for host IDE
 fix_compile_commands() {

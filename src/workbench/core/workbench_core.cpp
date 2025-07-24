@@ -12,6 +12,7 @@
 #include "service_connector.hpp"
 #include "metrics_dashboard.h"
 #include "trade_manager.h"
+#include "trading_hud.h"
 
 // Include ImGui headers
 #include <imgui.h>
@@ -88,6 +89,7 @@ bool WorkbenchEngine::initialize()
         renderer_ = std::make_unique<Renderer>();
         trade_manager_ = std::make_unique<TradeManager>(service_connector_->getOandaConnector());
         metrics_dashboard_ = std::make_unique<MetricsDashboard>();
+        trading_hud_ = std::make_unique<TradingHUD>();
         
         // Initialize renderer and metrics dashboard
         int width, height;
@@ -107,6 +109,13 @@ bool WorkbenchEngine::initialize()
             std::cout << "[WorkbenchEngine] Connecting offline engine to metrics dashboard" << std::endl;
         }
         
+        // Initialize trading HUD
+        if (!trading_hud_->initialize()) {
+            std::cerr << "[WorkbenchEngine] Warning: Failed to initialize trading HUD" << std::endl;
+        } else {
+            std::cout << "[WorkbenchEngine] Trading HUD initialized successfully" << std::endl;
+        }
+        
         // Create offline engine as fallback
         std::cout << "[WorkbenchEngine] Creating offline engine..." << std::endl;
         offline_engine_ = std::make_unique<sep::core::Engine>();
@@ -117,6 +126,19 @@ bool WorkbenchEngine::initialize()
         
         // Skip service check - use offline engine as primary engine
         std::cout << "[WorkbenchEngine] Using offline engine as primary engine - no service needed" << std::endl;
+        
+        // Connect components together
+        std::cout << "[WorkbenchEngine] Connecting trading components..." << std::endl;
+        if (trading_hud_ && service_connector_ && service_connector_->getOandaConnector()) {
+            // Create shared_ptr from raw pointer (careful with ownership)
+            auto oanda_ptr = service_connector_->getOandaConnector();
+            // For now, we'll skip the connection since we need proper shared_ptr management
+            std::cout << "[WorkbenchEngine] OANDA connector available: " << (oanda_ptr ? "Yes" : "No") << std::endl;
+            
+            // TODO: Connect metrics monitor when available
+            // trading_hud_->setMetricsMonitor(metrics_monitor);
+        }
+        
         transitionTo(ApplicationState::LANDING_PAGE);
 
         std::cout << "[WorkbenchEngine] Initialization complete!" << std::endl;
@@ -306,6 +328,11 @@ void WorkbenchEngine::renderFrame()
     // Always render metrics dashboard as main interface (removed demo system)
     if (metrics_dashboard_) {
         metrics_dashboard_->render();
+    }
+    
+    // Render advanced trading HUD
+    if (trading_hud_) {
+        trading_hud_->render();
     }
     
     // Handle special states

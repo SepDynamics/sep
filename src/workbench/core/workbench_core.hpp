@@ -13,6 +13,7 @@ class LandingPage;
 class Renderer;
 class MetricsDashboard;
 class TradeManager;
+class TradingHUD;
 
 }  // namespace sep::workbench
 
@@ -104,6 +105,7 @@ private:
     std::unique_ptr<Renderer> renderer_;
     std::unique_ptr<MetricsDashboard> metrics_dashboard_;
     std::unique_ptr<TradeManager> trade_manager_;
+    std::unique_ptr<TradingHUD> trading_hud_;
     
     // Engine components (may be null if service not connected)
     std::unique_ptr<sep::core::Engine> offline_engine_;

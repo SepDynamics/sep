@@ -51,6 +51,14 @@ For a detailed breakdown of the project's phases and tasks, please see [`docs/TO
 ## Key Components
 
 *   **SEP Engine**: The core C++ engine for pattern analysis.
+*   **Advanced Trading HUD**: Professional real-time trading interface featuring:
+    - Live candlestick charts with technical indicators (EMAs, RSI, MACD, Bollinger Bands)
+    - Automatic trend line detection for support/resistance levels
+    - Interactive mouse hover showing OHLC data + SEP metrics at cursor position
+    - Multi-timeframe analysis (24H/6H/3H) with dynamic data loading
+    - Account balance monitoring with real-time P&L tracking
+    - SEP signal overlay with proprietary pattern analysis visualization
+    - Fixed window positioning for optimal trading workflow
 *   **Predictive Gauge**: A composite metric for financial market prediction.
 *   **Backtesting Script**: A Python script (`financial_backtest.py`) for validating trading strategies.
 *   **Experiment Runner**: A shell script (`run_experiment.sh`) to automate the end-to-end workflow.

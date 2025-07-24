@@ -1,33 +1,54 @@
-# SEP Documentation Overview
+# SEP Engine Trading Platform - Integration Phase
 
-This directory centralizes all project documents. The [root README](../README.md) covers the overall build and execution instructions.
-Use this file as a map for locating more detailed material.
+## Current Status: Workbench Integration & Pattern Analysis
 
-## Quick Links
+After thorough verification of our quantum processing pipeline ([data flow architecture](data_flow_architecture.md)), we're now focused on integrating components into the workbench platform and discovering predictive patterns.
 
-- **Proof-of-Concepts:** [`proofs/`](proofs/) – chronological experiments validating engine performance and predictive capability.
-- **Architecture Notes:** [`integrated_trading_platform_architecture.md`](integrated_trading_platform_architecture.md), [`signal_generation_architecture.md`](signal_generation_architecture.md), [`trading_hud_features.md`](trading_hud_features.md)
-- **Forex Prototype:** [`../forex/`](../forex/) – JavaScript signal generation reference from earlier work.
+## Phase Objectives
 
-## Building and Running
+### 1. **Workbench Integration** 🎯
+- Get SEP engine metrics displaying in real-time dashboard
+- Show correlation between quantum metrics and market movements  
+- Implement 48-hour historical data analysis (pausing live feeds)
+
+### 2. **Pattern Discovery** 🔍
+- Identify threshold combinations that predict market direction
+- Example: `stability < 0.3 && entropy > 0.7 = sell signal`
+- Analyze rolling 24-hour contexts for pattern consistency
+
+### 3. **Validation Framework** ✅  
+- Test predictive power of instant quantum metrics
+- Measure correlation between metric changes and price movements
+- Build confidence in signal generation before live trading
+
+## Current Architecture
+
+Our verified data pipeline:
+**OANDA Market Data** → **Quantum Pattern Engine** → **Workbench Dashboard** → **Signal Analysis**
+
+## Key Components Verified ✅
+
+- **OANDA Connector**: Authentic market data integration
+- **Pattern Kernels**: Real CUDA-accelerated quantum processing  
+- **Metrics Monitor**: Genuine coherence/stability/entropy calculations
+- **Data Parser**: Live OHLC → quantum pattern conversion
+
+## Next Milestones
+
+1. **48H Data Sample**: Create controlled dataset for analysis
+2. **Dashboard Integration**: Real metrics in workbench UI
+3. **Threshold Detection**: Visual indicators for pattern crossings
+4. **Predictive Testing**: Validate market movement correlation
+
+## Build & Run
 
 ```bash
-# Build the engine
-./build.sh
-
-# Start the workbench (requires keys.txt with OANDA credentials)
-./run_workbench.sh
-
-# Backtest using metrics
-python3 financial_backtest.py metrics.json
+./build.sh                    # Build with verified components
+./run_workbench.sh           # Launch integrated dashboard
 ```
 
-Metrics such as coherence, stability and entropy stream to the console when the workbench runs.
+## Key Files
 
-## Document Index
-
-- [`proofs/README.md`](proofs/README.md) – explains each PoC document.
-- [`archive_old/`](archive_old/) – historic planning material.
-- [`TODO.md`](TODO.md) – active task list.
-
-Refer to the PoC documents for verified benchmarks and previous analyses.
+- [`data_flow_architecture.md`](data_flow_architecture.md) - Complete pipeline verification
+- [`TODO.md`](TODO.md) - Current phase tasks
+- [`../src/apps/workbench/`](../src/apps/workbench/) - Dashboard integration code

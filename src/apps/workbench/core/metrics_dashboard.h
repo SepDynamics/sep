@@ -19,7 +19,7 @@ namespace sep::workbench {
         class TradeManager;
     }
 
-// Candlestick data structure for OHLC charts
+// Enhanced Candlestick with SEP metrics for rolling window analysis
 struct Candlestick {
     double timestamp;
     double open;
@@ -27,6 +27,16 @@ struct Candlestick {
     double low;
     double close;
     double volume;
+    
+    // SEP quantum metrics associated with this candlestick
+    float coherence{0.0f};
+    float stability{0.0f};
+    float entropy{0.0f};
+    
+    // Trendline data
+    double trend_slope{0.0};
+    double trend_intercept{0.0};
+    bool trend_valid{false};
     
     Candlestick(double t = 0, double o = 0, double h = 0, double l = 0, double c = 0, double v = 0)
         : timestamp(t), open(o), high(h), low(l), close(c), volume(v) {}
@@ -156,7 +166,10 @@ private:
     void updateOandaData();
     void renderOandaPanel();
     void renderOandaMainView();
+    void renderComprehensiveTradingCharts();
     void fetchHistoricalData();
+    bool loadSampleData();
+    void processSampleDataWithSEP();
     void renderHistoricalChart();
     void updateInstrumentCache(const std::string& instrument);
     void calculateSnapshotMetrics(Chart24HrCache& cache);
@@ -165,7 +178,12 @@ private:
     void renderTechnicalIndicators(const std::string& instrument);
     void renderMarketDepth(const std::string& instrument);
     void renderPatternMetrics();
+    void initializeMetricsMonitor();
+    void renderMultiTimeframeRollingAverages(const std::string& instrument);
+    void renderThresholdCrossingIndicators(const std::string& instrument);
     void updateCandlestickData(const std::string& instrument, const sep::connectors::MarketData& data);
+    void updateCandlestickMetrics(const std::string& instrument, Candlestick& candlestick);
+    void calculateTrendlines(const std::string& instrument);
     void calculateTechnicalIndicators(const std::string& instrument);
     void renderOHLCCandlesticks(const std::deque<Candlestick>& candles, float min_price, float max_price, float price_range);
     void renderSEPSignalOverlay(const std::string& instrument, float min_price, float max_price, float price_range);

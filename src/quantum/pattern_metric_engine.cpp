@@ -51,6 +51,25 @@ void PatternMetricEngine::evolvePatterns() {
     if (stream_buffer_.empty()) {
         return;
     }
+    
+    // Use the QFH processor to analyze the raw data
+    if (qfh_processor_) {
+        // Convert bytes to uint32_t for QFH processing
+        std::vector<uint32_t> pattern_bits;
+        pattern_bits.reserve((stream_buffer_.size() + 3) / 4); // Reserve space for uint32_t conversion
+        
+        for (size_t i = 0; i < stream_buffer_.size(); i += 4) {
+            uint32_t value = 0;
+            for (size_t j = 0; j < 4 && (i + j) < stream_buffer_.size(); ++j) {
+                value |= (static_cast<uint32_t>(stream_buffer_[i + j]) << (j * 8));
+            }
+            pattern_bits.push_back(value);
+        }
+        
+        // This will trigger the QFH analysis which logs "analyze: events size: X"
+        qfh_processor_->processPatternBits(pattern_bits);
+    }
+    
     // Process the new data in the buffer, append patterns, and clear the buffer.
     auto new_patterns = extractPatternsFromBytes(stream_buffer_.data(), stream_buffer_.size());
     current_patterns_.insert(current_patterns_.end(), new_patterns.begin(), new_patterns.end());

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include "connectors/market_data_converter.h"
 
 namespace sep::workbench {
@@ -51,6 +53,14 @@ bool UnifiedDashboard::initialize() {
         std::cout << "[UnifiedDashboard] Memory manager connected" << std::endl;
     } catch (const std::exception& e) {
         std::cout << "[UnifiedDashboard] Memory manager failed: " << e.what() << std::endl;
+    }
+    
+    // Try to load sample data for demonstration
+    if (loadSampleData()) {
+        std::cout << "[UnifiedDashboard] Using sample data for demonstration" << std::endl;
+        processSampleDataWithSEP();
+    } else {
+        std::cout << "[UnifiedDashboard] Sample data not available, will use OANDA API when needed" << std::endl;
     }
 
     return true;
@@ -211,6 +221,9 @@ void UnifiedDashboard::renderMemorySection() {
 }
 
 void UnifiedDashboard::updateMarketData() {
+    // If sample data is loaded, skip OANDA API calls
+    if (sample_data_loaded_) return;
+    
     if (!oanda_connector_ || !account_info_.connected) return;
     
     try {
@@ -359,6 +372,127 @@ void UnifiedDashboard::feedMarketDataToEngine(const sep::connectors::MarketData&
         
     } catch (const std::exception& e) {
         std::cout << "[UnifiedDashboard] Engine data feed failed: " << e.what() << std::endl;
+    }
+}
+
+bool UnifiedDashboard::loadSampleData() {
+    const std::string sample_file = "/sep/Testing/OANDA/sample_48h.json";
+    
+    std::cout << "[UnifiedDashboard] Attempting to load sample data from: " << sample_file << std::endl;
+    
+    std::ifstream file(sample_file);
+    if (!file.is_open()) {
+        std::cout << "[UnifiedDashboard] Could not open sample file: " << sample_file << std::endl;
+        return false;
+    }
+    
+    try {
+        nlohmann::json json_data;
+        file >> json_data;
+        
+        std::string instrument = json_data["instrument"];
+        std::string granularity = json_data["granularity"];
+        auto candles_json = json_data["candles"];
+        
+        std::cout << "[UnifiedDashboard] Parsing " << candles_json.size() 
+                  << " candles for " << instrument << " (" << granularity << ")" << std::endl;
+        
+        historical_data_.clear();
+        historical_data_.reserve(candles_json.size());
+        
+        for (const auto& candle_json : candles_json) {
+            sep::connectors::OandaCandle candle;
+            
+            // Parse timestamp
+            candle.time = candle_json["time"];
+            
+            // Parse OHLC from mid prices
+            const auto& mid = candle_json["mid"];
+            candle.open = std::stod(mid["o"].get<std::string>());
+            candle.high = std::stod(mid["h"].get<std::string>());
+            candle.low = std::stod(mid["l"].get<std::string>());
+            candle.close = std::stod(mid["c"].get<std::string>());
+            
+            // Parse volume
+            candle.volume = candle_json["volume"];
+            
+            historical_data_.push_back(candle);
+        }
+        
+        sample_data_loaded_ = true;
+        market_data_.instrument = instrument;
+        
+        std::cout << "[UnifiedDashboard] Successfully loaded " << historical_data_.size() 
+                  << " sample candles for " << instrument << std::endl;
+        
+        // Debug: Print first and last candles
+        if (!historical_data_.empty()) {
+            const auto& first = historical_data_.front();
+            const auto& last = historical_data_.back();
+            std::cout << "[DEBUG] First candle: " << first.time 
+                      << " O=" << first.open << " H=" << first.high 
+                      << " L=" << first.low << " C=" << first.close << std::endl;
+            std::cout << "[DEBUG] Last candle: " << last.time 
+                      << " O=" << last.open << " H=" << last.high 
+                      << " L=" << last.low << " C=" << last.close << std::endl;
+        }
+        
+        return true;
+        
+    } catch (const std::exception& e) {
+        std::cout << "[UnifiedDashboard] Error parsing sample data: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+void UnifiedDashboard::processSampleDataWithSEP() {
+    if (historical_data_.empty()) {
+        std::cout << "[UnifiedDashboard] No historical data to process with SEP engine" << std::endl;
+        return;
+    }
+    
+    std::cout << "[UnifiedDashboard] Processing " << historical_data_.size() 
+              << " candles through SEP engine for quantum metrics" << std::endl;
+    
+    try {
+        // Convert OANDA candles to byte stream using MarketDataConverter
+        auto byte_stream = sep::connectors::MarketDataConverter::candlesToByteStream(historical_data_);
+        
+        if (byte_stream.empty()) {
+            std::cout << "[UnifiedDashboard] Warning: Empty byte stream from market data conversion" << std::endl;
+            return;
+        }
+        
+        std::cout << "[UnifiedDashboard] Converted market data to " << byte_stream.size() 
+                  << " bytes for SEP analysis" << std::endl;
+        
+        if (sep_engine_) {
+            // Feed the historical data to the SEP engine
+            std::istringstream data_stream(std::string(byte_stream.begin(), byte_stream.end()));
+            sep_engine_->ingestFromStream(data_stream);
+            
+            // Run the SEP engine to process patterns
+            sep_engine_->run();
+            
+            std::cout << "[UnifiedDashboard] SEP engine processing complete" << std::endl;
+            
+            // Update market data with latest candle for display
+            if (!historical_data_.empty()) {
+                const auto& latest = historical_data_.back();
+                market_data_.bid = latest.low;   // Use low as bid approximation
+                market_data_.ask = latest.high;  // Use high as ask approximation
+                market_data_.spread = latest.high - latest.low;
+                market_data_.last_update = std::chrono::system_clock::now();
+                
+                std::cout << "[UnifiedDashboard] Updated market display with sample data" << std::endl;
+            }
+            
+        } else {
+            std::cout << "[UnifiedDashboard] Error: SEP engine not initialized" << std::endl;
+        }
+        
+    } catch (const std::exception& e) {
+        std::cout << "[UnifiedDashboard] Error processing sample data with SEP engine: " << e.what() << std::endl;
     }
 }
 

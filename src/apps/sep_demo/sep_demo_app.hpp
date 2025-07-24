@@ -118,7 +118,7 @@ private:
     
     // Demo panels
     std::vector<std::unique_ptr<DemoPanel>> panels_;
-    std::unique_ptr<workbench::SignalTestingPanel> signal_testing_panel_;
+    workbench::SignalTestingPanel* signal_testing_panel_; // Raw pointer since ownership is in panels_ vector
     
     // UI state
     bool show_demo_window_ = false;

@@ -460,7 +460,11 @@ bool SEPDemoApp::initialize() {
         panels_.push_back(std::make_unique<PatternProcessingPanel>(quantum_processor_));
         panels_.push_back(std::make_unique<SystemMetricsPanel>(memory_manager_, quantum_processor_));
         panels_.push_back(std::make_unique<PatternGeneratorPanel>(quantum_processor_));
-        signal_testing_panel_ = std::make_unique<workbench::SignalTestingPanel>(signal_generator_);
+        
+        // Add signal testing panel to main panels list
+        auto signal_panel = std::make_unique<workbench::SignalTestingPanel>(signal_generator_);
+        signal_testing_panel_ = signal_panel.get(); // Keep raw pointer for direct access
+        panels_.push_back(std::move(signal_panel));
 
         // Initialize with some demo data
         initializeDemoData();

@@ -22,10 +22,9 @@ SignalResult QuantumSignalGenerator::generateSignal(const dag::DagNode& pattern)
 
 void QuantumSignalGenerator::tick() {
     if (strategy_) {
-        // A dummy DagNode is created here for demonstration purposes.
-        // In a real scenario, this would come from the engine.
-        dag::DagNode dummy_node;
-        last_signal_ = strategy_->generateSignal(dummy_node);
+        // Use empty DAG node since engine connection not available yet
+        dag::DagNode empty_node;
+        last_signal_ = strategy_->generateSignal(empty_node);
     } else {
         last_signal_ = {SignalType::HOLD, 0.0f, "No strategy set"};
     }

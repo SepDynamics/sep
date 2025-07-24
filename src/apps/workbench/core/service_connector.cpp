@@ -2,6 +2,8 @@
 
 // Include engine headers - they should be found via CMake include paths
 #include "engine.h"
+#include "service_proxy_engine.h"
+#include "config/cuda_config.h"
 
 #include <iostream>
 #include <thread>
@@ -357,10 +359,10 @@ void ServiceConnector::updateHealthMetrics() {
     }
     
     // In production, these would be queried from the service via API calls
-    // For now, provide reasonable defaults for demonstration
+    // Use actual service data when available - NO FAKE INCREMENTS
     if (health_metrics_.is_responsive) {
-        health_metrics_.processed_patterns += 1; // Simulated increment
-        health_metrics_.coherence_average = 0.75f; // Simulated coherence
+        // Real implementation would query service metrics via API
+        // For now, maintain last known values instead of fake incrementing
     } else {
         health_metrics_.processed_patterns = 0;
         health_metrics_.coherence_average = 0.0f;
@@ -696,10 +698,9 @@ sep::core::Engine* ServiceConnector::createServiceEngineProxy(int socket_fd)
         int health_sock = socket(AF_INET, SOCK_STREAM, 0);
         if (health_sock == -1)
         {
-            std::cerr << "[ServiceConnector] Failed to create health check socket - using offline mode" << std::endl;
-            // CRITICAL FIX: Never return nullptr - always provide working engine
-            static sep::core::Engine offline_marker;
-            return &offline_marker;
+            std::cerr << "[ServiceConnector] Failed to create health check socket - creating local engine" << std::endl;
+            // Create a real local engine instance instead of stub
+            return createLocalEngine();
         }
 
         struct sockaddr_in health_addr;
@@ -742,14 +743,9 @@ sep::core::Engine* ServiceConnector::createServiceEngineProxy(int socket_fd)
 
                         close(health_sock);
 
-                        // Service is verified healthy and reachable
-                        // CRITICAL FIX: Always return a working engine pointer - never nullptr
-                        std::cout << "[ServiceConnector] Service verified - engine proxy created successfully" << std::endl;
-                        
-                        // Return a valid engine pointer (the workbench will use its offline engine)
-                        // This signals successful service connection without creating new engine
-                        static sep::core::Engine dummy_engine_marker;
-                        return &dummy_engine_marker;
+                        // Service is verified healthy and reachable - create HTTP client engine proxy
+                        std::cout << "[ServiceConnector] Creating HTTP engine proxy for remote service" << std::endl;
+                        return createHttpEngineProxy(socket_fd);
                     }
                 }
             }
@@ -763,10 +759,68 @@ sep::core::Engine* ServiceConnector::createServiceEngineProxy(int socket_fd)
                   << std::endl;
     }
 
-    std::cout << "[ServiceConnector] Service connection failed - using offline engine" << std::endl;
-    // CRITICAL FIX: Never return nullptr - always provide working engine
-    static sep::core::Engine fallback_engine;
-    return &fallback_engine;
+    std::cout << "[ServiceConnector] Remote service unavailable - creating local engine" << std::endl;
+    // Create a real local engine instance for offline operation
+    return createLocalEngine();
+}
+
+sep::core::Engine* ServiceConnector::createLocalEngine()
+{
+    try {
+        std::cout << "[ServiceConnector] Initializing local SEP engine..." << std::endl;
+        
+        // Create a real local engine instance
+        local_engine_ = std::make_unique<sep::core::Engine>();
+        
+        // Initialize the engine with default configuration
+        sep::config::CudaConfig cuda_config;
+        cuda_config.enable_cuda = true;
+        cuda_config.device_id = 0;
+        cuda_config.memory_limit_mb = 1024;
+        
+        if (!local_engine_->init(cuda_config)) {
+            std::cerr << "[ServiceConnector] Failed to initialize local engine" << std::endl;
+            return nullptr;
+        }
+        
+        std::cout << "[ServiceConnector] Local SEP engine initialized successfully" << std::endl;
+        health_metrics_.is_responsive = true;
+        health_metrics_.version_info = "SEP Local Engine v1.0";
+        
+        return local_engine_.get();
+        
+    } catch (const std::exception& e) {
+        std::cerr << "[ServiceConnector] Exception creating local engine: " << e.what() << std::endl;
+        return nullptr;
+    }
+}
+
+sep::core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
+{
+    try {
+        std::cout << "[ServiceConnector] Creating HTTP proxy engine for remote service..." << std::endl;
+        
+        // Create a proxy engine that forwards commands to the remote service via HTTP
+        http_proxy_engine_ = std::make_unique<sep::core::ServiceProxyEngine>(config_.service_address, config_.service_port);
+        
+        // Test the connection
+        if (!http_proxy_engine_->isConnected()) {
+            std::cerr << "[ServiceConnector] HTTP proxy engine connection failed" << std::endl;
+            // Fallback to local engine
+            return createLocalEngine();
+        }
+        
+        std::cout << "[ServiceConnector] HTTP proxy engine created successfully" << std::endl;
+        health_metrics_.is_responsive = true;
+        health_metrics_.version_info = "SEP Remote Service Proxy v1.0";
+        
+        return http_proxy_engine_.get();
+        
+    } catch (const std::exception& e) {
+        std::cerr << "[ServiceConnector] Exception creating HTTP proxy engine: " << e.what() << std::endl;
+        // Fallback to local engine
+        return createLocalEngine();
+    }
 }
 
 } // namespace sep::workbench

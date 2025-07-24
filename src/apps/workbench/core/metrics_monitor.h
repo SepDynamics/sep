@@ -47,6 +47,33 @@ public:
         std::chrono::steady_clock::time_point last_update;
     };
 
+    struct RollingMetrics {
+        float coherence_24h_avg{0.0f};
+        float stability_24h_avg{0.0f};
+        float entropy_24h_avg{0.0f};
+        float coherence_1h_avg{0.0f};
+        float stability_1h_avg{0.0f};
+        float entropy_1h_avg{0.0f};
+        float coherence_trend{0.0f};  // Direction of change over 24h
+        float stability_trend{0.0f};
+        float entropy_trend{0.0f};
+        std::chrono::steady_clock::time_point last_calculation;
+    };
+
+    struct ThresholdSignal {
+        enum Type { SELL, BUY, HOLD };
+        Type signal_type{HOLD};
+        float confidence{0.0f};
+        std::string reason;
+        std::chrono::steady_clock::time_point timestamp;
+        
+        // Signal conditions that triggered
+        bool low_stability{false};
+        bool high_entropy{false};
+        bool coherence_drop{false};
+        bool rapid_change{false};
+    };
+
 public:
     ~MetricsMonitor();
 
@@ -68,6 +95,8 @@ public:
     // Metrics access
     const std::vector<PatternStats>& getPatternStats() const;
     const SystemMetrics& getSystemMetrics() const;
+    const RollingMetrics& getRollingMetrics() const;
+    const ThresholdSignal& getLatestSignal() const;
     
     // Pattern selection and filtering
     void setMinPatternLength(size_t min_length);
@@ -82,12 +111,23 @@ private:
     void updateMetrics();
     void processIngestedData();
     void calculateSystemMetrics();
+    void calculateRollingMetrics();
+    void detectThresholdSignals();
     
     // Forward declaration to avoid circular dependency
     // The actual engine will be created in the implementation
     void* engine_; // Using void* to avoid including the header here
     std::vector<PatternStats> pattern_stats_;
     SystemMetrics system_metrics_;
+    RollingMetrics rolling_metrics_;
+    ThresholdSignal latest_signal_;
+    
+    // Historical data for rolling calculations
+    struct MetricsSnapshot {
+        float coherence, stability, entropy;
+        std::chrono::steady_clock::time_point timestamp;
+    };
+    std::vector<MetricsSnapshot> metrics_history_;
     
     std::atomic<bool> processing_{false};
     std::atomic<bool> shutdown_requested_{false};

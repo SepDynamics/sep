@@ -37,6 +37,8 @@ private:
     void updateEngineMetrics();
     void updateMemoryInfo();
     void feedMarketDataToEngine(const sep::connectors::MarketData& market_data);
+    bool loadSampleData();
+    void processSampleDataWithSEP();
     std::string formatCurrency(double value);
     std::string formatBytes(size_t bytes);
 
@@ -83,6 +85,10 @@ private:
     std::chrono::steady_clock::time_point last_market_update_;
     std::chrono::steady_clock::time_point last_engine_update_;
     std::chrono::steady_clock::time_point last_memory_update_;
+    
+    // Sample data for demonstration
+    bool sample_data_loaded_{false};
+    std::vector<sep::connectors::OandaCandle> historical_data_;
 };
 
 } // namespace sep::workbench

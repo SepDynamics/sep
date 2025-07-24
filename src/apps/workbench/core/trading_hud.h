@@ -498,6 +498,11 @@ private:
     void trimDataToTimeWindow();
     bool shouldUpdateIndicators();
     
+    // Currency correlation analysis
+    float calculateCurrencyPairCorrelation(const std::string& pair1, const std::string& pair2);
+    float calculatePearsonCorrelation(const std::vector<float>& x, const std::vector<float>& y);
+    float calculateSupportResistanceStrength(float level_high, float level_low);
+    
     // State tracking
     std::chrono::steady_clock::time_point last_update_;
     std::chrono::steady_clock::time_point last_indicator_calc_;

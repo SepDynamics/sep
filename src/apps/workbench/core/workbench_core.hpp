@@ -11,12 +11,17 @@ namespace sep::workbench {
 class ServiceConnector;
 class LandingPage;
 class Renderer;
-class TradingHUD;
 class QuantumSignalGenerator;
+class UILayoutManager;
+namespace tabs {
+    class SignalsTabController;
+    class EngineTabController;
+    class BackendTabController;
+}
 
 }  // namespace sep::workbench
 
-#include "trading_hud.h"
+#include "ui_layout_manager.h"
 // External classes from sep namespace (not in sep::workbench)
 namespace sep {
     namespace core
@@ -105,7 +110,10 @@ private:
     // Demo orchestrator removed for trading-focused version
     std::unique_ptr<LandingPage> landing_page_;
     std::unique_ptr<Renderer> renderer_;
-    std::unique_ptr<TradingHUD> trading_hud_;
+    std::unique_ptr<UILayoutManager> layout_manager_;
+    std::unique_ptr<tabs::SignalsTabController> signals_tab_;
+    std::unique_ptr<tabs::EngineTabController> engine_tab_;
+    std::unique_ptr<tabs::BackendTabController> backend_tab_;
     std::unique_ptr<QuantumSignalGenerator> signal_generator_;
     
     // Engine components (may be null if service not connected)

@@ -10,7 +10,10 @@
 #include "landing_page.hpp"
 #include "renderer.h"
 #include "service_connector.hpp"
-#include "trading_hud.h"
+#include "apps/workbench/tabs/signals_tab_controller.h"
+#include "apps/workbench/tabs/engine_tab_controller.h"
+#include "apps/workbench/tabs/backend_tab_controller.h"
+
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 
 // Include ImGui headers
@@ -36,6 +39,8 @@ WorkbenchEngine::WorkbenchEngine()
     instance_ = this;
     metrics_.startup_time = std::chrono::steady_clock::now();
 }
+
+WorkbenchEngine::~WorkbenchEngine() = default;
 
 WorkbenchEngine::~WorkbenchEngine()
 {
@@ -86,7 +91,10 @@ bool WorkbenchEngine::initialize()
         // demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         // landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = std::make_unique<Renderer>();
-        trading_hud_ = std::make_unique<TradingHUD>();
+        layout_manager_ = std::make_unique<UILayoutManager>();
+        signals_tab_ = std::make_unique<tabs::SignalsTabController>();
+        engine_tab_ = std::make_unique<tabs::EngineTabController>();
+        backend_tab_ = std::make_unique<tabs::BackendTabController>();
         signal_generator_ = std::make_unique<QuantumSignalGenerator>();
         
         // Initialize renderer and metrics dashboard
@@ -94,11 +102,9 @@ bool WorkbenchEngine::initialize()
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
         
-        if (!trading_hud_->initialize()) {
-            std::cerr << "[WorkbenchEngine] Warning: Failed to initialize trading HUD" << std::endl;
-        } else {
-            std::cout << "[WorkbenchEngine] Trading HUD initialized successfully" << std::endl;
-        }
+        signals_tab_->initialize();
+        engine_tab_->initialize();
+        backend_tab_->initialize();
         
         // Create offline engine as fallback
         std::cout << "[WorkbenchEngine] Creating offline engine..." << std::endl;
@@ -305,8 +311,8 @@ void WorkbenchEngine::renderFrame()
     ImGui::NewFrame();
     
     // Render unified dashboard as main interface
-    if (trading_hud_) {
-        trading_hud_->render();
+    if (layout_manager_) {
+        layout_manager_->render();
     }
     
     // Handle special states

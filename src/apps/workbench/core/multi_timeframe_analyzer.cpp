@@ -1,10 +1,12 @@
 #include "multi_timeframe_analyzer.h"
-#include "trading_hud.h"  // For CandleData definition
+#include "common_structs.h"
+#include "connectors/market_data_converter.h"
+
 #include <algorithm>
-#include <numeric>
 #include <cmath>
-#include <sstream>
 #include <iostream>
+#include <numeric>
+#include <sstream>
 
 // Temporary logging macros until we fix the logging system
 #define SEP_LOG_ERROR(msg) std::cerr << "[ERROR] " << msg << std::endl

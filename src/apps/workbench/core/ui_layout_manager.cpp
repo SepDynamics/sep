@@ -91,9 +91,15 @@ void UILayoutManager::render() {
         renderCustomizationControls();
     }
     
-    // Render all layout groups
-    for (auto& [group_name, group] : layout_groups_) {
-        renderLayoutGroup(group_name);
+    renderTabs();
+
+    // Render content for the active tab
+    if (active_tab_ == 0) { // Signals
+        renderLayoutGroup("Main Chart");
+    } else if (active_tab_ == 1) { // Engine
+        renderLayoutGroup("SEP Metrics");
+    } else if (active_tab_ == 2) { // Backend
+        renderLayoutGroup("Data & Backtesting");
     }
 }
 
@@ -345,6 +351,24 @@ void UILayoutManager::setGlobalSpacing(float padding, float spacing) {
     for (auto& [name, group] : layout_groups_) {
         group.padding = padding;
         group.spacing = spacing;
+    }
+}
+
+void UILayoutManager::renderTabs() {
+    if (ImGui::BeginTabBar("MainTabs")) {
+        if (ImGui::BeginTabItem("SIGNALS")) {
+            active_tab_ = 0;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("ENGINE")) {
+            active_tab_ = 1;
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("BACKEND")) {
+            active_tab_ = 2;
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
     }
 }
 

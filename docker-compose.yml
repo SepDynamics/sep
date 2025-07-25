@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  sepengine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sep-engine-builder
+    volumes:
+      - .:/sep
+    environment:
+      - CUDA_HOME=/usr/local/cuda
+      - CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda
+      - CUDA_BIN_PATH=/usr/local/cuda/bin
+      - CMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc
+      - PATH=/usr/local/cuda/bin:${PATH}
+      - LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
+    # runtime: nvidia (uncomment for running with nvidia docker runtime)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    working_dir: /sep
+    command: tail -f /dev/null  # Keep the container running

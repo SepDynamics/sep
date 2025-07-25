@@ -86,6 +86,7 @@ public:
     void render();
     void renderLayoutGroup(const std::string& group_name);
     void renderPanel(const std::string& panel_id);
+    void renderTabs();
     
     // Layout Presets
     void applyTradingLayout();
@@ -114,6 +115,7 @@ private:
     float global_padding_ = 8.0f;
     float global_spacing_ = 4.0f;
     bool customization_mode_ = false;
+    int active_tab_ = 0;
     
     // Helper methods
     void renderCustomizationControls();

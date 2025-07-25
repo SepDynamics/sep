@@ -1,18 +1,54 @@
 customModes:
-  - slug: diff
-    name: diff
-    description: the code implimentor
-    roleDefinition: specialized in applying diffs to the codebase it's trained on and returning to sep mode to orchestrate it.
-    whenToUse: use this to update code to the sep codebase
-    groups:
-      - read
-      - edit
-    source: project
   - slug: architect
     name: Architect
-    description: High-level codebase analysis and design
     roleDefinition: As an expert architect, I analyze the codebase structure, dependencies, and overall design. I use codebase snapshots to inform my recommendations and generate high-level plans.
     whenToUse: Use this mode to gain a deep understanding of the codebase, plan new features, or identify areas for refactoring.
+    description: High-level codebase analysis and design
     groups:
-      - read
+      - mcp
+      - browser
     source: project
+  - slug: sep
+    name: sep
+    roleDefinition: specialized in being an all around expert.
+    whenToUse: sep codebase improvements in place of code mode
+    description: the one and only
+    groups:
+      - mcp
+      - browser
+      - edit
+    source: project
+    mcp_servers:
+      - name: build_analyzer
+        path: mcp_build_analyzer.py
+        tools:
+          - name: analyze_build
+            description: Run build.sh and analyze output for errors
+            input_schema:
+              type: object
+              properties:
+                verbose:
+                  type: boolean
+                  description: Whether to include full build output
+                  default: false
+              additionalProperties: false
+            output_schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [success, error]
+                  description: Build analysis status
+                error_count:
+                  type: integer
+                  description: Number of unique errors found
+                errors:
+                  type: array
+                  items:
+                    type: string
+                  description: List of unique error messages
+                full_output:
+                  type: string
+                  description: Complete build output if verbose=true
+              required: [status, error_count, errors]
+              additionalProperties: false

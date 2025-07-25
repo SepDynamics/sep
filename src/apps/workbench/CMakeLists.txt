@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 file(GLOB_RECURSE WB_SOURCES
     "demos/*.cpp"
     "core/*.cpp"
+    "tabs/*.cpp"
     "panels/*.cpp"
     "signal_generator/*.cpp"
     "simple_renderer.cpp"

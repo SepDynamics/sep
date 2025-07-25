@@ -180,6 +180,8 @@ void MetricsDashboard::renderSystemMetrics() {
         ImGui::EndTable();
     }
     
+
+    
     ImGui::Spacing();
     
     // Pattern statistics

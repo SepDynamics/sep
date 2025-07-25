@@ -42,6 +42,9 @@ cmake-build-*/
 vendor/
 extern/
 !extern/crow
+third_party/
+!third_party/imgui
+!third_party/implot
 cmake-make/
 intern/
 source/

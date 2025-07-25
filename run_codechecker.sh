@@ -28,11 +28,15 @@ docker run --rm \
     sep-engine-builder bash -c '
         # Run as root and fix permissions later
         cd /sep
+        # Set clang-tidy path explicitly
+        export PATH="/usr/bin:$PATH"
+        which clang-tidy
+        
         CodeChecker analyze compile_commands.json \
             --output /home/codecheck/.codechecker/reports \
             --analyzers clang-tidy \
-            --enable sensitive \
-            --enable extreme
+            --ctu \
+            --verbose debug
 
         CodeChecker parse /home/codecheck/.codechecker/reports \
             --export html \

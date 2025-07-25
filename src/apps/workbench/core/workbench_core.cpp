@@ -96,6 +96,14 @@ bool WorkbenchEngine::initialize()
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
 
+        signals_tab_ = std::make_unique<sep::workbench::tabs::SignalsTabController>();
+        engine_tab_ = std::make_unique<sep::workbench::tabs::EngineTabController>();
+        backend_tab_ = std::make_unique<sep::workbench::tabs::BackendTabController>();
+
+        signals_tab_->initialize();
+        engine_tab_->initialize();
+        backend_tab_->initialize();
+
         // Create offline engine as fallback
         ::std::cout << "[WorkbenchEngine] Creating offline engine..." << ::std::endl;
         offline_engine_ = ::std::make_unique<sep::core::Engine>();

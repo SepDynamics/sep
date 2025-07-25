@@ -54,7 +54,6 @@ ollama/
 .turbo/
 node_modules/
 asio/
-third_party/
 
 # IDE & Editor Files
 .idea/

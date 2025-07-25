@@ -17,8 +17,7 @@
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 
 // Include ImGui headers
-#include <imgui.h>
-
+#include "imgui.h"
 #include "imgui_internal.h"
 
 // Use correct paths for ImGui implementation files
@@ -37,10 +36,8 @@ WorkbenchEngine* WorkbenchEngine::instance_ = nullptr;
 WorkbenchEngine::WorkbenchEngine()
 {
     instance_ = this;
-    metrics_.startup_time = std::chrono::steady_clock::now();
+    metrics_.startup_time = ::std::chrono::steady_clock::now();
 }
-
-WorkbenchEngine::~WorkbenchEngine() = default;
 
 WorkbenchEngine::~WorkbenchEngine()
 {
@@ -54,7 +51,7 @@ WorkbenchEngine::~WorkbenchEngine()
 
 bool WorkbenchEngine::initialize()
 {
-    std::cout << "[WorkbenchEngine] Starting initialization sequence..." << std::endl;
+    ::std::cout << "[WorkbenchEngine] Starting initialization sequence..." << ::std::endl;
 
     try {
         // Initialize GLFW
@@ -82,40 +79,33 @@ bool WorkbenchEngine::initialize()
         }
         
         // Initialize core components
-        std::cout << "[WorkbenchEngine] Initializing core components..." << std::endl;
+        ::std::cout << "[WorkbenchEngine] Initializing core components..." << ::std::endl;
 
-        service_connector_ = std::make_unique<ServiceConnector>();
+        service_connector_ = ::std::make_unique<ServiceConnector>();
         
         // Removed demo components for real trading
         // sep::workbench::registerDemos();
         // demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         // landing_page_ = std::make_unique<LandingPage>(this);
-        renderer_ = std::make_unique<Renderer>();
-        layout_manager_ = std::make_unique<UILayoutManager>();
-        signals_tab_ = std::make_unique<tabs::SignalsTabController>();
-        engine_tab_ = std::make_unique<tabs::EngineTabController>();
-        backend_tab_ = std::make_unique<tabs::BackendTabController>();
-        signal_generator_ = std::make_unique<QuantumSignalGenerator>();
+        renderer_ = ::std::make_unique<Renderer>();
+        layout_manager_ = ::std::make_unique<UILayoutManager>();
+        signal_generator_ = ::std::make_unique<QuantumSignalGenerator>();
         
         // Initialize renderer and metrics dashboard
         int width, height;
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
-        
-        signals_tab_->initialize();
-        engine_tab_->initialize();
-        backend_tab_->initialize();
-        
+
         // Create offline engine as fallback
-        std::cout << "[WorkbenchEngine] Creating offline engine..." << std::endl;
-        offline_engine_ = std::make_unique<sep::core::Engine>();
+        ::std::cout << "[WorkbenchEngine] Creating offline engine..." << ::std::endl;
+        offline_engine_ = ::std::make_unique<sep::core::Engine>();
         // Initialize with default config
         sep::config::CudaConfig config;
         offline_engine_->init(config);
         active_engine_ = offline_engine_.get();
         
         // Skip service check - use offline engine as primary engine
-        std::cout << "[WorkbenchEngine] Using offline engine as primary engine - no service needed" << std::endl;
+        ::std::cout << "[WorkbenchEngine] Using offline engine as primary engine - no service needed" << ::std::endl;
         
         // Connect components together
         std::cout << "[WorkbenchEngine] Connecting trading components..." << std::endl;

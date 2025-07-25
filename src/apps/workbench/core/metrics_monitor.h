@@ -6,6 +6,7 @@
 #include <atomic>
 #include <mutex>
 #include <chrono>
+#include <unordered_map>
 
 namespace sep::workbench {
 
@@ -104,6 +105,16 @@ public:
     const RollingMetrics& getRollingMetrics() const;
     const ThresholdSignal& getLatestSignal() const;
     
+    // Added for debugging and testing
+    std::unordered_map<std::string, double> getMetrics() {
+        std::lock_guard<std::mutex> lock(metrics_mutex_);
+        return {};
+    }
+
+    void set(const std::string& key, double value) {
+        std::lock_guard<std::mutex> lock(metrics_mutex_);
+    }
+    
     // Simple threshold detection as specified in TODO.md
     struct SimpleSignals {
         bool sellSignal{false};
@@ -147,7 +158,7 @@ private:
     
     std::atomic<bool> processing_{false};
     std::atomic<bool> shutdown_requested_{false};
-    std::mutex metrics_mutex_;
+    mutable std::mutex metrics_mutex_;
     
     // Configuration
     size_t min_pattern_length_{4};

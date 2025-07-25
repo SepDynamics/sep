@@ -1,20 +1,19 @@
 #pragma once
 
+#include <chrono>
+#include <deque>
+#include <glm/glm.hpp>
 #include <memory>
 #include <string>
 #include <vector>
-#include <chrono>
-#include <deque>
 
-#include <imgui.h>
-#include <glm/glm.hpp>
-
-#include "memory/memory_tier_manager.hpp"
-#include "quantum/processor.h"
-#include "quantum/types.h"
 #include "apps/workbench/panels/signal_testing_panel.h"
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 #include "demo_panel.h"
+#include "imgui.h"
+#include "memory/memory_tier_manager.hpp"
+#include "quantum/processor.h"
+#include "quantum/types.h"
 
 namespace sep::demo {
 

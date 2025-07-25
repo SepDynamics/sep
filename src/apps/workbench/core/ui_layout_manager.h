@@ -1,10 +1,11 @@
 #pragma once
 
-#include <imgui.h>
+#include <functional>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-#include <functional>
+
+#include "imgui.h"
 
 namespace sep::workbench {
 

@@ -1,14 +1,12 @@
-#include "glad/glad.h"
-
 #include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
 #include <chrono>
 #include <iostream>
 #include <memory>
 #include <thread>
+
+#include "imgui.h"
 #include "sep_demo_app.hpp"
 
 static void glfw_error_callback(int error, const char* description) {
@@ -45,10 +43,6 @@ int main(int argc, char** argv) {
     glfwSwapInterval(1); // Enable vsync
 
     // Initialize OpenGL loader
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        return 1;
-    }
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -61,7 +55,6 @@ int main(int argc, char** argv) {
     ImGui::StyleColorsDark();
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     // Initialize SEP Demo App
@@ -81,7 +74,6 @@ int main(int argc, char** argv) {
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
         // Render demo app
@@ -105,7 +97,6 @@ int main(int argc, char** argv) {
     demo_app.reset();
 
     ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
     glfwDestroyWindow(window);

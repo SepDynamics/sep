@@ -1,17 +1,16 @@
 #include "backend_tab_controller.h"
-#include <imgui.h>
+
 #include <filesystem>
 #include <iostream>
+
+#include "imgui.h"
 
 namespace sep::workbench {
 
 BackendTabController::BackendTabController()
     : backtester_(std::make_unique<backtester::Backtester>()) {}
 
-BackendTabController::~BackendTabController() {
-    shutdown();
-}
-
+BackendTabController::~BackendTabController() { shutdown(); }
 bool BackendTabController::initialize() {
     std::cout << "[BackendTabController] Initializing..." << std::endl;
     return true;

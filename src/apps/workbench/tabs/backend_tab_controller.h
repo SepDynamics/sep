@@ -13,7 +13,7 @@ public:
     BackendTabController();
     ~BackendTabController();
 
-    void initialize();
+    bool initialize();
     void render();
     void shutdown();
 

@@ -1,15 +1,17 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
+
+#include <map>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
 #include "connectors/oanda_connector.h"
 #include "engine/engine.h"
-#include <GLFW/glfw3.h>
-#include <string>
-#include <imgui.h>
-#include <memory>
-#include <thread>
-#include <mutex>
-#include <map>
-#include <vector>
+#include "imgui.h"
 
 namespace sep::apps {
 

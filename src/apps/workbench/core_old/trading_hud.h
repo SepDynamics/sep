@@ -1,23 +1,24 @@
 #pragma once
 
-#include <vector>
-#include <unordered_map>
+#include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <deque>
 #include <memory>
-#include <thread>
-#include <atomic>
-#include <queue>
 #include <mutex>
-#include <condition_variable>
-#include <imgui.h>
-#include "connectors/oanda_connector.h"
+#include <queue>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+
 #include "connectors/market_data_converter.h"
-#include "metrics_monitor.h"
+#include "connectors/oanda_connector.h"
 #include "forex_pattern_generator.h"
-#include "ui_layout_manager.h"
+#include "imgui.h"
+#include "metrics_monitor.h"
 #include "multi_timeframe_analyzer.h"
 #include "trade_manager.h"
+#include "ui_layout_manager.h"
 
 // SEP Engine Components
 #include "engine/engine.h"

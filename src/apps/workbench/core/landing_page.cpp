@@ -1,9 +1,12 @@
 #include "landing_page.hpp"
-#include "workbench_core.hpp"
-#include <imgui.h>
+
 #include <imgui_internal.h>
+
 #include <algorithm>
 #include <cmath>
+
+#include "imgui.h"
+#include "workbench_core.hpp"
 
 namespace sep::workbench {
 

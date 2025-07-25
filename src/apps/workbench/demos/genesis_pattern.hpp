@@ -1,12 +1,11 @@
 #pragma once
 
-#include <imgui.h>
-
 #include <memory>
 
 #include "demo_base.hpp"
-#include "quantum/processor.h"
+#include "imgui.h"
 #include "memory/quantum_coherence_manager.h"
+#include "quantum/processor.h"
 
 // Forward declarations
 namespace sep {

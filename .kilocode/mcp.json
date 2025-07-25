@@ -64,7 +64,7 @@
     "simple_build_analyzer": {
       "command": "python3",
       "args": [
-        "/sep/.kilocode/mcp/tools/simple_build_analyzer/main.py"
+        "/sep/.kilocode/mcp/tools/robust_build_analyzer/robust_build_analyzer.py"
       ],
       "alwaysAllow": [
         "analyze_build"

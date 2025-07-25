@@ -1,12 +1,13 @@
 #pragma once
 
-#include <vector>
 #include <deque>
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include <imgui.h>
-#include "../core/common_structs.h"
+#include <vector>
+
+#include "core/common_structs.h"
+#include "imgui.h"
 
 namespace sep::workbench {
 

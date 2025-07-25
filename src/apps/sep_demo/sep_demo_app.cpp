@@ -1,12 +1,12 @@
 #include "sep_demo_app.hpp"
 
 #include <algorithm>
+#include <cmath>
+#include <iomanip>
 #include <random>
 #include <sstream>
-#include <iomanip>
-#include <cmath>
 
-#include <imgui.h>
+#include "imgui.h"
 
 namespace sep::demo {
 

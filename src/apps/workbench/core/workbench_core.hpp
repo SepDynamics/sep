@@ -13,11 +13,9 @@ class LandingPage;
 class Renderer;
 class QuantumSignalGenerator;
 class UILayoutManager;
-namespace tabs {
-    class SignalsTabController;
-    class EngineTabController;
-    class BackendTabController;
-}
+#include "tabs/signals_tab_controller.h"
+#include "tabs/engine_tab_controller.h"
+#include "tabs/backend_tab_controller.h"
 
 }  // namespace sep::workbench
 

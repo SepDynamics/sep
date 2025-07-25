@@ -1,15 +1,14 @@
 #include "engine_tab_controller.h"
-#include <imgui.h>
+
 #include <iostream>
+
+#include "imgui.h"
 
 namespace sep::workbench {
 
 EngineTabController::EngineTabController() {}
 
-EngineTabController::~EngineTabController() {
-    shutdown();
-}
-
+EngineTabController::~EngineTabController() { shutdown(); }
 bool EngineTabController::initialize() {
     std::cout << "[EngineTabController] Initializing..." << std::endl;
     return true;
@@ -17,7 +16,6 @@ bool EngineTabController::initialize() {
 
 void EngineTabController::render() {
     renderSEPMetricsPanel();
-    ImGui::Separator();
     renderEngineControls();
 }
 

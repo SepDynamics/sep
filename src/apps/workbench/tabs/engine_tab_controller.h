@@ -1,14 +1,15 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-#include <string>
 #include <deque>
-#include "../core/common_structs.h"
-#include "../core/metrics_monitor.h"
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "core/common_structs.h"
+#include "core/metrics_monitor.h"
 #include "engine/engine.h"
-#include "quantum/pattern_metric_engine.h"
 #include "quantum/coherence_manager.h"
+#include "quantum/pattern_metric_engine.h"
 
 namespace sep::workbench {
 
@@ -17,7 +18,7 @@ public:
     EngineTabController();
     ~EngineTabController();
 
-    void initialize();
+    bool initialize();
     void render();
     void shutdown();
 

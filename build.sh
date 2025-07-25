@@ -9,6 +9,14 @@ echo "Building SEP Engine..."
 # sudo rm -rf .cache .codechecker CMakeCache.txt output CMakeFiles Makefile /sep/.Trash-1000
 # mkdir -p .cache output .codechecker/{output,reports,html} build
 # chmod -R 777 .cache .codechecker build output
+cd /sep
+sudo rm -rf .cache .codechecker CMakeCache.txt CMakeFiles output Makefile
+sleep 2 
+clear 
+sudo rm -rf /sep/.Trash-1000 
+sleep 1
+
+mkdir .cache .codechecker/output output build
 
 # Save text output if the command exists
 if command -v totxt.save &> /dev/null; then
@@ -72,7 +80,7 @@ docker run --gpus all --rm \
     # Run static analysis if requested
     if [ "${RUN_ANALYSIS:-}" = "true" ]; then
         echo "Running CodeChecker analysis..."
-        ./scripts/run_codechecker.sh
+        ./run_codechecker.sh
     fi
 '
 

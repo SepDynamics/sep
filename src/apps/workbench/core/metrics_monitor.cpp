@@ -10,7 +10,7 @@
 
 namespace sep::workbench {
 
-    MetricsMonitor::MetricsMonitor() : engine_(nullptr)
+    MetricsMonitor::MetricsMonitor() : engine_(nullptr), metrics_mutex_()
     {
         start_time_ = std::chrono::steady_clock::now();
         last_metrics_update_ = start_time_;

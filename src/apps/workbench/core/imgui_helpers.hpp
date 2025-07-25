@@ -1,8 +1,10 @@
 #pragma once
 
-#include <imgui.h>
 #include <imgui_internal.h>
+
 #include <cmath>
+
+#include "imgui.h"
 
 namespace ImGui {
 

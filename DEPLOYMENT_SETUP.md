@@ -107,7 +107,7 @@ In your DNS settings for sepdynamics.co:
 
 Run the codechecker script:
 ```bash
-./scripts/run_codechecker.sh
+./run_codechecker.sh
 ```
 
 This will:

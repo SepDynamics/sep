@@ -1,10 +1,9 @@
 #include "metrics_dashboard.h"
 
-#include <imgui.h>
-
 #include <filesystem>
 
 #include "backtester/backtester.h"
+#include "imgui.h"
 // #include <implot.h> // TODO: Fix ImPlot integration
 #include <iostream>
 #include <algorithm>

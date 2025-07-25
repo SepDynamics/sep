@@ -1,12 +1,15 @@
 #include "oanda_trader_app.hpp"
-#include "connectors/market_data_converter.h"
-#include <imgui.h>
+
+#include <GL/gl.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include <iostream>
+
 #include <cstdlib>
-#include <GL/gl.h>
+#include <iostream>
 #include <nlohmann/json.hpp>
+
+#include "connectors/market_data_converter.h"
+#include "imgui.h"
 
 namespace sep::apps {
 

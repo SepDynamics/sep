@@ -35,7 +35,6 @@ docker run --rm \
         CodeChecker analyze compile_commands.json \
             --output /home/codecheck/.codechecker/reports \
             --analyzers clang-tidy \
-            --ctu \
             --verbose debug
 
         CodeChecker parse /home/codecheck/.codechecker/reports \

@@ -11,6 +11,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     cmake \
     git \
     clang-15 \
+    clang-tidy-15 \
+    clang-format-15 \
     ninja-build \
     libfmt-dev \
     libtbb-dev \
@@ -52,6 +54,8 @@ RUN ls -la /usr/local/cuda/bin/nvcc && \
     ln -sf /usr/local/cuda/bin/nvcc /usr/bin/nvcc && \
     ln -sf /usr/local/cuda/include/* /usr/local/include/cuda/ && \
     ln -sf /usr/local/cuda/lib64/* /usr/local/lib/cuda/ && \
+    ln -sf /usr/bin/clang-tidy-15 /usr/bin/clang-tidy && \
+    ln -sf /usr/bin/clang-format-15 /usr/bin/clang-format && \
     echo "CUDA environment verification complete"
 
 # Install Python packages for analysis

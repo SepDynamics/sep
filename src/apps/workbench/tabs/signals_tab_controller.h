@@ -16,7 +16,7 @@ public:
     SignalsTabController();
     ~SignalsTabController();
 
-    void initialize();
+    bool initialize();
     void render();
     void shutdown();
 

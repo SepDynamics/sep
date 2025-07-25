@@ -1,25 +1,14 @@
 #pragma once
 
 #include "std_includes.h"
+#include "tabs/signals_tab_controller.h"
+#include "tabs/engine_tab_controller.h"
+#include "tabs/backend_tab_controller.h"
+#include "ui_layout_manager.h"
 
 // Forward declaration for GLFW
 struct GLFWwindow;
 
-namespace sep::workbench {
-
-// Forward declarations
-class ServiceConnector;
-class LandingPage;
-class Renderer;
-class QuantumSignalGenerator;
-class UILayoutManager;
-#include "tabs/signals_tab_controller.h"
-#include "tabs/engine_tab_controller.h"
-#include "tabs/backend_tab_controller.h"
-
-}  // namespace sep::workbench
-
-#include "ui_layout_manager.h"
 // External classes from sep namespace (not in sep::workbench)
 namespace sep {
     namespace core
@@ -29,6 +18,12 @@ namespace sep {
 }  // namespace sep
 
 namespace sep::workbench {
+
+// Forward declarations
+class ServiceConnector;
+class LandingPage;
+class Renderer;
+class QuantumSignalGenerator;
 
 enum class ApplicationState {
     INITIALIZING,
@@ -109,9 +104,9 @@ private:
     std::unique_ptr<LandingPage> landing_page_;
     std::unique_ptr<Renderer> renderer_;
     std::unique_ptr<UILayoutManager> layout_manager_;
-    std::unique_ptr<tabs::SignalsTabController> signals_tab_;
-    std::unique_ptr<tabs::EngineTabController> engine_tab_;
-    std::unique_ptr<tabs::BackendTabController> backend_tab_;
+    std::unique_ptr<SignalsTabController> signals_tab_;
+    std::unique_ptr<EngineTabController> engine_tab_;
+    std::unique_ptr<BackendTabController> backend_tab_;
     std::unique_ptr<QuantumSignalGenerator> signal_generator_;
     
     // Engine components (may be null if service not connected)

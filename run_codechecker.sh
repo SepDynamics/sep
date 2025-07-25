@@ -14,10 +14,8 @@ USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
 # Create directories if they don't exist and set permissions
-for dir in .codechecker/{reports,html,output}; do
-    mkdir -p "$dir"
-    chmod -R 777 "$dir"
-done
+mkdir -p .codechecker/reports .codechecker/html .codechecker/output
+chmod -R 777 .codechecker
 
 echo "Running CodeChecker analysis..."
 

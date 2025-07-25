@@ -589,6 +589,63 @@ std::string MultiTimeframeAnalyzer::getStatusReport() const {
     return report.str();
 }
 
+CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std::string& timeframe) {
+    CorrelationMetrics correlation_metrics;
+    if (timeframe_data_.find(timeframe) == timeframe_data_.end() || latest_metrics_.find(timeframe) == latest_metrics_.end()) {
+        return correlation_metrics;
+    }
+
+    const auto& candles = timeframe_data_.at(timeframe).candles;
+    const auto& metrics = latest_metrics_.at(timeframe);
+
+    if (candles.size() < 2 || metrics.detected_patterns.empty()) {
+        return correlation_metrics;
+    }
+
+    std::vector<double> price_changes;
+    for (size_t i = 1; i < candles.size(); ++i) {
+        price_changes.push_back(candles[i].close - candles[i-1].close);
+    }
+
+    std::vector<double> coherence_values;
+    std::vector<double> stability_values;
+    std::vector<double> entropy_values;
+
+    for (const auto& pattern : metrics.detected_patterns) {
+        coherence_values.push_back(pattern.coherence);
+        stability_values.push_back(pattern.stability);
+        entropy_values.push_back(pattern.entropy);
+    }
+
+    auto calculate_correlation = [](const std::vector<double>& v1, const std::vector<double>& v2) {
+        if (v1.size() != v2.size() || v1.empty()) {
+            return 0.0;
+        }
+
+        double sum_v1 = 0.0, sum_v2 = 0.0, sum_v1_sq = 0.0, sum_v2_sq = 0.0, sum_products = 0.0;
+        int n = v1.size();
+
+        for (int i = 0; i < n; ++i) {
+            sum_v1 += v1[i];
+            sum_v2 += v2[i];
+            sum_v1_sq += v1[i] * v1[i];
+            sum_v2_sq += v2[i] * v2[i];
+            sum_products += v1[i] * v2[i];
+        }
+
+        double numerator = n * sum_products - sum_v1 * sum_v2;
+        double denominator = std::sqrt((n * sum_v1_sq - sum_v1 * sum_v1) * (n * sum_v2_sq - sum_v2 * sum_v2));
+
+        return (denominator == 0) ? 0.0 : numerator / denominator;
+    };
+
+    correlation_metrics.coherence_price_correlation = calculate_correlation(coherence_values, price_changes);
+    correlation_metrics.stability_price_correlation = calculate_correlation(stability_values, price_changes);
+    correlation_metrics.entropy_price_correlation = calculate_correlation(entropy_values, price_changes);
+
+    return correlation_metrics;
+}
+
 // TimeframeUtils implementation
 namespace TimeframeUtils {
 

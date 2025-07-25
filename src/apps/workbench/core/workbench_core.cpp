@@ -15,6 +15,8 @@
 #include "apps/workbench/tabs/backend_tab_controller.h"
 
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
+#include "apps/workbench/core/metrics_monitor.h"
+#include "apps/workbench/core/multi_timeframe_analyzer.h"
 
 // Include ImGui headers
 #include "imgui.h"
@@ -90,6 +92,8 @@ bool WorkbenchEngine::initialize()
         renderer_ = ::std::make_unique<Renderer>();
         layout_manager_ = ::std::make_unique<UILayoutManager>();
         signal_generator_ = ::std::make_unique<QuantumSignalGenerator>();
+        metrics_monitor_ = ::std::make_unique<MetricsMonitor>();
+        multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
         
         // Initialize renderer and metrics dashboard
         int width, height;
@@ -107,7 +111,10 @@ bool WorkbenchEngine::initialize()
         // Set up data flow
         signals_tab_->setOandaConnector(service_connector_->getOandaConnector());
         signals_tab_->setQuantumSignalGenerator(signal_generator_.get());
+        signals_tab_->setMetricsMonitor(metrics_monitor_.get());
+        signals_tab_->setWorkbenchEngine(this);
         engine_tab_->setSEPEngine(active_engine_);
+        engine_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         backend_tab_->setServiceConnector(service_connector_.get());
 
         // Create offline engine as fallback

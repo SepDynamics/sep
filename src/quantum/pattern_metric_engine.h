@@ -19,6 +19,27 @@ namespace sep::quantum {
 
 namespace sep::quantum {
 
+    struct SignalThresholds
+    {
+        float min_coherence{0.7f};
+        float min_stability{0.6f};
+        float max_entropy{0.3f};
+    };
+
+    enum class SignalType
+    {
+        BUY,
+        SELL,
+        HOLD
+    };
+
+    struct Signal
+    {
+        SignalType type{SignalType::HOLD};
+        float confidence{0.0f};
+        std::string pattern_id;
+    };
+
 /// @brief Holds the computed metrics for a single pattern.
 struct PatternMetrics {
     char pattern_id[compat::PatternData::MAX_ID_LENGTH]; ///< The ID of the pattern.
@@ -31,6 +52,13 @@ struct PatternMetrics {
         pattern_id[0] = '\0';
     }
 };
+
+/// @brief Holds the computed metrics for a single pattern.
+extern char pattern_id[compat::PatternData::MAX_ID_LENGTH];  ///< The ID of the pattern.
+extern float coherence;  ///< Measure of the pattern's internal consistency.
+extern float stability;  ///< Measure of how resistant the pattern is to change.
+extern float entropy;    ///< Measure of the pattern's complexity and randomness.
+extern std::vector<PatternRelationship> relationships;  ///< Relationships to other patterns.
 
 /**
  * @class PatternMetricEngine
@@ -110,6 +138,12 @@ public:
     /// @return A vector of PatternMetrics structs.
     const std::vector<PatternMetrics>& computeMetrics();
 
+    /// @brief Sets the thresholds for signal generation.
+    void setSignalThresholds(const SignalThresholds& thresholds);
+
+    /// @brief Gets the latest generated signals.
+    const std::vector<Signal>& getSignals() const;
+
     /// @brief Gets the current patterns.
     /// @return A vector of PatternData structs.
     const std::vector<compat::PatternData>& getPatterns() const;
@@ -139,6 +173,8 @@ private:
     // Internal pattern storage
     std::vector<compat::PatternData> current_patterns_;
     std::vector<PatternMetrics> current_metrics_;
+    SignalThresholds signal_thresholds_;
+    std::vector<Signal> current_signals_;
 
     // Thread safety and streaming
     std::mutex engine_mutex_;

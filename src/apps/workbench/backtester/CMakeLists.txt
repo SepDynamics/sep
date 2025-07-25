@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 3.16)
 
 add_library(sep_backtester STATIC
     backtester.cpp
+    data/data_loader.cpp
+    data/json_data_parser.cpp
 )
+
+add_executable(data_loader_test data/data_loader_test.cpp)
+
+target_link_libraries(data_loader_test PUBLIC sep_backtester)
 
 target_include_directories(sep_backtester PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}

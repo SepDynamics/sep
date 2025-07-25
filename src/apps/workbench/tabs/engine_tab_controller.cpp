@@ -1,4 +1,5 @@
 #include "engine_tab_controller.h"
+#include "core/multi_timeframe_analyzer.h"
 
 #include <iostream>
 
@@ -17,6 +18,7 @@ bool EngineTabController::initialize() {
 void EngineTabController::render() {
     renderSEPMetricsPanel();
     renderEngineControls();
+    renderCorrelationPanel();
 }
 
 void EngineTabController::shutdown() {}
@@ -35,6 +37,10 @@ void EngineTabController::setPatternMetricEngine(sep::quantum::PatternMetricEngi
 
 void EngineTabController::setCoherenceManager(sep::quantum::CoherenceManager* coherence_manager) {
     coherence_manager_ = coherence_manager;
+}
+
+void EngineTabController::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer) {
+    multi_timeframe_analyzer_ = analyzer;
 }
 
 void EngineTabController::renderSEPMetricsPanel() {
@@ -153,6 +159,38 @@ void EngineTabController::resetEngineState() {
     } catch (const std::exception& e) {
         std::cerr << "[EngineTabController] Error resetting engine state: " << e.what() << std::endl;
     }
+}
+
+void EngineTabController::renderCorrelationPanel() {
+    ImGui::Begin("Correlation Analysis");
+
+    if (!multi_timeframe_analyzer_) {
+        ImGui::Text("MultiTimeframeAnalyzer not available.");
+        ImGui::End();
+        return;
+    }
+
+    static std::string selected_timeframe = "1m";
+    if (ImGui::BeginCombo("Timeframe", selected_timeframe.c_str())) {
+        for (const auto& tf : multi_timeframe_analyzer_->getActiveTimeframes()) {
+            bool is_selected = (selected_timeframe == tf);
+            if (ImGui::Selectable(tf.c_str(), is_selected)) {
+                selected_timeframe = tf;
+            }
+            if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+
+    auto correlation_metrics = multi_timeframe_analyzer_->calculateCorrelationMetrics(selected_timeframe);
+
+    ImGui::Text("Coherence-Price Correlation: %.3f", correlation_metrics.coherence_price_correlation);
+    ImGui::Text("Stability-Price Correlation: %.3f", correlation_metrics.stability_price_correlation);
+    ImGui::Text("Entropy-Price Correlation: %.3f", correlation_metrics.entropy_price_correlation);
+
+    ImGui::End();
 }
 
 } // namespace sep::workbench

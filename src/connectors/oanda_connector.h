@@ -80,6 +80,9 @@ public:
     MarketData getMarketData(const std::string& instrument);
     int getVolatilityLevel(double atr);
 
+    // Sample Data
+    void setupSampleData(const std::string& instrument, const std::string& granularity, const std::string& output_file);
+
     // Error handling
     std::string getLastError() const { return last_error_; }
     bool hasError() const { return !last_error_.empty(); }

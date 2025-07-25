@@ -1,4 +1,7 @@
 #include "signals_tab_controller.h"
+#include "apps/workbench/core/workbench_core.hpp"
+#include "quantum/pattern_metric_engine.h"
+#include "core/metrics_monitor.h"
 #include <algorithm>
 #include <numeric>
 #include <cmath>
@@ -22,6 +25,34 @@ bool SignalsTabController::initialize() {
 }
 
 void SignalsTabController::render() {
+    ImGui::Begin("Signal Thresholds");
+    static float min_coherence = 0.7f;
+    static float min_stability = 0.6f;
+    static float max_entropy = 0.3f;
+    ImGui::SliderFloat("Min Coherence", &min_coherence, 0.0f, 1.0f);
+    ImGui::SliderFloat("Min Stability", &min_stability, 0.0f, 1.0f);
+    ImGui::SliderFloat("Max Entropy", &max_entropy, 0.0f, 1.0f);
+    if (ImGui::Button("Apply")) {
+        if (workbench_engine_) {
+            auto* pme = workbench_engine_->getPatternMetricEngine();
+            if (pme) {
+                sep::quantum::SignalThresholds thresholds;
+                thresholds.min_coherence = min_coherence;
+                thresholds.min_stability = min_stability;
+                thresholds.max_entropy = max_entropy;
+                pme->setSignalThresholds(thresholds);
+            }
+        }
+    }
+    ImGui::End();
+
+    if (metrics_monitor_) {
+        const auto& system_metrics = metrics_monitor_->getSystemMetrics();
+        ImGui::Text("Avg Coherence: %.3f", system_metrics.avg_coherence);
+        ImGui::Text("Avg Stability: %.3f", system_metrics.avg_stability);
+        ImGui::Text("Avg Entropy: %.3f", system_metrics.avg_entropy);
+    }
+
     if (oanda_connector_) {
         // This is a placeholder for fetching real data
         // candle_data_ = oanda_connector_->getCandleData();
@@ -49,6 +80,22 @@ void SignalsTabController::setOandaConnector(sep::connectors::OandaConnector* co
 
 void SignalsTabController::setQuantumSignalGenerator(QuantumSignalGenerator* generator) {
     signal_generator_ = generator;
+}
+
+void SignalsTabController::setMetricsMonitor(MetricsMonitor* monitor) {
+    metrics_monitor_ = monitor;
+}
+
+void SignalsTabController::setWorkbenchEngine(WorkbenchEngine* engine) {
+    workbench_engine_ = engine;
+}
+
+void SignalsTabController::setCandleData(const std::deque<CandleData>& data) {
+    candle_data_ = data;
+}
+
+void SignalsTabController::setSEPSignals(const std::deque<SEPSignalData>& signals) {
+    sep_signals_ = signals;
 }
 
 void SignalsTabController::renderMainChart() {

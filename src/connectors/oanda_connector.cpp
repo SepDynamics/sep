@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <cstring>
+#include <fstream>
 
 namespace sep {
 namespace connectors {
@@ -537,6 +538,41 @@ nlohmann::json OandaConnector::getOrders() {
     
     last_error_ = "Failed to get orders: " + response.data;
     return nlohmann::json{ {"error", last_error_} };
+}
+
+void OandaConnector::setupSampleData(const std::string& instrument, const std::string& granularity, const std::string& output_file) {
+    // 48 hours * 60 minutes/hour = 2880 M1 candles
+    auto candles = getHistoricalData(instrument, granularity, "", "", 2880);
+
+    if (candles.empty()) {
+        last_error_ = "Failed to fetch any data for sample setup.";
+        std::cerr << "[OandaConnector] Error: " << last_error_ << std::endl;
+        return;
+    }
+
+    nlohmann::json json_output;
+    for (const auto& c : candles) {
+        nlohmann::json candle_json;
+        candle_json["time"] = c.time;
+        candle_json["open"] = c.open;
+        candle_json["high"] = c.high;
+        candle_json["low"] = c.low;
+        candle_json["close"] = c.close;
+        candle_json["volume"] = c.volume;
+        json_output.push_back(candle_json);
+    }
+
+    std::ofstream out_stream(output_file);
+    if (!out_stream.is_open()) {
+        last_error_ = "Failed to open output file: " + output_file;
+        std::cerr << "[OandaConnector] Error: " << last_error_ << std::endl;
+        return;
+    }
+
+    out_stream << json_output.dump(4);
+    out_stream.close();
+
+    std::cout << "[OandaConnector] Successfully wrote " << candles.size() << " candles to " << output_file << std::endl;
 }
 
 } // namespace connectors

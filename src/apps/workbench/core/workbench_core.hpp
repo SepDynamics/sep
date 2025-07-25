@@ -5,6 +5,7 @@
 #include "tabs/engine_tab_controller.h"
 #include "tabs/backend_tab_controller.h"
 #include "ui_layout_manager.h"
+#include "multi_timeframe_analyzer.h"
 
 // Forward declaration for GLFW
 struct GLFWwindow;
@@ -24,6 +25,7 @@ class ServiceConnector;
 class LandingPage;
 class Renderer;
 class QuantumSignalGenerator;
+class MetricsMonitor;
 
 enum class ApplicationState {
     INITIALIZING,
@@ -83,6 +85,7 @@ public:
 
     // Signal generator
     QuantumSignalGenerator* getSignalGenerator() const { return signal_generator_.get(); }
+    sep::quantum::PatternMetricEngine* getPatternMetricEngine() const { return active_engine_ ? active_engine_->getPatternMetricEngine() : nullptr; }
 
     // Static callbacks for GLFW
     static void errorCallback(int error, const char* description);
@@ -108,6 +111,8 @@ private:
     std::unique_ptr<EngineTabController> engine_tab_;
     std::unique_ptr<BackendTabController> backend_tab_;
     std::unique_ptr<QuantumSignalGenerator> signal_generator_;
+    std::unique_ptr<MetricsMonitor> metrics_monitor_;
+    std::unique_ptr<MultiTimeframeAnalyzer> multi_timeframe_analyzer_;
     
     // Engine components (may be null if service not connected)
     std::unique_ptr<sep::core::Engine> offline_engine_;

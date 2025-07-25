@@ -1,4 +1,10 @@
 #include "quantum/pattern_metric_engine.h"
+
+char sep::quantum::pattern_id[sep::compat::PatternData::MAX_ID_LENGTH];
+float sep::quantum::coherence = 0.0f;
+float sep::quantum::stability = 0.0f;
+float sep::quantum::entropy = 0.0f;
+std::vector<sep::quantum::PatternRelationship> sep::quantum::relationships;
 #include "quantum/quantum_processor_cuda.h"
 
 namespace sep::quantum {
@@ -92,6 +98,15 @@ sep::compat::PatternData PatternMetricEngine::mutatePattern(const sep::compat::P
         mutated.data[0] += 0.1f;
     }
     return mutated;
+}
+
+void PatternMetricEngine::setSignalThresholds(const SignalThresholds& thresholds) {
+    std::lock_guard<std::mutex> lock(engine_mutex_);
+    signal_thresholds_ = thresholds;
+}
+
+const std::vector<Signal>& PatternMetricEngine::getSignals() const {
+    return current_signals_;
 }
 
 const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
@@ -235,6 +250,21 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
             m.entropy = 0.5f; // Default entropy for empty patterns
         }
         current_metrics_.push_back(m);
+
+        // Signal generation
+        if (m.stability < signal_thresholds_.min_stability && m.entropy > signal_thresholds_.max_entropy) {
+            Signal s;
+            s.type = SignalType::SELL;
+            s.confidence = (1.0f - m.stability) * m.entropy;
+            s.pattern_id = m.pattern_id;
+            current_signals_.push_back(s);
+        } else if (m.coherence > signal_thresholds_.min_coherence && m.stability > signal_thresholds_.min_stability) {
+            Signal s;
+            s.type = SignalType::BUY;
+            s.confidence = m.coherence * m.stability;
+            s.pattern_id = m.pattern_id;
+            current_signals_.push_back(s);
+        }
     }
     return current_metrics_;
 }

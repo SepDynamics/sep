@@ -13,6 +13,10 @@
 
 namespace sep::workbench {
 
+class MetricsMonitor;
+
+class WorkbenchEngine;
+
 class SignalsTabController {
 public:
     SignalsTabController();
@@ -24,10 +28,17 @@ public:
 
     void setOandaConnector(sep::connectors::OandaConnector* connector);
     void setQuantumSignalGenerator(QuantumSignalGenerator* generator);
+    void setMetricsMonitor(MetricsMonitor* monitor);
+    void setWorkbenchEngine(WorkbenchEngine* engine);
+
+    void setCandleData(const std::deque<CandleData>& data);
+    void setSEPSignals(const std::deque<SEPSignalData>& signals);
 
 private:
     sep::connectors::OandaConnector* oanda_connector_ = nullptr;
     QuantumSignalGenerator* signal_generator_ = nullptr;
+    MetricsMonitor* metrics_monitor_ = nullptr;
+    WorkbenchEngine* workbench_engine_ = nullptr;
     // Chart data
     std::deque<CandleData> candle_data_;
     std::deque<SEPSignalData> sep_signals_;

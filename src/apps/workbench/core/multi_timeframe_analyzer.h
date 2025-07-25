@@ -57,6 +57,12 @@ struct TimeframeMetrics {
     }
 };
 
+struct CorrelationMetrics {
+    double coherence_price_correlation = 0.0;
+    double stability_price_correlation = 0.0;
+    double entropy_price_correlation = 0.0;
+};
+
 struct MultiTimeframeSignal {
     std::chrono::system_clock::time_point generated_at;
     std::string instrument;
@@ -173,6 +179,8 @@ public:
     std::vector<std::string> getActiveTimeframes() const;
     size_t getPatternsCount(const std::string& timeframe) const;
     std::string getStatusReport() const;
+
+    CorrelationMetrics calculateCorrelationMetrics(const std::string& timeframe);
 };
 
 // Helper functions for timeframe conversions

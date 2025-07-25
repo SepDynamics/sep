@@ -64,11 +64,12 @@
     "robust_build_analyzer": {
       "command": "python3",
       "args": [
-            "/sep/.kilocode/mcp/tools/robust_build_analyzer/main.py"
+        "/sep/.kilocode/mcp/tools/robust_build_analyzer/main.py"
       ],
       "alwaysAllow": [
-            "analyze_build"
-      ]
+        "analyze_build"
+      ],
+      "disabled": true
     }
   }
 }

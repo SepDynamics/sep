@@ -13,6 +13,8 @@
 
 namespace sep::workbench {
 
+class MultiTimeframeAnalyzer;
+
 class EngineTabController {
 public:
     EngineTabController();
@@ -26,16 +28,19 @@ public:
     void setSEPEngine(sep::core::Engine* engine);
     void setPatternMetricEngine(sep::quantum::PatternMetricEngine* pattern_engine);
     void setCoherenceManager(sep::quantum::CoherenceManager* coherence_manager);
+    void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer);
 
 private:
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     sep::core::Engine* sep_engine_ = nullptr;
     sep::quantum::PatternMetricEngine* pattern_engine_ = nullptr;
     sep::quantum::CoherenceManager* coherence_manager_ = nullptr;
+    MultiTimeframeAnalyzer* multi_timeframe_analyzer_ = nullptr;
 
     // Rendering functions
     void renderSEPMetricsPanel();
     void renderEngineControls();
+    void renderCorrelationPanel();
 
     // Data retrieval
     std::vector<sep::quantum::PatternMetrics> getCurrentPatternMetrics();

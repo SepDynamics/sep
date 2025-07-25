@@ -69,6 +69,10 @@ void MetricsMonitor::clear() {
     {
         static_cast<sep::quantum::PatternMetricEngine*>(engine_)->clear();
     }
+    
+    latest_signal_.entropy_spike = false;
+    latest_signal_.cumulative_score = 0.0f;
+    latest_signal_.trade_confidence = 0.0f;
 }
 
 void MetricsMonitor::ingestData(const uint8_t* data, size_t size) {
@@ -445,8 +449,19 @@ void MetricsMonitor::detectThresholdSignals() {
         reasons += "Rapid market state change; ";
     }
 
+    // Signal condition 5: Entropy spike (rapid increase)
+    if (rolling_metrics_.entropy_trend > 35.0f && current_entropy > entropy_24h * 1.5f) {
+        signal.entropy_spike = true;
+        confidence_score += 20.0f;
+        reasons += "Entropy spike detected; ";
+    }
+
     // Determine signal type based on conditions
-    if (signal.low_stability && signal.high_entropy) {
+    if (signal.entropy_spike && signal.coherence_drop && current_stability < 0.4f) {
+        signal.signal_type = ThresholdSignal::SELL;
+        confidence_score += 40.0f; // High-confidence sell signal
+        reasons += "Reversal pattern: entropy spike + coherence drop; ";
+    } else if (signal.low_stability && signal.high_entropy) {
         signal.signal_type = ThresholdSignal::SELL;
         confidence_score += 10.0f;  // Bonus for multiple sell indicators
     } else if (signal.coherence_drop) {
@@ -456,6 +471,18 @@ void MetricsMonitor::detectThresholdSignals() {
         signal.signal_type = ThresholdSignal::BUY;
         reasons += "Stabilization after volatility; ";
     }
+
+    // Cumulative Signal Scoring
+    signal.cumulative_score = (current_coherence * 0.5f) + (current_stability * 0.3f) - (current_entropy * 0.2f);
+
+    // Trade Confidence Index
+    float confidence_from_metrics = (signal.low_stability * 0.2f) +
+                                    (signal.high_entropy * 0.2f) +
+                                    (signal.coherence_drop * 0.3f) +
+                                    (signal.entropy_spike * 0.3f);
+    
+    signal.trade_confidence = std::min(1.0f, confidence_from_metrics + (signal.cumulative_score * 0.1f));
+
 
     signal.confidence = std::min(100.0f, confidence_score);
     signal.reason = reasons;

@@ -23,6 +23,7 @@ target_include_directories(sep_workbench_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/src/connectors
     ${CMAKE_SOURCE_DIR}/src/glad
     ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
 )
 
 # Link against core components
@@ -41,9 +42,11 @@ target_link_libraries(sep_workbench_lib PUBLIC
 )
 
 # Create the sep_workbench executable
+add_subdirectory(backtester)
 add_executable(sep_workbench core/workbench_main.cpp)
 target_link_libraries(sep_workbench PRIVATE
     sep_workbench_lib
+    sep_backtester
     imgui
     sep_audio
     sep_quantum

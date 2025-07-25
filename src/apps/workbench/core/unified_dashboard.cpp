@@ -197,6 +197,21 @@ void UnifiedDashboard::renderEngineMetricsSection() {
     ImGui::ProgressBar(engine_metrics_.entropy, ImVec2(-1, 0), entropy_buf);
     
     ImGui::Text("Patterns: %zu", engine_metrics_.pattern_count);
+    
+    // Simple threshold signals from TODO.md
+    ImGui::Separator();
+    ImGui::Text("Threshold Signals:");
+    
+    bool sellSignal = (engine_metrics_.stability < 0.3f && engine_metrics_.entropy > 0.7f);
+    bool buySignal = (engine_metrics_.stability > 0.7f && engine_metrics_.entropy < 0.3f);
+    
+    if (sellSignal) {
+        ImGui::TextColored(ImVec4(1, 0.2f, 0.2f, 1), "SELL");
+    } else if (buySignal) {
+        ImGui::TextColored(ImVec4(0.2f, 1, 0.2f, 1), "BUY");
+    } else {
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "HOLD");
+    }
 }
 
 void UnifiedDashboard::renderMemorySection() {

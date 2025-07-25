@@ -10,7 +10,7 @@
 #include "landing_page.hpp"
 #include "renderer.h"
 #include "service_connector.hpp"
-#include "unified_dashboard.h"
+#include "trading_hud.h"
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 
 // Include ImGui headers
@@ -86,7 +86,7 @@ bool WorkbenchEngine::initialize()
         // demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
         // landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = std::make_unique<Renderer>();
-        unified_dashboard_ = std::make_unique<UnifiedDashboard>();
+        trading_hud_ = std::make_unique<TradingHUD>();
         signal_generator_ = std::make_unique<QuantumSignalGenerator>();
         
         // Initialize renderer and metrics dashboard
@@ -94,10 +94,10 @@ bool WorkbenchEngine::initialize()
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
         
-        if (!unified_dashboard_->initialize()) {
-            std::cerr << "[WorkbenchEngine] Warning: Failed to initialize dashboard" << std::endl;
+        if (!trading_hud_->initialize()) {
+            std::cerr << "[WorkbenchEngine] Warning: Failed to initialize trading HUD" << std::endl;
         } else {
-            std::cout << "[WorkbenchEngine] Unified dashboard initialized successfully" << std::endl;
+            std::cout << "[WorkbenchEngine] Trading HUD initialized successfully" << std::endl;
         }
         
         // Create offline engine as fallback
@@ -304,9 +304,9 @@ void WorkbenchEngine::renderFrame()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     
-    // Render unified dashboard as main interface  
-    if (unified_dashboard_) {
-        unified_dashboard_->render();
+    // Render unified dashboard as main interface
+    if (trading_hud_) {
+        trading_hud_->render();
     }
     
     // Handle special states

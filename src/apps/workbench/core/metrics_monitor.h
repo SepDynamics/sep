@@ -68,10 +68,16 @@ public:
         std::chrono::steady_clock::time_point timestamp;
         
         // Signal conditions that triggered
+        // Signal conditions that triggered
         bool low_stability{false};
         bool high_entropy{false};
         bool coherence_drop{false};
         bool rapid_change{false};
+        bool entropy_spike{false};
+
+        // Advanced signal metrics
+        float cumulative_score{0.0f};
+        float trade_confidence{0.0f};
     };
 
 public:

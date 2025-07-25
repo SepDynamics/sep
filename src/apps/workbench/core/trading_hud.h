@@ -14,10 +14,10 @@
 #include "connectors/oanda_connector.h"
 #include "connectors/market_data_converter.h"
 #include "metrics_monitor.h"
-#include "trade_manager.h"
 #include "forex_pattern_generator.h"
 #include "ui_layout_manager.h"
 #include "multi_timeframe_analyzer.h"
+#include "trade_manager.h"
 
 // SEP Engine Components
 #include "engine/engine.h"
@@ -73,20 +73,6 @@ struct PendingOrder {
           created_time(std::chrono::system_clock::now()) {}
 };
 
-struct Position {
-    std::string instrument;
-    double size; // positive for long, negative for short
-    double average_price;
-    double current_price;
-    double unrealized_pl;
-    double realized_pl;
-    std::chrono::system_clock::time_point open_time;
-    
-    Position(const std::string& inst, double sz, double avg_price)
-        : instrument(inst), size(sz), average_price(avg_price), 
-          current_price(avg_price), unrealized_pl(0), realized_pl(0),
-          open_time(std::chrono::system_clock::now()) {}
-};
 
 struct TradeHistory {
     std::string id;

@@ -5,6 +5,7 @@
 #include "file_dialog.hpp"
 #include "oanda_connector.h"
 #include "market_data_converter.h"
+#include "backtester/backtester.h"
 #include <memory>
 #include <vector>
 #include <string>
@@ -110,6 +111,7 @@ private:
     void renderMetricsGraphs();
     void renderDataSourceSelector();
     void renderMemoryMonitor();
+    void renderBacktesterPanel();
     
     // Control panel actions
     void handleDataLoad();
@@ -120,6 +122,7 @@ private:
 
     std::unique_ptr<MetricsMonitor> monitor_;
     std::unique_ptr<MemoryMonitor> memory_monitor_;
+    std::unique_ptr<backtester::Backtester> backtester_;
     FileDialog file_dialog_;
     
     // UI State
@@ -129,6 +132,7 @@ private:
     bool show_pattern_list_{true};
     bool show_metrics_graphs_{true};
     bool show_memory_monitor_{true};
+    bool show_backtester_panel_{true};
     
     // Data source selection
     char file_path_buffer_[512] = "";

@@ -22,19 +22,8 @@
         "read_file",
         "get_capabilities"
       ],
-      "timeout": 30,
+      "timeout": 60,
       "disabledTools": [
-        "read_file",
-        "read_multiple_files",
-        "edit_file",
-        "write_file",
-        "directory_tree",
-        "list_directory_with_sizes",
-        "list_directory",
-        "create_directory",
-        "get_file_info",
-        "search_files",
-        "move_file",
         "list_allowed_directories"
       ]
     },
@@ -44,16 +33,14 @@
         "-y",
         "@modelcontextprotocol/server-sequential-thinking"
       ],
-      "timeout": 30,
+      "timeout": 60,
       "alwaysAllow": [
         "break_down_problem",
         "next_thought",
         "get_capabilities",
         "sequentialthinking"
       ],
-      "disabledTools": [
-        "sequentialthinking"
-      ]
+      "disabledTools": []
     },
     "memory": {
       "command": "npx",
@@ -73,17 +60,9 @@
         "delete_relations",
         "remember"
       ],
-      "timeout": 15,
+      "timeout": 60,
       "disabledTools": [
-        "create_entities",
-        "create_relations",
-        "add_observations",
-        "delete_entities",
-        "delete_observations",
-        "delete_relations",
-        "read_graph",
-        "search_nodes",
-        "open_nodes"
+        "create_entities"
       ]
     },
     "redis": {

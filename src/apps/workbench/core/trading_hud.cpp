@@ -2236,6 +2236,11 @@ void TradingHUD::renderRiskManager() {
         ImGui::SliderFloat("Stop Loss (pips)", &stop_loss_pips, 5.0f, 100.0f, "%.0f");
         ImGui::SliderFloat("Risk:Reward", &risk_reward_ratio, 1.0f, 5.0f, "1:%.1f");
         ImGui::Checkbox("Trailing Stop", &use_trailing_stop);
+
+        if (use_trailing_stop) {
+            static float trailing_stop_pips = 15.0f;
+            ImGui::SliderFloat("Trailing Stop (pips)", &trailing_stop_pips, 5.0f, 50.0f, "%.0f");
+        }
         ImGui::InputFloat("Max Daily Loss", &max_daily_loss, 50.0f, 100.0f, "$%.0f");
         
         ImGui::Separator();
@@ -2244,7 +2249,12 @@ void TradingHUD::renderRiskManager() {
         double account_balance = account_info_.balance;
         double risk_amount = account_balance * (risk_percent / 100.0);
         double pip_value = 10.0; // Simplified for demo
-        double position_size = risk_amount / (stop_loss_pips * pip_value);
+        
+        // Dynamic position sizing based on volatility (ATR)
+        float atr = sep_signals_.empty() ? 20.0f : sep_signals_.back().atr * 10000;
+        double stop_loss_pips_dynamic = std::max(stop_loss_pips, atr * 1.5f);
+
+        double position_size = risk_amount / (stop_loss_pips_dynamic * pip_value);
         
         ImGui::Text("Calculated Position Size:");
         ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "%.2f lots (Risk: $%.2f)", 

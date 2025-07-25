@@ -11,12 +11,12 @@ namespace sep::workbench {
 class ServiceConnector;
 class LandingPage;
 class Renderer;
-class UnifiedDashboard;
+class TradingHUD;
 class QuantumSignalGenerator;
 
 }  // namespace sep::workbench
 
-#include "trade_manager.h"
+#include "trading_hud.h"
 // External classes from sep namespace (not in sep::workbench)
 namespace sep {
     namespace core
@@ -105,7 +105,7 @@ private:
     // Demo orchestrator removed for trading-focused version
     std::unique_ptr<LandingPage> landing_page_;
     std::unique_ptr<Renderer> renderer_;
-    std::unique_ptr<UnifiedDashboard> unified_dashboard_;
+    std::unique_ptr<TradingHUD> trading_hud_;
     std::unique_ptr<QuantumSignalGenerator> signal_generator_;
     
     // Engine components (may be null if service not connected)

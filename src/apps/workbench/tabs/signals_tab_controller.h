@@ -8,6 +8,8 @@
 
 #include "core/common_structs.h"
 #include "imgui.h"
+#include "connectors/oanda_connector.h"
+#include "signal_generator/quantum_signal_generator.h"
 
 namespace sep::workbench {
 
@@ -20,10 +22,12 @@ public:
     void render();
     void shutdown();
 
-    void setCandleData(const std::deque<CandleData>& data);
-    void setSEPSignals(const std::deque<SEPSignalData>& signals);
+    void setOandaConnector(sep::connectors::OandaConnector* connector);
+    void setQuantumSignalGenerator(QuantumSignalGenerator* generator);
 
 private:
+    sep::connectors::OandaConnector* oanda_connector_ = nullptr;
+    QuantumSignalGenerator* signal_generator_ = nullptr;
     // Chart data
     std::deque<CandleData> candle_data_;
     std::deque<SEPSignalData> sep_signals_;

@@ -22,6 +22,14 @@ bool SignalsTabController::initialize() {
 }
 
 void SignalsTabController::render() {
+    if (oanda_connector_) {
+        // This is a placeholder for fetching real data
+        // candle_data_ = oanda_connector_->getCandleData();
+    }
+    if (signal_generator_) {
+        // This is a placeholder for fetching real data
+        // sep_signals_ = signal_generator_->getSignals();
+    }
     handleMouseInput();
     setupChartArea();
     renderMainChart();
@@ -35,12 +43,12 @@ void SignalsTabController::shutdown() {
     trend_lines_.clear();
 }
 
-void SignalsTabController::setCandleData(const std::deque<CandleData>& data) {
-    candle_data_ = data;
+void SignalsTabController::setOandaConnector(sep::connectors::OandaConnector* connector) {
+    oanda_connector_ = connector;
 }
 
-void SignalsTabController::setSEPSignals(const std::deque<SEPSignalData>& signals) {
-    sep_signals_ = signals;
+void SignalsTabController::setQuantumSignalGenerator(QuantumSignalGenerator* generator) {
+    signal_generator_ = generator;
 }
 
 void SignalsTabController::renderMainChart() {

@@ -1,14 +1,11 @@
 #!/bin/bash
-# Enhanced build script with development tools integration
+# Simplified build script for running inside a container
 
 set -uo pipefail
 
 echo "Building SEP Engine..."
 
-# Clean up with proper permissions
-# sudo rm -rf .cache .codechecker CMakeCache.txt output CMakeFiles Makefile /sep/.Trash-1000
-# mkdir -p .cache output .codechecker/{output,reports,html} build
-# chmod -R 777 .cache .codechecker build output
+# Clean up previous build artifacts
 cd /sep
 sudo rm -rf .cache .codechecker CMakeCache.txt CMakeFiles output Makefile
 sleep 2 
@@ -16,26 +13,12 @@ clear
 sudo rm -rf /sep/.Trash-1000 
 sleep 1
 
-mkdir .cache .codechecker/output output build
-
-# Save text output if the command exists
-if command -v totxt.save &> /dev/null; then
-    totxt.save
-fi
+mkdir -p .cache .codechecker/output output
+totxt.save
 
 # Ensure proper permissions for CodeChecker directories
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
-
-# Ensure Docker image is built
-DOCKER_BUILDKIT=1 docker build -t sep-engine-builder .
-# DOCKER_BUILDKIT=1 docker build --no-cache -t sep-engine-builder .
-
-# Function to fix paths in compile_commands.json for host IDE
-fix_compile_commands() {
-    # Replace container paths with host paths for IDE integration
-    sed -i "s|/sep/|$(pwd)/|g" compile_commands.json
-}
 
 # Build and setup development environment
 docker run --gpus all --rm \
@@ -74,16 +57,13 @@ docker run --gpus all --rm \
     # Copy and fix compile_commands.json for IDE
     cp compile_commands.json ../ && cd ..
     
-    # Fix ownership of all generated files
-    sudo chown -R $USER_ID:$GROUP_ID /sep/.cache /sep/.codechecker /sep/build /sep/output /home/codecheck/.cache /home/codecheck/.codechecker
     
-    # Run static analysis if requested
-    if [ "${RUN_ANALYSIS:-}" = "true" ]; then
-        echo "Running CodeChecker analysis..."
-        ./run_codechecker.sh
-    fi
 '
 
-# Fix paths in compile_commands.json for local IDE integration
-fix_compile_commands
+# Fix ownership of all generated files
+sudo chown -R $USER_ID:$GROUP_ID /sep/.cache /sep/.codechecker /sep/build /sep/output 
+fix_compile_commands() {
+    # Replace container paths with host paths for IDE integration
+    sed -i "s|/sep/|$(pwd)/|g" compile_commands.json
+}  
 echo "Build complete!"

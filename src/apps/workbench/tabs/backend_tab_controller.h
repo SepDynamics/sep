@@ -5,6 +5,7 @@
 #include "../core/metrics_monitor.h"
 #include "../backtester/backtester.h"
 #include "../core/file_dialog.hpp"
+#include "../core/service_connector.hpp"
 
 namespace sep::workbench {
 
@@ -18,8 +19,10 @@ public:
     void shutdown();
 
     void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
+    void setServiceConnector(ServiceConnector* connector);
 
 private:
+    ServiceConnector* service_connector_ = nullptr;
     void renderDataSourceSelector();
     void renderBacktesterPanel();
 

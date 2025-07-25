@@ -61,17 +61,14 @@
         "get-library-docs"
       ]
     },
-    "simple_build_analyzer": {
+    "robust_build_analyzer": {
       "command": "python3",
       "args": [
-        "/sep/.kilocode/mcp/tools/robust_build_analyzer/robust_build_analyzer.py"
+            "/sep/.kilocode/mcp/tools/robust_build_analyzer/main.py"
       ],
       "alwaysAllow": [
-        "analyze_build"
-      ],
-      "timeout": 300,
-      "disabled": false,
-      "disabledTools": []
+            "analyze_build"
+      ]
     }
   }
 }

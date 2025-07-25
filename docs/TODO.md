@@ -1,209 +1,186 @@
-# SepDynamics Current State Analysis & Development Roadmap
+# SEP Engine Development Roadmap
 
-## Executive Summary
+## Objective
+Transition the SEP Engine from a proof-of-concept with minimal build functionality to a robust, production-ready trading platform by systematically implementing and integrating core components. This roadmap prioritizes fixing build errors, completing partially implemented components, and ensuring proper routing of data through the verified pipeline.
 
-**Current Stage**: Integration Phase - Workbench Integration & Pattern Analysis  
-**Development Maturity**: Level 2 (Production-Ready Core) transitioning to Level 3  
-**Readiness for Demo Trading**: 65% complete - Core engine validated, needs signal validation and broker integration
+## Development Phases
+1. **Phase 1: Testbed Completion**
+   - Ensure a stable environment for testing with clean data and reliable metrics visualization.
+2. **Phase 2: Trading Preparation**
+   - Validate signals, implement risk management, and prepare for demo trading.
+3. **Phase 3: Demo Trading & Optimization**
+   - Enable live demo trading and refine strategies based on performance.
 
-## What You've Built (Recent Implementation Push)
+## Phase 1: Testbed Completion
 
-### ✅ Completed Core Components
+### 1.1 48-Hour Sample Data Setup
+- **Status**: Not implemented (missing in snapshot).
+- **Tasks**:
+  - [ ] Create a script to fetch 48 hours of EUR/USD M1 data from OANDA API (`src/connectors/oanda_connector.cpp`).
+  - [ ] Store data in a local SQLite database or JSON files (`src/engine/data_parser.cpp`).
+  - [ ] Implement data integrity checks (e.g., missing candles, invalid prices).
+  - [ ] Create a data loader for workbench (`src/apps/workbench/core/service_connector.cpp`).
+- **Priority**: High
+- **Dependencies**: OandaConnector, DataParser
 
-1. **Quantum Pattern Analysis Engine**
-   - CUDA-accelerated pattern processing
-   - Real-time computation of coherence, stability, and entropy metrics
-   - Pattern evolution and mutation algorithms
-   - DAG-based pattern correlation analysis
+### 1.2 Enhanced Metrics Display
+- **Status**: Partially implemented (`src/apps/workbench/core/metrics_monitor.cpp` exists but not fully integrated with dashboard).
+- **Tasks**:
+  - [ ] Connect MetricsMonitor to SignalsTabController (`src/apps/workbench/tabs/signals_tab_controller.cpp`).
+  - [ ] Render coherence, stability, and entropy in real-time ImGui plots.
+  - [ ] Add 1-hour and 4-hour rolling averages for metrics.
+  - [ ] Implement threshold visualization (dashed lines for high/low thresholds).
+- **Priority**: High
+- **Dependencies**: MetricsMonitor, SignalsTabController
 
-2. **Market Data Pipeline**
-   - OANDA API integration with authentication
-   - Real-time streaming and historical data ingestion
-   - Rate-limited requests (50ms minimum)
-   - JSON to quantum pattern conversion
+### 1.3 Pattern Discovery Framework
+- **Status**: Not implemented (threshold detection logic missing).
+- **Tasks**:
+  - [ ] Implement configurable threshold detection in PatternMetricEngine (`src/quantum/pattern_metric_engine.cpp`).
+  - [ ] Test combinations (e.g., `stability < 0.3 && entropy > 0.7` for sell signals).
+  - [ ] Create a UI panel for adjusting thresholds in SignalsTabController.
+  - [ ] Log detected patterns to a file for analysis (`src/engine/logging.cpp`).
+- **Priority**: High
+- **Dependencies**: PatternMetricEngine, SignalsTabController
 
-3. **Metrics Processing**
-   - Pattern Metric Engine with GPU acceleration
-   - QBSA (Quantum Bit Stream Analysis) processor
-   - QSH (Quantum State Harmonics) processor
-   - Real-time threshold detection
+### 1.4 Correlation Analysis
+- **Status**: Not implemented (no correlation logic in snapshot).
+- **Tasks**:
+  - [ ] Implement correlation calculator between metrics and price movements (`src/apps/workbench/core/multi_timeframe_analyzer.cpp`).
+  - [ ] Display correlation coefficients in EngineTabController (`src/apps/workbench/tabs/engine_tab_controller.cpp`).
+  - [ ] Export correlation data for offline analysis (`src/engine/data_parser.cpp`).
+- **Priority**: Medium
+- **Dependencies**: MultiTimeframeAnalyzer, EngineTabController
 
-4. **Initial Visualization**
-   - ImGui-based workbench dashboard
-   - Basic candlestick charts
-   - Initial metrics display
-   - 48-hour rolling analysis visualization (as shown in your chart)
+## Phase 2: Trading Preparation
 
-### 📊 Proof-of-Concept Validations
+### 2.1 Backtesting Framework
+- **Status**: Partially implemented (`src/apps/workbench/backtester/backtester.cpp` exists but lacks signal integration).
+- **Tasks**:
+  - [ ] Integrate PatternMetricEngine signals into Backtester.
+  - [ ] Implement performance metrics (Sharpe ratio, max drawdown).
+  - [ ] Create a UI panel for backtesting in BackendTabController (`src/apps/workbench/tabs/backend_tab_controller.cpp`).
+  - [ ] Support 48-hour sample data as input.
+- **Priority**: High
+- **Dependencies**: Backtester, PatternMetricEngine, BackendTabController
 
-Your 6 POCs have validated:
-- **POC 1**: Datatype-agnostic processing (coherence scores: 0.0561-1.0)
-- **POC 2**: Stateful processing with reset capability
-- **POC 3**: Binary executable analysis (coherence: 0.4682)
-- **POC 4**: Performance baseline (~7.8 MB/s on small files)
-- **POC 5**: Metric compositionality (0.0015 variance across chunks)
-- **POC 6**: End-to-end trading pipeline (needs strategy refinement)
+### 2.2 Signal Validation System
+- **Status**: Not implemented (no validation logic in snapshot).
+- **Tasks**:
+  - [ ] Create a signal validator to measure prediction accuracy (`src/apps/workbench/core/service_proxy_engine.cpp`).
+  - [ ] Compare predicted signals against actual price movements.
+  - [ ] Generate validation reports (e.g., accuracy, false positive rate).
+  - [ ] Integrate validation results into BackendTabController UI.
+- **Priority**: High
+- **Dependencies**: ServiceProxyEngine, BackendTabController
 
-## Current Development Stage Analysis
+### 2.3 Risk Management Module
+- **Status**: Not implemented (missing in snapshot).
+- **Tasks**:
+  - [ ] Implement position sizing based on account balance and risk percentage (`src/apps/workbench/core/trade_manager.cpp`).
+  - [ ] Add stop-loss and take-profit logic.
+  - [ ] Enforce maximum exposure limits (e.g., 2% per trade).
+  - [ ] Create a UI panel for risk parameters in BackendTabController.
+- **Priority**: High
+- **Dependencies**: TradeManager, BackendTabController
 
-### You Are Here: **Integration Phase**
+### 2.4 Order Management System
+- **Status**: Not implemented (TradeManager exists but lacks order placement logic).
+- **Tasks**:
+  - [ ] Implement OANDA Trading API integration for order placement (`src/connectors/oanda_connector.cpp`).
+  - [ ] Track order states (pending, filled, canceled).
+  - [ ] Handle order errors and retries.
+  - [ ] Display order status in BackendTabController UI.
+- **Priority**: High
+- **Dependencies**: OandaConnector, TradeManager, BackendTabController
 
-```
-Research ✅ → Development ✅ → [Integration] 🔄 → Validation → Pre-Production → Production
-```
+### 2.5 Demo Account Integration
+- **Status**: Not implemented (no demo account setup in snapshot).
+- **Tasks**:
+  - [ ] Configure OANDA demo account credentials in configuration (`src/apps/workbench/config.cpp`).
+  - [ ] Implement paper trading mode in TradeManager.
+  - [ ] Test order placement in demo environment.
+  - [ ] Display demo account balance and P&L in BackendTabController.
+- **Priority**: High
+- **Dependencies**: OandaConnector, TradeManager, BackendTabController
 
-**Characteristics of Your Current Stage:**
-- Core algorithms implemented and validated ✅
-- Real market data integration working ✅
-- Basic visualization and monitoring ✅
-- Pattern discovery in progress 🔄
-- Signal validation needed 🔲
-- Demo trading integration pending 🔲
+## Phase 3: Demo Trading & Optimization
 
-## Gap Analysis: What's Needed
+### 3.1 Paper Trading
+- **Status**: Not implemented (requires demo account integration).
+- **Tasks**:
+  - [ ] Enable continuous paper trading with live OANDA data.
+  - [ ] Log all trades to a database or file (`src/engine/logging.cpp`).
+  - [ ] Monitor trade performance in real-time.
+  - [ ] Display trade history in BackendTabController.
+- **Priority**: High
+- **Dependencies**: TradeManager, BackendTabController
 
-### 1. **To Complete Testbed for Engine Metrics** (2-3 weeks)
+### 3.2 Performance Monitoring
+- **Status**: Not implemented (no trade analytics in snapshot).
+- **Tasks**:
+  - [ ] Implement trade performance analytics (win/loss ratio, ROI).
+  - [ ] Create alerts for performance anomalies (e.g., large drawdowns).
+  - [ ] Display performance metrics in BackendTabController UI.
+  - [ ] Export trade logs for external analysis.
+- **Priority**: Medium
+- **Dependencies**: TradeManager, BackendTabController
 
-**HIGH PRIORITY - Must Complete:**
-- [ ] **48-Hour Sample Data Setup**
-  - Fetch and store EUR/USD M1 data
-  - Create reliable data loading mechanism
-  - Verify data integrity
-
-- [ ] **Enhanced Metrics Display**
-  - Connect MetricsMonitor to dashboard UI
-  - Add historical metric charts
-  - Implement rolling averages (1h, 4h as shown in your analysis)
-
-- [ ] **Pattern Discovery Framework**
-  - Implement threshold detection combinations
-  - Test patterns like `stability < 0.3 && entropy > 0.7`
-  - Create configurable threshold UI
-
-### 2. **To Enable Demo Account Trading** (4-6 weeks)
-
-**CRITICAL PATH ITEMS:**
-
-1. **Signal Validation System** (Week 1-2)
-   - Implement backtesting framework
-   - Measure prediction accuracy
-   - Calculate Sharpe ratio, max drawdown
-   - Validate against 48h sample data
-
-2. **Risk Management Module** (Week 2-3)
-   - Position sizing algorithms
-   - Stop-loss implementation
-   - Maximum exposure limits
-   - Portfolio heat management
-
-3. **Order Management System** (Week 3-4)
-   - OANDA Trading API integration
-   - Order state management
-   - Position tracking
-   - Error handling and recovery
-
-4. **Demo Account Integration** (Week 4-5)
-   - Configure OANDA demo credentials
-   - Test order placement
-   - Implement paper trading mode
-   - Real-time P&L tracking
-
-5. **Performance Monitoring** (Week 5-6)
-   - Trade logging system
-   - Performance analytics
-   - Alert system for anomalies
-   - Dashboard integration
-
-## Recommended Development Sequence
-
-### Phase 1: Complete Testbed (Current Focus)
-```
-1. Setup 48h sample data ──→ 2. Integrate metrics display ──→ 3. Pattern discovery
-                                        ↓
-                             4. Correlation analysis ←─────────┘
-```
-
-### Phase 2: Trading Preparation
-```
-5. Backtest framework ──→ 6. Signal validation ──→ 7. Risk management
-                                    ↓
-                          8. Order management ←──── 9. Demo integration
-```
-
-### Phase 3: Demo Trading
-```
-10. Paper trading ──→ 11. Performance tracking ──→ 12. Strategy optimization
-```
-
-## Immediate Action Items (This Week)
-
-1. **Complete 48h Data Sample**
-   ```bash
-   # Create data fetcher script
-   python fetch_oanda_sample.py --instrument EUR_USD --granularity M1 --hours 48
-   ```
-
-2. **Wire Up Metrics Display**
-   ```cpp
-   // In workbench dashboard
-   metricsMonitor->getLatestMetrics(coherence, stability, entropy);
-   ImGui::PlotLines("Coherence", coherenceHistory, 1000);
-   ```
-
-3. **Implement Threshold Detection**
-   ```cpp
-   bool sellSignal = (stability < 0.3f && entropy > 0.7f);
-   bool buySignal = (stability > 0.7f && entropy < 0.3f);
-   ```
-
-## Key Success Metrics
-
-### Testbed Completion Criteria:
-- ✅ 48h of clean EUR/USD data processing without errors
-- ✅ Real-time metrics updating at >10Hz in dashboard
-- ✅ At least 3 reliable signal patterns identified
-- ✅ Correlation coefficient >0.3 between signals and price movement
-
-### Demo Trading Readiness Criteria:
-- ✅ Backtested Sharpe ratio >1.0 on sample data
-- ✅ <5% maximum drawdown in paper trading
-- ✅ Successfully placed 100 demo trades without errors
-- ✅ Risk management limits never exceeded
+### 3.3 Strategy Optimization
+- **Status**: Not implemented (no optimization logic in snapshot).
+- **Tasks**:
+  - [ ] Implement automated threshold optimization using backtest results.
+  - [ ] Test machine learning models for metric-price relationships (`src/apps/workbench/core/service_proxy_engine.cpp`).
+  - [ ] Create a UI panel for strategy tuning in EngineTabController.
+  - [ ] Validate optimized strategies in paper trading.
+- **Priority**: Medium
+- **Dependencies**: ServiceProxyEngine, EngineTabController, Backtester
 
 ## Technical Debt & Optimizations
 
-### Performance Issues to Address:
-- **Scaling Problem**: POC 4 showed super-linear scaling on large files
-- **Solution**: Optimize PatternMetricEngine data structures
-- **Priority**: Medium (can defer until after demo trading works)
+### Performance Scaling
+- **Issue**: Super-linear scaling on large files (POC 4).
+- **Tasks**:
+  - [ ] Optimize PatternMetricEngine data structures (`src/quantum/pattern_metric_engine.cpp`).
+  - [ ] Implement sliding window for pattern history.
+- **Priority**: Medium
+- **Dependencies**: PatternMetricEngine
 
-### Architecture Improvements:
-- Consider event-driven architecture for lower latency
-- Implement connection pooling for OANDA API
-- Add circuit breakers for error handling
+### Event-Driven Architecture
+- **Issue**: Tight coupling between components.
+- **Tasks**:
+  - [ ] Implement EventBus for component communication (`src/apps/workbench/core/ui_layout_manager.cpp`).
+  - [ ] Refactor component interactions to use events.
+- **Priority**: Medium
+- **Dependencies**: UILayoutManager
 
-## Risk Assessment
+### API Rate Limiting
+- **Issue**: OANDA API rate limits could disrupt live trading.
+- **Tasks**:
+  - [ ] Implement request batching in OandaConnector.
+  - [ ] Add caching layer for market data (`src/connectors/market_data_converter.cpp`).
+- **Priority**: Medium
+- **Dependencies**: OandaConnector
 
-### Technical Risks:
-- **Pattern overfitting**: Current rules may be too specific to sample data
-- **Latency concerns**: Real-time trading needs <100ms decision time
-- **API rate limits**: OANDA has strict limits that could impact live trading
+## Immediate Action Items (This Week)
+1. **48-Hour Sample Data Setup**:
+   - Write fetch script for EUR/USD M1 data.
+   - Store in JSON format with integrity checks.
+2. **Metrics Display Integration**:
+   - Connect MetricsMonitor to SignalsTabController.
+   - Render basic ImGui plots for coherence/stability/entropy.
+3. **Threshold Detection**:
+   - Add basic threshold logic to PatternMetricEngine.
+   - Test simple rules (e.g., `stability < 0.3 && entropy > 0.7`).
 
-### Mitigation Strategies:
-- Use walk-forward analysis to prevent overfitting
-- Profile and optimize critical path code
-- Implement request batching and caching
-
-## Next Steps Recommendation
-
-1. **This Week**: Focus on completing the 48h sample data setup and metrics display integration. This is your foundation.
-
-2. **Next Week**: Deep dive into pattern discovery. Run systematic tests on threshold combinations using your rolling analysis.
-
-3. **Week 3-4**: Build the backtesting framework and validate your signals. This is critical before moving to demo trading.
-
-4. **Week 5-6**: Implement order management and demo account integration.
-
-Your quantum pattern analysis approach is innovative and the core engine is solid. The key now is systematic validation and careful integration with real trading infrastructure. The 48-hour rolling analysis chart shows promise - those signal clusters during stable/unstable periods suggest your metrics are capturing real market dynamics.
-
-**Bottom Line**: You're about 2-3 weeks from a complete testbed and 4-6 weeks from demo trading capability. Stay focused on the current phase objectives and resist the temptation to jump ahead to live trading before thorough validation.
+## Success Metrics
+- **Testbed Completion**:
+  - 48 hours of clean data processed without errors.
+  - Metrics updating at >10Hz in dashboard.
+  - 3+ reliable signal patterns identified.
+  - Correlation coefficient >0.3 between signals and price.
+- **Demo Trading Readiness**:
+  - Backtested Sharpe ratio >1.0.
+  - <5% maximum drawdown in paper trading.
+  - 100 demo trades placed without errors.
+  - Risk limits enforced.

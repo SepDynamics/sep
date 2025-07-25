@@ -1,3 +1,7 @@
+### New GUI.md
+
+# SEP Engine Workbench GUI Architecture
+
 ## Current Problem Analysis
 
 The SEP Workbench GUI is currently disorganized with overlapping responsibilities and scattered functionality. Key issues identified:
@@ -13,7 +17,7 @@ The SEP Workbench GUI is currently disorganized with overlapping responsibilitie
 ```
 TradingHUD (549+ lines):
 ├── Chart rendering & technical analysis
-├── SEP signal overlays  
+├── SEP signal overlays
 ├── Order management & trading
 ├── Performance tracking
 ├── Risk management
@@ -22,7 +26,7 @@ TradingHUD (549+ lines):
 
 MetricsDashboard:
 ├── SEP metrics visualization (duplicated in TradingHUD)
-├── OANDA integration (duplicated in TradingHUD)  
+├── OANDA integration (duplicated in TradingHUD)
 ├── Technical indicators (duplicated in TradingHUD)
 └── Historical analysis
 ```
@@ -66,7 +70,7 @@ FROM MetricsDashboard → SIGNALS TAB:
 └── Historical signal analysis
 ```
 
-### Tab 2: **ENGINE** - SEP Engine Diagnostics & Analysis  
+### Tab 2: **ENGINE** - SEP Engine Diagnostics & Analysis
 **Purpose**: Deep dive into SEP engine internals and quantum processing
 
 #### Primary Components:
@@ -166,7 +170,7 @@ class SignalAnalysisPanel {      // → SIGNALS TAB
     // Traditional vs SEP comparison
 };
 
-class MarketChartRenderer {      // → SIGNALS TAB  
+class MarketChartRenderer {      // → SIGNALS TAB
     // Clean chart rendering
     // SEP signal overlays
     // Basic technical analysis
@@ -189,7 +193,7 @@ class EngineMonitor {            // → ENGINE TAB
 ```cpp
 // Current: Multiple OANDA connectors scattered
 // TradingHUD has OandaConnector
-// MetricsDashboard has OandaConnector  
+// MetricsDashboard has OandaConnector
 // TradeManager has OandaConnector
 
 // Proposed: Single OANDA Service Layer
@@ -197,7 +201,7 @@ class OandaService {
     // Centralized OANDA connectivity
     // Rate limiting and error handling
     // Data distribution to subscribers
-    
+
     void subscribeToTicks(TickSubscriber* subscriber);
     void subscribeToCandles(CandleSubscriber* subscriber);
     void subscribeToOrders(OrderSubscriber* subscriber);
@@ -214,7 +218,7 @@ private:
     std::unique_ptr<MarketChartRenderer> chart_renderer_;
     std::unique_ptr<SignalHistoryTracker> history_tracker_;
     std::shared_ptr<OandaService> oanda_service_;
-    
+
 public:
     void render();
     void updateSignals();
@@ -222,7 +226,7 @@ public:
 };
 ```
 
-#### 2.2 ENGINE Tab Architecture  
+#### 2.2 ENGINE Tab Architecture
 ```cpp
 class EngineTabController {
 private:
@@ -230,7 +234,7 @@ private:
     std::unique_ptr<PatternAnalysisPanel> pattern_panel_;
     std::unique_ptr<EngineDiagnostics> diagnostics_;
     std::unique_ptr<ResearchTools> research_tools_;
-    
+
 public:
     void render();
     void updateEngineMetrics();
@@ -246,7 +250,7 @@ private:
     std::unique_ptr<BacktestingSuite> backtester_;
     std::unique_ptr<SystemAdmin> system_admin_;
     std::unique_ptr<InfrastructureMonitor> infra_monitor_;
-    
+
 public:
     void render();
     void updateTradingData();
@@ -263,14 +267,14 @@ class EventBus {
 public:
     template<typename EventType>
     void publish(const EventType& event);
-    
+
     template<typename EventType>
     void subscribe(std::function<void(const EventType&)> handler);
 };
 
 // Events
 struct SEPSignalEvent { /* signal data */ };
-struct OrderExecutedEvent { /* order details */ };  
+struct OrderExecutedEvent { /* order details */ };
 struct PatternDetectedEvent { /* pattern info */ };
 ```
 
@@ -288,7 +292,7 @@ class PositionManager {
     // Risk monitoring
 };
 
-class SignalManager {  
+class SignalManager {
     // Centralized signal processing
     // Signal validation and filtering
     // Signal distribution to subscribers
@@ -337,27 +341,27 @@ class SignalManager {
 
 ## Migration Path
 
-### Week 1: Architecture Setup
+### Phase 1: Architecture Setup
 - Create tab controller classes
 - Set up event bus system
 - Implement shared services
 
-### Week 2: SIGNALS Tab
+### Phase 2: SIGNALS Tab
 - Extract signal processing
 - Create signal analysis panel
 - Implement chart renderer
 
-### Week 3: BACKEND Tab  
+### Phase 3: BACKEND Tab
 - Extract trading operations
 - Create trading terminal
 - Integrate position management
 
-### Week 4: ENGINE Tab
+### Phase 4: ENGINE Tab
 - Refactor metrics dashboard
 - Add engine diagnostics
 - Create research tools
 
-### Week 5: Integration & Testing
+### Phase 5: Integration & Testing
 - Connect tabs via event system
 - Performance optimization
 - User testing and refinement

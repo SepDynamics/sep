@@ -96,13 +96,19 @@ bool WorkbenchEngine::initialize()
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
 
-        signals_tab_ = std::make_unique<sep::workbench::tabs::SignalsTabController>();
-        engine_tab_ = std::make_unique<sep::workbench::tabs::EngineTabController>();
-        backend_tab_ = std::make_unique<sep::workbench::tabs::BackendTabController>();
+        signals_tab_ = std::make_unique<sep::workbench::SignalsTabController>();
+        engine_tab_ = std::make_unique<sep::workbench::EngineTabController>();
+        backend_tab_ = std::make_unique<sep::workbench::BackendTabController>();
 
         signals_tab_->initialize();
         engine_tab_->initialize();
         backend_tab_->initialize();
+
+        // Set up data flow
+        signals_tab_->setOandaConnector(service_connector_->getOandaConnector());
+        signals_tab_->setQuantumSignalGenerator(signal_generator_.get());
+        engine_tab_->setSEPEngine(active_engine_);
+        backend_tab_->setServiceConnector(service_connector_.get());
 
         // Create offline engine as fallback
         ::std::cout << "[WorkbenchEngine] Creating offline engine..." << ::std::endl;
@@ -295,6 +301,7 @@ void WorkbenchEngine::updateFrame(float delta_time)
     handleStateTransition();
     
     // No demo updates needed for trading mode
+    updateData();
 }
 
 void WorkbenchEngine::renderFrame()
@@ -312,6 +319,10 @@ void WorkbenchEngine::renderFrame()
     if (layout_manager_) {
         layout_manager_->render();
     }
+    
+    renderTabs();
+    
+    renderTabs();
     
     // Handle special states
     if (current_state_.load() == ApplicationState::ERROR_RECOVERY) {
@@ -634,5 +645,51 @@ void WorkbenchEngine::handleWindowResize(int width, int height)
 }
 
 bool WorkbenchEngine::isServiceConnected() const { return metrics_.service_connected; }
+
+void WorkbenchEngine::renderTabs()
+{
+    if (ImGui::Begin("SEP Workbench", nullptr, ImGuiWindowFlags_MenuBar))
+    {
+        if (ImGui::BeginTabBar("MainTabBar"))
+        {
+            if (ImGui::BeginTabItem("Signals"))
+            {
+                signals_tab_->render();
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Engine"))
+            {
+                engine_tab_->render();
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Backend"))
+            {
+                backend_tab_->render();
+                ImGui::EndTabItem();
+            }
+            ImGui::EndTabBar();
+        }
+    }
+    ImGui::End();
+}
+
+
+void WorkbenchEngine::updateData()
+{
+    if (service_connector_ && service_connector_->getOandaConnector()) {
+        auto oanda_connector = service_connector_->getOandaConnector();
+        // Fetch candle data
+        // This is a placeholder for fetching real data
+        std::deque<CandleData> candle_data;
+        signals_tab_->setCandleData(candle_data);
+    }
+
+    if (active_engine_) {
+        // Fetch SEP signals
+        // This is a placeholder for fetching real data
+        std::deque<SEPSignalData> sep_signals;
+        signals_tab_->setSEPSignals(sep_signals);
+    }
+}
 
 } // namespace sep::workbench

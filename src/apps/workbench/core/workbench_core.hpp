@@ -132,6 +132,7 @@ private:
     void processInput();
     void updateFrame(float delta_time);
     void renderFrame();
+    void updateData();
     
     void handleStateTransition();
     void updateMetrics(float delta_time);
@@ -140,6 +141,7 @@ private:
     void renderLoadingScreen();
     void renderErrorRecovery();
     void renderStatusBar();
+    void renderTabs();
     
     // State handlers
     void handleInitializing();

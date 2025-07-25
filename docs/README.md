@@ -2,13 +2,13 @@
 
 ## Current Status: Workbench Integration & Pattern Analysis
 
-After thorough verification of our quantum processing pipeline ([data flow architecture](data_flow_architecture.md)), we're now focused on integrating components into the workbench platform and discovering predictive patterns.
+After thorough verification of our quantum processing pipeline ([DATA.md](DATA.md)), we're now focused on integrating components into the workbench platform and discovering predictive patterns.
 
 ## Phase Objectives
 
 ### 1. **Workbench Integration** 🎯
 - Get SEP engine metrics displaying in real-time dashboard
-- Show correlation between quantum metrics and market movements  
+- Show correlation between quantum metrics and market movements
 - Implement 48-hour historical data analysis (pausing live feeds)
 
 ### 2. **Pattern Discovery** 🔍
@@ -16,7 +16,7 @@ After thorough verification of our quantum processing pipeline ([data flow archi
 - Example: `stability < 0.3 && entropy > 0.7 = sell signal`
 - Analyze rolling 24-hour contexts for pattern consistency
 
-### 3. **Validation Framework** ✅  
+### 3. **Validation Framework** ✅
 - Test predictive power of instant quantum metrics
 - Measure correlation between metric changes and price movements
 - Build confidence in signal generation before live trading
@@ -29,7 +29,7 @@ Our verified data pipeline:
 ## Key Components Verified ✅
 
 - **OANDA Connector**: Authentic market data integration
-- **Pattern Kernels**: Real CUDA-accelerated quantum processing  
+- **Pattern Kernels**: Real CUDA-accelerated quantum processing
 - **Metrics Monitor**: Genuine coherence/stability/entropy calculations
 - **Data Parser**: Live OHLC → quantum pattern conversion
 
@@ -49,6 +49,7 @@ Our verified data pipeline:
 
 ## Key Files
 
-- [`data_flow_architecture.md`](data_flow_architecture.md) - Complete pipeline verification
+- [`DATA.md`](DATA.md) - Complete pipeline verification
+- [`GUI.md`](GUI.md) - Workbench GUI architecture
 - [`TODO.md`](TODO.md) - Current phase tasks
 - [`../src/apps/workbench/`](../src/apps/workbench/) - Dashboard integration code

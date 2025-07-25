@@ -34,6 +34,10 @@ void BackendTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> mon
     monitor_ = monitor;
 }
 
+void BackendTabController::setServiceConnector(ServiceConnector* connector) {
+    service_connector_ = connector;
+}
+
 void BackendTabController::renderDataSourceSelector() {
     const char* source_types[] = {"File", "Live Stream", "Generated Data"};
     ImGui::Combo("Source Type", &data_source_type_, source_types, 3);

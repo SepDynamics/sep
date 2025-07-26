@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "src/apps/workbench/core/common_structs.h"
+
+#include "core/common_structs.h"
 
 namespace sep {
 namespace workbench {

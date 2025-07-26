@@ -10,7 +10,8 @@ public:
     ~SEPSignalStrategy();
 
     std::vector<sep::quantum::Signal>
-    execute(const std::vector<sep::common::CandleData>& candles) override;
+    execute(const std::vector<sep::common::CandleData>& candles,
+            const std::vector<sep::quantum::Signal>& engine_signals) override;
 
 private:
     sep::quantum::PatternMetricEngine engine_;

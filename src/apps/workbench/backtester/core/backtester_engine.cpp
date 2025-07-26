@@ -55,9 +55,10 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     engine_ref.evolvePatterns();
     engine_ref.computeMetrics();
 
-    std::vector<sep::quantum::Signal> signals;
+    std::vector<sep::quantum::Signal> engine_signals = engine_ref.getSignals();
+    std::vector<sep::quantum::Signal> signals = engine_signals;
     if (strategy) {
-        signals = strategy->execute(candles);
+        signals = strategy->execute(candles, engine_signals);
     }
     std::vector<float> prices;
     prices.reserve(candles.size());

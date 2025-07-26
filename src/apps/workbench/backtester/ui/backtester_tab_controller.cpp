@@ -10,7 +10,6 @@ using sep::workbench::BacktestResultEvent;
 
 BacktesterTabController::BacktesterTabController()
     : engine_(std::make_unique<BacktesterEngine>()) {
-    pattern_engine_.init(nullptr);
 }
 
 BacktesterTabController::~BacktesterTabController() {
@@ -36,6 +35,7 @@ void BacktesterTabController::render() {
                     return true;
                 },
                 &strategy_names_, strategy_names_.size());
+    ImGui::Checkbox("Use GPU", &use_gpu_);
 
     if (!running_) {
         if (ImGui::Button("Start")) {
@@ -45,6 +45,7 @@ void BacktesterTabController::render() {
             if (strategy_index_ == 0) {
                 strat_ptr = &strategy;
             }
+            pattern_engine_.init(use_gpu_ ? &gpu_context_ : nullptr);
             result_ = engine_->run(dataset_path_, &pattern_engine_, strat_ptr);
             globalEventBus().publish(BacktestResultEvent{result_});
             running_ = false;

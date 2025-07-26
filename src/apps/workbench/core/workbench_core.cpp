@@ -17,6 +17,7 @@
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/core/metrics_monitor.h"
 #include "apps/workbench/core/multi_timeframe_analyzer.h"
+#include "memory/memory_tier_manager.hpp"
 #include "engine/data_parser.h"
 
 // Include ImGui headers
@@ -104,6 +105,7 @@ bool WorkbenchEngine::initialize()
             metrics_.service_connected = (e.state == ConnectionState::CONNECTED);
         });
         signal_generator_ = ::std::make_unique<QuantumSignalGenerator>();
+        signal_generator_->setMemoryManager(&::sep::memory::MemoryTierManager::getInstance());
         metrics_monitor_ = ::std::make_shared<MetricsMonitor>();
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
         

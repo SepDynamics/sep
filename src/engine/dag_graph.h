@@ -72,6 +72,9 @@ public:
     float getAlpha(uint64_t id) const;
     float getCorrelation(uint64_t id) const;
     uint32_t getGeneration(uint64_t id) const;
+
+    // Get most recently added node, or nullptr if empty
+    const DagNode* getMostRecentNode() const;
     
     // JSON serialization for metrics output
     std::string exportAsJson() const;

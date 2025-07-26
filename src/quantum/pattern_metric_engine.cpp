@@ -18,12 +18,17 @@ std::vector<sep::quantum::PatternRelationship> sep::quantum::relationships;
 
 namespace sep::quantum {
 
-PatternMetricEngine::PatternMetricEngine() : qfh_processor_(std::make_unique<QuantumProcessorQFH>()), use_gpu_(false) {}
+PatternMetricEngine::PatternMetricEngine()
+    : qfh_processor_(std::make_unique<QuantumProcessorQFH>()), use_gpu_(false) {
+    scratch_pattern_bits_.reserve(1024);
+}
 
 void PatternMetricEngine::clear() {
     std::lock_guard<std::mutex> lock(engine_mutex_);
     current_patterns_.clear();
     current_metrics_.clear();
+    pattern_cache_.clear();
+    cache_dirty_ = true;
     stream_buffer_.clear();
     if (qfh_processor_) {
         qfh_processor_->clear();
@@ -118,31 +123,41 @@ void PatternMetricEngine::evolvePatterns() {
     
     // Use the QFH processor to analyze the raw data
     if (qfh_processor_) {
-        // Convert bytes to uint32_t for QFH processing
-        std::vector<uint32_t> pattern_bits;
-        pattern_bits.reserve((stream_buffer_.size() + 3) / 4); // Reserve space for uint32_t conversion
-        
+        // Convert bytes to uint32_t for QFH processing using preallocated buffer
+        scratch_pattern_bits_.clear();
+        scratch_pattern_bits_.reserve((stream_buffer_.size() + 3) / 4);
+
         for (size_t i = 0; i < stream_buffer_.size(); i += 4) {
             uint32_t value = 0;
             for (size_t j = 0; j < 4 && (i + j) < stream_buffer_.size(); ++j) {
                 value |= (static_cast<uint32_t>(stream_buffer_[i + j]) << (j * 8));
             }
-            pattern_bits.push_back(value);
+            scratch_pattern_bits_.push_back(value);
         }
-        
+
         // This will trigger the QFH analysis which logs "analyze: events size: X"
-        qfh_processor_->processPatternBits(pattern_bits);
+        qfh_processor_->processPatternBits(scratch_pattern_bits_);
     }
-    
+
     // Process the new data in the buffer, append patterns, and clear the buffer.
     auto new_patterns = extractPatternsFromBytes(stream_buffer_.data(), stream_buffer_.size());
-    current_patterns_.insert(current_patterns_.end(), new_patterns.begin(), new_patterns.end());
+    for (const auto& p : new_patterns) {
+        current_patterns_.push_back(p);
+        if (current_patterns_.size() > max_history_size_) {
+            current_patterns_.pop_front();
+        }
+    }
+    cache_dirty_ = true;
     stream_buffer_.clear();
 }
 
 void PatternMetricEngine::addPattern(const sep::compat::PatternData& pattern) {
     std::lock_guard<std::mutex> lock(engine_mutex_);
     current_patterns_.push_back(pattern);
+    if (current_patterns_.size() > max_history_size_) {
+        current_patterns_.pop_front();
+    }
+    cache_dirty_ = true;
 }
 
 sep::compat::PatternData PatternMetricEngine::mutatePattern(const sep::compat::PatternData& parent) {
@@ -184,6 +199,8 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
     
     current_metrics_.clear();
     current_metrics_.reserve(current_patterns_.size());
+
+    scratch_diffs_.clear();
 
     for (const auto& p : current_patterns_) {
         PatternMetrics m;
@@ -280,24 +297,25 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
             float entropy = 0.0f;
             
             if (p.data.size() > 1) {
-                // Calculate differences between consecutive values
-                std::vector<float> diffs;
+                // Calculate differences between consecutive values using preallocated buffer
+                scratch_diffs_.clear();
+                scratch_diffs_.reserve(p.data.size() - 1);
                 for (size_t i = 1; i < p.data.size(); ++i) {
-                    diffs.push_back(std::abs(p.data[i] - p.data[i-1]));
+                    scratch_diffs_.push_back(std::abs(p.data[i] - p.data[i - 1]));
                 }
-                
+
                 // Calculate variance of differences (measure of unpredictability)
                 float diff_mean = 0.0f;
-                for (float diff : diffs) {
+                for (float diff : scratch_diffs_) {
                     diff_mean += diff;
                 }
-                diff_mean /= diffs.size();
-                
+                diff_mean /= scratch_diffs_.size();
+
                 float diff_variance = 0.0f;
-                for (float diff : diffs) {
+                for (float diff : scratch_diffs_) {
                     diff_variance += (diff - diff_mean) * (diff - diff_mean);
                 }
-                diff_variance /= diffs.size();
+                diff_variance /= scratch_diffs_.size();
                 
                 // Entropy is higher with more variance in differences
                 entropy = std::sqrt(diff_variance);
@@ -322,7 +340,11 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
 
 const std::vector<sep::compat::PatternData>& PatternMetricEngine::getPatterns() const
 {
-    return current_patterns_;
+    if (cache_dirty_) {
+        pattern_cache_.assign(current_patterns_.begin(), current_patterns_.end());
+        cache_dirty_ = false;
+    }
+    return pattern_cache_;
 }
 
 std::vector<sep::compat::PatternData> PatternMetricEngine::extractPatternsFromBytes(
@@ -403,10 +425,14 @@ void PatternMetricEngine::processBuffer([[maybe_unused]] bool is_final_chunk) {
             stream_buffer_.size()
         );
         
-        // Add extracted patterns to our current pattern set
+        // Add extracted patterns to our current pattern set with history limit
         for (const auto& pattern : extracted_patterns) {
             current_patterns_.push_back(pattern);
+            if (current_patterns_.size() > max_history_size_) {
+                current_patterns_.pop_front();
+            }
         }
+        cache_dirty_ = true;
         
         // Clear the buffer after processing
         stream_buffer_.clear();

@@ -7,6 +7,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <deque>
 
 #include "engine/types.h"
 #include "quantum/processor.h"
@@ -176,11 +177,18 @@ private:
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_;
     bool use_gpu_;
     
-    // Internal pattern storage
-    std::vector<compat::PatternData> current_patterns_;
+    // Internal pattern storage with sliding history window
+    size_t max_history_size_{1024};
+    std::deque<compat::PatternData> current_patterns_;
+    mutable std::vector<compat::PatternData> pattern_cache_;
+    mutable bool cache_dirty_{false};
     std::vector<PatternMetrics> current_metrics_;
     SignalThresholds signal_thresholds_;
     std::vector<Signal> current_signals_;
+
+    // Preallocated scratch space to avoid frequent allocations
+    std::vector<uint32_t> scratch_pattern_bits_;
+    std::vector<float> scratch_diffs_;
 
     // Thread safety and streaming
     std::mutex engine_mutex_;

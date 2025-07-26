@@ -13,4 +13,6 @@ public:
     ~BacktesterEngine();
 
     sep::workbench::backtester::BacktestResult run(const std::string& dataset_path);
+    sep::workbench::backtester::BacktestResult run(const std::string& dataset_path,
+                                                   sep::quantum::PatternMetricEngine* engine);
 };

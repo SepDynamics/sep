@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <cstring>
 
 #include "imgui.h"
 
@@ -187,7 +188,7 @@ void BackendTabController::renderBacktesterPanel() {
             }
 
             sep::core::ServiceProxyEngine proxy("localhost", 8080);
-            validation_result_ = proxy.validateSignals(signals, prices);
+            validation_result_ = proxy.validateSignalsAgainstHistory(signals, prices);
         }
     }
 
@@ -198,8 +199,16 @@ void BackendTabController::renderBacktesterPanel() {
 
     ImGui::Begin("Backtester");
     ImGui::PushID("Backtester");
+    ImGui::InputText("Dataset", backtest_file_buffer_, sizeof(backtest_file_buffer_));
     if (ImGui::Button("Run Backtest")) {
-        data_loader_->load_data(file_path_buffer_);
+        data_loader_->load_data(backtest_file_buffer_);
+        backtester_->run(pattern_engine_.get(), data_loader_.get());
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Run 48h Sample")) {
+        strncpy(backtest_file_buffer_, "eur_usd_m1_48h.json", sizeof(backtest_file_buffer_) - 1);
+        backtest_file_buffer_[sizeof(backtest_file_buffer_) - 1] = '\0';
+        data_loader_->load_data(backtest_file_buffer_);
         backtester_->run(pattern_engine_.get(), data_loader_.get());
     }
 

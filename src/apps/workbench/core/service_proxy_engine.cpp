@@ -198,5 +198,11 @@ sep::workbench::SignalValidator::ValidationResult ServiceProxyEngine::validateSi
     return {accuracy, false_rate};
 }
 
+sep::workbench::SignalValidator::ValidationResult ServiceProxyEngine::validateSignalsAgainstHistory(
+    const std::vector<sep::quantum::Signal>& signals,
+    const std::vector<float>& prices) {
+    return validateSignals(signals, prices);
+}
+
 } // namespace core
 } // namespace sep

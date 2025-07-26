@@ -111,15 +111,8 @@ public:
     sep::connectors::MarketData getLatestMarketData() const;
     void setLatestMarketData(const sep::connectors::MarketData& data);
     
-    // Added for debugging and testing
-    std::unordered_map<std::string, double> getMetrics() {
-        std::lock_guard<std::mutex> lock(metrics_mutex_);
-        return {};
-    }
-
-    void set(const std::string& key, double value) {
-        std::lock_guard<std::mutex> lock(metrics_mutex_);
-    }
+    std::unordered_map<std::string, double> getMetrics() const;
+    void set(const std::string& key, double value);
     
     // Simple threshold detection as specified in TODO.md
     struct SimpleSignals {
@@ -163,6 +156,8 @@ private:
         std::chrono::steady_clock::time_point timestamp;
     };
     std::vector<MetricsSnapshot> metrics_history_;
+    std::unordered_map<std::string, double> metrics_;
+    bool metrics_history_dirty_{false};
     
     std::atomic<bool> processing_{false};
     std::atomic<bool> shutdown_requested_{false};

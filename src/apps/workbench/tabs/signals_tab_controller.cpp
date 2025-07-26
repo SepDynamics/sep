@@ -265,10 +265,27 @@ void SignalsTabController::renderMainChart() {
         return;
     }
 
+    updatePriceRange();
+    if (auto_detect_trends_) {
+        detectTrendLines();
+    }
+
     ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, ImPlotCond_Always);
-    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300), ImPlotFlags_Crosshairs | ImPlotFlags_NoMenus)) {
+    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300), ImPlotFlags_NoMenus)) {
+        renderTechnicalIndicators();
         renderCandlesticks();
+        if (show_sep_overlay_) {
+            renderSEPSignalOverlay();
+        }
+        if (show_trend_lines_) {
+            renderTrendLines();
+        }
+        renderCrosshair();
         ImPlot::EndPlot();
+    }
+
+    if (show_volume_) {
+        renderVolumeChart();
     }
 }
 
@@ -281,7 +298,10 @@ void SignalsTabController::renderCandlesticks() {
     static std::vector<double> low;
     static std::vector<double> high;
 
-    const size_t count = candle_data_.size();
+    static constexpr size_t MAX_VISIBLE = 240;
+    size_t start_idx = candle_data_.size() > MAX_VISIBLE ? candle_data_.size() - MAX_VISIBLE : 0;
+    const size_t count = candle_data_.size() - start_idx;
+
     xs.resize(count);
     open.resize(count);
     close.resize(count);
@@ -289,11 +309,12 @@ void SignalsTabController::renderCandlesticks() {
     high.resize(count);
 
     for (size_t i = 0; i < count; ++i) {
+        const auto& c = candle_data_[start_idx + i];
         xs[i] = static_cast<double>(i);
-        open[i] = candle_data_[i].open;
-        close[i] = candle_data_[i].close;
-        low[i] = candle_data_[i].low;
-        high[i] = candle_data_[i].high;
+        open[i] = c.open;
+        close[i] = c.close;
+        low[i] = c.low;
+        high[i] = c.high;
     }
 
     ImPlot::PushPlotClipRect();
@@ -313,6 +334,7 @@ void SignalsTabController::renderTechnicalIndicators() {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     
     static constexpr size_t MAX_CANDLES = 1440;
+    static constexpr size_t MAX_VISIBLE = 240;
     static constexpr size_t INDICATOR_PERIODS[] = {9, 21, 50, 200};
 
     // Render EMAs
@@ -323,8 +345,8 @@ void SignalsTabController::renderTechnicalIndicators() {
         
         if (!indicator.enabled || indicator.values.empty()) continue;
         
-        size_t start_idx = indicator.values.size() > MAX_CANDLES ? 
-                          indicator.values.size() - MAX_CANDLES : 0;
+        size_t start_idx = indicator.values.size() > MAX_VISIBLE ?
+                          indicator.values.size() - MAX_VISIBLE : 0;
         
         if (indicator.values.size() <= start_idx + 1) continue;
         
@@ -355,9 +377,9 @@ void SignalsTabController::renderTechnicalIndicators() {
         bb_upper.values.size() == bb_lower.values.size() && 
         !bb_upper.values.empty()) {
         
-        size_t start_idx = bb_upper.values.size() > MAX_CANDLES ? 
-                          bb_upper.values.size() - MAX_CANDLES : 0;
-        float candle_width = chart_size_.x / std::min(bb_upper.values.size() - start_idx, (size_t)MAX_CANDLES);
+        size_t start_idx = bb_upper.values.size() > MAX_VISIBLE ?
+                          bb_upper.values.size() - MAX_VISIBLE : 0;
+        float candle_width = chart_size_.x / std::min(bb_upper.values.size() - start_idx, (size_t)MAX_VISIBLE);
         
         // Draw band as polygon
         std::vector<ImVec2> points;
@@ -392,10 +414,10 @@ void SignalsTabController::renderSEPSignalOverlay() {
     
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     
-    static constexpr size_t MAX_CANDLES = 1440;
-    size_t start_idx = sep_signals_.size() > MAX_CANDLES ? 
-                       sep_signals_.size() - MAX_CANDLES : 0;
-    float signal_width = chart_size_.x / std::min(sep_signals_.size() - start_idx, (size_t)MAX_CANDLES);
+    static constexpr size_t MAX_VISIBLE = 240;
+    size_t start_idx = sep_signals_.size() > MAX_VISIBLE ?
+                       sep_signals_.size() - MAX_VISIBLE : 0;
+    float signal_width = chart_size_.x / std::min(sep_signals_.size() - start_idx, (size_t)MAX_VISIBLE);
     
     // Draw SEP signal strength as overlay
     for (size_t i = start_idx; i < sep_signals_.size(); i++) {
@@ -446,10 +468,10 @@ void SignalsTabController::renderVolumeChart() {
                             ImVec2(volume_pos.x + chart_size_.x, volume_pos.y + volume_height), 
                             IM_COL32(10, 10, 15, 200));
     
-    static constexpr size_t MAX_CANDLES = 1440;
-    size_t start_idx = candle_data_.size() > MAX_CANDLES ? 
-                       candle_data_.size() - MAX_CANDLES : 0;
-    float candle_width = chart_size_.x / std::min(candle_data_.size() - start_idx, (size_t)MAX_CANDLES);
+    static constexpr size_t MAX_VISIBLE = 240;
+    size_t start_idx = candle_data_.size() > MAX_VISIBLE ?
+                       candle_data_.size() - MAX_VISIBLE : 0;
+    float candle_width = chart_size_.x / std::min(candle_data_.size() - start_idx, (size_t)MAX_VISIBLE);
     
     // Find max volume for scaling
     float max_vol = 1.0f;
@@ -665,8 +687,16 @@ void SignalsTabController::renderCrosshair() {
         ImVec2(label_pos.x + 60, label_pos.y + 20),
         IM_COL32(40, 40, 40, 200)
     );
-    draw_list->AddText(ImVec2(label_pos.x + 5, label_pos.y + 3), 
+    draw_list->AddText(ImVec2(label_pos.x + 5, label_pos.y + 3),
         IM_COL32(255, 255, 255, 255), price_str.c_str());
+
+    auto t = screenToTime(mouse_pos.x);
+    std::time_t tt = std::chrono::system_clock::to_time_t(t);
+    char time_buf[16];
+    std::strftime(time_buf, sizeof(time_buf), "%H:%M", std::localtime(&tt));
+    ImVec2 time_pos = ImVec2(mouse_pos.x - 30, chart_pos_.y + chart_size_.y + 5);
+    draw_list->AddRectFilled(time_pos - ImVec2(2,2), time_pos + ImVec2(34,16), IM_COL32(40,40,40,200));
+    draw_list->AddText(time_pos, IM_COL32(255,255,255,255), time_buf);
 }
 
 void SignalsTabController::renderChartGrid() {

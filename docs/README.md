@@ -1,72 +1,59 @@
-# SEP Engine Trading Platform - Integration Phase
+# SEP Engine Trading Platform - Build Failure Resolution Phase
 
-## Current Status: Workbench Integration & Chart Rendering - **Compilation Blockers Identified**
+## Current Status: **CRITICAL BUILD FAILURE** - All Development Blocked
 
-The SEP Engine is a quantum-inspired trading platform designed to process streaming OANDA market data, generating predictive signals based on **coherence**, **stability**, and **entropy**. The project is currently in a critical phase of integrating core components into a 3-tab workbench dashboard ([GUI.md](GUI.md)). However, **severe compilation errors are preventing the application from building and launching, directly impacting chart rendering and core engine functionality.** Resolving these build issues is the absolute top priority.
+The SEP Engine is a quantum-inspired trading platform designed to process OANDA market data and generate predictive trading signals. The project is currently **completely blocked by critical compilation errors** that prevent the application from building and launching. The previous phase of integrating the core engine with a 3-tab workbench GUI is halted.
 
-## Phase Objectives
+**The absolute top priority is to resolve all build errors to create a stable, compilable foundation.** Until the application builds successfully, no further progress on chart rendering, data processing, or feature integration is possible.
 
-### 1. **Resolve Critical Build Errors** ✅
-- **TOP PRIORITY**: Address `fatal error: 'imgui.h' file not found` and related "incomplete type" issues, which are symptoms of GUI headers bleeding into core libraries.
-- Fix namespace and undeclared identifier errors (`sep::workbench::Config`, `backtester`).
-- Resolve missing `<cstdint>` includes.
+## Primary Objective: Fix the Build
 
-### 2. **Workbench Integration & Chart Rendering** 📊
-- Render real-time candlestick charts with SEP signal overlays in the Signals Tab.
-- Display coherence, stability, and entropy metrics in interactive ImGui plots across all tabs.
-- Enable 48-hour historical data analysis with pause/resume functionality for live feeds.
+1.  **Resolve Header Dependency Conflicts**: ✅
+    -   **Top Priority**: Refactor core data structures (e.g., `CandleData`) out of GUI-specific headers (`apps/workbench/core/common_structs.h`) and into a neutral, shared library (`src/common/financial_data_types.h`). This will fix the `fatal error: 'imgui.h' file not found` errors in the core engine and CUDA kernels.
 
-### 3. **Pattern Discovery** 🔍
-- Implement and validate threshold combinations for predictive signals (e.g., `stability < 0.3 && entropy > 0.7` for sell signals).
-- Analyze 24-hour rolling contexts for pattern consistency.
-- Log and visualize detected patterns in the Signals and Engine Tabs.
+2.  **Correct Namespace and API Usage**: ✅
+    -   Fix incorrect `ConfigManager` access in `service_connector.cpp` (must be `sep::config::ConfigManager`).
+    -   Resolve undeclared identifiers (`backtester`, `ServiceProxyEngine`, `TechnicalIndicator`, etc.) by adding the necessary `#include` directives and namespace qualifications.
+    -   Address missing `globalEventBus` and `OrderUpdateEvent` usage in `oanda_connector.cpp` by creating and including a proper event-handling header.
 
-### 4. **Validation Framework** ✅
-- Test signal accuracy against historical price movements using the backtesting framework.
-- Measure correlations between metrics and market direction in the Engine Tab.
-- Build confidence in signal reliability before demo trading.
+3.  **Address Miscellaneous Compilation Errors**: ✅
+    -   Fix the typo (`undeclared identifier 's'`) in `pattern_metric_engine.cpp`.
+    -   Resolve the missing `implot.h` dependency for the Signals Tab.
+    -   Add missing `<cstdint>` include in `emitterutils.cpp`.
 
-## Current Architecture
+## Architecture (Post-Build-Fix)
 
-The data pipeline, detailed in [DATA.md](DATA.md), is verified:
-**OANDA Market Data → Quantum Pattern Engine → Workbench Dashboard → Signal Analysis → Trading Decisions**
+The intended architecture, detailed in [DATA.md](DATA.md) and [GUI.md](GUI.md), remains the goal once the project is compilable.
 
-The workbench GUI ([GUI.md](GUI.md)) is being refactored into three tabs:
-- **Signals Tab**: Candlestick charts, signal overlays, and metric plots for market analysis.
-- **Engine Tab**: Quantum diagnostics with metric graphs and pattern analysis tools.
-- **Backend Tab**: Trading terminal, backtesting interface, and system monitoring.
+-   **Data Pipeline**: OANDA Market Data → Quantum Pattern Engine → Workbench Dashboard → Signal Analysis
+-   **GUI**: A 3-tab workbench for Signals, Engine Diagnostics, and Backend Operations.
 
-## Key Components Status
+## Key Components Status (Compilation)
 
--   **OandaConnector** (`src/connectors/oanda_connector.cpp`): Fetches real-time and historical OHLC candles with 50ms rate limiting. **FUNCTIONAL, but indirectly affected by `imgui.h` include issue.**
--   **PatternMetricEngine** (`src/quantum/pattern_metric_engine.cpp`): CUDA-accelerated metric computation (coherence, stability, entropy). **FUNCTIONAL, but blocked from building by `engine.cu` which depends on `common_structs.h`.**
--   **MetricsMonitor** (`src/apps/workbench/core/metrics_monitor.cpp`): Real-time metric generation. **FUNCTIONAL, but UI integration blocked.**
--   **DataParser** (`src/engine/data_parser.cpp`): Converts OANDA JSON to quantum patterns. **FUNCTIONAL, but blocked from building by `common_structs.h` dependency.**
--   **ServiceConnector** (`src/apps/workbench/core/service_connector.cpp`): Manages connection to SEP API/local engine. **COMPILATION BLOCKED by `sep::workbench::Config` access issue.**
--   **WorkbenchEngine** (`src/apps/workbench/core/workbench_core.cpp`): Main application loop and GUI manager. **COMPILATION BLOCKED by multiple type/include issues.**
+-   **OandaConnector** (`src/connectors/oanda_connector.cpp`): **BUILD FAILED.** Blocked by missing `globalEventBus` and `OrderUpdateEvent` types.
+-   **PatternMetricEngine** (`src/quantum/pattern_metric_engine.cpp`): **BUILD FAILED.** Blocked by an `undeclared identifier 's'` typo. Also blocked by `engine.cu`'s dependency on the problematic `common_structs.h`.
+-   **DataParser** (`src/engine/data_parser.cpp`): **BUILD FAILED.** Blocked by dependency on `common_structs.h` which incorrectly includes `imgui.h`.
+-   **ServiceConnector** (`src/apps/workbench/core/service_connector.cpp`): **BUILD FAILED.** Blocked by incorrect namespace for `ConfigManager` and undeclared `DataLoader`.
+-   **SignalsTabController** (`src/apps/workbench/tabs/signals_tab_controller.cpp`): **BUILD FAILED.** Blocked by missing `implot.h` and undeclared chart-related types.
+-   **Workbench Core** (`src/apps/workbench/core/workbench_main.cpp`): **BUILD FAILED.** Blocked by multiple undeclared type errors stemming from header issues in its dependencies.
 
 ## Next Milestones (Contingent on Build Fixes)
 
-1.  **Fix All Critical Build Errors**: Enable successful compilation of the entire project. This is the **single most important blocking item**.
-2.  **Chart Rendering**: Implement robust candlestick and metric charts in Signals Tab.
-3.  **48-Hour Data Sample**: Create EUR/USD M1 dataset for testing and visualization.
-4.  **Dashboard Integration**: Connect metrics and signals to all tabs with interactive plots.
-5.  **Threshold Detection**: Add visual indicators for pattern crossings in Signals Tab.
-6.  **Demo Trading**: Enable paper trading with OANDA demo account.
+1.  **Achieve a Clean Build**: Successfully compile the entire project with zero errors. **This is the only current milestone.**
+2.  **Render Charts**: Implement candlestick and metric charts in the Signals Tab.
+3.  **Integrate Live Data**: Connect the OANDA data feed to the charts.
+4.  **Validate Signals**: Begin backtesting and validating signal generation logic.
 
-## Build & Run
+## Build & Run (Currently Failing)
 
 ```bash
-./build.sh                    # Build with verified components (currently fails)
-./run_workbench.sh            # Launch integrated dashboard (currently fails)
+./build.sh          # Expected to FAIL until errors are resolved
+./run_workbench.sh  # Cannot be run
 ```
 
 ## Key Files
 
--   [`DATA.md`](DATA.md): Pipeline and data flow architecture.
--   [`GUI.md`](GUI.md): Workbench GUI architecture and visual layout.
--   [`TODO.md`](TODO.md): Detailed development roadmap.
--   [`WORK.md`](WORK.md): Component status and integration details.
--   [`backtesting_architecture.md`](backtesting_architecture.md): Backtesting framework design.
--   [`../src/apps/workbench/`](../src/apps/workbench/): Dashboard and tab code.
--   [`../examples/pattern_metric_example.cpp`](../examples/pattern_metric_example.cpp): Metric analysis example.
+-   [`DATA.md`](DATA.md): Data pipeline architecture and its current blocked state.
+-   [`GUI.md`](GUI.md): Workbench GUI architecture and the refactoring plan to fix build issues.
+-   [`TODO.md`](TODO.md): Detailed roadmap, with build fixes as the top priority.
+```

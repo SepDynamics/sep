@@ -1,15 +1,70 @@
 # SEP Engine Workbench GUI Architecture
 
-## Current Problem Analysis
-The SEP Workbench GUI (`src/apps/workbench/workbench_core.cpp`) is disorganized, with overlapping responsibilities and **critical compilation issues preventing chart rendering and overall application launch**. The refactoring plan adopts a 3-tab architecture with a focus on clear visual layouts and robust chart rendering to address these issues.
+## Current Problem Analysis: **CRITICAL BUILD FAILURE**
 
-### Current Architecture Issues
--   **TradingHUD** (`src/apps/workbench/core_old/trading_hud.cpp`, 549+ lines): Monolithic, handling charts, signals, and trading.
--   **MetricsDashboard** (`src/apps/workbench/core_old/metrics_dashboard.cpp`): Duplicates signal and OANDA integration.
--   **Chart Rendering Failure**: **Compilation errors involving `CandleData` and `std::deque` in `data_parser.cpp` and `engine.cu` are directly preventing chart display.** These stem from `imgui.h` being indirectly included in core libraries via `common_structs.h`.
--   **Core Application Launch Failure**: `workbench_main.cpp` and `engine_tab_controller.h` are failing to compile due to undeclared types (`ServiceProxyEngine`, `backtester`) and incorrect namespace access for `sep::config::ConfigManager`.
--   **Build Warnings**: `cert-err33-c`, `security.FloatLoopCounter` in `imgui_impl_opengl3.cpp`, `imgui_demo.cpp`, `signals_tab_controller.cpp`. These need to be addressed after critical errors.
--   **Tight Coupling**: Components lack separation, complicating updates.
+The SEP Workbench GUI is currently **unbuildable and non-functional**. Critical compilation errors, primarily stemming from an architectural flaw where core engine components depend on GUI-specific headers (`imgui.h`), prevent the application from launching. Chart rendering, a key feature, is completely blocked.
+
+The immediate goal is to refactor the code to resolve these build errors. The proposed 3-tab architecture remains the target design *after* the build is stabilized.
+
+### Primary Compilation Blockers
+-   **Fatal Header Conflict**: Core files like `data_parser.cpp` and `engine.cu` fail to build because they indirectly include `imgui.h` via `apps/workbench/core/common_structs.h`. This is the most severe issue.
+-   **Missing `implot.h`**: The `signals_tab_controller.cpp` fails because the `implot.h` header for charting is missing or not configured in the build system.
+-   **Undeclared Types**: `signals_tab_controller.h` uses undeclared types like `TechnicalIndicator` and `TrendLine`. These GUI-specific types need to be defined within the workbench library, not in a shared header.
+-   **Namespace/API Errors**: The `service_connector.cpp` and `workbench_main.cpp` have multiple errors due to incorrect namespace usage (`sep::config::ConfigManager`) and missing includes for `ServiceProxyEngine` and `backtester`.
+-   **Static Analysis Warnings**: The `report.md` file highlights numerous high and medium severity issues in third-party libraries (`imgui`, `yaml-cpp`) that should be addressed post-build-fix to ensure stability.
+
+## Proposed 3-Tab Architecture (Post-Build-Fix)
+
+The GUI will be organized into three distinct tabs to separate concerns and improve usability.
+
+### Tab 1: **SIGNALS** - Trading & Market Analysis
+-   **Purpose**: Clean, interactive interface for signal visualization and market analysis.
+-   **Layout**: Candlestick chart (70%) with SEP signal overlays. Metric plots for Coherence, Stability, and Entropy (30%).
+
+### Tab 2: **ENGINE** - SEP Engine Diagnostics
+-   **Purpose**: Detailed quantum diagnostics and performance monitoring.
+-   **Layout**: Time series plots for core metrics, pattern frequency histograms, and a correlation matrix.
+
+### Tab 3: **BACKEND** - Trading Operations & Backtesting
+-   **Purpose**: Manage trading, backtesting, and system health.
+-   **Layout**: Trading terminal for order placement, a backtesting suite with performance charts, and a system monitor for API/data status.
+
+## Detailed Refactoring Plan
+
+### Phase 1: Critical Build Fixes (Immediate Priority)
+This phase focuses exclusively on making the project compilable again.
+
+#### 1.1: Decouple Core Logic from GUI
+-   **Action**: Create `src/common/financial_data_types.h`. Move all non-GUI data structures (`CandleData`, `TickData`, `SEPSignalData`, etc.) from `apps/workbench/core/common_structs.h` into this new header.
+-   **Action**: Update all core engine files (`data_parser.h`, `engine.cu`, etc.) to include `financial_data_types.h` instead of `common_structs.h`.
+-   **Action**: Strip `imgui.h` from `common_structs.h`. This header should now only contain structs specific to the GUI, like `ChartZoom` or `EnhancedHoverInfo`.
+
+#### 1.2: Fix Namespace and Include Errors
+-   **Action**: In `service_connector.cpp`, change `workbench::Config::getInstance()` to the correct `sep::config::ConfigManager::getInstance()`.
+-   **Action**: In `workbench_main.cpp`, `engine_tab_controller.h`, etc., add the necessary `#include` statements for `ServiceProxyEngine`, `backtester`, `DataLoader` and qualify them with their correct namespaces (e.g., `sep::core::ServiceProxyEngine`).
+
+#### 1.3: Resolve Missing Dependencies and Typos
+-   **Action**: Integrate `implot` as a third-party dependency and ensure `implot.h` is correctly included in `signals_tab_controller.cpp`.
+-   **Action**: Correct the `undeclared identifier 's'` typo in `pattern_metric_engine.cpp`.
+-   **Action**: Add `#include <cstdint>` in `emitterutils.cpp`.
+
+### Phase 2: Tab-Specific Implementation (Post-Build-Fix)
+-   **Action**: Implement the `SignalsTabController` with candlestick charts and metric plots.
+-   **Action**: Implement the `EngineTabController` with diagnostic panels.
+-   **Action**: Implement the `BackendTabController` with trading and backtesting UI.
+
+## Implementation Priority
+
+1.  **Critical Build Errors (IMMEDIATE)**: Address all compilation errors listed in Phase 1 of the refactoring plan. **This is the single highest priority and blocks all other work.**
+2.  **Chart Rendering** (Post-Build-Fix): Implement robust candlestick charts in `SignalsTabController`.
+3.  **Data Flow Integration** (Post-Build-Fix): Connect the OANDA connector and `PatternMetricEngine` to the GUI tabs.
+4.  **Backend & Engine Tabs** (Post-Build-Fix): Build out the UI for the remaining tabs.
+
+## Success Metrics
+-   **Compilation**: The project builds successfully with zero errors.
+-   **Chart Rendering**: Candlestick charts are visible and update at >10Hz.
+-   **Tab Separation**: UI components are logically separated with clear responsibilities.
+-   **Maintainability**: Core engine can be modified and built without affecting the GUI.
 
 ### Component Responsibility Overlap
 ```

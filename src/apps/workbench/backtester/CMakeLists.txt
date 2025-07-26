@@ -4,6 +4,9 @@ add_library(sep_backtester STATIC
     backtester.cpp
     data/data_loader.cpp
     data/json_data_parser.cpp
+    core/backtester_engine.cpp
+    core/performance_metrics.cpp
+    strategies/sep_signal_strategy.cpp
 )
 
 add_executable(data_loader_test data/data_loader_test.cpp)

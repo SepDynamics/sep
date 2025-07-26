@@ -5,6 +5,8 @@
 #include <numeric>
 #include <vector>
 
+#include "apps/workbench/backtester/strategies/sep_signal_strategy.h"
+
 BacktesterEngine::BacktesterEngine() {
 }
 
@@ -13,6 +15,10 @@ BacktesterEngine::~BacktesterEngine() {
 
 sep::workbench::backtester::BacktestResult BacktesterEngine::run(const std::string& dataset_path) {
     sep::quantum::PatternMetricEngine engine;
+    if (engine.init(nullptr) != sep::SEPResult::SUCCESS) {
+        std::cerr << "Failed to initialize PatternMetricEngine" << std::endl;
+        return {};
+    }
     return run(dataset_path, &engine);
 }
 
@@ -23,10 +29,10 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     if (dataset_path == "EURUSD_48H") {
         loader.load_48h_sample();
     } else {
-        loader.loadData(dataset_path);
+        loader.load_data(dataset_path);
     }
 
-    const auto& candles = loader.getCandleData();
+    const auto& candles = loader.get_data();
     sep::workbench::backtester::BacktestResult result{};
     if (candles.empty()) {
         return result;
@@ -35,19 +41,9 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     if (!engine) {
         return result;
     }
-    sep::quantum::PatternMetricEngine& engine_ref = *engine;
-    std::vector<uint8_t> byte_stream;
-    byte_stream.reserve(candles.size() * sizeof(sep::workbench::CandleData));
-    for (const auto& candle : candles) {
-        const uint8_t* bytes = reinterpret_cast<const uint8_t*>(&candle);
-        byte_stream.insert(byte_stream.end(), bytes, bytes + sizeof(sep::workbench::CandleData));
-    }
 
-    engine_ref.ingestData(byte_stream.data(), byte_stream.size());
-    engine_ref.evolvePatterns();
-    engine_ref.computeMetrics();
-
-    const auto& signals = engine_ref.getSignals();
+    SEPSignalStrategy strategy;
+    auto signals = strategy.execute(candles);
     std::vector<float> prices;
     prices.reserve(candles.size());
     for (const auto& candle : candles) {

@@ -4,6 +4,7 @@
 #include "tabs/signals_tab_controller.h"
 #include "tabs/engine_tab_controller.h"
 #include "tabs/backend_tab_controller.h"
+#include "backtester/ui/backtester_tab_controller.h"
 #include "ui_layout_manager.h"
 #include "multi_timeframe_analyzer.h"
 
@@ -110,6 +111,7 @@ private:
     std::unique_ptr<SignalsTabController> signals_tab_;
     std::unique_ptr<EngineTabController> engine_tab_;
     std::unique_ptr<BackendTabController> backend_tab_;
+    std::unique_ptr<BacktesterTabController> backtester_tab_;
     std::unique_ptr<QuantumSignalGenerator> signal_generator_;
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     std::unique_ptr<MultiTimeframeAnalyzer> multi_timeframe_analyzer_;

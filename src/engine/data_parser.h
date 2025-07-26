@@ -1,6 +1,8 @@
 #pragma once
 
 #include "engine/standard_includes.h"
+#include <map>
+#include "apps/workbench/core/multi_timeframe_analyzer.h"
 
 namespace sep {
     namespace quantum
@@ -57,6 +59,10 @@ public:
 
     // Convert patterns to PinStates for engine compatibility
     std::vector<sep::PinState> toPinStates(const std::vector<sep::quantum::Pattern>& patterns);
+
+    // Export correlation metrics to CSV
+    bool exportCorrelationCSV(const std::string& path,
+                              const std::map<std::string, workbench::CorrelationMetrics>& data) const;
 
 private:
     // Format detection

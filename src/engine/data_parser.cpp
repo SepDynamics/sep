@@ -515,4 +515,23 @@ uint64_t DataParser::parseTimestamp(const std::string& timestamp) const
         now.time_since_epoch()).count();
 }
 
+bool DataParser::exportCorrelationCSV(const std::string& path,
+                                      const std::map<std::string, workbench::CorrelationMetrics>& data) const {
+    std::ofstream file(path);
+    if (!file.is_open()) {
+        return false;
+    }
+    file << "timeframe,coh_pearson,coh_spearman,stab_pearson,stab_spearman,entropy_pearson,entropy_spearman\n";
+    for (const auto& [tf, metrics] : data) {
+        file << tf << ','
+             << metrics.coherence_pearson << ','
+             << metrics.coherence_spearman << ','
+             << metrics.stability_pearson << ','
+             << metrics.stability_spearman << ','
+             << metrics.entropy_pearson << ','
+             << metrics.entropy_spearman << "\n";
+    }
+    return true;
+}
+
 } // namespace sep

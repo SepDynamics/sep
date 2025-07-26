@@ -1,5 +1,7 @@
 #include "engine_tab_controller.h"
 #include "core/multi_timeframe_analyzer.h"
+#include "engine/data_parser.h"
+#include <map>
 
 #include <iostream>
 
@@ -216,9 +218,32 @@ void EngineTabController::renderCorrelationPanel() {
 
     auto correlation_metrics = multi_timeframe_analyzer_->calculateCorrelationMetrics(selected_timeframe);
 
-    ImGui::Text("Coherence-Price Correlation: %.3f", correlation_metrics.coherence_price_correlation);
-    ImGui::Text("Stability-Price Correlation: %.3f", correlation_metrics.stability_price_correlation);
-    ImGui::Text("Entropy-Price Correlation: %.3f", correlation_metrics.entropy_price_correlation);
+    ImGui::Text("Correlation Coefficients");
+    ImGui::Columns(3);
+    ImGui::Text("Metric"); ImGui::NextColumn();
+    ImGui::Text("Pearson"); ImGui::NextColumn();
+    ImGui::Text("Spearman"); ImGui::NextColumn();
+    ImGui::Separator();
+
+    ImGui::Text("Coherence"); ImGui::NextColumn();
+    ImGui::Text("%.3f", correlation_metrics.coherence_pearson); ImGui::NextColumn();
+    ImGui::Text("%.3f", correlation_metrics.coherence_spearman); ImGui::NextColumn();
+
+    ImGui::Text("Stability"); ImGui::NextColumn();
+    ImGui::Text("%.3f", correlation_metrics.stability_pearson); ImGui::NextColumn();
+    ImGui::Text("%.3f", correlation_metrics.stability_spearman); ImGui::NextColumn();
+
+    ImGui::Text("Entropy"); ImGui::NextColumn();
+    ImGui::Text("%.3f", correlation_metrics.entropy_pearson); ImGui::NextColumn();
+    ImGui::Text("%.3f", correlation_metrics.entropy_spearman); ImGui::NextColumn();
+    ImGui::Columns(1);
+
+    ImGui::InputText("Export Path", correlation_export_path_, sizeof(correlation_export_path_));
+    if (ImGui::Button("Export")) {
+        sep::DataParser parser;
+        std::map<std::string, workbench::CorrelationMetrics> data{{selected_timeframe, correlation_metrics}};
+        parser.exportCorrelationCSV(correlation_export_path_, data);
+    }
 
     ImGui::End();
 }

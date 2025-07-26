@@ -1,6 +1,7 @@
 #include "performance_metrics.h"
 
 #include <cmath>
+#include <numeric>
 #include <vector>
 
 PerformanceMetrics::PerformanceMetrics() {
@@ -14,11 +15,7 @@ float PerformanceMetrics::computeSharpeRatio(const std::vector<float>& pnl_serie
         return 0.0f;
     }
 
-    float sum = 0.0f;
-    for (float p : pnl_series) {
-        sum += p;
-    }
-
+    float sum = std::accumulate(pnl_series.begin(), pnl_series.end(), 0.0f);
     float mean = sum / static_cast<float>(pnl_series.size());
 
     float variance = 0.0f;
@@ -26,7 +23,6 @@ float PerformanceMetrics::computeSharpeRatio(const std::vector<float>& pnl_serie
         float diff = p - mean;
         variance += diff * diff;
     }
-
     if (pnl_series.size() > 1) {
         variance /= static_cast<float>(pnl_series.size() - 1);
     }
@@ -49,18 +45,15 @@ float PerformanceMetrics::computeMaxDrawdown(const std::vector<float>& pnl_serie
     float equity = 0.0f;
     float peak = 0.0f;
     float max_dd = 0.0f;
-
     for (float p : pnl_series) {
         equity += p;
         if (equity > peak) {
             peak = equity;
         }
-
         float drawdown = peak - equity;
         if (drawdown > max_dd) {
             max_dd = drawdown;
         }
     }
-
     return max_dd;
 }

@@ -572,6 +572,7 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 if (order_callback_) order_callback_(info);
                 sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
             }
+            refreshOrders();
             return json_resp;
         } catch (const std::exception& e) {
             last_error_ = "Failed to parse placeOrder response: " + std::string(e.what());
@@ -725,6 +726,18 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
 
     auto candles = getHistoricalData(instrument, "M1", std::to_string(start_t), std::to_string(now_t), 48 * 60);
     if (candles.empty()) return false;
+
+    auto validation = validateCandleSequence(candles, "M1");
+    if (!validation.valid || candles.size() != static_cast<size_t>(48 * 60))
+    {
+        last_error_ = "Historical data failed validation";
+        for (const auto& err : validation.errors)
+            last_error_ += " - " + err;
+        if (candles.size() != static_cast<size_t>(48 * 60))
+            last_error_ += " - expected 2880 got " + std::to_string(candles.size());
+        std::cerr << "[OandaConnector] Error: " << last_error_ << std::endl;
+        return false;
+    }
 
     std::vector<sep::CandleData> out;
     out.reserve(candles.size());

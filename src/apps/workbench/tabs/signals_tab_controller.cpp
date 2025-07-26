@@ -34,8 +34,7 @@ bool SignalsTabController::initialize() {
     return true;
 }
 
-void SignalsTabController::render() {
-    ImGui::Columns(2, "SignalsColumns", true);
+void SignalsTabController::renderThresholdPanel() {
     ImGui::Begin("Signal Thresholds");
     ImGui::Text("BUY thresholds");
     ImGui::SliderFloat("Buy Coherence", &buy_min_coherence_, 0.0f, 1.0f);
@@ -60,7 +59,11 @@ void SignalsTabController::render() {
         }
     }
     ImGui::End();
+}
 
+void SignalsTabController::render() {
+    ImGui::Columns(2, "SignalsColumns", true);
+    renderThresholdPanel();
     ImGui::NextColumn();
 
     if (metrics_monitor_) {
@@ -274,6 +277,14 @@ void SignalsTabController::renderMainChart() {
     updatePriceRange();
 
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    if (!draw_list) return;
+    if (!draw_list) return;
+    if (!draw_list) return;
+    if (!draw_list) return;
+    if (!draw_list) return;
+    if (!draw_list) return;
+    if (!draw_list) return;
+    if (!draw_list) return;
 
     ImU32 bg_color = IM_COL32(15, 15, 25, 255);
     draw_list->AddRectFilled(chart_pos_, 
@@ -511,28 +522,54 @@ void SignalsTabController::renderVolumeChart() {
 void SignalsTabController::renderMetricsGraphs() {
     if (!metrics_monitor_) return;
 
-    const auto& sys = metrics_monitor_->getSystemMetrics();
-    coherence_history_.push_back(sys.avg_coherence);
-    stability_history_.push_back(sys.avg_stability);
-    entropy_history_.push_back(sys.avg_entropy);
+    const auto& roll = metrics_monitor_->getRollingMetrics();
+    coherence_history_.push_back(roll.coherence_1h_avg);
+    stability_history_.push_back(roll.stability_1h_avg);
+    entropy_history_.push_back(roll.entropy_1h_avg);
+    coherence_history_4h_.push_back(roll.coherence_4h_avg);
+    stability_history_4h_.push_back(roll.stability_4h_avg);
+    entropy_history_4h_.push_back(roll.entropy_4h_avg);
 
     const size_t MAX_POINTS = 240; // roughly 4 hours if updated each minute
     if (coherence_history_.size() > MAX_POINTS) coherence_history_.pop_front();
     if (stability_history_.size() > MAX_POINTS) stability_history_.pop_front();
     if (entropy_history_.size() > MAX_POINTS) entropy_history_.pop_front();
+    if (coherence_history_4h_.size() > MAX_POINTS) coherence_history_4h_.pop_front();
+    if (stability_history_4h_.size() > MAX_POINTS) stability_history_4h_.pop_front();
+    if (entropy_history_4h_.size() > MAX_POINTS) entropy_history_4h_.pop_front();
 
     ImVec2 graph_size(200, 60);
-    ImGui::PlotLines("Coherence", coherence_history_.data(), coherence_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Coherence 1h", coherence_history_.data(), coherence_history_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
+    if (ImGui::IsItemHovered()) {
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.MouseWheel != 0.0f) {
+            metrics_scale_ *= (io.MouseWheel > 0 ? 0.9f : 1.1f);
+            metrics_scale_ = std::clamp(metrics_scale_, 0.1f, 2.0f);
+        }
+        if (ImGui::IsMouseDragging(ImGuiMouseButton_Middle)) {
+            if (!metrics_panning_) {
+                metrics_pan_start_ = io.MousePos;
+                metrics_panning_ = true;
+            } else {
+                float delta = io.MouseDelta.y / graph_size.y * metrics_scale_;
+                metrics_offset_ += delta;
+            }
+        } else {
+            metrics_panning_ = false;
+        }
+    }
     auto rect_min = ImGui::GetItemRectMin();
     auto rect_max = ImGui::GetItemRectMax();
     ImDrawList* dl = ImGui::GetWindowDrawList();
-    const auto& roll = metrics_monitor_->getRollingMetrics();
+    if (!dl) return;
     float y1 = rect_max.y - roll.coherence_1h_avg * (rect_max.y - rect_min.y);
     float y4 = rect_max.y - roll.coherence_4h_avg * (rect_max.y - rect_min.y);
     drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
     drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
 
-    ImGui::PlotLines("Stability", stability_history_.data(), stability_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Coherence 4h", coherence_history_4h_.data(), coherence_history_4h_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
+    ImGui::PlotLines("Stability 1h", stability_history_.data(), stability_history_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
+    ImGui::PlotLines("Stability 4h", stability_history_4h_.data(), stability_history_4h_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
     rect_min = ImGui::GetItemRectMin();
     rect_max = ImGui::GetItemRectMax();
     y1 = rect_max.y - roll.stability_1h_avg * (rect_max.y - rect_min.y);
@@ -540,7 +577,8 @@ void SignalsTabController::renderMetricsGraphs() {
     drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
     drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
 
-    ImGui::PlotLines("Entropy", entropy_history_.data(), entropy_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Entropy 1h", entropy_history_.data(), entropy_history_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
+    ImGui::PlotLines("Entropy 4h", entropy_history_4h_.data(), entropy_history_4h_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
     rect_min = ImGui::GetItemRectMin();
     rect_max = ImGui::GetItemRectMax();
     y1 = rect_max.y - roll.entropy_1h_avg * (rect_max.y - rect_min.y);
@@ -772,7 +810,13 @@ std::chrono::system_clock::time_point SignalsTabController::screenToTime(float x
 
 void SignalsTabController::updatePriceRange() {
     if (candle_data_.empty()) return;
-    
+
+    if (chart_zoom_.is_zoomed) {
+        price_min_ = chart_zoom_.price_min;
+        price_max_ = chart_zoom_.price_max;
+        return;
+    }
+
     price_min_ = std::numeric_limits<double>::max();
     price_max_ = std::numeric_limits<double>::lowest();
     
@@ -807,6 +851,31 @@ void SignalsTabController::handleMouseInput() {
         hover_info_.active = true;
         hover_info_.position = mouse_pos;
         updateHoverInfo();
+
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.MouseWheel != 0.0f) {
+            double price_at_cursor = screenToPrice(mouse_pos.y);
+            double range = price_max_ - price_min_;
+            double scale = io.MouseWheel > 0 ? 0.9 : 1.1;
+            chart_zoom_.price_min = price_at_cursor - (price_at_cursor - price_min_) * scale;
+            chart_zoom_.price_max = price_at_cursor + (price_max_ - price_at_cursor) * scale;
+            chart_zoom_.is_zoomed = true;
+        }
+
+        if (ImGui::IsMouseDragging(ImGuiMouseButton_Right)) {
+            if (!is_panning_) {
+                pan_start_pos_ = mouse_pos;
+                is_panning_ = true;
+            } else {
+                float delta_y = mouse_pos.y - pan_start_pos_.y;
+                double price_delta = (delta_y / chart_size_.y) * (price_max_ - price_min_);
+                chart_zoom_.price_min += price_delta;
+                chart_zoom_.price_max += price_delta;
+                pan_start_pos_ = mouse_pos;
+            }
+        } else {
+            is_panning_ = false;
+        }
     } else {
         hover_info_.active = false;
     }

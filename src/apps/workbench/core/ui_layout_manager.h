@@ -159,6 +159,7 @@ public:
     // Viewport Management
     void updateViewport();
     ImVec2 getViewportSize() const { return viewport_size_; }
+    void setRefreshInterval(float seconds) { refresh_interval_ = seconds; }
     
 private:
     std::map<std::string, UIPanel> panels_;
@@ -168,6 +169,8 @@ private:
     float global_spacing_ = 4.0f;
     bool customization_mode_ = false;
     int active_tab_ = 0;
+    std::chrono::steady_clock::time_point last_render_{};
+    float refresh_interval_ = 0.05f;
     
     // Helper methods
     void renderCustomizationControls();

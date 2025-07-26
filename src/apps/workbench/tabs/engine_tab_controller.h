@@ -11,7 +11,7 @@
 #include "quantum/coherence_manager.h"
 #include "quantum/pattern_metric_engine.h"
 #include "../backtester/backtester.h"
-#include "../backtester/data_loader.h"
+#include "../backtester/data/data_loader.h"
 
 namespace sep::workbench {
 

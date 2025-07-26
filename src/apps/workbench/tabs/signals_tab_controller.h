@@ -24,6 +24,7 @@ public:
 
     bool initialize();
     void render();
+    void renderThresholdPanel();
     void shutdown();
 
     void setOandaConnector(sep::connectors::OandaConnector* connector);
@@ -66,7 +67,7 @@ private:
     float buy_min_coherence_ = 0.7f;
     float buy_min_stability_ = 0.6f;
     float buy_max_entropy_ = 0.3f;
-    float sell_max_stability_ = 0.4f;
+    float sell_max_stability_ = 0.3f;
     float sell_min_entropy_ = 0.7f;
 
     // Chart dimensions and state
@@ -90,6 +91,17 @@ private:
     std::deque<float> coherence_history_;
     std::deque<float> stability_history_;
     std::deque<float> entropy_history_;
+    std::deque<float> coherence_history_1h_;
+    std::deque<float> coherence_history_4h_;
+    std::deque<float> stability_history_1h_;
+    std::deque<float> stability_history_4h_;
+    std::deque<float> entropy_history_1h_;
+    std::deque<float> entropy_history_4h_;
+
+    float metrics_scale_ = 1.0f;
+    float metrics_offset_ = 0.0f;
+    bool metrics_panning_ = false;
+    ImVec2 metrics_pan_start_{};
 
     // Utility functions
     ImVec2 priceToScreen(double price, std::chrono::system_clock::time_point time);

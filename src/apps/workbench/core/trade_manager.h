@@ -76,6 +76,7 @@ public:
 
     const std::vector<double>& getROIHistory() const { return roi_history_; }
     const std::vector<double>& getWinLossHistory() const { return win_loss_history_; }
+    const std::vector<double>& getBalanceHistory() const { return balance_history_; }
 
 private:
     void updatePositions(const Order& order);
@@ -98,6 +99,7 @@ private:
 
     std::vector<double> roi_history_;
     std::vector<double> win_loss_history_;
+    std::vector<double> balance_history_;
 };
 
 } // namespace workbench

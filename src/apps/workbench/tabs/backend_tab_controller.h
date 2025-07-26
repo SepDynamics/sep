@@ -9,7 +9,7 @@
 #include "../core/trade_manager.h"
 #include "../core/ui_layout_manager.h"
 #include "connectors/oanda_connector.h"
-#include "../backtester/data_loader.h"
+#include "../backtester/data/data_loader.h"
 #include "quantum/pattern_metric_engine.h"
 #include "../core/service_proxy_engine.h"
 #include <vector>
@@ -49,7 +49,6 @@ private:
     std::unique_ptr<backtester::Backtester> backtester_;
     std::unique_ptr<sep::workbench::backtester::DataLoader> data_loader_;
     std::unique_ptr<sep::quantum::PatternMetricEngine> pattern_engine_;
-    std::unique_ptr<sep::workbench::TradeManager> trade_manager_;
     FileDialog file_dialog_;
 
     // UI State
@@ -69,6 +68,7 @@ private:
     bool paper_trading_ = false;
 
     std::vector<std::string> trade_history_;
+    std::vector<float> equity_curve_;
 };
 
 } // namespace sep::workbench

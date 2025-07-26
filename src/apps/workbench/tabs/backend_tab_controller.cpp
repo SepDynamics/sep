@@ -54,9 +54,8 @@ void BackendTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> mon
 
 void BackendTabController::setServiceConnector(ServiceConnector* connector) {
     service_connector_ = connector;
-    if (service_connector_ && service_connector_->getOandaConnector()) {
-        trade_manager_ = std::make_unique<sep::workbench::TradeManager>(
-            service_connector_->getOandaConnector());
+    if (service_connector_) {
+        trade_manager_ = service_connector_->getTradeManager();
     }
 }
 
@@ -100,6 +99,10 @@ void BackendTabController::renderOrderManagementPanel() {
     if (trade_manager_) {
         ImGui::Text("Balance: %.2f", trade_manager_->getAccountBalance());
         ImGui::Text("Realized PnL: %.2f", trade_manager_->getRealizedPnL());
+        const auto& hist = trade_manager_->getBalanceHistory();
+        if (!hist.empty()) {
+            ImGui::PlotLines("Balance History", hist.data(), hist.size());
+        }
     }
     ImGui::End();
 
@@ -125,10 +128,8 @@ void BackendTabController::renderOrderManagementPanel() {
     }
 
     if (ImGui::Button("Refresh Orders and Positions")) {
-        if (trade_manager_) {
-            // no-op: local orders already stored
-        }
-        if (service_connector_) {
+        if (service_connector_ && service_connector_->getOandaConnector()) {
+            service_connector_->getOandaConnector()->refreshOrders();
             open_positions_ = service_connector_->getOandaConnector()->getOpenPositions();
             orders_ = service_connector_->getOandaConnector()->getOrders();
         }
@@ -204,6 +205,17 @@ void BackendTabController::renderBacktesterPanel() {
     if (ImGui::Button("Run Backtest")) {
         data_loader_->load_data(backtest_file_buffer_);
         backtester_->run(pattern_engine_.get(), data_loader_.get());
+        equity_curve_.clear();
+        const auto& trades = backtester_->getResult().trades;
+        float equity = 0.0f;
+        equity_curve_.push_back(equity);
+        for (const auto& t : trades) {
+            float diff = (t.type == sep::quantum::SignalType::BUY)
+                             ? t.exit_price - t.entry_price
+                             : t.entry_price - t.exit_price;
+            equity += diff;
+            equity_curve_.push_back(equity);
+        }
     }
     ImGui::SameLine();
     if (ImGui::Button("Run 48h Sample")) {
@@ -211,6 +223,17 @@ void BackendTabController::renderBacktesterPanel() {
         backtest_file_buffer_[sizeof(backtest_file_buffer_) - 1] = '\0';
         data_loader_->load_data(backtest_file_buffer_);
         backtester_->run(pattern_engine_.get(), data_loader_.get());
+        equity_curve_.clear();
+        const auto& trades = backtester_->getResult().trades;
+        float equity = 0.0f;
+        equity_curve_.push_back(equity);
+        for (const auto& t : trades) {
+            float diff = (t.type == sep::quantum::SignalType::BUY)
+                             ? t.exit_price - t.entry_price
+                             : t.entry_price - t.exit_price;
+            equity += diff;
+            equity_curve_.push_back(equity);
+        }
     }
 
     const auto& result = backtester_->getResult();
@@ -219,6 +242,10 @@ void BackendTabController::renderBacktesterPanel() {
     ImGui::Text("Total PnL: %.2f", result.total_pnl);
     ImGui::Text("Sharpe Ratio: %.2f", result.sharpe_ratio);
     ImGui::Text("Max Drawdown: %.2f", result.max_drawdown);
+    if (!equity_curve_.empty()) {
+        ImGui::PlotLines("Equity Curve", equity_curve_.data(),
+                         static_cast<int>(equity_curve_.size()));
+    }
 
     ImGui::End();
 }

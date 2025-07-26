@@ -7,6 +7,10 @@ QuantumSignalGenerator::QuantumSignalGenerator() {
     strategy_ = nullptr;
 }
 
+void QuantumSignalGenerator::setMemoryManager(sep::memory::MemoryTierManager* manager) {
+    memory_manager_ = manager;
+}
+
 void QuantumSignalGenerator::setStrategy(std::unique_ptr<SignalStrategy> strategy) {
     strategy_ = std::move(strategy);
 }
@@ -19,10 +23,14 @@ SignalResult QuantumSignalGenerator::generateSignal(const dag::DagNode& pattern)
 }
 
 void QuantumSignalGenerator::tick() {
-    if (strategy_) {
-        // Use empty DAG node since engine connection not available yet
-        dag::DagNode empty_node;
-        last_signal_ = strategy_->generateSignal(empty_node);
+    if (strategy_ && memory_manager_) {
+        auto& dag = memory_manager_->getDagGraph();
+        const dag::DagNode* node = dag.getMostRecentNode();
+        if (node) {
+            last_signal_ = strategy_->generateSignal(*node);
+        } else {
+            last_signal_ = {SignalType::HOLD, 0.0f, "No data"};
+        }
     } else {
         last_signal_ = {SignalType::HOLD, 0.0f, "No strategy set"};
     }

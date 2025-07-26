@@ -159,6 +159,13 @@ uint32_t DagGraph::getGeneration(uint64_t id) const {
     return (it != nodes_.end()) ? it->second.generation : 0;
 }
 
+const DagNode* DagGraph::getMostRecentNode() const {
+    if (nodes_.empty()) return nullptr;
+    auto it = nodes_.find(next_id_ - 1);
+    if (it != nodes_.end()) return &it->second;
+    return nullptr;
+}
+
 std::string DagGraph::exportAsJson() const
 {
     std::stringstream json;

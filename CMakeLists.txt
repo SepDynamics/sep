@@ -80,6 +80,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
+FetchContent_Declare(
+  implot
+  GIT_REPOSITORY https://github.com/epezent/implot.git
+  GIT_TAG v0.16
+)
+FetchContent_MakeAvailable(implot)
+
 # Create imgui library manually since imgui doesn't provide CMakeLists.txt
 set(IMGUI_SOURCES
     ${imgui_SOURCE_DIR}/imgui.cpp
@@ -97,6 +104,20 @@ target_include_directories(imgui PUBLIC
     ${imgui_SOURCE_DIR}
     ${imgui_SOURCE_DIR}/backends
 )
+
+set(IMPLOT_SOURCES
+    ${implot_SOURCE_DIR}/implot.cpp
+    ${implot_SOURCE_DIR}/implot_items.cpp
+    ${implot_SOURCE_DIR}/implot_demo.cpp
+)
+
+add_library(implot STATIC ${IMPLOT_SOURCES})
+
+target_include_directories(implot PUBLIC
+    ${implot_SOURCE_DIR}
+)
+
+target_link_libraries(implot PUBLIC imgui)
 
 # Find and link required dependencies
 find_package(PkgConfig REQUIRED)

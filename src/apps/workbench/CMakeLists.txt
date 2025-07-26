@@ -48,6 +48,12 @@ target_link_libraries(sep_workbench_lib PUBLIC
     TBB::tbb
 )
 
+if(MSVC)
+    target_compile_options(sep_workbench_lib PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+else()
+    target_compile_options(sep_workbench_lib PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+endif()
+
 # Create the sep_workbench executable
 add_subdirectory(backtester)
 add_executable(sep_workbench core/workbench_main.cpp)
@@ -71,3 +77,9 @@ target_link_libraries(sep_workbench PRIVATE
     OpenGL::GLX
     OpenGL::OpenGL
 )
+
+if(MSVC)
+    target_compile_options(sep_workbench PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+else()
+    target_compile_options(sep_workbench PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+endif()

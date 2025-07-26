@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
     
     // Parse command line arguments for OANDA credentials
     std::string api_key, account_id;
+    bool skip_fetch = false;
     for (int i = 1; i < argc; i++) {
         if (std::string(argv[i]) == "--api-key" && i + 1 < argc) {
             api_key = argv[i + 1];
@@ -36,6 +37,8 @@ int main(int argc, char* argv[]) {
         } else if (std::string(argv[i]) == "--account-id" && i + 1 < argc) {
             account_id = argv[i + 1];
             i++; // Skip the next argument
+        } else if (std::string(argv[i]) == "--skip-fetch") {
+            skip_fetch = true;
         }
     }
     
@@ -47,6 +50,9 @@ int main(int argc, char* argv[]) {
     if (!account_id.empty()) {
         setenv("OANDA_ACCOUNT_ID", account_id.c_str(), 1);
         std::cout << "[Main] OANDA Account ID set: " << account_id << std::endl;
+    }
+    if (skip_fetch) {
+        setenv("SEP_SKIP_FETCH", "1", 1);
     }
 
     // Verify SEP engine availability before launching

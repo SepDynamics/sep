@@ -41,6 +41,17 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     if (!engine) {
         return result;
     }
+    sep::quantum::PatternMetricEngine& engine_ref = *engine;
+    std::vector<uint8_t> byte_stream;
+    byte_stream.reserve(candles.size() * sizeof(sep::common::CandleData));
+    for (const auto& candle : candles) {
+        const uint8_t* bytes = reinterpret_cast<const uint8_t*>(&candle);
+        byte_stream.insert(byte_stream.end(), bytes, bytes + sizeof(sep::common::CandleData));
+    }
+
+    engine_ref.ingestData(byte_stream.data(), byte_stream.size());
+    engine_ref.evolvePatterns();
+    engine_ref.computeMetrics();
 
     SEPSignalStrategy strategy;
     auto signals = strategy.execute(candles);

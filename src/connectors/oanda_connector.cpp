@@ -9,9 +9,6 @@
 #include <thread>
 #include "engine/data_parser.h"
 #include "common/financial_data_types.h"
-#ifdef SEP_ENABLE_WORKBENCH
-#include "apps/workbench/core/ui_layout_manager.h"
-#endif
 #include <mutex>
 
 namespace sep {

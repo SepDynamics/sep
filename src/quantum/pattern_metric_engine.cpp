@@ -413,14 +413,20 @@ void PatternMetricEngine::generateSignals() {
     current_signals_.clear();
     for (const auto& m : current_metrics_) {
         SignalType type = evaluateSignal(m);
-        if (type == SignalType::HOLD) continue;
 
-        Signal s;
-        s.type = type;
-        if (type == SignalType::BUY) {
-            s.confidence = m.coherence * m.stability;
-        } else {
-            s.confidence = (1.0f - m.stability) * m.entropy;
+        if (type != SignalType::HOLD) {
+            Signal s;
+            s.type = type;
+            if (type == SignalType::BUY) {
+                s.confidence = m.coherence * m.stability;
+            } else {
+                s.confidence = (1.0f - m.stability) * m.entropy;
+            }
+            s.pattern_id = m.pattern_id;
+            current_signals_.push_back(s);
+            auto now = std::chrono::system_clock::now();
+            sep::logging::logPatternDetected(s.pattern_id, now);
+            sep::logging::logSignalDetected(s.pattern_id, s.type, now);
         }
         s.pattern_id = m.pattern_id;
         current_signals_.push_back(s);

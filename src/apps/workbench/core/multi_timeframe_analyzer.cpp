@@ -711,6 +711,7 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
     correlation_metrics.stability_spearman = spearman(stability_values, price_moves);
     correlation_metrics.entropy_pearson = pearson(entropy_values, price_moves);
     correlation_metrics.entropy_spearman = spearman(entropy_values, price_moves);
+    correlation_metrics.sample_count = static_cast<int>(n);
 
     return correlation_metrics;
 }

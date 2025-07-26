@@ -575,7 +575,7 @@ bool DataParser::exportCorrelationCSV(const std::string& path,
     if (!file.is_open()) {
         return false;
     }
-    file << "timeframe,coh_pearson,coh_spearman,stab_pearson,stab_spearman,entropy_pearson,entropy_spearman\n";
+    file << "timeframe,coh_pearson,coh_spearman,stab_pearson,stab_spearman,entropy_pearson,entropy_spearman,samples\n";
     for (const auto& [tf, metrics] : data) {
         file << tf << ','
              << metrics.coherence_pearson << ','
@@ -583,7 +583,8 @@ bool DataParser::exportCorrelationCSV(const std::string& path,
              << metrics.stability_pearson << ','
              << metrics.stability_spearman << ','
              << metrics.entropy_pearson << ','
-             << metrics.entropy_spearman << "\n";
+             << metrics.entropy_spearman << ','
+             << metrics.sample_count << "\n";
     }
     return true;
 }
@@ -598,7 +599,8 @@ bool DataParser::exportCorrelationJSON(const std::string& path,
             {"stab_pearson", metrics.stability_pearson},
             {"stab_spearman", metrics.stability_spearman},
             {"entropy_pearson", metrics.entropy_pearson},
-            {"entropy_spearman", metrics.entropy_spearman}
+            {"entropy_spearman", metrics.entropy_spearman},
+            {"samples", metrics.sample_count}
         };
     }
     std::ofstream file(path);

@@ -24,7 +24,7 @@ public:
 
     bool initialize();
     void render();
-    void renderThresholdPanel();
+    void renderThresholdControlPanel();
     void shutdown();
 
     void setOandaConnector(sep::connectors::OandaConnector* connector);

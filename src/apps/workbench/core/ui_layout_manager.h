@@ -8,6 +8,7 @@
 #include <typeindex>
 
 #include "imgui.h"
+#include "connectors/oanda_connector.h"
 
 namespace sep::workbench {
 
@@ -81,6 +82,10 @@ struct GroupCollapsedEvent {
 
 struct ConnectionStateEvent {
     ConnectionState state;
+};
+
+struct OrderUpdateEvent {
+    sep::connectors::OrderInfo info;
 };
 
 class EventBus {

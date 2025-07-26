@@ -558,6 +558,8 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.price = tx.contains("price") ? std::stod(tx["price"].get<std::string>()) : 0.0;
                 info.status = OrderStatus::PENDING;
                 pending_orders_.push_back(info);
+                if (order_callback_) order_callback_(info);
+                sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
             }
             if (json_resp.contains("orderFillTransaction")) {
                 const auto& tx = json_resp["orderFillTransaction"];
@@ -567,6 +569,8 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.price = std::stod(tx.value("price", "0"));
                 info.status = OrderStatus::FILLED;
                 filled_orders_.push_back(info);
+                if (order_callback_) order_callback_(info);
+                sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
             }
             return json_resp;
         } catch (const std::exception& e) {
@@ -629,6 +633,8 @@ void OandaConnector::refreshOrders() {
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
             info.status = OrderStatus::PENDING;
             pending_orders_.push_back(info);
+            if (order_callback_) order_callback_(info);
+            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
         }
     }
 
@@ -642,6 +648,8 @@ void OandaConnector::refreshOrders() {
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
             info.status = OrderStatus::FILLED;
             filled_orders_.push_back(info);
+            if (order_callback_) order_callback_(info);
+            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
         }
     }
 
@@ -655,6 +663,8 @@ void OandaConnector::refreshOrders() {
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
             info.status = OrderStatus::CANCELED;
             canceled_orders_.push_back(info);
+            if (order_callback_) order_callback_(info);
+            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
         }
     }
 }

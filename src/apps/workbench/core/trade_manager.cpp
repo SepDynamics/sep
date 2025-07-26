@@ -43,6 +43,15 @@ nlohmann::json TradeManager::placeOrder(const std::string& instrument,
     if (units == 0) {
         units = position_size;
     }
+
+    double current_exposure = 0.0;
+    for (const auto& pos : positions_) {
+        current_exposure += std::abs(pos.size) * pos.current_price;
+    }
+    double new_exposure = current_exposure + std::abs(units) * current_price;
+    if (new_exposure > account_balance_ * max_exposure_pct_) {
+        return {{"error", "Exposure limit exceeded"}};
+    }
     if (paper_trading_) {
         std::lock_guard<std::mutex> lock(mutex_);
         Order order;

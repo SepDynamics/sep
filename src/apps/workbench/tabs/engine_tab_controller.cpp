@@ -259,6 +259,7 @@ void EngineTabController::renderCorrelationPanel() {
     ImGui::Text("%.3f", correlation_metrics.entropy_pearson); ImGui::NextColumn();
     ImGui::Text("%.3f", correlation_metrics.entropy_spearman); ImGui::NextColumn();
     ImGui::Columns(1);
+    ImGui::Text("Samples: %d", correlation_metrics.sample_count);
 
     // Plot correlation history
     auto history = multi_timeframe_analyzer_->getCorrelationHistory(selected_timeframe);

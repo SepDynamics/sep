@@ -6,6 +6,7 @@
 #include "engine/standard_includes.h"
 #include "quantum/types.h"
 #include "types.h"
+#include "common/financial_data_types.h"
 
 namespace sep {
 
@@ -63,11 +64,11 @@ std::vector<quantum::Pattern> DataParser::parseBuffer(const uint8_t* data, size_
             std::string json_str(reinterpret_cast<const char*>(data), size);
             try {
                 nlohmann::json j = nlohmann::json::parse(json_str.c_str());
-                std::vector<CandleData> candles;
+                std::vector<sep::common::CandleData> candles;
 
                 if (j.contains("candles") && j["candles"].is_array()) {
                     for (const auto& candle_json : j["candles"]) {
-                        CandleData candle;
+                        sep::common::CandleData candle;
                         
                         if (candle_json.contains("time") && candle_json["time"].is_string()) {
                             candle.time = candle_json["time"].get<std::string>().c_str();
@@ -388,9 +389,9 @@ DataFormat DataParser::detectFileFormat(const std::string& path) const
     return DataFormat::BINARY;
 }
 
-std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
+std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::string& path)
 {
-    std::vector<CandleData> candles;
+    std::vector<sep::common::CandleData> candles;
     std::ifstream file(path.c_str());
 
     if (!file.is_open()) {
@@ -405,7 +406,7 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
         if (j.is_array()) {
             int index = 0;
             for (const auto& candle_json : j) {
-                CandleData candle;
+                sep::common::CandleData candle;
 
                 bool valid = true;
 
@@ -463,7 +464,7 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
 
             int index = 0;
             for (const auto& candle_json : j["candles"]) {
-            CandleData candle;
+            sep::common::CandleData candle;
             
             // Parse time
             if (candle_json.contains("time") && candle_json["time"].is_string()) {
@@ -526,7 +527,7 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
 }
 
 std::vector<quantum::Pattern> DataParser::candlesToPatterns(
-    const std::vector<CandleData>& candles)
+    const std::vector<sep::common::CandleData>& candles)
 {
     std::vector<sep::quantum::Pattern> patterns;
 
@@ -567,7 +568,7 @@ std::vector<quantum::Pattern> DataParser::candlesToPatterns(
     return patterns;
 }
 
-void DataParser::writeQuantJSON(const std::vector<CandleData>& candles, const std::string& path) const
+void DataParser::writeQuantJSON(const std::vector<sep::common::CandleData>& candles, const std::string& path) const
 {
     nlohmann::json j;
     j["candles"] = nlohmann::json::array();
@@ -599,7 +600,7 @@ void DataParser::writeQuantJSON(const std::vector<CandleData>& candles, const st
     }
 }
 
-bool DataParser::saveValidatedCandlesJSON(const std::vector<CandleData>& candles,
+bool DataParser::saveValidatedCandlesJSON(const std::vector<sep::common::CandleData>& candles,
                                           const std::string& path) const
 {
     if (candles.empty()) {

@@ -32,6 +32,7 @@ target_sources(sep_engine PRIVATE
 target_include_directories(sep_engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/common
 )
 
 if(MSVC)

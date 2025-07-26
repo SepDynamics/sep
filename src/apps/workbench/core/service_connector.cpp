@@ -60,6 +60,13 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         trade_manager_ = std::make_unique<workbench::TradeManager>(oanda_connector_.get());
         trade_manager_->setRiskPercentage(0.02);
         trade_manager_->setPaperTrading(cfg.oanda().paper_trading);
+        if (mtf_analyzer_) {
+            oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
+                if (mtf_analyzer_) {
+                    mtf_analyzer_->ingestMarketData("EUR_USD", c);
+                }
+            });
+        }
         std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
         std::cout << "[ServiceConnector] API Key length: " << api_key.length() << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;

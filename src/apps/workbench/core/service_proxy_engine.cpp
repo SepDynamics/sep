@@ -201,7 +201,38 @@ sep::workbench::SignalValidator::ValidationResult ServiceProxyEngine::validateSi
 sep::workbench::SignalValidator::ValidationResult ServiceProxyEngine::validateSignalsAgainstHistory(
     const std::vector<sep::quantum::Signal>& signals,
     const std::vector<float>& prices) {
-    return validateSignals(signals, prices);
+    if (signals.empty() || prices.size() < 2) {
+        return {0.0, 1.0};
+    }
+
+    size_t limit = std::min(signals.size(), prices.size() - 1);
+    size_t correct = 0;
+    size_t total = 0;
+    size_t false_pos = 0;
+    for (size_t i = 0; i < limit; ++i) {
+        const auto& s = signals[i];
+        float cur = prices[i];
+        float next = prices[i + 1];
+        float change = (next - cur) / cur;
+        bool up = change > 0.0001f;
+        bool down = change < -0.0001f;
+        if (s.confidence > 0.7f) {
+            bool buy = s.type == sep::quantum::SignalType::BUY;
+            bool sell = s.type == sep::quantum::SignalType::SELL;
+            if (buy || sell) {
+                ++total;
+                if ((buy && up) || (sell && down)) {
+                    ++correct;
+                } else if ((buy && down) || (sell && up)) {
+                    ++false_pos;
+                }
+            }
+        }
+    }
+
+    double accuracy = total > 0 ? static_cast<double>(correct) / total : 0.0;
+    double false_rate = total > 0 ? static_cast<double>(false_pos) / total : 0.0;
+    return {accuracy, false_rate};
 }
 
 } // namespace core

@@ -763,7 +763,7 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
     for (const auto& c : candles)
     {
         sep::common::CandleData cd;
-        cd.time = c.time;
+        cd.time = sep::common::parseTimestamp(c.time);
         cd.open = static_cast<float>(c.open);
         cd.high = static_cast<float>(c.high);
         cd.low = static_cast<float>(c.low);
@@ -786,11 +786,8 @@ bool OandaConnector::saveEURUSDM1_48h(const std::string& output_file)
 
 int64_t OandaConnector::parseTimestamp(const std::string& time_str)
 {
-    std::tm tm = {};
-    std::stringstream ss(time_str);
-    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-    auto time_point = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-    return std::chrono::duration_cast<std::chrono::seconds>(time_point.time_since_epoch()).count();
+    auto tp = sep::common::parseTimestamp(time_str);
+    return std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch()).count();
 }
 
 DataValidationResult OandaConnector::validateCandle(const OandaCandle& candle)

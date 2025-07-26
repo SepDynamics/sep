@@ -3,6 +3,7 @@
 #include "engine/standard_includes.h"
 #include <map>
 #include <deque>
+#include "common/financial_data_types.h"
 
 
 namespace sep {
@@ -26,16 +27,6 @@ namespace sep {
         struct CorrelationMetrics;
     }
 
-struct CandleData
-    {
-        std::string time;
-        uint64_t volume;
-        float open;
-        float high;
-        float low;
-        float close;
-    };
-
 // Universal data parser for all input sources
 class DataParser {
 public:
@@ -55,18 +46,18 @@ public:
                                                    DataFormat format = DataFormat::AUTO);
 
     // Specific format parsers
-    std::vector<CandleData> parseQuantJSON(const std::string& path);
+    std::vector<sep::common::CandleData> parseQuantJSON(const std::string& path);
         std::vector<quantum::Pattern> parseCSV(const std::string& path);
         std::vector<quantum::Pattern> parseBinary(const uint8_t* data, size_t size);
 
     // Convert raw candle data to SEP patterns
-        std::vector<quantum::Pattern> candlesToPatterns(const std::vector<CandleData>& candles);
+        std::vector<quantum::Pattern> candlesToPatterns(const std::vector<sep::common::CandleData>& candles);
 
     // Utility: write candle data to OANDA-style JSON
-    void writeQuantJSON(const std::vector<CandleData>& candles, const std::string& path) const;
+    void writeQuantJSON(const std::vector<sep::common::CandleData>& candles, const std::string& path) const;
 
     // Save candle data with validation checks (time ordering, field ranges)
-    bool saveValidatedCandlesJSON(const std::vector<CandleData>& candles,
+    bool saveValidatedCandlesJSON(const std::vector<sep::common::CandleData>& candles,
                                   const std::string& path) const;
 
     // Convert patterns to PinStates for engine compatibility

@@ -8,7 +8,10 @@
 #include <sstream>
 #include <thread>
 #include "engine/data_parser.h"
+#include "common/financial_data_types.h"
+#ifdef SEP_ENABLE_WORKBENCH
 #include "apps/workbench/core/ui_layout_manager.h"
+#endif
 #include <mutex>
 
 namespace sep {
@@ -560,7 +563,10 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.status = OrderStatus::PENDING;
                 pending_orders_.push_back(info);
                 if (order_callback_) order_callback_(info);
+                // publish order update to UI if available
+#ifdef SEP_ENABLE_WORKBENCH
                 sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
+#endif
             }
             if (json_resp.contains("orderFillTransaction")) {
                 const auto& tx = json_resp["orderFillTransaction"];
@@ -571,7 +577,10 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.status = OrderStatus::FILLED;
                 filled_orders_.push_back(info);
                 if (order_callback_) order_callback_(info);
+                // publish order update to UI if available
+#ifdef SEP_ENABLE_WORKBENCH
                 sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
+#endif
             }
             refreshOrders();
             return json_resp;
@@ -636,7 +645,10 @@ void OandaConnector::refreshOrders() {
             info.status = OrderStatus::PENDING;
             pending_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
+            // publish order update to UI if available
+#ifdef SEP_ENABLE_WORKBENCH
             sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
+#endif
         }
     }
 
@@ -651,7 +663,10 @@ void OandaConnector::refreshOrders() {
             info.status = OrderStatus::FILLED;
             filled_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
+            // publish order update to UI if available
+#ifdef SEP_ENABLE_WORKBENCH
             sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
+#endif
         }
     }
 
@@ -666,7 +681,10 @@ void OandaConnector::refreshOrders() {
             info.status = OrderStatus::CANCELED;
             canceled_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
+            // publish order update to UI if available
+#ifdef SEP_ENABLE_WORKBENCH
             sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
+#endif
         }
     }
 }
@@ -740,11 +758,11 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
         return false;
     }
 
-    std::vector<CandleData> out;
+    std::vector<sep::common::CandleData> out;
     out.reserve(candles.size());
     for (const auto& c : candles)
     {
-        CandleData cd;
+        sep::common::CandleData cd;
         cd.time = c.time;
         cd.open = static_cast<float>(c.open);
         cd.high = static_cast<float>(c.high);

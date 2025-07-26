@@ -51,8 +51,8 @@ docker run --gpus all --rm \
         -DCMAKE_CXX_COMPILER=clang++-15 \
         -DSEP_USE_CUDA=ON
     
-    # Build
-    ninja
+    # Build with logging
+    ninja 2>&1 | tee /sep/output/build_log.txt
     
     # Copy and fix compile_commands.json for IDE
     cp compile_commands.json ../ && cd ..
@@ -65,5 +65,12 @@ sudo chown -R $USER_ID:$GROUP_ID /sep/.cache /sep/.codechecker /sep/build /sep/o
 fix_compile_commands() {
     # Replace container paths with host paths for IDE integration
     sed -i "s|/sep/|$(pwd)/|g" compile_commands.json
-}  
+}
+
+# Extract errors from build log
+if [ -f output/build_log.txt ]; then
+    echo "Extracting errors to output/errors.txt..."
+    grep -i "error\|failed\|fatal" output/build_log.txt > output/errors.txt 2>/dev/null || echo "No errors found" > output/errors.txt
+fi
+
 echo "Build complete!"

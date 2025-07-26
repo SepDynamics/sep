@@ -52,6 +52,13 @@ include(cmake/template.cmake)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Ensure GLM configuration is included for all targets
+if(MSVC)
+    add_compile_options(/FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+else()
+    add_compile_options(-include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+endif()
+
 # Enable testing
 enable_testing()
 

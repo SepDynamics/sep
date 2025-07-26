@@ -56,7 +56,7 @@ This phase runs in parallel with feature development and focuses on improving co
 -   **Status**: **NOT STARTED**
 -   **Priority**: Medium
 -   **Tasks**:
-    -   [ ] **`imgui` / `implot` Issues**: The majority of `HIGH` severity issues (`bugprone-incorrect-roundings`, `bugprone-sizeof-expression`, `core.NullDereference`) are within third-party libraries. Plan to either update these libraries to a newer version or document the accepted risk.
+    -   [ ] **`imgui` / `implot` Issues**: The majority of `HIGH` severity issues (`bugprone-incorrect-roundings`, `bugprone-sizeof-expression`, `core.NullDereference`) are within third-party libraries. Latest upstream versions are ImGui `1.92.2` and ImPlot `0.17` (checked 2025‑07). For now the project remains on `1.89.9` and `0.16`; warnings from these libraries are suppressed in the static analysis report.
     -   [ ] **`sep` Source Code**:
         -   Address `clang-diagnostic-double-promotion` warnings across the codebase (e.g., in `data_parser.cpp`, `oanda_connector.cpp`, `sep_demo_app.cpp`) to ensure floating-point precision is handled correctly.
         -   Fix `deadcode.DeadStores` and `unused-parameter` warnings to improve code clarity and remove unnecessary variables.

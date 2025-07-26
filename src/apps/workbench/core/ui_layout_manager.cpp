@@ -96,6 +96,12 @@ void UILayoutManager::setGroupCollapsed(const std::string& group_name, bool coll
 }
 
 void UILayoutManager::render() {
+    auto now = std::chrono::steady_clock::now();
+    if (std::chrono::duration<float>(now - last_render_).count() < refresh_interval_) {
+        return;
+    }
+    last_render_ = now;
+
     updateViewport();
     
     if (customization_mode_) {

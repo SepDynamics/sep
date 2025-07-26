@@ -44,6 +44,13 @@ bool SignalsTabController::initialize() {
     // Ensure dependent components are routed through the standard setters
     setMetricsMonitor(metrics_monitor_);
     setQuantumSignalGenerator(signal_generator_);
+    ImPlot::GetStyle().UseISO8601 = true;
+    ImPlot::GetStyle().UseLocalTime = true;
+    ImPlotInputMap& map = ImPlot::GetInputMap();
+    map.Pan = ImGuiMouseButton_Middle;
+    map.Fit = ImGuiMouseButton_Right;
+    map.ZoomMod = ImGuiMod_Ctrl;
+    plot_flags_ = ImPlotFlags_Crosshairs;
     return true;
 }
 
@@ -103,7 +110,6 @@ void SignalsTabController::render() {
         ImGui::Text("Stability: %.3f", rolling_metrics.stability_24h_avg);
         ImGui::Text("Entropy: %.3f", rolling_metrics.entropy_24h_avg);
 
-        renderMetricsGraphs();
         ImGui::End();
     }
 
@@ -225,6 +231,7 @@ void SignalsTabController::render() {
     handleMouseInput();
     setupChartArea();
     renderMainChart();
+    renderMetricsGraphs();
     renderHoverInfo();
 
     ImGui::Columns(1);
@@ -282,8 +289,9 @@ void SignalsTabController::renderMainChart() {
         detectTrendLines();
     }
 
-    ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, ImPlotCond_Always);
-    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300), ImPlotFlags_NoMenus)) {
+    ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, ImPlotCond_Once);
+    ImPlot::SetNextAxisLimits(ImAxis_X1, 0, static_cast<double>(candle_data_.size()), ImPlotCond_Once);
+    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300), plot_flags_)) {
         renderTechnicalIndicators();
         renderCandlesticks();
         if (show_sep_overlay_) {
@@ -291,6 +299,9 @@ void SignalsTabController::renderMainChart() {
         }
         if (show_trend_lines_) {
             renderTrendLines();
+        }
+        if (show_grid_) {
+            renderChartGrid();
         }
         renderCrosshair();
         ImPlot::EndPlot();
@@ -331,14 +342,6 @@ void SignalsTabController::renderCandlesticks() {
 
     ImPlot::PushPlotClipRect();
     ImPlot::PlotCandles("Price", xs.data(), open.data(), close.data(), low.data(), high.data(), static_cast<int>(count));
-
-    // Use ImPlot::DragRect for proper drag functionality
-    static ImPlotPoint rect_min, rect_max;
-    if (ImPlot::DragRect(0, &rect_min.x, &rect_min.y, &rect_max.x, &rect_max.y, ImVec4(1,1,1,0.5f))) {
-        chart_zoom_.price_min = std::min(rect_min.y, rect_max.y);
-        chart_zoom_.price_max = std::max(rect_min.y, rect_max.y);
-        chart_zoom_.is_zoomed = true;
-    }
     ImPlot::PopPlotClipRect();
 }
 
@@ -673,7 +676,7 @@ void SignalsTabController::renderHoverInfo() {
 }
 
 void SignalsTabController::renderCrosshair() {
-    if (!ImGui::IsWindowHovered()) return;
+    if (!show_crosshair_ || !ImGui::IsWindowHovered()) return;
     
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     ImVec2 mouse_pos = crosshair_pos_;
@@ -789,12 +792,6 @@ std::chrono::system_clock::time_point SignalsTabController::screenToTime(float x
 void SignalsTabController::updatePriceRange() {
     if (candle_data_.empty()) return;
 
-    if (chart_zoom_.is_zoomed) {
-        price_min_ = chart_zoom_.price_min;
-        price_max_ = chart_zoom_.price_max;
-        return;
-    }
-
     price_min_ = std::numeric_limits<double>::max();
     price_max_ = std::numeric_limits<double>::lowest();
     
@@ -822,39 +819,14 @@ void SignalsTabController::setupChartArea() {
 
 void SignalsTabController::handleMouseInput() {
     ImVec2 mouse_pos = ImGui::GetMousePos();
-    
+
     if (mouse_pos.x >= chart_pos_.x && mouse_pos.x <= chart_pos_.x + chart_size_.x &&
         mouse_pos.y >= chart_pos_.y && mouse_pos.y <= chart_pos_.y + chart_size_.y) {
-        
+
         hover_info_.active = true;
         hover_info_.position = mouse_pos;
         crosshair_pos_ = mouse_pos;
         updateHoverInfo();
-
-        ImGuiIO& io = ImGui::GetIO();
-        if (io.MouseWheel != 0.0f) {
-            double price_at_cursor = screenToPrice(mouse_pos.y);
-            double range = price_max_ - price_min_;
-            double scale = io.MouseWheel > 0 ? 0.9 : 1.1;
-            chart_zoom_.price_min = price_at_cursor - (price_at_cursor - price_min_) * scale;
-            chart_zoom_.price_max = price_at_cursor + (price_max_ - price_at_cursor) * scale;
-            chart_zoom_.is_zoomed = true;
-        }
-
-        if (ImGui::IsMouseDragging(ImGuiMouseButton_Right)) {
-            if (!is_panning_) {
-                pan_start_pos_ = mouse_pos;
-                is_panning_ = true;
-            } else {
-                float delta_y = mouse_pos.y - pan_start_pos_.y;
-                double price_delta = (delta_y / chart_size_.y) * (price_max_ - price_min_);
-                chart_zoom_.price_min += price_delta;
-                chart_zoom_.price_max += price_delta;
-                pan_start_pos_ = mouse_pos;
-            }
-        } else {
-            is_panning_ = false;
-        }
     } else {
         hover_info_.active = false;
     }

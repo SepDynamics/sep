@@ -144,14 +144,14 @@ Engine::~Engine() {
 #endif
 }
 
-void Engine::generate_probes(const std::vector<sep::PinState> &inputs,
+void Engine::generate_probes(const std::vector<PinState> &inputs,
                              std::vector<std::uint32_t> &probe_indices,
                              std::vector<std::uint32_t> &expectations, std::uint64_t tick)
 {
     if (inputs.empty())
     {
         ::sep::core::ErrorHandler::instance().reportError(
-            {sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::generate_probes"});
+            {SEPResult::INVALID_ARGUMENT, "No input states", "Engine::generate_probes"});
         return;
     }
 
@@ -211,7 +211,7 @@ void Engine::generate_probes(const std::vector<sep::PinState> &inputs,
     std::fill(impl_->d_chunks_.begin(), impl_->d_chunks_.end(), 0);
 }
 
-void Engine::process_batch(const std::vector<sep::PinState> &inputs, std::uint64_t tick,
+void Engine::process_batch(const std::vector<PinState> &inputs, std::uint64_t tick,
                            ::sep::quantum::QBSAResult &qbsa_result,
                            ::sep::cuda::QSHResult &qsh_result)
 {
@@ -219,14 +219,14 @@ void Engine::process_batch(const std::vector<sep::PinState> &inputs, std::uint64
     if (inputs.empty())
     {
         ::sep::core::ErrorHandler::instance().reportError(
-            {sep::SEPResult::INVALID_ARGUMENT, "No input states", "Engine::process_batch"});
+            {SEPResult::INVALID_ARGUMENT, "No input states", "Engine::process_batch"});
         return;
     }
 
     if (inputs.size() > DEFAULT_SIZE)
     {
         ::sep::core::ErrorHandler::instance().reportError(
-            {sep::SEPResult::INVALID_ARGUMENT, "Batch too large", "Engine::process_batch"});
+            {SEPResult::INVALID_ARGUMENT, "Batch too large", "Engine::process_batch"});
         return;
     }
 
@@ -248,7 +248,7 @@ void Engine::process_batch(const std::vector<sep::PinState> &inputs, std::uint64
         generate_probes(inputs, probe_indices, expectations, tick);
 
         // CPU fallback when CUDA is unavailable
-        sep::quantum::QBSAProcessor cpu_proc;
+        quantum::QBSAProcessor cpu_proc;
         qbsa_result = cpu_proc.analyze(probe_indices, expectations);
         qbsa_result.collapse_detected = cpu_proc.detectCollapse(qbsa_result, inputs.size());
 
@@ -266,7 +266,7 @@ void Engine::process_batch(const std::vector<sep::PinState> &inputs, std::uint64
         impl_->state_history_.push_back(node);
     } catch (const std::exception &e) {
       ::sep::core::ErrorHandler::instance().reportError(
-          {sep::SEPResult::PROCESSING_ERROR, e.what(), "Engine::process_batch"});
+          {SEPResult::PROCESSING_ERROR, e.what(), "Engine::process_batch"});
       return;
   }
 }
@@ -341,8 +341,8 @@ void Engine::ingestFile(const std::string &dataPath, bool legacy)
             pattern.last_modified = pattern.timestamp;
             
             // Copy compatible data to pattern data structure
-            std::strncpy(pattern.data.id, pattern.id.c_str(), sep::compat::PatternData::MAX_ID_LENGTH - 1);
-            pattern.data.id[sep::compat::PatternData::MAX_ID_LENGTH - 1] = '\0';
+            std::strncpy(pattern.data.id, pattern.id.c_str(), compat::PatternData::MAX_ID_LENGTH - 1);
+            pattern.data.id[compat::PatternData::MAX_ID_LENGTH - 1] = '\0';
             pattern.data.coherence = pattern.quantum_state.coherence;
             pattern.data.position = pattern.position;
             

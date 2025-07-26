@@ -111,9 +111,9 @@ bool WorkbenchEngine::initialize()
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
 
-        signals_tab_ = std::make_unique<sep::workbench::SignalsTabController>();
-        engine_tab_ = std::make_unique<sep::workbench::EngineTabController>();
-        backend_tab_ = std::make_unique<sep::workbench::BackendTabController>();
+        signals_tab_ = std::make_unique<workbench::SignalsTabController>();
+        engine_tab_ = std::make_unique<workbench::EngineTabController>();
+        backend_tab_ = std::make_unique<workbench::BackendTabController>();
 
         signals_tab_->initialize();
         engine_tab_->initialize();
@@ -134,9 +134,9 @@ bool WorkbenchEngine::initialize()
 
         // Create offline engine as fallback
         ::std::cout << "[WorkbenchEngine] Creating offline engine..." << ::std::endl;
-        offline_engine_ = ::std::make_unique<sep::core::Engine>();
+        offline_engine_ = ::std::make_unique<core::Engine>();
         // Initialize with default config
-        sep::config::CudaConfig config;
+        config::CudaConfig config;
         offline_engine_->init(config);
         active_engine_ = offline_engine_.get();
         

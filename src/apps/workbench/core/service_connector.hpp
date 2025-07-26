@@ -21,13 +21,16 @@ class Engine;
 
 namespace sep::workbench {
 
-// Service connection states
 enum class ConnectionState {
     DISCONNECTED,
     CONNECTING,
     CONNECTED,
-    ERROR
+    CONNECTION_FAILED,
+    RECONNECTING
 };
+
+// Service connection states
+
 
 // Service health metrics
 struct ServiceHealth {

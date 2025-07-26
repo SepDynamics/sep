@@ -10,7 +10,7 @@
 namespace sep {
 
 // Parse from file (auto-detects format)
-std::vector<sep::quantum::Pattern> DataParser::parseFile(const std::string& path, DataFormat format)
+std::vector<quantum::Pattern> DataParser::parseFile(const std::string& path, DataFormat format)
 {
     if (format == DataFormat::AUTO) {
         format = detectFileFormat(path);
@@ -49,7 +49,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseFile(const std::string& path
 }
 
 // Parse from memory buffer (binary/non-UTF8 safe)
-std::vector<sep::quantum::Pattern> DataParser::parseBuffer(const uint8_t* data, size_t size,
+std::vector<quantum::Pattern> DataParser::parseBuffer(const uint8_t* data, size_t size,
                                                            DataFormat format)
 {
     if (format == DataFormat::AUTO) {
@@ -113,7 +113,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseBuffer(const uint8_t* data, 
 }
 
 // Parse from stream (maintains state for continuous data)
-std::vector<sep::quantum::Pattern> DataParser::parseStream(std::istream& stream, DataFormat format)
+std::vector<quantum::Pattern> DataParser::parseStream(std::istream& stream, DataFormat format)
 {
     if (!stream_state_) {
         stream_state_ = std::make_unique<StreamState>();
@@ -130,7 +130,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseStream(std::istream& stream,
         format = detectFormat(stream_state_->buffer.data(), stream_state_->buffer.size());
     }
 
-    std::vector<sep::quantum::Pattern> patterns;
+    std::vector<quantum::Pattern> patterns;
     if (format == DataFormat::JSON || format == DataFormat::CANDLE) {
         try {
             // Attempt to parse the buffered data
@@ -150,7 +150,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseStream(std::istream& stream,
 }
 
 // Parse CSV file
-std::vector<sep::quantum::Pattern> DataParser::parseCSV(const std::string& path)
+std::vector<quantum::Pattern> DataParser::parseCSV(const std::string& path)
 {
     std::vector<sep::quantum::Pattern> patterns;
     std::ifstream file(path.c_str());
@@ -185,7 +185,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseCSV(const std::string& path)
         }
 
         if (!values.empty()) {
-            sep::quantum::Pattern pattern;
+            quantum::Pattern pattern;
             pattern.id = std::to_string(line_num);
             pattern.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                                     std::chrono::system_clock::now().time_since_epoch())
@@ -205,7 +205,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseCSV(const std::string& path)
             // Initialize other fields
             pattern.generation = 0;
             pattern.coherence = 0.0f;
-            pattern.quantum_state = sep::quantum::QuantumState{};
+            pattern.quantum_state = quantum::QuantumState{};
             pattern.velocity = glm::vec4(0.0f);
             pattern.attributes = glm::vec4(0.0f);
             pattern.amplitude = {1.0f, 0.0f};
@@ -222,7 +222,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseCSV(const std::string& path)
 }
 
 // Parse binary data
-std::vector<sep::quantum::Pattern> DataParser::parseBinary(const uint8_t* data, size_t size)
+std::vector<quantum::Pattern> DataParser::parseBinary(const uint8_t* data, size_t size)
 {
     std::vector<sep::quantum::Pattern> patterns;
     const size_t floats_per_pattern = 4;
@@ -236,7 +236,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseBinary(const uint8_t* data, 
     const float* float_data = reinterpret_cast<const float*>(data);
 
     for (size_t i = 0; i < num_patterns; ++i) {
-        sep::quantum::Pattern pattern;
+        quantum::Pattern pattern;
         pattern.id = std::to_string(i);
         pattern.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                                 std::chrono::system_clock::now().time_since_epoch())
@@ -254,7 +254,7 @@ std::vector<sep::quantum::Pattern> DataParser::parseBinary(const uint8_t* data, 
         pattern.coherence = 1.0f / (1.0f + variance);
 
         pattern.generation = 0;
-        pattern.quantum_state = sep::quantum::QuantumState{};
+        pattern.quantum_state = quantum::QuantumState{};
         pattern.velocity = glm::vec4(0.0f);
         pattern.attributes = glm::vec4(0.0f);
         pattern.amplitude = {1.0f, 0.0f};
@@ -269,13 +269,13 @@ std::vector<sep::quantum::Pattern> DataParser::parseBinary(const uint8_t* data, 
 }
 
 // Convert patterns to PinStates for engine compatibility
-std::vector<sep::PinState> DataParser::toPinStates(
-    const std::vector<sep::quantum::Pattern>& patterns)
+std::vector<PinState> DataParser::toPinStates(
+    const std::vector<quantum::Pattern>& patterns)
 {
-    std::vector<sep::PinState> pin_states;
+    std::vector<PinState> pin_states;
 
     for (const auto& pattern : patterns) {
-        sep::PinState state;
+        PinState state;
 
         // Convert pattern data to uint64_t state
         // Simple approach: use position.x as floating point bits
@@ -470,13 +470,13 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
     return candles;
 }
 
-std::vector<sep::quantum::Pattern> DataParser::candlesToPatterns(
+std::vector<quantum::Pattern> DataParser::candlesToPatterns(
     const std::vector<CandleData>& candles)
 {
     std::vector<sep::quantum::Pattern> patterns;
 
     for (const auto& candle : candles) {
-        sep::quantum::Pattern pattern;
+        quantum::Pattern pattern;
 
         // Use timestamp as unique ID
         pattern.id = std::to_string(parseTimestamp(candle.time));

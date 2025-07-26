@@ -9,6 +9,7 @@
 
 #include "imgui.h"
 #include "connectors/oanda_connector.h"
+#include "service_connector.hpp"
 
 namespace sep::workbench {
 
@@ -80,8 +81,10 @@ struct GroupCollapsedEvent {
     bool collapsed{false};
 };
 
+
+
 struct ConnectionStateEvent {
-    ConnectionState state;
+    sep::workbench::ConnectionState state;
 };
 
 struct OrderUpdateEvent {

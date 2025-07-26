@@ -12,11 +12,11 @@
 #include "quantum/coherence_manager.h"
 #include "engine/metrics_collector.h"
 #include "connectors/oanda_connector.h"
+#include "apps/workbench/core/common_structs.h"
 
 namespace sep::workbench {
 
-// Forward declaration - will use CandleData from trading_hud.h
-struct CandleData;
+
 
 struct TimeframeData {
     std::string timeframe_id;        // "1m", "5m", "15m", "1h", "4h", "1D"

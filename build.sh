@@ -52,7 +52,7 @@ docker run --gpus all --rm \
         -DSEP_USE_CUDA=ON
     
     # Build with logging
-    ninja 2>&1 | tee /sep/output/build_log.txt
+    ninja -k 0 2>&1 | tee /sep/output/build_log.txt
     
     # Copy and fix compile_commands.json for IDE
     cp compile_commands.json ../ && cd ..

@@ -7,7 +7,7 @@
 
 #include "imgui.h"
 
-EventBus& globalEventBus() {
+sep::workbench::EventBus& sep::workbench::globalEventBus() {
     static EventBus bus;
     return bus;
 }

@@ -1,4 +1,5 @@
 #include "multi_timeframe_analyzer.h"
+#include "engine/data_parser.h"
 #include "common_structs.h"
 #include "connectors/market_data_converter.h"
 
@@ -40,14 +41,14 @@ bool MultiTimeframeAnalyzer::initialize() {
         coherence_config.anomaly_threshold = config_.coherence_threshold;
         coherence_config.enable_cuda = config_.enable_cuda_acceleration;
         
-        coherence_manager_ = std::make_unique<sep::quantum::CoherenceManager>(coherence_config);
+        coherence_manager_ = std::make_unique<quantum::CoherenceManager>(coherence_config);
         
         // Initialize metrics collector
-        metrics_collector_ = std::make_unique<sep::core::MetricsCollector>();
+        metrics_collector_ = std::make_unique<core::MetricsCollector>();
         
         // Initialize pattern engines for each timeframe
         for (const auto& tf : config_.timeframes) {
-            auto engine = std::make_unique<sep::quantum::PatternMetricEngine>();
+            auto engine = std::make_unique<quantum::PatternMetricEngine>();
             pattern_engines_[tf] = std::move(engine);
         }
         
@@ -222,9 +223,9 @@ TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
         auto& engine = pattern_engines_[timeframe];
         
         // Convert candles to proper byte stream for pattern analysis
-        std::vector<sep::connectors::OandaCandle> oanda_candles;
+        std::vector<connectors::OandaCandle> oanda_candles;
         for (const auto& candle : candles) {
-            sep::connectors::OandaCandle oanda_candle;
+            connectors::OandaCandle oanda_candle;
             oanda_candle.open = candle.open;
             oanda_candle.high = candle.high;
             oanda_candle.low = candle.low;
@@ -244,7 +245,7 @@ TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
             }
             oanda_candles.push_back(oanda_candle);
         }
-        auto byte_stream = sep::connectors::MarketDataConverter::candlesToByteStream(oanda_candles);
+        auto byte_stream = connectors::MarketDataConverter::candlesToByteStream(oanda_candles);
         
         // Feed properly converted data to SEP engine
         engine->ingestData(byte_stream.data(), byte_stream.size());
@@ -294,7 +295,7 @@ TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
 }
 
 float MultiTimeframeAnalyzer::calculateTrendStrength(
-    const std::vector<sep::quantum::PatternMetrics>& patterns) {
+    const std::vector<quantum::PatternMetrics>& patterns) {
     
     if (patterns.empty()) return 0.0f;
     
@@ -309,7 +310,7 @@ float MultiTimeframeAnalyzer::calculateTrendStrength(
 }
 
 float MultiTimeframeAnalyzer::calculateVolatilityPrediction(
-    const std::vector<sep::quantum::PatternMetrics>& patterns) {
+    const std::vector<quantum::PatternMetrics>& patterns) {
     
     if (patterns.empty()) return 0.5f; // Neutral prediction
     
@@ -341,7 +342,7 @@ float MultiTimeframeAnalyzer::calculateVolatilityPrediction(
 }
 
 float MultiTimeframeAnalyzer::calculateBreakoutProbability(
-    const sep::quantum::PatternMetrics& latest_pattern) {
+    const quantum::PatternMetrics& latest_pattern) {
     
     // Breakout probability based on coherence instability and low entropy
     float coherence_factor = latest_pattern.coherence;
@@ -575,7 +576,7 @@ MultiTimeframeAnalyzer::PerformanceStats MultiTimeframeAnalyzer::getPerformanceS
     stats.memory_usage_mb = 0.0f;
     if (coherence_manager_) {
         // Estimate memory usage based on pattern count and data structures
-        size_t estimated_bytes = stats.total_patterns_tracked * sizeof(sep::quantum::PatternMetrics);
+        size_t estimated_bytes = stats.total_patterns_tracked * sizeof(quantum::PatternMetrics);
         for (const auto& [tf, tf_data] : timeframe_data_) {
             estimated_bytes += tf_data.candles.size() * sizeof(CandleData);
         }

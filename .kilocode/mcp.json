@@ -19,7 +19,8 @@
         "read_multiple_files",
         "read_file",
         "list_directory",
-        "edit_file"
+        "edit_file",
+        "delete_file"
       ]
     },
     "sequentialthinking": {

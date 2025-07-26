@@ -222,8 +222,8 @@ double TradeManager::getROI() const
     return realized_pnl_ / starting_balance_;
 }
 
-const std::vector<double>& TradeManager::getROIHistory() const { return roi_history_; }
-const std::vector<double>& TradeManager::getWinLossHistory() const { return win_loss_history_; }
+
+
 
 } // namespace workbench
 } // namespace sep

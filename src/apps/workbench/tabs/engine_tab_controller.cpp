@@ -41,15 +41,15 @@ void EngineTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> moni
     metrics_monitor_ = monitor;
 }
 
-void EngineTabController::setSEPEngine(sep::core::Engine* engine) {
+void EngineTabController::setSEPEngine(core::Engine* engine) {
     sep_engine_ = engine;
 }
 
-void EngineTabController::setPatternMetricEngine(sep::quantum::PatternMetricEngine* pattern_engine) {
+void EngineTabController::setPatternMetricEngine(quantum::PatternMetricEngine* pattern_engine) {
     pattern_engine_ = pattern_engine;
 }
 
-void EngineTabController::setCoherenceManager(sep::quantum::CoherenceManager* coherence_manager) {
+void EngineTabController::setCoherenceManager(quantum::CoherenceManager* coherence_manager) {
     coherence_manager_ = coherence_manager;
 }
 
@@ -57,7 +57,7 @@ void EngineTabController::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* anal
     multi_timeframe_analyzer_ = analyzer;
 }
 
-void EngineTabController::setServiceProxyEngine(sep::core::ServiceProxyEngine* engine) {
+void EngineTabController::setServiceProxyEngine(core::ServiceProxyEngine* engine) {
     service_proxy_engine_ = engine;
 }
 
@@ -151,7 +151,7 @@ void EngineTabController::renderEngineControls() {
     }
 }
 
-std::vector<sep::quantum::PatternMetrics> EngineTabController::getCurrentPatternMetrics() {
+std::vector<quantum::PatternMetrics> EngineTabController::getCurrentPatternMetrics() {
     if (!pattern_engine_) {
         return {};
     }
@@ -163,7 +163,7 @@ std::vector<sep::quantum::PatternMetrics> EngineTabController::getCurrentPattern
     }
 }
 
-sep::quantum::CoherenceManager::CoherenceMetrics EngineTabController::getCoherenceMetrics() {
+quantum::CoherenceManager::CoherenceMetrics EngineTabController::getCoherenceMetrics() {
     if (!coherence_manager_) {
         return {};
     }
@@ -296,7 +296,7 @@ void EngineTabController::renderCorrelationPanel() {
             }
         }
         if (ok) {
-            sep::DataParser parser;
+            DataParser parser;
             std::map<std::string, workbench::CorrelationMetrics> data{{selected_timeframe, correlation_metrics}};
             bool csv_ok = parser.exportCorrelationCSV(path_str, data);
             bool json_ok = parser.exportCorrelationJSON(path_str + ".json", data);
@@ -341,7 +341,7 @@ void EngineTabController::renderStrategyOptimization()
     ImGui::SliderFloat("Entropy", &opt_entropy_, 0.0f, 1.0f);
     if (ImGui::Button("Apply Thresholds")) {
         if (pattern_engine_) {
-            sep::quantum::SignalThresholds th;
+            quantum::SignalThresholds th;
             th.buy_min_coherence = opt_coherence_;
             th.buy_min_stability = opt_stability_;
             th.buy_max_entropy = opt_entropy_;

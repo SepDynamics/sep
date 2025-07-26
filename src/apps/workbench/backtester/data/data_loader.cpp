@@ -20,6 +20,7 @@ const std::vector<sep::workbench::CandleData>& DataLoader::getCandleData() const
 }
 
 void DataLoader::load_48h_sample() {
+    namespace fs = std::filesystem;
     sep::connectors::OandaConnector connector("", "", true);
     if (!connector.initialize()) {
         return;
@@ -28,7 +29,7 @@ void DataLoader::load_48h_sample() {
     auto candles = connector.getHistoricalData("EUR_USD", "M1", "", "", 2880);
     connector.shutdown();
 
-    std::vector<sep::CandleData> export_candles;
+        std::vector<sep::CandleData> export_candles;
     export_candles.reserve(candles.size());
 
     m_candleData.clear();
@@ -41,7 +42,7 @@ void DataLoader::load_48h_sample() {
         m_candleData.emplace_back(c.open, c.high, c.low, c.close,
                                   static_cast<int>(c.volume), tp);
 
-        sep::CandleData ec;
+                sep::CandleData ec;
         ec.time = c.time;
         ec.volume = static_cast<uint64_t>(c.volume);
         ec.open = static_cast<float>(c.open);
@@ -51,7 +52,7 @@ void DataLoader::load_48h_sample() {
         export_candles.push_back(ec);
     }
 
-    std::filesystem::create_directories("Testing/OANDA");
-    sep::DataParser parser;
+        fs::create_directories("Testing/OANDA");
+        sep::DataParser parser;
     parser.writeQuantJSON(export_candles, "Testing/OANDA/eurusd_48h.json");
 }

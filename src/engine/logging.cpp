@@ -156,6 +156,7 @@ void logSignalDetected(const std::string &pattern_id,
                                : (type == sep::quantum::SignalType::SELL ? "SELL" : "HOLD");
 
     logger->info("Signal {} for pattern {} at {}", type_str, pattern_id, buf);
+}
 void logTrade(const std::string &instrument,
               double units,
               double price,

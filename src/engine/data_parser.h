@@ -20,8 +20,12 @@ namespace sep {
         CANDLE   // Market candle data
     };
 
-    // Raw candle data structure matching the JSON format
-    struct CandleData
+    namespace workbench {
+        struct CandleData;
+        struct CorrelationMetrics;
+    }
+
+struct CandleData
     {
         std::string time;
         uint64_t volume;
@@ -38,30 +42,30 @@ public:
     ~DataParser() = default;
 
     // Parse from file (auto-detects format)
-    std::vector<sep::quantum::Pattern> parseFile(const std::string& path,
+        std::vector<quantum::Pattern> parseFile(const std::string& path,
                                                  DataFormat format = DataFormat::AUTO);
 
     // Parse from memory buffer (binary/non-UTF8 safe)
-    std::vector<sep::quantum::Pattern> parseBuffer(const uint8_t* data, size_t size,
+        std::vector<quantum::Pattern> parseBuffer(const uint8_t* data, size_t size,
                                                    DataFormat format = DataFormat::AUTO);
 
     // Parse from stream (maintains state for continuous data)
-    std::vector<sep::quantum::Pattern> parseStream(std::istream& stream,
+        std::vector<quantum::Pattern> parseStream(std::istream& stream,
                                                    DataFormat format = DataFormat::AUTO);
 
     // Specific format parsers
     std::vector<CandleData> parseQuantJSON(const std::string& path);
-    std::vector<sep::quantum::Pattern> parseCSV(const std::string& path);
-    std::vector<sep::quantum::Pattern> parseBinary(const uint8_t* data, size_t size);
+        std::vector<quantum::Pattern> parseCSV(const std::string& path);
+        std::vector<quantum::Pattern> parseBinary(const uint8_t* data, size_t size);
 
     // Convert raw candle data to SEP patterns
-    std::vector<sep::quantum::Pattern> candlesToPatterns(const std::vector<CandleData>& candles);
+        std::vector<quantum::Pattern> candlesToPatterns(const std::vector<CandleData>& candles);
 
     // Utility: write candle data to OANDA-style JSON
     void writeQuantJSON(const std::vector<CandleData>& candles, const std::string& path) const;
 
     // Convert patterns to PinStates for engine compatibility
-    std::vector<sep::PinState> toPinStates(const std::vector<sep::quantum::Pattern>& patterns);
+        std::vector<PinState> toPinStates(const std::vector<quantum::Pattern>& patterns);
 
     // Export correlation metrics to CSV
     bool exportCorrelationCSV(const std::string& path,

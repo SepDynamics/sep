@@ -11,13 +11,13 @@ namespace sep::workbench {
 BackendTabController::BackendTabController()
     : backtester_(std::make_unique<backtester::Backtester>()),
       data_loader_(std::make_unique<backtester::DataLoader>()),
-      pattern_engine_(std::make_unique<sep::quantum::PatternMetricEngine>()) {}
+      pattern_engine_(std::make_unique<quantum::PatternMetricEngine>()) {}
 
 BackendTabController::~BackendTabController() { shutdown(); }
 bool BackendTabController::initialize() {
     std::cout << "[BackendTabController] Initializing..." << std::endl;
     globalEventBus().subscribe<OrderUpdateEvent>([this](const OrderUpdateEvent& e) {
-        auto it = std::find_if(order_cache_.begin(), order_cache_.end(), [&](const sep::connectors::OrderInfo& o) { return o.id == e.info.id; });
+        auto it = std::find_if(order_cache_.begin(), order_cache_.end(), [&](const connectors::OrderInfo& o) { return o.id == e.info.id; });
         if (it == order_cache_.end()) {
             order_cache_.push_back(e.info);
         } else {
@@ -101,7 +101,7 @@ void BackendTabController::renderOrderManagementPanel() {
         ImGui::Text("Realized PnL: %.2f", trade_manager_->getRealizedPnL());
         const auto& hist = trade_manager_->getBalanceHistory();
         if (!hist.empty()) {
-            ImGui::PlotLines("Balance History", hist.data(), hist.size());
+            ImGui::PlotLines("Balance History", (const float*)hist.data(), hist.size());
         }
     }
     ImGui::End();
@@ -148,8 +148,8 @@ void BackendTabController::renderOrderManagementPanel() {
     ImGui::Text("Orders:");
     for (const auto& o : order_cache_) {
         const char* status_str = "PENDING";
-        if (o.status == sep::connectors::OrderStatus::FILLED) status_str = "FILLED";
-        else if (o.status == sep::connectors::OrderStatus::CANCELED) status_str = "CANCELED";
+        if (o.status == connectors::OrderStatus::FILLED) status_str = "FILLED";
+        else if (o.status == connectors::OrderStatus::CANCELED) status_str = "CANCELED";
         ImGui::Text("%s %s %.0f @ %.5f [%s]", o.id.c_str(), o.instrument.c_str(), o.units, o.price, status_str);
     }
 
@@ -189,7 +189,7 @@ void BackendTabController::renderBacktesterPanel() {
                 prices.push_back(candle.close);
             }
 
-            sep::core::ServiceProxyEngine proxy("localhost", 8080);
+            core::ServiceProxyEngine proxy("localhost", 8080);
             validation_result_ = proxy.validateSignalsAgainstHistory(signals, prices);
         }
     }
@@ -210,7 +210,7 @@ void BackendTabController::renderBacktesterPanel() {
         float equity = 0.0f;
         equity_curve_.push_back(equity);
         for (const auto& t : trades) {
-            float diff = (t.type == sep::quantum::SignalType::BUY)
+            float diff = (t.type == quantum::SignalType::BUY)
                              ? t.exit_price - t.entry_price
                              : t.entry_price - t.exit_price;
             equity += diff;
@@ -243,7 +243,7 @@ void BackendTabController::renderBacktesterPanel() {
     ImGui::Text("Sharpe Ratio: %.2f", result.sharpe_ratio);
     ImGui::Text("Max Drawdown: %.2f", result.max_drawdown);
     if (!equity_curve_.empty()) {
-        ImGui::PlotLines("Equity Curve", equity_curve_.data(),
+        ImGui::PlotLines("Equity Curve", (const float*)equity_curve_.data(),
                          static_cast<int>(equity_curve_.size()));
     }
 
@@ -290,9 +290,9 @@ void BackendTabController::renderTradeHistoryPanel() {
         const auto& roi = trade_manager_->getROIHistory();
         const auto& wl = trade_manager_->getWinLossHistory();
         if (!roi.empty())
-            ImGui::PlotLines("ROI", roi.data(), roi.size(), 0, nullptr, -1.0f, 1.0f, ImVec2(0,80));
+            ImGui::PlotLines("ROI", (const float*)roi.data(), roi.size(), 0, nullptr, -1.0f, 1.0f, ImVec2(0,80));
         if (!wl.empty())
-            ImGui::PlotLines("Win/Loss", wl.data(), wl.size(), 0, nullptr, 0.0f, 1.0f, ImVec2(0,80));
+            ImGui::PlotLines("Win/Loss", (const float*)wl.data(), wl.size(), 0, nullptr, 0.0f, 1.0f, ImVec2(0,80));
     }
     for (const auto& l : trade_history_) {
         ImGui::TextUnformatted(l.c_str());

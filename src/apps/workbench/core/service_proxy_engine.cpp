@@ -284,13 +284,13 @@ sep::workbench::SignalValidator::ValidationResult ServiceProxyEngine::validateSi
     return {accuracy, false_rate};
 }
 
-backtester::BacktestResult ServiceProxyEngine::optimize_strategy(const std::string& dataset_path,
+workbench::backtester::BacktestResult ServiceProxyEngine::optimize_strategy(const std::string& dataset_path,
                                                                  float& coherence,
                                                                  float& stability,
                                                                  float& entropy) {
-    backtester::DataLoader loader;
+    workbench::backtester::DataLoader loader;
     loader.load_data(dataset_path);
-    backtester::Backtester bt;
+    workbench::backtester::Backtester bt;
     sep::quantum::PatternMetricEngine engine;
     engine.init(nullptr);
     bt.run(&engine, &loader);

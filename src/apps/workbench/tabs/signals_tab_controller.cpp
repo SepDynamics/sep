@@ -48,7 +48,7 @@ void SignalsTabController::renderThresholdPanel() {
         if (workbench_engine_) {
             auto* pme = workbench_engine_->getPatternMetricEngine();
             if (pme) {
-                sep::quantum::SignalThresholds thresholds;
+                quantum::SignalThresholds thresholds;
                 thresholds.buy_min_coherence = buy_min_coherence_;
                 thresholds.buy_min_stability = buy_min_stability_;
                 thresholds.buy_max_entropy = buy_max_entropy_;
@@ -532,7 +532,7 @@ void SignalsTabController::renderMetricsGraphs() {
     if (entropy_history_4h_.size() > MAX_POINTS) entropy_history_4h_.pop_front();
 
     ImVec2 graph_size(200, 60);
-    ImGui::PlotLines("Coherence 1h", coherence_history_.data(), coherence_history_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
+    ImGui::PlotLines("Coherence 1h", &coherence_history_[0], coherence_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
     if (ImGui::IsItemHovered()) {
         ImGuiIO& io = ImGui::GetIO();
         if (io.MouseWheel != 0.0f) {
@@ -560,9 +560,9 @@ void SignalsTabController::renderMetricsGraphs() {
     drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
     drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
 
-    ImGui::PlotLines("Coherence 4h", coherence_history_4h_.data(), coherence_history_4h_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
-    ImGui::PlotLines("Stability 1h", stability_history_.data(), stability_history_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
-    ImGui::PlotLines("Stability 4h", stability_history_4h_.data(), stability_history_4h_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
+    ImGui::PlotLines("Coherence 4h", &coherence_history_4h_[0], coherence_history_4h_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Stability 1h", &stability_history_[0], stability_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Stability 4h", &stability_history_4h_[0], stability_history_4h_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
     rect_min = ImGui::GetItemRectMin();
     rect_max = ImGui::GetItemRectMax();
     y1 = rect_max.y - roll.stability_1h_avg * (rect_max.y - rect_min.y);
@@ -570,8 +570,8 @@ void SignalsTabController::renderMetricsGraphs() {
     drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
     drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
 
-    ImGui::PlotLines("Entropy 1h", entropy_history_.data(), entropy_history_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
-    ImGui::PlotLines("Entropy 4h", entropy_history_4h_.data(), entropy_history_4h_.size(), 0, nullptr, metrics_offset_, metrics_offset_ + metrics_scale_, graph_size);
+    ImGui::PlotLines("Entropy 1h", &entropy_history_[0], entropy_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Entropy 4h", &entropy_history_4h_[0], entropy_history_4h_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
     rect_min = ImGui::GetItemRectMin();
     rect_max = ImGui::GetItemRectMax();
     y1 = rect_max.y - roll.entropy_1h_avg * (rect_max.y - rect_min.y);

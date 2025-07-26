@@ -54,7 +54,7 @@ public:
         const std::vector<sep::quantum::Signal>& signals,
         const std::vector<float>& prices);
 
-    backtester::BacktestResult optimize_strategy(const std::string& dataset_path,
+        sep::workbench::backtester::BacktestResult optimize_strategy(const std::string& dataset_path,
                                                  float& coherence,
                                                  float& stability,
                                                  float& entropy);

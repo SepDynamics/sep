@@ -33,7 +33,7 @@ ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 
 ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
-    auto& cfg = sep::workbench::Config::getInstance().oanda();
+    auto& cfg = workbench::Config::getInstance().oanda();
     std::string api_key = cfg.demo_api_key.empty() ? cfg.api_key : cfg.demo_api_key;
     std::string account_id = cfg.demo_account_id.empty() ? cfg.account_id : cfg.demo_account_id;
     if (api_key.empty() || account_id.empty()) {
@@ -51,12 +51,12 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     }
 
     if (!api_key.empty() && !account_id.empty()) {
-        oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, true);
-        trade_manager_ = std::make_unique<sep::workbench::TradeManager>(oanda_connector_.get());
+        oanda_connector_ = std::make_unique<connectors::OandaConnector>(api_key, account_id, true);
+        trade_manager_ = std::make_unique<workbench::TradeManager>(oanda_connector_.get());
         trade_manager_->setRiskPercentage(0.02);
         trade_manager_->setPaperTrading(cfg.paper_trading);
         std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
-        std::cout << "[ServiceConnector] API Key length: " << strlen(api_key) << std::endl;
+        std::cout << "[ServiceConnector] API Key length: " << api_key.length() << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
         if (oanda_connector_->initialize()) {
             if (oanda_connector_->fetchHistoricalData("EUR_USD", "eur_usd_m1_48h.json")) {
@@ -85,12 +85,12 @@ ServiceConnector::~ServiceConnector() {
 bool ServiceConnector::connect() {
     std::cout << "[ServiceConnector] Attempting connection to SEP service..." << std::endl;
     
-    if (connection_state_ == ConnectionState::CONNECTED) {
+    if (connection_state_ == sep::workbench::ConnectionState::CONNECTED) {
         std::cout << "[ServiceConnector] Already connected" << std::endl;
         return true;
     }
     
-    connection_state_ = ConnectionState::CONNECTING;
+    connection_state_ = sep::workbench::ConnectionState::CONNECTING;
     
     // Try different connection methods in order of preference
     bool connected = false;
@@ -116,23 +116,23 @@ bool ServiceConnector::connect() {
             return false;
         }
         
-        connection_state_ = ConnectionState::CONNECTED;
+        connection_state_ = sep::workbench::ConnectionState::CONNECTED;
         health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
         
         // Start health monitoring
         startHealthMonitoring();
         
         // Notify via EventBus
-        globalEventBus().publish(ConnectionStateEvent{ConnectionState::CONNECTED});
+        globalEventBus().publish(ConnectionStateEvent{sep::workbench::ConnectionState::CONNECTED});
         if (connection_callback_) {
-            connection_callback_(ConnectionState::CONNECTED);
+            connection_callback_(sep::workbench::ConnectionState::CONNECTED);
         }
         
         std::cout << "[ServiceConnector] Successfully connected to SEP service" << std::endl;
         return true;
     }
     
-    connection_state_ = ConnectionState::ERROR;
+    connection_state_ = sep::workbench::ConnectionState::CONNECTION_FAILED;
     std::cerr << "[ServiceConnector] Failed to connect to SEP service" << std::endl;
     
     // Return false to indicate connection failure
@@ -140,7 +140,7 @@ bool ServiceConnector::connect() {
 }
 
 void ServiceConnector::disconnect() {
-    if (connection_state_ == ConnectionState::DISCONNECTED) {
+    if (connection_state_ == sep::workbench::ConnectionState::DISCONNECTED) {
         return;
     }
     
@@ -179,12 +179,12 @@ void ServiceConnector::disconnect() {
     }
     
     service_engine_ = nullptr;
-    connection_state_ = ConnectionState::DISCONNECTED;
+    connection_state_ = sep::workbench::ConnectionState::DISCONNECTED;
     
     // Notify via EventBus
-    globalEventBus().publish(ConnectionStateEvent{ConnectionState::DISCONNECTED});
+    globalEventBus().publish(ConnectionStateEvent{sep::workbench::ConnectionState::DISCONNECTED});
     if (connection_callback_) {
-        connection_callback_(ConnectionState::DISCONNECTED);
+        connection_callback_(sep::workbench::ConnectionState::DISCONNECTED);
     }
     
     std::cout << "[ServiceConnector] Disconnected from SEP service" << std::endl;
@@ -242,7 +242,7 @@ void ServiceConnector::monitoringLoop() {
     
     while (monitoring_active_) {
         try {
-            if (connection_state_ == ConnectionState::CONNECTED) {
+            if (connection_state_ == sep::workbench::ConnectionState::CONNECTED) {
                 // Send heartbeat
                 if (!sendHeartbeat()) {
                     consecutive_failures++;
@@ -252,12 +252,12 @@ void ServiceConnector::monitoringLoop() {
                     // Check if we've exceeded max retry attempts
                     if (consecutive_failures >= config_.max_retry_attempts) {
                         std::cerr << "[ServiceConnector] Max retry attempts exceeded, marking as disconnected" << std::endl;
-                        connection_state_ = ConnectionState::ERROR;
+                        connection_state_ = sep::workbench::ConnectionState::CONNECTION_FAILED;
                         
                         // Check if we should attempt reconnection
                         if (config_.auto_reconnect) {
                             std::cout << "[ServiceConnector] Scheduling auto-reconnect..." << std::endl;
-                            connection_state_ = ConnectionState::DISCONNECTED;
+                            connection_state_ = sep::workbench::ConnectionState::DISCONNECTED;
                         }
                         
                         // Notify via EventBus
@@ -279,7 +279,7 @@ void ServiceConnector::monitoringLoop() {
                     // Update health metrics
                     updateHealthMetrics();
                 }
-            } else if (connection_state_ == ConnectionState::DISCONNECTED && config_.auto_reconnect) {
+            } else if (connection_state_ == sep::workbench::ConnectionState::DISCONNECTED && config_.auto_reconnect) {
                 // Attempt reconnection if we're configured for it
                 std::cout << "[ServiceConnector] Attempting scheduled reconnection..." << std::endl;
                 if (reconnect()) {
@@ -309,7 +309,7 @@ void ServiceConnector::monitoringLoop() {
 }
 
 bool ServiceConnector::sendHeartbeat() {
-    if (connection_state_ != ConnectionState::CONNECTED || !service_handle_) {
+    if (connection_state_ != sep::workbench::ConnectionState::CONNECTED || !service_handle_) {
         return false;
     }
     
@@ -805,16 +805,16 @@ sep::core::Engine* ServiceConnector::createServiceEngineProxy(int socket_fd)
     return createLocalEngine();
 }
 
-sep::core::Engine* ServiceConnector::createLocalEngine()
+core::Engine* ServiceConnector::createLocalEngine()
 {
     try {
         std::cout << "[ServiceConnector] Initializing local SEP engine..." << std::endl;
         
         // Create a real local engine instance
-        local_engine_ = std::make_unique<sep::core::Engine>();
+        local_engine_ = std::make_unique<core::Engine>();
         
         // Initialize the engine with default configuration
-        sep::config::CudaConfig cuda_config;
+        config::CudaConfig cuda_config;
         cuda_config.use_gpu = true;
         cuda_config.max_memory_mb = 1024;
         
@@ -835,15 +835,15 @@ sep::core::Engine* ServiceConnector::createLocalEngine()
     }
 }
 
-sep::core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
+core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
 {
     try {
         std::cout << "[ServiceConnector] Creating HTTP proxy engine for remote service..." << std::endl;
         
     // Create a proxy engine that forwards commands to the remote service via HTTP
-    http_proxy_engine_ = std::make_unique<sep::core::ServiceProxyEngine>(config_.service_address, config_.service_port);
+    http_proxy_engine_ = std::make_unique<core::ServiceProxyEngine>(config_.service_address, config_.service_port);
 
-    sep::config::CudaConfig cfg{};
+    config::CudaConfig cfg{};
     if (!http_proxy_engine_->init(cfg) || !http_proxy_engine_->isConnected()) {
         std::string err = "HTTP proxy engine connection failed: " + http_proxy_engine_->getLastError();
         std::cerr << "[ServiceConnector] " << err << std::endl;
@@ -870,7 +870,7 @@ sep::core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
 
 void ServiceConnector::loadInitialData(const std::string& path)
 {
-    sep::DataParser parser;
+    DataParser parser;
     auto candles = parser.parseQuantJSON(path);
     initial_data_.clear();
     for (const auto& c : candles)

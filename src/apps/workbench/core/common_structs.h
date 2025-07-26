@@ -1,5 +1,4 @@
 #pragma once
-
 #include <chrono>
 #include <deque>
 #include <map>
@@ -201,4 +200,4 @@ struct EnhancedHoverInfo {
     std::string market_regime = "Unknown";  // Trending, Ranging, Breakout
 };
 
-} // namespace sep::workbench
+}  // namespace sep::workbench

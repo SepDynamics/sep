@@ -10,6 +10,7 @@
 #include "engine/engine.h"
 #include "quantum/coherence_manager.h"
 #include "quantum/pattern_metric_engine.h"
+#include "core/service_proxy_engine.h"
 #include "../backtester/backtester.h"
 #include "../backtester/data/data_loader.h"
 

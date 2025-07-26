@@ -38,7 +38,7 @@ class Engine {
   Engine() noexcept(false);
   ~Engine();
 
-  bool init(const sep::config::CudaConfig &config);
+  bool init(const config::CudaConfig &config);
 
   // Delete copy operations
   Engine(const Engine &) = delete;
@@ -57,7 +57,7 @@ class Engine {
                        std::vector<std::uint32_t> &expectations, std::uint64_t tick);
 
   void process_batch(const std::vector<::sep::PinState> &inputs, std::uint64_t tick,
-                     sep::quantum::QBSAResult &qbsa_result, sep::cuda::QSHResult &qsh_result);
+                     quantum::QBSAResult &qbsa_result, cuda::QSHResult &qsh_result);
 
   // Process quantitative data (market data, etc.)
   std::string processQuantData(const std::string &dataPath, bool useGPU = true);
@@ -83,7 +83,7 @@ class Engine {
   std::map<std::string, double> getMetrics() const;
   bool isProcessing() const;
 
-  sep::quantum::PatternMetricEngine* getPatternMetricEngine() { return &pattern_metric_engine_; }
+  quantum::PatternMetricEngine* getPatternMetricEngine() { return &pattern_metric_engine_; }
 
  private:
   static constexpr size_t DEFAULT_SIZE = 1024;
@@ -91,8 +91,8 @@ class Engine {
 
   struct Impl;
   std::unique_ptr<Impl> impl_;
-  sep::quantum::PatternMetricEngine pattern_metric_engine_;
-  std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor_;
+  quantum::PatternMetricEngine pattern_metric_engine_;
+  std::unique_ptr<quantum::QuantumProcessor> quantum_processor_;
   MetricsCollector metrics_collector_;
 };
 

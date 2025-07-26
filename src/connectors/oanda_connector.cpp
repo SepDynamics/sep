@@ -559,7 +559,7 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.status = OrderStatus::PENDING;
                 pending_orders_.push_back(info);
                 if (order_callback_) order_callback_(info);
-                sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
+                workbench::globalEventBus().publish(workbench::OrderUpdateEvent{info});
             }
             if (json_resp.contains("orderFillTransaction")) {
                 const auto& tx = json_resp["orderFillTransaction"];
@@ -739,11 +739,11 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
         return false;
     }
 
-    std::vector<sep::CandleData> out;
+    std::vector<CandleData> out;
     out.reserve(candles.size());
     for (const auto& c : candles)
     {
-        sep::CandleData cd;
+        CandleData cd;
         cd.time = c.time;
         cd.open = static_cast<float>(c.open);
         cd.high = static_cast<float>(c.high);
@@ -753,7 +753,7 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
         out.push_back(cd);
     }
 
-    sep::DataParser parser;
+    DataParser parser;
     parser.writeQuantJSON(out, output_file);
     return true;
 }

@@ -4,11 +4,12 @@
 #include "engine.h"
 #include "service_proxy_engine.h"
 #include "config.h"
-#include "../config.hpp"
+#include "ui_layout_manager.h"
 
 #include <iostream>
 #include <thread>
 #include <cstring>
+#include "engine/data_parser.h"
 
 // Platform-specific includes
 #ifdef _WIN32
@@ -44,8 +45,21 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
 
     if (!api_key.empty() && !account_id.empty()) {
         oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, true);
-        trade_manager_ = std::make_unique<workbench::TradeManager>(oanda_connector_.get());
-        std::cout << "[ServiceConnector] OANDA connector configured" << std::endl;
+        std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
+        std::cout << "[ServiceConnector] API Key length: " << strlen(api_key) << std::endl;
+        std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
+        if (oanda_connector_->initialize()) {
+            oanda_connector_->fetchHistoricalData("EUR_USD", "eur_usd_m1_48h.json");
+            sep::DataParser parser;
+            auto candles = parser.parseQuantJSON("eur_usd_m1_48h.json");
+            for (const auto& c : candles) {
+                std::tm tm = {};
+                std::istringstream ss(c.time);
+                ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+                auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+                initial_data_.emplace_back(c.open, c.high, c.low, c.close, (int)c.volume, ts);
+            }
+        }
     } else {
         std::cout << "[ServiceConnector] ERROR: OANDA credentials not provided" << std::endl;
     }
@@ -100,7 +114,8 @@ bool ServiceConnector::connect() {
         // Start health monitoring
         startHealthMonitoring();
         
-        // Notify callback
+        // Notify via EventBus
+        globalEventBus().publish(ConnectionStateEvent{ConnectionState::CONNECTED});
         if (connection_callback_) {
             connection_callback_(ConnectionState::CONNECTED);
         }
@@ -158,7 +173,8 @@ void ServiceConnector::disconnect() {
     service_engine_ = nullptr;
     connection_state_ = ConnectionState::DISCONNECTED;
     
-    // Notify callback
+    // Notify via EventBus
+    globalEventBus().publish(ConnectionStateEvent{ConnectionState::DISCONNECTED});
     if (connection_callback_) {
         connection_callback_(ConnectionState::DISCONNECTED);
     }
@@ -170,6 +186,15 @@ bool ServiceConnector::reconnect() {
     disconnect();
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     return connect();
+}
+
+void ServiceConnector::setSignalsTab(SignalsTabController* tab)
+{
+    signals_tab_ = tab;
+    if (signals_tab_ && !initial_data_.empty())
+    {
+        signals_tab_->setCandleData(initial_data_);
+    }
 }
 
 ServiceHealth ServiceConnector::getServiceHealth() const {
@@ -227,7 +252,8 @@ void ServiceConnector::monitoringLoop() {
                             connection_state_ = ConnectionState::DISCONNECTED;
                         }
                         
-                        // Notify callback of state change
+                        // Notify via EventBus
+                        globalEventBus().publish(ConnectionStateEvent{connection_state_});
                         if (connection_callback_) {
                             connection_callback_(connection_state_);
                         }

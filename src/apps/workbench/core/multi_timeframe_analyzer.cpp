@@ -607,6 +607,12 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
         prices.push_back(candle.close);
     }
 
+    // Price movements (delta close)
+    std::vector<double> price_moves;
+    for (size_t i = 1; i < prices.size(); ++i) {
+        price_moves.push_back(prices[i] - prices[i - 1]);
+    }
+
     std::vector<double> coherence_values;
     std::vector<double> stability_values;
     std::vector<double> entropy_values;
@@ -617,31 +623,62 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
         entropy_values.push_back(pattern.entropy);
     }
 
-    auto calculate_correlation = [](const std::vector<double>& v1, const std::vector<double>& v2) {
-        if (v1.size() != v2.size() || v1.empty()) {
+    auto pearson = [](const std::vector<double>& a, const std::vector<double>& b) {
+        if (a.size() != b.size() || a.empty()) {
             return 0.0;
         }
 
-        double sum_v1 = 0.0, sum_v2 = 0.0, sum_v1_sq = 0.0, sum_v2_sq = 0.0, sum_products = 0.0;
-        int n = v1.size();
+        double sum_a = 0.0, sum_b = 0.0, sum_a_sq = 0.0, sum_b_sq = 0.0, sum_prod = 0.0;
+        int n = static_cast<int>(a.size());
 
         for (int i = 0; i < n; ++i) {
-            sum_v1 += v1[i];
-            sum_v2 += v2[i];
-            sum_v1_sq += v1[i] * v1[i];
-            sum_v2_sq += v2[i] * v2[i];
-            sum_products += v1[i] * v2[i];
+            sum_a += a[i];
+            sum_b += b[i];
+            sum_a_sq += a[i] * a[i];
+            sum_b_sq += b[i] * b[i];
+            sum_prod += a[i] * b[i];
         }
 
-        double numerator = n * sum_products - sum_v1 * sum_v2;
-        double denominator = std::sqrt((n * sum_v1_sq - sum_v1 * sum_v1) * (n * sum_v2_sq - sum_v2 * sum_v2));
+        double numerator = n * sum_prod - sum_a * sum_b;
+        double denominator = std::sqrt((n * sum_a_sq - sum_a * sum_a) * (n * sum_b_sq - sum_b * sum_b));
 
         return (denominator == 0) ? 0.0 : numerator / denominator;
     };
 
-    correlation_metrics.coherence_price_correlation = calculate_correlation(coherence_values, prices);
-    correlation_metrics.stability_price_correlation = calculate_correlation(stability_values, prices);
-    correlation_metrics.entropy_price_correlation = calculate_correlation(entropy_values, prices);
+    auto spearman = [&pearson](const std::vector<double>& a, const std::vector<double>& b) {
+        if (a.size() != b.size() || a.empty()) {
+            return 0.0;
+        }
+
+        int n = static_cast<int>(a.size());
+        std::vector<std::pair<double, int>> ar(n), br(n);
+        for (int i = 0; i < n; ++i) {
+            ar[i] = {a[i], i};
+            br[i] = {b[i], i};
+        }
+        std::sort(ar.begin(), ar.end(), [](auto& x, auto& y){ return x.first < y.first; });
+        std::sort(br.begin(), br.end(), [](auto& x, auto& y){ return x.first < y.first; });
+        std::vector<double> rank_a(n), rank_b(n);
+        for (int i = 0; i < n; ++i) {
+            rank_a[ar[i].second] = i + 1;
+            rank_b[br[i].second] = i + 1;
+        }
+        return pearson(rank_a, rank_b);
+    };
+
+    // Ensure vectors are same length
+    size_t n = std::min({coherence_values.size(), stability_values.size(), entropy_values.size(), price_moves.size()});
+    coherence_values.resize(n);
+    stability_values.resize(n);
+    entropy_values.resize(n);
+    price_moves.resize(n);
+
+    correlation_metrics.coherence_pearson = pearson(coherence_values, price_moves);
+    correlation_metrics.coherence_spearman = spearman(coherence_values, price_moves);
+    correlation_metrics.stability_pearson = pearson(stability_values, price_moves);
+    correlation_metrics.stability_spearman = spearman(stability_values, price_moves);
+    correlation_metrics.entropy_pearson = pearson(entropy_values, price_moves);
+    correlation_metrics.entropy_spearman = spearman(entropy_values, price_moves);
 
     return correlation_metrics;
 }

@@ -53,6 +53,9 @@ public:
         float coherence_24h_avg{0.0f};
         float stability_24h_avg{0.0f};
         float entropy_24h_avg{0.0f};
+        float coherence_4h_avg{0.0f};
+        float stability_4h_avg{0.0f};
+        float entropy_4h_avg{0.0f};
         float coherence_1h_avg{0.0f};
         float stability_1h_avg{0.0f};
         float entropy_1h_avg{0.0f};

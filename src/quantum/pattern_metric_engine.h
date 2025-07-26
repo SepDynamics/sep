@@ -141,6 +141,11 @@ public:
     /// @brief Sets the thresholds for signal generation.
     void setSignalThresholds(const SignalThresholds& thresholds);
 
+    /// @brief Returns the current thresholds for signal generation.
+    SignalThresholds getSignalThresholds() const {
+        return signal_thresholds_;
+    }
+
     /// @brief Gets the latest generated signals.
     const std::vector<Signal>& getSignals() const;
 

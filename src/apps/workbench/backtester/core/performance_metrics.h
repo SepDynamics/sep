@@ -5,5 +5,6 @@ public:
     PerformanceMetrics();
     ~PerformanceMetrics();
 
-    void calculate();
+    static float computeSharpeRatio(const std::vector<float>& pnl_series);
+    static float computeMaxDrawdown(const std::vector<float>& pnl_series);
 };

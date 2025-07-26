@@ -6,6 +6,7 @@
 #include "../backtester/backtester.h"
 #include "../core/file_dialog.hpp"
 #include "../core/service_connector.hpp"
+#include "../core/trade_manager.h"
 #include "../backtester/data_loader.h"
 #include "quantum/pattern_metric_engine.h"
 #include "../core/service_proxy_engine.h"
@@ -42,6 +43,7 @@ private:
     std::unique_ptr<backtester::Backtester> backtester_;
     std::unique_ptr<sep::workbench::backtester::DataLoader> data_loader_;
     std::unique_ptr<sep::quantum::PatternMetricEngine> pattern_engine_;
+    std::unique_ptr<sep::workbench::TradeManager> trade_manager_;
     FileDialog file_dialog_;
 
     // UI State

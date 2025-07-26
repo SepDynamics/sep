@@ -27,20 +27,17 @@ bool SignalsTabController::initialize() {
 void SignalsTabController::render() {
     ImGui::Columns(2, "SignalsColumns", true);
     ImGui::Begin("Signal Thresholds");
-    static float min_coherence = 0.7f;
-    static float min_stability = 0.6f;
-    static float max_entropy = 0.3f;
-    ImGui::SliderFloat("Min Coherence", &min_coherence, 0.0f, 1.0f);
-    ImGui::SliderFloat("Min Stability", &min_stability, 0.0f, 1.0f);
-    ImGui::SliderFloat("Max Entropy", &max_entropy, 0.0f, 1.0f);
+    ImGui::SliderFloat("Min Coherence", &min_coherence_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Min Stability", &min_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Max Entropy", &max_entropy_, 0.0f, 1.0f);
     if (ImGui::Button("Apply")) {
         if (workbench_engine_) {
             auto* pme = workbench_engine_->getPatternMetricEngine();
             if (pme) {
                 sep::quantum::SignalThresholds thresholds;
-                thresholds.min_coherence = min_coherence;
-                thresholds.min_stability = min_stability;
-                thresholds.max_entropy = max_entropy;
+                thresholds.min_coherence = min_coherence_;
+                thresholds.min_stability = min_stability_;
+                thresholds.max_entropy = max_entropy_;
                 pme->setSignalThresholds(thresholds);
             }
         }
@@ -50,7 +47,7 @@ void SignalsTabController::render() {
     ImGui::NextColumn();
 
     if (metrics_monitor_) {
-        ImGui::Begin("SEP Engine Metrics");
+        (void)ImGui::Begin("SEP Engine Metrics");
         const auto& system_metrics = metrics_monitor_->getSystemMetrics();
         const auto& rolling_metrics = metrics_monitor_->getRollingMetrics();
 
@@ -70,6 +67,7 @@ void SignalsTabController::render() {
         ImGui::Text("Stability: %.3f", rolling_metrics.stability_24h_avg);
         ImGui::Text("Entropy: %.3f", rolling_metrics.entropy_24h_avg);
 
+        renderMetricsGraphs();
         ImGui::End();
     }
 
@@ -493,6 +491,47 @@ void SignalsTabController::renderVolumeChart() {
     }
 }
 
+void SignalsTabController::renderMetricsGraphs() {
+    if (!metrics_monitor_) return;
+
+    const auto& sys = metrics_monitor_->getSystemMetrics();
+    coherence_history_.push_back(sys.avg_coherence);
+    stability_history_.push_back(sys.avg_stability);
+    entropy_history_.push_back(sys.avg_entropy);
+
+    const size_t MAX_POINTS = 240; // roughly 4 hours if updated each minute
+    if (coherence_history_.size() > MAX_POINTS) coherence_history_.pop_front();
+    if (stability_history_.size() > MAX_POINTS) stability_history_.pop_front();
+    if (entropy_history_.size() > MAX_POINTS) entropy_history_.pop_front();
+
+    ImVec2 graph_size(200, 60);
+    ImGui::PlotLines("Coherence", coherence_history_.data(), coherence_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    auto rect_min = ImGui::GetItemRectMin();
+    auto rect_max = ImGui::GetItemRectMax();
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    const auto& roll = metrics_monitor_->getRollingMetrics();
+    float y1 = rect_max.y - roll.coherence_1h_avg * (rect_max.y - rect_min.y);
+    float y4 = rect_max.y - roll.coherence_4h_avg * (rect_max.y - rect_min.y);
+    dl->AddLine(ImVec2(rect_min.x, y1), ImVec2(rect_max.x, y1), IM_COL32(255,0,0,128));
+    dl->AddLine(ImVec2(rect_min.x, y4), ImVec2(rect_max.x, y4), IM_COL32(0,255,0,128));
+
+    ImGui::PlotLines("Stability", stability_history_.data(), stability_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    rect_min = ImGui::GetItemRectMin();
+    rect_max = ImGui::GetItemRectMax();
+    y1 = rect_max.y - roll.stability_1h_avg * (rect_max.y - rect_min.y);
+    y4 = rect_max.y - roll.stability_4h_avg * (rect_max.y - rect_min.y);
+    dl->AddLine(ImVec2(rect_min.x, y1), ImVec2(rect_max.x, y1), IM_COL32(255,0,0,128));
+    dl->AddLine(ImVec2(rect_min.x, y4), ImVec2(rect_max.x, y4), IM_COL32(0,255,0,128));
+
+    ImGui::PlotLines("Entropy", entropy_history_.data(), entropy_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
+    rect_min = ImGui::GetItemRectMin();
+    rect_max = ImGui::GetItemRectMax();
+    y1 = rect_max.y - roll.entropy_1h_avg * (rect_max.y - rect_min.y);
+    y4 = rect_max.y - roll.entropy_4h_avg * (rect_max.y - rect_min.y);
+    dl->AddLine(ImVec2(rect_min.x, y1), ImVec2(rect_max.x, y1), IM_COL32(255,0,0,128));
+    dl->AddLine(ImVec2(rect_min.x, y4), ImVec2(rect_max.x, y4), IM_COL32(0,255,0,128));
+}
+
 void SignalsTabController::renderTrendLines() {
     if (trend_lines_.empty()) return;
     
@@ -653,7 +692,7 @@ void SignalsTabController::renderChartGrid() {
         
         double price = price_max_ - ((price_max_ - price_min_) * i / num_price_lines);
         char price_text[32];
-        sprintf(price_text, "%.5f", price);
+        (void)sprintf(price_text, "%.5f", price);
         draw_list->AddText(ImVec2(chart_pos_.x - 70, y - 8), 
                            IM_COL32(150, 150, 160, 255), price_text);
     }
@@ -666,7 +705,7 @@ void SignalsTabController::renderChartGrid() {
                            grid_color);
         
         char time_text[16];
-        sprintf(time_text, "%02d:00", (24 - (i * 4)) % 24);
+        (void)sprintf(time_text, "%02d:00", (24 - (i * 4)) % 24);
         draw_list->AddText(ImVec2(x - 15, chart_pos_.y + chart_size_.y + 5), 
                            IM_COL32(150, 150, 160, 255), time_text);
     }

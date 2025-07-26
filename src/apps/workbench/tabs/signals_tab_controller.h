@@ -62,6 +62,11 @@ private:
     bool show_trend_lines_ = true;
     bool auto_detect_trends_ = true;
 
+    // Threshold settings for signal generation
+    float min_coherence_ = 0.7f;
+    float min_stability_ = 0.6f;
+    float max_entropy_ = 0.3f;
+
     // Chart dimensions and state
     ImVec2 chart_size_;
     ImVec2 chart_pos_;
@@ -78,6 +83,11 @@ private:
     void renderHoverInfo();
     void renderCrosshair();
     void renderChartGrid();
+    void renderMetricsGraphs();
+
+    std::deque<float> coherence_history_;
+    std::deque<float> stability_history_;
+    std::deque<float> entropy_history_;
 
     // Utility functions
     ImVec2 priceToScreen(double price, std::chrono::system_clock::time_point time);

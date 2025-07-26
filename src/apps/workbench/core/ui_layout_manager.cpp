@@ -4,7 +4,13 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 
+
 #include "imgui.h"
+
+EventBus& globalEventBus() {
+    static EventBus bus;
+    return bus;
+}
 
 namespace sep::workbench {
 
@@ -24,6 +30,7 @@ void UILayoutManager::unregisterPanel(const std::string& panel_id) {
 void UILayoutManager::setPanelVisible(const std::string& panel_id, bool visible) {
     if (panels_.find(panel_id) != panels_.end()) {
         panels_[panel_id].visible = visible;
+        globalEventBus().publish(PanelVisibilityEvent{panel_id, visible});
     }
 }
 
@@ -72,6 +79,7 @@ void UILayoutManager::createLayoutGroup(const std::string& group_name, PanelGrou
     }
     
     layout_groups_[group_name] = group;
+    globalEventBus().publish(GroupCollapsedEvent{group_name, group.collapsed});
 }
 
 void UILayoutManager::addPanelToGroup(const std::string& group_name, const std::string& panel_id) {
@@ -83,6 +91,7 @@ void UILayoutManager::addPanelToGroup(const std::string& group_name, const std::
 void UILayoutManager::setGroupCollapsed(const std::string& group_name, bool collapsed) {
     if (layout_groups_.find(group_name) != layout_groups_.end()) {
         layout_groups_[group_name].collapsed = collapsed;
+        globalEventBus().publish(GroupCollapsedEvent{group_name, collapsed});
     }
 }
 

@@ -58,6 +58,10 @@ class Manager {
   ::spdlog::level::level_enum toSpdLogLevel(Level level);
 };
 
+// Log a detected pattern with timestamp to the pattern_engine logger
+void logPatternDetected(const std::string &pattern_id,
+                        std::chrono::system_clock::time_point timestamp);
+
 // Global functions
 inline void initializeLogging() { Manager::initialize(); }
 inline Level levelFromString(const std::string &level)

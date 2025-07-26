@@ -75,6 +75,8 @@ public:
     double getWinLossRatio() const;
     double getROI() const;
 
+    const std::vector<double>& getBalanceHistory() const { return balance_history_; }
+
 private:
     void updatePositions(const Order& order);
 
@@ -94,6 +96,7 @@ private:
     int win_count_ = 0;
     int loss_count_ = 0;
     bool paper_trading_ = false;
+    std::vector<double> balance_history_;
 };
 
 } // namespace workbench

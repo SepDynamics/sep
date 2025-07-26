@@ -45,7 +45,6 @@ private:
     std::unique_ptr<backtester::Backtester> backtester_;
     std::unique_ptr<sep::workbench::backtester::DataLoader> data_loader_;
     std::unique_ptr<sep::quantum::PatternMetricEngine> pattern_engine_;
-    std::unique_ptr<sep::workbench::TradeManager> trade_manager_;
     FileDialog file_dialog_;
 
     // UI State

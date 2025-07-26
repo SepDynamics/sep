@@ -10,6 +10,7 @@ TradeManager::TradeManager(sep::connectors::OandaConnector* connector)
     : oanda_connector_(connector)
 {
     starting_balance_ = account_balance_;
+    balance_history_.push_back(account_balance_);
     sep::logging::LoggerConfig config;
     config.file.path = "trades.log";
     logger_ = sep::logging::Manager::getInstance().createLogger("trade_manager", config);
@@ -36,7 +37,8 @@ nlohmann::json TradeManager::placeOrder(const std::string& instrument,
                                         double current_price,
                                         double stop_loss_pips,
                                         double take_profit_pips) {
-    double risk_amount = account_balance_ * risk_percentage_;
+    double applied_risk = std::min(risk_percentage_, 0.02);
+    double risk_amount = account_balance_ * applied_risk;
     double pips_to_risk = stop_loss_pips;
     double pip_value = 0.0001;
     double position_size = risk_amount / (pips_to_risk * pip_value);
@@ -49,7 +51,7 @@ nlohmann::json TradeManager::placeOrder(const std::string& instrument,
         current_exposure += std::abs(pos.size) * pos.current_price;
     }
     double new_exposure = current_exposure + std::abs(units) * current_price;
-    if (new_exposure > account_balance_ * max_exposure_pct_) {
+    if (new_exposure > account_balance_ * 0.02) {
         return {{"error", "Exposure limit exceeded"}};
     }
     if (paper_trading_) {
@@ -166,6 +168,7 @@ void TradeManager::updatePositions(const Order& order) {
         positions_.push_back(new_position);
         account_balance_ -= order.units * order.price;
     }
+    balance_history_.push_back(account_balance_);
 }
 
 void TradeManager::startPaperTrading(const std::string& instrument)

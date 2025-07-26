@@ -572,6 +572,7 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 if (order_callback_) order_callback_(info);
                 sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
             }
+            refreshOrders();
             return json_resp;
         } catch (const std::exception& e) {
             last_error_ = "Failed to parse placeOrder response: " + std::string(e.what());

@@ -63,6 +63,7 @@ private:
     nlohmann::json orders_;
     std::vector<sep::connectors::OrderInfo> order_cache_;
     bool paper_trading_ = false;
+    std::vector<float> equity_curve_;
 };
 
 } // namespace sep::workbench

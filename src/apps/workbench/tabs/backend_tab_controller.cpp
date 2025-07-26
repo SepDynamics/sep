@@ -203,6 +203,17 @@ void BackendTabController::renderBacktesterPanel() {
     if (ImGui::Button("Run Backtest")) {
         data_loader_->load_data(backtest_file_buffer_);
         backtester_->run(pattern_engine_.get(), data_loader_.get());
+        equity_curve_.clear();
+        const auto& trades = backtester_->getResult().trades;
+        float equity = 0.0f;
+        equity_curve_.push_back(equity);
+        for (const auto& t : trades) {
+            float diff = (t.type == sep::quantum::SignalType::BUY)
+                             ? t.exit_price - t.entry_price
+                             : t.entry_price - t.exit_price;
+            equity += diff;
+            equity_curve_.push_back(equity);
+        }
     }
     ImGui::SameLine();
     if (ImGui::Button("Run 48h Sample")) {
@@ -210,6 +221,17 @@ void BackendTabController::renderBacktesterPanel() {
         backtest_file_buffer_[sizeof(backtest_file_buffer_) - 1] = '\0';
         data_loader_->load_data(backtest_file_buffer_);
         backtester_->run(pattern_engine_.get(), data_loader_.get());
+        equity_curve_.clear();
+        const auto& trades = backtester_->getResult().trades;
+        float equity = 0.0f;
+        equity_curve_.push_back(equity);
+        for (const auto& t : trades) {
+            float diff = (t.type == sep::quantum::SignalType::BUY)
+                             ? t.exit_price - t.entry_price
+                             : t.entry_price - t.exit_price;
+            equity += diff;
+            equity_curve_.push_back(equity);
+        }
     }
 
     const auto& result = backtester_->getResult();
@@ -218,6 +240,10 @@ void BackendTabController::renderBacktesterPanel() {
     ImGui::Text("Total PnL: %.2f", result.total_pnl);
     ImGui::Text("Sharpe Ratio: %.2f", result.sharpe_ratio);
     ImGui::Text("Max Drawdown: %.2f", result.max_drawdown);
+    if (!equity_curve_.empty()) {
+        ImGui::PlotLines("Equity Curve", equity_curve_.data(),
+                         static_cast<int>(equity_curve_.size()));
+    }
 
     ImGui::End();
 }

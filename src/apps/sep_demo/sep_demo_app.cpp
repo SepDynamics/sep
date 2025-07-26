@@ -357,7 +357,7 @@ void PatternGeneratorPanel::generateWavePattern() {
 
     for (int i = 0; i < pattern_count_; ++i) {
         float t = static_cast<float>(i) / static_cast<float>(pattern_count_ - 1);
-        float angle = t * 2.0f * M_PI;
+        float angle = t * 2.0f * static_cast<float>(M_PI);
 
         quantum::Pattern pattern;
         pattern.id = "wave_" + std::to_string(i) + "_" + std::to_string(gen());

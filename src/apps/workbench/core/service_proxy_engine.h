@@ -41,6 +41,7 @@ public:
                       sep::cuda::QSHResult& qsh_result);
 
     bool isConnected() const { return is_connected_; }
+    const std::string& getLastError() const { return last_error_; }
 
     sep::workbench::SignalValidator::ValidationResult validate_signal(
         const std::vector<sep::quantum::Signal>& signals, const std::vector<float>& prices);
@@ -67,6 +68,8 @@ private:
     // Helper methods for HTTP communication
     bool sendRequest(const std::string& endpoint, const std::string& payload, std::string& response);
     std::string buildRequestPath(const std::string& endpoint) const;
+
+    std::string last_error_;
 };
 
 } // namespace core

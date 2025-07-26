@@ -840,15 +840,20 @@ sep::core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
     try {
         std::cout << "[ServiceConnector] Creating HTTP proxy engine for remote service..." << std::endl;
         
-        // Create a proxy engine that forwards commands to the remote service via HTTP
-        http_proxy_engine_ = std::make_unique<sep::core::ServiceProxyEngine>(config_.service_address, config_.service_port);
-        
-        // Test the connection
-        if (!http_proxy_engine_->isConnected()) {
-            std::cerr << "[ServiceConnector] HTTP proxy engine connection failed" << std::endl;
-            // Fallback to local engine
-            return createLocalEngine();
-        }
+    // Create a proxy engine that forwards commands to the remote service via HTTP
+    http_proxy_engine_ = std::make_unique<sep::core::ServiceProxyEngine>(config_.service_address, config_.service_port);
+
+    sep::config::CudaConfig cfg{};
+    if (!http_proxy_engine_->init(cfg) || !http_proxy_engine_->isConnected()) {
+        std::string err = "HTTP proxy engine connection failed: " + http_proxy_engine_->getLastError();
+        std::cerr << "[ServiceConnector] " << err << std::endl;
+        health_metrics_.last_error = err;
+        health_metrics_.is_responsive = false;
+        // Fallback to local engine
+        return createLocalEngine();
+    }
+
+    health_metrics_.last_error.clear();
         
         std::cout << "[ServiceConnector] HTTP proxy engine created successfully" << std::endl;
         health_metrics_.is_responsive = true;

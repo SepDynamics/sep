@@ -10,6 +10,7 @@
 #include "connectors/oanda_connector.h"
 #include "service_proxy_engine.h"
 #include "trade_manager.h"
+#include "multi_timeframe_analyzer.h"
 #include "tabs/signals_tab_controller.h"
 #include "common/financial_data_types.h"
 
@@ -89,6 +90,7 @@ public:
     const ConnectionConfig& getConfig() const { return config_; }
 
     void setSignalsTab(SignalsTabController* tab);
+    void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer) { mtf_analyzer_ = analyzer; }
     const std::deque<common::CandleData>& getInitialData() const { return initial_data_; }
 
 private:
@@ -131,6 +133,7 @@ private:
     std::unique_ptr<sep::core::ServiceProxyEngine> http_proxy_engine_;
 
     SignalsTabController* signals_tab_{nullptr};
+    MultiTimeframeAnalyzer* mtf_analyzer_{nullptr};
     std::deque<common::CandleData> initial_data_;
     std::deque<common::SEPSignalData> initial_signals_;
 

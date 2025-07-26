@@ -498,8 +498,20 @@ void OandaConnector::updateCandleBuilder(const MarketData& md) {
     auto start = std::chrono::time_point_cast<std::chrono::minutes>(tp);
     auto& builder = candle_builders_[md.instrument];
     if (!builder.active || builder.start != start) {
-        if (builder.active && candle_callback_) {
-            candle_callback_(builder.candle);
+        if (builder.active) {
+            if (candle_callback_) {
+                candle_callback_(builder.candle);
+            }
+            if (price_callback_) {
+                MarketData candle_md;
+                candle_md.instrument = md.instrument;
+                candle_md.bid = builder.candle.close;
+                candle_md.ask = builder.candle.close;
+                candle_md.mid = builder.candle.close;
+                candle_md.timestamp = sep::common::time_point_to_nanoseconds(builder.start);
+                candle_md.volume = builder.candle.volume;
+                price_callback_(candle_md);
+            }
         }
         builder.candle = common::CandleData(md.mid, md.mid, md.mid, md.mid, md.volume, start);
         builder.start = start;

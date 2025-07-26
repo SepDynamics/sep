@@ -25,6 +25,7 @@
 // Include ImGui headers
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "imgui_helpers.hpp"
 #include <implot.h>
 
 // Use correct paths for ImGui implementation files
@@ -126,6 +127,9 @@ bool WorkbenchEngine::initialize()
                 rolling.entropy_4h_avg = it4->second.entropy_level;
             }
             metrics_monitor_->setRollingMetrics(rolling);
+            if (signals_tab_) {
+                signals_tab_->setMetricsMonitor(metrics_monitor_);
+            }
         });
         
         // Initialize renderer and metrics dashboard
@@ -149,6 +153,7 @@ bool WorkbenchEngine::initialize()
         signals_tab_->setMetricsMonitor(metrics_monitor_);
         signals_tab_->setWorkbenchEngine(this);
         service_connector_->setSignalsTab(signals_tab_.get());
+        service_connector_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         engine_tab_->setSEPEngine(active_engine_);
         engine_tab_->setMetricsMonitor(metrics_monitor_);
         engine_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
@@ -174,11 +179,6 @@ bool WorkbenchEngine::initialize()
             std::cout << "[WorkbenchEngine] OANDA connector available: " << (oanda_ptr ? "Yes" : "No") << std::endl;
             oanda_ptr->setPriceCallback([this](const connectors::MarketData& md) {
                 if (metrics_monitor_) metrics_monitor_->setLatestMarketData(md);
-            });
-            oanda_ptr->setCandleCallback([this](const common::CandleData& c) {
-                if (multi_timeframe_analyzer_) {
-                    multi_timeframe_analyzer_->ingestMarketData("EUR_USD", c);
-                }
             });
             oanda_ptr->startPriceStream({"EUR_USD"});
         }
@@ -582,6 +582,11 @@ void WorkbenchEngine::attemptServiceConnection()
     }
 
     globalEventBus().publish(ConnectionStateEvent{state});
+    if (state == ConnectionState::CONNECTED) {
+        Toast("Service Connected", "Successfully connected to SEP service");
+    } else if (state == ConnectionState::CONNECTION_FAILED) {
+        Toast("Connection Failed", "Could not connect to SEP service");
+    }
 
     // Ensure we always have a valid engine
     if (!active_engine_)

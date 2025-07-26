@@ -204,5 +204,22 @@ sep::workbench::SignalValidator::ValidationResult ServiceProxyEngine::validateSi
     return validateSignals(signals, prices);
 }
 
+backtester::BacktestResult ServiceProxyEngine::optimize_strategy(const std::string& dataset_path,
+                                                                 float& coherence,
+                                                                 float& stability,
+                                                                 float& entropy) {
+    backtester::DataLoader loader;
+    loader.load_data(dataset_path);
+    backtester::Backtester bt;
+    sep::quantum::PatternMetricEngine engine;
+    engine.init(nullptr);
+    bt.run(&engine, &loader);
+    auto result = bt.getResult();
+    coherence = 0.5f + result.win_rate * 0.5f;
+    stability = 0.5f + result.win_rate * 0.3f;
+    entropy = 0.5f - result.win_rate * 0.5f;
+    return result;
+}
+
 } // namespace core
 } // namespace sep

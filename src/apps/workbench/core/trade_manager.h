@@ -62,7 +62,6 @@ public:
     const std::vector<Order>& getOrders() const;
     const std::vector<Position>& getPositions() const;
 
-    double getAccountBalance() const { return account_balance_; }
     double getRealizedPnL() const { return realized_pnl_; }
 
     void setPaperTrading(bool paper_trading);
@@ -75,6 +74,9 @@ public:
     double getWinLossRatio() const;
     double getROI() const;
 
+    const std::vector<double>& getROIHistory() const { return roi_history_; }
+    const std::vector<double>& getWinLossHistory() const { return win_loss_history_; }
+
 private:
     void updatePositions(const Order& order);
 
@@ -82,7 +84,6 @@ private:
     std::vector<Order> orders_;
     std::vector<Position> positions_;
     std::shared_ptr<spdlog::logger> logger_;
-    std::thread paper_thread_;
     std::atomic<bool> paper_thread_active_{false};
     std::string paper_instrument_;
     std::mutex mutex_;
@@ -94,6 +95,9 @@ private:
     int win_count_ = 0;
     int loss_count_ = 0;
     bool paper_trading_ = false;
+
+    std::vector<double> roi_history_;
+    std::vector<double> win_loss_history_;
 };
 
 } // namespace workbench

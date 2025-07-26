@@ -68,6 +68,7 @@ public:
     sep::core::Engine* getEngine() const { return service_engine_; }
     sep::connectors::OandaConnector* getOandaConnector() const { return oanda_connector_.get(); }
     workbench::TradeManager* getTradeManager() const { return trade_manager_.get(); }
+    sep::core::ServiceProxyEngine* getServiceProxyEngine() const { return http_proxy_engine_.get(); }
     ServiceHealth getServiceHealth() const;
     
     // Health monitoring

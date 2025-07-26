@@ -127,6 +127,7 @@ bool WorkbenchEngine::initialize()
         engine_tab_->setSEPEngine(active_engine_);
         engine_tab_->setMetricsMonitor(metrics_monitor_);
         engine_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
+        engine_tab_->setServiceProxyEngine(service_connector_->getServiceProxyEngine());
         backend_tab_->setServiceConnector(service_connector_.get());
         backend_tab_->setTradeManager(service_connector_->getTradeManager());
 

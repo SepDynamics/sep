@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "backtester/backtester.h"
+#include "backtester/data_loader.h"
 #include "engine/engine.h"
 #include "engine/standard_includes.h"
 #include "quantum/qbsa.h"
@@ -51,6 +52,11 @@ public:
     sep::workbench::SignalValidator::ValidationResult validateSignalsAgainstHistory(
         const std::vector<sep::quantum::Signal>& signals,
         const std::vector<float>& prices);
+
+    backtester::BacktestResult optimize_strategy(const std::string& dataset_path,
+                                                 float& coherence,
+                                                 float& stability,
+                                                 float& entropy);
 
 private:
     std::string service_address_;

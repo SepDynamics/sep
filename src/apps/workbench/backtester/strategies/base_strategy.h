@@ -16,5 +16,6 @@ public:
      * @return Generated buy/sell/hold signals for each candle.
      */
     virtual std::vector<sep::quantum::Signal>
-    execute(const std::vector<sep::common::CandleData>& candles) = 0;
+    execute(const std::vector<sep::common::CandleData>& candles,
+            const std::vector<sep::quantum::Signal>& engine_signals) = 0;
 };

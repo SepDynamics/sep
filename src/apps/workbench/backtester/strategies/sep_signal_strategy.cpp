@@ -11,8 +11,12 @@ SEPSignalStrategy::SEPSignalStrategy() {
 SEPSignalStrategy::~SEPSignalStrategy() = default;
 
 std::vector<sep::quantum::Signal>
-SEPSignalStrategy::execute(const std::vector<sep::common::CandleData>& candles) {
-    std::vector<sep::quantum::Signal> signals;
+SEPSignalStrategy::execute(const std::vector<sep::common::CandleData>& candles,
+                           const std::vector<sep::quantum::Signal>& engine_signals) {
+    std::vector<sep::quantum::Signal> signals = engine_signals;
+    if (!signals.empty()) {
+        return signals;
+    }
     if (candles.empty()) {
         return signals;
     }

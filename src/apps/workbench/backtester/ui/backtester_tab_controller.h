@@ -17,6 +17,8 @@ public:
 private:
     std::unique_ptr<BacktesterEngine> engine_;
     sep::quantum::PatternMetricEngine pattern_engine_;
+    sep::quantum::GPUContext gpu_context_{};
+    bool use_gpu_ = false;
     std::vector<std::string> strategy_names_{"SEP Signal"};
     int strategy_index_ = 0;
     sep::workbench::FileDialog file_dialog_;

@@ -4,6 +4,7 @@
 #include <map>
 
 #include <iostream>
+#include <filesystem>
 
 #include "imgui.h"
 
@@ -280,10 +281,35 @@ void EngineTabController::renderCorrelationPanel() {
 
     ImGui::InputText("Export Path", correlation_export_path_, sizeof(correlation_export_path_));
     if (ImGui::Button("Export")) {
-        sep::DataParser parser;
-        std::map<std::string, workbench::CorrelationMetrics> data{{selected_timeframe, correlation_metrics}};
-        parser.exportCorrelationCSV(correlation_export_path_, data);
-        parser.exportCorrelationJSON(std::string(correlation_export_path_) + ".json", data);
+        correlation_export_status_.clear();
+        std::string path_str(correlation_export_path_);
+        std::filesystem::path csv_path(path_str);
+        std::filesystem::path dir = csv_path.parent_path();
+        bool ok = true;
+        if (!dir.empty() && !std::filesystem::exists(dir)) {
+            try {
+                std::filesystem::create_directories(dir);
+            } catch (const std::exception& e) {
+                std::cerr << "[EngineTabController] Failed to create directory: " << e.what() << std::endl;
+                correlation_export_status_ = "Failed to create directory";
+                ok = false;
+            }
+        }
+        if (ok) {
+            sep::DataParser parser;
+            std::map<std::string, workbench::CorrelationMetrics> data{{selected_timeframe, correlation_metrics}};
+            bool csv_ok = parser.exportCorrelationCSV(path_str, data);
+            bool json_ok = parser.exportCorrelationJSON(path_str + ".json", data);
+            if (!csv_ok || !json_ok) {
+                std::cerr << "[EngineTabController] Failed to export correlation metrics" << std::endl;
+                correlation_export_status_ = "Export failed";
+            } else {
+                correlation_export_status_ = "Export successful";
+            }
+        }
+    }
+    if (!correlation_export_status_.empty()) {
+        ImGui::Text("%s", correlation_export_status_.c_str());
     }
 
     ImGui::End();

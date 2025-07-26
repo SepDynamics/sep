@@ -51,6 +51,8 @@ public:
     double getAccountBalance() const { return account_balance_; }
     void setRiskPercentage(double pct) { risk_percentage_ = pct; }
     double getRiskPercentage() const { return risk_percentage_; }
+    void setMaxExposurePct(double pct) { max_exposure_pct_ = pct; }
+    double getMaxExposurePct() const { return max_exposure_pct_; }
 
     void updateOrderStatus(const std::string& order_id, OrderState state);
     const std::vector<Order>& getOrders() const;
@@ -71,6 +73,7 @@ private:
     double account_balance_ = 100000.0;
     double realized_pnl_ = 0.0;
     double risk_percentage_ = 0.02;
+    double max_exposure_pct_ = 0.02;
     bool paper_trading_ = false;
 };
 

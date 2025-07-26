@@ -34,13 +34,20 @@ ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
     auto& cfg = sep::workbench::Config::getInstance().oanda();
-    std::string api_key = cfg.api_key;
-    std::string account_id = cfg.account_id;
+    std::string api_key = cfg.demo_api_key.empty() ? cfg.api_key : cfg.demo_api_key;
+    std::string account_id = cfg.demo_account_id.empty() ? cfg.account_id : cfg.demo_account_id;
     if (api_key.empty() || account_id.empty()) {
         const char* env_key = std::getenv("OANDA_API_KEY");
         const char* env_id = std::getenv("OANDA_ACCOUNT_ID");
-        if (env_key) api_key = env_key;
-        if (env_id) account_id = env_id;
+        const char* env_demo_key = std::getenv("OANDA_DEMO_API_KEY");
+        const char* env_demo_id = std::getenv("OANDA_DEMO_ACCOUNT_ID");
+        if (env_demo_key && env_demo_id) {
+            api_key = env_demo_key;
+            account_id = env_demo_id;
+        } else {
+            if (env_key) api_key = env_key;
+            if (env_id) account_id = env_id;
+        }
     }
 
     if (!api_key.empty() && !account_id.empty()) {

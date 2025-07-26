@@ -7,6 +7,8 @@
 #include "../core/file_dialog.hpp"
 #include "../core/service_connector.hpp"
 #include "../core/trade_manager.h"
+#include "../core/ui_layout_manager.h"
+#include "connectors/oanda_connector.h"
 #include "../backtester/data_loader.h"
 #include "quantum/pattern_metric_engine.h"
 #include "../core/service_proxy_engine.h"
@@ -58,6 +60,7 @@ private:
     int units_ = 1000;
     nlohmann::json open_positions_;
     nlohmann::json orders_;
+    std::vector<sep::connectors::OrderInfo> order_cache_;
     bool paper_trading_ = false;
 };
 

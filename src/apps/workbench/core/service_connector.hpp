@@ -37,6 +37,7 @@ struct ServiceHealth {
     float coherence_average{0.0f};
     std::string version_info;
     std::chrono::steady_clock::time_point last_heartbeat;
+    std::string last_error;
 };
 
 // Connection configuration

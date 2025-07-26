@@ -23,8 +23,57 @@ ServiceProxyEngine::~ServiceProxyEngine() {
 
 bool ServiceProxyEngine::init(const sep::config::CudaConfig& config) {
     std::cout << "[ServiceProxyEngine] Initializing proxy engine..." << std::endl;
-    is_connected_ = true;
-    return true;
+    is_connected_ = false;
+    last_error_.clear();
+
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1) {
+        last_error_ = "socket creation failed";
+        return false;
+    }
+
+    struct sockaddr_in server_addr;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(service_port_);
+    inet_pton(AF_INET, service_address_.c_str(), &server_addr.sin_addr);
+
+    if (connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1) {
+        last_error_ = "connection failed";
+        close(sock);
+        return false;
+    }
+
+    std::string request = "GET " + buildRequestPath("health") + " HTTP/1.1\r\n" +
+                          "Host: " + service_address_ + "\r\n" +
+                          "Connection: close\r\n\r\n";
+
+    if (send(sock, request.c_str(), request.length(), 0) == -1) {
+        last_error_ = "send failed";
+        close(sock);
+        return false;
+    }
+
+    char buffer[256];
+    ssize_t bytes = recv(sock, buffer, sizeof(buffer) - 1, 0);
+    if (bytes <= 0) {
+        last_error_ = "no response";
+        close(sock);
+        return false;
+    }
+
+    buffer[bytes] = '\0';
+    std::istringstream iss(buffer);
+    std::string http_version;
+    int status = 0;
+    iss >> http_version >> status;
+    if (status == 200) {
+        is_connected_ = true;
+    } else {
+        last_error_ = "HTTP " + std::to_string(status);
+    }
+
+    close(sock);
+    return is_connected_;
 }
 
 void ServiceProxyEngine::run() {

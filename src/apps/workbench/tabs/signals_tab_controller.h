@@ -78,6 +78,7 @@ private:
     ImVec2 chart_pos_;
     double price_min_, price_max_;
     float volume_max_;
+    ImPlotFlags plot_flags_ = ImPlotFlags_None;
 
     // Rendering functions
     void renderMainChart();

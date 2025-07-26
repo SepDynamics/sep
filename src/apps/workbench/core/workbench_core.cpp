@@ -92,6 +92,7 @@ bool WorkbenchEngine::initialize()
         // landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = ::std::make_unique<Renderer>();
         layout_manager_ = ::std::make_unique<UILayoutManager>();
+        layout_manager_->setRefreshInterval(0.05f);
 
         // Subscribe to basic events
         globalEventBus().subscribe<PanelVisibilityEvent>([](const PanelVisibilityEvent& e) {

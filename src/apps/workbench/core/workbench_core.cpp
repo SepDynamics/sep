@@ -89,8 +89,6 @@ bool WorkbenchEngine::initialize()
         // Initialize core components
         ::std::cout << "[WorkbenchEngine] Initializing core components..." << ::std::endl;
 
-        service_connector_ = ::std::make_unique<ServiceConnector>();
-        
         // Removed demo components for real trading
         // sep::workbench::registerDemos();
         // demo_orchestrator_ = std::make_unique<DemoOrchestrator>();
@@ -130,7 +128,13 @@ bool WorkbenchEngine::initialize()
             if (signals_tab_) {
                 signals_tab_->setMetricsMonitor(metrics_monitor_);
             }
+            if (engine_tab_) {
+                engine_tab_->setMetricsMonitor(metrics_monitor_);
+            }
         });
+
+        service_connector_ = ::std::make_unique<ServiceConnector>();
+        service_connector_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         
         // Initialize renderer and metrics dashboard
         int width, height;
@@ -153,7 +157,6 @@ bool WorkbenchEngine::initialize()
         signals_tab_->setMetricsMonitor(metrics_monitor_);
         signals_tab_->setWorkbenchEngine(this);
         service_connector_->setSignalsTab(signals_tab_.get());
-        service_connector_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         engine_tab_->setSEPEngine(active_engine_);
         engine_tab_->setMetricsMonitor(metrics_monitor_);
         engine_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());

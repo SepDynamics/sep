@@ -235,6 +235,20 @@ void ServiceConnector::setSignalsTab(SignalsTabController* tab)
     }
 }
 
+void ServiceConnector::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer)
+{
+    mtf_analyzer_ = analyzer;
+    if (oanda_connector_ && mtf_analyzer_)
+    {
+        oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
+            if (mtf_analyzer_)
+            {
+                mtf_analyzer_->ingestMarketData("EUR_USD", c);
+            }
+        });
+    }
+}
+
 ServiceHealth ServiceConnector::getServiceHealth() const {
     return health_metrics_;
 }

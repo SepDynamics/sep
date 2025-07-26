@@ -25,6 +25,7 @@ namespace sep
             bool cuda_enabled;
             bool metrics_enabled;
             std::string log_level;
+            std::string patterns_file;
         };
 
         struct GenesisPatternConfig

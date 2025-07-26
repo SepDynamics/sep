@@ -31,7 +31,8 @@ namespace sep
                 auto& engine = json["engine"];
                 engine_ = {engine.value("cuda_enabled", false),
                            engine.value("metrics_enabled", false),
-                           engine.value("log_level", std::string{"info"})};
+                           engine.value("log_level", std::string{"info"}),
+                           engine.value("patterns_file", std::string{"forex/final_symmetry.json"})};
 
                 auto& genesis = json["demos"]["genesis_pattern"];
                 auto& initial = genesis["initial_pattern"];
@@ -257,7 +258,8 @@ namespace sep
 
                 json["engine"] = {{"cuda_enabled", engine_.cuda_enabled},
                                   {"metrics_enabled", engine_.metrics_enabled},
-                                  {"log_level", engine_.log_level}};
+                                  {"log_level", engine_.log_level},
+                                  {"patterns_file", engine_.patterns_file}};
 
                 json["demos"]["genesis_pattern"] = {
                     {"initial_pattern",

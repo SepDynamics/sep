@@ -43,7 +43,7 @@ struct ForexSignal {
 class ForexPatternGenerator {
 public:
     ForexPatternGenerator();
-    ~ForexPatternGenerator() = default;
+    ~ForexPatternGenerator();
     
     // Pattern management
     void loadPatterns();

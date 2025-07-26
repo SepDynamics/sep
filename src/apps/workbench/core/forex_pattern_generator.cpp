@@ -1,13 +1,19 @@
 #include "forex_pattern_generator.h"
+#include "../config.hpp"
 #include <iostream>
 #include <algorithm>
 #include <fstream>
+#include <filesystem>
 #include <nlohmann/json.hpp>
 
 namespace sep::workbench {
 
 ForexPatternGenerator::ForexPatternGenerator() {
-    initializeDefaultPatterns();
+    loadPatterns();
+}
+
+ForexPatternGenerator::~ForexPatternGenerator() {
+    savePatterns();
 }
 
 void ForexPatternGenerator::initializeDefaultPatterns() {
@@ -224,18 +230,79 @@ void ForexPatternGenerator::applyFeedback(const std::string& pattern_id, bool wa
             if (pattern.resonance > 0.75f && pattern.consciousness_level < 4) {
                 pattern.consciousness_level = std::min(4, pattern.consciousness_level + 1);
             }
-            
+
+            savePatterns();
+
             break;
         }
     }
 }
 
 void ForexPatternGenerator::loadPatterns() {
-    // TODO: Load from JSON file if needed
+    const auto& cfg = Config::getInstance().engine();
+    std::filesystem::path path = cfg.patterns_file;
+    if (path.empty()) {
+        initializeDefaultPatterns();
+        return;
+    }
+
+    try {
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            initializeDefaultPatterns();
+            return;
+        }
+
+        nlohmann::json j;
+        file >> j;
+
+        if (!j.contains("patterns")) {
+            initializeDefaultPatterns();
+            return;
+        }
+
+        patterns_.clear();
+        for (const auto& p : j["patterns"]) {
+            patterns_.emplace_back(
+                p.value("patternId", ""),
+                p.value("note", ""),
+                p.value("resonance", 0.0f),
+                p.value("consciousnessLevel", 1));
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Failed to load patterns: " << e.what() << std::endl;
+        initializeDefaultPatterns();
+    }
 }
 
 void ForexPatternGenerator::savePatterns() {
-    // TODO: Save to JSON file if needed
+    const auto& cfg = Config::getInstance().engine();
+    std::filesystem::path path = cfg.patterns_file;
+    if (path.empty()) {
+        return;
+    }
+
+    nlohmann::json j;
+    j["patterns"] = nlohmann::json::array();
+    for (const auto& p : patterns_) {
+        j["patterns"].push_back({
+            {"patternId", p.pattern_id},
+            {"note", p.note},
+            {"resonance", p.resonance},
+            {"consciousnessLevel", p.consciousness_level}
+        });
+    }
+    try {
+        std::ofstream file(path);
+        if (!file.is_open()) {
+            std::cerr << "Failed to open patterns file for writing: "
+                      << path << std::endl;
+            return;
+        }
+        file << j.dump(2);
+    } catch (const std::exception& e) {
+        std::cerr << "Failed to save patterns: " << e.what() << std::endl;
+    }
 }
 
 } // namespace sep::workbench

@@ -119,7 +119,7 @@ void MultiTimeframeAnalyzer::updateAllTimeframes(const std::string& instrument) 
     }
     
     // Convert deque to vector for resampling
-    std::vector<CandleData> base_candles(
+    std::vector<sep::common::CandleData> base_candles(
         timeframe_data_["1m"].candles.begin(),
         timeframe_data_["1m"].candles.end()
     );
@@ -159,8 +159,8 @@ void MultiTimeframeAnalyzer::updateAllTimeframes(const std::string& instrument) 
     }
 }
 
-std::vector<CandleData> MultiTimeframeAnalyzer::resampleCandles(
-    const std::vector<CandleData>& source_candles, 
+std::vector<sep::common::CandleData> MultiTimeframeAnalyzer::resampleCandles(
+    const std::vector<sep::common::CandleData>& source_candles, 
     int target_interval_minutes) {
     
     if (source_candles.empty()) {
@@ -173,7 +173,7 @@ std::vector<CandleData> MultiTimeframeAnalyzer::resampleCandles(
     auto start_time = source_candles[0].timestamp;
     auto interval_duration = std::chrono::minutes(target_interval_minutes);
     
-    CandleData current_candle{0, 0, 0, 0, 0, std::chrono::system_clock::now()};
+    sep::common::CandleData current_candle{std::chrono::system_clock::now(), 0, 0, 0, 0, 0};
     bool candle_started = false;
     
     for (const auto& candle : source_candles) {
@@ -211,7 +211,7 @@ std::vector<CandleData> MultiTimeframeAnalyzer::resampleCandles(
 
 TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
     const std::string& timeframe, 
-    const std::vector<CandleData>& candles) {
+    const std::vector<sep::common::CandleData>& candles) {
     
     TimeframeMetrics metrics(timeframe);
     

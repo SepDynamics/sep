@@ -2,10 +2,10 @@
 #include <iostream>
 
 int main() {
-    DataLoader dataLoader;
-    dataLoader.loadData("eur_usd_m1_48h.json");
+    sep::workbench::backtester::DataLoader dataLoader;
+    dataLoader.load_data("eur_usd_m1_48h.json");
 
-    const auto& candleData = dataLoader.getCandleData();
+    const auto& candleData = dataLoader.get_data();
 
     if (candleData.empty()) {
         std::cerr << "No data loaded." << std::endl;

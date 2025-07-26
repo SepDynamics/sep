@@ -936,7 +936,7 @@ void ServiceConnector::loadInitialData(const std::string& path)
         {
             const auto& m = metrics[i];
             const auto& candle = initial_data_[initial_data_.size() - metrics.size() + i];
-            SEPSignalData sig;
+            common::SEPSignalData sig;
             sig.coherence = m.coherence;
             sig.stability = m.stability;
             sig.entropy = m.entropy;
@@ -945,15 +945,15 @@ void ServiceConnector::loadInitialData(const std::string& path)
             sig.timestamp = candle.timestamp;
 
             if (m.coherence > 0.8f && m.stability > 0.7f && m.entropy < 0.2f)
-                sig.signal_type = SEPSignalData::STRONG_BUY;
+                sig.signal_type = common::SEPSignalData::STRONG_BUY;
             else if (m.coherence > 0.7f && m.stability > 0.6f && m.entropy < 0.3f)
-                sig.signal_type = SEPSignalData::BUY;
+                sig.signal_type = common::SEPSignalData::BUY;
             else if (m.coherence < 0.2f && m.stability < 0.3f && m.entropy > 0.8f)
-                sig.signal_type = SEPSignalData::STRONG_SELL;
+                sig.signal_type = common::SEPSignalData::STRONG_SELL;
             else if (m.coherence < 0.3f && m.stability < 0.4f && m.entropy > 0.7f)
-                sig.signal_type = SEPSignalData::SELL;
+                sig.signal_type = common::SEPSignalData::SELL;
             else
-                sig.signal_type = SEPSignalData::NEUTRAL;
+                sig.signal_type = common::SEPSignalData::NEUTRAL;
 
             initial_signals_.push_back(sig);
         }

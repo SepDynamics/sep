@@ -21,7 +21,7 @@ target_include_directories(sep_workbench_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/src/engine
     ${CMAKE_SOURCE_DIR}/src/api
     ${CMAKE_SOURCE_DIR}/src/apps/workbench
-    ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester
+    ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester/core
     ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester/data
     ${CMAKE_SOURCE_DIR}/src/apps/common
     ${CMAKE_SOURCE_DIR}/src/connectors
@@ -36,7 +36,6 @@ target_link_libraries(sep_workbench_lib PUBLIC
     sep_engine
     sep_quantum
     sep_memory
-    sep_connectors
     imgui
     implot
     glad

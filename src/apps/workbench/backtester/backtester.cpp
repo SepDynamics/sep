@@ -1,4 +1,5 @@
 #include "backtester.h"
+#include "common/financial_data_types.h"
 #include <iostream>
 #include <numeric>
 #include <cmath>

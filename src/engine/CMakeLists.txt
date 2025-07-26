@@ -41,5 +41,5 @@ else()
     target_compile_options(sep_engine PRIVATE -include "${CMAKE_CURRENT_SOURCE_DIR}/json_config.h")
 endif()
 
-target_link_libraries(sep_engine PUBLIC sep_memory sep_quantum)
+target_link_libraries(sep_engine PUBLIC sep_memory sep_quantum sep_connectors)
 

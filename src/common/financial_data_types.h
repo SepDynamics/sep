@@ -1,6 +1,9 @@
 #pragma once
 #include <chrono>
 #include <string>
+#include <vector>
+#include <sstream>
+#include <iomanip>
 
 namespace sep::common {
 
@@ -8,6 +11,8 @@ struct CandleData {
     std::chrono::system_clock::time_point time;
     double open, high, low, close;
     long long volume;
+
+    CandleData() : time(), open(0), high(0), low(0), close(0), volume(0) {}
 };
 
 struct SEPSignalData {
@@ -29,6 +34,17 @@ struct SEPSignalData {
         STRONG_SELL
     };
 };
+
+struct CorrelationMetrics {
+    int total_patterns;
+    double pattern_frequency;
+    double average_coherence;
+    double average_stability;
+    double average_entropy;
+    double trend_correlation;
+    std::chrono::system_clock::time_point last_updated;
+};
+
 
 inline std::chrono::system_clock::time_point parseTimestamp(const std::string& ts) {
     std::tm tm = {};

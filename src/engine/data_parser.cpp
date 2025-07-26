@@ -188,9 +188,7 @@ std::vector<quantum::Pattern> DataParser::parseCSV(const std::string& path)
         if (!values.empty()) {
             quantum::Pattern pattern;
             pattern.id = std::to_string(line_num);
-            pattern.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
-                                    std::chrono::system_clock::now().time_since_epoch())
-                                    .count();
+            pattern.timestamp = std::chrono::system_clock::now();
 
             // Map values to pattern fields
             if (values.size() >= 1) pattern.position.x = values[0];
@@ -211,8 +209,8 @@ std::vector<quantum::Pattern> DataParser::parseCSV(const std::string& path)
             pattern.attributes = glm::vec4(0.0f);
             pattern.amplitude = {1.0f, 0.0f};
             pattern.momentum = glm::vec3(0.0f);
-            pattern.last_accessed = pattern.timestamp;
-            pattern.last_modified = pattern.timestamp;
+            pattern.last_accessed = std::chrono::system_clock::now();
+            pattern.last_modified = std::chrono::system_clock::now();
             
             patterns.push_back(pattern);
         }
@@ -576,12 +574,16 @@ void DataParser::writeQuantJSON(const std::vector<sep::common::CandleData>& cand
         if (!std::isfinite(c.open) || !std::isfinite(c.high) || !std::isfinite(c.low) ||
             !std::isfinite(c.close) || c.high < c.low)
         {
-            std::cerr << "[DataParser] Invalid candle data at " << c.time << std::endl;
+            std::time_t tt = std::chrono::system_clock::to_time_t(c.time);
+            std::cerr << "[DataParser] Invalid candle data at " << std::ctime(&tt) << std::endl;
             continue;
         }
 
         nlohmann::json cj;
-        cj["time"] = c.time;
+        std::time_t tt = std::chrono::system_clock::to_time_t(c.time);
+        std::stringstream ss;
+        ss << std::put_time(std::gmtime(&tt), "%Y-%m-%dT%H:%M:%S");
+        cj["time"] = ss.str();
         cj["volume"] = c.volume;
         cj["mid"] = {
             {"o", std::to_string(c.open)},
@@ -636,7 +638,7 @@ uint64_t DataParser::parseTimestamp(const std::string& timestamp) const
 }
 
 bool DataParser::exportCorrelationCSV(const std::string& path,
-                                      const std::map<std::string, workbench::CorrelationMetrics>& data) const {
+                                      const std::map<std::string, sep::common::CorrelationMetrics>& data) const {
     std::ofstream file(path);
     if (!file.is_open()) {
         return false;
@@ -656,7 +658,7 @@ bool DataParser::exportCorrelationCSV(const std::string& path,
 }
 
 bool DataParser::exportCorrelationJSON(const std::string& path,
-                                       const std::map<std::string, workbench::CorrelationMetrics>& data) const {
+                                       const std::map<std::string, sep::common::CorrelationMetrics>& data) const {
     nlohmann::json j;
     for (const auto& [tf, metrics] : data) {
         j[tf] = {
@@ -678,7 +680,7 @@ bool DataParser::exportCorrelationJSON(const std::string& path,
 }
 
 bool DataParser::exportCorrelationHistoryCSV(const std::string& path,
-                                             const std::map<std::string, std::deque<workbench::CorrelationMetrics>>& history) const {
+                                             const std::map<std::string, std::deque<sep::common::CorrelationMetrics>>& history) const {
     std::ofstream file(path);
     if (!file.is_open()) {
         return false;
@@ -702,7 +704,7 @@ bool DataParser::exportCorrelationHistoryCSV(const std::string& path,
 }
 
 bool DataParser::exportCorrelationForBacktester(const std::string& path,
-                                                const std::deque<workbench::CorrelationMetrics>& metrics) const {
+                                                const std::deque<sep::common::CorrelationMetrics>& metrics) const {
     std::ofstream file(path);
     if (!file.is_open()) {
         return false;

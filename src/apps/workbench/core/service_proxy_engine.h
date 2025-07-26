@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "backtester/backtester.h"
-#include "backtester/data_loader.h"
+#include "apps/workbench/backtester/data/data_loader.h"
 #include "engine/engine.h"
 #include "engine/standard_includes.h"
 #include "quantum/qbsa.h"

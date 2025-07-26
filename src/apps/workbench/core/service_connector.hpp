@@ -89,7 +89,7 @@ public:
     const ConnectionConfig& getConfig() const { return config_; }
 
     void setSignalsTab(SignalsTabController* tab);
-    const std::deque<CandleData>& getInitialData() const { return initial_data_; }
+    const std::deque<common::CandleData>& getInitialData() const { return initial_data_; }
 
 private:
     // Internal state
@@ -131,11 +131,11 @@ private:
     std::unique_ptr<sep::core::ServiceProxyEngine> http_proxy_engine_;
 
     SignalsTabController* signals_tab_{nullptr};
-    std::deque<CandleData> initial_data_;
-    std::deque<SEPSignalData> initial_signals_;
+    std::deque<common::CandleData> initial_data_;
+    std::deque<common::SEPSignalData> initial_signals_;
 
 public:
-    const std::deque<SEPSignalData>& getInitialSignals() const { return initial_signals_; }
+    const std::deque<common::SEPSignalData>& getInitialSignals() const { return initial_signals_; }
 
     void loadInitialData(const std::string& path);
 };

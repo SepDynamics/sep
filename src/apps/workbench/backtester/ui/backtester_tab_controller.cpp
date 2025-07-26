@@ -35,7 +35,10 @@ void BacktesterTabController::render() {
                     return true;
                 },
                 &strategy_names_, strategy_names_.size());
-    ImGui::Checkbox("Use GPU", &use_gpu_);
+    int device_index = use_gpu_ ? 1 : 0;
+    const char* device_items[] = {"CPU", "GPU"};
+    ImGui::Combo("Device", &device_index, device_items, 2);
+    use_gpu_ = device_index == 1;
 
     if (!running_) {
         if (ImGui::Button("Start")) {

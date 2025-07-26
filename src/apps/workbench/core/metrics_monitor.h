@@ -112,6 +112,7 @@ public:
     sep::quantum::SignalThresholds calculateSignalThresholds() const;
     sep::connectors::MarketData getLatestMarketData() const;
     void setLatestMarketData(const sep::connectors::MarketData& data);
+    void setRollingMetrics(const RollingMetrics& metrics);
     
     std::unordered_map<std::string, double> getMetrics() const;
     void set(const std::string& key, double value);

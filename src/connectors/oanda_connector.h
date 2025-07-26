@@ -77,6 +77,7 @@ public:
     bool startPriceStream(const std::vector<std::string>& instruments);
     bool stopPriceStream();
     void setPriceCallback(std::function<void(const MarketData&)> callback);
+    void setCandleCallback(std::function<void(const common::CandleData&)> cb);
 
     // Account information
     nlohmann::json getAccountInfo();
@@ -117,6 +118,14 @@ private:
     CURL* curl_handle_;
     std::string last_error_;
     std::function<void(const MarketData&)> price_callback_;
+    std::function<void(const common::CandleData&)> candle_callback_;
+
+    struct CandleBuilder {
+        common::CandleData candle;
+        std::chrono::system_clock::time_point start;
+        bool active{false};
+    };
+    std::unordered_map<std::string, CandleBuilder> candle_builders_;
     
     // HTTP helpers
     struct CurlResponse {
@@ -129,6 +138,7 @@ private:
 
     CurlResponse makeRequest(const std::string& endpoint, const std::string& method = "GET", const std::string& data = "");
     void processStreamData(const std::string& data);
+    void updateCandleBuilder(const MarketData& md);
 
     // Data conversion and validation
     MarketData parseMarketData(const nlohmann::json& price_data);

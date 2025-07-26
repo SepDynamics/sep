@@ -39,6 +39,7 @@ private:
     void renderTradeHistoryPanel();
     void renderBacktestingSuite();
     void updateTradeHistory();
+    void onBacktestResult(const BacktestResultEvent& e);
 
     void handleDataLoad();
     void handleClearData();
@@ -51,6 +52,8 @@ private:
     std::unique_ptr<sep::workbench::backtester::DataLoader> data_loader_;
     std::unique_ptr<sep::quantum::PatternMetricEngine> pattern_engine_;
     FileDialog file_dialog_;
+
+    backtester::BacktestResult last_result_{};
 
     // UI State
     char file_path_buffer_[512] = "eur_usd_m1_48h.json";

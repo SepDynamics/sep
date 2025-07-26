@@ -19,12 +19,14 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(const std::stri
         std::cerr << "Failed to initialize PatternMetricEngine" << std::endl;
         return {};
     }
-    return run(dataset_path, &engine);
+    SEPSignalStrategy strategy;
+    return run(dataset_path, &engine, &strategy);
 }
 
 sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     const std::string& dataset_path,
-    sep::quantum::PatternMetricEngine* engine) {
+    sep::quantum::PatternMetricEngine* engine,
+    sep::workbench::backtester::BaseStrategy* strategy) {
     sep::workbench::backtester::DataLoader loader;
     if (dataset_path == "EURUSD_48H") {
         loader.load_48h_sample();
@@ -53,8 +55,10 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     engine_ref.evolvePatterns();
     engine_ref.computeMetrics();
 
-    SEPSignalStrategy strategy;
-    auto signals = strategy.execute(candles);
+    std::vector<sep::quantum::Signal> signals;
+    if (strategy) {
+        signals = strategy->execute(candles);
+    }
     std::vector<float> prices;
     prices.reserve(candles.size());
     for (const auto& candle : candles) {

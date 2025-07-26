@@ -7,6 +7,7 @@
 #include <vector>
 #include <unordered_map>
 #include <typeindex>
+#include "apps/workbench/backtester/backtester.h"
 
 #include "imgui.h"
 #include "common/financial_data_types.h"
@@ -90,6 +91,10 @@ struct ConnectionStateEvent {
 
 struct OrderUpdateEvent {
     sep::common::OrderInfo info;
+};
+
+struct BacktestResultEvent {
+    sep::workbench::backtester::BacktestResult result;
 };
 
 class EventBus {

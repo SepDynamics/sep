@@ -38,8 +38,4 @@ target_include_directories(sep_engine PUBLIC
     ${CMAKE_SOURCE_DIR}/src/common
 )
 
-if(MSVC)
-    target_compile_options(sep_engine PRIVATE /FI"${CMAKE_CURRENT_SOURCE_DIR}/json_config.h")
-else()
-    target_compile_options(sep_engine PRIVATE -include "${CMAKE_CURRENT_SOURCE_DIR}/json_config.h")
-endif()
+# json_config.h can be included manually in source files that need it

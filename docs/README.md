@@ -31,7 +31,7 @@ The platform is built on a decoupled architecture that ensures the core engine, 
 
 ## Next Milestones
 
-1.  **Chart Rendering**: Implement candlestick and metric charts in the Signals Tab.
+1.  **Chart Rendering (In Progress)**: Implement candlestick and metric charts in the Signals Tab.
 2.  **Live Data Integration**: Connect the OANDA data feed to the charts and engine.
 3.  **Signal Validation**: Implement the backtesting UI and validate signal generation logic against historical data.
 4.  **Static Analysis Cleanup**: Address critical and high-priority issues identified in `report.md`.

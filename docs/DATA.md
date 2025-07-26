@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the SEP Engine's data processing pipeline. As of July 2024, the pipeline is **operational and compiling successfully**. The architectural refactoring to decouple core components from the GUI is complete, and the focus has shifted to implementing and optimizing the data flow from market sources to the trading workbench.
+This document outlines the SEP Engine's data processing pipeline. As of the latest build, the pipeline is **operational and compiling successfully**. The architectural refactoring to decouple core components from the GUI is complete, and the focus has shifted to implementing and optimizing the data flow from market sources to the trading workbench.
 
 The current priority is to fully implement the connections between each stage of the pipeline to enable real-time signal generation and visualization.
 

@@ -9,7 +9,13 @@
 
 // Define CUDA version before GLM checks it
 #ifdef __CUDACC__
-#define CUDA_VERSION 90  // CUDA 9.0
+#ifndef CUDA_VERSION
+#define CUDA_VERSION 12090  // CUDA 12.9
+#endif
+// Define GLM compiler for CUDA compatibility
+#ifndef GLM_COMPILER
+#define GLM_COMPILER 0  // Ignore compiler checks as suggested by GLM error
+#endif
 #endif
 
 #ifndef GLM_CUDA_VERSION_CHECK

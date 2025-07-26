@@ -66,6 +66,8 @@ target_link_libraries(sep_workbench PRIVATE
     sep_quantum
     sep_memory  
     sep_engine
+    fmt::fmt
+    ${FMT_DYNAMIC_LIB}
     ${TBB_LIBRARIES}
     ${ALEMBIC_LIBRARIES}
     ${OPENPGL_LIBRARIES}

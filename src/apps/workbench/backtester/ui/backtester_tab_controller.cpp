@@ -5,6 +5,9 @@
 #include <iostream>
 #include "apps/workbench/backtester/strategies/sep_signal_strategy.h"
 
+using sep::workbench::globalEventBus;
+using sep::workbench::BacktestResultEvent;
+
 BacktesterTabController::BacktesterTabController()
     : engine_(std::make_unique<BacktesterEngine>()) {
     pattern_engine_.init(nullptr);
@@ -38,7 +41,7 @@ void BacktesterTabController::render() {
         if (ImGui::Button("Start")) {
             running_ = true;
             SEPSignalStrategy strategy;
-            backtester::BaseStrategy* strat_ptr = nullptr;
+            BaseStrategy* strat_ptr = nullptr;
             if (strategy_index_ == 0) {
                 strat_ptr = &strategy;
             }

@@ -19,6 +19,8 @@ target_link_libraries(pattern_metric_example
     sep_quantum  
     sep_memory
     sep_connectors
+    fmt::fmt
+    ${FMT_DYNAMIC_LIB}
     ${CMAKE_THREAD_LIBS_INIT}
     nlohmann_json::nlohmann_json
 )

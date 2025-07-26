@@ -1,5 +1,3 @@
-### TODO.md
-
 # SEP Engine Development Roadmap
 
 ## Current Objective: Implement Core Features and Address Technical Debt
@@ -14,8 +12,8 @@ This phase focuses on bringing the core functionalities of the workbench to life
 -   **Status**: **DONE**
 -   **Summary**: The architectural decoupling of the backend from the GUI is complete. All resulting compilation errors related to type mismatches, API changes, and namespace issues have been resolved. The project now compiles successfully.
 
-### 1.2: Implement Chart Rendering (Top Priority)
--   **Status**: **NOT STARTED**
+### 1.2: Implement Chart Rendering (In Progress)
+-   **Status**: **IN PROGRESS**
 -   **Priority**: **CRITICAL (BLOCKING)**
 -   **Tasks**:
     -   [ ] Render candlestick charts in `SignalsTabController` using `implot`.
@@ -45,7 +43,7 @@ This phase focuses on bringing the core functionalities of the workbench to life
 This phase runs in parallel with feature development and focuses on improving code quality based on the `report.md` findings.
 
 ### 2.1: Critical Static Analysis Fixes
--   **Status**: **NOT STARTED**
+-   **Status**: **IN PROGRESS**
 -   **Priority**: High
 -   **Tasks**:
     -   [ ] **`emitterutils.cpp`**: Address `CRITICAL` `undeclared identifier` errors by including `<cstdint>`.

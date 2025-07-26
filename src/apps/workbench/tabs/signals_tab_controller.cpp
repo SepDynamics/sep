@@ -707,7 +707,7 @@ void SignalsTabController::renderCrosshair() {
     char time_buf[16];
     std::strftime(time_buf, sizeof(time_buf), "%H:%M", std::localtime(&tt));
     ImVec2 time_pos = ImVec2(mouse_pos.x - 30, chart_pos_.y + chart_size_.y + 5);
-    draw_list->AddRectFilled(time_pos - ImVec2(2,2), time_pos + ImVec2(34,16), IM_COL32(40,40,40,200));
+    draw_list->AddRectFilled(ImVec2(time_pos.x - 2, time_pos.y - 2), ImVec2(time_pos.x + 34, time_pos.y + 16), IM_COL32(40,40,40,200));
     draw_list->AddText(time_pos, IM_COL32(255,255,255,255), time_buf);
 }
 

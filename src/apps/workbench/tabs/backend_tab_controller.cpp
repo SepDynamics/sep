@@ -217,8 +217,8 @@ void BackendTabController::renderBacktestingSuite() {
     ImGui::Text("Max Drawdown: %.2f", last_result_.max_drawdown);
     if (!equity_curve_.empty()) {
         if (ImPlot::BeginPlot("Equity Curve", ImVec2(-1,150))) {
-            std::vector<double> xs(equity_curve_.size());
-            for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<double>(i);
+            std::vector<float> xs(equity_curve_.size());
+            for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
             ImPlot::PlotLine("Equity", xs.data(), equity_curve_.data(), static_cast<int>(equity_curve_.size()));
             ImPlot::EndPlot();
         }

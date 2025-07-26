@@ -1,7 +1,7 @@
 #pragma once
 
 #include <imgui_internal.h>
-
+#include <string>
 #include <cmath>
 
 #include "imgui.h"
@@ -58,7 +58,7 @@ inline void GradientProgressBar(float fraction, const ImVec2& size_arg = ImVec2(
 
     ImVec2 pos = window->DC.CursorPos;
     ImVec2 size = CalcItemSize(size_arg, CalcItemWidth(), g.FontSize + style.FramePadding.y*2.0f);
-    ImRect bb(pos, pos + size);
+    ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
     ItemSize(size, style.FramePadding.y);
     if (!ItemAdd(bb, 0))
         return;

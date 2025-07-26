@@ -52,12 +52,7 @@ include(cmake/template.cmake)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Ensure GLM configuration is included for all targets
-if(MSVC)
-    add_compile_options(/FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
-else()
-    add_compile_options(-include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
-endif()
+# GLM configuration is included per-target in cmake template
 
 # Enable testing
 enable_testing()
@@ -72,6 +67,17 @@ find_package(spdlog REQUIRED)
 find_package(glm REQUIRED)
 find_package(OpenGL REQUIRED)
 
+# Ensure fmt library is available and force dynamic linking to match spdlog
+if(TARGET fmt::fmt)
+    # Add explicit link to the dynamic fmt library to resolve symbol conflicts
+    find_library(FMT_LIBRARY_PATH NAMES fmt PATHS /lib64 /usr/lib64 /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu)
+    if(FMT_LIBRARY_PATH)
+        message(STATUS "Found fmt library: ${FMT_LIBRARY_PATH}")
+        # We'll add this to executables that need it
+        set(FMT_DYNAMIC_LIB ${FMT_LIBRARY_PATH})
+    endif()
+endif()
+
 include(FetchContent)
 FetchContent_Declare(
   yaml-cpp
@@ -84,14 +90,14 @@ set_target_properties(yaml-cpp PROPERTIES CXX_STANDARD 17)
 FetchContent_Declare(
   imgui
   GIT_REPOSITORY https://github.com/ocornut/imgui.git
-  GIT_TAG v1.92.1
+  GIT_TAG v1.91.6
 )
 FetchContent_MakeAvailable(imgui)
 
 FetchContent_Declare(
   implot
   GIT_REPOSITORY https://github.com/epezent/implot.git
-  GIT_TAG v0.17
+  GIT_TAG v0.16
 )
 FetchContent_MakeAvailable(implot)
 

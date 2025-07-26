@@ -583,9 +583,9 @@ void WorkbenchEngine::attemptServiceConnection()
 
     globalEventBus().publish(ConnectionStateEvent{state});
     if (state == ConnectionState::CONNECTED) {
-        Toast("Service Connected", "Successfully connected to SEP service");
+        ImGui::Toast("Service Connected", "Successfully connected to SEP service");
     } else if (state == ConnectionState::CONNECTION_FAILED) {
-        Toast("Connection Failed", "Could not connect to SEP service");
+        ImGui::Toast("Connection Failed", "Could not connect to SEP service");
     }
 
     // Ensure we always have a valid engine

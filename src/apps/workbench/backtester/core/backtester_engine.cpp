@@ -26,7 +26,7 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(const std::stri
 sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     const std::string& dataset_path,
     sep::quantum::PatternMetricEngine* engine,
-    sep::workbench::backtester::BaseStrategy* strategy) {
+    BaseStrategy* strategy) {
     sep::workbench::backtester::DataLoader loader;
     if (dataset_path == "EURUSD_48H") {
         loader.load_48h_sample();

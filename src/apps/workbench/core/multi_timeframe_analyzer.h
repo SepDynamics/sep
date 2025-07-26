@@ -61,6 +61,9 @@ struct TimeframeMetrics {
     }
 };
 
+// Type alias for metrics callback
+using MetricsCallback = std::function<void(const std::map<std::string, TimeframeMetrics>&)>;
+
 struct CorrelationMetrics {
     double coherence_pearson = 0.0;
     double coherence_spearman = 0.0;
@@ -170,7 +173,6 @@ public:
     void ingestHistoricalData(const std::string& instrument,
                             const std::vector<sep::common::CandleData>& historical_candles);
 
-    using MetricsCallback = std::function<void(const std::map<std::string, TimeframeMetrics>&)>;
     void setMetricsCallback(MetricsCallback cb);
     
     // Analysis methods

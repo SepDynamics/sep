@@ -8,6 +8,7 @@
 #include <sstream>
 #include <thread>
 #include "engine/data_parser.h"
+#include "apps/workbench/core/ui_layout_manager.h"
 #include <mutex>
 
 namespace sep {
@@ -559,7 +560,7 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.status = OrderStatus::PENDING;
                 pending_orders_.push_back(info);
                 if (order_callback_) order_callback_(info);
-                workbench::globalEventBus().publish(workbench::OrderUpdateEvent{info});
+                sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
             }
             if (json_resp.contains("orderFillTransaction")) {
                 const auto& tx = json_resp["orderFillTransaction"];

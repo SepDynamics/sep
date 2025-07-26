@@ -443,6 +443,16 @@ MetricsMonitor::SimpleSignals MetricsMonitor::getSimpleThresholdSignals() const 
     return signals;
 }
 
+sep::quantum::SignalThresholds MetricsMonitor::calculateSignalThresholds() const {
+    sep::quantum::SignalThresholds th;
+    th.buy_min_coherence = std::clamp(rolling_metrics_.coherence_24h_avg * 1.2f, 0.0f, 1.0f);
+    th.buy_min_stability = std::clamp(rolling_metrics_.stability_24h_avg * 1.2f, 0.0f, 1.0f);
+    th.buy_max_entropy = std::clamp(rolling_metrics_.entropy_24h_avg * 0.8f, 0.0f, 1.0f);
+    th.sell_max_stability = std::clamp(rolling_metrics_.stability_24h_avg * 0.8f, 0.0f, 1.0f);
+    th.sell_min_entropy = std::clamp(rolling_metrics_.entropy_24h_avg * 1.2f, 0.0f, 1.0f);
+    return th;
+}
+
 void MetricsMonitor::detectThresholdSignals() {
     if (metrics_history_.size() < 10) return;  // Need some history for confidence
 

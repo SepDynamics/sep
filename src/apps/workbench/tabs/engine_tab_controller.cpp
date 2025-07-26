@@ -316,9 +316,9 @@ void EngineTabController::renderStrategyOptimization()
     if (ImGui::Button("Apply Thresholds")) {
         if (pattern_engine_) {
             sep::quantum::SignalThresholds th;
-            th.min_coherence = opt_coherence_;
-            th.min_stability = opt_stability_;
-            th.max_entropy = opt_entropy_;
+            th.buy_min_coherence = opt_coherence_;
+            th.buy_min_stability = opt_stability_;
+            th.buy_max_entropy = opt_entropy_;
             pattern_engine_->setSignalThresholds(th);
         }
     }

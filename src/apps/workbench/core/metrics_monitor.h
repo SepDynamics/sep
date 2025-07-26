@@ -8,6 +8,7 @@
 #include <chrono>
 #include <unordered_map>
 #include "connectors/oanda_connector.h"
+#include "quantum/pattern_metric_engine.h"
 
 namespace sep::workbench {
 
@@ -108,6 +109,7 @@ public:
     const SystemMetrics& getSystemMetrics() const;
     const RollingMetrics& getRollingMetrics() const;
     const ThresholdSignal& getLatestSignal() const;
+    sep::quantum::SignalThresholds calculateSignalThresholds() const;
     sep::connectors::MarketData getLatestMarketData() const;
     void setLatestMarketData(const sep::connectors::MarketData& data);
     

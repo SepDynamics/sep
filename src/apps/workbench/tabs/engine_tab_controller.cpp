@@ -255,11 +255,31 @@ void EngineTabController::renderCorrelationPanel() {
     ImGui::Text("%.3f", correlation_metrics.entropy_spearman); ImGui::NextColumn();
     ImGui::Columns(1);
 
+    // Plot correlation history
+    auto history = multi_timeframe_analyzer_->getCorrelationHistory(selected_timeframe);
+    std::vector<float> coh_p, coh_s, stab_p, stab_s, ent_p, ent_s;
+    for (const auto& h : history) {
+        coh_p.push_back(static_cast<float>(h.coherence_pearson));
+        coh_s.push_back(static_cast<float>(h.coherence_spearman));
+        stab_p.push_back(static_cast<float>(h.stability_pearson));
+        stab_s.push_back(static_cast<float>(h.stability_spearman));
+        ent_p.push_back(static_cast<float>(h.entropy_pearson));
+        ent_s.push_back(static_cast<float>(h.entropy_spearman));
+    }
+    const ImVec2 graph_size(200, 60);
+    ImGui::PlotLines("Coh Pearson", coh_p.data(), coh_p.size(), 0, nullptr, -1.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Coh Spearman", coh_s.data(), coh_s.size(), 0, nullptr, -1.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Stab Pearson", stab_p.data(), stab_p.size(), 0, nullptr, -1.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Stab Spearman", stab_s.data(), stab_s.size(), 0, nullptr, -1.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Ent Pearson", ent_p.data(), ent_p.size(), 0, nullptr, -1.0f, 1.0f, graph_size);
+    ImGui::PlotLines("Ent Spearman", ent_s.data(), ent_s.size(), 0, nullptr, -1.0f, 1.0f, graph_size);
+
     ImGui::InputText("Export Path", correlation_export_path_, sizeof(correlation_export_path_));
     if (ImGui::Button("Export")) {
         sep::DataParser parser;
         std::map<std::string, workbench::CorrelationMetrics> data{{selected_timeframe, correlation_metrics}};
         parser.exportCorrelationCSV(correlation_export_path_, data);
+        parser.exportCorrelationJSON(std::string(correlation_export_path_) + ".json", data);
     }
 
     ImGui::End();

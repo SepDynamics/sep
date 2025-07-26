@@ -66,6 +66,8 @@ public:
     // Export correlation metrics to CSV
     bool exportCorrelationCSV(const std::string& path,
                               const std::map<std::string, workbench::CorrelationMetrics>& data) const;
+    bool exportCorrelationJSON(const std::string& path,
+                               const std::map<std::string, workbench::CorrelationMetrics>& data) const;
 
 private:
     // Format detection

@@ -24,6 +24,7 @@ public:
 
     bool initialize();
     void render();
+    void renderThresholdPanel();
     void shutdown();
 
     void setOandaConnector(sep::connectors::OandaConnector* connector);
@@ -66,7 +67,7 @@ private:
     float buy_min_coherence_ = 0.7f;
     float buy_min_stability_ = 0.6f;
     float buy_max_entropy_ = 0.3f;
-    float sell_max_stability_ = 0.4f;
+    float sell_max_stability_ = 0.3f;
     float sell_min_entropy_ = 0.7f;
 
     // Chart dimensions and state

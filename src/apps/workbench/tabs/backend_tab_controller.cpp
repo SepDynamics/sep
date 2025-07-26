@@ -32,6 +32,7 @@ void BackendTabController::render() {
     renderDataSourceSelector();
     ImGui::Separator();
     renderBacktesterPanel();
+    renderBacktestingSuite();
     renderOrderManagementPanel();
     renderTradeHistoryPanel();
 
@@ -198,9 +199,11 @@ void BackendTabController::renderBacktesterPanel() {
     ImGui::Text("False Positive Rate: %.2f", validation_result_.false_positive_rate);
     ImGui::PopID();
     ImGui::End();
+}
 
-    ImGui::Begin("Backtester");
-    ImGui::PushID("Backtester");
+void BackendTabController::renderBacktestingSuite() {
+    ImGui::Begin("BacktestingSuite");
+    ImGui::PushID("BacktestingSuite");
     ImGui::InputText("Dataset", backtest_file_buffer_, sizeof(backtest_file_buffer_));
     if (ImGui::Button("Run Backtest")) {
         data_loader_->load_data(backtest_file_buffer_);
@@ -247,6 +250,7 @@ void BackendTabController::renderBacktesterPanel() {
                          static_cast<int>(equity_curve_.size()));
     }
 
+    ImGui::PopID();
     ImGui::End();
 }
 

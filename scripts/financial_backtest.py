@@ -7,11 +7,16 @@ def calculate_gauge(metrics_df):
     """
     Calculates the predictive gauge from the primary metrics.
     """
-    # Normalize metrics (example: using a rolling Z-score)
-    # This is a placeholder; a more robust normalization will be implemented.
-    metrics_df['coherence_norm'] = (metrics_df['coherence'] - metrics_df['coherence'].rolling(20).mean()) / metrics_df['coherence'].rolling(20).std()
-    metrics_df['stability_norm'] = (metrics_df['stability'] - metrics_df['stability'].rolling(20).mean()) / metrics_df['stability'].rolling(20).std()
-    metrics_df['entropy_norm'] = (metrics_df['entropy'] - metrics_df['entropy'].rolling(20).mean()) / metrics_df['entropy'].rolling(20).std()
+    # Normalize metrics using standard Z-score
+    metrics_df['coherence_norm'] = (
+        metrics_df['coherence'] - metrics_df['coherence'].mean()
+    ) / metrics_df['coherence'].std(ddof=0)
+    metrics_df['stability_norm'] = (
+        metrics_df['stability'] - metrics_df['stability'].mean()
+    ) / metrics_df['stability'].std(ddof=0)
+    metrics_df['entropy_norm'] = (
+        metrics_df['entropy'] - metrics_df['entropy'].mean()
+    ) / metrics_df['entropy'].std(ddof=0)
 
     # Fill NaNs that result from rolling calculations
     metrics_df.fillna(0, inplace=True)
@@ -186,9 +191,16 @@ def main():
         return
 
     metrics_df = pd.DataFrame(metrics_data)
-    # This will need to be aligned with the actual output of the engine
-    # For now, creating a placeholder date range
-    metrics_df['date'] = pd.to_datetime(pd.date_range(start='2021-01-01', periods=len(metrics_df), freq='D'))
+
+    # Use actual timestamps if provided, fall back to synthetic range
+    if 'timestamp' in metrics_df.columns:
+        metrics_df['date'] = pd.to_datetime(metrics_df['timestamp'])
+    elif 'time' in metrics_df.columns:
+        metrics_df['date'] = pd.to_datetime(metrics_df['time'])
+    else:
+        metrics_df['date'] = pd.to_datetime(
+            pd.date_range(start='2021-01-01', periods=len(metrics_df), freq='D')
+        )
 
     # --- Synthetic Market Data Generation ---
     # Create a synthetic price series based on the metrics

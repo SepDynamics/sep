@@ -5,6 +5,7 @@
 #include "core/metrics_monitor.h"
 
 #include <implot.h>
+#include "imgui_internal.h"
 #include "apps/workbench/implot_extension.h"
 #include <algorithm>
 #include <numeric>
@@ -49,8 +50,8 @@ bool SignalsTabController::initialize() {
     ImPlotInputMap& map = ImPlot::GetInputMap();
     map.Pan = ImGuiMouseButton_Middle;
     map.Fit = ImGuiMouseButton_Right;
-    map.BoxSelect = ImGuiMouseButton_Left;
-    map.ContextMenu = ImGuiMouseButton_Right;
+    map.Select = ImGuiMouseButton_Left;
+    map.Menu = ImGuiMouseButton_Right;
     map.ZoomMod = ImGuiMod_Ctrl;
     plot_flags_ = ImPlotFlags_Crosshairs | ImPlotFlags_NoMenus | ImPlotFlags_NoLegend;
 
@@ -234,7 +235,6 @@ void SignalsTabController::render() {
             std::cerr << "[SignalsTab] SEP signal generation error: " << e.what() << std::endl;
         }
     }
-    handleMouseInput();
     setupChartArea();
     renderMainChart();
     renderMetricsGraphs();
@@ -310,6 +310,7 @@ void SignalsTabController::renderMainChart() {
             renderChartGrid();
         }
         renderCrosshair();
+        handleMouseInput();
         ImPlot::EndPlot();
     }
 
@@ -728,9 +729,9 @@ void SignalsTabController::renderChartGrid() {
     ImPlotRect limits = ImPlot::GetPlotLimits();
 
     for (int i = 0; i <= num_price_lines; i++) {
-        double price = ImLerp(limits.YMin, limits.YMax, i / (double)num_price_lines);
-        ImVec2 p1 = ImPlot::PlotToPixels(ImPlotPoint(limits.XMin, price));
-        ImVec2 p2 = ImPlot::PlotToPixels(ImPlotPoint(limits.XMax, price));
+        double price = ImLerp(limits.Y.Min, limits.Y.Max, i / (double)num_price_lines);
+        ImVec2 p1 = ImPlot::PlotToPixels(ImPlotPoint(limits.X.Min, price));
+        ImVec2 p2 = ImPlot::PlotToPixels(ImPlotPoint(limits.X.Max, price));
         drawDashedHorizontal(draw_list, p1.x, p2.x, p1.y, grid_color);
 
         char price_text[32];
@@ -740,9 +741,9 @@ void SignalsTabController::renderChartGrid() {
 
     const int num_time_lines = 6;
     for (int i = 0; i <= num_time_lines; i++) {
-        double xval = ImLerp(limits.XMin, limits.XMax, i / (double)num_time_lines);
-        ImVec2 p1 = ImPlot::PlotToPixels(ImPlotPoint(xval, limits.YMin));
-        ImVec2 p2 = ImPlot::PlotToPixels(ImPlotPoint(xval, limits.YMax));
+        double xval = ImLerp(limits.X.Min, limits.X.Max, i / (double)num_time_lines);
+        ImVec2 p1 = ImPlot::PlotToPixels(ImPlotPoint(xval, limits.Y.Min));
+        ImVec2 p2 = ImPlot::PlotToPixels(ImPlotPoint(xval, limits.Y.Max));
         draw_list->AddLine(p1, p2, grid_color);
 
         size_t idx = static_cast<size_t>(xval + 0.5);

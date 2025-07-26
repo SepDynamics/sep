@@ -44,7 +44,7 @@ target_link_libraries(sep_workbench_lib PUBLIC
     OpenGL::GL
     glfw
     nlohmann_json::nlohmann_json
-    fmt::fmt
+    fmt-header-only
     TBB::tbb
 )
 
@@ -66,8 +66,7 @@ target_link_libraries(sep_workbench PRIVATE
     sep_quantum
     sep_memory  
     sep_engine
-    fmt::fmt
-    ${FMT_DYNAMIC_LIB}
+    fmt-header-only
     ${TBB_LIBRARIES}
     ${ALEMBIC_LIBRARIES}
     ${OPENPGL_LIBRARIES}

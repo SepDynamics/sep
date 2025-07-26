@@ -59,24 +59,13 @@ enable_testing()
 
 # Find required packages
 find_package(Threads REQUIRED)
-find_package(fmt REQUIRED)
-find_package(TBB REQUIRED)
+# TBB built via FetchContent to avoid system dependencies
 find_package(benchmark REQUIRED)
 find_package(nlohmann_json REQUIRED)
-find_package(spdlog REQUIRED)
+# spdlog built via FetchContent to use our fmt
 find_package(glm REQUIRED)
 find_package(OpenGL REQUIRED)
 
-# Ensure fmt library is available and force dynamic linking to match spdlog
-if(TARGET fmt::fmt)
-    # Add explicit link to the dynamic fmt library to resolve symbol conflicts
-    find_library(FMT_LIBRARY_PATH NAMES fmt PATHS /lib64 /usr/lib64 /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu)
-    if(FMT_LIBRARY_PATH)
-        message(STATUS "Found fmt library: ${FMT_LIBRARY_PATH}")
-        # We'll add this to executables that need it
-        set(FMT_DYNAMIC_LIB ${FMT_LIBRARY_PATH})
-    endif()
-endif()
 
 include(FetchContent)
 FetchContent_Declare(
@@ -100,6 +89,21 @@ FetchContent_Declare(
   GIT_TAG v0.16
 )
 FetchContent_MakeAvailable(implot)
+
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY https://github.com/gabime/spdlog.git
+  GIT_TAG v1.12.0
+)
+set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(spdlog)
+
+FetchContent_Declare(
+  tbb
+  GIT_REPOSITORY https://github.com/oneapi-src/oneTBB.git
+  GIT_TAG v2021.10.0
+)
+FetchContent_MakeAvailable(tbb)
 
 # Create imgui library manually since imgui doesn't provide CMakeLists.txt
 set(IMGUI_SOURCES
@@ -141,6 +145,8 @@ find_package(OpenGL REQUIRED)
 target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
 
 # Add subdirectories
+set(FMT_INSTALL OFF CACHE BOOL "" FORCE)
+add_subdirectory(third_party/fmt)
 # Trigger rebuild again
 add_subdirectory(src)
 add_subdirectory(examples)

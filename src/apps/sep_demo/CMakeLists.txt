@@ -34,7 +34,6 @@ target_link_libraries(sep_demo PRIVATE
     glfw
     glad
     fmt::fmt
-    ${FMT_DYNAMIC_LIB}
     TBB::tbb
     Threads::Threads
     ${CMAKE_DL_LIBS}

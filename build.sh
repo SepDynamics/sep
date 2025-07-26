@@ -6,14 +6,13 @@ set -uo pipefail
 echo "Building SEP Engine..."
 
 # Clean up previous build artifacts
-cd /sep
-sudo rm -rf .cache .codechecker CMakeCache.txt CMakeFiles output Makefile
+sudo rm -rf CMakeCache.txt CMakeFiles output Makefile #.cache .codechecker 
 sleep 2 
 clear 
 sudo rm -rf /sep/.Trash-1000 
 sleep 1
 
-mkdir -p .cache .codechecker/output output
+mkdir -p output
 totxt.save
 
 # Ensure proper permissions for CodeChecker directories

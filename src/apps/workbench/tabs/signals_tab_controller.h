@@ -8,6 +8,7 @@
 
 #include "common/financial_data_types.h"
 #include "imgui.h"
+#include "implot.h"
 #include "connectors/oanda_connector.h"
 #include "signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/config.hpp"

@@ -158,6 +158,7 @@ namespace sep
                     oanda_.demo_api_key = oanda.value("demo_api_key", "");
                     oanda_.demo_account_id = oanda.value("demo_account_id", "");
                     oanda_.sandbox = oanda.value("sandbox", true);
+                    oanda_.paper_trading = oanda.value("paper_trading", false);
                 }
                 else
                 {
@@ -175,6 +176,7 @@ namespace sep
                     {
                         oanda_.demo_api_key = env_demo_key;
                         oanda_.demo_account_id = env_demo_id;
+                        oanda_.paper_trading = true;
                     }
                     if (!(env_key && env_id) && !(env_demo_key && env_demo_id))
                     {
@@ -212,6 +214,7 @@ namespace sep
                                         std::string val = line.substr(pos + 1);
                                         val.erase(std::remove(val.begin(), val.end(), '"'), val.end());
                                         oanda_.demo_api_key = val;
+                                        oanda_.paper_trading = true;
                                     }
                                 }
                                 else if (line.find("OANDA_DEMO_ACCOUNT_ID") != std::string::npos)
@@ -222,6 +225,7 @@ namespace sep
                                         std::string val = line.substr(pos + 1);
                                         val.erase(std::remove(val.begin(), val.end(), '"'), val.end());
                                         oanda_.demo_account_id = val;
+                                        oanda_.paper_trading = true;
                                     }
                                 }
                             }
@@ -352,7 +356,8 @@ namespace sep
                                    {"account_id", oanda_.account_id},
                                    {"demo_api_key", oanda_.demo_api_key},
                                    {"demo_account_id", oanda_.demo_account_id},
-                                   {"sandbox", oanda_.sandbox}};
+                                   {"sandbox", oanda_.sandbox},
+                                   {"paper_trading", oanda_.paper_trading}};
 
                 std::ofstream file(path);
                 if (!file.is_open())

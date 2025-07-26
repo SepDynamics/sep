@@ -179,6 +179,7 @@ namespace sep
             std::string demo_api_key;
             std::string demo_account_id;
             bool sandbox;
+            bool paper_trading{false};
         };
 
         class Config

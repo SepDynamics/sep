@@ -114,5 +114,13 @@
     "particle_count": 1000,
     "simulation_speed": 1.0,
     "gravity_constant": 6.67430e-11
+  },
+  "oanda": {
+    "api_key": "",
+    "account_id": "",
+    "demo_api_key": "",
+    "demo_account_id": "",
+    "sandbox": true,
+    "paper_trading": true
   }
 }

@@ -53,9 +53,8 @@ void BackendTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> mon
 
 void BackendTabController::setServiceConnector(ServiceConnector* connector) {
     service_connector_ = connector;
-    if (service_connector_ && service_connector_->getOandaConnector()) {
-        trade_manager_ = std::make_unique<sep::workbench::TradeManager>(
-            service_connector_->getOandaConnector());
+    if (service_connector_) {
+        trade_manager_ = service_connector_->getTradeManager();
     }
 }
 
@@ -99,6 +98,10 @@ void BackendTabController::renderOrderManagementPanel() {
     if (trade_manager_) {
         ImGui::Text("Balance: %.2f", trade_manager_->getAccountBalance());
         ImGui::Text("Realized PnL: %.2f", trade_manager_->getRealizedPnL());
+        const auto& hist = trade_manager_->getBalanceHistory();
+        if (!hist.empty()) {
+            ImGui::PlotLines("Balance History", hist.data(), hist.size());
+        }
     }
     ImGui::End();
 
@@ -124,10 +127,8 @@ void BackendTabController::renderOrderManagementPanel() {
     }
 
     if (ImGui::Button("Refresh Orders and Positions")) {
-        if (trade_manager_) {
-            // no-op: local orders already stored
-        }
-        if (service_connector_) {
+        if (service_connector_ && service_connector_->getOandaConnector()) {
+            service_connector_->getOandaConnector()->refreshOrders();
             open_positions_ = service_connector_->getOandaConnector()->getOpenPositions();
             orders_ = service_connector_->getOandaConnector()->getOrders();
         }

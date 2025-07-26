@@ -52,6 +52,9 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
 
     if (!api_key.empty() && !account_id.empty()) {
         oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, true);
+        trade_manager_ = std::make_unique<sep::workbench::TradeManager>(oanda_connector_.get());
+        trade_manager_->setRiskPercentage(0.02);
+        trade_manager_->setPaperTrading(cfg.paper_trading);
         std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
         std::cout << "[ServiceConnector] API Key length: " << strlen(api_key) << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;

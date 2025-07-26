@@ -21,8 +21,10 @@ target_include_directories(sep_workbench_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/src/engine
     ${CMAKE_SOURCE_DIR}/src/api
     ${CMAKE_SOURCE_DIR}/src/apps/workbench
-    ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester/core
+    ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester
+    ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester/data/core
     ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester/data
+    ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester
     ${CMAKE_SOURCE_DIR}/src/apps/common
     ${CMAKE_SOURCE_DIR}/src/connectors
     ${CMAKE_SOURCE_DIR}/src/glad

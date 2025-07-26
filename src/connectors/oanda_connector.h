@@ -14,6 +14,7 @@
 #include <mutex>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
+#include "common/financial_data_types.h"
 
 namespace sep {
 namespace connectors {
@@ -51,15 +52,7 @@ struct DataValidationResult
     std::vector<std::string> warnings;
 };
 
-enum class OrderStatus { PENDING, FILLED, CANCELED };
 
-struct OrderInfo {
-    std::string id;
-    std::string instrument;
-    double units{0};
-    double price{0};
-    OrderStatus status{OrderStatus::PENDING};
-};
 
 class OandaConnector {
 public:

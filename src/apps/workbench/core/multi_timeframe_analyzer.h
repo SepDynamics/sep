@@ -6,7 +6,7 @@
 #include <vector>
 #include "common/financial_data_types.h"
 
-using sep::common::CandleData;
+
 #include <chrono>
 #include <mutex>
 #include <deque>
@@ -24,7 +24,7 @@ namespace sep::workbench {
 struct TimeframeData {
     std::string timeframe_id;        // "1m", "5m", "15m", "1h", "4h", "1D"
     int interval_minutes;            // 1, 5, 15, 60, 240, 1440
-    std::deque<CandleData> candles;  // Rolling window of candles
+    std::deque<sep::common::CandleData> candles;  // Rolling window of candles
     size_t max_candles = 1000;      // Keep last 1000 candles
     
     TimeframeData() : interval_minutes(1) {}  // Default constructor
@@ -137,13 +137,13 @@ private:
     size_t max_correlation_history_ = 1000;
     
     // Internal methods
-    std::vector<CandleData> resampleCandles(
-        const std::vector<CandleData>& source_candles, 
+    std::vector<sep::common::CandleData> resampleCandles(
+        const std::vector<sep::common::CandleData>& source_candles, 
         int target_interval_minutes);
     
     TimeframeMetrics analyzeTimeframe(
         const std::string& timeframe, 
-        const std::vector<CandleData>& candles);
+        const std::vector<sep::common::CandleData>& candles);
     
     float calculateTrendStrength(const std::vector<sep::quantum::PatternMetrics>& patterns);
     float calculateVolatilityPrediction(const std::vector<sep::quantum::PatternMetrics>& patterns);
@@ -164,9 +164,9 @@ public:
     void shutdown();
     
     // Data ingestion
-    void ingestMarketData(const std::string& instrument, const CandleData& candle);
+    void ingestMarketData(const std::string& instrument, const sep::common::CandleData& candle);
     void ingestHistoricalData(const std::string& instrument, 
-                            const std::vector<CandleData>& historical_candles);
+                            const std::vector<sep::common::CandleData>& historical_candles);
     
     // Analysis methods
     MultiTimeframeSignal generateSignal(const std::string& instrument);

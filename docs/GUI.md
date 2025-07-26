@@ -1,17 +1,19 @@
 # SEP Engine Workbench GUI Architecture
 
-## Current Problem Analysis: **CRITICAL BUILD FAILURE**
+## Current Problem Analysis: **BUILD FAILING - Post-Refactoring Cleanup**
 
-The SEP Workbench GUI is currently **unbuildable and non-functional**. Critical compilation errors, primarily stemming from an architectural flaw where core engine components depend on GUI-specific headers (`imgui.h`), prevent the application from launching. Chart rendering, a key feature, is completely blocked.
+The SEP Workbench GUI is currently **unbuildable and non-functional**. The previous critical architectural flaw (backend components depending on `imgui.h`) has been **resolved**. However, this major refactoring has introduced a new set of compilation errors related to API changes, namespace inconsistencies, and outdated data structure usage.
 
-The immediate goal is to refactor the code to resolve these build errors. The proposed 3-tab architecture remains the target design *after* the build is stabilized.
+Chart rendering and all other GUI features remain completely blocked until these new build errors are fixed.
 
 ### Primary Compilation Blockers
--   **Fatal Header Conflict**: Core backend files like `oanda_connector.cpp` and `data_parser.cpp` fail to build because they are forced to include GUI headers like `imgui.h` through a broken include chain (`ui_layout_manager.h`). This is the most severe issue.
--   **Incomplete Types & Missing Definitions**: Multiple files (`multi_timeframe_analyzer.cpp`, `data_parser.cpp`) fail because they use forward-declared types like `CorrelationMetrics` and `CandleData` without ever including the full struct definition, leading to `incomplete type` errors.
--   **Refactoring Mismatches**: Numerous errors like `out-of-line definition does not match` and `no member named 'loadData'` indicate that source files (`.cpp`) were not updated after their corresponding headers (`.h`) were changed during refactoring.
--   **Namespace Conflicts**: The codebase is inconsistent in its use of `sep::workbench::CandleData` vs. `sep::common::CandleData`, causing type mismatch and `no viable conversion` errors.
--   **Missing Include Paths**: The build system cannot find `'backtester/data_loader.h'`, indicating a misconfigured `CMakeLists.txt`.
+-   **Fatal Header Conflict**: **RESOLVED.** The decoupling of core logic from GUI headers was successful. Backend files no longer include `imgui.h`.
+-   **Namespace Conflicts & Missing Includes**: The primary issue is now inconsistent use of namespaces. Code frequently attempts to use types like `sep::connectors::OrderInfo` when they have been moved to `sep::common::OrderInfo`. This causes numerous `unknown type name` errors.
+-   **Refactoring Mismatches**: The codebase is filled with errors resulting from the refactoring:
+    -   **Incorrect Struct Members**: Code in `service_connector.cpp` and `signals_tab_controller.cpp` attempts to access members of `SEPSignalData` and `CorrelationMetrics` that no longer exist.
+    -   **Incorrect Constructors**: `json_data_parser.cpp` fails to build because it calls a constructor for `sep::common::CandleData` with the wrong number of arguments.
+    -   **API Changes**: The `ConfigManager` API was changed, but not all call sites were updated.
+-   **Data Type Mismatches**: A widespread issue is the incorrect assignment of `std::chrono::time_point` objects to `uint64_t` variables in `data_parser.cpp`, causing type errors.
 
 ## Proposed 3-Tab Architecture (Post-Build-Fix)
 
@@ -32,22 +34,16 @@ The GUI will be organized into three distinct tabs to separate concerns and impr
 ## Detailed Refactoring Plan
 
 ### Phase 1: Critical Build Fixes (Immediate Priority)
-This phase focuses exclusively on making the project compilable again.
+This phase focuses exclusively on making the project compilable again by cleaning up after the major refactoring.
 
 #### 1.1: Decouple Core Logic from GUI
--   **Action**: Create `src/common/financial_data_types.h`. Move all non-GUI data structures (`CandleData`, `SEPSignalData`, `CorrelationMetrics`) into this new header.
--   **Action**: Create a new GUI-specific types header (e.g., `apps/workbench/core/ui_types.h`) for structs that use ImGui types like `ChartZoom` and `EnhancedHoverInfo`.
--   **Action**: Update all core engine and connector files (`data_parser.h`, `oanda_connector.cpp`, etc.) to include `financial_data_types.h` and remove any direct or indirect dependency on GUI headers. This will eliminate the `fatal error: 'imgui.h' file not found` in backend components.
--   **Action**: Ensure full definitions of structs are included in the `.cpp` files that use them to fix all `incomplete type` errors.
+-   **Status**: **DONE**. All non-GUI data structures (`CandleData`, `SEPSignalData`, `CorrelationMetrics`) have been moved to `src/common/financial_data_types.h`. Backend components no longer depend on GUI headers.
 
-#### 1.2: Fix Namespace and Refactoring Errors
--   **Action**: Standardize on the `sep::common` namespace for shared financial data types across the entire project to resolve `no viable conversion` errors.
--   **Action**: Update the implementations in `multi_timeframe_analyzer.cpp` to match the function signatures declared in its header.
--   **Action**: Correct method names in test files, such as changing `dataLoader.loadData(...)` to `dataLoader.load_data(...)` in `data_loader_test.cpp`.
-
-#### 1.3: Resolve Missing Dependencies and Includes
--   **Action**: Correct the include path for `backtester/data_loader.h` in all workbench files. This requires updating `target_include_directories` in the relevant `CMakeLists.txt`.
--   **Action**: Properly integrate `implot` as a third-party dependency so `implot.h` can be included in GUI components.
+#### 1.2: Fix Post-Refactoring Errors
+-   **Action**: **Fix Timestamp Handling**: Create a utility function to convert `std::chrono::time_point` to `uint64_t` and use it in `data_parser.cpp` and `oanda_connector.cpp` to resolve assignment errors.
+-   **Action**: **Standardize Namespaces**: Go through all compilation errors and ensure shared types like `OrderInfo`, `CandleData`, and `CorrelationMetrics` are included from `common/financial_data_types.h` and referenced via the `sep::common` namespace.
+-   **Action**: **Update Data Structure Usage**: Correct all member access for refactored structs like `SEPSignalData` to use the new fields (`signal_type`, `timestamp`, etc.).
+-   **Action**: **Correct Constructor and API Calls**: Fix the `CandleData` constructor call in `json_data_parser.cpp`. Update code using `ConfigManager` to match its new API.
 
 ### Phase 2: Tab-Specific Implementation (Post-Build-Fix)
 -   **Action**: Implement the `SignalsTabController` with candlestick charts and metric plots using `implot`.
@@ -56,7 +52,7 @@ This phase focuses exclusively on making the project compilable again.
 
 ## Implementation Priority
 
-1.  **Critical Build Errors (IMMEDIATE)**: Address all compilation errors listed in Phase 1 of the refactoring plan. **This is the single highest priority and blocks all other work.**
+1.  **Critical Build Errors (IMMEDIATE)**: Address all compilation errors listed in Phase 1.2 of the refactoring plan. **This is the single highest priority and blocks all other work.**
 2.  **Chart Rendering** (Post-Build-Fix): Implement robust candlestick charts in `SignalsTabController`.
 3.  **Data Flow Integration** (Post-Build-Fix): Connect the OANDA connector and `PatternMetricEngine` to the GUI tabs.
 4.  **Backend & Engine Tabs** (Post-Build-Fix): Build out the UI for the remaining tabs.

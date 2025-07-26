@@ -156,7 +156,7 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
                     std::tm tm{};
                     std::istringstream ss(c.time);
                     ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-                    cd.time = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+                    cd.timestamp = sep::common::parseTimestamp(c.time);
                     cd.open = c.open;
                     cd.high = c.high;
                     cd.low = c.low;
@@ -579,9 +579,7 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 pending_orders_.push_back(info);
                 if (order_callback_) order_callback_(info);
                 // publish order update to UI if available
-#ifdef SEP_ENABLE_WORKBENCH
-                sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
-#endif
+
             }
             if (json_resp.contains("orderFillTransaction")) {
                 const auto& tx = json_resp["orderFillTransaction"];
@@ -593,9 +591,7 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 filled_orders_.push_back(info);
                 if (order_callback_) order_callback_(info);
                 // publish order update to UI if available
-#ifdef SEP_ENABLE_WORKBENCH
-                sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
-#endif
+
             }
             refreshOrders();
             return json_resp;
@@ -661,9 +657,7 @@ void OandaConnector::refreshOrders() {
             pending_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
             // publish order update to UI if available
-#ifdef SEP_ENABLE_WORKBENCH
-            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
-#endif
+
         }
     }
 
@@ -679,9 +673,7 @@ void OandaConnector::refreshOrders() {
             filled_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
             // publish order update to UI if available
-#ifdef SEP_ENABLE_WORKBENCH
-            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
-#endif
+
         }
     }
 
@@ -697,9 +689,7 @@ void OandaConnector::refreshOrders() {
             canceled_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
             // publish order update to UI if available
-#ifdef SEP_ENABLE_WORKBENCH
-            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
-#endif
+
         }
     }
 }
@@ -778,7 +768,7 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
     for (const auto& c : candles)
     {
         sep::common::CandleData cd;
-        cd.time = sep::common::parseTimestamp(c.time);
+        cd.timestamp = sep::common::parseTimestamp(c.time);
         cd.open = static_cast<float>(c.open);
         cd.high = static_cast<float>(c.high);
         cd.low = static_cast<float>(c.low);

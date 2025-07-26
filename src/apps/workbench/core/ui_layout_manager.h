@@ -9,7 +9,7 @@
 #include <typeindex>
 
 #include "imgui.h"
-#include "connectors/oanda_connector.h"
+#include "common/financial_data_types.h"
 #include "service_connector.hpp"
 
 namespace sep::workbench {
@@ -89,7 +89,7 @@ struct ConnectionStateEvent {
 };
 
 struct OrderUpdateEvent {
-    sep::connectors::OrderInfo info;
+    sep::common::OrderInfo info;
 };
 
 class EventBus {

@@ -2,9 +2,9 @@
 
 ## Overview
 
-This document outlines the SEP Engine's data processing pipeline. As of July 2024, the entire pipeline is **non-functional due to critical compilation failures**. The primary architectural flaw identified is a dependency conflict where core engine components (`DataParser`, `OandaConnector`) are forced to include GUI headers (`imgui.h`), making a successful build impossible.
+This document outlines the SEP Engine's data processing pipeline. As of July 2024, the pipeline is **non-functional due to compilation failures that arose after a major architectural refactoring.** The previous critical issue where core engine components depended on GUI headers has been resolved. The current blockers are type mismatches, API inconsistencies, and namespace errors resulting from this refactoring.
 
-**The immediate and only priority is to resolve these build-blocking issues by refactoring header dependencies.**
+**The immediate priority is to resolve these new build-blocking issues to make the data pipeline operational.**
 
 ## Data Flow Diagram (Intended Architecture)
 
@@ -80,45 +80,33 @@ graph TB
 -   **Error Analysis**:
     ```
     # From errors.txt:
-    error: field has incomplete type 'sep::workbench::CorrelationMetrics'
-    error: member access into incomplete type 'const sep::workbench::CorrelationMetrics'
-    error: no viable overloaded '=' for std::chrono::time_point
+    error: assigning to 'uint64_t' from incompatible type 'std::chrono::system_clock::time_point'
+    error: no member named 'parseTimestamp' in namespace 'sep::common'
+    error: no member named 'coherence_pearson' in 'sep::common::CorrelationMetrics'
     ```
--   **Conclusion**: A forward declaration of `CorrelationMetrics` is used, but the full definition is never included. The header containing the struct must be included. Additionally, string-based timestamps are being incorrectly assigned to `std::chrono::time_point` members without proper parsing.
+-   **Conclusion**: The refactoring introduced a major type mismatch for timestamps. `std::chrono::time_point` objects must be converted to a `uint64_t` representation before assignment. The `CorrelationMetrics` struct and timestamp parsing utility have also been changed, requiring updates at all call sites.
 
-### 2. **Multi-Timeframe Analyzer (`multi_timeframe_analyzer.cpp`)**
--   **Function**: Resamples and analyzes market data across different timeframes.
--   **Status**: **BUILD FAILED**.
--   **Error Analysis**:
-    ```
-    # From errors.txt:
-    error: out-of-line definition of 'ingestMarketData' does not match any declaration...
-    error: no viable conversion from 'vector<sep::workbench::CandleData>' to 'const vector<sep::common::CandleData>'
-    error: member access into incomplete type 'const sep::workbench::CandleData'
-    ```
--   **Conclusion**: A major refactoring has created a mismatch between the class declaration and its implementation. There is a critical namespace conflict between `sep::workbench::CandleData` and `sep::common::CandleData`, and the `CandleData` struct is being used as an incomplete type, indicating a missing header include.
-
-### 3. **OANDA Connector (`oanda_connector.cpp`)**
+### 2. **OANDA Connector (`oanda_connector.cpp`)**
 -   **Function**: Fetches market data and handles trade execution with the OANDA API.
 -   **Status**: **BUILD FAILED**.
--   **Error Analysis**: The build fails because it indirectly includes a GUI header:
+-   **Error Analysis**:
     ```
-    # From build_log.txt:
-    fatal error: 'imgui.h' file not found
-    # Included from: .../src/apps/workbench/core/ui_layout_manager.h
+    # From errors.txt:
+    error: unknown type name 'OrderInfo'; did you mean 'common::OrderInfo'?
     ```
--   **Conclusion**: A backend data connector should **never** include a GUI library. This indicates a severe architectural flaw where headers are improperly chained. The dependency on `ui_layout_manager.h` must be removed.
+-   **Conclusion**: Progress has been made; the connector no longer has a fatal dependency on `imgui.h`. The current failure is a namespace/include issue. The `OrderInfo` struct was moved to the `sep::common` namespace, and this file must be updated to include the correct header and use the new namespace.
 
-### 4. **Backtester (`backtester.cpp`, `data_loader_test.cpp`)**
--   **Function**: Simulates trading strategies on historical data.
+### 3. **Backtester & Workbench Components**
+-   **Function**: Simulates trading and provides UI.
 -   **Status**: **BUILD FAILED**.
 -   **Error Analysis**:
     ```
     # From errors.txt:
-    error: unknown type name 'CandleData'; did you mean 'common::CandleData'?
-    error: no member named 'loadData' in '...DataLoader'; did you mean 'load_data'?
+    error: no matching constructor for initialization of 'sep::common::CandleData'
+    error: no member named 'coherence' in 'sep::common::SEPSignalData'
+    error: unknown type name 'OrderInfo'; did you mean 'common::OrderInfo'?
     ```
--   **Conclusion**: The backtester components have not been updated to reflect recent refactoring of data types (namespaces) and method names.
+-   **Conclusion**: These components were not fully updated after the refactoring. They are using incorrect constructors, accessing outdated struct members, and referencing types from old namespaces.
 
 ## Data Authenticity Policy (Post-Build-Fix)
 
@@ -127,4 +115,4 @@ The platform is designed for authentic data processing. Once the build is fixed,
 -   ✅ **DataParser**: Genuine OHLC to pattern conversion.
 -   ✅ **PatternMetricEngine**: CUDA-accelerated algorithms operating on real data.
 
-**Overall Conclusion**: The data flow architecture is sound in theory but is completely blocked in practice. **Resolving the critical compilation errors by refactoring headers and fixing API usage is the mandatory first step to make this pipeline operational.**
+**Overall Conclusion**: The data pipeline's core architecture has been improved, but the implementation is broken due to widespread, secondary errors from the refactoring. **Resolving these type, API, and namespace errors is the mandatory first step to make this pipeline operational.**

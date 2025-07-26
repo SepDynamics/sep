@@ -24,7 +24,7 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine, DataLoader* data
     std::vector<uint8_t> byte_stream;
     for (const auto& candle : candles) {
         const uint8_t* candle_bytes = reinterpret_cast<const uint8_t*>(&candle);
-        byte_stream.insert(byte_stream.end(), candle_bytes, candle_bytes + sizeof(CandleData));
+        byte_stream.insert(byte_stream.end(), candle_bytes, candle_bytes + sizeof(sep::common::CandleData));
     }
 
     engine->ingestData(byte_stream.data(), byte_stream.size());

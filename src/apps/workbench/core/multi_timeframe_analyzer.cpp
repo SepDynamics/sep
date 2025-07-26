@@ -72,7 +72,7 @@ void MultiTimeframeAnalyzer::shutdown() {
     SEP_LOG_INFO("MultiTimeframeAnalyzer shutdown complete");
 }
 
-void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument, const CandleData& candle) {
+void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument, const sep::common::CandleData& candle) {
     std::lock_guard<std::mutex> lock(analysis_mutex_);
     
     // Add to 1-minute base timeframe first
@@ -91,7 +91,7 @@ void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument, con
 }
 
 void MultiTimeframeAnalyzer::ingestHistoricalData(const std::string& instrument, 
-                                                 const std::vector<CandleData>& historical_candles) {
+                                                 const std::vector<sep::common::CandleData>& historical_candles) {
     std::lock_guard<std::mutex> lock(analysis_mutex_);
     
     // Assume historical data comes in 1-minute resolution
@@ -167,7 +167,7 @@ std::vector<sep::common::CandleData> MultiTimeframeAnalyzer::resampleCandles(
         return {};
     }
     
-    std::vector<CandleData> resampled;
+    std::vector<sep::common::CandleData> resampled;
     
     // Group candles by target interval
     auto start_time = source_candles[0].timestamp;

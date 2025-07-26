@@ -1,25 +1,29 @@
+# SEP Engine Trading Platform - Post-Refactoring Cleanup Phase
 
-# SEP Engine Trading Platform - Build Failure Resolution Phase
+## Current Status: **BUILD FAILING** - Post-Refactoring Cleanup Required
 
-## Current Status: **CRITICAL BUILD FAILURE** - All Development Blocked
+The SEP Engine is a quantum-inspired trading platform designed to process market data and generate predictive trading signals. The project has successfully resolved the critical architectural flaw where backend components depended on GUI libraries.
 
-The SEP Engine is a quantum-inspired trading platform designed to process market data and generate predictive trading signals. The project is currently **completely blocked by critical compilation errors** that prevent the application from building and launching. The previous phase of integrating the core engine with a 3-tab workbench GUI is halted.
+However, the build is **still failing due to numerous compilation errors** that emerged as a result of the major refactoring. The current top priority is to resolve these new errors to create a stable, compilable foundation for feature development.
 
-**The absolute top priority is to resolve all build errors to create a stable, compilable foundation.** Until the application builds successfully, no further progress on chart rendering, data processing, or feature integration is possible.
+## Primary Objective: Achieve a Clean Build
 
-## Primary Objective: Fix the Build
+The previous objective to decouple core logic from the GUI has been **completed**. The new objective is to clean up all resulting API mismatches, type errors, and namespace conflicts.
 
-1.  **Resolve Header Dependency Conflicts**: The most severe issue is a flawed architecture where backend components depend on GUI libraries.
-    -   **Top Priority**: Refactor core data structures (e.g., `CandleData`, `CorrelationMetrics`) out of GUI-specific headers and into a common, GUI-independent header (`src/common/financial_data_types.h`). This will fix the `fatal error: 'imgui.h' file not found` and `incomplete type` errors in the core engine and backend connectors.
+1.  **Fix Timestamp and Data Type Mismatches**: A significant number of errors are due to incorrect assignments between `std::chrono::time_point` and `uint64_t`.
+    -   **Top Priority**: Implement and use a consistent conversion utility to handle timestamps correctly across `data_parser.cpp`, `oanda_connector.cpp`, and other components.
+    -   Ensure all data structures use their intended types (e.g., `uint64_t` for timestamps that will be stored or serialized).
 
-2.  **Correct Refactoring Errors**: The codebase has numerous mismatches between header declarations and source file implementations.
-    -   Update source files (`.cpp`) to match their corresponding header (`.h`) declarations, resolving `out-of-line definition does not match` errors in `multi_timeframe_analyzer.cpp`.
-    -   Fix incorrect method names and API usage (e.g., `loadData` vs. `load_data` in `data_loader_test.cpp`).
-    -   Resolve missing header includes (e.g., `'backtester/data_loader.h' file not found`) by correcting CMake `include_directories` or file paths.
+2.  **Update Data Structure Usage**: The refactoring changed the members of core data structures like `SEPSignalData` and `CorrelationMetrics`.
+    -   Update all code in `service_connector.cpp`, `workbench_core.cpp`, and `signals_tab_controller.cpp` to use the correct new member names (e.g., `signal_type` instead of older fields).
+    -   Fix incorrect member access in `data_parser.cpp` for `CorrelationMetrics` (e.g., `coherence_pearson` no longer exists).
 
-3.  **Unify Data Types and Namespaces**: The project uses conflicting data types like `sep::workbench::CandleData` and `sep::common::CandleData`.
-    -   Standardize on a single, common namespace (`sep::common`) for all shared financial data types to eliminate type conversion errors.
-    -   Add missing standard headers like `<cstdint>` in `emitterutils.cpp` to resolve undeclared identifier errors.
+3.  **Resolve Namespace and Include Issues**: The move of data types to the `sep::common` namespace was successful but left many files with incorrect using-declarations or missing includes.
+    -   Resolve all `unknown type name 'OrderInfo'` and `unknown type name 'CandleData'` errors by including `common/financial_data_types.h` and explicitly using the `sep::common` namespace.
+
+4.  **Correct API and Constructor Mismatches**:
+    -   Fix calls to outdated APIs, such as the missing `oanda` member in `ConfigManager`.
+    -   Update `json_data_parser.cpp` and `signals_tab_controller.cpp` to use the correct constructor signature for `sep::common::CandleData`.
 
 ## Architecture (Post-Build-Fix)
 
@@ -30,11 +34,10 @@ The intended architecture, detailed in [DATA.md](DATA.md) and [GUI.md](GUI.md), 
 
 ## Key Components Compilation Status
 
--   **DataParser** (`src/engine/data_parser.cpp`): **BUILD FAILED.** Blocked by `incomplete type` errors for `CorrelationMetrics` due to a missing header include.
--   **MultiTimeframeAnalyzer** (`src/apps/workbench/core/multi_timeframe_analyzer.cpp`): **BUILD FAILED.** Multiple errors due to signature mismatches, namespace confusion between `workbench::CandleData` and `common::CandleData`, and incomplete type access.
--   **OandaConnector** (`src/connectors/oanda_connector.cpp`): **BUILD FAILED.** Blocked by a fatal header dependency on `imgui.h`. A backend connector must not depend on a GUI library.
--   **Backtester & Tests** (`backtester.cpp`, `data_loader_test.cpp`): **BUILD FAILED.** Blocked by outdated API usage (`loadData` vs `load_data`) and namespace errors for `CandleData`.
--   **Workbench Core & Tabs** (`service_proxy_engine.h`, `landing_page.cpp`, etc.): **BUILD FAILED.** Multiple `file not found` errors for `backtester/data_loader.h`, indicating an include path or refactoring issue.
+-   **DataParser** (`src/engine/data_parser.cpp`): **BUILD FAILED.** Multiple errors assigning `std::chrono::time_point` to `uint64_t`. Calls to a missing `sep::common::parseTimestamp` function. Accessing non-existent members of `CorrelationMetrics`.
+-   **OandaConnector** (`src/connectors/oanda_connector.cpp`): **BUILD FAILED.** The critical dependency on `imgui.h` is **RESOLVED**. Now failing due to `unknown type name 'OrderInfo'`, indicating a namespace/include error after refactoring.
+-   **ServiceConnector & Workbench Core** (`service_connector.cpp`, `workbench_core.cpp`): **BUILD FAILED.** Multiple errors from using outdated `SEPSignalData` and `CandleData` struct members. `ConfigManager` API has changed.
+-   **Backtester & UI** (`json_data_parser.cpp`, `backtester_tab_controller.h`): **BUILD FAILED.** `CandleData` constructor call is incorrect. Namespace for `OrderInfo` is wrong.
 
 ## Next Milestones (Contingent on Build Fixes)
 

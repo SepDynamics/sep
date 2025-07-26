@@ -105,6 +105,17 @@ find_package(OpenGL REQUIRED)
 
 target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
 
+# ImPlot setup (built from third_party source)
+set(IMPLOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/implot)
+set(IMPLOT_SOURCES
+    ${IMPLOT_DIR}/implot.cpp
+    ${IMPLOT_DIR}/implot_items.cpp
+    ${IMPLOT_DIR}/implot_demo.cpp
+)
+add_library(implot STATIC ${IMPLOT_SOURCES})
+target_include_directories(implot PUBLIC ${IMPLOT_DIR} ${imgui_SOURCE_DIR})
+target_link_libraries(implot PUBLIC imgui)
+
 # Add subdirectories
 # Trigger rebuild again
 add_subdirectory(src)

@@ -110,6 +110,23 @@ bool WorkbenchEngine::initialize()
         signal_generator_->setMemoryManager(&::sep::memory::MemoryTierManager::getInstance());
         metrics_monitor_ = ::std::make_shared<MetricsMonitor>();
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
+        multi_timeframe_analyzer_->setMetricsCallback([this](const std::map<std::string, workbench::TimeframeMetrics>& m) {
+            if (!metrics_monitor_) return;
+            auto rolling = metrics_monitor_->getRollingMetrics();
+            auto it1 = m.find("1h");
+            if (it1 != m.end()) {
+                rolling.coherence_1h_avg = it1->second.dominant_coherence;
+                rolling.stability_1h_avg = it1->second.stability_index;
+                rolling.entropy_1h_avg = it1->second.entropy_level;
+            }
+            auto it4 = m.find("4h");
+            if (it4 != m.end()) {
+                rolling.coherence_4h_avg = it4->second.dominant_coherence;
+                rolling.stability_4h_avg = it4->second.stability_index;
+                rolling.entropy_4h_avg = it4->second.entropy_level;
+            }
+            metrics_monitor_->setRollingMetrics(rolling);
+        });
         
         // Initialize renderer and metrics dashboard
         int width, height;
@@ -154,6 +171,15 @@ bool WorkbenchEngine::initialize()
         if (service_connector_ && service_connector_->getOandaConnector()) {
             auto oanda_ptr = service_connector_->getOandaConnector();
             std::cout << "[WorkbenchEngine] OANDA connector available: " << (oanda_ptr ? "Yes" : "No") << std::endl;
+            oanda_ptr->setPriceCallback([this](const connectors::MarketData& md) {
+                if (metrics_monitor_) metrics_monitor_->setLatestMarketData(md);
+            });
+            oanda_ptr->setCandleCallback([this](const common::CandleData& c) {
+                if (multi_timeframe_analyzer_) {
+                    multi_timeframe_analyzer_->ingestMarketData("EUR_USD", c);
+                }
+            });
+            oanda_ptr->startPriceStream({"EUR_USD"});
         }
 
         const char* skip_env = std::getenv("SEP_SKIP_FETCH");
@@ -524,36 +550,37 @@ void WorkbenchEngine::handleErrorRecovery()
 
 void WorkbenchEngine::attemptServiceConnection()
 {
+    ConnectionState state = ConnectionState::DISCONNECTED;
     if (service_connector_) {
         metrics_.service_connected = service_connector_->connect();
-        
+
         if (metrics_.service_connected) {
             std::cout << "[WorkbenchEngine] Successfully connected to SEP service" << std::endl;
-            // Switch to service engine
             active_engine_ = service_connector_->getEngine();
-
-            // If service engine is null, fall back to offline
-            if (!active_engine_)
-            {
+            if (!active_engine_) {
                 std::cout
                     << "[WorkbenchEngine] Service engine is null, falling back to offline mode"
                     << std::endl;
                 active_engine_ = offline_engine_.get();
                 metrics_.service_connected = false;
+                state = ConnectionState::DISCONNECTED;
+            } else {
+                state = ConnectionState::CONNECTED;
             }
         } else {
             std::cout << "[WorkbenchEngine] Failed to connect to SEP service, using offline mode"
                       << std::endl;
             active_engine_ = offline_engine_.get();
+            state = ConnectionState::CONNECTION_FAILED;
         }
-    }
-    else
-    {
-        // No service connector, use offline mode
+    } else {
         std::cout << "[WorkbenchEngine] No service connector available, using offline mode"
                   << std::endl;
         active_engine_ = offline_engine_.get();
+        state = ConnectionState::DISCONNECTED;
     }
+
+    globalEventBus().publish(ConnectionStateEvent{state});
 
     // Ensure we always have a valid engine
     if (!active_engine_)

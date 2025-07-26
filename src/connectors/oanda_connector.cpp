@@ -211,6 +211,14 @@ bool OandaConnector::stopPriceStream() {
 
     streaming_active_ = false;
 
+    // flush any partially built candles
+    for (auto& [instrument, builder] : candle_builders_) {
+        if (builder.active && candle_callback_) {
+            candle_callback_(builder.candle);
+            builder.active = false;
+        }
+    }
+
     if (stream_thread_.joinable())
     {
         stream_thread_.join();
@@ -221,6 +229,10 @@ bool OandaConnector::stopPriceStream() {
 
 void OandaConnector::setPriceCallback(std::function<void(const MarketData&)> callback) {
     price_callback_ = callback;
+}
+
+void OandaConnector::setCandleCallback(std::function<void(const common::CandleData&)> cb) {
+    candle_callback_ = std::move(cb);
 }
 
 nlohmann::json OandaConnector::getAccountInfo() {
@@ -444,9 +456,11 @@ void OandaConnector::processStreamData(const std::string& data) {
             if (json_data.contains("type")) {
                 std::string type = json_data["type"];
                 if (type == "PRICE") {
+                    auto md = parseMarketData(json_data);
                     if (price_callback_) {
-                        price_callback_(parseMarketData(json_data));
+                        price_callback_(md);
                     }
+                    updateCandleBuilder(md);
                 } else if (type == "HEARTBEAT") {
                     // Connection is alive
                 }
@@ -477,8 +491,28 @@ MarketData OandaConnector::parseMarketData(const nlohmann::json& price_data) {
     }
     
     market_data.mid = (market_data.bid + market_data.ask) / 2.0;
-    
+
     return market_data;
+}
+
+void OandaConnector::updateCandleBuilder(const MarketData& md) {
+    auto tp = std::chrono::time_point<std::chrono::system_clock>(
+        std::chrono::nanoseconds(md.timestamp));
+    auto start = std::chrono::time_point_cast<std::chrono::minutes>(tp);
+    auto& builder = candle_builders_[md.instrument];
+    if (!builder.active || builder.start != start) {
+        if (builder.active && candle_callback_) {
+            candle_callback_(builder.candle);
+        }
+        builder.candle = common::CandleData(md.mid, md.mid, md.mid, md.mid, md.volume, start);
+        builder.start = start;
+        builder.active = true;
+    } else {
+        builder.candle.high = std::max(builder.candle.high, md.mid);
+        builder.candle.low = std::min(builder.candle.low, md.mid);
+        builder.candle.close = md.mid;
+        builder.candle.volume += md.volume;
+    }
 }
 
 OandaCandle OandaConnector::parseCandle(const nlohmann::json& candle_data) {

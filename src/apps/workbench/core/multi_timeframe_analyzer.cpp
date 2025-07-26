@@ -33,6 +33,10 @@ MultiTimeframeAnalyzer::~MultiTimeframeAnalyzer() {
     shutdown();
 }
 
+void MultiTimeframeAnalyzer::setMetricsCallback(MetricsCallback cb) {
+    metrics_callback_ = std::move(cb);
+}
+
 bool MultiTimeframeAnalyzer::initialize() {
     try {
         // Initialize coherence manager with constructor
@@ -88,6 +92,9 @@ void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument, con
     
     // Update higher timeframes by resampling from 1m data
     updateAllTimeframes(instrument);
+    if (metrics_callback_) {
+        metrics_callback_(latest_metrics_);
+    }
 }
 
 void MultiTimeframeAnalyzer::ingestHistoricalData(const std::string& instrument, 

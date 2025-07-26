@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <functional>
 #include <vector>
 #include "common/financial_data_types.h"
 
@@ -114,6 +115,7 @@ public:
 private:
     Config config_;
     std::mutex analysis_mutex_;
+    MetricsCallback metrics_callback_;
     
     // SEP Engine components - one per timeframe for parallel processing
     std::map<std::string, std::unique_ptr<sep::quantum::PatternMetricEngine>> pattern_engines_;
@@ -165,8 +167,11 @@ public:
     
     // Data ingestion
     void ingestMarketData(const std::string& instrument, const sep::common::CandleData& candle);
-    void ingestHistoricalData(const std::string& instrument, 
+    void ingestHistoricalData(const std::string& instrument,
                             const std::vector<sep::common::CandleData>& historical_candles);
+
+    using MetricsCallback = std::function<void(const std::map<std::string, TimeframeMetrics>&)>;
+    void setMetricsCallback(MetricsCallback cb);
     
     // Analysis methods
     MultiTimeframeSignal generateSignal(const std::string& instrument);

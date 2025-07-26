@@ -169,6 +169,11 @@ void MetricsMonitor::setLatestMarketData(const sep::connectors::MarketData& data
     latest_market_data_ = data;
 }
 
+void MetricsMonitor::setRollingMetrics(const RollingMetrics& metrics) {
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
+    rolling_metrics_ = metrics;
+}
+
 void MetricsMonitor::setMinPatternLength(size_t min_length) {
     min_pattern_length_ = min_length;
 }

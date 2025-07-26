@@ -5,6 +5,7 @@
 #include <glm/geometric.hpp>
 
 #include "../simple_renderer.h"
+#include "config.hpp"
 
 namespace sep {
 namespace workbench {
@@ -14,10 +15,10 @@ namespace workbench {
         (void)renderer;
         (void)engine;
         renderer_ = renderer;
-        // Use hardcoded values for all demos to avoid configuration issues
-        temperature_ = 1.0f;
-        cooling_rate_ = 0.99f;
-        int count = 10;
+        const auto& cfg = Config::getInstance().annealing();
+        temperature_ = cfg.initial_temperature;
+        cooling_rate_ = cfg.cooling_rate;
+        int count = cfg.particle_count;
         particles_.resize(count);
         for (auto& p : particles_)
         {

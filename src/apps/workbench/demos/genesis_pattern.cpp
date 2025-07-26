@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "simple_renderer.h"
+#include "config.hpp"
 #include "quantum/processor.h"
 #include "memory/quantum_coherence_manager.h"
 
@@ -79,13 +80,7 @@ void GenesisPatternDemo::updateVisualization() {
     }
 
     try {
-        // Use hardcoded defaults instead of Config to avoid linkage issues
-        struct {
-            struct {
-                std::string color_mode = "rainbow";
-                std::string emission_mode = "normal";
-            } visualization;
-        } genesis_config;
+        const auto& cfg = Config::getInstance().genesis_pattern();
 
         // Convert processor patterns to positions for the renderer
         std::vector<glm::vec3> pattern_state;
@@ -94,8 +89,8 @@ void GenesisPatternDemo::updateVisualization() {
         }
         
         // Set renderer parameters and render patterns
-        renderer_->setColorMode(genesis_config.visualization.color_mode);
-        renderer_->setEmissionMode(genesis_config.visualization.emission_mode);
+        renderer_->setColorMode(cfg.visualization.color_mode);
+        renderer_->setEmissionMode(cfg.visualization.emission_mode);
         renderer_->setRotation(view_.rotation);
         renderer_->setZoom(view_.zoom);
         renderer_->setWireframe(view_.wireframe);
